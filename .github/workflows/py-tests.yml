@@ -1,0 +1,62 @@
+name: Run Python Tests
+env:
+  PIP_CACHE_DIR: .pip
+  PYTHONPATH: src
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/py-tests.yml"
+      - "pyproject.toml"
+      - "**.py"
+  release:
+    types: ["published"]
+jobs:
+  py-lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Set Up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ./.pip
+          key: ubuntu-24.04-py-lint-3.12-${{ hashFiles('pyproject.toml') }}
+
+      - name: Upgrade Pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install Dependencies
+        run: pip install -IU -e .[lint]
+
+      - name: Check Formatting
+        run: ruff format --check --diff .
+
+      - name: Check ruff
+        run: ruff check -q .
+
+  py-test:
+    runs-on: ubuntu-24.04
+    needs: [py-lint]
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Set Up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ./.pip
+          key: ubuntu-24.04-py-test-3.12-${{ hashFiles('pyproject.toml') }}
+
+      - name: Upgrade Pip
+        run: python -m pip install --upgrade pip
