@@ -62,6 +62,9 @@ jobs:
       - name: Upgrade Pip
         run: python -m pip install --upgrade pip
 
+      - name: Install Dependencies
+        run: pip install -IU -e .[node,test]
+
       - name: Run Tests
         run: pytest -v --cov --cov-branch --cov-report=xml tests/
 
