@@ -44,6 +44,38 @@ jobs:
   py-test:
     runs-on: ubuntu-24.04
     needs: [py-lint]
+    services:
+      consul:
+        image: consul:1.15
+      kafka:
+        image: bitnami/kafka:3.6.2
+        env:
+          KAFKA_CFG_NODE_ID: "0"
+          KAFKA_CFG_PROCESS_ROLES: controller,broker
+          KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+          KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+          KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
+          KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+          KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "false"
+          KAFKA_CFG_LOG_FLUSH_INTERVAL_MESSAGES: "1"
+          KAFKA_CFG_LOG_FLUSH_INTERVAL_MS: "1000"
+          KAFKA_CFG_LOG_FLUSH_SCHEDULER_INTERVAL_MS: "1000"
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: noc
+          POSTGRES_USER: noc
+          POSTGRES_PASSWORD: noc
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      mongodb:
+        image: mongo:4.4
+      clickhouse:
+        image: clickhouse/clickhouse-server:23
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
