@@ -136,7 +136,6 @@ supervisor = [
 test = [
   "pytest==8.3.3",
   "pytest-cov==7.0.0",
-  "Coverage[toml]==7.4.4", # Required for GitLab
   "pytest-dependency==0.5.1",
 ]
 testing = ["dbf==0.99.3"]
