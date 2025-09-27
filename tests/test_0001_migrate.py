@@ -97,7 +97,7 @@ def test_migration_order(name):
         assert orders[d] < orders[name], "Out-of-order dependency"
 
 
-@pytest.mark.usefixtures("database")
+@pytest.mark.fatal
 def test_database_migrations(database):
     """
     Force database migrations
@@ -108,6 +108,7 @@ def test_database_migrations(database):
     runner.migrate()
 
 
+@pytest.mark.fatal
 def test_migration_history():
     """
     Test all migrations are in `migrations` collection

@@ -60,6 +60,8 @@ jobs:
           KAFKA_CFG_LOG_FLUSH_INTERVAL_MESSAGES: "1"
           KAFKA_CFG_LOG_FLUSH_INTERVAL_MS: "1000"
           KAFKA_CFG_LOG_FLUSH_SCHEDULER_INTERVAL_MS: "1000"
+        ports:
+          - 9092:9092
       postgres:
         image: postgres:16
         env:
@@ -68,14 +70,20 @@ jobs:
           POSTGRES_PASSWORD: noc
         # Set health checks to wait until postgres has started
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U noc"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        ports:
+          - 5432:5432
       mongodb:
         image: mongo:4.4
+        ports:
+          - 27017:27017
       clickhouse:
         image: clickhouse/clickhouse-server:23
+        ports:
+          - 8123:8123
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -103,10 +111,10 @@ jobs:
           DJANGO_SETTINGS_MODULE: noc.settings
           NOC_TEST_DB: noc_tests
           NOC_CONFIG: env:///NOC
-          NOC_MONGO_ADDRESSES: mongo:27017
-          NOC_PG_ADDRESSES: postgres:5432
-          NOC_CLICKHOUSE_RW_ADDRESSES: clickhouse:8123
-          NOC_CLICKHOUSE_RO_ADDRESSES: clickhouse:8123
+          NOC_MONGO_ADDRESSES: 127.0.0.1:27017
+          NOC_PG_ADDRESSES: 127.0.0.1:5432
+          NOC_CLICKHOUSE_RW_ADDRESSES: 127.0.0.1:8123
+          NOC_CLICKHOUSE_RO_ADDRESSES: 127.0.0.1:8123
           NOC_FEATURES_CONSUL_HEALTHCHECKS: false
           NOC_FEATURES_SERVICE_REGISTRATION: false
           NOC_PG_DB: noc
@@ -115,7 +123,7 @@ jobs:
           NOC_MONGO_USER: noc
           NOC_MONGO_PASSWORD: noc
           NOC_MSGSTREAM_CLIENT_CLASS: noc.core.msgstream.redpanda.RedPandaClient
-          NOC_REDPANDA_ADDRESSES: kafka:9092
+          NOC_REDPANDA_ADDRESSES: 127.0.0.1:9092
 
       # - name: Run Tests
       #   run: pytest -v --cov --cov-branch --cov-report=xml tests/

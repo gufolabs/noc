@@ -10,6 +10,9 @@ from collections import defaultdict
 from typing import DefaultDict, Dict
 from time import perf_counter_ns
 
+# Third-party modules
+import pytest
+
 # NOC modules
 from noc.tests.fixtures.database import database  # noqa
 
@@ -67,3 +70,18 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
         terminalreporter.write_line(f"{label:<40} {other_time:.3f}s ({percent:.3f}%)")
     terminalreporter.write_line(f"Total: {total:.3f}s")
     _stats = terminalreporter.stats
+
+
+@pytest.fixture(scope="session", autouse=True)
+def fatal_check(request):
+    """Run over every test and process fatai failires."""
+    yield
+    if hasattr(request.node, "fatal_failed"):
+        pytest.exit("A required test failed. Aborting further tests.", returncode=1)
+
+
+def pytest_runtest_makereport(item, call):
+    """Process @pytest.mark.fatal"""
+    if "fatal" in item.keywords and call.excinfo is not None:
+        # Mark in session that fatal test failed
+        item.session.fatal_failed = True

@@ -26,7 +26,7 @@ def test_collection_path(collection):
     assert any(os.path.isdir(p) for p in collection.get_path())
 
 
-@pytest.mark.usefixtures("database")
+@pytest.mark.fatal
 def test_collection_load(database, collection):
     """
     Load collection

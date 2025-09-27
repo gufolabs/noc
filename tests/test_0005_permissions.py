@@ -11,6 +11,7 @@ from noc.core.service.loader import get_service
 from noc.services.web.base.site import site
 
 
+@pytest.mark.fatal
 def test_permissions():
     site.service = get_service()
     Permission.sync()

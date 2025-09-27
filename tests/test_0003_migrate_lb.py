@@ -9,7 +9,7 @@
 import pytest
 
 
-@pytest.mark.usefixtures("database")
+@pytest.mark.fatal
 def test_migrate_lb(database):
     """
     Test migrate-liftbridge
