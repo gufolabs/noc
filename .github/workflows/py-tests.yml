@@ -95,12 +95,31 @@ jobs:
         run: python -m pip install --upgrade pip
 
       - name: Install Dependencies
-        run: pip install -IU -e .[node,test]
+        run: pip install -IU -e .[node,test,bh,activator,classifier,cache-redis,node,login-ldap,login-pam,login-radius,prod-tools,testing,sender-kafka,ping]
 
       - name: Run Tests
-        run: pytest -v --cov --cov-branch --cov-report=xml tests/
+        run: ./noc test run --statistics
+        env:
+          NOC_TEST_DB: noc_tests
+          NOC_CONFIG: env:///NOC
+          NOC_MONGO_ADDRESSES: mongo:27017
+          NOC_PG_ADDRESSES: postgres:5432
+          NOC_CLICKHOUSE_RW_ADDRESSES: clickhouse:8123
+          NOC_CLICKHOUSE_RO_ADDRESSES: clickhouse:8123
+          NOC_FEATURES_CONSUL_HEALTHCHECKS: false
+          NOC_FEATURES_SERVICE_REGISTRATION: false
+          NOC_PG_DB: noc
+          NOC_PG_PASSWORD: noc
+          NOC_PG_USER: noc
+          NOC_MONGO_USER: noc
+          NOC_MONGO_PASSWORD: noc
+          NOC_MSGSTREAM_CLIENT_CLASS: noc.core.msgstream.redpanda.RedPandaClient
+          NOC_REDPANDA_ADDRESSES: kafka:9092
 
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+      # - name: Run Tests
+      #   run: pytest -v --cov --cov-branch --cov-report=xml tests/
+
+      # - name: Upload coverage reports to Codecov
+      #   uses: codecov/codecov-action@v5
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
