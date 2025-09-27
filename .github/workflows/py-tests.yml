@@ -4,7 +4,7 @@ env:
   PYTHONPATH: src
   TEST_PYTHON_VERSION: "3.12"
 on:
-  pull_request:
+  push:
     paths:
       - ".github/workflows/py-tests.yml"
       - "pyproject.toml"
