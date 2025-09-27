@@ -97,11 +97,8 @@ jobs:
       - name: Install Dependencies
         run: pip install -IU -e .[node,test,bh,activator,classifier,cache-redis,node,login-ldap,login-pam,login-radius,prod-tools,testing,sender-kafka,ping]
 
-      - name: Check where we are
-        run: ls -l
-
       - name: Run Tests
-        run: ./noc test run --statistics
+        run: pytest -v tests/
         env:
           NOC_TEST_DB: noc_tests
           NOC_CONFIG: env:///NOC
