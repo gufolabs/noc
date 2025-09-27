@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # Test application permissions
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Third-party modules
+import pytest
 
 # NOC modules
 from noc.aaa.models.permission import Permission
