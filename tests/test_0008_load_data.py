@@ -15,7 +15,6 @@ from django.db import models
 from noc.config import config
 from noc.models import get_model, is_document
 from noc.core.model.fields import DocumentReferenceField, CachedForeignKey
-from .conftest import DB_MIGRATED
 
 
 def iter_data():

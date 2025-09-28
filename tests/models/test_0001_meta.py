@@ -20,7 +20,6 @@ def test_iter_model_id():
     assert any(iter_model_id()), "Empty model id"
 
 
-@pytest.mark.dependency(name="test_model_loading")
 @pytest.mark.parametrize("model_id", iter_model_id())
 def test_model_loading(model_id):
     """
@@ -32,7 +31,6 @@ def test_model_loading(model_id):
     assert model is not None, "Cannot load model %s" % model_id
 
 
-@pytest.mark.dependency(name="test_model_id", depends=["test_model_loading"])
 @pytest.mark.parametrize("model_id", iter_model_id())
 def test_model_id(model_id):
     """

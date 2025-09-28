@@ -100,7 +100,6 @@ def event(database, request):
     # request.fspath = path
     return event, ec, cfg.get("vars", {})
 
-@pytest.mark.dependency(depends=[DB_COLLECTION])
 def test_event(database, ruleset, event):
     e, expected_class, expected_vars = event
     e_vars = e.raw_vars.copy()

@@ -157,6 +157,10 @@ def _create_clickhouse_db():
     """
 
 
+def _create_kafka_db():
+    """Initialize kafka database."""
+
+
 def _drop_pg_db():
     """Drop postgresql test database"""
     import psycopg2
@@ -174,10 +178,10 @@ def _drop_pg_db():
             FROM pg_stat_activity
             WHERE datname = %s
         """,
-            [config.pg.db],
+            [database],
         )
         # Drop
-        cursor.execute(f"DROP DATABASE IF EXISTS {config.pg.db}")
+        cursor.execute(f"DROP DATABASE IF EXISTS {database}")
 
 
 def _drop_mongo_db():
@@ -191,6 +195,10 @@ def _drop_mongo_db():
 
 def _drop_clickhouse_db():
     """Drop clickhouse database."""
+
+
+def _drop_kafka_db():
+    """Drop kafka database."""
 
 
 def _migrate_db():
