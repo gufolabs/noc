@@ -136,7 +136,6 @@ supervisor = [
 test = [
   "pytest==8.4.2",
   "pytest-cov==7.0.0",
-  "pytest-dependency==0.6.0",
 ]
 testing = ["dbf==0.99.3"]
 vcenter = ["pyvmomi==8.0.3.0.1"]

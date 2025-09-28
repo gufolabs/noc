@@ -72,34 +72,47 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
     _stats = terminalreporter.stats
 
 
-@pytest.fixture(scope="session", autouse=True)
-def fatal_check(request):
-    """Run over every test and process fatai failires."""
+@pytest.fixture(scope="session")
+def db_postgres(request):
+    """Create and destroy postgres database."""
+    _create_pg_db()
     yield
-    if hasattr(request.node, "fatal_failed"):
-        pytest.exit("A required test failed. Aborting further tests.", returncode=1)
-
-
-def pytest_runtest_makereport(item, call):
-    """Process @pytest.mark.fatal"""
-    if "fatal" in item.keywords and call.excinfo is not None:
-        # Mark in session that fatal test failed
-        item.session.fatal_failed = True
+    _drop_pg_db()
 
 
 @pytest.fixture(scope="session")
-def database(request):
-    """Create and destroy test databases."""
-    # Create databases
-    _create_pg_db()
+def db_mongo(request):
+    """Create and destroy mongo database."""
     _create_mongo_db()
-    _create_clickhouse_db()
-    # Return control to the test
     yield
-    # Cleanup databases
-    _drop_pg_db()
     _drop_mongo_db()
+
+
+@pytest.fixture(scope="session")
+def db_clickhouse(request):
+    """Create and destroy ClickHouse database."""
+    _create_clickhouse_db()
+    yield
     _drop_clickhouse_db()
+
+
+@pytest.fixture(scope="session")
+def db_kafka(request):
+    """Create and destroy Kafka cluster."""
+    _create_kafka_db()
+    yield
+    _drop_kafka_db()
+
+
+@pytest.fixture(scope="session")
+def database(request, db_postgres, db_mongo, db_clickhouse, db_kafka):
+    _migrate_db()
+    _migrate_clickhouse()
+    _migrate_kafka()
+    _ensure_indexes()
+    _load_collections()
+    _load_mibs()
+    yield
 
 
 def _create_pg_db():
@@ -108,21 +121,33 @@ def _create_pg_db():
     from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
     db = config.pg_connection_args.copy()
-    db["database"] = "postgres"
+    database = db["database"]
     connect = psycopg2.connect(**db)
     connect.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-    cursor = connect.cursor()
-    cursor.execute(f"CREATE DATABASE {config.pg.db} ENCODING 'UTF-8'")
-    cursor.close()
-    connect.close()
+    with connect.cursor() as cursor:
+        cursor.execute(f"CREATE DATABASE {database} ENCODING 'UTF-8'")
+        # Check
+        cursor.execute(
+            "SELECT 1 FROM pg_database WHERE datname = %s",
+            [database],
+        )
+        row = cursor.fetchone()
+        assert row, f"Database {database} does not exist"
 
 
 def _create_mongo_db():
     """Create mongodb test database."""
     # MongoDB creates database automatically on connect
-    import mongoengine
+    from noc.core.mongo.connection import get_db
 
-    mongoengine.connect()
+    db = get_db()
+    coll_name = "__test"
+    coll = db[coll_name]
+    coll.insert_one({"ping": 1})
+    doc = coll.find_one({})
+    assert doc
+    assert "ping" in doc
+    assert doc["ping"] == 1
 
 
 def _create_clickhouse_db():
@@ -137,24 +162,22 @@ def _drop_pg_db():
     import psycopg2
     from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
-    tpl = config.pg_connection_args.copy()
-    tpl["database"] = "postgres"
-    connect = psycopg2.connect(**tpl)
+    db = config.pg_connection_args.copy()
+    database = db["database"]
+    connect = psycopg2.connect(**db)
     connect.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-    cursor = connect.cursor()
-    # Forcefully disconnect remaining connections
-    cursor.execute(
-        """
-        SELECT pg_terminate_backend(pid)
-        FROM pg_stat_activity
-        WHERE datname = %s
-    """,
-        [config.pg.db],
-    )
-    # Drop
-    cursor.execute(f"DROP DATABASE IF EXISTS {config.pg.db}")
-    cursor.close()
-    connect.close()
+    with connect.cursor() as cursor:
+        # Forcefully disconnect remaining connections
+        cursor.execute(
+            """
+            SELECT pg_terminate_backend(pid)
+            FROM pg_stat_activity
+            WHERE datname = %s
+        """,
+            [config.pg.db],
+        )
+        # Drop
+        cursor.execute(f"DROP DATABASE IF EXISTS {config.pg.db}")
 
 
 def _drop_mongo_db():
@@ -170,7 +193,31 @@ def _drop_clickhouse_db():
     """Drop clickhouse database."""
 
 
-# Dependencies name
-DB_READY = "test_db_ready"
-DB_MIGRATED = "test_db_migrated"
-DB_COLLECTION = "test_db_collection"
+def _migrate_db():
+    m = __import__("noc.commands.migrate", {}, {}, "Command")
+    assert m.Command().run_from_argv([]) == 0
+
+
+def _migrate_kafka():
+    m = __import__("noc.commands.migrate-liftbridge", {}, {}, "Command")
+    assert m.Command().run_from_argv(["--slots", "1"]) == 0
+
+
+def _migrate_clickhouse():
+    m = __import__("noc.commands.migrate-ch", {}, {}, "Command")
+    assert m.Command().run_from_argv([]) == 0
+
+
+def _ensure_indexes():
+    m = __import__("noc.commands.ensure-indexes", {}, {}, "Command")
+    assert m.Command().run_from_argv([]) == 0
+
+
+def _load_collections():
+    m = __import__("noc.commands.collection-sync", {}, {}, "Command")
+    assert m.Command().run_from_argv([]) == 0
+
+
+def _load_mibs():
+    m = __import__("noc.commands.sync-mibs", {}, {}, "Command")
+    assert m.Command().run_from_argv([]) == 0

@@ -44,8 +44,7 @@ model_refs = {}  # model -> name -> model
 m2m_refs = {}  # model -> name -> model
 
 
-@pytest.mark.dependency(depends=[DB_MIGRATED])
-def test_load_data(initial_data):
+def test_load_data(initial_data, database):
     global model_refs, m2m_refs
 
     data = initial_data
