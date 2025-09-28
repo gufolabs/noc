@@ -13,9 +13,6 @@ from time import perf_counter_ns
 # Third-party modules
 import pytest
 
-# NOC modules
-from noc.tests.fixtures.database import database  # noqa
-
 
 _stats = None
 _durations: DefaultDict[str, int] = defaultdict(int)
@@ -85,3 +82,86 @@ def pytest_runtest_makereport(item, call):
     if "fatal" in item.keywords and call.excinfo is not None:
         # Mark in session that fatal test failed
         item.session.fatal_failed = True
+
+
+@pytest.fixture(scope="session")
+def database(request):
+    """Create and destroy test databases."""
+    # Create databases
+    _create_pg_db()
+    _create_mongo_db()
+    _create_clickhouse_db()
+    # Return control to the test
+    yield
+    # Cleanup databases
+    _drop_pg_db()
+    _drop_mongo_db()
+    _drop_clickhouse_db()
+
+
+def _create_pg_db():
+    """Create postgres test database."""
+    import psycopg2
+    from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+
+    db = config.pg_connection_args.copy()
+    db["database"] = "postgres"
+    connect = psycopg2.connect(**db)
+    connect.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+    cursor = connect.cursor()
+    cursor.execute(f"CREATE DATABASE {config.pg.db} ENCODING 'UTF-8'")
+    cursor.close()
+    connect.close()
+
+
+def _create_mongo_db():
+    """Create mongodb test database."""
+    # MongoDB creates database automatically on connect
+    import mongoengine
+
+    mongoengine.connect()
+
+
+def _create_clickhouse_db():
+    """
+    Create clickhouse test database
+    :return:
+    """
+
+
+def _drop_pg_db():
+    """Drop postgresql test database"""
+    import psycopg2
+    from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+
+    tpl = config.pg_connection_args.copy()
+    tpl["database"] = "postgres"
+    connect = psycopg2.connect(**tpl)
+    connect.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+    cursor = connect.cursor()
+    # Forcefully disconnect remaining connections
+    cursor.execute(
+        """
+        SELECT pg_terminate_backend(pid)
+        FROM pg_stat_activity
+        WHERE datname = %s
+    """,
+        [config.pg.db],
+    )
+    # Drop
+    cursor.execute(f"DROP DATABASE IF EXISTS {config.pg.db}")
+    cursor.close()
+    connect.close()
+
+
+def _drop_mongo_db():
+    """Drop mongodb database."""
+    import mongoengine
+
+    client = mongoengine.connect(**config.mongo_connection_args)
+    client.drop_database(config.mongo.db)
+    client.close()
+
+
+def _drop_clickhouse_db():
+    """Drop clickhouse database."""

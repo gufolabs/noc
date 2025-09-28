@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Test all models
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -11,6 +11,13 @@ import pytest
 # NOC modules
 from noc.models import get_model_id, get_model, iter_model_id
 from .util import get_models, get_documents
+
+
+def test_iter_model_id():
+    """
+    Check iter_model_id is not empty
+    """
+    assert any(iter_model_id()), "Empty model id"
 
 
 @pytest.mark.dependency(name="test_model_loading")
