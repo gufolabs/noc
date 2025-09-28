@@ -168,3 +168,9 @@ def _drop_mongo_db():
 
 def _drop_clickhouse_db():
     """Drop clickhouse database."""
+
+
+# Dependencies name
+DB_READY = "test_db_ready"
+DB_MIGRATED = "test_db_migrated"
+DB_COLLECTION = "test_db_collection"

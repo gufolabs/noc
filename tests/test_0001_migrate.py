@@ -16,6 +16,7 @@ import cachetools
 from noc.core.migration.base import BaseMigration
 from noc.core.migration.loader import loader
 from noc.core.migration.runner import MigrationRunner
+from .conftest import DB_READY, DB_MIGRATED
 
 
 @cachetools.cached({})
@@ -97,6 +98,7 @@ def test_migration_order(name):
         assert orders[d] < orders[name], "Out-of-order dependency"
 
 
+@pytest.mark.dependency(depends_on=[DB_READY])
 @pytest.mark.fatal
 def test_database_migrations(database):
     """
@@ -108,13 +110,54 @@ def test_database_migrations(database):
     runner.migrate()
 
 
+@pytest.mark.dependency(depends_on=["test_database_migrations"])
 @pytest.mark.fatal
-def test_migration_history():
+def test_migration_history(database):
     """
     Test all migrations are in `migrations` collection
-    :return:
     """
     runner = MigrationRunner()
     applied = runner.get_history()
     all_migrations = get_migration_names_set()
     assert all_migrations == applied
+
+
+@pytest.mark.dependency()
+@pytest.mark.fatal
+def test_migration_kafka(database):
+    """Test migrate-liftbridge"""
+    m = __import__("noc.commands.migrate-liftbridge", {}, {}, "Command")
+    assert m.Command().run_from_argv(["--slots", "1"]) == 0
+
+
+@pytest.mark.dependency()
+@pytest.mark.fatal
+def test_migration_ch(database):
+    """Test migrate-ch"""
+    m = __import__("noc.commands.migrate-ch", {}, {}, "Command")
+    assert m.Command().run_from_argv([]) == 0
+
+
+@pytest.mark.dependency(depends=["test_migration_history"])
+@pytest.mark.fatal
+def test_ensure_indexes(database):
+    """
+    Create indexes
+    :param database:
+    :return:
+    """
+    m = __import__("noc.commands.ensure-indexes", {}, {}, "Command")
+    assert m.Command().run_from_argv([]) == 0
+
+
+@pytest.mark.dependency(
+    name=DB_MIGRATED,
+    depends_on=[
+        "test_migration_history",
+        "test_migration_kafka",
+        "test_migration_ch",
+        "test_ensure_indexes",
+    ],
+)
+def test_db_migrated() -> None:
+    """Grouping element"""

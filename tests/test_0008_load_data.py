@@ -15,6 +15,7 @@ from django.db import models
 from noc.config import config
 from noc.models import get_model, is_document
 from noc.core.model.fields import DocumentReferenceField, CachedForeignKey
+from .conftest import DB_MIGRATED
 
 
 def iter_data():
@@ -43,6 +44,7 @@ model_refs = {}  # model -> name -> model
 m2m_refs = {}  # model -> name -> model
 
 
+@pytest.mark.dependency(depends=[DB_MIGRATED])
 def test_load_data(initial_data):
     global model_refs, m2m_refs
 

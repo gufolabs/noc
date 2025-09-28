@@ -12,8 +12,10 @@ import pytest
 # NOC modules
 from noc.config import config
 from noc.core.mongo.connection import get_db
+from .conftest import DB_READY
 
 
+@pytest.mark.dependency()
 @pytest.mark.fatal
 def test_pg(database) -> None:
     db = config.pg_connection_args.copy()
@@ -27,6 +29,7 @@ def test_pg(database) -> None:
         assert cur.fetchone() is not None, f"Database {database} does not exist"
 
 
+@pytest.mark.dependency()
 @pytest.mark.fatal
 def test_mongo(database) -> None:
     db = get_db()
@@ -37,3 +40,8 @@ def test_mongo(database) -> None:
     assert doc
     assert "ping" in doc
     assert doc["ping"] == 1
+
+
+@pytest.mark.dependency(name=DB_READY, depends=["test_pg", "test_mongo"])
+def test_db_ready() -> None:
+    """Grouping element."""

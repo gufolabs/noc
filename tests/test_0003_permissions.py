@@ -12,8 +12,10 @@ import pytest
 from noc.aaa.models.permission import Permission
 from noc.core.service.loader import get_service
 from noc.services.web.base.site import site
+from .conftest import DB_MIGRATED
 
 
+@pytest.mark.dependency(depends=[DB_MIGRATED])
 @pytest.mark.fatal
 def test_permissions():
     site.service = get_service()

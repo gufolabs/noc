@@ -134,9 +134,9 @@ supervisor = [
   "supervisor-serialrestart==0.1.1",
 ]
 test = [
-  "pytest==8.3.3",
+  "pytest==8.4.2",
   "pytest-cov==7.0.0",
-  "pytest-dependency==0.5.1",
+  "pytest-dependency==0.6.0",
 ]
 testing = ["dbf==0.99.3"]
 vcenter = ["pyvmomi==8.0.3.0.1"]
