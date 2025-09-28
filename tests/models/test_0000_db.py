@@ -7,7 +7,6 @@
 
 # Third party modules
 import psycopg2
-import mongoengine
 import pytest
 
 # NOC modules
@@ -22,7 +21,7 @@ def test_pg(database) -> None:
     connect = psycopg2.connect(**db)
     with connect.cursor() as cur:
         cur.execute(
-            sql.SQL("SELECT 1 FROM pg_database WHERE datname = %s"),
+            "SELECT 1 FROM pg_database WHERE datname = %s",
             [database],
         )
         assert cur.fetchone() is not None, f"Database {database} does not exist"

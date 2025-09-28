@@ -13,6 +13,9 @@ from time import perf_counter_ns
 # Third-party modules
 import pytest
 
+# NOC modules
+from noc.config import config
+
 
 _stats = None
 _durations: DefaultDict[str, int] = defaultdict(int)
