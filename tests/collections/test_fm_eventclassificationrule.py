@@ -24,6 +24,7 @@ from noc.fm.models.eventclass import EventClass
 from noc.fm.models.eventclassificationrule import EventClassificationRule
 from noc.config import config
 from .utils import CollectionTestHelper
+from ..conftest import DB_COLLECTION
 
 helper = CollectionTestHelper(EventClassificationRule)
 COLLECTION_NAME = "test.events"
@@ -68,14 +69,14 @@ def iter_json_loader(urls):
 
 
 @pytest.fixture(scope="module")
-def ruleset():
+def ruleset(database):
     ruleset = RuleSet()
     ruleset.load()
     return ruleset
 
 
 @pytest.fixture(params=list(iter_json_loader(config.tests.events_paths)))
-def event(request):
+def event(database, request):
     path, cfg = request.param
     coll = cfg.get("$collection", COLLECTION_NAME)
     assert coll == COLLECTION_NAME, "Invalid collection %s" % coll
@@ -100,7 +101,7 @@ def event(request):
     # request.fspath = path
     return event, ec, cfg.get("vars", {})
 
-
+@pytest.mark.dependency(depends=[DB_COLLECTION])
 def test_event(ruleset, event):
     e, expected_class, expected_vars = event
     e_vars = e.raw_vars.copy()
@@ -124,7 +125,7 @@ def test_event(ruleset, event):
 # def rule_case(request):
 #     return request.param
 
-
+@pytest.mark.dependency(depends=[DB_COLLECTION])
 def test_rules_collection_cases(ruleset, event_class_rule):
     for e, v in event_class_rule.iter_cases():
         rule, e_vars = ruleset.find_rule(e, v)
