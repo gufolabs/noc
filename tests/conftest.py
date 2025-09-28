@@ -125,14 +125,21 @@ def _create_pg_db():
     connect = psycopg2.connect(**db)
     connect.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     with connect.cursor() as cursor:
-        cursor.execute(f"CREATE DATABASE {database} ENCODING 'UTF-8'")
-        # Check
+        # Check for database exists
         cursor.execute(
             "SELECT 1 FROM pg_database WHERE datname = %s",
             [database],
         )
         row = cursor.fetchone()
-        assert row, f"Database {database} does not exist"
+        if not row:
+            cursor.execute(f"CREATE DATABASE {database} ENCODING 'UTF-8'")
+            # Check
+            cursor.execute(
+                "SELECT 1 FROM pg_database WHERE datname = %s",
+                [database],
+            )
+            row = cursor.fetchone()
+            assert row, f"Database {database} does not exist"
 
 
 def _create_mongo_db():
