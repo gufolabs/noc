@@ -45,8 +45,6 @@ jobs:
     runs-on: ubuntu-24.04
     needs: [py-lint]
     services:
-      consul:
-        image: consul:1.15
       kafka:
         image: bitnamilegacy/kafka:3.6.2
         env:
