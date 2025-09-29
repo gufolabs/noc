@@ -61,6 +61,8 @@ jobs:
           KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://127.0.0.1:9092
         ports:
           - 9092:9092
+        options: >-
+          --mount type=tmpfs,dst=/bitnami/data
       postgres:
         image: postgres:16
         env:
@@ -73,6 +75,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+          --mount type=tmpfs,dst=/var/lib/postgresql/data
         ports:
           - 5432:5432
       mongodb:
@@ -82,10 +85,14 @@ jobs:
         env:
           MONGO_INITDB_ROOT_USERNAME: noc
           MONGO_INITDB_ROOT_PASSWORD: noc
+        options: >-
+          --mount type=tmpfs,dst=/data/db
       clickhouse:
         image: clickhouse/clickhouse-server:23
         ports:
           - 8123:8123
+        options: >-
+          --mount type=tmpfs,dst=/var/lib/clickhouse
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
