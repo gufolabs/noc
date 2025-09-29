@@ -94,11 +94,11 @@ class BaseCommand(object):
             else:
                 self.print("Assertion error: %s" % e)
             return 4
-        except Exception:
-            from noc.core.debug import error_report
+        # except Exception:
+        #     from noc.core.debug import error_report
 
-            error_report()
-            return 2
+        #     error_report()
+        #     return 2
         finally:
             if show_usage:
                 stop_usage = resource.getrusage(resource.RUSAGE_SELF)
