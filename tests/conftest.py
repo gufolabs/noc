@@ -187,29 +187,41 @@ def _drop_kafka_db():
 
 def _migrate_db():
     m = __import__("noc.commands.migrate", {}, {}, "Command")
-    assert m.Command().run_from_argv([]) == 0
+    r = m.Command().run_from_argv([])
+    if r:
+        pytest.exit("Failed to migrate database")
 
 
 def _migrate_kafka():
     m = __import__("noc.commands.migrate-liftbridge", {}, {}, "Command")
-    assert m.Command().run_from_argv(["--slots", "1"]) == 0
+    r = m.Command().run_from_argv(["--slots", "1"])
+    if r:
+        pytest.exit("Failed to create Kafka topics")
 
 
 def _migrate_clickhouse():
     m = __import__("noc.commands.migrate-ch", {}, {}, "Command")
-    assert m.Command().run_from_argv([]) == 0
+    r = m.Command().run_from_argv([])
+    if r:
+        pytest.exit("Failed to migrate ClickHouse database")
 
 
 def _ensure_indexes():
     m = __import__("noc.commands.ensure-indexes", {}, {}, "Command")
-    assert m.Command().run_from_argv([]) == 0
+    r = m.Command().run_from_argv([])
+    if r:
+        pytest.exit("Failed to create indexes")
 
 
 def _load_collections():
     m = __import__("noc.commands.collection-sync", {}, {}, "Command")
-    assert m.Command().run_from_argv([]) == 0
+    r = m.Command().run_from_argv([])
+    if r:
+        pytest.exit("Failed to load collections")
 
 
 def _load_mibs():
     m = __import__("noc.commands.sync-mibs", {}, {}, "Command")
-    assert m.Command().run_from_argv([]) == 0
+    r = m.Command().run_from_argv([])
+    if r:
+        pytest.exit("Failed to load MIBs")
