@@ -24,6 +24,17 @@ _counts: DefaultDict[str, int] = defaultdict(int)
 _start_times: Dict[str, int] = {}
 
 
+def pytest_collection_modifyitems(session, config, items):
+    def is_run_on_setup(item) -> bool:
+        return "run_on_setup" in item.keywords
+
+    # Only reorder when running the whole suite
+    if not config.args:
+        setup_tests = [item for item in items if is_run_on_setup(item)]
+        others = [item for item in items if not is_run_on_setup(item)]
+        items[:] = setup_tests + others
+
+
 def pytest_runtest_setup(item):
     _start_times[item.nodeid] = perf_counter_ns()
 
