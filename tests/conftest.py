@@ -228,10 +228,12 @@ def _ensure_indexes():
 
 
 def _load_collections():
-    m = __import__("noc.commands.collection-sync", {}, {}, "Command")
-    r = m.Command().run_from_argv([])
-    if r:
-        pytest.exit("Failed to load collections")
+    from noc.core.collection.base import Collection
+
+    try:
+        Collection.sync_all()
+    except ValueError as e:
+        pytest.exit(f"Failed to load collections: {e}")
 
 
 def _load_mibs():
