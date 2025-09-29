@@ -9,6 +9,7 @@
 from collections import defaultdict
 from typing import DefaultDict, Dict
 from time import perf_counter_ns
+from typing import List
 
 # Third-party modules
 import pytest
@@ -24,22 +25,24 @@ _counts: DefaultDict[str, int] = defaultdict(int)
 _start_times: Dict[str, int] = {}
 
 
-def pytest_collection_modifyitems(session, config, items):
-    def is_run_on_setup(item) -> bool:
-        return "run_on_setup" in item.keywords
+def pytest_collection_modifyitems(
+    session: pytest.Session, config: pytest.Config, items: List[pytest.Item]
+):
+    """Process @pytest.mark.run_on_startup"""
 
-    # Only reorder when running the whole suite
-    if not config.args:
-        setup_tests = [item for item in items if is_run_on_setup(item)]
-        others = [item for item in items if not is_run_on_setup(item)]
-        items[:] = setup_tests + others
+    def is_run_on_setup(item: pytest.Item) -> bool:
+        return any(m.name == "run_on_setup" for m in item.own_markers)
+
+    setup_tests = [item for item in items if is_run_on_setup(item)]
+    others = [item for item in items if not is_run_on_setup(item)]
+    items[:] = setup_tests + others
 
 
-def pytest_runtest_setup(item):
+def pytest_runtest_setup(item: pytest.Item):
     _start_times[item.nodeid] = perf_counter_ns()
 
 
-def pytest_runtest_teardown(item, nextitem):
+def pytest_runtest_teardown(item: pytest.Item, nextitem: pytest.Item):
     start = _start_times.get(item.nodeid)
     if start is None:
         return
