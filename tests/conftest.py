@@ -44,7 +44,8 @@ def pytest_collection_modifyitems(
 
 
 def pytest_runtest_setup(item: pytest.Item):
-    _start_times[item.nodeid] = perf_counter_ns()
+    if "test_init_db" not in item.nodeid:
+        _start_times[item.nodeid] = perf_counter_ns()
 
 
 def pytest_runtest_teardown(item: pytest.Item, nextitem: pytest.Item):
@@ -275,7 +276,7 @@ def _load_mibs():
         raise RuntimeError("Failed to load MIBs")
 
 
-@with_timing
+@with_timing("load_fixtures")
 def _load_fixtures():
     for url in config.tests.fixtures_paths:
         with open_fs(url) as fs:
