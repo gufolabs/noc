@@ -81,6 +81,7 @@ jobs:
         ports:
           - 27017:27017
         env:
+          MONGO_INITDB_DATABASE: noc
           MONGO_INITDB_ROOT_USERNAME: noc
           MONGO_INITDB_ROOT_PASSWORD: noc
       clickhouse:
