@@ -162,10 +162,7 @@ def _create_mongo_db():
 
 
 def _create_clickhouse_db():
-    """
-    Create clickhouse test database
-    :return:
-    """
+    """Create clickhouse test database."""
 
 
 def _create_kafka_db():
@@ -174,34 +171,10 @@ def _create_kafka_db():
 
 def _drop_pg_db():
     """Drop postgresql test database"""
-    import psycopg2
-    from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-
-    db = config.pg_connection_args.copy()
-    database = db["database"]
-    connect = psycopg2.connect(**db)
-    connect.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-    with connect.cursor() as cursor:
-        # Forcefully disconnect remaining connections
-        cursor.execute(
-            """
-            SELECT pg_terminate_backend(pid)
-            FROM pg_stat_activity
-            WHERE datname = %s
-        """,
-            [database],
-        )
-        # Drop
-        cursor.execute(f"DROP DATABASE IF EXISTS {database}")
 
 
 def _drop_mongo_db():
     """Drop mongodb database."""
-    import mongoengine
-
-    client = mongoengine.connect(**config.mongo_connection_args)
-    client.drop_database(config.mongo.db)
-    client.close()
 
 
 def _drop_clickhouse_db():
