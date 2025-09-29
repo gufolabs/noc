@@ -81,7 +81,6 @@ jobs:
         ports:
           - 27017:27017
         env:
-          MONGO_INITDB_DATABASE: noc
           MONGO_INITDB_ROOT_USERNAME: noc
           MONGO_INITDB_ROOT_PASSWORD: noc
       clickhouse:
@@ -126,6 +125,7 @@ jobs:
           NOC_PG_USER: noc
           NOC_MONGO_USER: noc
           NOC_MONGO_PASSWORD: noc
+          NOC_MONGO_AUTHENTICATION_SOURCE: admin
           NOC_MSGSTREAM_CLIENT_CLASS: noc.core.msgstream.redpanda.RedPandaClient
           NOC_REDPANDA_ADDRESSES: 127.0.0.1:9092
 
