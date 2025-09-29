@@ -53,7 +53,7 @@ class GetDiagScript(BaseScript):
         return r
 
 
-@pytest.mark.skipif(bool(os.getenv("GITHUB_ACTIONS", "")), "Temporary disabled on github")
+@pytest.mark.skipif(bool(os.getenv("GITHUB_ACTIONS", "")), reason="Temporary disabled on github")
 @pytest.mark.parametrize(
     "proto,host,port,user,password,args,xcls",
     [
