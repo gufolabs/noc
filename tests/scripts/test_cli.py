@@ -7,7 +7,6 @@
 
 # Python modules
 import socket
-import os
 
 # Third-party modules
 import pytest
