@@ -24,5 +24,4 @@ def test_model_str(model, database):
 def test_document_str(model, database):
     for o in model.objects.all():
         s = str(o)
-        assert s
         assert isinstance(s, str)

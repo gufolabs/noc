@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Test python module loading
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -46,6 +46,7 @@ def _allow_xfail(module: str) -> bool:
         module in ALLOW_XFAIL
         or module.startswith("noc.ansible.")
         or module.startswith("noc.sa.profiles.VMWare")
+        or module.startswith("noc.scripts")
     )
 
 

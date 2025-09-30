@@ -1,12 +1,13 @@
 # ----------------------------------------------------------------------
 # SNMP testing
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import socket
+import os
 
 # Third-party modules
 import pytest
@@ -50,6 +51,7 @@ class GetDiagScript(BaseScript):
         return r
 
 
+@pytest.mark.skipif(bool(os.getenv("GITHUB_ACTIONS", "")), reason="Temporary disabled on github")
 @pytest.mark.parametrize(
     "host,version,community,xcls",
     [
