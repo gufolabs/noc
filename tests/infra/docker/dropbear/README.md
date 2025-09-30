@@ -7,7 +7,7 @@ SSH keys are also available
 Docker Compose usage:
 ``` yaml
   sshd:
-    image: "ghcr.io/gufolabs/dropbear:<version>"
+    image: "ghcr.io/gufolabs/dropbear:v1"
     restart: "no"
     command: /usr/sbin/dropbear -F -E
     networks:

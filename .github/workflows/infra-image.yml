@@ -12,7 +12,9 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       dropbear: ${{ steps.filter.outputs.dropbear }}
+      snmpd: ${{ steps.filter.outputs.snmpd }}
       sshd: ${{ steps.filter.outputs.sshd }}
+      telnetd: ${{ steps.filter.outputs.telnetd }}
     steps:
       - name: Filter Items
         uses: dorny/paths-filter@v3
@@ -21,8 +23,12 @@ jobs:
           filters: |
             dropbear:
               - 'tests/infra/docker/dropbear/**'
+            snmpd:
+              - 'tests/infra/docker/snmpd/**'
             sshd:
               - 'tests/infra/docker/sshd/**'
+            telnetd:
+              - 'tests/infra/docker/telnetd/**'
   build:
     needs: [changes]
     runs-on: ubuntu-24.04
@@ -31,6 +37,12 @@ jobs:
         include:
           - service: dropbear
             changed: ${{ needs.changes.outputs.dropbear }}
+          - service: snmpd
+            changed: ${{ needs.changes.outputs.snmpd }}
+          - service: sshd
+            changed: ${{ needs.changes.outputs.sshd }}
+          - service: telnetd
+            changed: ${{ needs.changes.outputs.telnetd }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
