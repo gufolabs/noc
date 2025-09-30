@@ -30,13 +30,14 @@ jobs:
         service:
           - service: dropbear
             changed: ${{ needs.changes.outputs.dropbear }}
-    if: matrix.changed == 'true'
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
+        if: matrix.changed == 'true'
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
+        if: matrix.changed == 'true'
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -44,23 +45,25 @@ jobs:
 
       - name: Read version
         id: version
+        if: matrix.changed == 'true'
         run: |
           VERSION=$(cat tests/infra/docker/${{ matrix.service }}/VERSION)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build Docker image
+        if: matrix.changed == 'true'
         run: |
           docker build \
             -t ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:${{ steps.version.outputs.version }} \
             tests/infra/docker/${{ matrix.service }}
 
       - name: Push image (main only)
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' && matrix.changed == 'true'
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:${{ steps.version.outputs.version }}
 
       - name: Push PR preview image
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && matrix.changed == 'true'
         run: |
           PR_TAG=${{ steps.version.outputs.version }}-pr-${{ github.event.pull_request.number }}
           docker tag ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:${{ steps.version.outputs.version }} \
