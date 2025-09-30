@@ -13,8 +13,6 @@ jobs:
     outputs:
       dropbear: ${{ steps.filter.outputs.dropbear }}
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
       - name: Filter Items
         uses: dorny/paths-filter@v3
         id: filter
@@ -27,7 +25,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        service:
+        include:
           - service: dropbear
             changed: ${{ needs.changes.outputs.dropbear }}
     steps:
