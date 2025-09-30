@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       dropbear: ${{ steps.filter.outputs.dropbear }}
+      sshd: ${{ steps.filter.outputs.sshd }}
     steps:
       - name: Filter Items
         uses: dorny/paths-filter@v3
@@ -20,6 +21,8 @@ jobs:
           filters: |
             dropbear:
               - 'tests/infra/docker/dropbear/**'
+            sshd:
+              - 'tests/infra/docker/sshd/**'
   build:
     needs: [changes]
     runs-on: ubuntu-24.04
