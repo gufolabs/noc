@@ -115,7 +115,7 @@ jobs:
         run: pip install -IU -e .[node,test,bh,activator,classifier,cache-redis,node,login-ldap,login-pam,login-radius,prod-tools,testing,sender-kafka,ping]
 
       - name: Run Tests
-        run: pytest --maxfail=10 tests/
+        run: pytest --maxfail=10 --cov --cov-branch --cov-report=xml tests/
         env:
           DJANGO_SETTINGS_MODULE: noc.settings
           NOC_TEST_DB: noc_tests
@@ -135,10 +135,7 @@ jobs:
           NOC_MSGSTREAM_CLIENT_CLASS: noc.core.msgstream.redpanda.RedPandaClient
           NOC_REDPANDA_ADDRESSES: 127.0.0.1:9092
 
-      # - name: Run Tests
-      #   run: pytest -v --cov --cov-branch --cov-report=xml tests/
-
-      # - name: Upload coverage reports to Codecov
-      #   uses: codecov/codecov-action@v5
-      #   with:
-      #     token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
