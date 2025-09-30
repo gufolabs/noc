@@ -4,7 +4,6 @@ RUN \
     apk add --no-cache dropbear \
     && mkdir -p /etc/dropbear \
     && /usr/bin/dropbearkey -t rsa -f /etc/dropbear/dropbear_rsa_host_key -s 2048 \
-    && /usr/bin/dropbearkey -t dss -f /etc/dropbear/dropbear_dss_host_key \
     && /usr/bin/dropbearkey -t ecdsa -f /etc/dropbear/dropbear_ecdsa_host_key \
     && adduser -S -h /home/test -s /bin/sh test \
     && (echo "test:pw1234567890" | /usr/sbin/chpasswd) \
