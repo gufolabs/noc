@@ -1,0 +1,66 @@
+name: Build Test Images
+on:
+  push:
+    branches: [master]
+    paths:
+      - tests/infra/docker/**
+  pull_request:
+    paths:
+      - tests/infra/docker/**
+jobs:
+  changes:
+    runs-on: ubuntu:24.04
+    outputs:
+      dropbear: ${{ steps.filter.outputs.dropbear }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: Filter Items
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            dropbear:
+              - 'tests/infra/docker/dropbear/**'
+  build:
+    needs: [changes]
+    runs-on: ubuntu:24.04
+    strategy:
+      matrix:
+        service: [dropbear]
+    if: needs.changes.outputs[ matrix.service ] == 'true'
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Read version
+        id: version
+        run: |
+          VERSION=$(cat tests/infra/docker/${{ matrix.service }}/VERSION)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:${{ steps.version.outputs.version }} \
+            tests/infra/docker/${{ matrix.service }}
+
+      - name: Push image (main only)
+        if: github.ref == 'refs/heads/master'
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:${{ steps.version.outputs.version }}
+
+      - name: Push PR preview image
+        if: github.event_name == 'pull_request'
+        run: |
+          PR_TAG=${{ steps.version.outputs.version }}-pr-${{ github.event.pull_request.number }}
+          docker tag ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:${{ steps.version.outputs.version }} \
+            ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:$PR_TAG
+          docker push ghcr.io/${{ github.repository_owner }}/${{ matrix.service }}:$PR_TAG
