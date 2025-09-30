@@ -8,3 +8,4 @@ RUN \
     && chown -R test /home/test \
     && chmod 500 /home/test/.ssh \
     && chmod 400 /home/test/.ssh/*
+CMD ["/usr/sbin/sshd", "-D", "-e", "-4"]

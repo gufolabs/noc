@@ -11,38 +11,38 @@ jobs:
   changes:
     runs-on: ubuntu-24.04
     outputs:
-      dropbear: ${{ steps.filter.outputs.dropbear }}
-      snmpd: ${{ steps.filter.outputs.snmpd }}
-      sshd: ${{ steps.filter.outputs.sshd }}
-      telnetd: ${{ steps.filter.outputs.telnetd }}
+      dropbear: ${{ steps.filter.outputs.testdropbear }}
+      snmpd: ${{ steps.filter.outputs.testsnmpd }}
+      sshd: ${{ steps.filter.outputs.testsshd }}
+      telnetd: ${{ steps.filter.outputs.testtelnetd }}
     steps:
       - name: Filter Items
         uses: dorny/paths-filter@v3
         id: filter
         with:
           filters: |
-            dropbear:
-              - 'tests/infra/docker/dropbear/**'
-            snmpd:
-              - 'tests/infra/docker/snmpd/**'
-            sshd:
-              - 'tests/infra/docker/sshd/**'
-            telnetd:
-              - 'tests/infra/docker/telnetd/**'
+            testdropbear:
+              - 'tests/infra/docker/testdropbear/**'
+            testsnmpd:
+              - 'tests/infra/docker/testsnmpd/**'
+            testsshd:
+              - 'tests/infra/docker/testsshd/**'
+            testtelnetd:
+              - 'tests/infra/docker/testtelnetd/**'
   build:
     needs: [changes]
     runs-on: ubuntu-24.04
     strategy:
       matrix:
         include:
-          - service: dropbear
-            changed: ${{ needs.changes.outputs.dropbear }}
-          - service: snmpd
-            changed: ${{ needs.changes.outputs.snmpd }}
-          - service: sshd
-            changed: ${{ needs.changes.outputs.sshd }}
-          - service: telnetd
-            changed: ${{ needs.changes.outputs.telnetd }}
+          - service: testdropbear
+            changed: ${{ needs.changes.outputs.testdropbear }}
+          - service: testsnmpd
+            changed: ${{ needs.changes.outputs.testsnmpd }}
+          - service: testsshd
+            changed: ${{ needs.changes.outputs.testsshd }}
+          - service: testtelnetd
+            changed: ${{ needs.changes.outputs.testtelnetd }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4

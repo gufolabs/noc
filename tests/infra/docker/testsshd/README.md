@@ -6,10 +6,6 @@ SSH keys are also available
 
 Docker Compose usage:
 ``` yaml
-  sshd:
-    image: "ghcr.io/gufolabs/sshd:v1"
-    restart: "no"
-    command: /usr/sbin/sshd -D -e -4
-    networks:
-      - noc
+sshd:
+  image: "ghcr.io/gufolabs/testsshd:v1"
 ```
