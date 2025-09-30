@@ -10,6 +10,7 @@ from collections import defaultdict
 from typing import DefaultDict, Dict, List, Any
 from time import perf_counter_ns
 import functools
+import os
 
 # Third-party modules
 import pytest
@@ -23,6 +24,7 @@ from noc.config import config
 from noc.models import get_model, is_document
 from noc.core.model.fields import DocumentReferenceField, CachedForeignKey
 
+IN_GITHUB_ACTIONS = bool(os.getenv("GITHUB_ACTIONS", ""))
 
 _stats = None
 _durations: DefaultDict[str, int] = defaultdict(int)

@@ -18,6 +18,7 @@ import bson
 from noc.core.datastream.base import DataStream
 from noc.core.perf import metrics
 from noc.core.datastream.loader import loader
+from .conftest import IN_GITHUB_ACTIONS
 
 
 class ExampleDataStream(DataStream):
@@ -262,6 +263,7 @@ def test_loader_contains(datastream_name):
     assert datastream_name in loader
 
 
+@pytest.mark.skipif(IN_GITHUB_ACTIONS, reason="Replica set is disabled")
 def test_wait():
     class WaitDS(DataStream):
         name = "wait"
