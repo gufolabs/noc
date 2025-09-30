@@ -27,8 +27,10 @@ jobs:
     runs-on: ubuntu:24.04
     strategy:
       matrix:
-        service: [dropbear]
-    if: needs.changes.outputs[ matrix.service ] == 'true'
+        service:
+          - service: dropbear
+            changed: ${{ needs.changes.outputs.dropbear }}
+    if: matrix.changed == 'true'
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
