@@ -11,10 +11,10 @@ jobs:
   changes:
     runs-on: ubuntu-24.04
     outputs:
-      dropbear: ${{ steps.filter.outputs.testdropbear }}
-      snmpd: ${{ steps.filter.outputs.testsnmpd }}
-      sshd: ${{ steps.filter.outputs.testsshd }}
-      telnetd: ${{ steps.filter.outputs.testtelnetd }}
+      testdropbear: ${{ steps.filter.outputs.testdropbear }}
+      testsnmpd: ${{ steps.filter.outputs.testsnmpd }}
+      testsshd: ${{ steps.filter.outputs.testsshd }}
+      testtelnetd: ${{ steps.filter.outputs.testtelnetd }}
     steps:
       - name: Filter Items
         uses: dorny/paths-filter@v3
