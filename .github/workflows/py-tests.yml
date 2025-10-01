@@ -8,6 +8,7 @@ on:
     paths: &changed-paths
       - ".github/workflows/py-tests.yml"
       - "pyproject.toml"
+      - "codecov.yml"
       - "**.py"
   pull_request:
     paths: *changed-paths
