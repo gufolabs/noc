@@ -96,7 +96,7 @@ jobs:
         ports:
           - 5432:5432
       testdropbear:
-        image: ghcr.io/gufolabs/testdropbear:v2-pr-1
+        image: ghcr.io/gufolabs/testdropbear:v2
         ports:
           - 10001:22
       testtelnetd:
