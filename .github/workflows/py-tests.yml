@@ -5,10 +5,12 @@ env:
   TEST_PYTHON_VERSION: "3.12"
 on:
   push:
-    paths:
+    paths: &changed-paths
       - ".github/workflows/py-tests.yml"
       - "pyproject.toml"
       - "**.py"
+  pull_request:
+    paths: *changed-paths
   release:
     types: ["published"]
 jobs:

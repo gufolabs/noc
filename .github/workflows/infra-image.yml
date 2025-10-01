@@ -2,13 +2,11 @@ name: Build Test Images
 on:
   push:
     branches: [master]
-    paths:
+    paths: &changed-paths
       - .github/workflows/infra-image.yml
       - tests/infra/docker/**
   pull_request:
-    paths:
-      - .github/workflows/infra-image.yml
-      - tests/infra/docker/**
+    paths: *changed-paths
 jobs:
   changes:
     runs-on: ubuntu-24.04
