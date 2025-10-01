@@ -45,6 +45,12 @@ jobs:
     runs-on: ubuntu-24.04
     needs: [py-lint]
     services:
+      clickhouse:
+        image: clickhouse/clickhouse-server:23
+        ports:
+          - 8123:8123
+        options: >-
+          --mount type=tmpfs,dst=/var/lib/clickhouse
       kafka:
         image: bitnamilegacy/kafka:3.6.2
         env:
@@ -63,6 +69,15 @@ jobs:
           - 9092:9092
         options: >-
           --mount type=tmpfs,dst=/bitnami/data
+      mongodb:
+        image: mongo:4.4
+        ports:
+          - 27017:27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: noc
+          MONGO_INITDB_ROOT_PASSWORD: noc
+        options: >-
+          --mount type=tmpfs,dst=/data/db
       postgres:
         image: postgres:16
         env:
@@ -78,21 +93,22 @@ jobs:
           --mount type=tmpfs,dst=/var/lib/postgresql/data
         ports:
           - 5432:5432
-      mongodb:
-        image: mongo:4.4
+      testdropbear:
+        image: push ghcr.io/gufolabs/testdropbear:v1
         ports:
-          - 27017:27017
-        env:
-          MONGO_INITDB_ROOT_USERNAME: noc
-          MONGO_INITDB_ROOT_PASSWORD: noc
-        options: >-
-          --mount type=tmpfs,dst=/data/db
-      clickhouse:
-        image: clickhouse/clickhouse-server:23
+          - 10001:22
+      testtelnetd:
+        image: push ghcr.io/gufolabs/testtelnetd:v1
         ports:
-          - 8123:8123
-        options: >-
-          --mount type=tmpfs,dst=/var/lib/clickhouse
+          - 10002:23
+      testsnmpd:
+        image: push ghcr.io/gufolabs/testsnmpd:v1
+        ports:
+          - 161:161 # Custom telnet ports still not implemented
+      testsshd:
+        image: push ghcr.io/gufolabs/testsshd:v1
+        ports:
+          - 10004:22
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -134,6 +150,14 @@ jobs:
           NOC_MONGO_AUTHENTICATION_SOURCE: admin
           NOC_MSGSTREAM_CLIENT_CLASS: noc.core.msgstream.redpanda.RedPandaClient
           NOC_REDPANDA_ADDRESSES: 127.0.0.1:9092
+          NOC_TESTS_DROPBEAR_HOST: 127.0.0.1
+          NOC_TESTS_DROPBEAR_PORT: 10001
+          NOC_TESTS_TELNETD_HOST: 127.0.0.1
+          NOC_TESTS_TELNETD_PORT: 10002
+          NOC_TESTS_SNMPD_HOST: 127.0.0.1
+          NOC_TESTS_SNMPD_PORT: 161
+          NOC_TESTS_SSHD_HOST: 127.0.0.1
+          NOC_TESTS_SSHD_PORT: 10004
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5

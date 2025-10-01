@@ -18,7 +18,6 @@ from noc.sa.interfaces.igetdict import IGetDict
 from noc.core.script.snmp.base import SNMP
 from noc.core.mib import mib
 from noc.config import config
-from ..conftest import IN_GITHUB_ACTIONS
 
 
 SNMP_HOST = config.tests.snmpd_host
@@ -51,7 +50,6 @@ class GetDiagScript(BaseScript):
         return r
 
 
-@pytest.mark.skipif(IN_GITHUB_ACTIONS, reason="Temporary disabled on github")
 @pytest.mark.parametrize(
     "host,version,community,xcls",
     [

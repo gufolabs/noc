@@ -16,7 +16,6 @@ from noc.core.script.base import BaseScript
 from noc.core.script.cli.error import CLIConnectionRefused, CLIAuthFailed
 from noc.sa.interfaces.igetdict import IGetDict
 from noc.config import config
-from ..conftest import IN_GITHUB_ACTIONS
 
 SSHD_HOST = config.tests.sshd_host
 SSHD_PORT = config.tests.sshd_port
@@ -53,7 +52,6 @@ class GetDiagScript(BaseScript):
         return r
 
 
-@pytest.mark.skipif(IN_GITHUB_ACTIONS, reason="Temporary disabled on github")
 @pytest.mark.parametrize(
     "proto,host,port,user,password,args,xcls",
     [
