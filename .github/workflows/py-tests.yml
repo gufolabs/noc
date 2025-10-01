@@ -94,19 +94,19 @@ jobs:
         ports:
           - 5432:5432
       testdropbear:
-        image: push ghcr.io/gufolabs/testdropbear:v1
+        image: ghcr.io/gufolabs/testdropbear:v1
         ports:
           - 10001:22
       testtelnetd:
-        image: push ghcr.io/gufolabs/testtelnetd:v1
+        image: ghcr.io/gufolabs/testtelnetd:v1
         ports:
           - 10002:23
       testsnmpd:
-        image: push ghcr.io/gufolabs/testsnmpd:v1
+        image: ghcr.io/gufolabs/testsnmpd:v1
         ports:
           - 161:161 # Custom telnet ports still not implemented
       testsshd:
-        image: push ghcr.io/gufolabs/testsshd:v1
+        image: ghcr.io/gufolabs/testsshd:v1
         ports:
           - 10004:22
     steps:
