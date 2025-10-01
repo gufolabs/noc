@@ -24,8 +24,8 @@ lib64
 !/docs/blog/.authors.yml
 !/.eslintrc.json
 !/ui/.eslintrc.json
-!/tests/infra/docker/dropbear/root/home/test/.ssh
-!/tests/infra/docker/sshd/root/home/test/.ssh
+!/tests/infra/docker/testdropbear/root/home/test/.ssh
+!/tests/infra/docker/testsshd/root/home/test/.ssh
 ext_*
 static/test/
 pip-selfcheck.json
