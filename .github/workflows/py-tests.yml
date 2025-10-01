@@ -104,7 +104,7 @@ jobs:
       testsnmpd:
         image: ghcr.io/gufolabs/testsnmpd:v1
         ports:
-          - 161:161 # Custom telnet ports still not implemented
+          - 161:161/udp # Custom telnet ports still not implemented
       testsshd:
         image: ghcr.io/gufolabs/testsshd:v1
         ports:
