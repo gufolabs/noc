@@ -28,9 +28,7 @@ logger = logging.getLogger(__name__)
 HIDDEN_FIELDS = {"password", "new_password", "old_password", "retype_password"}
 
 # Build JWK for sign/verify
-jwt_key = jwk.construct(
-    config.secret_key, algorithm=config.login.jwt_algorithm
-).to_dict()
+jwt_key = jwk.construct(config.secret_key, algorithm=config.login.jwt_algorithm).to_dict()
 
 
 class ChangeCredentialsError(NOCError):
@@ -90,9 +88,7 @@ def register_last_login(user: str) -> None:
             u.register_login()
 
 
-def get_jwt_token(
-    user: str, expire: Optional[int] = None, audience: Optional[str] = None
-) -> str:
+def get_jwt_token(user: str, expire: Optional[int] = None, audience: Optional[str] = None) -> str:
     """
     Build JWT token for given user.
 
