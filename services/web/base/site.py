@@ -518,56 +518,6 @@ class Site(object):
         # Finally, order the menu
         self.sort_menu()
 
-    def _autodiscover(self):
-        """
-        Auto-load and initialize all application classes
-        """
-        if self.apps:
-            # Do not discover site twice
-            return
-        self.app_count = 0
-        prefix = os.path.join("services", "web", "apps")
-        # Load applications
-        installed_apps = [x[4:] for x in settings.INSTALLED_APPS if x.startswith("noc.")]
-        self.menu_roots = {}
-        for app in installed_apps:
-            app_path = os.path.join(prefix, app)
-            if not os.path.isdir(app_path):
-                continue
-            logger.debug("Loading %s applications", app)
-            self.menu_roots[app] = self.add_module_menu("noc.%s" % app)
-            # Initialize application
-            for cs in config.get_customized_paths("", prefer_custom=True):
-                if cs:
-                    basename = os.path.basename(os.path.dirname(cs))
-                else:
-                    basename = "noc"
-                for f in glob.glob("%s/*/views.py" % os.path.join(cs, app_path)):
-                    d = os.path.split(f)[0]
-                    # Skip application loading if denoted by DISABLED file
-                    if os.path.isfile(os.path.join(d, "DISABLED")):
-                        continue
-                    # site.register will be called by metaclass, registering views
-                    __import__(
-                        ".".join(
-                            [basename, *f[:-3].split(os.path.sep)[len(cs.split(os.path.sep)) - 1 :]]
-                        ),
-                        {},
-                        {},
-                        "*",
-                    )
-        # Register all collected applications
-        for app_class in self.pending_applications:
-            self.do_register(app_class)
-        self.setup_reports()
-        self.pending_applications = []
-        # Setup router URLs
-        self.setup_router()
-        # Install applications
-        logger.info("%d applications are installed", self.app_count)
-        # Finally, order the menu
-        self.sort_menu()
-
     rx_namespace = re.compile(r"^[a-z0-9_]+:[a-z0-9_]+:[a-z0-9_]+$", re.IGNORECASE)
 
     def reverse(self, url, *args, **kwargs):
