@@ -40,7 +40,7 @@ SECRETS_BASE = Path("/", "run", "secrets")
 
 
 class Config(BaseConfig):
-    loglevel = MapParameter(
+    loglevel = MapParameter[int](
         default="info",
         mappings={
             # pylint: disable=used-before-assignment
@@ -105,7 +105,7 @@ class Config(BaseConfig):
         enable_reboots = BooleanParameter(default=False)
         enable_managedobjects = BooleanParameter(default=False)
         enable_alarms_archive = BooleanParameter(default=False)
-        alarms_archive_policy = MapParameter(
+        alarms_archive_policy = MapParameter[str](
             default="weekly",
             mappings={
                 "weekly": '{{doc["clear_timestamp"].strftime("y%Yw%W")}}',
@@ -305,7 +305,7 @@ class Config(BaseConfig):
             default=True, help="Permit consul self registration"
         )
         forensic = BooleanParameter(default=False)
-        gate = ListParameter(item=StringParameter(), default=[], help="Feature gates")
+        gate = ListParameter[str](item=StringParameter(), default=[], help="Feature gates")
 
     class fm(ConfigSection):
         active_window = SecondsParameter(default="1d")
@@ -337,15 +337,15 @@ class Config(BaseConfig):
         enable_tile1 = BooleanParameter(default=False)
         tile1_name = StringParameter(default="Custom 1")
         tile1_url = StringParameter(default="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
-        tile1_subdomains = ListParameter(item=StringParameter(), default=[])
+        tile1_subdomains = ListParameter[str](item=StringParameter(), default=[])
         enable_tile2 = BooleanParameter(default=False)
         tile2_name = StringParameter(default="Custom 2")
         tile2_url = StringParameter(default="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
-        tile2_subdomains = ListParameter(item=StringParameter(), default=[])
+        tile2_subdomains = ListParameter[str](item=StringParameter(), default=[])
         enable_tile3 = BooleanParameter(default=False)
         tile3_name = StringParameter(default="Custom 3")
         tile3_url = StringParameter(default="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
-        tile3_subdomains = ListParameter(item=StringParameter(), default=[])
+        tile3_subdomains = ListParameter[str](item=StringParameter(), default=[])
         yandex_supported = BooleanParameter(default=False)
         enable_yandex_roadmap = BooleanParameter(default=False)
         enable_yandex_hybrid = BooleanParameter(default=False)
@@ -488,7 +488,7 @@ class Config(BaseConfig):
         enable_reboot = BooleanParameter(default=False)
         enable_metrics = BooleanParameter(default=False)
         # Comma-separated list of metric scopes
-        enable_metric_scopes = ListParameter(item=StringParameter(), default=[])
+        enable_metric_scopes = ListParameter[str](item=StringParameter(), default=[])
         enable_snmptrap = BooleanParameter(default=False)
         enable_syslog = BooleanParameter(default=False)
         enable_diagnostic_change = BooleanParameter(default=False)
@@ -776,7 +776,7 @@ class Config(BaseConfig):
         storm_threshold_reduction = FloatParameter(default=0.9)
         # time to live (rounds quantity) of records in storm protection addresses dictionary
         storm_record_ttl = IntParameter(default=10)
-        storm_min_severity = MapParameter(
+        storm_min_severity = MapParameter[int](
             default="error",
             mappings={
                 "emergency": 0,
@@ -1009,11 +1009,11 @@ class Config(BaseConfig):
 
     class tests(ConfigSection):
         # List of pyfilesystem URLs holding intial data
-        fixtures_paths = ListParameter(item=StringParameter(), default=["tests/data"])
+        fixtures_paths = ListParameter[str](item=StringParameter(), default=["tests/data"])
         # List of pyfilesystem URLs holding event classification samples
-        events_paths = ListParameter(item=StringParameter())
+        events_paths = ListParameter[str](item=StringParameter())
         # List of pyfilesystem URLs holding beef test cases
-        beef_paths = ListParameter(item=StringParameter())
+        beef_paths = ListParameter[str](item=StringParameter())
         # SSHD hostname and port
         sshd_host = StringParameter(default="sshd")
         sshd_port = IntParameter(default=22)
@@ -1037,18 +1037,18 @@ class Config(BaseConfig):
         rpsl_inverse_pref_style = BooleanParameter(default=False)
 
     class perfomance(ConfigSection):
-        default_hist = ListParameter(
+        default_hist = ListParameter[float](
             item=FloatParameter(), default=[0.001, 0.005, 0.01, 0.05, 0.5, 1.0, 5.0, 10.0]
         )
         enable_mongo_hist = BooleanParameter(default=False)
-        mongo_hist = ListParameter(
+        mongo_hist = ListParameter[float](
             item=FloatParameter(), default=[0.001, 0.005, 0.01, 0.05, 0.5, 1.0, 5.0, 10.0]
         )
         enable_postgres_hist = BooleanParameter(default=False)
-        postgres_hist = ListParameter(
+        postgres_hist = ListParameter[float](
             item=FloatParameter(), default=[0.001, 0.005, 0.01, 0.05, 0.5, 1.0, 5.0, 10.0]
         )
-        default_quantiles = ListParameter(item=FloatParameter(), default=[0.5, 0.9, 0.95])
+        default_quantiles = ListParameter[float](item=FloatParameter(), default=[0.5, 0.9, 0.95])
         default_quantiles_epsilon = 0.01
         default_quantiles_window = 60
         default_quantiles_buffer = 100
