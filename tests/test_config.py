@@ -147,9 +147,9 @@ def test_bool_parameter():
 
 def test_list_parameter():
     class Config(BaseConfig):
-        str_list = ListParameter(item=StringParameter())
-        default_str_list = ListParameter(item=StringParameter(), default=[1, "2"])
-        bool_list = ListParameter(item=BooleanParameter())
+        str_list = ListParameter[str](item=StringParameter())
+        default_str_list = ListParameter[str](item=StringParameter(), default=[1, "2"])
+        bool_list = ListParameter[bool](item=BooleanParameter())
 
     config = Config()
     # str_list
@@ -185,8 +185,8 @@ def test_float_parameter():
 
 def test_map_parameter():
     class Config(BaseConfig):
-        m = MapParameter(mappings={"one": 1, "two": 2})
-        default_m = MapParameter(mappings={"one": 1, "two": 2}, default="one")
+        m = MapParameter[int](mappings={"one": 1, "two": 2})
+        default_m = MapParameter[int](mappings={"one": 1, "two": 2}, default="one")
 
     config = Config()
     # m
