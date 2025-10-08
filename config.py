@@ -16,7 +16,6 @@ from pathlib import Path
 from typing import Dict, Union, Optional, Iterable
 from types import ModuleType
 import importlib
-import pkgutil
 
 # Third-party modules
 import cachetools
