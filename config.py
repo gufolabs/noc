@@ -27,7 +27,7 @@ from noc.core.config.params import (
     BooleanParameter,
     HandlerParameter,
     SecondsParameter,
-    BytesParameter,
+    BytesSizeParameter,
     FloatParameter,
     ServiceParameter,
     SecretParameter,
@@ -392,10 +392,10 @@ class Config(BaseConfig):
         security_protocol = StringParameter(
             choices=["PLAINTEXT", "SASL_PLAINTEXT", "SSL", "SASL_SSL"], default="PLAINTEXT"
         )
-        max_batch_size = BytesParameter(
+        max_batch_size = BytesSizeParameter(
             default=16384, help="Maximum size of buffered data per partition"
         )
-        max_request_size = BytesParameter(default=1048576, help="The maximum size of a request")
+        max_request_size = BytesSizeParameter(default=1048576, help="The maximum size of a request")
         compression_type = StringParameter(
             default="none",
             choices=["none", "gzip", "snappy", "lz4", "zstd"],
@@ -589,14 +589,14 @@ class Config(BaseConfig):
         security_protocol = StringParameter(
             choices=["PLAINTEXT", "SASL_PLAINTEXT", "SSL", "SASL_SSL"], default="PLAINTEXT"
         )
-        max_batch_size = BytesParameter(
+        max_batch_size = BytesSizeParameter(
             default=16384, help="Maximum size of buffered data per partition"
         )
         retry_backoff_ms = SecondsParameter(
             default=3,
             help="The amount of time to wait before attempting to retry a failed request to a given topic partition",
         )
-        max_request_size = BytesParameter(default=1048576, help="The maximum size of a request")
+        max_request_size = BytesSizeParameter(default=1048576, help="The maximum size of a request")
         compression_type = StringParameter(
             default="lz4",
             choices=["none", "gzip", "snappy", "lz4", "zstd"],
@@ -676,7 +676,7 @@ class Config(BaseConfig):
                 default="24h",
                 help="FM events stream retention interval. If 0 use Liftbrdige setting value",
             )
-            retention_max_bytes = BytesParameter(
+            retention_max_bytes = BytesSizeParameter(
                 default=0,
                 help="FM events stream retention size (in bytes). If 0 use Liftbrdige setting value",
             )
@@ -684,7 +684,7 @@ class Config(BaseConfig):
                 default="1h",
                 help="FM events stream segment interval. Must be less retention age. If 0 use Liftbrdige setting value",
             )
-            segment_max_bytes = BytesParameter(
+            segment_max_bytes = BytesSizeParameter(
                 default=0,
                 help="FM events stream segment size. Must be less retention size. If 0 use Liftbrdige setting value",
             )
@@ -698,7 +698,7 @@ class Config(BaseConfig):
                 default="24h",
                 help="FM alarms stream retention interval. If 0 use Liftbrdige setting value",
             )
-            retention_max_bytes = BytesParameter(
+            retention_max_bytes = BytesSizeParameter(
                 default=0,
                 help="FM alarms stream retention size (in bytes). If 0 use Liftbrdige setting value",
             )
@@ -706,7 +706,7 @@ class Config(BaseConfig):
                 default="1h",
                 help="FM alarms stream segment interval. Must be less retention age. If 0 use Liftbrdige setting value",
             )
-            segment_max_bytes = BytesParameter(
+            segment_max_bytes = BytesSizeParameter(
                 default=0,
                 help="FM alarms stream segment size. Must be less retention size. If 0 use Liftbrdige setting value",
             )
@@ -717,17 +717,17 @@ class Config(BaseConfig):
 
         class message(ConfigSection):
             retention_max_age = SecondsParameter(default="1h")
-            retention_max_bytes = BytesParameter(default=0)
+            retention_max_bytes = BytesSizeParameter(default=0)
             segment_max_age = SecondsParameter(default="30M")
-            segment_max_bytes = BytesParameter(default=0)
+            segment_max_bytes = BytesSizeParameter(default=0)
             auto_pause_time = SecondsParameter(default=0)
             auto_pause_disable_if_subscribers = BooleanParameter(default=False)
 
         class ch(ConfigSection):
             retention_max_age = SecondsParameter(default="1h")
-            retention_max_bytes = BytesParameter(default="100M")
+            retention_max_bytes = BytesSizeParameter(default="100M")
             segment_max_age = SecondsParameter(default="30M")
-            segment_max_bytes = BytesParameter(default="50M")
+            segment_max_bytes = BytesSizeParameter(default="50M")
             auto_pause_time = SecondsParameter(default=0)
             auto_pause_disable_if_subscribers = BooleanParameter(default=False)
             replication_factor = IntParameter(
@@ -736,32 +736,32 @@ class Config(BaseConfig):
 
         class kafkasender(ConfigSection):
             retention_max_age = SecondsParameter(default="1h")
-            retention_max_bytes = BytesParameter(default=0)
+            retention_max_bytes = BytesSizeParameter(default=0)
             segment_max_age = SecondsParameter(default="30M")
-            segment_max_bytes = BytesParameter(default=0)
+            segment_max_bytes = BytesSizeParameter(default=0)
             auto_pause_time = SecondsParameter(default=0)
             auto_pause_disable_if_subscribers = BooleanParameter(default=False)
 
         class metrics(ConfigSection):
             retention_max_age = SecondsParameter(default="1h")
-            retention_max_bytes = BytesParameter(default=0)
+            retention_max_bytes = BytesSizeParameter(default=0)
             segment_max_age = SecondsParameter(default="30M")
-            segment_max_bytes = BytesParameter(default=0)
+            segment_max_bytes = BytesSizeParameter(default=0)
             auto_pause_time = SecondsParameter(default=0)
             auto_pause_disable_if_subscribers = BooleanParameter(default=False)
 
         class jobs(ConfigSection):
             retention_max_age = SecondsParameter(default="24h")
-            retention_max_bytes = BytesParameter(default=0)
+            retention_max_bytes = BytesSizeParameter(default=0)
             segment_max_age = SecondsParameter(default="1h")
-            segment_max_bytes = BytesParameter(default=0)
+            segment_max_bytes = BytesSizeParameter(default=0)
             auto_pause_time = SecondsParameter(default=0)
 
         class submit(ConfigSection):
             retention_max_age = SecondsParameter(default="24h")
-            retention_max_bytes = BytesParameter(default=0)
+            retention_max_bytes = BytesSizeParameter(default=0)
             segment_max_age = SecondsParameter(default="1h")
-            segment_max_bytes = BytesParameter(default=0)
+            segment_max_bytes = BytesSizeParameter(default=0)
             auto_pause_time = SecondsParameter(default=0)
 
     class syslogcollector(ConfigSection):
@@ -848,7 +848,7 @@ class Config(BaseConfig):
         heatmap_zoom = StringParameter(default="4")
         map_lon = StringParameter(default="108.567849")
         map_lat = StringParameter(default="66.050063")
-        max_image_size = BytesParameter(default="2M")
+        max_image_size = BytesSizeParameter(default="2M")
         topology_map_grid_size = IntParameter(min=5, default=25)
         report_csv_delimiter = StringParameter(choices=[";", ","], default=";")
         enable_report_history = BooleanParameter(
@@ -856,7 +856,7 @@ class Config(BaseConfig):
         )
 
     class ui(ConfigSection):
-        max_avatar_size = BytesParameter(default="256K")
+        max_avatar_size = BytesSizeParameter(default="256K")
         max_rest_limit = IntParameter(default=100)
 
     class datasource(ConfigSection):

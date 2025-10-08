@@ -20,7 +20,7 @@ from noc.core.config.params import (
     HandlerParameter,
     SecondsParameter,
     ListParameter,
-    BytesParameter,
+    BytesSizeParameter,
     UUIDParameter,
 )
 
@@ -243,8 +243,8 @@ def test_seconds_parameter():
 
 def test_bytes_parameter():
     class Config(BaseConfig):
-        s = BytesParameter()
-        default_s = BytesParameter(default="1M")
+        s = BytesSizeParameter()
+        default_s = BytesSizeParameter(default="1M")
 
     config = Config()
     # s

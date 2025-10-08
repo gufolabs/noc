@@ -222,7 +222,7 @@ class SecondsParameter(BaseParameter[int]):
         return f"{self.value}s"
 
 
-class BytesParameter(BaseParameter[int]):
+class BytesSizeParameter(BaseParameter[int]):
     SHORT_FORM = (
         (1099511627776, "T"),
         (1073741824, "G"),
@@ -284,14 +284,14 @@ class ServiceItem(object):
         self.port = port
 
     def __str__(self):
-        return "{self.host}:{self.port}"
+        return f"{self.host}:{self.port}"
 
     def __repr__(self):
-        return "<ServiceItem {self.host}:{self.port}>"
+        return f"<ServiceItem {self.host}:{self.port}>"
 
     def __contains__(self, item) -> bool:
         # @todo: Strange
-        return item in "%s:%s" % (self.host, self.port)
+        return item in f"{self.host}:{self.port}"
 
 
 class ServiceParameter(BaseParameter[List[ServiceItem]]):
@@ -379,7 +379,7 @@ class ServiceParameter(BaseParameter[List[ServiceItem]]):
             if not self.wait or self.value:
                 break
 
-    def as_list(self):
+    def as_list(self) -> List[str]:
         """
         :return: List of <host>:<port>
         """
