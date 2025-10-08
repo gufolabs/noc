@@ -7,22 +7,20 @@
 
 # Python modules
 import re
-import glob
-import os
 import hashlib
 import logging
 import types
 from collections import defaultdict
 import operator
 from urllib.parse import urlencode
-from typing import List, Dict, Set
+from typing import List, Dict, Set, Optional
 from threading import Lock
 import pkgutil
 import importlib
 
 # Third-party modules
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseForbidden, Http404
-from django.urls import path, re_path, include, reverse
+from django.urls import path, re_path, include, reverse, URLPattern
 from django.conf import settings
 from django.utils.encoding import smart_str
 from django.views.i18n import JavaScriptCatalog
@@ -35,6 +33,7 @@ from noc.config import config
 from noc.core.debug import error_report
 from noc.core.comp import smart_bytes, smart_text
 from noc.core.jsonutils import orjson_defaults
+from noc.core.service.base import BaseService
 
 logger = logging.getLogger(__name__)
 
@@ -115,7 +114,7 @@ class Site(object):
 
     def __init__(self):
         self.apps = {}  # app_id -> app instance
-        self.urlpatterns = []
+        self.urlpatterns: List[URLPattern] = []
         self.menu = []
         self.menu_roots = {}  # app -> menu
         self.reports = []  # app_id -> title
@@ -125,9 +124,19 @@ class Site(object):
         self.app_contributors = defaultdict(set)
         self.app_count = 0
         self.pending_applications = []
+        self.service: Optional[BaseService] = None
+
+    def set_service(self, service: BaseService) -> None:
+        """
+        Bind site to service.
+
+        Args:
+            service: Service instance.
+        """
+        self.service = service
 
     @property
-    def urls(self):
+    def urls(self) -> List[URLPattern]:
         """
         Returns URLConf
         """
@@ -502,9 +511,10 @@ class Site(object):
                 importlib.import_module(mod_info.name)
                 # mark as loaded
                 seen_apps.add(app_id)
-        # Initialize menu roots
+        # Initialize menu roots, sort by code
         self.menu_roots = {
-            app: self.add_module_menu(f"noc.{app}") for app in {x.split(".")[0] for x in seen_apps}
+            app: self.add_module_menu(f"noc.{app}")
+            for app in sorted({x.split(".")[0] for x in seen_apps})
         }
         # Register all collected applications
         for app_class in self.pending_applications:
