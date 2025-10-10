@@ -511,10 +511,16 @@ class Site(object):
                 importlib.import_module(mod_info.name)
                 # mark as loaded
                 seen_apps.add(app_id)
-        # Initialize menu roots, sort by code
+        # Initialize menu roots
+        app_order: Dict[str, int] = {
+            app: n
+            for n, app in enumerate(x[4:] for x in settings.INSTALLED_APPS if x.startswith("noc."))
+        }
         self.menu_roots = {
             app: self.add_module_menu(f"noc.{app}")
-            for app in sorted({x.split(".")[0] for x in seen_apps})
+            for app in sorted(
+                {x.split(".")[0] for x in seen_apps}, key=lambda x: app_order.get(x, 999)
+            )
         }
         # Register all collected applications
         for app_class in self.pending_applications:
