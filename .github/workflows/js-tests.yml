@@ -28,16 +28,6 @@ jobs:
           path: ui/node_modules/
           key: ${{ runner.os }}-eslint-${{ hashFiles('ui/package.json') }}
 
-      - name: Install eslint
-        run: |
-          npm install -g eslint@$(grep -oP '"eslint"\s*:\s*"\K[~^]?\K[0-9.]+(?=")' package.json)
-          eslint --version
-        working-directory: ui
-
-      - name: npm install
-        run: npm install
-        working-directory: ui
-
       - name: Run eslint
-        run: eslint web --debug --fix-dry-run --exit-on-fatal-error
+        run: npx -y eslint@$(grep -oP '"eslint"\s*:\s*"\K[~^]?\K[0-9.]+(?=")' package.json) web --fix-dry-run
         working-directory: ui
