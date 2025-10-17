@@ -11,7 +11,7 @@ on:
   release:
     types: ["published"]
 jobs:
-  lint:
+  js-lint:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repo
@@ -33,6 +33,7 @@ jobs:
 
       - name: Run eslint
         run: |
+          set -x -e
           cd ui/
           npm install
           eslint web --fix-dry-run
