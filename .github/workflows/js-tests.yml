@@ -1,0 +1,37 @@
+name: Run JS Tests
+on:
+  push:
+    branches: [master]
+    paths: &changed-paths
+      - ".github/workflows/js-tests.yml"
+      - "ui/**.js"
+  pull_request:
+    paths: *changed-paths
+  release:
+    types: ["published"]
+jobs:
+  js-lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ui/node_modules/
+          key: ${{ runner.os }}-eslint-${{ hashFiles('ui/packages.json') }}
+
+      - name: Install eslint
+        run: npm install -g eslint@$(grep -oP '"eslint"\s*:\s*"\K[~^]?\K[0-9.]+(?=")' ui/package.json)
+
+      - name: Run eslint
+        run: |
+          cd ui/
+          npm install
+          eslint web --fix-dry-run
