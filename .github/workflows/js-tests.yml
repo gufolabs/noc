@@ -29,7 +29,7 @@ jobs:
           key: ${{ runner.os }}-eslint-${{ hashFiles('ui/package.json') }}
 
       - name: Install eslint
-        run: npm install -g eslint@$(grep -oP '"eslint"\s*:\s*"\K[~^]?\K[0-9.]+(?=")' ui/package.json)
+        run: npm install -g eslint@$(grep -oP '"eslint"\s*:\s*"\K[~^]?\K[0-9.]+(?=")' package.json)
         working-directory: ui
 
       - name: npm install
