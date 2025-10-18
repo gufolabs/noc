@@ -5,8 +5,10 @@ on:
     paths: &changed-paths
       - ".github/workflows/js-tests.yml"
       - "ui/package.json"
+      - "ui/package-lock.json"
       - "ui/**.js"
   pull_request:
+    branches: [master]
     paths: *changed-paths
   release:
     types: ["published"]
@@ -24,10 +26,14 @@ jobs:
           cache: "npm"
           cache-dependency-path: "ui/package-lock.json"
 
+      - name: Filter package.json
+        run: jq -f filter-devdeps.jq package.json > package.json
+        working-directory: ui
+
       - name: Install dependencies
-        run: npm install
+        run: npm ci
         working-directory: ui
 
       - name: Run eslint
-        run: npx -y eslint@$(grep -oP '"eslint"\s*:\s*"\K[~^]?\K[0-9.]+(?=")' package.json) web
+        run: npx eslint web
         working-directory: ui
