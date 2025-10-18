@@ -22,6 +22,7 @@ jobs:
         with:
           node-version: "22"
           cache: "npm"
+          cache-dependency-path: "ui/package-lock.json"
 
       - name: Run eslint
         run: npx -y eslint@$(grep -oP '"eslint"\s*:\s*"\K[~^]?\K[0-9.]+(?=")' package.json) web
