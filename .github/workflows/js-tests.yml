@@ -21,12 +21,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: "22"
-
-      - name: Cache Dependencies
-        uses: actions/cache@v4
-        with:
-          path: ui/node_modules/
-          key: ${{ runner.os }}-eslint-${{ hashFiles('ui/package.json') }}
+          cache: "npm"
 
       - name: Run eslint
         run: npx -y eslint@$(grep -oP '"eslint"\s*:\s*"\K[~^]?\K[0-9.]+(?=")' package.json) web
