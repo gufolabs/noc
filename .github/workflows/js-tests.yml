@@ -25,7 +25,7 @@ jobs:
       - name: Cache Dependencies
         uses: actions/cache@v4
         with:
-          path: ~/.npm/_npx_cache
+          path: ui/node_modules/
           key: ${{ runner.os }}-eslint-${{ hashFiles('ui/package.json') }}
 
       - name: Run eslint
