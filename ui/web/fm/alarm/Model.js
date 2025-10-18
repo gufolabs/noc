@@ -10,7 +10,7 @@ Ext.define("NOC.fm.alarm.Model", {
   extend: "Ext.data.Model",
   rest_url: "/fm/alarm/",
   fields: [
-        {
+    {
       name: "id",
       type: "string",
     },
