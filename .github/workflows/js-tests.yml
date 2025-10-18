@@ -24,6 +24,10 @@ jobs:
           cache: "npm"
           cache-dependency-path: "ui/package-lock.json"
 
+      - name: Install dependencies
+        run: npm install
+        working-directory: ui
+
       - name: Run eslint
         run: npx -y eslint@$(grep -oP '"eslint"\s*:\s*"\K[~^]?\K[0-9.]+(?=")' package.json) web
         working-directory: ui
