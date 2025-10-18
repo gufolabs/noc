@@ -25,9 +25,9 @@ jobs:
       - name: Cache Dependencies
         uses: actions/cache@v4
         with:
-          path: ui/node_modules/
+          path: ~/.npm/_npx_cache
           key: ${{ runner.os }}-eslint-${{ hashFiles('ui/package.json') }}
 
       - name: Run eslint
-        run: npx -y eslint@$(grep -oP '"eslint"\s*:\s*"\K[~^]?\K[0-9.]+(?=")' package.json) web --fix-dry-run
+        run: npx -y eslint@$(grep -oP '"eslint"\s*:\s*"\K[~^]?\K[0-9.]+(?=")' package.json) web
         working-directory: ui
