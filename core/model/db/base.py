@@ -5,9 +5,6 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
-# Python modules
-from typing import Dict
-
 # Third-party modules
 import orjson
 import psycopg2
