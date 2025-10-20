@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import runtime_checkable, Set
+from typing import runtime_checkable, Set, Protocol
 from pathlib import Path
 
 # Third-party modules
@@ -19,7 +19,7 @@ from .util import get_documents
 
 # Mark @runtime_checkable for isinstance() support
 @runtime_checkable
-class CheckGetJsonPath(GetJsonPath): ...
+class CheckGetJsonPath(GetJsonPath, Protocol): ...
 
 
 SELECTED_MODELS = [x for x in get_documents() if hasattr(x, "get_json_path")]
