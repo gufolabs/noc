@@ -130,6 +130,9 @@ def db_postgres(request):
 def db_mongo(request):
     """Create and destroy mongo database."""
     if not IS_COLLECT_ONLY:
+        from noc.core.mongo.connection import connect
+
+        connect()
         _create_mongo_db()
     yield
 
