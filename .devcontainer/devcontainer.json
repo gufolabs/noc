@@ -13,7 +13,6 @@
 		// Dockerfile target
 		"target": "devcontainer"
 	},
-	"postStartCommand": "/usr/local/bin/docker-entrypoint.sh bash",
 	// Environment
 	"containerEnv": {
 		"PYTHONPATH": "src"

@@ -27,11 +27,7 @@ jobs:
           cache-dependency-path: "ui/package-lock.json"
 
       - name: Filter package.json
-        run: jq -f filter-devdeps.jq package.json > package.json.tmp && mv package.json.tmp package.json
-        working-directory: ui
-
-      - name: Install dependencies
-        run: npm ci
+        run: npm install
         working-directory: ui
 
       - name: Run eslint

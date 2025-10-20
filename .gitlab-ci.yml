@@ -112,7 +112,7 @@ eslint:
     - npm install -g eslint@$(grep -oP '"eslint"\s*:\s*"\K[~^]?\K[0-9.]+(?=")' ui/package.json)
     - cd ui/
     - npm install
-    - eslint web --fix-dry-run
+    - eslint web
   only:
     refs:
       - merge_requests

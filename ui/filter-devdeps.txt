@@ -1,3 +1,0 @@
-This filter leaves the dependencies section empty and selects only the four specified packages from devDependencies: eslint, @eslint/js, typescript-eslint, globals. It is used only in the js-test GitHub workflow.
-
-.github/workflows/js-tests.yml
