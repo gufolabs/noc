@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import runtime_checkable, Set, Protocol
+from typing import Set
 from pathlib import Path
 
 # Third-party modules
@@ -17,17 +17,12 @@ from noc.core.protocols.get_json_path import GetJsonPath
 from .util import get_documents
 
 
-# Mark @runtime_checkable for isinstance() support
-@runtime_checkable
-class CheckGetJsonPath(GetJsonPath, Protocol): ...
-
-
 SELECTED_MODELS = [x for x in get_documents() if hasattr(x, "get_json_path")]
 
 
 @pytest.mark.parametrize("model", SELECTED_MODELS)
 def test_get_json_path_protocol(model) -> None:
-    assert isinstance(model, CheckGetJsonPath)
+    assert isinstance(model, GetJsonPath)
 
 
 @pytest.mark.parametrize("model", SELECTED_MODELS)
