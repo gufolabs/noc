@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # Autocommit pg database wrapper
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Python modules
+from typing import Dict
 
 # Third-party modules
 import orjson
@@ -36,7 +39,15 @@ class DatabaseWrapper(PGDatabaseWrapper):
         :param conn_params:
         :return:
         """
+
+        def _resolve_deferred(name: str) -> None:
+            cp = conn_params.get(name)
+            if cp and callable(cp):
+                conn_params[name] = cp()
+
         conn_params["cursor_factory"] = SpanCursor
+        _resolve_deferred("host")
+        _resolve_deferred("port")
         connection = psycopg2.connect(**conn_params)
         # Register dummy loads() to avoid a round trip from psycopg2's decode
         # to json.dumps() to json.loads(), when using a custom decoder in
