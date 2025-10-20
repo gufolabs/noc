@@ -7,9 +7,10 @@
 
 # Python modules
 from pathlib import Path
-from typing import Protocol
+from typing import Protocol, runtime_checkable
 
 
+@runtime_checkable
 class GetJsonPath(Protocol):
     """
     Relative JSON path in the collection.
