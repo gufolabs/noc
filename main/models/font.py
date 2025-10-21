@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Font Collection
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -9,6 +9,7 @@
 from threading import Lock
 import operator
 from typing import Any, Dict, Optional, Union
+from pathlib import Path
 
 # Third-party modules
 from mongoengine.document import Document
@@ -67,5 +68,5 @@ class Font(Document):
             self.json_data, order=["name", "$collection", "uuid", "font_family", "description"]
         )
 
-    def get_json_path(self) -> str:
-        return "%s.json" % quote_safe_path(self.name)
+    def get_json_path(self) -> Path:
+        return Path(quote_safe_path(self.name)).with_suffix(".json")

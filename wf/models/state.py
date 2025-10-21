@@ -1,16 +1,16 @@
 # ----------------------------------------------------------------------
 # State model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-import os
 import operator
 import logging
 from threading import Lock
 from typing import Optional, Union, Iterable, Dict, Any
+from pathlib import Path
 
 # Third-party modules
 from bson import ObjectId
@@ -215,9 +215,10 @@ class State(Document):
             ],
         )
 
-    def get_json_path(self) -> str:
-        name_coll = quote_safe_path(self.workflow.name + " " + self.name)
-        return os.path.join(name_coll) + ".json"
+    def get_json_path(self) -> Path:
+        return Path(
+            quote_safe_path(f"{self.workflow.name}"), quote_safe_path(self.name)
+        ).with_suffix(".json")
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
