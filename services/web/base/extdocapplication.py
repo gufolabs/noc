@@ -8,7 +8,6 @@
 # Python modules
 import uuid
 from functools import reduce
-import os
 from pathlib import Path
 
 # Third-party modules
