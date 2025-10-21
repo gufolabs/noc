@@ -7,16 +7,17 @@
 
 # Python modules
 from pathlib import Path
-from typing import Protocol, runtime_checkable
+from typing import Protocol
 
 
-@runtime_checkable
-class GetJsonPath(Protocol):
+class ToJson(Protocol):
     """
-    Relative JSON path in the collection.
+    Saving to collections support.
 
-    Models must implement GetJsonPath protocol in order
-    to save and load data from collections.
+    Must implement methods:
+    - get_json_path() - relative path in colelction
+    - to_json() - collection content.
     """
 
     def get_json_path(self) -> Path: ...
+    def to_json(self) -> str: ...

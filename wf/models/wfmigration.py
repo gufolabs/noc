@@ -1,13 +1,13 @@
 # ----------------------------------------------------------------------
 # Workflow Migration model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-import os
 from typing import Dict, Any
+from pathlib import Path
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
@@ -83,9 +83,10 @@ class WFMigration(Document):
             ],
         )
 
-    def get_json_path(self) -> str:
-        p = [quote_safe_path(n.strip()) for n in self.name.split("|")]
-        return os.path.join(*p) + ".json"
+    def get_json_path(self) -> Path:
+        return Path(*(quote_safe_path(n.strip()) for n in self.name.split("|"))).with_suffix(
+            ".json"
+        )
 
     def get_translation_map(self, target_wf):
         """

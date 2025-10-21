@@ -1,16 +1,16 @@
 # ----------------------------------------------------------------------
 # State transition
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-import os
 import operator
 import logging
 from typing import List, Dict, Any, Optional, Union
 from threading import Lock
+from pathlib import Path
 
 # Third-party modules
 from bson import ObjectId
@@ -180,11 +180,13 @@ class Transition(Document):
             ],
         )
 
-    def get_json_path(self) -> str:
-        name_coll = quote_safe_path(
-            " ".join([self.workflow.name, self.from_state.name, self.to_state.name, self.label])
-        )
-        return os.path.join(name_coll) + ".json"
+    def get_json_path(self) -> Path:
+        return Path(
+            quote_safe_path(self.workflow.name),
+            quote_safe_path(self.from_state.name),
+            quote_safe_path(self.to_state.name),
+            quote_safe_path(self.label),
+        ).with_suffix(".json")
 
     @property
     def json_name(self):
