@@ -34,7 +34,8 @@ def test_get_json_path(model) -> None:
         assert path
         assert isinstance(path, Path)
         assert path.suffix == ".json"
-        assert path not in seen, f"{path} is already taken by {seen[path]}"
+        taken_by = seen.get(path)
+        assert taken_by is None, f"{path} requested by {o.uuid} but already taken by {taken_by}"
         seen[path] = o.uuid
 
 
