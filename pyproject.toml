@@ -223,7 +223,7 @@ select = [
   # "C90", # mccabe
   # "I", # isort
   # "D", # Pydocstyle
-  # "YTT", # flake8-2020
+  "YTT", # flake8-2020
   # "ANN", # flake8-annotations
   # "S", # flake8-bandit
   # "BLE", # flake8-blind-except
