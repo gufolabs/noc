@@ -6,7 +6,8 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Set
+from typing import Dict
+from uuid import UUID
 from pathlib import Path
 
 # Third-party modules
@@ -27,14 +28,14 @@ def test_to_json_protocol(model) -> None:
 
 @pytest.mark.parametrize("model", SELECTED_MODELS)
 def test_get_json_path(model) -> None:
-    seen: Set[Path] = set()
+    seen: Dict[Path, UUID] = {}
     for o in model.objects.all():
         path = o.get_json_path()
         assert path
         assert isinstance(path, Path)
         assert path.suffix == ".json"
-        assert path not in seen
-        seen.add(path)
+        assert path not in seen, f"{path} is already taken by {seen[path]}"
+        seen[path] = o.uuid
 
 
 @pytest.mark.parametrize("model", SELECTED_MODELS)
