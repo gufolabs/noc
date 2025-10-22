@@ -19,7 +19,7 @@ import bson
 
 # NOC modules
 from noc.core.prettyjson import to_json
-from noc.core.text import quote_safe_path
+from noc.core.path import safe_json_path
 from noc.core.model.decorator import on_delete_check
 
 id_lock = Lock()
@@ -69,4 +69,4 @@ class Font(Document):
         )
 
     def get_json_path(self) -> Path:
-        return Path(quote_safe_path(self.name)).with_suffix(".json")
+        return safe_json_path(self.name)

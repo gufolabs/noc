@@ -34,8 +34,7 @@ from noc.core.mongo.fields import PlainReferenceField
 from noc.core.bi.decorator import bi_sync
 from noc.main.models.remotesystem import RemoteSystem
 from noc.core.handler import get_handler
-
-from noc.core.text import quote_safe_path
+from noc.core.path import safe_json_path
 from noc.core.prettyjson import to_json
 
 logger = logging.getLogger(__name__)
@@ -181,12 +180,9 @@ class Transition(Document):
         )
 
     def get_json_path(self) -> Path:
-        return Path(
-            quote_safe_path(self.workflow.name),
-            quote_safe_path(self.from_state.name),
-            quote_safe_path(self.to_state.name),
-            quote_safe_path(self.label),
-        ).with_suffix(".json")
+        return safe_json_path(
+            self.workflow.name, self.from_state.name, self.to_state.name, self.label or ""
+        )
 
     @property
     def json_name(self):

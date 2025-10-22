@@ -19,7 +19,7 @@ import bson
 
 # NOC modules
 from noc.core.prettyjson import to_json
-from noc.core.text import quote_safe_path
+from noc.core.path import safe_json_path
 from noc.core.mongo.fields import PlainReferenceField
 from noc.core.model.decorator import on_delete_check
 from .font import Font
@@ -71,9 +71,7 @@ class Glyph(Document):
         return to_json(self.json_data, order=["name", "$collection", "uuid", "font__name", "code"])
 
     def get_json_path(self) -> Path:
-        return Path(*(quote_safe_path(x.strip()) for x in self.name.split("|"))).with_suffix(
-            ".json"
-        )
+        return safe_json_path(self.name)
 
     @property
     def css_class(self) -> Optional[str]:
