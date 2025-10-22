@@ -17,9 +17,7 @@ from noc.core.protocols.to_json import ToJson
 from .util import get_documents
 from ..utils import check_protocol
 
-SELECTED_MODELS = [
-    x for x in get_documents() if hasattr(x, "get_json_path") or hasattr(x, "to_json")
-]
+SELECTED_MODELS = [x for x in get_documents() if hasattr(x, "get_json_path")]
 
 
 @pytest.mark.parametrize("model", SELECTED_MODELS)
