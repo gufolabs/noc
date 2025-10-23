@@ -14,6 +14,7 @@ from threading import Lock
 from collections import defaultdict
 from itertools import accumulate
 from functools import partial
+from pathlib import Path
 
 # Third-party modules
 import bson
@@ -42,9 +43,8 @@ from noc.main.models.remotesystem import RemoteSystem
 from noc.main.models.prefixtable import PrefixTable, PrefixTablePrefix
 from noc.models import get_model, is_document, get_model_id, LABEL_MODELS
 from noc.vc.models.vlanfilter import VLANFilter
-
-from noc.core.text import quote_safe_path
 from noc.core.prettyjson import to_json
+from noc.core.path import safe_json_path
 
 MATCH_OPS = {"=", "<", ">", "&"}
 
@@ -275,8 +275,8 @@ class Label(Document):
             ],
         )
 
-    def get_json_path(self) -> str:
-        return quote_safe_path(self.name.strip("*")) + ".json"
+    def get_json_path(self) -> Path:
+        return safe_json_path(self.name)
 
     @property
     def scope(self):
