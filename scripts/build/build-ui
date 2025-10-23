@@ -32,8 +32,6 @@ jquery.tokeninput@1.1.1
 django-media@3.1.8
 viz-js@3.7.0
 leaflet@1.9.4
-monaco@0.52.2.1
-micromark@4.0.2
 theme-noc@1.5.21
 "
 
@@ -45,5 +43,7 @@ done
 
 cd ui/
 npm install
+npm run build:micromark
+npm run build:monaco
 npm run prod
 npm run vendor

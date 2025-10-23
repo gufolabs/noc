@@ -28,10 +28,6 @@ RUN\
     curl \
     ca-certificates \
     && ./scripts/build/build-ui
-# && npm install\
-# && npm run prod\
-# && npm run vendor\
-# && (cd dist && tar cfzv /www.tgz)
 
 # Base layer containing system packages and requirements
 FROM python AS code
