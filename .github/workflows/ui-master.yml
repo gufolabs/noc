@@ -1,4 +1,4 @@
-name: Nightly UI Build
+name: Master UI Build
 on:
   schedule:
     - cron: "30 3 * * *"
