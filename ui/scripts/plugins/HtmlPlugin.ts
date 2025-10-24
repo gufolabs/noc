@@ -84,7 +84,7 @@ export class HtmlPlugin{
         return false; 
       });
     const externalLibs = this.searchFile("external", ".js");
-    let html = await fs.readFile(filesname, "utf8");
+    const htmlCache = await fs.readFile(filesname, "utf8");
     if(externalLibs){
       toReplaceFiles.push(externalLibs);
     } else{
@@ -93,10 +93,11 @@ export class HtmlPlugin{
     for(const language of this.options.languages){
       for(const theme of this.options.themes){
         const outputFile = `${this.options.buildDir}/index.${theme}.${language}.html`;
-        html = this.addThemeAttribute(html, theme);
+        const files = toReplaceFiles.filter(file => !file.startsWith("theme-") || file.startsWith(`theme-${theme}-`));
+        let html = this.addThemeAttribute(htmlCache, theme);
         html = this.setLanguage(html, language);
-        for(const file of toReplaceFiles){
-          html =this.replaceHtmlAttributes(html, file.split("-")[0] + "-", path.extname(file), toReplaceFiles);
+        for(const file of files){
+          html =this.replaceHtmlAttributes(html, file.split("-")[0] + "-", path.extname(file), files);
         }
         await fs.writeFile(outputFile, html);
       }
