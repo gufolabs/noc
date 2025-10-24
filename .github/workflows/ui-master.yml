@@ -30,6 +30,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release view master > /den/null 2>&1 || \
+          gh release view master > /dev/null 2>&1 || \
             gh release create master --title "Master Build" --notes "Automated master builds"
           gh release upload master dist/noc-ui-master.tar.gz --clobber
