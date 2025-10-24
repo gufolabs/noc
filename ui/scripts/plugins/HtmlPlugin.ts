@@ -139,8 +139,10 @@ export class HtmlPlugin{
     
     return html.replace(regex, (match, attribute, value) => {
       if(value.startsWith(pattern) && value.endsWith(suffix)){
-        const replacement = toReplace.find(file => file.startsWith(pattern) && file.endsWith(suffix));
-            
+        let replacement = toReplace.find(file => file.startsWith(pattern) && file.endsWith(suffix));
+        if(!this.options.isDev){
+          replacement = `/ui/${replacement}`;
+        }
         if(replacement !== undefined){
           return `${attribute}="${replacement}"`;
         }
