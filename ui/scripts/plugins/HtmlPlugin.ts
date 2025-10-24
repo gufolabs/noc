@@ -82,8 +82,8 @@ export class HtmlPlugin{
         }
         return false; 
       });
+    let html = await fs.readFile(filesname, "utf8");
     for(const language of this.options.languages){
-      let html = await fs.readFile(filesname, "utf8");
       for(const theme of this.options.themes){
         const outputFile = `${this.options.buildDir}/index.${theme}.${language}.html`;
         const listFiles = toReplaceFiles.filter((file) => {
@@ -161,20 +161,14 @@ export class HtmlPlugin{
     if(!this.options.isDev){
       jsonFile = this.searchJsonFile(language);
     }
-    if(language === "en"){
-      return html
-      .replace(/\s*<!-- l10n -->\s*\n?/g, "")
-      .replace(/\s*<link rel="gettext"[^>]*\/>\s*\n?/g, "\n  ");
-    } else{
-      return html.replace(/<html[^>]*lang=["'][^"']*["'][^>]*>/i, (match) => {
-        if(match.includes("lang=")){
-          return match.replace(/lang=["'][^"']*["']/i, `lang="${language}"`);
-        } else{
-          return match.replace("<html", `<html lang="${language}"`);
-        }
-      })
-        .replace(/<link[^>]*rel=["']gettext["'][^>]*>/i, `<link rel="gettext" href="${jsonFile}" lang="${language}">`);
-    }
+    return html.replace(/<html[^>]*lang=["'][^"']*["'][^>]*>/i, (match) => {
+      if(match.includes("lang=")){
+        return match.replace(/lang=["'][^"']*["']/i, `lang="${language}"`);
+      } else{
+        return match.replace("<html", `<html lang="${language}"`);
+      }
+    })
+      .replace(/<link[^>]*rel=["']gettext["'][^>]*>/i, `<link rel="gettext" href="${jsonFile}" lang="${language}">`);
   }
 
   private searchJsonFile(language: Language): string{
