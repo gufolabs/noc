@@ -24,7 +24,7 @@ jobs:
           set -eux
           ./scripts/build/build-ui
           mkdir -p dist/
-          tar czf dist/noc-ui-master.tar.gz -C ui/dist .
+          tar czf dist/ui_master.tar.gz -C ui/dist .
 
       - name: Publish
         env:
