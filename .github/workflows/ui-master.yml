@@ -3,6 +3,13 @@ on:
   schedule:
     - cron: "30 3 * * *"
   workflow_dispatch: # allows manual trigger
+  push:
+    branches:
+      - master
+    paths:
+      - "ui/**"
+      - ".github/workflows/ui-master.yml"
+      - "scripts/build/build-ui"
 permissions:
   contents: write
 jobs:
