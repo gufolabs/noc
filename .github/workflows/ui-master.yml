@@ -39,4 +39,4 @@ jobs:
         run: |
           gh release view master > /dev/null 2>&1 || \
             gh release create master --title "Master Build" --notes "Automated master builds"
-          gh release upload master dist/noc-ui-master.tar.gz --clobber
+          gh release upload master dist/ui_master.tar.gz --clobber
