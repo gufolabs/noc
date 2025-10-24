@@ -43,7 +43,7 @@ const isDev = ["dev", "vendor-dev"].includes(mode);
 
 const commonOptions: BuilderOptions = {
   buildDir: "dist",
-  filePatterns: ["app", "theme"], // files to clean in buildDir
+  filePatterns: ["app", "theme", "ext-locale"], // files to clean in buildDir
   entryPoint: ["web/main/desktop/app.js"],
   cacheDir: ".cache",
   theme: theme,
@@ -149,7 +149,7 @@ switch(mode){
       entryPoint: [`${commonOptions.cacheDir}/vendor.js`],
       esbuildOptions: {
         ...commonOptions.esbuildOptions,
-        entryNames: "external-libs.js",
+        entryNames: "external.js",
       },
     });
     break;

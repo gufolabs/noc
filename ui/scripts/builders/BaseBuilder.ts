@@ -51,7 +51,7 @@ export abstract class BaseBuilder{
   // this method shares ProdBuilder and DevBuilder classes 
   protected async clearBuildDir(): Promise<void>{
     const filePatterns = this.options.filePatterns.join("|");
-    const filePattern = new RegExp(`^(${filePatterns})*`);
+    const filePattern = new RegExp(`^(${filePatterns}).*\\.(js|css)$|.*\\.(json|html)$`);
     
     await fs.emptyDir(this.options.cacheDir!);
     console.log(`Cleaned ${this.options.cacheDir} directory`);

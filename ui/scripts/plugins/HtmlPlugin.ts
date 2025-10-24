@@ -72,6 +72,7 @@ export class HtmlPlugin{
       "app": [".js"],
       "ext-locale": [".js"],
       "theme": [".js", ".css"],
+      "external": [".js"],
     };
     const toReplaceFiles = Object.keys(outputs).map(file => file.replace(this.options.buildDir + "/", ""))
       .filter((file) => {
@@ -82,17 +83,20 @@ export class HtmlPlugin{
         }
         return false; 
       });
+    const externalLibs = this.searchFile("external", ".js");
     let html = await fs.readFile(filesname, "utf8");
+    if(externalLibs){
+      toReplaceFiles.push(externalLibs);
+    } else{
+      throw new Error(`External libraries file not found in ${this.options.buildDir}`);
+    }
     for(const language of this.options.languages){
       for(const theme of this.options.themes){
         const outputFile = `${this.options.buildDir}/index.${theme}.${language}.html`;
-        const listFiles = toReplaceFiles.filter((file) => {
-          return file.startsWith("app") || file.includes(theme) || file.includes(language);
-        });
         html = this.addThemeAttribute(html, theme);
         html = this.setLanguage(html, language);
-        for(const file of listFiles){
-          html =this.replaceHtmlAttributes(html, file.split("-")[0] + "-", path.extname(file), listFiles);
+        for(const file of toReplaceFiles){
+          html =this.replaceHtmlAttributes(html, file.split("-")[0] + "-", path.extname(file), toReplaceFiles);
         }
         await fs.writeFile(outputFile, html);
       }
@@ -159,7 +163,7 @@ export class HtmlPlugin{
   private setLanguage(html: string, language: Language): string{
     let jsonFile = `/ui/web/translations/${language}.json`;
     if(!this.options.isDev){
-      jsonFile = this.searchJsonFile(language);
+      jsonFile = this.searchLanguageFile(language);
     }
     return html.replace(/<html[^>]*lang=["'][^"']*["'][^>]*>/i, (match) => {
       if(match.includes("lang=")){
@@ -171,16 +175,20 @@ export class HtmlPlugin{
       .replace(/<link[^>]*rel=["']gettext["'][^>]*>/i, `<link rel="gettext" href="${jsonFile}" lang="${language}">`);
   }
 
-  private searchJsonFile(language: Language): string{
+  private searchLanguageFile(language: Language): string{
     if(language === "en"){
       return "/ui/web/translations/en.json"; // default
     }
-    const files = fs.readdirSync(this.options.buildDir);
-    const pattern = new RegExp(`^${language}-[a-f0-9]{8}\\.json$`);
-    const matchedFile = files.find(file => pattern.test(file));
+    const matchedFile = this.searchFile(language, ".json");
     if(!matchedFile){
       throw new Error(`Translation file for language "${language}" not found in ${this.options.buildDir}`);
     }
-    return `/${matchedFile}`;
+    return `/ui/${matchedFile}`;
+  }
+
+  private searchFile(basename: string, suffix: string): string | undefined{
+    const files = fs.readdirSync(this.options.buildDir);
+    const pattern = new RegExp(`^${basename}-[a-f0-9]{8}\\${suffix}$`);
+    return files.find(file => pattern.test(file));
   }
 }
