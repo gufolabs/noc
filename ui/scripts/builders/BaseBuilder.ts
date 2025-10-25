@@ -65,7 +65,7 @@ export abstract class BaseBuilder{
     console.log(`Cleaned ${this.options.assetsDir} directory`);
 
     for(const file of await fs.readdir(this.options.buildDir)){
-      if(filePattern.test(file)){
+      if(filePattern.test(file) && !/^theme-.*\.js$/.test(file)){
         const filePath = path.join(this.options.buildDir, file);
         await fs.remove(filePath);
         console.log(`Removed bundle: ${file}`);

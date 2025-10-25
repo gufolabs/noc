@@ -93,6 +93,7 @@ export class HtmlPlugin{
     for(const language of this.options.languages){
       for(const theme of this.options.themes){
         const outputFile = `${this.options.buildDir}/index.${theme}.${language}.html`;
+        toReplaceFiles.push(this.searchFile(`theme-${theme}`, ".js") || "");
         const files = toReplaceFiles.filter(file => !file.startsWith("theme-") || file.startsWith(`theme-${theme}-`));
         let html = this.addThemeAttribute(htmlCache, theme);
         html = this.setLanguage(html, language);
