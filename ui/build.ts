@@ -156,6 +156,14 @@ switch(mode){
   }
 }
 
+{
+  const outputDir = path.resolve(commonOptions.buildDir);
+  fs.ensureDirSync(outputDir);
+  const from = path.resolve("web/img");
+  const to = path.join(outputDir, "web", "img");
+  fs.copySync(from, to);
+}
+
 builder.start();
 
 process.on("SIGINT", async() => {
