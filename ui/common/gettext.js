@@ -1,91 +1,79 @@
 //
 // Simple JS gettext implementation
 //
+import ptTranslations from "../web/translations/pt_BR.json";
+import ruTranslations from "../web/translations/ru.json";
 
-var NOCGettext = function() {
+class NOCGettext{
+  constructor(){
     this.lang = "en";
     this.translations = {};
-};
-
-NOCGettext.prototype.initialize = function() {
+  }
+  async initialize(){
     var lang = document.getElementsByTagName("html")[0].getAttribute("lang");
     this.set_translation(lang);
-};
-
-NOCGettext.prototype.gettext = function(s) {
+  }
+  gettext(s){
     var t = this.translations[s];
-    if(t === undefined) {
-        return s;
+    if(t === undefined){
+      return s;
     }
-    if(typeof t === "string") {
-        return t;
-    } else {
-        return t[1];
+    if(typeof t === "string"){
+      return t;
+    } else{
+      return t[1];
     }
-};
-
-NOCGettext.prototype.ngettext = function() {
+  }
+  ngettext(){
     console.log("ngettext is not implemented yet");
     return this.gettext(arguments[0]);
-};
-
-NOCGettext.prototype.set_translation = function(lang) {
-    var me = this;
-    // Get URL
-    var links = document.getElementsByTagName("link"),
-        url = null,
-        xobj, i;
-    //
-    for(i = 0; i <= links.length; i++) {
-        if(links[i].getAttribute("rel") === "gettext" && links[i].getAttribute("lang") === lang) {
-            url = links[i].getAttribute("href");
-            break;
-        }
+  }
+  set_translation(lang){
+    if(!lang || lang.toLowerCase() === "en"){
+      this.lang = "en";
+      this.translations = {};
+      return;
     }
-    // Reset to english when improperly configured
-    if ((!url) || (url.search("/en.json") != -1)) {
-        this.lang = "en";
-        this.translations = {};
-        return;
+    if(lang.toLowerCase() === "ru"){
+      this.lang = "ru";
+      this.translations = ruTranslations;
+      this.compile_plurals();
+      return;
     }
-    //
-    this.lang = lang;
-    // Get translation
-    xobj = new XMLHttpRequest();
-    xobj.overrideMimeType("application/json");
-    xobj.open("GET", url, false);
-    xobj.send(null);
-    if(xobj.status === 200) {
-        me.lang = lang;
-        me.translations = JSON.parse(xobj.responseText);
-        me.compile_plurals();
+    if(lang.toLowerCase() === "pt_br"){
+      this.lang = "pt_BR";
+      this.translations = ptTranslations;
+      this.compile_plurals();
+      return;
     }
-};
-
-NOCGettext.prototype.plural_index = function(n) {
+  }
+  plural_index(n){
     // English fallback
-    if(n > 1) {
-        return 1;
-    } else {
-        return 0;
+    if(n > 1){
+      return 1;
+    } else{
+      return 0;
     }
-};
-
-NOCGettext.prototype.compile_plurals = function () {
+  }
+  compile_plurals(){
     // English plurals
-    var plurals = "nplurals = 2; plural = n ? 1 : 0",
-        code;
+    var plurals = "nplurals = 2; plural = n ? 1 : 0";
     // Translation plurals
-    if(this.translations[""] && this.translations[""]["Plural-Forms"]) {
-        plurals = this.translations[""]["Plural-Forms"];
+    if(this.translations[""] && this.translations[""]["Plural-Forms"]){
+      plurals = this.translations[""]["Plural-Forms"];
     }
     // Build function
-    code = "(function(n) {" + plurals + ";return plural;})";
-    this.plural_index = eval(code);
-};
+    this.plural_index = new Function("n", `${plurals}; return plural;`);
+  }
+}
 
-nocgettext = new NOCGettext();
-nocgettext.initialize();
-_ = nocgettext.gettext.bind(nocgettext);
-__ = nocgettext.gettext.bind(nocgettext);
-ngettext = nocgettext.ngettext.bind(nocgettext);
+var nocgettext = new NOCGettext();
+nocgettext.initialize().catch(function(error){
+  console.warn("Failed to initialize translations:", error);
+});
+window._ = nocgettext.gettext.bind(nocgettext);
+window.__ = nocgettext.gettext.bind(nocgettext);
+window.ngettext = nocgettext.ngettext.bind(nocgettext);
+
+export const gettext = nocgettext.gettext.bind(nocgettext);
+export default nocgettext;

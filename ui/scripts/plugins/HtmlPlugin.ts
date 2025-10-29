@@ -125,12 +125,6 @@ export class HtmlPlugin{
       }
     }
 
-    if(this.options.isDev && this.options.mode === "create"){
-      const liveReloadScript =
-        '  <script>new EventSource("/esbuild").addEventListener("change", () => location.reload());</script>';
-      html = html.replace("</head>", `${liveReloadScript}\n</head>`);
-    }
-
     await fs.writeFile(`${this.options.buildDir}/index.html`, html);
   }
 
@@ -155,18 +149,13 @@ export class HtmlPlugin{
   }
 
   private setLanguage(html: string, language: Language): string{
-    let jsonFile = `/ui/web/translations/${language}.json`;
-    if(!this.options.isDev){
-      jsonFile = this.searchJsonFile(language);
-    }
     return html.replace(/<html[^>]*lang=["'][^"']*["'][^>]*>/i, (match) => {
       if(match.includes("lang=")){
         return match.replace(/lang=["'][^"']*["']/i, `lang="${language}"`);
       } else{
         return match.replace("<html", `<html lang="${language}"`);
       }
-    })
-      .replace(/<link[^>]*rel=["']gettext["'][^>]*>/i, `<link rel="gettext" href="${jsonFile}" lang="${language}">`);
+    });
   }
 
   private searchJsonFile(language: Language): string{

@@ -45,6 +45,7 @@ const commonOptions: BuilderOptions = {
   buildDir: "dist",
   filePatterns: ["app", "theme"], // files to clean in buildDir
   entryPoint: ["web/main/desktop/app.js"],
+  preloadFile: "scripts/globals.js",
   cacheDir: ".cache",
   theme: theme,
   themes: ["gray", "noc"],

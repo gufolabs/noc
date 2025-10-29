@@ -37,6 +37,7 @@ export interface BuilderOptions {
   themes: Theme[];
   language: Language;
   languages: Language[];
+  preloadFile?: string;
 }
 
 export abstract class BaseBuilder{
@@ -84,6 +85,7 @@ export abstract class BaseBuilder{
       basePath: process.cwd(),
       paths: {"NOC": "web"},
       entryPoint: this.options.entryPoint,
+      preloadFile: this.options.preloadFile,
       debug: this.options.pluginDebug,
       parserOptions: this.options.parserOptions,
     });

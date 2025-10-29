@@ -71,7 +71,7 @@ export class ExternalLibsPlugin{
         {name: "pkg/monaco/monaco.js", format: "iife"},
         
         // NOC modules
-        {name: "common/gettext.js", format: "iife"},
+        // {name: "common/gettext.js", format: "iife"},
         {name: "web/js/colors.js", format: "iife"},
         {name: "web/js/glyph.js", format: "iife"},
         {name: "web/js/util.js", format: "iife"},

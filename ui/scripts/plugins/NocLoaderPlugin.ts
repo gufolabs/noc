@@ -13,6 +13,7 @@ interface PluginOptions {
   parserOptions?: Options;
   cacheDir?: string;
   debug?: boolean;
+  preloadFile?: string;
 }
 
 export class NocLoaderPlugin{
@@ -49,6 +50,18 @@ export class NocLoaderPlugin{
         build.onLoad(
           {filter: new RegExp(this.options.entryPoint[0])},
           async(args) => {
+            let preloadContent = "";
+            if(this.options.preloadFile){
+              try{
+                const preloadPath = path.join(this.options.basePath, this.options.preloadFile);
+                const fileContent = await fs.readFile(preloadPath, "utf8");
+                preloadContent += fileContent + "\n";
+                this.log(`Preloaded: ${this.options.preloadFile}`);
+              } catch(error){
+                this.logError(error as Error, `Loading preload file: ${this.options.preloadFile}`);
+              }
+            }
+
             const content = await fs.readFile(args.path, "utf8");
             for(const [namespace, dirPath] of Object.entries(this.options.paths)){
               const fullPath = path.join(this.options.basePath, dirPath);
@@ -60,7 +73,7 @@ export class NocLoaderPlugin{
             });
             const imports = this.graph.topologicalSort()?.map(cl=>`import '${cl}'`).join("\n");
             return {
-              contents: imports + content,
+              contents: preloadContent + imports + content,
               loader: "js",
             };
           });
