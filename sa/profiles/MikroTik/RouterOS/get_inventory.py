@@ -75,7 +75,7 @@ class Script(BaseScript):
                             ll = int(match.group("ll"))
                         else:
                             if match.group("ll_k"):
-                                ll = int(match.group("ll_k"))*1000
+                                ll = int(match.group("ll_k")) * 1000
                             else:
                                 ll = 0
                         if match.group("copper"):
