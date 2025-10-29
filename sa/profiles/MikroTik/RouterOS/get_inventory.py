@@ -73,11 +73,10 @@ class Script(BaseScript):
                             nm = 0
                         if match.group("ll"):
                             ll = int(match.group("ll"))
+                        elif match.group("ll_k"):
+                            ll = int(match.group("ll_k")) * 1000
                         else:
-                            if match.group("ll_k"):
-                                ll = int(match.group("ll_k")) * 1000
-                            else:
-                                ll = 0
+                            ll = 0
                         if match.group("copper"):
                             copper = int(match.group("copper"))
                             if copper == 3:
