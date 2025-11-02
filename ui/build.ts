@@ -44,7 +44,7 @@ const isDev = ["dev", "vendor-dev"].includes(mode);
 
 const commonOptions: BuilderOptions = {
   buildDir: "dist",
-  filePatterns: ["app", "theme", "ext-locale"], // files to clean in buildDir
+  filePatterns: ["app", "theme", "locale-"], // files to clean in buildDir
   entryPoint: ["web/main/desktop/app.js"],
   cacheDir: ".cache",
   theme: theme,
