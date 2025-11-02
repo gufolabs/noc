@@ -36,6 +36,8 @@ export class ProdBuilder extends BaseBuilder{
         "locale-en",
         "locale-ru",
         "locale-pt_BR",
+        "pkg/extjs/classic/theme-noc/theme-noc.js",
+        "pkg/extjs/classic/theme-gray/theme-gray.js",
       ],
       plugins: [
         ...(buildOptions.plugins || []),

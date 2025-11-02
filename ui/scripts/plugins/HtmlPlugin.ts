@@ -156,7 +156,7 @@ export class HtmlPlugin{
 
   private searchFile(basename: string, suffix: string): string | undefined{
     const files = fs.readdirSync(this.options.buildDir);
-    const pattern = new RegExp(`^${basename}-[a-f0-9]{8}\\${suffix}$`);
+    const pattern = new RegExp(`^${basename}.*${suffix}$`);
     return files.find(file => pattern.test(file));
   }
 
