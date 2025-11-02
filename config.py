@@ -589,7 +589,7 @@ class Config(BaseConfig):
             default=16384, help="Maximum size of buffered data per partition"
         )
         retry_backoff_ms = SecondsParameter(
-            default=3,
+            default=3_000,
             help="The amount of time to wait before attempting to retry a failed request to a given topic partition",
         )
         max_request_size = BytesSizeParameter(default=1048576, help="The maximum size of a request")
