@@ -55,8 +55,6 @@ class Script(BaseScript):
     rx_discover_interfaces = re.compile(
         r"discover-interface-list: (?P<list>\S+)\s*\n", re.MULTILINE
     )
-    has_lldp = self.has_capability("Network | LLDP")
-    has_cdp = self.has_capability("Network | CDP")
 
     def get_tunnel(self, tun_type, f, afi, ipif):
         self.si["tunnel"] = {}
@@ -486,7 +484,9 @@ class Script(BaseScript):
                                 if router_id == IP(addr).address:
                                     si["enabled_protocols"] += ["BGP"]
                                     break
-        if self.has_lldp or self.has_cdp:
+        has_lldp = self.has_capability("Network | LLDP")
+        has_cdp = self.has_capability("Network | CDP")
+        if has_lldp or has_cdp:
             c = self.cli("/ip neighbor discovery-settings print without-paging", cached=True)
             discover_list = self.rx_discover_interfaces.search(c)["list"]
             if discover_list != "all":
@@ -497,15 +497,15 @@ class Script(BaseScript):
                     if r["list"] == discover_list:
                         if r["interface"] in ifaces:
                             i = ifaces[r["interface"]]
-                            if self.has_lldp:
+                            if has_lldp:
                                 i["enabled_protocols"] += ["LLDP"]
-                            if self.has_cdp:
+                            if has_cdp:
                                 i["enabled_protocols"] += ["CDP"]
             else:
                 for i in ifaces:
-                    if self.has_lldp:
+                    if has_lldp:
                         ifaces[i]["enabled_protocols"] += ["LLDP"]
-                    if self.has_cdp:
+                    if has_cdp:
                         ifaces[i]["enabled_protocols"] += ["CDP"]
 
         return [{"interfaces": list(ifaces.values())}]
