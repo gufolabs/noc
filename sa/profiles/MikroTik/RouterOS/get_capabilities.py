@@ -16,7 +16,9 @@ class Script(BaseScript):
     name = "MikroTik.RouterOS.get_capabilities"
     cache = True
 
-    rx_discover_interfaces = re.compile(r"discover-interface-list: (?P<list>\S+)\s*\n", re.MULTILINE)
+    rx_discover_interfaces = re.compile(
+        r"discover-interface-list: (?P<list>\S+)\s*\n", re.MULTILINE
+    )
     rx_lldp = re.compile(r"(?:lldp\s*\n|protocol: .*lldp)", re.MULTILINE)
     rx_cdp = re.compile(r"(?:cdp\s*\n|protocol: cdp)", re.MULTILINE)
 
