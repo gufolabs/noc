@@ -52,7 +52,9 @@ class Script(BaseScript):
 
     ignored_types = {"mesh", "traffic-eng", "vpls", "vrrp", "wds", "lte", "cap", "vrrp", "vif"}
     si = {}
-    rx_discover_interfaces = re.compile(r"discover-interface-list: (?P<list>\S+)\s*\n", re.MULTILINE)
+    rx_discover_interfaces = re.compile(
+        r"discover-interface-list: (?P<list>\S+)\s*\n", re.MULTILINE
+    )
     has_lldp = self.has_capability("Network | LLDP")
     has_cdp = self.has_capability("Network | CDP")
 
