@@ -70,7 +70,11 @@ export class LanguagePlugin{
       if(fs.existsSync(translationPath)){
         const translationContent = fs.readFileSync(translationPath, "utf8");
         translations = JSON.parse(translationContent);
-      }      
+        translations = Object.entries(translations).reduce((acc: Record<string, any>, [key, value]: [string, any]) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+          acc[key] = Array.isArray(value) ? value[1] || "" : value;
+          return acc;
+        }, {});
+      }
       return extLocale + templateContent
         .replace(/{locale}/g, lang)
         .replace(/"{translations}"/g, JSON.stringify(translations));
