@@ -136,7 +136,7 @@ class CLI(BaseCLI):
                 metrics["cli_connection_refused", ("proto", self.name)] += 1
                 return None
             except CLIAuthFailed as e:
-                self.error = CLIAuthFailed(*e.args)
+                self.error = e
                 self.logger.info("CLI Authentication failed")
                 # metrics["cli_connection_refused", ("proto", self.name)] += 1
                 return None
