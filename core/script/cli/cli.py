@@ -188,7 +188,7 @@ class CLI(BaseCLI):
                 metrics["cli_reads", ("proto", self.name)] += 1
                 print("@@@ read()")
                 r = await self.stream.read(self.BUFFER_SIZE)
-                print(r"@@@ -> {r}")
+                print(f"@@@ -> {r}")
             except (asyncio.TimeoutError, TimeoutError):
                 self.logger.warning("Timeout error")
                 metrics["cli_timeouts", ("proto", self.name)] += 1
@@ -246,6 +246,7 @@ class CLI(BaseCLI):
                     print(
                         f"@@@ match cleaned_chunks={cleaned_chunks} matched={matched} self.buffer={self.buffer}"
                     )
+                    print(f"@@@ handler={handler}")
                     if isinstance(handler, tuple):
                         metrics["cli_state", ("state", handler[0].__name__)] += 1
                         r = await handler[0](matched, match, *handler[1:])
