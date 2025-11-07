@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # CLI FSM
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -10,7 +10,7 @@ import re
 import functools
 from functools import reduce
 import asyncio
-from typing import Optional, Any, Type, Callable, Dict, Set, Union
+from typing import Optional, Any, Type, Callable, Dict, Set, Union, List
 
 # NOC modules
 from noc.core.text import replace_re_group
@@ -196,6 +196,8 @@ class CLI(BaseCLI):
         await self.stream.write(cmd)
 
     async def read_until_prompt(self):
+        cleaned_chunks: List[bytes] = []  # Already processed chunks
+        active_chunk = self.buffer  # Active window
         while True:
             try:
                 metrics["cli_reads", ("proto", self.name)] += 1
@@ -220,18 +222,33 @@ class CLI(BaseCLI):
                 self.script.push_cli_tracking(r, self.state)
             self.logger.debug("Received: %r", r)
             # Clean input
-            if self.buffer.find(b"\x1b", -self.MATCH_MISSED_CONTROL_TAIL) != -1:
-                self.buffer = self.cleaned_input(self.buffer + r)
+            esc_index = active_chunk.find(b"\x1b", -self.MATCH_MISSED_CONTROL_TAIL)
+            if esc_index != -1:
+                # Possible uncomplete ESC-sequences at the end of the buffer.
+                # Need to recombine ESC sequence.
+                active_chunk = active_chunk[:esc_index] + self.cleaned_input(
+                    active_chunk[esc_index:] + r
+                )
+            elif len(r) > self.MATCH_TAIL:
+                # Safely evade string catenation
+                cleaned_chunks.append(active_chunk)
+                active_chunk = self.cleaned_input(r)
+            elif len(active_chunk) >= 2 * self.MATCH_TAIL:
+                # Active chunk is two times long of matching window.
+                # By the rule of thumb send a first half to cleaned_chunks
+                cleaned_chunks.append(active_chunk[: self.MATCH_TAIL])
+                active_chunk = active_chunk[self.MATCH_TAIL] + self.cleaned_input(r)
             else:
-                self.buffer += self.cleaned_input(r)
+                active_chunk += self.cleaned_input(r)
             # Try to find matched pattern
-            offset = max(0, len(self.buffer) - self.MATCH_TAIL)
+            offset = max(0, len(active_chunk) - self.MATCH_TAIL)
             for rx, handler in self.pattern_table.items():
-                match = rx.search(self.buffer, offset)
+                match = rx.search(active_chunk, offset)
                 if match:
                     self.logger.debug("Match: %s", rx.pattern)
-                    matched = self.buffer[: match.start()]
-                    self.buffer = self.buffer[match.end() :]
+                    cleaned_chunks.append(active_chunk[: match.start()])
+                    matched = b"".join(cleaned_chunks)
+                    self.buffer = active_chunk[match.end() :]
                     if isinstance(handler, tuple):
                         metrics["cli_state", ("state", handler[0].__name__)] += 1
                         r = await handler[0](matched, match, *handler[1:])
