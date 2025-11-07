@@ -100,15 +100,15 @@ class Command(BaseCommand):
             rule, r_vars = ruleset.find_rule(event, raw_vars)
             if not rule.name.startswith("Unknown |"):  # EventClass
                 cls_cnt += 1
+                out_record = {
+                    "message": event.model_dump()["message"],
+                    "event_class__name": rule.event_class_name,
+                    "vars": r_vars,
+                }
+                out_data += [out_record]
             else:
                 message = event.model_dump()["message"]
                 unknown_messages += f"{message}\n"
-            out_record = {
-                "message": event.model_dump()["message"],
-                "event_class__name": rule.event_class_name,
-                "vars": r_vars,
-            }
-            out_data += [out_record]
             msg_cnt += 1
         time_delta = time.perf_counter() - time_start
         out = {
