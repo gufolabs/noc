@@ -181,14 +181,10 @@ class CLI(BaseCLI):
     async def read_until_prompt(self):
         cleaned_chunks: List[bytes] = []  # Already processed chunks
         active_chunk = self.buffer  # Active window
-        print("@@@ read_until_prompt")
         while True:
-            print(f"@@@ round: cleaned_chunks={cleaned_chunks} active_chunk={active_chunk}")
             try:
                 metrics["cli_reads", ("proto", self.name)] += 1
-                print("@@@ read()")
                 r = await self.stream.read(self.BUFFER_SIZE)
-                print(f"@@@ -> {r}")
             except (asyncio.TimeoutError, TimeoutError):
                 self.logger.warning("Timeout error")
                 metrics["cli_timeouts", ("proto", self.name)] += 1
@@ -210,30 +206,24 @@ class CLI(BaseCLI):
             self.logger.debug("Received: %r", r)
             # Clean input
             esc_index = active_chunk.find(b"\x1b", -self.MATCH_MISSED_CONTROL_TAIL)
-            print(f"@@@ esc_index = {esc_index}")
             if esc_index != -1:
-                print("@@@ 1")
                 # Possible uncomplete ESC-sequences at the end of the buffer.
                 # Need to recombine ESC sequence.
                 active_chunk = active_chunk[:esc_index] + self.cleaned_input(
                     active_chunk[esc_index:] + r
                 )
             elif len(r) > self.MATCH_TAIL:
-                print("@@@ 2")
                 # Safely evade string catenation
                 cleaned_chunks.append(active_chunk)
                 active_chunk = self.cleaned_input(r)
             elif len(active_chunk) >= 2 * self.MATCH_TAIL:
-                print("@@@ 3")
                 # Active chunk is two times long of matching window.
                 # By the rule of thumb send a first half to cleaned_chunks
                 cleaned_chunks.append(active_chunk[: self.MATCH_TAIL])
                 active_chunk = active_chunk[self.MATCH_TAIL :] + self.cleaned_input(r)
             else:
-                print("@@@ 4")
                 # Active chunk is relatively short
                 active_chunk += self.cleaned_input(r)
-            print(f"@@@ so far: cleaned_chunks={cleaned_chunks} active_chunk={active_chunk}")
             # Try to find matched pattern
             offset = max(0, len(active_chunk) - self.MATCH_TAIL)
             for rx, handler in self.pattern_table.items():
@@ -243,21 +233,16 @@ class CLI(BaseCLI):
                     cleaned_chunks.append(active_chunk[: match.start()])
                     matched = b"".join(cleaned_chunks)
                     active_chunk = active_chunk[match.end() :]
-                    print(
-                        f"@@@ match cleaned_chunks={cleaned_chunks} matched={matched} self.buffer={self.buffer}"
-                    )
-                    print(f"@@@ handler={handler}")
                     if isinstance(handler, tuple):
                         metrics["cli_state", ("state", handler[0].__name__)] += 1
                         r = await handler[0](matched, match, *handler[1:])
                     else:
                         metrics["cli_state", ("state", handler.__name__)] += 1
                         r = await handler(matched, match)
-                    if r is not None:
-                        print(f"@@@ return {r}")
-                        self.buffer = active_chunk
-                        return r
-                    break  # This state is processed
+                    if r is None:
+                        break  # This state is processed
+                    self.buffer = active_chunk  # Save remainings
+                    return r
 
     async def parse_object_stream(self, parser=None, cmd_next=None, cmd_stop=None):
         """
