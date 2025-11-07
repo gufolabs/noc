@@ -103,9 +103,7 @@ class CLI(BaseCLI):
         else:
             parser = self.read_until_prompt
         with (
-            Span(
-                server=self.script.credentials.get("address"), service=self.name, in_label=cmd
-            ) as s,
+            Span(server=self.script.credentials.get("address"), service=self.name, in_label=cmd),
             IOLoopContext() as loop,
         ):
             return loop.run_until_complete(self.submit(parser))
