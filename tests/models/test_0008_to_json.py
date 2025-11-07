@@ -37,8 +37,6 @@ def test_get_json_path(model) -> None:
         taken_by = seen.get(path)
         if taken_by:
             print(f">>> UUID: {o.uuid} -- {o}")
-            import uuid
-
             t_o = model.objects.get(uuid=taken_by)
             print(f"   taken by {t_o.uuid} -- {t_o}")
         assert taken_by is None, f"{path} requested by {o.uuid} but already taken by {taken_by}"
