@@ -55,6 +55,8 @@ MATCH_BADGES = {
     "&": "&",
 }
 
+MATCH_PATHS = {"=": "eq", "<": "less", ">": "more", "&": "and"}
+
 REGEX_LABEL_SCOPES = {
     "managedobject_name": ("sa.ManagedObject", "name"),
     "managedobject_address": ("sa.ManagedObject", "address"),
@@ -276,7 +278,9 @@ class Label(Document):
         )
 
     def get_json_path(self) -> Path:
-        return safe_json_path(self.name)
+        suffix = MATCH_PATHS.get(self.value)
+        name = self.name if suffix is None else f"{self.name}_{suffix}"
+        return safe_json_path(name)
 
     @property
     def scope(self):
