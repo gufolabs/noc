@@ -232,6 +232,7 @@ class CLI(BaseCLI):
                     self.logger.debug("Match: %s", rx.pattern)
                     cleaned_chunks.append(active_chunk[: match.start()])
                     matched = b"".join(cleaned_chunks)
+                    cleaned_chunks = []  # All left to matched
                     active_chunk = active_chunk[match.end() :]
                     if isinstance(handler, tuple):
                         metrics["cli_state", ("state", handler[0].__name__)] += 1
