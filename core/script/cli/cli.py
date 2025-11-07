@@ -58,8 +58,6 @@ class CLI(BaseCLI):
         self.prompt_stack = []
         self.patterns = self.profile.patterns.copy()
         self.buffer: bytes = b""
-        self.result = None
-        self.error = None
         self.pattern_table = None
         self.collected_data = []
         self.setup_complete = False
@@ -91,7 +89,6 @@ class CLI(BaseCLI):
     ) -> str:
         self.buffer = b""
         self.command = cmd
-        self.error = None
         self.ignore_errors = ignore_errors
         self.allow_empty_response = allow_empty_response
         # Labels
@@ -105,16 +102,17 @@ class CLI(BaseCLI):
             )
         else:
             parser = self.read_until_prompt
-        with Span(
-            server=self.script.credentials.get("address"), service=self.name, in_label=cmd
-        ) as s:
-            with IOLoopContext() as loop:
-                loop.run_until_complete(self.submit(parser))
-            if self.error:
-                if s:
-                    s.error_text = str(self.error)
-                raise self.error
-            return self.result
+        with (
+            Span(
+                server=self.script.credentials.get("address"), service=self.name, in_label=cmd
+            ) as s,
+            IOLoopContext() as loop,
+        ):
+            try:
+                return loop.run_until_complete(self.submit(parser))
+            except Exception as e:
+                s.error_text = str(e)
+                raise
 
     async def start_stream(self):
         await super().start_stream()
@@ -132,14 +130,11 @@ class CLI(BaseCLI):
             try:
                 await self.start_stream()
             except ConnectionRefusedError:
-                self.error = CLIConnectionRefused("Connection refused")
                 metrics["cli_connection_refused", ("proto", self.name)] += 1
-                return None
+                raise CLIConnectionRefused("Connection refused")
             except CLIAuthFailed as e:
-                self.error = e
                 self.logger.info("CLI Authentication failed")
-                # metrics["cli_connection_refused", ("proto", self.name)] += 1
-                return None
+                raise
         metrics["cli_commands", ("proto", self.name)] += 1
         # Send command
         # @todo: encode to object's encoding
@@ -153,28 +148,22 @@ class CLI(BaseCLI):
                 # Await response
                 await self.stream.wait_for_read()
         parser = parser or self.read_until_prompt
-        self.result = await parser()
-        self.logger.debug(
-            "Command: %s\n%s", self.command.strip(), smart_text(self.result, errors="replace")
-        )
+        r = await parser()
+        self.logger.debug("Command: %s\n%s", self.command.strip(), smart_text(r, errors="replace"))
         if (
             self.profile.rx_pattern_syntax_error
             and not self.ignore_errors
             and parser == self.read_until_prompt
-            and (
-                self.profile.rx_pattern_syntax_error.search(self.result)
-                or self.result == self.SYNTAX_ERROR_CODE
-            )
+            and (self.profile.rx_pattern_syntax_error.search(r) or r == self.SYNTAX_ERROR_CODE)
         ):
-            error_text = self.result
+            error_text = r
             if self.profile.send_on_syntax_error and not self.is_beef():
                 self.allow_empty_response = True
                 await self.on_error_sequence(
                     self.profile.send_on_syntax_error, self.command, error_text
                 )
-            self.error = self.script.CLISyntaxError(error_text)
-            self.result = None
-        return self.result
+            raise self.script.CLISyntaxError(error_text)
+        return r
 
     def is_beef(self) -> bool:
         return False
@@ -296,15 +285,13 @@ class CLI(BaseCLI):
                     await self.on_error_sequence(
                         self.profile.send_on_syntax_error, self.command, error_text
                     )
-                self.error = self.script.CLISyntaxError(error_text)
-                break
+                raise self.script.CLISyntaxError(error_text)
             # Then check for operation error
             if (
                 self.profile.rx_pattern_operation_error_str
                 and self.profile.rx_pattern_operation_error.search(buffer)
             ):
-                self.error = self.script.CLIOperationError(buffer)
-                break
+                raise self.script.CLIOperationError(buffer)
             # Parse all possible objects
             while buffer:
                 pr = parser(smart_text(buffer, errors="replace"))
