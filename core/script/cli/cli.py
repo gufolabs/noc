@@ -242,7 +242,7 @@ class CLI(BaseCLI):
                     self.logger.debug("Match: %s", rx.pattern)
                     cleaned_chunks.append(active_chunk[: match.start()])
                     matched = b"".join(cleaned_chunks)
-                    self.buffer = active_chunk[match.end() :]
+                    active_chunk = active_chunk[match.end() :]
                     print(
                         f"@@@ match cleaned_chunks={cleaned_chunks} matched={matched} self.buffer={self.buffer}"
                     )
@@ -255,6 +255,7 @@ class CLI(BaseCLI):
                         r = await handler(matched, match)
                     if r is not None:
                         print(f"@@@ return {r}")
+                        self.buffer = active_chunk
                         return r
                     break  # This state is processed
 
