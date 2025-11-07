@@ -237,8 +237,9 @@ class CLI(BaseCLI):
                 # Active chunk is two times long of matching window.
                 # By the rule of thumb send a first half to cleaned_chunks
                 cleaned_chunks.append(active_chunk[: self.MATCH_TAIL])
-                active_chunk = active_chunk[self.MATCH_TAIL] + self.cleaned_input(r)
+                active_chunk = active_chunk[self.MATCH_TAIL :] + self.cleaned_input(r)
             else:
+                # Active chunk is relatively short
                 active_chunk += self.cleaned_input(r)
             # Try to find matched pattern
             offset = max(0, len(active_chunk) - self.MATCH_TAIL)
