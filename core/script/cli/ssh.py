@@ -122,7 +122,6 @@ class SSHStream(BaseStream):
                         self.logger.info("SSH session reset")
                         self.close()
                         return b""
-                    await self.wait_for_read()
                     metrics["ssh_reads_blocked"] += 1
                     continue
                 if code > 0:
