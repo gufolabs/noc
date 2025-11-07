@@ -108,11 +108,7 @@ class CLI(BaseCLI):
             ) as s,
             IOLoopContext() as loop,
         ):
-            try:
-                return loop.run_until_complete(self.submit(parser))
-            except Exception as e:
-                s.error_text = str(e)
-                raise
+            return loop.run_until_complete(self.submit(parser))
 
     async def start_stream(self):
         await super().start_stream()
