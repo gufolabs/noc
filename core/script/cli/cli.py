@@ -132,7 +132,7 @@ class CLI(BaseCLI):
             except ConnectionRefusedError:
                 metrics["cli_connection_refused", ("proto", self.name)] += 1
                 raise CLIConnectionRefused("Connection refused")
-            except CLIAuthFailed as e:
+            except CLIAuthFailed:
                 self.logger.info("CLI Authentication failed")
                 raise
         metrics["cli_commands", ("proto", self.name)] += 1
