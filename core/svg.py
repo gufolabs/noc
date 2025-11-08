@@ -254,7 +254,7 @@ class SVG(object):
         source = source.clone()
         # Merge defs
         src_defs = source.get_defs()
-        if src_defs:
+        if src_defs is not None:
             for c in src_defs:
                 self.append_def(c)
             # Remove defs from source
