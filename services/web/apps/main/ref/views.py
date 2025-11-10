@@ -268,7 +268,7 @@ class RefAppplication(ExtApplication):
 
     def build_containertype(self):
         """Container type loolup"""
-        return [{"id": x.value, "label": x.name} for x in ContainerType()]
+        return [{"id": x.value, "label": x.name} for x in ContainerType]
 
     @view(url=r"^(?P<ref>\S+)/lookup/$", method=["GET"], access=True, api=True)
     def api_lookup(self, request, ref=None):

@@ -4,6 +4,7 @@
     "uuid": "54233881-3e91-4043-8dbf-f475fa059cb0",
     "vendor__code": "NOC",
     "description": "Sandboxed part of the inventory",
+    "container_type": "sandbox",
     "connections": [],
     "data": [
         {
