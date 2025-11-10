@@ -120,6 +120,12 @@ def test_rack(model: ObjectModel) -> None:
     )
 
 
+def test_chassis(model: ObjectModel) -> None:
+    if model.cr_context == "CHASSIS":
+        assert model.container_type
+        assert model.container_type.is_chassis(), "container_type should be set to CHASSIS"
+
+
 _CT_PROTOCOLS = {}
 
 # dict must have one or more keys:
