@@ -88,15 +88,20 @@ class BaseStream(object):
         Wait until data available for read
         :return:
         """
+
+        def on_readable() -> None:
+            if not fut.done():
+                fut.set_result(None)
+
         if not self.socket:
             self.logger.warning("Wait for READ: No Socket Ready")
             return
         loop = asyncio.get_running_loop()
-        read_ev = asyncio.Event()
+        fut = loop.create_future()
         fileno = self.socket.fileno()
-        loop.add_reader(fileno, read_ev.set)
+        loop.add_reader(fileno, on_readable)
         try:
-            await asyncio.wait_for(read_ev.wait(), self._timeout)
+            await asyncio.wait_for(fut, self._timeout)
         finally:
             loop.remove_reader(fileno)
 
