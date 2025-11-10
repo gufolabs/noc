@@ -4,6 +4,7 @@
     "uuid": "c5b7d7aa-f22e-4328-9b68-88ac78153852",
     "vendor__code": "APC",
     "description": "NetShelter SX 48U 600mm Wide x 1070mm Deep Enclosure",
+    "container_type": "rack",
     "connections": [],
     "data": [
         {
