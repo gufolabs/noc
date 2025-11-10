@@ -11,11 +11,6 @@
             "attr": "layer",
             "interface": "geopoint",
             "value": "cities"
-        },
-        {
-            "attr": "container",
-            "interface": "container",
-            "value": true
         }
     ],
     "glyph__name": "FontAwesome | globe"

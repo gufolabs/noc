@@ -8,14 +8,11 @@
     "connections": [],
     "data": [
         {
-            "attr": "container",
-            "interface": "container",
-            "value": true
-        },
-        {
             "attr": "part_no",
             "interface": "asset",
-            "value": ["AR3307"]
+            "value": [
+                "AR3307"
+            ]
         },
         {
             "attr": "rear_door",
