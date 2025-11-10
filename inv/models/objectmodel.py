@@ -99,7 +99,7 @@ class ContainerType(Enum):
 
     def is_sandbox(self) -> bool:
         """Check if object is group."""
-        return self == ContainerType.GROUP
+        return self == ContainerType.SANDBOX
 
 
 class ModelAttr(EmbeddedDocument):

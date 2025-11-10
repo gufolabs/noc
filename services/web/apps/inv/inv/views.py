@@ -127,15 +127,7 @@ class InvApplication(ExtApplication):
                 cmodels = [
                     d["_id"]
                     for d in ObjectModel._get_collection().find(
-                        {
-                            "data": {
-                                "$elemMatch": {
-                                    "interface": "container",
-                                    "attr": "container",
-                                    "value": True,
-                                }
-                            }
-                        },
+                        {"container_type": {"$nin": [None, "none"]}},
                         {"_id": 1},
                     )
                 ]
@@ -145,7 +137,6 @@ class InvApplication(ExtApplication):
                         __raw__={"parent": None, "model": {"$in": cmodels}}
                     )
                 ]
-
             else:
                 return self.response_bad_request()
         r = []
