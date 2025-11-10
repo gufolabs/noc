@@ -709,14 +709,7 @@ class InvApplication(ExtApplication):
             return True
         # Inside rack or PoP
         while o:
-            # Sandbox
-            if o.model.name == "Sandbox":
-                return True
-            # Rack
-            if o.is_rack:
-                return True
-            # PoP
-            if o.is_pop:
+            if o.is_sandbox or o.is_rack or o.is_pop:
                 return True
             o = o.parent
         return False
