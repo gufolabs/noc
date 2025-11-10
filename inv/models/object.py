@@ -1801,6 +1801,11 @@ class Object(Document):
         """Check if object is group."""
         return self.model.container_type and self.model.container_type.is_sandbox()
 
+    @property
+    def is_chassis(self) -> bool:
+        """Check if object is chassis."""
+        return self.model.container_type and self.model.container_type.is_chassis()
+
 
 signals.pre_delete.connect(Object.detach_children, sender=Object)
 signals.pre_delete.connect(Object.delete_disconnect, sender=Object)

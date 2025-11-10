@@ -68,6 +68,7 @@ class ContainerType(Enum):
         POP: Point of presence (of any level).
         RACK: Rack shelf.
         SANDBOX: Inventory sandbox.
+        CHASSIS: Box chassis.
     """
 
     NONE = "none"
@@ -76,10 +77,11 @@ class ContainerType(Enum):
     POP = "pop"
     RACK = "rack"
     SANDBOX = "sandbox"
+    CHASSIS = "chassis"
 
     def is_container(self) -> bool:
         """Check if object is container."""
-        return self != ContainerType.NONE
+        return self not in (ContainerType.NONE, ConnectionType.CHASSIS)
 
     def is_group(self) -> bool:
         """Check if object is group."""
@@ -100,6 +102,10 @@ class ContainerType(Enum):
     def is_sandbox(self) -> bool:
         """Check if object is group."""
         return self == ContainerType.SANDBOX
+
+    def is_chassis(self) -> bool:
+        """Check if object is chassis."""
+        return self == ContainerType.CHASSIS
 
 
 class ModelAttr(EmbeddedDocument):
@@ -819,7 +825,7 @@ class ObjectModel(Document):
         if self.get_data("rack", "units"):
             return "fa fa-th-large"
         # Chassis
-        if self.cr_context == "CHASSIS":
+        if self.container_type and self.container_type.is_chassis():
             return "fa fa-square"
         # Linecard
         if self.cr_context == "LINECARD":

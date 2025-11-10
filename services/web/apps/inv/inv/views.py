@@ -127,7 +127,7 @@ class InvApplication(ExtApplication):
                 cmodels = [
                     d["_id"]
                     for d in ObjectModel._get_collection().find(
-                        {"container_type": {"$nin": [None, "none"]}},
+                        {"container_type": {"$nin": [None, "none", "chassis"]}},
                         {"_id": 1},
                     )
                 ]
@@ -693,7 +693,7 @@ class InvApplication(ExtApplication):
             False: Otherwise.
         """
         # Is chassis
-        if o.model.cr_context == "CHASSIS":
+        if o.is_chassis:
             return True
         # Has outer connections
         if o.parent_connection:
