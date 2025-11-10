@@ -6,11 +6,5 @@
     "description": "Group container",
     "container_type": "group",
     "connections": [],
-    "data": [
-        {
-            "attr": "container",
-            "interface": "container",
-            "value": true
-        }
-    ]
+    "data": []
 }
