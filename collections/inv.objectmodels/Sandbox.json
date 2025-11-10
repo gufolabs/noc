@@ -6,12 +6,6 @@
     "description": "Sandboxed part of the inventory",
     "container_type": "sandbox",
     "connections": [],
-    "data": [
-        {
-            "attr": "container",
-            "interface": "container",
-            "value": true
-        }
-    ],
+    "data": [],
     "glyph__name": "FontAwesome | object-group"
 }
