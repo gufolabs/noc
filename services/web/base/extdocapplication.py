@@ -47,6 +47,7 @@ from noc.sa.interfaces.base import (
     DocumentParameter,
     ObjectIdParameter,
 )
+from noc.core.protocols.get_style import GetStyle
 from noc.core.validators import is_int, is_uuid
 from noc.aaa.models.permission import Permission
 from noc.aaa.models.modelprotectionprofile import ModelProtectionProfile
@@ -60,7 +61,7 @@ from .extapplication import ExtApplication, view
 
 
 class ExtDocApplication(ExtApplication):
-    model = None  # Document to expose
+    mode = None  # Document to expose
     icon = "icon_application_view_list"
     query_fields = []  # Use all unique fields by default
     query_condition = "startswith"
@@ -163,8 +164,16 @@ class ExtDocApplication(ExtApplication):
             )
         if self.json_collection:
             self.bulk_fields += [self._bulk_field_is_builtin]
-        # Find field_* and populate custom fields
+        # Additional custom fields
         self.custom_fields = {}
+        # row_class field
+        if isinstance(self.model, GetStyle):
+
+            def field_row_class(o: self.model) -> str:
+                return o.get_style() or ""
+
+            self.custom_fields["row_class"] = field_row_class
+        # Find field_* and populate custom fields
         for fn in [n for n in dir(self) if n.startswith("field_")]:
             h = getattr(self, fn)
             if callable(h):
