@@ -118,3 +118,6 @@ class VLANProfile(Document):
     def on_save(self):
         if self.role_label:
             Label.ensure_label(self.role_label, model_ids=["vc.VLAN", "inv.Interface"])
+
+    def get_style(self) -> Optional[str]:
+        return self.style.style if self.style else None

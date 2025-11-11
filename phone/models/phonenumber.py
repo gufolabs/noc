@@ -110,3 +110,6 @@ class PhoneNumber(Document):
     @property
     def enum(self):
         return ".".join(reversed(self.number)) + ".e164.arpa"
+
+    def get_style(self) -> Optional[str]:
+        return self.profile.style if self.profile else None

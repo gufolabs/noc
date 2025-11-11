@@ -248,6 +248,9 @@ class PhoneRange(Document):
             )
             n.save()
 
+    def get_style(self) -> Optional[str]:
+        return self.profile.style if self.profile else None
+
 
 def allocate_numbers(range_id):
     range = PhoneRange.get_by_id(range_id)

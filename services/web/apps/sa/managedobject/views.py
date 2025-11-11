@@ -186,9 +186,6 @@ class ManagedObjectApplication(ExtModelApplication):
     def get_ac_object_down():
         return AlarmClass.get_by_name("NOC | Managed Object | Ping Failed")
 
-    def field_row_class(self, o):
-        return o.object_profile.style.css_class_name if o.object_profile.style else ""
-
     def bulk_field_fav_status(self, data):
         user = get_user()
         fav_items = self.get_favorite_items(user)

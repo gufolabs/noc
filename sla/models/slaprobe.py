@@ -341,3 +341,6 @@ class SLAProbe(Document):
             "managed_object": self.managed_object,
             "description": self.description,
         }
+
+    def get_style(self) -> Optional[str]:
+        return self.profile.style if self.profile else None
