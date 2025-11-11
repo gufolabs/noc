@@ -269,3 +269,6 @@ class VRF(NOCModel):
     @classmethod
     def iter_lazy_labels(cls, vrf: "VRF"):
         yield f"noc::ipvrf::{vrf.name}::="
+
+    def get_style(self) -> Optional[str]:
+        return self.profile.style if self.profile else None

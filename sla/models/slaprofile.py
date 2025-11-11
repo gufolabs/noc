@@ -198,3 +198,6 @@ class SLAProfile(Document):
                 labels=labels,
                 instance_filters=[("profile", self.id)],
             )
+
+    def get_style(self) -> Optional[str]:
+        return self.style.style if self.style else None

@@ -328,3 +328,6 @@ class SLAProbe(Document):
             "caps": self.get_caps(),
             "state": str(state.id),
         }
+
+    def get_style(self) -> Optional[str]:
+        return self.profile.style if self.profile else None
