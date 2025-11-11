@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # SensorProfile model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -186,3 +186,6 @@ class SensorProfile(Document):
             for mr in self.match_rules:
                 q |= mr.get_q()
         return q
+
+    def get_style(self) -> Optional[str]:
+        return self.style.style if self.style else None

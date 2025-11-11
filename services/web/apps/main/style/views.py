@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # main.style application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.services.web.base.extmodelapplication import ExtModelApplication, view
+from noc.services.web.base.extmodelapplication import ExtModelApplication
 from noc.main.models.style import Style
 from noc.sa.interfaces.base import ColorParameter
 from noc.core.translation import ugettext as _

@@ -621,3 +621,6 @@ class NetworkSegment(Document):
             resource_id=str(self.id),
             title=self.name,
         )
+
+    def get_style(self) -> Optional[str]:
+        return self.profile.style if self.profile else None

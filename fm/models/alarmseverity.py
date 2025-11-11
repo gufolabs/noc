@@ -174,3 +174,6 @@ class AlarmSeverity(Document):
         severities, weights, alpha = cls.get_weights()
         i = find(weights, w)
         return severities[i] + int(alpha[i] * (w - weights[i]))
+
+    def get_style(self) -> Optional[str]:
+        return self.style.style if self.style else None
