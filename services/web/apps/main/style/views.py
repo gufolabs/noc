@@ -23,11 +23,3 @@ class StyleApplication(ExtModelApplication):
     icon = "icon_style"
 
     clean_fields = {"background_color": ColorParameter(), "font_color": ColorParameter()}
-
-    def field_row_class(self, o):
-        return o.css_class_name
-
-    @view(url=r"^css/$", method=["GET"], access=True)
-    def view_css(self, request):
-        text = "\n\n".join([s.css for s in Style.objects.all()])
-        return self.render_plain_text(text, content_type="text/css")

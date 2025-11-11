@@ -51,6 +51,7 @@ from noc.main.models.label import Label
 from noc.core.middleware.tls import get_user
 from noc.core.comp import smart_text
 from noc.core.collection.base import Collection
+from noc.core.protocols.get_style import GetStyle
 from noc.models import get_model_id
 from noc.core.model.util import is_related_field
 from noc.inv.models.resourcegroup import ResourceGroup
@@ -106,8 +107,16 @@ class ExtModelApplication(ExtApplication):
             self.m2m_fields.update(self.custom_m2m_fields)
         for f in self.model._meta.many_to_many:
             self.m2m_fields[f.name] = f.remote_field.model
-        # Find field_* and populate custom fields
+        # Additional fields
         self.custom_fields = {}
+        # row_class field
+        if isinstance(self.model, GetStyle):
+
+            def field_row_class(o: self.model) -> str:
+                return o.get_style() or ""
+
+            self.custom_fields["row_class"] = field_row_class
+        # Find field_* and populate custom fields
         for fn in [n for n in dir(self) if n.startswith("field_")]:
             h = getattr(self, fn)
             if callable(h):

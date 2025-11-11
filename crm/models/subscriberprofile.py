@@ -71,3 +71,6 @@ class SubscriberProfile(Document):
     @classmethod
     def can_set_label(cls, label):
         return Label.get_effective_setting(label, setting="enable_subscriber")
+
+    def get_style(self) -> Optional[str]:
+        return self.style.style if self.style else None
