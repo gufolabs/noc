@@ -75,32 +75,21 @@ class Style(NOCModel):
         return Style.objects.filter(id=oid).first()
 
     @property
-    def css_class_name(self):
-        """
-        CSS Class Name
-        """
-        return "noc-color-%d" % self.id
-
-    @property
-    def style(self):
+    def style(self) -> str:
         """
         CSS Style
         """
-        s = "color: #%06X !important; background-color: #%06X !important;" % (
-            self.font_color,
-            self.background_color,
-        )
+        r = [
+            f"color:#{self.font_color:06X}",
+            f"background-color:#{self.background_color:06X}",
+        ]
         if self.bold:
-            s += " font-weight: bold !important;"
+            r.append("font-weight:bold")
         if self.italic:
-            s += " font-style: italic !important;"
+            r.append("font-style:italic")
         if self.underlined:
-            s += " text-decoration: underline !important;"
-        return s
+            r.append("text-decoration: underline")
+        return ";".join(r)
 
-    @property
-    def css(self):
-        """
-        CSS class style
-        """
-        return ".%s, .%s td { %s }\n" % (self.css_class_name, self.css_class_name, self.style)
+    def get_style(self) -> Optional[str]:
+        return self.style

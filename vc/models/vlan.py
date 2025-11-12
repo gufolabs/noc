@@ -266,3 +266,6 @@ class VLAN(Document):
     @property
     def vlan_role_label(self) -> Optional[str]:
         return self.profile.role_label
+
+    def get_style(self) -> Optional[str]:
+        return self.profile.style if self.profile else None

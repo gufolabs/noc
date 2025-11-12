@@ -45,3 +45,6 @@ class PhoneNumberProfile(Document):
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
     def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["PhoneNumberProfile"]:
         return PhoneNumberProfile.objects.filter(id=oid).first()
+
+    def get_style(self) -> Optional[str]:
+        return self.style.style if self.style else None

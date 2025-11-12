@@ -47,6 +47,7 @@ from noc.sa.interfaces.base import (
     DocumentParameter,
     ObjectIdParameter,
 )
+from noc.core.protocols.get_style import GetStyle
 from noc.core.validators import is_int, is_uuid
 from noc.aaa.models.permission import Permission
 from noc.aaa.models.modelprotectionprofile import ModelProtectionProfile
@@ -60,7 +61,7 @@ from .extapplication import ExtApplication, view
 
 
 class ExtDocApplication(ExtApplication):
-    model = None  # Document to expose
+    mode = None  # Document to expose
     icon = "icon_application_view_list"
     query_fields = []  # Use all unique fields by default
     query_condition = "startswith"
@@ -68,9 +69,8 @@ class ExtDocApplication(ExtApplication):
     clean_fields = {"id": ObjectIdParameter()}  # field name -> Parameter instance
     parent_field = None  # Tree lookup
     parent_model = None
-    secret_fields = (
-        None  # Set of sensitive fields. "secret" permission is required to show of modify
-    )
+    # Set of sensitive fields. "secret" permission is required to show of modify
+    secret_fields = None
     lookup_default = [{"id": "Leave unchanged", "label": "Leave unchanged"}]
     ignored_fields = {"id", "bi_id", "state"}
     SECRET_MASK = "********"
@@ -163,8 +163,13 @@ class ExtDocApplication(ExtApplication):
             )
         if self.json_collection:
             self.bulk_fields += [self._bulk_field_is_builtin]
-        # Find field_* and populate custom fields
+        # Additional custom fields
         self.custom_fields = {}
+        # row_class field
+        self.supports_style = isinstance(self.model, GetStyle)
+        if self.supports_style:
+            self.custom_fields["row_class"] = self._get_row_class
+        # Find field_* and populate custom fields
         for fn in [n for n in dir(self) if n.startswith("field_")]:
             h = getattr(self, fn)
             if callable(h):
@@ -413,7 +418,10 @@ class ExtDocApplication(ExtApplication):
         return r
 
     def instance_to_lookup(self, o, fields=None):
-        return {"id": str(o.id), "label": smart_text(o)}
+        r = {"id": o.id, "label": str(o)}
+        if self.supports_style:
+            r["row_class"] = o.get_style() or ""
+        return r
 
     @view(method=["GET"], url=r"^$", access="read", api=True)
     def api_list(self, request):
@@ -656,4 +664,8 @@ class ExtDocApplication(ExtApplication):
             for p in v:
                 setattr(o, p, v[p])
             o.save()
-        return "%d records has been updated" % len(objects)
+        return f"{len(objects)} records has been updated"
+
+    @staticmethod
+    def _get_row_class(o: GetStyle) -> str:
+        return o.get_style() or ""
