@@ -22,6 +22,6 @@ Ext.define("NOC.main.style.LookupField", {
     me.callParent();
   },
   getInnerTpl: function(){
-    return "<div class='noc-color-{id}'>{label}</div>";
+    return '<div <tpl if="row_class"> style="{row_class}"</tpl>>{label}</div>';
   },
 });

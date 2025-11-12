@@ -110,12 +110,9 @@ class ExtModelApplication(ExtApplication):
         # Additional fields
         self.custom_fields = {}
         # row_class field
-        if isinstance(self.model, GetStyle):
-
-            def field_row_class(o: self.model) -> str:
-                return o.get_style() or ""
-
-            self.custom_fields["row_class"] = field_row_class
+        self.supports_style = isinstance(self.model, GetStyle)
+        if self.supports_style:
+            self.custom_fields["row_class"] = self._get_row_class
         # Find field_* and populate custom fields
         for fn in [n for n in dir(self) if n.startswith("field_")]:
             h = getattr(self, fn)
@@ -462,7 +459,10 @@ class ExtModelApplication(ExtApplication):
         return r
 
     def instance_to_lookup(self, o, fields=None):
-        return {"id": o.id, "label": smart_text(o)}
+        r = {"id": o.id, "label": str(o)}
+        if self.supports_style:
+            r["row_class"] = o.get_style() or ""
+        return r
 
     def lookup_tags(self, q, name, value):
         if not value:
@@ -861,4 +861,8 @@ class ExtModelApplication(ExtApplication):
             for p in v:
                 setattr(o, p, v[p])
             o.save()
-        return "%d records has been updated" % len(objects)
+        return f"{len(objects)} records has been updated"
+
+    @staticmethod
+    def _get_row_class(o: GetStyle) -> str:
+        return o.get_style() or ""
