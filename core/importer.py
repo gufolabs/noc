@@ -30,7 +30,7 @@ class NOCLoader(importlib.abc.Loader):
     packages: Set[str] = set()
 
     def __init__(self, path_entry: Optional[str] = None):
-        self.path_entry: Optional[str] = path_entry
+        self.base_path = Path(path_entry or "")
         self.packages.add(self.PREFIX)
 
     def get_source(self, fullname: str) -> Optional[str]:
@@ -58,7 +58,7 @@ class NOCLoader(importlib.abc.Loader):
         Returns:
             Appropriate filename.
         """
-        base = Path(self.path_entry or "") / Path(*fullname.split("."))
+        base = self.base_path / Path(*fullname.split("."))
         if self.is_package(fullname):
             return str(base / "__init__.py")
         return str(base.with_suffix(".py"))
@@ -124,17 +124,25 @@ class NOCCustomLoader(NOCLoader):
     PREFIX = "noc.custom"
 
     def get_source(self, fullname: str) -> Optional[str]:
-        key = fullname[len(self.PREFIX) + 1 :]
-        if not key:
-            return self.INIT_SOURCE  # noc.custom package itself
-        base_path = Path(config.path.custom_path) / Path(*key.split("."))
-        file_path = base_path.with_suffix(".py")
-        if file_path.exists():
-            return file_path.read_text(encoding="utf-8")
-        if base_path.exists():
+        key = fullname[len(self.PREFIX) + 1 :].split(".")
+        path = Path(config.path.custom_path) / Path(*key)
+        if self.is_package(fullname):
+            path /= "__init__.py"
+        else:
+            path = path.with_suffix(".py")
+        if path.exists():
+            return path.read_text(encoding="utf-8")
+        return self.INIT_SOURCE
+
+    def is_package(self, fullname: str) -> bool:
+        if super().is_package(fullname):
+            return True
+        key = fullname[len(self.PREFIX) + 1 :].split(".")
+        path = Path(config.path.custom_path) / Path(*key)
+        if path.is_dir() and (path / "__init__.py").exists():
             self.packages.add(fullname)
-            return self.INIT_SOURCE
-        return None
+            return True
+        return False
 
 
 class NOCImportRouter(importlib.abc.MetaPathFinder):
