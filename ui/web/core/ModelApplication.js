@@ -26,6 +26,7 @@ Ext.define("NOC.core.ModelApplication", {
     "NOC.core.modelfilter.Favorites",
     "NOC.core.modelfilter.Tree",
     "Ext.ux.grid.column.GlyphAction",
+    "Ext.ux.grid.RowStyle",
   ],
   mixins: [
     "NOC.core.mixins.Export",

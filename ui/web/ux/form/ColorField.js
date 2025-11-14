@@ -1,112 +1,113 @@
 //---------------------------------------------------
 // ColorField:
-// ComboBox with color picker
-// Based on
-// http://www.learnsomethings.com/2012/03/20/extjs4-color-picker-in-a-drop-down-control-for-use-on-forms-and-in-editable-grids/
+// Color picker field based on HTML5 color input
 //---------------------------------------------------
 console.debug("Defining Ext.ux.form.ColorField");
 
 Ext.define("Ext.ux.form.ColorField", {
   extend: "Ext.form.field.Text",
   alias: "widget.colorfield",
+  
   triggers: {
     color: {
       scope: "this",
       handler: "onTriggerClick",
     },
   },
+  
   width: 190,
   regex: /^(#|0x)?[0-9A-Fa-f]+$/,
-  regexText: __("Enter integer number or hex value starting with # or 0x"),
+  regexText: __("Enter hex value starting with # or 0x"),
+
+  afterRender: function(){
+    this.callParent(arguments);
+    
+    this.colorInput = Ext.DomHelper.append(this.bodyEl, {
+      tag: "input",
+      type: "color",
+      style: "position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;",
+    }, true);
+    
+    this.colorInput.on("input", () => {
+      this.onColorSelected(this.colorInput.dom.value);
+    });
+
+    if(this.value){
+      this.updateColorDisplay(this.value);
+    }
+  },
 
   onTriggerClick: function(){
-    var me = this;
-    if(!me.picker){
-      me.picker = Ext.create("Ext.picker.Color", {
-        pickerField: me,
-        ownerCt: me,
-        floating: true,
-        hidden: true,
-        focusOnShow: true,
-        defaultAlign: "tl-bl",
-        alignTarget: me.inputEl,
-        style: {
-          backgroundColor: "#FFFFFF",
-        },
-        listeners: {
-          scope: me,
-          select: me.onSelectColor,
-          show: me.onShowPicker,
-        },
-        colors: [
-          "1ABC9C",
-          "2ECC71",
-          "3498DB",
-          "9B59B6",
-          "34495E",
-          "16A085",
-          "27AE60",
-          "2980B9",
-          "8E44AD",
-          "2C3E50",
-          "F1C40F",
-          "E67E22",
-          "E74C3C",
-          "ECF0F1",
-          "95A5A6",
-          "F39C12",
-          "D35400",
-          "C0392B",
-          "BDC3C7",
-          "7F8C8D",
-          "000000",
-          "FFFFFF",
-        ],
-      });
+    if(this.colorInput){
+      this.colorInput.dom.click();
     }
-    me.picker.show(me.inputEl);
   },
 
-  onSelectColor: function(field, value){
-    var me = this;
-    me.setValue(parseInt(value, 16));
-    me.picker.hide();
+  onColorSelected: function(hexColor){
+    this.setValue(hexColor);
   },
 
-  onShowPicker: function(field){
-    field.getEl().monitorMouseLeave(500, field.hide, field);
-  },
-  // Set field color
-  setColor: function(color){
-    var me = this;
-    me.setFieldStyle({
-      color: this.getContrastColor(color),
-      backgroundColor: this.toHexColor(color),
+  updateColorDisplay: function(decimalValue){
+    var hexColor = this.toHexColor(decimalValue);
+    
+    this.setFieldStyle({
+      color: this.getContrastColor(decimalValue),
+      backgroundColor: hexColor,
       backgroundImage: "none",
     });
+    
+    if(this.colorInput){
+      this.colorInput.dom.value = hexColor;
+    }
   },
-  //
+
   setValue: function(value){
-    var me = this;
-    me.callParent([value]);
-    me.setColor(value);
+    var decimalValue = this.toDecimalColor(value);
+        
+    this.value = this.toHexColor(decimalValue);
+    this.updateColorDisplay(decimalValue);
+    this.callParent([this.value]);
   },
-  //
-  toHexColor: function(x){
-    let hex = Number(x).toString(16);
+
+  toDecimalColor: function(value){
+    var decimalValue;
+    if(typeof value === "string"){
+      if(value.indexOf("#") === 0){
+        decimalValue = parseInt(value.substring(1), 16);
+      } else if(value.indexOf("0x") === 0){
+        decimalValue = parseInt(value.substring(2), 16);
+      } else{
+        decimalValue = parseInt(value, 10);
+      }
+    } else{
+      decimalValue = value;
+    }
+    return decimalValue;
+  },
+  
+  toHexColor: function(decimalValue){
+    var hex = Number(decimalValue).toString(16);
     while(hex.length < 6){
       hex = "0" + hex;
     }
-    return "#" + hex.toUpperCase();
+    return "#" + hex.toLowerCase();
   },
-  //
-  getValue: function(){
-    var me = this;
-    return me.toHexColor(me.callParent());
+
+  rawToValue: function(){
+    return this.toDecimalColor(this.rawValue) || 0;
   },
-  //
-  getContrastColor: function(color){
-    var avgBrightness = ((color >> 16) & 255) * 0.299 + ((color >> 8) & 255) * 0.587 + (color & 255) * 0.114;
+
+  getContrastColor: function(decimalValue){
+    var avgBrightness = ((decimalValue >> 16) & 255) * 0.299 + 
+                       ((decimalValue >> 8) & 255) * 0.587 + 
+                       (decimalValue & 255) * 0.114;
     return (avgBrightness > 130) ? "#000000" : "#FFFFFF";
+  },
+
+  onDestroy: function(){
+    if(this.colorInput){
+      this.colorInput.destroy();
+    }
+    this.callParent(arguments);
   },
 });
