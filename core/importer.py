@@ -48,7 +48,7 @@ class NOCLoader(importlib.abc.Loader):
     def is_package(self, fullname: str) -> bool:
         return fullname in self.packages
 
-    def get_filename(self, fullname: str) -> Path:
+    def get_filename(self, fullname: str) -> str:
         """
         Get file name for module.
 
@@ -60,8 +60,8 @@ class NOCLoader(importlib.abc.Loader):
         """
         base = Path(self.path_entry or "") / Path(*fullname.split("."))
         if self.is_package(fullname):
-            return base / "__init__.py"
-        return base.with_suffix(".py")
+            return str(base / "__init__.py")
+        return str(base.with_suffix(".py"))
 
     def create_module(self, spec: ModuleSpec) -> Optional[ModuleType]:
         """
