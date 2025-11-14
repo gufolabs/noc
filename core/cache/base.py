@@ -8,12 +8,10 @@
 # Python modules
 import logging
 from typing import Optional, Any, Iterable, Dict
-import warnings
 
 # NOC modules
 from noc.config import config
 from noc.core.handler import get_handler
-from noc.core.deprecations import RemovedInNOC2402Warning
 
 logger = logging.getLogger(__name__)
 
@@ -87,12 +85,6 @@ class BaseCache(object):
     @classmethod
     def get_cache(cls) -> "BaseCache":
         cache_cls = config.cache.cache_class
-        if cache_cls == "noc.core.cache.memcached.MemcachedCache":
-            warnings.warn(
-                "Memcached cache is deprecated and not safe. Switching to mongo cache. Will be an error in NOC 24.2",
-                RemovedInNOC2402Warning,
-            )
-            cache_cls = "noc.core.cache.mongo.MongoCache"
         logger.info("Using cache backend: %s", cache_cls)
         c = get_handler(cache_cls)
         if c:

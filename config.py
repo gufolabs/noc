@@ -473,11 +473,6 @@ class Config(BaseConfig):
         nodata_record_ttl = SecondsParameter(default="1h")
         nodata_round_duration = SecondsParameter(default="1M")
 
-    class memcached(ConfigSection):
-        addresses = ServiceParameter(service="memcached", wait=True, full_result=True)
-        pool_size = IntParameter(default=8)
-        default_ttl = SecondsParameter(default="1d")
-
     class message(ConfigSection):
         enable_alarm = BooleanParameter(default=False)
         enable_event = BooleanParameter(default=False)
