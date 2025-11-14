@@ -25,7 +25,6 @@ from noc.core.config.params import (
     MapParameter,
     IntParameter,
     BooleanParameter,
-    HandlerParameter,
     SecondsParameter,
     BytesSizeParameter,
     FloatParameter,
