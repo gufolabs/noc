@@ -123,7 +123,7 @@ node = [
   "gufo_noc_speedup==0.1.0",
   "urllib3<2", # To be deleted after drop OS with openssl<1.1.1 (centos7,rhel7,deb9)
 ]
-ping = ["gufo-ping==0.5.0"]
+ping = ["gufo-ping==0.6.0"]
 prod-tools = [
   "sentry-sdk==0.20.3",
   "supervisor-wildcards==0.1.3",
