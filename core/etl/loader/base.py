@@ -315,9 +315,9 @@ class BaseLoader(object):
                 o = next(old, None)
             elif n.id == o.id:
                 # Changed
-                if n.dict(include=include_fields, exclude={self.checkpoint_field}) != o.dict(
+                if n.model_dump(
                     include=include_fields, exclude={self.checkpoint_field}
-                ):
+                ) != o.model_dump(include=include_fields, exclude={self.checkpoint_field}):
                     yield o, n
                 elif return_wo_changes:
                     yield o, n
