@@ -21,7 +21,6 @@ from noc.config import config
 from noc.fm.models.eventclassificationrule import EventClassificationRule
 from noc.fm.models.enumeration import Enumeration
 from noc.sa.models.profile import GENERIC_PROFILE
-from noc.core.handler import get_handler
 from noc.core.profile.loader import loader as profile_loader
 from noc.core.perf import metrics
 from noc.core.fm.event import Event
