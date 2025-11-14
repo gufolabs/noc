@@ -146,7 +146,6 @@ class Config(BaseConfig):
 
     class classifier(ConfigSection):
         ds_limit = IntParameter(default=1000)
-        lookup_handler = HandlerParameter(default="noc.services.classifier.rulelookup.RuleLookup")
         default_interface_profile = StringParameter(default="default")
         default_rule = StringParameter(default="Unknown | Default")
         allowed_time_drift = SecondsParameter(default="5M")

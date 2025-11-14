@@ -178,7 +178,6 @@ class ClassifierService(FastAPIService):
         """
         Load rules from database after loading config
         """
-        self.logger.info("Using rule lookup solution: %s", config.classifier.lookup_handler)
         self.ruleset.load(skip_load_rules=config.datastream.enable_cfgeventrules)
         self.load_link_action()
         # Heat up MIB cache
