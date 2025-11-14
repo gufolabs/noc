@@ -26,10 +26,6 @@ class RemovedInNOC2301Warning(DeprecationWarning):
     """Features to be removed in NOC 23.1."""
 
 
-class RemovedInNOC2402Warning(DeprecationWarning):
-    """Features to be removed in NOC 24.2."""
-
-
 class RemovedInNOC2501Warning(DeprecationWarning):
     """Features to be removed in NOC 25.1."""
 
