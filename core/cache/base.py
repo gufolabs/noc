@@ -8,12 +8,10 @@
 # Python modules
 import logging
 from typing import Optional, Any, Iterable, Dict
-import warnings
 
 # NOC modules
 from noc.config import config
 from noc.core.handler import get_handler
-from noc.core.deprecations import RemovedInNOC2402Warning
 
 logger = logging.getLogger(__name__)
 
