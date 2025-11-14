@@ -35,7 +35,6 @@
 * [[logging] section](logging.md)
 * [[login] section](login.md)
 * [[mailsender] section](mailsender.md)
-* [[memcached] section](memcached.md)
 * [[message] section](message.md)
 * [[metrics] section](metrics.md)
 * [[metricscollector] section](metricscollector.md)

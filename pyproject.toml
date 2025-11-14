@@ -45,7 +45,6 @@ bh = [
   "gufo-ping==0.5.0",
   "gufo-traceroute==0.2.0",
 ]
-cache-memcached = ["pylibmc==1.6.3"]
 cache-redis = ["hiredis==3.1.0", "redis==4.6.0"]
 classifier = ["bitarray==3.7.1"]
 dev = [

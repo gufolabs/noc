@@ -12,12 +12,6 @@ postgresql_conf_prefix: "{{ postgres_home }}/{{ postgres_version }}/data"
 postgresql_conf_path: "{{ postgresql_conf_prefix }}/postgresql.conf"
 postgresql_hba_path: "{{ postgresql_conf_prefix }}/pg_hba.conf"
 postgres_proccess: postmaster
-
-memcahed_user: memcached
-memcahed_conf: /etc/sysconfig/memcached
-
 pgbouncer_user: pgbouncer
-
 jemalloc_path: /lib64/libjemalloc.so.1
-
 fake_shell: /sbin/nologin

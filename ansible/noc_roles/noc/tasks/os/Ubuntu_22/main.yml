@@ -15,8 +15,6 @@
       - libpq-dev
       - libffi7
       - libffi-dev
-      - libmemcached11
-      - libmemcached-dev
       - patch
       - bzip2
       - zlib1g-dev

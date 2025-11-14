@@ -10,7 +10,6 @@
       - py38-virtualenv
       - curl
       - libffi
-      - libmemcached
       - git
       - zstd
   tags:
