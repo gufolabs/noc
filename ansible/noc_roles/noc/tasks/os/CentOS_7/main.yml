@@ -57,8 +57,6 @@
       - postgresql{{ postgres_version|replace(".","") }}-devel
       - libffi
       - libffi-devel
-      - libmemcached
-      - libmemcached-devel
       - zlib-devel
       - jemalloc
       - bzip2

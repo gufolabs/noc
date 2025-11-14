@@ -240,14 +240,6 @@
   tags:
     - requirements
 
-- name: Add -memcached- python packages
-  set_fact:
-    python_deps: "{{ python_deps + ['cache-memcached'] }}"
-  when:
-    - "'svc-memcached-exec' in groups and groups['svc-memcached-exec']|length>0 "
-  tags:
-    - requirements
-
 - name: Add -redis- python packages
   set_fact:
     python_deps: "{{ python_deps + ['cache-redis'] }}"
