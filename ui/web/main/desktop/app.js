@@ -16,6 +16,7 @@ Ext.application({
   requires: [
     "NOC.main.desktop.Application",
     "NOC.main.desktop.LoginView",
+    "Ext.ux.grid.RowStyle",
   ],
 
   launch: function(){
