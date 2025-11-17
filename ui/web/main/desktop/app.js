@@ -135,6 +135,7 @@ Ext.application({
         NOC.templates = {};
         // Change title
         document.title = setup.brand + "|" + setup.installation_name;
+        this.createCss(setup.color_scheme || {});
         this.app = Ext.create("NOC.main.desktop.Application", {
           listeners: {
             scope: this,
@@ -160,5 +161,39 @@ Ext.application({
         parent.destroy();
       },
     });
+  },
+  createCss: function(scheme){
+    var classes = scheme.style || [],
+      style = document.createElement("style"),
+      root = document.documentElement,
+      css = "";
+    classes.forEach(cl => {
+      css += `.${cl.name}, .${cl.name} td{`;
+      Object.entries(cl)
+        .filter((name) => name[0] !== "name")
+        .forEach(([key, value]) => {
+          switch(key){
+            case "color":
+              css += `color: var(--${cl.name}) !important;`;
+              root.style.setProperty(`--${cl.name}`, value);
+              break;
+            case "background-color":
+            case "backgroundColor":
+              var v = `${cl.name}-bg`;
+              css += `background-color: var(--${v}) !important;`;
+              root.style.setProperty(`--${v}`, value);
+              break;
+            default:
+              css += `${key}: ${value}; `;
+          }
+        });
+      css += "} ";
+    });
+    if(style.styleSheet){
+      style.styleSheet.cssText = css;
+    } else{
+      style.appendChild(document.createTextNode(css));
+    }
+    document.getElementsByTagName("head")[0].appendChild(style);
   },
 });
