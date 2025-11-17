@@ -301,5 +301,5 @@ class CPEProfile(Document):
                 q |= mr.get_q()
         return q
 
-    def get_style(self) -> Optional[str]:
-        return self.style.style if self.style else None
+    def get_css_class(self) -> Optional[str]:
+        return self.style.get_css_class() if self.style else None

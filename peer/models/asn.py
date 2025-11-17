@@ -277,5 +277,5 @@ class AS(NOCModel):
             "profile": {"id": str(self.profile.id), "name": self.profile.name},
         }
 
-    def get_style(self) -> Optional[str]:
-        return self.profile.style if self.profile else None
+    def get_css_class(self) -> Optional[str]:
+        return self.profile.get_css_class() if self.profile else None

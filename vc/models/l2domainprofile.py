@@ -141,5 +141,5 @@ class L2DomainProfile(Document):
         if vlan_filters and len(vlan_filters) != len(set(vlan_filters)):
             raise ValidationError("VLAN Filter overlapped")
 
-    def get_style(self) -> Optional[str]:
-        return self.style.style if self.style else None
+    def get_css_class(self) -> Optional[str]:
+        return self.style.get_css_class() if self.style else None

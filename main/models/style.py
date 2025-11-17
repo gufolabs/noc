@@ -7,7 +7,7 @@
 
 # Python modules
 from threading import Lock
-from typing import Optional
+from typing import Optional, Dict
 import operator
 
 # Third-party modules
@@ -75,21 +75,25 @@ class Style(NOCModel):
         return Style.objects.filter(id=oid).first()
 
     @property
-    def style(self) -> str:
+    def style(self) -> Dict[str, str]:
         """
         CSS Style
         """
-        r = [
-            f"color:#{self.font_color:06X}",
-            f"background-color:#{self.background_color:06X}",
-        ]
+        r = {
+            "color": f"#{self.font_color:06X}",
+            "background-color": f"#{self.background_color:06X}",
+        }
         if self.bold:
-            r.append("font-weight:bold")
+            r["font-weight"] = "bold"
         if self.italic:
-            r.append("font-style:italic")
+            r["font-style"] = "italic"
         if self.underlined:
-            r.append("text-decoration: underline")
-        return ";".join(r)
+            r["text-decoration"] = "underline"
+        return r
 
-    def get_style(self) -> Optional[str]:
-        return self.style
+    @property
+    def css_class(self) -> Optional[str]:
+        return f"noc-colors-{self.id}"
+
+    def get_css_class(self) -> Optional[str]:
+        return self.css_class

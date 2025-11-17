@@ -342,8 +342,8 @@ class Sensor(Document):
             r["service_groups"] = self.managed_object.effective_service_groups
         return r
 
-    def get_style(self) -> Optional[str]:
-        return self.profile.style if self.profile else None
+    def get_css_class(self) -> Optional[str]:
+        return self.profile.get_css_class() if self.profile else None
 
 
 def sync_object(obj: "Object") -> None:

@@ -116,5 +116,5 @@ class VPN(Document):
     def can_set_label(cls, label):
         return Label.get_effective_setting(label, "enable_vpn")
 
-    def get_style(self) -> Optional[str]:
-        return self.profile.style if self.profile else None
+    def get_css_class(self) -> Optional[str]:
+        return self.profile.get_css_class() if self.profile else None

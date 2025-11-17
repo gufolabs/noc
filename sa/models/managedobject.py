@@ -3100,8 +3100,8 @@ class ManagedObject(NOCModel):
             ctx["cred"] = self.credentials.get_snmp_credential()
         return ctx
 
-    def get_style(self) -> Optional[str]:
-        return self.object_profile.style if self.object_profile else None
+    def get_css_class(self) -> Optional[str]:
+        return self.object_profile.get_css_class() if self.object_profile else None
 
 
 @on_save

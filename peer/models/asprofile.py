@@ -135,5 +135,5 @@ class ASProfile(Document):
                 r[(str(pp.id), mr.dynamic_order)] = build_matcher(mr.get_match_expr())
         return tuple((x[0], r[x]) for x in sorted(r, key=lambda i: i[1]))
 
-    def get_style(self) -> Optional[str]:
-        return self.style.style if self.style else None
+    def get_css_class(self) -> Optional[str]:
+        return self.style.get_css_class() if self.style else None

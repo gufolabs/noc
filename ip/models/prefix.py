@@ -820,8 +820,8 @@ class Prefix(NOCModel):
     def resource_usage(self) -> Optional[float]:
         return self.address_usage
 
-    def get_style(self) -> Optional[str]:
-        return self.profile.style if self.profile else None
+    def get_css_class(self) -> Optional[str]:
+        return self.profile.get_css_class() if self.profile else None
 
 
 # Avoid circular references

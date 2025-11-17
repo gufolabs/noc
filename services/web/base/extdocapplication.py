@@ -47,7 +47,7 @@ from noc.sa.interfaces.base import (
     DocumentParameter,
     ObjectIdParameter,
 )
-from noc.core.protocols.get_style import GetStyle
+from noc.core.protocols.get_css_class import GetCssClass
 from noc.core.validators import is_int, is_uuid
 from noc.aaa.models.permission import Permission
 from noc.aaa.models.modelprotectionprofile import ModelProtectionProfile
@@ -166,8 +166,8 @@ class ExtDocApplication(ExtApplication):
         # Additional custom fields
         self.custom_fields = {}
         # row_class field
-        self.supports_style = isinstance(self.model, GetStyle)
-        if self.supports_style:
+        self.supports_css_class = isinstance(self.model, GetCssClass)
+        if self.supports_css_class:
             self.custom_fields["row_class"] = self._get_row_class
         # Find field_* and populate custom fields
         for fn in [n for n in dir(self) if n.startswith("field_")]:
@@ -419,7 +419,7 @@ class ExtDocApplication(ExtApplication):
 
     def instance_to_lookup(self, o, fields=None):
         r = {"id": o.id, "label": str(o)}
-        if self.supports_style:
+        if self.supports_css_class:
             r["row_class"] = o.get_style() or ""
         return r
 
@@ -667,5 +667,5 @@ class ExtDocApplication(ExtApplication):
         return f"{len(objects)} records has been updated"
 
     @staticmethod
-    def _get_row_class(o: GetStyle) -> str:
-        return o.get_style() or ""
+    def _get_row_class(o: GetCssClass) -> str:
+        return o.get_css_class() or ""

@@ -119,5 +119,5 @@ class VLANProfile(Document):
         if self.role_label:
             Label.ensure_label(self.role_label, model_ids=["vc.VLAN", "inv.Interface"])
 
-    def get_style(self) -> Optional[str]:
-        return self.style.style if self.style else None
+    def get_css_class(self) -> Optional[str]:
+        return self.style.get_css_class() if self.style else None

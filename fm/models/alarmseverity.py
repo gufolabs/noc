@@ -175,5 +175,5 @@ class AlarmSeverity(Document):
         i = find(weights, w)
         return severities[i] + int(alpha[i] * (w - weights[i]))
 
-    def get_style(self) -> Optional[str]:
-        return self.style.style if self.style else None
+    def get_css_class(self) -> Optional[str]:
+        return self.style.get_css_class() if self.style else None

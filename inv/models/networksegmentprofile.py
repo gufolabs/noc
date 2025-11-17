@@ -294,5 +294,5 @@ class NetworkSegmentProfile(Document):
         if not n:
             yield DEFAULT_UPLINK_POLICY
 
-    def get_style(self) -> Optional[str]:
-        return self.style.style if self.style else None
+    def get_css_class(self) -> Optional[str]:
+        return self.style.get_css_class() if self.style else None

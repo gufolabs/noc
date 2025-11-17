@@ -50,5 +50,5 @@ class PhoneRangeProfile(Document):
     def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["PhoneRangeProfile"]:
         return PhoneRangeProfile.objects.filter(id=oid).first()
 
-    def get_style(self) -> Optional[str]:
-        return self.style.style if self.style else None
+    def get_css_class(self) -> Optional[str]:
+        return self.style.get_css_class() if self.style else None
