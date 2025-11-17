@@ -47,6 +47,7 @@ Ext.application({
     console.log("Initializing history API");
     Ext.History.init();
     console.log("NOC application starting");
+    this.loadCssFetch();
     this.settings();
   },
   openLogin: function(){
@@ -58,6 +59,63 @@ Ext.application({
       },
     });
     console.log("NOC login started");
+  },
+  loadCss: function(){
+    Ext.Ajax.request({
+      url: "/main/style/css/",
+      method: "GET",
+      scope: this,
+      success: function(response){
+        var cssText = response.responseText,
+          root = document.documentElement,
+          cssRules = [],
+          classRegex = /\.noc-color-(\d+),\s*\.noc-color-\1\s+td\s*\{([^}]+)\}/g,
+          match;
+      
+        while((match = classRegex.exec(cssText)) !== null){
+          var colorNumber = match[1],
+            rules = match[2],
+            colorMatch = rules.match(/color:\s*([^!]+)\s*!important/),
+            bgColorMatch = rules.match(/background-color:\s*([^!]+)\s*!important/),
+            otherProps = rules.replace(/color:[^;]+;/g, "").replace(/background-color:[^;]+;/g, "").trim();
+        
+          if(colorMatch){
+            var colorVar = "noc-color-" + colorNumber;
+            root.style.setProperty("--" + colorVar, colorMatch[1].trim());
+          }
+        
+          if(bgColorMatch){
+            var bgColorVar = "noc-bg-color-" + colorNumber;
+            root.style.setProperty("--" + bgColorVar, bgColorMatch[1].trim());
+          }
+        
+          // Create CSS rule with variables
+          var ruleStr = ".noc-color-" + colorNumber + ", .noc-color-" + colorNumber + " td { ";
+          if(colorMatch){
+            ruleStr += "color: var(--noc-color-" + colorNumber+ "-color) !important; ";
+          }
+          if(bgColorMatch){
+            ruleStr += "background-color: var(--noc-bg-color-" + colorNumber + ") !important; ";
+          }
+          if(otherProps){
+            ruleStr += otherProps + " ";
+          }
+          ruleStr += "}";
+          cssRules.push(ruleStr);
+        }
+      
+        // Inject CSS
+        if(cssRules.length > 0){
+          var styleElement = document.createElement("style");
+          styleElement.type = "text/css";
+          styleElement.innerHTML = cssRules.join("\n");
+          document.head.appendChild(styleElement);
+        }
+      },
+      failure: function(response){
+        console.error("Failed to load CSS:", response.status);
+      },
+    });
   },
   settings: function(){
     Ext.Ajax.request({
