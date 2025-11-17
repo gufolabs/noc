@@ -51,37 +51,56 @@ Ext.define("NOC.main.style.Application", {
       allowBlank: true,
     },
     {
-      name: "font_color",
-      xtype: "colorfield",
-      uiStyle: "medium",
-      fieldLabel: __("Font Color"),
-      allowBlank: false,
-    },
+      xtype: "fieldset",
+      title: __("Colors"),
+      layout: "hbox",
+      defaults: {
+        labelAlign: "top",
+        margin: "0 8 0 0",
+      },
+      items: [
+        {
+          name: "font_color",
+          xtype: "colorfield",
+          width: 120,
+          fieldLabel: __("Font"),
+          allowBlank: false,
+        },
+        {
+          name: "background_color",
+          xtype: "colorfield",
+          width: 120,
+          fieldLabel: __("Background"),
+          allowBlank: false,
+        },
+      ]},
     {
-      name: "background_color",
-      xtype: "colorfield",
-      uiStyle: "medium",
-      fieldLabel: __("Background Color"),
-      allowBlank: false,
-    },
-    {
-      name: "bold",
-      xtype: "checkboxfield",
-      boxLabel: __("Bold"),
-      allowBlank: false,
-    },
-    {
-      name: "italic",
-      xtype: "checkboxfield",
-      boxLabel: __("Italic"),
-      allowBlank: false,
-    },
-    {
-      name: "underlined",
-      xtype: "checkboxfield",
-      boxLabel: __("Underlined"),
-      allowBlank: false,
-    },
+      xtype: "fieldset",
+      title: __("Style"),
+      layout: "hbox",
+      defaults: {
+        margin: "0 8 0 0",
+      },
+      items: [
+        {
+          name: "bold",
+          xtype: "checkboxfield",
+          boxLabel: __("Bold"),
+          allowBlank: false,
+        },
+        {
+          name: "italic",
+          xtype: "checkboxfield",
+          boxLabel: __("Italic"),
+          allowBlank: false,
+        },
+        {
+          name: "underlined",
+          xtype: "checkboxfield",
+          boxLabel: __("Underlined"),
+          allowBlank: false,
+        },
+      ]},
   ],
   filters: [
     {
