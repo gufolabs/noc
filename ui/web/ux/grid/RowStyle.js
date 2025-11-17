@@ -4,7 +4,7 @@ Ext.define("Ext.ux.grid.RowStyle", {
 
   init: function(grid){
     var view = grid.getView();
-    view.getRowClass = function(record, rowIndex, rowParams, store){
+    view.getRowClass = function(record){
       return record.get("row_class") || "";
     };
   },

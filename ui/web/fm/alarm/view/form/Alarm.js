@@ -16,6 +16,7 @@ Ext.define("NOC.fm.alarm.view.form.Alarm", {
   requires: [
     "NOC.fm.alarm.view.form.AlarmModel",
     "NOC.fm.alarm.view.form.AlarmController",
+    "Ext.ux.grid.RowStyle",
   ],
   layout: "border",
   reference: "fm-alarm-form",
