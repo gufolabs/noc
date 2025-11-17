@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # NOC modules
-from noc.services.web.base.extmodelapplication import ExtModelApplication
+from noc.services.web.base.extmodelapplication import ExtModelApplication, view
 from noc.main.models.style import Style
 from noc.sa.interfaces.base import ColorParameter
 from noc.core.translation import ugettext as _
@@ -23,3 +23,7 @@ class StyleApplication(ExtModelApplication):
     icon = "icon_style"
 
     clean_fields = {"background_color": ColorParameter(), "font_color": ColorParameter()}
+
+    @view("^scheme/$", method=["GET"], access=True)
+    def api_style(self, request):
+        return Style.get_scheme()

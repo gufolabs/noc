@@ -7,7 +7,7 @@
 
 # Python modules
 from threading import Lock
-from typing import Optional, Dict
+from typing import Optional, Dict, Any
 import operator
 
 # Third-party modules
@@ -93,7 +93,20 @@ class Style(NOCModel):
 
     @property
     def css_class(self) -> Optional[str]:
-        return f"noc-colors-{self.id}"
+        return f"noc-color-{self.id}"
 
     def get_css_class(self) -> Optional[str]:
         return self.css_class
+
+    @classmethod
+    def get_scheme(cls) -> Dict[str, Any]:
+        """
+        Get schema snapshot.
+        """
+
+        def q(s: Style) -> Dict[str, Any]:
+            r = {"name": s.css_class}
+            r.update(s.style)
+            return r
+
+        return {"style": [q(x) for x in Style.objects.filter(is_active=True)]}
