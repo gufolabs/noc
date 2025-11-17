@@ -47,7 +47,7 @@ Ext.application({
     console.log("Initializing history API");
     Ext.History.init();
     console.log("NOC application starting");
-    this.loadCssFetch();
+    this.loadCss();
     this.settings();
   },
   openLogin: function(){
