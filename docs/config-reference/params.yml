@@ -128,9 +128,9 @@ params:
   clickhouse.db_dictionaries:
     default: noc_dict
   clickhouse.default_Float32:
-    default: "-2147483647.0"
+    default: "-2147483600.0"
   clickhouse.default_Float64:
-    default: "-9.223372036854776e+18"
+    default: "-9.223372036854e+18"
   clickhouse.default_Int16:
     default: "-32767"
   clickhouse.default_Int32:
@@ -150,6 +150,8 @@ params:
   clickhouse.default_merge_tree_granularity:
     default: "8192"
   clickhouse.enable_default_value: {}
+  clickhouse.enable_migrate_type:
+    default: "True"
   clickhouse.encoding:
     choices:
       - ""
@@ -220,14 +222,6 @@ params:
     default: "#34495e"
   customization.branding_color:
     default: "#ffffff"
-  customization.favicon_url:
-    default: /ui/web/img/logo_24x24_deep_azure.png
-  customization.logo_height:
-    default: "24"
-  customization.logo_url:
-    default: /ui/web/img/logo_white.svg
-  customization.logo_width:
-    default: "24"
   customization.preview_theme:
     default: midnight
   datasource.chunk_size:
@@ -244,7 +238,7 @@ params:
   datastream.cfgeventrules_ttl: {}
   datastream.cfgmetricrules_ttl: {}
   datastream.cfgmetrics_ttl: {}
-  datastream.cfgmetricsources_ttl: {}
+  datastream.cfgmetricstarget_ttl: {}
   datastream.cfgmxroute_ttl: {}
   datastream.cfgtarget_ttl: {}
   datastream.dnszone_ttl: {}
@@ -273,9 +267,9 @@ params:
     default: "True"
   datastream.enable_cfgmetrics_wait:
     default: "True"
-  datastream.enable_cfgmetricsources:
+  datastream.enable_cfgmetricstarget:
     default: "True"
-  datastream.enable_cfgmetricsources_wait:
+  datastream.enable_cfgmetricstarget_wait:
     default: "True"
   datastream.enable_cfgmxroute:
     default: "True"
@@ -429,6 +423,20 @@ params:
     default: microservices
   help.language:
     default: en
+  home.enable_alarms:
+    default: "True"
+  home.enable_channels:
+    default: "True"
+  home.enable_community:
+    default: "True"
+  home.enable_favorites:
+    default: "True"
+  home.enable_inventory_summary:
+    default: "True"
+  home.enable_mo_summary:
+    default: "True"
+  home.enable_welcome:
+    default: "True"
   http_client.buffer_size:
     default: "131072"
   http_client.connect_timeout:
@@ -458,6 +466,38 @@ params:
   installation_name:
     default: Unconfigured installation
   instance: {}
+  kafka.addresses: {}
+  kafka.bootstrap_servers: {}
+  kafka.compression_type:
+    choices: !!set
+      gzip: null
+      lz4: null
+      none: null
+      snappy: null
+      zstd: null
+    default: lz4
+  kafka.max_batch_size:
+    default: "16384"
+  kafka.max_request_size:
+    default: "1048576"
+  kafka.password: {}
+  kafka.retry_backoff_ms:
+    default: "3"
+  kafka.sasl_mechanism:
+    choices: !!set
+      GSSAPI: null
+      PLAIN: null
+      SCRAM-SHA-256: null
+      SCRAM-SHA-512: null
+    default: PLAIN
+  kafka.security_protocol:
+    choices: !!set
+      PLAINTEXT: null
+      SASL_PLAINTEXT: null
+      SASL_SSL: null
+      SSL: null
+    default: PLAINTEXT
+  kafka.username: {}
   kafkasender.bootstrap_servers: {}
   kafkasender.compression_type:
     choices:
@@ -615,6 +655,7 @@ params:
     default: "1000"
   mongo.addresses: {}
   mongo.app_name: {}
+  mongo.authentication_source: {}
   mongo.db:
     default: noc
   mongo.max_idle_time:
@@ -922,6 +963,10 @@ params:
   syslogcollector.storm_threshold_reduction:
     default: "0.9"
   tests.beef_paths: {}
+  tests.dropbear_host:
+    default: dropbear
+  tests.dropbear_port:
+    default: "22"
   tests.events_paths: {}
   tests.fixtures_paths:
     default: "['tests/data']"
