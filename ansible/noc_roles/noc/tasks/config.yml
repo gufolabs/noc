@@ -64,7 +64,6 @@
 
 # Generating local etc/settings.yml file
 - block:
-
     - name: Ensure settings.yml is exists
       file:
         path: "{{ noc_root }}/etc/settings.yml"
@@ -77,8 +76,8 @@
         state: present
         edits:
           - key: msgstream.client_class
-            value: "noc.core.msgstream.redpanda.RedPandaClient"
-          - key: redpanda.addresses
+            value: "noc.core.msgstream.kafka.KafkaClient"
+          - key: kafka.addresses
             value: "kafka"
 
   when:

@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------
-# RedPanda client
+# Kafka client
 # ----------------------------------------------------------------------
 # Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
 CLIENT_ID = "NOC"
 
 
-class RedPandaClient(object):
+class KafkaClient(object):
     TIMESTAMP_MULTIPLIER = 1_000
     SUBSCRIBE_BULK = True
     RESOLVE_RETRY = 1.0
@@ -64,7 +64,7 @@ class RedPandaClient(object):
         # So get parameter via .find_parameter() and resolve explicitly.
         logger.debug("Resolving broker addresses")
         while True:
-            addresses = await config.find_parameter("redpanda.addresses").async_get()
+            addresses = await config.find_parameter("kafka.addresses").async_get()
             if addresses:
                 break
             logger.warning("Broker is not ready yet, waiting")
@@ -78,7 +78,7 @@ class RedPandaClient(object):
             self.bootstrap = run_sync(self.resolve_broker)
         return self.bootstrap
 
-    async def __aenter__(self) -> "RedPandaClient":
+    async def __aenter__(self) -> "kafkaClient":
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
@@ -172,16 +172,14 @@ class RedPandaClient(object):
             loop=self.loop,
             bootstrap_servers=bootstrap,
             acks=1,
-            max_batch_size=config.redpanda.max_batch_size,
-            sasl_mechanism=config.redpanda.sasl_mechanism,
-            security_protocol=config.redpanda.security_protocol,
-            sasl_plain_username=config.redpanda.username,
-            sasl_plain_password=config.redpanda.password,
-            max_request_size=config.redpanda.max_request_size,
+            max_batch_size=config.kafka.max_batch_size,
+            sasl_mechanism=config.kafka.sasl_mechanism,
+            security_protocol=config.kafka.security_protocol,
+            sasl_plain_username=config.kafka.username,
+            sasl_plain_password=config.kafka.password,
+            max_request_size=config.kafka.max_request_size,
             compression_type=(
-                None
-                if config.redpanda.compression_type == "none"
-                else config.redpanda.compression_type
+                None if config.kafka.compression_type == "none" else config.kafka.compression_type
             ),
         )
         while True:
@@ -205,7 +203,7 @@ class RedPandaClient(object):
             client_id=CLIENT_ID,
             enable_auto_commit=False,
             group_id=group_id,
-            retry_backoff_ms=config.redpanda.retry_backoff_ms * 1_000,
+            retry_backoff_ms=config.kafka.retry_backoff_ms * 1_000,
         )
         while True:
             # @todo errors
