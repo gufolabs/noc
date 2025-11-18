@@ -317,7 +317,7 @@ class ManagedObjectApplication(ExtModelApplication):
             "version": o.version.version if o.version else "",
             "vrf": o.vrf.name if o.vrf else "",
             "description": o.description or "",
-            "row_class": o.object_profile.style.css_class_name if o.object_profile.style else "",
+            "row_class": o.object_profile.get_css_class() or "" if o.object_profile else "",
             "link_count": len(o.links),
             "labels": sorted(
                 [self.format_label(ll) for ll in Label.from_names(o.labels)],
