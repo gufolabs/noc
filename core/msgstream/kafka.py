@@ -78,7 +78,7 @@ class KafkaClient(object):
             self.bootstrap = run_sync(self.resolve_broker)
         return self.bootstrap
 
-    async def __aenter__(self) -> "kafkaClient":
+    async def __aenter__(self) -> "KafkaClient":
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
