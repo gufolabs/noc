@@ -1,6 +1,7 @@
 //---------------------------------------------------
 // ColorField:
 // Color picker field based on HTML5 color input
+// when make build is used, custom element 'color-input' 
 //---------------------------------------------------
 console.debug("Defining Ext.ux.form.ColorField");
 
@@ -15,57 +16,77 @@ Ext.define("Ext.ux.form.ColorField", {
     },
   },
   
+  colorPickerMode: "auto", // 'auto' | 'custom' | 'native'
   width: 190,
   regex: /^(#|0x)?[0-9A-Fa-f]+$/,
   regexText: __("Enter hex value starting with # or 0x"),
 
   afterRender: function(){
     this.callParent(arguments);
+    var hasCustom = !!(window.customElements && customElements.get("color-input"));
+    this._pickerKind = this.colorPickerMode === "custom" ? "custom"
+      : this.colorPickerMode === "native" ? "native"
+      : (hasCustom ? "custom" : "native");
+    this.openMethod = this._pickerKind === "custom" ? "show" : "click";
+    this.changeEvent = this._pickerKind === "custom" ? "change" : "input";
     
-    this.colorInput = Ext.DomHelper.append(this.bodyEl, {
-      tag: "input",
-      type: "color",
-      style: "position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;",
-    }, true);
-    
-    this.colorInput.on("input", () => {
-      this.onColorSelected(this.colorInput.dom.value);
-    });
+    if(this._pickerKind === "custom"){
+      this.colorInput = Ext.DomHelper.append(this.bodyEl, {
+        tag: "color-input",
+        style: "position:absolute;width:0;height:0;overflow:hidden;border:0;padding:0;margin:0;",
+        theme: "light",
+        colorspace: "hex",
+        value: "#ffffff",
+      }, true);
+      customElements.whenDefined("color-input").then(() => {
+        this.colorInput.dom.shadowRoot.querySelector("select").style.backgroundImage = "none";
+      });
+    } else{
+      this.colorInput = Ext.DomHelper.append(this.bodyEl, {
+        tag: "input",
+        type: "color",
+        style: "position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;",
+      }, true);
 
+    }
+    this.colorInput.on(this.changeEvent, () => this.setValue(this.colorInput.dom.value));
+    
     if(this.value){
       this.updateColorDisplay(this.value);
     }
   },
 
   onTriggerClick: function(){
-    if(this.colorInput){
-      this.colorInput.dom.click();
+    if(Ext.isEmpty(this.colorInput)){
+      return;
     }
+    this.colorInput.dom[this.openMethod]();
   },
 
-  onColorSelected: function(hexColor){
-    this.setValue(hexColor);
-  },
-
-  updateColorDisplay: function(decimalValue){
-    var hexColor = this.toHexColor(decimalValue);
-    
+  updateColorDisplay: function(hexColor){    
+    this._suppressPickerEvent = true;
+    if(this._pickerKind === "custom"){
+      this.colorInput.dom.value = hexColor;
+      this.colorInput.dom.colorspace = "hex";
+    } else{
+      this.colorInput.dom.value = hexColor;
+    }
+    this._suppressPickerEvent = false;
     this.setFieldStyle({
-      color: this.getContrastColor(decimalValue),
+      color: this.getContrastColor(hexColor),
       backgroundColor: hexColor,
       backgroundImage: "none",
     });
-    
-    if(this.colorInput){
-      this.colorInput.dom.value = hexColor;
-    }
   },
 
   setValue: function(value){
+    if(this._suppressPickerEvent){
+      return; 
+    }
     var decimalValue = this.toDecimalColor(value);
-        
+    
     this.value = this.toHexColor(decimalValue);
-    this.updateColorDisplay(decimalValue);
+    this.updateColorDisplay(this.value);
     this.callParent([this.value]);
   },
 
@@ -97,15 +118,17 @@ Ext.define("Ext.ux.form.ColorField", {
     return this.toDecimalColor(this.rawValue) || 0;
   },
 
-  getContrastColor: function(decimalValue){
-    var avgBrightness = ((decimalValue >> 16) & 255) * 0.299 + 
-                       ((decimalValue >> 8) & 255) * 0.587 + 
-                       (decimalValue & 255) * 0.114;
+  getContrastColor: function(hexValue){
+    var r = parseInt(hexValue.substr(1, 2), 16),
+      g = parseInt(hexValue.substr(3, 2), 16),
+      b = parseInt(hexValue.substr(5, 2), 16),
+      avgBrightness = r * 0.299 + g * 0.597 + b * 0.114;
     return (avgBrightness > 130) ? "#000000" : "#FFFFFF";
   },
 
   onDestroy: function(){
     if(this.colorInput){
+      this.colorInput.un(this.changeEvent, this.setValue);
       this.colorInput.destroy();
     }
     this.callParent(arguments);

@@ -55,23 +55,20 @@ Ext.define("NOC.main.style.Application", {
       title: __("Colors"),
       layout: "hbox",
       defaults: {
+        xtype: "colorfield",
         labelAlign: "top",
         margin: "0 8 0 0",
+        width: 135,
+        allowBlank: false,
       },
       items: [
         {
           name: "font_color",
-          xtype: "colorfield",
-          width: 120,
           fieldLabel: __("Font"),
-          allowBlank: false,
         },
         {
           name: "background_color",
-          xtype: "colorfield",
-          width: 120,
           fieldLabel: __("Background"),
-          allowBlank: false,
         },
       ]},
     {
@@ -80,25 +77,23 @@ Ext.define("NOC.main.style.Application", {
       layout: "hbox",
       defaults: {
         margin: "0 8 0 0",
+        allowBlank: false,
       },
       items: [
         {
           name: "bold",
           xtype: "checkboxfield",
           boxLabel: __("Bold"),
-          allowBlank: false,
         },
         {
           name: "italic",
           xtype: "checkboxfield",
           boxLabel: __("Italic"),
-          allowBlank: false,
         },
         {
           name: "underlined",
           xtype: "checkboxfield",
           boxLabel: __("Underlined"),
-          allowBlank: false,
         },
       ]},
   ],
