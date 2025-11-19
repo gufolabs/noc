@@ -32,7 +32,7 @@
         }
     ],
     "subject_template": "The MAC address threshold for the interface {{interface}} been exceeded",
-    "body_template": "The MAC address threshold for the interface {{interface}} been exceeded: {% if mac_limit %}{{mac_limit}}/{% endif %}{{utilization}} ({% if mac_limit %}threshold/{% endif %}/value)",
+    "body_template": "The MAC address threshold for the interface {{interface}} been exceeded: {% if mac_limit %}{{mac_limit}}/{% endif %}{{utilization}} ({% if mac_limit %}threshold/{% endif %}value)",
     "symptoms": "Network instability",
     "probable_causes": "",
     "recommended_actions": "Increase the limit on addresses learned by interface",
