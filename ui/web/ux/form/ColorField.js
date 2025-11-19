@@ -38,6 +38,7 @@ Ext.define("Ext.ux.form.ColorField", {
         colorspace: "hex",
         value: "#ffffff",
       }, true);
+      // Fix background image issue in some browsers, remove when color-input is fixed
       customElements.whenDefined("color-input").then(() => {
         this.colorInput.dom.shadowRoot.querySelector("select").style.backgroundImage = "none";
       });
