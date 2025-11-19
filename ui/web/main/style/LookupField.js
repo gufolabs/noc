@@ -22,11 +22,7 @@ Ext.define("NOC.main.style.LookupField", {
     me.callParent();
   },
   getInnerTpl: function(){
-    return "<div style='display: flex;justify-content: space-between'>{label}"
-      + "<div style='display:flex; gap:10px;align-items: center;'>"
-      + "<div class='noc-color-{id}' style='border: 2px solid; width: 18px; height: 18px;'></div>"
-      + "<div style='color: var(--noc-color-{id})'>" + __("text") + "</div>"
-      + "</div>"
-      + "</div>";
+    return "<div style='display:flex; gap:10px;align-items: center;'><div class='noc-color-{id}' style='border: 2px solid; width: 18px; height: 18px;'></div>"
+      + "<div>{label}</div>";
   },
 });
