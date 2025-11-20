@@ -11,6 +11,7 @@ interface PluginOptions {
   toReplaceMethods: MethodReplacement[] | undefined;
   parserOptions?: espree.Options;
   generateOptions?: astring.Options;
+  isDev: boolean;
   debug?: boolean;
 }
 
@@ -34,7 +35,10 @@ export class ReplaceMethodsPlugin{
           if(new RegExp(/.*theme-.*\.js$/).test(args.path)){
             contents = await this.removePolyfills(contents);
           }
-          return await this.processFile(contents);
+          return {
+            contents: this.processFile(args.path, contents),
+            loader: "js",
+          };
         });
       },
     };
@@ -51,7 +55,7 @@ export class ReplaceMethodsPlugin{
     return content.substring(extDefineIndex);
   }
 
-  private async processFile(contents: string): Promise<esbuild.OnLoadResult>{
+  private processFile(filename: string, contents: string): string{
     let ast = espree.parse(contents, this.options.parserOptions) as Node;
 
     this.options.toReplaceMethods?.map((method) => {
@@ -59,12 +63,7 @@ export class ReplaceMethodsPlugin{
       ast = visitor.getResults();
     });
 
-    const cleanedCode = generate(ast, this.options.generateOptions);
-
-    return {
-      contents: cleanedCode,
-      loader: "js",
-    };
+    return generate(ast, this.options.generateOptions);
   }
 
   private log(...args: (string | number | boolean | object)[]): void{

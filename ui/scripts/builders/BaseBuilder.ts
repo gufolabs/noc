@@ -91,6 +91,7 @@ export abstract class BaseBuilder{
     const removePlugin = new ReplaceMethodsPlugin({
       toReplaceMethods: this.options.toReplaceMethods,
       debug: this.options.pluginDebug,
+      isDev: this.options.isDev,
       parserOptions: this.options.parserOptions,
       generateOptions: this.options.generateOptions,
     });
