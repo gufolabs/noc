@@ -3,14 +3,12 @@ import type * as esbuild from "esbuild";
 import type * as espree from "espree";
 import fs from "fs-extra";
 import * as path from "path";
-import {NocLoaderPlugin} from "../plugins/NocLoaderPlugin.ts";
-import {ReplaceMethodsPlugin} from "../plugins/ReplaceMethodsPlugin.ts";
-// import {ApplicationLoaderPlugin} from "../plugins/ApplicationLoaderPlugin.ts";
-// import {CopyLibPlugin} from "../plugins/CopyLibPlugin.ts";
 import {AliasPlugin} from "../plugins/AliasPlugin.ts";
 import {HtmlPlugin} from "../plugins/HtmlPlugin.ts";
 import {ImageCheckPlugin} from "../plugins/ImageCheckPlugin.ts";
 import {LoggerPlugin} from "../plugins/LoggerPlugin.ts";
+import {NocLoaderPlugin} from "../plugins/NocLoaderPlugin.ts";
+import {ReplaceMethodsPlugin} from "../plugins/ReplaceMethodsPlugin.ts";
 import type {MethodReplacement} from "../visitors/MethodReplaceVisitor.ts";
 
 export type Theme = "gray" | "noc";
@@ -100,29 +98,6 @@ export abstract class BaseBuilder{
       // debug: this.options.pluginDebug,
       debug: true,
     });
-    // const applicationPlugin = new ApplicationLoaderPlugin({
-    //   basePath: process.cwd(),
-    //   paths: {"NOC": "src/ui"},
-    //   entryPoint: this.options.entryPoint,
-    //   debug: this.options.pluginDebug,
-    //   parserOptions: this.options.parserOptions,
-    // });
-    // const cssPlugin = new CssPlugin({
-    //   entryPoints: this.options.cssEntryPoints || [],
-    //   isDev: this.options.isDev,
-    //   debug: this.options.pluginDebug,
-    // });
-    // const plugins = [
-    //   applicationPlugin.getPlugin(),
-    //   cssPlugin.getPlugin(),
-    // ];
-    // if(this.options.libDir){
-    //   const copyLibPlugin = new CopyLibPlugin({
-    //     sourcePath: this.options.libDir,
-    //     targetDir: this.options.buildDir,
-    //   });
-    //   plugins.push(copyLibPlugin.getPlugin());
-    // }
     const plugins = [
       // externalLibsPlugin.getPlugin(),
       nocPlugin.getPlugin(),
