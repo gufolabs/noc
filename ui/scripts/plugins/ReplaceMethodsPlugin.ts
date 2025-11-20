@@ -4,6 +4,7 @@ import * as esbuild from "esbuild";
 import * as espree from "espree";
 import type {Node} from "estree";
 import fs from "fs-extra";
+import {SourceMapGenerator} from "source-map";
 import type {MethodReplacement} from "../visitors/MethodReplaceVisitor.ts";
 import {MethodReplaceVisitor} from "../visitors/MethodReplaceVisitor.ts";
 
@@ -36,7 +37,7 @@ export class ReplaceMethodsPlugin{
             contents = await this.removePolyfills(contents);
           }
           return {
-            contents: this.processFile(args.path, contents),
+            contents: this.processFile(args.path, contents, this.options.isDev),
             loader: "js",
           };
         });
@@ -54,8 +55,7 @@ export class ReplaceMethodsPlugin{
     
     return content.substring(extDefineIndex);
   }
-
-  private processFile(filename: string, contents: string): string{
+  private processFile(fileName: string, contents: string, isDev: boolean): string{    
     let ast = espree.parse(contents, this.options.parserOptions) as Node;
 
     this.options.toReplaceMethods?.map((method) => {
@@ -63,7 +63,22 @@ export class ReplaceMethodsPlugin{
       ast = visitor.getResults();
     });
 
-    return generate(ast, this.options.generateOptions);
+    if(isDev){
+      const map = new SourceMapGenerator({
+          file: fileName,
+        }),
+        generatedCode = generate(ast, {
+          ...this.options.generateOptions,
+          sourceMap: map,
+        }),
+        base64Map = Buffer.from(map.toString(), "utf8").toString("base64");
+
+      return generatedCode +
+        "\n//# sourceMappingURL=data:application/json;base64," +
+        base64Map;
+    } else{
+      return generate(ast, this.options.generateOptions);
+    }
   }
 
   private log(...args: (string | number | boolean | object)[]): void{
