@@ -84,6 +84,7 @@ export abstract class BaseBuilder{
       entryPoint: this.options.entryPoint,
       debug: this.options.pluginDebug,
       parserOptions: this.options.parserOptions,
+      isDev: this.options.isDev,
     });
     
     const removePlugin = new ReplaceMethodsPlugin({

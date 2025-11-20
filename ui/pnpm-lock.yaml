@@ -78,6 +78,9 @@ importers:
       globals:
         specifier: ^16.5.0
         version: 16.5.0
+      magic-string:
+        specifier: ^0.30.21
+        version: 0.30.21
       playwright:
         specifier: ^1.56.1
         version: 1.56.1
