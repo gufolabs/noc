@@ -19,7 +19,8 @@ class Script(BaseScript):
     interface = IGetNTPStatus
     rx_line = re.compile(
         r"^(?P<status>[\+\*\- ])(?P<address>\d+\.\d+\.\d+\.\d+)\s+"
-        r"(?P<ref_id>\S+)\s+(?P<stratum>\d+)", re.MULTILINE
+        r"(?P<ref_id>\S+)\s+(?P<stratum>\d+)",
+        re.MULTILINE,
     )
     status_map = client_map = {" ": "unknown", "-": "sane", "+": "selected", "*": "master"}
 
@@ -33,7 +34,7 @@ class Script(BaseScript):
                     "ref_id": match.group("ref_id"),
                     "stratum": match.group("stratum"),
                     "is_synchronized": match.group("status") == "*",
-                    "status": self.status_map[match.group("status")]
+                    "status": self.status_map[match.group("status")],
                 }
             ]
         return r

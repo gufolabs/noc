@@ -35,6 +35,7 @@ from noc.core.lldp import (
     lldp_caps_to_bits,
 )
 
+
 class Script(BaseScript):
     name = "OS.FreeBSD.get_lldp_neighbors"
     interface = IGetLLDPNeighbors
@@ -52,7 +53,7 @@ class Script(BaseScript):
         r"^\s+Port:\s+\n"
         r"^\s+PortID:\s+(?P<remote_port_subtype>\S+)\s+(?P<remote_port>\S+)\n"
         r"(^\s+PortDescr:\s+(?P<remote_port_description>\S+)\n)?",
-        re.MULTILINE |re.DOTALL,
+        re.MULTILINE | re.DOTALL,
     )
     rx_item_no_mgmt = re.compile(
         r"^Interface:\s+(?P<local_interface>\S+), via: LLDP.+\n"
@@ -64,7 +65,7 @@ class Script(BaseScript):
         r"^\s+Port:\s+\n"
         r"^\s+PortID:\s+(?P<remote_port_subtype>\S+)\s+(?P<remote_port>\S+)\n"
         r"(^\s+PortDescr:\s+(?P<remote_port_description>\S+)\n)?",
-        re.MULTILINE |re.DOTALL,
+        re.MULTILINE | re.DOTALL,
     )
     rx_line = re.compile(r"^(?P<tlv>\S+)\_\d+\=\'(?P<value>\S*)\'", re.MULTILINE)
 
@@ -85,7 +86,7 @@ class Script(BaseScript):
                     continue
             n = {
                 "remote_chassis_id": match1.group("remote_chassis_id"),
-                "remote_port": match1.group("remote_port")
+                "remote_port": match1.group("remote_port"),
             }
             n["remote_chassis_id_subtype"] = {
                 "ifalias": LLDP_CHASSIS_SUBTYPE_INTERFACE_ALIAS,
@@ -93,7 +94,7 @@ class Script(BaseScript):
                 "ip": LLDP_CHASSIS_SUBTYPE_NETWORK_ADDRESS,
                 "ifname": LLDP_CHASSIS_SUBTYPE_INTERFACE_NAME,
                 "local": LLDP_CHASSIS_SUBTYPE_LOCAL,
-                "unhandled" : LLDP_CHASSIS_SUBTYPE_PORT_COMPONENT
+                "unhandled" : LLDP_CHASSIS_SUBTYPE_PORT_COMPONENT,
             }[match1.group("remote_chassis_id_subtype")]
             n["remote_port_subtype"] = {
                 "ifalias": LLDP_PORT_SUBTYPE_ALIAS,
@@ -101,14 +102,22 @@ class Script(BaseScript):
                 "ip": LLDP_PORT_SUBTYPE_NETWORK_ADDRESS,
                 "ifname": LLDP_PORT_SUBTYPE_NAME,
                 "local": LLDP_PORT_SUBTYPE_LOCAL,
-                "unhandled": LLDP_PORT_SUBTYPE_UNSPECIFIED
+                "unhandled": LLDP_PORT_SUBTYPE_UNSPECIFIED,
             }[match1.group("remote_port_subtype")]
             if match1.group("remote_system_name") and match1.group("remote_system_name").strip():
                 n["remote_system_name"] = match1.group("remote_system_name")
-            if match1.group("remote_system_description") and match1.group("remote_system_description").strip():
+            if (
+                match1.group("remote_system_description")
+                and match1.group("remote_system_description").strip()
+            ):
                 n["remote_system_description"] = match1.group("remote_system_description")
-                n["remote_system_description"] = re.sub(r"\n\s{18}", "", n["remote_system_description"])
-            if match1.group("remote_port_description") and match1.group("remote_port_description").strip():
+                n["remote_system_description"] = re.sub(
+                    r"\n\s{18}", "", n["remote_system_description"]
+                )
+            if (
+                match1.group("remote_port_description")
+                and match1.group("remote_port_description").strip()
+            ):
                 n["remote_port_description"] = match1.group("remote_port_description")
             caps = match1.group("capabilities")
             cap = 0
@@ -161,16 +170,16 @@ class Script(BaseScript):
                 value = value.replace("r", "repeater")
                 cap = lldp_caps_to_bits(
                     value.split(),
-                        {
-                            "o": LLDP_CAP_OTHER,
-                            "repeater": LLDP_CAP_REPEATER,
-                            "b": LLDP_CAP_BRIDGE,
-                            "w": LLDP_CAP_WLAN_ACCESS_POINT,
-                            "r": LLDP_CAP_ROUTER,
-                            "t": LLDP_CAP_TELEPHONE,
-                            "c": LLDP_CAP_DOCSIS_CABLE_DEVICE,
-                            "s": LLDP_CAP_STATION_ONLY,
-                        },
+                    {
+                        "o": LLDP_CAP_OTHER,
+                        "repeater": LLDP_CAP_REPEATER,
+                        "b": LLDP_CAP_BRIDGE,
+                        "w": LLDP_CAP_WLAN_ACCESS_POINT,
+                        "r": LLDP_CAP_ROUTER,
+                        "t": LLDP_CAP_TELEPHONE,
+                        "c": LLDP_CAP_DOCSIS_CABLE_DEVICE,
+                        "s": LLDP_CAP_STATION_ONLY,
+                    },
                 )
                 n["remote_capabilities"] = cap
             elif tlv == "HOLDTIME":  # last TLV
