@@ -17,7 +17,7 @@ class Script(BaseScript):
     name = "OS.FreeBSD.get_arp"
     interface = IGetARP
     rx_line = re.compile(
-        r"^\S+\s+\((?P<ip>\S+)\)\s+\S+\s+(?P<mac>[0-9a-fA-F:]+)\s+\S+\s+" r"(?P<interface>\S+)",
+        r"^\S+\s+\((?P<ip>\S+)\)\s+\S+\s+(?P<mac>[0-9a-fA-F:]+)\s+\S+\s+(?P<interface>\S+)",
         re.MULTILINE | re.DOTALL,
     )
 

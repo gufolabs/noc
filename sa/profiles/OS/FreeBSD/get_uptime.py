@@ -9,7 +9,7 @@
 import re
 
 # NOC modules
-from noc.core.script.base import BaseScript
+from noc.sa.profiles.Generic.get_uptime import Script as BaseScript
 from noc.sa.interfaces.igetuptime import IGetUptime
 
 
@@ -21,7 +21,7 @@ class Script(BaseScript):
     rx_uptime2 = re.compile(r"up (?P<m>\d+) mins, \d+ user")
     rx_uptime3 = re.compile(r"up (?P<d>\d+) days, (?P<h>\d+):(?P<m>\d+), \d+ user")
 
-    def execute(self):
+    def execute_cli(self):
         secs = mins = hours = days = 0
         c = self.cli("uptime")
         match = self.rx_uptime1.search(c)
@@ -37,5 +37,4 @@ class Script(BaseScript):
                     days = int(match.group("d"))
                     hours = int(match.group("h"))
                     mins = int(match.group("m"))
-        s = days * 86400 + hours * 3600 + mins * 60 + secs
-        return s
+        return days * 86400 + hours * 3600 + mins * 60 + secs

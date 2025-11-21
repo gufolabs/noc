@@ -18,7 +18,7 @@ class Script(BaseScript):
     name = "OS.FreeBSD.get_interfaces"
     interface = IGetInterfaces
     rx_if_name = re.compile(
-        r"^(?P<ifname>\S+): flags=[0-9a-f]+<(?P<flags>\S+)>( metric \d+)?" r" mtu (?P<mtu>\d+)$"
+        r"^(?P<ifname>\S+): flags=[0-9a-f]+<(?P<flags>\S+)>( metric \d+)? mtu (?P<mtu>\d+)$"
     )
     rx_if_descr = re.compile(r"^\tdescription: (?P<descr>.+)\s*$")
     rx_if_mac = re.compile(r"^\tether (?P<mac>\S+)\s*$")
@@ -40,18 +40,17 @@ class Script(BaseScript):
                 self.iface["subinterfaces"] = []
                 self.iface["subinterfaces"] += [self.subiface]
                 self.interfaces += [self.iface]
-            else:
-                if self.parent == "IEEE 802.11":
-                    for i in self.interfaces:
-                        if "mac" in i:
-                            if i["mac"] == self.subiface["mac"]:
-                                i["subinterfaces"] += [self.subiface]
-                                break
-                else:
-                    for i in self.interfaces:
-                        if i["name"] == self.parent:
+            elif self.parent == "IEEE 802.11":
+                for i in self.interfaces:
+                    if "mac" in i:
+                        if i["mac"] == self.subiface["mac"]:
                             i["subinterfaces"] += [self.subiface]
                             break
+            else:
+                for i in self.interfaces:
+                    if i["name"] == self.parent:
+                        i["subinterfaces"] += [self.subiface]
+                        break
         self.iface = {}
         self.subiface = {}
         self.parent = ""

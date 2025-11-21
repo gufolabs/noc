@@ -18,7 +18,7 @@ class Script(BaseScript):
     interface = IGetPortchannel
     cache = True
     rx_if_name = re.compile(
-        r"^(?P<ifname>\S+): flags=[0-9a-f]+<(?P<flags>\S+)>( metric \d+)?" r" mtu (?P<mtu>\d+)$"
+        r"^(?P<ifname>\S+): flags=[0-9a-f]+<(?P<flags>\S+)>( metric \d+)? mtu (?P<mtu>\d+)$"
     )
     rx_if_lagg = re.compile(r"^\tgroups:.+?bridge.*?$")
     rx_if_lagg_p = re.compile(r"^\tlaggproto lacp")
