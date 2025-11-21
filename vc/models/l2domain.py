@@ -302,3 +302,6 @@ class L2Domain(Document):
             return 0.0
 
         return vlans * 100.0 / 4095
+
+    def get_css_class(self) -> Optional[str]:
+        return self.profile.get_css_class() if self.profile else None

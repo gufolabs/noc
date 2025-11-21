@@ -341,3 +341,6 @@ class SLAProbe(Document):
             "managed_object": self.managed_object,
             "description": self.description,
         }
+
+    def get_css_class(self) -> Optional[str]:
+        return self.profile.get_css_class() if self.profile else None
