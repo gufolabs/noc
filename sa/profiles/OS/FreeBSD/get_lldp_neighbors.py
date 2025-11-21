@@ -94,7 +94,7 @@ class Script(BaseScript):
                 "ip": LLDP_CHASSIS_SUBTYPE_NETWORK_ADDRESS,
                 "ifname": LLDP_CHASSIS_SUBTYPE_INTERFACE_NAME,
                 "local": LLDP_CHASSIS_SUBTYPE_LOCAL,
-                "unhandled" : LLDP_CHASSIS_SUBTYPE_PORT_COMPONENT,
+                "unhandled": LLDP_CHASSIS_SUBTYPE_PORT_COMPONENT,
             }[match1.group("remote_chassis_id_subtype")]
             n["remote_port_subtype"] = {
                 "ifalias": LLDP_PORT_SUBTYPE_ALIAS,
