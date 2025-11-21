@@ -40,7 +40,7 @@ class Script(BaseScript):
     name = "OS.FreeBSD.get_lldp_neighbors"
     interface = IGetLLDPNeighbors
 
-    rx_entry = re.compile("^\-+(?P<item>.+?)TTL:\s+\d+\n", re.MULTILINE | re.DOTALL)
+    rx_entry = re.compile(r"^\-+(?P<item>.+?)TTL:\s+\d+\n", re.MULTILINE | re.DOTALL)
 
     rx_item = re.compile(
         r"^Interface:\s+(?P<local_interface>\S+), via: LLDP.+\n"
