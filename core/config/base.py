@@ -9,13 +9,18 @@
 import inspect
 import re
 import os
-from typing import Dict, Iterable, Tuple
+from typing import Dict, Iterable, Tuple, Optional, Any, Type
+import warnings
 
 # NOC modules
 from .params import BaseParameter
 
 DEFAULT_CONFIG = "yaml:///opt/noc/etc/tower.yml,yaml:///opt/noc/etc/settings.yml,env:///NOC"
 DEFAULT_DUMP_URL = "yaml://"
+
+
+class ConfigurationError(Exception):
+    """Configuration error."""
 
 
 class ConfigSectionBase(type):
@@ -35,6 +40,84 @@ class ConfigSectionBase(type):
 
 class ConfigSection(object, metaclass=ConfigSectionBase):
     pass
+
+
+class BaseRewrite(object):
+    """Rewrite configuration parameter."""
+
+    def __init__(self, /, deprecation: Optional[Type[Warning]] = None) -> None:
+        self.deprecation = deprecation
+
+    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+        """
+        Rewrite configuration parameter.
+
+        Args:
+            key: dot-separated parameter name.
+            value: parameter value.
+
+        Returns:
+            (key, value): Rewritten key-value pair.
+            None: Value must be dropped.
+        """
+        raise NotImplementedError
+
+
+class PrefixRewrite(BaseRewrite):
+    """Rewrite parameter's prefix."""
+
+    def __init__(
+        self, prefix: str, rewrite_to: str, /, deprecation: Optional[Type[Warning]] = None
+    ) -> None:
+        super().__init__(deprecation=deprecation)
+        self.prefix = f"{prefix}."
+        self.rewrite_to = f"{rewrite_to}."
+
+    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+        if not key.startswith(self.prefix):
+            return key, value
+        new_key = f"{self.rewrite_to}{key[len(self.prefix) :]}"
+        if self.deprecation:
+            msg = f"`{key}` is deprecated and must be renamed to `{new_key}`"
+            warnings.warn(msg, self.deprecation)
+        return new_key, value
+
+
+class ValueRewrite(BaseRewrite):
+    """
+    Map parameter's values according to map.
+    """
+
+    def __init__(
+        self, key: str, value: str, new_value: str, /, deprecation: Optional[Type[Warning]] = None
+    ) -> None:
+        super().__init__(deprecation=deprecation)
+        self.key = key
+        self.value = value
+        self.new_value = new_value
+
+    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+        if key != self.key or self.value != str(value):
+            return key, value
+        if self.deprecation:
+            msg = f"{key} = {value} is deprecated, use {self.new_value} instead"
+            warnings.warn(msg, self.deprecation)
+        return self.key, self.new_value
+
+
+class DeprecatedValue(BaseRewrite):
+    def __init__(
+        self, key: str, value: str, /, deprecation: Optional[Type[Warning]] = None
+    ) -> None:
+        super().__init__(deprecation=deprecation)
+        self.key = key
+        self.value = value
+
+    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+        if key == self.key and self.value == str(value) and self.deprecation:
+            msg = f"{key} = {value} is deprecated and will be removed"
+            warnings.warn(msg, self.deprecation)
+        return key, value
 
 
 class ConfigBase(type):
@@ -62,6 +145,9 @@ class BaseConfig(object, metaclass=ConfigBase):
 
     _rx_env_sh = re.compile(r"\${([^:}]+)(:-[^}]+)?}")
     _params: Dict[str, BaseParameter]
+
+    def __init__(self, rewrites: Optional[Iterable[BaseRewrite]] = None) -> None:
+        self._rewrites = list(rewrites) if rewrites else None
 
     def __iter__(self):
         yield from self._params_order
@@ -97,13 +183,45 @@ class BaseConfig(object, metaclass=ConfigBase):
             return
         if isinstance(value, str):
             value = self.expand(value)
-        self._params[path].set_value(value)
+        r = self.rewrite(path, value)
+        if r is None:
+            return
+        path, value = r
+        p = self._params.get(path)
+        if p is None:
+            msg = f"Unknown parameter: {path}"
+            raise ConfigurationError(msg)
+        p.set_value(value)
+
+    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+        """
+        Rewrite parameters.
+
+        Args:
+            key: dot-separated parameter's path.
+            value: parameter's value.
+
+        Returns:
+            (key, value): Rewritten parameters.
+            None: Parameter should be dropped.
+        """
+        if self._rewrites:
+            for rule in self._rewrites:
+                r = rule.rewrite(key, value)
+                if r is None:
+                    return None
+                key, value = r
+        return key, value
 
     def find_parameter(self, path) -> BaseParameter:
         """
-        Get parameter instance by name
-        :param path: Comma-separated path
-        :return: Parameter instance
+        Get parameter instance by name.
+
+        Args:
+            path: Comma-separated path
+
+        Returns:
+            Parameter instance
         """
         return self._params[path]
 
@@ -126,12 +244,14 @@ class BaseConfig(object, metaclass=ConfigBase):
         raise ValueError(msg)
 
     def load(self):
-        paths = os.environ.get("NOC_CONFIG", DEFAULT_CONFIG)
-        for p in paths.split(","):
-            p = p.strip()
-            pcls = self.get_protocol(p)
-            proto = pcls(self, p)
-            proto.load()
+        with warnings.catch_warnings():
+            warnings.simplefilter("always")
+            paths = os.environ.get("NOC_CONFIG", DEFAULT_CONFIG)
+            for p in paths.split(","):
+                p = p.strip()
+                pcls = self.get_protocol(p)
+                proto = pcls(self, p)
+                proto.load()
 
     def dump(self, url=DEFAULT_DUMP_URL, section=None):
         pcls = self.get_protocol(url)

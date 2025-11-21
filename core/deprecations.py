@@ -14,27 +14,25 @@ On every new NOC release ensure:
 """
 
 
-class RemovedInNOC2003Warning(PendingDeprecationWarning):
-    """
-    Features to be removed in NOC 20.3
-    """
+class RemovedInNOC2003Warning(DeprecationWarning):
+    """Features to be removed in NOC 20.3."""
 
 
-class RemovedInNOC2102Warning(PendingDeprecationWarning):
-    """
-    Features to be removed in NOC 21.2
-    """
+class RemovedInNOC2102Warning(DeprecationWarning):
+    """Features to be removed in NOC 21.2."""
 
 
-class RemovedInNOC2301Warning(PendingDeprecationWarning):
-    """
-    Features to be removed in NOC 23.1
-    """
+class RemovedInNOC2301Warning(DeprecationWarning):
+    """Features to be removed in NOC 23.1."""
 
 
-class RemovedInNOC2402Warning(PendingDeprecationWarning):
+class RemovedInNOC2402Warning(DeprecationWarning):
     """Features to be removed in NOC 24.2."""
 
 
-class RemovedInNOC2501Warning(PendingDeprecationWarning):
-    """Features to be removed in NOC 25.1"""
+class RemovedInNOC2501Warning(DeprecationWarning):
+    """Features to be removed in NOC 25.1."""
+
+
+class RemovedInNOC2601Warning(PendingDeprecationWarning):
+    """Features to be removed in NOC 26.1."""
