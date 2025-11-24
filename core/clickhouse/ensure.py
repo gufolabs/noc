@@ -1,22 +1,24 @@
 # ----------------------------------------------------------------------
 # Ensure ClickHouse database schema
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import logging
+from typing import Optional
 
 # NOC modules
 from noc.config import config
 from .loader import loader
+from .connect import ClickhouseClient
 from ..bi.dictionaries.loader import loader as bi_dictionary_loader
 
 logger = logging.getLogger(__name__)
 
 
-def ensure_bi_models(connect=None, allow_type: bool = False):
+def ensure_bi_models(connect: Optional[ClickhouseClient] = None, allow_type: bool = False) -> bool:
     logger.info("Ensuring BI models:")
     # Ensure fields
     allow_type |= config.clickhouse.enable_migrate_type
@@ -32,7 +34,9 @@ def ensure_bi_models(connect=None, allow_type: bool = False):
     return changed
 
 
-def ensure_dictionary_models(connect=None, allow_type: bool = False):
+def ensure_dictionary_models(
+    connect: Optional[ClickhouseClient] = None, allow_type: bool = False
+) -> bool:
     logger.info("Ensuring Dictionaries:")
     # Ensure fields
     allow_type |= config.clickhouse.enable_migrate_type
@@ -52,7 +56,7 @@ def ensure_dictionary_models(connect=None, allow_type: bool = False):
     return changed
 
 
-def ensure_pm_scopes(connect=None, allow_type: bool = False):
+def ensure_pm_scopes(connect: Optional[ClickhouseClient] = None, allow_type: bool = False) -> bool:
     from noc.pm.models.metricscope import MetricScope
 
     logger.info("Ensuring PM scopes")
@@ -64,7 +68,7 @@ def ensure_pm_scopes(connect=None, allow_type: bool = False):
     return changed
 
 
-def ensure_all_pm_scopes():
+def ensure_all_pm_scopes() -> None:
     from noc.core.clickhouse.connect import connection
 
     if not config.clickhouse.cluster or config.clickhouse.cluster_topology == "1":
@@ -81,7 +85,9 @@ def ensure_all_pm_scopes():
         ensure_pm_scopes(c)
 
 
-def ensure_report_ds_scopes(connect=None, allow_type: bool = False):
+def ensure_report_ds_scopes(
+    connect: Optional[ClickhouseClient] = None, allow_type: bool = False
+) -> bool:
     from noc.core.datasources.loader import loader
 
     logger.info("Ensuring Report BI")
