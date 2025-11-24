@@ -27,14 +27,10 @@ class Script(BaseScript):
     def execute(self):
         r = []
         s = self.cli("ntpq --command=peers -n")
-        for match in self.rx_line.finditer(s):
-            r += [
-                {
-                    "address": match.group("address"),
-                    "ref_id": match.group("ref_id"),
-                    "stratum": match.group("stratum"),
-                    "is_synchronized": match.group("status") == "*",
-                    "status": self.status_map[match.group("status")],
-                }
-            ]
-        return r
+        return [{
+            "address": match.group("address"),
+            "ref_id": match.group("ref_id"),
+            "stratum": match.group("stratum"),
+            "is_synchronized": match.group("status") == "*",
+            "status": self.status_map[match.group("status")],
+        } for match in self.rx_line.finditer(s)]

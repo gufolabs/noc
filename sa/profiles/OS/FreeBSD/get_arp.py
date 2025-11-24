@@ -23,15 +23,8 @@ class Script(BaseScript):
 
     def execute(self, vrf=None):
         s = self.cli("arp -an")
-        r = []
-        for match in self.rx_line.finditer(s):
-            if match.group("mac") == "FF:FF:FF:FF:FF:FF":
-                continue
-            r += [
-                {
-                    "ip": match.group("ip"),
-                    "mac": match.group("mac"),
-                    "interface": match.group("interface"),
-                }
-            ]
-        return r
+        return [{
+            "ip": match.group("ip"),
+            "mac": match.group("mac"),
+            "interface": match.group("interface"),
+        } for match in self.rx_line.finditer(s) if match.group("mac") != "FF:FF:FF:FF:FF:FF"]

@@ -22,10 +22,10 @@ class Script(BaseScript):
     def execute_cli(self, **kwargs):
         config = ""
         for c in self.configs:
-            conf = self.cli("cat -v %s ; echo" % c)
+            conf = self.cli(f"cat -v {c} ; echo")
             match = self.rx_not_found.search(conf)
             if not match:
-                config = config + ("\n## %s\n" % c) + conf
+                config = f"{config}\n## {c}\n{conf}\n"
 
         config = self.strip_first_lines(config, 1)
         return self.cleaned_config(config)

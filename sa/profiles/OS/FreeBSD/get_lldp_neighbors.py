@@ -138,7 +138,7 @@ class Script(BaseScript):
             if "Station, on" in caps:
                 cap |= LLDP_CAP_STATION_ONLY
             n["remote_capabilities"] = cap
-            neighbors += [{"local_interface": match1.group("local_interface"), "neighbors": [n]}]
+            neighbors.append({"local_interface": match1.group("local_interface"), "neighbors": [n]})
 
         if neighbors:
             return neighbors
@@ -184,5 +184,5 @@ class Script(BaseScript):
                 n["remote_capabilities"] = cap
             elif tlv == "HOLDTIME":  # last TLV
                 if n["remote_chassis_id"] != "":
-                    neighbors += [{"local_interface": local_interface, "neighbors": [n]}]
+                    neighbors.append({"local_interface": local_interface, "neighbors": [n]})
         return neighbors
