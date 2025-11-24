@@ -25,7 +25,6 @@ class Script(BaseScript):
     status_map = client_map = {" ": "unknown", "-": "sane", "+": "selected", "*": "master"}
 
     def execute(self):
-        r = []
         s = self.cli("ntpq --command=peers -n")
         return [
             {
