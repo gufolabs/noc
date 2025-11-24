@@ -13,11 +13,11 @@ https://github.com/ultrabug/mkdocs-static-i18n/issues/283#issuecomment-221387957
 """
 
 from mkdocs import plugins
-from mkdocs.structure.files import Files
+from mkdocs.structure.files import Files, File
 
 BLOG_FILES = None
 """
-List of files that belong to a blog. They will be temporarily removed and added back to hide them 
+List of files that belong to a blog. They will be temporarily removed and added back to hide them
 from the i18n plugin. Set later for mkdocs serve to work properly.
 """
 
@@ -34,7 +34,7 @@ def _on_files_disconnect_blog_files(files: Files, config, *_, **__):
         if name.startswith("material/blog"):
             blog_prefixes.append(instance.config.blog_dir)
 
-    blog_prefixes = tuple(map(lambda x: x.rstrip("/") + "/", blog_prefixes))
+    blog_prefixes = tuple(x.rstrip("/") + "/" for x in blog_prefixes)
 
     # i18n blog prefix awareness can be used in overrides templates
     config.extra.i18n_blog_prefixes = blog_prefixes
