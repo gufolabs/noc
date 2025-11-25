@@ -16,8 +16,6 @@ class Script(BaseScript):
     @false_on_cli_error
     def has_lldp_cli(self):
         """
-        Check box has ladvd daemon enabled
+        Check box has lldpd or ladvd daemon enabled
         """
-        r1 = self.cli("/usr/bin/pgrep ladvd")
-        r2 = self.cli("/usr/bin/pgrep lldpd")
-        return bool(r1 or r2)
+        return bool(self.cli("/usr/bin/pgrep lldpd") or self.cli("/usr/bin/pgrep ladvd"))
