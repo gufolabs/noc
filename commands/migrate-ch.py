@@ -5,6 +5,9 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
+# Python modules
+from typing import Optional
+
 # NOC modules
 from noc.core.management.base import BaseCommand
 from noc.core.clickhouse.connect import connection
@@ -30,10 +33,17 @@ class Command(BaseCommand):
             help="Allow migrate column when type mismatch",
         )
 
-    def handle(self, host=None, port=None, allow_type=False, *args, **options):
+    def handle(
+        self,
+        host: Optional[str] = None,
+        port: Optional[int] = None,
+        allow_type: bool = False,
+        *args,
+        **options,
+    ):
         self.host = host or None
         self.port = port or None
-        self.connect()
+        self.ch_connect()
         mongo_connect()
         self.ensure_db()
         self.create_dictionaries_db()
@@ -46,7 +56,7 @@ class Command(BaseCommand):
         else:
             self.print("OK")
 
-    def connect(self):
+    def ch_connect(self):
         """
         Connect to database
         :return:
