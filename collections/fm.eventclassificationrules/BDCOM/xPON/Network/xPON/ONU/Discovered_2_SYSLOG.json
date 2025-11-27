@@ -1,0 +1,19 @@
+{
+    "name": "BDCOM | xPON | Network | xPON | ONU | Discovered #2 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "5b4cd0b6-3c4d-497e-8268-bd572236396e",
+    "description": "%EPON-ONUREG: ONU 4092.4912.e73d is registered on EPON0/2:52.",
+    "event_class__name": "Network | xPON | ONU | Discovered",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "%EPON-ONUREG: ONU (?P<mac>\\S+) is registered on (?P<interface>EPON\\S+)\\.",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "%EPON-ONUREG: ONU 4092.4912.e73d is registered on EPON0/2:52.",
+            "raw_vars": []
+        }
+    ]
+}

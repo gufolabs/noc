@@ -1,0 +1,19 @@
+{
+    "name": "BDCOM | xPON | Network | xPON | ONU | Discovered #1 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "39c2bbec-a02d-4090-93e4-ad8f658fd373",
+    "description": "%GPON-ONUACTIVATE: ONU BDCM:6B85B483 is activated on GPON0/3:5.",
+    "event_class__name": "Network | xPON | ONU | Discovered",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "%GPON-ONUDISCOVER: ONU (?P<vendor>\\S+):(?P<mac>\\S+) is discovered on (?P<interface>GPON\\S+)\\.",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "%GPON-ONUDISCOVER: ONU BDCM:6B85B483 is discovered on GPON0/3:5.",
+            "raw_vars": []
+        }
+    ]
+}
