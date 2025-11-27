@@ -9,7 +9,7 @@
 import logging
 from itertools import chain
 from collections import defaultdict
-from typing import Dict, Any, Tuple, Optional, Callable, List
+from typing import Dict, Any, Tuple, Optional, List
 
 # NOC modules
 from .rule import Rule
@@ -21,7 +21,6 @@ from noc.config import config
 from noc.fm.models.eventclassificationrule import EventClassificationRule
 from noc.fm.models.enumeration import Enumeration
 from noc.sa.models.profile import GENERIC_PROFILE
-from noc.core.handler import get_handler
 from noc.core.profile.loader import loader as profile_loader
 from noc.core.perf import metrics
 from noc.core.fm.event import Event
@@ -46,7 +45,6 @@ class RuleSet(object):
             Tuple[Optional[str], str], RuleLookup
         ] = {}  # (profile, chain) -> [rule, ..., rule]
         self.enumerations: Dict[str, Dict[str, str]] = {}  # name -> value -> enumerated
-        self.lookup_cls: Optional[Callable] = None
         self.default_rule: Optional[Rule] = None
         #
         # is_failed: bool = False
@@ -70,7 +68,7 @@ class RuleSet(object):
             keys = [(p, rule.source.value) for p in rule.profiles]
         for key in keys:
             if key not in self.rules:
-                self.rules[key] = self.lookup_cls([rule])
+                self.rules[key] = RuleLookup([rule])
             else:
                 self.rules[key].add_rule(rule)
             self.add_rules += 1
@@ -89,7 +87,6 @@ class RuleSet(object):
         """
         Load rules from database
         """
-        self.lookup_cls = get_handler(config.classifier.lookup_handler)
         self.rules = {}
         logger.info("Loading rules")
         n = 0
@@ -126,7 +123,7 @@ class RuleSet(object):
                 rules[p, rule.source.value] += [rule]
             n += 1
         # Apply lookup solution
-        self.rules = {k: self.lookup_cls(rules[k]) for k in rules}
+        self.rules = {k: RuleLookup(rules[k]) for k in rules}
         logger.info("%d rules are loaded in the %d chains", n, len(self.rules))
 
     def load_enumerations(self):
