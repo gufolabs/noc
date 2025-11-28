@@ -56,7 +56,7 @@ class MongoCache(BaseCache):
         :return:
         """
         k = self.make_key(key, version)
-        ttl = ttl or config.memcached.default_ttl
+        ttl = ttl or config.cache.default_ttl
         expires = datetime.datetime.now() + datetime.timedelta(seconds=ttl)
         self.get_collection().update_one(
             {self.KEY_FIELD: k},
