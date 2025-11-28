@@ -246,7 +246,7 @@ class RuleSet(object):
             try:
                 v = ecv.type.clean_value(r_vars[ecv.name])
             except InterfaceTypeError:
-                msg = f"Cannot decode variable '{ecv.name}'. Invalid {ecv.type}: {r_vars[ecv.name]}"
+                msg = f"Cannot decode variable '{ecv.name}'. Invalid {ecv.type}: '{r_vars[ecv.name]}'"
                 raise EventProcessingFailed(msg)
             r[ecv.name] = v
         return r, resources, error
