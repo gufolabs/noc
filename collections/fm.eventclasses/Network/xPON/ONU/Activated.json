@@ -12,20 +12,14 @@
             "required": true
         },
         {
-            "name": "mac",
-            "description": "ONU MAC",
-            "type": "mac",
-            "required": true
-        },
-        {
-            "name": "vendor",
-            "description": "ONU vendor",
+            "name": "onu",
+            "description": "ONU MAC/Serial",
             "type": "str",
-            "required": false
+            "required": true
         }
     ],
-    "subject_template": "ONU {% if vendor %}{{vendor}}:{% endif %}{{mac}} activated on {{interface}}",
-    "body_template": "ONU {% if vendor %}{{vendor}}:{% endif %}{{mac}} activated on {{interface}}",
+    "subject_template": "ONU {{onu}} activated on {{interface}}",
+    "body_template": "ONU {{onu}} activated on {{interface}}",
     "symptoms": "",
     "probable_causes": "",
     "recommended_actions": ""
