@@ -1,0 +1,17 @@
+{
+    "name": "BDCOM | xPON | Unknown | Ignore SSL Accept(SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "98337bb6-7582-40f0-b9a0-31316f7e9d6d",
+    "description": "websSSLAccept::webs accept request",
+    "event_class__name": "Unknown | Ignore",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "websSSLAccept::webs accept request",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [{
+        "message": "websSSLAccept::webs accept request",
+        "raw_vars": []
+    }]
+}

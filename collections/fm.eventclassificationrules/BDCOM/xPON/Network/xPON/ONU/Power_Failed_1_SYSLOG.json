@@ -1,0 +1,19 @@
+{
+    "name": "BDCOM | xPON | Network | xPON | ONU | Power Failed #1 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "94d98586-d162-49c8-a63d-e7c043272637",
+    "description": "%GPON-ONUDGI: ONU BDCM:6B85B483 Dying Gasp on GPON0/3:5.",
+    "event_class__name": "Network | xPON | ONU | Power Failed",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "%GPON-ONUDGI: ONU (?P<vendor>\\S+):(?P<mac>\\S+) Dying Gasp on (?P<interface>GPON\\S+)\\.",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "%GPON-ONUDGI: ONU BDCM:6B85B483 Dying Gasp on GPON0/3:5.",
+            "raw_vars": []
+        }
+    ]
+}

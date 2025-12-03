@@ -1,0 +1,19 @@
+{
+    "name": "BDCOM | xPON | Network | xPON | ONU | Activated #2 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "c2f4990c-267d-4334-bdef-cc490ad2d43a",
+    "description": "%EPON-ONUAUTHEN: ONU 4cd7.c852.2ea8 is authenticated on EPON0/3:19.",
+    "event_class__name": "Network | xPON | ONU | Activated",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "%EPON-ONUAUTHEN: ONU (?P<mac>\\S+) is authenticated on (?P<interface>EPON\\S+)\\.",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "%EPON-ONUAUTHEN: ONU 4cd7.c852.2ea8 is authenticated on EPON0/3:19.",
+            "raw_vars": []
+        }
+    ]
+}
