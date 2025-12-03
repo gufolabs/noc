@@ -13,13 +13,21 @@ import sys
 from functools import partial
 from urllib.parse import quote as urllib_quote
 from pathlib import Path
-from typing import Dict, Union
+from typing import Dict, Union, Optional, Iterable
 
 # Third-party modules
 import cachetools
 
 # NOC modules
-from noc.core.config.base import BaseConfig, ConfigSection
+from noc.core.config.base import (
+    BaseConfig,
+    ConfigSection,
+    BaseRewrite,
+    PrefixRewrite,
+    ValueRewrite,
+    DeprecatedValue,
+)
+from noc.core.deprecations import RemovedInNOC2601Warning
 from noc.core.config.params import (
     StringParameter,
     MapParameter,
@@ -77,9 +85,9 @@ class Config(BaseConfig):
     class backup(ConfigSection):
         keep_days = SecondsParameter(default="14d")
         keep_weeks = SecondsParameter(default="12w")
-        keep_day_of_week = IntParameter(default="6")
-        keep_months = IntParameter(default="12")
-        keep_day_of_month = IntParameter(default="1")
+        keep_day_of_week = IntParameter(default=6)
+        keep_months = IntParameter(default=12)
+        keep_day_of_month = IntParameter(default=1)
 
     class bh(ConfigSection):
         bulk_ping_timeout = SecondsParameter(default="5s")
@@ -584,8 +592,8 @@ class Config(BaseConfig):
         db = IntParameter(default=0)
         default_ttl = SecondsParameter(default="1d")
 
-    class redpanda(ConfigSection):
-        addresses = ServiceParameter(service="redpanda", wait=False, near=True, full_result=False)
+    class kafka(ConfigSection):
+        addresses = ServiceParameter(service="kafka", wait=False, near=True, full_result=False)
         bootstrap_servers = StringParameter()
         username = StringParameter()
         password = SecretParameter(path=SECRETS_BASE / "kafka-password")
@@ -1076,7 +1084,8 @@ class Config(BaseConfig):
         ds_limit = IntParameter(default=1000)
 
     # pylint: disable=super-init-not-called
-    def __init__(self):
+    def __init__(self, rewrites: Optional[Iterable[BaseRewrite]] = None):
+        super().__init__(rewrites=rewrites)
         self.setup_logging()
 
     @property
@@ -1231,6 +1240,21 @@ class Config(BaseConfig):
         return run_sync(partial(dcs.get_slot_limit, slot_name))
 
 
-config = Config()
+config = Config(
+    rewrites=[
+        PrefixRewrite("redpanda", "kafka", deprecation=RemovedInNOC2601Warning),
+        ValueRewrite(
+            "msgstream.client_class",
+            "noc.core.msgstream.redpanda.RedPandaClient",
+            "noc.core.msgstream.kafka.KafkaClient",
+            deprecation=RemovedInNOC2601Warning,
+        ),
+        DeprecatedValue(
+            "msgstream.client_class",
+            "noc.core.msgstream.liftbridge.LiftBridgeClient",
+            deprecation=RemovedInNOC2601Warning,
+        ),
+    ]
+)
 config.load()
 config.setup_logging()

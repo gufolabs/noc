@@ -15,10 +15,10 @@
 4. Убедитесь, что вы используете `consul` для управления настройками (это когда у вас есть "consul://consul/noc" в `Config Load Preference Path` на главной странице `ENV` в `Tower`), в противном случае вам необходимо добавить настройки в локальный файл конфигурации в `/opt/noc/etc/settings.yml`:
 
 ```
-redpanda:
+kafka:
   addresses: kafka
 msgstream:
-  client_class: noc.core.msgstream.redpanda.RedPandaClient
+  client_class: noc.core.msgstream.kafka.KafkaClient
 ```
 
 5. Деплой

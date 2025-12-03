@@ -9,7 +9,7 @@
   vars:
     consul_service_key: "noc/slots/worker/manifest"
     consul_service_internal_key: "Limit"
-    consul_service_value: "{{ hostvars |json_query(\"*.noc_services[] | [?name=='worker'].{num:config.power} | sum([].num)\") }}"  # noqa 204
+    consul_service_value: '{{ hostvars |json_query("*.noc_services[] | [?name==''worker''].{num:config.power} | sum([].num)") }}' # noqa 204
     consul_service_token: None
   tags:
     - worker
@@ -22,7 +22,7 @@
   vars:
     consul_service_key: "noc/slots/metrics/manifest"
     consul_service_internal_key: "Limit"
-    consul_service_value: "{{ hostvars |json_query(\"*.noc_services[] | [?name=='metrics'].{num:config.power} | sum([].num)\") }}"  # noqa 204
+    consul_service_value: '{{ hostvars |json_query("*.noc_services[] | [?name==''metrics''].{num:config.power} | sum([].num)") }}' # noqa 204
     consul_service_token: None
   tags:
     - metrics
@@ -35,7 +35,7 @@
   vars:
     consul_service_key: "noc/slots/discovery-{{ item }}/manifest"
     consul_service_internal_key: "Limit"
-    consul_service_value: "{{ hostvars | json_query(\"*.noc_services[] | [?name=='discovery'].{n:pool,num:config.power} | [?n=='\"+item+\"'] | sum([].num)\") }}"  # noqa 204
+    consul_service_value: '{{ hostvars | json_query("*.noc_services[] | [?name==''discovery''].{n:pool,num:config.power} | [?n==''"+item+"''] | sum([].num)") }}' # noqa 204
     consul_service_token: None
   with_items: "{{ hostvars |json_query('*.noc_services[] | [].pool') |unique }}"
   tags:
@@ -49,7 +49,7 @@
   vars:
     consul_service_key: "noc/slots/ping-{{ item }}/manifest"
     consul_service_internal_key: "Limit"
-    consul_service_value: "{{ hostvars |json_query(\"*.noc_services[] | [?name=='ping'].{n:pool,num:config.power} | [?n=='\"+item+\"'] | sum([].num)\") }}"  # noqa 204
+    consul_service_value: '{{ hostvars |json_query("*.noc_services[] | [?name==''ping''].{n:pool,num:config.power} | [?n==''"+item+"''] | sum([].num)") }}' # noqa 204
     consul_service_token: None
   with_items: "{{ hostvars |json_query('*.noc_services[] | [].pool') |unique }}"
   tags:
@@ -63,7 +63,7 @@
   vars:
     consul_service_key: "noc/slots/classifier-{{ item }}/manifest"
     consul_service_internal_key: "Limit"
-    consul_service_value: "{{ hostvars |json_query(\"*.noc_services[] | [?name=='classifier'].{n:pool,num:config.power} | [?n=='\"+item+\"'] | sum([].num)\") }}"  # noqa 204
+    consul_service_value: '{{ hostvars |json_query("*.noc_services[] | [?name==''classifier''].{n:pool,num:config.power} | [?n==''"+item+"''] | sum([].num)") }}' # noqa 204
     consul_service_token: None
   with_items: "{{ hostvars |json_query('*.noc_services[] | [].pool') |unique }}"
   tags:
@@ -77,7 +77,7 @@
   vars:
     consul_service_key: "noc/slots/correlator-{{ item }}/manifest"
     consul_service_internal_key: "Limit"
-    consul_service_value: "{{ hostvars |json_query(\"*.noc_services[] | [?name=='correlator'].{n:pool,num:config.power} | [?n=='\"+item+\"'] | sum([].num)\") }}"  # noqa 204
+    consul_service_value: '{{ hostvars |json_query("*.noc_services[] | [?name==''correlator''].{n:pool,num:config.power} | [?n==''"+item+"''] | sum([].num)") }}' # noqa 204
     consul_service_token: None
   with_items: "{{ hostvars |json_query('*.noc_services[] | [].pool') |unique }}"
   tags:
@@ -91,14 +91,13 @@
   vars:
     consul_service_key: "noc/slots/kafkasender/manifest"
     consul_service_internal_key: "Limit"
-    consul_service_value: "{{ hostvars |json_query(\"*.noc_services[] | [?name=='kafkasender'].{num:config.power} | sum([].num)\") }}"  # noqa 204
+    consul_service_value: '{{ hostvars |json_query("*.noc_services[] | [?name==''kafkasender''].{num:config.power} | sum([].num)") }}' # noqa 204
     consul_service_token: None
   tags:
     - kafkasender
 
 # Set consul kv for kafka
 - block:
-
     - name: load kafka configuration to consul 1
       run_once: true
       include_role:
@@ -106,7 +105,7 @@
         tasks_from: service_config_set
       vars:
         consul_service_key: "noc/msgstream/client_class"
-        consul_service_value: "noc.core.msgstream.redpanda.RedPandaClient"
+        consul_service_value: "noc.core.msgstream.kafka.KafkaClient"
 
     - name: load kafka configuration to consul 2
       run_once: true
@@ -114,7 +113,7 @@
         name: consul
         tasks_from: service_config_set
       vars:
-        consul_service_key: "noc/redpanda/addresses"
+        consul_service_key: "noc/kafka/addresses"
         consul_service_value: "kafka"
 
   when:
