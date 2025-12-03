@@ -9,7 +9,7 @@
 import inspect
 import re
 import os
-from typing import Dict, Iterable, Tuple, Optional, Any, Type
+from typing import Dict, Iterable, Tuple, Optional, Any, Type, Set, List
 import warnings
 
 # NOC modules
@@ -62,6 +62,22 @@ class BaseRewrite(object):
         """
         raise NotImplementedError
 
+    def reverse_rewrite(self, key: str) -> Optional[str]:
+        """
+        Rewrite name back.
+
+        If rule rewrites parameter name, find the name
+        which will be rewriten to given.
+
+        Args:
+            key: Target name.
+
+        Returns:
+            None: if name is not a result of rewriting.
+            old value: which can be rewriten to given one.
+        """
+        return None
+
 
 class PrefixRewrite(BaseRewrite):
     """Rewrite parameter's prefix."""
@@ -81,6 +97,11 @@ class PrefixRewrite(BaseRewrite):
             msg = f"`{key}` is deprecated and must be renamed to `{new_key}`"
             warnings.warn(msg, self.deprecation)
         return new_key, value
+
+    def reverse_rewrite(self, key: str) -> Optional[str]:
+        if key.startswith(self.rewrite_to):
+            return f"{self.prefix}{key[len(self.rewrite_to) :]}"
+        return None
 
 
 class ValueRewrite(BaseRewrite):
@@ -131,7 +152,6 @@ class ConfigBase(type):
             elif inspect.isclass(attrs[k]) and issubclass(attrs[k], ConfigSection):
                 for kk in attrs[k]._params:
                     cls._params[f"{k}.{kk}"] = attrs[k]._params[kk]
-        cls._params_order = sorted(cls._params, key=lambda x: cls._params[x].param_number)
         return cls
 
 
@@ -148,9 +168,25 @@ class BaseConfig(object, metaclass=ConfigBase):
 
     def __init__(self, rewrites: Optional[Iterable[BaseRewrite]] = None) -> None:
         self._rewrites = list(rewrites) if rewrites else None
+        self._params_order = sorted(self._params, key=lambda x: self._params[x].param_number)
+        self._rewritten_params = self._get_rewritten_params()
 
     def __iter__(self):
         yield from self._params_order
+        if self._rewritten_params:
+            yield from self._rewritten_params
+
+    def _get_rewritten_params(self) -> Optional[List[str]]:
+        """Find rewritten params, if any."""
+        if not self._rewrites:
+            return None
+        r: Set[str] = set()
+        for rule in self._rewrites:
+            for p in self._params_order:
+                old = rule.reverse_rewrite(p)
+                if old:
+                    r.add(old)
+        return sorted(r) if r else None
 
     @classmethod
     def expand(cls, value):
@@ -229,6 +265,8 @@ class BaseConfig(object, metaclass=ConfigBase):
         return self._params[path].value
 
     def dump_parameter(self, path):
+        if self._rewritten_params and path in self._rewritten_params:
+            return None
         return self._params[path].dump_value()
 
     @classmethod
@@ -265,7 +303,7 @@ class BaseConfig(object, metaclass=ConfigBase):
         :return:
         """
         assert isinstance(cfg, dict)
-        for name in self._params_order:
+        for name in self:
             c = cfg
             parts = name.split(".")
             for n in parts[:-1]:
