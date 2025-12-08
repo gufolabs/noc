@@ -9,7 +9,7 @@
             "name": "mac_limit",
             "description": "MAC Address Limit",
             "type": "int",
-            "required": true,
+            "required": false,
             "match_suppress": true
         },
         {
@@ -30,8 +30,8 @@
     "deduplication_window": 3,
     "suppression_window": 0,
     "ttl": 86400,
-    "subject_template": "Превышен порог MAC адресов для интерфейса {{interface}}: {{mac_limit}}/{{utilization}} (порог/значение)",
-    "body_template": "Превышен порог MAC адресов для интерфейса {{interface}}: {{mac_limit}}/{{utilization}}",
+    "subject_template": "The MAC address threshold for the interface {{interface}} been exceeded",
+    "body_template": "The MAC address threshold for the interface {{interface}} been exceeded: {% if mac_limit %}{{mac_limit}}/{% endif %}{{utilization}} ({% if mac_limit %}threshold/{% endif %}value)",
     "symptoms": "",
     "probable_causes": "",
     "recommended_actions": "",

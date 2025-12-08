@@ -1,0 +1,39 @@
+{
+    "name": "Network | MAC | MAC Exceed",
+    "$collection": "fm.eventclasses",
+    "uuid": "a7041ad7-f7f3-48be-977a-57b46972e51a",
+    "description": "MAC address limit exceeded",
+    "action": "A",
+    "vars": [
+        {
+            "name": "mac_limit",
+            "description": "MAC Address Limit",
+            "type": "int",
+            "required": false,
+            "match_suppress": true
+        },
+        {
+            "name": "utilization",
+            "description": "Utilization",
+            "type": "int",
+            "required": true,
+            "match_suppress": false
+        }
+    ],
+    "deduplication_window": 3,
+    "suppression_window": 0,
+    "ttl": 86400,
+    "subject_template": "The MAC address threshold has been exceeded",
+    "body_template": "The MAC address threshold has been exceeded: {% if mac_limit %}{{mac_limit}}/{% endif %}{{utilization}} ({% if mac_limit %}threshold/{% endif %}value)",
+    "symptoms": "",
+    "probable_causes": "",
+    "recommended_actions": "",
+    "disposition": [
+        {
+            "name": "dispose",
+            "condition": "True",
+            "action": "raise",
+            "alarm_class__name": "Network | MAC | MAC Exceed"
+        }
+    ]
+}
