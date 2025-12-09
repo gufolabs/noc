@@ -13,6 +13,7 @@ from noc.core.clickhouse.ensure import (
     ensure_pm_scopes,
     ensure_dictionary_models,
     ensure_report_ds_scopes,
+    sync_ch_policies,
 )
 from noc.core.mongo.connection import connect as mongo_connect
 from noc.config import config
@@ -37,14 +38,12 @@ class Command(BaseCommand):
         mongo_connect()
         self.ensure_db()
         self.create_dictionaries_db()
-        changed = ensure_pm_scopes(connect=self.connect, allow_type=allow_type)
+        changed = sync_ch_policies()
+        changed |= ensure_pm_scopes(connect=self.connect, allow_type=allow_type)
         changed |= ensure_bi_models(connect=self.connect, allow_type=allow_type)
         changed |= ensure_dictionary_models(connect=self.connect, allow_type=allow_type)
         changed |= ensure_report_ds_scopes(connect=self.connect, allow_type=allow_type)
-        if changed:
-            self.print("CHANGED")
-        else:
-            self.print("OK")
+        self.print("CHANGED" if changed else "OK")
 
     def connect(self):
         """
