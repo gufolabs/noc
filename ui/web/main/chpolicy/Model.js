@@ -25,13 +25,18 @@ Ext.define("NOC.main.chpolicy.Model", {
       defaultValue: true,
     },
     {
-      name: "dry_run",
-      type: "boolean",
-      defaultValue: true,
-    },
-    {
       name: "ttl",
       type: "int",
+    },
+    {
+      name: "rows",
+      type: "int",
+      persist: false,
+    },
+    {
+      name: "size",
+      type: "int",
+      persist: false,
     },
   ],
 });

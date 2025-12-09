@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // main.chpolicy application
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2018 The NOC Project
+// Copyright (C) 2007-2035 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.main.chpolicy.Application");
@@ -12,6 +12,7 @@ Ext.define("NOC.main.chpolicy.Application", {
     "NOC.main.chpolicy.Model",
   ],
   model: "NOC.main.chpolicy.Model",
+  search: true,
   initComponent: function(){
     var me = this;
     Ext.apply(me, {
@@ -28,12 +29,6 @@ Ext.define("NOC.main.chpolicy.Application", {
           renderer: NOC.render.Bool,
         },
         {
-          text: __("Dry Run"),
-          dataIndex: "dry_run",
-          width: 25,
-          renderer: NOC.render.Bool,
-        },
-        {
           text: __("TTL"),
           dataIndex: "ttl",
           width: 100,
@@ -44,8 +39,21 @@ Ext.define("NOC.main.chpolicy.Application", {
             return __("Disabled")
           },
         },
+        {
+          text: __("Rows"),
+          dataIndex: "rows",
+          width: 100,
+          renderer: NOC.render.Size,
+          align: "right",
+        },
+        {
+          text: __("Size"),
+          dataIndex: "size",
+          width: 100,
+          renderer: NOC.render.Size,
+          align: "right",
+        },
       ],
-
       fields: [
         {
           name: "table",
@@ -58,11 +66,6 @@ Ext.define("NOC.main.chpolicy.Application", {
           name: "is_active",
           xtype: "checkbox",
           boxLabel: __("Active"),
-        },
-        {
-          name: "dry_run",
-          xtype: "checkbox",
-          boxLabel: __("Dry Run"),
         },
         {
           name: "ttl",
@@ -80,11 +83,6 @@ Ext.define("NOC.main.chpolicy.Application", {
     {
       title: __("By Active"),
       name: "is_active",
-      ftype: "boolean",
-    },
-    {
-      title: __("By Dry Run"),
-      name: "dry_run",
       ftype: "boolean",
     },
   ],

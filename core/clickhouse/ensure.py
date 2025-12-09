@@ -67,13 +67,12 @@ def ensure_pm_scopes(connect: ClickhouseClient | None = None, allow_type: bool =
     return changed
 
 
-def ensure_all_pm_scopes() -> None:
+def ensure_all_pm_scopes() -> bool:
     from noc.core.clickhouse.connect import connection
 
     if not config.clickhouse.cluster or config.clickhouse.cluster_topology == "1":
         # Standalone configuration
-        ensure_pm_scopes()
-        return
+        return ensure_pm_scopes()
     # Replicated configuration
     ch = connection(read_only=False)
     for host, port in ch.execute(
@@ -102,4 +101,26 @@ def ensure_report_ds_scopes(
         logger.info("Ensure Report DataSources %s", ds.name)
         changed |= ds.ensure_table(connect=connect)
         changed |= ds.ensure_views(connect=connect)
+    return changed
+
+
+def sync_ch_policies() -> bool:
+    """Create CHPolicy when necessary."""
+    from noc.main.models.chpolicy import CHPolicy
+    from noc.pm.models.metricscope import MetricScope
+
+    seen = {p.table for p in CHPolicy.objects.all()}
+    # Collect tables from pm scopes
+    tables: list[str] = [ms._get_raw_db_table() for ms in MetricScope.objects.all()]
+    # Collect BI models
+    for name in loader:
+        model = loader[name]
+        if model:
+            tables.append(model._meta.db_table)
+    # Create CHPolicy
+    changed = False
+    for t in tables:
+        if t not in seen:
+            CHPolicy(table=t, is_active=False, ttl=0).save()
+            changed = True
     return changed
