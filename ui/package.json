@@ -69,6 +69,7 @@
     "vitest": "^4.0.8"
   },
   "dependencies": {
+    "@gufo-labs/font": "^0.0.1",
     "color-input": "github:argyleink/css-color-component#cdn-latest",
     "dompurify": "^3.3.0",
     "leaflet": "^1.9.4",

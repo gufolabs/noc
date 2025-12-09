@@ -101,6 +101,20 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
       items: [
         // NOC logo
         {
+          xtype: "component",
+          html: "<i class='gf brand-noc-s gf-24px'></i>",
+          style: {
+            cursor: "pointer",
+            paddingTop: "4px",
+          },
+          listeners: {
+            el: {
+              scope: me,
+              click: me.openHome,
+            },
+          },
+        },
+        {
           xtype: "image",
           src: "/ui/web/img/logo_white.svg",
           style: {
