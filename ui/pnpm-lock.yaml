@@ -12,6 +12,9 @@ importers:
 
   .:
     dependencies:
+      '@gufo-labs/font':
+        specifier: ^0.0.1
+        version: 0.0.1
       color-input:
         specifier: github:argyleink/css-color-component#cdn-latest
         version: https://codeload.github.com/argyleink/css-color-component/tar.gz/27527a65f4809de3c67baf7eeeaa31dd4a542817
@@ -449,6 +452,9 @@ packages:
   '@eslint/plugin-kit@0.4.1':
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@gufo-labs/font@0.0.1':
+    resolution: {integrity: sha512-+fojd9dR+wtM5Krh66jnmslZQtmRoRVwVf7G0kg+cGiQF7FN5FmrhP+Wc4tdfvuyvKwgrLzxpUHf0ety/1UGhg==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -2069,6 +2075,8 @@ snapshots:
     dependencies:
       '@eslint/core': 0.17.0
       levn: 0.4.1
+
+  '@gufo-labs/font@0.0.1': {}
 
   '@humanfs/core@0.19.1': {}
 
