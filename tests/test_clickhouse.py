@@ -14,6 +14,7 @@ import pytest
 # NOC modules
 from noc.core.clickhouse.model import Model, NestedModel
 from noc.core.clickhouse.fields import StringField, Int8Field, NestedField, DateField
+from noc.core.clickhouse.parser import parse, TableInfo
 
 
 class Pair(NestedModel):
@@ -63,3 +64,20 @@ def test_mymodel_to_python():
         "pairs": [{"index": 1, "text": "First"}, {"index": 2, "text": "Second"}],
     }
     assert ch_data == valid_data
+
+
+PARSE_SQL1 = "CREATE TABLE noc.raw_syslog (`date` Date, `ts` DateTime, `managed_object` UInt64, `facility` UInt8, `severity` UInt8, `message` String) ENGINE = MergeTree PARTITION BY toYYYYMM(date) PRIMARY KEY (managed_object, ts) ORDER BY (managed_object, ts) TTL ts + toIntervalDay(365) SETTINGS index_granularity = 8192"
+PARSE_SQL2 = "CREATE TABLE noc.raw_syslog (`date` Date, `ts` DateTime, `managed_object` UInt64, `facility` UInt8, `severity` UInt8, `message` String) ENGINE = MergeTree PARTITION BY toYYYYMM(date) PRIMARY KEY (managed_object, ts) ORDER BY (managed_object, ts) SETTINGS index_granularity = 8192"
+
+
+@pytest.mark.parametrize(
+    ("sql", "info"), [(PARSE_SQL1, TableInfo(table_ttl=365 * 24 * 3600)), (PARSE_SQL2, TableInfo())]
+)
+def test_parse(sql: str, info: TableInfo) -> None:
+    r = parse(sql)
+    assert r == info
+
+
+def test_table_info_default() -> None:
+    ti = TableInfo.default()
+    assert ti.table_ttl is None
