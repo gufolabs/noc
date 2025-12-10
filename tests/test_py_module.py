@@ -19,7 +19,6 @@ import cachetools
 _ALLOW_XFAIL = {
     "noc.services.login.backends.pam",
     "noc.services.web.apps.kb.parsers.mediawiki",
-    "noc.services.classifier.xrulelookup",
     "noc.commands.translation",
     "noc.gis.tile",
     "noc.core.etl.extractor.vcenter",
