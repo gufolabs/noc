@@ -13,6 +13,7 @@ from noc.core.clickhouse.ensure import (
     ensure_pm_scopes,
     ensure_dictionary_models,
     ensure_report_ds_scopes,
+    ensure_ch_policies,
     sync_ch_policies,
 )
 from noc.core.mongo.connection import connect as mongo_connect
@@ -43,6 +44,7 @@ class Command(BaseCommand):
         changed |= ensure_bi_models(connect=self.connect, allow_type=allow_type)
         changed |= ensure_dictionary_models(connect=self.connect, allow_type=allow_type)
         changed |= ensure_report_ds_scopes(connect=self.connect, allow_type=allow_type)
+        changed |= ensure_ch_policies(connect=self.connect)
         self.print("CHANGED" if changed else "OK")
 
     def connect(self):

@@ -7,10 +7,12 @@
 
 # Python modules
 import logging
-from typing import List
+from typing import List, Optional, Dict
 
 # NOC modules
 from noc.config import config
+from noc.core.clickhouse.connect import connection, ClickhouseClient
+from .info import TableInfo
 from .loader import loader
 from ..bi.dictionaries.loader import loader as bi_dictionary_loader
 
@@ -66,8 +68,6 @@ def ensure_pm_scopes(connect=None, allow_type: bool = False) -> bool:
 
 
 def ensure_all_pm_scopes() -> bool:
-    from noc.core.clickhouse.connect import connection
-
     if not config.clickhouse.cluster or config.clickhouse.cluster_topology == "1":
         # Standalone configuration
         ensure_pm_scopes()
@@ -113,11 +113,39 @@ def sync_ch_policies() -> bool:
     for name in loader:
         model = loader[name]
         if model:
-            tables.append(model._meta.db_table)
+            tables.append(model._get_raw_db_table())
     # Create CHPolicy
     changed = False
     for t in tables:
         if t not in seen:
             CHPolicy(table=t, is_active=False, ttl=0).save()
             changed = True
+    return changed
+
+
+DAY = 24 * 3600
+
+
+def ensure_ch_policies(connect: Optional[ClickhouseClient] = None) -> bool:
+    from noc.main.models.chpolicy import CHPolicy
+
+    changed = False
+    policy_ttl: Dict[str, int] = {
+        p.table: p.ttl * DAY for p in CHPolicy.objects.filter(is_active=True)
+    }
+    if not policy_ttl:
+        return changed
+    for ti in TableInfo.iter_for_tables(policy_ttl):
+        ttl = policy_ttl.get(ti.name) or 0
+        if ttl == ti.table_ttl:
+            continue  # Already applied
+        if ttl:
+            logger.info("[%s] setting ttl to %s", ti.name, ttl)
+            sql = f"ALTER TABLE {ti.name} MODIFY TTL ts + INTERVAL {ttl} SECOND"
+        else:
+            logger.info("[%s] disabling ttl", ti.name)
+            sql = f"ALTER TABLE {ti.name} REMOVE TTL"
+        if connect is None:
+            connect = connection()
+        connect.execute(sql)
     return changed
