@@ -236,17 +236,8 @@ Example tables for configuration:
 
 Set TTL as desired, for example, use `30` for `raw_mac`.
 
-**Usage Example**
+To apply policy run:
 
-To view the amount of data that will be removed, use the following command:
-
-```
-./noc ch-policy apply --host 0.0.0.0
-```
-
-
-To delete the data, use the `--approve` flag:
-
-```
-noc ch-policy apply --host 0.0.0.0 --approve
+``` sh
+./noc migrate-ch
 ```
