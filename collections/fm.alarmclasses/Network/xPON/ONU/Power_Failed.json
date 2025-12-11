@@ -3,7 +3,7 @@
     "$collection": "fm.alarmclasses",
     "uuid": "fe63a499-afd5-475a-b10e-4854daba20de",
     "is_unique": true,
-    "reference": ["onu", "interface"],
+    "reference": ["onu"],
     "is_ephemeral": false,
     "user_clearable": true,
     "vars": [
@@ -16,8 +16,8 @@
             "description": "ONU MAC/Serial"
         }
     ],
-    "subject_template": "ONU {{onu}} power failed on {{interface}}",
-    "body_template": "ONU {{onu}} power failed on {{interface}}",
+    "subject_template": "ONU {{onu}} power failed{% if interface %} on {{interface}}{% endif %}",
+    "body_template": "ONU {{onu}} power failed{% if interface %} on {{interface}}{% endif %}",
     "symptoms": "Subscriber connection loss",
     "probable_causes": "",
     "recommended_actions": "",

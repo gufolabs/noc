@@ -9,7 +9,7 @@
             "name": "interface",
             "description": "xPON interface",
             "type": "interface_name",
-            "required": true
+            "required": false
         },
         {
             "name": "onu",
@@ -18,8 +18,8 @@
             "required": true
         }
     ],
-    "subject_template": "ONU {{onu}} power failed on {{interface}}",
-    "body_template": "ONU {{onu}} power failed on {{interface}}",
+    "subject_template": "ONU {{onu}} power failed{% if interface %} on {{interface}}{% endif %}",
+    "body_template": "ONU {{onu}} power failed{% if interface %} on {{interface}}{% endif %}",
     "symptoms": "",
     "probable_causes": "",
     "recommended_actions": "",
