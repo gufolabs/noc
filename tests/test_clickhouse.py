@@ -14,7 +14,7 @@ import pytest
 # NOC modules
 from noc.core.clickhouse.model import Model, NestedModel
 from noc.core.clickhouse.fields import StringField, Int8Field, NestedField, DateField
-from noc.core.clickhouse.parser import parse, TableInfo
+from noc.core.clickhouse.info import TableInfo
 
 
 class Pair(NestedModel):
@@ -71,13 +71,18 @@ PARSE_SQL2 = "CREATE TABLE noc.raw_syslog (`date` Date, `ts` DateTime, `managed_
 
 
 @pytest.mark.parametrize(
-    ("sql", "info"), [(PARSE_SQL1, TableInfo(table_ttl=365 * 24 * 3600)), (PARSE_SQL2, TableInfo())]
+    ("sql", "info"),
+    [
+        (PARSE_SQL1, TableInfo(name="raw_syslog", table_ttl=365 * 24 * 3600)),
+        (PARSE_SQL2, TableInfo(name="raw_syslog")),
+    ],
 )
-def test_parse(sql: str, info: TableInfo) -> None:
-    r = parse(sql)
+def test_tableinfo_from_sql(sql: str, info: TableInfo) -> None:
+    r = TableInfo.from_sql(sql)
     assert r == info
 
 
-def test_table_info_default() -> None:
-    ti = TableInfo.default()
-    assert ti.table_ttl is None
+@pytest.mark.parametrize("sql", ["REATE TABLE", "CREATE TABLE xxx (zzzz"])
+def test_tableinfo_from_sql_error(sql: str) -> None:
+    with pytest.raises(ValueError):
+        TableInfo.from_sql(sql)
