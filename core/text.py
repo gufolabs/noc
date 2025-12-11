@@ -767,7 +767,7 @@ def find_balanced(s: str, /, start: int = 0, closing: str = ")") -> int:
     """
     n = 1
     opening = s[start]
-    for i in range(start+1, len(s)):
+    for i in range(start + 1, len(s)):
         match s[i]:
             case c if c == opening:
                 n += 1
