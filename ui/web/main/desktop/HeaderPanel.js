@@ -30,6 +30,7 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
   header: false,
   app: null,
   bodyPadding: 4,
+  height: 25,
   //
   initComponent: function(){
     var me = this;
@@ -102,59 +103,10 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
         // NOC logo
         {
           xtype: "component",
-          html: "<i class='gf brand-noc-s gf-24px'></i>",
-          style: {
-            cursor: "pointer",
-            paddingTop: "4px",
-          },
-          listeners: {
-            el: {
-              scope: me,
-              click: me.openHome,
-            },
-          },
-        },
-        {
-          xtype: "image",
-          src: "/ui/web/img/logo_white.svg",
-          style: {
-            width: "24px",
-            height: "24px",
-            cursor: "pointer",
-          },
-          listeners: {
-            el: {
-              scope: me,
-              click: me.openHome,
-            },
-          },
-        },
-        // Bold NOC|
-        {
-          xtype: "container",
-          html: "&nbsp;" + NOC.settings.brand + "|",
-          style: {
-            fontSize: "18px",
-            fontWeight: "bold",
-            cursor: "pointer",
-          },
-          border: false,
-          listeners: {
-            el: {
-              scope: me,
-              click: me.openHome,
-            },
-          },
-        },
-        // Installation name
-        {
-          xtype: "container",
-          html: NOC.settings.installation_name,
-          style: {
-            fontSize: "18px",
-            cursor: "pointer",
-          },
-          border: false,
+          html: "<div style='display: flex;align-items: center;'>"
+            + "<i class= 'gf brand-noc-s' style='--gf-stencil-size: 24px; line-height: 1;'></i> "
+            + "<snap style='font-weight: bold; font-size: 18px; cursor: pointer;padding-left: 4px;'>" + NOC.settings.brand + "|</snap>"
+            + "<snap style='font-size: 18px; cursor: pointer;'>" + NOC.settings.installation_name + "</snap></div>",
           listeners: {
             el: {
               scope: me,
@@ -246,8 +198,8 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
   // Toggle full-screen mode
   onFullscreenToggle: function(){
     if(document.fullscreenElement){
-      this.fullscreenMenu.setText(__("Enter Full Screen")); 
-      document.exitFullscreen(); 
+      this.fullscreenMenu.setText(__("Enter Full Screen"));
+      document.exitFullscreen();
     } else{
       let element = document.documentElement;
       element.requestFullscreen({navigationUI: "hide"});
