@@ -9,7 +9,7 @@
             "name": "interface",
             "description": "xPON interface",
             "type": "interface_name",
-            "required": fale
+            "required": false
         },
         {
             "name": "onu",
