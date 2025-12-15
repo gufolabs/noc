@@ -30,7 +30,6 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
   header: false,
   app: null,
   bodyPadding: 4,
-  height: 25,
   //
   initComponent: function(){
     var me = this;
