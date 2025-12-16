@@ -7,7 +7,7 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "%EPON-ONUAUTHEN: ONU (?P<mac>\\S+) is authenticated on (?P<interface>EPON\\S+)\\.",
+    "message_rx": "%EPON-ONUAUTHEN: ONU (?P<onu>\\S+) is authenticated on (?P<interface>EPON\\S+)\\.",
     "profiles": ["BDCOM.xPON"],
     "sources": ["syslog"],
     "test_cases": [

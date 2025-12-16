@@ -7,7 +7,7 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "%EPON-ONUDEREG: ONU (?P<mac>\\S+) is deregistered on (?P<interface>EPON\\S+)\\.",
+    "message_rx": "%EPON-ONUDEREG: ONU (?P<onu>\\S+) is deregistered on (?P<interface>EPON\\S+)\\.",
     "profiles": ["BDCOM.xPON"],
     "sources": ["syslog"],
     "test_cases": [

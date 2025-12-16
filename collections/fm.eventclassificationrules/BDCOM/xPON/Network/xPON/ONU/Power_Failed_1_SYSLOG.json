@@ -7,7 +7,7 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "%GPON-ONUDGI: ONU (?P<vendor>\\S+):(?P<mac>\\S+) Dying Gasp on (?P<interface>GPON\\S+)\\.",
+    "message_rx": "%GPON-ONUDGI: ONU (?P<onu>\\S+) Dying Gasp on (?P<interface>GPON\\S+)\\.",
     "profiles": ["BDCOM.xPON"],
     "sources": ["syslog"],
     "test_cases": [
