@@ -103,7 +103,7 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
         {
           xtype: "component",
           html: "<div class='gf-map' style='display: flex;align-items: center; font-size: 24px; cursor: pointer; padding-left: 8px'>"
-            + "<i class= 'gf brand-noc-s' style='--gf-size: 1.2em'></i> "
+            + "<i class= 'gf gf-larger brand-noc-s'></i> "
             + "<snap style='font-weight: bold; padding-left: 8px;'>" + NOC.settings.brand + ": </snap>"
             + "<snap>" + NOC.settings.installation_name + "</snap>"
             + "</div>",
