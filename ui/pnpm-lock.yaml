@@ -5,7 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  dompurify: ^3.3.1
   js-yaml: 4.1.1
 
 importers:
@@ -13,8 +12,8 @@ importers:
   .:
     dependencies:
       '@gufo-labs/font':
-        specifier: ^0.0.2
-        version: 0.0.2
+        specifier: ^0.0.3
+        version: 0.0.3
       color-input:
         specifier: github:argyleink/css-color-component#cdn-latest
         version: hdr-color-input@https://codeload.github.com/argyleink/css-color-component/tar.gz/63eccbd78fd8051458bcdcd7e101580483e2df7d
@@ -297,8 +296,8 @@ packages:
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@gufo-labs/font@0.0.2':
-    resolution: {integrity: sha512-64YbpQpo2s/WTFu2q0iHJbMcGIBUQXxPDOUcFeRqu+hovY+4s0gcQqUrAlNAHr2ppsCzhYkmUsKRx2wG/s0RBQ==}
+  '@gufo-labs/font@0.0.3':
+    resolution: {integrity: sha512-uPxjuYmxUaDn3EvQXFJpl2FP+Esipl7sf+pGJ8sDmuuXG7c0Zd+Lmturz5Ri2qfLWsumYuYWLG4lyoBqAecwbw==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -777,6 +776,9 @@ packages:
 
   devlop@1.1.0:
     resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
+
+  dompurify@3.2.7:
+    resolution: {integrity: sha512-WhL/YuveyGXJaerVlMYGWhvQswa7myDG17P7Vu65EWC05o8vfeNbvNf4d/BOvH99+ZW+LlQsc1GDKMa1vNK6dw==}
 
   dompurify@3.3.1:
     resolution: {integrity: sha512-qkdCKzLNtrgPFP1Vo+98FRzJnBRGe4ffyCea9IwHB1fyxPOeNTHpLKYGd4Uk9xvNoH0ZoOjwZxNptyMwqrId1Q==}
@@ -1801,7 +1803,7 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
-  '@gufo-labs/font@0.0.2': {}
+  '@gufo-labs/font@0.0.3': {}
 
   '@humanfs/core@0.19.1': {}
 
@@ -2288,6 +2290,10 @@ snapshots:
   devlop@1.1.0:
     dependencies:
       dequal: 2.0.3
+
+  dompurify@3.2.7:
+    optionalDependencies:
+      '@types/trusted-types': 2.0.7
 
   dompurify@3.3.1:
     optionalDependencies:
@@ -2863,7 +2869,7 @@ snapshots:
 
   monaco-editor@0.55.1:
     dependencies:
-      dompurify: 3.3.1
+      dompurify: 3.2.7
       marked: 14.0.0
 
   ms@2.0.0: {}
