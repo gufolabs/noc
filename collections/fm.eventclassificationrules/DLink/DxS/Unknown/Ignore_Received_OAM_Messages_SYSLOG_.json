@@ -1,13 +1,13 @@
 {
-    "name": "DLink | DxS | Network | OAM | Monitoring Error (SYSLOG)",
+    "name": "DLink | DxS | Unknown | Ignore_Received_OAM_Messages (SYSLOG)",
     "$collection": "fm.eventclassificationrules",
-    "uuid": "02b653b2-f768-4da5-bb9b-e1cd78e47e9d",
+    "uuid": "6bf45c76-f24b-4ecd-bd51-d944162c9db3",
     "description": "WARN: Errored symbol period event received (Port 1)",
-    "event_class__name": "Network | OAM | Monitoring Error",
+    "event_class__name": "Unknown | Ignore",
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "WARN: Errored (?P<error>(?:symbol|frame)(?: (?:period|seconds summary))?) event received\\s*\\(Port (?P<interface>\\d+\\S*)\\)",
+    "message_rx": "WARN: Errored (?:symbol|frame) (?:period|seconds summary) event received\\s*\\(Port \\d+\\)",
     "profiles": ["DLink.DxS"],
     "sources": ["syslog"],
     "test_cases": [
