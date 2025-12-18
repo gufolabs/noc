@@ -16,12 +16,10 @@
     "node": "^22.0.0"
   },
   "overrides": {
-    "js-yaml": "4.1.1",
-    "dompurify": "^3.3.1"
+    "js-yaml": "4.1.1"
   },
   "pnpm": {
     "overrides": {
-      "dompurify": "^3.3.1",
       "js-yaml": "4.1.1"
     }
   },
@@ -75,7 +73,7 @@
     "leaflet": "^1.9.4",
     "micromark": "^4.0.2",
     "micromark-extension-gfm": "^3.0.0",
-    "monaco-editor": "^0.54.0",
+    "monaco-editor": "^0.55.1",
     "ymaps": "^0.2.1"
   }
 }
