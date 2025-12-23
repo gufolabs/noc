@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // main.glyph application
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2020 The NOC Project
+// Copyright (C) 2007-2025 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.main.glyph.Application");
@@ -11,21 +11,12 @@ Ext.define("NOC.main.glyph.Application", {
   requires: [
     "NOC.core.JSONPreview",
     "NOC.main.glyph.Model",
-    "NOC.main.font.LookupField",
   ],
   model: "NOC.main.glyph.Model",
   search: true,
 
   initComponent: function(){
     var me = this;
-
-    me.jsonPanel = Ext.create("NOC.core.JSONPreview", {
-      app: me,
-      restUrl: "/main/font/{0}/json/",
-      previewName: "Font: {0}",
-    });
-
-    me.ITEM_JSON = me.registerItem(me.jsonPanel);
 
     Ext.apply(me, {
       columns: [
@@ -35,18 +26,16 @@ Ext.define("NOC.main.glyph.Application", {
           width: 200,
         },
         {
-          text: __("Font"),
-          dataIndex: "font",
-          renderer: NOC.render.Lookup("font"),
+          text: __("Code"),
+          dataIndex: "code",
           width: 100,
+          renderer: (value) => `U+${value.toString(16).toUpperCase()}`,
         },
         {
           text: __("Glyph"),
-          dataIndex: "code",
-          width: 100,
-          renderer: function(value, meta, record){
-            return "<span style='font-family: " + record.get("font__label") + "'>&#" + value + ";</span>";
-          },
+          dataIndex: "name",
+          flex: 1,
+          renderer: (value, meta, record) => `<i class="gf ${value}"></i>`,
         },
       ],
 
@@ -56,20 +45,13 @@ Ext.define("NOC.main.glyph.Application", {
           xtype: "textfield",
           fieldLabel: __("Name"),
           allowBlank: false,
-          uiStyle: "large",
+          uiStyle: "medium",
         },
         {
           name: "uuid",
           xtype: "displayfield",
           fieldLabel: __("UUID"),
           allowBlank: true,
-        },
-        {
-          itemId: "font",
-          name: "font",
-          xtype: "main.font.LookupField",
-          fieldLabel: __("Font"),
-          allowBlank: false,
         },
         {
           name: "code",
@@ -93,39 +75,23 @@ Ext.define("NOC.main.glyph.Application", {
               field.up().queryById("preview").setValue(newValue);
             },
           },
-          uiStyle: "medium",
+          uiStyle: "small",
         },
         {
           itemId: "preview",
           xtype: "displayfield",
-          uiStyle: "small",
           fieldLabel: __("Preview"),
-          renderer: function(value, field){
-            var fontName = field.up().queryById("font").getRawValue();
-            if(fontName){
-              return "<span style='font-family: " + fontName + ";'>&#" + value + "</span>";
+          renderer: (value, field) => {
+            if(value){
+              let name = field.up().getForm().findField("name")?.getValue();
+              return `<i class="gf gf-3x ${name}"></i>`
+            } else{
+              return ""
             }
           },
         },
       ],
-
-      formToolbar: [
-        {
-          text: __("JSON"),
-          glyph: NOC.glyph.file,
-          tooltip: __("Show JSON"),
-          hasAccess: NOC.hasPermission("read"),
-          scope: me,
-          handler: me.onJSON,
-        },
-      ],
     });
     me.callParent();
-  },
-
-  onJSON: function(){
-    var me = this;
-    me.showItem(me.ITEM_JSON);
-    me.jsonPanel.preview(me.currentRecord, me.ITEM_FORM);
   },
 });
