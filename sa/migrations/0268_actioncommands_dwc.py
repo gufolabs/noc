@@ -28,7 +28,7 @@ class Migration(BaseMigration):
             r.append(
                 UpdateMany(
                     {"_id": {"$in": items}},
-                    {"$set": {"disable_when_change": "N" if doc["_id"] else "N"}},
+                    {"$set": {"disable_when_change": "N"}},
                 )
             )
         if r:
