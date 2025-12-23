@@ -100,6 +100,7 @@ export class DevBuilder extends BaseBuilder{
             },
           },
         ],
+        glyphTransformer: this.options.glyphTransformer,
       }),
       languagePlugin = new LanguagePlugin({
         debug: this.options.pluginDebug,

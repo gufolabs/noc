@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       '@gufo-labs/font':
-        specifier: ^0.0.3
-        version: 0.0.3
+        specifier: ^0.0.4
+        version: 0.0.4
       color-input:
         specifier: github:argyleink/css-color-component#cdn-latest
         version: hdr-color-input@https://codeload.github.com/argyleink/css-color-component/tar.gz/63eccbd78fd8051458bcdcd7e101580483e2df7d
@@ -296,8 +296,8 @@ packages:
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@gufo-labs/font@0.0.3':
-    resolution: {integrity: sha512-uPxjuYmxUaDn3EvQXFJpl2FP+Esipl7sf+pGJ8sDmuuXG7c0Zd+Lmturz5Ri2qfLWsumYuYWLG4lyoBqAecwbw==}
+  '@gufo-labs/font@0.0.4':
+    resolution: {integrity: sha512-dyhBKISwZ9Rsdr8hfWcAGa02jK2h+IVPzS5S0dSUOwCKGStof8HYCUhRZvzNj5Lb+7GR2KCTn8jzb0xpipNScw==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -1803,7 +1803,7 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
-  '@gufo-labs/font@0.0.3': {}
+  '@gufo-labs/font@0.0.4': {}
 
   '@humanfs/core@0.19.1': {}
 

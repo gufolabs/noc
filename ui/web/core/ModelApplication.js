@@ -116,7 +116,7 @@ Ext.define("NOC.core.ModelApplication", {
     me.callParent();
     me.currentRecord = null;
     if(me.noc.cmd && me.noc.cmd.callback){
-      me.noc.cmd.callback(); 
+      me.noc.cmd.callback();
     }
     // Process commands
     switch(me.getCmd()){
@@ -430,7 +430,7 @@ Ext.define("NOC.core.ModelApplication", {
         c.listeners = {};
       }
       c.listeners.afterrender = function(){
-        if(Ext.isEmpty(this.tooltip) && !Ext.isEmpty(this.text)){ 
+        if(Ext.isEmpty(this.tooltip) && !Ext.isEmpty(this.text)){
           Ext.create("Ext.ToolTip", {
             target: this.getEl(),
             anchor: "top",
@@ -520,7 +520,7 @@ Ext.define("NOC.core.ModelApplication", {
       itemId: "save",
       text: __("Save"),
       tooltip: __("Save changes"),
-      glyph: NOC.glyph.save,
+      glyph: NOC.glyph.semantic.ACTION_ADD,
       formBind: true,
       disabled: true,
       scope: me,
@@ -827,7 +827,7 @@ Ext.define("NOC.core.ModelApplication", {
           // clean dirty for reload browser
           this.form.reset();
         } else{
-          me.setHistoryHash(me.currentRecord.get(me.idField)); 
+          me.setHistoryHash(me.currentRecord.get(me.idField));
         }
         this.query("inlinegrid").forEach(function(grid){grid.setDisabled(false)});
         Ext.each(me.inlineStores, function(store){ store.setParent(me.currentRecord.get(me.idField))});
