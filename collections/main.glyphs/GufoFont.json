@@ -1,0 +1,1591 @@
+{
+  "$type": "bundle",
+  "$collection": "sa.actioncommands",
+  "items": [
+    {
+      "name": "exclamation",
+      "uuid": "48c52208-71da-5efd-986e-2a91e367870f",
+      "code": 33
+    },
+    {
+      "name": "comma",
+      "uuid": "37d41a0b-3bd0-5ea6-82d9-713966e50951",
+      "code": 44
+    },
+    {
+      "name": "full-stop",
+      "uuid": "f84be6f7-7b52-5239-987f-24a54d4904c7",
+      "code": 46
+    },
+    {
+      "name": "zero",
+      "uuid": "cb6f5d22-ce84-525c-9f11-a583c5e815a2",
+      "code": 48
+    },
+    {
+      "name": "one",
+      "uuid": "f414747a-a82a-50ad-a2cc-da19e2922866",
+      "code": 49
+    },
+    {
+      "name": "two",
+      "uuid": "3232a4f6-b5af-5e03-8e72-eabc8842e729",
+      "code": 50
+    },
+    {
+      "name": "three",
+      "uuid": "a9e6dddd-3b6d-5b49-b590-3e39f3dd1d2b",
+      "code": 51
+    },
+    {
+      "name": "four",
+      "uuid": "94df1cae-9fc8-5f53-88ea-2d18bd6a6954",
+      "code": 52
+    },
+    {
+      "name": "five",
+      "uuid": "c69cf498-31c0-5a11-a563-bcd68092d4ee",
+      "code": 53
+    },
+    {
+      "name": "six",
+      "uuid": "80be6b7b-1176-5866-8ccc-fb6439588991",
+      "code": 54
+    },
+    {
+      "name": "seven",
+      "uuid": "0ee5e5e7-ff49-5e34-8759-e22f03fc8c3f",
+      "code": 55
+    },
+    {
+      "name": "eight",
+      "uuid": "a679937e-2032-5d05-96c5-efc94cf91180",
+      "code": 56
+    },
+    {
+      "name": "nine",
+      "uuid": "07fa10b8-3bc7-5070-8764-1156d5e0c927",
+      "code": 57
+    },
+    {
+      "name": "question",
+      "uuid": "bde3f9da-a37b-5f61-b12b-ee295057ecc8",
+      "code": 63
+    },
+    {
+      "name": "at",
+      "uuid": "4a81381f-288d-52cf-b458-e3226a20b916",
+      "code": 64
+    },
+    {
+      "name": "latin-capital-a",
+      "uuid": "481725c0-f49d-50d5-b2ca-8cd9e51626cb",
+      "code": 65
+    },
+    {
+      "name": "latin-capital-b",
+      "uuid": "6a27a21d-1e57-5e41-ab33-3809839ab914",
+      "code": 66
+    },
+    {
+      "name": "latin-capital-c",
+      "uuid": "32d9bd8d-75d6-525e-90db-a492d86f1a20",
+      "code": 67
+    },
+    {
+      "name": "latin-capital-d",
+      "uuid": "74ac6791-a94b-5d39-a735-38d8c9cf02d7",
+      "code": 68
+    },
+    {
+      "name": "latin-capital-e",
+      "uuid": "039eab89-7f47-59d8-aa2c-06be3a5ba9c4",
+      "code": 69
+    },
+    {
+      "name": "latin-capital-f",
+      "uuid": "8b8acf5e-29c6-53f0-9101-8729f5dbc575",
+      "code": 70
+    },
+    {
+      "name": "latin-capital-g",
+      "uuid": "17610361-50c0-5309-ac50-1c5fc7af9375",
+      "code": 71
+    },
+    {
+      "name": "latin-capital-h",
+      "uuid": "f16218d9-19b9-5b41-a2a7-482b67a29652",
+      "code": 72
+    },
+    {
+      "name": "latin-capital-i",
+      "uuid": "0d93722f-76fe-52d9-b880-2b0afe165def",
+      "code": 73
+    },
+    {
+      "name": "latin-capital-j",
+      "uuid": "aaf086cc-cf9d-5fca-b7b2-229c5191c2c1",
+      "code": 74
+    },
+    {
+      "name": "latin-capital-k",
+      "uuid": "e1a88299-7a4e-5a81-a694-9ce74e911184",
+      "code": 75
+    },
+    {
+      "name": "latin-capital-l",
+      "uuid": "04eafc06-a8c4-50a0-836d-b6ac885aa784",
+      "code": 76
+    },
+    {
+      "name": "latin-capital-m",
+      "uuid": "f94e9c42-e9ee-5d97-b839-b6665d192d20",
+      "code": 77
+    },
+    {
+      "name": "latin-capital-n",
+      "uuid": "a5318173-870e-594a-825d-ef32de4a8b5b",
+      "code": 78
+    },
+    {
+      "name": "latin-capital-o",
+      "uuid": "4f4e5348-d49a-5068-a4fe-0869bbdbc417",
+      "code": 79
+    },
+    {
+      "name": "latin-capital-p",
+      "uuid": "9dacd1e3-47cc-55ce-9329-53b4311c9be8",
+      "code": 80
+    },
+    {
+      "name": "latin-capital-q",
+      "uuid": "18993af0-9484-5ccd-b940-7cfd36ace040",
+      "code": 81
+    },
+    {
+      "name": "latin-capital-r",
+      "uuid": "1308b4d1-b944-58ea-80d3-3b19fb4eb37f",
+      "code": 82
+    },
+    {
+      "name": "latin-capital-s",
+      "uuid": "6896b109-f476-5b8d-8ea5-5879063755c9",
+      "code": 83
+    },
+    {
+      "name": "latin-capital-t",
+      "uuid": "f5533b1e-3894-5103-a077-736610fc80e7",
+      "code": 84
+    },
+    {
+      "name": "latin-capital-u",
+      "uuid": "260feb34-4ce7-57ad-b618-9a1e7877aa63",
+      "code": 85
+    },
+    {
+      "name": "latin-capital-v",
+      "uuid": "8316f923-0062-5bcc-8ef8-011331adb220",
+      "code": 86
+    },
+    {
+      "name": "latin-capital-w",
+      "uuid": "04c6cbc3-adc3-577c-aa25-2af40eb24028",
+      "code": 87
+    },
+    {
+      "name": "latin-capital-x",
+      "uuid": "70b6aea2-338b-54ca-ad6a-73c968b5dc15",
+      "code": 88
+    },
+    {
+      "name": "latin-capital-y",
+      "uuid": "0df5cab3-5c5f-575e-a9b7-7de0857ec8d6",
+      "code": 89
+    },
+    {
+      "name": "latin-capital-z",
+      "uuid": "77ea35e8-b5e9-5190-9295-fc71af669163",
+      "code": 90
+    },
+    {
+      "name": "copyright",
+      "uuid": "f1e12a6f-875e-56e8-9d5a-0d35d550e710",
+      "code": 169
+    },
+    {
+      "name": "cyrillic-capital-a",
+      "uuid": "d782c738-5ce8-545e-83ed-fcf43c7b83a9",
+      "code": 1040
+    },
+    {
+      "name": "cyrillic-capital-be",
+      "uuid": "f29c8688-f394-5bc1-94c0-0344a35cb515",
+      "code": 1041
+    },
+    {
+      "name": "cyrillic-capital-ve",
+      "uuid": "d75ca9f6-e2dd-5b61-bb15-600dee12ce2f",
+      "code": 1042
+    },
+    {
+      "name": "cyrillic-capital-ghe",
+      "uuid": "1dbfcc17-cf97-5df2-94db-4334c9a3ba78",
+      "code": 1043
+    },
+    {
+      "name": "cyrillic-capital-de",
+      "uuid": "ed50aa2e-97da-52bb-bcf7-6f023443d121",
+      "code": 1044
+    },
+    {
+      "name": "cyrillic-capital-ie",
+      "uuid": "0376c759-09f6-536a-b914-19c025724cb1",
+      "code": 1045
+    },
+    {
+      "name": "cyrillic-capital-zhe",
+      "uuid": "81521752-7b18-591f-acc4-2e683a7f1860",
+      "code": 1046
+    },
+    {
+      "name": "cyrillic-capital-ze",
+      "uuid": "8282661a-2802-5f61-8648-074939ff397a",
+      "code": 1047
+    },
+    {
+      "name": "cyrillic-capital-ai",
+      "uuid": "ca355282-f43d-5c2b-98ff-c20c04e0a368",
+      "code": 1048
+    },
+    {
+      "name": "cyrillic-capital-short-i",
+      "uuid": "d638b7be-4a90-5d88-92ab-6ed986f42438",
+      "code": 1049
+    },
+    {
+      "name": "cyrillic-capital-ka",
+      "uuid": "9c1a4208-316b-50da-ad79-adcc16812ed7",
+      "code": 1050
+    },
+    {
+      "name": "cyrillic-capital-el",
+      "uuid": "270d359a-535a-5df6-a318-0d443bd82a91",
+      "code": 1051
+    },
+    {
+      "name": "cyrillic-capital-em",
+      "uuid": "f282ccfb-1577-5fdd-a261-c7943685c7c3",
+      "code": 1052
+    },
+    {
+      "name": "cyrillic-capital-en",
+      "uuid": "b3c80e31-db32-5aef-b81a-929f4e09c32f",
+      "code": 1053
+    },
+    {
+      "name": "cyrillic-capital-o",
+      "uuid": "06df6f4d-50db-5869-ae98-4780c838fc0b",
+      "code": 1054
+    },
+    {
+      "name": "cyrillic-capital-pe",
+      "uuid": "ad6f1f18-9e07-5028-a99a-268808e28423",
+      "code": 1055
+    },
+    {
+      "name": "cyrillic-capital-er",
+      "uuid": "c84e015e-3fd9-51b4-bee2-82e2060b1755",
+      "code": 1056
+    },
+    {
+      "name": "cyrillic-capital-es",
+      "uuid": "066377d0-a658-54a7-8cb9-5ca1a09d723b",
+      "code": 1057
+    },
+    {
+      "name": "cyrillic-capital-te",
+      "uuid": "b3d91aae-0c53-5ee8-9588-d44d1d8f3eef",
+      "code": 1058
+    },
+    {
+      "name": "cyrillic-capital-u",
+      "uuid": "8c210a8d-ff6d-5986-b4d1-884a97877eaf",
+      "code": 1059
+    },
+    {
+      "name": "cyrillic-capital-ef",
+      "uuid": "891fb657-4216-5c80-a02b-663c807969e9",
+      "code": 1060
+    },
+    {
+      "name": "cyrillic-capital-ha",
+      "uuid": "0612f1e4-bd1a-5194-8da3-15bfd419f7cb",
+      "code": 1061
+    },
+    {
+      "name": "cyrillic-capital-tse",
+      "uuid": "a53ea185-87fb-5a15-89c4-55e9a0fece8f",
+      "code": 1062
+    },
+    {
+      "name": "cyrillic-capital-che",
+      "uuid": "2786d6b9-3aa0-5e0f-bc4e-27288d6a2e75",
+      "code": 1063
+    },
+    {
+      "name": "cyrillic-capital-sha",
+      "uuid": "13af699c-79ba-54f9-b260-17710335de24",
+      "code": 1064
+    },
+    {
+      "name": "cyrillic-capital-shcha",
+      "uuid": "c803854c-5e80-5244-9372-728739f88a7d",
+      "code": 1065
+    },
+    {
+      "name": "cyrillic-capital-hard-sign",
+      "uuid": "8643e0e0-8aae-5d15-b3ea-08ae00fd3dd1",
+      "code": 1066
+    },
+    {
+      "name": "cyrillic-capital-yeru",
+      "uuid": "d40a6910-df85-5017-842f-dc2039f7db82",
+      "code": 1067
+    },
+    {
+      "name": "cyrillic-capital-soft-sign",
+      "uuid": "e8f97713-35b1-5805-b9f0-772921b6f21e",
+      "code": 1068
+    },
+    {
+      "name": "cyrillic-capital-e",
+      "uuid": "88ac31fd-e13e-550b-bbb8-63f3592cc350",
+      "code": 1069
+    },
+    {
+      "name": "cyrillic-capital-yu",
+      "uuid": "2f33742e-b8cf-5fdc-9418-22e82dca092b",
+      "code": 1070
+    },
+    {
+      "name": "cyrillic-capital-ya",
+      "uuid": "32a345e2-85bd-5bdf-a828-f58edd9ae463",
+      "code": 1071
+    },
+    {
+      "name": "ohm-sign",
+      "uuid": "35cb77ce-1de8-52b0-bcac-5a0979f6d219",
+      "code": 8486
+    },
+    {
+      "name": "brand-noc-s",
+      "uuid": "ebea3b63-851d-5f0a-a3b7-ed4abb62239f",
+      "code": 57345
+    },
+    {
+      "name": "brand-gufolabs-s",
+      "uuid": "f4425920-3140-5c86-b70a-502ab3cd27b6",
+      "code": 57347
+    },
+    {
+      "name": "brand-sova-s",
+      "uuid": "e12a2e92-3180-5d93-a7d8-af7dc92d8f9a",
+      "code": 57349
+    },
+    {
+      "name": "circle",
+      "uuid": "f9348190-5916-5d8f-be2a-cb25a889bb5a",
+      "code": 57984
+    },
+    {
+      "name": "circle-s",
+      "uuid": "4f2c2226-ea13-549b-b69e-a22bfc8efe3b",
+      "code": 57985
+    },
+    {
+      "name": "circle-o",
+      "uuid": "4e745831-1b3d-58b0-b057-05c3c9d05cf6",
+      "code": 57986
+    },
+    {
+      "name": "rectangle",
+      "uuid": "270eaf49-295b-5ebb-909d-2d8d4b0e4e78",
+      "code": 57987
+    },
+    {
+      "name": "rectangle-s",
+      "uuid": "1cb96034-f786-5e91-99e0-57adf31120a7",
+      "code": 57988
+    },
+    {
+      "name": "rectangle-o",
+      "uuid": "eda339e3-fab6-5c6f-870d-49178fe84bd5",
+      "code": 57989
+    },
+    {
+      "name": "circle-small",
+      "uuid": "8f360cd6-b3c4-5407-8bce-4842335389c2",
+      "code": 57990
+    },
+    {
+      "name": "circle-small-s",
+      "uuid": "a9bbfd28-09e0-5814-b073-0955662a9be3",
+      "code": 57991
+    },
+    {
+      "name": "circle-small-o",
+      "uuid": "2edb9f44-f707-56f8-9f7f-6c64984cd818",
+      "code": 57992
+    },
+    {
+      "name": "rectangle-small",
+      "uuid": "71201930-7bed-59b2-b5e5-f172f819acaa",
+      "code": 57993
+    },
+    {
+      "name": "rectangle-small-s",
+      "uuid": "9d28eb9c-d3f3-59f4-926f-025ff2a9b3fd",
+      "code": 57994
+    },
+    {
+      "name": "rectangle-small-o",
+      "uuid": "7daa7a1d-214c-5e3e-bb66-9649b0530557",
+      "code": 57995
+    },
+    {
+      "name": "star",
+      "uuid": "36bc1e93-6434-55b5-a162-0508046e952b",
+      "code": 57996
+    },
+    {
+      "name": "star-s",
+      "uuid": "1cb2dd29-240e-55b5-8bcb-5e2936fba7af",
+      "code": 57997
+    },
+    {
+      "name": "star-o",
+      "uuid": "6432f8e2-3332-5db8-badf-f6dcca84070e",
+      "code": 57998
+    },
+    {
+      "name": "star-small",
+      "uuid": "7b55de04-2ff6-54f6-aab0-0f2edf8f71b3",
+      "code": 57999
+    },
+    {
+      "name": "star-small-s",
+      "uuid": "e1b68ac5-25c3-5ede-94b7-e1c26e6a1c60",
+      "code": 58000
+    },
+    {
+      "name": "star-small-o",
+      "uuid": "f02c405f-252a-536b-ab9c-4d15f42b682b",
+      "code": 58001
+    },
+    {
+      "name": "ban-o",
+      "uuid": "2f52df80-fa5e-59c7-b845-560dd975ed39",
+      "code": 58002
+    },
+    {
+      "name": "triangle",
+      "uuid": "891c849d-6577-50ba-b3dc-b2e7aaec0cc0",
+      "code": 58003
+    },
+    {
+      "name": "triangle-s",
+      "uuid": "f14be965-9212-5ce9-bddd-9fa70ad24cbe",
+      "code": 58004
+    },
+    {
+      "name": "triangle-o",
+      "uuid": "22d72878-87c3-5230-ba40-aa8def3fff3c",
+      "code": 58005
+    },
+    {
+      "name": "triangle-small",
+      "uuid": "da859440-c2c1-5dd0-b804-4120c3f8001a",
+      "code": 58006
+    },
+    {
+      "name": "triangle-small-s",
+      "uuid": "18af36a5-15b2-5c97-8007-dfa9e0e515f8",
+      "code": 58007
+    },
+    {
+      "name": "triangle-small-o",
+      "uuid": "234b5520-d735-53d3-aecd-c6aebaebd767",
+      "code": 58008
+    },
+    {
+      "name": "copy-s",
+      "uuid": "6c6269a3-7e47-5b6c-be64-2f801a61e11d",
+      "code": 58009
+    },
+    {
+      "name": "copy-o",
+      "uuid": "d6b83be2-e58d-5ef9-a98d-4dadbec02e9a",
+      "code": 58010
+    },
+    {
+      "name": "play",
+      "uuid": "fd13152e-0114-5dcf-9664-d464d09fbccd",
+      "code": 58011
+    },
+    {
+      "name": "play-s",
+      "uuid": "cb6f7a26-b4c4-5afe-9b4a-6fcee7d1b906",
+      "code": 58012
+    },
+    {
+      "name": "play-o",
+      "uuid": "b9ee1358-6491-561d-8927-2fec277e8501",
+      "code": 58013
+    },
+    {
+      "name": "pause",
+      "uuid": "e71ee59f-6c36-5ca2-8764-036836487d1b",
+      "code": 58014
+    },
+    {
+      "name": "pause-s",
+      "uuid": "1c33b8b1-5834-5122-8f40-31ccb5992e83",
+      "code": 58015
+    },
+    {
+      "name": "pause-o",
+      "uuid": "c3bad2c8-c334-5674-a7d3-348dc24525ef",
+      "code": 58016
+    },
+    {
+      "name": "minus",
+      "uuid": "dddce353-2cbc-585b-8b1d-addd2f85e65b",
+      "code": 58017
+    },
+    {
+      "name": "minus-s",
+      "uuid": "e2600d3b-0585-5edf-9102-22ed560fde9f",
+      "code": 58018
+    },
+    {
+      "name": "minus-o",
+      "uuid": "230444ca-55a0-5257-accc-d0a0d44d7986",
+      "code": 58019
+    },
+    {
+      "name": "minus-small",
+      "uuid": "101e0744-1a03-5013-8d0c-1c0059f3c8ab",
+      "code": 58020
+    },
+    {
+      "name": "minus-small-s",
+      "uuid": "68e4645e-afa3-5e0d-98d0-805001b77f32",
+      "code": 58021
+    },
+    {
+      "name": "plus",
+      "uuid": "c5cbd915-a834-55f8-a4b6-e524fd1ead0d",
+      "code": 58022
+    },
+    {
+      "name": "plus-s",
+      "uuid": "0d86ff89-81f6-5b50-95ed-a74547cd78bb",
+      "code": 58023
+    },
+    {
+      "name": "plus-o",
+      "uuid": "32fa282a-a34b-5594-a458-168acdbfaba5",
+      "code": 58024
+    },
+    {
+      "name": "plus-small",
+      "uuid": "0c4b25b7-77d7-5cff-820b-bb3eb69e4da6",
+      "code": 58025
+    },
+    {
+      "name": "plus-small-s",
+      "uuid": "54b0ed56-586f-50ed-b4f0-39a95acb1200",
+      "code": 58026
+    },
+    {
+      "name": "arrow-right",
+      "uuid": "74d98ad2-0f31-5408-beb6-bdbd96f63f6d",
+      "code": 58027
+    },
+    {
+      "name": "arrow-right-s",
+      "uuid": "cc95d30e-4025-5ad6-a338-96ddf8175f9d",
+      "code": 58028
+    },
+    {
+      "name": "arrow-left",
+      "uuid": "a8c76941-e504-510f-b81a-1ea74c8c0672",
+      "code": 58029
+    },
+    {
+      "name": "arrow-left-s",
+      "uuid": "404fda23-ca24-5005-91ee-70ef9e1047ba",
+      "code": 58030
+    },
+    {
+      "name": "arrow-up",
+      "uuid": "763d3498-3e0a-5ec0-8697-4562ab0ea563",
+      "code": 58031
+    },
+    {
+      "name": "arrow-up-s",
+      "uuid": "30a687b3-9986-5fee-8a17-d3e17ade1f30",
+      "code": 58032
+    },
+    {
+      "name": "arrow-down",
+      "uuid": "ad784f15-8444-52db-8cc6-f8bc2be702ca",
+      "code": 58033
+    },
+    {
+      "name": "arrow-down-s",
+      "uuid": "33473b0a-2821-570d-b570-8d5d3c83bc13",
+      "code": 58034
+    },
+    {
+      "name": "check",
+      "uuid": "29fce196-ca25-57cf-909d-337060b9ea1c",
+      "code": 58035
+    },
+    {
+      "name": "check-s",
+      "uuid": "51338033-cb9d-5b0d-853e-d3ee78c60666",
+      "code": 58036
+    },
+    {
+      "name": "compress-o",
+      "uuid": "04e617ca-b7fc-535d-92e2-22d29447d0dd",
+      "code": 58037
+    },
+    {
+      "name": "power-off-s",
+      "uuid": "92fd78ff-071b-5a15-ba8c-88958506f7cd",
+      "code": 58038
+    },
+    {
+      "name": "chevron-right",
+      "uuid": "98c77af6-3865-5d47-93a9-a154ae1c3f75",
+      "code": 58039
+    },
+    {
+      "name": "chevron-right-s",
+      "uuid": "135b41af-1201-5a9b-bad5-df875feb52f2",
+      "code": 58040
+    },
+    {
+      "name": "chevron-up",
+      "uuid": "5c0662b7-5334-50af-874a-7e9855cfbabd",
+      "code": 58041
+    },
+    {
+      "name": "chevron-up-s",
+      "uuid": "f173076d-d16c-5a03-86c2-f5bb2e03233c",
+      "code": 58042
+    },
+    {
+      "name": "chevron-left",
+      "uuid": "27f11f65-d81e-5c83-a075-bbbcac155065",
+      "code": 58043
+    },
+    {
+      "name": "chevron-left-s",
+      "uuid": "11cd877e-17f0-5341-aa3e-58c4c6985093",
+      "code": 58044
+    },
+    {
+      "name": "chevron-down",
+      "uuid": "d4a7fff8-02ae-534f-bad1-69be6bf9d18a",
+      "code": 58045
+    },
+    {
+      "name": "chevron-down-s",
+      "uuid": "243922e1-0623-5060-a626-65d8c8e5cfd0",
+      "code": 58046
+    },
+    {
+      "name": "chevrons-right",
+      "uuid": "031bf249-bfe7-52d4-a17b-0e5cba8b845f",
+      "code": 58047
+    },
+    {
+      "name": "chevrons-right-s",
+      "uuid": "95a581a6-5a4b-5e5f-9a99-78a92ad0bc73",
+      "code": 58048
+    },
+    {
+      "name": "chevrons-up",
+      "uuid": "42bbbc2a-90b2-5716-aab1-5e38289958b4",
+      "code": 58049
+    },
+    {
+      "name": "chevrons-up-s",
+      "uuid": "08121ed6-e1fd-59ac-bacb-a46164843dfd",
+      "code": 58050
+    },
+    {
+      "name": "chevrons-left",
+      "uuid": "9db570ae-376c-53a2-8542-7eccdf2ff9ef",
+      "code": 58051
+    },
+    {
+      "name": "chevrons-left-s",
+      "uuid": "899c3e4e-a7ed-5282-8ef7-5b5593e0843b",
+      "code": 58052
+    },
+    {
+      "name": "chevrons-down",
+      "uuid": "07f186ab-7e69-5394-b7db-68c7aee8f4df",
+      "code": 58053
+    },
+    {
+      "name": "chevrons-down-s",
+      "uuid": "532a7b69-da97-5575-9263-acdcf8581ab1",
+      "code": 58054
+    },
+    {
+      "name": "xmark",
+      "uuid": "e45e8950-d9b6-5f95-baf0-26ec58db9fc5",
+      "code": 58055
+    },
+    {
+      "name": "xmark-s",
+      "uuid": "6b58d4b9-ede1-5cbf-a4dd-eafd210c479b",
+      "code": 58056
+    },
+    {
+      "name": "xmark-small",
+      "uuid": "659ff00a-f771-5b38-86a5-bf12eeb78522",
+      "code": 58057
+    },
+    {
+      "name": "xmark-small-s",
+      "uuid": "b281e6ba-d415-5cf5-908d-fda8b378e8e6",
+      "code": 58058
+    },
+    {
+      "name": "user",
+      "uuid": "1f98fefa-9a79-5738-a5f3-70e528892bc6",
+      "code": 58059
+    },
+    {
+      "name": "user-s",
+      "uuid": "ac54a1e4-3497-572c-9e31-94f120cf3930",
+      "code": 58060
+    },
+    {
+      "name": "rotate-s",
+      "uuid": "279921bc-0067-579c-8690-1bd7a450b2a9",
+      "code": 58061
+    },
+    {
+      "name": "rotate-left-s",
+      "uuid": "fe1a14b0-62a0-54ae-8ec9-f84ac17771b1",
+      "code": 58062
+    },
+    {
+      "name": "rotate-right-s",
+      "uuid": "6cafd8cb-6783-5d69-809a-2d238642f2a9",
+      "code": 58063
+    },
+    {
+      "name": "heart",
+      "uuid": "1a47bc01-17be-5d9e-9f93-289e3389c411",
+      "code": 58064
+    },
+    {
+      "name": "heart-s",
+      "uuid": "f9b6ed12-9f66-538a-8ad7-e0d7f39496ae",
+      "code": 58065
+    },
+    {
+      "name": "heart-o",
+      "uuid": "f52af1ad-80f7-550a-9d35-fa26001cf95c",
+      "code": 58066
+    },
+    {
+      "name": "magnifying-glass-o",
+      "uuid": "7c610ea2-2eda-525b-94d4-85fcb1cbf0e2",
+      "code": 58067
+    },
+    {
+      "name": "crosshairs-o",
+      "uuid": "d302706b-59d5-50fe-b526-1e44eb97058e",
+      "code": 58068
+    },
+    {
+      "name": "bars-s",
+      "uuid": "d3ef6b05-bcb0-5b2b-8f45-563595575031",
+      "code": 58069
+    },
+    {
+      "name": "file-s",
+      "uuid": "5268817a-8786-5d9c-ae8e-f790beae71bb",
+      "code": 58071
+    },
+    {
+      "name": "file-o",
+      "uuid": "3822cb07-483c-5a57-b79a-1fe004da4000",
+      "code": 58072
+    },
+    {
+      "name": "cog",
+      "uuid": "2a3b79b0-9aed-5378-808b-0bca13207afd",
+      "code": 58073
+    },
+    {
+      "name": "cog-s",
+      "uuid": "12159555-b2ac-5cc9-ad37-2cc07310838f",
+      "code": 58074
+    },
+    {
+      "name": "cog-o",
+      "uuid": "c049aca7-a5fb-54aa-8e7f-0e3f9fba2d97",
+      "code": 58075
+    },
+    {
+      "name": "floppy-disk-s",
+      "uuid": "a215778b-1d05-5f67-a365-80e74641e415",
+      "code": 58077
+    },
+    {
+      "name": "floppy-disk-o",
+      "uuid": "024e0444-f06d-5bf0-b472-326b17f29d69",
+      "code": 58078
+    },
+    {
+      "name": "eye-o",
+      "uuid": "3952d5af-cbaa-5e46-9720-8c4cdbd1c311",
+      "code": 58079
+    },
+    {
+      "name": "globe",
+      "uuid": "375fcd11-72a6-5d53-b8d0-4f83036b40f0",
+      "code": 58080
+    },
+    {
+      "name": "globe-s",
+      "uuid": "183e38a8-8004-53ca-b491-03bc39d9bffc",
+      "code": 58081
+    },
+    {
+      "name": "globe-o",
+      "uuid": "43a96687-d383-5828-95e6-81fa61df4b85",
+      "code": 58082
+    },
+    {
+      "name": "location-pin-s",
+      "uuid": "72c92eb3-db25-564f-b84f-9c28a03b0c57",
+      "code": 58084
+    },
+    {
+      "name": "location-pin-o",
+      "uuid": "089bf467-6010-53d7-b76f-b4b9f0406861",
+      "code": 58085
+    },
+    {
+      "name": "filter-s",
+      "uuid": "e83c7731-1755-5074-b748-185698960b86",
+      "code": 58087
+    },
+    {
+      "name": "filter-o",
+      "uuid": "6222a240-bbc9-5391-96c4-315886a5ade7",
+      "code": 58088
+    },
+    {
+      "name": "flag",
+      "uuid": "d703750a-23aa-5d27-8d6c-803180cb0829",
+      "code": 58089
+    },
+    {
+      "name": "flag-s",
+      "uuid": "2dc849b3-c14f-5d1b-9830-c388a080c0fd",
+      "code": 58090
+    },
+    {
+      "name": "download-s",
+      "uuid": "c194cc3d-bf3c-5919-bd7e-3192ea883887",
+      "code": 58092
+    },
+    {
+      "name": "upload-s",
+      "uuid": "ea74766e-6573-5db8-ba2d-6eba85600e12",
+      "code": 58093
+    },
+    {
+      "name": "pen-to-square-o",
+      "uuid": "4b3a4f89-379a-5ab8-961e-bd5915463bd9",
+      "code": 58094
+    },
+    {
+      "name": "lock",
+      "uuid": "ce4bca7f-1ac9-5771-9f3e-a269e6f9003b",
+      "code": 58095
+    },
+    {
+      "name": "lock-s",
+      "uuid": "35fd7ece-6f02-53f5-80c9-5bbdca462823",
+      "code": 58096
+    },
+    {
+      "name": "lock-o",
+      "uuid": "250d1603-2d2e-529c-a2c0-e3a5ff468423",
+      "code": 58097
+    },
+    {
+      "name": "pencil-s",
+      "uuid": "9d425f2f-a9f0-5dad-8e9b-ef5b4ebd8bcd",
+      "code": 58098
+    },
+    {
+      "name": "pencil-o",
+      "uuid": "ee96b898-cc78-5760-88ed-79b365ca86fb",
+      "code": 58099
+    },
+    {
+      "name": "eraser-s",
+      "uuid": "6c928da9-4726-565b-9218-781d4c62a0b1",
+      "code": 58100
+    },
+    {
+      "name": "location-arrow-s",
+      "uuid": "b403fe14-e9d4-5d6d-b523-832b1c93137b",
+      "code": 58101
+    },
+    {
+      "name": "location-arrow-o",
+      "uuid": "8ec95a60-612d-5854-83b7-732f774cd6d8",
+      "code": 58102
+    },
+    {
+      "name": "comment-s",
+      "uuid": "01f7c74a-7a64-5656-b5c4-d33356d4650a",
+      "code": 58105
+    },
+    {
+      "name": "comment-o",
+      "uuid": "f0863954-9312-589f-8b43-0a79d4b07325",
+      "code": 58106
+    },
+    {
+      "name": "dot-s",
+      "uuid": "25e0db64-4bf5-59a0-983a-28bc63f41295",
+      "code": 58107
+    },
+    {
+      "name": "ellipsis-s",
+      "uuid": "3a4e0b77-b9ff-5f83-bb33-aa84a7d62b70",
+      "code": 58108
+    },
+    {
+      "name": "ellipsis-vertical-s",
+      "uuid": "a52f119c-c3fb-5b78-ad9d-97ee39461528",
+      "code": 58109
+    },
+    {
+      "name": "circle-info-s",
+      "uuid": "9577e812-9bc6-5b83-a293-e9ff4649cfa4",
+      "code": 58110
+    },
+    {
+      "name": "house-s",
+      "uuid": "2daf22bf-2a1a-5bf8-a3e5-00e91b90dae3",
+      "code": 58112
+    },
+    {
+      "name": "stairs-o",
+      "uuid": "ae3c847e-4429-501a-a154-4b9161ae3f87",
+      "code": 58114
+    },
+    {
+      "name": "octagon",
+      "uuid": "5c1ce0d2-a190-5445-9129-323c6a47ef7b",
+      "code": 58115
+    },
+    {
+      "name": "octagon-s",
+      "uuid": "529eba5e-3b72-5a8c-add4-9dfa940b3451",
+      "code": 58116
+    },
+    {
+      "name": "octagon-o",
+      "uuid": "bbe45a7e-f975-50d1-8cd3-5bcab728e503",
+      "code": 58117
+    },
+    {
+      "name": "spinner-s",
+      "uuid": "ab83ba6e-0c63-57c9-bed4-a56457a45fee",
+      "code": 58118
+    },
+    {
+      "name": "circle-notch-o",
+      "uuid": "bfa2b94a-3eae-5ff0-a50d-891b5fbf2aff",
+      "code": 58119
+    },
+    {
+      "name": "slash-s",
+      "uuid": "8f824190-900c-5b77-ad0f-7757b10551da",
+      "code": 58120
+    },
+    {
+      "name": "asterisk",
+      "uuid": "b1111328-e302-51f2-a6ba-ad80a1c44565",
+      "code": 58121
+    },
+    {
+      "name": "asterisk-s",
+      "uuid": "d5734d64-635e-5b3b-bae5-07be141d2bf6",
+      "code": 58122
+    },
+    {
+      "name": "wrench-s",
+      "uuid": "4bb7042f-7fdd-5c7e-96a0-336395ff59be",
+      "code": 58123
+    },
+    {
+      "name": "building-s",
+      "uuid": "c76064f2-0281-5553-92e7-036089876f89",
+      "code": 58124
+    },
+    {
+      "name": "warehouse-s",
+      "uuid": "b20942df-d7f9-5b2d-ade7-21ddef677232",
+      "code": 58125
+    },
+    {
+      "name": "building-columns-s",
+      "uuid": "423839ad-98f4-5d76-a1e3-6f0055749c7e",
+      "code": 58126
+    },
+    {
+      "name": "house-medical-s",
+      "uuid": "eca72578-d8ae-50f2-b14b-20aa75e17104",
+      "code": 58127
+    },
+    {
+      "name": "dungeon-s",
+      "uuid": "8456122a-0d9b-5db3-a431-a4dd32241cee",
+      "code": 58128
+    },
+    {
+      "name": "governmental-building-s",
+      "uuid": "93e964fa-672f-5eeb-a9c6-b9a513cb2d9d",
+      "code": 58129
+    },
+    {
+      "name": "industry-s",
+      "uuid": "5516ef28-1f63-5a8f-91a1-94e6660f32ff",
+      "code": 58130
+    },
+    {
+      "name": "tv-s",
+      "uuid": "44a945cd-a125-5653-9345-5bd1aa5ef040",
+      "code": 58132
+    },
+    {
+      "name": "tv-o",
+      "uuid": "c8780793-801a-5a4b-86c1-ba51f0ae08e1",
+      "code": 58133
+    },
+    {
+      "name": "tower-broadcast-s",
+      "uuid": "1f53b89a-f61e-5322-ab13-9af2eefdeb1d",
+      "code": 58134
+    },
+    {
+      "name": "bookmark-s",
+      "uuid": "3bd3a579-2f57-597a-b5d6-576793b45712",
+      "code": 58136
+    },
+    {
+      "name": "bookmark-o",
+      "uuid": "259be816-8da1-5f6a-b5b1-c31b8fcff403",
+      "code": 58137
+    },
+    {
+      "name": "book-s",
+      "uuid": "53198f35-26db-52bb-98b5-62b2eb601edd",
+      "code": 58139
+    },
+    {
+      "name": "book-o",
+      "uuid": "2dfa0423-7b9b-5461-bb5d-7810c7127c6a",
+      "code": 58140
+    },
+    {
+      "name": "book-bible-s",
+      "uuid": "bf879e2d-5ce7-5ee0-bfd2-cd293b05ba17",
+      "code": 58142
+    },
+    {
+      "name": "book-bible-o",
+      "uuid": "8a6819e5-9635-5180-98d9-769424dca74a",
+      "code": 58143
+    },
+    {
+      "name": "book-medical-s",
+      "uuid": "203ed83f-ebf7-5002-a0d5-b15b6157b195",
+      "code": 58145
+    },
+    {
+      "name": "book-medical-o",
+      "uuid": "e5c8bdb9-04bc-50ef-af10-43666a2c1981",
+      "code": 58146
+    },
+    {
+      "name": "newspaper-s",
+      "uuid": "0386052a-25dd-5e8b-8416-a513b9b96665",
+      "code": 58147
+    },
+    {
+      "name": "newspaper-o",
+      "uuid": "42d270fa-a855-5e77-a197-e5e5f9b4ee76",
+      "code": 58148
+    },
+    {
+      "name": "people-group-s",
+      "uuid": "345baf4f-6224-5c27-aa6b-97859cdb1037",
+      "code": 58149
+    },
+    {
+      "name": "book-open-s",
+      "uuid": "8e34bc1e-b072-5685-b4c7-cde3f78b15c6",
+      "code": 58150
+    },
+    {
+      "name": "book-open-o",
+      "uuid": "bfaccc78-2f8f-52ea-adce-2f6e40119ed6",
+      "code": 58151
+    },
+    {
+      "name": "trash-s",
+      "uuid": "dfeb0f0a-0ddc-5f3f-b71a-d9dd05245bcd",
+      "code": 58152
+    },
+    {
+      "name": "trash-o",
+      "uuid": "95a841ff-9cde-54a4-bfb2-47062c7e1fbd",
+      "code": 58153
+    },
+    {
+      "name": "burst-s",
+      "uuid": "bc266c55-84c0-558f-802d-6e24a08ec8c4",
+      "code": 58155
+    },
+    {
+      "name": "recycle-o",
+      "uuid": "dc2a660f-563b-52a1-84fe-772f55c46a6c",
+      "code": 58157
+    },
+    {
+      "name": "comment-dots-s",
+      "uuid": "3ad69ef1-6d98-5d95-aac7-f05532134085",
+      "code": 58159
+    },
+    {
+      "name": "comment-dots-o",
+      "uuid": "f73e2206-9293-567d-91e4-c3ad8d391bb0",
+      "code": 58160
+    },
+    {
+      "name": "bullseye-o",
+      "uuid": "5b630656-e2cd-5219-8973-954ab745c6cb",
+      "code": 58161
+    },
+    {
+      "name": "certificate-s",
+      "uuid": "501df9e0-dd2b-5db0-bf4a-1859971eae02",
+      "code": 58162
+    },
+    {
+      "name": "cross-s",
+      "uuid": "fa5883a1-cde4-5881-8445-0e78307a8678",
+      "code": 58163
+    },
+    {
+      "name": "car-s",
+      "uuid": "a4f503a6-9a3a-5ebb-8ced-626537089b05",
+      "code": 58164
+    },
+    {
+      "name": "car-side-s",
+      "uuid": "1719cb47-bba0-529d-80cc-4393d4849cbb",
+      "code": 58165
+    },
+    {
+      "name": "city-s",
+      "uuid": "2b08aadc-2d8b-55cc-924b-0d1affca505a",
+      "code": 58166
+    },
+    {
+      "name": "fence-s",
+      "uuid": "9b21e93a-66dc-5937-8339-27c89c50af08",
+      "code": 58167
+    },
+    {
+      "name": "map-s",
+      "uuid": "39a6b1d0-6c95-583b-aadc-c118c9737d96",
+      "code": 58169
+    },
+    {
+      "name": "map-o",
+      "uuid": "ba3abdd5-7892-5596-a633-f2e6137a8a54",
+      "code": 58170
+    },
+    {
+      "name": "barcode-s",
+      "uuid": "8ab205e7-42f7-508d-b258-d58c5fcdf649",
+      "code": 58171
+    },
+    {
+      "name": "layer-group-s",
+      "uuid": "a1e83cc4-4785-58e7-9797-c29db8e86ea7",
+      "code": 58172
+    },
+    {
+      "name": "sitemap-s",
+      "uuid": "de3c9372-8258-5f3e-950c-5253a21ee234",
+      "code": 58173
+    },
+    {
+      "name": "folder-s",
+      "uuid": "f5df684d-b05e-5adb-8325-a01615a6bf16",
+      "code": 58175
+    },
+    {
+      "name": "folder-o",
+      "uuid": "2c79344c-a723-5739-961c-53eccca9c2d4",
+      "code": 58176
+    },
+    {
+      "name": "database",
+      "uuid": "fecbb369-561e-5d7e-8b3a-ab569ebdb930",
+      "code": 61440
+    },
+    {
+      "name": "database-s",
+      "uuid": "3657e15a-b147-5509-a575-8fe032ddc7d1",
+      "code": 61441
+    },
+    {
+      "name": "internet",
+      "uuid": "13261042-0e18-5025-bfbe-df0c074a1b2c",
+      "code": 61442
+    },
+    {
+      "name": "fiber-optics-o",
+      "uuid": "9327730c-410a-5782-9cc1-fab31e8bed49",
+      "code": 61443
+    },
+    {
+      "name": "cloud",
+      "uuid": "3e12371a-2260-503a-b6e2-c0619489dbd0",
+      "code": 61444
+    },
+    {
+      "name": "cloud-s",
+      "uuid": "4584cb62-7a0c-53ca-a01d-3f2cde7511e5",
+      "code": 61445
+    },
+    {
+      "name": "cloud-o",
+      "uuid": "e8d8ef81-640c-5384-8b8c-f4ef6594f3fe",
+      "code": 61446
+    },
+    {
+      "name": "radiation",
+      "uuid": "9c647e54-af0a-5f3d-82c7-ffd262d837f4",
+      "code": 61447
+    },
+    {
+      "name": "radiation-s",
+      "uuid": "eca967ee-beb8-5fb2-99f4-12b8a79a38fd",
+      "code": 61448
+    },
+    {
+      "name": "biohazard-s",
+      "uuid": "4c8d76b8-c125-50f3-ba2e-695be97cc36b",
+      "code": 61450
+    },
+    {
+      "name": "bolt",
+      "uuid": "8df317ad-0e20-539e-b668-693305a27ced",
+      "code": 61451
+    },
+    {
+      "name": "bolt-s",
+      "uuid": "385b4f86-096b-5755-87b5-c37c5b88a9f0",
+      "code": 61452
+    },
+    {
+      "name": "lightning-bolt",
+      "uuid": "d3c218cf-2106-515b-b332-3e7a830a315a",
+      "code": 61453
+    },
+    {
+      "name": "lightning-bolt-s",
+      "uuid": "af2345ea-0a4f-546e-8604-3f8cdaf1baf1",
+      "code": 61454
+    },
+    {
+      "name": "wifi",
+      "uuid": "23c1ad0f-932b-5957-837f-9a9f86771354",
+      "code": 61458
+    },
+    {
+      "name": "wifi-s",
+      "uuid": "376089a6-5e37-53d3-a343-579b530f41b4",
+      "code": 61459
+    },
+    {
+      "name": "database-postgres",
+      "uuid": "f2997ecb-ae12-5d39-ad85-79f873e47133",
+      "code": 61462
+    },
+    {
+      "name": "atom-o",
+      "uuid": "9e07797f-638c-5590-8087-e3d508dba396",
+      "code": 61463
+    },
+    {
+      "name": "bluetooth-o",
+      "uuid": "50e76dec-8bac-5995-b0a7-416ff1f13860",
+      "code": 61464
+    },
+    {
+      "name": "cloud-ip",
+      "uuid": "f3925288-83a1-51d0-83a4-a6e2e1f08e8d",
+      "code": 61465
+    },
+    {
+      "name": "cloud-ip-s",
+      "uuid": "2cdb8412-0e99-5c34-9b06-52a6ca54c15f",
+      "code": 61466
+    },
+    {
+      "name": "cloud-ip-o",
+      "uuid": "41ed911d-159c-5979-8125-55498cc08f94",
+      "code": 61467
+    },
+    {
+      "name": "cloud-mpls",
+      "uuid": "5bbde9ef-6cd6-51db-bf19-792d0c6a0261",
+      "code": 61468
+    },
+    {
+      "name": "cloud-mpls-s",
+      "uuid": "66d4af8c-c437-5109-bec5-b2a43c485aef",
+      "code": 61469
+    },
+    {
+      "name": "cloud-mpls-o",
+      "uuid": "0475d25f-4116-5f31-8999-29d86d1b370c",
+      "code": 61470
+    },
+    {
+      "name": "cloud-vpn",
+      "uuid": "b3303b83-67d0-5ba5-904b-67ee36a3d76d",
+      "code": 61471
+    },
+    {
+      "name": "cloud-vpn-s",
+      "uuid": "f696ee4d-1b5b-5fb9-9b6c-0d848434fb6c",
+      "code": 61472
+    },
+    {
+      "name": "cloud-vpn-o",
+      "uuid": "c19ab552-670f-5874-8d87-35dde763dd05",
+      "code": 61473
+    },
+    {
+      "name": "cloud-wan",
+      "uuid": "84ce2f82-aba1-5002-8bd1-be3c1cd4dd33",
+      "code": 61474
+    },
+    {
+      "name": "cloud-wan-s",
+      "uuid": "06b4a94f-15ad-5382-80af-4a2f3a306da9",
+      "code": 61475
+    },
+    {
+      "name": "cloud-wan-o",
+      "uuid": "918fbfd1-3efc-5b9a-9bab-4faa6d25602e",
+      "code": 61476
+    },
+    {
+      "name": "cloud-lan",
+      "uuid": "0db4f535-09dc-551f-8302-9d8955c6df90",
+      "code": 61480
+    },
+    {
+      "name": "cloud-lan-s",
+      "uuid": "71af9775-5148-5d1e-a2c0-6043f9d7e0b3",
+      "code": 61481
+    },
+    {
+      "name": "cloud-lan-o",
+      "uuid": "df549a0d-17fb-54c6-999b-273d675238e9",
+      "code": 61482
+    },
+    {
+      "name": "cloud-pstn",
+      "uuid": "479a5836-7814-5908-81d0-b4a57bb25f52",
+      "code": 61483
+    },
+    {
+      "name": "cloud-pstn-s",
+      "uuid": "9b5dc72b-e897-5d12-934c-71d272d1c2db",
+      "code": 61484
+    },
+    {
+      "name": "cloud-pstn-o",
+      "uuid": "81c7d008-4acb-5a50-abe9-f344f7194b75",
+      "code": 61485
+    },
+    {
+      "name": "cloud-plmn",
+      "uuid": "ab4c3d5a-a69c-56fa-84b1-4d7db4a5135c",
+      "code": 61486
+    },
+    {
+      "name": "cloud-plmn-s",
+      "uuid": "7795867c-a12d-5be5-bb3a-6f50288385b6",
+      "code": 61487
+    },
+    {
+      "name": "cloud-plmn-o",
+      "uuid": "3896d64b-be83-59dc-804c-709a5499616d",
+      "code": 61488
+    },
+    {
+      "name": "cloud-ims",
+      "uuid": "43f0d158-9602-5a28-bcea-152b1c22d841",
+      "code": 61489
+    },
+    {
+      "name": "cloud-ims-s",
+      "uuid": "747f6c8b-64ec-5abf-b5f9-c80e6681964d",
+      "code": 61490
+    },
+    {
+      "name": "cloud-ims-o",
+      "uuid": "339900ca-dec8-5aa6-8f1b-dc353cd75eca",
+      "code": 61491
+    },
+    {
+      "name": "cloud-sdh",
+      "uuid": "9d56b667-a3c8-5c16-8a43-aee569a9b478",
+      "code": 61492
+    },
+    {
+      "name": "cloud-sdh-s",
+      "uuid": "3ec0f6e5-8410-5b3b-b315-c10df5fcde06",
+      "code": 61493
+    },
+    {
+      "name": "cloud-sdh-o",
+      "uuid": "e473ae6b-b080-5e1e-9c17-3ee4bcac765b",
+      "code": 61494
+    },
+    {
+      "name": "cisco-accesspoint",
+      "uuid": "eb8a2fb7-5433-5c52-91ea-8ab852cd4b44",
+      "code": 61952
+    },
+    {
+      "name": "cisco-ace",
+      "uuid": "ac35bc84-499e-5b3e-a03a-cdf502eece3b",
+      "code": 61953
+    },
+    {
+      "name": "cisco-ata",
+      "uuid": "4033c202-1987-5e6f-972d-953090e9d61b",
+      "code": 61955
+    },
+    {
+      "name": "cisco-atm-router",
+      "uuid": "d7ace48d-91c2-5099-aa0c-03f27b633b2d",
+      "code": 61956
+    },
+    {
+      "name": "cisco-bridge",
+      "uuid": "654ba910-ba17-5e13-b907-920105c2c610",
+      "code": 61958
+    },
+    {
+      "name": "cisco-broadband-router",
+      "uuid": "113e2fe5-61be-55c2-a54f-873a35d8be10",
+      "code": 61959
+    },
+    {
+      "name": "cisco-cable-modem",
+      "uuid": "b7df38e9-7bda-570c-b1fd-0c54057275e1",
+      "code": 61960
+    },
+    {
+      "name": "cisco-concentrator",
+      "uuid": "264d63cc-851c-514f-9368-714292865e07",
+      "code": 61966
+    },
+    {
+      "name": "cisco-firewall",
+      "uuid": "215f2c4e-57ee-5772-a365-8541acff1625",
+      "code": 61972
+    },
+    {
+      "name": "cisco-optical-amplifier",
+      "uuid": "bfdedf94-7899-5d83-994f-b3f2b151995f",
+      "code": 61987
+    },
+    {
+      "name": "cisco-relational-database",
+      "uuid": "a0be1e9b-0018-5a20-adec-97a5281ed5dd",
+      "code": 61995
+    },
+    {
+      "name": "cisco-router",
+      "uuid": "4fc81b12-e72d-5a6e-8b67-816cf394d6f2",
+      "code": 61996
+    },
+    {
+      "name": "cisco-workgroup-switch",
+      "uuid": "6bddaab6-8a16-5404-bfb4-7c162bf68fb5",
+      "code": 62015
+    },
+    {
+      "name": "juniper-generic-router",
+      "uuid": "ec24adbd-e2c8-5635-87b6-713ac2ad6b3e",
+      "code": 62464
+    },
+    {
+      "name": "juniper-l2-l3-switch",
+      "uuid": "c32d6fd8-afed-5f48-85d9-0df8bb38be0b",
+      "code": 62465
+    },
+    {
+      "name": "juniper-l2-l3-switch2",
+      "uuid": "b0aeaa85-0836-5610-b4f1-2afd4620f853",
+      "code": 62466
+    },
+    {
+      "name": "juniper-fcoe",
+      "uuid": "fe783477-2082-5166-91d5-bdf04ce5d382",
+      "code": 62467
+    },
+    {
+      "name": "juniper-switch",
+      "uuid": "d55898fe-ed19-5cfb-a215-a51708ae4c78",
+      "code": 62468
+    },
+    {
+      "name": "huawei-msan",
+      "uuid": "07006ae2-9bc0-59fb-9f6b-1eba5e6888cf",
+      "code": 62528
+    }
+  ]
+}
