@@ -13,6 +13,7 @@ export interface GlyphTransformerOptions {
   semanticDtsPath: string;
   glyphCodes: GlyphCodes;
   debug?: boolean;
+  useSemantic: boolean;
 }
 
 /**
@@ -24,12 +25,14 @@ export class GlyphTransformer{
   private glyphMapping: GlyphMapping = {};
   private glyphCodes: Record<string, number>;
   private debug: boolean;
+  private useSemantic: boolean;
   private initialized = false;
 
   constructor(options: GlyphTransformerOptions){
     this.semanticDtsPath = options.semanticDtsPath;
     this.glyphCodes = options.glyphCodes;
     this.debug = options.debug || false;
+    this.useSemantic = options.useSemantic;
   }
 
   /**
@@ -54,6 +57,24 @@ export class GlyphTransformer{
    * @returns Transformed content
    */
   public transform(contents: string, filePath: string): string{
+    // Check for NOC.glyph.* pattern and validate "semantic" keyword
+    if(this.useSemantic){
+      const glyphPattern = /NOC\.glyph\.(\w+)\.\w+/g;
+      let match;
+      
+      while((match = glyphPattern.exec(contents)) !== null){
+        const keyword = match[1];
+        if(keyword !== "semantic"){
+          throw new Error(
+            `[GlyphTransformer] Invalid glyph accessor: NOC.glyph.${keyword}\n` +
+            `  File: ${filePath}\n` +
+            `  Expected: NOC.glyph.semantic.<NAME>\n` +
+            `  Use "semantic" keyword to access glyph constants`,
+          );
+        }
+      }
+    }
+
     // Quick check - skip files without semantic references
     if(!contents.includes("NOC.glyph.semantic.")){
       return contents;

@@ -170,7 +170,12 @@ const commonOptions: BuilderOptions = {
     indent: "  ",
     lineEnd: "\n",
   },
-  glyphTransformer: new GlyphTransformer({semanticDtsPath: "web/js/glyph.semantic.d.ts", glyphCodes: GLYPHS, debug: false}),
+  glyphTransformer: new GlyphTransformer({
+    semanticDtsPath: "types/noc-glyph.d.ts",
+    glyphCodes: GLYPHS,
+    useSemantic: false,
+    debug: false,
+  }),
 };
 
 let builder: BaseBuilder;
