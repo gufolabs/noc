@@ -1,4 +1,4 @@
-import {GLYPHS} from "@gufo-labs/font";
+import {CODEPOINTS} from "@gufo-labs/font";
 import fs from "fs-extra";
 import * as path from "path";
 import type {BuilderOptions, Language, Theme} from "./scripts/builders/BaseBuilder.ts";
@@ -172,7 +172,7 @@ const commonOptions: BuilderOptions = {
   },
   glyphTransformer: new GlyphTransformer({
     semanticDtsPath: "types/noc-glyph.d.ts",
-    glyphCodes: GLYPHS,
+    glyphCodes: CODEPOINTS,
     useSemantic: false,
     debug: false,
   }),

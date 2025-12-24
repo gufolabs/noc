@@ -12,10 +12,10 @@ interface NOC {
         // =================================================================
       
         /** Save changes (text: "Save", tooltip: "Save changes") */
-        /** @glyphName save */
+        /** @glyphName floppy_disk_s */
         readonly ACTION_SAVE: string;
         /** Apply without closing (text: "Apply", tooltip: "Save changes and continue editing") */
-        /** @glyphName save */
+        /** @glyphName plus_s */
         readonly ACTION_APPLY: string;
       
         /** Add new item (text: "Add", tooltip: "Add new record") */
@@ -28,7 +28,7 @@ interface NOC {
         /** @glyphName plus */
         readonly ACTION_INSERT: string;
         /** Append to list */
-        /** @glyphName sign_in */
+        /** @glyphName floppy_disk_s */
         readonly ACTION_APPEND: string;
       
         /** Edit object (text: "Edit", "Group Edit") */
@@ -108,6 +108,12 @@ interface NOC {
         /** Advanced search (text: "Query") */
         /** @glyphName search_plus */
         readonly DATA_SEARCH_ADVANCED: string;
+      
+        // =================================================================
+        // NAVIGATION
+        // =================================================================
+      
+        /** Navigate up */
         /** @glyphName arrow_up */
         readonly NAV_UP: string;
         /** Navigate down */
@@ -141,12 +147,14 @@ interface NOC {
         /** @glyphName expand */
         readonly NAV_EXPAND: string;
         /** Collapse view */
-        /** @glyphName compressL_DOWN: string;
-        
-        /** Navigate to location (tooltip: "Center to object") */
-        readonly NAV_LOCATION: string;
-        /** Set position marker (tooltip: "Set position") */
-        readonly NAV_MAP_MARKER: string;
+        /** @glyphName compress */
+        readonly NAV_COLLAPSE: string;
+      
+        // =================================================================
+        // VIEW MODES
+        // =================================================================
+      
+        /** Preview view */
         /** @glyphName eye */
         readonly VIEW_PREVIEW: string;
         /** Show details */
@@ -172,6 +180,16 @@ interface NOC {
         readonly VIEW_GLOBE: string;
         /** Chart/Graph view */
         /** @glyphName line_chart */
+        readonly VIEW_CHART: string;
+        /** Tree/Hierarchy view */
+        /** @glyphName sitemap */
+        readonly VIEW_TREE: string;
+      
+        // =================================================================
+        // ENTITY TYPES
+        // =================================================================
+      
+        /** User entity */
         /** @glyphName user */
         readonly ENTITY_USER: string;
         /** Device/Server */
@@ -187,19 +205,14 @@ interface NOC {
         /** @glyphName file_code_o */
         readonly ENTITY_FILE_CODE: string;
         /** Video/Recording */
-        /** @glyphName filmiew */
-        readonly VIEW_GLOBE: string;
-        /** Chart/Graph view */
-        readonly VIEW_CHART: string;
-        /** Tree/Hierarchy view */
-        readonly VIEW_TREE: string;
+        /** @glyphName film */
+        readonly ENTITY_VIDEO: string;
       
         // =================================================================
-        // ENTITY TYPES
+        // STATUS INDICATORS
         // =================================================================
       
-        /** User entity */
-        readonly ENTITY_USER: string;
+        /** Success state */
         /** @glyphName check */
         readonly STATUS_SUCCESS: string;
         /** Success with circle (text: "Fix") */
@@ -223,6 +236,12 @@ interface NOC {
         /** Favorite/Important */
         /** @glyphName star */
         readonly STATUS_STAR: string;
+      
+        // =================================================================
+        // CONNECTION/LINKING
+        // =================================================================
+      
+        /** Link/Connect */
         /** @glyphName link */
         readonly CONNECT_LINK: string;
         /** Remove link */

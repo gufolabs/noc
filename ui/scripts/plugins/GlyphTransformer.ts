@@ -1,3 +1,5 @@
+import type {TSESTree} from "@typescript-eslint/types";
+import {parse} from "@typescript-eslint/typescript-estree";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -120,7 +122,7 @@ export class GlyphTransformer{
     );
   }
 
-  private loadGlyphMappings(): void{
+  public loadGlyphMappings(): void{
     const dtsPath = path.resolve(process.cwd(), this.semanticDtsPath);
 
     if(!fs.existsSync(dtsPath)){
@@ -129,19 +131,114 @@ export class GlyphTransformer{
 
     const content = fs.readFileSync(dtsPath, "utf8");
 
-    // Parse: /** @glyphName glyph_name */\n      readonly SEMANTIC_NAME: string;
-    const regex = /\/\*\*\s*@glyphName\s+(\w+)\s*\*\/\s*readonly\s+(\w+):/g;
-    let match;
+    // Parse TypeScript .d.ts file using AST
+    const parseResult = parse(content, {
+      comment: true,
+      loc: true,
+      range: true,
+      tokens: true,
+    });
 
-    while((match = regex.exec(content)) !== null){
-      const [, glyphName, semanticName] = match;
-      this.glyphMapping[semanticName] = glyphName;
-      this.log(`  Mapped ${semanticName} -> ${glyphName}`);
+    this.log(`Parsed AST, found ${parseResult.body.length} top-level nodes`);
+    this.log(`Comments found: ${parseResult.comments?.length || 0}`);
+
+    const semanticMembers = this.findSemanticInterface(parseResult);
+    
+    this.log(`Found ${semanticMembers.length} semantic members`);
+
+    if(semanticMembers.length === 0){
+      throw new Error(`[GlyphTransformer] No semantic members found in AST`);
     }
+
+    const comments = parseResult.comments || [];
+    
+    this.log(`Total comments in file: ${comments.length}`);
+    
+    for(const member of semanticMembers){
+      const semanticName = this.extractPropertyName(member);
+      const glyphName = this.extractGlyphNameFromComments(member, comments);
+
+      if(semanticName && glyphName){
+        this.glyphMapping[semanticName] = glyphName;
+        this.log(`  Mapped ${semanticName} -> ${glyphName}`);
+      }
+      else if(semanticName && !glyphName){
+        this.log(`  Warning: ${semanticName} has no @glyphName (line ${member.loc?.start.line})`);
+      }
+    }
+
+    this.log(`Total mappings found: ${Object.keys(this.glyphMapping).length}`);
 
     if(Object.keys(this.glyphMapping).length === 0){
       throw new Error(`[GlyphTransformer] No glyph mappings found in ${dtsPath}`);
     }
+  }
+
+  private findSemanticInterface(ast: TSESTree.Program): TSESTree.TypeElement[]{
+    for(const node of ast.body){
+      // Look for: interface NOC
+      if(node.type === "TSInterfaceDeclaration" && node.id.name === "NOC"){
+        // Find glyph property
+        for(const property of node.body.body){
+          if(this.isPropertyWithName(property, "glyph") && property.type === "TSPropertySignature"){
+            const glyphType = property.typeAnnotation?.typeAnnotation;
+            if(glyphType?.type === "TSTypeLiteral"){
+              // Find semantic property inside glyph
+              for(const glyphMember of glyphType.members){
+                if(this.isPropertyWithName(glyphMember, "semantic") && glyphMember.type === "TSPropertySignature"){
+                  const semanticType = glyphMember.typeAnnotation?.typeAnnotation;
+                  if(semanticType?.type === "TSTypeLiteral"){
+                    // Return all members of semantic interface
+                    return semanticType.members;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    throw new Error("[GlyphTransformer] Could not find NOC.glyph.semantic interface in AST");
+  }
+
+  private isPropertyWithName(node: TSESTree.TypeElement, name: string): boolean{
+    return node.type === "TSPropertySignature" && node.key?.type === "Identifier" && node.key.name === name;
+  }
+
+  private extractPropertyName(node: TSESTree.TypeElement): string | null{
+    if(node.type === "TSPropertySignature" && node.readonly && node.key && node.key.type === "Identifier"){
+      return node.key.name;
+    }
+    return null;
+  }
+
+  /**
+   * Extract @glyphName from leading comments
+   * Since typescript-estree doesn't attach comments automatically,
+   * we need to find them manually based on position
+   */
+  private extractGlyphNameFromComments(node: TSESTree.TypeElement, allComments: TSESTree.Comment[]): string | null{
+    if(!node.loc){
+      return null;
+    }
+
+    // Find comments that are right before this node
+    // (comments that end on the line before the node starts)
+    const relevantComments = allComments.filter(comment => 
+      comment.loc && 
+      comment.loc.end.line >= node.loc!.start.line - 2 && 
+      comment.loc.end.line < node.loc!.start.line,
+    );
+
+    for(const comment of relevantComments){
+      if(comment.type === "Block" || comment.type === "Line"){
+        const match = comment.value.match(/@glyphName\s+(\w+)/);
+        if(match){
+          return match[1];
+        }
+      }
+    }
+    return null;
   }
 
   private log(...args: (string | number | boolean | object)[]): void{
