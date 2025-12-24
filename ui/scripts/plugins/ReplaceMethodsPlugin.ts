@@ -53,6 +53,10 @@ export class ReplaceMethodsPlugin{
     };
   }
 
+  public loadGlyphMappings(): void{
+    this.options.glyphTransformer.loadGlyphMappings();
+  }
+
   private async removePolyfills(content: string): Promise<string>{
     // Looking for the end of polyfills by the first Ext.define
     const extDefineIndex = content.indexOf("Ext.define('Ext.theme.neptune.Component'");
