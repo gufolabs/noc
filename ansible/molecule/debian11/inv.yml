@@ -39,8 +39,8 @@ all:
           consul_master_token: null
           consul_power: bootstrap
           consul_replication_token: null
-          consul_template_use_dedup: 'False'
-          consul_setup_resolv: 'False'
+          consul_template_use_dedup: "False"
+          consul_setup_resolv: "False"
           correlator_loglevel: info
           correlator_max_threads: 10
           correlator_power: 1
@@ -126,7 +126,7 @@ all:
           mailsender_smtp_port: 25
           mailsender_smtp_server: null
           mailsender_smtp_user: null
-          mailsender_use_tls: 'False'
+          mailsender_use_tls: "False"
           memcached_max_clients: 1024
           memcached_max_memory: 64
           mongod_db: noc
@@ -229,11 +229,11 @@ all:
             tRhkoUdCx1rl8SdZhck3WUMteyzYvU9p+MJdYxOzM/GhTjEAMq01zhq/LL/hdvoF
             GB3i9UFuEYEVOWBtjzEY5G2K1znlQQ==
             -----END PRIVATE KEY-----
-          nginx_external_cert_management: 'False'
-          nginx_http_redirect: 'True'
-          nginx_json_logging: 'False'
-          nginx_self_signed_cerificate: 'True'
-          nginx_permit_firewall: 'True'
+          nginx_external_cert_management: "False"
+          nginx_http_redirect: "True"
+          nginx_json_logging: "False"
+          nginx_self_signed_cerificate: "True"
+          nginx_permit_firewall: "True"
           noc_all_pools:
             - description: Default pool for NOC
               name: default
@@ -244,7 +244,7 @@ all:
           noc_group: noc
           noc_installation_name: Unconfigured installation
           noc_python_interpreter: python3
-          noc_repo: https://github.com/nocproject/noc.git
+          noc_repo: https://github.com/gufolabs/noc.git
           noc_root: /opt/noc
           noc_services:
             - config:
@@ -263,7 +263,7 @@ all:
                 supervisord:
                   command: ./services/activator/service.py
                   oom_score_adj: 300
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -282,7 +282,7 @@ all:
                 supervisord:
                   command: ./services/selfmon/service.py
                   oom_score_adj: 50
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -306,7 +306,7 @@ all:
                 supervisord:
                   command: ./services/bi/service.py
                   oom_score_adj: 50
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -331,7 +331,7 @@ all:
                   command: ./services/card/service.py
                   oom_score_adj: 100
                   priority: 300
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -352,7 +352,7 @@ all:
                   command: ./services/datasource/service.py
                   oom_score_adj: 999
                   priority: 100
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 1MB
@@ -377,7 +377,7 @@ all:
                   command: ./services/chwriter/service.py
                   oom_score_adj: 10
                   priority: 300
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -400,7 +400,7 @@ all:
                   command: ./services/classifier/service.py
                   oom_score_adj: 50
                   priority: 300
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -421,7 +421,7 @@ all:
                   command: ./services/correlator/service.py
                   oom_score_adj: 20
                   priority: 150
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -443,7 +443,7 @@ all:
                   command: ./services/datastream/service.py
                   oom_score_adj: 999
                   priority: 100
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 1MB
@@ -465,7 +465,7 @@ all:
                   command: ./services/discovery/service.py
                   oom_score_adj: 500
                   priority: 100
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -486,7 +486,7 @@ all:
                   command: ./services/escalator/service.py
                   oom_score_adj: 5
                   priority: 50
-                  process_name: '%(program_name)s'
+                  process_name: "%(program_name)s"
                   startretries: 999
                   stdout_logfile_backups: 10
                   stdout_logfile_maxbytes: 10MB
@@ -509,7 +509,7 @@ all:
                   command: ./services/grafanads/service.py
                   oom_score_adj: 900
                   priority: 500
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 1
                   stdout_logfile_maxbytes: 10MB
@@ -535,7 +535,7 @@ all:
                   command: ./services/login/service.py
                   oom_score_adj: 10
                   priority: 40
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 5
                   stdout_logfile_maxbytes: 10MB
@@ -551,7 +551,7 @@ all:
                 smtp_port: 25
                 smtp_server: null
                 smtp_user: null
-                use_tls: 'False'
+                use_tls: "False"
               config_order: yaml:///opt/noc/etc/tower.yml,yaml:///opt/noc/etc/settings.yml,env:///NOC
               environment:
                 category: internal
@@ -562,7 +562,7 @@ all:
                   command: ./services/mailsender/service.py
                   oom_score_adj: 100
                   priority: 600
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -583,7 +583,7 @@ all:
                   command: ./services/mrt/service.py
                   oom_score_adj: 100
                   priority: 110
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -604,7 +604,7 @@ all:
                   command: ./services/mx/service.py
                   oom_score_adj: 100
                   priority: 110
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -624,7 +624,7 @@ all:
                   command: ./services/nbi/service.py
                   oom_score_adj: 999
                   priority: 100
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 1MB
@@ -644,7 +644,7 @@ all:
                   command: ./services/kafkasender/service.py
                   oom_score_adj: 100
                   priority: 110
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -668,7 +668,7 @@ all:
                   command: ./services/ping/service.py
                   oom_score_adj: 200
                   priority: 90
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -690,7 +690,7 @@ all:
                   command: ./services/sae/service.py
                   oom_score_adj: 300
                   priority: 90
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -711,7 +711,7 @@ all:
                   command: ./services/scheduler/service.py
                   oom_score_adj: 100
                   priority: 50
-                  process_name: '%(program_name)s'
+                  process_name: "%(program_name)s"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -732,7 +732,7 @@ all:
                   command: ./services/syslogcollector/service.py
                   oom_score_adj: 50
                   priority: 200
-                  process_name: '%(program_name)s'
+                  process_name: "%(program_name)s"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -754,7 +754,7 @@ all:
                   command: ./services/trapcollector/service.py
                   oom_score_adj: 50
                   priority: 200
-                  process_name: '%(program_name)s'
+                  process_name: "%(program_name)s"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -781,7 +781,7 @@ all:
                   command: ./services/web/service.py
                   oom_score_adj: 300
                   priority: 50
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -802,7 +802,7 @@ all:
                   command: ./services/ui/service.py
                   oom_score_adj: 300
                   priority: 50
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -822,7 +822,7 @@ all:
                   command: ./services/metrics/service.py
                   oom_score_adj: 300
                   priority: 50
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
@@ -843,7 +843,7 @@ all:
                   command: ./services/worker/service.py
                   oom_score_adj: 300
                   priority: 50
-                  process_name: '%(program_name)s-%(process_num)02d'
+                  process_name: "%(program_name)s-%(process_num)02d"
                   startretries: 999
                   stdout_logfile_backups: 3
                   stdout_logfile_maxbytes: 10MB
