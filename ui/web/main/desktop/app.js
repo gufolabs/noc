@@ -43,7 +43,7 @@ Ext.application({
     });
   },
   openApplication: function(){
-    Ext.setGlyphFontFamily("FontAwesome");
+    Ext.setGlyphFontFamily("GufoFont");
     console.log("Initializing history API");
     Ext.History.init();
     console.log("NOC application starting");

@@ -7,6 +7,7 @@ import fs from "fs-extra";
 import {SourceMapGenerator} from "source-map";
 import type {MethodReplacement} from "../visitors/MethodReplaceVisitor.ts";
 import {MethodReplaceVisitor} from "../visitors/MethodReplaceVisitor.ts";
+import {GlyphTransformer} from "./GlyphTransformer.ts";
 
 interface PluginOptions {
   toReplaceMethods: MethodReplacement[] | undefined;
@@ -14,6 +15,7 @@ interface PluginOptions {
   generateOptions?: astring.Options;
   isDev: boolean;
   debug?: boolean;
+  glyphTransformer: GlyphTransformer;
 }
 
 export class ReplaceMethodsPlugin{
@@ -30,6 +32,12 @@ export class ReplaceMethodsPlugin{
     return {
       name: "remove-methods-plugin",
       setup: (build) => {
+        build.onStart(() => {
+          if(this.options.glyphTransformer){
+            this.options.glyphTransformer.initialize();
+          }
+        });
+
         build.onLoad({filter: /\.js$/}, async(args) => {
           let contents = await fs.readFile(args.path, "utf8");
           this.log(`Processed file: ${args.path}`);
@@ -45,6 +53,10 @@ export class ReplaceMethodsPlugin{
     };
   }
 
+  public loadGlyphMappings(): void{
+    this.options.glyphTransformer.loadGlyphMappings();
+  }
+
   private async removePolyfills(content: string): Promise<string>{
     // Looking for the end of polyfills by the first Ext.define
     const extDefineIndex = content.indexOf("Ext.define('Ext.theme.neptune.Component'");
@@ -55,7 +67,12 @@ export class ReplaceMethodsPlugin{
     
     return content.substring(extDefineIndex);
   }
-  private processFile(fileName: string, contents: string, isDev: boolean): string{    
+  
+  private processFile(fileName: string, contents: string, isDev: boolean): string{
+    if(this.options.glyphTransformer){
+      contents = this.options.glyphTransformer.transform(contents, fileName);
+    }
+
     let ast = espree.parse(contents, this.options.parserOptions) as Node;
 
     this.options.toReplaceMethods?.map((method) => {

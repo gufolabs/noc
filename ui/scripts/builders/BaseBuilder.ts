@@ -4,6 +4,7 @@ import type * as espree from "espree";
 import fs from "fs-extra";
 import * as path from "path";
 import {AliasPlugin} from "../plugins/AliasPlugin.ts";
+import {GlyphTransformer} from "../plugins/GlyphTransformer.ts";
 import {HtmlPlugin} from "../plugins/HtmlPlugin.ts";
 import {ImageCheckPlugin} from "../plugins/ImageCheckPlugin.ts";
 import {LoggerPlugin} from "../plugins/LoggerPlugin.ts";
@@ -31,6 +32,7 @@ export interface BuilderOptions {
   cssEntryPoints?: string[];
   cssOutdir?: string;
   aliases?: Record<string, string>;
+  glyphTransformer: GlyphTransformer;
   theme: Theme;
   themes: Theme[];
   language: Language;
@@ -93,6 +95,7 @@ export abstract class BaseBuilder{
       isDev: this.options.isDev,
       parserOptions: this.options.parserOptions,
       generateOptions: this.options.generateOptions,
+      glyphTransformer: this.options.glyphTransformer,
     });
 
     const imageCheckPlugin = new ImageCheckPlugin({

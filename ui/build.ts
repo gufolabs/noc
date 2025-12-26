@@ -1,3 +1,4 @@
+import {CODEPOINTS} from "@gufo-labs/font";
 import fs from "fs-extra";
 import * as path from "path";
 import type {BuilderOptions, Language, Theme} from "./scripts/builders/BaseBuilder.ts";
@@ -5,6 +6,7 @@ import {BaseBuilder} from "./scripts/builders/BaseBuilder.ts";
 import {DevBuilder} from "./scripts/builders/DevBuilder.ts";
 import {ProdBuilder} from "./scripts/builders/ProdBuilder.ts";
 import {VendorBuilder} from "./scripts/builders/VendorBuilder.ts";
+import {GlyphTransformer} from "./scripts/plugins/GlyphTransformer.ts";
 
 type ModeType = "prod" | "dev" | "vendor" | "vendor-dev"
 
@@ -168,6 +170,12 @@ const commonOptions: BuilderOptions = {
     indent: "  ",
     lineEnd: "\n",
   },
+  glyphTransformer: new GlyphTransformer({
+    semanticDtsPath: "types/noc-glyph.d.ts",
+    glyphCodes: CODEPOINTS,
+    useSemantic: false,
+    debug: false,
+  }),
 };
 
 let builder: BaseBuilder;
