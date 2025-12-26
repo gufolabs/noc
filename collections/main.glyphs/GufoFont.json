@@ -1,11 +1,16 @@
 {
   "$type": "bundle",
-  "$collection": "sa.actioncommands",
+  "$collection": "main.glyphs",
   "items": [
     {
       "name": "exclamation",
       "uuid": "48c52208-71da-5efd-986e-2a91e367870f",
       "code": 33
+    },
+    {
+      "name": "hashtag",
+      "uuid": "fc289f16-240e-5393-b79c-4389cbcdf88a",
+      "code": 35
     },
     {
       "name": "comma",
@@ -1263,6 +1268,11 @@
       "code": 58176
     },
     {
+      "name": "python-s",
+      "uuid": "d229aa67-d754-50ed-8809-541b881686ac",
+      "code": 58177
+    },
+    {
       "name": "database",
       "uuid": "fecbb369-561e-5d7e-8b3a-ab569ebdb930",
       "code": 61440
@@ -1513,6 +1523,11 @@
       "code": 61956
     },
     {
+      "name": "cisco-atm-switch",
+      "uuid": "ee944fda-4378-5fc8-a6aa-d245440009bc",
+      "code": 61957
+    },
+    {
       "name": "cisco-bridge",
       "uuid": "654ba910-ba17-5e13-b907-920105c2c610",
       "code": 61958
@@ -1528,6 +1543,11 @@
       "code": 61960
     },
     {
+      "name": "cisco-class-4-5-switch",
+      "uuid": "0d66d88a-fb3b-5e13-90e7-b04b74da520a",
+      "code": 61963
+    },
+    {
       "name": "cisco-concentrator",
       "uuid": "264d63cc-851c-514f-9368-714292865e07",
       "code": 61966
@@ -1536,6 +1556,26 @@
       "name": "cisco-firewall",
       "uuid": "215f2c4e-57ee-5772-a365-8541acff1625",
       "code": 61972
+    },
+    {
+      "name": "cisco-generic-softswitch",
+      "uuid": "73799c09-9632-5e40-b778-04f64f7cad30",
+      "code": 61973
+    },
+    {
+      "name": "cisco-host",
+      "uuid": "da35907f-a2ac-539f-ace6-e07d8c2e2c0d",
+      "code": 61975
+    },
+    {
+      "name": "cisco-layer-3-switch",
+      "uuid": "01578a2f-8a55-582e-b8d0-ea2dd21e2974",
+      "code": 61980
+    },
+    {
+      "name": "cisco-network-management",
+      "uuid": "70670c1e-f9b0-52c6-b665-d14067b256fc",
+      "code": 61985
     },
     {
       "name": "cisco-optical-amplifier",
@@ -1586,6 +1626,26 @@
       "name": "huawei-msan",
       "uuid": "07006ae2-9bc0-59fb-9f6b-1eba5e6888cf",
       "code": 62528
+    },
+    {
+      "name": "huawei-dslam",
+      "uuid": "24df760c-b3b8-55ef-bea8-9759feb4a059",
+      "code": 62529
+    },
+    {
+      "name": "huawei-optical-splitter",
+      "uuid": "9672e193-6c70-523b-a73c-fa0fab06f67d",
+      "code": 62531
+    },
+    {
+      "name": "huawei-bras",
+      "uuid": "d7433772-95ce-5575-af17-a467a100fc12",
+      "code": 62539
+    },
+    {
+      "name": "huawei-access-node",
+      "uuid": "ec98101e-761a-539d-8ef2-de0bcd9ed74b",
+      "code": 62540
     }
   ]
 }
