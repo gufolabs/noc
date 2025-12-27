@@ -1,12 +1,13 @@
 # ----------------------------------------------------------------------
 # get_current_user dependencies
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 from typing import Optional
+from urllib.parse import unquote
 
 # Third-party modules
 from fastapi import Header, HTTPException
@@ -32,7 +33,7 @@ async def get_current_user(
         return None
     if not remote_user:
         raise HTTPException(403, "Not authorized")
-    user = User.get_by_username(remote_user)
+    user = User.get_by_username(unquote(remote_user))
     if not user:
         raise HTTPException(403, "Not authorized")
     if not user.is_active:
