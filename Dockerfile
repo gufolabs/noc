@@ -1,5 +1,5 @@
 # Basic Python image
-FROM python:3.12-slim-trixie AS python
+FROM python:3.13-slim-trixie AS python
 ENV \
     PYTHONPATH=/opt
 RUN \

@@ -1,7 +1,7 @@
 name: Run Python Tests
 env:
   PYTHONPATH: src
-  TEST_PYTHON_VERSION: "3.12"
+  TEST_PYTHON_VERSION: "3.13"
 on:
   push:
     branches: [master]
