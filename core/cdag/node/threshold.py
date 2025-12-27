@@ -1,14 +1,14 @@
 # ----------------------------------------------------------------------
 # Threshold node
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import datetime
 import logging
-from typing import Optional, List, Dict, Literal, Iterable, Any
+from typing import Optional, List, Dict, Literal, Iterable
 
 # Third-party modules
 import orjson
