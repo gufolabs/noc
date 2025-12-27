@@ -1,0 +1,19 @@
+{
+    "name": "BDCOM | xPON | Network | xPON | Laser Always On #1 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "461cdcac-ad4f-4fd1-9076-bc3d301d2793",
+    "description": "Alarm LASER_ALWAYS_ON from OLT 0x03000000 port EPON0/4",
+    "event_class__name": "Network | xPON | Laser Always On",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "Alarm LASER_ALWAYS_ON from OLT \\S+ port (?P<interface>\\S+)",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "Alarm LASER_ALWAYS_ON from OLT 0x03000000 port EPON0/4",
+            "raw_vars": []
+        }
+    ]
+}
