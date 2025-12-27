@@ -26,10 +26,10 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      - name: Set Up Python 3.12
+      - name: Set Up Python 3.13
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
 
       - name: Setup uv
         uses: astral-sh/setup-uv@v1
