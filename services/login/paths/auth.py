@@ -8,6 +8,7 @@
 # Python modules
 import logging
 import codecs
+from urllib.parse import quote
 
 # Third-party modules
 from fastapi import APIRouter, Request, Cookie, Header, Depends
@@ -38,6 +39,19 @@ PINHOLE_PATHS = {
     "/api/zeroconf/config",
     "/api/metricscollector/send",
 }
+
+
+def encode_user(user: str) -> str:
+    """
+    Encode username to be passed via Remote-User.
+
+    Args:
+        user: User name.
+
+    Returns:
+        encoded user name.
+    """
+    return quote(user)
 
 
 @router.get("/api/auth/auth/", tags=["auth"])
@@ -93,7 +107,9 @@ async def auth_cookie(
         user = get_user_from_jwt(jwt_cookie, audience="auth")
         if pinned_user and user != pinned_user:
             raise ValueError("User doesn't match certificate")
-        return ORJSONResponse({"status": True}, status_code=200, headers={"Remote-User": user})
+        return ORJSONResponse(
+            {"status": True}, status_code=200, headers={"Remote-User": encode_user(user)}
+        )
     except ValueError as e:
         logger.error("[Cookie][%s] Denied: %s", request.client.host, str(e) or "Unspecified reason")
         return ORJSONResponse({"status": False}, status_code=401)
@@ -112,7 +128,7 @@ async def auth_private_token(
         return ORJSONResponse(
             {"status": True},
             status_code=200,
-            headers={"Remote-User": user, "X-NOC-API-Access": access},
+            headers={"Remote-User": encode_user(user), "X-NOC-API-Access": access},
         )
     if not user:
         reason = "API Key not found"
@@ -196,7 +212,9 @@ async def auth_authorization_basic(
             logger.error("[Authorization|Basic][%s] user doesn't match certificate", user)
             return ORJSONResponse({"status": False}, status_code=401)
         register_last_login(user)
-        response = ORJSONResponse({"status": True}, status_code=200, headers={"Remote-User": user})
+        response = ORJSONResponse(
+            {"status": True}, status_code=200, headers={"Remote-User": encode_user(user)}
+        )
         set_jwt_cookie(response, user)
         return response
     logger.error("[Authorization|Basic][%s|%s] Denied: Authentication failed", user, remote_ip)
@@ -221,7 +239,9 @@ async def auth_authorization_bearer(
             "[Authorization|Bearer][%s] Denied: Authentication failed", request.client.host
         )
         return ORJSONResponse({"status": False}, status_code=401)
-    return ORJSONResponse({"status": True}, status_code=200, headers={"Remote-User": user})
+    return ORJSONResponse(
+        {"status": True}, status_code=200, headers={"Remote-User": encode_user(user)}
+    )
 
 
 def is_pinhole(path: str) -> bool:
