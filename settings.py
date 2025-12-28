@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Django settings
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -100,7 +100,7 @@ MIDDLEWARE = [
     "noc.core.middleware.extformat.ext_format_middleware",
 ]
 
-ROOT_URLCONF = "noc.urls"
+ROOT_URLCONF = "noc.services.web.urls"
 
 TEMPLATES = [
     {
