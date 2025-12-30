@@ -16,7 +16,7 @@ interface NOC {
         readonly ACTION_SAVE: string;
         /** Apply without closing (text: "Apply", tooltip: "Save changes and continue editing") */
         /** @glyphName plus_s */
-        readonly ACTION_APPLY: string;
+        readonly ACTION_SAVE_AND_CONTINUE: string;
       
         /** Add new item (text: "Add", tooltip: "Add new record") */
         /** @glyphName plus */
