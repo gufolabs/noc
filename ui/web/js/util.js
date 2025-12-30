@@ -675,7 +675,7 @@ Ext.define("NOC.form.field.VTypes", {
     }
   },
   ASNText: "AS num must be a numeric value > 0",
-  ASNMask: /[\d.]/,
+  ASNMask: /[\d.]/i,
 
   // IPv4 check
   IPv4: function(val){
