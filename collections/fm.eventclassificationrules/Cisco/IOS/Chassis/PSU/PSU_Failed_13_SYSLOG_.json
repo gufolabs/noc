@@ -1,0 +1,19 @@
+{
+    "name": "Cisco | IOS | Chassis | PSU | PSU Failed #13 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "2d49ee3e-8037-47a0-a804-36b0071d11c2",
+    "description": "%PLATFORM_ENV-6-FRU_PS_OIR: FRU Power Supply 1 powered off",
+    "event_class__name": "Chassis | PSU | PSU Failed",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "%PLATFORM_ENV-6-FRU_PS_OIR: FRU (?P<name>Power [Ss]upply \\d+) powered off",
+    "profiles": ["Cisco.IOS"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "%PLATFORM_ENV-6-FRU_PS_OIR: FRU Power Supply 1 powered off",
+            "raw_vars": []
+        }
+    ]
+}
