@@ -1,0 +1,19 @@
+{
+    "name": "DLink | DxS | Network | DHCP | DHCP Flood (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "c0aa7e6b-c87a-40f9-a871-1d05f4ea7d9f",
+    "description": "WARN: Port 26 is currently shutdown due to the DHCP rate excludes the rate limiting.",
+    "event_class__name": "Network | DHCP | DHCP Flood",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "[Pp]ort (?P<interface>.+) is currently shutdown due to the DHCP rate excludes the rate limiting",
+    "profiles": ["DLink.DxS"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "WARN: Port 26 is currently shutdown due to the DHCP rate excludes the rate limiting.",
+            "raw_vars": []
+        }
+    ]
+}

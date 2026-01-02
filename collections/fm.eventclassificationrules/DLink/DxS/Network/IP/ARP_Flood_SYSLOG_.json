@@ -1,0 +1,19 @@
+{
+    "name": "DLink | DxS | Network | IP | ARP Flood (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "6494d932-054b-4a4e-8b3d-2ed8608ff76d",
+    "description": "CPUP-2: Incoming traffic reached ARP cpu limit.",
+    "event_class__name": "Network | IP | ARP Flood",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "Incoming traffic reached ARP cpu limit",
+    "profiles": ["DLink.DxS"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "CPUP-2: Incoming traffic reached ARP cpu limit.",
+            "raw_vars": []
+        }
+    ]
+}
