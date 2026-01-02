@@ -11,12 +11,16 @@
     }],
     "patterns": [],
     "labels": [],
-    "message_rx": "%HARDWARE-2-FAN_ERROR: Fan(.+)? Failure.",
+    "message_rx": "%HARDWARE-2-FAN_ERROR: Fan(.+)? Failure\\.?",
     "profiles": ["Cisco.IOS"],
     "sources": ["syslog"],
     "test_cases": [
         {
             "message": "%HARDWARE-2-FAN_ERROR: Fan Failure.",
+            "raw_vars": []
+        },
+        {
+            "message": "%HARDWARE-2-FAN_ERROR: Fan  Failure",
             "raw_vars": []
         }
     ]

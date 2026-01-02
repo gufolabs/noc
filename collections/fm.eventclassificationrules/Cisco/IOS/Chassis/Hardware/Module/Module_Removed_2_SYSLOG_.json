@@ -7,12 +7,16 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "%C4K_IOSINTF-5-TRANSCEIVERREMOVED: Slot=(?P<module>\\d+) Port=(?P<interface>\\d+): Transceiver has been removed",
+    "message_rx": "%(C4K_IOSINTF|PHY)-5-TRANSCEIVERREMOVED: Slot=(?P<module>\\d+) Port=(?P<interface>\\d+): Transceiver has been removed",
     "profiles": ["Cisco.IOS"],
     "sources": ["syslog"],
     "test_cases": [
         {
             "message": "%C4K_IOSINTF-5-TRANSCEIVERREMOVED: Slot=1 Port=3: Transceiver has been removed",
+            "raw_vars": []
+        },
+        {
+            "message": "%PHY-5-TRANSCEIVERREMOVED: Slot=1 Port=52: Transceiver has been removed",
             "raw_vars": []
         }
     ]
