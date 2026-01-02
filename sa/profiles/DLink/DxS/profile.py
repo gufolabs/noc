@@ -245,11 +245,11 @@ class Profile(BaseProfile):
     rx_port = re.compile(
         r"^\s*(?P<port>\d+(/|:)?\d*)\s*"
         r"(\((?P<media_type>(C|F))\))?\s+(?P<admin_state>Enabled|Disabled)\s+"
-        r"(?P<admin_speed>Auto|10M|100M|1000M|10G)/"
+        r"(?P<admin_speed>Auto|10M|100M|1000M|1G|10G)/"
         r"((?P<admin_duplex>Half|Full)/)?"
         r"(?P<admin_flowctrl>Enabled|Disabled)\s+"
         r"(?P<status>LinkDown|Link\sDown|(?:Err|Loop)\-Disabled|Empty)?"
-        r"((?P<speed>10M|100M|1000M|10G)/"
+        r"((?P<speed>10M|100M|1000M|1G|10G)/"
         r"(?P<duplex>Half|Full)/(?P<flowctrl>None|Enabled|Disabled|802.3x))?\s+"
         r"(?P<addr_learning>Enabled|Disabled)\s*"
         r"((?P<trap_state>Enabled|Disabled)\s*)?"
@@ -261,11 +261,11 @@ class Profile(BaseProfile):
     rx_port_old = re.compile(
         r"^(?P<port>\d+)\s+"
         r"(?P<admin_state>Enabled|Disabled|MDIX)\s+"
-        r"(?P<admin_speed>Auto|10M|100M|1000M)/"
+        r"(?P<admin_speed>Auto|10M|100M|1000M|1G)/"
         r"((?P<admin_duplex>Half|Full)/)?"
         r"(?P<admin_flowctrl>Enabled|Disabled)\s+"
         r"(?P<status>LinkDown|Link\sDown|(?:Err|Loop)\-Disabled|Empty)?"
-        r"((?P<speed>10M|100M|1000M)/"
+        r"((?P<speed>10M|100M|1000M|1G)/"
         r"(?P<duplex>Half|Full)/(?P<flowctrl>None|Enabled|Disabled|802.3x))?\s+"
         r"(?P<mdix>Auto|MDI|MDIX|Cross|Normal|N/A|\-)\s*\n",
         re.MULTILINE,
