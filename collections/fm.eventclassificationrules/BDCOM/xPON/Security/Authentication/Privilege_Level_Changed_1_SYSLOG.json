@@ -1,0 +1,19 @@
+{
+    "name": "BDCOM | xPON | Security | Authentication | Privilege Level Changed #1 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "7c341d9a-5a9c-4eba-ba76-7c95c5bc3af2",
+    "description": "User mitya enter privilege mode from vty 0, level = 15",
+    "event_class__name": "Security | Authentication | Privilege Level Changed",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "User (?P<user>\\S+) enter privilege mode from vty \\d+, level = (?P<to_priv>\\d+)",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "User mitya enter privilege mode from vty 0, level = 15",
+            "raw_vars": []
+        }
+    ]
+}
