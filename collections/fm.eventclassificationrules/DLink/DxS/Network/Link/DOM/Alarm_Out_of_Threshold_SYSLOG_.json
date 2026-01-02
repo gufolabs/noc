@@ -7,12 +7,16 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "(DDM )?Port (?P<interface>\\S+) (?:optic module|SFP) (?P<sensor>.+) exceeded the (?P<threshold>low|high) alarm threshold",
+    "message_rx": "(DDM )?Port <?(?P<interface>\\S+)>? (?:optic module|SFP) (?P<sensor>.+) exceeded the (?P<threshold>low|high) alarm\\s*threshold",
     "profiles": ["DLink.DxS"],
     "sources": ["syslog"],
     "test_cases": [
         {
             "message": "DDM Port 9 optic module RX power exceeded the low alarm threshold",
+            "raw_vars": []
+        },
+        {
+            "message": "CRIT(2) Port <1:2> SFP RX power exceeded the low alarmthreshold",
             "raw_vars": []
         }
     ]
