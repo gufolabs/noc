@@ -7,7 +7,7 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "(DDM )?Port (?P<interface>\\S+) (?:optic module|SFP) (?P<sensor>.+) recovered from the (?P<threshold>low|high) alarm threshold",
+    "message_rx": "(DDM )?Port <?(?P<interface>\\S+)>? (?:optic module|SFP) (?P<sensor>.+) recover(ed)? from the (?P<threshold>low|high) alarm\\s*threshold",
     "profiles": ["DLink.DxS"],
     "sources": ["syslog"],
     "test_cases": [

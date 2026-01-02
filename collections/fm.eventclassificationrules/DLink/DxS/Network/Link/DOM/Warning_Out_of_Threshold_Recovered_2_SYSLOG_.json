@@ -1,0 +1,23 @@
+{
+    "name": "DLink | DxS | Network | Link | DOM | Warning: Out of Threshold Recovered #2 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "97dc319b-a04b-4728-851e-4c015f006c08",
+    "description": "WARN(4) Port <14> optic module RX power back to normal",
+    "event_class__name": "Network | Link | DOM | Warning: Out of Threshold Recovered",
+    "preference": 1000,
+    "vars": [{
+        "name": "threshold",
+        "value": "low"
+    }],
+    "patterns": [],
+    "labels": [],
+    "message_rx": "Port <?(?P<interface>\\S+)>? (?:optic module|SFP) (?P<sensor>.+) back to normal",
+    "profiles": ["DLink.DxS"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "WARN(4) Port <14> optic module RX power back to normal",
+            "raw_vars": []
+        }
+    ]
+}
