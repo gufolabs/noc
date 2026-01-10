@@ -1,0 +1,19 @@
+{
+    "name": "Cisco | IOS | Chassis | PSU | PSU Recovered #13 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "1ec5314a-601a-4463-83c3-5a9acfa57d7a",
+    "description": "%PLATFORM_ENV-6-FRU_PS_OIR: FRU Power Supply 1 powered on",
+    "event_class__name": "Chassis | PSU | PSU Recovered",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "%PLATFORM_ENV-6-FRU_PS_OIR: FRU (?P<name>Power [Ss]upply \\d+) powered on",
+    "profiles": ["Cisco.IOS"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "%PLATFORM_ENV-6-FRU_PS_OIR: FRU Power Supply 1 powered on",
+            "raw_vars": []
+        }
+    ]
+}

@@ -7,12 +7,20 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "%ETHERNET_OAM-5-LINK_MONITOR: (?P<error>.+) errors detected over the last .+ on interface (?P<interface>\\S+)",
+    "message_rx": "%ETHERNET_OAM-5-LINK_MONITOR: \\d+( rx)? (?P<error>.+)( errors)? detected over the last .+ on interface (?P<interface>\\S+)\\.",
     "profiles": ["Cisco.IOS"],
     "sources": ["syslog"],
     "test_cases": [
         {
-            "message": "%ETHERNET_OAM-5-LINK_MONITOR: 121507 rx CRC errors detected over the last 180 seconds on interface Fa0/24",
+            "message": "%ETHERNET_OAM-5-LINK_MONITOR: 121507 rx CRC errors detected over the last 180 seconds on interface Fa0/24.",
+            "raw_vars": []
+        },
+        {
+            "message": "%ETHERNET_OAM-5-LINK_MONITOR: 49152 frame errors detected over the last 600x100 milliseconds on interface Fa0/24.",
+            "raw_vars": []
+        },
+        {
+            "message": "%ETHERNET_OAM-5-LINK_MONITOR: 10 errored seconds detected over the last 9000x100 milliseconds on interface Fa0/24.",
             "raw_vars": []
         }
     ]
