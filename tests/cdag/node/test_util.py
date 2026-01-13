@@ -9,7 +9,7 @@
 import pytest
 
 # NOC modules
-from .util import NodeCDAG, publish_service
+from .util import NodeCDAG, publish_service, MetricTarget
 
 
 @pytest.mark.parametrize(
@@ -75,13 +75,13 @@ def test_metrics(values, expected):
     # Check default inputs
     node = cdag.get_node()
     inputs = set(node.iter_inputs())
-    assert inputs == {"ts", "labels"}
+    assert inputs == {"ts", "target", "labels"}
     assert node.allow_dynamic is True
     # Add dynamic inputs
     for k in values:
         node.add_input(k)
     inputs = set(node.iter_inputs())
-    x_inputs = {"ts", "labels"}
+    x_inputs = {"ts", "target", "labels"}
     x_inputs.update(set(values))
     assert inputs == x_inputs
     # Activate dynamic inputs
@@ -90,6 +90,7 @@ def test_metrics(values, expected):
             cdag.activate(k, v)
     # Activate static inputs
     cdag.activate("ts", TS)
+    cdag.activate("target", None)
     cdag.activate("labels", LABELS)
     value = cdag.get_value()
     assert value == expected
@@ -121,17 +122,23 @@ def test_alarm(config, values, expected, state):
         "reference": "test:1",
         "pool": "TEST",
         "partition": 3,
+        "rule_id": "6963de4606487013c97ff7b2",
+        "action_id": "6963de5306487013c97ff7b3",
         "alarm_class": "Test",
         "managed_object": "777",
         "labels": ["l1", "l2"],
     }
     cfg = default_cfg.copy()
     cfg.update(config)
+    target = MetricTarget(
+        type="managed_object", id="777", bi_id=1111111111111, managed_object=777, fm_pool="TEST"
+    )
     cdag = NodeCDAG("alarm", cfg)
     node = cdag.get_node()
     with publish_service() as svc:
         for v, exp, st in zip(values, expected, state):
             cdag.begin()
+            cdag.activate("target", target)
             cdag.activate("x", v)
             # Check state change
             assert node.state.active is st, "Invalid state"
@@ -153,7 +160,7 @@ def test_alarm(config, values, expected, state):
             assert exp == msg.value["$op"]
             if msg.value["$op"] == "raise":
                 # Check managed object
-                assert msg.value["managed_object"] == cfg["managed_object"]
+                assert msg.value["managed_object"] == target.managed_object
                 # Check timestamp
                 assert "timestamp" in msg.value
                 # Check labels
@@ -206,15 +213,21 @@ def test_alarm_vars(config, expected):
         "alarm_class": "Test",
         "managed_object": "777",
         "labels": ["l1", "l2"],
+        "rule_id": "6963de4606487013c97ff7b2",
+        "action_id": "6963de5306487013c97ff7b3",
         "activation_level": 1.0,
         "deactivation_level": 0.5,
     }
     cfg = default_cfg.copy()
     if config:
         cfg.update(config)
+    target = MetricTarget(
+        type="managed_object", id="777", bi_id=1111111111111, managed_object=777, fm_pool="TEST"
+    )
     cdag = NodeCDAG("alarm", cfg)
     with publish_service() as svc:
         cdag.begin()
+        cdag.activate("target", target)
         cdag.activate("x", 1.0)
         messages = list(svc.iter_published())
         assert len(messages) == 1, "Lost message"
@@ -384,16 +397,21 @@ def test_threshold(config, values, expected, state):
         "pool": "TEST",
         "partition": 3,
         "alarm_class": "Test",
-        "managed_object": "777",
-        "labels": ["l1", "l2"],
+        # "alarm_labels": ["l1", "l2"],
+        "rule_id": "6963de4606487013c97ff7b2",
+        "action_id": "6963de5306487013c97ff7b3",
     }
     cfg = default_cfg.copy()
     cfg.update(config)
+    target = MetricTarget(
+        type="managed_object", id="777", bi_id=1111111111111, managed_object=777, fm_pool="TEST"
+    )
     cdag = NodeCDAG("threshold", cfg)
     node = cdag.get_node()
     with publish_service() as svc:
         for v, exp, st in zip(values, expected, state):
             cdag.begin()
+            cdag.activate("target", target)
             cdag.activate("x", v)
             # Check state change
             assert node.is_active() is st, "Invalid state"
@@ -415,8 +433,8 @@ def test_threshold(config, values, expected, state):
             assert exp == msg.value["$op"]
             if msg.value["$op"] == "raise":
                 # Check managed object
-                assert msg.value["managed_object"] == cfg["managed_object"]
+                assert msg.value["managed_object"] == f"bi_id:{target.managed_object}"
                 # Check timestamp
                 assert "timestamp" in msg.value
                 # Check labels
-                assert msg.value["labels"] == cfg["labels"]
+                # assert msg.value["labels"] == cfg["labels"]

@@ -357,6 +357,23 @@ class Label(Document):
             r.append(ll)
         return r
 
+    @classmethod
+    def _refresh_object_labels(cls, obj: Any):
+        """Refresh effective labels on object"""
+        # Sync Labels
+        if not hasattr(obj, "effective_labels"):
+            return
+        el = Label.build_effective_labels(obj)
+        # Build and clean up effective labels. Filter can_set_labels
+        if not obj.effective_labels or el != set(obj.effective_labels):
+            # mo.effective_labels = sorted(el)
+            if is_document(obj):
+                obj.objects.filter(id=obj.id).update(effective_labels=sorted(el))
+            else:
+                obj.__class__.objects.filter(id=obj.id).update(effective_labels=sorted(el))
+            if hasattr(obj, "_reset_caches"):
+                obj._reset_caches(obj.id)
+
     # def __getattr__(self, item):
     #     """
     #     Check enable_XX settings for backward compatible
@@ -625,7 +642,7 @@ class Label(Document):
         #     return  # Exists
         label = Label.get_by_name(name)
         if label:
-            return None  # Exists
+            return label  # Exists
         logger.info("[%s] Create label by ensure", name)
         settings = cls.get_effective_settings(name, include_current=True)
         if not settings.get("allow_auto_create"):

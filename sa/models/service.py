@@ -50,9 +50,9 @@ from noc.core.etl.remotemappings import mappings
 from noc.core.diagnostic.types import DiagnosticConfig, DiagnosticState
 from noc.core.diagnostic.decorator import diagnostic
 from noc.core.validators import is_objectid
-from noc.core.watchers.types import ObjectEffect
-from noc.core.watchers.decorator import watchers
-from noc.core.watchers.types import WatchItem
+from noc.core.watchers.types import ObjectEffect, WatchItem
+from noc.core.watchers.decorator import watchers, WATCHER_JCLS, get_next_ts
+from noc.core.scheduler.scheduler import Scheduler
 from noc.crm.models.subscriber import Subscriber
 from noc.crm.models.supplier import Supplier
 from noc.main.models.remotesystem import RemoteSystem
@@ -74,6 +74,7 @@ logger = logging.getLogger(__name__)
 id_lock = Lock()
 _path_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 SVC_REF_PREFIX = "svc"
+SCHEDULER = "scheduler"
 SVC_AC = "Service | Status | Change"
 
 
@@ -353,6 +354,14 @@ class Service(Document):
         )
 
     @classmethod
+    def get_by_remote_ids(cls, remote_system: RemoteSystem, ids: List[str]) -> List[str]:
+        """Return object IDS by remote_ids"""
+        return Service.objects.filter(
+            m_q(remote_system=str(remote_system.id), remote_id__in=ids)
+            | m_q(mappings__match={"remote_id": {"$in": ids}, "remote_system": remote_system.id})
+        ).scalar("id")
+
+    @classmethod
     def get_exposed_labels_for_object(cls, mo_id: int) -> List[str]:
         """Return exposed labels for Managed Object"""
         from noc.sa.models.serviceinstance import ServiceInstance
@@ -381,6 +390,15 @@ class Service(Document):
                 continue
             svc = row["svc"][0]
             yield Label.build_expose_labels(svc["effective_labels"], "expose_sa_object")
+
+    @classmethod
+    def get_min_wait_ts(cls) -> Optional[datetime.datetime]:
+        """"""
+        return (
+            Service.objects()
+            .aggregate([{"$group": {"_id": None, "wait_ts": {"$min": "$watcher_wait_ts"}}}])
+            .next()["wait_ts"]
+        )
 
     def __str__(self):
         if self.label:
@@ -1024,37 +1042,21 @@ class Service(Document):
                 continue
             update = up_w.pop((w.effect, w.key, rs), None)
             if update:
-                w = WatchDocumentItem(
-                    effect=update.effect,
-                    key=update.key,
-                    remote_system=(
-                        RemoteSystem.get_by_name(update.remote_system)
-                        if update.remote_system
-                        else None
-                    ),
-                    after=update.after,
-                    once=update.once,
-                    args=update.args,
-                )
+                w = WatchDocumentItem.from_item(update)
             updates.append(w)
         for w in up_w.values():
             rs = RemoteSystem.get_by_name(w.remote_system) if w.remote_system else None
-            updates.append(
-                WatchDocumentItem(
-                    effect=w.effect,
-                    key=w.key,
-                    remote_system=rs,
-                    after=w.after,
-                    once=w.once,
-                    args=w.args,
-                )
-            )
+            updates.append(WatchDocumentItem.from_item(w, remote_system=rs))
         self.watchers = updates
         wait_ts = self.get_wait_ts()
         if self.watcher_wait_ts != wait_ts:
             self.watcher_wait_ts = wait_ts
         if dry_run or self._created:
             return
+        m_ts = self.get_min_wait_ts()
+        if wait_ts and (not m_ts or wait_ts < m_ts):
+            scheduler = Scheduler(SCHEDULER)
+            scheduler.submit(jcls=WATCHER_JCLS, key="sa.Service", ts=get_next_ts(wait_ts))
         set_op = {"watchers": self.watchers, "watcher_wait_ts": self.watcher_wait_ts}
         self.update(**set_op)
 
@@ -1179,6 +1181,30 @@ class Service(Document):
     def iter_diagnostic_configs(self) -> Iterable[DiagnosticConfig]:
         """Iterable diagnostic Config"""
         yield from self.profile.iter_diagnostic_configs(self)
+
+    @classmethod
+    def update_maintenance(
+        cls,
+        maintenance_id: str,
+        services: List["Service"],
+        start: datetime.datetime,
+        affected_topology: bool = False,
+        remote_system: Optional[RemoteSystem] = None,
+        remote_ids: Optional[List[str]] = None,
+    ):
+        """Update Maintenance"""
+        svcs = [s.id for s in services]
+        if remote_system and remote_ids:
+            svcs += Service.get_by_remote_ids(remote_system, remote_ids)
+        logger.info("Update maintenance on Services: %s", svcs)
+        for svc in Service.objects.filter(id__in=svcs):
+            svc.add_watch(ObjectEffect.MAINTENANCE, key=str(maintenance_id), once=False)
+
+    @classmethod
+    def reset_maintenance(cls, maintenance_id: ObjectId):
+        """Reset Maintenance"""
+        for svc in Service.objects.filter(watchers__key=str(maintenance_id)):
+            svc.stop_watch(ObjectEffect.MAINTENANCE, str(maintenance_id))
 
     def get_check_ctx(self, include_credentials=False, **kwargs) -> Dict[str, Any]:
         """"""

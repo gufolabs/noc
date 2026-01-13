@@ -43,7 +43,7 @@ WORKDIR /opt/noc/
 RUN \
     set -x \
     && uv pip install --system -e .[bh,activator,classifier,cache-redis,node,login-ldap,login-pam,login-radius,prod-tools,testing,sender-kafka,ping] \
-    && (curl -L https://get.static-web-server.net/ | sed 's/sudo //g' | sh) \
+    && (curl -L https://raw.githubusercontent.com/static-web-server/static-web-server/refs/tags/v2.40.1/scripts/installer.sh | sed 's/sudo //g' | sh) \
     && find /opt/noc/ -type f -name "*.py" -print0 | xargs -0 python3 -m py_compile \
     && uv cache clean \
     && rm -rf /var/lib/apt/lists/* /tmp/*.whl\
