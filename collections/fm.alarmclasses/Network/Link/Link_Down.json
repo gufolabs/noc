@@ -39,6 +39,15 @@
     "recommended_actions": "Check configuration, both sides of links and hardware",
     "root_cause": [
         {
+            "name": "Other side power loss",
+            "root__name": "Environment | Total Power Loss",
+            "window": 60,
+            "condition": "alarm.vars.get('link') is not None",
+            "match_condition": {
+                "vars__link": "managed_object.id"
+            }
+        },
+        {
             "name": "Other side link down",
             "root__name": "Network | Link | Link Down",
             "window": 60,
@@ -70,6 +79,16 @@
         {
             "name": "STP Loop Detected",
             "root__name": "Network | STP | STP Loop Detected",
+            "window": 10,
+            "condition": "True",
+            "match_condition": {
+                "vars__interface": "alarm.vars['interface']",
+                "managed_object": "alarm.managed_object.id"
+            }
+        },
+        {
+            "name": "DHCP Flood Detected",
+            "root__name": "Network | DHCP | DHCP Flood",
             "window": 10,
             "condition": "True",
             "match_condition": {
