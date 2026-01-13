@@ -71,8 +71,6 @@ class LegacyProtocol(BaseProtocol):
             "classifier-%(pool)s-%(node)s.default_interface_profile",
             "classifier.default_interface_profile",
         ),
-        ("classifier.lookup_solution", "classifier.lookup_handler"),
-        ("classifier-%(pool)s-%(node)s.lookup_solution", "classifier.lookup_handler"),
         # Correlator
         ("correlator.max_threads", "correlator.max_threads"),
         ("correlator-%(pool)s-%(node)s.max_threads", "correlator.max_threads"),
