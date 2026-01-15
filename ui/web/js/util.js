@@ -675,7 +675,7 @@ Ext.define("NOC.form.field.VTypes", {
     }
   },
   ASNText: "AS num must be a numeric value > 0",
-  ASNMask: /^[1-9]\d*$/,
+  ASNMask: /[\d.]/,
 
   // IPv4 check
   IPv4: function(val){
@@ -687,7 +687,7 @@ Ext.define("NOC.form.field.VTypes", {
     }
   },
   IPv4Text: "Must be a numeric value 0.0.0.0 - 255.255.255.255",
-  IPv4Mask: /^(?:(?:25[0-5]|2[0-4]\d|[01]?\d?\d{1})\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d?\d{1})$/,
+  IPv4Mask: /[\d.]/,
   // IPv4 check
   IPv4Group: function(val){
     if(val === "Leave unchanged") return true;
@@ -699,7 +699,7 @@ Ext.define("NOC.form.field.VTypes", {
     }
   },
   IPv4GroupText: "Must be a numeric value 0.0.0.0 - 255.255.255.255",
-  IPv4GroupMask: /^(?:(?:25[0-5]|2[0-4]\d|[01]?\d?\d{1})\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d?\d{1})$/, 
+  IPv4GroupMask: /[\d.]/,
 
   // IPv4 prefix check
   IPv4Prefix: function(val){
@@ -726,7 +726,7 @@ Ext.define("NOC.form.field.VTypes", {
   FQDNRe: /(?=^.{1,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$)/,
   FQDNText: "Not valid FQDN",
 
-  // AS-set check for compatibility whith: 
+  // AS-set check for compatibility with: 
   //   https://apps.db.ripe.net/docs/08.Set-Objects/#creating-set-objects
   //   Valid:
   //     AS12345:AS-MEGA-2:AS-MEGA-3-SET

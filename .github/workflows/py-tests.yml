@@ -146,8 +146,8 @@ jobs:
           NOC_MONGO_USER: noc
           NOC_MONGO_PASSWORD: noc
           NOC_MONGO_AUTHENTICATION_SOURCE: admin
-          NOC_MSGSTREAM_CLIENT_CLASS: noc.core.msgstream.redpanda.RedPandaClient
-          NOC_REDPANDA_ADDRESSES: 127.0.0.1:9092
+          NOC_MSGSTREAM_CLIENT_CLASS: noc.core.msgstream.kafka.KafkaClient
+          NOC_KAFKA_ADDRESSES: 127.0.0.1:9092
           NOC_TESTS_DROPBEAR_HOST: 127.0.0.1
           NOC_TESTS_DROPBEAR_PORT: 10001
           NOC_TESTS_TELNETD_HOST: 127.0.0.1

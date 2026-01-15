@@ -15,10 +15,10 @@ From some moment Liftbridge service didn't go well in production and become aban
 4. Please be sure that you use `consul` for your settings management(It happens when you have "consul://consul/noc," in `Config Load Preference Path` in main page `ENV` in `Tower`), otherwise you need to add settings to your local config file in `/opt/noc/etc/settings.yml`:
 
 ```
-redpanda:
+kafka:
   addresses: kafka
 msgstream:
-  client_class: noc.core.msgstream.redpanda.RedPandaClient
+  client_class: noc.core.msgstream.kafka.KafkaClient
 ```
 
 5. Deploy
