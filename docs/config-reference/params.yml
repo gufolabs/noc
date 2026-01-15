@@ -948,7 +948,7 @@ params:
     default: "22"
   tests.events_paths: {}
   tests.fixtures_paths:
-    default: "[""tests/data""]"
+    default: ["tests/data"]
   tests.snmpd_host:
     default: snmpd
   tests.snmpd_port:
