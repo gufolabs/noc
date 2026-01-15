@@ -675,7 +675,7 @@ Ext.define("NOC.form.field.VTypes", {
     }
   },
   ASNText: "AS num must be a numeric value > 0",
-  ASNMask: /[\d.]/i,
+  ASNMask: /[\d.]/,
 
   // IPv4 check
   IPv4: function(val){
@@ -687,7 +687,7 @@ Ext.define("NOC.form.field.VTypes", {
     }
   },
   IPv4Text: "Must be a numeric value 0.0.0.0 - 255.255.255.255",
-  IPv4Mask: /[\d.]/i,
+  IPv4Mask: /[\d.]/,
   // IPv4 check
   IPv4Group: function(val){
     if(val === "Leave unchanged") return true;
@@ -699,7 +699,7 @@ Ext.define("NOC.form.field.VTypes", {
     }
   },
   IPv4GroupText: "Must be a numeric value 0.0.0.0 - 255.255.255.255",
-  IPv4GroupMask: /[\d.]/i,
+  IPv4GroupMask: /[\d.]/,
 
   // IPv4 prefix check
   IPv4Prefix: function(val){
