@@ -128,9 +128,9 @@ params:
   clickhouse.db_dictionaries:
     default: noc_dict
   clickhouse.default_Float32:
-    default: "-2147483647.0"
+    default: "-2147483600.0"
   clickhouse.default_Float64:
-    default: "-9.223372036854776e+18"
+    default: "-9.223372036854e+18"
   clickhouse.default_Int16:
     default: "-32767"
   clickhouse.default_Int32:
@@ -150,11 +150,13 @@ params:
   clickhouse.default_merge_tree_granularity:
     default: "8192"
   clickhouse.enable_default_value: {}
+  clickhouse.enable_migrate_type:
+    default: "True"
   clickhouse.encoding:
     choices:
-      - ""
-      - deflate
-      - gzip
+    - ""
+    - deflate
+    - gzip
   clickhouse.request_timeout:
     default: "3600"
   clickhouse.ro_addresses: {}
@@ -220,14 +222,6 @@ params:
     default: "#34495e"
   customization.branding_color:
     default: "#ffffff"
-  customization.favicon_url:
-    default: /ui/web/img/logo_24x24_deep_azure.png
-  customization.logo_height:
-    default: "24"
-  customization.logo_url:
-    default: /ui/web/img/logo_white.svg
-  customization.logo_width:
-    default: "24"
   customization.preview_theme:
     default: midnight
   datasource.chunk_size:
@@ -244,7 +238,7 @@ params:
   datastream.cfgeventrules_ttl: {}
   datastream.cfgmetricrules_ttl: {}
   datastream.cfgmetrics_ttl: {}
-  datastream.cfgmetricsources_ttl: {}
+  datastream.cfgmetricstarget_ttl: {}
   datastream.cfgmxroute_ttl: {}
   datastream.cfgtarget_ttl: {}
   datastream.dnszone_ttl: {}
@@ -273,9 +267,9 @@ params:
     default: "True"
   datastream.enable_cfgmetrics_wait:
     default: "True"
-  datastream.enable_cfgmetricsources:
+  datastream.enable_cfgmetricstarget:
     default: "True"
-  datastream.enable_cfgmetricsources_wait:
+  datastream.enable_cfgmetricstarget_wait:
     default: "True"
   datastream.enable_cfgmxroute:
     default: "True"
@@ -345,10 +339,10 @@ params:
     default: "60"
   etl.compression:
     choices:
-      - plain
-      - gzip
-      - bz2
-      - lzma
+    - bz2
+    - lzma
+    - gzip
+    - plain
     default: gzip
   features.consul_healthchecks:
     default: "True"
@@ -429,6 +423,20 @@ params:
     default: microservices
   help.language:
     default: en
+  home.enable_alarms:
+    default: "True"
+  home.enable_channels:
+    default: "True"
+  home.enable_community:
+    default: "True"
+  home.enable_favorites:
+    default: "True"
+  home.enable_inventory_summary:
+    default: "True"
+  home.enable_mo_summary:
+    default: "True"
+  home.enable_welcome:
+    default: "True"
   http_client.buffer_size:
     default: "131072"
   http_client.connect_timeout:
@@ -458,14 +466,46 @@ params:
   installation_name:
     default: Unconfigured installation
   instance: {}
+  kafka.addresses: {}
+  kafka.bootstrap_servers: {}
+  kafka.compression_type:
+    choices:
+    - lz4
+    - gzip
+    - none
+    - snappy
+    - zstd
+    default: lz4
+  kafka.max_batch_size:
+    default: "16384"
+  kafka.max_request_size:
+    default: "1048576"
+  kafka.password: {}
+  kafka.retry_backoff_ms:
+    default: "3"
+  kafka.sasl_mechanism:
+    choices:
+    - GSSAPI
+    - SCRAM-SHA-256
+    - SCRAM-SHA-512
+    - PLAIN
+    default: PLAIN
+  kafka.security_protocol:
+    choices:
+    - PLAINTEXT
+    - SASL_PLAINTEXT
+    - SASL_SSL
+    - SSL
+    default: PLAINTEXT
+  kafka.username: {}
   kafkasender.bootstrap_servers: {}
   kafkasender.compression_type:
     choices:
-      - none
-      - gzip
-      - snappy
-      - lz4
-      - zstd
+    - lz4
+    - gzip
+    - none
+    - snappy
+    - zstd
     default: none
   kafkasender.max_batch_size:
     default: "16384"
@@ -474,17 +514,17 @@ params:
   kafkasender.password: {}
   kafkasender.sasl_mechanism:
     choices:
-      - PLAIN
-      - GSSAPI
-      - SCRAM-SHA-256
-      - SCRAM-SHA-512
+    - GSSAPI
+    - SCRAM-SHA-256
+    - SCRAM-SHA-512
+    - PLAIN
     default: PLAIN
   kafkasender.security_protocol:
     choices:
-      - PLAINTEXT
-      - SASL_PLAINTEXT
-      - SSL
-      - SASL_SSL
+    - PLAINTEXT
+    - SASL_PLAINTEXT
+    - SASL_SSL
+    - SSL
     default: PLAINTEXT
   kafkasender.username: {}
   language:
@@ -516,9 +556,9 @@ params:
   liftbridge.addresses: {}
   liftbridge.compression_method:
     choices:
-      - ""
-      - zlib
-      - lzma
+    - ""
+    - zlib
+    - lzma
     default: zlib
   liftbridge.compression_threshold:
     default: "524288"
@@ -537,9 +577,9 @@ params:
     default: "604800"
   login.jwt_algorithm:
     choices:
-      - HS256
-      - HS384
-      - HS512
+    - HS384
+    - HS256
+    - HS512
     default: HS256
   login.jwt_cookie_name:
     default: noc_jwt
@@ -611,10 +651,22 @@ params:
     default: "1000"
   metrics.flush_interval:
     default: "60"
+  metricscollector.batch_delay_s:
+    default: "10"
+  metricscollector.batch_max_message_size:
+    default: "307200"
+  metricscollector.batch_size:
+    default: "50000"
   metricscollector.ds_limit:
     default: "1000"
+  metricscollector.listen: {}
+  metricscollector.nodata_record_ttl:
+    default: "3600"
+  metricscollector.nodata_round_duration:
+    default: "60"
   mongo.addresses: {}
   mongo.app_name: {}
+  mongo.authentication_source: {}
   mongo.db:
     default: noc
   mongo.max_idle_time:
@@ -796,38 +848,6 @@ params:
   redis.db: {}
   redis.default_ttl:
     default: "86400"
-  redpanda.addresses: {}
-  redpanda.bootstrap_servers: {}
-  redpanda.compression_type:
-    choices:
-      - none
-      - gzip
-      - snappy
-      - lz4
-      - zstd
-    default: lz4
-  redpanda.max_batch_size:
-    default: "16384"
-  redpanda.max_request_size:
-    default: "1048576"
-  redpanda.password: {}
-  redpanda.retry_backoff_ms:
-    default: "3"
-  redpanda.sasl_mechanism:
-    choices:
-      - PLAIN
-      - GSSAPI
-      - SCRAM-SHA-256
-      - SCRAM-SHA-512
-    default: PLAIN
-  redpanda.security_protocol:
-    choices:
-      - PLAINTEXT
-      - SASL_PLAINTEXT
-      - SSL
-      - SASL_SSL
-    default: PLAINTEXT
-  redpanda.username: {}
   rpc.async_connect_timeout:
     default: "20"
   rpc.async_request_timeout:
@@ -922,9 +942,37 @@ params:
   syslogcollector.storm_threshold_reduction:
     default: "0.9"
   tests.beef_paths: {}
+  tests.dropbear_host:
+    default: dropbear
+  tests.dropbear_port:
+    default: "22"
   tests.events_paths: {}
   tests.fixtures_paths:
-    default: "['tests/data']"
+    default: ["tests/data"]
+  tests.snmpd_host:
+    default: snmpd
+  tests.snmpd_port:
+    default: "161"
+  tests.sshd_host:
+    default: sshd
+  tests.sshd_port:
+    default: "22"
+  tests.telnetd_host:
+    default: telnetd
+  tests.telnetd_port:
+    default: "23"
+  tgsender.http_connect_timeout:
+    default: "5"
+    max: "60"
+    min: "2"
+  tgsender.http_request_timeout:
+    default: "3"
+    max: "60"
+    min: "2"
+  tgsender.max_body_size:
+    default: "3000"
+  tgsender.max_file_size:
+    default: "50000000"
   tgsender.proxy_address: {}
   tgsender.retry_timeout:
     default: "2"
@@ -1007,8 +1055,8 @@ params:
     default: "16777216"
   web.report_csv_delimiter:
     choices:
-      - ;
-      - ","
+    - ","
+    - ;
     default: ;
   web.theme:
     default: gray

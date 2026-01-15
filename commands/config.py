@@ -51,7 +51,7 @@ class Command(BaseCommand):
             # choices
             choices = getattr(param, "choices", [])
             if choices:
-                p["choices"] = choices
+                p["choices"] = list(choices)
             # min
             p_min = getattr(param, "min", None)
             if p_min is not None:

@@ -134,7 +134,7 @@ class KafkaStreamCollector(BaseCollector):
         return offset
 
     async def collect(self) -> List[PartitionOffset]:
-        addresses = await config.find_parameter("redpanda.addresses").async_get()
+        addresses = await config.find_parameter("kafka.addresses").async_get()
         bootstrap_servers = [f"{svc.host}:{svc.port}" for svc in addresses]
         partitions = await self.get_partitions(bootstrap_servers)
         return await self.get_offsets(bootstrap_servers, partitions)
