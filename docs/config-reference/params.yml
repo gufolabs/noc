@@ -154,9 +154,9 @@ params:
     default: "True"
   clickhouse.encoding:
     choices:
-      - ""
-      - deflate
-      - gzip
+    - ""
+    - deflate
+    - gzip
   clickhouse.request_timeout:
     default: "3600"
   clickhouse.ro_addresses: {}
@@ -339,10 +339,10 @@ params:
     default: "60"
   etl.compression:
     choices:
-      - plain
-      - gzip
-      - bz2
-      - lzma
+    - bz2
+    - lzma
+    - gzip
+    - plain
     default: gzip
   features.consul_healthchecks:
     default: "True"
@@ -469,12 +469,12 @@ params:
   kafka.addresses: {}
   kafka.bootstrap_servers: {}
   kafka.compression_type:
-    choices: !!set
-      gzip: null
-      lz4: null
-      none: null
-      snappy: null
-      zstd: null
+    choices:
+    - lz4
+    - gzip
+    - none
+    - snappy
+    - zstd
     default: lz4
   kafka.max_batch_size:
     default: "16384"
@@ -484,28 +484,28 @@ params:
   kafka.retry_backoff_ms:
     default: "3"
   kafka.sasl_mechanism:
-    choices: !!set
-      GSSAPI: null
-      PLAIN: null
-      SCRAM-SHA-256: null
-      SCRAM-SHA-512: null
+    choices:
+    - GSSAPI
+    - SCRAM-SHA-256
+    - SCRAM-SHA-512
+    - PLAIN
     default: PLAIN
   kafka.security_protocol:
-    choices: !!set
-      PLAINTEXT: null
-      SASL_PLAINTEXT: null
-      SASL_SSL: null
-      SSL: null
+    choices:
+    - PLAINTEXT
+    - SASL_PLAINTEXT
+    - SASL_SSL
+    - SSL
     default: PLAINTEXT
   kafka.username: {}
   kafkasender.bootstrap_servers: {}
   kafkasender.compression_type:
     choices:
-      - none
-      - gzip
-      - snappy
-      - lz4
-      - zstd
+    - lz4
+    - gzip
+    - none
+    - snappy
+    - zstd
     default: none
   kafkasender.max_batch_size:
     default: "16384"
@@ -514,17 +514,17 @@ params:
   kafkasender.password: {}
   kafkasender.sasl_mechanism:
     choices:
-      - PLAIN
-      - GSSAPI
-      - SCRAM-SHA-256
-      - SCRAM-SHA-512
+    - GSSAPI
+    - SCRAM-SHA-256
+    - SCRAM-SHA-512
+    - PLAIN
     default: PLAIN
   kafkasender.security_protocol:
     choices:
-      - PLAINTEXT
-      - SASL_PLAINTEXT
-      - SSL
-      - SASL_SSL
+    - PLAINTEXT
+    - SASL_PLAINTEXT
+    - SASL_SSL
+    - SSL
     default: PLAINTEXT
   kafkasender.username: {}
   language:
@@ -556,9 +556,9 @@ params:
   liftbridge.addresses: {}
   liftbridge.compression_method:
     choices:
-      - ""
-      - zlib
-      - lzma
+    - ""
+    - zlib
+    - lzma
     default: zlib
   liftbridge.compression_threshold:
     default: "524288"
@@ -577,9 +577,9 @@ params:
     default: "604800"
   login.jwt_algorithm:
     choices:
-      - HS256
-      - HS384
-      - HS512
+    - HS384
+    - HS256
+    - HS512
     default: HS256
   login.jwt_cookie_name:
     default: noc_jwt
@@ -651,8 +651,19 @@ params:
     default: "1000"
   metrics.flush_interval:
     default: "60"
+  metricscollector.batch_delay_s:
+    default: "10"
+  metricscollector.batch_max_message_size:
+    default: "307200"
+  metricscollector.batch_size:
+    default: "50000"
   metricscollector.ds_limit:
     default: "1000"
+  metricscollector.listen: {}
+  metricscollector.nodata_record_ttl:
+    default: "3600"
+  metricscollector.nodata_round_duration:
+    default: "60"
   mongo.addresses: {}
   mongo.app_name: {}
   mongo.authentication_source: {}
@@ -837,38 +848,6 @@ params:
   redis.db: {}
   redis.default_ttl:
     default: "86400"
-  redpanda.addresses: {}
-  redpanda.bootstrap_servers: {}
-  redpanda.compression_type:
-    choices:
-      - none
-      - gzip
-      - snappy
-      - lz4
-      - zstd
-    default: lz4
-  redpanda.max_batch_size:
-    default: "16384"
-  redpanda.max_request_size:
-    default: "1048576"
-  redpanda.password: {}
-  redpanda.retry_backoff_ms:
-    default: "3"
-  redpanda.sasl_mechanism:
-    choices:
-      - PLAIN
-      - GSSAPI
-      - SCRAM-SHA-256
-      - SCRAM-SHA-512
-    default: PLAIN
-  redpanda.security_protocol:
-    choices:
-      - PLAINTEXT
-      - SASL_PLAINTEXT
-      - SSL
-      - SASL_SSL
-    default: PLAINTEXT
-  redpanda.username: {}
   rpc.async_connect_timeout:
     default: "20"
   rpc.async_request_timeout:
@@ -969,7 +948,31 @@ params:
     default: "22"
   tests.events_paths: {}
   tests.fixtures_paths:
-    default: "['tests/data']"
+    default: "[""tests/data""]"
+  tests.snmpd_host:
+    default: snmpd
+  tests.snmpd_port:
+    default: "161"
+  tests.sshd_host:
+    default: sshd
+  tests.sshd_port:
+    default: "22"
+  tests.telnetd_host:
+    default: telnetd
+  tests.telnetd_port:
+    default: "23"
+  tgsender.http_connect_timeout:
+    default: "5"
+    max: "60"
+    min: "2"
+  tgsender.http_request_timeout:
+    default: "3"
+    max: "60"
+    min: "2"
+  tgsender.max_body_size:
+    default: "3000"
+  tgsender.max_file_size:
+    default: "50000000"
   tgsender.proxy_address: {}
   tgsender.retry_timeout:
     default: "2"
@@ -1052,8 +1055,8 @@ params:
     default: "16777216"
   web.report_csv_delimiter:
     choices:
-      - ;
-      - ","
+    - ","
+    - ;
     default: ;
   web.theme:
     default: gray
