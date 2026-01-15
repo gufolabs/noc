@@ -13,6 +13,16 @@
       "code": 35
     },
     {
+      "name": "bracket-round",
+      "uuid": "8b4d0320-1bb7-57c9-8e45-daeb7312d04d",
+      "code": 40
+    },
+    {
+      "name": "bracket-round-right",
+      "uuid": "1c2484a2-ff79-5e6e-9e65-f3b18b740641",
+      "code": 41
+    },
+    {
       "name": "comma",
       "uuid": "37d41a0b-3bd0-5ea6-82d9-713966e50951",
       "code": 44
@@ -213,6 +223,26 @@
       "code": 90
     },
     {
+      "name": "bracket-square",
+      "uuid": "23a3f085-e2f8-5cc5-abda-d253649486de",
+      "code": 91
+    },
+    {
+      "name": "bracket-square-right",
+      "uuid": "d026054e-f7f1-5f8b-9db2-f5ceb184230a",
+      "code": 93
+    },
+    {
+      "name": "bracket-curly",
+      "uuid": "cbf17fb3-118e-54b0-a957-2b8db972f0ee",
+      "code": 123
+    },
+    {
+      "name": "bracket-curly-right",
+      "uuid": "32f83863-10ba-5846-93ac-77e3992b0aed",
+      "code": 125
+    },
+    {
       "name": "copyright",
       "uuid": "f1e12a6f-875e-56e8-9d5a-0d35d550e710",
       "code": 169
@@ -381,6 +411,146 @@
       "name": "ohm-sign",
       "uuid": "35cb77ce-1de8-52b0-bcac-5a0979f6d219",
       "code": 8486
+    },
+    {
+      "name": "upwards-white-arrow",
+      "uuid": "e967c6ff-07eb-59bb-9d35-a62e262d86f0",
+      "code": 8679
+    },
+    {
+      "name": "infinity",
+      "uuid": "d1ebd2a5-7eda-5e08-bebc-b5ee1856cbbe",
+      "code": 8734
+    },
+    {
+      "name": "up-arrowhead",
+      "uuid": "4b8de2ef-3761-5946-afc4-667950ff7c33",
+      "code": 8963
+    },
+    {
+      "name": "place-of-interest-sign",
+      "uuid": "e70fb588-fb55-54d7-8190-b73abd93b97f",
+      "code": 8984
+    },
+    {
+      "name": "option-key",
+      "uuid": "54d65138-a454-5c6b-a6b0-05b67eedf4c2",
+      "code": 8997
+    },
+    {
+      "name": "broken-circle-with-nw-arrow",
+      "uuid": "6a4e1c98-b906-55da-9386-8719457adc09",
+      "code": 9099
+    },
+    {
+      "name": "return-symbol",
+      "uuid": "b037d5f8-a87c-536d-b5bc-2656db41ebd2",
+      "code": 9166
+    },
+    {
+      "name": "ankh",
+      "uuid": "cd0a148f-3cfd-5fbb-933c-067593c2237e",
+      "code": 9765
+    },
+    {
+      "name": "female-sign",
+      "uuid": "6f60a571-ffc9-50ea-b24a-2d63fe828154",
+      "code": 9792
+    },
+    {
+      "name": "male-sign",
+      "uuid": "594ccabd-a508-503e-8b6f-37445ff025ff",
+      "code": 9794
+    },
+    {
+      "name": "aries",
+      "uuid": "0fbd9f00-d297-588c-bdd3-275fe8f4a6dc",
+      "code": 9800
+    },
+    {
+      "name": "taurus",
+      "uuid": "04f864d1-f4f1-54dd-8e08-1e88224b8226",
+      "code": 9801
+    },
+    {
+      "name": "gemini",
+      "uuid": "4b332f7e-7ec7-593f-b02e-8f2780a52856",
+      "code": 9802
+    },
+    {
+      "name": "cancer",
+      "uuid": "0c641a9c-ee6f-5978-9452-042e12088207",
+      "code": 9803
+    },
+    {
+      "name": "leo",
+      "uuid": "9ae3fb17-2df1-5fca-9702-56cb9bf8a2e4",
+      "code": 9804
+    },
+    {
+      "name": "virgo",
+      "uuid": "bed951f1-96ff-5ef5-9b35-cef4c513639a",
+      "code": 9805
+    },
+    {
+      "name": "libra",
+      "uuid": "0149ea9b-94e7-56a2-9587-15fcf9caeccc",
+      "code": 9806
+    },
+    {
+      "name": "scorpius",
+      "uuid": "10c3e98c-2309-53c1-8203-a8a253a07369",
+      "code": 9807
+    },
+    {
+      "name": "sagittarius",
+      "uuid": "82f1c579-a8cf-55ba-b42e-2ae040f56264",
+      "code": 9808
+    },
+    {
+      "name": "capricorn",
+      "uuid": "2d12a8ca-50f3-5d9a-87ff-7b9ca0541ba5",
+      "code": 9809
+    },
+    {
+      "name": "aquarius",
+      "uuid": "c8ee43ea-2b61-5ed8-bbae-08a94dff5b27",
+      "code": 9810
+    },
+    {
+      "name": "pisces",
+      "uuid": "859eac37-4faf-5103-a44f-594a7c69decc",
+      "code": 9811
+    },
+    {
+      "name": "die-face-1",
+      "uuid": "486b5163-4333-5a3f-b66c-ff9a4b20a417",
+      "code": 9856
+    },
+    {
+      "name": "die-face-2",
+      "uuid": "ddcffdfc-74b3-5c6b-8196-9c208335d0be",
+      "code": 9857
+    },
+    {
+      "name": "die-face-3",
+      "uuid": "af7c5fb2-91c8-5554-8302-1ec19fe49ac6",
+      "code": 9858
+    },
+    {
+      "name": "die-face-4",
+      "uuid": "5562b589-91db-5efb-b345-5a1e888b2d67",
+      "code": 9859
+    },
+    {
+      "name": "die-face-5",
+      "uuid": "c5fac587-3351-51f5-b7ef-04fa8795ad72",
+      "code": 9860
+    },
+    {
+      "name": "die-face-6",
+      "uuid": "5626173a-1545-5055-a710-165b20229616",
+      "code": 9861
     },
     {
       "name": "brand-noc-s",
@@ -1273,6 +1443,321 @@
       "code": 58177
     },
     {
+      "name": "arrow-u-turn-down-left-o",
+      "uuid": "cb486093-035a-5029-b033-027d843ca694",
+      "code": 58178
+    },
+    {
+      "name": "arrow-u-turn-down-right-o",
+      "uuid": "7179f24d-cd60-5e9a-a898-bbf87ff41b95",
+      "code": 58179
+    },
+    {
+      "name": "arrow-u-turn-up-left-o",
+      "uuid": "966ce9f9-f1d8-5aab-ab95-b7ea55b86df5",
+      "code": 58180
+    },
+    {
+      "name": "arrow-u-turn-up-right-o",
+      "uuid": "a08a969b-375c-536f-bdb1-c531cf1b68ac",
+      "code": 58181
+    },
+    {
+      "name": "arrow-u-turn-left-up-o",
+      "uuid": "3daadd38-137a-5d07-9211-ad50c96d7d4b",
+      "code": 58182
+    },
+    {
+      "name": "arrow-u-turn-left-down-o",
+      "uuid": "4443a727-dc03-5e6f-a682-de13b5aa7987",
+      "code": 58183
+    },
+    {
+      "name": "arrow-u-turn-right-up-o",
+      "uuid": "7525af7b-0681-55da-8832-03e3ccbc82ef",
+      "code": 58184
+    },
+    {
+      "name": "arrow-u-turn-right-down-o",
+      "uuid": "6fd42781-6ab8-59f2-9194-59127248a4a6",
+      "code": 58185
+    },
+    {
+      "name": "arrow-left-to-line-o",
+      "uuid": "e6cf1e5b-1332-5718-81c4-ec02ac94f142",
+      "code": 58186
+    },
+    {
+      "name": "arrow-up-to-line-o",
+      "uuid": "31061d60-0eb6-5ea6-9f81-66c3764e8c28",
+      "code": 58187
+    },
+    {
+      "name": "arrow-right-to-line-o",
+      "uuid": "f26aa41b-81d1-50a9-842d-7a51f30899fd",
+      "code": 58188
+    },
+    {
+      "name": "arrow-down-to-line-o",
+      "uuid": "ade6fab6-d35b-5710-a7a6-9d8cf6b4c2ff",
+      "code": 58189
+    },
+    {
+      "name": "arrow-left-to-arc-o",
+      "uuid": "fe3ed49b-04ab-5750-8e84-8a7128b21cbe",
+      "code": 58190
+    },
+    {
+      "name": "arrow-up-to-arc-o",
+      "uuid": "cf502df7-2a88-51fa-82b0-98d04119279e",
+      "code": 58191
+    },
+    {
+      "name": "arrow-right-to-arc-o",
+      "uuid": "45e83359-c520-5de3-91ef-9f1ce82e9cc8",
+      "code": 58192
+    },
+    {
+      "name": "arrow-down-to-arc-o",
+      "uuid": "a6fac8fe-e41f-5c49-b63a-8c11a9d7bf39",
+      "code": 58193
+    },
+    {
+      "name": "arrow-left-to-bracket-o",
+      "uuid": "9ed0baae-62a3-5324-b3e7-ea6ec9697f78",
+      "code": 58194
+    },
+    {
+      "name": "arrow-up-to-bracket-o",
+      "uuid": "e511144b-e9f8-582b-811a-ded9f24e17a8",
+      "code": 58195
+    },
+    {
+      "name": "arrow-right-to-bracket-o",
+      "uuid": "855f8e35-e2c2-575d-a2d3-974ea141efce",
+      "code": 58196
+    },
+    {
+      "name": "arrow-down-to-bracket-o",
+      "uuid": "b0698232-fe0e-522c-82d6-c1dd12c052bc",
+      "code": 58197
+    },
+    {
+      "name": "arrow-left-to-square-o",
+      "uuid": "5edc6547-94e9-5386-81eb-c3a87238c87e",
+      "code": 58198
+    },
+    {
+      "name": "arrow-up-to-square-o",
+      "uuid": "e698762e-4198-5a3d-88b3-ce3212ae45df",
+      "code": 58199
+    },
+    {
+      "name": "arrow-right-to-square-o",
+      "uuid": "c23d77b5-f969-559c-87e1-2107c4bdd232",
+      "code": 58200
+    },
+    {
+      "name": "arrow-down-to-square-o",
+      "uuid": "67305f01-3343-58f6-9543-c2cdc6ea57f9",
+      "code": 58201
+    },
+    {
+      "name": "print-s",
+      "uuid": "901c0ab1-5c99-51e2-9079-912925412f05",
+      "code": 58202
+    },
+    {
+      "name": "print-o",
+      "uuid": "ccda4ad6-a7f6-5b13-ae87-c151393857b0",
+      "code": 58203
+    },
+    {
+      "name": "shredder-s",
+      "uuid": "897f5c78-3016-5bae-b377-4163a88a36d9",
+      "code": 58204
+    },
+    {
+      "name": "shredder-o",
+      "uuid": "e2d16548-84d8-5d7a-882b-a865e4d01e38",
+      "code": 58205
+    },
+    {
+      "name": "fingerprint-o",
+      "uuid": "d3436e9b-81ca-5a0c-80bf-8c10fc0d87a1",
+      "code": 58206
+    },
+    {
+      "name": "file-code-o",
+      "uuid": "78518939-3ce0-520b-8238-7b61165df901",
+      "code": 58208
+    },
+    {
+      "name": "file-image-o",
+      "uuid": "549cdba7-b231-5d0c-be32-851b186c7bbb",
+      "code": 58209
+    },
+    {
+      "name": "file-csv-o",
+      "uuid": "87dd1f09-887a-5bf3-8364-28409c1b4e32",
+      "code": 58210
+    },
+    {
+      "name": "file-pdf-o",
+      "uuid": "b4ec8639-81f9-5115-a9c5-b9d8927bb601",
+      "code": 58211
+    },
+    {
+      "name": "file-xslx-o",
+      "uuid": "0bab4768-7ad0-5f13-82f5-c8700a42f167",
+      "code": 58212
+    },
+    {
+      "name": "file-docx-o",
+      "uuid": "95198fd4-394f-59e0-959b-be15772c1320",
+      "code": 58213
+    },
+    {
+      "name": "file-json-o",
+      "uuid": "1f0feb37-823b-5bee-9ee8-fe0184c8b599",
+      "code": 58214
+    },
+    {
+      "name": "file-yaml-o",
+      "uuid": "ea3950a2-827e-598d-9b2c-866e9fac3a2a",
+      "code": 58215
+    },
+    {
+      "name": "fan-s",
+      "uuid": "54b59d1c-d633-54bc-ac1a-3be2bb1ef389",
+      "code": 58216
+    },
+    {
+      "name": "alien-s",
+      "uuid": "963d4374-f5cd-54c3-bdfb-a521e5b324f5",
+      "code": 58217
+    },
+    {
+      "name": "alien-o",
+      "uuid": "08d810ed-b24e-5c8c-bdfd-f2dba4737a65",
+      "code": 58218
+    },
+    {
+      "name": "hammer-s",
+      "uuid": "3fa0e323-0623-5fa2-a698-43efd23b1e11",
+      "code": 58219
+    },
+    {
+      "name": "indent-o",
+      "uuid": "82cd2df5-57a5-5e03-bc39-22589a242e60",
+      "code": 58220
+    },
+    {
+      "name": "outdent-o",
+      "uuid": "8c790044-db5c-5a85-8d08-d0fb97145664",
+      "code": 58221
+    },
+    {
+      "name": "chart-line-o",
+      "uuid": "497a269e-5140-5a52-9172-8ca8d7018bba",
+      "code": 58222
+    },
+    {
+      "name": "chart-line-down-o",
+      "uuid": "b14df3ea-5c7f-59e7-841b-4c9c244b42af",
+      "code": 58223
+    },
+    {
+      "name": "chart-bar-o",
+      "uuid": "e841a18c-881f-5b92-af89-7b94905d0bb7",
+      "code": 58224
+    },
+    {
+      "name": "append-o",
+      "uuid": "16fcb81f-110c-5676-a461-caf0c358b4a1",
+      "code": 58225
+    },
+    {
+      "name": "circle-arc-s",
+      "uuid": "cbbb1835-a6cb-53e1-82b7-76d0336b288f",
+      "code": 58226
+    },
+    {
+      "name": "inbox-s",
+      "uuid": "37495c31-7dd9-5b1a-88e2-74a94419f15f",
+      "code": 58228
+    },
+    {
+      "name": "inbox-o",
+      "uuid": "56cb7c68-2a5f-565f-bd80-2b52a382d91b",
+      "code": 58229
+    },
+    {
+      "name": "grip-lines-o",
+      "uuid": "f206fd24-4869-5424-ab83-d6ce086e80dd",
+      "code": 58230
+    },
+    {
+      "name": "grip-lines-vertical-o",
+      "uuid": "3694fc9b-f683-54b8-bfc0-c88615e393ef",
+      "code": 58231
+    },
+    {
+      "name": "camera-o",
+      "uuid": "3b11cbc2-2983-508c-968f-f65ffe7ff033",
+      "code": 58232
+    },
+    {
+      "name": "mug-hot-o",
+      "uuid": "f250b1b8-6958-5a83-8c77-ecee5fdf9a29",
+      "code": 58233
+    },
+    {
+      "name": "envelope-s",
+      "uuid": "bc2f9a71-1583-58d7-b532-ec3f0e80b19b",
+      "code": 58234
+    },
+    {
+      "name": "bus-s",
+      "uuid": "4dac683a-7f27-56c3-a6a2-4d8b7c2344fd",
+      "code": 58236
+    },
+    {
+      "name": "binoculars-s",
+      "uuid": "4cc59491-b4d9-5871-8f68-6d0144547a94",
+      "code": 58237
+    },
+    {
+      "name": "terminal-o",
+      "uuid": "7f580e71-6fd5-547b-8515-50808b24a723",
+      "code": 58238
+    },
+    {
+      "name": "gauge-s",
+      "uuid": "e445d8d7-a8f1-5b7d-b943-c52eb7113754",
+      "code": 58249
+    },
+    {
+      "name": "thumbs-up-s",
+      "uuid": "774bd367-4139-5802-b6a0-23409ef684a5",
+      "code": 58250
+    },
+    {
+      "name": "thumbs-up-o",
+      "uuid": "22c7150f-9461-5954-bdb1-04abd365a4de",
+      "code": 58251
+    },
+    {
+      "name": "thumbs-down-s",
+      "uuid": "c051b468-454c-5eaa-9e29-1626bd7f7085",
+      "code": 58252
+    },
+    {
+      "name": "thumbs-down-o",
+      "uuid": "10f64d56-cfd6-5b22-b041-e5ac8bcbc633",
+      "code": 58253
+    },
+    {
       "name": "database",
       "uuid": "fecbb369-561e-5d7e-8b3a-ab569ebdb930",
       "code": 61440
@@ -1503,6 +1988,36 @@
       "code": 61494
     },
     {
+      "name": "ethernet-s",
+      "uuid": "91df352a-e9ff-5984-9975-88fe1ffd0e33",
+      "code": 61495
+    },
+    {
+      "name": "lc-simplex-o",
+      "uuid": "9bd6ed02-8461-511a-be9f-4ec83c96f8d0",
+      "code": 61496
+    },
+    {
+      "name": "lc-duplex-o",
+      "uuid": "7488e823-4d05-5113-b104-c52bfb6b558b",
+      "code": 61497
+    },
+    {
+      "name": "sc-simplex-o",
+      "uuid": "cc8a7bda-4051-52ff-950a-450685681b47",
+      "code": 61498
+    },
+    {
+      "name": "sc-duplex-o",
+      "uuid": "f3e92ef9-09cc-550a-ad79-3e8b1b2dcd2a",
+      "code": 61499
+    },
+    {
+      "name": "st-o",
+      "uuid": "d62c5e69-b163-53ec-8d30-354b5dd16b68",
+      "code": 61500
+    },
+    {
       "name": "cisco-accesspoint",
       "uuid": "eb8a2fb7-5433-5c52-91ea-8ab852cd4b44",
       "code": 61952
@@ -1543,6 +2058,11 @@
       "code": 61960
     },
     {
+      "name": "cisco-asa-5500",
+      "uuid": "496405ec-757a-53f4-88c7-7936f672073d",
+      "code": 61962
+    },
+    {
       "name": "cisco-class-4-5-switch",
       "uuid": "0d66d88a-fb3b-5e13-90e7-b04b74da520a",
       "code": 61963
@@ -1566,6 +2086,11 @@
       "name": "cisco-host",
       "uuid": "da35907f-a2ac-539f-ace6-e07d8c2e2c0d",
       "code": 61975
+    },
+    {
+      "name": "cisco-iptv-broadcast-server",
+      "uuid": "e831116a-66eb-5b68-b4b9-4e0fe05957ce",
+      "code": 61978
     },
     {
       "name": "cisco-layer-3-switch",
@@ -1633,9 +2158,34 @@
       "code": 62529
     },
     {
+      "name": "huawei-md5500b",
+      "uuid": "ad0e0311-124c-57ff-86c3-2a2da52a2a7d",
+      "code": 62530
+    },
+    {
       "name": "huawei-optical-splitter",
       "uuid": "9672e193-6c70-523b-a73c-fa0fab06f67d",
       "code": 62531
+    },
+    {
+      "name": "huawei-fdt",
+      "uuid": "819854a4-a7eb-5cd5-90df-63ec96db525a",
+      "code": 62532
+    },
+    {
+      "name": "huawei-fiber-connector",
+      "uuid": "278c79a5-e8c7-50a8-a939-8dc893bf30dc",
+      "code": 62535
+    },
+    {
+      "name": "huawei-optical-attenuator",
+      "uuid": "84032199-8264-5473-a54b-a484012caaa5",
+      "code": 62536
+    },
+    {
+      "name": "huawei-termination-module",
+      "uuid": "2b99fae7-e890-5f94-aa20-296c029d67e5",
+      "code": 62538
     },
     {
       "name": "huawei-bras",
@@ -1646,6 +2196,216 @@
       "name": "huawei-access-node",
       "uuid": "ec98101e-761a-539d-8ef2-de0bcd9ed74b",
       "code": 62540
+    },
+    {
+      "name": "huawei-pbx-switch",
+      "uuid": "67060b1c-5ba8-5637-a7c0-5f9b46f2231d",
+      "code": 62541
+    },
+    {
+      "name": "huawei-radius-server",
+      "uuid": "74087c4d-d50f-5c26-81f6-2efbda09cd8e",
+      "code": 62548
+    },
+    {
+      "name": "huawei-splicing-module",
+      "uuid": "2a8df1b1-3d92-507c-9b8e-108d332dfc72",
+      "code": 62549
+    },
+    {
+      "name": "huawei-conversion-adapter",
+      "uuid": "3097eee1-b9ee-5ba7-9647-5c815ef62c33",
+      "code": 62550
+    },
+    {
+      "name": "huawei-bits",
+      "uuid": "6b21c8ea-ad4d-5a50-af4a-02a39bd5f873",
+      "code": 62552
+    },
+    {
+      "name": "huawei-sps",
+      "uuid": "22d50e33-2923-51aa-bb24-99d3baa94a31",
+      "code": 62553
+    },
+    {
+      "name": "huawei-dvc",
+      "uuid": "5b98c18f-c1e9-5804-a509-df15254a0d81",
+      "code": 62554
+    },
+    {
+      "name": "huawei-location-server",
+      "uuid": "0de7c9a7-2bfb-56f1-9cf9-ed676cb738ac",
+      "code": 62555
+    },
+    {
+      "name": "huawei-sbc",
+      "uuid": "7fb1d1dc-a577-5a6d-8985-4b0c4687e59c",
+      "code": 62556
+    },
+    {
+      "name": "huawei-iserver",
+      "uuid": "252e467b-abfa-5da3-b8d3-d9424fc84b8c",
+      "code": 62557
+    },
+    {
+      "name": "huawei-low-end-and-mid-range-router",
+      "uuid": "50183280-fba4-5691-b37b-b407b7eef888",
+      "code": 62561
+    },
+    {
+      "name": "huawei-high-end-router",
+      "uuid": "32e1760a-e023-54d1-bc51-786e6974f2f7",
+      "code": 62562
+    },
+    {
+      "name": "huawei-core-router",
+      "uuid": "83bb2d02-af0a-563f-aebf-9249cd29e263",
+      "code": 62563
+    },
+    {
+      "name": "huawei-bcs",
+      "uuid": "d44c955b-eb05-51e7-b6ff-5a277048c348",
+      "code": 62567
+    },
+    {
+      "name": "huawei-rnc",
+      "uuid": "12794130-86f7-52e5-b5e0-820f5473fa79",
+      "code": 62568
+    },
+    {
+      "name": "huawei-test-client",
+      "uuid": "eed23f7f-ba1b-5a9a-aaad-70d26251cd26",
+      "code": 62571
+    },
+    {
+      "name": "huawei-hgw",
+      "uuid": "665f4b38-3f38-537d-8854-cb14ae9b0d9f",
+      "code": 62575
+    },
+    {
+      "name": "huawei-softx3000",
+      "uuid": "caf07afe-97b0-52a5-b1ac-aafa14be5456",
+      "code": 62589
+    },
+    {
+      "name": "huawei-mrp6600",
+      "uuid": "d8a43bf7-1d8a-5099-a790-79ea69e3acf0",
+      "code": 62591
+    },
+    {
+      "name": "huawei-combiner",
+      "uuid": "49e8d871-d9aa-5df9-aeac-571af04c3754",
+      "code": 62592
+    },
+    {
+      "name": "huawei-olt",
+      "uuid": "6e009cb3-a5f8-5aa5-a9bc-da4901cf87f0",
+      "code": 62594
+    },
+    {
+      "name": "huawei-mdu",
+      "uuid": "d0cb2b0f-c091-556d-a47f-26a8177b835e",
+      "code": 62595
+    },
+    {
+      "name": "huawei-layer-3-switch",
+      "uuid": "55866dd2-0892-58db-90ed-e387b50bcfe0",
+      "code": 62598
+    },
+    {
+      "name": "huawei-upstream-optical-receiver",
+      "uuid": "dd108553-4b78-5e83-9211-b42c9691caa6",
+      "code": 62601
+    },
+    {
+      "name": "huawei-upstream-optical-transmitter",
+      "uuid": "0a716722-db64-5ebe-b40d-fc18c87152c7",
+      "code": 62602
+    },
+    {
+      "name": "huawei-downstream-optical-receiver",
+      "uuid": "b681c943-91f7-594a-8d14-beaf862f7e3f",
+      "code": 62603
+    },
+    {
+      "name": "huawei-downstream-optical-transmitter",
+      "uuid": "5be5636e-bbb8-5e36-814f-c9b513dc9631",
+      "code": 62604
+    },
+    {
+      "name": "huawei-common-transceiver",
+      "uuid": "cc8cf627-b32c-53af-9b95-530706817999",
+      "code": 62605
+    },
+    {
+      "name": "huawei-oa",
+      "uuid": "a4f50634-2c32-5ef1-a31b-54a09cf58974",
+      "code": 62606
+    },
+    {
+      "name": "huawei-one-way-amplifier",
+      "uuid": "f6d73201-7c42-5951-ac6c-5172be6a0aa9",
+      "code": 62607
+    },
+    {
+      "name": "huawei-two-way-amplifier",
+      "uuid": "51b796e5-c296-5239-afed-cbda14090161",
+      "code": 62608
+    },
+    {
+      "name": "huawei-distributor",
+      "uuid": "97f559f9-67f1-52be-87bb-d3a352294e65",
+      "code": 62610
+    },
+    {
+      "name": "huawei-frequency-mixer",
+      "uuid": "0c1e3e79-39aa-5453-9807-e44ab3589776",
+      "code": 62611
+    },
+    {
+      "name": "huawei-eqam",
+      "uuid": "766f756f-6829-5b49-bf2e-0f263e1fe478",
+      "code": 62612
+    },
+    {
+      "name": "huawei-d-cmts",
+      "uuid": "a5db2872-e08a-55d4-ad4c-5ca63cf50b06",
+      "code": 62613
+    },
+    {
+      "name": "flag-ci",
+      "uuid": "41a7d4dd-03ce-5f79-a32b-ac526af2b7ed",
+      "code": 62818
+    },
+    {
+      "name": "flag-fr",
+      "uuid": "2d7870f2-7c68-5398-aad7-ae6d72b7deb1",
+      "code": 62843
+    },
+    {
+      "name": "flag-gn",
+      "uuid": "8e67c5df-d3e4-56f4-aee7-8c45f870bfe1",
+      "code": 62850
+    },
+    {
+      "name": "flag-it",
+      "uuid": "5052e775-7c5a-5d38-a975-9f1c3c060566",
+      "code": 62867
+    },
+    {
+      "name": "flag-ml",
+      "uuid": "c8f4c9b7-09f3-579a-a621-1d62ce8fed94",
+      "code": 62899
+    },
+    {
+      "name": "flag-ro",
+      "uuid": "044b1afe-5d31-5368-b008-3423d1cc23d5",
+      "code": 62930
+    },
+    {
+      "name": "flag-td",
+      "uuid": "e1746577-f1e4-533a-b36e-e384ad636eaf",
+      "code": 62952
     }
   ]
 }
