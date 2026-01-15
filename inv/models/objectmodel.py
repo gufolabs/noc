@@ -860,13 +860,13 @@ class ObjectModel(Document):
         # Pre-defined glyphs
         # Rack
         if self.container_type and self.container_type.is_rack():
-            return "fa fa-th-large"
+            return "gf rack-o"
         # Chassis
         if self.container_type and self.container_type.is_chassis():
             return "fa fa-square"
         # Linecard
         if self.is_linecard():
-            return "fa fa-window-minimize"
+            return "gf gf-linecard-o"
         # Transceiver
         if self.is_xcvr():
             pt = self.get_xcvr_port_type()
