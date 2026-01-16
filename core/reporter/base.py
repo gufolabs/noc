@@ -28,7 +28,6 @@ from .types import (
     OutputType,
     RunParams,
     ReportConfig,
-    ReportBand,
     ReportQuery,
     OutputDocument,
     ROOT_BAND,
@@ -184,11 +183,12 @@ class ReportEngine(object):
                 clean_params[name] = self.align_date(clean_params[name])
         return clean_params
 
+    @staticmethod
     def parse_fields(
-        self, band: ReportBand, template: Template, fields: Optional[List[str]] = None
+        template: Template, fields: Optional[List[str]] = None
     ) -> Dict[str, List[str]]:
         """Parse requested fields for apply to datasource query"""
-        logger.info("[%s] Request datasource fields for band", band.name)
+        logger.info("Request datasource fields for template '%s'", template.code)
         if not template.bands_format and not fields:
             return {}
         if fields:
@@ -210,9 +210,7 @@ class ReportEngine(object):
                 r[f].append(ds[0])
         return r
 
-    def load_bands(
-        self, report: ReportConfig, params: Dict[str, Any], template: Optional[Template] = None
-    ) -> Band:
+    def load_bands(self, report: ReportConfig, params: Dict[str, Any], template: Template) -> Band:
         """
         Generate Report Bands from Config
         Attrs:
@@ -228,6 +226,7 @@ class ReportEngine(object):
             root.add_children(s.get_data(**params))
             return root
         deferred = []
+        f_map = self.parse_fields(template, params.pop("fields", None))
         for b in report.bands:
             if b.conditions and not b.is_match(params):
                 continue
@@ -235,7 +234,6 @@ class ReportEngine(object):
                 band = root
             else:
                 band = Band.from_report(b)
-            f_map = self.parse_fields(b, template, params.pop("fields", None))
             for num, d in enumerate(self.get_dataset(b.queries, params, f_map)):
                 self.logger.debug(
                     "[%s] Add dataset, Columns [%s]: %s",
