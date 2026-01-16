@@ -25,6 +25,7 @@ from noc.core.middleware.tls import get_user
 from noc.core.datasources.base import BaseDataSource
 from noc.core.datasources.loader import loader as ds_loader
 from noc.core.reporter.band import Band, DataSet
+from noc.core.reporter.formatter.loader import loader as df_loader
 from noc.core.reporter.types import (
     Template,
     OutputType,
@@ -71,7 +72,7 @@ class ReportEngine(object):
         self.logger.info("[%s] Running report with parameter: %s", report.name, cleaned_param)
         try:
             band = self.load_bands(report, cleaned_param, template)
-            self.generate_report(report, template, out_type, out, cleaned_param, band)
+            self.generate_report(template, out_type, out, band)
         except Exception as e:
             error = str(e)
             if self.report_print_error:
@@ -144,18 +145,11 @@ class ReportEngine(object):
             ],
         )
 
+    @staticmethod
     def generate_report(
-        self,
-        report: ReportConfig,
-        template: Template,
-        output_type: OutputType,
-        output_stream: bytes,
-        params: Dict[str, Any],
-        band: Band,
+        template: Template, output_type: OutputType, output_stream: bytes, band: Band
     ):
         """Render document"""
-        from noc.core.reporter.formatter.loader import loader as df_loader
-
         formatter = df_loader[template.formatter]
         fmt = formatter(band, template, output_type, output_stream)
         fmt.render_document()
@@ -291,7 +285,9 @@ class ReportEngine(object):
                 data, key_fields = cls.query_datasource(query, q_ctx, fields=ds_f)
                 joined_fields_map[query.name] = key_fields
             if num and query.name in joined_fields_map:
-                jf = set(joined_fields_map[query.name]).intersection(joined_fields_map[result[-1].name])
+                jf = set(joined_fields_map[query.name]).intersection(
+                    joined_fields_map[result[-1].name]
+                )
                 result[-1].data = result[-1].data.join(data, on=list(jf), how="left")
             else:
                 result.append(
