@@ -234,7 +234,7 @@ class ReportEngine(object):
                 band = root
             else:
                 band = Band.from_report(b)
-            for num, d in enumerate(self.get_dataset(b.queries, params, f_map)):
+            for num, d in enumerate(self.get_datasets(b.queries, params, f_map)):
                 self.logger.debug(
                     "[%s] Add dataset, Columns [%s]: %s",
                     b.name,
@@ -261,7 +261,7 @@ class ReportEngine(object):
         return root
 
     @classmethod
-    def get_dataset(
+    def get_datasets(
         cls, queries: List[ReportQuery], ctx: Dict[str, Any], fields_map: Dict[str, List[str]]
     ) -> List[DataSet]:
         """
@@ -269,10 +269,10 @@ class ReportEngine(object):
             queries: Configuration dataset
             ctx: Report params
         """
-        r: List[DataSet] = []
+        result: List[DataSet] = []
         if not queries:
             return []
-        joined_field = {}
+        joined_fields_map = {}
         for num, query in enumerate(queries):
             data, ds_f = None, []
             q_ctx = ctx.copy()
@@ -287,17 +287,14 @@ class ReportEngine(object):
             elif num and query.datasource and fields_map and query.datasource not in fields_map:
                 continue
             elif query.datasource:
-                # fields = fields_map[query.datasource] if query.datasource in fields_map else []
                 logger.info("[%s] Query DataSource with fields: %s", query.datasource, ds_f)
-                data, key_field = cls.query_datasource(query, q_ctx, fields=ds_f)
-                if key_field:
-                    joined_field[query.name] = key_field
-                    # joined_field = key_field
-            if num and query.name in joined_field:
-                jf = set(joined_field[query.name]).intersection(joined_field[r[-1].name])
-                r[-1].data = r[-1].data.join(data, on=list(jf), how="left")
+                data, key_fields = cls.query_datasource(query, q_ctx, fields=ds_f)
+                joined_fields_map[query.name] = key_fields
+            if num and query.name in joined_fields_map:
+                jf = set(joined_fields_map[query.name]).intersection(joined_fields_map[result[-1].name])
+                result[-1].data = result[-1].data.join(data, on=list(jf), how="left")
             else:
-                r.append(
+                result.append(
                     DataSet(
                         name=query.name,
                         data=data,
@@ -306,7 +303,7 @@ class ReportEngine(object):
                         transpose_columns=query.transpose_columns,
                     )
                 )
-        return r
+        return result
 
     @classmethod
     def query_datasource(
