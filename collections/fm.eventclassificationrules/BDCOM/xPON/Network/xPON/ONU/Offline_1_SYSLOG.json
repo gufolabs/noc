@@ -1,0 +1,19 @@
+{
+    "name": "BDCOM | xPON | Network | xPON | ONU | Offline #1 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "22cb67fa-c09d-430d-9583-0f29fd10b5a0",
+    "description": "%GPON-ONULOS: ONU BDCM:6B85B483 is offline on GPON0/3:5.",
+    "event_class__name": "Network | xPON | ONU | Offline",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "%GPON-ONULOS: ONU (?P<onu>\\S+) is offline on (?P<interface>GPON\\S+)\\.",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "%GPON-ONULOS: ONU BDCM:6B85B483 is offline on GPON0/3:5.",
+            "raw_vars": []
+        }
+    ]
+}

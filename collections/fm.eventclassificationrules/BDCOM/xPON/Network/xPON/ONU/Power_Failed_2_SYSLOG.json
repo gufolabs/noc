@@ -1,0 +1,19 @@
+{
+    "name": "BDCOM | xPON | Network | xPON | ONU | Power Failed #2 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "908dec95-3a80-4a05-a066-5b1edfe11efb",
+    "description": "Alarm DYING_GASP from ONU 4cd7.c871.5634 port EPON0/1:23",
+    "event_class__name": "Network | xPON | ONU | Power Failed",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "Alarm DYING_GASP from ONU (?P<onu>\\S+) port (?P<interface>EPON\\S+)",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "Alarm DYING_GASP from ONU 4cd7.c871.5634 port EPON0/1:23",
+            "raw_vars": []
+        }
+    ]
+}

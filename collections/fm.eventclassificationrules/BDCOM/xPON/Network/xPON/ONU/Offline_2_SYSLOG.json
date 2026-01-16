@@ -1,0 +1,19 @@
+{
+    "name": "BDCOM | xPON | Network | xPON | ONU | Offline #2 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "5a856736-8c7f-47b0-bea2-e1594323578b",
+    "description": "%EPON-ONUDEREG: ONU 6c68.a467.f760 is deregistered on EPON0/1:10.",
+    "event_class__name": "Network | xPON | ONU | Offline",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "%EPON-ONUDEREG: ONU (?P<onu>\\S+) is deregistered on (?P<interface>EPON\\S+)\\.",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "%EPON-ONUDEREG: ONU 6c68.a467.f760 is deregistered on EPON0/1:10.",
+            "raw_vars": []
+        }
+    ]
+}

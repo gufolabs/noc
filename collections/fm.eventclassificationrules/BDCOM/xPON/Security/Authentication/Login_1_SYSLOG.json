@@ -7,12 +7,16 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "User (?P<user>\\S+) logged in from (?P<ip>\\d\\S+)",
+    "message_rx": "(?:Local user|User) (?P<user>\\S+) (?:successfully logs|logged) in from (?P<ip>\\d\\S+\\d+)",
     "profiles": ["BDCOM.xPON"],
     "sources": ["syslog"],
     "test_cases": [
         {
             "message": "User mitya logged in from 10.118.0.2 on vty 0",
+            "raw_vars": []
+        },
+        {
+            "message": "Local user Nikolaenko successfully logs in from 172.25.8.198!",
             "raw_vars": []
         }
     ]
