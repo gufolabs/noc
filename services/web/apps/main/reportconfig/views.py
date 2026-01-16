@@ -17,7 +17,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
 from noc.main.models.report import Report
-from noc.core.reporter.base import ReportEngine
+from noc.core.reporter.reportengine import ReportEngine
 from noc.core.reporter.types import RunParams, OutputType
 from noc.core.translation import ugettext as _
 from noc.models import get_model

@@ -12,7 +12,7 @@ import polars as pl
 from polars.testing import assert_frame_equal
 
 # NOC modules
-from noc.core.reporter.base import ReportEngine
+from noc.core.reporter.reportengine import ReportEngine
 from noc.core.reporter.types import ReportQuery
 
 query1 = ReportQuery(name="query1")

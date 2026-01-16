@@ -11,7 +11,7 @@ import os
 import yaml
 
 # NOC modules
-from noc.core.reporter.base import ReportEngine
+from noc.core.reporter.reportengine import ReportEngine
 from noc.core.reporter.types import ReportConfig, RunParams, OutputType
 from noc.core.mongo.connection import connect
 

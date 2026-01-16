@@ -17,7 +17,7 @@ import orjson
 # NOC modules
 from noc.core.management.base import BaseCommand
 from noc.core.mongo.connection import connect
-from noc.core.reporter.base import ReportEngine
+from noc.core.reporter.reportengine import ReportEngine
 from noc.core.reporter.types import RunParams, OutputType
 from noc.core.datasources.loader import loader
 from noc.aaa.models.user import User
