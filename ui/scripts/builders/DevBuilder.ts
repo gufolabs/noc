@@ -6,7 +6,73 @@ import {BaseBuilder} from "./BaseBuilder.ts";
 
 export class DevBuilder extends BaseBuilder{
   readonly className: string = "DevBuilder";
-
+  replaceMethodsPlugin = new ReplaceMethodsPlugin({
+    debug: this.options.pluginDebug,
+    isDev: true,
+    parserOptions: {
+      ...this.options.parserOptions,
+      loc: true,
+      range: true,
+      comment: true,
+      tokens: true,
+    },
+    generateOptions: this.options.generateOptions,
+    toReplaceMethods: [
+      {
+        name: "NOC.core.ResourceLoader.loadSet",
+        replacement: {
+          type: "ExpressionStatement",
+          expression: {
+            type: "CallExpression",
+            callee: {
+              type: "MemberExpression",
+              object: {
+                type: "CallExpression",
+                callee: {
+                  type: "MemberExpression",
+                  object: {type: "Identifier", name: "leafletAPI"},
+                  property: {type: "Identifier", name: "preload"},
+                  computed: false,
+                  optional: false,
+                },
+                arguments: [],
+                optional: false,
+              },
+              property: {type: "Identifier", name: "then"},
+              computed: false,
+              optional: false,
+            },
+            arguments: [
+              {
+                type: "ArrowFunctionExpression",
+                params: [],
+                body: {
+                  type: "CallExpression",
+                  callee: {
+                    type: "MemberExpression",
+                    object: {type: "ThisExpression"},
+                    property: {type: "Identifier", name: "createMap"},
+                    computed: false,
+                    optional: false,
+                  },
+                  arguments: [
+                    {type: "Identifier", name: "data"},
+                  ],
+                  optional: false,
+                },
+                generator: false,
+                expression: true,
+                async: false,
+              },
+            ],
+            optional: false,
+          },
+        },
+      },
+    ],
+    glyphTransformer: this.options.glyphTransformer,
+  });
+  
   async start(): Promise<void>{
     try{
       await this.initialize();
@@ -36,71 +102,6 @@ export class DevBuilder extends BaseBuilder{
 
   private async createContext(): Promise<void>{
     const options = this.getBaseBuildOptions(),
-      replaceMethodsPlugin = new ReplaceMethodsPlugin({
-        debug: this.options.pluginDebug,
-        isDev: true,
-        parserOptions: {
-          ...this.options.parserOptions,
-          loc: true,
-          range: true,
-          comment: true,
-          tokens: true,
-        },
-        generateOptions: this.options.generateOptions,
-        toReplaceMethods: [
-          {
-            name: "NOC.core.ResourceLoader.loadSet",
-            replacement: {
-              type: "ExpressionStatement",
-              expression: {
-                type: "CallExpression",
-                callee: {
-                  type: "MemberExpression",
-                  object: {
-                    type: "CallExpression",
-                    callee: {
-                      type: "MemberExpression",
-                      object: {type: "Identifier", name: "leafletAPI"},
-                      property: {type: "Identifier", name: "preload"},
-                      computed: false,
-                      optional: false,
-                    },
-                    arguments: [],
-                    optional: false,
-                  },
-                  property: {type: "Identifier", name: "then"},
-                  computed: false,
-                  optional: false,
-                },
-                arguments: [
-                  {
-                    type: "ArrowFunctionExpression",
-                    params: [],
-                    body: {
-                      type: "CallExpression",
-                      callee: {
-                        type: "MemberExpression",
-                        object: {type: "ThisExpression"},
-                        property: {type: "Identifier", name: "createMap"},
-                        computed: false,
-                        optional: false,
-                      },
-                      arguments: [
-                        {type: "Identifier", name: "data"},
-                      ],
-                      optional: false,
-                    },
-                    generator: false,
-                    expression: true,
-                    async: false,
-                  },
-                ],
-                optional: false,
-              },
-            },
-          },
-        ],
-      }),
       languagePlugin = new LanguagePlugin({
         debug: this.options.pluginDebug,
         isDev: true,
@@ -118,7 +119,7 @@ export class DevBuilder extends BaseBuilder{
       plugins: [
         ...(options.plugins || []),
         languagePlugin.getPlugin(),
-        replaceMethodsPlugin.getPlugin(),
+        this.replaceMethodsPlugin.getPlugin(),
       ],
     });
   }
@@ -128,6 +129,32 @@ export class DevBuilder extends BaseBuilder{
       throw new Error("Context not initialized");
     }
     await this.context.watch();
+
+    const fs = await import("fs");
+    const extraWatchFile = "types/noc-glyph.d.ts";
+    
+    if(fs.existsSync(extraWatchFile)){
+      let lastMtime = fs.statSync(extraWatchFile).mtimeMs;
+      let timer: NodeJS.Timeout;
+
+      fs.watch(extraWatchFile, () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          try{
+            const stats = fs.statSync(extraWatchFile);
+            if(stats.mtimeMs !== lastMtime){
+              lastMtime = stats.mtimeMs;
+              console.log(`Change detected in ${extraWatchFile}, rebuilding...`);
+              this.replaceMethodsPlugin.loadGlyphMappings();
+              this.context?.rebuild().catch((err) => console.error("Rebuild failed:", err));
+            }
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          } catch(e){
+            // ignore
+          }
+        }, 100);
+      });
+    }
   }
 
   private async serve(): Promise<ServeResult>{
