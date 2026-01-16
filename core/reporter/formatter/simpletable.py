@@ -12,9 +12,9 @@ from typing import Optional
 from xlsxwriter.workbook import Workbook
 
 # NOC modules
-from .base import DataFormatter
-from .utils import replace_nested_datatypes
-from ..types import OutputType, HEADER_BAND
+from noc.core.reporter.formatter.base import DataFormatter
+from noc.core.reporter.formatter.utils import replace_nested_datatypes
+from noc.core.reporter.types import OutputType, HEADER_BAND
 
 
 class SimpleTableFormatter(DataFormatter):

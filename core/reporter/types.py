@@ -218,14 +218,14 @@ class RunParams(BaseModel):
     Report request
     """
 
-    report: ReportConfig
+    report_config: ReportConfig
     report_template: Optional[str] = None  # Report Template Code, Use default if not set
     output_type: Optional[OutputType] = None  # Requested OutputType (if not set used from template)
     params: Optional[Dict[str, Any]] = None  # Requested report params
     output_name_pattern: Optional[str] = None  # Output document file name
 
-    def get_template(self) -> "Template":
-        return self.report.get_template(self.report_template)
+    def get_template(self) -> Template:
+        return self.report_config.get_template(self.report_template)
 
     def get_params(self) -> Dict[str, Any]:
         r = {}

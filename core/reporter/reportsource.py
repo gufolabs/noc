@@ -9,8 +9,8 @@
 from typing import List, Dict
 
 # Python Modules
-from .report import Band
-from .types import BandFormat
+from noc.core.reporter.band import Band
+from noc.core.reporter.types import BandFormat
 
 
 class ReportSource(object):
