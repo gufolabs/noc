@@ -108,6 +108,43 @@ class ContainerType(Enum):
         return self == ContainerType.CHASSIS
 
 
+class XcvrPortType(Enum):
+    """
+    Transceiver port type.
+
+    Attributes:
+        LC: LC.
+        LC_BIDI: LC bidirection (single-fiber).
+        SC: SC.
+        SC_BIDI: SC bidirection (single-fiber).
+        RJ45: RJ45.
+        OTHER: Other Type.
+    """
+
+    LC = "lc"
+    LC_BIDI = "lc_bidi"
+    SC = "sc"
+    SC_BIDI = "sc_bidi"
+    RJ45 = "rj45"
+    OTHER = "other"
+
+    def glyph_css_class(self) -> str | None:
+        """Get glpyh class."""
+        match self:
+            case XcvrPortType.LC:
+                return "gf lc-duplex-o"
+            case XcvrPortType.LC_BIDI:
+                return "gf lc-simplex-o"
+            case XcvrPortType.SC:
+                return "gf sc-duplex-o"
+            case XcvrPortType.SC_BIDI:
+                return "gf sc-simplex-o"
+            case XcvrPortType.RJ45:
+                return "gf ethernet-s"
+            case XcvrPortType.OTHER:
+                return None
+
+
 class ModelAttr(EmbeddedDocument):
     meta = {"strict": False, "auto_create_index": False}
     interface = StringField()
@@ -822,17 +859,18 @@ class ObjectModel(Document):
             return self.glyph.css_class
         # Pre-defined glyphs
         # Rack
-        if self.get_data("rack", "units"):
-            return "fa fa-th-large"
+        if self.container_type and self.container_type.is_rack():
+            return "gf rack-o"
         # Chassis
         if self.container_type and self.container_type.is_chassis():
             return "fa fa-square"
         # Linecard
-        if self.cr_context == "LINECARD":
-            return "fa fa-window-minimize"
+        if self.is_linecard():
+            return "gf gf-linecard-o"
         # Transceiver
-        if self.cr_context == "XCVR":
-            return "fa fa-bolt"
+        if self.is_xcvr():
+            pt = self.get_xcvr_port_type()
+            return pt.glyph_css_class()
         return None
 
     def _ensure_connection_names(self):
@@ -913,6 +951,35 @@ class ObjectModel(Document):
                 if mi.is_default:
                     return mi.name
         return None
+
+    def is_linecard(self) -> bool:
+        """Check if model is linecard."""
+        return self.cr_context == "LINECARD"
+
+    def is_xcvr(self) -> bool:
+        """Check if model is transceiver."""
+        return self.cr_context == "XCVR"
+
+    def get_xcvr_port_type(self) -> XcvrPortType:
+        """Get XCVR port type for transceiver."""
+        n_lc = 0
+        n_sc = 0
+        for c in self.connections:
+            if not c.type:
+                continue
+            if c.type.is_lc():
+                n_lc += 1
+            elif c.type.is_sc():
+                n_sc += 1
+        if n_lc == 2:
+            return XcvrPortType.LC
+        if n_lc == 1:
+            return XcvrPortType.LC_BIDI
+        if n_sc == 2:
+            return XcvrPortType.SC
+        if n_sc == 1:
+            return XcvrPortType.SC_BIDI
+        return XcvrPortType.OTHER
 
 
 class ModelConnectionsCache(Document):
