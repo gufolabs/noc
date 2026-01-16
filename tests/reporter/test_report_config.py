@@ -32,7 +32,7 @@ def test_report_config(report):
         args["request"] = RequestStub(None)
     r_cfg = ReportConfig(**cfg)
     report_engine = ReportEngine(report_print_error=True)
-    rp = RunParams(report=r_cfg, params=args)
+    rp = RunParams(report_config=r_cfg, params=args)
     connect()
     out_doc = report_engine.run_report(r_params=rp)
     site.autodiscover()

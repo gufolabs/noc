@@ -74,7 +74,7 @@ class Command(BaseCommand):
         args = self.get_report_args(arguments)
         self.print(f"Running report with arguments: {args}")
         rp = RunParams(
-            report=report.get_config(pref_lang),
+            report_config=report.get_config(pref_lang),
             output_type=OutputType(out_type),
             params=args,
         )

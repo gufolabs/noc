@@ -30,7 +30,7 @@ def test_report(report, params):
         cfg = yaml.safe_load(f)
     # r = yaml.safe_load(report_config)
     report_engine = ReportEngine(report_print_error=True)
-    rp = RunParams(report=ReportConfig(**cfg), output_type=OutputType.CSV, params=params)
+    rp = RunParams(report_config=ReportConfig(**cfg), output_type=OutputType.CSV, params=params)
     connect()
     out_doc = report_engine.run_report(r_params=rp)
     re_out = out_doc.content.decode("utf8")

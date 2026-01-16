@@ -61,17 +61,17 @@ class ReportEngine(object):
         """
         # Handler param
         out: BytesIO = BytesIO()
-        report = r_params.report
+        rc = r_params.report_config
         template = r_params.get_template()
         out_type = r_params.output_type or template.output_type
         user = user or get_user()
-        cleaned_param = self.clean_param(report, r_params.get_params())
+        cleaned_param = self.clean_param(rc, r_params.get_params())
         if user:
             cleaned_param["user"] = user
         error, start = None, datetime.datetime.now()
-        self.logger.info("[%s] Running report with parameter: %s", report.name, cleaned_param)
+        self.logger.info("[%s] Running report with parameter: %s", rc.name, cleaned_param)
         try:
-            band = self.load_bands(report, cleaned_param, template)
+            band = self.load_bands(rc, cleaned_param, template)
             self.generate_report(template, out_type, out, band)
         except Exception as e:
             error = str(e)
@@ -79,7 +79,7 @@ class ReportEngine(object):
                 error_report(logger=self.logger, suppress_log=self.suppress_error_log)
         if self.report_execution_history:
             self.register_execute(
-                report,
+                rc,
                 start,
                 r_params.get_params(),
                 successfully=not error,
@@ -88,10 +88,10 @@ class ReportEngine(object):
             )
         if error:
             self.logger.error(
-                "[%s] Finished report with error: %s ; Params:%s", report.name, error, cleaned_param
+                "[%s] Finished report with error: %s ; Params:%s", rc.name, error, cleaned_param
             )
             raise ValueError(error)
-        self.logger.info("[%s] Finished report with parameter: %s", report.name, cleaned_param)
+        self.logger.info("[%s] Finished report with parameter: %s", rc.name, cleaned_param)
         output_name = self.resolve_output_filename(run_params=r_params, root_band=band)
         return OutputDocument(
             content=out.getvalue(), document_name=output_name, output_type=out_type
@@ -100,7 +100,7 @@ class ReportEngine(object):
     @classmethod
     def register_execute(
         cls,
-        report: ReportConfig,
+        rc: ReportConfig,
         start: datetime.datetime,
         params: Dict[str, Any],
         end: Optional[datetime.datetime] = None,
@@ -110,7 +110,7 @@ class ReportEngine(object):
         user: Optional[str] = None,
     ):
         """
-        :param report:
+        :param rc:
         :param start:
         :param end:
         :param params:
@@ -133,8 +133,8 @@ class ReportEngine(object):
                     "start": start.replace(microsecond=0).isoformat(),
                     "end": end.replace(microsecond=0).isoformat(),
                     "duration": int(abs((end - start).total_seconds()) * 1000),
-                    "report": report.name,
-                    "name": report.name,
+                    "report": rc.name,
+                    "name": rc.name,
                     "code": "",
                     "user": str(user),
                     "successfully": successfully,
@@ -159,11 +159,11 @@ class ReportEngine(object):
         """Align end date parameter"""
         return (date + datetime.timedelta(days=1)).replace(hour=0, minute=0, second=0)
 
-    def clean_param(self, report: ReportConfig, params: Dict[str, Any]):
+    def clean_param(self, rc: ReportConfig, params: Dict[str, Any]):
         """Clean and validata input params"""
         # clean_params = params.copy()
         clean_params = {}
-        for p in report.parameters or []:
+        for p in rc.parameters or []:
             name = p.name
             value = params.get(name)
             if not value and p.required:
@@ -173,7 +173,7 @@ class ReportEngine(object):
             elif not value:
                 continue
             clean_params[name] = p.clean_value(value)
-            if name == "end" and p.type == "date" and report.align_end_date_param:
+            if name == "end" and p.type == "date" and rc.align_end_date_param:
                 clean_params[name] = self.align_date(clean_params[name])
         return clean_params
 
@@ -204,14 +204,14 @@ class ReportEngine(object):
                 r[f].append(ds[0])
         return r
 
-    def load_bands(self, report: ReportConfig, params: Dict[str, Any], template: Template) -> Band:
+    def load_bands(self, rc: ReportConfig, params: Dict[str, Any], template: Template) -> Band:
         """
         Generate Report Bands from Config
         Attrs:
-            report: Report configuration
+            rc: Report configuration
             params: Running params
         """
-        r = report.get_root_band()
+        r = rc.get_root_band()
         root = Band.from_report(r, params)
         # Create Root BandData
         if r.source:
@@ -221,7 +221,7 @@ class ReportEngine(object):
             return root
         deferred = []
         f_map = self.parse_fields(template, params.pop("fields", None))
-        for b in report.bands:
+        for b in rc.bands:
             if b.conditions and not b.is_match(params):
                 continue
             if b.name == ROOT_BAND:

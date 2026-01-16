@@ -231,7 +231,7 @@ class ReportConfigApplication(ExtDocApplication):
         )
         try:
             rp = RunParams(
-                report=report.get_config(pref_lang),
+                report_config=report.get_config(pref_lang),
                 output_type=OutputType(q.get("output_type")),
                 params=q,
             )
