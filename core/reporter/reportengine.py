@@ -23,6 +23,8 @@ from noc.main.reportsources.loader import loader as r_source_loader
 from noc.core.debug import error_report
 from noc.core.middleware.tls import get_user
 from noc.core.datasources.base import BaseDataSource
+from noc.core.datasources.loader import loader as ds_loader
+from noc.core.reporter.band import Band, DataSet
 from noc.core.reporter.types import (
     Template,
     OutputType,
@@ -33,8 +35,6 @@ from noc.core.reporter.types import (
     ROOT_BAND,
     HEADER_BAND,
 )
-from noc.core.reporter.band import Band, DataSet
-
 
 logger = logging.getLogger(__name__)
 
@@ -310,11 +310,7 @@ class ReportEngine(object):
 
     @classmethod
     def query_datasource(
-        cls,
-        query: ReportQuery,
-        ctx: Dict[str, Any],
-        joined_field: Optional[str] = None,
-        fields: Optional[List[str]] = None,
+        cls, query: ReportQuery, ctx: Dict[str, Any], fields: Optional[List[str]] = None
     ) -> Tuple[Optional[pl.DataFrame], List[str]]:
         """
         Resolve Datasource for Query
@@ -323,19 +319,10 @@ class ReportEngine(object):
             ctx:
             fields:
         """
-        from noc.core.datasources.loader import loader as ds_loader
-
-        ds: "BaseDataSource" = ds_loader[query.datasource]
+        ds: BaseDataSource = ds_loader[query.datasource]
         if not ds:
             raise ValueError(f"Unknown DataSource: {query.datasource}")
-        if joined_field and not ds.has_field(joined_field):
-            # Joined is not supported
-            logger.warning("[%s] Joined field '%s' not available", ds.name, joined_field)
-            return None, []
-        if joined_field and fields:
-            fields += [joined_field]
-            # Check not row_index
-        elif not joined_field and fields:
+        if fields:
             fields += ds.join_fields()
         row = ds.query_sync(fields=fields, **ctx)
         return row, ds.join_fields()
