@@ -272,3 +272,15 @@ class ConnectionType(Document):
         :return:
         """
         return any(True for m in self.matchers if m.scope == scope and m.protocol in protocols)
+
+    def is_lc(self) -> bool:
+        """Check if connection type is Optical | LC"""
+        return self.name == "Optical | LC"
+
+    def is_sc(self) -> bool:
+        """Check if connection type is Optical | SC"""
+        return self.name == "Optical | LC"
+
+    def is_rj45(self) -> bool:
+        """Check if connection type is Electrical | RJ45"""
+        return self.name == "Electrical | RJ45"
