@@ -23,7 +23,7 @@ from noc.main.reportsources.loader import loader as r_source_loader
 from noc.core.debug import error_report
 from noc.core.middleware.tls import get_user
 from noc.core.datasources.base import BaseDataSource
-from .types import (
+from noc.core.reporter.types import (
     Template,
     OutputType,
     RunParams,
@@ -33,7 +33,7 @@ from .types import (
     ROOT_BAND,
     HEADER_BAND,
 )
-from .report import Band, DataSet
+from noc.core.reporter.band import Band, DataSet
 
 
 logger = logging.getLogger(__name__)

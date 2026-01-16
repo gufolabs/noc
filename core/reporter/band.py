@@ -14,7 +14,7 @@ import polars as pl
 from jinja2 import Template as Jinja2Template
 
 # NOC modules
-from .types import BandOrientation, ROOT_BAND, ReportBand
+from noc.core.reporter.types import BandOrientation, ROOT_BAND, ReportBand
 
 
 @dataclass

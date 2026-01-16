@@ -11,8 +11,8 @@ from typing import Optional
 from io import BytesIO
 
 # NOC modules
-from ..types import Template, OutputType, BandFormat
-from noc.core.reporter.report import Band
+from noc.core.reporter.band import Band
+from noc.core.reporter.types import Template, OutputType, BandFormat
 from noc.config import config
 
 logger = logging.getLogger(__name__)
