@@ -99,6 +99,7 @@ class ActiveAlarm(Document):
             for x in (
                 "timestamp",
                 "-severity",
+                "wait_ts",
                 ("alarm_class", "managed_object"),
                 "#reference",
                 ("timestamp", "managed_object"),
@@ -263,6 +264,19 @@ class ActiveAlarm(Document):
         if hasattr(self, "_clear_ts"):
             return self._clear_ts
         return None
+
+    @classmethod
+    def get_min_wait_ts(cls) -> Optional[datetime.datetime]:
+        """"""
+        return (
+            ActiveAlarm.objects()
+            .aggregate(
+                [
+                    {"$group": {"_id": None, "min_wait_ts": {"$min": "$wait_ts"}}},
+                ]
+            )
+            .next()["min_wait_ts"]
+        )
 
     def clean(self):
         super().clean()
@@ -690,6 +704,7 @@ class ActiveAlarm(Document):
         immediate: bool = False,
         clear_only: bool = False,
         after: Optional[datetime.datetime] = None,
+        keep_args: bool = False,
         **kwargs,
     ):
         """
@@ -701,12 +716,15 @@ class ActiveAlarm(Document):
             immediate: Already executed (used for save data/reference on external job)
             clear_only: Run only alarm clear
             after: Run After Timer
+            keep_args: Keep arguments for exist effect
         """
         if effect == Effect.CLEAR_ALARM and (clear_only or once):
             raise ValueError("Not supported options")
         for w in self.watchers:
             if effect == w.effect and key == w.key:
-                w.after = after
+                if not keep_args:
+                    w.after = after
+                    w.args = kwargs
                 break
         else:
             self.watchers.append(
@@ -1177,7 +1195,7 @@ class ActiveAlarm(Document):
                 bulk += [UpdateOne({"_id": root}, op)]
         return bulk
 
-    def set_root(self, root_alarm, rca_type=RCA_OTHER):
+    def set_root(self, root_alarm: "ActiveAlarm", rca_type=RCA_OTHER):
         """
         Set root cause
         """
@@ -1200,6 +1218,15 @@ class ActiveAlarm(Document):
         root_alarm.log_message("Alarm %s has been marked as child" % self.id, bulk=bulk)
         if self.id:
             ActiveAlarm._get_collection().bulk_write(bulk, ordered=True)
+        # Bulk
+        # root_alarm.touch_watch(is_update=True)
+
+    def reset_root(self):
+        """Reset Root cause"""
+        self.root = None
+        self.log_message("Detached from root for not recovered", to_save=True)
+        # Touch only
+        # root_alarm.touch_watch(is_update=True)
 
     def escalate(
         self,
@@ -1401,6 +1428,32 @@ class ActiveAlarm(Document):
             "affected_services": affected_services,
             "has_merged_downlinks": self.has_merged_downlinks(),
         }
+
+    def refresh_escalation_job(
+        self, profile: str, is_clear: bool = False, job_id: Optional[str] = None
+    ):
+        """"""
+        from noc.services.correlator.alarmjob import AlarmJob
+
+        if not job_id:
+            job = AlarmJob.ensure_profile_job(self, profile)
+            if job.is_end:
+                # Job already ended
+                return
+            job.save_state()
+            self.add_watch(Effect.ESCALATION, key=profile, job_id=str(job.id))
+            job_id = str(job.id)
+        # Run Scheduler
+        # ts = a.wait_ts - datetime.datetime.now().replace(microsecond=0)
+        call_later(
+            "noc.services.correlator.alarmjob.run_alarm_job",
+            scheduler="correlator",
+            max_runs=5,
+            pool=config.pool,
+            delay=2,
+            shard=self.managed_object.id if self.managed_object else 0,
+            job_id=job_id,
+        )
 
     def refresh_job(self, is_clear: bool = False, job_id: Optional[str] = None):
         """Refresh Alarm Job by changes"""
