@@ -14,7 +14,6 @@ from .base import (
     InterfaceNameParameter,
     MACAddressParameter,
     IPv4Parameter,
-    REStringParameter,
 )
 
 
@@ -68,8 +67,6 @@ class IGetLLDPNeighbors(BaseInterface):
                     # LldpPortIdSubtype TC, interfaceName(5)
                     "remote_port_subtype": IntParameter(default=5),
                     "remote_port": MACAddressParameter(accept_bin=False)
-                    | REStringParameter(r"^(?:[Xx]e[1-9]|[Gg][ei][1-9]|sfp)\d$")
-                    | IPv4Parameter()
                     | StringParameter(),
                     "remote_port_description": StringParameter(required=False),
                     "remote_system_name": StringParameter(required=False),
