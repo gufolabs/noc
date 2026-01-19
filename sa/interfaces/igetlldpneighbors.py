@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # IGetLLDPNeighbors
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -14,6 +14,7 @@ from .base import (
     InterfaceNameParameter,
     MACAddressParameter,
     IPv4Parameter,
+    REStringParameter,
 )
 
 
@@ -67,6 +68,8 @@ class IGetLLDPNeighbors(BaseInterface):
                     # LldpPortIdSubtype TC, interfaceName(5)
                     "remote_port_subtype": IntParameter(default=5),
                     "remote_port": MACAddressParameter(accept_bin=False)
+                    | REStringParameter(r"^G[ei]\d\d$")
+                    | REStringParameter(r"^sfp\d$")
                     | IPv4Parameter()
                     | StringParameter(),
                     "remote_port_description": StringParameter(required=False),
