@@ -68,7 +68,7 @@ class IGetLLDPNeighbors(BaseInterface):
                     # LldpPortIdSubtype TC, interfaceName(5)
                     "remote_port_subtype": IntParameter(default=5),
                     "remote_port": MACAddressParameter(accept_bin=False)
-                    | REStringParameter(r"^(?:G[ei]\d|sfp)\d$")
+                    | REStringParameter(r"^(?:[Xx]e[1-9]|[Gg][ei][1-9]|sfp)\d$")
                     | IPv4Parameter()
                     | StringParameter(),
                     "remote_port_description": StringParameter(required=False),
