@@ -11,7 +11,7 @@ import os
 import yaml
 
 # NOC modules
-from noc.core.reporter.base import ReportEngine
+from noc.core.reporter.reportengine import ReportEngine
 from noc.core.reporter.types import ReportConfig, RunParams, OutputType
 from noc.core.mongo.connection import connect
 from noc.services.web.base.site import site
@@ -32,7 +32,7 @@ def test_report_config(report):
         args["request"] = RequestStub(None)
     r_cfg = ReportConfig(**cfg)
     report_engine = ReportEngine(report_print_error=True)
-    rp = RunParams(report=r_cfg, params=args)
+    rp = RunParams(report_config=r_cfg, params=args)
     connect()
     out_doc = report_engine.run_report(r_params=rp)
     site.autodiscover()

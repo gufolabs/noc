@@ -12,7 +12,7 @@ import polars as pl
 from polars.testing import assert_frame_equal
 
 # NOC modules
-from noc.core.reporter.base import ReportEngine
+from noc.core.reporter.reportengine import ReportEngine
 from noc.core.reporter.types import ReportQuery
 
 query1 = ReportQuery(name="query1")
@@ -40,7 +40,7 @@ def dataframe_from(query):
 )
 def test_get_rows(queries, expected):
     report_engine = ReportEngine()
-    res = report_engine.get_dataset(queries, {}, []) or None
+    res = report_engine.get_datasets(queries, {}, []) or None
     if res is None:
         assert expected is None
     elif isinstance(res[0].data, pl.DataFrame):

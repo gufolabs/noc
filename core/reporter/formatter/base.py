@@ -11,8 +11,8 @@ from typing import Optional
 from io import BytesIO
 
 # NOC modules
-from ..types import Template, OutputType, BandFormat
-from noc.core.reporter.report import Band
+from noc.core.reporter.band import Band
+from noc.core.reporter.types import Template, OutputType, BandFormat
 from noc.config import config
 
 logger = logging.getLogger(__name__)
@@ -39,6 +39,17 @@ class DataFormatter(object):
         self.output_stream: BytesIO = output_stream or BytesIO()
         self.csv_delimiter = config.web.report_csv_delimiter
         self.logger = logger
+
+    def __str__(self):
+        return f"DataFormatter/{self.__class__.__name__}"
+
+    def __repr__(self):
+        return (
+            f"DataFormatter/{self.__class__.__name__} ("
+            f"root_band: {self.root_band}, "
+            f"report_template: {self.report_template}, "
+            f"output_type: {self.output_type})"
+        )
 
     def get_band_format(self, band: str) -> Optional[BandFormat]:
         if self.report_template.bands_format and band in self.report_template.bands_format:
