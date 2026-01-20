@@ -14,7 +14,7 @@ import polars as pl
 from jinja2 import Template as Jinja2Template
 
 # NOC modules
-from .types import BandOrientation, ROOT_BAND, ReportBand
+from noc.core.reporter.types import BandOrientation, ROOT_BAND, ReportBand
 
 
 @dataclass
@@ -62,10 +62,15 @@ class Band(object):
         # self.report_field_format: Dict[str, ReportField] = {}
 
     def __str__(self):
-        return self.name
+        return f'Band "{self.name}"'
 
     def __repr__(self):
-        return f"{self.name} ({self.parent})"
+        return (
+            f'Band "{self.name}" (parent: {self.parent}, '
+            f"children_bands: {len(self.children_bands)}, "
+            f"datasets: {len(self.datasets)}, "
+            f"data: {len(self.data)})"
+        )
 
     @property
     def is_root(self) -> bool:

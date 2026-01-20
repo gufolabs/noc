@@ -7,7 +7,7 @@
 
 # NOC modules
 from noc.core.loader.base import BaseLoader
-from .base import DataFormatter
+from noc.core.reporter.formatter.base import DataFormatter
 
 
 class DataFormatterLoader(BaseLoader):

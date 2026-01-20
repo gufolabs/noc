@@ -23,19 +23,19 @@ from noc.main.reportsources.loader import loader as r_source_loader
 from noc.core.debug import error_report
 from noc.core.middleware.tls import get_user
 from noc.core.datasources.base import BaseDataSource
-from .types import (
+from noc.core.datasources.loader import loader as ds_loader
+from noc.core.reporter.band import Band, DataSet
+from noc.core.reporter.formatter.loader import loader as df_loader
+from noc.core.reporter.types import (
     Template,
     OutputType,
     RunParams,
     ReportConfig,
-    ReportBand,
     ReportQuery,
     OutputDocument,
     ROOT_BAND,
     HEADER_BAND,
 )
-from .report import Band, DataSet
-
 
 logger = logging.getLogger(__name__)
 
@@ -61,25 +61,25 @@ class ReportEngine(object):
         """
         # Handler param
         out: BytesIO = BytesIO()
-        report = r_params.report
+        rc = r_params.report_config
         template = r_params.get_template()
         out_type = r_params.output_type or template.output_type
         user = user or get_user()
-        cleaned_param = self.clean_param(report, r_params.get_params())
+        cleaned_param = self.clean_param(rc, r_params.get_params())
         if user:
             cleaned_param["user"] = user
         error, start = None, datetime.datetime.now()
-        self.logger.info("[%s] Running report with parameter: %s", report.name, cleaned_param)
+        self.logger.info("[%s] Running report with parameter: %s", rc.name, cleaned_param)
         try:
-            band = self.load_bands(report, cleaned_param, template)
-            self.generate_report(report, template, out_type, out, cleaned_param, band)
+            band = self.load_bands(rc, cleaned_param, template)
+            self.generate_report(template, out_type, out, band)
         except Exception as e:
             error = str(e)
             if self.report_print_error:
                 error_report(logger=self.logger, suppress_log=self.suppress_error_log)
         if self.report_execution_history:
             self.register_execute(
-                report,
+                rc,
                 start,
                 r_params.get_params(),
                 successfully=not error,
@@ -88,10 +88,10 @@ class ReportEngine(object):
             )
         if error:
             self.logger.error(
-                "[%s] Finished report with error: %s ; Params:%s", report.name, error, cleaned_param
+                "[%s] Finished report with error: %s ; Params:%s", rc.name, error, cleaned_param
             )
             raise ValueError(error)
-        self.logger.info("[%s] Finished report with parameter: %s", report.name, cleaned_param)
+        self.logger.info("[%s] Finished report with parameter: %s", rc.name, cleaned_param)
         output_name = self.resolve_output_filename(run_params=r_params, root_band=band)
         return OutputDocument(
             content=out.getvalue(), document_name=output_name, output_type=out_type
@@ -100,7 +100,7 @@ class ReportEngine(object):
     @classmethod
     def register_execute(
         cls,
-        report: ReportConfig,
+        rc: ReportConfig,
         start: datetime.datetime,
         params: Dict[str, Any],
         end: Optional[datetime.datetime] = None,
@@ -110,7 +110,7 @@ class ReportEngine(object):
         user: Optional[str] = None,
     ):
         """
-        :param report:
+        :param rc:
         :param start:
         :param end:
         :param params:
@@ -133,8 +133,8 @@ class ReportEngine(object):
                     "start": start.replace(microsecond=0).isoformat(),
                     "end": end.replace(microsecond=0).isoformat(),
                     "duration": int(abs((end - start).total_seconds()) * 1000),
-                    "report": report.name,
-                    "name": report.name,
+                    "report": rc.name,
+                    "name": rc.name,
                     "code": "",
                     "user": str(user),
                     "successfully": successfully,
@@ -145,18 +145,11 @@ class ReportEngine(object):
             ],
         )
 
+    @staticmethod
     def generate_report(
-        self,
-        report: ReportConfig,
-        template: Template,
-        output_type: OutputType,
-        output_stream: bytes,
-        params: Dict[str, Any],
-        band: Band,
+        template: Template, output_type: OutputType, output_stream: bytes, band: Band
     ):
         """Render document"""
-        from noc.core.reporter.formatter.loader import loader as df_loader
-
         formatter = df_loader[template.formatter]
         fmt = formatter(band, template, output_type, output_stream)
         fmt.render_document()
@@ -166,11 +159,11 @@ class ReportEngine(object):
         """Align end date parameter"""
         return (date + datetime.timedelta(days=1)).replace(hour=0, minute=0, second=0)
 
-    def clean_param(self, report: ReportConfig, params: Dict[str, Any]):
+    def clean_param(self, rc: ReportConfig, params: Dict[str, Any]):
         """Clean and validata input params"""
         # clean_params = params.copy()
         clean_params = {}
-        for p in report.parameters or []:
+        for p in rc.parameters or []:
             name = p.name
             value = params.get(name)
             if not value and p.required:
@@ -180,15 +173,16 @@ class ReportEngine(object):
             elif not value:
                 continue
             clean_params[name] = p.clean_value(value)
-            if name == "end" and p.type == "date" and report.align_end_date_param:
+            if name == "end" and p.type == "date" and rc.align_end_date_param:
                 clean_params[name] = self.align_date(clean_params[name])
         return clean_params
 
+    @staticmethod
     def parse_fields(
-        self, band: ReportBand, template: Template, fields: Optional[List[str]] = None
+        template: Template, fields: Optional[List[str]] = None
     ) -> Dict[str, List[str]]:
         """Parse requested fields for apply to datasource query"""
-        logger.info("[%s] Request datasource fields for band", band.name)
+        logger.info("Request datasource fields for template '%s'", template.code)
         if not template.bands_format and not fields:
             return {}
         if fields:
@@ -210,16 +204,14 @@ class ReportEngine(object):
                 r[f].append(ds[0])
         return r
 
-    def load_bands(
-        self, report: ReportConfig, params: Dict[str, Any], template: Optional[Template] = None
-    ) -> Band:
+    def load_bands(self, rc: ReportConfig, params: Dict[str, Any], template: Template) -> Band:
         """
         Generate Report Bands from Config
         Attrs:
-            report: Report configuration
+            rc: Report configuration
             params: Running params
         """
-        r = report.get_root_band()
+        r = rc.get_root_band()
         root = Band.from_report(r, params)
         # Create Root BandData
         if r.source:
@@ -228,15 +220,15 @@ class ReportEngine(object):
             root.add_children(s.get_data(**params))
             return root
         deferred = []
-        for b in report.bands:
+        f_map = self.parse_fields(template, params.pop("fields", None))
+        for b in rc.bands:
             if b.conditions and not b.is_match(params):
                 continue
             if b.name == ROOT_BAND:
                 band = root
             else:
                 band = Band.from_report(b)
-            f_map = self.parse_fields(b, template, params.pop("fields", None))
-            for num, d in enumerate(self.get_dataset(b.queries, params, f_map)):
+            for num, d in enumerate(self.get_datasets(b.queries, params, f_map)):
                 self.logger.debug(
                     "[%s] Add dataset, Columns [%s]: %s",
                     b.name,
@@ -263,7 +255,7 @@ class ReportEngine(object):
         return root
 
     @classmethod
-    def get_dataset(
+    def get_datasets(
         cls, queries: List[ReportQuery], ctx: Dict[str, Any], fields_map: Dict[str, List[str]]
     ) -> List[DataSet]:
         """
@@ -271,10 +263,10 @@ class ReportEngine(object):
             queries: Configuration dataset
             ctx: Report params
         """
-        r: List[DataSet] = []
+        result: List[DataSet] = []
         if not queries:
             return []
-        joined_field = {}
+        joined_fields_map = {}
         for num, query in enumerate(queries):
             data, ds_f = None, []
             q_ctx = ctx.copy()
@@ -289,17 +281,16 @@ class ReportEngine(object):
             elif num and query.datasource and fields_map and query.datasource not in fields_map:
                 continue
             elif query.datasource:
-                # fields = fields_map[query.datasource] if query.datasource in fields_map else []
                 logger.info("[%s] Query DataSource with fields: %s", query.datasource, ds_f)
-                data, key_field = cls.query_datasource(query, q_ctx, fields=ds_f)
-                if key_field:
-                    joined_field[query.name] = key_field
-                    # joined_field = key_field
-            if num and query.name in joined_field:
-                jf = set(joined_field[query.name]).intersection(joined_field[r[-1].name])
-                r[-1].data = r[-1].data.join(data, on=list(jf), how="left")
+                data, key_fields = cls.query_datasource(query, q_ctx, fields=ds_f)
+                joined_fields_map[query.name] = key_fields
+            if num and query.name in joined_fields_map:
+                jf = set(joined_fields_map[query.name]).intersection(
+                    joined_fields_map[result[-1].name]
+                )
+                result[-1].data = result[-1].data.join(data, on=list(jf), how="left")
             else:
-                r.append(
+                result.append(
                     DataSet(
                         name=query.name,
                         data=data,
@@ -308,15 +299,11 @@ class ReportEngine(object):
                         transpose_columns=query.transpose_columns,
                     )
                 )
-        return r
+        return result
 
     @classmethod
     def query_datasource(
-        cls,
-        query: ReportQuery,
-        ctx: Dict[str, Any],
-        joined_field: Optional[str] = None,
-        fields: Optional[List[str]] = None,
+        cls, query: ReportQuery, ctx: Dict[str, Any], fields: Optional[List[str]] = None
     ) -> Tuple[Optional[pl.DataFrame], List[str]]:
         """
         Resolve Datasource for Query
@@ -325,19 +312,10 @@ class ReportEngine(object):
             ctx:
             fields:
         """
-        from noc.core.datasources.loader import loader as ds_loader
-
-        ds: "BaseDataSource" = ds_loader[query.datasource]
+        ds: BaseDataSource = ds_loader[query.datasource]
         if not ds:
             raise ValueError(f"Unknown DataSource: {query.datasource}")
-        if joined_field and not ds.has_field(joined_field):
-            # Joined is not supported
-            logger.warning("[%s] Joined field '%s' not available", ds.name, joined_field)
-            return None, []
-        if joined_field and fields:
-            fields += [joined_field]
-            # Check not row_index
-        elif not joined_field and fields:
+        if fields:
             fields += ds.join_fields()
         row = ds.query_sync(fields=fields, **ctx)
         return row, ds.join_fields()

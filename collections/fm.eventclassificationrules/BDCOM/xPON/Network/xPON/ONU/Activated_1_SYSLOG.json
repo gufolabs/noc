@@ -1,0 +1,19 @@
+{
+    "name": "BDCOM | xPON | Network | xPON | ONU | Activated #1 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "09f2ebeb-a688-4145-947a-ec98202531e1",
+    "description": "%GPON-ONUACTIVATE: ONU BDCM:6B85B483 is activated on GPON0/3:5.",
+    "event_class__name": "Network | xPON | ONU | Activated",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "%GPON-ONUACTIVATE: ONU (?P<onu>\\S+) is activated on (?P<interface>GPON\\S+)\\.",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "%GPON-ONUACTIVATE: ONU BDCM:6B85B483 is activated on GPON0/3:5.",
+            "raw_vars": []
+        }
+    ]
+}
