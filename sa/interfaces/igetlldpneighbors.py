@@ -62,12 +62,12 @@ class IGetLLDPNeighbors(BaseInterface):
                     "remote_chassis_id_subtype": IntParameter(default=4),
                     # Remote chassis ID
                     "remote_chassis_id": MACAddressParameter(accept_bin=False)
-                    | IPv4Parameter()
+                    | IPv4Parameter(accept_bin=False)
                     | StringParameter(),
                     # LldpPortIdSubtype TC, interfaceName(5)
                     "remote_port_subtype": IntParameter(default=5),
                     "remote_port": MACAddressParameter(accept_bin=False)
-                    | IPv4Parameter()
+                    | IPv4Parameter(accept_bin=False)
                     | StringParameter(),
                     "remote_port_description": StringParameter(required=False),
                     "remote_system_name": StringParameter(required=False),
