@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Abstract script interfaces
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -574,6 +574,10 @@ class IPv4Parameter(StringParameter):
     Check value is IPv4 address
     """
 
+    def __init__(self, required=True, default=None, accept_bin=True):
+        self.accept_bin = accept_bin
+        super().__init__(required=required, default=default)
+
     def clean(self, value):
         if value is None and self.default is not None:
             return self.default
@@ -582,22 +586,23 @@ class IPv4Parameter(StringParameter):
             return value
         except ValueError:
             pass
-        if len(value) == 4 and isinstance(value, bytes):
-            value = ".".join(str(c) for c in value)
-        elif len(value) == 4:
-            # IP address in binary form
-            value = ".".join(["%02X" % ord(c) for c in value])
+        if self.accept_bin:
+            if len(value) == 4 and isinstance(value, bytes):
+                value = ".".join(str(c) for c in value)
+            elif len(value) == 4:
+                # IP address in binary form
+                value = ".".join("%02X" % ord(c) for c in value)
         v = super().clean(value)
-        X = v.split(".")
-        if len(X) != 4:
+        parts = v.split(".")
+        if len(parts) != 4:
             self.raise_error(value)
         try:
-            if len([x for x in X if 0 <= int(x) <= 255]) != 4:
+            if sum(1 for x in parts if 0 <= int(x) <= 255) != 4:
                 self.raise_error(value)
         except ValueError:
             self.raise_error(value)
         # Avoid output like 001.002.003.004
-        return ".".join("%d" % int(c) for c in X)
+        return ".".join("%d" % int(c) for c in parts)
 
 
 class IPv4PrefixParameter(StringParameter):
