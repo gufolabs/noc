@@ -19,6 +19,7 @@ from noc.core.tt.types import (
     EscalationStatus,
     EscalationResult,
     TTActionContext,
+    TTUser,
 )
 from noc.core.tt.base import TTSystemCtx, TTAction
 from noc.core.fm.enum import AlarmAction, ActionStatus
@@ -43,12 +44,14 @@ class AlarmActionRunner(object):
         items: List[Any],
         allowed_actions: List[AlarmAction] = None,
         logger: Optional[Logger] = None,
-        services: Optional[List[Service]] = None,
+        services: Optional[List[str]] = None,
+        groups: List[int] = None,
         dry_run: bool = False,
     ):
         self.items = items
         self.alarm: "ActiveAlarm" = items[0].alarm
-        self.services: List[Service] = services
+        self.services: List[str] = services or []
+        self.groups = groups
         self.allowed_actions: List[AllowedAction] = allowed_actions or []
         self.logger = logger or logging.getLogger("AlarmActionRunner")
         self.alarm_log = []
@@ -133,15 +136,12 @@ class AlarmActionRunner(object):
     def get_affected_services_items(self, tt_system: TTSystem) -> List[EscalationServiceItem]:
         """Return Affected Service item for escalation doc"""
         r = []
-        if "service" in self.alarm.components:
-            svc = self.alarm.components.service
-            return [EscalationServiceItem(id=str(svc.id), tt_id=tt_system.get_object_tt_id(svc))]
+        # if "service" in self.alarm.components:
+        #     svc = self.alarm.components.service
+        #     return [EscalationServiceItem(id=str(svc.id), tt_id=tt_system.get_object_tt_id(svc))]
         if not self.services:
             return r
-        # (
-        #             list(Service.objects.filter(id__in=services)) if services else []
-        #         )
-        for svc in self.services:
+        for svc in Service.objects.filter(id__in=self.services):
             r.append(EscalationServiceItem(id=str(svc.id), tt_id=tt_system.get_object_tt_id(svc)))
         return r
 
@@ -170,6 +170,7 @@ class AlarmActionRunner(object):
         login: Optional[str] = None,
         queue: Optional[str] = None,
         pre_reason: Optional[str] = None,
+        user: Optional[User] = None,
     ) -> TTSystemCtx:
         """
         Build TTSystem Context
@@ -180,12 +181,15 @@ class AlarmActionRunner(object):
             login:
             queue: TT Queue
             pre_reason: Alarm Pre-Diagnostic code
+            user: User
 
         """
         # cfg = self.get_tt_system_config(tt_system)
         cfg = tt_system.get_config()
         if self.alarm.managed_object and not queue:
             queue = self.alarm.managed_object.tt_queue
+        if user:
+            user = TTUser(id=str(user.id), username=user.username)
         return TTSystemCtx(
             id=tt_id,
             tt_system=tt_system.get_system(),
@@ -196,6 +200,7 @@ class AlarmActionRunner(object):
             actions=self.get_action_context(),
             items=self.get_escalation_items(tt_system, cfg.promote_item),
             services=self.get_affected_services_items(tt_system),
+            assigned=user,
         )
 
     def log_alarm(self, message: str, *args) -> None:
@@ -411,8 +416,15 @@ class AlarmActionRunner(object):
             )
             self.log_alarm(f"Creating TT in system {tt_system.name}")
         with self.get_tt_system_context(
-            tt_system, tt_id, timestamp, login, queue, pre_reason
+            tt_system,
+            tt_id,
+            timestamp,
+            login,
+            queue,
+            pre_reason,
+            user,
         ) as ctx:
+            self.logger.debug("TT Context: %s", ctx.services)
             ctx.create(subject=subject, body=body)
         r = ctx.get_result()
         if r.status == EscalationStatus.TEMP:

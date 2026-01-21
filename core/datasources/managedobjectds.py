@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ManagedObject DataSource
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -84,6 +84,11 @@ class ManagedObjectDS(BaseDataSource):
         FieldInfo(name="vendor", description="Object Vendor"),
         FieldInfo(name="model", description="Object Model", internal_name="platform"),
         FieldInfo(name="sw_version", description="Object Firmware", internal_name="version"),
+        FieldInfo(
+            name="sw_version_full",
+            description="Profile and Object Firmware",
+            internal_name="version",
+        ),
         # Attributes fields
         FieldInfo(
             name="attr_hwversion",
@@ -432,6 +437,53 @@ class ManagedObjectDS(BaseDataSource):
             res[mo_id] = serial
         return res
 
+    @staticmethod
+    def get_locations() -> Dict[str, str]:
+        """
+        Get object locations (physical addresses) from `inv.Object` model
+        """
+        res = {}
+        for o in Object._get_collection().aggregate(
+            [
+                {"$match": {"data.interface": "address"}},
+                {
+                    "$project": {
+                        "data": {
+                            "$filter": {
+                                "input": "$data",
+                                "as": "d1",
+                                "cond": {
+                                    "$and": [
+                                        {"$eq": ["$$d1.interface", "address"]},
+                                        {
+                                            "$or": [
+                                                {"$not": ["$$d1.scope"]},
+                                                {"$eq": ["$$d1.scope", ""]},
+                                            ],
+                                        },
+                                        {"$eq": ["$$d1.attr", "text"]},
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                },
+                {"$project": {"_id": 1, "location": {"$arrayElemAt": ["$data.value", 0]}}},
+            ]
+        ):
+            oid = str(o["_id"])
+            if "location" in o:
+                res[oid] = o["location"].strip()
+        return res
+
+    @staticmethod
+    def get_location(locations: Dict[str, str], c_path: List[str]) -> str:
+        for c in reversed(c_path):
+            location = locations.get(c)
+            if location:
+                return location
+        return ""
+
     @classmethod
     async def iter_query(
         cls,
@@ -480,6 +532,8 @@ class ManagedObjectDS(BaseDataSource):
             q_fields.append("caps")
         if q_maps:
             q_fields.append("mappings")
+        if not fields or "container" in fields:
+            q_fields.append("container_path")
         q_filter = cls.get_filter(kwargs)
         mos = ManagedObject.objects.filter(**q_filter)
         if admin_domain_ads:
@@ -514,6 +568,9 @@ class ManagedObjectDS(BaseDataSource):
         if not fields or "serial_odata" in fields:
             mo_ids = list(mos.values_list("id", flat=True))
             odata_serials = cls.get_odata_serials(mo_ids)
+        locations = {}
+        if not fields or "container" in fields:
+            locations = cls.get_locations()
         for num, mo in enumerate(mos.values(*q_fields).iterator(), start=1):
             yield num, "id", mo["id"]
             yield num, "managed_object_id", mo["id"]
@@ -537,12 +594,10 @@ class ManagedObjectDS(BaseDataSource):
                 platform = mo["platform"]
                 yield num, "model", Platform.get_by_id(platform).name if platform else None
             if "version" in mo:
-                sw_version = mo["version"]
-                yield (
-                    num,
-                    "sw_version",
-                    (Firmware.get_by_id(sw_version).version if sw_version else None),
-                )
+                version_id = mo["version"]
+                fw = Firmware.get_by_id(version_id) if version_id else None
+                yield num, "sw_version", fw.version if fw else None
+                yield num, "sw_version_full", fw.full_name if fw else None
             if "vendor" in mo:
                 yield num, "vendor", Vendor.get_by_id(mo["vendor"]).name if mo["vendor"] else None
             if hostname_map:
@@ -575,8 +630,8 @@ class ManagedObjectDS(BaseDataSource):
                 )
             if "labels" in mo:
                 yield num, "object_labels", mo["labels"]
-            if "container" in mo:
-                yield num, "container", ""
+            if "container_path" in mo:
+                yield num, "container", cls.get_location(locations, mo["container_path"])
             # Discovery
             if "object_profile__enable_box_discovery" in mo:
                 yield num, "enable_box", mo["object_profile__enable_box_discovery"]

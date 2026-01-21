@@ -7,13 +7,14 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Dict, Tuple, List, Optional, Set, Iterable
+from typing import Dict, Tuple, List, Optional, Set, Iterable, Union
 
 # NOC modules
 from noc.core.perf import metrics
 from noc.core.cdag.node.base import BaseCDAGNode
 from noc.core.cdag.node.alarm import AlarmNode
-from .source import SourceInfo
+from noc.core.cdag.node.threshold import ThresholdNode
+from .target import SensorTarget, ManagedObjectTarget, ComponentTarget
 
 
 @dataclass
@@ -32,37 +33,30 @@ class Card(object):
     Store Input probe nodes
     """
 
-    __slots__ = ("affected_rules", "alarms", "config", "is_dirty", "probes", "senders")
+    __slots__ = ("affected_rules", "alarms", "component", "config", "is_dirty", "probes", "senders")
     probes: Dict[str, BaseCDAGNode]
     senders: Tuple[BaseCDAGNode, ...]
-    alarms: List[AlarmNode]
+    alarms: List[Union[ThresholdNode, AlarmNode]]
     affected_rules: Set[str]
-    config: Optional[SourceInfo]
+    config: Optional[Union[ManagedObjectTarget, SensorTarget]]
+    component: Optional[ComponentTarget]
     is_dirty: bool
 
     def get_sender(self, name: str) -> Optional[BaseCDAGNode]:
-        """
-        Get probe sender by name
-        :param name:
-        :return:
-        """
+        """Get probe sender by name"""
         return next((s for s in self.senders if s.config.scope == name), None)
 
     @classmethod
     def iter_subscribed_nodes(cls, node) -> Iterable[BaseCDAGNode]:
         """
         Iterate over nodes subscribed to Probes on Card
-        :return:
         """
         for s in node.iter_subscribers():
             yield s.node
             yield from cls.iter_subscribed_nodes(s.node)
 
     def invalidate_card(self):
-        """
-        Remove all subscribed node and set  is_dirty for applied rules
-        :return:
-        """
+        """Remove all subscribed node and set  is_dirty for applied rules"""
         for probe in self.probes.values():
             for node in self.iter_subscribed_nodes(probe):
                 if node in self.senders or node in self.probes or node in self.alarms:
@@ -76,5 +70,48 @@ class Card(object):
                 probe.unsubscribe(s.node, s.input)
         self.set_dirty()
 
+    def invalidate_alarms(self, remove_all: bool = False) -> List[Tuple[str, str]]:
+        """Remove not affected alarms node and return node_id"""
+        r = []
+        # Actual rules
+        rules = {f"{rule_id}-{action_id}" for rule_id, action_id in self.get_rules()}
+        if remove_all:
+            to_deleted = self.affected_rules
+        else:
+            to_deleted = self.affected_rules - rules
+        if not to_deleted:
+            return []
+        alarms = []
+        # Unsubscribe
+        for a in self.alarms:
+            if a.rule_id not in to_deleted:
+                alarms.append(a)
+            else:
+                r.append((a.node_id, a.name))
+                del a
+        self.alarms = alarms
+        if r:
+            self.set_dirty()
+        return r
+
     def set_dirty(self):
         self.is_dirty = True
+
+    def get_rules(self) -> Iterable[Tuple[str, str]]:
+        """Get metric rules"""
+        if not self.component:
+            return self.config.rules or []
+        return self.component.rules or []
+
+    @property
+    def composed_metrics(self):
+        if not self.component:
+            return self.config.composed_metrics or []
+        return self.component.composed_metrics or []
+
+    @property
+    def m_unit(self) -> Optional[str]:
+        """"""
+        if self.config and self.config.type == "sensor":
+            return self.config.units
+        return None

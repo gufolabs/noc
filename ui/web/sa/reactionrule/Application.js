@@ -24,6 +24,9 @@ Ext.define("NOC.sa.reactionrule.Application", {
     "NOC.main.remotesystem.LookupField",
     "NOC.main.notificationgroup.LookupField",
     "NOC.inv.capability.LookupField",
+    "NOC.sa.action.LookupField",
+    "NOC.sa.reactionrule.LookupField",
+    "NOC.main.ref.modelid.LookupField",
     "Ext.ux.form.JSONField",
     "Ext.ux.form.GridField",
   ],
@@ -52,7 +55,7 @@ Ext.define("NOC.sa.reactionrule.Application", {
       text: __("Pref"),
       dataIndex: "preference",
       width: 50,
-    }
+    },
   ],
 
   initComponent: function(){
@@ -107,7 +110,10 @@ Ext.define("NOC.sa.reactionrule.Application", {
           store: [
             ["sa.ManagedObject", __("Managed Object")],
             ["sa.Service", __("Service")],
+            ["sla.SLAProbe", __("SLA Probe")],
+            ["inv.Interface", __("Network Interface")],
             ["inv.Object", __("Inventory object")],
+            ["vc.L2Domain", __("L2 Domain")],
             ["vc.VLAN", __("VLAN")],
           ],
           uiStyle: "medium",
@@ -125,7 +131,7 @@ Ext.define("NOC.sa.reactionrule.Application", {
             ["config_changed", __("Config Changed")],
             ["version_changed", __("Version Changed")],
             ["version_set", __("Version Set")],
-            ["any", __("Any")]
+            ["any", __("Any")],
           ],
           uiStyle: "medium",
         },
@@ -161,18 +167,198 @@ Ext.define("NOC.sa.reactionrule.Application", {
           ],
         },
         {
-          name: "handlers",
+          name: "field_data",
           xtype: "gridfield",
-          fieldLabel: __("Handlers"),
+          fieldLabel: __("Field Data"),
           columns: [
+            {
+              text: __("Field"),
+              dataIndex: "field",
+              editor: "textfield",
+              width: 250,
+            },
+            {
+              text: __("Capability"),
+              dataIndex: "capability",
+              renderer: NOC.render.Lookup("capability"),
+              width: 250,
+              editor: "inv.capability.LookupField",
+            },
+            {
+              text: __("Cond."),
+              dataIndex: "condition",
+              width: 100,
+              editor: {
+                xtype: "combobox",
+                store: [
+                  ["regex", __("Regex")],
+                  ["contains", __("Contains")],
+                  ["exists", __("Exists")],
+                  ["eq", __("Equal")],
+                  ["ne", __("Not Equal")],
+                  ["gte", __("Greater Equal")],
+                  ["gt", __("Greater")],
+                  ["lte", __("Less Equal")],
+                  ["lt", __("Less")],
+                ],
+              },
+              renderer: NOC.render.Choices({
+                "regex": __("Regex"),
+                "contains": __("Contains"),
+                "exists": __("Exists"),
+                "eq": __("Equal"),
+                "ne": __("Not Equal"),
+                "gte": __("Greater Equal"),
+                "gt": __("Greater"),
+                "lte": __("Less Equal"),
+                "lt": __("Less"),
+              }),
+            },
+            {
+              text: __("Value"),
+              dataIndex: "value",
+              editor: "textfield",
+              width: 100,
+            },
+            {
+              text: __("Set Context"),
+              dataIndex: "set_context",
+              editor: "textfield",
+              width: 100,
+            },
+          ],
+        },
+        {
+          name: "affected_rules",
+          xtype: "gridfield",
+          fieldLabel: __("Affected Rules"),
+          columns: [
+            {
+              text: __("ModelID"),
+              dataIndex: "model_id",
+              renderer: NOC.render.Lookup("model_id"),
+              editor: "main.ref.modelid.LookupField",
+              width: 150,
+            },
+            {
+              text: __("Rule"),
+              dataIndex: "rule",
+              renderer: NOC.render.Lookup("rule"),
+              editor: "sa.reactionrule.LookupField",
+              width: 150,
+            },
+            {
+              text: __("Suppress Action"),
+              dataIndex: "suppress_action",
+              width: 70,
+              editor: "checkboxfield",
+              renderer: NOC.render.Bool,
+            },
+            {
+              text: __("Extend Ctx"),
+              dataIndex: "extend_ctx",
+              width: 70,
+              editor: "checkboxfield",
+              renderer: NOC.render.Bool,
+            },
+          ],
+        },
+        {
+          name: "actions",
+          xtype: "gridfield",
+          fieldLabel: __("Run Actions"),
+          columns: [
+            {
+              text: __("Action"),
+              dataIndex: "action",
+              width: 100,
+              allowBlank: false,
+              editor: {
+                xtype: "combobox",
+                store: [
+                  ["handler", __("Handler")],
+                  ["action_command", __("Commands")],
+                  ["run_discovery", __("Run Discovery")],
+                  ["fire_wf_event", __("Fire Event")],
+                ],
+              },
+              renderer: NOC.render.Choices({
+                "handler": __("Handler"),
+                "action_command": __("Commands"),
+                "run_discovery": __("Run Discovery"),
+                "fire_wf_event": __("Fire Event"),
+              }),
+            },
+            {
+              text: __("Run"),
+              dataIndex: "run",
+              width: 75,
+              allowBlank: false,
+              editor: {
+                xtype: "combobox",
+                store: [
+                  ["A", __("Always")],
+                  ["F", __("Prev Failed")],
+                  ["S", __("Prev Success")],
+                ],
+              },
+              renderer: NOC.render.Choices({
+                "A": __("Always"),
+                "F": __("Prev Failed"),
+                "S": __("Prev Successy"),
+              }),
+            },
+            {
+              text: __("Commands"),
+              dataIndex: "commands",
+              width: 150,
+              editor: {
+                xtype: "sa.action.LookupField",
+              },
+              renderer: NOC.render.Lookup("commands"),
+            },
+            {
+              text: __("Allow Fail"),
+              dataIndex: "allow_fail",
+              width: 50,
+              editor: "checkboxfield",
+              renderer: NOC.render.Bool,
+            },
+            {
+              text: __("Cancel"),
+              dataIndex: "cancel_command",
+              width: 50,
+              editor: "checkboxfield",
+              renderer: NOC.render.Bool,
+            },
+            {
+              text: __("Domain Ctx"),
+              dataIndex: "expand_domain_ctx",
+              width: 70,
+              editor: "checkboxfield",
+              renderer: NOC.render.Bool,
+            },
+            {
+              text: __("Over Topology"),
+              dataIndex: "over_topology",
+              width: 70,
+              editor: "checkboxfield",
+              renderer: NOC.render.Bool,
+            },
+            {
+              editor: "stringlistfield",
+              dataIndex: "context",
+              width: 400,
+              text: __("Context"),
+            },
             {
               text: __("Handler"),
               dataIndex: "handler",
-              width: 400,
+              width: 150,
               editor: {
                 xtype: "main.handler.LookupField",
                 query: {
-                    allow_reaction: true
+                  allow_reaction: true,
                 },
               },
               renderer: NOC.render.Lookup("handler"),
@@ -212,7 +398,7 @@ Ext.define("NOC.sa.reactionrule.Application", {
               fieldLabel: __("Dispose Alarm"),
               uiStyle: "medium",
               allowBlank: true,
-            }
+            },
           ],
         },
         {
@@ -226,71 +412,9 @@ Ext.define("NOC.sa.reactionrule.Application", {
           fieldLabel: __("Condition Op Vars"),
           store: [
             ["AND", __("AND")],
-            ["OR", __("OR")]
+            ["OR", __("OR")],
           ],
           uiStyle: "medium",
-        },
-        {
-          name: "field_data",
-          xtype: "gridfield",
-          fieldLabel: __("Field Data"),
-          columns: [
-            {
-              text: __("Field"),
-              dataIndex: "field",
-              editor: "textfield",
-              width: 250,
-            },
-            {
-                text: __("Capability"),
-                dataIndex: "capability",
-                renderer: NOC.render.Lookup("capability"),
-                width: 250,
-                editor: "inv.capability.LookupField"
-            },
-            {
-              text: __("Op"),
-              dataIndex: "op",
-              width: 100,
-              editor: {
-                xtype: "combobox",
-                store: [
-                  ["regex", __("Regex")],
-                  ["contains", __("Contains")],
-                  ["exists", __("Exists")],
-                  ["eq", __("Equal")],
-                  ["ne", __("Not Equal")],
-                  ["gte", __("Greater Equal")],
-                  ["gt", __("Greater")],
-                  ["lte", __("Less Equal")],
-                  ["lt", __("Less")],
-                ],
-              },
-              renderer: NOC.render.Choices({
-                "regex": __("Regex"),
-                "contains": __("Contains"),
-                "exists": __("Exists"),
-                "eq": __("Equal"),
-                "ne": __("Not Equal"),
-                "gte": __("Greater Equal"),
-                "gt": __("Greater"),
-                "lte": __("Less Equal"),
-                "lt": __("Less"),
-              }),
-            },
-            {
-              text: __("Value"),
-              dataIndex: "value",
-              editor: "textfield",
-              width: 100
-            },
-            // {
-            //   text: __("Set Context"),
-            //   dataIndex: "value",
-            //   editor: "set_context",
-            //   width: 100
-            // }
-          ],
         },
         {
           name: "conditions",

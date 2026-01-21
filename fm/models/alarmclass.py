@@ -130,7 +130,6 @@ class AlarmClassVar(EmbeddedDocument):
         ("sa.ObjectDiagnosticConfig", "alarm_class"),
         ("sa.ServiceProfile", "raise_alarm_class"),
         ("sa.ServiceProfile", "diagnostic_status.alarm_class"),
-        ("sa.ReactionRule", "alarm_disposition"),
         ("fm.EventClass", "disposition.alarm_class"),
         ("fm.AlarmRule", "groups.alarm_class"),
         ("fm.AlarmRule", "match.alarm_class"),
@@ -470,9 +469,7 @@ class AlarmClass(Document):
             "vars": [av.get_config() for av in alarm_class.vars],
         }
         for rule in DispositionRule.objects.filter(alarm_disposition=alarm_class, is_active=True):
-            cfg = DispositionRule.get_rule_config(rule)
-            if "alarm_class" in cfg:
-                del cfg["alarm_class"]
+            cfg = DispositionRule.get_event_alarm_rule_config(rule)
             r["dispositions"].append(cfg)
         for rule in AlarmRule.objects.filter(match__alarm_class=alarm_class):
             r["rules"].append(AlarmRule.get_config(rule))

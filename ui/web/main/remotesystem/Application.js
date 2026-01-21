@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // main.remotesystem application
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2024 The NOC Project
+// Copyright (C) 2007-2025 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.main.remotesystem.Application");
@@ -212,9 +212,19 @@ Ext.define("NOC.main.remotesystem.Application", {
               boxLabel: __("Project"),
             },
             {
+              name: "enable_maintenance",
+              xtype: "checkbox",
+              boxLabel: __("Maintenances"),
+            },
+            {
               name: "enable_label",
               xtype: "checkbox",
               boxLabel: __("Labels"),
+            },
+            {
+              name: "enable_pmagent",
+              xtype: "checkbox",
+              boxLabel: __("PM Agent"),
             },
             {
               name: "enable_fmevent",

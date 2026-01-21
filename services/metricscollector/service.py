@@ -10,26 +10,35 @@
 import asyncio
 import operator
 import re
+import datetime
+import itertools
+from time import perf_counter
 from dataclasses import dataclass
 from typing import Any, Optional, Tuple, List, Dict, Set, Iterable, DefaultDict, FrozenSet
 from collections import defaultdict
 
 # Third-party modules
 import cachetools
-import orjson
 
 # NOC modules
 from noc.config import config
 from noc.core.error import NOCError
 from noc.core.perf import metrics
 from noc.core.service.fastapi import FastAPIService
+from noc.core.jsonutils import iter_chunks
 from noc.core.ioloop.timers import PeriodicCallback
 from noc.core.service.nodatachecker import NoDataChecker
+from noc.core.mx import MessageType, MX_FROM_COLLECTOR
 from noc.services.metricscollector.datastream import MetricsDataStreamClient, SourceStreamClient
-from noc.services.metricscollector.models.sendmetric import SendMetric
-from noc.services.metricscollector.sourceconfig import SourceConfig
+from noc.services.metricscollector.sourceconfig import (
+    SourceConfig,
+    RemoteSystemConfig,
+    SensorConfig,
+)
+from noc.services.metricscollector.models.channel import RemoteSystemChannel
 
 NS = 1_000_000_000
+MAX_UNKNOWN_METRICS = 200
 
 
 @dataclass(frozen=True)
@@ -42,6 +51,7 @@ class CfgItem(object):
     allow_partial_match: bool
     labels: FrozenSet[str]
     aliases: List[str]
+    unit: str
     preference: int
 
     @classmethod
@@ -53,8 +63,9 @@ class CfgItem(object):
             collector=data["collector"],
             coll_field=data["field"],
             allow_partial_match=bool(data.get("allow_partial_match")),
-            labels=data["labels"],
+            labels=frozenset(data["labels"] or []),
             aliases=data["aliases"],
+            unit=data.get("unit"),
             preference=data["preference"],
         )
 
@@ -64,7 +75,8 @@ class MetricsCollectorService(FastAPIService):
     # use_mongo = True
     traefik_routes_rule = "PathPrefix(`/api/metricscollector`)"
     # Cache regex for partial match
-    _rx_name_cache = cachetools.LRUCache(500)
+    _rx_name_cache = cachetools.LRUCache(1000)
+    _rs_key_cache = cachetools.TTLCache(10, ttl=120)
 
     def __init__(self):
         super().__init__()
@@ -80,25 +92,167 @@ class MetricsCollectorService(FastAPIService):
             nodata_round_duration=config.metricscollector.nodata_round_duration,
             collector="metricscollector",
         )
+        # Source Configs: ManagedObject & Agent
         self.source_configs: Dict[str, SourceConfig] = {}  # id -> SourceConfig
         self.source_map: Dict[str, str] = {}
-        self.invalid_sources = defaultdict(int)  # ip -> count
+        self.channels: Dict[str, RemoteSystemChannel] = {}
+        # Remote Systems Config
         self.banned_rs = set()
+        self.remote_system_config: Dict[str, RemoteSystemConfig] = {}
         self.remote_system_map: Dict[str, str] = {}
+        # Sensors
+        self.sensor_configs: Dict[str, SensorConfig] = {}
+        self.stopping = False
+        # Queue of channels to flush
+        self.flush_queue: asyncio.Queue[RemoteSystemChannel] = asyncio.Queue()
+        if config.metricscollector.listen:
+            address, port = config.metricscollector.listen.split(":")
+            if address == "auto":
+                address = config.node
+            self.address, self.port = address, int(port)
+
+    def get_channel(
+        self, remote_system: RemoteSystemConfig, collector: str, batch_delay: Optional[int] = None
+    ) -> Optional["RemoteSystemChannel"]:
+        """
+        Create channel for received data
+            remote_system: External System for channel
+            collector: Collector name
+            batch_delay: Send data delay (in second)
+        """
+        # Unknown channel
+        # Unauthorized channels
+        if remote_system.name not in self.channels:
+            self.channels[remote_system.name] = RemoteSystemChannel(
+                self,
+                remote_system,
+                collector,
+                batch_delay=batch_delay,
+                logger=self.logger,
+            )
+        return self.channels.get(remote_system.name)
+
+    async def flush_data(self):
+        """Flush data"""
+        while not self.stopping:
+            ch = await self.flush_queue.get()
+            n_records = ch.records
+            self.logger.info(
+                "[%s] Flush Records: %s, Sensors: %s",
+                ch.remote_system.name,
+                n_records,
+                len(ch.sensors_data),
+            )
+            parts = defaultdict(list)
+            for (clock, target, labels), mms in ch.data.items():
+                try:
+                    target = self.source_configs[target]
+                except KeyError:
+                    continue
+                if not target.managed_object:
+                    continue
+                ts = datetime.datetime.fromtimestamp(clock)
+                out = {}
+                for metric, value in mms.items():
+                    try:
+                        cfg = self.id_mappings[metric][0]
+                    except KeyError:
+                        continue
+                    if cfg.ch_table not in out:
+                        out[cfg.ch_table] = {
+                            "ts": (ts.timestamp() + config.tz_utc_offset) * NS,
+                            "scope": cfg.ch_table,
+                            "labels": list(labels),
+                            # "service": item.service,
+                            "managed_object": target.managed_object,
+                            "remote_system": ch.remote_system.bi_id,
+                            "_units": {},
+                        }
+                    out[cfg.ch_table][cfg.ch_field] = value
+                    out[cfg.ch_table]["_units"][cfg.ch_field] = cfg.unit or "1"
+                parts[target.bi_id % self.n_parts] += list(out.values())
+            # Sensors
+            for (clock, cfg_id), value in ch.sensors_data.items():
+                try:
+                    cfg = self.sensor_configs[cfg_id]
+                except KeyError:
+                    continue
+                ts = datetime.datetime.fromtimestamp(clock)
+                parts[cfg.bi_id % self.n_parts].append(
+                    {
+                        "ts": (ts.timestamp() + config.tz_utc_offset) * NS,
+                        "scope": "sensor",
+                        "labels": [f"noc::sensor::{cfg.name}"],
+                        "sensor": cfg.bi_id,
+                        "managed_object": cfg.managed_object,
+                        "_units": {"value_delta": cfg.units, "value": cfg.units},
+                        "remote_system": ch.remote_system.bi_id,
+                        "value": value,
+                        "value_delta": value,
+                    }
+                )
+            # Unfreeze channel
+            self.logger.info("Send Records To Stream")
+            for partition, items in parts.items():
+                await self.send_records(items, partition)
+                await asyncio.sleep(1)
+            del parts
+            ch.flush_complete()
+
+    async def send_records(self, data: List[Any], partition: Optional[int] = None):
+        """Send data to"""
+        for d in iter_chunks(
+            data,
+            max_size=config.metricscollector.batch_max_message_size,
+        ):
+            self.publish(
+                value=d,
+                stream="metrics",
+                partition=partition,  # self.object.bi_id % metrics_svc_slots,
+                headers={},
+            )
 
     async def report_invalid_sources(self):
-        """
-        Report invalid event sources
-        """
-        if not self.invalid_sources:
-            return
-        total = sum(self.invalid_sources[s] for s in self.invalid_sources)
-        self.logger.info(
-            "Dropping %d messages with invalid sources: %s",
-            total,
-            ", ".join("%s: %s" % (s, self.invalid_sources[s]) for s in self.invalid_sources),
-        )
-        self.invalid_sources = defaultdict(int)
+        """Report invalid event sources"""
+        for ch in self.channels:
+            ch = self.channels[ch]
+            self.logger.info(
+                "[%s] Processed controlled hosts: %s",
+                ch.remote_system.name,
+                len(ch.last_received_hosts),
+            )
+            for target_id, clock in ch.last_received_hosts.items():
+                try:
+                    target = self.source_configs[target_id]
+                except KeyError:
+                    continue
+                ts = datetime.datetime.fromtimestamp(clock)
+                self.no_data_checker.register_data(
+                    str(target.bi_id),
+                    ts=ts,
+                    collector=ch.collector,
+                    remote_system=ch.remote_system.name,
+                )
+            if ch.unknown_hosts:
+                self.logger.info(
+                    "[%s] Unknown Hosts: %s", ch.remote_system.name, ",".join(ch.unknown_hosts)
+                )
+                await self.send_message(
+                    {
+                        "collector": ch.collector,
+                        "remote_system": ch.remote_system.name,
+                        "hosts": list(ch.unknown_hosts),
+                    },
+                    MessageType.UNKNOWN_TARGET,
+                    headers={MX_FROM_COLLECTOR: ch.collector.encode()},
+                )
+            if ch.unknown_metrics:
+                self.logger.info(
+                    "[%s] Unknown Metrics (%s): %s",
+                    ch.remote_system.name,
+                    len(ch.unknown_metrics),
+                    ";".join(itertools.islice(ch.unknown_metrics, MAX_UNKNOWN_METRICS)),
+                )
 
     async def init_api(self):
         # Postpone initialization process until config datastream is fully processed
@@ -110,7 +264,7 @@ class MetricsCollectorService(FastAPIService):
             asyncio.get_running_loop().create_task(self.get_object_mappings())
             await self.event_source_ready.wait()
         self.logger.info("Stating invalid sources reporting task")
-        self.report_invalid_callback = PeriodicCallback(self.report_invalid_sources, 60000)
+        self.report_invalid_callback = PeriodicCallback(self.report_invalid_sources, 120000)
         self.report_invalid_callback.start()
         if config.metricscollector.nodata_round_duration:
             self.no_data_checker.initialize()
@@ -118,6 +272,26 @@ class MetricsCollectorService(FastAPIService):
         self.mx_partitions = await self.get_stream_partitions("message") or 0
         # Process as usual
         await super().init_api()
+
+    async def on_activate(self):
+        check_callback = PeriodicCallback(
+            self.check_channels, config.metricscollector.batch_delay_s
+        )
+        check_callback.start()
+        asyncio.create_task(self.flush_data())
+
+    async def check_channels(self):
+        ts = perf_counter()
+        expired = [c for c in self.channels.values() if c.is_expired(ts)]
+        for ch in expired:
+            self.logger.debug("[%s] Flushing due to timeout", ch.remote_system)
+            await ch.schedule_flush()
+
+    def stop(self):
+        # Stop consuming new messages
+        self.stopping = True
+        # .stop() will wait until queued data will be really published
+        super().stop()
 
     async def get_metrics_mappings(self):
         """
@@ -137,11 +311,9 @@ class MetricsCollectorService(FastAPIService):
                 await asyncio.sleep(1)
 
     async def get_object_mappings(self):
-        """
-        Coroutine to request object mappings
-        """
+        """Coroutine to request object mappings"""
         self.logger.info("Starting to track object mappings")
-        client = SourceStreamClient("cfgtarget", service=self)
+        client = SourceStreamClient("cfgmetricstarget", service=self)
         # Track stream changes
         while True:
             try:
@@ -163,111 +335,11 @@ class MetricsCollectorService(FastAPIService):
             self.update_data(data)
         else:
             self.insert_data(data)
+        for ch in self.channels.values():
+            ch.flush_unknown_metrics |= True
 
     async def delete_metric_type(self, mt_id: str) -> None:
         self.delete_data(mt_id)
-
-    async def update_source(self, data):
-        """Update Source config"""
-        try:
-            s = SourceConfig.from_data(data)
-        except Exception as e:
-            print(f"{data['id']}Error when processed source: {e}")
-            return False
-        if s.id not in self.source_configs:
-            self.update_mappings(s.id, s.get_mappings())
-        else:
-            if not self.source_configs[s.id].is_diff(s):
-                return False
-            self.update_mappings(s.id, s.get_mappings(), self.source_configs[s.id].get_mappings())
-        self.source_configs[s.id] = s
-        # Update metrics
-        metrics["sources_changed"] += 1
-        self.add_sources += 1
-        for m in data.get("mapping_refs") or []:
-            code, *refs = m.split(":")
-            if code == "rs" and refs[0].lower() not in self.remote_system_map:
-                self.remote_system_map[refs[0].lower()] = refs[0]
-
-    def update_mappings(self, sid, new: Iterable[str], old: Optional[Iterable[str]] = None):
-        """"""
-        # Delete Old Mappings
-        for m in set(old or []) - set(new):
-            if m in self.source_map:
-                del self.source_map[m]
-        # Add new Mappings
-        for m in set(new) - set(old or []):
-            self.source_map[m] = sid
-
-    async def delete_source(self, sid):
-        if sid not in self.source_configs:
-            return False
-        source = self.source_configs.pop(sid)
-        for m in source.mapping_refs:
-            if m in self.source_map:
-                del self.source_map[m]
-        metrics["sources_deleted"] += 1
-
-    async def on_event_source_ready(self) -> None:
-        """
-        Called when all mappings are ready.
-        """
-        self.event_source_ready.set()
-        self.logger.info("%d Event Sources has been loaded", self.add_sources)
-        # calculate size
-
-    def lookup_source_by_name(
-        self, name: str, collector: Optional[str] = None
-    ) -> Optional[SourceConfig]:
-        """Lookup source by name"""
-        # Clean domain part
-        name = name.split(".", 1)[0]
-        # Lowe
-        name = f"name:{name.lower()}"
-        if name in self.source_map:
-            return self.source_configs[self.source_map[name]]
-        # Register invalid event source
-        if self.source_configs and collector:
-            metrics["error", ("type", "object_not_found"), ("collector", collector)] += 1
-        else:
-            metrics["error", ("type", "object_not_found")] += 1
-        self.invalid_sources[name] += 1
-        return None
-
-    def lookup_agent_by_noc_key(self, key: str) -> Optional[SourceConfig]:
-        """Lookup Agent by key"""
-        if key in self.source_map:
-            return self.source_configs[self.source_map[key]]
-        metrics["error", ("type", "agent_not_found")] += 1
-        self.invalid_sources[key] += 1
-        return None
-
-    def get_remote_system_name(self, code, authorization: Optional[str] = None) -> Optional[str]:
-        """Check Remote System"""
-        if code.lower() not in self.remote_system_map:
-            return None
-        return self.remote_system_map[code.lower()]
-
-    def is_rs_banned(self, code) -> bool:
-        """Check remote system is banned"""
-        return code in self.banned_rs
-
-    def ban_remote_system(self, code):
-        """Add Remote System code to banned"""
-        self.logger.warning("[%s] Add RemoteSystem code to banned", code)
-        self.banned_rs.add(code)
-
-    @staticmethod
-    def expand_rules(data: Dict[str, Any]) -> List[CfgItem]:
-        return [
-            CfgItem.from_data(
-                rid=data["id"],
-                table=data["table"],
-                field=data["field"],
-                data=item,
-            )
-            for item in data["rules"]
-        ]
 
     def insert_data(self, data: Dict[str, Any]) -> None:
         """
@@ -311,6 +383,177 @@ class MetricsCollectorService(FastAPIService):
                 del self.mappings[k]
         del self.id_mappings[mt_id]
 
+    async def update_sensors(self, cfg: SourceConfig, sensors: List[Dict[str, Any]]):
+        """Update sensors Config"""
+        processed = set()
+        for data in sensors:
+            s = SensorConfig.from_data(data, managed_object=cfg.bi_id)
+            processed.add(s.id)
+            self.sensor_configs[s.id] = s
+            for m in s.get_mappings():
+                self.source_map[m] = s.id
+        if cfg.id not in self.source_configs:
+            return
+        for sid in self.source_configs[cfg.id].sensors or []:
+            # Deleted
+            if sid in processed or sid not in self.sensor_configs:
+                continue
+            # Clean mappings
+            for m in self.sensor_configs[sid].get_mappings():
+                if m in self.source_map:
+                    del self.source_map[m]
+            del self.sensor_configs[sid]
+
+    async def update_remote_system(self, data):
+        try:
+            cfg = RemoteSystemConfig.from_data(data)
+        except Exception:
+            return
+        self.remote_system_config[data["id"]] = cfg
+        self.remote_system_map[cfg.api_key] = cfg.id
+        self.remote_system_map[cfg.name.lower()] = cfg.id
+        self.logger.info("[%s] Adding for received", cfg.name)
+        # Update metrics
+        metrics["sources_changed"] += 1
+        self.add_sources += 1
+
+    async def update_source(self, data):
+        """Update Source config"""
+        if data["type"] == "remote_system":
+            return await self.update_remote_system(data)
+        try:
+            s = SourceConfig.from_data(data)
+        except Exception as e:
+            print(f"{data['id']} Error when processed source: {e}")
+            return False
+        if s.sensors or (s.id in self.source_configs and self.source_configs[s.id].sensors):
+            await self.update_sensors(s, data.get("sensors"))
+        if s.id not in self.source_configs:
+            self.update_mappings(s.id, s.get_mappings())
+        else:
+            if not self.source_configs[s.id].is_diff(s):
+                return False
+            self.update_mappings(s.id, s.get_mappings(), self.source_configs[s.id].get_mappings())
+        self.source_configs[s.id] = s
+        # Update metrics
+        metrics["sources_changed"] += 1
+        self.add_sources += 1
+        # Set Channel flags
+        for ch in self.channels.values():
+            ch.flush_unknown_hosts |= True
+
+    def update_mappings(self, sid, new: Iterable[str], old: Optional[Iterable[str]] = None):
+        """"""
+        # Delete Old Mappings
+        for m in set(old or []) - set(new):
+            if m in self.source_map:
+                del self.source_map[m]
+        # Add new Mappings
+        for m in set(new) - set(old or []):
+            self.source_map[m] = sid
+
+    async def delete_remote_system_config(self, sid):
+        if sid not in self.remote_system_config:
+            return
+        cfg = self.remote_system_config.pop(sid)
+        if cfg.name.lower() in self.remote_system_map:
+            del self.remote_system_map[cfg.name.lower()]
+        if cfg.api_key in self.remote_system_map:
+            del self.remote_system_map[cfg.api_key]
+        metrics["sources_deleted"] += 1
+
+    async def delete_source(self, sid):
+        await self.delete_remote_system_config(sid)
+        if sid not in self.source_configs:
+            return
+        source = self.source_configs.pop(sid)
+        for m in source.mapping_refs:
+            if m in self.source_map:
+                del self.source_map[m]
+        for sid in source.sensors or []:
+            cfg = self.sensor_configs.pop(sid, None)
+            if not cfg:
+                continue
+            for m in cfg.get_mappings():
+                if m in self.source_map:
+                    del self.source_map[m]
+        metrics["sources_deleted"] += 1
+
+    async def on_event_source_ready(self) -> None:
+        """
+        Called when all mappings are ready.
+        """
+        self.event_source_ready.set()
+        self.logger.info("%d Event Sources has been loaded", self.add_sources)
+        # calculate size
+
+    def lookup_source_by_name(
+        self, name: str, collector: Optional[str] = None
+    ) -> Optional[SourceConfig]:
+        """Lookup source by name"""
+        # Clean domain part
+        hostname = name.split(".", 1)[0]
+        # Lowe
+        hostname = f"name:{hostname.lower()}"
+        if hostname in self.source_map:
+            return self.source_configs[self.source_map[hostname]]
+        if f"name:{name.lower()}" in self.source_map:
+            return self.source_configs[self.source_map[f"name:{name.lower()}"]]
+        # Register invalid event source
+        if self.source_configs and collector:
+            metrics["error", ("type", "object_not_found"), ("collector", collector)] += 1
+        else:
+            metrics["error", ("type", "object_not_found")] += 1
+        return None
+
+    def lookup_remote_sensor(self, sid: str, remote_system: str) -> Optional[SensorConfig]:
+        """Lookup remote_sensor"""
+        if not self.sensor_configs:
+            return None
+        sid = f"rs:{remote_system}:{sid}"
+        if sid in self.source_map:
+            return self.sensor_configs[self.source_map[sid]]
+
+    def lookup_agent_by_noc_key(self, key: str) -> Optional[SourceConfig]:
+        """Lookup Agent by key"""
+        if key in self.source_map:
+            return self.source_configs[self.source_map[key]]
+        metrics["error", ("type", "agent_not_found")] += 1
+        return None
+
+    def get_remote_system_by_code(
+        self,
+        code: str,
+    ) -> Optional[RemoteSystemConfig]:
+        """Check Remote System"""
+        sid = self.remote_system_map.get(code.lower())
+        if not sid or sid not in self.remote_system_config:
+            return None
+        return self.remote_system_config[sid]
+
+    @cachetools.cachedmethod(operator.attrgetter("_rs_key_cache"))
+    def get_remote_system_by_key(
+        self,
+        key: str,
+    ) -> Optional[RemoteSystemConfig]:
+        """Check Remote System"""
+        for rs in self.remote_system_config.values():
+            if rs.api_key == key:
+                return rs
+        return None
+
+    @staticmethod
+    def expand_rules(data: Dict[str, Any]) -> List[CfgItem]:
+        return [
+            CfgItem.from_data(
+                rid=data["id"],
+                table=data["table"],
+                field=data["field"],
+                data=item,
+            )
+            for item in data["rules"]
+        ]
+
     def find_metrics_by_name(self, collector: str, name: str) -> List[CfgItem]:
         """Find by name (rx)"""
         if (collector, name) in self.mappings:
@@ -341,53 +584,12 @@ class MetricsCollectorService(FastAPIService):
             labels = frozenset(labels)
         for m in self.find_metrics_by_name(collector, name):
             # all(rl in item_labels for rl in rule_labels)
-            if labels and m.labels and labels - m.labels:
+            if labels and m.labels and m.labels - labels:
                 continue
             return m
         # Not Mapped metric
         self.logger.debug("[%s] Not mapped value: %s. Skipping", collector, name)
         return None
-
-    def send_data(self, data: List[SendMetric]):
-        """
-        Apply mappings to the request item and spool the data
-        """
-        parts = defaultdict(list)
-        for item in data:
-            metrics["items"] += 1
-            out: Dict[str, Dict[str, Any]] = {}
-            units = item.metrics.get("_units", {})
-            for coll_field, value in item.metrics.items():
-                if coll_field == "_units":
-                    continue
-                metrics["values"] += 1
-                cfg_metric = self.get_cfg_metric(item.collector, coll_field, labels=item.labels)
-                if not cfg_metric:
-                    # Unknown metric field
-                    continue
-                # Matched rule found
-                if cfg_metric.ch_table not in out:
-                    out[cfg_metric.ch_table] = {
-                        "ts": (item.ts.timestamp() + config.tz_utc_offset) * NS,
-                        "scope": cfg_metric.ch_table,
-                        "labels": item.labels,
-                        "service": item.service,
-                        "managed_object": item.managed_object,
-                        "s_key": item.key,
-                        "_units": {},
-                    }
-                    if item.remote_system:
-                        out[cfg_metric.ch_table]["remote_system"] = item.remote_system
-                out[cfg_metric.ch_table][cfg_metric.ch_field] = value
-                if coll_field in units:
-                    out[cfg_metric.ch_table]["_units"][cfg_metric.ch_field] = units[coll_field]
-                metrics["mapped_values"] += 1
-            # Spool data
-            # Split to partitions
-            parts[item.key % self.n_parts] += out.values()
-        # Spool data
-        for partition, items in parts.items():
-            self.publish(orjson.dumps(items), stream="metrics", partition=partition)
 
 
 if __name__ == "__main__":

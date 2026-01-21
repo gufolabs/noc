@@ -7,6 +7,7 @@
 
 # NOC modules
 import operator
+from collections import defaultdict
 from threading import Lock, RLock
 from typing import Optional, Union, Dict, Any, Tuple, List, Callable
 from functools import partial
@@ -49,6 +50,7 @@ from noc.config import config
 
 id_lock = Lock()
 ips_lock = RLock()
+rule_lock = Lock()
 CPE_TYPES = IGetCPE.returns.element.attrs["type"].choices
 
 
@@ -77,7 +79,7 @@ class MatchRule(EmbeddedDocument):
         """Return instance queryset"""
         q = m_q()
         if self.labels:
-            q &= m_q(effective_labels_all=self.labels)
+            q &= m_q(effective_labels__all=self.labels)
         if self.resource_groups:
             q &= m_q(effective_service_groups__all=self.resource_groups)
         if self.type:
@@ -166,6 +168,7 @@ class CPEProfile(Document):
     _bi_id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _default_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _status_discovery_cache = cachetools.TTLCache(maxsize=10, ttl=120)
+    _cpe_profile_rules = cachetools.TTLCache(maxsize=10, ttl=300)
 
     DEFAULT_PROFILE_NAME = "default"
     DEFAULT_WORKFLOW_NAME = "Sensor Default"
@@ -225,7 +228,7 @@ class CPEProfile(Document):
     def iter_changed_datastream(self, changed_fields=None):
         from noc.inv.models.cpe import CPE
 
-        if not config.datastream.enable_cfgmetricsources:
+        if not config.datastream.enable_cfgmetricstarget:
             return
         if (
             changed_fields
@@ -240,9 +243,9 @@ class CPEProfile(Document):
                 # Check Active?
                 mos.add(controllers[0].managed_object.bi_id)
             if not changed_fields or "metrics" in changed_fields or "labels" in changed_fields:
-                yield "cfgmetricsources", f"inv.CPE::{bi_id}"
+                yield "cfgmetricstarget", f"inv.CPE::{bi_id}"
         for bi_id in mos:
-            yield "cfgmetricsources", f"sa.ManagedObject::{bi_id}"
+            yield "cfgmetricstarget", f"sa.ManagedObject::{bi_id}"
 
     def on_save(self):
         self._reset_caches(self.id)
@@ -267,15 +270,20 @@ class CPEProfile(Document):
         return matcher(ctx)
 
     @classmethod
-    def get_profiles_matcher(cls) -> Tuple[Tuple[str, Callable], ...]:
+    @cachetools.cachedmethod(
+        operator.attrgetter("_cpe_profile_rules"),
+        key=lambda x: "ruleset",
+        lock=lambda _: rule_lock,
+    )
+    def get_profiles_matcher(cls) -> Tuple[Tuple[str, Tuple[Callable, ...]], ...]:
         """Build matcher based on Profile Match Rules"""
-        r = {}
+        r = defaultdict(list)
         for mop_id, rules in CPEProfile.objects.filter(
             dynamic_classification_policy="R",
         ).values_list("id", "match_rules"):
             for mr in rules:
-                r[(str(mop_id), mr.dynamic_order)] = build_matcher(mr.get_match_expr())
-        return tuple((x[0], r[x]) for x in sorted(r, key=lambda i: i[1]))
+                r[(str(mop_id), mr.dynamic_order)].append(build_matcher(mr.get_match_expr()))
+        return tuple((x[0], tuple(r[x])) for x in sorted(r, key=lambda i: i[1]))
 
     @classmethod
     def get_effective_profile(cls, o) -> Optional["str"]:
@@ -284,9 +292,10 @@ class CPEProfile(Document):
             # Dynamic classification not enabled
             return None
         ctx = o.get_matcher_ctx()
-        for profile_id, match in cls.get_profiles_matcher():
-            if match(ctx):
-                return profile_id
+        for profile_id, matches in cls.get_profiles_matcher():
+            for match in matches:
+                if match(ctx):
+                    return profile_id
         return None
 
     def get_instance_affected_query(

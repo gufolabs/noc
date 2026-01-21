@@ -8,10 +8,10 @@
 # Python modules
 import datetime
 import logging
-from typing import Optional, List, Iterable, Any, Dict
+from typing import Optional, List, Iterable, Any, Dict, Tuple
 
 # Third-party modules
-from pymongo import UpdateOne
+from pymongo import UpdateOne, ReadPreference
 from mongoengine.document import Document, EmbeddedDocument
 from mongoengine.fields import (
     StringField,
@@ -22,6 +22,7 @@ from mongoengine.fields import (
     ListField,
     EnumField,
     BinaryField,
+    ObjectIdField,
     EmbeddedDocumentListField,
 )
 from mongoengine.queryset.visitor import Q
@@ -92,6 +93,9 @@ class ServiceInstance(Document):
             "#reference",
             "type",
             "remote_id",
+            "dependencies",
+            ("managed_object", "resources"),
+            ("asset_refs", "type"),
             ("addresses.address_bin", "port"),
             {"fields": ["service", "type", "managed_object", "remote_id", "name"], "unique": True},
             {"fields": ["expires"], "expireAfterSeconds": 0},
@@ -119,6 +123,8 @@ class ServiceInstance(Document):
     asset_refs: List[str] = ListField(StringField(required=True))
     # Used Resources
     resources: List[str] = ListField(StringField(required=True))
+    # Service Dependencies
+    dependencies: List[str] = ListField(ObjectIdField(required=True))
     # Operation Attributes
     oper_status: bool = BooleanField()
     oper_status_change = DateTimeField()
@@ -311,23 +317,40 @@ class ServiceInstance(Document):
 
         q = Q()
         rds = {}
-        if managed_object.remote_system and managed_object.remote_id:
-            rds[managed_object.remote_id] = str(managed_object.remote_system.id)
-        for m in managed_object.mappings or []:
-            rds[m["remote_id"]] = m["remote_system"]
+        for m in managed_object.iter_remote_mappings():
+            rds[m.remote_id] = m.remote_system.id
         if rds:
             q |= Q(remote_id__in=list(rds))
         addrs = set()
         if managed_object.address:
             addrs.add(managed_object.address)
-        for ipv4_addrs in SubInterface.objects.filter(
-            managed_object=managed_object.id, ipv4_addresses__exists=True, enabled_afi="IPv4"
-        ).scalar("ipv4_addresses"):
+        for ipv4_addrs in (
+            SubInterface.objects.filter(
+                managed_object=managed_object.id, ipv4_addresses__exists=True, enabled_afi="IPv4"
+            )
+            .read_preference(ReadPreference.SECONDARY_PREFERRED)
+            .scalar("ipv4_addresses")
+        ):
             addrs |= {IP.prefix(x).address for x in ipv4_addrs}
         if addrs:
             q |= Q(addresses__address__in=addrs)
-        for si in ServiceInstance.objects.filter(q):
-            if rds and si.remote_id and str(si.service.remote_system.id) != rds.get(si.remote_id):
+        # get_full_fqdn
+        q |= Q(fqdn=managed_object.name.lower().strip())
+        # Capability Reference
+        refs = []
+        for c in managed_object.iter_caps():
+            refs += c.capability.get_references(c.value)
+        if refs:
+            q |= Q(asset_refs__in=refs)
+        for si in ServiceInstance.objects.filter(q).read_preference(
+            ReadPreference.SECONDARY_PREFERRED
+        ):
+            # By configuration
+            if (
+                si.remote_id in rds
+                and si.service.remote_system
+                and si.service.remote_system.id != rds.get(si.remote_id)
+            ):
                 continue
             yield si
 
@@ -429,6 +452,7 @@ class ServiceInstance(Document):
         """
         processed = set()
         new_addresses = []
+        addresses = addresses or []
         changed = False
         for a in self.addresses:
             if a.address not in addresses and source in a.sources:
@@ -451,7 +475,8 @@ class ServiceInstance(Document):
             changed |= True
             self.port = port
         # Update instance
-        self.seen(source, last_seen=ts)
+        if InputSource == InputSource.DISCOVERY:
+            self.seen(source, last_seen=ts)
         return changed
 
     def deregister_endpoint(
@@ -566,20 +591,36 @@ class ServiceInstance(Document):
                 ServiceSummary.refresh_object(self.managed_object)
 
     @classmethod
-    def get_object_resources(cls, o) -> Dict[str, str]:
+    def get_object_resources(cls, oid: int) -> Dict[str, Tuple[str, int, str]]:
         """Return all resources used by object"""
         r = {}
-        for row in (
-            ServiceInstance.objects.filter(
-                managed_object=o,
-                resources__exists=True,
-            )
-            .scalar("resources", "service")
-            .as_pymongo()
+        # Secondary Preferred
+        coll = ServiceInstance._get_collection().with_options(
+            read_preference=ReadPreference.SECONDARY_PREFERRED,
+        )
+        for row in coll.aggregate(
+            [
+                {"$match": {"managed_object": oid, "resources": {"$exists": True, "$ne": []}}},
+                {"$project": {"service": 1, "resources": 1}},
+                {
+                    "$lookup": {
+                        "from": "noc.services",
+                        "let": {"i_service": "$service"},
+                        "pipeline": [
+                            {"$match": {"$expr": {"$eq": ["$_id", "$$i_service"]}}},
+                            {"$project": {"profile": 1, "bi_id": 1}},
+                        ],
+                        "as": "svc",
+                    }
+                },
+                {"$unwind": "$svc"},
+            ]
         ):
+            if not row["svc"]:
+                continue
             for rid in row["resources"]:
                 _, rid = rid.split(":")
-                r[rid] = row["service"]
+                r[rid] = (row["service"], row["svc"]["bi_id"], row["svc"]["profile"])
         return r
 
     @classmethod

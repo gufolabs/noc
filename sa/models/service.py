@@ -39,17 +39,20 @@ from noc.core.bi.decorator import bi_sync
 from noc.core.model.decorator import on_save, on_delete_check, on_init, tree
 from noc.core.resourcegroup.decorator import resourcegroup
 from noc.core.wf.decorator import workflow
-from noc.core.change.decorator import change, change_tracker
+from noc.core.change.decorator import change
 from noc.core.service.loader import get_service
 from noc.core.models.servicestatus import Status
 from noc.core.models.serviceinstanceconfig import InstanceType, ServiceInstanceConfig
 from noc.core.models.inputsources import InputSource
 from noc.core.mx import MessageType, send_message, MessageMeta, get_subscription_id
 from noc.core.caps.decorator import capabilities
-from noc.core.caps.types import CapsValue
 from noc.core.etl.remotemappings import mappings
 from noc.core.diagnostic.types import DiagnosticConfig, DiagnosticState
 from noc.core.diagnostic.decorator import diagnostic
+from noc.core.validators import is_objectid
+from noc.core.watchers.types import ObjectEffect, WatchItem
+from noc.core.watchers.decorator import watchers, WATCHER_JCLS, get_next_ts
+from noc.core.scheduler.scheduler import Scheduler
 from noc.crm.models.subscriber import Subscriber
 from noc.crm.models.supplier import Supplier
 from noc.main.models.remotesystem import RemoteSystem
@@ -62,6 +65,7 @@ from noc.inv.models.capsitem import CapsItem
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.sa.models.diagnosticitem import DiagnosticItem
 from noc.sa.models.serviceinstance import ServiceInstance
+from noc.sa.models.objectwatchersitem import WatchDocumentItem
 from noc.pm.models.agent import Agent
 from noc.config import config
 
@@ -70,28 +74,26 @@ logger = logging.getLogger(__name__)
 id_lock = Lock()
 _path_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 SVC_REF_PREFIX = "svc"
+SCHEDULER = "scheduler"
 SVC_AC = "Service | Status | Change"
 
 
-class Instance(EmbeddedDocument):
-    meta = {"strict": False, "auto_create_index": False}
-
-    name_template = StringField()
-    pool: "Pool" = PlainReferenceField(Pool, required=False)
-    port_range = StringField()
-
-
-class ServiceStatusDependency(EmbeddedDocument):
+class ServiceDependency(EmbeddedDocument):
     """
     Service dependency status
     Attributes:
         service: Service from dependent status
-        resource_group: Group for dependent status (client)
+        group: Group for dependent status (client)
         type: Dependency type:
             * service - for dependent service or group as client
             * group - for aggregating service or service group
             * parent - for overwrite parent dependent
             * children - for overwrite children dependent
+        oper_status_transfer:
+            * Disable - Not Transfer
+            * Send - Send Own Status
+            * Received - Received Own Status
+            * Both - Send and Received Status
         min_status: Min Status value receive
         max_status: Max Status value receive
         set_status: Overwrite dependent status
@@ -103,22 +105,46 @@ class ServiceStatusDependency(EmbeddedDocument):
 
     service: Optional["Service"] = PlainReferenceField("sa.Service", required=False)
     # Add to effective group, check group of client
-    resource_group: Optional["ResourceGroup"] = ReferenceField(ResourceGroup, required=False)
+    group: Optional["ResourceGroup"] = ReferenceField(ResourceGroup, required=False)
     type = StringField(
         choices=[
             ("S", "Service (Using)"),
-            ("G", "Group (UP)"),
-            ("P", "Parent (UP)"),
-            ("C", "Children (Down)"),
+            ("C", "Client (Using)"),
+            # ("G", "Service Group (Using)"),
+            ("U", "Parent (UP)"),
+            ("D", "Children (Down)"),
         ],
         default="S",
+    )
+    # Status
+    oper_status_transfer = StringField(
+        choices=[
+            ("D", "Disable"),
+            ("S", "Send"),
+            ("R", "Received"),
+            ("B", "Both"),
+        ],
+        default="D",
     )
     min_status = EnumField(Status, required=False)
     max_status = EnumField(Status, required=False)
     set_status = EnumField(Status, required=False)
-    ignore = BooleanField(default=False)
-    weight = IntField(min_value=0)
+    weight: int = IntField(min_value=0)
+    # is_fatal = BooleanField(default=False)
+    #
+    register_instance: bool = BooleanField(default=False)  # Find Instance
+    include_resources: bool = BooleanField(default=False)
+    # match_labels: List[str] = ListField(StringField(required=True))
+    # Instance EndPoint
+    name_template = StringField()  # Instance Template ?
+    port_range = StringField()
+    active_instances = IntField(min_value=1)
+    reserve_instances = IntField(min_value=0)
+    # type - endpoint
+    # pool: "Pool" = PlainReferenceField(Pool, required=False)
     # Propagate admin status
+    # propagate_status = BooleanField(default=False)
+    # ignore = BooleanField(default=False)
 
     def is_match(self) -> bool:
         if not self.service:
@@ -149,6 +175,7 @@ class ServiceStatusDependency(EmbeddedDocument):
 @resourcegroup
 @on_init
 @change
+@watchers
 @diagnostic
 @workflow
 @capabilities
@@ -157,6 +184,7 @@ class ServiceStatusDependency(EmbeddedDocument):
     clean=[
         ("phone.PhoneNumber", "service"),
         ("sa.Service", "parent"),
+        ("sa.ServiceInstance", "dependencies"),
     ],
     delete=[("sa.ServiceInstance", "service")],
 )
@@ -169,18 +197,20 @@ class Service(Document):
             "subscriber",
             "supplier",
             "profile",
-            ("caps.capability", "caps.value"),
-            "sla_probe",
             "parent",
-            "order_id",
             "state",
+            ("caps.capability", "caps.value"),
+            ("mappings.remote_system", "mappings.remote_id"),
+            "sla_probe",
+            "order_id",
             "effective_service_groups",
             "effective_client_groups",
             "effective_labels",
             "service_path",
+            "watcher_wait_ts",
         ],
     }
-    profile: ServiceProfile = ReferenceField(ServiceProfile, required=True)
+    profile: ServiceProfile = PlainReferenceField(ServiceProfile, required=True)
     name_template = StringField()
     # Creation timestamp
     ts = DateTimeField(default=datetime.datetime.now)
@@ -189,7 +219,7 @@ class Service(Document):
     # Last state change
     state_changed = DateTimeField()
     # Parent service
-    parent: "Service" = ReferenceField("self", required=False)
+    parent: "Service" = PlainReferenceField("self", required=False)
     # Subscriber information
     subscriber: Optional[Subscriber] = ReferenceField(Subscriber, required=False)
     oper_status: Status = EnumField(Status, default=Status.UNKNOWN)
@@ -204,9 +234,7 @@ class Service(Document):
         ],
         default="P",
     )
-    status_dependencies: List["ServiceStatusDependency"] = EmbeddedDocumentListField(
-        ServiceStatusDependency
-    )
+    dependency_services: List["ServiceDependency"] = EmbeddedDocumentListField(ServiceDependency)
     calculate_status_function = StringField(
         choices=[
             ("D", "Disable"),
@@ -247,12 +275,11 @@ class Service(Document):
     # Capabilities
     caps: List[CapsItem] = EmbeddedDocumentListField(CapsItem)
     diagnostics: List[DiagnosticItem] = EmbeddedDocumentListField(DiagnosticItem)
-    static_instances: List[Instance] = EmbeddedDocumentListField(Instance)
     # Link to agent
     agent = PlainReferenceField(Agent)
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from
-    remote_system = ReferenceField(RemoteSystem)
+    remote_system = PlainReferenceField(RemoteSystem)
     # Object id in remote system
     remote_id = StringField()
     # Object id in BI
@@ -267,6 +294,10 @@ class Service(Document):
     effective_client_groups = ListField(ObjectIdField())
     # Remote Mappings
     mappings: List[RemoteMappingItem] = EmbeddedDocumentListField(RemoteMappingItem)
+    # Watchers
+    watchers: List[WatchDocumentItem] = EmbeddedDocumentListField(WatchDocumentItem)
+    watcher_wait_ts: Optional[datetime.datetime] = DateTimeField(required=False)
+    # maintenances
 
     _id_cache = cachetools.TTLCache(maxsize=500, ttl=60)
     _bi_id_cache = cachetools.TTLCache(maxsize=500, ttl=60)
@@ -322,6 +353,53 @@ class Service(Document):
             ).scalar("service")
         )
 
+    @classmethod
+    def get_by_remote_ids(cls, remote_system: RemoteSystem, ids: List[str]) -> List[str]:
+        """Return object IDS by remote_ids"""
+        return Service.objects.filter(
+            m_q(remote_system=str(remote_system.id), remote_id__in=ids)
+            | m_q(mappings__match={"remote_id": {"$in": ids}, "remote_system": remote_system.id})
+        ).scalar("id")
+
+    @classmethod
+    def get_exposed_labels_for_object(cls, mo_id: int) -> List[str]:
+        """Return exposed labels for Managed Object"""
+        from noc.sa.models.serviceinstance import ServiceInstance
+
+        coll = ServiceInstance._get_collection()
+        for row in coll.aggregate(
+            [
+                {"$match": {"managed_object": mo_id}},
+                {"$project": {"resources": 1, "service": 1}},
+                {
+                    "$lookup": {
+                        "from": "noc.services",
+                        "let": {"si_service": "$service"},
+                        "pipeline": [
+                            {
+                                "$match": {"$expr": {"$eq": ["$$si_service", "$_id"]}},
+                            },
+                            {"$project": {"effective_labels": 1}},
+                        ],
+                        "as": "svc",
+                    }
+                },
+            ]
+        ):
+            if not row["svc"]:
+                continue
+            svc = row["svc"][0]
+            yield Label.build_expose_labels(svc["effective_labels"], "expose_sa_object")
+
+    @classmethod
+    def get_min_wait_ts(cls) -> Optional[datetime.datetime]:
+        """"""
+        return (
+            Service.objects()
+            .aggregate([{"$group": {"_id": None, "wait_ts": {"$min": "$watcher_wait_ts"}}}])
+            .next()["wait_ts"]
+        )
+
     def __str__(self):
         if self.label:
             return self.label
@@ -363,6 +441,14 @@ class Service(Document):
     @property
     def in_maintenance(self):
         """Check service in maintenance"""
+        from noc.maintenance.models.maintenance import Maintenance
+
+        for w in self.watchers:
+            if w.effect != ObjectEffect.MAINTENANCE:
+                continue
+            mai = Maintenance.get_by_id(w.key)
+            if mai and mai.is_active:
+                return True
         return False
 
     def check_deployed(self) -> Optional[str]:
@@ -422,15 +508,51 @@ class Service(Document):
             return self.profile.status_transfer_policy
         return self.status_transfer_policy
 
-    def iter_dependency_services(self, filter_match_status: bool = False) -> Iterable["Service"]:
+    def get_nested_ids(self) -> List[ObjectId]:
+        """Return id of this and all nested services"""
+        # $graphLookup hits 100Mb memory limit. Do not use it
+        seen = {self.id}
+        wave = {self.id}
+        max_level = 7
+        coll = Service._get_collection()
+        for _ in range(max_level):
+            # Get next wave
+            wave = {d["_id"] for d in coll.find({"parent": {"$in": list(wave)}}, {"_id": 1})} - seen
+            if not wave:
+                break
+            seen |= wave
+        seen -= {self.id}
+        return list(seen)
+
+    def iter_dependent_services(self) -> Iterable[Tuple["Service", str]]:
+        """
+        Iterable over dependent service, that affected self changed: status_change
+        """
+        # Children
+        nested = self.get_nested_ids()
+        # Services
+        services = []
+        for deps in ServiceInstance.objects.filter(
+            service=self,
+            dependencies__exists=True,
+            dependencies__ne=[],
+        ).scalar("dependencies"):
+            services += deps
+        for svc in Service.objects.filter(id__in=nested + services):
+            if svc.id in nested:
+                yield svc, "D"
+            else:
+                yield svc, "S"
+
+    def iter_dependencies_services(self, filter_match_status: bool = False) -> Iterable["Service"]:
         """Iterate over service topology, with affected statuses"""
-        for item in self.status_dependencies:
+        for item in self.dependency_services:
             if filter_match_status and not item.is_match():
                 continue
             if item.service:
                 yield item.service
-            if item.resource_group and item.resource_group.technology.service_model == "sa.Service":
-                for svc in Service.objects.filter(effective_service_groups=item.resource_group):
+            if item.group and item.group.technology.service_model == "sa.Service":
+                for svc in Service.objects.filter(effective_service_groups=item.group):
                     yield svc
 
     def iter_dependency_status(self) -> Iterable[Tuple[Status, int]]:
@@ -444,7 +566,7 @@ class Service(Document):
                 # yield from svc.iter_dependency_status("self_only")
                 ...
 
-        for item in self.status_dependencies:
+        for item in self.dependency_services:
             if not item.is_match():
                 continue
             yield item.service, item.service.profile.weight
@@ -512,7 +634,7 @@ class Service(Document):
             msg = self.get_message_context()
             # msg["managed_object"] = self.managed_object.get_message_context()
             msg["from_status"] = {"id": os, "name": os.name}
-            msg["ts"] = (timestamp.replace(microsecond=0).isoformat(),)
+            msg["ts"] = timestamp.replace(microsecond=0).isoformat()
             send_message(
                 data=msg,
                 message_type=MessageType.SERVICE_STATUS_CHANGE,
@@ -808,12 +930,27 @@ class Service(Document):
         return self.calculate_status(r)
 
     @classmethod
+    def find_alarm_affected_services(cls, alarm) -> List[str]:
+        """Find affected services on topology"""
+        r = []
+        if "service" in alarm.vars and is_objectid(alarm.vars["service"]):
+            svc_id = alarm.vars["service"]
+        elif "service" in alarm.components and getattr(alarm.components, "service", None):
+            svc_id = alarm.components.service.id
+        else:
+            return r
+        for svc in Service.objects.filter(service_path=svc_id):
+            if svc.profile.get_rule_by_alarm(alarm):
+                r.append(svc.id)
+        return r
+
+    @classmethod
     def get_services_by_alarm(cls, alarm) -> List[str]:
         """Return service Ids for requested alarm"""
         if alarm.alarm_class.name == SVC_AC:
             return []
-        if hasattr(alarm.components, "service") and getattr(alarm.components, "service", None):
-            return [alarm.components.service.id]
+        if "service" in alarm.components or "service" in alarm.vars:
+            return cls.find_alarm_affected_services(alarm)
         q = m_q()
         if hasattr(alarm.components, "slaprobe") and getattr(alarm.components, "slaprobe", None):
             q |= m_q(sla_probe=alarm.components.slaprobe.id)
@@ -847,10 +984,7 @@ class Service(Document):
         logger.debug("Requested services by query: %s", q)
         if not q:
             return list(services)
-        for (
-            sid,
-            path,
-        ) in Service.objects.filter(q).scalar("id", "service_path"):
+        for sid, path in Service.objects.filter(q).scalar("id", "service_path"):
             services.add(sid)
             if path:
                 services |= set(path)
@@ -879,12 +1013,12 @@ class Service(Document):
     def iter_effective_labels(cls, instance: "Service") -> Iterable[List[str]]:
         yield list(instance.labels or [])
         yield list(ServiceProfile.iter_lazy_labels(instance.profile))
+        for c in instance.iter_caps():
+            if c.config.set_label:
+                yield Label.ensure_labels(c.get_labels(), ["sa.Service"])
 
     def get_effective_agent(self) -> Optional[Agent]:
-        """
-        Find effective agent for service
-        :return:
-        """
+        """Find effective agent for service"""
         svc = self
         while svc:
             if svc.agent:
@@ -892,30 +1026,42 @@ class Service(Document):
             svc = svc.parent
         return None
 
-    def save_caps(
-        self, caps: List[CapsValue], dry_run: bool = False, bulk=None, changed_fields=None, **kwargs
+    def update_object_watchers(
+        self,
+        to_watchers: List[WatchItem],
+        to_remove: Optional[List[Tuple[ObjectEffect, str, Optional[str]]]],
+        dry_run: bool = False,
+        bulk=None,
     ):
         """"""
-        from noc.inv.models.capsitem import CapsItem
-
-        self.caps = [
-            CapsItem(
-                capability=c.capability, value=c.value, source=c.source.value, scope=c.scope or ""
-            )
-            for c in caps
-        ]
+        updates = []
+        up_w = {(w.effect, w.key, w.remote_system): w for w in to_watchers}
+        for w in self.watchers:
+            rs = w.remote_system.name if w.remote_system else None
+            if to_remove and (w.effect, w.key, rs) in to_remove:
+                continue
+            update = up_w.pop((w.effect, w.key, rs), None)
+            if update:
+                w = WatchDocumentItem.from_item(update)
+            updates.append(w)
+        for w in up_w.values():
+            rs = RemoteSystem.get_by_name(w.remote_system) if w.remote_system else None
+            updates.append(WatchDocumentItem.from_item(w, remote_system=rs))
+        self.watchers = updates
+        wait_ts = self.get_wait_ts()
+        if self.watcher_wait_ts != wait_ts:
+            self.watcher_wait_ts = wait_ts
         if dry_run or self._created:
             return
-        # Register changes
-        change_tracker.register(
-            "update",
-            "sa.Service",
-            str(self.id),
-            fields=changed_fields,
-            audit=True,
-            caps=[cf.field for cf in changed_fields or []],
-        )
-        self.update(caps=self.caps)
+        m_ts = self.get_min_wait_ts()
+        if wait_ts and (not m_ts or wait_ts < m_ts):
+            scheduler = Scheduler(SCHEDULER)
+            scheduler.submit(jcls=WATCHER_JCLS, key="sa.Service", ts=get_next_ts(wait_ts))
+        set_op = {"watchers": self.watchers, "watcher_wait_ts": self.watcher_wait_ts}
+        self.update(**set_op)
+
+    def on_save_caps(self, changed_fields=None, dry_run: bool = False, **kwargs):
+        """"""
         self.sync_instances()
         self.diagnostic.refresh_diagnostics()
         self.refresh_status()
@@ -931,6 +1077,7 @@ class Service(Document):
             if not cfgs:
                 continue
             instances += cfgs
+        # Deps
         logger.debug("[%s] Synced instances from config: %s", self, instances)
         self.update_instances(InputSource.CONFIG, instances)
 
@@ -952,6 +1099,8 @@ class Service(Document):
             instance = ServiceInstance.ensure_instance(self, cfg, settings)
             # Update Data, Run sync
             instance.update_config(cfg)
+            instance.register_endpoint(source, cfg.addresses)
+            instance.dependencies = cfg.services or None
             # Add Source
             instance.seen(source, last_update, dry_run=True)
             instance.save()
@@ -1012,13 +1161,50 @@ class Service(Document):
         return si
 
     @classmethod
-    def get_component(cls, managed_object, service, **kwargs) -> Optional["Service"]:
+    def get_component(
+        cls,
+        managed_object: Optional[str] = None,
+        service: Optional[str] = None,
+        remote_ref: Optional[str] = None,
+        **kwargs,
+    ) -> Optional["Service"]:
+        logger.debug("Getting service by component: %s", kwargs)
         if service:
             return Service.get_by_id(service)
+        if remote_ref:
+            try:
+                rs, rid = RemoteSystem.from_reference(remote_ref)
+                return Service.get_by_mapping(rs, rid)
+            except ValueError:
+                pass
 
     def iter_diagnostic_configs(self) -> Iterable[DiagnosticConfig]:
         """Iterable diagnostic Config"""
         yield from self.profile.iter_diagnostic_configs(self)
+
+    @classmethod
+    def update_maintenance(
+        cls,
+        maintenance_id: str,
+        services: List["Service"],
+        start: datetime.datetime,
+        affected_topology: bool = False,
+        remote_system: Optional[RemoteSystem] = None,
+        remote_ids: Optional[List[str]] = None,
+    ):
+        """Update Maintenance"""
+        svcs = [s.id for s in services]
+        if remote_system and remote_ids:
+            svcs += Service.get_by_remote_ids(remote_system, remote_ids)
+        logger.info("Update maintenance on Services: %s", svcs)
+        for svc in Service.objects.filter(id__in=svcs):
+            svc.add_watch(ObjectEffect.MAINTENANCE, key=str(maintenance_id), once=False)
+
+    @classmethod
+    def reset_maintenance(cls, maintenance_id: ObjectId):
+        """Reset Maintenance"""
+        for svc in Service.objects.filter(watchers__key=str(maintenance_id)):
+            svc.stop_watch(ObjectEffect.MAINTENANCE, str(maintenance_id))
 
     def get_check_ctx(self, include_credentials=False, **kwargs) -> Dict[str, Any]:
         """"""
@@ -1044,7 +1230,7 @@ class Service(Document):
             "service_groups": list(self.effective_service_groups),
             "remote_system": str(self.remote_system.id) if self.remote_system else None,
             "caps": self.get_caps(),
-            "state": str(state),
+            "state": str(state.id),
         }
 
 

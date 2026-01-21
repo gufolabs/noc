@@ -46,7 +46,6 @@ from noc.sa.models.managedobject import ManagedObject
 from noc.sa.interfaces.base import MACAddressParameter
 from noc.sa.interfaces.igetinterfaces import IGetInterfaces
 from noc.main.models.label import Label
-from noc.sa.models.service import Service
 from noc.project.models.project import Project
 from noc.inv.models.capsitem import CapsItem
 from noc.wf.models.state import State
@@ -223,7 +222,7 @@ class Interface(Document):
     def iter_changed_datastream(self, changed_fields=None):
         if config.datastream.enable_managedobject:
             yield "managedobject", self.managed_object.id
-        yield "cfgmetricsources", f"sa.ManagedObject::{self.managed_object.bi_id}"
+        yield "cfgmetricstarget", f"sa.ManagedObject::{self.managed_object.bi_id}"
 
     def save(self, *args, **kwargs):
         if not hasattr(self, "_changed_fields") or "name" in self._changed_fields:
@@ -462,11 +461,11 @@ class Interface(Document):
         """
         if self.oper_status == status:
             return
-        now = timestamp or datetime.datetime.now()
-        if self.oper_status != status and (
-            not self.oper_status_change or self.oper_status_change < now
-        ):
-            self.update(oper_status=status, oper_status_change=now)
+        timestamp = timestamp or datetime.datetime.now().replace(microsecond=0)
+        if not self.oper_status_change or self.oper_status_change < timestamp:
+            self.oper_status = status
+            self.oper_status_change = timestamp
+            self.update(oper_status=status, oper_status_change=timestamp)
             if self.profile.is_enabled_notification:
                 logger.debug("Sending status change notification")
                 headers = self.managed_object.get_mx_message_headers(self.effective_labels)
@@ -599,7 +598,7 @@ class Interface(Document):
         d_interval = d_interval or mo.get_metric_discovery_interval()
         s_map = {}
         if config.discovery.interface_metric_service:
-            s_map = ServiceInstance.get_object_resources(mo)
+            s_map = ServiceInstance.get_object_resources(mo.id)
         for i in (
             Interface._get_collection()
             .with_options(read_preference=ReadPreference.SECONDARY_PREFERRED)
@@ -665,15 +664,15 @@ class Interface(Document):
             if not metrics:
                 continue
             ifindex = i.get("ifindex")
-            service = None
+            service_id = None
             if str(i["_id"]) in s_map:
-                service = Service.get_by_id(s_map[str(i["_id"])])
+                service_id = s_map[str(i["_id"])][1]
             yield MetricCollectorConfig(
                 collector="managed_object",
                 metrics=tuple(metrics),
                 labels=(f"noc::interface::{i['name']}",),
                 hints=[f"ifindex::{ifindex}"] if ifindex else None,
-                service=service.bi_id if service else None,
+                service=service_id,
             )
             if i_profile.subinterface_apply_policy != "I":
                 continue
@@ -686,9 +685,9 @@ class Interface(Document):
                 )
             ):
                 ifindex = si.get("ifindex")
-                service = None
+                service_id = None
                 if str(si["_id"]) in s_map:
-                    service = Service.get_by_id(s_map[str(si["_id"])])
+                    service_id = s_map[str(si["_id"])][1]
                 yield MetricCollectorConfig(
                     collector="managed_object",
                     metrics=tuple(metrics),
@@ -697,7 +696,7 @@ class Interface(Document):
                         f"noc::subinterface::{si['name']}",
                     ),
                     hints=[f"ifindex::{ifindex}"] if ifindex else None,
-                    service=service.bi_id if service else None,
+                    service=service_id,
                 )
 
     @classmethod
@@ -733,11 +732,19 @@ class Interface(Document):
         return r.get("interval", 0)
 
     def get_matcher_ctx(self) -> Dict[str, Any]:
+        """"""
+        if not self.state:
+            state = self.profile.workflow.get_default_state()
+        else:
+            state = self.state
         return {
             "name": self.name,
             "description": self.description,
             "labels": list(self.effective_labels),
-            "service_groups": list(self.managed_object.effective_service_groups),
+            "object_groups": list(self.managed_object.effective_service_groups),
+            "service_groups": list(self.effective_service_groups),
+            "caps": self.get_caps(),
+            "state": str(state.id),
         }
 
 

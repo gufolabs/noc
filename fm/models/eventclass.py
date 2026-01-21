@@ -429,10 +429,11 @@ class EventClass(Document):
                 "id": str(event_class.id),
                 "bi_id": str(event_class.bi_id),
             },
+            "link_event": event_class.link_event,
             "vars": [],
             "filters": [],
             "handlers": [],
-            "actions": [],
+            "rules": [],
         }
         if event_class.deduplication_window:
             r["filters"].append(
@@ -442,6 +443,8 @@ class EventClass(Document):
             r["filters"].append(
                 {"name": "suppress", "window": event_class.suppression_window},
             )
+        for rule in DispositionRule.get_event_actions(event_class=event_class):
+            r["rules"].append(rule)
         for vv in event_class.vars:
             r["vars"].append(
                 {
@@ -452,7 +455,6 @@ class EventClass(Document):
                     "resource_model": vv.type.resource_model,
                 }
             )
-        r["actions"] += DispositionRule.get_actions(event_class=event_class, event_config=True)
         return r
 
 

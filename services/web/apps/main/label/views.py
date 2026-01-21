@@ -27,6 +27,7 @@ class LabelApplication(ExtDocApplication):
     glyph = "tag"
     model = Label
     query_condition = "icontains"
+    query_fields = ["name__contains", "description__contains"]
 
     clean_fields = {
         "bg_color1": ColorParameter(),
@@ -49,7 +50,7 @@ class LabelApplication(ExtDocApplication):
             r[s] = model_id in o.allow_models
         return r
 
-    def field_is_builtin(self, o: "Label"):
+    def field_is_noc_builtin(self, o: "Label"):
         return bool(o.is_builtin)
 
     def field_is_scoped(self, o: "Label"):

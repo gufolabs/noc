@@ -58,6 +58,7 @@ class BaseRemoteSystem(object):
         "ipprefix",
         "ipaddressprofile",
         "ipaddress",
+        "pmagent",
         "managedobject",
         "link",
         "sensor",
@@ -70,6 +71,7 @@ class BaseRemoteSystem(object):
         "street",
         "building",
         "address",
+        "maintenance",
     ]
 
     def __init__(self, remote_system):
@@ -179,6 +181,12 @@ class BaseRemoteSystem(object):
             out.write("Summary:\n")
             out.write("\n".join(summary) + "\n")
         return n_errors, r
+
+    def get_metric_extractor(self):
+        """"""
+        if "metric" in self.extractors[self.__module__]:
+            return self.extractors[self.__module__]["metric"](self)
+        return None
 
     @classmethod
     def extractor(cls, c):

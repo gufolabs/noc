@@ -10,11 +10,12 @@ from typing import Dict, Any, Optional
 
 # NOC modules
 from noc.inv.models.capability import Capability
+from noc.inv.models.resourcegroup import ResourceGroup
 from noc.sa.models.service import Service as ServiceModel
 from noc.sa.models.serviceprofile import ServiceProfile
 from noc.core.models.inputsources import InputSource
 from .base import BaseLoader
-from ..models.service import Service, Instance
+from ..models.service import Service, Instance, InstanceType
 
 
 class ServiceLoader(BaseLoader):
@@ -35,6 +36,20 @@ class ServiceLoader(BaseLoader):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.available_caps = {x.name for x in Capability.objects.filter()}
+        self.clean_map["static_service_groups"] = lambda x: [
+            x.id
+            for x in ResourceGroup.objects.filter(
+                remote_id__in=x or [],
+                remote_system=self.system.remote_system,
+            )
+        ]
+        self.clean_map["static_client_groups"] = lambda x: [
+            x.id
+            for x in ResourceGroup.objects.filter(
+                remote_id__in=x or [],
+                remote_system=self.system.remote_system,
+            )
+        ]
 
     def post_save(self, o: ServiceModel, fields: Dict[str, Any]):
         if not fields:
@@ -49,9 +64,19 @@ class ServiceLoader(BaseLoader):
             caps[c_name] = cc["value"]
         o.update_caps(caps, source="etl", scope=self.system.name)
         # Raise Error in not allowed on config
+        si = []
+        for i in instances or []:
+            i = Instance.model_validate(i)
+            cfg = i.config
+            if i.type == InstanceType.SERVICE_CLIENT:
+                svc = self.clean_remote_reference(o.remote_system.name, self.name, i.remote_id)
+                if not svc:
+                    raise self.Deferred()
+                cfg.services = [svc]
+            si.append(cfg)
         o.update_instances(
             source=InputSource.ETL,
-            instances=[Instance.model_validate(i).config for i in instances or []],
+            instances=si,
         )
 
     def find_object(

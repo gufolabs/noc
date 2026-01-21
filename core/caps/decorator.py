@@ -14,7 +14,7 @@ from noc.models import is_document, get_model_id
 from noc.core.models.inputsources import InputSource
 from noc.core.change.policy import change_tracker
 from noc.core.change.model import ChangeField
-from noc.core.change.decorator import get_datastreams, get_domains
+from noc.core.change.decorator import get_datastreams, get_domains, get_applied_rules
 from .types import CapsValue, CapsConfig
 
 caps_logger = logging.getLogger(__name__)
@@ -33,7 +33,7 @@ def iter_model_caps(
         if not c:
             caps_logger.info("Removing unknown capability id %s", ci["capability"])
             continue
-        cs = ci.get("scope", "")
+        cs = ci.get("scope") or None
         if scope and scope != cs:
             continue
         try:
@@ -69,7 +69,7 @@ def iter_document_caps(
     from noc.inv.models.capability import Capability
 
     configs = self.get_caps_config()
-
+    processed = set()
     for ci in self.caps or []:
         if scope and scope != ci.scope:
             continue
@@ -83,13 +83,16 @@ def iter_document_caps(
             capability=ci.capability,
             value=cv,
             source=cs,
-            scope=ci.scope,
-            config=configs.pop(str(ci.capability.id), CapsConfig()),
+            scope=ci.scope or None,
+            config=configs.get(str(ci.capability.id), CapsConfig()),
         )
+        processed.add(ci.capability.id)
     if not include_default:
         return
     for c, cfg in configs.items():
         c = Capability.get_by_id(c)
+        if c.id in processed:
+            continue
         yield CapsValue(
             capability=c,
             value=c.clean_value(cfg.default_value) if cfg.default_value else None,
@@ -144,9 +147,12 @@ def save_document_caps(
         audit=True,
         datastreams=get_datastreams(self),
         domains=get_domains(self, changed_fields),
+        reactions_rules=get_applied_rules(self, "update", changed_fields=changed_fields),
         caps=[cf.field for cf in changed_fields or []],
     )
     self.update(**set_op)
+    if hasattr(self, "on_save_caps"):
+        self.on_save_caps(changed_fields, dry_run=dry_run)
 
 
 def save_model_caps(
@@ -195,6 +201,7 @@ def save_model_caps(
         audit=True,
         datastreams=get_datastreams(self),
         domains=get_domains(self, changed_fields),
+        reactions_rules=get_applied_rules(self, "update", changed_fields=changed_fields),
         caps=[cf.field for cf in changed_fields or []],
     )
     self.__class__.objects.filter(id=self.id).update(**set_op)
@@ -246,12 +253,13 @@ def set_caps(
         source = InputSource(source)
     except ValueError:
         source = InputSource.UNKNOWN
-    scope = scope or ""
+    scope = scope or None
     changed, is_new, changed_fields = False, True, []
     for item in self.iter_caps():
         if item.capability == caps:
             # Set found scope
             if is_new and item.scope == scope:
+                # Add Manual Source
                 is_new = False
             if item.scope == scope and item.value != value:
                 new_caps.append(item.set_value(value))
@@ -278,15 +286,23 @@ def set_caps(
         self.save_caps(new_caps, changed_fields=changed_fields)
 
 
-def reset_caps(self, caps: Optional[str] = None, scope: Optional[str] = None):
+def reset_caps(
+    self,
+    caps: Optional[str] = None,
+    scope: Optional[str] = None,
+    source: Optional[str] = None,
+):
     """
     Remove caps from object
     Args:
         self: Object
         caps: Caps Name
         scope: Scope name
+        source: Source set
     """
     new_caps, changed_fields = [], []
+    if source:
+        source = InputSource(source)
     changed = False
     for item in self.iter_caps():
         if scope and scope == item.scope:
@@ -294,7 +310,7 @@ def reset_caps(self, caps: Optional[str] = None, scope: Optional[str] = None):
             caps_logger.info("Removing capability by scope: %s", scope)
             changed_fields += [ChangeField(field=item.name, old=str(item.value), new=None)]
             continue
-        if caps and caps == item.name:
+        if caps and caps == item.name and (not source or source == item.source):
             changed |= True
             caps_logger.info("Removing capability by name: %s", caps)
             changed_fields += [ChangeField(field=item.name, old=str(item.value), new=None)]
@@ -342,13 +358,13 @@ def update_caps(
     for ci in self.iter_caps():
         if not scope or (scope and scope == ci.scope):
             seen.add(ci.name)
-        if scope and scope != ci.scope:
+        if (scope and scope != ci.scope) or (not scope and ci.scope):
             # For Separate scope - skipping update (ETL)
             logger.debug(
                 "[%s] Not changing capability %s: from other scope '%s'",
                 o_label,
                 ci.name,
-                ci.scope,
+                ci.scope or "",
             )
         elif ci.source == InputSource.MANUAL:
             # Manual Source set only for set_caps method
@@ -358,15 +374,19 @@ def update_caps(
                 ci.name,
                 ci.source,
             )
+        elif ci.source == InputSource.DATABASE and not ci.scope:
+            # Skip Database Caps without source, that set after separate discovery process
+            # If not set scope - it clean.
+            continue
         elif ci.name in caps:
             value = ci.capability.clean_value(caps[ci.name])
-            if value != ci.value:
+            if ci.value != value:
                 logger.info(
                     "[%s] Changing capability %s: %s -> %s",
                     o_label,
                     ci.name,
                     ci.value,
-                    caps[ci.name],
+                    value,
                 )
                 changed_fields.append(
                     ChangeField(
@@ -375,16 +395,16 @@ def update_caps(
                         new=value,
                     )
                 )
-                ci = ci.set_value(caps[ci.name])
+                ci = ci.set_value(value)
                 changed |= True
             else:
                 logger.debug(
                     "[%s] Caps value is same for '%s': Set with source '%s'",
                     o_label,
                     ci.name,
-                    ci.source,
+                    ci.source.name,
                 )
-        elif ci.name not in caps and scope == ci.scope:
+        elif ci.name not in caps and source == ci.source:
             logger.info("[%s] Removing capability %s", o_label, ci)
             changed |= True
             changed_fields.append(

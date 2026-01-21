@@ -6,11 +6,9 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import datetime
 import logging
 import asyncio
 import enum
-from collections import defaultdict
 from typing import Optional
 from http import HTTPStatus
 
@@ -24,8 +22,6 @@ from noc.core.perf import metrics
 from noc.core.service.loader import get_service
 from noc.core.ioloop.util import setup_asyncio
 from noc.core.fm.event import Event, Target, MessageType
-from ..models.sendmetric import SendMetric
-
 
 router = APIRouter()
 
@@ -57,15 +53,16 @@ class ZabbixAPI(object):
 
     async def send(
         self,
-        remote_system_code: str,
         req: bytes = Body(...),
+        remote_system_code: Optional[str] = None,
         authorization: Optional[str] = Header(None, alias="Authorization"),
     ) -> ORJSONResponse:
         if not authorization:
             raise HTTPException(status_code=HTTPStatus.FORBIDDEN)
         _, key = authorization.split(" ")
         metrics["msg_in", ("collector", ZABBIX_COLLECTOR)] += 1
-        if self.service.is_rs_banned(remote_system_code):
+        rs_cfg = self.service.get_remote_system_by_key(key.strip())
+        if not rs_cfg:
             # IP Address
             return ORJSONResponse(
                 {
@@ -73,55 +70,52 @@ class ZabbixAPI(object):
                 },
                 status_code=HTTPStatus.NOT_FOUND,
             )
-        received = defaultdict(dict)
+        if rs_cfg.api_key != key:
+            return ORJSONResponse(
+                {
+                    "error": f"Remote System API Key not Authorization {remote_system_code}",
+                },
+                status_code=HTTPStatus.FORBIDDEN,
+            )
+        metrics[
+            "remote_msg_in", ("collector", ZABBIX_COLLECTOR), ("remote_system", rs_cfg.name)
+        ] += 1
+        # Lock ?
+        channel = self.service.get_channel(rs_cfg, ZABBIX_COLLECTOR)
+        if not channel or channel.is_banned:
+            # IP Address
+            return ORJSONResponse(
+                {
+                    "error": f"Not Found Remote System by key {remote_system_code}",
+                },
+                status_code=HTTPStatus.NOT_FOUND,
+            )
+        received = 0
+        sensors = []
         # Clock, Name
         # Log request
+        received_count = 0
         for line in req.split(b"\n"):
             if not line:
                 continue
             # Linux: CPU guest nice time', 'clock': 1758647522, 'ns': 830065411, 'value': 0, 'type': 0
             item = orjson.loads(line)
+            received_count += 1
             # metrics["items_in", ("collector", "zabbix")] += 1
             if item["type"] == ValueType.FLOAT.value or item["type"] == ValueType.UNSIGNED.value:
                 # Add serial_num tag, to metrics.../or dict managed_object
-                received[(item["clock"], item["host"]["name"])][item["name"]] = item["value"]
-        if not received:
-            return ORJSONResponse({}, status_code=200)
-        r = []
-        for (clock, host_name), metric in received.items():
-            cfg = self.service.lookup_source_by_name(
-                host_name, collector=ZABBIX_COLLECTOR
-            )  # receiver
-            if not cfg:
-                continue
-            remote_system = cfg.get_remote_collector_by_key(key)
-            if not remote_system:
-                logger.warning(
-                    "Remote System not supported on item: %s",
-                    cfg.name,
+                await channel.feed(
+                    item["host"]["name"],
+                    item["name"],
+                    [(int(item["clock"]), item["value"])],
+                    labels=[f"{t['tag']}::{t['value']}" for t in item["item_tags"]],
+                    sensor_id=item["itemid"],
                 )
-                # Optionally? Strict Mode, Pass Mode
-                # self.service.ban_remote_system(remote_system_code)
-                return ORJSONResponse({}, status_code=200)
-            ts = datetime.datetime.fromtimestamp(clock)
-            if cfg.no_data_check:
-                self.service.no_data_checker.register_data(
-                    str(cfg.bi_id),
-                    ts,
-                    collector="metricscollector",
-                    remote_system=remote_system.name,
-                )
-            metric["_units"] = {}
-            r.append(
-                SendMetric(
-                    ts=ts,
-                    collector=ZABBIX_COLLECTOR,
-                    managed_object=cfg.bi_id,
-                    remote_system=remote_system.bi_id,
-                    metrics=metric,
-                )
-            )
-        self.service.send_data(r)
+                received += 1
+        logger.info("Received lines: %s", received_count)
+        if sensors:
+            logger.debug("Received sensors: %s", len(sensors))
+            self.service.send_sensors(sensors)
         return ORJSONResponse({}, status_code=200)
 
     async def events(
@@ -135,10 +129,22 @@ class ZabbixAPI(object):
         logger.debug("REQUEST: %r", req)
         _, key = authorization.split(" ")
         metrics["msg_in", ("collector", ZABBIX_COLLECTOR)] += 1
-        rs_name = self.service.get_remote_system_name(remote_system_code)
-        if not rs_name:
-            # raise HTTPException(status_code=HTTPStatus.FORBIDDEN)
-            return ORJSONResponse({}, status_code=200)
+        rs_cfg = self.service.get_remote_system_by_key(key.strip())
+        if not rs_cfg or rs_cfg.is_banned:
+            # IP Address
+            return ORJSONResponse(
+                {
+                    "error": f"Unknown Remote System {remote_system_code}",
+                },
+                status_code=HTTPStatus.NOT_FOUND,
+            )
+        if rs_cfg.api_key != authorization:
+            return ORJSONResponse(
+                {
+                    "error": f"Remote System API Key not Authorization {remote_system_code}",
+                },
+                status_code=HTTPStatus.FORBIDDEN,
+            )
         for line in req.split(b"\n"):
             if not line:
                 continue
@@ -156,7 +162,7 @@ class ZabbixAPI(object):
                 data=[],
                 type=MessageType(),
                 remote_id=str(item["eventid"]),
-                remote_system=rs_name,
+                remote_system=rs_cfg.name,
                 message=item["name"],
                 labels=[f"{t['tag']}::{t['value']}" for t in item["tags"]],
             )
@@ -168,7 +174,7 @@ class ZabbixAPI(object):
     def setup_endpoints(self):
         # Items
         self.router.add_api_route(
-            path=f"/api/{self.api_name}/zabbix/items/{{remote_system_code}}/send",
+            path=f"/api/{self.api_name}/zabbix/items/send",
             endpoint=self.send,
             methods=["POST"],
             # dependencies=[Depends(self.get_verify_token_hander(ds))],
@@ -180,7 +186,7 @@ class ZabbixAPI(object):
         )
         # Event
         self.router.add_api_route(
-            path=f"/api/{self.api_name}/zabbix/events/{{remote_system_code}}/send",
+            path=f"/api/{self.api_name}/zabbix/events/send",
             endpoint=self.events,
             methods=["POST"],
             # dependencies=[Depends(self.get_verify_token_hander(ds))],

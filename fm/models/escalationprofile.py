@@ -150,6 +150,7 @@ class EscalationItem(EmbeddedDocument):
                     login=tt_login,
                     queue=self.tt_queue,
                     promote_item_policy=promote_item,
+                    assigned=str(self.assigned_user.id) if self.assigned_user else None,
                 )
             )
         if self.register_message:
@@ -343,7 +344,7 @@ class EscalationProfile(Document):
         """Alarm must wait escalation ended before close"""
         return self.end_condition in ("CT", "M")
 
-    def from_alarm(self, alarm: ActiveAlarm):
+    def from_alarm(self, alarm: ActiveAlarm) -> AlarmActionRequest:
         """"""
         actions = []
         for e in self.escalations:
@@ -361,10 +362,14 @@ class EscalationProfile(Document):
             ma += a.get_config()
         return AlarmActionRequest(
             item=ActionItem(alarm=str(alarm.id)),
+            item_policy=self.escalation_policy,
             start_at=alarm.timestamp,
             actions=actions,
             allowed_actions=ma,
         )
+
+    def get_delay(self) -> int:
+        return self.escalations[0].delay
 
     @classmethod
     def get_config(cls, profile: "EscalationProfile") -> Dict[str, Any]:
@@ -387,6 +392,7 @@ class EscalationProfile(Document):
         for a in profile.actions:
             ma += a.get_config()
         r = {
+            "id": str(profile.id),
             "name": profile.name,
             "actions": [a.model_dump() for a in actions],
             "allowed_actions": [aa.model_dump() for aa in ma],

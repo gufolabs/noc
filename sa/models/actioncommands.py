@@ -24,13 +24,16 @@ from mongoengine.fields import (
 
 # NOC modules
 from noc.core.mongo.fields import PlainReferenceField
+from noc.core.models.cfgactioncommands import ActionCommandConfig, ScopeConfig
 from noc.sa.models.profile import Profile
 from noc.core.text import quote_safe_path
+from noc.sa.models.action import Action
 from noc.core.prettyjson import to_json
-from .action import Action, ScopeConfig
 
 
 class PlatformMatch(EmbeddedDocument):
+    meta = {"strict": False, "auto_create_index": False}
+
     platform_re = StringField()
     version_re = StringField()
 
@@ -43,7 +46,8 @@ class PlatformMatch(EmbeddedDocument):
 
 
 class ActionCommandsTestCase(EmbeddedDocument):
-    meta = {"strict": False}
+    meta = {"strict": False, "auto_create_index": False}
+
     output = StringField()
     context = DictField()
 
@@ -56,6 +60,8 @@ class ActionCommandsTestCase(EmbeddedDocument):
 
 
 class Scope(EmbeddedDocument):
+    meta = {"strict": False, "auto_create_index": False}
+
     scope = StringField()
     command = StringField()
     enter_scope = BooleanField(default=False)
@@ -78,7 +84,7 @@ class Scope(EmbeddedDocument):
             value="",
             command=self.command,
             enter=self.enter_scope,
-            exit_command=self.exit_command,
+            # exit_command=self.exit_command,
         )
 
 
@@ -93,14 +99,26 @@ class ActionCommands(Document):
     }
     name = StringField(unique=True)
     uuid = UUIDField(unique=True)
-    action = ReferenceField(Action)
+    action: "Action" = ReferenceField(Action, required=True)
     description = StringField()
     profile: "Profile" = PlainReferenceField(Profile)
     # Config Scopes
     config_mode = BooleanField(default=False)
+    disable_when_change = StringField(
+        choices=[
+            ("N", "Nothing"),
+            ("O", "Out-of-Scope"),
+            ("I", "Inner-of-Scope"),
+        ],
+        default="N",
+    )
     scopes: List["Scope"] = EmbeddedDocumentListField(Scope)
     match: List[PlatformMatch] = EmbeddedDocumentListField(PlatformMatch)
+    exit_scope_commands = StringField()
     commands = StringField()
+    # cancel commands
+    # backward_commands
+    # cancel_prefix
     preference = IntField(default=1000)
     timeout = IntField(default=60)
     test_cases: List[ActionCommandsTestCase] = EmbeddedDocumentListField(ActionCommandsTestCase)
@@ -114,7 +132,7 @@ class ActionCommands(Document):
 
     @property
     def json_data(self) -> Dict[str, Any]:
-        return {
+        r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],
             "uuid": self.uuid,
@@ -122,6 +140,7 @@ class ActionCommands(Document):
             "description": self.description,
             "profile__name": self.profile.name,
             "config_mode": self.config_mode,
+            "disable_when_change": self.disable_when_change,
             "match": [c.json_data for c in self.match],
             "scopes": [c.json_data for c in self.scopes],
             "commands": self.commands,
@@ -129,6 +148,9 @@ class ActionCommands(Document):
             "timeout": self.timeout,
             "test_cases": [t.json_data for t in self.test_cases],
         }
+        if self.exit_scope_commands:
+            r["exit_scope_commands"] = self.exit_scope_commands
+        return r
 
     def to_json(self) -> str:
         return to_json(
@@ -142,11 +164,30 @@ class ActionCommands(Document):
                 "profile__name",
                 "config_mode",
                 "preference",
+                "disable_when_change",
                 "match",
                 "commands",
                 "timeout",
                 "test_cases",
             ],
+        )
+
+    def get_config(self, scopes: List[ScopeConfig]) -> "ActionCommandConfig":
+        """Get commands config"""
+        profile = self.profile.get_profile()
+        cfg = self.get_scope_configs()
+        r = []
+        for s in scopes:
+            if s.name in cfg:
+                s.update_config(cfg[s.name])
+            r.append(s)
+        return ActionCommandConfig(
+            name=self.action.name,
+            commands=self.commands,
+            config_mode=self.config_mode,
+            cancel_prefix=profile.command_cancel_prefix or None,
+            exit_command=self.exit_scope_commands,
+            scopes=r,
         )
 
     def get_scope_configs(self) -> Dict[str, ScopeConfig]:
@@ -155,6 +196,7 @@ class ActionCommands(Document):
         for sc in self.scopes:
             cfg = sc.config
             r[cfg.name] = cfg
+            # Replace to Scope Config
         return r
 
     def is_match(

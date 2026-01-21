@@ -14,12 +14,14 @@ import operator
 from threading import Lock
 import datetime
 import warnings
+from collections import defaultdict
 from dataclasses import dataclass
 from itertools import chain
 from typing import Tuple, Iterable, List, Any, Dict, Set, Optional, Union
 
 # Third-party modules
 import cachetools
+import orjson
 from django.contrib.postgres.fields import ArrayField
 from django.db.models.query_utils import Q
 from django.core.validators import MinValueValidator
@@ -33,6 +35,8 @@ from django.db.models import (
     SET_NULL,
     CASCADE,
     DateTimeField,
+    TextChoices,
+    JSONField,
     When,
     Case,
     Value,
@@ -149,6 +153,8 @@ from noc.core.models.cfgmetrics import MetricCollectorConfig, MetricItem
 from noc.core.wf.decorator import workflow
 from noc.core.etl.remotemappings import mappings
 from noc.core.model.dynamicprofile import dynamic_profile
+from noc.core.watchers.decorator import watchers
+from noc.core.watchers.types import ObjectEffect, WatchItem
 from noc.wf.models.state import State
 from .administrativedomain import AdministrativeDomain
 from .authprofile import AuthProfile
@@ -157,7 +163,14 @@ from .objectdiagnosticconfig import ObjectDiagnosticConfig
 
 # Increase whenever new field added or removed
 MANAGEDOBJECT_CACHE_VERSION = 54
-CREDENTIAL_CACHE_VERSION = 10
+CREDENTIAL_CACHE_VERSION = 11
+
+# Query for remove maintenance from affected structure
+SQL_MAINTENANCE_REMOVE = """
+  UPDATE sa_managedobject
+  SET affected_maintenances = affected_maintenances - %s
+  WHERE affected_maintenances ? %s
+"""
 
 
 @dataclass(frozen=True)
@@ -376,6 +389,7 @@ class ManagedObjectManager(Manager):
                         "status"
                     )
                 ),
+                # Watchers
                 is_managed=Case(
                     When(Q(diagnostics__SA__state="enabled"), then=Value(True)),
                     default=Value(False),
@@ -401,6 +415,7 @@ class ManagedObjectManager(Manager):
 @on_init
 @on_save
 @on_delete
+@watchers
 @workflow
 @diagnostic
 @change
@@ -437,6 +452,7 @@ class ManagedObjectManager(Manager):
         ("maintenance.Maintenance", "direct_objects__object"),
         ("sa.DiscoveredObject", "managed_object_id"),
         ("sa.ServiceInstance", "managed_object"),
+        ("pm.Agent", "managed_object"),
         ("peer.Peer", "managed_object"),
     ],
 )
@@ -471,6 +487,8 @@ class ManagedObject(NOCModel):
     last_seen = DateTimeField("Last Seen", null=True, blank=True)
     # Timestamp of first discovery
     first_discovered = DateTimeField("First Discovered", null=True, blank=True)
+    # Last state change
+    watcher_wait_ts = DateTimeField("Watcher Wait Ts", null=True, blank=True)
     # Optional pool to route FM events
     fm_pool = DocumentReferenceField(Pool, null=True, blank=True)
     profile: "Profile" = DocumentReferenceField(
@@ -1021,6 +1039,19 @@ class ManagedObject(NOCModel):
         return list(ManagedObject.objects.filter(q))
 
     @classmethod
+    def get_by_remote_ids(cls, remote_system: RemoteSystem, ids: List[str]) -> List[str]:
+        """Return object IDS by remote_ids"""
+        q = Q()
+        for rs_id in ids:
+            q |= Q(remote_system=str(remote_system.id), remote_id=rs_id)
+            q |= Q(
+                mappings__contains=[{"remote_id": rs_id, "remote_system": str(remote_system.id)}]
+            )
+        if not q:
+            return []
+        return list(ManagedObject.objects.filter(q).values_list("id", flat=True))
+
+    @classmethod
     def get_by_l2_domains(cls, domains: Iterable[str]):
         """Getting object by L2 Domains"""
         q = Q(l2_domain__in=[str(x) for x in domains])
@@ -1035,10 +1066,8 @@ class ManagedObject(NOCModel):
             yield "managedobject", self.id
         if config.datastream.enable_cfgtarget:
             yield "cfgtarget", self.id
-        if config.datastream.enable_cfgmetricsources and changed_fields.intersection(
-            {"id", "bi_id", "state", "pool", "fm_pool", "labels", "effective_labels"}
-        ):
-            yield "cfgmetricsources", f"sa.ManagedObject::{self.bi_id}"
+        if config.datastream.enable_cfgmetricstarget:
+            yield "cfgmetricstarget", f"sa.ManagedObject::{self.bi_id}"
 
     def iter_changed_domains(self, changed_fields=None):
         """
@@ -1558,7 +1587,7 @@ class ManagedObject(NOCModel):
                             "[%s] broken config_diff_filter: Returns empty result", self.name
                         )
                 else:
-                    self.logger.warning("Handler is not allowed for config diff filter")
+                    logger.warning("Handler is not allowed for config diff filter")
                     new_data = data
             else:
                 new_data = data
@@ -2321,6 +2350,8 @@ class ManagedObject(NOCModel):
 
     @classmethod
     def iter_effective_labels(cls, instance: "ManagedObject") -> Iterable[List[str]]:
+        from noc.sa.models.service import Service
+
         yield list(instance.labels or [])
         yield list(instance.object_profile.labels or [])
         if instance.state:
@@ -2369,7 +2400,8 @@ class ManagedObject(NOCModel):
                 )
         for c in instance.iter_caps():
             if c.config.set_label:
-                yield c.get_labels()
+                yield Label.ensure_labels(c.get_labels(), ["sa.ManagedObject"])
+        yield from Service.get_exposed_labels_for_object(instance.id)
 
     @classmethod
     def can_set_label(cls, label: str) -> bool:
@@ -2549,11 +2581,7 @@ class ManagedObject(NOCModel):
                 "id": str(self.profile.id),
                 "name": self.administrative_domain.name,
             },
-            "labels": list(
-                Label.objects.filter(name__in=self.labels, expose_datastream=True).values_list(
-                    "name"
-                )
-            ),
+            "labels": Label.build_expose_labels(self.labels, "expose_datastream"),
             "profile": {"id": str(self.profile.id), "name": self.profile.name},
             "object_profile": {"id": str(self.object_profile.id), "name": self.object_profile.name},
             "remote_mappings": [],
@@ -2686,6 +2714,8 @@ class ManagedObject(NOCModel):
         from noc.inv.models.interface import Interface
         from noc.inv.models.interfaceprofile import InterfaceProfile
         from noc.pm.models.metricrule import MetricRule
+        from noc.inv.models.sensor import Sensor
+        from noc.core.checkers.base import NODATA
 
         if Interaction.ServiceActivation not in mo.interactions:
             return {}
@@ -2698,38 +2728,66 @@ class ManagedObject(NOCModel):
             ip = InterfaceProfile.get_by_id(iface["profile"])
             if not ip.metrics:
                 continue
+            rules = MetricRule.get_affected_rules(
+                {
+                    "labels": iface["effective_labels"],
+                    "service_groups": list(mo.effective_service_groups),
+                },
+                scope="interface",
+            )
+            c_metrics = [
+                mc.metric_type.field_name
+                for mc in ip.metrics
+                if bool(mc.metric_type.compose_expression)
+            ]
+            if not rules and not c_metrics:
+                continue
             items.append(
                 {
-                    "key_labels": [f"noc::interface::{iface['name']}"],
-                    "labels": [],
-                    "rules": list(MetricRule.iter_rules_actions(iface["effective_labels"])),
-                    "composed_metrics": [
-                        mc.metric_type.field_name
-                        for mc in ip.metrics
-                        if bool(mc.metric_type.compose_expression)
-                    ],
+                    "key": [f"noc::interface::{iface['name']}"],
+                    "composed_metrics": c_metrics,
+                    "rules": rules,
                 }
             )
+        refs = [f"name:{mo.name.lower()}"]
+        for m in mo.iter_remote_mappings():
+            refs.append(RemoteSystem.clean_reference(m.remote_system, m.remote_id))
+        sensors = []
+        for s in Sensor.objects.filter(managed_object=mo):
+            cfg = Sensor.get_metric_config(s)
+            if cfg:
+                sensors.append(cfg)
+        nodata_policy = "D"
+        # Has Diagnostic
+        for d in mo.iter_diagnostic_configs():
+            if not d.checks:
+                continue
+            nd = [c for c in d.checks if c.name == NODATA]
+            if nd:
+                nodata_policy = "C"
+                break
         return {
             "type": "managed_object",
             "bi_id": mo.bi_id,
+            "name": mo.name,
+            "addresses": [mo.address],
+            "mapping_refs": refs,
             "fm_pool": mo.get_effective_fm_pool().name,
             "labels": sorted(mo.effective_labels),
-            "exposed_labels": [
-                ll
-                for ll in mo.effective_labels
-                if not ll.endswith("*") and Label.get_effective_setting(ll, "expose_metric")
-            ],
+            "exposed_labels": Label.build_expose_labels(mo.effective_labels, "expose_metric"),
             "discovery_interval": mo.get_metric_discovery_interval(),
             "composed_metrics": [
                 mc.metric_type.field_name
                 for mc in s_metrics.values()
                 if bool(mc.metric_type.compose_expression)
             ],
-            "rules": list(MetricRule.iter_rules_actions(mo.effective_labels)),
+            "nodata_policy": nodata_policy,
+            "nodata_ttl": 3600,
+            "rules": list(MetricRule.get_affected_rules(mo.get_matcher_ctx())),
             "items": items,
+            "sensors": sensors,
             "sharding_key": mo.bi_id,
-            "meta": mo.get_message_context(),
+            "opaque_data": mo.get_message_context(),
         }
 
     @property
@@ -2858,6 +2916,41 @@ class ManagedObject(NOCModel):
             MessageMeta.LABELS: list(self.effective_labels),
         }
 
+    def iter_object_watchers(self) -> Iterable[WatchItem]:
+        """Iterate over Object Watchers"""
+        for w in ManagedObjectWatchers.objects.filter(managed_object=self.id):
+            yield w.item
+
+    def update_object_watchers(
+        self,
+        to_watchers: List[WatchItem],
+        to_remove: Optional[List[Tuple[ObjectEffect, str, Optional[str]]]],
+        dry_run: bool = False,
+        bulk=None,
+    ):
+        """"""
+        updated = []
+        for w in to_watchers:
+            updated.append(ManagedObjectWatchers.from_item(self, w))
+        if updated and not dry_run:
+            ManagedObjectWatchers.objects.bulk_create(
+                updated,
+                update_conflicts=True,
+                unique_fields=["managed_object", "effect", "key", "remote_system"],
+                update_fields=["once", "wait_avail", "after", "args"],
+            )
+        if not to_remove or dry_run:
+            return
+        q = Q()
+        for effect, key, rs in to_remove:
+            q |= Q(effect=effect.value, key=key or "", remote_system=rs or "")
+        ManagedObjectWatchers.objects.filter(q).delete()
+
+    @classmethod
+    def get_min_wait_ts(cls) -> Optional[datetime.datetime]:
+        """"""
+        return None
+
     @classmethod
     def from_template(
         cls,
@@ -2879,11 +2972,14 @@ class ManagedObject(NOCModel):
         """
         Create Managed Object instance from Template
         """
+        descr = None
+        if "description" in data:
+            descr = data["description"][:250]
         mo = ManagedObject(
             name=name or address,
             address=address,
             pool=pool,
-            description=data.get("description"),
+            description=descr,
             scheme=scheme,
             object_profile=object_profile,
             administrative_domain=administrative_domain,
@@ -3085,6 +3181,78 @@ class ManagedObject(NOCModel):
             ctx["cred"] = self.credentials.get_snmp_credential()
         return ctx
 
+    @classmethod
+    def get_downlinks_ids(cls, objects: List[int]) -> List[int]:
+        """Getting objects by downlinks"""
+        objects = set(objects)
+        r = {
+            mo_id
+            for mo_id in ManagedObject.objects.filter(
+                is_managed=True, uplinks__overlap=list(objects)
+            ).values_list("id", flat=True)
+            if mo_id not in objects
+        }
+        if not r:
+            return []
+        # Leave only objects with all uplinks affected
+        rr = set()
+        for mo_id, uplinks in ManagedObject.objects.filter(
+            is_managed=True, id__in=list(r)
+        ).values_list("id", "uplinks"):
+            if len([1 for u in uplinks if u in objects]) == len(uplinks):
+                rr.add(mo_id)
+        return list(rr)
+
+    @classmethod
+    def update_maintenance(
+        cls,
+        maintenance_id: str,
+        objects: List["ManagedObject"],
+        start: datetime.datetime,
+        affected_topology: bool = False,
+        remote_system: Optional[RemoteSystem] = None,
+        remote_ids: Optional[List[str]] = None,
+    ):
+        """Update Maintenance"""
+        updated = defaultdict(list)
+        ids = {o.id for o in objects}
+        if remote_system and remote_ids:
+            ids |= set(ManagedObject.get_by_remote_ids(remote_system, remote_ids))
+        if affected_topology:
+            ids |= set(cls.get_downlinks_ids(list(ids)))
+        for oid in ids:
+            updated[oid].append(
+                WatchItem(effect=ObjectEffect.MAINTENANCE, key=str(maintenance_id), once=False),
+            )
+        if updated:
+            ManagedObjectWatchers.update_bulk(updated)
+        # for oid in ManagedObject.objects.filter(id__in=list(ids)):
+        #     updated.append(
+        #         ManagedObjectWatchers(
+        #             managed_object=oid,
+        #             effect=ObjectEffect.MAINTENANCE.value,
+        #             key=maintenance_id,
+        #             once=False,
+        #         ),
+        #     )
+        # if updated:
+        #     # Get Processed and reset others
+        #     ManagedObjectWatchers.objects.bulk_create(
+        #         updated,
+        #         update_conflicts=True,
+        #         unique_fields=["managed_object", "effect", "key", "remote_system"],
+        #         update_fields=["once", "wait_avail", "after", "args"],
+        #     )
+
+    @classmethod
+    def reset_maintenance(cls, maintenance_id: str):
+        """Reset Maintenance"""
+        from django.db import connection as pg_connection
+
+        with pg_connection.cursor() as cursor:
+            cursor.execute(SQL_MAINTENANCE_REMOVE, [str(maintenance_id), str(maintenance_id)])
+        ManagedObjectWatchers.objects.filter(key=maintenance_id).delete()
+
 
 @on_save
 class ManagedObjectAttribute(NOCModel):
@@ -3261,6 +3429,109 @@ class ManagedObjectStatus(NOCModel):
         for (pool, status), keys in suspended_jobs.items():
             sc = Scheduler("discovery", pool=pool)
             sc.suspend_keys(keys, suspend=not status)
+
+
+@on_save
+class ManagedObjectWatchers(NOCModel):
+    class Meta(object):
+        verbose_name = "Managed Object Watchers"
+        verbose_name_plural = "Managed Object Watchers"
+        db_table = "sa_managedobjectwatchers"
+        app_label = "sa"
+        # For Maintenance
+        unique_together = [("managed_object", "effect", "key", "remote_system")]
+
+    class ObjectEffect(TextChoices):
+        SUBSCRIPTION = "subscription", "Subscription"
+        MAINTENANCE = "maintenance", "Maintenance"
+        WF_EVENT = "wf_event", "WF Event"
+        WIPING = "wiping", "Wiping"
+        SUSPEND_JOB = "suspend_job", "Suspend Job"
+        DIAGNOSTIC_CHECK = "diagnostic_check", "Diagnostic Check"
+
+    managed_object = ForeignKey(
+        ManagedObject,
+        verbose_name="Managed Object",
+        unique=False,
+        primary_key=False,
+        on_delete=CASCADE,
+    )
+    effect = CharField(
+        "Effect",
+        choices=ObjectEffect.choices,
+        max_length=20,
+        blank=False,
+        null=False,
+    )
+    key: str = CharField("Effect Key", max_length=64, blank=True, null=False)
+    once: bool = BooleanField(default=True)
+    wait_avail: bool = BooleanField(default=False)
+    after = DateTimeField("Activate after time", auto_now_add=False, blank=True, null=True)
+    # Before Postgres 15 nulls not equals. It and unique constraints not worked for NULL value
+    remote_system = CharField("Effect Key", max_length=24, blank=True, null=False)
+    args: Dict[str, Any] = JSONField(default=dict)
+
+    @property
+    def item(self) -> WatchItem:
+        """"""
+        return WatchItem(
+            effect=ObjectEffect(self.effect),
+            key=self.key or None,
+            once=self.once,
+            wait_avail=self.wait_avail,
+            remote_system=self.remote_system,
+            after=self.after or None,
+            args=self.args or None,
+        )
+
+    @classmethod
+    def from_item(cls, managed_object, item: WatchItem) -> "ManagedObjectWatchers":
+        return ManagedObjectWatchers(
+            managed_object=managed_object,
+            effect=item.effect.value,
+            key=item.key or "",
+            remote_system=item.remote_system or "",
+            once=item.once,
+            wait_avail=item.wait_avail,
+            after=item.after,
+            args=item.args or None,
+        )
+
+    @classmethod
+    def update_bulk(cls, updated: Dict[int, List["WatchItem"]]):
+        """Update bulk query"""
+        from psycopg2.extras import execute_values
+        from django.db import connection as pg_connection
+
+        bulk = []
+        for oid, items in updated.items():
+            for ii in items:
+                aa = orjson.dumps(ii.args or {}).decode()
+                bulk.append(
+                    (
+                        int(oid),
+                        ii.effect.value,
+                        ii.key or "",
+                        ii.once,
+                        ii.wait_avail,
+                        ii.after or None,
+                        aa,
+                        str(ii.remote_system.id) if ii.remote_system else "",
+                    )
+                )
+        cursor = pg_connection.cursor()
+        execute_values(
+            cursor,
+            """
+            INSERT INTO sa_managedobjectwatchers as ow
+            (managed_object_id, effect, key, once, wait_avail, after, args, remote_system) VALUES %s
+            ON CONFLICT ON CONSTRAINT sa_managedobjectwatchers_uniques DO UPDATE
+            SET once=EXCLUDED.once, wait_avail=EXCLUDED.wait_avail, after=EXCLUDED.after,
+                remote_system=EXCLUDED.remote_system, args=EXCLUDED.args::jsonb
+            """,
+            bulk,
+            page_size=1000,
+        )
 
 
 # object.scripts. ...

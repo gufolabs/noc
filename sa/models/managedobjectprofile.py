@@ -7,6 +7,7 @@
 
 # Python modules
 import operator
+from collections import defaultdict
 from threading import Lock
 from functools import partial
 from dataclasses import dataclass
@@ -153,6 +154,7 @@ m_valid = DictListParameter(
 )
 
 id_lock = Lock()
+rule_lock = Lock()
 
 
 @Label.match_labels("managedobjectprofile", allowed_op={"="})
@@ -739,7 +741,7 @@ class ManagedObjectProfile(NOCModel):
         choices=[("D", "Disable"), ("R", "By Rule")],
         default="R",
     )
-    match_rules = PydanticField(
+    match_rules: List["MatchRule"] = PydanticField(
         _("Match Dynamic Rules"),
         schema=MatchRules,
         blank=True,
@@ -766,6 +768,8 @@ class ManagedObjectProfile(NOCModel):
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _bi_id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _object_profile_metrics = cachetools.TTLCache(maxsize=1000, ttl=300)
+    _object_profile_matcher = cachetools.TTLCache(maxsize=100, ttl=300)
+    _object_profile_rules = cachetools.TTLCache(maxsize=10, ttl=300)
 
     DEFAULT_WORKFLOW_NAME = "ManagedObject Default"
 
@@ -821,7 +825,7 @@ class ManagedObjectProfile(NOCModel):
                 "id", flat=True
             ):
                 yield "cfgtarget", mo_id
-        if config.datastream.enable_cfgmetricsources and (
+        if config.datastream.enable_cfgmetricstarget and (
             "metrics" in changed_fields
             or "enable_metrics" in changed_fields
             or "metrics_default_interval" in changed_fields
@@ -829,20 +833,15 @@ class ManagedObjectProfile(NOCModel):
             for mo_id in ManagedObject.objects.filter(object_profile=self).values_list(
                 "bi_id", flat=True
             ):
-                yield "cfgmetricsources", f"sa.ManagedObject::{mo_id}"
+                yield "cfgmetricstarget", f"sa.ManagedObject::{mo_id}"
 
     def iter_pools(self):
-        """
-        Iterate all pool instances covered by profile
-        """
+        """Iterate all pool instances covered by profile"""
         for mo in self.managedobject_set.order_by("pool").distinct("pool"):
             yield mo.pool
 
     def can_escalate(self, depended=False):
-        """
-        Check alarms on objects within profile can be escalated
-        :return:
-        """
+        """Check alarms on objects within profile can be escalated"""
         if self.escalation_policy == "R":
             return bool(depended)
         return self.escalation_policy == "E"
@@ -863,9 +862,7 @@ class ManagedObjectProfile(NOCModel):
         return False
 
     def get_changed_diagnostics(self) -> Set[str]:
-        """
-        Return changed diagnostic state by policy field
-        """
+        """Return changed diagnostic state by policy field"""
         r = set()
         if self.is_field_changed(["event_processing_policy"]):
             r |= {SNMPTRAP_DIAG, SYSLOG_DIAG}
@@ -1145,6 +1142,11 @@ class ManagedObjectProfile(NOCModel):
         r = [m.get("interval") or self.metrics_default_interval for m in self.metrics]
         return min(r) if r else self.metrics_default_interval
 
+    @cachetools.cachedmethod(
+        operator.attrgetter("_object_profile_matcher"),
+        lock=lambda _: metrics_lock,
+        key=operator.attrgetter("id"),
+    )
     def get_matcher(self) -> Callable:
         """"""
         expr = []
@@ -1162,16 +1164,21 @@ class ManagedObjectProfile(NOCModel):
         return matcher(ctx)
 
     @classmethod
-    def get_profiles_matcher(cls) -> Tuple[Tuple[str, Callable], ...]:
+    @cachetools.cachedmethod(
+        operator.attrgetter("_object_profile_rules"),
+        key=lambda x: "ruleset",
+        lock=lambda _: rule_lock,
+    )
+    def get_profiles_matcher(cls) -> Tuple[Tuple[str, Tuple[Callable, ...]], ...]:
         """Build matcher based on Profile Match Rules"""
-        r = {}
+        r = defaultdict(list)
         for mop_id, rules in ManagedObjectProfile.objects.filter(
             dynamic_classification_policy="R",
         ).values_list("id", "match_rules"):
             for mr in rules:
                 mr = MatchRule.model_validate(mr)
-                r[(str(mop_id), mr.dynamic_order)] = build_matcher(mr.get_match_expr())
-        return tuple((x[0], r[x]) for x in sorted(r, key=lambda i: i[1]))
+                r[(str(mop_id), mr.dynamic_order)].append(build_matcher(mr.get_match_expr()))
+        return tuple((x[0], tuple(r[x])) for x in sorted(r, key=lambda i: i[1]))
 
     @classmethod
     def get_effective_profile(cls, o) -> Optional["str"]:
@@ -1180,9 +1187,10 @@ class ManagedObjectProfile(NOCModel):
             # Dynamic classification not enabled
             return None
         ctx = o.get_matcher_ctx()
-        for profile_id, match in cls.get_profiles_matcher():
-            if match(ctx):
-                return profile_id
+        for profile_id, matches in cls.get_profiles_matcher():
+            for match in matches:
+                if match(ctx):
+                    return profile_id
         return None
 
     def get_instance_affected_query(

@@ -80,11 +80,6 @@ class EventAction(enum.Enum):
     LOG_ERROR = 4
     DROP_MX = 5
 
-    def __lt__(self, other):
-        if self.__class__ is other.__class__:
-            return self.value < other.value
-        return NotImplemented
-
     @classmethod
     def from_rule(cls, action: str) -> "EventAction":
         """Convert rule value to Action"""
@@ -106,6 +101,14 @@ class EventAction(enum.Enum):
     def to_dispose(self) -> bool:
         """Check event to disposition"""
         return self == EventAction.DISPOSITION
+
+    def is_priority(self, other: "EventAction") -> bool:
+        """"""
+        if not other:
+            return True
+        if other.is_drop:
+            return False
+        return self.is_drop or self.to_dispose
 
 
 class AlarmAction(enum.Enum):
@@ -190,7 +193,7 @@ class ItemStatus(enum.Enum):
     FAIL = "fail"  # escalation fail
     EXISTS = "exists"  # Exists on another escalation
     REMOVED = "removed"  # item removed
-    ARCHIVED = "archived"
+    ARCHIVED = "archived"  # Item deleted from collections
 
     @classmethod
     def from_alarm(cls, alarm, is_clear: bool = False):

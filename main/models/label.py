@@ -25,7 +25,6 @@ from mongoengine.fields import (
     IntField,
     UUIDField,
     BooleanField,
-    ReferenceField,
     ListField,
     EmbeddedDocumentField,
 )
@@ -113,6 +112,10 @@ class PrefixFilterItem(EmbeddedDocument):
 @on_delete
 @on_delete_check(
     check=[
+        ("sa.CapsProfile", "caps__set_label"),
+    ],
+    check_labels=[
+        ("wf.State", "labels"),
         ("fm.AlarmRule", "match__labels"),
         ("fm.AlarmRule", "match__exclude_labels"),
         ("pm.MetricRule", "match__labels"),
@@ -121,7 +124,6 @@ class PrefixFilterItem(EmbeddedDocument):
         ("main.MessageRoute", "match__exclude_labels"),
         ("sa.ObjectDiagnosticConfig", "match__labels"),
         ("sa.ObjectDiagnosticConfig", "match__exclude_labels"),
-        ("sa.CapsProfile", "caps__set_label"),
         ("sa.CredentialCheckRule", "match__labels"),
         ("sa.CredentialCheckRule", "match__exclude_labels"),
         ("sa.ReactionRule", "conditions__labels"),
@@ -130,7 +132,6 @@ class PrefixFilterItem(EmbeddedDocument):
         ("inv.ResourceGroup", "dynamic_service_labels__labels"),
         ("inv.ResourceGroup", "dynamic_client_labels__labels"),
         ("sa.ManagedObjectProfile", "match_rules__labels"),
-        ("wf.State", "labels"),
     ],
     clean=[
         ("sa.ManagedObject", "labels"),
@@ -196,6 +197,7 @@ class Label(Document):
     expose_metric = BooleanField(default=False)
     expose_datastream = BooleanField(default=False)
     expose_alarm = BooleanField(default=False)
+    expose_sa_object = BooleanField(default=False)
     # Match Condition
     # match_condition = ALL,ANY
     # Regex
@@ -206,7 +208,7 @@ class Label(Document):
     match_prefixfilter = ListField(EmbeddedDocumentField(PrefixFilterItem))
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from
-    remote_system = ReferenceField(RemoteSystem)
+    remote_system = PlainReferenceField(RemoteSystem)
     # Object id in remote system
     remote_id = StringField()
     # Caches
@@ -246,6 +248,7 @@ class Label(Document):
             "expose_metric": self.expose_metric,
             "expose_datastream": self.expose_datastream,
             "expose_alarm": self.expose_alarm,
+            "expose_sa_object": self.expose_sa_object,
             # Regex
         }
 
@@ -294,7 +297,6 @@ class Label(Document):
     def is_scoped(self) -> bool:
         """
         Returns True if the label is scoped
-        :return:
         """
         return "::" in self.name
 
@@ -302,7 +304,6 @@ class Label(Document):
     def is_wildcard(self) -> bool:
         """
         Returns True if the label is wildcard
-        :return:
         """
         return self.name.endswith("::*")
 
@@ -310,7 +311,6 @@ class Label(Document):
     def is_builtin(self) -> bool:
         """
         Returns True if the label is builtin NOC
-        :return:
         """
         return self.name.startswith("noc::")
 
@@ -318,7 +318,6 @@ class Label(Document):
     def is_matched(self) -> bool:
         """
         Returns True if the label is matched
-        :return:
         """
         return self.name[-1] in MATCH_OPS
 
@@ -352,6 +351,23 @@ class Label(Document):
             r.append(ll)
         return r
 
+    @classmethod
+    def _refresh_object_labels(cls, obj: Any):
+        """Refresh effective labels on object"""
+        # Sync Labels
+        if not hasattr(obj, "effective_labels"):
+            return
+        el = Label.build_effective_labels(obj)
+        # Build and clean up effective labels. Filter can_set_labels
+        if not obj.effective_labels or el != set(obj.effective_labels):
+            # mo.effective_labels = sorted(el)
+            if is_document(obj):
+                obj.objects.filter(id=obj.id).update(effective_labels=sorted(el))
+            else:
+                obj.__class__.objects.filter(id=obj.id).update(effective_labels=sorted(el))
+            if hasattr(obj, "_reset_caches"):
+                obj._reset_caches(obj.id)
+
     # def __getattr__(self, item):
     #     """
     #     Check enable_XX settings for backward compatible
@@ -367,7 +383,7 @@ class Label(Document):
         if (not changed_fields and self.expose_metric) or (
             changed_fields and "expose_metric" in changed_fields
         ):
-            ds_changed.append("cfgmetricsources")
+            ds_changed.append("cfgmetricstarget")
         if (not changed_fields and self.expose_datastream) or (
             changed_fields and "expose_datastream" in changed_fields
         ):
@@ -577,6 +593,17 @@ class Label(Document):
             yield "::".join(r)
 
     @classmethod
+    def build_expose_labels(cls, labels: List[str], expose_setting: str) -> List[str]:
+        """Build expose labels list"""
+        return [
+            ll
+            for ll in labels
+            if ll[-1] not in MATCH_OPS
+            and ll[-1] != "*"
+            and Label.get_effective_setting(ll, expose_setting)
+        ]
+
+    @classmethod
     def ensure_label(
         cls,
         name,
@@ -589,7 +616,7 @@ class Label(Document):
         fg_color2=0x000000,
         expose_metric=False,
         expose_datastream=False,
-    ) -> None:
+    ) -> Optional["Label"]:
         """
         Ensure label is exists, create when necessary
         :param name:
@@ -608,12 +635,12 @@ class Label(Document):
         #     return  # Exists
         label = Label.get_by_name(name)
         if label:
-            return  # Exists
+            return label  # Exists
         logger.info("[%s] Create label by ensure", name)
         settings = cls.get_effective_settings(name, include_current=True)
         if not settings.get("allow_auto_create"):
             logger.warning("[%s] Not allowed autocreate label", name)
-            return
+            return None
         settings["name"] = name
         settings["description"] = description or "Auto-created"
         settings["is_protected"] = settings.get("is_protected") or is_protected
@@ -631,7 +658,7 @@ class Label(Document):
             settings["expose_metric"] = expose_metric
         if expose_datastream:
             settings["expose_datastream"] = expose_datastream
-        Label(**settings).save()
+        return Label(**settings).save()
 
     @classmethod
     def ensure_labels(

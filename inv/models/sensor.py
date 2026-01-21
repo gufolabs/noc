@@ -7,13 +7,16 @@
 
 # Python modules
 import logging
-from threading import Lock
 import operator
 import datetime
-from typing import Dict, Optional, Iterable, List, Union
+from collections import defaultdict
+from threading import Lock
+from typing import Dict, Optional, Iterable, List, Union, Any, DefaultDict
 
 # Third-party modules
 import bson
+import orjson
+import cachetools
 from mongoengine.document import Document
 from mongoengine.fields import (
     StringField,
@@ -22,10 +25,9 @@ from mongoengine.fields import (
     ListField,
     DateTimeField,
     DictField,
-    ReferenceField,
+    EnumField,
 )
 from pymongo import ReadPreference
-import cachetools
 
 # NOC modules
 from noc.core.wf.decorator import workflow
@@ -33,6 +35,9 @@ from noc.core.bi.decorator import bi_sync
 from noc.core.change.decorator import change
 from noc.core.mongo.fields import PlainReferenceField, ForeignKeyField
 from noc.core.models.cfgmetrics import MetricCollectorConfig, MetricItem
+from noc.core.models.sensorprotos import SensorProtocol
+from noc.core.model.dynamicprofile import dynamic_profile
+from noc.core.service.loader import get_service
 from noc.main.models.label import Label
 from noc.main.models.remotesystem import RemoteSystem
 from noc.inv.models.object import Object
@@ -55,8 +60,10 @@ for dt in ["i32", "u32", "f32"]:
     for df in ["be", "le", "bs", "ls"]:
         MODBUS_FORMAT.append(f"{dt}_{df}")
 
+NS = 1_000_000_000
 
-@Label.dynamic_classification(profile_model_id="inv.SensorProfile")
+
+@dynamic_profile(profile_model_id="inv.SensorProfile", sync_profile=True)
 @Label.model
 @change(audit=False)
 @bi_sync
@@ -70,9 +77,12 @@ class Sensor(Document):
             "agent",
             "managed_object",
             "object",
-            "labels",
+            "remote_system",
             "effective_labels",
             ("managed_object", "object"),
+            ("remote_system", "remote_host"),
+            ("remote_system", "remote_id"),
+            ("remote_system", "protocol", "profile"),
         ],
     }
 
@@ -80,7 +90,7 @@ class Sensor(Document):
         SensorProfile, default=SensorProfile.get_default_profile
     )
     object: "Object" = PlainReferenceField(Object)
-    managed_object: "ManagedObject" = ForeignKeyField(ManagedObject)
+    managed_object: "ManagedObject" = ForeignKeyField(ManagedObject, required=False)
     agent: "Agent" = PlainReferenceField(Agent)
     # Dynamic Profile Classification
     dynamic_classification_policy = StringField(
@@ -89,7 +99,7 @@ class Sensor(Document):
     )
     local_id = StringField()
     state: "State" = PlainReferenceField(State)
-    units = PlainReferenceField(
+    units: MeasurementUnits = PlainReferenceField(
         MeasurementUnits, default=MeasurementUnits.get_default_measurement_units
     )
     label = StringField()
@@ -102,18 +112,18 @@ class Sensor(Document):
     expired = DateTimeField()
     # Timestamp of first discovery
     first_discovered = DateTimeField(default=datetime.datetime.now)
-    protocol = StringField(
-        choices=["modbus_rtu", "modbus_ascii", "modbus_tcp", "snmp", "ipmi", "other"]
-    )
+    protocol = EnumField(SensorProtocol, default=SensorProtocol.OTHER)
     modbus_register = IntField()
     modbus_format = StringField(choices=MODBUS_FORMAT)
     snmp_oid = StringField()
     ipmi_id = StringField()
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from
-    remote_system = ReferenceField(RemoteSystem)
-    # Object id in remote system
+    remote_system = PlainReferenceField(RemoteSystem)
+    # Sensor id in remote system
     remote_id = StringField()
+    # Object id in remote system
+    remote_host = StringField()
     bi_id = LongField(unique=True)
     # Labels
     labels = ListField(StringField())
@@ -141,14 +151,15 @@ class Sensor(Document):
         return Sensor.objects.filter(bi_id=bi_id).first()
 
     def iter_changed_datastream(self, changed_fields=None):
-        if config.datastream.enable_cfgmetricsources:
-            yield "cfgmetricsources", f"inv.Sensor::{self.bi_id}"
+        if config.datastream.enable_cfgmetricstarget:
             if self.managed_object:
-                yield "cfgmetricsources", f"sa.ManagedObject::{self.managed_object.bi_id}"
+                yield "cfgmetricstarget", f"sa.ManagedObject::{self.managed_object.bi_id}"
+            if self.agent:
+                yield "cfgmetricstarget", f"pm.Agent::{self.agent.bi_id}"
             if self.object and self.object.get_data("management", "managed_object"):
                 mo = ManagedObject.get_by_id(self.object.get_data("management", "managed_object"))
                 if mo:
-                    yield "cfgmetricsources", f"sa.ManagedObject::{mo.bi_id}"
+                    yield "cfgmetricstarget", f"sa.ManagedObject::{mo.bi_id}"
 
     def clean(self):
         if self.extra_labels:
@@ -275,30 +286,87 @@ class Sensor(Document):
                 sensor=sensor.bi_id,
             )
 
+    def set_value(
+        self,
+        value: float,
+        ts: Optional[datetime.datetime] = None,
+        units: Optional[MeasurementUnits] = None,
+        bulk: Optional[DefaultDict[int, List[Dict[str, Any]]]] = None,
+        shards: Optional[int] = None,
+    ):
+        """Set Sensor value to PM Database"""
+        ts = ts or datetime.datetime.now().replace(microsecond=0)
+        units = units or self.munits
+        shards = shards or 1
+        if bulk is None:
+            parts = defaultdict(list)
+        else:
+            parts = bulk
+        r = {
+            "ts": (ts.timestamp() + config.tz_utc_offset) * NS,
+            "scope": "sensor",
+            "labels": [f"noc::sensor::{self.label}"],
+            "sensor": self.bi_id,
+            "_units": {"value_delta": units.code, "value": units.code},
+            "value": value,
+            # "value_delta": value,
+        }
+        if self.remote_system:
+            r["remote_system"] = self.remote_system.bi_id
+        if self.managed_object:
+            r["managed_object"] = self.managed_object.bi_id
+            # Register ManagedObject Metrics
+            if self.profile.metric_type:
+                mt = self.profile.metric_type
+                parts[self.managed_object.bi_id % shards].append(
+                    {
+                        "ts": (ts.timestamp() + config.tz_utc_offset) * NS,
+                        "managed_object": self.managed_object.bi_id,
+                        "remote_system": self.remote_system.bi_id if self.remote_system else None,
+                        "sensor": self.bi_id,
+                        "scope": mt.scope.table_name,
+                        "labels": Label.build_expose_labels(
+                            self.managed_object.effective_labels,
+                            "expose_metric",
+                        ),
+                        "_units": {"value": mt.units.code},
+                        mt.field_name: value,
+                    }
+                )
+        parts[self.bi_id % shards].append(r)
+        if bulk is not None:
+            return
+        svc = get_service()
+        # metrics_svc_slots = svc.get_slot_limits("metrics")
+        for partition, publish in parts.items():
+            svc.publish(
+                value=orjson.dumps(publish),
+                stream="metrics",
+                partition=partition,
+                headers={},
+            )
+
     @classmethod
     def get_metric_config(cls, sensor: "Sensor"):
-        """
-        Return MetricConfig for Metrics service
-        :param sensor:
-        :return:
-        """
-        if not sensor.state.is_productive:
+        """Return MetricConfig for Metrics service"""
+        if not sensor.state.is_productive or not sensor.profile.enable_collect:
             return {}
-        return {
-            "type": "sensor",
+        r = {
+            "id": str(sensor.id),
             "bi_id": sensor.bi_id,
-            "fm_pool": (
-                sensor.managed_object.get_effective_fm_pool().name
-                if sensor.managed_object
-                else None
+            "name": sensor.label,
+            "units": sensor.munits.code,
+            "protocol": sensor.protocol,
+            "exposed_labels": Label.build_expose_labels(
+                sensor.effective_labels,
+                "expose_metric",
             ),
-            "labels": [],
             "profile": sensor.profile.bi_id,
-            "items": [],
-            "composed_metrics": [],
-            "sharding_key": sensor.managed_object.bi_id if sensor.managed_object else None,
-            "rules": list(MetricRule.iter_rules_actions(sensor.effective_labels)),
+            "rules": MetricRule.get_affected_rules(sensor.get_matcher_ctx(), scope="sensor"),
         }
+        if sensor.remote_system:
+            r["hints"] = [RemoteSystem.clean_reference(sensor.remote_system, sensor.remote_id)]
+        return r
 
     @classmethod
     def get_metric_discovery_interval(cls, mo: ManagedObject) -> int:
@@ -324,20 +392,26 @@ class Sensor(Document):
 
     @property
     def has_configured_metrics(self) -> bool:
-        """
-        Check configured collected metrics
-        :return:
-        """
+        """Check configured collected metrics"""
         config = self.get_metric_config(self)
         return config.get("metrics") or config.get("items")
 
+    def get_matcher_ctx(self) -> Dict[str, Any]:
+        r = {
+            "name": self.label,
+            "labels": list(self.effective_labels),
+            "service_groups": [],
+            "units": self.units,
+        }
+        if self.managed_object:
+            r["service_groups"] = self.managed_object.effective_service_groups
+        if self.remote_system:
+            r["remote_system"] = self.remote_system.id
+        return r
+
 
 def sync_object(obj: "Object") -> None:
-    """
-    Synchronize sensors with object model
-    :param obj:
-    :return:
-    """
+    """Synchronize sensors with object model"""
     # Get existing sensors
     obj_sensors: Dict[str, Sensor] = {s.local_id: s for s in Sensor.objects.filter(object=obj.id)}
     logger.info("[%s] Sync sensor for ojbect", obj)

@@ -71,10 +71,15 @@ class SLAProfile(Document):
     meta = {"collection": "noc.sla_profiles", "strict": False, "auto_create_index": False}
     name = StringField(unique=True)
     description = StringField()
-    workflow = PlainReferenceField(
+    workflow: "Workflow" = PlainReferenceField(
         Workflow, default=partial(Workflow.get_default_workflow, "sla.SLAProfile")
     )
     style = ForeignKeyField(Style, required=False)
+    # Provisioning
+    provisioning_policy: str = StringField(
+        choices=[("D", "Disable"), ("E", "Enable"), ("M", "Manual"), ("A", "Add Only")],
+        default="D",
+    )
     # Agent collected intervale
     collect_interval = IntField(default=120)
     # Test packets Number
@@ -165,7 +170,7 @@ class SLAProfile(Document):
     def iter_changed_datastream(self, changed_fields=None):
         from noc.sla.models.slaprobe import SLAProbe
 
-        if not config.datastream.enable_cfgmetricsources:
+        if not config.datastream.enable_cfgmetricstarget:
             return
         if (
             changed_fields
@@ -189,7 +194,6 @@ class SLAProfile(Document):
 
     def on_save(self):
         labels = [ll for ll in self.labels if Label.get_effective_setting(ll, "enable_slaprobe")]
-        print("ON Save", labels, self._changed_fields)
         if not labels:
             return
         if not hasattr(self, "_changed_fields") or "labels" in self._changed_fields:

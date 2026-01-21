@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // inv.sensorprofile application
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2020 The NOC Project
+// Copyright (C) 2007-2025 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.inv.sensorprofile.Application");
@@ -9,11 +9,14 @@ console.debug("Defining NOC.inv.sensorprofile.Application");
 Ext.define("NOC.inv.sensorprofile.Application", {
   extend: "NOC.core.ModelApplication",
   requires: [
+    "NOC.core.tagfield.Tagfield",
     "NOC.core.label.LabelField",
     "NOC.core.ListFormField",
     "NOC.main.handler.LookupField",
     "NOC.inv.sensorprofile.Model",
+    "NOC.pm.metrictype.LookupField",
     "NOC.wf.workflow.LookupField",
+    "NOC.main.remotesystem.LookupField",
     "NOC.main.style.LookupField",
     "NOC.pm.measurementunits.LookupField"
   ],
@@ -70,6 +73,12 @@ Ext.define("NOC.inv.sensorprofile.Application", {
           xtype: "pm.measurementunits.LookupField",
           fieldLabel: __("Sensor Measurement Units"),
           allowBlank: true
+        },
+        {
+          name: "metric_type",
+          xtype: "pm.metrictype.LookupField",
+          fieldLabel: __("Metric Type"),
+          allowBlank: true,
         },
         {
           name: "dynamic_classification_policy",
@@ -137,7 +146,7 @@ Ext.define("NOC.inv.sensorprofile.Application", {
               name: "labels",
               xtype: "labelfield",
               fieldLabel: __("Match Labels"),
-              allowBlank: false,
+              allowBlank: true,
               isTree: true,
               filterProtected: false,
               pickerPosition: "down",
@@ -147,18 +156,36 @@ Ext.define("NOC.inv.sensorprofile.Application", {
               }
               },
             {
-              name: "handler",
-              xtype: "main.handler.LookupField",
-              fieldLabel: __("Match Handler"),
+              xtype: "core.tagfield",
+              url: "/inv/resourcegroup/lookup/",
+              fieldLabel: __("Object Groups"),
+              name: "resource_groups",
+              allowBlank: true,
+              uiStyle: "extra",
+            },
+            {
+              name: "units",
+              xtype: "pm.measurementunits.LookupField",
+              fieldLabel: __("Match M Units"),
               allowBlank: true,
               uiStyle: "medium",
-              query: {
-                "allow_match_rule": true
-              }
-            }
-            ]
-        }
-      ]
+            },
+            {
+              name: "remote_system",
+              xtype: "main.remotesystem.LookupField",
+              fieldLabel: __("Remote System"),
+              allowBlank: true,
+            },
+            {
+              name: "name_pattern",
+              xtype: "textfield",
+              fieldLabel: __("Label Pattern"),
+              allowBlank: true,
+              uiStyle: "medium",
+            },
+          ],
+        },
+      ],
     });
     me.callParent();
   }

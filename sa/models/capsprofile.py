@@ -25,6 +25,7 @@ import cachetools
 # NOC modules
 from noc.core.caps.types import CapsConfig
 from noc.core.model.decorator import on_delete_check
+from noc.core.change.decorator import change
 from noc.inv.models.capability import Capability
 from noc.main.models.label import Label
 
@@ -41,7 +42,7 @@ class CapsSettings(EmbeddedDocument):
     # Add to Reference
     ref_scope = StringField(required=False)
     # Wildcard
-    set_label = ReferenceField(Label, required=False)
+    set_label: Optional["Label"] = ReferenceField(Label, required=False)
     # ref_remote_system
 
     def __str__(self):
@@ -52,8 +53,10 @@ class CapsSettings(EmbeddedDocument):
         if self.default_value:
             self.capability.clean_value(self.default_value)
         if self.set_label:
-            if not self.set_label.is_wildcard:
+            if not self.set_label.is_wildcard and not self.capability.type.is_logical:
                 raise ValueError("Only wildcard label may by set")
+            if self.capability.type.is_logical and self.set_label.is_scoped:
+                raise ValueError("On boolean type only not-scoped Set")
 
     def get_config(self) -> CapsConfig:
         """"""
@@ -65,7 +68,10 @@ class CapsSettings(EmbeddedDocument):
         )
 
 
-@on_delete_check(check=[("sa.ManagedObjectProfile", "caps_profile")])
+@change
+@on_delete_check(
+    check=[("sa.ManagedObjectProfile", "caps_profile"), ("sa.ServiceProfile", "caps_profile")]
+)
 class CapsProfile(Document):
     meta = {"collection": "capsprofiles", "strict": False, "auto_create_index": False}
 

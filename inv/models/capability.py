@@ -40,7 +40,6 @@ TCapsValue = Union[bool, str, int, float, List[Any]]
     check=[
         ("pm.MetricType", "required_capability"),
         ("sa.Service", "caps__capability"),
-        ("sa.ServiceProfile", "caps__capability"),
         ("sa.ManagedObject", "caps__capability"),
         ("sa.CapsProfile", "caps__capability"),
         ("main.ModelTemplate", "params__set_capability"),
@@ -101,6 +100,8 @@ class Capability(Document):
         if self.agent_collector and self.agent_param:
             r["agent_collector"] = self.agent_collector
             r["agent_param"] = self.agent_param
+        if self.values:
+            r["values"] = dict(self.values)
         return r
 
     def to_json(self) -> str:

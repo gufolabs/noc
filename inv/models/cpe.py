@@ -162,8 +162,8 @@ class CPE(Document):
         return CPE.objects.filter(bi_id=bi_id).first()
 
     def iter_changed_datastream(self, changed_fields=None):
-        if config.datastream.enable_cfgmetricsources:
-            yield "cfgmetricsources", f"inv.CPE::{self.bi_id}"
+        if config.datastream.enable_cfgmetricstarget:
+            yield "cfgmetricstarget", f"inv.CPE::{self.bi_id}"
 
     def clean(self):
         if self.extra_labels:
@@ -276,7 +276,7 @@ class CPE(Document):
     def get_component(
         cls, managed_object, global_id: str = None, local_id: str = None, **kwargs
     ) -> Optional["CPE"]:
-        if not global_id or not local_id:
+        if not global_id and not local_id:
             return None
         if global_id:
             return CPE.objects.filter(global_id=global_id).first()
@@ -354,16 +354,13 @@ class CPE(Document):
         """Return MetricConfig for Metrics service"""
         if not cpe.state or not cpe.state.is_productive:
             return {}
-        labels = []
-        for ll in cpe.effective_labels:
-            l_c = Label.get_by_name(ll)
-            labels.append({"label": ll, "expose_metric": l_c.expose_metric if l_c else False})
         return {
             "type": "cpe",
             "bi_id": cpe.bi_id,
             "fm_pool": cpe.controller.managed_object.get_effective_fm_pool().name,
-            "labels": labels,
-            "rules": list(MetricRule.iter_rules_actions(cpe.effective_labels)),
+            "exposed_labels": Label.build_expose_labels(cpe.effective_labels, "expose_metric"),
+            "labels": [],
+            "rules": list(MetricRule.get_affected_rules(cpe.get_matcher_ctx())),
             "sharding_key": cpe.controller.managed_object.bi_id if cpe.controller else None,
             "items": [],
         }

@@ -7,10 +7,10 @@
 
 # Python modules
 import enum
-from typing import Optional, Any, List
+from typing import Optional, Any, List, Annotated
 
 # Third-party modules
-from pydantic import BaseModel, HttpUrl, ValidationError
+from pydantic import BaseModel, HttpUrl, ValidationError, StringConstraints, field_validator
 
 # NOC modules
 from noc.sa.interfaces.base import (
@@ -27,10 +27,22 @@ from noc.sa.interfaces.base import (
 from noc.core.validators import is_fqdn
 from noc.models import get_model, is_document
 
-BOOL_VALUES = frozenset(("t", "true", "yes"))
+BOOL_VALUES = frozenset(("t", "true", "yes", "on"))
 REFERENCE_SCOPE_SPLITTER = "::"
 ARRAY_ANNEX = "**"
 ARRAY_DELIMITER = " | "
+DomainName = Annotated[
+    str,
+    StringConstraints(
+        pattern=r"^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9].?$"
+    ),
+]
+# HOSTNAME = Annotated[
+#     str,
+#     StringConstraints(
+#         pattern=r"^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.[A-Za-z0-9-]{1,63}(?<!-))*$"
+#     ),
+# ]
 
 
 class HTTPURLModel(BaseModel):
@@ -40,6 +52,24 @@ class HTTPURLModel(BaseModel):
     def normalize(cls, value) -> "HttpUrl":
         """https://xxxx"""
         return HTTPURLModel(url=value)
+
+
+class HostNameModel(BaseModel):
+    hostname: str
+
+    @field_validator("hostname")
+    def validate_hostname(cls, v):
+        if not all(c.isalnum() or c in {"-", "."} for c in v):
+            raise ValueError("Hostname contains invalid characters.")
+        if v.startswith("-") or v.endswith("-"):
+            raise ValueError("Hostname cannot start or end with a hyphen.")
+        # Add more complex validation rules as needed
+        return v
+
+    @classmethod
+    def normalize(cls, value) -> "HttpUrl":
+        """https://xxxx"""
+        return HostNameModel(hostname=value)
 
 
 class ValueType(enum.Enum):
@@ -64,6 +94,12 @@ class ValueType(enum.Enum):
     SERIAL_NUM = "serial_num"
     VLAN = "vlan"
     IP_VRF = "vrf"
+    HOSTNAME = "hostname"
+
+    @property
+    def is_logical(self):
+        """Check type is boolean"""
+        return self == ValueType.BOOL
 
     def get_default(self, value):
         match self.value:
@@ -142,7 +178,7 @@ class ValueType(enum.Enum):
         if is_fqdn(value):
             value = f"http://{value}"
         try:
-            HTTPURLModel(url=value)
+            HTTPURLModel.normalize(value)
             return value
         except ValidationError as e:
             raise ValueError(str(e))
@@ -165,6 +201,16 @@ class ValueType(enum.Enum):
     def decode_serial_num(value):
         """Check"""
         return str(value.strip())
+
+    @staticmethod
+    def decode_hostname(value):
+        try:
+            HostNameModel.normalize(value)
+            return value
+        except ValidationError as e:
+            raise ValueError(str(e))
+        except ValueError as e:
+            raise e
 
     @staticmethod
     def convert_from_array(value: Any) -> str:
@@ -195,6 +241,9 @@ class ValueType(enum.Enum):
                 value = str(HTTPURLModel(url=value).url)
             case ValueType.SERIAL_NUM:
                 scope = "sn"
+            case ValueType.HOSTNAME:
+                scope = "hostname"
+                value = value.lower()
         if scope:
             return f"{scope}{REFERENCE_SCOPE_SPLITTER}{value}"
         return None

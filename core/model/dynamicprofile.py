@@ -87,7 +87,7 @@ def dynamic_profile(
             return None
         profile_id = profile_model.get_effective_profile(instance)
         if not profile_id:
-            logger.info("[%s] Nothing profile for match", instance.name)
+            logger.info("[%s] Nothing profile for match", str(instance))
             return None
         profile_field = profile_field or "profile"
         profile = getattr(instance, profile_field)
@@ -201,8 +201,9 @@ def update_profiles(
             ll = get_label(o)
             processed += 1
             ctx = o.get_matcher_ctx()
-            for p_id, match in classifier:
-                if match(ctx):
+            for p_id, matchers in classifier:
+                match = any(match(ctx) for match in matchers)
+                if match:
                     break
             else:
                 logger.debug("[%s|%s] Nothing profile for match", o.id, ll)

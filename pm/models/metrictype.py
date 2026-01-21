@@ -49,12 +49,15 @@ id_lock = Lock()
 
 
 class CollectorMappingItem(EmbeddedDocument):
+    meta = {"strict": False}
+
     sender = StringField(choices=["zabbix", "noc_agent", "any"], default="any")
     collector = StringField()
     field = StringField()
     aliases = ListField(StringField())
     allow_partial_match = BooleanField(default=False)
-    labels = ListField(StringField())
+    in_labels = ListField(StringField())
+    unit = PlainReferenceField(MeasurementUnits)
 
     def __str__(self):
         return f"{self.collector}.{self.field}"
@@ -68,8 +71,10 @@ class CollectorMappingItem(EmbeddedDocument):
         }
         if self.aliases:
             r["aliases"] = list(self.aliases)
-        if self.labels:
-            r["labels"] = list(self.labels)
+        if self.in_labels:
+            r["in_labels"] = list(self.in_labels)
+        if self.unit:
+            r["unit__code"] = self.unit.code
         return r
 
     def get_config(self):
@@ -79,7 +84,8 @@ class CollectorMappingItem(EmbeddedDocument):
             "field": self.field,
             "allow_partial_match": self.allow_partial_match,
             "aliases": list(self.aliases or []),
-            "labels": [],
+            "labels": list(self.in_labels or []),
+            "unit": self.unit.code if self.unit else None,
         }
 
 
@@ -91,6 +97,7 @@ class CollectorMappingItem(EmbeddedDocument):
         ("sa.ManagedObjectProfile", "metrics__metric_type"),
         ("cm.ConfigurationParam", "metric_type"),
         ("inv.InterfaceProfile", "metrics__metric_type"),
+        ("inv.SensorProfile", "metric_type"),
         ("sla.SLAProfile", "metrics__metric_type"),
         ("pm.MetricAction", "compose_inputs__metric_type"),
         ("pm.MetricAction", "compose_metric_type"),

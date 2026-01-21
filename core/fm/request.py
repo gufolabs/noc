@@ -57,9 +57,10 @@ class ActionConfig(BaseModel):
     # If approve required, it suspend processing and send
     # Message to approver
     manually: bool = False
+    assigned: Optional[str] = None
     # Manual, Group Access
     # root_only: bool = True
-    policy: EscalationPolicy = EscalationPolicy.ROOT
+    # already_escalated
 
 
 class ActionPermission(BaseModel):
@@ -109,6 +110,7 @@ class AlarmActionRequest(BaseModel):
     allowed_actions: Optional[List[AllowedAction]] = None
     start_at: Optional[datetime.datetime] = None
     item: Optional[ActionItem] = None
+    item_policy: EscalationPolicy = EscalationPolicy.ROOT
     # Group
     end_condition: Literal["CR", "CA", "CT", "M", "E"] = "CR"
     # policy: EscalationPolicy = EscalationPolicy.ROOT

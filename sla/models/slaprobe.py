@@ -24,6 +24,7 @@ from mongoengine.fields import (
     LongField,
     IntField,
     DictField,
+    EmbeddedDocumentListField,
 )
 from pymongo import ReadPreference
 
@@ -35,6 +36,7 @@ from noc.sa.interfaces.igetslaprobes import IGetSLAProbes
 from noc.pm.models.agent import Agent
 from noc.pm.models.metricrule import MetricRule
 from noc.main.models.label import Label
+from noc.inv.models.capsitem import CapsItem
 from noc.core.mongo.fields import ForeignKeyField, PlainReferenceField
 from noc.core.validators import is_ipv4
 from noc.core.change.decorator import change
@@ -43,6 +45,7 @@ from noc.core.wf.decorator import workflow
 from noc.core.models.cfgmetrics import MetricCollectorConfig, MetricItem
 from noc.core.model.sql import SQL
 from noc.core.model.decorator import on_delete_check
+from noc.core.caps.decorator import capabilities
 from noc.config import config
 
 PROBE_TYPES = IGetSLAProbes.returns.element.attrs["type"].choices
@@ -54,6 +57,7 @@ _target_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 @Label.model
 @change
 @bi_sync
+@capabilities
 @workflow
 @on_delete_check(
     clean=[("sa.Service", "sla_probe")],
@@ -86,6 +90,8 @@ class SLAProbe(Document):
     # Probe type
     type = StringField(choices=[(x, x) for x in PROBE_TYPES])
     tos = IntField(min=0, max=64)
+    # Capabilities
+    caps: List[CapsItem] = EmbeddedDocumentListField(CapsItem)
     # IP address or URL, depending on type
     target = StringField()
     # Hardware timestamps
@@ -120,8 +126,8 @@ class SLAProbe(Document):
         return Service.objects.filter(sla_probe=self).first()
 
     def iter_changed_datastream(self, changed_fields=None):
-        if config.datastream.enable_cfgmetricsources:
-            yield "cfgmetricsources", f"sla.SLAProbe::{self.bi_id}"
+        if config.datastream.enable_cfgmetricstarget:
+            yield "cfgmetricstarget", f"sla.SLAProbe::{self.bi_id}"
 
     def clean(self):
         if self.extra_labels:
@@ -246,13 +252,14 @@ class SLAProbe(Document):
         return {
             "type": "sla_probe",
             "bi_id": source.bi_id,
+            "name": source.name,
             "fm_pool": sla_probe.managed_object.get_effective_fm_pool().name,
             "labels": sorted(sla_probe.effective_labels),
             "items": [],
             "composed_metrics": [],
             "sharding_key": sla_probe.managed_object.bi_id if sla_probe.managed_object else None,
-            "meta": sla_probe.get_message_context(),
-            "rules": list(MetricRule.iter_rules_actions(sla_probe.effective_labels)),
+            "opaque_data": sla_probe.get_message_context(),
+            "rules": MetricRule.get_affected_rules(sla_probe.get_matcher_ctx(), scope="sla"),
         }
 
     @property
@@ -261,8 +268,8 @@ class SLAProbe(Document):
         Check configured collected metrics
         :return:
         """
-        config = self.get_metric_config(self)
-        return config.get("metrics") or config.get("items")
+        cfg = self.get_metric_config(self)
+        return cfg.get("metrics") or cfg.get("items")
 
     @classmethod
     def get_metric_discovery_interval(cls, mo: ManagedObject) -> int:
@@ -306,3 +313,59 @@ class SLAProbe(Document):
         if self.service:
             r["service"] = self.service.get_message_context()
         return r
+
+    def get_matcher_ctx(self) -> Dict[str, Any]:
+        """"""
+        if not self.state:
+            state = self.profile.workflow.get_default_state()
+        else:
+            state = self.state
+        r = {
+            "name": self.name,
+            "description": self.description,
+            "labels": list(self.effective_labels),
+            "provisioning_op": self.get_provisioning_op(),
+            "service_groups": [],
+            "caps": self.get_caps(),
+            "state": str(state.id),
+        }
+        if self.managed_object:
+            r["service_groups"] = self.managed_object.effective_service_groups
+        return r
+
+    def get_action_ctx(self) -> Dict[str, Any]:
+        """Context for running action"""
+        return {
+            "name": self.name,
+            "target": self.target,
+            "target_object": self.get_target(),
+            "type": self.type,
+            "owner": self.group,
+            "description": self.description,
+            "provisioning_op": self.get_provisioning_op(),
+        }
+
+    def iter_changed_domains(self, changed_fields=None):
+        """
+        Iterate over changed Domain, Configured domains, Migrate to Configuration Context
+        In/Out
+        """
+        if self.managed_object:
+            yield "sa.ManagedObject", str(self.managed_object.id)
+        # Target - Role
+
+    def get_provisioning_op(self) -> str:
+        """
+        Return provisioning operation
+        * N - disable
+        * P - Provisioned
+        # R - Remove
+        """
+        if self.profile.provisioning_policy == "D":
+            return "N"
+        # policy = self.profile.provisioning_policy
+        if self.state.name == "Missed":
+            return "P"
+        # if self.state.name == "Free" and policy != "A":
+        #    return "R"
+        return "N"

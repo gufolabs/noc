@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Optional, Any, Iterable, Tuple, List
+from typing import Dict, Optional, Any, Iterable, Tuple
 from collections import namedtuple
 
 # NOC modules
@@ -72,9 +72,7 @@ class Target(
 
     @property
     def opaque_data(self):
-        """
-        ManagedObject Opaque Data
-        """
+        """ManagedObject Opaque Data"""
         r = {
             "id": str(self.mo_id),
             "bi_id": str(self.bi_id),
@@ -176,9 +174,7 @@ class Target(
         }
 
     def get_syslog_settings(self) -> Optional[Dict[str, Any]]:
-        """
-        Get effective event archiving policy
-        """
+        """Get effective event archiving policy"""
         if self.syslog_source_type == "d" or not self.is_process_event:
             return None
         return {
@@ -195,15 +191,6 @@ class Target(
             "storm_policy": self.mop_trapcollector_storm_policy,
             "storm_threshold": self.mop_trapcollector_storm_threshold,
         }
-
-    def get_metrics_settings(self) -> Optional[List[Dict[str, Any]]]:
-        """"""
-        r = []
-        for rs in RemoteSystem.objects.filter(remote_collectors_policy="E"):
-            cgf = RemoteSystem.get_collector_config(rs)
-            if cgf:
-                r.append(cgf)
-        return r
 
 
 class CfgTrapDataStream(DataStream):
@@ -318,14 +305,11 @@ class CfgTrapDataStream(DataStream):
             "syslog": target.get_syslog_settings(),
             "trap": target.get_snmptrap_settings(),
             "ping": target.get_ping_settings(),
-            "metric_collector": target.get_metrics_settings(),
         }
         # Ping Settings
         if time_pattern:
             r["time_expr"] = TimePattern.get_code(time_pattern)
-        if not (
-            bool(r["ping"]) or bool(r["syslog"]) or bool(r["trap"]) or bool(r["metric_collector"])
-        ):
+        if not bool(r["ping"] or bool(r["syslog"]) or bool(r["trap"])):
             raise KeyError("Not enable collectors")
         addresses = {}
         # Process sources
@@ -382,14 +366,12 @@ class CfgTrapDataStream(DataStream):
 
         if not addresses:
             raise KeyError(f"Unsupported Trap Source Type: {trap_source_type}")
-        refs = [f"name:{name.lower()}"]
-        for m in r["opaque_data"]["mappings"]:
-            rs = RemoteSystem.get_by_id(m["remote_system"]["id"])
-            refs.append(RemoteSystem.clean_reference(rs, m["remote_id"]))
         r |= {
             "addresses": list(addresses.values()),
-            "mapping_refs": refs,
+            "mapping_refs": [f"name:{name.lower()}"],
         }
+        for m in r["opaque_data"]["mappings"]:
+            r["mapping_refs"].append(f"rs:{m['remote_system']['name']}:{m['remote_id']}")
         return r
 
     @classmethod

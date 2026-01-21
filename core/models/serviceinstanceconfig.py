@@ -33,6 +33,7 @@ class InstanceType(enum.Enum):
     ASSET = "asset"
     NETWORK_CHANNEL = "network"
     SERVICE_ENDPOINT = "endpoint"
+    SERVICE_CLIENT = "client"
     OTHER = "other"
 
 
@@ -64,6 +65,7 @@ class ServiceInstanceConfig:
     nri_port: Optional[str] = None
     fqdn: Optional[str] = None
     addresses: List[str] = None
+    services: List[str] = None
     port: int = 0
     asset_refs: List[str] = None
 
@@ -77,6 +79,8 @@ class ServiceInstanceConfig:
                 cfg = NetworkChannelInstance
             case InstanceType.SERVICE_ENDPOINT:
                 cfg = ServiceEndPoint
+            case InstanceType.SERVICE_CLIENT:
+                cfg = ConfigInstance
             case _:
                 cfg = ConfigInstance
         return cfg
@@ -106,6 +110,7 @@ class ServiceInstanceConfig:
             remote_id=kwargs.get("remote_id"),
             nri_port=kwargs.get("nri_port"),
             asset_refs=kwargs.get("asset_refs"),
+            services=kwargs.get("services"),
         )
 
     def get_queryset(self, service: Any, settings: ServiceInstanceTypeConfig, **kwargs) -> Q:
@@ -140,13 +145,19 @@ class NetworkHostInstance(ServiceInstanceConfig):
         """Create Config from settings"""
         if settings.asset_group and settings.asset_group.id in service.effective_client_groups:
             return cls.from_group(settings.asset_group)
-        caps = service.get_caps()
-        if not settings.refs_caps or settings.refs_caps.name not in caps:
+        if not settings.refs_caps:
             return []
-        refs = settings.refs_caps.get_references(caps[settings.refs_caps.name])
+        hostname, refs = None, []
+        for c in service.iter_caps():
+            if c.capability == settings.refs_caps:
+                refs += c.capability.get_references(c.value)
+            # More Complex: Service - get_hostname ?
+            if c.capability.type == ValueType.HOSTNAME:
+                hostname = c.value
         if not refs:
             return []
-        cfg = cls.from_config(name=name, asset_refs=refs)
+        # Fqdn
+        cfg = cls.from_config(name=name, asset_refs=refs, fqdn=hostname)
         return [cfg]
 
 
@@ -167,10 +178,16 @@ class NetworkChannelInstance(ServiceInstanceConfig):
         if not settings.refs_caps or settings.refs_caps.name not in caps:
             return []
         refs = settings.refs_caps.get_references(caps[settings.refs_caps.name])
-        if not refs:
+        addresses = []
+        if settings.refs_caps.type in [ValueType.IPV4_ADDR, ValueType.IP_ADDR]:
+            if settings.refs_caps.multi:
+                addresses = caps[settings.refs_caps.name]
+            else:
+                addresses = [caps[settings.refs_caps.name]]
+        elif not refs:
             return []
         if settings.only_one_instance:
-            cfg = cls.from_config(name=name, asset_refs=refs)
+            cfg = cls.from_config(name=name, asset_refs=refs, addresses=addresses or None)
             return [cfg]
         r = []
         for c in caps[settings.refs_caps.name]:

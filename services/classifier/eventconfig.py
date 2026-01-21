@@ -42,6 +42,7 @@ class EventConfig:
     # TargetActions
     # Resources
     actions: Optional[List[Callable]] = None
+    link_event: bool = False
 
     @property
     def label(self):
@@ -67,15 +68,22 @@ class EventConfig:
                 window=ff["window"],
                 vars=[vv["name"] for vv in data["vars"] if vv["match_suppress"]],
             )
+        if "link_event" in data:
+            ec.link_event = data["link_event"]
+        # if v.required and v.resource_model == "inv.Interface":
+        #   ec.link_event = True
         for vv in data["vars"]:
-            ec.vars += [
-                VarItem(
-                    name=vv["name"],
-                    type=ValueType(vv["type"]),
-                    required=vv["required"],
-                    resource_model=vv.get("resource_model"),
-                ),
-            ]
+            v = VarItem(
+                name=vv["name"],
+                type=ValueType(vv["type"]),
+                required=vv["required"],
+                resource_model=vv.get("resource_model"),
+            )
+            ec.vars.append(v)
         # for rr in data["resources"]:
         #     ec.resolvers[rr["resource"]] = lambda x: True
         return ec
+
+    @property
+    def is_link_event(self) -> bool:
+        return self.link_event

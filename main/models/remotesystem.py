@@ -6,9 +6,9 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from threading import Lock
 import operator
 import datetime
+from threading import Lock
 from typing import Optional, Union, List, Dict, Tuple, Any
 
 # Third-party modules
@@ -95,6 +95,7 @@ class EnvItem(EmbeddedDocument):
         ("inv.Channel", "remote_system"),
         ("inv.ResourceGroup", "remote_system"),
         ("sa.Service", "remote_system"),
+        ("pm.Agent", "remote_system"),
         ("vc.VLAN", "remote_system"),
         ("vc.VLANProfile", "remote_system"),
         ("vc.VPN", "remote_system"),
@@ -105,6 +106,7 @@ class EnvItem(EmbeddedDocument):
         ("wf.Transition", "remote_system"),
         ("wf.Workflow", "remote_system"),
         ("project.Project", "remote_system"),
+        ("maintenance.Maintenance", "remote_system"),
     ],
     delete=[("main.NotificationGroupSubscription", "remote_system")],
 )
@@ -151,8 +153,10 @@ class RemoteSystem(Document):
     enable_ipaddressprofile = BooleanField()
     enable_label = BooleanField()
     enable_discoveredobject = BooleanField()
+    enable_pmagent = BooleanField()
     enable_fmevent = BooleanField()
     enable_metrics = BooleanField()
+    enable_maintenance = BooleanField()
     api_key: Optional[APIKey] = ReferenceField(APIKey)
     remote_collectors_policy: str = StringField(
         choices=[
@@ -162,6 +166,8 @@ class RemoteSystem(Document):
         ],
         default="D",
     )
+    remote_collectors_batch_size: int = IntField(min_value=1000, default=5000)
+    remote_collectors_batch_delay: int = IntField(min_value=5, default=10)
     portmapper_name = StringField()
     managed_object_loader_policy = StringField(
         choices=[("D", "As Discovered"), ("M", "As Managed Object")],
@@ -198,6 +204,8 @@ class RemoteSystem(Document):
     last_successful_load = DateTimeField()
     last_extract_event = DateTimeField()
     last_successful_extract_event = DateTimeField()
+    last_extract_metrics = DateTimeField()
+    last_successful_extract_metrics = DateTimeField()
     load_error = StringField()
     object_url_template = StringField()
     # Object id in BI
@@ -206,10 +214,13 @@ class RemoteSystem(Document):
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _name_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _bi_id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
+    _api_key_cache = cachetools.TTLCache(maxsize=10, ttl=60)
     _active_collector = cachetools.TTLCache(maxsize=10, ttl=120)
 
     SCHEDULER = "scheduler"
     JCLS = "noc.services.scheduler.jobs.remote_system.ETLSyncJob"
+    JCLS_EVENT = "noc.services.scheduler.jobs.remote_system.ETLEventSyncJob"
+    JCLS_METRIC = "noc.services.scheduler.jobs.remote_system.ETLMetricSyncJob"
     # Sync Event
 
     def __str__(self):
@@ -229,6 +240,14 @@ class RemoteSystem(Document):
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
     def get_by_bi_id(cls, bi_id: int) -> Optional["RemoteSystem"]:
         return RemoteSystem.objects.filter(bi_id=bi_id).first()
+
+    @classmethod
+    @cachetools.cachedmethod(operator.attrgetter("_api_key_cache"), lock=lambda _: id_lock)
+    def get_by_api_key(cls, api_key: str) -> Optional["RemoteSystem"]:
+        api_key = APIKey.get_by_api_key(api_key)
+        if api_key:
+            return RemoteSystem.objects.filter(api_key=api_key).first()
+        return None
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_active_collector"), lock=lambda _: id_lock)
@@ -266,6 +285,8 @@ class RemoteSystem(Document):
             else:
                 for mo_id in ManagedObject.objects.filter().values_list("id", flat=True):
                     yield "cfgtarget", mo_id
+        if config.datastream.enable_cfgmetricstarget:
+            yield "cfgmetricstarget", f"main.RemoteSystem::{self.bi_id}"
 
     def get_portmapper(self) -> "BasePortMapper":
         """Getting portmapper functions"""
@@ -279,10 +300,12 @@ class RemoteSystem(Document):
             raise ValueError
         return h(self)
 
-    def get_extractors(self) -> List[str]:
+    def get_extractors(self, exclude_fmevent: bool = False) -> List[str]:
         extractors = []
         for k in self._fields:
             if k.startswith("enable_") and getattr(self, k):
+                if exclude_fmevent and k == "enable_fmevent":
+                    continue
                 extractors += [k[7:]]
         return extractors
 
@@ -292,8 +315,9 @@ class RemoteSystem(Document):
         quiet: bool = False,
         incremental: bool = False,
         checkpoint: Optional[str] = None,
+        exclude_fmevent: Optional[bool] = False,
     ) -> List[StepResult]:
-        extractors = extractors or self.get_extractors()
+        extractors = extractors or self.get_extractors(exclude_fmevent=exclude_fmevent)
         error, results = None, []
         try:
             results = self.get_handler().extract(
@@ -335,9 +359,12 @@ class RemoteSystem(Document):
         return results
 
     def load(
-        self, extractors: Optional[List[str]] = None, quiet: bool = False
+        self,
+        extractors: Optional[List[str]] = None,
+        quiet: bool = False,
+        exclude_fmevent: bool = False,
     ) -> Optional[List[StepResult]]:
-        extractors = extractors or self.get_extractors()
+        extractors = extractors or self.get_extractors(exclude_fmevent=exclude_fmevent)
         error, r = None, []
         try:
             r = self.get_handler().load(extractors)
@@ -388,6 +415,10 @@ class RemoteSystem(Document):
             headers=self.get_mx_message_headers(),
         )
 
+    def get_metric_extractor(self):
+        """Extract metrics from RemoteSystem"""
+        return self.get_handler().get_metric_extractor()
+
     def get_loader_chain(self):
         return self.get_handler().get_loader_chain()
 
@@ -410,9 +441,13 @@ class RemoteSystem(Document):
 
     def on_save(self):
         self.ensure_job()
+        self.ensure_event_job()
+        self.ensure_metric_job()
 
     def on_delete(self):
-        self.ensure_job()
+        scheduler = Scheduler(self.SCHEDULER)
+        scheduler.remove_job(jcls=self.JCLS, key=self.id)
+        scheduler.remove_job(jcls=self.JCLS_EVENT, key=self.id)
 
     def ensure_job(self):
         """Create or remove scheduler job"""
@@ -423,6 +458,26 @@ class RemoteSystem(Document):
                 scheduler.submit(jcls=self.JCLS, key=self.id, ts=ts)
                 return
         scheduler.remove_job(jcls=self.JCLS, key=self.id)
+
+    def ensure_event_job(self):
+        """Create or remove scheduler job"""
+        scheduler = Scheduler(self.SCHEDULER)
+        if self.enable_sync and self.event_sync_interval:
+            ts = self.run_sync_at or datetime.datetime.now().replace(microsecond=0)
+            if ts:
+                scheduler.submit(jcls=self.JCLS_EVENT, key=self.id, ts=ts)
+                return
+        scheduler.remove_job(jcls=self.JCLS_EVENT, key=self.id)
+
+    def ensure_metric_job(self):
+        """Create or remove scheduler job"""
+        scheduler = Scheduler(self.SCHEDULER)
+        if self.enable_metrics and self.remote_collectors_policy == "D":
+            ts = self.run_sync_at or datetime.datetime.now().replace(microsecond=0)
+            if ts:
+                scheduler.submit(jcls=self.JCLS_METRIC, key=self.id, ts=ts)
+                return
+        scheduler.remove_job(jcls=self.JCLS_METRIC, key=self.id)
 
     @classmethod
     def get_collector_config(cls, remote_system: "RemoteSystem") -> Dict[str, Any]:
@@ -446,5 +501,37 @@ class RemoteSystem(Document):
         """Build reference string. Maybe add aliases ?"""
         return f"{REFERENCE_CODE}:{remote_system.name}:{remote_id}"
 
+    @classmethod
+    def from_reference(cls, reference: str) -> Tuple["RemoteSystem", str]:
+        if not reference.startswith(REFERENCE_CODE):
+            raise ValueError("Unknown Reference format")
+        _, name, remote_id = reference.split(":")
+        rs = RemoteSystem.get_by_name(name)
+        if not rs:
+            raise ValueError("Unknown Remote System by name %s" % name)
+        return rs, remote_id
+
     def reset_lock(self):
         """"""
+
+    @property
+    def has_configured_metrics(self) -> bool:
+        """Check configured collected metrics"""
+        return self.enable_metrics or self.enable_fmevent
+
+    @classmethod
+    def get_metric_config(cls, remote_system: "RemoteSystem"):
+        """Return MetricConfig for Target service"""
+        if not remote_system.enable_metrics and not remote_system.enable_fmevent:
+            return {}
+        return {
+            "type": "remote_system",
+            "name": remote_system.name,
+            "bi_id": remote_system.bi_id,
+            "sharding_key": 0,
+            "enable_fmevent": remote_system.enable_fmevent,
+            "enable_metrics": remote_system.enable_metrics,
+            "api_key": remote_system.api_key.key if remote_system.api_key else None,
+            "rules": [],
+            "items": [],
+        }
