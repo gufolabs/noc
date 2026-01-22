@@ -357,6 +357,8 @@ class Script(BaseScript):
             # Tunnel types
             # XXX /ip address print detail do not print tunnels !!!
             # Need reworks !!!
+            if t["type"].startswith("ovpn-"):
+                self.logger.debug(t["type"])
             """
             Temporary disable tunnel processing
 
@@ -368,7 +370,7 @@ class Script(BaseScript):
                 self.get_tunnel("PPP", f, afi, r)
             if t["type"].startswith("pppoe-"):
                 self.get_tunnel("PPPOE", f, afi, r)
-            ip  if t["type"].startswith("ovpn-"):
+            if t["type"].startswith("ovpn-"):
                 self.si["tunnel"] = {}
             if t["type"].startswith("l2tp-"):
                 self.get_tunnel("L2TP", f, afi, r)
