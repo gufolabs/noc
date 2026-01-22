@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # MikroTik.RouterOS.get_interfaces
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -92,7 +92,7 @@ class Script(BaseScript):
         v_ifindex = {}
         time.sleep(1)
         # Fill interfaces
-        a = self.cli_detail("/interface print detail without-paging")
+        a = self.cli_detail("/interface print detail without-paging terse")
         for n, f, r in a:
             if r["type"] in self.ignored_types or r["type"] not in self.type_map:
                 continue
@@ -109,6 +109,8 @@ class Script(BaseScript):
                     ifaces[r["name"]]["mac"] = r["mac-address"]
                 if "mac" in r:
                     ifaces[r["name"]]["mac"] = r["mac"]
+                if "comment" in r:
+                    ifaces[r["name"]]["description"] = r["comment"]
                 misc[r["name"]] = {"type": r["type"]}
                 if n in n_ifindex:
                     ifaces[r["name"]]["snmp_ifindex"] = n_ifindex[n]
@@ -143,7 +145,7 @@ class Script(BaseScript):
                 v_ifindex[r["name"]] = r["id"]
         time.sleep(1)
         # Attach `vlan` subinterfaces to parent
-        for n, f, r in self.cli_detail("/interface vlan print detail without-paging"):
+        for n, f, r in self.cli_detail("/interface vlan print detail without-paging terse"):
             if r["interface"] in ifaces:
                 i = ifaces[r["interface"]]
                 self.si = {
@@ -155,6 +157,8 @@ class Script(BaseScript):
                     "vlan_ids": [int(r["vlan-id"])],
                     "enabled_protocols": [],
                 }
+                if "comment" in r:
+                    self.si["description"] = r["comment"]
                 if self.get_mtu(r) is not None:
                     self.si["mtu"] = self.get_mtu(r)
                 if r["name"] in v_ifindex:
@@ -353,11 +357,18 @@ class Script(BaseScript):
             # Tunnel types
             # XXX /ip address print detail do not print tunnels !!!
             # Need reworks !!!
+            """
+            Temporary disable tunnel processing
+
+            /interface ppp print detail without-paging
+            bad command name ppp (line 1 column 12)
+
+            Need reworks !!!
             if t["type"].startswith("ppp-"):
                 self.get_tunnel("PPP", f, afi, r)
             if t["type"].startswith("pppoe-"):
                 self.get_tunnel("PPPOE", f, afi, r)
-            if t["type"].startswith("ovpn-"):
+            ip  if t["type"].startswith("ovpn-"):
                 self.si["tunnel"] = {}
             if t["type"].startswith("l2tp-"):
                 self.get_tunnel("L2TP", f, afi, r)
@@ -367,6 +378,7 @@ class Script(BaseScript):
                 self.get_tunnel("PPP", f, afi, r)
             if t["type"].startswith("sstp-"):
                 self.get_tunnel("SSTP", f, afi, r)
+            """
         # bridge
         for n, f, r in self.cli_detail("/interface bridge print detail without-paging"):
             self.si = {}
