@@ -152,7 +152,7 @@ class ModelAttr(EmbeddedDocument):
     value = DynamicField()
 
     def __str__(self) -> str:
-        return "%s.%s = %s" % (self.interface, self.attr, self.value)
+        return f"{self.interface}.{self.attr} = {self.value}"
 
     @property
     def json_data(self) -> dict[str, Any]:
@@ -863,10 +863,10 @@ class ObjectModel(Document):
             return "gf rack-o"
         # Chassis
         if self.container_type and self.container_type.is_chassis():
-            return "fa fa-square"
+            return "gf chassis-s"
         # Linecard
         if self.is_linecard():
-            return "gf gf-linecard-o"
+            return "gf linecard-o"
         # Transceiver
         if self.is_xcvr():
             pt = self.get_xcvr_port_type()
