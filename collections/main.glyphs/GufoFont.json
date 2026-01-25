@@ -83,6 +83,21 @@
       "code": 57
     },
     {
+      "name": "less-than",
+      "uuid": "45368191-b88b-5dd1-9cbc-b8f4b8e8e271",
+      "code": 60
+    },
+    {
+      "name": "equals",
+      "uuid": "9b83bc58-cd4e-5531-811c-39cb1146bb4b",
+      "code": 61
+    },
+    {
+      "name": "greater-than",
+      "uuid": "8562705d-e025-5d5c-b889-bff47cc9b7d5",
+      "code": 62
+    },
+    {
       "name": "question",
       "uuid": "bde3f9da-a37b-5f61-b12b-ee295057ecc8",
       "code": 63
@@ -1588,6 +1603,11 @@
       "code": 58206
     },
     {
+      "name": "user-o",
+      "uuid": "b601f996-5c5f-548f-a8f1-85e64e8a1ab6",
+      "code": 58207
+    },
+    {
       "name": "file-code-o",
       "uuid": "78518939-3ce0-520b-8238-7b61165df901",
       "code": 58208
@@ -1756,6 +1776,91 @@
       "name": "thumbs-down-o",
       "uuid": "10f64d56-cfd6-5b22-b041-e5ac8bcbc633",
       "code": 58253
+    },
+    {
+      "name": "radar-o",
+      "uuid": "ff39bc26-06b5-58a7-8b2d-54ab0e2862aa",
+      "code": 58254
+    },
+    {
+      "name": "magnet-s",
+      "uuid": "bd3f81ab-6d5f-5e47-8fe3-e72f25af6d36",
+      "code": 58255
+    },
+    {
+      "name": "circle-dot-s",
+      "uuid": "fbd47ca8-f899-54da-9917-947df6555dc4",
+      "code": 58256
+    },
+    {
+      "name": "circle-dot-o",
+      "uuid": "ab7105e1-447d-5ce8-a752-e72f5ad467f3",
+      "code": 58257
+    },
+    {
+      "name": "arrows-maximize-o",
+      "uuid": "aa088d48-6234-5507-8906-ed75d455d9ff",
+      "code": 58258
+    },
+    {
+      "name": "arrows-minimize-o",
+      "uuid": "edd2a5e3-6f80-55b5-934c-dee711ce35aa",
+      "code": 58259
+    },
+    {
+      "name": "shuffle-o",
+      "uuid": "9bdfe1dc-d6c0-5a1b-839e-d5949208b873",
+      "code": 58260
+    },
+    {
+      "name": "up-down-o",
+      "uuid": "e7ddf8c3-b0c4-53ed-a643-127620e1de80",
+      "code": 58261
+    },
+    {
+      "name": "left-right-o",
+      "uuid": "1819d331-9c17-5532-9db3-20d2ffba832d",
+      "code": 58262
+    },
+    {
+      "name": "arrows-up-down-left-right-o",
+      "uuid": "2cec3883-df51-588a-81ef-785c62bdd6b9",
+      "code": 58263
+    },
+    {
+      "name": "code-o",
+      "uuid": "a5f4eed5-9dde-5ae1-895e-337f1e4413d6",
+      "code": 58264
+    },
+    {
+      "name": "arrows-to-dot-o",
+      "uuid": "f5c6703c-0bec-57b1-98d8-1746e3caa6f1",
+      "code": 58265
+    },
+    {
+      "name": "shop-s",
+      "uuid": "51752b23-77dd-576d-8d54-2fce838f3fcb",
+      "code": 58266
+    },
+    {
+      "name": "shield-s",
+      "uuid": "f2e6f102-de5b-545a-b4b1-935dd7ae38ab",
+      "code": 58267
+    },
+    {
+      "name": "bell-s",
+      "uuid": "11459bdd-cf60-5f01-b428-050d37fcbef4",
+      "code": 58268
+    },
+    {
+      "name": "glasses-o",
+      "uuid": "62fe7a19-4490-5b71-9868-35b8f39241c0",
+      "code": 58269
+    },
+    {
+      "name": "wine-bottle-s",
+      "uuid": "e3577060-e5b8-551b-ac6d-fae9e096a733",
+      "code": 58270
     },
     {
       "name": "database",
@@ -2016,6 +2121,36 @@
       "name": "st-o",
       "uuid": "d62c5e69-b163-53ec-8d30-354b5dd16b68",
       "code": 61500
+    },
+    {
+      "name": "linecard-s",
+      "uuid": "f126cdbb-c64b-5e75-8448-426674ab3998",
+      "code": 61501
+    },
+    {
+      "name": "linecard-o",
+      "uuid": "28ecea36-afc3-51b6-91f5-3775752e9524",
+      "code": 61502
+    },
+    {
+      "name": "rack-s",
+      "uuid": "a48a01e9-6d9b-5d92-98e1-1705fb513b70",
+      "code": 61503
+    },
+    {
+      "name": "rack-o",
+      "uuid": "d8ed533e-3c80-504a-8112-bcdb97fc1b75",
+      "code": 61504
+    },
+    {
+      "name": "chassis-modular-s",
+      "uuid": "b38c13a4-3381-56b5-9740-75d6f3e25b65",
+      "code": 61505
+    },
+    {
+      "name": "chassis-s",
+      "uuid": "507c1268-cfbd-5c0c-9a26-94f377182b2f",
+      "code": 61507
     },
     {
       "name": "cisco-accesspoint",
