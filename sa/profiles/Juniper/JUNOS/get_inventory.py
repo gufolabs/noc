@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Juniper.JUNOS.get_inventory
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -26,7 +26,6 @@ class Script(BaseScript):
     rx_chassis = re.compile(
         r"^Chassis\s+(?P<revision>REV \d+)?\s+(?P<serial>\S+)\s+(?P<rest>.+)$", re.IGNORECASE
     )
-
     rx_part = re.compile(
         r"^\s*(?P<name>\S+(?: \S+)+?)\s+"
         r"(?P<revision>rev \d+|\S{1,6})?\s+"
@@ -35,14 +34,16 @@ class Script(BaseScript):
         r"(?P<rest>.+)$",
         re.IGNORECASE,
     )
-
-    env_part = re.compile(
-        r"^(?P<type>(?:(?:Power|Temp|Fans))?\s+)?"
-        r"(?P<name>(?:(?:CB|FPC)(?:.\S+)+)\s+)"
-        r"(?P<status>.\S+.)",
-        re.IGNORECASE,
+    rx_oem_xcvr = re.compile(
+        r"^\s+(?P<xcvr_num>\d+).+?(?:n/a|SM)\s+OEM\s+(?P<part_no>.+?)\s+"
+        r"(?P<wave_length>n/a|\d+ nm)\s+.+\n",
+        re.MULTILINE
     )
-
+    rx_unknown_xcvr = re.compile(
+        r"^\s+(?P<xcvr_num>\d+).+?(?:n/a|SM)\s+(?P<vendor>.+?)\s+(?P<part_no>\S+)\s+"
+        r"(?P<wave_length>n/a|\d+ nm)\s+.+\n",
+        re.MULTILINE
+    )
     rx_num = re.compile(r"(?P<num>[0-9]/[0-9*])/*")
 
     TYPE_MAP = {
@@ -129,6 +130,26 @@ class Script(BaseScript):
                 <status>Check</status>
             </environment-item>
             ...
+            <environment-item>
+                <name>Routing Engine 0</name>
+                <class>Temp</class>
+                <status>OK</status>
+                <temperature junos:celsius="26">26 degrees C / 78 degrees F</temperature>
+            </environment-item>
+            <environment-item>
+                <name>Routing Engine 0 CPU</name>
+                <status>OK</status>
+                <temperature junos:celsius="27">27 degrees C / 80 degrees F</temperature>
+            </environment-item>
+            <environment-item>
+                <name>Routing Engine 1</name>
+                <class>Temp</class>
+                <status>Absent</status>
+            </environment-item>
+            <environment-item>
+                <name>Routing Engine 1 CPU</name>
+                <status>Absent</status>
+            </environment-item>
             ...
         </environment-information>
         <cli>
@@ -150,7 +171,13 @@ class Script(BaseScript):
         for el in env_info.iterfind("environment-item"):
             item_name = el.find("name").text
             item_status = el.find("status").text
-            item_class = el.find("class").text
+            class_el = el.find("class")
+            if class_el is None:
+                # Some sensors does not have class
+                item_class = "Temp"
+                self.logger.debug("Add stub class for |%s|", item_name)
+            else:
+                item_class = class_el.text
 
             yield item_class, item_name, item_status
 
@@ -165,9 +192,8 @@ class Script(BaseScript):
             return res
 
         for env_type, env_name, env_status in p_chassis_environment:
-            if env_type:
-                insert_type = env_type.strip()
-            chassis_id = env_name.split(" ")[1]
+            sensor_type = env_type.strip()
+            slot_id = env_name.split(" ")[1]
             env_status = env_status.strip().lower()
             if env_status == "absent":
                 continue
@@ -175,25 +201,28 @@ class Script(BaseScript):
             env_name = env_name.strip()
 
             sensor = {
-                "name": f"{chassis_id}|{env_name}",
+                "name": f"{slot_id}|{env_name}",
                 "status": env_status,
-                "description": f"State of {env_name} on Unit_{chassis_id}",
+                "description": f"State of {env_name} on Unit_{slot_id}",
                 "measurement": "StatusEnum",
                 "labels": [
                     "noc::sensor::placement::internal",
                     "noc::sensor::mode::flag",
-                    f"noc::sensor::target::{self.ENV_TYPE_MAP.get(insert_type.lower())}",
-                    f"noc::chassis::{chassis_id}",
+                    f"noc::sensor::target::{self.ENV_TYPE_MAP.get(sensor_type.lower(), 'stub')}",
+                    f"noc::chassis::{slot_id}",
                 ],
             }
-            if res.get(chassis_id):
-                res[chassis_id].append(sensor)
+            if res.get(slot_id):
+                res[slot_id].append(sensor)
             else:
-                res[chassis_id] = [sensor]
+                res[slot_id] = [sensor]
 
         return res
 
     def execute_cli(self):
+        fpc_number = 0
+        pic_number = 0
+        has_show_pic = True
         self.chassis_no = None
         self.virtual_chassis = None
         v = self.cli("show chassis hardware", cached=True)
@@ -204,6 +233,7 @@ class Script(BaseScript):
 
         for name, revision, part_no, serial, description in p_hardware:
             builtin = False
+            xcvr_data = []
             # Detect type
             t, number = self.get_type(name)
             if not t:
@@ -229,6 +259,7 @@ class Script(BaseScript):
                     part_no = part_no[:-1]
                 chassis_sn.add(serial)
             elif t == "FPC":
+                fpc_number = 0
                 if description.startswith("EX4"):
                     # Avoid duplicate `CHASSIS` type on some EX switches
                     has_chassis = False
@@ -246,10 +277,50 @@ class Script(BaseScript):
                     chassis_sn.add(serial)
             elif t == "XCVR":
                 if vendor == "NONAME":
-                    if description in ("UNKNOWN", "UNSUPPORTED"):
+                    if description == "UNSUPPORTED":
                         part_no = self.UNKNOWN_XCVR
-                    else:
+                    elif has_show_pic:
+                        try:
+                            c = self.cli(
+                                f"show chassis pic fpc-slot {fpc_number} pic-slot {pic_number}",
+                                cached=True
+                            )
+                            xcvr_found = False
+                            # Try OEM first
+                            for match in self.rx_oem_xcvr.finditer(c):
+                                if match.group("xcvr_num") == number:
+                                    if "BIDI" in match.group("part_no"):
+                                        xcvr_data.append(
+                                            {
+                                                "interface": "optical",
+                                                "attr": "bidi",
+                                                "value": True,
+                                            },
+                                        )
+                                    if "nm" in match.group("wave_length"):
+                                        n = match.group("wave_length").split()
+                                        xcvr_data.append(
+                                            {
+                                                "interface": "optical",
+                                                "attr": "tx_wavelength",
+                                                "value": n[0],
+                                            },
+                                        )
+                                    xcvr_found = True
+                                    break
+                            if not xcvr_found:
+                                # Try other NON-JNPR or UNKNOWN vendors
+                                for match in self.rx_unknown_xcvr.finditer(c):
+                                    if match.group("xcvr_num") == number:
+                                        vendor = match.group("vendor")
+                                        part_no = match.group("part_no")
+                                        break
+                        except self.CLISyntaxError:
+                            has_show_pic = False
+                    if vendor == "NONAME":
                         part_no = self.get_trans_part_no(serial, description)
+            elif t == "PIC":
+                pic_number = number
             if serial == "BUILTIN" or (serial in chassis_sn and t != "CHASSIS"):
                 builtin = True
                 part_no = []
@@ -273,7 +344,8 @@ class Script(BaseScript):
                 chassis_id = obj["number"] if obj.get("number") else "0"
                 if sensor := sensors.get(chassis_id):
                     obj["sensors"] = sensor
-
+            elif obj["type"] == "XCVR" and xcvr_data:
+                obj["data"] = xcvr_data
             objects.append(obj)
 
         return objects
