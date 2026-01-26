@@ -37,12 +37,12 @@ class Script(BaseScript):
     rx_oem_xcvr = re.compile(
         r"^\s+(?P<xcvr_num>\d+).+?(?:n/a|SM)\s+OEM\s+(?P<part_no>.+?)\s+"
         r"(?P<wave_length>n/a|\d+ nm)\s+.+\n",
-        re.MULTILINE
+        re.MULTILINE,
     )
     rx_unknown_xcvr = re.compile(
         r"^\s+(?P<xcvr_num>\d+).+?(?:n/a|SM)\s+(?P<vendor>.+?)\s+(?P<part_no>\S+)\s+"
         r"(?P<wave_length>n/a|\d+ nm)\s+.+\n",
-        re.MULTILINE
+        re.MULTILINE,
     )
     rx_num = re.compile(r"(?P<num>[0-9]/[0-9*])/*")
 
@@ -285,7 +285,7 @@ class Script(BaseScript):
                         try:
                             c = self.cli(
                                 f"show chassis pic fpc-slot {fpc_number} pic-slot {pic_number}",
-                                cached=True
+                                cached=True,
                             )
                             xcvr_found = False
                             # Try OEM first
