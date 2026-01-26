@@ -259,7 +259,7 @@ class Script(BaseScript):
                     part_no = part_no[:-1]
                 chassis_sn.add(serial)
             elif t == "FPC":
-                fpc_number = 0
+                fpc_number = number
                 if description.startswith("EX4"):
                     # Avoid duplicate `CHASSIS` type on some EX switches
                     has_chassis = False
@@ -275,6 +275,8 @@ class Script(BaseScript):
                     if part_no.endswith(","):  # EX4200-48T, 8 POE
                         part_no = part_no[:-1]
                     chassis_sn.add(serial)
+            elif t == "PIC":
+                pic_number = number
             elif t == "XCVR":
                 if vendor == "NONAME":
                     if description == "UNSUPPORTED":
@@ -319,8 +321,6 @@ class Script(BaseScript):
                             has_show_pic = False
                     if vendor == "NONAME":
                         part_no = self.get_trans_part_no(serial, description)
-            elif t == "PIC":
-                pic_number = number
             if serial == "BUILTIN" or (serial in chassis_sn and t != "CHASSIS"):
                 builtin = True
                 part_no = []
