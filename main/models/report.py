@@ -30,6 +30,7 @@ from mongoengine.fields import (
 import cachetools
 
 # NOC modules
+from noc.core.datasources.loader import loader
 from noc.core.mongo.fields import ForeignKeyField
 from noc.core.reporter.types import (
     ReportConfig,
@@ -74,6 +75,9 @@ class ReportParam(EmbeddedDocument):
     choices = ListField(StringField())
     required = BooleanField(default=False)
     default = StringField(required=False)
+    condition_param = StringField(required=False)
+    condition_values = ListField(StringField(), required=False)
+    default_values = ListField(StringField(), required=False)
     hide = BooleanField(default=False)
     localization = DictField()
 
@@ -97,6 +101,12 @@ class ReportParam(EmbeddedDocument):
             r["required"] = self.required
         if self.default:
             r["default"] = self.default
+        if self.condition_param:
+            r["condition_param"] = self.condition_param
+        if self.condition_values:
+            r["condition_values"] = self.condition_values
+        if self.default_values:
+            r["default_values"] = self.default_values
         return r
 
 
@@ -403,35 +413,30 @@ class Report(Document):
             align_end_date_param=self.time_params == "A",
         )
 
-    def get_band_format(self, band: Optional[str] = None) -> "BandFormat":
-        for bf in self.bands_format:
-            if not band:
-                return bf
-            if bf.name == band:
-                return bf
+    def get_first_bandformat(self) -> Optional[BandFormat]:
+        if self.bands_format:
+            return self.bands_format[0]
         return None
 
-    def get_band_columns(self, band: str = ROOT_BAND) -> Dict[str, List[str]]:
-        from noc.core.datasources.loader import loader
-
+    def get_root_band_ds_columns(self) -> Dict[str, List[str]]:
         r = defaultdict(list)
+        root_band = None
         for b in self.bands:
-            if b.name != band:
-                continue
-            for num, q in enumerate(b.queries):
+            if b.is_root:
+                root_band = b
+                break
+        if root_band:
+            for num, q in enumerate(root_band.queries):
                 if not q.datasource:
                     continue
                 ds = loader[q.datasource]
                 r[q.datasource] = [f.name for f in ds.iter_ds_fields()]
-                if not num:
+                if num == 0:
                     # default
                     r[""] = [f.name for f in ds.iter_ds_fields()]
-            break
         return r
 
     def get_root_datasource(self):
-        from noc.core.datasources.loader import loader
-
         for b in self.bands:
             if b.is_root and b.queries and b.queries[0].datasource:
                 return loader[b.queries[0].datasource]

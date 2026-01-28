@@ -99,10 +99,10 @@ class ReportConfigApplication(ExtDocApplication):
         """
         r = []
         checked = checked or {}
-        root_fmt = report.get_band_format()
+        root_fmt = report.get_first_bandformat()
         if not root_fmt.column_format:
             return r
-        columns = report.get_band_columns()
+        columns = report.get_root_band_ds_columns()
         for field in root_fmt.column_format:
             field_name = field["name"]
             if "." in field_name:
@@ -117,6 +117,14 @@ class ReportConfigApplication(ExtDocApplication):
                 report.get_localization(f"columns.{fn}", lang=pref_lang) or field.get("title") or fn
             )
             r += [(field_name, title, field_name in checked)]
+        return r
+
+    @view(url=r"^(?P<report_id>\S+)/fs-get-columns/$", method=["GET"], access="run", api=True)
+    def api_fields_selector_get_columns(self, request, report_id):
+        x = request.GET.lists()
+        print("x", x, type(x))
+        q = {str(k): v[0] if len(v) == 1 else v for k, v in request.GET.lists()}
+        r = {}
         return r
 
     @view(url=r"^(?P<report_id>\S+)/form/$", method=["GET"], access="run", api=True)
