@@ -519,7 +519,7 @@ class MapApplication(ExtApplication):
             if o not in object_group:
                 continue
             for g in object_group[o]:
-                group_status[g].add(r[o]["status_code"])
+                group_status[g].add(r[str(o)]["status_code"])
         for g, status in group_status.items():
             if self.ST_ALARM in status or self.ST_DOWN in status:
                 r[str(o)]["status_code"] = self.ST_ALARM
