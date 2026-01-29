@@ -2082,7 +2082,7 @@ msgstr "Обработчики"
 
 #: services/web/apps/main/home/views.py:36
 msgid "Home"
-msgstr "Домашний"
+msgstr "Главная"
 
 #: services/web/apps/main/home/views.py:83
 msgid "Welcome to "

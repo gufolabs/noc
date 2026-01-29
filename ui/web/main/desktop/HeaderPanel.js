@@ -187,9 +187,9 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
   //
   openHome: function(){
     var me = this.up(), // Desktop Application
-      homeTab = Ext.Array.findBy(me.workplacePanel.getRefItems(), function(tab){return tab.title === "Home"});
+      homeTab = me.workplacePanel.down("[appId=main.home]")?.up();
     if(Ext.isEmpty(homeTab)){
-      me.launchTab("NOC.main.home.Application", "Home", {});
+      me.launchTab("NOC.main.home.Application", __("Home"), {});
     } else{
       var tabIndex = me.workplacePanel.items.indexOf(homeTab);
       me.workplacePanel.setActiveTab(tabIndex);
