@@ -413,10 +413,27 @@ class Report(Document):
             align_end_date_param=self.time_params == "A",
         )
 
-    def get_first_bandformat(self) -> Optional[BandFormat]:
-        if self.bands_format:
-            return self.bands_format[0]
+    def _get_band_by_condition(self, condition_value: str) -> Optional[Band]:
+        for band in self.bands:
+            if band.condition_value == condition_value:
+                return band
         return None
+
+    def _get_bandformat_by_condition(self, condition_value: str) -> Optional[BandFormat]:
+        band = self._get_band_by_condition(condition_value)
+        if band:
+            for bf in self.bands_format:
+                if bf.name == band.name:
+                    return bf
+        return None
+
+    def get_bandformat(self, condition_value: Optional[str] = None) -> Optional[BandFormat]:
+        if not self.bands_format:
+            return None
+        if condition_value:
+            return self._get_bandformat_by_condition(condition_value)
+        # without condition (by default) method returns first (!) band_format
+        return self.bands_format[0]
 
     def get_root_band_ds_columns(self) -> Dict[str, List[str]]:
         r = defaultdict(list)

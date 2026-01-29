@@ -89,6 +89,7 @@ class ReportConfigApplication(ExtDocApplication):
         report: "Report",
         checked: Optional[Set[str]] = None,
         pref_lang: Optional[str] = None,
+        condition_value: Optional[str] = None,
     ):
         """
         Get columns filter
@@ -99,11 +100,11 @@ class ReportConfigApplication(ExtDocApplication):
         """
         r = []
         checked = checked or {}
-        root_fmt = report.get_first_bandformat()
-        if not root_fmt.column_format:
+        band_fmt = report.get_bandformat(condition_value)
+        if not band_fmt.column_format:
             return r
         columns = report.get_root_band_ds_columns()
-        for field in root_fmt.column_format:
+        for field in band_fmt.column_format:
             field_name = field["name"]
             if "." in field_name:
                 q_name, fn = field_name.split(".")
@@ -210,13 +211,16 @@ class ReportConfigApplication(ExtDocApplication):
                 if param.default and param.default == "1":
                     cfg["checked"] = "true"
             elif param.type == "fields_selector":
-                cf = self.get_columns_filter(
-                    report,
-                    checked={p.strip() for p in param.default.split(",")},
-                    pref_lang=pref_lang,
-                )
                 cfg["xtype"] = "reportcolumnselect"
-                cfg["storeData"] = cf
+                if param.condition_param:
+                    cfg["conditionParam"] = param.condition_param
+                else:
+                    cf = self.get_columns_filter(
+                        report,
+                        checked={p.strip() for p in param.default.split(",")},
+                        pref_lang=pref_lang,
+                    )
+                    cfg["storeData"] = cf
             else:
                 cfg["xtype"] = "textfield"
             r["params"] += [cfg]
