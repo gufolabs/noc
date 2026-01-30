@@ -101,6 +101,8 @@ class ActionLog(object):
         self.error = result.error
         if result.ctx:
             self.ctx |= result.ctx
+        if result.document_id:
+            self.document_id = result.document_id
 
     def is_match(self, severity: int, timestamp: datetime.datetime, ack_user: Any):
         """Check job condition"""
@@ -197,6 +199,8 @@ class ActionLog(object):
         """
         if user and not isinstance(user, User):
             user = User.get_by_id(int(user))
+        elif action.assigned:
+            user = User.get_by_id(int(action.assigned))
         if tt_system:
             tt_system = TTSystem.get_by_id(tt_system)
         elif stub_tt_system:
