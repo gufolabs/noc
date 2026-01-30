@@ -134,7 +134,7 @@ class ReportConfigApplication(ExtDocApplication):
         param = report.get_param_by_name(param_name)
         if not param:
             return HttpResponseBadRequest(f"Report parameter '{param_name}' not found")
-        default_value = param.get_default_value_by_condition(condition_value)
+        default_value = param.get_default_value_by_condition(condition_value) or ""
         cf = self.get_columns_filter(
             report,
             checked={p.strip() for p in default_value.split(",")},
