@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # main.report application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -86,7 +86,7 @@ class ReportConfigApplication(ExtDocApplication):
 
     @staticmethod
     def get_columns_filter(
-        report: "Report",
+        report: Report,
         checked: Optional[Set[str]] = None,
         pref_lang: Optional[str] = None,
         condition_value: Optional[str] = None,
@@ -122,15 +122,30 @@ class ReportConfigApplication(ExtDocApplication):
 
     @view(url=r"^(?P<report_id>\S+)/fs-get-columns/$", method=["GET"], access="run", api=True)
     def api_fields_selector_get_columns(self, request, report_id):
-        x = request.GET.lists()
-        print("x", x, type(x))
+        report: Report = self.get_object_or_404(Report, id=report_id)
+        pref_lang = request.user.preferred_language
         q = {str(k): v[0] if len(v) == 1 else v for k, v in request.GET.lists()}
-        r = {}
-        return r
+        param_name = q.get("param_name")
+        condition_value = q.get("condition_value")
+        if not (param_name and condition_value):
+            return HttpResponseBadRequest(
+                "Request must have 'param_name' and 'condition_value' query-parameters"
+            )
+        param = report.get_param_by_name(param_name)
+        if not param:
+            return HttpResponseBadRequest(f"Report parameter '{param_name}' not found")
+        default_value = param.get_default_value_by_condition(condition_value)
+        cf = self.get_columns_filter(
+            report,
+            checked={p.strip() for p in default_value.split(",")},
+            pref_lang=pref_lang,
+            condition_value=condition_value,
+        )
+        return {"storeData": cf}
 
     @view(url=r"^(?P<report_id>\S+)/form/$", method=["GET"], access="run", api=True)
     def api_form_report(self, request, report_id):
-        report: "Report" = self.get_object_or_404(Report, id=report_id)
+        report: Report = self.get_object_or_404(Report, id=report_id)
         pref_lang = request.user.preferred_language
         outputs = set()
         r = {
@@ -237,7 +252,7 @@ class ReportConfigApplication(ExtDocApplication):
         """
         q = {str(k): v[0] if len(v) == 1 else v for k, v in request.GET.lists()}
         pref_lang = request.user.preferred_language
-        report: "Report" = self.get_object_or_404(Report, id=report_id)
+        report: Report = self.get_object_or_404(Report, id=report_id)
         report_engine = ReportEngine(
             report_execution_history=config.web.enable_report_history,
         )

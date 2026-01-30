@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Report model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -108,6 +108,15 @@ class ReportParam(EmbeddedDocument):
         if self.default_values:
             r["default_values"] = self.default_values
         return r
+
+    def get_default_value_by_condition(self, condition_value) -> Optional[str]:
+        if condition_value in self.condition_values:
+            idx = self.condition_values.index(condition_value)
+        else:
+            return None
+        if idx >= len(self.default_values):
+            return None
+        return self.default_values[idx]
 
 
 class Template(EmbeddedDocument):
@@ -325,6 +334,12 @@ class Report(Document):
 
     def get_json_path(self) -> Path:
         return safe_json_path(self.name)
+
+    def get_param_by_name(self, param_name) -> Optional[ReportParam]:
+        for param in self.parameters:
+            if param.name == param_name:
+                return param
+        return None
 
     @property
     def config(self) -> ReportConfig:
