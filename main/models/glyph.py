@@ -78,7 +78,4 @@ class Glyph(Document):
         """
         Generate CSS class
         """
-        if self.font.name == "FontAwesome":
-            n = self.name.split("|")[-1].strip()
-            return f"fa fa-{n}"
-        return None
+        return f"gf {self.name}"

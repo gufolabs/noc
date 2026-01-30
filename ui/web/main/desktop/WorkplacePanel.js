@@ -62,10 +62,14 @@ Ext.define("NOC.main.desktop.WorkplacePanel", {
           },
           menuNode: node,
         }),
+        first = this.items.first(),
+        homeApp = first.down("[appId=main.home]");
         // Close Home tab, if any
-        first = this.items.first();
-      if(first && first.title !== title && first.title === "Home"){
-        first.close();
+      if(homeApp){
+        var homeTab = homeApp.up();
+        if(homeTab && homeTab !== tab){
+          homeTab.close();
+        }
       }
       //
       this.setActiveTab(tab);
@@ -97,7 +101,7 @@ Ext.define("NOC.main.desktop.WorkplacePanel", {
       var me = this.up(), // Desktop Application
         homeTab = me.workplacePanel.down("[appId=main.home]");
       if(Ext.isEmpty(homeTab)){
-        me.launchTab("NOC.main.home.Application", "Home", {});
+        me.launchTab("NOC.main.home.Application", __("Home"), {});
       } else{
         var tabIndex = me.workplacePanel.items.indexOf(homeTab);
         me.workplacePanel.setActiveTab(tabIndex);

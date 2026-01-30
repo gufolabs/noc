@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # noc.sa.interfaces test
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -380,7 +380,14 @@ def test_ipv4_parameter(raw, config, expected):
     assert IPv4Parameter(**config).clean(raw) == expected
 
 
-@pytest.mark.parametrize(("raw", "config"), [("192.168.0.256", {}), (b"\xc0\xa8\x8f\x82\x44", {})])
+@pytest.mark.parametrize(
+    ("raw", "config"),
+    [
+        ("192.168.0.256", {}),
+        (b"\xc0\xa8\x8f\x82\x44", {}),
+        (b"\xc0\xa8\x8f\x82", {"accept_bin": False}),
+    ],
+)
 def test_ipv4_parameter_error(raw, config):
     with pytest.raises(InterfaceTypeError):
         assert IPv4Parameter(**config).clean(raw)
