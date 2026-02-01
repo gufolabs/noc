@@ -2153,6 +2153,16 @@
       "code": 61507
     },
     {
+      "name": "drone-s",
+      "uuid": "675a945b-60f9-5c30-a2b1-86f126e5ffaa",
+      "code": 61510
+    },
+    {
+      "name": "helicopter-symbol-s",
+      "uuid": "eb687437-68b6-54eb-9962-5b03112b1272",
+      "code": 61515
+    },
+    {
       "name": "cisco-accesspoint",
       "uuid": "eb8a2fb7-5433-5c52-91ea-8ab852cd4b44",
       "code": 61952
@@ -2208,6 +2218,11 @@
       "code": 61966
     },
     {
+      "name": "cisco-dslam",
+      "uuid": "62daec43-c0fa-5d08-bdb1-9d0a3133a4ad",
+      "code": 61969
+    },
+    {
       "name": "cisco-firewall",
       "uuid": "215f2c4e-57ee-5772-a365-8541acff1625",
       "code": 61972
@@ -2251,6 +2266,21 @@
       "name": "cisco-router",
       "uuid": "4fc81b12-e72d-5a6e-8b67-816cf394d6f2",
       "code": 61996
+    },
+    {
+      "name": "cisco-ups",
+      "uuid": "6357eab1-0a50-5f07-b7a2-7d8eb4e01e54",
+      "code": 62009
+    },
+    {
+      "name": "cisco-wireless-bridge",
+      "uuid": "2b71b1a3-25aa-5ae4-87b2-21c053b7d04d",
+      "code": 62013
+    },
+    {
+      "name": "cisco-wireless-router",
+      "uuid": "841dcb86-9f71-5047-9918-e68d0134bac5",
+      "code": 62014
     },
     {
       "name": "cisco-workgroup-switch",
