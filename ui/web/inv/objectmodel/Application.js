@@ -120,6 +120,14 @@ Ext.define("NOC.inv.objectmodel.Application", {
     Ext.apply(me, {
       columns: [
         {
+          text: __("Glyph"),
+          dataIndex: "glyph",
+          width: 32,
+          renderer: (value, meta, record) => value && record.get("glyph__label")
+            ? `<i class="gf ${record.get("glyph__label")}"></i>`
+            : "",
+        },
+        {
           text: __("Name"),
           dataIndex: "name",
           width: 200,
