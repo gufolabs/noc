@@ -1,0 +1,8 @@
+{
+    "name": "Fiberhome",
+    "uuid": "076fbd83-9cf2-4533-8ff5-55c9da213343",
+    "full_name": "Wuhan FiberHome International Technologies Co., Ltd.(F)",
+    "code": ["FIBERHOME", "FHTT", "FGEP"],
+    "site": "https://en.fiberhome.com/",
+    "$collection": "inv.vendors"
+}

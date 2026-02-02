@@ -2,7 +2,7 @@
     "name": "D-Link",
     "uuid": "deaacf21-325b-4b62-94d1-b8f3123e8f21",
     "full_name": "D-Link",
-    "code": ["DLINK"],
+    "code": ["DLINK", "DLNK"],
     "site": "http://www.dlink.com/",
     "$collection": "inv.vendors"
 }

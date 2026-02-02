@@ -2,7 +2,7 @@
     "name": "Generic",
     "uuid": "d864a89b-79bb-4f99-a40a-ccf764f3c38c",
     "full_name": "Generic",
-    "code": ["GENERIC", "GPON"],
+    "code": ["GENERIC", "GPON", "XPON"],
     "site": "https://getnoc.com",
     "$collection": "inv.vendors"
 }
