@@ -121,12 +121,6 @@ class ReportParam(EmbeddedDocument):
             r["condition_values"] = [x.json_data for x in self.condition_values]
         return r
 
-    def get_condition(self, condition_value) -> Optional[ParamConditionValue]:
-        for cond in self.condition_values:
-            if cond.value == condition_value:
-                return cond
-        return None
-
 
 class Template(EmbeddedDocument):
     meta = {"strict": False, "auto_create_index": False}
