@@ -52,6 +52,19 @@ id_lock = Lock()
 perm_lock = Lock()
 
 
+class ParamConditionValue(EmbeddedDocument):
+    value = StringField(required=True)
+    # default value for related component
+    default_value = StringField(required=True)
+
+    @property
+    def json_data(self) -> Dict[str, Any]:
+        return {
+            "value": self.value,
+            "default_value": self.default_value,
+        }
+
+
 class ReportParam(EmbeddedDocument):
     meta = {"strict": False, "auto_create_index": False}
     name = StringField(required=True)
@@ -76,8 +89,9 @@ class ReportParam(EmbeddedDocument):
     required = BooleanField(default=False)
     default = StringField(required=False)
     condition_param = StringField(required=False)
-    condition_values = ListField(StringField(), required=False)
-    default_values = ListField(StringField(), required=False)
+    condition_values: List[ParamConditionValue] = EmbeddedDocumentListField(
+        ParamConditionValue, required=False
+    )
     hide = BooleanField(default=False)
     localization = DictField()
 
@@ -104,19 +118,14 @@ class ReportParam(EmbeddedDocument):
         if self.condition_param:
             r["condition_param"] = self.condition_param
         if self.condition_values:
-            r["condition_values"] = self.condition_values
-        if self.default_values:
-            r["default_values"] = self.default_values
+            r["condition_values"] = [x.json_data for x in self.condition_values]
         return r
 
-    def get_default_value_by_condition(self, condition_value) -> Optional[str]:
-        if condition_value in self.condition_values:
-            idx = self.condition_values.index(condition_value)
-        else:
-            return None
-        if idx >= len(self.default_values):
-            return None
-        return self.default_values[idx]
+    def get_condition(self, condition_value) -> Optional[ParamConditionValue]:
+        for cond in self.condition_values:
+            if cond.value == condition_value:
+                return cond
+        return None
 
 
 class Template(EmbeddedDocument):
