@@ -33,9 +33,7 @@ Ext.define("NOC.main.desktop.Report", {
       scrollable: "vertical",
       defaults: {
         anchor: "70%",
-        style: {
-          padding: "0 10",
-        },
+        padding: "0 8",
       },
       items: [
         me.formTitle,
