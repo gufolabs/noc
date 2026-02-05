@@ -149,14 +149,16 @@ Ext.define("NOC.inv.inv.plugins.Zoom", {
       container = element.parentNode,
       containerAspectRatio = container.clientWidth / container.clientHeight,
       svgAspectRatio = element.viewBox.baseVal.width / element.viewBox.baseVal.height,
+      baseStyle = "display: block;",
+      dimensions = containerAspectRatio > svgAspectRatio ?
+          `width: auto; height: ${size}%;` :
+          `width: ${size}%; height: auto;`, 
       attributes = {
         height: "100%",
         width: "100%",
         preserveAspectRatio: "xMinYMin meet",
         "object-fit": "contain",
-        style: containerAspectRatio > svgAspectRatio ?
-          `width: auto; height: ${size}%;` :
-          `width: ${size}%; height: auto;`,
+        style: `${baseStyle} ${dimensions}`,
       };
 
     Object.entries(attributes).forEach(([key, value]) => 
@@ -203,12 +205,13 @@ Ext.define("NOC.inv.inv.plugins.Zoom", {
   setStyle: function(element, scale){
     var isWidthAuto = element.style.width === "auto",
       isHeightAuto = element.style.height === "auto",
+      baseStyle = "display: block;",
       style = isWidthAuto ? 
         `width: auto; height: ${scale}%` :
         isHeightAuto ?
           `height: auto; width: ${scale}%` :
           null;           
-    if(style) element.setAttribute("style", style);
+    if(style) element.setAttribute("style", `${baseStyle} ${style}`);
   },
   
   setZoom: function(zoom){
@@ -225,10 +228,10 @@ Ext.define("NOC.inv.inv.plugins.Zoom", {
         this.fitSvgToContainer(element, this.ZOOM_LEVELS.FIT_PAGE);
         break;
       case this.ZOOM_LEVELS.FIT_HEIGHT:
-        element.setAttribute("style", "height: 100%; width: auto;");
+        element.setAttribute("style", "display: block; height: 100%; width: auto;");
         break;
       case this.ZOOM_LEVELS.FIT_WIDTH:
-        element.setAttribute("style", "height: auto; width: 100%;");
+        element.setAttribute("style", "display: block; height: auto; width: 100%;");
         break;
     }
   },

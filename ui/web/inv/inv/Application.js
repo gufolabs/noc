@@ -387,7 +387,7 @@ Ext.define("NOC.inv.inv.Application", {
     me.tabPanel = Ext.create("Ext.tab.Panel", {
       layout: "fit",
       border: false,
-      scrollable: true,
+      scrollable: false,
       defaults: {
         scrollable: true,
       },
