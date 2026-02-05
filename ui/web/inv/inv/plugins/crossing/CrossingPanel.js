@@ -10,6 +10,7 @@ Ext.define("NOC.inv.inv.plugins.crossing.CrossingPanel", {
   extend: "NOC.inv.inv.plugins.VizSchemePluginAbstract",
   title: __("Crossing"),
   itemId: "crossingPanel",
+  scrollable: false,
   viewModel: {
     data: {
       showDetails: false,

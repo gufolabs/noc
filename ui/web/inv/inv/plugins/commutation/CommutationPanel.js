@@ -10,6 +10,7 @@ Ext.define("NOC.inv.inv.plugins.commutation.CommutationPanel", {
   extend: "NOC.inv.inv.plugins.VizSchemePluginAbstract",
   title: __("Commutation"),
   itemId: "commutationPanel",
+  scrollable: false,
   viewModel: {
     data: {
       downloadCsvItemDisabled: false,
