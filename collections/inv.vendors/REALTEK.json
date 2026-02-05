@@ -1,0 +1,8 @@
+{
+    "name": "Realtek",
+    "uuid": "214121d3-af7c-4e5f-b04f-81c3a2e5d55a",
+    "full_name": "Realtek Semiconductor Corp.",
+    "code": ["REALTEK", "RTKG"],
+    "site": "https://www.realtek.com/",
+    "$collection": "inv.vendors"
+}

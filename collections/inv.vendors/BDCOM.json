@@ -2,7 +2,7 @@
     "name": "BDCOM",
     "uuid": "ee9aaf27-109b-489f-bb7d-215068d53aa7",
     "full_name": "BDCOM",
-    "code": ["BDCOM"],
+    "code": ["BDCOM", "BDCM"],
     "site": "http://www.bdcom.cn/",
     "$collection": "inv.vendors"
 }
