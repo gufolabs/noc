@@ -151,8 +151,8 @@ Ext.define("NOC.inv.inv.plugins.Zoom", {
       svgAspectRatio = element.viewBox.baseVal.width / element.viewBox.baseVal.height,
       baseStyle = "display: block;",
       dimensions = containerAspectRatio > svgAspectRatio ?
-          `width: auto; height: ${size}%;` :
-          `width: ${size}%; height: auto;`, 
+        `width: auto; height: ${size}%;` :
+        `width: ${size}%; height: auto;`, 
       attributes = {
         height: "100%",
         width: "100%",
