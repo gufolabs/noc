@@ -130,7 +130,10 @@ class ReportConfigApplication(ExtDocApplication):
             for cfg in result["params"]:
                 if cfg["name"] == cond_param:
                     cfg["reportMeta"] = {}
-                    dep = {"targetWidget": f"[name={target_name}]"}
+                    dep = {
+                        "targetWidget": f"[name={target_name}]",
+                        "filter": "type",
+                    }
                     cfg["reportMeta"]["dependencies"] = [dep]
                     return
 
