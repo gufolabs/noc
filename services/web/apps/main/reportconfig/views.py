@@ -7,7 +7,7 @@
 
 # Python modules
 from urllib.parse import quote
-from typing import Optional, Set
+from typing import Dict, List, Optional, Set
 from collections import defaultdict
 
 # Third-party modules
@@ -90,7 +90,7 @@ class ReportConfigApplication(ExtDocApplication):
         checked: Optional[Set[str]] = None,
         pref_lang: Optional[str] = None,
         condition_value: Optional[str] = None,
-    ):
+    ) -> List:
         """
         Get columns filter
         :param report:
@@ -117,11 +117,23 @@ class ReportConfigApplication(ExtDocApplication):
             title = (
                 report.get_localization(f"columns.{fn}", lang=pref_lang) or field.get("title") or fn
             )
-            r += [(field_name, title, field_name in checked)]
+            if condition_value:
+                row = (field_name, title, field_name in checked, condition_value)
+            else:
+                row = (field_name, title, field_name in checked)
+            r.append(row)
         return r
 
     @view(url=r"^(?P<report_id>\S+)/form/$", method=["GET"], access="run", api=True)
     def api_form_report(self, request, report_id):
+        def update_choice_widget(result: Dict, cond_param: str, target_name: str):
+            for cfg in result["params"]:
+                if cfg["name"] == cond_param:
+                    cfg["reportMeta"] = {}
+                    dep = {"targetWidget": target_name}
+                    cfg["reportMeta"]["dependencies"] = [dep]
+                    return
+
         report: Report = self.get_object_or_404(Report, id=report_id)
         pref_lang = request.user.preferred_language
         outputs = set()
@@ -148,6 +160,7 @@ class ReportConfigApplication(ExtDocApplication):
             r["dockedItems"] += [
                 {"text": out.upper(), "param": {"output_type": out}} for out in outputs
             ]
+        widget_dependency = None
         for param in report.parameters:
             if param.hide:
                 continue
@@ -205,8 +218,12 @@ class ReportConfigApplication(ExtDocApplication):
             elif param.type == "fields_selector":
                 cfg["xtype"] = "reportcolumnselect"
                 if param.condition_param:
+                    widget_dependency = {
+                        "cond_param": param.condition_param,
+                        "target_name": param.name,
+                    }
                     cfg["conditionParam"] = param.condition_param
-                    cfs = {}
+                    cfs = []
                     for cv in param.condition_values:
                         cf = self.get_columns_filter(
                             report,
@@ -214,8 +231,19 @@ class ReportConfigApplication(ExtDocApplication):
                             pref_lang=pref_lang,
                             condition_value=cv.value,
                         )
-                        cfs[cv.value] = cf
-                    cfg["storeData"] = cfs
+                        cfs.extend(cf)
+                    cfg["store"] = {
+                        "fields": [
+                            "id",
+                            "label",
+                            {
+                                "name": "is_active",
+                                "type": "boolean",
+                            },
+                            "type",
+                        ],
+                        "data": cfs,
+                    }
                 else:
                     cf = self.get_columns_filter(
                         report,
@@ -226,6 +254,10 @@ class ReportConfigApplication(ExtDocApplication):
             else:
                 cfg["xtype"] = "textfield"
             r["params"] += [cfg]
+        if widget_dependency:
+            update_choice_widget(
+                r, widget_dependency["cond_param"], widget_dependency["target_name"]
+            )
         # formats
         return r
 
