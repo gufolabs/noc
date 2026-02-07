@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // main.desktop.report application
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2023 The NOC Project
+// Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.main.desktop.Report");
@@ -50,7 +50,8 @@ Ext.define("NOC.main.desktop.Report", {
       method: "GET",
       scope: me,
       success: function(response){
-        var data = Ext.decode(response.responseText);
+        var updateFields = [],
+          data = Ext.decode(response.responseText);
 
         this.form.addDocked({
           xtype: "toolbar",
@@ -63,15 +64,43 @@ Ext.define("NOC.main.desktop.Report", {
           }, this),
         });
         this.formTitle.setHtml(data.title);
-        Ext.Array.each(data.params, function(field){
-          this.form.add(field);
-        }, this);
+        Ext.Array.each(data.params, (param) => {
+          let field = this.form.add(param);
+          if(Object.hasOwn(param, "reportMeta")){
+            param.reportMeta.dependencies.forEach((dependency) => {
+              dependency.filterValue = field.getValue()[param.name];
+              this.setupDependencies(this.form, field, dependency);
+              updateFields.push({
+                source: param.name,
+                dependencies: dependency,
+              });
+            });
+          }
+        });
+        if(!Ext.isEmpty(updateFields)){
+          Ext.Array.each(updateFields, (dependency) => {
+            let source = this.form.down(`[name=${dependency.source}]`),
+              value = source.getValue()[dependency.source];
+            this.updateDependencies(this.form, value, dependency.dependencies);
+          }, this);
+        }
       },
       failure: function(){
         NOC.error(__("Failed to get params form"));
       },
     });
     me.callParent();
+  },
+  setupDependencies: function(form, field, dependencies){
+    field.on("change", function(field, newValue){
+      this.updateDependencies(form, newValue[field.name], dependencies);
+    }, this);
+  },
+  updateDependencies: function(form, value, dependencies){
+    form.down(dependencies.targetWidget)
+      .getStore().addFilter({
+        property: dependencies.filter, value,
+      });
   },
   submitForm: function(button){
     var params = Ext.Object.toQueryString(Ext.apply({output_type: button.param.output_type}, this.form.getValues())),
