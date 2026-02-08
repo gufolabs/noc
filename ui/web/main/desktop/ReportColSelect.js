@@ -28,15 +28,6 @@ Ext.define("NOC.main.desktop.ReportColSelect", {
   listeners: {
     rowdblclick: "toggle",
   },
-  initComponent: function(){
-    if(Object.hasOwn(this, "storeData")){
-      this.store = Ext.create("Ext.data.Store", {
-        fields: ["id", "label", "is_active"],
-        data: this.storeData,
-      });
-    }
-    this.callParent(arguments);
-  },
   getValue: function(){
     var selectedFields = Ext.Array.filter(this.getStore().getData().items, function(field){return field.get("is_active");});
 
