@@ -253,7 +253,17 @@ class ReportConfigApplication(ExtDocApplication):
                         checked={p.strip() for p in param.default.split(",")},
                         pref_lang=pref_lang,
                     )
-                    cfg["storeData"] = cf
+                    cfg["store"] = {
+                        "fields": [
+                            "id",
+                            "label",
+                            {
+                                "name": "is_active",
+                                "type": "boolean",
+                            },
+                        ],
+                        "data": cf,
+                    }
             else:
                 cfg["xtype"] = "textfield"
             r["params"] += [cfg]
