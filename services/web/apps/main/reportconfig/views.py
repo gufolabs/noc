@@ -118,9 +118,11 @@ class ReportConfigApplication(ExtDocApplication):
                 report.get_localization(f"columns.{fn}", lang=pref_lang) or field.get("title") or fn
             )
             if condition_value:
-                row = (field_name, title, field_name in checked, condition_value)
+                id = f"{condition_value}__{field_name}"
+                row = (id, field_name, title, field_name in checked, condition_value)
             else:
-                row = (field_name, title, field_name in checked)
+                id = field_name
+                row = (id, field_name, title, field_name in checked)
             r.append(row)
         return r
 
@@ -238,6 +240,7 @@ class ReportConfigApplication(ExtDocApplication):
                     cfg["store"] = {
                         "fields": [
                             "id",
+                            "field_name",
                             "label",
                             {
                                 "name": "is_active",
@@ -256,6 +259,7 @@ class ReportConfigApplication(ExtDocApplication):
                     cfg["store"] = {
                         "fields": [
                             "id",
+                            "field_name",
                             "label",
                             {
                                 "name": "is_active",
