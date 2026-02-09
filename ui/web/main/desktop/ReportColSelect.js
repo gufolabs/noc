@@ -31,7 +31,7 @@ Ext.define("NOC.main.desktop.ReportColSelect", {
   getValue: function(){
     var selectedFields = Ext.Array.filter(this.getStore().getData().items, function(field){return field.get("is_active");});
 
-    return Ext.Array.map(selectedFields, function(field){return field.id;}).join(",");
+    return Ext.Array.map(selectedFields, function(field){return field.get("field_name");}).join(",");
   },
   toggle: function(self, record){
     record.set("is_active", !record.get("is_active"));
