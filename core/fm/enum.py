@@ -124,6 +124,8 @@ class AlarmAction(enum.Enum):
 
     CREATE_TT = "create_tt"
     CLOSE_TT = "close_tt"
+    COMMENT_TT = "comment_tt"
+    COMMENT_ALARM_STATE = "comment_alarm_state"
     ACK = "ack"
     UN_ACK = "un_ack"
     CLEAR = "clear"  # Reopen
@@ -199,8 +201,10 @@ class ItemStatus(enum.Enum):
     @classmethod
     def from_alarm(cls, alarm, is_clear: bool = False):
         """"""
+        if alarm is None:
+            return ItemStatus.ARCHIVED
         if alarm.status == "C" or is_clear:
             return ItemStatus.REMOVED
-        if alarm.timestamp != alarm.last_update:
-            return ItemStatus.CHANGED
+        # if alarm.timestamp != alarm.last_update:
+        #    return ItemStatus.CHANGED
         return ItemStatus.NEW
