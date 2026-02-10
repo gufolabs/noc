@@ -338,11 +338,11 @@ class Report(Document):
     def get_json_path(self) -> Path:
         return safe_json_path(self.name)
 
-    def get_param_by_name(self, param_name) -> Optional[ReportParam]:
-        for param in self.parameters:
-            if param.name == param_name:
-                return param
-        return None
+    def get_param_by_name(self, param_name: str) -> Optional[ReportParam]:
+        return next(
+            (p for p in self.parameters if p.name == param_name),
+            None,
+        )
 
     @property
     def config(self) -> ReportConfig:
@@ -432,18 +432,17 @@ class Report(Document):
         )
 
     def _get_band_by_condition(self, condition_value: str) -> Optional[Band]:
-        for band in self.bands:
-            if band.condition_value == condition_value:
-                return band
-        return None
+        return next(
+            (b for b in self.bands if b.condition_value == condition_value),
+            None,
+        )
 
     def _get_bandformat_by_condition(self, condition_value: str) -> Optional[BandFormat]:
         band = self._get_band_by_condition(condition_value)
-        if band:
-            for bf in self.bands_format:
-                if bf.name == band.name:
-                    return bf
-        return None
+        return next(
+            (bf for bf in self.bands_format if bf.name == band.name),
+            None,
+        )
 
     def get_bandformat(self, condition_value: Optional[str] = None) -> Optional[BandFormat]:
         if not self.bands_format:
