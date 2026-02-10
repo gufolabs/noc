@@ -2798,8 +2798,11 @@ class ManagedObject(NOCModel):
             return False
         return bool(self.get_metric_discovery_interval())
 
-    def get_glyph(self) -> Glyph | None:
-        return self.glyph or self.object_profile.glyph
+    def get_glyph_code(self) -> int | None:
+        g = self.glyph or self.object_profile.glyph
+        if g:
+            return g.code
+        return None
 
     def get_shape_overlays(self) -> List[ShapeOverlay]:
         seen: Set[ShapeOverlayPosition] = set()
@@ -2850,7 +2853,7 @@ class ManagedObject(NOCModel):
             title_metric_template=self.shape_title_template
             or self.object_profile.shape_title_template
             or "",
-            stencil=self.get_stencil(),
+            glyph=self.get_glyph_code(),
             overlays=self.get_shape_overlays(),
             level=self.object_profile.level,
             attrs={"address": self.address, "mo": self},

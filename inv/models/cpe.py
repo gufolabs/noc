@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # CPE
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -38,7 +38,6 @@ from noc.core.validators import is_ipv4
 from noc.core.model.decorator import on_delete_check
 from noc.core.topology.types import ShapeOverlay, TopologyNode
 from noc.core.caps.decorator import capabilities
-from noc.core.stencil import Stencil
 from noc.core.model.dynamicprofile import dynamic_profile
 from noc.main.models.label import Label
 from noc.main.models.textindex import full_text_search
@@ -470,10 +469,9 @@ class CPE(Document):
         r = next(r, {})
         return r.get("interval", 0)
 
-    def get_stencil(self) -> Optional[Stencil]:
-        if self.profile.shape:
-            # Use profile's shape
-            return self.profile.shape
+    def get_glyph_code(self) -> int | None:
+        if self.profile.glyph:
+            return self.profile.glyph.code
         return None
 
     def get_shape_overlays(self) -> List[ShapeOverlay]:
@@ -486,7 +484,7 @@ class CPE(Document):
             resource_id=str(self.id),
             title=str(self),
             title_metric_template=self.profile.shape_title_template or "",
-            stencil=self.get_stencil(),
+            glyph=self.get_glyph_code(),
             overlays=self.get_shape_overlays(),
             level=10,
             attrs={
