@@ -9,6 +9,7 @@
 # NOC modules
 from noc.core.migration.base import BaseMigration
 from noc.core.model.fields import DocumentReferenceField
+from noc.core.collection.base import Collection
 
 
 DEFAULT_GLYPH = 0xF22C
@@ -66,6 +67,15 @@ SHAPE_MAP: dict[str, int] = {
 
 class Migration(BaseMigration):
     def migrate(self):
+        # Ensure glyph collection is synched
+        Collection("main.glyphs").sync()
+        # code to id mappings
+        code_map = {
+            doc["code"]: str(doc["id"])
+            for doc in self.mongo_db["glyphs"].find({}, {"_id": 1, "code": 1})
+        }
+        default_glyph_id = code_map[DEFAULT_GLYPH]
+        # Update tables
         for table in ("sa_managedobjectprofile", "sa_managedobject"):
             # Create `glyph` field
             self.db.add_column(
@@ -74,7 +84,8 @@ class Migration(BaseMigration):
             # Migrate values
             for (shape,) in self.db.execute(f"SELECT DISTINCT shape FROM {table}"):
                 if shape:
-                    glyph = SHAPE_MAP.get(shape, DEFAULT_GLYPH)
+                    glyph_code = SHAPE_MAP.get(shape, DEFAULT_GLYPH)
+                    glyph = code_map.get(glyph_code, default_glyph_id)
                     self.db.execute(f"UPDATE {table} SET glyph=%s WHERE shape=%s", [glyph, shape])
             # Remove `shape` field
             self.db.delete_column(table, "shape")

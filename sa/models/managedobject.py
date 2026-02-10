@@ -2798,14 +2798,8 @@ class ManagedObject(NOCModel):
             return False
         return bool(self.get_metric_discovery_interval())
 
-    def get_stencil(self) -> Optional[Stencil]:
-        if self.shape:
-            # Use mo's shape, if set
-            return self.shape
-        if self.object_profile.shape:
-            # Use profile's shape
-            return self.object_profile.shape
-        return None
+    def get_glyph(self) -> Glyph | None:
+        return self.glyph or self.object_profile.glyph
 
     def get_shape_overlays(self) -> List[ShapeOverlay]:
         seen: Set[ShapeOverlayPosition] = set()
