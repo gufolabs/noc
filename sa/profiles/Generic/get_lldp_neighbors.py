@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Generic.get_lldp_neighbors
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -18,10 +18,10 @@ from noc.core.lldp import (
     LLDP_PORT_SUBTYPE_ALIAS,
     LLDP_PORT_SUBTYPE_MAC,
     LLDP_PORT_SUBTYPE_LOCAL,
-    LLDP_PORT_SUBTYPE_COMPONENT,
     LLDP_CHASSIS_SUBTYPE_MAC,
+    LLDP_CHASSIS_SUBTYPE_LOCAL,
 )
-from noc.core.comp import smart_text
+from noc.core import lldp
 from noc.core.snmp.render import render_bin
 
 
@@ -143,9 +143,9 @@ class Script(BaseScript):
             index = v[0].split(".")
             if len(index) == 2:
                 # Bug on TPLINK T2600, index without TimeMark
-                port_num, port_index = index
+                port_num, _port_index = index
             else:
-                _, port_num, port_index = index
+                _, port_num, _port_index = index
             if neigh["remote_chassis_id"].startswith(b"\x00\x00\x00"):
                 continue
                 # b'\x00\x00\x00
@@ -153,25 +153,29 @@ class Script(BaseScript):
                 self.logger.warning("[%s] Local ports not in map. Skipping", port_num)
                 continue
             # cleaning
-            if neigh["remote_port_subtype"] == LLDP_PORT_SUBTYPE_COMPONENT:
-                neigh["remote_port_subtype"] = LLDP_PORT_SUBTYPE_ALIAS
-            neigh["remote_port"] = neigh["remote_port"].replace(b" \x00", b"")
             if neigh["remote_chassis_id_subtype"] == LLDP_CHASSIS_SUBTYPE_MAC:
                 neigh["remote_chassis_id"] = MAC(neigh["remote_chassis_id"])
-            if neigh["remote_port_subtype"] == LLDP_PORT_SUBTYPE_MAC:
-                try:
-                    neigh["remote_port"] = MAC(neigh["remote_port"])
-                except ValueError:
-                    self.logger.warning(
-                        "Bad MAC address on Remote Neighbor: %s", neigh["remote_port"]
-                    )
-            else:
-                neigh["remote_port"] = smart_text(neigh["remote_port"]).rstrip("\x00")
+            match neigh["remote_port_subtype"]:
+                case lldp.LLDP_PORT_SUBTYPE_COMPONENT:
+                    neigh["remote_port_subtype"] = LLDP_PORT_SUBTYPE_ALIAS
+                case lldp.LLDP_PORT_SUBTYPE_MAC:
+                    try:
+                        neigh["remote_port"] = MAC(neigh["remote_port"])
+                    except ValueError:
+                        self.logger.warning(
+                            "Bad MAC address on Remote Neighbor: %s", neigh["remote_port"]
+                        )
+                case lldp.LLDP_PORT_SUBTYPE_NETWORK_ADDRESS:
+                    if len(neigh["remote_port"]) == 4:
+                        a, b, c, d = neigh["remote_port"]
+                        neigh["remote_port"] = f"{a}.{b}.{c}.{d}"
+                case _:
+                    neigh["remote_port"] = trim_str(neigh["remote_port"].replace(b" \x00", b""))
             if neigh.get("remote_system_name"):
-                neigh["remote_system_name"] = smart_text(neigh["remote_system_name"]).rstrip("\x00")
+                neigh["remote_system_name"] = trim_str(neigh["remote_system_name"])
             if neigh.get("remote_port_description"):
-                neigh["remote_port_description"] = neigh["remote_port_description"].rstrip("\x00")
-            if neigh["remote_chassis_id_subtype"] == 7 and isinstance(
+                neigh["remote_port_description"] = trim_str(neigh["remote_port_description"])
+            if neigh["remote_chassis_id_subtype"] == LLDP_CHASSIS_SUBTYPE_LOCAL and isinstance(
                 neigh["remote_chassis_id"], bytes
             ):
                 try:
@@ -184,12 +188,17 @@ class Script(BaseScript):
                     continue
             if port_num in neigh_mgmt_addresses:
                 neigh["remote_mgmt_address"] = neigh_mgmt_addresses[port_num].address
-            r += [
+            r.append(
                 {
                     "local_interface": local_ports[port_num]["local_interface"],
                     # @todo if local interface subtype != 5
                     # "local_interface_id": 5,
                     "neighbors": [neigh],
                 }
-            ]
+            )
         return r
+
+
+def trim_str(v: bytes) -> str:
+    """Convert to string and stip trailing zeroes."""
+    return v.rstrip(b"\x00").decode()
