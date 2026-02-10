@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ExtModelApplication implementation
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -43,7 +43,6 @@ from noc.sa.interfaces.base import (
 )
 from noc.core.validators import is_int
 from noc.models import is_document
-from noc.core.stencil import stencil_registry
 from noc.core.debug import error_report
 from noc.aaa.models.permission import Permission
 from noc.aaa.models.modelprotectionprofile import ModelProtectionProfile
@@ -407,11 +406,6 @@ class ExtModelApplication(ExtApplication):
             elif f.name == "tags":
                 # Send tags as a list
                 r[f.name] = getattr(o, f.name)
-            elif f.name == "shape":
-                if o.shape:
-                    v = stencil_registry.get(o.shape)
-                    r[f.name] = v.id
-                    r["%s__label" % f.name] = smart_text(v.title)
             elif f.name in {"labels", "effective_labels"} and isinstance(f, ArrayField):
                 r[f.name] = sorted(
                     [self.format_label(ll) for ll in Label.from_names(getattr(o, f.name, []))],

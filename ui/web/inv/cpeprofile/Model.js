@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // inv.cpeprofile Model
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2022 The NOC Project
+// Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.inv.cpeprofile.Model");
@@ -28,7 +28,7 @@ Ext.define("NOC.inv.cpeprofile.Model", {
       type: "int",
     },
     {
-      name: "shape",
+      name: "glyph",
       type: "string",
     },
     {

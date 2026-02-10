@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ManagedObject
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -102,7 +102,6 @@ from noc.core.model.fields import (
     PydanticField,
 )
 from noc.core.model.sql import SQL
-from noc.core.stencil import stencil_registry, Stencil
 from noc.core.validators import is_ipv4, is_ipv4_prefix
 from noc.core.ip import IP
 from noc.sa.interfaces.base import MACAddressParameter
@@ -162,7 +161,7 @@ from .managedobjectprofile import ManagedObjectProfile
 from .objectdiagnosticconfig import ObjectDiagnosticConfig
 
 # Increase whenever new field added or removed
-MANAGEDOBJECT_CACHE_VERSION = 55
+MANAGEDOBJECT_CACHE_VERSION = 56
 CREDENTIAL_CACHE_VERSION = 11
 
 # Query for remove maintenance from affected structure
@@ -586,9 +585,7 @@ class ManagedObject(NOCModel):
         "self", verbose_name="Controller", blank=True, null=True, on_delete=CASCADE
     )
     # Stencils
-    shape = CharField(
-        "Shape", blank=True, null=True, choices=stencil_registry.choices, max_length=128
-    )
+    glyph = DocumentReferenceField(Glyph, null=True, blank=True)
     shape_overlay_glyph = DocumentReferenceField(Glyph, null=True, blank=True)
     shape_overlay_position = CharField(
         "S.O. Position",

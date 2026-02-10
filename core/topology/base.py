@@ -72,10 +72,7 @@ class TopologyBase(object):
         self.load()  # Load nodes
 
     def __len__(self):
-        """
-        Map nodel count
-        :return:
-        """
+        """Map nodes count."""
         return len(self.G)
 
     def __contains__(self, item):
@@ -87,33 +84,25 @@ class TopologyBase(object):
 
     @property
     def title(self):
-        """
-        Map Title
-        :return:
-        """
+        """Map Title."""
         return f"{self.name}"
 
     @property
     def meta(self) -> MapMeta:
-        """
-        Return Map settings
-        :return:
-        """
+        """Get Map settings."""
         return MapMeta(title=self.title)
 
     def get_uplinks(self) -> List[str]:
-        """
-        Return uplink node for map. Use on tree layout
-        :return:
-        """
+        """Return uplink node for map. Use on tree layout."""
         return []
 
     def add_node(self, n: TopologyNode, attrs: Optional[Dict[str, Any]] = None) -> None:
         """
-        Add node to map
-        :param n: Node
-        :param attrs: Additional attributes
-        :return:
+        Add node to map.
+
+        Args:
+            n: Node
+            attrs: Additional attributes
         """
         attrs = attrs or {}
         o_id = str(n.id)
@@ -153,9 +142,7 @@ class TopologyBase(object):
     def add_edge(
         self, o1: str, o2: str, attrs: Optional[Dict[str, Any]] = None, edge_type: str = "link"
     ):
-        """
-        Add link between interfaces to topology
-        """
+        """Add link between interfaces to topology."""
         a = {"connector": "normal"}
         if attrs:
             a.update(attrs)
@@ -163,17 +150,14 @@ class TopologyBase(object):
         self.G.add_edge(o1, o2, **a)
 
     def add_link(self, link):
-        """
-        Add Link to Graph edge
-        :param link:
-        :return:
-        """
+        """Add Link to Graph edge."""
 
         def get_bandwidth(if_list):
             """
-            Calculate bandwidth for list of interfaces
-            :param if_list:
-            :return: total in bandwidth, total out bandwidth
+            Calculate bandwidth for list of interfaces.
+
+            Returns:
+                Tuple of total in bandwidth, total out bandwidth
             """
             in_bw = 0
             out_bw = 0
@@ -264,12 +248,7 @@ class TopologyBase(object):
             self.pn += 2
 
     def add_parent(self, parent, child):
-        """
-        Add Child-Parent link
-        :param parent:
-        :param child:
-        :return:
-        """
+        """Add Child-Parent link."""
         # Create virtual ports
         if {"id": f"{parent}-children", "ports": ["children"]} not in self.G.nodes[child]["ports"]:
             self.G.nodes[parent]["ports"].append(
@@ -288,17 +267,18 @@ class TopologyBase(object):
         )
 
     def load(self):
-        """
-        Fill nodes and edges on graph
-        :return:
-        """
+        """Fill nodes and edges on graph."""
 
     def order_nodes(self, uplink, downlinks):
         """
-        Sort downlinks basing on uplink's interface
-        :param uplink: managed object id
-        :param downlinks: ids of downlinks
-        :returns: sorted list of downlinks
+        Sort downlinks basing on uplink's interface.
+
+        Args:
+            uplink: managed object id
+            downlinks: ids of downlinks
+
+        Returns:
+            sorted list of downlinks
         """
         id_to_name = {}
         dl_map = {}  # downlink -> uplink port
@@ -313,16 +293,12 @@ class TopologyBase(object):
 
     @cachetools.cachedmethod(operator.attrgetter("_rings_cache"))
     def get_rings(self):
-        """
-        Return list of all rings
-        """
+        """Return list of all rings."""
         return list(nx.cycle_basis(self.G))
 
     @cachetools.cachedmethod(operator.attrgetter("_isolated_cache"))
     def get_isolated(self):
-        """
-        Returns list of nodes without connections
-        """
+        """Returns list of nodes without connections."""
         return list(nx.isolates(self.G))
 
     def non_isolated_graph(self):
@@ -334,7 +310,9 @@ class TopologyBase(object):
     ) -> Tuple[int, int, Dict[str, Tuple[int, int]]]:
         """
         Normalize positions, shift to (0, 0).
-        Returns width, height, post
+
+        Returns:
+            Tuple of width, height, post
         """
         maxv = np.array([0, 0])
         minv = np.array([0, 0])
@@ -352,10 +330,7 @@ class TopologyBase(object):
         return s[0], s[1], pos
 
     def get_layout_class(self):
-        """
-        Getting layout module
-        :return:
-        """
+        """Getting layout module."""
         if not len(self.G):
             # Empty graph
             return SpringLayout
@@ -366,10 +341,7 @@ class TopologyBase(object):
         return SpringLayout
 
     def layout(self):
-        """
-        Fill node coordinates
-        :return:
-        """
+        """Fill node coordinates."""
         # Use node hints
         dpos = {}
         for p, nh in self.node_hints.items():
@@ -411,11 +383,7 @@ class TopologyBase(object):
 
     @staticmethod
     def q_node(node):
-        """
-        Format graph node
-        :param node:
-        :return:
-        """
+        """Format graph node."""
         x = node.copy()
         if "mo" in x:
             del x["mo"]
@@ -426,18 +394,12 @@ class TopologyBase(object):
         return x
 
     def iter_nodes(self):
-        """
-        Iterate over map Nodes
-        :return:
-        """
+        """Iterate over map Nodes."""
         for n in self.G.nodes.values():
             yield self.q_node(n)
 
     def iter_edges(self) -> Iterable[Any]:
-        """
-        Iterate over map Edges
-        :return:
-        """
+        """Iterate over map Edges."""
         for u, v in self.G.edges():
             yield self.G[u][v]
 
@@ -455,20 +417,8 @@ class TopologyBase(object):
         start: Optional[int] = None,
         page: Optional[int] = None,
     ) -> Iterable[MapItem]:
-        """
-        Iterator over available maps
-        :param parent:
-        :param query:
-        :param limit:
-        :param start:
-        :param page:
-        :return:
-        """
+        """Iterate over available maps."""
 
     @classmethod
     def iter_path(cls, gen_id) -> Iterable[PathItem]:
-        """
-        Return map by hierarchy path
-        :param gen_id:
-        :return:
-        """
+        """Return map by hierarchy path."""
