@@ -18,7 +18,6 @@ from mongoengine.base.common import _document_registry
 from noc.services.web.base.extapplication import ExtApplication, view
 from noc.services.web.base.site import site
 from noc.core.interface.loader import loader as interface_loader
-from noc.core.stencil import stencil_registry
 from noc.core.profile.loader import loader as profile_loader
 from noc.core.script.loader import loader as script_loader
 from noc.core.checkers.loader import loader as checker_loader
@@ -83,16 +82,6 @@ class RefAppplication(ExtApplication):
         """
         s = {x.split(".")[-1] for x in script_loader.iter_scripts()}
         return [{"id": n, "label": n} for n in sorted(s)]
-
-    def build_stencil(self):
-        """
-        Stencils
-        :return:
-        """
-        return sorted(
-            ({"id": s[0], "label": s[1]} for s in stencil_registry.choices),
-            key=lambda x: x["label"],
-        )
 
     def build_model(self):
         """

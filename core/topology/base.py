@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # BaseMapTopology class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -18,7 +18,6 @@ import cachetools
 from bson import ObjectId
 
 # NOC modules
-from noc.core.stencil import stencil_registry, Stencil
 from noc.core.text import alnum_key
 from .layout.ring import RingLayout
 from .layout.spring import SpringLayout
@@ -53,12 +52,14 @@ class TopologyBase(object):
     AGG_LINK_SPACING = 10
     # Fixed map shifting
     MAP_OFFSET = np.array([80, 40])
+    # DEFAULT_GLYPH
+    DEFAULT_GLYPH = 0xF22C
+    CLOUD_GLYPH = 0xF004
 
-    def __init__(self, **settings):
+    def __init__(self, **kwargs):
         # Hints
-        self.node_hints: Optional[Dict[str, Any]] = settings.get("node_hints") or {}
-        self.link_hints: Optional[Dict[str, Any]] = settings.get("link_hints") or {}
-        self.default_stencil = stencil_registry.get(stencil_registry.DEFAULT_STENCIL)
+        self.node_hints: Optional[Dict[str, Any]] = kwargs.get("node_hints") or {}
+        self.link_hints: Optional[Dict[str, Any]] = kwargs.get("link_hints") or {}
         self.pn = 0
         # Caches
         self._rings_cache = {}
@@ -67,7 +68,7 @@ class TopologyBase(object):
         # Graph
         self.G = nx.Graph()
         self.caps: Set[str] = set()
-        self.settings = settings or {}
+        self.settings = kwargs or {}
         self.load()  # Load nodes
 
     def __len__(self):
@@ -121,7 +122,6 @@ class TopologyBase(object):
             # Only update attributes
             self.G.nodes[o_id].update(attrs)
             return
-        stencil: Stencil = stencil_registry.get(n.stencil or stencil_registry.DEFAULT_STENCIL)
         # Get capabilities
         oc = set()
         if n.get_caps():
@@ -141,9 +141,7 @@ class TopologyBase(object):
                 "metrics_template": n.title_metric_template or "",
                 "level": n.level,
                 "name": n.title or "",
-                "shape": getattr(stencil, "path", ""),
-                "shape_width": getattr(stencil, "width", 0),
-                "shape_height": getattr(stencil, "height", 0),
+                "glyph": n.glyph or self.DEFAULT_GLYPH,
                 "shape_overlay": [asdict(x) for x in n.overlays] if n.overlays else [],
                 "ports": [],
                 "caps": list(oc),
@@ -203,7 +201,7 @@ class TopologyBase(object):
         mo_ifaces = defaultdict(list)
         for if_id in link.interface_ids:
             iface = self._interface_cache[if_id]
-            mo_ifaces[self.G.nodes[str(iface["managed_object"])]["mo"]] += [iface]
+            mo_ifaces[self.G.nodes[str(iface["managed_object"])]["mo"]].append(iface)
         # Pairs of managed objects are pseudo-links
         if len(mo_ifaces) == 2:
             # ptp link
@@ -217,7 +215,7 @@ class TopologyBase(object):
                     id=str(link.id),
                     title=str(link),
                     type="cloud",
-                    stencil=stencil_registry.DEFAULT_CLOUD_STENCIL,
+                    glyph=self.CLOUD_GLYPH,
                 )
             )
             # Create virtual links to cloud
@@ -230,13 +228,13 @@ class TopologyBase(object):
             mo0_id = str(mo0.id)
             mo1_id = str(mo1.id)
             # Create virtual ports for mo0
-            self.G.nodes[mo0_id]["ports"] += [
+            self.G.nodes[mo0_id]["ports"].append(
                 {"id": self.pn, "ports": [i["name"] for i in mo_ifaces[mo0]]}
-            ]
+            )
             # Create virtual ports for mo1
-            self.G.nodes[mo1_id]["ports"] += [
+            self.G.nodes[mo1_id]["ports"].append(
                 {"id": self.pn + 1, "ports": [i["name"] for i in mo_ifaces[mo1]]}
-            ]
+            )
             # Calculate bandwidth
             t_in_bw, t_out_bw = get_bandwidth(mo_ifaces[mo0])
             d_in_bw, d_out_bw = get_bandwidth(mo_ifaces[mo1])
@@ -274,8 +272,10 @@ class TopologyBase(object):
         """
         # Create virtual ports
         if {"id": f"{parent}-children", "ports": ["children"]} not in self.G.nodes[child]["ports"]:
-            self.G.nodes[parent]["ports"] += [{"id": f"{parent}-children", "ports": ["children"]}]
-        self.G.nodes[child]["ports"] += [{"id": f"{child}-parent", "ports": ["parent"]}]
+            self.G.nodes[parent]["ports"].append(
+                {"id": f"{parent}-children", "ports": ["children"]}
+            )
+        self.G.nodes[child]["ports"].append({"id": f"{child}-parent", "ports": ["parent"]})
         self.add_edge(
             child,
             parent,
