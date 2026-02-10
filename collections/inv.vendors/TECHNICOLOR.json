@@ -1,0 +1,8 @@
+{
+    "name": "Technicolor",
+    "uuid": "5415ce56-03f5-4145-96db-e4b7bd139dbb",
+    "full_name": "Technicolor Group",
+    "code": ["TECHNICOLOR"],
+    "site": "https://www.technicolor.com/",
+    "$collection": "inv.vendors"
+}

@@ -1,0 +1,8 @@
+{
+    "name": "FoxGate",
+    "uuid": "7877bf20-a654-44c6-ba7e-f03fb55e475f",
+    "full_name": "FoxGate",
+    "code": ["FOXGATE", "FGXP"],
+    "site": "https://foxgate.ua/",
+    "$collection": "inv.vendors"
+}

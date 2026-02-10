@@ -1,0 +1,8 @@
+{
+    "name": "AVM",
+    "uuid": "f89c491a-4ce6-4c44-8314-6d1373b3888f",
+    "full_name": "AVM (FRITZ!Box)",
+    "code": ["AVM", "AVMG", "FRITZ"],
+    "site": "https://fritz.com",
+    "$collection": "inv.vendors"
+}

@@ -20,9 +20,7 @@ import bson
 # NOC modules
 from noc.core.prettyjson import to_json
 from noc.core.path import safe_json_path
-from noc.core.mongo.fields import PlainReferenceField
 from noc.core.model.decorator import on_delete_check
-from .font import Font
 
 id_lock = Lock()
 
@@ -44,8 +42,7 @@ class Glyph(Document):
     }
     name = StringField(unique=True)
     uuid = UUIDField(unique=True, binary=True)
-    font = PlainReferenceField(Font)
-    code = IntField()
+    code = IntField(unique=True)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 
@@ -63,12 +60,11 @@ class Glyph(Document):
             "name": self.name,
             "$collection": self._meta["json_collection"],
             "uuid": str(self.uuid),
-            "font__name": self.font.name,
             "code": self.code,
         }
 
     def to_json(self) -> str:
-        return to_json(self.json_data, order=["name", "$collection", "uuid", "font__name", "code"])
+        return to_json(self.json_data, order=["name", "$collection", "uuid", "code"])
 
     def get_json_path(self) -> Path:
         return safe_json_path(self.name)

@@ -185,8 +185,4 @@ class AlarmCard(BaseCard):
         if not object:
             return "--"
         s = {1: "telnet", 2: "ssh", 3: "http", 4: "https"}[object.scheme]
-        return "<a href='%s://%s/'><i class='fa fa-terminal'></i> %s</a>" % (
-            s,
-            object.address,
-            s.upper(),
-        )
+        return f"<a href='{s}://{object.address}/'><i class='gf gf-terminal-o'></i> {s.upper()}</a>"
