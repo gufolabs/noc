@@ -456,6 +456,12 @@ Ext.define("NOC.main.reportconfig.Application", {
                       editor: "textfield",
                     },
                     {
+                      text: __("Condition/Param"),
+                      dataIndex: "condition_param",
+                      width: 200,
+                      editor: "textfield",
+                    },
+                    {
                       text: __("Default"),
                       dataIndex: "default",
                       width: 100,
