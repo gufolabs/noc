@@ -450,9 +450,9 @@ Ext.define("NOC.main.reportconfig.Application", {
                       editor: "stringlistfield",
                     },
                     {
-                      text: __("Condition/Values"),
-                      dataIndex: "condition_values",
-                      width: 200,
+                      text: __("Default"),
+                      dataIndex: "default",
+                      width: 100,
                       editor: "textfield",
                     },
                     {
@@ -462,9 +462,9 @@ Ext.define("NOC.main.reportconfig.Application", {
                       editor: "textfield",
                     },
                     {
-                      text: __("Default"),
-                      dataIndex: "default",
-                      width: 100,
+                      text: __("Condition/Values"),
+                      dataIndex: "condition_values",
+                      width: 200,
                       editor: "textfield",
                     },
                     {
