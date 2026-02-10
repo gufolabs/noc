@@ -13,7 +13,7 @@ Ext.define("NOC.inv.inv.plugins.conduits.ConduitsPanel", {
   title: __("Conduits"),
   closable: false,
   layout: "fit",
-  autoScroll: true,
+  scrollable: false,
   app: null,
 
   initComponent: function(){

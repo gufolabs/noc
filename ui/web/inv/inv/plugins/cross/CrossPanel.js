@@ -11,6 +11,7 @@ Ext.define("NOC.inv.inv.plugins.cross.CrossPanel", {
   title: __("Cross"),
   closable: false,
   layout: "fit",
+  scrollable: false,
   items: [
     {
       xtype: "panel",

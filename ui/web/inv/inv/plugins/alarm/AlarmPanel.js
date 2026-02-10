@@ -27,6 +27,7 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
   title: __("Alarms"),
   closable: false,
   layout: "fit",
+  scrollable: false,
   //
   initComponent: function(){
     var me = this;

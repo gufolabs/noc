@@ -12,7 +12,7 @@ Ext.define("NOC.inv.inv.plugins.contacts.ContactsPanel", {
   ],
   title: __("Contacts"),
   closable: false,
-  scrollable: true,
+  scrollable: false,
   padding: 4,
 
   initComponent: function(){

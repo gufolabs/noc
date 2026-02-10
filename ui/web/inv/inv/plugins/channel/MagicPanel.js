@@ -10,6 +10,7 @@ Ext.define("NOC.inv.inv.plugins.channel.MagicPanel", {
   extend: "Ext.panel.Panel",
   alias: "widget.invchannelmagic",
   layout: "fit",
+  scrollable: false,
   defaultListenerScope: true,
   items: [
     {

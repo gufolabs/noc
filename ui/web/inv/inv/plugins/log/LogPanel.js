@@ -14,6 +14,7 @@ Ext.define("NOC.inv.inv.plugins.log.LogPanel", {
   title: __("Log"),
   closable: false,
   layout: "fit",
+  scrollable: false,
 
   initComponent: function(){
     var me = this;
