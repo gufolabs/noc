@@ -47,7 +47,6 @@ bh = [
 ]
 cache-memcached = ["pylibmc==1.6.3"]
 cache-redis = ["hiredis==3.1.0", "redis==4.6.0"]
-classifier = ["bitarray==3.7.1"]
 dev = [
   "Babel==2.13.1",
   "ipython==9.5.0",
