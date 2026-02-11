@@ -20,7 +20,7 @@ class PredicateTransformer(ast.NodeTransformer):
         super().__init__()
 
     def wrap_callable(self, node):
-        return ast.Lambda(
+        new_node = ast.Lambda(
             args=ast.arguments(
                 posonlyargs=[],
                 args=[ast.arg(arg=CVAR_NAME, annotation=None)],
@@ -32,10 +32,11 @@ class PredicateTransformer(ast.NodeTransformer):
             ),
             body=node,
         )
+        return ast.copy_location(new_node, node)
 
-    def make_or_call(self, cn):
+    def make_or_call(self, node):
         l_name = "_input_%d" % next(self.input_counter)
-        return ast.Lambda(
+        new_node = ast.Lambda(
             args=ast.arguments(
                 posonlyargs=[],
                 args=[ast.arg(arg="self", annotation=None), ast.arg(arg=l_name, annotation=None)],
@@ -45,8 +46,9 @@ class PredicateTransformer(ast.NodeTransformer):
                 kwarg=None,
                 defaults=[],
             ),
-            body=self.visit_Call(cn, _input=ast.Name(id=l_name, ctx=ast.Load())),
+            body=self.visit_Call(node, _input=ast.Name(id=l_name, ctx=ast.Load())),
         )
+        return ast.copy_location(new_node, node)
 
     def wrap_visitor(self, node):
         return self.visit(node)
@@ -69,7 +71,7 @@ class PredicateTransformer(ast.NodeTransformer):
         # NameConstant py<3.8, Constant py>=3.8
         return node.value
 
-    def visit_Call(self, node, _input=None):
+    def visit_Call(self, node: ast.Call, _input=None):
         if isinstance(node, ast.BoolOp):
             return self.visit_BoolOp(node, _input=_input)
         if isinstance(node, ast.UnaryOp):
@@ -78,13 +80,14 @@ class PredicateTransformer(ast.NodeTransformer):
             _input = ast.Name(id="_input", ctx=ast.Load())
         attr_name = "fn_%s" % self._get_node_id(node.func)
         fn = getattr(self.engine, attr_name)
-        return ast.Call(
+        new_node = ast.Call(
             func=ast.Attribute(
                 value=ast.Name(id="self", ctx=ast.Load()), attr=attr_name, ctx=ast.Load()
             ),
             args=[_input, *self.visit_args(fn, node.args)],
             keywords=[ast.keyword(arg=k.arg, value=self.wrap_expr(k.value)) for k in node.keywords],
         )
+        return ast.copy_location(new_node, node)
 
     def visit_BoolOp(self, node, _input=None):
         def get_and_call_chain(chain):
@@ -93,13 +96,14 @@ class PredicateTransformer(ast.NodeTransformer):
             return self.visit_Call(chain[0], get_and_call_chain(chain[1:]))
 
         def get_or_call_chain(chain):
-            return ast.Call(
+            new_node = ast.Call(
                 func=ast.Attribute(
                     value=ast.Name(id="self", ctx=ast.Load()), attr="op_Or", ctx=ast.Load()
                 ),
                 args=[_input] + [self.make_or_call(n) for n in chain],
                 keywords=[],
             )
+            return ast.copy_location(new_node, node)
 
         if not _input:
             _input = ast.Name(id="_input", ctx=ast.Load())
@@ -109,29 +113,31 @@ class PredicateTransformer(ast.NodeTransformer):
             return get_or_call_chain(node.values)
         return node
 
-    def visit_Name(self, node):
+    def visit_Name(self, node: ast.Name):
         """
         Convert Name(id=name) to self.fn_Var(name)
         :param node:
         :return:
         """
-        return ast.Call(
+        new_node = ast.Call(
             func=ast.Attribute(
                 value=ast.Name(id="self", ctx=ast.Load()), attr="fn_Var", ctx=ast.Load()
             ),
-            args=[ast.Str(s=node.id)],
+            args=[ast.Constant(value=node.id)],
             keywords=[],
         )
+        return ast.copy_location(new_node, node)
 
     def visit_UnaryOp(self, node):
         if isinstance(node.op, ast.Not):
-            return ast.Call(
+            new_node = ast.Call(
                 func=ast.Attribute(
                     value=ast.Name(id="self", ctx=ast.Load()), attr="op_Not", ctx=ast.Load()
                 ),
                 args=[self.visit(node.operand)],
                 keywords=[],
             )
+            return ast.copy_location(new_node, node)
 
         return node
 
@@ -139,11 +145,12 @@ class PredicateTransformer(ast.NodeTransformer):
 class ExpressionTransformer(ast.NodeTransformer):
     RESERVED_NAMES = {"True", "False", "None"}
 
-    def visit_Name(self, node):
+    def visit_Name(self, node: ast.Name):
         if node.id in self.RESERVED_NAMES:
             return node
-        return ast.Subscript(
+        new_node = ast.Subscript(
             value=ast.Name(id=CVAR_NAME, ctx=ast.Load()),
-            slice=ast.Index(value=ast.Str(s=node.id)),
+            slice=ast.Constant(value=node.id),
             ctx=ast.Load(),
         )
+        return ast.copy_location(new_node, node)
