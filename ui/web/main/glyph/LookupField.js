@@ -11,5 +11,5 @@ Ext.define("NOC.main.glyph.LookupField", {
   alias: "widget.main.glyph.LookupField",
   uiStyle: "medium-combo",
   dataFields: ["id", "label", "font", "code"],
-  tpl: '<tpl for="."><div class="x-boundlist-item"><span style="font-family: {font}">&#{code};</span> {label}</div></tpl>',
+  tpl: '<tpl for="."><div class="x-boundlist-item"><span class="gf">&#{code};</span> {label}</div></tpl>',
 });
