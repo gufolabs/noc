@@ -124,7 +124,7 @@ jobs:
         uses: astral-sh/setup-uv@v1
 
       - name: Install Dependencies
-        run: uv pip install --system -e .[node,test,bh,activator,classifier,cache-redis,node,login-ldap,login-pam,login-radius,prod-tools,testing,sender-kafka,ping]
+        run: uv pip install --system -e .[node,test,bh,activator,cache-redis,node,login-ldap,login-pam,login-radius,prod-tools,testing,sender-kafka,ping]
 
       - name: Run Tests (with coverage)
         run: pytest --maxfail=10 --cov --cov-branch --cov-report=xml tests/
