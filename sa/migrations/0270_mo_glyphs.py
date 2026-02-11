@@ -62,6 +62,19 @@ SHAPE_MAP: dict[str, int] = {
     "Juniper/generic_router": 0xF400,
     "Juniper/l2_l3_switch": 0xF401,
     "Juniper/l2_l3_switch3": 0xF402,
+    "Flaticon/cctv-1": 0xF04C,
+    "Flaticon/cctv-2": 0xF04C,
+    "Flaticon/cctv-3": 0xF04C,
+    "Flaticon/cctv-square": 0xF04C,
+    "Flaticon/cctv-wifi": 0xF04C,
+    "Flaticon/hub": 0xF04C,
+    "Flaticon/router": 0xF04C,
+    "Flaticon/surveillance-1": 0xF04C,
+    "Flaticon/surveillance-2": 0xF04C,
+    "Flaticon/surveillance-3": 0xF04C,
+    "Flaticon/surveillance-4": 0xF04C,
+    "Flaticon/surveillance-5": 0xF04C,
+    "Flaticon/web-camera": 0xF04C,
 }
 
 
