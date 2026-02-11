@@ -216,15 +216,7 @@ Ext.define("NOC.inv.map.MapPanel", {
   afterRender: function(){
     var me = this;
     me.callParent();
-    new_load_scripts(
-      [
-        "/ui/pkg/lodash/lodash.min.js",
-        "/ui/pkg/backbone/backbone.min.js",
-        "/ui/pkg/joint/joint.min.js",
-      ],
-      me,
-      me.initMap,
-    );
+    me.initMap();
     this.boundScrollHandler = Ext.bind(this.moveViewPort, this);
     this.body.dom.addEventListener("scroll", this.boundScrollHandler);
   },
