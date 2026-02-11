@@ -216,14 +216,6 @@
   tags:
     - requirements
 
-- name: Add -classifier- python packages
-  set_fact:
-    python_deps: "{{ python_deps + ['classifier'] }}"
-  when:
-    - "'svc-classifier-exec' in groups and inventory_hostname in groups['svc-classifier-exec']"
-  tags:
-    - requirements
-
 - name: Add -login- python packages 1
   set_fact:
     python_deps: "{{ python_deps + ['login-ldap'] }}"
