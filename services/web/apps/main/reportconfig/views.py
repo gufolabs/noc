@@ -1,13 +1,13 @@
 # ----------------------------------------------------------------------
 # main.report application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 from urllib.parse import quote
-from typing import Optional, Set
+from typing import Dict, List, Optional, Set
 from collections import defaultdict
 
 # Third-party modules
@@ -86,10 +86,11 @@ class ReportConfigApplication(ExtDocApplication):
 
     @staticmethod
     def get_columns_filter(
-        report: "Report",
+        report: Report,
         checked: Optional[Set[str]] = None,
         pref_lang: Optional[str] = None,
-    ):
+        condition_value: Optional[str] = None,
+    ) -> List:
         """
         Get columns filter
         :param report:
@@ -99,11 +100,11 @@ class ReportConfigApplication(ExtDocApplication):
         """
         r = []
         checked = checked or {}
-        root_fmt = report.get_band_format()
-        if not root_fmt.column_format:
+        band_fmt = report.get_bandformat(condition_value)
+        if not band_fmt.column_format:
             return r
-        columns = report.get_band_columns()
-        for field in root_fmt.column_format:
+        columns = report.get_root_band_ds_columns()
+        for field in band_fmt.column_format:
             field_name = field["name"]
             if "." in field_name:
                 q_name, fn = field_name.split(".")
@@ -116,12 +117,29 @@ class ReportConfigApplication(ExtDocApplication):
             title = (
                 report.get_localization(f"columns.{fn}", lang=pref_lang) or field.get("title") or fn
             )
-            r += [(field_name, title, field_name in checked)]
+            if condition_value:
+                id = f"{condition_value}__{field_name}"
+                row = (id, field_name, title, field_name in checked, condition_value)
+            else:
+                id = field_name
+                row = (id, field_name, title, field_name in checked)
+            r.append(row)
         return r
 
     @view(url=r"^(?P<report_id>\S+)/form/$", method=["GET"], access="run", api=True)
     def api_form_report(self, request, report_id):
-        report: "Report" = self.get_object_or_404(Report, id=report_id)
+        def update_choice_widget(result: Dict, cond_param: str, target_name: str):
+            for cfg in result["params"]:
+                if cfg["name"] == cond_param:
+                    cfg["reportMeta"] = {}
+                    dep = {
+                        "targetWidget": f"[name={target_name}]",
+                        "filter": "type",
+                    }
+                    cfg["reportMeta"]["dependencies"] = [dep]
+                    return
+
+        report: Report = self.get_object_or_404(Report, id=report_id)
         pref_lang = request.user.preferred_language
         outputs = set()
         r = {
@@ -147,6 +165,7 @@ class ReportConfigApplication(ExtDocApplication):
             r["dockedItems"] += [
                 {"text": out.upper(), "param": {"output_type": out}} for out in outputs
             ]
+        widget_dependency = None
         for param in report.parameters:
             if param.hide:
                 continue
@@ -202,16 +221,60 @@ class ReportConfigApplication(ExtDocApplication):
                 if param.default and param.default == "1":
                     cfg["checked"] = "true"
             elif param.type == "fields_selector":
-                cf = self.get_columns_filter(
-                    report,
-                    checked={p.strip() for p in param.default.split(",")},
-                    pref_lang=pref_lang,
-                )
                 cfg["xtype"] = "reportcolumnselect"
-                cfg["storeData"] = cf
+                if param.condition_param:
+                    widget_dependency = {
+                        "cond_param": param.condition_param,
+                        "target_name": param.name,
+                    }
+                    cfg["conditionParam"] = param.condition_param
+                    cfs = []
+                    for cv in param.condition_values:
+                        cf = self.get_columns_filter(
+                            report,
+                            checked={p.strip() for p in cv.default_value.split(",")},
+                            pref_lang=pref_lang,
+                            condition_value=cv.value,
+                        )
+                        cfs.extend(cf)
+                    cfg["store"] = {
+                        "fields": [
+                            "id",
+                            "field_name",
+                            "label",
+                            {
+                                "name": "is_active",
+                                "type": "boolean",
+                            },
+                            "type",
+                        ],
+                        "data": cfs,
+                    }
+                else:
+                    cf = self.get_columns_filter(
+                        report,
+                        checked={p.strip() for p in param.default.split(",")},
+                        pref_lang=pref_lang,
+                    )
+                    cfg["store"] = {
+                        "fields": [
+                            "id",
+                            "field_name",
+                            "label",
+                            {
+                                "name": "is_active",
+                                "type": "boolean",
+                            },
+                        ],
+                        "data": cf,
+                    }
             else:
                 cfg["xtype"] = "textfield"
             r["params"] += [cfg]
+        if widget_dependency:
+            update_choice_widget(
+                r, widget_dependency["cond_param"], widget_dependency["target_name"]
+            )
         # formats
         return r
 
@@ -225,7 +288,7 @@ class ReportConfigApplication(ExtDocApplication):
         """
         q = {str(k): v[0] if len(v) == 1 else v for k, v in request.GET.lists()}
         pref_lang = request.user.preferred_language
-        report: "Report" = self.get_object_or_404(Report, id=report_id)
+        report: Report = self.get_object_or_404(Report, id=report_id)
         report_engine = ReportEngine(
             report_execution_history=config.web.enable_report_history,
         )

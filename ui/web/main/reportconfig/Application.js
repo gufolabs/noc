@@ -65,22 +65,19 @@ Ext.define("NOC.main.reportconfig.Application", {
       fields: [
         {
           xtype: "container",
-          layout: "hbox",
           items: [
+            {
+              name: "uuid",
+              xtype: "displayfield",
+              fieldLabel: __("UUID"),
+            },
             {
               name: "name",
               xtype: "textfield",
               fieldLabel: __("Name"),
-              allowBlank: false,
+              allowBlank: true,
               uiStyle: "large",
             },
-            {
-              name: "uuid",
-              xtype: "displayfield",
-              style: "padding-left: 10px",
-              fieldLabel: __("UUID"),
-            },
-
           ],
         },
         {
@@ -456,6 +453,18 @@ Ext.define("NOC.main.reportconfig.Application", {
                       text: __("Default"),
                       dataIndex: "default",
                       width: 100,
+                      editor: "textfield",
+                    },
+                    {
+                      text: __("Condition/Param"),
+                      dataIndex: "condition_param",
+                      width: 200,
+                      editor: "textfield",
+                    },
+                    {
+                      text: __("Condition/Values"),
+                      dataIndex: "condition_values",
+                      width: 200,
                       editor: "textfield",
                     },
                     {
