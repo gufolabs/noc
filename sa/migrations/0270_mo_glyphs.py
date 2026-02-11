@@ -71,7 +71,7 @@ class Migration(BaseMigration):
         Collection("main.glyphs").sync()
         # code to id mappings
         code_map = {
-            doc["code"]: str(doc["id"])
+            doc["code"]: str(doc["_id"])
             for doc in self.mongo_db["glyphs"].find({}, {"_id": 1, "code": 1})
         }
         default_glyph_id = code_map[DEFAULT_GLYPH]
