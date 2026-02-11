@@ -348,10 +348,11 @@
             "name": "reporttype",
             "description": null,
             "choices": ["load_interfaces", "load_cpu", "ping"],
+            "default": "load_interfaces",
             "hide": false,
             "label": "Report Type",
             "required": true,
-            "type": "combo-choice"
+            "type": "choice"
         },
         {
             "name": "start",
@@ -407,6 +408,19 @@
             "hide": false,
             "label": "Exclude interface that has zero load",
             "type": "bool"
+        },
+        {
+            "name": "fields",
+            "description": null,
+            "condition_param": "reporttype",
+            "condition_values": [
+                {"value": "load_interfaces", "default_value": "managedobjectds.name,iface_name"},
+                {"value": "load_cpu", "default_value": "managedobjectds.name,cpu_usage"},
+                {"value": "ping", "default_value": "managedobjectds.name,ping_rtt"}
+             ],
+            "hide": false,
+            "label": "Fields",
+            "type": "fields_selector"
         }
     ],
     "templates": [
