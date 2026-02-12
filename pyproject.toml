@@ -76,7 +76,7 @@ login-radius = ["pyrad==2.4"]
 node = [
   "aiokafka[lz4,snappy,zstd]==0.12.0",
   "Django==4.2.26",
-  "FastAPI==0.115.11",
+  "FastAPI==0.128.8",
   "Jinja2==3.1.6",
   "PyYAML==6.0.2",
   "Pygments==2.19.1",
