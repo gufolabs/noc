@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # CLI FSM
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -10,7 +10,7 @@ import re
 import functools
 from functools import reduce
 import asyncio
-from typing import Optional, Any, Type, Callable, Dict, Set, Union
+from typing import Optional, Any, Type, Callable, Dict, Set, Union, List
 
 # NOC modules
 from noc.core.text import replace_re_group
@@ -58,8 +58,6 @@ class CLI(BaseCLI):
         self.prompt_stack = []
         self.patterns = self.profile.patterns.copy()
         self.buffer: bytes = b""
-        self.result = None
-        self.error = None
         self.pattern_table = None
         self.collected_data = []
         self.setup_complete = False
@@ -91,7 +89,6 @@ class CLI(BaseCLI):
     ) -> str:
         self.buffer = b""
         self.command = cmd
-        self.error = None
         self.ignore_errors = ignore_errors
         self.allow_empty_response = allow_empty_response
         # Labels
@@ -105,16 +102,11 @@ class CLI(BaseCLI):
             )
         else:
             parser = self.read_until_prompt
-        with Span(
-            server=self.script.credentials.get("address"), service=self.name, in_label=cmd
-        ) as s:
-            with IOLoopContext() as loop:
-                loop.run_until_complete(self.submit(parser))
-            if self.error:
-                if s:
-                    s.error_text = str(self.error)
-                raise self.error
-            return self.result
+        with (
+            Span(server=self.script.credentials.get("address"), service=self.name, in_label=cmd),
+            IOLoopContext() as loop,
+        ):
+            return loop.run_until_complete(self.submit(parser))
 
     async def start_stream(self):
         await super().start_stream()
@@ -132,14 +124,11 @@ class CLI(BaseCLI):
             try:
                 await self.start_stream()
             except ConnectionRefusedError:
-                self.error = CLIConnectionRefused("Connection refused")
                 metrics["cli_connection_refused", ("proto", self.name)] += 1
-                return None
-            except CLIAuthFailed as e:
-                self.error = CLIAuthFailed(*e.args)
+                raise CLIConnectionRefused("Connection refused")
+            except CLIAuthFailed:
                 self.logger.info("CLI Authentication failed")
-                # metrics["cli_connection_refused", ("proto", self.name)] += 1
-                return None
+                raise
         metrics["cli_commands", ("proto", self.name)] += 1
         # Send command
         # @todo: encode to object's encoding
@@ -153,28 +142,22 @@ class CLI(BaseCLI):
                 # Await response
                 await self.stream.wait_for_read()
         parser = parser or self.read_until_prompt
-        self.result = await parser()
-        self.logger.debug(
-            "Command: %s\n%s", self.command.strip(), smart_text(self.result, errors="replace")
-        )
+        r = await parser()
+        self.logger.debug("Command: %s\n%s", self.command.strip(), smart_text(r, errors="replace"))
         if (
             self.profile.rx_pattern_syntax_error
             and not self.ignore_errors
             and parser == self.read_until_prompt
-            and (
-                self.profile.rx_pattern_syntax_error.search(self.result)
-                or self.result == self.SYNTAX_ERROR_CODE
-            )
+            and (self.profile.rx_pattern_syntax_error.search(r) or r == self.SYNTAX_ERROR_CODE)
         ):
-            error_text = self.result
+            error_text = r
             if self.profile.send_on_syntax_error and not self.is_beef():
                 self.allow_empty_response = True
                 await self.on_error_sequence(
                     self.profile.send_on_syntax_error, self.command, error_text
                 )
-            self.error = self.script.CLISyntaxError(error_text)
-            self.result = None
-        return self.result
+            raise self.script.CLISyntaxError(error_text)
+        return r
 
     def is_beef(self) -> bool:
         return False
@@ -196,6 +179,8 @@ class CLI(BaseCLI):
         await self.stream.write(cmd)
 
     async def read_until_prompt(self):
+        cleaned_chunks: List[bytes] = []  # Already processed chunks
+        active_chunk = self.buffer  # Active window
         while True:
             try:
                 metrics["cli_reads", ("proto", self.name)] += 1
@@ -220,27 +205,45 @@ class CLI(BaseCLI):
                 self.script.push_cli_tracking(r, self.state)
             self.logger.debug("Received: %r", r)
             # Clean input
-            if self.buffer.find(b"\x1b", -self.MATCH_MISSED_CONTROL_TAIL) != -1:
-                self.buffer = self.cleaned_input(self.buffer + r)
+            esc_index = active_chunk.find(b"\x1b", -self.MATCH_MISSED_CONTROL_TAIL)
+            if esc_index != -1:
+                # Possible uncomplete ESC-sequences at the end of the buffer.
+                # Need to recombine ESC sequence.
+                active_chunk = active_chunk[:esc_index] + self.cleaned_input(
+                    active_chunk[esc_index:] + r
+                )
+            elif len(r) > self.MATCH_TAIL:
+                # Safely evade string catenation
+                cleaned_chunks.append(active_chunk)
+                active_chunk = self.cleaned_input(r)
+            elif len(active_chunk) >= 2 * self.MATCH_TAIL:
+                # Active chunk is two times long of matching window.
+                # By the rule of thumb send a first half to cleaned_chunks
+                cleaned_chunks.append(active_chunk[: self.MATCH_TAIL])
+                active_chunk = active_chunk[self.MATCH_TAIL :] + self.cleaned_input(r)
             else:
-                self.buffer += self.cleaned_input(r)
+                # Active chunk is relatively short
+                active_chunk += self.cleaned_input(r)
             # Try to find matched pattern
-            offset = max(0, len(self.buffer) - self.MATCH_TAIL)
+            offset = max(0, len(active_chunk) - self.MATCH_TAIL)
             for rx, handler in self.pattern_table.items():
-                match = rx.search(self.buffer, offset)
+                match = rx.search(active_chunk, offset)
                 if match:
                     self.logger.debug("Match: %s", rx.pattern)
-                    matched = self.buffer[: match.start()]
-                    self.buffer = self.buffer[match.end() :]
+                    cleaned_chunks.append(active_chunk[: match.start()])
+                    matched = b"".join(cleaned_chunks)
+                    cleaned_chunks = []  # All left to matched
+                    active_chunk = active_chunk[match.end() :]
                     if isinstance(handler, tuple):
                         metrics["cli_state", ("state", handler[0].__name__)] += 1
                         r = await handler[0](matched, match, *handler[1:])
                     else:
                         metrics["cli_state", ("state", handler.__name__)] += 1
                         r = await handler(matched, match)
-                    if r is not None:
-                        return r
-                    break  # This state is processed
+                    if r is None:
+                        break  # This state is processed
+                    self.buffer = active_chunk  # Save remainings
+                    return r
 
     async def parse_object_stream(self, parser=None, cmd_next=None, cmd_stop=None):
         """
@@ -278,15 +281,13 @@ class CLI(BaseCLI):
                     await self.on_error_sequence(
                         self.profile.send_on_syntax_error, self.command, error_text
                     )
-                self.error = self.script.CLISyntaxError(error_text)
-                break
+                raise self.script.CLISyntaxError(error_text)
             # Then check for operation error
             if (
                 self.profile.rx_pattern_operation_error_str
                 and self.profile.rx_pattern_operation_error.search(buffer)
             ):
-                self.error = self.script.CLIOperationError(buffer)
-                break
+                raise self.script.CLIOperationError(buffer)
             # Parse all possible objects
             while buffer:
                 pr = parser(smart_text(buffer, errors="replace"))
