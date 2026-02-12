@@ -131,6 +131,7 @@ class TopologyBase(object):
                 "level": n.level,
                 "name": n.title or "",
                 "glyph": n.glyph or self.DEFAULT_GLYPH,
+                "cls": "gf-1x",  # Space-separated list of CSS classes
                 "shape_overlay": [asdict(x) for x in n.overlays] if n.overlays else [],
                 "ports": [],
                 "caps": list(oc),
