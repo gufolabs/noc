@@ -127,11 +127,9 @@ class InterfaceStatusCheck(DiscoveryCheck):
             }
             changes = self.update_if_changed(iface, kwargs, ignore_empty=list(kwargs), bulk=bulk)
             self.log_changes(f"Interface {i['interface']} status has been changed", changes)
-            if iface.type == "aggregated":
-                continue
             ostatus = i.get("oper_status")
             astatus = i.get("admin_status")
-            if iface.oper_status != ostatus and ostatus is not None:
+            if ostatus is not None and iface.oper_status != ostatus:
                 self.logger.info("[%s] set oper_status to %s", i["interface"], ostatus)
                 if (
                     iface.profile.status_discovery in {"c", "rc", "ca"}
@@ -139,7 +137,7 @@ class InterfaceStatusCheck(DiscoveryCheck):
                 ):
                     self.iface_alarm(ostatus, astatus, iface, timestamp=now)
                 iface.set_oper_status(ostatus)
-            if old_adm_status != astatus and astatus is not None:
+            if astatus is not None and old_adm_status != astatus:
                 if iface.profile.status_discovery in {"ca", "rc"} and old_adm_status is not None:
                     self.iface_alarm(ostatus, astatus, iface, timestamp=now)
                 if astatus is False:
