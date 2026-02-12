@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # DLink.DxS.get_lldp_neighbors
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -51,19 +51,19 @@ class Script(BaseScript):
     rx_port = re.compile(
         r"^Port ID : (?P<port>\S+)\s*\n"
         r"^-+\s*\n"
-        r"^Remote Entities Count : [1-9]+\s*\n"
+        r"^Remote Entities Count : (?P<ent_count>[1-9]+)\s*\n"
         r"(?P<entities>.+?): \d+\s*\n\n",
         re.MULTILINE | re.DOTALL | re.IGNORECASE,
     )
     rx_entity = re.compile(
         r"^Entity \d+\s*\n"
-        r"^\s+Chassis ID Subtype\s+:(?P<chassis_id_subtype>.+)\s*\n"
-        r"^\s+Chassis ID\s+:(?P<chassis_id>.+)\s*\n"
-        r"^\s+Port ID Subtype\s+:(?P<port_id_subtype>.+)\s*\n"
-        r"^\s+Port ID\s+:(?P<port_id>.+)\s*\n"
-        r"^\s*Port Description\s+:(?P<port_description>.*)"
-        r"^\s+System Name\s+:(?P<system_name>.*)"
-        r"^\s+System Description\s+:(?P<system_description>.*)"
+        r"^\s+Chassis ID Subtype\s+:(?P<chassis_id_subtype>.+?)\s*\n"
+        r"^\s+Chassis ID\s+:(?P<chassis_id>.+?)\s*\n"
+        r"^\s+Port ID Subtype\s+:(?P<port_id_subtype>.+?)\s*\n"
+        r"^\s+Port ID\s+:(?P<port_id>.+?)\s*\n"
+        r"^\s*Port Description\s+:(?P<port_description>.*?)"
+        r"^\s+System Name\s+:(?P<system_name>.*?)"
+        r"^\s+System Description\s+:(?P<system_description>.*?)"
         r"^\s+System Capabilities\s+:(?P<system_capabilities>.+?)\s*\n"
         r"^\s+Management Address Count",
         re.MULTILINE | re.DOTALL | re.IGNORECASE,
@@ -192,8 +192,13 @@ class Script(BaseScript):
         except self.CLISyntaxError:
             raise self.NotSupportedError()
         for match in self.rx_port.finditer(v):
-            i = {"local_interface": match.group("port"), "neighbors": []}
-            for m in self.rx_entity.finditer(match.group("entities")):
+            local_interface = match.group("port")
+            i = {"local_interface": local_interface, "neighbors": []}
+            if match.group("ent_count") == "1":
+                entities = match.group("entities")
+            else:
+                entities = self.cli(f"show lldp remote_ports {local_interface} mode normal")
+            for m in self.rx_entity.finditer(entities):
                 n = {}
                 remote_chassis_id_subtype = m.group("chassis_id_subtype").replace("_", " ")
                 n["remote_chassis_id_subtype"] = {
