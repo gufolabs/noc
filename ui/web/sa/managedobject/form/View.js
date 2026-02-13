@@ -226,7 +226,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 },
                 {
                   name: "glyph",
-                  xtype: "core.combo",
+                  xtype: "main.glyph.LookupField",
                   restUrl: "/main/glyph/lookup/",
                   uiStyle: "medium-combo",
                   fieldLabel: __("Glyph"),
@@ -236,7 +236,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                 },
                 {
                   name: "shape_overlay_glyph",
-                  xtype: "core.combo",
+                  xtype: "main.glyph.LookupField",
                   restUrl: "/main/glyph/lookup/",
                   uiStyle: "medium-combo",
                   fieldLabel: __("Overlay Glyph"),
