@@ -125,7 +125,6 @@ prod-tools = [
   "sentry-sdk==0.20.3",
   "supervisor-wildcards==0.1.3",
 ]
-sender-kafka = ["aiokafka[lz4,snappy,zstd]==0.12.0"]
 supervisor = [
   "supervisor==4.2.5",
   "supervisor-serialrestart==0.1.1",
