@@ -68,11 +68,12 @@ class ReportEngine(object):
         cleaned_param = self.clean_param(rc, r_params.get_params())
         if user:
             cleaned_param["user"] = user
+        selected_fields = cleaned_param.get("fields")
         error, start = None, datetime.datetime.now()
         self.logger.info("[%s] Running report with parameter: %s", rc.name, cleaned_param)
         try:
             band = self.load_bands(rc, cleaned_param, template)
-            self.generate_report(template, out_type, out, band)
+            self.generate_report(template, out_type, out, band, selected_fields)
         except Exception as e:
             error = str(e)
             if self.report_print_error:
@@ -147,11 +148,15 @@ class ReportEngine(object):
 
     @staticmethod
     def generate_report(
-        template: Template, output_type: OutputType, output_stream: bytes, band: Band
+        template: Template,
+        output_type: OutputType,
+        output_stream: bytes,
+        band: Band,
+        selected_fields: list[str] | None,
     ):
         """Render document"""
         formatter = df_loader[template.formatter]
-        fmt = formatter(band, template, output_type, output_stream)
+        fmt = formatter(band, template, output_type, output_stream, selected_fields)
         fmt.render_document()
 
     @staticmethod
