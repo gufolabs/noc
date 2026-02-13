@@ -57,7 +57,6 @@
 * [service](service.md)
 * [shell](shell.md)
 * [snmp](snmp.md)
-* [stencil](stencil.md)
 * [sync-mibs](sync-mibs.md)
 * [sync-perm](sync-perm.md)
 * [sync-refbooks](sync-refbooks.md)

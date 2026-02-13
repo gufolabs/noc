@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // Network Map Panel
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2018 The NOC Project
+// Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.inv.map.MapPanel");
@@ -80,11 +80,11 @@ Ext.define("NOC.inv.map.MapPanel", {
   },
   // Object status filter names
   statusFilter: {
-    0: "osUnknown",
-    1: "osOk",
-    2: "osAlarm",
-    3: "osUnreach",
-    4: "osDown",
+    0: "gf-unknown",
+    1: "gf-ok",
+    2: "gf-warn",
+    3: "gf-unknown",
+    4: "gf-fail",
   },
 
   // Link overlay modes
@@ -216,15 +216,7 @@ Ext.define("NOC.inv.map.MapPanel", {
   afterRender: function(){
     var me = this;
     me.callParent();
-    new_load_scripts(
-      [
-        "/ui/pkg/lodash/lodash.min.js",
-        "/ui/pkg/backbone/backbone.min.js",
-        "/ui/pkg/joint/joint.min.js",
-      ],
-      me,
-      me.initMap,
-    );
+    me.initMap();
     this.boundScrollHandler = Ext.bind(this.moveViewPort, this);
     this.body.dom.addEventListener("scroll", this.boundScrollHandler);
   },
@@ -459,49 +451,53 @@ Ext.define("NOC.inv.map.MapPanel", {
       tokens.pop();
       dataName = tokens.join("#");
     }
-    var name = this.symbolName(dataName, data.metrics_label, data.shape_width, true);
-    if(!me.usedImages[data.shape]){
-      var img = me.shapeRegistry.getImage(data.shape);
-      V(me.paper.svg).defs().append(V(img));
-      me.usedImages[data.shape] = true;
-    }
-    sclass = me.shapeRegistry.getShape(data.shape);
-    node = new sclass({
-      id: data.type + ":" + data.id,
-      z: 9999,
-      external: data.external,
-      name: name,
-      address: data.address,
-      position: {
-        x: data.x,
-        y: data.y,
-      },
-      attrs: {
-        text: {
-          text: name,
+    var name = this.symbolName(dataName, data.metrics_label, data.shape_width || 64, true);
+    if(Ext.isEmpty(data.glyph)){
+      if(!me.usedImages[data.shape]){
+        var img = me.shapeRegistry.getImage(data.shape);
+        V(me.paper.svg).defs().append(V(img));
+        me.usedImages[data.shape] = true;
+      }
+      sclass = me.shapeRegistry.getShape(data.shape);
+      node = new sclass({
+        id: data.type + ":" + data.id,
+        z: 9999,
+        external: data.external,
+        name: name,
+        address: data.address,
+        position: {
+          x: data.x,
+          y: data.y,
         },
-        use: {
+        attrs: {
+          text: {
+            text: name,
+          },
+          use: {
+            width: data.shape_width,
+            height: data.shape_height,
+          },
+        },
+        size: {
           width: data.shape_width,
           height: data.shape_height,
         },
-      },
-      size: {
-        width: data.shape_width,
-        height: data.shape_height,
-      },
-      data: {
-        type: data.type,
-        id: data.id,
-        node_id: data.node_id,
-        caps: data.caps,
-        isMaintenance: false,
-        portal: data.portal,
-        object_filter: data.object_filter,
-        metrics_template: data.metrics_template,
-        shape_width: data.shape_width,
-        metrics_label: data.metrics_label,
-      },
-    });
+        data: {
+          type: data.type,
+          id: data.id,
+          node_id: data.node_id,
+          caps: data.caps,
+          isMaintenance: false,
+          portal: data.portal,
+          object_filter: data.object_filter,
+          metrics_template: data.metrics_template,
+          shape_width: data.shape_width,
+          metrics_label: data.metrics_label,
+        },
+      });
+    } else{
+      node = me.shapeRegistry.getIconNode(data, name);
+    }
     Ext.each(data.shape_overlay, function(config){
       var badge = me.createBadge(node, config);
       node.embed(badge);

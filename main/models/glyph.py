@@ -29,8 +29,11 @@ id_lock = Lock()
     check=[
         ("project.Project", "shape_overlay_glyph"),
         ("sa.ManagedObject", "shape_overlay_glyph"),
+        ("sa.ManagedObject", "glyph"),
         ("sa.ManagedObjectProfile", "shape_overlay_glyph"),
+        ("sa.ManagedObjectProfile", "glyph"),
         ("inv.ObjectModel", "glyph"),
+        ("inv.CPEProfile", "glyph"),
     ]
 )
 class Glyph(Document):

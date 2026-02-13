@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // sa.managedobjectprofile application
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2020 The NOC Project
+// Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.sa.managedobjectprofile.Application");
@@ -15,7 +15,7 @@ Ext.define("NOC.sa.managedobjectprofile.Application", {
     "NOC.sa.capsprofile.LookupField",
     "NOC.peer.peerprofile.LookupField",
     "NOC.main.style.LookupField",
-    "NOC.main.ref.stencil.LookupField",
+    "NOC.main.glyph.LookupField",
     "NOC.main.ref.windowfunction.LookupField",
     "NOC.pm.metrictype.LookupField",
     "NOC.main.remotesystem.LookupField",
@@ -266,9 +266,9 @@ Ext.define("NOC.sa.managedobjectprofile.Application", {
                           allowBlank: true,
                         },
                         {
-                          name: "shape",
-                          xtype: "main.ref.stencil.LookupField",
-                          fieldLabel: __("Shape"),
+                          name: "glyph",
+                          xtype: "main.glyph.LookupField",
+                          fieldLabel: __("Glyph"),
                           allowBlank: true,
                         },
                         {

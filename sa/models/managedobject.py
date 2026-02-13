@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ManagedObject
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -102,7 +102,6 @@ from noc.core.model.fields import (
     PydanticField,
 )
 from noc.core.model.sql import SQL
-from noc.core.stencil import stencil_registry, Stencil
 from noc.core.validators import is_ipv4, is_ipv4_prefix
 from noc.core.ip import IP
 from noc.sa.interfaces.base import MACAddressParameter
@@ -162,7 +161,7 @@ from .managedobjectprofile import ManagedObjectProfile
 from .objectdiagnosticconfig import ObjectDiagnosticConfig
 
 # Increase whenever new field added or removed
-MANAGEDOBJECT_CACHE_VERSION = 55
+MANAGEDOBJECT_CACHE_VERSION = 56
 CREDENTIAL_CACHE_VERSION = 11
 
 # Query for remove maintenance from affected structure
@@ -586,9 +585,7 @@ class ManagedObject(NOCModel):
         "self", verbose_name="Controller", blank=True, null=True, on_delete=CASCADE
     )
     # Stencils
-    shape = CharField(
-        "Shape", blank=True, null=True, choices=stencil_registry.choices, max_length=128
-    )
+    glyph = DocumentReferenceField(Glyph, null=True, blank=True)
     shape_overlay_glyph = DocumentReferenceField(Glyph, null=True, blank=True)
     shape_overlay_position = CharField(
         "S.O. Position",
@@ -2801,13 +2798,10 @@ class ManagedObject(NOCModel):
             return False
         return bool(self.get_metric_discovery_interval())
 
-    def get_stencil(self) -> Optional[Stencil]:
-        if self.shape:
-            # Use mo's shape, if set
-            return self.shape
-        if self.object_profile.shape:
-            # Use profile's shape
-            return self.object_profile.shape
+    def get_glyph_code(self) -> int | None:
+        g = self.glyph or self.object_profile.glyph
+        if g:
+            return g.code
         return None
 
     def get_shape_overlays(self) -> List[ShapeOverlay]:
@@ -2859,7 +2853,7 @@ class ManagedObject(NOCModel):
             title_metric_template=self.shape_title_template
             or self.object_profile.shape_title_template
             or "",
-            stencil=self.get_stencil(),
+            glyph=self.get_glyph_code(),
             overlays=self.get_shape_overlays(),
             level=self.object_profile.level,
             attrs={"address": self.address, "mo": self},
