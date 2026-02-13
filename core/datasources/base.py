@@ -209,10 +209,11 @@ class BaseDataSource(object):
             yield f
 
     @classmethod
-    def field_by_name(cls, name: str) -> FieldInfo:
-        for f in cls.fields:
-            if f.name == name:
-                return f
+    def field_by_name(cls, name: str) -> Optional[FieldInfo]:
+        return next(
+            (f for f in cls.fields if f.name == name),
+            None,
+        )
 
     @classmethod
     def clean_params(cls, params: Dict[str, Any]) -> Dict[str, Any]:
