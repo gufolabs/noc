@@ -27,7 +27,7 @@
             "parent": "Root",
             "queries": [
                 {
-                    "ds_query": "select managed_object_id, name, address, model, administrativedomain, segment, container, iface_name, iface_description, iface_speed, load_in_perc, load_in_avg, load_in_p, load_out_perc, load_out_avg, load_out_p, octets_in_sum, octets_out_sum, errors_in, errors_in_sum, errors_out, errors_out_sum, discards_in, discards_out, interface_flap, lastchange, status_oper_last, interface_load_url, mac_counter from Root"
+                    "ds_query": "select * from Root"
                 }
             ]
         },
