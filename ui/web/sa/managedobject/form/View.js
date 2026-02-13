@@ -239,7 +239,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
                   xtype: "core.combo",
                   restUrl: "/main/glyph/lookup/",
                   uiStyle: "medium-combo",
-                  fieldLabel: __("Glyph"),
+                  fieldLabel: __("Overlay Glyph"),
                   tabIndex: 80,
                   allowBlank: true,
                 },
