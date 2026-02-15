@@ -652,20 +652,15 @@ class ManagedObjectApplication(ExtModelApplication):
         def sorted_iname(s):
             return sorted(s, key=lambda x: alnum_key(x["name"]))
 
-        def get_style(i):
+        def get_style(i: Interface) -> str:
             profile = i.profile
-            if profile:
-                try:
-                    return style_cache[profile.id]
-                except KeyError:
-                    pass
-                if profile.style:
-                    s = profile.style.css_class_name
-                else:
-                    s = ""
-                style_cache[profile.id] = s
-                return s
-            return ""
+            if not profile:
+                return ""
+            style = style_cache.get(profile.id)
+            if style is None:
+                style = profile.style.css_class if profile.style else ""
+                style_cache[profile.id] = style
+            return style
 
         def get_link(i):
             link = i.link
