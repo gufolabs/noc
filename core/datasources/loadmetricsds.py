@@ -215,7 +215,6 @@ class LoadMetricsDS(BaseDataSource):
                 except ValueError:
                     return None
 
-        end = end + datetime.timedelta(days=1)
         ts_from_date = time.mktime(start.timetuple())
         ts_to_date = time.mktime(end.timetuple())
         q_filter = cls.get_filter(kwargs)
