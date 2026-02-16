@@ -1,0 +1,64 @@
+#!/bin/bash
+
+set -euo pipefail
+
+NOC_CMD="/opt/noc/noc"
+
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root."
+   exit 1
+fi
+
+BACKUP_DIR=${1:-}
+
+if [[ -z "${BACKUP_DIR}" ]]; then
+    echo "You must specify backup directory."
+    exit 1
+fi
+
+if [ ! -d "${BACKUP_DIR}" ]; then
+    echo "${BACKUP_DIR} does not exist."
+    exit 1
+fi
+
+if [ ! -e "${NOC_CMD}" ]; then
+    echo "${NOC_CMD} does not exist."
+    exit 1
+fi
+
+POSTGRES_DIR="${BACKUP_DIR}/postgres/"
+MONGO_DIR="${BACKUP_DIR}/mongodump/"
+
+cat <<EOF
+System must be stopped
+Backup will be saved into ${BACKUP_DIR}
+
+Are you sure?[y/N]
+EOF
+
+read line
+
+case "$line" in
+    "y"|"Y")
+        echo "Yes"
+    ;;
+    *)
+        echo "No"
+        exit 0
+    ;;
+esac
+
+mkdir "${POSTGRES_DIR}"
+chown postgres:postgres "${POSTGRES_DIR}"
+mkdir "${MONGO_DIR}"
+
+${NOC_CMD} ctl stop all
+systemctl stop noc
+sleep 1
+
+mongodump --db=noc --username=noc --password=noc -v --out="${MONGO_DIR}" --gzip
+sudo -u postgres pg_dumpall -c -f "${POSTGRES_DIR}/pg_dumpall.out" -v -U postgres
+
+sleep 1
+systemctl start noc
+
