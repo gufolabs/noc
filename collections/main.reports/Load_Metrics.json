@@ -62,147 +62,147 @@
             "column_format": [
                 {
                     "name": "managed_object_id",
-                    "title": "MANAGED_OBJECT_ID",
+                    "title": "ID",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.name",
-                    "title": "OBJECT_NAME",
+                    "title": "Object Name",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.address",
-                    "title": "OBJECT_ADDRESS",
+                    "title": "IP Address",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.model",
-                    "title": "OBJECT_PLATFORM",
+                    "title": "Object Platform",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.administrativedomain",
-                    "title": "OBJECT_ADM_DOMAIN",
+                    "title": "Object Administrative domain",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.segment",
-                    "title": "OBJECT_SEGMENT",
+                    "title": "Object Segment",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.container",
-                    "title": "CONTAINER_ADDRESS",
+                    "title": "Object Geo Address",
                     "format_type": "string"
                 },
                 {
                     "name": "iface_name",
-                    "title": "INTERFACE_NAME",
+                    "title": "Interface Name",
                     "format_type": "string"
                 },
                 {
                     "name": "iface_description",
-                    "title": "INTERFACE_DESCRIPTION",
+                    "title": "Interface Description",
                     "format_type": "string"
                 },
                 {
                     "name": "iface_speed",
-                    "title": "INTERFACE_SPEED",
+                    "title": "Interface Speed",
                     "format_type": "string"
                 },
                 {
                     "name": "load_in_perc",
-                    "title": "LOAD_IN_PERC",
+                    "title": "Load In (90% percentile)",
                     "format_type": "string"
                 },
                 {
                     "name": "load_in_avg",
-                    "title": "LOAD_IN_AVG",
+                    "title": "Load In (Average)",
                     "format_type": "string"
                 },
                 {
                     "name": "load_in_p",
-                    "title": "LOAD_IN_P",
+                    "title": "Load In (% Bandwith)",
                     "format_type": "string"
                 },
                 {
                     "name": "load_out_perc",
-                    "title": "LOAD_OUT_PERC",
+                    "title": "Load Out (90% percentile)",
                     "format_type": "string"
                 },
                 {
                     "name": "load_out_avg",
-                    "title": "LOAD_OUT_AVG",
+                    "title": "Load Out (Average)",
                     "format_type": "string"
                 },
                 {
                     "name": "load_out_p",
-                    "title": "LOAD_OUT_P",
+                    "title": "Load Out (% Bandwith)",
                     "format_type": "string"
                 },
                 {
                     "name": "octets_in_sum",
-                    "title": "OCTETS_IN_SUM",
+                    "title": "Traffic In (Sum by period in MB)",
                     "format_type": "string"
                 },
                 {
                     "name": "octets_out_sum",
-                    "title": "OCTETS_OUT_SUM",
+                    "title": "Traffic Out (Sum by period in MB)",
                     "format_type": "string"
                 },
                 {
                     "name": "errors_in",
-                    "title": "ERRORS_IN",
+                    "title": "Errors In (packets/s)",
                     "format_type": "string"
                 },
                 {
                     "name": "errors_in_sum",
-                    "title": "ERRORS_IN_SUM",
+                    "title": "Errors In (Summary)",
                     "format_type": "string"
                 },
                 {
                     "name": "errors_out",
-                    "title": "ERRORS_OUT",
+                    "title": "Errors Out (packets/s)",
                     "format_type": "string"
                 },
                 {
                     "name": "errors_out_sum",
-                    "title": "ERRORS_OUT_SUM",
+                    "title": "Errors Out (Summary)",
                     "format_type": "string"
                 },
                 {
                     "name": "discards_in",
-                    "title": "DISCARDS_IN",
+                    "title": "Discards In (packets/s)",
                     "format_type": "string"
                 },
                 {
                     "name": "discards_out",
-                    "title": "DISCARDS_OUT",
+                    "title": "Discards Out (packets/s)",
                     "format_type": "string"
                 },
                 {
                     "name": "interface_flap",
-                    "title": "INTERFACE_FLAP",
+                    "title": "Interface Flap count",
                     "format_type": "string"
                 },
                 {
                     "name": "lastchange",
-                    "title": "LAST_CHANGE",
+                    "title": "Interface Last Change (days)",
                     "format_type": "string"
                 },
                 {
                     "name": "status_oper_last",
-                    "title": "STATUS_OPER_LAST",
+                    "title": "Operational status (Last)",
                     "format_type": "string"
                 },
                 {
                     "name": "interface_load_url",
-                    "title": "INTERFACE_LOAD_URL",
+                    "title": "Interface Load URL",
                     "format_type": "string"
                 },
                 {
                     "name": "mac_counter",
-                    "title": "MAC_COUNTER",
+                    "title": "Mac counter",
                     "format_type": "string"
                 }
             ],
@@ -213,47 +213,47 @@
             "column_format": [
                 {
                     "name": "managed_object_id",
-                    "title": "MANAGED_OBJECT_ID",
+                    "title": "ID",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.name",
-                    "title": "OBJECT_NAME",
+                    "title": "Object Name",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.address",
-                    "title": "OBJECT_ADDRESS",
+                    "title": "IP Address",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.model",
-                    "title": "OBJECT_PLATFORM",
+                    "title": "Object Platform",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.administrativedomain",
-                    "title": "OBJECT_ADM_DOMAIN",
+                    "title": "Object Administrative domain",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.segment",
-                    "title": "OBJECT_SEGMENT",
+                    "title": "Object Segment",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.container",
-                    "title": "CONTAINER_ADDRESS",
+                    "title": "Object Geo Address",
                     "format_type": "string"
                 },
                 {
                     "name": "cpu_usage",
-                    "title": "CPU_USAGE",
+                    "title": "CPU Usage",
                     "format_type": "string"
                 },
                 {
                     "name": "memory_usage",
-                    "title": "MEMORY_USAGE",
+                    "title": "Memory Usage",
                     "format_type": "string"
                 }
             ],
@@ -264,47 +264,47 @@
             "column_format": [
                 {
                     "name": "managed_object_id",
-                    "title": "MANAGED_OBJECT_ID",
+                    "title": "ID",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.name",
-                    "title": "OBJECT_NAME",
+                    "title": "Object Name",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.address",
-                    "title": "OBJECT_ADDRESS",
+                    "title": "IP Address",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.model",
-                    "title": "OBJECT_PLATFORM",
+                    "title": "Object Platform",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.administrativedomain",
-                    "title": "OBJECT_ADM_DOMAIN",
+                    "title": "Object Administrative domain",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.segment",
-                    "title": "OBJECT_SEGMENT",
+                    "title": "Object Segment",
                     "format_type": "string"
                 },
                 {
                     "name": "managedobjectds.container",
-                    "title": "CONTAINER_ADDRESS",
+                    "title": "Object Geo Address",
                     "format_type": "string"
                 },
                 {
                     "name": "ping_rtt",
-                    "title": "PING_RTT",
+                    "title": "Ping RTT",
                     "format_type": "string"
                 },
                 {
                     "name": "ping_attempts",
-                    "title": "PING_ATTEMPTS",
+                    "title": "Ping Attempts",
                     "format_type": "string"
                 }
             ],
