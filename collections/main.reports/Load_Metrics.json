@@ -206,7 +206,7 @@
                     "format_type": "string"
                 }
             ],
-            "title_template": "-=LOAD INTERFACES=-"
+            "title_template": ""
         },
         {
             "name": "load_cpu",
@@ -257,7 +257,7 @@
                     "format_type": "string"
                 }
             ],
-            "title_template": "-=LOAD CPU=-"
+            "title_template": ""
         },
         {
             "name": "ping",
@@ -308,7 +308,7 @@
                     "format_type": "string"
                 }
             ],
-            "title_template": "-=PING=-"
+            "title_template": ""
         }
     ],
     "category": "inv",
