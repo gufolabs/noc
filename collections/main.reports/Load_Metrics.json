@@ -314,6 +314,7 @@
     "category": "inv",
     "code": null,
     "hide": false,
+    "time_params": "A",
     "localization": {
         "title": {
             "ru": "Отчет по метрикам (Новый)"
