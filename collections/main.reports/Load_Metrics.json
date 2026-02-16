@@ -322,6 +322,108 @@
         "description": {
             "ru": "Отчет по метрикам"
         },
+        "columns.managed_object_id": {
+            "ru": "ID"
+        },
+        "columns.name": {
+            "ru": "Имя объекта"
+        },
+        "columns.address": {
+            "ru": "IP адрес"
+        },
+        "columns.model": {
+            "ru": "Платформа"
+        },
+        "columns.administrativedomain": {
+            "ru": "Зона ответственности"
+        },
+        "columns.segment": {
+            "ru": "Сегмент"
+        },
+        "columns.container": {
+            "ru": "Почтовый адрес объекта"
+        },
+        "columns.iface_name": {
+            "ru": "Имя интерфейса"
+        },
+        "columns.iface_description": {
+            "ru": "Описание интерфейса"
+        },
+        "columns.iface_speed": {
+            "ru": "Скорость интерфейса"
+        },
+        "columns.load_in_perc": {
+            "ru": "Входящая загрузка (90% перцентиль)"
+        },
+        "columns.load_in_avg": {
+            "ru": "Входящая загрузка (средняя)"
+        },
+        "columns.load_in_p": {
+            "ru": "Входящая загрузка (В процентах от скорости интерфейса)"
+        },
+        "columns.load_out_perc": {
+            "ru": "Исходящая  загрузка (90% перцентиль)"
+        },
+        "columns.load_out_avg": {
+            "ru": "Исходящая  загрузка (средняя)"
+        },
+        "columns.load_out_p": {
+            "ru": "Исходящая  загрузка (В процентах от скорости интерфейса)"
+        },
+        "columns.octets_in_sum": {
+            "ru": "Входящий трафик (сумма за период), Мб"
+        },
+        "columns.octets_out_sum": {
+            "ru": "Исходящий трафик (сумма за период), Мб"
+        },
+        "columns.errors_in": {
+            "ru": "Входящие ошибки, пакеты/с"
+        },
+        "columns.errors_in_sum": {
+            "ru": "Сумма входящих ошибок, пакеты"
+        },
+        "columns.errors_out": {
+            "ru": "Исходящие ошибки, пакеты/с"
+        },
+        "columns.errors_out_sum": {
+            "ru": "Сумма исходящих ошибок, пакеты"
+        },
+        "columns.discards_in": {
+            "ru": "Отброшенные на входе, пакеты/с"
+        },
+        "columns.discards_out": {
+            "ru": "Отброшенные на выходе, пакеты/с"
+        },
+        "columns.interface_flap": {
+            "ru": "Число изменений оперативного статуса"
+        },
+        "columns.lastchange": {
+            "ru": "Время последнего изменения статуса (дней)"
+        },
+        "columns.status_oper_last": {
+            "ru": "Оперативный статус интерфейса (последний)"
+        },
+        "columns.interface_load_url": {
+            "ru": "Ссылка на график загрузки"
+        },
+        "columns.mac_counter": {
+            "ru": "Число MAC адресов"
+        },
+        "columns.cpu_usage": {
+            "ru": "Загрузка процессора (%)"
+        },
+        "columns.memory_usage": {
+            "ru": "Использование памяти (%)"
+        },
+        "columns.ping_rtt": {
+            "ru": "Круговая задержка"
+        },
+        "columns.ping_attempts": {
+            "ru": "Число повторов ICMP"
+        },
+        "parameters.reporttype": {
+            "ru": "Тип отчета"
+        },
         "parameters.start": {
             "ru": "С"
         },
