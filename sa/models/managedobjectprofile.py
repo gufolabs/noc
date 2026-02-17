@@ -24,7 +24,6 @@ from pydantic import BaseModel, RootModel, field_validator, model_validator
 # NOC modules
 from noc.core.translation import ugettext as _
 from noc.core.model.base import NOCModel
-from noc.core.stencil import stencil_registry
 from noc.core.model.fields import DocumentReferenceField, PydanticField
 from noc.core.model.decorator import on_save, on_init, on_delete_check
 from noc.core.cache.base import cache
@@ -192,9 +191,7 @@ class ManagedObjectProfile(NOCModel):
         default=partial(Workflow.get_default_workflow, "sa.ManagedObjectProfile"),
     )
     # Stencils
-    shape = models.CharField(
-        _("Shape"), blank=True, null=True, choices=stencil_registry.choices, max_length=128
-    )
+    glyph = DocumentReferenceField(Glyph, null=True, blank=True)
     shape_overlay_glyph = DocumentReferenceField(Glyph, null=True, blank=True)
     shape_overlay_position = models.CharField(
         "S.O. Position",

@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // inv.configuredmap application
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2022 The NOC Project
+// Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.inv.configuredmap.Application");
@@ -21,7 +21,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
     "NOC.core.combotree.ComboTree",
     "NOC.sa.managedobject.LookupField",
     "NOC.main.imagestore.LookupField",
-    "NOC.main.ref.stencil.LookupField",
+    "NOC.main.glyph.LookupField",
     "NOC.main.ref.topologygen.LookupField",
   ],
   model: "NOC.inv.configuredmap.Model",
@@ -288,7 +288,7 @@ Ext.define("NOC.inv.configuredmap.Application", {
                         },
                         {
                           name: "stencil",
-                          xtype: "main.ref.stencil.LookupField",
+                          xtype: "main.glyph.LookupField",
                           fieldLabel: __("Shape"),
                           labelAlign: "top",
                           width: 100,
