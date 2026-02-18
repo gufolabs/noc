@@ -70,7 +70,15 @@ Ext.define("NOC.sa.managedobject.form.View", {
       listeners: {
         scope: this,
         validitychange: function(me, isValid){
-          Ext.each(Ext.ComponentQuery.query("[itemId$=aveBtn]"), function(button){button.setDisabled(!isValid)});
+          var btnQuery = [
+            "[itemId=saveBtn]",
+            "[itemId=applyBtn]",
+            "[itemId=groupSaveBtn]",
+            "[itemId=groupApplyBtn]",
+          ].join(",");
+          Ext.each(Ext.ComponentQuery.query(btnQuery), function(button){
+            button.setDisabled(!isValid);
+          });
         },
       },
       items: [
@@ -1693,11 +1701,25 @@ Ext.define("NOC.sa.managedobject.form.View", {
         handler: "onSaveRecord",
       },
       {
+        itemId: "applyBtn",
+        text: __("Apply"),
+        tooltip: __("Apply changes"),
+        glyph: NOC.glyph.save,
+        handler: "onApplyRecord",
+      },
+      {
         itemId: "groupSaveBtn",
         text: __("Save"),
         tooltip: __("Save changes"),
         glyph: NOC.glyph.save,
         handler: "onSaveRecords",
+      },
+      {
+        itemId: "groupApplyBtn",
+        text: __("Apply"),
+        tooltip: __("Apply changes"),
+        glyph: NOC.glyph.save,
+        handler: "onApplyRecords",
       },
       {
         itemId: "closeBtn",
