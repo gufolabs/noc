@@ -10,7 +10,7 @@
             "orientation": "H",
             "queries": [
                 {
-                    "datasource": "maxmetricsds",
+                    "datasource": "loadmetricsmaxds",
                     "json": null
                 },
                 {
