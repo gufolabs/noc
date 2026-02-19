@@ -745,3 +745,36 @@ def str_distance(s1: str, s2: str) -> int:
         if c1 != c2:
             n += 1
     return n
+
+
+def find_balanced(s: str, /, start: int = 0, closing: str = ")") -> int:
+    """
+    Find balanced closing symbol's index.
+
+    Symbol at `start` position considered an "opening bracked".
+    Function tracks all opening and closing braces until the
+    matching pair for open brace found.
+
+    Args:
+        s: String to search.
+        start: Starting position, symbol in this posiiton
+            is an "opening brace".
+        closing: Closing brace symbol.
+
+    Returns:
+        index of closing brace: if matched.
+        -1: otherwise
+    """
+    n = 1
+    opening = s[start]
+    for i in range(start + 1, len(s)):
+        match s[i]:
+            case c if c == opening:
+                n += 1
+            case c if c == closing:
+                n -= 1
+                if not n:
+                    return i
+            case _:
+                pass
+    return -1
