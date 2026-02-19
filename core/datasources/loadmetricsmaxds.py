@@ -45,8 +45,8 @@ ORDER BY managed_object, path
 CHUNK_SIZE = 1000
 
 
-class MaxMetricsDS(BaseDataSource):
-    name = "maxmetricsds"
+class LoadMetricsMaxDS(BaseDataSource):
+    name = "loadmetricsmaxds"
     row_index = "managed_object_id"
     fields = [
         FieldInfo(name="managed_object_id", type=FieldType.UINT),
