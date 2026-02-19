@@ -178,7 +178,6 @@ class LoadMetricsMaxDS(BaseDataSource):
         def str_to_float(str):
             return float("{0:.3f}".format(float(str)))
 
-        end = end + datetime.timedelta(days=1)
         diff = end - start
         q_filter = cls.get_filter(kwargs)
         q_filter["is_managed"] = True
