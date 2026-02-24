@@ -111,12 +111,18 @@ class SimpleReportFormatter(DataFormatter):
         2. On Rows datasource
         3. Exception
         """
+
+        def selected(columns: list[TableColumn]) -> list[TableColumn]:
+            if self.selected_fields is None:
+                return columns
+            return [col for col in columns if col.name in self.selected_fields]
+
         header_format = self.get_band_format(HEADER_BAND)
         columns = []
         if header_format:
             columns = self.get_columns_format(header_format)
         if columns:
-            return columns
+            return selected(columns)
         # Getting last data band
         for rb in self.root_band.iter_nested_bands():
             if rb.has_children:
@@ -125,19 +131,19 @@ class SimpleReportFormatter(DataFormatter):
             if bf and bf.columns:
                 columns = self.get_columns_format(bf)
                 if columns:
-                    return columns
+                    return selected(columns)
             if rb.has_rows:
-                return [TableColumn(name=c, title=c) for c in rb.get_columns()]
+                return selected([TableColumn(name=c, title=c) for c in rb.get_columns()])
         if not columns and self.root_band.has_rows:
             columns = [TableColumn(name=c, title=c) for c in self.root_band.get_columns()]
-        return columns
+        return selected(columns)
 
     def render_sections(self):
         columns = self.get_report_columns()
         if not columns:
             raise ValueError("Not setting column for Report")
         data = []
-        fields = [c.name for c in columns]
+        fields = [c.name.rsplit(".", maxsplit=1)[-1] for c in columns]
         for rb in self.root_band.iter_report_bands():
             if rb.name == HEADER_BAND:
                 # Skip Header Band
