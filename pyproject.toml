@@ -42,7 +42,7 @@ Homepage = "https://getnoc.com/"
 [project.optional-dependencies]
 activator = ["ssh2-python==1.1.2.post1"]
 bh = [
-  "gufo-ping==0.5.0",
+  "gufo-ping==0.7.0",
   "gufo-traceroute==0.2.0",
 ]
 cache-memcached = ["pylibmc==1.6.3"]
@@ -120,7 +120,7 @@ node = [
   "gufo_noc_speedup==0.1.0",
   "urllib3<2", # To be deleted after drop OS with openssl<1.1.1 (centos7,rhel7,deb9)
 ]
-ping = ["gufo-ping==0.5.0"]
+ping = ["gufo-ping==0.7.0"]
 prod-tools = [
   "sentry-sdk==0.20.3",
   "supervisor-wildcards==0.1.3",
