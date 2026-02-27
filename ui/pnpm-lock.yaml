@@ -12,8 +12,11 @@ importers:
   .:
     dependencies:
       '@gufo-labs/font':
-        specifier: ^0.0.3
-        version: 0.0.3
+        specifier: ^0.0.9
+        version: 0.0.9
+      '@joint/core':
+        specifier: ^4.2.4
+        version: 4.2.4
       color-input:
         specifier: github:argyleink/css-color-component#cdn-latest
         version: hdr-color-input@https://codeload.github.com/argyleink/css-color-component/tar.gz/63eccbd78fd8051458bcdcd7e101580483e2df7d
@@ -296,8 +299,8 @@ packages:
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@gufo-labs/font@0.0.3':
-    resolution: {integrity: sha512-uPxjuYmxUaDn3EvQXFJpl2FP+Esipl7sf+pGJ8sDmuuXG7c0Zd+Lmturz5Ri2qfLWsumYuYWLG4lyoBqAecwbw==}
+  '@gufo-labs/font@0.0.9':
+    resolution: {integrity: sha512-YcnDG77sDUp6xz8jweCLCLAYE7Rck7xZ+iMbJfd6ZjAb1B7og8QVJTclgFwDd7j4Gdg0bgPsoK2nbIaF5OsOBw==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -314,6 +317,9 @@ packages:
   '@humanwhocodes/retry@0.4.3':
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
+
+  '@joint/core@4.2.4':
+    resolution: {integrity: sha512-GMXYz40VQ5AtDDp0/Z08pAN3w8H7DaUdKitVAqkDegXN29uzq5TvB/O7i0Mwc87WB3sc032Asj+hLKicCLjSxA==}
 
   '@jridgewell/sourcemap-codec@1.5.5':
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
@@ -1803,7 +1809,7 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
-  '@gufo-labs/font@0.0.3': {}
+  '@gufo-labs/font@0.0.9': {}
 
   '@humanfs/core@0.19.1': {}
 
@@ -1815,6 +1821,8 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/retry@0.4.3': {}
+
+  '@joint/core@4.2.4': {}
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
 
