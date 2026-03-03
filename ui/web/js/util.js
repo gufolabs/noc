@@ -272,6 +272,9 @@ Ext.apply(NOC.render, {
     if(v === null || v === undefined){
       return "";
     }
+    if(v >= 10000000000){
+      return Math.round(v / 1000000000) + "G";
+    }
     if(v >= 10000000){
       return Math.round(v / 1000000) + "M";
     }
