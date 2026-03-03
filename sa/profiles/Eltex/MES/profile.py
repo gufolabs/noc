@@ -111,7 +111,9 @@ class Profile(BaseProfile):
         "142": "MES-3348F",  # rev.B
         "190": "MES-3324F",  # rev.B
         "192": "MES-2324FB",
+        "216": "MES-5324",   # rev.B
         "235": "MES-2348P",
+        "239": "MES-3324",   # rev.C
     }
 
     def setup_session(self, script):
