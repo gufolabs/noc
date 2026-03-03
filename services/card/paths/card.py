@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Card API
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -11,6 +11,7 @@ import inspect
 from threading import Lock
 import operator
 from typing import Optional
+from urllib.parse import unquote
 
 # Third-party modules
 import cachetools
@@ -170,7 +171,7 @@ class CardAPI(BaseAPI):
         request: Request,
         remote_user: Optional[str] = Header(None, alias="Remote-User"),
     ):
-        current_user = self.get_current_user(remote_user)
+        current_user = self.get_current_user(unquote(remote_user))
         if not current_user:
             raise HTTPException(404, "Not found")
         is_ajax = card_id == "ajax"
