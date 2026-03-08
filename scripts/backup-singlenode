@@ -54,7 +54,7 @@ mkdir "${MONGO_DIR}"
 
 ${NOC_CMD} ctl stop all
 systemctl stop noc
-sleep 1
+sleep 3
 
 mongodump --db=noc --username=noc --password=noc -v --out="${MONGO_DIR}" --gzip
 sudo -u postgres pg_dumpall -c -f "${POSTGRES_DIR}/pg_dumpall.out" -v -U postgres
