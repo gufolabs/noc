@@ -67,7 +67,12 @@ class RemoteSystemChannel(object):
         sensor_id: Optional[str] = None,
     ):
         """Feed the message. Returns optional offset of last saved message"""
-        if target in self.unknown_hosts:
+        # Try sensor
+        if sensor_id:
+            sensor_cfg = self.service.lookup_remote_sensor(sensor_id, self.remote_system.name)
+        else:
+            sensor_cfg = None
+        if target in self.unknown_hosts and not sensor_cfg:
             return
         # Wait until feed became possible
         await self.feed_ready.wait()
@@ -75,16 +80,12 @@ class RemoteSystemChannel(object):
         cfg = self.service.lookup_source_by_name(target, collector=self.collector)
         if not cfg:
             self.unknown_hosts.add(target)
-            return
-        if cfg.no_data_check and values:
+            if not sensor_cfg:
+                return
+        elif cfg.no_data_check and values:
             self.last_received_hosts[cfg.id] = values[0][0]
         # if metric in self.unknown_metrics:
         #     return
-        # Try sensor
-        if sensor_id:
-            sensor_cfg = self.service.lookup_remote_sensor(sensor_id, self.remote_system.name)
-        else:
-            sensor_cfg = None
         # Parse Labels for metrics
         cfg_metric = self.service.get_cfg_metric(self.collector, metric, labels=labels)
         if not cfg_metric:
@@ -97,7 +98,7 @@ class RemoteSystemChannel(object):
             # if ((v[0], cfg.id, frozenset(labels or [])) in self.data
             #         and cfg_metric.id in self.data[(v[0], cfg.id, frozenset(labels or []))]):
             #     self.deduplicated += 1
-            if cfg_metric:
+            if cfg_metric and cfg:
                 key = (v[0], cfg.id, frozenset(labels or []))
                 self.data[key][cfg_metric.id] = v[1]
             if sensor_cfg:
@@ -168,7 +169,8 @@ class RemoteSystemEventChannel(object):
         self.last_offset: int = 0
         self.size: int = 0
         self.events: List[Event] = []
-        self.fm_events: Dict[str, FMEventObject] = {}
+        self.received_events: Dict[str, FMEventObject] = {}
+        self.send_events: Dict[str, FMEventObject] = {}
         self.deferred = []
         self.records: int = 0
         self.deduplicated: int = 0
@@ -200,22 +202,28 @@ class RemoteSystemEventChannel(object):
     async def feed_etl(self, event: FMEventObject):
         """Register Event"""
         await self.feed_ready.wait()
-        self.fm_events[event.id] = event
+        self.received_events[event.id] = event
         self.records += 1
         self.last_offset = max(self.last_offset, event.ts)
         if not self.expired:
             self.expired = perf_counter() + self.ttl
 
-    async def feed_resolved_event(self, event_id: str, r_event_id: str):
+    async def feed_resolved_event(self, event_id: str, r_event_id: str, ts: int):
         """Register Resolved Event"""
         await self.feed_ready.wait()
-        event = self.fm_events.get(event_id)
+        if r_event_id not in self.received_events:
+            event = self.send_events.pop(r_event_id, None)
+        else:
+            event = self.received_events[r_event_id]
         if not event:
-            self.deferred.append(r_event_id)
+            self.deferred.append(event_id)
         else:
             event.is_cleared = True
-            self.fm_events[r_event_id] = event
+            event.id = event_id
+            event.ts = ts
+            self.received_events[event.id] = event
         self.records += 1
+        self.last_offset = max(self.last_offset, ts)
         # self.last_offset = max(self.last_offset, event.ts)
         if not self.expired:
             self.expired = perf_counter() + self.ttl
@@ -238,7 +246,8 @@ class RemoteSystemEventChannel(object):
     def flush_complete(self):
         """Called when data are safely flushed"""
         self.events = []
-        self.fm_events = {}
+        self.send_events |= self.received_events
+        self.received_events = {}
         self.deferred = []
         self.size = 0
         self.records = 0
