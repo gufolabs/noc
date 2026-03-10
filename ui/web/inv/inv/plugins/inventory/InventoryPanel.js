@@ -13,7 +13,7 @@ Ext.define("NOC.inv.inv.plugins.inventory.InventoryPanel", {
   ],
   layout: "fit",
   app: null,
-  scrollable: true,
+  scrollable: false,
   title: __("Inventory"),
 
   initComponent: function(){

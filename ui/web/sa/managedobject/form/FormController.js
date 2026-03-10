@@ -25,6 +25,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
       configBtn = app.down("[itemId=configBtn]"),
       confDBBtn = app.down("[itemId=confDBBtn]"),
       saveBtn = app.down("[itemId=saveBtn]"),
+      applyBtn = app.down("[itemId=applyBtn]"),
       resetBtn = app.down("[itemId=resetBtn]"),
       cloneBtn = app.down("[itemId=cloneBtn]"),
       alarmsBtn = app.down("[itemId=alarmsBtn]"),
@@ -40,6 +41,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
     configBtn.setDisabled(!view.hasPermission("config"));
     confDBBtn.setDisabled(!view.hasPermission("config"));
     saveBtn.setDisabled(!view.hasPermission("update"));
+    applyBtn.setDisabled(!view.hasPermission("update"));
     resetBtn.setDisabled(!view.hasPermission("update"));
     cloneBtn.setDisabled(!view.hasPermission("create"));
     alarmsBtn.setDisabled(!view.hasPermission("alarm"));
@@ -51,7 +53,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
   toMain: function(){
     this.gotoItem("managedobject-select");
   },
-  onSaveRecord: function(){
+  prepareData: function(){
     var me = this.getView();
     if(!this.getView().down("[itemId=managedobject-form-panel]").form.isValid()){
       NOC.error(__("Error in data"));
@@ -69,8 +71,19 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
     //     delete v[me.idField];
     // }
     //
-    this.saveRecord(v);
-
+    return v;
+  },
+  onSaveRecord: function(){
+    let v = this.prepareData();
+    if(v){
+      this.saveRecord(v, true);
+    }
+  },
+  onApplyRecord: function(){
+    let v = this.prepareData();
+    if(v){
+      this.saveRecord(v, false);
+    }
   },
   onSaveRecords: function(){
     var me = this,
@@ -134,7 +147,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
       parentController = view.up("[itemId=sa-managedobject]").getController(),
       formPanel = this.getView().down("[itemId=managedobject-form-panel]");
     parentController.setFormTitle(__("Clone") + " {0}", {id: "CLONE"});
-    parentController.displayButtons(["closeBtn", "saveBtn", "resetBtn"]);
+    parentController.displayButtons(["closeBtn", "saveBtn", "applyBtn", "resetBtn"]);
     formPanel.getForm().setValues({bi_id: null});
     formPanel.recordId = undefined;
     Ext.Array.each(view.query("[itemId$=-inline]"), function(grid){return grid.getStore().cloneData()});
@@ -224,12 +237,12 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
     });
     parentController.setFormTitle(__("Create") + " {0}", {id: "NEW"});
     parentController.resetInlineStore(formPanel, defaults);
-    parentController.displayButtons(["closeBtn", "saveBtn", "resetBtn"]);
+    parentController.displayButtons(["closeBtn", "saveBtn", "applyBtn", "resetBtn"]);
     formPanel.recordId = undefined;
     this.getView().up("[itemId=sa-managedobject]").getController().clearForm(formPanel.getForm());
     formPanel.getForm().setValues(defaultValues);
   },
-  saveRecord: function(data){
+  saveRecord: function(data, goToMain){
     var me = this, record,
       view = this.getView(),
       formPanel = view.down("[itemId=managedobject-form-panel]"),
@@ -264,7 +277,9 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
         me.getView().setHistoryHash();
         me.reloadSelectionGrids();
         me.dirtyReset(formPanel.getForm());
-        me.toMain();
+        if(goToMain){
+          me.toMain();
+        }
         NOC.msg.complete(__("Saved"));
       },
       failure: function(record, operation){

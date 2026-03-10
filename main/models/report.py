@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Report model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -30,6 +30,7 @@ from mongoengine.fields import (
 import cachetools
 
 # NOC modules
+from noc.core.datasources.loader import loader
 from noc.core.mongo.fields import ForeignKeyField
 from noc.core.reporter.types import (
     ReportConfig,
@@ -49,6 +50,19 @@ from noc.aaa.models.group import Group
 
 id_lock = Lock()
 perm_lock = Lock()
+
+
+class ParamConditionValue(EmbeddedDocument):
+    value = StringField(required=True)
+    # default value for related component
+    default_value = StringField(required=True)
+
+    @property
+    def json_data(self) -> Dict[str, Any]:
+        return {
+            "value": self.value,
+            "default_value": self.default_value,
+        }
 
 
 class ReportParam(EmbeddedDocument):
@@ -74,6 +88,10 @@ class ReportParam(EmbeddedDocument):
     choices = ListField(StringField())
     required = BooleanField(default=False)
     default = StringField(required=False)
+    condition_param = StringField(required=False)
+    condition_values: List[ParamConditionValue] = EmbeddedDocumentListField(
+        ParamConditionValue, required=False
+    )
     hide = BooleanField(default=False)
     localization = DictField()
 
@@ -97,6 +115,10 @@ class ReportParam(EmbeddedDocument):
             r["required"] = self.required
         if self.default:
             r["default"] = self.default
+        if self.condition_param:
+            r["condition_param"] = self.condition_param
+        if self.condition_values:
+            r["condition_values"] = [x.json_data for x in self.condition_values]
         return r
 
 
@@ -316,6 +338,12 @@ class Report(Document):
     def get_json_path(self) -> Path:
         return safe_json_path(self.name)
 
+    def get_param_by_name(self, param_name: str) -> Optional[ReportParam]:
+        return next(
+            (p for p in self.parameters if p.name == param_name),
+            None,
+        )
+
     @property
     def config(self) -> ReportConfig:
         return self.get_config()
@@ -403,35 +431,46 @@ class Report(Document):
             align_end_date_param=self.time_params == "A",
         )
 
-    def get_band_format(self, band: Optional[str] = None) -> "BandFormat":
-        for bf in self.bands_format:
-            if not band:
-                return bf
-            if bf.name == band:
-                return bf
-        return None
+    def _get_band_by_condition(self, condition_value: str) -> Optional[Band]:
+        return next(
+            (b for b in self.bands if b.condition_value == condition_value),
+            None,
+        )
 
-    def get_band_columns(self, band: str = ROOT_BAND) -> Dict[str, List[str]]:
-        from noc.core.datasources.loader import loader
+    def _get_bandformat_by_condition(self, condition_value: str) -> Optional[BandFormat]:
+        band = self._get_band_by_condition(condition_value)
+        return next(
+            (bf for bf in self.bands_format if bf.name == band.name),
+            None,
+        )
 
+    def get_bandformat(self, condition_value: Optional[str] = None) -> Optional[BandFormat]:
+        if not self.bands_format:
+            return None
+        if condition_value:
+            return self._get_bandformat_by_condition(condition_value)
+        # without condition (by default) method returns first (!) band_format
+        return self.bands_format[0]
+
+    def get_root_band_ds_columns(self) -> Dict[str, List[str]]:
         r = defaultdict(list)
+        root_band = None
         for b in self.bands:
-            if b.name != band:
-                continue
-            for num, q in enumerate(b.queries):
+            if b.is_root:
+                root_band = b
+                break
+        if root_band:
+            for num, q in enumerate(root_band.queries):
                 if not q.datasource:
                     continue
                 ds = loader[q.datasource]
                 r[q.datasource] = [f.name for f in ds.iter_ds_fields()]
-                if not num:
+                if num == 0:
                     # default
                     r[""] = [f.name for f in ds.iter_ds_fields()]
-            break
         return r
 
     def get_root_datasource(self):
-        from noc.core.datasources.loader import loader
-
         for b in self.bands:
             if b.is_root and b.queries and b.queries[0].datasource:
                 return loader[b.queries[0].datasource]

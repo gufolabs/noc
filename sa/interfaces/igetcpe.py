@@ -40,6 +40,7 @@ class IGetCPE(BaseInterface):
     * vendor - CPE vendor
     * model - CPE model
     * version - CPE os version
+    * revision - CPE hardware version
     * serial - CPE serial number
     * ip - CPE IP
     * mac - CPE mac
@@ -64,6 +65,7 @@ class IGetCPE(BaseInterface):
             "vendor": StringParameter(required=False),
             "model": StringParameter(required=False),
             "version": StringParameter(required=False),
+            "revision": StringParameter(required=False),
             "serial": StringParameter(required=False),
             "ip": IPv4Parameter(required=False),
             "mac": MACAddressParameter(required=False),

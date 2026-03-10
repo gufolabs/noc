@@ -17,6 +17,7 @@ Ext.define("NOC.inv.inv.plugins.bom.BoMPanel", {
   closable: false,
   controller: "bom",
   layout: "fit",
+  scrollable: false,
   viewModel: {
     data: {
       searchText: "",

@@ -15,6 +15,7 @@ Ext.define("NOC.inv.inv.plugins.rack.RackPanel", {
   itemId: "rackPanel",
   title: __("Rack"),
   layout: "border",
+  scrollable: false,
   controller: "rack",
   initComponent: function(){
     var tbarItems = Ext.clone(this.tbar);

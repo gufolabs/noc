@@ -24,12 +24,15 @@ The web interface of the system is accessible via the IP address `https://<insta
 ![Login](login.png)
 
 After logging in, you will see the main interface of the system, which consists of the following parts (highlighted by the green border in the image):
+
 1) Navigation Panel
 2) Window Header
 3) Workspace
+
 ![Interface Areas](areas.png)
 
 The navigation is structured as follows:
+
 * `<System Component>`
     * `<Base Application>` - located at the root of the component and usually represents the core functionality.
     * `<Settings>` (number 3) - contains various settings.
@@ -39,6 +42,7 @@ The navigation is structured as follows:
         * `Report` (number 4) - an `HTML` table with data corresponding to the report's title.
 
 The top-level navigation includes the system's basic modules:
+
 * **AAA** - user and group settings
 * **Main** - system settings that do not fit into a separate section
 * **Project Management** - project creation
@@ -54,6 +58,7 @@ The top-level navigation includes the system's basic modules:
 * **Phone** - phone number tracking
 
 On the second level, you can access applications within each module:
+
 * `AAA` -> `Setup`
     * **Users** - system users
     * **Groups** - user groups

@@ -387,7 +387,7 @@ Ext.define("NOC.inv.inv.Application", {
     me.tabPanel = Ext.create("Ext.tab.Panel", {
       layout: "fit",
       border: false,
-      scrollable: true,
+      scrollable: false,
       defaults: {
         scrollable: true,
       },
@@ -465,11 +465,41 @@ Ext.define("NOC.inv.inv.Application", {
     });
   },
   //
+  clearTabPanel: function(){
+    var removedItems;
+    if(this.destroyed || this.isDestroying || this.isClearingTabPanel){
+      return;
+    }
+    if(!this.tabPanel || this.tabPanel.destroyed || this.tabPanel.isDestroying){
+      return;
+    }
+    this.isClearingTabPanel = true;
+    try{
+      removedItems = this.tabPanel.removeAll(false);
+      Ext.Array.each(removedItems, function(item){
+        if(!item || item.destroyed || item.isDestroying){
+          return;
+        }
+        try{
+          item.destroy();
+        } catch(error){
+          console.warn("Failed to destroy tab", item.pluginName || item.xtype || item.$className || item.id, error);
+        }
+      });
+    } finally{
+      this.isClearingTabPanel = false;
+    }
+  },
+  //
   runPlugin: function(objectId, pData, index){
     var me = this,
       messageId = me.maskComponent.show("loading", [pData.name]);
 
     Ext.Loader.require(pData.xtype, function(){
+      if(this.destroyed || this.isDestroying || this.isClearingTabPanel || !this.tabPanel || this.tabPanel.destroyed || this.tabPanel.isDestroying || this.selectedObjectId !== objectId){
+        me.maskComponent.hide(messageId);
+        return;
+      }
       var plugin = Ext.create(pData.xtype, {app: this});
       this.tabPanel.insert(index, plugin);
       this.invPlugins[pData.name] = plugin;
@@ -570,7 +600,7 @@ Ext.define("NOC.inv.inv.Application", {
     me.down("#addObjectDock").hide();
     me.selectedObjectId = objectId;
     me.invPlugins = {};
-    me.tabPanel.removeAll();
+    me.clearTabPanel();
     Ext.each(plugins, function(p, index){
       me.runPlugin(objectId, p, index);
     });
@@ -594,9 +624,7 @@ Ext.define("NOC.inv.inv.Application", {
         node.querySelector("button").style.display = "none";
       }
     }
-    this.tabPanel.suspendLayouts();
-    this.tabPanel.removeAll();
-    this.tabPanel.resumeLayouts();
+    this.clearTabPanel();
     this.setHistoryHash();
   },
   // Expand nav tree to object
@@ -1031,7 +1059,7 @@ Ext.define("NOC.inv.inv.Application", {
         var parentId = container.get("parentId");
         if(parentId === "root"){
           me.store.reload({node: me.store.getRootNode()});
-          me.tabPanel.removeAll();
+          me.clearTabPanel();
           me.setHistoryHash();
           me.down("#addObjectDock").show(); 
         } else{

@@ -35,7 +35,7 @@ Ext.define("NOC.main.glyph.Application", {
           text: __("Glyph"),
           dataIndex: "name",
           flex: 1,
-          renderer: (value, meta, record) => `<i class="gf ${value}"></i>`,
+          renderer: (value) => `<i class="gf ${value}"></i>`,
         },
       ],
 

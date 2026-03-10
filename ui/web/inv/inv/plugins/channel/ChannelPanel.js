@@ -11,6 +11,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
   title: __("Channels"),
   itemId: "channelPanel",
   layout: "card",
+  scrollable: false,
   requires: [
     "NOC.inv.inv.plugins.channel.MagicPanel",
     "NOC.inv.inv.plugins.channel.ParamsForm",

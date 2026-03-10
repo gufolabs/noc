@@ -14,7 +14,7 @@ Ext.define("NOC.inv.inv.plugins.comment.CommentPanel", {
   title: __("Comment"),
   closable: false,
   layout: "fit",
-  scrollable: true,
+  scrollable: false,
   padding: 4,
 
   initComponent: function(){
@@ -26,7 +26,7 @@ Ext.define("NOC.inv.inv.plugins.comment.CommentPanel", {
     });
 
     me.editField = Ext.create("NOC.core.MarkdownEditor");
-
+    me.editField.hide();
     me.editButton = Ext.create("Ext.button.Button", {
       text: __("Edit"),
       glyph: NOC.glyph.edit,
