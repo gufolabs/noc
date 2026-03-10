@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # FastAPIService
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -143,7 +143,7 @@ class FastAPIService(BaseService):
             self.app, host=addr, port=port, lifespan="on", access_log=False, loop="none"
         )
         self.server = uvicorn.Server(config=uvi_config)
-        uvi_config.setup_event_loop()
+        uvi_config.get_loop_factory()
         uvi_config.load()
         self.server.lifespan = uvi_config.lifespan_class(uvi_config)
         await self.server.startup()
