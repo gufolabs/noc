@@ -107,7 +107,7 @@ node = [
   "pydantic==2.11.10",
   "pymongo==4.8.0",
   "pyproj==3.7.1",
-  "python-consul==1.1.0",
+  "py-consul==1.7.1",
   "python-creole==1.4.10",
   "python-dateutil==2.9.0",
   "python-jose[cryptography]==3.4.0",
@@ -156,7 +156,7 @@ version = {file = "VERSION"}
 
 [tool.black]
 line-length = 100 # Must be same as tool.ruff.line-length
-target-version = ['py310'] 
+target-version = ['py310']
 
 [tool.coverage.run]
 omit = ['*tests*']
@@ -169,7 +169,7 @@ directory = "build/coverage"
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
-exclude = [".git", "build", "dist", "var", "share", "collections", "node_modules", "ansible"] 
+exclude = [".git", "build", "dist", "var", "share", "collections", "node_modules", "ansible"]
 line-length = 100 # Must be same as tool.black.line-length
 # Assume Python 3.12
 target-version = "py312"
@@ -209,7 +209,7 @@ ignore = [
   "RUF009", # @todo: Manual work! Do not perform function call `Layout` in dataclass defaults
   "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
   "RUF013", # PEP 484 prohibits implicit `Optional`
-  "RUF051", # @todo: ruff#20700 reported! Use `pop` instead of `key in dict` followed by `del dict[key]`  
+  "RUF051", # @todo: ruff#20700 reported! Use `pop` instead of `key in dict` followed by `del dict[key]`
   "RUF059", # Unpacked variable `epsilon` is never used
   "RUF100", # Unused blanket `noqa` directive
 ]
@@ -227,7 +227,7 @@ select = [
   # "BLE", # flake8-blind-except
   # "B", # flake8-bugbear
   "A", # flake8-builtins
-  "C4", # flake8-comprehensions 
+  "C4", # flake8-comprehensions
   # "EM", # flake8-errmsg
   "ISC", # flake8-implicit-str-concat
   # "ICN", # flake8-import-conventions
