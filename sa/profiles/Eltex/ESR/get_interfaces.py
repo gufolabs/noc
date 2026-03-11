@@ -32,7 +32,7 @@ class Script(BaseScript):
                     try:
                         v = self.profile.convert_interface_name(name)
                     except InterfaceTypeError as why:
-                        self.logger.debug("Ignoring unknown interface %s: %s", name, why)
+                        self.logger.debug(f"Ignoring unknown interface {name}: {why}", name, why)
                         unknown_interfaces += [name]
                         continue
                     ifindex = int(oid.split(".")[-1])
@@ -118,7 +118,7 @@ class Script(BaseScript):
                 "snmp_ifindex": index[ifname.replace("twe", "Tw ").replace("oob", "Oo ").replace("lo", "Lo ").replace("br", "Br ")],
             }
             ip_addresses = {}
-            c = self.cli("show ip interfaces %s" % ifname, cached=True)
+            c = self.cli(f"show ip interfaces {ifname}", cached=True)
             for line in parse_table(c):
                 # When type is DHCP, IP address may be '--'
                 if is_ipv4(line[0].split('/')[0]):

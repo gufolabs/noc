@@ -32,7 +32,7 @@ class Script(BaseScript):
     def execute_cli(self, **kwargs):
         vpns = []
         try:
-            v = self.cli("show running-config vrf")
+            v = self.cli("show running-config vrf", cached=True)
         except self.CLISyntaxError:
             return []
         block = None
@@ -50,8 +50,9 @@ class Script(BaseScript):
                         "interfaces": [],
                     }
                 ]
-                rx_vpn_int = re.compile(r"^(?:\s{,4}(%s) \s+|\s{6,})(?P<iface>.+?),?\s*$"%vpns[-1]["name"], re.IGNORECASE)
-                for line in self.cli("show ip vrf "+vpns[-1]["name"]).splitlines():
+                vrf_name=vpns[-1]["name"]
+                rx_vpn_int = re.compile(r"^(?:\s{,4}(%s) \s+|\s{6,})(?P<iface>.+?),?\s*$"%vrf_name, re.IGNORECASE)
+                for line in self.cli(f"show ip vrf {vrf_name}").splitlines():
                     match_int = rx_vpn_int.match(line)
                     if match_int:
                         for ints in match_int.group("iface").replace(",","").split():

@@ -17,9 +17,9 @@ class Script(BaseScript):
 
     def execute_cli(self, interface=None, vrf=None):
         if vrf:
-            c = self.cli("show arp vrf %s" % vrf)
+            c = self.cli(f"show arp vrf {vrf}")
         else:
-            c = self.cli("show arp")
+            c = self.cli("show arp", cached=True)
         r = []
         for iface, ip, mac, state, age in parse_table(c):
             if (interface is not None) and (interface != iface):
