@@ -13,7 +13,7 @@
   },
   "packageManager": "pnpm@10.18.3",
   "engines": {
-    "node": "^22.0.0"
+    "node": "^24.0.0"
   },
   "overrides": {
     "js-yaml": "4.1.1"
@@ -25,21 +25,21 @@
   },
   "scripts": {
     "dev": "pnpm run clean && pnpm run vendor-dev && pnpm run build:bundles-dev && pnpm run watch",
-    "watch": "node --experimental-strip-types build.ts dev noc en",
-    "watch:bundles": "node --experimental-strip-types watch-bundles.ts",
-    "prod": "node --experimental-strip-types build.ts prod",
-    "vendor": "node --experimental-strip-types build.ts vendor",
-    "vendor-dev": "node --experimental-strip-types build.ts vendor-dev noc en",
+    "watch": "node build.ts dev noc en",
+    "watch:bundles": "node watch-bundles.ts",
+    "prod": "node build.ts prod",
+    "vendor": "node build.ts vendor",
+    "vendor-dev": "node build.ts vendor-dev noc en",
     "sync": "browser-sync start --proxy 'localhost:8080' --files 'dist/**/*.js,dist/**/*.css,dist/**/*.html,dist/**/*.map' --no-open",
     "lint": "eslint scripts --fix",
     "clean": "rm -rf dist",
     "build": "pnpm run clean && pnpm run vendor && pnpm run prod && pnpm run build:bundles-prod",
-    "build:micromark-dev": "node --experimental-strip-types build-bundle.ts micromark --dev",
-    "build:monaco-dev": "node --experimental-strip-types build-bundle.ts monaco --dev",
-    "build:leaflet-dev": "node --experimental-strip-types build-bundle.ts leaflet --dev",
-    "build:joint-dev": "node --experimental-strip-types build-bundle.ts joint/index --dev",
+    "build:micromark-dev": "node build-bundle.ts micromark --dev",
+    "build:monaco-dev": "node build-bundle.ts monaco --dev",
+    "build:leaflet-dev": "node build-bundle.ts leaflet --dev",
+    "build:joint-dev": "node build-bundle.ts joint/index --dev",
     "build:bundles-dev": "pnpm run build:micromark-dev && pnpm run build:monaco-dev && pnpm run build:leaflet-dev && pnpm run build:joint-dev",
-    "build:bundles-prod": "node --experimental-strip-types build-bundles-prod.ts",
+    "build:bundles-prod": "node build-bundles-prod.ts",
     "test": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
