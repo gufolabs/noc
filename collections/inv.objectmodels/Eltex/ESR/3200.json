@@ -1,0 +1,310 @@
+{
+    "name": "Eltex | ESR | 3200",
+    "$collection": "inv.objectmodels",
+    "uuid": "4baba7f9-6748-4210-8dce-5f323bb67138",
+    "vendor__code": "ELTEX",
+    "description": "Router Eltex ESR-3200, 12 × 1000BASE-X (SFP)/10GBASE-R (SFP+)/25GBASE-R (SFP28), Console RS-232 (RJ-45), OOB, 24 GB RAM, 8 GB NAND-Flash, 2 slots for Power Supply 100–240 VAC or 36–72 VDC.",
+    "connection_rule__name": "Eltex | MES",
+    "cr_context": "CHASSIS",
+    "connections": [
+        {
+            "name": "Console",
+            "description": "Console port",
+            "direction": "s",
+            "gender": "f",
+            "protocols": [{
+                "direction": ">",
+                "protocol__code": "RS232"
+            }],
+            "type__name": "Electrical | RJ45"
+        },
+        {
+            "name": "PS-1",
+            "description": "Power slot 1",
+            "direction": "i",
+            "gender": "f",
+            "type__name": "Eltex | MES | PSU"
+        },
+        {
+            "name": "PS-2",
+            "description": "Power slot 2",
+            "direction": "i",
+            "gender": "f",
+            "type__name": "Eltex | MES | PSU"
+        },
+        {
+            "name": "TwentyFiveGigabitEthernet 1/0/1",
+            "description": "TwentyFiveGigabitEthernet 1/0/1 SFP port",
+            "direction": "i",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth1G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth10G"
+                }
+            ],
+            "type__name": "Transceiver | SFP28"
+        },
+        {
+            "name": "TwentyFiveGigabitEthernet 1/0/2",
+            "description": "TwentyFiveGigabitEthernet 1/0/2 SFP port",
+            "direction": "i",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth1G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth10G"
+                }
+            ],
+            "type__name": "Transceiver | SFP28"
+        },
+        {
+            "name": "TwentyFiveGigabitEthernet 1/0/3",
+            "description": "TwentyFiveGigabitEthernet 1/0/3 SFP port",
+            "direction": "i",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth1G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth10G"
+                }
+            ],
+            "type__name": "Transceiver | SFP28"
+        },
+        {
+            "name": "TwentyFiveGigabitEthernet 1/0/4",
+            "description": "TwentyFiveGigabitEthernet 1/0/4 SFP port",
+            "direction": "i",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth1G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth10G"
+                }
+            ],
+            "type__name": "Transceiver | SFP28"
+        },
+        {
+            "name": "TwentyFiveGigabitEthernet 1/0/5",
+            "description": "TwentyFiveGigabitEthernet 1/0/5 SFP port",
+            "direction": "i",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth1G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth10G"
+                }
+            ],
+            "type__name": "Transceiver | SFP28"
+        },
+        {
+            "name": "TwentyFiveGigabitEthernet 1/0/6",
+            "description": "TwentyFiveGigabitEthernet 1/0/6 SFP port",
+            "direction": "i",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth1G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth10G"
+                }
+            ],
+            "type__name": "Transceiver | SFP28"
+        },
+        {
+            "name": "TwentyFiveGigabitEthernet 1/0/7",
+            "description": "TwentyFiveGigabitEthernet 1/0/7 SFP port",
+            "direction": "i",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth1G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth10G"
+                }
+            ],
+            "type__name": "Transceiver | SFP28"
+        },
+        {
+            "name": "TwentyFiveGigabitEthernet 1/0/8",
+            "description": "TwentyFiveGigabitEthernet 1/0/8 SFP port",
+            "direction": "i",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth1G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth10G"
+                }
+            ],
+            "type__name": "Transceiver | SFP28"
+        },
+        {
+            "name": "TwentyFiveGigabitEthernet 1/0/9",
+            "description": "TwentyFiveGigabitEthernet 1/0/9 SFP port",
+            "direction": "i",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth1G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth10G"
+                }
+            ],
+            "type__name": "Transceiver | SFP28"
+        },
+        {
+            "name": "TwentyFiveGigabitEthernet 1/0/10",
+            "description": "TwentyFiveGigabitEthernet 1/0/10 SFP port",
+            "direction": "i",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth1G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth10G"
+                }
+            ],
+            "type__name": "Transceiver | SFP28"
+        },
+        {
+            "name": "TwentyFiveGigabitEthernet 1/0/11",
+            "description": "TwentyFiveGigabitEthernet 1/0/11 SFP port",
+            "direction": "i",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth1G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth10G"
+                }
+            ],
+            "type__name": "Transceiver | SFP28"
+        },
+        {
+            "name": "TwentyFiveGigabitEthernet 1/0/12",
+            "description": "TwentyFiveGigabitEthernet 1/0/12 SFP port",
+            "direction": "i",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth1G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth10G"
+                }
+            ],
+            "type__name": "Transceiver | SFP28"
+        },
+        {
+            "name": "usb1",
+            "description": "USB Port",
+            "direction": "s",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": ">",
+                    "protocol__code": "USB10"
+                },
+                {
+                    "direction": ">",
+                    "protocol__code": "USB11"
+                },
+                {
+                    "direction": ">",
+                    "protocol__code": "USB20"
+                }
+            ],
+            "type__name": "Electrical | USB"
+        },
+        {
+            "name": "usb2",
+            "description": "USB Port",
+            "direction": "s",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": ">",
+                    "protocol__code": "USB10"
+                },
+                {
+                    "direction": ">",
+                    "protocol__code": "USB11"
+                },
+                {
+                    "direction": ">",
+                    "protocol__code": "USB20"
+                }
+            ],
+            "type__name": "Electrical | USB"
+        }
+    ],
+    "data": [
+        {
+            "attr": "part_no",
+            "interface": "asset",
+            "value": ["ESR-3200"]
+        },
+        {
+            "attr": "depth",
+            "interface": "dimensions",
+            "value": 330
+        },
+        {
+            "attr": "height",
+            "interface": "dimensions",
+            "value": 44
+        },
+        {
+            "attr": "width",
+            "interface": "dimensions",
+            "value": 430
+        },
+        {
+            "attr": "managed",
+            "interface": "management",
+            "value": true
+        }
+    ]
+}
+
