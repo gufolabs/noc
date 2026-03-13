@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Juniper.JUNOS.get_lldp_neighbors
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -109,72 +109,84 @@ class Script(BaseScript):
         r = []
         # Collect data
         local_port_ids = {}  # name -> id
+        lldp_interfaces = []
         v = self.cli("show lldp local-information", cached=True)
         for port, local_id in self.rx_localport.findall(v):
             local_port_ids[port] = IntParameter().clean(local_id)
         v = self.cli("show lldp neighbors")
-        for match in self.rx_neigh.finditer(v):
-            ifname = match.group("local_if")
-            v = self.cli("show lldp neighbors interface %s" % ifname)
-            n = {}
-            match = self.rx_detail.search(v)
-            n["remote_chassis_id_subtype"] = self.CHASSIS_TYPE[match.group("ch_type")]
-            n["remote_chassis_id"] = match.group("id")
-            n["remote_port_subtype"] = self.PORT_TYPE[match.group("p_type")]
-            if match.group("p_id"):
-                n["remote_port"] = match.group("p_id")
-            if match.group("p_descr"):
-                n["remote_port_description"] = match.group("p_descr")
-            # On some devices we are not seen `Port ID`
-            if (
-                "remote_port" not in n
-                and n["remote_port_subtype"] == 1
-                and "remote_port_description" in n
-            ):
-                n["remote_port"] = n["remote_port_description"]
-            elif "remote_port" not in n and "remote_port_description" in n:
-                # Juniper.JUNOS mx10-t 11.4X27.62, LOCAL_NAME xe-0/0/0 L3
-                n["remote_port"] = n["remote_port_description"]
-                n["remote_port_subtype"] = 1
-            if match.group("name"):
-                n["remote_system_name"] = match.group("name")
-            match = self.rx_mgmt.search(v)
-            if match:
-                n["remote_mgmt_address"] = match.group("address")
-            # Get capability
-            cap = 0
-            match = self.rx_caps.search(v)
-            if match:
-                s = match.group("capability")
-                # WLAN Access Point
-                s = s.replace(" Access Point", "")
-                # Station Only
-                s = s.replace(" Only", "")
-                cap = lldp_caps_to_bits(
-                    s.strip().split(" "),
-                    {
-                        "other": LLDP_CAP_OTHER,
-                        "repeater": LLDP_CAP_REPEATER,
-                        "bridge": LLDP_CAP_BRIDGE,
-                        "wlan": LLDP_CAP_WLAN_ACCESS_POINT,
-                        "router": LLDP_CAP_ROUTER,
-                        "telephone": LLDP_CAP_TELEPHONE,
-                        "cable": LLDP_CAP_DOCSIS_CABLE_DEVICE,
-                        "station": LLDP_CAP_STATION_ONLY,
-                    },
-                )
-            n["remote_capabilities"] = cap
-            iface_found = False
-            for i in r:
-                if i["local_interface"] == ifname:
-                    i["neighbors"] += [n]
-                    iface_found = True
-                    break
-            if not iface_found:
-                i = {"local_interface": ifname, "neighbors": [n]}
-                if ifname in local_port_ids:
-                    i["local_interface_id"] = local_port_ids[ifname]
-                r += [i]
+        for line in v.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            match = self.rx_neigh.match(line)
+            if not match:
+                continue
+            if match.group("local_if") not in lldp_interfaces:
+                lldp_interfaces += [match.group("local_if")]
+        for local_if in lldp_interfaces:
+            v = self.cli(f"show lldp neighbors interface {local_if}")
+            for neighbor in v.split("Neighbour Information:"):
+                match = self.rx_detail.search(neighbor)
+                if not match:
+                    continue
+                n = {}
+                n["remote_chassis_id_subtype"] = self.CHASSIS_TYPE[match.group("ch_type")]
+                n["remote_chassis_id"] = match.group("id")
+                n["remote_port_subtype"] = self.PORT_TYPE[match.group("p_type")]
+                if match.group("p_id"):
+                    n["remote_port"] = match.group("p_id")
+                if match.group("p_descr"):
+                    n["remote_port_description"] = match.group("p_descr")
+                # On some devices we are not seen `Port ID`
+                if (
+                    "remote_port" not in n
+                    and n["remote_port_subtype"] == 1
+                    and "remote_port_description" in n
+                ):
+                    n["remote_port"] = n["remote_port_description"]
+                elif "remote_port" not in n and "remote_port_description" in n:
+                    # Juniper.JUNOS mx10-t 11.4X27.62, LOCAL_NAME xe-0/0/0 L3
+                    n["remote_port"] = n["remote_port_description"]
+                    n["remote_port_subtype"] = 1
+                if match.group("name"):
+                    n["remote_system_name"] = match.group("name")
+                match = self.rx_mgmt.search(neighbor)
+                if match:
+                    n["remote_mgmt_address"] = match.group("address")
+                # Get capability
+                cap = 0
+                match = self.rx_caps.search(neighbor)
+                if match:
+                    s = match.group("capability")
+                    # WLAN Access Point
+                    s = s.replace(" Access Point", "")
+                    # Station Only
+                    s = s.replace(" Only", "")
+                    cap = lldp_caps_to_bits(
+                        s.strip().split(" "),
+                        {
+                            "other": LLDP_CAP_OTHER,
+                            "repeater": LLDP_CAP_REPEATER,
+                            "bridge": LLDP_CAP_BRIDGE,
+                            "wlan": LLDP_CAP_WLAN_ACCESS_POINT,
+                            "router": LLDP_CAP_ROUTER,
+                            "telephone": LLDP_CAP_TELEPHONE,
+                            "cable": LLDP_CAP_DOCSIS_CABLE_DEVICE,
+                            "station": LLDP_CAP_STATION_ONLY,
+                        },
+                    )
+                n["remote_capabilities"] = cap
+                iface_found = False
+                for i in r:
+                    if i["local_interface"] == local_if:
+                        i["neighbors"] += [n]
+                        iface_found = True
+                        break
+                if not iface_found:
+                    i = {"local_interface": local_if, "neighbors": [n]}
+                    if local_if in local_port_ids:
+                        i["local_interface_id"] = local_port_ids[local_if]
+                    r += [i]
         for q in r:
             if q["local_interface"].endswith(".0"):
                 q["local_interface"] = q["local_interface"][:-2]
