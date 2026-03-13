@@ -38,7 +38,8 @@
     "build:monaco-dev": "node build-bundle.ts monaco --dev",
     "build:leaflet-dev": "node build-bundle.ts leaflet --dev",
     "build:joint-dev": "node build-bundle.ts joint/index --dev",
-    "build:bundles-dev": "pnpm run build:micromark-dev && pnpm run build:monaco-dev && pnpm run build:leaflet-dev && pnpm run build:joint-dev",
+    "build:topo-map": "cp node_modules/topo-map/dist/topo-map.umd.js dist/topo-map.umd.js",
+    "build:bundles-dev": "pnpm run build:micromark-dev && pnpm run build:monaco-dev && pnpm run build:leaflet-dev && pnpm run build:joint-dev && pnpm run build:topo-map",
     "build:bundles-prod": "node build-bundles-prod.ts",
     "test": "vitest",
     "test:e2e": "playwright test",
@@ -81,6 +82,7 @@
     "micromark": "^4.0.2",
     "micromark-extension-gfm": "^3.0.0",
     "monaco-editor": "^0.55.1",
+    "topo-map": "github:uncol/topo-map",
     "ymaps": "^0.2.1"
   }
 }
