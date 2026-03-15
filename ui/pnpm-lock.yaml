@@ -12,8 +12,11 @@ importers:
   .:
     dependencies:
       '@gufo-labs/font':
-        specifier: ^0.0.3
-        version: 0.0.3
+        specifier: ^0.0.9
+        version: 0.0.9
+      '@joint/core':
+        specifier: ^4.2.4
+        version: 4.2.4
       color-input:
         specifier: github:argyleink/css-color-component#cdn-latest
         version: hdr-color-input@https://codeload.github.com/argyleink/css-color-component/tar.gz/63eccbd78fd8051458bcdcd7e101580483e2df7d
@@ -32,6 +35,9 @@ importers:
       monaco-editor:
         specifier: ^0.55.1
         version: 0.55.1
+      topo-map:
+        specifier: github:uncol/topo-map
+        version: https://codeload.github.com/uncol/topo-map/tar.gz/affbe4b75d93fe4cdee4c31169c1959bddc4df4c
       ymaps:
         specifier: ^0.2.1
         version: 0.2.1
@@ -296,8 +302,8 @@ packages:
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@gufo-labs/font@0.0.3':
-    resolution: {integrity: sha512-uPxjuYmxUaDn3EvQXFJpl2FP+Esipl7sf+pGJ8sDmuuXG7c0Zd+Lmturz5Ri2qfLWsumYuYWLG4lyoBqAecwbw==}
+  '@gufo-labs/font@0.0.9':
+    resolution: {integrity: sha512-YcnDG77sDUp6xz8jweCLCLAYE7Rck7xZ+iMbJfd6ZjAb1B7og8QVJTclgFwDd7j4Gdg0bgPsoK2nbIaF5OsOBw==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -314,6 +320,9 @@ packages:
   '@humanwhocodes/retry@0.4.3':
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
+
+  '@joint/core@4.2.4':
+    resolution: {integrity: sha512-GMXYz40VQ5AtDDp0/Z08pAN3w8H7DaUdKitVAqkDegXN29uzq5TvB/O7i0Mwc87WB3sc032Asj+hLKicCLjSxA==}
 
   '@jridgewell/sourcemap-codec@1.5.5':
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
@@ -1338,6 +1347,9 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
+  quickselect@3.0.0:
+    resolution: {integrity: sha512-XdjUArbK4Bm5fLLvlm5KpTFOiOThgfWWI4axAZDWg4E/0mKdZyI9tNEfds27qCi1ze/vwTR16kvmmGhRra3c2g==}
+
   range-parser@1.2.1:
     resolution: {integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==}
     engines: {node: '>= 0.6'}
@@ -1345,6 +1357,9 @@ packages:
   raw-body@2.5.3:
     resolution: {integrity: sha512-s4VSOf6yN0rvbRZGxs8Om5CWj6seneMwK3oDb4lWDH0UPhWcxwOWw5+qk24bxq87szX1ydrwylIOp2uG1ojUpA==}
     engines: {node: '>= 0.8'}
+
+  rbush@4.0.1:
+    resolution: {integrity: sha512-IP0UpfeWQujYC8Jg162rMNc01Rf0gWMMAb2Uxus/Q0qOFw4lCcq6ZnQEZwUoJqWyUGJ9th7JjwI4yIWo+uvoAQ==}
 
   readdirp@3.6.0:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
@@ -1497,6 +1512,10 @@ packages:
   toidentifier@1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
     engines: {node: '>=0.6'}
+
+  topo-map@https://codeload.github.com/uncol/topo-map/tar.gz/affbe4b75d93fe4cdee4c31169c1959bddc4df4c:
+    resolution: {tarball: https://codeload.github.com/uncol/topo-map/tar.gz/affbe4b75d93fe4cdee4c31169c1959bddc4df4c}
+    version: 2.0.0
 
   ts-api-utils@2.1.0:
     resolution: {integrity: sha512-CUgTZL1irw8u29bzrOD/nH85jqyc74D6SshFgujOIA7osm2Rz7dYH77agkx7H4FBNxDq7Cjf+IjaX/8zwFW+ZQ==}
@@ -1803,7 +1822,7 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
-  '@gufo-labs/font@0.0.3': {}
+  '@gufo-labs/font@0.0.9': {}
 
   '@humanfs/core@0.19.1': {}
 
@@ -1815,6 +1834,8 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/retry@0.4.3': {}
+
+  '@joint/core@4.2.4': {}
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
 
@@ -2958,6 +2979,8 @@ snapshots:
 
   punycode@2.3.1: {}
 
+  quickselect@3.0.0: {}
+
   range-parser@1.2.1: {}
 
   raw-body@2.5.3:
@@ -2966,6 +2989,10 @@ snapshots:
       http-errors: 2.0.1
       iconv-lite: 0.4.24
       unpipe: 1.0.0
+
+  rbush@4.0.1:
+    dependencies:
+      quickselect: 3.0.0
 
   readdirp@3.6.0:
     dependencies:
@@ -3163,6 +3190,12 @@ snapshots:
       is-number: 7.0.0
 
   toidentifier@1.0.1: {}
+
+  topo-map@https://codeload.github.com/uncol/topo-map/tar.gz/affbe4b75d93fe4cdee4c31169c1959bddc4df4c:
+    dependencies:
+      '@gufo-labs/font': 0.0.9
+      '@joint/core': 4.2.4
+      rbush: 4.0.1
 
   ts-api-utils@2.1.0(typescript@5.9.3):
     dependencies:

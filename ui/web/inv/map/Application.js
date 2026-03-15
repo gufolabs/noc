@@ -17,22 +17,11 @@ Ext.define("NOC.inv.map.Application", {
     "NOC.inv.map.inspectors.CloudInspector",
     "NOC.inv.map.inspectors.CPEInspector",
     "NOC.inv.map.Legend",
-    "NOC.inv.map.MiniMap",
     "NOC.inv.map.Basket",
+    "NOC.inv.inv.plugins.Zoom",
     "Ext.ux.form.SearchField",
   ],
   rightWidth: 250,
-  zoomLevels: [
-    [0.25, "25%"],
-    [0.5, "50%"],
-    [0.75, "75%"],
-    [1.0, "100%"],
-    [1.25, "125%"],
-    [1.5, "150%"],
-    [2.0, "200%"],
-    [3.0, "300%"],
-    [4.0, "400%"],
-  ],
   initComponent: function(){
     var me = this;
 
@@ -90,18 +79,6 @@ Ext.define("NOC.inv.map.Application", {
       listeners: {
         scope: me,
         select: me.onSelectSegment,
-      },
-    });
-
-    me.zoomCombo = Ext.create("Ext.form.ComboBox", {
-      store: me.zoomLevels,
-      width: 97,
-      value: 1.0,
-      valueField: "zoom",
-      displayField: "label",
-      listeners: {
-        scope: me,
-        select: me.onZoom,
       },
     });
 
@@ -216,13 +193,16 @@ Ext.define("NOC.inv.map.Application", {
       hideCollapseTool: true,
     });
 
-    me.miniMapPanel = Ext.create("NOC.inv.map.MiniMap", {
+    me.miniMapPanel = Ext.create("Ext.panel.Panel", {
       region: "south",
+      itemId: "miniMap",
       width: this.rightWidth,
+      height: 300,
       collapsible: true,
       collapseMode: undefined,
       header: false,
       hideCollapseTool: true,
+      layout: "fit",
     });
 
     me.basketPanel = Ext.create("NOC.inv.map.Basket", {
@@ -284,10 +264,10 @@ Ext.define("NOC.inv.map.Application", {
             me.basketButton.setPressed();
           }
         },
-        renderdone: function(){
-          me.miniMapPanel.scaleContentToFit();
-          if(me.selectedObjectId){
-            me.selectCell(me.mapPanel.objectNodes[me.selectedObjectId]);
+        renderdone: () => {
+          console.log("Map render done");
+          if(this.selectedObjectId){
+            this.mapPanel.highlightAndMoveById(this.selectedObjectId);
           }
         },
         updateTick: function(text){
@@ -301,6 +281,7 @@ Ext.define("NOC.inv.map.Application", {
         },
         onSelectCell: me.selected,
         onUnselectCell: me.selected,
+        searchResult: me.onSearchResult,
       },
     });
 
@@ -382,7 +363,11 @@ Ext.define("NOC.inv.map.Application", {
           items: [
             me.segmentCombo,
             "-",
-            me.zoomCombo,
+            {
+              xtype: "invPluginsZoom",
+              itemId: "zoomControl",
+              setZoom: Ext.bind(me.mapPanel.setZoom, me.mapPanel),
+            },
             me.reloadButton,
             "-",
             me.searchField,
@@ -428,9 +413,7 @@ Ext.define("NOC.inv.map.Application", {
     this.inspectSegment();
     this.viewMapButton.setPressed(true);
     this.viewStpButton.setPressed(false);
-    this.zoomCombo.setValue(1.0);
-    this.mapPanel.setZoom(1.0);
-    this.mapPanel.paper.clearGrid();
+    // this.mapPanel.paper.clearGrid();
   },
 
   onMapReady: function(){
@@ -451,7 +434,6 @@ Ext.define("NOC.inv.map.Application", {
         this.selectedObjectId = this.noc.cmd.args[2];
       }
     }
-    this.miniMapPanel.createMini(this.mapPanel);
   },
 
   onSelectSegment: function(combo, record){
@@ -459,10 +441,6 @@ Ext.define("NOC.inv.map.Application", {
       this.generator = record.get("generator");
       this.loadSegment(record.get("id"));
     }
-  },
-
-  onZoom: function(combo, record){
-    this.mapPanel.setZoom(record.get("field1"));
   },
 
   inspectSegment: function(){
@@ -525,17 +503,17 @@ Ext.define("NOC.inv.map.Application", {
   },
 
   onEdit: function(){
-    this.mapPanel.paper.clearGrid();
+    // this.mapPanel.paper.clearGrid();
     if(this.editButton.pressed){
-      this.mapPanel.setOverlayMode(0);
-      this.mapPanel.paper.setGrid({
-        name: "doubleMesh",
-        args: [
-          {color: "#bdc3c7", thickness: 1}, // settings for the primary mesh
-          {color: "#bdc3c7", scaleFactor: 5, thickness: 2}, //settings for the secondary mesh
-        ],
-      });
-      this.mapPanel.paper.drawGrid();
+      // this.mapPanel.setOverlayMode(0);
+      // this.mapPanel.paper.setGrid({
+      //   name: "doubleMesh",
+      //   args: [
+      //     {color: "#bdc3c7", thickness: 1}, // settings for the primary mesh
+      //     {color: "#bdc3c7", scaleFactor: 5, thickness: 2}, //settings for the secondary mesh
+      //   ],
+      // });
+      // this.mapPanel.paper.drawGrid();
       this.viewMapButton.setPressed(true);
       this.saveButton.setDisabled(true);
       this.setStateMapButtons(false);
@@ -630,44 +608,8 @@ Ext.define("NOC.inv.map.Application", {
   },
 
   onSearch: function(){
-    var searched = undefined,
-      value = this.searchField.getValue();
-    if(!Ext.isEmpty(value)){
-      Ext.Object.eachValue(this.mapPanel.objectNodes, function(node){
-        var name = node.attributes.name.replace(/\n/g, "");
-        if(name.indexOf(value) !== -1){
-          searched = node;
-          return false;
-        }
-      });
-      this.selectCell(searched);
-    }
-  },
-
-  selectCell: function(searched){
-    var scrollX, scrollY,
-      zoom = this.zoomCombo.getValue(),
-      getScroll = function(pos, offset){
-        var value = pos * zoom - offset;
-        return value > 0 ? value : 0;
-      };
-    this.selectedObjectId = null;
-    if(searched && searched.isElement()){
-      var offsetX = this.mapPanel.getWidth() / 2,
-        offsetY = this.mapPanel.getHeight() / 2;
-      this.searchButton.setText(__("Search"));
-      scrollX = getScroll(searched.attributes.position.x, offsetX);
-      scrollY = getScroll(searched.attributes.position.y, offsetY);
-      this.mapPanel.onCellSelected(this.mapPanel.paper.findViewByModel(searched));
-      this.selectedObjectId = searched.attributes.data.id;
-    } else{
-      scrollX = scrollY = 0;
-      this.mapPanel.unhighlight();
-      this.searchButton.setText(__("Not found"));
-    }
-    this.setHistoryHash(this.currentSegmentId);
-    this.mapPanel.setPaperDimension();
-    this.mapPanel.scrollTo(scrollX, scrollY);
+    let value = this.searchField.getValue();
+    this.mapPanel.highlightAndMoveByLabel(value);
   },
 
   resetSearchButton: function(){
@@ -693,5 +635,13 @@ Ext.define("NOC.inv.map.Application", {
       this.currentHistoryHash += ":" + this.selectedObjectId;
     }
     Ext.History.setHash(this.currentHistoryHash);
+  },
+
+  onSearchResult: function(detail){
+    console.log("Search result", detail);
+    if(!detail.found){
+      this.mapPanel.onBlankSelected();
+      this.searchButton.setText(__("Not found"));
+    }
   },
 });
