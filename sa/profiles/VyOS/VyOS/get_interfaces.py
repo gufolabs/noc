@@ -58,7 +58,7 @@ class Script(BaseScript):
                     "admin_status": ",UP," in match.group("flags"),
                     "oper_status": match.group("state") in ["UP", "UNKNOWN"],
                     "enabled_afi": [],
-                    "mtu": match.group("mtu")
+                    "mtu": match.group("mtu"),
                 }
                 if "@" in last_if:
                     name, base = last_if.split("@")
