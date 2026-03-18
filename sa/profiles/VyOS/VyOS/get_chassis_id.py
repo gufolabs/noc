@@ -25,7 +25,7 @@ class Script(BaseScript):
 
     def execute_cli(self):
         c = self.cli("show interfaces detail", cached=True)
-        macs = sorted(self.rx_mac.findall(self.cli("show interfaces detail", cached=True)))
+        macs = sorted(self.rx_mac.findall(c))
         return [
             {"first_chassis_mac": f, "last_chassis_mac": t} for f, t in self.macs_to_ranges(macs)
         ]

@@ -32,7 +32,6 @@ from noc.core.lldp import (
     LLDP_CAP_TELEPHONE,
     LLDP_CAP_DOCSIS_CABLE_DEVICE,
     LLDP_CAP_STATION_ONLY,
-    lldp_caps_to_bits,
 )
 
 
