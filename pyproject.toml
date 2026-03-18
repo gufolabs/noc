@@ -66,7 +66,6 @@ docs = [
 lint = [
   "ruff==0.14.1",
   "mypy==1.10",
-  "black==24.8.0",
   "mongo-types==0.15.1",
   "types-cachetools==5.5.0.20240820",
 ]
