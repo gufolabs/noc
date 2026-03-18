@@ -101,6 +101,7 @@ The profiles reference provides information about existing profiles and their sp
 [Vector](Vector/index.md)
 [Vitesse](Vitesse/index.md)
 [Vyatta](Vyatta/index.md)
+[VyOS](VyOS/index.md)
 [ZTE](ZTE/index.md)
 [Zebra](Zebra/index.md)
 [Zhone](Zhone/index.md)
