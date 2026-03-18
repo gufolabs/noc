@@ -324,9 +324,10 @@ class TopologyBase(object):
         s = maxv - minv
         # Shift positions according to offset and node size
         for p in pos:
-            so = np.array(
-                [self.G.nodes[p]["shape_width"] / 2.0, self.G.nodes[p]["shape_height"] / 2.0]
-            )
+            # so = np.array(
+            #     [self.G.nodes[p]["shape_width"] / 2.0, self.G.nodes[p]["shape_height"] / 2.0]
+            # )
+            so = np.array([32.0, 32.0])
             pos[p] -= minv + so - self.MAP_OFFSET
         return s[0], s[1], pos
 
