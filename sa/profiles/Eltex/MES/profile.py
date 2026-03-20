@@ -1,8 +1,7 @@
 # ---------------------------------------------------------------------
-# Vendor: Eltex
-# OS:     MES
+# Eltex.MES profile
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -113,7 +112,7 @@ class Profile(BaseProfile):
         "192": "MES-2324FB",
         "216": "MES-5324",  # rev.B
         "235": "MES-2348P",
-        "239": "MES-3324",  #rev.C
+        "239": "MES-3324",  # rev.C
     }
 
     def setup_session(self, script):
