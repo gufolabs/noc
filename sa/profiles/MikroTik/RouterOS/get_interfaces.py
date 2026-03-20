@@ -359,28 +359,28 @@ class Script(BaseScript):
             # Need reworks !!!
             if t["type"].startswith("ovpn-"):
                 self.logger.debug(t["type"])
-            """
-            Temporary disable tunnel processing
-
-            /interface ppp print detail without-paging
-            bad command name ppp (line 1 column 12)
-
-            Need reworks !!!
-            if t["type"].startswith("ppp-"):
-                self.get_tunnel("PPP", f, afi, r)
-            if t["type"].startswith("pppoe-"):
-                self.get_tunnel("PPPOE", f, afi, r)
-            if t["type"].startswith("ovpn-"):
-                self.si["tunnel"] = {}
-            if t["type"].startswith("l2tp-"):
-                self.get_tunnel("L2TP", f, afi, r)
-            if t["type"].startswith("pptp-"):
-                self.get_tunnel("PPTP", f, afi, r)
-            if t["type"].startswith("ovpn-"):
-                self.get_tunnel("PPP", f, afi, r)
-            if t["type"].startswith("sstp-"):
-                self.get_tunnel("SSTP", f, afi, r)
-            """
+            #
+            # Temporary disable tunnel processing
+            #
+            # /interface ppp print detail without-paging
+            # bad command name ppp (line 1 column 12)
+            #
+            # Need reworks !!!
+            # if t["type"].startswith("ppp-"):
+            #     self.get_tunnel("PPP", f, afi, r)
+            # if t["type"].startswith("pppoe-"):
+            #     self.get_tunnel("PPPOE", f, afi, r)
+            # if t["type"].startswith("ovpn-"):
+            #     self.si["tunnel"] = {}
+            # if t["type"].startswith("l2tp-"):
+            #     self.get_tunnel("L2TP", f, afi, r)
+            # if t["type"].startswith("pptp-"):
+            #     self.get_tunnel("PPTP", f, afi, r)
+            # if t["type"].startswith("ovpn-"):
+            #     self.get_tunnel("PPP", f, afi, r)
+            # if t["type"].startswith("sstp-"):
+            #     self.get_tunnel("SSTP", f, afi, r)
+            #
         # bridge
         for n, f, r in self.cli_detail("/interface bridge print detail without-paging"):
             self.si = {}
