@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # inv.map application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -340,7 +340,7 @@ class MapApplication(ExtApplication):
         # Search for maps
         r = []
         for mi in gen.iter_maps(
-            parent=parent if gen.name != parent else None,
+            parent=parent if parent not in ("0", gen.name) else None,
             query=g.get(self.query_param, ""),
             limit=int(g.get(self.limit_param, 500)),
             start=int(g.get(self.start_param, 0)),
