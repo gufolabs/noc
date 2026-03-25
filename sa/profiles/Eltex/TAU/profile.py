@@ -68,12 +68,6 @@ class Profile(BaseProfile):
 
     @classmethod
     def get_interface_type(cls, name):
-        if name.startswith("ge"):
-            return "physical"
-        elif name.startswith("reserved"):
-            return "physical"
-        elif name.startswith("cpu"):
-            return "physical"
-        elif name.startswith("sfp"):
+        if name.startswith(("ge", "reserved", "cpu", "sfp")):
             return "physical"
         return cls.INTERFACE_TYPES.get(name[:1])
