@@ -121,7 +121,7 @@ node = [
 ]
 ping = ["gufo-ping==0.5.0"]
 prod-tools = [
-  "sentry-sdk==0.20.3",
+  "sentry-sdk==2.57.0",
   "supervisor-wildcards==0.1.3",
 ]
 sender-kafka = ["aiokafka[lz4,snappy,zstd]==0.13.0"]
