@@ -8,7 +8,7 @@
 # Python modules
 from enum import Enum
 from dataclasses import dataclass
-from typing import Optional, Dict, Any, List, Set
+from typing import Optional, Dict, Any, List
 
 
 class Layout(str, Enum):

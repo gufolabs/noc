@@ -22,7 +22,7 @@ from noc.core.text import alnum_key
 from .layout.ring import RingLayout
 from .layout.spring import SpringLayout
 from .layout.tree import TreeLayout
-from .types import TopologyNode, TopologyNodeType, MapMeta, MapItem, PathItem
+from .types import TopologyNode, MapMeta, MapItem, PathItem
 
 
 class TopologyBase(object):

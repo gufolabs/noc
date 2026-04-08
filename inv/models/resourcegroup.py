@@ -30,7 +30,7 @@ from noc.core.model.decorator import on_delete_check, on_save, tree
 from noc.core.change.decorator import change
 from noc.core.defer import defer
 from noc.core.bi.decorator import bi_sync
-from noc.core.topology.types import TopologyNodeType
+from noc.core.topology.types import TopologyNode, TopologyNodeType
 from noc.main.models.remotesystem import RemoteSystem
 from noc.main.models.label import Label
 from .technology import Technology
