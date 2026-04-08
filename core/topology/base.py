@@ -22,7 +22,7 @@ from noc.core.text import alnum_key
 from .layout.ring import RingLayout
 from .layout.spring import SpringLayout
 from .layout.tree import TreeLayout
-from .types import TopologyNode, MapMeta, MapItem, PathItem
+from .types import TopologyNode, TopologyNodeType, MapMeta, MapItem, PathItem
 
 
 class TopologyBase(object):
@@ -113,9 +113,12 @@ class TopologyBase(object):
             return
         # Get capabilities
         oc = set()
-        if n.get_caps():
-            oc = set(n.get_caps()) & self.CAPS
+        print("@@@@@@@@@@@@@@@ CAPS FILTER", self.CAPS)
+        if cv := n.get_caps():
+            print(">>>>> CV=", cv)
+            oc = set(cv) & self.CAPS
             self.caps |= oc
+        print(">>>>> CAPS", self.caps)
         if n.portal:
             attrs["portal"] = asdict(n.portal)
         # Apply node hints
@@ -389,6 +392,7 @@ class TopologyBase(object):
         x = node.copy()
         if "mo" in x:
             del x["mo"]
+        x["type"] = x["type"].value
         if x["type"] == "managedobject":
             x["external"] = x.get("role") != "segment"
         elif node["type"] == "cloud":

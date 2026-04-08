@@ -147,6 +147,7 @@ from noc.core.topology.types import (
     ShapeOverlayForm,
     ShapeOverlay,
     TopologyNode,
+    TopologyNodeType,
 )
 from noc.core.models.problem import ProblemItem
 from noc.core.models.cfgmetrics import MetricCollectorConfig, MetricItem
@@ -2850,7 +2851,7 @@ class ManagedObject(NOCModel):
     def get_topology_node(self) -> TopologyNode:
         return TopologyNode(
             id=str(self.id),
-            type="managedobject",
+            type=TopologyNodeType.MANAGEDOBJECT,
             resource_id=self.id,
             title=self.name,
             title_metric_template=self.shape_title_template
@@ -2860,6 +2861,7 @@ class ManagedObject(NOCModel):
             overlays=self.get_shape_overlays(),
             level=self.object_profile.level,
             attrs={"address": self.address, "mo": self},
+            caps=self.get_caps() or None,
         )
 
     def get_metric_discovery_interval(self) -> int:

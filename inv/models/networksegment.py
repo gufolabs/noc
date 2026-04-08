@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Network Segment
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ from pymongo.errors import OperationFailure
 
 # NOC modules
 from noc.core.mongo.fields import PlainReferenceField
-from noc.core.topology.types import TopologyNode
+from noc.core.topology.types import TopologyNode, TopologyNodeType
 from noc.main.models.remotesystem import RemoteSystem
 from noc.sa.models.servicesummary import ServiceSummary, SummaryItem, ObjectSummaryItem
 from noc.core.model.decorator import on_delete_check, on_save, tree
@@ -617,7 +617,7 @@ class NetworkSegment(Document):
     def get_topology_node(self) -> TopologyNode:
         return TopologyNode(
             id=str(self.id),
-            type="objectsegment",
+            type=TopologyNodeType.OBJECTSEGMENT,
             resource_id=str(self.id),
             title=self.name,
         )
