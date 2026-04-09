@@ -1,0 +1,12 @@
+{
+    "name": "Telephony | SIP | Trunk | CurrentTotalCalls",
+    "$collection": "pm.metrictypes",
+    "uuid": "c1e94b1e-69be-438d-af78-585968ddd4b5",
+    "scope__name": "Object",
+    "field_name": "sip_trunk_current_total_calls",
+    "field_type": "UInt32",
+    "description": "Current total calls in trunk group",
+    "measure": null,
+    "units__code": "1",
+    "scale__code": "1"
+}
