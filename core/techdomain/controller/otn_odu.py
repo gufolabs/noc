@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # OTNODUController class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -205,7 +205,7 @@ class OTNODUController(BaseController):
             """
             Get channel discriminator from crossing
             """
-            last = s.split("::")[-1]
+            last = s.rsplit("::", maxsplit=1)[-1]
             if "-" in s:
                 last, _ = last.split("-", 1)
             return f"odu::{last}"

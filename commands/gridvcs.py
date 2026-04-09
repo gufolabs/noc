@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Full-text search index management
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -221,7 +221,7 @@ class Command(BaseCommand):
                     if mpath.startswith(mirror):
                         safe_rewrite(mpath, data)
                     else:
-                        self.print("    !!! mirror path violation for" % address)
+                        self.print(f"    !!! mirror path violation for {address}")
         self.print("Done")
 
     def _forget(self, mo, revision: str, dry_run=False):

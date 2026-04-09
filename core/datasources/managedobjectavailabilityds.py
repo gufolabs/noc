@@ -122,7 +122,7 @@ class ManagedObjectAvailabilityDS(BaseDataSource):
                 print(row)
                 continue
             row = orjson.loads(row)
-            oid = m_biid_map.get(int(row["managed_object"]), None)
+            oid = m_biid_map.get(int(row["managed_object"]))
             if not oid:
                 continue
             min_start, max_stop = (

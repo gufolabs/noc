@@ -181,7 +181,6 @@ class Credentials(object):
     super_password: str
     snmp_ro: str
     snmp_rw: str
-    snmp_rate_limit: str
     snmp_security_level: str
     snmp_username: str
     snmp_ctx_name: str

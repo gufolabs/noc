@@ -512,12 +512,13 @@ class Object(Document):
             if not mi:
                 continue
             for na, a in enumerate(mi.attrs):
-                sorting_keys["%s.%s" % (i, a.name)] = "%06d.%06d" % (ni, na)
+                sorting_keys[f"{i}.{a.name}"] = "%06d.%06d" % (ni, na)
         # Return sorted result
         return sorted(
             r,
-            key=lambda oa: "%s.%s"
-            % (sorting_keys.get("%s.%s" % (oa.interface, oa.attr), "999999.999999"), oa.scope),
+            key=lambda oa: (
+                "%s.%s" % (sorting_keys.get(f"{oa.interface}.{oa.attr}", "999999.999999"), oa.scope)
+            ),
         )
 
     def set_data(self, interface: str, key: str, value: Any, scope: Optional[str] = None) -> None:
