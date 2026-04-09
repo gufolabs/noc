@@ -9,7 +9,6 @@ classifiers = [
   "Intended Audience :: Developers",
   "Intended Audience :: System Administrators",
   "Intended Audience :: Telecommunications Industry",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
@@ -33,11 +32,12 @@ content-type = "text/markdown"
 file = "README.md"
 
 [project.urls]
-"Bug Tracker" = "https://code.getnoc.com/noc/noc/-/issues"
+"Bug Tracker" = "https://github.com/gufolabs/noc/issues"
 Changelog = "https://getnoc.com/release-policy/"
+Discussions = "https://github.com/gufolabs/noc/discussions"
 Documentation = "https://getnoc.com/"
 Homepage = "https://getnoc.com/"
-"Source Code" = "https://code.getnoc.com/noc/noc/-/tree/master"
+"Source Code" = "https://github.com/gufolabs/noc"
 
 [project.optional-dependencies]
 activator = ["ssh2-python==1.1.2.post1"]
