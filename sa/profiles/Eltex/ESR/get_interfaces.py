@@ -167,10 +167,12 @@ class Script(BaseScript):
                 vrfs["default"]["interfaces"] += [interfaces[i]]
             for s in subs:
                 if (
-                    self.profile.convert_interface_name(s["name"]) in vrf_if_map 
+                    self.profile.convert_interface_name(s["name"]) in vrf_if_map
                     and vrf_if_map[self.profile.convert_interface_name(s["name"])] != iface_vrf
                 ):
-                    vrfs[vrf_if_map[self.profile.convert_interface_name(s["name"])]]["interfaces"] += [
+                    vrfs[vrf_if_map[self.profile.convert_interface_name(s["name"])]][
+                        "interfaces"
+                    ] += [
                         {
                             "name": s["name"],
                             "type": "other",

@@ -38,7 +38,6 @@ class Profile(BaseProfile):
         "br": "SVI",
     }
 
-
     @classmethod
     def get_interface_type(cls, iftype):
         return cls.INTERFACE_TYPES.get(iftype)
