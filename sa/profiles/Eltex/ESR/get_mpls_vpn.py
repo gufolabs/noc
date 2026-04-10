@@ -11,7 +11,6 @@ import re
 # NOC modules
 from noc.sa.profiles.Generic.get_mpls_vpn import Script as BaseScript
 from noc.sa.interfaces.igetmplsvpn import IGetMPLSVPN
-from noc.core.text import parse_kv
 
 
 class Script(BaseScript):
@@ -34,9 +33,6 @@ class Script(BaseScript):
             v = self.cli("show running-config vrf", cached=True)
         except self.CLISyntaxError:
             return []
-        block = None
-        block_splitter = None
-        line_format = None
         for line in v.splitlines():
             match = self.rx_line.search(line)
             if match:
@@ -78,11 +74,7 @@ class Script(BaseScript):
                 match_export = self.rx_export.match(line)
                 if match_export:
                     vpns[-1]["rt_export"] = match_export.group("rt_export").split()
-                    block = "rt_export"
-                    line_format = self.rx_rt_format
                 match_import = self.rx_import.match(line)
                 if match_import:
                     vpns[-1]["rt_import"] = match_import.group("rt_import").split()
-                    block = "rt_import"
-                    line_format = self.rx_rt_format
         return vpns

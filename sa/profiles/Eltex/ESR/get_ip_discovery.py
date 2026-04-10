@@ -61,9 +61,13 @@ class Script(BaseScript):
             # Process ARP cache
             arp_cache = self.scripts.get_arp(vrf=vrf)
             for x in arp_cache:
-                if vrf and x["interface"] not in vrfs[v]["interfaces"]:
-                    continue
-                elif not vrf and x["interface"] in vrf_iface_map:
+                if (
+                    vrf 
+                    and x["interface"] not in vrfs[v]["interfaces"]
+                    ) or (
+                    not vrf
+                    and x["interface"] in vrf_iface_map
+                ):
                     continue
                 a += [{"ip": x["ip"], "afi": "4", "mac": x["mac"], "interface": x["interface"]}]
             # Process NBD
