@@ -29,13 +29,52 @@ class Profile(BaseProfile):
     convert_interface_name = BaseProfile.convert_interface_name_cisco
 
     INTERFACE_TYPES = {
-        6: "physical",
-        161: "aggregated",
-        54: "aggregated",
-        53: "SVI",
-        24: "loopback",
+        "gi": "physical",
+        "te": "physical",
+        "twe": "physical",
+        "oob": "physical",
+        "lo": "loopback",
+        "po": "aggregated",
+        "br": "SVI",
     }
+
 
     @classmethod
     def get_interface_type(cls, iftype):
         return cls.INTERFACE_TYPES.get(iftype)
+
+#    def convert_interface_name(self, s):
+#        """
+#        >>> Profile().convert_interface_name("XGE2/0/0")
+#        'XGigabitEthernet2/0/0'
+#        >>> Profile().convert_interface_name("Ten-GigabitEthernet2/0/0")
+#        'XGigabitEthernet2/0/0'
+#        >>> Profile().convert_interface_name("GE2/0/0")
+#        'GigabitEthernet2/0/0'
+#        >>> Profile().convert_interface_name("G2/0/0")
+#        'GigabitEthernet2/0/0'
+#        >>> Profile().convert_interface_name("Eth2/0/0")
+#        'Ethernet2/0/0'
+#        >>> Profile().convert_interface_name("MEth2/0/0")
+#        'M-Ethernet2/0/0'
+#        """
+#        s = str(s)  # avoid `expected string or buffer` error
+#        match = self.rx_interface_name.match(s)
+#        if not match:
+#            return s
+#        return "%s%s" % (
+#            {
+#                "Loop": "LoopBack",
+#                "Ten-GigabitEthernet": "XGigabitEthernet",
+#                "XGE": "XGigabitEthernet",
+#                "GE": "GigabitEthernet",  # Sometimes it used on iface description
+#                "G": "GigabitEthernet",  # Sometimes it used on iface description
+#                "Gi": "GigabitEthernet",
+#                "Eth": "Ethernet",
+#                "MEth": "M-Ethernet",
+#                "VE": "Virtual-Ethernet",
+#                # "Vlanif": "Vlan-interface" - need testing
+#            }[match.group("type")],
+#            match.group("number"),
+#        )
+#

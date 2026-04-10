@@ -18,7 +18,6 @@ class Script(BaseScript):
     name = "Eltex.ESR.get_mpls_vpn"
     interface = IGetMPLSVPN
 
-
     rx_line = re.compile(r"^ip vrf\s+(?P<vrf>\S+?)$", re.IGNORECASE)
     rx_rd = re.compile(r"^  rd (?P<rd>\S+:\S+|<not set>)$", re.IGNORECASE)
     rx_import = re.compile(

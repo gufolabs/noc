@@ -61,8 +61,6 @@ class Script(BaseScript):
             # Process ARP cache
             arp_cache = self.scripts.get_arp(vrf=vrf)
             for x in arp_cache:
-                if not x.get("mac"):
-                    continue
                 if vrf and x["interface"] not in vrfs[v]["interfaces"]:
                     continue
                 elif not vrf and x["interface"] in vrf_iface_map:

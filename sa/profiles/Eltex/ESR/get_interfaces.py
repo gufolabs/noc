@@ -22,7 +22,6 @@ class Script(BaseScript):
 
     rx_iface = re.compile(r"Interface:?\s+(?P<iface>\S+)")
 
-    types = {"gi": "physical", "te": "physical", "twe": "physical", "oob": "physical", "lo": "loopback", "po": "aggregated", "br": "SVI"}
     def get_ifindexes(self):
         r = {}
         unknown_interfaces = []
@@ -115,13 +114,14 @@ class Script(BaseScript):
                 "mac": mac,
                 "enabled_afi": [],
                 "enabled_protocols": [],
-                "snmp_ifindex": index[ifname.replace("twe", "Tw ").replace("oob", "Oo ").replace("lo", "Lo ").replace("br", "Br ")],
+                "snmp_ifindex": index[self.profile.convert_interface_name(ifname)],
+                #"snmp_ifindex": index[ifname.replace("twe", "Tw ").replace("oob", "Oo ").replace("lo", "Lo ").replace("br", "Br ")],
             }
             ip_addresses = {}
             c = self.cli(f"show ip interfaces {ifname}", cached=True)
             for line in parse_table(c):
                 # When type is DHCP, IP address may be '--'
-                if is_ipv4(line[0].split('/')[0]):
+                if is_ipv4(line[0].split("/")[0]):
                     ip_addresses[line[1]] = line[0]
             if ip_addresses.get(ifname):
                 sub["enabled_afi"] += ["IPv4"]
@@ -138,14 +138,15 @@ class Script(BaseScript):
                 sub["vlan_ids"] = [vlan_ids]
                 interfaces[name]["subinterfaces"] += [sub]
                 continue
-            typ = self.types[ifname[:3].strip("0123456789")]
+            typ = self.profile.get_interface_type(ifname[:3].strip("0123456789"))
             iface = {
                 "name": ifname,
                 "type": typ,
                 "admin_status": astate == "Up",
                 "oper_status": lstate == "Up",
                 "mac": mac,
-                "snmp_ifindex": index[ifname.replace("twe", "Tw ").replace("oob", "Oo ").replace("lo", "Lo ").replace("br", "Br ")],
+                "snmp_ifindex": index[self.profile.convert_interface_name(ifname)],
+                #"snmp_ifindex": index[ifname.replace("twe", "Tw ").replace("oob", "Oo ").replace("lo", "Lo ").replace("br", "Br ")],
                 "enabled_protocols": ["NDP"],
                 "subinterfaces": [sub],
             }
@@ -159,14 +160,14 @@ class Script(BaseScript):
             iface_vrf = "default"
             subs = interfaces[i]["subinterfaces"]
             interfaces[i]["subinterfaces"] = []
-            if i.replace("twe","Tw ") in vrf_if_map:
-                iface_vrf = vrf_if_map[i.replace("twe","Tw ")]
-                vrfs[vrf_if_map[i.replace("twe","Tw ")]]["interfaces"] += [interfaces[i]]
+            if self.profile.convert_interface_name(i) in vrf_if_map:
+                iface_vrf = vrf_if_map[self.profile.convert_interface_name(i)]
+                vrfs[vrf_if_map[self.profile.convert_interface_name(i)]]["interfaces"] += [interfaces[i]]
             else:
                 vrfs["default"]["interfaces"] += [interfaces[i]]
             for s in subs:
-                if s["name"].replace("twe","Tw ") in vrf_if_map and vrf_if_map[s["name"].replace("twe","Tw ")] != iface_vrf:
-                    vrfs[vrf_if_map[s["name"].replace("twe","Tw ")]]["interfaces"] += [
+                if self.profile.convert_interface_name(s["name"]) in vrf_if_map and vrf_if_map[self.profile.convert_interface_name(s["name"])] != iface_vrf:
+                    vrfs[vrf_if_map[self.profile.convert_interface_name(s["name"])]]["interfaces"] += [
                         {
                             "name": s["name"],
                             "type": "other",

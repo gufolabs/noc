@@ -9,7 +9,7 @@
 from noc.sa.profiles.Generic.get_arp import Script as BaseScript
 from noc.sa.interfaces.igetarp import IGetARP
 from noc.core.text import parse_table
-
+from noc.core.validators import is_mac
 
 class Script(BaseScript):
     name = "Eltex.ESR.get_arp"
@@ -24,8 +24,6 @@ class Script(BaseScript):
         for iface, ip, mac, state, age in parse_table(c):
             if (interface is not None) and (interface != iface):
                 continue
-            if mac == "--":
-                mac = None
-            if mac:
+            if is_mac(mac):
                 r += [{"ip": ip, "mac": mac, "interface": iface}]
         return r
