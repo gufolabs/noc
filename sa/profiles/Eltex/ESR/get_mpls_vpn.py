@@ -51,7 +51,7 @@ class Script(BaseScript):
                 ]
                 vrf_name = vpns[-1]["name"]
                 rx_vpn_int = re.compile(
-                    r"^(?:\s{,4}(%s) \s+|\s{6,})(?P<iface>.+?),?\s*$"%vrf_name, re.IGNORECASE
+                    r"^(?:\s{,4}(%s) \s+|\s{6,})(?P<iface>.+?),?\s*$" % vrf_name, re.IGNORECASE
                 )
                 for line in self.cli(f"show ip vrf {vrf_name}").splitlines():
                     match_int = rx_vpn_int.match(line)
