@@ -80,7 +80,7 @@ class Script(BaseScript):
         index = self.scripts.get_ifindexes()
         vrrp = []
         descriptions = {}
-        descrs = ''
+        descrs = ""
         c = self.cli("show interfaces description", cached=True)
         for line in c.splitlines():
             if not line.startswith("  ") and line != "":
@@ -160,11 +160,16 @@ class Script(BaseScript):
             interfaces[i]["subinterfaces"] = []
             if self.profile.convert_interface_name(i) in vrf_if_map:
                 iface_vrf = vrf_if_map[self.profile.convert_interface_name(i)]
-                vrfs[vrf_if_map[self.profile.convert_interface_name(i)]]["interfaces"] += [interfaces[i]]
+                vrfs[vrf_if_map[self.profile.convert_interface_name(i)]]["interfaces"] += [
+                    interfaces[i]
+                ]
             else:
                 vrfs["default"]["interfaces"] += [interfaces[i]]
             for s in subs:
-                if self.profile.convert_interface_name(s["name"]) in vrf_if_map and vrf_if_map[self.profile.convert_interface_name(s["name"])] != iface_vrf:
+                if (
+                    self.profile.convert_interface_name(s["name"]) in vrf_if_map 
+                    and vrf_if_map[self.profile.convert_interface_name(s["name"])] != iface_vrf
+                ):
                     vrfs[vrf_if_map[self.profile.convert_interface_name(s["name"])]]["interfaces"] += [
                         {
                             "name": s["name"],

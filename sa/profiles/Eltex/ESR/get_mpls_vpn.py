@@ -49,7 +49,7 @@ class Script(BaseScript):
                         "interfaces": [],
                     }
                 ]
-                vrf_name=vpns[-1]["name"]
+                vrf_name = vpns[-1]["name"]
                 rx_vpn_int = re.compile(r"^(?:\s{,4}(%s) \s+|\s{6,})(?P<iface>.+?),?\s*$"%vrf_name, re.IGNORECASE)
                 for line in self.cli(f"show ip vrf {vrf_name}").splitlines():
                     match_int = rx_vpn_int.match(line)
@@ -59,12 +59,12 @@ class Script(BaseScript):
                                 vpns[-1]["interfaces"] += [ints]
                             elif "--" not in ints:
                                 result = []
-                                intn, rng = ints.split('.')
-                                a, b = rng.split('-')
+                                intn, rng = ints.split(".")
+                                a, b = rng.split("-")
                                 a, b = int(a), int(b)
                                 result.extend(range(a, b + 1))
                                 for i in result:
-                                    intf = intn+'.'+str(i)
+                                    intf = intn + "." + str(i)
                                     vpns[-1]["interfaces"] += [intf]
             elif vpns:
                 match_rd = self.rx_rd.match(line)
@@ -84,4 +84,3 @@ class Script(BaseScript):
                     block = "rt_import"
                     line_format = self.rx_rt_format
         return vpns
-

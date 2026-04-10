@@ -11,6 +11,7 @@ from noc.sa.interfaces.igetarp import IGetARP
 from noc.core.text import parse_table
 from noc.core.validators import is_mac
 
+
 class Script(BaseScript):
     name = "Eltex.ESR.get_arp"
     interface = IGetARP
