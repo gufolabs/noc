@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------
-# Generic.get_topology_data
+# Eltex.ESR.get_ip_discovery
 # ---------------------------------------------------------------------
 # Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
@@ -14,7 +14,8 @@ class Script(BaseScript):
     """
     Retrieve data for IP discovery
     """
-
+    
+    name = "Eltex.ESR.get_ip_discovery"
     interface = IGetIPDiscovery
     requires = ["get_arp"]
 
