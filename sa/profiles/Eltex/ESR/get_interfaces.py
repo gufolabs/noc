@@ -115,7 +115,6 @@ class Script(BaseScript):
                 "enabled_afi": [],
                 "enabled_protocols": [],
                 "snmp_ifindex": index[self.profile.convert_interface_name(ifname)],
-                #"snmp_ifindex": index[ifname.replace("twe", "Tw ").replace("oob", "Oo ").replace("lo", "Lo ").replace("br", "Br ")],
             }
             ip_addresses = {}
             c = self.cli(f"show ip interfaces {ifname}", cached=True)
@@ -146,7 +145,6 @@ class Script(BaseScript):
                 "oper_status": lstate == "Up",
                 "mac": mac,
                 "snmp_ifindex": index[self.profile.convert_interface_name(ifname)],
-                #"snmp_ifindex": index[ifname.replace("twe", "Tw ").replace("oob", "Oo ").replace("lo", "Lo ").replace("br", "Br ")],
                 "enabled_protocols": ["NDP"],
                 "subinterfaces": [sub],
             }
