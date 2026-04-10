@@ -17,7 +17,6 @@ from noc.core.mib import mib
 from noc.core.validators import is_ipv4, is_ipv6
 
 
-
 class Script(BaseScript):
     name = "Eltex.ESR.get_interfaces"
     interface = IGetInterfaces
