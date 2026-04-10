@@ -15,7 +15,6 @@ class Script(BaseScript):
     Retrieve data for IP discovery
     """
 
-    name = "Generic.get_ip_discovery"
     interface = IGetIPDiscovery
     requires = ["get_arp"]
 
