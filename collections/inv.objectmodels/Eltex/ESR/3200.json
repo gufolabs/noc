@@ -46,6 +46,10 @@
                 {
                     "direction": "*",
                     "protocol__code": "TransEth10G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth25G"
                 }
             ],
             "type__name": "Transceiver | SFP28"
@@ -63,6 +67,10 @@
                 {
                     "direction": "*",
                     "protocol__code": "TransEth10G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth25G"
                 }
             ],
             "type__name": "Transceiver | SFP28"
@@ -80,6 +88,10 @@
                 {
                     "direction": "*",
                     "protocol__code": "TransEth10G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth25G"
                 }
             ],
             "type__name": "Transceiver | SFP28"
@@ -97,6 +109,10 @@
                 {
                     "direction": "*",
                     "protocol__code": "TransEth10G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth25G"
                 }
             ],
             "type__name": "Transceiver | SFP28"
@@ -114,6 +130,10 @@
                 {
                     "direction": "*",
                     "protocol__code": "TransEth10G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth25G"
                 }
             ],
             "type__name": "Transceiver | SFP28"
@@ -131,6 +151,10 @@
                 {
                     "direction": "*",
                     "protocol__code": "TransEth10G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth25G"
                 }
             ],
             "type__name": "Transceiver | SFP28"
@@ -148,6 +172,10 @@
                 {
                     "direction": "*",
                     "protocol__code": "TransEth10G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth25G"
                 }
             ],
             "type__name": "Transceiver | SFP28"
@@ -165,6 +193,10 @@
                 {
                     "direction": "*",
                     "protocol__code": "TransEth10G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth25G"
                 }
             ],
             "type__name": "Transceiver | SFP28"
@@ -182,6 +214,10 @@
                 {
                     "direction": "*",
                     "protocol__code": "TransEth10G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth25G"
                 }
             ],
             "type__name": "Transceiver | SFP28"
@@ -199,6 +235,10 @@
                 {
                     "direction": "*",
                     "protocol__code": "TransEth10G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth25G"
                 }
             ],
             "type__name": "Transceiver | SFP28"
@@ -216,6 +256,10 @@
                 {
                     "direction": "*",
                     "protocol__code": "TransEth10G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth25G"
                 }
             ],
             "type__name": "Transceiver | SFP28"
@@ -233,6 +277,10 @@
                 {
                     "direction": "*",
                     "protocol__code": "TransEth10G"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "TransEth25G"
                 }
             ],
             "type__name": "Transceiver | SFP28"
