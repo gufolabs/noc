@@ -14,7 +14,7 @@ class Script(BaseScript):
     """
     Retrieve data for IP discovery
     """
-    
+
     name = "Eltex.ESR.get_ip_discovery"
     interface = IGetIPDiscovery
     requires = ["get_arp"]
