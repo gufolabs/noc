@@ -156,32 +156,6 @@ class Script(GetMetricsScript):
                 )
 
     @metrics(
-        ["Telephony | SIP | Register | Contacts | Active"],
-        volatile=False,
-        access="S",
-    )
-    def get_sip_registration_count(self, metrics):
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.29.42.2.0", cached=True)
-        self.set_metric(
-            id=("Telephony | SIP | Register | Contacts | Active", None),
-            value=v,
-            multi=True,
-        )
-
-    @metrics(
-        ["Telephony | SIP | Sessions | Active"],
-        volatile=False,
-        access="S",
-    )
-    def get_sip_active_call_count(self, metrics):
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.29.42.1.0", cached=True)
-        self.set_metric(
-            id=("Telephony | SIP | Sessions | Active", None),
-            value=v,
-            multi=True,
-        )
-
-    @metrics(
         ["Telephony | SIP | Trunk | Enable"],
         volatile=False,
         access="S",
