@@ -3,6 +3,7 @@
     "$collection": "inv.objectmodels",
     "uuid": "4baba7f9-6748-4210-8dce-5f323bb67138",
     "vendor__code": "ELTEX",
+	"container_type": "chassis",
     "description": "Router Eltex ESR-3200, 12 × 1000BASE-X (SFP)/10GBASE-R (SFP+)/25GBASE-R (SFP28), Console RS-232 (RJ-45), OOB, 24 GB RAM, 8 GB NAND-Flash, 2 slots for Power Supply 100–240 VAC or 36–72 VDC.",
     "connection_rule__name": "Eltex | MES",
     "cr_context": "CHASSIS",
