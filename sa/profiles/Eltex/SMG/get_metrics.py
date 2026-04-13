@@ -71,32 +71,6 @@ class Script(GetMetricsScript):
             )
 
     @metrics(
-        ["Environment | Temperature"],
-        volatile=False,
-        access="S",
-    )
-    def get_temperature(self, metrics):
-        print("*** get_temperature")
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.29.35.1.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Temperature", None),
-                labels=["noc::sensor::Temperature 1"],
-                value=v,
-                multi=True,
-                units="C",
-            )
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.29.35.2.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Temperature", None),
-                labels=["noc::sensor::Temperature 2"],
-                value=v,
-                multi=True,
-                units="C",
-            )
-
-    @metrics(
         ["Environment | Sensor Status"],
         volatile=False,
         access="S",
