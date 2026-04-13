@@ -143,8 +143,11 @@ class Command(BaseCommand):
 
         if username:
             username = self.parse_credentials(username)
-        x = run_sync(main)
-        self.print(f"Result {x}")
+        try:
+            x = run_sync(main)
+            self.print(f"Result {x}")
+        except SnmpAuthError:
+            self.die("Authentication failed")
 
     def handle_getbulk(self, address, community, timeout, oid, username, *args, **options):
         """ """
@@ -164,8 +167,11 @@ class Command(BaseCommand):
 
         if username:
             username = self.parse_credentials(username)
-        x = run_sync(main)
-        self.print(f"Result {x}")
+        try:
+            x = run_sync(main)
+            self.print(f"Result {x}")
+        except SnmpAuthError:
+            self.die("Authentication failed")
 
     def handle_poll(
         self,
