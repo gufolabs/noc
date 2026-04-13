@@ -11,7 +11,12 @@ from noc.sa.profiles.Generic.get_metrics import Script as GetMetricsScript, metr
 CPU_USAGE_TYPE_MAP = {
     "cpuUsr": 1,
     "cpuSys": 2,
-    "cpuIdle": 3,
+    "cpuNic": 3,
+    "cpuIdle": 4,
+    "cpuIo": 5,
+    "cpuIrq": 6,
+    "cpuSirq": 7,
+    "cpuUsage": 8,
 }
 
 POWER_METRIC_TYPE_MAP = {
@@ -33,7 +38,12 @@ class Script(GetMetricsScript):
             [
                 "1.3.6.1.4.1.35265.1.29.37.1.2",  # cpuUsr
                 "1.3.6.1.4.1.35265.1.29.37.1.3",  # cpuSys
+                "1.3.6.1.4.1.35265.1.29.37.1.4",  # cpuNic
                 "1.3.6.1.4.1.35265.1.29.37.1.5",  # cpuIdle
+                "1.3.6.1.4.1.35265.1.29.37.1.6",  # cpuIo
+                "1.3.6.1.4.1.35265.1.29.37.1.7",  # cpuIrq
+                "1.3.6.1.4.1.35265.1.29.37.1.8",  # cpuSirq
+                "1.3.6.1.4.1.35265.1.29.37.1.9",  # cpuUsage
             ],
             bulk=True,
         )
