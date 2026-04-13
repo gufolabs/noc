@@ -162,7 +162,7 @@ class Script(GetMetricsScript):
             [
                 "1.3.6.1.4.1.35265.1.29.46.1.1.2",  # trunkName
                 "1.3.6.1.4.1.35265.1.29.46.1.1.3",  # trunkEntryType
-                "1.3.6.1.4.1.35265.1.29.36.1.1.5",  # trunkCapacity
+                "1.3.6.1.4.1.35265.1.29.46.1.1.5",  # trunkCapacity
             ],
             bulk=True,
         )
@@ -186,7 +186,7 @@ class Script(GetMetricsScript):
             [
                 "1.3.6.1.4.1.35265.1.29.46.1.1.2",  # trunkName
                 "1.3.6.1.4.1.35265.1.29.46.1.1.3",  # trunkEntryType
-                "1.3.6.1.4.1.35265.1.29.36.1.1.6",  # trunkCurrentIngressCalls
+                "1.3.6.1.4.1.35265.1.29.46.1.1.6",  # trunkCurrentIngressCalls
             ],
             bulk=True,
         )
@@ -210,7 +210,7 @@ class Script(GetMetricsScript):
             [
                 "1.3.6.1.4.1.35265.1.29.46.1.1.2",  # trunkName
                 "1.3.6.1.4.1.35265.1.29.46.1.1.3",  # trunkEntryType
-                "1.3.6.1.4.1.35265.1.29.36.1.1.7",  # trunkCurrentEgressCalls
+                "1.3.6.1.4.1.35265.1.29.46.1.1.7",  # trunkCurrentEgressCalls
             ],
             bulk=True,
         )
@@ -234,7 +234,7 @@ class Script(GetMetricsScript):
             [
                 "1.3.6.1.4.1.35265.1.29.46.1.1.2",  # trunkName
                 "1.3.6.1.4.1.35265.1.29.46.1.1.3",  # trunkEntryType
-                "1.3.6.1.4.1.35265.1.29.36.1.1.8",  # trunkCurrentTotalCalls
+                "1.3.6.1.4.1.35265.1.29.46.1.1.8",  # trunkCurrentTotalCalls
             ],
             bulk=True,
         )
