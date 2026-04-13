@@ -1,0 +1,12 @@
+{
+    "name": "Telephony | SIP | Trunk | UnavailableCicCount",
+    "$collection": "pm.metrictypes",
+    "uuid": "fb74a093-304d-42ee-ad90-e9c2e342fa2b",
+    "scope__name": "Object",
+    "field_name": "sip_trunk_unavailable_cic_count",
+    "field_type": "UInt32",
+    "description": "Only for entry type CAS, PRI, SS7, E1-channels, SS7-lines: number of blocked/unavailable/disabled channels",
+    "measure": null,
+    "units__code": "1",
+    "scale__code": "1"
+}

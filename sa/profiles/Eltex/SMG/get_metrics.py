@@ -130,120 +130,54 @@ class Script(GetMetricsScript):
                 )
 
     @metrics(
-        ["Telephony | SIP | Trunk | Enable"],
+        [
+            "Telephony | SIP | Trunk | Enable",
+            "Telephony | SIP | Trunk | Capacity",
+            "Telephony | SIP | Trunk | CurrentIngressCalls",
+            "Telephony | SIP | Trunk | CurrentEgressCalls",
+            "Telephony | SIP | Trunk | CurrentTotalCalls",
+            "Telephony | SIP | Trunk | CurrentCps",
+            "Telephony | SIP | Trunk | Status",
+            "Telephony | SIP | Trunk | UnavailableCicCount",
+            "Telephony | SIP | Trunk | CPSMax",
+            "Telephony | SIP | Trunk | CPSAlarm",
+            "Telephony | SIP | Trunk | ChansFree",
+            "Telephony | SIP | Trunk | ChansBusy",
+        ],
         volatile=False,
         access="S",
     )
-    def get_sip_trunk_enable(self, metrics):
+    def get_sip_trunk_metrics(self, metrics):
+        metric_oid_map = {
+            "Telephony | SIP | Trunk | Enable": "1.3.6.1.4.1.35265.1.29.46.1.1.4",
+            "Telephony | SIP | Trunk | Capacity": "1.3.6.1.4.1.35265.1.29.46.1.1.5",
+            "Telephony | SIP | Trunk | CurrentIngressCalls": "1.3.6.1.4.1.35265.1.29.46.1.1.6",
+            "Telephony | SIP | Trunk | CurrentEgressCalls": "1.3.6.1.4.1.35265.1.29.46.1.1.7",
+            "Telephony | SIP | Trunk | CurrentTotalCalls": "1.3.6.1.4.1.35265.1.29.46.1.1.8",
+            "Telephony | SIP | Trunk | CurrentCps": "1.3.6.1.4.1.35265.1.29.46.1.1.9",
+            "Telephony | SIP | Trunk | Status": "1.3.6.1.4.1.35265.1.29.46.1.1.10",
+            "Telephony | SIP | Trunk | UnavailableCicCount": "1.3.6.1.4.1.35265.1.29.46.1.1.11",
+            "Telephony | SIP | Trunk | CPSMax": "1.3.6.1.4.1.35265.1.29.46.1.1.12",
+            "Telephony | SIP | Trunk | CPSAlarm": "1.3.6.1.4.1.35265.1.29.46.1.1.13",
+            "Telephony | SIP | Trunk | ChansFree": "1.3.6.1.4.1.35265.1.29.46.1.1.14",
+            "Telephony | SIP | Trunk | ChansBusy": "1.3.6.1.4.1.35265.1.29.46.1.1.15",
+        }
+        print("***** metrics", metrics, type(metrics), len(metrics))
+        m = metrics[0]
+        print("***** m", m, type(m))
+        metric_oid = metric_oid_map[m.metric]
         t = self.snmp.get_tables(
             [
                 "1.3.6.1.4.1.35265.1.29.46.1.1.2",  # trunkName
                 "1.3.6.1.4.1.35265.1.29.46.1.1.3",  # trunkEntryType
-                "1.3.6.1.4.1.35265.1.29.46.1.1.4",  # trunkEnable
+                metric_oid,
             ],
             bulk=True,
         )
-        for _, trunk_name, trunk_type, v in t:
-            print("  trunk_metrics", trunk_name, trunk_type, v)
+        for _, trunk_name, trunk_type, value in t:
             self.set_metric(
-                id=("Telephony | SIP | Trunk | Enable", None),
+                id=(m.metric, None),
                 labels=[f"noc::sip::trunk::{trunk_name}.{trunk_type}"],
-                value=v,
+                value=value,
                 multi=True,
             )
-
-    @metrics(
-        ["Telephony | SIP | Trunk | Capacity"],
-        volatile=False,
-        access="S",
-    )
-    def get_sip_trunk_capacity(self, metrics):
-        t = self.snmp.get_tables(
-            [
-                "1.3.6.1.4.1.35265.1.29.46.1.1.2",  # trunkName
-                "1.3.6.1.4.1.35265.1.29.46.1.1.3",  # trunkEntryType
-                "1.3.6.1.4.1.35265.1.29.46.1.1.5",  # trunkCapacity
-            ],
-            bulk=True,
-        )
-        for _, trunk_name, trunk_type, v in t:
-            print("  trunk_metrics", trunk_name, trunk_type, v)
-            if v is not None:
-                self.set_metric(
-                    id=("Telephony | SIP | Trunk | Capacity", None),
-                    labels=[f"noc::sip::trunk::{trunk_name}.{trunk_type}"],
-                    value=v,
-                    multi=True,
-                )
-
-    @metrics(
-        ["Telephony | SIP | Trunk | CurrentIngressCalls"],
-        volatile=False,
-        access="S",
-    )
-    def get_sip_trunk_current_ingress_calls(self, metrics):
-        t = self.snmp.get_tables(
-            [
-                "1.3.6.1.4.1.35265.1.29.46.1.1.2",  # trunkName
-                "1.3.6.1.4.1.35265.1.29.46.1.1.3",  # trunkEntryType
-                "1.3.6.1.4.1.35265.1.29.46.1.1.6",  # trunkCurrentIngressCalls
-            ],
-            bulk=True,
-        )
-        for _, trunk_name, trunk_type, v in t:
-            print("  trunk_metrics", trunk_name, trunk_type, v)
-            if v is not None:
-                self.set_metric(
-                    id=("Telephony | SIP | Trunk | CurrentIngressCalls", None),
-                    labels=[f"noc::sip::trunk::{trunk_name}.{trunk_type}"],
-                    value=v,
-                    multi=True,
-                )
-
-    @metrics(
-        ["Telephony | SIP | Trunk | CurrentEgressCalls"],
-        volatile=False,
-        access="S",
-    )
-    def get_sip_trunk_current_egress_calls(self, metrics):
-        t = self.snmp.get_tables(
-            [
-                "1.3.6.1.4.1.35265.1.29.46.1.1.2",  # trunkName
-                "1.3.6.1.4.1.35265.1.29.46.1.1.3",  # trunkEntryType
-                "1.3.6.1.4.1.35265.1.29.46.1.1.7",  # trunkCurrentEgressCalls
-            ],
-            bulk=True,
-        )
-        for _, trunk_name, trunk_type, v in t:
-            print("  trunk_metrics", trunk_name, trunk_type, v)
-            if v is not None:
-                self.set_metric(
-                    id=("Telephony | SIP | Trunk | CurrentEgressCalls", None),
-                    labels=[f"noc::sip::trunk::{trunk_name}.{trunk_type}"],
-                    value=v,
-                    multi=True,
-                )
-
-    @metrics(
-        ["Telephony | SIP | Trunk | CurrentTotalCalls"],
-        volatile=False,
-        access="S",
-    )
-    def get_sip_trunk_current_total_calls(self, metrics):
-        t = self.snmp.get_tables(
-            [
-                "1.3.6.1.4.1.35265.1.29.46.1.1.2",  # trunkName
-                "1.3.6.1.4.1.35265.1.29.46.1.1.3",  # trunkEntryType
-                "1.3.6.1.4.1.35265.1.29.46.1.1.8",  # trunkCurrentTotalCalls
-            ],
-            bulk=True,
-        )
-        for _, trunk_name, trunk_type, v in t:
-            print("  trunk_metrics", trunk_name, trunk_type, v)
-            if v is not None:
-                self.set_metric(
-                    id=("Telephony | SIP | Trunk | CurrentTotalCalls", None),
-                    labels=[f"noc::sip::trunk::{trunk_name}.{trunk_type}"],
-                    value=v,
-                    multi=True,
-                )

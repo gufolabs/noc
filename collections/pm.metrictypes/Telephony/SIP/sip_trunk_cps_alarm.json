@@ -1,0 +1,12 @@
+{
+    "name": "Telephony | SIP | Trunk | CPSAlarm",
+    "$collection": "pm.metrictypes",
+    "uuid": "5b4ea1f4-e6e8-4079-8a05-28b3a43c5865",
+    "scope__name": "Object",
+    "field_name": "sip_trunk_cps_alarm",
+    "field_type": "UInt32",
+    "description": "CPS threshold value on trunk group",
+    "measure": null,
+    "units__code": "1",
+    "scale__code": "1"
+}
