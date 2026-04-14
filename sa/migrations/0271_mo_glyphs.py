@@ -79,7 +79,15 @@ SHAPE_MAP: dict[str, int] = {
 
 
 class Migration(BaseMigration):
+    aliases = ["sa.0270_mo_glyphs"]
+
     def migrate(self):
+        tables = ("sa_managedobjectprofile", "sa_managedobject")
+        # Create `glyph` field
+        for table in tables:
+            self.db.add_column(
+                table, "glyph", DocumentReferenceField("main.Glyph", null=True, blank=True)
+            )
         # Ensure glyph collection is synched
         Collection("main.glyphs").sync()
         # code to id mappings
@@ -89,16 +97,13 @@ class Migration(BaseMigration):
         }
         default_glyph_id = code_map[DEFAULT_GLYPH]
         # Update tables
-        for table in ("sa_managedobjectprofile", "sa_managedobject"):
-            # Create `glyph` field
-            self.db.add_column(
-                table, "glyph", DocumentReferenceField("main.Glyph", null=True, blank=True)
-            )
+        for table in tables:
             # Migrate values
             for (shape,) in self.db.execute(f"SELECT DISTINCT shape FROM {table}"):
                 if shape:
                     glyph_code = SHAPE_MAP.get(shape, DEFAULT_GLYPH)
                     glyph = code_map.get(glyph_code, default_glyph_id)
                     self.db.execute(f"UPDATE {table} SET glyph=%s WHERE shape=%s", [glyph, shape])
-            # Remove `shape` field
+        # Remove `shape` field
+        for table in tables:
             self.db.delete_column(table, "shape")
