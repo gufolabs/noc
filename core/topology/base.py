@@ -113,12 +113,9 @@ class TopologyBase(object):
             return
         # Get capabilities
         oc = set()
-        print("@@@@@@@@@@@@@@@ CAPS FILTER", self.CAPS)
         if cv := n.get_caps():
-            print(">>>>> CV=", cv)
             oc = set(cv) & self.CAPS
             self.caps |= oc
-        print(">>>>> CAPS", self.caps)
         if n.portal:
             attrs["portal"] = asdict(n.portal)
         # Apply node hints
