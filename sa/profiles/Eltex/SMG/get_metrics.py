@@ -69,16 +69,16 @@ class Script(GetMetricsScript):
         volatile=False,
         access="S",
     )
-    def get_memory_free(self, metrics):
-        ram_free = self.snmp.get("1.3.6.1.4.1.35265.1.29.33.0", cached=True)
-        if ram_free:
-            mem_usage = float(ram_free)
-            self.set_metric(
-                id=("Memory | Usage", None),
-                value=int(mem_usage),
-                multi=True,
-                units="kb",
-            )
+    def get_memory_usage(self, metrics):
+        mem_real = self.snmp.get("1.3.6.1.4.1.2021.4.5.0", cached=True)  # memTotalReal
+        mem_free = self.snmp.get("1.3.6.1.4.1.2021.4.11.0", cached=True)  # memTotalFree
+        mem_usage = (mem_real - mem_free) / mem_real * 100
+        self.set_metric(
+            id=("Memory | Usage", None),
+            value=int(mem_usage),
+            multi=True,
+            units="%",
+        )
 
     @metrics(
         ["Environment | Sensor Status"],
