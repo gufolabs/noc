@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 # NOC modules
+from noc.core.script.metrics import percent
 from noc.sa.profiles.Generic.get_metrics import Script as GetMetricsScript, metrics
 
 CPU_USAGE_TYPE_MAP = {
@@ -72,7 +73,7 @@ class Script(GetMetricsScript):
     def get_memory_usage(self, metrics):
         mem_real = self.snmp.get("1.3.6.1.4.1.2021.4.5.0", cached=True)  # memTotalReal
         mem_free = self.snmp.get("1.3.6.1.4.1.2021.4.11.0", cached=True)  # memTotalFree
-        mem_usage = (mem_real - mem_free) / mem_real * 100
+        mem_usage = percent(mem_real - mem_free, mem_real)
         self.set_metric(
             id=("Memory | Usage", None),
             value=int(mem_usage),
