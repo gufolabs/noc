@@ -36,7 +36,7 @@ from noc.core.mongo.fields import PlainReferenceField, ForeignKeyField
 from noc.core.models.cfgmetrics import MetricCollectorConfig, MetricItem
 from noc.core.validators import is_ipv4
 from noc.core.model.decorator import on_delete_check
-from noc.core.topology.types import ShapeOverlay, TopologyNode
+from noc.core.topology.types import ShapeOverlay, TopologyNode, TopologyNodeType
 from noc.core.caps.decorator import capabilities
 from noc.core.model.dynamicprofile import dynamic_profile
 from noc.main.models.label import Label
@@ -480,7 +480,7 @@ class CPE(Document):
     def get_topology_node(self) -> TopologyNode:
         return TopologyNode(
             id=str(self.id),
-            type="cpe",
+            type=TopologyNodeType.CPE,
             resource_id=str(self.id),
             title=str(self),
             title_metric_template=self.profile.shape_title_template or "",

@@ -113,8 +113,8 @@ class TopologyBase(object):
             return
         # Get capabilities
         oc = set()
-        if n.get_caps():
-            oc = set(n.get_caps()) & self.CAPS
+        if cv := n.get_caps():
+            oc = set(cv) & self.CAPS
             self.caps |= oc
         if n.portal:
             attrs["portal"] = asdict(n.portal)
@@ -389,6 +389,7 @@ class TopologyBase(object):
         x = node.copy()
         if "mo" in x:
             del x["mo"]
+        x["type"] = x["type"].value
         if x["type"] == "managedobject":
             x["external"] = x.get("role") != "segment"
         elif node["type"] == "cloud":
