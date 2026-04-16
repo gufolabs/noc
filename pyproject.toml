@@ -100,6 +100,7 @@ node = [
   "numpy==2.3.2",
   "orjson==3.11.7",
   "progressbar2==4.5.0",
+  "psutil==7.2.2",
   "psycopg2-binary==2.9.11",
   "polars-lts-cpu==1.24.0",
   "pydantic==2.11.10",
