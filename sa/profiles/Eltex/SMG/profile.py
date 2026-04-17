@@ -24,4 +24,3 @@ class Profile(BaseProfile):
             return "physical"
         if name.startswith(("host", "sm", "eth")):
             return "other"
-        raise Exception("Cannot detect interface type for %s" % name)
