@@ -20,11 +20,6 @@ CPU_USAGE_TYPE_MAP = {
     "cpuUsage": 8,
 }
 
-POWER_METRIC_TYPE_MAP = {
-    "pmExist": 1,
-    "pmPower": 2,
-}
-
 
 class Script(GetMetricsScript):
     name = "Eltex.SMG.get_metrics"
@@ -80,65 +75,6 @@ class Script(GetMetricsScript):
             multi=True,
             units="%",
         )
-
-    @metrics(
-        ["Environment | Sensor Status"],
-        volatile=False,
-        access="S",
-    )
-    def get_sensor_status(self, metrics):
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.29.35.3.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Sensor Status", None),
-                labels=["noc::sensor::Fan Rotate"],
-                value=v,
-                multi=True,
-            )
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.29.35.4.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Sensor Status", None),
-                labels=["noc::sensor::Fan 1 Rotate"],
-                value=v,
-                multi=True,
-            )
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.29.35.5.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Sensor Status", None),
-                labels=["noc::sensor::Fan 2 Rotate"],
-                value=v,
-                multi=True,
-            )
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.29.35.6.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Sensor Status", None),
-                labels=["noc::sensor::Fan 3 Rotate"],
-                value=v,
-                multi=True,
-            )
-
-        t = self.snmp.get_tables(
-            [
-                "1.3.6.1.4.1.35265.1.29.36.1.2",  # pmExist
-                "1.3.6.1.4.1.35265.1.29.36.1.3",  # pmPower
-            ],
-            bulk=True,
-        )
-        print("  t", t, type(t))
-        for module_metrics in t:
-            print("  module_metrics", module_metrics, type(module_metrics))
-            module_number = module_metrics[0]
-            for metric_type, idx in POWER_METRIC_TYPE_MAP.items():
-                metric_value = module_metrics[idx]
-                self.set_metric(
-                    id=("Environment | Sensor Status", None),
-                    labels=[f"noc::sensor::Device Power::{module_number}.{metric_type}"],
-                    value=metric_value,
-                    multi=True,
-                )
 
     @metrics(
         [
