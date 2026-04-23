@@ -40,7 +40,7 @@ Homepage = "https://getnoc.com/"
 "Source Code" = "https://github.com/gufolabs/noc"
 
 [project.optional-dependencies]
-activator = ["ssh2-python==1.1.2.post1"]
+activator = ["ssh2-python==1.2.0.post1"]
 bh = [
   "gufo-ping==0.7.0",
   "gufo-traceroute==0.2.0",
