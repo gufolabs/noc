@@ -83,8 +83,14 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
     }, 100, this);
   },
   //
-  handleWindowBlur: function(){
+  handleWindowBlur: function() {
+    if(this.isFullScreen()){
+      return;
+    }
     this.disableHandler(true);
+  },
+  isFullScreen: function(){
+    return window.outerWidth === screen.width && window.outerHeight === screen.height;
   },
   disableHandler: function(state){
     var isVisible = !document.hidden, // check is user has switched to another tab browser
