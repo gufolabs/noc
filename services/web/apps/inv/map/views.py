@@ -602,26 +602,31 @@ class MapApplication(ExtApplication):
         def qt(t):
             return "|".join(["%s=%s" % (v, t[v]) for v in sorted(t)])
 
+        # Filter misformated metrics
+        filtered_metrics = [
+            m
+            for m in metrics
+            if "tags" in m and m["tags"].get("object") and "interface" in m["tags"]
+        ]
+        if not filtered_metrics:
+            return {}
+        # Bulk resolve managed objects by name
+        # @todo: May break if mo name became non-unique
+        mo_names = [m["tags"]["object"] for m in filtered_metrics]
+        mo_map = {mo.name: mo for mo in ManagedObject.objects.filter(name__in=mo_names)}
+        if not mo_map:
+            return {}
         # Build query
         tag_id = {}  # object, interface -> id
         if_ids = {}  # id -> port id
         mlst = []  # (metric, object, interface)
-        for m in metrics:
-            if "object" in m["tags"] and "interface" in m["tags"]:
-                if not m["tags"]["object"]:
-                    continue
-                try:
-                    if_ids[
-                        self.interface_tags_to_id(m["tags"]["object"], m["tags"]["interface"])
-                    ] = m["id"]
-                    object = ManagedObject.objects.get(name=m["tags"]["object"])
-                    tag_id[object, m["tags"]["interface"]] = m["id"]
-                    mlst += [(m["metric"], object, m["tags"]["interface"])]
-                except KeyError:
-                    pass
-                # @todo: Get last values from cache
-        if not mlst:
-            return {}
+        for m in filtered_metrics:
+            object = mo_map.get(m["tags"]["object"])
+            if not object:
+                continue
+            if_ids[self.interface_tags_to_id(m["tags"]["object"], m["tags"]["interface"])] = m["id"]
+            tag_id[object, m["tags"]["interface"]] = m["id"]
+            mlst.append((m["metric"], object, m["tags"]["interface"]))
 
         r = {}
         # Apply interface statuses
@@ -632,7 +637,7 @@ class MapApplication(ExtApplication):
                 "admin_status": d.get("admin_status", True),
                 "oper_status": d.get("oper_status", True),
             }
-        metric_map, last_ts = get_interface_metrics([m[1] for m in mlst])
+        metric_map, _last_ts = get_interface_metrics([m[1] for m in mlst])
         # Apply metrics
         for rq_mo, rq_iface in tag_id:
             pid = tag_id.get((rq_mo, rq_iface))
