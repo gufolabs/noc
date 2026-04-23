@@ -496,7 +496,9 @@ class KafkaClient(object):
         consumer = await self.get_consumer(group_id=stream)
         if TopicPartition(topic=stream, partition=partition) not in consumer.assignment():
             consumer.assign([TopicPartition(topic=stream, partition=partition)])
-        await consumer.commit({TopicPartition(topic=stream, partition=partition): offset})
+        # The committed offset should be the offset of the next message to process, not the last message processed.
+        # So commit offset + 1.
+        await consumer.commit({TopicPartition(topic=stream, partition=partition): offset + 1})
 
     async def copy_topic_messages(
         self,
