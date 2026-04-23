@@ -12,6 +12,12 @@ import pytest
 from noc.core.mac import MAC
 
 
+def test_mac_mac() -> None:
+    x = MAC("00:11:22:33:44:55")
+    y = MAC(x)
+    assert x is y
+
+
 @pytest.mark.parametrize(
     ("raw", "expected"),
     [("12:34:56:78:9a:bc", "12:34:56:78:9A:BC"), ("12:34:56:78:9A:BC", "12:34:56:78:9A:BC")],
@@ -168,5 +174,25 @@ def test_multicast(value):
         "1E:80:C2:00:00:0E",
     ],
 )
-def test_locally_administered(value):
+def test_locally_administered(value: str) -> None:
     assert MAC(value).is_locally_administered is True
+
+
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [("AA:BB:CC:DD:EE:FF", 0xAABBCC), ("0:1:2:4:5:6", 0x0102), ("dead.beef.abcd", 0xDEADBE)],
+)
+def test_oui(value: str, expected: int) -> None:
+    assert MAC(value).oui == expected
+
+
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [
+        (("01:02:03:04:05:06",), True),
+        (("01:02:03:04:05:06", "01:02:03:04:05:0a"), True),
+        (("01:02:03:04:05:06", "01:02:03:04:05:0a", "01:03:03:04:05:0a"), False),
+    ],
+)
+def test_is_same_oui(value: tuple[str, ...], expected: bool) -> None:
+    assert MAC.is_same_oui(value[0], *tuple(value[1:])) is expected
