@@ -276,11 +276,12 @@ class MapSettings(Document):
         cls, gen_type: str, gen_id: Optional[str] = None, **kwargs
     ) -> Optional[Dict[str, Any]]:
         """
-        Return Map Data
-        :param gen_id: Generator Id param
-        :param gen_type: Generator Type
-        :param kwargs: generator Hints
-        :return:
+        Return Map Data.
+
+        Args:
+            gen_id: Generator Id param
+            gen_type: Generator Type
+            kwargs: generator Hints
         """
         gen: TopologyBase = t_loader[gen_type]
         if not gen:

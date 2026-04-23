@@ -13,7 +13,7 @@
   },
   "packageManager": "pnpm@10.18.3",
   "engines": {
-    "node": "^22.0.0"
+    "node": "^24.0.0"
   },
   "overrides": {
     "js-yaml": "4.1.1"
@@ -24,16 +24,16 @@
     }
   },
   "scripts": {
-    "dev": "node --experimental-strip-types build.ts dev noc en",
-    "prod": "node --experimental-strip-types build.ts prod",
-    "vendor": "node --experimental-strip-types build.ts vendor",
-    "vendor-dev": "node --experimental-strip-types build.ts vendor-dev noc en",
+    "dev": "node build.ts dev noc en",
+    "prod": "node build.ts prod",
+    "vendor": "node build.ts vendor",
+    "vendor-dev": "node build.ts vendor-dev noc en",
     "sync": "browser-sync start --proxy 'localhost:8080' --files 'dist/*.*' --no-open",
     "lint": "eslint scripts --fix",
     "build": "pnpm run vendor && pnpm run prod",
-    "build:micromark": "node --experimental-strip-types build-bundle.ts micromark",
-    "build:monaco": "node --experimental-strip-types build-bundle.ts monaco",
-    "build:leaflet": "node --experimental-strip-types build-bundle.ts leaflet",
+    "build:micromark": "node build-bundle.ts micromark",
+    "build:monaco": "node build-bundle.ts monaco",
+    "build:leaflet": "node build-bundle.ts leaflet",
     "test": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",

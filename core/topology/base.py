@@ -113,8 +113,8 @@ class TopologyBase(object):
             return
         # Get capabilities
         oc = set()
-        if n.get_caps():
-            oc = set(n.get_caps()) & self.CAPS
+        if cv := n.get_caps():
+            oc = set(cv) & self.CAPS
             self.caps |= oc
         if n.portal:
             attrs["portal"] = asdict(n.portal)
@@ -324,9 +324,10 @@ class TopologyBase(object):
         s = maxv - minv
         # Shift positions according to offset and node size
         for p in pos:
-            so = np.array(
-                [self.G.nodes[p]["shape_width"] / 2.0, self.G.nodes[p]["shape_height"] / 2.0]
-            )
+            # so = np.array(
+            #     [self.G.nodes[p]["shape_width"] / 2.0, self.G.nodes[p]["shape_height"] / 2.0]
+            # )
+            so = np.array([32.0, 32.0])
             pos[p] -= minv + so - self.MAP_OFFSET
         return s[0], s[1], pos
 
@@ -388,6 +389,7 @@ class TopologyBase(object):
         x = node.copy()
         if "mo" in x:
             del x["mo"]
+        x["type"] = x["type"].value
         if x["type"] == "managedobject":
             x["external"] = x.get("role") != "segment"
         elif node["type"] == "cloud":

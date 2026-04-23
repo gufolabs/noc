@@ -1,14 +1,14 @@
 # ----------------------------------------------------------------------
 # Topology types
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 from enum import Enum
 from dataclasses import dataclass
-from typing import Optional, Dict, Any, List, Literal
+from typing import Optional, Dict, Any, List
 
 
 class Layout(str, Enum):
@@ -77,23 +77,24 @@ class Portal(object):
     settings: Optional[Dict[str, Any]] = None
 
 
+class TopologyNodeType(Enum):
+    OBJECTGROUP = "objectgroup"
+    MANAGEDOBJECT = "managedobject"
+    OBJECTSEGMENT = "objectsegment"
+    CPE = "cpe"
+    CONTAINER = "container"
+    OTHER = "other"
+
+
 @dataclass
 class TopologyNode(object):
     id: str
-    type: Literal[
-        "objectgroup",
-        "managedobject",
-        "objectsegment",
-        "cpe",
-        "container",
-        "other",
-    ] = "other"
+    type: TopologyNodeType = TopologyNodeType.OTHER
     resource_id: Optional[str] = None
-    # Ссылка на node_id группы
-    parent: Optional[str] = None
-    # Подпись
+    parent: Optional[str] = None  # group node_id link
+    # Title settings
     title: Optional[str] = ""
-    title_position: Optional[ShapeOverlayPosition] = "S"
+    title_position: Optional[ShapeOverlayPosition] = ShapeOverlayPosition.S
     title_metric_template: Optional[str] = ""
     glyph: Optional[int] = None
     overlays: Optional[List[ShapeOverlay]] = None
@@ -101,12 +102,13 @@ class TopologyNode(object):
     level: int = 25
     attrs: Optional[Dict[str, Any]] = None
     object_filter: Optional[Dict[str, Any]] = None
+    caps: Optional[Dict[str, Any]] = None
 
     def get_attr(self) -> Dict[str, Any]:
         return self.attrs or {}
 
-    def get_caps(self):
-        return {}
+    def get_caps(self) -> Dict[str, Any]:
+        return self.caps or {}
 
 
 @dataclass

@@ -87,6 +87,12 @@ Environment
 
 ## listen
 
+API listen address in form `<address>:<port>`, where `<address>` is one of:
+
+* `auto` - use hostname to detect address.
+* interface name, like `eth0`
+* IP address.
+
 |                |              |
 | -------------- | ------------ |
 | Default value  | `auto:0`     |

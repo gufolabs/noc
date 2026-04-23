@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # BaseMigration
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Python modules
+from typing import List, Tuple, Set, Optional
 
 # NOC modules
 from noc.core.mongo.connection import get_db
@@ -11,8 +14,9 @@ from .db import db
 
 
 class BaseMigration(object):
-    depends_on = []
+    depends_on: List[Tuple[str, str]] = []
     db = db
+    aliases: Optional[List[str]] = None
 
     def __init__(self):
         # @todo: set_comprehensions
@@ -21,28 +25,43 @@ class BaseMigration(object):
     def __str__(self):
         return self.get_name()
 
-    def add_dependency(self, name):
+    def add_dependency(self, name: str) -> None:
         self.dependencies.add(name)
 
-    def is_resolved(self, dependencies):
+    def is_resolved(self, dependencies: Set[str]) -> bool:
         """
-        Check if all dependencies is resolved
-        :param dependencies: Set of seen dependencies
-        :return:
+        Check if all dependencies are resolved.
+
+        Args:
+            dependencies: Set of seen dependencies
+
+        Returns:
+            True: if all dependencies are resolved.
         """
         return not bool(self.dependencies - dependencies)
 
+    def is_applied(self, applied: Set[str]) -> bool:
+        """
+        Check if migration is applied.
+
+        Args:
+            applied: Set of already applied migrations.
+
+        Returns:
+            True: if migration is already applied.
+        """
+        return self.get_name() in applied or (
+            bool(self.aliases) and any(a in applied for a in self.aliases)
+        )
+
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         parts = cls.__module__.split(".")
-        return "%s.%s" % (parts[1], parts[3])
+        return f"{parts[1]}.{parts[3]}"
 
     @property
     def mongo_db(self):
         return get_db()
 
-    def migrate(self):
-        """
-        Actual migration code
-        :return:
-        """
+    def migrate(self) -> None:
+        """Actual migration code."""

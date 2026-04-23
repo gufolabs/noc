@@ -72,6 +72,71 @@ class Band(object):
             f"data: {len(self.data)})"
         )
 
+    def diagram(self, max_width=100, panel_width=60, level_offset=4) -> str:
+        """Generate pretty textual diagram of band and all its children"""
+
+        def get_panel(data: list[str], offset: int, width: int) -> str:
+            offset_str = " " * offset
+            width_wob = width - 2
+            top_line = f"{offset_str}┌{'─' * width_wob}┐\n"
+            bot_line = f"{offset_str}└{'─' * width_wob}┘\n"
+            data_lines = []
+            for row in data:
+                row = row.replace("\n", "")
+                row = row[: width_wob - 1] + "…" if len(row) > width_wob else row.ljust(width_wob)
+                line = f"{offset_str}│{row}│\n"
+                data_lines.append(line)
+            data_lines = "".join(data_lines)
+            return "".join((top_line, data_lines, bot_line))
+
+        def get_band_instance_image(band: Band, offset: int) -> str:
+            """Image for band only (without children bands)"""
+
+            def format_dataframe(df: Optional[pl.DataFrame]) -> str:
+                if df is None:
+                    return "None"
+                return f"DataFrame (rows: {df.shape[0]}, cols: {df.shape[1]})"
+
+            data = [
+                f"Band name: {band.name}",
+                f"==========={'=' * len(band.name)}",
+                f"orientation: {band.orientation}",
+                "data",
+            ]
+            for k, v in band.data.items():
+                data.append(f"  {k}: {v}")
+            data.append("datasets")
+            for k, v in band.datasets.items():
+                data.append(f"  {k}: Dataset {v.name}")
+                data.append(f"    data: {format_dataframe(v.data)}")
+                if v.data is not None:
+                    data.append(f'    > band.datasets["{k}"].data.columns')
+                data.append(f"    rows: {v.rows}")
+                data.append(f"    query: {v.query}")
+                data.append(f"    transpose: {v.transpose}")
+                data.append(f"    transpose_columns: {v.transpose_columns}")
+            return get_panel(data, offset, panel_width)
+
+        def get_band_image(band: Band, offset: int) -> str:
+            """Image for band with children bands (recursive)"""
+            band_image = get_band_instance_image(band, offset)
+            children_image = "".join(
+                get_band_instance_image(b, offset + level_offset) for b in band.children_bands
+            )
+            return "\n\n".join((band_image, children_image))
+
+        def get_cropped_band_image(band: Band, offset: int) -> str:
+            def crop_string(value: str) -> str:
+                return value[: max_width - 1] + ">" if len(value) > max_width else value
+
+            lines = get_band_image(band, offset).split("\n")
+            return "\n".join(crop_string(row) for row in lines)
+
+        return get_cropped_band_image(self, 0)
+
+    def print_diagram(self):
+        print(self.diagram())
+
     @property
     def is_root(self) -> bool:
         """Return True if Root Band"""

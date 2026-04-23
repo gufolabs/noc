@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # managedobject datastream model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -170,7 +170,6 @@ class ManagedObjectDataStreamItem(BaseModel):
     id: str
     change_id: str
     name: str
-    version: int
     bi_id: int
     profile: str
     is_managed: bool

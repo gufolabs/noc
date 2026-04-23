@@ -1,8 +1,7 @@
-#!./bin/python
 # ---------------------------------------------------------------------
 # noc-correlator daemon
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -104,7 +103,7 @@ class CorrelatorService(FastAPIService):
         self.de: Dict[bytes, List[Tuple[int, Event]]] = {}  # Delayed Event
         self.alarm_rule_set = AlarmRuleSet()
         self.alarm_class_vars = defaultdict(dict)
-        self.status_changes = deque([])  # Save status changes
+        self.status_changes = deque()  # Save status changes
         self.slot_number = 0
         self.total_slots = 0
         self.is_distributed = False

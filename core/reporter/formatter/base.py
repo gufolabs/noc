@@ -32,11 +32,13 @@ class DataFormatter(object):
         template: Template,
         output_type: OutputType,
         output_stream: BytesIO,
+        selected_fields: list[str] | None = None,
     ):
         self.root_band = root_band
         self.report_template = template
         self.output_type = output_type
         self.output_stream: BytesIO = output_stream or BytesIO()
+        self.selected_fields = selected_fields
         self.csv_delimiter = config.web.report_csv_delimiter
         self.logger = logger
 

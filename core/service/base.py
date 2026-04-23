@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Base service
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -30,6 +30,7 @@ from typing import (
     Awaitable,
     Iterable,
 )
+import socket
 
 # Third-party modules
 import setproctitle
@@ -57,6 +58,7 @@ from noc.core.ioloop.timers import PeriodicCallback
 from noc.core.error import NOCError
 from noc.core.mx import MX_STREAM, MX_SPAN_CTX, MX_SPAN_ID, MessageType
 from noc.core.span import Span
+from noc.core.validators import is_ipv4
 from .rpc import RPCProxy
 from .loader import set_service
 from ..router.datastream import RouteDataStreamClient
@@ -364,7 +366,7 @@ class BaseService(object):
         Returns an (address, port) for HTTP service listener
         """
         if self.address and self.port:
-            return self.address, self.port
+            return self.address, self.port  # Already resolved
         if config.listen:
             addr, port = config.listen.split(":")
             port_tracker = config.instance
@@ -373,10 +375,36 @@ class BaseService(object):
             port_tracker = 0
         if addr == "auto":
             addr = config.node
-            self.logger.info("Autodetecting address: auto -> %s", addr)
-        addr = config.node
+            self.logger.info("Autodetecting address to %s", addr)
+        elif not is_ipv4(addr):
+            addr = self.resolve_addr(addr)
+            self.logger.info("Resolving address to %s", addr)
         port = int(port) + port_tracker
         return addr, port
+
+    def resolve_addr(self, addr: str) -> str:
+        """
+        Resolve symbolic name to address.
+
+        Tries to:
+
+        1. Resolve to interface name.
+        2. Or leave untouched.
+
+        Args:
+            addr: Symbolic name.
+
+        Returns:
+            Resolved address.
+        """
+        import psutil
+
+        if_addrs = psutil.net_if_addrs()
+        if if_addrs.get(addr):
+            r = [a.address for a in if_addrs[addr] if a.family == socket.AddressFamily.AF_INET]
+            if r:
+                return r[0]
+        return addr  # Leave untouched
 
     async def init_api(self):
         """

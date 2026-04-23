@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ResourceGroup model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ from noc.core.model.decorator import on_delete_check, on_save, tree
 from noc.core.change.decorator import change
 from noc.core.defer import defer
 from noc.core.bi.decorator import bi_sync
-from noc.core.topology.types import TopologyNode
+from noc.core.topology.types import TopologyNode, TopologyNodeType
 from noc.main.models.remotesystem import RemoteSystem
 from noc.main.models.label import Label
 from .technology import Technology
@@ -592,7 +592,7 @@ class ResourceGroup(Document):
         """
         return TopologyNode(
             id=str(self.id),
-            type="objectgroup",
+            type=TopologyNodeType.OBJECTGROUP,
             resource_id=str(self.id),
             title=self.name,
         )

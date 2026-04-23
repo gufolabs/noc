@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # inv.map application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -149,7 +149,7 @@ class MapApplication(ExtApplication):
             # "external": object.segment.id != segment.id,
             # "external_segment": {"id": str(object.segment.id), "name": object.segment.name},
             "caps": object.get_caps(),
-            "console_url": "%s://%s/" % (s, object.address),
+            "console_url": f"{s}://{object.address}/",
         }
 
     def inspector_objectgroup(self, request, id, rg_id):
@@ -340,7 +340,7 @@ class MapApplication(ExtApplication):
         # Search for maps
         r = []
         for mi in gen.iter_maps(
-            parent=parent if gen.name != parent else None,
+            parent=parent if parent not in ("0", gen.name) else None,
             query=g.get(self.query_param, ""),
             limit=int(g.get(self.limit_param, 500)),
             start=int(g.get(self.start_param, 0)),
@@ -656,36 +656,33 @@ class MapApplication(ExtApplication):
         validate={"objects": ListOfParameter(IntParameter())},
     )
     def api_objects_stp_status(self, request, objects):
-        def get_stp_status(object_id):
-            roots = set()
-            blocked = set()
+        def get_stp_status(object_id: int) -> tuple[set[int], set[str]]:
+            roots: set[int] = set()
+            blocked: set[str] = set()
             object = ManagedObject.get_by_id(object_id)
             sr = object.scripts.get_spanning_tree()
             for instance in sr["instances"]:
                 ro = DiscoveryID.find_object_by_mac(instance["root_id"])
                 if ro:
-                    roots.add(ro)
-                for i in instance["interfaces"]:
-                    if i["state"] == "discarding" and i["role"] == "alternate":
-                        iface = object.get_interface(i["interface"])
+                    roots.add(ro.id)
+                for iface in instance["interfaces"]:
+                    if iface["state"] == "discarding" and iface["role"] == "alternate":
+                        iface = object.get_interface(iface["interface"])
                         if iface:
                             link = iface.link
                             if link:
                                 blocked.add(str(link.id))
-            return object_id, roots, blocked
+            return roots, blocked
 
-        r = {"roots": [], "blocked": []}
-        futures = []
+        roots: set[int] = set()
+        blocked: set[str] = set()
         with ThreadPoolExecutor(max_workers=10) as executor:
-            for o in objects:
-                futures += [executor.submit(get_stp_status, o)]
+            futures = [executor.submit(get_stp_status, o) for o in objects]
             for future in as_completed(futures):
                 try:
-                    obj, roots, blocked = future.result()
-                    for ro in roots:
-                        if ro.id not in r["roots"]:
-                            r["roots"] += [ro.id]
-                    r["blocked"] += blocked
+                    o_roots, o_blocked = future.result()
+                    roots |= o_roots
+                    blocked |= o_blocked
                 except Exception as e:
                     self.logger.error("[stp] Exception: %s", e)
-        return r
+        return {"roots": list(roots), "blocked": list(blocked)}

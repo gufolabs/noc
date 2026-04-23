@@ -17,7 +17,7 @@ RUN \
     && (curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=/usr/local/bin sh)
 
 # Build web
-FROM node:22-trixie-slim AS build-ui
+FROM node:24-trixie-slim AS build-ui
 COPY . /opt/noc
 WORKDIR /opt/noc
 RUN\
@@ -68,7 +68,7 @@ RUN \
     git \
     && uv pip install --system -e .[dev,docs,lint,test]\
     && uv cache clean \
-    && (curl -fsSL https://deb.nodesource.com/setup_22.x | bash -)\
+    && (curl -fsSL https://deb.nodesource.com/setup_24.x | bash -)\
     && apt-get install -y --no-install-recommends nodejs \
     && (cd ui/ && npm install) \
     && mv ui/node_modules /opt\
@@ -93,7 +93,7 @@ RUN \
     git \
     && uv pip install --system -e .[bh,activator,classifier,cache-redis,dev,docs,lint,node,test,login-ldap,login-pam,login-radius,prod-tools,testing,sender-kafka,ping] \
     && uv cache clean \
-    && (curl -fsSL https://deb.nodesource.com/setup_22.x | bash -)\
+    && (curl -fsSL https://deb.nodesource.com/setup_24.x | bash -)\
     && apt-get install -y --no-install-recommends nodejs \
     && (cd ui/ && npm install) \
     && mv ui/node_modules /workspaces\

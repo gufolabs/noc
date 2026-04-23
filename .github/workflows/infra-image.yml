@@ -20,9 +20,9 @@ jobs:
       testtelnetd: ${{ steps.filter.outputs.testtelnetd }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Filter Items
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@v4
         id: filter
         with:
           filters: |
@@ -50,11 +50,11 @@ jobs:
             changed: ${{ needs.changes.outputs.testsshd }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         if: matrix.changed == 'true'
 
       - name: Log in to GHCR
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         if: matrix.changed == 'true'
         with:
           registry: ghcr.io

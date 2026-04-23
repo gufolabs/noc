@@ -14,7 +14,7 @@ import hashlib
 import pprint
 import traceback
 import uuid
-from typing import Type
+from typing import Type, Dict, Any
 
 # Third-party modules
 import orjson
@@ -41,12 +41,12 @@ sentry_sdk = None
 
 if config.features.sentry:
 
-    def before_send(event, hint):
-        if "exc_info" not in hint:
+    def before_send(event: Dict[str, Any], hint: Dict[str, Any]) -> Dict[str, Any]:
+        exc_info = hint.get("exc_info")
+        if exc_info is None:
             return event
 
-        exception = hint["exc_info"][1]
-        event["fingerprint"] = ["{{ type }}", str(exception), error_fingerprint()]
+        event["fingerprint"] = ["{{ type }}", str(exc_info[1]), error_fingerprint()]
         return event
 
     try:
@@ -57,7 +57,6 @@ if config.features.sentry:
             shutdown_timeout=config.sentry.shutdown_timeout,
             release=version.version,
             max_breadcrumbs=config.sentry.max_breadcrumbs,
-            default_integrations=config.sentry.default_integrations,
             debug=config.sentry.debug,
             before_send=before_send,
         )
