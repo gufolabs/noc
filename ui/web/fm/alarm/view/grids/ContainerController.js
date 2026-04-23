@@ -142,7 +142,7 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
     var app = this.getView().up("[itemId=fm-alarm]"),
       gridsContainer = this.getView(),
       isVisible = !document.hidden, // check is user has switched to another tab browser
-      isFocused = document.hasFocus(), // check is user has minimized browser window
+      isFocused = document.hasFocus() || this.isFullScreen(), // check is user has minimized browser window
       isIntersecting = this.getView().isIntersecting; // switch to other application tab
     
     // lib visibilityJS
