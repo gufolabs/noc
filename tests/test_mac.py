@@ -196,3 +196,17 @@ def test_oui(value: str, expected: int) -> None:
 )
 def test_is_same_oui(value: tuple[str, ...], expected: bool) -> None:
     assert MAC.is_same_oui(value[0], *tuple(value[1:])) is expected
+
+
+@pytest.mark.parametrize(
+    ("s", "e", "dist"),
+    [
+        ("01:02:03:04:05:06", "01:02:03:04:05:06", 0),
+        ("01:02:03:04:05:06", "01:02:03:04:05:07", 1),
+        ("01:02:03:04:05:07", "01:02:03:04:05:06", 1),
+        ("01:02:03:04:05:06", "01:02:03:04:06:07", 257),
+        ("01:02:03:04:06:07", "01:02:03:04:05:06", 257),
+    ],
+)
+def test_distance(s: str, e: str, dist: int) -> None:
+    assert MAC.distance(s, e) == dist
