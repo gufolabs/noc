@@ -277,6 +277,7 @@ class Config(BaseConfig):
             default=True,
             help="Add service field to metric request",
         )
+        max_id_mac_range = IntParameter(default=0)
 
     class dns(ConfigSection):
         warn_before_expired = SecondsParameter(default="30d")
