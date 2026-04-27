@@ -43,9 +43,7 @@ class Script(GetMetricsScript):
             ],
             bulk=True,
         )
-        print("  t", t, type(t))
         for core_metrics in t:
-            print("  core_metrics", core_metrics, type(core_metrics))
             core_number = core_metrics[0]
             for cpu_usage_type, idx in CPU_USAGE_TYPE_MAP.items():
                 cpu_usage = core_metrics[idx]
@@ -109,9 +107,7 @@ class Script(GetMetricsScript):
             "Telephony | SIP | Trunk | ChansFree": "1.3.6.1.4.1.35265.1.29.46.1.1.14",
             "Telephony | SIP | Trunk | ChansBusy": "1.3.6.1.4.1.35265.1.29.46.1.1.15",
         }
-        print("***** metrics", metrics, type(metrics), len(metrics))
         m = metrics[0]
-        print("***** m", m, type(m))
         metric_oid = metric_oid_map[m.metric]
         t = self.snmp.get_tables(
             [
