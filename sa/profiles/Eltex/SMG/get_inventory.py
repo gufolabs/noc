@@ -53,9 +53,7 @@ class Script(BaseScript):
         ]
 
         t = self.snmp.get_tables([m[1] for m in POWER_METRICS], bulk=True)
-        print("  t", t, type(t))
         for module_metrics in t:
-            print("  module_metrics", module_metrics, type(module_metrics))
             module_number = module_metrics[0]
             for metric_name, metric_oid in POWER_METRICS:
                 d = {
