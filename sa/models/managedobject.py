@@ -43,6 +43,7 @@ from django.db.models import (
     Manager,
     Subquery,
     OuterRef,
+    Min,
 )
 from pydantic import BaseModel, RootModel
 from pymongo import ASCENDING
@@ -50,8 +51,8 @@ from pymongo import ASCENDING
 # NOC modules
 from noc.core.model.base import NOCModel
 from noc.config import config
-from noc.core.diagnostic.types import DiagnosticValue, DiagnosticState, DiagnosticConfig
-from noc.core.diagnostic.decorator import diagnostic, DEFER_CHANGE_STATE
+from noc.core.diagnostic.types import DiagnosticValue, DiagnosticConfig
+from noc.core.diagnostic.decorator import diagnostic
 from noc.core.diagnostic.hub import (
     DIAGNOCSTIC_LABEL_SCOPE,
     SA_DIAG,
@@ -121,7 +122,7 @@ from noc.core.model.decorator import (
 )
 from noc.inv.models.object import Object
 from noc.inv.models.resourcegroup import ResourceGroup
-from noc.core.defer import call_later, defer
+from noc.core.defer import call_later
 from noc.core.cache.decorator import cachedmethod
 from noc.core.cache.base import cache
 from noc.core.script.caller import SessionContext, ScriptCaller
@@ -153,7 +154,7 @@ from noc.core.models.cfgmetrics import MetricCollectorConfig, MetricItem
 from noc.core.wf.decorator import workflow
 from noc.core.etl.remotemappings import mappings
 from noc.core.model.dynamicprofile import dynamic_profile
-from noc.core.watchers.decorator import watchers
+from noc.core.watchers.decorator import watchers, WATCHER_JCLS, get_next_ts
 from noc.core.watchers.types import ObjectEffect, WatchItem
 from noc.wf.models.state import State
 from .administrativedomain import AdministrativeDomain
@@ -171,6 +172,7 @@ SQL_MAINTENANCE_REMOVE = """
   SET affected_maintenances = affected_maintenances - %s
   WHERE affected_maintenances ? %s
 """
+SCHEDULER = "scheduler"
 
 
 @dataclass(frozen=True)
@@ -1294,7 +1296,7 @@ class ManagedObject(NOCModel):
             self.diagnostic.reset_diagnostics(diagnostics)
         elif "effective_labels" in self.changed_fields:
             # Update configured diagnostic
-            self.diagnostic.refresh_diagnostics()
+            self.diagnostic.reload_diagnostics()
         # Apply discovery jobs
         self.ensure_discovery_jobs()
         # self.update_init()
@@ -2580,6 +2582,7 @@ class ManagedObject(NOCModel):
             "administrative_domain": {
                 "id": str(self.profile.id),
                 "name": self.administrative_domain.name,
+                "description": self.administrative_domain.description,
             },
             "labels": Label.build_expose_labels(self.labels, "expose_datastream"),
             "profile": {"id": str(self.profile.id), "name": self.profile.name},
@@ -2929,27 +2932,39 @@ class ManagedObject(NOCModel):
         bulk=None,
     ):
         """"""
+        from noc.core.scheduler.scheduler import Scheduler
+
         updated = []
         for w in to_watchers:
             updated.append(ManagedObjectWatchers.from_item(self, w))
-        if updated and not dry_run:
+        if dry_run:
+            return
+        if updated:
             ManagedObjectWatchers.objects.bulk_create(
                 updated,
                 update_conflicts=True,
                 unique_fields=["managed_object", "effect", "key", "remote_system"],
                 update_fields=["once", "wait_avail", "after", "args"],
             )
-        if not to_remove or dry_run:
-            return
-        q = Q()
-        for effect, key, rs in to_remove:
-            q |= Q(effect=effect.value, key=key or "", remote_system=rs or "")
-        ManagedObjectWatchers.objects.filter(q).delete()
+        if to_remove:
+            q = Q()
+            for effect, key, rs in to_remove:
+                q |= Q(effect=effect.value, key=key or "", remote_system=rs or "")
+            ManagedObjectWatchers.objects.filter(q).delete()
+        wait_ts = self.get_wait_ts()
+        if self.watcher_wait_ts != wait_ts:
+            self.watcher_wait_ts = wait_ts
+            self.__class__.objects.filter(id=self.id).update(watcher_wait_ts=self.watcher_wait_ts)
+        m_ts = self.get_min_wait_ts()
+        if wait_ts and (not m_ts or wait_ts <= m_ts):
+            scheduler = Scheduler(SCHEDULER)
+            scheduler.submit(jcls=WATCHER_JCLS, key="sa.ManagedObject", ts=get_next_ts(wait_ts))
 
     @classmethod
     def get_min_wait_ts(cls) -> Optional[datetime.datetime]:
         """"""
-        return None
+        r = ManagedObjectWatchers.objects.aggregate(Min("after"))
+        return r.get("after__min")
 
     @classmethod
     def from_template(
@@ -2996,6 +3011,8 @@ class ManagedObject(NOCModel):
         #     for ris, rid in mappings.items():
         #         mo.set_mapping(ris, rid)
         for field, value in data.items():
+            if field == "description":
+                continue
             if hasattr(mo, field):
                 setattr(mo, field, value)
         return mo
@@ -3334,9 +3351,9 @@ class ManagedObjectStatus(NOCModel):
     ):
         """
         Update statuses bulk
-        :param statuses:
-        :param update_jobs:
-        :return:
+        Args:
+            statuses: Statuses bulk
+            update_jobs: Suspend ManagedObject jobs
         """
         from django.db import connection as pg_connection
         from collections import defaultdict
@@ -3348,22 +3365,21 @@ class ManagedObjectStatus(NOCModel):
         bulk = {}
         outages: List[Tuple[int, datetime.datetime, datetime.datetime]] = []
         # Getting current status
+        # Getting current status
         cs = {}
         with pg_connection.cursor() as cursor:
             cursor.execute(
                 """
-                SELECT id, os.status, os.last, mo.pool, diagnostics -> 'FIRST_AVAIL' ->> 'state' as fa_state
+                SELECT id, os.status, os.last, mo.pool
                 FROM sa_managedobject AS mo
                 LEFT JOIN sa_objectstatus AS os ON mo.id = os.managed_object_id
                 WHERE id = ANY(%s::INT[])
                 """,
                 [[x[0] for x in statuses]],
             )
-            for o, status, last, pool, d_state in cursor:
+            for o, status, last, pool in cursor:
                 pool = Pool.get_by_id(pool)
                 cs[o] = {"status": status, "last": last, "pool": pool.name}
-                if d_state and DiagnosticState(d_state) == DiagnosticState.unknown:
-                    cs[o]["d_avail_state"] = None
         # Processed new statuses
         suspended_jobs = defaultdict(list)  # Pool - ids
         for oid, status, ts in statuses:
@@ -3371,7 +3387,14 @@ class ManagedObjectStatus(NOCModel):
                 logger.error("Unknown object id: %s", oid)
                 continue
             ts = (ts or now).replace(microsecond=0, tzinfo=None)
-            if cs[oid]["status"] is None or (cs[oid]["status"] != status and cs[oid]["last"] <= ts):
+            if cs[oid]["status"] is None or cs[oid]["status"] != status:
+                if not cs[oid]["last"]:
+                    # Unknown state, from migration?
+                    pass
+                elif cs[oid]["last"] > ts:
+                    # Oops, out-of-order update
+                    # Restore correct state
+                    continue
                 bulk[oid] = (oid, status, ts)  # Only last status
                 if update_jobs:
                     suspended_jobs[(cs[oid]["pool"], status)].append(oid)
@@ -3379,21 +3402,10 @@ class ManagedObjectStatus(NOCModel):
                 if cs[oid]["last"] and status:
                     outages.append((oid, cs[oid]["last"], ts))
                 cs[oid].update({"status": status, "last": ts})
-            elif cs[oid]["last"] > ts:
-                # Oops, out-of-order update
-                # Restore correct state
-                pass
-            if status and "d_avail_state" in cs[oid]:
-                # fire event
-                defer(
-                    DEFER_CHANGE_STATE,
-                    diagnostic=FIRST_AVAIL,
-                    state=DiagnosticState.enabled.value,
-                    oid=oid,
-                    key=oid,
-                )
         if not bulk:
             return
+        # Add/Remove suspended Jobs
+        # Ensure First Avail - check job
         # Save statuses to db
         with pg_connection.cursor() as cursor:
             execute_values(
@@ -3401,7 +3413,7 @@ class ManagedObjectStatus(NOCModel):
                 """
                 INSERT INTO sa_objectstatus as os (managed_object_id, status, last) VALUES %s
                 ON CONFLICT (managed_object_id) DO UPDATE SET status = EXCLUDED.status, last = EXCLUDED.last
-                WHERE os.status != EXCLUDED.status and os.last < EXCLUDED.last
+                WHERE os.status != EXCLUDED.status and (os.last < EXCLUDED.last or os.last is Null)
                 """,
                 list(bulk.values()),
                 page_size=500,

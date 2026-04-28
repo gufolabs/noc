@@ -325,7 +325,11 @@ class ActiveAlarm(Document):
         bulk: Optional[List[Any]] = None,
         source: Optional[str] = None,
         tt_id: Optional[str] = None,
+        timestamp: Optional[datetime.datetime] = None,
+        is_internal: bool = True,
+        quiet: bool = False,
     ):
+        timestamp = timestamp or datetime.datetime.now()
         if bulk is not None:
             bulk += [
                 UpdateOne(
@@ -333,12 +337,13 @@ class ActiveAlarm(Document):
                     {
                         "$push": {
                             "log": {
-                                "timestamp": datetime.datetime.now(),
+                                "timestamp": timestamp.replace(microsecond=0),
                                 "from_status": self.status,
                                 "to_status": self.status,
                                 "message": message,
                                 "source": source,
                                 "tt_id": tt_id,
+                                "internal": is_internal,
                             }
                         }
                     },
@@ -346,16 +351,23 @@ class ActiveAlarm(Document):
             ]
         self.log += [
             AlarmLog(
-                timestamp=datetime.datetime.now(),
+                timestamp=timestamp.replace(microsecond=0),
                 from_status=self.status,
                 to_status=self.status,
                 message=message,
                 source=source,
                 tt_id=tt_id,
+                internal=is_internal,
             )
         ]
         if to_save and not bulk:
             self.safe_save()
+        if not is_internal and not quiet:
+            self.touch_watch()
+
+    @property
+    def has_escalation(self) -> bool:
+        return any(w.effect != Effect.ESCALATION for w in self.watchers or [])
 
     @property
     def allow_clear(self) -> bool:
@@ -386,6 +398,7 @@ class ActiveAlarm(Document):
         ts = ts or datetime.datetime.now()
         if not force and not self.allow_clear:
             self.add_watch(Effect.CLEAR_ALARM, key="", immediate=True)
+            ActiveAlarm.objects.filter(id=self.id).update(watchers=self.watchers)
             return None
         if self.alarm_class.clear_handlers:
             # Process clear handlers
@@ -428,6 +441,7 @@ class ActiveAlarm(Document):
             adm_path=self.adm_path,
             segment_path=self.segment_path,
             container_path=self.container_path,
+            affected_services=self.affected_services,
             uplinks=self.uplinks,
             rca_neighbors=self.rca_neighbors,
             rca_type=self.rca_type,
@@ -572,39 +586,30 @@ class ActiveAlarm(Document):
     def is_link_alarm(self) -> bool:
         return hasattr(self.components, "interface")
 
-    def acknowledge(self, user: "User", msg=""):
+    def acknowledge(self, user: "User", msg="", touch: bool = True):
         """Acknowledge alarm by user"""
         self.ack_ts = datetime.datetime.now()
         self.ack_user = user.username
-        self.log = [
-            *self.log,
-            AlarmLog(
-                timestamp=self.ack_ts,
-                from_status="A",
-                to_status="A",
-                message="Acknowledged by %s(%s): %s" % (user.get_full_name(), user.username, msg),
-                source=user.username,
-            ),
-        ]
-        self.safe_save()
-        self.touch_watch()
+        self.log_message(
+            message="Acknowledged by %s(%s): %s" % (user.get_full_name(), user.username, msg),
+            source=user.username,
+            timestamp=self.ack_ts,
+            is_internal=False,
+        )
+        if touch:
+            self.touch_watch()
 
-    def unacknowledge(self, user: "User", msg=""):
+    def unacknowledge(self, user: "User", msg="", touch: bool = True):
         """Delete acknowledge alarm by user"""
         self.ack_ts = None
         self.ack_user = None
-        self.log = [
-            *self.log,
-            AlarmLog(
-                timestamp=datetime.datetime.now(),
-                from_status="A",
-                to_status="A",
-                message="Unacknowledged by %s(%s): %s" % (user.get_full_name(), user.username, msg),
-                source=user.username,
-            ),
-        ]
-        self.safe_save()
-        self.touch_watch()
+        self.log_message(
+            message="Unacknowledged by %s(%s): %s" % (user.get_full_name(), user.username, msg),
+            source=user.username,
+            is_internal=False,
+        )
+        if touch:
+            self.touch_watch()
 
     def register_clear(
         self, msg: str, user: Optional[User] = None, timestamp: Optional[datetime.datetime] = None
@@ -646,6 +651,8 @@ class ActiveAlarm(Document):
     def get_wait_ts(self, timestamp: Optional[datetime.datetime] = None):
         wait_ts = []
         for w in self.watchers:
+            if w.root_only and self.root:
+                continue
             if w.after:
                 wait_ts.append(w.after)
         if timestamp:
@@ -661,7 +668,9 @@ class ActiveAlarm(Document):
         once: bool = False,
         immediate: bool = False,
         clear_only: bool = False,
+        root_only: bool = False,
         after: Optional[datetime.datetime] = None,
+        job: Optional[str] = None,
         keep_args: bool = False,
         **kwargs,
     ):
@@ -673,6 +682,7 @@ class ActiveAlarm(Document):
             once: Run only once
             immediate: Already executed (used for save data/reference on external job)
             clear_only: Run only alarm clear
+            root_only: Ru only Root alarm
             after: Run After Timer
             keep_args: Keep arguments for exist effect
         """
@@ -680,9 +690,11 @@ class ActiveAlarm(Document):
             raise ValueError("Not supported options")
         for w in self.watchers:
             if effect == w.effect and key == w.key:
+                w.after = after
                 if not keep_args:
-                    w.after = after
                     w.args = kwargs
+                if job and w.job != job:
+                    w.job = job
                 break
         else:
             self.watchers.append(
@@ -692,7 +704,9 @@ class ActiveAlarm(Document):
                     once=once,
                     immediate=immediate,
                     clear_only=clear_only,
+                    root_only=root_only,
                     after=after,
+                    job=job or None,
                     args=kwargs,  # Convert to string
                 )
             )
@@ -710,10 +724,20 @@ class ActiveAlarm(Document):
             self.watchers = r
             self.wait_ts = self.get_wait_ts()
 
+    def get_watchers(self, effect: Effect, key: Optional[str] = None) -> List[WatchItem]:
+        """Getting watchers by effect"""
+        r = []
+        for w in self.watchers:
+            if w.effect != effect and (not key or key != w.key):
+                continue
+            r.append(w)
+        return r
+
     def touch_watch(
         self,
         is_clear: bool = False,
         is_update: bool = False,
+        effect: Optional[Effect] = None,
         dry_run: bool = False,
     ):
         """
@@ -721,24 +745,36 @@ class ActiveAlarm(Document):
         Args:
             is_clear: Flag for alarm_clear procedure
             is_update: Flag for refresh_alarm procedure
+            effect: Effect only
             dry_run: For tests run
         """
         now = datetime.datetime.now() + datetime.timedelta(seconds=10)  # time drift
+        jobs = set()
         for w in self.watchers:
             if w.clear_only and not is_clear:
                 # Watch alarm_clear
                 continue
             if w.once and is_update:
                 continue
+            if w.root_only and self.root:
+                continue
+            if effect and w.effect != effect:
+                continue
             if w.immediate:
                 # If Immediate, not run (used for save run only)
                 continue
             if w.after and w.after > now:
                 continue
+            if w.job:
+                jobs.add(w.job)
             try:
                 w.run(self, is_clear=is_clear, dry_run=dry_run)
+                if w.after:
+                    w.after = None
             except Exception as e:
                 print(f"Exception when run Watch Action: {e}")
+        for job in jobs:
+            self.refresh_job(job, is_clear=is_clear)
 
     @property
     def duration(self) -> int:
@@ -1192,6 +1228,7 @@ class ActiveAlarm(Document):
         close_tt: bool = False,
         wait_tt: Optional[str] = None,
         template: Optional[Template] = None,
+        supress_job: bool = False,
         **kwargs,
     ):
         if close_tt:
@@ -1214,12 +1251,13 @@ class ActiveAlarm(Document):
         if wait_tt:
             self.add_watch(Effect.STOP_CLEAR, key=wait_tt, immediate=True)
             self.log_message("Waiting for TT to close")
-            call_later(
-                "noc.services.escalator.wait_tt.wait_tt",
-                scheduler="escalator",
-                pool=self.managed_object.escalator_shard,
-                alarm_id=self.id,
-            )
+            if not supress_job:
+                call_later(
+                    "noc.services.escalator.wait_tt.wait_tt",
+                    scheduler="escalator",
+                    pool=self.managed_object.escalator_shard,
+                    alarm_id=self.id,
+                )
         self.log_message("Escalated to %s" % tt_id, tt_id=tt_id, to_save=True)
         # q = {"_id": self.id}
         # op = {
@@ -1392,37 +1430,36 @@ class ActiveAlarm(Document):
     ):
         """"""
         from noc.services.correlator.alarmjob import AlarmJob
+        from noc.main.models.pool import Pool
 
         if not job_id:
             job = AlarmJob.ensure_profile_job(self, profile)
             if job.is_end:
+                # Can escalate ?
                 # Job already ended
                 return
-            job.save_state()
-            self.add_watch(Effect.ESCALATION, key=profile, job_id=str(job.id))
+            # For save escalation profile
+            job.save_state(is_dirty=True)
             job_id = str(job.id)
         # Run Scheduler
-        # ts = a.wait_ts - datetime.datetime.now().replace(microsecond=0)
+        pool = Pool.get_default_fm_pool()
+        self.refresh_job(job_id, pool=pool.name)
+
+    def refresh_job(self, job_id: str, is_clear: bool = False, pool: Optional[str] = None):
+        """Refresh Alarm Job by changes"""
+        shard = 0
+        if not pool and self.managed_object:
+            pool, shard = self.managed_object.alarms_stream_and_partition
+            _, pool = pool.split(".", 1)
         call_later(
             "noc.services.correlator.alarmjob.run_alarm_job",
             scheduler="correlator",
             max_runs=5,
-            pool=config.pool,
+            pool=pool,
             delay=2,
-            shard=self.managed_object.id if self.managed_object else 0,
+            shard=shard,
             job_id=job_id,
         )
-
-    def refresh_job(self, is_clear: bool = False, job_id: Optional[str] = None):
-        """Refresh Alarm Job by changes"""
-        from noc.services.correlator.alarmjob import AlarmJob
-
-        if job_id:
-            job = AlarmJob.get_by_id(job_id)
-            job.update_item(self, is_clear=is_clear)
-        else:
-            job = AlarmJob.from_alarm(self, is_clear=is_clear)
-        job.run()
 
     def get_resources(self) -> List[str]:
         """"""

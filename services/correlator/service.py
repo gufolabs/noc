@@ -108,7 +108,7 @@ class CorrelatorService(FastAPIService):
         self.slot_number = 0
         self.total_slots = 0
         self.is_distributed = False
-        self.is_default_jobs = False
+        self.is_default_scheduler = False
         # Scheduler
         self.scheduler: Optional[Scheduler] = None
         # Locks
@@ -117,6 +117,9 @@ class CorrelatorService(FastAPIService):
     async def on_activate(self):
         self.slot_number, self.total_slots = await self.acquire_slot()
         self.is_distributed = self.total_slots > 1
+        self.is_default_scheduler = (
+            self.slot_number == 0 and config.pool == Pool.get_default_fm_pool().name
+        )
         # Prepare scheduler
         if self.is_distributed:
             self.logger.info(
@@ -138,13 +141,10 @@ class CorrelatorService(FastAPIService):
         )
         self.scheduler.correlator = self
         self.scheduler.run()
-        self.is_default_jobs = (
-            config.pool == Pool.get_default_fm_pool().name and self.slot_number == 0
-        )
-        # if config.pool == Pool.get_default_fm_pool().name and not self.slot_number:
-        #     # Run on first slot on Default Pool
-        #     self.logger.info("Started Watchers Job")
-        #     self.scheduler.submit(jcls=ALARM_WATCHER_JCLS, key="", keep_ts=True)
+        if self.is_default_scheduler:
+            # Run on first slot on Default Pool
+            self.logger.info("Started Watchers Job")
+            self.scheduler.submit(jcls=ALARM_WATCHER_JCLS, key="", keep_ts=True)
         asyncio.create_task(self.update_object_statuses())
         # Subscribe stream, move to separate task to let the on_activate to terminate
         self.loop.create_task(
@@ -417,13 +417,16 @@ class CorrelatorService(FastAPIService):
         elif timestamp > alarm.last_update:
             # Refresh last update
             alarm.last_update = timestamp
+            # For retry alarm, stop clear
+            alarm.stop_watch(Effect.CLEAR_ALARM, key="")
             alarm.save()
         e_severity = alarm.get_effective_severity()
-        if e_severity != alarm.severity:
-            alarm.severity = e_severity
-            alarm.last_update = datetime.datetime.now().replace(microsecond=0)
+        if e_severity == alarm.severity:
+            return
+        alarm.severity = e_severity
+        alarm.last_update = datetime.datetime.now().replace(microsecond=0)
+        alarm.touch_watch(effect=Effect.SEVERITY)
         alarm.save()
-        alarm.touch_watch(is_update=True)
 
     async def apply_rules(
         self,
@@ -432,6 +435,8 @@ class CorrelatorService(FastAPIService):
         on_refresh: bool = False,
     ) -> Dict[str, Any]:
         """Apply alarm rules"""
+        from noc.fm.models.escalationprofile import EscalationProfile
+
         groups = {}
         for rule in self.alarm_rule_set.iter_rules(alarm):
             after_ts = None
@@ -484,21 +489,15 @@ class CorrelatorService(FastAPIService):
                 # After - delay, from - alarm_ts/now
                 # JobId
                 # Refresh - true/false
-                alarm.add_watch(
-                    Effect.ESCALATION,
-                    key=str(rule.escalation_profile),
-                    once=True,
-                    after=alarm.timestamp + datetime.timedelta(seconds=rule.escalation_delay),
-                    keep_args=True,
-                )
+                EscalationProfile.watch_escalation(rule.escalation_profile, alarm)
             if rule.clear_after_delay:
                 if rule.ttl_policy == "C":
                     after = alarm.timestamp + datetime.timedelta(seconds=rule.clear_after_delay)
                 else:
                     after = alarm.last_update + datetime.timedelta(seconds=rule.clear_after_delay)
-                alarm.add_watch(Effect.CLEAR_ALARM, key="", after=after)
+                alarm.add_watch(Effect.CLEAR_ALARM, key=str(rule.id), after=after)
             else:
-                alarm.stop_watch(Effect.CLEAR_ALARM, key="")
+                alarm.stop_watch(Effect.CLEAR_ALARM, key=str(rule.id))
             rule.apply_actions(alarm)
         return groups
 
@@ -709,7 +708,7 @@ class CorrelatorService(FastAPIService):
                 svc_ids=[str(x) for x in a.affected_services],
             )
         # Ensure Alarm Jobs when set delayed actions
-        if a.wait_ts and self.is_default_jobs:
+        if a.wait_ts and self.is_default_scheduler:
             mv = ActiveAlarm.get_min_wait_ts()
             if not mv or mv > a.wait_ts:
                 self.scheduler.submit(jcls=ALARM_WATCHER_JCLS, key="", keep_ts=False)
@@ -1413,7 +1412,16 @@ class CorrelatorService(FastAPIService):
         )
         alarm.last_update = max(alarm.last_update, ts)
         groups = alarm.groups
-        alarm.clear_alarm(message or "Cleared by id", ts=ts, source=source, force=bool(source))
+        aa = alarm.clear_alarm(message or "Cleared by id", ts=ts, source=source, force=bool(source))
+        if not aa:
+            self.logger.info(
+                "[%s|%s] Alarm %s(%s) clear not allowed",
+                alarm.managed_object.name if alarm.managed_object else DEFAULT_REFERENCE,
+                alarm.managed_object.address if alarm.managed_object else alarm.reference,
+                alarm.alarm_class.name,
+                alarm.id,
+            )
+            return
         metrics["alarm_clear"] += 1
         await self.clear_groups(groups, ts=ts)
 

@@ -21,6 +21,7 @@ from noc.core.wf.interaction import Interaction
 from noc.core.change.policy import change_tracker
 from noc.core.change.decorator import get_datastreams, get_domains, get_applied_rules
 from noc.core.change.model import ChangeField
+from noc.core.watchers.types import ObjectEffect
 
 logger = logging.getLogger(__name__)
 
@@ -72,10 +73,11 @@ def document_set_state(
             old=str(self.state.id),
             old_label=str(self.state),
             new=str(state.id),
-            new_label=str(self.state),
+            new_label=str(state),
         )
     else:
-        cf = ChangeField(field="state", old=None, new=str(state.id), new_label=str(self.state))
+        cf = ChangeField(field="state", old=None, new=str(state.id), new_label=str(state))
+    prev_state = self.state
     prev_labels = self.state.labels if self.state else []
     # Set state field
     self.state = state
@@ -86,10 +88,23 @@ def document_set_state(
     # Fill expired field
     if self._has_expired:
         if state.ttl:
-            self.expired = datetime.datetime.now() + datetime.timedelta(seconds=state.ttl)
+            expired = datetime.datetime.now() + datetime.timedelta(seconds=state.ttl)
         else:
-            self.expired = None
-        set_op["expired"] = self.expired
+            expired = None
+        if self.expired != expired:
+            self.expired = expired
+            set_op["expired"] = self.expired
+    # Apply Watchers
+    # Bulk Supported?
+    if self._has_watchers:
+        if state.is_wiping and (not prev_state or not prev_state.is_wiping):
+            self.add_watch(ObjectEffect.WIPING, after=self.expired)
+        elif "expired" in set_op and self.expired:
+            self.add_watch(ObjectEffect.WF_EVENT, after=self.expired, wf_event="expired")
+        if (not prev_state or prev_state.is_wiping) and not state.is_wiping:
+            self.stop_watch(ObjectEffect.WIPING)
+        if "expired" in set_op and not self.expired:
+            self.stop_watch(ObjectEffect.WF_EVENT)
     # Update database directly
     # to avoid full save
     c_bulk = [UpdateOne({"_id": self.id}, {"$set": set_op})]
@@ -180,16 +195,17 @@ def model_set_state(self, state, state_changed: datetime.datetime = None, bulk=N
     # Direct update arguments
     logger.debug("[%s] Set state: %s", self.name, state)
     set_op = {"state": str(state.id)}
+    prev_state = self.state
     if self.state:
         cf = ChangeField(
             field="state",
             old=str(self.state.id),
             old_label=str(self.state),
             new=str(state.id),
-            new_label=str(self.state),
+            new_label=str(state),
         )
     else:
-        cf = ChangeField(field="state", old=None, new=str(state.id), new_label=str(self.state))
+        cf = ChangeField(field="state", old=None, new=str(state.id), new_label=str(state))
     prev_labels = self.state.labels if self.state else []
     # Set state field
     self.state = state
@@ -200,10 +216,23 @@ def model_set_state(self, state, state_changed: datetime.datetime = None, bulk=N
     # Fill expired field
     if self._has_expired:
         if state.ttl:
-            self.expired = datetime.datetime.now() + datetime.timedelta(seconds=state.ttl)
+            expired = datetime.datetime.now() + datetime.timedelta(seconds=state.ttl)
         else:
-            self.expired = None
-        set_op["expired"] = self.expired
+            expired = None
+        if self.expired != expired:
+            self.expired = expired
+            set_op["expired"] = self.expired
+    # Apply Watchers
+    # Add Bulk
+    if self._has_watchers:
+        if state.is_wiping and (not prev_state or not prev_state.is_wiping):
+            self.add_watch(ObjectEffect.WIPING, after=self.expired)
+        elif "expired" in set_op and self.expired:
+            self.add_watch(ObjectEffect.WF_EVENT, after=self.expired, wf_event="expired")
+        if (not prev_state or prev_state.is_wiping) and not state.is_wiping:
+            self.stop_watch(ObjectEffect.WIPING)
+        if "expired" in set_op and not self.expired:
+            self.stop_watch(ObjectEffect.WF_EVENT)
     # Update database include effective labels directly
     # to avoid full save
     if hasattr(self, "effective_labels"):
@@ -222,12 +251,13 @@ def model_set_state(self, state, state_changed: datetime.datetime = None, bulk=N
         ic_handler()
     # Call state on_enter_handlers
     self.state.on_enter_state(self)
-    if state.is_wiping and not state.ttl:
+    ttl = self.get_wiping_ttl() or 0
+    if state.is_wiping and not ttl:
         self.delete()
     elif state.is_wiping:
         call_later(
             "noc.core.wf.decorator.wipe",
-            delay=state.ttl or 0,
+            delay=ttl,
             scheduler="scheduler",
             # pool=self.escalate_managed_object.escalator_shard,
             model_id=get_model_id(self),
@@ -244,7 +274,7 @@ def model_set_state(self, state, state_changed: datetime.datetime = None, bulk=N
             oid=self.id,
         )
     if self._has_diagnostics:
-        self.diagnostic.refresh_diagnostics()
+        self.diagnostic.reload_diagnostics()
         # self.diagnostic.reset_diagnostics(
         #    [d.diagnostic for d in state.iter_diagnostic_configs(self)]
         # )
@@ -334,6 +364,11 @@ def _on_model_post_save(sender, instance, *args, **kwargs):
         instance.set_state(new_state, create=True)
 
 
+def get_wiping_ttl(self) -> Optional[datetime.datetime]:
+    """Getting"""
+    return self.state.ttl
+
+
 def workflow(cls):
     """
     @workflow decorator denotes models which have .state
@@ -351,12 +386,14 @@ def workflow(cls):
     cls._has_expired = False
     cls._has_state_changed = False
     cls._has_diagnostics = False
+    cls._has_watchers = False
+    if not hasattr(cls, "get_wiping_ttl"):
+        cls.get_wiping_ttl = get_wiping_ttl
     if is_document(cls):
         # MongoEngine model
         from mongoengine import signals as mongo_signals
 
         cls.set_state = document_set_state
-        mongo_signals.post_save.connect(_on_document_post_save, sender=cls)
         if "state_changed" in cls._fields:
             cls._has_state_changed = True
         if (
@@ -368,12 +405,14 @@ def workflow(cls):
             cls._has_expired = True
         if "diagnostics" in cls._fields:
             cls._has_diagnostics = True
+        if "watchers" in cls._fields:
+            cls._has_watchers = True
+        mongo_signals.post_save.connect(_on_document_post_save, sender=cls)
     else:
         # Django model
         from django.db.models import signals as django_signals
 
         cls.set_state = model_set_state
-        django_signals.post_save.connect(_on_model_post_save, sender=cls)
         fields = [f.name for f in cls._meta.get_fields()]
         if "state_changed" in fields:
             cls._has_state_changed = True
@@ -382,6 +421,9 @@ def workflow(cls):
             cls._has_expired = True
         if "diagnostics" in fields:
             cls._has_diagnostics = True
+        if "watchers" in fields or "watcher_wait_ts" in fields:
+            cls._has_watchers = True
+        django_signals.post_save.connect(_on_model_post_save, sender=cls)
 
     cls.fire_transition = fire_transition
     cls.fire_event = fire_event
@@ -389,12 +431,7 @@ def workflow(cls):
 
 
 def wipe(model_id: str, oid):
-    """
-    Wiping object for delay
-    :param model_id:
-    :param oid:
-    :return:
-    """
+    """Wiping object for delay"""
     model = get_model(model_id)
     o = model.objects.filter(id=oid).first()
     if not o:
@@ -418,12 +455,7 @@ def wipe(model_id: str, oid):
 
 
 def wipe_alarm(model_id: str, oid):
-    """
-    Wiping Active Alarm
-    :param model_id:
-    :param oid:
-    :return:
-    """
+    """Wiping Active Alarm"""
     # Clear alarms
     from noc.fm.models.activealarm import ActiveAlarm
 

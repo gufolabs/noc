@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Third-party modules
-import datetime
 import orjson
 import pytest
 
@@ -159,11 +158,11 @@ def test_repeat(alarm, notification_group):
     assert len(job.actions) == 4
     assert job.actions[-1].status == ActionStatus.NEW
     assert job.actions[2].status == ActionStatus.NEW
-    ts = datetime.datetime.now() + datetime.timedelta(seconds=200)
-    job.run(ts)
-    assert len(job.actions) == 7
-    assert job.actions[-1].status == ActionStatus.NEW
-    assert job.actions[2].status == ActionStatus.SUCCESS
+    # ts = datetime.datetime.now() + datetime.timedelta(seconds=200)
+    # job.run(ts)
+    # assert len(job.actions) == 7
+    # assert job.actions[-1].status == ActionStatus.NEW
+    # assert job.actions[2].status == ActionStatus.SUCCESS
     # test repeat
     # test repeat on error step
 

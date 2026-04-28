@@ -22,12 +22,14 @@ from mongoengine.fields import (
     LongField,
     FloatField,
     ListField,
+    BinaryField,
     IntField,
 )
 
 # NOC models
 from noc.core.fm.enum import AlarmAction, ActionStatus, ItemStatus
 from noc.sa.models.servicesummary import SummaryItem, ObjectSummaryItem
+from noc.fm.models.alarmwatch import Effect
 
 
 class JobStatus(Enum):
@@ -102,6 +104,7 @@ class ActionLog(EmbeddedDocument):
     time_pattern = StringField()
     alarm_ack = StringField()
     when = StringField(default="any")
+    has_effect = EnumField(Effect, required=False)
     stop_processing: bool = BooleanField(default=False)
     allow_fail: bool = BooleanField(default=False)
     repeat_num: int = IntField(default=0)
@@ -156,7 +159,8 @@ class AlarmJob(Document):
     actions: List[ActionLog] = EmbeddedDocumentListField(ActionLog)
     # List of group references, if any
     tt_docs = DictField()
-    groups = EmbeddedDocumentListField(GroupItem)
+    is_dirty = BooleanField(default=True)
+    groups = ListField(BinaryField())
     max_repeats: int = IntField(default=0)
     repeat_delay: int = IntField(default=60)
     affected_services = ListField(ObjectIdField())

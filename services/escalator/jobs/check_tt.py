@@ -9,18 +9,17 @@
 import datetime
 import threading
 from collections import defaultdict
-from typing import Optional, List, Tuple
+from typing import Optional, List, Tuple, Dict
 
 # NOC modules
 from noc.core.scheduler.job import Job
 from noc.core.tt.types import TTAction, TTChange
 from noc.core.lock.process import ProcessLock
-from noc.core.change.policy import change_tracker
-from noc.core.span import Span
 from noc.core.fm.request import ActionConfig
 from noc.core.fm.enum import AlarmAction
 from noc.aaa.models.user import User
 from noc.fm.models.ttsystem import TTSystem
+from noc.fm.models.alarmjob import AlarmJob as AlarmJobState
 from noc.services.correlator.alarmjob import AlarmJob
 from noc.config import config
 from noc.core.text import alnum_key
@@ -57,17 +56,38 @@ class CheckTTJob(Job):
         Args:
             username: User contact id
         """
-        return User.get_by_contact(username)
+        u = User.get_by_contact(username)
+        if not u:
+            u = User.get_by_username(username)
+        return u
+
+    def get_waited_tt_ids(self) -> Dict[str, str]:
+        """Getting waited TTS"""
+        r = {}
+        oid = str(self.object.id)
+        for job_id, ids in AlarmJobState.objects.filter(
+            **{
+                f"tt_docs__{oid}__exists": True,
+                "end_condition": "CT",
+                "completed_at__exists": False,
+            }
+        ).scalar("id", "tt_docs"):
+            if oid not in ids:
+                continue
+            r[ids[oid]] = str(job_id)
+        return r
 
     def handler(self, **kwargs):
         tts = self.object.get_system()
+        waited_ids = self.get_waited_tt_ids()
         last_ts: datetime.datetime = datetime.datetime.now()
         last_id: Optional[str] = self.object.last_update_id
         changes = defaultdict(list)
         for c in tts.get_updates(
+            self.object.login,
             self.object.last_update_id,
             self.object.last_update_ts,
-            [],
+            list(waited_ids.keys()),
         ):
             # if c.document_id not in docs:
             #    self.logger.info(
@@ -94,9 +114,9 @@ class CheckTTJob(Job):
         # From alarm (doc) and build jobs
         # Exists Alarm Job / Create from Alarm
         # a_jobs: Dict[str, AlarmJob] = {}
-        self.logger.debug("Processed changes: %s", changes)
+        self.logger.info("Processed changes: %s", changes)
         for doc_id, changes in changes.items():
-            a_job = AlarmJob.ensure_job(self.object.get_tt_id(doc_id))
+            a_job = AlarmJob.get_by_id(waited_ids[doc_id])
             if not a_job:
                 self.logger.info(
                     "[%s] Updates on Unknown document with id: '%s'",
@@ -104,17 +124,20 @@ class CheckTTJob(Job):
                     doc_id,
                 )
                 continue
+            if a_job.is_end:
+                self.logger.info("[%s|%s] Job Is End", doc_id, waited_ids[doc_id])
+                continue
             # _job = a_jobs[doc_id]
-            with (
-                Span(
-                    client="escalator",
-                    sample=self.object.telemetry_sample,
-                    context=a_job.ctx_id,
-                ),
-                self.lock.acquire(a_job.get_lock_items()),
-                change_tracker.bulk_changes(),
-            ):
-                self.processed_changes(a_job, changes)
+            # with (
+            #     Span(
+            #         client="escalator",
+            #         sample=self.object.telemetry_sample,
+            #         context=a_job.ctx_id,
+            #     ),
+            #     self.lock.acquire(a_job.get_lock_items()),
+            #     change_tracker.bulk_changes(),
+            # ):
+            self.processed_changes(a_job, changes)
             # a_job.save_state()
         if last_ts or last_id:
             self.object.register_update(last_ts, last_id)
@@ -124,12 +147,13 @@ class CheckTTJob(Job):
             case TTAction.CLOSE:
                 return ActionConfig(
                     action=AlarmAction.CLEAR,
+                    key=str(self.object.id),
                     subject=f"Clear by TTSystem: {self.object.name}",
                 )
             case TTAction.ACK:
                 return ActionConfig(action=AlarmAction.ACK, key=str(user.id))
             case TTAction.UN_ACK:
-                return ActionConfig(action=AlarmAction.UN_ACK)
+                return ActionConfig(action=AlarmAction.UN_ACK, key=str(user.id))
             case TTAction.LOG:
                 return ActionConfig(action=AlarmAction.LOG, subject=change.message)
 
