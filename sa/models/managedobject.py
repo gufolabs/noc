@@ -1293,7 +1293,7 @@ class ManagedObject(NOCModel):
             self.diagnostic.reset_diagnostics(diagnostics)
         elif "effective_labels" in self.changed_fields:
             # Update configured diagnostic
-            self.diagnostic.refresh_diagnostics()
+            self.diagnostic.reload_diagnostics()
         # Apply discovery jobs
         self.ensure_discovery_jobs()
         # self.update_init()
@@ -3006,6 +3006,8 @@ class ManagedObject(NOCModel):
         #     for ris, rid in mappings.items():
         #         mo.set_mapping(ris, rid)
         for field, value in data.items():
+            if field == "description":
+                continue
             if hasattr(mo, field):
                 setattr(mo, field, value)
         return mo
