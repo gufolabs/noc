@@ -480,7 +480,7 @@ class ManagedObjectApplication(ExtModelApplication):
         ) -> Tuple[List[Interface], List[Interface]]:
             """
             Returns:
-                tuple of <local interfaces>, <remote iterafaces>
+                tuple of <local interfaces>, <remote interfaces>
             """
             local_ifaces = []
             remote_ifaces = []
