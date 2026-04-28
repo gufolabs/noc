@@ -497,7 +497,7 @@ class ManagedObjectApplication(ExtModelApplication):
         # Get links
         result = []
         for link in Link.object_links(o):
-            local_ifaces, remote_ifaces = split_local_ifaces(link.iterfaces)
+            local_ifaces, remote_ifaces = split_local_ifaces(link.interfaces)
             if not local_ifaces or not remote_ifaces:
                 continue  # Malformed link
             for li in local_ifaces:
