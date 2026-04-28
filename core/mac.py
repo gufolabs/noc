@@ -1,15 +1,13 @@
 # ----------------------------------------------------------------------
 # MAC address manipulation routines
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import re
 
-# NOC modules
-from noc.core.comp import smart_text
 
 # Regular expressions
 
@@ -26,6 +24,8 @@ rx_mac_address_sixblock = re.compile(
 rx_mac_address_hp = re.compile(r"^[0-9A-F]{6}-[0-9A-F]{6}$")
 # Unseparated block
 rx_mac_address_solid = re.compile(r"^[0-9A-F]{12}$")
+
+INPUT_TYPES = int | bytes | str
 
 
 class MAC(str):
@@ -70,81 +70,58 @@ class MAC(str):
     'AA:BB:CC:DD:EE:FF -- 00:11:22:33:44:55'
     """
 
-    def __new__(cls, mac):
+    def __new__(cls, mac: INPUT_TYPES):
+        if isinstance(mac, MAC):
+            return mac
         return super(MAC, cls).__new__(cls, cls._clean(mac))
 
-    def __long__(self):
-        return int(self.replace(":", ""), 16)
-
-    def __int__(self):
+    def __int__(self) -> int:
         return int(self.replace(":", ""), 16)
 
     @classmethod
-    def _clean(cls, mac):
-        if isinstance(mac, int):
-            return "%02X:%02X:%02X:%02X:%02X:%02X" % (
-                (mac >> 40) & 0xFF,
-                (mac >> 32) & 0xFF,
-                (mac >> 24) & 0xFF,
-                (mac >> 16) & 0xFF,
-                (mac >> 8) & 0xFF,
-                mac & 0xFF,
-            )
-        if len(mac) == 6:
-            if isinstance(mac, bytes):
-                return ":".join(["%02X" % c for c in mac])
-            return ":".join(["%02X" % ord(c) for c in mac])
+    def _clean(cls, mac: INPUT_TYPES) -> str:
+        def qm(value: str) -> str:
+            return ":".join(f"{value[i : i + 2]}" for i in range(0, 12, 2))
 
-        value = smart_text(mac).upper()
+        match mac:
+            case int():
+                return ":".join(f"{(mac >> shift) & 0xFF:02X}" for shift in (40, 32, 24, 16, 8, 0))
+            case bytes() if len(mac) == 6:
+                return ":".join(f"{b:02X}" for b in mac)
+            case str() if len(mac) == 6:
+                return ":".join(f"{ord(c):02X}" for c in mac)
+            case bytes():
+                value = mac.decode(encoding="utf-8", errors="strict").upper()
+            case str():
+                value = mac.upper()
+            case _:
+                raise ValueError(f"Invalid MAC: {mac}")
+
         match = rx_mac_address_solid.match(value)
         if match:
-            return "%s:%s:%s:%s:%s:%s" % (
-                value[:2],
-                value[2:4],
-                value[4:6],
-                value[6:8],
-                value[8:10],
-                value[10:],
-            )
+            return qm(value)
         match = rx_mac_address_cisco_media.match(value)
         if match:
-            value = value.replace(".", "")[2:]
-            return "%s:%s:%s:%s:%s:%s" % (
-                value[:2],
-                value[2:4],
-                value[4:6],
-                value[6:8],
-                value[8:10],
-                value[10:],
-            )
+            return qm(value.replace(".", "")[2:])
         match = rx_mac_address_cisco.match(value)
         if match:
-            value = value.replace(".", "").replace("-", "")
-        else:
-            match = rx_mac_address_hp.match(value)
-            if match:
-                value = value.replace("-", "")
-            else:
-                value = value.replace("-", ":")
-                match = rx_mac_address_sixblock.match(value)
-                if not match:
-                    raise ValueError("Invalid MAC: '%s'" % mac)
-                value = ""
-                for i in range(1, 7):
-                    v = match.group(i)
-                    if len(v) == 1:
-                        v = "0" + v
-                    value += v
-        return "%s:%s:%s:%s:%s:%s" % (
-            value[:2],
-            value[2:4],
-            value[4:6],
-            value[6:8],
-            value[8:10],
-            value[10:],
-        )
+            return qm(value.replace(".", "").replace("-", ""))
+        match = rx_mac_address_hp.match(value)
+        if match:
+            return qm(value.replace("-", ""))
+        value = value.replace("-", ":")
+        match = rx_mac_address_sixblock.match(value)
+        if not match:
+            raise ValueError(f"Invalid MAC: {mac}")
+        r: list[str] = []
+        for i in range(1, 7):
+            v = match.group(i)
+            if len(v) == 1:
+                v = f"0{v}"
+            r.append(v)
+        return qm("".join(r))
 
-    def to_cisco(self):
+    def to_cisco(self) -> str:
         """
         Convert to Cisco-like format
 
@@ -152,9 +129,9 @@ class MAC(str):
         'aabb.ccdd.eeff'
         """
         r = self.lower().replace(":", "")
-        return "%s.%s.%s" % (r[:4], r[4:8], r[8:])
+        return f"{r[:4]}.{r[4:8]}.{r[8:]}"
 
-    def shift(self, count):
+    def shift(self, count: int) -> str:
         """
         Return shifted MAC address
 
@@ -174,18 +151,12 @@ class MAC(str):
         """
         # Convert to 64-bit integer
         v = 0
-        for o in [int(x, 16) for x in self.split(":")]:
-            v <<= 8
-            v += o
+        for part in self.split(":"):
+            v = (v << 8) | int(part, 16)
         # Shift count addresses
         v += count
         # Convert back to MAC
-        r = []
-        for i in range(6):
-            r += ["%02X" % (v & 0xFF)]
-            v >>= 8
-        r.reverse()
-        return ":".join(r)
+        return ":".join(f"{(v >> shift) & 0xFF:02X}" for shift in (40, 32, 24, 16, 8, 0))
 
     @property
     def is_multicast(self) -> bool:
@@ -213,3 +184,36 @@ class MAC(str):
     def is_private(self) -> bool:
         """Check if MAC address on Private Range: F0:3F:03:00:00:00 - F0:3F:03:FF:FF:FF"""
         return self.startswith("F0:3F:03")
+
+    @classmethod
+    def distance(cls, s: INPUT_TYPES, e: INPUT_TYPES) -> int:
+        """
+        Calculate distance between MACs.
+
+        Order is insignificant.
+
+        Args:
+            m1: first mac.
+            m2: last mac.
+
+        Returns:
+            Distance between MACs.
+        """
+        return abs(int(MAC(s)) - int(MAC(e)))
+
+    @property
+    def oui(self) -> int:
+        """
+        Returns organization unique identifier of MAC.
+        """
+        return int(self) >> 24
+
+    @classmethod
+    def is_same_oui(cls, s: INPUT_TYPES, *args: INPUT_TYPES) -> bool:
+        """
+        Check if both macs belongs to same vendor's organization unique identifiers.
+        """
+        if not args:
+            return True
+        oui = MAC(s).oui
+        return all(MAC(a).oui == oui for a in args)
