@@ -25,7 +25,6 @@
 * [get-uuid](get-uuid.md)
 * [gridvcs](gridvcs.md)
 * [import-mib](import-mib.md)
-* [import-rancid](import-rancid.md)
 * [import-zone](import-zone.md)
 * [index](index.md)
 * [inject-event](inject-event.md)
