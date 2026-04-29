@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // main.messageroute Model
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2020 The NOC Project
+// Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.main.messageroute.Model");
@@ -81,6 +81,11 @@ Ext.define("NOC.main.messageroute.Model", {
       name: "notification_group__label",
       type: "string",
       persist: false,
+    },
+    {
+      name: "register_notification_method",
+      type: "boolean",
+      defaultValue: false,
     },
     {
       name: "render_template",
