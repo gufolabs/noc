@@ -1,0 +1,12 @@
+{
+    "name": "Telephony | Voice | Lost Packets",
+    "$collection": "pm.metrictypes",
+    "uuid": "705c0322-558d-4b63-b26f-6f719a51db39",
+    "scope__name": "Object",
+    "field_name": "voice_lost_packets",
+    "field_type": "Int32",
+    "description": "Lost Packets",
+    "measure": null,
+    "units__code": "1",
+    "scale__code": "1"
+}
