@@ -33,9 +33,7 @@ class Script(GetMetricsScript):
             ],
             bulk=True,
         )
-        print("  t", t, type(t))
         for thread_metrics in t:
-            print("  thread_metrics", thread_metrics, type(thread_metrics))
             _, thread_name, thread_usage = thread_metrics
             self.set_metric(
                 id=("CPU | Usage", None),
@@ -63,9 +61,7 @@ class Script(GetMetricsScript):
             ],
             bulk=True,
         )
-        print("  t", t, type(t))
         for node_metrics in t:
-            print("  node_metrics", node_metrics, type(node_metrics))
             hostname = node_metrics[1]
             for metric_type, idx in PEER_NODE_METRIC_TYPE_MAP.items():
                 metric = node_metrics[idx]
