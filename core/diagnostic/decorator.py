@@ -7,6 +7,7 @@
 
 # Python modules
 from typing import List, Iterable, Optional, Dict
+import datetime
 
 # NOC modules
 from noc.models import is_document
@@ -74,7 +75,13 @@ def save_document_diagnostics(
 def save_model_diagnostics(self, diagnostics: List[DiagnosticItem], dry_run: bool = False):
     """Update Model Instance diagnostics"""
     self.diagnostics = {d.diagnostic: d.get_value().model_dump() for d in diagnostics}
-    self.stop_watch(ObjectEffect.DIAGNOSTIC_CHECK)
+    expired: List[datetime.datetime] = []
+    for d in diagnostics:
+        expired.extend(c.expired for c in d.checks or [] if c.expired)
+    if expired:
+        self.add_watch(ObjectEffect.DIAGNOSTIC_CHECK, after=max(expired), dry_run=dry_run)
+    else:
+        self.stop_watch(ObjectEffect.DIAGNOSTIC_CHECK)
     if dry_run and not self.id:
         return
     # Expired/Add watchers
