@@ -1,12 +1,13 @@
 # ----------------------------------------------------------------------
 # @diagnostic decorator
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 from typing import List, Iterable, Optional, Dict
+import datetime
 
 # NOC modules
 from noc.models import is_document
@@ -73,12 +74,10 @@ def save_document_diagnostics(
 
 def save_model_diagnostics(self, diagnostics: List[DiagnosticItem], dry_run: bool = False):
     """Update Model Instance diagnostics"""
-    saved, expired = {}, []
+    self.diagnostics = {d.diagnostic: d.get_value().model_dump() for d in diagnostics}
+    expired: List[datetime.datetime] = []
     for d in diagnostics:
-        saved[d.diagnostic] = d.get_value().model_dump()
-        if d.expired:
-            expired.append(d.expired)
-    self.diagnostics = saved
+        expired.extend(c.expired for c in d.checks or [] if c.expired)
     if expired:
         self.add_watch(ObjectEffect.DIAGNOSTIC_CHECK, after=max(expired), dry_run=dry_run)
     else:
