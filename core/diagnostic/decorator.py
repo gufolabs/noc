@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # @diagnostic decorator
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -73,16 +73,8 @@ def save_document_diagnostics(
 
 def save_model_diagnostics(self, diagnostics: List[DiagnosticItem], dry_run: bool = False):
     """Update Model Instance diagnostics"""
-    saved, expired = {}, []
-    for d in diagnostics:
-        saved[d.diagnostic] = d.get_value().model_dump()
-        if d.expired:
-            expired.append(d.expired)
-    self.diagnostics = saved
-    if expired:
-        self.add_watch(ObjectEffect.DIAGNOSTIC_CHECK, after=max(expired), dry_run=dry_run)
-    else:
-        self.stop_watch(ObjectEffect.DIAGNOSTIC_CHECK)
+    self.diagnostics = {d.diagnostic: d.get_value().model_dump() for d in diagnostics}
+    self.stop_watch(ObjectEffect.DIAGNOSTIC_CHECK)
     if dry_run and not self.id:
         return
     # Expired/Add watchers
