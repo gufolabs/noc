@@ -57,6 +57,13 @@ class Script(BaseScript):
                 r[-1]["subinterfaces"] = [{"name": current_iface, name: [value]}]
                 update_ifindex(r[-1]["subinterfaces"][-1])
 
+        def ensure_afi(afi: str) -> None:
+            sub = r[-1]["subinterfaces"][-1]
+            enabled_afi = sub.get("enabled_afi", [])
+            if afi not in enabled_afi:
+                enabled_afi.append(afi)
+            sub["enabled_afi"] = enabled_afi
+
         ifindexes = self.get_ifindex()
         r: List[Dict[str, Any]] = []  # Result
         current_iface = ""
@@ -93,6 +100,8 @@ class Script(BaseScript):
                 r[-1]["mac"] = match.group("mac")
             elif match := self.rx_inet.search(line):
                 append_to_sub("ipv4_addresses", match.group("inet"))
+                ensure_afi("IPv4")
             elif match := self.rx_inet6.search(line):
                 append_to_sub("ipv6_addresses", match.group("inet6"))
+                ensure_afi("IPv6")
         return [{"interfaces": r}]
