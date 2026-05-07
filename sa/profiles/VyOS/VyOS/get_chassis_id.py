@@ -19,7 +19,7 @@ class Script(BaseScript):
     interface = IGetChassisID
     always_prefer = "S"
 
-    rx_mac = re.compile(r"^\s+link/ether (\S+)\s*brd \S+\n", re.MULTILINE)
+    rx_mac = re.compile(r"^\s+link/ether (\S+)\s+brd", re.MULTILINE)
 
     SNMP_GET_OIDS = {"SNMP": [mib["IF-MIB::ifPhysAddress", 1]]}
 
