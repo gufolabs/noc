@@ -20,6 +20,7 @@ from mongoengine.fields import (
     EmbeddedDocumentField,
     IntField,
     DictField,
+    EnumField,
 )
 from mongoengine.queryset.visitor import Q
 from mongoengine.errors import NotUniqueError
@@ -27,7 +28,7 @@ from mongoengine.errors import NotUniqueError
 # NOC modules
 from noc.core.topology.loader import loader as t_loader
 from noc.core.topology.base import TopologyBase
-from noc.core.topology.types import Layout
+from noc.core.topology.types import Layout, TopologyNodeType
 from noc.config import config
 
 logger = logging.getLogger(__name__)
@@ -38,13 +39,13 @@ LC_ROUNDED = "rounded"
 
 
 class NodeSettings(EmbeddedDocument):
-    type = StringField()
+    type = EnumField(TopologyNodeType, required=True)
     id = StringField()
     x = FloatField()
     y = FloatField()
 
     def __str__(self):
-        return "%s:%s" % (self.type, self.id)
+        return f"{self.type.value}:{self.id}"
 
 
 class VertexPosition(EmbeddedDocument):
@@ -162,13 +163,14 @@ class MapSettings(Document):
         height: Optional[float] = None,
     ):
         """
-        Update settings
-        :param nodes:
-        :param links:
-        :param user:
-        :param width:
-        :param height:
-        :return:
+        Update settings.
+
+        Args:
+            nodes:
+            links:
+            user:
+            width:
+            height:
         """
         self.current_change_id = datetime.datetime.now().replace(microsecond=0)
         if user:
