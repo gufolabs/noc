@@ -12,7 +12,7 @@ from time import perf_counter
 from typing import Tuple, Iterable
 
 # Third-party modules
-from gufo.snmp import SnmpSession, SnmpVersion, SnmpError as GSNMPError
+from gufo.snmp import SnmpSession, SnmpVersion, SnmpError as GSNMPError, SnmpAuthError
 from gufo.snmp.user import User, Aes128Key, DesKey, Md5Key, Sha1Key, KeyType
 
 # NOC modules
@@ -119,8 +119,11 @@ class Command(BaseCommand):
 
         if username:
             username = self.parse_credentials(username)
-        x = run_sync(main)
-        self.print(f"Result {x}")
+        try:
+            x = run_sync(main)
+            self.print(f"Result {x}")
+        except SnmpAuthError:
+            self.die("Authentication failed")
 
     def handle_getnext(self, address, community, timeout, oid, username, *args, **options):
         """ """
@@ -140,8 +143,11 @@ class Command(BaseCommand):
 
         if username:
             username = self.parse_credentials(username)
-        x = run_sync(main)
-        self.print(f"Result {x}")
+        try:
+            x = run_sync(main)
+            self.print(f"Result {x}")
+        except SnmpAuthError:
+            self.die("Authentication failed")
 
     def handle_getbulk(self, address, community, timeout, oid, username, *args, **options):
         """ """
@@ -161,8 +167,11 @@ class Command(BaseCommand):
 
         if username:
             username = self.parse_credentials(username)
-        x = run_sync(main)
-        self.print(f"Result {x}")
+        try:
+            x = run_sync(main)
+            self.print(f"Result {x}")
+        except SnmpAuthError:
+            self.die("Authentication failed")
 
     def handle_poll(
         self,

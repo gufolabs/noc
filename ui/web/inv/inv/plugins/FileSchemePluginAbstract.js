@@ -15,7 +15,7 @@ Ext.define("NOC.inv.inv.plugins.FileSchemePluginAbstract", {
   ],
   xtype: "filescheme",
   app: null,
-  scrollable: true,
+  scrollable: false,
   closable: false,
   controller: "filescheme",
   layout: {

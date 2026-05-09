@@ -7,11 +7,12 @@
 
 # Python modules
 import datetime
+import os
 
 # Third-party modules
 import pytest
 import orjson
-from fs import open_fs
+import fsspec
 
 # NOC modules
 from noc.services.classifier.ruleset import RuleSet
@@ -57,9 +58,13 @@ def iter_json_loader(urls):
     if not urls:
         urls = []
     for url in urls:
-        with open_fs(url) as fs:
-            for path in fs.walk.files(filter=["*.json"]):
-                with fs.open(path) as f:
+        fs, url_path = fsspec.url_to_fs(url)
+        for path, _, files in fs.walk(url_path):
+            for name in files:
+                if not name.endswith(".json"):
+                    continue
+                path = os.path.join(path, name)
+                with fs.open(os.path.join(path, name), mode="rb") as f:
                     data = orjson.loads(f.read())
                 if not isinstance(data, list):
                     data = [data]
@@ -100,6 +105,7 @@ def event(database, request):
     # request.fspath = path
     return event, ec, cfg.get("vars", {})
 
+
 def test_event(database, ruleset, event):
     e, expected_class, expected_vars = event
     e_vars = e.raw_vars.copy()
@@ -122,6 +128,7 @@ def test_event(database, ruleset, event):
 # )
 # def rule_case(request):
 #     return request.param
+
 
 def test_rules_collection_cases(database, ruleset, event_class_rule):
     for e, v in event_class_rule.iter_cases():

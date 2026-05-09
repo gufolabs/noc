@@ -13,6 +13,10 @@
         "Project-Id-Version": "The NOC Project VERSION",
         "Report-Msgid-Bugs-To": "EMAIL@ADDRESS"
     },
+    "Home": [
+        null,
+        "Главная"
+    ],
     " - Failed": [
         null,
         " - Ошибка"

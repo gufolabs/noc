@@ -17,15 +17,16 @@ from noc.core.tt.types import (
     EscalationItem as ECtxItem,
     EscalationServiceItem,
     EscalationStatus,
-    EscalationResult,
     TTActionContext,
+    TTUser,
 )
 from noc.core.tt.base import TTSystemCtx, TTAction
 from noc.core.fm.enum import AlarmAction, ActionStatus
-from noc.core.fm.request import AllowedAction, ActionConfig
+from noc.core.fm.request import AllowedAction, ActionConfig, WhenCondition
 from noc.sa.models.service import Service
 from noc.fm.models.ttsystem import TTSystem
 from noc.fm.models.activealarm import ActiveAlarm
+from noc.fm.models.alarmwatch import Effect
 from noc.aaa.models.user import User
 from .actionlog import ActionResult
 
@@ -43,12 +44,14 @@ class AlarmActionRunner(object):
         items: List[Any],
         allowed_actions: List[AlarmAction] = None,
         logger: Optional[Logger] = None,
-        services: Optional[List[Service]] = None,
+        services: Optional[List[str]] = None,
+        groups: List[int] = None,
         dry_run: bool = False,
     ):
         self.items = items
         self.alarm: "ActiveAlarm" = items[0].alarm
-        self.services: List[Service] = services
+        self.services: List[str] = services or []
+        self.groups = groups
         self.allowed_actions: List[AllowedAction] = allowed_actions or []
         self.logger = logger or logging.getLogger("AlarmActionRunner")
         self.alarm_log = []
@@ -70,6 +73,10 @@ class AlarmActionRunner(object):
                 r = self.create_tt(**ctx)
             case AlarmAction.CLOSE_TT:
                 r = self.close_tt(**ctx)
+            case AlarmAction.COMMENT_TT:
+                r = self.comment_tt(**ctx)
+            case AlarmAction.COMMENT_ALARM_STATE:
+                r = self.comment_alarm_state(**ctx)
             case AlarmAction.CLEAR:
                 r = self.alarm_clear(**ctx)
             case AlarmAction.ACK:
@@ -90,12 +97,13 @@ class AlarmActionRunner(object):
 
     def check_escalated(self, tt_system: TTSystem) -> Optional[str]:
         """Check alarm have tt_id for tt_system"""
-        log = self.alarm.get_escalation_log(tt_system)
-        if not log:
-            return None
-        # Compare with tt_system
-        tt, tt_id = log.tt_id.split(":")
-        return tt_id.strip()
+        if self.alarm.status == "C":
+            return self.alarm.escalation_tt
+        for r in self.alarm.get_watchers(Effect.TT_SYSTEM):
+            tt, tt_id = r.key.split(":")
+            if tt == tt_system.name:
+                return tt_id.strip()
+        return None
 
     def get_escalation_items(
         self, tt_system: TTSystem, promote_items: Optional[str] = None
@@ -133,15 +141,12 @@ class AlarmActionRunner(object):
     def get_affected_services_items(self, tt_system: TTSystem) -> List[EscalationServiceItem]:
         """Return Affected Service item for escalation doc"""
         r = []
-        if "service" in self.alarm.components:
-            svc = self.alarm.components.service
-            return [EscalationServiceItem(id=str(svc.id), tt_id=tt_system.get_object_tt_id(svc))]
+        # if "service" in self.alarm.components:
+        #     svc = self.alarm.components.service
+        #     return [EscalationServiceItem(id=str(svc.id), tt_id=tt_system.get_object_tt_id(svc))]
         if not self.services:
             return r
-        # (
-        #             list(Service.objects.filter(id__in=services)) if services else []
-        #         )
-        for svc in self.services:
+        for svc in Service.objects.filter(id__in=self.services):
             r.append(EscalationServiceItem(id=str(svc.id), tt_id=tt_system.get_object_tt_id(svc)))
         return r
 
@@ -170,6 +175,7 @@ class AlarmActionRunner(object):
         login: Optional[str] = None,
         queue: Optional[str] = None,
         pre_reason: Optional[str] = None,
+        user: Optional[User] = None,
     ) -> TTSystemCtx:
         """
         Build TTSystem Context
@@ -180,12 +186,15 @@ class AlarmActionRunner(object):
             login:
             queue: TT Queue
             pre_reason: Alarm Pre-Diagnostic code
+            user: User
 
         """
         # cfg = self.get_tt_system_config(tt_system)
         cfg = tt_system.get_config()
         if self.alarm.managed_object and not queue:
             queue = self.alarm.managed_object.tt_queue
+        if user:
+            user = TTUser(id=str(user.id), username=user.username)
         return TTSystemCtx(
             id=tt_id,
             tt_system=tt_system.get_system(),
@@ -196,6 +205,7 @@ class AlarmActionRunner(object):
             actions=self.get_action_context(),
             items=self.get_escalation_items(tt_system, cfg.promote_item),
             services=self.get_affected_services_items(tt_system),
+            assigned=user,
         )
 
     def log_alarm(self, message: str, *args) -> None:
@@ -218,6 +228,49 @@ class AlarmActionRunner(object):
     def get_bulk(self) -> List[Any]:
         return self.alarm_log
 
+    def comment_alarm_state(
+        self,
+        tt_system: TTSystem,
+        tt_id: str,
+        subject: str,
+        timestamp: Optional[datetime.datetime] = None,
+        login: Optional[str] = None,
+        queue: Optional[str] = None,
+        pre_reason: Optional[str] = None,
+        from_system: Optional[TTSystem] = None,
+        **kwargs,
+    ) -> ActionResult:
+        """Comment alarm status"""
+        r = self.comment_tt(
+            tt_system, tt_id, subject, timestamp=timestamp, login=login, queue=queue
+        )
+        is_clear = self.alarm.get_watchers(effect=Effect.CLEAR_ALARM)
+        if is_clear:
+            subject = "Alarm Was Reopen"
+            effect = None
+        else:
+            subject = "Alarm Was closed"
+            effect = Effect.CLEAR_ALARM
+        if r.status != ActionStatus.SUCCESS:
+            return ActionResult(status=r.status, error=r.error)
+        return ActionResult(
+            status=r.status,
+            error=r.error,
+            actions=[
+                ActionConfig(
+                    when=WhenCondition.ANY,
+                    action=AlarmAction.COMMENT_ALARM_STATE,
+                    key=str(tt_system.id),
+                    # template=str(self.close_template.id) if self.close_template else None,
+                    subject=subject,
+                    has_effect=effect,
+                    allow_fail=True,
+                    login=login,
+                    queue=queue,
+                )
+            ],
+        )
+
     def comment_tt(
         self,
         tt_system: TTSystem,
@@ -229,7 +282,7 @@ class AlarmActionRunner(object):
         pre_reason: Optional[str] = None,
         from_system: Optional[TTSystem] = None,
         **kwargs,
-    ) -> EscalationResult:
+    ) -> ActionResult:
         """
         Append Comment to Trouble Ticket
 
@@ -238,6 +291,10 @@ class AlarmActionRunner(object):
             tt_id: Number of document on TT System
             timestamp:
             subject: comment message
+            login: TT Login
+            queue: TT Queue
+            pre_reason: Escalation Pre Reason
+            from_system: Action from TT System
 
         Returns:
             Escalation Resul instance
@@ -246,11 +303,14 @@ class AlarmActionRunner(object):
         with self.get_tt_system_context(
             tt_system, tt_id, timestamp, login, queue, pre_reason
         ) as ctx:
-            ctx.comment(subject)
+            ctx.comment_tt(subject)
         r = ctx.get_result()
         if r.is_ok:
             metrics["escalation_tt_comment"] += 1
-            return r
+            return ActionResult(
+                status=ActionStatus.SUCCESS,
+                document_id=r.document,
+            )
         if r.status == EscalationStatus.TEMP:
             metrics["escalation_tt_comment_fail"] += 1
             error = f"Failed to add comment to {tt_id}: {r.error}"
@@ -260,7 +320,7 @@ class AlarmActionRunner(object):
         else:
             error = r.error
         self.logger.info(error)
-        return r
+        return ActionResult(status=ActionStatus.FAILED, error=error)
 
     def notify(
         self, notification_group, subject: str, body: Optional[str] = None, **kwargs
@@ -274,7 +334,7 @@ class AlarmActionRunner(object):
             body: Message Body
 
         Returns:
-            EscalationResult: Escalation Resul instance
+            ActionResult: Escalation Resul instance
         """
         self.logger.info(
             "[%s] Notification message:\nSubject: %s\n%s", notification_group, subject, body
@@ -299,7 +359,7 @@ class AlarmActionRunner(object):
             message = subject or f"Acknowledge by {user} (from TTSystem: {requester.name})"
         else:
             message = subject or f"Acknowledge by {user}"
-        self.alarm.acknowledge(user, message)
+        self.alarm.acknowledge(user, message, touch=False)
         return ActionResult(status=ActionStatus.SUCCESS)
 
     def alarm_unack(
@@ -318,7 +378,7 @@ class AlarmActionRunner(object):
             message = subject or f"UnAcknowledge by {user} (from TTSystem: {requester.name})"
         else:
             message = subject or f"UnAcknowledge by {user}"
-        self.alarm.unacknowledge(user, message)
+        self.alarm.unacknowledge(user, message, touch=False)
         return ActionResult(status=ActionStatus.SUCCESS)
 
     def alarm_clear(
@@ -369,6 +429,7 @@ class AlarmActionRunner(object):
         login: Optional[str] = None,
         queue: Optional[str] = None,
         pre_reason: Optional[str] = None,
+        wait_tt: bool = False,
         from_system: Optional[TTSystem] = None,
         user: Optional[User] = None,
         **kwargs,
@@ -386,10 +447,11 @@ class AlarmActionRunner(object):
             from_system: TTSystem, request action
             queue: TT Queue
             pre_reason: Diagnostic Pre Reason
+            wait_tt: Waiting tt for close
             user: User, request action
 
         Returns:
-            EscalationResult:
+            ActionResult:
         """
         self.logger.debug(
             "Escalation message:\nSubject: %s\n%s",
@@ -411,8 +473,15 @@ class AlarmActionRunner(object):
             )
             self.log_alarm(f"Creating TT in system {tt_system.name}")
         with self.get_tt_system_context(
-            tt_system, tt_id, timestamp, login, queue, pre_reason
+            tt_system,
+            tt_id,
+            timestamp,
+            login,
+            queue,
+            pre_reason,
+            user,
         ) as ctx:
+            self.logger.debug("TT Context: %s", ctx.services)
             ctx.create(subject=subject, body=body)
         r = ctx.get_result()
         if r.status == EscalationStatus.TEMP:
@@ -431,13 +500,13 @@ class AlarmActionRunner(object):
                 login=login,
                 queue=queue,
                 pre_reason=pre_reason,
+                wait_tt=str(r.document) if wait_tt else None,
+                supress_job=True,
                 clear_template=kwargs.get("clear_template"),
             )
-            return ActionResult(
-                status=ActionStatus.SUCCESS,
-                document_id=r.document,
-                action=ActionConfig(
-                    when="on_end",
+            actions = [
+                ActionConfig(
+                    when=WhenCondition.ON_END,
                     action=AlarmAction.CLOSE_TT,
                     key=str(tt_system.id),
                     # template=str(self.close_template.id) if self.close_template else None,
@@ -445,7 +514,26 @@ class AlarmActionRunner(object):
                     allow_fail=False,
                     login=login,
                     queue=queue,
-                ),
+                )
+            ]
+            if wait_tt:
+                actions += [
+                    ActionConfig(
+                        when=WhenCondition.ANY,
+                        action=AlarmAction.COMMENT_ALARM_STATE,
+                        key=str(tt_system.id),
+                        subject="Alarm Was Cleared",
+                        # template=str(self.close_template.id) if self.close_template else None,
+                        has_effect=Effect.CLEAR_ALARM,
+                        allow_fail=True,
+                        login=login,
+                        queue=queue,
+                    )
+                ]
+            return ActionResult(
+                status=ActionStatus.SUCCESS,
+                document_id=r.document,
+                actions=actions,
             )
         # @todo r.document != tt_id
         # Project result to escalation items

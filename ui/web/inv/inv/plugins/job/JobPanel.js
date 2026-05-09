@@ -15,6 +15,7 @@ Ext.define("NOC.inv.inv.plugins.job.JobPanel", {
   title: __("Jobs"),
   closable: false,
   layout: "fit",
+  scrollable: false,
   controller: "job",
   viewModel: {
     data: {

@@ -38,6 +38,8 @@ class NotificationContact:
         method: delivery method
         title_tag: Additional title string
         time_pattern: Active contact time
+        headers: Additional message headers. Channel settings?
+        route: Forward to current route
     """
 
     contact: str
@@ -45,6 +47,8 @@ class NotificationContact:
     method: str = "mail"
     title_tag: Optional[str] = None
     time_pattern: Optional[TimePatternList] = None
+    headers: Optional[Dict[str, Any]] = None
+    route: Optional[str] = None
 
     def __hash__(self):
         return hash(f"{self.method}_{self.contact}")
@@ -56,6 +60,7 @@ MX_METRICS_TYPE = "metrics"
 MX_METRICS_SCOPE = "Metric-Scope"
 MX_SPAN_CTX = "NOC-Span-Ctx"
 MX_SPAN_ID = "Span-Id"
+MX_FWD_ROUTER = "Fwd-Roter-Id"
 # Headers
 MX_MESSAGE_TYPE = "Message-Type"
 MX_SHARDING_KEY = "Sharding-Key"
@@ -71,6 +76,8 @@ MX_TO_STAGE_NAME = "Resource-To-Stage-Name"
 MX_LABELS = "Labels"
 MX_RESOURCE_GROUPS = "Resource-Group-Ids"
 MX_WATCH_FOR_ID = "Watch-For-Id"
+MX_REMOTE_SYSTEM = "Remote-System-Id"
+MX_ETL_LOADER = "ETL-Loader"
 # Notification headers
 MX_TO = "To"
 MX_NOTIFICATION = b"notification"
@@ -84,7 +91,7 @@ MX_WH_API_URL = "WebHook-API-URL"
 MX_WH_API_METHOD = "WebHook-API-Method"
 MX_WH_API_AUTHORIZATION = "WebHook-API-Authorization"
 MX_WH_TO_PARAM_NAME = "WebHook-To-Param-Name"
-MX_WH_MESSAGE_PARAM_NAME = "WebHook-To-Param-Name"
+MX_WH_MESSAGE_PARAM_NAME = "WebHook-Message-Param-Name"
 MX_WH_CONTENT_TYPE = "WebHook-API-Content-Type"
 MX_WH_SENDER_METHOD = "WebHook-Sender-Method"
 MX_WH_NOTIFICATION_PARAM_NAME = "WebHook-Notification-Param-Name"
@@ -118,6 +125,7 @@ class MessageType(enum.Enum):
     UNKNOWN_TARGET = "unknown_targets"
     JOB = "job"
     MAINTENANCE_PROCESSED = "maintenance_processed"
+    ETL_PUSH = "etl_push"
     OTHER = "other"
 
 
@@ -134,6 +142,7 @@ CONFIGS = {
     "administrative_domain": MetaConfig(MX_ADMINISTRATIVE_DOMAIN_ID),
     "from": MetaConfig(MX_DATA_ID),
     "labels": MetaConfig(MX_LABELS, is_list=True),
+    "remote_system": MetaConfig(MX_REMOTE_SYSTEM),
 }
 
 
@@ -148,6 +157,7 @@ class MessageMeta(enum.Enum):
     ADM_DOMAIN = "administrative_domain"
     FROM = "from"
     LABELS = "labels"
+    REMOTE_SYSTEM = "remote_system"
 
     def clean_header_value(self, value: Any) -> bytes:
         if self.config.is_list:
@@ -162,6 +172,7 @@ MESSAGE_HEADERS = {
     MX_CHANGE_ID,
     MX_ADMINISTRATIVE_DOMAIN_ID,
     MX_PROFILE_ID,
+    MX_ETL_LOADER,
     MX_TO_STAGE_NAME,
     MX_TO,
     MX_LANG,
@@ -174,7 +185,9 @@ MESSAGE_HEADERS = {
     MX_WH_TO_PARAM_NAME,
     MX_WH_CONTENT_TYPE,
     MX_WH_NOTIFICATION_PARAM_NAME,
+    MX_WH_MESSAGE_PARAM_NAME,
     MX_FROM_COLLECTOR,
+    MX_FWD_ROUTER,
 }
 # Method -> Sender stream map, ?autoregister
 NOTIFICATION_METHODS = {

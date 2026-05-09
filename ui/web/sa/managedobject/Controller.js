@@ -573,7 +573,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
     this.view.down("[itemId=formTitle]").update(Ext.String.format(
       formPanel.up().groupChangeTitle, selectedIds.length, formPanel.up("[itemId=sa-managedobject]").appTitle,
     ));
-    this.displayButtons(["closeBtn", "groupSaveBtn"]);
+    this.displayButtons(["closeBtn", "groupSaveBtn", "groupApplyBtn"]);
     formPanel.ids = selectedIds;
     this.clearForm(form);
     parentCmp.mask(__("Loading"));
@@ -718,10 +718,10 @@ Ext.define("NOC.sa.managedobject.Controller", {
             formPanel,
             form,
             formView,
-            standardMode = ["closeBtn", "saveBtn", "resetBtn", "deleteBtn", "createBtn", "cloneBtn", "showMapBtn",
+            standardMode = ["closeBtn", "saveBtn", "applyBtn", "resetBtn", "deleteBtn", "createBtn", "cloneBtn", "showMapBtn",
                             "configBtn", "confDBBtn", "cardBtn", "dashboardBtn", "consoleBtn", "scriptsBtn", "interfacesBtn",
                             "sensorsBtn", "linksBtn", "discoverBtn", "alarmsBtn", "inventoryBtn", "cmdBtn", "helpBtn", "mappingBtn"],
-            embeddedMode = ["saveBtn", "showMapBtn", "configBtn", "confDBBtn", "cardBtn", "dashboardBtn",
+            embeddedMode = ["saveBtn", "applyBtn", "showMapBtn", "configBtn", "confDBBtn", "cardBtn", "dashboardBtn",
                             "consoleBtn", "scriptsBtn", "interfacesBtn", "sensorsBtn", "linksBtn", "discoverBtn",
                             "alarmsBtn", "inventoryBtn", "cmdBtn", "helpBtn", "mappingBtn"],
             r = {},

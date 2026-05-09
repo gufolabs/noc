@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // inv.cpeprofile application
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2022 The NOC Project
+// Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.inv.cpeprofile.Application");
@@ -15,7 +15,7 @@ Ext.define("NOC.inv.cpeprofile.Application", {
     "NOC.main.handler.LookupField",
     "NOC.inv.cpeprofile.Model",
     "NOC.main.pool.LookupField",
-    "NOC.main.ref.stencil.LookupField",
+    "NOC.main.glyph.LookupField",
     "NOC.sa.managedobject.LookupField",
     "NOC.sa.managedobjectprofile.LookupField",
     "NOC.wf.workflow.LookupField",
@@ -91,9 +91,9 @@ Ext.define("NOC.inv.cpeprofile.Application", {
               allowBlank: true,
             },
             {
-              name: "shape",
-              xtype: "main.ref.stencil.LookupField",
-              fieldLabel: __("Shape"),
+              name: "glyph",
+              xtype: "main.glyph.LookupField",
+              fieldLabel: __("Glyph"),
               allowBlank: true,
             },
             {

@@ -300,7 +300,6 @@ def on_delete_check(
 
     def iter_related(object, model, field):
         qs = get_related_query(object, model, field)
-        print("Related ts", model, qs)
         for ro in model.objects.filter(**qs):
             yield ro
 

@@ -88,7 +88,16 @@ class ReportBand(BaseModel):
     # children: Optional[List["ReportBand"]] = None
 
     def __str__(self):
-        return self.name
+        return f'ReportBand "{self.name}"'
+
+    def __repr__(self):
+        return (
+            f'ReportBand "{self.name}" ('
+            f"queries: {len(self.queries) if self.queries is not None else None}, "
+            f"source: {self.source}, "
+            f"parent: {self.parent}, "
+            f"conditions: {len(self.conditions) if self.conditions is not None else None})"
+        )
 
     def is_match(self, params: Dict[str, Any]) -> bool:
         if not self.conditions:
@@ -131,6 +140,16 @@ class BandFormat(BaseModel):
     title_template: Optional[str] = None  # Title format for Section row
     columns: Optional[List[ColumnFormat]] = None  # ColumnName -> ColumnFormat
 
+    def __str__(self):
+        return f'BandFormat "{self.title_template}"'
+
+    def __repr__(self):
+        return (
+            f'BandFormat "{self.title_template}" ('
+            f"title_template: {self.title_template}, "
+            f"columns: {len(self.columns) if self.columns is not None else None})"
+        )
+
 
 class Template(BaseModel):
     """
@@ -152,6 +171,17 @@ class Template(BaseModel):
 
     def get_document_name(self):
         return self.output_name_pattern or "report"
+
+    def __str__(self):
+        return f'Template "{self.code}"'
+
+    def __repr__(self):
+        return (
+            f'Template "{self.code}" (output_type: {self.output_type}, '
+            f"content: {self.content}, "
+            f"formatter: {self.formatter}, "
+            f"bands_format: {len(self.bands_format) if self.bands_format is not None else None})"
+        )
 
 
 class Parameter(BaseModel):
@@ -202,6 +232,17 @@ class ReportConfig(BaseModel):
     align_end_date_param: bool = False
     # field_format: Optional[List[ReportField]] = None  # Field Formatter
 
+    def __str__(self):
+        return f'ReportConfig "{self.name}"'
+
+    def __repr__(self):
+        return (
+            f'ReportConfig "{self.name}" ('
+            f"bands: {len(self.bands)}, "
+            f"templates: {len(self.templates)}, "
+            f"parameters: {len(self.parameters) if self.parameters is not None else None})"
+        )
+
     def get_root_band(self) -> ReportBand:
         return next(b for b in self.bands if b.name == ROOT_BAND)
 
@@ -218,14 +259,26 @@ class RunParams(BaseModel):
     Report request
     """
 
-    report: ReportConfig
+    report_config: ReportConfig
     report_template: Optional[str] = None  # Report Template Code, Use default if not set
     output_type: Optional[OutputType] = None  # Requested OutputType (if not set used from template)
     params: Optional[Dict[str, Any]] = None  # Requested report params
     output_name_pattern: Optional[str] = None  # Output document file name
 
-    def get_template(self) -> "Template":
-        return self.report.get_template(self.report_template)
+    def __str__(self):
+        return f'RunParams "{self.report_config.name}"'
+
+    def __repr__(self):
+        return (
+            f'RunParams "{self.report_config.name}" ('
+            f"report_config: {self.report_config}, "
+            f"report_template: {self.report_template}, "
+            f"output_type: {self.output_type}, "
+            f"params: {len(self.params) if self.params is not None else None})"
+        )
+
+    def get_template(self) -> Template:
+        return self.report_config.get_template(self.report_template)
 
     def get_params(self) -> Dict[str, Any]:
         r = {}

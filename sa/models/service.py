@@ -41,7 +41,7 @@ from noc.core.resourcegroup.decorator import resourcegroup
 from noc.core.wf.decorator import workflow
 from noc.core.change.decorator import change
 from noc.core.service.loader import get_service
-from noc.core.models.servicestatus import Status
+from noc.core.models.servicestatus import Status, StatusAffectedItem
 from noc.core.models.serviceinstanceconfig import InstanceType, ServiceInstanceConfig
 from noc.core.models.inputsources import InputSource
 from noc.core.mx import MessageType, send_message, MessageMeta, get_subscription_id
@@ -50,9 +50,8 @@ from noc.core.etl.remotemappings import mappings
 from noc.core.diagnostic.types import DiagnosticConfig, DiagnosticState
 from noc.core.diagnostic.decorator import diagnostic
 from noc.core.validators import is_objectid
-from noc.core.watchers.types import ObjectEffect, WatchItem
-from noc.core.watchers.decorator import watchers, WATCHER_JCLS, get_next_ts
-from noc.core.scheduler.scheduler import Scheduler
+from noc.core.watchers.types import ObjectEffect
+from noc.core.watchers.decorator import watchers
 from noc.crm.models.subscriber import Subscriber
 from noc.crm.models.supplier import Supplier
 from noc.main.models.remotesystem import RemoteSystem
@@ -408,6 +407,8 @@ class Service(Document):
     def iter_changed_datastream(self, changed_fields=None):
         if config.datastream.enable_service:
             yield "service", self.id
+            if self.parent:
+                yield "service", self.parent.id
 
     @property
     def service_instances(self) -> List["ServiceInstance"]:
@@ -491,9 +492,11 @@ class Service(Document):
             not hasattr(self, "_changed_fields")
             or "profile" in self._changed_fields
             or "caps" in self._changed_fields
+            or "effective_labels" in self._changed_fields
         ):
-            self.diagnostic.refresh_diagnostics()
+            self.diagnostic.reload_diagnostics()
             self.refresh_status()
+            self._refresh_managed_object()
 
     def _refresh_managed_object(self):
         from noc.sa.models.servicesummary import ServiceSummary
@@ -569,20 +572,28 @@ class Service(Document):
         for item in self.dependency_services:
             if not item.is_match():
                 continue
-            yield item.service, item.service.profile.weight
+            yield item.service.oper_status, item.service.profile.weight
 
-    def set_oper_status(self, status: Status, timestamp: Optional[datetime.datetime] = None):
+    def set_oper_status(
+        self,
+        status: Status,
+        timestamp: Optional[datetime.datetime] = None,
+        affected: Optional[List[StatusAffectedItem]] = None,
+    ):
         """
         Set Operational Status for Service
         Args:
             status: New status
             timestamp: Time when status changed
+            affected: List factors affected to alarm Status
         """
         # Check state on is_productive
         # if not self.state.is_productive:
         #    return
         if isinstance(status, str):
             status = Status[status]
+        if status == Status.UNKNOWN:
+            status = self.get_default_oper_status()
         if self.oper_status == status:
             logger.debug("[%s] Status is same. Skipping", self.id)
             return
@@ -629,12 +640,21 @@ class Service(Document):
             ],
         )
         if self.profile.is_enabled_notification:
-            logger.debug("Sending status change notification")
             headers = self.get_mx_message_headers(self.effective_labels)
+            logger.info("Sending status change notification: H(%s)", headers)
             msg = self.get_message_context()
             # msg["managed_object"] = self.managed_object.get_message_context()
             msg["from_status"] = {"id": os, "name": os.name}
             msg["ts"] = timestamp.replace(microsecond=0).isoformat()
+            for ai in affected or []:
+                msg["affected"].append(
+                    {
+                        "id": ai.id,
+                        "status": {"id": ai.status, "name": ai.status.name},
+                        "source": ai.source,
+                        "summary": ai.reason,
+                    }
+                )
             send_message(
                 data=msg,
                 message_type=MessageType.SERVICE_STATUS_CHANGE,
@@ -649,7 +669,10 @@ class Service(Document):
             return
         self.register_alarm(os)
 
-    def get_message_context(self) -> Dict[str, Any]:
+    def get_message_context(
+        self,
+        affected: Optional[List[StatusAffectedItem]] = None,
+    ) -> Dict[str, Any]:
         """Service Message Ctx"""
         r = {
             "id": str(self.id),
@@ -657,22 +680,27 @@ class Service(Document):
             "description": self.description,
             "profile": {"id": str(self.profile.id), "name": self.profile.name},
             "status": {"id": self.oper_status, "name": self.oper_status.name},
-            "in_maintenance": int(self.in_maintenance),
+            "in_maintenance": self.in_maintenance,
             "agreement_id": self.agreement_id,
             "caps": self.get_caps(),
+            "affected": [],
         }
         if self.remote_system:
-            r["remote_system"] = {
-                "id": str(self.remote_system.id),
-                "name": self.remote_system.name,
+            r |= {
+                "remote_system": {
+                    "id": str(self.remote_system.id),
+                    "name": self.remote_system.name,
+                },
+                "remote_id": self.remote_id,
             }
-            r["remote_id"] = self.remote_id
         if self.profile.remote_system:
-            r["profile"]["remote_system"] = {
-                "id": str(self.profile.remote_system.id),
-                "name": self.profile.remote_system.name,
+            r["profile"] |= {
+                "remote_system": {
+                    "id": str(self.profile.remote_system.id),
+                    "name": self.profile.remote_system.name,
+                },
+                "remote_id": self.profile.remote_id,
             }
-            r["profile"]["remote_id"] = self.profile.remote_id
         return r
 
     def get_mx_message_headers(self, labels: Optional[List[str]] = None) -> Dict[str, bytes]:
@@ -776,13 +804,26 @@ class Service(Document):
         logger.info("[%s] Send alarm message: %s", self.id, msg)
         svc.publish(orjson.dumps(msg), stream=stream, partition=partition)
 
+    def get_default_oper_status(self) -> Status:
+        """
+        Default Service Oper Status
+        UNKNOWN - disable calculate satus (if not set status_function)
+        UP - default
+        """
+        if self.calculate_status_function == "D" or (
+            self.calculate_status_function == "P" and self.profile.calculate_status_function == "D"
+        ):
+            return Status.UNKNOWN
+        return Status.UP
+
     def refresh_status(self):
         """Calculate Operative Status, maximum over Directed and Affected Status"""
-        status = self.get_direct_status()
+        affected = []
+        status = self.get_direct_status(affected=affected)
         status = max(status, self.get_affected_status())
-        self.set_oper_status(status)
+        self.set_oper_status(status, affected=affected)
 
-    def get_alarm_status(self) -> Status:
+    def get_alarm_status(self, affected: Optional[List[StatusAffectedItem]] = None) -> Status:
         """
         Calculate alarm status for service
         1. If alarm affected policy is Disabled. Return UNKNOWN
@@ -813,10 +854,16 @@ class Service(Document):
             # Calculate Status
             status = rule.status or ServiceProfile.get_status_by_severity(aa.severity)
             logger.info(
-                "[%s] Alarm status is: %s. Instance flag %s", aa, status, rule.affected_instance
+                "[%s|%s] Alarm status is: %s. Instance flag %s",
+                self.id,
+                aa,
+                status,
+                rule.affected_instance,
             )
             if status == Status.UNKNOWN:
                 continue
+            if affected is not None:
+                affected.append(StatusAffectedItem.from_alarm(aa, status))
             if not rule.affected_instance:
                 alarm_status = max(status, alarm_status)
                 continue
@@ -868,7 +915,7 @@ class Service(Document):
         # Calculate affected status
         return self.calculate_status(r)
 
-    def get_diagnostics_status(self) -> Status:
+    def get_diagnostics_status(self, affected: Optional[List[StatusAffectedItem]] = None) -> Status:
         if not self.profile.diagnostic_status:
             return Status.UNKNOWN
         values = self.get_diagnostic_values()
@@ -878,12 +925,19 @@ class Service(Document):
                 and d.diagnostic in values
                 and values[d.diagnostic].state == DiagnosticState.failed
             ):
+                if affected is not None:
+                    affected.append(
+                        StatusAffectedItem.from_diagnostic(values[d.diagnostic], d.failed_status)
+                    )
                 return d.failed_status
         return Status.UNKNOWN
 
-    def get_direct_status(self) -> Status:
+    def get_direct_status(self, affected: Optional[List[StatusAffectedItem]] = None) -> Status:
         """Getting oper_status from Alarm and Diagnostics"""
-        return max(self.get_alarm_status(), self.get_diagnostics_status())
+        return max(
+            self.get_alarm_status(affected=affected),
+            self.get_diagnostics_status(affected=affected),
+        )
 
     def get_calculate_status_function(self) -> str:
         """"""
@@ -942,6 +996,8 @@ class Service(Document):
         for svc in Service.objects.filter(service_path=svc_id):
             if svc.profile.get_rule_by_alarm(alarm):
                 r.append(svc.id)
+        if not r:
+            r.append(ObjectId(svc_id))
         return r
 
     @classmethod
@@ -1026,45 +1082,12 @@ class Service(Document):
             svc = svc.parent
         return None
 
-    def update_object_watchers(
-        self,
-        to_watchers: List[WatchItem],
-        to_remove: Optional[List[Tuple[ObjectEffect, str, Optional[str]]]],
-        dry_run: bool = False,
-        bulk=None,
-    ):
-        """"""
-        updates = []
-        up_w = {(w.effect, w.key, w.remote_system): w for w in to_watchers}
-        for w in self.watchers:
-            rs = w.remote_system.name if w.remote_system else None
-            if to_remove and (w.effect, w.key, rs) in to_remove:
-                continue
-            update = up_w.pop((w.effect, w.key, rs), None)
-            if update:
-                w = WatchDocumentItem.from_item(update)
-            updates.append(w)
-        for w in up_w.values():
-            rs = RemoteSystem.get_by_name(w.remote_system) if w.remote_system else None
-            updates.append(WatchDocumentItem.from_item(w, remote_system=rs))
-        self.watchers = updates
-        wait_ts = self.get_wait_ts()
-        if self.watcher_wait_ts != wait_ts:
-            self.watcher_wait_ts = wait_ts
-        if dry_run or self._created:
-            return
-        m_ts = self.get_min_wait_ts()
-        if wait_ts and (not m_ts or wait_ts < m_ts):
-            scheduler = Scheduler(SCHEDULER)
-            scheduler.submit(jcls=WATCHER_JCLS, key="sa.Service", ts=get_next_ts(wait_ts))
-        set_op = {"watchers": self.watchers, "watcher_wait_ts": self.watcher_wait_ts}
-        self.update(**set_op)
-
     def on_save_caps(self, changed_fields=None, dry_run: bool = False, **kwargs):
         """"""
         self.sync_instances()
         self.diagnostic.refresh_diagnostics()
         self.refresh_status()
+        self._refresh_managed_object()
 
     def sync_instances(self):
         """Synchronize Config-base instance"""
@@ -1237,7 +1260,7 @@ class Service(Document):
 def refresh_service_status(svc_ids: List[str]):
     logger.info("Refresh service status: %s", svc_ids)
     affected_paths = set()
-    for svc in Service.objects.filter(id__in=svc_ids):
+    for svc in Service.objects.filter(id__in=svc_ids).order_by("-parent"):
         os = svc.oper_status
         svc.refresh_status()
         if svc.parent and svc.oper_status != os:
@@ -1247,5 +1270,5 @@ def refresh_service_status(svc_ids: List[str]):
         return
     # Check changed
     # Update linked
-    for svc in Service.objects.filter(id__in=list(affected_paths)):
+    for svc in Service.objects.filter(id__in=list(affected_paths)).order_by("-parent"):
         svc.refresh_status()

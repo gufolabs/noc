@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // sa.managedobject Model
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2020 The NOC Project
+// Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.sa.managedobject.Model");
@@ -237,7 +237,7 @@ Ext.define("NOC.sa.managedobject.Model", {
       persist: false,
     },
     {
-      name: "shape",
+      name: "glyph",
       type: "string",
     },
     {

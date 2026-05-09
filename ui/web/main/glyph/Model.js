@@ -24,10 +24,6 @@ Ext.define("NOC.main.glyph.Model", {
       type: "string",
     },
     {
-      name: "font",
-      type: "string",
-    },
-    {
       name: "code",
       type: "int",
     },

@@ -1,0 +1,8 @@
+{
+    "name": "Hosecom",
+    "uuid": "f2bfd918-0dcf-4257-b583-45ad786d68a2",
+    "full_name": "Shenzhen HOSECOM Electronic Technology Co., Ltd",
+    "code": ["HOSECOM", "HSTC"],
+    "site": "https://www.hosecom.com/",
+    "$collection": "inv.vendors"
+}

@@ -14,6 +14,8 @@ from typing import Optional, Set, Dict, Tuple, List, FrozenSet, Iterable, Defaul
 
 # NOC modules
 from noc.services.metricscollector.sourceconfig import RemoteSystemConfig
+from noc.core.etl.models.fmevent import FMEventObject
+from noc.core.fm.event import Event
 
 
 class RemoteSystemChannel(object):
@@ -65,7 +67,12 @@ class RemoteSystemChannel(object):
         sensor_id: Optional[str] = None,
     ):
         """Feed the message. Returns optional offset of last saved message"""
-        if target in self.unknown_hosts:
+        # Try sensor
+        if sensor_id:
+            sensor_cfg = self.service.lookup_remote_sensor(sensor_id, self.remote_system.name)
+        else:
+            sensor_cfg = None
+        if target in self.unknown_hosts and not sensor_cfg:
             return
         # Wait until feed became possible
         await self.feed_ready.wait()
@@ -73,16 +80,12 @@ class RemoteSystemChannel(object):
         cfg = self.service.lookup_source_by_name(target, collector=self.collector)
         if not cfg:
             self.unknown_hosts.add(target)
-            return
-        if cfg.no_data_check and values:
+            if not sensor_cfg:
+                return
+        elif cfg.no_data_check and values:
             self.last_received_hosts[cfg.id] = values[0][0]
         # if metric in self.unknown_metrics:
         #     return
-        # Try sensor
-        if sensor_id:
-            sensor_cfg = self.service.lookup_remote_sensor(sensor_id, self.remote_system.name)
-        else:
-            sensor_cfg = None
         # Parse Labels for metrics
         cfg_metric = self.service.get_cfg_metric(self.collector, metric, labels=labels)
         if not cfg_metric:
@@ -95,7 +98,7 @@ class RemoteSystemChannel(object):
             # if ((v[0], cfg.id, frozenset(labels or [])) in self.data
             #         and cfg_metric.id in self.data[(v[0], cfg.id, frozenset(labels or []))]):
             #     self.deduplicated += 1
-            if cfg_metric:
+            if cfg_metric and cfg:
                 key = (v[0], cfg.id, frozenset(labels or []))
                 self.data[key][cfg_metric.id] = v[1]
             if sensor_cfg:
@@ -116,6 +119,8 @@ class RemoteSystemChannel(object):
     def is_ready_to_flush(self) -> bool:
         """Check if channel is ready to flush"""
         if not self.size:
+            return False
+        if self.remote_system.batch_signal == "D":
             return False
         return self.records >= self.min_batch_size
 
@@ -139,6 +144,114 @@ class RemoteSystemChannel(object):
             self.logger.info(
                 "[%s] Clean unknown metrics: %s", self.remote_system.name, len(self.unknown_metrics)
             )
+        if self.flush_unknown_hosts:
+            self.unknown_hosts = set()
+            self.flush_unknown_hosts = False
+            self.logger.info(
+                "[%s] Clean unknown Hosts: %s", self.remote_system.name, len(self.unknown_hosts)
+            )
+        self.feed_ready.set()
+
+
+class RemoteSystemEventChannel(object):
+    def __init__(
+        self,
+        service,
+        remote_system: RemoteSystemConfig,
+        collector: str,
+        batch_delay: Optional[int] = None,
+        logger: Optional[logging.Logger] = None,
+    ):
+        self.service = service
+        self.collector = collector
+        self.remote_system: RemoteSystemConfig = remote_system
+        self.logger = logger
+        self.last_offset: int = 0
+        self.size: int = 0
+        self.events: List[Event] = []
+        self.received_events: Dict[str, FMEventObject] = {}
+        self.send_events: Dict[str, FMEventObject] = {}
+        self.deferred = []
+        self.records: int = 0
+        self.deduplicated: int = 0
+        self.expired: Optional[float] = None
+        self.feed_ready = asyncio.Event()
+        self.feed_ready.set()
+        self.flush_unknown_hosts = False
+        self.unknown_hosts: Set[str] = set()
+        self.last_received_hosts: Dict[str, int] = {}
+        self.min_batch_size = remote_system.batch_size
+        if batch_delay:
+            self.ttl = float(batch_delay)
+        else:
+            self.ttl = float(remote_system.batch_delay_s)
+
+    @property
+    def is_banned(self) -> bool:
+        return False
+
+    async def feed(self, event: Event):
+        """Register Event"""
+        await self.feed_ready.wait()
+        self.events.append(event)
+        self.records += 1
+        self.last_offset = max(self.last_offset, event.ts)
+        if not self.expired:
+            self.expired = perf_counter() + self.ttl
+
+    async def feed_etl(self, event: FMEventObject):
+        """Register Event"""
+        await self.feed_ready.wait()
+        self.received_events[event.id] = event
+        self.records += 1
+        self.last_offset = max(self.last_offset, event.ts)
+        if not self.expired:
+            self.expired = perf_counter() + self.ttl
+
+    async def feed_resolved_event(self, event_id: str, r_event_id: str, ts: int):
+        """Register Resolved Event"""
+        await self.feed_ready.wait()
+        if r_event_id not in self.received_events:
+            event = self.send_events.pop(r_event_id, None)
+        else:
+            event = self.received_events[r_event_id]
+        if not event:
+            self.deferred.append(event_id)
+        else:
+            event.is_cleared = True
+            event.id = event_id
+            event.ts = ts
+            self.received_events[event.id] = event
+        self.records += 1
+        self.last_offset = max(self.last_offset, ts)
+        # self.last_offset = max(self.last_offset, event.ts)
+        if not self.expired:
+            self.expired = perf_counter() + self.ttl
+
+    def is_expired(self, ts: float) -> bool:
+        """Check if channel is expired to given timestamp"""
+        return self.expired and self.expired < ts
+
+    def is_ready_to_flush(self) -> bool:
+        """Check if channel is ready to flush"""
+        return False
+
+    async def schedule_flush(self):
+        if not self.feed_ready.is_set():
+            return  # Already scheduled
+        self.expired = None
+        self.feed_ready.clear()
+        await self.service.flush_queue.put(self)
+
+    def flush_complete(self):
+        """Called when data are safely flushed"""
+        self.events = []
+        self.send_events |= self.received_events
+        self.received_events = {}
+        self.deferred = []
+        self.size = 0
+        self.records = 0
+        self.expired = None
         if self.flush_unknown_hosts:
             self.unknown_hosts = set()
             self.flush_unknown_hosts = False

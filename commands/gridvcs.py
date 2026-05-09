@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Full-text search index management
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -85,7 +85,7 @@ class Command(BaseCommand):
             "--before-days", type=int, help="Revision or Date", required=True
         )
         forget_parser.add_argument(
-            "--approve", action="store_true", default=False, help="Do not modify data"
+            "--approve", action="store_true", default=False, help="Approve changes"
         )
         forget_parser.add_argument("--include-labels", help="Labels for additional filter")
         forget_parser.add_argument("--exclude-labels", help="Labels for exclude additional filter")
@@ -221,7 +221,7 @@ class Command(BaseCommand):
                     if mpath.startswith(mirror):
                         safe_rewrite(mpath, data)
                     else:
-                        self.print("    !!! mirror path violation for" % address)
+                        self.print(f"    !!! mirror path violation for {address}")
         self.print("Done")
 
     def _forget(self, mo, revision: str, dry_run=False):

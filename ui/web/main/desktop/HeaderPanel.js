@@ -104,8 +104,8 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
           xtype: "component",
           html: "<div class='gf-map' style='display: flex;align-items: center; font-size: 24px; cursor: pointer; padding-left: 8px'>"
             + "<i class= 'gf gf-larger brand-noc-s'></i> "
-            + "<snap style='font-weight: bold; padding-left: 8px;'>" + NOC.settings.brand + ": </snap>"
-            + "<snap>" + NOC.settings.installation_name + "</snap>"
+            + "<span style='font-weight: bold; padding-left: 8px;'>" + NOC.settings.brand + ": </span>"
+            + "<span>" + NOC.settings.installation_name + "</span>"
             + "</div>",
           listeners: {
             el: {
@@ -187,9 +187,9 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
   //
   openHome: function(){
     var me = this.up(), // Desktop Application
-      homeTab = Ext.Array.findBy(me.workplacePanel.getRefItems(), function(tab){return tab.title === "Home"});
+      homeTab = me.workplacePanel.down("[appId=main.home]")?.up();
     if(Ext.isEmpty(homeTab)){
-      me.launchTab("NOC.main.home.Application", "Home", {});
+      me.launchTab("NOC.main.home.Application", __("Home"), {});
     } else{
       var tabIndex = me.workplacePanel.items.indexOf(homeTab);
       me.workplacePanel.setActiveTab(tabIndex);

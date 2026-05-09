@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Configured Map
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -23,12 +23,12 @@ from mongoengine.fields import (
 )
 
 # NOC modules
-from noc.core.stencil import stencil_registry
 from noc.core.topology.types import TopologyNode, Portal
 from noc.core.topology.loader import loader as topo_loader
 from noc.core.topology.types import Layout
-from noc.core.mongo.fields import ForeignKeyField
+from noc.core.mongo.fields import ForeignKeyField, PlainReferenceField
 from noc.main.models.imagestore import ImageStore
+from noc.main.models.glyph import Glyph
 from noc.fm.models.alarmclass import AlarmClass
 from noc.fm.models.alarmseverity import AlarmSeverity
 from noc.sa.models.managedobject import ManagedObject
@@ -73,8 +73,7 @@ class NodeItem(EmbeddedDocument):
     object_filter: ObjectFilter = EmbeddedDocumentField(ObjectFilter)
     add_nested = BooleanField()  # Add nested nodes (if supported) all nodes from group or children
     # Draw block
-    shape = StringField(choices=["stencil", "rectangle", "ellipse"])
-    stencil = StringField(choices=stencil_registry.choices, max_length=128)
+    glyph = PlainReferenceField(Glyph)
     # Title
     title = StringField()
     title_position = StringField()

@@ -97,7 +97,7 @@ Ext.define("NOC.main.desktop.Application", {
         NOC.launch(app);
       }
     } else{ // Launch home application
-      this.launchTab("NOC.main.home.Application", "Home", {});
+      this.launchTab("NOC.main.home.Application", __("Home"), {});
     }
   },
   // Show About screen
@@ -141,7 +141,7 @@ Ext.define("NOC.main.desktop.Application", {
       // Open tab
       this.workplacePanel.setActiveTab(this.launchedTabs[node]);
     } else{
-      if(title !== "Home"){
+      if(title !== __("Home")){
         NOC.msg.started(__("Starting \"{0}\""), title);
       }
       // Launch new tab

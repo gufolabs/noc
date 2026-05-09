@@ -11,6 +11,7 @@ Ext.define("NOC.inv.inv.plugins.sensor.SensorPanel", {
   title: __("Sensors"),
   closable: false,
   layout: "fit",
+  scrollable: false,
   requires: [
     "NOC.core.StateField",
     "NOC.inv.sensorprofile.LookupField",

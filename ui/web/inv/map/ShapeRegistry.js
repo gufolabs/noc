@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // JointJS shape registry
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2015 The NOC Project
+// Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.inv.map.ShapeRegistry");
@@ -9,7 +9,40 @@ console.debug("Defining NOC.inv.map.ShapeRegistry");
 Ext.define("NOC.inv.map.ShapeRegistry", {
   singleton: true,
   shapes: {},
-
+ 
+  iconShape: (function(){
+    return joint.shapes.basic.Generic.extend({
+      markup: [
+        {tagName: "text", selector: "text", className: "rotatable"},
+        {tagName: "text", selector: "icon", className: "scalable"},
+      ],
+      defaults: joint.util.deepSupplement({
+        type: "noc.icon",
+        attrs: {
+          icon: { },
+          text: {
+            text: "New Object",
+            fill: "#000000",
+            ref: "icon",
+            refX: "50%",
+            refY: "100%",
+            textAnchor: "middle",
+            display: "block",
+          },
+        },
+      }, joint.shapes.basic.Generic.prototype.defaults),
+      initialize: function(options){
+        joint.shapes.basic.Generic.prototype.initialize.apply(this, arguments);
+        const icon = options.attrs.icon || {};
+        this.attr("icon/class", `gf ${icon.iconSize} ${icon.status}`);
+      },
+      setFilter: function(filter){
+        const iconSize = this.attr("icon/iconSize") || "gf-2x";
+        console.log("Setting filter", filter, iconSize);
+        this.attr("icon/class", `gf ${iconSize} ${filter}`);
+      },
+    });
+  })(),
   // Generate stencil id from name
   getId: function(name){
     return "img-" + name.replace("/", "-").replace(" ", "-").replace("_", "-")
@@ -93,5 +126,41 @@ Ext.define("NOC.inv.map.ShapeRegistry", {
     });
     registerClass(typeName + "View", sv);
     return sc;
+  },
+
+  getIconNode: function(data, name){
+    return new this.iconShape({
+      id: data.type + ":" + data.id,
+      z: 9999,
+      external: data.external,
+      name: name,
+      address: data.address,
+      position: {
+        x: data.x,
+        y: data.y,
+      },
+      attrs: {
+        text: {
+          text: name,
+        },
+        icon: {
+          text: String.fromCharCode(data.glyph),
+          iconSize: data.cls || "gf-1x",
+          status: "gf-unknown",
+        },
+      },
+      data: {
+        type: data.type,
+        id: data.id,
+        node_id: data.node_id,
+        caps: data.caps,
+        isMaintenance: false,
+        portal: data.portal,
+        object_filter: data.object_filter,
+        metrics_template: data.metrics_template,
+        shape_width: data.shape_width,
+        metrics_label: data.metrics_label,
+      },
+    });
   },
 });

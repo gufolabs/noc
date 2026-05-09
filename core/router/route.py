@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Route
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -18,6 +18,7 @@ from typing import (
     Optional,
     Literal,
     FrozenSet,
+    Iterable,
 )
 from dataclasses import dataclass
 
@@ -38,10 +39,11 @@ from noc.core.mx import (
     MX_RESOURCE_GROUPS,
     MX_JOB_HANDLER,
     MX_DISABLE_MUTATIONS,
+    MX_REMOTE_SYSTEM,
     MessageType,
     MessageMeta,
 )
-from .action import Action, NotificationAction, MessageAction, ActionCfg, JobAction
+from .action import Action, NotificationAction, MessageAction, ActionCfg, JobAction, HeaderItem
 
 T_BODY = Union[bytes, Any]
 
@@ -168,7 +170,7 @@ class Route(object):
         )
         self.order = order
         self.telemetry_sample = telemetry_sample or 0
-        self.match_co: Optional[Callable] = None  # Code object for matcher
+        self.match_co: Optional[Callable[[Dict[str, Any]], bool]] = None  # Code object for matcher
         self.actions: List[Action] = []
         self.transmute_handler: Optional[Callable[[Dict[str, bytes], T_BODY], T_BODY]] = None
         self.transmute_template: Optional[TransmuteTemplate] = None
@@ -207,7 +209,7 @@ class Route(object):
             return True
         return self.match_co(self.get_match_ctx(msg))
 
-    def transmute(self, headers: Dict[str, bytes], data: bytes) -> Union[bytes, Dict[str, Any]]:
+    def transmute(self, headers: Dict[str, bytes], data: T_BODY) -> Union[bytes, Dict[str, Any]]:
         """
         Transmute message body and apply template
         Attrs:
@@ -227,7 +229,7 @@ class Route(object):
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes]]]:
+    ) -> Iterator[Tuple[str, Dict[str, bytes], T_BODY]]:
         """
         Iterate over available actions
 
@@ -254,7 +256,7 @@ class Route(object):
         return True
 
     @classmethod
-    def get_matcher(cls, match) -> Optional[Callable]:
+    def get_matcher(cls, match) -> Optional[Callable[[Dict[str, Any]], bool]]:
         """"""
         expr = []
         for r in MatchItem.from_data(match):
@@ -292,6 +294,9 @@ class Route(object):
         r.update(data)
         return r
 
+    def iter_route(self) -> Iterable["Route"]:
+        yield self
+
 
 class DefaultNotificationRoute(Route):
     """
@@ -318,7 +323,7 @@ class DefaultNotificationRoute(Route):
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes]]]:
+    ) -> Iterator[Tuple[str, Dict[str, bytes], T_BODY]]:
         if MX_NOTIFICATION_GROUP_ID in msg.headers:
             yield from self.message_action.iter_action(msg, message_type)
         else:
@@ -342,5 +347,33 @@ class DefaultJobRoute(Route):
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes]]]:
+    ) -> Iterator[Tuple[str, Dict[str, bytes], T_BODY]]:
+        yield from self.job_action.iter_action(msg, message_type)
+
+
+class DefaultETLEventRoute(Route):
+    """
+    Default Router for Job Request
+    Route request to worker
+    """
+
+    MX_JOB = MessageType.ETL_PUSH.value.encode()
+    DEFAULT_HANDLER = "noc.main.models.remotesystem.processed_remote_event"
+
+    def __init__(self):
+        super().__init__(name="etl_jobs", r_type="*", order=999)
+        self.job_action = JobAction(
+            ActionCfg(
+                "job",
+                stream=JOBS_STREAM,
+                headers=[HeaderItem(header=MX_JOB_HANDLER, value=self.DEFAULT_HANDLER)],
+            ),
+        )
+
+    def is_match(self, msg: Message, message_type: bytes) -> bool:
+        return message_type == self.MX_JOB and MX_REMOTE_SYSTEM in msg.headers
+
+    def iter_action(
+        self, msg: Message, message_type: bytes
+    ) -> Iterator[Tuple[str, Dict[str, bytes], T_BODY]]:
         yield from self.job_action.iter_action(msg, message_type)

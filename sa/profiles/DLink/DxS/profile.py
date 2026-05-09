@@ -2,7 +2,7 @@
 # Vendor: D-Link
 # OS:     DxS
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -95,6 +95,13 @@ class Profile(BaseProfile):
         "is_des_35xx": {"platform": {"$regex": r"^DES-35(?:26|52).*"}},
         "is_dgs_1100": {
             "platform": {"$regex": r"^DGS-1100-(16|16/ME|18|18/ME|24|24/ME|24P|24P/ME|26|26/ME)$"}
+        },
+        "is_chassis_mac_10": {
+            "platform": {
+                "$in": [
+                    "DES-1210-10/ME/B2",
+                ]
+            }
         },
     }
     #

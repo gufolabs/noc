@@ -11,7 +11,7 @@ from typing import List, Dict
 
 # NOC modules
 from noc.core.reporter.reportsource import ReportSource
-from noc.core.reporter.report import Band, DataSet
+from noc.core.reporter.band import Band, DataSet
 from noc.core.reporter.types import BandFormat, ColumnFormat
 from noc.fm.models.eventclassificationrule import EventClassificationRule
 

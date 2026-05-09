@@ -11,7 +11,7 @@ console.debug("Defining NOC.inv.map.SelectIconForm");
 Ext.define("NOC.inv.map.SelectIconForm", {
   extend: "Ext.Window",
   requires: [
-    "NOC.main.ref.stencil.LookupField",
+    "NOC.main.glyph.LookupField",
   ],
   title: __("Select Shape"),
   autoShow: true,
@@ -27,7 +27,7 @@ Ext.define("NOC.inv.map.SelectIconForm", {
           xtype: "form",
           items: [
             {
-              xtype: "main.ref.stencil.LookupField",
+              xtype: "main.glyph.LookupField",
               name: "shape",
               fieldLabel: __("Shape"),
               labelWidth: 40,

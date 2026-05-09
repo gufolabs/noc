@@ -24,3 +24,17 @@ class Profile(BaseProfile):
     pattern_more = [
         (rb"^--More--, next page: Space, next line: Return key, quit: Control-c", b" "),
     ]
+
+    INTERFACE_TYPES = {
+        "Gi": "physical",  # gigabitethernet
+        "10Gi": "physical",  # 10gigabitethernet
+        "Manag": "physical",  # Management
+        "v": "SVI",
+    }
+
+    @classmethod
+    def get_interface_type(cls, name):
+        for x in cls.INTERFACE_TYPES:
+            if not name.startswith(x):
+                continue
+            return cls.INTERFACE_TYPES[x]

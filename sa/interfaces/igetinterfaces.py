@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # IGetInterfaces
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -443,6 +443,7 @@ class IGetInterfaces(BaseInterface):
                                         "IGMP",
                                         "VRRP",
                                         "SRRP",
+                                        "BFD",
                                     ],
                                     required=False,
                                 ),
@@ -534,6 +535,9 @@ class IGetInterfaces(BaseInterface):
                                                 "SSTP",
                                                 "EOIP",
                                                 "SLIP",
+                                                "OVPN",  # OpenVPN
+                                                "WG",  # WireGuard
+                                                "other",
                                             ]
                                         ),
                                         "local_address": IPParameter(required=False),

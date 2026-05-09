@@ -92,6 +92,8 @@ class InterfaceCheck(PolicyDiscoveryCheck):
         if not result:
             self.logger.error("Failed to get interfaces")
             return
+        self.logger.info("Collected %s forwarding instances", len(result))
+
         if_map: Dict[str, Interface] = {}
         # Process forwarding instances
         for fi in result:
@@ -110,6 +112,8 @@ class InterfaceCheck(PolicyDiscoveryCheck):
             # for effective caching
             ifaces = sorted(fi["interfaces"], key=self.in_lag)
             icache = {}
+
+            self.logger.info("FI %s, interfaces %s", fi["forwarding_instance"], len(ifaces))
             for i in ifaces:
                 # Get LAG
                 agg = None
@@ -501,7 +505,7 @@ class InterfaceCheck(PolicyDiscoveryCheck):
         """
         if iface.profile_locked:
             self.logger.info(
-                "[%s] Interface %s profile set by User. That block for classification",
+                "[%s] Interface %s profile set by User. That block for classification. Contacts to User with System Administrator rights",
                 iface.name,
                 iface.profile.name,
             )

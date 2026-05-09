@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Object model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -25,7 +25,6 @@ from mongoengine.fields import (
     EmbeddedDocumentField,
     EmbeddedDocumentListField,
     DynamicField,
-    ReferenceField,
     BooleanField,
     DateTimeField,
 )
@@ -44,7 +43,7 @@ from noc.core.defer import call_later
 from noc.core.model.decorator import on_save, on_delete_check
 from noc.core.bi.decorator import bi_sync
 from noc.core.change.decorator import change
-from noc.core.topology.types import TopologyNode
+from noc.core.topology.types import TopologyNode, TopologyNodeType
 from noc.core.discriminator import discriminator
 from noc.core.confdb.collator.typing import PortItem, PathItem
 from noc.main.models.remotesystem import RemoteSystem
@@ -233,7 +232,7 @@ class Object(Document):
     effective_labels = ListField(StringField())
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from
-    remote_system = ReferenceField(RemoteSystem)
+    remote_system = PlainReferenceField(RemoteSystem)
     # Object id in remote system
     remote_id = StringField()
     # Object id in BI
@@ -513,12 +512,13 @@ class Object(Document):
             if not mi:
                 continue
             for na, a in enumerate(mi.attrs):
-                sorting_keys["%s.%s" % (i, a.name)] = "%06d.%06d" % (ni, na)
+                sorting_keys[f"{i}.{a.name}"] = "%06d.%06d" % (ni, na)
         # Return sorted result
         return sorted(
             r,
-            key=lambda oa: "%s.%s"
-            % (sorting_keys.get("%s.%s" % (oa.interface, oa.attr), "999999.999999"), oa.scope),
+            key=lambda oa: (
+                "%s.%s" % (sorting_keys.get(f"{oa.interface}.{oa.attr}", "999999.999999"), oa.scope)
+            ),
         )
 
     def set_data(self, interface: str, key: str, value: Any, scope: Optional[str] = None) -> None:
@@ -1509,7 +1509,7 @@ class Object(Document):
     def get_topology_node(self) -> "TopologyNode":
         return TopologyNode(
             id=str(self.id),
-            type="container",
+            type=TopologyNodeType.CONTAINER,
             resource_id=str(self.id),
             title=self.name,
             title_metric_template="",

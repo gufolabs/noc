@@ -15,7 +15,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
   title: __("Map"),
   closable: false,
   layout: "fit",
-  autoScroll: true,
+  scrollable: false,
   minZoomLevel: 0,
   maxZoomLevel: 19,
   mixins: [

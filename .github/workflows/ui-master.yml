@@ -17,14 +17,19 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: latest
 
       - name: Install NodeJS
         uses: actions/setup-node@v6
         with:
-          node-version: "22"
-          cache: "npm"
-          cache-dependency-path: "ui/package-lock.json"
+          node-version: "24"
+          cache: "pnpm"
+          cache-dependency-path: "ui/pnpm-lock.yaml"
 
       - name: Build UI
         run: |

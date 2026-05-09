@@ -147,6 +147,8 @@ LOCALE_PATHS = ["locale"]
 FORCE_LOWERCASE_TAGS = False
 # Suppress deprecation warning. We don't use django's testing framework
 TEST_RUNNER = None
+# Explicitly setup Django 5 behavior
+USE_TZ = False
 
 # Disable SQL statement logging
 logging.getLogger("django.db.backends").setLevel(logging.ERROR)

@@ -17,7 +17,7 @@ import orjson
 # NOC modules
 from noc.core.management.base import BaseCommand
 from noc.core.mongo.connection import connect
-from noc.core.reporter.base import ReportEngine
+from noc.core.reporter.reportengine import ReportEngine
 from noc.core.reporter.types import RunParams, OutputType
 from noc.core.datasources.loader import loader
 from noc.aaa.models.user import User
@@ -74,7 +74,7 @@ class Command(BaseCommand):
         args = self.get_report_args(arguments)
         self.print(f"Running report with arguments: {args}")
         rp = RunParams(
-            report=report.get_config(pref_lang),
+            report_config=report.get_config(pref_lang),
             output_type=OutputType(out_type),
             params=args,
         )

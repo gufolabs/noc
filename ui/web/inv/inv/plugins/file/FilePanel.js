@@ -14,7 +14,7 @@ Ext.define("NOC.inv.inv.plugins.file.FilePanel", {
   title: __("Files"),
   closable: false,
   layout: "fit",
-  autoScroll: true,
+  scrollable: false,
 
   initComponent: function(){
     var me = this;

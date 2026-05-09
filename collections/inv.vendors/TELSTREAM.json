@@ -1,0 +1,8 @@
+{
+    "name": "Telstream",
+    "uuid": "8bff4e22-8287-42a3-a995-e7b074a9299b",
+    "full_name": "Телстрим",
+    "code": ["TELSTREAM", "MONU"],
+    "site": "http://telstream.ru/",
+    "$collection": "inv.vendors"
+}

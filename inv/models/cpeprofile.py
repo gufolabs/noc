@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # CPE Profile model
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -32,7 +32,6 @@ from mongoengine.queryset.visitor import Q as m_q
 
 # NOC modules
 from noc.core.model.decorator import on_delete_check
-from noc.core.stencil import stencil_registry
 from noc.core.bi.decorator import bi_sync
 from noc.core.change.decorator import change
 from noc.core.change.model import ChangeField
@@ -41,6 +40,7 @@ from noc.core.matcher import build_matcher
 from noc.main.models.style import Style
 from noc.main.models.label import Label
 from noc.main.models.pool import Pool
+from noc.main.models.glyph import Glyph
 from noc.pm.models.metrictype import MetricType
 from noc.wf.models.workflow import Workflow
 from noc.sa.models.managedobjectprofile import ManagedObjectProfile
@@ -137,7 +137,7 @@ class CPEProfile(Document):
     )
     style = ForeignKeyField(Style)
     # Stencils
-    shape = StringField(required=False, null=True, choices=stencil_registry.choices, max_length=128)
+    glyph = PlainReferenceField(Glyph, required=False, null=True)
     shape_title_template = StringField(max_length=256, required=False, null=True)
     # Sync CPE with Inventory Object
     sync_asset = BooleanField(default=False)

@@ -1,0 +1,8 @@
+{
+    "name": "Allnet",
+    "uuid": "f5bc8b85-03ab-412e-9fdb-b9bc0b25753b",
+    "full_name": "Allnet Group",
+    "code": ["ALLNET", "ALLG"],
+    "site": "https://allnet.dk/",
+    "$collection": "inv.vendors"
+}

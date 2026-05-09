@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # sa.managedobject application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any, Tuple, List
+from typing import Dict, Any, Tuple, List, Iterable
 from collections import defaultdict
 import zlib
 
@@ -88,7 +88,12 @@ class ManagedObjectApplication(ExtModelApplication):
     query_condition = "icontains"
     query_fields = ["name", "description"]
     secret_fields = {"password", "super_password", "snmp_ro", "snmp_rw"}
-    ignored_fields = ExtModelApplication.ignored_fields | {"global_cpe_id", "local_cpe_id"}
+    ignored_fields = ExtModelApplication.ignored_fields | {
+        "global_cpe_id",
+        "local_cpe_id",
+        "remote_system",
+        "remote_id",
+    }
     # Inlines
     attrs = ModelInline(ManagedObjectAttribute)
     cfg = RepoInline("config", access="config")
@@ -470,41 +475,56 @@ class ManagedObjectApplication(ExtModelApplication):
 
     @view(url=r"^(?P<id>\d+)/links/$", method=["GET"], access="read", api=True)
     def api_links(self, request, id):
+        def split_local_ifaces(
+            interfaces: Iterable[Interface],
+        ) -> Tuple[List[Interface], List[Interface]]:
+            """
+            Returns:
+                tuple of <local interfaces>, <remote interfaces>
+            """
+            local_ifaces = []
+            remote_ifaces = []
+            for iface in interfaces:
+                if iface.managed_object.id == o.id:
+                    local_ifaces.append(iface)
+                else:
+                    remote_ifaces.append(iface)
+            return local_ifaces, remote_ifaces
+
         o = self.get_object_or_404(ManagedObject, id=id)
         if not o.has_access(request.user):
             return self.response_forbidden("Access denied")
         # Get links
         result = []
         for link in Link.object_links(o):
-            ifaces = []
-            r = []
-            for i in link.interfaces:
-                if i.managed_object.id == o.id:
-                    ifaces += [i]
-                else:
-                    r += [i]
-            for li, ri in zip(ifaces, r):
-                result += [
-                    {
-                        "link_id": str(link.id),
-                        "local_interface": str(li.id),
-                        "local_interface__label": li.name,
-                        "remote_object": ri.managed_object.id,
-                        "remote_object__label": ri.managed_object.name,
-                        "remote_platform": (
-                            ri.managed_object.platform.name if ri.managed_object.platform else ""
-                        ),
-                        "remote_interface": str(ri.id),
-                        "remote_interface__label": ri.name,
-                        "discovery_method": link.discovery_method,
-                        "local_description": li.description,
-                        "remote_description": ri.description,
-                        "first_discovered": (
-                            link.first_discovered.isoformat() if link.first_discovered else None
-                        ),
-                        "last_seen": link.last_seen.isoformat() if link.last_seen else None,
-                    }
-                ]
+            local_ifaces, remote_ifaces = split_local_ifaces(link.interfaces)
+            if not local_ifaces or not remote_ifaces:
+                continue  # Malformed link
+            for li in local_ifaces:
+                for ri in remote_ifaces:
+                    result.append(
+                        {
+                            "link_id": str(link.id),
+                            "local_interface": str(li.id),
+                            "local_interface__label": li.name,
+                            "remote_object": ri.managed_object.id,
+                            "remote_object__label": ri.managed_object.name,
+                            "remote_platform": (
+                                ri.managed_object.platform.name
+                                if ri.managed_object.platform
+                                else ""
+                            ),
+                            "remote_interface": str(ri.id),
+                            "remote_interface__label": ri.name,
+                            "discovery_method": link.discovery_method,
+                            "local_description": li.description,
+                            "remote_description": ri.description,
+                            "first_discovered": (
+                                link.first_discovered.isoformat() if link.first_discovered else None
+                            ),
+                            "last_seen": link.last_seen.isoformat() if link.last_seen else None,
+                        }
+                    )
         return result
 
     @view(url=r"^(?P<id>\d+)/discovery/$", method=["GET"], access="read", api=True)
@@ -647,20 +667,15 @@ class ManagedObjectApplication(ExtModelApplication):
         def sorted_iname(s):
             return sorted(s, key=lambda x: alnum_key(x["name"]))
 
-        def get_style(i):
+        def get_style(i: Interface) -> str:
             profile = i.profile
-            if profile:
-                try:
-                    return style_cache[profile.id]
-                except KeyError:
-                    pass
-                if profile.style:
-                    s = profile.style.css_class_name
-                else:
-                    s = ""
-                style_cache[profile.id] = s
-                return s
-            return ""
+            if not profile:
+                return ""
+            style = style_cache.get(profile.id)
+            if style is None:
+                style = profile.style.css_class if profile.style else ""
+                style_cache[profile.id] = style
+            return style
 
         def get_link(i):
             link = i.link

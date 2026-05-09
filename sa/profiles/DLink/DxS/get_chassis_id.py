@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # DLink.DxS.get_chassis_id
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -14,6 +14,7 @@ from noc.sa.interfaces.igetchassisid import IGetChassisID
 from noc.core.validators import is_mac
 from noc.core.text import parse_table
 from noc.core.mib import mib
+from noc.core.mac import MAC
 
 
 class Script(BaseScript):
@@ -34,6 +35,11 @@ class Script(BaseScript):
     def execute_cli(self):
         match = self.rx_mac.search(self.scripts.get_switch())
         mac = match.group("id")
+        # Found on DES-1210-10/ME/B2 version 10.05.B030
+        # Need testing
+        if self.is_chassis_mac_10:
+            return [{"first_chassis_mac": mac, "last_chassis_mac": MAC(mac).shift(9)}]
+
         macs = []
         try:
             v = self.cli("show fdb static", cached=True)

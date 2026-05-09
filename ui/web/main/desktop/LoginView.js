@@ -39,6 +39,7 @@ Ext.define("NOC.main.desktop.LoginView", {
       allowBlank: false,
       enableKeyEvents: true,
       xtype: "textfield",
+      labelPad: 20,
     },
     layout: {
       type: "vbox",

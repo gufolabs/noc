@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # LLDP check
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -18,6 +18,7 @@ from noc.core.lldp import (
     LLDP_CHASSIS_SUBTYPE_LOCAL,
     LLDP_PORT_SUBTYPE_ALIAS,
     LLDP_PORT_SUBTYPE_MAC,
+    LLDP_PORT_SUBTYPE_NETWORK_ADDRESS,
     LLDP_PORT_SUBTYPE_NAME,
     LLDP_PORT_SUBTYPE_LOCAL,
     LLDP_PORT_SUBTYPE_UNSPECIFIED,
@@ -114,6 +115,8 @@ class LLDPCheck(TopologyDiscoveryCheck):
             rp = self.get_interface_by_description(port, remote_object)
         elif port_subtype == LLDP_PORT_SUBTYPE_MAC:
             rp = self.get_interface_by_mac(port, remote_object)
+        elif port_subtype == LLDP_PORT_SUBTYPE_NETWORK_ADDRESS:
+            rp = self.get_interface_by_ip(port, remote_object)
         elif port_subtype == LLDP_PORT_SUBTYPE_NAME:
             rp = self.get_interface_by_name(port, remote_object)
         elif port_subtype == LLDP_PORT_SUBTYPE_LOCAL:

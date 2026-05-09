@@ -14,6 +14,7 @@ Ext.define("NOC.inv.inv.plugins.data.DataPanel", {
   title: __("Data"),
   closable: false,
   layout: "fit",
+  scrollable: false,
   viewModel: {
     data: {
       searchText: "",

@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // inv.reportmetrics application
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2025 The NOC Project
+// Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.inv.reportmetrics.Application");
@@ -73,7 +73,118 @@ Ext.define("NOC.inv.reportmetrics.Application", {
     ["id", __("ID"), false],
     ["object_name", __("Other Data"), true],
   ],
+  
+  viewModel: {
+    data: {
+      reporttype: {reporttype: "load_interfaces"},
+    },
+    formulas: {
+      gridData: {
+        bind: "{reporttype}",
+        get: function(reporttype){
+          var me = this.getView(),
+            reporttypeValue = reporttype && reporttype.reporttype ? reporttype.reporttype : "load_interfaces";
+          switch(reporttypeValue){
+            case "load_interfaces":
+              return me.interfaceData;
+            case "load_cpu":
+              return me.objectData;
+            case "ping":
+              return me.availabilityData;
+            default:
+              return me.otherData;
+          }
+        },
+      },
+      gridDataType: {
+        bind: "{reporttype}",
+        get: function(reporttype){
+          return reporttype || "load_interfaces";
+        },
+      },
+    },
+  },
+
   defaultListenerScope: true,
+  
+  listeners: {
+    afterrender: function(){
+      var vm = this.getViewModel();
+      vm.bind("{gridData}", this.onGridDataChange, this);
+      // var grid = this.down("[xtype=grid]");
+      // if(grid){
+      //   var store = Ext.create("Ext.data.Store", {
+      //     fields: ["id", "label", {
+      //       name: "is_active",
+      //       type: "boolean",
+      //     }],
+      //     proxy: {
+      //       url: "/inv/reportmetrics/fields/",
+      //       type: "rest",
+      //       pageParam: "__page",
+      //       startParam: "__start",
+      //       limitParam: "__limit",
+      //       sortParam: "__sort",
+      //       extraParams: {
+      //         "__format": "ext",
+      //         "reporttype": vm.get("reporttype").reporttype,
+      //       },
+      //       reader: {
+      //         type: "json",
+      //         rootProperty: "data",
+      //         totalProperty: "total",
+      //         successProperty: "success",
+      //       },
+      //     },
+      //   });
+      //   grid.setStore(store);
+      //   vm.bind("{reporttype}", function(reporttype){
+      //     var reporttypeValue = reporttype && reporttype.reporttype ? reporttype.reporttype : "load_interfaces";
+      //     grid.getStore().load({
+      //       params: {
+      //         reporttype: reporttypeValue,
+      //       },
+      //       callback: function(records, operation, success){
+      //         if(!success){
+      //           NOC.error(__("Failed to load data"));
+      //         }
+      //       },
+      //     });
+      //   }, this);
+      // }
+    },
+  },
+
+  onGridDataChange: function(data){
+    var grid = this.down("[xtype=grid]");
+    if(grid && data){
+      grid.getStore().loadData(data);
+    }
+  },
+
+  // listeners: {
+  //   afterrender: function(){
+  //     var vm = this.getViewModel();
+  //     vm.bind("{gridDataType}", this.onGridDataChange, this);
+  //   },
+  // },
+
+  // onGridDataChange: function(reporttype){
+  //   var grid = this.down("[xtype=grid]");
+  //   if(grid && reporttype){
+  //     grid.getStore().load({
+  //       params: {
+  //         reporttype: reporttype,
+  //       },
+  //       callback: function(records, operation, success){
+  //         if(!success){
+  //           NOC.error(__("Failed to load data"));
+  //         }
+  //       },
+  //     });
+  //   }
+  // },
+
   items: {
     xtype: "report.control",
     url: "/inv/reportmetrics",
@@ -90,12 +201,12 @@ Ext.define("NOC.inv.reportmetrics.Application", {
           padding: "0 5",
         },
         items: [
-          {boxLabel: "Interfaces", name: "reporttype", inputValue: "load_interfaces", checked: true},
+          {boxLabel: "Interfaces", name: "reporttype", inputValue: "load_interfaces"},
           {boxLabel: "Objects", name: "reporttype", inputValue: "load_cpu"},
           {boxLabel: "Ping", name: "reporttype", inputValue: "ping"},
         ],
-        listeners: {
-          change: "onChangeSource",
+        bind: {
+          value: "{reporttype}",
         },
       },
       {
@@ -170,30 +281,5 @@ Ext.define("NOC.inv.reportmetrics.Application", {
         defaultValue: false,
       },
     ],
-  },
-
-  initComponent: function(){
-    this.callParent();
-    // ToDo need sync with radio "Metric source" checked value
-    this.onChangeSource(null, {reporttype: "load_interfaces"});
-  },
-
-  onChangeSource: function(self, newVal){
-    var me = this, data,
-      store = me.down("[xtype=grid]").getStore();
-    switch(newVal.reporttype){
-      case "load_interfaces":
-        data = me.interfaceData;
-        break;
-      case "load_cpu":
-        data = me.objectData;
-        break;
-      case "ping":
-        data = me.availabilityData;
-        break;
-      default:
-        data = me.otherData;
-    }
-    store.loadData(data);
   },
 });
