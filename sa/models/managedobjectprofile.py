@@ -38,7 +38,7 @@ from noc.core.defer import call_later, defer
 from noc.core.topology.types import ShapeOverlayPosition, ShapeOverlayForm
 from noc.core.script.scheme import SSH, SNMPCredential, Protocol as CredProtocol
 from noc.core.wf.interaction import Interaction
-from noc.core.checkers.base import Check
+from noc.core.checkers.base import Check, NODATA
 from noc.core.diagnostic.types import DiagnosticState, DiagnosticConfig, CtxItem
 from noc.core.diagnostic.hub import (
     PROFILE_DIAG,
@@ -1077,6 +1077,13 @@ class ManagedObjectProfile(NOCModel):
                 blocked=not enabled,
                 run_policy="D",
                 reason=reason,
+                checks=[
+                    Check(
+                        name=NODATA,
+                        address="*",
+                        args={"arg0": "trapcollector", "collector": "trapcollector"},
+                    )
+                ],
             )
             enabled, reason = o.is_enabled_diagnostic(SYSLOG_DIAG)
             yield DiagnosticConfig(
@@ -1086,6 +1093,13 @@ class ManagedObjectProfile(NOCModel):
                 blocked=not enabled,
                 run_policy="D",
                 reason=reason,
+                checks=[
+                    Check(
+                        name=NODATA,
+                        address="*",
+                        args={"arg0": "syslogcollector", "collector": "syslogcollector"},
+                    )
+                ],
             )
 
     @classmethod
