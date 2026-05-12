@@ -1,9 +1,9 @@
 {
-    "name": "Telephony | SIP | Trunk | ChansBusy",
+    "name": "Telephony | Trunk | ChansBusy",
     "$collection": "pm.metrictypes",
     "uuid": "0e30538c-c946-4ea6-97f2-4a72bd39cf53",
     "scope__name": "Object",
-    "field_name": "sip_trunk_chans_busy",
+    "field_name": "trunk_chans_busy",
     "field_type": "UInt32",
     "description": "Busy channels on trunk group",
     "measure": null,

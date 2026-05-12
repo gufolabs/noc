@@ -1,9 +1,9 @@
 {
-    "name": "Telephony | SIP | Trunk | CurrentCps",
+    "name": "Telephony | Trunk | CurrentCps",
     "$collection": "pm.metrictypes",
     "uuid": "4dcd9f7b-ec87-4372-8d15-f733820721c0",
     "scope__name": "Object",
-    "field_name": "sip_trunk_current_cps",
+    "field_name": "trunk_current_cps",
     "field_type": "UInt32",
     "description": "Current cps in trunk group",
     "measure": null,

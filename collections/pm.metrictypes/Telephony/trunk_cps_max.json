@@ -1,9 +1,9 @@
 {
-    "name": "Telephony | SIP | Trunk | CPSMax",
+    "name": "Telephony | Trunk | CPSMax",
     "$collection": "pm.metrictypes",
     "uuid": "fa67171c-8df3-4208-a1ae-7b5c0ff34b28",
     "scope__name": "Object",
-    "field_name": "sip_trunk_cps_max",
+    "field_name": "trunk_cps_max",
     "field_type": "UInt32",
     "description": "CPS restriction on trunk group",
     "measure": null,
