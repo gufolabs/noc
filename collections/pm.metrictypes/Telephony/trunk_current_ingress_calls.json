@@ -1,9 +1,9 @@
 {
-    "name": "Telephony | SIP | Trunk | CurrentIngressCalls",
+    "name": "Telephony | Trunk | CurrentIngressCalls",
     "$collection": "pm.metrictypes",
     "uuid": "00f7d4fa-7248-4d23-a139-15ac54ddb3ef",
     "scope__name": "Object",
-    "field_name": "sip_trunk_current_ingress_calls",
+    "field_name": "trunk_current_ingress_calls",
     "field_type": "UInt32",
     "description": "Current ingress calls in trunk group",
     "measure": null,

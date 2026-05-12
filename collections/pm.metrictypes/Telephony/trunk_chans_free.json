@@ -1,9 +1,9 @@
 {
-    "name": "Telephony | SIP | Trunk | ChansFree",
+    "name": "Telephony | Trunk | ChansFree",
     "$collection": "pm.metrictypes",
     "uuid": "a7f6169a-d661-4be0-becb-fd05e8823905",
     "scope__name": "Object",
-    "field_name": "sip_trunk_chans_free",
+    "field_name": "trunk_chans_free",
     "field_type": "UInt32",
     "description": "Free channels on trunk group",
     "measure": null,
