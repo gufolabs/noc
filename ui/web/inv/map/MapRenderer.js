@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------
-// Network Map Renderer Placeholder
+// Network Map Renderer
 //---------------------------------------------------------------------
 // Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
@@ -154,12 +154,6 @@ Ext.define("NOC.inv.map.MapRendererPlaceholder", {
 
   applyObjectStatuses: function(data){
     this.topoMap.data.elements.setStatuses(data);
-    // this.topoMap.data.elements.setRandomStatuses([
-    //   {status_code: 0, metrics_label: ""},
-    //   {status_code: 1, metrics_label: "CPU<br/>12%"},
-    //   {status_code: 2, metrics_label: "CPU<br/>78%"},
-    //   {status_code: 4, metrics_label: "Link<br/>Down"},
-    // ]);
   },
 
   setZoom: function(zoom){
