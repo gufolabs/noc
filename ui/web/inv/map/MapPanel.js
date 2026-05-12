@@ -8,7 +8,7 @@ console.debug("Defining NOC.inv.map.MapPanel");
 
 Ext.define("NOC.inv.map.MapPanel", {
   extend: "Ext.panel.Panel",
-  requires: ["NOC.inv.map.MapRendererPlaceholder"],
+  requires: ["NOC.inv.map.MapRenderer"],
   mixins: [
     "NOC.core.mixins.Polling",
   ],
@@ -36,7 +36,7 @@ Ext.define("NOC.inv.map.MapPanel", {
   initComponent: function(){
     var me = this;
 
-    me.renderer = Ext.create("NOC.inv.map.MapRendererPlaceholder", me);
+    me.renderer = Ext.create("NOC.inv.map.MapRenderer", me);
     me.usedImages = {};
     me.objectNodes = {};
     me.objectsList = [];
