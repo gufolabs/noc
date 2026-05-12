@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topology Map - Vanilla JS Example</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #0f172a;
+      background: #f8fafc;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px;
+      background: #ffffff;
+      border-bottom: 1px solid #cbd5e1;
+    }
+
+    .toolbar button,
+    .toolbar label,
+    .toolbar select,
+    .toolbar input {
+      font-size: 14px;
+    }
+
+    .toolbar button {
+      border: 1px solid #94a3b8;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .toolbar button:hover {
+      background: #eff6ff;
+    }
+
+    .toolbar select {
+      border: 1px solid #94a3b8;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 6px 8px;
+      border-radius: 6px;
+      min-width: 140px;
+    }
+
+    .toolbar input[type="text"] {
+      border: 1px solid #94a3b8;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 6px 10px;
+      border-radius: 6px;
+      min-width: 220px;
+    }
+
+    .toolbar .search-status {
+      align-self: center;
+      font-size: 13px;
+      color: #475569;
+      white-space: nowrap;
+    }
+
+    .toolbar .stats {
+      margin-left: auto;
+      align-self: center;
+      font-size: 13px;
+      color: #334155;
+      white-space: nowrap;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(360px, 1fr) 280px;
+      height: calc(100vh - 58px);
+    }
+
+    .layout>div {
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    #topology-main {
+      min-width: 0;
+      border-right: 1px solid #cbd5e1;
+    }
+
+    #topology-minimap {
+      min-width: 0;
+      background: #ffffff;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 220px;
+      }
+
+      #topology-main {
+        border-right: 0;
+        border-bottom: 1px solid #cbd5e1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="toolbar">
+    <button id="mode-pan" type="button">Pan</button>
+    <button id="mode-zoom-area" type="button">Zoom To Area</button>
+    <button id="mode-edit" type="button">Edit</button>
+    <button id="toggle-node-labels" type="button">Title/IP</button>
+    <button id="zoom-in" type="button">+</button>
+    <button id="zoom-out" type="button">-</button>
+    <button id="reset-view" type="button">Reset</button>
+    <label>
+      Map
+      <select id="map-select">
+        <option value="glyph-segment">Glyph Segment</option>
+        <option value="configured-shape">Configured Shape</option>
+        <option value="generated-grid">Generated Grid</option>
+        <option value="big-map">Big Map</option>
+      </select>
+    </label>
+    <label>
+      Zoom
+      <select id="zoom-select">
+        <option value="fit-page">Fit to page</option>
+        <option value="fit-width">Fit to width</option>
+        <option value="fit-height">Fit to height</option>
+        <option value="0.25">25%</option>
+        <option value="0.5">50%</option>
+        <option value="0.75">75%</option>
+        <option value="1" selected>100%</option>
+        <option value="1.25">125%</option>
+        <option value="1.5">150%</option>
+        <option value="2">200%</option>
+        <option value="3">300%</option>
+      </select>
+    </label>
+    <label><input id="snap-toggle" type="checkbox" checked /> Snap to grid</label>
+    <label><input id="guides-toggle" type="checkbox" checked /> Guides</label>
+    <label>
+      Search mode
+      <select id="node-search-mode">
+        <option value="labelAndMove">Search &amp; move</option>
+        <option value="idAndMove">Search &amp; move by id</option>
+      </select>
+    </label>
+    <input id="node-search" type="text" placeholder="Find by node name" autocomplete="off" />
+    <button id="node-search-submit" type="button">Find</button>
+    <span id="node-search-status" class="search-status">Search by node name</span>
+    <span id="render-stats" class="stats">Visible E: 0 L: 0 | Total E: 0 L: 0</span>
+  </div>
+  <div class="layout">
+    <div id="topology-main"></div>
+    <div id="topology-minimap" style="height: 300px;"></div>
+  </div>
+
+  <script type="module" src="./vanilla-launch.js"></script>
+</body>
+
+</html>
