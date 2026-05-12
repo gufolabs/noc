@@ -4,9 +4,9 @@
 // Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
-console.debug("Defining NOC.inv.map.MapRendererPlaceholder");
+console.debug("Defining NOC.inv.map.MapRenderer");
 
-Ext.define("NOC.inv.map.MapRendererPlaceholder", {
+Ext.define("NOC.inv.map.MapRenderer", {
   LOAD_METRICS: ["Interface | Load | In", "Interface | Load | Out"],
   // Link status
   LINK_OK: 0,
@@ -148,7 +148,7 @@ Ext.define("NOC.inv.map.MapRendererPlaceholder", {
   },
 
   setLinkStyle: function(linkId, status){
-    console.warn("MapRendererPlaceholder.setLinkStyle", linkId, status);
+    console.warn("MapRenderer.setLinkStyle", linkId, status);
     this.topoMap.setLinkStatus(linkId, status);
   },
 
