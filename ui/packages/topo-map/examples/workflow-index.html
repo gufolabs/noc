@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workflow Editor Demo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #eef2f8;
+      --panel: rgba(255, 255, 255, 0.92);
+      --line: #dbe4f0;
+      --accent: #0f766e;
+      --accent-strong: #115e59;
+      --ink: #0f172a;
+      --muted: #475569;
+      --danger: #be123c;
+      --shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(15, 118, 110, 0.16), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(190, 24, 93, 0.10), transparent 22%),
+        linear-gradient(180deg, #f8fbff, var(--bg));
+    }
+
+    .shell {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-height: 100vh;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      background: rgba(255, 255, 255, 0.84);
+      backdrop-filter: blur(16px);
+    }
+
+    .toolbar button,
+    .toolbar label,
+    .toolbar input,
+    .toolbar select {
+      font: inherit;
+    }
+
+    .toolbar button,
+    .toolbar .file-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #9fb1c7;
+      background: white;
+      color: var(--ink);
+      padding: 8px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .toolbar button.primary {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .toolbar button.primary:hover {
+      background: var(--accent-strong);
+    }
+
+    .toolbar .file-label input {
+      display: none;
+    }
+
+    .toolbar .status {
+      margin-left: auto;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(420px, 1fr) 360px;
+      gap: 16px;
+      padding: 16px;
+      min-height: 0;
+    }
+
+    .canvas-panel,
+    .inspector-panel {
+      min-height: 0;
+      background: var(--panel);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .canvas-panel {
+      position: relative;
+    }
+
+    #workflow-main {
+      width: 100%;
+      height: calc(100vh - 108px);
+      min-height: 600px;
+    }
+
+    .context-menu {
+      position: fixed;
+      display: none;
+      z-index: 10;
+      min-width: 180px;
+      padding: 8px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+    }
+
+    .context-menu button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .context-menu button:hover {
+      background: #f1f5f9;
+    }
+
+    .inspector-panel {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+    }
+
+    .inspector-header {
+      padding: 20px 22px 12px;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .inspector-header h2 {
+      margin: 0 0 6px;
+      font-size: 24px;
+    }
+
+    .inspector-header p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .issues {
+      display: none;
+      margin: 16px 22px 0;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(190, 24, 93, 0.18);
+      background: rgba(190, 24, 93, 0.08);
+      color: var(--danger);
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .issues.is-visible {
+      display: block;
+    }
+
+    .inspector-content {
+      overflow: auto;
+      padding: 18px 22px 22px;
+    }
+
+    .inspector-form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .inspector-form label {
+      display: grid;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .inspector-form input,
+    .inspector-form textarea,
+    .inspector-form select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 12px;
+      padding: 10px 12px;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .inspector-form textarea {
+      resize: vertical;
+      min-height: 96px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .checkbox-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .checkbox-grid label {
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .checkbox-grid input {
+      width: 16px;
+      height: 16px;
+      padding: 0;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .json-output {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 18px;
+      background: #0f172a;
+      color: #d8e1f0;
+      font-size: 12px;
+      line-height: 1.6;
+      overflow: auto;
+      max-height: 260px;
+      white-space: pre-wrap;
+    }
+
+    @media (max-width: 1080px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      #workflow-main {
+        height: 62vh;
+        min-height: 520px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <div class="toolbar">
+      <button id="mode-edit" class="primary" type="button">Edit</button>
+      <button id="mode-pan" type="button">Pan</button>
+      <button id="add-state" type="button">Add State</button>
+      <button id="auto-layout" type="button">Auto Layout</button>
+      <button id="fit-content" type="button">Fit</button>
+      <button id="zoom-in" type="button">Zoom +</button>
+      <button id="zoom-out" type="button">Zoom -</button>
+      <button id="remove-selected" type="button">Remove Selected</button>
+      <label class="file-label">
+        Load JSON
+        <input id="file-input" type="file" accept=".json,application/json" />
+      </label>
+      <button id="reload-sample" type="button">Reload Sample</button>
+      <button id="export-json" type="button">Export JSON</button>
+      <div class="status">
+        <span id="selection-status">Selection: workflow</span>
+        <span id="dirty-status">Saved</span>
+      </div>
+    </div>
+    <div class="layout">
+      <section class="canvas-panel">
+        <div id="workflow-main"></div>
+        <div id="context-menu" class="context-menu">
+          <button id="menu-add-state" type="button">Add State Here</button>
+        </div>
+      </section>
+      <aside class="inspector-panel">
+        <div class="inspector-header">
+          <h2>Workflow Inspector</h2>
+          <p>Edit workflow metadata, selected states, and transitions. Drag from the right port of a state to the left port of another state to create a transition.</p>
+        </div>
+        <div id="issues" class="issues"></div>
+        <div class="inspector-content">
+          <div id="inspector"></div>
+          <pre id="json-output" class="json-output"></pre>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script type="module" src="./workflow-launch.js"></script>
+</body>
+
+</html>

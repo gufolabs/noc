@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" width="37.2" height="54.32" xmlns="http://www.w3.org/2000/svg">
+  <title>Video Camera</title>
+  <g transform="matrix(1, 0, 0, 1, -287.836914, -368.985809)">
+    <g transform=" translate(286.951200,368.985800) ">
+      <g transform="translate(-340.9983, 690.8537)">
+        <path d="M 359.0077,-676.6823 L 359.0077,-636.5301 " stroke="#000000" stroke-width="0.8857" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="3.5428" fill="none"/>
+        <path d="M 359.0077,-676.6823 L 376.1314,-643.0253 " stroke="#000000" stroke-width="0.8857" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="3.5428" fill="none"/>
+        <path d="M 359.0077,-676.6823 L 341.8840,-643.0253 " stroke="#000000" stroke-width="0.8857" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="3.5428" fill="none"/>
+        <path d="M 364.0267,-671.9585 L 364.0267,-681.1109 L 353.6935,-681.1109 L 353.6935,-671.9585 L 364.0267,-671.9585 Z " fill="#000000" stroke-width="1px" stroke="#000000"/>
+        <path d="M 359.0077,-676.6823 L 359.0077,-676.6823 Z " fill="#000000" stroke-width="1px" stroke="#000000"/>
+        <path d="M 359.0077,-676.6823 L 359.0077,-676.6823 " stroke="none" stroke-width="0.0" fill="none"/>
+        <path d="M 349.2649,-684.3585 L 349.2649,-684.3585 Z " fill="#000000" stroke-width="1px" stroke="#000000"/>
+        <path d="M 349.2649,-684.3585 L 349.2649,-684.3585 " stroke="none" stroke-width="0.0" fill="none"/>
+        <path d="M 344.2459,-681.4061 C 343.6554,-681.4061 343.3602,-682.8823 343.3602,-684.3585 C 343.3602,-685.8346 343.6554,-687.3108 344.2459,-687.3108 C 349.2649,-687.3108 349.2649,-687.3108 349.2649,-687.3108 C 349.8554,-687.3108 350.4459,-685.8346 350.4459,-684.3585 C 350.4459,-682.8823 349.8554,-681.4061 349.2649,-681.4061 Z " fill="#000000" stroke="none"/>
+        <path d="M 344.2459,-684.3585 L 344.2459,-684.3585 Z " fill="#000000" stroke-width="1px" stroke="#000000"/>
+        <path d="M 344.2459,-684.3585 L 344.2459,-684.3585 " stroke="none" stroke-width="0.0" fill="none"/>
+        <path d="M 348.0840,-677.5680 L 348.0840,-687.6061 L 369.9315,-687.6061 L 369.9315,-677.5680 L 348.0840,-677.5680 Z " fill="#000000" stroke="#FFFFFF" stroke-width="1px" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="3.5428"/>
+        <path d="M 369.9315,-677.5680 L 369.9315,-687.6061 L 348.0840,-687.6061 L 350.7411,-690.2632 L 369.9315,-690.2632 L 372.5886,-690.2632 L 372.5886,-680.2252 L 369.9315,-677.5680 Z " fill="#000000" stroke="#FFFFFF" stroke-width="1px" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="3.5428"/>
+        <path d="M 369.9315,-687.6061 L 372.5886,-690.2632 Z " fill="#000000" stroke-width="1px" stroke="#000000"/>
+        <path d="M 369.9315,-687.6061 L 372.5886,-690.2632 " stroke="#FFFFFF" stroke-width="1px" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="3.5428" fill="none"/>
+        <path d="M 369.9315,-680.2252 L 348.0840,-680.2252 " stroke="#FFFFFF" stroke-width="1px" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="3.5428" fill="none"/>
+        <path d="M 372.5886,-682.8823 L 369.9315,-680.2252 " stroke="#FFFFFF" stroke-width="1px" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="3.5428" fill="none"/>
+        <path d="M 379.0838,-690.8537 L 378.7886,-688.7870 L 373.7696,-683.7680 L 370.8172,-687.9013 L 379.0838,-690.8537 Z " fill="#000000" stroke-width="1px" stroke="#000000"/>
+      </g>
+    </g>
+  </g>
+</svg>
