@@ -120,7 +120,7 @@ class Script(GetMetricsScript):
         for _, trunk_name, trunk_type, value in t:
             self.set_metric(
                 id=(m.metric, None),
-                labels=[f"noc::sip::trunk::{trunk_name}.{trunk_type}"],
+                labels=[f"noc::trunk::{trunk_name}.{trunk_type}"],
                 value=value,
                 multi=True,
             )
