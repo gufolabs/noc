@@ -805,7 +805,7 @@ class CorrelatorService(FastAPIService):
                         a.root,
                         h,
                     )
-            except Exception:  # noqa. Can probable happens anything from handler
+            except Exception:
                 error_report()
                 metrics["error", ("type", "alarm_handler")] += 1
         # Call triggers if necessary
@@ -813,7 +813,7 @@ class CorrelatorService(FastAPIService):
             for t in self.triggers[a.alarm_class.id]:
                 try:
                     t.call(a)
-                except:  # noqa. Can probable happens anything from trigger
+                except:
                     error_report()
 
     async def clear_alarm_from_rule(
