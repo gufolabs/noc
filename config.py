@@ -646,6 +646,7 @@ class Config(BaseConfig):
         cache_default_ttl = SecondsParameter(default="1d")
         autointervaljob_interval = SecondsParameter(default="1d")
         autointervaljob_initial_submit_interval = SecondsParameter(default="1d")
+        diagnostic_check_depth_interval = SecondsParameter(default="1w")
 
     class script(ConfigSection):
         timeout = SecondsParameter(default="2M", help="default sa script script timeout")
@@ -807,6 +808,7 @@ class Config(BaseConfig):
             },
             help="Maximum severity level for received messages. More than will be dropped",
         )
+        target_check_ttl = SecondsParameter(default="1w", help="TTL between received tartget trap")
 
     class tgsender(ConfigSection):
         token = SecretParameter(path=SECRETS_BASE / "tgsender-token")
@@ -839,6 +841,7 @@ class Config(BaseConfig):
         storm_threshold_reduction = FloatParameter(default=0.9)
         # time to live (rounds quantity) of records in storm protection addresses dictionary
         storm_record_ttl = IntParameter(default=10)
+        target_check_ttl = SecondsParameter(default="1w", help="TTL between received tartget trap")
 
     class watchdog(ConfigSection):
         enable_watchdog = BooleanParameter(default=True)
