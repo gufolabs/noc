@@ -110,11 +110,10 @@ node = [
   "python-creole==1.4.10",
   "python-dateutil==2.9.0",
   "python-jose[cryptography]==3.5.0",
-  "pytz==2025.1",
   "setproctitle==1.3.5",
   "uvicorn==0.40.0",
   'yappi==1.7.3',
-  "python-multipart==0.0.22", # Used by FastAPI to process form data
+  "python-multipart==0.0.28", # Used by FastAPI to process form data
   "gufo-liftbridge==0.2.0",
   "gufo-snmp==0.12.0",
   "gufo_noc_speedup==0.1.0",
@@ -124,7 +123,6 @@ prod-tools = [
   "sentry-sdk==2.57.0",
   "supervisor-wildcards==0.1.3",
 ]
-sender-kafka = ["aiokafka[lz4,snappy,zstd]==0.13.0"]
 supervisor = [
   "supervisor==4.2.5",
   "supervisor-serialrestart==0.1.1",
@@ -154,7 +152,7 @@ version = {file = "VERSION"}
 
 [tool.black]
 line-length = 100 # Must be same as tool.ruff.line-length
-target-version = ['py310']
+target-version = ['py310'] 
 
 [tool.coverage.run]
 omit = ['*tests*']
@@ -167,7 +165,7 @@ directory = "build/coverage"
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
-exclude = [".git", "build", "dist", "var", "share", "collections", "node_modules", "ansible"]
+exclude = [".git", "build", "dist", "var", "share", "collections", "node_modules", "ansible"] 
 line-length = 100 # Must be same as tool.black.line-length
 # Assume Python 3.12
 target-version = "py312"

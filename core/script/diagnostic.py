@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Script credential diagnostic
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -69,10 +69,10 @@ class SNMPSuggestsDiagnostic:
         for c in checks:
             if c.skipped:
                 continue
-            if c.error:
-                error = c.error
             if c.status:
                 return DiagnosticState.enabled, None
+            if c.error:
+                error = c.error
         return DiagnosticState.failed, error
 
     def process_result(

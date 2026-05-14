@@ -1,14 +1,14 @@
 # ----------------------------------------------------------------------
 # Config parameters
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import itertools
 import logging
-import pytz
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from pathlib import Path
 from typing import Optional, TypeVar, Generic, Any, Iterable, Dict, List, Union
 
@@ -100,11 +100,11 @@ class UUIDParameter(BaseParameter[str]):
         return v
 
 
-class TimeZoneParameter(BaseParameter[pytz.BaseTzInfo]):
-    def clean(self, v: Any) -> pytz.BaseTzInfo:
+class TimeZoneParameter(BaseParameter[ZoneInfo]):
+    def clean(self, v: Any) -> ZoneInfo:
         try:
-            return pytz.timezone(v)
-        except pytz.UnknownTimeZoneError:
+            return ZoneInfo(str(v))
+        except ZoneInfoNotFoundError:
             msg = f"Invalid TimeZone value: {v}"
             raise ValueError(msg)
 

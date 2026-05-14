@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # NOC config
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -10,7 +10,8 @@ import logging
 import os
 import socket
 import sys
-from functools import partial
+import datetime
+from functools import partial, cached_property
 from urllib.parse import quote as urllib_quote
 from pathlib import Path
 from typing import Dict, Union, Optional, Iterable
@@ -1265,19 +1266,14 @@ class Config(BaseConfig):
         # Check quantiles is enabled
         return getattr(self.perfomance, f"enable_{name}_quantiles", False)
 
-    @property
+    @cached_property
     def tz_utc_offset(self) -> int:
         """
-        Return UTC offset for configured timezone
-        :return:
+        UTC offset for configured timezone.
         """
-        import pytz
-        import datetime
-
-        if not hasattr(self, "_utcoffset"):
-            dt = datetime.datetime.now(tz=pytz.utc)
-            self._utcoffset = dt.astimezone(self.timezone).utcoffset()
-        return int(self._utcoffset.total_seconds())
+        dt = datetime.datetime.now(datetime.timezone.utc)
+        offset = dt.astimezone(self.timezone).utcoffset()
+        return int(offset.total_seconds())
 
     @staticmethod
     @cachetools.cached(cachetools.TTLCache(maxsize=128, ttl=60))
