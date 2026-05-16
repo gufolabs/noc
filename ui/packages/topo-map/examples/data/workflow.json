@@ -1,0 +1,186 @@
+{
+    "id": "5fca627e890f55564231e1f5",
+    "name": "Sensor Default",
+    "is_active": true,
+    "description": "Sensor default workflow",
+    "states": [
+        {
+            "id": "5fca627e890f55564231e1fb",
+            "name": "Missed",
+            "description": "Sensor is missed",
+            "is_default": false,
+            "is_productive": false,
+            "is_wiping": false,
+            "update_last_seen": false,
+            "ttl": 0,
+            "update_expired": false,
+            "on_enter_handlers": [],
+            "job_handler": null,
+            "on_leave_handlers": [],
+            "labels": [],
+            "bi_id": "1925217288374048050",
+            "x": 140,
+            "y": 160
+        },
+        {
+            "id": "5fca627e890f55564231e1fd",
+            "name": "Non-operational",
+            "description": "Sensor is broken or non-operational",
+            "is_default": false,
+            "is_productive": false,
+            "is_wiping": false,
+            "update_last_seen": false,
+            "ttl": 0,
+            "update_expired": false,
+            "on_enter_handlers": [],
+            "job_handler": null,
+            "on_leave_handlers": [],
+            "labels": [],
+            "bi_id": "6087488050439942373",
+            "x": 440,
+            "y": 150
+        },
+        {
+            "id": "5fca627e890f55564231e1f7",
+            "name": "Ok",
+            "description": "",
+            "is_default": true,
+            "is_productive": true,
+            "is_wiping": false,
+            "update_last_seen": false,
+            "ttl": 0,
+            "update_expired": false,
+            "on_enter_handlers": [],
+            "job_handler": null,
+            "on_leave_handlers": [],
+            "labels": [],
+            "bi_id": "246779251013309823",
+            "x": 290,
+            "y": 40
+        },
+        {
+            "id": "69b0853a4d056cdea8e3f2ae",
+            "name": "Removing",
+            "description": null,
+            "is_default": false,
+            "is_productive": false,
+            "is_wiping": true,
+            "update_last_seen": false,
+            "ttl": 0,
+            "update_expired": false,
+            "on_enter_handlers": [],
+            "job_handler": null,
+            "on_leave_handlers": [],
+            "labels": [],
+            "bi_id": "8977386931935958458",
+            "x": 290,
+            "y": 330
+        }
+    ],
+    "allowed_models": [
+        {
+            "id": "inv.Sensor",
+            "label": "inv.Sensor"
+        },
+        {
+            "id": "inv.CPE",
+            "label": "inv.CPE"
+        }
+    ],
+    "transitions": [
+        {
+            "id": "5fca627e890f55564231e201",
+            "from_state": "Ok",
+            "to_state": "Missed",
+            "is_active": true,
+            "event": "missed",
+            "label": "missed",
+            "description": "",
+            "enable_manual": true,
+            "handlers": [],
+            "required_rules": [],
+            "vertices": [],
+            "bi_id": "311387734538203880"
+        },
+        {
+            "id": "5fca627e890f55564231e1ff",
+            "from_state": "Ok",
+            "to_state": "Non-operational",
+            "is_active": true,
+            "event": "down",
+            "label": "Non-operational",
+            "description": "",
+            "enable_manual": true,
+            "handlers": [],
+            "required_rules": [],
+            "vertices": [
+                {
+                    "x": 450,
+                    "y": 60
+                }
+            ],
+            "bi_id": "44894602916285118"
+        },
+        {
+            "id": "5fca627e890f55564231e203",
+            "from_state": "Missed",
+            "to_state": "Ok",
+            "is_active": true,
+            "event": "seen",
+            "label": "Seen",
+            "description": "",
+            "enable_manual": true,
+            "handlers": [],
+            "required_rules": [],
+            "vertices": [],
+            "bi_id": "5858192813321598962"
+        },
+        {
+            "id": "69b0853a4d056cdea8e3f312",
+            "from_state": "Missed",
+            "to_state": "Removing",
+            "is_active": true,
+            "event": "expired",
+            "label": "Removing",
+            "description": null,
+            "enable_manual": false,
+            "handlers": [],
+            "required_rules": [],
+            "vertices": [
+                {
+                    "x": 190,
+                    "y": 320
+                }
+            ],
+            "bi_id": "7600591124788767343"
+        },
+        {
+            "id": "5fca627e890f55564231e205",
+            "from_state": "Non-operational",
+            "to_state": "Ok",
+            "is_active": true,
+            "event": "up",
+            "label": "Fixed",
+            "description": "",
+            "enable_manual": true,
+            "handlers": [],
+            "required_rules": [],
+            "vertices": [],
+            "bi_id": "1720440267695078397"
+        },
+        {
+            "id": "69b0853a4d056cdea8e3f302",
+            "from_state": "Removing",
+            "to_state": "Ok",
+            "is_active": true,
+            "event": "seen",
+            "label": "Restore",
+            "description": null,
+            "enable_manual": true,
+            "handlers": [],
+            "required_rules": [],
+            "vertices": [],
+            "bi_id": "4841524777429178591"
+        }
+    ]
+}

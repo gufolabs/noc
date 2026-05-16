@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" width="42.0765000000" height="42.0750000000" xmlns="http://www.w3.org/2000/svg">
+  <title>FCoE</title>
+  <g transform=" scale(1.000000) ">
+    <path xmlns="http://www.w3.org/2000/svg" d="  M0.0000,42.0750 L42.0765,42.0750 L42.0765,0.0000 L0.0000,0.0000 L0.0000,42.0750 Z" style="fill-rule: evenodd; fill: #000000; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M0.0000,42.0750 L42.0765,42.0750 L42.0765,0.0000 L0.0000,0.0000 L0.0000,42.0750 Z" style="stroke-width: 1.1250; stroke: #ffffff; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M13.2105,33.7590 L11.6625,32.2155 L32.2192,11.6647 L33.7590,13.2090 L35.7540,6.3210 L28.8690,8.3160 L30.4125,9.8610 L9.8595,30.4117 L8.3175,28.8682 L6.3217,35.7540 L13.2105,33.7590 Z" style="fill-rule: evenodd; fill: #ffffff; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M33.7605,28.8660 L32.2147,30.4140 L11.6655,9.8587 L13.2090,8.3183 L6.3217,6.3225 L8.3175,13.2082 L9.8617,11.6640 L30.4117,32.2170 L28.8682,33.7590 L35.7555,35.7547 L33.7605,28.8660 Z" style="fill-rule: evenodd; fill: #ffffff; "/>
+  </g>
+</svg>

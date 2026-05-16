@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" width="42.0765000000" height="42.0757000000" xmlns="http://www.w3.org/2000/svg">
+  <title>L2/L3 Switch (2)</title>
+  <g transform=" scale(1.000000) ">
+    <path xmlns="http://www.w3.org/2000/svg" d="  M0.0000,42.0757 L42.0765,42.0757 L42.0765,0.0000 L0.0000,0.0000 L0.0000,42.0757 Z" style="fill-rule: evenodd; fill: #000000; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M0.0000,42.0757 L42.0765,42.0757 L42.0765,0.0000 L0.0000,0.0000 L0.0000,42.0757 Z" style="stroke-width: 1.1250; stroke: #000000; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M31.8488,11.3190 L19.2998,11.3190 L19.2998,8.7720 L31.8488,8.7720 L31.8503,6.5693 L34.9208,8.3415 L37.9905,10.1160 L34.9208,11.8890 L31.8488,13.6620 L31.8488,11.3190 Z" style="fill-rule: evenodd; fill: #ffffff; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M31.8488,24.3263 L19.2998,24.3263 L19.2998,21.7785 L31.8488,21.7785 L31.8503,19.5765 L34.9208,21.3495 L37.9905,23.1233 L34.9208,24.8962 L31.8488,26.6693 L31.8488,24.3263 Z" style="fill-rule: evenodd; fill: #ffffff; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M10.9898,28.4235 L23.5388,28.4235 L23.5388,30.9690 L10.9898,30.9690 L10.9898,33.1725 L7.9170,31.3988 L4.8473,29.6258 L7.9170,27.8535 L10.9898,26.0798 L10.9898,28.4235 Z" style="fill-rule: evenodd; fill: #ffffff; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M10.9898,15.4155 L23.5388,15.4155 L23.5388,17.9610 L10.9898,17.9610 L10.9898,20.1653 L7.9170,18.3915 L4.8473,16.6178 L7.9170,14.8455 L10.9898,13.0725 L10.9898,15.4155 Z" style="fill-rule: evenodd; fill: #ffffff; "/>
+  </g>
+</svg>
