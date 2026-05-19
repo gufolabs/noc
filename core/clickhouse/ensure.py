@@ -1,22 +1,25 @@
 # ----------------------------------------------------------------------
 # Ensure ClickHouse database schema
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import logging
+from typing import List, Optional, Dict
 
 # NOC modules
 from noc.config import config
+from noc.core.clickhouse.connect import connection, ClickhouseClient
+from .info import TableInfo
 from .loader import loader
 from ..bi.dictionaries.loader import loader as bi_dictionary_loader
 
 logger = logging.getLogger(__name__)
 
 
-def ensure_bi_models(connect=None, allow_type: bool = False):
+def ensure_bi_models(connect=None, allow_type: bool = False) -> bool:
     logger.info("Ensuring BI models:")
     # Ensure fields
     allow_type |= config.clickhouse.enable_migrate_type
@@ -32,7 +35,7 @@ def ensure_bi_models(connect=None, allow_type: bool = False):
     return changed
 
 
-def ensure_dictionary_models(connect=None, allow_type: bool = False):
+def ensure_dictionary_models(connect=None, allow_type: bool = False) -> bool:
     logger.info("Ensuring Dictionaries:")
     # Ensure fields
     allow_type |= config.clickhouse.enable_migrate_type
@@ -52,7 +55,7 @@ def ensure_dictionary_models(connect=None, allow_type: bool = False):
     return changed
 
 
-def ensure_pm_scopes(connect=None, allow_type: bool = False):
+def ensure_pm_scopes(connect=None, allow_type: bool = False) -> bool:
     from noc.pm.models.metricscope import MetricScope
 
     logger.info("Ensuring PM scopes")
@@ -64,9 +67,7 @@ def ensure_pm_scopes(connect=None, allow_type: bool = False):
     return changed
 
 
-def ensure_all_pm_scopes():
-    from noc.core.clickhouse.connect import connection
-
+def ensure_all_pm_scopes() -> bool:
     if not config.clickhouse.cluster or config.clickhouse.cluster_topology == "1":
         # Standalone configuration
         ensure_pm_scopes()
@@ -81,7 +82,7 @@ def ensure_all_pm_scopes():
         ensure_pm_scopes(c)
 
 
-def ensure_report_ds_scopes(connect=None, allow_type: bool = False):
+def ensure_report_ds_scopes(connect=None, allow_type: bool = False) -> bool:
     from noc.core.datasources.loader import loader
 
     logger.info("Ensuring Report BI")
@@ -97,4 +98,54 @@ def ensure_report_ds_scopes(connect=None, allow_type: bool = False):
         logger.info("Ensure Report DataSources %s", ds.name)
         changed |= ds.ensure_table(connect=connect)
         changed |= ds.ensure_views(connect=connect)
+    return changed
+
+
+def sync_ch_policies() -> bool:
+    """Create CHPolicy when necessary."""
+    from noc.main.models.chpolicy import CHPolicy
+    from noc.pm.models.metricscope import MetricScope
+
+    seen = {p.table for p in CHPolicy.objects.all()}
+    # Collect tables from pm scopes
+    tables: List[str] = [ms._get_raw_db_table() for ms in MetricScope.objects.all()]
+    # Collect BI models
+    for name in loader:
+        model = loader[name]
+        if model:
+            tables.append(model._get_raw_db_table())
+    # Create CHPolicy
+    changed = False
+    for t in tables:
+        if t not in seen:
+            CHPolicy(table=t, is_active=False, ttl=0).save()
+            changed = True
+    return changed
+
+
+DAY = 24 * 3600
+
+
+def ensure_ch_policies(connect: Optional[ClickhouseClient] = None) -> bool:
+    from noc.main.models.chpolicy import CHPolicy
+
+    changed = False
+    policy_ttl: Dict[str, int] = {
+        p.table: p.ttl * DAY for p in CHPolicy.objects.filter(is_active=True)
+    }
+    if not policy_ttl:
+        return changed
+    for ti in TableInfo.iter_for_tables(policy_ttl):
+        ttl = policy_ttl.get(ti.name) or 0
+        if ttl == ti.table_ttl:
+            continue  # Already applied
+        if ttl:
+            logger.info("[%s] setting ttl to %s", ti.name, ttl)
+            sql = f"ALTER TABLE {ti.name} MODIFY TTL ts + INTERVAL {ttl} SECOND"
+        else:
+            logger.info("[%s] disabling ttl", ti.name)
+            sql = f"ALTER TABLE {ti.name} REMOVE TTL"
+        if connect is None:
+            connect = connection()
+        connect.execute(sql)
     return changed

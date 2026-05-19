@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # noc.core.text tests
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Python modules
+from typing import Dict, Any
 
 # Third-party modules
 import pytest
@@ -27,6 +30,7 @@ from noc.core.text import (
     ch_escape,
     split_text,
     str_distance,
+    find_balanced,
 )
 
 
@@ -519,3 +523,20 @@ def test_split_text(config, max_chunk, expected):
 def test_str_distance(s1: str, s2: str, expected: int) -> None:
     d = str_distance(s1, s2)
     assert d == expected
+
+
+@pytest.mark.parametrize(
+    ("s", "conf", "expected"),
+    [
+        ("(", {}, -1),
+        ("()", {}, 1),
+        ("()()", {}, 1),
+        ("(xxxxx(ddddd)sss(ssss)xxx)", {}, 25),
+        ("abc(....)", {"start": 3}, 8),
+        ("abc[aaa())xddd]", {"start": 3, "closing": "]"}, 14),
+        ("abc[aaa())[][][[]]xddd]", {"start": 3, "closing": "]"}, 22),
+    ],
+)
+def test_find_balanced(s: str, conf: Dict[str, Any], expected: int) -> None:
+    r = find_balanced(s, **conf)
+    assert r == expected
