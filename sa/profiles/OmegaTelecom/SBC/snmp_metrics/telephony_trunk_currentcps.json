@@ -1,5 +1,5 @@
 {
-    "$metric": "Telephony | SIP | Trunk | CurrentCps",
+    "$metric": "Telephony | Trunk | CurrentCps",
     "$type": "oid",
     "oid": "1.2.643.2.124.1.3.2.1.1.6.0",
     "units": "1"
