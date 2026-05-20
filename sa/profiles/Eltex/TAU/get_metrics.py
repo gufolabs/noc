@@ -48,45 +48,6 @@ class Script(GetMetricsScript):
         )
 
     @metrics(
-        ["Environment | Sensor Status"],
-        volatile=False,
-        access="S",
-    )
-    def get_sensor_status(self, metrics):
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.9.10.9.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Sensor Status", None),
-                labels=["noc::sensor::Fan State"],
-                value=v,
-                multi=True,
-            )
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.9.10.10.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Sensor Status", None),
-                labels=["noc::sensor::Fan 1 Rotate"],
-                value=v,
-                multi=True,
-            )
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.9.10.11.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Sensor Status", None),
-                labels=["noc::sensor::Fan 2 Rotate"],
-                value=v,
-                multi=True,
-            )
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.9.10.14.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Sensor Status", None),
-                labels=["noc::sensor::Device Power (ac/dc)"],
-                value=v,
-                multi=True,
-            )
-
-    @metrics(
         [
             "Telephony | Voice | Calls Count",
             "Telephony | Voice | Lost Packets",
