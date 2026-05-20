@@ -29,11 +29,13 @@ class Profile(BaseProfile):
     convert_interface_name = BaseProfile.convert_interface_name_cisco
 
     INTERFACE_TYPES = {
-        6: "physical",
-        161: "aggregated",
-        54: "aggregated",
-        53: "SVI",
-        24: "loopback",
+        "gi": "physical",
+        "te": "physical",
+        "twe": "physical",
+        "oob": "physical",
+        "lo": "loopback",
+        "po": "aggregated",
+        "br": "SVI",
     }
 
     @classmethod
