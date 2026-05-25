@@ -10,7 +10,6 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
   extend: "Ext.panel.Panel",
   requires: [
     "NOC.inv.inv.plugins.alarm.AlarmModel",
-    "NOC.core.mixins.Polling",
   ],
   mixins: [
     "NOC.core.mixins.Polling",

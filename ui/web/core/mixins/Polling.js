@@ -56,9 +56,10 @@ Ext.define("NOC.core.mixins.Polling", {
     document.addEventListener("visibilitychange", this._handleVisibilityChange);
 
     if(Ext.isEmpty(this.pollingTaskId)){
+      var jitter = this.pollingInterval * 0.1 * (2 * Math.random() - 1);
       this.pollingTaskId = Ext.TaskManager.start({
         run: this.pollingTask,
-        interval: this.pollingInterval,
+        interval: Math.round(this.pollingInterval + jitter),
         scope: this,
       });
     } else{

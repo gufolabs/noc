@@ -14,7 +14,6 @@ Ext.define("NOC.inv.inv.Application", {
     "NOC.inv.inv.MaskComponent",
     "NOC.inv.inv.NavModel",
     "NOC.inv.inv.NavSearch",
-    "NOC.core.mixins.Polling",
   ],
   mixins: [
     "NOC.core.mixins.Polling",

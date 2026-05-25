@@ -10,7 +10,6 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
   alias: "controller.fm.alarm.container",
   requires: [
     "NOC.fm.alarm.view.form.ClearAlarms",
-    "NOC.core.mixins.Polling",
   ],
   mixins: [
     "NOC.core.mixins.Polling",

@@ -11,7 +11,6 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
   requires: [
     "NOC.core.MapLayersCreator",
     "NOC.core.ResourceLoader",
-    "NOC.core.mixins.Polling",
   ],
   title: __("Map"),
   closable: false,
