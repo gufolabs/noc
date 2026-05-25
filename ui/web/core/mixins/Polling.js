@@ -68,7 +68,7 @@ Ext.define("NOC.core.mixins.Polling", {
   },
 
   isFullScreen: function(){
-    return window.outerWidth === screen.width && window.outerHeight === screen.height;
+    return window.outerWidth === screen.width || window.outerHeight === screen.height;
   },
 
   stopPolling: function(){
