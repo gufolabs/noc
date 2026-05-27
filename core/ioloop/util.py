@@ -14,7 +14,6 @@ from typing import Callable, TypeVar, Optional
 
 # NOC modules
 from noc.config import config
-from noc.core.comp import reraise
 
 logger = logging.getLogger(__name__)
 T = TypeVar("T")
