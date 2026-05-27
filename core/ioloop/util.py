@@ -1,17 +1,16 @@
 # ----------------------------------------------------------------------
 # Various IOLoop utilities
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-import sys
 import asyncio
 import logging
 
 # Third-party modules
-from typing import Callable, TypeVar, Tuple, Any, Optional
+from typing import Callable, TypeVar, Optional
 
 # NOC modules
 from noc.config import config
@@ -74,7 +73,7 @@ class IOLoopContext(object):
             return True
 
 
-def run_sync(cb: Callable[..., T]) -> T:
+def run_sync(cb: Callable[[], T]) -> T:
     """
     Run callable on dedicated IOLoop in safe manner
     and return result or raise error
@@ -87,24 +86,11 @@ def run_sync(cb: Callable[..., T]) -> T:
     """
     global _setup_completed
 
-    async def wrapper():
-        nonlocal result, error
-        try:
-            result = await cb()
-        except Exception:
-            error = sys.exc_info()
-
     if not _setup_completed:
         setup_asyncio()
 
-    result: Optional[T] = None
-    error: Optional[Tuple[Any, Any, Any]] = None
-
     with IOLoopContext() as loop:
-        loop.run_until_complete(wrapper())
-    if error:
-        reraise(*error)
-    return result
+        return loop.run_until_complete(cb())
 
 
 _setup_completed = False
