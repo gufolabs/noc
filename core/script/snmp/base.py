@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # SNMP methods implementation
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -299,7 +299,7 @@ class SNMP(object):
             raise ValueError("oids must be either string or dict")
         if display_hints is None:
             display_hints = self._get_display_hints()
-        return run_sync(run, close_all=False)
+        return run_sync(run)
 
     def set(self, *args):
         """
@@ -345,7 +345,7 @@ class SNMP(object):
             self.logger.debug("[%s] COUNT result: %s", address, result)
             return result
 
-        return run_sync(partial(run, filter or (lambda x, y: True)), close_all=False)
+        return run_sync(partial(run, filter or (lambda x, y: True)))
 
     def get_max_repetitions(self, max_repetitions: Optional[int] = None) -> Optional[int]:
         """Return max_repetition on SNMP Bulk Request"""
@@ -439,7 +439,7 @@ class SNMP(object):
         bulk = self.script.has_snmp_bulk() if bulk is None else bulk
         if display_hints is None:
             display_hints = self._get_display_hints()
-        return run_sync(partial(run, max_retries, filter or (lambda x, y: True)), close_all=False)
+        return run_sync(partial(run, max_retries, filter or (lambda x, y: True)))
 
     def get_table(self, oid, community_suffix=None, cached=False, display_hints=None):
         """
@@ -592,4 +592,4 @@ class SNMP(object):
             except self.TimeOutError:
                 return None
 
-        return run_sync(run, close_all=False)
+        return run_sync(run)

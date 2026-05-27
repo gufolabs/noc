@@ -74,14 +74,16 @@ class IOLoopContext(object):
             return True
 
 
-def run_sync(cb: Callable[..., T], close_all: bool = True) -> T:
+def run_sync(cb: Callable[..., T]) -> T:
     """
     Run callable on dedicated IOLoop in safe manner
     and return result or raise error
 
-    :param cb: Callable to be runned on IOLoop
-    :param close_all: Close all file descriptors
-    :return: Callable result
+    Args:
+        cb: Callable to be runned on IOLoop
+
+    Returns:
+        Callable result
     """
     global _setup_completed
 
