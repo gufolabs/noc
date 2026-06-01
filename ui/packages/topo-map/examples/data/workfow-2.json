@@ -1,0 +1,256 @@
+{
+    "id": "610bcff0902971a3863306fb",
+    "name": "Agent Default",
+    "is_active": true,
+    "description": "Agent Default Workflow",
+    "states": [
+        {
+            "id": "610be4c771b6da38e5f5acb2",
+            "name": "Approved",
+            "description": "Agent is approved for ready",
+            "is_default": false,
+            "is_productive": true,
+            "is_wiping": false,
+            "update_last_seen": false,
+            "ttl": 0,
+            "update_expired": false,
+            "on_enter_handlers": [],
+            "job_handler": null,
+            "on_leave_handlers": [],
+            "labels": [
+                {
+                    "id": "noc::agent::auth::pre",
+                    "is_protected": true,
+                    "scope": "noc::agent::auth",
+                    "name": "noc::agent::auth::pre",
+                    "value": "pre",
+                    "badges": [
+                        "fa-ils"
+                    ],
+                    "display_order": 0,
+                    "bg_color1": "#9b59b6",
+                    "fg_color1": "#ffffff",
+                    "bg_color2": "#3498db",
+                    "fg_color2": "#ffffff"
+                }
+            ],
+            "bi_id": "3373553393116727828",
+            "x": 260,
+            "y": 50
+        },
+        {
+            "id": "610be3c671b6da38e5f5acb0",
+            "name": "New",
+            "description": "New registered agent on System",
+            "is_default": true,
+            "is_productive": false,
+            "is_wiping": false,
+            "update_last_seen": false,
+            "ttl": 0,
+            "update_expired": false,
+            "on_enter_handlers": [],
+            "job_handler": null,
+            "on_leave_handlers": [],
+            "labels": [
+                {
+                    "id": "noc::agent::auth::none",
+                    "is_protected": true,
+                    "scope": "noc::agent::auth",
+                    "name": "noc::agent::auth::none",
+                    "value": "none",
+                    "badges": [
+                        "fa-ils"
+                    ],
+                    "display_order": 0,
+                    "bg_color1": "#9b59b6",
+                    "fg_color1": "#ffffff",
+                    "bg_color2": "#3498db",
+                    "fg_color2": "#ffffff"
+                }
+            ],
+            "bi_id": "6693212396144621794",
+            "x": 50,
+            "y": 50
+        },
+        {
+            "id": "610bd09371b6da38e5f5acae",
+            "name": "Ready",
+            "description": "Agent is in productive usage",
+            "is_default": false,
+            "is_productive": true,
+            "is_wiping": false,
+            "update_last_seen": true,
+            "ttl": 0,
+            "update_expired": false,
+            "on_enter_handlers": [],
+            "job_handler": null,
+            "on_leave_handlers": [],
+            "labels": [
+                {
+                    "id": "noc::agent::auth::auth",
+                    "is_protected": true,
+                    "scope": "noc::agent::auth",
+                    "name": "noc::agent::auth::auth",
+                    "value": "auth",
+                    "badges": [
+                        "fa-ils"
+                    ],
+                    "display_order": 0,
+                    "bg_color1": "#9b59b6",
+                    "fg_color1": "#ffffff",
+                    "bg_color2": "#3498db",
+                    "fg_color2": "#ffffff"
+                }
+            ],
+            "bi_id": "6323558026723790432",
+            "x": 260,
+            "y": 200
+        },
+        {
+            "id": "610be4fd902971a3863306ff",
+            "name": "Removing",
+            "description": "Agent is removed from system use",
+            "is_default": false,
+            "is_productive": false,
+            "is_wiping": false,
+            "update_last_seen": false,
+            "ttl": 0,
+            "update_expired": false,
+            "on_enter_handlers": [],
+            "job_handler": null,
+            "on_leave_handlers": [],
+            "labels": [
+                {
+                    "id": "noc::agent::auth::none",
+                    "is_protected": true,
+                    "scope": "noc::agent::auth",
+                    "name": "noc::agent::auth::none",
+                    "value": "none",
+                    "badges": [
+                        "fa-ils"
+                    ],
+                    "display_order": 0,
+                    "bg_color1": "#9b59b6",
+                    "fg_color1": "#ffffff",
+                    "bg_color2": "#3498db",
+                    "fg_color2": "#ffffff"
+                }
+            ],
+            "bi_id": "5644536921567111119",
+            "x": 350,
+            "y": 370
+        },
+        {
+            "id": "610be4d9902971a3863306fd",
+            "name": "Suspended",
+            "description": "Agent is temporary suspended/blocked for organisational reasons",
+            "is_default": false,
+            "is_productive": false,
+            "is_wiping": false,
+            "update_last_seen": false,
+            "ttl": 0,
+            "update_expired": false,
+            "on_enter_handlers": [],
+            "job_handler": null,
+            "on_leave_handlers": [],
+            "labels": [
+                {
+                    "id": "noc::agent::auth::pre",
+                    "is_protected": true,
+                    "scope": "noc::agent::auth",
+                    "name": "noc::agent::auth::pre",
+                    "value": "pre",
+                    "badges": [
+                        "fa-ils"
+                    ],
+                    "display_order": 0,
+                    "bg_color1": "#9b59b6",
+                    "fg_color1": "#ffffff",
+                    "bg_color2": "#3498db",
+                    "fg_color2": "#ffffff"
+                }
+            ],
+            "bi_id": "7418372945801511030",
+            "x": 140,
+            "y": 300
+        }
+    ],
+    "allowed_models": [
+        {
+            "id": "pm.Agent",
+            "label": "pm.Agent"
+        }
+    ],
+    "transitions": [
+        {
+            "id": "610be6b471b6da38e5f5acb5",
+            "from_state": "Ready",
+            "to_state": "Suspended",
+            "is_active": true,
+            "event": "suspend",
+            "label": "Suspend",
+            "description": "",
+            "enable_manual": true,
+            "handlers": [],
+            "required_rules": [],
+            "vertices": [],
+            "bi_id": "7385490058000949812"
+        },
+        {
+            "id": "610be76671b6da38e5f5acbb",
+            "from_state": "New",
+            "to_state": "Approved",
+            "is_active": true,
+            "event": "approve",
+            "label": "Approve",
+            "description": "",
+            "enable_manual": true,
+            "handlers": [],
+            "required_rules": [],
+            "vertices": [],
+            "bi_id": "8807158971147672185"
+        },
+        {
+            "id": "610be699902971a386330701",
+            "from_state": "Approved",
+            "to_state": "Ready",
+            "is_active": true,
+            "event": "seen",
+            "label": "Seen",
+            "description": "",
+            "enable_manual": true,
+            "handlers": [],
+            "required_rules": [],
+            "vertices": [],
+            "bi_id": "2789875778847456366"
+        },
+        {
+            "id": "610be6c771b6da38e5f5acb7",
+            "from_state": "Suspended",
+            "to_state": "Ready",
+            "is_active": true,
+            "event": "resume",
+            "label": "Resume",
+            "description": "",
+            "enable_manual": true,
+            "handlers": [],
+            "required_rules": [],
+            "vertices": [],
+            "bi_id": "3738440408351158595"
+        },
+        {
+            "id": "610be6f871b6da38e5f5acb9",
+            "from_state": "Suspended",
+            "to_state": "Removing",
+            "is_active": true,
+            "event": null,
+            "label": "Remove",
+            "description": "",
+            "enable_manual": true,
+            "handlers": [],
+            "required_rules": [],
+            "vertices": [],
+            "bi_id": "6195769163155286672"
+        }
+    ]
+}

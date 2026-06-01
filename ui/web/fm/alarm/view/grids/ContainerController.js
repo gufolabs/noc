@@ -11,6 +11,9 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
   requires: [
     "NOC.fm.alarm.view.form.ClearAlarms",
   ],
+  mixins: [
+    "NOC.core.mixins.Polling",
+  ],
   pollingTaskId: undefined,
   pollingInterval: 120000,
   initViewModel: function(){
@@ -27,24 +30,14 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
       },
     });
   },
-  init: function(view){
-    this.observer = new IntersectionObserver(function(entries){
-      view.isIntersecting = entries[0].isIntersecting;
-      if(!Ext.isEmpty(view.getController())){
-        view.getController().disableHandler(!entries[0].isIntersecting);
-      }
-    }, {
-      threshold: 0.1,
-    });
+  init: function(){
     this.callParent();
-    this.subscribeToEvents();
     var activeGridStore = this.lookupReference("fm-alarm-active").getStore();
     activeGridStore.addListener("beforeload", this.onBeforeLoad, this);
     activeGridStore.addListener("load", this.onLoad, this);
   },
   destroy: function(){
     var activeGrid = this.lookupReference("fm-alarm-active");
-    this.unsubscribeFromEvents();
     this.stopPolling();
     this.setContainerDisabled(false);
     if(Ext.isEmpty(activeGrid)){
@@ -66,33 +59,8 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
       this.getViewModel().set("icon", this.generateIcon(true, "circle", NOC.colors.yes, __("online")));
     }
   },
-  subscribeToEvents: function(){
-    window.addEventListener("focus", this.handleWindowFocus.bind(this));
-    window.addEventListener("blur", this.handleWindowBlur.bind(this));
-  },
-  unsubscribeFromEvents: function(){
-    window.removeEventListener("focus", this.handleWindowFocus.bind(this));
-    window.removeEventListener("blur", this.handleWindowBlur.bind(this));
-  },
   onSoundToggle: function(self, pressed){
     this.getViewModel().set("volume", pressed);
-  },
-  handleWindowFocus: function(){
-    setTimeout(function(me){
-      me.disableHandler(false);
-    }, 100, this);
-  },
-  //
-  handleWindowBlur: function(){
-    this.disableHandler(true);
-  },
-  disableHandler: function(state){
-    var isVisible = !document.hidden, // check is user has switched to another tab browser
-      isIntersecting = this.getView().isIntersecting; // switch to other application tab
-    if(this.pollingTaskId && isIntersecting && isVisible){
-      this.setContainerDisabled(state);
-      this.pollingTask();
-    }
   },
   setContainerDisabled: function(value){
     var vm, app = this.getView().up("[itemId=fm-alarm]");
@@ -115,53 +83,30 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
       this.stopPolling();
     }
   },
-  startPolling: function(){
-    this.observer.observe(this.getView().getEl().dom);
-    if(Ext.isEmpty(this.pollingTaskId)){
-      this.pollingTaskId = Ext.TaskManager.start({
-        run: this.pollingTask,
-        interval: this.pollingInterval,
-        scope: this,
-      });
-    } else{
-      this.pollingTask();
-    }
-  },
-  stopPolling: function(){
-    if(this.pollingTaskId){
-      Ext.TaskManager.stop(this.pollingTaskId);
-      this.pollingTaskId = undefined;
-    }
+  getEl: function(){
+    return this.getView().getEl();
   },
   pollingTask: function(){
+    if(this.destroyed) return;
+    if(!document.hidden && this.isFocused() && this.isIntersecting){
+      this.alarmsUpdate();
+    }
+  },
+  alarmsUpdate: function(){
     var app = this.getView().up("[itemId=fm-alarm]"),
-      gridsContainer = this.getView(),
-      isVisible = !document.hidden, // check is user has switched to another tab browser
-      isFocused = document.hasFocus(), // check is user has minimized browser window
-      isIntersecting = this.getView().isIntersecting; // switch to other application tab
-    
-    // lib visibilityJS
-    if(isIntersecting && isVisible && isFocused){ // check is user has switched to another tab or minimized browser window
-      this.setContainerDisabled(false);
-      // Check for new alarms and play sound
-      this.checkNewAlarms();
-      // Poll only application tab is visible
-      if(!app.ownerCt.isVisible()){ // e.g. app.isActive()
-        return;
+      gridsContainer = this.getView();
+    this.checkNewAlarms();
+    if(!app.ownerCt.isVisible()){
+      return;
+    }
+    if(!gridsContainer.isVisible()){
+      return;
+    }
+    if(this.isNotLocked(gridsContainer)){
+      gridsContainer.down("[reference=fm-alarm-active]").getStore().reload();
+      if(this.isRecentActive()){
+        gridsContainer.down("[reference=fm-alarm-recent]").getStore().reload();
       }
-      // Poll only when in grid preview
-      if(!gridsContainer.isVisible()){
-        return;
-      }
-      // Poll only if polling is not locked
-      if(this.isNotLocked(gridsContainer)){
-        gridsContainer.down("[reference=fm-alarm-active]").getStore().reload();
-        if(this.isRecentActive()){
-          gridsContainer.down("[reference=fm-alarm-recent]").getStore().reload();
-        }
-      }
-    } else{
-      this.setContainerDisabled(true);
     }
   },
   isRecentActive: function(){
@@ -475,11 +420,5 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
         }
       }),
     }).show();
-  },
-  generateIcon: function(isUpdatable, icon, color, msg){
-    if(isUpdatable){
-      return `<i class='fa fa-${icon}' style='padding-left:4px;color:${color};width:16px;' data-qtip='${msg}'></i>`;
-    }
-    return "<i class='fa fa-fw' style='padding-left:4px;width:16px;'></i>";
   },
 });
