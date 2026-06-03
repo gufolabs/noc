@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import datetime
 from typing import List, Iterable, Optional, Dict
 
 # NOC modules
@@ -55,10 +56,9 @@ def save_document_diagnostics(
     """"""
     # Expired/Add watchers
     self.diagnostics = [DiagnosticItemDoc.from_value(d) for d in diagnostics]
-    saved, expired = [], []
+    expired: List[datetime.datetime] = []
     for d in diagnostics:
         expired.extend(c.expired for c in d.checks or [] if c.expired)
-    self.diagnostics = saved
     if expired:
         self.add_watch(ObjectEffect.DIAGNOSTIC_CHECK, after=max(expired), dry_run=dry_run)
     else:
