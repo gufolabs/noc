@@ -14,6 +14,7 @@ from noc.core.snmp.render import render_mac
 class Profile(BaseProfile):
     name = "NOC.UPS"
 
+
 #    pattern_username = rb"^ login: "
 #    pattern_password = rb"^ password: "
 #    pattern_prompt = rb"^>"
