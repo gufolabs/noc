@@ -9,7 +9,6 @@
 from noc.sa.profiles.Generic.get_inventory import Script as BaseScript
 from noc.sa.interfaces.igetinventory import IGetInventory
 from noc.core.mib import mib
-from noc.core.snmp.error import SNMPError
 
 
 class Script(BaseScript):
@@ -140,7 +139,7 @@ class Script(BaseScript):
 
         num_outputs = self.snmp.get(mib["UPS-MIB::upsOutputNumLines", 0])
 
-        for x in range(1, num_inputs + 1):
+        for x in range(1, num_outputs + 1):
             r.extend(
                 [
                     {

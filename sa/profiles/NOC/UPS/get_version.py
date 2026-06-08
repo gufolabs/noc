@@ -5,9 +5,6 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
-# Python modules
-import re
-
 # NOC modules
 from noc.core.script.base import BaseScript
 from noc.sa.interfaces.igetversion import IGetVersion
@@ -27,7 +24,7 @@ class Script(BaseScript):
     def execute_snmp(self):
         vendor = self.snmp.get(self.MANUFACTURER_OID).strip() or "Generic"
         model = self.snmp.get(self.MODEL_OID).strip() or "NOCUPS"
-        ups_software = self.snmp.get(self.UPS_SOFTWARE_VER_OID).strip()
+        # ups_software = self.snmp.get(self.UPS_SOFTWARE_VER_OID).strip()
         ups_agent_software = self.snmp.get(self.AGENT_SOFTWARE_VER_OID).strip()
 
         return {
