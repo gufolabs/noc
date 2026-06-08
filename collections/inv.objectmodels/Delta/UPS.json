@@ -1,0 +1,58 @@
+{
+    "name": "Delta | UPS",
+    "$collection": "inv.objectmodels",
+    "uuid": "70bd6a30-15ab-431b-9835-9a7d383c4290",
+    "vendor__code": "DELTA",
+    "description": "DELTA",
+    "connection_rule__name": "APC | SmartUPS",
+    "cr_context": "CHASSIS",
+    "connections": [
+        {
+            "name": "in",
+            "description": "APC Smart Slot",
+            "direction": "o",
+            "gender": "m",
+            "type__name": "APC | UPS | SS"
+        },
+        {
+            "name": "eth",
+            "description": "Outband Management",
+            "direction": "s",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": "*",
+                    "protocol__code": "10BASET"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "100BASETX"
+                }
+            ],
+            "type__name": "Electrical | RJ45"
+        },
+        {
+            "name": "console",
+            "description": "Management Console",
+            "direction": "s",
+            "gender": "f",
+            "protocols": [{
+                "direction": ">",
+                "protocol__code": "RS232"
+            }],
+            "type__name": "Electrical | 2.5mm-jack"
+        }
+    ],
+    "data": [
+        {
+            "attr": "part_no",
+            "interface": "asset",
+            "value": ["GES502R212035"]
+        },
+        {
+            "attr": "managed",
+            "interface": "management",
+            "value": true
+        }
+    ]
+}

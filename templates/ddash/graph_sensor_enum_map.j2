@@ -1,0 +1,142 @@
+{% set comma = joiner(",") -%}
+{
+  "aliasColors": {},
+  "bars": false,
+  "datasource": null,
+  "id": 15912443232626,
+  "span": "{{ status_span or 12}}",
+  "targets": [
+    {% for sensor in sensor_enum -%}
+        {{ comma() }}
+        {
+          "intervalFactor": 1,
+          "query": "SELECT $timeSeries as t, argMax(value, t) as \"{{ sensor.local_id }}\" FROM $table WHERE sensor={{sensor.bi_id}} and $timeFilter GROUP BY t ORDER BY t",
+          "resultFormat": "time_series",
+          "database": "{{ noc_db_metrics }}",
+          "tableLoading": false,
+          "table": "sensor",
+          "dateLoading": false,
+          "datetimeLoading": false,
+          "dateColDataType": "date",
+          "dateTimeColDataType": "ts"
+        }
+    {% endfor %}
+  ],
+  "timeFrom": null,
+  "timeShift": null,
+  "type": "stat",
+  "options": {
+    "graphMode": "area",
+    "colorMode": "background",
+    "justifyMode": "auto",
+    "fieldOptions": {
+      "values": false,
+      "calcs": [
+        "lastNotNull"
+      ],
+      "defaults": {
+        "thresholds": {
+          "mode": "absolute",
+          "steps": [
+            {
+              "value": null,
+              "color": "green"
+            },
+            {
+              "value": 1,
+              "color": "red"
+            },
+          ]
+        },
+         "mappings": [
+          {
+            "id": 1,
+            "operator": "",
+            "value": "0",
+            "text": "OK",
+            "type": 1,
+            "from": "",
+            "to": ""
+          },
+          {
+            "id": 2,
+            "operator": "",
+            "value": "1",
+            "text": "Alarm",
+            "type": 1,
+            "from": "",
+            "to": ""
+          },
+          {
+            "id": 3,
+            "operator": "",
+            "value": "",
+            "text": "Unknown",
+            "type": 2,
+            "from": "2",
+            "to": "100"
+          }
+        ]
+      },
+      "overrides": [
+        {% set comma = joiner(",") -%}
+        {% for sensor in sensor_enum -%}
+          {{ comma() }}
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{{ sensor.local_id }}"
+            },
+            "properties": [
+              {% set comma1 = joiner(",") -%}
+              {% if sensor.mappings %}
+              {{ comma1() }}
+              {
+                  "id": "mappings",
+                  "value": [
+                      {
+                          "options": {
+                              {% set comma2 = joiner(",") -%}
+                              {% for key, value in sensor.mappings.items() %}
+                              {{ comma2() }}
+                              "{{ key }}": {
+                                  "index": {{ loop.index0 }},
+                                  "text": "{{ value }}"
+                              }
+
+                              {% endfor %}
+                          },
+                          "type": "value"
+                      }
+                  ]
+              }
+              {% endif %}
+              {% if sensor.thresholds %}
+              {{ comma1() }}
+              {
+                  "id": "thresholds",
+                  "value": {
+                      "mode": "absolute",
+                      "steps": [
+                          {% set comma2 = joiner(",") -%}
+                          {% for threshold in sensor.thresholds %}
+                          {{ comma2() }}
+                          {
+                              "color": "{{threshold.color}}",
+                              "value": {{threshold.value}}
+                          }
+                          {% endfor %}
+                      ]
+                  }
+              }
+              {% endif %}
+            ]
+          }
+          {% endfor %}
+        ]
+    },
+    "orientation": "auto"
+  },
+  "pluginVersion": "6.7.0",
+  "transparent": true
+}
