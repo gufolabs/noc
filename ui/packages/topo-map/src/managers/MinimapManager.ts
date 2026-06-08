@@ -1,18 +1,18 @@
-import * as joint from '@joint/core';
-import { CELL_HIGHLIGHT_EVENT, CELL_UNHIGHLIGHT_EVENT } from '../core/events/constants';
-import { centerOfRect, containsPoint } from '../core/geometry';
-import { MapBoundsState } from '../core/MapBoundsState';
-import type { Point, Rect } from '../core/types';
-import { ViewportState } from '../core/ViewportState';
-import { cellNamespace } from '../shapes/cellNamespace';
+import * as joint from "@joint/core";
+import {CELL_HIGHLIGHT_EVENT, CELL_UNHIGHLIGHT_EVENT} from "../core/events/constants";
+import {centerOfRect, containsPoint} from "../core/geometry";
+import {MapBoundsState} from "../core/MapBoundsState";
+import type {Point, Rect} from "../core/types";
+import {ViewportState} from "../core/ViewportState";
+import {cellNamespace} from "../shapes/cellNamespace";
 
-const MINIMAP_ELEMENT_HIGHLIGHT_ID = 'topology-minimap-element-highlight';
+const MINIMAP_ELEMENT_HIGHLIGHT_ID = "topology-minimap-element-highlight";
 
 interface MinimapRect {
   rect: Rect;
 }
 
-export class MinimapManager {
+export class MinimapManager{
   private readonly mapBoundsState: MapBoundsState;
 
   private readonly container: HTMLElement;
@@ -45,15 +45,15 @@ export class MinimapManager {
 
   private dragging = false;
 
-  private dragOffset: Point = { x: 0, y: 0 };
+  private dragOffset: Point = {x: 0, y: 0};
 
   private minimapViewportRect: MinimapRect = {
     rect: {
       x: 0,
       y: 0,
       width: 0,
-      height: 0
-    }
+      height: 0,
+    },
   };
 
   private readonly onPointerDownBound = (event: PointerEvent): void => {
@@ -66,7 +66,7 @@ export class MinimapManager {
 
   private readonly onPointerUpBound = (): void => {
     this.dragging = false;
-    this.viewportRectElement.style.cursor = 'grab';
+    this.viewportRectElement.style.cursor = "grab";
   };
 
   private readonly onCellHighlightBound = (event: Event): void => {
@@ -87,8 +87,8 @@ export class MinimapManager {
     viewportState: ViewportState,
     mapBoundsState: MapBoundsState,
     asyncRendering: boolean,
-    padding: number
-  ) {
+    padding: number,
+  ){
     this.container = container;
     this.selectionEventTarget = selectionEventTarget;
     this.graph = graph;
@@ -97,10 +97,10 @@ export class MinimapManager {
     this.mapBoundsState = mapBoundsState;
     this.asyncRendering = asyncRendering;
     this.padding = Number.isFinite(padding) && padding > 0 ? padding : 0;
-    if (window.getComputedStyle(container).position === 'static') {
-      container.style.position = 'relative';
+    if(window.getComputedStyle(container).position === "static"){
+      container.style.position = "relative";
     }
-    this.paperHost = this.createPaperHost(container, 'topology-minimap-paper-host');
+    this.paperHost = this.createPaperHost(container, "topology-minimap-paper-host");
 
     this.paper = new joint.dia.Paper({
       el: this.paperHost,
@@ -113,12 +113,12 @@ export class MinimapManager {
       interactive: false,
       gridSize: 1,
       drawGrid: false,
-      background: { color: '#ffffff' }
+      background: {color: "#ffffff"},
     });
     this.viewportRectElement = this.createViewportRectElement();
     this.container.append(this.viewportRectElement);
 
-    if (this.asyncRendering) {
+    if(this.asyncRendering){
       this.paper.unfreeze();
     }
 
@@ -131,36 +131,36 @@ export class MinimapManager {
 
     this.selectionEventTarget.addEventListener(CELL_HIGHLIGHT_EVENT, this.onCellHighlightBound);
     this.selectionEventTarget.addEventListener(CELL_UNHIGHLIGHT_EVENT, this.onCellUnhighlightBound);
-    this.container.addEventListener('pointerdown', this.onPointerDownBound);
-    window.addEventListener('pointermove', this.onPointerMoveBound);
-    window.addEventListener('pointerup', this.onPointerUpBound);
+    this.container.addEventListener("pointerdown", this.onPointerDownBound);
+    window.addEventListener("pointermove", this.onPointerMoveBound);
+    window.addEventListener("pointerup", this.onPointerUpBound);
 
     this.syncPaperTransform();
     this.updateViewportRect();
     this.syncSelectionHighlight();
   }
 
-  public resize(width: number, height: number): void {
+  public resize(width: number, height: number): void{
     this.paper.setDimensions(width, height);
     this.refresh();
   }
 
-  public refresh(): void {
+  public refresh(): void{
     this.syncPaperTransform();
     this.updateViewportRect();
     this.syncSelectionHighlight();
   }
 
-  public destroy(): void {
+  public destroy(): void{
     this.unsubscribeViewport();
     this.unsubscribeMapBounds();
 
     this.selectionEventTarget.removeEventListener(CELL_HIGHLIGHT_EVENT, this.onCellHighlightBound);
     this.selectionEventTarget.removeEventListener(CELL_UNHIGHLIGHT_EVENT, this.onCellUnhighlightBound);
-    this.container.removeEventListener('pointerdown', this.onPointerDownBound);
-    window.removeEventListener('pointermove', this.onPointerMoveBound);
-    window.removeEventListener('pointerup', this.onPointerUpBound);
-    if (this.refreshRafId !== 0) {
+    this.container.removeEventListener("pointerdown", this.onPointerDownBound);
+    window.removeEventListener("pointermove", this.onPointerMoveBound);
+    window.removeEventListener("pointerup", this.onPointerUpBound);
+    if(this.refreshRafId !== 0){
       window.cancelAnimationFrame(this.refreshRafId);
       this.refreshRafId = 0;
     }
@@ -170,21 +170,21 @@ export class MinimapManager {
     this.paper.remove();
   }
 
-  private syncPaperTransform(): void {
+  private syncPaperTransform(): void{
     const contentArea = this.getMainContentRect();
     const options: joint.dia.Paper.TransformToFitContentOptions = {
       useModelGeometry: true,
       padding: this.padding,
-      preserveAspectRatio: true
+      preserveAspectRatio: true,
     };
-    if (contentArea) {
+    if(contentArea){
       options.contentArea = contentArea;
     }
 
     this.paper.transformToFitContent(options);
   }
 
-  private updateViewportRect(): void {
+  private updateViewportRect(): void{
     const mainSnapshot = this.viewportState.getSnapshot();
     const mainWidth = this.mainPaper.el.clientWidth;
     const mainHeight = this.mainPaper.el.clientHeight;
@@ -193,7 +193,7 @@ export class MinimapManager {
       x: -mainSnapshot.tx / mainSnapshot.scale,
       y: -mainSnapshot.ty / mainSnapshot.scale,
       width: mainWidth / mainSnapshot.scale,
-      height: mainHeight / mainSnapshot.scale
+      height: mainHeight / mainSnapshot.scale,
     });
 
     this.minimapViewportRect.rect = mainRectLocal;
@@ -206,16 +206,16 @@ export class MinimapManager {
     style.height = `${Math.max(0, minimapRect.height)}px`;
   }
 
-  private onPointerDown(event: PointerEvent): void {
+  private onPointerDown(event: PointerEvent): void{
     const local = this.clientToLocalPoint(event.clientX, event.clientY);
     const currentRect = this.minimapViewportRect.rect;
 
-    if (containsPoint(currentRect, local)) {
+    if(containsPoint(currentRect, local)){
       this.dragging = true;
-      this.viewportRectElement.style.cursor = 'grabbing';
+      this.viewportRectElement.style.cursor = "grabbing";
       this.dragOffset = {
         x: local.x - currentRect.x,
-        y: local.y - currentRect.y
+        y: local.y - currentRect.y,
       };
       return;
     }
@@ -224,13 +224,13 @@ export class MinimapManager {
       x: local.x - currentRect.width / 2,
       y: local.y - currentRect.height / 2,
       width: currentRect.width,
-      height: currentRect.height
+      height: currentRect.height,
     });
     this.centerMainViewportAt(centerOfRect(targetRect));
   }
 
-  private onPointerMove(event: PointerEvent): void {
-    if (!this.dragging) {
+  private onPointerMove(event: PointerEvent): void{
+    if(!this.dragging){
       return;
     }
     const local = this.clientToLocalPoint(event.clientX, event.clientY);
@@ -239,12 +239,12 @@ export class MinimapManager {
       x: local.x - this.dragOffset.x,
       y: local.y - this.dragOffset.y,
       width: currentRect.width,
-      height: currentRect.height
+      height: currentRect.height,
     });
     this.centerMainViewportAt(centerOfRect(targetRect));
   }
 
-  private centerMainViewportAt(minimapPoint: Point): void {
+  private centerMainViewportAt(minimapPoint: Point): void{
     const snapshot = this.viewportState.getSnapshot();
     const width = this.mainPaper.el.clientWidth;
     const height = this.mainPaper.el.clientHeight;
@@ -255,9 +255,9 @@ export class MinimapManager {
     this.viewportState.setTranslate(tx, ty);
   }
 
-  private handleCellHighlight(event: Event): void {
+  private handleCellHighlight(event: Event): void{
     const cellId = this.getCellIdFromEvent(event);
-    if (!cellId) {
+    if(!cellId){
       return;
     }
 
@@ -265,19 +265,19 @@ export class MinimapManager {
     this.syncSelectionHighlight();
   }
 
-  private mainLocalRectToMinimapPaper(mainRect: Rect): Rect {
+  private mainLocalRectToMinimapPaper(mainRect: Rect): Rect{
     const paperRect = this.paper.localToPaperRect(mainRect);
     return {
       x: paperRect.x,
       y: paperRect.y,
       width: paperRect.width,
-      height: paperRect.height
+      height: paperRect.height,
     };
   }
 
-  private clampRectToMinimapBounds(rect: Rect): Rect {
+  private clampRectToMinimapBounds(rect: Rect): Rect{
     const bounds = this.getMinimapContentPaperRect();
-    if (!bounds) {
+    if(!bounds){
       const computedSize = this.paper.getComputedSize();
       const maxWidth = Math.max(0, computedSize.width || this.container.clientWidth);
       const maxHeight = Math.max(0, computedSize.height || this.container.clientHeight);
@@ -290,7 +290,7 @@ export class MinimapManager {
         x: left,
         y: top,
         width,
-        height
+        height,
       };
     }
 
@@ -303,112 +303,112 @@ export class MinimapManager {
       x: left,
       y: top,
       width,
-      height
+      height,
     };
   }
 
-  private clientToLocalPoint(clientX: number, clientY: number): Point {
+  private clientToLocalPoint(clientX: number, clientY: number): Point{
     const {x, y} = this.paper.clientToLocalPoint({
       x: clientX,
-      y: clientY
+      y: clientY,
     });
-    return { x, y };
+    return {x, y};
   }
 
-  private syncSelectionHighlight(): void {
+  private syncSelectionHighlight(): void{
     this.removeRenderedSelectionHighlight();
 
-    if (!this.highlightedCellId) {
+    if(!this.highlightedCellId){
       return;
     }
 
     const cell = this.graph.getCell(this.highlightedCellId);
-    if (!cell?.isElement()) {
+    if(!cell?.isElement()){
       this.highlightedCellId = null;
       return;
     }
 
     const elementView = this.resolveElementView(cell);
-    if (!elementView) {
+    if(!elementView){
       return;
     }
 
-    joint.highlighters.mask.add(elementView, 'root', MINIMAP_ELEMENT_HIGHLIGHT_ID, {
+    joint.highlighters.mask.add(elementView, "root", MINIMAP_ELEMENT_HIGHLIGHT_ID, {
       padding: 4,
       attrs: {
-        stroke: '#f59e0b',
+        stroke: "#f59e0b",
         strokeWidth: 1.5,
-        fill: 'none',
+        fill: "none",
         opacity: 0.95,
-        pointerEvents: 'none'
-      }
+        pointerEvents: "none",
+      },
     });
   }
 
-  private resolveElementView(element: joint.dia.Element): joint.dia.ElementView | null {
+  private resolveElementView(element: joint.dia.Element): joint.dia.ElementView | null{
     const existingView = this.paper.findViewByModel<joint.dia.ElementView>(element);
-    if (existingView) {
+    if(existingView){
       return existingView;
     }
 
-    try {
+    try{
       return this.paper.requireView<joint.dia.ElementView>(element);
-    } catch {
+    } catch{
       return null;
     }
   }
 
-  private clearSelectionHighlight(): void {
+  private clearSelectionHighlight(): void{
     this.highlightedCellId = null;
     this.removeRenderedSelectionHighlight();
   }
 
-  private removeRenderedSelectionHighlight(): void {
+  private removeRenderedSelectionHighlight(): void{
     joint.highlighters.mask.removeAll(this.paper, MINIMAP_ELEMENT_HIGHLIGHT_ID);
   }
 
-  private getCellIdFromEvent(event: Event): string | null {
-    if (!(event instanceof CustomEvent)) {
+  private getCellIdFromEvent(event: Event): string | null{
+    if(!(event instanceof CustomEvent)){
       return null;
     }
 
     const detail = event.detail;
-    if (typeof detail !== 'object' || detail === null || !('id' in detail)) {
+    if(typeof detail !== "object" || detail === null || !("id" in detail)){
       return null;
     }
 
-    const { id } = detail as { id?: unknown };
-    return typeof id === 'string' && id.length > 0 ? id : null;
+    const {id} = detail as { id?: unknown };
+    return typeof id === "string" && id.length > 0 ? id : null;
   }
 
-  private createPaperHost(container: HTMLElement, className: string): HTMLDivElement {
-    const host = document.createElement('div');
+  private createPaperHost(container: HTMLElement, className: string): HTMLDivElement{
+    const host = document.createElement("div");
     host.className = className;
-    host.style.width = '100%';
-    host.style.height = '100%';
-    host.style.position = 'relative';
+    host.style.width = "100%";
+    host.style.height = "100%";
+    host.style.position = "relative";
     container.append(host);
     return host;
   }
 
-  private createViewportRectElement(): HTMLDivElement {
-    const rect = document.createElement('div');
-    rect.className = 'topology-minimap-viewport-rect';
-    rect.style.position = 'absolute';
-    rect.style.left = '0';
-    rect.style.top = '0';
-    rect.style.width = '0';
-    rect.style.height = '0';
-    rect.style.background = 'rgba(14, 165, 233, 0.14)';
-    rect.style.border = '1px dashed #0284c7';
-    rect.style.borderRadius = '2px';
-    rect.style.cursor = 'grab';
-    rect.style.zIndex = '2';
-    rect.style.boxSizing = 'border-box';
+  private createViewportRectElement(): HTMLDivElement{
+    const rect = document.createElement("div");
+    rect.className = "topology-minimap-viewport-rect";
+    rect.style.position = "absolute";
+    rect.style.left = "0";
+    rect.style.top = "0";
+    rect.style.width = "0";
+    rect.style.height = "0";
+    rect.style.background = "rgba(14, 165, 233, 0.14)";
+    rect.style.border = "1px dashed #0284c7";
+    rect.style.borderRadius = "2px";
+    rect.style.cursor = "grab";
+    rect.style.zIndex = "2";
+    rect.style.boxSizing = "border-box";
     return rect;
   }
 
-  private getMainContentRect(): Rect | null {
+  private getMainContentRect(): Rect | null{
     return this.mapBoundsState.get();
   }
 
@@ -417,9 +417,9 @@ export class MinimapManager {
    * 
    * @returns The minimap content rectangle in minimap coordinates, or null if no content
    */
-  private getMinimapContentPaperRect(): Rect | null {
+  private getMinimapContentPaperRect(): Rect | null{
     const contentRect = this.getMainContentRect();
-    if (!contentRect) {
+    if(!contentRect){
       return null;
     }
 
@@ -428,7 +428,7 @@ export class MinimapManager {
       x: paperRect.x,
       y: paperRect.y,
       width: Math.max(0, paperRect.width),
-      height: Math.max(0, paperRect.height)
+      height: Math.max(0, paperRect.height),
     };
   }
   
@@ -440,9 +440,9 @@ export class MinimapManager {
    * @param rect - The viewport rectangle to constrain
    * @returns The constrained viewport rectangle within content bounds
    */
-  private clampViewportRectToContent(rect: Rect): Rect {
+  private clampViewportRectToContent(rect: Rect): Rect{
     const bounds = this.getMainContentRect();
-    if (!bounds) {
+    if(!bounds){
       return rect;
     }
 
@@ -455,7 +455,7 @@ export class MinimapManager {
       x,
       y,
       width,
-      height
+      height,
     };
   }
 
@@ -464,20 +464,20 @@ export class MinimapManager {
    * Ensures multiple refresh requests are batched into a single update.
    * Applies a one-frame delay before syncing transforms and updating the viewport.
    */
-  private scheduleGraphRefresh(): void {
+  private scheduleGraphRefresh(): void{
     this.refreshDelayFrames = 1;
-    if (this.refreshRafId !== 0) {
+    if(this.refreshRafId !== 0){
       return;
     }
 
     const runRefresh = (): void => {
       this.refreshRafId = window.requestAnimationFrame(() => {
         this.refreshRafId = 0;
-        if (this.refreshDelayFrames > 0) {
-        this.refreshDelayFrames -= 1;
-        runRefresh();
-        return;
-      }
+        if(this.refreshDelayFrames > 0){
+          this.refreshDelayFrames -= 1;
+          runRefresh();
+          return;
+        }
 
         this.refresh();
       });

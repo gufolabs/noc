@@ -1,17 +1,17 @@
-import type * as joint from '@joint/core';
-import { MapDocument } from '../core/MapDocument';
-import { createGraphLayers, LINK_LAYER_ID, NODE_LAYER_ID } from '../core/graphLayers';
-import { createNodeCell } from '../core/nodeCellFactory';
-import { DEFAULT_STATUS_CODE } from '../core/nodePresentation';
+import type * as joint from "@joint/core";
+import {MapDocument} from "../core/MapDocument";
+import {createGraphLayers, LINK_LAYER_ID, NODE_LAYER_ID} from "../core/graphLayers";
+import {createNodeCell} from "../core/nodeCellFactory";
+import {DEFAULT_STATUS_CODE} from "../core/nodePresentation";
 import {
   type Interface,
   PAPER_TYPES,
   type PaperConfig,
   type PaperType,
   type ShapeOverlay,
-  type ViewportSnapshot
-} from '../core/types';
-import { createIconLinkEnd } from '../shapes/linkEndpoints';
+  type ViewportSnapshot,
+} from "../core/types";
+import {createIconLinkEnd} from "../shapes/linkEndpoints";
 
 type ScalarId = string | number;
 
@@ -81,23 +81,23 @@ export interface MapConverterInput {
   caps?: [] | null;
 }
 
-function isPaperType(value: unknown): value is PaperType {
-  return typeof value === 'string' && PAPER_TYPES.includes(value as PaperType);
+function isPaperType(value: unknown): value is PaperType{
+  return typeof value === "string" && PAPER_TYPES.includes(value as PaperType);
 }
 
-function toFiniteNumber(value: unknown, fallback: number): number {
-  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+function toFiniteNumber(value: unknown, fallback: number): number{
+  return typeof value === "number" && Number.isFinite(value) ? value : fallback;
 }
 
-function toPositiveFiniteNumber(value: unknown, fallback: number): number {
-  if (typeof value === 'number' && Number.isFinite(value) && value > 0) {
+function toPositiveFiniteNumber(value: unknown, fallback: number): number{
+  if(typeof value === "number" && Number.isFinite(value) && value > 0){
     return value;
   }
-  if (typeof value === 'string') {
+  if(typeof value === "string"){
     const trimmed = value.trim();
-    if (trimmed.length > 0) {
+    if(trimmed.length > 0){
       const parsed = Number(trimmed);
-      if (Number.isFinite(parsed) && parsed > 0) {
+      if(Number.isFinite(parsed) && parsed > 0){
         return parsed;
       }
     }
@@ -105,36 +105,36 @@ function toPositiveFiniteNumber(value: unknown, fallback: number): number {
   return fallback;
 }
 
-function toId(value: unknown): string | null {
-  if (typeof value === 'string' && value.length > 0) {
+function toId(value: unknown): string | null{
+  if(typeof value === "string" && value.length > 0){
     return value;
   }
-  if (typeof value === 'number' && Number.isFinite(value)) {
+  if(typeof value === "number" && Number.isFinite(value)){
     return String(value);
   }
   return null;
 }
 
-function toText(value: unknown, fallback = ''): string {
-  return typeof value === 'string' ? value : fallback;
+function toText(value: unknown, fallback = ""): string{
+  return typeof value === "string" ? value : fallback;
 }
 
-function toOptionalText(value: unknown): string | undefined {
+function toOptionalText(value: unknown): string | undefined{
   const text = toText(value);
   return text.length > 0 ? text : undefined;
 }
 
-function toOptionalFiniteNumber(value: unknown): number | undefined {
-  return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
+function toOptionalFiniteNumber(value: unknown): number | undefined{
+  return typeof value === "number" && Number.isFinite(value) ? value : undefined;
 }
 
-function toOptionalBoolean(value: unknown): boolean | undefined {
-  return typeof value === 'boolean' ? value : undefined;
+function toOptionalBoolean(value: unknown): boolean | undefined{
+  return typeof value === "boolean" ? value : undefined;
 }
 
-function normalizeOpacity(value: unknown): number | undefined {
+function normalizeOpacity(value: unknown): number | undefined{
   const opacity = toOptionalFiniteNumber(value);
-  if (opacity === undefined) {
+  if(opacity === undefined){
     return undefined;
   }
 
@@ -142,14 +142,14 @@ function normalizeOpacity(value: unknown): number | undefined {
   return Math.min(1, Math.max(0, normalized));
 }
 
-function toGlyphText(value: unknown): string | null {
-  if (typeof value === 'number' && Number.isFinite(value)) {
+function toGlyphText(value: unknown): string | null{
+  if(typeof value === "number" && Number.isFinite(value)){
     return String.fromCodePoint(value);
   }
 
-  if (typeof value === 'string' && value.length > 0) {
+  if(typeof value === "string" && value.length > 0){
     const numeric = Number(value);
-    if (Number.isFinite(numeric)) {
+    if(Number.isFinite(numeric)){
       return String.fromCodePoint(numeric);
     }
     return value;
@@ -158,22 +158,22 @@ function toGlyphText(value: unknown): string | null {
   return null;
 }
 
-function normalizeViewport(viewport: MapConverterInput['viewport']): ViewportSnapshot | undefined {
-  if (!viewport) {
+function normalizeViewport(viewport: MapConverterInput["viewport"]): ViewportSnapshot | undefined{
+  if(!viewport){
     return undefined;
   }
 
   const scale = toFiniteNumber(viewport.scale, Number.NaN);
   const tx = toFiniteNumber(viewport.tx, Number.NaN);
   const ty = toFiniteNumber(viewport.ty, Number.NaN);
-  if (!Number.isFinite(scale) || !Number.isFinite(tx) || !Number.isFinite(ty)) {
+  if(!Number.isFinite(scale) || !Number.isFinite(tx) || !Number.isFinite(ty)){
     return undefined;
   }
 
-  return { scale, tx, ty };
+  return {scale, tx, ty};
 }
 
-function normalizePaperConfig(input: MapConverterInput): PaperConfig {
+function normalizePaperConfig(input: MapConverterInput): PaperConfig{
   const paperConfig: PaperConfig = {};
   const id = toId(input.id);
   const type = toOptionalText(input.type);
@@ -187,70 +187,70 @@ function normalizePaperConfig(input: MapConverterInput): PaperConfig {
   const height = toOptionalFiniteNumber(input.height);
   const stencilDir = toOptionalText(input.stencil_dir);
 
-  if (id) {
+  if(id){
     paperConfig.id = id;
   }
-  if (isPaperType(type)) {
+  if(isPaperType(type)){
     paperConfig.type = type;
   }
-  if (gridSize !== undefined) {
+  if(gridSize !== undefined){
     paperConfig.gridSize = gridSize;
   }
-  if (normalizePosition !== undefined) {
+  if(normalizePosition !== undefined){
     paperConfig.normalizePosition = normalizePosition;
   }
-  if (objectStatusRefreshInterval !== undefined) {
+  if(objectStatusRefreshInterval !== undefined){
     paperConfig.objectStatusRefreshInterval = objectStatusRefreshInterval;
   }
-  if (backgroundImage) {
+  if(backgroundImage){
     paperConfig.backgroundImage = backgroundImage;
   }
-  if (backgroundOpacity !== undefined) {
+  if(backgroundOpacity !== undefined){
     paperConfig.backgroundOpacity = backgroundOpacity;
   }
-  if (name) {
+  if(name){
     paperConfig.name = name;
   }
-  if (width !== undefined) {
+  if(width !== undefined){
     paperConfig.width = width;
   }
-  if (height !== undefined) {
+  if(height !== undefined){
     paperConfig.height = height;
   }
-  if (stencilDir) {
+  if(stencilDir){
     paperConfig.stencilDir = stencilDir;
   }
 
   return paperConfig;
 }
 
-function getImageId(shape: string): string {
-  return `img-${shape.replace(/\//g, '-').replace(/ /g, '-').replace(/_/g, '-')}`;
+function getImageId(shape: string): string{
+  return `img-${shape.replace(/\//g, "-").replace(/ /g, "-").replace(/_/g, "-")}`;
 }
 
-class MapConverter {
+class MapConverter{
   private readonly mapData: MapConverterInput;
 
   private readonly portToNode: Record<string, string>;
 
-  public constructor(mapData: MapConverterInput) {
+  public constructor(mapData: MapConverterInput){
     this.mapData = mapData;
     this.portToNode = this.buildPortMap();
   }
 
-  public convert(): MapDocument {
+  public convert(): MapDocument{
     const cells: Array<joint.dia.Cell.JSON> = [];
 
-    for (const node of this.mapData.nodes ?? []) {
+    for(const node of this.mapData.nodes ?? []){
       const cell = this.convertNode(node);
-      if (cell) {
+      if(cell){
         cells.push(cell);
       }
     }
 
-    for (const link of this.mapData.links ?? []) {
+    for(const link of this.mapData.links ?? []){
       const cell = this.convertLink(link);
-      if (cell) {
+      if(cell){
         cells.push(cell);
       }
     }
@@ -258,7 +258,7 @@ class MapConverter {
     const graphJson: joint.dia.Graph.JSON = {
       cells,
       layers: createGraphLayers(),
-      defaultLayer: NODE_LAYER_ID
+      defaultLayer: NODE_LAYER_ID,
     };
 
     const viewport = normalizeViewport(this.mapData.viewport);
@@ -267,18 +267,18 @@ class MapConverter {
     return MapDocument.fromGraph(graphJson, viewport, normalizePaperConfig(this.mapData), interfaces);
   }
 
-  private buildPortMap(): Record<string, string> {
+  private buildPortMap(): Record<string, string>{
     const map: Record<string, string> = {};
 
-    for (const node of this.mapData.nodes ?? []) {
+    for(const node of this.mapData.nodes ?? []){
       const nodeId = toId(node.id);
-      if (!nodeId) {
+      if(!nodeId){
         continue;
       }
 
-      for (const port of node.ports ?? []) {
+      for(const port of node.ports ?? []){
         const portId = toId(port.id);
-        if (portId) {
+        if(portId){
           map[portId] = nodeId;
         }
       }
@@ -287,12 +287,12 @@ class MapConverter {
     return map;
   }
 
-  private convertNode(node: MapConverterNode): joint.dia.Cell.JSON | null {
+  private convertNode(node: MapConverterNode): joint.dia.Cell.JSON | null{
     const nodeId = toId(node.id);
     const shape = toText(node.shape);
     const nodeWidth = toPositiveFiniteNumber(node.shape_width, 64);
     const nodeHeight = toPositiveFiniteNumber(node.shape_height, 64);
-    if (!nodeId) {
+    if(!nodeId){
       return null;
     }
     const data = {
@@ -310,14 +310,14 @@ class MapConverter {
       shapeOverlay: node.shape_overlay,
       type: node.type,
     };
-    if (shape.length === 0) {
+    if(shape.length === 0){
       const glyphText = toGlyphText(node.glyph);
-      if (!glyphText) {
+      if(!glyphText){
         return null;
       }
 
       return createNodeCell({
-        kind: 'font',
+        kind: "font",
         id: nodeId,
         x: toFiniteNumber(node.x, 0),
         y: toFiniteNumber(node.y, 0),
@@ -337,7 +337,7 @@ class MapConverter {
     }
 
     return createNodeCell({
-      kind: 'image',
+      kind: "image",
       id: nodeId,
       x: toFiniteNumber(node.x, 0),
       y: toFiniteNumber(node.y, 0),
@@ -348,20 +348,20 @@ class MapConverter {
       ipaddrText: toText(node.address),
       iconHref: `#${getImageId(shape)}`,
       statusCode: DEFAULT_STATUS_CODE,
-      data
+      data,
     });
   }
 
-  private convertLink(link: MapConverterLink): joint.dia.Cell.JSON | null {
+  private convertLink(link: MapConverterLink): joint.dia.Cell.JSON | null{
     const sourcePortId = toId(link.ports?.[0]);
     const targetPortId = toId(link.ports?.[1]);
-    if (!sourcePortId || !targetPortId) {
+    if(!sourcePortId || !targetPortId){
       return null;
     }
 
     const srcId = this.portToNode[sourcePortId];
     const dstId = this.portToNode[targetPortId];
-    if (srcId === undefined || dstId === undefined) {
+    if(srcId === undefined || dstId === undefined){
       return null;
     }
     const data = {
@@ -376,7 +376,7 @@ class MapConverter {
     };
 
     return {
-      type: 'noc.LinkElement',
+      type: "noc.LinkElement",
       id: toId(link.id) ?? `${srcId}:${dstId}`,
       layer: LINK_LAYER_ID,
       source: createIconLinkEnd(srcId),
@@ -385,20 +385,20 @@ class MapConverter {
     };
   }
 
-  private collectInterfaces(): Interface[] {
+  private collectInterfaces(): Interface[]{
     const interfaces: Interface[] = [];
 
-    for (const node of this.mapData.nodes ?? []) {
+    for(const node of this.mapData.nodes ?? []){
       const objectName = toText(node.name);
-      for (const port of node.ports ?? []) {
+      for(const port of node.ports ?? []){
         const portId = toId(port.id);
-        if (!portId) {
+        if(!portId){
           continue;
         }
 
-        for (const interfaceName of port.ports ?? []) {
+        for(const interfaceName of port.ports ?? []){
           const normalizedInterfaceName = toOptionalText(interfaceName);
-          if (!normalizedInterfaceName) {
+          if(!normalizedInterfaceName){
             continue;
           }
 
@@ -406,8 +406,8 @@ class MapConverter {
             id: portId,
             tags: {
               object: objectName,
-              interface: normalizedInterfaceName
-            }
+              interface: normalizedInterfaceName,
+            },
           });
         }
       }
@@ -417,6 +417,6 @@ class MapConverter {
   }
 }
 
-export function convertMapData(input: MapConverterInput): MapDocument {
+export function convertMapData(input: MapConverterInput): MapDocument{
   return new MapConverter(input).convert();
 }

@@ -3,8 +3,8 @@ interface HistoryShortcutBindings {
   redo: () => boolean;
 }
 
-function isEditableTarget(target: EventTarget | null): boolean {
-  if (typeof Element === 'undefined' || !(target instanceof Element)) {
+function isEditableTarget(target: EventTarget | null): boolean{
+  if(typeof Element === "undefined" || !(target instanceof Element)){
     return false;
   }
 
@@ -12,15 +12,15 @@ function isEditableTarget(target: EventTarget | null): boolean {
   return editable !== null;
 }
 
-function focusHost(host: HTMLElement): void {
-  if (typeof host.focus !== 'function') {
+function focusHost(host: HTMLElement): void{
+  if(typeof host.focus !== "function"){
     return;
   }
-  host.focus({ preventScroll: true });
+  host.focus({preventScroll: true});
 }
 
-export function bindHistoryShortcuts(host: HTMLElement, bindings: HistoryShortcutBindings): () => void {
-  if (host.tabIndex < 0) {
+export function bindHistoryShortcuts(host: HTMLElement, bindings: HistoryShortcutBindings): () => void{
+  if(host.tabIndex < 0){
     host.tabIndex = 0;
   }
 
@@ -29,15 +29,15 @@ export function bindHistoryShortcuts(host: HTMLElement, bindings: HistoryShortcu
   };
 
   const onKeyDown = (event: KeyboardEvent): void => {
-    if ((!event.metaKey && !event.ctrlKey) || event.altKey || isEditableTarget(event.target)) {
+    if((!event.metaKey && !event.ctrlKey) || event.altKey || isEditableTarget(event.target)){
       return;
     }
-    if (event.key.toLowerCase() !== 'z') {
+    if(event.key.toLowerCase() !== "z"){
       return;
     }
 
     const handled = event.shiftKey ? bindings.redo() : bindings.undo();
-    if (!handled) {
+    if(!handled){
       return;
     }
 
@@ -45,11 +45,11 @@ export function bindHistoryShortcuts(host: HTMLElement, bindings: HistoryShortcu
     event.stopPropagation();
   };
 
-  host.addEventListener('pointerdown', onPointerDown);
-  host.addEventListener('keydown', onKeyDown);
+  host.addEventListener("pointerdown", onPointerDown);
+  host.addEventListener("keydown", onKeyDown);
 
   return () => {
-    host.removeEventListener('pointerdown', onPointerDown);
-    host.removeEventListener('keydown', onKeyDown);
+    host.removeEventListener("pointerdown", onPointerDown);
+    host.removeEventListener("keydown", onKeyDown);
   };
 }

@@ -1,16 +1,16 @@
-import type * as joint from '@joint/core';
-import { PanManager } from '../managers/PanManager';
-import { getEventClientPoint, isPrimaryMouseButton } from '../core/events';
-import { DiagramService } from '../core/DiagramService';
-import type { InteractionMode } from './InteractionMode';
+import type * as joint from "@joint/core";
+import {DiagramService} from "../core/DiagramService";
+import {getEventClientPoint, isPrimaryMouseButton} from "../core/events";
+import {PanManager} from "../managers/PanManager";
+import type {InteractionMode} from "./InteractionMode";
 
-export class PanMode implements InteractionMode {
+export class PanMode implements InteractionMode{
   private readonly panManager: PanManager;
 
   private readonly diagramService: DiagramService;
 
   private readonly onWindowPointerMoveBound = (event: PointerEvent): void => {
-    if (!this.panManager.isPanning()) {
+    if(!this.panManager.isPanning()){
       return;
     }
     this.panManager.move(event.clientX, event.clientY);
@@ -23,37 +23,37 @@ export class PanMode implements InteractionMode {
 
   private windowTracking = false;
 
-  public constructor(panManager: PanManager, diagramService: DiagramService) {
+  public constructor(panManager: PanManager, diagramService: DiagramService){
     this.panManager = panManager;
     this.diagramService = diagramService;
   }
 
-  public activate(): void {
+  public activate(): void{
     this.diagramService.setDrawGrid(false, 1);
     this.diagramService.setInteractive(false);
   }
 
-  public deactivate(): void {
+  public deactivate(): void{
     this.stopWindowTracking();
     this.panManager.end();
   }
 
-  public onBlankPointerDown(event: joint.dia.Event, _x: number, _y: number): void {
+  public onBlankPointerDown(event: joint.dia.Event): void{
     this.startPanFromEvent(event);
   }
 
-  public onBlankPointerMove(event: joint.dia.Event, _x: number, _y: number): void {
-    if (!this.panManager.isPanning()) {
+  public onBlankPointerMove(event: joint.dia.Event): void{
+    if(!this.panManager.isPanning()){
       return;
     }
     const clientPoint = getEventClientPoint(event);
-    if (!clientPoint) {
+    if(!clientPoint){
       return;
     }
     this.panManager.move(clientPoint.x, clientPoint.y);
   }
 
-  public onBlankPointerUp(_event: joint.dia.Event, _x: number, _y: number): void {
+  public onBlankPointerUp(): void{
     this.stopWindowTracking();
     this.panManager.end();
   }
@@ -61,67 +61,58 @@ export class PanMode implements InteractionMode {
   public onElementPointerDown(
     _elementView: joint.dia.ElementView,
     event: joint.dia.Event,
-    _x: number,
-    _y: number
-  ): void {
+  ): void{
     this.startPanFromEvent(event);
   }
 
   public onElementPointerMove(
     _elementView: joint.dia.ElementView,
     event: joint.dia.Event,
-    _x: number,
-    _y: number
-  ): void {
-    if (!this.panManager.isPanning()) {
+  ): void{
+    if(!this.panManager.isPanning()){
       return;
     }
     const clientPoint = getEventClientPoint(event);
-    if (!clientPoint) {
+    if(!clientPoint){
       return;
     }
     this.panManager.move(clientPoint.x, clientPoint.y);
   }
 
-  public onElementPointerUp(
-    _elementView: joint.dia.ElementView,
-    _event: joint.dia.Event,
-    _x: number,
-    _y: number
-  ): void {
+  public onElementPointerUp(): void{
     this.stopWindowTracking();
     this.panManager.end();
   }
 
-  private startPanFromEvent(event: joint.dia.Event): void {
-    if (!isPrimaryMouseButton(event)) {
+  private startPanFromEvent(event: joint.dia.Event): void{
+    if(!isPrimaryMouseButton(event)){
       return;
     }
     const clientPoint = getEventClientPoint(event);
-    if (!clientPoint) {
+    if(!clientPoint){
       return;
     }
     this.panManager.start(clientPoint.x, clientPoint.y);
     this.startWindowTracking();
   }
 
-  private startWindowTracking(): void {
-    if (this.windowTracking) {
+  private startWindowTracking(): void{
+    if(this.windowTracking){
       return;
     }
-    window.addEventListener('pointermove', this.onWindowPointerMoveBound);
-    window.addEventListener('pointerup', this.onWindowPointerUpBound);
-    window.addEventListener('pointercancel', this.onWindowPointerUpBound);
+    window.addEventListener("pointermove", this.onWindowPointerMoveBound);
+    window.addEventListener("pointerup", this.onWindowPointerUpBound);
+    window.addEventListener("pointercancel", this.onWindowPointerUpBound);
     this.windowTracking = true;
   }
 
-  private stopWindowTracking(): void {
-    if (!this.windowTracking) {
+  private stopWindowTracking(): void{
+    if(!this.windowTracking){
       return;
     }
-    window.removeEventListener('pointermove', this.onWindowPointerMoveBound);
-    window.removeEventListener('pointerup', this.onWindowPointerUpBound);
-    window.removeEventListener('pointercancel', this.onWindowPointerUpBound);
+    window.removeEventListener("pointermove", this.onWindowPointerMoveBound);
+    window.removeEventListener("pointerup", this.onWindowPointerUpBound);
+    window.removeEventListener("pointercancel", this.onWindowPointerUpBound);
     this.windowTracking = false;
   }
 }

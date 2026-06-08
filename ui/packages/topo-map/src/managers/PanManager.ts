@@ -1,4 +1,4 @@
-import { ViewportState } from '../core/ViewportState';
+import {ViewportState} from "../core/ViewportState";
 
 interface PanSession {
   startClientX: number;
@@ -7,27 +7,27 @@ interface PanSession {
   startTy: number;
 }
 
-export class PanManager {
+export class PanManager{
   private readonly viewportState: ViewportState;
 
   private session: PanSession | null = null;
 
-  public constructor(viewportState: ViewportState) {
+  public constructor(viewportState: ViewportState){
     this.viewportState = viewportState;
   }
 
-  public start(clientX: number, clientY: number): void {
+  public start(clientX: number, clientY: number): void{
     const snapshot = this.viewportState.getSnapshot();
     this.session = {
       startClientX: clientX,
       startClientY: clientY,
       startTx: snapshot.tx,
-      startTy: snapshot.ty
+      startTy: snapshot.ty,
     };
   }
 
-  public move(clientX: number, clientY: number): void {
-    if (!this.session) {
+  public move(clientX: number, clientY: number): void{
+    if(!this.session){
       return;
     }
 
@@ -37,11 +37,11 @@ export class PanManager {
     this.viewportState.setTranslate(this.session.startTx + dx, this.session.startTy + dy);
   }
 
-  public end(): void {
+  public end(): void{
     this.session = null;
   }
 
-  public isPanning(): boolean {
+  public isPanning(): boolean{
     return this.session !== null;
   }
 }

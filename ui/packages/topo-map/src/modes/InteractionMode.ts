@@ -1,4 +1,4 @@
-import type * as joint from '@joint/core';
+import type * as joint from "@joint/core";
 
 export interface InteractionMode {
   activate(): void;

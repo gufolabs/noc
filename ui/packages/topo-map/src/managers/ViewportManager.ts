@@ -1,16 +1,16 @@
-import * as joint from '@joint/core';
-import RBush from 'rbush';
-import type { BBox } from 'rbush';
-import type { Rect } from '../core/types';
-import { ViewportState } from '../core/ViewportState';
-import { inflateRect, intersects } from '../core/geometry';
+import * as joint from "@joint/core";
+import RBush from "rbush";
+import type {BBox} from "rbush";
+import type {Rect} from "../core/types";
+import {ViewportState} from "../core/ViewportState";
+import {inflateRect, intersects} from "../core/geometry";
 
 interface IndexedElement extends BBox {
   id: joint.dia.Cell.ID;
   element: joint.dia.Element;
 }
 
-export class ViewportManager {
+export class ViewportManager{
   private readonly graph: joint.dia.Graph;
 
   private readonly paper: joint.dia.Paper;
@@ -24,7 +24,7 @@ export class ViewportManager {
   private readonly bufferPx: number;
 
   private readonly onAddBound = (cell: joint.dia.Cell): void => {
-    if (cell.isElement()) {
+    if(cell.isElement()){
       this.upsertElement(cell);
     }
   };
@@ -34,12 +34,12 @@ export class ViewportManager {
   };
 
   private readonly onPositionChangeBound = (cell: joint.dia.Cell): void => {
-    if (cell.isElement()) {
+    if(cell.isElement()){
       this.upsertElement(cell);
     }
   };
 
-  public constructor(graph: joint.dia.Graph, paper: joint.dia.Paper, viewportState: ViewportState, bufferPx = 200) {
+  public constructor(graph: joint.dia.Graph, paper: joint.dia.Paper, viewportState: ViewportState, bufferPx = 200){
     this.graph = graph;
     this.paper = paper;
     this.viewportState = viewportState;
@@ -47,23 +47,23 @@ export class ViewportManager {
 
     this.rebuildIndex();
 
-    this.graph.on('add', this.onAddBound);
-    this.graph.on('remove', this.onRemoveBound);
-    this.graph.on('change:position', this.onPositionChangeBound);
-    this.graph.on('change:size', this.onPositionChangeBound);
+    this.graph.on("add", this.onAddBound);
+    this.graph.on("remove", this.onRemoveBound);
+    this.graph.on("change:position", this.onPositionChangeBound);
+    this.graph.on("change:size", this.onPositionChangeBound);
   }
 
-  public isCellVisible(view: joint.mvc.View<joint.mvc.Model, SVGElement>): boolean {
+  public isCellVisible(view: joint.mvc.View<joint.mvc.Model, SVGElement>): boolean{
     const modelCandidate = (view as unknown as { model?: joint.mvc.Model }).model;
-    if (!(modelCandidate instanceof joint.dia.Cell)) {
+    if(!(modelCandidate instanceof joint.dia.Cell)){
       return true;
     }
 
     const cell = modelCandidate;
-    if (cell.isLink()) {
+    if(cell.isLink()){
       return this.isLinkVisible(cell);
     }
-    if (!cell.isElement()) {
+    if(!cell.isElement()){
       return true;
     }
     const bbox = cell.getBBox();
@@ -72,22 +72,22 @@ export class ViewportManager {
       x: bbox.x,
       y: bbox.y,
       width: bbox.width,
-      height: bbox.height
+      height: bbox.height,
     };
     return intersects(elementRect, viewportRect);
   }
 
-  public searchNearby(rect: Rect): joint.dia.Element[] {
+  public searchNearby(rect: Rect): joint.dia.Element[]{
     const found = this.index.search({
       minX: rect.x,
       minY: rect.y,
       maxX: rect.x + rect.width,
-      maxY: rect.y + rect.height
+      maxY: rect.y + rect.height,
     });
     return found.map((item: IndexedElement) => item.element);
   }
 
-  public rebuildIndex(): void {
+  public rebuildIndex(): void{
     this.index.clear();
     this.itemsById.clear();
 
@@ -98,18 +98,18 @@ export class ViewportManager {
     });
   }
 
-  public destroy(): void {
-    this.graph.off('add', this.onAddBound);
-    this.graph.off('remove', this.onRemoveBound);
-    this.graph.off('change:position', this.onPositionChangeBound);
-    this.graph.off('change:size', this.onPositionChangeBound);
+  public destroy(): void{
+    this.graph.off("add", this.onAddBound);
+    this.graph.off("remove", this.onRemoveBound);
+    this.graph.off("change:position", this.onPositionChangeBound);
+    this.graph.off("change:size", this.onPositionChangeBound);
     this.index.clear();
     this.itemsById.clear();
   }
 
-  private upsertElement(element: joint.dia.Element): void {
+  private upsertElement(element: joint.dia.Element): void{
     const current = this.itemsById.get(element.id);
-    if (current) {
+    if(current){
       this.index.remove(current, (a: IndexedElement, b: IndexedElement) => a.id === b.id);
     }
     const next = this.toIndexItem(element);
@@ -117,16 +117,16 @@ export class ViewportManager {
     this.index.insert(next);
   }
 
-  private removeById(id: joint.dia.Cell.ID): void {
+  private removeById(id: joint.dia.Cell.ID): void{
     const current = this.itemsById.get(id);
-    if (!current) {
+    if(!current){
       return;
     }
     this.index.remove(current, (a: IndexedElement, b: IndexedElement) => a.id === b.id);
     this.itemsById.delete(id);
   }
 
-  private toIndexItem(element: joint.dia.Element): IndexedElement {
+  private toIndexItem(element: joint.dia.Element): IndexedElement{
     const bbox = element.getBBox();
     return {
       id: element.id,
@@ -134,11 +134,11 @@ export class ViewportManager {
       minX: bbox.x,
       minY: bbox.y,
       maxX: bbox.x + bbox.width,
-      maxY: bbox.y + bbox.height
+      maxY: bbox.y + bbox.height,
     };
   }
 
-  private getBufferedViewportRect(): Rect {
+  private getBufferedViewportRect(): Rect{
     const snapshot = this.viewportState.getSnapshot();
     const width = this.paper.el.clientWidth;
     const height = this.paper.el.clientHeight;
@@ -146,12 +146,12 @@ export class ViewportManager {
       x: -snapshot.tx / snapshot.scale,
       y: -snapshot.ty / snapshot.scale,
       width: width / snapshot.scale,
-      height: height / snapshot.scale
+      height: height / snapshot.scale,
     };
     return inflateRect(viewport, this.bufferPx / snapshot.scale);
   }
 
-  private isLinkVisible(link: joint.dia.Link): boolean {
+  private isLinkVisible(link: joint.dia.Link): boolean{
     const viewportRect = this.getBufferedViewportRect();
     const bbox = link.getBBox();
 
@@ -159,7 +159,7 @@ export class ViewportManager {
       x: bbox.x,
       y: bbox.y,
       width: bbox.width,
-      height: bbox.height
+      height: bbox.height,
     };
 
     const snapshot = this.viewportState.getSnapshot();

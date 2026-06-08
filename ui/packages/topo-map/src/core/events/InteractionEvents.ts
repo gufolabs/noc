@@ -68,14 +68,12 @@ export class InteractionEvents{
   private readonly onCellContextMenuBound = (
     cellView: joint.dia.CellView,
     event: joint.dia.Event,
-    x: number,
-    y: number,
   ): void => {
-    this.handleCellContextMenu(cellView, event, x, y);
+    this.handleCellContextMenu(cellView, event);
   };
 
-  private readonly onBlankContextMenuBound = (event: joint.dia.Event, x: number, y: number): void => {
-    this.handleBlankContextMenu(event, x, y);
+  private readonly onBlankContextMenuBound = (event: joint.dia.Event): void => {
+    this.handleBlankContextMenu(event);
   };
 
   private readonly onNodeNameMouseOverBound = (evt: MouseEvent): void => {
@@ -260,8 +258,6 @@ export class InteractionEvents{
   private handleCellContextMenu(
     cellView: joint.dia.CellView,
     event: joint.dia.Event,
-    _x: number,
-    _y: number,
   ): void{
     this.preventDefaultEvent(event);
     const clientPoint = getEventClientPoint(event);
@@ -272,7 +268,7 @@ export class InteractionEvents{
     });
   }
 
-  private handleBlankContextMenu(event: joint.dia.Event, _x: number, _y: number): void{
+  private handleBlankContextMenu(event: joint.dia.Event): void{
     this.preventDefaultEvent(event);
     const clientPoint = getEventClientPoint(event);
     this.emitBubbledContextMenuEvent(BLANK_CONTEXTMENU_EVENT, {

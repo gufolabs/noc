@@ -15,7 +15,7 @@ const POSITION_TO_SELECTOR: Record<ShapeOverlayPosition, string> = {
   W: "badgeW",
 };
 
-function buildBadgeClassName(statusCode: number): string{
+function buildBadgeClassName(): string{
   return [
     "gf",
   ].filter(Boolean).join(" ");
@@ -61,7 +61,7 @@ export function buildBadgeAttrs(
   badgeRef = "nodeName",
 ): joint.dia.Cell.Selectors{
   // set color based on status code of the first overlay (if any)
-  const badgeClassName = buildBadgeClassName(statusCode);
+  const badgeClassName = buildBadgeClassName();
   const attrs: joint.dia.Cell.Selectors = {};
 
   overlays.forEach(({position, code, form}) => {
@@ -89,6 +89,7 @@ export function buildBadgeAttrs(
       fontFamily: "GufoFont",
       fill: "#000000",
       class: badgeClassName,
+      // eslint-disable-next-line
       style: `--gf-size: ${badgeFontSize}px;` as any,
       text: String.fromCodePoint(code),
     };
