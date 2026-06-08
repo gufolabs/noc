@@ -1,5 +1,19 @@
-import {bindHistoryShortcuts} from "../history/bindHistoryShortcuts";
 import * as joint from "@joint/core";
+import {bindHistoryShortcuts} from "../history/bindHistoryShortcuts";
+import {bindEvents, resolveInteractivity} from "./internal/bindings";
+import {createWorkflowEditorState, resolveWorkflowEditorConfig} from "./internal/editorState";
+import {emitCanRedoChange, emitCanUndoChange, emitContextMenu, emitDirtyChange, emitDocumentChange, emitSelectionChange, emitValidationChange} from "./internal/events";
+import {WorkflowGuidesManager} from "./internal/GuidesManager";
+import {createDefaultWorkflow as createInitialWorkflow} from "./internal/helpers";
+import {createWorkflowHistoryController} from "./internal/history";
+import {addState, applyWorkflowDocument, autoLayout, createDefaultLink, exportForSave, loadWorkflow, prepareLinkData, removeSelected, toJSON, updateState, updateTransition, updateWorkflowMeta} from "./internal/mutations";
+import {beginLinkCreation, clearPendingEndLinkCreationTimeout, endLinkCreation, endLinkCreationSoon, setElementPortsVisible, shouldShowPortsForElement, syncPortsVisibility, validateConnection, validateMagnet} from "./internal/ports";
+import type {WorkflowEditorRuntime} from "./internal/runtime";
+import {clearSelection, getSelection, selectCell} from "./internal/selection";
+import {WorkflowSpatialIndex} from "./internal/spatialIndex";
+import {decorateState, decorateStateById, decorateStates, refreshAllLinks, refreshLink} from "./internal/styling";
+import {cancelScheduledGraphSync, flushScheduledGraphSync, markDocumentChanged, performGraphSync, scheduleGraphSync, setDirty, syncWorkflowFromGraph, withDocumentSyncSuspended} from "./internal/sync";
+import {applyViewport, clientToLocalPoint, fitToContent, resize, setZoom, zoomIn, zoomOut} from "./internal/viewport";
 import {workflowCellNamespace} from "./shapes/workflowCellNamespace";
 import type {
   WorkflowContextMenuDetail,
@@ -11,20 +25,6 @@ import type {
   WorkflowState,
   WorkflowTransition,
 } from "./types";
-import {emitCanRedoChange, emitCanUndoChange, emitContextMenu, emitDirtyChange, emitDocumentChange, emitSelectionChange, emitValidationChange} from "./internal/events";
-import {resolveInteractivity, bindEvents} from "./internal/bindings";
-import {createDefaultWorkflow as createInitialWorkflow} from "./internal/helpers";
-import {createWorkflowHistoryController} from "./internal/history";
-import {clearPendingEndLinkCreationTimeout, beginLinkCreation, endLinkCreation, endLinkCreationSoon, setElementPortsVisible, shouldShowPortsForElement, syncPortsVisibility, validateConnection, validateMagnet} from "./internal/ports";
-import {createWorkflowEditorState, resolveWorkflowEditorConfig} from "./internal/editorState";
-import {clearSelection, getSelection, selectCell} from "./internal/selection";
-import {cancelScheduledGraphSync, flushScheduledGraphSync, markDocumentChanged, performGraphSync, scheduleGraphSync, setDirty, syncWorkflowFromGraph, withDocumentSyncSuspended} from "./internal/sync";
-import {decorateState, decorateStateById, decorateStates, refreshAllLinks, refreshLink} from "./internal/styling";
-import {WorkflowGuidesManager} from "./internal/GuidesManager";
-import {applyWorkflowDocument, autoLayout, createDefaultLink, exportForSave, loadWorkflow, prepareLinkData, toJSON, addState, removeSelected, updateState, updateTransition, updateWorkflowMeta} from "./internal/mutations";
-import type {WorkflowEditorRuntime} from "./internal/runtime";
-import {WorkflowSpatialIndex} from "./internal/spatialIndex";
-import {applyViewport, clientToLocalPoint, fitToContent, resize, setZoom, zoomIn, zoomOut} from "./internal/viewport";
 
 const PAPER_BACKGROUND = "#f8fafc";
 
@@ -67,7 +67,7 @@ export class WorkflowEditor extends EventTarget{
       defaultRouter: {name: "orthogonal"},
       defaultConnector: {name: "rounded"},
       defaultLink: () => createDefaultLink(),
-      interactive: (cellView, eventName) => resolveInteractivity(runtime, cellView, eventName),
+      interactive: (cellView) => resolveInteractivity(runtime, cellView),
       validateMagnet: (_cellView, magnet) => validateMagnet(runtime, magnet),
       validateConnection: (sourceView, sourceMagnet, targetView, targetMagnet) =>
         validateConnection(runtime, sourceView, sourceMagnet, targetView, targetMagnet),
