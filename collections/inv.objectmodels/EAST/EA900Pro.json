@@ -5,6 +5,7 @@
     "vendor__code": "EAST",
     "description": "EAST UPS EA900Pro",
     "connection_rule__name": "APC | SmartUPS",
+    "container_type": "chassis",
     "cr_context": "CHASSIS",
     "connections": [
         {

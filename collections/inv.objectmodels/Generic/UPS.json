@@ -5,6 +5,7 @@
     "vendor__code": "GENERIC",
     "description": "Generic UPS for SNMP cards without UPS-MIB::upsIdentManufacturer",
     "connection_rule__name": "APC | SmartUPS",
+    "container_type": "chassis",
     "cr_context": "CHASSIS",
     "connections": [
         {
