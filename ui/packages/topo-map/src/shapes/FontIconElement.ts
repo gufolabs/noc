@@ -20,7 +20,6 @@ const GF_SIZE_MAP: Record<string, number> = {
 };
 
 const FONT_ICON_MARKUP = { tagName: 'text', selector: 'icon', className: 'scalable' } as const;
-const ICON_AREA_MARKUP = { tagName: 'rect', selector: 'iconArea' } as const;
 
 interface FontIconElementMethods {
   setClass: (size?: string, statusCode?: number) => void;
@@ -31,6 +30,7 @@ type FontIconElementInstance = IconElementInstance<FontIconElementMethods>;
 interface FontIconState {
   expectedSize: joint.dia.Size;
   glyph: string;
+  badgeRef: string;
   iconAttrs: AttrMap;
   iconSize: number;
   overlays: ShapeOverlay[];
@@ -58,14 +58,18 @@ function computeSize(iconSize: number): joint.dia.Size {
 
 function makeLabelAttrs(display: 'block' | 'none'): AttrMap {
   return {
-    ref: 'iconArea',
+    ref: 'icon',
     refX: '50%',
-    y: 'calc(1.7*w)',
+    refY: '100%',
     fontSize: 'calc(w / 4)',
     display,
     textAnchor: 'middle',
     fill: '#000000',
-    textWrap: { width: 'calc(2*w)', ellipsis: false },
+    textWrap: {
+      width: 'calc(2*w)',
+      ellipsis: true,
+      maxLineCount: 3
+    },
     ...textLabelBg
   };
 }
@@ -102,7 +106,10 @@ function deriveFontIconState(instance: FontIconElementInstance): FontIconState {
   const sizeClass = getFontSizeClass(data, iconAttrs);
   const iconSize = GF_SIZE_MAP[sizeClass] ?? DEFAULT_ICON_SIZE;
 
+  const ipaddrDisplay = getString(getNestedRecord(instance.get('attrs'), 'ipaddr'), 'display');
+
   return {
+    badgeRef: ipaddrDisplay === 'block' ? 'ipaddr' : 'nodeName',
     expectedSize: computeSize(iconSize),
     glyph: getFontGlyph(data, iconAttrs),
     iconAttrs,
@@ -115,38 +122,34 @@ function deriveFontIconState(instance: FontIconElementInstance): FontIconState {
 
 function buildFontMarkup(state: FontIconState): joint.dia.MarkupJSON {
   const badgeMarkup = buildBadgeMarkup(state.overlays);
-  return [...elementMarkup, FONT_ICON_MARKUP, ICON_AREA_MARKUP, ...badgeMarkup];
+  return [
+    ...elementMarkup,
+    FONT_ICON_MARKUP,
+    ...badgeMarkup
+  ];
 }
 
 function computeBadgeAttrs(state: FontIconState): AttrMap {
   const badgeSize = state.iconSize * BADGE_SCALE;
   const badgeFontSize = state.iconSize * BADGE_SCALE;
-  const iconXY = 1.5 * state.iconSize;
-
+  const x1 = -state.iconSize / 2 + badgeSize * 2;
+  const y3 = -state.iconSize - badgeSize;
+  const x2 = 'calc(w/2)';
+  const y2 = `calc(h/2 - ${state.iconSize / 2})`;
+  const x3 = `calc(w+${badgeSize})`;
+  const y1 = `calc(h + ${badgeSize})`;
   const transforms: Record<ShapeOverlayPosition, string> = {
-    NW: `translate(${state.iconSize - badgeSize}, ${badgeSize})`,
-    NE: `translate(calc(w-${state.iconSize - badgeSize}), ${badgeSize})`,
-    SW: `translate(${state.iconSize - badgeSize}, calc(h-${badgeSize}))`,
-    SE: `translate(calc(w-${state.iconSize - badgeSize}), calc(h-${badgeSize}))`,
-    N: `translate(calc(w/2), ${badgeSize})`,
-    E: `translate(calc(w-${state.iconSize - badgeSize}), calc(h/2))`,
-    S: `translate(calc(w/2), calc(h-${badgeSize}))`,
-    W: `translate(${state.iconSize - badgeSize}, calc(h/2))`,
-  };
-  
-  const attrs: AttrMap = {
-    iconArea: {
-      x: iconXY,
-      y: iconXY,
-      width: state.iconSize,
-      height: state.iconSize,
-      fill: 'none',
-      stroke: 'none'
-    }
+    SW: `translate(${x1}, ${y1})`,
+    W: `translate(${x1}, ${y2})`,
+    NW: `translate(${x1}, ${y3})`,
+    N: `translate(${x2}, ${y3})`,
+    NE: `translate(${x3}, ${y3})`,
+    E: `translate(${x3}, ${y2})`,
+    SE: `translate(${x3}, ${y1})`,
+    S: `translate(${x2}, ${y1})`,
   };
   return {
-    ...attrs,
-    ...buildBadgeAttrs(state.overlays, state.statusCode, badgeSize, badgeFontSize, transforms)
+    ...buildBadgeAttrs(state.overlays, state.statusCode, badgeSize, badgeFontSize, transforms, state.badgeRef)
   };
 }
 

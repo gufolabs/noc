@@ -67,6 +67,8 @@ Ext.define("NOC.inv.map.MapRenderer", {
       onScaleChange: this.onScaleChange.bind(this),
       onLinkHover: this.onLinkHover.bind(this),
       onLinkOut: this.onLinkOut.bind(this),
+      onNodeNameHover: this.onNodeNameHover.bind(this),
+      onNodeNameMouseOut: this.onNodeNameMouseOut.bind(this),
     };
     mainEl.dom.addEventListener(module.CELL_HIGHLIGHT_EVENT, boundHandlers.onCellSelected);
     mainEl.dom.addEventListener(module.CELL_UNHIGHLIGHT_EVENT, boundHandlers.onCellUnhighlight);
@@ -78,6 +80,8 @@ Ext.define("NOC.inv.map.MapRenderer", {
     mainEl.dom.addEventListener(module.SCALE_CHANGE_EVENT, boundHandlers.onScaleChange);
     mainEl.dom.addEventListener(module.LINK_HOVER_EVENT, boundHandlers.onLinkHover);
     mainEl.dom.addEventListener(module.LINK_MOUSEOUT_EVENT, boundHandlers.onLinkOut);
+    mainEl.dom.addEventListener(module.NODE_NAME_HOVER_EVENT, boundHandlers.onNodeNameHover);
+    mainEl.dom.addEventListener(module.NODE_NAME_MOUSEOUT_EVENT, boundHandlers.onNodeNameMouseOut);
     this.removeHandlers = function(){
       mainEl.dom.removeEventListener(module.CELL_HIGHLIGHT_EVENT, boundHandlers.onCellSelected);
       mainEl.dom.removeEventListener(module.CELL_UNHIGHLIGHT_EVENT, boundHandlers.onCellUnhighlight);
@@ -89,6 +93,8 @@ Ext.define("NOC.inv.map.MapRenderer", {
       mainEl.dom.removeEventListener(module.SCALE_CHANGE_EVENT, boundHandlers.onScaleChange);
       mainEl.dom.removeEventListener(module.LINK_HOVER_EVENT, boundHandlers.onLinkHover);
       mainEl.dom.removeEventListener(module.LINK_MOUSEOUT_EVENT, boundHandlers.onLinkOut);
+      mainEl.dom.removeEventListener(module.NODE_NAME_HOVER_EVENT, boundHandlers.onNodeNameHover);
+      mainEl.dom.removeEventListener(module.NODE_NAME_MOUSEOUT_EVENT, boundHandlers.onNodeNameMouseOut);
       boundHandlers = null;
     };
     this.panel.fireEvent("mapready");
@@ -122,7 +128,16 @@ Ext.define("NOC.inv.map.MapRenderer", {
       this.panel.fireEvent("searchResult", detail);
     }
   },
-
+  
+  onNodeNameMouseOut: function(){
+    this.panel.tip.hide();
+  },
+  
+  onNodeNameHover: function(event){
+    this.panel.tip.setData(event.detail.data.name);
+    this.panel.tip.showAt(event.detail.position);
+  },
+  
   onCellUnhighlight: function(){
     this.panel.onCellUnhighlight();
   },
