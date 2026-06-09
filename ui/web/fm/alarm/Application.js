@@ -25,6 +25,10 @@ Ext.define("NOC.fm.alarm.Application", {
   bind: {
     activeItem: "{activeItem}",
   },
+  // Back/forward: re-route the current URL via the controller.
+  applyHistory: function(){
+    this.getController().restoreFromUrl();
+  },
   items: [
     {
       itemId: "fm-alarm-list",

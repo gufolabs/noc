@@ -78,7 +78,7 @@ Ext.define("NOC.main.desktop.WorkplacePanel", {
   onTabChange: function(panel, tab){
     var app = tab.items.first(),
       h = app.getHistoryHash();
-    Ext.History.setHash(h);
+    NOC.navigation.navigate(h);
   },
   //
   onTabClose: function(tab){

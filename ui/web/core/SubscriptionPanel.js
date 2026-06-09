@@ -176,7 +176,7 @@ Ext.define("NOC.core.SubscriptionPanel", {
   onClose: function(){
     var app = this.up("[appId]");
     app.showItem(app[this.showOnClose]);
-    Ext.History.setHash(app.appId);
+    NOC.navigation.navigate(app.appId);
     app.reloadStore();
   },
   //

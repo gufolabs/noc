@@ -633,7 +633,30 @@ Ext.define("NOC.inv.map.Application", {
     if(this.selectedObjectId){
       this.currentHistoryHash += ":" + this.selectedObjectId;
     }
-    Ext.History.setHash(this.currentHistoryHash);
+    // dedup: never push a duplicate entry for the URL we are already on.
+    NOC.navigation.navigate(this.currentHistoryHash, {dedup: true});
+  },
+
+  // Apply a history token (back/forward). Token is inv.map/<generator>/<segmentId>
+  // optionally with ":<objectId>". Reload only when the segment actually
+  // changes; reloading the map is expensive.
+  applyHistory: function(args){
+    var me = this,
+      generator = args[0],
+      segmentId = args[1];
+    if(Ext.isEmpty(segmentId)){
+      return;
+    }
+    if(typeof segmentId === "string" && segmentId.indexOf(":") !== -1){
+      var parts = segmentId.split(":");
+      segmentId = parts[0];
+      me.selectedObjectId = parts[1];
+    }
+    me.generator = generator || "segment";
+    if(String(me.currentSegmentId) === String(segmentId)){
+      return;
+    }
+    me.loadSegment(segmentId);
   },
 
   onSearchResult: function(detail){

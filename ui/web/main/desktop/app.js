@@ -44,8 +44,10 @@ Ext.application({
   },
   openApplication: function(){
     Ext.setGlyphFontFamily("FontAwesome");
-    console.log("Initializing history API");
-    Ext.History.init();
+    console.log("Initializing navigation");
+    // Navigation API migration (Phase 1, hash-based URLs). This replaces the
+    // former Ext.History facade; see ui/docs/navigation-api-migration.md
+    NOC.core.Navigation.init();
     console.log("NOC application starting");
     this.settings();
   },

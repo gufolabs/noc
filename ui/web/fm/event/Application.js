@@ -199,6 +199,41 @@ Ext.define("NOC.fm.event.Application", {
     this.showItem(this.ITEM_GRID);
     this.setHistoryHash();
   },
+  // Apply a history token (back/forward or deep-link):
+  //   []     -> collapse the inspector (back to the bare grid)
+  //   [id]   -> open the event inspector for that id
+  applyHistory: function(args){
+    var me = this;
+    if(!args || Ext.isEmpty(args[0])){
+      me.getController().collapseInspector();
+      return;
+    }
+    me.onCmd_history({args: args});
+  },
+  // Restore a deep link fm.event/<id>: fetch the event by id and open the
+  // inspector. core.Application has no restoreHistory(), so we handle the
+  // "history" command here (called by processCommands on afterrender).
+  onCmd_history: function(cmd){
+    var me = this,
+      args = (cmd && cmd.args) || [],
+      id = args[0];
+    if(Ext.isEmpty(id)){
+      return;
+    }
+    Ext.Ajax.request({
+      url: "/fm/event/" + id + "/",
+      method: "GET",
+      scope: me,
+      success: function(response){
+        var data = Ext.decode(response.responseText),
+          record = Ext.create("NOC.fm.event.Model", data);
+        me.getController().expandInspector(null, record);
+      },
+      failure: function(){
+        NOC.error(__("Failed to load event ") + id);
+      },
+    });
+  },
   showForm: function(){
     this.showGrid();
   },

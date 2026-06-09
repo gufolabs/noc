@@ -773,7 +773,12 @@ Ext.define("NOC.sa.managedobject.Controller", {
             view.setHistoryHash(data.id);
           }
           this.dirtyReset(form);
-          view.getLayout().setActiveItem("managedobject-form").down().setActiveItem("managedobject-form-panel");
+          // Do not chain off setActiveItem(): the Card layout returns false
+          // when the target card is already active (e.g. on back/forward while
+          // already on the form), which would crash on .down(). Look the form
+          // container up explicitly instead.
+          view.getLayout().setActiveItem("managedobject-form");
+          view.down("[itemId=managedobject-form]").down().setActiveItem("managedobject-form-panel");
           this.displayButtons(isEmbedded === undefined ? standardMode : embeddedMode);
           if(suffix){
             formView.getController().itemPreview("sa-" + suffix);
@@ -955,7 +960,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
   },
   restoreSearchField: function(){
     var param = "__query",
-      queryStr = Ext.util.History.getToken().split("?")[1];
+      queryStr = NOC.navigation.getToken().split("?")[1];
     if(queryStr && queryStr.includes(param)){
       var query = Ext.Object.fromQueryString(queryStr, true);
       this.getView().down("[itemId=" + param + "]").setValue(query[param]);
@@ -985,7 +990,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
   },
   saveFilterToUrl: function(filter){
     var params = Ext.Object.toQueryString(filter, true)
-      , currentHash = Ext.History.getHash()
+      , currentHash = NOC.navigation.getToken()
       , index = currentHash.indexOf("?")
       , app;
     if(index === -1){
@@ -994,9 +999,9 @@ Ext.define("NOC.sa.managedobject.Controller", {
       app = currentHash.substr(0, index);
     }
     if(params){
-      Ext.History.add(app + "?" + params);
+      NOC.navigation.navigate(app + "?" + params);
     } else{
-      Ext.History.add(app);
+      NOC.navigation.navigate(app);
     }
   },
 });

@@ -514,8 +514,24 @@ Ext.define("NOC.inv.inv.Application", {
         } else{
           this.tabPanel.setActiveTab(0);
         }
+        // Programmatic setActiveTab on the already-active first tab does not
+        // fire beforetabchange, so reflect the settled active plugin in the
+        // URL explicitly (covers object select and deep-link restore).
+        this.reflectPluginInUrl();
       }
     }, this);
+  },
+  // Push inv.inv/<objectId>/<plugin> for the currently active plugin tab.
+  // dedup avoids a duplicate history entry when the URL already matches.
+  reflectPluginInUrl: function(){
+    var me = this,
+      objectId = me.selectedObjectId,
+      activeTab = me.tabPanel.getActiveTab(),
+      pluginName = activeTab && activeTab.pluginName;
+    if(objectId && pluginName){
+      me.currentHistoryHash = [me.appId, objectId, pluginName].join("/");
+      NOC.navigation.navigate(me.currentHistoryHash, {dedup: true});
+    }
   },
   //
   addAppForm: function(parent, app, objectId){
@@ -555,6 +571,16 @@ Ext.define("NOC.inv.inv.Application", {
       objectId = me.selectedObjectId,
       pluginName = currentPanel.pluginName,
       messageId = me.maskComponent.show("fetching", [pluginName]);
+    // Reflect the active plugin tab in the URL as inv.inv/<id>/<plugin>.
+    // Restored on reload via restoreHistory() (sets currentPlugin). dedup
+    // avoids a duplicate history entry while restoring from the URL.
+    // NB: do NOT assign me.currentPlugin here — that would clobber the
+    // restore target while plugins auto-activate during load. currentPlugin
+    // is captured by onBeforeSelect on object switch.
+    if(objectId && pluginName){
+      me.currentHistoryHash = [me.appId, objectId, pluginName].join("/");
+      NOC.navigation.navigate(me.currentHistoryHash, {dedup: true});
+    }
     if(oldPanel && !Ext.isEmpty(oldPanel.messageId)){
       me.maskComponent.hide(me.messageId);
     }
@@ -603,11 +629,15 @@ Ext.define("NOC.inv.inv.Application", {
     me.selectedObjectId = objectId;
     me.invPlugins = {};
     me.clearTabPanel();
+    // Set the object URL BEFORE loading plugins. When plugin classes are
+    // already cached, runPlugin() runs synchronously inside the loop below and
+    // reflectPluginInUrl() appends the active plugin; doing setHistoryHash here
+    // afterwards would clobber that back to inv.inv/<id> without the plugin.
+    me.setHistoryHash(objectId);
     Ext.each(plugins, function(p, index){
       me.runPlugin(objectId, p, index);
     });
     me.isMenuShow = false;
-    me.setHistoryHash(objectId);
     if(me.currentPlugin && me.invPlugins[me.currentPlugin]){
       me.tabPanel.setActiveTab(me.invPlugins[me.currentPlugin]);
       return;
@@ -943,7 +973,34 @@ Ext.define("NOC.inv.inv.Application", {
   //
   restoreHistory: function(args){
     var me = this;
+    if(!args || Ext.isEmpty(args[0])){
+      // Bare inv.inv (e.g. back/forward to the empty state): nothing to open.
+      return;
+    }
+    // args[1], when present, is the plugin name to restore as the active tab.
+    if(args[1]){
+      me.currentPlugin = args[1];
+    }
     me.showObject(args[0]);
+  },
+  // Apply a history token (back/forward). If the object is already selected,
+  // just switch the plugin tab — re-selecting the same tree node would not
+  // fire the select event, so showObject() would be a no-op. Otherwise fall
+  // back to the full object restore.
+  applyHistory: function(args){
+    var me = this;
+    if(!args || Ext.isEmpty(args[0])){
+      return;
+    }
+    var objectId = args[0],
+      plugin = args[1];
+    if(String(me.selectedObjectId) === String(objectId)){
+      if(plugin && me.invPlugins[plugin]){
+        me.tabPanel.setActiveTab(me.invPlugins[plugin]);
+      }
+      return;
+    }
+    me.restoreHistory(args);
   },
   //
   onCreateConnection: function(){

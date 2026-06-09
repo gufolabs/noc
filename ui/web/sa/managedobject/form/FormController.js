@@ -356,6 +356,17 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
     if(activeItem !== false){
       activeItem.app = mainView.up("[itemId=sa-managedobject]");
       activeItem.preview(backItem.currentRecord, backItem);
+      // Reflect the sub-view in the URL as sa.managedobject/<id>/<suffix>.
+      // Restored on reload via Controller.init -> editManagedObject(id, suffix)
+      // which calls itemPreview("sa-" + suffix). dedup avoids a duplicate
+      // history entry when we are the ones restoring from the URL.
+      var app = mainView.up("[appId=sa.managedobject]"),
+        record = backItem.currentRecord,
+        suffix = itemName.replace(/^sa-/, "");
+      if(app && record){
+        app.currentHistoryHash = [app.appId, record.id, suffix].join("/");
+        NOC.navigation.navigate(app.currentHistoryHash, {dedup: true});
+      }
     }
   },
   addTooltip: function(element){

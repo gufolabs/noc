@@ -406,6 +406,11 @@ Ext.define("NOC.core.ModelApplication", {
         xtype: "Ext.panel.Panel",
       };
       Ext.apply(config, me.preview);
+      // urlSuffix lets the preview state be reflected in / restored from the
+      // URL as "<appId>/<id>/preview" (apps may override via me.preview).
+      if(!config.urlSuffix){
+        config.urlSuffix = "preview";
+      }
       me.ITEM_PREVIEW = me.registerItem(
         Ext.create(config.xtype, config),
       );
@@ -769,6 +774,7 @@ Ext.define("NOC.core.ModelApplication", {
       item = me.showItem(me.ITEM_PREVIEW);
     if(item !== undefined){
       item.preview(record, me.ITEM_GRID);
+      me.reflectItemInUrl(item, record);
     }
   },
   // Save changed data
@@ -1068,7 +1074,7 @@ Ext.define("NOC.core.ModelApplication", {
   },
   saveFilterToUrl: function(filter){
     var params = Ext.Object.toQueryString(filter, true)
-      , currentHash = Ext.History.getHash()
+      , currentHash = NOC.navigation.getToken()
       , index = currentHash.indexOf("?")
       , app;
     if(index === -1){
@@ -1077,9 +1083,9 @@ Ext.define("NOC.core.ModelApplication", {
       app = currentHash.substr(0, index);
     }
     if(params){
-      Ext.History.add(app + "?" + params);
+      NOC.navigation.navigate(app + "?" + params);
     } else{
-      Ext.History.add(app);
+      NOC.navigation.navigate(app);
     }
   },
   // Filter
@@ -1477,6 +1483,27 @@ Ext.define("NOC.core.ModelApplication", {
     });
   },
   //
+  // Apply a history token (back/forward or deep-link). Empty token => grid
+  // (re-applying the filter from the URL query, if any).
+  applyHistory: function(args){
+    var me = this;
+    if(!args || args.length === 0){
+      me.showGrid();
+      var token = NOC.navigation.getToken();
+      if(token.indexOf("?") !== -1){
+        // Filter state in the URL: restore it. Covers both ModelApplication's
+        // native filter (filterSetters) and an optional NOC.Filter panel.
+        me.restoreFilter(token);
+        me.restoreFilterFromUrl();
+        if(Ext.isFunction(me.reloadStore)){
+          me.reloadStore();
+        }
+      }
+      return;
+    }
+    me.restoreHistory(args);
+  },
+  //
   restoreHistory: function(args){
     var me = this;
     if(args.length === 1){
@@ -1488,9 +1515,21 @@ Ext.define("NOC.core.ModelApplication", {
       var panelIndex = this.getRegisteredItemByUrl(args[1]);
       if(panelIndex !== -1){
         var panel = this.getRegisteredItem(panelIndex);
-        this.currentHistoryHash = Ext.History.getHash();
-        this.showItem(panelIndex);
-        panel.load(this.appId, args[0], "ITEM_GRID");
+        this.currentHistoryHash = NOC.navigation.getToken();
+        if(Ext.isFunction(panel.load)){
+          // Panels that load themselves by id (e.g. sa.service subscription /
+          // instances panels).
+          this.showItem(panelIndex);
+          panel.load(this.appId, args[0], "ITEM_GRID");
+        } else if(Ext.isFunction(panel.preview)){
+          // Generic preview-style panels: fetch the record, then preview it.
+          this.loadById(args[0], function(record){
+            me.showItem(panelIndex);
+            panel.preview(record, me.ITEM_GRID);
+          });
+        } else{
+          this.showItem(panelIndex);
+        }
       }
     }
   },
