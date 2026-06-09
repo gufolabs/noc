@@ -268,9 +268,9 @@ Ext.define("NOC.sa.service.InstancesPanel", {
   onClose: function(){
     var app = this.up("[appId=sa.service]"),
       showOnClose = this.getViewModel().get("showOnClose");
-    if(showOnClose === "ITEM_GRID") Ext.History.setHash("sa.service");
+    if(showOnClose === "ITEM_GRID") NOC.navigation.navigate("sa.service");
     app.showItem(app[showOnClose]);
-    Ext.History.setHash(app.appId);
+    NOC.navigation.navigate(app.appId);
     app.reloadStore();
   },
   load: function(appId, recordId, showOnClose){

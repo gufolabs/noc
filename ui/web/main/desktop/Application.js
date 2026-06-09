@@ -9,6 +9,7 @@ Ext.define("NOC.main.desktop.Application", {
   extend: "Ext.Viewport",
   layout: "border",
   requires: [
+    "NOC.core.Navigation",
     "NOC.core.InactivityLogout",
     "NOC.core.PasswordField",
     "NOC.core.ObservableModel",
@@ -81,14 +82,69 @@ Ext.define("NOC.main.desktop.Application", {
   //
   afterRender: function(){
     this.callParent();
+    // React to browser back/forward: sync the active app to the URL.
+    NOC.navigation.subscribe(this.onNavigate.bind(this));
     this.onLogin();
     this.fireEvent("applicationReady");
     console.log("NOC application ready");
   },
+  // Called by NOC.navigation on every route change. We only act on user
+  // back/forward ("traverse"); our own push/replace navigations are ignored.
+  onNavigate: function(token, type){
+    if(type !== "traverse"){
+      return;
+    }
+    this.routeHistory(token);
+  },
+  // Route a back/forward token to the matching open app tab and let the app
+  // restore the sub-state. Wrapped in navigation.silent() so re-asserting the
+  // state does not push new history entries and fight the traversal. We do not
+  // launch a new tab here (to avoid duplicates) — only re-target open ones.
+  routeHistory: function(token){
+    var me = this;
+    token = token || "";
+    // appId is the segment before the first "/" or "?"; the rest (path
+    // segments, query stripped) is passed to the app. Apps that need the query
+    // string read NOC.navigation.getToken() directly.
+    var appId = token.split(/[/?]/)[0];
+    if(!appId){
+      return;
+    }
+    var tab = me.findAppTab(appId);
+    if(!tab){
+      return;
+    }
+    var app = tab.items.first(),
+      pathPart = token.slice(appId.length).split("?")[0],
+      paths = pathPart.split("/").filter(Boolean);
+    NOC.navigation.silent(function(){
+      me.workplacePanel.setActiveTab(tab);
+      if(app && Ext.isFunction(app.applyHistory)){
+        app.applyHistory(paths);
+      }
+    });
+  },
+  // Find the open workplace tab hosting the app with the given appId.
+  findAppTab: function(appId){
+    var found = null;
+    this.workplacePanel.items.each(function(tab){
+      var app = tab.items && tab.items.first && tab.items.first();
+      if(app && app.appId === appId){
+        found = tab;
+        return false;
+      }
+    });
+    return found;
+  },
   // Launch applications from URL or home
   launchApps: function(){
-    var hash = Ext.History.getHash();
+    var hash = NOC.navigation.getToken();
     if(hash){ // Open application tab
+      // The browser already loaded this deep-link URL; while we relaunch the
+      // app and restore its state, replace history entries instead of pushing
+      // so the back button is not left pointing at half-built intermediate
+      // states. Replace mode ends once the restore reconstructs this URL.
+      NOC.navigation.beginReplaceMode();
       var paths = hash.split("/").filter(Boolean),
         app = paths.shift();
       if(paths.length > 0){
@@ -187,7 +243,7 @@ Ext.define("NOC.main.desktop.Application", {
         );
         // restore saved hash
         if(index !== -1){
-          Ext.History.setHash(app);
+          NOC.navigation.navigate(app);
         }
       },
       failure: function(){

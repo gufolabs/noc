@@ -67,7 +67,7 @@ Ext.define("NOC.sa.discoveredobject.controller.Sidebar", {
       token = "?" + query;
     }
 
-    Ext.History.add(appView.appId + token, true);
+    NOC.navigation.navigate(appView.appId + token, {dedup: true});
 
     this.reloadTask.cancel();
     this.reloadTask.delay(500);
@@ -87,7 +87,7 @@ Ext.define("NOC.sa.discoveredobject.controller.Sidebar", {
     });
   },
   restoreFilter: function(){
-    var queryStr = Ext.util.History.getToken().split("?")[1];
+    var queryStr = NOC.navigation.getToken().split("?")[1];
 
     if(queryStr){
       var params = Ext.Object.fromQueryString(queryStr, true),
@@ -101,7 +101,7 @@ Ext.define("NOC.sa.discoveredobject.controller.Sidebar", {
   cleanAllFilters: function(button){
     var appView = this.view.up("[appId]");
 
-    Ext.History.add(appView.appId);
+    NOC.navigation.navigate(appView.appId);
     button.up("form").getForm().reset();
     this.getView().fireEvent("filterChanged", this.getView(), {});
     this.reloadData();

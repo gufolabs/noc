@@ -50,6 +50,7 @@ scripts/build/web/node_modules
 pyvenv.cfg
 ui/.cache
 ui/node_modules
+ui/packages/topo-map/node_modules
 ui/dist
 ui/scripts/.env
 ui/scripts/nginx.conf
