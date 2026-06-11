@@ -8,26 +8,14 @@ edit_uri: -/edit/master/docs/
 copyright: 2007-2025, Gufo Labs
 nav:
   - Home: index.md
-  - Installation:
-      - Overview: installation-guide/index.md
-      - Using Gufo Thor: installation-guide/install-using-gufo-thor.md
+  - Installation: installation-guide/
   - Guides:
       - Overview: sections-overview/guides.md
       - Quickstart: quickstart-guide/index.md
-      - Community Guide:
-          - Overview: community-guide/index.md
-          - Code of Conduct: CODE_OF_CONDUCT.md
-          - Contributing: CONTRIBUTING.md
-          - English Telegram: community-guide/tg-en.md
-          - Russian Telegram: community-guide/tg-ru.md
+      - Community Guide: community-guide/
       - Docs Contributing Guide: docs-contributing-guide/index.md
       - Docs Translation Guide: docs-translation-guide/index.md
-      - Docs Style Guide:
-          - Overview: docs-style-guide/index.md
-          - Tutorials: docs-style-guide/tutorials.md
-          - How-to Guides: docs-style-guide/howto.md
-          - References: docs-style-guide/references.md
-          - Explanations: docs-style-guide/explanations.md
+      - Docs Style Guide: docs-style-guide/
   - References:
       - Overview: sections-overview/references.md
       - Concepts: concepts/
@@ -79,10 +67,7 @@ nav:
       - Reclaim Database Space: reclaim-db-space-howto/index.md
       - Migrate Liftbridge to Kafka: liftbridge-to-kafka-howto/index.md
       - Cleaning False Config Changes: cleaning-false-config-changes-howto/index.md
-      - Create Object Models:
-          - Overview: create-object-models-howto/index.md
-          - Connection Rules: create-object-models-howto/connection-rule.md
-          - Facades: facades-howto/index.md
+      - Create Object Models: create-object-models-howto/
       - Writing NOC Command: writing-noc-command-howto/index.md
       - Language translation: language-translation-howto/index.md
       - Configure vCenter on NOC as Device Source: howto-add-vcenter-to-noc/index.md
