@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # BDCOM.xPON.get_inventory
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -66,7 +66,7 @@ class Script(BaseScript):
                 "number": None,
                 "vendor": "BDCOM",
                 "serial": serial,
-                "description": f"{p['vendor']} {p['platform']}",
+                "description": f'{p["vendor"]} {p["platform"]}',
                 "part_no": [p["platform"]],
                 "revision": revision,
                 "builtin": False,
@@ -93,8 +93,10 @@ class Script(BaseScript):
                     part_no = "SFP"
                 elif t in ["10Giga-FX-SFP"]:
                     part_no = "SFP+"
-                elif not t in ["GPON", "Giga-PON"]:
-                    self.logger.info(f"{ifname} - Unknown port type '{t}'.")
+                else:
+                    # xPON interfaces do not display the absence of a transceiver
+                    if not t in ["GPON", "Giga-PON"]:
+                        self.logger.info(f"{ifname} - Unknown port type '{t}'.")
             if not match:
                 # Some devices can not get transceiver info
                 continue
@@ -224,8 +226,12 @@ class Script(BaseScript):
                         )
                         part_no = part_no + "Unknown SFP"
                 else:
-                    self.logger.info(f"{ifname} - Unknown `part_no` '{p}'.")
-                    part_no = part_no + "Unknown SFP"
+                    # Found with part_no DPB-3512-S2
+                    if xcvr_type == "1000BASE-LX":
+                        part_no = part_no + "1G | SFP LX"
+                    else:
+                        self.logger.info(f"{ifname} - Unknown `part_no` '{p}'.")
+                        part_no = part_no + "Unknown SFP"
                 r += [
                     {
                         "type": "XCVR",

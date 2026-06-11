@@ -2,7 +2,7 @@
 # Vendor: BDCOM
 # OS:     xPON
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ class Profile(BaseProfile):
 
     pattern_more = [(rb"^ --More-- ", b" "), (rb"\(y/n\) \[n\]", b"y\n")]
     pattern_unprivileged_prompt = rb"^(?P<hostname>\S+)>"
-    pattern_prompt = rb"^(?P<hostname>\S+)#"
+    pattern_prompt = rb"^(?P<hostname>\S+)(?:_config(?:_\S+)?)?#"
     pattern_syntax_error = rb"% Unknown command"
     command_disable_pager = ["terminal length 0", "terminal width 0"]
     command_super = b"enable"
@@ -25,28 +25,34 @@ class Profile(BaseProfile):
     command_exit = "exit"
     config_volatile = ["^%.*?$"]
 
+    matchers = {
+        "is_gpon": {"platform": {"$regex": r"^GP"}},
+    }
+
     def convert_interface_name(self, interface):
         if interface.startswith("TGigaEthernet"):
             return interface
-        if interface.startswith("GigaEthernet"):
+        elif interface.startswith("GigaEthernet"):
             return interface
-
-        if interface.startswith("f"):
-            return interface.replace("f", "FastEthernet")
-        if interface.startswith("g"):
-            return interface.replace("g", "GigaEthernet")
-        if interface.startswith("Gig"):
-            return interface.replace("Gig", "GigaEthernet")
-        if interface.startswith("TGi"):
-            return interface.replace("TGi", "TGigaEthernet")
-        if interface.startswith("tg"):
-            return interface.replace("tg", "TGigaEthernet")
+        if ":" in interface:
+            interface = interface.split(":")[0]
         if interface.startswith("gpon"):
             return "GPON" + interface[4:]
-        if interface.startswith("epon"):
+        elif interface.startswith("epon"):
             return "EPON" + interface[4:]
-        if interface.startswith("v"):
+        elif interface.startswith("f"):
+            return interface.replace("f", "FastEthernet")
+        elif interface.startswith("g"):
+            return interface.replace("g", "GigaEthernet")
+        elif interface.startswith("Gig"):
+            return interface.replace("Gig", "GigaEthernet")
+        elif interface.startswith("TGi"):
+            return interface.replace("TGi", "TGigaEthernet")
+        elif interface.startswith("tg"):
+            return interface.replace("tg", "TGigaEthernet")
+        elif interface.startswith("v"):
             return interface.replace("v", "VLAN")
-        if interface.startswith("n"):
+        elif interface.startswith("n"):
             return interface.replace("n", "Null")
-        return interface
+        else:
+            return interface
