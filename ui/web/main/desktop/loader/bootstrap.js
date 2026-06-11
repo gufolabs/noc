@@ -21,11 +21,15 @@
 // the UI is loaded.
 //---------------------------------------------------------------------
 
+import {loadMonaco} from "./lazy-loader.js";
 import {loadUI} from "./ui-loader.js";
 
 // Initializes framework-neutral infrastructure, then loads the UI. Each future
 // extraction adds an awaited step before loadUI().
 export async function bootstrap(){
   // Neutral infrastructure init goes here as modules are extracted from ExtJS.
+  // Expose on-demand bundle loaders as globals so the legacy ExtJS components
+  // can lazily pull heavy bundles (Monaco) instead of loading them eagerly.
+  window.loadMonaco = loadMonaco;
   await loadUI();
 }

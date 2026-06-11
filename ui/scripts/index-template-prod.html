@@ -12,6 +12,9 @@
   <link rel="stylesheet" type="text/css" href="theme-bundle.css" />
   <link rel="stylesheet" type="text/css" href="libs-bundle.css" />
   <link rel="stylesheet" type="text/css" href="app-prod-bundle.css" />
+  <!-- Lazily-loaded bundle URLs (Monaco is loaded on demand, not eagerly).
+       The monaco URL is rewritten to the hashed file by build-bundles-prod. -->
+  <script type="text/javascript">window.NOC_BUNDLES = {"monaco": "monaco.js", "monacoCss": "monaco.css"};</script>
   <!-- JS -->
   <script type="text/javascript" src="external-libs.js"></script>
   <script type="text/javascript" src="locale-bundle.js"></script>

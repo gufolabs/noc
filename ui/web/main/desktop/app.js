@@ -5,8 +5,8 @@
 // See LICENSE for details
 //---------------------------------------------------------------------
 // This file is the esbuild entry point. NocLoaderPlugin prepends an import for
-// every Ext.define class (topologically sorted) ahead of this code, so all NOC
-// classes are defined before the loader runs. The application itself is started
+// every Ext class definition (topologically sorted) ahead of this code, so all
+// NOC classes are defined before the loader runs. The application is started
 // by the framework-neutral loader chain (index -> bootstrap -> ui-loader ->
 // ext-application); ExtJS is no longer the root. See loader/index.js and
 // ui/docs/extjs-migration-summary.md.
