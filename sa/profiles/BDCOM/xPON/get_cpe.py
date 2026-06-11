@@ -90,13 +90,13 @@ class Script(BaseScript):
         "PICO": {  # Picotel
             "100N": "Ge-100N",
         },
-        "SNR":  {
+        "SNR": {
             "SNR-ONU-EPON-1G-": "SNR-ONU-EPON-1G-mini",
         },
         "TPLK": {
             "110": "TL-EP110",
         },
-        "ZTE":  {
+        "ZTE": {
             "ONU-": "ONU-501",
         },
     }
@@ -125,9 +125,7 @@ class Script(BaseScript):
                 onu["status"] = self.STATUS_MAP.get(onu_status, "inactive")
                 r[onu["id"]] = dict(onu)
             v = self.cli("show gpon active-onu")
-            for ifaces in re.split(
-                "Interface GPON\d+/\d+ has bound \d+ active ONUs:\n", v
-            ):
+            for ifaces in re.split("Interface GPON\d+/\d+ has bound \d+ active ONUs:\n", v):
                 for i in parse_table(v):
                     r[i[0]]["distance"] = int(float(i[5]))
             v = self.cli("show gpon onu-description")
@@ -163,7 +161,9 @@ class Script(BaseScript):
                 onu["status"] = self.STATUS_MAP.get(onu_status, "inactive")
                 r[onu["id"]] = dict(onu)
             v = self.cli("show epon active-onu")
-            for ifaces in re.split("Interface EPON\d+/\d+ has bound \d+ ONUs auto-configured:\n", v):
+            for ifaces in re.split(
+                "Interface EPON\d+/\d+ has bound \d+ ONUs auto-configured:\n", v
+            ):
                 for i in parse_table(v):
                     if is_int(i[4]):
                         r[i[0]]["distance"] = i[4]
