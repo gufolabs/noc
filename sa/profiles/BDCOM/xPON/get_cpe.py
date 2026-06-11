@@ -7,12 +7,10 @@
 
 # Python modules
 import re
-import time
 
 # NOC modules
 from noc.core.script.base import BaseScript
 from noc.sa.interfaces.igetcpe import IGetCPE
-from noc.sa.interfaces.base import MACAddressParameter
 from noc.core.text import parse_table
 from noc.core.validators import is_int
 from noc.core.mac import MAC
@@ -33,7 +31,7 @@ class Script(BaseScript):
         re.MULTILINE,
     )
     rx_epon_sw_version = re.compile(
-        "^(?P<onu_id>EPON\d+/\d+:\d+)\s+(?P<version>\S+)\s*\n",
+        r"^(?P<onu_id>EPON\d+/\d+:\d+)\s+(?P<version>\S+)\s*\n",
         re.MULTILINE,
     )
     rx_onu_model_id = re.compile(r"^ONU MODEL ID\s+: (?P<model>\S{4})\s*\n", re.MULTILINE)
@@ -125,7 +123,7 @@ class Script(BaseScript):
                 onu["status"] = self.STATUS_MAP.get(onu_status, "inactive")
                 r[onu["id"]] = dict(onu)
             v = self.cli("show gpon active-onu")
-            for ifaces in re.split("Interface GPON\d+/\d+ has bound \d+ active ONUs:\n", v):
+            for ifaces in re.split(r"Interface GPON\d+/\d+ has bound \d+ active ONUs:\n", v):
                 for i in parse_table(v):
                     r[i[0]]["distance"] = int(float(i[5]))
             v = self.cli("show gpon onu-description")
@@ -162,7 +160,7 @@ class Script(BaseScript):
                 r[onu["id"]] = dict(onu)
             v = self.cli("show epon active-onu")
             for ifaces in re.split(
-                "Interface EPON\d+/\d+ has bound \d+ ONUs auto-configured:\n", v
+                r"Interface EPON\d+/\d+ has bound \d+ ONUs auto-configured:\n", v
             ):
                 for i in parse_table(v):
                     if is_int(i[4]):
@@ -273,7 +271,6 @@ class Script(BaseScript):
             # IF-MIB::ifDescr
             for oid, value in self.snmp.getnext("1.3.6.1.2.1.2.2.1.2"):
                 ifindex = int(oid.split(".")[-1])
-                ifnames[ifindex] = value  # ???
                 if ifindex in r:
                     r[ifindex]["id"] = value
                     r[ifindex]["interface"] = value
