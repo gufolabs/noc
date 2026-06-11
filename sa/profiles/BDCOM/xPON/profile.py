@@ -30,10 +30,7 @@ class Profile(BaseProfile):
     }
 
     def convert_interface_name(self, interface):
-        if (
-            interface.startswith("TGigaEthernet")
-            or interface.startswith("GigaEthernet")
-        ):
+        if interface.startswith("TGigaEthernet") or interface.startswith("GigaEthernet"):
             return interface
         if ":" in interface:
             interface = interface.split(":")[0]
