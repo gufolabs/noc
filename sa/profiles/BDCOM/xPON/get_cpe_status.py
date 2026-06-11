@@ -1,92 +1,69 @@
 # ---------------------------------------------------------------------
 # BDCOM.xPON.get_cpe_status
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
-
-# Python modules
-import re
 
 # NOC modules
 from noc.core.script.base import BaseScript
 from noc.sa.interfaces.igetcpestatus import IGetCPEStatus
-from noc.sa.interfaces.base import MACAddressParameter
+from noc.core.mac import MAC
 
 
 class Script(BaseScript):
     name = "BDCOM.xPON.get_cpe_status"
     interface = IGetCPEStatus
+    always_prefer = "S"
 
-    cache = True
-    splitter = re.compile(r"\s*-+\n")
-
-    status_map = {
-        "auto-configured": True,
-        "auto-configuring": True,
-        "authenticated": True,
-        "lost": False,
-        "deregistered": False,
+    SNMP_STATUS_MAP = {
+        0: True,  # authenticated
+        1: True,  # registered
+        2: False,  # deregistered
+        3: True,  # auto_config
+        4: False,  # lost
+        5: True,  # standby
     }
 
-    # EPON port can contain maximum 64 ONU
-    ifname_validator = re.compile(r"^EPON\d+/\d+:\d{1,2}$")
-    ifname_match = re.compile(r"^(?P<ifname>EPON\d+/\d+:\d{1,2})")
-    status_match = re.compile(
-        r"^(?P<status>auto-configured|auto-configuring|authenticated|lost|deregistered)"
-    )
-
-    def get_onu_status(self, raw_status):
-        m = self.status_match.match(raw_status)
-        if m:
-            status = m["status"]
+    def execute_snmp(self, **kwargs):
+        r = {}
+        if self.is_gpon:
+            # NMS-GPON-MIB::onuSerialNum
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.10.3.1.1.4"):
+                ifindex = int(oid.split(".")[-1])
+                r[ifindex] = {
+                    "global_id": value,
+                }
+            # IF-MIB::ifDescr
+            for oid, value in self.snmp.getnext("1.3.6.1.2.1.2.2.1.2"):
+                ifindex = int(oid.split(".")[-1])
+                if ifindex in r:
+                    r[ifindex]["local_id"] = value
+                    r[ifindex]["interface"] = value
+            # NMS-GPON-MIB::onuOperationalState - enable(1), disable(2)
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.10.3.1.1.8"):
+                ifindex = int(oid.split(".")[-1])
+                value = int(value)
+                if ifindex in r:
+                    r[ifindex]["oper_status"] = value == 1
         else:
-            self.logger.info("Unknown ONU status '%s'. Fallback to oper_state 'down'", raw_status)
-            return False
+            # NMS-EPON-MIB::onuID
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.101.10.1.1.3"):
+                ifindex = int(oid.split(".")[-1])
+                r[ifindex] = {
+                    "global_id": MAC(value),
+                }
+            # IF-MIB::ifDescr
+            for oid, value in self.snmp.getnext("1.3.6.1.2.1.2.2.1.2"):
+                ifindex = int(oid.split(".")[-1])
+                if ifindex in r:
+                    r[ifindex]["local_id"] = value
+                    r[ifindex]["interface"] = value
+            # NMS-EPON-MIB::onuStatus
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.101.10.1.1.26"):
+                ifindex = int(oid.split(".")[-1])
+                value = int(value)
+                if ifindex in r:
+                    r[ifindex]["oper_status"] = self.SNMP_STATUS_MAP.get(value, False)
 
-        return self.status_map[status]
-
-    def get_onu_local_id(self, raw_id):
-        m = self.ifname_match.match(raw_id)
-        if m:
-            ifname = m["ifname"]
-        else:
-            self.logger.info("Unknown ONU ifname '%s'. Return raw value", raw_id)
-            return raw_id
-
-        return ifname
-
-    def execute_cli(self, **kwargs):
-        r = []
-        v = self.cli("show epon onu-information")
-        for table in v.split("\n\n"):
-            parts = self.splitter.split(table)
-            for p in parts[1:]:
-                for onu in p.split("\n"):
-                    line = onu.split()
-                    if len(line) >= 8 or self.ifname_validator.match(line[0]):
-                        onu_id = line[0]
-                        onu_mac = MACAddressParameter().clean(line[3])
-                        onu_status = self.get_onu_status(line[6])
-                    else:
-                        # Sometimes first fields overlaps on some firmware version
-                        # IntfName   VendorID  ModelID    MAC Address    Description                     BindType  Status          Dereg Reason
-                        # ---------- --------- ---------- -------------- ------------------------------- --------- --------------- -----------------
-                        # EPON0/13:9 VSOL      D401       006d.61d4.6bf8 N/A                             static    auto-configured N/A
-                        # EPON0/13:10xPON      101Z       e0e8.e61f.0759 N/A                             static    auto-configured N/A
-                        #
-                        # Or last fields
-                        # EPON0/3:38 VSOL      D401      006d.61d3.ee10 N/A             static    auto-configuringN/A
-
-                        onu_id = self.get_onu_local_id(line[0])
-                        onu_mac = MACAddressParameter().clean(line[2])
-                        onu_status = self.get_onu_status(line[5])
-
-                    r.append(
-                        {
-                            "oper_status": onu_status,
-                            "local_id": onu_id,
-                            "global_id": onu_mac,
-                        }
-                    )
-        return r
+        return list(r.values())

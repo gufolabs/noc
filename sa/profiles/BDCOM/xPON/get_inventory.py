@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # BDCOM.xPON.get_inventory
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -94,6 +94,7 @@ class Script(BaseScript):
                 elif t in ["10Giga-FX-SFP"]:
                     part_no = "SFP+"
                 elif not t in ["GPON", "Giga-PON"]:
+                    # xPON interfaces do not display the absence of a transceiver
                     self.logger.info(f"{ifname} - Unknown port type '{t}'.")
             if not match:
                 # Some devices can not get transceiver info
@@ -223,6 +224,9 @@ class Script(BaseScript):
                             f"{ifname} - Unknown xcvr_type '{xcvr_type}' for SFP `part_no`."
                         )
                         part_no = part_no + "Unknown SFP"
+                elif xcvr_type == "1000BASE-LX":
+                    # Found with part_no DPB-3512-S2
+                    part_no = part_no + "1G | SFP LX"
                 else:
                     self.logger.info(f"{ifname} - Unknown `part_no` '{p}'.")
                     part_no = part_no + "Unknown SFP"
