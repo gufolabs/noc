@@ -2,8 +2,7 @@
 
 ## Toolchain
 
-- **Sphinx** for building the documentation site (getnoc.com) with Material theme 9.7
-- mkdocstrings for Python introspection, macros plugin for dynamic content generation, i18n plugin for multi-language support
+Project builds the documentation site (getnoc.com) with **MkDocs + Material theme** and these plugins: search, macros, blog, literate-nav, i18n, mkdocstrings.
 
 Configuration: `mkdocs.yml` at project root defines navigation and metadata. **Never edit nav structure manually** without updating `mkdocs.yml` first.
 
@@ -70,23 +69,29 @@ All docs must follow the style guide in `docs/docs-style-guide/`. The four requi
 | **Reference** | data dictionary and structured lookups (OIDs, metrics, APIs) | When the user needs exact values/config options | YAML-style config examples; tables for structured data |
 | **Explanation** | "why does this work this way?" — pure concept, not how-to | User needs to understand the reasoning behind a design decision | No task steps — just context and reasoning |
 
+## Navigation Convention (mkdocs.yml + SUMMARY.md)
+
+Every directory in `docs/` either has a single-page book or multi-page book. Pick one pattern — never mix within the same category:
+
+| Pages in the book | mkdocs.yml entry | Directory layout |
+|---|---|---|
+| **1 page** (single `index.md`) | `- Title: dir/index.md` | `<book>/\n  index.md` |
+| **2+ pages** | `- Title: dir/` + create `dir/SUMMARY.md` | `<book>/\n  SUMMARY.md\n  index.md\n  page1.md\n  page2.md` |
+
+The root `mkdocs.yml` defines **top-level navigation only** (Guides, References, Background, etc.). **Each book's internal structure lives in its own `SUMMARY.md`** — edit it to add/delete pages without touching mkdocs.yml.
+
+Key rule: when creating new docs, determine the book category first. Never create files in a random directory — all docs go into established books or require approval for a new one.
+
 ## Code Examples in Docs
 
 - Use shell commands for CLI examples: `` ./noc command arg ``
 - Include actual configuration snippets (not placeholders) whenever possible
-- When referencing NOC config options, use YAML syntax for clarity
-- Reference NBI/API endpoints with URL paths like `/api/v1/objects/` rather than full URLs — agents and internal links should resolve these relative to the live site
 
 ## Cross-references
 
 - **Internal docs links** → always use relative paths: `../reference/metrics/index.md`
 - **External NOC references** → link to the live site (https://getnoc.com/)
 - Always verify external links work before merging doc changes — broken nav links or missing target pages will fail CI build
-
-## When to Edit `mkdocs.yml` vs When to Use `SUMMARY.md`
-
-- The root `mkdocs.yml` defines **top-level navigation** categories (Guides, References, Background, etc.) and links each book directory via a single line like `- Guides: guides/`. Modify this only if you are adding/removing top-level nav items.
-- The `SUMMARY.md` inside each book directory defines the **internal structure** of that category. This is where you add/reorder sub-pages within a book. You can edit `SUMMARY.md` without touching `mkdocs.yml` for routine doc changes.
 
 ## Building & Deploying
 
