@@ -93,10 +93,9 @@ class Script(BaseScript):
                     part_no = "SFP"
                 elif t in ["10Giga-FX-SFP"]:
                     part_no = "SFP+"
-                else:
+                elif not t in ["GPON", "Giga-PON"]:
                     # xPON interfaces do not display the absence of a transceiver
-                    if not t in ["GPON", "Giga-PON"]:
-                        self.logger.info(f"{ifname} - Unknown port type '{t}'.")
+                    self.logger.info(f"{ifname} - Unknown port type '{t}'.")
             if not match:
                 # Some devices can not get transceiver info
                 continue
@@ -225,13 +224,12 @@ class Script(BaseScript):
                             f"{ifname} - Unknown xcvr_type '{xcvr_type}' for SFP `part_no`."
                         )
                         part_no = part_no + "Unknown SFP"
-                else:
+                elif xcvr_type == "1000BASE-LX":
                     # Found with part_no DPB-3512-S2
-                    if xcvr_type == "1000BASE-LX":
-                        part_no = part_no + "1G | SFP LX"
-                    else:
-                        self.logger.info(f"{ifname} - Unknown `part_no` '{p}'.")
-                        part_no = part_no + "Unknown SFP"
+                    part_no = part_no + "1G | SFP LX"
+                else:
+                    self.logger.info(f"{ifname} - Unknown `part_no` '{p}'.")
+                    part_no = part_no + "Unknown SFP"
                 r += [
                     {
                         "type": "XCVR",
