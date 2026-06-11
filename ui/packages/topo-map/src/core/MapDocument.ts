@@ -1,5 +1,5 @@
-import type * as joint from '@joint/core';
-import type { Interface, PaperConfig, ViewportSnapshot } from './types';
+import type * as joint from "@joint/core";
+import type {Interface, PaperConfig, ViewportSnapshot} from "./types";
 
 export interface MapDocumentJSON {
   graph: joint.dia.Graph.JSON;
@@ -17,52 +17,52 @@ interface MapDocumentInit {
   schemaVersion: string | undefined;
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
+function isRecord(value: unknown): value is Record<string, unknown>{
+  return typeof value === "object" && value !== null;
 }
 
-function normalizeViewport(value: unknown): ViewportSnapshot | undefined {
-  if (!isRecord(value)) {
+function normalizeViewport(value: unknown): ViewportSnapshot | undefined{
+  if(!isRecord(value)){
     return undefined;
   }
 
-  const { scale, tx, ty } = value;
-  return typeof scale === 'number' && typeof tx === 'number' && typeof ty === 'number'
-    ? { scale, tx, ty }
+  const {scale, tx, ty} = value;
+  return typeof scale === "number" && typeof tx === "number" && typeof ty === "number"
+    ? {scale, tx, ty}
     : undefined;
 }
 
-function normalizePaperConfig(value: unknown): PaperConfig {
-  return isRecord(value) ? ({ ...value } as PaperConfig) : {};
+function normalizePaperConfig(value: unknown): PaperConfig{
+  return isRecord(value) ? ({...value} as PaperConfig) : {};
 }
 
-function normalizeGraph(value: unknown): joint.dia.Graph.JSON {
-  return isRecord(value) ? (value as joint.dia.Graph.JSON) : ({ cells: [] } as joint.dia.Graph.JSON);
+function normalizeGraph(value: unknown): joint.dia.Graph.JSON{
+  return isRecord(value) ? (value as joint.dia.Graph.JSON) : ({cells: []} as joint.dia.Graph.JSON);
 }
 
-function cloneInterfaces(interfaces: Interface[]): Interface[] {
+function cloneInterfaces(interfaces: Interface[]): Interface[]{
   return interfaces.map((item) => ({
     id: item.id,
     tags: {
       object: item.tags.object,
-      interface: item.tags.interface
-    }
+      interface: item.tags.interface,
+    },
   }));
 }
 
-function normalizeInterfaces(value: unknown): Interface[] {
-  if (!Array.isArray(value)) {
+function normalizeInterfaces(value: unknown): Interface[]{
+  if(!Array.isArray(value)){
     return [];
   }
 
   return value.flatMap((item) => {
-    if (!isRecord(item) || typeof item.id !== 'string' || !isRecord(item.tags)) {
+    if(!isRecord(item) || typeof item.id !== "string" || !isRecord(item.tags)){
       return [];
     }
 
     const object = item.tags.object;
     const interfaceName = item.tags.interface;
-    if (typeof object !== 'string' || typeof interfaceName !== 'string') {
+    if(typeof object !== "string" || typeof interfaceName !== "string"){
       return [];
     }
 
@@ -70,19 +70,19 @@ function normalizeInterfaces(value: unknown): Interface[] {
       id: item.id,
       tags: {
         object,
-        interface: interfaceName
-      }
+        interface: interfaceName,
+      },
     }];
   });
 }
 
-export class MapDocument {
-  public static readonly DEFAULT_SCHEMA_VERSION = '1.0.0';
+export class MapDocument{
+  public static readonly DEFAULT_SCHEMA_VERSION = "1.0.0";
 
   private static readonly DEFAULT_VIEWPORT: ViewportSnapshot = {
     scale: 1,
     tx: 0,
-    ty: 0
+    ty: 0,
   };
 
   public readonly graph: joint.dia.Graph.JSON;
@@ -95,35 +95,35 @@ export class MapDocument {
 
   public readonly schemaVersion: string;
 
-  public constructor(init: MapDocumentInit) {
+  public constructor(init: MapDocumentInit){
     this.graph = normalizeGraph(init.graph);
     this.interfaces = cloneInterfaces(normalizeInterfaces(init.interfaces));
     this.viewport = init.viewport;
     this.paperConfig = normalizePaperConfig(init.paperConfig);
     this.schemaVersion =
-      typeof init.schemaVersion === 'string' && init.schemaVersion.length > 0
+      typeof init.schemaVersion === "string" && init.schemaVersion.length > 0
         ? init.schemaVersion
         : MapDocument.DEFAULT_SCHEMA_VERSION;
   }
 
-  public static fromJSON(input: unknown): MapDocument {
-    if (!isRecord(input)) {
+  public static fromJSON(input: unknown): MapDocument{
+    if(!isRecord(input)){
       return new MapDocument({
-        graph: { cells: [] } as joint.dia.Graph.JSON,
+        graph: {cells: []} as joint.dia.Graph.JSON,
         interfaces: [],
         viewport: MapDocument.DEFAULT_VIEWPORT,
         paperConfig: undefined,
-        schemaVersion: undefined
+        schemaVersion: undefined,
       });
     }
 
-    if ('graph' in input) {
+    if("graph" in input){
       return new MapDocument({
         graph: normalizeGraph(input.graph),
         interfaces: normalizeInterfaces(input.interfaces),
         viewport: normalizeViewport(input.viewport) ?? MapDocument.DEFAULT_VIEWPORT,
         paperConfig: normalizePaperConfig(input.paperConfig),
-        schemaVersion: typeof input.schemaVersion === 'string' ? input.schemaVersion : undefined
+        schemaVersion: typeof input.schemaVersion === "string" ? input.schemaVersion : undefined,
       });
     }
 
@@ -132,7 +132,7 @@ export class MapDocument {
       interfaces: [],
       viewport: MapDocument.DEFAULT_VIEWPORT,
       paperConfig: undefined,
-      schemaVersion: undefined
+      schemaVersion: undefined,
     });
   }
 
@@ -141,31 +141,31 @@ export class MapDocument {
     viewport?: ViewportSnapshot,
     paperConfig: PaperConfig = {},
     interfaces: Interface[] = [],
-    schemaVersion = MapDocument.DEFAULT_SCHEMA_VERSION
-  ): MapDocument {
+    schemaVersion = MapDocument.DEFAULT_SCHEMA_VERSION,
+  ): MapDocument{
     return new MapDocument({
       graph,
       interfaces,
       viewport,
       paperConfig,
-      schemaVersion
+      schemaVersion,
     });
   }
 
-  public hasPaperConfig(): boolean {
+  public hasPaperConfig(): boolean{
     return Object.keys(this.paperConfig).length > 0;
   }
 
-  public toJSON(): MapDocumentJSON {
+  public toJSON(): MapDocumentJSON{
     const json: MapDocumentJSON = {
       graph: this.graph,
       interfaces: cloneInterfaces(this.interfaces),
-      paperConfig: { ...this.paperConfig },
-      schemaVersion: this.schemaVersion
+      paperConfig: {...this.paperConfig},
+      schemaVersion: this.schemaVersion,
     };
 
-    if (this.viewport) {
-      json.viewport = { ...this.viewport };
+    if(this.viewport){
+      json.viewport = {...this.viewport};
     }
 
     return json;

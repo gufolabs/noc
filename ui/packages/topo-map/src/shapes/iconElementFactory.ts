@@ -1,5 +1,5 @@
-import * as joint from '@joint/core';
-import { elementMarkup } from './labeling';
+import * as joint from "@joint/core";
+import {elementMarkup} from "./labeling";
 
 export type IconElementInstance<TMethods extends object> = joint.dia.Element &
   TMethods & {
@@ -19,47 +19,47 @@ export interface IconElementFactoryConfig<TMethods extends object> {
   onIconInit?: (instance: joint.dia.Element & TMethods, iconAttrs: Record<string, unknown>) => void;
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
+function isRecord(value: unknown): value is Record<string, unknown>{
+  return typeof value === "object" && value !== null;
 }
 
-export function getNestedRecord(parent: unknown, key: string): Record<string, unknown> {
-  if (!isRecord(parent)) {
+export function getNestedRecord(parent: unknown, key: string): Record<string, unknown>{
+  if(!isRecord(parent)){
     return {};
   }
   const value = parent[key];
-  if (!isRecord(value)) {
+  if(!isRecord(value)){
     return {};
   }
   return value;
 }
 
-export function getString(record: Record<string, unknown>, key: string): string {
+export function getString(record: Record<string, unknown>, key: string): string{
   const value = record[key];
-  return typeof value === 'string' ? value : '';
+  return typeof value === "string" ? value : "";
 }
 
-export function getNumber(record: Record<string, unknown>, key: string, fallback: number): number {
+export function getNumber(record: Record<string, unknown>, key: string, fallback: number): number{
   const value = record[key];
-  if (typeof value === 'number' && Number.isFinite(value)) {
+  if(typeof value === "number" && Number.isFinite(value)){
     return value;
   }
-  if (typeof value === 'string') {
+  if(typeof value === "string"){
     const parsed = Number.parseFloat(value);
-    if (Number.isFinite(parsed)) {
+    if(Number.isFinite(parsed)){
       return parsed;
     }
   }
   return fallback;
 }
 
-function toggleLabel(this: joint.dia.Element): void {
-  const nodeNameDisplay = this.attr('nodeName/display');
-  const ipaddrDisplay = this.attr('ipaddr/display');
-  const newNodeNameDisplay = nodeNameDisplay === 'none' ? 'block' : 'none';
-  const newIpaddrDisplay = ipaddrDisplay === 'none' ? 'block' : 'none';
-  this.attr('nodeName/display', newNodeNameDisplay);
-  this.attr('ipaddr/display', newIpaddrDisplay);
+function toggleLabel(this: joint.dia.Element): void{
+  const nodeNameDisplay = this.attr("nodeName/display");
+  const ipaddrDisplay = this.attr("ipaddr/display");
+  const newNodeNameDisplay = nodeNameDisplay === "none" ? "block" : "none";
+  const newIpaddrDisplay = ipaddrDisplay === "none" ? "block" : "none";
+  this.attr("nodeName/display", newNodeNameDisplay);
+  this.attr("ipaddr/display", newIpaddrDisplay);
 }
 
 export type IconElementConstructor = joint.dia.Cell.Constructor<
@@ -67,8 +67,8 @@ export type IconElementConstructor = joint.dia.Cell.Constructor<
 >;
 
 export function createIconElement<TMethods extends object>(
-  config: IconElementFactoryConfig<TMethods>
-): IconElementConstructor {
+  config: IconElementFactoryConfig<TMethods>,
+): IconElementConstructor{
   type Instance = IconElementInstance<TMethods>;
 
   return joint.dia.Element.define(
@@ -76,23 +76,23 @@ export function createIconElement<TMethods extends object>(
     {
       type: config.type,
       z: 100,
-      attrs: config.attrs
+      attrs: config.attrs,
     },
     {
-      initialize: function (this: Instance, ...args: joint.dia.Element.Attributes[]) {
+      initialize: function(this: Instance, ...args: joint.dia.Element.Attributes[]){
         joint.dia.Element.prototype.initialize.apply(this, args as [joint.dia.Element.Attributes]);
         const markup = config.buildMarkup?.(this as joint.dia.Element & TMethods)
           ?? [...elementMarkup, ...(config.iconMarkup ? [config.iconMarkup] : [])];
-        this.set('markup', markup, { silent: true });
+        this.set("markup", markup, {silent: true});
 
-        const attrs = this.get('attrs');
-        const iconAttrs = getNestedRecord(attrs, 'icon');
+        const attrs = this.get("attrs");
+        const iconAttrs = getNestedRecord(attrs, "icon");
 
         config.onIconInit?.(this as joint.dia.Element & TMethods, iconAttrs);
       },
 
       toggleLabel,
-      ...config.methods
-    }
+      ...config.methods,
+    },
   );
 }

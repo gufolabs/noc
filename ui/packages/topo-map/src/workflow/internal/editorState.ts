@@ -1,4 +1,4 @@
-import type { WorkflowDocument, WorkflowEditorConfig, WorkflowMode } from '../types';
+import type {WorkflowDocument, WorkflowEditorConfig, WorkflowMode} from "../types";
 
 export const DEFAULT_INITIAL_SCALE = 1;
 export const DEFAULT_MIN_SCALE = 0.2;
@@ -20,8 +20,8 @@ export interface ActiveVertexDragState {
   index: number;
 }
 
-export type WorkflowEditorConfigResolved = Required<Omit<WorkflowEditorConfig, 'mainContainer'>> &
-  Pick<WorkflowEditorConfig, 'mainContainer'>;
+export type WorkflowEditorConfigResolved = Required<Omit<WorkflowEditorConfig, "mainContainer">> &
+  Pick<WorkflowEditorConfig, "mainContainer">;
 
 export interface WorkflowEditorState {
   workflow: WorkflowDocument;
@@ -42,7 +42,7 @@ export interface WorkflowEditorState {
   validationIssues: string[];
 }
 
-export function resolveWorkflowEditorConfig(config: WorkflowEditorConfig): WorkflowEditorConfigResolved {
+export function resolveWorkflowEditorConfig(config: WorkflowEditorConfig): WorkflowEditorConfigResolved{
   return {
     mainContainer: config.mainContainer,
     initialScale: config.initialScale ?? DEFAULT_INITIAL_SCALE,
@@ -52,18 +52,18 @@ export function resolveWorkflowEditorConfig(config: WorkflowEditorConfig): Workf
     guidesEnabled: config.guidesEnabled ?? DEFAULT_GUIDES_ENABLED,
     guideThreshold: config.guideThreshold ?? DEFAULT_GUIDE_THRESHOLD,
     fitToPageOnLoad: config.fitToPageOnLoad ?? true,
-    wheelZoom: config.wheelZoom ?? true
+    wheelZoom: config.wheelZoom ?? true,
   };
 }
 
 export function createWorkflowEditorState(
   config: WorkflowEditorConfigResolved,
-  workflow: WorkflowDocument
-): WorkflowEditorState {
+  workflow: WorkflowDocument,
+): WorkflowEditorState{
   return {
     workflow,
     selectedCellId: null,
-    mode: 'edit' satisfies WorkflowMode,
+    mode: "edit" satisfies WorkflowMode,
     scale: config.initialScale,
     tx: 0,
     ty: 0,
@@ -76,6 +76,6 @@ export function createWorkflowEditorState(
     pendingGraphSyncSelectionChange: false,
     dirty: false,
     suspendDocumentSyncDepth: 0,
-    validationIssues: []
+    validationIssues: [],
   };
 }

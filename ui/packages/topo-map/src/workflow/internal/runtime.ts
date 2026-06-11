@@ -1,13 +1,13 @@
-import * as joint from '@joint/core';
+import * as joint from "@joint/core";
 import type {
   WorkflowContextMenuDetail,
   WorkflowPoint,
-  WorkflowSelection
-} from '../types';
-import type { WorkflowEditorConfigResolved, WorkflowEditorState } from './editorState';
-import type { WorkflowGuidesManager } from './GuidesManager';
-import type { WorkflowHistoryController } from './history';
-import type { WorkflowSpatialIndex } from './spatialIndex';
+  WorkflowSelection,
+} from "../types";
+import type {WorkflowEditorConfigResolved, WorkflowEditorState} from "./editorState";
+import type {WorkflowGuidesManager} from "./GuidesManager";
+import type {WorkflowHistoryController} from "./history";
+import type {WorkflowSpatialIndex} from "./spatialIndex";
 
 export interface WorkflowEditorRuntime {
   host: EventTarget;

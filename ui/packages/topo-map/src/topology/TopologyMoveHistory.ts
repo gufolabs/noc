@@ -1,4 +1,4 @@
-import type * as joint from '@joint/core';
+import type * as joint from "@joint/core";
 
 interface PositionSnapshot {
   x: number;
@@ -18,11 +18,11 @@ interface ActiveMove {
 
 const DEFAULT_HISTORY_LIMIT = 100;
 
-function samePosition(left: PositionSnapshot, right: PositionSnapshot): boolean {
+function samePosition(left: PositionSnapshot, right: PositionSnapshot): boolean{
   return left.x === right.x && left.y === right.y;
 }
 
-export class TopologyMoveHistory {
+export class TopologyMoveHistory{
   private readonly graph: joint.dia.Graph;
 
   private readonly limit: number;
@@ -33,27 +33,27 @@ export class TopologyMoveHistory {
 
   private activeMove: ActiveMove | null = null;
 
-  public constructor(graph: joint.dia.Graph, limit = DEFAULT_HISTORY_LIMIT) {
+  public constructor(graph: joint.dia.Graph, limit = DEFAULT_HISTORY_LIMIT){
     this.graph = graph;
     this.limit = Number.isFinite(limit) && limit > 0 ? Math.trunc(limit) : DEFAULT_HISTORY_LIMIT;
   }
 
-  public canUndo(): boolean {
+  public canUndo(): boolean{
     return this.undoStack.length > 0;
   }
 
-  public canRedo(): boolean {
+  public canRedo(): boolean{
     return this.redoStack.length > 0;
   }
 
-  public clear(): void {
+  public clear(): void{
     this.undoStack = [];
     this.redoStack = [];
     this.activeMove = null;
   }
 
-  public begin(cell: joint.dia.Cell | null | undefined): void {
-    if (!cell?.isElement()) {
+  public begin(cell: joint.dia.Cell | null | undefined): void{
+    if(!cell?.isElement()){
       this.activeMove = null;
       return;
     }
@@ -63,13 +63,13 @@ export class TopologyMoveHistory {
       cellId: String(cell.id),
       before: {
         x: position.x,
-        y: position.y
-      }
+        y: position.y,
+      },
     };
   }
 
-  public commit(cell: joint.dia.Cell | null | undefined): boolean {
-    if (!cell?.isElement() || this.activeMove === null || this.activeMove.cellId !== String(cell.id)) {
+  public commit(cell: joint.dia.Cell | null | undefined): boolean{
+    if(!cell?.isElement() || this.activeMove === null || this.activeMove.cellId !== String(cell.id)){
       this.activeMove = null;
       return false;
     }
@@ -80,30 +80,30 @@ export class TopologyMoveHistory {
       before: this.activeMove.before,
       after: {
         x: after.x,
-        y: after.y
-      }
+        y: after.y,
+      },
     };
     this.activeMove = null;
 
-    if (samePosition(entry.before, entry.after)) {
+    if(samePosition(entry.before, entry.after)){
       return false;
     }
 
     this.undoStack.push(entry);
-    if (this.undoStack.length > this.limit) {
+    if(this.undoStack.length > this.limit){
       this.undoStack.splice(0, this.undoStack.length - this.limit);
     }
     this.redoStack = [];
     return true;
   }
 
-  public cancel(): void {
+  public cancel(): void{
     this.activeMove = null;
   }
 
-  public undo(): boolean {
+  public undo(): boolean{
     const entry = this.undoStack.pop();
-    if (!entry) {
+    if(!entry){
       return false;
     }
     this.redoStack.push(entry);
@@ -111,9 +111,9 @@ export class TopologyMoveHistory {
     return true;
   }
 
-  public redo(): boolean {
+  public redo(): boolean{
     const entry = this.redoStack.pop();
-    if (!entry) {
+    if(!entry){
       return false;
     }
     this.undoStack.push(entry);
@@ -121,11 +121,11 @@ export class TopologyMoveHistory {
     return true;
   }
 
-  private applyPosition(cellId: string, position: PositionSnapshot): void {
+  private applyPosition(cellId: string, position: PositionSnapshot): void{
     const cell = this.graph.getCell(cellId);
-    if (!cell?.isElement()) {
+    if(!cell?.isElement()){
       return;
     }
-    cell.position(position.x, position.y, { deep: true });
+    cell.position(position.x, position.y, {deep: true});
   }
 }

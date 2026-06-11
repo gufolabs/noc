@@ -1,4 +1,4 @@
-export type Mode = 'pan' | 'zoomToArea' | 'edit';
+export type Mode = "pan" | "zoomToArea" | "edit";
 
 export interface Config {
   mainContainer: HTMLElement;
@@ -18,12 +18,12 @@ export interface Config {
 }
 
 export const PAPER_TYPES = [
-  'segment',
-  'configured',
-  'l2domain',
-  'objectcontainer',
-  'objectgroup',
-  'objectlevelneighbor'
+  "segment",
+  "configured",
+  "l2domain",
+  "objectcontainer",
+  "objectgroup",
+  "objectlevelneighbor",
 ] as const;
 
 export type PaperType = (typeof PAPER_TYPES)[number];
@@ -42,9 +42,9 @@ export interface PaperConfig {
   stencilDir?: string;
 }
 
-export type ShapeOverlayPosition = 'NW' | 'N' | 'NE' | 'E' | 'SE' | 'S' | 'SW' | 'W';
+export type ShapeOverlayPosition = "NW" | "N" | "NE" | "E" | "SE" | "S" | "SW" | "W";
 
-export type ShapeOverlayForm = 'c' | 's';
+export type ShapeOverlayForm = "c" | "s";
 
 export interface ShapeOverlay {
   code: number;
@@ -155,9 +155,9 @@ export interface ViewportStateSnapshot extends ViewportSnapshot {
   maxScale: number;
 }
 
-export type NodeLabelField = 'nodeName' | 'ipaddr';
+export type NodeLabelField = "nodeName" | "ipaddr";
 
-export type NodeSearchField = NodeLabelField | 'id';
+export type NodeSearchField = NodeLabelField | "id";
 
 export interface NodeSearchResult {
   id: string;

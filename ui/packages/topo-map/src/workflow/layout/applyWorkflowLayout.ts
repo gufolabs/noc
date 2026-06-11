@@ -1,7 +1,7 @@
-import * as joint from '@joint/core';
+import * as joint from "@joint/core";
 
 export interface ApplyWorkflowLayoutOptions {
-  rankDir?: 'TB' | 'BT' | 'LR' | 'RL';
+  rankDir?: "TB" | "BT" | "LR" | "RL";
   marginX?: number;
   marginY?: number;
   nodeSep?: number;
@@ -10,12 +10,12 @@ export interface ApplyWorkflowLayoutOptions {
 
 export function applyWorkflowLayout(
   graph: joint.dia.Graph,
-  options: ApplyWorkflowLayoutOptions = {}
-): void {
+  options: ApplyWorkflowLayoutOptions = {},
+): void{
   const directedGraph = (joint.layout as { DirectedGraph?: { layout?: (graph: joint.dia.Graph, options: object) => void } })
     .DirectedGraph;
-  if (!directedGraph?.layout) {
-    console.warn('[applyWorkflowLayout] joint.layout.DirectedGraph is not available. Auto-layout skipped.');
+  if(!directedGraph?.layout){
+    console.warn("[applyWorkflowLayout] joint.layout.DirectedGraph is not available. Auto-layout skipped.");
     return;
   }
 
@@ -28,6 +28,6 @@ export function applyWorkflowLayout(
     marginY: options.marginY ?? 50,
     nodeSep: options.nodeSep ?? 100,
     edgeSep: options.edgeSep ?? 80,
-    rankDir: options.rankDir ?? 'TB'
+    rankDir: options.rankDir ?? "TB",
   });
 }

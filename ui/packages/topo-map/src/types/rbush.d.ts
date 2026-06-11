@@ -1,4 +1,4 @@
-declare module 'rbush' {
+declare module "rbush" {
   export interface BBox {
     minX: number;
     minY: number;
@@ -6,7 +6,7 @@ declare module 'rbush' {
     maxY: number;
   }
 
-  export default class RBush<T extends BBox> {
+  export default class RBush<T extends BBox>{
     constructor(maxEntries?: number);
     all(): T[];
     search(bbox: BBox): T[];

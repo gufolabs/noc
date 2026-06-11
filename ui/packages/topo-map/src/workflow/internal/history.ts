@@ -1,9 +1,9 @@
-import { HistoryController } from '../../history/HistoryController';
-import { clonePlain } from '../clonePlain';
-import type { WorkflowDocument } from '../types';
-import type { WorkflowEditorRuntime } from './runtime';
+import {HistoryController} from "../../history/HistoryController";
+import {clonePlain} from "../clonePlain";
+import type {WorkflowDocument} from "../types";
+import type {WorkflowEditorRuntime} from "./runtime";
 
-export type WorkflowHistoryGesture = 'state-move' | 'link-change';
+export type WorkflowHistoryGesture = "state-move" | "link-change";
 
 export interface WorkflowHistoryController {
   beginGesture: (kind: WorkflowHistoryGesture) => void;
@@ -22,22 +22,22 @@ export interface WorkflowHistoryController {
   syncDirtyState: () => void;
 }
 
-function equalsWorkflowDocument(left: WorkflowDocument, right: WorkflowDocument): boolean {
+function equalsWorkflowDocument(left: WorkflowDocument, right: WorkflowDocument): boolean{
   return JSON.stringify(left) === JSON.stringify(right);
 }
 
-export function captureWorkflowSnapshot(runtime: WorkflowEditorRuntime): WorkflowDocument {
+export function captureWorkflowSnapshot(runtime: WorkflowEditorRuntime): WorkflowDocument{
   runtime.flushScheduledGraphSync();
   return clonePlain(runtime.state.workflow);
 }
 
 export function createWorkflowHistoryController(
   runtime: WorkflowEditorRuntime,
-  applySnapshot: (snapshot: WorkflowDocument) => void
-): WorkflowHistoryController {
+  applySnapshot: (snapshot: WorkflowDocument) => void,
+): WorkflowHistoryController{
   const history = new HistoryController<WorkflowDocument>({
     clone: clonePlain,
-    equals: equalsWorkflowDocument
+    equals: equalsWorkflowDocument,
   });
   let baseline = captureWorkflowSnapshot(runtime);
   let activeGesture: WorkflowHistoryGesture | null = null;
@@ -49,12 +49,12 @@ export function createWorkflowHistoryController(
     const nextCanUndo = history.canUndo();
     const nextCanRedo = history.canRedo();
 
-    if (nextCanUndo !== lastCanUndo) {
+    if(nextCanUndo !== lastCanUndo){
       lastCanUndo = nextCanUndo;
       runtime.emitCanUndoChange(nextCanUndo);
     }
 
-    if (nextCanRedo !== lastCanRedo) {
+    if(nextCanRedo !== lastCanRedo){
       lastCanRedo = nextCanRedo;
       runtime.emitCanRedoChange(nextCanRedo);
     }
@@ -66,14 +66,14 @@ export function createWorkflowHistoryController(
 
   return {
     beginGesture: (kind: WorkflowHistoryGesture): void => {
-      if (history.isReplayInProgress() || activeGesture !== null || implicitChangeActive) {
+      if(history.isReplayInProgress() || activeGesture !== null || implicitChangeActive){
         return;
       }
       activeGesture = kind;
       history.begin(captureWorkflowSnapshot(runtime));
     },
     commitGesture: (kind: WorkflowHistoryGesture): boolean => {
-      if (activeGesture !== kind) {
+      if(activeGesture !== kind){
         return false;
       }
       activeGesture = null;
@@ -83,21 +83,21 @@ export function createWorkflowHistoryController(
       return recorded;
     },
     cancelGesture: (kind?: WorkflowHistoryGesture): void => {
-      if (kind && activeGesture !== kind) {
+      if(kind && activeGesture !== kind){
         return;
       }
       activeGesture = null;
       history.cancel();
     },
     beginImplicitChange: (): void => {
-      if (history.isReplayInProgress() || activeGesture !== null || implicitChangeActive) {
+      if(history.isReplayInProgress() || activeGesture !== null || implicitChangeActive){
         return;
       }
       implicitChangeActive = true;
       history.begin(captureWorkflowSnapshot(runtime));
     },
     commitImplicitChange: (): boolean => {
-      if (!implicitChangeActive) {
+      if(!implicitChangeActive){
         return false;
       }
       implicitChangeActive = false;
@@ -128,7 +128,7 @@ export function createWorkflowHistoryController(
       const changed = history.undo((snapshot) => {
         applySnapshot(snapshot);
       });
-      if (changed) {
+      if(changed){
         syncDirtyState();
         emitAvailabilityChanges();
       }
@@ -138,7 +138,7 @@ export function createWorkflowHistoryController(
       const changed = history.redo((snapshot) => {
         applySnapshot(snapshot);
       });
-      if (changed) {
+      if(changed){
         syncDirtyState();
         emitAvailabilityChanges();
       }
@@ -147,6 +147,6 @@ export function createWorkflowHistoryController(
     canUndo: (): boolean => history.canUndo(),
     canRedo: (): boolean => history.canRedo(),
     isReplayInProgress: (): boolean => history.isReplayInProgress(),
-    syncDirtyState
+    syncDirtyState,
   };
 }

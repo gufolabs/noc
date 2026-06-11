@@ -1,6 +1,6 @@
-import type * as joint from '@joint/core';
-import { applyElementStatus, isStatusSupportedElement, readElementStatus } from './elementStatus';
-import { readDisplayedLabel } from './nodeLabels';
+import type * as joint from "@joint/core";
+import {applyElementStatus, isStatusSupportedElement, readElementStatus} from "./elementStatus";
+import {readDisplayedLabel} from "./nodeLabels";
 import type {
   CellData,
   DataApi,
@@ -12,19 +12,19 @@ import type {
   ElementStatusUpdateMap,
   LinkDataApi,
   PortId,
-  LinkRecord
-} from './types';
+  LinkRecord,
+} from "./types";
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
+function isRecord(value: unknown): value is Record<string, unknown>{
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function cloneValue<T>(value: T): T {
-  if (Array.isArray(value)) {
+function cloneValue<T>(value: T): T{
+  if(Array.isArray(value)){
     return value.map((item) => cloneValue(item)) as T;
   }
 
-  if (!isRecord(value)) {
+  if(!isRecord(value)){
     return value;
   }
 
@@ -35,29 +35,29 @@ function cloneValue<T>(value: T): T {
   return clone as T;
 }
 
-function toOptionalFiniteNumber(value: unknown): number | undefined {
-  return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
+function toOptionalFiniteNumber(value: unknown): number | undefined{
+  return typeof value === "number" && Number.isFinite(value) ? value : undefined;
 }
 
-function toOptionalId(value: unknown): string | undefined {
-  if (typeof value === 'string' && value.length > 0) {
+function toOptionalId(value: unknown): string | undefined{
+  if(typeof value === "string" && value.length > 0){
     return value;
   }
 
-  if (typeof value === 'number' && Number.isFinite(value)) {
+  if(typeof value === "number" && Number.isFinite(value)){
     return String(value);
   }
 
   return undefined;
 }
 
-function extractPortIds(data: unknown): string[] {
-  if (!isRecord(data) || !Array.isArray(data.ports)) {
+function extractPortIds(data: unknown): string[]{
+  if(!isRecord(data) || !Array.isArray(data.ports)){
     return [];
   }
 
   return data.ports.flatMap((port) => {
-    if (!isRecord(port)) {
+    if(!isRecord(port)){
       return [];
     }
 
@@ -66,30 +66,30 @@ function extractPortIds(data: unknown): string[] {
   });
 }
 
-function extractLinkPortIds(data: unknown): [string | undefined, string | undefined] {
-  if (!isRecord(data) || !Array.isArray(data.ports)) {
+function extractLinkPortIds(data: unknown): [string | undefined, string | undefined]{
+  if(!isRecord(data) || !Array.isArray(data.ports)){
     return [undefined, undefined];
   }
 
   return [
     toOptionalId(data.ports[0]),
-    toOptionalId(data.ports[1])
+    toOptionalId(data.ports[1]),
   ];
 }
 
-function getLinkEndId(end: unknown): string | undefined {
-  if (!isRecord(end)) {
+function getLinkEndId(end: unknown): string | undefined{
+  if(!isRecord(end)){
     return undefined;
   }
 
   return toOptionalId(end.id);
 }
 
-function mergePatchedData(currentData: unknown, patch: CellData): CellData {
+function mergePatchedData(currentData: unknown, patch: CellData): CellData{
   const nextData = isRecord(currentData) ? cloneValue(currentData) : {};
 
   Object.entries(patch).forEach(([key, value]) => {
-    if (value == null) {
+    if(value == null){
       delete nextData[key];
       return;
     }
@@ -101,37 +101,37 @@ function mergePatchedData(currentData: unknown, patch: CellData): CellData {
 }
 
 function toRecord<TData extends CellData>(
-  cell: joint.dia.Cell
-): ElementRecord<TData> | LinkRecord<TData> | null {
-  const data = cell.get('data');
-  if (!isRecord(data)) {
+  cell: joint.dia.Cell,
+): ElementRecord<TData> | LinkRecord<TData> | null{
+  const data = cell.get("data");
+  if(!isRecord(data)){
     return null;
   }
 
   return {
     id: String(cell.id),
-    data: cloneValue(data as TData)
+    data: cloneValue(data as TData),
   };
 }
 
-class ElementDataFacade implements ElementDataApi {
+class ElementDataFacade implements ElementDataApi{
   private portToNodeIndex: Map<string, string> | null = null;
 
-  public constructor(private readonly graph: joint.dia.Graph) {
-    this.graph.on('add remove reset change:data change:source change:target', () => {
+  public constructor(private readonly graph: joint.dia.Graph){
+    this.graph.on("add remove reset change:data change:source change:target", () => {
       this.portToNodeIndex = null;
     });
   }
 
-  public getIdsByDataType(type: string): string[] {
+  public getIdsByDataType(type: string): string[]{
     const expectedType = type.trim();
-    if (expectedType.length === 0) {
+    if(expectedType.length === 0){
       return [];
     }
 
     return this.graph.getElements().flatMap((element) => {
-      const data = element.get('data');
-      if (!isRecord(data) || data.type !== expectedType) {
+      const data = element.get("data");
+      if(!isRecord(data) || data.type !== expectedType){
         return [];
       }
 
@@ -139,157 +139,157 @@ class ElementDataFacade implements ElementDataApi {
     });
   }
 
-  public getById<TData extends CellData = CellData>(id: string): ElementRecord<TData> | null {
+  public getById<TData extends CellData = CellData>(id: string): ElementRecord<TData> | null{
     const cell = this.graph.getCell(id);
-    if (!cell?.isElement()) {
+    if(!cell?.isElement()){
       return null;
     }
 
     return toRecord<TData>(cell);
   }
 
-  public getAll<TData extends CellData = CellData>(): ElementRecord<TData>[] {
+  public getAll<TData extends CellData = CellData>(): ElementRecord<TData>[]{
     return this.graph.getElements().flatMap((element) => {
       const record = toRecord<TData>(element);
       return record ? [record] : [];
     });
   }
 
-  public getLabelByPortId(portId: PortId): string | null {
+  public getLabelByPortId(portId: PortId): string | null{
     const nodeId = this.resolveNodeIdByPortId(portId);
-    if (!nodeId) {
+    if(!nodeId){
       return null;
     }
 
     const cell = this.graph.getCell(nodeId);
-    if (!cell?.isElement()) {
+    if(!cell?.isElement()){
       return null;
     }
 
     return readDisplayedLabel(cell);
   }
 
-  private resolveNodeIdByPortId(portId: PortId): string | null {
+  private resolveNodeIdByPortId(portId: PortId): string | null{
     const expectedPortId = toOptionalId(portId);
-    if (!expectedPortId) {
+    if(!expectedPortId){
       return null;
     }
 
-    if (!this.portToNodeIndex) {
+    if(!this.portToNodeIndex){
       this.portToNodeIndex = this.buildPortToNodeIndex();
     }
 
     return this.portToNodeIndex.get(expectedPortId) ?? null;
   }
 
-  public getStatus(id: string): ElementStatusUpdate | null {
+  public getStatus(id: string): ElementStatusUpdate | null{
     const element = this.getStatusTargetElement(id);
-    if (!element) {
+    if(!element){
       return null;
     }
 
     return readElementStatus(element);
   }
 
-  public getStatuses(ids: string[]): ElementStatusRecord[] {
+  public getStatuses(ids: string[]): ElementStatusRecord[]{
     return ids.map((id) => {
       const status = this.getStatus(id);
       return {
         id,
         status_code: status?.status_code ?? null,
-        metrics_label: status?.metrics_label ?? null
+        metrics_label: status?.metrics_label ?? null,
       };
     });
   }
 
-  public setStatus(id: string, update: ElementStatusUpdate): boolean {
+  public setStatus(id: string, update: ElementStatusUpdate): boolean{
     const element = this.getStatusTargetElement(id);
-    if (!element) {
+    if(!element){
       return false;
     }
 
     return applyElementStatus(element, update);
   }
 
-  public setStatuses(updates: ElementStatusUpdateMap): string[] {
+  public setStatuses(updates: ElementStatusUpdateMap): string[]{
     const entries = Object.entries(updates);
-    if (entries.length === 0) {
+    if(entries.length === 0){
       return [];
     }
 
     const updatedIds: string[] = [];
-    this.graph.startBatch('element-status');
-    try {
+    this.graph.startBatch("element-status");
+    try{
       entries.forEach(([id, update]) => {
         const element = this.getStatusTargetElement(id);
-        if (!element) {
+        if(!element){
           return;
         }
 
-        if (applyElementStatus(element, update)) {
+        if(applyElementStatus(element, update)){
           updatedIds.push(id);
         }
       });
-    } finally {
-      this.graph.stopBatch('element-status');
+    } finally{
+      this.graph.stopBatch("element-status");
     }
 
     return updatedIds;
   }
 
-  public setRandomStatuses(updates: ElementStatusUpdate[]): string[] {
-    if (updates.length === 0) {
+  public setRandomStatuses(updates: ElementStatusUpdate[]): string[]{
+    if(updates.length === 0){
       return [];
     }
 
     const updatedIds: string[] = [];
-    this.graph.startBatch('element-status');
-    try {
+    this.graph.startBatch("element-status");
+    try{
       this.graph.getElements().forEach((element) => {
-        if (!isStatusSupportedElement(element)) {
+        if(!isStatusSupportedElement(element)){
           return;
         }
 
         const randomUpdate = updates[Math.floor(Math.random() * updates.length)];
-        if (randomUpdate && applyElementStatus(element, randomUpdate)) {
+        if(randomUpdate && applyElementStatus(element, randomUpdate)){
           updatedIds.push(String(element.id));
         }
       });
-    } finally {
-      this.graph.stopBatch('element-status');
+    } finally{
+      this.graph.stopBatch("element-status");
     }
 
     return updatedIds;
   }
 
-  private getStatusTargetElement(id: string): joint.dia.Element | null {
+  private getStatusTargetElement(id: string): joint.dia.Element | null{
     const cell = this.graph.getCell(id);
-    if (!isStatusSupportedElement(cell)) {
+    if(!isStatusSupportedElement(cell)){
       return null;
     }
 
     return cell;
   }
 
-  private buildPortToNodeIndex(): Map<string, string> {
+  private buildPortToNodeIndex(): Map<string, string>{
     const index = new Map<string, string>();
 
     this.graph.getElements().forEach((element) => {
-      extractPortIds(element.get('data')).forEach((portId) => {
+      extractPortIds(element.get("data")).forEach((portId) => {
         index.set(portId, String(element.id));
       });
     });
 
     this.graph.getLinks().forEach((link) => {
-      const [sourcePortId, targetPortId] = extractLinkPortIds(link.get('data'));
+      const [sourcePortId, targetPortId] = extractLinkPortIds(link.get("data"));
       const sourceId = getLinkEndId(link.source());
       const targetId = getLinkEndId(link.target());
 
-      if (sourcePortId && sourceId && !index.has(sourcePortId)) {
+      if(sourcePortId && sourceId && !index.has(sourcePortId)){
         index.set(sourcePortId, sourceId);
       }
 
-      if (targetPortId && targetId && !index.has(targetPortId)) {
+      if(targetPortId && targetId && !index.has(targetPortId)){
         index.set(targetPortId, targetId);
       }
     });
@@ -298,33 +298,33 @@ class ElementDataFacade implements ElementDataApi {
   }
 }
 
-class LinkDataFacade implements LinkDataApi {
-  public constructor(private readonly graph: joint.dia.Graph) {}
+class LinkDataFacade implements LinkDataApi{
+  public constructor(private readonly graph: joint.dia.Graph){}
 
-  public getById<TData extends CellData = CellData>(id: string): LinkRecord<TData> | null {
+  public getById<TData extends CellData = CellData>(id: string): LinkRecord<TData> | null{
     const cell = this.graph.getCell(id);
-    if (!cell?.isLink()) {
+    if(!cell?.isLink()){
       return null;
     }
 
     return toRecord<TData>(cell);
   }
 
-  public getAll<TData extends CellData = CellData>(): LinkRecord<TData>[] {
+  public getAll<TData extends CellData = CellData>(): LinkRecord<TData>[]{
     return this.graph.getLinks().flatMap((link) => {
       const record = toRecord<TData>(link);
       return record ? [record] : [];
     });
   }
 
-  public getLinkBw(id: string): LinkBwValue | null {
+  public getLinkBw(id: string): LinkBwValue | null{
     const cell = this.graph.getCell(id);
-    if (!cell?.isLink()) {
+    if(!cell?.isLink()){
       return null;
     }
 
-    const data = cell.get('data');
-    if (!isRecord(data)) {
+    const data = cell.get("data");
+    if(!isRecord(data)){
       return null;
     }
 
@@ -332,28 +332,28 @@ class LinkDataFacade implements LinkDataApi {
     const outputBw = toOptionalFiniteNumber(data.out_bw);
     return {
       in: inputBw ?? 0,
-      out: outputBw ?? 0
+      out: outputBw ?? 0,
     };
   }
 
-  public updateData(id: string, patch: CellData): boolean {
+  public updateData(id: string, patch: CellData): boolean{
     const cell = this.graph.getCell(id);
-    if (!cell?.isLink()) {
+    if(!cell?.isLink()){
       return false;
     }
 
-    const nextData = mergePatchedData(cell.get('data'), patch);
-    cell.set('data', nextData, { silent: true });
+    const nextData = mergePatchedData(cell.get("data"), patch);
+    cell.set("data", nextData, {silent: true});
     return true;
   }
 }
 
-export class DataFacade implements DataApi {
+export class DataFacade implements DataApi{
   public readonly elements: ElementDataApi;
 
   public readonly links: LinkDataApi;
 
-  public constructor(graph: joint.dia.Graph) {
+  public constructor(graph: joint.dia.Graph){
     this.elements = new ElementDataFacade(graph);
     this.links = new LinkDataFacade(graph);
   }

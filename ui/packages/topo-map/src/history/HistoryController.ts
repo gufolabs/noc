@@ -11,7 +11,7 @@ export interface HistoryControllerOptions<TSnapshot> {
 
 const DEFAULT_HISTORY_LIMIT = 100;
 
-export class HistoryController<TSnapshot> {
+export class HistoryController<TSnapshot>{
   private readonly cloneSnapshot: (snapshot: TSnapshot) => TSnapshot;
 
   private readonly equalsSnapshot: (left: TSnapshot, right: TSnapshot) => boolean;
@@ -26,7 +26,7 @@ export class HistoryController<TSnapshot> {
 
   private replayDepth = 0;
 
-  public constructor(options: HistoryControllerOptions<TSnapshot>) {
+  public constructor(options: HistoryControllerOptions<TSnapshot>){
     this.cloneSnapshot = options.clone;
     this.equalsSnapshot = options.equals;
     this.limit = Number.isFinite(options.limit) && (options.limit ?? 0) > 0
@@ -34,37 +34,37 @@ export class HistoryController<TSnapshot> {
       : DEFAULT_HISTORY_LIMIT;
   }
 
-  public canUndo(): boolean {
+  public canUndo(): boolean{
     return this.undoStack.length > 0;
   }
 
-  public canRedo(): boolean {
+  public canRedo(): boolean{
     return this.redoStack.length > 0;
   }
 
-  public isReplayInProgress(): boolean {
+  public isReplayInProgress(): boolean{
     return this.replayDepth > 0;
   }
 
-  public clear(): void {
+  public clear(): void{
     this.undoStack = [];
     this.redoStack = [];
     this.pendingBefore = null;
   }
 
-  public begin(snapshot: TSnapshot): void {
-    if (this.isReplayInProgress()) {
+  public begin(snapshot: TSnapshot): void{
+    if(this.isReplayInProgress()){
       return;
     }
     this.pendingBefore = this.cloneSnapshot(snapshot);
   }
 
-  public cancel(): void {
+  public cancel(): void{
     this.pendingBefore = null;
   }
 
-  public commit(snapshot: TSnapshot): boolean {
-    if (this.pendingBefore === null) {
+  public commit(snapshot: TSnapshot): boolean{
+    if(this.pendingBefore === null){
       return false;
     }
 
@@ -73,30 +73,30 @@ export class HistoryController<TSnapshot> {
     return recorded;
   }
 
-  public record(before: TSnapshot, after: TSnapshot): boolean {
-    if (this.isReplayInProgress()) {
+  public record(before: TSnapshot, after: TSnapshot): boolean{
+    if(this.isReplayInProgress()){
       return false;
     }
 
     const nextEntry: HistoryEntry<TSnapshot> = {
       before: this.cloneSnapshot(before),
-      after: this.cloneSnapshot(after)
+      after: this.cloneSnapshot(after),
     };
-    if (this.equalsSnapshot(nextEntry.before, nextEntry.after)) {
+    if(this.equalsSnapshot(nextEntry.before, nextEntry.after)){
       return false;
     }
 
     this.undoStack.push(nextEntry);
-    if (this.undoStack.length > this.limit) {
+    if(this.undoStack.length > this.limit){
       this.undoStack.splice(0, this.undoStack.length - this.limit);
     }
     this.redoStack = [];
     return true;
   }
 
-  public undo(apply: (snapshot: TSnapshot) => void): boolean {
+  public undo(apply: (snapshot: TSnapshot) => void): boolean{
     const entry = this.undoStack.pop();
-    if (!entry) {
+    if(!entry){
       return false;
     }
 
@@ -107,9 +107,9 @@ export class HistoryController<TSnapshot> {
     return true;
   }
 
-  public redo(apply: (snapshot: TSnapshot) => void): boolean {
+  public redo(apply: (snapshot: TSnapshot) => void): boolean{
     const entry = this.redoStack.pop();
-    if (!entry) {
+    if(!entry){
       return false;
     }
 
@@ -120,11 +120,11 @@ export class HistoryController<TSnapshot> {
     return true;
   }
 
-  private runReplay(callback: () => void): void {
+  private runReplay(callback: () => void): void{
     this.replayDepth++;
-    try {
+    try{
       callback();
-    } finally {
+    } finally{
       this.replayDepth--;
     }
   }
