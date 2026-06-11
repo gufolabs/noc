@@ -56,60 +56,49 @@ class Script(BaseScript):
         "5": "other",  # standby
     }
     ONU_MAP = {
-        "BDCM":
-            {
-                "3024": "P1004B",
-                "3022": "P1501B",
-                "151C": "P1501С",
-                "1004": "P1004T",
-                "104C": "P1004C",
-                "1154": "GP1702-1Gv2",
-                "6014": "P1501DT",
-                "6032": "P1501DS",
-            },
-        "FORA":
-            {
-                "0311": "NA-1001B",
-                "101C": "NA-1001C",
-                "100D": "NA-1001D",
-            },
-        "FGXP":
-            {
-                "2001": "G2001R",
-            },
-        "GEAR":
-            {
-                "1004": "P1004T",
-            },
-        "MONU":
-            {
-                "H323": "RTKG",
-            },
-        "NGPN":
-            {
-                "NG02": "NGN-02E",
-            },
-        "PCTL":  # Picotel
-            {
-                "G100": "GE100",
-                "NG02": "GE100N",
-            },
-        "PICO":  # Picotel
-            {
-                "100N": "Ge-100N",
-            },
-        "SNR":
-            {
-                "SNR-ONU-EPON-1G-": "SNR-ONU-EPON-1G-mini",
-            },
-        "TPLK":
-            {
-                "110": "TL-EP110",
-            },
-        "ZTE":
-            {
-                "ONU-": "ONU-501",
-            },
+        "BDCM": {
+            "3024": "P1004B",
+            "3022": "P1501B",
+            "151C": "P1501С",
+            "1004": "P1004T",
+            "104C": "P1004C",
+            "1154": "GP1702-1Gv2",
+            "6014": "P1501DT",
+            "6032": "P1501DS",
+        },
+        "FORA": {
+            "0311": "NA-1001B",
+            "101C": "NA-1001C",
+            "100D": "NA-1001D",
+        },
+        "FGXP": {
+            "2001": "G2001R",
+        },
+        "GEAR": {
+            "1004": "P1004T",
+        },
+        "MONU": {
+            "H323": "RTKG",
+        },
+        "NGPN": {
+            "NG02": "NGN-02E",
+        },
+        "PCTL": {  # Picotel
+            "G100": "GE100",
+            "NG02": "GE100N",
+        },
+        "PICO": {  # Picotel
+            "100N": "Ge-100N",
+        },
+        "SNR":  {
+            "SNR-ONU-EPON-1G-": "SNR-ONU-EPON-1G-mini",
+        },
+        "TPLK": {
+            "110": "TL-EP110",
+        },
+        "ZTE":  {
+            "ONU-": "ONU-501",
+        },
     }
 
     def get_onu_model(self, vendor, model):
@@ -136,7 +125,9 @@ class Script(BaseScript):
                 onu["status"] = self.STATUS_MAP.get(onu_status, "inactive")
                 r[onu["id"]] = dict(onu)
             v = self.cli("show gpon active-onu")
-            for ifaces in re.split("Interface GPON\d+/\d+ has bound \d+ active ONUs:\n", v):
+            for ifaces in re.split(
+                "Interface GPON\d+/\d+ has bound \d+ active ONUs:\n", v
+            ):
                 for i in parse_table(v):
                     r[i[0]]["distance"] = int(float(i[5]))
             v = self.cli("show gpon onu-description")
@@ -238,8 +229,11 @@ class Script(BaseScript):
                 ifindex = int(ifindex)
                 value = value.rstrip().rstrip("\x00")
                 if (
-                    ifindex in r and value != "" and int(valid) == 1
-                    and int(active) == 1 and int(commited) == 1
+                    ifindex in r
+                    and value != ""
+                    and int(valid) == 1
+                    and int(active) == 1
+                    and int(commited) == 1
                 ):
                     r[ifindex]["version"] = value
             # NMS-GPON-MIB::onuImageInstance1Version ...
@@ -254,8 +248,11 @@ class Script(BaseScript):
                 ifindex = int(ifindex)
                 value = value.rstrip().rstrip("\x00")
                 if (
-                    ifindex in r and value != "" and int(valid) == 1
-                     and int(active) == 1 and int(commited) == 1
+                    ifindex in r
+                    and value != ""
+                    and int(valid) == 1
+                    and int(active) == 1
+                    and int(commited) == 1
                 ):
                     r[ifindex]["version"] = value
             # NMS-EPON-MIB::onuDistance

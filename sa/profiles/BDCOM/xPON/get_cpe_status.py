@@ -31,7 +31,9 @@ class Script(BaseScript):
             # NMS-GPON-MIB::onuSerialNum
             for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.10.3.1.1.4"):
                 ifindex = int(oid.split(".")[-1])
-                r[ifindex] = { "global_id": value, }
+                r[ifindex] = {
+                    "global_id": value,
+                }
             # IF-MIB::ifDescr
             for oid, value in self.snmp.getnext("1.3.6.1.2.1.2.2.1.2"):
                 ifindex = int(oid.split(".")[-1])
@@ -48,7 +50,9 @@ class Script(BaseScript):
             # NMS-EPON-MIB::onuID
             for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.101.10.1.1.3"):
                 ifindex = int(oid.split(".")[-1])
-                r[ifindex] = { "global_id": MAC(value), }
+                r[ifindex] = {
+                    "global_id": MAC(value),
+                }
             # IF-MIB::ifDescr
             for oid, value in self.snmp.getnext("1.3.6.1.2.1.2.2.1.2"):
                 ifindex = int(oid.split(".")[-1])
