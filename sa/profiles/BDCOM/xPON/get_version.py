@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # BDCOM.xPON.get_version
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -36,7 +36,7 @@ class Script(BaseScript):
         return {
             "vendor": "BDCOM",
             "platform": match.group("platform"),
-            "version": match.group("version"),
+            "version": "%s, %s" % (match.group("version"), match.group("build")),
             "attributes": {
                 "Build": match.group("build"),
                 "Boot PROM": match.group("boot"),
@@ -51,11 +51,12 @@ class Script(BaseScript):
             return {
                 "vendor": "BDCOM",
                 "platform": match.group("platform"),
-                "version": match.group("version"),
+                "version": "%s, %s" % (match.group("version"), match.group("build")),
                 "attributes": {
                     "Build": match.group("build"),
                     "Boot PROM": match.group("boot"),
                     "Serial Number": match.group("serial"),
                 },
             }
-        raise self.NotSupportedError()
+        else:
+            raise self.NotSupportedError()

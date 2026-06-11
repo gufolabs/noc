@@ -1,102 +1,327 @@
 # ---------------------------------------------------------------------
 # BDCOM.xPON.get_cpe
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import re
+import time
 
 # NOC modules
 from noc.core.script.base import BaseScript
 from noc.sa.interfaces.igetcpe import IGetCPE
 from noc.sa.interfaces.base import MACAddressParameter
+from noc.core.text import parse_table
+from noc.core.validators import is_int
+from noc.core.mac import MAC
 
 
 class Script(BaseScript):
     name = "BDCOM.xPON.get_cpe"
     interface = IGetCPE
+    TIMEOUT = 600
+    always_prefer = "S"
 
-    splitter = re.compile(r"\s*-+\n")
+    rx_gpon_image_iface = re.compile(
+        r"^Image information of (?P<pon_id>\S+):\s*\n",
+        re.MULTILINE,
+    )
+    rx_gpon_image_version = re.compile(
+        r"^\s+Image#\d+\s+(?P<version>\S+)\s+valid\s+active\s+committed",
+        re.MULTILINE,
+    )
+    rx_epon_sw_version = re.compile(
+        "^(?P<onu_id>EPON\d+/\d+:\d+)\s+(?P<version>\S+)\s*\n",
+        re.MULTILINE,
+    )
+    rx_onu_model_id = re.compile(r"^ONU MODEL ID\s+: (?P<model>\S{4})\s*\n", re.MULTILINE)
+    rx_onu_ext_id = re.compile(r"^ONU EXT MODEL ID\s+: (?P<ext_model>\S+)\s*\n", re.MULTILINE)
+    rx_onu_sw = re.compile(r"^Software Version\s+:\s+(?P<version>\S+)\s*\n", re.MULTILINE)
+    rx_onu_hw = re.compile(r"^Hardware Version\s+: (?P<revision>\S+)\s*\n", re.MULTILINE)
 
-    status_map = {
+    STATUS_MAP = {
         "auto-configured": "active",
-        "auto-configuring": "active",
+        "auto-configuring": "provisioning",
         "authenticated": "active",
-        "lost": "inactive",
-        "deregistered": "inactive",
+        "active": "active",
+    }
+    SNMP_STATUS_MAP = {
+        "0": "active",  # authenticated
+        "1": "active",  # registered
+        "2": "inactive",  # deregistered
+        "3": "active",  # auto_config
+        "4": "inactive",  # lost
+        "5": "other",  # standby
+    }
+    ONU_MAP = {
+        "BDCM":
+            {
+                "3024": "P1004B",
+                "3022": "P1501B",
+                "151C": "P1501С",
+                "1004": "P1004T",
+                "104C": "P1004C",
+                "1154": "GP1702-1Gv2",
+                "6014": "P1501DT",
+                "6032": "P1501DS",
+            },
+        "FORA":
+            {
+                "0311": "NA-1001B",
+                "101C": "NA-1001C",
+                "100D": "NA-1001D",
+            },
+        "FGXP":
+            {
+                "2001": "G2001R",
+            },
+        "GEAR":
+            {
+                "1004": "P1004T",
+            },
+        "MONU":
+            {
+                "H323": "RTKG",
+            },
+        "NGPN":
+            {
+                "NG02": "NGN-02E",
+            },
+        "PCTL":  # Picotel
+            {
+                "G100": "GE100",
+                "NG02": "GE100N",
+            },
+        "PICO":  # Picotel
+            {
+                "100N": "Ge-100N",
+            },
+        "SNR":
+            {
+                "SNR-ONU-EPON-1G-": "SNR-ONU-EPON-1G-mini",
+            },
+        "TPLK":
+            {
+                "110": "TL-EP110",
+            },
+        "ZTE":
+            {
+                "ONU-": "ONU-501",
+            },
     }
 
-    # EPON port can contain maximum 64 ONU
-    ifname_validator = re.compile(r"^EPON\d+/\d+:\d{1,2}$")
-    ifname_match = re.compile(r"^(?P<ifname>EPON\d+/\d+:\d{1,2})")
-    status_match = re.compile(
-        r"^(?P<status>auto-configured|auto-configuring|authenticated|lost|deregistered)"
-    )
-
-    def get_onu_status(self, raw_status):
-        m = self.status_match.match(raw_status)
-        if m:
-            status = m["status"]
-        else:
-            self.logger.info("Unknown ONU status '%s'. Fallback to oper_state 'down'", raw_status)
-            return "inactive"
-
-        return self.status_map[status]
-
-    def get_onu_local_id(self, raw_id):
-        m = self.ifname_match.match(raw_id)
-        if m:
-            ifname = m["ifname"]
-        else:
-            self.logger.info("Unknown ONU ifname '%s'. Return raw value", raw_id)
-            return raw_id
-
-        return ifname
+    def get_onu_model(self, vendor, model):
+        if vendor in self.ONU_MAP:
+            return self.ONU_MAP.get(vendor).get(model, model)
+        return model
 
     def execute_cli(self, **kwargs):
-        r = []
-        v = self.cli("show epon onu-information")
-        for table in v.split("\n\n"):
-            parts = self.splitter.split(table)
-            for p in parts[1:]:
-                for onu in p.split("\n"):
-                    line = onu.split()
-                    if len(line) >= 8 or self.ifname_validator.match(line[0]):
-                        onu_id = line[0]
-                        onu_vendor = line[1]
-                        onu_model = line[2]
-                        onu_mac = MACAddressParameter().clean(line[3])
-                        onu_status = self.get_onu_status(line[6])
-                    else:
-                        # Sometimes first fields overlaps on some firmware version
-                        # IntfName   VendorID  ModelID    MAC Address    Description                     BindType  Status          Dereg Reason
-                        # ---------- --------- ---------- -------------- ------------------------------- --------- --------------- -----------------
-                        # EPON0/13:9 VSOL      D401       006d.61d4.6bf8 N/A                             static    auto-configured N/A
-                        # EPON0/13:10xPON      101Z       e0e8.e61f.0759 N/A                             static    auto-configured N/A
-                        #
-                        # Or last fields
-                        # EPON0/3:38 VSOL      D401      006d.61d3.ee10 N/A             static    auto-configuringN/A
+        r = {}
+        if self.is_gpon:
+            v = self.cli("show gpon onu-information", cached=True)
+            for i in parse_table(v):
+                onu = {
+                    "id": i[0],
+                    "global_id": i[3],
+                    "serial": i[3],
+                    "type": "ont",
+                    "interface": i[0],
+                }
+                onu["vendor"] = i[1]
+                if i[2] != "N/A":
+                    onu["model"] = self.get_onu_model(i[1], i[2])
+                onu_status = i[5]
+                onu["status"] = self.STATUS_MAP.get(onu_status, "inactive")
+                r[onu["id"]] = dict(onu)
+            v = self.cli("show gpon active-onu")
+            for ifaces in re.split("Interface GPON\d+/\d+ has bound \d+ active ONUs:\n", v):
+                for i in parse_table(v):
+                    r[i[0]]["distance"] = int(float(i[5]))
+            v = self.cli("show gpon onu-description")
+            for ifaces in v.split("\n\n"):
+                for i in parse_table(v):
+                    if i[1] == "N/A":
+                        continue
+                    r[i[0]]["description"] = i[1]
+            v = self.cli("show gpon onu-image-information")
+            for i in v.split("\n\n"):
+                onu_id = self.rx_gpon_image_iface.search(i)
+                version = self.rx_gpon_image_version.search(i)
+                if onu_id is None or version is None:
+                    continue
+                r[onu_id.group("pon_id")]["version"] = version.group("version")
+        else:
+            v = self.cli("show epon onu-information", cached=True)
+            for i in parse_table(v):
+                onu = {
+                    "id": i[0],
+                    "global_id": i[3],
+                    "type": "ont",
+                    "interface": i[0],
+                }
+                if i[1] != "----":
+                    onu["vendor"] = i[1]
+                    if "/" in i[2]:
+                        i[2] = i[2].split("/")[1]
+                    onu["model"] = self.get_onu_model(i[1], i[2])
+                if i[4] != "N/A":
+                    onu["description"] = i[4]
+                onu_status = i[6]
+                onu["status"] = self.STATUS_MAP.get(onu_status, "inactive")
+                r[onu["id"]] = dict(onu)
+            v = self.cli("show epon active-onu")
+            for ifaces in re.split("Interface EPON\d+/\d+ has bound \d+ ONUs auto-configured:\n", v):
+                for i in parse_table(v):
+                    if is_int(i[4]):
+                        r[i[0]]["distance"] = i[4]
+            v = self.cli("show epon onu-software-version")
+            for ifaces in v.split("auto-configured:\n"):
+                for i in parse_table(v):
+                    if i[0].startswith("EPON"):
+                        r[i[0]]["version"] = i[1]
 
-                        onu_id = self.get_onu_local_id(line[0])
-                        onu_vendor = line[0].replace(onu_id, "")
-                        onu_model = line[1]
-                        onu_mac = MACAddressParameter().clean(line[2])
-                        onu_status = self.get_onu_status(line[5])
+        return sorted(r.values(), key=lambda x: x["id"])
 
-                    r.append(
-                        {
-                            "vendor": onu_vendor,
-                            "model": onu_model,
-                            "mac": onu_mac,
-                            "status": onu_status,
-                            "id": onu_id,
-                            "global_id": onu_mac,
-                            "type": "ont",
-                            "serial": onu_mac,
-                            "description": "",
-                        }
-                    )
-
-        return r
+    def execute_snmp(self, **kwargs):
+        r = {}
+        if self.is_gpon:
+            # NMS-GPON-MIB::onuSerialNum
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.10.3.1.1.4"):
+                ifindex = int(oid.split(".")[-1])
+                r[ifindex] = {
+                    "global_id": value,
+                    "serial": value,
+                    "type": "ont",
+                }
+            # IF-MIB::ifDescr
+            for oid, value in self.snmp.getnext("1.3.6.1.2.1.2.2.1.2"):
+                ifindex = int(oid.split(".")[-1])
+                if ifindex in r:
+                    r[ifindex]["id"] = value
+                    r[ifindex]["interface"] = value
+            # NMS-GPON-MIB::onuVendorID
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.10.3.1.1.2"):
+                ifindex = int(oid.split(".")[-1])
+                if ifindex in r:
+                    if value != "":
+                        r[ifindex]["vendor"] = value
+                    else:  # hack for deregistered ONU
+                        r[ifindex]["vendor"] = r[ifindex]["global_id"].split(".")[-1]
+            # NMS-GPON-MIB::onuVersion
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.10.3.1.1.3"):
+                ifindex = int(oid.split(".")[-1])
+                value = value.rstrip().rstrip("\x00")
+                if ifindex in r and value != "":
+                    r[ifindex]["revision"] = value
+            # NMS-GPON-MIB::onuOperationalState - enable(1), disable(2)
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.10.3.1.1.8"):
+                ifindex = int(oid.split(".")[-1])
+                value = int(value)
+                if ifindex in r:
+                    r[ifindex]["status"] = "active" if value == 1 else "inactive"
+            # NMS-GPON-MIB::onuEquipmentID
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.10.3.1.1.9"):
+                ifindex = int(oid.split(".")[-1])
+                if ifindex in r and value != "":
+                    r[ifindex]["model"] = value
+            # NMS-GPON-MIB::onuImageInstance0Version ...
+            for ifindex, value, valid, active, commited in self.snmp.get_tables(
+                [
+                    "1.3.6.1.4.1.3320.10.3.1.1.20",
+                    "1.3.6.1.4.1.3320.10.3.1.1.21",
+                    "1.3.6.1.4.1.3320.10.3.1.1.22",
+                    "1.3.6.1.4.1.3320.10.3.1.1.23",
+                ]
+            ):
+                ifindex = int(ifindex)
+                value = value.rstrip().rstrip("\x00")
+                if (
+                    ifindex in r and value != "" and int(valid) == 1
+                    and int(active) == 1 and int(commited) == 1
+                ):
+                    r[ifindex]["version"] = value
+            # NMS-GPON-MIB::onuImageInstance1Version ...
+            for ifindex, value, valid, active, commited in self.snmp.get_tables(
+                [
+                    "1.3.6.1.4.1.3320.10.3.1.1.24",
+                    "1.3.6.1.4.1.3320.10.3.1.1.25",
+                    "1.3.6.1.4.1.3320.10.3.1.1.26",
+                    "1.3.6.1.4.1.3320.10.3.1.1.27",
+                ]
+            ):
+                ifindex = int(ifindex)
+                value = value.rstrip().rstrip("\x00")
+                if (
+                    ifindex in r and value != "" and int(valid) == 1
+                     and int(active) == 1 and int(commited) == 1
+                ):
+                    r[ifindex]["version"] = value
+            # NMS-EPON-MIB::onuDistance
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.10.3.1.1.33"):
+                ifindex = int(oid.split(".")[-1])
+                value = int(value)
+                if ifindex in r and value != 0:
+                    r[ifindex]["distance"] = value // 10
+        else:
+            # NMS-EPON-MIB::onuID
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.101.10.1.1.3"):
+                ifindex = int(oid.split(".")[-1])
+                r[ifindex] = {
+                    "global_id": MAC(value),
+                    "mac": MAC(value),
+                    "type": "ont",
+                }
+            # IF-MIB::ifDescr
+            for oid, value in self.snmp.getnext("1.3.6.1.2.1.2.2.1.2"):
+                ifindex = int(oid.split(".")[-1])
+                ifnames[ifindex] = value  # ???
+                if ifindex in r:
+                    r[ifindex]["id"] = value
+                    r[ifindex]["interface"] = value
+            # NMS-EPON-MIB::onuVendorID
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.101.10.1.1.1"):
+                ifindex = int(oid.split(".")[-1])
+                if ifindex in r and value != "----":
+                    r[ifindex]["vendor"] = value
+            # NMS-EPON-MIB::onuModuleID
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.101.10.1.1.2"):
+                ifindex = int(oid.split(".")[-1])
+                if ifindex in r and value != "----":
+                    value = self.get_onu_model(r[ifindex]["vendor"], value)
+                    r[ifindex]["model"] = value
+            # NMS-EPON-MIB::onuHardwareVersion
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.101.10.1.1.4"):
+                ifindex = int(oid.split(".")[-1])
+                value = value.rstrip("\x00")
+                if ifindex in r and value != "":
+                    r[ifindex]["revision"] = value
+            # NMS-EPON-MIB::onuSoftwareVersion
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.101.10.1.1.5"):
+                ifindex = int(oid.split(".")[-1])
+                value = value.rstrip("\x00")
+                if ifindex in r and value != "":
+                    r[ifindex]["version"] = value
+            # NMS-EPON-MIB::onuStatus
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.101.10.1.1.26"):
+                ifindex = int(oid.split(".")[-1])
+                value = int(value)
+                if ifindex in r:
+                    r[ifindex]["status"] = self.STATUS_MAP.get(value, "inactive")
+            # NMS-EPON-MIB::onuDistance
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.101.10.1.1.27"):
+                ifindex = int(oid.split(".")[-1])
+                value = int(value)
+                if ifindex in r and value != 0:
+                    r[ifindex]["distance"] = value
+            # NMS-EPON-MIB::onuExtModelID
+            try:
+                for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.101.10.1.1.85"):
+                    ifindex = int(oid.split(".")[-1])
+                    if ifindex in r and value != "":
+                        value = self.get_onu_model(r[ifindex]["vendor"], value)
+                        r[ifindex]["model"] = value
+            except:
+                pass
+        return list(r.values())
