@@ -36,21 +36,20 @@ class Profile(BaseProfile):
             interface = interface.split(":")[0]
         if interface.startswith("gpon"):
             return "GPON" + interface[4:]
-        elif interface.startswith("epon"):
+        if interface.startswith("epon"):
             return "EPON" + interface[4:]
-        elif interface.startswith("f"):
+        if interface.startswith("f"):
             return interface.replace("f", "FastEthernet")
-        elif interface.startswith("g"):
+        if interface.startswith("g"):
             return interface.replace("g", "GigaEthernet")
-        elif interface.startswith("Gig"):
+        if interface.startswith("Gig"):
             return interface.replace("Gig", "GigaEthernet")
-        elif interface.startswith("TGi"):
+        if interface.startswith("TGi"):
             return interface.replace("TGi", "TGigaEthernet")
-        elif interface.startswith("tg"):
+        if interface.startswith("tg"):
             return interface.replace("tg", "TGigaEthernet")
-        elif interface.startswith("v"):
+        if interface.startswith("v"):
             return interface.replace("v", "VLAN")
-        elif interface.startswith("n"):
+        if interface.startswith("n"):
             return interface.replace("n", "Null")
-        else:
-            return interface
+        return interface

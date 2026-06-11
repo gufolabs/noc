@@ -45,7 +45,7 @@ class Script(BaseScript):
                 ifindex = int(oid.split(".")[-1])
                 value = int(value)
                 if ifindex in r:
-                    r[ifindex]["oper_status"] = True if value == 1 else False
+                    r[ifindex]["oper_status"] = value == 1
         else:
             # NMS-EPON-MIB::onuID
             for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.101.10.1.1.3"):
