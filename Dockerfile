@@ -93,6 +93,7 @@ RUN \
     && apt-get install -y --no-install-recommends \
     snmp \
     git \
+    nginx \
     && uv pip install --system -e .[bh,activator,classifier,cache-redis,dev,docs,lint,node,test,login-ldap,login-pam,login-radius,prod-tools,testing,ping] \
     && uv cache clean \
     && (curl -fsSL https://deb.nodesource.com/setup_24.x | bash -)\
