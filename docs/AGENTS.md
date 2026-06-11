@@ -25,7 +25,7 @@ Each book directory follows this skeleton:
 └── <page>.md           # individual pages (can also be subdirectories with their own index.md)
 ```
 
-SUMMARY.md is **recommended, not mandatory**. Every directory without one falls back to flat file discovery. The benefit of SUMMARY.md is two-fold: it keeps the root `mkdocs.yml` uncluttered and localizes navigation definitions to each book's directory. You can skip SUMMARY.md for small docs trees; include it when a category grows beyond 5–10 pages or when the team wants clear ownership of the nav structure.
+SUMMARY.md is **required for any directory with more than one page**. Every directory without a SUMMARY.md falls back to flat file discovery only if there is exactly one page. The benefit of SUMMARY.md is two-fold: it keeps the root `mkdocs.yml` uncluttered and localizes navigation definitions to each book's directory. If a category has 2 or more pages, always create a SUMMARY.md — never leave multi-page sections as inline entries in mkdocs.yml.
 
 **Critical rule:** when creating new documentation, determine which book category it belongs to first. Never create a markdown file in a random directory — all new documents MUST go into one of the established books above, or require approval to create an entirely new one.
 
