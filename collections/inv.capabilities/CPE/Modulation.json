@@ -1,0 +1,8 @@
+{
+    "name": "CPE | Modulation",
+    "$collection": "inv.capabilities",
+    "uuid": "4a290ac4-e0fb-480c-9e61-af7a3025d1b9",
+    "description": "CPE modulation used",
+    "type": "str",
+    "card_template": null
+}
