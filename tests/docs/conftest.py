@@ -26,7 +26,7 @@ T_NAV_ITEM = Union[str, Dict[str, "T_NAV_ITEM"], List["T_NAV_ITEM"]]
 
 class ToC(object):
     def __init__(self, path: Path):
-        self.items: Dict[Tuple[str, ...], Any] = {}
+        self.items: Dict[Tuple[str, ...], str] = {}
         for kv in self.iter_nav(path):
             self.add_item([], kv)
 
@@ -74,7 +74,7 @@ class ToC(object):
     def __contains__(self, item: Iterable[str]) -> bool:
         return tuple(item) in self.items
 
-    def __getitem__(self, item: Iterable[str]):
+    def __getitem__(self, item: Iterable[str]) -> str:
         return self.items[tuple(item)]
 
 
