@@ -27,6 +27,7 @@ Ext.define("NOC.sa.managedobject.form.View", {
     "NOC.core.StateField",
     "NOC.core.MonacoPanel",
     "NOC.core.plugins.DynamicModalEditing",
+    "NOC.main.glyph.LookupField",
     "NOC.sa.managedobject.AttributesModel",
     "NOC.sa.managedobject.CapabilitiesModel",
     "NOC.sa.managedobject.form.FormController",
