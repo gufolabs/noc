@@ -52,20 +52,20 @@ class Command(BaseCommand):
         dump_parser.add_argument("--object", type=smart_text, help="Managed Object ID")
 
     def handle(self, cmd, *args, **options):
-        return getattr(self, "handle_%s" % cmd)(*args, **options)
+        return getattr(self, f"handle_{cmd}")(*args, **options)
 
     def handle_syntax(self, path=None, profile=None, *args, **kwargs):
         def dump_node(node, level=0, recursive=True):
             indent = "  " * level
             if node.name:
-                label = "<%s>" % node.name
+                label = f"<{node.name}>"
             elif node.token is None:
                 label = "ANY"
             else:
                 label = node.token
             if node.multi:
-                label = "*%s" % label
-            self.print("%s%s" % (indent, label))
+                label = f"*{label}"
+            self.print(f"{indent}{label}")
             if recursive and node.children:
                 for nc in node.children:
                     dump_node(nc, level + 1)
@@ -89,9 +89,9 @@ class Command(BaseCommand):
         if profile:
             p = loader.get_profile(profile)
             if not p:
-                self.die("Invalid profile: %s" % profile)
+                self.die(f"Invalid profile: {profile}")
             n_handler, n_config = p.get_config_normalizer(self)
-            n_cls = get_handler("noc.sa.profiles.%s.confdb.normalizer.%s" % (p.name, n_handler))
+            n_cls = get_handler(f"noc.sa.profiles.{p.name}.confdb.normalizer.{n_handler}")
             s = n_cls.SYNTAX
         root = find_root(s, path)
         if not root:
@@ -103,7 +103,7 @@ class Command(BaseCommand):
         cfg = None
         if config:
             if not os.path.exists(config):
-                self.die("File not found: %s" % config)
+                self.die(f"File not found: {config}")
             with open(config) as f:
                 cfg = f.read()
         if object:
@@ -116,7 +116,7 @@ class Command(BaseCommand):
         elif profile:
             p = loader.get_profile(profile)
             if not p:
-                self.die("Invalid profile: %s" % profile)
+                self.die(f"Invalid profile: {profile}")
             if not cfg:
                 self.die("Specify config file with --config option")
             # Mock up tokenizer
@@ -136,7 +136,7 @@ class Command(BaseCommand):
         cfg = None
         if config:
             if not os.path.exists(config):
-                self.die("File not found: %s" % config)
+                self.die(f"File not found: {config}")
             with open(config) as f:
                 cfg = f.read()
         if object:
@@ -149,7 +149,7 @@ class Command(BaseCommand):
         elif profile:
             p = loader.get_profile(profile)
             if not p:
-                self.die("Invalid profile: %s" % profile)
+                self.die(f"Invalid profile: {profile}")
             if not cfg:
                 self.die("Specify config file with --config option")
             # Mock up tokenizer
@@ -170,7 +170,7 @@ class Command(BaseCommand):
         cfg = None
         if config:
             if not os.path.exists(config):
-                self.die("File not found: %s" % config)
+                self.die(f"File not found: {config}")
             with open(config) as f:
                 cfg = f.read()
         if object:
@@ -183,7 +183,7 @@ class Command(BaseCommand):
         elif profile:
             p = loader.get_profile(profile)
             if not p:
-                self.die("Invalid profile: %s" % profile)
+                self.die(f"Invalid profile: {profile}")
             if not cfg:
                 self.die("Specify config file with --config option")
             # Mock up tokenizer

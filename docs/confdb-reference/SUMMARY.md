@@ -4,3 +4,6 @@
 * [Tokenizer](tokenizer.md)
 * [Normalizer](normalizer.md)
 * [Query](query.md)
+* ConfDB Syntax:
+    * [Syntax Tree](syntax.md)
+    * [meta](syntax-meta.md)

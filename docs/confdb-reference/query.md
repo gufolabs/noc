@@ -8,21 +8,14 @@ and validation.
 
 ### Contexts
 
-Query context is the couple of variables and their values. It is
-a simple key-value structure implemented over python's `dict`.
-Context represents a `possible state` of pipeline. Contexts are
-grouped together representing `possibilities` on each stage of pipeline.
-Within the possibilities, each context is independent on each other.
+Query context is the couple of variables and their values. It is a simple key-value structure implemented over python's `dict`. Context represents a `possible state` of pipeline. Contexts are grouped together representing `possibilities` on each stage of pipeline. Within the possibilities, each context is independent on each other.
 
 Variables can be either `bound` (known values) or `unbound` (superposition
 of possible values).
 
 ### Predicates
 
-`Predicate` is the logic function, defined by its arguments and accepting
-`possibilities` on input, evaluating them and passing `outcomes` as output.
-Predicates evaluate input context independently. Each input context
-may be evaluated to one or more output context.
+`Predicate` is the logic function, defined by its arguments and accepting `possibilities` on input, evaluating them and passing `outcomes` as output. Predicates evaluate input context independently. Each input context may be evaluated to one or more output context.
 
 ```mermaid
 graph LR
@@ -32,18 +25,15 @@ graph LR
 
 ### Pipelining
 
-`Predicates` may be combined together into sequential (`and`) and
-parallel (`or`) chains. Chains can be grouped together by bracket
-operator. Resulting chains build `pipeline` which is valid predicate too.
+`Predicates` may be combined together into sequential (`and`) and parallel (`or`) chains. Chains can be grouped together by bracket operator. Resulting chains build `pipeline` which is valid predicate too.
 
 ### Query
 
-Query is the pipeline, which can be applied to exact ConfDB state and
-input context to produce output contexts with possible `outcomes`
+Query is the pipeline, which can be applied to exact ConfDB state and input context to produce output contexts with possible `outcomes`
 
 ### Syntax
 
-Query is the [Python expression](https://docs.python.org/2/reference/expressions.html)
+Query is the [Python expression](https://docs.python.org/3/reference/expressions.html)
 
 ### Variable
 
@@ -62,8 +52,7 @@ See [Query Builtin-predicates](#built-in-predicates) for possible predicates and
 
 ### Sequential chain
 
-Sequential chain is the combination of two predicates when output of
-first predicate serves as input to the second one
+Sequential chain is the combination of two predicates when output of first predicate serves as input to the second one
 
 ```mermaid
 graph LR
@@ -86,8 +75,7 @@ P1() and P2() and P3() and P4()
 
 ### Parallel chain
 
-Parallel chain consists of two or more predicates independentently accepting
-same input and combining and deduplicating resulting outputs
+Parallel chain consists of two or more predicates independentently accepting same input and combining and deduplicating resulting outputs
 
 ```mermaid
 graph LR
@@ -128,8 +116,7 @@ Always False, breaks predicate chain
 
 #### Set(**kwargs)
 
-Add or modify variables of context. If variable value is a list,
-expand the list and apply production
+Add or modify variables of context. If variable value is a list, expand the list and apply production
 
 ```python
 Set(X=2)
@@ -150,8 +137,11 @@ Del(X)
 
 Match `*args` against ConfDB. Bind unbound variables on match
 
-*args
-: ConfDB path
+Params:
+
+| Name | Description |
+| --- | --- |
+| `*args` | ConfDB path |
 
 ```python
 Match('interface', X, 'description', Y)
@@ -162,8 +152,11 @@ Match('interface', X, 'description', Y)
 Pass only if `*args` is not matched against ConfDB. Bind unbound
 variables when possible
 
-*args
-: ConfDB path
+Params:
+
+| Name | Description |
+| --- | --- |
+| `*args` | ConfDB path |
 
 ```python
 NotMatch('interface', X, 'description')
@@ -173,9 +166,13 @@ NotMatch('interface', X, 'description')
 
 #### Fact(*args)
 
-    Set Fact to database
+Set Fact to database
 
-    :param *args: ConfDB path of fact, eigther constants or bound variables
+Params:
+
+| Name | Description |
+| --- | --- |
+| `*args` | ConfDB path of fact, eigther constants or bound variables |
 
 ```python
 Fact('interface', X, 'hints', 'test')
@@ -185,9 +182,11 @@ Fact('interface', X, 'hints', 'test')
 
 #### Filter(expr):
 
-    Pass context only if `expr` is evaluated as True
+Pass context only if `expr` is evaluated as True
 
-:param expr: Python expression
+| Name | Description |
+| --- | --- |
+| `expr` | Python expression |
 
 ```python
 Filter(X % 2 == 0)
@@ -195,13 +194,13 @@ Filter(X % 2 == 0)
 
 #### Re(pattern, name, ignore_case=None):
 
-Match variable *name* against regular expression pattern.
-Pass context further if matched. If regular expression contains
-named groups, i.e. (?P<group_name>....), apply them as context variables
+Match variable `name` against regular expression pattern. Pass context further if matched. If regular expression contains named groups, i.e. (?P<group_name>....), apply them as context variables
 
-    :param pattern: Regular expression pattern
-    :param name: Variable name
-    :param ignore_case: Ignore case during match
+| Name | Description |
+| --- | --- |
+| `pattern` | Regular expression pattern |
+| `name` | Variable name |
+| `ignore_case` | Ignore case during match |
 
 ```python
 Re("a+", X)
@@ -211,10 +210,14 @@ Re("-(?P<abs>\d+)", X)
 
 #### HasVLAN(vlan_filter, vlan_id):
 
-    Check `vlan_id` is within `vlan_filter` expression
+Check `vlan_id` is within `vlan_filter` expression
 
-    :param vlan_filter: VC Filter expression
-    :param vlan_id: Vlan Id or bound variable
+Params:
+
+| Name | Description |
+| --- | --- |
+| `vlan_filter` | VC Filter expression |
+| `vlan_id` | Vlan Id or bound variable |
 
 ```python
 HasVlan("1-99,200-299", X)
@@ -224,7 +227,7 @@ HasVlan("1-99,200-299", X)
 
 #### Group(stack=None, *args, **kwargs):*
 
-    Group input context on given variables
+Group input context on given variables
 
 ```python
 (
@@ -237,11 +240,12 @@ HasVlan("1-99,200-299", X)
 
 #### Collapse(*args, **kwargs):
 
-    Collapse multiple keys to a single one following rules
+Collapse multiple keys to a single one following rules
 
-    :param kwargs: One of collapse operation should be specified
-        * join=<sep> -- join lines with separator sep
-        * joinrange=<sep> -- join lines with separator sep and apply range optimization
+One of collapse operation should be specified
+
+* join=`<sep>` - join lines with separator sep
+* joinrange=`<sep>` - join lines with separator sep and apply range optimization
 
 ```python
 Collapse("interfaces", X, "tagged-vlans", join=",")
@@ -250,12 +254,13 @@ Collapse("interfaces", X, "tagged-vlans", joinrange=",")
 
 ### Debugging
 
-
 #### Dump(message=None):
 
-    Dump current context to stdout and pass unmodified
+Dump current context to stdout and pass unmodified
 
-    :param message: Optional message
+| Name | Description |
+| --- | --- |
+| `message` | Optional message |
 
 ```python
 Dump()
@@ -264,12 +269,15 @@ Dump("Point1")
 
 #### Sprintf(name, fmt, *args):
 
-Perform string formatting and apply result to context variable
+Perform string formatting and apply result to context variable.
 
-    :param name: Target variable name
-    :param fmt: String format
-    :param args: Values or bound variables
+Params:
 
+| Name | Description |
+| --- | --- |
+| `name` | Target variable name |
+| `fmt` | String format |
+| `args` | Values or bound variables |
 
 ```python
 Sprintf(y, 'x = %s, y = %s', x, '2')
