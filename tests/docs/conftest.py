@@ -8,7 +8,7 @@
 # Python modules
 import re
 from pathlib import Path
-from typing import List, Tuple, Dict, Iterable, Any, Union
+from typing import List, Tuple, Dict, Iterable, Union
 
 
 # Third-party modules
