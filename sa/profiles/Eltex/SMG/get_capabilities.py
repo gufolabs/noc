@@ -12,3 +12,6 @@ from noc.sa.profiles.Generic.get_capabilities import Script as BaseScript
 class Script(BaseScript):
     name = "Eltex.SMG.get_capabilities"
     cache = True
+
+    def execute_platform_snmp(self, caps):
+        caps["Network | SMG"] = True
