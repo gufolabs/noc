@@ -1,72 +1,83 @@
 # ----------------------------------------------------------------------
 # docs test fixtures
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-import os
 import re
-from typing import List, Tuple
+from pathlib import Path
+from typing import List, Tuple, Dict, Iterable, Any, Union
+
 
 # Third-party modules
 import pytest
 import yaml
 
-DOCS_DIR = "docs"
+
+DOCS_DIR = Path("docs")
 SUMMARY_FILENAME = "SUMMARY.md"
+MKDOCS_CONF = Path("mkdocs.yml")
+rx_item = re.compile(r"\[(.*)].*\((.*)\)")
+
+T_NAV_ITEM = Union[str, Dict[str, "T_NAV_ITEM"], List["T_NAV_ITEM"]]
 
 
 class ToC(object):
-    def __init__(self, path):
-        with open(path, encoding="utf-8") as f:
-            data = yaml.safe_load(f.read().replace("!!python/name:", ""))
-        self.items = {}
-        for kv in data["nav"]:
+    def __init__(self, path: Path):
+        self.items: Dict[Tuple[str, ...], Any] = {}
+        for kv in self.iter_nav(path):
             self.add_item([], kv)
 
     @staticmethod
-    def get_summary(path: str) -> List[Tuple[str, str]]:
+    def iter_nav(path: Path) -> Iterable[T_NAV_ITEM]:
+        with path.open() as fp:
+            data = yaml.safe_load(fp.read().replace("!!python/name:", ""))
+        yield from data["nav"]
+
+    @staticmethod
+    def iter_summary(path: str) -> Iterable[Tuple[str, str]]:
         if path[-1] == "/":
             path = path[:-1]
-        pp = os.path.join(DOCS_DIR, path, SUMMARY_FILENAME)
-        if not os.path.exists(pp):
-            return []
-        result = []
+        pp = DOCS_DIR / path / SUMMARY_FILENAME
+        if not pp.exists():
+            return
         with open(pp, "r", encoding="utf-8") as f:
             data = f.read().splitlines()
         for line in data:
-            if line.strip():
-                key, value = re.search(r"\[(.*)].*\((.*)\)", line).group(1, 2)
-                result.append((key, value))
-        return result
+            line = line.strip()
+            if not line:
+                continue
+            match = rx_item.search(line)
+            if match:
+                yield match.group(1, 2)
 
-    def add_item(self, path, kv):
-        if isinstance(kv, str):
-            k = kv
-            v = kv
+    def add_item(self, path: List[str], item: T_NAV_ITEM) -> None:
+        if isinstance(item, str):
+            k = item
+            v = item
         else:
-            k = next(iter(kv.keys()))
-            v = kv[k]
+            k = next(iter(item.keys()))
+            v = item[k]
         if isinstance(v, list):
             for lkv in v:
                 self.add_item([*path, k], lkv)
         else:
             self.items[(*path, k)] = v
-            s_path = os.path.join(DOCS_DIR, v)
-            if os.path.isdir(s_path):
-                summary = [{sk: v + sv} for sk, sv in self.get_summary(v)]
+            s_path = DOCS_DIR / v
+            if s_path.is_dir():
+                summary = [{sk: v + sv} for sk, sv in self.iter_summary(v)]
                 if summary:
                     self.add_item(path, {k: summary})
 
-    def __contains__(self, item):
+    def __contains__(self, item: Iterable[str]) -> bool:
         return tuple(item) in self.items
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: Iterable[str]):
         return self.items[tuple(item)]
 
 
 @pytest.fixture(scope="session")
 def toc():
-    return ToC("mkdocs.yml")
+    return ToC(MKDOCS_CONF)
