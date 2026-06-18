@@ -80,6 +80,18 @@ function resolveBundleUrl(name, fallback){
 }
 
 let monacoPromise = null;
+const _monacoListeners = new Set();
+
+function _notifyMonaco(active){
+  for(const fn of _monacoListeners) fn(active);
+}
+
+// Subscribe to Monaco loading state changes. fn(true) when load starts,
+// fn(false) when it completes or fails. Returns an unsubscribe function.
+export function onMonacoLoading(fn){
+  _monacoListeners.add(fn);
+  return () => _monacoListeners.delete(fn);
+}
 
 // Loads the Monaco editor bundle on demand and resolves with window.monaco.
 // The bundle exposes monaco as a global (window.monaco / window.monacoAPI). Its
@@ -93,6 +105,7 @@ export function loadMonaco(){
   if(monacoPromise){
     return monacoPromise;
   }
+  _notifyMonaco(true);
   monacoPromise = Promise.all([
     loadScriptOnce(resolveBundleUrl("monaco", "monaco.js")),
     loadStyleOnce(resolveBundleUrl("monacoCss", "monaco.css")),
@@ -101,11 +114,12 @@ export function loadMonaco(){
       if(!window.monaco){
         throw new Error("Monaco bundle loaded but window.monaco is undefined");
       }
+      _notifyMonaco(false);
       return window.monaco;
     })
     .catch((error) => {
-      // Allow a later call to retry after a failure.
       monacoPromise = null;
+      _notifyMonaco(false);
       throw error;
     });
   return monacoPromise;

@@ -22,8 +22,11 @@
 //---------------------------------------------------------------------
 
 import {api} from "./api.js";
+import {auth} from "./auth.js";
+import {config} from "./config.js";
+import {events} from "./events.js";
 import {navigation} from "./navigation.js";
-import {loadMonaco} from "./lazy-loader.js";
+import {loadMonaco, onMonacoLoading} from "./lazy-loader.js";
 import {loadUI} from "./ui-loader.js";
 
 // Thin top bar that appears while any NOC.api request is in flight.
@@ -69,13 +72,27 @@ function createLoadingBar(){
   }
 
   let _showTimer = null;
-  api.onLoading((active) => {
+  let _monacoActive = false;
+  let _apiActive = false;
+
+  function _sync(active){
     if(active){
-      _showTimer = setTimeout(() => bar.classList.add("active"), 300);
-    } else{
+      _showTimer = _showTimer || setTimeout(() => bar.classList.add("active"), 300);
+    } else if(!_monacoActive && !_apiActive){
       clearTimeout(_showTimer);
+      _showTimer = null;
       bar.classList.remove("active");
     }
+  }
+
+  api.onLoading((active) => {
+    _apiActive = active;
+    _sync(active);
+  });
+
+  onMonacoLoading((active) => {
+    _monacoActive = active;
+    _sync(active);
   });
 }
 
@@ -85,8 +102,14 @@ export async function bootstrap(){
   // 1. API layer — fetch wrapper that replaces Ext.Ajax.
   window.NOC = window.NOC || {};
   window.NOC.api = api;
+  // 2. Auth / session — reactive session state.
+  window.NOC.auth = auth;
+  // 3. Config — application settings loaded after auth.
+  window.NOC.config = config;
   // 4. Router — Navigation API singleton, framework-neutral.
   window.NOC.navigation = navigation;
+  // 5. Event bus — cross-component events, replaces Ext.GlobalEvents.
+  window.NOC.events = events;
   createLoadingBar();
   // Expose on-demand bundle loaders as globals so the legacy ExtJS components
   // can lazily pull heavy bundles (Monaco) instead of loading them eagerly.
