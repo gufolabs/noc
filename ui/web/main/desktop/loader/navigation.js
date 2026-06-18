@@ -130,7 +130,16 @@ export const navigation = {
   },
 
   // Subscribe to route changes. handler(token, type).
-  // Returns an unsubscribe function.
+  // Returns an unsubscribe function — callers MUST invoke it when the
+  // subscribing component is torn down, otherwise dead handlers accumulate.
+  //
+  // Component pattern:
+  //   onMounted(() => {
+  //     const unsub = NOC.navigation.subscribe(handler);
+  //     onUnmounted(unsub);
+  //   });
+  //
+  // ExtJS Application (singleton, lives for the page session) may omit unsub.
   subscribe(handler){
     if(!this._subscribers){
       this._subscribers = [];
