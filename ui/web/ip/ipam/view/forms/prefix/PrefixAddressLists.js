@@ -130,6 +130,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixAddressLists", {
       xtype: "dataview",
       itemId: "ipam-prefix-grid",
       width: "100%",
+      scrollable: true,
       itemSelector: "tr.prefix-row",
       tpl: [
         "<table class='ipam'>",
@@ -228,6 +229,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixAddressLists", {
       xtype: "dataview",
       itemId: "ipam-address-grid",
       width: "100%",
+      scrollable: true,
       itemSelector: "tr.address-row",
       tpl: [
         "<table class='ipam'>",
@@ -306,6 +308,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixAddressLists", {
       xtype: "dataview",
       itemId: "ipam-range-grid",
       width: "100%",
+      scrollable: true,
       itemSelector: "tr.range-row",
       tpl: [
         "<table class='ipam'>",

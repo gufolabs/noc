@@ -10,18 +10,19 @@ from operator import itemgetter
 
 # Third-party modules modules
 import orjson
-from noc.core.translation import ugettext as _
+
+from noc.aaa.models.permission import Permission
+from noc.core.colors import get_colors
 from noc.core.ip import IP
+from noc.core.translation import ugettext as _
+from noc.core.validators import is_ipv4, is_ipv4_prefix, is_ipv6, is_ipv6_prefix
+from noc.ip.models.prefix import Prefix
+from noc.ip.models.prefixbookmark import PrefixBookmark
+from noc.ip.models.vrf import VRF
+from noc.main.models.customfield import CustomField
 
 # NOC modules
 from noc.services.web.base.extapplication import ExtApplication, view
-from noc.core.validators import is_ipv4, is_ipv4_prefix, is_ipv6, is_ipv6_prefix
-from noc.ip.models.vrf import VRF
-from noc.ip.models.prefixbookmark import PrefixBookmark
-from noc.ip.models.prefix import Prefix
-from noc.main.models.customfield import CustomField
-from noc.aaa.models.permission import Permission
-from noc.core.colors import get_colors
 
 
 class IPAMApplication(ExtApplication):
@@ -61,12 +62,12 @@ class IPAMApplication(ExtApplication):
         return {"has_bookmark": prefix.has_bookmark(request.user)}
 
     @view(
-        url=r"get_vrf_prefix/(?P<vrf_id>\d+)/(?P<afi>[46])/(?P<prefix>([0-9a-f.:/]+|))/$",
+        url=r"get_vrf_prefix/(?P<vrf_id>\d+)/(?P<afi>[46])/(?:(?P<prefix>[0-9a-f.:/]+)/)?$",
         method=["GET"],
         api=True,
         access="launch",
     )
-    def get_vrf_prefix(self, request, vrf_id, afi, prefix):
+    def get_vrf_prefix(self, request, vrf_id, afi, prefix=None):
         vrf = self.get_object_or_404(VRF, id=int(vrf_id))
 
         if not prefix:
