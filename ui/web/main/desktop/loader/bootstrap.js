@@ -68,7 +68,15 @@ function createLoadingBar(){
     document.addEventListener("DOMContentLoaded", append);
   }
 
-  api.onLoading((active) => bar.classList.toggle("active", active));
+  let _showTimer = null;
+  api.onLoading((active) => {
+    if(active){
+      _showTimer = setTimeout(() => bar.classList.add("active"), 300);
+    } else{
+      clearTimeout(_showTimer);
+      bar.classList.remove("active");
+    }
+  });
 }
 
 // Initializes framework-neutral infrastructure, then loads the UI. Each future
