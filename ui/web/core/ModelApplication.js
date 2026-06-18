@@ -631,6 +631,7 @@ Ext.define("NOC.core.ModelApplication", {
       for(const inline of me.inlines){
         var istore = Ext.create("NOC.core.InlineModelStore", {
             model: inline.model,
+            pageSize: 0,
           }),
           gp = {
             xtype: "inlinegrid",
