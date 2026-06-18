@@ -232,7 +232,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
       return;
     }
     if(me.map.hasLayer(layer)){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/inv/inv/plugin/map/layers/" + me.getQuery(layer.options.nocCode),
         method: "GET",
         scope: me,
@@ -262,7 +262,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
       }
     
       if(me.map.hasLayer(layer)){
-        Ext.Ajax.request({
+        NOC.api.requestLegacy({
           url: "/inv/inv/plugin/map/layers/" + me.getQuery(layer.options.nocCode),
           method: "GET",
           scope: me,
@@ -362,7 +362,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
   //
   visibilityHandler: function(e){
     var me = this, status = e.type === "add";
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/plugin/map/layer_visibility/",
       method: "POST",
       jsonData: {
@@ -391,7 +391,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
     
     this.getViewModel().set("icon", this.generateIcon(true, "spinner", "grey", __("loading")));
     
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/resource_status/",
       method: "POST",
       jsonData: {
@@ -510,7 +510,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
     var me = this;
     if(me.setPositionButton.pressed){
       me.setPositionButton.toggle(false);
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/inv/inv/" + me.currentId + "/plugin/map/set_geopoint/",
         method: "POST",
         jsonData: {

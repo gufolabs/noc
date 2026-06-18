@@ -98,7 +98,7 @@ Ext.define("NOC.main.userprofile.Application", {
   },
   //
   loadData: function(){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/main/userprofile/",
       method: "GET",
       scope: this,
@@ -124,7 +124,7 @@ Ext.define("NOC.main.userprofile.Application", {
         preferred_language: languageField.getValue(),
         contacts: contactsField.getValue(),
       };
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/main/userprofile/",
       method: "POST",
       scope: this,

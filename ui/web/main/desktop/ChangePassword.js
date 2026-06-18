@@ -85,7 +85,7 @@ Ext.define("NOC.main.desktop.ChangePassword", {
       form = panel.getForm();
     if(form.isValid()){
       panel.setDisabled(true);
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/api/login/change_credentials",
         method: "PUT",
         scope: this,

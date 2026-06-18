@@ -124,7 +124,7 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
     ts = new Date().getTime();
     if(this.lastCheckTS && this.getViewModel().get("volume")){
       delta = Math.ceil((ts - this.lastCheckTS) / 1000.0);
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/fm/alarm/notification/?delta=" + delta,
         scope: this,
         success: function(response){
@@ -283,7 +283,7 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
         __("Please enter comment"),
         function(btn, text){
           if(btn === "ok"){
-            Ext.Ajax.request({
+            NOC.api.requestLegacy({
               url: "/fm/alarm/comment/post/",
               method: "POST",
               jsonData: {
@@ -309,7 +309,7 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
       ids = grid.getSelection().map(function(alarm){
         return alarm.id
       });
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/fm/alarm/escalate/",
       method: "POST",
       jsonData: {
@@ -387,7 +387,7 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
       ids = grid.getSelection().map(function(alarm){
         return alarm.id
       });
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/fm/alarm/group/favorites/",
       method: "POST",
       scope: this,

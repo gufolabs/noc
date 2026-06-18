@@ -397,7 +397,7 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
     this.getAlarmDetail(id);
   },
   showMapHandler: function(id){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + id + "/map_lookup/",
       method: "GET",
       scope: this,
@@ -427,7 +427,7 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
     });
   },
   getAlarmDetail: function(alarmId){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/fm/alarm/" + alarmId + "/",
       method: "GET",
       scope: this,
@@ -466,7 +466,7 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
     if(!filter){
       filter = this.getViewModel().get("activeFilter");
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/fm/alarm/",
       method: "POST",
       scope: this,
@@ -523,7 +523,7 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
         var msg = __("Failed to set acknowledgedun/acknowledged"),
           url = "/fm/alarm/" + alarmId + (isAck ? "/unacknowledge/" : "/acknowledge/");
         if(btn === "ok"){
-          Ext.Ajax.request({
+          NOC.api.requestLegacy({
             url: url,
             method: "POST",
             jsonData: {

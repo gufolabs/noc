@@ -21,7 +21,7 @@ Ext.define("NOC.ip.ipam.view.forms.vrf.VRFController", {
     delete source["profile__label"];
     delete source["vrf_group__label"];
     delete source["project__label"];
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/ip/vrf/" + source.id + "/",
       method: "PUT",
       jsonData: Ext.merge(source, data),

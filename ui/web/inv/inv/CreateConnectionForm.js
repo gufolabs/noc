@@ -400,7 +400,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
 
   },
   disconnectConnection: function(params, callBack){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/disconnect/",
       method: "POST",
       jsonData: params,
@@ -728,7 +728,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
         params = "o1=" + leftObjectId + (rightObjectId ? "&o2=" + rightObjectId : "");
         params += cable ? "&cable_filter=" + cable : "";
         me.mask(__("Loading..."));
-        Ext.Ajax.request({
+        NOC.api.requestLegacy({
           url: "/inv/inv/crossing_proposals/?" + params,
           method: "GET",
           scope: me,
@@ -1160,7 +1160,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
       }
       return param;
     });
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/connect/",
       method: "POST",
       jsonData: params,
@@ -1583,7 +1583,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
     params += cable ? "&cable_filter=" + cable : "";
     params += filter ? "&" + filter : "";
     me.mask(__("Loading..."));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/crossing_proposals/?" + params,
       method: "GET",
       success: function(response){

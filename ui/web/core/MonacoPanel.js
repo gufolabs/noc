@@ -169,7 +169,7 @@ Ext.define("NOC.core.MonacoPanel", {
   requestText: function(record){
     this.rootUrl = Ext.String.format(this.restUrl, record.get("id"));
     this.mask(__("Loading"));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: this.rootUrl,
       method: "GET",
       scope: this,
@@ -193,7 +193,7 @@ Ext.define("NOC.core.MonacoPanel", {
   requestRevisions: function(id){
     if(Ext.isEmpty(this.down("#revCombo"))) return;
     var url = (id ? Ext.String.format(this.restUrl, id) : this.rootUrl) + "revisions/";
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "GET",
       scope: this,
@@ -226,7 +226,7 @@ Ext.define("NOC.core.MonacoPanel", {
   },
   requestRevision: function(rev, callback){
     this.mask(__("Loading"));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: this.rootUrl + rev + "/",
       method: "GET",
       scope: this,

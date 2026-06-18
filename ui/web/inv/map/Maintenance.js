@@ -150,7 +150,7 @@ Ext.define("NOC.inv.map.Maintenance", {
       NOC.error(__("Your must select maintenance!"));
       return;
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.rest_url + selected[0].data.id + "/add/",
       method: "POST",
       jsonData: Ext.JSON.encode({mode: me.noc.args[0].mode, elements: me.noc.args[1]}),
@@ -173,7 +173,7 @@ Ext.define("NOC.inv.map.Maintenance", {
       params = Ext.apply(params, {is_completed: 1})
     }
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.rest_url,
       method: "GET",
       params: params,

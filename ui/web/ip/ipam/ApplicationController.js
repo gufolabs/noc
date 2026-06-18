@@ -144,7 +144,7 @@ Ext.define("NOC.ip.ipam.ApplicationController", {
     }
   },
   loadDetail: function(prefix, hash, variable){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: prefix + hash,
       method: "GET",
       scope: this,

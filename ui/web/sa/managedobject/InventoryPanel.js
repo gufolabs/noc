@@ -112,7 +112,7 @@ Ext.define("NOC.sa.managedobject.InventoryPanel", {
     var me = this;
     me.callParent(arguments);
     me.setTitle(record.get("name") + " inventory");
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + record.get("id") + "/inventory/",
       method: "GET",
       scope: me,

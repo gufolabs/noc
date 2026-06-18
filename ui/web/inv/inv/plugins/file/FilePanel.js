@@ -104,7 +104,7 @@ Ext.define("NOC.inv.inv.plugins.file.FilePanel", {
   //
   refresh: function(){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + me.currentId + "/plugin/file/",
       method: "GET",
       scope: me,
@@ -131,7 +131,7 @@ Ext.define("NOC.inv.inv.plugins.file.FilePanel", {
       glyph: NOC.glyph.question_circle,
       fn: function(rec){
         if(rec === "yes"){
-          Ext.Ajax.request({
+          NOC.api.requestLegacy({
             url: "/inv/inv/" + me.currentId + "/plugin/file/" + sel[0].get("id") + "/",
             method: "DELETE",
             scope: me,

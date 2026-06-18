@@ -26,7 +26,7 @@ Ext.define("NOC.core.RestTemplatePreview", {
     var url = me.urlTemplate(record.data);
     me.setTitle(me.titleTemplate(record.data));
     me.currentRecord = record;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "GET",
       scope: me,

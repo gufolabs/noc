@@ -119,7 +119,7 @@ Ext.define("NOC.main.config.Application", {
     me.callParent();
     me.current = null;
     // Load config list
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/main/config/",
       method: "GET",
       scope: me,
@@ -139,7 +139,7 @@ Ext.define("NOC.main.config.Application", {
   loadConfig: function(id){
     var me = this;
     me.current = id || me.current;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/main/config/" + me.current + "/",
       method: "GET",
       scope: me,
@@ -185,7 +185,7 @@ Ext.define("NOC.main.config.Application", {
       }
     });
     // Save
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/main/config/" + me.current + "/",
       method: "POST",
       scope: me,

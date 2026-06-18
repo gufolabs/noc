@@ -24,7 +24,7 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfController", {
     if(Ext.isEmpty(currentId)) return;
     var isUpdatable = this.getView().down("combo[itemId=tabType]").getValue() === 2;
     vm.set("icon", this.generateIcon(isUpdatable, "spinner", "grey", __("loading")));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + currentId + "/plugin/pconf/data/",
       method: "GET",
       scope: this,
@@ -49,7 +49,7 @@ Ext.define("NOC.inv.inv.plugins.pconf.PConfController", {
     var maskComponent = this.getView().up("[appId=inv.inv]").maskComponent,
       messageId = maskComponent.show("saving", "pconf"),
       currentId = this.getViewModel().get("currentId");
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + currentId + "/plugin/pconf/set/",
       method: "POST",
       scope: this,

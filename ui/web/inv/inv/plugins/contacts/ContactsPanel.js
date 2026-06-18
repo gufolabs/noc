@@ -143,7 +143,7 @@ Ext.define("NOC.inv.inv.plugins.contacts.ContactsPanel", {
       adminValue = me.editAdminField.getValue(),
       billValue = me.editBillField.getValue(),
       techValue = me.editTechField.getValue();
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + me.currentId + "/plugin/contacts/",
       method: "POST",
       jsonData: {

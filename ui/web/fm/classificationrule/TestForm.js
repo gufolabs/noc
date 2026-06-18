@@ -59,7 +59,7 @@ Ext.define("NOC.fm.classificationrule.TestForm", {
       data = me.dataField.getValue(),
       fd = me.app.getFormData();
     // @todo: Validation
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/fm/classificationrule/test/",
       method: "post",
       scope: me,

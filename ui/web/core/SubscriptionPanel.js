@@ -145,7 +145,7 @@ Ext.define("NOC.core.SubscriptionPanel", {
     if(this.rendered && !this.destroyed){
       this.mask(__("Updating ..."));
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: method,
       scope: this,

@@ -88,7 +88,7 @@ Ext.define("NOC.inv.macdb.MACLogForm", {
   preview: function(record){
     var me = this;
     me.currentMAC = record.get("mac");
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/macdb/" + record.get("mac") + "/",
       method: "GET",
       scope: me,

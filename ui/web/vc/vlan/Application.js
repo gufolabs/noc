@@ -290,7 +290,7 @@ Ext.define("NOC.vc.vlan.Application", {
   // Show interfaces window
   showVLANInterfaces: function(record){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/vc/vlan/" + record.get("id") + "/interfaces/",
       method: "GET",
       scope: me,

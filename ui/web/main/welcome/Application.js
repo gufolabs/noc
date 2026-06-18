@@ -14,7 +14,7 @@ Ext.define("NOC.main.welcome.Application", {
   afterRender: function(){
     var me = this;
     me.callParent();
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/main/welcome/welcome/",
       method: "GET",
       scope: me,

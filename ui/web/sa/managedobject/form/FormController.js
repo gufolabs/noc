@@ -117,7 +117,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
         scope: this,
         fn: function(button){
           if(button === "yes"){
-            Ext.Ajax.request({
+            NOC.api.requestLegacy({
               url: "/sa/managedobject/actions/group_edit/",
               method: "POST",
               scope: me,
@@ -315,7 +315,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
     record.self.setProxy({type: "managedobject"});
     if(formPanel.recordId){
       this.getView().mask(__("Deleting ..."));
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/sa/managedobject/" + formPanel.recordId + "/",
         method: "DELETE",
         scope: this,

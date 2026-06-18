@@ -36,7 +36,7 @@ Ext.define("NOC.inv.inv.plugins.conduits.ConduitsPanel", {
   //
   reload: function(){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + me.currentId + "/plugin/conduits/",
       scope: me,
       success: function(response){

@@ -335,7 +335,7 @@ Ext.define("NOC.sa.job.Application", {
   sendRequest: function(itemId, suffix, callBack){
     var url = itemId ? "/sa/job/" + itemId + suffix : "/sa/job/";
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "GET",
       success: callBack,

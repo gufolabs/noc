@@ -151,7 +151,7 @@ Ext.define("NOC.inv.map.MapPanel", {
     }
     me.segmentId = segmentId;
     me.mask(__("Map loading ..."));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "GET",
       scope: me,
@@ -320,7 +320,7 @@ Ext.define("NOC.inv.map.MapPanel", {
       }
       r.links.push(lr);
     });
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/map/" + me.generator + "/" + me.segmentId + "/data/",
       method: "POST",
       jsonData: r,
@@ -362,7 +362,7 @@ Ext.define("NOC.inv.map.MapPanel", {
   },
 
   getObjectStatus: function(){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/map/objects_statuses/",
       method: "POST",
       jsonData: {
@@ -410,7 +410,7 @@ Ext.define("NOC.inv.map.MapPanel", {
     switch(this.overlayMode){
       case this.LO_LOAD:
         var r = this.renderer.getMetrics(["Interface | Load | In", "Interface | Load | Out"]);
-        Ext.Ajax.request({
+        NOC.api.requestLegacy({
           url: "/inv/map/metrics/",
           method: "POST",
           jsonData: {
@@ -479,7 +479,7 @@ Ext.define("NOC.inv.map.MapPanel", {
       return;
     }
     forceSpring = forceSpring || false;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/map/" + me.generator + "/" + me.segmentId + "/data/",
       method: "DELETE",
       scope: me,
@@ -619,7 +619,7 @@ Ext.define("NOC.inv.map.MapPanel", {
   },
 
   addObjectToBasket: function(id, store){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + id + "/",
       method: "GET",
       success: function(response){
@@ -657,7 +657,7 @@ Ext.define("NOC.inv.map.MapPanel", {
       }
     });
     // Get STP status
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/map/stp/status/",
       method: "POST",
       jsonData: {

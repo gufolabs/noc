@@ -157,7 +157,7 @@ Ext.define("NOC.inv.inv.AddObjectForm", {
           } 
           return item; 
         });
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/add/",
       method: "POST",
       jsonData: {

@@ -58,7 +58,7 @@ Ext.define("NOC.main.jsonimport.Application", {
   //
   onSave: function(){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/main/jsonimport/",
       method: "POST",
       scope: me,

@@ -220,7 +220,7 @@ Ext.define("NOC.fm.event.Application", {
     if(Ext.isEmpty(id)){
       return;
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/fm/event/" + id + "/",
       method: "GET",
       scope: me,
