@@ -9,7 +9,6 @@ Ext.define("NOC.main.desktop.Application", {
   extend: "Ext.Viewport",
   layout: "border",
   requires: [
-    "NOC.core.Navigation",
     "NOC.core.InactivityLogout",
     "NOC.core.PasswordField",
     "NOC.core.ObservableModel",

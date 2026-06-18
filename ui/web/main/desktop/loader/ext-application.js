@@ -38,7 +38,7 @@ export function startExtApplication(){
         history.replaceState({}, document.title, newUrl);
         this.openLogin();
       } catch(err){
-        console.error("Request failed:", err.status);
+        console.error("Request failed:", err);
       }
     },
     openApplication: function(){
@@ -46,7 +46,7 @@ export function startExtApplication(){
       console.log("Initializing navigation");
       // Navigation API migration (Phase 1, hash-based URLs). This replaces the
       // former Ext.History facade; see ui/docs/navigation-api-migration.md
-      NOC.core.Navigation.init();
+      NOC.navigation.init();
       console.log("NOC application starting");
       this.settings();
     },

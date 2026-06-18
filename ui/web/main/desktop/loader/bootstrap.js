@@ -22,6 +22,7 @@
 //---------------------------------------------------------------------
 
 import {api} from "./api.js";
+import {navigation} from "./navigation.js";
 import {loadMonaco} from "./lazy-loader.js";
 import {loadUI} from "./ui-loader.js";
 
@@ -76,6 +77,8 @@ export async function bootstrap(){
   // 1. API layer — fetch wrapper that replaces Ext.Ajax.
   window.NOC = window.NOC || {};
   window.NOC.api = api;
+  // 4. Router — Navigation API singleton, framework-neutral.
+  window.NOC.navigation = navigation;
   createLoadingBar();
   // Expose on-demand bundle loaders as globals so the legacy ExtJS components
   // can lazily pull heavy bundles (Monaco) instead of loading them eagerly.
