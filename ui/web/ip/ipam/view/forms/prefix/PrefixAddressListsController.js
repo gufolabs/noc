@@ -17,7 +17,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixAddressListsController", {
   },
   onViewPrefixContents: function(view, record, item, idx, evt){
     if(evt.getTarget(".prefix-bookmark")){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/ip/ipam/" + record.id + "/toggle_bookmark/",
         method: "GET",
         success: function(response){
@@ -64,7 +64,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixAddressListsController", {
     if(key.getKey() === Ext.EventObject.ENTER){
       var vrf_id = this.getViewModel().get("prefix.vrf"),
         afi = this.getViewModel().get("prefix.afi");
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/ip/ipam/" + vrf_id + "/" + afi + "/quickjump/",
         method: "POST",
         scope: this,

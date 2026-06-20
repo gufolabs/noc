@@ -88,7 +88,7 @@ Ext.define("NOC.core.tagfield.Tagfield", {
           obj[me.valueField] = element;
           return obj;
         });
-        Ext.Ajax.request({
+        NOC.api.requestLegacy({
           url: me.store.proxy.url,
           method: "GET",
           scope: me,

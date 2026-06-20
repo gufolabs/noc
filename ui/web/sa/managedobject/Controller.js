@@ -251,7 +251,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
           }
         }
       }
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         method: "POST",
         params: JSON.stringify({objects: objects, config: config}),
         headers: {"Content-Type": "application/json"},
@@ -359,7 +359,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
 
     if(newValue){
       this.idForRender = newValue;
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: `/sa/runcommands/form/${mode}/${newValue}/`,
 
         success: function(response){
@@ -535,7 +535,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
       );
 
       selectionGrid.mask(__("Loading"));
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: this.lookupReference("saManagedobjectSelectionGrid").getStore().rest_url,
         method: "POST",
         jsonData: params,
@@ -577,7 +577,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
     formPanel.ids = selectedIds;
     this.clearForm(form);
     parentCmp.mask(__("Loading"));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: this.url + "full/",
       method: "POST",
       scope: this,
@@ -682,7 +682,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
     var action = record.get("fav_status") ? "reset" : "set",
       url = "/sa/managedobject/favorites/item/" + record.id + "/" + action + "/";
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "POST",
       success: function(){
@@ -708,7 +708,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
     if(gridView){
       gridView.mask(__("Loading"));
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "GET",
       scope: this,
@@ -851,7 +851,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
              }, this);
   },
   showMapHandler: function(record){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + record.get("id") + "/map_lookup/",
       method: "GET",
       scope: this,
@@ -901,7 +901,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
     var me = this,
       basketStore = this.lookupReference("saManagedobjectSelectedGrid1").getStore(),
       ids = Ext.Array.map(basketStore.getData().items, function(record){return record.id});
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + "actions/" + actionName + "/",
       method: "POST",
       scope: me,
@@ -927,7 +927,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
     });
     if(ids.length > 0){
       basketGrid.mask(__("Loading"));
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: this.url + "full/",
         method: "POST",
         scope: this,

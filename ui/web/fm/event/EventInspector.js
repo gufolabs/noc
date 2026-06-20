@@ -140,7 +140,7 @@ Ext.define("NOC.fm.event.EventInspector", {
   //
   onReclassify: function(){
     var record = this.getViewModel().get("record");
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/fm/event/" + this.getViewModel().data.id + "/reclassify/",
       method: "POST",
       jsonData: record.data,

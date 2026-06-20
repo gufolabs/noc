@@ -9,7 +9,6 @@ Ext.define("NOC.main.desktop.Application", {
   extend: "Ext.Viewport",
   layout: "border",
   requires: [
-    "NOC.core.Navigation",
     "NOC.core.InactivityLogout",
     "NOC.core.PasswordField",
     "NOC.core.ObservableModel",
@@ -159,7 +158,7 @@ Ext.define("NOC.main.desktop.Application", {
   // Show About screen
   onAbout: function(){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/main/desktop/about/",
       method: "GET",
       scope: me,
@@ -224,7 +223,7 @@ Ext.define("NOC.main.desktop.Application", {
     var index = app.indexOf("?"),
       _app = index === -1 ? app : app.substr(0, index),
       url = "/" + _app.replace(".", "/") + "/launch_info/";
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "GET",
       scope: me,
@@ -326,10 +325,9 @@ Ext.define("NOC.main.desktop.Application", {
     console.log("User preferences state: ", provider.state);
     this.launchApps();
     // Apply user settings
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       method: "GET",
       url: "/main/desktop/user_settings/",
-      async: true, // make one request, when reload with open tab
       scope: this,
       success: function(response){
         var settings = Ext.decode(response.responseText),
@@ -337,6 +335,7 @@ Ext.define("NOC.main.desktop.Application", {
         // Save settings
         NOC.username = settings.username;
         NOC.email = settings.email;
+        NOC.auth.setUserInfo({username: settings.username, email: settings.email});
         // Build display name
         if(settings.first_name){
           displayName.push(settings.first_name);

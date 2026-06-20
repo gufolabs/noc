@@ -816,7 +816,7 @@ Ext.define("NOC.core.ModelApplication", {
             });
     me.mask("Saving ...");
     // Save data
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.base_url + (me.currentRecord ? result[me.idField] + "/" : ""),
       method: me.currentRecord ? "PUT" : "POST",
       scope: me,
@@ -890,7 +890,7 @@ Ext.define("NOC.core.ModelApplication", {
     if(!me.hasPermission("read") && !me.hasPermission("update"))
       return;
     if(me.recordReload){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: me.base_url + record.get(me.idField) + "/",
         method: "GET",
         scope: me,
@@ -1004,7 +1004,7 @@ Ext.define("NOC.core.ModelApplication", {
   deleteRecord: function(){
     var me = this,
       pollProgress = function(url){
-        Ext.Ajax.request({
+        NOC.api.requestLegacy({
           url: url,
           method: "GET",
           scope: me,
@@ -1044,7 +1044,7 @@ Ext.define("NOC.core.ModelApplication", {
       };
     if(me.currentRecord){
       me.mask("Deleting ...");
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: me.base_url + me.currentRecord.get(me.idField) + "/",
         method: "DELETE",
         scope: me,
@@ -1332,7 +1332,7 @@ Ext.define("NOC.core.ModelApplication", {
       action = r.get("fav_status") ? "reset" : "set",
       url = me.base_url + "favorites/item/" + id + "/" + action + "/";
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "POST",
       scope: me,
@@ -1396,7 +1396,7 @@ Ext.define("NOC.core.ModelApplication", {
   //
   runAction: function(action, params){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.base_url + "actions/" + action.itemId + "/",
       method: "POST",
       scope: me,
@@ -1964,7 +1964,7 @@ Ext.define("NOC.core.ModelApplication", {
         modal: true,
         fn: function(button){
           if(button === "yes"){
-            Ext.Ajax.request({
+            NOC.api.requestLegacy({
               url: me.base_url + "actions/group_edit/",
               method: "POST",
               scope: me,
@@ -2027,7 +2027,7 @@ Ext.define("NOC.core.ModelApplication", {
       currentFilter = me.currentQuery[me.levelFilter.filter];
 
     if(currentFilter){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         method: "GET",
         url: filter.tree.restUrl + "/" + currentFilter + "/get_path/",
         scope: me,

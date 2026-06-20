@@ -52,7 +52,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.RebasePanel", {
   save: function(data){
     var me = this;
     me.mask(__("Rebasing ..."));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.prefixUrl + me.currentPrefixId + "/rebase/",
       method: "POST",
       scope: me,

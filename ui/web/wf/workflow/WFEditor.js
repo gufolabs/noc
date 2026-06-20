@@ -208,7 +208,7 @@ Ext.define("NOC.wf.workflow.WFEditor", {
     var me = this;
     if(record){
       me.configId = record.get("id");
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/wf/workflow/" + me.configId + "/config/",
         method: "GET",
         scope: me,
@@ -711,7 +711,7 @@ Ext.define("NOC.wf.workflow.WFEditor", {
     }
 
     ret = me.sanitizeWorkflowForSave(me.editor.exportForSave());
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/wf/workflow/" + me.configId + "/config/",
       method: "POST",
       jsonData: ret,

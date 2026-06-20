@@ -46,7 +46,7 @@ Ext.define("NOC.sa.discoveredobject.controller.Container", {
           filterObject = filterPanel.getController().notEmptyValues(),
           params = Ext.apply(filterObject, {ids: ids}, {args: args});
 
-        Ext.Ajax.request({
+        NOC.api.requestLegacy({
           url: actionUrl,
           method: "POST",
           jsonData: params,
@@ -73,7 +73,7 @@ Ext.define("NOC.sa.discoveredobject.controller.Container", {
         });
       };
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       success: function(response){
         var me = this,
@@ -162,7 +162,7 @@ Ext.define("NOC.sa.discoveredobject.controller.Container", {
                 }
               });
 
-              Ext.Ajax.request({
+              NOC.api.requestLegacy({
                 url: "/sa/discoveredobject/scan_run/",
                 method: "POST",
                 jsonData: params,

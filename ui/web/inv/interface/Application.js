@@ -252,7 +252,7 @@ Ext.define("NOC.inv.interface.Application", {
     } else{
       data["id"] = r.get("id");
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/interface/" + r.get("id") + "/",
       method: "POST",
       jsonData: data,
@@ -299,7 +299,7 @@ Ext.define("NOC.inv.interface.Application", {
       modal: true,
       fn: function(button){
         if(button === "yes"){
-          Ext.Ajax.request({
+          NOC.api.requestLegacy({
             url: "/inv/interface/unlink/" + ifaceId + "/",
             method: "POST",
             scope: me,

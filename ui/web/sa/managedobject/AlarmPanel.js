@@ -133,7 +133,7 @@ Ext.define("NOC.sa.managedobject.AlarmPanel", {
     let status = me.statusRadioButton.getValue().params,
       objectId = me.currentRecord.get("id");
     me.setTitle(record.get("name") + " alarms");
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: `/fm/alarm/?managed_object=${objectId}&__format=ext&${status}`,
       method: "GET",
       scope: me,

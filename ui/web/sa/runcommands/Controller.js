@@ -312,7 +312,7 @@ Ext.define("NOC.sa.runcommands.Controller", {
           }
         }
       }
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         method: "POST",
         params: JSON.stringify({objects: objects, config: config}),
         headers: {"Content-Type": "application/json"},
@@ -414,7 +414,7 @@ Ext.define("NOC.sa.runcommands.Controller", {
 
     if(newValue){
       this.idForRender = newValue;
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: `/sa/runcommands/form/${mode}/${newValue}/`,
 
         success: function(response){
@@ -591,7 +591,7 @@ Ext.define("NOC.sa.runcommands.Controller", {
       );
 
       selectionGrid.mask(__("Loading"));
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: this.lookupReference("sa-run-commands-selection-grid").getStore().rest_url,
         method: "POST",
         jsonData: params,

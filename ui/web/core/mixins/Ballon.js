@@ -10,7 +10,7 @@ console.debug("Defining NOC.core.mixins.Ballon");
 Ext.define("NOC.core.mixins.Ballon", {
   showBalloon: function(app, itemId, resourceData, pos){
     var self = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/baloon/",
       method: "POST",
       jsonData: {

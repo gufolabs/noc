@@ -289,7 +289,7 @@ Ext.define("NOC.inv.inv.plugins.alarm.AlarmPanel", {
     
     this.getViewModel().set("icon", this.generateIcon(true, "spinner", "grey", __("loading")));
     
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: `/inv/inv/${objectId}/plugin/alarm/`,
       method: "GET",
       scope: this,

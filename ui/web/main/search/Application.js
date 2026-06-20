@@ -83,7 +83,7 @@ Ext.define("NOC.main.search.Application", {
     var me = this;
     NOC.msg.started(__("Starting search"));
     me.mask();
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/main/search/",
       method: "POST",
       jsonData: {

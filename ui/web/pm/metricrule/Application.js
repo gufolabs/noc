@@ -278,7 +278,7 @@ Ext.define("NOC.pm.metricrule.Application", {
       form = field.up("[xtype=form]"),
       queryParamsField = form.down("gridfield[name=metric_action_params]");
     if(record && record.isModel){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/pm/metricaction/" + record.get("id") + "/",
         scope: me,
         success: function(response){

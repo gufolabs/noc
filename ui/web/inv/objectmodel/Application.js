@@ -793,7 +793,7 @@ Ext.define("NOC.inv.objectmodel.Application", {
   //
   onTest: function(){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/objectmodel/" + me.currentRecord.get("id") + "/compatible/",
       method: "GET",
       scope: me,
@@ -858,7 +858,7 @@ Ext.define("NOC.inv.objectmodel.Application", {
       side = btn.itemId.replace("_facadeBtn", ""),
       downloadPath = `/inv/objectmodel/${record.id}/${side}/template.svg`,
       checkPath = `/inv/objectmodel/${record.id}/is_valid_template/`;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: checkPath,
       method: "GET",
       scope: me,

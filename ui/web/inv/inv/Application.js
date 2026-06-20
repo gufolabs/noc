@@ -271,7 +271,7 @@ Ext.define("NOC.inv.inv.Application", {
                 me.menu.hide();
                 return;
               }
-              Ext.Ajax.request({
+              NOC.api.requestLegacy({
                 url: "/inv/inv/" + objectId + "/map_lookup/",
                 method: "GET",
                 success: function(response){
@@ -539,7 +539,7 @@ Ext.define("NOC.inv.inv.Application", {
       url = "/" + app.replace(".", "/") + "/launch_info/",
       messageId = me.maskComponent.show("processing", [app]),
       c;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "GET",
       scope: me,
@@ -588,7 +588,7 @@ Ext.define("NOC.inv.inv.Application", {
       Ext.TaskManager.stop(oldPanel.timer);
       oldPanel.timer = null;
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + objectId + "/plugin/" + pluginName + "/",
       method: "GET",
       scope: me,
@@ -665,7 +665,7 @@ Ext.define("NOC.inv.inv.Application", {
     if(reload){
       me.onReloadNav();
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + objectId + "/path/",
       method: "GET",
       scope: me,
@@ -716,7 +716,7 @@ Ext.define("NOC.inv.inv.Application", {
     if(!Ext.isEmpty(data.records)){
       itemId = data.records[0].get("id");
       dropHandlers.wait = true;
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/inv/inv/attach/",
         method: "POST",
         jsonData: {
@@ -778,7 +778,7 @@ Ext.define("NOC.inv.inv.Application", {
                         var tree = this.up("form").down("treepanel"),
                           sel = tree.getSelectionModel().getSelection();
                         if(sel.length > 0){
-                          Ext.Ajax.request({
+                          NOC.api.requestLegacy({
                             url: "/inv/inv/attach/",
                             method: "POST",
                             jsonData: {
@@ -949,7 +949,7 @@ Ext.define("NOC.inv.inv.Application", {
         if(btn === "yes"){
           var selectedObject = this.getSelectedObject();
           if(selectedObject){
-            Ext.Ajax.request({
+            NOC.api.requestLegacy({
               url: "/inv/inv/remove_connections/",
               method: "DELETE",
               jsonData: {container: selectedObject.id},
@@ -1059,7 +1059,7 @@ Ext.define("NOC.inv.inv.Application", {
               if(!Ext.isEmpty(sel)){
                 container = sel[0];
               }
-              Ext.Ajax.request({
+              NOC.api.requestLegacy({
                 url: "/inv/inv/clone/",
                 method: "POST",
                 jsonData: {
@@ -1109,7 +1109,7 @@ Ext.define("NOC.inv.inv.Application", {
   },
   //
   removeGroup: function(container, dialog, data, me){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/remove_group/",
       method: "DELETE",
       jsonData: data,
@@ -1215,7 +1215,7 @@ Ext.define("NOC.inv.inv.Application", {
     if(this.destroyed || this.isUpdating) return;
     this.isUpdating = true;
     this.getViewModel().set("icon", this.generateIcon(true, "spinner", "grey", __("loading")));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/resource_status/",
       method: "POST",
       jsonData: {

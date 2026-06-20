@@ -99,7 +99,7 @@ Ext.define("NOC.inv.unknownmodel.Application", {
     var me = this,
       formData = this.form.getValues();
     new Ext.Promise(function(resolve){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/inv/vendor/lookup/?__format=ext&__limit=2&__query=" + me.currentRecord.get("vendor"),
         method: "GET",
         scope: me,
@@ -118,7 +118,7 @@ Ext.define("NOC.inv.unknownmodel.Application", {
         },
       })
     }).then(function(vendor){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/inv/objectmodel/" + formData.type + "/",
         method: "GET",
         scope: me,

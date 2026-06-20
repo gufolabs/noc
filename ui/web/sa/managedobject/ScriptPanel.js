@@ -90,7 +90,7 @@ Ext.define("NOC.sa.managedobject.ScriptPanel", {
     var me = this;
     me.callParent(arguments);
     me.setTitle(record.get("name") + " scripts");
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + record.get("id") + "/scripts/",
       method: "GET",
       scope: me,
@@ -120,7 +120,7 @@ Ext.define("NOC.sa.managedobject.ScriptPanel", {
     var me = this;
     params = params || {};
     me.loadMask.show();
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + me.currentRecord.get("id") + "/scripts/" + name + "/",
       method: "POST",
       scope: me,

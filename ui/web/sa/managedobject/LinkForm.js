@@ -98,7 +98,7 @@ Ext.define("NOC.sa.managedobject.LinkForm", {
   //
   onObjectSelect: function(field, value){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/interface/unlinked/" + value.get("id") + "/",
       method: "GET",
       scope: me,
@@ -119,7 +119,7 @@ Ext.define("NOC.sa.managedobject.LinkForm", {
         type: "ptp",
         interfaces: [me.ifaceId, me.form.getValues().interface],
       };
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/interface/link/",
       method: "POST",
       jsonData: data,
@@ -145,7 +145,7 @@ Ext.define("NOC.sa.managedobject.LinkForm", {
       modal: true,
       fn: function(button){
         if(button == "yes"){
-          Ext.Ajax.request({
+          NOC.api.requestLegacy({
             url: "/inv/interface/unlink/" + me.ifaceId + "/",
             method: "POST",
             scope: me,
@@ -171,7 +171,7 @@ Ext.define("NOC.sa.managedobject.LinkForm", {
   onFix: function(){
     var me = this;
     me.mask("Fixing ...");
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/link/fix/" + me.linkId + "/",
       method: "POST",
       scope: me,

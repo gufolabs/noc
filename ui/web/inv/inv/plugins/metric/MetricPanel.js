@@ -124,7 +124,7 @@ Ext.define("NOC.inv.inv.plugins.metric.MetricPanel", {
                             values = me.up("form").getValues(),
                             body = {thresholds: Ext.Object.getKeys(values).map(function(el){return {name: el, value: values[el]}})};
 
-                          Ext.Ajax.request({
+                          NOC.api.requestLegacy({
                             url: url,
                             method: "POST",
                             scope: me,
@@ -188,7 +188,7 @@ Ext.define("NOC.inv.inv.plugins.metric.MetricPanel", {
   refreshMetric: function(){
     var me = this;
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + me.currentId + "/plugin/metric/",
       method: "GET",
       scope: me,

@@ -232,7 +232,7 @@ Ext.define("NOC.main.modeltemplate.Application", {
                 params = form.down("#fieldsGrid"),
                 selection = params.grid.getSelectionModel().getSelection()[0],
                 value = templateType.getValue();
-              Ext.Ajax.request({
+              NOC.api.requestLegacy({
                 url: `/main/modeltemplate/directory/${value}/fields/${context.record.get("name")}/`,
                 method: "GET",
                 async: false,
@@ -292,7 +292,7 @@ Ext.define("NOC.main.modeltemplate.Application", {
                       form = field.up("form"),
                       templateType = form.down("#templateType"),
                       value = templateType.getValue();
-                    Ext.Ajax.request({
+                    NOC.api.requestLegacy({
                       url: `/main/modeltemplate/directory/${value}/fields`,
                       method: "GET",
                       success: function(response){

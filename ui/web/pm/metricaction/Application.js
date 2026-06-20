@@ -626,7 +626,7 @@ Ext.define("NOC.pm.metricaction.Application", {
 
     me.mask("Saving ...");
     // Save data
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.base_url + (me.currentRecord ? me.currentRecord.id + "/" : ""),
       method: me.currentRecord ? "PUT" : "POST",
       scope: me,

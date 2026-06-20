@@ -18,14 +18,11 @@ Ext.define("NOC.core.StateProvider", {
 
   loadState: async function(){
     try{
-      const response = await fetch(this.url);
-      if(response.ok){
-        const states = await response.json();
-        for(var k in states){
-          states[k] = this.decodeValue(states[k])
-        }
-        this.state = states;
+      const states = await NOC.api.request(this.url);
+      for(var k in states){
+        states[k] = this.decodeValue(states[k]);
       }
+      this.state = states;
     } catch(error){
       console.error("Error loading preferences:", error);
     }
@@ -35,20 +32,21 @@ Ext.define("NOC.core.StateProvider", {
     var ret = this.state[name];
     return ret === undefined ? defaultValue : ret;
   },
-  
+
   set: function(name, value){
     var me = this;
     me.callParent([name, value]);
-    fetch(me.url + name + "/", {
+    NOC.api.request(me.url + name + "/", {
       method: "POST",
       body: me.encodeValue(value),
+      headers: {"Content-Type": "text/plain"},
     }).catch(error => console.error("Error saving state:", error));
   },
 
   clear: function(name){
     var me = this;
     me.callParent([name]);
-    fetch(me.url + name + "/", {
+    NOC.api.request(me.url + name + "/", {
       method: "DELETE",
     }).catch(error => console.error("Error clearing state:", error));
   },

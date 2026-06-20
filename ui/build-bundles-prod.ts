@@ -109,7 +109,7 @@ function cleanOldFiles(pattern: RegExp): void{
   }
 }
 
-function updateHtmlFiles(jsFileName: string, cssFileName: string): void{
+function updateHtmlFiles(jsFileName: string, cssFileName: string, monacoFileName: string, monacoCssFileName: string): void{
   const prefix = "/ui";
   const htmlFiles = fs.readdirSync(outputDir).filter(f => f.startsWith("index") && f.endsWith(".html"));
   for(const htmlFile of htmlFiles){
@@ -117,6 +117,9 @@ function updateHtmlFiles(jsFileName: string, cssFileName: string): void{
     let content = fs.readFileSync(filePath, "utf8");
     content = content.replace(/libs-bundle[^"]*\.js/, `${prefix}/${jsFileName}`);
     content = content.replace(/libs-bundle[^"]*\.css/, `${prefix}/${cssFileName}`);
+    // Point the runtime bundle manifest at the hashed Monaco files.
+    content = content.replace(/("monaco":\s*")[^"]*(")/, `$1${prefix}/${monacoFileName}$2`);
+    content = content.replace(/("monacoCss":\s*")[^"]*(")/, `$1${prefix}/${monacoCssFileName}$2`);
     fs.writeFileSync(filePath, content);
     console.log(`Updated ${filePath}`);
   }
@@ -143,8 +146,19 @@ async function main(){
       plugins: [monacoWorkerPlugin(workerCodes)],
     },
   );
-  allJs.push(`/* monaco */\n${monacoJs}`);
-  if(monacoCss) allCss.push(`/* monaco */\n${monacoCss}`);
+  // Emit Monaco (JS + CSS) as its own content-hashed bundle loaded on demand at
+  // runtime (see web/main/desktop/loader/lazy-loader.js). Both are kept out of
+  // libs-bundle so they stay off the critical path. The loader injects the CSS
+  // together with the JS — without it the editor internals collapse.
+  const monacoFileName = `monaco-${contentHash(monacoJs)}.js`;
+  cleanOldFiles(/^monaco-.*\.(js|css)$/);
+  fs.writeFileSync(path.join(outputDir, monacoFileName), monacoJs);
+  console.log(`Monaco written to ${outputDir}/${monacoFileName} (${monacoJs.length} bytes)`);
+  const monacoCssFileName = `monaco-${contentHash(monacoCss || "")}.css`;
+  if(monacoCss){
+    fs.writeFileSync(path.join(outputDir, monacoCssFileName), monacoCss);
+    console.log(`Monaco CSS written to ${outputDir}/${monacoCssFileName} (${monacoCss.length} bytes)`);
+  }
 
   // Combine content
   const jsContent = allJs.join("\n");
@@ -167,7 +181,7 @@ async function main(){
   console.log(`CSS written to ${outputDir}/${cssFileName} (${cssContent.length} bytes)`);
 
   // Update HTML files
-  updateHtmlFiles(jsFileName, cssFileName);
+  updateHtmlFiles(jsFileName, cssFileName, monacoFileName, monacoCssFileName);
 }
 
 main().catch((e) => {

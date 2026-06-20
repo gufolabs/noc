@@ -106,7 +106,7 @@ Ext.define("NOC.main.desktop.LoginView", {
       });
     if(params !== undefined){
       this.lookup("loginForm").setDisabled(true);
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/api/login/login",
         params: params,
         method: "POST",

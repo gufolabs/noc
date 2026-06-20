@@ -194,7 +194,7 @@ Ext.define("NOC.inv.inv.plugins.conduits.ConduitsForm", {
   onAddConduits: function(){
     var me = this;
     // Request candidate proposals
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + me.currentId + "/plugin/conduits/get_neighbors/",
       method: "GET",
       scope: me,
@@ -272,7 +272,7 @@ Ext.define("NOC.inv.inv.plugins.conduits.ConduitsForm", {
         conduits: v.get("conduits"),
       });
     });
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + me.currentId + "/plugin/conduits/",
       method: "POST",
       jsonData: {

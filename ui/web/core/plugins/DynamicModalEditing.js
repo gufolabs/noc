@@ -211,7 +211,7 @@ Ext.define("NOC.core.plugins.DynamicModalEditing", {
     var record = this.record,
       url = `${this.urlPrefix}/${record.get("object")}/capabilities/${record.get("id")}/`,
       data = this.formatResult(this.formPanel.getForm().getValues()[this.dataIndex]);
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: method,
       jsonData: method === "PUT" ? {value: data} : undefined,
