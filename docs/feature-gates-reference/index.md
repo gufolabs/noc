@@ -39,3 +39,17 @@ Enables the orchestrator framework.
 
 - **Status**: ALFA
 - **Available since**: 25.1
+
+## fgalarms
+
+Fine-grained alarms, alarm binding to arbitrary resources
+
+- **Status**: ALFA
+- **Available since**: 25.1
+
+## smartrefresh
+
+Automatically suspends periodic backend queries while the associated UI element is not visible, reducing unnecessary network and server load. Polling resumes as soon as the element becomes visible again.
+
+- **Status**: ALFA
+- **Available since**: 25.1
