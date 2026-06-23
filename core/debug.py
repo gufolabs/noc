@@ -91,7 +91,7 @@ def get_lines_from_file(filename, lineno, context_lines, loader=None, module_nam
         try:
             with open(filename) as f:
                 source = f.readlines()
-        except (OSError, IOError):
+        except OSError:
             pass
     if source is None or lineno >= len(source):
         return None, [], None, []

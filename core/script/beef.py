@@ -221,7 +221,7 @@ class Beef:
                     fs.makedirs(dir_path, recreate=True)
                 fs.writebytes(path, data)
         except storage.Error as e:
-            raise IOError(str(e))
+            raise OSError(str(e))
         return csize, usize
 
     @classmethod
@@ -241,14 +241,14 @@ class Beef:
                 with open_fs(storage) as fs:
                     data = fs.readbytes(smart_text(path))
             except FSError as e:
-                raise IOError(str(e))
+                raise OSError(str(e))
         else:
             # Load from external storage
             try:
                 with storage.open_fs() as fs:
                     data = fs.readbytes(smart_text(path))
             except storage.Error as e:
-                raise IOError(str(e))
+                raise OSError(str(e))
         if path.endswith(".gz"):
             data = cls.decompress_gzip(data)
         elif path.endswith(".json.bz2"):

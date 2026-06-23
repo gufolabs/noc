@@ -528,8 +528,10 @@ class Object(Document):
         # Return sorted result
         return sorted(
             r,
-            key=lambda oa: "%s.%s"
-            % (sorting_keys.get("%s.%s" % (oa.interface, oa.attr), "999999.999999"), oa.scope),
+            key=lambda oa: (
+                "%s.%s"
+                % (sorting_keys.get("%s.%s" % (oa.interface, oa.attr), "999999.999999"), oa.scope)
+            ),
         )
 
     def set_data(self, interface: str, key: str, value: Any, scope: Optional[str] = None) -> None:

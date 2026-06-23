@@ -1026,8 +1026,7 @@ class PrefixDB:
                 elif len(bits) < max_bits:
                     nc = c.children[n]
                     if nc.key is None:
-                        for f in walk_tree(nc, bits):
-                            yield f
+                        yield from walk_tree(nc, bits)
 
         root_bits = list(root.iter_bits())
         afi = root.afi

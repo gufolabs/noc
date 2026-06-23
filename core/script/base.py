@@ -416,7 +416,7 @@ class BaseScript(metaclass=BaseScriptMetaclass):
                 raise Exception("Invalid lookup operation: %s" % o)
         # Combine expressions into single lambda
         return reduce(
-            lambda x, y: lambda self, v, x=x, y=y: (x(self, v) and y(self, v)),  # pylint: disable=undefined-variable
+            lambda x, y: lambda self, v, x=x, y=y: x(self, v) and y(self, v),  # pylint: disable=undefined-variable
             c,
             lambda self, x: True,
         )
@@ -432,9 +432,9 @@ class BaseScript(metaclass=BaseScriptMetaclass):
             if hasattr(f, "_match"):
                 old_filter = f._match
                 # pylint: disable=undefined-variable
-                f._match = lambda self, v, old_filter=old_filter, new_filter=new_filter: new_filter(
-                    self, v
-                ) or old_filter(self, v)
+                f._match = lambda self, v, old_filter=old_filter, new_filter=new_filter: (
+                    new_filter(self, v) or old_filter(self, v)
+                )
             else:
                 f._match = new_filter
             f._seq = next(cls._x_seq)
@@ -1236,7 +1236,7 @@ class BaseScript(metaclass=BaseScriptMetaclass):
 
             try:
                 beef = Beef.load(beef_storage_url, beef_path)
-            except IOError as e:
+            except OSError as e:
                 self.logger.error("Beef load error: %s", e)
                 return None
             self._beef = beef

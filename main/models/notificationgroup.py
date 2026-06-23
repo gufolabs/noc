@@ -697,11 +697,10 @@ class NotificationGroup(NOCModel):
         # Remote
         # allow_edit
         # allow_suppress
-        for s in NotificationGroupSubscription.objects.filter(
+        yield from NotificationGroupSubscription.objects.filter(
             model_id=get_model_id(o),
             instance_id=str(o.id),
-        ):
-            yield s
+        )
 
     def is_allowed_subscription(self, user: User) -> bool:
         groups = frozenset(user.groups.values_list("id", flat=True))

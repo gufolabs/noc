@@ -36,8 +36,7 @@ class RouterOSTokenizer(LineTokenizer):
     def iter_context(self, context, tokens):
         if tokens:
             if "=" not in tokens[0]:
-                for ct in self.iter_context((*context, tokens[0]), tokens[1:]):
-                    yield ct
+                yield from self.iter_context((*context, tokens[0]), tokens[1:])
             else:
                 for token in tokens:
                     if "=" not in token:

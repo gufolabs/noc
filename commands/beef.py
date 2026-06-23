@@ -189,7 +189,7 @@ class Command(BaseCommand):
                     self.print(
                         f"  {cdata} bytes written ({udata} uncompressed. Ratio {ratio:.2f}/1)"
                     )
-            except IOError as e:
+            except OSError as e:
                 self.print(f"  Failed to save: {e}")
             self.print("  Done")
 
@@ -538,7 +538,7 @@ class Command(BaseCommand):
         """
         try:
             return Beef.load(storage, path)
-        except IOError as e:
+        except OSError as e:
             self.die(f"Failed to load beef: {e}")
 
     def get_config(self, storage=None, path=None):

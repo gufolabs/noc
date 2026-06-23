@@ -110,8 +110,7 @@ class ThresholdNode(BaseCDAGNode):
         return f"{self.config.rule_id}-{self.config.action_id}"
 
     def iter_thresholds(self) -> Iterable[ThresholdItem]:
-        for num, th in enumerate(ta_ListThresholdItem.validate_python(self.config.thresholds)):
-            yield num, th
+        yield from enumerate(ta_ListThresholdItem.validate_python(self.config.thresholds))
 
     # check pool
     def get_value(self, x: ValueType, target: Any, **kwargs):

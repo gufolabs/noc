@@ -45,21 +45,18 @@ class Action:
     def iter_event_actions(self) -> Iterable[Callable]:
         """Iter event action"""
         # First Event Handler
-        for h in self.event:
-            yield h
+        yield from self.event
 
     def iter_target_actions(self) -> Iterable[Callable]:
         """Iter Target action"""
-        for h in self.target:
-            yield h
+        yield from self.target
 
     def iter_resource_actions(self, resource: Any) -> Iterable[Callable]:
         """Iterate over resource action"""
         if not self.resource:
             return
         mid = get_model_id(resource)
-        for h in self.resource.get(mid, []):
-            yield h
+        yield from self.resource.get(mid, [])
 
 
 class ActionSet:

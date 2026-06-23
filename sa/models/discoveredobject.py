@@ -253,11 +253,10 @@ class DiscoveredObject(Document):
     def iter_sorted_data(self, sources: Optional[List[str]] = None) -> Iterable["DataItem"]:
         """Return data sorted by source"""
         sources = sources or self.sources
-        for di in sorted(
+        yield from sorted(
             itertools.filterfalse(lambda d: d.source not in self.sources, self.data),
             key=lambda x: sources.index(x.source),
-        ):
-            yield di
+        )
 
     def set_dirty(self, msg: Optional[str] = None):
         logger.debug("[%s] Set dirty %s", self.address, msg or "")

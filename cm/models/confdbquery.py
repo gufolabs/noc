@@ -123,8 +123,7 @@ class ConfDBQuery(Document):
         params = kwargs.copy()
         for p in self.params:
             params[p.name] = p.get_parameter().clean(params.get(p.name, p.default))
-        for ctx in engine.query(self.source, **params):
-            yield ctx
+        yield from engine.query(self.source, **params)
 
     def any(self, engine, **kwargs):
         """

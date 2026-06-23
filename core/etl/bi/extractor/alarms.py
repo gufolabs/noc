@@ -45,10 +45,9 @@ class AlarmsExtractor(ArchivingExtractor):
         else:
             coll = [ArchivedAlarm._get_collection()]
         for c in coll:
-            for d in c.find(
+            yield from c.find(
                 {"clear_timestamp": {"$gt": self.start, "$lte": self.stop}}, no_cursor_timeout=True
-            ).sort("clear_timestamp"):
-                yield d
+            ).sort("clear_timestamp")
 
     def extract(self, *args, **options):
         nr = 0
@@ -152,7 +151,6 @@ class AlarmsExtractor(ArchivingExtractor):
         return d.get("timestamp")
 
     def iter_archived_items(self):
-        for d in ArchivedAlarm._get_collection().find(
+        yield from ArchivedAlarm._get_collection().find(
             {"clear_timestamp": {"$lte": self.clean_ts}}, no_cursor_timeout=True
-        ):
-            yield d
+        )

@@ -125,8 +125,7 @@ class LineTokenizer(BaseTokenizer):
                     yield line[start:qi]
                     in_string = False
                 else:
-                    for li in line[start : qi - 1].split():
-                        yield li
+                    yield from line[start : qi - 1].split()
                     in_string = True
                 start = qi + 1
         else:
