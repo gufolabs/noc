@@ -190,7 +190,7 @@ class Script(BaseScript):
                     and "tagged_vlans" in r
                     and "None" not in r["tagged_vlans"]
                 ):
-                    sub["tagged_vlans"] = self.expand_rangelist((r["tagged_vlans"]))
+                    sub["tagged_vlans"] = self.expand_rangelist(r["tagged_vlans"])
                 if r["port_type"].lower() == "trunk" and "vlan_permitted" in r:
                     sub["tagged_vlans"] = self.expand_rangelist(r["vlan_permitted"])
             interfaces[ifname]["subinterfaces"] += [sub]

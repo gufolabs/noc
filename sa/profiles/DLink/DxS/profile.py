@@ -328,7 +328,7 @@ class Profile(BaseProfile):
         ) and not script.match_version(DES3200, platform="DES-3200-28F"):
             objects = []
             if interface is not None:
-                c = script.cli(("show ports %s description" % interface))
+                c = script.cli("show ports %s description" % interface)
             else:
                 c = script.cli("show ports description")
             for match in self.rx_port.finditer(c):
