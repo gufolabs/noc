@@ -446,9 +446,9 @@ class ReportDataSource:
             response, dialect="excel", delimiter=";", quotechar='"', quoting=csv.QUOTE_NONNUMERIC
         )
         # Header
-        writer.writerow((self.fields[f].label for f in self.fields if not self.fields[f].hidden))
+        writer.writerow(self.fields[f].label for f in self.fields if not self.fields[f].hidden)
         for row in self.extract():
-            writer.writerow((row[f] for f in self.fields if not self.fields[f].hidden))
+            writer.writerow(row[f] for f in self.fields if not self.fields[f].hidden)
 
         return smart_bytes(response.getvalue())
 

@@ -1020,7 +1020,7 @@ class ManagedObjectApplication(ExtModelApplication):
         key = "discovery-%s-%s" % (job, o.id)
         d = get_db()["noc.joblog"].find_one({"_id": key})
         if d and d["log"]:
-            return self.render_plain_text(zlib.decompress(smart_bytes((d["log"]))))
+            return self.render_plain_text(zlib.decompress(smart_bytes(d["log"])))
         return self.render_plain_text("No data")
 
     @view(url=r"^(?P<id>\d+)/interactions/$", method=["GET"], access="interactions", api=True)

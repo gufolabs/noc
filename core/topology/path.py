@@ -23,10 +23,13 @@ from .constraint.base import BaseConstraint
 import itertools
 
 MAX_PATH_LENGTH = 0xFFFFFFFF
-PathInfo = NamedTuple(
-    "PathInfo",
-    [("start", ManagedObject), ("end", ManagedObject), ("links", List[Link]), ("l2_cost", int)],
-)
+
+
+class PathInfo(NamedTuple):
+    start: ManagedObject
+    end: ManagedObject
+    links: List[Link]
+    l2_cost: int
 
 
 def get_shortest_path(start: ManagedObject, goal: ManagedObject) -> List[ManagedObject]:

@@ -137,7 +137,7 @@ class Command(BaseCommand):
                 + [
                     {
                         "oid": dd.oid,
-                        "name": next((a for a in dd.aliases if a.startswith(mib.name + "::"))),
+                        "name": next(a for a in dd.aliases if a.startswith(mib.name + "::")),
                         "description": dd.description,
                         "syntax": dd.syntax,
                     }

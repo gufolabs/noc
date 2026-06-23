@@ -335,7 +335,7 @@ class Beef:
         :return:
         """
         if self.mib_oids is None:
-            self.mib_oids = sorted((tuple(int(c) for c in m.oid.split(".")) for m in self.mib))
+            self.mib_oids = sorted(tuple(int(c) for c in m.oid.split(".")) for m in self.mib)
         return self.mib_oids
 
     def iter_mib_oids(self, oid):
