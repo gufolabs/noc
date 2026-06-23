@@ -99,7 +99,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixDeletePanel", {
 
   preview: function(id){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/ip/prefix/" + id + "/",
       method: "GET",
       scope: me,
@@ -128,7 +128,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixDeletePanel", {
     if(isRecursive){
       url += "recursive/"
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "DELETE",
       scope: me,

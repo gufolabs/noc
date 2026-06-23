@@ -277,7 +277,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
       maskComponent = this.up("[appId=inv.inv]").maskComponent,
       messageId = maskComponent.show(__("Fetching data for ad-hoc channels"));
     this.getViewModel().set("createInvChannelBtnDisabled", true);
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "GET",
       scope: this,
@@ -307,7 +307,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
         maskComponent = this.up("[appId=inv.inv]").maskComponent,
         messageId = maskComponent.show(__("Fetching data for draw scheme ..."));
       this.getViewModel().set("downloadSvgItemDisabled", false);
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: url,
         method: "GET",
         scope: this,
@@ -335,7 +335,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
       maskComponent = this.up("[appId=inv.inv]").maskComponent,
       message = Ext.isDefined(params.channel_id) ? __("Create new channel ..."): __("Update channel"),
       messageId = maskComponent.show(message); 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + currentId + "/plugin/channel/adhoc/",
       method: "POST",
       scope: this,
@@ -462,7 +462,7 @@ Ext.define("NOC.inv.inv.plugins.channel.ChannelPanel", {
       messageId = maskComponent.show(__("Favorite status updating ...")),
       url = "/inv/channel/favorites/item/" + id + "/" + action + "/";
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "POST",
       scope: this,

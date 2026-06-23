@@ -69,7 +69,7 @@ Ext.define("NOC.inv.networksegment.EffectiveSettingsPanel", {
     var me = this;
     me.callParent(arguments);
     me.setTitle(record.get("name") + " interfaces");
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/networksegment/" + record.get("id") + "/effective_settings/",
       method: "GET",
       scope: me,

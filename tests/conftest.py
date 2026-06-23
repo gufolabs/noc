@@ -42,7 +42,7 @@ def pytest_configure(config: pytest.Config) -> None:
 def pytest_collection_modifyitems(
     session: pytest.Session, config: pytest.Config, items: List[pytest.Item]
 ):
-    """Process @pytest.mark.run_on_startup"""
+    """Process @pytest.mark.run_on_setup"""
 
     def is_run_on_setup(item: pytest.Item) -> bool:
         return any(m.name == "run_on_setup" for m in item.own_markers)

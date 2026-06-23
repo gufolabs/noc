@@ -222,7 +222,7 @@ Ext.define("NOC.core.plugins.SubscriptionModalEditing", {
     var url = this.makeUrl(this.appId, this.objectId, this.record.get("notification_group")),
       data = this.getValues();
     button.up("window").mask(__("Saving..."));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: method,
       scope: this,
@@ -248,7 +248,7 @@ Ext.define("NOC.core.plugins.SubscriptionModalEditing", {
   //
   makeUrl: function(appId, objectId, groupId){ 
     var prefix = appId.replace(/\./g, "/");
-    return Ext.String.format("/{0}/{1}/object_subscription/{2}/update/", prefix, objectId, groupId);
+    return `/${prefix}/${objectId}/object_subscription/${groupId}/update/`;
   },
   //
   getValues: function(){

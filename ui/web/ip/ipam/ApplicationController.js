@@ -10,10 +10,15 @@ Ext.define("NOC.ip.ipam.ApplicationController", {
   extend: "Ext.app.ViewController",
   alias: "controller.ip.ipam",
   init: function(){
-    var id, mode, url = Ext.History.getHash().split("?"),
-      prefix = url[0];
+    this.route();
+    this.callParent();
+  },
+  // URL router: open the view matching the current token. Reused for the
+  // initial deep-link and for browser back/forward (via Application.applyHistory).
+  route: function(){
+    var id, mode,
+      prefix = NOC.navigation.getToken().split("?")[0];
 
-    // url router
     if(Ext.String.startsWith(prefix, "ip.ipam/vrf")){
       id = prefix.replace("ip.ipam/vrf", "").replace("/", "");
       mode = id ? "edit" : "new";
@@ -30,7 +35,6 @@ Ext.define("NOC.ip.ipam.ApplicationController", {
     } else if(Ext.String.startsWith(prefix, "ip.ipam/")){
       this.openPrefixContents(prefix.replace("ip.ipam/", ""));
     }
-    this.callParent();
   },
   onRebaseFormClose: function(){
     var prefixForm = this.getView().down("[itemId=ipam-prefix-form]");
@@ -83,7 +87,7 @@ Ext.define("NOC.ip.ipam.ApplicationController", {
   onPrefixContentsOpen: function(grid, params){
     var url = "contents/" + params.id + "/";
     if(Object.hasOwn(params, "afi")){
-      url = "get_vrf_prefix/" + params.id + "/" + params.afi + "//";
+      url = "get_vrf_prefix/" + params.id + "/" + params.afi + "/";
     }
     this.openPrefixContents(url);
   },
@@ -140,7 +144,7 @@ Ext.define("NOC.ip.ipam.ApplicationController", {
     }
   },
   loadDetail: function(prefix, hash, variable){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: prefix + hash,
       method: "GET",
       scope: this,
@@ -167,14 +171,14 @@ Ext.define("NOC.ip.ipam.ApplicationController", {
   setUrl: function(hash){
     var prefix;
     if(hash){
-      prefix = Ext.History.getHash().split(/[/?]/)[0];
-      Ext.History.setHash(prefix + "/" + hash);
+      prefix = NOC.navigation.getToken().split(/[/?]/)[0];
+      NOC.navigation.navigate(prefix + "/" + hash, {dedup: true});
     }
   },
   setQuery: function(val){
-    var prefix = Ext.History.getHash().split(/[/?]/)[0],
+    var prefix = NOC.navigation.getToken().split(/[/?]/)[0],
       query = val ? "?" + Ext.Object.toQueryString(val, true) : "";
-    Ext.History.setHash(prefix + query);
+    NOC.navigation.navigate(prefix + query, {dedup: true});
   },
   updateHash: function(force){
     if(force){

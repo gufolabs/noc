@@ -40,7 +40,7 @@ Ext.define("NOC.support.account.Application", {
   //
   getInfo: function(){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/support/account/",
       method: "GET",
       scope: me,

@@ -28,15 +28,3 @@ def smart_text(s, errors="strict", encoding=DEFAULT_ENCODING):
     if isinstance(s, bytes):
         return s.decode(encoding, errors=errors)
     return str(s)
-
-
-def reraise(tp, value, tb=None):
-    try:
-        if value is None:
-            value = tp()
-        if value.__traceback__ is not tb:
-            raise value.with_traceback(tb)
-        raise value
-    finally:
-        value = None
-        tb = None

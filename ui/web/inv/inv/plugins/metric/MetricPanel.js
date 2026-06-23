@@ -120,11 +120,11 @@ Ext.define("NOC.inv.inv.plugins.metric.MetricPanel", {
                         text: __("Save"),
                         handler: function(){
                           var me = this,
-                            url = Ext.String.format("/inv/inv/{0}/plugin/metric/{1}/set_threshold/", record.get("object"), record.get("id")),
+                            url = `/inv/inv/${record.get("object")}/plugin/metric/${record.get("id")}/set_threshold/`,
                             values = me.up("form").getValues(),
                             body = {thresholds: Ext.Object.getKeys(values).map(function(el){return {name: el, value: values[el]}})};
 
-                          Ext.Ajax.request({
+                          NOC.api.requestLegacy({
                             url: url,
                             method: "POST",
                             scope: me,
@@ -188,7 +188,7 @@ Ext.define("NOC.inv.inv.plugins.metric.MetricPanel", {
   refreshMetric: function(){
     var me = this;
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + me.currentId + "/plugin/metric/",
       method: "GET",
       scope: me,

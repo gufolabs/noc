@@ -164,7 +164,7 @@ Ext.define("NOC.main.desktop.HeaderPanel", {
   //
   pollingTask: function(){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/main/remotesystem/brief_lookup/",
       method: "GET",
       scope: me,

@@ -62,7 +62,7 @@ Ext.define("NOC.fm.alarm.view.form.ClearAlarms", {
         alarms = this.up("[itemId=fmAlarmClear]").alarms;
 
       form.mask(__("Clearing alarms..."));
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/fm/alarm/clear/",
         method: "POST",
         jsonData: {

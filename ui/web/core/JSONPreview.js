@@ -62,7 +62,7 @@ Ext.define("NOC.core.JSONPreview", {
   },
   onSave: function(){
     var restUrl = this.restUrl.replace("{0}", this.currentRecord.get("id")) 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: restUrl,
       method: "POST",
       scope: this,

@@ -78,7 +78,7 @@ Ext.define("NOC.sa.managedobject.CapsPanel", {
     var me = this;
     me.callParent(arguments);
     me.setTitle(record.get("name") + " capabilities");
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + me.currentRecord.get("id") + "/caps/",
       method: "GET",
       scope: me,

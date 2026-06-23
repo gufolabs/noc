@@ -203,7 +203,7 @@ Ext.define("NOC.inv.inv.plugins.VizSchemePluginAbstract", {
       currentId = me.getViewModel().get("currentId"),
       maskComponent = me.up("[appId=inv.inv]").maskComponent,
       messageId = maskComponent.show("fetching", [pluginName]);
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + currentId + "/plugin/" + pluginName + "/",
       method: "GET",
       scope: me,

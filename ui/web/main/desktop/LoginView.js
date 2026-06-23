@@ -16,8 +16,12 @@ Ext.define("NOC.main.desktop.LoginView", {
   layout: "fit",
   modal: true,
   defaultListenerScope: true,
-  defaultFocus: "user",
   defaultButton: "okButton",
+  listeners: {
+    show: function(){
+      this.lookupReference("user").focus(false, 100);
+    },
+  },
   referenceHolder: true,
   width: 500,
   height: 310,
@@ -53,14 +57,14 @@ Ext.define("NOC.main.desktop.LoginView", {
         hideLabel: true,
       },
       {
-        itemId: "user",
+        reference: "user",
         name: "user",
         bind: "{user}",
         fieldLabel: __("User"),
         blankText: __("User name cannot be empty"),
       },
       {
-        itemId: "password",
+        reference: "password",
         name: "password",
         bind: "{password}",
         fieldLabel: __("Password"),
@@ -77,7 +81,7 @@ Ext.define("NOC.main.desktop.LoginView", {
         glyph: "xf090@FontAwesome",
       },
       {
-        itemId: "resetBtn",
+        reference: "resetBtn",
         text: __("Reset"),
         glyph: "xf00d@FontAwesome",
         handler: function(){
@@ -102,7 +106,7 @@ Ext.define("NOC.main.desktop.LoginView", {
       });
     if(params !== undefined){
       this.lookup("loginForm").setDisabled(true);
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/api/login/login",
         params: params,
         method: "POST",

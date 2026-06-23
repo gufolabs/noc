@@ -77,7 +77,7 @@ Ext.define("NOC.inv.interface.LinkForm", {
   //
   onObjectSelect: function(field, value){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/interface/unlinked/" + value.get("id") + "/",
       method: "GET",
       scope: me,
@@ -98,7 +98,7 @@ Ext.define("NOC.inv.interface.LinkForm", {
         type: "ptp",
         interfaces: [me.ifaceId, me.form.getValues().interface],
       };
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/interface/link/",
       method: "POST",
       jsonData: data,

@@ -36,7 +36,7 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
   recentBinding: undefined,
   displayBinding: undefined,
   init: function(view){
-    var url = Ext.History.getHash().split("?"),
+    var url = NOC.navigation.getToken().split("?"),
       viewModel = view.getViewModel(),
       prefix = url[0], queryStr = url.length ? url[1] : undefined;
     this.initFilter(viewModel);
@@ -73,6 +73,21 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
       deep: true,
     }, this.onChangeDisplayFilters, this);
     this.callParent();
+  },
+  // Back/forward: route the current URL to the alarm form or back to the list
+  // (restoring filters from the query string). Reads the live token.
+  restoreFromUrl: function(){
+    var token = NOC.navigation.getToken(),
+      prefix = token.split("?")[0],
+      queryStr = token.split("?")[1];
+    if(this.urlHasId(prefix)){
+      this.openForm(); // reads the id from the URL
+    } else{
+      this.getViewModel().set("activeItem", "fm-alarm-list");
+      if(queryStr){
+        this.deserialize(queryStr, this.getView().getViewModel());
+      }
+    }
   },
   initFilter: function(viewModel){
     var hasProfiles, duration;
@@ -340,7 +355,7 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
     return filter;
   },
   updateHash: function(force){
-    if(force || !this.urlHasId(Ext.History.getHash())){
+    if(force || !this.urlHasId(NOC.navigation.getToken())){
       var queryStr = Ext.merge(
         this.serialize(this.getViewModel().get("activeFilter")),
         {
@@ -351,12 +366,12 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
     }
   },
   setUrl: function(id){
-    var prefix = Ext.History.getHash().split(/[/?]/)[0];
-    Ext.History.setHash(prefix + "/" + id);
+    var prefix = NOC.navigation.getToken().split(/[/?]/)[0];
+    NOC.navigation.navigate(prefix + "/" + id, {dedup: true});
   },
   setHash: function(val){
-    var prefix = Ext.History.getHash().split(/[/?]/)[0];
-    Ext.History.setHash(prefix + "?" + Ext.Object.toQueryString(val, true));
+    var prefix = NOC.navigation.getToken().split(/[/?]/)[0];
+    NOC.navigation.navigate(prefix + "?" + Ext.Object.toQueryString(val, true), {dedup: true});
   },
   urlHasId: function(url){
     var tokens = url.split("/"),
@@ -376,13 +391,13 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
     if(id){
       this.setUrl(id);
     } else{ // restore from url
-      id = Ext.History.getHash().split(/[/?]/)[1];
+      id = NOC.navigation.getToken().split(/[/?]/)[1];
     }
     this.getView().down("[reference=fm-alarm-form-tab-panel]").setActiveTab(0);
     this.getAlarmDetail(id);
   },
   showMapHandler: function(id){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + id + "/map_lookup/",
       method: "GET",
       scope: this,
@@ -412,7 +427,7 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
     });
   },
   getAlarmDetail: function(alarmId){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/fm/alarm/" + alarmId + "/",
       method: "GET",
       scope: this,
@@ -451,7 +466,7 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
     if(!filter){
       filter = this.getViewModel().get("activeFilter");
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/fm/alarm/",
       method: "POST",
       scope: this,
@@ -508,7 +523,7 @@ Ext.define("NOC.fm.alarm.ApplicationController", {
         var msg = __("Failed to set acknowledgedun/acknowledged"),
           url = "/fm/alarm/" + alarmId + (isAck ? "/unacknowledge/" : "/acknowledge/");
         if(btn === "ok"){
-          Ext.Ajax.request({
+          NOC.api.requestLegacy({
             url: url,
             method: "POST",
             jsonData: {

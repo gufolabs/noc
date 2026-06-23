@@ -75,7 +75,7 @@ Ext.define("NOC.inv.inv.plugins.map.AddObjectForm", {
   onPressAdd: function(){
     var me = this,
       values = me.form.getValues();
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/plugin/map/",
       method: "POST",
       jsonData: {

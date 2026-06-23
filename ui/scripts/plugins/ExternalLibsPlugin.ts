@@ -54,13 +54,13 @@ export class ExternalLibsPlugin{
         // {name: "pkg/codemirror/addon/merge/merge.js", format: "iife"},
         
         // JointJS
-        {name: "pkg/lodash/lodash.min.js", format: "iife"},
-        {name: "pkg/backbone/backbone.min.js", format: "iife"},
-        {name: "pkg/dagre/dagre.min.js", format: "iife"},
-        {name: "pkg/graphlib/graphlib.min.js", format: "iife"},
-        {name: "pkg/joint/joint.min.js", format: "iife"},
-        {name: "pkg/joint.layout.directedgraph/joint.layout.directedgraph.min.js", format: "iife"},
-        {name: "web/wf/workflow/js/joint.element.Tools.js", format: "iife"},
+        // {name: "pkg/lodash/lodash.min.js", format: "iife"},
+        // {name: "pkg/backbone/backbone.min.js", format: "iife"},
+        // {name: "pkg/dagre/dagre.min.js", format: "iife"},
+        // {name: "pkg/graphlib/graphlib.min.js", format: "iife"},
+        // {name: "pkg/joint/joint.min.js", format: "iife"},
+        // {name: "pkg/joint.layout.directedgraph/joint.layout.directedgraph.min.js", format: "iife"},
+        // {name: "web/wf/workflow/js/joint.element.Tools.js", format: "iife"},
       
         // Other libraries
         // {name: "pkg/moment/moment.min.js", format: "iife"},
@@ -68,9 +68,9 @@ export class ExternalLibsPlugin{
         {name: "pkg/viz-js/viz-standalone.js", format: "iife"},
        
         // Self-made libraries
-        {name: "scripts/bundles/dist/micromark.js", format: "iife"},
-        {name: "scripts/bundles/dist/monaco.js", format: "iife"},
-        {name: "scripts/bundles/dist/leaflet.js", format: "iife"},
+        // {name: "scripts/bundles/dist/micromark.js", format: "iife"},
+        // {name: "scripts/bundles/dist/monaco.js", format: "iife"},
+        // {name: "scripts/bundles/dist/leaflet.js", format: "iife"},
 
         // node_modules
         {name: "node_modules/color-input/dist/color-input.min.js", format: "iife"},
@@ -98,7 +98,8 @@ export class ExternalLibsPlugin{
           const filePath = path.join(projectRoot, libPath.name);
           
           if(fs.existsSync(filePath)){
-            const content = fs.readFileSync(filePath, "utf-8");
+            let content = fs.readFileSync(filePath, "utf-8");
+            content = content.replace(/\/\/[#@]\s*sourceMappingURL=.*/g, "");
             if(libPath.format === "iife") combinedLibraries += "(function() {\n";
             combinedLibraries += `\n/* ${libPath} */\n${content}\n`;
             if(libPath.format === "iife") combinedLibraries += "\n})();\n";

@@ -100,4 +100,8 @@ Ext.define("NOC.ip.ipam.Application", {
       },
     },
   ],
+  // Back/forward: re-run the controller's URL router against the current token.
+  applyHistory: function(){
+    this.getController().route();
+  },
 });

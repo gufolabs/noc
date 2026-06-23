@@ -159,16 +159,17 @@ Ext.define("NOC.core.MonacoPanel", {
     }
   },
   startPreview: function(record, backItem){
-    var bi = backItem === undefined ? this.backItem : backItem;
+    var bi = backItem === undefined ? this.backItem : backItem,
+      pool_label = Ext.util.Format.lowercase(record.get("pool__label"));
     this.currentRecord = record;
     this.backItem = bi;
     this.setTitle(Ext.String.format(this.previewName, record.get("name")));
-    this.fileName = Ext.String.format("{0}_{1}", Ext.util.Format.lowercase(record.get("pool__label")), record.get("address"));
+    this.fileName = `${pool_label}_${record.get("address")}`;
   },
   requestText: function(record){
     this.rootUrl = Ext.String.format(this.restUrl, record.get("id"));
     this.mask(__("Loading"));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: this.rootUrl,
       method: "GET",
       scope: this,
@@ -192,7 +193,7 @@ Ext.define("NOC.core.MonacoPanel", {
   requestRevisions: function(id){
     if(Ext.isEmpty(this.down("#revCombo"))) return;
     var url = (id ? Ext.String.format(this.restUrl, id) : this.rootUrl) + "revisions/";
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "GET",
       scope: this,
@@ -225,7 +226,7 @@ Ext.define("NOC.core.MonacoPanel", {
   },
   requestRevision: function(rev, callback){
     this.mask(__("Loading"));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: this.rootUrl + rev + "/",
       method: "GET",
       scope: this,

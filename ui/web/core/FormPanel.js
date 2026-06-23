@@ -22,7 +22,7 @@ Ext.define("NOC.core.FormPanel", {
     var me = this;
 
     if(me.restUrl){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: me.restUrl + "launch_info/",
         method: "GET",
         scope: me,

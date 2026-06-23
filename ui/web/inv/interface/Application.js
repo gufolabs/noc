@@ -252,7 +252,7 @@ Ext.define("NOC.inv.interface.Application", {
     } else{
       data["id"] = r.get("id");
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/interface/" + r.get("id") + "/",
       method: "POST",
       jsonData: data,
@@ -293,13 +293,13 @@ Ext.define("NOC.inv.interface.Application", {
     var me = this;
     Ext.Msg.show({
       title: __("Unlink interface"),
-      msg: Ext.String.format("Do you wish to unlink interface {0}?", ifaceName),
+      msg: `Do you wish to unlink interface ${ifaceName}?`,
       buttons: Ext.Msg.YESNO,
       icon: Ext.window.MessageBox.QUESTION,
       modal: true,
       fn: function(button){
         if(button === "yes"){
-          Ext.Ajax.request({
+          NOC.api.requestLegacy({
             url: "/inv/interface/unlink/" + ifaceId + "/",
             method: "POST",
             scope: me,
@@ -368,8 +368,7 @@ Ext.define("NOC.inv.interface.Application", {
         objectId: scope.currentRecord.get("managed_object"),
         data: data,
         name: scope.currentRecord.get("name"),
-        title: Ext.String.format("MACs on {0}",
-                                 scope.currentRecord.get("name")),
+        title: `MACs on ${scope.currentRecord.get("name")}`,
       });
     } else{
       NOC.error(__("Failed to get data"));

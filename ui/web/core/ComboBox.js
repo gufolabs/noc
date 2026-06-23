@@ -188,7 +188,7 @@ Ext.define("NOC.core.ComboBox", {
         return;
       }
       params[this.valueField] = value;
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: this.restUrl,
         method: "GET",
         scope: this,

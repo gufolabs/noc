@@ -12,7 +12,7 @@ Ext.define("NOC.sa.monitor.FilterController", {
   ],
 
   restoreFilter: function(){
-    var queryStr = Ext.util.History.getToken().split("?")[1],
+    var queryStr = NOC.navigation.getToken().split("?")[1],
       obj;
 
     if(queryStr){

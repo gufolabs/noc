@@ -767,7 +767,7 @@ class AlarmApplication(ExtApplication):
         url=r"^(?P<id>[a-z0-9]{24})/clear/",
         method=["POST"],
         api=True,
-        access="launch",
+        access="clear",
         validate={
             "msg": UnicodeParameter(default=""),
         },

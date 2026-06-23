@@ -20,7 +20,7 @@ Ext.define("NOC.core.filter.FilterController", {
   },
 
   restoreFilter: function(){
-    var queryStr = Ext.util.History.getToken().split("?")[1];
+    var queryStr = NOC.navigation.getToken().split("?")[1];
     var parentXtype = this.view.selectionStore.split(".")[0];
     var selectionStoreName = this.view.selectionStore.split(".")[1];
     var view = this.getView().findParentByType(parentXtype);
@@ -124,7 +124,7 @@ Ext.define("NOC.core.filter.FilterController", {
   },
 
   cleanAllFilters: function(){
-    Ext.History.add(this.view.appId);
+    NOC.navigation.navigate(this.view.appId);
     this.view.viewModel.set("filterObject", {});
     this.onCleanFavorite();
     Ext.Array.each(this.lookupFields(), function(item){
@@ -174,7 +174,7 @@ Ext.define("NOC.core.filter.FilterController", {
       token = "?" + query;
     }
 
-    Ext.History.add(this.view.appId + token, true);
+    NOC.navigation.navigate(this.view.appId + token, {dedup: true});
     this.reload();
   },
 
@@ -207,7 +207,7 @@ Ext.define("NOC.core.filter.FilterController", {
       token = "?" + query;
     }
 
-    Ext.History.add(this.view.appId + token, true);
+    NOC.navigation.navigate(this.view.appId + token, {dedup: true});
     this.reload();
   },
 

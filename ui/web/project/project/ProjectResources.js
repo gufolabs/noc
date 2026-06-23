@@ -49,7 +49,7 @@ Ext.define("NOC.project.project.ProjectResources", {
   //
   preview: function(record){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/project/project/" + record.get("id") + "/resources/",
       method: "GET",
       scope: me,

@@ -251,11 +251,11 @@ Ext.define("NOC.sa.managedobject.Controller", {
           }
         }
       }
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         method: "POST",
         params: JSON.stringify({objects: objects, config: config}),
         headers: {"Content-Type": "application/json"},
-        url: Ext.String.format("/sa/runcommands/render/{0}/{1}/", mode, me.idForRender),
+        url: `/sa/runcommands/render/${mode}/${me.idForRender}/`,
 
         success: function(response){
           var obj = Ext.decode(response.responseText);
@@ -359,8 +359,8 @@ Ext.define("NOC.sa.managedobject.Controller", {
 
     if(newValue){
       this.idForRender = newValue;
-      Ext.Ajax.request({
-        url: Ext.String.format("/sa/runcommands/form/{0}/{1}/", mode, newValue),
+      NOC.api.requestLegacy({
+        url: `/sa/runcommands/form/${mode}/${newValue}/`,
 
         success: function(response){
           var obj = Ext.decode(response.responseText);
@@ -535,7 +535,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
       );
 
       selectionGrid.mask(__("Loading"));
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: this.lookupReference("saManagedobjectSelectionGrid").getStore().rest_url,
         method: "POST",
         jsonData: params,
@@ -577,7 +577,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
     formPanel.ids = selectedIds;
     this.clearForm(form);
     parentCmp.mask(__("Loading"));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: this.url + "full/",
       method: "POST",
       scope: this,
@@ -682,7 +682,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
     var action = record.get("fav_status") ? "reset" : "set",
       url = "/sa/managedobject/favorites/item/" + record.id + "/" + action + "/";
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "POST",
       success: function(){
@@ -708,7 +708,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
     if(gridView){
       gridView.mask(__("Loading"));
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "GET",
       scope: this,
@@ -773,7 +773,12 @@ Ext.define("NOC.sa.managedobject.Controller", {
             view.setHistoryHash(data.id);
           }
           this.dirtyReset(form);
-          view.getLayout().setActiveItem("managedobject-form").down().setActiveItem("managedobject-form-panel");
+          // Do not chain off setActiveItem(): the Card layout returns false
+          // when the target card is already active (e.g. on back/forward while
+          // already on the form), which would crash on .down(). Look the form
+          // container up explicitly instead.
+          view.getLayout().setActiveItem("managedobject-form");
+          view.down("[itemId=managedobject-form]").down().setActiveItem("managedobject-form-panel");
           this.displayButtons(isEmbedded === undefined ? standardMode : embeddedMode);
           if(suffix){
             formView.getController().itemPreview("sa-" + suffix);
@@ -846,7 +851,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
              }, this);
   },
   showMapHandler: function(record){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + record.get("id") + "/map_lookup/",
       method: "GET",
       scope: this,
@@ -896,7 +901,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
     var me = this,
       basketStore = this.lookupReference("saManagedobjectSelectedGrid1").getStore(),
       ids = Ext.Array.map(basketStore.getData().items, function(record){return record.id});
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + "actions/" + actionName + "/",
       method: "POST",
       scope: me,
@@ -922,7 +927,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
     });
     if(ids.length > 0){
       basketGrid.mask(__("Loading"));
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: this.url + "full/",
         method: "POST",
         scope: this,
@@ -955,7 +960,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
   },
   restoreSearchField: function(){
     var param = "__query",
-      queryStr = Ext.util.History.getToken().split("?")[1];
+      queryStr = NOC.navigation.getToken().split("?")[1];
     if(queryStr && queryStr.includes(param)){
       var query = Ext.Object.fromQueryString(queryStr, true);
       this.getView().down("[itemId=" + param + "]").setValue(query[param]);
@@ -985,7 +990,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
   },
   saveFilterToUrl: function(filter){
     var params = Ext.Object.toQueryString(filter, true)
-      , currentHash = Ext.History.getHash()
+      , currentHash = NOC.navigation.getToken()
       , index = currentHash.indexOf("?")
       , app;
     if(index === -1){
@@ -994,9 +999,9 @@ Ext.define("NOC.sa.managedobject.Controller", {
       app = currentHash.substr(0, index);
     }
     if(params){
-      Ext.History.add(app + "?" + params);
+      NOC.navigation.navigate(app + "?" + params);
     } else{
-      Ext.History.add(app);
+      NOC.navigation.navigate(app);
     }
   },
 });

@@ -13,6 +13,9 @@
 		// Dockerfile target
 		"target": "devcontainer"
 	},
+	"forwardPorts": [
+		3000
+	],
 	// Environment
 	"containerEnv": {
 		"PYTHONPATH": "src"

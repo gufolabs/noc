@@ -107,7 +107,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
     });
     if(!Ext.Object.isEmpty(values)){
       values.ids = formPanel.ids;
-      var message = Ext.String.format("Do you wish to change {0} record(s): <br/><br/>{1}<br/>This operation cannot be undone!", values.ids.length, valuesTxt);
+      var message = `Do you wish to change ${values.ids.length} record(s): <br/><br/>${valuesTxt}<br/>This operation cannot be undone!`;
       Ext.Msg.show({
         title: __("Change records?"),
         msg: message,
@@ -117,7 +117,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
         scope: this,
         fn: function(button){
           if(button === "yes"){
-            Ext.Ajax.request({
+            NOC.api.requestLegacy({
               url: "/sa/managedobject/actions/group_edit/",
               method: "POST",
               scope: me,
@@ -315,7 +315,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
     record.self.setProxy({type: "managedobject"});
     if(formPanel.recordId){
       this.getView().mask(__("Deleting ..."));
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/sa/managedobject/" + formPanel.recordId + "/",
         method: "DELETE",
         scope: this,
@@ -356,6 +356,17 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
     if(activeItem !== false){
       activeItem.app = mainView.up("[itemId=sa-managedobject]");
       activeItem.preview(backItem.currentRecord, backItem);
+      // Reflect the sub-view in the URL as sa.managedobject/<id>/<suffix>.
+      // Restored on reload via Controller.init -> editManagedObject(id, suffix)
+      // which calls itemPreview("sa-" + suffix). dedup avoids a duplicate
+      // history entry when we are the ones restoring from the URL.
+      var app = mainView.up("[appId=sa.managedobject]"),
+        record = backItem.currentRecord,
+        suffix = itemName.replace(/^sa-/, "");
+      if(app && record){
+        app.currentHistoryHash = [app.appId, record.id, suffix].join("/");
+        NOC.navigation.navigate(app.currentHistoryHash, {dedup: true});
+      }
     }
   },
   addTooltip: function(element){

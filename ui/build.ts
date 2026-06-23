@@ -173,11 +173,25 @@ const commonOptions: BuilderOptions = {
 let builder: BaseBuilder;
 
 switch(mode){
-  case "dev":
+  case "dev": {
+    const externalJsPath = path.join(commonOptions.buildDir, "external.js");
+    if(!fs.existsSync(externalJsPath)){
+      console.log("[dev] external.js not found — running vendor-dev build first...");
+      await new VendorBuilder({
+        ...commonOptions,
+        cssEntryPoints: undefined,
+        entryPoint: [`${commonOptions.cacheDir}/vendor.js`],
+        esbuildOptions: {
+          ...commonOptions.esbuildOptions,
+          entryNames: "external.js",
+        },
+      }).start();
+    }
     builder = new DevBuilder({
       ...commonOptions,
     });
     break;
+  }
   case "prod":
     builder = new ProdBuilder({
       ...commonOptions,

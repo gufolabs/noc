@@ -21,8 +21,8 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
   mixins: [
     "NOC.core.mixins.Ballon",
     "NOC.inv.inv.plugins.Mixins",
+    "NOC.core.mixins.Polling",
   ],
-  pollingTaskId: undefined,
   pollingInterval: 5000,
   // ViewModel for this panel
   viewModel: {
@@ -140,7 +140,6 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
       items: [me.mapPanel],
     });
     me.callParent();
-    this.subscribeToEvents();
   },
   //
   preview: function(data){
@@ -233,7 +232,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
       return;
     }
     if(me.map.hasLayer(layer)){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/inv/inv/plugin/map/layers/" + me.getQuery(layer.options.nocCode),
         method: "GET",
         scope: me,
@@ -263,7 +262,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
       }
     
       if(me.map.hasLayer(layer)){
-        Ext.Ajax.request({
+        NOC.api.requestLegacy({
           url: "/inv/inv/plugin/map/layers/" + me.getQuery(layer.options.nocCode),
           method: "GET",
           scope: me,
@@ -363,7 +362,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
   //
   visibilityHandler: function(e){
     var me = this, status = e.type === "add";
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/plugin/map/layer_visibility/",
       method: "POST",
       jsonData: {
@@ -392,7 +391,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
     
     this.getViewModel().set("icon", this.generateIcon(true, "spinner", "grey", __("loading")));
     
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/resource_status/",
       method: "POST",
       jsonData: {
@@ -511,7 +510,7 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
     var me = this;
     if(me.setPositionButton.pressed){
       me.setPositionButton.toggle(false);
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/inv/inv/" + me.currentId + "/plugin/map/set_geopoint/",
         method: "POST",
         jsonData: {
@@ -586,74 +585,10 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
     this.getViewModel().set("autoReloadText", __("Auto reload : ") + (isReloading ? __("ON") : __("OFF")));
   },
   //
-  generateIcon: function(isUpdatable, icon, color, msg){
-    if(isUpdatable){
-      return `<i class='fa fa-${icon}' style='color:${color};width:16px;' data-qtip='${msg}'></i>`;
-    }
-    return "<i class='fa fa-fw' style='width:16px;'></i>";
-  },
-  //
-  startPolling: function(){
-    var me = this;
-    
-    if(this.observer){
-      this.stopPolling();
-    }
-    
-    this.observer = new IntersectionObserver(function(entries){
-      if(me.destroyed) return;
-      me.isIntersecting = entries[0].isIntersecting;
-      me.disableHandler(!entries[0].isIntersecting);
-    }, {
-      threshold: 0.1,
-    });
-    
-    if(this.getEl() && this.getEl().dom){
-      this.observer.observe(this.getEl().dom);
-    }
-    
-    if(Ext.isEmpty(this.pollingTaskId)){
-      this.pollingTaskId = Ext.TaskManager.start({
-        run: this.pollingTask,
-        interval: this.pollingInterval,
-        scope: this,
-      });
-    } else{
-      this.pollingTask();
-    }
-  },
-  //
-  stopPolling: function(){
-    if(this.pollingTaskId){
-      Ext.TaskManager.stop(this.pollingTaskId);
-      this.pollingTaskId = undefined;
-    }
-    if(this.observer && this.getEl() && this.getEl().dom){
-      this.observer.unobserve(this.getEl().dom);
-      this.observer.disconnect();
-      this.observer = null;
-    }
-  },
-  //
   pollingTask: function(){
     if(this.destroyed) return;
-    
-    let isVisible = !document.hidden, // check is user has switched to another tab browser
-      isFocused = document.hasFocus(), // check is user has minimized browser window
-      isIntersecting = this.isIntersecting; // switch to other application tab
-    if(isIntersecting && isVisible && isFocused){ // check is user has switched to another tab or minimized browser window
+    if(!document.hidden && this.isFocused() && this.isIntersecting){
       this.updateStatuses();
-    }
-  },
-  //
-  disableHandler: function(state){
-    if(this.destroyed) return;
-    
-    var isVisible = !document.hidden, // check is user has switched to another tab browser
-      isIntersecting = this.isIntersecting; // switch to other application tab
-    if(this.pollingTaskId && isIntersecting && isVisible){
-      this.setContainerDisabled(state);
-      this.pollingTask();
     }
   },
   //
@@ -671,57 +606,20 @@ Ext.define("NOC.inv.inv.plugins.map.MapPanel", {
       this.getViewModel().set("icon", icon);
     }
   },
-  subscribeToEvents: function(){
-    this.handleWindowFocus = this.handleWindowFocus.bind(this);
-    this.handleWindowBlur = this.handleWindowBlur.bind(this);
-    window.addEventListener("focus", this.handleWindowFocus);
-    window.addEventListener("blur", this.handleWindowBlur);
-  },
-  
-  unsubscribeFromEvents: function(){
-    if(this.handleWindowFocus){
-      window.removeEventListener("focus", this.handleWindowFocus);
-    }
-    if(this.handleWindowBlur){
-      window.removeEventListener("blur", this.handleWindowBlur);
-    }
-  },
   //
   destroy: function(){
-    this.destroyed = true;
-    
-    this.unsubscribeFromEvents();
     this.stopPolling();
     this.setContainerDisabled(false);
-    
     if(this.contextMenu){
       this.contextMenu.destroy();
       this.contextMenu = null;
     }
-    
     if(this.layers){
       this.layers = null;
     }
-    
     this.isRefreshing = false;
     this.isUpdatingStatuses = false;
-    
     this.callParent();
-  },
-  //
-  handleWindowFocus: function(){
-    if(this.destroyed) return;
-    var me = this;
-    setTimeout(function(){
-      if(!me.destroyed){
-        me.disableHandler(false);
-      }
-    }, 100);
-  },
-  //
-  handleWindowBlur: function(){
-    if(this.destroyed) return;
-    this.disableHandler(true);
   },
   //
   getVisibleFeaturesInLayer: function(layer){

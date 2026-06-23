@@ -136,7 +136,7 @@ Ext.define("NOC.wf.workflow.Application", {
   onClone: function(){
     var me = this;
     if(me.currentRecord){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/wf/workflow/" + me.currentRecord.get("id") + "/clone/",
         method: "POST",
         scope: me,

@@ -121,7 +121,7 @@ Ext.define("NOC.support.account.ChangeCredentials", {
   //
   changeCredentials: function(values){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       method: "POST",
       url: "/support/account/account/change_password/",
       params: values,

@@ -338,7 +338,7 @@ Ext.define("NOC.core.combotree.ComboTree", {
         return;
       }
       params[me.valueField] = value;
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: me.restUrl + "lookup/",
         method: "GET",
         scope: me,

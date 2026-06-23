@@ -162,7 +162,7 @@ Ext.define("NOC.sa.managedobject.CPEPanel", {
     var me = this;
     me.callParent(arguments);
     me.setTitle(record.get("name") + " CPE");
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + record.get("id") + "/cpe/",
       method: "GET",
       scope: me,

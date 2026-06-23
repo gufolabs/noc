@@ -30,4 +30,13 @@ Ext.define("NOC.sa.discoveredobject.Application", {
   listeners: {
     afterrender: "onAfterRender",
   },
+  // Back/forward: re-apply the filter carried in the URL query via the sidebar.
+  applyHistory: function(){
+    var list = this.lookup("sa-discoveredobject-list"),
+      sidebar = list && Ext.isFunction(list.lookup) ? list.lookup("sa-discovered-sidebar") : null,
+      ctrl = sidebar && Ext.isFunction(sidebar.getController) ? sidebar.getController() : null;
+    if(ctrl && Ext.isFunction(ctrl.restoreFilter)){
+      ctrl.restoreFilter();
+    }
+  },
 });
