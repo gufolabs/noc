@@ -41,28 +41,28 @@ class Script(BaseScript):
                 "name": "smgFan0",
                 "status": True,
                 "description": "Current fan #0 speed",
-                "measurement": "1",
+                "measurement": "RPM",
                 "snmp_oid": "1.3.6.1.4.1.35265.1.29.35.3.0",
             },
             {
                 "name": "smgFan1",
                 "status": True,
                 "description": "Current fan #1 speed",
-                "measurement": "1",
+                "measurement": "RPM",
                 "snmp_oid": "1.3.6.1.4.1.35265.1.29.35.4.0",
             },
             {
                 "name": "smgFan2",
                 "status": True,
                 "description": "Current fan #2 speed",
-                "measurement": "1",
+                "measurement": "RPM",
                 "snmp_oid": "1.3.6.1.4.1.35265.1.29.35.5.0",
             },
             {
                 "name": "smgFan3",
                 "status": True,
                 "description": "Current fan #3 speed",
-                "measurement": "1",
+                "measurement": "RPM",
                 "snmp_oid": "1.3.6.1.4.1.35265.1.29.35.6.0",
             },
         ]
@@ -75,7 +75,7 @@ class Script(BaseScript):
                     "name": f"{module_number}.{metric_name}",
                     "status": True,
                     "description": "",
-                    "measurement": "1",
+                    "measurement": "StatusEnum",
                     "snmp_oid": f"{metric_oid}.{module_number}",
                 }
                 r.append(d)

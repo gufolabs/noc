@@ -200,7 +200,7 @@
                 {% set s = trunk_groups_data_en_st[tg_name][0] %}
                 {{sensors(s, s.bi_ids[0], s.bi_ids[1], loop.index)}}
                 ,
-                {% from "graph_sensor_value.j2" import sensors -%}
+                {% from "graph_trunk_capacity.j2" import sensors -%}
                 {% set s = trunk_groups_data[tg_name][1] %}
                 {{sensors(s, loop.index)}}
                 ,

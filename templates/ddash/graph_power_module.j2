@@ -48,7 +48,7 @@
     }
   ],
  {% endif %}
-  "span": 4,
+  "span": 3,
   "stack": false,
   "steppedLine": false,
   "targets": [
@@ -101,6 +101,40 @@
       "min": null,
       "label": null
     }
-  ]
+  ],
+  "fieldConfig": {
+    "defaults": {
+      "mappings": [
+        {
+          "type": "value",
+          "options": {
+            "1": {
+              "text": "yes",
+              "index": 0
+            },
+            "2": {
+              "text": "no",
+              "color": "red",
+              "index": 1
+            }
+          }
+        }
+      ],
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "value": null,
+            "color": "green"
+          },
+          {
+            "value": 80,
+            "color": "red"
+          }
+        ]
+      }
+    },
+    "overrides": []
+  }
 }
 {%- endmacro %}

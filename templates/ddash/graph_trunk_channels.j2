@@ -48,13 +48,13 @@
     }
   ],
  {% endif %}
-  "span": 4,
+  "span": 3,
   "stack": false,
   "steppedLine": false,
   "targets": [
     {
       "intervalFactor": 1,
-      "query": "SELECT t, groupArray((name, Value)) AS groupArr FROM ( SELECT $timeSeries as t, argMax(value, t) as Value, name FROM $table WHERE (sensor in ({{s1_bi_id}}, {{s2_bi_id}}, {{s3_bi_id}})) and $timeFilter GROUP BY name, t ORDER BY t) GROUP BY t  ORDER BY t ASC",
+      "query": "SELECT t, groupArray((name, Value)) AS groupArr FROM ( SELECT $timeSeries as t, argMax(value, t) as Value, name FROM $table WHERE (sensor in ({{s1_bi_id}}, {{s2_bi_id}}, {{s3_bi_id}})) and $timeFilter GROUP BY name, t ORDER BY name, t) GROUP BY t  ORDER BY t ASC",
       "refId": "A",
       "resultFormat": "time_series",
       "database": "{{ noc_db_metrics }}",
