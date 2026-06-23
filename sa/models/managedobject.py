@@ -1752,9 +1752,7 @@ class ManagedObject(NOCModel):
             if not iprofile or not iprofile.interface_validation_policy:
                 continue
             for ifname in doc["ifaces"]:
-                yield from iprofile.interface_validation_policy.iter_problems(
-                    confdb, ifname=ifname
-                )
+                yield from iprofile.interface_validation_policy.iter_problems(confdb, ifname=ifname)
 
     @property
     def credentials(self) -> Credentials:
