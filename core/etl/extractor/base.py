@@ -383,7 +383,7 @@ class BaseExtractor:
                             ]
                             + [p.message.encode("utf-8")]
                         )
-            except IOError as e:
+            except OSError as e:
                 self.logger.error("Error when saved problems %s", e)
         else:
             self.logger.info("No problems detected")

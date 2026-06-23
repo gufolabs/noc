@@ -181,7 +181,7 @@ def tail(path, lines):
         while True:
             try:
                 f.seek(-avg * lines, 2)
-            except IOError:
+            except OSError:
                 f.seek(0)
             pos = f.tell()
             ln = f.read().splitlines()

@@ -180,7 +180,7 @@ class GridVCS:
                     return smart_text(self.decompress(f.read(), f._file.get("c")))
             except gridfs.errors.NoFile:
                 return None
-        data = str()
+        data = ""
         for r in self.iter_revisions(object, reverse=True):
             with self.fs.get(r.id) as f:
                 delta = self.decompress(f.read(), f._file.get("c"))

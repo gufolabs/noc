@@ -368,8 +368,7 @@ class Command(BaseCommand):
             if a.size == 1:
                 yield a
                 continue
-            for x in a.iter_address(count=a.size):
-                yield x
+            yield from a.iter_address(count=a.size)
 
     @classmethod
     def iter_address_scan(cls) -> Iterable[IP]:
@@ -387,8 +386,7 @@ class Command(BaseCommand):
                 if p.size == 1:
                     yield p
                     continue
-                for x in p.iter_address(count=p.size):
-                    yield x
+                yield from p.iter_address(count=p.size)
 
     @staticmethod
     def parse_credentials(

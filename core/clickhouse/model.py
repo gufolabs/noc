@@ -142,8 +142,7 @@ class Model(metaclass=ModelBase):
         :return:
         """
         for field in cls._meta.ordered_fields:
-            for fn, db_type in field.iter_create_sql():
-                yield fn, db_type
+            yield from field.iter_create_sql()
 
     @classmethod
     def get_materialized_columns(cls) -> List[str]:

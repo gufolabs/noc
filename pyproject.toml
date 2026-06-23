@@ -156,13 +156,9 @@ lint.ignore = [
   "UP007", # Use `X | Y` for type annotations
   "UP014", # Convert `PathInfo` from `NamedTuple` functional to class syntax
   "UP017", # Use `datetime.UTC` alias
-  "UP018", # Unnecessary `str` call (rewrite as a literal)
-  "UP024", # Replace aliased errors with `OSError`
-  "UP028", # Replace `yield` over `for` loop with `yield from`
   "UP030", # Use implicit references for positional format fields
   "UP031", # Use format specifiers instead of percent format
   "UP032", # Use f-string instead of `format` call
-  "UP034", # Avoid extraneous parentheses
   "UP035", # `typing.Dict` is deprecated, use `dict` instead
   "UP041", # Replace aliased errors with `TimeoutError`
   "UP042", # Class Interaction inherits from both `str` and `enum.Enum`

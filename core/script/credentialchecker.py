@@ -148,11 +148,10 @@ class CredentialChecker:
         :param order:
         :return:
         """
-        for p in sorted(
+        yield from sorted(
             set(args[0]).intersection(*[set(s) for s in args[1:] if s]),
             key=lambda x: order.index(x),
-        ):
-            yield p
+        )
 
     @staticmethod
     def is_unsupported_error(message) -> bool:

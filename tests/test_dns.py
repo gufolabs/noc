@@ -15,9 +15,9 @@ from noc.core.dns.encoding import from_idna, to_idna, is_idna
 @pytest.mark.parametrize(
     "input,expected",
     [
-        (str("example.com"), False),
-        (str("example.xn--p1ai"), True),
-        (str("xn--e1afmkfd.xn--p1ai"), True),
+        ("example.com", False),
+        ("example.xn--p1ai", True),
+        ("xn--e1afmkfd.xn--p1ai", True),
     ],
 )
 def test_is_idna(input, expected):
@@ -27,9 +27,9 @@ def test_is_idna(input, expected):
 @pytest.mark.parametrize(
     "input,expected",
     [
-        (str("example.com"), str("example.com")),
-        (str("example.xn--p1ai"), str("example.рф")),
-        (str("xn--e1afmkfd.xn--p1ai"), str("пример.рф")),
+        ("example.com", "example.com"),
+        ("example.xn--p1ai", "example.рф"),
+        ("xn--e1afmkfd.xn--p1ai", "пример.рф"),
     ],
 )
 def test_from_idna(input, expected):
@@ -39,9 +39,9 @@ def test_from_idna(input, expected):
 @pytest.mark.parametrize(
     "input,expected",
     [
-        (str("example.com"), str("example.com")),
-        (str("example.рф"), str("example.xn--p1ai")),
-        (str("пример.рф"), str("xn--e1afmkfd.xn--p1ai")),
+        ("example.com", "example.com"),
+        ("example.рф", "example.xn--p1ai"),
+        ("пример.рф", "xn--e1afmkfd.xn--p1ai"),
     ],
 )
 def test_to_idna(input, expected):

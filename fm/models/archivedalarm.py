@@ -268,8 +268,7 @@ class ArchivedAlarm(Document):
         """
         if not self.groups:
             return
-        for a in ArchivedAlarm.objects.filter(groups__in=self.groups):
-            yield a
+        yield from ArchivedAlarm.objects.filter(groups__in=self.groups)
 
     def set_escalation_close_error(self, error):
         self.escalation_error = error

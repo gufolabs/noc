@@ -283,12 +283,11 @@ class ReportDsAlarms(ReportDataSource):
                 pipeline += [{"$match": match_duration}]
 
             # print(pipeline, alarm_collections)
-            for row in (
+            yield from (
                 coll._get_collection()
                 .with_options(read_preference=ReadPreference.SECONDARY_PREFERRED)
                 .aggregate(pipeline)
-            ):
-                yield row
+            )
 
     def extract(self) -> Iterable[Dict[str, int]]:
         # moss = MOCache()

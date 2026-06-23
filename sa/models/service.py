@@ -665,8 +665,7 @@ class Service(Document):
             if item.service:
                 yield item.service
             if item.group and item.group.technology.service_model == "sa.Service":
-                for svc in Service.objects.filter(effective_service_groups=item.group):
-                    yield svc
+                yield from Service.objects.filter(effective_service_groups=item.group)
 
     def iter_dependency_status(self) -> Iterable[Tuple[Status, "Service"]]:
         """Iterate over dependency services status"""
@@ -1472,8 +1471,7 @@ class Service(Document):
             run_policy="D",
             checks=[Check(name=CAPS_PROFILE_CHECK, address="*")],
         )
-        for dc in ObjectDiagnosticConfig.iter_object_diagnostics(self):
-            yield dc
+        yield from ObjectDiagnosticConfig.iter_object_diagnostics(self)
         # yield from self.profile.iter_diagnostic_configs(self)
 
     @classmethod

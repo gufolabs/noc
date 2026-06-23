@@ -236,8 +236,7 @@ class AlarmRuleSet:
         """
         Iterable candidate rules with matching labels
         """
-        for rule in self.common_rules:
-            yield rule
+        yield from self.common_rules
 
     def iter_rules(self, alarm: ActiveAlarm) -> Iterable[AlarmRule]:
         """

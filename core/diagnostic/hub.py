@@ -158,8 +158,7 @@ class DiagnosticHub:
         """"""
         if self.__diagnostics is None:
             self.__load_diagnostics()
-        for d in self.__diagnostics.values():
-            yield d
+        yield from self.__diagnostics.values()
 
     def __iter__(self) -> Iterable[DiagnosticItem]:
         yield from self.iter_diagnostics()

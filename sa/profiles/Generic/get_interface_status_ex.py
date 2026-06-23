@@ -100,8 +100,7 @@ class Script(BaseScript):
             yield iface["ifindex"], iface["interface"]
         if interfaces:
             return
-        for ifindex, name in self.get_iftable(self.get_ifname_oid()):
-            yield ifindex, name
+        yield from self.get_iftable(self.get_ifname_oid())
 
     def get_data(self, interfaces=None, raw_speed_value=False):
         # ifIndex -> ifName mapping

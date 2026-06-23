@@ -26,26 +26,23 @@ DAY_PATTERNS = [
     ),
     (
         RC(r"^(\d{2})\.(\d{2})-(\d{2})\.(\d{2})$"),
-        lambda from_day,
-        from_month,
-        to_day,
-        to_month: "('%s%s' <= ('%%02d%%02d' %% (T.month, T.day)) <= '%s%s')"
-        % (from_month, from_day, to_month, to_day),
+        lambda from_day, from_month, to_day, to_month: (
+            "('%s%s' <= ('%%02d%%02d' %% (T.month, T.day)) <= '%s%s')"
+            % (from_month, from_day, to_month, to_day)
+        ),
     ),
     (
         RC(r"^(\d{2})\.(\d{2})\.(\d{4})$"),
-        lambda day, month, year: "(T.day == %d and T.month == %d and T.year == %d)"
-        % (int(day), int(month), int(year)),
+        lambda day, month, year: (
+            "(T.day == %d and T.month == %d and T.year == %d)" % (int(day), int(month), int(year))
+        ),
     ),
     (
         RC(r"^(\d{2})\.(\d{2})\.(\d{4})-(\d{2})\.(\d{2})\.(\d{4})$"),
-        lambda from_day,
-        from_month,
-        from_year,
-        to_day,
-        to_month,
-        to_year: "('%s%s%s' <= ('%%04d%%02d%%02d' %% (T.year, T.month, T.day)) <= '%s%s%s')"
-        % (from_year, from_month, from_day, to_year, to_month, to_day),
+        lambda from_day, from_month, from_year, to_day, to_month, to_year: (
+            "('%s%s%s' <= ('%%04d%%02d%%02d' %% (T.year, T.month, T.day)) <= '%s%s%s')"
+            % (from_year, from_month, from_day, to_year, to_month, to_day)
+        ),
     ),
     (
         RC(r"^%s$" % DoWRE, re.IGNORECASE),
@@ -53,8 +50,9 @@ DAY_PATTERNS = [
     ),
     (
         RC(r"^%s-%s$" % (DoWRE, DoWRE), re.IGNORECASE),
-        lambda from_dow, to_dow: "(%d <= T.weekday() <= %d)"
-        % (DoW.index(from_dow.lower()), DoW.index(to_dow)),
+        lambda from_dow, to_dow: (
+            "(%d <= T.weekday() <= %d)" % (DoW.index(from_dow.lower()), DoW.index(to_dow))
+        ),
     ),
 ]
 
@@ -66,8 +64,10 @@ TIME_PATTERNS = [
     ),
     (
         RC(r"^(\d{2}):(\d{2})-(\d{2}):(\d{2})$"),
-        lambda from_hour, from_minute, to_hour, to_minute: "(%d <= (T.hour * 60 + T.minute) <= %d)"
-        % (int(from_hour) * 60 + int(from_minute), int(to_hour) * 60 + int(to_minute)),
+        lambda from_hour, from_minute, to_hour, to_minute: (
+            "(%d <= (T.hour * 60 + T.minute) <= %d)"
+            % (int(from_hour) * 60 + int(from_minute), int(to_hour) * 60 + int(to_minute))
+        ),
     ),
 ]
 
