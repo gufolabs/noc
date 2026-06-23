@@ -8,7 +8,7 @@
 # NOC modules
 
 
-class OverlayHandler(object):
+class OverlayHandler:
     def __init__(self, **config):
         """
         Overlay configuration will be passed

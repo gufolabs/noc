@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 
-class ConfigurationContextManager(object):
+class ConfigurationContextManager:
     """
     Configuration context manager to use with "with" statement
     """
@@ -24,7 +24,7 @@ class ConfigurationContextManager(object):
             self.script.leave_config()
 
 
-class CacheContextManager(object):
+class CacheContextManager:
     def __init__(self, script):
         self.script = script
         self.changed = False
@@ -39,7 +39,7 @@ class CacheContextManager(object):
             self.script.root.is_cached = False
 
 
-class IgnoredExceptionsContextManager(object):
+class IgnoredExceptionsContextManager:
     """
     Silently ignore specific exceptions
     """

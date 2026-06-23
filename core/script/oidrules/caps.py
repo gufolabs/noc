@@ -9,7 +9,7 @@
 from .loader import load_rule
 
 
-class CapabilityRule(object):
+class CapabilityRule:
     """
     Capability-based selection
 

@@ -11,7 +11,7 @@ from .node import Node
 from .marshall.loader import loader
 
 
-class ConfDB(object):
+class ConfDB:
     def __init__(self):
         self.db = Node(None)
 

@@ -25,7 +25,7 @@ from noc.core.comp import smart_bytes, smart_text
 from .revision import Revision
 
 
-class GridVCS(object):
+class GridVCS:
     T_FILE = "F"
     T_BDIFF = "b"
     T_BSDIFF4 = "B"

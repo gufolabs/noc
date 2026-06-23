@@ -69,7 +69,7 @@ rx_md_anchor = re.compile(r"[ _\|\(\)/]+")
 
 
 @dataclass(order=True)
-class Metric(object):
+class Metric:
     scope: str
     name: str
     field_name: str
@@ -107,7 +107,7 @@ class Metric(object):
 
 
 @dataclass
-class KeyField(object):
+class KeyField:
     field_name: str
     model: str
 
@@ -117,7 +117,7 @@ class KeyField(object):
 
 
 @dataclass
-class Label(object):
+class Label:
     label: str
     view_column: str
     store_column: str
@@ -132,7 +132,7 @@ class Label(object):
 
 
 @dataclass(order=True)
-class Data(object):
+class Data:
     """
     Collections data.
 

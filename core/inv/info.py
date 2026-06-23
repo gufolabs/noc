@@ -17,7 +17,7 @@ from noc.core.glyph import Glyph
 
 
 @dataclass
-class PathItem(object):
+class PathItem:
     label: str
     id: str | None = None
 
@@ -51,7 +51,7 @@ class ButtonAction(Enum):
 
 
 @dataclass
-class Button(object):
+class Button:
     label: str | None = None
     glyph: Glyph | None = None
     hint: str | None = None
@@ -75,7 +75,7 @@ class Button(object):
 
 
 @dataclass
-class Info(object):
+class Info:
     title: str | None = None
     description: str | None = None
     path: list[PathItem] | None = None

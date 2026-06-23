@@ -75,7 +75,7 @@ rx_md_anchor = re.compile(r"[ _\|\(\)/]+")
 
 
 @dataclass(order=True)
-class Var(object):
+class Var:
     name: str
     description: str
     type: str
@@ -121,7 +121,7 @@ class Action(Enum):
 
 
 @dataclass(order=True)
-class Disposition(object):
+class Disposition:
     alarm_class: str
     name: str
     action: Action
@@ -158,7 +158,7 @@ class Disposition(object):
 
 
 @dataclass(order=True)
-class Data(object):
+class Data:
     """
     Collections data.
 

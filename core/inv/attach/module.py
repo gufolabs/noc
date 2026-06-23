@@ -18,7 +18,7 @@ from ..result import Result
 
 
 @dataclass
-class ModulePosition(object):
+class ModulePosition:
     obj: Object
     name: str
 

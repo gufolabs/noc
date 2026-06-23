@@ -13,7 +13,7 @@ from noc.core.profile.base import BaseProfile
 from .typing import PortItem
 
 
-class BaseCollator(object):
+class BaseCollator:
     def __init__(self, profile: Optional[BaseProfile]):
         self.profile = profile
 

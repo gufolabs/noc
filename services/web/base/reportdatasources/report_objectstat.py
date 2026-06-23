@@ -25,7 +25,7 @@ from noc.inv.models.interface import Interface
 from noc.inv.models.link import Link
 
 
-class IsolatorClass(object):
+class IsolatorClass:
     """
     BaseClass for isolated set.
     Every Isolated Class split objects set by facets function.

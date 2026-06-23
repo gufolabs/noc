@@ -38,7 +38,7 @@ from .action import DROP, DUMP, FWD
 logger = logging.getLogger(__name__)
 
 
-class Router(object):
+class Router:
     DEFAULT_N_CHAIN = "default"
     DEFAULT_JOB_CHAIN = "default_job"
     DEFAULT_ETL_EVENT_PUSH_JOB_CHAIN = "default_etl_event_push"

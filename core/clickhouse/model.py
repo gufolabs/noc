@@ -53,7 +53,7 @@ class ModelBase(type):
         return cls
 
 
-class ModelMeta(object):
+class ModelMeta:
     def __init__(
         self,
         engine=None,
@@ -92,8 +92,8 @@ class ModelMeta(object):
         self.ordered_fields = sorted(self.fields.values(), key=operator.attrgetter("field_number"))
 
 
-class Model(object, metaclass=ModelBase):
-    class Meta(object):
+class Model(metaclass=ModelBase):
+    class Meta:
         engine = None
         db_table = None
         description = None
@@ -118,7 +118,7 @@ class Model(object, metaclass=ModelBase):
     @classmethod
     def wrap_table(cls, table_name):
         class WrapClass(Model):
-            class Meta(object):
+            class Meta:
                 db_table = table_name
 
         return WrapClass
@@ -560,7 +560,7 @@ class DictionaryBase(ModelBase):
         return cls
 
 
-class DictionaryMeta(object):
+class DictionaryMeta:
     def __init__(
         self,
         name=None,
@@ -609,7 +609,7 @@ class DictionaryMeta(object):
 
 
 class DictionaryModel(Model, metaclass=DictionaryBase):
-    class Meta(object):
+    class Meta:
         name = None
         engine = None
         source_model = None

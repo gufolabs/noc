@@ -170,7 +170,7 @@ class Command(BaseCommand):
             print(smart_bytes(job.out_buffer.getvalue()))
 
 
-class ServiceStub(object):
+class ServiceStub:
     def __init__(self):
         self.metrics = defaultdict(list)
         self.service_id = "stub"

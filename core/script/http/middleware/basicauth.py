@@ -28,6 +28,6 @@ class BasicAuthMiddeware(BaseMiddleware):
         user = self.user or self.http.script.credentials.get("user")
         password = self.password or self.http.script.credentials.get("password")
         if user and password:
-            uh = f"{user}:{password}".encode("utf-8")
+            uh = f"{user}:{password}".encode()
             headers["Authorization"] = b"Basic %s" % codecs.encode(uh, "base64").strip()
         return url, body, headers

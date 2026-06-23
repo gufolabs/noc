@@ -9,7 +9,7 @@
 from django.http import Http404
 
 
-class RepoInline(object):
+class RepoInline:
     def __init__(self, field, access="read"):
         self.field = field
         self.app = None

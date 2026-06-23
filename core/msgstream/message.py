@@ -11,7 +11,7 @@ from typing import Dict, Optional
 
 
 @dataclass
-class Message(object):
+class Message:
     value: bytes
     subject: str
     offset: int
@@ -22,7 +22,7 @@ class Message(object):
 
 
 @dataclass
-class PublishRequest(object):
+class PublishRequest:
     __slots__ = ("data", "headers", "key", "partition", "stream")
 
     stream: str

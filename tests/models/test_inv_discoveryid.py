@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Third-party modules
-from builtins import str
 import pytest
 
 # NOC modules

@@ -15,7 +15,7 @@ from noc.core.feature import Feature
 from ..views import InvApplication
 
 
-class InvPlugin(object):
+class InvPlugin:
     name = None
     js = None
     required_feature: Optional[Feature] = None

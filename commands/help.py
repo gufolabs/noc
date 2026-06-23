@@ -27,7 +27,7 @@ class Command(BaseCommand):
 
     def list_commands(self):
         def get_help_from_command(path: str) -> str:
-            with open(path, "r") as f:
+            with open(path) as f:
                 tree = ast.parse(f.read())
             for node in ast.walk(tree):
                 if isinstance(node, ast.ClassDef) and node.name == "Command":

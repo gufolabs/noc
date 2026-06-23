@@ -39,7 +39,7 @@ class Category(str, Enum):
 
 
 @dataclass
-class Subscriber(object):
+class Subscriber:
     __slots__ = ("input", "next", "node")
     node: "BaseCDAGNode"
     input: str
@@ -49,7 +49,7 @@ class Subscriber(object):
 config_proxy_sentinel = object()
 
 
-class ConfigProxy(object):
+class ConfigProxy:
     """
     Wrap BaseModel and override particular attributes
     """
@@ -126,7 +126,7 @@ class BaseCDAGNodeMetaclass(type):
         return n
 
 
-class BaseCDAGNode(object, metaclass=BaseCDAGNodeMetaclass):
+class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
     name: str
     state_cls: Type[BaseModel]
     config_cls: Type[BaseModel]

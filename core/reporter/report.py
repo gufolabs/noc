@@ -27,7 +27,7 @@ class DataSet:
     transpose_columns: Optional[List[str]] = None
 
 
-class Band(object):
+class Band:
     """
     Report Data for Band. Contains data, rows and format options
     """

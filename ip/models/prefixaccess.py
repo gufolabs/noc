@@ -25,7 +25,7 @@ from .vrf import VRF
 
 
 class PrefixAccess(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = _("Prefix Access")
         verbose_name_plural = _("Prefix Access")
         db_table = "ip_prefixaccess"

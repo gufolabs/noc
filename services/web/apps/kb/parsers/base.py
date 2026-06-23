@@ -11,7 +11,7 @@ from noc.core.validators import is_int
 BASE_PATH = "/api/card/view/kb"
 
 
-class BaseParser(object):
+class BaseParser:
     """
     Abstract parser class
     """

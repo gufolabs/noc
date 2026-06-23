@@ -9,7 +9,7 @@
 from typing import Iterator, Tuple
 
 
-class BaseTokenizer(object):
+class BaseTokenizer:
     name = None
 
     def __init__(self, data: str):

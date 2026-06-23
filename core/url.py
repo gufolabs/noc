@@ -18,7 +18,7 @@ class InvalidURLException(Exception):
     pass
 
 
-class URL(object):
+class URL:
     def __init__(self, url):
         self.url = url
         match = rx_url.match(self.url)

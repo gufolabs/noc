@@ -22,7 +22,7 @@ TModel = TypeVar("TModel", bound=Model)
 TDoc = TypeVar("TDoc", bound=Document)
 
 
-class ListOp(object):
+class ListOp:
     def __init__(self, name: str):
         self.name = name
 

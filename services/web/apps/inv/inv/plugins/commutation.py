@@ -21,14 +21,14 @@ from .base import InvPlugin
 
 
 @dataclass
-class ConnectionItem(object):
+class ConnectionItem:
     local_name: str
     remote_object: str
     remote_name: str
 
 
 @dataclass
-class Node(object):
+class Node:
     object: Object
     name: str
     model: str

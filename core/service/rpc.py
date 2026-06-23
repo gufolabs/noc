@@ -41,7 +41,7 @@ REQUEST_TIMEOUT = config.rpc.async_request_timeout
 _orjson_crash_lock = threading.Lock()
 
 
-class RPCProxy(object):
+class RPCProxy:
     """
     API Proxy
     """

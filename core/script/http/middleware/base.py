@@ -9,7 +9,7 @@
 from typing import Dict, Any
 
 
-class BaseMiddleware(object):
+class BaseMiddleware:
     name = None
 
     def __init__(self, http):

@@ -37,7 +37,7 @@ class Status(Enum):
 
 
 @dataclass
-class Threshold(object):
+class Threshold:
     c_min: str | None = None
     w_min: str | None = None
     w_max: str | None = None
@@ -95,7 +95,7 @@ class Type(Enum):
 
 
 @dataclass
-class Item(object):
+class Item:
     """
     Configuration item
     """
@@ -156,7 +156,7 @@ class Item(object):
 
 
 @dataclass
-class ParsedData(object):
+class ParsedData:
     groups: list[str]
     conf: list[Item]
     mgmt_url: str | None = None

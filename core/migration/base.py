@@ -10,7 +10,7 @@ from noc.core.mongo.connection import get_db
 from .db import db
 
 
-class BaseMigration(object):
+class BaseMigration:
     depends_on = []
     db = db
 

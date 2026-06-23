@@ -43,7 +43,7 @@ DataItems = RootModel[List[ModelDataItem]]
 @change
 @on_delete_check(check=[("peer.Peer", "profile"), ("sa.ManagedObjectProfile", "bgppeer_profile")])
 class PeerProfile(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Peer Profile"
         verbose_name_plural = "Peer Profiles"
         db_table = "peer_peerprofile"

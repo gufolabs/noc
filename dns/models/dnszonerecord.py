@@ -29,7 +29,7 @@ class DNSZoneRecord(NOCModel):
     Zone RRs
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = _("DNS Zone Record")
         verbose_name_plural = _("DNS Zone Records")
         db_table = "dns_dnszonerecord"

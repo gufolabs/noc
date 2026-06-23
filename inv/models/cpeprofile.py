@@ -55,7 +55,7 @@ CPE_TYPES = IGetCPE.returns.element.attrs["type"].choices
 
 
 @dataclass
-class MetricConfig(object):
+class MetricConfig:
     metric_type: MetricType
     is_stored: bool
     interval: int

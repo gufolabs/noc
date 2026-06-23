@@ -15,7 +15,7 @@ from noc.core.model.decorator import on_delete_check
 
 @on_delete_check(check=[("peer.Peer", "peer_group")])
 class PeerGroup(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Peer Group"
         verbose_name_plural = "Peer Groups"
         db_table = "peer_peergroup"

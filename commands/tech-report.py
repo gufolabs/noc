@@ -55,7 +55,7 @@ class LibStatus(IntEnum):
 
 
 @dataclass
-class Library(object):
+class Library:
     original_name: str
     req_version: str
     inst_version: str = ""
@@ -170,7 +170,7 @@ class Command(BaseCommand):
         for fp in root_path.glob("*.txt"):
             if not fp.is_file:
                 continue
-            with open(fp, "r") as f:
+            with open(fp) as f:
                 btext = f.read()
                 lines = btext.split("\n")
             for line in lines:

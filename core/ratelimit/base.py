@@ -13,7 +13,7 @@ from time import perf_counter_ns
 NS = 1_000_000_000.0
 
 
-class BaseRateLimit(object):
+class BaseRateLimit:
     """
     Limit calls to `wait*` methods to `rate` requests per second.
     """

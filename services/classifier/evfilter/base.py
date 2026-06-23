@@ -19,7 +19,7 @@ from noc.core.fm.event import Event
 from noc.services.classifier.eventconfig import EventConfig
 
 
-class BaseEvFilter(object):
+class BaseEvFilter:
     """
     BaseEvFilter implements in-memory event filtering basing on hashes.
 

@@ -13,7 +13,7 @@ from typing import List, Dict, Optional, Any
 
 
 @dataclass(frozen=True)
-class ProblemItem(object):
+class ProblemItem:
     alarm_class: Optional[str]
     message: str = ""
     path: List[str] = field(default_factory=list)

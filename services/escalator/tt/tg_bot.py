@@ -36,7 +36,7 @@ class TGBotTTSystem(BaseTTSystem):
         """
         Connection is WSDL path
         """
-        super(TGBotTTSystem, self).__init__(name, connection)
+        super().__init__(name, connection)
         p = urlparse(connection)
         self.url = "https://%s%s" % (p.netloc, p.path)
         self.http_client = HttpClient(

@@ -57,7 +57,7 @@ class AdministrativeDomain(NOCModel):
     Administrative Domain
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = _("Administrative Domain")
         verbose_name_plural = _("Administrative Domains")
         db_table = "sa_administrativedomain"

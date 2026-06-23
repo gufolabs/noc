@@ -22,7 +22,7 @@ from noc.core.translation import ugettext as _
 
 
 class ServiceOutages(Model):
-    class Meta(object):
+    class Meta:
         db_table = "serviceoutages"
         engine = MergeTree("date", ("date", "service"))
 

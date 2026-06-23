@@ -42,7 +42,7 @@ rx_table = re.compile(r"<!-- table start -->.*<!-- table end -->", re.MULTILINE 
 
 
 @dataclass(order=True)
-class Item(object):
+class Item:
     name: str
     type: str
     description: str
@@ -78,7 +78,7 @@ class Item(object):
 
 
 @dataclass(order=True)
-class Data(object):
+class Data:
     """
     Collections data.
 

@@ -21,7 +21,7 @@ CALLING_SERVICE = config.script.calling_service
 DEFAULT_IDLE_TIMEOUT = config.script.caller_timeout
 
 
-class ScriptCaller(object):
+class ScriptCaller:
     def __init__(self, obj, name):
         if "." in name:
             self.name = name.split(".")[-1]
@@ -47,7 +47,7 @@ class ScriptCaller(object):
         )
 
 
-class Session(object):
+class Session:
     def __init__(self, object_id, idle_timeout=None):
         self._object_id = object_id
         self._idle_timeout = idle_timeout or config.script.caller_timeout
@@ -104,7 +104,7 @@ class Session(object):
             return
 
 
-class SessionContext(object):
+class SessionContext:
     # Thread-local storage holding session context for threads
     cv_sessions_smap: ContextVar[Optional[Dict[int, Session]]] = ContextVar(
         "cv_sessions_smap", default=None

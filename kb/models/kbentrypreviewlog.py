@@ -19,7 +19,7 @@ class KBEntryPreviewLog(NOCModel):
     Preview Log
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "KB Entry Preview Log"
         verbose_name_plural = "KB Entry Preview Log"
         app_label = "kb"

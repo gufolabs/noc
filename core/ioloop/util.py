@@ -31,7 +31,7 @@ if config.features.use_uvloop:
         pass
 
 
-class IOLoopContext(object):
+class IOLoopContext:
     def __init__(self, suppress_trace=False):
         self.prev_loop = None
         self.new_loop = None

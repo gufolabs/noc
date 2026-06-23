@@ -378,7 +378,7 @@ class Command(BaseCommand):
                 self.logger.error("CVS reported: %s", e)
                 continue
             if not self.dry_run:
-                with open(path, "r") as f:
+                with open(path) as f:
                     data = f.read()
                 # Strip config
                 data = split_re.split(data, 1)[-1]

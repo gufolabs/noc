@@ -31,7 +31,7 @@ HTTP_PROTOCOLS = {HTTP, HTTPS}
 
 
 @dataclass(frozen=True)
-class ProtoConfig(object):
+class ProtoConfig:
     alias: str
     check: Optional[str] = None
     snmp_version: Optional[int] = None
@@ -42,7 +42,7 @@ class ProtoConfig(object):
 
 
 @dataclass(frozen=True)
-class SNMPCredential(object):
+class SNMPCredential:
     snmp_ro: str
     snmp_rw: Optional[str] = field(default=None, hash=True)
     oids: Optional[List[str]] = field(default=None, hash=False)
@@ -60,7 +60,7 @@ class SNMPCredential(object):
 
 
 @dataclass(frozen=True)
-class SNMPv3Credential(object):
+class SNMPv3Credential:
     username: str
     context: Optional[str] = None
     auth_key: Optional[str] = None
@@ -83,7 +83,7 @@ class SNMPv3Credential(object):
 
 
 @dataclass(frozen=True)
-class CLICredential(object):
+class CLICredential:
     username: str
     password: Optional[str] = None
     super_password: Optional[str] = None
@@ -100,7 +100,7 @@ class CLICredential(object):
 
 
 @dataclass
-class HTTPCredential(object):
+class HTTPCredential:
     username: str  # api_key, username
     password: Optional[str] = None
     http_only: bool = True

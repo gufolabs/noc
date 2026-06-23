@@ -21,7 +21,7 @@ class MIMEType(NOCModel):
     MIME Type mapping
     """
 
-    class Meta(object):
+    class Meta:
         app_label = "main"
         db_table = "main_mimetype"
         verbose_name = "MIME Type"

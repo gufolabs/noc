@@ -26,7 +26,7 @@ from noc.core.router.base import Router
 from .rpc import RPCProxy
 
 
-class ServiceStub(object):
+class ServiceStub:
     name = "stub"
     pooled = False
 

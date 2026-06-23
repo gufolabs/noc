@@ -17,7 +17,7 @@ from noc.config import config
 from .error import ClickhouseError
 
 
-class ClickhouseClient(object):
+class ClickhouseClient:
     def __init__(self, host=None, port=None, read_only=True):
         self.read_only = read_only
         if read_only:

@@ -22,7 +22,7 @@ if os.name == "nt":
     WHICH = "where"
 
 
-class cachedproperty(object):
+class cachedproperty:
     def __init__(self, f):
         self.f = f
         self.n = "_%s" % f.__name__
@@ -38,7 +38,7 @@ class cachedproperty(object):
         return v
 
 
-class Version(object):
+class Version:
     @cachedproperty
     def has_git(self) -> bool:
         """

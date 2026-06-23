@@ -16,7 +16,7 @@ from noc.config import config
 from .base import BaseCLI
 
 
-class BaseStream(object):
+class BaseStream:
     default_port = 23
     # compiled capabilities
     HAS_TCP_KEEPALIVE = hasattr(socket, "SO_KEEPALIVE")

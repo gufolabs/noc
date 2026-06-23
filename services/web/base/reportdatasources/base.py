@@ -60,7 +60,7 @@ def merge(iterators):
             yield val
 
 
-class BaseReportColumn(object):
+class BaseReportColumn:
     """
     Base report column class.
     Column is dataseries: ((id1: value1), (id2: value2)) - id - index sorted by asc
@@ -189,7 +189,7 @@ class BaseReportColumn(object):
         # raise NotImplementedError
 
 
-class LongestIter(object):
+class LongestIter:
     """
     c_did = DiscoveryID._get_collection()
     did = c_did.find({"hostname": {"$exists": 1}},
@@ -233,7 +233,7 @@ class LongestIter(object):
         self._end_iterator = True
 
 
-class ReportModelFilter(object):
+class ReportModelFilter:
     """
     Getting statictics info for ManagedObject
     """
@@ -338,7 +338,7 @@ class ReportConfig:
         self.columns = list(self.fields)
 
 
-class ReportDataSource(object):
+class ReportDataSource:
     name = None
     description = None
     object_model = None

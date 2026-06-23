@@ -36,7 +36,7 @@ class KBEntry(NOCModel):
     KB Entry
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "KB Entry"
         verbose_name_plural = "KB Entries"
         app_label = "kb"

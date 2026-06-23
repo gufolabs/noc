@@ -48,7 +48,7 @@ def get_shortest_path(start: ManagedObject, goal: ManagedObject) -> List[Managed
     return r
 
 
-class KSPFinder(object):
+class KSPFinder:
     """
     k-Shortest Path finder
     """

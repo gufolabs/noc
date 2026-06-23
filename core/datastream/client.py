@@ -23,7 +23,7 @@ from noc.core.timeout import retry_timeout
 logger = logging.getLogger(__name__)
 
 
-class DataStreamClient(object):
+class DataStreamClient:
     RETRY_TIMEOUT = 1.0
     NEXT_GET_DELAY = 2.0
 

@@ -22,7 +22,7 @@ from noc.sa.models.useraccess import UserAccess
 from noc.core.translation import ugettext as _
 
 
-class ReportDiscoveryProblem(object):
+class ReportDiscoveryProblem:
     """Report for MO links detail"""
 
     def __init__(self, mos, avail_only=False, match=None):

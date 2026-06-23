@@ -31,7 +31,7 @@ from noc.core.model.decorator import on_delete_check
 from noc.sa.interfaces.base import StringParameter, IntParameter, BooleanParameter
 
 
-class IPParameter(object):
+class IPParameter:
     def clean(self, value):
         return IP.prefix(value)
 

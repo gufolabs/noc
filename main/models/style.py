@@ -48,7 +48,7 @@ class Style(NOCModel):
     CSS Style
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Style"
         verbose_name_plural = "Styles"
         ordering = ["name"]

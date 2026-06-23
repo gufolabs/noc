@@ -14,7 +14,7 @@ from noc.core.debug import error_report
 from noc.core.handler import get_handler
 
 
-class Trigger(object):
+class Trigger:
     def __init__(self, t, handler=None):
         self.name = t.name
         # Condition

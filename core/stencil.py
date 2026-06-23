@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class Stencil(object):
+class Stencil:
     id: str
     title: str
     width: float
@@ -25,7 +25,7 @@ class Stencil(object):
     path: str
 
 
-class StencilRegistry(object):
+class StencilRegistry:
     prefix = os.path.join("ui", "pkg", "stencils")
     # Replace missed stencil with Cisco | Router
     DEFAULT_STENCIL = "Cisco/router"

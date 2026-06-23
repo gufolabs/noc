@@ -18,7 +18,7 @@ B16 = 0xFFFF
 B32 = 0xFFFFFFFF
 
 
-class IP(object):
+class IP:
     """Base class for IP prefix"""
 
     afi = None
@@ -959,7 +959,7 @@ class IPv6(IP):
         return addr.replace("::", xs)
 
 
-class PrefixDB(object):
+class PrefixDB:
     """
     Generalized binary-tree prefix lookup database
     """

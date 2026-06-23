@@ -20,7 +20,7 @@ from noc.core.diagnostic.decorator import diagnostic
 
 @dataclass
 @diagnostic
-class Object(object):
+class Object:
     id = 10
     diagnostics = {}
     effective_labels = []

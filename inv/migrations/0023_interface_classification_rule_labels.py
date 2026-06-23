@@ -19,7 +19,7 @@ from noc.core.mongo.connection import get_db
 from noc.core.migration.base import BaseMigration
 
 
-class InterfaceClassifierLabels(object):
+class InterfaceClassifierLabels:
     """
     Class for convert ManagedObjectSelector Fields to Labels set
     """

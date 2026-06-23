@@ -12,7 +12,7 @@ from enum import Enum
 
 
 @dataclass(frozen=True)
-class InteractionConfig(object):
+class InteractionConfig:
     models: Set[str]
     description: str = ""
 

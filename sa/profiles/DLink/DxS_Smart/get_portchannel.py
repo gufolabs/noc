@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from builtins import range
 
 # NOC modules
 from noc.core.script.base import BaseScript

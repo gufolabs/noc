@@ -262,7 +262,7 @@ class Profile(BaseProfile):
             index += intNum << 6
         return index
 
-    class diagnose(object):
+    class diagnose:
         """Switch context manager to use with "with" statement"""
 
         def __init__(self, script):

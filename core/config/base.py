@@ -33,7 +33,7 @@ class ConfigSectionBase(type):
         return cls
 
 
-class ConfigSection(object, metaclass=ConfigSectionBase):
+class ConfigSection(metaclass=ConfigSectionBase):
     pass
 
 
@@ -52,7 +52,7 @@ class ConfigBase(type):
         return cls
 
 
-class BaseConfig(object, metaclass=ConfigBase):
+class BaseConfig(metaclass=ConfigBase):
     PROTOCOLS = {
         "consul": "noc.core.config.proto.consul.ConsulProtocol",
         "env": "noc.core.config.proto.env.EnvProtocol",

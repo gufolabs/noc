@@ -12,7 +12,7 @@ from typing import List, Iterable, Any
 
 
 @dataclass(frozen=True)
-class DiscriminatorDataItem(object):
+class DiscriminatorDataItem:
     interface: str
     attr: str
     value: Any

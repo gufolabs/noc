@@ -12,7 +12,7 @@ from typing import Any, Dict, Tuple
 from .typing import ValueType
 
 
-class Transaction(object):
+class Transaction:
     def __init__(self, cdag):
         self.cdag = cdag
         # id(node) -> value

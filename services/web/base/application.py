@@ -95,7 +95,7 @@ class ApplicationBase(type):
         return m
 
 
-class Application(object, metaclass=ApplicationBase):
+class Application(metaclass=ApplicationBase):
     """
     Basic application class.
 

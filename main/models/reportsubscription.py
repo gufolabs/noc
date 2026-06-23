@@ -52,7 +52,7 @@ class ReportSubscription(Document):
     PREFIX = "var/reports"
     JCLS = "noc.main.models.reportsubscription.ReportJob"
 
-    class RequestStub(object):
+    class RequestStub:
         def __init__(self, user):
             self.user = user
 

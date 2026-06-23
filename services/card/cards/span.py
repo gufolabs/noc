@@ -14,7 +14,7 @@ from .base import BaseCard
 from noc.core.clickhouse.connect import connection
 
 
-class Span(object):
+class Span:
     def __init__(
         self,
         ts,

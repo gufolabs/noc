@@ -20,7 +20,7 @@ from noc.core.translation import ugettext as _
 
 
 class DiagnosticHistory(Model):
-    class Meta(object):
+    class Meta:
         db_table = "diagnostichistory"
         engine = MergeTree(
             "date", ("date", "diagnostic_name"), primary_keys=("date", "diagnostic_name")

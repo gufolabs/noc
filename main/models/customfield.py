@@ -34,7 +34,7 @@ class CustomField(NOCModel):
     Custom field description
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Custom Field"
         verbose_name_plural = "Custom Fields"
         db_table = "main_customfield"

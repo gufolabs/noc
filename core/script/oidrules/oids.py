@@ -9,7 +9,7 @@
 from .oid import OIDRule
 
 
-class OIDsRule(object):
+class OIDsRule:
     """
     Multiple items for single metric
     """

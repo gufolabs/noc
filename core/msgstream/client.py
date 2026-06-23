@@ -26,7 +26,7 @@ from noc.config import config
 logger = logging.getLogger(__name__)
 
 
-class MessageStreamClient(object):
+class MessageStreamClient:
     """
     Client for Message Stream application (like Kafka)
     1. Access Messages

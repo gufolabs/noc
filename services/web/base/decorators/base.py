@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 
-class BaseAppDecorator(object):
+class BaseAppDecorator:
     """
     Basic application decorator to inject new methods via .add_view
     """

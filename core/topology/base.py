@@ -26,7 +26,7 @@ from .layout.tree import TreeLayout
 from .types import TopologyNode, MapMeta, MapItem, PathItem
 
 
-class TopologyBase(object):
+class TopologyBase:
     """
     Base Class for Map generators. Loaded by name
     """

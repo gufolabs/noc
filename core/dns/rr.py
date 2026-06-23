@@ -15,7 +15,7 @@ TYPE_PREF = {"NS": 0, "MX": 10}
 DEFAULT_PREF = 100
 
 
-class RR(object):
+class RR:
     __slots__ = [
         "_content",
         "_idna",

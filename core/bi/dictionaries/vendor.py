@@ -12,7 +12,7 @@ from noc.inv.models.vendor import Vendor as VendorModel
 
 
 class Vendor(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "vendor"
         layout = "hashed"
         source_model = "inv.Vendor"

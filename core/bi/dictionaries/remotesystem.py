@@ -12,7 +12,7 @@ from noc.main.models.remotesystem import RemoteSystem as RemoteSystemModel
 
 
 class RemoteSystem(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "remotesystem"
         layout = "hashed"
         source_model = "main.RemoteSystem"

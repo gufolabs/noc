@@ -19,7 +19,7 @@ from noc.config import config
 from noc.core.fileutils import make_persistent
 
 
-class Stream(object):
+class Stream:
     CHUNK_SIZE = config.bi.chunk_size
 
     def __init__(self, model, prefix, date=None):

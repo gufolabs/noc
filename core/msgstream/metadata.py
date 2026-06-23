@@ -11,14 +11,14 @@ from typing import Optional, Dict, List, Iterable
 
 
 @dataclass(frozen=True)
-class Broker(object):
+class Broker:
     id: str
     host: str
     port: int
 
 
 @dataclass(frozen=True)
-class PartitionMetadata(object):
+class PartitionMetadata:
     topic: str
     partition: int
     leader: str
@@ -36,7 +36,7 @@ class PartitionMetadata(object):
 
 
 @dataclass(frozen=True)
-class Metadata(object):
+class Metadata:
     brokers: List[Broker]
     metadata: Dict[str, Dict[int, PartitionMetadata]]  # Stream -> Partition -> PartitionMetadata
 

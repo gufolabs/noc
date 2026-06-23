@@ -42,7 +42,7 @@ SNMP_OVERLOAD_VALUE = 0xFFFFFFFFFFFFFFFF  # 18446744073709551615 for 64-bit coun
 PROFILES_PATH = os.path.join("sa", "profiles")
 
 
-class MetricConfig(object):
+class MetricConfig:
     __slots__ = (
         "id",
         "ifindex",
@@ -73,7 +73,7 @@ class MetricConfig(object):
 
 
 @dataclass(frozen=True)
-class ProfileMetricConfig(object):
+class ProfileMetricConfig:
     """
     Config for SNMP Collected metrics, supported on profile.
     """
@@ -86,7 +86,7 @@ class ProfileMetricConfig(object):
     units: str
 
 
-class BatchConfig(object):
+class BatchConfig:
     __slots__ = ("id", "labels", "metric", "scale", "service", "type", "units")
 
     def __init__(self, id, metric, labels, type, scale, units, service=None):
@@ -157,7 +157,7 @@ class MetricScriptBase(BaseScriptMetaclass):
     """
 
     def __new__(mcs, name, bases, attrs):
-        m = super(MetricScriptBase, mcs).__new__(mcs, name, bases, attrs)
+        m = super().__new__(mcs, name, bases, attrs)
         # Inject metric_type -> [handler] mappings
         m._mt_map = defaultdict(list)
         # Get @metrics handlers

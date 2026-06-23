@@ -37,14 +37,14 @@ CHECK_HISTORY_TABLE = "checkhistory"
 
 
 @dataclass(frozen=True)
-class MetricValue(object):
+class MetricValue:
     metric_type: str
     value: float
     labels: Optional[List[str]] = None
 
 
 @dataclass(frozen=True)
-class DataItem(object):
+class DataItem:
     name: str
     value: Any
     scope: Optional[str] = None  # caps/attribute
@@ -52,7 +52,7 @@ class DataItem(object):
 
 
 @dataclass(frozen=True, eq=True)
-class Check(object):
+class Check:
     name: str  # Check name
     args: Optional[Dict[str, str]] = None
     # pool: Optional[str] = field(default=None, hash=False)  # Address Pool
@@ -165,7 +165,7 @@ class Check(object):
 
 
 @dataclass(frozen=True)
-class CheckError(object):
+class CheckError:
     code: str  # Error code
     message: Optional[str] = None  # Description if Fail
     is_access: Optional[bool] = None  # Access to resource for credential
@@ -173,7 +173,7 @@ class CheckError(object):
 
 
 @dataclass(frozen=True)
-class CheckResult(object):
+class CheckResult:
     check: str
     status: bool  # True - OK, False - Fail
     # For requested copied from Check
@@ -283,7 +283,7 @@ class CheckResult(object):
         return CheckResult.from_dict(r)
 
 
-class BaseChecker(object):
+class BaseChecker:
     """
     Base class for Checkers. Check some facts and return result
     """

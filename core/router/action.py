@@ -43,13 +43,13 @@ ACTION_TYPES: Dict[str, Type["Action"]] = {}
 
 
 @dataclass
-class HeaderItem(object):
+class HeaderItem:
     header: str
     value: str
 
 
 @dataclass
-class ActionCfg(object):
+class ActionCfg:
     type: Literal["stream", "notification_group", "drop", "job"]
     stream: Optional[str] = None
     notification_group: Optional[str] = None
@@ -67,7 +67,7 @@ class ActionBase(type):
         return cls
 
 
-class Action(object, metaclass=ActionBase):
+class Action(metaclass=ActionBase):
     name: ClassVar[str]
 
     def __init__(self, cfg: ActionCfg):

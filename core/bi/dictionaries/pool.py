@@ -12,7 +12,7 @@ from noc.main.models.pool import Pool as PoolModel
 
 
 class Pool(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "pool"
         layout = "hashed"
         source_model = "main.Pool"

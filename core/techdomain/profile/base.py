@@ -12,7 +12,7 @@ import logging
 from noc.core.log import PrefixLoggerAdapter
 
 
-class BaseProfileController(object):
+class BaseProfileController:
     """
     Base class for profile controller.
 

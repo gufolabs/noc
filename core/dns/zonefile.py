@@ -22,7 +22,7 @@ FOOTER = """;;
 """
 
 
-class ZoneFile(object):
+class ZoneFile:
     TABSTOP = 8
     MAX_TXT = 128
 

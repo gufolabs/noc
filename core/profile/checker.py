@@ -31,7 +31,7 @@ from noc.core.snmp.version import SNMP_v1, SNMP_v2c
 rules_lock = Lock()
 
 
-class ProfileChecker(object):
+class ProfileChecker:
     base_logger = logging.getLogger("profilechecker")
     _rules_cache = cachetools.TTLCache(10, ttl=60)
     _re_cache = {}

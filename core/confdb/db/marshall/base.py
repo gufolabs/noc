@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 
-class BaseMarshaller(object):
+class BaseMarshaller:
     name = None
 
     @classmethod

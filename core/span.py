@@ -61,7 +61,7 @@ DEFAULT_ID = 0
 US = 1000000.0
 
 
-class Span(object):
+class Span:
     def __init__(
         self,
         client=DEFAULT_CLIENT,

@@ -28,7 +28,7 @@ logger = getLogger(__name__)
 
 
 @dataclass
-class Input(object):
+class Input:
     """
     Input mapping.
 
@@ -57,7 +57,7 @@ class Input(object):
         return self.name
 
 
-class Job(object):
+class Job:
     """
     Job runtime representation.
 

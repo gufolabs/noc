@@ -18,7 +18,7 @@ from noc.core.translation import ugettext as _
 
 
 class MetricState(Model):
-    class Meta(object):
+    class Meta:
         db_table = "metricstate"
         engine = ReplacingMergeTree("date", ("node_id",))
 

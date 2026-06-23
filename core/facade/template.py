@@ -30,7 +30,7 @@ HORIZONTAL_GAP = 5.0
 
 
 @dataclass
-class ConnectionTypeInfo(object):
+class ConnectionTypeInfo:
     """
     Various information for ConnectionType.
 

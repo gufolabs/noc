@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 
-class BaseDownloader(object):
+class BaseDownloader:
     """
     Downloader is a class performing download and parsing of refbook
     and returning a list of hashes (for RefBook.bulk_upload)
