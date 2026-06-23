@@ -1236,7 +1236,7 @@ class BaseScript(metaclass=BaseScriptMetaclass):
 
             try:
                 beef = Beef.load(beef_storage_url, beef_path)
-            except IOError as e:
+            except OSError as e:
                 self.logger.error("Beef load error: %s", e)
                 return None
             self._beef = beef
