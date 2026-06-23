@@ -19,7 +19,7 @@ class KBEntryHistory(NOCModel):
     Modification History
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "KB Entry History"
         verbose_name_plural = "KB Entry Histories"
         app_label = "kb"

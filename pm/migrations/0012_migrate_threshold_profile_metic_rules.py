@@ -37,7 +37,7 @@ function_map = {
 
 
 @dataclass
-class ThresholdProfile(object):
+class ThresholdProfile:
     window_type: str
     window_size: int
     window_func: Optional[str]

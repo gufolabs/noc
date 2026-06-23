@@ -55,7 +55,7 @@ def get_column_width(name):
     return 15
 
 
-class ReportInterfaceStatus(object):
+class ReportInterfaceStatus:
     """Report interface status."""
 
     def __init__(self, mo_ids, zero, def_profile, interface_profile):

@@ -12,7 +12,7 @@ from typing import Tuple, List, Dict
 from noc.inv.models.interface import Interface
 
 
-class AbductDetector(object):
+class AbductDetector:
     def __init__(self):
         self.active: Dict[int, List[Tuple[int, str]]] = {}
 

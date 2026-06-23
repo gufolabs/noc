@@ -24,7 +24,7 @@ from noc.core.ioloop.timers import PeriodicCallback
 from .error import ResolutionError
 
 
-class DCSBase(object):
+class DCSBase:
     # Resolver class
     resolver_cls = None
     # HTTP code to be returned by /health endpoint when service is healthy
@@ -226,7 +226,7 @@ class DCSBase(object):
             self.status_message = ""
 
 
-class ResolverBase(object):
+class ResolverBase:
     def __init__(self, dcs, name, critical=False, near=False, track=True):
         self.dcs = dcs
         self.name = name

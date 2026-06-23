@@ -15,7 +15,7 @@ from noc.config import config
 
 
 @dataclass
-class RemoteSystemConfig(object):
+class RemoteSystemConfig:
     id: str
     name: str
     bi_id: int
@@ -47,7 +47,7 @@ class RemoteSystemConfig(object):
 
 
 @dataclass(eq=True, frozen=True)
-class SensorConfig(object):
+class SensorConfig:
     name: str
     bi_id: int
     units: str = "1"
@@ -73,7 +73,7 @@ class SensorConfig(object):
 
 
 @dataclass(eq=True, frozen=True)
-class SourceConfig(object):
+class SourceConfig:
     id: str
     name: str
     bi_id: int

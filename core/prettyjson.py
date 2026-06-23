@@ -14,7 +14,7 @@ from noc.core.escape import json_escape
 from noc.core.text import indent
 
 
-class PrettyJSON(object):
+class PrettyJSON:
     @classmethod
     def to_json(cls, o, order=None) -> str:
         r = cls.convert(o, 0, order)

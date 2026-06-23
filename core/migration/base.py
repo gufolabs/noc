@@ -13,7 +13,7 @@ from noc.core.mongo.connection import get_db
 from .db import db
 
 
-class BaseMigration(object):
+class BaseMigration:
     depends_on: List[Tuple[str, str]] = []
     db = db
     aliases: Optional[List[str]] = None

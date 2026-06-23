@@ -38,7 +38,7 @@ from noc.core.service.base import BaseService
 logger = logging.getLogger(__name__)
 
 
-class ProxyNode(object):
+class ProxyNode:
     pass
 
 
@@ -46,7 +46,7 @@ HTTP_METHODS = {"GET", "POST", "PUT", "DELETE"}
 RX_SANITIZE_METHOD = re.compile("[^A-Z]+")
 
 
-class URL(object):
+class URL:
     """
     URL Data wrapper
     """
@@ -77,7 +77,7 @@ class URL(object):
 
 
 @dataclass
-class AppPermission(object):
+class AppPermission:
     """
     Application permission.
 
@@ -102,7 +102,7 @@ class AppPermission(object):
 _perms_lock = Lock()
 
 
-class Site(object):
+class Site:
     """
     Application site. Registers applications, builds menu and
     handling views

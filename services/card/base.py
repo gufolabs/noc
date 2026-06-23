@@ -23,7 +23,7 @@ from noc.core.service.loader import get_service
 FORBIDDEN_MESSAGE = "<html><title>403: Forbidden</title><body>403: Forbidden</body></html>"
 
 
-class BaseAPI(object):
+class BaseAPI:
     """
     Base API Class
     """

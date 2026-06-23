@@ -53,7 +53,7 @@ REACTION_MODELS = frozenset(
 CHUNK_SIZE = 1000
 
 
-class ChangeTracker(object):
+class ChangeTracker:
     """
     Thread-local change tracker.
     """
@@ -193,7 +193,7 @@ class ChangeTracker(object):
 change_tracker = ChangeTracker()
 
 
-class BaseChangeTrackerPolicy(object, metaclass=ABCMeta):
+class BaseChangeTrackerPolicy(metaclass=ABCMeta):
     """
     Base class for change tracker policies
     """

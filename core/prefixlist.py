@@ -18,7 +18,7 @@ from noc.core.ip import IP, IPv4
 __all__ = ["optimize_prefix_list", "optimize_prefix_list_maxlen"]
 
 
-class Node(object):
+class Node:
     """
     Optimizing prefix tree.
     """

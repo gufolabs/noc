@@ -118,7 +118,7 @@ class Command(BaseCommand):
         from noc.dev.models.spec import Spec
         from fs import open_fs
 
-        class FakeSpec(object):
+        class FakeSpec:
             def __init__(self, name):
                 self.name = name
                 self.uuid = "4ec10fd8-3a33-4f23-b96e-91e3967c3b1b"
@@ -663,8 +663,8 @@ class Command(BaseCommand):
         return args
 
 
-class ServiceStub(object):
-    class ServiceConfig(object):
+class ServiceStub:
+    class ServiceConfig:
         def __init__(self, pool, tos=None):
             self.pool = pool
             self.tos = tos

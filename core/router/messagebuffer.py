@@ -19,7 +19,7 @@ from noc.core.mx import Message
 from noc.config import config
 
 
-class MBuffer(object):
+class MBuffer:
     """
     Buffered writes to queue, merge outgoing messages to a larger block
     """

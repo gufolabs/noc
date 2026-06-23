@@ -210,7 +210,7 @@ class RTSPBase(BaseCLI):
             self.profile.shutdown_session(self.script)
 
 
-class DigestAuth(object):
+class DigestAuth:
     """
     Append HTTP Digest authorisation headers
     """

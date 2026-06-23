@@ -11,7 +11,7 @@ from dataclasses import dataclass, field, replace
 
 
 @dataclass(frozen=True)
-class ChangeField(object):
+class ChangeField:
     field: str  # FieldName
     new: Optional[Any]  # New Value
     new_label: Optional[str] = None
@@ -20,7 +20,7 @@ class ChangeField(object):
 
 
 @dataclass(frozen=True)
-class ChangeItem(object):
+class ChangeItem:
     op: Literal["create", "update", "delete"] = field(compare=False)
     model_id: str
     item_id: str

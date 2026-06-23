@@ -79,7 +79,7 @@ TABLE TR TD {
 """
 
 
-class Node(object):
+class Node:
     def __init__(self, app):
         self.app = app
         self.children = []

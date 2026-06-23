@@ -18,7 +18,7 @@ from noc.core.cdag.factory.config import ConfigCDAGFactory, GraphConfig
 
 
 @dataclass
-class Rule(object):
+class Rule:
     """
     Store Rule actions, configs and conditions
     """

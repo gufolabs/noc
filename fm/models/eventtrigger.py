@@ -18,7 +18,7 @@ from noc.inv.models.resourcegroup import ResourceGroup
 
 
 class EventTrigger(NOCModel):
-    class Meta(object):
+    class Meta:
         db_table = "fm_eventtrigger"
         app_label = "fm"
         verbose_name = "Event Trigger"

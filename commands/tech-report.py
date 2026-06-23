@@ -55,7 +55,7 @@ class LibStatus(IntEnum):
 
 
 @dataclass
-class Library(object):
+class Library:
     original_name: str
     req_version: str
     inst_version: str = ""

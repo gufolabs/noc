@@ -27,13 +27,13 @@ COMMIT_VALUE = struct.Struct("!HQ")
 
 
 @dataclass
-class PartitionCursor(object):
+class PartitionCursor:
     group: str
     topic_partition: TopicPartition
 
 
 @dataclass
-class PartitionOffset(object):
+class PartitionOffset:
     topic_partition: TopicPartition
     end_offset: int
     cursors: Dict[str, int]

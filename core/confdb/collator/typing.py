@@ -11,7 +11,7 @@ from typing import Optional, List, Any
 
 
 @dataclass(frozen=True)
-class PathItem(object):
+class PathItem:
     """
     Connection Path. From chassis to last module
     """
@@ -43,7 +43,7 @@ class PathItem(object):
 
 
 @dataclass
-class PortItem(object):
+class PortItem:
     """
     Connection port, by selected protocols
     """

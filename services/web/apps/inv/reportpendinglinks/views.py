@@ -29,7 +29,7 @@ from noc.sa.models.useraccess import UserAccess
 from noc.core.translation import ugettext as _
 
 
-class ReportPendingLinks(object):
+class ReportPendingLinks:
     def __init__(self, ids, cache_key=None, ignore_profiles=None, filter_exists_link=False):
         self.ids = ids
         self.ignore_profiles = ignore_profiles

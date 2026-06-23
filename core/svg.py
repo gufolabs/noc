@@ -14,7 +14,7 @@ from itertools import zip_longest
 from pathlib import Path
 
 
-class SVG(object):
+class SVG:
     """
     SVG image wrapper.
 

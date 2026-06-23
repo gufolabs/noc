@@ -12,7 +12,7 @@ from noc.inv.models.interfaceprofile import InterfaceProfile as InterfaceProfile
 
 
 class InterfaceProfile(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "interfaceprofile"
         layout = "hashed"
         source_model = "inv.InterfaceProfile"

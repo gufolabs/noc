@@ -35,7 +35,7 @@ class Profile(BaseProfile):
     command_save_config = "save"
     pattern_prompt = rb"^\S+#"
 
-    class switch(object):
+    class switch:
         """Switch context manager to use with "with" statement"""
 
         def __init__(self, script):

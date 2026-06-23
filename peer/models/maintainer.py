@@ -22,7 +22,7 @@ from .person import Person
 @on_delete_check(check=[("peer.Organisation", "mnt_ref")])
 @on_save
 class Maintainer(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Maintainer"
         verbose_name_plural = "Maintainers"
         db_table = "peer_maintainer"

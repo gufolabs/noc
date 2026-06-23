@@ -22,7 +22,7 @@ class Pair(NestedModel):
 
 
 class MyModel(Model):
-    class Meta(object):
+    class Meta:
         db_table = "mymodel"
 
     date = DateField()

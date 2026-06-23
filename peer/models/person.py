@@ -18,7 +18,7 @@ from .rir import RIR
 
 @on_save
 class Person(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Person"
         verbose_name_plural = "Persons"
         db_table = "peer_person"

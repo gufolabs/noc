@@ -413,8 +413,8 @@ class Command(BaseCommand):
         return codecs.encode(smart_bytes(s), CLI_ENCODING)
 
 
-class ServiceStub(object):
-    class ServiceConfig(object):
+class ServiceStub:
+    class ServiceConfig:
         def __init__(self, pool, tos=None):
             self.pool = pool
             self.tos = tos
@@ -423,32 +423,32 @@ class ServiceStub(object):
         self.config = self.ServiceConfig(pool=pool)
 
 
-class PoolStub(object):
+class PoolStub:
     def __init__(self, name):
         self.name = name
 
 
-class ProfileStub(object):
+class ProfileStub:
     def __init__(self, name):
         self.name = name
 
 
-class VendorStub(object):
+class VendorStub:
     def __init__(self, name):
         self.name = name
 
 
-class PlatformStub(object):
+class PlatformStub:
     def __init__(self, name):
         self.name = name
 
 
-class VersionStub(object):
+class VersionStub:
     def __init__(self, version):
         self.version = version
 
 
-class JSONObject(object):
+class JSONObject:
     def __init__(self, path):
         with open(path) as f:
             data = orjson.loads(f.read())
@@ -506,7 +506,7 @@ class JSONObject(object):
         return None
 
 
-class StorageStub(object):
+class StorageStub:
     def __init__(self, url):
         self.url = url
 

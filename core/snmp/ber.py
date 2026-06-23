@@ -33,7 +33,7 @@ def did(tag_class: int, is_constructed: int, tag_id: int) -> int:
     return did | (tag_id << 3)
 
 
-class BERDecoder(object):
+class BERDecoder:
     def __init__(self, display_hints=None, include_raw=False):
         self.last_oid: Optional[str] = None
         self.oid_msg: Optional[bytes] = None
@@ -334,7 +334,7 @@ class BERDecoder(object):
     }
 
 
-class BEREncoder(object):
+class BEREncoder:
     INF = float("inf")
     NINF = float("-inf")
     NAN = float("nan")

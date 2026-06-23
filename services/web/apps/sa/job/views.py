@@ -87,7 +87,7 @@ class JobApplication(ExtDocApplication):
 
 
 @dataclass
-class Node(object):
+class Node:
     id: str
     name: str
     status: JobStatus

@@ -23,8 +23,8 @@ from noc.core.ioloop.util import setup_asyncio
 rx_tc = re.compile(r"^.+/\d\d\d\d\.\S+\.json\.bz2")
 
 
-class ServiceStub(object):
-    class ServiceConfig(object):
+class ServiceStub:
+    class ServiceConfig:
         def __init__(self, pool, tos=None):
             self.pool = pool
             self.tos = tos

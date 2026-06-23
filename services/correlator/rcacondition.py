@@ -12,7 +12,7 @@ import datetime
 from bson import ObjectId
 
 
-class RCACondition(object):
+class RCACondition:
     def __init__(self, alarm_class, condition):
         self.name = f"{alarm_class.name}::{condition.name}"
         self.window = condition.window

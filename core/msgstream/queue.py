@@ -15,7 +15,7 @@ from typing import Optional, Dict, Any
 from .message import PublishRequest
 
 
-class MessageStreamQueue(object):
+class MessageStreamQueue:
     def __init__(self, loop: Optional[asyncio.BaseEventLoop] = None):
         self.queue: deque = deque()
         self.lock = Lock()

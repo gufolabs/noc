@@ -21,7 +21,7 @@ class Profile(BaseProfile):
 
     matchers = {"is_wl8200": {"platform": {"$regex": "WL8200-TL3.+"}}}
 
-    class shell(object):
+    class shell:
         """Switch context manager to use with "with" statement"""
 
         def __init__(self, script):

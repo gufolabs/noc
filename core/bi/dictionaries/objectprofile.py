@@ -12,7 +12,7 @@ from noc.sa.models.managedobjectprofile import ManagedObjectProfile
 
 
 class ObjectProfile(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "objectprofile"
         layout = "hashed"
         source_model = "sa.ManagedObjectProfile"

@@ -18,13 +18,13 @@ from .cli.base import BaseCLI
 
 
 @dataclass
-class Session(object):
+class Session:
     session: str
     stream: BaseCLI
     timer_task: Optional[asyncio.Handle] = None
 
 
-class SessionStore(object):
+class SessionStore:
     def __init__(self):
         self._lock = Lock()
         self._sessions: Dict[str, Session] = {}

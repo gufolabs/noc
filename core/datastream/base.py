@@ -31,7 +31,7 @@ from noc.core.mx import send_message, MessageType, MX_CHANGE_ID, MX_DATA_ID
 logger = logging.getLogger(__name__)
 
 
-class DataStream(object):
+class DataStream:
     """
     Datastream stored in collection named ds_<name>.
     Fields:

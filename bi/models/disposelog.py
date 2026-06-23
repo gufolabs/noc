@@ -24,7 +24,7 @@ from noc.core.translation import ugettext as _
 
 
 class DisposeLog(Model):
-    class Meta(object):
+    class Meta:
         db_table = "disposelog"
         engine = MergeTree(
             "date",

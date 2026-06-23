@@ -24,7 +24,7 @@ ANY = ANY
 REST = REST
 
 
-class Node(object):
+class Node:
     __slots__ = ["children", "handler", "matcher", "token"]
 
     def __init__(self, token):
@@ -185,7 +185,7 @@ class BaseNormalizerMetaclass(type):
         setattr(ncls, sdef.gen, ctx[sdef.gen])
 
 
-class BaseNormalizer(object, metaclass=BaseNormalizerMetaclass):
+class BaseNormalizer(metaclass=BaseNormalizerMetaclass):
     # Custom syntax to enrich ConfDB
     SYNTAX = []
 

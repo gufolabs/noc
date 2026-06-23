@@ -28,7 +28,7 @@ from noc.config import config
 from .job import Job
 
 
-class Scheduler(object):
+class Scheduler:
     COLLECTION_BASE = "noc.schedules."
 
     SUBMIT_THRESHOLD_FACTOR = config.scheduler.submit_threshold_factor

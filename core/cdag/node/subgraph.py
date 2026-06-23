@@ -75,7 +75,7 @@ class SubgraphCDAGFactory(ConfigCDAGFactory):
 
 
 @dataclass
-class InputItem(object):
+class InputItem:
     __slots__ = "input", "node"
     node: BaseCDAGNode
     input: str

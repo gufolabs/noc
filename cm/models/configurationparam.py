@@ -109,7 +109,7 @@ class ParamSchema(BaseModel):
 
 
 @dataclass
-class ScopeVariant(object):
+class ScopeVariant:
     scope: "ConfigurationScope"
     value: Optional[str] = None
 
@@ -143,7 +143,7 @@ class ScopeVariant(object):
 
 
 @dataclass
-class ParamData(object):
+class ParamData:
     code: str
     schema: ParamSchema
     scopes: Optional[List[ScopeVariant]] = None

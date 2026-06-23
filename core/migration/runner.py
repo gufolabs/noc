@@ -15,7 +15,7 @@ from noc.core.mongo.connection import get_db
 from .loader import MigrationLoader
 
 
-class MigrationRunner(object):
+class MigrationRunner:
     def __init__(self):
         self.db = get_db()
         self.hist_coll = self.db["migrations"]

@@ -23,7 +23,7 @@ from noc.core.collection.base import Collection
 from noc.models import get_model
 
 
-class Dict2Class(object):
+class Dict2Class:
     def __init__(self, d: dict):
         for k, v in d.items():
             setattr(self, k, v)
@@ -483,8 +483,8 @@ class Command(BaseCommand):
             self.handle_files()
 
 
-class ServiceStub(object):
-    class ServiceConfig(object):
+class ServiceStub:
+    class ServiceConfig:
         def __init__(self, pool, tos=None):
             self.pool = pool
             self.tos = tos

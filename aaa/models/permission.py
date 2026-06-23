@@ -31,7 +31,7 @@ class Permission(NOCModel):
     @todo: Check name format
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Permission"
         verbose_name_plural = "Permissions"
         db_table = "main_permission"

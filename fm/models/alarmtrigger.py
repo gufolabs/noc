@@ -18,7 +18,7 @@ from noc.inv.models.resourcegroup import ResourceGroup
 
 
 class AlarmTrigger(NOCModel):
-    class Meta(object):
+    class Meta:
         db_table = "fm_alarmtrigger"
         app_label = "fm"
         verbose_name = "Alarm Trigger"

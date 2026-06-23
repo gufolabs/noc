@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
 CLIENT_ID = "NOC"
 
 
-class KafkaClient(object):
+class KafkaClient:
     TIMESTAMP_MULTIPLIER = 1_000
     SUBSCRIBE_BULK = True
     RESOLVE_RETRY = 1.0

@@ -50,7 +50,7 @@ T_BODY = Union[bytes, Any]
 
 
 @dataclass
-class RenderTemplate(object):
+class RenderTemplate:
     subject_template: JTemplate
     body_template: JTemplate
 
@@ -64,7 +64,7 @@ class RenderTemplate(object):
 
 
 @dataclass
-class TransmuteTemplate(object):
+class TransmuteTemplate:
     template: JTemplate
 
     def render_body(self, ctx: Dict[str, Any]) -> Dict[str, Any]:
@@ -72,7 +72,7 @@ class TransmuteTemplate(object):
 
 
 @dataclass
-class HeaderMatchItem(object):
+class HeaderMatchItem:
     header: str
     op: Literal["==", "!=", "regex"]
     value: str
@@ -94,7 +94,7 @@ class HeaderMatchItem(object):
 
 
 @dataclass(frozen=True)
-class MatchItem(object):
+class MatchItem:
     labels: Optional[List[str]] = None
     exclude_labels: Optional[List[str]] = None
     administrative_domain: Optional[List[int]] = None
@@ -159,7 +159,7 @@ class MatchItem(object):
         return r
 
 
-class Route(object):
+class Route:
     """
     Route Notification. Contains condition and action.
     If condition is matched - do action

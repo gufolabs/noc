@@ -28,7 +28,7 @@ from noc.core.span import Span
 Redirect = namedtuple("Redirect", ["location", "method", "params"])
 
 
-class JSONRPCAPI(object):
+class JSONRPCAPI:
     """
     JSON-RPC (specification 2.0) API implementation for FastAPI service
     https://www.jsonrpc.org/specification

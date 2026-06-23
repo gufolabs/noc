@@ -97,7 +97,7 @@ class Profile(BaseProfile):
         # additional command to `terminal datadump`
         script.cli("terminal length 0", ignore_errors=True)
 
-    class e1(object):
+    class e1:
         """E1 context manager to use with "with" statement"""
 
         def __init__(self, script):

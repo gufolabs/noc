@@ -12,7 +12,7 @@ from noc.crm.models.subscriberprofile import SubscriberProfile as SubscriberProf
 
 
 class SubscriberProfile(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "subscriberprofile"
         layout = "hashed"
         source_model = "crm.SubscriberProfile"

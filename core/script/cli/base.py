@@ -17,7 +17,7 @@ from noc.core.comp import smart_bytes
 from .error import CLIConnectionReset
 
 
-class BaseCLI(object):
+class BaseCLI:
     name = "base"
 
     def __init__(self, script, tos: Optional[int] = None):

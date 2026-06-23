@@ -21,7 +21,7 @@ from .types import ObjectSnapshot
 logger = getLogger(__name__)
 
 
-class Topo(object):
+class Topo:
     """
     Topology processing class.
 

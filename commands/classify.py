@@ -25,7 +25,7 @@ from noc.services.classifier.ruleset import RuleSet
 
 
 @dataclass
-class Stats(object):
+class Stats:
     """
     Classification statistics.
 

@@ -16,7 +16,7 @@ from xml.sax.saxutils import escape
 
 
 @dataclass
-class Item(object):
+class Item:
     path: str
     text: str
 

@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 
-class AlarmPlugin(object):
+class AlarmPlugin:
     name = None
 
     def __init__(self, app):

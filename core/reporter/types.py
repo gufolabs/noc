@@ -215,7 +215,7 @@ class Parameter(BaseModel):
 
 
 @dataclass
-class ReportField(object):
+class ReportField:
     name: str
     output_format: str  # Jinja template
 

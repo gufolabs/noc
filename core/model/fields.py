@@ -207,7 +207,7 @@ class TagsContainsLookup(models.Lookup):
         return "(ARRAY[%s] <@ %s)" % (",".join(tags), self.lhs.as_sql(compiler, connection)[0]), []
 
 
-class DocumentReferenceDescriptor(object):
+class DocumentReferenceDescriptor:
     def __init__(self, field):
         self.field = field
         self.document = self.field.document

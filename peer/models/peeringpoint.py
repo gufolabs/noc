@@ -20,7 +20,7 @@ from .asn import AS
 
 @on_delete_check(check=[("peer.Peer", "peering_point"), ("peer.PrefixListCache", "peering_point")])
 class PeeringPoint(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Peering Point"
         verbose_name_plural = "Peering Points"
         db_table = "peer_peeringpoint"

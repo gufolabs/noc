@@ -34,7 +34,7 @@ router = APIRouter()
 MIN_SEARCH = 2
 
 
-class HandlerStub(object):
+class HandlerStub:
     def __init__(self, user, arguments):
         self.user: "User" = user
         self.arguments = {}

@@ -47,7 +47,7 @@ class DNSZoneProfile(NOCModel):
     :param description:
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = _("DNS Zone Profile")
         verbose_name_plural = _("DNS Zone Profiles")
         db_table = "dns_dnszoneprofile"

@@ -19,7 +19,7 @@ from noc.settings import INSTALLED_APPS
 from .base import BaseMigration
 
 
-class MigrationLoader(object):
+class MigrationLoader:
     _migration_cache = {}
 
     @staticmethod

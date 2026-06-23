@@ -53,7 +53,7 @@ class Peer(NOCModel):
     BGP Peering session
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Peer"
         verbose_name_plural = "Peers"
         db_table = "peer_peer"

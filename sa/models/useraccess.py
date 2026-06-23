@@ -21,7 +21,7 @@ from .administrativedomain import AdministrativeDomain
 
 
 class UserAccess(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = _("User Access")
         verbose_name_plural = _("User Access")
         db_table = "sa_useraccess"

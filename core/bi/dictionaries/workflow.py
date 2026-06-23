@@ -12,7 +12,7 @@ from noc.wf.models.workflow import Workflow as WorkflowModel
 
 
 class Workflow(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "workflow"
         layout = "hashed"
         source_model = "wf.Workflow"

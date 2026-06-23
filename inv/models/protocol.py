@@ -54,7 +54,7 @@ rx_mode = re.compile(r"^(.+?)\s*\((.+)\)")
 
 
 @dataclass(frozen=True)
-class ProtocolVariant(object):
+class ProtocolVariant:
     """
     Add __contains__ for connection check
     """

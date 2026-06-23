@@ -15,7 +15,7 @@ from noc.core.models.inputsources import InputSource
 
 
 @dataclass(frozen=True)
-class CapsConfig(object):
+class CapsConfig:
     allow_manual: bool = False
     default_value: Optional[Any] = None
     ref_scope: Optional[str] = None
@@ -25,7 +25,7 @@ class CapsConfig(object):
 
 
 @dataclass(frozen=True)
-class CapsValue(object):
+class CapsValue:
     capability: Any
     value: Any
     source: InputSource

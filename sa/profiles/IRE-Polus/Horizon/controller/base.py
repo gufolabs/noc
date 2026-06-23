@@ -29,13 +29,13 @@ OD_96_H = UUID("1777a6a3-7546-48c8-bec2-c9693d207493")
 
 
 @dataclass
-class SetValue(object):
+class SetValue:
     name: str
     value: str
     description: str | None
 
 
-class HorizonMixin(object):
+class HorizonMixin:
     """
     Horizon platform utilities.
     """

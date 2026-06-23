@@ -80,7 +80,7 @@ def render_message(name, context=None):
 
 
 class ObjectNotification(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = _("Managed Object Notification")
         db_table = "sa_objectnotification"
         app_label = "sa"

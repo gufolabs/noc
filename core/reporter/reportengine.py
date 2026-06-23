@@ -40,7 +40,7 @@ from noc.core.reporter.types import (
 logger = logging.getLogger(__name__)
 
 
-class ReportEngine(object):
+class ReportEngine:
     """
     Reporting Engine implementation. Report Pipeline:
     RunParams -> ReportEngine -> load_data -> Band -> Formatter -> DocumentFile

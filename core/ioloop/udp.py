@@ -15,7 +15,7 @@ import errno
 _ERRNO_WOULDBLOCK = (errno.EWOULDBLOCK, errno.EAGAIN)
 
 
-class UDPSocket(object):
+class UDPSocket:
     """
     UDP socket abstraction
 
@@ -70,7 +70,7 @@ class UDPSocket(object):
                 raise e
 
 
-class UDPSocketContext(object):
+class UDPSocketContext:
     def __init__(self, sock: Optional[UDPSocket] = None, tos: Optional[int] = None):
         if sock:
             self.sock = sock

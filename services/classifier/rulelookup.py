@@ -9,7 +9,7 @@
 import operator
 
 
-class RuleLookup(object):
+class RuleLookup:
     def __init__(self, rules):
         self.rules = rules
 

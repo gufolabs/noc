@@ -11,7 +11,7 @@ from noc.inv.models.interface import Interface
 from noc.inv.models.link import Link
 
 
-class BaseConstraint(object):
+class BaseConstraint:
     def __init__(self) -> None:
         pass
 

@@ -28,7 +28,7 @@ from noc.core.model.fields import TextArrayField
 from noc.core.comp import smart_text
 
 
-class ModelInline(object):
+class ModelInline:
     # HTTP Result Codes
     OK = 200
     CREATED = 201

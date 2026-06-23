@@ -12,12 +12,12 @@ from dataclasses import dataclass
 
 
 @dataclass
-class _Waiter(object):
+class _Waiter:
     lock: asyncio.Lock
     waiters: int = 0
 
 
-class LockManager(object):
+class LockManager:
     def __init__(self):
         self._lock = asyncio.Lock()
         self._waiters: Dict[str, _Waiter] = {}
@@ -48,7 +48,7 @@ class LockManager(object):
                     del self._waiters[name]  # No longer needed
 
 
-class LockCtx(object):
+class LockCtx:
     def __init__(self, parent: LockManager, names: Iterable[str]):
         self._parent = parent
         self._names = list(names)
