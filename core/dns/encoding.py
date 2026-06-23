@@ -8,7 +8,7 @@
 # NOC modules
 from noc.core.comp import smart_text, smart_bytes
 
-IDNA_PREFIX = str("xn--")
+IDNA_PREFIX = "xn--"
 
 
 def to_idna(zone: str) -> str:
