@@ -51,7 +51,7 @@ class Command(BaseCommand):
         # Create output
         try:
             out = open(options["output"], "w")
-        except IOError as e:
+        except OSError as e:
             raise CommandError(str(e))
         # Build
         self.build_prefix_list(out, expression, options["name"], profile)
