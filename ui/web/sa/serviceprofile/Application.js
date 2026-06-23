@@ -150,6 +150,12 @@ Ext.define("NOC.sa.serviceprofile.Application", {
           },
         },
         {
+          name: "caps_exposed",
+          xtype: "checkbox",
+          boxLabel: __("Exposed Caps to Objects"),
+          allowBlank: true,
+        },
+        {
           name: "interface_profile",
           xtype: "inv.interfaceprofile.LookupField",
           fieldLabel: __("Interface Profile"),
@@ -238,6 +244,35 @@ Ext.define("NOC.sa.serviceprofile.Application", {
               xtype: "gridfield",
               allowBlank: true,
               columns: [
+                {
+                  text: __("Group"),
+                  dataIndex: "group",
+                  renderer: NOC.render.Lookup("group"),
+                  width: 200,
+                  editor: {
+                    xtype: "inv.resourcegroup.LookupField",
+                  },
+                },
+                {
+                  text: __("Type"),
+                  dataIndex: "type",
+                  width: 100,
+                  editor: {
+                    xtype: "combobox",
+                    store: [
+                      ["S", "Service (Using)"],
+                      ["C", "Client (Using)"],
+                      ["T", "Parent (UP)"],
+                      ["D", "Children (Down)"],
+                    ],
+                  },
+                  renderer: NOC.render.Choices({
+                    "S": "Service (Using)",
+                    "C": "Client (Using)",
+                    "T": "Parent (UP)",
+                    "D": "Children (Down)",
+                  }),
+                },
                 {
                   text: __("Function"),
                   dataIndex: "weight_function",
@@ -363,12 +398,14 @@ Ext.define("NOC.sa.serviceprofile.Application", {
               fieldLabel: __("Alarm Affected Policy"),
               tooltip: __("Transfer alarm to OperStatus <br/>" +
                                 "D - Disable Alarm Transfer<br/>" +
-                                "A - Any alarm by Resource"),
+                                "B - Service Component on Alarm<br/>" +
+                                "B - Instance Filter<br/>" +
+                                "O - Only By Filter Rule (Empty - Disable)"),
               store: [
                 ["D", __("Disable")],
-                ["B", __("By Object")],
+                ["B", __("By Service Component")],
                 ["A", __("By Instance")],
-                ["O", __("By Filter")],
+                ["O", __("Only By Filter")],
               ],
               allowBlank: true,
               value: "A",
@@ -402,6 +439,13 @@ Ext.define("NOC.sa.serviceprofile.Application", {
                     },
                   },
                   width: 200,
+                },
+                {
+                  text: __("Ref. Only"),
+                  dataIndex: "required_reference",
+                  width: 100,
+                  editor: "checkbox",
+                  renderer: NOC.render.Bool,
                 },
                 {
                   text: __("Affected Instance"),
@@ -695,7 +739,8 @@ Ext.define("NOC.sa.serviceprofile.Application", {
               fieldLabel: __("Status Alarm Policy"),
               store: [
                 ["D", __("Disable")],
-                ["R", __("Group")],
+                ["R", __("Root Group (Only Root Severvice)")],
+                ["G", __("Group")],
                 ["A", __("Direct Alarm")],
               ],
               value: "R",
