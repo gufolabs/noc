@@ -46,6 +46,7 @@ class Feature(enum.Enum):
     CHANNEL = "channel"
     JOBS = "jobs"
     FGALARMS = "fgalarms"
+    SMARTREFRESH = "smartrefresh"
 
     def is_active(self) -> bool:
         """Check if feature is active."""
@@ -56,8 +57,14 @@ _FEATURE_STATUS = {
     Feature.CHANNEL: FeatureStatus.ALPHA,
     Feature.JOBS: FeatureStatus.ALPHA,
     Feature.FGALARMS: FeatureStatus.ALPHA,
+    Feature.SMARTREFRESH: FeatureStatus.ALPHA,
 }
-_FEATURE_DEFAULT = {Feature.CHANNEL: False, Feature.JOBS: False, Feature.FGALARMS: False}
+_FEATURE_DEFAULT = {
+    Feature.CHANNEL: False,
+    Feature.JOBS: False,
+    Feature.FGALARMS: False,
+    Feature.SMARTREFRESH: False,
+}
 _current_features: Optional[Set[Feature]] = None
 
 
