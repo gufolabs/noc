@@ -728,7 +728,7 @@ class BaseLoader(object):
         else:
             # Compress the file
             self.logger.info("Compressing")
-            with open(self.new_state_path, "r") as s, compressor(archive_path, "w") as d:
+            with open(self.new_state_path) as s, compressor(archive_path, "w") as d:
                 d.write(s.read())
             os.unlink(self.new_state_path)
         self.logger.info("Saving mappings to %s", self.mappings_path)

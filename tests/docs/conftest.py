@@ -43,7 +43,7 @@ class ToC(object):
         pp = DOCS_DIR / path / SUMMARY_FILENAME
         if not pp.exists():
             return
-        with open(pp, "r", encoding="utf-8") as f:
+        with open(pp, encoding="utf-8") as f:
             data = f.read().splitlines()
         for line in data:
             line = line.strip()

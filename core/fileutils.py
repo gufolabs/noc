@@ -80,7 +80,7 @@ def read_file(path):
     Return None when file does not exists
     """
     if os.path.isfile(path) and os.access(path, os.R_OK):
-        with open(path, "r") as f:
+        with open(path) as f:
             return f.read()
     return None
 
@@ -211,7 +211,7 @@ def iter_open(path):
         yield f
         f.close()
     else:
-        f = open(path, "r")
+        f = open(path)
         yield f
         f.close()
 
