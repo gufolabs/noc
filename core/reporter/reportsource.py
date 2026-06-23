@@ -13,7 +13,7 @@ from .report import Band
 from .types import BandFormat
 
 
-class ReportSource(object):
+class ReportSource:
     """
     Class for old-compatible report format when Data and Format union in one source
     """

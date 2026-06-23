@@ -98,7 +98,7 @@ class BaseProfileMetaclass(type):
         return n
 
 
-class BaseProfile(object, metaclass=BaseProfileMetaclass):
+class BaseProfile(metaclass=BaseProfileMetaclass):
     """
     Equipment profile. Contains all equipment personality and specific
     """

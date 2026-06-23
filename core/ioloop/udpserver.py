@@ -33,7 +33,7 @@ class UDPServerProtocol(asyncio.DatagramProtocol):
         logger.error("UDP server received error %s" % exc)
 
 
-class UDPServer(object):
+class UDPServer:
     def __init__(self):
         self._transports: List[asyncio.BaseTransport] = []
         self._sockaddr: List[Tuple[str, int]] = []

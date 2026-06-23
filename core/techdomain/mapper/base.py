@@ -17,7 +17,7 @@ from ..controller.base import Endpoint
 
 
 @dataclass
-class Node(object):
+class Node:
     label: str
     endpoints: List[str]
     inputs: List[str]
@@ -78,7 +78,7 @@ class Node(object):
             self.endpoints.append(ep)
 
 
-class BaseMapper(object):
+class BaseMapper:
     name: str = "base"
 
     def __init__(self, channel: Channel):

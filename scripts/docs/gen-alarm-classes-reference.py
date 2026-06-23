@@ -74,7 +74,7 @@ rx_md_anchor = re.compile(r"[ _\|\(\)/]+")
 
 
 @dataclass(order=True)
-class Var(object):
+class Var:
     name: str
     description: str
     default: str
@@ -117,7 +117,7 @@ class Action(Enum):
 
 
 @dataclass(order=True)
-class Event(object):
+class Event:
     name: str
     action: Action = field(compare=False)
 
@@ -142,7 +142,7 @@ class Event(object):
 
 
 @dataclass(order=True)
-class Data(object):
+class Data:
     """
     Collections data.
 

@@ -15,7 +15,7 @@ from contextlib import contextmanager
 from noc.config import config
 
 
-class ImportRouter(object):
+class ImportRouter:
     """
     Module importer that maps module prefixes to loader classes
     """
@@ -30,7 +30,7 @@ class ImportRouter(object):
         return None
 
 
-class NOCLoader(object):
+class NOCLoader:
     """
     Abstract class for prefixed loader
     """

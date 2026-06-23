@@ -22,7 +22,6 @@ import cachetools
 import orjson
 from pymongo import UpdateOne
 from typing import List, Dict, Any, Optional, Tuple
-from builtins import str, object
 
 # NOC modules
 from noc.core.scheduler.periodicjob import PeriodicJob
@@ -380,7 +379,7 @@ class MODiscoveryJob(PeriodicJob):
         return name in self.artefacts
 
 
-class DiscoveryCheck(object):
+class DiscoveryCheck:
     name = None
     # If not none, check required script is available
     # before running check

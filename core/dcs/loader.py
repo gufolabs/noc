@@ -22,7 +22,7 @@ from .base import DCSBase
 DEFAULT_DCS = "consul://%s:%s/%s" % (config.consul.host, config.consul.port, config.consul.base)
 
 
-class DCSRunner(object):
+class DCSRunner:
     HANDLERS = {"consul": "noc.core.dcs.consul.ConsulDCS"}
 
     def __init__(self):

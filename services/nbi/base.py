@@ -21,7 +21,7 @@ API_ACCESS_HEADER = "X-NOC-API-Access"
 FORBIDDEN_MESSAGE = "<html><title>403: Forbidden</title><body>403: Forbidden</body></html>"
 
 
-class NBIAPI(object):
+class NBIAPI:
     """
     NBI API Base Class
     """

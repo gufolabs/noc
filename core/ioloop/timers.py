@@ -14,7 +14,7 @@ import math
 from typing import Optional, Coroutine
 
 
-class PeriodicCallback(object):
+class PeriodicCallback:
     def __init__(self, cb: Coroutine, interval: int, delay: int = 0):
         """
         This function sets up a timer that will run the coroutine every

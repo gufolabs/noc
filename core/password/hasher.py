@@ -58,7 +58,7 @@ def must_change(encoded: str) -> bool:
     return hasher.must_change(encoded)
 
 
-class BaseHasher(object):
+class BaseHasher:
     @classmethod
     def must_change(cls, encoded: str) -> bool:
         """

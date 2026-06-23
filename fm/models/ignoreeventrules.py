@@ -13,7 +13,7 @@ from noc.core.model.base import NOCModel
 
 
 class IgnoreEventRules(NOCModel):
-    class Meta(object):
+    class Meta:
         app_label = "fm"
         db_table = "fm_ignoreeventrules"
         verbose_name = "Ignore Event Rule"

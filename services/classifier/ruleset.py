@@ -40,7 +40,7 @@ from noc.sa.interfaces.base import (
 logger = logging.getLogger(__name__)
 
 
-class RuleSet(object):
+class RuleSet:
     def __init__(self):
         self.rules: Dict[
             Tuple[Optional[str], str], RuleLookup

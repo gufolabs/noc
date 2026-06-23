@@ -54,7 +54,7 @@ def test_check_password(password: str, encoded: str) -> None:
     assert check_password(password, encoded) is True
 
 
-class ErrContext(object):
+class ErrContext:
     def __init__(self, msg: str | None = None):
         self._msg = msg
 

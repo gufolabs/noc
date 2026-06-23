@@ -49,7 +49,7 @@ id_lock = Lock()
     ]
 )
 class User(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "User"
         verbose_name_plural = "Users"
         app_label = "aaa"

@@ -9,7 +9,7 @@
 from typing import Iterable
 
 
-class BaseConstraint(object):
+class BaseConstraint:
     """
     Base constraint class.
 

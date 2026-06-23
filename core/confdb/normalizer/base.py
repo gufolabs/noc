@@ -24,7 +24,7 @@ ANY = ANY
 REST = REST
 
 
-class Node(object):
+class Node:
     __slots__ = ["children", "handler", "matcher", "token"]
 
     def __init__(self, token):
@@ -133,7 +133,7 @@ class BaseNormalizerMetaclass(type):
             del f._seq
             del f._matcher
         # Process syntax
-        if bases[0] == object:
+        if not bases:
             mcs.parse_syntax(n, SYNTAX)
         elif n.SYNTAX:
             # Apply custom syntax
@@ -185,7 +185,7 @@ class BaseNormalizerMetaclass(type):
         setattr(ncls, sdef.gen, ctx[sdef.gen])
 
 
-class BaseNormalizer(object, metaclass=BaseNormalizerMetaclass):
+class BaseNormalizer(metaclass=BaseNormalizerMetaclass):
     # Custom syntax to enrich ConfDB
     SYNTAX = []
 

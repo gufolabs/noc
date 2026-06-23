@@ -53,7 +53,7 @@ def rel_ref(from_path: str, to_path: str) -> str:
 
 
 @dataclass
-class EventClassVar(object):
+class EventClassVar:
     name: str
     description: str
     type: str
@@ -73,14 +73,14 @@ class DispositionAction(enum.Enum):
 
 
 @dataclass
-class EventClassDisposition(object):
+class EventClassDisposition:
     name: str
     action: DispositionAction
     alarm: str
 
 
 @dataclass
-class EventClass(object):
+class EventClass:
     name: str
     uuid: str
     description: str
@@ -104,7 +104,7 @@ class EventClass(object):
 
 
 @dataclass
-class AlarmClassVar(object):
+class AlarmClassVar:
     name: str
     description: str
     default: Optional[str]
@@ -117,19 +117,19 @@ class AlarmClassVar(object):
 
 
 @dataclass
-class RoutCause(object):
+class RoutCause:
     name: str
     alarm_class: str
 
 
 @dataclass
-class AlarmEvent(object):
+class AlarmEvent:
     event_class: str
     name: str
 
 
 @dataclass
-class AlarmClass(object):
+class AlarmClass:
     name: str
     uuid: str
     description: str
@@ -156,7 +156,7 @@ class AlarmClass(object):
 
 
 @dataclass
-class MetricScopePath(object):
+class MetricScopePath:
     name: str
     is_required: bool
 
@@ -168,7 +168,7 @@ class MetricScopePath(object):
 
 
 @dataclass
-class MetricScope(object):
+class MetricScope:
     name: str
     uuid: str
     table_name: str
@@ -186,7 +186,7 @@ class MetricScope(object):
 
 
 @dataclass
-class MetricType(object):
+class MetricType:
     name: str
     uuid: str
     scope: MetricScope
@@ -209,7 +209,7 @@ class MetricType(object):
 
 
 @dataclass
-class AltMeasurementUnits(object):
+class AltMeasurementUnits:
     name: str
     description: Optional[str]
     label: str
@@ -219,7 +219,7 @@ class AltMeasurementUnits(object):
 
 
 @dataclass
-class MeasurementUnits(object):
+class MeasurementUnits:
     name: str
     uuid: str
     description: Optional[str]
@@ -238,7 +238,7 @@ class MeasurementUnits(object):
 
 
 @dataclass
-class ConnectionType(object):
+class ConnectionType:
     name: str
     uuid: str
     description: Optional[str]
@@ -270,7 +270,7 @@ GENDER_DESC = {
 }
 
 
-class FileWriter(object):
+class FileWriter:
     def __init__(self, root: str):
         self.root = root
         self.new_files = 0
@@ -310,7 +310,7 @@ class FileWriter(object):
         )
 
 
-class CollectionDoc(object):
+class CollectionDoc:
     rx_indent = re.compile(r"^(\s+)-")
 
     def __init__(self):

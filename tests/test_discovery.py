@@ -44,7 +44,7 @@ _service_cache = {}
 _configs = {}  # mo -> config
 
 
-class ServiceStub(object):
+class ServiceStub:
     def __init__(self, pool):
         self.pool = pool
         self.metrics = defaultdict(list)
@@ -56,7 +56,7 @@ class ServiceStub(object):
         self.metrics[table] += data
 
 
-class BeefCallWrapper(object):
+class BeefCallWrapper:
     def __init__(self, obj, name):
         self.name = name
         self.object = obj

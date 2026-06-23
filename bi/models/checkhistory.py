@@ -26,7 +26,7 @@ from noc.core.translation import ugettext as _
 
 
 class CheckHistory(Model):
-    class Meta(object):
+    class Meta:
         db_table = "checkhistory"
         engine = MergeTree("date", ("date", "check_name"), primary_keys=("date", "check_name"))
 

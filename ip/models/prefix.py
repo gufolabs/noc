@@ -72,7 +72,7 @@ class Prefix(NOCModel):
     Allocated prefix
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = _("Prefix")
         verbose_name_plural = _("Prefixes")
         db_table = "ip_prefix"

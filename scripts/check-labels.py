@@ -28,7 +28,7 @@ class FatalError(Exception):
     pass
 
 
-class TestCase(object):
+class TestCase:
     def __init__(self, name=None, path=None, fatal=False, ref=None):
         self.name = name
         self.path = path
@@ -79,7 +79,7 @@ class TestCase(object):
         return "\n".join(r)
 
 
-class TestSuite(object):
+class TestSuite:
     PRI_LABELS = ["pri::p1", "pri::p2", "pri::p3", "pri::p4"]
     COMP_LABELS = ["comp::trivial", "comp::low", "comp::medium", "comp::high"]
     KIND_LABELS = ["kind::feature", "kind::improvement", "kind::bug", "kind::cleanup"]

@@ -17,7 +17,7 @@ from noc.core.comp import smart_text, DEFAULT_ENCODING
 logger = logging.getLogger(__name__)
 
 
-class BaseParameter(object):
+class BaseParameter:
     PARAM_NUMBER = itertools.count()
 
     def __init__(self, default=None, help=None):
@@ -246,7 +246,7 @@ class ListParameter(BaseParameter):
         return [self.item.clean(x) for x in v]
 
 
-class ServiceItem(object):
+class ServiceItem:
     __slots__ = ["host", "port"]
 
     def __init__(self, host, port):

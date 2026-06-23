@@ -9,7 +9,7 @@
 from typing import Dict, Optional, Iterable, Tuple
 
 
-class Environment(object):
+class Environment:
     """
     Environment.
 

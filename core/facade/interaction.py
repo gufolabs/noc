@@ -39,7 +39,7 @@ class InteractionAction(Enum):
 
 
 @dataclass
-class InteractionItem(object):
+class InteractionItem:
     """
     Single interaction.
 
@@ -59,7 +59,7 @@ class InteractionItem(object):
 
 
 @dataclass
-class Interaction(object):
+class Interaction:
     actions: list[InteractionItem]
 
     def to_str(self) -> str:

@@ -12,7 +12,7 @@ from typing import Optional
 from noc.sa.models.managedobject import ManagedObject
 
 
-class BaseGoal(object):
+class BaseGoal:
     DEFAULT_COST = 1
     DROP_COST = 0xFFFFFF
 

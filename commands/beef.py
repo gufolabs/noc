@@ -118,7 +118,7 @@ class Command(BaseCommand):
         from noc.dev.models.spec import Spec
         from fs import open_fs
 
-        class FakeSpec(object):
+        class FakeSpec:
             def __init__(self, name):
                 self.name = name
                 self.uuid = "4ec10fd8-3a33-4f23-b96e-91e3967c3b1b"
@@ -254,7 +254,7 @@ class Command(BaseCommand):
         """
         for import_path in paths:
             self.print(f"Importing {import_path} ...")
-            with open(import_path, "r") as f:
+            with open(import_path) as f:
                 data = yaml.safe_load(f)
             for c in data["cli_fsm"]:
                 c["reply"] = [
@@ -663,8 +663,8 @@ class Command(BaseCommand):
         return args
 
 
-class ServiceStub(object):
-    class ServiceConfig(object):
+class ServiceStub:
+    class ServiceConfig:
         def __init__(self, pool, tos=None):
             self.pool = pool
             self.tos = tos

@@ -76,7 +76,7 @@ class DataSourceRecord:
         return r
 
 
-class NoDataChecker(object):
+class NoDataChecker:
     """
     Control input data from source, and set flag in no updated data on TTL
     Attributes:

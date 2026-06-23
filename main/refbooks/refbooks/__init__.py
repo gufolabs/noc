@@ -25,7 +25,7 @@ def get_language(name):
 #
 # RefBook description base
 #
-class RefBook(object):
+class RefBook:
     name = None
     language = "English"
     description = ""
@@ -93,7 +93,7 @@ class RefBook(object):
                 field.save()
 
 
-class Field(object):
+class Field:
     """
     RefBook fields
     """

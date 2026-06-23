@@ -17,7 +17,7 @@ from django.db.backends.utils import names_digest, truncate_name
 logger = logging.getLogger("migration")
 
 
-class DB(object):
+class DB:
     """
     PostgreSQL database migration operations
     """
@@ -149,7 +149,7 @@ class DB(object):
         pk_field_args = pk_field_args or []
         pk_field_kwargs = pk_field_kwargs or {}
 
-        class MockOptions(object):
+        class MockOptions:
             def __init__(self, model):
                 self.db_table = db_table
                 self.db_tablespace = ""
@@ -174,7 +174,7 @@ class DB(object):
                 # we only care about the pk field
                 return self.pk
 
-        class MockModel(object):
+        class MockModel:
             _meta = None
 
         # We need to return an actual class object here, not an instance

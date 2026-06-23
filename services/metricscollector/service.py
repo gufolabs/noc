@@ -49,7 +49,7 @@ TARGET_CHECK_SEND_INTERVAL = 3600
 
 
 @dataclass(frozen=True)
-class CfgItem(object):
+class CfgItem:
     id: str
     ch_table: str
     ch_field: str

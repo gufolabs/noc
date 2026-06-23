@@ -67,7 +67,7 @@ DIAGNOSTIC_CHECK_STATE: Dict[bool, DiagnosticState] = {
 }
 
 
-class DiagnosticHub(object):
+class DiagnosticHub:
     """
     Diagnostic Hub
     Methods:

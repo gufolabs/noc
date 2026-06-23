@@ -56,7 +56,7 @@ def template_validator(value):
     ]
 )
 class Template(NOCModel):
-    class Meta(object):
+    class Meta:
         app_label = "main"
         db_table = "main_template"
         verbose_name = "Template"

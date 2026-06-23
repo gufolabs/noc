@@ -15,7 +15,7 @@ from noc.sa.models.managedobject import ManagedObject
 
 
 @dataclass(eq=True, frozen=True)
-class SourceConfig(object):
+class SourceConfig:
     id: str
     name: str
     bi_id: int
@@ -53,7 +53,7 @@ class SourceConfig(object):
         return self.mapping_refs
 
 
-class SourceLookup(object):
+class SourceLookup:
     def __init__(self):
         self.source_configs: Dict[str, SourceConfig] = {}  # id -> SourceConfig
         self.source_map: Dict[str, str] = {}

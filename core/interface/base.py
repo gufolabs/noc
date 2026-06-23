@@ -37,7 +37,7 @@ class BaseInterfaceMetaclass(type):
         return n
 
 
-class BaseInterface(object, metaclass=BaseInterfaceMetaclass):
+class BaseInterface(metaclass=BaseInterfaceMetaclass):
     template = None  # Relative template path in sa/templates/
     form = None
     preview = None

@@ -29,7 +29,7 @@ from .vrf import VRF
 @Label.model
 @change
 class AddressRange(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = _("Address Range")
         db_table = "ip_addressrange"
         app_label = "ip"

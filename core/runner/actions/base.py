@@ -52,7 +52,7 @@ class ActionMetaclass(type):
         return m
 
 
-class BaseAction(object, metaclass=ActionMetaclass):
+class BaseAction(metaclass=ActionMetaclass):
     """
     Base class for actions.
 

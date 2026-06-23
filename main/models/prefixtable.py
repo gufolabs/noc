@@ -22,7 +22,7 @@ from noc.core.translation import ugettext as _
     clean_lazy_labels="prefixfilter",
 )
 class PrefixTable(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = _("Prefix Table")
         verbose_name_plural = _("Prefix Tables")
         db_table = "main_prefixtable"
@@ -77,7 +77,7 @@ class PrefixTable(NOCModel):
 
 
 class PrefixTablePrefix(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = _("Prefix")
         verbose_name_plural = _("Prefixes")
         app_label = "main"

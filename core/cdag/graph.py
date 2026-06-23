@@ -15,7 +15,7 @@ from .node.loader import loader
 from .tx import Transaction
 
 
-class CDAG(object):
+class CDAG:
     def __init__(self, graph_id: str, state: Optional[Dict[str, Any]] = None):
         self.graph_id = graph_id
         self.state: Dict[str, Any] = state or {}

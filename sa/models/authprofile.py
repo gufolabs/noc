@@ -57,7 +57,7 @@ MatchRules = RootModel[List[Optional[MatchRule]]]
 @bi_sync
 @on_delete_check(check=[("sa.ManagedObject", "auth_profile")])
 class AuthProfile(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Auth Profile"
         verbose_name_plural = "Auth Profiles"
         db_table = "sa_authprofile"

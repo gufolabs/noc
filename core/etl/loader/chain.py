@@ -16,7 +16,7 @@ from .loader import loader as loader_loader
 from noc.core.etl.loader.base import BaseLoader
 
 
-class LoaderChain(object):
+class LoaderChain:
     def __init__(self, system):
         self.system = system
         self.loaders: Dict[str, BaseLoader] = {}  # name -> loader

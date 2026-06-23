@@ -17,20 +17,20 @@ TARGET_CHECK_SEND_INTERVAL = 43000
 
 
 @dataclass
-class RemoteSystemData(object):
+class RemoteSystemData:
     id: str
     name: str
 
 
 @dataclass
-class AdministrativeDomainData(object):
+class AdministrativeDomainData:
     id: int
     name: str
     remote_system: Optional[RemoteSystemData] = None
 
 
 @dataclass
-class ManagedObjectData(object):
+class ManagedObjectData:
     id: str
     name: str
     administrative_domain: AdministrativeDomainData
@@ -41,7 +41,7 @@ class ManagedObjectData(object):
 
 
 @dataclass
-class SourceConfig(object):
+class SourceConfig:
     id: str
     addresses: Tuple[str, ...]
     stream: str

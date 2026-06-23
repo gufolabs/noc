@@ -22,7 +22,7 @@ from noc.settings import LANGUAGE_CODE
 
 
 @dataclass
-class Message(object):
+class Message:
     value: bytes
     headers: Dict[str, bytes]
     timestamp: int
@@ -131,7 +131,7 @@ class MessageType(enum.Enum):
 
 
 @dataclass(frozen=True)
-class MetaConfig(object):
+class MetaConfig:
     header: str
     is_list: bool = False
 

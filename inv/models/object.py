@@ -65,7 +65,7 @@ _path_cache = cachetools.TTLCache(maxsize=1000, ttl=60)
 
 
 @dataclass(frozen=True)
-class ConnectionData(object):
+class ConnectionData:
     name: str
     protocols: List[ProtocolVariant]
     data: Dict[str, Any]

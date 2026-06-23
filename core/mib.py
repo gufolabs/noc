@@ -19,7 +19,7 @@ from noc.core.snmp.util import render_tc
 logger = logging.getLogger(__name__)
 
 
-class MIBRegistry(object):
+class MIBRegistry:
     PATHS = config.get_customized_paths("cmibs")
     load_lock = Lock()
 

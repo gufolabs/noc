@@ -11,7 +11,7 @@ from typing import Optional, List
 
 
 @dataclass
-class ObjectSnapshot(object):
+class ObjectSnapshot:
     """
     Managed object snapshot for topology service.
 

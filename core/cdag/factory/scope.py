@@ -23,14 +23,14 @@ cfg_lock = Lock()
 
 
 @dataclass
-class ProbeConfig(object):
+class ProbeConfig:
     name: str
     description: str
     config: ProbeNodeConfig
 
 
 @dataclass
-class ScopeConfig(object):
+class ScopeConfig:
     name: str
     description: str
     config: MetricsNodeConfig

@@ -24,7 +24,7 @@ class VRFGroup(NOCModel):
     Group of VRFs with common properties
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = _("VRF Group")
         verbose_name_plural = _("VRF Groups")
         db_table = "ip_vrfgroup"

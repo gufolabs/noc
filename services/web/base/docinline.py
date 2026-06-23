@@ -26,7 +26,7 @@ from noc.core.mongo.fields import PlainReferenceField, ForeignKeyField
 from noc.core.comp import smart_text
 
 
-class DocInline(object):
+class DocInline:
     # HTTP Result Codes
     OK = 200
     CREATED = 201

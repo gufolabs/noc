@@ -18,7 +18,7 @@ DOCS_DIR = "docs"
 SUMMARY_FILENAME = "SUMMARY.md"
 
 
-class ToC(object):
+class ToC:
     def __init__(self, path):
         with open(path, encoding="utf-8") as f:
             data = yaml.safe_load(f.read().replace("!!python/name:", ""))
@@ -34,7 +34,7 @@ class ToC(object):
         if not os.path.exists(pp):
             return []
         result = []
-        with open(pp, "r", encoding="utf-8") as f:
+        with open(pp, encoding="utf-8") as f:
             data = f.read().splitlines()
         for line in data:
             if line.strip():

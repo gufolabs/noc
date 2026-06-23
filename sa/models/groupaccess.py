@@ -16,7 +16,7 @@ from .administrativedomain import AdministrativeDomain
 
 
 class GroupAccess(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = _("Group Access")
         verbose_name_plural = _("Group Access")
         db_table = "sa_groupaccess"

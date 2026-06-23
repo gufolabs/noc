@@ -63,7 +63,7 @@ class CtxItem:
 
 
 @dataclass(frozen=True)
-class DiagnosticConfig(object):
+class DiagnosticConfig:
     """
     Configuration over diagnostic
     Attributes:

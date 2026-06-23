@@ -25,13 +25,13 @@ class ConnAction(int, Enum):
 
 
 @dataclass(frozen=True)
-class PathItem(object):
+class PathItem:
     obj: Object
     connection: str
 
 
 @dataclass(frozen=True)
-class AdjItem(object):
+class AdjItem:
     local_name: str
     remote_object: Object
     remote_name: str

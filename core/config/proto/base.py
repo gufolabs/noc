@@ -9,7 +9,7 @@
 from urllib.parse import unquote, urlparse
 
 
-class BaseProtocol(object):
+class BaseProtocol:
     def __init__(self, config, url):
         self.config = config
         self.url = url

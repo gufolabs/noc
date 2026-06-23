@@ -14,7 +14,7 @@ from .communitytype import CommunityType
 
 
 class Community(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Community"
         verbose_name_plural = "Communities"
         db_table = "peer_community"

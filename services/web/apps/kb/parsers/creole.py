@@ -19,7 +19,7 @@ from noc.core.comp import smart_text
 mw_lock = Lock()
 
 
-class MacroWrapper(object):
+class MacroWrapper:
     pass
 
 

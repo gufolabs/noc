@@ -15,7 +15,7 @@ import struct
 from collections import defaultdict
 
 
-class BaseField(object):
+class BaseField:
     """
     BaseField class for ClickHouse structure
     """

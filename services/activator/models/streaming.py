@@ -11,7 +11,7 @@ from typing import Optional, Dict, Any
 
 
 @dataclass
-class StreamingConfig(object):
+class StreamingConfig:
     # Liftbridge stream name
     stream: str
     # Liftbridge partition

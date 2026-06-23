@@ -21,7 +21,7 @@ from noc.core.mongo.connection import get_db
 from noc.core.perf import metrics
 
 
-class RCALock(object):
+class RCALock:
     """
     Lock set of items
     """

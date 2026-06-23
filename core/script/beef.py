@@ -49,7 +49,7 @@ class MIBData(NamedTuple):
     value: bytes
 
 
-class Beef(object):
+class Beef:
     def __init__(self):
         self.version: Optional[str] = None
         self.uuid = None

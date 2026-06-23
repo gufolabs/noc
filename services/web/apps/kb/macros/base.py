@@ -12,7 +12,7 @@ import re
 rx_args = re.compile(r"\s*(?P<attr>\S+)\s*=\s*(?P<quote>['\"])(?P<value>.*?)(?P=quote)")
 
 
-class BaseMacro(object):
+class BaseMacro:
     name = None
 
     @classmethod

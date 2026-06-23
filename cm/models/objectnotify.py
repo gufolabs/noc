@@ -18,7 +18,7 @@ OBJECT_TYPE_CHOICES = [(x, x) for x in OBJECT_TYPES if x != "config"]
 
 
 class ObjectNotify(NOCModel):
-    class Meta(object):
+    class Meta:
         app_label = "cm"
         db_table = "cm_objectnotify"
         verbose_name = "Object Notify"

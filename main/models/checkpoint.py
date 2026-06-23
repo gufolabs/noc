@@ -21,7 +21,7 @@ class Checkpoint(NOCModel):
     Checkpoint is a marked moment in time
     """
 
-    class Meta(object):
+    class Meta:
         app_label = "main"
         db_table = "main_checkpoint"
         verbose_name = "Checkpoint"

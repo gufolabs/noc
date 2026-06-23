@@ -16,7 +16,7 @@ TEMPORARY_STREAM_PREFIX = "__tmp"
 
 
 @dataclass(frozen=True)
-class StreamConfig(object):
+class StreamConfig:
     name: str
     sharded: bool = False
     slot: Optional[str] = None
@@ -35,7 +35,7 @@ class StreamConfig(object):
 
 
 @dataclass(frozen=True)
-class StreamItem(object):
+class StreamItem:
     name: Optional[str]
     shard: Optional[str] = None
     slot: Optional[str] = None

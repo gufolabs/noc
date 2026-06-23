@@ -20,7 +20,7 @@ class KBUserBookmark(NOCModel):
     User Bookmarks
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "KB User Bookmark"
         verbose_name_plural = "KB User Bookmarks"
         app_label = "kb"

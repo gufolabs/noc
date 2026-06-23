@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from builtins import str
 from typing import Optional, List, Dict, Any  # noqa
 import os
 import re

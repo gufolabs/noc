@@ -188,7 +188,7 @@ class NotificationGroup(NOCModel):
     Notification Groups
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Notification Group"
         verbose_name_plural = "Notification Groups"
         app_label = "main"
@@ -852,7 +852,7 @@ class NotificationGroup(NOCModel):
 
 
 class NotificationGroupUserSettings(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Notification Group User Subscription"
         verbose_name_plural = "Notification Group Users"
         app_label = "main"
@@ -910,7 +910,7 @@ class NotificationGroupUserSettings(NOCModel):
 
 
 class NotificationGroupSubscription(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Notification Group Watch Subscription"
         verbose_name_plural = "Notification Group Users"
         app_label = "main"

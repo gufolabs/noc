@@ -39,7 +39,7 @@ from noc.sa.models.administrativedomain import AdministrativeDomain as Administr
 
 
 class Events(Model):
-    class Meta(object):
+    class Meta:
         db_table = "events"
         engine = MergeTree(
             "date",

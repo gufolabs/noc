@@ -20,7 +20,7 @@ class CommandError(Exception):
     pass
 
 
-class BaseCommand(object):
+class BaseCommand:
     LOG_FORMAT = config.log_format
     help = ""  # Help text (shows ./noc help)
 

@@ -56,7 +56,7 @@ PRIV_PROTO_MAP = {
 }
 
 
-class SNMP(object):
+class SNMP:
     name = "snmp"
 
     class TimeOutError(NOCError):

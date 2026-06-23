@@ -14,7 +14,7 @@ class PermissionDenied(Exception):
     """
 
 
-class Permission(object):
+class Permission:
     """
     Basic Permission class.
     Each permission must implement ``check`` method

@@ -48,7 +48,7 @@ FREE_ADDRESS_STATE = "Free"
 @workflow
 @on_delete_check(check=[("ip.Address", "ipv6_transition")])
 class Address(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = _("Address")
         verbose_name_plural = _("Addresses")
         db_table = "ip_address"

@@ -15,7 +15,7 @@ from noc.core.handler import get_handler
 logger = logging.getLogger(__name__)
 
 
-class Trigger(object):
+class Trigger:
     def __init__(self, t):
         self.name = t.name
         # Condition

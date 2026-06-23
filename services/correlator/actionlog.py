@@ -23,7 +23,7 @@ from noc.fm.models.activealarm import ActiveAlarm, WatchItem, Effect
 
 
 @dataclass(frozen=True)
-class ActionResult(object):
+class ActionResult:
     """
     Action result class
     Attributes:
@@ -40,7 +40,7 @@ class ActionResult(object):
     actions: Optional[List[ActionConfig]] = None
 
 
-class ActionLog(object):
+class ActionLog:
     """
     Action Part of log with Run"""
 

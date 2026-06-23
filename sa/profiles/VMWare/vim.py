@@ -22,7 +22,7 @@ class VIMError(NOCError):
     default_code = ERR_HTTP_UNKNOWN
 
 
-class VIM(object):
+class VIM:
     VIMError = VIMError
 
     def __init__(self, script):

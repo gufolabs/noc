@@ -23,8 +23,8 @@ SNMP_HOST = "snmpd"
 SNMP_COMMUNITY = "public"
 
 
-class ServiceStub(object):
-    class ServiceConfig(object):
+class ServiceStub:
+    class ServiceConfig:
         def __init__(self, pool, tos=None):
             self.pool = pool
             self.tos = tos

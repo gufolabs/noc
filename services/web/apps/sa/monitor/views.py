@@ -111,7 +111,7 @@ class MonitorApplication(ObjectListApplication):
         return self.render_plain_text("No data")
 
 
-class JobF(object):
+class JobF:
     def __init__(self, scheduler="discovery", pool="default"):
         self.scheduler = scheduler
         self.pool = pool

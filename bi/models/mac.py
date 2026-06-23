@@ -55,7 +55,7 @@ class MAC(Model):
       AND uni = 1;
     """
 
-    class Meta(object):
+    class Meta:
         db_table = "mac"
         engine = MergeTree(
             "date", ("date", "managed_object"), primary_keys=("date", "managed_object")

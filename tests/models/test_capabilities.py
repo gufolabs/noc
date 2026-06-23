@@ -13,7 +13,7 @@ from noc.core.caps.decorator import capabilities
 
 
 @capabilities
-class MockManagedObject(object):
+class MockManagedObject:
     name = "mock"
 
     def __init__(self, caps=None):

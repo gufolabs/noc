@@ -29,7 +29,7 @@ class ScriptStub(BaseScript):
         return
 
 
-class ProfileStub(object):
+class ProfileStub:
     telnet_send_on_connect = None
 
     @classmethod

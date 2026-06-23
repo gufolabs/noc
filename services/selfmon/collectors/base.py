@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 Metric = Tuple[Tuple[Any], int]
 
 
-class BaseCollector(object):
+class BaseCollector:
     name = None
 
     def __init__(self, service):

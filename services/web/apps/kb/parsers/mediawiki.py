@@ -25,7 +25,7 @@ class MediaWikiParser(BaseParser):
     name = "MediaWiki"
     css = ["mediawiki/shared.css", "mediawiki/main.css"]
 
-    class NOCDB(object):
+    class NOCDB:
         rx_link = re.compile(r"<a href='(.+?)'>")
 
         def __init__(self, kb_entry):

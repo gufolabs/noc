@@ -9,7 +9,7 @@
 import itertools
 
 
-class GeocodingParser(object):
+class GeocodingParser:
     ID_ADDR = None
 
     def __init__(self):

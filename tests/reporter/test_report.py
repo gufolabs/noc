@@ -35,5 +35,5 @@ def test_report(report, params):
     out_doc = report_engine.run_report(r_params=rp)
     re_out = out_doc.content.decode("utf8")
     re_out = re_out.replace("\r\n", "\n")
-    with open(os.path.join(path, f"{report}.csv"), "r") as f:
+    with open(os.path.join(path, f"{report}.csv")) as f:
         assert re_out == f.read()

@@ -12,7 +12,7 @@ from noc.inv.models.networksegment import NetworkSegment as NetworkSegmentModel
 
 
 class NetworkSegment(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "networksegment"
         layout = "hashed"
         source_model = "inv.NetworkSegment"

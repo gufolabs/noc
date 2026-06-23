@@ -13,7 +13,7 @@ from noc.core.prefixlist import optimize_prefix_list, optimize_prefix_list_maxle
 from noc.core.mongo.connection import get_db
 
 
-class WhoisCache(object):
+class WhoisCache:
     """
     Whois cache interface
     """

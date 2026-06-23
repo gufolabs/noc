@@ -40,7 +40,7 @@ from .report import Band, DataSet
 logger = logging.getLogger(__name__)
 
 
-class ReportEngine(object):
+class ReportEngine:
     """
     Reporting Engine implementation. Report Pipeline:
     RunParams -> ReportEngine -> load_data -> Band -> Formatter -> DocumentFile

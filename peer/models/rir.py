@@ -32,7 +32,7 @@ class RIR(NOCModel):
     Regional internet registries
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "RIR"
         verbose_name_plural = "RIRs"
         db_table = "peer_rir"

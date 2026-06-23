@@ -61,7 +61,7 @@ class VRF(NOCModel):
     VRF
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = _("VRF")
         verbose_name_plural = _("VRFs")
         db_table = "ip_vrf"

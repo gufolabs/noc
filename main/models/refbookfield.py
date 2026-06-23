@@ -21,7 +21,7 @@ class RefBookField(NOCModel):
     Refbook fields
     """
 
-    class Meta(object):
+    class Meta:
         app_label = "main"
         verbose_name = "Ref Book Field"
         verbose_name_plural = "Ref Book Fields"

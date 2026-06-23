@@ -13,7 +13,7 @@ from ..typing import FactoryCtx
 from ..graph import CDAG
 
 
-class BaseCDAGFactory(object):
+class BaseCDAGFactory:
     """
     CDAG factory is responsible for computation graph construction. Factories can be chained
     together

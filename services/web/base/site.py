@@ -37,14 +37,14 @@ from noc.core.jsonutils import orjson_defaults
 logger = logging.getLogger(__name__)
 
 
-class ProxyNode(object):
+class ProxyNode:
     pass
 
 
 HTTP_METHODS = {"GET", "POST", "PUT", "DELETE"}
 
 
-class URL(object):
+class URL:
     """
     URL Data wrapper
     """
@@ -75,7 +75,7 @@ class URL(object):
 
 
 @dataclass
-class AppPermission(object):
+class AppPermission:
     """
     Application permission.
 
@@ -100,7 +100,7 @@ class AppPermission(object):
 _perms_lock = Lock()
 
 
-class Site(object):
+class Site:
     """
     Application site. Registers applications, builds menu and
     handling views

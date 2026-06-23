@@ -18,7 +18,7 @@ from noc.core.deprecations import RemovedInNOC2402Warning
 logger = logging.getLogger(__name__)
 
 
-class BaseCache(object):
+class BaseCache:
     """
     Basic cache class.
     Follows common dict style like cache[key] = value

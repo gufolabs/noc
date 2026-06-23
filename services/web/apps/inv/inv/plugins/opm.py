@@ -35,7 +35,7 @@ class Band(Enum):
 
 
 @dataclass
-class CardConfig(object):
+class CardConfig:
     """
     Card configuration.
 
@@ -49,7 +49,7 @@ class CardConfig(object):
 
 
 @dataclass
-class BaseToken(object):
+class BaseToken:
     pass
 
 
@@ -73,7 +73,7 @@ class DirToken(BaseToken):
     direction: str
 
 
-class BaseCard(object):
+class BaseCard:
     """Base card handler."""
 
     groups: list[str]

@@ -25,7 +25,7 @@ Sample = namedtuple("Sample", ["value", "width", "delta"])
 MAX_FLOAT = sys.float_info.max
 
 
-class Stream(object):
+class Stream:
     """
     Base class for approximate quantiles compulation
 
@@ -285,7 +285,7 @@ class TargetedStream(Stream):
         return m
 
 
-class Summary(object):
+class Summary:
     """
     Group of time-expiring quantiles. Collects up to `n` time slots.
     `Summary` collects quantiles for ttl, 2 * ttl, .. , n * ttl intervals.

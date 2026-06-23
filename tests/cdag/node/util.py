@@ -22,7 +22,7 @@ from noc.core.service.loader import get_service, set_service
 from noc.core.service.stub import ServiceStub
 
 
-class NodeCDAG(object):
+class NodeCDAG:
     def __init__(self, node_type: str, config=None, state=None):
         self.cdag = CDAG("test", state or {})
         self.node = self.cdag.add_node("node", node_type, config=config)
@@ -74,7 +74,7 @@ def publish_service():
 
 
 @dataclass
-class PublishMsg(object):
+class PublishMsg:
     value: Any
     stream: str
     partition: Optional[int] = None

@@ -16,7 +16,7 @@ from noc.core.inv.path import find_path, PathItem
 translation_map = str.maketrans("<>", "><")
 
 
-class CrossingProposalsBuilder(object):
+class CrossingProposalsBuilder:
     def __init__(
         self,
         lo: Object,
@@ -109,7 +109,7 @@ class CrossingProposalsBuilder(object):
         return result
 
 
-class _SideBuilder(object):
+class _SideBuilder:
     key: str
     has_wires: bool = False
 

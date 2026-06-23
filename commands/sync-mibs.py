@@ -69,7 +69,7 @@ class Command(BaseCommand):
             if path.endswith(".gz"):
                 f = gzip.GzipFile(path, "r")
             else:
-                f = open(path, "r")
+                f = open(path)
             if mib:
                 data = smart_text(f.read(4096))
                 match = self.rx_last_updated.search(data)

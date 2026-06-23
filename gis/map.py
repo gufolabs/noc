@@ -16,7 +16,7 @@ from noc.inv.models.objectconnection import ObjectConnection
 from noc.core.geo import distance, get_bbox
 
 
-class Map(object):
+class Map:
     CONDUITS_LAYERS = ["manholes", "cableentries"]
 
     def __init__(self):

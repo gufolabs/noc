@@ -29,7 +29,7 @@ class RefBookData(NOCModel):
     Ref. Book Data
     """
 
-    class Meta(object):
+    class Meta:
         app_label = "main"
         verbose_name = "Ref Book Data"
         verbose_name_plural = "Ref Book Data"

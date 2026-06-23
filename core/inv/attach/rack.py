@@ -53,7 +53,7 @@ class RackSide(Enum):
 
 
 @dataclass
-class RackPosition(object):
+class RackPosition:
     """
     Rack mounting position.
     """

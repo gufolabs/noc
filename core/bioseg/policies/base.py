@@ -18,7 +18,7 @@ from noc.sa.models.managedobject import ManagedObject
 from noc.core.topology.uplink import update_uplinks
 
 
-class BaseBioSegPolicy(object):
+class BaseBioSegPolicy:
     name: str = None
 
     # Persistent target. Effective attacker's policy map

@@ -35,7 +35,7 @@ def iter_test_paths():
             yield os.path.join(*path)
 
 
-class MockProfile(object):
+class MockProfile:
     def __init__(self, profile_cls):
         self.profile = profile_cls()
 
@@ -43,7 +43,7 @@ class MockProfile(object):
         return self.profile
 
 
-class MockManagedObject(object):
+class MockManagedObject:
     def __init__(self, profile):
         self.profile = MockProfile(profile)
 

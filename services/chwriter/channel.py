@@ -19,7 +19,7 @@ from noc.config import config
 from noc.core.msgstream.message import Message
 
 
-class Channel(object):
+class Channel:
     def __init__(self, service, table: str):
         self.service = service
         self.table = table
@@ -29,7 +29,7 @@ class Channel(object):
         self.size: int = 0
         self.records: int = 0
         self.expired: Optional[float] = None
-        self.q_sql = urllib_quote(f"INSERT INTO raw_{table} FORMAT JSONEachRow".encode("utf-8"))
+        self.q_sql = urllib_quote(f"INSERT INTO raw_{table} FORMAT JSONEachRow".encode())
         self.feed_ready = asyncio.Event()
         self.feed_ready.set()
         self.ttl = float(config.chwriter.batch_delay_ms) / 1_000.0

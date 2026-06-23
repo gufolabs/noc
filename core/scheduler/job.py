@@ -25,7 +25,7 @@ from noc.core.comp import smart_text
 logger = logging.getLogger(__name__)
 
 
-class Job(object):
+class Job:
     # Unique job name
     name = None
     # Set to False when job is disabled

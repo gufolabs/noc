@@ -24,7 +24,7 @@ class PrefixBookmark(NOCModel):
     User Bookmarks
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = _("Prefix Bookmark")
         verbose_name_plural = _("Prefix Bookmarks")
         db_table = "ip_prefixbookmark"

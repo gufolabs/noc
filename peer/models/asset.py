@@ -21,7 +21,7 @@ from noc.core.model.decorator import on_save
 @Label.model
 @on_save
 class ASSet(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "ASSet"
         verbose_name_plural = "ASSets"
         db_table = "peer_asset"

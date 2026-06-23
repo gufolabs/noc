@@ -27,7 +27,7 @@ class HTTPError(NOCError):
     default_code = ERR_HTTP_UNKNOWN
 
 
-class HTTP(object):
+class HTTP:
     HTTPError = HTTPError
 
     def __init__(self, script):

@@ -30,7 +30,7 @@ def unroll_link(s):
     return s
 
 
-class RackSet(object):
+class RackSet:
     """RackSet representation"""
 
     def __init__(self, id, label):
@@ -156,7 +156,7 @@ class RackSet(object):
 #
 # Rack Representation
 #
-class Rack(object):
+class Rack:
     def __init__(self, rackset, id, height):
         self.rackset = rackset
         self.id = id
@@ -169,7 +169,7 @@ class Rack(object):
 # Allocation representation
 # Rendered to HTML by Rack.render_html
 #
-class Allocation(object):
+class Allocation:
     def __init__(
         self,
         rack,
@@ -232,7 +232,7 @@ class Allocation(object):
         return "<br/>".join(r)
 
 
-class Slot(object):
+class Slot:
     def __init__(
         self,
         allocation,
@@ -281,7 +281,7 @@ class Slot(object):
 #              `-> allocation attrs: id, position, height, reserved, model, hostname, description, assetno, href, serial
 #                    `-> slot attrs: id, model, hostname, description, reserved, assetno, href, serial
 #
-class XMLParser(object):
+class XMLParser:
     def __init__(self, text):
         self.parser = xml.parsers.expat.ParserCreate()
         self.parser.StartElementHandler = self.start_element

@@ -62,7 +62,7 @@ class Action:
             yield h
 
 
-class ActionSet(object):
+class ActionSet:
     def __init__(self, logger=None):
         # EventClass
         # Abduct Detector

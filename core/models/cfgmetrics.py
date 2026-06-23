@@ -14,7 +14,7 @@ from noc.core.bi.decorator import bi_hash
 
 
 @dataclass(frozen=True)
-class MetricItem(object):
+class MetricItem:
     name: str
     field_name: str = field(compare=False)
     scope_name: str = field(compare=False)
@@ -48,7 +48,7 @@ class MetricItem(object):
 
 
 @dataclass(frozen=True)
-class MetricCollectorConfig(object):
+class MetricCollectorConfig:
     collector: Literal["sla", "sensor", "managed_object", "cpe"]
     metrics: Tuple[MetricItem, ...]  # Metric Type List
     # Key labels

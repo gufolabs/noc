@@ -232,11 +232,11 @@ def test_list_parmeter(raw, config, expected):
     assert ListParameter(**config).clean(raw) == expected
 
 
-class C(object):
+class C:
     pass
 
 
-class X(object):
+class X:
     pass
 
 
@@ -255,7 +255,7 @@ def test_instanceof_parameter_error(raw, config):
         assert InstanceOfParameter(**config).clean(raw) and "Ok"
 
 
-class C(object):
+class C:
     pass
 
 

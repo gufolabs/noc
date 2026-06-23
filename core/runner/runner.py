@@ -27,7 +27,7 @@ from .actions.base import ActionError
 logger = getLogger(__name__)
 
 
-class Runner(object):
+class Runner:
     """
     Job Runner.
     """

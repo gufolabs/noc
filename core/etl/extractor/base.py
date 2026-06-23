@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclasses.dataclass
-class Problem(object):
+class Problem:
     line: int
     is_rej: bool
     p_class: str
@@ -39,11 +39,11 @@ class Problem(object):
 
 
 @dataclasses.dataclass
-class RemovedItem(object):
+class RemovedItem:
     id: str
 
 
-class BaseExtractor(object):
+class BaseExtractor:
     """
     Data extractor interface. Subclasses must provide
     *iter_data* method
