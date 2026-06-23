@@ -39,11 +39,12 @@ from noc.core.mx import (
     MX_RESOURCE_GROUPS,
     MX_JOB_HANDLER,
     MX_DISABLE_MUTATIONS,
-    MX_REMOTE_SYSTEM,
+    MX_REMOTE_SYSTEMS,
+    MX_FWD_ROUTER,
     MessageType,
     MessageMeta,
 )
-from .action import Action, NotificationAction, MessageAction, ActionCfg, JobAction, HeaderItem
+from .action import Action, NotificationAction, MessageAction, ActionCfg, JobAction, HeaderItem, FWD
 
 T_BODY = Union[bytes, Any]
 
@@ -98,6 +99,7 @@ class MatchItem(object):
     exclude_labels: Optional[List[str]] = None
     administrative_domain: Optional[List[int]] = None
     resource_groups: Optional[List[str]] = None
+    remote_systems: Optional[List[str]] = None
     profile: Optional[str] = None
     headers: Optional[List[HeaderMatchItem]] = None
 
@@ -138,6 +140,10 @@ class MatchItem(object):
         if self.administrative_domain:
             r[MessageMeta.ADM_DOMAIN.config.header] = {
                 "$in": frozenset(str(ad).encode() for ad in self.administrative_domain),
+            }
+        if self.remote_systems:
+            r[MessageMeta.REMOTE_SYSTEMS] = {
+                "$all": frozenset(x.encode() for x in self.remote_systems)
             }
         if self.profile:
             r[MessageMeta.PROFILE.config.header] = str(self.profile).encode()
@@ -194,6 +200,10 @@ class Route(object):
         if msg.headers.get(MX_RESOURCE_GROUPS):
             ctx[MessageMeta.GROUPS] = frozenset(
                 msg.headers[MX_RESOURCE_GROUPS].split(self.MX_H_VALUE_SPLITTER)
+            )
+        if msg.headers.get(MX_REMOTE_SYSTEMS):
+            ctx[MessageMeta.REMOTE_SYSTEMS] = frozenset(
+                msg.headers[MX_REMOTE_SYSTEMS].split(self.MX_H_VALUE_SPLITTER)
             )
         ctx.update(msg.headers)
         return ctx
@@ -326,6 +336,8 @@ class DefaultNotificationRoute(Route):
     ) -> Iterator[Tuple[str, Dict[str, bytes], T_BODY]]:
         if MX_NOTIFICATION_GROUP_ID in msg.headers:
             yield from self.message_action.iter_action(msg, message_type)
+        elif MX_FWD_ROUTER in msg.headers:
+            yield FWD, msg.headers, msg.value
         else:
             yield from self.notification_action.iter_action(msg, message_type)
 
@@ -371,7 +383,7 @@ class DefaultETLEventRoute(Route):
         )
 
     def is_match(self, msg: Message, message_type: bytes) -> bool:
-        return message_type == self.MX_JOB and MX_REMOTE_SYSTEM in msg.headers
+        return message_type == self.MX_JOB and MX_REMOTE_SYSTEMS in msg.headers
 
     def iter_action(
         self, msg: Message, message_type: bytes

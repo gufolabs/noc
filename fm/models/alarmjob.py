@@ -28,6 +28,7 @@ from mongoengine.fields import (
 
 # NOC models
 from noc.core.fm.enum import AlarmAction, ActionStatus, ItemStatus
+from noc.core.models.servicestatus import Status
 from noc.sa.models.servicesummary import SummaryItem, ObjectSummaryItem
 from noc.fm.models.alarmwatch import Effect
 
@@ -59,7 +60,7 @@ class JobStatus(Enum):
 
 class GroupItem(EmbeddedDocument):
     reference = StringField()
-    id: StringField(required=True)
+    id = StringField(required=True)
 
 
 class AlarmItem(EmbeddedDocument):
@@ -74,6 +75,23 @@ class AlarmItem(EmbeddedDocument):
 
     alarm = ObjectIdField()
     # For requested Escalation by ManagedObject
+    # managed_object_id: Int
+    status = EnumField(ItemStatus, default=ItemStatus.NEW)
+    # Already escalated doc
+
+
+class ServiceItem(EmbeddedDocument):
+    """
+    Escalation affected items. First item it escalation leader
+    Attributes:
+        alarm: Alarm Id item
+        status: Item status
+    """
+
+    meta = {"strict": False}
+
+    service = ObjectIdField()
+    service_status: Status = EnumField(Status)
     # managed_object_id: Int
     status = EnumField(ItemStatus, default=ItemStatus.NEW)
     # Already escalated doc
@@ -105,6 +123,7 @@ class ActionLog(EmbeddedDocument):
     alarm_ack = StringField()
     when = StringField(default="any")
     has_effect = EnumField(Effect, required=False)
+    ex_effect = EnumField(Effect, required=False)
     stop_processing: bool = BooleanField(default=False)
     allow_fail: bool = BooleanField(default=False)
     repeat_num: int = IntField(default=0)
@@ -163,7 +182,7 @@ class AlarmJob(Document):
     groups = ListField(BinaryField())
     max_repeats: int = IntField(default=0)
     repeat_delay: int = IntField(default=60)
-    affected_services = ListField(ObjectIdField())
+    affected_services = EmbeddedDocumentListField(ServiceItem)
     affected_maintenances = ListField(ObjectIdField())
     # Escalation summary
     severity: int = IntField(min_value=0)

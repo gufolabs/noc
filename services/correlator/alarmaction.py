@@ -8,22 +8,26 @@
 # Python modules
 import datetime
 import logging
+import uuid
 from typing import Optional, Any, Dict, List
 from logging import Logger
+
+# Third Party modules
+import orjson
 
 # NOC modules
 from noc.core.perf import metrics
 from noc.core.tt.types import (
     EscalationItem as ECtxItem,
-    EscalationServiceItem,
     EscalationStatus,
+    TTAction,
     TTActionContext,
     TTUser,
 )
-from noc.core.tt.base import TTSystemCtx, TTAction
+from noc.core.tt.base import TTSystemCtx
 from noc.core.fm.enum import AlarmAction, ActionStatus
 from noc.core.fm.request import AllowedAction, ActionConfig, WhenCondition
-from noc.sa.models.service import Service
+from noc.core.mx import MessageType, send_message
 from noc.fm.models.ttsystem import TTSystem
 from noc.fm.models.activealarm import ActiveAlarm
 from noc.fm.models.alarmwatch import Effect
@@ -88,6 +92,8 @@ class AlarmActionRunner(object):
                 r = self.notify(**ctx)
             case AlarmAction.SUBSCRIBE:
                 r = self.alarm_subscribe(**ctx)
+            case AlarmAction.REGISTER_MESSAGE:
+                r = self.register_message(**ctx)
             case AlarmAction.LOG:
                 self.log_alarm(message=ctx["subject"])
                 r = ActionResult(status=ActionStatus.SUCCESS)
@@ -131,23 +137,27 @@ class AlarmActionRunner(object):
                 self.log_alarm(err)
                 # item.escalation_status = "fail"
                 continue
+            tt_id = tt_system.get_object_tt_id(item.managed_object)
+            if not tt_id:
+                continue
             ei = ECtxItem(
                 id=str(item.managed_object.id),
-                tt_id=tt_system.get_object_tt_id(item.managed_object),
+                tt_id=tt_id,
+                item="managed_object",
+                ctx=item.managed_object.get_message_context(),
             )
             r.append(ei)
-        return r
-
-    def get_affected_services_items(self, tt_system: TTSystem) -> List[EscalationServiceItem]:
-        """Return Affected Service item for escalation doc"""
-        r = []
-        # if "service" in self.alarm.components:
-        #     svc = self.alarm.components.service
-        #     return [EscalationServiceItem(id=str(svc.id), tt_id=tt_system.get_object_tt_id(svc))]
-        if not self.services:
-            return r
-        for svc in Service.objects.filter(id__in=self.services):
-            r.append(EscalationServiceItem(id=str(svc.id), tt_id=tt_system.get_object_tt_id(svc)))
+        for si in self.services:
+            tt_id = tt_system.get_object_tt_id(si.service)
+            # if not tt_id:
+            #    continue
+            ei = ECtxItem(
+                id=str(si.service.id),
+                tt_id=tt_id or "",
+                item="service",
+                ctx=si.service.get_message_context(),
+            )
+            r.append(ei)
         return r
 
     def get_action_context(self) -> List[TTActionContext]:
@@ -204,7 +214,6 @@ class AlarmActionRunner(object):
             timestamp=timestamp,
             actions=self.get_action_context(),
             items=self.get_escalation_items(tt_system, cfg.promote_item),
-            services=self.get_affected_services_items(tt_system),
             assigned=user,
         )
 
@@ -247,10 +256,10 @@ class AlarmActionRunner(object):
         is_clear = self.alarm.get_watchers(effect=Effect.CLEAR_ALARM)
         if is_clear:
             subject = "Alarm Was Reopen"
-            effect = None
+            effect, ex_effect = None, Effect.CLEAR_ALARM
         else:
             subject = "Alarm Was closed"
-            effect = Effect.CLEAR_ALARM
+            effect, ex_effect = Effect.CLEAR_ALARM, None
         if r.status != ActionStatus.SUCCESS:
             return ActionResult(status=r.status, error=r.error)
         return ActionResult(
@@ -264,6 +273,7 @@ class AlarmActionRunner(object):
                     # template=str(self.close_template.id) if self.close_template else None,
                     subject=subject,
                     has_effect=effect,
+                    ex_effect=ex_effect,
                     allow_fail=True,
                     login=login,
                     queue=queue,
@@ -500,7 +510,7 @@ class AlarmActionRunner(object):
                 login=login,
                 queue=queue,
                 pre_reason=pre_reason,
-                wait_tt=str(r.document) if wait_tt else None,
+                wait_tt=tt_system.get_tt_id(r.document) if wait_tt else None,
                 supress_job=True,
                 clear_template=kwargs.get("clear_template"),
             )
@@ -615,3 +625,87 @@ class AlarmActionRunner(object):
             error = r.error
         self.logger.info(error)
         return ActionResult(status=ActionStatus.FAILED, error=error)
+
+    def register_message(
+        self,
+        subject: str,
+        body: str,
+        tt_id: Optional[str] = None,
+        timestamp: Optional[datetime.datetime] = None,
+        login: Optional[str] = None,
+        queue: Optional[str] = None,
+        pre_reason: Optional[str] = None,
+        wait_tt: bool = False,
+        from_system: Optional[TTSystem] = None,
+        user: Optional[User] = None,
+        **kwargs,
+    ) -> ActionStatus:
+        """Generate escalation state Message"""
+        items, services, headers = [], [], {}
+        for ss in self.services:
+            ctx = ss.service.get_message_context()
+            if not headers:
+                headers = ss.service.get_mx_message_headers()
+            if ss.status_from:
+                ctx["from_status"] = {
+                    "id": ss.status_from.value,
+                    "name": ss.status_from.name,
+                }
+            else:
+                ctx["from_status"] = None
+            ctx["item_status"] = ss.status.value
+            services.append(ctx)
+        for ii in self.items:
+            alarm = ii.alarm
+            if alarm.reference in self.groups:
+                continue
+            item = {
+                "alarm_id": str(alarm.id),
+                "subject": alarm.subject,
+                "body": alarm.body,
+                "vars": alarm.vars,
+                "labels": list(alarm.labels),
+                "item_status": ii.status.value,
+                "managed_object": {},
+            }
+            if alarm.remote_system:
+                item |= {
+                    "remote_system": {
+                        "id": str(alarm.remote_system.id),
+                        "name": alarm.remote_system.name,
+                    },
+                    "remote_id": alarm.remote_id,
+                }
+            items.append(item)
+        tt_id = tt_id or str(uuid.uuid4())
+        msg = {
+            # "status": self.status,
+            "timestamp": timestamp,
+            # "started_at": start_at,
+            "tt_id": tt_id,
+            "is_completed": subject == "Closed",
+            "completed_at": None,
+            # "severity": self.severity,
+            "leader": str(self.alarm.id),
+            "subject": subject,
+            "body": body,
+            "items": items,
+            "services": services,
+        }
+        send_message(orjson.dumps(msg), MessageType.ESCALATE, headers=headers)
+        return ActionResult(
+            status=ActionStatus.SUCCESS,
+            document_id=tt_id,
+            actions=[
+                ActionConfig(
+                    when=WhenCondition.ON_END,
+                    action=AlarmAction.REGISTER_MESSAGE,
+                    key=str(tt_id),
+                    # template=str(self.close_template.id) if self.close_template else None,
+                    subject="Closed",
+                    allow_fail=False,
+                    login=login,
+                    queue=queue,
+                )
+            ],
+        )

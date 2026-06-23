@@ -76,7 +76,7 @@ MX_TO_STAGE_NAME = "Resource-To-Stage-Name"
 MX_LABELS = "Labels"
 MX_RESOURCE_GROUPS = "Resource-Group-Ids"
 MX_WATCH_FOR_ID = "Watch-For-Id"
-MX_REMOTE_SYSTEM = "Remote-System-Id"
+MX_REMOTE_SYSTEMS = "Remote-System-Ids"
 MX_ETL_LOADER = "ETL-Loader"
 # Notification headers
 MX_TO = "To"
@@ -126,6 +126,7 @@ class MessageType(enum.Enum):
     JOB = "job"
     MAINTENANCE_PROCESSED = "maintenance_processed"
     ETL_PUSH = "etl_push"
+    ESCALATE = "escalate"
     OTHER = "other"
 
 
@@ -142,7 +143,7 @@ CONFIGS = {
     "administrative_domain": MetaConfig(MX_ADMINISTRATIVE_DOMAIN_ID),
     "from": MetaConfig(MX_DATA_ID),
     "labels": MetaConfig(MX_LABELS, is_list=True),
-    "remote_system": MetaConfig(MX_REMOTE_SYSTEM),
+    "remote_systems": MetaConfig(MX_REMOTE_SYSTEMS, is_list=True),
 }
 
 
@@ -157,7 +158,7 @@ class MessageMeta(enum.Enum):
     ADM_DOMAIN = "administrative_domain"
     FROM = "from"
     LABELS = "labels"
-    REMOTE_SYSTEM = "remote_system"
+    REMOTE_SYSTEMS = "remote_systems"
 
     def clean_header_value(self, value: Any) -> bytes:
         if self.config.is_list:
@@ -205,6 +206,7 @@ def send_message(
     message_type: MessageType,
     headers: Optional[Dict[str, bytes]],
     sharding_key: int = 0,
+    fwd_to: Optional[str] = None,
 ):
     """
     Build message and schedule to send to mx service
@@ -221,6 +223,8 @@ def send_message(
     }
     if headers:
         msg_headers.update(headers)
+    if fwd_to:
+        msg_headers[MX_FWD_ROUTER] = fwd_to.encode()
     svc = get_service()
     run_sync(partial(svc.send_message, data, message_type, headers, sharding_key))
     # n_partitions = get_mx_partitions()
@@ -237,6 +241,7 @@ def send_notification(
     body: str,
     to: str,  # ? method::/address
     notification_method: str = "mail",
+    fwd_to: Optional[str] = None,
     **kwargs,
 ):
     """
@@ -254,6 +259,8 @@ def send_notification(
         MX_NOTIFICATION_METHOD: notification_method.encode(),
         MX_TO: to.encode(DEFAULT_ENCODING),
     }
+    if fwd_to:
+        msg_headers[MX_FWD_ROUTER] = fwd_to.encode()
     svc = get_service()
     data = {"body": body, "subject": subject, "address": to}
     if kwargs:

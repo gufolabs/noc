@@ -167,6 +167,14 @@ class Sensor(Document):
         if config.datastream.enable_cfgmetricstarget:
             if self.managed_object:
                 yield "cfgmetricstarget", f"sa.ManagedObject::{self.managed_object.bi_id}"
+            elif changed_fields and changed_fields.get("managed_object"):
+                mo = (
+                    ManagedObject.objects.filter(id=changed_fields["managed_object"])
+                    .values_list("bi_id")
+                    .first()
+                )
+                if mo:
+                    yield "cfgmetricstarget", f"sa.ManagedObject::{mo[0]}"
             if self.agent:
                 yield "cfgmetricstarget", f"pm.Agent::{self.agent.bi_id}"
             if self.object and self.object.get_data("management", "managed_object"):
@@ -196,6 +204,14 @@ class Sensor(Document):
         :return:
         """
         return self.profile.units or self.units
+
+    @property
+    def mx_alias(self) -> str:
+        if self.profile.mx_policy == "L":
+            return self.label
+        if self.profile.mx_policy == "A":
+            return self.profile.alias_template
+        return None
 
     def seen(self, source: Optional[str] = None):
         """
@@ -291,6 +307,8 @@ class Sensor(Document):
                 hints.append(f"oid::{sensor.snmp_oid}")
             if sensor.object and sensor.object.get_data("hw_path", "slot"):
                 hints.append(f"slot::{sensor.object.get_data('hw_path', 'slot')}")
+            if sensor.munits != "1":
+                hints.append(f"units::{sensor.munits.code}")
             yield MetricCollectorConfig(
                 collector="sensor",
                 metrics=tuple(metrics),
@@ -311,6 +329,7 @@ class Sensor(Document):
         ts = ts or datetime.datetime.now().replace(microsecond=0)
         units = units or self.munits
         shards = shards or 1
+        shard_key = self.bi_id
         if bulk is None:
             parts = defaultdict(list)
         else:
@@ -327,6 +346,7 @@ class Sensor(Document):
         if self.remote_system:
             r["remote_system"] = self.remote_system.bi_id
         if self.managed_object:
+            shard_key = self.managed_object.bi_id
             r["managed_object"] = self.managed_object.bi_id
             # Register ManagedObject Metrics
             if self.profile.metric_type:
@@ -346,7 +366,7 @@ class Sensor(Document):
                         mt.field_name: value,
                     }
                 )
-        parts[self.bi_id % shards].append(r)
+        parts[shard_key % shards].append(r)
         if bulk is not None:
             return
         svc = get_service()
@@ -360,7 +380,7 @@ class Sensor(Document):
             )
 
     @classmethod
-    def get_metric_config(cls, sensor: "Sensor"):
+    def get_metric_config(cls, sensor: "Sensor") -> Dict[str, Any]:
         """Return MetricConfig for Metrics service"""
         if not sensor.state.is_productive or not sensor.profile.enable_collect:
             return {}
@@ -369,6 +389,7 @@ class Sensor(Document):
             "bi_id": sensor.bi_id,
             "name": sensor.label,
             "units": sensor.munits.code,
+            "mx_alias": sensor.mx_alias,
             "protocol": sensor.protocol,
             "exposed_labels": Label.build_expose_labels(
                 sensor.effective_labels,

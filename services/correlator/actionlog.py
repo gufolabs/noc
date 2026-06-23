@@ -54,6 +54,7 @@ class ActionLog(object):
         alarm_ack: str = "any",
         when: WhenCondition = WhenCondition.ANY,
         has_effect: Optional[Effect] = None,
+        ex_effect: Optional[Effect] = None,
         # Time ?
         subject: Optional[str] = None,
         timestamp: Optional[datetime.datetime] = None,
@@ -84,6 +85,7 @@ class ActionLog(object):
         self.alarm_ack: str = alarm_ack or "any"
         self.when: WhenCondition = when or WhenCondition.ANY
         self.has_effect: Optional[Effect] = has_effect
+        self.ex_effect: Optional[Effect] = ex_effect
         self.stop_processing = stop_processing
         self.allow_fail = allow_fail
         self.repeat_num = repeat_num or 0
@@ -123,6 +125,8 @@ class ActionLog(object):
             return False
         if self.has_effect and self.has_effect not in effects:
             return False
+        if self.ex_effect and self.ex_effect in effects:
+            return False
         return not (self.alarm_ack == "unack" and ack_user)
 
     def get_ctx(
@@ -148,6 +152,8 @@ class ActionLog(object):
             AlarmAction.COMMENT_ALARM_STATE,
         ):
             r["tt_system"] = TTSystem.get_by_id(self.key)
+            r["tt_id"] = self.document_id or document_id
+        elif self.action == AlarmAction.REGISTER_MESSAGE:
             r["tt_id"] = self.document_id or document_id
         elif self.action == AlarmAction.NOTIFY:
             r["notification_group"] = NotificationGroup.get_by_id(int(self.key))
@@ -185,6 +191,7 @@ class ActionLog(object):
             alarm_ack=self.alarm_ack,
             when=self.when,
             has_effect=self.has_effect,
+            ex_effect=self.ex_effect,
             min_severity=self.min_severity,
             allow_fail=self.allow_fail,
             stop_processing=self.stop_processing,
@@ -239,6 +246,7 @@ class ActionLog(object):
             when=action.when,
             min_severity=action.min_severity or 0,
             has_effect=action.has_effect or None,
+            ex_effect=action.ex_effect or None,
             allow_fail=action.allow_fail,
             stop_processing=action.stop_processing,
             # Ctx
@@ -270,6 +278,7 @@ class ActionLog(object):
             alarm_ack=data["alarm_ack"],
             when=WhenCondition(data["when"]),
             has_effect=Effect(data["has_effect"]) if data.get("has_effect") else None,
+            ex_effect=Effect(data["ex_effect"]) if data.get("ex_effect") else None,
             timestamp=data["timestamp"],
             repeat_num=int(data["repeat_num"]),
             status=ActionStatus(data["status"]),
@@ -294,6 +303,7 @@ class ActionLog(object):
             "alarm_ack": self.alarm_ack,
             "when": self.when.value,
             "has_effect": self.has_effect.value if self.has_effect else None,
+            "ex_effect": self.ex_effect.value if self.ex_effect else None,
             "timestamp": self.timestamp.replace(microsecond=0),
             "status": self.status.value,
             "error": self.error,

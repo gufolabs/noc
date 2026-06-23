@@ -2726,6 +2726,8 @@ class ManagedObject(NOCModel):
         from noc.inv.models.interfaceprofile import InterfaceProfile
         from noc.pm.models.metricrule import MetricRule
         from noc.inv.models.sensor import Sensor
+        from noc.sa.models.serviceinstance import ServiceInstance
+        from noc.core.models.serviceinstanceconfig import InstanceType
         from noc.core.checkers.base import NODATA
 
         if Interaction.ServiceActivation not in mo.interactions:
@@ -2781,6 +2783,13 @@ class ManagedObject(NOCModel):
             "type": "managed_object",
             "bi_id": mo.bi_id,
             "name": mo.name,
+            "services": [
+                str(svc.bi_id)
+                for svc in ServiceInstance.objects.filter(
+                    managed_object=mo.id, type=InstanceType.ASSET
+                ).values_list("service")
+            ]
+            or None,
             "addresses": [mo.address],
             "mapping_refs": refs,
             "fm_pool": mo.get_effective_fm_pool().name,
@@ -2925,6 +2934,9 @@ class ManagedObject(NOCModel):
             MessageMeta.PROFILE: get_subscription_id(self.object_profile),
             MessageMeta.GROUPS: list(self.effective_service_groups),
             MessageMeta.LABELS: list(self.effective_labels),
+            MessageMeta.REMOTE_SYSTEMS: [
+                str(m.remote_system.id) for m in self.iter_remote_mappings()
+            ],
         }
 
     def iter_object_watchers(self) -> Iterable[WatchItem]:
@@ -3042,7 +3054,7 @@ class ManagedObject(NOCModel):
         changed = False
         if capabilities:
             self.update_caps(capabilities, source="template")
-        groups = [str(g.id) for g in static_service_groups]
+        groups = [str(g.id) for g in static_service_groups or []]
         if set(self.static_service_groups) != set(groups):
             self.static_service_groups = groups
             changed |= True
@@ -3058,6 +3070,8 @@ class ManagedObject(NOCModel):
             if hasattr(self, field) and getattr(self, field) != value:
                 setattr(self, field, value)
                 changed |= True
+        if mappings:
+            self.update_remote_mappings(mappings, dry_run=True)
         return changed
 
     def get_controller_credentials(self):

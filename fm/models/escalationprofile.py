@@ -30,7 +30,7 @@ from noc.core.change.decorator import change
 from noc.core.mongo.fields import ForeignKeyField
 from noc.core.models.escalationpolicy import EscalationPolicy
 from noc.core.tt.types import TTSystemConfig, EscalationMember
-from noc.core.fm.enum import AlarmAction
+from noc.core.fm.enum import AlarmAction, GroupType
 from noc.core.fm.request import AlarmActionRequest, ActionConfig, AllowedAction, ActionItem
 from noc.main.models.notificationgroup import NotificationGroup
 from noc.main.models.timepattern import TimePattern
@@ -346,6 +346,35 @@ class EscalationProfile(Document):
         """Alarm must wait escalation ended before close"""
         return self.end_condition in ("CT", "M")
 
+    def allowed_escalation(self, alarm: ActiveAlarm, check_active_groups: bool = False) -> bool:
+        """
+        Job Leader
+        * Always First
+        * Root
+        * Root First
+        """
+        if self.escalation_policy == EscalationPolicy.ALWAYS:
+            # Not control unique!
+            return True
+        if self.escalation_policy == EscalationPolicy.ROOT:
+            # Not allowed Group escalation
+            return not (alarm.root or alarm.group_type.value)
+        if alarm.group_type != GroupType.NEVER and not self.escalation_policy.allowed_group:
+            # Not allowed Group escalation
+            return False
+        if (
+            alarm.group_type == GroupType.NEVER
+            and self.escalation_policy.value in {1, 3}
+            and not alarm.groups
+            and check_active_groups
+        ):
+            # Not allowed escalation alarm without active group
+            return False
+        if self.escalation_policy == EscalationPolicy.ROOT_FIRST:
+            return not bool(alarm.root)
+        # EscalationPolicy.ALWAYS_FIRST
+        return True
+
     def from_alarm(self, alarm: ActiveAlarm) -> AlarmActionRequest:
         """"""
         actions = []
@@ -405,11 +434,13 @@ class EscalationProfile(Document):
         return r
 
     @classmethod
-    def watch_escalation(cls, profile: str, alarm: ActiveAlarm, force: bool = False):
+    def watch_escalation(cls, pid: str, alarm: ActiveAlarm, force: bool = False):
         """Check Alarm fow"""
-        profile = EscalationProfile.get_by_id(profile)
+        profile = EscalationProfile.get_by_id(pid)
         if not profile:
             # Unknown escalation Profile
+            return
+        if not profile.allowed_escalation(alarm):
             return
         # After
         delay = profile.get_delay()
@@ -424,7 +455,7 @@ class EscalationProfile(Document):
         alarm.add_watch(
             Effect.ESCALATION,
             key=str(profile.id),
-            once=True,
+            once=False,
             after=after,
             root_only=root_only,
             keep_args=True,

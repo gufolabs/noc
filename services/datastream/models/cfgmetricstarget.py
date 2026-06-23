@@ -23,6 +23,7 @@ class SensorItem(BaseModel):
     rules: Optional[List[str]] = None
     profile: Optional[str] = None
     protocol: str = "other"
+    mx_alias: Optional[str] = None
     hints: Optional[List[str]] = None
 
 
@@ -50,6 +51,7 @@ class CfgMetricsTarget(BaseModel):
     bi_id: int
     sharding_key: int
     # Service
+    services: Optional[List[str]] = None
     mapping_refs: Optional[List[str]] = None
     # Collector received
     enable_fmevent: bool = False
