@@ -254,7 +254,7 @@ class Command(BaseCommand):
         """
         for import_path in paths:
             self.print(f"Importing {import_path} ...")
-            with open(import_path, "r") as f:
+            with open(import_path) as f:
                 data = yaml.safe_load(f)
             for c in data["cli_fsm"]:
                 c["reply"] = [

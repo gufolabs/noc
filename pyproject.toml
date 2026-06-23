@@ -214,7 +214,6 @@ ignore = [
   "UP007", # Use `X | Y` for type annotations
   "UP012", # Unnecessary UTF-8 `encoding` argument to `encode`
   "UP014", # Convert `PathInfo` from `NamedTuple` functional to class syntax
-  "UP015", # Unnecessary mode argument
   "UP017", # Use `datetime.UTC` alias
   "UP018", # Unnecessary `str` call (rewrite as a literal)
   "UP024", # Replace aliased errors with `OSError`

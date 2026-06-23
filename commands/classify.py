@@ -163,7 +163,7 @@ class Command(BaseCommand):
         """
         Parse events from syslog-format file located on the path 'filepath'
         """
-        with open(filepath, "r") as f:
+        with open(filepath) as f:
             lines = f.read().splitlines()
         events = []
         for line in lines:

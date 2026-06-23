@@ -129,7 +129,7 @@ def get_old_ip():
     """Read old ip from file from /etc/hosts"""
     try:
         ipfilepath = "/etc/hosts"
-        with open(ipfilepath, "r") as file:
+        with open(ipfilepath) as file:
             hostname = socket.gethostname()
             for line in file.readlines():
                 if line.strip().endswith(hostname):
