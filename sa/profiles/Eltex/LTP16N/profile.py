@@ -59,7 +59,7 @@ class Profile(BaseProfile):
     def get_platform(self, s):
         return self.PLATFORMS.get(s)
 
-    class switch(object):
+    class switch:
         """Switch context manager to use with "with" statement"""
 
         def __init__(self, script):

@@ -13,7 +13,7 @@ from noc.core.reporter.band import Band
 from noc.core.reporter.types import BandFormat
 
 
-class ReportSource(object):
+class ReportSource:
     """
     Class for old-compatible report format when Data and Format union in one source
     """

@@ -379,7 +379,7 @@ class MODiscoveryJob(PeriodicJob):
         return name in self.artefacts
 
 
-class DiscoveryCheck(object):
+class DiscoveryCheck:
     name = None
     # If not none, check required script is available
     # before running check

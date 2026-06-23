@@ -40,7 +40,7 @@ id_lock = Lock()
 )
 @on_save
 class AS(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "AS"
         verbose_name_plural = "ASes"
         db_table = "peer_as"

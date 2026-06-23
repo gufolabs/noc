@@ -11,7 +11,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class BaseAuthBackend(object):
+class BaseAuthBackend:
     class LoginError(Exception):
         pass
 

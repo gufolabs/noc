@@ -10,7 +10,7 @@ import datetime
 from noc.config import config
 
 
-class BaseExtractor(object):
+class BaseExtractor:
     """
     Extract data between timestamps
     """

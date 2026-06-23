@@ -19,7 +19,7 @@ from noc.config import config
 from noc.core.msgstream.message import Message
 
 
-class Channel(object):
+class Channel:
     def __init__(self, service, table: str):
         self.service = service
         self.table = table

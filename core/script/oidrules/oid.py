@@ -15,7 +15,7 @@ from noc.core.mib import mib
 rx_rule_var = re.compile(r"{{\s*([^}]+?)\s*}}")
 
 
-class OIDRule(object):
+class OIDRule:
     """
     SNMP OID generator for SNMP_OIDS
     """

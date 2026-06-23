@@ -41,7 +41,7 @@ class ValueType(enum.Enum):
     BINARY = 5
 
 
-class ZabbixAPI(object):
+class ZabbixAPI:
     def __init__(self, router: APIRouter):
         self.router = router
         self.openapi_tags = ["api", "metricscollector"]

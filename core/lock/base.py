@@ -67,7 +67,7 @@ class BaseLock(ABC):
         """
 
 
-class Token(object):
+class Token:
     """
     Active lock context manager
     """

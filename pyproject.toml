@@ -209,7 +209,6 @@ ignore = [
   "RUF051", # @todo: ruff#20700 reported! Use `pop` instead of `key in dict` followed by `del dict[key]`
   "RUF059", # Unpacked variable `epsilon` is never used
   "RUF100", # Unused blanket `noqa` directive
-  "UP004", # Class `ProfileStub` inherits from `object`
   "UP006", # Use `dict` instead of `Dict` for type annotation
   "UP007", # Use `X | Y` for type annotations
   "UP014", # Convert `PathInfo` from `NamedTuple` functional to class syntax

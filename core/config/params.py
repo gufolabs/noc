@@ -276,7 +276,7 @@ class ListParameter(BaseParameter[List[T]], Generic[T]):
         return [self.item.clean(x) for x in v]
 
 
-class ServiceItem(object):
+class ServiceItem:
     __slots__ = ["host", "port"]
 
     def __init__(self, host: str, port: int):

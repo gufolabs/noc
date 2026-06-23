@@ -32,7 +32,7 @@ from ..models.base import BaseModel
 logger = logging.getLogger(__name__)
 
 
-class BaseLoader(object):
+class BaseLoader:
     """
     Import directory structure:
     var/

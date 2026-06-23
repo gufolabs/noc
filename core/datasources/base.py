@@ -108,7 +108,7 @@ caps_dtype_map = {
 
 
 @dataclass
-class FieldInfo(object):
+class FieldInfo:
     """
     Datasource Field description
     """
@@ -178,7 +178,7 @@ class ParamInfo:
         return value
 
 
-class BaseDataSource(object):
+class BaseDataSource:
     """DataSource and fields description"""
 
     IGNORED_PARAMS = {"administrative_domain", "user"}

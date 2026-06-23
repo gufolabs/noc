@@ -30,14 +30,14 @@ CHECK_OIDS = [mib["SNMPv2-MIB::sysObjectID.0"]]
 
 
 @dataclass(frozen=True)
-class SNMPCredential(object):
+class SNMPCredential:
     snmp_ro: str = None
     snmp_rw: Optional[str] = None
     oids: Optional[List[str]] = None
 
 
 @dataclass(frozen=True)
-class CLICredential(object):
+class CLICredential:
     user: Optional[str] = None
     password: Optional[str] = None
     super_password: Optional[str] = None
@@ -45,7 +45,7 @@ class CLICredential(object):
 
 
 @dataclass(frozen=True)
-class SuggestSNMPConfig(object):
+class SuggestSNMPConfig:
     protocols: Tuple[Protocol, ...]
     check_method: str = "snmp_check"
     snmp_ro: Optional[str] = None
@@ -57,7 +57,7 @@ class SuggestSNMPConfig(object):
 
 
 @dataclass(frozen=True)
-class SuggestCLIConfig(object):
+class SuggestCLIConfig:
     protocols: Tuple[Protocol, ...]
     check_method: str = "cli_check"
     user: Optional[str] = None
@@ -76,7 +76,7 @@ class SuggestCLIConfig(object):
 
 
 @dataclass(frozen=True)
-class ProtocolResult(object):
+class ProtocolResult:
     protocol: Protocol
     status: bool
     skipped: bool = False
@@ -89,7 +89,7 @@ SUGGEST_CLI: Tuple[Protocol, ...] = (Protocol(1), Protocol(2))
 SUGGEST_PROTOCOLS: Tuple[Protocol, ...] = SUGGEST_SNMP + SUGGEST_CLI
 
 
-class CredentialChecker(object):
+class CredentialChecker:
     """
     Credential checker for CLI/SNMP credential. Allow suggests credential
     """

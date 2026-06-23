@@ -17,7 +17,7 @@ from noc.config import config
 logger = logging.getLogger(__name__)
 
 
-class LoaderLoader(object):
+class LoaderLoader:
     def __init__(self):
         self.loaders = {}  # Load loaders
         self.lock = threading.Lock()

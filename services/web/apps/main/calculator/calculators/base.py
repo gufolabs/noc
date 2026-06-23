@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 
-class BaseCalculator(object):
+class BaseCalculator:
     name = None
     title = None
     description = None

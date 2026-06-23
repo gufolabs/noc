@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 
-class EventPlugin(object):
+class EventPlugin:
     name = None
 
     def __init__(self, app):

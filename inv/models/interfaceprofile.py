@@ -55,7 +55,7 @@ NON_DISABLED_METRIC_TYPE = {"Interface | Status | Oper", "Interface | Status | A
 
 
 @dataclass
-class MetricConfig(object):
+class MetricConfig:
     metric_type: MetricType
     is_stored: bool
     interval: int

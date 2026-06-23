@@ -80,7 +80,7 @@ metrics_lock = Lock()
 
 
 @dataclass
-class MetricConfig(object):
+class MetricConfig:
     metric_type: MetricType
     is_stored: bool
     interval: int
@@ -170,7 +170,7 @@ rule_lock = Lock()
     clean_lazy_labels="managedobjectprofile",
 )
 class ManagedObjectProfile(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = _("Managed Object Profile")
         verbose_name_plural = _("Managed Object Profiles")
         db_table = "sa_managedobjectprofile"

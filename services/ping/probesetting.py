@@ -25,7 +25,7 @@ class Policy(Enum):
     CHECK_ALL = 1
 
 
-class ProbeSetting(object):
+class ProbeSetting:
     __slots__ = [
         "address",
         "bi_id",

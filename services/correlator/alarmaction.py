@@ -35,7 +35,7 @@ from noc.aaa.models.user import User
 from .actionlog import ActionResult
 
 
-class AlarmActionRunner(object):
+class AlarmActionRunner:
     """
     Base class for run actions from config.
     Args:

@@ -68,7 +68,7 @@ DCS_SLOTS_CACHE = {}  # PROCESS -> object cache
 dcs_slot_lock = threading.Lock()
 
 
-class BaseService(object):
+class BaseService:
     """
     Basic service implementation.
 

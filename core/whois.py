@@ -28,7 +28,7 @@ IGNORED_LINES = {" " * 16}  # 16 - default tab, Add after find:
 # '                299 Broadway',
 
 
-class WhoisCacheLoader(object):
+class WhoisCacheLoader:
     RIPE_AS_SET_MEMBERS = "https://ftp.ripe.net/ripe/dbase/split/ripe.db.as-set.gz"
     RIPE_ROUTE_ORIGIN = "https://ftp.ripe.net/ripe/dbase/split/ripe.db.route.gz"
     ARIN = "https://ftp.arin.net/pub/rr/arin.db.gz"

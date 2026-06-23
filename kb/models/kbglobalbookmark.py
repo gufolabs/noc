@@ -20,7 +20,7 @@ class KBGlobalBookmark(NOCModel):
     @todo: Replace with boolean flag in KBEntry
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "KB Global Bookmark"
         verbose_name_plural = "KB Global Bookmarks"
         app_label = "kb"

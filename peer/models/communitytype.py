@@ -15,7 +15,7 @@ from noc.core.model.decorator import on_delete_check
 
 @on_delete_check(check=[("peer.Community", "type")])
 class CommunityType(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Community Type"
         verbose_name_plural = "Community Types"
         db_table = "peer_communitytype"

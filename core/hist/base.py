@@ -14,7 +14,7 @@ from atomicl import AtomicLong
 DEFAULT_HIST_SCALE = 1000000
 
 
-class Histogram(object):
+class Histogram:
     def __init__(self, config=None, scale=DEFAULT_HIST_SCALE):
         self.scale = DEFAULT_HIST_SCALE
         self.labels = [str(x) for x in config] + ["+Inf"]

@@ -15,7 +15,7 @@ from noc.main.models.remotesystem import RemoteSystem
 
 
 @mappings
-class MockManagedObject(object):
+class MockManagedObject:
     name = "mock"
     _is_document = True
     _created = True

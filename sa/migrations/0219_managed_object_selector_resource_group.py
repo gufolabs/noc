@@ -47,7 +47,7 @@ selector = namedtuple(
 BULK = 10000
 
 
-class ManagedObjectSelectorLabels(object):
+class ManagedObjectSelectorLabels:
     """
     Class for convert ManagedObjectSelector Fields to Labels set
     """

@@ -75,7 +75,7 @@ def get_column_width(name):
     return 15
 
 
-class ReportAdPath(object):
+class ReportAdPath:
     """
     Return AD path
     """

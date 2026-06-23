@@ -13,7 +13,7 @@ MetricKey = Tuple[str, Tuple[Tuple[str, Any], ...], Tuple[str, ...]]
 
 
 @dataclass(frozen=True)
-class SourceInfo(object):
+class SourceInfo:
     """
     Source Info for applied metric Card
     """
@@ -43,7 +43,7 @@ class SourceInfo(object):
 
 
 @dataclass(frozen=True)
-class ItemConfig(object):
+class ItemConfig:
     """
     Metric Source Item Config
     Match by key_labels
@@ -59,7 +59,7 @@ class ItemConfig(object):
 
 
 @dataclass(frozen=True)
-class SourceConfig(object):
+class SourceConfig:
     """
     Configuration for Metric Source and Items.
     Contains configured metrics, labels and alarm node config
@@ -98,7 +98,7 @@ class SourceConfig(object):
 
 
 @dataclass
-class ManagedObjectInfo(object):
+class ManagedObjectInfo:
     __slots__ = ("bi_id", "fm_pool", "id", "labels", "metric_labels")
     id: int
     bi_id: int

@@ -18,7 +18,7 @@ from noc.core.log import PrefixLoggerAdapter
 logger = logging.getLogger(__name__)
 
 
-class BaseLoader(object):
+class BaseLoader:
     name = None
     base_cls = None  # Base class to be loaded
     base_path = None  # Tuple of path components

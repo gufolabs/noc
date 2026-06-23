@@ -1677,7 +1677,7 @@ class AlarmComponent(Protocol):
     def get_component(self, **kwargs) -> Optional["Generic"]: ...
 
 
-class ComponentHub(object):
+class ComponentHub:
     """
     Resolve Model instance by Alarm Vars data
     If component not find on the system - return None

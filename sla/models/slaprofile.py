@@ -42,7 +42,7 @@ metrics_lock = Lock()
 
 
 @dataclass
-class MetricConfig(object):
+class MetricConfig:
     metric_type: MetricType
     is_stored: bool
     interval: int

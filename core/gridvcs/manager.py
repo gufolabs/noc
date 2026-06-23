@@ -14,7 +14,7 @@ from .base import GridVCS
 logger = logging.getLogger(__name__)
 
 
-class GridVCSField(object):
+class GridVCSField:
     """
     Django's model manager.
 
@@ -54,7 +54,7 @@ class GridVCSField(object):
         return GridVCSObjectProxy(self.repo, instance.id)
 
 
-class GridVCSObjectDescriptor(object):
+class GridVCSObjectDescriptor:
     def __init__(self, field):
         self.field = field
         self.repo = field.repo
@@ -63,7 +63,7 @@ class GridVCSObjectDescriptor(object):
         return GridVCSObjectProxy(self.repo, instance.id)
 
 
-class GridVCSObjectProxy(object):
+class GridVCSObjectProxy:
     _cache = {}
 
     def __init__(self, repo, id):

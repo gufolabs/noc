@@ -18,7 +18,7 @@ from noc.config import config
 logger = logging.getLogger(__name__)
 
 
-class DataFormatter(object):
+class DataFormatter:
     """
     Base class for Report Formatter
     Create result document by setted format

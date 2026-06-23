@@ -46,7 +46,7 @@ def unscope(x):
 
 
 @dataclass
-class ScopeInfo(object):
+class ScopeInfo:
     scope: str
     key_fields: Tuple[str, ...]
     key_labels: Tuple[str, ...]
@@ -70,7 +70,7 @@ class MetricsItem(TypedDict, closed=True):
 
 
 @dataclass
-class Card(object):
+class Card:
     """
     Store Input probe nodes
     """

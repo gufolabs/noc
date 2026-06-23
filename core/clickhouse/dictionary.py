@@ -35,7 +35,7 @@ class DictionaryBase(type):
         return cls
 
 
-class DictionaryMeta(object):
+class DictionaryMeta:
     def __init__(self, name=None, layout=None, lifetime_min=None, lifetime_max=None):
         self.name = name
         self.layout = layout
@@ -59,7 +59,7 @@ class DictionaryMeta(object):
         self.ordered_fields = sorted(self.fields.values(), key=operator.attrgetter("field_number"))
 
 
-class Dictionary(object, metaclass=DictionaryBase):
+class Dictionary(metaclass=DictionaryBase):
     class Meta:
         name = None
         layout = None

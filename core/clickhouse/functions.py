@@ -8,7 +8,7 @@
 from typing import Optional
 
 
-class AggregateFunction(object):
+class AggregateFunction:
     db_name = None
 
     def __init__(self, function: Optional[str] = None, **params):

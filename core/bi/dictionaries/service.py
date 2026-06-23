@@ -12,7 +12,7 @@ from noc.sa.models.service import Service as ServiceModel
 
 
 class Service(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "service"
         layout = "hashed"
         source_model = "sa.Service"

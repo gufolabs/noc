@@ -55,7 +55,7 @@ rx_md_anchor = re.compile(r"[ _\|\(\)/]+")
 
 
 @dataclass(order=True)
-class Data(object):
+class Data:
     """
     Collections data.
 

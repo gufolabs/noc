@@ -56,7 +56,7 @@ def get_column_width(name):
     return 15
 
 
-class ReportLinksDetail(object):
+class ReportLinksDetail:
     """Report for MO links detail"""
 
     def __init__(self, mo_ids):

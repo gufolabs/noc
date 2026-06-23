@@ -17,7 +17,7 @@ from noc.main.models.pool import Pool
 
 
 @dataclass
-class PoolConfig(object):
+class PoolConfig:
     name: str
     description: str | None = None
     discovery_reschedule_limit: int | None = None

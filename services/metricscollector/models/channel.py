@@ -18,7 +18,7 @@ from noc.core.etl.models.fmevent import FMEventObject
 from noc.core.fm.event import Event
 
 
-class RemoteSystemChannel(object):
+class RemoteSystemChannel:
     def __init__(
         self,
         service,
@@ -153,7 +153,7 @@ class RemoteSystemChannel(object):
         self.feed_ready.set()
 
 
-class RemoteSystemEventChannel(object):
+class RemoteSystemEventChannel:
     def __init__(
         self,
         service,

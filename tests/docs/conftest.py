@@ -24,7 +24,7 @@ rx_item = re.compile(r"\[(.*)].*\((.*)\)")
 T_NAV_ITEM = Union[str, Dict[str, "T_NAV_ITEM"], List["T_NAV_ITEM"]]
 
 
-class ToC(object):
+class ToC:
     def __init__(self, path: Path):
         self.items: Dict[Tuple[str, ...], str] = {}
         for kv in self.iter_nav(path):

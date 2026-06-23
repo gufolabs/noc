@@ -26,7 +26,7 @@ from .reportapplication import ReportApplication
 INDENT = "    "
 
 
-class ReportNode(object):
+class ReportNode:
     """
     Abstract Report Node
     """
@@ -462,7 +462,7 @@ class TableColumn(ReportNode):
         return len([x for x in f if x])
 
 
-class SectionRow(object):
+class SectionRow:
     """
     Delimiter row
     """
@@ -795,7 +795,7 @@ class SimpleReport(ReportApplication):
         return self.predefined_reports[variant].args
 
 
-class PredefinedReport(object):
+class PredefinedReport:
     def __init__(self, title=None, args=None):
         self.title = title
         self.args = args or {}

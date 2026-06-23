@@ -53,7 +53,7 @@ class DNSZone(NOCModel):
     DNS Zone
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = _("DNS Zone")
         verbose_name_plural = _("DNS Zones")
         ordering = ["name"]

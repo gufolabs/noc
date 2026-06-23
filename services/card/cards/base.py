@@ -21,7 +21,7 @@ from noc.config import config
 from noc.core.perf import metrics
 
 
-class BaseCard(object):
+class BaseCard:
     name = None
     default_template_name = "default"
     template_cache = {}  # name -> Template instance

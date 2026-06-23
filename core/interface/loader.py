@@ -22,7 +22,7 @@ from noc.config import config
 logger = logging.getLogger(__name__)
 
 
-class InterfaceLoader(object):
+class InterfaceLoader:
     rx_class = re.compile(r"^class\s+(?P<name>\S+)\(", re.MULTILINE)
 
     def __init__(self):

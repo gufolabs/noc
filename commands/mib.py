@@ -277,7 +277,7 @@ class Command(BaseCommand):
             self.die("RPC Error: %s" % e)
 
 
-class ServiceStub(object):
+class ServiceStub:
     def __init__(self):
         self.service_id = "stub"
         self.logger = logging.getLogger(__name__)

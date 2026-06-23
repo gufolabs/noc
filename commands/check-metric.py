@@ -131,8 +131,8 @@ class Command(BaseCommand):
             self.print_csv(profile_list, metric_list)
 
 
-class ServiceStub(object):
-    class ServiceConfig(object):
+class ServiceStub:
+    class ServiceConfig:
         def __init__(self, pool, tos=None):
             self.pool = pool
             self.tos = tos

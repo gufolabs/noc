@@ -17,7 +17,7 @@ from noc.core.perf import metrics
 from noc.core.comp import smart_text
 
 
-class LoggingMiddleware(object):
+class LoggingMiddleware:
     def __init__(
         self, app, logger=None, is_wsgi_app: bool = False, collect_req_api_metric: bool = False
     ):

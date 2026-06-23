@@ -72,7 +72,7 @@ TIME_PATTERNS = [
 ]
 
 
-class TimePattern(object):
+class TimePattern:
     """
     >>> import datetime
     >>> TimePattern("13").match(datetime.datetime(year=2005,month=3,day=13))
@@ -156,7 +156,7 @@ class TimePattern(object):
         return x
 
 
-class TimePatternList(object):
+class TimePatternList:
     """
     Enclosure for a list of time patterns
     """

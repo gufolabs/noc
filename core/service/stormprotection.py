@@ -30,7 +30,7 @@ class StormRecord:
     storm_threshold: int
 
 
-class StormProtection(object):
+class StormProtection:
     """Message Storm Protection class
 
     An instance of the `Storm Protection` class is installed at the message receiving point to

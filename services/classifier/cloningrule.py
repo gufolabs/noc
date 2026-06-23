@@ -12,8 +12,8 @@ import re
 from noc.services.classifier.exception import InvalidPatternException
 
 
-class CloningRule(object):
-    class Pattern(object):
+class CloningRule:
+    class Pattern:
         def __init__(self, key_re, value_re):
             self.key_re = key_re
             self.value_re = value_re

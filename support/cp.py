@@ -21,7 +21,7 @@ from noc.core.comp import smart_text
 logger = logging.getLogger(__name__)
 
 
-class CPClient(object):
+class CPClient:
     CONFIG = "etc/support.conf"
     CP_URL = "https://cp.nocproject.org"
     PRODUCT = "NOC"

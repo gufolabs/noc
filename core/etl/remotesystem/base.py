@@ -38,7 +38,7 @@ class StepResult:
         return bool(changes)
 
 
-class BaseRemoteSystem(object):
+class BaseRemoteSystem:
     extractors = {}
 
     extractors_order = [

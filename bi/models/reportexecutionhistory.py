@@ -18,7 +18,7 @@ from noc.core.clickhouse.engines import MergeTree
 
 
 class ReportExecutionHistory(Model):
-    class Meta(object):
+    class Meta:
         db_table = "reportexecutionhistory"
         engine = MergeTree("date", ("date", "report"))
 

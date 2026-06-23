@@ -63,7 +63,7 @@ router = APIRouter()
 
 
 @dataclass
-class QueryConfig(object):
+class QueryConfig:
     metric_type: str
     query_expression: str
     alias: Optional[str] = None
@@ -72,7 +72,7 @@ class QueryConfig(object):
     description: str = ""
 
 
-class JsonDSAPI(object):
+class JsonDSAPI:
     """
     Backend for SimpodJson Grafana plugin
     """

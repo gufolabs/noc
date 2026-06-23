@@ -16,7 +16,7 @@ import orjson
 BAD_CHARS = "!\"%'()+,:;<>?@^`{|}~\\\n\r"
 
 
-class BaseDashboard(object):
+class BaseDashboard:
     name = None
 
     class NotFound(Exception):

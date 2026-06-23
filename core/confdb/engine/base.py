@@ -29,7 +29,7 @@ def visitor(args):
     return wrap
 
 
-class Engine(object):
+class Engine:
     CLEANUP_NODES = {"hints"}
 
     def __init__(self):

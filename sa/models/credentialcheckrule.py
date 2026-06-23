@@ -40,7 +40,7 @@ def check_model(oid):
 
 
 @dataclass(frozen=True)
-class SuggestItem(object):
+class SuggestItem:
     """
     Attributes:
         credentials: List of suggests credentials

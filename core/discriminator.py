@@ -15,7 +15,7 @@ from noc.core.text import ranges_to_list
 SCOPE_SEPARATOR = "::"
 
 
-class LambdaDiscriminator(object):
+class LambdaDiscriminator:
     """
     Optical wavelength.
 
@@ -82,7 +82,7 @@ class LambdaDiscriminator(object):
         return LambdaDiscriminator(f"{ch_freq}-{ch_width}")
 
 
-class VlanDiscriminator(object):
+class VlanDiscriminator:
     scope: str = "vlan"
 
     def __init__(self, value: str):
@@ -153,7 +153,7 @@ ODU_LIMITS = {
 }
 
 
-class OduDiscriminator(object):
+class OduDiscriminator:
     scope: str = "odu"
 
     def __init__(self, value: str):
@@ -241,7 +241,7 @@ class OduDiscriminator(object):
         return r
 
 
-class OscDiscriminator(object):
+class OscDiscriminator:
     scope = "osc"
     OUTBAND = "outband"
 

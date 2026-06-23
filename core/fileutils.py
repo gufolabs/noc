@@ -106,7 +106,7 @@ def write_tempfile(text):
     return p
 
 
-class temporary_file(object):
+class temporary_file:
     """
     Temporary file context manager.
     Writes data to temporary file an returns path.

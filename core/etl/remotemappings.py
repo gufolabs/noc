@@ -23,7 +23,7 @@ DEFAULT_PRIORITY = "uem"
 
 
 @dataclass(frozen=True)
-class RemoteMappingValue(object):
+class RemoteMappingValue:
     remote_system: Any
     remote_id: Any
     sources: FrozenSet[InputSource]

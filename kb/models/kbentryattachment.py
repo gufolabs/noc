@@ -19,7 +19,7 @@ class KBEntryAttachment(NOCModel):
     Attachments
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "KB Entry Attachment"
         verbose_name_plural = "KB Entry Attachments"
         app_label = "kb"

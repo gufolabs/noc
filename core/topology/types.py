@@ -35,14 +35,14 @@ class ShapeOverlayForm(str, Enum):
 
 
 @dataclass
-class ShapeOverlay(object):
+class ShapeOverlay:
     code: str
     position: ShapeOverlayPosition = ShapeOverlayPosition.SE
     form: ShapeOverlayForm = ShapeOverlayForm.Circle
 
 
 @dataclass
-class MapItem(object):
+class MapItem:
     title: str
     id: str
     generator: str
@@ -52,26 +52,26 @@ class MapItem(object):
 
 
 @dataclass
-class MapSize(object):
+class MapSize:
     width: Optional[int] = None
     height: Optional[int] = None
 
 
 @dataclass
-class BackgroundImage(object):
+class BackgroundImage:
     image: str
     opacity: int = 30
 
 
 @dataclass
-class PathItem(object):
+class PathItem:
     title: str
     id: str
     level: 0
 
 
 @dataclass
-class Portal(object):
+class Portal:
     generator: str
     id: Optional[str] = None
     settings: Optional[Dict[str, Any]] = None
@@ -87,7 +87,7 @@ class TopologyNodeType(Enum):
 
 
 @dataclass
-class TopologyNode(object):
+class TopologyNode:
     id: str
     type: TopologyNodeType = TopologyNodeType.OTHER
     resource_id: Optional[str] = None
@@ -112,7 +112,7 @@ class TopologyNode(object):
 
 
 @dataclass
-class MapMeta(object):
+class MapMeta:
     title: str
     image: Optional[BackgroundImage] = None
     width: Optional[int] = None

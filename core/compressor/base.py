@@ -10,7 +10,7 @@ import io
 from typing import Optional
 
 
-class BaseCompressor(object):
+class BaseCompressor:
     name = None
     # Default file extension
     ext = None

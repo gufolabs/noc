@@ -37,7 +37,7 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 
 
-class VMAgentAPI(object):
+class VMAgentAPI:
     """
     # https://github.com/prometheus/prometheus/blob/v2.24.0/prompb/remote.proto
     # https://prometheus.io/docs/specs/prw/remote_write_spec/

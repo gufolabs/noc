@@ -59,7 +59,7 @@ class BaseScriptMetaclass(type):
         return n
 
 
-class BaseScript(object, metaclass=BaseScriptMetaclass):
+class BaseScript(metaclass=BaseScriptMetaclass):
     """
     Service Activation script base class
     """
@@ -1271,13 +1271,13 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         return d
 
 
-class ScriptsHub(object):
+class ScriptsHub:
     """
     Object representing Script.scripts structure.
     Returns initialized child script which can be used ans callable
     """
 
-    class _CallWrapper(object):
+    class _CallWrapper:
         def __init__(self, script_class, parent):
             self.parent = parent
             self.script_class = script_class
@@ -1318,7 +1318,7 @@ class ScriptsHub(object):
         return script_loader.has_script(item)
 
 
-class PartialResult(object):
+class PartialResult:
     __slots__ = ["result"]
 
     def __int__(self, **kwargs):

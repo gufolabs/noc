@@ -11,7 +11,7 @@ from noc.models import get_model
 from noc.config import config
 
 
-class OP(object):
+class OP:
     """
     :param min: Minimal count element in query
     :param max: Maximal count element in query

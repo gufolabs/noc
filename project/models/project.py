@@ -53,7 +53,7 @@ class Project(NOCModel):
     Projects are used to track investment projects expenses and profits
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Project"
         verbose_name_plural = "Projects"
         app_label = "project"

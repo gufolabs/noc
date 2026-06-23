@@ -23,7 +23,7 @@ from noc.config import config
 
 
 @dataclass
-class Message(object):
+class Message:
     value: bytes
     headers: Dict[str, bytes]
     timestamp: int
@@ -72,7 +72,7 @@ FORMAT JSONEachRow
 
 
 @dataclass(slots=True, frozen=True)
-class PurgatoriumData(object):
+class PurgatoriumData:
     """
     Data return from Purgatorium Table
     """

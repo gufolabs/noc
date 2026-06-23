@@ -12,7 +12,7 @@ from noc.wf.models.state import State as StateModel
 
 
 class State(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "state"
         layout = "hashed"
         source_model = "wf.State"

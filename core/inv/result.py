@@ -14,7 +14,7 @@ import orjson
 
 
 @dataclass
-class Result(object):
+class Result:
     status: bool
     message: str | None = None
 

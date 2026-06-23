@@ -20,7 +20,7 @@ from noc.config import config
 
 
 @dataclass
-class DiscoveryVLAN(object):
+class DiscoveryVLAN:
     id: int
     l2domain: "L2Domain"
     name: Optional[str] = None

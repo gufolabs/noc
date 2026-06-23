@@ -31,7 +31,7 @@ SQL_STATE = """
 STATE_RETRY = 3.0
 
 
-class ChangeLog(object):
+class ChangeLog:
     LOCK_CATEGORY = "metrics"
     COLL_NAME = "metricslog"
     MAX_DATA = 15_000_000

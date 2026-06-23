@@ -28,7 +28,7 @@ from .error import TTError, TemporaryTTError
 from noc.core.debug import error_report
 
 
-class BaseTTSystem(object):
+class BaseTTSystem:
     """
     Base class for TT integration adapter.
 
@@ -175,7 +175,7 @@ class BaseTTSystem(object):
         raise NotImplementedError()
 
 
-class TTSystemCtx(object):
+class TTSystemCtx:
     """
     Escalation context data class.
 

@@ -27,7 +27,7 @@ DEFAULT_GROUP_CLASS = "Group"
 
 
 @dataclass
-class Group(object):
+class Group:
     reference_template: Template
     alarm_class: AlarmClass
     title_template: Template
@@ -50,7 +50,7 @@ class Group(object):
 
 
 @dataclass
-class GroupItem(object):
+class GroupItem:
     reference: str
     alarm_class: AlarmClass
     title: str
@@ -62,7 +62,7 @@ class GroupItem(object):
 
 
 @dataclass
-class JobConfig(object):
+class JobConfig:
     name: str
     actions: List[ActionConfig]
     repeat_delay: Optional[int] = None
@@ -70,7 +70,7 @@ class JobConfig(object):
     allowed_actions: Optional[List[AllowedAction]] = None
 
 
-class AlarmRule(object):
+class AlarmRule:
     _default_alarm_class: Optional[AlarmClass] = None
     severity_policy: str = "AL"
     min_severity: Optional[int] = None
@@ -212,7 +212,7 @@ class AlarmRule(object):
                 )
 
 
-class AlarmRuleSet(object):
+class AlarmRuleSet:
     """
     Full set of alarm rules
     """

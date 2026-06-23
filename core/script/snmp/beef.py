@@ -30,7 +30,7 @@ class BeefSNMP(SNMP):
         return self.socket
 
 
-class BeefSNMPSocket(object):
+class BeefSNMPSocket:
     def __init__(self, snmp):
         self.script = snmp.script
         self.logger = snmp.logger

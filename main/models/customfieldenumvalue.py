@@ -18,7 +18,7 @@ class CustomFieldEnumValue(NOCModel):
     Enumeration groups values
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Enum Group Value"
         verbose_name_plural = "Enum Group Values"
         db_table = "main_customfieldenumvalue"

@@ -10,7 +10,7 @@ from noc.core.matcher import match
 from .loader import load_rule
 
 
-class MatcherRule(object):
+class MatcherRule:
     """
     Multiple items for single metric
     """

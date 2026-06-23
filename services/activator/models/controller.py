@@ -11,7 +11,7 @@ from typing import Optional
 
 
 @dataclass
-class ControllerConfig(object):
+class ControllerConfig:
     """
     Attributes:
         local_id: Identifier host on controller

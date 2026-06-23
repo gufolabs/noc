@@ -9,7 +9,7 @@
 from noc.core.ip import IP, IPv4, IPv6
 
 
-class BasePattern(object):
+class BasePattern:
     # __slots__ = ["match_rest"] conflicts with py3
     match_rest = False
 

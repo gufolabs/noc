@@ -394,7 +394,7 @@ def dump_stacks(thread_id=None):
                 print("    %s" % line.strip())
 
 
-class ErrorReport(object):
+class ErrorReport:
     """
     error_report context wrapper
     """

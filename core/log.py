@@ -14,7 +14,7 @@ from noc.core.debug import get_traceback, error_fingerprint
 from noc.core.comp import smart_text
 
 
-class PrefixLoggerAdapter(object):
+class PrefixLoggerAdapter:
     """
     Add [prefix] to log message
     """

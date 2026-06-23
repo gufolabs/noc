@@ -45,7 +45,7 @@ ALARM_WATCHER_JCLS = "noc.services.correlator.alarmjob.AlarmWatchersJob"
 
 
 @dataclass(repr=True)
-class ServiceItem(object):
+class ServiceItem:
     service: Service
     managed_object_id: Optional[int] = None
     service_status: ServiceStatus = ServiceStatus.UNKNOWN
@@ -66,7 +66,7 @@ class ServiceItem(object):
 
 
 @dataclass(repr=True)
-class Item(object):
+class Item:
     """Over Job Item"""
 
     #! Replace to alarm List, status
@@ -108,7 +108,7 @@ class Item(object):
 
 
 @dataclass(repr=True)
-class AllowedAction(object):
+class AllowedAction:
     action: AlarmAction
     login: Optional[str] = None
     stop_processing: bool = False
@@ -119,7 +119,7 @@ class AllowedAction(object):
         return AllowedAction(action=req.action)
 
 
-class AlarmJob(object):
+class AlarmJob:
     """
     Runtime Alarm Automation
     """

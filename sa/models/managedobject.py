@@ -176,7 +176,7 @@ SCHEDULER = "scheduler"
 
 
 @dataclass(frozen=True)
-class Credentials(object):
+class Credentials:
     user: str
     password: str
     super_password: str
@@ -359,7 +359,7 @@ def default(obj):
 
 
 @dataclass(frozen=True)
-class ObjectUplinks(object):
+class ObjectUplinks:
     object_id: int
     uplinks: List[int]
     rca_neighbors: List[int]
@@ -462,7 +462,7 @@ class ManagedObject(NOCModel):
     Managed Object
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Managed Object"
         verbose_name_plural = "Managed Objects"
         db_table = "sa_managedobject"
@@ -3293,7 +3293,7 @@ class ManagedObject(NOCModel):
 
 @on_save
 class ManagedObjectAttribute(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Managed Object Attribute"
         verbose_name_plural = "Managed Object Attributes"
         db_table = "sa_managedobjectattribute"
@@ -3314,7 +3314,7 @@ class ManagedObjectAttribute(NOCModel):
 
 @on_save
 class ManagedObjectStatus(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Managed Object Status"
         verbose_name_plural = "Managed Object Status"
         db_table = "sa_objectstatus"
@@ -3465,7 +3465,7 @@ class ManagedObjectStatus(NOCModel):
 
 @on_save
 class ManagedObjectWatchers(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Managed Object Watchers"
         verbose_name_plural = "Managed Object Watchers"
         db_table = "sa_managedobjectwatchers"
@@ -3567,7 +3567,7 @@ class ManagedObjectWatchers(NOCModel):
 
 
 # object.scripts. ...
-class ScriptsProxy(object):
+class ScriptsProxy:
     def __init__(self, obj, caller=None):
         self._object = obj
         self._cache = {}
@@ -3597,8 +3597,8 @@ class ScriptsProxy(object):
         return (x.split(".")[-1] for x in script_loader.iter_scripts() if x.startswith(prefix))
 
 
-class ActionsProxy(object):
-    class CallWrapper(object):
+class ActionsProxy:
+    class CallWrapper:
         def __init__(self, obj, name, action):
             self.name = name
             self.object = obj
@@ -3622,7 +3622,7 @@ class ActionsProxy(object):
         return cw
 
 
-class MatchersProxy(object):
+class MatchersProxy:
     def __init__(self, obj):
         self._object = obj
         self._data = None
@@ -3654,7 +3654,7 @@ class MatchersProxy(object):
         return item in self._data
 
 
-class InteractionHub(object):
+class InteractionHub:
     """
     Return available interaction on object
     If interaction is not supported - return None

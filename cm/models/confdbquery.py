@@ -31,7 +31,7 @@ from noc.sa.interfaces.base import StringParameter, IntParameter, BooleanParamet
 from noc.core.path import safe_json_path
 
 
-class IPParameter(object):
+class IPParameter:
     def clean(self, value):
         return IP.prefix(value)
 

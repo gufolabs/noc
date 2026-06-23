@@ -61,7 +61,7 @@ class Profile(BaseProfile):
         self.add_script_method(script, "zynos_mode", self.zynos_mode)
 
 
-class ZyNOSContextManager(object):
+class ZyNOSContextManager:
     """zynos mode context manager to use with "with" statement"""
 
     def __init__(self, script):

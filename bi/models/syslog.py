@@ -20,7 +20,7 @@ from noc.core.translation import ugettext as _
 
 
 class Syslog(Model):
-    class Meta(object):
+    class Meta:
         db_table = "syslog"
         engine = MergeTree("date", ("managed_object", "ts"), primary_keys=("managed_object", "ts"))
 

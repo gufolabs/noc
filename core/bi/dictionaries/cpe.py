@@ -13,7 +13,7 @@ from noc.core.text import ch_escape
 
 
 class CPEAttributes(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "cpe"
         layout = "complex_key_hashed"
         source_model = "sa.CPEStatus"

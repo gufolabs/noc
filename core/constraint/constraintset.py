@@ -15,7 +15,7 @@ from .base import BaseConstraint
 BC = TypeVar("BC", bound=BaseConstraint)
 
 
-class ConstraintSet(object):
+class ConstraintSet:
     """
     Set of restrictions.
     """

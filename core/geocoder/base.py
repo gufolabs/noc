@@ -15,7 +15,7 @@ from .errors import GeoCoderError
 
 
 @dataclass
-class GeoCoderResult(object):
+class GeoCoderResult:
     exact: bool
     query: str
     path: List[str]
@@ -26,7 +26,7 @@ class GeoCoderResult(object):
     scope: Optional[str] = None
 
 
-class BaseGeocoder(object):
+class BaseGeocoder:
     name = None
 
     def __init__(self, *args, **kwargs):

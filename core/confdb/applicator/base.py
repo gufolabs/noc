@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 
-class BaseApplicator(object):
+class BaseApplicator:
     def __init__(self, object, confdb):
         self.object = object
         self.confdb = confdb

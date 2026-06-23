@@ -31,7 +31,7 @@ DEFAULT_IDLE_TIMEOUT = config.threadpool.idle_timeout
 DEFAULT_SHUTDOWN_TIMEOUT = config.threadpool.shutdown_timeout
 
 
-class ThreadPoolExecutor(object):
+class ThreadPoolExecutor:
     def __init__(
         self,
         max_workers: int,

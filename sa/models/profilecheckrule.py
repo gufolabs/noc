@@ -31,7 +31,7 @@ rules_lock = Lock()
 
 
 @dataclass(frozen=True)
-class SuggestProfile(object):
+class SuggestProfile:
     method: Literal["snmp_v2c_get", "http_get", "https_get"]
     param: str
     match: Literal["eq", "contains", "re"]

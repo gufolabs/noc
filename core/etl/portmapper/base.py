@@ -28,7 +28,7 @@ class PortMapperBase(type):
         return n
 
 
-class BasePortMapper(object, metaclass=PortMapperBase):
+class BasePortMapper(metaclass=PortMapperBase):
     """
     Basic class to convert port notation from external NRI and back.
     External NRI system is defined in managed object's

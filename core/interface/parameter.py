@@ -9,7 +9,7 @@
 from .error import InterfaceTypeError
 
 
-class BaseParameter(object):
+class BaseParameter:
     """
     Abstract parameter
     """

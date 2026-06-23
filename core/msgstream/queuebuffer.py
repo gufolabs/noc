@@ -17,7 +17,7 @@ import orjson
 from noc.config import config
 
 
-class QBuffer(object):
+class QBuffer:
     """
     Buffered writes to queue, merge outgoing messages to a larger block
     """

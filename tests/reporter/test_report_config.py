@@ -17,7 +17,7 @@ from noc.core.mongo.connection import connect
 from noc.services.web.base.site import site
 
 
-class RequestStub(object):
+class RequestStub:
     def __init__(self, user):
         self.user = user
 
