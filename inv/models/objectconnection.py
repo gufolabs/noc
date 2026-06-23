@@ -75,8 +75,7 @@ class ObjectConnection(Document):
     def iter_changed_datastream(self, changed_fields=None):
         if config.datastream.enable_managedobject:
             for c in self.connection:
-                for _, mo_id in c.object.iter_changed_datastream():
-                    yield _, mo_id
+                yield from c.object.iter_changed_datastream()
 
     def on_save(self) -> None:
         for c in self.connection:

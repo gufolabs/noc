@@ -1355,15 +1355,13 @@ class ActiveAlarm(Document):
         """
         if not self.groups:
             return
-        for a in ActiveAlarm.objects.filter(reference__in=self.groups):
-            yield a
+        yield from ActiveAlarm.objects.filter(reference__in=self.groups)
 
     def iter_grouped(self) -> Iterable["ActiveAlarm"]:
         """
         Generator yielding all alarm in group
         """
-        for a in ActiveAlarm.objects.filter(groups__in=[self.reference]):
-            yield a
+        yield from ActiveAlarm.objects.filter(groups__in=[self.reference])
 
     def iter_affected(self):
         """

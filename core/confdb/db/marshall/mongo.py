@@ -22,8 +22,7 @@ class MongoMarshaller(BaseMarshaller):
                 else:
                     n_path = path
                 for c in n.iter_nodes():
-                    for t in iter_line(c, n_path):
-                        yield t
+                    yield from iter_line(c, n_path)
             else:
                 yield [*path, n.token]
 

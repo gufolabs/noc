@@ -1752,10 +1752,7 @@ class ManagedObject(NOCModel):
             if not iprofile or not iprofile.interface_validation_policy:
                 continue
             for ifname in doc["ifaces"]:
-                for problem in iprofile.interface_validation_policy.iter_problems(
-                    confdb, ifname=ifname
-                ):
-                    yield problem
+                yield from iprofile.interface_validation_policy.iter_problems(confdb, ifname=ifname)
 
     @property
     def credentials(self) -> Credentials:
@@ -2653,8 +2650,7 @@ class ManagedObject(NOCModel):
         state = self.state or self.object_profile.workflow.get_default_state()
         yield from state.iter_diagnostic_configs(self)
         yield from self.object_profile.iter_diagnostic_configs(self)
-        for dc in ObjectDiagnosticConfig.iter_object_diagnostics(self):
-            yield dc
+        yield from ObjectDiagnosticConfig.iter_object_diagnostics(self)
 
     def get_caps_config(self) -> Dict[str, CapsConfig]:
         """Local Capabilities Config (from Profile)"""

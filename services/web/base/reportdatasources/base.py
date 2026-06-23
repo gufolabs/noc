@@ -630,5 +630,4 @@ class CHTableReportDataSource(ReportDataSource):
                     yield orjson.loads(row)
 
     def extract(self):
-        for row in self.do_query():
-            yield row
+        yield from self.do_query()

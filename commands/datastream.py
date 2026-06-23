@@ -112,8 +112,7 @@ class Command(BaseCommand):
                 for id, bi_id in m.objects.values_list("id", "bi_id").order_by("id"):
                     yield f"{model_id}::{bi_id}"
             else:
-                for id in m.objects.values_list("id", flat=True).order_by("id"):
-                    yield id
+                yield from m.objects.values_list("id", flat=True).order_by("id")
 
     def get_total(self, model):
         if isinstance(model, tuple):

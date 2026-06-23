@@ -261,8 +261,7 @@ def on_delete_check(
         category = cfg.get("clean_lazy_labels")
         if not (hasattr(instance, "iter_lazy_labels") or category):
             return
-        for ll in model.objects.filter(name__startswith=f"noc::{category}::{instance.name}::"):
-            yield ll
+        yield from model.objects.filter(name__startswith=f"noc::{category}::{instance.name}::")
 
     def get_related_query(o, model, field):
         """
@@ -298,13 +297,11 @@ def on_delete_check(
             qs = {f"{field}__contains": object.name}
         else:
             qs = {f"{field}__contains": [object.name]}
-        for ro in model.objects.filter(**qs):
-            yield ro
+        yield from model.objects.filter(**qs)
 
     def iter_related(object, model, field):
         qs = get_related_query(object, model, field)
-        for ro in model.objects.filter(**qs):
-            yield ro
+        yield from model.objects.filter(**qs)
 
     def iter_models(name):
         nn = "_%s" % name
@@ -312,8 +309,7 @@ def on_delete_check(
         if c is None:
             c = [(get_model(x[0]), x[0], x[1]) for x in cfg[name]]
             cfg[nn] = c
-        for model, model_id, field in c:
-            yield model, model_id, field
+        yield from c
 
     def decorator(cls):
         if (

@@ -16,8 +16,7 @@ class TreeMarshaller(BaseMarshaller):
     def marshall(cls, node):
         def iter_node(n, lvl):
             for lcn in reversed(list(n.iter_nodes())):
-                for d in iter_node(lcn, lvl + 1):
-                    yield d
+                yield from iter_node(lcn, lvl + 1)
             if lvl >= 0:
                 yield (lvl, n.token)
 

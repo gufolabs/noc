@@ -142,8 +142,7 @@ class Engine:
             yield {}
 
     def iter_initial(self, **kwargs):
-        for ctx in self.iter_product({}, **kwargs):
-            yield ctx
+        yield from self.iter_product({}, **kwargs)
 
     @staticmethod
     def context_hash(ctx):
@@ -278,8 +277,7 @@ class Engine:
             f = node.find(current)
             if f is not None:
                 if rest:  # Match tail
-                    for wctx in match(f, c, rest):
-                        yield wctx
+                    yield from match(f, c, rest)
                 else:
                     yield c  # Final match
 
@@ -288,8 +286,7 @@ class Engine:
                 nctx = c.copy()
                 current.set(nctx, f.token)
                 if rest:
-                    for wctx in match(f, nctx, rest):
-                        yield wctx
+                    yield from match(f, nctx, rest)
                 else:
                     yield nctx
 
@@ -309,8 +306,7 @@ class Engine:
 
         assert self.db, "Current database is not set"
         for ctx in _input:
-            for nctx in match(self.db.db, ctx, args):
-                yield nctx
+            yield from match(self.db.db, ctx, args)
 
     def fn_NotMatch(self, _input, *args):
         """
@@ -324,8 +320,7 @@ class Engine:
             f = node.find(current)
             if rest:
                 if f:  # Descent deeper
-                    for wctx in not_match(f, c, rest):
-                        yield wctx
+                    yield from not_match(f, c, rest)
                 elif not any(True for x in rest if isinstance(x, Var) and not x.is_bound(c)):
                     # There is rest and token not found and no unbound variables left in rest
                     yield c
@@ -337,8 +332,7 @@ class Engine:
                 for f in node.iter_nodes():
                     uctx = c.copy()
                     current.set(uctx, f.token)
-                    for wctx in not_match_token(node, uctx, f.token, rest):
-                        yield wctx
+                    yield from not_match_token(node, uctx, f.token, rest)
 
         def not_match(node, c, where):
             current, rest = where[0], where[1:]
@@ -355,8 +349,7 @@ class Engine:
 
         assert self.db, "Current database is not set"
         for ctx in _input:
-            for nctx in not_match(self.db.db, ctx, args):
-                yield nctx
+            yield from not_match(self.db.db, ctx, args)
 
     def fn_Re(self, _input, pattern, name, ignore_case=None):
         """

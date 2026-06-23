@@ -83,9 +83,7 @@ class ReportDiscoveryProblem:
                 .with_options(read_preference=ReadPreference.SECONDARY_PREFERRED)
                 .aggregate(self.pipelines.get(p.name, self.pipeline()))
             )
-            for x in r:
-                # @todo Append info for MO
-                yield x
+            yield from r
 
 
 class ReportForm(forms.Form):

@@ -81,8 +81,7 @@ class ReportMetrics(BaseReportColumn):
         query = self.get_query_ch(f_date, to_date)
         while mo_ids:
             chunk, mo_ids = mo_ids[: self.CHUNK_SIZE], mo_ids[self.CHUNK_SIZE :]
-            for row in self.ch_client.execute(query % self.get_mo_filter(chunk)):
-                yield row
+            yield from self.ch_client.execute(query % self.get_mo_filter(chunk))
 
     def extract(self):
         # do_query_ch(self, moss, query_map, f_date, to_date)

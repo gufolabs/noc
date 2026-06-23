@@ -81,8 +81,7 @@ class LiftbridgeStreamCollector(BaseCollector):
                 name, pool, cursor = stream.name, None, -1
                 if name.startswith("ch"):
                     # Chwriter streams
-                    for r in self.iter_ch_cursors(name, p):
-                        yield r
+                    yield from self.iter_ch_cursors(name, p)
                 elif "." in name:
                     name, pool = name.split(".", 1)
                 if name in self.CURSOR_STREAM:

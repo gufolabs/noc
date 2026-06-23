@@ -24,8 +24,7 @@ class CapabilityRule:
     def iter_oids(self, script, metric):
         for cap, oid in self.oids:
             if script.has_capability(cap):
-                for r in oid.iter_oids(script, metric):
-                    yield r
+                yield from oid.iter_oids(script, metric)
                 break
 
     @classmethod
