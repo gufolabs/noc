@@ -133,7 +133,7 @@ class BaseNormalizerMetaclass(type):
             del f._seq
             del f._matcher
         # Process syntax
-        if bases[0] == object:
+        if not bases:
             mcs.parse_syntax(n, SYNTAX)
         elif n.SYNTAX:
             # Apply custom syntax
