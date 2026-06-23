@@ -42,5 +42,4 @@ class Metadata:
 
     def iter_partitions(self) -> Iterable[PartitionMetadata]:
         for stream in self.metadata:
-            for part_meta in self.metadata[stream].values():
-                yield part_meta
+            yield from self.metadata[stream].values()

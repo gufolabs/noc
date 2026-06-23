@@ -574,10 +574,9 @@ class Interface(Document):
             # When create id is None
             # Do not use SECONDARY_PREFERRED, when update labels right after
             # create or update SubInterface changes not keep up on Secondary
-            for el in SubInterface.objects.filter(
+            yield from SubInterface.objects.filter(
                 enabled_afi__in=["BRIDGE", "IPv4"], interface=instance.parent.id
-            ).scalar("effective_labels"):
-                yield el
+            ).scalar("effective_labels")
 
     @classmethod
     def iter_collected_metrics(

@@ -28,8 +28,7 @@ def iter_ids_batch():
         d = [d["_id"] for d in cursor]
         if not d:
             break
-        for link in NetworkSegment.objects.filter(id__in=d).timeout(False):
-            yield link
+        yield from NetworkSegment.objects.filter(id__in=d).timeout(False)
         # if match and match["_id"]["$gt"] == d[-1]:
         #     break
         match = {"_id": {"$gt": d[-1]}}

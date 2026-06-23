@@ -185,8 +185,7 @@ class Command(BaseCommand):
                         break
                     match = {"_id": {"$gt": d["_id"]}}
             else:
-                for id in m.objects.values_list("id", flat=True).order_by("id"):
-                    yield id
+                yield from m.objects.values_list("id", flat=True).order_by("id")
 
     def handle_rebuild_dictionary(self, dictionaries=None, *args, **options):
         async def upload(table: str, data: List[bytes]):

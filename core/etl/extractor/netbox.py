@@ -74,8 +74,7 @@ class NetBoxExtractor(BaseExtractor):
             if status != 200:
                 print(f"[{status}] Error when requested data: {body}")
                 raise Exception(body)
-            for r in body["results"]:
-                yield r
+            yield from body["results"]
             if not body["next"]:
                 break
             p = urlparse(body["next"])

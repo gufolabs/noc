@@ -205,8 +205,7 @@ class BaseDataSource:
 
     @classmethod
     def iter_ds_fields(cls) -> Iterable[FieldInfo]:
-        for f in cls.fields:
-            yield f
+        yield from cls.fields
 
     @classmethod
     def field_by_name(cls, name: str) -> Optional[FieldInfo]:

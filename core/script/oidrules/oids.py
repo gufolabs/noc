@@ -21,8 +21,7 @@ class OIDsRule:
 
     def iter_oids(self, script, metric):
         for rule in self.oids:
-            for r in rule.iter_oids(script, metric):
-                yield r
+            yield from rule.iter_oids(script, metric)
 
     @classmethod
     def from_json(cls, data):

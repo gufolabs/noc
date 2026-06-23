@@ -96,8 +96,7 @@ class DNSZoneProfile(NOCModel):
         if not config.datastream.enable_dnszone:
             return
         for z in self.dnszone_set.all():
-            for ds, id in z.iter_changed_datastream(changed_fields=changed_fields):
-                yield ds, id
+            yield from z.iter_changed_datastream(changed_fields=changed_fields)
 
     @property
     def authoritative_servers(self):
