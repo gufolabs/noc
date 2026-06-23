@@ -157,7 +157,7 @@ class MetricScriptBase(BaseScriptMetaclass):
     """
 
     def __new__(mcs, name, bases, attrs):
-        m = super(MetricScriptBase, mcs).__new__(mcs, name, bases, attrs)
+        m = super().__new__(mcs, name, bases, attrs)
         # Inject metric_type -> [handler] mappings
         m._mt_map = defaultdict(list)
         # Get @metrics handlers

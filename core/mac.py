@@ -73,7 +73,7 @@ class MAC(str):
     def __new__(cls, mac: INPUT_TYPES):
         if isinstance(mac, MAC):
             return mac
-        return super(MAC, cls).__new__(cls, cls._clean(mac))
+        return super().__new__(cls, cls._clean(mac))
 
     def __int__(self) -> int:
         return int(self.replace(":", ""), 16)

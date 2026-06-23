@@ -23,7 +23,7 @@ class NOCModelBase(ModelBase):
         else:
             # NOCModel base class must be replaced to django's Model
             bases = tuple(base if base != NOCModel else Model for base in bases)
-        m = super(NOCModelBase, mcs).__new__(mcs, name, bases, attrs)
+        m = super().__new__(mcs, name, bases, attrs)
         # Perform pants tucking: Fake up django's app registry population
         # to shut up their stupid checks.
         # NB: Every hipster may be misused
