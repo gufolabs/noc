@@ -18,6 +18,11 @@ Ext.define("NOC.core.mixins.Polling", {
   observer: null,
 
   startPolling: function(){
+    if(!NOC.settings.features.includes("smartrefresh")){
+      this.runPollingTask();
+      return;
+    }
+
     if(this.observer){
       this.stopPolling();
     }
@@ -55,6 +60,10 @@ Ext.define("NOC.core.mixins.Polling", {
     window.addEventListener("blur", this._handleWindowBlur);
     document.addEventListener("visibilitychange", this._handleVisibilityChange);
 
+    this.runPollingTask();
+  },
+
+  runPollingTask: function(){
     if(Ext.isEmpty(this.pollingTaskId)){
       var jitter = this.pollingInterval * 0.1 * (2 * Math.random() - 1);
       this.pollingTaskId = Ext.TaskManager.start({
