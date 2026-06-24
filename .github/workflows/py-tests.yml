@@ -4,7 +4,7 @@ env:
   TEST_PYTHON_VERSION: "3.13"
 on:
   push:
-    branches: [master]
+    branches: [master, release-25.1]
     paths: &changed-paths
       - ".github/workflows/py-tests.yml"
       - "pyproject.toml"
