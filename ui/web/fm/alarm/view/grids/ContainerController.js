@@ -89,6 +89,9 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
   disableHandler: function(state){
     var isVisible = !document.hidden, // check is user has switched to another tab browser
       isIntersecting = this.getView().isIntersecting; // switch to other application tab
+    if(!this.isSmartRefreshEnabled()){
+      return;
+    }
     if(this.pollingTaskId && isIntersecting && isVisible){
       this.setContainerDisabled(state);
       this.pollingTask();
@@ -132,12 +135,18 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
       this.pollingTaskId = undefined;
     }
   },
+  isSmartRefreshEnabled: function(){
+    return NOC.settings.features.includes("smartrefresh");
+  },
+  reloadStores: function(){
+    this.getView().down("[reference=fm-alarm-active]").getStore().reload();
+    if(this.isRecentActive()){
+      this.getView().down("[reference=fm-alarm-recent]").getStore().reload();
+    }
+  },
   pollingTask: function(){
-    if(!NOC.settings.features.includes("smartrefresh")) {
-        gridsContainer.down("[reference=fm-alarm-active]").getStore().reload();
-        if(this.isRecentActive()){
-          gridsContainer.down("[reference=fm-alarm-recent]").getStore().reload();
-        }
+    if(!this.isSmartRefreshEnabled()) {
+      this.reloadStores();
       return;
     }
 
@@ -146,7 +155,7 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
       isVisible = !document.hidden, // check is user has switched to another tab browser
       isFocused = document.hasFocus(), // check is user has minimized browser window
       isIntersecting = this.getView().isIntersecting; // switch to other application tab
-    
+
     // lib visibilityJS
     if(isIntersecting && isVisible && isFocused){ // check is user has switched to another tab or minimized browser window
       this.setContainerDisabled(false);
@@ -162,10 +171,7 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
       }
       // Poll only if polling is not locked
       if(this.isNotLocked(gridsContainer)){
-        gridsContainer.down("[reference=fm-alarm-active]").getStore().reload();
-        if(this.isRecentActive()){
-          gridsContainer.down("[reference=fm-alarm-recent]").getStore().reload();
-        }
+        this.reloadStores();
       }
     } else{
       this.setContainerDisabled(true);
@@ -203,10 +209,7 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
     this.lastCheckTS = ts;
   },
   onRefresh: function(){
-    this.getView().lookup("fm-alarm-active").getStore().reload();
-    if(this.isRecentActive()){
-      this.getView().lookup("fm-alarm-recent").getStore().reload();
-    }
+    this.reloadStores();
   },
   onReload: function(grid){
     grid.getStore().reload();
