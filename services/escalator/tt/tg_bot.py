@@ -128,7 +128,7 @@ class TGBotTTSystem(BaseTTSystem):
 
     def get_updates(
         self,
-        last_run: datetime | None = None,
+        last_run: datetime.datetime | None = None,
         last_update: str | None = None,
         tt_ids: list[str] | None = None,
     ) -> list[TTChange]:
