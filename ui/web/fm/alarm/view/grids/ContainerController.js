@@ -133,6 +133,14 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
     }
   },
   pollingTask: function(){
+    if(!NOC.settings.features.includes("smartrefresh")) {
+        gridsContainer.down("[reference=fm-alarm-active]").getStore().reload();
+        if(this.isRecentActive()){
+          gridsContainer.down("[reference=fm-alarm-recent]").getStore().reload();
+        }
+      return;
+    }
+
     var app = this.getView().up("[itemId=fm-alarm]"),
       gridsContainer = this.getView(),
       isVisible = !document.hidden, // check is user has switched to another tab browser
