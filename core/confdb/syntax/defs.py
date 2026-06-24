@@ -18,7 +18,7 @@ from .patterns import BasePattern
 class SyntaxDef:
     __slots__ = ("children", "default", "gen", "multi", "name", "required", "token")
     token: Union[str, BasePattern]
-    children: Optional[List["SyntaxDef"]]
+    children: Optional[list["SyntaxDef"]]
     required: boolean
     name: Optional[str]
     multi: boolean
@@ -28,7 +28,7 @@ class SyntaxDef:
 
 def DEF(
     token: Union[str, BasePattern],
-    children: Optional[List[SyntaxDef]] = None,
+    children: Optional[list[SyntaxDef]] = None,
     required: boolean = False,
     multi: boolean = False,
     name: Optional[str] = None,

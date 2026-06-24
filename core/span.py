@@ -73,7 +73,7 @@ class Span:
         context=DEFAULT_ID,
         hist=None,
         quantile=None,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: Optional[dict[str, bytes]] = None,
         suppress_trace=False,
     ):
         self.client = client

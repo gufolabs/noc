@@ -29,7 +29,7 @@ class MBuffer:
         max_size: Optional[int] = None,
     ):
         self.queue: deque = deque()
-        self.buf: Dict[str, Any] = {}
+        self.buf: dict[str, Any] = {}
         self.lock = Lock()
         self.req_puts: int = 0
         self.req_gets: int = 0

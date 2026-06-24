@@ -93,12 +93,12 @@ class DiagnosticConfig:
     blocked: bool = False
     default_state: DiagnosticState = DiagnosticState.unknown
     # Check config
-    checks: Optional[List[Check]] = None
+    checks: Optional[list[Check]] = None
     diagnostic_handler: Optional[str] = None
-    dependent: Optional[List[str]] = None
+    dependent: Optional[list[str]] = None
     include_credentials: bool = False
     allow_set_credentials: bool = False
-    diagnostic_ctx: Optional[List[CtxItem]] = None
+    diagnostic_ctx: Optional[list[CtxItem]] = None
     # Calculate State on checks.
     state_policy: str = "ANY"
     reason: Optional[str] = None
@@ -118,7 +118,7 @@ class DiagnosticConfig:
     display_order: int = 0
     # FM Config
     alarm_class: Optional[str] = None
-    alarm_labels: Optional[List[str]] = None
+    alarm_labels: Optional[list[str]] = None
 
     @property
     def is_local_status(self):
@@ -185,7 +185,7 @@ class DiagnosticValue(BaseModel):
 
     diagnostic: str
     state: DiagnosticState = DiagnosticState("unknown")
-    checks: Optional[List[CheckStatus]] = None
+    checks: Optional[list[CheckStatus]] = None
     # scope: Literal["access", "all", "discovery", "default"] = "default"
     # policy: str = "ANY
     reason: Optional[str] = None

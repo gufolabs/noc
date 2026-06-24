@@ -58,7 +58,7 @@ class ParamConditionValue(EmbeddedDocument):
     default_value = StringField(required=True)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "value": self.value,
             "default_value": self.default_value,
@@ -89,7 +89,7 @@ class ReportParam(EmbeddedDocument):
     required = BooleanField(default=False)
     default = StringField(required=False)
     condition_param = StringField(required=False)
-    condition_values: List[ParamConditionValue] = EmbeddedDocumentListField(
+    condition_values: list[ParamConditionValue] = EmbeddedDocumentListField(
         ParamConditionValue, required=False
     )
     hide = BooleanField(default=False)
@@ -99,7 +99,7 @@ class ReportParam(EmbeddedDocument):
         return self.name
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "description": self.description,
@@ -133,7 +133,7 @@ class Template(EmbeddedDocument):
     handler = StringField(default="simplereport", required=True)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "code": self.code,
             "output_type": self.output_type,
@@ -152,7 +152,7 @@ class Query(EmbeddedDocument):
     json = StringField()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {}
         if self.datasource:
             r["datasource"] = self.datasource
@@ -179,7 +179,7 @@ class BandFormat(EmbeddedDocument):
         return self.name
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "title_template": self.title_template,
@@ -205,7 +205,7 @@ class Band(EmbeddedDocument):
         return self.name == ROOT_BAND
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "orientation": self.orientation.value,
@@ -258,10 +258,10 @@ class Report(Document):
         ],
         default="N",
     )
-    parameters: List["ReportParam"] = EmbeddedDocumentListField(ReportParam)
-    templates: List["Template"] = EmbeddedDocumentListField(Template)
-    bands: List["Band"] = EmbeddedDocumentListField(Band)
-    bands_format: List["BandFormat"] = EmbeddedDocumentListField(BandFormat)
+    parameters: list["ReportParam"] = EmbeddedDocumentListField(ReportParam)
+    templates: list["Template"] = EmbeddedDocumentListField(Template)
+    bands: list["Band"] = EmbeddedDocumentListField(Band)
+    bands_format: list["BandFormat"] = EmbeddedDocumentListField(BandFormat)
     permissions = EmbeddedDocumentListField(Permission)
     localization = MapField(DictField())
 
@@ -296,7 +296,7 @@ class Report(Document):
             return self.localization[field].get(lang)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -452,7 +452,7 @@ class Report(Document):
         # without condition (by default) method returns first (!) band_format
         return self.bands_format[0]
 
-    def get_root_band_ds_columns(self) -> Dict[str, List[str]]:
+    def get_root_band_ds_columns(self) -> dict[str, list[str]]:
         r = defaultdict(list)
         root_band = None
         for b in self.bands:
@@ -478,7 +478,7 @@ class Report(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_effective_perm_cache"), lock=lambda _: perm_lock)
-    def get_effective_permissions(cls, user) -> Set[str]:
+    def get_effective_permissions(cls, user) -> set[str]:
         """
         Returns a set of effective user permissions,
         counting group and implied ones

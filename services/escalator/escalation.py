@@ -133,7 +133,7 @@ class EscalationSequence(BaseSequence):
         self.escalation_delay = escalation_delay
         self.timestamp_policy = timestamp_policy
         self.force = force
-        self.alarm_ids: Dict[ObjectId, ActiveAlarm] = {}
+        self.alarm_ids: dict[ObjectId, ActiveAlarm] = {}
         self.escalation_doc: Escalation
 
     def log_alarm(self, message: str, *args) -> None:
@@ -381,7 +381,7 @@ class EscalationSequence(BaseSequence):
             "has_merged_downlinks": self.has_merged_downlinks(),
         }
 
-    def notify(self, item: AEscalationItem, ctx: Dict[str, Any]) -> bool:
+    def notify(self, item: AEscalationItem, ctx: dict[str, Any]) -> bool:
         if not item.notification_group or not self.can_notify():
             return False
         subject = item.template.render_subject(**ctx)
@@ -422,7 +422,7 @@ class EscalationSequence(BaseSequence):
         self.log_alarm(f"Already escalated with TT #{tt}")
         return True
 
-    def create_tt(self, esc_item: AEscalationItem, ctx: Dict[str, Any]):
+    def create_tt(self, esc_item: AEscalationItem, ctx: dict[str, Any]):
         """
         Create trouble ticket for alarm
         """
@@ -541,7 +541,7 @@ class EscalationSequence(BaseSequence):
         """
         Get effective escalation policy for alarm
         """
-        labels: List[List[str]] = [self.alarm.effective_labels]
+        labels: list[list[str]] = [self.alarm.effective_labels]
         if self.alarm.groups:
             # All groups
             for doc in ActiveAlarm._get_collection().find(
@@ -558,7 +558,7 @@ class EscalationSequence(BaseSequence):
         """
 
         def update_totals_from_summary(
-            t_dict: DefaultDict[ObjectId, int], t_items: Iterable[SummaryItem]
+            t_dict: defaultdict[ObjectId, int], t_items: Iterable[SummaryItem]
         ) -> None:
             """
             Update totals from alarm summary
@@ -575,9 +575,9 @@ class EscalationSequence(BaseSequence):
         if not items:
             return None
         # Total counters
-        total_objects: DefaultDict[int, int] = defaultdict(int)
-        total_services: DefaultDict[ObjectId, int] = defaultdict(int)
-        total_subscribers: DefaultDict[ObjectId, int] = defaultdict(int)
+        total_objects: defaultdict[int, int] = defaultdict(int)
+        total_services: defaultdict[ObjectId, int] = defaultdict(int)
+        total_subscribers: defaultdict[ObjectId, int] = defaultdict(int)
         # @todo: Append profile
         doc = Escalation(
             timestamp=datetime.datetime.now(), items=[], prev_escalation=self.prev_escalation
@@ -674,8 +674,8 @@ class EscalationSequence(BaseSequence):
         Note: Must be called under the lock
         """
         alarms = [item.alarm for item in self.escalation_doc.items]
-        esc_status: Dict[ObjectId, ObjectId] = {}
-        esc_tt: Dict[ObjectId, str] = {}
+        esc_status: dict[ObjectId, ObjectId] = {}
+        esc_tt: dict[ObjectId, str] = {}
         for doc in Escalation._get_collection().aggregate(
             [
                 {

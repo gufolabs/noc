@@ -17,7 +17,7 @@ class CfgMetricsCollectorDataStream(DataStream):
     name = "cfgmetrics"
 
     @classmethod
-    def get_object(cls, id: str) -> Dict[str, Any]:
+    def get_object(cls, id: str) -> dict[str, Any]:
         mt = MetricType.get_by_id(id)
         cfg = MetricType.get_config(mt)
         if not mt:

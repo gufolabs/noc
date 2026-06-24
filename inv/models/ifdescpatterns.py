@@ -69,7 +69,7 @@ class IfDescPatterns(Document):
             if not rx:
                 raise ValidationError("Invalid regular expression: %s" % p.pattern)
 
-    def iter_match(self, s: str) -> Iterable[Dict[str, str]]:
+    def iter_match(self, s: str) -> Iterable[dict[str, str]]:
         """
         Match patterns against string yield all matching groups
 

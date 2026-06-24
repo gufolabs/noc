@@ -108,7 +108,7 @@ def moderate(
     target: NetworkSegment,
     attacker_object: Optional[ManagedObject] = None,
     target_object: Optional[ManagedObject] = None,
-) -> Tuple[Optional[str], Optional[str], bool]:
+) -> tuple[Optional[str], Optional[str], bool]:
     """
     Perform trial moderation
 
@@ -170,7 +170,7 @@ def get_collision_policy(
     is_persistent: bool,
     attacker_object: Optional[ManagedObject] = None,
     target_object: Optional[ManagedObject] = None,
-) -> Optional[Type[BioCollisionPolicy]]:
+) -> Optional[type[BioCollisionPolicy]]:
     attacker_level = attacker_object.object_profile.level if attacker_object else None
     target_level = target_object.object_profile.level if target_object else None
     for cp in seg.profile.bio_collision_policy:

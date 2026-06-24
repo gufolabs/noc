@@ -99,7 +99,7 @@ class ResourcePool(Document):
     def resource_model(self):
         return get_model(TYPE_RESOURCE_MAP[self.type])
 
-    def get_resource_domains(self) -> List[Any]:
+    def get_resource_domains(self) -> list[Any]:
         """Getting Resource Domains"""
         if self.type == "vlan":
             model = get_model("vc.L2Domain")
@@ -110,7 +110,7 @@ class ResourcePool(Document):
         return model.get_by_resource_pool(self)
 
     @classmethod
-    def acquire(cls, pools: List["ResourcePool"], owner: Optional[str] = None):
+    def acquire(cls, pools: list["ResourcePool"], owner: Optional[str] = None):
         """
         # Set Lock
         with ResourcePool.acquire([pool1, ..., poolN]):
@@ -145,7 +145,7 @@ class ResourcePool(Document):
         return self.allocate
 
     @classmethod
-    def get_metrics(cls, pools: List["ResourcePool"]):
+    def get_metrics(cls, pools: list["ResourcePool"]):
         """
         Getting metrics for pools: total, used (by count)
         1. Group by type
@@ -169,7 +169,7 @@ class ResourcePool(Document):
         confirm: bool = True,
         is_dirty: bool = False,
         # Hints
-        resource_keys: Optional[List[str]] = None,
+        resource_keys: Optional[list[str]] = None,
         domain: Optional[Any] = None,
         **kwargs,
     ):
@@ -195,7 +195,7 @@ class ResourcePool(Document):
             domains = self.get_resource_domains()
         if not domains:
             return None
-        allocated: List[Any] = []
+        allocated: list[Any] = []
         d = domains.pop()
         # Replace to hints
         pool_hints = d.get_pool_hints(self)

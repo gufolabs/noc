@@ -100,7 +100,7 @@ class VLANFilter(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_match_cache"), lock=lambda _: match_lock)
-    def get_matcher(cls) -> Dict[Tuple[FrozenSet[int], FrozenSet[int]], List["VLANFilter"]]:
+    def get_matcher(cls) -> dict[tuple[frozenset[int], frozenset[int]], list["VLANFilter"]]:
         r = defaultdict(list)
         for vlan_filter in VLANFilter.objects.filter():
             r[
@@ -116,7 +116,7 @@ class VLANFilter(Document):
         return r
 
     @classmethod
-    def iter_match_vlanfilter(cls, vlan_list: Union[int, List[int]]) -> Tuple["VLANFilter", str]:
+    def iter_match_vlanfilter(cls, vlan_list: Union[int, list[int]]) -> tuple["VLANFilter", str]:
         if isinstance(vlan_list, int):
             vlan_list = [vlan_list]
         match_expressions = cls.get_matcher()

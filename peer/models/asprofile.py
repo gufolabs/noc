@@ -38,7 +38,7 @@ class MatchRule(EmbeddedDocument):
     labels = ListField(StringField())
     include_expression = StringField()
 
-    def get_match_expr(self) -> Dict[str, Any]:
+    def get_match_expr(self) -> dict[str, Any]:
         r = {}
         if self.labels:
             r["labels"] = {"$all": list(self.labels)}
@@ -126,7 +126,7 @@ class ASProfile(Document):
         return matcher(ctx)
 
     @classmethod
-    def get_profiles_matcher(cls) -> Tuple[Tuple[str, Callable], ...]:
+    def get_profiles_matcher(cls) -> tuple[tuple[str, Callable], ...]:
         """Build matcher based on Profile Match Rules"""
         r = {}
         profiles = ASProfile.objects.filter(dynamic_classification_policy__ne="D")

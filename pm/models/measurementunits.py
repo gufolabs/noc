@@ -47,7 +47,7 @@ class ConvertFrom(EmbeddedDocument):
             raise ValidationError("Expression syntax error")
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "unit__code": self.unit.code,
             "expr": self.expr,
@@ -62,7 +62,7 @@ class EnumValue(EmbeddedDocument):
         return f"{self.key}: {self.value}"
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"key": self.key, "value": self.value}
 
 
@@ -137,7 +137,7 @@ class MeasurementUnits(Document):
         return MeasurementUnits.objects.filter(name=cls.DEFAULT_MU_NAME).first()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],

@@ -73,7 +73,7 @@ class TGBotTTSystem(BaseTTSystem):
             )
 
     @staticmethod
-    def get_inline_keyboard(actions: List[TTActionContext]):
+    def get_inline_keyboard(actions: list[TTActionContext]):
         r = []
         if not actions:
             return {}
@@ -131,8 +131,8 @@ class TGBotTTSystem(BaseTTSystem):
         self,
         last_run: Optional[datetime] = None,
         last_update: Optional[str] = None,
-        tt_ids: Optional[List[str]] = None,
-    ) -> List[TTChange]:
+        tt_ids: Optional[list[str]] = None,
+    ) -> list[TTChange]:
         status, _, body = self.http_client.get(f"{self.url}/getUpdates")
         r = []
         if status != 200:

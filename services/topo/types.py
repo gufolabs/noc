@@ -27,5 +27,5 @@ class ObjectSnapshot:
 
     id: int
     level: int
-    links: Optional[List[int]] = None
-    uplinks: Optional[List[int]] = None
+    links: Optional[list[int]] = None
+    uplinks: Optional[list[int]] = None

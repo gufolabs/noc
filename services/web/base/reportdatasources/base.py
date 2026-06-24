@@ -327,11 +327,11 @@ class ReportConfig:
     description: str
     timebased: bool
     enabled: bool
-    fields: List[ReportField]
-    columns: List[ReportField] = field(init=False)
-    groupby: List[str]
-    intervals: List[str]
-    filters: List[ReportFilter]
+    fields: list[ReportField]
+    columns: list[ReportField] = field(init=False)
+    groupby: list[str]
+    intervals: list[str]
+    filters: list[ReportFilter]
     dataretentiondays: int
 
     def __post_init__(self):
@@ -344,35 +344,35 @@ class ReportDataSource:
     object_model = None
 
     # (List#, Name, Alias): TypeNormalizer or (TypeNormalizer, DefaultValue)
-    FIELDS: List[ReportField] = []
-    INTERVALS: List[str] = ["HOUR"]
+    FIELDS: list[ReportField] = []
+    INTERVALS: list[str] = ["HOUR"]
     TIMEBASED: bool = False
     SORTED: bool = True
 
     def __init__(
         self,
-        fields: List[str],
-        objectids: List[str] = None,
+        fields: list[str],
+        objectids: list[str] = None,
         allobjectids: bool = False,
         start: Optional[datetime.datetime] = None,
         end: Optional[datetime.datetime] = None,
         interval: Optional[str] = None,
         max_intervals: Optional[int] = None,
-        filters: Optional[List[Dict[str, Union[List[str], str]]]] = None,
+        filters: Optional[list[dict[str, Union[list[str], str]]]] = None,
         rows: Optional[int] = None,
-        groups: Optional[List[str]] = None,
+        groups: Optional[list[str]] = None,
         user: Optional["User"] = None,
     ):
-        self.query_fields: List[str] = fields
-        self.fields: Dict[str, ReportField] = self.get_fields(fields)  # OrderedDict
+        self.query_fields: list[str] = fields
+        self.fields: dict[str, ReportField] = self.get_fields(fields)  # OrderedDict
         self.fields_summary = self.get_summary_fields(fields)
         self.objectids = objectids
         self.allobjectids: bool = allobjectids
-        self.filters: List[Dict[str, Union[List[str], str]]] = filters or []
+        self.filters: list[dict[str, Union[list[str], str]]] = filters or []
         self.interval: str = interval
         self.max_intervals: int = max_intervals
         self.rows: int = rows
-        self.groups: List[str] = groups or []
+        self.groups: list[str] = groups or []
         if self.TIMEBASED and not start:
             raise ValueError("Timebased Report required start param")
         self.end: datetime.datetime = end or datetime.datetime.now()
@@ -419,14 +419,14 @@ class ReportDataSource:
                     r[query_f] = f
         return r
 
-    def get_summary_statistics(self) -> Dict[str, Any]:
+    def get_summary_statistics(self) -> dict[str, Any]:
         # Return summary
         return {}
 
     def iter_data(self):
         pass
 
-    def extract(self) -> Iterable[Dict[str, int]]:
+    def extract(self) -> Iterable[dict[str, int]]:
         """
         Generate list of rows. Each row is a list of fields. First value - is id
         :return:
@@ -459,7 +459,7 @@ class ReportDataSource:
         wb = xlsxwriter.Workbook(response)
         cf1 = wb.add_format({"bottom": 1, "left": 1, "right": 1, "top": 1})
         ws = wb.add_worksheet("Data")
-        max_column_data_length: Dict[str, int] = {}
+        max_column_data_length: dict[str, int] = {}
         # Header
         for cn, c in enumerate(self.fields):
             if self.fields[c].hidden:
@@ -522,7 +522,7 @@ class CHTableReportDataSource(ReportDataSource):
         "MONTH": "toMonth(toDateTime(ts))",
     }
 
-    def get_group(self) -> Tuple[List[str], List[str]]:
+    def get_group(self) -> tuple[list[str], list[str]]:
         """
         If set max_intervals - use variants interval
         :return:
@@ -540,7 +540,7 @@ class CHTableReportDataSource(ReportDataSource):
 
         return select, group
 
-    def get_custom_conditions(self) -> Dict[str, List[str]]:
+    def get_custom_conditions(self) -> dict[str, list[str]]:
         if not self.filters:
             return {}
         where, having = [], []

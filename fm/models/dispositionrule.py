@@ -106,7 +106,7 @@ class VarItem(EmbeddedDocument):
             return f"{self.name}: {self.condition} {self.value}"
         return f"{self.name}: AL({self.alias}), A({self.affected_model})"
 
-    def get_match_expr(self) -> Dict[str, Any]:
+    def get_match_expr(self) -> dict[str, Any]:
         """"""
         if self.condition == "exists" and self.value:
             return {"vars": {"$in": [self.value]}}
@@ -130,7 +130,7 @@ class VarItem(EmbeddedDocument):
             r["alias"] = self.alias
         return r
 
-    def get_action_config(self) -> Optional[Dict[str, Any]]:
+    def get_action_config(self) -> Optional[dict[str, Any]]:
         if self.update_oper_status in {"N", "V"}:
             return None
         return {
@@ -141,7 +141,7 @@ class VarItem(EmbeddedDocument):
         }
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {"name": self.name, "required": self.required}
         if self.wildcard:
             r["wildcard__name"] = self.wildcard.name
@@ -167,12 +167,12 @@ class Match(EmbeddedDocument):
     # categories: List[EventCategory] = ListField(ReferenceField(EventCategory, required=True))
     # ex_categories: List[EventCategory] = ListField(ReferenceField(EventCategory, required=True))
     event_class_re: str = StringField()
-    groups: List[ResourceGroup] = ListField(ReferenceField(ResourceGroup, required=True))
-    ex_groups: List[ResourceGroup] = ListField(ReferenceField(ResourceGroup, required=True))
+    groups: list[ResourceGroup] = ListField(ReferenceField(ResourceGroup, required=True))
+    ex_groups: list[ResourceGroup] = ListField(ReferenceField(ResourceGroup, required=True))
     # severity: AlarmSeverity = ReferenceField(AlarmSeverity, required=False)
     remote_system: Optional["RemoteSystem"] = ReferenceField(RemoteSystem, required=False)
     reference_rx = StringField()
-    event_classes: List[ObjectId] = ListField(ObjectIdField(required=True))
+    event_classes: list[ObjectId] = ListField(ObjectIdField(required=True))
     object_status: Optional[str] = StringField(
         choices=[("A", "Any"), ("U", "To Up"), ("D", "To Down")],
         required=False,
@@ -182,7 +182,7 @@ class Match(EmbeddedDocument):
         return f"{', '.join(self.labels)}"
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {}
         if self.event_class_re:
             r["event_class_re"] = self.event_class_re
@@ -203,7 +203,7 @@ class Match(EmbeddedDocument):
             self.event_classes = [ec.id for ec in EventClass.objects.filter(name=re.compile(ec))]
         super().clean()
 
-    def get_match_expr(self) -> Dict[str, Any]:
+    def get_match_expr(self) -> dict[str, Any]:
         r = {}
         if self.labels:
             r["labels"] = {"$all": list(self.labels)}
@@ -238,13 +238,13 @@ class ActionItem(EmbeddedDocument):
     action: ActionType = EnumField(ActionType, required=True)
     action_command: Optional["Action"] = ReferenceField(Action, required=False)
     interaction_audit: Optional[Interaction] = EnumField(Interaction, required=False)
-    context: List[str] = ListField(StringField())
+    context: list[str] = ListField(StringField())
 
     def __str__(self):
         return f"C: {self.action}; A: {self.interaction_audit}; С: {self.action_command}"
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {"action": self.action.value}
         if self.action_command:
             r["action_command__name"] = self.action_command.name
@@ -254,7 +254,7 @@ class ActionItem(EmbeddedDocument):
             r["contex"] = list(self.context)
         return r
 
-    def get_config(self) -> Dict[str, Any]:
+    def get_config(self) -> dict[str, Any]:
         """Get Action config"""
         key, args = None, {}
         match self.action:
@@ -280,7 +280,7 @@ class HandlerItem(EmbeddedDocument):
     handler: "Handler" = ReferenceField(Handler, required=True)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         if self.handler:
             return {"handler__name": self.handler.name}
         return {}
@@ -305,9 +305,9 @@ class DispositionRule(Document):
     uuid = UUIDField(binary=True)
     is_active = BooleanField(default=True)
     preference = IntField(required=True, default=1000)
-    conditions: List[Match] = EmbeddedDocumentListField(Match)
+    conditions: list[Match] = EmbeddedDocumentListField(Match)
     # vars_conditions: List[MatchData] = EmbeddedDocumentListField(MatchData)
-    vars_op: List[VarItem] = EmbeddedDocumentListField(VarItem)
+    vars_op: list[VarItem] = EmbeddedDocumentListField(VarItem)
     vars_conditions_op: str = StringField(
         choices=[
             ("AND", "Raise Disposition Alarm"),
@@ -360,12 +360,12 @@ class DispositionRule(Document):
     )
     replace_rule: Optional["DispositionRule"] = ReferenceField("self", required=False)
     # Actions
-    handlers: List[HandlerItem] = EmbeddedDocumentListField(HandlerItem)
+    handlers: list[HandlerItem] = EmbeddedDocumentListField(HandlerItem)
     notification_group: Optional["NotificationGroup"] = ForeignKeyField(
         NotificationGroup, required=False
     )
     subject_template = StringField()
-    target_actions: List[ActionItem] = EmbeddedDocumentListField(ActionItem)
+    target_actions: list[ActionItem] = EmbeddedDocumentListField(ActionItem)
     default_action = StringField(
         choices=[
             ("R", "Raise Disposition Alarm"),
@@ -424,7 +424,7 @@ class DispositionRule(Document):
             yield "cfgevent", f"ec:{ec.id}"
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -515,7 +515,7 @@ class DispositionRule(Document):
         return r
 
     @classmethod
-    def get_event_rule_config(cls, rule: "DispositionRule") -> Dict[str, Any]:
+    def get_event_rule_config(cls, rule: "DispositionRule") -> dict[str, Any]:
         """Disposition Rule config"""
         if rule.replace_rule and rule.replace_rule_policy == "w":
             # Merge Rule ?
@@ -580,7 +580,7 @@ class DispositionRule(Document):
         return r
 
     @classmethod
-    def get_event_alarm_rule_config(cls, rule: "DispositionRule") -> Dict[str, Any]:
+    def get_event_alarm_rule_config(cls, rule: "DispositionRule") -> dict[str, Any]:
         """Build Rule for Disposition processing"""
         if rule.replace_rule and rule.replace_rule_policy == "w":
             # Merge Rule ?

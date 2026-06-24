@@ -29,7 +29,7 @@ class AllocatorRequest(BaseModel):
     # [{"domain": XXX, "key": XXXX}]
     resource_pool: str
     limit: int = 1
-    keys: List[ResourceKey]
+    keys: list[ResourceKey]
     tt_id: Optional[str] = None
     allocated_till: Optional[datetime.date] = None
     action: str = "allocate"

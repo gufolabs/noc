@@ -128,12 +128,12 @@ class AlarmJob:
 
     def __init__(
         self,
-        items: List[Item],
-        actions: List[ActionLog],
-        groups: Optional[List[bytes]] = None,
-        services: Optional[List[ServiceItem]] = None,
+        items: list[Item],
+        actions: list[ActionLog],
+        groups: Optional[list[bytes]] = None,
+        services: Optional[list[ServiceItem]] = None,
         profile: Optional[str] = None,
-        allowed_actions: Optional[List[AllowedAction]] = None,
+        allowed_actions: Optional[list[AllowedAction]] = None,
         maintenance_policy: str = None,
         item_policy: EscalationPolicy = EscalationPolicy.ROOT,
         end_condition: str = "CR",
@@ -155,9 +155,9 @@ class AlarmJob:
         self.id = job_id
         self.name = name
         self.profile = profile
-        self.items: List[Item] = items
-        self.services: List[ServiceItem] = services or []
-        self.groups: List[bytes] = groups or []
+        self.items: list[Item] = items
+        self.services: list[ServiceItem] = services or []
+        self.groups: list[bytes] = groups or []
         self.actions = actions
         self.base_severity = severity
         # Policies
@@ -207,7 +207,7 @@ class AlarmJob:
         """Getting document alarm"""
         return self.leader_item.alarm
 
-    def get_lock_items(self) -> List[str]:
+    def get_lock_items(self) -> list[str]:
         """"""
         r = set()
         # Add items
@@ -496,7 +496,7 @@ class AlarmJob:
         cls,
         policy: EscalationPolicy,
         alarm: ActiveAlarm,
-    ) -> Tuple[Optional[ActiveAlarm], List[bytes]]:
+    ) -> tuple[Optional[ActiveAlarm], list[bytes]]:
         """Detect escalation Leader by Escalation Policy"""
         if policy in {EscalationPolicy.ALWAYS_FIRST, EscalationPolicy.ROOT_FIRST}:
             # Group
@@ -700,7 +700,7 @@ class AlarmJob:
             error_report()
 
     @classmethod
-    def items_from_state(cls, state: List[Dict[str, str]]) -> List[Item]:
+    def items_from_state(cls, state: list[dict[str, str]]) -> list[Item]:
         """Build items from state"""
         r = []
         items = {x["alarm"]: x["status"] for x in state}
@@ -721,7 +721,7 @@ class AlarmJob:
         return r
 
     @classmethod
-    def services_from_state(cls, state: List[Dict[str, str]]) -> List[ServiceItem]:
+    def services_from_state(cls, state: list[dict[str, str]]) -> list[ServiceItem]:
         """"""
         r = []
         items = {x["service"]: x for x in state}
@@ -744,7 +744,7 @@ class AlarmJob:
         return r
 
     def iter_escalation_alarms(
-        self, alarm: ActiveAlarm, groups: List[bytes]
+        self, alarm: ActiveAlarm, groups: list[bytes]
     ) -> Iterable[ActiveAlarm]:
         """Iter over alarms on items"""
         if groups:
@@ -762,7 +762,7 @@ class AlarmJob:
         yield from alarm.iter_consequences()
 
     @classmethod
-    def iter_groups_alarm(cls, groups: List[bytes]):
+    def iter_groups_alarm(cls, groups: list[bytes]):
         """Iterate over groups alarm"""
         for aa in ActiveAlarm.objects.filter(groups__in=groups).order_by("root", "-timestamp"):
             yield aa
@@ -772,9 +772,9 @@ class AlarmJob:
     @classmethod
     def from_state(
         cls,
-        data: Dict[str, Any],
+        data: dict[str, Any],
         is_dirty: bool = False,
-        stub_alarms: Optional[List[ActiveAlarm]] = None,
+        stub_alarms: Optional[list[ActiveAlarm]] = None,
     ) -> Optional["AlarmJob"]:
         """"""
         if stub_alarms:

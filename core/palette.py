@@ -374,7 +374,7 @@ def get_avatar_bg_color(n: int) -> str:
     return AVATAR_COLORS[i]
 
 
-def split_rgb(color: str) -> Tuple[int, int, int]:
+def split_rgb(color: str) -> tuple[int, int, int]:
     """
     Split color #RRGGBB to a tuple of (R, G, B)
     :param color:
@@ -390,7 +390,7 @@ def get_fg_color(color: str) -> str:
     :return:
     """
 
-    def distance(c1: Tuple[int, int, int], c2: Tuple[int, int, int]):
+    def distance(c1: tuple[int, int, int], c2: tuple[int, int, int]):
         return abs(c1[0] - c2[0]) + abs(c1[1] - c2[1]) + abs(c1[2] - c2[2])
 
     bg_rgb = split_rgb(color)

@@ -188,7 +188,7 @@ class Command(BaseCommand):
                 yield from m.objects.values_list("id", flat=True).order_by("id")
 
     def handle_rebuild_dictionary(self, dictionaries=None, *args, **options):
-        async def upload(table: str, data: List[bytes]):
+        async def upload(table: str, data: list[bytes]):
             CHUNK = 500
             n_parts = len(config.clickhouse.cluster_topology.split(","))
             async with MessageStreamClient() as client:
@@ -258,7 +258,7 @@ class Command(BaseCommand):
             e.clean(force=force)
 
     def handle_load(self):
-        async def upload(table: str, data: List[bytes]):
+        async def upload(table: str, data: list[bytes]):
             CHUNK = 500
             n_parts = len(config.clickhouse.cluster_topology.split(","))
             async with MessageStreamClient() as client:

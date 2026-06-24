@@ -67,8 +67,8 @@ class DataStream:
 
     DIAGNOSTIC: str = None
 
-    _collections: Dict[str, pymongo.collection.Collection] = {}
-    _collections_async: Dict[str, pymongo.collection.Collection] = {}
+    _collections: dict[str, pymongo.collection.Collection] = {}
+    _collections_async: dict[str, pymongo.collection.Collection] = {}
 
     @classmethod
     def get_collection_name(cls, format: Optional[str] = None) -> str:
@@ -129,7 +129,7 @@ class DataStream:
         raise NotImplementedError()
 
     @classmethod
-    def get_meta(cls, data: Dict[str, Any]) -> Optional[Dict]:
+    def get_meta(cls, data: dict[str, Any]) -> Optional[dict]:
         """
         Extract additional metadata from .get_object() result for additional indexing
         :param data: .get_object() result
@@ -147,7 +147,7 @@ class DataStream:
         return {"id": str(id), cls.F_DELETED: True}
 
     @classmethod
-    def get_moved_object(cls, id: Union[str, int]) -> Dict[str, Any]:
+    def get_moved_object(cls, id: Union[str, int]) -> dict[str, Any]:
         """
         Generate item for deleted object
         :param id:
@@ -160,11 +160,11 @@ class DataStream:
         return hashlib.sha256(orjson.dumps(data)).hexdigest()[: DataStream.HASH_LEN]
 
     @classmethod
-    def bulk_update(cls, objects: List[Union[id, str, bson.ObjectId]]) -> None:
+    def bulk_update(cls, objects: list[Union[id, str, bson.ObjectId]]) -> None:
         coll = cls.get_collection()
         # Get possible formats
-        fmt_coll: Dict[str, pymongo.collection.Collection] = {}
-        fmt_handler: Dict[str, Callable] = {}
+        fmt_coll: dict[str, pymongo.collection.Collection] = {}
+        fmt_handler: dict[str, Callable] = {}
         for fmt, handler in cls.iter_formats():
             fmt_coll[fmt] = cls.get_collection(fmt)
             fmt_handler[fmt] = handler
@@ -212,7 +212,7 @@ class DataStream:
                     fmt_coll[fmt].bulk_write(bulk, ordered=True)
 
     @classmethod
-    def clean_meta(cls, meta: Dict[str, List[Any]], current_meta: Dict[str, Any]):
+    def clean_meta(cls, meta: dict[str, list[Any]], current_meta: dict[str, Any]):
         """
         Calculate actual meta from calculate and current records
 
@@ -252,7 +252,7 @@ class DataStream:
         fmt: Optional[str] = None,
         state=None,
         meta_headers=None,
-        bulk: Optional[List[Any]] = None,
+        bulk: Optional[list[Any]] = None,
     ) -> bool:
         """
         Check calculate data changed and save it to collection
@@ -323,7 +323,7 @@ class DataStream:
     @classmethod
     def _get_current_data(
         cls, obj_id, delete=False
-    ) -> Tuple[Dict[str, Any], Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
+    ) -> tuple[dict[str, Any], Optional[dict[str, Any]], Optional[dict[str, Any]]]:
         if delete:
             return cls.get_deleted_object(obj_id), None, None
         try:
@@ -364,7 +364,7 @@ class DataStream:
     @classmethod
     def iter_formats(
         cls,
-    ) -> Iterable[Tuple[str, Callable[[Dict[str, Any]], Iterable[Dict[str, Any]]]]]:
+    ) -> Iterable[tuple[str, Callable[[dict[str, Any]], Iterable[dict[str, Any]]]]]:
         # Do not load in datastream service
         DataStreamConfig = getattr(cls, "_DataStreamConfig", None)
         if not DataStreamConfig:
@@ -415,7 +415,7 @@ class DataStream:
             raise ValueError(str(e))
 
     @classmethod
-    def is_moved(cls, meta: Dict[str, List[Any]], meta_filters: Dict[str, Any]) -> bool:
+    def is_moved(cls, meta: dict[str, list[Any]], meta_filters: dict[str, Any]) -> bool:
         """
         Check record is out of filter scope. Check filter diff on meta and record value
         :param meta:
@@ -445,7 +445,7 @@ class DataStream:
         cls,
         change_id: str = None,
         limit: int = None,
-        filters: List[str] = None,
+        filters: list[str] = None,
         fmt=None,
         filter_policy: Optional[str] = None,
     ):
@@ -498,7 +498,7 @@ class DataStream:
         cls,
         change_id: str = None,
         limit: int = None,
-        filters: List[str] = None,
+        filters: list[str] = None,
         fmt=None,
         filter_policy: Optional[str] = None,
     ):
@@ -691,7 +691,7 @@ class DataStream:
         return None
 
     @classmethod
-    def get_meta_headers(cls, data: Dict[str, Any]) -> Optional[Dict[str, bytes]]:
+    def get_meta_headers(cls, data: dict[str, Any]) -> Optional[dict[str, bytes]]:
         """
         Return MetaData for message headers
         :param data:
@@ -702,10 +702,10 @@ class DataStream:
     @classmethod
     def send_message(
         cls,
-        data: Dict[str, Any],
+        data: dict[str, Any],
         change_id: bson.ObjectId,
         mtype: Optional[str] = None,
-        additional_headers: Optional[Dict[str, bytes]] = None,
+        additional_headers: Optional[dict[str, bytes]] = None,
     ) -> None:
         """
         Send MX message
@@ -739,7 +739,7 @@ class DataStream:
         del data["$changeid"]
 
     @classmethod
-    def clean_meta_fields(cls, data: Dict[str, Any]):
+    def clean_meta_fields(cls, data: dict[str, Any]):
         if cls.F_LABELS_META in data:
             del data[cls.F_LABELS_META]
         if cls.F_ADM_DOMAIN_META in data:

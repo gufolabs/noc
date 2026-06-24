@@ -24,22 +24,22 @@ class Rule:
     """
 
     id: str
-    match_labels: FrozenSet[FrozenSet[str]]
-    exclude_labels: Optional[FrozenSet[FrozenSet[str]]]
+    match_labels: frozenset[frozenset[str]]
+    exclude_labels: Optional[frozenset[frozenset[str]]]
     graph_config: GraphConfig
-    match_scopes: Set[str]
-    inputs: Set[str]
-    configs: Dict[str, Dict[str, Any]]  # NodeId -> Config
-    alarms: Tuple[AlarmNode]
+    match_scopes: set[str]
+    inputs: set[str]
+    configs: dict[str, dict[str, Any]]  # NodeId -> Config
+    alarms: tuple[AlarmNode]
     # is_delete: bool
     # alarms,composed,intergraph (send state) - outputs
 
-    def is_matched(self, labels: Set[str]) -> bool:
+    def is_matched(self, labels: set[str]) -> bool:
         if not self.match_labels and not self.exclude_labels:
             return True
         return any(labels.issuperset(ml) for ml in self.match_labels)
 
-    def is_differ(self, rule: "Rule") -> FrozenSet[str]:
+    def is_differ(self, rule: "Rule") -> frozenset[str]:
         """
         Diff nodes config - update configs only
         Diff graph nodes or structure - rebuld Card Rules
@@ -56,7 +56,7 @@ class Rule:
             r.append("configs")
         return frozenset(r)
 
-    def update_config(self, configs: Dict[str, Dict[str, Any]]) -> Set[str]:
+    def update_config(self, configs: dict[str, dict[str, Any]]) -> set[str]:
         """
         Update node config, return changed node
         :param configs:
@@ -71,7 +71,7 @@ class Rule:
                 self.configs[node_id] = configs[node_id]
         return update_configs
 
-    def build_graph(self, inputs: List[str], namespace: str, states=None) -> CDAG:
+    def build_graph(self, inputs: list[str], namespace: str, states=None) -> CDAG:
         graph = CDAG(f"{namespace}::{self.id}", state=states)
         f = ConfigCDAGFactory(
             graph,
@@ -89,7 +89,7 @@ class Rule:
         rule_id: str,
         action: RuleAction,
         rule_name: str,
-        conditions: List[RuleCondition],
+        conditions: list[RuleCondition],
     ) -> "Rule":
         """Build rule from config"""
         rule_id = f"{rule_id}-{action.id}"

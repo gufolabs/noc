@@ -22,7 +22,7 @@ class Item:
 
 
 def iter_problems(tee: bool = False) -> Iterable[Item]:
-    section: List[str] = []
+    section: list[str] = []
     current_file: Optional[str] = None
     for line in sys.stdin:
         if tee:

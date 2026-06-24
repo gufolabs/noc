@@ -57,7 +57,7 @@ class DataStreamConfig(Document):
 
     def iter_formats(
         self,
-    ) -> Iterable[Tuple[str, Callable[[Dict[str, Any]], Iterable[Dict[str, Any]]]]]:
+    ) -> Iterable[tuple[str, Callable[[dict[str, Any]], Iterable[dict[str, Any]]]]]:
         for fmt in self.formats:
             if fmt.is_active:
                 handler = fmt.handler.get_handler()

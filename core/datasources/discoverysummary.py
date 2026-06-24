@@ -77,7 +77,7 @@ class DiscoverySummaryDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         # Interface metrics
         p_metrics = {p.id: len(p.metrics) for p in InterfaceProfile.objects.filter()}
         icoll = Interface._get_collection()

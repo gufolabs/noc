@@ -150,7 +150,7 @@ class Script(BaseScript):
                     r["attributes"]["Serial Number"] = s
                 return r
 
-    def execute_inventory_raw(self) -> Tuple[str, Optional[str]]:
+    def execute_inventory_raw(self) -> tuple[str, Optional[str]]:
         v = self.cli("show inventory raw")
         i = 0
         serial, platform = None, None

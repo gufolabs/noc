@@ -20,7 +20,7 @@ class AdmDomainDataStreamItem(BaseModel):
     name: str
     change_id: str
     parent: Optional[str]
-    labels: Optional[List[str]]
-    tags: Optional[List[str]]
+    labels: Optional[list[str]]
+    tags: Optional[list[str]]
     remote_system: Optional[RemoteSystemItem]
     remote_id: Optional[str]

@@ -57,7 +57,7 @@ class HttpClient(GufoHttpClient):
         self: "HttpClient",
         /,
         max_redirects: Optional[int] = config.http_client.max_redirects,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: Optional[dict[str, bytes]] = None,
         compression: Optional[int] = DEFLATE | GZIP | BROTLI,
         validate_cert: bool = config.http_client.validate_certs,
         connect_timeout: float = config.http_client.connect_timeout,
@@ -116,8 +116,8 @@ class HttpClient(GufoHttpClient):
         url: str,
         /,
         body: Optional[bytes] = None,
-        headers: Optional[Dict[str, bytes]] = None,
-    ) -> Tuple[int, Dict[str, Any], bytes]:
+        headers: Optional[dict[str, bytes]] = None,
+    ) -> tuple[int, dict[str, Any], bytes]:
         m = RequestMethod.get(method)
         if not m:
             raise NotImplementedError("Not implementer method: %s", method)
@@ -140,8 +140,8 @@ class HttpClient(GufoHttpClient):
         return r.status, r.headers, r.content
 
     async def get(
-        self, url: str, /, headers: Optional[Dict[str, bytes]] = None
-    ) -> Tuple[int, Dict[str, Any], bytes]:
+        self, url: str, /, headers: Optional[dict[str, bytes]] = None
+    ) -> tuple[int, dict[str, Any], bytes]:
         metrics["httpclient_requests", ("method", "get")] += 1
         try:
             url = await self.resolve(url)
@@ -165,8 +165,8 @@ class HttpClient(GufoHttpClient):
         url: str,
         body: bytes,
         /,
-        headers: Optional[Dict[str, bytes]] = None,
-    ) -> Tuple[int, Dict[str, Any], bytes]:
+        headers: Optional[dict[str, bytes]] = None,
+    ) -> tuple[int, dict[str, Any], bytes]:
         metrics["httpclient_requests", ("method", "post")] += 1
         try:
             url = await self.resolve(url)
@@ -190,8 +190,8 @@ class HttpClient(GufoHttpClient):
         url: str,
         body: bytes,
         /,
-        headers: Optional[Dict[str, bytes]] = None,
-    ) -> Tuple[int, Dict[str, Any], bytes]:
+        headers: Optional[dict[str, bytes]] = None,
+    ) -> tuple[int, dict[str, Any], bytes]:
         metrics["httpclient_requests", ("method", "put")] += 1
         try:
             url = await self.resolve(url)

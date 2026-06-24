@@ -40,7 +40,7 @@ class SuggestProfile:
     preference: int
     name: Optional[str] = None
 
-    _re_cache: ClassVar[Dict[str, str]] = {}
+    _re_cache: ClassVar[dict[str, str]] = {}
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_re_cache"))
@@ -109,7 +109,7 @@ class ProfileCheckRule(Document):
             raise ValidationError("SNMP Param must not be started with dot")
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "$collection": self._meta["json_collection"],

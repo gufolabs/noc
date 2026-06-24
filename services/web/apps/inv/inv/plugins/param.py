@@ -79,7 +79,7 @@ class ParamPlugin(InvPlugin):
 
     def api_save_data(self, request, id, **kwargs):
         o: "Object" = self.app.get_object_or_404(Object, id=id)
-        data: List[Dict[str, Any]] = self.app.deserialize(request.body)
+        data: list[dict[str, Any]] = self.app.deserialize(request.body)
         for d in data:
             p = self.app.get_object_or_404(ConfigurationParam, id=d["param"])
             if not d.get("scopes"):

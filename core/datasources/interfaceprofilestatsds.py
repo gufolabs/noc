@@ -28,7 +28,7 @@ class InterfaceProfileStatsDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         d_count = Interface.objects.count()
         num = 0
         for num, p in enumerate(InterfaceProfile.objects.all()):

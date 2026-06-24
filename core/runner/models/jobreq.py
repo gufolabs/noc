@@ -80,18 +80,18 @@ class JobRequest(BaseModel):
     name: str
     action: Optional[str] = None
     description: Optional[str] = None
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None
     allow_fail: bool = False
-    locks: Optional[List[str]] = None
-    inputs: Optional[List[InputMapping]] = None
+    locks: Optional[list[str]] = None
+    inputs: Optional[list[InputMapping]] = None
     require_approval: bool = False
-    depends_on: Optional[List[str]] = None
-    environment: Optional[Dict[str, str]] = None
+    depends_on: Optional[list[str]] = None
+    environment: Optional[dict[str, str]] = None
     after: Optional[datetime.datetime] = None
     deadline: Optional[datetime.datetime] = None
-    resource_path: Optional[List[str]] = None
+    resource_path: Optional[list[str]] = None
     entity: Optional[str] = None
-    jobs: Optional[List["JobRequest"]] = None
+    jobs: Optional[list["JobRequest"]] = None
 
     def submit(self) -> None:
         """Submit job request."""

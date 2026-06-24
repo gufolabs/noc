@@ -52,19 +52,19 @@ class ActionCommandConfig:
     name: str
     commands: str
     config_mode: bool = False
-    scopes: Optional[List[ScopeConfig]] = None
+    scopes: Optional[list[ScopeConfig]] = None
     cancel_prefix: Optional[str] = None
     exit_command: Optional[str] = None
 
     @classmethod
-    def render_command(cls, commands: str, **ctx: Dict[str, Any]):
+    def render_command(cls, commands: str, **ctx: dict[str, Any]):
         """"""
         loader = jinja2.DictLoader({"tpl": commands})
         env = jinja2.Environment(loader=loader)
         template = env.get_template("tpl")
         return template.render(**ctx)
 
-    def render_scope(self, **inputs) -> Tuple[List[str], Dict[str, str]]:
+    def render_scope(self, **inputs) -> tuple[list[str], dict[str, str]]:
         """Render Scope"""
         r, r_ctx = [], {}
         for s in self.scopes or []:
@@ -81,10 +81,10 @@ class ActionCommandConfig:
 
     def render(
         self,
-        ctx: Dict[str, Any],
+        ctx: dict[str, Any],
         scope_prepend: str = " ",
-        enable_commands: Optional[List[str]] = None,
-        disable_commands: Optional[List[str]] = None,
+        enable_commands: Optional[list[str]] = None,
+        disable_commands: Optional[list[str]] = None,
         clean_empty_string: bool = True,
         ignore_scope: bool = False,
         cancel: bool = False,

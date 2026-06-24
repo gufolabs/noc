@@ -51,7 +51,7 @@ class NodeCDAG:
         self.tx = self.cdag.begin()
         return self.tx
 
-    def get_changed_state(self) -> Dict[Tuple[str, str], Any]:
+    def get_changed_state(self) -> dict[tuple[str, str], Any]:
         return self.tx.get_changed_state()
 
 
@@ -79,13 +79,13 @@ class PublishMsg:
     stream: str
     partition: Optional[int] = None
     key: Optional[bytes] = None
-    headers: Optional[Dict[str, bytes]] = None
+    headers: Optional[dict[str, bytes]] = None
 
 
 class PublishStub(ServiceStub):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.messages: List[PublishMsg] = []
+        self.messages: list[PublishMsg] = []
 
     def publish(
         self,
@@ -93,7 +93,7 @@ class PublishStub(ServiceStub):
         stream: str,
         partition: Optional[int] = None,
         key: Optional[bytes] = None,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: Optional[dict[str, bytes]] = None,
     ):
         self.messages.append(
             PublishMsg(

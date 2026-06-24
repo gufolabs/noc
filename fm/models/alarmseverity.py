@@ -87,7 +87,7 @@ class AlarmSeverity(Document):
         return AlarmSeverity.objects.filter(code=code).first()
 
     @classmethod
-    def get_from_labels(cls, labels: List[str]) -> Optional["AlarmSeverity"]:
+    def get_from_labels(cls, labels: list[str]) -> Optional["AlarmSeverity"]:
         """
 
         Args
@@ -101,7 +101,7 @@ class AlarmSeverity(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_order_cache"), lock=lambda _: id_lock)
-    def get_ordered(cls) -> List["AlarmSeverity"]:
+    def get_ordered(cls) -> list["AlarmSeverity"]:
         """
         Returns list of severities ordered in acvending order
         :return:

@@ -49,7 +49,7 @@ class PathItem:
         return list(reversed(r)) if r else None
 
     @classmethod
-    def from_channel(cls, ch: Channel) -> "Optional[List[PathItem]]":
+    def from_channel(cls, ch: Channel) -> "Optional[list[PathItem]]":
         """Get path for channel."""
         return [PathItem(label=ch.name, id=str(id))]
 
@@ -214,7 +214,7 @@ def _info_for_channel(resource: str) -> Optional[Info]:
     )
 
 
-INFO_HANDLERS: Dict[str, Callable[[str], Optional[Info]]] = {
+INFO_HANDLERS: dict[str, Callable[[str], Optional[Info]]] = {
     "o": _info_for_object,
     "c": _info_for_channel,
 }

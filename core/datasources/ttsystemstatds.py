@@ -72,7 +72,7 @@ class TTSystemStatDS(BaseDataSource):
         fields: Optional[Iterable[str]] = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[int, str, Union[str, int]]]:
+    ) -> AsyncIterable[tuple[int, str, Union[str, int]]]:
         start: datetime.datetime = kwargs.get("start")
         end: datetime.datetime = kwargs.get("end")
         ts_start = time.mktime(start.timetuple())

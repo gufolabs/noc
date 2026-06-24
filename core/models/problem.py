@@ -16,10 +16,10 @@ from typing import List, Dict, Optional, Any
 class ProblemItem:
     alarm_class: Optional[str]
     message: str = ""
-    path: List[str] = field(default_factory=list)
-    labels: List[str] = field(default_factory=list)
+    path: list[str] = field(default_factory=list)
+    labels: list[str] = field(default_factory=list)
     fatal: bool = False
     diagnostic: Optional[str] = None
-    vars: Dict[str, Any] = field(default_factory=dict)
+    vars: dict[str, Any] = field(default_factory=dict)
     code: Optional[str] = None
     check: Optional[str] = None

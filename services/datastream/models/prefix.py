@@ -41,8 +41,8 @@ class PrefixDataStreamItem(BaseModel):
     state: StateItem
     profile: PrefixProfileItem
     description: Optional[str]
-    labels: Optional[List[str]]
-    tags: Optional[List[str]]
+    labels: Optional[list[str]]
+    tags: Optional[list[str]]
     project: Optional[ProjectItem]
     vrf: Optional[VRFItem]
     asf: Optional[ASItem] = Field(None, alias="as")

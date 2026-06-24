@@ -24,6 +24,6 @@ class Object(BaseModel):
     id: str
     name: str
     model: str
-    data: List[ObjectData] = []
+    data: list[ObjectData] = []
     parent: Optional[Reference["Object"]] = Field(None, serialization_alias="container")
     checkpoint: Optional[str] = None

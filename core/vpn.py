@@ -19,7 +19,7 @@ SIPHASH_SEED = b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x0
 T_MAP = {"vrf": "VRF", "vpls": "VPLS"}
 
 
-def get_vpn_id(vpn: Dict[str, Any]) -> str:
+def get_vpn_id(vpn: dict[str, Any]) -> str:
     """
     Calculate RFC2685-compatible VPN ID
     :param vpn: Dict containing following keys

@@ -28,4 +28,4 @@ class Sensor(BaseModel):
     protocol: SensorProtocol = SensorProtocol.OTHER
     # Workflow state
     state: Optional[str] = None
-    labels: List[str] = []
+    labels: list[str] = []

@@ -16,10 +16,10 @@ class StatusItem(BaseModel):
     managed_object: str
     status: bool
     timestamp: Optional[str] = None
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None
     message: Optional[str] = None
 
 
 class SetStatusRequest(BaseModel):
     op: Literal["set_status"] = Field(None, alias="$op")
-    statuses: List[StatusItem]
+    statuses: list[StatusItem]

@@ -30,28 +30,28 @@ router = APIRouter()
 
 class Metrics(BaseModel):
     object: str
-    interfaces: Optional[List[str]] = None
-    metric_types: List[str]
+    interfaces: Optional[list[str]] = None
+    metric_types: list[str]
 
 
 class ObjectMetricsRequest(BaseModel):
     from_: datetime = Field(..., alias="from")
     to: datetime
-    metrics: List[Metrics]
+    metrics: list[Metrics]
 
 
 class ObjectMetricsResponseItem(BaseModel):
     object: str
     metric_type: str
-    path: List[str]
-    values: List[List[Any]]
+    path: list[str]
+    values: list[list[Any]]
     interface: Optional[str]
 
 
 class ObjectMetricsResponse(BaseModel):
     from_: datetime = Field(..., alias="from")
     to: datetime
-    metrics: List[ObjectMetricsResponseItem]
+    metrics: list[ObjectMetricsResponseItem]
 
 
 class ObjectMetricsAPI(NBIAPI):

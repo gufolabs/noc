@@ -258,7 +258,7 @@ async def snmp_getnext(
     udp_socket: Optional[UDPSocket] = None,
     max_retries: int = 0,
     raw_varbinds: bool = False,
-    display_hints: Optional[Dict[str, Optional[Callable[[str, bytes], Union[str, bytes]]]]] = None,
+    display_hints: Optional[dict[str, Optional[Callable[[str, bytes], Union[str, bytes]]]]] = None,
     response_parser: Optional[_ResponseParser] = None,
     rate_limit: Optional[AsyncRateLimit] = None,
 ):

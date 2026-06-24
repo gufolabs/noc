@@ -81,7 +81,7 @@ async def _run_script(current_user, oid, script, args, span_id=0, bi_id=None):
 
 
 async def _iterdata(
-    req: List[Union[MRTCommandScript, MRTInterfaceScript, MRTAnyScript]], current_user
+    req: list[Union[MRTCommandScript, MRTInterfaceScript, MRTAnyScript]], current_user
 ):
     service = get_service()
     metrics["mrt_requests"] += 1
@@ -146,7 +146,7 @@ async def _iterdata(
 
 @router.post("/api/mrt/")
 async def api_mrt(
-    req: List[Union[MRTCommandScript, MRTInterfaceScript, MRTAnyScript]],
+    req: list[Union[MRTCommandScript, MRTInterfaceScript, MRTAnyScript]],
     current_user: User = Depends(get_current_user),
 ):
     # Disable nginx proxy buffering

@@ -18,7 +18,7 @@ class Message:
     timestamp: int
     key: bytes
     partition: int
-    headers: Dict[str, bytes]
+    headers: dict[str, bytes]
 
 
 @dataclass
@@ -28,6 +28,6 @@ class PublishRequest:
     stream: str
     data: bytes
     partition: Optional[int]
-    headers: Optional[Dict[str, bytes]]
+    headers: Optional[dict[str, bytes]]
     # Meta
     key: Optional[bytes]

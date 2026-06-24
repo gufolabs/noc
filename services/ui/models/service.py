@@ -23,12 +23,12 @@ class DefaultServiceItem(BaseModel):
     ts: datetime.datetime
     state: Reference
     state_changed: datetime.datetime
-    labels: List[LabelItem]
-    effective_labels: List[LabelItem]
-    static_service_groups: List[Reference]
-    effective_service_groups: List[Reference]
-    static_client_groups: List[Reference]
-    effective_client_groups: List[Reference]
+    labels: list[LabelItem]
+    effective_labels: list[LabelItem]
+    static_service_groups: list[Reference]
+    effective_service_groups: list[Reference]
+    static_client_groups: list[Reference]
+    effective_client_groups: list[Reference]
     parent: Optional[Reference] = None
     subscriber: Optional[Reference] = None
     supplier: Optional[Reference] = None
@@ -62,9 +62,9 @@ class FormServiceItem(BaseModel):
     address: Optional[str] = None
     managed_object: Optional[Reference] = None
     nri_port: Optional[str] = None
-    labels: Optional[List[str]] = None
-    static_service_groups: Optional[List[Reference]] = None
-    static_client_groups: Optional[List[Reference]] = None
+    labels: Optional[list[str]] = None
+    static_service_groups: Optional[list[Reference]] = None
+    static_client_groups: Optional[list[Reference]] = None
 
 
 class PreviewServiceItem(BaseModel):

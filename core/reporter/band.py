@@ -21,10 +21,10 @@ from noc.core.reporter.types import BandOrientation, ROOT_BAND, ReportBand
 class DataSet:
     name: str
     data: pl.DataFrame
-    rows: Optional[List[Dict[str, Any]]] = None
+    rows: Optional[list[dict[str, Any]]] = None
     query: Optional[str] = None
     transpose: bool = False
-    transpose_columns: Optional[List[str]] = None
+    transpose_columns: Optional[list[str]] = None
 
 
 class Band:
@@ -49,14 +49,14 @@ class Band:
         name: str,
         parent: Optional["Band"] = None,
         orientation: BandOrientation = BandOrientation.HORIZONTAL,
-        data: Dict[str, Any] = None,
+        data: dict[str, Any] = None,
     ):
         self.name = name
         self.parent = parent
-        self.children_bands: List[Band] = []
+        self.children_bands: list[Band] = []
         self.orientation = orientation
-        self.datasets: Dict[str, DataSet] = {}
-        self.data: Dict[str, Any] = data or {}
+        self.datasets: dict[str, DataSet] = {}
+        self.data: dict[str, Any] = data or {}
         # self.rows: Optional[DataFrame] = rows
         # self.format: Optional[BandFormat] = None
         # self.report_field_format: Dict[str, ReportField] = {}
@@ -158,7 +158,7 @@ class Band:
         """Calculate full BandName - <rb>.<b1>.<b2>"""
         return ".".join(b.name for b in self.get_path()[1:])
 
-    def get_columns(self) -> List[str]:
+    def get_columns(self) -> list[str]:
         r = self.get_rows()
         if not r and not self.data:
             return []
@@ -166,7 +166,7 @@ class Band:
             return list(self.data)
         return r[0].columns
 
-    def add_children(self, bands: List["Band"]):
+    def add_children(self, bands: list["Band"]):
         """
         Add children Band
         Attrs:
@@ -180,13 +180,13 @@ class Band:
         band.parent = self
         self.children_bands.append(band)
 
-    def get_path(self) -> List["Band"]:
+    def get_path(self) -> list["Band"]:
         """Getting band path"""
         if self.parent:
             return [*self.parent.get_path(), self]
         return [self]
 
-    def get_rows(self) -> List[pl.DataFrame]:
+    def get_rows(self) -> list[pl.DataFrame]:
         """Getting rows for Band"""
         if not self.datasets:
             return []
@@ -229,12 +229,12 @@ class Band:
                 sql.register(b.name, rows.lazy())
         return r
 
-    def iter_rows(self) -> Iterable[Dict[str, Any]]:
+    def iter_rows(self) -> Iterable[dict[str, Any]]:
         """iterate row dataset"""
         for r in self.get_rows():
             yield from r.to_dicts()
 
-    def iter_data_rows(self, fields: List[str] = None) -> Iterable[Tuple[str, ...]]:
+    def iter_data_rows(self, fields: list[str] = None) -> Iterable[tuple[str, ...]]:
         """Convert rows to columns tuple"""
         for r in self.get_rows():
             for row in r.to_dicts():
@@ -249,7 +249,7 @@ class Band:
         """
         self.datasets[name or self.name] = data
 
-    def set_data(self, data: Dict[str, Any]):
+    def set_data(self, data: dict[str, Any]):
         """Set Band Data"""
         self.data.update(data.copy())
 
@@ -288,12 +288,12 @@ class Band:
                 return band
 
     @classmethod
-    def from_report(cls, band: ReportBand, params: Optional[Dict[str, Any]] = None) -> "Band":
+    def from_report(cls, band: ReportBand, params: Optional[dict[str, Any]] = None) -> "Band":
         """Create Band from configuration"""
         return Band(name=band.name, orientation=band.orientation, data=params)
 
     @classmethod
-    def from_band(cls, band: "Band", data: Dict[str, Any], parent: Optional["Band"] = None):
+    def from_band(cls, band: "Band", data: dict[str, Any], parent: Optional["Band"] = None):
         b = Band(
             name=band.name, parent=parent or band.parent, orientation=band.orientation, data=data
         )

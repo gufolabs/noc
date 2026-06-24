@@ -24,7 +24,7 @@ class VarItem:
 @dataclass(frozen=True, slots=True)
 class FilterConfig:
     window: int
-    vars: Optional[List[str]] = None
+    vars: Optional[list[str]] = None
 
 
 @dataclass(slots=True)
@@ -34,14 +34,14 @@ class EventConfig:
     event_class: str
     event_class_id: str
     # categories: List[str]
-    vars: List[VarItem]
+    vars: list[VarItem]
     managed_object_required: bool = True
-    filters: Optional[Dict[str, FilterConfig]] = None
-    resources: Optional[Dict[str, Callable]] = None
+    filters: Optional[dict[str, FilterConfig]] = None
+    resources: Optional[dict[str, Callable]] = None
     # EventActions
     # TargetActions
     # Resources
-    actions: Optional[List[Callable]] = None
+    actions: Optional[list[Callable]] = None
     link_event: bool = False
 
     @property

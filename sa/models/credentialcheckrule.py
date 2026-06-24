@@ -48,11 +48,11 @@ class SuggestItem:
         protocols: List of allowed protocols
     """
 
-    credentials: List[Union[SNMPCredential, CLICredential]]
-    labels: List[FrozenSet[str]]
-    protocols: Tuple[Protocol, ...]
+    credentials: list[Union[SNMPCredential, CLICredential]]
+    labels: list[frozenset[str]]
+    protocols: tuple[Protocol, ...]
 
-    def is_match(self, labels: Set[str]) -> bool:
+    def is_match(self, labels: set[str]) -> bool:
         if not self.labels:
             return True
         return bool(any(not set(ll) - labels for ll in self.labels))
@@ -93,29 +93,29 @@ class CredentialCheckRule(Document):
 
     name = StringField(required=True, unique=True)
     is_active = BooleanField(default=True)
-    match: List["Match"] = EmbeddedDocumentListField(Match)
+    match: list["Match"] = EmbeddedDocumentListField(Match)
     description = StringField()
     # Rule preference, processed from lesser to greater
     preference = IntField(required=True, default=100)
-    suggest_snmp: List["SuggestSNMP"] = EmbeddedDocumentListField(SuggestSNMP)
-    suggest_credential: List["SuggestCLI"] = EmbeddedDocumentListField(SuggestCLI)
-    suggest_auth_profile: List["SuggestAuthProfile"] = EmbeddedDocumentListField(SuggestAuthProfile)
+    suggest_snmp: list["SuggestSNMP"] = EmbeddedDocumentListField(SuggestSNMP)
+    suggest_credential: list["SuggestCLI"] = EmbeddedDocumentListField(SuggestCLI)
+    suggest_auth_profile: list["SuggestAuthProfile"] = EmbeddedDocumentListField(SuggestAuthProfile)
     # TELNET/SSH/SNMP/HTTP
     suggest_protocols = ListField(
         StringField(choices=[p.name for p in Protocol if p.config.enable_suggest])
     )
     # SNMP OID's for check
-    suggest_snmp_oids: List[str] = ListField(StringField(validation=check_model))
+    suggest_snmp_oids: list[str] = ListField(StringField(validation=check_model))
 
     _rules_cache = cachetools.TTLCache(10, ttl=300)
 
     def __str__(self):
         return self.name
 
-    def get_suggest_proto(self) -> List[Protocol]:
+    def get_suggest_proto(self) -> list[Protocol]:
         return [Protocol[sp] for sp in self.suggest_protocols]
 
-    def get_suggest_snmp(self) -> List[SNMPCredential]:
+    def get_suggest_snmp(self) -> list[SNMPCredential]:
         r = []
         for ss in self.suggest_snmp:
             r.append(
@@ -132,7 +132,7 @@ class CredentialCheckRule(Document):
                 )
         return r
 
-    def get_suggest_cli(self, raise_privilege: bool = True) -> List[CLICredential]:
+    def get_suggest_cli(self, raise_privilege: bool = True) -> list[CLICredential]:
         r = []
         sp = tuple(p.value for p in self.get_suggest_proto() if p.config.is_cli)
         proto = sp or (1, 2)
@@ -160,16 +160,16 @@ class CredentialCheckRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_rules_cache"), lock=lambda _: rules_lock)
-    def get_suggest_rules(cls) -> List["SuggestItem"]:
+    def get_suggest_rules(cls) -> list["SuggestItem"]:
         r = []
         for rule in (
             CredentialCheckRule.objects.filter(is_active=True)
             .read_preference(ReadPreference.SECONDARY_PREFERRED)
             .order_by("preference")
         ):
-            sr: List[SNMPCredential] = rule.get_suggest_snmp()
+            sr: list[SNMPCredential] = rule.get_suggest_snmp()
             labels = [frozenset(ll.labels) for ll in rule.match]
-            protos: List[Protocol] = rule.get_suggest_proto()
+            protos: list[Protocol] = rule.get_suggest_proto()
             if sr:
                 r.append(
                     SuggestItem(
@@ -182,7 +182,7 @@ class CredentialCheckRule(Document):
                         ),
                     )
                 )
-            sr: List[CLICredential] = rule.get_suggest_cli()
+            sr: list[CLICredential] = rule.get_suggest_cli()
             if sr:
                 c_protos = protos or CLI_PROTOCOLS
                 r.append(
@@ -197,7 +197,7 @@ class CredentialCheckRule(Document):
     @classmethod
     def get_suggests(
         cls, o
-    ) -> List[Tuple[Tuple[Protocol, ...], Union[SNMPCredential, CLICredential]]]:
+    ) -> list[tuple[tuple[Protocol, ...], Union[SNMPCredential, CLICredential]]]:
         r = []
         labels = set(o.effective_labels)
         for s in cls.get_suggest_rules():

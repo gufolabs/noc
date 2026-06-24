@@ -77,10 +77,10 @@ class JsonDSAPI:
     Backend for SimpodJson Grafana plugin
     """
 
-    QUERY_CONFIGS: List["QueryConfig"] = None
-    openapi_tags: List[str] = ["api", "grafanads"]
+    QUERY_CONFIGS: list["QueryConfig"] = None
+    openapi_tags: list[str] = ["api", "grafanads"]
     api_name: Optional[str] = None
-    query_response_model = List[TargetResponseItem]
+    query_response_model = list[TargetResponseItem]
     variable_payload = None
     allow_interval_limit: bool = True
 
@@ -88,7 +88,7 @@ class JsonDSAPI:
         self.service = get_service()
         self.logger = self.service.logger
         self.router = router
-        self.query_config: Dict[str, "QueryConfig"] = self.load_query_config()
+        self.query_config: dict[str, "QueryConfig"] = self.load_query_config()
         self.type_adapter = TypeAdapter(self.variable_payload)
         self.setup_routes()
 
@@ -104,7 +104,7 @@ class JsonDSAPI:
         return r
 
     async def api_grafanads_search(
-        self, req: Dict[str, str], user: User = Depends(get_current_user)
+        self, req: dict[str, str], user: User = Depends(get_current_user)
     ):
         """
         Method for /search endpoint on datasource
@@ -168,7 +168,7 @@ class JsonDSAPI:
     ) -> Iterable["Annotation"]: ...
 
     @classmethod
-    def get_metrics(cls) -> List[Dict[str, str]]:
+    def get_metrics(cls) -> list[dict[str, str]]:
         """
         Return Available Metrics for datasource
         :return:
@@ -188,7 +188,7 @@ class JsonDSAPI:
         return r
 
     @classmethod
-    def get_metrics_for_search(cls) -> List[Dict[str, str]]:
+    def get_metrics_for_search(cls) -> list[dict[str, str]]:
         """
         Return Available Metrics for datasource
         :return:
@@ -232,7 +232,7 @@ class JsonDSAPI:
         self.logger.info("Query Request: %s", req)
         connect = connection()
         r = []
-        targets: Dict[Tuple[str, str], List["QueryConfig"]] = defaultdict(list)
+        targets: dict[tuple[str, str], list["QueryConfig"]] = defaultdict(list)
         # Merge targets to Metric Scope and Filter
         for target in req.targets:
             if target.target in self.query_config:
@@ -278,7 +278,7 @@ class JsonDSAPI:
         req: QueryRequest,
         table_name: str,
         query_condition: str,
-        query_configs: List["QueryConfig"],
+        query_configs: list["QueryConfig"],
     ) -> str:
         """
         Return Query Expression for Clickhouse
@@ -336,7 +336,7 @@ class JsonDSAPI:
         )
 
     @classmethod
-    def format_time_series(cls, results: List[Tuple[List["QueryConfig"], Dict[str, Any]]]):
+    def format_time_series(cls, results: list[tuple[list["QueryConfig"], dict[str, Any]]]):
         result = []
         for query_configs, data in results:
             request_metrics = {qc.alias or qc.metric_type for qc in query_configs}
@@ -357,7 +357,7 @@ class JsonDSAPI:
     @classmethod
     def format_result(
         cls,
-        results: List[Tuple[List["QueryConfig"], Dict[str, Any]]],
+        results: list[tuple[list["QueryConfig"], dict[str, Any]]],
         result_type: str = "time_series",
     ):
         if not hasattr(cls, f"format_{result_type}"):
@@ -367,7 +367,7 @@ class JsonDSAPI:
         return getattr(cls, f"format_{result_type}")(results)
 
     @staticmethod
-    def get_target_expression(table_name: str = None) -> Tuple[str, Optional[str]]:
+    def get_target_expression(table_name: str = None) -> tuple[str, Optional[str]]:
         """
         Getting Target name format for table
         :param table_name:
@@ -376,7 +376,7 @@ class JsonDSAPI:
         return "arrayStringConcat(labels,'/')", "target"
 
     @staticmethod
-    def convert_ts_range(req) -> Tuple[datetime.datetime, datetime.datetime]:
+    def convert_ts_range(req) -> tuple[datetime.datetime, datetime.datetime]:
         """
         Convert request range param to local datetime
         :param req:
@@ -418,8 +418,8 @@ class JsonDSAPI:
         metric,
         name,
         user,
-        payload: Optional[Dict[str, str]] = None,
-    ) -> List[Dict[str, str]]:
+        payload: Optional[dict[str, str]] = None,
+    ) -> list[dict[str, str]]:
         """ """
         return []
 
@@ -436,7 +436,7 @@ class JsonDSAPI:
 
     @staticmethod
     def resolve_object_query(
-        model_id, value, query_function: Optional[List[str]] = None, user: User = None
+        model_id, value, query_function: Optional[list[str]] = None, user: User = None
     ) -> Optional[Any]:
         """
         Resolve object in Query by Value
@@ -450,7 +450,7 @@ class JsonDSAPI:
         return model.objects.filter(name__contains=value).first()
 
     @classmethod
-    def get_metric_scope_fields(cls, metric_scope) -> Tuple[Dict[str, str], Set[str], Set[str]]:
+    def get_metric_scope_fields(cls, metric_scope) -> tuple[dict[str, str], set[str], set[str]]:
         """
         Get Metric Scope Config. Key Field -> Model map, Required Column, Columns
         :param metric_scope: MetricScope Name
@@ -470,7 +470,7 @@ class JsonDSAPI:
 
     def get_query_metric_type_condition(
         self,
-        payload: Dict[str, Union[str, List[str]]],
+        payload: dict[str, Union[str, list[str]]],
         metric_type: Optional["MetricType"] = None,
         user: User = None,
     ) -> str:
@@ -564,7 +564,7 @@ class JsonDSAPI:
             path=f"/api/grafanads/{self.api_name}/search",
             endpoint=self.api_grafanads_search,
             methods=["POST"],
-            response_model=List[SearchResponseItem],
+            response_model=list[SearchResponseItem],
             tags=self.openapi_tags,
             name=f"{self.api_name}_search",
             description="Getting available metrics",
@@ -573,7 +573,7 @@ class JsonDSAPI:
             path=f"/api/grafanads/{self.api_name}/metrics",
             endpoint=self.api_grafanads_metrics,
             methods=["POST"],
-            response_model=List[MetricsResponseItem],
+            response_model=list[MetricsResponseItem],
             tags=self.openapi_tags,
             name=f"{self.api_name}_metrics",
             description="Getting available metrics",
@@ -582,7 +582,7 @@ class JsonDSAPI:
             path=f"/api/grafanads/{self.api_name}/metric-payload-options",
             endpoint=self.api_metric_payload_options,
             methods=["POST"],
-            response_model=List[MetricsResponseItem],
+            response_model=list[MetricsResponseItem],
             tags=self.openapi_tags,
             name=f"{self.api_name}_metric_payload_options",
             description="Getting payload options",
@@ -601,7 +601,7 @@ class JsonDSAPI:
             path="/api/grafanads/annotations",
             endpoint=self.api_grafanads_annotations,
             methods=["POST"],
-            response_model=List[Annotation],
+            response_model=list[Annotation],
             tags=self.openapi_tags,
             name=f"{self.api_name}_annotations_back",
             description="Getting target annotations (Backward compatible)",
@@ -610,7 +610,7 @@ class JsonDSAPI:
             path=f"/api/grafanads/{self.api_name}/annotations",
             endpoint=self.api_grafanads_annotations,
             methods=["POST"],
-            response_model=List[Annotation],
+            response_model=list[Annotation],
             tags=self.openapi_tags,
             name=f"{self.api_name}_annotations",
             description="Getting target annotations",
@@ -619,7 +619,7 @@ class JsonDSAPI:
             path=f"/api/grafanads/{self.api_name}/variable",
             endpoint=self.api_grafanads_variable,
             methods=["POST"],
-            response_model=List[Union[Dict[str, str], str]],
+            response_model=list[Union[dict[str, str], str]],
             tags=self.openapi_tags,
             name=f"{self.api_name}_variable",
             description="Getting target variable",

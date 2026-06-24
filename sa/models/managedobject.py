@@ -296,7 +296,7 @@ class Credentials:
         self,
         cli_only: bool = False,
         snmp_only: bool = False,
-    ) -> Iterable[Tuple[str, str]]:
+    ) -> Iterable[tuple[str, str]]:
         """Iterate over credentail"""
         # CLI
         if not snmp_only or cli_only:
@@ -330,10 +330,10 @@ class MaintenanceItem(BaseModel):
     stop: Optional[datetime.datetime] = None
 
 
-MaintenanceItems = RootModel[Dict[str, MaintenanceItem]]
+MaintenanceItems = RootModel[dict[str, MaintenanceItem]]
 
 
-CapsItems = RootModel[List[ModelCapsItem]]
+CapsItems = RootModel[list[ModelCapsItem]]
 
 
 class MappingItem(BaseModel):
@@ -344,10 +344,10 @@ class MappingItem(BaseModel):
     sources: str = "o"
 
 
-MappingItems = RootModel[List[MappingItem]]
+MappingItems = RootModel[list[MappingItem]]
 
 
-DiagnosticItems = RootModel[Dict[str, DiagnosticValue]]
+DiagnosticItems = RootModel[dict[str, DiagnosticValue]]
 
 
 def default(obj):
@@ -361,8 +361,8 @@ def default(obj):
 @dataclass(frozen=True)
 class ObjectUplinks:
     object_id: int
-    uplinks: List[int]
-    rca_neighbors: List[int]
+    uplinks: list[int]
+    rca_neighbors: list[int]
 
 
 id_lock = Lock()
@@ -621,7 +621,7 @@ class ManagedObject(NOCModel):
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from
     remote_system = DocumentReferenceField(RemoteSystem, null=True, blank=True)
-    mappings: Optional[List[MappingItem]] = PydanticField(
+    mappings: Optional[list[MappingItem]] = PydanticField(
         "Remote System Mapping Items",
         schema=MappingItems,
         blank=True,
@@ -841,23 +841,23 @@ class ManagedObject(NOCModel):
         default="P",
     )
     # Resource groups
-    static_service_groups: List[str] = ObjectIDArrayField(
+    static_service_groups: list[str] = ObjectIDArrayField(
         db_index=True, blank=True, null=True, default=list
     )
-    effective_service_groups: List[str] = ObjectIDArrayField(
+    effective_service_groups: list[str] = ObjectIDArrayField(
         db_index=True, blank=True, null=True, default=list
     )
-    static_client_groups: List[str] = ObjectIDArrayField(
+    static_client_groups: list[str] = ObjectIDArrayField(
         db_index=True, blank=True, null=True, default=list
     )
-    effective_client_groups: List[str] = ObjectIDArrayField(
+    effective_client_groups: list[str] = ObjectIDArrayField(
         db_index=True, blank=True, null=True, default=list
     )
-    labels: List[str] = ArrayField(CharField(max_length=250), blank=True, null=True, default=list)
-    effective_labels: List[str] = ArrayField(
+    labels: list[str] = ArrayField(CharField(max_length=250), blank=True, null=True, default=list)
+    effective_labels: list[str] = ArrayField(
         CharField(max_length=250), blank=True, null=True, default=list
     )
-    caps: List[Dict[str, Any]] = PydanticField(
+    caps: list[dict[str, Any]] = PydanticField(
         "Caps Items",
         schema=CapsItems,
         blank=True,
@@ -880,7 +880,7 @@ class ManagedObject(NOCModel):
     adm_path = ArrayField(IntegerField(), blank=True, null=True, default=list)
     segment_path = ObjectIDArrayField(db_index=True, blank=True, null=True, default=list)
     container_path = ObjectIDArrayField(db_index=True, blank=True, null=True, default=list)
-    affected_maintenances: Dict[str, Dict[str, str]] = PydanticField(
+    affected_maintenances: dict[str, dict[str, str]] = PydanticField(
         "Maintenance Items",
         schema=MaintenanceItems,
         blank=True,
@@ -889,7 +889,7 @@ class ManagedObject(NOCModel):
         # ? Internal validation not worked with JSON Field
         # validators=[match_rules_validate],
     )
-    diagnostics: Dict[str, DiagnosticValue] = PydanticField(
+    diagnostics: dict[str, DiagnosticValue] = PydanticField(
         "Diagnostic Items",
         schema=DiagnosticItems,
         blank=True,
@@ -1030,8 +1030,8 @@ class ManagedObject(NOCModel):
 
     @classmethod
     def get_by_mappings(
-        cls, remote_mappings: List[Tuple[RemoteSystem, str]]
-    ) -> List["ManagedObject"]:
+        cls, remote_mappings: list[tuple[RemoteSystem, str]]
+    ) -> list["ManagedObject"]:
         """
         Resolve object by multiple mappings
         Args:
@@ -1046,7 +1046,7 @@ class ManagedObject(NOCModel):
         return list(ManagedObject.objects.filter(q))
 
     @classmethod
-    def get_by_remote_ids(cls, remote_system: RemoteSystem, ids: List[str]) -> List[str]:
+    def get_by_remote_ids(cls, remote_system: RemoteSystem, ids: list[str]) -> list[str]:
         """Return object IDS by remote_ids"""
         q = Q()
         for rs_id in ids:
@@ -1316,9 +1316,9 @@ class ManagedObject(NOCModel):
         """
         card = f"Managed object {self.name} ({self.address or ''})"
         if self.address:
-            content: List[str] = [self.name, self.address or ""]
+            content: list[str] = [self.name, self.address or ""]
         else:
-            content: List[str] = [self.name]
+            content: list[str] = [self.name]
         if self.trap_source_ip:
             content += [self.trap_source_ip]
         platform = self.platform
@@ -1455,7 +1455,7 @@ class ManagedObject(NOCModel):
         return ManagedObjectStatus.set_status(self, status, ts=ts)
 
     @classmethod
-    def get_statuses(cls, objects: List[int]) -> Dict[int, bool]:
+    def get_statuses(cls, objects: list[int]) -> dict[int, bool]:
         """
         Returns a map of object id -> status
         for a list od object ids
@@ -1509,7 +1509,7 @@ class ManagedObject(NOCModel):
             delta=delta or self.pool.get_delta(),
         )
 
-    def event(self, event_id: str, data: Optional[Dict[str, Any]] = None, delay=None, tag=None):
+    def event(self, event_id: str, data: Optional[dict[str, Any]] = None, delay=None, tag=None):
         """
         Process object-related event
         :param event_id: ManagedObject.EV_*
@@ -2329,7 +2329,7 @@ class ManagedObject(NOCModel):
             cache.delete(f"cred-{mo_id}", version=CREDENTIAL_CACHE_VERSION)
 
     @property
-    def events_stream_and_partition(self) -> Tuple[str, int]:
+    def events_stream_and_partition(self) -> tuple[str, int]:
         """
         Return publish stream and partition for events
         :return: stream name, partition
@@ -2339,7 +2339,7 @@ class ManagedObject(NOCModel):
         return f"events.{fm_pool}", self.id % slots
 
     @property
-    def alarms_stream_and_partition(self) -> Tuple[str, int]:
+    def alarms_stream_and_partition(self) -> tuple[str, int]:
         """
         Return publish stream and partition for alarms
         :return: stream name, partition
@@ -2349,11 +2349,11 @@ class ManagedObject(NOCModel):
         return f"dispose.{fm_pool}", self.id % slots
 
     @cachetools.cached(_e_labels_cache, key=lambda x: str(x.id), lock=e_labels_lock)
-    def get_effective_labels(self) -> List[str]:
+    def get_effective_labels(self) -> list[str]:
         return Label.merge_labels(ManagedObject.iter_effective_labels(self))
 
     @classmethod
-    def iter_effective_labels(cls, instance: "ManagedObject") -> Iterable[List[str]]:
+    def iter_effective_labels(cls, instance: "ManagedObject") -> Iterable[list[str]]:
         from noc.sa.models.service import Service
 
         yield list(instance.labels or [])
@@ -2412,7 +2412,7 @@ class ManagedObject(NOCModel):
         return Label.get_effective_setting(label, "enable_managedobject")
 
     @classmethod
-    def uplinks_for_objects(cls, objects: List["ManagedObject"]) -> Dict[int, List[int]]:
+    def uplinks_for_objects(cls, objects: list["ManagedObject"]) -> dict[int, list[int]]:
         """
         Returns uplinks for list of objects
         :param objects: List of object
@@ -2438,9 +2438,9 @@ class ManagedObject(NOCModel):
         from django.db import connection as pg_connection
         from noc.core.change.model import ChangeField
 
-        obj_data: List[ObjectUplinks] = []
-        seen_neighbors: Set[int] = set()
-        uplinks: Dict[int, Set[int]] = {}
+        obj_data: list[ObjectUplinks] = []
+        seen_neighbors: set[int] = set()
+        uplinks: dict[int, set[int]] = {}
         for ou in iter_uplinks:
             obj_data += [ou]
             seen_neighbors |= set(ou.rca_neighbors)
@@ -2448,7 +2448,7 @@ class ManagedObject(NOCModel):
         if not obj_data:
             return  # No uplinks for segment
         # Get downlink_merge window settings
-        dlm_settings: Dict[int, int] = {}
+        dlm_settings: dict[int, int] = {}
         if seen_neighbors:
             with pg_connection.cursor() as cursor:
                 cursor.execute(
@@ -2461,7 +2461,7 @@ class ManagedObject(NOCModel):
                 )
                 dlm_settings = {mo_id: dlm_w for mo_id, is_enabled, dlm_w in cursor if is_enabled}
         # Propagate downlink-merge settings downwards
-        dlm_windows: Dict[int, int] = {}
+        dlm_windows: dict[int, int] = {}
         MAX_WINDOW = 1000000
         for o in seen_neighbors:
             ups = uplinks.get(o)
@@ -2492,7 +2492,7 @@ class ManagedObject(NOCModel):
             )
 
     @classmethod
-    def update_links(cls, linked_objects: List[int], exclude_link_ids: List[str] = None) -> None:
+    def update_links(cls, linked_objects: list[int], exclude_link_ids: list[str] = None) -> None:
         """
 
         :param linked_objects:
@@ -2503,7 +2503,7 @@ class ManagedObject(NOCModel):
         from django.db import connection as pg_connection
 
         coll = Link._get_collection()
-        r: Dict[int, Set] = {lo: set() for lo in linked_objects}
+        r: dict[int, set] = {lo: set() for lo in linked_objects}
         match_expr = {"linked_objects": {"$in": linked_objects}}
         if exclude_link_ids:
             match_expr["_id"] = {"$nin": exclude_link_ids}
@@ -2552,7 +2552,7 @@ class ManagedObject(NOCModel):
         """
         return any(self.get_active_maintenances())
 
-    def get_active_maintenances(self, timestamp: Optional[datetime.datetime] = None) -> List[str]:
+    def get_active_maintenances(self, timestamp: Optional[datetime.datetime] = None) -> list[str]:
         """
         Getting device active maintenances ids
         :param timestamp:
@@ -2574,7 +2574,7 @@ class ManagedObject(NOCModel):
             r.append(mai_id)
         return r
 
-    def get_message_context(self) -> Dict[str, Any]:
+    def get_message_context(self) -> dict[str, Any]:
         r = {
             "id": str(self.id),
             "bi_id": str(self.bi_id),
@@ -2615,7 +2615,7 @@ class ManagedObject(NOCModel):
             )
         return r
 
-    def is_enabled_diagnostic(self, diag: str) -> Tuple[bool, Optional[str]]:
+    def is_enabled_diagnostic(self, diag: str) -> tuple[bool, Optional[str]]:
         """Check diagnostic enabled/blocked by settings"""
         if (
             diag in SA_DIAGS or diag == SA_DIAG
@@ -2652,7 +2652,7 @@ class ManagedObject(NOCModel):
         yield from self.object_profile.iter_diagnostic_configs(self)
         yield from ObjectDiagnosticConfig.iter_object_diagnostics(self)
 
-    def get_caps_config(self) -> Dict[str, CapsConfig]:
+    def get_caps_config(self) -> dict[str, CapsConfig]:
         """Local Capabilities Config (from Profile)"""
         r = {}
         for c in self.object_profile.caps_profile.caps or []:
@@ -2681,7 +2681,7 @@ class ManagedObject(NOCModel):
         from noc.inv.models.interface import Interface
         from noc.inv.models.sensor import Sensor
 
-        metrics: List[MetricItem] = []
+        metrics: list[MetricItem] = []
         d_interval = d_interval or self.get_metric_discovery_interval()
         for mc in ManagedObjectProfile.get_object_profile_metrics(self.object_profile.id).values():
             interval = mc.interval or self.object_profile.metrics_default_interval
@@ -2820,9 +2820,9 @@ class ManagedObject(NOCModel):
             return g.code
         return None
 
-    def get_shape_overlays(self) -> List[ShapeOverlay]:
-        seen: Set[ShapeOverlayPosition] = set()
-        r: List[ShapeOverlay] = []
+    def get_shape_overlays(self) -> list[ShapeOverlay]:
+        seen: set[ShapeOverlayPosition] = set()
+        r: list[ShapeOverlay] = []
         # ManagedObject
         if self.shape_overlay_glyph:
             pos = self.shape_overlay_position or ShapeOverlayPosition.NW
@@ -2910,14 +2910,14 @@ class ManagedObject(NOCModel):
         self._interactions = InteractionHub(self)
         return self._interactions
 
-    def get_mx_message_headers(self, labels: Optional[List[str]] = None) -> Dict[str, bytes]:
+    def get_mx_message_headers(self, labels: Optional[list[str]] = None) -> dict[str, bytes]:
         return {
             key.config.header: key.clean_header_value(value)
             for key, value in self.message_meta.items()
         }
 
     @property
-    def message_meta(self) -> Dict[MessageMeta, Any]:
+    def message_meta(self) -> dict[MessageMeta, Any]:
         """Message Meta for instance"""
         return {
             MessageMeta.WATCH_FOR: get_subscription_id(self),
@@ -2937,8 +2937,8 @@ class ManagedObject(NOCModel):
 
     def update_object_watchers(
         self,
-        to_watchers: List[WatchItem],
-        to_remove: Optional[List[Tuple[ObjectEffect, str, Optional[str]]]],
+        to_watchers: list[WatchItem],
+        to_remove: Optional[list[tuple[ObjectEffect, str, Optional[str]]]],
         dry_run: bool = False,
         bulk=None,
     ):
@@ -2989,10 +2989,10 @@ class ManagedObject(NOCModel):
         scheme: int = TELNET,
         state: Optional[State] = None,
         template: Optional[Any] = None,
-        labels: Optional[List[str]] = None,
-        capabilities: Optional[Dict[str, Any]] = None,
-        static_service_groups: Optional[List[ResourceGroup]] = None,
-        mappings: Optional[Dict[RemoteSystem, str]] = None,
+        labels: Optional[list[str]] = None,
+        capabilities: Optional[dict[str, Any]] = None,
+        static_service_groups: Optional[list[ResourceGroup]] = None,
+        mappings: Optional[dict[RemoteSystem, str]] = None,
         **data,
     ) -> "ManagedObject":
         """
@@ -3035,10 +3035,10 @@ class ManagedObject(NOCModel):
         name: str,
         state: Optional[State] = None,
         template: Optional[Any] = None,
-        labels: Optional[List[str]] = None,
-        capabilities: Optional[Dict[str, Any]] = None,
-        static_service_groups: Optional[List[ResourceGroup]] = None,
-        mappings: Optional[Dict[RemoteSystem, str]] = None,
+        labels: Optional[list[str]] = None,
+        capabilities: Optional[dict[str, Any]] = None,
+        static_service_groups: Optional[list[ResourceGroup]] = None,
+        mappings: Optional[dict[RemoteSystem, str]] = None,
         **data,
     ) -> bool:
         """Update object data from template"""
@@ -3144,7 +3144,7 @@ class ManagedObject(NOCModel):
             self._reset_caches(self.id, credential=True)
             self.update_init()
 
-    def reset_credential(self, snmp_only=False, cli_only=False) -> Dict[str, Any]:
+    def reset_credential(self, snmp_only=False, cli_only=False) -> dict[str, Any]:
         """Reset credential"""
         r = {}
         for f, _ in self.credentials.iter_credential(snmp_only=snmp_only, cli_only=cli_only):
@@ -3212,7 +3212,7 @@ class ManagedObject(NOCModel):
         return ctx
 
     @classmethod
-    def get_downlinks_ids(cls, objects: List[int]) -> List[int]:
+    def get_downlinks_ids(cls, objects: list[int]) -> list[int]:
         """Getting objects by downlinks"""
         objects = set(objects)
         r = {
@@ -3237,11 +3237,11 @@ class ManagedObject(NOCModel):
     def update_maintenance(
         cls,
         maintenance_id: str,
-        objects: List["ManagedObject"],
+        objects: list["ManagedObject"],
         start: datetime.datetime,
         affected_topology: bool = False,
         remote_system: Optional[RemoteSystem] = None,
-        remote_ids: Optional[List[str]] = None,
+        remote_ids: Optional[list[str]] = None,
     ):
         """Update Maintenance"""
         updated = defaultdict(list)
@@ -3326,7 +3326,7 @@ class ManagedObjectStatus(NOCModel):
         return "%s: %s" % (self.managed_object, self.status)
 
     @classmethod
-    def get_last_status(cls, o) -> Tuple[Optional[bool], Optional[datetime.datetime]]:
+    def get_last_status(cls, o) -> tuple[Optional[bool], Optional[datetime.datetime]]:
         """
         Returns last registered status and update time
         :param o: Managed Object
@@ -3362,7 +3362,7 @@ class ManagedObjectStatus(NOCModel):
     @classmethod
     def update_status_bulk(
         cls,
-        statuses: List[Tuple[int, bool, Optional[datetime.datetime]]],
+        statuses: list[tuple[int, bool, Optional[datetime.datetime]]],
         update_jobs: bool = False,
     ):
         """
@@ -3379,7 +3379,7 @@ class ManagedObjectStatus(NOCModel):
 
         now = datetime.datetime.now()
         bulk = {}
-        outages: List[Tuple[int, datetime.datetime, datetime.datetime]] = []
+        outages: list[tuple[int, datetime.datetime, datetime.datetime]] = []
         # Getting current status
         # Getting current status
         cs = {}
@@ -3497,7 +3497,7 @@ class ManagedObjectWatchers(NOCModel):
     after = DateTimeField("Activate after time", auto_now_add=False, blank=True, null=True)
     # Before Postgres 15 nulls not equals. It and unique constraints not worked for NULL value
     remote_system = CharField("Effect Key", max_length=24, blank=True, null=False)
-    args: Dict[str, Any] = JSONField(default=dict)
+    args: dict[str, Any] = JSONField(default=dict)
 
     @property
     def item(self) -> WatchItem:
@@ -3526,7 +3526,7 @@ class ManagedObjectWatchers(NOCModel):
         )
 
     @classmethod
-    def update_bulk(cls, updated: Dict[int, List["WatchItem"]]):
+    def update_bulk(cls, updated: dict[int, list["WatchItem"]]):
         """Update bulk query"""
         from psycopg2.extras import execute_values
         from django.db import connection as pg_connection
@@ -3659,7 +3659,7 @@ class InteractionHub:
 
     def __init__(self, obj):
         self.logger = logging.getLogger(__name__)
-        self.__supported_interactions: Set[Interaction] = self.load_supported_interactions()
+        self.__supported_interactions: set[Interaction] = self.load_supported_interactions()
         self.__state: State = obj.state or obj.object_profile.workflow.get_default_state()
 
     @staticmethod

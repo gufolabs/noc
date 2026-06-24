@@ -148,7 +148,7 @@ class FloatParameter(BaseParameter[float]):
 
 class MapParameter(BaseParameter[T], Generic[T]):
     def __init__(
-        self, mappings: Dict[str, T], default: Optional[str] = None, help: Optional[str] = None
+        self, mappings: dict[str, T], default: Optional[str] = None, help: Optional[str] = None
     ):
         self.mappings = mappings or {}
         super().__init__(default=default, help=help)
@@ -262,12 +262,12 @@ class BytesSizeParameter(BaseParameter[int]):
         return f"{self.value}s"
 
 
-class ListParameter(BaseParameter[List[T]], Generic[T]):
+class ListParameter(BaseParameter[list[T]], Generic[T]):
     def __init__(self, item: BaseParameter[T], default: Any = None, help: Optional[str] = None):
         self.item = item
         super().__init__(default=default, help=help)
 
-    def clean(self, v: Any) -> List[T]:
+    def clean(self, v: Any) -> list[T]:
         if isinstance(v, str):
             # Alter format - [value1,value2]
             if v.startswith("[") and v.endswith("]"):
@@ -294,7 +294,7 @@ class ServiceItem:
         return item in f"{self.host}:{self.port}"
 
 
-class ServiceParameter(BaseParameter[List[ServiceItem]]):
+class ServiceParameter(BaseParameter[list[ServiceItem]]):
     """
     Resolve external service location to a list of ServiceItem.
     Service resolved at startup,
@@ -312,7 +312,7 @@ class ServiceParameter(BaseParameter[List[ServiceItem]]):
 
     def __init__(
         self,
-        service: Union[str, List[str]],
+        service: Union[str, list[str]],
         near: bool = False,
         wait: bool = True,
         help: Optional[str] = None,
@@ -329,14 +329,14 @@ class ServiceParameter(BaseParameter[List[ServiceItem]]):
         self.critical = critical
         super().__init__(default=[], help=help)
 
-    def __get__(self, _instance, _owner) -> List[ServiceItem]:
+    def __get__(self, _instance, _owner) -> list[ServiceItem]:
         if not self.value:
             from noc.core.ioloop.util import run_sync
 
             run_sync(self.resolve)
         return self.value
 
-    async def async_get(self) -> List[ServiceItem]:
+    async def async_get(self) -> list[ServiceItem]:
         if not self.value:
             await self.resolve()
         return self.value
@@ -379,7 +379,7 @@ class ServiceParameter(BaseParameter[List[ServiceItem]]):
             if not self.wait or self.value:
                 break
 
-    def as_list(self) -> List[str]:
+    def as_list(self) -> list[str]:
         """
         :return: List of <host>:<port>
         """

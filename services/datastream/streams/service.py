@@ -196,7 +196,7 @@ class ServiceDataStream(DataStream):
             r["dependencies"] = dependencies
 
     @classmethod
-    def get_service(cls, svc: Service) -> Dict[str, Any]:
+    def get_service(cls, svc: Service) -> dict[str, Any]:
         r = {
             "id": str(svc.id),
             "label": qs(svc.label),
@@ -238,7 +238,7 @@ class ServiceDataStream(DataStream):
         return {f"{cls.F_META}.client_groups": {"$elemMatch": {"$elemMatch": {"$in": [name]}}}}
 
     @classmethod
-    def get_meta_headers(cls, data: Dict[str, Any]) -> Optional[Dict[str, bytes]]:
+    def get_meta_headers(cls, data: dict[str, Any]) -> Optional[dict[str, bytes]]:
         if "$deleted" in data:
             # @@todo Meta fields for deleted object
             return None

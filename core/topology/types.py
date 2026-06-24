@@ -74,7 +74,7 @@ class PathItem:
 class Portal:
     generator: str
     id: Optional[str] = None
-    settings: Optional[Dict[str, Any]] = None
+    settings: Optional[dict[str, Any]] = None
 
 
 class TopologyNodeType(Enum):
@@ -97,17 +97,17 @@ class TopologyNode:
     title_position: Optional[ShapeOverlayPosition] = ShapeOverlayPosition.S
     title_metric_template: Optional[str] = ""
     glyph: Optional[int] = None
-    overlays: Optional[List[ShapeOverlay]] = None
+    overlays: Optional[list[ShapeOverlay]] = None
     portal: Optional[Portal] = None
     level: int = 25
-    attrs: Optional[Dict[str, Any]] = None
-    object_filter: Optional[Dict[str, Any]] = None
-    caps: Optional[Dict[str, Any]] = None
+    attrs: Optional[dict[str, Any]] = None
+    object_filter: Optional[dict[str, Any]] = None
+    caps: Optional[dict[str, Any]] = None
 
-    def get_attr(self) -> Dict[str, Any]:
+    def get_attr(self) -> dict[str, Any]:
         return self.attrs or {}
 
-    def get_caps(self) -> Dict[str, Any]:
+    def get_caps(self) -> dict[str, Any]:
         return self.caps or {}
 
 

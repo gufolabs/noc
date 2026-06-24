@@ -18,7 +18,7 @@ from noc.core.migration.base import BaseMigration
 
 class Migration(BaseMigration):
     def migrate(self):
-        def get_dir(doc: Dict[str, Any]) -> Optional[str]:
+        def get_dir(doc: dict[str, Any]) -> Optional[str]:
             o = doc.get("object")
             if not o:
                 return None
@@ -28,34 +28,34 @@ class Migration(BaseMigration):
                 return None
             return conn_dirs.get((m, n))
 
-        def is_inner(doc: Dict[str, Any]) -> bool:
+        def is_inner(doc: dict[str, Any]) -> bool:
             d = get_dir(doc)
             return not (d is None or d != "i")
 
-        def is_outer(doc: Dict[str, Any]) -> bool:
+        def is_outer(doc: dict[str, Any]) -> bool:
             d = get_dir(doc)
             return not (d is None or d != "o")
 
         # Get connection directions
         om = self.mongo_db["noc.objectmodels"]
-        conn_dirs: Dict[Tuple[ObjectId, str], str] = {}
+        conn_dirs: dict[tuple[ObjectId, str], str] = {}
         for doc in om.find({}, {"_id": 1, "connections": 1}):
-            conns: List[Dict[str, Any]] = doc.get("connections")
+            conns: list[dict[str, Any]] = doc.get("connections")
             if not conns:
                 continue
             for c in conns:
                 conn_dirs[doc["_id"], c["name"]] = c["direction"]
         # Get object models
         oc = self.mongo_db["noc.objects"]
-        obj_models: Dict[ObjectId, ObjectId] = {
+        obj_models: dict[ObjectId, ObjectId] = {
             doc["_id"]: doc["model"] for doc in oc.find({}, {"_id": 1, "model": 1})
         }
         # Walk through connections
-        to_prune: List[ObjectId] = []
+        to_prune: list[ObjectId] = []
         parent_bulk = []
         ocm = self.mongo_db["noc.objectconnections"]
         for oc in ocm.find({}, {"_id": 1, "connection": 1}):
-            c: Optional[List[Dict[str, Any]]] = oc.get("connection")
+            c: Optional[list[dict[str, Any]]] = oc.get("connection")
             if not c or len(c) != 2:
                 continue
             if is_inner(c[0]) and is_outer(c[1]):

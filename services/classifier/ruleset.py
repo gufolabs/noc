@@ -41,10 +41,10 @@ logger = logging.getLogger(__name__)
 
 class RuleSet:
     def __init__(self):
-        self.rules: Dict[
-            Tuple[Optional[str], str], RuleLookup
+        self.rules: dict[
+            tuple[Optional[str], str], RuleLookup
         ] = {}  # (profile, chain) -> [rule, ..., rule]
-        self.enumerations: Dict[str, Dict[str, str]] = {}  # name -> value -> enumerated
+        self.enumerations: dict[str, dict[str, str]] = {}  # name -> value -> enumerated
         self.default_rule: Optional[Rule] = None
         #
         # is_failed: bool = False
@@ -142,8 +142,8 @@ class RuleSet:
     def find_rule(
         self,
         event: Event,
-        vars: Dict[str, Any],
-    ) -> Tuple[Optional[Rule], Optional[Dict[str, Any]]]:
+        vars: dict[str, Any],
+    ) -> tuple[Optional[Rule], Optional[dict[str, Any]]]:
         """
         Find first matching classification rule
 
@@ -182,7 +182,7 @@ class RuleSet:
         return None, None
 
     @classmethod
-    def resolve_resource(cls, v: VarItem, vv: Dict[str, Any], managed_object: Any):
+    def resolve_resource(cls, v: VarItem, vv: dict[str, Any], managed_object: Any):
         """"""
         m = get_model(v.resource_model)
         x = m.get_component(managed_object=managed_object, **vv)
@@ -206,8 +206,8 @@ class RuleSet:
         return x
 
     def eval_vars(
-        self, r_vars: Dict[str, Any], managed_object: Any, e_cfg: EventConfig, by_test: bool = False
-    ) -> Tuple[Dict[str, Any], List[Any], Optional[str]]:
+        self, r_vars: dict[str, Any], managed_object: Any, e_cfg: EventConfig, by_test: bool = False
+    ) -> tuple[dict[str, Any], list[Any], Optional[str]]:
         """Evaluate rule variables"""
         r = {}
         # Resolve resource

@@ -78,7 +78,7 @@ def iter_model_id() -> Iterable[str]:
 
 
 # Model cache: model_id -> class
-_MCACHE: Dict[str, Any] = {}
+_MCACHE: dict[str, Any] = {}
 
 _MODELS = {
     # aaa models

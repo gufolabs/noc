@@ -145,7 +145,7 @@ class Interface(Document):
     effective_labels = ListField(StringField())
     extra_labels = DictField()
     # Capabilities
-    caps: List[CapsItem] = EmbeddedDocumentListField(CapsItem)
+    caps: list[CapsItem] = EmbeddedDocumentListField(CapsItem)
 
     PROFILE_LINK = "profile"
     _component_cache = cachetools.TTLCache(maxsize=2000, ttl=60)
@@ -483,7 +483,7 @@ class Interface(Document):
                     headers=headers,
                 )
 
-    def get_message_context(self) -> Dict[str, Any]:
+    def get_message_context(self) -> dict[str, Any]:
         """Interface Message Ctx"""
         return {
             "name": self.name,
@@ -544,7 +544,7 @@ class Interface(Document):
         return Label.get_effective_setting(label, setting="enable_interface")
 
     @classmethod
-    def iter_effective_labels(cls, instance: "Interface") -> Iterable[List[str]]:
+    def iter_effective_labels(cls, instance: "Interface") -> Iterable[list[str]]:
         from noc.inv.models.subinterface import SubInterface
 
         yield list(instance.labels or [])
@@ -623,7 +623,7 @@ class Interface(Document):
                 continue  # No metrics configured
             elif i["type"] == "SVI" and i_profile.is_default and i["name"] not in s_map:
                 continue  # Not allowed apply default profile to SVI
-            metrics: List[MetricItem] = []
+            metrics: list[MetricItem] = []
             for mc in i_profile.metrics:
                 # Check metric collected policy
                 if not i_profile.allow_collected_metric(
@@ -730,7 +730,7 @@ class Interface(Document):
         r = next(r, {})
         return r.get("interval", 0)
 
-    def get_matcher_ctx(self) -> Dict[str, Any]:
+    def get_matcher_ctx(self) -> dict[str, Any]:
         """"""
         if not self.state:
             state = self.profile.workflow.get_default_state()

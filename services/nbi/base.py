@@ -29,7 +29,7 @@ class NBIAPI:
     # API name
     api_name: Optional[str] = None
     # Tags for OpenAPI documentation
-    openapi_tags: List[str] = []
+    openapi_tags: list[str] = []
 
     def __init__(self, router: APIRouter):
         self.service = get_service()

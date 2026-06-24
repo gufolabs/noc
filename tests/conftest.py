@@ -28,9 +28,9 @@ IN_GITHUB_ACTIONS = bool(os.getenv("GITHUB_ACTIONS", ""))
 IS_COLLECT_ONLY = any("--collect-only" in arg for arg in sys.argv)
 
 _stats = None
-_durations: DefaultDict[str, int] = defaultdict(int)
-_counts: DefaultDict[str, int] = defaultdict(int)
-_start_times: Dict[str, int] = {}
+_durations: defaultdict[str, int] = defaultdict(int)
+_counts: defaultdict[str, int] = defaultdict(int)
+_start_times: dict[str, int] = {}
 
 
 def pytest_configure(config: pytest.Config) -> None:
@@ -40,7 +40,7 @@ def pytest_configure(config: pytest.Config) -> None:
 
 
 def pytest_collection_modifyitems(
-    session: pytest.Session, config: pytest.Config, items: List[pytest.Item]
+    session: pytest.Session, config: pytest.Config, items: list[pytest.Item]
 ):
     """Process @pytest.mark.run_on_setup"""
 
@@ -273,7 +273,7 @@ model_refs = {}  # model -> name -> model
 m2m_refs = {}  # model -> name -> model
 
 
-def _load_data(data: List[Dict[str, Any]]) -> None:
+def _load_data(data: list[dict[str, Any]]) -> None:
     def _dereference(model, id):
         if hasattr(model, "get_by_id"):
             return model.get_by_id(id)

@@ -35,7 +35,7 @@ class ManagedObjectData:
     name: str
     administrative_domain: AdministrativeDomainData
     bi_id: int = None
-    labels: List[str] = None
+    labels: list[str] = None
     remote_system: Optional[RemoteSystemData] = None
     remote_id: Optional[str] = None
 
@@ -43,13 +43,13 @@ class ManagedObjectData:
 @dataclass
 class SourceConfig:
     id: str
-    addresses: Tuple[str, ...]
+    addresses: tuple[str, ...]
     stream: str
     partition: int
     bi_id: Optional[int] = None
     name: Optional[str] = None
     sa_profile: Optional[str] = None
-    effective_labels: List[str] = None
+    effective_labels: list[str] = None
     managed_object: Optional[ManagedObjectData] = None
     storm_policy: str = "D"
     storm_threshold: int = 1000

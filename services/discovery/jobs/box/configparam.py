@@ -30,7 +30,7 @@ class ConfigParamCheck(DiscoveryCheck):
 
     def submit_param_data(self, o: "Object", data):
         """ """
-        ed: Dict[ParamData, Any] = {}
+        ed: dict[ParamData, Any] = {}
         for pd in o.get_effective_cfg_params():
             ed[pd] = pd.value
         self.logger.info("[%s] Submit Param Data", o)
@@ -73,7 +73,7 @@ class ConfigParamCheck(DiscoveryCheck):
             # Set Last Seen
         o.save()
 
-    def clean_result(self, o: Object, data: List[Dict[str, Any]]) -> List["ParamData"]:
+    def clean_result(self, o: Object, data: list[dict[str, Any]]) -> list["ParamData"]:
         r = []
         for d in data:
             param = ConfigurationParam.get_by_code(d["param"])
@@ -102,7 +102,7 @@ class ConfigParamCheck(DiscoveryCheck):
         o = Object.get_managed(self.object)
         return bool(o)
 
-    def get_param_data_confdb(self, o: Object) -> List["ParamData"]:
+    def get_param_data_confdb(self, o: Object) -> list["ParamData"]:
         """
         Getting Config Param Data from ConfDB
         :param o: Chassis Object
@@ -115,14 +115,14 @@ class ConfigParamCheck(DiscoveryCheck):
             return []
         return []
 
-    def get_param_data_artifact(self, o: Object) -> List[Tuple["Object", List["ParamData"]]]:
+    def get_param_data_artifact(self, o: Object) -> list[tuple["Object", list["ParamData"]]]:
         """
         Getting Config Param Data from Artifacts
         :param o: Chassis Object
         :return:
         """
         self.logger.debug("Getting ParamData from Artifacts")
-        o_artifacts: Dict[str, List[Dict[str, Any]]] = self.get_artefact("object_param_artifacts")
+        o_artifacts: dict[str, list[dict[str, Any]]] = self.get_artefact("object_param_artifacts")
         if not o_artifacts:
             self.logger.info("No object asset artifacts, skipping object param data")
             return []
@@ -134,7 +134,7 @@ class ConfigParamCheck(DiscoveryCheck):
             r.append((o, self.clean_result(o, params)))
         return r
 
-    def get_param_data_script(self, o: Object) -> List["ParamData"]:
+    def get_param_data_script(self, o: Object) -> list["ParamData"]:
         """
         Getting Config Param Data from script
         :param o: Chassis Object

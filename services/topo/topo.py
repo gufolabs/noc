@@ -32,7 +32,7 @@ class Topo:
     def __init__(self, check: bool = False):
         self.check = check
         self.graph = nx.Graph()
-        self.dirty_nodes: Set[int] = set()
+        self.dirty_nodes: set[int] = set()
         metrics["obj_dirty"] = 0
 
     def sync_object(self, obj: ObjectSnapshot) -> None:
@@ -52,8 +52,8 @@ class Topo:
         else:
             self.add_object(obj)
         # Synchronize links
-        old_neighbors: Set[int] = set(self.graph.adj[obj.id])
-        new_neighbors: Set[int] = set(obj.links) if obj.links else set()
+        old_neighbors: set[int] = set(self.graph.adj[obj.id])
+        new_neighbors: set[int] = set(obj.links) if obj.links else set()
         # Add new links
         for n in new_neighbors - old_neighbors:
             self.add_link(obj.id, n)
@@ -114,7 +114,7 @@ class Topo:
         self.set_dirty(obj.id)
 
     @staticmethod
-    def clear_uplinks(s: Optional[Iterable[int]]) -> Optional[Tuple[int, ...]]:
+    def clear_uplinks(s: Optional[Iterable[int]]) -> Optional[tuple[int, ...]]:
         """
         Normalize uplinks.
 
@@ -127,7 +127,7 @@ class Topo:
         return tuple(sorted(s)) if s else None
 
     @staticmethod
-    def to_set(s: Optional[Set[int]]) -> Set[int]:
+    def to_set(s: Optional[set[int]]) -> set[int]:
         """
         Normalize None, Tuple or Set to Set
 
@@ -210,7 +210,7 @@ class Topo:
         self.set_dirty(u)
         self.set_dirty(v)
 
-    def process(self) -> Set[int]:
+    def process(self) -> set[int]:
         """
         Proceess topology.
 
@@ -223,7 +223,7 @@ class Topo:
             return set()
         logger.info("%d dirty nodes found", len(self.dirty_nodes))
         t0 = time.time()
-        affected: Set[int] = set()
+        affected: set[int] = set()
         total_clusters = 0
         processed = 0
         for cc in nx.connected_components(self.graph):
@@ -267,7 +267,7 @@ class Topo:
         metrics["clusters_processed"] += processed
         return affected
 
-    def iter_uplinks(self, root: int, uplinks: Dict[int, Set[int]]) -> Iterable[Tuple[int, int]]:
+    def iter_uplinks(self, root: int, uplinks: dict[int, set[int]]) -> Iterable[tuple[int, int]]:
         """
         Iterate over all uplinks leading to root.
 
@@ -303,7 +303,7 @@ class Topo:
                 visited[child] = True
                 stack.append(iter(next_nodes))
 
-    def is_dirty(self, cc: Set[int]) -> bool:
+    def is_dirty(self, cc: set[int]) -> bool:
         """
         Check if cluster is dirty ad should be recalculated.
 
@@ -317,7 +317,7 @@ class Topo:
         """
         return len(cc.intersection(self.dirty_nodes)) > 0
 
-    def iter_connected_cluster_uplinks(self, cc: Set[int]) -> Iterable[Tuple[int, Set[int]]]:
+    def iter_connected_cluster_uplinks(self, cc: set[int]) -> Iterable[tuple[int, set[int]]]:
         """
         Iterate over all uplinks of cluster.
 
@@ -357,7 +357,7 @@ class Topo:
         logger.debug("Found uplinks for %d objects", len(uplinks))
         yield from uplinks.items()
 
-    def get_uplinks(self, obj: int) -> Set[int]:
+    def get_uplinks(self, obj: int) -> set[int]:
         """
         Get node uplinks.
 
@@ -372,7 +372,7 @@ class Topo:
             return set(uplinks)
         return set()
 
-    def get_rca_neighbors(self, obj: int) -> Set[int]:
+    def get_rca_neighbors(self, obj: int) -> set[int]:
         """
         Get RCA neighbors.
 
@@ -383,7 +383,7 @@ class Topo:
             List of RCA neighbors.
         """
         uplinks = self.get_uplinks(obj)
-        r: Set[int] = set()
+        r: set[int] = set()
         for n in self.graph[obj]:
             r.add(n)
             if n not in uplinks:

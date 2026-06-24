@@ -17,7 +17,7 @@ from noc.core.techdomain.mapper.loader import loader as mapper_loader
 from noc.core.feature import Feature
 
 
-def get_usage(v: Optional[List[UsageItem]]) -> List[Dict[str, str]]:
+def get_usage(v: Optional[list[UsageItem]]) -> list[dict[str, str]]:
     if not v:
         return []
     return [i.to_json() for i in v]

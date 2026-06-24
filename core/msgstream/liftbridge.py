@@ -58,7 +58,7 @@ class LiftBridgeClient(GugoLiftbridgeClient):
         return min(len(meta.brokers), 2)
 
     @staticmethod
-    def get_topic_config(name, replication_factor: Optional[int] = 0) -> Dict[str, int]:
+    def get_topic_config(name, replication_factor: Optional[int] = 0) -> dict[str, int]:
         """
         Return topic retention settings
         :param name:
@@ -172,8 +172,8 @@ class LiftBridgeClient(GugoLiftbridgeClient):
         self,
         from_topic,
         to_topic,
-        partitions: Optional[Union[Dict[int, int], int]] = None,
-    ) -> Dict[int, int]:
+        partitions: Optional[Union[dict[int, int], int]] = None,
+    ) -> dict[int, int]:
         """
         Copy message from one topic to another
         :param from_topic: From topic
@@ -181,7 +181,7 @@ class LiftBridgeClient(GugoLiftbridgeClient):
         :param partitions: Number of from partition or MAP
         :return:
         """
-        n_msg: Dict[int, int] = {}  # partition -> copied messages
+        n_msg: dict[int, int] = {}  # partition -> copied messages
         s = get_stream(from_topic)
         if not partitions:
             partitions = {0: 0}

@@ -41,10 +41,10 @@ class AlarmItem(BaseModel):
     managed_object: Optional[str] = None
     alarm_class: str = "NOC | Managed Object | Ping Failed"
     reference: Optional[str] = None
-    vars: Optional[Dict[str, Any]] = None
+    vars: Optional[dict[str, Any]] = None
     severity: Optional[int] = None
     delay: int = 1
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None
     status: bool = False
     remote_system: Optional[str] = None
     remote_id: Optional[str] = None
@@ -86,7 +86,7 @@ class AlarmItem(BaseModel):
 class AlarmConfig(BaseModel):
     repeat: Optional[int] = None  # repeat Alarm Item
     delay: int = 1  # wait interval
-    alarms: List[AlarmItem]
+    alarms: list[AlarmItem]
 
 
 class Command(BaseCommand):
@@ -275,7 +275,7 @@ class Command(BaseCommand):
     def get_default_reference(
         managed_object: ManagedObject,
         alarm_class: AlarmClass,
-        vars: Optional[Dict[str, Any]] = None,
+        vars: Optional[dict[str, Any]] = None,
     ) -> str:
         """
         Generate default reference for event-based alarms.

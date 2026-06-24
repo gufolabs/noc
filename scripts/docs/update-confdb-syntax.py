@@ -50,9 +50,9 @@ def iter_anchors() -> Iterable[str]:
 
 
 def get_syntax_tree() -> str:
-    def iter_node(node: SyntaxDef, level: int, path: List[str]) -> Iterable[str]:
+    def iter_node(node: SyntaxDef, level: int, path: list[str]) -> Iterable[str]:
         def get_span(node: SyntaxDef) -> str:
-            classes: List[str] = []
+            classes: list[str] = []
             if node.name:
                 label = node.name
                 classes.append(CLS_NAME)
@@ -68,7 +68,7 @@ def get_syntax_tree() -> str:
                 return f'<span class="{" ".join(classes)}">{label}</span>'
             return f"<span>{label}<span>"
 
-        def get_doc_tag(path: List[str]) -> str:
+        def get_doc_tag(path: list[str]) -> str:
             anchor = "-".join(path)
             if anchor in anchors:
                 seen_anchors.add(anchor)

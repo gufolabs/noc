@@ -139,7 +139,7 @@ class ActiveAlarm(Document):
     # Alarm reference is a hash of discriminator
     # for external systems
     reference = BinaryField(required=False)
-    log: List[AlarmLog] = EmbeddedDocumentListField(AlarmLog)
+    log: list[AlarmLog] = EmbeddedDocumentListField(AlarmLog)
     # Manual acknowledgement timestamp
     ack_ts = DateTimeField(required=False)
     # Manual acknowledgement user name
@@ -147,7 +147,7 @@ class ActiveAlarm(Document):
     opening_event = ObjectIdField(required=False)
     closing_event = ObjectIdField(required=False)
     # List of subscribers
-    watchers: List[WatchItem] = EmbeddedDocumentListField(WatchItem)
+    watchers: list[WatchItem] = EmbeddedDocumentListField(WatchItem)
     custom_subject = StringField(required=False)
     custom_object = StringField(required=False)
     custom_style = ForeignKeyField(Style, required=False)
@@ -363,7 +363,7 @@ class ActiveAlarm(Document):
         self,
         message,
         to_save=True,
-        bulk: Optional[List[Any]] = None,
+        bulk: Optional[list[Any]] = None,
         source: Optional[str] = None,
         tt_id: Optional[str] = None,
         timestamp: Optional[datetime.datetime] = None,
@@ -536,7 +536,7 @@ class ActiveAlarm(Document):
         # Return archived
         return a
 
-    def get_template_vars(self) -> Dict[str, Any]:
+    def get_template_vars(self) -> dict[str, Any]:
         """
         Prepare template variables
         """
@@ -768,7 +768,7 @@ class ActiveAlarm(Document):
             self.watchers = r
             self.wait_ts = self.get_wait_ts()
 
-    def get_watchers(self, effect: Effect, key: Optional[str] = None) -> List[WatchItem]:
+    def get_watchers(self, effect: Effect, key: Optional[str] = None) -> list[WatchItem]:
         """Getting watchers by effect"""
         r = []
         for w in self.watchers:
@@ -904,7 +904,7 @@ class ActiveAlarm(Document):
 
     def get_effective_severity(
         self,
-        summary: Optional[Dict[str, Any]] = None,
+        summary: Optional[dict[str, Any]] = None,
         severity: Optional[int] = None,
         policy: Optional[str] = None,
     ) -> int:
@@ -1400,7 +1400,7 @@ class ActiveAlarm(Document):
     def can_set_label(cls, label):
         return Label.get_effective_setting(label, "enable_alarm")
 
-    def get_matcher_ctx(self) -> Dict[str, Any]:
+    def get_matcher_ctx(self) -> dict[str, Any]:
         r = {
             "alarm_class": str(self.alarm_class.id),
             "labels": list(self.effective_labels),
@@ -1522,14 +1522,14 @@ class ActiveAlarm(Document):
             is_clear=is_clear,
         )
 
-    def get_resources(self) -> List[str]:
+    def get_resources(self) -> list[str]:
         """"""
         try:
             return self.components.get_resources()
         except AttributeError:
             return []
 
-    def _get_obj_path(self) -> Optional[List[str]]:
+    def _get_obj_path(self) -> Optional[list[str]]:
         if not HAS_FGALARMS:
             return None
         if self.vars and "slot_id" in self.vars and "port_name" in self.vars:
@@ -1539,7 +1539,7 @@ class ActiveAlarm(Document):
             )
         return None
 
-    def _get_obj_vendor_slotted_path(self, slot_id: str, port_name: str) -> Optional[List[str]]:
+    def _get_obj_vendor_slotted_path(self, slot_id: str, port_name: str) -> Optional[list[str]]:
         """Temporary vendor-specific implementation."""
         try:
             slot = int(slot_id)
@@ -1596,7 +1596,7 @@ class ActiveAlarm(Document):
                 _slot_mo[self.managed_object.id] = r
             return r
 
-    def _get_channel_path(self, obj_path: List[str]) -> Optional[List[str]]:
+    def _get_channel_path(self, obj_path: list[str]) -> Optional[list[str]]:
         """Get channel path."""
         # Cached
         key = tuple(obj_path)
@@ -1612,7 +1612,7 @@ class ActiveAlarm(Document):
             return [f"c:{ep['channel']}", ep["resource"]]
         return None
 
-    def get_resource_path(self, code: PathCode) -> Optional[List[str]]:
+    def get_resource_path(self, code: PathCode) -> Optional[list[str]]:
         """
         Get resource path for code.
 
@@ -1628,7 +1628,7 @@ class ActiveAlarm(Document):
         return None
 
     @classmethod
-    def get_resource_statuses(cls, iter: Iterable[str]) -> Dict[str, bool]:
+    def get_resource_statuses(cls, iter: Iterable[str]) -> dict[str, bool]:
         """
         Get alarm status for resources.
 
@@ -1639,7 +1639,7 @@ class ActiveAlarm(Document):
             Dict of resource -> alarm status.
         """
 
-        def query_for_code(code: str) -> Dict[str, Any]:
+        def query_for_code(code: str) -> dict[str, Any]:
             items = by_codes[code]
             if len(items) == 1:
                 return {"resource_path": {"$elemMatch": {"c": code, "p": items[0]}}}
@@ -1648,7 +1648,7 @@ class ActiveAlarm(Document):
         r = dict.fromkeys(iter, False)
         if not r:
             return r
-        by_codes: DefaultDict[str, List[str]] = defaultdict(list)
+        by_codes: defaultdict[str, list[str]] = defaultdict(list)
         for res in r:
             match res.split(":", 1)[0]:
                 case "o":
@@ -1683,16 +1683,16 @@ class ComponentHub:
     """
 
     def __init__(
-        self, alarm_class: AlarmClass, managed_object: ManagedObject, vars: Dict[str, Any] = None
+        self, alarm_class: AlarmClass, managed_object: ManagedObject, vars: dict[str, Any] = None
     ):
         self.logger = logging.getLogger(__name__)
         self.__alarm_class = alarm_class
         self.__managed_object = managed_object
         self.__vars = vars or {}
-        self.__components: Dict[str, Any] = {}
-        self.__all_components: Optional[Set[str]] = None
+        self.__components: dict[str, Any] = {}
+        self.__all_components: Optional[set[str]] = None
 
-    def get_resources(self) -> List[str]:
+    def get_resources(self) -> list[str]:
         """Return resources"""
         r = []
         for c in self.__alarm_class.components:

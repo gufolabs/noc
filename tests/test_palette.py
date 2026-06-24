@@ -25,7 +25,7 @@ from noc.core.palette import (
     get_fg_color,
 )
 
-ALL_COLORS: Set[str] = set()
+ALL_COLORS: set[str] = set()
 for palette in ALL_PALETTES:
     ALL_COLORS.update(palette)
 
@@ -38,12 +38,12 @@ def test_color_item(color: str) -> None:
 
 
 @pytest.mark.parametrize("colors", COLOR_PALETTES)
-def test_color_palette_size(colors: List[str]) -> None:
+def test_color_palette_size(colors: list[str]) -> None:
     assert len(colors) == 14
 
 
 @pytest.mark.parametrize("colors", TONE_PALETTES)
-def test_tone_palette_size(colors: List[str]) -> None:
+def test_tone_palette_size(colors: list[str]) -> None:
     assert len(colors) == 10
 
 
@@ -78,7 +78,7 @@ def test_split_rgb(color: str):
 
 @pytest.mark.parametrize("color", [c for c in ALL_COLORS if c not in FG])
 def test_get_fg_color(color: str):
-    def distance(c1: Tuple[int, int, int], c2: Tuple[int, int, int]):
+    def distance(c1: tuple[int, int, int], c2: tuple[int, int, int]):
         return abs(c1[0] - c2[0]) + abs(c1[1] - c2[1]) + abs(c1[2] - c2[2])
 
     fg = get_fg_color(color)

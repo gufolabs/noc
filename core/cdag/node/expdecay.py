@@ -21,8 +21,8 @@ NS = 1_000_000_000
 
 
 class ExpDecayNodeState(BaseModel):
-    times: List[int] = []
-    values: List[ValueType] = []
+    times: list[int] = []
+    values: list[ValueType] = []
 
 
 class ExpDecayNodeConfig(WindowConfig):
@@ -39,7 +39,7 @@ class ExpDecayNode(WindowNode):
     categories = [Category.WINDOW]
 
     def get_window_value(
-        self, values: List[ValueType], timestamps: List[int]
+        self, values: list[ValueType], timestamps: list[int]
     ) -> Optional[ValueType]:
         t0 = timestamps[-1] // NS
         nk = self.config.k

@@ -21,12 +21,12 @@ SUMMARY_FILENAME = "SUMMARY.md"
 MKDOCS_CONF = Path("mkdocs.yml")
 rx_item = re.compile(r"\[(.*)].*\((.*)\)")
 
-T_NAV_ITEM = Union[str, Dict[str, "T_NAV_ITEM"], List["T_NAV_ITEM"]]
+T_NAV_ITEM = Union[str, dict[str, "T_NAV_ITEM"], list["T_NAV_ITEM"]]
 
 
 class ToC:
     def __init__(self, path: Path):
-        self.items: Dict[Tuple[str, ...], str] = {}
+        self.items: dict[tuple[str, ...], str] = {}
         for kv in self.iter_nav(path):
             self.add_item([], kv)
 
@@ -37,7 +37,7 @@ class ToC:
         yield from data["nav"]
 
     @staticmethod
-    def iter_summary(path: str) -> Iterable[Tuple[str, str]]:
+    def iter_summary(path: str) -> Iterable[tuple[str, str]]:
         if path[-1] == "/":
             path = path[:-1]
         pp = DOCS_DIR / path / SUMMARY_FILENAME
@@ -53,7 +53,7 @@ class ToC:
             if match:
                 yield match.group(1, 2)
 
-    def add_item(self, path: List[str], item: T_NAV_ITEM) -> None:
+    def add_item(self, path: list[str], item: T_NAV_ITEM) -> None:
         if isinstance(item, str):
             k = item
             v = item

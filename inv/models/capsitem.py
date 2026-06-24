@@ -32,7 +32,7 @@ class CapsItem(EmbeddedDocument):
         return f"{self.capability.name} = {self.value}"
 
     @classmethod
-    def get_caps(cls, *args: List["CapsItem"], scope: Optional[str] = None) -> Dict[str, Any]:
+    def get_caps(cls, *args: list["CapsItem"], scope: Optional[str] = None) -> dict[str, Any]:
         """
         Consolidate capabilities list and return resulting dict of
         caps name -> caps value. First appearance of capability
@@ -42,7 +42,7 @@ class CapsItem(EmbeddedDocument):
         :param scope: Scope Name
         :return:
         """
-        r: Dict[str, Any] = {}
+        r: dict[str, Any] = {}
         for caps in args:
             for ci in caps:
                 cn = ci.capability.name
@@ -67,7 +67,7 @@ class ModelCapsItem(BaseModel):
         return self.capability.name
 
     @classmethod
-    def get_caps(cls, *args: List["CapsItem"]) -> Dict[str, Any]:
+    def get_caps(cls, *args: list["CapsItem"]) -> dict[str, Any]:
         """
         Consolidate capabilities list and return resulting dict of
         caps name -> caps value. First appearance of capability
@@ -76,7 +76,7 @@ class ModelCapsItem(BaseModel):
         :param args:
         :return:
         """
-        r: Dict[str, Any] = {}
+        r: dict[str, Any] = {}
         for caps in args:
             for ci in caps:
                 cn = ci.capability.name

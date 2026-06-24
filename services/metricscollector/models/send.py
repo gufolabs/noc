@@ -15,18 +15,18 @@ from pydantic import BaseModel, RootModel, model_validator
 
 class SendRequestItem(BaseModel):
     ts: datetime.datetime
-    labels: Optional[List[str]]
+    labels: Optional[list[str]]
     service: int
     collector: str
-    metrics: Dict[str, Any]
+    metrics: dict[str, Any]
 
     @model_validator(mode="before")
-    def build_metrics(cls, values: Dict[str, Any]) -> Dict[str, Any]:
-        r: Dict[str, Any] = {
+    def build_metrics(cls, values: dict[str, Any]) -> dict[str, Any]:
+        r: dict[str, Any] = {
             f: values[f] for f in cls.model_fields if f in values and f != "metrics"
         }
         r["metrics"] = {f: values[f] for f in values if f not in cls.model_fields}
         return r
 
 
-SendRequest = RootModel[List[SendRequestItem]]
+SendRequest = RootModel[list[SendRequestItem]]

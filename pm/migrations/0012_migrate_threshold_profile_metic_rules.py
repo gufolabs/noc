@@ -52,7 +52,7 @@ class ThresholdProfile:
         func, *param = function_map.get(self.window_func)
         return func
 
-    def get_activate(self) -> Tuple[float, Optional[float], bool]:
+    def get_activate(self) -> tuple[float, Optional[float], bool]:
         """
         Convert clear value to activation_level
         :return: activation_level, deactivation_level, inverse

@@ -14,7 +14,7 @@ from noc.core.runner.lock import LockManager
 
 
 def test_locks() -> None:
-    async def job(lm: LockManager, names: List[str]) -> None:
+    async def job(lm: LockManager, names: list[str]) -> None:
         async with lm.acquire(names):
             await asyncio.sleep(0.0001)  # Pass control
 

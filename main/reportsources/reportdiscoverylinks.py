@@ -32,7 +32,7 @@ class ReportDiscoveryLinks(ReportSource):
         ("status = False", _("More 3"), "1.1"),  # 2is1.6is1.3hs4
     ]
 
-    def get_formats(self) -> Dict[str, BandFormat]:
+    def get_formats(self) -> dict[str, BandFormat]:
         return {
             "header": BandFormat(title_template="Discovery Links Summary"),
             "pool": BandFormat(
@@ -46,7 +46,7 @@ class ReportDiscoveryLinks(ReportSource):
             ),
         }
 
-    def get_data(self, request=None, **kwargs) -> List[Band]:
+    def get_data(self, request=None, **kwargs) -> list[Band]:
         data = []
         ds = loader["managedobjectds"]
         sql = pl.SQLContext()

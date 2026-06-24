@@ -67,7 +67,7 @@ class MACApplication(ExtApplication):
         segment: Optional[str] = None,
         interface_profile: Optional[str] = None,
         is_uni: Optional[bool] = None,
-    ) -> List[str]:
+    ) -> list[str]:
         """"""
         r = []
         if mac_query:
@@ -147,7 +147,7 @@ class MACApplication(ExtApplication):
         return out, rows_count
 
     @classmethod
-    def parse_output(cls, r: Dict[str, Any]):
+    def parse_output(cls, r: dict[str, Any]):
         mos = {
             mo[1]: mo
             for mo in ManagedObject.objects.filter(

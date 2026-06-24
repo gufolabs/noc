@@ -19,20 +19,20 @@ class SensorItem(BaseModel):
     bi_id: int
     name: str
     units: str
-    exposed_labels: Optional[List[str]] = None
-    rules: Optional[List[str]] = None
+    exposed_labels: Optional[list[str]] = None
+    rules: Optional[list[str]] = None
     profile: Optional[str] = None
     protocol: str = "other"
     mx_alias: Optional[str] = None
-    hints: Optional[List[str]] = None
+    hints: Optional[list[str]] = None
 
 
 class MetricItem(BaseModel):
     key: Any
     # key_Hash ?
-    composed_metrics: Optional[List[str]] = None
-    exposed_labels: Optional[List[str]] = None
-    rules: Optional[List[str]] = None
+    composed_metrics: Optional[list[str]] = None
+    exposed_labels: Optional[list[str]] = None
+    rules: Optional[list[str]] = None
 
 
 class RemoteChannelItem(BaseModel):
@@ -51,8 +51,8 @@ class CfgMetricsTarget(BaseModel):
     bi_id: int
     sharding_key: int
     # Service
-    services: Optional[List[str]] = None
-    mapping_refs: Optional[List[str]] = None
+    services: Optional[list[str]] = None
+    mapping_refs: Optional[list[str]] = None
     # Collector received
     enable_fmevent: bool = False
     enable_metrics: bool = True
@@ -62,7 +62,7 @@ class CfgMetricsTarget(BaseModel):
     nodata_ttl: Optional[int] = None
     discovery_interval: Optional[int] = None
     # Allowed address
-    addresses: Optional[List[str]] = None
+    addresses: Optional[list[str]] = None
     # mirroring - mirror to collection
     # FM
     fm_pool: Optional[str] = None
@@ -70,10 +70,10 @@ class CfgMetricsTarget(BaseModel):
     # key -> Rule
     channel: Optional[RemoteChannelItem] = None
     managed_object: Optional[int] = None
-    exposed_labels: Optional[List[str]] = None
-    rules: Optional[List[str]] = None
+    exposed_labels: Optional[list[str]] = None
+    rules: Optional[list[str]] = None
     # Optional, if rule, composed metrics or config set
-    composed_metrics: Optional[List[str]] = None
+    composed_metrics: Optional[list[str]] = None
     opaque_data: Optional[ManagedObjectOpaque] = None  # Kafka message data
-    items: Optional[List[MetricItem]] = None
-    sensors: Optional[List[SensorItem]] = None
+    items: Optional[list[MetricItem]] = None
+    sensors: Optional[list[SensorItem]] = None

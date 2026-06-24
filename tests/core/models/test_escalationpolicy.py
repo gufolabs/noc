@@ -71,5 +71,5 @@ def test_try_from_label(label: str, expected: Optional[EscalationPolicy]):
         ),
     ],
 )
-def test_get_effective_policy(labels: Iterable[List[str]], expected: EscalationPolicy):
+def test_get_effective_policy(labels: Iterable[list[str]], expected: EscalationPolicy):
     assert EscalationPolicy.get_effective_policy(labels) is expected

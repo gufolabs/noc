@@ -79,7 +79,7 @@ class Script(BaseScript):
     )
     rx_lag_port = re.compile(r"\s*\S+ is LAG member port, LAG port:(?P<lag_port>\S+)\n")
 
-    def get_switchport_cli(self) -> Dict[str, Dict[str, Any]]:
+    def get_switchport_cli(self) -> dict[str, dict[str, Any]]:
         result = defaultdict(lambda: {"untagged": None, "tagged": []})
         v = self.cli("show running-config interface")
         v = v.replace("\n switchport trunk allowed vlan add ", ",")
@@ -91,7 +91,7 @@ class Script(BaseScript):
                 result[ifname]["tagged"] = self.expand_rangelist(tagged_vlans)
         return result
 
-    def get_interface_lldp(self) -> Set[str]:
+    def get_interface_lldp(self) -> set[str]:
         lldp = set()
         if self.is_foxgate_cli:
             return lldp

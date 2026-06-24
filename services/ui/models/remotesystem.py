@@ -23,7 +23,7 @@ class DefaultRemoteSystemItem(BaseModel):
     name: str
     handler: str
     # Environment variables
-    environment: List[EnvItem]
+    environment: list[EnvItem]
     description: Optional[str] = None
     # Enable extractors/loaders
     enable_admdiv: bool = False
@@ -58,7 +58,7 @@ class FormRemoteSystemItem(BaseModel):
     description: str
     handler: str
     # Environment variables
-    environment: List[EnvItem]
+    environment: list[EnvItem]
     # Enable extractors/loaders
     enable_admdiv: bool = False
     enable_administrativedomain: bool = False

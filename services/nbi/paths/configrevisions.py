@@ -33,7 +33,7 @@ class ConfigRevisionsAPI(NBIAPI):
             "path": "/api/nbi/configrevisions/{object_id}",
             "method": "GET",
             "endpoint": self.handler,
-            "response_model": List[Revision],
+            "response_model": list[Revision],
             "name": "configrevisions",
             "description": "Get all config revisions for Managed Object with id `object_id`",
         }

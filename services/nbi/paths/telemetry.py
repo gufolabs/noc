@@ -24,13 +24,13 @@ router = APIRouter()
 
 class Metric(BaseModel):
     metric_type: str
-    labels: List[str]
-    values: List[List[Any]]
+    labels: list[str]
+    values: list[list[Any]]
 
 
 class TelemetryRequest(BaseModel):
     bi_id: int
-    metrics: List[Metric]
+    metrics: list[Metric]
 
 
 class TelemetryAPI(NBIAPI):
@@ -52,13 +52,13 @@ class TelemetryAPI(NBIAPI):
     async def handler(
         self, req: TelemetryRequest, access_header: str = Header(..., alias=API_ACCESS_HEADER)
     ):
-        def get_scope(label: str) -> Tuple[Optional[str], str]:
+        def get_scope(label: str) -> tuple[Optional[str], str]:
             scope, *value = label.rsplit("::", 1)
             if not value:
                 return None, scope
             return scope, value[0]
 
-        def get_scope_key_label(scope: MetricScope) -> Set[str]:
+        def get_scope_key_label(scope: MetricScope) -> set[str]:
             r = set()
             for ll in scope.labels:
                 if ll.is_required or ll.is_primary_key:

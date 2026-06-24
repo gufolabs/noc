@@ -13,7 +13,7 @@ from pydantic import BaseModel
 
 
 class PingRequest(BaseModel):
-    addresses: List[str]
+    addresses: list[str]
     timeout: Optional[int]
     n: int = 1
     tos: Optional[int]
@@ -21,8 +21,8 @@ class PingRequest(BaseModel):
 
 class PingItem(BaseModel):
     address: str
-    rtt: List[Optional[float]]
+    rtt: list[Optional[float]]
 
 
 class PingResponse(BaseModel):
-    items: List[PingItem]
+    items: list[PingItem]

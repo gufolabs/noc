@@ -36,7 +36,7 @@ class InputSource(enum.Enum):
     UNKNOWN = "unknown"
 
     @classmethod
-    def from_sources(cls, code) -> List["InputSource"]:
+    def from_sources(cls, code) -> list["InputSource"]:
         """Convert code to InputSource List"""
         return [InputSource(CODE_SOURCE_MAP[c]) for c in code]
 

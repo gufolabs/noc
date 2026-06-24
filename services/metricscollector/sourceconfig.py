@@ -52,7 +52,7 @@ class SensorConfig:
     bi_id: int
     units: str = "1"
     managed_object: Optional[int] = None
-    hints: Optional[Tuple[str, ...]] = None
+    hints: Optional[tuple[str, ...]] = None
 
     @classmethod
     def from_data(cls, data, managed_object: Optional[int] = None) -> "SensorConfig":
@@ -68,7 +68,7 @@ class SensorConfig:
     def id(self):
         return str(self.bi_id)
 
-    def get_mappings(self) -> List[str]:
+    def get_mappings(self) -> list[str]:
         return self.hints or []
 
 
@@ -84,9 +84,9 @@ class SourceConfig:
     enable_metrics: bool = False
     enable_fmevent: bool = False
     no_data_check: bool = False
-    mapping_refs: Optional[Tuple[str, ...]] = None
-    sensors: Optional[Tuple[str, ...]] = None
-    services: Optional[Tuple[int, ...]] = None
+    mapping_refs: Optional[tuple[str, ...]] = None
+    sensors: Optional[tuple[str, ...]] = None
+    services: Optional[tuple[int, ...]] = None
 
     @classmethod
     def from_data(cls, data) -> "SourceConfig":

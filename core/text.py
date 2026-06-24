@@ -376,7 +376,7 @@ def _iter_split_alnum(s: str) -> Iterable[str]:
         yield match.group(0)
 
 
-def split_alnum(s: str) -> List[Union[str, int]]:
+def split_alnum(s: str) -> list[Union[str, int]]:
     """
     Split line to a sequence of iterating alpha and digit strings
 
@@ -713,7 +713,7 @@ legend = {
 
 
 def cyr_to_lat(s: str) -> str:
-    r: List[str] = []
+    r: list[str] = []
     for c in s:
         if c in legend:
             r.append(legend[c])

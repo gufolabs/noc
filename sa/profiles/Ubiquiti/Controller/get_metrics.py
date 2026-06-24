@@ -65,7 +65,7 @@ class Script(GetMetricsScript):
         # total_attempts: 41
     }
 
-    def collect_cpe_metrics(self, metrics: List[MetricCollectorConfig]):
+    def collect_cpe_metrics(self, metrics: list[MetricCollectorConfig]):
         """
         Collect metrics on client side(ONT).
         band: "na"

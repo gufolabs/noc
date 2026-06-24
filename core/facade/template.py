@@ -77,7 +77,7 @@ def get_facade_template(model: ObjectModel) -> str:
     )
     svg.append(rect)
     # Get s/i slots
-    conn_types: Dict[str, ConnectionTypeInfo] = {}
+    conn_types: dict[str, ConnectionTypeInfo] = {}
     for conn in model.connections:
         # Filter proper direction
         if conn.direction not in DIR_FILTER:
@@ -146,7 +146,7 @@ def get_facade_template(model: ObjectModel) -> str:
     return ET.tostring(tree.getroot(), encoding="unicode", method=None)
 
 
-def get_model_dimensions(model: ObjectModel) -> Tuple[int, int]:
+def get_model_dimensions(model: ObjectModel) -> tuple[int, int]:
     """
     Get dimenstions from model.
 

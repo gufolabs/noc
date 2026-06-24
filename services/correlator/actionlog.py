@@ -36,8 +36,8 @@ class ActionResult:
     status: ActionStatus
     error: Optional[str] = None
     document_id: Optional[str] = None
-    ctx: Optional[Dict[str, str]] = None
-    actions: Optional[List[ActionConfig]] = None
+    ctx: Optional[dict[str, str]] = None
+    actions: Optional[list[ActionConfig]] = None
 
 
 class ActionLog:
@@ -113,7 +113,7 @@ class ActionLog:
         severity: int,
         timestamp: datetime.datetime,
         ack_user: Any,
-        effects: Optional[Set[Effect]] = None,
+        effects: Optional[set[Effect]] = None,
     ):
         """Check job condition"""
         effects = effects or set()
@@ -132,16 +132,16 @@ class ActionLog:
     def get_ctx(
         self,
         document_id: Optional[str] = None,
-        alarm_ctx: Optional[Dict[str, Any]] = None,
+        alarm_ctx: Optional[dict[str, Any]] = None,
         wait_tt: bool = False,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Build action Context
         Args:
             document_id: External document on tt_system
             alarm_ctx: Alarm context
         """
-        r: Dict[str, Any] = {"timestamp": self.timestamp}
+        r: dict[str, Any] = {"timestamp": self.timestamp}
         if (self.action in (AlarmAction.CREATE_TT, AlarmAction.CLOSE_TT)) and self.key == "stub":
             r["tt_system"] = self.tt_system
             r["tt_id"] = self.document_id or document_id
@@ -261,7 +261,7 @@ class ActionLog:
         )
 
     @classmethod
-    def from_state(cls, data: Dict[str, Any]) -> "ActionLog":
+    def from_state(cls, data: dict[str, Any]) -> "ActionLog":
         """Restore Action Context from State Document"""
         user, tt_system, template = None, None, None
         if data.get("user"):
@@ -293,7 +293,7 @@ class ActionLog:
             **data.get("ctx", {}),
         )
 
-    def get_state(self) -> Dict[str, Any]:
+    def get_state(self) -> dict[str, Any]:
         """Getting Dict for action current state"""
         r = {
             "action": self.action.value,
@@ -328,7 +328,7 @@ class ActionLog:
     @classmethod
     def from_watch(
         cls, watch: WatchItem, alarm: ActiveAlarm, is_clear: bool = False
-    ) -> List["ActionLog"]:
+    ) -> list["ActionLog"]:
         """Restore Action Log from Watch"""
         # Restore documentID, From WATCH, From LOG ?
         r = []
@@ -371,7 +371,7 @@ class ActionLog:
         return r
 
     @classmethod
-    def from_alarm(cls, alarm: ActiveAlarm, is_clear: bool = False) -> List["ActionLog"]:
+    def from_alarm(cls, alarm: ActiveAlarm, is_clear: bool = False) -> list["ActionLog"]:
         """"""
         r = []
         for w in alarm.watchers:

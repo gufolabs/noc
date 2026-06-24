@@ -26,8 +26,8 @@ class WindowType(str, Enum):
 
 
 class WindowNodeState(BaseModel):
-    timestamps: List[int] = []
-    values: List[StrictValueType] = []
+    timestamps: list[int] = []
+    values: list[StrictValueType] = []
 
 
 class WindowConfig(BaseModel):
@@ -43,7 +43,7 @@ class WindowNode(BaseCDAGNode):
     categories = [Category.WINDOW]
 
     def get_window_value(
-        self, values: List[ValueType], timestamps: List[int]
+        self, values: list[ValueType], timestamps: list[int]
     ) -> Optional[ValueType]:  # pragma: no cover
         raise NotImplementedError
 

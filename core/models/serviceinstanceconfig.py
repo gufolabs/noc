@@ -40,7 +40,7 @@ class InstanceType(enum.Enum):
 
 @dataclass
 class ServiceInstanceTypeConfig:
-    allow_resources: Optional[List[str]] = None
+    allow_resources: Optional[list[str]] = None
     allow_manual: bool = False
     # For multiple object, control TTL ?
     only_one_instance: bool = True
@@ -65,13 +65,13 @@ class ServiceInstanceConfig:
     remote_id: Optional[str] = None
     nri_port: Optional[str] = None
     fqdn: Optional[str] = None
-    addresses: List[str] = None
-    services: List[bson.ObjectId] = None
+    addresses: list[str] = None
+    services: list[bson.ObjectId] = None
     port: int = 0
-    asset_refs: List[str] = None
+    asset_refs: list[str] = None
 
     @classmethod
-    def get_type(cls, i_type: InstanceType) -> Type["ServiceInstanceConfig"]:
+    def get_type(cls, i_type: InstanceType) -> type["ServiceInstanceConfig"]:
         """Return Config instance by type"""
         match i_type:
             case InstanceType.ASSET:
@@ -92,7 +92,7 @@ class ServiceInstanceConfig:
         settings: "ServiceInstanceTypeConfig",
         service,
         name: Optional[str] = None,
-    ) -> List["ServiceInstanceConfig"]:
+    ) -> list["ServiceInstanceConfig"]:
         """Create Config from settings"""
         raise NotImplementedError()
 
@@ -128,7 +128,7 @@ class NetworkHostInstance(ServiceInstanceConfig):
     type = InstanceType.ASSET
 
     @classmethod
-    def from_group(cls, group) -> List["NetworkHostInstance"]:
+    def from_group(cls, group) -> list["NetworkHostInstance"]:
         from noc.inv.models.resourcegroup import ResourceGroup
 
         r = []
@@ -142,7 +142,7 @@ class NetworkHostInstance(ServiceInstanceConfig):
         settings: "ServiceInstanceTypeConfig",
         service,
         name: Optional[str] = None,
-    ) -> List["ServiceInstanceConfig"]:
+    ) -> list["ServiceInstanceConfig"]:
         """Create Config from settings"""
         if settings.asset_group and settings.asset_group.id in service.effective_client_groups:
             return cls.from_group(settings.asset_group)
@@ -173,7 +173,7 @@ class NetworkChannelInstance(ServiceInstanceConfig):
         settings: "ServiceInstanceTypeConfig",
         service,
         name: Optional[str] = None,
-    ) -> List["ServiceInstanceConfig"]:
+    ) -> list["ServiceInstanceConfig"]:
         """Create Config from settings"""
         caps = service.get_caps()
         if not settings.refs_caps or settings.refs_caps.name not in caps:
@@ -212,7 +212,7 @@ class ServiceEndPoint(ServiceInstanceConfig):
         settings: "ServiceInstanceTypeConfig",
         service,
         name: Optional[str] = None,
-    ) -> List["ServiceInstanceConfig"]:
+    ) -> list["ServiceInstanceConfig"]:
         """
         Create Config from settings
         """
@@ -251,7 +251,7 @@ class ConfigInstance(ServiceInstanceConfig):
         settings: "ServiceInstanceTypeConfig",
         service,
         name: Optional[str] = None,
-    ) -> List["ServiceInstanceConfig"]:
+    ) -> list["ServiceInstanceConfig"]:
         """Create Config from settings"""
         caps = service.get_caps()
         if not settings.refs_caps or settings.refs_caps.name not in caps:

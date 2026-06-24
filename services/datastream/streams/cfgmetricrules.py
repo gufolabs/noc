@@ -17,7 +17,7 @@ class CfgMetricRuleDataStream(DataStream):
     name = "cfgmetricrules"
 
     @classmethod
-    def get_object(cls, id: str) -> Dict[str, Any]:
+    def get_object(cls, id: str) -> dict[str, Any]:
         rule: "MetricRule" = MetricRule.objects.filter(id=id).first()
         if not rule or not rule.is_active or not rule.actions:
             raise KeyError()

@@ -20,7 +20,7 @@ from .handler import DiagnosticHandler
 from .types import DiagnosticState, DiagnosticConfig, CheckStatus, DiagnosticValue
 
 
-DIAGNOSTIC_CHECK_STATE: Dict[bool, DiagnosticState] = {
+DIAGNOSTIC_CHECK_STATE: dict[bool, DiagnosticState] = {
     True: DiagnosticState("enabled"),
     False: DiagnosticState("failed"),
 }
@@ -31,7 +31,7 @@ class DiagnosticItem(BaseModel):
 
     diagnostic: str
     state: DiagnosticState = DiagnosticState("unknown")
-    checks: Optional[List[CheckStatus]] = None
+    checks: Optional[list[CheckStatus]] = None
     # scope: Literal["access", "all", "discovery", "default"] = "default"
     # policy: str = "ANY
     reason: Optional[str] = None
@@ -158,7 +158,7 @@ class DiagnosticItem(BaseModel):
         self,
         logger=None,
         **kwargs,
-    ) -> Iterable[Tuple[Check, ...]]:
+    ) -> Iterable[tuple[Check, ...]]:
         """Iterate over configured checks"""
         if not self.config.diagnostic_handler and not self.config.checks:
             return
@@ -168,7 +168,7 @@ class DiagnosticItem(BaseModel):
         h = self.get_handler(logger=logger)
         yield from h.iter_checks(**kwargs)
 
-    def get_check_status(self) -> Tuple[Optional[DiagnosticState], Optional[str]]:
+    def get_check_status(self) -> tuple[Optional[DiagnosticState], Optional[str]]:
         """
         Calculate check status, ANY or ALL policy apply
         """
@@ -194,9 +194,9 @@ class DiagnosticItem(BaseModel):
 
     def update_checks(
         self,
-        checks: List[CheckResult],
+        checks: list[CheckResult],
         source: Optional[InputSource] = InputSource.UNKNOWN,
-    ) -> Tuple[List[CheckStatus], List[DataItem]]:
+    ) -> tuple[list[CheckStatus], list[DataItem]]:
         """Processed checks result and Update Item checks status"""
         if self.config.diagnostic_handler:
             h = self.get_handler()
@@ -221,7 +221,7 @@ class DiagnosticItem(BaseModel):
             self.is_dirty |= True
         return changed, data
 
-    def get_object_form(self) -> Dict[str, Any]:
+    def get_object_form(self) -> dict[str, Any]:
         """Displayed form"""
         return {
             "name": self.diagnostic[:6],

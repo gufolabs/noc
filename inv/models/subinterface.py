@@ -150,7 +150,7 @@ class SubInterface(Document):
         return Label.get_effective_setting(label, setting="enable_interface")
 
     @classmethod
-    def iter_effective_labels(cls, instance: "SubInterface") -> Iterable[List[str]]:
+    def iter_effective_labels(cls, instance: "SubInterface") -> Iterable[list[str]]:
         if instance.tagged_vlans:
             yield Label.get_effective_vlanfilter_labels(
                 "subinterface_tagged_vlans", instance.tagged_vlans
@@ -192,7 +192,7 @@ class SubInterface(Document):
         # return f"if:{self.interface.id}:{self.id}"
         return f"si:{self.id}"
 
-    def get_matcher_ctx(self) -> Dict[str, Any]:
+    def get_matcher_ctx(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "description": self.description,

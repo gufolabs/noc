@@ -131,7 +131,7 @@ class InvApplication(ExtApplication):
                         {"_id": 1},
                     )
                 ]
-                children: List[Tuple[str, "Object"]] = [
+                children: list[tuple[str, "Object"]] = [
                     (o.name, o)
                     for o in Object.objects.filter(
                         __raw__={"parent": None, "model": {"$in": cmodels}}
@@ -376,7 +376,7 @@ class InvApplication(ExtApplication):
             ),
         },
     )
-    def api_add(self, request, items: List[Dict[str, str]], container: Optional[str] = None):
+    def api_add(self, request, items: list[dict[str, str]], container: Optional[str] = None):
         if container:
             parent = self.get_object_or_404(Object, id=container)
         else:
@@ -564,12 +564,12 @@ class InvApplication(ExtApplication):
         request,
         **kwargs,
     ):
-        def register_error(link: Dict[str, Any], err: str) -> None:
+        def register_error(link: dict[str, Any], err: str) -> None:
             self.logger.warning("Connection Error: %s", err)
             link["error"] = err
             errors.append(link)
 
-        def create_internal_connection(link: Dict[str, Any]) -> None:
+        def create_internal_connection(link: dict[str, Any]) -> None:
             name, remote_name = link["name"], link["remote_name"]
             try:
                 discriminator = link.get("discriminator") or {}
@@ -586,7 +586,7 @@ class InvApplication(ExtApplication):
             except (ConnectionError, ValidationError) as e:
                 register_error(link, str(e))
 
-        def create_cable_connection(link: Dict[str, Any], lo: Object, ro: Object) -> None:
+        def create_cable_connection(link: dict[str, Any], lo: Object, ro: Object) -> None:
             cable_model = ObjectModel.get_by_name(link["cable"])
             if not cable_model:
                 register_error(link, f"Invalid cable model: {link['cable']}")
@@ -611,15 +611,15 @@ class InvApplication(ExtApplication):
             except ConnectionError as e:
                 register_error(link, str(e))
 
-        def create_p2p_connection(link: Dict[str, Any], lo: Object, ro: Object) -> None:
+        def create_p2p_connection(link: dict[str, Any], lo: Object, ro: Object) -> None:
             name, remote_name = link["name"], link["remote_name"]
             try:
                 lo.connect_p2p(name, ro, remote_name, {}, reconnect=link.get("reconnect"))
             except ConnectionError as e:
                 register_error(link, str(e))
 
-        data: List[Dict[str, Any]] = self.deserialize(request.body)
-        errors: List[Dict[str, Any]] = []
+        data: list[dict[str, Any]] = self.deserialize(request.body)
+        errors: list[dict[str, Any]] = []
         for link in data:
             lo = self.get_object_or_404(Object, id=link["object"])
             remote_object = link.get("remote_object")
@@ -792,7 +792,7 @@ class InvApplication(ExtApplication):
         validate={"q": UnicodeParameter(required=True)},
     )
     def api_search(self, request, q: str, **kwargs):
-        def path(o: Object) -> List[Dict]:
+        def path(o: Object) -> list[dict]:
             result = []
             for oid in o.get_path():
                 obj = Object.get_by_id(oid)
@@ -864,7 +864,7 @@ class InvApplication(ExtApplication):
         api=True,
         validate={"resources": StringListParameter()},
     )
-    def api_resource_status(self, request, resources: List[str]):
+    def api_resource_status(self, request, resources: list[str]):
         # @todo: Limit access
         alarmed = ActiveAlarm.get_resource_statuses(resources)
         return self.render_json(

@@ -56,7 +56,7 @@ class ActivatorAPI(JSONRPCAPI):
         credentials,
         capabilities=None,
         version=None,
-        args: Optional[Dict[str, Any]] = None,
+        args: Optional[dict[str, Any]] = None,
         timeout: Optional[int] = None,
         session: Optional[str] = None,
         session_idle_timeout: Optional[int] = None,
@@ -344,8 +344,8 @@ class ActivatorAPI(JSONRPCAPI):
             kwargs: Checker param
         """
         checks = [Check.from_dict(c) for c in checks]
-        r: List[CheckResult] = []
-        do_checks: Dict[str, List[Check]] = defaultdict(list)
+        r: list[CheckResult] = []
+        do_checks: dict[str, list[Check]] = defaultdict(list)
         for check in checks:
             checker = checker_loader[check.name]
             if not checker:

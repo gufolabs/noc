@@ -35,13 +35,13 @@ class BoxData(NamedTuple):
 
 class CLIFSMData(NamedTuple):
     state: str
-    reply: List[bytes]
+    reply: list[bytes]
 
 
 class CLIData(NamedTuple):
-    names: List[str]
+    names: list[str]
     request: bytes
-    reply: List[bytes]
+    reply: list[bytes]
 
 
 class MIBData(NamedTuple):
@@ -57,12 +57,12 @@ class Beef:
         self.box: Optional[BoxData] = None
         self.changed = None
         self.description: Optional[str] = None
-        self.cli_fsm: Optional[List[CLIFSMData]] = None
-        self.cli: Optional[List[CLIData]] = None
-        self.mib: Optional[List[MIBData]] = None
+        self.cli_fsm: Optional[list[CLIFSMData]] = None
+        self.cli: Optional[list[CLIData]] = None
+        self.mib: Optional[list[MIBData]] = None
         self.mib_encoding: Optional[str] = None
-        self.mib_oid_values: Optional[Dict[str, bytes]] = None
-        self.mib_oids: Optional[List[Tuple[int]]] = None
+        self.mib_oid_values: Optional[dict[str, bytes]] = None
+        self.mib_oids: Optional[list[tuple[int]]] = None
 
     @classmethod
     def from_json(cls, data):

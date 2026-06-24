@@ -35,7 +35,7 @@ class MaintenanceLoader(BaseLoader):
         super().__init__(*args, **kwargs)
         self.clean_map["type"] = MaintenanceType.get_by_name
 
-    def post_save(self, o: MaintenanceModel, fields: Dict[str, Any]):
+    def post_save(self, o: MaintenanceModel, fields: dict[str, Any]):
         """Processed maintenance object"""
         r = []
         for oo in fields.get("objects", []):

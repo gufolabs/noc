@@ -44,7 +44,7 @@ class DocumentResourceAPI(BaseResourceAPI[T]):
         """
         return cls.model.objects.all()
 
-    def get_total_items(self, user: User, transforms: Optional[List[Callable]] = None) -> int:
+    def get_total_items(self, user: User, transforms: Optional[list[Callable]] = None) -> int:
         qs = self.queryset(user)
         if transforms:
             for t in transforms:
@@ -52,8 +52,8 @@ class DocumentResourceAPI(BaseResourceAPI[T]):
         return qs.count()
 
     def get_summary_items(
-        self, user: User, field: str, transforms: Optional[List[Callable]] = None
-    ) -> List[SummaryItem]:
+        self, user: User, field: str, transforms: Optional[list[Callable]] = None
+    ) -> list[SummaryItem]:
         """
         Calculate total amount of items, satisfying criteria
         :param user:
@@ -77,11 +77,11 @@ class DocumentResourceAPI(BaseResourceAPI[T]):
     def get_items(
         self,
         user: User,
-        sort: List[str],
+        sort: list[str],
         limit: int = config.ui.max_rest_limit,
         offset: int = 0,
-        transforms: Optional[List[Callable]] = None,
-    ) -> List[T]:
+        transforms: Optional[list[Callable]] = None,
+    ) -> list[T]:
         # Start from initial restrictions
         qs = self.queryset(user)
         # Then apply transformations passed by query
@@ -124,10 +124,10 @@ class DocumentResourceAPI(BaseResourceAPI[T]):
         return bool(item)
 
     def add_ref_cleaner(self, name: str, remote: SupportsGetById) -> None:
-        def inner(value: Optional[Dict[str, Any]]) -> Optional[Any]:
+        def inner(value: Optional[dict[str, Any]]) -> Optional[Any]:
             if not value:
                 return None
-            if not isinstance(value, Dict):
+            if not isinstance(value, dict):
                 raise ValueError("Must be dict")
             item = remote.get_by_id(value["id"])
             if not item:

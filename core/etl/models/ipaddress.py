@@ -34,7 +34,7 @@ class IPAddress(BaseModel):
     state_changed: Optional[datetime.datetime] = None
     # Workflow event
     event: Optional[str] = None
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None
 
     @field_validator("address")
     @classmethod

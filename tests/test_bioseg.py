@@ -44,7 +44,7 @@ class MockBioSegPolicy(BaseBioSegPolicy):
     LEVEL = 10
     _objects = []
 
-    def get_objects(self, seg: NetworkSegment) -> List[ManagedObject]:
+    def get_objects(self, seg: NetworkSegment) -> list[ManagedObject]:
         if not self._objects:
             profile = ManagedObjectProfile(name="mock", level=self.LEVEL)
             self._objects = [

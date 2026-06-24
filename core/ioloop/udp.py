@@ -44,8 +44,8 @@ class UDPSocket:
             self.socket = None
 
     async def send_and_receive(
-        self, data: bytes, address: Tuple[str, int]
-    ) -> Tuple[bytes, Tuple[str, int]]:
+        self, data: bytes, address: tuple[str, int]
+    ) -> tuple[bytes, tuple[str, int]]:
         loop = asyncio.get_running_loop()
         fileno = self.socket.fileno()
         write_ev = asyncio.Event()

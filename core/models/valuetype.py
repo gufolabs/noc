@@ -220,7 +220,7 @@ class ValueType(enum.Enum):
         return f"{ARRAY_ANNEX}{ARRAY_DELIMITER.join([str(v) for v in value])}"
 
     @staticmethod
-    def convert_to_array(value: str) -> List[str]:
+    def convert_to_array(value: str) -> list[str]:
         """Convert array to string"""
         return [v.strip() for v in value.split(ARRAY_DELIMITER)]
 

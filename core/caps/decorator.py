@@ -105,10 +105,10 @@ def iter_document_caps(
 
 def save_document_caps(
     self,
-    caps: List[CapsValue],
+    caps: list[CapsValue],
     dry_run: bool = False,
     bulk=None,
-    changed_fields: Optional[List[ChangeField]] = None,
+    changed_fields: Optional[list[ChangeField]] = None,
 ):
     """"""
     from noc.inv.models.capsitem import CapsItem
@@ -159,10 +159,10 @@ def save_document_caps(
 
 def save_model_caps(
     self,
-    caps: List[CapsValue],
+    caps: list[CapsValue],
     dry_run: bool = False,
     bulk=None,
-    changed_fields: Optional[List[ChangeField]] = None,
+    changed_fields: Optional[list[ChangeField]] = None,
 ):
     """"""
     prev_labels, caps_labels, new_caps = set(), set(), []
@@ -215,7 +215,7 @@ def save_model_caps(
 
 def get_caps(
     self, scope: Optional[str] = None, exposed_scope: Optional[str] = None
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Returns a dict of effective object capabilities
     """
@@ -232,7 +232,7 @@ def get_caps(
     return caps
 
 
-def get_caps_config(self) -> Dict[str, CapsConfig]:
+def get_caps_config(self) -> dict[str, CapsConfig]:
     """Return Dict with Local Capabilities Config"""
     if hasattr(self, "profile") and hasattr(self.profile, "get_caps_config"):
         return self.profile.get_caps_config()
@@ -252,7 +252,7 @@ def set_caps(
     """
     from noc.inv.models.capability import Capability
 
-    new_caps: List[CapsValue] = []
+    new_caps: list[CapsValue] = []
     caps = Capability.get_by_name(key)
     if not caps:
         return
@@ -332,13 +332,13 @@ def reset_caps(
 
 def update_caps(
     self,
-    caps: Dict[str, Any],
+    caps: dict[str, Any],
     source: str,
     scope: Optional[str] = None,
     dry_run: bool = False,
     bulk=None,
     logger: Optional[logging.Logger] = None,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Update existing capabilities with a new ones.
     * if set scope - processed items over that scope
@@ -361,7 +361,7 @@ def update_caps(
         source = InputSource.UNKNOWN
     # Update existing capabilities
     logger = logger or caps_logger
-    new_caps: List[CapsValue] = []
+    new_caps: list[CapsValue] = []
     seen = set()
     changed = False
     changed_fields = []

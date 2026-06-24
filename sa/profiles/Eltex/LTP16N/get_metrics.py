@@ -522,7 +522,7 @@ class Script(GetMetricsScript):
                 multi=True,
             )
 
-    def collect_cpe_metrics(self, metrics: List[MetricCollectorConfig]):
+    def collect_cpe_metrics(self, metrics: list[MetricCollectorConfig]):
         """
         Collect metrics on client side(ONT).
         """

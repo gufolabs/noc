@@ -36,7 +36,7 @@ class RemoteId(BaseModel):
 
 
 class ServiceStatusRequest(BaseModel):
-    services: List[Union[ServiceId, RemoteId]]
+    services: list[Union[ServiceId, RemoteId]]
     changed_at: Optional[datetime.datetime] = None
     suppress_not_found: bool = False
 
@@ -47,12 +47,12 @@ class Status(BaseModel):
     change: datetime.datetime
     in_maintenance: bool = False
     parent: Optional[str] = None
-    remote_mappings: Optional[Dict[str, str]] = None
+    remote_mappings: Optional[dict[str, str]] = None
 
 
 class ServiceStatusResponse(BaseModel):
-    statuses: List[Status]
-    not_found_queries: Optional[List[Union[ServiceId, RemoteId]]] = None
+    statuses: list[Status]
+    not_found_queries: Optional[list[Union[ServiceId, RemoteId]]] = None
 
 
 class ServiceStatusAPI(NBIAPI):

@@ -69,15 +69,15 @@ class AlarmDataStreamItem(BaseModel):
     timestamp: datetime.datetime
     severity: int
     reopens: int
-    labels: Optional[List[str]]
-    tags: Optional[List[str]]
+    labels: Optional[list[str]]
+    tags: Optional[list[str]]
     root: Optional[str]
     clear_timestamp: Optional[str]
     managed_object: ManagedObjectItem
     alarm_class: AlarmClassItem
-    vars: Dict[str, Union[str, int]]
+    vars: dict[str, Union[str, int]]
     escalation: Optional[EscalationItem]
-    direct_services: List[ServiceSummaryItem]
-    total_services: List[ServiceSummaryItem]
-    direct_subscribers: List[SubscriberSummaryItem]
-    total_subscribers: List[SubscriberSummaryItem]
+    direct_services: list[ServiceSummaryItem]
+    total_services: list[ServiceSummaryItem]
+    direct_subscribers: list[SubscriberSummaryItem]
+    total_subscribers: list[SubscriberSummaryItem]

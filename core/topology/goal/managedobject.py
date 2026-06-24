@@ -24,7 +24,7 @@ class ManagedObjectGoal(BaseGoal):
         # Use A* acceleration
         self.use_segment_path = True
         # Heuristic weight is the number of segments to be passed to goal
-        self.hw: Dict[NetworkSegment, int] = {}
+        self.hw: dict[NetworkSegment, int] = {}
 
     def segment_cost_estimate(self, neighbor, current=None):
         if not self.hw:
@@ -77,7 +77,7 @@ class ManagedObjectGoal(BaseGoal):
         self.use_segment_path = bool(self.hw)
 
     @staticmethod
-    def get_segment_path(start: ManagedObject, goal: ManagedObject) -> List[NetworkSegment]:
+    def get_segment_path(start: ManagedObject, goal: ManagedObject) -> list[NetworkSegment]:
         """
         Returns a list of segments laying between two management objects
         :param start: Managed Object instance
@@ -86,8 +86,8 @@ class ManagedObjectGoal(BaseGoal):
         """
 
         def merge_path(
-            l1: List[NetworkSegment], l2: List[NetworkSegment], cross: Set[NetworkSegment]
-        ) -> List[NetworkSegment]:
+            l1: list[NetworkSegment], l2: list[NetworkSegment], cross: set[NetworkSegment]
+        ) -> list[NetworkSegment]:
             ci = next(iter(cross))
             i1 = l1.index(ci)
             ri1 = l1[:i1]
@@ -95,8 +95,8 @@ class ManagedObjectGoal(BaseGoal):
             ri2 = list(reversed(l2[:i2]))
             return [*ri1, ci, *ri2]
 
-        p1: List[NetworkSegment] = [start.segment]
-        p2: List[NetworkSegment] = [goal.segment]
+        p1: list[NetworkSegment] = [start.segment]
+        p2: list[NetworkSegment] = [goal.segment]
         while True:
             can_up1: bool = bool(p1[-1].parent)
             can_up2: bool = bool(p2[-1].parent)

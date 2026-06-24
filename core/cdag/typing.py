@@ -13,4 +13,4 @@ from pydantic import StrictInt, StrictFloat
 
 ValueType = Union[int, float]
 StrictValueType = Union[StrictInt, StrictFloat]
-FactoryCtx = Dict[str, Any]
+FactoryCtx = dict[str, Any]

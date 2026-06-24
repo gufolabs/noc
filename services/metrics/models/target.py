@@ -10,10 +10,10 @@ import sys
 from dataclasses import dataclass
 from typing import Any, Tuple, Optional, Dict, FrozenSet, Union, ClassVar, List
 
-MetricKey = Tuple[str, Tuple[Tuple[str, int], ...], Tuple[str, ...]]
+MetricKey = tuple[str, tuple[tuple[str, int], ...], tuple[str, ...]]
 
 
-def convert_rules(rules: List[Tuple[str, str]]) -> Tuple[Tuple[str, str], ...]:
+def convert_rules(rules: list[tuple[str, str]]) -> tuple[tuple[str, str], ...]:
     """"""
     r = []
     for rule_id, action_id in rules:
@@ -23,10 +23,10 @@ def convert_rules(rules: List[Tuple[str, str]]) -> Tuple[Tuple[str, str], ...]:
 
 @dataclass(frozen=True, slots=True)
 class ComponentTarget:
-    key_labels: Tuple[str, ...]  # noc::interface::*, noc::interface::Fa 0/24
-    rules: Optional[Tuple[Tuple[str, str], ...]]
-    composed_metrics: Tuple[str, ...]  # Metric Field for compose metrics
-    exposed_labels: Optional[Tuple[str, ...]]
+    key_labels: tuple[str, ...]  # noc::interface::*, noc::interface::Fa 0/24
+    rules: Optional[tuple[tuple[str, str], ...]]
+    composed_metrics: tuple[str, ...]  # Metric Field for compose metrics
+    exposed_labels: Optional[tuple[str, ...]]
 
     @classmethod
     def from_data(cls, data):
@@ -47,14 +47,14 @@ class MetricTarget:
     bi_id: int
     managed_object: Optional[int]
     fm_pool: Optional[str]
-    rules: Optional[Tuple[Tuple[str, str], ...]]
-    exposed_labels: Optional[Tuple[str, ...]]
-    composed_metrics: Optional[Tuple[str, ...]]
+    rules: Optional[tuple[tuple[str, str], ...]]
+    exposed_labels: Optional[tuple[str, ...]]
+    composed_metrics: Optional[tuple[str, ...]]
     # not_save_metrics
 
     @classmethod
     def from_config(
-        cls, data: Dict[str, Any], r_type: str
+        cls, data: dict[str, Any], r_type: str
     ) -> Optional[Union["ManagedObjectTarget", "SLAProbeTarget"]]:
         """Return classes"""
         if "$deleted" in data or r_type == "remote_system":
@@ -92,11 +92,11 @@ class MetricTarget:
 class ManagedObjectTarget(MetricTarget):
     type = "managed_object"
 
-    opaque_data: Optional[Dict[str, Any]]
-    components: Optional[Tuple[ComponentTarget, ...]]
+    opaque_data: Optional[dict[str, Any]]
+    components: Optional[tuple[ComponentTarget, ...]]
     # For changes
     # Exclude compare
-    sensors: Optional[FrozenSet[int]]
+    sensors: Optional[frozenset[int]]
 
     @property
     def meta(self):
@@ -107,7 +107,7 @@ class ManagedObjectTarget(MetricTarget):
 class SLAProbeTarget(MetricTarget):
     type = "sla_probe"
 
-    opaque: Optional[Dict[str, Any]]
+    opaque: Optional[dict[str, Any]]
     service: Optional[int] = None
 
     @property
@@ -125,8 +125,8 @@ class SensorComponentTarget:
     target: Optional[MetricTarget]
     managed_object: Optional[int]
     agent: Optional[int]
-    rules: Optional[Tuple[Tuple[str, str], ...]]
-    exposed_labels: Optional[Tuple[str, ...]]
+    rules: Optional[tuple[tuple[str, str], ...]]
+    exposed_labels: Optional[tuple[str, ...]]
 
     @classmethod
     def from_config(cls, data, target: Optional[MetricTarget] = None):

@@ -62,7 +62,7 @@ async def token(
     except ValidationError as e:
         return await svc.request_validation_error_handler(request, e)
     # <-- MADNESS ABOVE
-    auth_req: Optional[Dict[str, str]]
+    auth_req: Optional[dict[str, str]]
     if req.grant_type == "refresh_token":
         # Refresh token
         if svc.is_revoked(req.refresh_token):

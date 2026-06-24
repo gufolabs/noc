@@ -80,7 +80,7 @@ class Var:
     default: str
 
     @classmethod
-    def from_json(cls, d: Dict[str, Any]) -> "Var":
+    def from_json(cls, d: dict[str, Any]) -> "Var":
         """
         Read from
         """
@@ -158,8 +158,8 @@ class Data:
     symptoms: str
     probable_causes: str
     recommended_actions: str
-    vars: List[Var]
-    events: List[Event]
+    vars: list[Var]
+    events: list[Event]
 
     @classmethod
     def read(cls, path: Path) -> "Data":
@@ -195,7 +195,7 @@ class Data:
         return rx_md_anchor.sub("-", self.name.lower())
 
     @property
-    def bucket(self) -> Tuple[str, ...]:
+    def bucket(self) -> tuple[str, ...]:
         return tuple(islice((x.strip() for x in self.name.split("|", 1)), 0, BUCKET_DEPTH))
 
     def link_from(self, src: "Data") -> str:
@@ -243,8 +243,8 @@ def iter_data() -> Iterable[Data]:
     logger.info("%d items read in %.3fs", n, dt)
 
 
-def get_buckets() -> DefaultDict[Tuple[str, ...], List[Data]]:
-    buckets: DefaultDict[Tuple[str, ...], List[Data]] = defaultdict(list)
+def get_buckets() -> defaultdict[tuple[str, ...], list[Data]]:
+    buckets: defaultdict[tuple[str, ...], list[Data]] = defaultdict(list)
     for data in iter_data():
         buckets[data.bucket].append(data)
     return buckets
@@ -257,7 +257,7 @@ def canonical_name(s: str) -> str:
     return s.replace(" | ", "-").replace(" ", "-").lower()
 
 
-def bucket_path(s: Tuple[str, ...]) -> Path:
+def bucket_path(s: tuple[str, ...]) -> Path:
     """
     Convert bucket tuple to .md path
     """
@@ -292,8 +292,8 @@ def alnum_key(d: Data) -> str:
     return "".join(maybe_formatted_int(x) for x in _iter_split_alnum(d.name))
 
 
-def get_events() -> Dict[str, List[Event]]:
-    r: DefaultDict[str, List[Event]] = defaultdict(list)
+def get_events() -> dict[str, list[Event]]:
+    r: defaultdict[str, list[Event]] = defaultdict(list)
     for path in EC_COLLECTION_ROOT.rglob("*.json"):
         with open(path) as fp:
             data = json.loads(fp.read())

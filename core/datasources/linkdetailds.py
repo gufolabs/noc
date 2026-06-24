@@ -57,10 +57,10 @@ class LinkDetailDS(BaseDataSource):
         fields: Optional[Iterable[str]] = None,
         resource_group: Optional[ResourceGroup] = None,
         segment: Optional[NetworkSegment] = None,
-        admin_domain_ads: Optional[List[int]] = None,
+        admin_domain_ads: Optional[list[int]] = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[int, str, Union[str, int]]]:
+    ) -> AsyncIterable[tuple[int, str, Union[str, int]]]:
         def get_platform(id):
             return str(Platform.get_by_id(id)) if id else ""
 

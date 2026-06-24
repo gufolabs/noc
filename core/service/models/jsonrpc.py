@@ -14,7 +14,7 @@ from pydantic import BaseModel
 
 class JSONRemoteProcedureCall(BaseModel):
     method: str
-    params: List[Any]
+    params: list[Any]
     id: int
 
 

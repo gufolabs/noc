@@ -83,7 +83,7 @@ class LinkedPoP:
         linked |= self.get_linked_pops_by_cables()
         return linked
 
-    def get_linked_pops_by_cables(self) -> Set[Object]:
+    def get_linked_pops_by_cables(self) -> set[Object]:
         """
         Get PoP's tracing ObjectConnection
         """

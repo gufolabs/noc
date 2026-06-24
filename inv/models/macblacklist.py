@@ -115,7 +115,7 @@ class MACBlacklist(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_list_cache"), lock=lambda _: _list_lock)
-    def _get_blacklist(cls) -> List[ListItem]:
+    def _get_blacklist(cls) -> list[ListItem]:
         return [
             ListItem(
                 from_mac=MAC(d.from_mac),

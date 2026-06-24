@@ -71,7 +71,7 @@ class DataPlugin(InvPlugin):
         is_const: bool = False,
         type: Optional[str] = None,
         scope: Optional[str] = None,
-        choices: Optional[List[Tuple[str, str]]] = None,
+        choices: Optional[list[tuple[str, str]]] = None,
         item_id: Optional[str] = None,
     ) -> dict[str, Any]:
         """
@@ -276,7 +276,7 @@ class DataPlugin(InvPlugin):
 
     def iter_effective_data(self, o: Object) -> Iterable[dict[str, Any]]:
         # Group by model interfaces
-        mi_values: dict[str, dict[str, List[Tuple[Optional[str], str]]]] = {}
+        mi_values: dict[str, dict[str, list[tuple[Optional[str], str]]]] = {}
         for item in o.get_effective_data():
             if item.interface not in mi_values:
                 mi_values[item.interface] = defaultdict(list)

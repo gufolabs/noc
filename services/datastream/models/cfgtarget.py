@@ -56,10 +56,10 @@ class Dependency(BaseModel):
 class CfgTarget(BaseModel):
     id: str  # Record id
     name: str
-    addresses: List[TargetAddress]
+    addresses: list[TargetAddress]
     bi_id: int
     pool: str
-    effective_labels: List[str]
+    effective_labels: list[str]
     opaque_data: Optional[ManagedObjectOpaque] = None  # Kafka message data
     sa_profile: Optional[str] = None
     fm_pool: Optional[str] = None
@@ -68,7 +68,7 @@ class CfgTarget(BaseModel):
     syslog: Optional[SyslogSettings] = None
     trap: Optional[TrapSettings] = None
     # checks: Optional[List[CheckConfig]] = None
-    services: Optional[List[Dict[str, str]]] = None
-    dependencies: Optional[List[Dependency]] = None
-    mapping_refs: Optional[List[str]] = None
-    watchers: Optional[List[str]] = None
+    services: Optional[list[dict[str, str]]] = None
+    dependencies: Optional[list[Dependency]] = None
+    mapping_refs: Optional[list[str]] = None
+    watchers: Optional[list[str]] = None

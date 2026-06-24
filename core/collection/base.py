@@ -61,7 +61,7 @@ class Item:
     uuid: str
     path: Path
     hash: str
-    data: Dict[str, Any]
+    data: dict[str, Any]
 
 
 class Collection:
@@ -78,7 +78,7 @@ class Collection:
         self.name = name
         self._model = None
         self._api_version = self.DEFAULT_API_VERSION
-        self.ref_cache: Dict[Tuple[Document, str, str], Document] = {}
+        self.ref_cache: dict[tuple[Document, str, str], Document] = {}
         self._name_field = None
         self.stdout = stdout or sys.stdout
         self.partial_errors = {}
@@ -139,7 +139,7 @@ class Collection:
         """
         return get_db()[self.STATE_COLLECTION]
 
-    def get_state(self) -> Dict[str, str]:
+    def get_state(self) -> dict[str, str]:
         """
         Returns collection state as a dict of UUID -> hash
         :return:
@@ -151,7 +151,7 @@ class Collection:
             return orjson.loads(zlib.decompress(smart_bytes(cs["state"])))
         return self.get_legacy_state()
 
-    def get_legacy_state(self) -> Dict[str, str]:
+    def get_legacy_state(self) -> dict[str, str]:
         # Fallback to legacy local
         path = self.get_legacy_state_path()
         state = {}
@@ -163,7 +163,7 @@ class Collection:
                     state[r_uuid] = r_hash
         return state
 
-    def save_state(self, state: Dict[str, str]) -> None:
+    def save_state(self, state: dict[str, str]) -> None:
         """
         Save collection state
         :param state:
@@ -183,7 +183,7 @@ class Collection:
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_state_cache"), lock=lambda _: state_lock)
-    def get_builtins(cls, name: str) -> Set[str]:
+    def get_builtins(cls, name: str) -> set[str]:
         """
         Returns set of UUIDs for collection
         :param name:
@@ -205,7 +205,7 @@ class Collection:
         """
         return self.get_legacy_state_path().exists()
 
-    def item_hash(self, data: Dict[str, Any]) -> str:
+    def item_hash(self, data: dict[str, Any]) -> str:
         """
         Calculate item hash.
 
@@ -220,7 +220,7 @@ class Collection:
             return h
         return f"{self._api_version}:{h}"
 
-    def get_items(self) -> Dict[str, Item]:
+    def get_items(self) -> dict[str, Item]:
         """
         Returns dict of UUID -> Item containing new state.
         """
@@ -239,14 +239,14 @@ class Collection:
         Iterate all items from file.
         """
 
-        def get_single(data: Dict[str, Any]) -> Item:
+        def get_single(data: dict[str, Any]) -> Item:
             """Return single item."""
             if "uuid" not in data:
                 msg = f"Invalid JSON {path}: No UUID"
                 raise ValueError(msg)
             return Item(uuid=data["uuid"], path=path, hash=self.item_hash(data), data=data)
 
-        def iter_bundle(data: Dict[str, Any]) -> Iterable[Item]:
+        def iter_bundle(data: dict[str, Any]) -> Iterable[Item]:
             items = data.get("items")
             if not items:
                 return

@@ -84,7 +84,7 @@ class ActionPermission(BaseModel):
 class AllowedAction(BaseModel):
     action: AlarmAction
     login: Optional[str] = None
-    access: Optional[List[ActionPermission]] = None
+    access: Optional[list[ActionPermission]] = None
     stop_processing: bool = False
 
 
@@ -117,8 +117,8 @@ class AlarmActionRequest(BaseModel):
     """
 
     id: str = Field(default_factory=lambda: str(ObjectId()))
-    actions: List[ActionConfig]
-    allowed_actions: Optional[List[AllowedAction]] = None
+    actions: list[ActionConfig]
+    allowed_actions: Optional[list[AllowedAction]] = None
     start_at: Optional[datetime.datetime] = None
     item: Optional[ActionItem] = None
     item_policy: EscalationPolicy = EscalationPolicy.ROOT

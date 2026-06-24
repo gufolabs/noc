@@ -612,7 +612,7 @@ class ObjectModel(Document):
             return True
         return any(name in (c.input, c.output) for c in self.cross)
 
-    def iter_connection_proposals(self, name: str) -> Iterable[Tuple["ObjectId", str]]:
+    def iter_connection_proposals(self, name: str) -> Iterable[tuple["ObjectId", str]]:
         """
         Iterate possible connections from given one.
 
@@ -639,7 +639,7 @@ class ObjectModel(Document):
     @classmethod
     def check_connection(
         cls, lc: "ObjectModelConnection", rc: "ObjectModelConnection"
-    ) -> Tuple[bool, str]:
+    ) -> tuple[bool, str]:
         """
 
         :param lc:
@@ -664,7 +664,7 @@ class ObjectModel(Document):
         return True, ""
 
     @classmethod
-    def get_model(cls, vendor: "Vendor", part_no: Union[List[str], str]) -> Optional["ObjectModel"]:
+    def get_model(cls, vendor: "Vendor", part_no: Union[list[str], str]) -> Optional["ObjectModel"]:
         """
         Get ObjectModel by part part_no,
         Search order:

@@ -21,7 +21,7 @@ class CapsConfig:
     ref_scope: Optional[str] = None
     set_label: Optional[str] = None
     required: bool = False
-    expose_models: Optional[List[str]] = None
+    expose_models: Optional[list[str]] = None
 
 
 @dataclass(frozen=True)
@@ -64,7 +64,7 @@ class CapsValue:
             "editor": self.capability.get_editor() if self.config.allow_manual else None,
         }
 
-    def get_labels(self) -> Optional[List[str]]:
+    def get_labels(self) -> Optional[list[str]]:
         """Get caps Label"""
         if not self.config.set_label:
             return None

@@ -17,7 +17,7 @@ from .base import BaseCDAGNode, ValueType, Category
 
 
 class MeanNodeState(BaseModel):
-    values: List[float] = []
+    values: list[float] = []
 
 
 class MeanNodeConfig(BaseModel):

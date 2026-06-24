@@ -46,7 +46,7 @@ class QuizChange(EmbeddedDocument):
     changes = StringField()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"date": self.date.isoformat(), "changes": self.changes}
 
 
@@ -60,7 +60,7 @@ class QuizQuestion(EmbeddedDocument):
     when = StringField(default="True")
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"name": self.name, "question": self.question, "type": self.type, "when": self.when}
 
 
@@ -100,7 +100,7 @@ class Quiz(Document):
         return Quiz.objects.filter(name=name).first()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "$collection": self._meta["json_collection"],

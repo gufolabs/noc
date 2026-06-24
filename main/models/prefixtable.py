@@ -59,8 +59,8 @@ class PrefixTable(NOCModel):
 
     @classmethod
     def iter_match_prefix(
-        cls, prefixes: Union[str, List[str]]
-    ) -> Iterable[Tuple["PrefixTable", str]]:
+        cls, prefixes: Union[str, list[str]]
+    ) -> Iterable[tuple["PrefixTable", str]]:
         if isinstance(prefixes, str):
             prefixes = [prefixes]
         pp = [IP.prefix(prefix) for prefix in prefixes]
@@ -71,7 +71,7 @@ class PrefixTable(NOCModel):
             yield pt.table, "<"
 
     @classmethod
-    def iter_lazy_labels(cls, prefixes: Union[str, List[str]]):
+    def iter_lazy_labels(cls, prefixes: Union[str, list[str]]):
         for pt, condition in cls.iter_match_prefix(prefixes):
             yield f"noc::prefixfilter::{pt.name}::{condition}"
 

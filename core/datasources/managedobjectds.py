@@ -302,8 +302,8 @@ class ManagedObjectDS(BaseDataSource):
 
     @classmethod
     async def iter_caps(
-        cls, caps: List[Dict[str, Any]], requested_caps: Dict[str, Any] = None
-    ) -> AsyncIterable[Tuple[str, Any]]:
+        cls, caps: list[dict[str, Any]], requested_caps: dict[str, Any] = None
+    ) -> AsyncIterable[tuple[str, Any]]:
         """
         Consolidate capabilities list and return resulting dict of
         caps name -> caps value. First appearance of capability
@@ -320,8 +320,8 @@ class ManagedObjectDS(BaseDataSource):
 
     @classmethod
     async def iter_mappings(
-        cls, mappings: List[Dict[str, Any]], requested_mappings: Dict[str, str] = None
-    ) -> AsyncIterable[Tuple[str, Any]]:
+        cls, mappings: list[dict[str, Any]], requested_mappings: dict[str, str] = None
+    ) -> AsyncIterable[tuple[str, Any]]:
         mappings = {c["remote_system"]: c["remote_id"] for c in mappings}
         for rid, r_name in requested_mappings.items():
             yield r_name, mappings.get(rid, "")
@@ -342,7 +342,7 @@ class ManagedObjectDS(BaseDataSource):
         return False
 
     @staticmethod
-    def load_adm_path() -> Dict[str, Tuple[str, str]]:
+    def load_adm_path() -> dict[str, tuple[str, str]]:
         from django.db import connection as pg_connection
 
         with pg_connection.cursor() as cursor:
@@ -361,7 +361,7 @@ class ManagedObjectDS(BaseDataSource):
         return [mm async for mm in cls.iter_row(fields, *args, **kwargs)]
 
     @staticmethod
-    def get_filter(filters: Dict[str, Any]) -> Dict[str, Any]:
+    def get_filter(filters: dict[str, Any]) -> dict[str, Any]:
         from noc.inv.models.resourcegroup import ResourceGroup
 
         r = {}
@@ -380,7 +380,7 @@ class ManagedObjectDS(BaseDataSource):
 
     @staticmethod
     def get_diagnostic_trouble(
-        diagnostics: Dict[str, Any],
+        diagnostics: dict[str, Any],
         snmp: bool = False,
         profile: bool = False,
         cli: bool = False,
@@ -401,7 +401,7 @@ class ManagedObjectDS(BaseDataSource):
         return ""
 
     @staticmethod
-    def get_odata_serials(mo_ids) -> Dict[id, str]:
+    def get_odata_serials(mo_ids) -> dict[id, str]:
         """
         Get serial numbers data from `data` field in `inv.Object` model
         """
@@ -438,7 +438,7 @@ class ManagedObjectDS(BaseDataSource):
         return res
 
     @staticmethod
-    def get_locations() -> Dict[str, str]:
+    def get_locations() -> dict[str, str]:
         """
         Get object locations (physical addresses) from `inv.Object` model
         """
@@ -477,7 +477,7 @@ class ManagedObjectDS(BaseDataSource):
         return res
 
     @staticmethod
-    def get_location(locations: Dict[str, str], c_path: List[str]) -> str:
+    def get_location(locations: dict[str, str], c_path: list[str]) -> str:
         for c in reversed(c_path):
             location = locations.get(c)
             if location:
@@ -488,11 +488,11 @@ class ManagedObjectDS(BaseDataSource):
     async def iter_query(
         cls,
         fields: Optional[Iterable[str]] = None,
-        admin_domain_ads: Optional[List[int]] = None,
+        admin_domain_ads: Optional[list[int]] = None,
         *args,
         user=None,
         **kwargs,
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         fields = set(fields or [])
         q_fields, q_caps, q_maps = [], defaultdict(list), {}
         adm_paths = {}

@@ -33,11 +33,11 @@ class ZkConfigCollector(BaseModel, extra="allow"):
     type: str
     service: int
     interval: int
-    labels: List[str]
+    labels: list[str]
 
 
 class ZkConfig(BaseModel):
     version: str = Field("1", alias="$version")
     type: str = Field("zeroconf", alias="$type")
     config: ZkConfigConfig
-    collectors: List[ZkConfigCollector]
+    collectors: list[ZkConfigCollector]

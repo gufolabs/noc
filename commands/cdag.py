@@ -63,7 +63,7 @@ class Command(BaseCommand):
             f.write(cdag.get_dot())
 
     @staticmethod
-    def input_from_file(f_input: str) -> Iterable[Dict[str, Union[float, str]]]:
+    def input_from_file(f_input: str) -> Iterable[dict[str, Union[float, str]]]:
         with open(f_input) as f:
             for line in f:
                 line = line.strip()
@@ -92,7 +92,7 @@ class Command(BaseCommand):
                 self.die(f"Interface {iface} is not found")
         return source
 
-    def input_from_device(self, source: str, metrics: List[str]):
+    def input_from_device(self, source: str, metrics: list[str]):
         from noc.core.clickhouse.connect import connection
         from noc.sla.models.slaprobe import SLAProbe
 
@@ -161,8 +161,8 @@ class Command(BaseCommand):
             yield row
 
     def iter_metrics(
-        self, f_input: Optional[str], metrics: Optional[List[str]] = None
-    ) -> Iterable[Dict[str, Union[float, str]]]:
+        self, f_input: Optional[str], metrics: Optional[list[str]] = None
+    ) -> Iterable[dict[str, Union[float, str]]]:
         if (
             f_input.startswith("cpu://")
             or f_input.startswith("iface://")
@@ -232,7 +232,7 @@ class Command(BaseCommand):
         if f_output:
             f_output.close()
 
-    def from_config_paths(self, paths: List[str]) -> CDAG:
+    def from_config_paths(self, paths: list[str]) -> CDAG:
         from noc.core.mongo.connection import connect
 
         connect()

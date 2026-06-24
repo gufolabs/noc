@@ -41,7 +41,7 @@ class LineTokenizer(BaseTokenizer):
         self.string_quote = string_quote
         self.rewrite = rewrite
 
-    def iter_lines(self) -> Iterator[Tuple[str]]:
+    def iter_lines(self) -> Iterator[tuple[str]]:
         dl = len(self.data)
         i = 0
         leol = len(self.eol)
@@ -53,29 +53,29 @@ class LineTokenizer(BaseTokenizer):
             yield self.data[i:ni]
             i = ni + leol
 
-    def iter_line_comments(self, iter: Iterable) -> Iterator[Tuple[str]]:
+    def iter_line_comments(self, iter: Iterable) -> Iterator[tuple[str]]:
         for line in iter:
             if not line.lstrip().startswith(self.line_comment):
                 yield line
 
-    def iter_inline_comments(self, iter: Iterable) -> Iterator[Tuple[str]]:
+    def iter_inline_comments(self, iter: Iterable) -> Iterator[tuple[str]]:
         for line in iter:
             i = line.find(self.inline_comment)
             if i != -1:
                 line = line[:i]
             yield line
 
-    def iter_not_empty(self, iter: Iterable) -> Iterator[Tuple[str]]:
+    def iter_not_empty(self, iter: Iterable) -> Iterator[tuple[str]]:
         for line in iter:
             if line.strip():
                 yield line
 
-    def iter_untabify(self, iter: Iterable) -> Iterator[Tuple[str]]:
+    def iter_untabify(self, iter: Iterable) -> Iterator[tuple[str]]:
         tr = " " * self.tab_width
         for line in iter:
             yield line.replace("\t", tr)
 
-    def iter_rewrite(self, iter: Iterable) -> Iterator[Tuple[str]]:
+    def iter_rewrite(self, iter: Iterable) -> Iterator[tuple[str]]:
         """
         Apply `rewrite`
         :param iter:
@@ -88,7 +88,7 @@ class LineTokenizer(BaseTokenizer):
                     break
             yield line
 
-    def iter_line_tokens(self, line) -> Iterator[Tuple[str]]:
+    def iter_line_tokens(self, line) -> Iterator[tuple[str]]:
         """
         Iterate line tokens
         :param line:
@@ -101,7 +101,7 @@ class LineTokenizer(BaseTokenizer):
                 line = line[match.end() :]
         yield from line.split()
 
-    def iter_line_quoted_tokens(self, line) -> Iterator[Tuple[str]]:
+    def iter_line_quoted_tokens(self, line) -> Iterator[tuple[str]]:
         """
         Iterate line tokens considering strings
         :param line:
@@ -132,7 +132,7 @@ class LineTokenizer(BaseTokenizer):
             # No quoted strings
             yield from line.split()
 
-    def __iter__(self) -> Iterator[Tuple[str]]:
+    def __iter__(self) -> Iterator[tuple[str]]:
         g = self.iter_lines()
         if self.tab_width:
             g = self.iter_untabify(g)

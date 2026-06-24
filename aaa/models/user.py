@@ -275,7 +275,7 @@ class User(NOCModel):
         return must_change(self.password)
 
     @property
-    def contacts(self) -> List[NotificationContact]:
+    def contacts(self) -> list[NotificationContact]:
         from .usercontact import UserContact
 
         return [
@@ -289,7 +289,7 @@ class User(NOCModel):
         ]
 
     @property
-    def active_contacts(self) -> List[NotificationContact]:
+    def active_contacts(self) -> list[NotificationContact]:
         """
         Get list of currently active contacts
 

@@ -25,7 +25,7 @@ class DumpNodeConfig(BaseModel):
 NS = 1_000_000_000
 
 # scope -> name -> cleaner
-scope_cleaners: Dict[str, Dict[str, Callable]] = {}
+scope_cleaners: dict[str, dict[str, Callable]] = {}
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +40,7 @@ class DumpNode(BaseCDAGNode):
     config_cls = DumpNodeConfig
     dot_shape = "folder"
 
-    def get_value(self, ts: int, labels: List[str], **kwargs) -> None:
+    def get_value(self, ts: int, labels: list[str], **kwargs) -> None:
         r = []
         for k, v in kwargs.items():
             if v is None:

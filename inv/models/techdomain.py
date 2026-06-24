@@ -128,8 +128,8 @@ class TechDomain(Document):
         return TechDomain.objects.filter(bi_id=bi_id).first()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
-        r: Dict[str, Any] = {
+    def json_data(self) -> dict[str, Any]:
+        r: dict[str, Any] = {
             "name": self.name,
             "$collection": self._meta["json_collection"],
             "uuid": self.uuid,

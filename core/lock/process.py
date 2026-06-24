@@ -41,10 +41,10 @@ class ProcessLock(BaseLock):
         """
         super().__init__(category, owner, ttl=ttl)
         self.lock_id_seq = itertools.count()
-        self.items: Dict[str, Set[str]] = {}
+        self.items: dict[str, set[str]] = {}
         self.items_condition = Condition()
 
-    def acquire_by_items(self, items: List[str], ttl: Optional[float] = None) -> str:
+    def acquire_by_items(self, items: list[str], ttl: Optional[float] = None) -> str:
         """
         Acquire lock by list of items
         """

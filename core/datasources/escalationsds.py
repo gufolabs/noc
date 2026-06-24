@@ -45,7 +45,7 @@ class EscalationsDS(BaseDataSource):
         fields: Optional[Iterable[str]] = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         start: datetime.datetime = kwargs.get("start")
         end: datetime.datetime = kwargs.get("end")
         q = {

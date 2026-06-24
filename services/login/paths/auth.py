@@ -134,7 +134,7 @@ api_key_cache = cachetools.TTLCache(100, ttl=3)
 
 
 @cachetools.cached(api_key_cache)
-def get_api_access(key: str, ip: str) -> Tuple[str, str]:
+def get_api_access(key: str, ip: str) -> tuple[str, str]:
     """
     Cached API key data
 

@@ -31,7 +31,7 @@ class CHWriterService(FastAPIService):
 
     def __init__(self):
         super().__init__()
-        self.channels: Dict[str, Channel] = {}
+        self.channels: dict[str, Channel] = {}
         self.last_ts = None
         self.last_metrics = 0
         self.table_fields = {}  # table name -> fields
@@ -106,7 +106,7 @@ class CHWriterService(FastAPIService):
             ):
                 await channel.feed(msg)
 
-    async def process_stream_bulk(self, streams: List[str]) -> None:
+    async def process_stream_bulk(self, streams: list[str]) -> None:
         self.logger.info("[%s] Subscribing", streams)
         for stream in streams:
             table = stream[3:]

@@ -158,8 +158,8 @@ class InterfaceClassifierLabels:
         return None
 
     def get_labels(
-        self, match_rules: List[Dict[str, Any]], rule_name: Optional[str] = None
-    ) -> List[str]:
+        self, match_rules: list[dict[str, Any]], rule_name: Optional[str] = None
+    ) -> list[str]:
         """
 
         :param match_rules:

@@ -43,7 +43,7 @@ class InterfacesStatusStatDS(BaseDataSource):
         return str(speed)
 
     @classmethod
-    def get_result(cls, fields: Dict[str, int], statuses: List[Dict[str, int]]) -> Dict[str, int]:
+    def get_result(cls, fields: dict[str, int], statuses: list[dict[str, int]]) -> dict[str, int]:
         # @todo Column filter
         r = fields.copy()
         for ss in statuses:
@@ -56,7 +56,7 @@ class InterfacesStatusStatDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         match = {"type": "physical"}
         query_fields = {ff.name: None for ff in cls.fields if not fields or ff.name in fields}
         row_num = 0

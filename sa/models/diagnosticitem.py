@@ -30,7 +30,7 @@ class CheckItem(EmbeddedDocument):
 
     name: str = StringField(required=True)
     status: bool = BooleanField(required=True)
-    args: Dict[str, str] = DictField(required=False)
+    args: dict[str, str] = DictField(required=False)
     skipped: bool = BooleanField(default=False)
     expired: Optional[datetime.datetime] = DateTimeField(required=False)
     source: InputSource = EnumField(InputSource, required=True, default=InputSource.UNKNOWN)
@@ -70,7 +70,7 @@ class DiagnosticItem(EmbeddedDocument):
 
     diagnostic = StringField(required=True)
     state: DiagnosticState = EnumField(DiagnosticState, default=DiagnosticState("unknown"))
-    checks: Optional[List[CheckItem]] = EmbeddedDocumentListField(CheckItem)
+    checks: Optional[list[CheckItem]] = EmbeddedDocumentListField(CheckItem)
     reason: Optional[str] = StringField(required=False)
     changed: Optional[datetime.datetime] = DateTimeField(required=False)
 

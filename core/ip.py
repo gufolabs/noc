@@ -131,7 +131,7 @@ class IP:
             if (count and n >= count) or (until and a == until):
                 return
 
-    def iter_cover(self, mask: int) -> Iterable[Type["IP"]]:
+    def iter_cover(self, mask: int) -> Iterable[type["IP"]]:
         """
         Generate prefixes of size _mask_ covering basic prefix
         """
@@ -147,7 +147,7 @@ class IP:
             yield s
             s += dist
 
-    def iter_free(self, prefixes: List[Union[str, Type["IP"]]]):
+    def iter_free(self, prefixes: list[Union[str, type["IP"]]]):
         """
         Return generator of free prefixes.
 
@@ -316,7 +316,7 @@ class IPv4(IP):
                 break
         return n
 
-    def _get_parts(self) -> List[int]:
+    def _get_parts(self) -> list[int]:
         """
         get list of 4 integers (IPv4 octets)
 
@@ -1039,7 +1039,7 @@ class PrefixDB:
             yield root.__class__.from_bits(bits)
 
     @classmethod
-    def from_prefixes(cls, prefixes: List["IPv4"], key) -> "PrefixDB":
+    def from_prefixes(cls, prefixes: list["IPv4"], key) -> "PrefixDB":
         pdb = PrefixDB()
         for p in prefixes:
             pdb[p] = key

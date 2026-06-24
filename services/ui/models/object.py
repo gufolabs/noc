@@ -26,8 +26,8 @@ class DefaultObjectItem(BaseModel):
     name: str
     model: Reference
     bi_id: str
-    labels: List[LabelItem]
-    effective_labels: List[LabelItem]
+    labels: list[LabelItem]
+    effective_labels: list[LabelItem]
     container: Optional[Reference] = None
     layer: Optional[Reference] = None
     point: Optional[PointItem] = None
@@ -38,5 +38,5 @@ class DefaultObjectItem(BaseModel):
 class FormObjectItem(BaseModel):
     name: str
     model: Reference
-    labels: List[LabelItem]
+    labels: list[LabelItem]
     container: Optional[Reference] = None

@@ -495,7 +495,7 @@ class Script(BaseScript):
             interfaces[iface["name"]] = iface
         return [{"interfaces": list(interfaces.values())}]
 
-    def get_port_id(self, ifindex: int) -> Tuple[int, int, int, int]:
+    def get_port_id(self, ifindex: int) -> tuple[int, int, int, int]:
         # Convert ifindex to rack, shelf, slot, port
         slot_id = ifindex >> 16
         rack, shelf, slot = self.profile.get_slot(slot_id)

@@ -20,7 +20,7 @@ router = APIRouter()
 
 
 class ObjectStatusRequest(BaseModel):
-    objects: List[Union[str, int]]
+    objects: list[Union[str, int]]
 
 
 class Status(BaseModel):
@@ -29,7 +29,7 @@ class Status(BaseModel):
 
 
 class ObjectStatusResponse(BaseModel):
-    statuses: List[Status]
+    statuses: list[Status]
 
 
 class ObjectStatusAPI(NBIAPI):

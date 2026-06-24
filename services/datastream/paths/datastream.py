@@ -38,7 +38,7 @@ def get_format_role(ds, fmt):
     return ds.get_format_role(fmt)
 
 
-def get_access_tokens_set(datastream, fmt: Optional[str] = None) -> Set[str]:
+def get_access_tokens_set(datastream, fmt: Optional[str] = None) -> set[str]:
     tokens = {"datastream:*", f"datastream:{datastream.name}"}
     if fmt:
         role = get_format_role(datastream, fmt)
@@ -59,7 +59,7 @@ class DatastreamAPI:
         self.setup_datastream()
 
     @staticmethod
-    def get_datastreams() -> List["DataStream"]:
+    def get_datastreams() -> list["DataStream"]:
         r = []
         for name in loader:
             if not getattr(config.datastream, f"enable_{name}", False):
@@ -182,8 +182,8 @@ class DatastreamAPI:
     def get_datastream_handler(self, datastream: "DataStream") -> Callable:
         async def inner_datastream(
             limit: Optional[int] = datastream.DEFAULT_LIMIT,
-            ds_filter: Optional[List[str]] = Query(None, alias="filter"),
-            ds_id: Optional[List[str]] = Query(None, alias="id"),
+            ds_filter: Optional[list[str]] = Query(None, alias="filter"),
+            ds_id: Optional[list[str]] = Query(None, alias="id"),
             ds_format: Optional[str] = Query(None, alias="format"),
             ds_from: Optional[str] = Query(None, alias="from"),
             ds_filter_policy: Optional[str] = Query(

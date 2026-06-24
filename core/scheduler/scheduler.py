@@ -158,7 +158,7 @@ class Scheduler:
             self.executor = ThreadPoolExecutor(self.max_threads, name=self.name)
         return self.executor
 
-    def reset_to_waiting(self, statuses: List[str]) -> None:
+    def reset_to_waiting(self, statuses: list[str]) -> None:
         """
         Reset all running jobs to waiting status
         """
@@ -175,7 +175,7 @@ class Scheduler:
         else:
             self.logger.info("Failed to reset jobs")
 
-    def suspend_keys(self, keys: List[int], suspend: bool = True):
+    def suspend_keys(self, keys: list[int], suspend: bool = True):
         self.logger.debug("Suspend jobs")
         r = self.get_collection().update_many(
             self.get_query({Job.ATTR_KEY: {"$in": keys}}),

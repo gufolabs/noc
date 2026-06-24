@@ -58,7 +58,7 @@ class WatchItem:
     remote_system: Optional[str] = None
     # deadline
     # Reaction ? User ?, Reason
-    args: Optional[Dict[str, str]] = None
+    args: Optional[dict[str, str]] = None
 
     def get_action(self) -> Optional[ActionType]:
         """Return Object Action"""

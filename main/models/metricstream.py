@@ -87,7 +87,7 @@ class MetricStream(Document):
         r += ["    return v"]
         return "\n".join(r)
 
-    def _get_transform(self) -> Callable[[Dict[str, Any]], Dict[str, Any]]:
+    def _get_transform(self) -> Callable[[dict[str, Any]], dict[str, Any]]:
         """
         Generate label -> path function for scope
         :return:
@@ -105,5 +105,5 @@ class MetricStream(Document):
                 transform_code[self.scope.name] = fn
         return fn
 
-    def to_mx(self, m: Dict[str, Any]) -> Dict[str, Any]:
+    def to_mx(self, m: dict[str, Any]) -> dict[str, Any]:
         return self._get_transform()(m)

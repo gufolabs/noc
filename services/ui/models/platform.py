@@ -21,8 +21,8 @@ class DefaultPlatformItem(BaseModel):
     id: str
     name: str
     vendor: Reference
-    labels: List[LabelItem]
-    effective_labels: List[LabelItem]
+    labels: list[LabelItem]
+    effective_labels: list[LabelItem]
     full_name: Optional[str] = None
     description: Optional[str] = None
     start_of_sale: Optional[datetime.datetime] = None
@@ -30,7 +30,7 @@ class DefaultPlatformItem(BaseModel):
     end_of_support: Optional[datetime.datetime] = None
     end_of_xsupport: Optional[datetime.datetime] = None
     snmp_sysobjectid: Optional[str] = None
-    aliases: Optional[List[str]] = None
+    aliases: Optional[list[str]] = None
     uuid: Optional[str] = None
     bi_id: Optional[str] = None
 
@@ -44,4 +44,4 @@ class FormPlatformItem(BaseModel):
     end_of_support: Optional[datetime.datetime] = None
     end_of_xsupport: Optional[datetime.datetime] = None
     snmp_sysobjectid: Optional[str] = None
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None

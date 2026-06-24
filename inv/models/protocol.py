@@ -155,7 +155,7 @@ class ProtocolAttr(EmbeddedDocument):
         return f"{self.interface}.{self.attr} = {self.value}"
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "interface": self.interface,
             "attr": self.attr,
@@ -171,7 +171,7 @@ class DiscriminatorAttr(EmbeddedDocument):
         return self.code
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"code": self.code, "data": [d.json_data for d in self.data]}
 
 
@@ -198,7 +198,7 @@ class Protocol(Document):
     description = StringField()
     uuid = UUIDField(binary=True)
     technology: "Technology" = PlainReferenceField(Technology)
-    data: List["ProtocolAttr"] = EmbeddedDocumentListField(ProtocolAttr)
+    data: list["ProtocolAttr"] = EmbeddedDocumentListField(ProtocolAttr)
     connection_schema = StringField(
         choices=[
             ("U", "Unidirectional"),
@@ -258,7 +258,7 @@ class Protocol(Document):
         return None
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "code": self.code,
@@ -315,7 +315,7 @@ class Protocol(Document):
             yield ProtocolVariant(self, ">", code)
 
     def get_discriminator_source(
-        self, data: Optional[List[ProtocolAttr]] = None
+        self, data: Optional[list[ProtocolAttr]] = None
     ) -> Optional[BaseDiscriminatorSource]:
         from noc.core.protodcsources.loader import loader
 

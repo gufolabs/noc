@@ -105,7 +105,7 @@ class ManagedObjectDPDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         num = 1
         for p in Pool.objects.all():
             pool_ids = list(ManagedObject.objects.filter(pool=p).values_list("id", flat=True))

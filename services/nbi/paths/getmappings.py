@@ -23,9 +23,9 @@ router = APIRouter()
 
 class GetMappingsRequest(BaseModel):
     scope: Optional[str] = None
-    id: Optional[Union[str, List[str]]] = None
+    id: Optional[Union[str, list[str]]] = None
     remote_system: Optional[str] = None
-    remote_id: Optional[Union[str, List[str]]] = None
+    remote_id: Optional[Union[str, list[str]]] = None
 
 
 class Mapping(BaseModel):
@@ -36,7 +36,7 @@ class Mapping(BaseModel):
 class GetMappingsResponseItem(BaseModel):
     scope: str
     id: str
-    mappings: List[Mapping]
+    mappings: list[Mapping]
 
 
 class GetMappingsAPI(NBIAPI):
@@ -73,7 +73,7 @@ class GetMappingsAPI(NBIAPI):
             "path": "/api/nbi/getmappings",
             "method": "GET",
             "endpoint": self.handler_get,
-            "response_model": List[GetMappingsResponseItem],
+            "response_model": list[GetMappingsResponseItem],
             "name": "getmappings",
             "description": "Allows remote system to query mappings between NOC's local identifiers (ID) and the remote system's one.",
         }
@@ -81,7 +81,7 @@ class GetMappingsAPI(NBIAPI):
             "path": "/api/nbi/getmappings",
             "method": "POST",
             "endpoint": self.handler_post,
-            "response_model": List[GetMappingsResponseItem],
+            "response_model": list[GetMappingsResponseItem],
             "name": "getmappings",
             "description": "Allows remote system to query mappings between NOC's local identifiers (ID) and the remote system's one.",
         }
@@ -90,9 +90,9 @@ class GetMappingsAPI(NBIAPI):
     async def handler_get(
         self,
         scope: Optional[str] = None,
-        id: Optional[List[str]] = Query(None),
+        id: Optional[list[str]] = Query(None),
         remote_system: Optional[str] = None,
-        remote_id: Optional[List[str]] = Query(None),
+        remote_id: Optional[list[str]] = Query(None),
         access_header: str = Header(..., alias=API_ACCESS_HEADER),
     ):
         if not self.access_granted(access_header):

@@ -27,7 +27,7 @@ class Script(BaseScript):
         re.IGNORECASE,
     )
 
-    def normalize_platform(self, oid: str) -> Tuple[str, Optional[str], Optional[str]]:
+    def normalize_platform(self, oid: str) -> tuple[str, Optional[str], Optional[str]]:
         """
         Normalize platform name from OID String
 

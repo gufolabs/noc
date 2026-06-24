@@ -41,7 +41,7 @@ class AlarmRootCauseCondition(EmbeddedDocument):
         )
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {"name": self.name, "root__name": self.root.name, "window": self.window}
         if self.condition:
             r["condition"] = self.condition

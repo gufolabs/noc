@@ -54,7 +54,7 @@ class RenderTemplate:
     subject_template: JTemplate
     body_template: JTemplate
 
-    def render_body(self, ctx: Dict[str, Any]) -> bytes:
+    def render_body(self, ctx: dict[str, Any]) -> bytes:
         return orjson.dumps(
             {
                 "subject": self.subject_template.render(**ctx),
@@ -67,7 +67,7 @@ class RenderTemplate:
 class TransmuteTemplate:
     template: JTemplate
 
-    def render_body(self, ctx: Dict[str, Any]) -> Dict[str, Any]:
+    def render_body(self, ctx: dict[str, Any]) -> dict[str, Any]:
         return orjson.loads(self.template.render(**ctx).encode(encoding=DEFAULT_ENCODING))
 
 
@@ -95,16 +95,16 @@ class HeaderMatchItem:
 
 @dataclass(frozen=True)
 class MatchItem:
-    labels: Optional[List[str]] = None
-    exclude_labels: Optional[List[str]] = None
-    administrative_domain: Optional[List[int]] = None
-    resource_groups: Optional[List[str]] = None
-    remote_systems: Optional[List[str]] = None
+    labels: Optional[list[str]] = None
+    exclude_labels: Optional[list[str]] = None
+    administrative_domain: Optional[list[int]] = None
+    resource_groups: Optional[list[str]] = None
+    remote_systems: Optional[list[str]] = None
     profile: Optional[str] = None
-    headers: Optional[List[HeaderMatchItem]] = None
+    headers: Optional[list[HeaderMatchItem]] = None
 
     @classmethod
-    def from_data(cls, data: List[Dict[str, Any]]) -> List["MatchItem"]:
+    def from_data(cls, data: list[dict[str, Any]]) -> list["MatchItem"]:
         r = []
         for match in data:
             r += [
@@ -169,16 +169,16 @@ class Route:
 
     def __init__(self, name: str, r_type: str, order: int, telemetry_sample: Optional[int] = None):
         self.name = name
-        self.type: FrozenSet[bytes] = (
+        self.type: frozenset[bytes] = (
             frozenset([r_type.encode()])
             if isinstance(r_type, str)
             else frozenset(x.encode() for x in r_type)
         )
         self.order = order
         self.telemetry_sample = telemetry_sample or 0
-        self.match_co: Optional[Callable[[Dict[str, Any]], bool]] = None  # Code object for matcher
-        self.actions: List[Action] = []
-        self.transmute_handler: Optional[Callable[[Dict[str, bytes], T_BODY], T_BODY]] = None
+        self.match_co: Optional[Callable[[dict[str, Any]], bool]] = None  # Code object for matcher
+        self.actions: list[Action] = []
+        self.transmute_handler: Optional[Callable[[dict[str, bytes], T_BODY], T_BODY]] = None
         self.transmute_template: Optional[TransmuteTemplate] = None
 
     def __str__(self):
@@ -188,10 +188,10 @@ class Route:
         return f"{self.name} ({self.type}, {self.order}): {self.actions}"
 
     @property
-    def m_types(self) -> FrozenSet[bytes]:
+    def m_types(self) -> frozenset[bytes]:
         return self.type
 
-    def get_match_ctx(self, msg: Message) -> Dict[MessageMeta, Any]:
+    def get_match_ctx(self, msg: Message) -> dict[MessageMeta, Any]:
         ctx = {}
         if msg.headers.get(MX_LABELS):
             ctx[MessageMeta.LABELS] = frozenset(
@@ -219,7 +219,7 @@ class Route:
             return True
         return self.match_co(self.get_match_ctx(msg))
 
-    def transmute(self, headers: Dict[str, bytes], data: T_BODY) -> Union[bytes, Dict[str, Any]]:
+    def transmute(self, headers: dict[str, bytes], data: T_BODY) -> Union[bytes, dict[str, Any]]:
         """
         Transmute message body and apply template
         Attrs:
@@ -239,7 +239,7 @@ class Route:
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], T_BODY]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], T_BODY]]:
         """
         Iterate over available actions
 
@@ -248,7 +248,7 @@ class Route:
         for a in self.actions:
             yield from a.iter_action(msg, message_type)
 
-    def set_type(self, r_type: Union[str, FrozenSet[bytes]]):
+    def set_type(self, r_type: Union[str, frozenset[bytes]]):
         if isinstance(r_type, str):
             self.type = frozenset([r_type.encode(encoding=DEFAULT_ENCODING)])
         else:
@@ -266,7 +266,7 @@ class Route:
         return True
 
     @classmethod
-    def get_matcher(cls, match) -> Optional[Callable[[Dict[str, Any]], bool]]:
+    def get_matcher(cls, match) -> Optional[Callable[[dict[str, Any]], bool]]:
         """"""
         expr = []
         for r in MatchItem.from_data(match):
@@ -328,12 +328,12 @@ class DefaultNotificationRoute(Route):
             return True
         return MX_NOTIFICATION_GROUP_ID in msg.headers
 
-    def transmute(self, headers: Dict[str, bytes], data: bytes) -> Union[bytes, Dict[str, Any]]:
+    def transmute(self, headers: dict[str, bytes], data: bytes) -> Union[bytes, dict[str, Any]]:
         return data
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], T_BODY]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], T_BODY]]:
         if MX_NOTIFICATION_GROUP_ID in msg.headers:
             yield from self.message_action.iter_action(msg, message_type)
         elif MX_FWD_ROUTER in msg.headers:
@@ -359,7 +359,7 @@ class DefaultJobRoute(Route):
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], T_BODY]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], T_BODY]]:
         yield from self.job_action.iter_action(msg, message_type)
 
 
@@ -387,5 +387,5 @@ class DefaultETLEventRoute(Route):
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], T_BODY]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], T_BODY]]:
         yield from self.job_action.iter_action(msg, message_type)

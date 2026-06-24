@@ -32,8 +32,8 @@ DEFAULT_MODBUS_TCP_SLAVE = 255
 def find_agent(
     agent_id: Optional[str] = None,
     serial: Optional[str] = None,
-    mac: Optional[List[str]] = None,
-    ip: Optional[List[str]] = None,
+    mac: Optional[list[str]] = None,
+    ip: Optional[list[str]] = None,
 ):
     """
     Find agent by combination of credentials
@@ -47,7 +47,7 @@ def find_agent(
         # Direct id is set
         return Agent.get_by_bi_id(int(agent_id))
     # Try serial
-    agents: List[Agent] = []
+    agents: list[Agent] = []
     if serial:
         agents = list(Agent.objects.filter(serial=serial))
         if len(agents) == 1:

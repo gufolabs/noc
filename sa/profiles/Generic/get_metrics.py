@@ -63,7 +63,7 @@ class MetricConfig:
     ):
         self.id: int = id
         self.metric: str = metric
-        self.labels: List[str] = labels
+        self.labels: list[str] = labels
         self.oid: str = oid
         self.ifindex: int = ifindex
         self.service: int = service
@@ -81,7 +81,7 @@ class ProfileMetricConfig:
     __slots__ = ("metric", "oid", "scale", "sla_types", "units")
     metric: str
     oid: str
-    sla_types: List[str]
+    sla_types: list[str]
     scale: int
     units: str
 
@@ -92,7 +92,7 @@ class BatchConfig:
     def __init__(self, id, metric, labels, type, scale, units, service=None):
         self.id: int = id
         self.metric: str = metric
-        self.labels: List[str] = labels
+        self.labels: list[str] = labels
         self.type: str = type
         self.scale = scale
         self.units = units
@@ -310,15 +310,15 @@ class Script(BaseScript, metaclass=MetricScriptBase):
         self.ts: Optional[int] = None
         # SNMP batch to be collected by collect_snmp_metrics
         # oid -> BatchConfig
-        self.snmp_batch: Dict[str, List[BatchConfig]] = defaultdict(list)
+        self.snmp_batch: dict[str, list[BatchConfig]] = defaultdict(list)
         # Collected metric ids
         self.seen_ids = set()
         # get_labels_hash(metric type, labels) -> metric config
-        self.metric_labels: Dict[str, List[MetricConfig]] = {}
-        self.sla_metrics: Dict[Tuple[str, str], int] = {}
-        self.cpe_metrics: Dict[Tuple[str, str], int] = {}
+        self.metric_labels: dict[str, list[MetricConfig]] = {}
+        self.sla_metrics: dict[tuple[str, str], int] = {}
+        self.cpe_metrics: dict[tuple[str, str], int] = {}
         # metric type -> [metric config]
-        self.metric_configs: Dict[str, List[MetricConfig]] = defaultdict(list)
+        self.metric_configs: dict[str, list[MetricConfig]] = defaultdict(list)
 
     def get_snmp_metrics_get_timeout(self) -> int:
         """
@@ -336,13 +336,13 @@ class Script(BaseScript, metaclass=MetricScriptBase):
         return self.profile.snmp_metrics_get_chunk
 
     @staticmethod
-    def get_labels_hash(metric: str, labels: List[str]):
+    def get_labels_hash(metric: str, labels: list[str]):
         if labels:
             return "\x00".join([metric, *labels])
         return metric
 
     def execute(
-        self, metrics: Optional[List[Dict[str, Any]]] = None, collected: List[Dict[str, Any]] = None
+        self, metrics: Optional[list[dict[str, Any]]] = None, collected: list[dict[str, Any]] = None
     ):
         """
         Metrics is a list of:
@@ -354,10 +354,10 @@ class Script(BaseScript, metaclass=MetricScriptBase):
         * sla_test - optional sla test inventory
         """
         # Generate list of MetricConfig from input parameters
-        sla_metrics: List[MetricCollectorConfig] = []
-        cpe_metrics: List[MetricCollectorConfig] = []
-        sensor_metrics: List[MetricCollectorConfig] = []
-        object_metrics: List[MetricConfig] = []
+        sla_metrics: list[MetricCollectorConfig] = []
+        cpe_metrics: list[MetricCollectorConfig] = []
+        sensor_metrics: list[MetricCollectorConfig] = []
+        object_metrics: list[MetricConfig] = []
         if collected:
             seq_id = 1
             for coll in collected:
@@ -652,11 +652,11 @@ class Script(BaseScript, metaclass=MetricScriptBase):
 
     def set_metric(
         self,
-        id: Union[int, Tuple[str, Optional[List[str]]]],
+        id: Union[int, tuple[str, Optional[list[str]]]],
         metric: str = None,
         value: Union[int, float] = 0,
         ts: Optional[int] = None,
-        labels: Optional[Union[List[str], Tuple[str]]] = None,
+        labels: Optional[Union[list[str], tuple[str]]] = None,
         type: str = "gauge",
         scale: Union[float, int, Callable[..., float]] = 1,
         units: str = "1",
@@ -780,9 +780,9 @@ class Script(BaseScript, metaclass=MetricScriptBase):
                 labels=mc.labels,
             )
 
-    SENSOR_OID_SCALE: Dict[str, Union[int, Callable[..., float]]] = {}  # oid -> scale
+    SENSOR_OID_SCALE: dict[str, Union[int, Callable[..., float]]] = {}  # oid -> scale
 
-    def collect_sensor_metrics(self, metrics: List[MetricCollectorConfig]):
+    def collect_sensor_metrics(self, metrics: list[MetricCollectorConfig]):
         """
         Collect sensor metrics method. Configured by profile
         :param metrics:
@@ -807,14 +807,14 @@ class Script(BaseScript, metaclass=MetricScriptBase):
             except Exception:
                 continue
 
-    def collect_sla_metrics(self, metrics: List[MetricCollectorConfig]):
+    def collect_sla_metrics(self, metrics: list[MetricCollectorConfig]):
         """
         Collect for SLA metrics method. Replaced by profile
         :param metrics:
         :return:
         """
 
-    def collect_cpe_metrics(self, metrics: List[MetricCollectorConfig]):
+    def collect_cpe_metrics(self, metrics: list[MetricCollectorConfig]):
         """
         Collect for CPE metrics method. Replaced by profile
         :param metrics:

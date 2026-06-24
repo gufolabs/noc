@@ -25,7 +25,7 @@ from noc.config import config
 @dataclass
 class Message:
     value: bytes
-    headers: Dict[str, bytes]
+    headers: dict[str, bytes]
     timestamp: int
     key: int
 
@@ -80,11 +80,11 @@ class PurgatoriumData:
     source: str
     ts: Optional[datetime.datetime] = None
     remote_system: Optional[str] = None
-    labels: Optional[List[str]] = None
-    service_groups: Optional[List[ObjectId]] = None
-    client_groups: Optional[List[ObjectId]] = None
-    data: Optional[Dict[str, str]] = None
-    caps: Optional[Dict[str, str]] = None
+    labels: Optional[list[str]] = None
+    service_groups: Optional[list[ObjectId]] = None
+    client_groups: Optional[list[ObjectId]] = None
+    data: Optional[dict[str, str]] = None
+    caps: Optional[dict[str, str]] = None
     event: Optional[str] = None  # Workflow Event
     is_delete: bool = False  # Delete Flag
 
@@ -117,7 +117,7 @@ class ProtocolCheckResult:
     available: Optional[bool] = None  # Protocol (port) is available, for UDP equal to access
     access: Optional[bool] = None  # None if not check (if available False)
     credential: Optional[str] = None  # Set if access True
-    data: Dict[str, str] = None
+    data: dict[str, str] = None
     error: Optional[str] = None  # Error message
 
 
@@ -146,13 +146,13 @@ def register(
     remote_system: Optional[int] = None,
     remote_id: Optional[str] = None,
     uptime: Optional[int] = None,
-    labels: Optional[List[str]] = None,
-    service_groups: Optional[List[int]] = None,
-    clients_groups: Optional[List[int]] = None,
+    labels: Optional[list[str]] = None,
+    service_groups: Optional[list[int]] = None,
+    clients_groups: Optional[list[int]] = None,
     template: Optional[str] = None,
     is_delete: bool = False,
-    checks: Optional[List[ProtocolCheckResult]] = None,
-    capabilities: Optional[List[CapsItem]] = None,
+    checks: Optional[list[ProtocolCheckResult]] = None,
+    capabilities: Optional[list[CapsItem]] = None,
     **kwargs,
 ):
     """
@@ -233,7 +233,7 @@ def iter_discovered_object(
     from_ts: Optional[datetime.datetime] = None,
     ip_address: Optional[str] = None,
 ) -> Iterable[
-    Tuple[int, str, List[str], List[PurgatoriumData], List[ProtocolCheckResult], datetime.datetime]
+    tuple[int, str, list[str], list[PurgatoriumData], list[ProtocolCheckResult], datetime.datetime]
 ]:
     """Iter Discovered Data by query"""
     from noc.core.clickhouse.connect import connection

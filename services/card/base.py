@@ -31,7 +31,7 @@ class BaseAPI:
     # API name
     api_name: Optional[str] = None
     # Tags for OpenAPI documentation
-    openapi_tags: List[str] = []
+    openapi_tags: list[str] = []
 
     hash = None
     PREFIX = os.getcwd()

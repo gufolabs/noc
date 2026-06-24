@@ -91,7 +91,7 @@ class SLAProbe(Document):
     type = StringField(choices=[(x, x) for x in PROBE_TYPES])
     tos = IntField(min=0, max=64)
     # Capabilities
-    caps: List[CapsItem] = EmbeddedDocumentListField(CapsItem)
+    caps: list[CapsItem] = EmbeddedDocumentListField(CapsItem)
     # IP address or URL, depending on type
     target = StringField()
     # Hardware timestamps
@@ -155,7 +155,7 @@ class SLAProbe(Document):
             return si.managed_object
 
     @classmethod
-    def iter_effective_labels(cls, probe: "SLAProbe") -> List[str]:
+    def iter_effective_labels(cls, probe: "SLAProbe") -> list[str]:
         return probe.labels + probe.profile.labels
 
     @classmethod
@@ -301,7 +301,7 @@ class SLAProbe(Document):
         r = next(r, {})
         return r.get("interval", 0)
 
-    def get_message_context(self) -> Dict[str, Any]:
+    def get_message_context(self) -> dict[str, Any]:
         r = {"target": self.target, "tos": self.tos}
         if self.managed_object:
             r["source_object"] = self.managed_object.get_message_context()
@@ -312,7 +312,7 @@ class SLAProbe(Document):
             r["service"] = self.service.get_message_context()
         return r
 
-    def get_matcher_ctx(self) -> Dict[str, Any]:
+    def get_matcher_ctx(self) -> dict[str, Any]:
         """"""
         if not self.state:
             state = self.profile.workflow.get_default_state()
@@ -331,7 +331,7 @@ class SLAProbe(Document):
             r["service_groups"] = self.managed_object.effective_service_groups
         return r
 
-    def get_action_ctx(self) -> Dict[str, Any]:
+    def get_action_ctx(self) -> dict[str, Any]:
         """Context for running action"""
         return {
             "name": self.name,

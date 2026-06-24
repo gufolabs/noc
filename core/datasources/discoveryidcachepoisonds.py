@@ -47,7 +47,7 @@ class DiscoveryIDCachePoisonDS(BaseDataSource):
         pool: Optional[Pool] = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         # Find object with equal ID
         find = DiscoveryID._get_collection().aggregate(
             [

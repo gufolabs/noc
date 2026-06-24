@@ -41,8 +41,8 @@ class ManagedObjectJsonDS(JsonDSAPI):
         metric,
         name,
         user,
-        payload: Optional[Dict[str, str]] = None,
-    ) -> List[Dict[str, str]]:
+        payload: Optional[dict[str, str]] = None,
+    ) -> list[dict[str, str]]:
         """ """
         if name == "metric":
             return super().get_metrics()
@@ -63,7 +63,7 @@ class ManagedObjectJsonDS(JsonDSAPI):
 
     @staticmethod
     def resolve_object_query(
-        model_id, value, query_function: Optional[List[str]] = None, user: User = None
+        model_id, value, query_function: Optional[list[str]] = None, user: User = None
     ) -> Optional[Any]:
         """
         Resolve object in Query by Value

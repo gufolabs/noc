@@ -18,7 +18,7 @@ class Script(BaseScript):
     name = "C3Solution.PDU.get_interfaces"
     interface = IGetInterfaces
 
-    def get_hints(self, ifname: str, iftype: str) -> List[str]:
+    def get_hints(self, ifname: str, iftype: str) -> list[str]:
         if ifname.startswith("eth"):
             return ["noc::interface::role::uplink"]
 

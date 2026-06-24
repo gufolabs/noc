@@ -38,15 +38,15 @@ class ConnectionRule(EmbeddedDocument):
     scope = PlainReferenceField(ConfigurationScope, required=True)
     match_context = StringField()
     match_connection_type: Optional[ConnectionType] = PlainReferenceField(ConnectionType)
-    match_protocols: Optional[List["Protocol"]] = PlainReferenceListField(Protocol)
+    match_protocols: Optional[list["Protocol"]] = PlainReferenceListField(Protocol)
     # Param Section
     # param, is_hide, is_readonly, choices
-    allowed_params: List["ConfigurationParam"] = PlainReferenceListField(ConfigurationParam)
-    deny_params: List["ConfigurationParam"] = PlainReferenceListField(ConfigurationParam)
+    allowed_params: list["ConfigurationParam"] = PlainReferenceListField(ConfigurationParam)
+    deny_params: list["ConfigurationParam"] = PlainReferenceListField(ConfigurationParam)
     disabled = BooleanField(default=False)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {"scope__name": self.scope.name}
         if self.match_context:
             r["match_context"] = self.match_context
@@ -80,7 +80,7 @@ class ParamRule(EmbeddedDocument):
         return "%s -> %s" % (self.param, self.choices)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "param__code": self.param.code,
             "is_hide": self.is_hide,
@@ -112,14 +112,14 @@ class ObjectConfigurationRule(Document):
     name = StringField(unique=True)
     description = StringField()
     uuid = UUIDField(binary=True)
-    connection_rules: List["ConnectionRule"] = EmbeddedDocumentListField(ConnectionRule)
-    param_rules: List["ParamRule"] = EmbeddedDocumentListField(ParamRule)
+    connection_rules: list["ConnectionRule"] = EmbeddedDocumentListField(ConnectionRule)
+    param_rules: list["ParamRule"] = EmbeddedDocumentListField(ParamRule)
 
     def __str__(self):
         return self.name
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "$collection": self._meta["json_collection"],

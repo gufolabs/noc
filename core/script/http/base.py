@@ -34,7 +34,7 @@ class HTTP:
         self.script = script
         if script:  # For testing purposes
             self.logger = PrefixLoggerAdapter(script.logger, "http")
-        self.headers: Dict[str, bytes] = {}
+        self.headers: dict[str, bytes] = {}
         self.cookies: Optional[SimpleCookie] = None
         self.session_started = False
         self.request_id = 1
@@ -183,7 +183,7 @@ class HTTP:
         if self.session_started:
             self.shutdown_session()
 
-    def _process_cookies(self, headers: Dict[str, bytes], allow_multiple_header: bool = False):
+    def _process_cookies(self, headers: dict[str, bytes], allow_multiple_header: bool = False):
         """
         Process and store cookies from response headers
         :param headers:
@@ -218,7 +218,7 @@ class HTTP:
             return None
         return self.cookies.get(name)
 
-    def _get_effective_headers(self, headers: Dict[str, bytes]):
+    def _get_effective_headers(self, headers: dict[str, bytes]):
         """
         Append session headers when necessary. Apply effective cookies
         :param headers:

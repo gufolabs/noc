@@ -107,8 +107,8 @@ class DiscoveryID(Document):
 
     @staticmethod
     def _macs_as_ints(
-        ranges: Optional[List[MACRange]] = None, additional: Optional[Iterable[str]] = None
-    ) -> List[int]:
+        ranges: Optional[list[MACRange]] = None, additional: Optional[Iterable[str]] = None
+    ) -> list[int]:
         """
         Get all MAC addresses within ranges as integers.
 
@@ -120,7 +120,7 @@ class DiscoveryID(Document):
             List of MACs in integer form
         """
         # Resulting set
-        macs: Set[int]
+        macs: set[int]
         if additional:
             macs = {int(MAC(mac)) for mac in additional}
         else:
@@ -166,7 +166,7 @@ class DiscoveryID(Document):
     def submit(
         cls,
         object: ManagedObject,
-        chassis_mac: Optional[List[MACRange]] = None,
+        chassis_mac: Optional[list[MACRange]] = None,
         hostname: Optional[str] = None,
         router_id: Optional[str] = None,
         additional_macs: Optional[Iterable[str]] = None,
@@ -195,7 +195,7 @@ class DiscoveryID(Document):
             cache.delete_many([f"discovery-id-{m}" for m in macs])
         elif result is not None and macs:
             # Invalidate dereferenced macs
-            old_macs: Optional[List[int]] = result.get("macs")
+            old_macs: Optional[list[int]] = result.get("macs")
             if old_macs and old_macs != macs:
                 cache.delete_many([f"discovery-id-{m}" for m in set(old_macs) - set(macs)])
 

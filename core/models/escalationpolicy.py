@@ -49,7 +49,7 @@ class EscalationPolicy(Enum):
         return EscalationPolicy.ROOT
 
     @classmethod
-    def get_effective_policy(cls, labels: Iterable[List[str]]) -> "EscalationPolicy":
+    def get_effective_policy(cls, labels: Iterable[list[str]]) -> "EscalationPolicy":
         """
         Calculate effective policy from a sequence of labels
         """
@@ -65,7 +65,7 @@ class EscalationPolicy(Enum):
         return r
 
     @classmethod
-    def get_choices(cls) -> List[Tuple[str, str]]:
+    def get_choices(cls) -> list[tuple[str, str]]:
         """
         Get `choices` for mongo/django models
         """

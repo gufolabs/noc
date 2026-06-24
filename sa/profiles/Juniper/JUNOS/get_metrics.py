@@ -143,7 +143,7 @@ class Script(GetMetricsScript):
         has_capability="Juniper | OID | jnxCosIfqStatsTable",
         access="S",  # CLI version
     )
-    def get_interface_cbqos_metrics_snmp(self, metrics: List[MetricConfig]):
+    def get_interface_cbqos_metrics_snmp(self, metrics: list[MetricConfig]):
         ifaces = {str(m.ifindex): m for m in metrics if m.ifindex}
         for (
             ifindex,
@@ -207,7 +207,7 @@ class Script(GetMetricsScript):
     #     volatile=True,
     #     access="S",  # CLI version
     # )
-    def get_ip_sla_udp_jitter_metrics_snmp(self, metrics: List[MetricCollectorConfig]):
+    def get_ip_sla_udp_jitter_metrics_snmp(self, metrics: list[MetricCollectorConfig]):
         """
         Returns collected ip sla metrics in form
         probe id -> {

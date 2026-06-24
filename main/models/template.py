@@ -91,7 +91,7 @@ class Template(NOCModel):
         return self.name
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._json_collection["json_collection"],

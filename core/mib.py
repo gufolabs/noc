@@ -24,11 +24,11 @@ class MIBRegistry:
     load_lock = Lock()
 
     def __init__(self):
-        self.mib: Dict[str, str] = {}
+        self.mib: dict[str, str] = {}
         self.hints = {}
         self.loaded_mibs = set()
 
-    def __getitem__(self, item: Union[str, Tuple[str, int]]) -> str:
+    def __getitem__(self, item: Union[str, tuple[str, int]]) -> str:
         def maybe_get(k: str) -> str:
             v = self.mib.get(k)
             if v is not None:
@@ -114,7 +114,7 @@ class MIBRegistry:
             self.loaded_mibs = set()
 
     @staticmethod
-    def longest_match(d: Dict[str, Any], k: str) -> Optional[Any]:
+    def longest_match(d: dict[str, Any], k: str) -> Optional[Any]:
         """
         Returns longest match of key `k` in dict `d`
         :param d:
@@ -130,7 +130,7 @@ class MIBRegistry:
         self,
         oid: str,
         value: bytes,
-        display_hints: Dict[str, Callable[[str, bytes], Union[str, bytes]]] = None,
+        display_hints: dict[str, Callable[[str, bytes], Union[str, bytes]]] = None,
     ) -> str:
         """Apply display-hint"""
         if display_hints:

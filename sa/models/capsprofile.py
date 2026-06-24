@@ -60,7 +60,7 @@ class CapsSettings(EmbeddedDocument):
             if self.capability.type.is_logical and self.set_label.is_scoped:
                 raise ValueError("On boolean type only not-scoped Set")
 
-    def get_config(self, exposed_models: Optional[List[str]] = None) -> CapsConfig:
+    def get_config(self, exposed_models: Optional[list[str]] = None) -> CapsConfig:
         """"""
         return CapsConfig(
             default_value=self.default_value or None,
@@ -246,7 +246,7 @@ class CapsProfile(Document):
     error_caps_policy = StringField(
         choices=[("I", "Ignore"), ("C", "Check"), ("S", "Strict")], default="I"
     )
-    caps: List[CapsSettings] = EmbeddedDocumentListField(CapsSettings)
+    caps: list[CapsSettings] = EmbeddedDocumentListField(CapsSettings)
 
     L2_SECTIONS = ["bfd", "cdp", "fdp", "huawei_ndp", "lacp", "lldp", "oam", "rep", "stp", "udld"]
     L3_SECTIONS = ["hsrp", "vrrp", "vrrpv3", "bgp", "ospf", "ospfv3", "isis", "ldp", "rsvp"]
@@ -271,7 +271,7 @@ class CapsProfile(Document):
 
     # ensure_profile
 
-    def get_sections(self, mop, nsp) -> List[str]:
+    def get_sections(self, mop, nsp) -> list[str]:
         """
         Returns a list of enabled sections
         Args:

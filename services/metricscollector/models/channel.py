@@ -33,10 +33,10 @@ class RemoteSystemChannel:
         self.logger = logger
         self.last_offset: int = 0
         # Data for deduplicate input key: Ts, Host, Labels
-        self.data: DefaultDict[Tuple[int, str, FrozenSet[str]], Dict[str, float]] = defaultdict(
+        self.data: defaultdict[tuple[int, str, frozenset[str]], dict[str, float]] = defaultdict(
             dict
         )
-        self.sensors_data: Dict[Tuple[int, str], float] = {}
+        self.sensors_data: dict[tuple[int, str], float] = {}
         self.size: int = 0
         self.records: int = 0
         self.deduplicated: int = 0
@@ -45,9 +45,9 @@ class RemoteSystemChannel:
         self.feed_ready.set()
         self.flush_unknown_metrics = False
         self.flush_unknown_hosts = False
-        self.unknown_metrics: Set[str] = set()
-        self.unknown_hosts: Set[str] = set()
-        self.last_received_hosts: Dict[str, int] = {}
+        self.unknown_metrics: set[str] = set()
+        self.unknown_hosts: set[str] = set()
+        self.last_received_hosts: dict[str, int] = {}
         self.min_batch_size = remote_system.batch_size
         if batch_delay:
             self.ttl = float(batch_delay)
@@ -62,7 +62,7 @@ class RemoteSystemChannel:
         self,
         target: str,
         metric: str,
-        values: List[Tuple[int, float]],
+        values: list[tuple[int, float]],
         labels: Optional[Iterable[str]] = None,
         sensor_id: Optional[str] = None,
     ):
@@ -168,9 +168,9 @@ class RemoteSystemEventChannel:
         self.logger = logger
         self.last_offset: int = 0
         self.size: int = 0
-        self.events: List[Event] = []
-        self.received_events: Dict[str, FMEventObject] = {}
-        self.send_events: Dict[str, FMEventObject] = {}
+        self.events: list[Event] = []
+        self.received_events: dict[str, FMEventObject] = {}
+        self.send_events: dict[str, FMEventObject] = {}
         self.deferred = []
         self.records: int = 0
         self.deduplicated: int = 0
@@ -178,8 +178,8 @@ class RemoteSystemEventChannel:
         self.feed_ready = asyncio.Event()
         self.feed_ready.set()
         self.flush_unknown_hosts = False
-        self.unknown_hosts: Set[str] = set()
-        self.last_received_hosts: Dict[str, int] = {}
+        self.unknown_hosts: set[str] = set()
+        self.last_received_hosts: dict[str, int] = {}
         self.min_batch_size = remote_system.batch_size
         if batch_delay:
             self.ttl = float(batch_delay)

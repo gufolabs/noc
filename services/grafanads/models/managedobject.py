@@ -46,7 +46,7 @@ class LabelTarget(BaseModel):
 
 class ManagedObjectTarget(BaseModel):
     target: Literal["managed_object"]
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None
     administrative_domain: Optional[str] = None
 
     def get_variables(self, user: "User" = None):

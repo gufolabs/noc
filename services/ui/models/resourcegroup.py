@@ -23,13 +23,13 @@ class DefaultResourceGroupItem(BaseModel):
     bi_id: str
     parent: Optional[Reference] = None
     description: Optional[str] = None
-    dynamic_service_labels: Optional[List[str]] = None
-    dynamic_client_labels: Optional[List[str]] = None
+    dynamic_service_labels: Optional[list[str]] = None
+    dynamic_client_labels: Optional[list[str]] = None
     remote_system: Optional[Reference] = None
     remote_id: Optional[str] = None
     # Labels
-    labels: Optional[List[LabelItem]] = None
-    effective_labels: Optional[List[LabelItem]] = None
+    labels: Optional[list[LabelItem]] = None
+    effective_labels: Optional[list[LabelItem]] = None
 
 
 class FormResourceGroupItem(BaseModel):
@@ -37,6 +37,6 @@ class FormResourceGroupItem(BaseModel):
     technology: Reference
     parent: Optional[Reference] = None
     description: Optional[str] = None
-    dynamic_service_labels: Optional[List[str]] = None
-    dynamic_client_labels: Optional[List[str]] = None
-    labels: Optional[List[str]] = None
+    dynamic_service_labels: Optional[list[str]] = None
+    dynamic_client_labels: Optional[list[str]] = None
+    labels: Optional[list[str]] = None

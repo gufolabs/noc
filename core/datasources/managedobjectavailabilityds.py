@@ -148,7 +148,7 @@ class ManagedObjectAvailabilityDS(BaseDataSource):
         skip_zero_access=False,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[int, str, Union[str, int]]]:
+    ) -> AsyncIterable[tuple[int, str, Union[str, int]]]:
         start, end = cls.clean_interval(start, end)
         td = int((end - start).total_seconds())
         rb = cls.get_reboots_by_object(start_date=start, stop_date=end)

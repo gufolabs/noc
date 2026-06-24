@@ -23,8 +23,8 @@ router = APIRouter()
 def config(
     agent_id: Optional[str] = None,
     serial: Optional[str] = None,
-    mac: Optional[List[str]] = Query(None),
-    ip: Optional[List[str]] = Query(None),
+    mac: Optional[list[str]] = Query(None),
+    ip: Optional[list[str]] = Query(None),
     x_noc_agent_key: Optional[str] = Header(None),
     host: Optional[str] = Header(None),
     x_forwarded_proto: Optional[str] = Header(None),

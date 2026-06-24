@@ -30,7 +30,7 @@ class ManagedObjectLocationDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         match = {"data.interface": "address"}
         value = (
             Object._get_collection()

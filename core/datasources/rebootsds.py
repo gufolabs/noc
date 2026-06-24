@@ -39,7 +39,7 @@ class RebootsDS(BaseDataSource):
         end: datetime.datetime = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         time_cond = {}
         start, end = cls.clean_interval(start, end)
         if start:

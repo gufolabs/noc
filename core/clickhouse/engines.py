@@ -23,8 +23,8 @@ class MergeTree(BaseEngine):
     def __init__(
         self,
         date_field: str,
-        order_by: Tuple[str, ...],
-        primary_keys: Optional[Tuple[str, ...]] = None,
+        order_by: tuple[str, ...],
+        primary_keys: Optional[tuple[str, ...]] = None,
         partition_function: Optional[str] = None,
         granularity=DEFAULT_MERGE_TREE_GRANULARITY,
     ):

@@ -30,8 +30,8 @@ def get_next_ts(next_ts: Optional[datetime.datetime]):
 
 def update_watchers(
     self,
-    to_watchers: List[WatchItem],
-    to_remove: Optional[List[Tuple[ObjectEffect, str, Optional[str]]]] = None,
+    to_watchers: list[WatchItem],
+    to_remove: Optional[list[tuple[ObjectEffect, str, Optional[str]]]] = None,
     dry_run: bool = False,
     bulk=None,
 ):
@@ -41,7 +41,7 @@ def update_watchers(
 
 def save_watchers(
     self,
-    watchers: List[WatchItem],
+    watchers: list[WatchItem],
     dry_run: bool = False,
     bulk=None,
     # changed_fields: Optional[List[ChangeField]] = None,
@@ -159,7 +159,7 @@ def touch_watch(
     effect: Optional[ObjectEffect] = None,
     is_avail: bool = False,
     dry_run: bool = True,
-) -> List[WatchItem]:
+) -> list[WatchItem]:
     """
     Processed watchers
     Args:
@@ -199,8 +199,8 @@ def touch_watch(
 
 def update_document_watchers(
     self,
-    to_watchers: List[WatchItem],
-    to_remove: Optional[List[Tuple[ObjectEffect, str, Optional[str]]]] = None,
+    to_watchers: list[WatchItem],
+    to_remove: Optional[list[tuple[ObjectEffect, str, Optional[str]]]] = None,
     dry_run: bool = False,
     bulk=None,
 ):

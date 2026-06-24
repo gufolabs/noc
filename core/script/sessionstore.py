@@ -27,7 +27,7 @@ class Session:
 class SessionStore:
     def __init__(self):
         self._lock = Lock()
-        self._sessions: Dict[str, Session] = {}
+        self._sessions: dict[str, Session] = {}
         self._loop: Optional[asyncio.BaseEventLoop] = None
 
     def get(self, session: str) -> Optional[BaseCLI]:

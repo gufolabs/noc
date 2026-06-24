@@ -77,7 +77,7 @@ class SimpleReportFormatter(DataFormatter):
         return Jinja2Template(template).render(band.get_data())
 
     @classmethod
-    def get_columns_format(cls, bf: BandFormat) -> List[TableColumn]:
+    def get_columns_format(cls, bf: BandFormat) -> list[TableColumn]:
         """Return Columns by band Format"""
         if not bf.columns:
             return []
@@ -103,7 +103,7 @@ class SimpleReportFormatter(DataFormatter):
                 ]
         return columns
 
-    def get_report_columns(self) -> List[TableColumn]:
+    def get_report_columns(self) -> list[TableColumn]:
         """
         Report Columns used for print report table data
         Column may be set:

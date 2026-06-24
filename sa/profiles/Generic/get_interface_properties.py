@@ -95,7 +95,7 @@ class Script(BaseScript):
 
     def merge_tables(
         self, *args: Optional[Iterable]
-    ) -> Dict[int, Dict[str, Union[int, bool, str]]]:
+    ) -> dict[int, dict[str, Union[int, bool, str]]]:
         """
         Merge iterables into single table
 
@@ -123,7 +123,7 @@ class Script(BaseScript):
 
     def iter_iftable(
         self, key: str, oid: str, ifindex: Optional[int] = None, clean: Callable = None
-    ) -> Iterable[Tuple[str, Union[str, int]]]:
+    ) -> Iterable[tuple[str, Union[str, int]]]:
         """
         Collect part of IF-MIB table.
 

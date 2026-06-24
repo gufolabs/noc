@@ -89,7 +89,7 @@ class VCenterLinkExtractor(BaseExtractor):
         self,
         system: "VCenterRemoteSystem",
         config=None,
-        links: List[Link] = None,
+        links: list[Link] = None,
     ):
         super().__init__(system)
         self.links = links or []
@@ -179,7 +179,7 @@ class VCenterManagedObjectExtractor(VCenterExtractor):
         self.pool: str = self.config.get("POOL") or "default"
         self.fm_pool: str = self.config.get("FM_POOL")
 
-    def get_mappings(self, obj: Union[vim.VirtualMachine, vim.HostSystem]) -> List[MappingItem]:
+    def get_mappings(self, obj: Union[vim.VirtualMachine, vim.HostSystem]) -> list[MappingItem]:
         """Additional mappings"""
         return []
 
@@ -189,7 +189,7 @@ class VCenterManagedObjectExtractor(VCenterExtractor):
         """Detect ManagedObject"""
         return ETLMapping(value="default", scope="adm_domain")
 
-    def get_labels(self, obj: Union[vim.VirtualMachine, vim.HostSystem]) -> List[str]:
+    def get_labels(self, obj: Union[vim.VirtualMachine, vim.HostSystem]) -> list[str]:
         """Additional mappings"""
         return []
 
@@ -385,7 +385,7 @@ class VCenterFMEventExtractor(VCenterExtractor):
             remote_id=content.about.instanceUuid,
         )
 
-    def parse_data(self, event: vim.event.Event) -> Tuple[str, List[Var]]:
+    def parse_data(self, event: vim.event.Event) -> tuple[str, list[Var]]:
         """"""
         message, r = None, []
         if event.userName:
@@ -420,7 +420,7 @@ class VCenterFMEventExtractor(VCenterExtractor):
 
         return message, r
 
-    def get_event_type_filter(self) -> List[str]:
+    def get_event_type_filter(self) -> list[str]:
         """Return list event types for extract"""
         return [
             "AlarmClearedEvent",

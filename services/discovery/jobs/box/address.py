@@ -124,9 +124,9 @@ class AddressCheck(DiscoveryCheck):
 
     @staticmethod
     def apply_addresses(
-        addresses: Dict[Tuple[str, IP], DiscoveredAddress],
-        discovered_addresses: List[DiscoveredAddress],
-    ) -> Dict[Tuple[str, IP], DiscoveredAddress]:
+        addresses: dict[tuple[str, IP], DiscoveredAddress],
+        discovered_addresses: list[DiscoveredAddress],
+    ) -> dict[tuple[str, IP], DiscoveredAddress]:
         """
         Apply list of discovered addresses to addresses dict
         :param addresses: dict of (vpn_id, address) => DiscoveredAddress
@@ -151,7 +151,7 @@ class AddressCheck(DiscoveryCheck):
             return False
         return self.is_enabled_for_object(self.object)
 
-    def get_interface_addresses(self) -> List[DiscoveredAddress]:
+    def get_interface_addresses(self) -> list[DiscoveredAddress]:
         """
         Get addresses from interface discovery artifact
         :return:
@@ -188,7 +188,7 @@ class AddressCheck(DiscoveryCheck):
             for a in addresses
         ]
 
-    def get_management_addresses(self) -> List[DiscoveredAddress]:
+    def get_management_addresses(self) -> list[DiscoveredAddress]:
         """
         Get addresses from ManagedObject management
         :return:
@@ -215,7 +215,7 @@ class AddressCheck(DiscoveryCheck):
             ]
         return addresses
 
-    def get_dhcp_addresses(self) -> List["DiscoveredAddress"]:
+    def get_dhcp_addresses(self) -> list["DiscoveredAddress"]:
         """
         Return addresses from DHCP leases
         :return:
@@ -263,7 +263,7 @@ class AddressCheck(DiscoveryCheck):
             for a in leases
         ]
 
-    def get_neighbor_addresses(self) -> List[DiscoveredAddress]:
+    def get_neighbor_addresses(self) -> list[DiscoveredAddress]:
         """Return addresses from ARP/IPv6 ND"""
 
         def get_vpn_id(vpn_id):

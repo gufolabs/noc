@@ -30,10 +30,10 @@ class IfDescCheck(TopologyDiscoveryCheck):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.if_cache: Dict[int, Dict[str, Interface]] = {}
+        self.if_cache: dict[int, dict[str, Interface]] = {}
 
     def handler(self):
-        candidates: List[Tuple[Interface, Interface]] = []
+        candidates: list[tuple[Interface, Interface]] = []
         ifaces = self.get_object_interfaces(self.object)
         for iface in ifaces.values():
             ri = self.resolve_remote_interface(iface)
@@ -48,7 +48,7 @@ class IfDescCheck(TopologyDiscoveryCheck):
                 candidates += [(iface, ri)]
         # Check other side
         if self.object.object_profile.ifdesc_symmetric:
-            confirmed: List[Tuple[Interface, Interface]] = []
+            confirmed: list[tuple[Interface, Interface]] = []
             for li, ri in candidates:
                 riri = self.resolve_remote_interface(ri)
                 if not riri:
@@ -171,8 +171,8 @@ class IfDescCheck(TopologyDiscoveryCheck):
         name: Optional[str] = None,
         address: Optional[str] = None,
         hostname: Optional[str] = None,
-    ) -> Tuple[Optional[ManagedObject], Optional[str]]:
-        def get_nearest_object(objects: List[ManagedObject]) -> Optional[ManagedObject]:
+    ) -> tuple[Optional[ManagedObject], Optional[str]]:
+        def get_nearest_object(objects: list[ManagedObject]) -> Optional[ManagedObject]:
             # Prefer same pool
             left = [x for x in objects if x.is_managed and x.pool.id == lmo.pool.id]
             if len(left) == 1:
@@ -257,7 +257,7 @@ class IfDescCheck(TopologyDiscoveryCheck):
             )
         return None
 
-    def get_object_interfaces(self, mo: ManagedObject) -> Dict[str, Interface]:
+    def get_object_interfaces(self, mo: ManagedObject) -> dict[str, Interface]:
         ifaces = self.if_cache.get(mo.id)
         if ifaces is not None:
             return ifaces

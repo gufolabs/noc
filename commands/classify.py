@@ -49,7 +49,7 @@ class Stats:
             f"non-classified={self.non_classified} [{self.duration:.3f}s, {self.rate:.2f} msg/sec]"
         )
 
-    def to_json(self) -> Dict[str, Union[int, float]]:
+    def to_json(self) -> dict[str, Union[int, float]]:
         return {
             "duration": self.duration,
             "messages": self.total,
@@ -57,7 +57,7 @@ class Stats:
         }
 
     @classmethod
-    def from_json(cls, path: Path, data: Dict[str, Union[int, float]]) -> "Stats":
+    def from_json(cls, path: Path, data: dict[str, Union[int, float]]) -> "Stats":
         """
         Get Stats from json data.
 
@@ -159,7 +159,7 @@ class Command(BaseCommand):
         cmd = options.pop("cmd")
         return getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
-    def parse_syslog_text(self, profile: str, filepath: Path) -> List[Event]:
+    def parse_syslog_text(self, profile: str, filepath: Path) -> list[Event]:
         """
         Parse events from syslog-format file located on the path 'filepath'
         """
@@ -191,11 +191,11 @@ class Command(BaseCommand):
         return events
 
     @staticmethod
-    def save_output(path: Path, data: Dict[str, Any]) -> None:
+    def save_output(path: Path, data: dict[str, Any]) -> None:
         with open(path, "wb") as f:
             f.write(orjson.dumps(data, option=orjson.OPT_INDENT_2))
 
-    def process_events(self, profile, ruleset, output_dir, filepath: Path, events: List[Event]):
+    def process_events(self, profile, ruleset, output_dir, filepath: Path, events: list[Event]):
         """
         Classify events for file located on the path 'filepath'
         """
@@ -266,7 +266,7 @@ class Command(BaseCommand):
         self.print(str(stats))
         self.print(stats.get_comparison(old_stats))
 
-    def _iter_path(self, paths: List[str]) -> Iterable[Path]:
+    def _iter_path(self, paths: list[str]) -> Iterable[Path]:
         """
         Iterate all files in path.
 
@@ -276,7 +276,7 @@ class Command(BaseCommand):
         Returns:
             Yields Path for every file.
         """
-        seen: Set[Path] = set()
+        seen: set[Path] = set()
         for p in paths:
             path = Path(p)
             if path.is_dir():
@@ -304,7 +304,7 @@ class Command(BaseCommand):
 
     def handle_import(
         self,
-        paths: List[str],
+        paths: list[str],
         profile,
         output_dir,
         **options,
@@ -318,14 +318,14 @@ class Command(BaseCommand):
 
     def handle_refresh(
         self,
-        paths: List[str],
+        paths: list[str],
         **options,
     ):
         connect()
         for path in self._iter_path(paths):
             self.refresh_events(self.get_ruleset(), path)
 
-    def handle_show(self, paths: List[str], unknown: bool = False, **options) -> None:
+    def handle_show(self, paths: list[str], unknown: bool = False, **options) -> None:
         for path in self._iter_path(paths):
             with open(path) as fp:
                 data = orjson.loads(fp.read())
@@ -343,7 +343,7 @@ class Command(BaseCommand):
                     continue
                 self.print(msg)
 
-    def handle_stats(self, paths: List[str], **options) -> None:
+    def handle_stats(self, paths: list[str], **options) -> None:
         for path in self._iter_path(paths):
             with open(path) as fp:
                 data = orjson.loads(fp.read())

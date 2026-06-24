@@ -37,7 +37,7 @@ class IPPrefix(BaseModel):
     vrf: Optional[Reference[IPVRF]] = None
     ipv6_transition: Optional[Reference["IPPrefix"]] = None
     project: Optional[Reference["Project"]] = None
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None
 
     @field_validator("prefix")
     @classmethod

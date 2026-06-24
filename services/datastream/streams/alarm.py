@@ -163,7 +163,7 @@ class AlarmDataStream(DataStream):
         return {"%s.alarmclass" % cls.F_META: {"$in": ids}}
 
     @classmethod
-    def get_meta_headers(cls, data: Dict[str, Any]) -> Optional[Dict[str, bytes]]:
+    def get_meta_headers(cls, data: dict[str, Any]) -> Optional[dict[str, bytes]]:
         return {
             MX_PROFILE_ID: smart_bytes(data["managed_object"]["object_profile"]["id"]),
             MX_ADMINISTRATIVE_DOMAIN_ID: smart_bytes(data[cls.F_ADM_DOMAIN_META]),

@@ -54,7 +54,7 @@ class MonMapCard(BaseCard):
     TOOLTIP_LIMIT = config.card.alarmheat_tooltip_limit
 
     @property
-    def card_js(self) -> List[str]:
+    def card_js(self) -> list[str]:
         res = [
             "/ui/pkg/leaflet/leaflet.js",
             "/ui/pkg/leaflet.heat/leaflet-heat.js",

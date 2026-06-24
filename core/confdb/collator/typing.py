@@ -49,8 +49,8 @@ class PortItem:
     """
 
     name: str
-    protocols: List[str]
-    path: List[PathItem]
+    protocols: list[str]
+    path: list[PathItem]
     internal_name: Optional[str] = None
     combo: Optional[str] = None
 

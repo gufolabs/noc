@@ -42,7 +42,7 @@ class VLANApplication(ExtDocApplication):
     int_query_fields = ["vlan"]
 
     @cachedmethod(key="vlans-interface-count-%s", ttl=180)
-    def get_l2domain_interfaces_count(self, l2_domain: str) -> Dict[int, int]:
+    def get_l2domain_interfaces_count(self, l2_domain: str) -> dict[int, int]:
         """
         Calculate VLAN Count by interface on ManagedObject list
         :param l2_domain:

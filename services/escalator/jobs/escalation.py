@@ -346,7 +346,7 @@ class EscalationJob(SequenceJob):
         else:
             self.object.alarm.log_message(msg, bulk=self.alarm_log)
 
-    def get_escalation_items(self, tt_system: TTSystem) -> List[ECtxItem]:
+    def get_escalation_items(self, tt_system: TTSystem) -> list[ECtxItem]:
         """
         Build escalation items for Escalation Doc
         Args:
@@ -371,7 +371,7 @@ class EscalationJob(SequenceJob):
             r.append(ei)
         return r
 
-    def get_action_context(self) -> List[TTActionContext]:
+    def get_action_context(self) -> list[TTActionContext]:
         """Return Available Action Context for escalation"""
         r = []
         for action in self.object.profile.get_actions():
@@ -417,8 +417,8 @@ class EscalationJob(SequenceJob):
         Note: Must be called under the lock
         """
         alarms = [item.alarm for item in self.object.items]
-        esc_status: Dict[ObjectId, ObjectId] = {}
-        esc_tt: Dict[ObjectId, str] = {}
+        esc_status: dict[ObjectId, ObjectId] = {}
+        esc_tt: dict[ObjectId, str] = {}
         for doc in Escalation._get_collection().aggregate(
             [
                 {
@@ -449,7 +449,7 @@ class EscalationJob(SequenceJob):
         tt_system: TTSystem,
         subject: str,
         body: str,
-        context: Optional[Dict[str, Any]] = None,
+        context: Optional[dict[str, Any]] = None,
         tt_id: Optional[str] = None,
     ) -> EscalationResult:
         """

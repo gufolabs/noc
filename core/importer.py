@@ -27,7 +27,7 @@ class NOCLoader(importlib.abc.Loader):
 
     PREFIX: str
     INIT_SOURCE = ""
-    packages: Set[str] = set()
+    packages: set[str] = set()
 
     def __init__(self, path_entry: Optional[str] = None):
         self.base_path = Path(path_entry or "")
@@ -154,7 +154,7 @@ class NOCImportRouter(importlib.abc.MetaPathFinder):
     def find_spec(
         self, fullname: str, path: Optional[Sequence[str]] = None, target: Optional[Any] = None
     ) -> Optional[ModuleSpec]:
-        def _get_spec(loader_cls: Type[NOCLoader]) -> Optional[ModuleSpec]:
+        def _get_spec(loader_cls: type[NOCLoader]) -> Optional[ModuleSpec]:
             loader = loader_cls(path_entry=(path[0] if path else None))
             return importlib.util.spec_from_loader(
                 fullname, loader, is_package=loader.is_package(fullname)

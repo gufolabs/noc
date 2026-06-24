@@ -330,13 +330,13 @@ class Address(NOCModel):
     def get_resource_keys(
         cls,
         prefix,
-        keys: Optional[List[int]] = None,
+        keys: Optional[list[int]] = None,
         strategy: str = "L",
         exclude_keys: Optional[Iterable[int]] = None,
         limit: int = 1,
         address_ranges: Optional[str] = None,
         **kwargs,
-    ) -> List[IP]:
+    ) -> list[IP]:
         """
         Args:
             prefix:
@@ -376,7 +376,7 @@ class Address(NOCModel):
         keys: Iterable[str],
         domain,
         allow_create: bool = False,
-    ) -> Iterable[Tuple[str, Optional["Address"], Optional[str]]]:
+    ) -> Iterable[tuple[str, Optional["Address"], Optional[str]]]:
         processed = set()
         for addr in Address.objects.filter(prefix=domain, address__in=keys):
             yield addr.address, addr, None

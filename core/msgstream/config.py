@@ -62,7 +62,7 @@ class StreamItem:
         return self.name
 
 
-STREAMS: List[StreamConfig] = [
+STREAMS: list[StreamConfig] = [
     StreamConfig(
         name="events",
         slot="classifier",

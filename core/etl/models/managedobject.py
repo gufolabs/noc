@@ -53,8 +53,8 @@ class ManagedObject(BaseModel):
     segment: Reference["NetworkSegment"]
     profile: Optional[str] = None
     object_profile: Reference["ManagedObjectProfile"]
-    static_client_groups: Optional[List[Reference["ResourceGroup"]]] = None
-    static_service_groups: Optional[List[Reference["ResourceGroup"]]] = None
+    static_client_groups: Optional[list[Reference["ResourceGroup"]]] = None
+    static_service_groups: Optional[list[Reference["ResourceGroup"]]] = None
     scheme: str
     address: Optional[str] = None
     fqdn: Optional[DomainName] = None
@@ -72,14 +72,14 @@ class ManagedObject(BaseModel):
     controller: Optional[Reference["ManagedObject"]] = None
     l2_domain: Optional[Reference["L2Domain"]] = None
     vrf: Optional[Reference["IPVRF"]] = None
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None
     tt_system: Optional[Reference["TTSystem"]] = None
     tt_queue: Optional[str] = None
     tt_system_id: Optional[str] = None
     project: Optional[Reference["Project"]] = None
-    capabilities: Optional[List[CapsItem]] = None
+    capabilities: Optional[list[CapsItem]] = None
     checkpoint: Optional[str] = None
-    mappings: Optional[List[MappingItem]] = None
+    mappings: Optional[list[MappingItem]] = None
 
     @field_validator("address")
     @classmethod

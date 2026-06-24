@@ -160,7 +160,7 @@ class LoadMetricsDS(BaseDataSource):
     ]
 
     @staticmethod
-    def get_filter(filters: Dict[str, Any]) -> Dict[str, Any]:
+    def get_filter(filters: dict[str, Any]) -> dict[str, Any]:
         r = {}
         if "resource_group" in filters:
             r["effective_service_groups__overlap"] = ResourceGroup.get_nested_ids(
@@ -180,10 +180,10 @@ class LoadMetricsDS(BaseDataSource):
         end: datetime.datetime = None,
         interface_profile: Optional[InterfaceProfile] = None,
         exclude_zero: bool = False,
-        admin_domain_ads: Optional[List[int]] = None,
+        admin_domain_ads: Optional[list[int]] = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         def get_interface_load_url(mo_bi_id):
             path = "/ui/grafana/dashboard/script/report.js"
             params = {

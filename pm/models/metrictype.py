@@ -64,7 +64,7 @@ class CollectorMappingItem(EmbeddedDocument):
     def __str__(self):
         return f"{self.collector}.{self.field}"
 
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "sender": self.sender,
             "collector": self.collector,
@@ -157,7 +157,7 @@ class MetricType(Document):
     compose_inputs = ListField(ReferenceField("self", reverse_delete_rule=NULLIFY))
     compose_expression = StringField()
     # Remote Mappings
-    collector_mappings: List[CollectorMappingItem] = EmbeddedDocumentListField(CollectorMappingItem)
+    collector_mappings: list[CollectorMappingItem] = EmbeddedDocumentListField(CollectorMappingItem)
     # Optional required capability
     required_capability = PlainReferenceField(Capability)
     # Object id in BI, used for counter context hashing
@@ -177,7 +177,7 @@ class MetricType(Document):
         return bool(self.compose_expression)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],

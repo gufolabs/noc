@@ -156,7 +156,7 @@ class Target(
     def is_enable_ping(self) -> bool:
         return self.enable_ping and self.ping_interval and self.ping_interval > 0
 
-    def get_ping_settings(self) -> Optional[Dict[str, Any]]:
+    def get_ping_settings(self) -> Optional[dict[str, Any]]:
         if not self.is_enable_ping:
             return None
         return {
@@ -170,7 +170,7 @@ class Target(
             "report_attempts": self.report_ping_attempts,
         }
 
-    def get_syslog_settings(self) -> Optional[Dict[str, Any]]:
+    def get_syslog_settings(self) -> Optional[dict[str, Any]]:
         """Get effective event archiving policy"""
         if self.syslog_source_type == "d" or not self.is_process_event:
             return None
@@ -180,7 +180,7 @@ class Target(
             "storm_threshold": self.mop_trapcollector_storm_threshold,
         }
 
-    def get_snmptrap_settings(self) -> Optional[Dict[str, Any]]:
+    def get_snmptrap_settings(self) -> Optional[dict[str, Any]]:
         if self.trap_source_type == "d" or not self.is_process_event:
             return None
         return {
@@ -375,7 +375,7 @@ class CfgTrapDataStream(DataStream):
         return r
 
     @classmethod
-    def _iter_addresses(cls, mo_id) -> Iterable[Tuple[str, Optional[str], str]]:
+    def _iter_addresses(cls, mo_id) -> Iterable[tuple[str, Optional[str], str]]:
         """
         Iterate over ManagedObject available addresses
         :return:

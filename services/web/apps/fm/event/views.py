@@ -91,10 +91,10 @@ class EventApplication(ExtApplication):
         segment: Optional[str] = None,
         from_query: Optional[str] = None,
         to_query: Optional[str] = None,
-        groups: Optional[List[str]] = None,
-        administrative_domains: Optional[List[int]] = None,
+        groups: Optional[list[str]] = None,
+        administrative_domains: Optional[list[int]] = None,
         event_class: Optional[str] = None,
-    ) -> List[str]:
+    ) -> list[str]:
         """"""
         r = []
         if managed_object:
@@ -131,9 +131,9 @@ class EventApplication(ExtApplication):
         segment: Optional[str] = None,
         from_query: Optional[datetime.date] = None,
         to_query: Optional[datetime.date] = None,
-        groups: Optional[List[str]] = None,
+        groups: Optional[list[str]] = None,
         event_class: Optional[str] = None,
-        administrative_domains: Optional[List[int]] = None,
+        administrative_domains: Optional[list[int]] = None,
         offset: Optional[int] = None,
         limit: Optional[int] = None,
     ):

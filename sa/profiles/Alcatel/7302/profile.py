@@ -31,7 +31,7 @@ class Profile(BaseProfile):
     }
 
     @staticmethod
-    def get_slot(slot_id: int) -> Tuple[int, int, int]:
+    def get_slot(slot_id: int) -> tuple[int, int, int]:
         rack = slot_id >> 12
         shelf = (slot_id >> 8) & 0xF
         slot = slot_id & 0x00FF

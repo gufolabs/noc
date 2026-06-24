@@ -400,8 +400,8 @@ class Command(BaseCommand):
     def handle_stats(
         self,
         scheduler: Scheduler,
-        mos: Optional[List[int]] = None,
-        slots: Optional[List[int]] = None,
+        mos: Optional[list[int]] = None,
+        slots: Optional[list[int]] = None,
         **options,
     ):
         from noc.sa.models.profile import Profile
@@ -445,7 +445,7 @@ class Command(BaseCommand):
         scheduler: Scheduler,
         min_duration=5,
         buckets=5,
-        slots: Optional[List[int]] = None,
+        slots: Optional[list[int]] = None,
         detail: bool = False,
         *args,
         **options,
@@ -482,7 +482,7 @@ class Command(BaseCommand):
         scheduler: Scheduler,
         min_duration=5,
         buckets=5,
-        slots: Optional[List[int]] = None,
+        slots: Optional[list[int]] = None,
         detail: bool = False,
         *args,
         **options,

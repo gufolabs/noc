@@ -36,7 +36,7 @@ class PartitionCursor:
 class PartitionOffset:
     topic_partition: TopicPartition
     end_offset: int
-    cursors: Dict[str, int]
+    cursors: dict[str, int]
 
 
 class KafkaStreamCollector(BaseCollector):
@@ -52,7 +52,7 @@ class KafkaStreamCollector(BaseCollector):
     }
     CLIENT_ID = "NOC"
 
-    async def get_partitions(self, bootstrap_servers: List[str]) -> List[TopicPartition]:
+    async def get_partitions(self, bootstrap_servers: list[str]) -> list[TopicPartition]:
         client = AIOKafkaClient(bootstrap_servers=bootstrap_servers, client_id=self.CLIENT_ID)
         await client.bootstrap()
         # Get all partitions
@@ -65,8 +65,8 @@ class KafkaStreamCollector(BaseCollector):
         return [TopicPartition(p.topic, p.partition) for p in partitions]
 
     async def get_offsets(
-        self, bootstrap_servers: List[str], partitions: List[TopicPartition]
-    ) -> List[PartitionOffset]:
+        self, bootstrap_servers: list[str], partitions: list[TopicPartition]
+    ) -> list[PartitionOffset]:
         async with AIOKafkaConsumer(
             bootstrap_servers=bootstrap_servers,
             client_id=self.CLIENT_ID,
@@ -76,8 +76,8 @@ class KafkaStreamCollector(BaseCollector):
             # Get last offsets for all partitions
             end_offsets = await consumer.end_offsets(partitions)
         # Fetch offsets
-        offsets: DefaultDict[TopicPartition, Dict[str, int]] = defaultdict(dict)
-        offset_groups: DefaultDict[str, List[TopicPartition]] = defaultdict(list)
+        offsets: defaultdict[TopicPartition, dict[str, int]] = defaultdict(dict)
+        offset_groups: defaultdict[str, list[TopicPartition]] = defaultdict(list)
         for p in partitions:
             if p.topic.startswith("ch."):
                 offset_groups["ch"].append(p)
@@ -104,15 +104,15 @@ class KafkaStreamCollector(BaseCollector):
     def parse_cursor_key(key: bytes) -> Optional[PartitionCursor]:
         """Parse kafka cursor key."""
 
-        def parse_uint16(k: bytes) -> Tuple[int, bytes]:
+        def parse_uint16(k: bytes) -> tuple[int, bytes]:
             (v,) = UINT16.unpack(k[:2])
             return v, k[2:]
 
-        def parse_uint32(k: bytes) -> Tuple[int, bytes]:
+        def parse_uint32(k: bytes) -> tuple[int, bytes]:
             (v,) = UINT32.unpack(k[:4])
             return v, k[4:]
 
-        def parse_str(k: bytes) -> Tuple[str, bytes]:
+        def parse_str(k: bytes) -> tuple[str, bytes]:
             str_len, rest = parse_uint16(k)
             return rest[:str_len].decode(), rest[str_len:]
 
@@ -133,7 +133,7 @@ class KafkaStreamCollector(BaseCollector):
             return None
         return offset
 
-    async def collect(self) -> List[PartitionOffset]:
+    async def collect(self) -> list[PartitionOffset]:
         addresses = await config.find_parameter("kafka.addresses").async_get()
         bootstrap_servers = [f"{svc.host}:{svc.port}" for svc in addresses]
         partitions = await self.get_partitions(bootstrap_servers)

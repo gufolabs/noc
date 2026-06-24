@@ -31,7 +31,7 @@ class Group:
     reference_template: Template
     alarm_class: AlarmClass
     title_template: Template
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None
     min_threshold: int = 0
     max_threshold: int = 0
     window: int = 0
@@ -54,7 +54,7 @@ class GroupItem:
     reference: str
     alarm_class: AlarmClass
     title: str
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None
     min_threshold: int = 0
     max_threshold: int = 0
     window: int = 0
@@ -64,10 +64,10 @@ class GroupItem:
 @dataclass
 class JobConfig:
     name: str
-    actions: List[ActionConfig]
+    actions: list[ActionConfig]
     repeat_delay: Optional[int] = None
     max_repeats: Optional[int] = None
-    allowed_actions: Optional[List[AllowedAction]] = None
+    allowed_actions: Optional[list[AllowedAction]] = None
 
 
 class AlarmRule:
@@ -87,8 +87,8 @@ class AlarmRule:
         self.name = name
         self.id = rid
         self.matcher: Optional[Callable] = None
-        self.groups: List[Group] = []
-        self.actions: List[ActionConfig] = []
+        self.groups: list[Group] = []
+        self.actions: list[ActionConfig] = []
         self.job_config: Optional[JobConfig] = None
         self.severity_match: bool = True
 
@@ -102,7 +102,7 @@ class AlarmRule:
         return severity
 
     @classmethod
-    def from_config(cls, config: Dict[str, Any]) -> "AlarmRule":
+    def from_config(cls, config: dict[str, Any]) -> "AlarmRule":
         """Generate rule from config"""
         rule = AlarmRule(name=config["name"], rid=config["id"])
         if config["match_expr"]:
@@ -141,7 +141,7 @@ class AlarmRule:
         return rule
 
     @classmethod
-    def get_matcher(cls, expr: List[Dict[str, Any]]) -> Callable:
+    def get_matcher(cls, expr: list[dict[str, Any]]) -> Callable:
         """"""
         if len(expr) == 1:
             return build_matcher(expr[0])
@@ -219,7 +219,7 @@ class AlarmRuleSet:
 
     def __init__(self):
         self.common_rules = []
-        self.alarm_class_rules: Dict[str, List[AlarmRule]] = {}
+        self.alarm_class_rules: dict[str, list[AlarmRule]] = {}
 
     def add(self, rule: CfgAlarmRule):
         """

@@ -67,7 +67,7 @@ async def fetch(
     password: Optional[str] = None,
     content_encoding: Optional[str] = None,
     eof_mark: Optional[bytes] = None,
-) -> Tuple[int, Dict[str, Any], bytes]:
+) -> tuple[int, dict[str, Any], bytes]:
     """
 
     :param url: Fetch URL
@@ -253,7 +253,7 @@ async def fetch(
             metrics["httpclient_timeouts"] += 1
             return ERR_TIMEOUT, {}, b"Timed out while sending request"
         parser = HttpParser()
-        response_body: List[bytes] = []
+        response_body: list[bytes] = []
         while not parser.is_message_complete():
             try:
                 data = await asyncio.wait_for(reader.read(max_buffer_size), request_timeout)

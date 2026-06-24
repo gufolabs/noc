@@ -193,7 +193,7 @@ class ServiceApplication(ExtDocApplication):
             ]
         }
 
-    def instance_to_dict_si(self, o: ServiceInstance) -> Dict[str, Any]:
+    def instance_to_dict_si(self, o: ServiceInstance) -> dict[str, Any]:
         r = {
             "id": str(o.id),
             "sources": [ss.code.upper() for ss in o.sources],
@@ -368,8 +368,8 @@ class ServiceApplication(ExtDocApplication):
         sid: str,
         iid: str,
         managed_object: Optional[ManagedObject] = None,
-        resources: List[str] = None,
-        addresses: List[Dict[str, str]] = None,
+        resources: list[str] = None,
+        addresses: list[dict[str, str]] = None,
     ):
         si = self.get_object_or_404(ServiceInstance, id=iid)
         if addresses:

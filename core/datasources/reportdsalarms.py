@@ -56,7 +56,7 @@ class ReportDsAlarms(BaseDataSource):
         ParamInfo(name="min_subscribers", type="int"),
     ]
 
-    fields: List[FieldInfo] = [
+    fields: list[FieldInfo] = [
         FieldInfo(
             name="alarm_id",
             # label="Alarm Id",
@@ -219,9 +219,9 @@ class ReportDsAlarms(BaseDataSource):
         cls,
         start: datetime.datetime,
         end: Optional[datetime.datetime],
-        admin_domain_ads: Optional[List[int]] = None,
-        **filters: Optional[Dict[str, Any]],
-    ) -> Iterable[Dict[str, Any]]:
+        admin_domain_ads: Optional[list[int]] = None,
+        **filters: Optional[dict[str, Any]],
+    ) -> Iterable[dict[str, Any]]:
         if "objectids" in filters:
             match = {"_id": {"$in": [bson.ObjectId(x) for x in filters["objectids"]]}}
         elif not end:
@@ -356,7 +356,7 @@ class ReportDsAlarms(BaseDataSource):
     @classmethod
     async def iter_query(
         cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         if "start" not in kwargs:
             raise ValueError("Start filter is required")
         moss = {

@@ -23,11 +23,11 @@ class QBuffer:
     """
 
     def __init__(self, max_size: Optional[int] = None):
-        self.buf: DefaultDict[Tuple[str, int], List[bytes]] = defaultdict(list)
+        self.buf: defaultdict[tuple[str, int], list[bytes]] = defaultdict(list)
         self.lock = Lock()
         self.max_size = max_size or config.liftbridge.max_message_size
 
-    def put(self, stream: str, partition: int, data: List[Dict[str, Any]]):
+    def put(self, stream: str, partition: int, data: list[dict[str, Any]]):
         """
         Put block of data to buffer
         :param stream:
@@ -42,8 +42,8 @@ class QBuffer:
             self.buf[stream, partition] += d
 
     @staticmethod
-    def _iter_chunks(data: List[bytes], max_size: int) -> Iterable[bytes]:
-        r: List[bytes] = []
+    def _iter_chunks(data: list[bytes], max_size: int) -> Iterable[bytes]:
+        r: list[bytes] = []
         size = 0
         for d in data:
             ld = len(d)
@@ -56,7 +56,7 @@ class QBuffer:
         if r:
             yield b"\n".join(r)
 
-    def iter_slice(self) -> Iterable[Tuple[str, int, bytes]]:
+    def iter_slice(self) -> Iterable[tuple[str, int, bytes]]:
         """
         Iterates tuple of (stream, partition, data)
         :return:

@@ -36,7 +36,7 @@ class GridVCS:
         self.fs = gridfs.GridFS(get_db(), collection="noc.gridvcs.%s" % repo)
         self.files = self.fs._GridFS__files
 
-    def get_delta(self, src: str, dst: str) -> Tuple[str, bytes]:
+    def get_delta(self, src: str, dst: str) -> tuple[str, bytes]:
         """
         Calculate strings delta
         :param src: Source string

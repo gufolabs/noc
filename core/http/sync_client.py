@@ -58,7 +58,7 @@ class HttpClient(GufoHttpClient):
         self: "HttpClient",
         /,
         max_redirects: Optional[int] = config.http_client.max_redirects,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: Optional[dict[str, bytes]] = None,
         compression: Optional[int] = DEFLATE | GZIP | BROTLI,
         validate_cert: bool = config.http_client.validate_certs,
         connect_timeout: float = config.http_client.connect_timeout,
@@ -148,7 +148,7 @@ class HttpClient(GufoHttpClient):
     @classmethod
     def encode_files(
         cls,
-        files: Dict[str, Union[bytes, Tuple[bytes, str], Tuple[bytes, str, str]]],
+        files: dict[str, Union[bytes, tuple[bytes, str], tuple[bytes, str, str]]],
         boundary: str,
         content_type: Optional[str] = "application/octet-stream",
     ) -> bytes:
@@ -189,8 +189,8 @@ class HttpClient(GufoHttpClient):
         url: str,
         /,
         body: Optional[bytes] = None,
-        headers: Optional[Dict[str, bytes]] = None,
-    ) -> Tuple[int, Dict[str, Any], bytes]:
+        headers: Optional[dict[str, bytes]] = None,
+    ) -> tuple[int, dict[str, Any], bytes]:
         m = RequestMethod.get(method)
         if not m:
             raise NotImplementedError("Not implementer method: %s", method)
@@ -209,8 +209,8 @@ class HttpClient(GufoHttpClient):
         return r.status, r.headers, r.content
 
     def get(
-        self, url: str, /, headers: Optional[Dict[str, bytes]] = None
-    ) -> Tuple[int, Dict[str, Any], bytes]:
+        self, url: str, /, headers: Optional[dict[str, bytes]] = None
+    ) -> tuple[int, dict[str, Any], bytes]:
         metrics["httpclient_requests", ("method", "get")] += 1
         try:
             r = super().get(url, headers=headers)
@@ -230,9 +230,9 @@ class HttpClient(GufoHttpClient):
         url: str,
         body: bytes,
         /,
-        headers: Optional[Dict[str, bytes]] = None,
-        files: Optional[Dict[str, Union[bytes, Tuple[bytes, str], Tuple[bytes, str, str]]]] = None,
-    ) -> Tuple[int, Dict[str, Any], bytes]:
+        headers: Optional[dict[str, bytes]] = None,
+        files: Optional[dict[str, Union[bytes, tuple[bytes, str], tuple[bytes, str, str]]]] = None,
+    ) -> tuple[int, dict[str, Any], bytes]:
         metrics["httpclient_requests", ("method", "post")] += 1
         if files:
             boundary = str(uuid.uuid4())
@@ -270,8 +270,8 @@ class HttpClient(GufoHttpClient):
         url: str,
         body: bytes,
         /,
-        headers: Optional[Dict[str, bytes]] = None,
-    ) -> Tuple[int, Dict[str, Any], bytes]:
+        headers: Optional[dict[str, bytes]] = None,
+    ) -> tuple[int, dict[str, Any], bytes]:
         metrics["httpclient_requests", ("method", "put")] += 1
         try:
             r = super().put(url, body, headers=headers)

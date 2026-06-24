@@ -54,7 +54,7 @@ class BaseCLI:
         raise NotImplementedError
 
     def set_timeout(
-        self, timeout: Optional[float] = None, error: Optional[Type[Exception]] = None
+        self, timeout: Optional[float] = None, error: Optional[type[Exception]] = None
     ) -> None:
         if timeout:
             error = error or CLIConnectionReset

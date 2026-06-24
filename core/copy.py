@@ -9,7 +9,7 @@
 from typing import Any, Dict
 
 
-def deep_copy(t: Dict[Any, Any]) -> Dict[Any, Any]:
+def deep_copy(t: dict[Any, Any]) -> dict[Any, Any]:
     """
     Returns copy of dict `t`, following nested dict structures.
     :param t: Input dictionary
@@ -24,7 +24,7 @@ def deep_copy(t: Dict[Any, Any]) -> Dict[Any, Any]:
     return r
 
 
-def deep_merge(t: Dict[Any, Any], d: Dict[Any, Any]) -> Dict[Any, Any]:
+def deep_merge(t: dict[Any, Any], d: dict[Any, Any]) -> dict[Any, Any]:
     """
     Merge contents of dicts `t` and `d`, including nested dicts,
     and returns merged dict. Values from `d` override values from `t`
@@ -34,7 +34,7 @@ def deep_merge(t: Dict[Any, Any], d: Dict[Any, Any]) -> Dict[Any, Any]:
     :returns: Merged dict
     """
 
-    def _merge(x: Dict[Any, Any], y: Dict[Any, Any]) -> None:
+    def _merge(x: dict[Any, Any], y: dict[Any, Any]) -> None:
         for k, v in y.items():
             if isinstance(v, dict):
                 x[k] = x.get(k, {})

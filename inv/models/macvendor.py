@@ -62,7 +62,7 @@ class MACVendor(Document):
             return d.get("vendor")
 
     @classmethod
-    def parse_txt_content(cls, content) -> Dict[str, str]:
+    def parse_txt_content(cls, content) -> dict[str, str]:
         r = {}
         for ll in content.decode().splitlines():
             if "(hex)" in ll:

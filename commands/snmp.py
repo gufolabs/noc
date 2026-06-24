@@ -234,7 +234,7 @@ class Command(BaseCommand):
     @classmethod
     def iter_credentials(
         cls, community, username, version
-    ) -> Iterable[Tuple[str, User, SnmpVersion]]:
+    ) -> Iterable[tuple[str, User, SnmpVersion]]:
         if version != SNMP_v3:
             for c in community:
                 yield c, None, SnmpVersion.v2c if not version else SnmpVersion.v1

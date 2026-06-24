@@ -19,8 +19,8 @@ class CrossingPlugin(InvPlugin):
     name = "crossing"
     js = "NOC.inv.inv.plugins.crossing.CrossingPanel"
 
-    def get_data(self, request, o: Object) -> Dict[str, Any]:
-        def render_node(name: str, items: Set[str]) -> Dict[str, Any]:
+    def get_data(self, request, o: Object) -> dict[str, Any]:
+        def render_node(name: str, items: set[str]) -> dict[str, Any]:
             """
             Render Viz node
             """
@@ -63,9 +63,9 @@ class CrossingPlugin(InvPlugin):
             if c.input_discriminator:
                 n_input_discriminators[c.input] += 1
         # Build list
-        inputs: Set[str] = set()
-        outputs: Set[str] = set()
-        mixed: Set[str] = set()
+        inputs: set[str] = set()
+        outputs: set[str] = set()
+        mixed: set[str] = set()
         for c in crossings:
             # Process inputs
             if c.input not in mixed:

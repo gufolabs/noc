@@ -24,10 +24,10 @@ class ChangeItem:
     op: Literal["create", "update", "delete"] = field(compare=False)
     model_id: str
     item_id: str
-    changed_fields: Optional[List[ChangeField]] = field(default=None, compare=False)
-    changed_caps: Optional[List[str]] = field(default=None, compare=False)
-    domains: Optional[List[Tuple[str, str]]] = None  # model, id, op (in/out)
-    affected_rules: Optional[List[str]] = field(default=None, compare=False)
+    changed_fields: Optional[list[ChangeField]] = field(default=None, compare=False)
+    changed_caps: Optional[list[str]] = field(default=None, compare=False)
+    domains: Optional[list[tuple[str, str]]] = None  # model, id, op (in/out)
+    affected_rules: Optional[list[str]] = field(default=None, compare=False)
     # datastreams: Optional[List[Tuple[str, str]]] = None
     # groups
     # labels
@@ -36,7 +36,7 @@ class ChangeItem:
     user: Optional[str] = field(default=None, compare=False)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "ChangeItem":
+    def from_dict(cls, data: dict[str, Any]) -> "ChangeItem":
         return ChangeItem(
             op=data["op"],
             model_id=data["model_id"],
@@ -51,8 +51,8 @@ class ChangeItem:
 
     @staticmethod
     def merge_fields(
-        f1: Optional[List[ChangeField]], f2: Optional[List[ChangeField]]
-    ) -> Optional[List[ChangeField]]:
+        f1: Optional[list[ChangeField]], f2: Optional[list[ChangeField]]
+    ) -> Optional[list[ChangeField]]:
         processed = set()
         r = []
         for x in f1 or []:
@@ -63,7 +63,7 @@ class ChangeItem:
                 r.append(x)
         return r
 
-    def change(self, op: str, changed_fields: List[ChangeField], timestamp: Optional[float] = None):
+    def change(self, op: str, changed_fields: list[ChangeField], timestamp: Optional[float] = None):
         """
         Args:
             op:

@@ -21,8 +21,8 @@ class AlarmItem(BaseModel):
     alarm_class: str
     severity: Optional[int] = None
     timestamp: Optional[str] = None
-    vars: Optional[Dict[str, Any]] = None
-    labels: Optional[List[str]] = None
+    vars: Optional[dict[str, Any]] = None
+    labels: Optional[list[str]] = None
     remote_system: Optional[str] = None
     remote_id: Optional[str] = None
 
@@ -34,6 +34,6 @@ class EnsureGroupRequest(BaseModel):
     severity: Optional[int] = None
     name: Optional[str] = None
     alarm_class: Optional[str] = None
-    labels: Optional[List[str]] = None
-    vars: Optional[Dict[str, Any]] = None
-    alarms: List[AlarmItem]
+    labels: Optional[list[str]] = None
+    vars: Optional[dict[str, Any]] = None
+    alarms: list[AlarmItem]

@@ -49,7 +49,7 @@ class DSSnapshot:
     report_ts: datetime.datetime
     report_uuid: Optional[uuid.UUID] = None
     job_uuid: Optional[uuid.UUID] = None
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None
 
 
 clean_map = {
@@ -142,7 +142,7 @@ class ParamInfo:
     default: Optional[Any] = None
     model: Optional[str] = None
 
-    def clean_value(self, value: Union[str, List[str]]):
+    def clean_value(self, value: Union[str, list[str]]):
         if not isinstance(value, list):
             value = [value]
         if self.model and self.resolve_nested and self.allow_multi:
@@ -163,7 +163,7 @@ class ParamInfo:
             return value
         return clean_map[self.type](value)
 
-    def clean_nested_model(self, values: List[Any]) -> List[Any]:
+    def clean_nested_model(self, values: list[Any]) -> list[Any]:
         r = set()
         m = get_model(self.model)
         for v in values:
@@ -186,9 +186,9 @@ class BaseDataSource:
     ENABLE_CH_MIRROR = False
 
     name: str
-    fields: List[FieldInfo]
-    params: Optional[List[ParamInfo]] = None
-    row_index: Union[str, Tuple[str, ...]] = "id"
+    fields: list[FieldInfo]
+    params: Optional[list[ParamInfo]] = None
+    row_index: Union[str, tuple[str, ...]] = "id"
 
     @classmethod
     def clickhouse_mirror(cls) -> bool:
@@ -196,7 +196,7 @@ class BaseDataSource:
         return cls.ENABLE_CH_MIRROR
 
     @classmethod
-    def join_fields(cls) -> List[str]:
+    def join_fields(cls) -> list[str]:
         if not cls.row_index:
             return []
         if cls.row_index and isinstance(cls.row_index, str):
@@ -215,7 +215,7 @@ class BaseDataSource:
         )
 
     @classmethod
-    def clean_params(cls, params: Dict[str, Any]) -> Dict[str, Any]:
+    def clean_params(cls, params: dict[str, Any]) -> dict[str, Any]:
         r = {}
         if "user" in params or "administrative_domain" in params:
             idx = cls.get_ads_filter(
@@ -238,8 +238,8 @@ class BaseDataSource:
     @staticmethod
     def get_ads_filter(
         user: Optional[Any] = None,
-        administrative_domain: Optional[Union[List[Any], Any]] = None,
-    ) -> Optional[List[int]]:
+        administrative_domain: Optional[Union[list[Any], Any]] = None,
+    ) -> Optional[list[int]]:
         """
         Build Administrative Domain filter
         """
@@ -271,7 +271,7 @@ class BaseDataSource:
         start: datetime.datetime,
         end: Optional[datetime.datetime] = None,
         period: Optional[int] = None,
-    ) -> Tuple[datetime.datetime, datetime.datetime]:
+    ) -> tuple[datetime.datetime, datetime.datetime]:
         """Clean datetime interval"""
         end = (end or datetime.datetime.now()).replace(microsecond=0)
         start = start or end - datetime.timedelta(seconds=period or cls.DEFAULT_INTERVAL)
@@ -291,7 +291,7 @@ class BaseDataSource:
         return run_sync(partial(cls.query, fields, *args, **kwargs))
 
     @classmethod
-    def get_columns_dtype(cls, fields: Optional[List[str]] = None):
+    def get_columns_dtype(cls, fields: Optional[list[str]] = None):
         """
         Return Column Dtype
         columns=[("col1", pl.Float32), ("col2", pl.Int64)]
@@ -317,7 +317,7 @@ class BaseDataSource:
         return any(f.name == name for f in cls.iter_ds_fields())
 
     @classmethod
-    def is_out_field(cls, f: FieldInfo, fields: Optional[Set[str]] = None) -> bool:
+    def is_out_field(cls, f: FieldInfo, fields: Optional[set[str]] = None) -> bool:
         """
         Check field allowed to out
         """
@@ -332,7 +332,7 @@ class BaseDataSource:
         return f.name in fields
 
     @classmethod
-    def get_series_from_data(cls, data: Dict[str, List[Any]], fields: Optional[Set[str]] = None):
+    def get_series_from_data(cls, data: dict[str, list[Any]], fields: Optional[set[str]] = None):
         """Getting dataframe from series columns data"""
         series = []
         for c in cls.iter_ds_fields():
@@ -395,7 +395,7 @@ class BaseDataSource:
         # return pl.DataFrame(r, columns=[(c.name, c.type.value) for c in cls.fields])
 
     @classmethod
-    def get_clickhouse_snapshots(cls, ttl: Optional[datetime.datetime] = None) -> List[DSSnapshot]:
+    def get_clickhouse_snapshots(cls, ttl: Optional[datetime.datetime] = None) -> list[DSSnapshot]:
         """Return available snapshots for Datasource"""
         if not cls.clickhouse_mirror():
             return []
@@ -497,7 +497,7 @@ class BaseDataSource:
     @classmethod
     async def iter_row(
         cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
-    ) -> AsyncIterable[Dict[str, str]]:
+    ) -> AsyncIterable[dict[str, str]]:
         """
         Iterate data as row
         :param fields: list fields for filtered on query
@@ -518,7 +518,7 @@ class BaseDataSource:
     @classmethod
     async def iter_query(
         cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
-    ) -> AsyncIterable[Tuple[int, str, Union[str, int]]]:
+    ) -> AsyncIterable[tuple[int, str, Union[str, int]]]:
         """
         Method for query report data. Iterate over field data
         :param fields: list fields for filtered on query

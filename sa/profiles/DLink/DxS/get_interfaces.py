@@ -181,7 +181,7 @@ class Script(BaseScript):
 
     def iter_iftable(
         self, key: str, oid: str, ifindexes: Optional[Iterable[int]] = None, clean: Callable = None
-    ) -> Iterable[Tuple[str, Union[str, int]]]:
+    ) -> Iterable[tuple[str, Union[str, int]]]:
         if key == "mac" and self.is_bad_ifmib_snmp:
             oid = "LLDP-MIB::lldpLocPortId"
         return super().iter_iftable(key=key, oid=oid, ifindexes=ifindexes, clean=clean)

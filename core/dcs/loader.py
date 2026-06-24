@@ -29,7 +29,7 @@ class DCSRunner:
         self.lock = Lock()
         self.thread: Optional[Thread] = None
         self.loop: Optional[asyncio.BaseEventLoop] = None
-        self.instances: Dict[str, DCSBase] = {}
+        self.instances: dict[str, DCSBase] = {}
         self.ready_event = Event()
         self.logger = logging.getLogger()
 

@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 class SegmentTopology(TopologyBase):
     name = "segment"
     header = _("Network Segment Schemas")
-    CAPS: Set[str] = {"Network | STP"}
+    CAPS: set[str] = {"Network | STP"}
     PARAMS = {"segment"}
 
     def __init__(self, segment, **settings):
@@ -76,7 +76,7 @@ class SegmentTopology(TopologyBase):
         return "downlink"
 
     @cachetools.cachedmethod(operator.attrgetter("_uplinks_cache"))
-    def get_uplinks(self) -> List[str]:
+    def get_uplinks(self) -> list[str]:
         self.logger.info("Searching for uplinks")
         if not self.G:
             return []
@@ -94,7 +94,7 @@ class SegmentTopology(TopologyBase):
         self.logger.info("Failed to find uplinks")
         return []
 
-    def get_uplinks_seghier(self) -> List[str]:
+    def get_uplinks_seghier(self) -> list[str]:
         """
         Find uplinks basing on segment hierarchy. Any object with parent segment
         is uplink
@@ -102,7 +102,7 @@ class SegmentTopology(TopologyBase):
         """
         return [i for i in self.G.nodes if self.G.nodes[i].get("role") == "uplink"]
 
-    def get_uplinks_molevel(self) -> List[str]:
+    def get_uplinks_molevel(self) -> list[str]:
         """
         Find uplinks basing on Managed Object's level. Top-leveled objects are returned.
         :return:
@@ -119,14 +119,14 @@ class SegmentTopology(TopologyBase):
             and self.G.nodes[i].get("level") == max_level
         ]
 
-    def get_uplinks_seg(self) -> List[str]:
+    def get_uplinks_seg(self) -> list[str]:
         """
         All segment objects are uplinks
         :return:
         """
         return [i for i in self.G.nodes if self.G.nodes[i].get("role") == "segment"]
 
-    def get_uplinks_minaddr(self) -> List[str]:
+    def get_uplinks_minaddr(self) -> list[str]:
         """
         Segment's Object with lesser address is uplink
         :return:
@@ -142,7 +142,7 @@ class SegmentTopology(TopologyBase):
         )
         return [s[1]]
 
-    def get_uplinks_maxaddr(self) -> List[str]:
+    def get_uplinks_maxaddr(self) -> list[str]:
         """
         Segment's Object with greater address is uplink
         :return:
@@ -164,15 +164,15 @@ class SegmentTopology(TopologyBase):
         Load all managed objects from segment
         """
         # Get all links, belonging to segment
-        links: List[Link] = list(
+        links: list[Link] = list(
             Link.objects.filter(linked_segments__in=[s.id for s in self.segment_siblings])
         )
         # All linked interfaces from map
-        all_ifaces: List["ObjectId"] = list(
+        all_ifaces: list["ObjectId"] = list(
             itertools.chain.from_iterable(link.interface_ids for link in links)
         )
         # Bulk fetch all interfaces data
-        self._interface_cache: Dict["ObjectId", "Interface"] = {
+        self._interface_cache: dict["ObjectId", "Interface"] = {
             i["_id"]: i
             for i in Interface._get_collection().find(
                 {"_id": {"$in": all_ifaces}},
@@ -187,15 +187,15 @@ class SegmentTopology(TopologyBase):
             )
         }
         # Bulk fetch all managed objects
-        segment_mos: Set[int] = set(self.segment.managed_objects.values_list("id", flat=True))
-        all_mos: List[int] = list(
+        segment_mos: set[int] = set(self.segment.managed_objects.values_list("id", flat=True))
+        all_mos: list[int] = list(
             {i["managed_object"] for i in self._interface_cache.values() if "managed_object" in i}
             | segment_mos
         )
-        mos: Dict[int, "ManagedObject"] = {
+        mos: dict[int, "ManagedObject"] = {
             mo.id: mo for mo in ManagedObject.objects.filter(id__in=all_mos)
         }
-        self.segment_objects: Set[int] = {
+        self.segment_objects: set[int] = {
             mo_id for mo_id in all_mos if mos[mo_id].segment.id == self.segment.id
         }
         for mo in mos.values():
@@ -220,7 +220,7 @@ class SegmentTopology(TopologyBase):
         :returns: ObjectUplinks items
         """
 
-        def get_node_uplinks(node: str) -> List[str]:
+        def get_node_uplinks(node: str) -> list[str]:
             role = self.G.nodes[node].get("role", "cloud")
             if role == "uplink":
                 # Only downlinks matter
@@ -246,21 +246,21 @@ class SegmentTopology(TopologyBase):
         uplinks = self.get_uplinks()
         # @todo: Workaround for empty uplinks
         # Get uplinks for cloud nodes
-        cloud_uplinks: Dict[str, List[int]] = {
+        cloud_uplinks: dict[str, list[int]] = {
             o: [int(u) for u in get_node_uplinks(o)]
             for o in self.G.nodes
             if self.G.nodes[o]["type"] == "cloud"
         }
         # All objects including neighbors
-        all_objects: Set[str] = {
+        all_objects: set[str] = {
             o for o in self.G.nodes if self.G.nodes[o]["type"] == "managedobject"
         }
         # Get objects uplinks
-        obj_uplinks: Dict[int, List[int]] = {}
-        obj_downlinks: Dict[int, Set[int]] = defaultdict(set)
+        obj_uplinks: dict[int, list[int]] = {}
+        obj_downlinks: dict[int, set[int]] = defaultdict(set)
         for o in all_objects:
             mo = int(o)
-            ups: List[int] = []
+            ups: list[int] = []
             for u in get_node_uplinks(o):
                 cu = cloud_uplinks.get(u)
                 if cu is not None:
@@ -272,7 +272,7 @@ class SegmentTopology(TopologyBase):
             for u in ups:
                 obj_downlinks[u].add(mo)
         # Check uplinks with DownlinkMerge settings
-        dlm_settings: Set[int] = set(
+        dlm_settings: set[int] = set(
             ManagedObject.objects.filter(
                 id__in=obj_uplinks, object_profile__enable_rca_downlink_merge=True
             ).values_list("id", flat=True)

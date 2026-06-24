@@ -51,7 +51,7 @@ class PoolItem(BaseModel):
     ip_filter: Optional[str] = None
 
 
-PoolItems = RootModel[List[PoolItem]]
+PoolItems = RootModel[list[PoolItem]]
 
 
 @Label.model
@@ -114,7 +114,7 @@ class Prefix(NOCModel):
     vlan: "VLAN" = DocumentReferenceField(VLAN, null=True, blank=True)
     description: str = models.TextField(_("Description"), blank=True, null=True)
     # Pools
-    pools: Optional[List[PoolItem]] = PydanticField(
+    pools: Optional[list[PoolItem]] = PydanticField(
         "Remote System Mapping Items",
         schema=PoolItems,
         blank=True,
@@ -202,7 +202,7 @@ class Prefix(NOCModel):
         return Prefix.objects.filter(id=oid).first()
 
     @classmethod
-    def get_by_resource_pool(cls, pool: ResourcePool) -> List["Prefix"]:
+    def get_by_resource_pool(cls, pool: ResourcePool) -> list["Prefix"]:
         """Getting Prefixes for resource pool"""
         # Include VRF
         q = Q(pools__contains=[{"pool": str(pool.id)}])
@@ -224,7 +224,7 @@ class Prefix(NOCModel):
                 continue
             yield p
 
-    def get_pool_hints(self, pool) -> Optional[Dict[str, Any]]:
+    def get_pool_hints(self, pool) -> Optional[dict[str, Any]]:
         """Getting pool setting for L2Domain"""
         return {}
 
@@ -528,7 +528,7 @@ class Prefix(NOCModel):
         )
 
     @property
-    def address_ranges(self) -> List["AddressRange"]:
+    def address_ranges(self) -> list["AddressRange"]:
         """
         All prefix-related address ranges
         :return:
@@ -810,8 +810,8 @@ class Prefix(NOCModel):
     @classmethod
     def get_resource_pool_usage(
         cls,
-        pools: List[ResourcePool],
-        domains: Optional[List["Prefix"]] = None,
+        pools: list[ResourcePool],
+        domains: Optional[list["Prefix"]] = None,
     ):
         """"""
         return 0.0

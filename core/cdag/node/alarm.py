@@ -40,12 +40,12 @@ class AlarmNodeConfig(BaseModel):
     dry_run: bool = False  # For service test used
     pool: str = ""
     partition: int = 0
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None
     error_text_template: Optional[str] = None
     activation_level: float = 1.0
     deactivation_level: float = 1.0
     invert_condition: bool = False
-    vars: Optional[List[VarItem]] = None
+    vars: Optional[list[VarItem]] = None
 
 
 logger = logging.getLogger(__name__)

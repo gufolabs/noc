@@ -32,7 +32,7 @@ SQL = """
 class ReportEventSummary(ReportSource):
     name = "reporteventsummary"
 
-    def get_formats(self) -> Dict[str, BandFormat]:
+    def get_formats(self) -> dict[str, BandFormat]:
         return {
             "header": BandFormat(title_template="Event Summary"),
             "row": BandFormat(
@@ -49,7 +49,7 @@ class ReportEventSummary(ReportSource):
             ),
         }
 
-    def get_data(self, request=None, **kwargs) -> List[Band]:
+    def get_data(self, request=None, **kwargs) -> list[Band]:
         """ """
         report_type = kwargs.get("report_type") or []
         if "class" in report_type:

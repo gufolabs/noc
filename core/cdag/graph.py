@@ -16,10 +16,10 @@ from .tx import Transaction
 
 
 class CDAG:
-    def __init__(self, graph_id: str, state: Optional[Dict[str, Any]] = None):
+    def __init__(self, graph_id: str, state: Optional[dict[str, Any]] = None):
         self.graph_id = graph_id
-        self.state: Dict[str, Any] = state or {}
-        self.nodes: Dict[str, BaseCDAGNode] = {}
+        self.state: dict[str, Any] = state or {}
+        self.nodes: dict[str, BaseCDAGNode] = {}
 
     def __getitem__(self, item: str) -> BaseCDAGNode:
         return self.nodes[item]
@@ -32,8 +32,8 @@ class CDAG:
         node_id: str,
         node_type: str,
         description: Optional[str] = None,
-        config: Optional[Dict[str, Any]] = None,
-        override_config: Optional[Dict[str, Any]] = None,
+        config: Optional[dict[str, Any]] = None,
+        override_config: Optional[dict[str, Any]] = None,
         sticky: bool = False,
     ) -> BaseCDAGNode:
         if node_id in self.nodes:
@@ -64,7 +64,7 @@ class CDAG:
     def get_node(self, name: str) -> Optional[BaseCDAGNode]:
         return self.nodes.get(name)
 
-    def get_state(self) -> Dict[str, Any]:
+    def get_state(self) -> dict[str, Any]:
         """
         Construct current state
         :return:
@@ -87,7 +87,7 @@ class CDAG:
         :return:
         """
         # Merge nodes
-        nodes: Dict[str, BaseCDAGNode] = {}
+        nodes: dict[str, BaseCDAGNode] = {}
         for node_id, node in other.nodes.items():
             # Normalize name
             if node.sticky or not prefix:
@@ -115,10 +115,10 @@ class CDAG:
 
         :return:
         """
-        n_map: Dict[str, str] = {}
+        n_map: dict[str, str] = {}
         r = ["digraph {", '  rankdir="LR";']
-        tb: List[str] = []
-        tb_conn: List[str] = []
+        tb: list[str] = []
+        tb_conn: list[str] = []
         tb_count = itertools.count()
         # Nodes
         for n, node_id in enumerate(sorted(self.nodes)):

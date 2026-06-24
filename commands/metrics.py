@@ -90,7 +90,7 @@ class Command(BaseCommand):
     def handle(self, cmd, *args, **options):
         return getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
-    def get_source(self, source: str) -> Tuple[str, Any]:
+    def get_source(self, source: str) -> tuple[str, Any]:
         """
         Get source by input
         iface:<MONAME>::<IFACE_NAME>,
@@ -132,7 +132,7 @@ class Command(BaseCommand):
             f.write(cdag.get_dot())
 
     def handle_load(self, fields, input, chunk, rm, *args, **kwargs):
-        async def upload(table: str, data: List[bytes]):
+        async def upload(table: str, data: list[bytes]):
             CHUNK = 1000
             n_parts = len(config.clickhouse.cluster_topology.split(","))
             async with MessageStreamClient() as client:
@@ -161,7 +161,7 @@ class Command(BaseCommand):
     def input_from_device(
         self,
         source: str,
-        metrics: List[str],
+        metrics: list[str],
         start: Optional[datetime.datetime] = None,
         end: Optional[datetime.datetime] = None,
         register_metric: bool = False,
@@ -234,11 +234,11 @@ class Command(BaseCommand):
     def iter_metrics(
         self,
         f_input: Optional[str],
-        metrics: Optional[List[str]] = None,
+        metrics: Optional[list[str]] = None,
         start: Optional[datetime.datetime] = None,
         end: Optional[datetime.datetime] = None,
         register_metric: bool = False,
-    ) -> Iterable[Dict[str, Union[float, str]]]:
+    ) -> Iterable[dict[str, Union[float, str]]]:
         if ":" in f_input:
             yield from self.input_from_device(
                 f_input, metrics, start=start, end=end, register_metric=register_metric
@@ -352,7 +352,7 @@ class Command(BaseCommand):
             time.sleep(5)
             self.print("Register Metric", data)
 
-    def from_config_paths(self, paths: List[str]) -> CDAG:
+    def from_config_paths(self, paths: list[str]) -> CDAG:
         from noc.core.mongo.connection import connect
 
         connect()
@@ -392,7 +392,7 @@ class Command(BaseCommand):
         return cdag
 
     @staticmethod
-    def input_from_file(f_input: str) -> Iterable[Dict[str, Union[float, str]]]:
+    def input_from_file(f_input: str) -> Iterable[dict[str, Union[float, str]]]:
         with open(f_input) as f:
             for line in f:
                 line = line.strip()

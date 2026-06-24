@@ -401,7 +401,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
     Increase if box send unprivileged prompt twice
     """
 
-    snmp_display_hints: Dict[str, Optional[Callable[[str, bytes], Union[str, bytes]]]] = {}
+    snmp_display_hints: dict[str, Optional[Callable[[str, bytes], Union[str, bytes]]]] = {}
     """
     Additional hints for snmp binary OctetString data processing
     Contains mapping of
@@ -442,7 +442,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
     Broken SNMP implementations are urged to use `parse_get_response_strict`
     """
 
-    snmp_rate_limit: Dict[str, Optional[float]] = {}
+    snmp_rate_limit: dict[str, Optional[float]] = {}
     """
     matcher_name -> snmp rate limit
     for default get_snmp_rate_limit() implementation
@@ -818,7 +818,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
 
     port_splitter = " "
 
-    def get_protocol_prefixes(self, protocols: List[str]) -> List[str]:
+    def get_protocol_prefixes(self, protocols: list[str]) -> list[str]:
         """
         Return interface prefix by Protocol
         :param protocols: Protocols code list
@@ -830,7 +830,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
                     return self.proto_prefixes[pp]
         return []
 
-    def get_interfaces_by_port(self, port: PortItem) -> List[str]:
+    def get_interfaces_by_port(self, port: PortItem) -> list[str]:
         """
         1. If device is not stackable and not module (len path) - return slot num
         2. Append num from last path element
@@ -842,7 +842,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         """
         if len(port.path) <= 1 and port.stack_num is None:
             return [port.name]
-        r: List[str] = []
+        r: list[str] = []
         x = []
         for p in reversed(port.path):
             x.insert(0, self.get_connection_path(p.c_name))
@@ -1189,7 +1189,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         Return dict of compiled regular expressions
         """
 
-        def get_commands(pattern_more) -> List[Union[bytes, Dict[Tuple[str, ...], str]]]:
+        def get_commands(pattern_more) -> list[Union[bytes, dict[tuple[str, ...], str]]]:
             commands = []
             for x in pattern_more:
                 c = x[1]

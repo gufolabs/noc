@@ -46,7 +46,7 @@ class CPEStatusCheck(DiscoveryCheck):
             self.logger.info("No CPE with status discovery enabled. Skipping")
             return
         bulk = []
-        result: List[Dict[str, str]] = self.object.scripts.get_cpe_status(cpes=hints)
+        result: list[dict[str, str]] = self.object.scripts.get_cpe_status(cpes=hints)
         for r in result:
             lid = r["local_id"]
             if lid not in cpe_cache:

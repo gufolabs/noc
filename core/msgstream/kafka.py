@@ -121,7 +121,7 @@ class KafkaClient:
         """
         client = self.get_kafka_client()
         await client.bootstrap()
-        s_meta: Dict[str, Dict[int, PartitionMetadata]] = defaultdict(dict)
+        s_meta: dict[str, dict[int, PartitionMetadata]] = defaultdict(dict)
         req_parts = []
         r = await client.fetch_all_metadata()
         for stream_n, stream_m in r._partitions.items():
@@ -238,7 +238,7 @@ class KafkaClient:
         return self.admin_client
 
     @staticmethod
-    def get_topic_config(name, replication_factor: int = 1) -> Dict[str, str]:
+    def get_topic_config(name, replication_factor: int = 1) -> dict[str, str]:
         """
         Return topic retention settings
         :param name:
@@ -305,7 +305,7 @@ class KafkaClient:
 
     async def _subscribe(
         self,
-        streams: List[str],
+        streams: list[str],
         group_id: str,
         partition: Optional[int] = None,
         start_offset: Optional[int] = None,
@@ -356,7 +356,7 @@ class KafkaClient:
             if start_offset is not None:
                 consumer.seek(tp, start_offset)
             elif start_timestamp is not None:
-                offset: Dict[TopicPartition, OffsetAndTimestamp] = await consumer.offsets_for_times(
+                offset: dict[TopicPartition, OffsetAndTimestamp] = await consumer.offsets_for_times(
                     {tp: start_timestamp}
                 )
                 consumer.seek(tp, offset[tp].offset)
@@ -427,7 +427,7 @@ class KafkaClient:
         stream: Optional[str] = None,
         key: Optional[bytes] = None,
         partition: Optional[int] = None,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: Optional[dict[str, bytes]] = None,
         **kwargs,
     ) -> None:
         """
@@ -504,8 +504,8 @@ class KafkaClient:
         self,
         from_topic,
         to_topic,
-        partitions: Optional[Union[Dict[int, int], int]] = None,
-    ) -> Dict[int, int]:
+        partitions: Optional[Union[dict[int, int], int]] = None,
+    ) -> dict[int, int]:
         """
         Copy message from one topic to another
         :param from_topic: From topic
@@ -513,7 +513,7 @@ class KafkaClient:
         :param partitions: Number of from partition
         :return:
         """
-        n_msg: Dict[int, int] = {}  # partition -> copied messages
+        n_msg: dict[int, int] = {}  # partition -> copied messages
         if not partitions:
             partitions = {0: 0}
         elif isinstance(partitions, int):

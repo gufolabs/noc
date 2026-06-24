@@ -82,7 +82,7 @@ class VLANCheck(PolicyDiscoveryCheck):
         #     source="vlan",
         # )
 
-    def allocate_vlans(self, l2_domain: "L2Domain", vlans: List["DiscoveryVLAN"]) -> List["VLAN"]:
+    def allocate_vlans(self, l2_domain: "L2Domain", vlans: list["DiscoveryVLAN"]) -> list["VLAN"]:
         """
         1. Getting pools
         3. Lock by pool
@@ -90,7 +90,7 @@ class VLANCheck(PolicyDiscoveryCheck):
         """
         pools = [p.pool for p in l2_domain.iter_pool_settings()]
         # @todo Filter pool by allocate vland + pool filter
-        vlan_include_filter: Set[int] = set(l2_domain.get_effective_vlan_id())
+        vlan_include_filter: set[int] = set(l2_domain.get_effective_vlan_id())
         # Check VLANs for create
         create_vlans = []
         for dvlan in vlans:
@@ -131,15 +131,15 @@ class VLANCheck(PolicyDiscoveryCheck):
                 )
         return r
 
-    def ensure_vlans(self, vlans: List["DiscoveryVLAN"]) -> List["VLAN"]:
+    def ensure_vlans(self, vlans: list["DiscoveryVLAN"]) -> list["VLAN"]:
         """
         Synchronize all vlans
         Get existing VLAN
         2. Getting vlans
         5. Return VLANs
         """
-        result: List["VLAN"] = []
-        l2domains_vlan_map: Dict["L2Domain", Dict[int, "DiscoveryVLAN"]] = {}
+        result: list["VLAN"] = []
+        l2domains_vlan_map: dict["L2Domain", dict[int, "DiscoveryVLAN"]] = {}
         for v in vlans:
             if v.l2domain not in l2domains_vlan_map:
                 l2domains_vlan_map[v.l2domain] = {}
@@ -150,12 +150,12 @@ class VLANCheck(PolicyDiscoveryCheck):
                 processed_vlans.add(vlan.vlan)
                 # @todo fix for some intelligence
                 vlan.__allow_seen = vlanid_map[vlan.vlan].allow_seen
-            allocated_vlans: Set[int] = set(vlanid_map) - processed_vlans
+            allocated_vlans: set[int] = set(vlanid_map) - processed_vlans
             if allocated_vlans:
                 result += self.allocate_vlans(l2domain, [vlanid_map[av] for av in allocated_vlans])
         return result
 
-    def get_object_vlans(self, l2_domain: "L2Domain") -> List["DiscoveryVLAN"]:
+    def get_object_vlans(self, l2_domain: "L2Domain") -> list["DiscoveryVLAN"]:
         """Get VLANs from equipment"""
         if self.object.object_profile.vlan_vlandb_discovery == "D":
             self.logger.info(
@@ -183,7 +183,7 @@ class VLANCheck(PolicyDiscoveryCheck):
             if not vlan_filter or v["vlan_id"] in vlan_filter
         ]
 
-    def get_interface_vlans(self, l2_domain: "L2Domain") -> List["DiscoveryVLAN"]:
+    def get_interface_vlans(self, l2_domain: "L2Domain") -> list["DiscoveryVLAN"]:
         """Get VLANs from interface discovery artifact"""
         self.logger.debug("Getting interface vlans")
         if self.object.object_profile.vlan_interface_discovery == "D":
@@ -214,7 +214,7 @@ class VLANCheck(PolicyDiscoveryCheck):
         ]
 
     @staticmethod
-    def merge_vlans(vlans: List["DiscoveryVLAN"]) -> List["DiscoveryVLAN"]:
+    def merge_vlans(vlans: list["DiscoveryVLAN"]) -> list["DiscoveryVLAN"]:
         """
         Merge object vlans with artifactory ones
         :param vlans:
@@ -229,7 +229,7 @@ class VLANCheck(PolicyDiscoveryCheck):
             processed.append(v.id)
         return vlans
 
-    def refresh_discovery_timestamps(self, vlans: List["VLAN"]):
+    def refresh_discovery_timestamps(self, vlans: list["VLAN"]):
         """
         Bulk update discovery timestamps of all vlans from list
         :param vlans: List of VLAN instances
@@ -243,7 +243,7 @@ class VLANCheck(PolicyDiscoveryCheck):
             VLAN._get_collection().bulk_write(bulk, ordered=True)
 
     @staticmethod
-    def send_seen_events(vlans: List["VLAN"]):
+    def send_seen_events(vlans: list["VLAN"]):
         """
         Send *seen* event to all vlans from list
         :param vlans: List of VLAN instances

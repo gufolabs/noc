@@ -24,7 +24,7 @@ class MeResponse(BaseModel):
     id: str
     username: str
     language: str
-    groups: List[GroupItem]
+    groups: list[GroupItem]
     avatar_label: str = Field(
         title="Avatar Label", description="Letters to be used when avatar is missed or empty"
     )

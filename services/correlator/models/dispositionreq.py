@@ -33,9 +33,9 @@ class DispositionRequest(BaseModel):
     alarm_class: Optional[str] = None
     severity: Optional[int] = None
     timestamp: Optional[str] = None
-    groups: Optional[List[GroupItem]] = None
-    vars: Optional[Dict[str, Any]] = None
-    labels: Optional[List[str]] = None
+    groups: Optional[list[GroupItem]] = None
+    vars: Optional[dict[str, Any]] = None
+    labels: Optional[list[str]] = None
     managed_object: Optional[str] = None
     remote_system: Optional[str] = None
     remote_id: Optional[str] = None

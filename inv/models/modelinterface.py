@@ -124,7 +124,7 @@ class ModelInterface(Document):
 
     name = StringField(unique=True)
     description = StringField()
-    attrs: List[ModelInterfaceAttr] = ListField(EmbeddedDocumentField(ModelInterfaceAttr))
+    attrs: list[ModelInterfaceAttr] = ListField(EmbeddedDocumentField(ModelInterfaceAttr))
     uuid = UUIDField(binary=True)
 
     _id_cache = cachetools.TTLCache(100, 10)
@@ -178,7 +178,7 @@ class ModelInterface(Document):
         return safe_json_path(self.name)
 
     @classmethod
-    def clean_data(cls, data: List[Dict[str, str]]) -> List[Dict[str, Any]]:
+    def clean_data(cls, data: list[dict[str, str]]) -> list[dict[str, Any]]:
         """
         Convert types according to interface
         """

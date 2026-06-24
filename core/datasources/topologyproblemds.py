@@ -42,11 +42,11 @@ class TopologyProblemDS(BaseDataSource):
         pool: Optional[Pool] = None,
         mo_profile: Optional[ManagedObjectProfile] = None,
         available_only: bool = False,
-        admin_domain_ads: Optional[List[int]] = None,
+        admin_domain_ads: Optional[list[int]] = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[str, str]]:
-        problems: Dict[int, str] = {}  # mo_id -> problem
+    ) -> AsyncIterable[tuple[str, str]]:
+        problems: dict[int, str] = {}  # mo_id -> problem
         mos = ManagedObject.objects.filter(is_managed=True, pool=pool)
         if admin_domain_ads:
             mos = mos.filter(administrative_domain__in=admin_domain_ads)

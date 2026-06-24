@@ -28,14 +28,14 @@ class NodeItem(BaseModel):
     name: str
     type: str
     description: Optional[str] = None
-    config: Optional[Dict[str, Any]] = None
-    inputs: Optional[List[InputItem]] = None
-    match: Optional[Dict[str, Any]] = None
+    config: Optional[dict[str, Any]] = None
+    inputs: Optional[list[InputItem]] = None
+    match: Optional[dict[str, Any]] = None
     sticky: bool = False
 
 
 class GraphConfig(BaseModel):
-    nodes: List[NodeItem]
+    nodes: list[NodeItem]
 
 
 class ConfigCDAGFactory(BaseCDAGFactory):
@@ -49,7 +49,7 @@ class ConfigCDAGFactory(BaseCDAGFactory):
         config: GraphConfig,
         ctx: Optional[FactoryCtx] = None,
         namespace: Optional[str] = None,
-        nodes_config: Optional[Dict[str, Dict[str, Any]]] = None,
+        nodes_config: Optional[dict[str, dict[str, Any]]] = None,
         node_config_prefix: Optional[str] = None,
     ):
         super().__init__(graph, ctx, namespace)
@@ -57,7 +57,7 @@ class ConfigCDAGFactory(BaseCDAGFactory):
         self.nodes_config = nodes_config or {}
         self.node_config_prefix = node_config_prefix
 
-    def requirements_met(self, inputs: Optional[List[InputItem]]):
+    def requirements_met(self, inputs: Optional[list[InputItem]]):
         if not inputs:
             return True
         return all(self.expand_input(input.node) in self.graph for input in inputs)
@@ -67,7 +67,7 @@ class ConfigCDAGFactory(BaseCDAGFactory):
             return True
         return match(self.ctx, expr)
 
-    def clean_node_config(self, node_id: str, config: Optional[Dict[str, Any]]) -> Any:
+    def clean_node_config(self, node_id: str, config: Optional[dict[str, Any]]) -> Any:
         return config
 
     def construct(self) -> None:

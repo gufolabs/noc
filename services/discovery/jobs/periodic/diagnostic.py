@@ -73,7 +73,7 @@ class DiagnosticCheck(DiscoveryCheck):
                 credential: Union[SNMPCredential, CLICredential, SNMPv3Credential] = None
                 for do_checks in d_hub.iter_checks(di.diagnostic):
                     # Do nothing check ?
-                    checks: List[CheckResult] = []
+                    checks: list[CheckResult] = []
                     for cr in self.run_checks(do_checks):
                         if (
                             di.config.allow_set_credentials
@@ -99,7 +99,7 @@ class DiagnosticCheck(DiscoveryCheck):
         self.logger.debug("Object Diagnostics: %s", self.object.diagnostics)
         # Fire workflow event diagnostic ?
 
-    def run_checks(self, checks: Tuple[Check, ...]) -> List[CheckResult]:
+    def run_checks(self, checks: tuple[Check, ...]) -> list[CheckResult]:
         self.logger.debug("Call checks on activator: %s", checks)
         script_checks, do_checks = [], []
         r = []
@@ -122,7 +122,7 @@ class DiagnosticCheck(DiscoveryCheck):
                 self.logger.error("RPC Error: %s", e)
         return [CheckResult.from_dict(c) for c in r]
 
-    def register_diagnostic_metrics(self, metrics: List[MetricValue]):
+    def register_diagnostic_metrics(self, metrics: list[MetricValue]):
         """
         Metrics Labels:
           noc::diagnostic::<name>

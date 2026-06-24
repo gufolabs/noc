@@ -107,7 +107,7 @@ class Job:
         self.start_time = None
         self.duration = None
         self.logger = PrefixLoggerAdapter(scheduler.logger, self.get_display_key())
-        self.context: Dict[str, Any] = {}
+        self.context: dict[str, Any] = {}
 
     def load_context(self, data):
         self.context = data or {}

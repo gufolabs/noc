@@ -101,7 +101,7 @@ class CPE(Document):
     }
 
     # (<managed object>, <local_id>) Must be unique
-    controllers: List[ControllerItem] = EmbeddedDocumentListField(ControllerItem)
+    controllers: list[ControllerItem] = EmbeddedDocumentListField(ControllerItem)
     global_id = StringField(unique=True)
     # Probe profile
     profile: CPEProfile = PlainReferenceField(CPEProfile, default=CPEProfile.get_default_profile)
@@ -124,7 +124,7 @@ class CPE(Document):
     address = StringField(validation=check_address)
     label = StringField(required=False)
     # Capabilities
-    caps: List[CapsItem] = EmbeddedDocumentListField(CapsItem)
+    caps: list[CapsItem] = EmbeddedDocumentListField(CapsItem)
     # Object id in BI
     bi_id = LongField(unique=True)
     # Labels
@@ -171,7 +171,7 @@ class CPE(Document):
             ]
 
     @classmethod
-    def iter_effective_labels(cls, instance: "CPE") -> List[str]:
+    def iter_effective_labels(cls, instance: "CPE") -> list[str]:
         yield list(instance.labels or [])
         if instance.profile.labels:
             yield list(instance.profile.labels)
@@ -388,7 +388,7 @@ class CPE(Document):
         self,
         status: bool,
         change_ts: Optional[datetime.datetime] = None,
-        bulk: Optional[List[Any]] = None,
+        bulk: Optional[list[Any]] = None,
     ):
         """
         Set oper CPE status
@@ -419,7 +419,7 @@ class CPE(Document):
         Get FTS index
         """
         card = f"CPE object {self.global_id} ({self.address})"
-        content: List[str] = [self.global_id, self.address]
+        content: list[str] = [self.global_id, self.address]
         if self.description:
             content += [self.description]
         return {
@@ -474,7 +474,7 @@ class CPE(Document):
             return self.profile.glyph.code
         return None
 
-    def get_shape_overlays(self) -> List[ShapeOverlay]:
+    def get_shape_overlays(self) -> list[ShapeOverlay]:
         return []
 
     def get_topology_node(self) -> TopologyNode:
@@ -494,7 +494,7 @@ class CPE(Document):
             },
         )
 
-    def get_matcher_ctx(self) -> Dict[str, Any]:
+    def get_matcher_ctx(self) -> dict[str, Any]:
         r = {
             "description": self.description,
             "labels": list(self.effective_labels),

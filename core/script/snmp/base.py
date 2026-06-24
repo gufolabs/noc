@@ -206,7 +206,7 @@ class SNMP:
             self.display_hints = self.script.profile.get_snmp_display_hints(self.script)
         return self.display_hints
 
-    def _get_snmp_credentials(self, version: Optional[int] = None) -> Tuple[str, int]:
+    def _get_snmp_credentials(self, version: Optional[int] = None) -> tuple[str, int]:
         version = self._get_snmp_version(version)
         if self.script.is_beefed:
             return "public", SNMP_v2c
@@ -218,14 +218,14 @@ class SNMP:
 
     def get(
         self,
-        oids: Union[Dict[str, str], str],
+        oids: Union[dict[str, str], str],
         cached: bool = False,
         version: Optional[int] = None,
         timeout: int = 10,
         raw_varbinds=False,
-        display_hints: Optional[Dict[str, Callable]] = None,
+        display_hints: Optional[dict[str, Callable]] = None,
         strict_value=False,
-    ) -> Union[Any, Dict[str, Any]]:
+    ) -> Union[Any, dict[str, Any]]:
         """
         Perform SNMP GET request by gufo_snmp library
         Args:
@@ -368,9 +368,9 @@ class SNMP:
         max_retries: int = 0,
         timeout: int = 10,
         raw_varbinds: bool = False,
-        display_hints: Optional[Dict[str, Callable]] = None,
+        display_hints: Optional[dict[str, Callable]] = None,
         max_records: Optional[int] = None,
-    ) -> List[Tuple[str, Any]]:
+    ) -> list[tuple[str, Any]]:
         """
         Perform SNMP GETNEXT request by gufo_snmp library
         :param oid: string
@@ -470,7 +470,7 @@ class SNMP:
 
     def get_tables(
         self,
-        oids: List[str],
+        oids: list[str],
         community_suffix: str = None,
         bulk: Optional[bool] = None,
         min_index: Optional[int] = None,
@@ -479,7 +479,7 @@ class SNMP:
         max_repetitions: Optional[int] = None,
         timeout: int = 15,
         max_retries: int = 0,
-        display_hints: Optional[Dict[str, Callable]] = None,
+        display_hints: Optional[dict[str, Callable]] = None,
     ):
         """
         Query list of SNMP tables referenced by oids and yields

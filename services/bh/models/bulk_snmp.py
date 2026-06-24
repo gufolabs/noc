@@ -19,7 +19,7 @@ class SNMPAddress(BaseModel):
 
 
 class SNMPRequest(BaseModel):
-    addresses: List[SNMPAddress]
+    addresses: list[SNMPAddress]
     oid_filter: str
     timeout: Optional[int]
     tos: Optional[int]
@@ -28,9 +28,9 @@ class SNMPRequest(BaseModel):
 
 class SNMPItem(BaseModel):
     address: str
-    objects: List[Tuple[str, ValueType]]
+    objects: list[tuple[str, ValueType]]
     error_code: Optional[str]
 
 
 class SNMPResponse(BaseModel):
-    items: List[SNMPItem]
+    items: list[SNMPItem]

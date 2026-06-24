@@ -50,7 +50,7 @@ class BaseTTSystem:
     TemporaryTTError = TemporaryTTError
     promote_group_tt = True
     processed_items = False
-    actions: List[TTAction] = []
+    actions: list[TTAction] = []
 
     def __init__(self, name: str, connection: str):
         self.connection = connection
@@ -119,7 +119,7 @@ class BaseTTSystem:
         """
         raise NotImplementedError()
 
-    def get_object_tts(self, obj: str) -> List[str]:
+    def get_object_tts(self, obj: str) -> list[str]:
         """
         Get list of TTs, open for object obj
 
@@ -160,8 +160,8 @@ class BaseTTSystem:
         login: str,
         last_run: Optional[datetime] = None,
         last_update: Optional[str] = None,
-        tt_ids: Optional[List[str]] = None,
-    ) -> List[TTChange]:
+        tt_ids: Optional[list[str]] = None,
+    ) -> list[TTChange]:
         """
         Getting updates from TT system
 
@@ -211,8 +211,8 @@ class TTSystemCtx:
         self.queue: Optional[str] = queue
         self.reason: Optional[str] = reason
         self.login: Optional[str] = login
-        self.items: List[EscalationItem] = items or []
-        self.actions: List[TTActionContext] = actions or []
+        self.items: list[EscalationItem] = items or []
+        self.actions: list[TTActionContext] = actions or []
         self.error_code: Optional[str] = None
         self.error_text: Optional[str] = ""
         self.suppress_tt_trace: bool = suppress_tt_trace
@@ -239,7 +239,7 @@ class TTSystemCtx:
     def services(self):
         return [i for i in self.items if i.item == "service"]
 
-    def add_items(self, items: List[EscalationItem]):
+    def add_items(self, items: list[EscalationItem]):
         self.items += items
 
     def get_config(self):
@@ -313,7 +313,7 @@ class TTSystemCtx:
 
     def get_updates(
         self, last_run: Optional[datetime] = None, last_number: Optional[str] = None
-    ) -> List[TTChange]:
+    ) -> list[TTChange]:
         """
         Getting updates from TT system
 

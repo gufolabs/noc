@@ -27,7 +27,7 @@ class VarItem(BaseModel):
 
 class ComboCondition(BaseModel):
     combo_condition: str
-    combo_event_classes: List[str]
+    combo_event_classes: list[str]
     combo_window: int = 0
     combo_count: int = 0
 
@@ -42,16 +42,16 @@ class Rule(BaseModel):
     on_disposition: bool = False
     stop_processing: bool = False
     # Conditions
-    match_expr: Optional[Dict[str, Any]] = None
-    vars_match_expr: Optional[Dict[str, Any]] = None
+    match_expr: Optional[dict[str, Any]] = None
+    vars_match_expr: Optional[dict[str, Any]] = None
     combo_condition: Optional[ComboCondition] = None
     # Actions
-    handlers: Optional[List[str]] = None
+    handlers: Optional[list[str]] = None
     # Notification
     notification_group: Optional[str] = None
     subject_template: Optional[str] = None
     # Target Actions
-    actions: Optional[List[DisposeAction]] = None
+    actions: Optional[list[DisposeAction]] = None
 
 
 class FilterConfig(BaseModel):
@@ -72,9 +72,9 @@ class CfgEvent(BaseModel):
     event_class: EventClass
     is_unique: bool = False
     link_event: bool = False
-    filters: Optional[List[FilterConfig]] = None
+    filters: Optional[list[FilterConfig]] = None
     # vars
-    vars: Optional[List[VarItem]] = None
+    vars: Optional[list[VarItem]] = None
     # subject:
-    handlers: List[str] = None
-    rules: Optional[List[Rule]] = None
+    handlers: list[str] = None
+    rules: Optional[list[Rule]] = None

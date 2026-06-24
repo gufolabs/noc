@@ -79,10 +79,10 @@ class InterfaceDetailDS(BaseDataSource):
         exclude_down: bool = False,
         exclude_def_profile: bool = False,
         only_admin_status: bool = False,
-        admin_domain_ads: Optional[List[int]] = None,
+        admin_domain_ads: Optional[list[int]] = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         mos = ManagedObject.objects.filter(is_managed=True)
         if resource_group:
             mos = mos.filter(

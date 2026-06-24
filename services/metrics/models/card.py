@@ -48,23 +48,23 @@ def unscope(x):
 @dataclass
 class ScopeInfo:
     scope: str
-    key_fields: Tuple[str, ...]
-    key_labels: Tuple[str, ...]
-    required_labels: Tuple[str, ...]
-    units: Dict[str, str]
+    key_fields: tuple[str, ...]
+    key_labels: tuple[str, ...]
+    required_labels: tuple[str, ...]
+    units: dict[str, str]
     enable_timedelta: bool = False
 
 
 class MetricsItem(TypedDict, closed=True):
     scope: str
     ts: int
-    labels: List[str]
+    labels: list[str]
     managed_object: int
     sla_probe: NotRequired[int]
     agent: NotRequired[int]
     service: NotRequired[int]
     sensor: NotRequired[int]
-    _units: Dict[str, str]
+    _units: dict[str, str]
     # Any key other than 'title' or 'year' must have a boolean value
     __extra_items__: float
 
@@ -85,14 +85,14 @@ class Card:
         "probes",
         "senders",
     )
-    init_state: ClassVar[Dict[str, Dict[str, Any]]] = {}
-    compose_node_inputs: ClassVar[Dict[str, Set[str]]] = {}
+    init_state: ClassVar[dict[str, dict[str, Any]]] = {}
+    compose_node_inputs: ClassVar[dict[str, set[str]]] = {}
 
-    probes: Dict[str, ProbeNode]
-    senders: Tuple[MetricsNode, ...]
-    alarms: List[Union[ThresholdNode, AlarmNode]]
-    affected_rules: FrozenSet[str]
-    graphs: Dict[str, CDAG]
+    probes: dict[str, ProbeNode]
+    senders: tuple[MetricsNode, ...]
+    alarms: list[Union[ThresholdNode, AlarmNode]]
+    affected_rules: frozenset[str]
+    graphs: dict[str, CDAG]
     config: Optional[Union[ManagedObjectTarget, SLAProbeTarget]]
     component: Optional[Union[ComponentTarget, SensorComponentTarget]]
     is_dirty: bool
@@ -130,7 +130,7 @@ class Card:
         cls,
         n: BaseCDAGNode,
         prefix: str,
-        config: Optional[Dict[str, Any]] = None,
+        config: Optional[dict[str, Any]] = None,
         static_config=None,
     ) -> BaseCDAGNode:
         """
@@ -152,7 +152,7 @@ class Card:
         config: Optional[ManagedObjectTarget] = None,
         component: Optional[ComponentTarget] = None,
     ):
-        nodes: Dict[str, BaseCDAGNode] = {}
+        nodes: dict[str, BaseCDAGNode] = {}
         # Clone nodes
         for node in src.nodes.values():
             # Apply sender nodes
@@ -256,7 +256,7 @@ class Card:
                 probe.unsubscribe(s.node, s.input)
         self.set_dirty()
 
-    def invalidate_alarms(self, remove_all: bool = False) -> List[Tuple[str, str]]:
+    def invalidate_alarms(self, remove_all: bool = False) -> list[tuple[str, str]]:
         """Remove not affected alarms node and return node_id"""
         r = []
         # Actual rules
@@ -283,7 +283,7 @@ class Card:
     def set_dirty(self):
         self.is_dirty = True
 
-    def get_rules(self) -> Iterable[Tuple[str, str]]:
+    def get_rules(self) -> Iterable[tuple[str, str]]:
         """Get metric rules"""
         if self.component:
             return self.component.rules or []
@@ -292,7 +292,7 @@ class Card:
         return []
 
     @property
-    def composed_metrics(self) -> List[str]:
+    def composed_metrics(self) -> list[str]:
         if self.component:
             return self.component.composed_metrics or []
         if self.config:
@@ -332,8 +332,8 @@ class Card:
     def refresh_card(
         self,
         k: MetricKey,
-        labels: List[str],
-        rules: Dict[str, Rule],
+        labels: list[str],
+        rules: dict[str, Rule],
     ):
         """Refresh card. Update composed, Refresh Graph"""
         # Composed nodel

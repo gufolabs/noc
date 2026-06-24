@@ -56,7 +56,7 @@ class DiscoveryProblemDS(BaseDataSource):
     ]
 
     @classmethod
-    def get_pipeline(cls, ids: List[int], match=None):
+    def get_pipeline(cls, ids: list[int], match=None):
         discovery = "noc.services.discovery.jobs.box.job.BoxDiscoveryJob"
         pipeline = [
             {"$match": {"key": {"$in": ids}, "jcls": discovery}},
@@ -107,10 +107,10 @@ class DiscoveryProblemDS(BaseDataSource):
         filter_pending_links: bool = False,
         filter_none_problems: bool = False,
         filter_view_other: bool = False,
-        admin_domain_ads: Optional[List[int]] = None,
+        admin_domain_ads: Optional[list[int]] = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[int, str, Union[str, int]]]:
+    ) -> AsyncIterable[tuple[int, str, Union[str, int]]]:
         """
         Attrs:
             fields:

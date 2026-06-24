@@ -61,7 +61,7 @@ class CheckTTJob(Job):
             u = User.get_by_username(username)
         return u
 
-    def get_waited_tt_ids(self) -> Dict[str, str]:
+    def get_waited_tt_ids(self) -> dict[str, str]:
         """Getting waited TTS"""
         r = {}
         oid = str(self.object.id)
@@ -157,7 +157,7 @@ class CheckTTJob(Job):
             case TTAction.LOG:
                 return ActionConfig(action=AlarmAction.LOG, subject=change.message)
 
-    def processed_changes(self, job: AlarmJob, changes: List[Tuple[User, TTChange]]):
+    def processed_changes(self, job: AlarmJob, changes: list[tuple[User, TTChange]]):
         """
         Processed Alarm Action
         Args:

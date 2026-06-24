@@ -15,7 +15,7 @@ import pytest
 from noc.core.runner.env import Environment
 
 
-def env(*e: Dict[str, str]) -> Environment:
+def env(*e: dict[str, str]) -> Environment:
     """
     Create nested environment.
 
@@ -100,7 +100,7 @@ def test_contains(env: Environment, key: str, expected: bool) -> None:
         ),
     ],
 )
-def test_keys(env: Environment, expected: List[str]) -> None:
+def test_keys(env: Environment, expected: list[str]) -> None:
     r = sorted(env.keys())
     assert r == expected
 
@@ -117,7 +117,7 @@ def test_keys(env: Environment, expected: List[str]) -> None:
         ),
     ],
 )
-def test_iter(env: Environment, expected: List[str]) -> None:
+def test_iter(env: Environment, expected: list[str]) -> None:
     r = sorted(env)
     assert r == expected
 
@@ -134,7 +134,7 @@ def test_iter(env: Environment, expected: List[str]) -> None:
         ),
     ],
 )
-def test_values(env: Environment, expected: List[str]) -> None:
+def test_values(env: Environment, expected: list[str]) -> None:
     r = sorted(env.values())
     assert r == expected
 
@@ -151,6 +151,6 @@ def test_values(env: Environment, expected: List[str]) -> None:
         ),
     ],
 )
-def test_items(env: Environment, expected: List[str]) -> None:
+def test_items(env: Environment, expected: list[str]) -> None:
     r = sorted(env.items())
     assert r == expected

@@ -146,7 +146,7 @@ class PolusParam:
     prefix: Optional[str] = None
     description: Optional[str] = None
 
-    def get_param_scopes(self) -> Optional[List[Dict[str, str]]]:
+    def get_param_scopes(self) -> Optional[list[dict[str, str]]]:
         r = []
         match = rx_param_match.match(self.name)
         if not match:
@@ -365,11 +365,11 @@ class PolusParam:
 class Component:
     name: str
     state: bool
-    metrics: List[PolusParam] = None
-    cfg_thresholds: List[PolusParam] = None
-    info_params: List[PolusParam] = None
-    cfg_params: List[PolusParam] = None
-    crossing: Dict[str, List[Tuple[str, str]]] = None
+    metrics: list[PolusParam] = None
+    cfg_thresholds: list[PolusParam] = None
+    info_params: list[PolusParam] = None
+    cfg_params: list[PolusParam] = None
+    crossing: dict[str, list[tuple[str, str]]] = None
 
     @property
     def is_common(self) -> bool:
@@ -424,7 +424,7 @@ class Component:
             self.crossing[p.prefix].append((d_port, d_odu))
 
     @classmethod
-    def get_components(cls, params: List[PolusParam]) -> Dict[str, "Component"]:
+    def get_components(cls, params: list[PolusParam]) -> dict[str, "Component"]:
         r = {}
         ignored_components = set()
 
@@ -452,8 +452,8 @@ class Component:
         return r
 
     @classmethod
-    def from_params(cls, params: List[Dict[str, str]]) -> Dict[str, "Component"]:
-        params: List[PolusParam] = [PolusParam.from_code(**p) for p in params]
+    def from_params(cls, params: list[dict[str, str]]) -> dict[str, "Component"]:
+        params: list[PolusParam] = [PolusParam.from_code(**p) for p in params]
         return cls.get_components(params)
 
 
@@ -474,7 +474,7 @@ class Profile(BaseProfile):
     )
 
     @staticmethod
-    def get_cu_slot(script) -> Tuple[int, int]:
+    def get_cu_slot(script) -> tuple[int, int]:
         """
         Getting ControlUnit location
         """

@@ -23,7 +23,7 @@ class AlarmPlugin(EmbeddedDocument):
         return self.name
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
         }

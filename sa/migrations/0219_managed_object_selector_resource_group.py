@@ -185,7 +185,7 @@ class ManagedObjectSelectorLabels:
             return None
         return self.get_match_label("adm_domain", name, op="<")
 
-    def get_labels(self, sel: NamedTuple) -> List[str]:
+    def get_labels(self, sel: NamedTuple) -> list[str]:
         r = []
         for f_name in sel._fields:
             if f_name in {"id", "name", "description", "source_combine_method"}:

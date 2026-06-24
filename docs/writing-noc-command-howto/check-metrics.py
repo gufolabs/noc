@@ -35,8 +35,8 @@ class Command(BaseCommand):
             self.print("Checking Interface Metric")
             self.check_interface_metrics(iface_metrics)
 
-    def check_object_metrics(self, metrics: List[MetricType]):
-        mt_check: Dict[str, MetricType] = {str(mt.id): mt for mt in metrics}
+    def check_object_metrics(self, metrics: list[MetricType]):
+        mt_check: dict[str, MetricType] = {str(mt.id): mt for mt in metrics}
         for mop in ManagedObjectProfile.objects.filter(
             enable_periodic_discovery_metrics=True, enable_periodic_discovery=True
         ):
@@ -50,7 +50,7 @@ class Command(BaseCommand):
                     ",".join(mt_check[c].name for c in checks),
                 )
 
-    def check_interface_metrics(self, metrics: List[MetricType]):
+    def check_interface_metrics(self, metrics: list[MetricType]):
         for ip in InterfaceProfile.objects.filter(metrics__exists=True):
             checks = set(metrics)
             for mc in ip.metrics:

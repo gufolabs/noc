@@ -70,7 +70,7 @@ class ReportProfileCheckSummary(ReportSource):
         ),  # 2is1.6is2
     ]
 
-    def get_formats(self) -> Dict[str, BandFormat]:
+    def get_formats(self) -> dict[str, BandFormat]:
         return {
             "header": BandFormat(
                 title_template="Profile Check Summary",
@@ -85,7 +85,7 @@ class ReportProfileCheckSummary(ReportSource):
             "pool": BandFormat(title_template="{{ name }}"),
         }
 
-    def get_data(self, request=None, **kwargs) -> List[Band]:
+    def get_data(self, request=None, **kwargs) -> list[Band]:
         data = []
         ds = loader["managedobjectds"]
         sql = pl.SQLContext()

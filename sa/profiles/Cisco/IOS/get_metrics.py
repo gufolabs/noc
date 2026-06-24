@@ -252,7 +252,7 @@ class Script(GetMetricsScript):
                 except ValueError:
                     pass
 
-    def get_cbqos_config_snmp(self) -> Dict[str, Dict[str, Union[str, int]]]:
+    def get_cbqos_config_snmp(self) -> dict[str, dict[str, Union[str, int]]]:
         """
         Return config for build metric index
         :return:
@@ -306,7 +306,7 @@ class Script(GetMetricsScript):
             config_cmap[object_index].update(policy_map[policy_index])
         return config_cmap
 
-    CBQOS_OIDS_MAP: Dict[str, Dict[str, Tuple[str, str, int, str]]] = {
+    CBQOS_OIDS_MAP: dict[str, dict[str, tuple[str, str, int, str]]] = {
         # oid, type, scale
         "In": {
             "Interface | CBQOS | Drops | In | Delta": (
@@ -348,10 +348,10 @@ class Script(GetMetricsScript):
         volatile=False,
         access="S",  # CLI version
     )
-    def get_interface_cbqos_metrics_snmp(self, metrics: List[MetricConfig]):
+    def get_interface_cbqos_metrics_snmp(self, metrics: list[MetricConfig]):
         ifaces = {m.ifindex: m for m in metrics if m.ifindex}
         config = self.get_cbqos_config_snmp()
-        oids: Dict[str, Tuple[str, Tuple[str, str, int, str], MetricConfig, List[str]]] = {}
+        oids: dict[str, tuple[str, tuple[str, str, int, str], MetricConfig, list[str]]] = {}
         for c, item in config.items():
             if item["ifindex"] in ifaces:
                 for metric, mc in self.CBQOS_OIDS_MAP[item["direction"]].items():
@@ -394,7 +394,7 @@ class Script(GetMetricsScript):
         # print(r)
         # "noc::traffic_class::*", "noc::interface::*"
 
-    def collect_sla_metrics(self, metrics: List[MetricCollectorConfig]):
+    def collect_sla_metrics(self, metrics: list[MetricCollectorConfig]):
         """
         Collect SLA metrics for Cisco
         :param metrics:
@@ -448,7 +448,7 @@ class Script(GetMetricsScript):
         if jitter_probes:
             self.get_ip_sla_udp_jitter_metrics_snmp(jitter_probes)
 
-    def get_ip_sla_icmp_metrics_snmp(self, metrics: Dict[Tuple[str, str], MetricCollectorConfig]):
+    def get_ip_sla_icmp_metrics_snmp(self, metrics: dict[tuple[str, str], MetricCollectorConfig]):
         ts = self.get_ts()
         for metric, m_oid in SLA_ICMP_METRIC_MAP.items():
             for oid, value in self.snmp.getnext(mib[m_oid]):
@@ -469,7 +469,7 @@ class Script(GetMetricsScript):
                     units="s",  # Second
                 )
 
-    def get_ip_sla_udp_jitter_metrics_snmp(self, metrics: List[MetricCollectorConfig]):
+    def get_ip_sla_udp_jitter_metrics_snmp(self, metrics: list[MetricCollectorConfig]):
         """
         Returns collected ip sla metrics in form
         probe id -> {

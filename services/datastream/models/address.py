@@ -33,8 +33,8 @@ class AddressDataStreamItem(BaseModel):
     source: str
     state: StateItem
     description: Optional[str]
-    labels: Optional[List[str]]
-    tags: Optional[List[str]]
+    labels: Optional[list[str]]
+    tags: Optional[list[str]]
     fqdn: Optional[str]
     mac: Optional[str]
     subinterface: Optional[str]

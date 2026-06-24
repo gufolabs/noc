@@ -115,7 +115,7 @@ class Command(BaseCommand):
         syslog: Optional[str] = None,
         object: Optional[str] = None,
         remote_system: Optional[str] = None,
-        paths: Optional[List[str]] = None,
+        paths: Optional[list[str]] = None,
         **options,
     ):
         # Inject syslog messages

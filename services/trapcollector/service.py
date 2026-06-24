@@ -54,12 +54,12 @@ class TrapCollectorService(FastAPIService):
         super().__init__()
         self.mappings_callback = None
         self.report_invalid_callback = None
-        self.source_configs: Dict[str, SourceConfig] = {}  # id -> SourceConfig
+        self.source_configs: dict[str, SourceConfig] = {}  # id -> SourceConfig
         self.address_configs = {}  # address -> SourceConfig
         self.invalid_sources = defaultdict(int)  # ip -> count
-        self.pool_partitions: Dict[str, int] = {}
+        self.pool_partitions: dict[str, int] = {}
         self.storm_protection: Optional[StormProtection] = None
-        self.updated: Set[str] = set()
+        self.updated: set[str] = set()
 
     async def on_activate(self):
         # Listen sockets
@@ -103,7 +103,7 @@ class TrapCollectorService(FastAPIService):
         msg = {"$op": "clear"}
         self._publish_message(cfg, msg)
 
-    def _publish_message(self, cfg, msg: Dict[str, Any]):
+    def _publish_message(self, cfg, msg: dict[str, Any]):
         msg["timestamp"] = datetime.datetime.now().isoformat()
         msg["reference"] = f"{TRAPCOLLECTOR_STORM_ALARM_CLASS}{cfg.id}"
         self.publish(orjson.dumps(msg), stream=f"dispose.{config.pool}", partition=cfg.partition)
@@ -133,7 +133,7 @@ class TrapCollectorService(FastAPIService):
         self,
         cfg: SourceConfig,
         timestamp: int,
-        body: Dict[str, Any],
+        body: dict[str, Any],
         address: str = None,
         message_id: Optional[str] = None,
     ):
@@ -179,7 +179,7 @@ class TrapCollectorService(FastAPIService):
         source_address: Optional[str] = None,
         message_id: Optional[str] = None,
         raw_pdu: Optional[bytes] = None,
-        raw_varbinds: List[Tuple[str, Any, bytes]] = None,
+        raw_varbinds: list[tuple[str, Any, bytes]] = None,
     ):
         metrics["events_mx_message"] += 1
         if not cfg.managed_object:

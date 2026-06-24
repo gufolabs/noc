@@ -10,7 +10,7 @@ from typing import Protocol, Type
 import inspect
 
 
-def check_protocol(proto: Protocol, impl: Type[object]) -> None:
+def check_protocol(proto: Protocol, impl: type[object]) -> None:
     """Check implementation follows protocol."""
 
     def check_method(name: str, proto_value) -> None:

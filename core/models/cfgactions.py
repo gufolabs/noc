@@ -70,7 +70,7 @@ class ActionType(enum.Enum):
         self,
         obj: Any,
         key: str,
-        cfg: Dict[str, Any],
+        cfg: dict[str, Any],
         immediate: bool = True,
         **kwargs,
     ):

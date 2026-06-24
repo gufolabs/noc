@@ -27,7 +27,7 @@ class ObjectDS(BaseDataSource):
         fields: Optional[Iterable[str]] = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[int, str, Any]]:
+    ) -> AsyncIterable[tuple[int, str, Any]]:
         data = Object.objects.all().scalar("name", "model")
         row_num = 0
         for name, model in data:

@@ -29,7 +29,7 @@ class UnknownSummaryDS(BaseDataSource):
         fields: Optional[Iterable[str]] = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[int, str, Any]]:
+    ) -> AsyncIterable[tuple[int, str, Any]]:
         data = {}  # vendor, part_no -> description, count
         for c in UnknownModel._get_collection().find():
             vendor = c["vendor"]

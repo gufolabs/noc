@@ -17,5 +17,5 @@ class BaseCollator:
     def __init__(self, profile: Optional[BaseProfile]):
         self.profile = profile
 
-    def collate(self, physical_port: PortItem, interfaces: Dict[str, Any]) -> Optional[str]:
+    def collate(self, physical_port: PortItem, interfaces: dict[str, Any]) -> Optional[str]:
         raise NotImplementedError

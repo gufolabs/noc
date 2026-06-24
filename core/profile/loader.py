@@ -30,7 +30,7 @@ class ProfileLoader(BaseLoader):
         self.lock = threading.Lock()
         self.all_profiles = set()
 
-    def get_profile(self, name) -> Optional[Type[BaseProfile]]:
+    def get_profile(self, name) -> Optional[type[BaseProfile]]:
         """
         Load profile and return BaseProfile instance.
         Returns None when no profile found or loading error occured

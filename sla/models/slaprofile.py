@@ -91,7 +91,7 @@ class SLAProfile(Document):
     # Number interval buckets
     metrics_interval_buckets = IntField(default=1, min_value=0)
     # Interface profile metrics
-    metrics: List[SLAProfileMetrics] = ListField(EmbeddedDocumentField(SLAProfileMetrics))
+    metrics: list[SLAProfileMetrics] = ListField(EmbeddedDocumentField(SLAProfileMetrics))
     # Labels
     labels = ListField(StringField())
 
@@ -158,7 +158,7 @@ class SLAProfile(Document):
     @cachetools.cachedmethod(
         operator.attrgetter("_slaprofile_metrics"), lock=lambda _: metrics_lock
     )
-    def get_slaprofile_metrics(cls, p_id: "ObjectId") -> Dict[str, MetricConfig]:
+    def get_slaprofile_metrics(cls, p_id: "ObjectId") -> dict[str, MetricConfig]:
         r = {}
         spr = SLAProfile.get_by_id(p_id)
         if not spr:

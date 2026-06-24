@@ -75,7 +75,7 @@ class Style(NOCModel):
         return Style.objects.filter(id=oid).first()
 
     @property
-    def style(self) -> Dict[str, str]:
+    def style(self) -> dict[str, str]:
         """
         CSS Style
         """
@@ -99,12 +99,12 @@ class Style(NOCModel):
         return self.css_class
 
     @classmethod
-    def get_scheme(cls) -> Dict[str, Any]:
+    def get_scheme(cls) -> dict[str, Any]:
         """
         Get schema snapshot.
         """
 
-        def q(s: Style) -> Dict[str, Any]:
+        def q(s: Style) -> dict[str, Any]:
             r = {"name": s.css_class}
             r.update(s.style)
             return r

@@ -67,15 +67,15 @@ class Service(BaseModel):
     cpe_mac: Optional[str] = None
     cpe_model: Optional[str] = None
     cpe_group: Optional[str] = None
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None
     description: Optional[str] = None
     # Groups
-    static_client_groups: Optional[List[Reference["ResourceGroup"]]] = None
-    static_service_groups: Optional[List[Reference["ResourceGroup"]]] = None
+    static_client_groups: Optional[list[Reference["ResourceGroup"]]] = None
+    static_service_groups: Optional[list[Reference["ResourceGroup"]]] = None
     # Custom
-    capabilities: Optional[List[CapsItem]] = None
-    instances: Optional[List[Instance]] = None
-    mappings: Optional[List[MappingItem]] = None
+    capabilities: Optional[list[CapsItem]] = None
+    instances: Optional[list[Instance]] = None
+    mappings: Optional[list[MappingItem]] = None
     checkpoint: Optional[str] = None
 
     model_config = ConfigDict(populate_by_name=True)

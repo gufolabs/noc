@@ -95,13 +95,13 @@ class ModelMetricConfigItem(BaseModel):
         return self.metric_type
 
 
-MetricConfigItems = RootModel[List[ModelMetricConfigItem]]
+MetricConfigItems = RootModel[list[ModelMetricConfigItem]]
 
 
 class MatchRule(BaseModel):
     dynamic_order: int = 0
-    labels: List[str] = []
-    resource_groups: List[str] = []
+    labels: list[str] = []
+    resource_groups: list[str] = []
 
     @field_validator("resource_groups")
     def groups_must_groups(cls, v):  # pylint: disable=no-self-argument
@@ -128,7 +128,7 @@ class MatchRule(BaseModel):
             q &= d_Q(effective_service_groups__contains=self.resource_groups)
         return q
 
-    def get_match_expr(self) -> Dict[str, Any]:
+    def get_match_expr(self) -> dict[str, Any]:
         r = {}
         if self.labels:
             r["labels"] = {"$all": list(self.labels)}
@@ -141,7 +141,7 @@ class MatchRule(BaseModel):
         return r
 
 
-MatchRules = RootModel[List[Optional[MatchRule]]]
+MatchRules = RootModel[list[Optional[MatchRule]]]
 
 
 m_valid = DictListParameter(
@@ -721,7 +721,7 @@ class ManagedObjectProfile(NOCModel):
     # Limits
     snmp_rate_limit = models.IntegerField(default=0)
     metrics_default_interval = models.IntegerField(default=300, validators=[MinValueValidator(0)])
-    metrics: List[ModelMetricConfigItem] = PydanticField(
+    metrics: list[ModelMetricConfigItem] = PydanticField(
         "Metric Config Items",
         schema=MetricConfigItems,
         blank=True,
@@ -738,7 +738,7 @@ class ManagedObjectProfile(NOCModel):
         choices=[("D", "Disable"), ("R", "By Rule")],
         default="R",
     )
-    match_rules: List["MatchRule"] = PydanticField(
+    match_rules: list["MatchRule"] = PydanticField(
         _("Match Dynamic Rules"),
         schema=MatchRules,
         blank=True,
@@ -852,13 +852,13 @@ class ManagedObjectProfile(NOCModel):
     def can_cli_session(self):
         return self.cli_session_policy == "E"
 
-    def is_field_changed(self, fields: List[str]) -> bool:
+    def is_field_changed(self, fields: list[str]) -> bool:
         for f in fields:
             if f in self.initial_data and self.initial_data[f] != getattr(self, f):
                 return True
         return False
 
-    def get_changed_diagnostics(self) -> Set[str]:
+    def get_changed_diagnostics(self) -> set[str]:
         """Return changed diagnostic state by policy field"""
         r = set()
         if self.is_field_changed(["event_processing_policy"]):
@@ -1132,7 +1132,7 @@ class ManagedObjectProfile(NOCModel):
     @cachetools.cachedmethod(
         operator.attrgetter("_object_profile_metrics"), lock=lambda _: metrics_lock
     )
-    def get_object_profile_metrics(cls, p_id: int) -> Dict[str, MetricConfig]:
+    def get_object_profile_metrics(cls, p_id: int) -> dict[str, MetricConfig]:
         r = {}
         opr = ManagedObjectProfile.get_by_id(p_id)
         if not opr:
@@ -1180,7 +1180,7 @@ class ManagedObjectProfile(NOCModel):
         key=lambda x: "ruleset",
         lock=lambda _: rule_lock,
     )
-    def get_profiles_matcher(cls) -> Tuple[Tuple[str, Tuple[Callable, ...]], ...]:
+    def get_profiles_matcher(cls) -> tuple[tuple[str, tuple[Callable, ...]], ...]:
         """Build matcher based on Profile Match Rules"""
         r = defaultdict(list)
         for mop_id, rules in ManagedObjectProfile.objects.filter(
@@ -1206,7 +1206,7 @@ class ManagedObjectProfile(NOCModel):
 
     def get_instance_affected_query(
         self,
-        changes: Optional[List[ChangeField]] = None,
+        changes: Optional[list[ChangeField]] = None,
         include_match: bool = False,
     ) -> d_Q:
         """Return queryset for instance"""

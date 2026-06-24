@@ -163,7 +163,7 @@ class MetricScope(Document):
             )
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -359,7 +359,7 @@ class MetricScope(Document):
                 """,
                 [config.clickhouse.db, table_name],
             ):
-                existing[name]: Dict[str, ExistingColumn] = ExistingColumn(
+                existing[name]: dict[str, ExistingColumn] = ExistingColumn(
                     name,
                     c_type,
                     default_kind,
@@ -471,7 +471,7 @@ class MetricScope(Document):
         ]
         return "\n".join(r)
 
-    def _get_to_path(self) -> Callable[[List[str]], List[str]]:
+    def _get_to_path(self) -> Callable[[list[str]], list[str]]:
         """
         Generate label -> path function for scope
         :return:
@@ -489,5 +489,5 @@ class MetricScope(Document):
                 to_path_code[self.name] = fn
         return fn
 
-    def to_path(self, labels: List[str]) -> List[str]:
+    def to_path(self, labels: list[str]) -> list[str]:
         return self._get_to_path()(labels)

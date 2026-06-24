@@ -43,14 +43,14 @@ class ProfileChecker:
         logger=None,
         snmp_community: Optional[str] = None,
         calling_service: str = "profilechecker",
-        snmp_version: Optional[List[int]] = None,
+        snmp_version: Optional[list[int]] = None,
     ):
         self.address = address
         self.pool = pool
         self.logger = PrefixLoggerAdapter(
             logger or self.base_logger, "%s][%s" % (self.pool or "", self.address or "")
         )
-        self.result_cache: Dict[Tuple[str, str], str] = {}  # (method, param) -> result
+        self.result_cache: dict[tuple[str, str], str] = {}  # (method, param) -> result
         self.error: Optional[str] = None
         self.snmp_check: Optional[bool] = None
         self.snmp_community = snmp_community
@@ -136,7 +136,7 @@ class ProfileChecker:
             .order_by("preference")
         )
 
-    def get_rules(self) -> Dict[int, Dict[Tuple[str, str], List[Tuple[str, str, str, str, str]]]]:
+    def get_rules(self) -> dict[int, dict[tuple[str, str], list[tuple[str, str, str, str, str]]]]:
         """
         Load ProfileCheckRules and return a list, grouped by preferences
         [{
@@ -165,7 +165,7 @@ class ProfileChecker:
 
     def iter_rules(
         self,
-    ) -> Iterable[List[Tuple[Tuple[str, str], List[Tuple[str, str, str, str, str]]]]]:
+    ) -> Iterable[list[tuple[tuple[str, str], list[tuple[str, str, str, str, str]]]]]:
         d = self.get_rules()
         for p in sorted(d):
             yield list(d[p].items())

@@ -115,17 +115,17 @@ class Agent(Document):
     # Agent identification
     # Auto-updated if profile.update_addresses is set
     serial = StringField()
-    ip: List[AgentIp] = EmbeddedDocumentListField(AgentIp)
+    ip: list[AgentIp] = EmbeddedDocumentListField(AgentIp)
     port: Optional[int] = IntField(min_value=1000, max_value=65536, required=False)
     fqdn: str = StringField(required=False)
-    mac: List[AgentMAC] = EmbeddedDocumentListField(AgentMAC)
+    mac: list[AgentMAC] = EmbeddedDocumentListField(AgentMAC)
     # Workflow
     state = PlainReferenceField(State)
     # Last state change
     state_changed = DateTimeField()
     last_metric_update = DateTimeField()
     # Capabilities
-    caps: List[CapsItem] = EmbeddedDocumentListField(CapsItem)
+    caps: list[CapsItem] = EmbeddedDocumentListField(CapsItem)
     # Unique secret authentication key
     key = StringField(unique=True, default=gen_key)
     bi_id = LongField(unique=True)
@@ -138,7 +138,7 @@ class Agent(Document):
     # Object id in remote system
     remote_id = StringField()
     # Remote Mappings
-    mappings: List[RemoteMappingItem] = EmbeddedDocumentListField(RemoteMappingItem)
+    mappings: list[RemoteMappingItem] = EmbeddedDocumentListField(RemoteMappingItem)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _bi_id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
@@ -174,8 +174,8 @@ class Agent(Document):
     def update_addresses(
         self,
         serial: Optional[str] = None,
-        mac: Optional[List[str]] = None,
-        ip: Optional[List[str]] = None,
+        mac: Optional[list[str]] = None,
+        ip: Optional[list[str]] = None,
     ) -> None:
         changed = False
         if self.serial != serial:
@@ -210,7 +210,7 @@ class Agent(Document):
         return 0
 
     @classmethod
-    def iter_effective_labels(cls, instance: "Agent") -> Iterable[List[str]]:
+    def iter_effective_labels(cls, instance: "Agent") -> Iterable[list[str]]:
         yield list(instance.labels or [])
         state = instance.state or instance.profile.workflow.get_default_state()
         if state.labels:

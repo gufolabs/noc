@@ -23,7 +23,7 @@ class Script(BaseScript):
         re.IGNORECASE,
     )
 
-    def normalize_param(self, oid: str) -> Tuple[str, Optional[str], Optional[dict]]:
+    def normalize_param(self, oid: str) -> tuple[str, Optional[str], Optional[dict]]:
         """
         Normalize platform name from OID String
 

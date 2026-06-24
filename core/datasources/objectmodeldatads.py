@@ -72,7 +72,7 @@ class ObjectModelDataDS(BaseDataSource):
         *args,
         managed_only: Optional[bool] = False,
         **kwargs,
-    ) -> AsyncIterable[Tuple[int, str, Union[str, int]]]:
+    ) -> AsyncIterable[tuple[int, str, Union[str, int]]]:
         """"""
         if managed_only:
             filters = {"data__match": {"interface": "management", "attr": "managed", "value": True}}

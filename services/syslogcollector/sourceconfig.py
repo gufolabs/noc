@@ -35,7 +35,7 @@ class ManagedObjectData:
     bi_id: int
     name: str
     administrative_domain: AdministrativeDomainData
-    labels: List[str] = None
+    labels: list[str] = None
     remote_system: Optional[RemoteSystemData] = None
     remote_id: Optional[str] = None
 
@@ -43,7 +43,7 @@ class ManagedObjectData:
 @dataclass
 class SourceConfig:
     id: str
-    addresses: Tuple[str, ...]
+    addresses: tuple[str, ...]
     bi_id: int
     process_events: bool
     archive_events: bool
@@ -51,7 +51,7 @@ class SourceConfig:
     partition: int
     sa_profile: Optional[str] = None
     name: Optional[str] = None
-    effective_labels: List[str] = None
+    effective_labels: list[str] = None
     managed_object: Optional[ManagedObjectData] = None
     storm_policy: str = "D"
     storm_threshold: int = 1000

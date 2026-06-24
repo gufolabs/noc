@@ -198,7 +198,7 @@ class ManagedObjectDataStream(DataStream):
         )
         if not instances:
             return
-        si_map: DefaultDict[ObjectId, List[str]] = defaultdict(list)
+        si_map: defaultdict[ObjectId, list[str]] = defaultdict(list)
         for doc in SubInterface._get_collection().find(
             {"managed_object": mo.id}, {"_id": 0, "name": 1, "forwarding_instance": 1}
         ):
@@ -536,7 +536,7 @@ class ManagedObjectDataStream(DataStream):
         return {f"{cls.F_META}.client_groups": {"$elemMatch": {"$elemMatch": {"$in": [name]}}}}
 
     @classmethod
-    def get_meta_headers(cls, data: Dict[str, Any]) -> Optional[Dict[str, bytes]]:
+    def get_meta_headers(cls, data: dict[str, Any]) -> Optional[dict[str, bytes]]:
         if "$deleted" in data:
             # @@todo Meta fields for deleted object
             return None

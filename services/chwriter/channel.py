@@ -25,7 +25,7 @@ class Channel:
         self.table = table
         self.stream = f"ch.{table}"
         self.last_offset: int = 0
-        self.data: List[bytes] = []
+        self.data: list[bytes] = []
         self.size: int = 0
         self.records: int = 0
         self.expired: Optional[float] = None

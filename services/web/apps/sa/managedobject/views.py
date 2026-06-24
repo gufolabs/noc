@@ -395,7 +395,7 @@ class ManagedObjectApplication(ExtModelApplication):
             extra["where"] = extra_condition
         return extra, order
 
-    def get_caps_Q(self, nq: Dict[str, Any]) -> Tuple["d_Q", List[str]]:
+    def get_caps_Q(self, nq: dict[str, Any]) -> tuple["d_Q", list[str]]:
         """
         Resolve caps on query to queryset
         :param nq:
@@ -477,7 +477,7 @@ class ManagedObjectApplication(ExtModelApplication):
     def api_links(self, request, id):
         def split_local_ifaces(
             interfaces: Iterable[Interface],
-        ) -> Tuple[List[Interface], List[Interface]]:
+        ) -> tuple[list[Interface], list[Interface]]:
             """
             Returns:
                 tuple of <local interfaces>, <remote interfaces>

@@ -50,7 +50,7 @@ def test_clean_component(s: str, expected: str) -> None:
         (("x", "@#@$", "y | ()()"), {"sep": "|", "suffix": ".json"}, ("x", "y.json")),
     ],
 )
-def test_safe_path(args: Tuple[str], kwargs: Dict[str, str], expected: Tuple[str]) -> None:
+def test_safe_path(args: tuple[str], kwargs: dict[str, str], expected: tuple[str]) -> None:
     r = safe_path(*args, **kwargs)
     assert r == Path(*expected)
 
@@ -71,6 +71,6 @@ def test_safe_path(args: Tuple[str], kwargs: Dict[str, str], expected: Tuple[str
         ),
     ],
 )
-def test_safe_json_path(args: Tuple[str], expected: Tuple[str]) -> None:
+def test_safe_json_path(args: tuple[str], expected: tuple[str]) -> None:
     r = safe_json_path(*args)
     assert r == Path(*expected)

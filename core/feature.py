@@ -65,10 +65,10 @@ _FEATURE_DEFAULT = {
     Feature.FGALARMS: False,
     Feature.SMARTREFRESH: False,
 }
-_current_features: Optional[Set[Feature]] = None
+_current_features: Optional[set[Feature]] = None
 
 
-def active_features() -> List[Feature]:
+def active_features() -> list[Feature]:
     """
     Return list of currently active features.
     """
@@ -86,7 +86,7 @@ def has_feature(feature: Feature) -> bool:
     return feature in _get_features()
 
 
-def _get_features() -> Set[Feature]:
+def _get_features() -> set[Feature]:
     """Parse features and populate _CURRENT_FEATURES"""
     global _current_features
 

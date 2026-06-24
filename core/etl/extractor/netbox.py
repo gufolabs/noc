@@ -324,7 +324,7 @@ class NetBoxIPPrefixExtractor(NetBoxExtractor):
 
     def iter_data(
         self, *, checkpoint: Optional[str] = None, **kwargs
-    ) -> Iterable[Union[BaseModel, RemovedItem, Tuple[Any, ...]]]:
+    ) -> Iterable[Union[BaseModel, RemovedItem, tuple[Any, ...]]]:
         duplicate = set()
         roles = set()
         for r in self.iter_records("/api/ipam/prefixes/"):
@@ -361,7 +361,7 @@ class NetBoxIPAddressExtractor(NetBoxExtractor):
 
     def iter_data(
         self, *, checkpoint: Optional[str] = None, **kwargs
-    ) -> Iterable[Union[BaseModel, RemovedItem, Tuple[Any, ...]]]:
+    ) -> Iterable[Union[BaseModel, RemovedItem, tuple[Any, ...]]]:
         duplicate = set()
         for r in self.iter_records("/api/ipam/ip-addresses/"):
             address = r["address"].split("/")[0]

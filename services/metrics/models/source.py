@@ -9,7 +9,7 @@
 from dataclasses import dataclass
 from typing import Any, Tuple, List, Optional, Literal, Dict
 
-MetricKey = Tuple[str, Tuple[Tuple[str, Any], ...], Tuple[str, ...]]
+MetricKey = tuple[str, tuple[tuple[str, Any], ...], tuple[str, ...]]
 
 
 @dataclass(frozen=True)
@@ -35,11 +35,11 @@ class SourceInfo:
     sla_probe: Optional[str]
     sensor: Optional[str]
     service: Optional[str]
-    labels: Optional[List[str]]
-    metric_labels: Optional[List[str]]
-    composed_metrics: Optional[List[str]]
-    rules: Optional[List[str]]
-    meta: Dict[str, Any]
+    labels: Optional[list[str]]
+    metric_labels: Optional[list[str]]
+    composed_metrics: Optional[list[str]]
+    rules: Optional[list[str]]
+    meta: dict[str, Any]
 
 
 @dataclass(frozen=True)
@@ -50,9 +50,9 @@ class ItemConfig:
     """
 
     __slots__ = ("composed_metrics", "key_labels", "rules")
-    key_labels: Tuple[str, ...]  # noc::interface::*, noc::interface::Fa 0/24
-    composed_metrics: Tuple[str, ...]  # Metric Field for compose metrics
-    rules: Tuple[str, ...]
+    key_labels: tuple[str, ...]  # noc::interface::*, noc::interface::Fa 0/24
+    composed_metrics: tuple[str, ...]  # Metric Field for compose metrics
+    rules: tuple[str, ...]
 
     def is_match(self, k: MetricKey) -> bool:
         return not set(self.key_labels) - set(k[2])
@@ -74,11 +74,11 @@ class SourceConfig:
     type: Literal["managed_object", "sla_probe", "sensor", "agent"]
     bi_id: int
     fm_pool: str
-    labels: Optional[Tuple[str, ...]]
-    exposed_labels: Optional[Tuple[str, ...]]
-    items: Tuple[ItemConfig, ...]
-    rules: List[str]
-    meta: Dict[str, Any]
+    labels: Optional[tuple[str, ...]]
+    exposed_labels: Optional[tuple[str, ...]]
+    items: tuple[ItemConfig, ...]
+    rules: list[str]
+    meta: dict[str, Any]
 
     def is_differ(self, sc: "SourceConfig"):
         """
@@ -103,5 +103,5 @@ class ManagedObjectInfo:
     id: int
     bi_id: int
     fm_pool: str
-    labels: Optional[List[str]]
-    metric_labels: Optional[List[str]]
+    labels: Optional[list[str]]
+    metric_labels: Optional[list[str]]

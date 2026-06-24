@@ -22,10 +22,10 @@ class SourceConfig:
     address: str
     fm_pool: str
     sa_profile: Optional[str] = None
-    effective_labels: Tuple[str, ...] = None
-    watchers: Optional[Tuple[str, ...]] = None
-    services: Optional[Tuple[int, ...]] = None
-    mapping_refs: Optional[Tuple[str, ...]] = None
+    effective_labels: tuple[str, ...] = None
+    watchers: Optional[tuple[str, ...]] = None
+    services: Optional[tuple[int, ...]] = None
+    mapping_refs: Optional[tuple[str, ...]] = None
 
     @classmethod
     def from_data(cls, data) -> "SourceConfig":
@@ -55,8 +55,8 @@ class SourceConfig:
 
 class SourceLookup:
     def __init__(self):
-        self.source_configs: Dict[str, SourceConfig] = {}  # id -> SourceConfig
-        self.source_map: Dict[str, str] = {}
+        self.source_configs: dict[str, SourceConfig] = {}  # id -> SourceConfig
+        self.source_map: dict[str, str] = {}
 
     def resolve_object(
         self, target: Target, remote_system: Optional[str] = None

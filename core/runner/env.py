@@ -18,8 +18,8 @@ class Environment:
     environment.
     """
 
-    def __init__(self, data: Optional[Dict[str, str]] = None) -> None:
-        self._data: Dict[str, str] = {}
+    def __init__(self, data: Optional[dict[str, str]] = None) -> None:
+        self._data: dict[str, str] = {}
         if data:
             self._data.update(data.items())
         self._parent: Optional[Environment] = None
@@ -38,7 +38,7 @@ class Environment:
         """
         self._is_dirty = False
 
-    def raw_data(self) -> Dict[str, str]:
+    def raw_data(self) -> dict[str, str]:
         """
         Returns data directly belonging to the environment.
         """
@@ -131,7 +131,7 @@ class Environment:
                     yield v
                     seen.add(k)
 
-    def items(self) -> Iterable[Tuple[str, str]]:
+    def items(self) -> Iterable[tuple[str, str]]:
         """Iterate over key-values pairs."""
         seen = set(self._data)
         yield from self._data.items()

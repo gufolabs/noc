@@ -37,7 +37,7 @@ class GaussNode(WindowNode):
         return self.config.true_level
 
     def get_window_value(
-        self, values: List[ValueType], timestamps: List[int]
+        self, values: list[ValueType], timestamps: list[int]
     ) -> Optional[ValueType]:
         if len(values) == 1:
             return self.config.true_level  # pragma: no cover

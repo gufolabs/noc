@@ -51,7 +51,7 @@ class ServiceLoader(BaseLoader):
             )
         ]
 
-    def post_save(self, o: ServiceModel, fields: Dict[str, Any]):
+    def post_save(self, o: ServiceModel, fields: dict[str, Any]):
         if not fields:
             capabilities, instances = [], []
         else:
@@ -74,7 +74,7 @@ class ServiceLoader(BaseLoader):
         )
 
     def find_object(
-        self, v: Dict[str, Any], mappings: Optional[Dict[Any, str]] = None, **kwargs
+        self, v: dict[str, Any], mappings: Optional[dict[Any, str]] = None, **kwargs
     ) -> Optional[Any]:
         """
         Find object by remote system/remote id

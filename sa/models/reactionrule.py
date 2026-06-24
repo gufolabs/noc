@@ -88,7 +88,7 @@ class ActionItem(EmbeddedDocument):
     over_topology = BooleanField(default=False)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "action": self.action.value,
             "run": self.run,
@@ -105,7 +105,7 @@ class ActionItem(EmbeddedDocument):
             r["handler__name"] = list(self.handler.name)
         return r
 
-    def get_context(self) -> Dict[str, str]:
+    def get_context(self) -> dict[str, str]:
         """"""
         r = {}
         for c in self.context:
@@ -114,7 +114,7 @@ class ActionItem(EmbeddedDocument):
                 r[key] = value[0]
         return r
 
-    def get_config(self, **kwargs) -> Dict[str, Any]:
+    def get_config(self, **kwargs) -> dict[str, Any]:
         """Get Action config from Ctx"""
         key, args = None, {}
         match self.action:
@@ -193,7 +193,7 @@ class FieldData(EmbeddedDocument):
         if not self.field and not self.capability:
             raise ValueError("Field or Caps Must Be set")
 
-    def get_match_expr(self) -> Dict[str, Any]:
+    def get_match_expr(self) -> dict[str, Any]:
         """"""
         if self.capability:
             return {"caps": {"$in": [self.capability.name]}}
@@ -203,7 +203,7 @@ class FieldData(EmbeddedDocument):
         return {}
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {"field": self.field}
         if self.capability:
             r["capability__uuid"] = str(self.capability.uuid)
@@ -219,10 +219,10 @@ class Match(EmbeddedDocument):
 
     labels = ListField(StringField())
     exclude_labels = ListField(StringField())
-    groups: List[ResourceGroup] = ListField(ReferenceField(ResourceGroup, required=True))
-    ex_groups: List[ResourceGroup] = ListField(ReferenceField(ResourceGroup, required=True))
+    groups: list[ResourceGroup] = ListField(ReferenceField(ResourceGroup, required=True))
+    ex_groups: list[ResourceGroup] = ListField(ReferenceField(ResourceGroup, required=True))
     remote_system: Optional["RemoteSystem"] = ReferenceField(RemoteSystem, required=False)
-    wf_states: List["State"] = ListField(ReferenceField(State, required=True))
+    wf_states: list["State"] = ListField(ReferenceField(State, required=True))
 
     def clean(self):
         super().clean()
@@ -238,7 +238,7 @@ class Match(EmbeddedDocument):
             q &= m_q(effective_service_groups__all=self.groups)
         return q
 
-    def get_match_expr(self) -> Dict[str, Any]:
+    def get_match_expr(self) -> dict[str, Any]:
         r = {}
         if self.labels:
             r["labels"] = {"$all": list(self.labels)}
@@ -289,7 +289,7 @@ class ReactionRule(Document):
         choices=list(REACTION_MODELS),
         required=True,
     )
-    conditions: List["Match"] = EmbeddedDocumentListField(Match)
+    conditions: list["Match"] = EmbeddedDocumentListField(Match)
     execute_policy = StringField(
         choices=[
             ("J", "As Job"),
@@ -300,7 +300,7 @@ class ReactionRule(Document):
     )
     stop_processing = BooleanField(default=False)
     # Match Handler -> ChangedItem ->
-    operations: List[str] = ListField(
+    operations: list[str] = ListField(
         StringField(
             choices=[
                 "create",
@@ -317,13 +317,13 @@ class ReactionRule(Document):
         ),
     )
     # Context
-    field_data: List["FieldData"] = EmbeddedDocumentListField(FieldData)
-    affected_rules: List["AffectedRule"] = EmbeddedDocumentListField(AffectedRule)
+    field_data: list["FieldData"] = EmbeddedDocumentListField(FieldData)
+    affected_rules: list["AffectedRule"] = EmbeddedDocumentListField(AffectedRule)
     # Controller, Scenario
     # Action Commands Set
     # action_command_set: List["ActionCommands"] = EmbeddedDocumentListField(ActionCommands)
     # Actions
-    actions: List[ActionItem] = EmbeddedDocumentListField(ActionItem)
+    actions: list[ActionItem] = EmbeddedDocumentListField(ActionItem)
     # Notification
     notification_policy = StringField(
         choices=[("D", "disable"), ("R", "register"), ("G", "To Group")],
@@ -364,7 +364,7 @@ class ReactionRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_rule_cache"), lock=lambda _: rule_lock)
-    def get_rules_matcher(cls, model_id: str, operation: str) -> Tuple[Tuple[str, Callable], ...]:
+    def get_rules_matcher(cls, model_id: str, operation: str) -> tuple[tuple[str, Callable], ...]:
         """Build matcher based on Profile Match Rules"""
         r = {}
         for rule in ReactionRule.objects.filter(
@@ -381,7 +381,7 @@ class ReactionRule(Document):
     #     )
 
     @classmethod
-    def iter_rules(cls, model_id: str, operation: str, m_ctx: Dict[str, Any]) -> Iterable["str"]:
+    def iter_rules(cls, model_id: str, operation: str, m_ctx: dict[str, Any]) -> Iterable["str"]:
         """Iterate rule for object"""
         for rule_id, match in cls.get_rules_matcher(model_id, operation):
             if not match or match(m_ctx):
@@ -440,7 +440,7 @@ class ReactionRule(Document):
         """Effective rule for Replace Rule settings"""
         return self
 
-    def get_action_ctx(self, o) -> Dict[str, Any]:
+    def get_action_ctx(self, o) -> dict[str, Any]:
         """Create action context (to env)"""
         # r = {"obj": o}
         r = {}
@@ -459,7 +459,7 @@ class ReactionRule(Document):
                 r[name] = caps[i.capability.name]
         return r
 
-    def iter_actions(self, o) -> List[Tuple[ActionType, Dict[str, Any], JobRequest]]:
+    def iter_actions(self, o) -> list[tuple[ActionType, dict[str, Any], JobRequest]]:
         """
         1. Handler
         2. Script/Command Action
@@ -478,8 +478,8 @@ class ReactionRule(Document):
 
     def iter_affected_rules(
         self,
-        domains: List[Any],
-    ) -> Iterable[Tuple["ReactionRule", Any, "AffectedRule"]]:
+        domains: list[Any],
+    ) -> Iterable[tuple["ReactionRule", Any, "AffectedRule"]]:
         """Iterate over affected Rules"""
         # self ?
         for model_id, oid in domains or []:
@@ -538,7 +538,7 @@ class ReactionRule(Document):
     def run(
         self,
         o: Any,
-        domains: Optional[List[Tuple[str, str]]] = None,
+        domains: Optional[list[tuple[str, str]]] = None,
         user: Optional[Any] = None,
         dry_run: bool = False,
         logger: Optional[logging.Logger] = None,

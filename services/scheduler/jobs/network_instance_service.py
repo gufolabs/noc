@@ -124,8 +124,8 @@ class NetworkInstanceDiscoveryJob(PeriodicJob):
 
     @classmethod
     def processed_records(
-        cls, rows: List[Dict[str, Any]]
-    ) -> Dict[str, Tuple[Interface, datetime.datetime]]:
+        cls, rows: list[dict[str, Any]]
+    ) -> dict[str, tuple[Interface, datetime.datetime]]:
         """"""
         r = {}
         ref = ValueType.MAC_ADDRESS
@@ -173,7 +173,7 @@ class NetworkInstanceDiscoveryJob(PeriodicJob):
     @classmethod
     def get_mac_neighbors(
         cls, start: Optional[datetime.datetime] = None, limit_mac_by_port: Optional[int] = None
-    ) -> Dict[str, Tuple[Interface, datetime.datetime]]:
+    ) -> dict[str, tuple[Interface, datetime.datetime]]:
         """Return Iface -> Mac Neighbor map"""
         limit_mac_by_port = limit_mac_by_port or LIMIT_MAC_BY_PORT
         start = start or (datetime.datetime.now() - datetime.timedelta(days=REQUEST_DAYS))

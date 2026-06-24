@@ -31,4 +31,4 @@ class IPVRF(BaseModel):
     afi_ipv4: bool = True
     afi_ipv6: bool = False
     project: Optional[Reference["Project"]] = None
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None

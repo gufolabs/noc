@@ -1099,7 +1099,7 @@ class Config(BaseConfig):
         self.setup_logging()
 
     @property
-    def pg_connection_args(self) -> Dict[str, Union[str, int]]:
+    def pg_connection_args(self) -> dict[str, Union[str, int]]:
         """
         PostgreSQL database connection arguments
         suitable to pass to psycopg2.connect

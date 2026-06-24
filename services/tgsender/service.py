@@ -88,9 +88,9 @@ class TgSenderService(FastAPIService):
     @classmethod
     def iter_tb_messages(
         cls,
-        data: Dict[str, Any],
+        data: dict[str, Any],
         address_to: str,
-    ) -> Iterable[Tuple[bytes, Optional[Dict[str, bytes]]]]:
+    ) -> Iterable[tuple[bytes, Optional[dict[str, bytes]]]]:
         """
         Render TG message
                 # HTML Style
@@ -135,7 +135,7 @@ class TgSenderService(FastAPIService):
         self,
         message_id: int,
         address: str,
-        data: Dict[str, Any],
+        data: dict[str, Any],
     ):
         """Send Telegram Bot message"""
         if not self.url:
@@ -179,7 +179,7 @@ class TgSenderService(FastAPIService):
             break
 
     @staticmethod
-    def parse_webhook_headers(headers: Dict[str, bytes]) -> Dict[str, str]:
+    def parse_webhook_headers(headers: dict[str, bytes]) -> dict[str, str]:
         """Parse webhooks headers to params"""
         r = {"api_url": headers[MX_WH_API_URL].decode()}
         for h in headers:
@@ -193,7 +193,7 @@ class TgSenderService(FastAPIService):
         self,
         message_id: int,
         address: str,
-        data: Dict[str, Any],
+        data: dict[str, Any],
         api_url: str,
         api_method: str = "POST",
         api_authorization: Optional[str] = None,

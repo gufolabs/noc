@@ -45,10 +45,10 @@ class ConfigSection(metaclass=ConfigSectionBase):
 class BaseRewrite:
     """Rewrite configuration parameter."""
 
-    def __init__(self, /, deprecation: Optional[Type[Warning]] = None) -> None:
+    def __init__(self, /, deprecation: Optional[type[Warning]] = None) -> None:
         self.deprecation = deprecation
 
-    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+    def rewrite(self, key: str, value: Any) -> Optional[tuple[str, Any]]:
         """
         Rewrite configuration parameter.
 
@@ -83,13 +83,13 @@ class PrefixRewrite(BaseRewrite):
     """Rewrite parameter's prefix."""
 
     def __init__(
-        self, prefix: str, rewrite_to: str, /, deprecation: Optional[Type[Warning]] = None
+        self, prefix: str, rewrite_to: str, /, deprecation: Optional[type[Warning]] = None
     ) -> None:
         super().__init__(deprecation=deprecation)
         self.prefix = f"{prefix}."
         self.rewrite_to = f"{rewrite_to}."
 
-    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+    def rewrite(self, key: str, value: Any) -> Optional[tuple[str, Any]]:
         if not key.startswith(self.prefix):
             return key, value
         new_key = f"{self.rewrite_to}{key[len(self.prefix) :]}"
@@ -110,14 +110,14 @@ class ValueRewrite(BaseRewrite):
     """
 
     def __init__(
-        self, key: str, value: str, new_value: str, /, deprecation: Optional[Type[Warning]] = None
+        self, key: str, value: str, new_value: str, /, deprecation: Optional[type[Warning]] = None
     ) -> None:
         super().__init__(deprecation=deprecation)
         self.key = key
         self.value = value
         self.new_value = new_value
 
-    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+    def rewrite(self, key: str, value: Any) -> Optional[tuple[str, Any]]:
         if key != self.key or self.value != str(value):
             return key, value
         if self.deprecation:
@@ -128,13 +128,13 @@ class ValueRewrite(BaseRewrite):
 
 class DeprecatedValue(BaseRewrite):
     def __init__(
-        self, key: str, value: str, /, deprecation: Optional[Type[Warning]] = None
+        self, key: str, value: str, /, deprecation: Optional[type[Warning]] = None
     ) -> None:
         super().__init__(deprecation=deprecation)
         self.key = key
         self.value = value
 
-    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+    def rewrite(self, key: str, value: Any) -> Optional[tuple[str, Any]]:
         if key == self.key and self.value == str(value) and self.deprecation:
             msg = f"{key} = {value} is deprecated and will be removed"
             warnings.warn(msg, self.deprecation)
@@ -164,7 +164,7 @@ class BaseConfig(metaclass=ConfigBase):
     }
 
     _rx_env_sh = re.compile(r"\${([^:}]+)(:-[^}]+)?}")
-    _params: Dict[str, BaseParameter]
+    _params: dict[str, BaseParameter]
 
     def __init__(self, rewrites: Optional[Iterable[BaseRewrite]] = None) -> None:
         self._rewrites = list(rewrites) if rewrites else None
@@ -176,11 +176,11 @@ class BaseConfig(metaclass=ConfigBase):
         if self._rewritten_params:
             yield from self._rewritten_params
 
-    def _get_rewritten_params(self) -> Optional[List[str]]:
+    def _get_rewritten_params(self) -> Optional[list[str]]:
         """Find rewritten params, if any."""
         if not self._rewrites:
             return None
-        r: Set[str] = set()
+        r: set[str] = set()
         for rule in self._rewrites:
             for p in self._params_order:
                 old = rule.reverse_rewrite(p)
@@ -229,7 +229,7 @@ class BaseConfig(metaclass=ConfigBase):
             raise ConfigurationError(msg)
         p.set_value(value)
 
-    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+    def rewrite(self, key: str, value: Any) -> Optional[tuple[str, Any]]:
         """
         Rewrite parameters.
 
@@ -315,7 +315,7 @@ class BaseConfig(metaclass=ConfigBase):
             if c and parts[-1] in c:
                 self.set_parameter(name, c[parts[-1]])
 
-    def iter_params(self) -> Iterable[Tuple[str, BaseParameter]]:
+    def iter_params(self) -> Iterable[tuple[str, BaseParameter]]:
         """
         Iterate over all known parameters.
 

@@ -924,7 +924,7 @@ class AlarmApplication(ExtApplication):
         return {"status": True}
 
     @staticmethod
-    def location(oid: str) -> Tuple[str, str]:
+    def location(oid: str) -> tuple[str, str]:
         """
         Return geo address for Managed Objects
         """
@@ -1033,7 +1033,7 @@ class AlarmApplication(ExtApplication):
                 x["isInMaintenance"] = x["managed_object"] in mtc
         return data
 
-    def bulk_field_group_subject(self, data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def bulk_field_group_subject(self, data: list[dict[str, Any]]) -> list[dict[str, Any]]:
         if not data or data[0]["status"] != "A":
             return data
         # Get existing refs

@@ -63,7 +63,7 @@ class BGPPeerCheck(PolicyDiscoveryCheck):
         self.sync_peers(peers)
         self.update_caps({"DB | BGP Peers": len(peers)}, source="database", scope="bgppeer")
 
-    def get_bgp_peer(self) -> Dict[Tuple[AS, IP], DiscoveredPeer]:
+    def get_bgp_peer(self) -> dict[tuple[AS, IP], DiscoveredPeer]:
         """Return BGP Peer. Local AS, RemoteIP"""
         r = {}
         data = self.get_data() or []
@@ -80,7 +80,7 @@ class BGPPeerCheck(PolicyDiscoveryCheck):
                 r[(local_as, p.remote_address)] = p
         return r
 
-    def sync_peers(self, peers: Dict[Tuple[AS, IP], DiscoveredPeer]):
+    def sync_peers(self, peers: dict[tuple[AS, IP], DiscoveredPeer]):
         """
         Apply Peers to database
         Attrs:
@@ -191,7 +191,7 @@ class BGPPeerCheck(PolicyDiscoveryCheck):
     def get_data_from_script(self):
         """Not implemented for BGP Discovery"""
 
-    def get_data_from_confdb(self) -> Optional[List[Dict[str, Any]]]:
+    def get_data_from_confdb(self) -> Optional[list[dict[str, Any]]]:
         """Getting peer from database"""
         r = defaultdict(list)
         for peer in self.confdb.query(self.BGP_PEER_QUERY):

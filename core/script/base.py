@@ -160,7 +160,7 @@ class BaseScript(metaclass=BaseScriptMetaclass):
         session_idle_timeout=None,
         streaming=None,
         controller=None,
-        labels: Optional[Set[str]] = None,
+        labels: Optional[set[str]] = None,
     ):
         self.service = service
         self.tos = config.activator.tos
@@ -828,7 +828,7 @@ class BaseScript(metaclass=BaseScriptMetaclass):
         obj_parser: Any = None,
         cmd_next: Any = None,
         cmd_stop: Any = None,
-        labels: Optional[Union[str, Set[str]]] = None,
+        labels: Optional[Union[str, set[str]]] = None,
     ) -> str:
         """
         Execute CLI command and return result. Initiate cli session
@@ -1246,7 +1246,7 @@ class BaseScript(metaclass=BaseScriptMetaclass):
     def is_beefed(self):
         return self.credentials.get("cli_protocol") == "beef"
 
-    def get_labels(self) -> Set[str]:
+    def get_labels(self) -> set[str]:
         return self.labels
 
     def add_label(self, label: str) -> None:

@@ -32,10 +32,10 @@ class VarTransformRule:
     f_type: Optional[str] = None
     default: Optional[str] = None
     function: Optional[CodeType] = None
-    enums: Optional[Dict[str, str]] = None
-    args: Optional[List[Any]] = None
+    enums: Optional[dict[str, str]] = None
+    args: Optional[list[Any]] = None
 
-    def transform(self, v: Dict[str, Any], var_ctx: Dict[str, Any]):
+    def transform(self, v: dict[str, Any], var_ctx: dict[str, Any]):
         if self.f_type == "ifindex":
             # Magic vars name
             v["ifindex"] = v[self.var]
@@ -92,21 +92,21 @@ class Rule:
     event_class_id: str
     event_class_name: str
     source: EventSource
-    profiles: Optional[FrozenSet[str]] = None
+    profiles: Optional[frozenset[str]] = None
     preference: int = 100
     message_rx: Optional[re.Pattern] = None
-    vars: Optional[Dict[str, str]] = None
-    vars_transform: Optional[Tuple[VarTransformRule, ...]] = None
-    matcher: Optional[Tuple[Callable, ...]] = None
-    label_matchers: Optional[Tuple[Callable, ...]] = None
-    set_labels: Optional[Tuple[str, ...]] = None
+    vars: Optional[dict[str, str]] = None
+    vars_transform: Optional[tuple[VarTransformRule, ...]] = None
+    matcher: Optional[tuple[Callable, ...]] = None
+    label_matchers: Optional[tuple[Callable, ...]] = None
+    set_labels: Optional[tuple[str, ...]] = None
     is_transparent_labels: bool = False
     is_unknown: bool = False
     is_unknown_syslog: bool = False
     to_drop: bool = False
 
     @classmethod
-    def from_config(cls, data: Dict[str, Any], enumerations, r_format: Optional[str] = None):
+    def from_config(cls, data: dict[str, Any], enumerations, r_format: Optional[str] = None):
         """Create from EventClassification rule config"""
         matcher, message_rx = [], data["message_rx"] if data["message_rx"] else None
         source = EventSource(data["sources"][0]) if data["sources"] else EventSource.OTHER
@@ -198,9 +198,9 @@ class Rule:
     def match(
         self,
         message,
-        vars: Dict[str, Any],
-        labels: Optional[List[str]] = None,
-    ) -> Optional[Dict[str, str]]:
+        vars: dict[str, Any],
+        labels: Optional[list[str]] = None,
+    ) -> Optional[dict[str, str]]:
         # if self.source != e.type.source:
         #    return None
         # if self.profile and self.profile != e.type.profile:
@@ -246,7 +246,7 @@ class Rule:
         )
 
     @classmethod
-    def get_matcher(cls, key_re: str, value_re: str) -> Tuple[Callable, List[str]]:
+    def get_matcher(cls, key_re: str, value_re: str) -> tuple[Callable, list[str]]:
         """Create variable matcher callable"""
         x_key, rx_key = None, None
         x_value, rx_value = None, None
@@ -314,11 +314,11 @@ class Rule:
             e_vars.update(self.vars)
 
 
-def match_eq(cv: str, field: str, ctx: Dict[str, Any], storage: Dict[str, str]) -> bool:
+def match_eq(cv: str, field: str, ctx: dict[str, Any], storage: dict[str, str]) -> bool:
     return ctx[field] == cv
 
 
-def match_regex(rx: re.Pattern, field: str, ctx: Dict[str, Any], storage: Dict[str, str]) -> bool:
+def match_regex(rx: re.Pattern, field: str, ctx: dict[str, Any], storage: dict[str, str]) -> bool:
     match = rx.search(ctx[field])
     if match:
         storage.update(match.groupdict())
@@ -326,7 +326,7 @@ def match_regex(rx: re.Pattern, field: str, ctx: Dict[str, Any], storage: Dict[s
     return False
 
 
-def match_k_regex(cv: str, field: re.Pattern, ctx: Dict[str, Any], storage: Dict[str, str]) -> bool:
+def match_k_regex(cv: str, field: re.Pattern, ctx: dict[str, Any], storage: dict[str, str]) -> bool:
     # To the end match chain, pop ctx
     for k in ctx:
         k_s = field.search(k)
@@ -337,7 +337,7 @@ def match_k_regex(cv: str, field: re.Pattern, ctx: Dict[str, Any], storage: Dict
 
 
 def match_k_v_regex(
-    rx: re.Pattern, field: re.Pattern, ctx: Dict[str, Any], storage: Dict[str, str]
+    rx: re.Pattern, field: re.Pattern, ctx: dict[str, Any], storage: dict[str, str]
 ) -> bool:
     # To the end match chain, pop ctx
     for k in ctx:
@@ -355,8 +355,8 @@ def match_k_v_regex(
 def match_scoped_label(
     scope: str,
     value: str,
-    ctx: Dict[str, Optional[str]],
-    storage: Dict[str, str],
+    ctx: dict[str, Optional[str]],
+    storage: dict[str, str],
     set_var: Optional[str] = None,
     default_fail: bool = False,
 ) -> bool:
@@ -372,8 +372,8 @@ def match_scoped_label(
 
 def match_label(
     label: str,
-    ctx: Dict[str, str],
-    storage: Dict[str, str],
+    ctx: dict[str, str],
+    storage: dict[str, str],
     set_var: Optional[str] = None,
     default_fail: bool = False,
 ) -> bool:
@@ -385,5 +385,5 @@ def match_label(
     return True
 
 
-def to_enum(enum: Dict[str, Dict[str, str]], key, value):
+def to_enum(enum: dict[str, dict[str, str]], key, value):
     return enum[key][value.lower()]

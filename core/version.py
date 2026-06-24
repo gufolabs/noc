@@ -180,7 +180,7 @@ class Version:
         return argv[0]
 
     @cachedproperty
-    def package_versions(self) -> Dict[str, str]:
+    def package_versions(self) -> dict[str, str]:
         return {"Python": self.python_version}
 
 

@@ -23,7 +23,7 @@ class MigrationLoader:
     _migration_cache = {}
 
     @staticmethod
-    def _iter_app_migration_files(app: str) -> Iterable[Tuple[str, bool]]:
+    def _iter_app_migration_files(app: str) -> Iterable[tuple[str, bool]]:
         """
         Iterate over migration files.
 

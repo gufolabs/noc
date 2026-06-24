@@ -15,5 +15,5 @@ class BaseTokenizer:
     def __init__(self, data: str):
         self.data = data
 
-    def __iter__(self) -> Iterator[Tuple[str]]:
+    def __iter__(self) -> Iterator[tuple[str]]:
         return iter(())

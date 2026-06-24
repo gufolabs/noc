@@ -24,7 +24,7 @@ from noc.settings import LANGUAGE_CODE
 @dataclass
 class Message:
     value: bytes
-    headers: Dict[str, bytes]
+    headers: dict[str, bytes]
     timestamp: int
     key: int
 
@@ -47,7 +47,7 @@ class NotificationContact:
     method: str = "mail"
     title_tag: Optional[str] = None
     time_pattern: Optional[TimePatternList] = None
-    headers: Optional[Dict[str, Any]] = None
+    headers: Optional[dict[str, Any]] = None
     route: Optional[str] = None
 
     def __hash__(self):
@@ -204,7 +204,7 @@ _mx_lock = Lock()
 def send_message(
     data: Any,
     message_type: MessageType,
-    headers: Optional[Dict[str, bytes]],
+    headers: Optional[dict[str, bytes]],
     sharding_key: int = 0,
     fwd_to: Optional[str] = None,
 ):

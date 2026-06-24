@@ -63,7 +63,7 @@ class Command(BaseCommand):
             f"Stat: down - {metrics.get('address_down').value}; up - {metrics.get('address_up').value}"
         )
 
-    def get_addresses(self, addresses: Iterable[str], input: Iterable[str]) -> List[str]:
+    def get_addresses(self, addresses: Iterable[str], input: Iterable[str]) -> list[str]:
         addresses = {a for a in addresses if is_ipv4(a)}
         # Read addresses from files
         if input:

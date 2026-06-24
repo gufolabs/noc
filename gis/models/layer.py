@@ -93,7 +93,7 @@ class Layer(Document):
         return Layer.objects.filter(code=code).first()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],

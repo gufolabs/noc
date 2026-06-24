@@ -52,11 +52,11 @@ class JSONRPCAPI:
         self.logger = self.service.logger
         self.current_user: Optional[User] = None
         self.router = router
-        self.methods: Set[str] = self.get_methods()
+        self.methods: set[str] = self.get_methods()
         self.setup_routes()
 
     @classmethod
-    def get_methods(cls) -> Set[str]:
+    def get_methods(cls) -> set[str]:
         """
         Returns a list of available API methods
         """

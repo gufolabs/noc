@@ -232,7 +232,7 @@ class Script(BaseScript):
 
     def get_sensors(
         self, c: Component, slot_num: str
-    ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
         """
         Getting Sensors from component metrics
         """
@@ -278,10 +278,10 @@ class Script(BaseScript):
             r[match.group("pname")] = match.group("pvalue").strip()
         return r
 
-    def parse_cross_roadm2x9(self, config) -> List[Dict[str, str]]:
-        src: Dict[str, str] = {}
-        dst: Dict[str, str] = {}
-        gain: Dict[str, str] = {}
+    def parse_cross_roadm2x9(self, config) -> list[dict[str, str]]:
+        src: dict[str, str] = {}
+        dst: dict[str, str] = {}
+        gain: dict[str, str] = {}
         crossings = []
 
         for oo in config:
@@ -328,11 +328,11 @@ class Script(BaseScript):
 
         return crossings, None
 
-    def parse_cross_roadm2(self, config) -> List[Dict[str, str]]:
-        client_src: List[str] = []
-        dir_src: List[str] = []
+    def parse_cross_roadm2(self, config) -> list[dict[str, str]]:
+        client_src: list[str] = []
+        dir_src: list[str] = []
 
-        gain: Dict[str, str] = {}
+        gain: dict[str, str] = {}
         out_gain = 0
         crossings = []
 
@@ -406,11 +406,11 @@ class Script(BaseScript):
 
         return crossings, None
 
-    def parse_cross_atp(self, config) -> List[Dict[str, str]]:
-        src: Dict[str, str] = {}
-        dst: Dict[str, str] = {}
-        datatypes: Dict[str, str] = {}
-        port_states: Dict[str, str] = {}
+    def parse_cross_atp(self, config) -> list[dict[str, str]]:
+        src: dict[str, str] = {}
+        dst: dict[str, str] = {}
+        datatypes: dict[str, str] = {}
+        port_states: dict[str, str] = {}
         mode: Optional[str] = None
         enable_oduflex = set()
         crossings = []
@@ -472,11 +472,11 @@ class Script(BaseScript):
 
         return crossings, None
 
-    def parse_cross_adm200(self, config) -> List[Dict[str, str]]:
-        src: Dict[str, str] = {}
-        dst: Dict[str, str] = {}
-        datatypes: Dict[str, str] = {}
-        port_states: Dict[str, str] = {}
+    def parse_cross_adm200(self, config) -> list[dict[str, str]]:
+        src: dict[str, str] = {}
+        dst: dict[str, str] = {}
+        datatypes: dict[str, str] = {}
+        port_states: dict[str, str] = {}
         mode: Optional[str] = None
         enable_oduflex = set()
         crossings = []
@@ -545,11 +545,11 @@ class Script(BaseScript):
 
         return crossings, card_mode
 
-    def parse_cross_default(self, config) -> List[Dict[str, str]]:
-        src: Dict[str, str] = {}
-        dst: Dict[str, str] = {}
-        datatypes: Dict[str, str] = {}
-        port_states: Dict[str, str] = {}
+    def parse_cross_default(self, config) -> list[dict[str, str]]:
+        src: dict[str, str] = {}
+        dst: dict[str, str] = {}
+        datatypes: dict[str, str] = {}
+        port_states: dict[str, str] = {}
         mode: Optional[str] = None
         enable_oduflex = set()
         crossings = []
@@ -603,8 +603,8 @@ class Script(BaseScript):
         return crossings, None
 
     def get_crossings(
-        self, config: Dict[str, Any], crate_num: int, slot: int
-    ) -> List[Dict[str, str]]:
+        self, config: dict[str, Any], crate_num: int, slot: int
+    ) -> list[dict[str, str]]:
         card_mode = None
         crossings = []
 
@@ -649,7 +649,7 @@ class Script(BaseScript):
             if p.code == "SrNumber":
                 r[-1]["serial"] = p.value
         # slots = self.http.get("/api/slots")
-        devices: Dict[int, Device] = {}  # slot -> device info
+        devices: dict[int, Device] = {}  # slot -> device info
         v = self.http.get("/api/devices", json=True)
         for item in v["devices"]:
             devices[item["slotNumber"]] = Device(
@@ -703,7 +703,7 @@ class Script(BaseScript):
             crossings, card_mode = self.get_crossings(config, d.crate_id - 1, slot)
             self.logger.debug("==|CROSS|==\n%s\n", crossings)
 
-            params: List[PolusParam] = [PolusParam.from_code(**p) for p in v["params"]]
+            params: list[PolusParam] = [PolusParam.from_code(**p) for p in v["params"]]
             self.logger.debug("[%s] Params: %s", num, [p for p in params if p.value])
             # Getting components
             components = Component.get_components(params=params)

@@ -188,7 +188,7 @@ class PathAPI(NBIAPI):
         object: Optional[Union[PointerId, PointerRemote]] = None,
         interface: Optional[Union[InterfaceModel, InterfaceModel_]] = None,
         service: Optional[Union[PointerId, PointerRemote, ServiceOrderPointer]] = None,
-    ) -> Tuple[ManagedObject, Optional[Interface]]:
+    ) -> tuple[ManagedObject, Optional[Interface]]:
         """
         Process from and to section of request and get object and interface
 
@@ -263,7 +263,7 @@ class PathAPI(NBIAPI):
         constraints: Optional[BaseConstraint] = None,
         max_depth: int = MAX_DEPTH_DEFAULT,
         n_shortest: int = N_SHORTEST_DEFAULT,
-    ) -> Iterable[Dict]:
+    ) -> Iterable[dict]:
         """
         Iterate possible paths
 
@@ -277,12 +277,12 @@ class PathAPI(NBIAPI):
         :return:
         """
 
-        def encode_link(interfaces: List[Interface]) -> Dict:
-            objects: DefaultDict[ManagedObject, List] = defaultdict(list)
+        def encode_link(interfaces: list[Interface]) -> dict:
+            objects: defaultdict[ManagedObject, list] = defaultdict(list)
             for iface in interfaces:
                 objects[iface.managed_object] += [iface.name]
             # Order objects
-            order: List[ManagedObject] = list(objects)
+            order: list[ManagedObject] = list(objects)
             try:
                 idx = order.index(last["obj"])
                 o = order.pop(idx)
@@ -309,8 +309,8 @@ class PathAPI(NBIAPI):
             start, goal, constraint=constraints, max_depth=max_depth, n_shortest=n_shortest
         )
         for path in finder.iter_shortest_paths():  # type: List[PathInfo]
-            last: Dict[str, ManagedObject] = {"obj": start}
-            r: Dict[str, Any] = {"path": [], "cost": {"l2": 0}}
+            last: dict[str, ManagedObject] = {"obj": start}
+            r: dict[str, Any] = {"path": [], "cost": {"l2": 0}}
             if start_iface:
                 r["path"] += [{"links": [encode_link([start_iface])]}]
             for pi in path:  # type: PathInfo

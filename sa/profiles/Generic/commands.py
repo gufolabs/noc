@@ -30,7 +30,7 @@ class Script(BaseScript):
 
     def execute(
         self,
-        commands: List[str],
+        commands: list[str],
         ignore_cli_errors: bool = False,
         include_commands: bool = False,
         config_mode: bool = False,
@@ -58,7 +58,7 @@ class Script(BaseScript):
 
     def execute_commands(
         self,
-        commands: List[str],
+        commands: list[str],
         ignore_cli_errors=False,
         include_commands=False,
         dry_run: bool = False,

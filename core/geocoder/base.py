@@ -18,7 +18,7 @@ from .errors import GeoCoderError
 class GeoCoderResult:
     exact: bool
     query: str
-    path: List[str]
+    path: list[str]
     lon: Optional[float] = None
     lat: Optional[float] = None
     id: Optional[str] = None
@@ -62,7 +62,7 @@ class BaseGeocoder:
         """
         yield from self.iter_query(query, bounds)
 
-    def get(self, url: str) -> Tuple[int, bytes]:
+    def get(self, url: str) -> tuple[int, bytes]:
         """
         Perform get request
         :param url:

@@ -109,7 +109,7 @@ GetResponse = namedtuple(
     "GetResponse", ["community", "request_id", "error_status", "error_index", "varbinds"]
 )
 
-_DisplayHints = Dict[str, Callable[[str, bytes], Union[str, bytes]]]
+_DisplayHints = dict[str, Callable[[str, bytes], Union[str, bytes]]]
 _ResponseParser = Callable[[bytes, Optional[_DisplayHints]], GetResponse]
 
 

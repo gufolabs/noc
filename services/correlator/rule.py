@@ -49,7 +49,7 @@ class VarTransformRule:
             update_oper_status=item.update_oper_status,
         )
 
-    def transform(self, v: Dict[str, Any], var_ctx: Dict[str, Any]):
+    def transform(self, v: dict[str, Any], var_ctx: dict[str, Any]):
         """Transform vars"""
         if self.value_type:
             v[self.name] = self.value_type.clean_value(v[self.name])
@@ -62,7 +62,7 @@ class EventAlarmRule:
     event_class: EventClass
     action: str
     unique: bool
-    vars_transform: List[VarTransformRule]
+    vars_transform: list[VarTransformRule]
     # component
     managed_object: str = "managed_object"
     match: Optional[Callable] = None
@@ -71,7 +71,7 @@ class EventAlarmRule:
     combo_condition: Optional[str] = None
     combo_window: int = 0
     combo_count: int = 0
-    combo_event_classes: List[str] = None
+    combo_event_classes: list[str] = None
     preference: int = 999
     reference_lookup: bool = False
     stop_disposition: bool = False
@@ -123,19 +123,19 @@ class EventAlarmRule:
             r.object_avail_condition = rule.object_avail_condition
         return r
 
-    def is_match(self, ctx: Dict[str, Any]) -> bool:
+    def is_match(self, ctx: dict[str, Any]) -> bool:
         return not (self.match and not self.match(ctx))
 
-    def is_vars(self, r_vars: Dict[str, Any]) -> bool:
+    def is_vars(self, r_vars: dict[str, Any]) -> bool:
         return not (self.match_vars and not self.match_vars(r_vars))
 
     def match_event(self, e: Event) -> bool:
         return not (self.match_vars and not self.match_vars(e.vars))
 
-    def get_vars(self, e_vars: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def get_vars(self, e_vars: dict[str, Any]) -> Optional[dict[str, Any]]:
         if not self.vars_transform:
             return None
-        ctx: Dict[str, Any] = {}
+        ctx: dict[str, Any] = {}
         # Transform
         for k in self.vars_transform:
             if k.name in e_vars:

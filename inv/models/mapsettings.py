@@ -108,7 +108,7 @@ class MapSettings(Document):
             nodes[n.node] = n
         return nodes
 
-    def get_generator_hints(self, **kwargs) -> Dict[str, str]:
+    def get_generator_hints(self, **kwargs) -> dict[str, str]:
         """
         Return Hints settings for generator
         :param kwargs: Additional hints
@@ -276,7 +276,7 @@ class MapSettings(Document):
     @classmethod
     def get_map(
         cls, gen_type: str, gen_id: Optional[str] = None, **kwargs
-    ) -> Optional[Dict[str, Any]]:
+    ) -> Optional[dict[str, Any]]:
         """
         Return Map Data.
 

@@ -34,7 +34,7 @@ id_lock = Lock()
 
 class MatchRule(BaseModel):
     dynamic_order: int = 0
-    labels: List[str] = []
+    labels: list[str] = []
     handler: Optional[str]
 
     @field_validator("handler")
@@ -49,7 +49,7 @@ class MatchRule(BaseModel):
         return str(h.id)
 
 
-MatchRules = RootModel[List[Optional[MatchRule]]]
+MatchRules = RootModel[list[Optional[MatchRule]]]
 
 
 @Label.model

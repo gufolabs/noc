@@ -37,9 +37,9 @@ class Action:
     stop_processing: bool = False
     match: Optional[Callable] = None
     event_match: Optional[Callable] = None
-    event: Tuple[Callable, ...] = None
-    target: Tuple[Callable, ...] = None
-    resource: Dict[str, Tuple[Callable, ...]] = None
+    event: tuple[Callable, ...] = None
+    target: tuple[Callable, ...] = None
+    resource: dict[str, tuple[Callable, ...]] = None
     action: EventAction = EventAction.LOG
 
     def iter_event_actions(self) -> Iterable[Callable]:
@@ -64,7 +64,7 @@ class ActionSet:
         # EventClass
         # Abduct Detector
         self.logger = logger or action_logger
-        self.actions: Dict[str, List[Action]] = {}
+        self.actions: dict[str, list[Action]] = {}
         self.add_handlers: int = 0
         self.add_event_actions: int = 0
         self.add_target_actions: int = 0
@@ -73,8 +73,8 @@ class ActionSet:
     def iter_actions(
         self,
         event_class: str,
-        ctx: Dict[str, Any],
-        e_vars: Dict[str, Any],
+        ctx: dict[str, Any],
+        e_vars: dict[str, Any],
     ) -> Iterable[Action]:
         """"""
         if event_class not in self.actions:
@@ -107,7 +107,7 @@ class ActionSet:
         if rid in self.actions:
             del self.actions[rid]
 
-    def from_config(self, data: Dict[str, Any]) -> List[Action]:
+    def from_config(self, data: dict[str, Any]) -> list[Action]:
         """Create actions"""
         try:
             rule = Rule.model_validate(data)
@@ -171,9 +171,9 @@ class ActionSet:
         self,
         event: Event,
         target: ManagedObject,
-        resources: List[Any],
+        resources: list[Any],
         config: EventConfig,
-    ) -> Tuple[EventAction, int]:
+    ) -> tuple[EventAction, int]:
         """
         Processed actions on Event
         Args:

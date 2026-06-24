@@ -33,7 +33,7 @@ class Node:
         else:
             self.token = token
         self.handler = None
-        self.children: List[Node] = []
+        self.children: list[Node] = []
         self.matcher = None
 
     def __repr__(self):

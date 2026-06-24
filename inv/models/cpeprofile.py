@@ -86,7 +86,7 @@ class MatchRule(EmbeddedDocument):
             q &= m_q(type=self.type)
         return q
 
-    def get_match_expr(self) -> Dict[str, Any]:
+    def get_match_expr(self) -> dict[str, Any]:
         r = {}
         if self.labels:
             r["labels"] = {"$all": list(self.labels)}
@@ -275,7 +275,7 @@ class CPEProfile(Document):
         key=lambda x: "ruleset",
         lock=lambda _: rule_lock,
     )
-    def get_profiles_matcher(cls) -> Tuple[Tuple[str, Tuple[Callable, ...]], ...]:
+    def get_profiles_matcher(cls) -> tuple[tuple[str, tuple[Callable, ...]], ...]:
         """Build matcher based on Profile Match Rules"""
         r = defaultdict(list)
         for mop_id, rules in CPEProfile.objects.filter(
@@ -300,7 +300,7 @@ class CPEProfile(Document):
 
     def get_instance_affected_query(
         self,
-        changes: Optional[List[ChangeField]] = None,
+        changes: Optional[list[ChangeField]] = None,
         include_match: bool = False,
     ) -> m_q:
         """Return queryset for instance"""

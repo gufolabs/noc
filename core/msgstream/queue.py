@@ -82,7 +82,7 @@ class MessageStreamQueue:
             except IndexError:
                 return None  # Triggered by shutdown
 
-    def apply_metrics(self, data: Dict[str, Any]) -> None:
+    def apply_metrics(self, data: dict[str, Any]) -> None:
         data.update(
             {
                 "liftbridge_publish_puts": self.req_puts,

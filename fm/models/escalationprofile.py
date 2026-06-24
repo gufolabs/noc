@@ -121,7 +121,7 @@ class EscalationItem(EmbeddedDocument):
         tt_login: Optional[str] = None,
         pre_reason: Optional[str] = None,
         promote_item: Optional[str] = None,
-    ) -> List["ActionConfig"]:
+    ) -> list["ActionConfig"]:
         """"""
         r = []
         if self.notification_group:
@@ -213,7 +213,7 @@ class EscalationAction(EmbeddedDocument):
     log = BooleanField(default=False)
     subscribe = BooleanField(default=False)
 
-    def get_config(self) -> List[AllowedAction]:
+    def get_config(self) -> list[AllowedAction]:
         """"""
         r = []
         if self.ack:
@@ -251,8 +251,8 @@ class EscalationProfile(Document):
     escalation_policy = EnumField(EscalationPolicy, default=EscalationPolicy.ROOT)
     #     choices=["never", "rootfirst", "root", "alwaysfirst", "always"], default="root"
     # )
-    tt_system_config: List[TTSystemItem] = EmbeddedDocumentListField(TTSystemItem)
-    actions: List[EscalationAction] = EmbeddedDocumentListField(EscalationAction)
+    tt_system_config: list[TTSystemItem] = EmbeddedDocumentListField(TTSystemItem)
+    actions: list[EscalationAction] = EmbeddedDocumentListField(EscalationAction)
     maintenance_policy = StringField(choices=["w", "i", "e"], default="end")
     alarm_consequence_policy = StringField(
         required=True,
@@ -276,7 +276,7 @@ class EscalationProfile(Document):
     )
     # Close alarm after End
     close_alarm = BooleanField(default=False)
-    escalations: List[EscalationItem] = EmbeddedDocumentListField(EscalationItem)  # Chain
+    escalations: list[EscalationItem] = EmbeddedDocumentListField(EscalationItem)  # Chain
     repeat_escalations = StringField(
         choices=[
             ("N", "Newer"),
@@ -304,7 +304,7 @@ class EscalationProfile(Document):
         self,
         user: Optional[User] = None,
         group: Optional[Group] = None,
-    ) -> FrozenSet[AlarmAction]:
+    ) -> frozenset[AlarmAction]:
         """
         Getting TT System Action support
 
@@ -404,7 +404,7 @@ class EscalationProfile(Document):
         return self.escalations[0].delay
 
     @classmethod
-    def get_config(cls, profile: "EscalationProfile") -> Dict[str, Any]:
+    def get_config(cls, profile: "EscalationProfile") -> dict[str, Any]:
         """Build job config"""
         actions = []
         for e in profile.escalations:

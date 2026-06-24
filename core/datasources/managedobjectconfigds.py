@@ -29,7 +29,7 @@ class ManagedObjectConfigDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         pipeline = [
             {"$group": {"_id": "$object", "last_ts": {"$max": "$ts"}}},
             {"$sort": {"_id": 1}},

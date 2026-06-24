@@ -68,7 +68,7 @@ class DisposeAction(BaseModel):
 
     action: ActionType
     key: str
-    args: Optional[Dict[str, Any]] = None
+    args: Optional[dict[str, Any]] = None
     model_id: Optional[str] = None
 
     @property
@@ -79,9 +79,9 @@ class DisposeAction(BaseModel):
 class ManagedObjectOpaque(BaseModel):
     id: str
     name: str
-    adm_path: List[int]
+    adm_path: list[int]
     administrative_domain: AdministrativeDomain
     remote_system: Optional[RemoteSystemItem] = None
     remote_id: Optional[str] = None
-    mappings: Optional[List[RemoteMapItem]] = None
-    services: Optional[List[Service]] = None
+    mappings: Optional[list[RemoteMapItem]] = None
+    services: Optional[list[Service]] = None

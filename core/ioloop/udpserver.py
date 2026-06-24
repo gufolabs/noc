@@ -35,10 +35,10 @@ class UDPServerProtocol(asyncio.DatagramProtocol):
 
 class UDPServer:
     def __init__(self):
-        self._transports: List[asyncio.BaseTransport] = []
-        self._sockaddr: List[Tuple[str, int]] = []
+        self._transports: list[asyncio.BaseTransport] = []
+        self._sockaddr: list[tuple[str, int]] = []
 
-    def iter_listen(self, cfg: str) -> Iterable[Tuple[str, int]]:
+    def iter_listen(self, cfg: str) -> Iterable[tuple[str, int]]:
         """
         Parses listen configuration and yield (address, port) tuples.
         Listen configuration is comma-separated string with items:
@@ -67,7 +67,7 @@ class UDPServer:
         for transport in self._transports:
             transport.close()
 
-    def on_read(self, data: bytes, address: Tuple[str, int]):
+    def on_read(self, data: bytes, address: tuple[str, int]):
         """
         To be overriden
         """

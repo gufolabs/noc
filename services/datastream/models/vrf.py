@@ -36,6 +36,6 @@ class VRFGroupDataStreamItem(BaseModel):
     profile: VRFProfileItem
     description: Optional[str]
     rd: Optional[str]
-    labels: Optional[List[str]]
-    tags: Optional[List[str]]
+    labels: Optional[list[str]]
+    tags: Optional[list[str]]
     project: Optional[ProjectItem]

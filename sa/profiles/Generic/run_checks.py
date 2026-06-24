@@ -27,7 +27,7 @@ class Script(BaseScript):
         iface = loader.get_interface_by_check(check)
         return iface.check_script
 
-    def execute(self, checks: List[Dict[str, Any]]):
+    def execute(self, checks: list[dict[str, Any]]):
         r = []
         for c in checks:
             if not is_ipv4(c["address"]):

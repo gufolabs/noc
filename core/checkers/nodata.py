@@ -20,7 +20,7 @@ class NoDataChecker(BaseChecker):
     name = "nodata"
     CHECKS = [NODATA]
 
-    async def iter_result(self, checks: List[Check]) -> AsyncIterable[CheckResult]:
+    async def iter_result(self, checks: list[Check]) -> AsyncIterable[CheckResult]:
         for c in checks:
             self.logger.info("Dump check: %s", c)
             yield CheckResult(

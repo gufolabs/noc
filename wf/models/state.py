@@ -58,7 +58,7 @@ class InteractionSetting(EmbeddedDocument):
     enable = BooleanField(default=True)
     # raise_alarm = BooleanField(default=True)
 
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"enable": self.enable}
 
 
@@ -155,7 +155,7 @@ class State(Document):
         return f"{self.workflow.name}: {self.name}"
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "workflow__name": self.workflow.name,
             "name": self.name,

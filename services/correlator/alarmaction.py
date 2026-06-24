@@ -45,18 +45,18 @@ class AlarmActionRunner:
 
     def __init__(
         self,
-        items: List[Any],
-        allowed_actions: List[AlarmAction] = None,
+        items: list[Any],
+        allowed_actions: list[AlarmAction] = None,
         logger: Optional[Logger] = None,
-        services: Optional[List[str]] = None,
-        groups: List[int] = None,
+        services: Optional[list[str]] = None,
+        groups: list[int] = None,
         dry_run: bool = False,
     ):
         self.items = items
         self.alarm: "ActiveAlarm" = items[0].alarm
-        self.services: List[str] = services or []
+        self.services: list[str] = services or []
         self.groups = groups
-        self.allowed_actions: List[AllowedAction] = allowed_actions or []
+        self.allowed_actions: list[AllowedAction] = allowed_actions or []
         self.logger = logger or logging.getLogger("AlarmActionRunner")
         self.alarm_log = []
         self.dry_run = dry_run
@@ -64,7 +64,7 @@ class AlarmActionRunner:
     def run_action(
         self,
         action: AlarmAction,
-        **ctx: Dict[str, str],
+        **ctx: dict[str, str],
     ) -> ActionResult:
         """
         Execute action
@@ -113,7 +113,7 @@ class AlarmActionRunner:
 
     def get_escalation_items(
         self, tt_system: TTSystem, promote_items: Optional[str] = None
-    ) -> List[ECtxItem]:
+    ) -> list[ECtxItem]:
         """
         Build escalation items for Escalation Doc
         Args:
@@ -160,7 +160,7 @@ class AlarmActionRunner:
             r.append(ei)
         return r
 
-    def get_action_context(self) -> List[TTActionContext]:
+    def get_action_context(self) -> list[TTActionContext]:
         """Return Available Action Context for escalation"""
         r = []
         for aa in self.allowed_actions:
@@ -234,7 +234,7 @@ class AlarmActionRunner:
             self.alarm.log_message(msg)  # bulk=self.alarm_log
             self.alarm.safe_save()
 
-    def get_bulk(self) -> List[Any]:
+    def get_bulk(self) -> list[Any]:
         return self.alarm_log
 
     def comment_alarm_state(

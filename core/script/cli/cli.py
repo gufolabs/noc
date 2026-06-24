@@ -85,7 +85,7 @@ class CLI(BaseCLI):
         cmd_stop: Optional[bytes] = None,
         ignore_errors: bool = False,
         allow_empty_response: bool = True,
-        labels: Optional[Union[str, Set[str]]] = None,
+        labels: Optional[Union[str, set[str]]] = None,
     ) -> str:
         self.buffer = b""
         self.command = cmd
@@ -179,7 +179,7 @@ class CLI(BaseCLI):
         await self.stream.write(cmd)
 
     async def read_until_prompt(self):
-        cleaned_chunks: List[bytes] = []  # Already processed chunks
+        cleaned_chunks: list[bytes] = []  # Already processed chunks
         active_chunk = self.buffer  # Active window
         while True:
             try:
@@ -358,9 +358,9 @@ class CLI(BaseCLI):
 
     def expect(
         self,
-        patterns: Dict[str, Any],
+        patterns: dict[str, Any],
         timeout: Optional[float] = None,
-        error: Optional[Type[Exception]] = None,
+        error: Optional[type[Exception]] = None,
     ):
         """
         Send command if not none and set reply patterns

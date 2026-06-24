@@ -145,7 +145,7 @@ class Model(metaclass=ModelBase):
             yield from field.iter_create_sql()
 
     @classmethod
-    def get_materialized_columns(cls) -> List[str]:
+    def get_materialized_columns(cls) -> list[str]:
         r = []
         for field in cls._meta.ordered_fields:
             if isinstance(field, MaterializedField):

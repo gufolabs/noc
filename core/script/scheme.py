@@ -45,7 +45,7 @@ class ProtoConfig:
 class SNMPCredential:
     snmp_ro: str
     snmp_rw: Optional[str] = field(default=None, hash=True)
-    oids: Optional[List[str]] = field(default=None, hash=False)
+    oids: Optional[list[str]] = field(default=None, hash=False)
     snmp_v1_only: bool = field(default=False, hash=False)
 
     @property
@@ -67,7 +67,7 @@ class SNMPv3Credential:
     auth_proto: Literal["MD5", "SHA"] = "MD5"
     private_key: Optional[str] = None
     private_proto: Literal["DES", "AES"] = "DES"
-    oids: Optional[List[str]] = field(default=None, hash=False)
+    oids: Optional[list[str]] = field(default=None, hash=False)
 
     @property
     def protocol(self) -> "Protocol":
@@ -88,7 +88,7 @@ class CLICredential:
     password: Optional[str] = None
     super_password: Optional[str] = None
     raise_privilege: bool = False
-    enable_protocols: Tuple[int, ...] = (1, 2)
+    enable_protocols: tuple[int, ...] = (1, 2)
 
     @property
     def protocol(self) -> "Protocol":

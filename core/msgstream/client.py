@@ -94,7 +94,7 @@ class MessageStreamClient:
         stream: Optional[str] = None,
         key: Optional[bytes] = None,
         partition: Optional[int] = None,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: Optional[dict[str, bytes]] = None,
         wait_for_stream: bool = False,
     ) -> None:
         # Build message
@@ -238,7 +238,7 @@ class MessageStreamClient:
         data: Any,
         stream: str,
         partition: Optional[int] = None,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: Optional[dict[str, bytes]] = None,
         sharding_key: int = 0,
     ) -> PublishRequest:
         """
@@ -264,7 +264,7 @@ class MessageStreamClient:
     async def alter_stream(
         self,
         name: str,
-        current_meta: Dict[int, PartitionMetadata],
+        current_meta: dict[int, PartitionMetadata],
         new_partitions: Optional[int] = None,
         replication_factor: Optional[int] = None,
     ) -> bool:
@@ -318,8 +318,8 @@ class MessageStreamClient:
         self,
         from_topic,
         to_topic,
-        partitions: Optional[Union[Dict[int, int], int]] = None,
-    ) -> Dict[int, int]:
+        partitions: Optional[Union[dict[int, int], int]] = None,
+    ) -> dict[int, int]:
         """
         Copy message from one topic to another
         :param from_topic: From topic

@@ -24,7 +24,7 @@ def publish(
     stream: str,
     partition: Optional[int] = None,
     key: Optional[bytes] = None,
-    headers: Optional[Dict[str, bytes]] = None,
+    headers: Optional[dict[str, bytes]] = None,
 ):
     async def wrap():
         async with MessageStreamClient() as client:

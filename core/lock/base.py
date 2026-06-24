@@ -12,7 +12,7 @@ from contextvars import ContextVar
 
 DEFAULT_TTL = 60.0
 
-locked_items: ContextVar[Optional[Set[str]]] = ContextVar("locked_items", default=None)
+locked_items: ContextVar[Optional[set[str]]] = ContextVar("locked_items", default=None)
 
 
 class BaseLock(ABC):
@@ -55,7 +55,7 @@ class BaseLock(ABC):
         return Token(self, items, ttl=ttl)
 
     @abstractmethod
-    def acquire_by_items(self, items: List[str], ttl: Optional[float] = None) -> str:
+    def acquire_by_items(self, items: list[str], ttl: Optional[float] = None) -> str:
         """
         Acquire lock by list of items
         """
@@ -101,7 +101,7 @@ class Token:
         locked_items.set(None)
 
 
-def get_locked_items() -> Set[str]:
+def get_locked_items() -> set[str]:
     """
     Get a list of currently locked items
     """

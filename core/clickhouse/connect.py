@@ -42,12 +42,12 @@ class ClickhouseClient:
     def execute(
         self,
         sql: Optional[str] = None,
-        args: Optional[List[str]] = None,
+        args: Optional[list[str]] = None,
         nodb: bool = False,
         post: str = None,
-        extra: List[Tuple[str, str]] = None,
+        extra: list[tuple[str, str]] = None,
         return_raw: bool = False,
-    ) -> Union[List[str], str]:
+    ) -> Union[list[str], str]:
         """
 
         :param sql: Query string

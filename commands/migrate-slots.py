@@ -36,7 +36,7 @@ class Command(BaseCommand):
                     changed = True
             return changed
 
-        slots: Dict[str, int] = {}
+        slots: dict[str, int] = {}
         for name, value in os.environ.items():
             if not name.startswith("NOC_MIGRATE_SLOTS_"):
                 continue

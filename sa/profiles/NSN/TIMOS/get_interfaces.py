@@ -232,7 +232,7 @@ class Script(BaseScript):
     )
 
     @staticmethod
-    def fix_protocols(protocols: str) -> List[str]:
+    def fix_protocols(protocols: str) -> list[str]:
         """
         :rtype : list
         """
@@ -266,7 +266,7 @@ class Script(BaseScript):
             fitype = "Unsupported"
         return fitype
 
-    def fix_ip_addr(self, ipaddr_section: str) -> Dict[str, List[str]]:
+    def fix_ip_addr(self, ipaddr_section: str) -> dict[str, list[str]]:
         """
         :rtype : dict
         """
@@ -289,11 +289,11 @@ class Script(BaseScript):
         return result
 
     def parse_interfaces(self, data: str, c_interfaces=None):
-        interfaces: Dict[str, Dict[str, Any]] = c_interfaces or {}
+        interfaces: dict[str, dict[str, Any]] = c_interfaces or {}
         r = self.re_int.split(data)
         for block in r[1:]:
             parent_iface = ""
-            iface: Dict[str, Any] = {}
+            iface: dict[str, Any] = {}
             if IfType.group.value in block:
                 match = self.re_int_desc_group.search(block)
                 if match:
@@ -417,7 +417,7 @@ class Script(BaseScript):
             interfaces[iface["name"]] = iface
         return interfaces
 
-    def parse_vpls_saps(self, sap_section: str) -> Dict[str, Any]:
+    def parse_vpls_saps(self, sap_section: str) -> dict[str, Any]:
         result = {}
         for line in sap_section.splitlines():
             match = self.re_saps.match(line)
@@ -449,7 +449,7 @@ class Script(BaseScript):
         return result
 
     def get_managment_router(self):
-        interfaces: Dict[str, Dict[str, Any]] = {}
+        interfaces: dict[str, dict[str, Any]] = {}
         card_detail = self.cli("show card detail")
         cards = self.re_cards_detail.findall(card_detail)
 
@@ -468,12 +468,12 @@ class Script(BaseScript):
                 interfaces[ifname]["mac"] = card[3]
         return list(interfaces.values())
 
-    def get_base_router(self) -> Dict[str, Any]:
+    def get_base_router(self) -> dict[str, Any]:
         """
         Getting Router physical ifaces.
         :return:
         """
-        interfaces: Dict[str, Dict[str, Any]] = {}
+        interfaces: dict[str, dict[str, Any]] = {}
         port_info = self.cli("show port")
         for line in port_info.splitlines():
             match = self.re_port_info.search(line)
@@ -484,7 +484,7 @@ class Script(BaseScript):
                     match_detail = self.re_port_detail_info_sr.search(port_detail)
                     if not match_detail:
                         match_detail = self.re_port_detail_info_sar.search(port_detail)
-                iface: Dict[str, Any] = match.groupdict()
+                iface: dict[str, Any] = match.groupdict()
                 iface.update(match_detail.groupdict())
                 if "aggregated_interface" in iface:
                     if is_int(iface["aggregated_interface"]):
@@ -573,7 +573,7 @@ class Script(BaseScript):
             match = self.re_forwarding_instance.search(line)
             if not match:
                 continue
-            fi: Dict[str, Any] = match.groupdict()
+            fi: dict[str, Any] = match.groupdict()
             fi["type"] = self.fix_fi_type(fi["type"])
             # fi["oper_status"] = self.fix_status(fi["oper_status"])
             # fi["admin_status"] = self.fix_status(fi["admin_status"])
@@ -607,7 +607,7 @@ class Script(BaseScript):
                 if not match:
                     fi["type"] = "vpls"
                     continue
-                vpls: Dict[str, Any] = match.groupdict()
+                vpls: dict[str, Any] = match.groupdict()
                 fi.update(vpls)
                 vpls["type"] = "bridge"
                 fi["oper_status"] = self.fix_status(fi["oper_status"])

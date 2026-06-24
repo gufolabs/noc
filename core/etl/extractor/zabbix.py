@@ -128,7 +128,7 @@ class ZabbixHostInterface(BaseModel):
     error: Optional[str] = None
     errors_from: Optional[int] = None
     disable_until: Optional[int] = None
-    details: Optional[List[str]] = None
+    details: Optional[list[str]] = None
 
 
 class ZabbixHost(BaseModel):
@@ -143,7 +143,7 @@ class ZabbixHost(BaseModel):
     flags: int
     inventory_mode: int
     status: int
-    tags: Optional[List[ZabbixTag]] = None
+    tags: Optional[list[ZabbixTag]] = None
     active_available: Optional[int] = None
     monitored_by: Optional[int] = None
     name: Optional[str] = None
@@ -155,8 +155,8 @@ class ZabbixHost(BaseModel):
     maintenance_status: Optional[int] = None
     maintenance_type: Optional[int] = None
     maintenance_id: int = Field(None, alias="hostid")
-    host_groups: Optional[List[ZabbixHostGroup]] = Field(None, alias="hostgroups")
-    interfaces: Optional[List[ZabbixHostInterface]] = None
+    host_groups: Optional[list[ZabbixHostGroup]] = Field(None, alias="hostgroups")
+    interfaces: Optional[list[ZabbixHostInterface]] = None
 
     @property
     def main_interface(self) -> Optional[ZabbixHostInterface]:
@@ -175,7 +175,7 @@ class ZabbixEventItem(BaseModel):
     type: ItemType
     key: str = Field(alias="key_")
     snmp_oid: Optional[str] = None
-    triggers: List[Dict[str, str]]
+    triggers: list[dict[str, str]]
 
     @property
     def is_snmp_interface_item(self) -> bool:
@@ -207,10 +207,10 @@ class ZabbixEvent(BaseModel):
     correlationid: Optional[int] = None
     userid: Optional[int] = None
     suppressed: Optional[int] = None
-    urls: Optional[List[str]] = None
-    tags: Optional[List[ZabbixTag]] = None
-    relatedObject: Optional[Dict[str, str]] = None
-    hosts: Optional[List[ZabbixEventHost]] = None
+    urls: Optional[list[str]] = None
+    tags: Optional[list[ZabbixTag]] = None
+    relatedObject: Optional[dict[str, str]] = None
+    hosts: Optional[list[ZabbixEventHost]] = None
 
     @property
     def created(self) -> datetime.datetime:
@@ -353,7 +353,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
     model = FMEventObject
     DISABLE_INCREMENTAL_MERGE = True
 
-    severity_map: Dict[ZabbixSeverity, EventSeverity] = {
+    severity_map: dict[ZabbixSeverity, EventSeverity] = {
         ZabbixSeverity.NOT_CLASSIFIED: EventSeverity.INDETERMINATE,  # Ignored
         ZabbixSeverity.INFORMATION: EventSeverity.INDETERMINATE,
         ZabbixSeverity.WARNING: EventSeverity.WARNING,
@@ -367,9 +367,9 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
 
     def __init__(self, system):
         super().__init__(system)
-        self.targets: Dict[int, RemoteObject] = {}
-        self.items: Dict[int, ZabbixEventItem] = {}
-        self.media_types: Dict[int, ZabbixMedia] = {}
+        self.targets: dict[int, RemoteObject] = {}
+        self.items: dict[int, ZabbixEventItem] = {}
+        self.media_types: dict[int, ZabbixMedia] = {}
         self.load_media()
 
     def load_media(self):
@@ -403,7 +403,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
             self.logger.info("Extracting all events from: %s", time_from)
         return time_from or datetime.datetime.now() - datetime.timedelta(days=1)
 
-    def get_alerts_tags(self, alerts) -> List[Dict[str, str]]:
+    def get_alerts_tags(self, alerts) -> list[dict[str, str]]:
         """"""
         r = []
         for a in alerts:
@@ -521,7 +521,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
                 remote_id=h["hostid"],
             )
 
-    def get_event_class(self, e: ZabbixEvent, labels: List[str]) -> Optional[str]:
+    def get_event_class(self, e: ZabbixEvent, labels: list[str]) -> Optional[str]:
         """"""
         name = e.name.strip() if e.name else ""
         if "ICMP::Unavailable" in labels or name in {
@@ -634,10 +634,10 @@ class ZabbixMetricsExtractor(ZabbixExtractor):
 
     def iter_history(
         self,
-        item_ids: List[str],
+        item_ids: list[str],
         start: datetime.datetime,
         end: Optional[datetime.datetime] = None,
-    ) -> Iterable[Tuple[int, datetime.datetime, float, float]]:
+    ) -> Iterable[tuple[int, datetime.datetime, float, float]]:
         """Iter over Zabbix item history"""
         prev_value, prev_id = None, None
         while True:
@@ -666,10 +666,10 @@ class ZabbixMetricsExtractor(ZabbixExtractor):
 
     def iter_metrics(
         self,
-        item_ids: List[str],
+        item_ids: list[str],
         end_ts: Optional[datetime.datetime] = None,
         **kwargs,
-    ) -> Iterable[Tuple[str, Optional[str], List[Tuple[int, float]]]]:
+    ) -> Iterable[tuple[str, Optional[str], list[tuple[int, float]]]]:
         """"""
         now = datetime.datetime.now().replace(microsecond=0)
         end_ts = end_ts or now

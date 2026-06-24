@@ -144,7 +144,7 @@ class KafkaSenderService(FastAPIService):
         return self.producer
 
     @classmethod
-    def get_partition(cls, partitions: Union[bytes, List], topic: bytes) -> Union[bytes, None]:
+    def get_partition(cls, partitions: Union[bytes, list], topic: bytes) -> Union[bytes, None]:
         """
         Get partitions from headers kafka.
 

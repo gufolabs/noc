@@ -403,12 +403,12 @@ class MapApplication(ExtApplication):
             )
         },
     )
-    def api_objects_statuses(self, request, nodes: List[Dict[str, str]]):
-        def get_alarms(objects: List[int]) -> Set[int]:
+    def api_objects_statuses(self, request, nodes: list[dict[str, str]]):
+        def get_alarms(objects: list[int]) -> set[int]:
             """
             Returns a set of objects with alarms
             """
-            alarms: Set[int] = set()
+            alarms: set[int] = set()
             coll = ActiveAlarm._get_collection()
             while objects:
                 chunk, objects = objects[:500], objects[500:]
@@ -421,7 +421,7 @@ class MapApplication(ExtApplication):
                 alarms.update(d["_id"] for d in a)
             return alarms
 
-        def get_alarms_segment(segments: List[str]) -> Set[str]:
+        def get_alarms_segment(segments: list[str]) -> set[str]:
             if not segments:
                 return set()
             coll = ActiveAlarm._get_collection()
@@ -437,7 +437,7 @@ class MapApplication(ExtApplication):
             }
 
         nid = {}
-        metrics_template: Dict[str, str] = {}
+        metrics_template: dict[str, str] = {}
         group_nodes = {}  # (segment, group)
         cpes = set()
         # Build id -> object_id mapping

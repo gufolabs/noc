@@ -40,7 +40,7 @@ CHECK_HISTORY_TABLE = "checkhistory"
 class MetricValue:
     metric_type: str
     value: float
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None
 
 
 @dataclass(frozen=True)
@@ -54,7 +54,7 @@ class DataItem:
 @dataclass(frozen=True, eq=True)
 class Check:
     name: str  # Check name
-    args: Optional[Dict[str, str]] = None
+    args: Optional[dict[str, str]] = None
     # pool: Optional[str] = field(default=None, hash=False)  # Address Pool
     address: str = field(default=None, compare=False)  # IP Address
     port: Optional[int] = None  # TCP/UDP port
@@ -103,7 +103,7 @@ class Check:
         return "&".join(r)
 
     @property
-    def keys(self) -> List[str]:
+    def keys(self) -> list[str]:
         """Rerurn keys fields"""
         r = []
         if self.script and self.script != "*":
@@ -177,18 +177,18 @@ class CheckResult:
     check: str
     status: bool  # True - OK, False - Fail
     # For requested copied from Check
-    args: Optional[Dict[str, Any]] = None  # Checked Argument
+    args: Optional[dict[str, Any]] = None  # Checked Argument
     port: Optional[int] = None
     address: Optional[str] = None
     script: Optional[str] = None
     skipped: bool = False  # Check was skipped (Example, no credential)
     error: Optional[CheckError] = None  # Set if fail
-    data: Optional[List[DataItem]] = None  # Collected check data
+    data: Optional[list[DataItem]] = None  # Collected check data
     remote_system: Optional[str] = None  # RemoteSystem
     ttl: Optional[int] = None
     # Action: Set Profile, Credential, Send Notification (Diagnostic Header) ?
     # Metrics collected
-    metrics: Optional[List[MetricValue]] = None
+    metrics: Optional[list[MetricValue]] = None
     # Credentials List, Return if suggests flag is set
     credential: Optional[Union[SNMPCredential, SNMPv3Credential, CLICredential, HTTPCredential]] = (
         None
@@ -254,7 +254,7 @@ class CheckResult:
         status,
         args,
         remote_system,
-        data: Dict[str, str],
+        data: dict[str, str],
     ) -> "CheckResult":
         """Create instance from History Record"""
         r = {
@@ -289,7 +289,7 @@ class BaseChecker:
     """
 
     name: ClassVar[str]
-    CHECKS: ClassVar[List[str]]
+    CHECKS: ClassVar[list[str]]
     USER_DISCOVERY_USE: bool = True  # Allow use in User Discovery
     _executor_lock = threading.Lock()
     _executor: Optional[ThreadPoolExecutor] = None
@@ -304,7 +304,7 @@ class BaseChecker:
         self.logger = PrefixLoggerAdapter(logger or logging.getLogger(self.name), self.name)
         self.address = address
 
-    async def iter_result(self, checks: List[Check]) -> AsyncIterable[CheckResult]:
+    async def iter_result(self, checks: list[Check]) -> AsyncIterable[CheckResult]:
         """
         Iterate over result checks
         Args:
@@ -324,7 +324,7 @@ class BaseChecker:
 
 
 def register_checks(
-    checks: List[CheckResult],
+    checks: list[CheckResult],
     source: Union[str, InputSource] = InputSource.UNKNOWN,
     managed_object: Optional[int] = None,
     service: Optional[int] = None,

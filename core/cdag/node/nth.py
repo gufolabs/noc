@@ -16,7 +16,7 @@ from .base import BaseCDAGNode, ValueType, Category
 
 
 class NthNodeState(BaseModel):
-    values: List[ValueType] = []
+    values: list[ValueType] = []
 
 
 class NthNodeConfig(BaseModel):

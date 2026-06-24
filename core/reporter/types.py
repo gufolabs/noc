@@ -61,10 +61,10 @@ class ReportQuery(BaseModel):
     name: str
     datasource: Optional[str] = None  # DataSource Name
     query: Optional[str] = None  # DataFrame query
-    params: Dict[str, Any] = None
+    params: dict[str, Any] = None
     json_data: Optional[str] = None
     transpose: bool = False
-    transpose_columns: Optional[List[str]] = None
+    transpose_columns: Optional[list[str]] = None
 
 
 class BandCondition(BaseModel):
@@ -80,11 +80,11 @@ class BandCondition(BaseModel):
 
 class ReportBand(BaseModel):
     name: str
-    queries: Optional[List[ReportQuery]] = None
+    queries: Optional[list[ReportQuery]] = None
     source: Optional[str] = None
     parent: Optional[str] = None  # Parent Band
     orientation: BandOrientation = "H"  # Relevant only for xlsx template
-    conditions: Optional[List[BandCondition]] = None
+    conditions: Optional[list[BandCondition]] = None
     # children: Optional[List["ReportBand"]] = None
 
     def __str__(self):
@@ -99,7 +99,7 @@ class ReportBand(BaseModel):
             f"conditions: {len(self.conditions) if self.conditions is not None else None})"
         )
 
-    def is_match(self, params: Dict[str, Any]) -> bool:
+    def is_match(self, params: dict[str, Any]) -> bool:
         if not self.conditions:
             return True
         for c in self.conditions:
@@ -138,7 +138,7 @@ class BandFormat(BaseModel):
     """Configuration for autogenerate template"""
 
     title_template: Optional[str] = None  # Title format for Section row
-    columns: Optional[List[ColumnFormat]] = None  # ColumnName -> ColumnFormat
+    columns: Optional[list[ColumnFormat]] = None  # ColumnName -> ColumnFormat
 
     def __str__(self):
         return f'BandFormat "{self.title_template}"'
@@ -164,7 +164,7 @@ class Template(BaseModel):
     # documentPath: str
     content: Optional[bytes] = None
     formatter: Optional[str] = None
-    bands_format: Optional[Dict[str, BandFormat]] = None
+    bands_format: Optional[dict[str, BandFormat]] = None
     output_name_pattern: Optional[str] = "report.html"
     handler: Optional[str] = None  # For custom code
     custom: bool = False
@@ -226,9 +226,9 @@ class ReportConfig(BaseModel):
     """
 
     name: str  # Report Name
-    bands: List[ReportBand]  # Report Band (Band Configuration)
-    templates: Dict[str, Template]  # Report Templates: template_code -> Template
-    parameters: Optional[List[Parameter]] = None  # Report Parameters
+    bands: list[ReportBand]  # Report Band (Band Configuration)
+    templates: dict[str, Template]  # Report Templates: template_code -> Template
+    parameters: Optional[list[Parameter]] = None  # Report Parameters
     align_end_date_param: bool = False
     # field_format: Optional[List[ReportField]] = None  # Field Formatter
 
@@ -262,7 +262,7 @@ class RunParams(BaseModel):
     report_config: ReportConfig
     report_template: Optional[str] = None  # Report Template Code, Use default if not set
     output_type: Optional[OutputType] = None  # Requested OutputType (if not set used from template)
-    params: Optional[Dict[str, Any]] = None  # Requested report params
+    params: Optional[dict[str, Any]] = None  # Requested report params
     output_name_pattern: Optional[str] = None  # Output document file name
 
     def __str__(self):
@@ -280,7 +280,7 @@ class RunParams(BaseModel):
     def get_template(self) -> Template:
         return self.report_config.get_template(self.report_template)
 
-    def get_params(self) -> Dict[str, Any]:
+    def get_params(self) -> dict[str, Any]:
         r = {}
         if self.params:
             r.update(self.params)

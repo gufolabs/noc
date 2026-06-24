@@ -143,14 +143,14 @@ class Event(BaseModel):
 
     ts: int  # Event Registered ts
     target: Target  # Message Sender Target
-    data: List[Var]  # Message Vars
+    data: list[Var]  # Message Vars
     id: Optional[str] = None
     type: MessageType = MessageType()
     remote_system: Optional[str] = None  # Remote System send event
     remote_id: Optional[str] = None  # Remote Id event on Remote System
-    labels: Optional[List[str]] = None  # Event labels
+    labels: Optional[list[str]] = None  # Event labels
     message: Optional[str] = None  # Event message string
-    vars: Optional[Dict[str, Any]] = None  # Event variables
+    vars: Optional[dict[str, Any]] = None  # Event variables
     start_ts: Optional[int] = None  # For cleared events - timestamp when create
 
     @property
@@ -162,7 +162,7 @@ class Event(BaseModel):
         return self.type.event_class
 
     @staticmethod
-    def resolve_managed_object_target(bi_id) -> Tuple[str, str]:
+    def resolve_managed_object_target(bi_id) -> tuple[str, str]:
         """
         Try resolva ManagedObject for old format event
         :param bi_id:
@@ -176,7 +176,7 @@ class Event(BaseModel):
         return "", ""
 
     @classmethod
-    def from_json(cls, data: Dict[str, Any]) -> "Event":
+    def from_json(cls, data: dict[str, Any]) -> "Event":
         """
         Build instance from clickhouse query
         :param data:
@@ -277,8 +277,8 @@ class Event(BaseModel):
         cls,
         source: EventSource,
         message: Optional[str] = None,
-        labels: Optional[List[str]] = None,
-        data: Optional[List[Dict[str, str]]] = None,
+        labels: Optional[list[str]] = None,
+        data: Optional[list[dict[str, str]]] = None,
         description: Optional[str] = None,
         profile: Optional[str] = None,
         snmp_trap_oid: Optional[str] = None,
@@ -332,7 +332,7 @@ class Event(BaseModel):
             r["labels"].append({"wildcard": ll, "is_required": True})
         return r
 
-    def get_message_context(self, managed_object: Any) -> Dict[str, Any]:
+    def get_message_context(self, managed_object: Any) -> dict[str, Any]:
         """"""
         return {
             "ts": self.timestamp,

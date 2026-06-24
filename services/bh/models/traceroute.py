@@ -22,4 +22,4 @@ class TracerouteRequest(BaseModel):
 class TracerouteResponse(BaseModel):
     status: bool
     end_address: str
-    items: List[HopInfo]
+    items: list[HopInfo]

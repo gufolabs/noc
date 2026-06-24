@@ -51,8 +51,8 @@ class ParamSchema(BaseModel):
     recommended_max: Optional[float] = None
     step: Optional[float] = None
     decimal: Optional[int] = None  # Choices 0, 0.1, 0.01, 0.001, 0.0001
-    recommended_choices: List[str] = None
-    choices: List[str] = None
+    recommended_choices: list[str] = None
+    choices: list[str] = None
 
     def clean(self, value: str) -> Union[str, float, bool]:
         if self.type == "bool":
@@ -146,7 +146,7 @@ class ScopeVariant:
 class ParamData:
     code: str
     schema: ParamSchema
-    scopes: Optional[List[ScopeVariant]] = None
+    scopes: Optional[list[ScopeVariant]] = None
     value: Optional[Any] = None
 
     def __str__(self) -> str:
@@ -238,12 +238,12 @@ class ConfigurationParam(Document):
     code = StringField(unique=True, required=True)
     description = StringField()
     uuid = UUIDField(binary=True)
-    scopes: List["ScopeItem"] = EmbeddedDocumentListField(ScopeItem)
+    scopes: list["ScopeItem"] = EmbeddedDocumentListField(ScopeItem)
     # Int
     type: str = StringField(choices=["string", "number", "bool"], default="string")
     # Limitation
-    schema: List["ParamSchemaItem"] = EmbeddedDocumentListField(ParamSchemaItem)
-    choices: List["ConfigurationParamChoiceItem"] = EmbeddedDocumentListField(
+    schema: list["ParamSchemaItem"] = EmbeddedDocumentListField(ParamSchemaItem)
+    choices: list["ConfigurationParamChoiceItem"] = EmbeddedDocumentListField(
         ConfigurationParamChoiceItem
     )
     choices_scope: Optional["ConfigurationScope"] = PlainReferenceField(

@@ -25,6 +25,6 @@ class DNSZoneDataStreamItem(BaseModel):
     change_id: str
     name: str
     serial: str
-    masters: List[str]
-    slaves: List[str]
-    records: List[DNSZoneRecord]
+    masters: list[str]
+    slaves: list[str]
+    records: list[DNSZoneRecord]

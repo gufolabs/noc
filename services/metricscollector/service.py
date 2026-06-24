@@ -56,8 +56,8 @@ class CfgItem:
     collector: str
     coll_field: str
     allow_partial_match: bool
-    labels: FrozenSet[str]
-    aliases: List[str]
+    labels: frozenset[str]
+    aliases: list[str]
     unit: str
     preference: int
 
@@ -87,9 +87,9 @@ class MetricsCollectorService(FastAPIService):
 
     def __init__(self):
         super().__init__()
-        self.mappings: DefaultDict[Tuple[str, str], List[CfgItem]] = defaultdict(list)
-        self.rx_mappings: DefaultDict[Tuple[str, re.Pattern], List[CfgItem]] = defaultdict(list)
-        self.id_mappings: Dict[str, List[CfgItem]] = {}
+        self.mappings: defaultdict[tuple[str, str], list[CfgItem]] = defaultdict(list)
+        self.rx_mappings: defaultdict[tuple[str, re.Pattern], list[CfgItem]] = defaultdict(list)
+        self.id_mappings: dict[str, list[CfgItem]] = {}
         self.n_parts: int = 0
         self.add_sources = 0
         self.ready_event: Optional[asyncio.Event] = asyncio.Event()
@@ -100,19 +100,19 @@ class MetricsCollectorService(FastAPIService):
             collector="metricscollector",
         )
         # Source Configs: ManagedObject & Agent
-        self.source_configs: Dict[str, SourceConfig] = {}  # id -> SourceConfig
-        self.source_map: Dict[str, str] = {}
-        self.channels: Dict[str, RemoteSystemChannel] = {}
-        self.event_channels: Dict[str, RemoteSystemEventChannel] = {}
+        self.source_configs: dict[str, SourceConfig] = {}  # id -> SourceConfig
+        self.source_map: dict[str, str] = {}
+        self.channels: dict[str, RemoteSystemChannel] = {}
+        self.event_channels: dict[str, RemoteSystemEventChannel] = {}
         # Remote Systems Config
         self.banned_rs = set()
-        self.remote_system_config: Dict[str, RemoteSystemConfig] = {}
-        self.remote_system_map: Dict[str, str] = {}
+        self.remote_system_config: dict[str, RemoteSystemConfig] = {}
+        self.remote_system_map: dict[str, str] = {}
         # Sensors
-        self.sensor_configs: Dict[str, SensorConfig] = {}
+        self.sensor_configs: dict[str, SensorConfig] = {}
         self.stopping = False
-        self.updated: Set[str] = set()
-        self.received: Dict[str, int] = {}
+        self.updated: set[str] = set()
+        self.received: dict[str, int] = {}
         # Queue of channels to flush
         self.flush_queue: asyncio.Queue[RemoteSystemChannel] = asyncio.Queue()
         if config.metricscollector.listen:
@@ -260,12 +260,12 @@ class MetricsCollectorService(FastAPIService):
             del parts
             ch.flush_complete()
 
-    async def send_events(self, events: List[Event], partition: Optional[int] = None):
+    async def send_events(self, events: list[Event], partition: Optional[int] = None):
         """Send data to"""
         for event in events:
             self.publish(orjson.dumps(event.model_dump()), f"events.{event.target.pool}")
 
-    async def send_records(self, data: List[Any], partition: Optional[int] = None):
+    async def send_records(self, data: list[Any], partition: Optional[int] = None):
         """Send data to"""
         for d in iter_chunks(
             data,
@@ -414,7 +414,7 @@ class MetricsCollectorService(FastAPIService):
         # Pass further initialization
         self.ready_event.set()
 
-    async def update_metric_type(self, data: Dict[str, Any]) -> None:
+    async def update_metric_type(self, data: dict[str, Any]) -> None:
         if data["id"] in self.id_mappings:
             self.update_data(data)
         else:
@@ -425,13 +425,13 @@ class MetricsCollectorService(FastAPIService):
     async def delete_metric_type(self, mt_id: str) -> None:
         self.delete_data(mt_id)
 
-    def insert_data(self, data: Dict[str, Any]) -> None:
+    def insert_data(self, data: dict[str, Any]) -> None:
         """
         Insert new data into tables
         """
         items = self.expand_rules(data)
         self.id_mappings[data["id"]] = items
-        affected: Set[Tuple[str, str]] = {(i.collector, i.coll_field) for i in items}
+        affected: set[tuple[str, str]] = {(i.collector, i.coll_field) for i in items}
         for i in items:
             if i.allow_partial_match:
                 self.rx_mappings[i.collector, re.compile(i.coll_field)].append(i)
@@ -443,7 +443,7 @@ class MetricsCollectorService(FastAPIService):
         for k in affected:
             self.mappings[k] = sorted(self.mappings[k], key=operator.attrgetter("preference"))
 
-    def update_data(self, data: Dict[str, Any]) -> None:
+    def update_data(self, data: dict[str, Any]) -> None:
         """
         Update data into tables
         """
@@ -457,7 +457,7 @@ class MetricsCollectorService(FastAPIService):
         items = self.id_mappings.get(mt_id) or []
         if not items:
             return
-        affected: Set[Tuple[str, str]] = {(i.collector, i.coll_field) for i in items}
+        affected: set[tuple[str, str]] = {(i.collector, i.coll_field) for i in items}
         for k in affected:
             self.mappings[k] = sorted(
                 (i for i in self.mappings[k] if i.id != mt_id),
@@ -467,7 +467,7 @@ class MetricsCollectorService(FastAPIService):
                 del self.mappings[k]
         del self.id_mappings[mt_id]
 
-    async def update_sensors(self, cfg: SourceConfig, sensors: List[Dict[str, Any]]):
+    async def update_sensors(self, cfg: SourceConfig, sensors: list[dict[str, Any]]):
         """Update sensors Config"""
         processed = set()
         for data in sensors:
@@ -636,7 +636,7 @@ class MetricsCollectorService(FastAPIService):
         return None
 
     @staticmethod
-    def expand_rules(data: Dict[str, Any]) -> List[CfgItem]:
+    def expand_rules(data: dict[str, Any]) -> list[CfgItem]:
         return [
             CfgItem.from_data(
                 rid=data["id"],
@@ -647,7 +647,7 @@ class MetricsCollectorService(FastAPIService):
             for item in data["rules"]
         ]
 
-    def find_metrics_by_name(self, collector: str, name: str) -> List[CfgItem]:
+    def find_metrics_by_name(self, collector: str, name: str) -> list[CfgItem]:
         """Find by name (rx)"""
         if (collector, name) in self.mappings:
             return self.mappings[(collector, name)]
@@ -657,7 +657,7 @@ class MetricsCollectorService(FastAPIService):
         return []
 
     @cachetools.cachedmethod(operator.attrgetter("_rx_name_cache"))
-    def find_metrics_by_rx(self, collector: str, name: str) -> List[CfgItem]:
+    def find_metrics_by_rx(self, collector: str, name: str) -> list[CfgItem]:
         """Find metric by Alias rx"""
         r = []
         for (c, rx), cfgs in self.rx_mappings.items():
@@ -670,7 +670,7 @@ class MetricsCollectorService(FastAPIService):
         self,
         collector,
         name,
-        labels: Optional[List[str]] = None,
+        labels: Optional[list[str]] = None,
     ) -> Optional[CfgItem]:
         """Get Metric config"""
         if labels:

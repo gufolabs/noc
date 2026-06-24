@@ -89,8 +89,8 @@ class Escalation(Document):
     def __str__(self) -> str:
         return str(self.id)
 
-    def get_lock_items(self) -> List[str]:
-        s: Set[str] = set()
+    def get_lock_items(self) -> list[str]:
+        s: set[str] = set()
         # Add items
         for item in self.items:
             s.add(f"a:{item.alarm}")
@@ -105,5 +105,5 @@ class Escalation(Document):
         return self.items[0]
 
     @property
-    def consequences(self) -> List[EscalationItem]:
+    def consequences(self) -> list[EscalationItem]:
         return self.items[1:]

@@ -32,11 +32,11 @@ class BaseEvFilter:
     update_deadline: bool = False
 
     def __init__(self):
-        self.events: Dict[int, Tuple[int, ObjectId]] = {}
-        self.pq: List[Tuple[int, int]] = []
+        self.events: dict[int, tuple[int, ObjectId]] = {}
+        self.pq: list[tuple[int, int]] = []
 
     @staticmethod
-    def event_hash(event: Event, event_config: EventConfig, event_vars: Dict[str, Any]) -> int:
+    def event_hash(event: Event, event_config: EventConfig, event_vars: dict[str, Any]) -> int:
         """
         Collapse event to a hash
         Args:
@@ -56,7 +56,7 @@ class BaseEvFilter:
         return int(event.timestamp.timestamp())
 
     def register(
-        self, event: Event, event_config: EventConfig, event_vars: Optional[Dict[str, Any]] = None
+        self, event: Event, event_config: EventConfig, event_vars: Optional[dict[str, Any]] = None
     ) -> None:
         """Register event to filter"""
         fw = self.get_window(event_config)
@@ -76,7 +76,7 @@ class BaseEvFilter:
         self.events[eh] = (deadline, event_id)
 
     def find(
-        self, event: Event, event_config: EventConfig, event_vars: Optional[Dict[str, Any]] = None
+        self, event: Event, event_config: EventConfig, event_vars: Optional[dict[str, Any]] = None
     ) -> Optional[ObjectId]:
         """Check if event is duplicated"""
         eh = self.event_hash(event, event_config, event_vars)

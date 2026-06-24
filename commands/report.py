@@ -105,7 +105,7 @@ class Command(BaseCommand):
 
     rx_arg = re.compile(r"^(?P<name>[a-zA-Z][a-zA-Z0-9_]*)(?P<op>:?=@?)(?P<value>.*)$")
 
-    def get_report_args(self, arguments) -> Dict[str, Any]:
+    def get_report_args(self, arguments) -> dict[str, Any]:
         """
         Parse arguments and return script's
         """

@@ -22,7 +22,7 @@ class AssertCmpAction(BaseAction):
 
     name = "assert_cmp"
 
-    _OPS: Dict[str, Callable[[str, str], bool]] = {
+    _OPS: dict[str, Callable[[str, str], bool]] = {
         "==": lambda x, y: x == y,
         "!=": lambda x, y: x != y,
         "<": lambda x, y: x < y,

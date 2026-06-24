@@ -19,7 +19,7 @@ class StreamingConfig:
     # TimeZone offset in seconds
     utc_offset: Optional[int] = 0
     # Optional data
-    data: Optional[Dict[str, Any]] = None
+    data: Optional[dict[str, Any]] = None
 
     def get_data(self):
         """

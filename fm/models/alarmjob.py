@@ -174,8 +174,8 @@ class AlarmJob(Document):
     end_condition: str = StringField()
     maintenance_policy: str = StringField()
     # Document options
-    items: List[AlarmItem] = EmbeddedDocumentListField(AlarmItem)
-    actions: List[ActionLog] = EmbeddedDocumentListField(ActionLog)
+    items: list[AlarmItem] = EmbeddedDocumentListField(AlarmItem)
+    actions: list[ActionLog] = EmbeddedDocumentListField(ActionLog)
     # List of group references, if any
     tt_docs = DictField()
     is_dirty = BooleanField(default=True)
@@ -187,9 +187,9 @@ class AlarmJob(Document):
     # Escalation summary
     severity: int = IntField(min_value=0)
     # subject: Optional[str] = StringField(required=False)
-    total_objects: List[ObjectSummaryItem] = EmbeddedDocumentListField(ObjectSummaryItem)
-    total_services: List[SummaryItem] = EmbeddedDocumentListField(SummaryItem)
-    total_subscribers: List[SummaryItem] = EmbeddedDocumentListField(SummaryItem)
+    total_objects: list[ObjectSummaryItem] = EmbeddedDocumentListField(ObjectSummaryItem)
+    total_services: list[SummaryItem] = EmbeddedDocumentListField(SummaryItem)
+    total_subscribers: list[SummaryItem] = EmbeddedDocumentListField(SummaryItem)
     expires = DateTimeField(required=False)
 
     def __str__(self) -> str:

@@ -261,7 +261,7 @@ class RemoteSystem(Document):
         return bool(RemoteSystem.objects.filter(remote_collectors_policy="E").first())
 
     @property
-    def config(self) -> Dict[str, str]:
+    def config(self) -> dict[str, str]:
         if not hasattr(self, "_config"):
             self._config = {e.key: e.value for e in self.environment}
         return self._config
@@ -305,7 +305,7 @@ class RemoteSystem(Document):
             raise ValueError
         return h(self)
 
-    def get_extractors(self, exclude_fmevent: bool = False) -> List[str]:
+    def get_extractors(self, exclude_fmevent: bool = False) -> list[str]:
         extractors = []
         for k in self._fields:
             if k.startswith("enable_") and getattr(self, k):
@@ -316,12 +316,12 @@ class RemoteSystem(Document):
 
     def extract(
         self,
-        extractors: Optional[List[str]] = None,
+        extractors: Optional[list[str]] = None,
         quiet: bool = False,
         incremental: bool = False,
         checkpoint: Optional[str] = None,
         exclude_fmevent: Optional[bool] = False,
-    ) -> List[StepResult]:
+    ) -> list[StepResult]:
         extractors = extractors or self.get_extractors(exclude_fmevent=exclude_fmevent)
         error, results = None, []
         try:
@@ -365,10 +365,10 @@ class RemoteSystem(Document):
 
     def load(
         self,
-        extractors: Optional[List[str]] = None,
+        extractors: Optional[list[str]] = None,
         quiet: bool = False,
         exclude_fmevent: bool = False,
-    ) -> Optional[List[StepResult]]:
+    ) -> Optional[list[StepResult]]:
         extractors = extractors or self.get_extractors(exclude_fmevent=exclude_fmevent)
         error, r = None, []
         try:
@@ -391,8 +391,8 @@ class RemoteSystem(Document):
         return r
 
     def check(
-        self, extractors: Optional[List[str]] = None, out=None
-    ) -> Optional[Tuple[int, List[StepResult]]]:
+        self, extractors: Optional[list[str]] = None, out=None
+    ) -> Optional[tuple[int, list[StepResult]]]:
         extractors = extractors or self.get_extractors()
         try:
             return self.get_handler().check(extractors, out=out)
@@ -431,14 +431,14 @@ class RemoteSystem(Document):
     def enable_sync(self) -> bool:
         return self.sync_policy != "M"
 
-    def get_mx_message_headers(self) -> Dict[str, bytes]:
+    def get_mx_message_headers(self) -> dict[str, bytes]:
         return {
             key.config.header: key.clean_header_value(value)
             for key, value in self.message_meta.items()
         }
 
     @property
-    def message_meta(self) -> Dict[MessageMeta, Any]:
+    def message_meta(self) -> dict[MessageMeta, Any]:
         """Message Meta for instance"""
         return {
             MessageMeta.WATCH_FOR: get_subscription_id(self),
@@ -485,7 +485,7 @@ class RemoteSystem(Document):
         scheduler.remove_job(jcls=self.JCLS_METRIC, key=self.id)
 
     @classmethod
-    def get_collector_config(cls, remote_system: "RemoteSystem") -> Dict[str, Any]:
+    def get_collector_config(cls, remote_system: "RemoteSystem") -> dict[str, Any]:
         """Collector config"""
         if remote_system.remote_collectors_policy != "D" and remote_system.api_key:
             return {
@@ -507,7 +507,7 @@ class RemoteSystem(Document):
         return f"{REFERENCE_CODE}:{remote_system.name}:{remote_id}"
 
     @classmethod
-    def from_reference(cls, reference: str) -> Tuple["RemoteSystem", str]:
+    def from_reference(cls, reference: str) -> tuple["RemoteSystem", str]:
         if not reference.startswith(REFERENCE_CODE):
             raise ValueError("Unknown Reference format")
         _, name, remote_id = reference.split(":")
@@ -550,7 +550,7 @@ class RemoteSystem(Document):
             "items": [],
         }
 
-    def push_events(self, events: List[Dict[str, Any]], deferred: List[str]):
+    def push_events(self, events: list[dict[str, Any]], deferred: list[str]):
         """Push events from Collector"""
         from noc.core.service.loader import get_service
 
@@ -575,7 +575,7 @@ class RemoteSystem(Document):
             )
 
 
-def processed_remote_event(remote_system: str, events: List[Dict[str, Any]], deferred: List[str]):
+def processed_remote_event(remote_system: str, events: list[dict[str, Any]], deferred: list[str]):
     """"""
     rs = RemoteSystem.get_by_name(remote_system)
     if not rs:

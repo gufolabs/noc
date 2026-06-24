@@ -191,7 +191,7 @@ class Channel(Document):
         return f"c:{self.id}"
 
     @classmethod
-    def from_resource(cls, resource: str) -> "Tuple[Channel | None, str | None]":
+    def from_resource(cls, resource: str) -> "tuple[Channel | None, str | None]":
         """
         Dereference from resource.
 

@@ -34,13 +34,13 @@ class ScopeConfig:
     name: str
     description: str
     config: MetricsNodeConfig
-    cleaners: Dict[str, Callable]
-    probes: List[ProbeConfig]
-    key_fields: List[str]
+    cleaners: dict[str, Callable]
+    probes: list[ProbeConfig]
+    key_fields: list[str]
     enable_timedelta: bool = False
 
 
-scope_config: Dict[str, ScopeConfig] = {}
+scope_config: dict[str, ScopeConfig] = {}
 
 
 class MetricScopeCDAGFactory(BaseCDAGFactory):

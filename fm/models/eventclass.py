@@ -218,7 +218,7 @@ class EventClass(Document):
     action = StringField(
         required=True, choices=[("D", "Drop"), ("L", "Log"), ("A", "Log & Archive")]
     )
-    vars: List[EventClassVar] = EmbeddedDocumentListField(EventClassVar)
+    vars: list[EventClassVar] = EmbeddedDocumentListField(EventClassVar)
     # Text messages
     subject_template = StringField()
     body_template = StringField()

@@ -58,7 +58,7 @@ class Glyph(Document):
         return Glyph.objects.filter(id=oid).first()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "$collection": self._meta["json_collection"],

@@ -183,10 +183,10 @@ class PendingLinksDS(BaseDataSource):
         pool: Optional[Pool] = None,
         mo_profile: Optional[ManagedObjectProfile] = None,
         show_already_linked=False,
-        admin_domain_ads: Optional[List[int]] = None,
+        admin_domain_ads: Optional[list[int]] = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[int, str, Any]]:
+    ) -> AsyncIterable[tuple[int, str, Any]]:
         direction_map = {
             "Not found iface on remote": "->",
             "Not found local iface on remote": "<-",

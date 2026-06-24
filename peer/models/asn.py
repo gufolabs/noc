@@ -270,7 +270,7 @@ class AS(NOCModel):
     def can_set_label(cls, label):
         return Label.get_effective_setting(label, setting="enable_asn")
 
-    def get_message_context(self) -> Dict[str, Any]:
+    def get_message_context(self) -> dict[str, Any]:
         return {
             "id": str(self.id),
             "asn": self.asn,

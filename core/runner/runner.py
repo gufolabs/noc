@@ -35,10 +35,10 @@ class Runner:
     def __init__(
         self,
         concurrency: int = 10,
-        queue: Optional[asyncio.Queue[Tuple[Optional[ObjectId], Dict[str, Any]]]] = None,
+        queue: Optional[asyncio.Queue[tuple[Optional[ObjectId], dict[str, Any]]]] = None,
     ):
-        self._jobs: Dict[ObjectId, Job] = {}
-        self._tasks: Set[asyncio.Task] = set()
+        self._jobs: dict[ObjectId, Job] = {}
+        self._tasks: set[asyncio.Task] = set()
         self._semaphore = asyncio.Semaphore(concurrency)
         self._status_lock = asyncio.Lock()
         self._locks = LockManager()
@@ -106,7 +106,7 @@ class Runner:
         """
         if not self._queue:
             return
-        r: Dict[str, Any] = {
+        r: dict[str, Any] = {
             "_id": job.id,
             "name": req.name,
             "parent": job.parent.id if job.parent else None,
@@ -278,7 +278,7 @@ class Runner:
         job.status = status
         if self._queue:
             # Store
-            r: Dict[str, Any] = {"status": job.status.value}
+            r: dict[str, Any] = {"status": job.status.value}
             if job.is_running:
                 r["started_at"] = datetime.datetime.now()
             elif job.is_complete:

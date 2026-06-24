@@ -41,11 +41,11 @@ class FMEventObject(BaseModel):
     id: str  # Event Id
     ts: int  # Event Registered ts
     object: RemoteObject  # Message Send object
-    data: List[Var]  # Message Vars
+    data: list[Var]  # Message Vars
     severity: str
     event_class: Optional[str] = None
     is_cleared: bool = False  # Set flag for cleared severity
-    labels: Optional[List[str]] = None  # Event labels
+    labels: Optional[list[str]] = None  # Event labels
     message: Optional[str] = None  # Event message string
     start_ts: Optional[int] = None  # Event Start ts
     checkpoint: Optional[str] = None

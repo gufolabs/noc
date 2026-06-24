@@ -56,7 +56,7 @@ class ConfigProxy:
 
     __slots__ = ("__base", "__override")
 
-    def __init__(self, base: BaseModel, override: Dict[str, Any]):
+    def __init__(self, base: BaseModel, override: dict[str, Any]):
         """
         Base Configuration (on BaseModel)
         :param base:
@@ -128,16 +128,16 @@ class BaseCDAGNodeMetaclass(type):
 
 class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
     name: str
-    state_cls: Type[BaseModel]
-    config_cls: Type[BaseModel]
-    static_inputs: Set[str]  # Filled by metaclass
+    state_cls: type[BaseModel]
+    config_cls: type[BaseModel]
+    static_inputs: set[str]  # Filled by metaclass
     # Required inputs count, filled by metaclass
     req_inputs_count: int = 0
     allow_dynamic: bool = False  # Filled by metaclass
     dot_shape: str = "box"
-    categories: List[Category] = []
-    config_cls_slot: Type  # Filled by metaclass
-    state_cls_slot: Type  # Filled by metaclass
+    categories: list[Category] = []
+    config_cls_slot: type  # Filled by metaclass
+    state_cls_slot: type  # Filled by metaclass
 
     __slots__ = (
         "_const_value",
@@ -157,9 +157,9 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
         self,
         node_id: str,
         prefix: Optional[str] = None,
-        state: Optional[Dict[str, Any]] = None,
+        state: Optional[dict[str, Any]] = None,
         description: Optional[str] = None,
-        config: Optional[Dict[str, Any]] = None,
+        config: Optional[dict[str, Any]] = None,
         sticky: bool = False,
     ):
         self._node_id = sys.intern(node_id)
@@ -168,10 +168,10 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
         self.state = self.clean_state(state)
         self.config = self.clean_config(config)
         self._subscribers: Optional[Subscriber] = None
-        self.bound_inputs: Optional[Set[str]] = None  # Lives until .freeze()
-        self.dynamic_inputs: Optional[Dict[str, bool]] = None
+        self.bound_inputs: Optional[set[str]] = None  # Lives until .freeze()
+        self.dynamic_inputs: Optional[dict[str, bool]] = None
         # # Pre-calculated inputs
-        self.const_inputs: Optional[Dict[str, ValueType]] = None
+        self.const_inputs: Optional[dict[str, ValueType]] = None
         self._const_value: Optional[ValueType] = None
         self.sticky = sticky
 
@@ -205,7 +205,7 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
         )
 
     @staticmethod
-    def slotify(slot_cls: Type, data: BaseModel) -> object:
+    def slotify(slot_cls: type, data: BaseModel) -> object:
         """
         Convert pydantic model to slotted class instance
         """
@@ -218,9 +218,9 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
         self,
         node_id: str,
         prefix: Optional[str] = None,
-        state: Optional[Dict[str, Any]] = None,
-        config: Optional[Dict[str, Any]] = None,
-        static_config: Optional[Dict[str, Any]] = None,
+        state: Optional[dict[str, Any]] = None,
+        config: Optional[dict[str, Any]] = None,
+        static_config: Optional[dict[str, Any]] = None,
     ) -> Optional["BaseCDAGNode"]:
         """
         Clone node
@@ -251,14 +251,14 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
                 node.add_input(di, is_key=is_key)
         return node
 
-    def clean_state(self, state: Optional[Dict[str, Any]]) -> Optional[BaseModel]:
+    def clean_state(self, state: Optional[dict[str, Any]]) -> Optional[BaseModel]:
         if not hasattr(self, "state_cls"):
             return None
         state = state or {}
         c_state = self.state_cls(**state)
         return self.slotify(self.state_cls_slot, c_state)
 
-    def clean_config(self, config: Optional[Dict[str, Any]]) -> Optional[BaseModel]:
+    def clean_config(self, config: Optional[dict[str, Any]]) -> Optional[BaseModel]:
         if not hasattr(self, "config_cls") or config is None:
             return None
         # Shortcut, if config is already cleaned (cloned copies)
@@ -538,7 +538,7 @@ class BaseCDAGNode(metaclass=BaseCDAGNodeMetaclass):
         if hasattr(self, "config_cls"):
             yield from self.config_cls_slot.__slots__
 
-    def get_initial_inputs(self) -> Dict[str, ValueType]:
+    def get_initial_inputs(self) -> dict[str, ValueType]:
         """
         Get dictionary of pre-set inputs and their values
 

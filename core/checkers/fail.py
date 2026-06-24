@@ -20,7 +20,7 @@ class FailChecker(BaseChecker):
     name = "fail"
     CHECKS = [FAIL_CHECK, SUCCESS_CHECK]
 
-    async def iter_result(self, checks: List[Check]) -> AsyncIterable[CheckResult]:
+    async def iter_result(self, checks: list[Check]) -> AsyncIterable[CheckResult]:
         for c in checks:
             self.logger.info("Dump check: %s", c)
             args = c.args or {}

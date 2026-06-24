@@ -50,7 +50,7 @@ class SSHStream(BaseStream):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_key_cache"), lock=lambda _: key_lock)
-    def get_publickey(cls, pool: str) -> Tuple[Optional[bytes], Optional[bytes]]:
+    def get_publickey(cls, pool: str) -> tuple[Optional[bytes], Optional[bytes]]:
         """
         Return public, private key pair
         :return: bytes, bytes or None, None
@@ -171,7 +171,7 @@ class SSHStream(BaseStream):
         """
         return self.script.credentials["password"] or ""
 
-    def authenticate(self, user: str, methods: List[str]) -> bool:
+    def authenticate(self, user: str, methods: list[str]) -> bool:
         """
         Try to authenticate. Return True on success
         :param user: Username

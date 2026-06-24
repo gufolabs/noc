@@ -71,10 +71,10 @@ class Job:
         name: str,
         status: JobStatus,
         id: Optional[str] = None,
-        action: Optional[Type[BaseAction]] = None,
+        action: Optional[type[BaseAction]] = None,
         allow_fail: bool = False,
         parent: Optional["Job"] = None,
-        environment: Optional[Dict[str, str]] = None,
+        environment: Optional[dict[str, str]] = None,
         locks: Optional[Iterable[str]] = None,
         inputs: Optional[Iterable[Input]] = None,
     ) -> None:
@@ -85,7 +85,7 @@ class Job:
         self.status: JobStatus = status
         self.parent = parent
         self.environment = Environment(environment)
-        self.children: Optional[List[ReferenceType[Job]]] = None
+        self.children: Optional[list[ReferenceType[Job]]] = None
         if self.parent:
             self.environment.set_parent(self.parent.environment)
             # Update children
@@ -95,9 +95,9 @@ class Job:
                 self.parent.children.append(ref(self))
         self.inputs = list(inputs) if inputs else None
         self.locks = list(locks) if locks is not None else None
-        self.depends_on: Optional[List[ReferenceType[Job]]] = None
+        self.depends_on: Optional[list[ReferenceType[Job]]] = None
         self._task: Optional[ReferenceType[asyncio.Task]] = None
-        self.results: Dict[str, Union[None, str, object]] = {}
+        self.results: dict[str, Union[None, str, object]] = {}
         self._result_is_dirty = False
 
     def __str__(self) -> str:
@@ -239,7 +239,7 @@ class Job:
         Args:
             jobs: Iterable of jobs.
         """
-        seen: Set[str] = set()
+        seen: set[str] = set()
         for job in jobs:
             if not job.name:
                 return False  # Empty name
@@ -249,7 +249,7 @@ class Job:
         return True
 
     @staticmethod
-    def _has_loops(graph: Dict[str, List[str]]) -> bool:
+    def _has_loops(graph: dict[str, list[str]]) -> bool:
         """
         Check a graph has loops.
 
@@ -260,7 +260,7 @@ class Job:
             True: if the graph has loops.
         """
 
-        def dfs(node: str, visited: Dict[str, bool], path: Set[str]) -> bool:
+        def dfs(node: str, visited: dict[str, bool], path: set[str]) -> bool:
             visited[node] = True
             path.add(node)
 
@@ -274,7 +274,7 @@ class Job:
             path.remove(node)
             return False
 
-        visited: Dict[str, bool] = {}
+        visited: dict[str, bool] = {}
         for node in graph:
             if node not in visited:
                 if dfs(node, visited, set()):
@@ -308,8 +308,8 @@ class Job:
             raise ValueError(msg)
         # Validate inputs
         if req.inputs:
-            action: Type[BaseAction] = loader[req.action]
-            seen_inputs: Set[str] = set()
+            action: type[BaseAction] = loader[req.action]
+            seen_inputs: set[str] = set()
             for i in req.inputs:
                 if not i.is_kv:
                     if i.name not in action.inputs:
@@ -400,10 +400,10 @@ class Job:
             locks=req.locks,
         )
         # Create nested jobs
-        chains: List[List[Job]] = []
+        chains: list[list[Job]] = []
         if req.jobs:
-            jobs: Dict[str, Job] = {}
-            deps: DefaultDict[str, Set[str]] = defaultdict(set)
+            jobs: dict[str, Job] = {}
+            deps: defaultdict[str, set[str]] = defaultdict(set)
             for j_req in req.jobs:
                 chain = list(Job.from_req(j_req, parent=leader))
                 first = chain[0]
@@ -426,7 +426,7 @@ class Job:
             yield from ch
 
     @classmethod
-    def from_dict(cls, doc: Dict[str, Any], jmap: Optional[Dict[ObjectId, "Job"]] = None) -> "Job":
+    def from_dict(cls, doc: dict[str, Any], jmap: Optional[dict[ObjectId, "Job"]] = None) -> "Job":
         """
         Create job from database dict.
         """
@@ -474,7 +474,7 @@ class Job:
         """
         Iterate real lock names.
         """
-        all_locks: Set[str] = set()
+        all_locks: set[str] = set()
         if self.locks:
             for lock in self.locks:
                 r = Template(lock).render(**self.environment)
@@ -490,7 +490,7 @@ class Job:
         if self.action is None:
             return
         # Prepare input arguments
-        kwargs: Dict[str, str] = {}
+        kwargs: dict[str, str] = {}
         if self.inputs:
             for i in self.inputs:
                 if self.parent and i.job:
@@ -523,12 +523,12 @@ class Job:
         """
         self._result_is_dirty = False
 
-    def results_json(self) -> Dict[str, Any]:
+    def results_json(self) -> dict[str, Any]:
         """
         Serialize results to JSON.
         """
 
-        def q(r: Union[str, object]) -> Union[str, Dict[str, str]]:
+        def q(r: Union[str, object]) -> Union[str, dict[str, str]]:
             if isinstance(r, str):
                 return r
             return asdict(r)

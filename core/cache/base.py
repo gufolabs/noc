@@ -57,7 +57,7 @@ class BaseCache:
     def has_key(self, key: str, version: Optional[int] = None) -> bool:
         return self.get(key, version=version) is not None
 
-    def get_many(self, keys: Iterable, version: Optional[int] = None) -> Dict[str, Any]:
+    def get_many(self, keys: Iterable, version: Optional[int] = None) -> dict[str, Any]:
         """
         Fetch a bunch of keys from the cache.
         """
@@ -69,7 +69,7 @@ class BaseCache:
         return d
 
     def set_many(
-        self, data: Dict[str, Any], ttl: Optional[int] = None, version: Optional[int] = None
+        self, data: dict[str, Any], ttl: Optional[int] = None, version: Optional[int] = None
     ) -> None:
         for k in data:
             self.set(k, data[k], ttl=ttl, version=version)

@@ -25,5 +25,5 @@ from noc.core.pm.utils import is_nan
         (("\\N", "\\N", "\\N"), True),
     ],
 )
-def test_is_nan(x: Tuple[str], expected: bool) -> None:
+def test_is_nan(x: tuple[str], expected: bool) -> None:
     assert is_nan(*x) == expected

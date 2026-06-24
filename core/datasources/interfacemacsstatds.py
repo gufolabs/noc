@@ -65,7 +65,7 @@ class InterfaceMACsStatDS(BaseDataSource):
         resolve_managedobject_id: bool = True,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         """
         Args:
             fields:

@@ -106,7 +106,7 @@ class Session:
 
 class SessionContext:
     # Thread-local storage holding session context for threads
-    cv_sessions_smap: ContextVar[Optional[Dict[int, Session]]] = ContextVar(
+    cv_sessions_smap: ContextVar[Optional[dict[int, Session]]] = ContextVar(
         "cv_sessions_smap", default=None
     )
 

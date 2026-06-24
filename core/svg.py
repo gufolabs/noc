@@ -32,10 +32,10 @@ class SVG:
 
     def __init__(self: "SVG") -> None:
         self._tree: ET.ElementTree
-        self._defs: Dict[str, ET.Element] = {}
+        self._defs: dict[str, ET.Element] = {}
 
     @classmethod
-    def init(cls: Type["SVG"]) -> "SVG":
+    def init(cls: type["SVG"]) -> "SVG":
         """
         Create root if necessary.
 
@@ -47,7 +47,7 @@ class SVG:
         return svg
 
     @classmethod
-    def read(cls: Type["SVG"], fp: TextIO) -> "SVG":
+    def read(cls: type["SVG"], fp: TextIO) -> "SVG":
         """
         Read from open file.
 
@@ -62,7 +62,7 @@ class SVG:
         return svg
 
     @classmethod
-    def from_string(cls: Type["SVG"], data: str) -> "SVG":
+    def from_string(cls: type["SVG"], data: str) -> "SVG":
         """
         Create SVG from string.
 
@@ -75,7 +75,7 @@ class SVG:
         return cls.read(StringIO(data))
 
     @classmethod
-    def get_placeholder(cls: Type["SVG"], width: float, height: float) -> "SVG":
+    def get_placeholder(cls: type["SVG"], width: float, height: float) -> "SVG":
         data = f"""<?xml version="1.0" encoding="utf-8"?>
     <svg viewBox="0 0 {width} {height}" width="{width}mm" height="{height}mm" xmlns="http://www.w3.org/2000/svg">
       <rect x="0" y="0" width="{width}" height="{height}" style="stroke: rgb(255, 0, 0); stroke-width: 0.5px; fill: rgb(255, 255, 255);"/>
@@ -85,7 +85,7 @@ class SVG:
         return cls.from_string(data)
 
     @classmethod
-    def from_file(cls: Type["SVG"], path: Union[str, Path]) -> "SVG":
+    def from_file(cls: type["SVG"], path: Union[str, Path]) -> "SVG":
         """
         Create SVG from file.
 
@@ -109,7 +109,7 @@ class SVG:
         return ET.tostring(self._tree.getroot(), encoding="unicode", method=None)
 
     @classmethod
-    def parse(cls: Type["SVG"], fp: TextIO) -> ET.ElementTree:
+    def parse(cls: type["SVG"], fp: TextIO) -> ET.ElementTree:
         """
         Parse SVG from file.
 
@@ -125,7 +125,7 @@ class SVG:
             raise ValueError(str(e)) from e
 
     @classmethod
-    def get_parser(cls: Type["SVG"]) -> ET.XMLParser:
+    def get_parser(cls: type["SVG"]) -> ET.XMLParser:
         """
         Get XMLParser instance.
 
@@ -341,7 +341,7 @@ class SVG:
         _add_prefix(self._tree.getroot())
 
     @classmethod
-    def get_transform_origin(cls: Type["SVG"], el: ET.Element) -> Optional[Tuple[float, float]]:
+    def get_transform_origin(cls: type["SVG"], el: ET.Element) -> Optional[tuple[float, float]]:
         """
         Calculate effective transform origin for element.
 
@@ -380,7 +380,7 @@ class SVG:
         return None
 
     @classmethod
-    def get_transform(cls: Type["SVG"], source: ET.Element) -> str:
+    def get_transform(cls: type["SVG"], source: ET.Element) -> str:
         """
         Calculate `transform` property.
 

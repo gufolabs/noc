@@ -61,14 +61,14 @@ class TargetItem(BaseModel):
     target: str
     ref_id: str = Field("A", alias="refId")
     datasource: Optional[Union[str, DataSourceItem]] = None
-    payload: Optional[Dict[str, Any]] = None
+    payload: Optional[dict[str, Any]] = None
 
 
 class QueryRequest(BaseModel):
     # string when query on Explorer
     panel_id: Union[int, str] = Field(..., alias="panelId")
     range: RangeSection
-    range_raw: Optional[Dict[str, str]] = Field(None, alias="rangeRaw")
+    range_raw: Optional[dict[str, str]] = Field(None, alias="rangeRaw")
     request_id: Optional[str] = Field(None, alias="requestId")
     timezone: Optional[str] = None
     # When query on Explorer
@@ -76,14 +76,14 @@ class QueryRequest(BaseModel):
     interval: str = "30s"
     interval_ms: int = Field(30_000, alias="intervalMs")
     max_datapoints: int = Field(500, alias="maxDataPoints")
-    targets: List[TargetItem]
-    adhoc_filters: Optional[List[AdhocFilterItem]] = Field(None, alias="adhocFilters")
+    targets: list[TargetItem]
+    adhoc_filters: Optional[list[AdhocFilterItem]] = Field(None, alias="adhocFilters")
     result_type: str = Field("time_series", alias="format")  # matrix
 
 
 class TargetResponseItem(BaseModel):
     target: str
-    datapoints: List[Tuple[float, int]]
+    datapoints: list[tuple[float, int]]
 
 
 class SearchResponseItem(BaseModel):
@@ -114,25 +114,25 @@ class MetricPayload(BaseModel):
         False, alias="reloadMetric"
     )  # Whether to overload the metrics API after modifying the value of the payload.
     width: int = 10  # Set the input / selection box width to a multiple of 8px.
-    options: Optional[List[PayloadSelectOptionItem]] = None
+    options: Optional[list[PayloadSelectOptionItem]] = None
 
 
 class MetricsResponseItem(BaseModel):
     value: str
     label: Optional[str] = None
-    payloads: Optional[List[MetricPayload]] = None
+    payloads: Optional[list[MetricPayload]] = None
 
 
 # Metrics
 class MetricsPayloadRequest(BaseModel):
-    payload: Optional[Dict[str, Any]]
+    payload: Optional[dict[str, Any]]
 
 
 # Metric Payload Options
 class MetricPayloadOptionsRequest(BaseModel):
     metric: str  # Current metric
     name: str  # The payload name of the option list needs to be obtained.
-    payload: Optional[Dict[str, Any]] = None  # Current payload
+    payload: Optional[dict[str, Any]] = None  # Current payload
 
 
 class VariableRequestTarget(BaseModel):

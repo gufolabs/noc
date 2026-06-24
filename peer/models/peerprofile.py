@@ -36,7 +36,7 @@ class ModelDataItem(BaseModel):
         return f"{self.name}: {self.value}"
 
 
-DataItems = RootModel[List[ModelDataItem]]
+DataItems = RootModel[list[ModelDataItem]]
 
 
 @on_init
@@ -59,7 +59,7 @@ class PeerProfile(NOCModel):
         default=partial(Workflow.get_default_workflow, "peer.Peer"),
     )
     max_prefixes = IntegerField("Max. Prefixes", default=100)
-    data: List[Dict[str, str]] = PydanticField(
+    data: list[dict[str, str]] = PydanticField(
         "Data Items",
         schema=DataItems,
         blank=True,
@@ -130,7 +130,7 @@ class PeerProfile(NOCModel):
     def is_enabled_notification(self) -> bool:
         return self.status_change_notification != "d"
 
-    def get_effective_data(self) -> Dict[str, Any]:
+    def get_effective_data(self) -> dict[str, Any]:
         r = {}
         for d in self.data:
             r[d["name"]] = d["value"]

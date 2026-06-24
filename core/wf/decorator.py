@@ -149,7 +149,7 @@ def document_set_state(
 
 
 def document_touch(
-    self, bulk: Optional[List["UpdateOne"]] = None, ts: Optional[datetime.datetime] = None
+    self, bulk: Optional[list["UpdateOne"]] = None, ts: Optional[datetime.datetime] = None
 ):
     if not self.state:
         logger.info("[%s] No default state. Skipping", self)
@@ -294,7 +294,7 @@ def model_set_state(self, state, state_changed: datetime.datetime = None, bulk=N
 
 
 def model_touch(
-    self, bulk: Optional[List["UpdateOne"]] = None, ts: Optional[datetime.datetime] = None
+    self, bulk: Optional[list["UpdateOne"]] = None, ts: Optional[datetime.datetime] = None
 ):
     if not self.state:
         logger.info("[%s] No default state. Skipping", self)

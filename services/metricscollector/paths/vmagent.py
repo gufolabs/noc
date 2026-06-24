@@ -56,8 +56,8 @@ class VMAgentAPI:
 
     @staticmethod
     def parse_labels(
-        labels: List[Any],
-    ) -> Tuple[Optional[str], Optional[str], Optional[str], Tuple[str, ...]]:
+        labels: list[Any],
+    ) -> tuple[Optional[str], Optional[str], Optional[str], tuple[str, ...]]:
         """Parse input labels"""
         name, instance, host, r = None, None, None, []
         for ll in labels:

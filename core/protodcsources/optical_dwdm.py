@@ -46,7 +46,7 @@ class OpticalDWDMDiscriminatorSource(BaseDiscriminatorSource):
         lit, num = item[0], item[1:]
         return not (lit not in {"C", "H"} or int(num) < 21 or int(num) > 60)
 
-    def get_data(self, code: str) -> List[DiscriminatorDataItem]:
+    def get_data(self, code: str) -> list[DiscriminatorDataItem]:
         """
         Get Discriminator Data by code
         C21 - > 1560,61
@@ -63,7 +63,7 @@ class OpticalDWDMDiscriminatorSource(BaseDiscriminatorSource):
             ),
         ]
 
-    def get_code(self, data: List[DiscriminatorDataItem]) -> str:
+    def get_code(self, data: list[DiscriminatorDataItem]) -> str:
         """
         Get Discriminator Code by data
         """

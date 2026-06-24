@@ -67,8 +67,8 @@ _path_cache = cachetools.TTLCache(maxsize=1000, ttl=60)
 @dataclass(frozen=True)
 class ConnectionData:
     name: str
-    protocols: List[ProtocolVariant]
-    data: Dict[str, Any]
+    protocols: list[ProtocolVariant]
+    data: dict[str, Any]
     cross: Optional[str] = None
     group: Optional[str] = None
     interface_name: Optional[str] = None
@@ -121,7 +121,7 @@ class ObjectConfigurationScope(EmbeddedDocument):
         return self.value == other.value
 
     @classmethod
-    def from_code(cls, code: str) -> List["ObjectConfigurationScope"]:
+    def from_code(cls, code: str) -> list["ObjectConfigurationScope"]:
         """
         Getting ObjectConfigurationScope from code.
         :param code: Format @code1@code2...
@@ -142,7 +142,7 @@ class ObjectConfigurationData(EmbeddedDocument):
     conflicted_value = DynamicField(required=False)
     last_seen = DateTimeField()
     # Scope Code
-    contexts: Optional[List["ObjectConfigurationScope"]] = EmbeddedDocumentListField(
+    contexts: Optional[list["ObjectConfigurationScope"]] = EmbeddedDocumentListField(
         ObjectConfigurationScope, required=False
     )
 
@@ -207,13 +207,13 @@ class Object(Document):
 
     name = StringField()
     model: "ObjectModel" = PlainReferenceField(ObjectModel)
-    data: List["ObjectAttr"] = ListField(EmbeddedDocumentField(ObjectAttr))
+    data: list["ObjectAttr"] = ListField(EmbeddedDocumentField(ObjectAttr))
     parent: Optional["Object"] = PlainReferenceField("self", required=False)
     parent_connection = StringField(required=False)
     additional_connections = ListField(StringField(), required=False)
     comment = GridVCSField("object_comment")
     # Configuration Param
-    cfg_data: List["ObjectConfigurationData"] = ListField(
+    cfg_data: list["ObjectConfigurationData"] = ListField(
         EmbeddedDocumentField(ObjectConfigurationData)
     )
     # Map
@@ -222,11 +222,11 @@ class Object(Document):
     # Current mode
     mode = StringField(required=False)
     # Additional connection data
-    connections: List["ObjectConnectionData"] = ListField(
+    connections: list["ObjectConnectionData"] = ListField(
         EmbeddedDocumentField(ObjectConnectionData)
     )
     # Dynamic crossings
-    cross: List[Crossing] = ListField(EmbeddedDocumentField(Crossing))
+    cross: list[Crossing] = ListField(EmbeddedDocumentField(Crossing))
     # Labels
     labels = ListField(StringField())
     effective_labels = ListField(StringField())
@@ -342,7 +342,7 @@ class Object(Document):
                     new_pop.update_pop_links()
 
     @cachetools.cached(_path_cache, key=lambda x: str(x.id), lock=id_lock)
-    def get_path(self) -> List[str]:
+    def get_path(self) -> list[str]:
         """
         Returns list of parent segment ids
         :return:
@@ -451,7 +451,7 @@ class Object(Document):
 
     def get_data_dict(
         self, interface: str, keys: Iterable, scope: Optional[str] = None
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Get multiple keys from single interface. Returns dict with values for every given key.
         If key is missed, return None value
@@ -470,8 +470,8 @@ class Object(Document):
         return r
 
     def get_data_tuple(
-        self, interface: str, keys: Union[List, Tuple], scope: Optional[str] = None
-    ) -> Tuple[Any, ...]:
+        self, interface: str, keys: Union[list, tuple], scope: Optional[str] = None
+    ) -> tuple[Any, ...]:
         """
         Get multiple keys from single interface. Returns tuple with values for every given key.
         If key is missed, return None value
@@ -484,13 +484,13 @@ class Object(Document):
         r = self.get_data_dict(interface, keys, scope)
         return tuple(r.get(k) for k in keys)
 
-    def get_effective_data(self) -> List[ObjectAttr]:
+    def get_effective_data(self) -> list[ObjectAttr]:
         """
         Return effective object data, including the model's defaults
         :return:
         """
-        seen: Set[Tuple[str, str, str]] = set()  # (interface, attr, scope
-        r: List[ObjectAttr] = []
+        seen: set[tuple[str, str, str]] = set()  # (interface, attr, scope
+        r: list[ObjectAttr] = []
         # Object attributes
         for item in self.data:
             k = (item.interface, item.attr, item.scope or "")
@@ -506,7 +506,7 @@ class Object(Document):
             r += [ObjectAttr(interface=item.interface, attr=item.attr, scope="", value=item.value)]
             seen.add(k)
         # Sort according to interface
-        sorting_keys: Dict[str, str] = {}
+        sorting_keys: dict[str, str] = {}
         for ni, i in enumerate(sorted({x[0] for x in seen})):
             mi = ModelInterface.get_by_name(i)
             if not mi:
@@ -613,7 +613,7 @@ class Object(Document):
             ]
 
     def reset_cfg_data(
-        self, param: Union["ConfigurationParam", List["ConfigurationParam"]], scope: Optional[str]
+        self, param: Union["ConfigurationParam", list["ConfigurationParam"]], scope: Optional[str]
     ):
         """
         Remove Configuration Data for param from scope
@@ -630,23 +630,23 @@ class Object(Document):
             r.append(cd)
         self.cfg_data = r
 
-    def reset_cfg_scopes(self, scopes: List[str]):
+    def reset_cfg_scopes(self, scopes: list[str]):
         """
         Remove all Configuration Param for scopes
         :param: scopes list
         """
         self.cfg_data = [cd for cd in self.cfg_data if cd.scope not in scopes]
 
-    def get_effective_cfg_params(self) -> List["ParamData"]:
+    def get_effective_cfg_params(self) -> list["ParamData"]:
         """
         Get all objects param with schema
         """
         # Getting param data
-        param_data: Dict[Tuple[str, str], Any] = {}
+        param_data: dict[tuple[str, str], Any] = {}
         for d in self.cfg_data:
             param_data[(d.param.code, d.scope)] = d.value
-        r: List["ParamData"] = []
-        seen: Set[Tuple[str, str]] = set()
+        r: list["ParamData"] = []
+        seen: set[tuple[str, str]] = set()
         if not self.model.configuration_rule:
             return r
         # Processed configurations param
@@ -732,7 +732,7 @@ class Object(Document):
 
     def get_crossing_proposals(
         self, name: str, to_name: Optional[str] = None
-    ) -> List[Tuple[str, List[str]]]:
+    ) -> list[tuple[str, list[str]]]:
         """
         Return possible connections for connection name
         as (connection name, discriminators)
@@ -790,7 +790,7 @@ class Object(Document):
         ro: "ObjectModel",
         remote_name: Optional[str] = None,
         use_cable: bool = False,
-    ) -> Iterable[Tuple[Optional["ObjectModel"], str]]:
+    ) -> Iterable[tuple[Optional["ObjectModel"], str]]:
         """
         Iterate possible connections.
         """
@@ -813,7 +813,7 @@ class Object(Document):
 
     def get_p2p_connection(
         self, name: str
-    ) -> Tuple[Optional[Any], Optional["Object"], Optional[str]]:
+    ) -> tuple[Optional[Any], Optional["Object"], Optional[str]]:
         """
         Get neighbor for p2p connection (s and mf types)
         Returns connection, remote object, remote connection or
@@ -866,7 +866,7 @@ class Object(Document):
         # Strange things happen
         return None, None, None
 
-    def get_genderless_connections(self, name: str) -> List[Tuple[Any, "Object", str]]:
+    def get_genderless_connections(self, name: str) -> list[tuple[Any, "Object", str]]:
         """
         Get genderless connections
         """
@@ -943,7 +943,7 @@ class Object(Document):
         name: str,
         remote_object: "Object",
         remote_name: str,
-        data: Optional[Dict[str, Any]] = None,
+        data: Optional[dict[str, Any]] = None,
         reconnect: bool = False,
     ) -> None:
         """
@@ -1007,7 +1007,7 @@ class Object(Document):
         name: str,
         remote_object: "Object",
         remote_name: str,
-        data: Dict[str, Any] = None,
+        data: dict[str, Any] = None,
         type: Optional[str] = None,
         layer: Optional[Layer] = None,
     ):
@@ -1069,7 +1069,7 @@ class Object(Document):
         """
         Iterates used connections.
         """
-        seen: Set[str] = set()
+        seen: set[str] = set()
         for doc in Object._get_collection().find(
             {"parent": self.id}, {"_id": 0, "parent_connection": 1, "additional_connections": 1}
         ):
@@ -1156,7 +1156,7 @@ class Object(Document):
             return [self.name]
         return []
 
-    def get_name_path(self) -> List[str]:
+    def get_name_path(self) -> list[str]:
         """
         Return list of container names
         """
@@ -1213,7 +1213,7 @@ class Object(Document):
             else:
                 o.put_into(target)
 
-    def iter_connections(self) -> Iterable[Tuple[str, "Object", str]]:
+    def iter_connections(self) -> Iterable[tuple[str, "Object", str]]:
         """
         Iterate horizontal connections.
 
@@ -1261,7 +1261,7 @@ class Object(Document):
             c = c.parent
         return None
 
-    def get_coordinates_zoom(self) -> Tuple[Optional[float], Optional[float], Optional[int]]:
+    def get_coordinates_zoom(self) -> tuple[Optional[float], Optional[float], Optional[int]]:
         """
         Get managed object's coordinates
         # @todo: Speedup?
@@ -1281,7 +1281,7 @@ class Object(Document):
         return None, None, None
 
     @classmethod
-    def get_managed(cls, mo) -> List["Object"]:
+    def get_managed(cls, mo) -> list["Object"]:
         """
         Get Object managed by managed object
         :param mo: Managed Object instance or id
@@ -1346,7 +1346,7 @@ class Object(Document):
                 yield mo
 
     @classmethod
-    def get_by_path(cls, path: List[str], hints=None) -> Optional["Object"]:
+    def get_by_path(cls, path: list[str], hints=None) -> Optional["Object"]:
         """
         Get object by given path.
         :param path: List of names following to path
@@ -1383,7 +1383,7 @@ class Object(Document):
                 break
         return None
 
-    def get_object_serials(self, chassis_only: bool = True) -> List[str]:
+    def get_object_serials(self, chassis_only: bool = True) -> list[str]:
         """
         Getting object serialNumber
         :param chassis_only: With serial numbers inner objects
@@ -1395,7 +1395,7 @@ class Object(Document):
                 serials += oo.get_object_serials(chassis_only=False)
         return serials
 
-    def iter_technology(self, technologies: List["Technology"]) -> Iterable[PortItem]:
+    def iter_technology(self, technologies: list["Technology"]) -> Iterable[PortItem]:
         """
         Iter object ports for technologies
         :param technologies: List for connection technologies
@@ -1445,7 +1445,7 @@ class Object(Document):
 
     @classmethod
     def iter_by_address_id(
-        cls, address: Union[str, List[str]], scope: str = None
+        cls, address: Union[str, list[str]], scope: str = None
     ) -> Iterable["Object"]:
         """
         Get objects
@@ -1555,7 +1555,7 @@ class Object(Document):
             item_desc = discriminator(item.input_discriminator)
             return any(d in item_desc for d in discriminators)
 
-        seen: Set[str] = set()
+        seen: set[str] = set()
         discriminators = [discriminator(x) for x in discriminators or []]
         # Dynamic crossings
         for item in self.iter_effective_crossing():
@@ -1563,7 +1563,7 @@ class Object(Document):
                 yield item
                 seen.add(item.output)
 
-    def set_internal_connection(self, input: str, output: str, data: Dict[str, str] = None):
+    def set_internal_connection(self, input: str, output: str, data: dict[str, str] = None):
         """ """
         input = self.model.get_model_connection(input)
         if not input:

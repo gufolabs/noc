@@ -28,7 +28,7 @@ class ThresholdState(BaseModel):
 
 
 class ThresholdNodeState(BaseModel):
-    thresholds: Dict[str, ThresholdState] = {}
+    thresholds: dict[str, ThresholdState] = {}
 
 
 class VarItem(BaseModel):
@@ -41,7 +41,7 @@ class ThresholdItem(BaseModel):
     op: Literal[">", ">=", "<", "<="] = ">="
     clear_value: Optional[float] = None
     alarm_class: Optional[str] = "NOC | PM | Out of Thresholds"
-    alarm_labels: Optional[List[str]] = None
+    alarm_labels: Optional[list[str]] = None
 
     def is_open_match(self, value: ValueType) -> bool:
         """
@@ -82,17 +82,17 @@ class ThresholdNodeConfig(BaseModel):
     alarm_class: Optional[str] = None
     reference: Optional[str] = None
     error_text_template: Optional[str] = None
-    vars: Optional[List[VarItem]] = None
+    vars: Optional[list[VarItem]] = None
     pool: str = ""
     dry_run: bool = False  # For service test used
     partition: int = 0
     rule_id: str
     action_id: str
-    thresholds: List[ThresholdItem]
+    thresholds: list[ThresholdItem]
 
 
 logger = logging.getLogger(__name__)
-ta_ListThresholdItem = TypeAdapter(List[ThresholdItem])
+ta_ListThresholdItem = TypeAdapter(list[ThresholdItem])
 
 
 class ThresholdNode(BaseCDAGNode):
@@ -121,7 +121,7 @@ class ThresholdNode(BaseCDAGNode):
             elif th.is_open_match(x) and not self.is_active(str(num)):
                 self.raise_alarm(x, target, th, str(num))
 
-    def get_vars(self) -> List[VarItem]:
+    def get_vars(self) -> list[VarItem]:
         return [VarItem(**v) for v in self.config.vars or []]
 
     def get_reference(self, th: ThresholdItem, target: Any) -> str:
@@ -248,7 +248,7 @@ class ThresholdNode(BaseCDAGNode):
     def __del__(self):
         self.reset_state()
 
-    def clean_state(self, state: Optional[Dict[str, Any]]) -> Optional[BaseModel]:
+    def clean_state(self, state: Optional[dict[str, Any]]) -> Optional[BaseModel]:
         if not hasattr(self, "state_cls"):
             return None
         state = state or {}

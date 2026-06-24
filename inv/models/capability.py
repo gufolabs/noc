@@ -33,7 +33,7 @@ from noc.core.models.valuetype import ValueType, ARRAY_ANNEX
 
 id_lock = Lock()
 
-TCapsValue = Union[bool, str, int, float, List[Any]]
+TCapsValue = Union[bool, str, int, float, list[Any]]
 
 
 @on_delete_check(
@@ -86,7 +86,7 @@ class Capability(Document):
         return Capability.objects.filter(name=name).first()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -139,7 +139,7 @@ class Capability(Document):
             raise ValueError(f"Invalid type: {self.type}")
         return self.type.clean_value(v)
 
-    def get_references(self, v: TCapsValue, scope: Optional[str] = None) -> List[str]:
+    def get_references(self, v: TCapsValue, scope: Optional[str] = None) -> list[str]:
         if self.multi and isinstance(v, list):
             return [
                 self.type.clean_reference(x, scope)
@@ -153,7 +153,7 @@ class Capability(Document):
             return [r]
         return []
 
-    def get_editor(self) -> Optional[Dict[str, Any]]:
+    def get_editor(self) -> Optional[dict[str, Any]]:
         if not self.allow_manual:
             return None
         r = {"type": self.type.value, "multiple": self.multi, "choices": []}

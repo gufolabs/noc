@@ -40,7 +40,7 @@ class PingService(FastAPIService):
     def __init__(self):
         super().__init__()
         self.mappings_callback = None
-        self.probes: Dict[str, Tuple[ProbeSetting, ...]] = defaultdict(
+        self.probes: dict[str, tuple[ProbeSetting, ...]] = defaultdict(
             tuple
         )  # mo id -> ProbeSetting
         self.ping = None
@@ -49,7 +49,7 @@ class PingService(FastAPIService):
         self.total_slots = 0
         self.ok_event = self.get_status_message(True)
         self.failed_event = self.get_status_message(False)
-        self.pool_partitions: Dict[str, int] = {}
+        self.pool_partitions: dict[str, int] = {}
 
     async def on_activate(self):
         # Acquire slot
@@ -259,7 +259,7 @@ class PingService(FastAPIService):
             metrics["ping_objects"] = len(self.probes)
 
     @classmethod
-    def get_status_message(cls, status: bool) -> Dict[str, Any]:
+    def get_status_message(cls, status: bool) -> dict[str, Any]:
         """
         Construct status message event
         :param status:
@@ -267,7 +267,7 @@ class PingService(FastAPIService):
         """
         return {"source": "system", "$event": {"class": cls.PING_CLS[status], "vars": {}}}
 
-    async def _probe(self, ps: ProbeSetting) -> Tuple[Optional[float], int]:
+    async def _probe(self, ps: ProbeSetting) -> tuple[Optional[float], int]:
         """
         Perform ping probe.
 
@@ -278,7 +278,7 @@ class PingService(FastAPIService):
             Tuple of (Average RTT or None, Attempts)
         """
         attempts = 0
-        timings: List[float] = []
+        timings: list[float] = []
         async for rtt in self.ping.iter_rtt(
             ps.address, size=ps.size, count=ps.count, interval=ps.timeout
         ):

@@ -83,7 +83,7 @@ class Handler(Document):
         return self.name
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "uuid": self.uuid,
             "$collection": self._meta["json_collection"],

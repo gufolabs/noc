@@ -227,7 +227,7 @@ class Label(Document):
         return self.name
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -345,7 +345,7 @@ class Label(Document):
             pass
 
     @classmethod
-    def from_names(self, labels: List[str]) -> List["Label"]:
+    def from_names(self, labels: list[str]) -> list["Label"]:
         """
         Conert list names to Labels list
         """
@@ -461,7 +461,7 @@ class Label(Document):
         return model_ins.objects.filter(**{"labels__contains": label}).first()
 
     @staticmethod
-    def get_wildcards(label: str) -> List[str]:
+    def get_wildcards(label: str) -> list[str]:
         return [
             f"{ll}::*" for ll in accumulate(label.split("::")[:-1], lambda acc, x: f"{acc}::{x}")
         ]
@@ -507,7 +507,7 @@ class Label(Document):
         return bool(r.get(setting))
 
     @classmethod
-    def get_effective_settings(cls, label: str, include_current: bool = False) -> Dict[str, Any]:
+    def get_effective_settings(cls, label: str, include_current: bool = False) -> dict[str, Any]:
         """
         Returns dict with effective settings
         :param label: Checked label name
@@ -559,8 +559,8 @@ class Label(Document):
 
     @classmethod
     def merge_labels(
-        cls, iter_labels: Iterable[List[str]], add_wildcard: bool = False
-    ) -> List[str]:
+        cls, iter_labels: Iterable[list[str]], add_wildcard: bool = False
+    ) -> list[str]:
         """
         Merge sets of labels, processing the scopes.
 
@@ -568,9 +568,9 @@ class Label(Document):
         :param add_wildcard: Add wildcard scope label
         :return:
         """
-        seen_scopes: Set[str] = set()
-        seen: Set[str] = set()
-        r: List[str] = []
+        seen_scopes: set[str] = set()
+        seen: set[str] = set()
+        r: list[str] = []
         for labels in iter_labels:
             for label in labels:
                 if label in seen or label.endswith("::*"):
@@ -600,7 +600,7 @@ class Label(Document):
             yield "::".join(r)
 
     @classmethod
-    def build_expose_labels(cls, labels: List[str], expose_setting: str) -> List[str]:
+    def build_expose_labels(cls, labels: list[str], expose_setting: str) -> list[str]:
         """Build expose labels list"""
         return [
             ll
@@ -614,7 +614,7 @@ class Label(Document):
     def ensure_label(
         cls,
         name,
-        model_ids: List[str],
+        model_ids: list[str],
         description=None,
         is_protected=False,
         bg_color1=0xFFFFFF,
@@ -670,9 +670,9 @@ class Label(Document):
     @classmethod
     def ensure_labels(
         cls,
-        labels: List[str],
-        model_ids: List[str],
-    ) -> List[str]:
+        labels: list[str],
+        model_ids: list[str],
+    ) -> list[str]:
         """
         Yields all scopes
         :return:
@@ -703,7 +703,7 @@ class Label(Document):
                 fg_color2=self.fg_color2,
             )
 
-    def get_matched_labels(self) -> List[str]:
+    def get_matched_labels(self) -> list[str]:
         """
         Get list of matched labels for wildcard label
         :return:
@@ -717,7 +717,7 @@ class Label(Document):
             ]
         return [label]
 
-    def get_match_regex_rules(self) -> Dict[Tuple[str, str], List[str]]:
+    def get_match_regex_rules(self) -> dict[tuple[str, str], list[str]]:
         """
         Yields all scopes
         :return:
@@ -823,10 +823,10 @@ class Label(Document):
                     cursor.execute(sql, params)
 
     @classmethod
-    def build_effective_labels(cls, instance, sender=None) -> Set[str]:
+    def build_effective_labels(cls, instance, sender=None) -> set[str]:
         """Build Effective labels for Instance"""
 
-        def default_iter_effective_labels(instance) -> Iterable[List[str]]:
+        def default_iter_effective_labels(instance) -> Iterable[list[str]]:
             yield instance.labels or []
 
         if not instance._has_effective_labels:
@@ -930,7 +930,7 @@ class Label(Document):
 
     @classmethod
     def match_labels(
-        cls, category, allowed_op: Set = None, matched_scopes: Set = None, parent_op: Set = None
+        cls, category, allowed_op: set = None, matched_scopes: set = None, parent_op: set = None
     ):
         """
         Decorator to denote models with labels.
@@ -1002,9 +1002,9 @@ class Label(Document):
     def _change_model_labels(
         cls,
         model_id: str,
-        add_labels: List[str] = None,
-        remove_labels: List[str] = None,
-        instance_filters: Optional[List[Tuple[str, Any]]] = None,
+        add_labels: list[str] = None,
+        remove_labels: list[str] = None,
+        instance_filters: Optional[list[tuple[str, Any]]] = None,
         effective_only: bool = True,
     ):
         """
@@ -1068,9 +1068,9 @@ class Label(Document):
     def _change_document_labels(
         cls,
         model_id: str,
-        add_labels: List[str] = None,
-        remove_labels: List[str] = None,
-        instance_filters: Optional[List[Tuple[str, Any]]] = None,
+        add_labels: list[str] = None,
+        remove_labels: list[str] = None,
+        instance_filters: Optional[list[tuple[str, Any]]] = None,
         effective_only: bool = True,
     ):
         """
@@ -1112,8 +1112,8 @@ class Label(Document):
     def add_model_labels(
         cls,
         model_id: str,
-        labels: List[str],
-        instance_filters: Optional[List[Tuple[str, Any]]] = None,
+        labels: list[str],
+        instance_filters: Optional[list[tuple[str, Any]]] = None,
     ):
         """
         Add Labels on models effective_labels field
@@ -1132,8 +1132,8 @@ class Label(Document):
     def remove_model_labels(
         cls,
         model_id: str,
-        labels: List[str],
-        instance_filters: Optional[List[Tuple[str, Any]]] = None,
+        labels: list[str],
+        instance_filters: Optional[list[tuple[str, Any]]] = None,
     ):
         """
         Remove labels from effective_labels field on models
@@ -1155,7 +1155,7 @@ class Label(Document):
     @staticmethod
     def get_instance_profile(
         profile_model,
-        labels: List[str],
+        labels: list[str],
         **kwargs,
     ) -> Optional[str]:
         """
@@ -1334,7 +1334,7 @@ class Label(Document):
         return inner
 
     @classmethod
-    def filter_labels(cls, labels: List[str], pred: Callable) -> List[str]:
+    def filter_labels(cls, labels: list[str], pred: Callable) -> list[str]:
         """
         Filter labels satisfying predicate
         :param labels:
@@ -1364,7 +1364,7 @@ class Label(Document):
         return rx
 
     @classmethod
-    def get_effective_regex_labels(cls, scope: str, value: str) -> List[str]:
+    def get_effective_regex_labels(cls, scope: str, value: str) -> list[str]:
         """
         :param: scope - check `enable_<scope>` for filter enable regex
         :param: value - string value for check
@@ -1376,7 +1376,7 @@ class Label(Document):
         return labels
 
     @classmethod
-    def get_effective_prefixfilter_labels(cls, scope: str, value: str) -> List[str]:
+    def get_effective_prefixfilter_labels(cls, scope: str, value: str) -> list[str]:
         """
 
         :param scope:
@@ -1398,7 +1398,7 @@ class Label(Document):
         return list(Label.objects.filter(mq).values_list("name"))
 
     @classmethod
-    def get_effective_vlanfilter_labels(cls, scope: str, value: Union[int, List[int]]) -> List[str]:
+    def get_effective_vlanfilter_labels(cls, scope: str, value: Union[int, list[int]]) -> list[str]:
         """
 
         :param scope:
@@ -1421,7 +1421,7 @@ class Label(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_rx_labels_cache"), lock=lambda _: rx_labels_lock)
-    def get_regex_labels(cls, scope: str) -> Tuple[re.Pattern, str]:
+    def get_regex_labels(cls, scope: str) -> tuple[re.Pattern, str]:
         """
         :param: scope - check `enable_<scope>` for filter enable regex
         """
@@ -1443,7 +1443,7 @@ class Label(Document):
         model_id: str,
         model_profile_id: str,
         profile_field="profile",
-        query_filter: Optional[List[Tuple[str, str]]] = None,
+        query_filter: Optional[list[tuple[str, str]]] = None,
     ):
         """
         Update profile by match rule
@@ -1495,8 +1495,8 @@ class Label(Document):
         cls,
         model_id: str,
         model_profile_id: str,
-        query_filter: Optional[List[Tuple[str, str]]] = None,
-    ) -> Tuple[str, str, Optional[str]]:
+        query_filter: Optional[list[tuple[str, str]]] = None,
+    ) -> tuple[str, str, Optional[str]]:
         """
         Sync profile by match rule
         :param model_id: Instance model_id
@@ -1543,8 +1543,8 @@ class Label(Document):
         cls,
         model_id: str,
         model_profile_id: str,
-        query_filter: Optional[List[Tuple[str, str]]] = None,
-    ) -> Tuple[str, str, Optional[str]]:
+        query_filter: Optional[list[tuple[str, str]]] = None,
+    ) -> tuple[str, str, Optional[str]]:
         """
         Iterate over instance profile
         :param model_id: Instance model_id

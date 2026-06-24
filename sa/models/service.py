@@ -211,7 +211,7 @@ class ServiceDependency(EmbeddedDocument):
             return False
         return not (self.max_status and status > self.max_status)
 
-    def get_names(self, me: "Service", connected: "Service") -> List[str]:
+    def get_names(self, me: "Service", connected: "Service") -> list[str]:
         """Gen Connected instance name"""
         r = {""}
         if not self.name_template:
@@ -314,7 +314,7 @@ class Service(Document):
         ],
         default="P",
     )
-    dependency_services: List["ServiceDependency"] = EmbeddedDocumentListField(ServiceDependency)
+    dependency_services: list["ServiceDependency"] = EmbeddedDocumentListField(ServiceDependency)
     calculate_status_function = StringField(
         choices=[
             ("D", "Disable"),
@@ -326,7 +326,7 @@ class Service(Document):
         ],
         default="P",
     )
-    calculate_status_rules: List["CalculatedStatusRule"] = EmbeddedDocumentListField(
+    calculate_status_rules: list["CalculatedStatusRule"] = EmbeddedDocumentListField(
         CalculatedStatusRule
     )
     #
@@ -353,8 +353,8 @@ class Service(Document):
     cpe_model = StringField()
     cpe_group = StringField()
     # Capabilities
-    caps: List[CapsItem] = EmbeddedDocumentListField(CapsItem)
-    diagnostics: List[DiagnosticItem] = EmbeddedDocumentListField(DiagnosticItem)
+    caps: list[CapsItem] = EmbeddedDocumentListField(CapsItem)
+    diagnostics: list[DiagnosticItem] = EmbeddedDocumentListField(DiagnosticItem)
     # Link to agent
     agent = PlainReferenceField(Agent)
     # Integration with external NRI and TT systems
@@ -373,9 +373,9 @@ class Service(Document):
     static_client_groups = ListField(ObjectIdField())
     effective_client_groups = ListField(ObjectIdField())
     # Remote Mappings
-    mappings: List[RemoteMappingItem] = EmbeddedDocumentListField(RemoteMappingItem)
+    mappings: list[RemoteMappingItem] = EmbeddedDocumentListField(RemoteMappingItem)
     # Watchers
-    watchers: List[WatchDocumentItem] = EmbeddedDocumentListField(WatchDocumentItem)
+    watchers: list[WatchDocumentItem] = EmbeddedDocumentListField(WatchDocumentItem)
     watcher_wait_ts: Optional[datetime.datetime] = DateTimeField(required=False)
     # maintenances
 
@@ -430,7 +430,7 @@ class Service(Document):
         ).first()
 
     @classmethod
-    def get_by_managed_object_id(cls, mo_id: int) -> List["Service"]:
+    def get_by_managed_object_id(cls, mo_id: int) -> list["Service"]:
         """"""
         return list(
             ServiceInstance.objects.filter(
@@ -443,7 +443,7 @@ class Service(Document):
         )
 
     @classmethod
-    def get_by_remote_ids(cls, remote_system: RemoteSystem, ids: List[str]) -> List[str]:
+    def get_by_remote_ids(cls, remote_system: RemoteSystem, ids: list[str]) -> list[str]:
         """Return object IDS by remote_ids"""
         return Service.objects.filter(
             m_q(remote_system=str(remote_system.id), remote_id__in=ids)
@@ -451,7 +451,7 @@ class Service(Document):
         ).scalar("id")
 
     @classmethod
-    def get_exposed_labels_for_object(cls, mo_id: int) -> Iterable[List[str]]:
+    def get_exposed_labels_for_object(cls, mo_id: int) -> Iterable[list[str]]:
         """Return exposed labels for Managed Object"""
         from noc.sa.models.serviceinstance import ServiceInstance
 
@@ -501,7 +501,7 @@ class Service(Document):
                 yield "service", self.parent.id
 
     @property
-    def service_instances(self) -> List["ServiceInstance"]:
+    def service_instances(self) -> list["ServiceInstance"]:
         return list(ServiceInstance.objects.filter(service=self.id))
 
     @property
@@ -556,7 +556,7 @@ class Service(Document):
             return "partial"
         return "full"
 
-    def get_nested(self) -> List["Service"]:
+    def get_nested(self) -> list["Service"]:
         """Returns list of nested services"""
         r = [self]
         for d in Service.objects.filter(parent=self):
@@ -614,7 +614,7 @@ class Service(Document):
             return self.profile.status_transfer_policy
         return self.status_transfer_policy
 
-    def get_nested_ids(self) -> List[ObjectId]:
+    def get_nested_ids(self) -> list[ObjectId]:
         """Return id of this and all nested services"""
         # $graphLookup hits 100Mb memory limit. Do not use it
         seen = {self.id}
@@ -647,7 +647,7 @@ class Service(Document):
                 link_cfg = sd
         return link_cfg
 
-    def iter_dependent_services(self) -> Iterable[Tuple["Service", str]]:
+    def iter_dependent_services(self) -> Iterable[tuple["Service", str]]:
         """
         Iterable over dependent service, that affected self changed: status_change
         """
@@ -667,7 +667,7 @@ class Service(Document):
             if item.group and item.group.technology.service_model == "sa.Service":
                 yield from Service.objects.filter(effective_service_groups=item.group)
 
-    def iter_dependency_status(self) -> Iterable[Tuple[Status, "Service"]]:
+    def iter_dependency_status(self) -> Iterable[tuple[Status, "Service"]]:
         """Iterate over dependency services status"""
         for svc, link_type in self.iter_dependent_services():
             cfg = self.get_dependency_config(svc, link_type=link_type)
@@ -707,7 +707,7 @@ class Service(Document):
         self,
         status: Status,
         timestamp: Optional[datetime.datetime] = None,
-        affected: Optional[List[AffectedItem]] = None,
+        affected: Optional[list[AffectedItem]] = None,
     ):
         """
         Set Operational Status for Service
@@ -807,8 +807,8 @@ class Service(Document):
 
     def get_message_context(
         self,
-        affected: Optional[List[AffectedItem]] = None,
-    ) -> Dict[str, Any]:
+        affected: Optional[list[AffectedItem]] = None,
+    ) -> dict[str, Any]:
         """Service Message Ctx"""
         r = {
             "id": str(self.id),
@@ -849,20 +849,20 @@ class Service(Document):
             )
         return r
 
-    def get_mx_message_headers(self, labels: Optional[List[str]] = None) -> Dict[str, bytes]:
+    def get_mx_message_headers(self, labels: Optional[list[str]] = None) -> dict[str, bytes]:
         return {
             key.config.header: key.clean_header_value(value)
             for key, value in self.message_meta.items()
         }
 
     @property
-    def alarms_stream_and_partition(self) -> Tuple[str, int]:
+    def alarms_stream_and_partition(self) -> tuple[str, int]:
         fm_pool = Pool.get_default_fm_pool()
         slots = config.get_slot_limits(f"correlator-{fm_pool}") or 1
         return f"dispose.{fm_pool.name}", self.bi_id % slots
 
     @property
-    def message_meta(self) -> Dict[MessageMeta, Any]:
+    def message_meta(self) -> dict[MessageMeta, Any]:
         """Message Meta for instance"""
         return {
             MessageMeta.WATCH_FOR: get_subscription_id(self),
@@ -997,7 +997,7 @@ class Service(Document):
             yield svc
         # InstanceConfig
 
-    def get_connected_services(self) -> Dict[str, Set[str]]:
+    def get_connected_services(self) -> dict[str, set[str]]:
         """"""
         r = defaultdict(set)
         for svc in self.get_connected_me():
@@ -1041,7 +1041,7 @@ class Service(Document):
             status = Status.UNKNOWN
         self.set_oper_status(status, affected=affected)
 
-    def get_alarm_status(self, affected: Optional[List[AffectedItem]] = None) -> Status:
+    def get_alarm_status(self, affected: Optional[list[AffectedItem]] = None) -> Status:
         """
         Calculate alarm status for service
         1. If alarm affected policy is Disabled. Return UNKNOWN
@@ -1061,7 +1061,7 @@ class Service(Document):
         instance_status = defaultdict(lambda: Status.UP)
         effective_clients = frozenset(str(x) for x in self.effective_client_groups)
         # Matcher ?
-        instances: Optional[List["ServiceInstance"]] = None
+        instances: Optional[list["ServiceInstance"]] = None
         max_weight = 0
         # Calculate Alarm status
         for aa in ActiveAlarm.objects.filter(affected_services=self.id):
@@ -1135,7 +1135,7 @@ class Service(Document):
         # Calculate affected status
         return self.calculate_status(r)
 
-    def get_diagnostics_status(self, affected: Optional[List[AffectedItem]] = None) -> Status:
+    def get_diagnostics_status(self, affected: Optional[list[AffectedItem]] = None) -> Status:
         if not self.profile.diagnostic_status:
             return Status.UNKNOWN
         values = self.get_diagnostic_values()
@@ -1152,7 +1152,7 @@ class Service(Document):
                 return d.failed_status
         return Status.UNKNOWN
 
-    def get_direct_status(self, affected: Optional[List[AffectedItem]] = None) -> Status:
+    def get_direct_status(self, affected: Optional[list[AffectedItem]] = None) -> Status:
         """Getting oper_status from Alarm and Diagnostics"""
         return max(
             self.get_alarm_status(affected=affected),
@@ -1165,12 +1165,12 @@ class Service(Document):
             return self.profile.calculate_status_function
         return self.calculate_status_function
 
-    def get_effective_calculate_rules(self) -> List["CalculatedStatusRule"]:
+    def get_effective_calculate_rules(self) -> list["CalculatedStatusRule"]:
         if self.calculate_status_function == "P":
             return self.profile.calculate_status_rules
         return self.calculate_status_rules
 
-    def calculate_status(self, statuses: Dict[Status, int]) -> Status:
+    def calculate_status(self, statuses: dict[Status, int]) -> Status:
         """Calculate status by Policy"""
         if not statuses:
             return Status.UNKNOWN
@@ -1187,7 +1187,7 @@ class Service(Document):
                 return status
         return Status.UNKNOWN
 
-    def get_affected_status(self, affected: Optional[List[AffectedItem]] = None) -> Status:
+    def get_affected_status(self, affected: Optional[list[AffectedItem]] = None) -> Status:
         """Getting operational status from dependencies services"""
         r = {}
         if self.profile.calculate_status_function == "D":
@@ -1207,7 +1207,7 @@ class Service(Document):
         return self.calculate_status(r)
 
     @classmethod
-    def find_alarm_affected_services(cls, alarm) -> List[str]:
+    def find_alarm_affected_services(cls, alarm) -> list[str]:
         """Find affected services on topology"""
         r = []
         if "service" in alarm.vars and is_objectid(alarm.vars["service"]):
@@ -1222,7 +1222,7 @@ class Service(Document):
         return r
 
     @classmethod
-    def get_services_by_alarm(cls, alarm) -> List[str]:
+    def get_services_by_alarm(cls, alarm) -> list[str]:
         """Return service Ids for requested alarm"""
         if alarm.alarm_class.name == SVC_AC:
             return []
@@ -1288,7 +1288,7 @@ class Service(Document):
         return Label.get_effective_setting(label, "enable_service")
 
     @classmethod
-    def iter_effective_labels(cls, instance: "Service") -> Iterable[List[str]]:
+    def iter_effective_labels(cls, instance: "Service") -> Iterable[list[str]]:
         yield list(instance.labels or [])
         yield list(ServiceProfile.iter_lazy_labels(instance.profile))
         for c in instance.iter_caps():
@@ -1332,7 +1332,7 @@ class Service(Document):
         """Synchronize Config-base instance"""
         if self.profile.instance_policy != "C":
             return
-        instances: List[ServiceInstanceConfig] = []
+        instances: list[ServiceInstanceConfig] = []
         # Dependencies, nanme, Instance Config, port ?, service list
         connected_services = self.get_connected_services()
         for settings in self.profile.instance_settings:
@@ -1357,7 +1357,7 @@ class Service(Document):
     def update_instances(
         self,
         source: Union[str, InputSource],
-        instances: List[ServiceInstanceConfig],
+        instances: list[ServiceInstanceConfig],
         last_update: Optional[datetime.datetime] = None,
     ):
         """Synchronize instances for source"""
@@ -1478,11 +1478,11 @@ class Service(Document):
     def update_maintenance(
         cls,
         maintenance_id: str,
-        services: List["Service"],
+        services: list["Service"],
         start: datetime.datetime,
         affected_topology: bool = False,
         remote_system: Optional[RemoteSystem] = None,
-        remote_ids: Optional[List[str]] = None,
+        remote_ids: Optional[list[str]] = None,
     ):
         """Update Maintenance"""
         svcs = [s.id for s in services]
@@ -1498,7 +1498,7 @@ class Service(Document):
         for svc in Service.objects.filter(watchers__key=str(maintenance_id)):
             svc.stop_watch(ObjectEffect.MAINTENANCE, str(maintenance_id))
 
-    def get_check_ctx(self, include_credentials=False, **kwargs) -> Dict[str, Any]:
+    def get_check_ctx(self, include_credentials=False, **kwargs) -> dict[str, Any]:
         """"""
         return {
             "name": self.label,
@@ -1526,7 +1526,7 @@ class Service(Document):
         }
 
 
-def refresh_service_status(svc_ids: List[str]):
+def refresh_service_status(svc_ids: list[str]):
     logger.info("Refresh service status: %s", svc_ids)
     affected_paths = set()
     for svc in Service.objects.filter(id__in=svc_ids).order_by("-parent"):
@@ -1543,7 +1543,7 @@ def refresh_service_status(svc_ids: List[str]):
         svc.refresh_status()
 
 
-def refresh_connected_services(svc_ids: List[str]):
+def refresh_connected_services(svc_ids: list[str]):
     logger.info("Refresh connected services: %s", svc_ids)
     from noc.sa.models.serviceinstance import ServiceInstance
 
@@ -1566,9 +1566,9 @@ def refresh_connected_services(svc_ids: List[str]):
 
 
 def refresh_exposed_caps(
-    object_ids: Optional[List[str]] = None,
-    svc_profile_ids: Optional[List[str]] = None,
-    svc_ids: Optional[List[str]] = None,
+    object_ids: Optional[list[str]] = None,
+    svc_profile_ids: Optional[list[str]] = None,
+    svc_ids: Optional[list[str]] = None,
     user: Optional[str] = None,
 ):
     """Syncronize exposed caps"""

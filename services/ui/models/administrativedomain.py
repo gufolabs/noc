@@ -19,8 +19,8 @@ from .label import LabelItem
 class DefaultAdministrativeDomainItem(BaseModel):
     id: str
     name: str
-    labels: List[LabelItem]
-    effective_labels: List[LabelItem]
+    labels: list[LabelItem]
+    effective_labels: list[LabelItem]
     parent: Optional[Reference] = None
     description: Optional[str] = None
     default_pool: Optional[Reference] = None
@@ -38,4 +38,4 @@ class FormAdministrativeDomainItem(BaseModel):
     default_pool: Optional[Reference] = None
     bioseg_floating_name_template: Optional[Reference] = None
     bioseg_floating_parent_segment: Optional[Reference] = None
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None

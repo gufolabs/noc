@@ -40,7 +40,7 @@ class ThreadPoolExecutor:
         name: Optional[str] = None,
     ) -> None:
         self.max_workers = max_workers
-        self.threads: Set[threading.Thread] = set()
+        self.threads: set[threading.Thread] = set()
         self.mutex = threading.Lock()
         self.queue: deque = deque()
         self.to_shutdown = False
@@ -52,7 +52,7 @@ class ThreadPoolExecutor:
         self.done_event = None
         self.done_future = None
         self.started = perf_counter()
-        self.waiters: List[_thread.LockType] = []
+        self.waiters: list[_thread.LockType] = []
         if config.thread_stack_size:
             threading.stack_size(config.thread_stack_size)
 
@@ -249,7 +249,7 @@ class ThreadPoolExecutor:
                 (self.max_workers - len(self.threads) - self._qsize() + len(self.waiters)), 0
             )
 
-    def apply_metrics(self, d: Dict[str, Any]) -> None:
+    def apply_metrics(self, d: dict[str, Any]) -> None:
         """
         Append threadpool metrics to dictionary d
         :param d:

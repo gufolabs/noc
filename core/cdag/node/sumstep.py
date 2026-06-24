@@ -35,7 +35,7 @@ class SumStepNode(WindowNode):
     categories = [Category.WINDOW]
 
     def get_window_value(
-        self, values: List[ValueType], timestamps: List[int]
+        self, values: list[ValueType], timestamps: list[int]
     ) -> Optional[ValueType]:
         if self.config.direction == StepDirection.INC:
             return sum(x1 - x0 for x0, x1 in itertools.pairwise(values) if x1 > x0)

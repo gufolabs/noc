@@ -209,7 +209,7 @@ class CPECheck(DiscoveryCheck):
         cpe.save()
         return cpe
 
-    def cleanup_caps(self, result: Dict[str, Any]) -> Dict[str, str]:
+    def cleanup_caps(self, result: dict[str, Any]) -> dict[str, str]:
         r = {}
         for attr_name, caps in self.caps_map.items():
             if result.get(attr_name):

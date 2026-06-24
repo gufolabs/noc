@@ -81,7 +81,7 @@ class StormProtection:
         self.storm_record_ttl = storm_record_ttl
         self.alarm_class = alarm_class
         self.service = get_service()
-        self.storm_table: Dict[str, StormRecord] = defaultdict(
+        self.storm_table: dict[str, StormRecord] = defaultdict(
             lambda: StormRecord(
                 messages_count=0,
                 verbose=False,

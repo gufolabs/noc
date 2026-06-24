@@ -62,7 +62,7 @@ class DataSourceRecord:
     def is_out_ttl(self, ts: int) -> bool:
         return (ts - self.last_ts) > (self.ttl + 3600)
 
-    def get_check_status_msg(self, status: bool) -> Dict[str, Any]:
+    def get_check_status_msg(self, status: bool) -> dict[str, Any]:
         """"""
         r = {
             "check": NODATA,
@@ -98,7 +98,7 @@ class NoDataChecker:
         self.alarm_class = alarm_class
         self.service = get_service()
         self.collector = collector or self.service.name
-        self.source_table: Dict[Tuple[str, str, str], DataSourceRecord] = {}
+        self.source_table: dict[tuple[str, str, str], DataSourceRecord] = {}
 
     def initialize(self):
         """
@@ -152,7 +152,7 @@ class NoDataChecker:
         logger.info("End of NoData Check round: found %d no data devices", no_data_count)
         logger.info("Data Sources: %s", len(self.source_table))
 
-    async def register_status_messages(self, records: Dict[str, Dict[str, Any]]):
+    async def register_status_messages(self, records: dict[str, dict[str, Any]]):
         """Register status message"""
         logger.debug("Register status message on: %s", records)
         # id: str

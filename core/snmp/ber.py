@@ -38,18 +38,18 @@ class BERDecoder:
         self.last_oid: Optional[str] = None
         self.oid_msg: Optional[bytes] = None
         self.raw_pdu: Optional[bytes] = None
-        self.raw_varbinds: List[Tuple[str, Any, bytes]] = []
+        self.raw_varbinds: list[tuple[str, Any, bytes]] = []
         self.display_hints = display_hints
         self.include_raw = include_raw
 
     @staticmethod
-    def split_tlv(msg: bytes) -> Tuple[bytes, bytes]:
+    def split_tlv(msg: bytes) -> tuple[bytes, bytes]:
         decoder_id, tag_class, tag, is_constructed, is_implicit, offset, length = parse_tlv_header(
             msg
         )
         return msg[offset : offset + length], msg[offset + length :]
 
-    def parse_tlv(self, msg: bytes) -> Tuple[Any, bytes]:
+    def parse_tlv(self, msg: bytes) -> tuple[Any, bytes]:
         decoder_id, tag_class, tag, is_constructed, is_implicit, offset, length = parse_tlv_header(
             msg
         )
@@ -169,7 +169,7 @@ class BERDecoder:
     def parse_p_t61_string(self, msg: bytes) -> str:
         return smart_text(msg, errors="ignore")
 
-    def parse_c_octetstring(self, msg: bytes) -> List[str]:
+    def parse_c_octetstring(self, msg: bytes) -> list[str]:
         r = []
         while msg:
             v, msg = self.parse_tlv(msg)
@@ -481,7 +481,7 @@ encoder = BEREncoder()
 
 def decode(
     msg: bytes, include_raw: bool = False
-) -> Tuple[Tuple[int, bytes, List[Any]], Optional[bytes], List[Tuple[str, Any, bytes]]]:
+) -> tuple[tuple[int, bytes, list[Any]], Optional[bytes], list[tuple[str, Any, bytes]]]:
     decoder = BERDecoder(include_raw=include_raw)
     data, _ = decoder.parse_tlv(msg)
     return data, decoder.raw_pdu, decoder.raw_varbinds

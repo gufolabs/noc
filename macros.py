@@ -163,7 +163,7 @@ def define_env(env):
         raise FileNotFoundError(path)
 
     @env.macro
-    def show_highlights(items: List[Dict[str, str]]) -> str:
+    def show_highlights(items: list[dict[str, str]]) -> str:
         r = [
             "<section class='noc-highlights-section'>",
             # "<div class='dark-mask'></div>",
@@ -181,7 +181,7 @@ def define_env(env):
         return "\n".join(r)
 
     @env.macro
-    def ui_path(*args: List[str]) -> str:
+    def ui_path(*args: list[str]) -> str:
         """
         Renders neat UI path in form `ARG1 > ARG2 > ARG3`
         """

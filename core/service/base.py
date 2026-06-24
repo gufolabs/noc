@@ -361,7 +361,7 @@ class BaseService:
         self.logger.warning("SIGTERM caught, Stopping")
         self.stop()
 
-    def get_service_address(self) -> Tuple[str, int]:
+    def get_service_address(self) -> tuple[str, int]:
         """
         Returns an (address, port) for HTTP service listener
         """
@@ -724,7 +724,7 @@ class BaseService:
         stream: str,
         partition: Optional[int] = None,
         key: Optional[bytes] = None,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: Optional[dict[str, bytes]] = None,
     ):
         """
         Schedule publish request
@@ -824,7 +824,7 @@ class BaseService:
                     await asyncio.sleep(to_sleep)
 
     async def publish_metrics(
-        self, queue: QBuffer, headers: Optional[Dict[str, bytes]] = None
+        self, queue: QBuffer, headers: Optional[dict[str, bytes]] = None
     ) -> None:
         """
         Schedule metrics to send stream
@@ -842,7 +842,7 @@ class BaseService:
                     await asyncio.sleep(to_sleep)
 
     def register_metrics(
-        self, table: str, metrics: List[Dict[str, Any]], key: Optional[int] = None
+        self, table: str, metrics: list[dict[str, Any]], key: Optional[int] = None
     ):
         """
         Schedule metrics to be sent to the `table`.
@@ -894,7 +894,7 @@ class BaseService:
                 self.logger.info("Failed to get MX route settings: %s", e)
                 await asyncio.sleep(1)
 
-    async def update_route(self, data: Dict[str, Any]) -> None:
+    async def update_route(self, data: dict[str, Any]) -> None:
         self.router.change_route(data)
 
     async def delete_route(self, r_id: str) -> None:
@@ -904,7 +904,7 @@ class BaseService:
         self,
         data: Any,
         message_type: MessageType,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: Optional[dict[str, bytes]] = None,
         sharding_key: int = 0,
         store: bool = False,
     ):
@@ -940,7 +940,7 @@ class BaseService:
         self,
         data: Any,
         message_type: MessageType,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: Optional[dict[str, bytes]] = None,
         sharding_key: int = 0,
         group_key: Optional[str] = None,
     ):

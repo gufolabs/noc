@@ -103,7 +103,7 @@ class ReportEngine:
         cls,
         rc: ReportConfig,
         start: datetime.datetime,
-        params: Dict[str, Any],
+        params: dict[str, Any],
         end: Optional[datetime.datetime] = None,
         successfully: bool = False,
         canceled: bool = False,
@@ -164,7 +164,7 @@ class ReportEngine:
         """Align end date parameter"""
         return (date + datetime.timedelta(days=1)).replace(hour=0, minute=0, second=0)
 
-    def clean_param(self, rc: ReportConfig, params: Dict[str, Any]):
+    def clean_param(self, rc: ReportConfig, params: dict[str, Any]):
         """Clean and validata input params"""
         # clean_params = params.copy()
         clean_params = {}
@@ -184,8 +184,8 @@ class ReportEngine:
 
     @staticmethod
     def parse_fields(
-        template: Template, fields: Optional[List[str]] = None
-    ) -> Dict[str, List[str]]:
+        template: Template, fields: Optional[list[str]] = None
+    ) -> dict[str, list[str]]:
         """Parse requested fields for apply to datasource query"""
         logger.info("Request datasource fields for template '%s'", template.code)
         if not template.bands_format and not fields:
@@ -209,7 +209,7 @@ class ReportEngine:
                 r[f].append(ds[0])
         return r
 
-    def load_bands(self, rc: ReportConfig, params: Dict[str, Any], template: Template) -> Band:
+    def load_bands(self, rc: ReportConfig, params: dict[str, Any], template: Template) -> Band:
         """
         Generate Report Bands from Config
         Attrs:
@@ -261,14 +261,14 @@ class ReportEngine:
 
     @classmethod
     def get_datasets(
-        cls, queries: List[ReportQuery], ctx: Dict[str, Any], fields_map: Dict[str, List[str]]
-    ) -> List[DataSet]:
+        cls, queries: list[ReportQuery], ctx: dict[str, Any], fields_map: dict[str, list[str]]
+    ) -> list[DataSet]:
         """
         Attrs:
             queries: Configuration dataset
             ctx: Report params
         """
-        result: List[DataSet] = []
+        result: list[DataSet] = []
         if not queries:
             return []
         joined_fields_map = {}
@@ -308,8 +308,8 @@ class ReportEngine:
 
     @classmethod
     def query_datasource(
-        cls, query: ReportQuery, ctx: Dict[str, Any], fields: Optional[List[str]] = None
-    ) -> Tuple[Optional[pl.DataFrame], List[str]]:
+        cls, query: ReportQuery, ctx: dict[str, Any], fields: Optional[list[str]] = None
+    ) -> tuple[Optional[pl.DataFrame], list[str]]:
         """
         Resolve Datasource for Query
         Attrs:

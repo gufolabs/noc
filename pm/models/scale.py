@@ -82,7 +82,7 @@ class Scale(Document):
         return Scale.objects.filter(name=cls.DEFAULT_SCALE_NAME).first()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -127,7 +127,7 @@ class Scale(Document):
     @classmethod
     def humanize(
         cls, value: Union[int, float], base: int = 10, min_exp: int = 3
-    ) -> Tuple[float, str]:
+    ) -> tuple[float, str]:
         """
         Humanize integer value for Scale suffix
         Attrs:

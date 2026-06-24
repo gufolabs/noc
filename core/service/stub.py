@@ -79,7 +79,7 @@ class ServiceStub:
         for t in config.rpc.retry_timeout.split(","):
             yield float(t)
 
-    def register_metrics(self, table: str, data: List[Dict[str, Any]], key: Optional[int] = None):
+    def register_metrics(self, table: str, data: list[dict[str, Any]], key: Optional[int] = None):
         self._metrics[table] += data
 
     def init_publisher(self) -> None:
@@ -120,7 +120,7 @@ class ServiceStub:
         stream: str,
         partition: Optional[int] = None,
         key: Optional[bytes] = None,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: Optional[dict[str, bytes]] = None,
     ):
         if not self.publish_queue:
             self.init_publisher()
@@ -133,7 +133,7 @@ class ServiceStub:
         self,
         data: Any,
         message_type: MessageType,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: Optional[dict[str, bytes]] = None,
         sharding_key: int = 0,
     ):
         """

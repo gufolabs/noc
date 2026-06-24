@@ -27,7 +27,7 @@ class EscalatorService(FastAPIService):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.shards: Dict[str, Scheduler] = {}
+        self.shards: dict[str, Scheduler] = {}
 
     async def on_activate(self):
         self.apply_shards()
@@ -43,7 +43,7 @@ class EscalatorService(FastAPIService):
 
     def apply_shards(self):
         # Get shards settings
-        shard_threads: DefaultDict[str, int] = defaultdict(int)
+        shard_threads: defaultdict[str, int] = defaultdict(int)
         shard_threads[DEFAULT_TTSYSTEM_SHARD] = config.escalator.max_threads
         for s in TTSystem.objects.all():
             if not s.is_active:

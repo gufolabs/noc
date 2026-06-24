@@ -185,7 +185,7 @@ class Command(BaseCommand):
         self,
         queue: Optional[asyncio.Queue],
         lock: asyncio.Lock,
-        addr_list: List[str],
+        addr_list: list[str],
         checks: str,
         ports: str,
         bar: progressbar.ProgressBar,
@@ -325,7 +325,7 @@ class Command(BaseCommand):
         input: Iterable[str],
         rule: Optional[Any] = None,
         ip_scan: bool = False,
-    ) -> List[str]:
+    ) -> list[str]:
         """Getting addresses for net-scan"""
         r = set()
         for a in addresses:
@@ -391,7 +391,7 @@ class Command(BaseCommand):
     @staticmethod
     def parse_credentials(
         community, snmp_user
-    ) -> List[Tuple[Protocol, Union[SNMPCredential, SNMPv3Credential]]]:
+    ) -> list[tuple[Protocol, Union[SNMPCredential, SNMPv3Credential]]]:
         """
         Parse SNMP Credentials arguments
         Args:
@@ -458,7 +458,7 @@ class Command(BaseCommand):
             )
 
     @staticmethod
-    def parse_data(data: List[DataItem], params: Dict[str, Any]) -> Dict[str, str]:
+    def parse_data(data: list[DataItem], params: dict[str, Any]) -> dict[str, str]:
         """Parse collected data"""
         r = {}
         if not data:
@@ -475,7 +475,7 @@ class Command(BaseCommand):
             params["chassis_id"] = r[CHASSIS_OID]
         return r
 
-    def print_out(self, address: str, rtt: float, checks: List[ProtocolCheckResult]):
+    def print_out(self, address: str, rtt: float, checks: list[ProtocolCheckResult]):
         """
         Format out result
         """

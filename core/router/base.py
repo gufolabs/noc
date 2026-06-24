@@ -44,13 +44,13 @@ class Router:
     DEFAULT_ETL_EVENT_PUSH_JOB_CHAIN = "default_etl_event_push"
 
     def __init__(self):
-        self.chains: DefaultDict[bytes, List[Route]] = defaultdict(list)
-        self.routes: Dict[str, Route] = {
+        self.chains: defaultdict[bytes, list[Route]] = defaultdict(list)
+        self.routes: dict[str, Route] = {
             self.DEFAULT_N_CHAIN: DefaultNotificationRoute(),  # Add default route for notification
             self.DEFAULT_JOB_CHAIN: DefaultJobRoute(),  # Add default rout for send to job
             self.DEFAULT_ETL_EVENT_PUSH_JOB_CHAIN: DefaultETLEventRoute(),
         }
-        self.stream_partitions: Dict[str, int] = {}
+        self.stream_partitions: dict[str, int] = {}
         self.svc = get_service()
         # Add default
         self.rebuild_chains([b"*", b"job"])
@@ -79,7 +79,7 @@ class Router:
 
     @classmethod
     def build_message(
-        cls, msg: Message, body: Dict[str, Any], headers: Dict[str, bytes]
+        cls, msg: Message, body: dict[str, Any], headers: dict[str, bytes]
     ) -> Message:
         if not isinstance(body, bytes):
             body = orjson.dumps(body)
@@ -201,7 +201,7 @@ class Router:
         stream: str,
         partition: Optional[int] = None,
         key: Optional[bytes] = None,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: Optional[dict[str, bytes]] = None,
     ):
         # if self.out_queue:
         #    self.out_queue.put(stream, partition, data=value)
@@ -219,7 +219,7 @@ class Router:
     def get_message(
         data: Any,
         message_type: str,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: Optional[dict[str, bytes]] = None,
         sharding_key: int = 0,
         raw_value: bool = False,
     ) -> Message:

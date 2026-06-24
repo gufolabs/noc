@@ -185,7 +185,7 @@ class Firmware(Document):
         return self._profile
 
     @cachetools.cached(_object_settings_cache, key=lambda x: str(x.id))
-    def get_effective_object_settings(self) -> Dict[str, Union[str, int]]:
+    def get_effective_object_settings(self) -> dict[str, Union[str, int]]:
         from .firmwarepolicy import FirmwarePolicy
 
         r = {}

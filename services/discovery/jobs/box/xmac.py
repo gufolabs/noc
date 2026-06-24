@@ -38,7 +38,7 @@ class XMACCheck(TopologyDiscoveryCheck):
                 self.process_cloud(iface, macs[if_name])
 
     def process_direct_downlink(
-        self, iface: Interface, macs: List[MAC], name: Optional[str] = None
+        self, iface: Interface, macs: list[MAC], name: Optional[str] = None
     ) -> None:
         """
         Direct downlink method. When:
@@ -81,7 +81,7 @@ class XMACCheck(TopologyDiscoveryCheck):
         self.confirm_interface_link(iface, ri)
 
     def process_chained_downlink(
-        self, iface: Interface, macs: List[MAC], name: Optional[str] = None
+        self, iface: Interface, macs: list[MAC], name: Optional[str] = None
     ) -> None:
         """
         Chained downlink method. When:
@@ -172,7 +172,7 @@ class XMACCheck(TopologyDiscoveryCheck):
         for link in links:
             self.confirm_interface_link(*link)
 
-    def process_cloud(self, iface: Interface, macs: List[MAC], name: Optional[str] = None) -> None:
+    def process_cloud(self, iface: Interface, macs: list[MAC], name: Optional[str] = None) -> None:
         """
         Cloud downlink methods. When:
 
@@ -235,7 +235,7 @@ class XMACCheck(TopologyDiscoveryCheck):
             self.logger.info("[%s][%s] Empty cloud. Skipping.", name, iface.name)
 
     @staticmethod
-    def find_direct_uplinks(mo: ManagedObject) -> List[Interface]:
+    def find_direct_uplinks(mo: ManagedObject) -> list[Interface]:
         """
         Find all `direct uplinks` interfaces for given object
 
@@ -250,15 +250,15 @@ class XMACCheck(TopologyDiscoveryCheck):
 
     @staticmethod
     def find_direct_uplinks_downlinks(
-        objects: List[ManagedObject],
-    ) -> Dict[ManagedObject, Tuple[List[Interface], List[Interface]]]:
+        objects: list[ManagedObject],
+    ) -> dict[ManagedObject, tuple[list[Interface], list[Interface]]]:
         """
         For all given objects return all direct uplink/direct downlink ports
 
         :param objects: List of Managed Objects
         :returns: Dict of ManagedObject -> (List of direct uplinks, List of direct downlinks)
         """
-        r: Dict[ManagedObject, Tuple[List[Interface], List[Interface]]] = {}
+        r: dict[ManagedObject, tuple[list[Interface], list[Interface]]] = {}
         for iface in Interface.objects.filter(
             managed_object__in=[mo.id for mo in objects], type="physical"
         ):

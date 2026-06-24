@@ -93,7 +93,7 @@ class TTSystemConfig(BaseModel):
     telemetry_sample: int = 0
     max_escalation_retries: int = 30
     global_limit: Optional[int] = None
-    actions: Optional[List[TTAction]] = None
+    actions: Optional[list[TTAction]] = None
     promote_item: str = "D"
     promote_group_tt: bool = False
 
@@ -152,7 +152,7 @@ class EscalationItem(BaseModel):
 
     id: str
     tt_id: str
-    ctx: Optional[Dict[str, Any]] = None
+    ctx: Optional[dict[str, Any]] = None
     label: Optional[str] = None
     item_status: str = "new"  # changed/removed
     item: str = "other"  # service, managed_object, container
@@ -202,17 +202,17 @@ class EscalationContext(BaseModel):
     """
 
     subject: str
-    items: List[EscalationItem]
+    items: list[EscalationItem]
     id: Optional[str] = None
     body: Optional[str] = None
     timestamp: Optional[datetime] = None
     queue: Optional[str] = None
     reason: Optional[str] = None
     login: Optional[str] = None
-    actions: Optional[List[TTActionContext]] = None
+    actions: Optional[list[TTActionContext]] = None
     is_unavailable: bool = False
     assigned: Optional[TTUser] = None
-    attachments: Optional[List[Attachment]] = None
+    attachments: Optional[list[Attachment]] = None
 
     @property
     def leader(self) -> EscalationItem:
@@ -307,7 +307,7 @@ class TTInfo(BaseModel):
     final_reason: Optional[TTRef] = None
     dept: Optional[TTRef] = None
     close_dept: Optional[TTRef] = None
-    comments: Optional[List[TTCommentInfo]] = None
+    comments: Optional[list[TTCommentInfo]] = None
 
 
 class TTCommentRequest(BaseModel):

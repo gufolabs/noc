@@ -39,7 +39,7 @@ class SpecChange(EmbeddedDocument):
     changes = StringField()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"date": self.date.isoformat(), "changes": self.changes}
 
 
@@ -49,7 +49,7 @@ class SpecAnswer(EmbeddedDocument):
     value = StringField()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"name": self.name, "type": self.type, "value": self.value}
 
 
@@ -89,7 +89,7 @@ class Spec(Document):
         return Spec.objects.filter(name=name).first()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "$collection": self._meta["json_collection"],

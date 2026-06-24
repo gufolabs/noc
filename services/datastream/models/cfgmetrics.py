@@ -17,18 +17,18 @@ class CollectorMapRule(BaseModel):
     field: str
     sender: str = Any
     allow_partial_match: bool = False
-    aliases: Optional[List[str]] = None
-    labels: Optional[List[str]] = None
+    aliases: Optional[list[str]] = None
+    labels: Optional[list[str]] = None
     unit: Optional[str] = None
     preference: int = 0
 
 
 class ScopeInfo(BaseModel):
     scope: str
-    key_fields: List[str]
-    key_labels: List[str]
-    required_labels: List[str]
-    units: Dict[str, str]
+    key_fields: list[str]
+    key_labels: list[str]
+    required_labels: list[str]
+    units: dict[str, str]
     enable_timedelta: bool = False
 
 
@@ -37,4 +37,4 @@ class CfgMetric(BaseModel):
     table: str
     field: str
     scope: ScopeInfo
-    rules: Optional[List[CollectorMapRule]] = None
+    rules: Optional[list[CollectorMapRule]] = None

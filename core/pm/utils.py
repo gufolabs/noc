@@ -40,7 +40,7 @@ class Condition:
     field: str
     value: Any
     condition: str = "="
-    labels: Optional[List[str]] = None
+    labels: Optional[list[str]] = None
 
     def get_expr(self) -> str:
         if self.condition == "in":
@@ -60,7 +60,7 @@ class MetricValue:
     """
 
     value: float
-    meta: Dict[str, str]
+    meta: dict[str, str]
     value_scale: Optional["Scale"] = None
     value_units: Optional["MeasurementUnits"] = None
     value_type: Optional["MetricType"] = None
@@ -120,7 +120,7 @@ class QueryField:
     Query Field class, Describe field that append to requested from DB
     """
 
-    function_alias: Dict[str, Function] = {
+    function_alias: dict[str, Function] = {
         "last": Function("argMax", alias="last", args="ts"),
         "count": Function("count", alias="count"),
         "distinct": Function("distinct", alias="distinct"),
@@ -186,7 +186,7 @@ class QuerySet:
     def __init__(
         self,
         proxy: "MetricScopeProxy",
-        group_by: Optional[Tuple[str, ...]] = None,
+        group_by: Optional[tuple[str, ...]] = None,
     ):
         """
         # Cached return values
@@ -195,10 +195,10 @@ class QuerySet:
             group_by: Group by fields list ?function
         """
         self.metric_proxy: "MetricScopeProxy" = proxy
-        self.fields: Dict[str, QueryField] = {}
+        self.fields: dict[str, QueryField] = {}
         self.group_by = group_by or []
         # self.query_cache: Dict[str, List["MetricValue"]] = defaultdict(list)
-        self.query_cache: Dict[FrozenSet[Tuple[str, str]], Dict[str, List[MetricValue]]] = {}
+        self.query_cache: dict[frozenset[tuple[str, str]], dict[str, list[MetricValue]]] = {}
         # List Metric Values - series
         self.last_field: Optional[str] = None
         self.include_last_ts: bool = False
@@ -249,7 +249,7 @@ class QuerySet:
         return field in self.requested_fields
 
     @property
-    def requested_fields(self) -> Set[str]:
+    def requested_fields(self) -> set[str]:
         fields = set()
         for r in self.query_cache.values():
             fields |= set(r.keys())
@@ -341,7 +341,7 @@ class QuerySet:
         self.fields[query.alias] = query
 
     # get_group_keys ?, get_values by key: list keys, -> getting values
-    def get_group_key(self, keys: Dict[str, str]) -> FrozenSet[Tuple[str, str]]:
+    def get_group_key(self, keys: dict[str, str]) -> frozenset[tuple[str, str]]:
         """
         Create group key by query fields:
         * Scope key fields
@@ -387,7 +387,7 @@ class QuerySet:
             return r.humanize(with_units=with_units)
         return "-"
 
-    def values(self, **kwargs) -> Iterable[Dict[str, MetricValue]]:
+    def values(self, **kwargs) -> Iterable[dict[str, MetricValue]]:
         """
         Getting requested query fields and filter by meta:
         Attrs:
@@ -440,11 +440,11 @@ class MetricScopeProxy:
         """
         self.scope: MetricScope = scope
         self.query: Optional[str] = query
-        self.last_group_by: Optional[Tuple[str, ...]] = None
-        self.queries: Dict[Optional[Tuple[str, ...]], QuerySet] = {}
-        self.query_conditions: List[Condition] = []
+        self.last_group_by: Optional[tuple[str, ...]] = None
+        self.queries: dict[Optional[tuple[str, ...]], QuerySet] = {}
+        self.query_conditions: list[Condition] = []
 
-    def add_conditions(self, conditions: Dict[str, Any]):
+    def add_conditions(self, conditions: dict[str, Any]):
         """Add query condition"""
         # Key conditions, Meta Conditions, Label condition
         for c in conditions:
@@ -460,7 +460,7 @@ class MetricScopeProxy:
                 )
             )
 
-    def add_queryset(self, group_by: Optional[List[str]] = None):
+    def add_queryset(self, group_by: Optional[list[str]] = None):
         """
         Add queryset for key by group_by. If not set used default group key
         Attrs:
@@ -477,7 +477,7 @@ class MetricScopeProxy:
         self.last_group_by = group_by
         return self.queries[group_by]
 
-    def get_queryset(self, group_by: Optional[List[str]] = None) -> Optional[QuerySet]:
+    def get_queryset(self, group_by: Optional[list[str]] = None) -> Optional[QuerySet]:
         """
         Get queryset by group key
         Attrs:
@@ -500,8 +500,8 @@ class MetricScopeProxy:
     def __call__(
         self,
         *args,
-        queries: Optional[List[Union[str, QueryField]]] = None,
-        group_by: Optional[List[str]] = None,
+        queries: Optional[list[Union[str, QueryField]]] = None,
+        group_by: Optional[list[str]] = None,
         **kwargs,
     ) -> "QuerySet":
         qs = self.get_queryset(group_by)
@@ -527,7 +527,7 @@ class MetricProxy:
     """
 
     def __init__(self, query_ts: Optional[datetime.datetime] = None, **kwargs):
-        self._scopes: Dict[str, "MetricScopeProxy"] = {}  # Scope Storage
+        self._scopes: dict[str, "MetricScopeProxy"] = {}  # Scope Storage
         self._conditions = kwargs
 
     def __getattr__(self, item) -> "MetricScopeProxy":
@@ -588,7 +588,7 @@ class MetricProxy:
 
 def get_objects_metrics(
     managed_objects: Union[Iterable, int],
-) -> Tuple[Dict[Any, Dict[str, Dict[str, int]]], Dict[Any, datetime.datetime]]:
+) -> tuple[dict[Any, dict[str, dict[str, int]]], dict[Any, datetime.datetime]]:
     """
     Attrs:
         managed_objects:
@@ -616,17 +616,17 @@ def get_objects_metrics(
     object_profiles = {
         mo.object_profile.id for mo in ManagedObject.objects.filter(bi_id__in=list(bi_map))
     }
-    msd: Dict[str, str] = {}  # Map ScopeID -> TableName
+    msd: dict[str, str] = {}  # Map ScopeID -> TableName
     labels_table = set()
     for ms in MetricScope.objects.filter():
         msd[ms.id] = ms.table_name
         if ms.labels:
             labels_table.add(ms.table_name)
-    mts: Dict[str, Tuple[str, str, str]] = {
+    mts: dict[str, tuple[str, str, str]] = {
         str(mt.id): (msd[mt.scope.id], mt.field_name, mt.name) for mt in MetricType.objects.all()
     }  # Map Metric Type ID -> table_name, column_name, MetricType Name
     mmm = set()
-    op_fields_map: DefaultDict[str, List[str]] = defaultdict(list)
+    op_fields_map: defaultdict[str, list[str]] = defaultdict(list)
     for op in ManagedObjectProfile.objects.filter(id__in=object_profiles):
         if not op.metrics:
             continue
@@ -637,7 +637,7 @@ def get_objects_metrics(
     ch = ch_connection()
     mtable = []  # mo_id, mac, iface, ts
     metric_map = {}
-    last_ts: Dict["ManagedObject", datetime.datetime] = {}  # mo -> ts
+    last_ts: dict["ManagedObject", datetime.datetime] = {}  # mo -> ts
 
     for table, fields in itertools.groupby(sorted(mmm, key=lambda x: x[0]), key=lambda x: x[0]):
         fields = list(fields)
@@ -687,10 +687,10 @@ def get_objects_metrics(
 
 
 def get_interface_metrics(
-    managed_objects: Union[Iterable, int], metrics: Optional[Dict[str, Any]] = None
-) -> Tuple[
-    Dict[Any, Dict[str, Dict[str, Union[float, int]]]],
-    Dict[Any, datetime.datetime],
+    managed_objects: Union[Iterable, int], metrics: Optional[dict[str, Any]] = None
+) -> tuple[
+    dict[Any, dict[str, dict[str, Union[float, int]]]],
+    dict[Any, datetime.datetime],
 ]:
     """
 
@@ -718,7 +718,7 @@ def get_interface_metrics(
         }
     if not isinstance(managed_objects, Iterable):
         managed_objects = [managed_objects]
-    bi_map: Dict[str, Any] = {str(getattr(mo, "bi_id", mo)): mo for mo in managed_objects}
+    bi_map: dict[str, Any] = {str(getattr(mo, "bi_id", mo)): mo for mo in managed_objects}
     query_interval: float = (
         ManagedObjectProfile.get_max_metrics_interval(
             {mo.object_profile.id for mo in ManagedObject.objects.filter(bi_id__in=list(bi_map))}
@@ -752,10 +752,10 @@ def get_interface_metrics(
         ", ".join(bi_map),
     )
     ch = ch_connection()
-    metric_map: DefaultDict["ManagedObject", Dict[str, Dict[str, Union[int, float]]]] = defaultdict(
+    metric_map: defaultdict["ManagedObject", dict[str, dict[str, Union[int, float]]]] = defaultdict(
         dict
     )
-    last_ts: Dict["ManagedObject", datetime.datetime] = {}  # mo -> ts
+    last_ts: dict["ManagedObject", datetime.datetime] = {}  # mo -> ts
     try:
         results = ch.execute(post=SQL, return_raw=True)
         results = orjson.loads(results)

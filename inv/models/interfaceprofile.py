@@ -71,7 +71,7 @@ class MatchRule(EmbeddedDocument):
     # name_patter = StringField()
     # description_patter = StringField()
 
-    def get_match_expr(self) -> Dict[str, Any]:
+    def get_match_expr(self) -> dict[str, Any]:
         r = {}
         if self.labels:
             r["labels"] = {"$all": list(self.labels)}
@@ -200,7 +200,7 @@ class InterfaceProfile(Document):
     default_notification_group = ForeignKeyField(NotificationGroup, required=False)
     metrics_default_interval = IntField(default=0, min_value=0)
     # Interface profile metrics
-    metrics: List[InterfaceProfileMetrics] = EmbeddedDocumentListField(InterfaceProfileMetrics)
+    metrics: list[InterfaceProfileMetrics] = EmbeddedDocumentListField(InterfaceProfileMetrics)
     # Alarm weight
     weight = IntField(default=0)
     # User network interface
@@ -224,7 +224,7 @@ class InterfaceProfile(Document):
         default="D",
     )
     # Capabilities
-    caps: List[CapsSettings] = EmbeddedDocumentListField(CapsSettings)
+    caps: list[CapsSettings] = EmbeddedDocumentListField(CapsSettings)
     # Dynamic Profile Classification
     dynamic_classification_policy = StringField(
         choices=[("R", "By Rule"), ("D", "Disable")],
@@ -331,7 +331,7 @@ class InterfaceProfile(Document):
     @cachetools.cachedmethod(
         operator.attrgetter("_interface_profile_metrics"), lock=lambda _: metrics_lock
     )
-    def get_interface_profile_metrics(cls, p_id: ObjectId) -> Dict[str, MetricConfig]:
+    def get_interface_profile_metrics(cls, p_id: ObjectId) -> dict[str, MetricConfig]:
         r = {}
         ipr = InterfaceProfile.get_by_id(p_id)
         if not ipr:
@@ -360,7 +360,7 @@ class InterfaceProfile(Document):
     def is_default(self):
         return self.name == self.DEFAULT_PROFILE_NAME
 
-    def get_caps_config(self) -> Dict[str, CapsConfig]:
+    def get_caps_config(self) -> dict[str, CapsConfig]:
         """Local Capabilities Config (from Profile)"""
         r = {}
         for c in self.caps:
@@ -405,7 +405,7 @@ class InterfaceProfile(Document):
         return matcher(ctx)
 
     @classmethod
-    def get_profiles_matcher(cls, subinterface: bool = False) -> Tuple[Tuple[str, Callable], ...]:
+    def get_profiles_matcher(cls, subinterface: bool = False) -> tuple[tuple[str, Callable], ...]:
         """Build matcher based on Profile Match Rules"""
         r = {}
         if subinterface:

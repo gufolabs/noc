@@ -38,7 +38,7 @@ class PartNumbersDS(BaseDataSource):
         fields: Optional[Iterable[str]] = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[int, str, Any]]:
+    ) -> AsyncIterable[tuple[int, str, Any]]:
         row_num = 0
         for m in ObjectModel.objects.all():
             row_num += 1

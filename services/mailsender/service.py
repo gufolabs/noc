@@ -58,7 +58,7 @@ class MailSenderService(FastAPIService):
         )
 
     def send_mail(
-        self, message_id: int, data: Dict[str, Any], address_to: Optional[str] = None
+        self, message_id: int, data: dict[str, Any], address_to: Optional[str] = None
     ) -> None:
         attachments = data.get("attachments", [])
         now = datetime.datetime.now(config.timezone)

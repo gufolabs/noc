@@ -18,19 +18,19 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     def migrate(self):
         # Get model connections
-        model_conns: Dict[ObjectId, Set[str]] = {}
+        model_conns: dict[ObjectId, set[str]] = {}
         for doc in self.mongo_db["noc.objectmodels"].find({}, {"_id": 1, "connections": 1}):
             conns = doc.get("connections")
             if not conns:
                 continue
             model_conns[doc["_id"]] = {c["name"] for c in conns}
         # Get object models
-        obj_models: Dict[ObjectId, ObjectId] = {
+        obj_models: dict[ObjectId, ObjectId] = {
             doc["_id"]: doc["model"]
             for doc in self.mongo_db["noc.objects"].find({}, {"_id": 1, "model": 1})
         }
         # Process connections
-        to_prune: List[ObjectId] = []
+        to_prune: list[ObjectId] = []
         for doc in self.mongo_db["noc.objectconnections"].find({}, {"_id": 1, "connection": 1}):
             conns = doc.get("connection")
             if not doc:
