@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # Third-party modules
 from xlsxwriter.workbook import Workbook
@@ -87,7 +86,7 @@ class SimpleTableFormatter(DataFormatter):
             book.close()
 
     @staticmethod
-    def get_col_widths(dataframe, out_columns, index_filed: Optional[str] = None):
+    def get_col_widths(dataframe, out_columns, index_filed: str | None = None):
         # Then, we concatenate this to the max of the lengths
         # of column name and its values for each column, left to right
         r = [max([len(str(s)) for s in dataframe[col]] + [len(col)]) for col in out_columns]

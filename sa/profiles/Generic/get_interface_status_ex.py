@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Optional, Iterable, Tuple, List
+from typing import Iterable
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -53,7 +53,7 @@ class Script(BaseScript):
         return self.IFNAME_OID
 
     def get_iftable(
-        self, oid: str, ifindexes: Optional[list[str]] = None
+        self, oid: str, ifindexes: list[str] | None = None
     ) -> Iterable[tuple[str, str]]:
         """
         If ifindex - collect information on the given interfaces
@@ -89,7 +89,7 @@ class Script(BaseScript):
                 s[name] = f(v)
 
     def iter_interfaces(
-        self, interfaces: Optional[list[dict[str, str]]] = None
+        self, interfaces: list[dict[str, str]] | None = None
     ) -> Iterable[tuple[str, str]]:
         """
         Iterate over requested interfaces. Without requested - getting from iftable

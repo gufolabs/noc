@@ -7,7 +7,7 @@
 
 # Python modules
 import logging
-from typing import List, Iterable, Optional, Tuple
+from typing import Iterable
 
 # NOC modules
 from noc.core.script.scheme import Protocol, SNMPCredential, SNMPv3Credential, CLICredential
@@ -30,8 +30,8 @@ class SNMPSuggestsDiagnostic:
     def iter_checks(
         self,
         address: str,
-        labels: Optional[list[str]] = None,
-        groups: Optional[list[str]] = None,
+        labels: list[str] | None = None,
+        groups: list[str] | None = None,
         suggests_snmp: bool = True,
         **kwargs,
     ) -> Iterable[tuple[Check, ...]]:
@@ -59,9 +59,9 @@ class SNMPSuggestsDiagnostic:
 
     def get_check_status(
         self,
-        checks: Optional[list[CheckStatus]],
+        checks: list[CheckStatus] | None,
         **kwargs,
-    ) -> tuple[Optional[DiagnosticState], Optional[str]]:
+    ) -> tuple[DiagnosticState | None, str | None]:
         """Getting Diagnostic result: State and reason"""
         if checks is None:
             return DiagnosticState.unknown, None
@@ -78,7 +78,7 @@ class SNMPSuggestsDiagnostic:
     def process_result(
         self,
         checks: list[CheckResult],
-        source: Optional[InputSource] = InputSource.UNKNOWN,
+        source: InputSource | None = InputSource.UNKNOWN,
     ) -> tuple[list[CheckStatus], list[DataItem]]:
         """Processed checks result and Return Status"""
         return [CheckStatus.from_result(c, source=source) for c in checks], []
@@ -96,9 +96,9 @@ class CLISuggestsDiagnostic:
     def iter_checks(
         self,
         address: str,
-        labels: Optional[list[str]] = None,
-        groups: Optional[list[str]] = None,
-        profile: Optional[str] = None,
+        labels: list[str] | None = None,
+        groups: list[str] | None = None,
+        profile: str | None = None,
         suggests_cli: bool = True,
         **kwargs,
     ) -> Iterable[tuple[Check, ...]]:
@@ -150,9 +150,9 @@ class CLISuggestsDiagnostic:
 
     def get_check_status(
         self,
-        checks: Optional[list[CheckStatus]],
+        checks: list[CheckStatus] | None,
         **kwargs,
-    ) -> tuple[Optional[DiagnosticState], Optional[str]]:
+    ) -> tuple[DiagnosticState | None, str | None]:
         """Getting Diagnostic result: State and reason"""
         if checks is None:
             return DiagnosticState.unknown, None
@@ -169,7 +169,7 @@ class CLISuggestsDiagnostic:
     def process_result(
         self,
         checks: list[CheckResult],
-        source: Optional[InputSource] = InputSource.UNKNOWN,
+        source: InputSource | None = InputSource.UNKNOWN,
     ) -> tuple[list[CheckStatus], list[DataItem]]:
         """Processed checks result and Return Status"""
         return [CheckStatus.from_result(c, source=source) for c in checks], []

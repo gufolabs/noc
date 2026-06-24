@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Set, List, Tuple
 import re
 
 # Third-party modules

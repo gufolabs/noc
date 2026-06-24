@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from .base import BaseModel
@@ -16,7 +15,7 @@ from .typing import Reference
 class AdministrativeDomain(BaseModel):
     id: str
     name: str
-    parent: Optional[Reference["AdministrativeDomain"]] = None
-    default_pool: Optional[str] = None
+    parent: Reference["AdministrativeDomain"] | None = None
+    default_pool: str | None = None
 
     _csv_fields = ["id", "name", "parent", "default_pool"]

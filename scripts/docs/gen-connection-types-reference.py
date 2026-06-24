@@ -10,7 +10,7 @@ import time
 import re
 import json
 from dataclasses import dataclass
-from typing import Optional, List, Iterable, DefaultDict, Tuple, Dict
+from typing import Iterable
 import logging
 from collections import defaultdict
 from pathlib import Path
@@ -68,7 +68,7 @@ class Data:
 
     name: str
     description: str
-    c_group: Optional[list[str]]
+    c_group: list[str] | None
     genders: str
 
     @classmethod

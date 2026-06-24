@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Iterable
+from typing import Iterable
 from collections import defaultdict
 
 # NOC modules
@@ -30,10 +30,10 @@ DEFAULT_MODBUS_TCP_SLAVE = 255
 
 
 def find_agent(
-    agent_id: Optional[str] = None,
-    serial: Optional[str] = None,
-    mac: Optional[list[str]] = None,
-    ip: Optional[list[str]] = None,
+    agent_id: str | None = None,
+    serial: str | None = None,
+    mac: list[str] | None = None,
+    ip: list[str] | None = None,
 ):
     """
     Find agent by combination of credentials

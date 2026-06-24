@@ -8,7 +8,7 @@
 # Python modules
 import threading
 import operator
-from typing import Optional, Union, List
+from typing import Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -60,7 +60,7 @@ class CapsSettings(EmbeddedDocument):
             if self.capability.type.is_logical and self.set_label.is_scoped:
                 raise ValueError("On boolean type only not-scoped Set")
 
-    def get_config(self, exposed_models: Optional[list[str]] = None) -> CapsConfig:
+    def get_config(self, exposed_models: list[str] | None = None) -> CapsConfig:
         """"""
         return CapsConfig(
             default_value=self.default_value or None,
@@ -261,7 +261,7 @@ class CapsProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["CapsProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["CapsProfile"]:
         return CapsProfile.objects.filter(id=oid).first()
 
     @classmethod

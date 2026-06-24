@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Any, Optional, List, Iterator, Tuple
+from typing import Any, Iterator
 
 # NOC modules
 from noc.core.http.sync_client import HttpClient
@@ -19,11 +19,11 @@ class GeoCoderResult:
     exact: bool
     query: str
     path: list[str]
-    lon: Optional[float] = None
-    lat: Optional[float] = None
-    id: Optional[str] = None
-    address: Optional[str] = None
-    scope: Optional[str] = None
+    lon: float | None = None
+    lat: float | None = None
+    id: str | None = None
+    address: str | None = None
+    scope: str | None = None
 
 
 class BaseGeocoder:
@@ -96,7 +96,7 @@ class BaseGeocoder:
         return o
 
     @staticmethod
-    def maybe_float(f: Any) -> Optional[float]:
+    def maybe_float(f: Any) -> float | None:
         if isinstance(f, float):
             return f
         if f:

@@ -8,7 +8,6 @@
 # Python modules
 import re
 from collections import defaultdict
-from typing import List
 
 # NOC Modules
 from noc.sa.profiles.Generic.get_metrics import (

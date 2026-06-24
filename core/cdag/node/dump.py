@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import logging
-from typing import Optional, List, Dict, Callable
+from typing import Callable
 
 # Third-party modules
 from pydantic import BaseModel
@@ -18,8 +18,8 @@ from .base import BaseCDAGNode, Category, IN_OPTIONAL, IN_REQUIRED
 
 
 class DumpNodeConfig(BaseModel):
-    out_format: Optional[str] = None
-    output: Optional[str] = "console"
+    out_format: str | None = None
+    output: str | None = "console"
 
 
 NS = 1_000_000_000

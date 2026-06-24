@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import Optional, List, Dict, Any, Union
+from typing import Optional, Any
 
 # Third-party modules
 import bson
@@ -99,13 +99,11 @@ class FirmwarePolicy(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["FirmwarePolicy"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["FirmwarePolicy"]:
         return FirmwarePolicy.objects.filter(id=oid).first()
 
     @classmethod
-    def get_status(
-        cls, version: "Firmware", platform: Optional["Platform"] = None
-    ) -> Optional[str]:
+    def get_status(cls, version: "Firmware", platform: Optional["Platform"] = None) -> str | None:
         if not version:
             return None
         fps = cls.get_effective_policies(version, platform)

@@ -11,7 +11,7 @@ import re
 import operator
 from dataclasses import dataclass
 from threading import Lock
-from typing import Any, Dict, ClassVar, Literal, Optional
+from typing import Any, ClassVar, Literal
 
 # Third-party modules
 import cachetools
@@ -38,7 +38,7 @@ class SuggestProfile:
     value: str
     profile: str
     preference: int
-    name: Optional[str] = None
+    name: str | None = None
 
     _re_cache: ClassVar[dict[str, str]] = {}
 

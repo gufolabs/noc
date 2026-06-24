@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Optional, Iterable, Tuple
+from typing import Iterable
 
 
 class Environment:
@@ -18,11 +18,11 @@ class Environment:
     environment.
     """
 
-    def __init__(self, data: Optional[dict[str, str]] = None) -> None:
+    def __init__(self, data: dict[str, str] | None = None) -> None:
         self._data: dict[str, str] = {}
         if data:
             self._data.update(data.items())
-        self._parent: Optional[Environment] = None
+        self._parent: Environment | None = None
         self._is_dirty = False
 
     @property
@@ -50,7 +50,7 @@ class Environment:
         """
         self._parent = parent
 
-    def get(self, name: str) -> Optional[str]:
+    def get(self, name: str) -> str | None:
         """
         Check for key.
 

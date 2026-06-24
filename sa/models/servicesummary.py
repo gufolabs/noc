@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Optional, List, Iterable, Any, Tuple
+from typing import Iterable, Any
 from collections import defaultdict
 import logging
 
@@ -83,8 +83,8 @@ class ServiceSummary(Document):
     def get_service_for_object(
         cls,
         managed_object,
-        states: Optional[list[str]] = None,
-    ) -> Iterable[tuple[str, list[dict[str, Any]], str, Optional[str], Optional[str]]]:
+        states: list[str] | None = None,
+    ) -> Iterable[tuple[str, list[dict[str, Any]], str, str | None, str | None]]:
         """Build service from ServiceInstance"""
         from noc.sa.models.serviceinstance import ServiceInstance
 

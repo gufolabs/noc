@@ -8,7 +8,6 @@
 # Python modules
 import re
 import time
-from typing import Optional
 
 # NOC modules
 from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
@@ -539,7 +538,7 @@ class Script(BaseScript):
         54: "physical",  # propMultiplexor
     }
 
-    def clean_iftype(self, ifname: str, ifindex: Optional[int] = None) -> str:
+    def clean_iftype(self, ifname: str, ifindex: int | None = None) -> str:
         """SNMP Type detect"""
         if not getattr(self, "_iftype_map", None):
             self._iftype_map = {

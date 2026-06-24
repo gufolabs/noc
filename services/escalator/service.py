@@ -9,7 +9,6 @@
 # Python modules
 from collections import defaultdict
 import asyncio
-from typing import Dict, DefaultDict
 
 # NOC modules
 from noc.config import config

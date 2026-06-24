@@ -7,7 +7,6 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Optional, List
 
 
 @dataclass
@@ -27,5 +26,5 @@ class ObjectSnapshot:
 
     id: int
     level: int
-    links: Optional[list[int]] = None
-    uplinks: Optional[list[int]] = None
+    links: list[int] | None = None
+    uplinks: list[int] | None = None

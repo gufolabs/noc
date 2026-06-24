@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Callable, Union, TypeVar, List
+from typing import Callable, TypeVar
 from http import HTTPStatus
 
 # Third-party modules
@@ -47,7 +47,7 @@ class FilterExact(ListOp):
 
 
 class RefFilter(ListOp):
-    def __init__(self, name: str, model: Union[TModel, TDoc]):
+    def __init__(self, name: str, model: TModel | TDoc):
         super().__init__(name)
         self.model = model
 

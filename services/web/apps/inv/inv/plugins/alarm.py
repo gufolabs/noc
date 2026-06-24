@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, DefaultDict, List, Any
+from typing import Any
 from collections import defaultdict
 
 # Third-party modules

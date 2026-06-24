@@ -7,7 +7,7 @@
 
 # Python modules
 from threading import Lock
-from typing import Optional, Dict, Any
+from typing import Optional, Any
 import operator
 
 # Third-party modules
@@ -92,10 +92,10 @@ class Style(NOCModel):
         return r
 
     @property
-    def css_class(self) -> Optional[str]:
+    def css_class(self) -> str | None:
         return f"noc-color-{self.id}"
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.css_class
 
     @classmethod

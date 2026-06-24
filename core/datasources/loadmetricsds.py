@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import time
-from typing import Any, AsyncIterable, Dict, List, Optional, Iterable, Tuple
+from typing import Any, AsyncIterable, Iterable
 
 # Third-party modules
 import orjson
@@ -174,13 +174,13 @@ class LoadMetricsDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
+        fields: Iterable[str] | None = None,
         reporttype: str = None,
         start: datetime.datetime = None,
         end: datetime.datetime = None,
-        interface_profile: Optional[InterfaceProfile] = None,
+        interface_profile: InterfaceProfile | None = None,
         exclude_zero: bool = False,
-        admin_domain_ads: Optional[list[int]] = None,
+        admin_domain_ads: list[int] | None = None,
         *args,
         **kwargs,
     ) -> AsyncIterable[tuple[str, str]]:

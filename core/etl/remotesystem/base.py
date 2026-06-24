@@ -9,7 +9,7 @@
 import logging
 from dataclasses import dataclass
 from time import perf_counter
-from typing import Optional, List, Dict, Tuple, Any
+from typing import Any
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter
@@ -24,8 +24,8 @@ class StepResult:
     step: str
     loader: str
     duration: float
-    error: Optional[str] = None
-    summary: Optional[dict[str, int]] = None
+    error: str | None = None
+    summary: dict[str, int] | None = None
 
     @property
     def has_changed(self) -> bool:
@@ -90,7 +90,7 @@ class BaseRemoteSystem:
         return chain
 
     def extract(
-        self, extractors=None, incremental: bool = False, checkpoint: Optional[str] = None
+        self, extractors=None, incremental: bool = False, checkpoint: str | None = None
     ) -> list[StepResult]:
         extractors = extractors or []
         r = []

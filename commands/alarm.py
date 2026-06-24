@@ -10,7 +10,7 @@ import time
 import datetime
 import argparse
 import yaml
-from typing import Optional, Dict, Any, List
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -38,16 +38,16 @@ CLEAN_WINDOW = datetime.timedelta(weeks=1)
 
 class AlarmItem(BaseModel):
     op: str = "raise"  # raise, clear, set_status
-    managed_object: Optional[str] = None
+    managed_object: str | None = None
     alarm_class: str = "NOC | Managed Object | Ping Failed"
-    reference: Optional[str] = None
-    vars: Optional[dict[str, Any]] = None
-    severity: Optional[int] = None
+    reference: str | None = None
+    vars: dict[str, Any] | None = None
+    severity: int | None = None
     delay: int = 1
-    labels: Optional[list[str]] = None
+    labels: list[str] | None = None
     status: bool = False
-    remote_system: Optional[str] = None
-    remote_id: Optional[str] = None
+    remote_system: str | None = None
+    remote_id: str | None = None
 
     def get_message(self):
         r = {
@@ -84,7 +84,7 @@ class AlarmItem(BaseModel):
 
 
 class AlarmConfig(BaseModel):
-    repeat: Optional[int] = None  # repeat Alarm Item
+    repeat: int | None = None  # repeat Alarm Item
     delay: int = 1  # wait interval
     alarms: list[AlarmItem]
 
@@ -129,7 +129,7 @@ class Command(BaseCommand):
         cmd = options.pop("cmd")
         return getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
-    def resolve_object(self, managed_object: str) -> Optional[ManagedObject]:
+    def resolve_object(self, managed_object: str) -> ManagedObject | None:
         """
         Resolve managed_object
         :param managed_object:
@@ -146,9 +146,9 @@ class Command(BaseCommand):
     def handle_close(
         self,
         managed_object,
-        alarm_class: Optional[str] = None,
-        reference: Optional[str] = None,
-        message: Optional[str] = None,
+        alarm_class: str | None = None,
+        reference: str | None = None,
+        message: str | None = None,
     ):
         mo = self.resolve_object(managed_object)
         if not mo:
@@ -171,9 +171,9 @@ class Command(BaseCommand):
         self,
         managed_object: str,
         alarm_class: str,
-        reference: Optional[str] = None,
-        a_vars: Optional[str] = None,
-        labels: Optional[str] = None,
+        reference: str | None = None,
+        a_vars: str | None = None,
+        labels: str | None = None,
     ):
         mo = self.resolve_object(managed_object)
         if not mo:
@@ -217,7 +217,7 @@ class Command(BaseCommand):
                 self.publish(managed_object=mo, msg=r.get_message())
                 time.sleep(r.delay)
 
-    def handle_run_test(self, *args, name: Optional[str] = None, **options):
+    def handle_run_test(self, *args, name: str | None = None, **options):
         name = name or "default"
         for path in args:
             with open(path) as f:
@@ -234,7 +234,7 @@ class Command(BaseCommand):
                     except ValueError as e:
                         self.die(f'Failed to decode JSON file "{path}": {e!s}')
 
-    def handle_test_rule(self, alarms, rule: Optional[str] = None, *args, **options):
+    def handle_test_rule(self, alarms, rule: str | None = None, *args, **options):
         alarm = get_alarm(alarms[0])
         if rule:
             rule = AlarmRule.get_by_id(rule)
@@ -275,7 +275,7 @@ class Command(BaseCommand):
     def get_default_reference(
         managed_object: ManagedObject,
         alarm_class: AlarmClass,
-        vars: Optional[dict[str, Any]] = None,
+        vars: dict[str, Any] | None = None,
     ) -> str:
         """
         Generate default reference for event-based alarms.
@@ -298,7 +298,7 @@ class Command(BaseCommand):
         )
         return f"e:{managed_object.id}:{alarm_class.id}:{var_suffix}"
 
-    def publish(self, managed_object: Optional[ManagedObject], msg):
+    def publish(self, managed_object: ManagedObject | None, msg):
         svc = get_service()
         if managed_object:
             stream, partition = managed_object.alarms_stream_and_partition

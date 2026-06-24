@@ -13,7 +13,7 @@ import importlib.abc
 import importlib.util
 from importlib.machinery import ModuleSpec
 from pathlib import Path
-from typing import Optional, Sequence, Any, Type, Set
+from typing import Sequence, Any
 from types import ModuleType
 
 # NOC modules
@@ -29,11 +29,11 @@ class NOCLoader(importlib.abc.Loader):
     INIT_SOURCE = ""
     packages: set[str] = set()
 
-    def __init__(self, path_entry: Optional[str] = None):
+    def __init__(self, path_entry: str | None = None):
         self.base_path = Path(path_entry or "")
         self.packages.add(self.PREFIX)
 
-    def get_source(self, fullname: str) -> Optional[str]:
+    def get_source(self, fullname: str) -> str | None:
         """
         Get source for module.
 
@@ -63,7 +63,7 @@ class NOCLoader(importlib.abc.Loader):
             return str(base / "__init__.py")
         return str(base.with_suffix(".py"))
 
-    def create_module(self, spec: ModuleSpec) -> Optional[ModuleType]:
+    def create_module(self, spec: ModuleSpec) -> ModuleType | None:
         """
         Use default module creation.
 
@@ -102,7 +102,7 @@ class NOCPyruleLoader(NOCLoader):
             self._collection = get_db()[self.COLLECTION_NAME]
         return self._collection
 
-    def get_source(self, fullname: str) -> Optional[str]:
+    def get_source(self, fullname: str) -> str | None:
         key = fullname[len(self.PREFIX) + 1 :]
         if not key:
             return self.INIT_SOURCE  # noc.pyrules package itself
@@ -123,7 +123,7 @@ class NOCPyruleLoader(NOCLoader):
 class NOCCustomLoader(NOCLoader):
     PREFIX = "noc.custom"
 
-    def get_source(self, fullname: str) -> Optional[str]:
+    def get_source(self, fullname: str) -> str | None:
         key = fullname[len(self.PREFIX) + 1 :].split(".")
         path = Path(config.path.custom_path) / Path(*key)
         if self.is_package(fullname):
@@ -152,9 +152,9 @@ class NOCImportRouter(importlib.abc.MetaPathFinder):
         self._check_custom = config.path.custom_path and os.path.exists(config.path.custom_path)
 
     def find_spec(
-        self, fullname: str, path: Optional[Sequence[str]] = None, target: Optional[Any] = None
-    ) -> Optional[ModuleSpec]:
-        def _get_spec(loader_cls: type[NOCLoader]) -> Optional[ModuleSpec]:
+        self, fullname: str, path: Sequence[str] | None = None, target: Any | None = None
+    ) -> ModuleSpec | None:
+        def _get_spec(loader_cls: type[NOCLoader]) -> ModuleSpec | None:
             loader = loader_cls(path_entry=(path[0] if path else None))
             return importlib.util.spec_from_loader(
                 fullname, loader, is_package=loader.is_package(fullname)

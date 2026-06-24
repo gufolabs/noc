@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Optional, Dict, List, Iterable
+from typing import Iterable
 
 
 @dataclass(frozen=True)
@@ -25,10 +25,10 @@ class PartitionMetadata:
     # The ids of all brokers that contain replicas of the partition
     replicas: list[str]
     # The ids of all brokers that contain in-sync replicas of the partition
-    isr: Optional[list[int]] = None
-    error: Optional[str] = None
-    high_watermark: Optional[int] = None
-    newest_offset: Optional[int] = None
+    isr: list[int] | None = None
+    error: str | None = None
+    high_watermark: int | None = None
+    newest_offset: int | None = None
 
     @property
     def id(self):

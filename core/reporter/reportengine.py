@@ -10,7 +10,7 @@ import logging
 import datetime
 from io import BytesIO
 from collections import defaultdict
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -52,7 +52,7 @@ class ReportEngine:
         self.report_print_error = report_print_error
         self.suppress_error_log = True
 
-    def run_report(self, r_params: RunParams, user: Optional[Any] = None):
+    def run_report(self, r_params: RunParams, user: Any | None = None):
         """
         Run report withs params
         :param r_params: Report params
@@ -104,11 +104,11 @@ class ReportEngine:
         rc: ReportConfig,
         start: datetime.datetime,
         params: dict[str, Any],
-        end: Optional[datetime.datetime] = None,
+        end: datetime.datetime | None = None,
         successfully: bool = False,
         canceled: bool = False,
-        error_text: Optional[str] = None,
-        user: Optional[str] = None,
+        error_text: str | None = None,
+        user: str | None = None,
     ):
         """
         :param rc:
@@ -183,9 +183,7 @@ class ReportEngine:
         return clean_params
 
     @staticmethod
-    def parse_fields(
-        template: Template, fields: Optional[list[str]] = None
-    ) -> dict[str, list[str]]:
+    def parse_fields(template: Template, fields: list[str] | None = None) -> dict[str, list[str]]:
         """Parse requested fields for apply to datasource query"""
         logger.info("Request datasource fields for template '%s'", template.code)
         if not template.bands_format and not fields:
@@ -308,8 +306,8 @@ class ReportEngine:
 
     @classmethod
     def query_datasource(
-        cls, query: ReportQuery, ctx: dict[str, Any], fields: Optional[list[str]] = None
-    ) -> tuple[Optional[pl.DataFrame], list[str]]:
+        cls, query: ReportQuery, ctx: dict[str, Any], fields: list[str] | None = None
+    ) -> tuple[pl.DataFrame | None, list[str]]:
         """
         Resolve Datasource for Query
         Attrs:

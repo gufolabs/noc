@@ -8,7 +8,7 @@
 # Python modules
 import operator
 import logging
-from typing import List, Dict, Any, Optional, Union
+from typing import Any, Optional
 from threading import Lock
 from pathlib import Path
 
@@ -190,7 +190,7 @@ class Transition(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Transition"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Transition"]:
         return Transition.objects.filter(id=oid).first()
 
     @classmethod

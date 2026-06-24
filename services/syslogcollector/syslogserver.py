@@ -8,7 +8,6 @@
 # Python modules
 import logging
 import time
-from typing import Tuple
 
 # NOC modules
 from noc.config import config

@@ -7,7 +7,6 @@
 
 # Python modules
 import enum
-from typing import List, Optional, Set
 import logging
 
 # NOC modules
@@ -65,7 +64,7 @@ _FEATURE_DEFAULT = {
     Feature.FGALARMS: False,
     Feature.SMARTREFRESH: False,
 }
-_current_features: Optional[set[Feature]] = None
+_current_features: set[Feature] | None = None
 
 
 def active_features() -> list[Feature]:

@@ -8,7 +8,7 @@
 # Python modules
 import logging
 from dataclasses import dataclass
-from typing import Optional, List, Dict, Any, Iterable, FrozenSet
+from typing import Any, Iterable
 
 # Third-party modules
 from jinja2 import Template
@@ -61,7 +61,7 @@ class RemoteMappingValue:
         )
 
     def set_remote_id(
-        self, remote_id: Any, source: Optional[InputSource] = None
+        self, remote_id: Any, source: InputSource | None = None
     ) -> "RemoteMappingValue":
         """Update value"""
         sources = self.sources
@@ -186,7 +186,7 @@ def save_model_mappings(self, mappings: list[RemoteMappingValue], dry_run: bool 
     self._reset_caches(self.id, credential=True)
 
 
-def set_mapping(self, remote_system: Any, remote_id: str, source: Optional[str] = None):
+def set_mapping(self, remote_system: Any, remote_id: str, source: str | None = None):
     """
     Set Object mapping
     Args:
@@ -230,7 +230,7 @@ def set_mapping(self, remote_system: Any, remote_id: str, source: Optional[str] 
         self.save_remote_mappings(new_mappings)
 
 
-def get_mapping(self, remote_system: Any) -> Optional[str]:
+def get_mapping(self, remote_system: Any) -> str | None:
     """return object mapping for remote_system"""
     for m in self.iter_remote_mappings():
         if m.remote_system.id == remote_system.id:
@@ -247,7 +247,7 @@ def get_mappings(self) -> dict[str, str]:
 
 
 def update_remote_mappings(
-    self, mappings: dict[Any, str], source: Optional[str] = None, dry_run: bool = False
+    self, mappings: dict[Any, str], source: str | None = None, dry_run: bool = False
 ) -> bool:
     """
     Update managed Object mappings

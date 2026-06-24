@@ -10,7 +10,7 @@ import operator
 import re
 from collections import defaultdict
 from threading import Lock
-from typing import Optional, Union, Tuple, List, Dict, Type, Iterable
+from typing import Optional, Iterable
 from functools import partial
 
 # Third-party modules
@@ -222,7 +222,7 @@ class CalculatedStatusRule(EmbeddedDocument):
             return f"({self.min_status} <> {self.max_status}) {s}"
         return s
 
-    def get_status(self, statuses: dict[Status, int]) -> Optional[Status]:
+    def get_status(self, statuses: dict[Status, int]) -> Status | None:
         weights = tuple(w for s, w in statuses.items() if self.is_match_status(s))
         if not weights:
             return None
@@ -297,7 +297,7 @@ class AlarmStatusRule(EmbeddedDocument):
         status: Set Service Status
     """
 
-    alarm_class_template: Optional[str] = StringField(required=False)
+    alarm_class_template: str | None = StringField(required=False)
     allow_partial: bool = BooleanField(default=False)
     include_labels = ListField(StringField())
     exclude_labels = ListField(StringField())
@@ -419,7 +419,7 @@ class ServiceProfile(Document):
         ],
         default="R",
     )
-    alarm_subject_template: Optional[str] = StringField(required=False)
+    alarm_subject_template: str | None = StringField(required=False)
     raise_alarm_class = ReferenceField(AlarmClass)
     include_root_group = BooleanField(default=False)
     # Instance Resources
@@ -449,7 +449,7 @@ class ServiceProfile(Document):
     # Diagnostics status
     diagnostic_status: list[DiagnosticSettings] = EmbeddedDocumentListField(DiagnosticSettings)
     # Capabilities
-    caps_profile: Optional[CapsProfile] = ReferenceField(CapsProfile, required=False)
+    caps_profile: CapsProfile | None = ReferenceField(CapsProfile, required=False)
     caps_exposed: bool = BooleanField(default=False)
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from
@@ -473,7 +473,7 @@ class ServiceProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ServiceProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ServiceProfile"]:
         return ServiceProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -532,7 +532,7 @@ class ServiceProfile(Document):
         return r
 
     def get_instance_config(
-        self, i_type: InstanceType, name: Optional[str] = None
+        self, i_type: InstanceType, name: str | None = None
     ) -> Optional["ServiceInstanceTypeConfig"]:
         """Getting instance Config"""
         if self.instance_policy == "A":
@@ -594,7 +594,7 @@ class ServiceProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_alarm_rule_cache"), lock=lambda _: id_lock)
-    def get_alarm_rules(cls) -> list[tuple[str, Optional[tuple[AlarmStatusRule, ...]], str]]:
+    def get_alarm_rules(cls) -> list[tuple[str, tuple[AlarmStatusRule, ...] | None, str]]:
         """
         Getting rules by policy
           * D - Not processed
@@ -614,12 +614,12 @@ class ServiceProfile(Document):
         return r
 
     @classmethod
-    def get_alarm_service_filter(cls, alarm) -> list[tuple[Optional[m_q], list[str]]]:
+    def get_alarm_service_filter(cls, alarm) -> list[tuple[m_q | None, list[str]]]:
         """Getting alarm filter by ServiceProfile rules"""
         from noc.sa.models.serviceinstance import ServiceInstance
 
         r = defaultdict(list)
-        queries: dict[str, Optional[m_q]] = {}
+        queries: dict[str, m_q | None] = {}
         for pid, rules, policy in ServiceProfile.get_alarm_rules():
             if rules is None and policy == "A":
                 q = ServiceInstance.get_instance_filter_by_alarm(

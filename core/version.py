@@ -10,7 +10,6 @@ import os
 import sys
 import subprocess
 import platform
-from typing import Optional, Dict
 
 # NOC modules
 from noc.config import config
@@ -130,7 +129,7 @@ class Version:
         return " ".join(os.uname())
 
     @cachedproperty
-    def os_brand(self) -> Optional[str]:
+    def os_brand(self) -> str | None:
         o = os.uname()[0].lower()
         if o == "linux":
             # os-release

@@ -9,7 +9,7 @@
 from threading import Lock
 import operator
 import logging
-from typing import Optional, Dict, Any, Union
+from typing import Optional, Any
 from pathlib import Path
 
 # Third-party modules
@@ -130,7 +130,7 @@ class Workflow(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Workflow"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Workflow"]:
         return Workflow.objects.filter(id=oid).first()
 
     @classmethod
@@ -168,7 +168,7 @@ class Workflow(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_wiping_states_cache"), lock=lambda _: id_lock)
-    def get_wiping_states(cls, model: Optional[str] = None):
+    def get_wiping_states(cls, model: str | None = None):
         from .state import State
 
         w_states = State.objects.filter(is_wiping=True)
@@ -181,7 +181,7 @@ class Workflow(Document):
     @cachetools.cachedmethod(
         operator.attrgetter("_productive_states_cache"), lock=lambda _: id_lock
     )
-    def get_productive_states(cls, model: Optional[str] = None):
+    def get_productive_states(cls, model: str | None = None):
         from .state import State
 
         w_states = State.objects.filter(is_productive=True)

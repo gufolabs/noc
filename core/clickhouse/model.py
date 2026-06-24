@@ -9,7 +9,6 @@
 import operator
 import string
 from random import choices
-from typing import List
 from time import perf_counter
 
 # NOC modules

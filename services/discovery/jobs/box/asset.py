@@ -12,7 +12,7 @@ import base64
 from threading import Lock
 import operator
 import re
-from typing import Optional, List, Dict, Set, Tuple, Iterable, Any, Union
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 import cachetools
@@ -57,15 +57,15 @@ class AssetCheck(DiscoveryCheck):
         self.objects: list[
             tuple[
                 str,
-                Union[Object, str],
-                dict[str, Union[int, str]],
-                Optional[str],
+                Object | str,
+                dict[str, int | str],
+                str | None,
                 list[ObjectAttr],
                 list[ObjectAttr],
             ]
         ] = []  # [(type, object, context, serial, data)]
         self.sensors: dict[
-            tuple[Optional[Object], str], dict[str, Any]
+            tuple[Object | None, str], dict[str, Any]
         ] = {}  # object, sensor -> sensor data
         # Upper object, lower object
         self.to_disconnect: set[tuple[Object, Object]] = set()
@@ -73,7 +73,7 @@ class AssetCheck(DiscoveryCheck):
             list
         )  # Connection rule. type -> [rule1, ruleN]
         self.rule_context = {}
-        self.ctx: dict[str, Union[int, str]] = {}
+        self.ctx: dict[str, int | str] = {}
         self.stack_member: dict["Object", str] = {}  # object -> stack member numbers
         self.managed: set[str] = set()  # Object ids
         self.unk_model: dict[str, ObjectModel] = {}  # name -> model
@@ -132,17 +132,17 @@ class AssetCheck(DiscoveryCheck):
         self,
         o_type: str,
         part_no: list[str],
-        number: Optional[str] = None,
+        number: str | None = None,
         builtin: bool = False,
-        vendor: Optional[str] = None,
-        revision: Optional[str] = None,
-        serial: Optional[str] = None,
-        mfg_date: Optional[str] = None,
-        description: Optional[str] = None,
+        vendor: str | None = None,
+        revision: str | None = None,
+        serial: str | None = None,
+        mfg_date: str | None = None,
+        description: str | None = None,
         sensors: list[dict[str, Any]] | None = None,
         sa_data: list[dict[str, Any]] | None = None,
         param_data: list[dict[str, Any]] | None = None,
-        cpe_id: Optional[str] = None,
+        cpe_id: str | None = None,
         crossing: list[dict[str, str]] | None = None,
         mode: str | None = None,
     ):
@@ -447,7 +447,7 @@ class AssetCheck(DiscoveryCheck):
         if changed:
             obj.save()
 
-    def prepare_context(self, o_type: str, number: Optional[str]):
+    def prepare_context(self, o_type: str, number: str | None):
         self.set_context("N", number)
         if o_type and o_type in self.rule_context:
             scope, reset_scopes = self.rule_context[o_type]
@@ -456,7 +456,7 @@ class AssetCheck(DiscoveryCheck):
             if reset_scopes:
                 self.reset_context(reset_scopes)
 
-    def update_name(self, obj: Object, cpe_id: Optional[str] = None):
+    def update_name(self, obj: Object, cpe_id: str | None = None):
         cpe = None
         if cpe_id:
             cpe = self.cpes[cpe_id][0]
@@ -474,7 +474,7 @@ class AssetCheck(DiscoveryCheck):
 
     def iter_object(
         self, i: int, scope: str, value: int, target_type: str, fwd: bool
-    ) -> Iterable[tuple[str, Union[Object, str], dict[str, Union[int, str]]]]:
+    ) -> Iterable[tuple[str, Object | str, dict[str, int | str]]]:
         # Search backwards
         if not fwd:
             for j in range(i - 1, -1, -1):
@@ -623,7 +623,7 @@ class AssetCheck(DiscoveryCheck):
         self.connect_p2p(o1, c, o2, c2)
 
     def sync_sensors(self):
-        obj_sensors: dict[tuple[Optional[Object], str], Sensor] = {
+        obj_sensors: dict[tuple[Object | None, str], Sensor] = {
             (s.object, s.local_id): s for s in Sensor.objects.filter(managed_object=self.object)
         }
         for obj, sn in obj_sensors:
@@ -669,10 +669,10 @@ class AssetCheck(DiscoveryCheck):
         obj: Object,
         name: str,
         status: bool = True,
-        units: Optional[str] = "Scalar",
-        label: Optional[str] = None,
-        snmp_oid: Optional[str] = None,
-        ipmi_id: Optional[str] = None,
+        units: str | None = "Scalar",
+        label: str | None = None,
+        snmp_oid: str | None = None,
+        ipmi_id: str | None = None,
         labels: list[str] = None,
     ):
         self.logger.info("[%s|%s] Creating new sensor '%s'", obj.name if obj else "-", "-", name)
@@ -710,11 +710,11 @@ class AssetCheck(DiscoveryCheck):
         self,
         sensor: Sensor,
         status: bool = True,
-        units: Optional[str] = "Scalar",
-        label: Optional[str] = None,
-        snmp_oid: Optional[str] = None,
-        ipmi_id: Optional[str] = None,
-        labels: Optional[list[str]] = None,
+        units: str | None = "Scalar",
+        label: str | None = None,
+        snmp_oid: str | None = None,
+        ipmi_id: str | None = None,
+        labels: list[str] | None = None,
     ):
         sensor.seen(source="asset")
         if not status:
@@ -789,7 +789,7 @@ class AssetCheck(DiscoveryCheck):
                 )
 
     def register_unknown_part_no(
-        self, vendor: "Vendor", part_no: Union[list[str], str], descripton: Optional[str]
+        self, vendor: "Vendor", part_no: list[str] | str, descripton: str | None
     ):
         """
         Register missed part number
@@ -803,7 +803,7 @@ class AssetCheck(DiscoveryCheck):
                 self.unknown_part_no[p].add(pp)
             UnknownModel.mark_unknown(vendor.code[0], self.object, p, descripton)
 
-    def register_sensors(self, sensors: list[dict[str, Any]], t_object: Optional[Object] = None):
+    def register_sensors(self, sensors: list[dict[str, Any]], t_object: Object | None = None):
         """"""
         for s in sensors:
             self.sensors[(t_object, s["name"])] = s
@@ -819,7 +819,7 @@ class AssetCheck(DiscoveryCheck):
                 r += [n]
         return r
 
-    def get_vendor(self, v: Optional[str], o_type: Optional[str] = "") -> Optional["Vendor"]:
+    def get_vendor(self, v: str | None, o_type: str | None = "") -> Optional["Vendor"]:
         """
         Get vendor instance or None. Create vendor if object type is XCVR.
         """
@@ -857,7 +857,7 @@ class AssetCheck(DiscoveryCheck):
         for r in rule.rules:
             self.rule[r.match_type] += [r]
 
-    def set_context(self, name: str, value: Optional[str]):
+    def set_context(self, name: str, value: str | None):
         self.ctx[name] = value
         n = "N%s" % name
         if n not in self.ctx:
@@ -988,9 +988,9 @@ class AssetCheck(DiscoveryCheck):
     def get_model_map(
         self,
         vendor: str,
-        part_no: Union[list[str], str],
-        serial: Optional[str],
-        cpe_id: Optional[str] = None,
+        part_no: list[str] | str,
+        serial: str | None,
+        cpe_id: str | None = None,
     ) -> Optional["ObjectModel"]:
         """
         Try to resolve using model map
@@ -1060,7 +1060,7 @@ class AssetCheck(DiscoveryCheck):
             )
         return r
 
-    def generate_serial(self, model: ObjectModel, number: Optional[str]) -> str:
+    def generate_serial(self, model: ObjectModel, number: str | None) -> str:
         """
         Generate virtual serial number
         """
@@ -1072,7 +1072,7 @@ class AssetCheck(DiscoveryCheck):
 
     @staticmethod
     def get_name(
-        obj: Object, managed_object: Optional[Any] = None, cpe_name: Optional[str] = None
+        obj: Object, managed_object: Any | None = None, cpe_name: str | None = None
     ) -> str:
         """
         Generate discovered object's name
@@ -1106,7 +1106,7 @@ class AssetCheck(DiscoveryCheck):
             # Move o2 to lost&found
             o2.put_into(self.lost_and_found)
 
-    def clean_serial(self, model: "ObjectModel", number: Optional[str], serial: Optional[str]):
+    def clean_serial(self, model: "ObjectModel", number: str | None, serial: str | None):
         # Empty value
         if not serial or serial == "None":
             new_serial = self.generate_serial(model, number)

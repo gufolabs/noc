@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Optional, Iterable, Tuple, AsyncIterable
+from typing import Iterable, AsyncIterable
 
 # Third-party modules
 from noc.inv.models.link import Link
@@ -26,7 +26,7 @@ class LinkedMethodStatDS(BaseDataSource):
 
     @classmethod
     async def iter_query(
-        cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
+        cls, fields: Iterable[str] | None = None, *args, **kwargs
     ) -> AsyncIterable[tuple[str, str]]:
         for num, x in enumerate(
             Link._get_collection().aggregate(

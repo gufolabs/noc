@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Tuple
 
 # Third-party modules
 from networkx import shortest_path, NetworkXNoPath

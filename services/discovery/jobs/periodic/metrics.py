@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Any, List, Dict
+from typing import Any
 
 # NOC modules
 from noc.core.jsonutils import iter_chunks

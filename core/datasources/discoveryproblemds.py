@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Optional, Iterable, Tuple, List, Union, AsyncIterable
+from typing import Iterable, AsyncIterable
 
 # Third-party modules
 from pymongo import ReadPreference
@@ -97,20 +97,20 @@ class DiscoveryProblemDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
-        pool: Optional[Pool] = None,
-        mo_profile: Optional[ManagedObjectProfile] = None,
-        resource_group: Optional[ResourceGroup] = None,
+        fields: Iterable[str] | None = None,
+        pool: Pool | None = None,
+        mo_profile: ManagedObjectProfile | None = None,
+        resource_group: ResourceGroup | None = None,
         filter_no_ping: bool = False,
         profile_check_only: bool = False,
         failed_discovery_only: bool = False,
         filter_pending_links: bool = False,
         filter_none_problems: bool = False,
         filter_view_other: bool = False,
-        admin_domain_ads: Optional[list[int]] = None,
+        admin_domain_ads: list[int] | None = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[tuple[int, str, Union[str, int]]]:
+    ) -> AsyncIterable[tuple[int, str, str | int]]:
         """
         Attrs:
             fields:

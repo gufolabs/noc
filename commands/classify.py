@@ -9,7 +9,7 @@
 import argparse
 from pathlib import Path
 import time
-from typing import List, Iterable, Set, Union, Dict, Any
+from typing import Iterable, Any
 from dataclasses import dataclass
 
 # Third-party modules
@@ -49,7 +49,7 @@ class Stats:
             f"non-classified={self.non_classified} [{self.duration:.3f}s, {self.rate:.2f} msg/sec]"
         )
 
-    def to_json(self) -> dict[str, Union[int, float]]:
+    def to_json(self) -> dict[str, int | float]:
         return {
             "duration": self.duration,
             "messages": self.total,
@@ -57,7 +57,7 @@ class Stats:
         }
 
     @classmethod
-    def from_json(cls, path: Path, data: dict[str, Union[int, float]]) -> "Stats":
+    def from_json(cls, path: Path, data: dict[str, int | float]) -> "Stats":
         """
         Get Stats from json data.
 

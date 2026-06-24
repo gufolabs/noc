@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Dict, Tuple, Optional
 from collections import namedtuple, defaultdict
 
 # NOC modules
@@ -431,7 +430,7 @@ class AddressCheck(DiscoveryCheck):
             return parent.effective_address_discovery == "E"
         return False
 
-    def get_address_name(self, address: DiscoveredAddress) -> Optional[str]:
+    def get_address_name(self, address: DiscoveredAddress) -> str | None:
         """
         Render address name
         :param address: DiscoveredAddress instance
@@ -444,7 +443,7 @@ class AddressCheck(DiscoveryCheck):
             return self.strip(name)
         return None
 
-    def get_address_fqdn(self, address: DiscoveredAddress) -> Optional[str]:
+    def get_address_fqdn(self, address: DiscoveredAddress) -> str | None:
         """
         Render address name
         :param address: DiscoveredAddress instance

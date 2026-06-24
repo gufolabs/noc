@@ -9,7 +9,7 @@
 import operator
 import enum
 from threading import Lock
-from typing import Optional, List, Iterable, Union
+from typing import Optional, Iterable
 
 # Third-party modules
 from bson import ObjectId
@@ -116,7 +116,7 @@ class Agent(Document):
     # Auto-updated if profile.update_addresses is set
     serial = StringField()
     ip: list[AgentIp] = EmbeddedDocumentListField(AgentIp)
-    port: Optional[int] = IntField(min_value=1000, max_value=65536, required=False)
+    port: int | None = IntField(min_value=1000, max_value=65536, required=False)
     fqdn: str = StringField(required=False)
     mac: list[AgentMAC] = EmbeddedDocumentListField(AgentMAC)
     # Workflow
@@ -148,7 +148,7 @@ class Agent(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Agent"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Agent"]:
         return Agent.objects.filter(id=oid).first()
 
     @classmethod
@@ -173,9 +173,9 @@ class Agent(Document):
 
     def update_addresses(
         self,
-        serial: Optional[str] = None,
-        mac: Optional[list[str]] = None,
-        ip: Optional[list[str]] = None,
+        serial: str | None = None,
+        mac: list[str] | None = None,
+        ip: list[str] | None = None,
     ) -> None:
         changed = False
         if self.serial != serial:

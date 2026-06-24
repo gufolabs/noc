@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Tuple, Optional, Union
 
 # Third-party modules
 from mongoengine.document import Document
@@ -16,7 +15,7 @@ from django.db.models import Model
 from noc.models import RESOURCE_MODELS, get_model
 
 
-def from_resource(resource: str) -> tuple[Union[Model, Document], Optional[str]]:
+def from_resource(resource: str) -> tuple[Model | Document, str | None]:
     """
     Get database item from resource.
 

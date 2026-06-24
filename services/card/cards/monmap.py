@@ -9,7 +9,6 @@
 import operator
 import itertools
 from collections import defaultdict
-from typing import List
 
 # Third-party modules
 import cachetools

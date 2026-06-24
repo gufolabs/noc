@@ -21,7 +21,7 @@ import bson
 import cachetools
 import orjson
 from pymongo import UpdateOne
-from typing import List, Dict, Any, Optional, Tuple
+from typing import Any
 
 # NOC modules
 from noc.core.scheduler.periodicjob import PeriodicJob
@@ -139,12 +139,12 @@ class MODiscoveryJob(PeriodicJob):
 
     def set_problem(
         self,
-        check: Optional[str] = None,
-        alarm_class: Optional[str] = None,
-        path: Optional[list[str]] = None,
-        message: Optional[str] = None,
+        check: str | None = None,
+        alarm_class: str | None = None,
+        path: list[str] | None = None,
+        message: str | None = None,
         fatal: bool = False,
-        diagnostic: Optional[str] = None,
+        diagnostic: str | None = None,
         **kwargs,
     ):
         """
@@ -199,7 +199,7 @@ class MODiscoveryJob(PeriodicJob):
             self.caps = self.object.get_caps()
         return self.caps
 
-    def update_caps(self, caps, source, scope: Optional[str] = None):
+    def update_caps(self, caps, source, scope: str | None = None):
         self.caps = self.object.update_caps(caps, source=source, scope=scope, logger=self.logger)
 
     def allow_sessions(self):
@@ -271,7 +271,7 @@ class MODiscoveryJob(PeriodicJob):
         from noc.fm.models.alarmclass import AlarmClass
 
         self.logger.info("Updating alarm statuses")
-        group_cls: Optional["AlarmClass"] = AlarmClass.get_by_name(group_cls or "Group")
+        group_cls: "AlarmClass" | None = AlarmClass.get_by_name(group_cls or "Group")
         if not group_cls:
             self.logger.info("No umbrella alarm class. Alarm statuses not updated")
             return
@@ -433,7 +433,7 @@ class DiscoveryCheck:
     def get_caps(self):
         return self.job.get_caps()
 
-    def update_caps(self, caps, source, scope: Optional[str] = None):
+    def update_caps(self, caps, source, scope: str | None = None):
         self.job.update_caps(caps, source, scope=scope)
 
     def has_capability(self, cap):
@@ -530,10 +530,10 @@ class DiscoveryCheck:
         self,
         obj,
         values: dict[str, Any],
-        caps: Optional[dict[str, str]] = None,
+        caps: dict[str, str] | None = None,
         ignore_empty: list[str] = None,
         wait: bool = True,
-        bulk: Optional[list[str]] = None,
+        bulk: list[str] | None = None,
         update_effective_labels: bool = False,
     ):
         """
@@ -692,11 +692,11 @@ class DiscoveryCheck:
 
     def set_problem(
         self,
-        alarm_class: Optional[str] = None,
-        path: Optional[list[str]] = None,
-        message: Optional[str] = None,
+        alarm_class: str | None = None,
+        path: list[str] | None = None,
+        message: str | None = None,
         fatal: bool = False,
-        diagnostic: Optional[str] = None,
+        diagnostic: str | None = None,
         **kwargs,
     ):
         """
@@ -730,7 +730,7 @@ class DiscoveryCheck:
         """
         self.job.set_artefact(name, value)
 
-    def get_artefact(self, name: str) -> Optional[Any]:
+    def get_artefact(self, name: str) -> Any | None:
         """
         Get artefact by name
         :param name: artefact name

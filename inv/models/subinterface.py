@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Iterable, List, Union, Dict, Any
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -112,7 +112,7 @@ class SubInterface(Document):
         return f"{self.managed_object.name} {self.name}"
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["SubInterface"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["SubInterface"]:
         return SubInterface.objects.filter(id=oid).first()
 
     @property
@@ -179,7 +179,7 @@ class SubInterface(Document):
             return si.service
         return None
 
-    def as_resource(self, path: Optional[str] = None) -> str:
+    def as_resource(self, path: str | None = None) -> str:
         """
         Convert instance or connection to the resource reference.
 

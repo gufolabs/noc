@@ -9,7 +9,7 @@
 from pathlib import Path
 import operator
 from threading import Lock
-from typing import Any, Dict, Callable, Optional, Union, List
+from typing import Any, Callable, Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -243,7 +243,7 @@ class MetricType(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["MetricType"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["MetricType"]:
         return MetricType.objects.filter(id=oid).first()
 
     @classmethod
@@ -253,7 +253,7 @@ class MetricType(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_field_cache"), lock=lambda _: id_lock)
-    def get_by_field_name(cls, fname, scope: Optional[str] = None) -> Optional["MetricType"]:
+    def get_by_field_name(cls, fname, scope: str | None = None) -> Optional["MetricType"]:
         if scope:
             scope = MetricScope.get_by_table_name(scope)
             return MetricType.objects.filter(field_name=fname, scope=scope).first()

@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel
@@ -21,22 +20,22 @@ class DefaultResourceGroupItem(BaseModel):
     name: str
     technology: Reference
     bi_id: str
-    parent: Optional[Reference] = None
-    description: Optional[str] = None
-    dynamic_service_labels: Optional[list[str]] = None
-    dynamic_client_labels: Optional[list[str]] = None
-    remote_system: Optional[Reference] = None
-    remote_id: Optional[str] = None
+    parent: Reference | None = None
+    description: str | None = None
+    dynamic_service_labels: list[str] | None = None
+    dynamic_client_labels: list[str] | None = None
+    remote_system: Reference | None = None
+    remote_id: str | None = None
     # Labels
-    labels: Optional[list[LabelItem]] = None
-    effective_labels: Optional[list[LabelItem]] = None
+    labels: list[LabelItem] | None = None
+    effective_labels: list[LabelItem] | None = None
 
 
 class FormResourceGroupItem(BaseModel):
     name: str
     technology: Reference
-    parent: Optional[Reference] = None
-    description: Optional[str] = None
-    dynamic_service_labels: Optional[list[str]] = None
-    dynamic_client_labels: Optional[list[str]] = None
-    labels: Optional[list[str]] = None
+    parent: Reference | None = None
+    description: str | None = None
+    dynamic_service_labels: list[str] | None = None
+    dynamic_client_labels: list[str] | None = None
+    labels: list[str] | None = None

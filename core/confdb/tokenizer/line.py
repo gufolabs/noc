@@ -7,7 +7,7 @@
 
 # Python modules
 import re
-from typing import Optional, Iterator, Iterable, Tuple
+from typing import Iterator, Iterable
 
 # NOC modules
 from .base import BaseTokenizer
@@ -26,10 +26,10 @@ class LineTokenizer(BaseTokenizer):
         data: str,
         eol: str = "\n",
         tab_width: int = 0,
-        line_comment: Optional[str] = None,
-        inline_comment: Optional[str] = None,
+        line_comment: str | None = None,
+        inline_comment: str | None = None,
         keep_indent: bool = False,
-        string_quote: Optional[str] = None,
+        string_quote: str | None = None,
         rewrite=None,
     ):
         super().__init__(data)

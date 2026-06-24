@@ -7,7 +7,6 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -23,8 +22,8 @@ class ControllerConfig:
 
     local_id: str
     address: str
-    global_id: Optional[int] = None
-    port: Optional[int] = None
-    user: Optional[str] = None
-    password: Optional[str] = None
-    api_key: Optional[str] = None
+    global_id: int | None = None
+    port: int | None = None
+    user: str | None = None
+    password: str | None = None
+    api_key: str | None = None

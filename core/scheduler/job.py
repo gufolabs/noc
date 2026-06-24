@@ -13,7 +13,7 @@ from time import perf_counter
 import asyncio
 
 # Third-party modules
-from typing import Dict, Any
+from typing import Any
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter

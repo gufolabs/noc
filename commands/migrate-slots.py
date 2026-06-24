@@ -8,7 +8,6 @@
 # Python modules
 import os
 import asyncio
-from typing import Dict
 
 # NOC modules
 from noc.core.management.base import BaseCommand

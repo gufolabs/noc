@@ -7,7 +7,6 @@
 
 # Python modules
 from pathlib import Path
-from typing import Tuple, Dict
 
 # Third-party modules
 import pytest

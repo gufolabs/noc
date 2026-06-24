@@ -11,7 +11,7 @@ import logging
 import operator
 from collections import defaultdict
 from threading import Lock
-from typing import Any, Dict, Optional, Iterable, List, Union, Tuple, Set
+from typing import Any, Optional, Iterable
 
 # Third-party modules
 import orjson
@@ -296,7 +296,7 @@ class Service(Document):
     # Parent service
     parent: "Service" = PlainReferenceField("self", required=False)
     # Subscriber information
-    subscriber: Optional[Subscriber] = ReferenceField(Subscriber, required=False)
+    subscriber: Subscriber | None = ReferenceField(Subscriber, required=False)
     # Oper Status Info
     oper_status: Status = EnumField(Status, default=Status.UNKNOWN)
     # oper_status_factors: List[StatusAffectedItem] = EmbeddedDocumentListField()
@@ -376,7 +376,7 @@ class Service(Document):
     mappings: list[RemoteMappingItem] = EmbeddedDocumentListField(RemoteMappingItem)
     # Watchers
     watchers: list[WatchDocumentItem] = EmbeddedDocumentListField(WatchDocumentItem)
-    watcher_wait_ts: Optional[datetime.datetime] = DateTimeField(required=False)
+    watcher_wait_ts: datetime.datetime | None = DateTimeField(required=False)
     # maintenances
 
     SUPPORTED_EFFECTS = frozenset(
@@ -396,7 +396,7 @@ class Service(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Service"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Service"]:
         return Service.objects.filter(id=oid).first()
 
     @classmethod
@@ -411,7 +411,7 @@ class Service(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_instance_cache"))
-    def get_by_instance(cls, address, port: Optional[str] = None) -> Optional["Service"]:
+    def get_by_instance(cls, address, port: str | None = None) -> Optional["Service"]:
         if port:
             # Service.objects.filter(static_instances__match={"address": address, "port": port})
             si = ServiceInstance.objects.filter(addresses__address=address, port=port).first()
@@ -481,7 +481,7 @@ class Service(Document):
             yield Label.build_expose_labels(svc["effective_labels"], "expose_sa_object")
 
     @classmethod
-    def get_min_wait_ts(cls) -> Optional[datetime.datetime]:
+    def get_min_wait_ts(cls) -> datetime.datetime | None:
         """"""
         return (
             Service.objects()
@@ -547,7 +547,7 @@ class Service(Document):
         """Apply calculate oper status"""
         return self.state.is_productive
 
-    def check_deployed(self) -> Optional[str]:
+    def check_deployed(self) -> str | None:
         """Generate Workflow signal"""
         statuses = {si.is_deployed for si in self.service_instances}
         if True not in statuses:
@@ -563,7 +563,7 @@ class Service(Document):
             r += d.get_nested()
         return r
 
-    def get_effective_managed_object(self) -> Optional[Any]:
+    def get_effective_managed_object(self) -> Any | None:
         """Return ManagedObject to upper level"""
         path = self.get_path()
         for mo in ServiceInstance.objects.filter(
@@ -631,8 +631,8 @@ class Service(Document):
         return list(seen)
 
     def get_dependency_config(
-        self, dependency: "Service", link_type: Optional[str] = None
-    ) -> Optional[ServiceDependency]:
+        self, dependency: "Service", link_type: str | None = None
+    ) -> ServiceDependency | None:
         """Return Dependency config as rule"""
         link_cfg = None
         for sd in self.dependency_services:
@@ -680,7 +680,7 @@ class Service(Document):
             # Transparent
 
     @property
-    def oper_status_root_factor(self) -> Optional[AffectedItem]:
+    def oper_status_root_factor(self) -> AffectedItem | None:
         """Calculate root factor affected to OperStatus"""
         root = None
         for item in self.oper_status_factors:
@@ -692,7 +692,7 @@ class Service(Document):
             root = item.item
         return root
 
-    def get_alarm_root_factor(self) -> Optional[str]:
+    def get_alarm_root_factor(self) -> str | None:
         """"""
         o = self.oper_status_root_factor
         if not o or o.source == "alarm":
@@ -706,8 +706,8 @@ class Service(Document):
     def set_oper_status(
         self,
         status: Status,
-        timestamp: Optional[datetime.datetime] = None,
-        affected: Optional[list[AffectedItem]] = None,
+        timestamp: datetime.datetime | None = None,
+        affected: list[AffectedItem] | None = None,
     ):
         """
         Set Operational Status for Service
@@ -807,7 +807,7 @@ class Service(Document):
 
     def get_message_context(
         self,
-        affected: Optional[list[AffectedItem]] = None,
+        affected: list[AffectedItem] | None = None,
     ) -> dict[str, Any]:
         """Service Message Ctx"""
         r = {
@@ -849,7 +849,7 @@ class Service(Document):
             )
         return r
 
-    def get_mx_message_headers(self, labels: Optional[list[str]] = None) -> dict[str, bytes]:
+    def get_mx_message_headers(self, labels: list[str] | None = None) -> dict[str, bytes]:
         return {
             key.config.header: key.clean_header_value(value)
             for key, value in self.message_meta.items()
@@ -1041,7 +1041,7 @@ class Service(Document):
             status = Status.UNKNOWN
         self.set_oper_status(status, affected=affected)
 
-    def get_alarm_status(self, affected: Optional[list[AffectedItem]] = None) -> Status:
+    def get_alarm_status(self, affected: list[AffectedItem] | None = None) -> Status:
         """
         Calculate alarm status for service
         1. If alarm affected policy is Disabled. Return UNKNOWN
@@ -1061,7 +1061,7 @@ class Service(Document):
         instance_status = defaultdict(lambda: Status.UP)
         effective_clients = frozenset(str(x) for x in self.effective_client_groups)
         # Matcher ?
-        instances: Optional[list["ServiceInstance"]] = None
+        instances: list["ServiceInstance"] | None = None
         max_weight = 0
         # Calculate Alarm status
         for aa in ActiveAlarm.objects.filter(affected_services=self.id):
@@ -1135,7 +1135,7 @@ class Service(Document):
         # Calculate affected status
         return self.calculate_status(r)
 
-    def get_diagnostics_status(self, affected: Optional[list[AffectedItem]] = None) -> Status:
+    def get_diagnostics_status(self, affected: list[AffectedItem] | None = None) -> Status:
         if not self.profile.diagnostic_status:
             return Status.UNKNOWN
         values = self.get_diagnostic_values()
@@ -1152,7 +1152,7 @@ class Service(Document):
                 return d.failed_status
         return Status.UNKNOWN
 
-    def get_direct_status(self, affected: Optional[list[AffectedItem]] = None) -> Status:
+    def get_direct_status(self, affected: list[AffectedItem] | None = None) -> Status:
         """Getting oper_status from Alarm and Diagnostics"""
         return max(
             self.get_alarm_status(affected=affected),
@@ -1187,7 +1187,7 @@ class Service(Document):
                 return status
         return Status.UNKNOWN
 
-    def get_affected_status(self, affected: Optional[list[AffectedItem]] = None) -> Status:
+    def get_affected_status(self, affected: list[AffectedItem] | None = None) -> Status:
         """Getting operational status from dependencies services"""
         r = {}
         if self.profile.calculate_status_function == "D":
@@ -1295,7 +1295,7 @@ class Service(Document):
             if c.config.set_label:
                 yield Label.ensure_labels(c.get_labels(), ["sa.Service"])
 
-    def get_effective_agent(self) -> Optional[Agent]:
+    def get_effective_agent(self) -> Agent | None:
         """Find effective agent for service"""
         svc = self
         while svc:
@@ -1356,9 +1356,9 @@ class Service(Document):
 
     def update_instances(
         self,
-        source: Union[str, InputSource],
+        source: str | InputSource,
         instances: list[ServiceInstanceConfig],
-        last_update: Optional[datetime.datetime] = None,
+        last_update: datetime.datetime | None = None,
     ):
         """Synchronize instances for source"""
         if isinstance(source, str):
@@ -1391,9 +1391,9 @@ class Service(Document):
         self,
         type: InstanceType,
         source: InputSource = InputSource.MANUAL,
-        name: Optional[str] = None,
-        fqdn: Optional[str] = None,
-        managed_object: Optional[Any] = None,
+        name: str | None = None,
+        fqdn: str | None = None,
+        managed_object: Any | None = None,
         # addresses
         # port
         # session_id ? register_session
@@ -1444,9 +1444,9 @@ class Service(Document):
     @classmethod
     def get_component(
         cls,
-        managed_object: Optional[str] = None,
-        service: Optional[str] = None,
-        remote_ref: Optional[str] = None,
+        managed_object: str | None = None,
+        service: str | None = None,
+        remote_ref: str | None = None,
         **kwargs,
     ) -> Optional["Service"]:
         logger.debug("Getting service by component: %s", kwargs)
@@ -1481,8 +1481,8 @@ class Service(Document):
         services: list["Service"],
         start: datetime.datetime,
         affected_topology: bool = False,
-        remote_system: Optional[RemoteSystem] = None,
-        remote_ids: Optional[list[str]] = None,
+        remote_system: RemoteSystem | None = None,
+        remote_ids: list[str] | None = None,
     ):
         """Update Maintenance"""
         svcs = [s.id for s in services]
@@ -1566,10 +1566,10 @@ def refresh_connected_services(svc_ids: list[str]):
 
 
 def refresh_exposed_caps(
-    object_ids: Optional[list[str]] = None,
-    svc_profile_ids: Optional[list[str]] = None,
-    svc_ids: Optional[list[str]] = None,
-    user: Optional[str] = None,
+    object_ids: list[str] | None = None,
+    svc_profile_ids: list[str] | None = None,
+    svc_ids: list[str] | None = None,
+    user: str | None = None,
 ):
     """Syncronize exposed caps"""
     from .serviceinstance import ServiceInstance

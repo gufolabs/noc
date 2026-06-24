@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Union, List, Literal
+from typing import Literal
 
 # Third-party modules
 from pydantic import BaseModel
@@ -25,7 +25,7 @@ MAX_MANAGED_OBJECT_RESPONSE = 2000
 # Query
 class QueryPayloadItem(BaseModel):
     managed_object: int
-    interface: Optional[str]
+    interface: str | None
 
     @property
     def expr(self) -> str:
@@ -46,8 +46,8 @@ class LabelTarget(BaseModel):
 
 class ManagedObjectTarget(BaseModel):
     target: Literal["managed_object"]
-    labels: Optional[list[str]] = None
-    administrative_domain: Optional[str] = None
+    labels: list[str] | None = None
+    administrative_domain: str | None = None
 
     def get_variables(self, user: "User" = None):
         mos = ManagedObject.objects.filter(is_managed=True)
@@ -66,8 +66,8 @@ class ManagedObjectTarget(BaseModel):
 class InterfaceTarget(BaseModel):
     target: Literal["interface"]
     managed_object: int
-    name: Optional[str] = None
-    interface_profile: Optional[str] = None
+    name: str | None = None
+    interface_profile: str | None = None
     type: str = "physical"
 
     @property
@@ -107,10 +107,10 @@ class TestTarget(BaseModel):
 
 class InterfaceProfileTarget(BaseModel):
     target: Literal["interface_profile"]
-    managed_object: Optional[int] = None
+    managed_object: int | None = None
 
     @property
-    def mo(self) -> Optional[ManagedObject]:
+    def mo(self) -> ManagedObject | None:
         if not self.managed_object:
             return None
         return ManagedObject.get_by_bi_id(self.managed_object)
@@ -130,6 +130,6 @@ class InterfaceProfileTarget(BaseModel):
         ]
 
 
-VariablePayloadItem = Union[
-    LabelTarget, ManagedObjectTarget, InterfaceTarget, InterfaceProfileTarget, TestTarget
-]
+VariablePayloadItem = (
+    LabelTarget | ManagedObjectTarget | InterfaceTarget | InterfaceProfileTarget | TestTarget
+)

@@ -17,7 +17,7 @@ import gridfs
 import gridfs.errors
 import bsdiff4
 from bson import ObjectId
-from typing import Tuple, Optional, Iterable
+from typing import Iterable
 
 # NOC modules
 from noc.core.mongo.connection import get_db
@@ -103,13 +103,13 @@ class GridVCS:
         return smart_text(bsdiff4.patch(src, delta))
 
     @classmethod
-    def compress(cls, data: bytes, method: Optional[str] = None) -> bytes:
+    def compress(cls, data: bytes, method: str | None = None) -> bytes:
         if method:
             return getattr(cls, "compress_%s" % method)(data)
         return data
 
     @classmethod
-    def decompress(cls, data: bytes, method: Optional[str] = None) -> bytes:
+    def decompress(cls, data: bytes, method: str | None = None) -> bytes:
         if method:
             return getattr(cls, "decompress_%s" % method)(data)
         return data
@@ -122,7 +122,7 @@ class GridVCS:
     def decompress_z(data: bytes) -> bytes:
         return zlib.decompress(smart_bytes(data))
 
-    def put(self, object: int, data: str, ts: Optional[datetime.datetime] = None) -> bool:
+    def put(self, object: int, data: str, ts: datetime.datetime | None = None) -> bool:
         """
         Save data
         :param object: Object id
@@ -167,7 +167,7 @@ class GridVCS:
         )
         return True
 
-    def get(self, object: int, revision: Optional[Revision] = None) -> Optional[str]:
+    def get(self, object: int, revision: Revision | None = None) -> str | None:
         """
         Get data
         :param object: Object id
@@ -198,7 +198,7 @@ class GridVCS:
         for r in self.iter_revisions(object):
             self.fs.delete(r.id)
 
-    def iter_revisions(self, object: int, reverse: Optional[bool] = False) -> Iterable[Revision]:
+    def iter_revisions(self, object: int, reverse: bool | None = False) -> Iterable[Revision]:
         """
         Get object's revision
         :param object:
@@ -208,7 +208,7 @@ class GridVCS:
         for r in self.files.find({"object": object}).sort("ts", d):
             yield Revision(r["_id"], r["ts"], r["ft"], r.get("c"), r["length"])
 
-    def find_last_revision(self, object: int) -> Optional[Revision]:
+    def find_last_revision(self, object: int) -> Revision | None:
         """
         Find last revision or return None
         :param object:
@@ -219,7 +219,7 @@ class GridVCS:
             return Revision(r["_id"], r["ts"], r["ft"], r.get("c"), r["length"])
         return None
 
-    def find_revision(self, object: int, revision: str) -> Optional[Revision]:
+    def find_revision(self, object: int, revision: str) -> Revision | None:
         """
         :param object:
         :param revision: Revision id

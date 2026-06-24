@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional
 from pathlib import Path
 
 # Third-party modules
@@ -91,7 +91,7 @@ class Quiz(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["Quiz"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["Quiz"]:
         return Quiz.objects.filter(id=oid).first()
 
     @classmethod

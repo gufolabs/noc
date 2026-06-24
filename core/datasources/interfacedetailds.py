@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Optional, Iterable, AsyncIterable, Tuple, List
+from typing import Iterable, AsyncIterable
 
 # Third-party modules
 from pymongo import ReadPreference
@@ -50,7 +50,7 @@ class InterfaceDetailDS(BaseDataSource):
     ]
 
     @staticmethod
-    def humanize_speed(speed: Optional[int]) -> str:
+    def humanize_speed(speed: int | None) -> str:
         if not speed:
             return "-"
         for t, n in [(1000000, "G"), (1000, "M"), (1, "k")]:
@@ -72,14 +72,14 @@ class InterfaceDetailDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
+        fields: Iterable[str] | None = None,
         iface_type: str = "physical",
-        iface_profile: Optional[InterfaceProfile] = None,
-        resource_group: Optional[ResourceGroup] = None,
+        iface_profile: InterfaceProfile | None = None,
+        resource_group: ResourceGroup | None = None,
         exclude_down: bool = False,
         exclude_def_profile: bool = False,
         only_admin_status: bool = False,
-        admin_domain_ads: Optional[list[int]] = None,
+        admin_domain_ads: list[int] | None = None,
         *args,
         **kwargs,
     ) -> AsyncIterable[tuple[str, str]]:

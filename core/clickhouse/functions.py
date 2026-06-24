@@ -5,13 +5,11 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
-from typing import Optional
-
 
 class AggregateFunction:
     db_name = None
 
-    def __init__(self, function: Optional[str] = None, **params):
+    def __init__(self, function: str | None = None, **params):
         self.function = self.db_name or function
         self.params = params
 
@@ -19,7 +17,7 @@ class AggregateFunction:
         return self.function
 
     # get expression
-    def get_expression(self, field, combinator: Optional[str] = None, **params):
+    def get_expression(self, field, combinator: str | None = None, **params):
         expr = field.expression
         if combinator == "Merge":
             expr = field.name
@@ -32,7 +30,7 @@ class AggregateFunction:
 class ArgMax(AggregateFunction):
     db_name = "argMax"
 
-    def get_expression(self, field, combinator: Optional[str] = None, **params):
+    def get_expression(self, field, combinator: str | None = None, **params):
         if combinator == "Merge":
             return f"{self.function}{combinator or ''}({field.name})"
         return f"{self.function}{combinator or ''}({field.expression}, ts)"

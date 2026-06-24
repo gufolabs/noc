@@ -7,7 +7,7 @@
 
 # Python modules
 import datetime
-from typing import Optional, List, Iterable, Tuple, Union, Dict, Any
+from typing import Iterable, Union, Any
 
 # Third-party modules
 from pydantic import BaseModel, PrivateAttr
@@ -31,16 +31,16 @@ class DiagnosticItem(BaseModel):
 
     diagnostic: str
     state: DiagnosticState = DiagnosticState("unknown")
-    checks: Optional[list[CheckStatus]] = None
+    checks: list[CheckStatus] | None = None
     # scope: Literal["access", "all", "discovery", "default"] = "default"
     # policy: str = "ANY
-    reason: Optional[str] = None
-    changed: Optional[datetime.datetime] = None
+    reason: str | None = None
+    changed: datetime.datetime | None = None
     is_dirty: bool = False
-    _config: Optional[DiagnosticConfig] = PrivateAttr()
-    _handler: Optional[DiagnosticHandler] = PrivateAttr()
+    _config: DiagnosticConfig | None = PrivateAttr()
+    _handler: DiagnosticHandler | None = PrivateAttr()
 
-    def __init__(self, cfg: Optional[DiagnosticConfig] = None, **data):
+    def __init__(self, cfg: DiagnosticConfig | None = None, **data):
         super().__init__(**data)
         self._config: DiagnosticConfig = cfg
 
@@ -71,7 +71,7 @@ class DiagnosticItem(BaseModel):
         return self.config.show_in_display
 
     @property
-    def workflow_event(self) -> Optional[str]:
+    def workflow_event(self) -> str | None:
         if not self.config.workflow_event:
             return None
         if self.state not in (DiagnosticState.enabled, DiagnosticState.blocked):
@@ -103,7 +103,7 @@ class DiagnosticItem(BaseModel):
     def from_config(
         cls,
         cfg: DiagnosticConfig,
-        value: Optional[DiagnosticValue] = None,
+        value: DiagnosticValue | None = None,
     ) -> "DiagnosticItem":
         """Create item from config"""
         checks, reason, is_dirty = None, cfg.reason, False
@@ -168,7 +168,7 @@ class DiagnosticItem(BaseModel):
         h = self.get_handler(logger=logger)
         yield from h.iter_checks(**kwargs)
 
-    def get_check_status(self) -> tuple[Optional[DiagnosticState], Optional[str]]:
+    def get_check_status(self) -> tuple[DiagnosticState | None, str | None]:
         """
         Calculate check status, ANY or ALL policy apply
         """
@@ -195,7 +195,7 @@ class DiagnosticItem(BaseModel):
     def update_checks(
         self,
         checks: list[CheckResult],
-        source: Optional[InputSource] = InputSource.UNKNOWN,
+        source: InputSource | None = InputSource.UNKNOWN,
     ) -> tuple[list[CheckStatus], list[DataItem]]:
         """Processed checks result and Update Item checks status"""
         if self.config.diagnostic_handler:

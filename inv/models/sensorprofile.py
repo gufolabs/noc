@@ -10,7 +10,7 @@ import operator
 import re
 from collections import defaultdict
 from threading import Lock
-from typing import Optional, Union, Dict, Any, Tuple, List, Callable
+from typing import Optional, Any, Callable
 from functools import partial
 
 # Third-party modules
@@ -115,7 +115,7 @@ class SensorProfile(Document):
     enable_collect = BooleanField(default=False)
     collect_interval = IntField(default=60)
     # PM Integration
-    units: Optional[MeasurementUnits] = PlainReferenceField(MeasurementUnits)
+    units: MeasurementUnits | None = PlainReferenceField(MeasurementUnits)
     metric_type: Optional["MetricType"] = PlainReferenceField(MetricType)
     mx_policy = StringField(
         choices=[("D", "Disable"), ("L", "Sensor Label"), ("A", "By Alias")], defaul="D"
@@ -147,7 +147,7 @@ class SensorProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["SensorProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["SensorProfile"]:
         return SensorProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -242,7 +242,7 @@ class SensorProfile(Document):
 
     def get_instance_affected_query(
         self,
-        changes: Optional[list[ChangeField]] = None,
+        changes: list[ChangeField] | None = None,
         include_match: bool = False,
     ) -> m_q:
         """Return queryset for instance"""
@@ -252,5 +252,5 @@ class SensorProfile(Document):
                 q |= mr.get_q()
         return q
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

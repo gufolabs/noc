@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Set
 from dataclasses import dataclass
 from enum import Enum
 

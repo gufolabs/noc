@@ -18,7 +18,7 @@ import bson
 import bson.errors
 import pymongo
 import dateutil.parser
-from typing import Optional, Dict, Any, List, Union, Iterable, Tuple, Callable
+from typing import Any, Iterable, Callable
 
 # NOC modules
 from noc.core.perf import metrics
@@ -71,13 +71,13 @@ class DataStream:
     _collections_async: dict[str, pymongo.collection.Collection] = {}
 
     @classmethod
-    def get_collection_name(cls, format: Optional[str] = None) -> str:
+    def get_collection_name(cls, format: str | None = None) -> str:
         if format:
             return "ds_%s_%s" % (cls.name, format)
         return "ds_%s" % cls.name
 
     @classmethod
-    def get_collection(cls, fmt: Optional[str] = None) -> pymongo.collection.Collection:
+    def get_collection(cls, fmt: str | None = None) -> pymongo.collection.Collection:
         """
         Get pymongo Collection object
         :return:
@@ -90,7 +90,7 @@ class DataStream:
         return coll
 
     @classmethod
-    def get_collection_async(cls, fmt: Optional[str] = None) -> pymongo.collection.Collection:
+    def get_collection_async(cls, fmt: str | None = None) -> pymongo.collection.Collection:
         """
         Get pymongo Collection object
         :return:
@@ -129,7 +129,7 @@ class DataStream:
         raise NotImplementedError()
 
     @classmethod
-    def get_meta(cls, data: dict[str, Any]) -> Optional[dict]:
+    def get_meta(cls, data: dict[str, Any]) -> dict | None:
         """
         Extract additional metadata from .get_object() result for additional indexing
         :param data: .get_object() result
@@ -147,7 +147,7 @@ class DataStream:
         return {"id": str(id), cls.F_DELETED: True}
 
     @classmethod
-    def get_moved_object(cls, id: Union[str, int]) -> dict[str, Any]:
+    def get_moved_object(cls, id: str | int) -> dict[str, Any]:
         """
         Generate item for deleted object
         :param id:
@@ -160,7 +160,7 @@ class DataStream:
         return hashlib.sha256(orjson.dumps(data)).hexdigest()[: DataStream.HASH_LEN]
 
     @classmethod
-    def bulk_update(cls, objects: list[Union[id, str, bson.ObjectId]]) -> None:
+    def bulk_update(cls, objects: list[id | str | bson.ObjectId]) -> None:
         coll = cls.get_collection()
         # Get possible formats
         fmt_coll: dict[str, pymongo.collection.Collection] = {}
@@ -249,10 +249,10 @@ class DataStream:
         cls,
         data,
         meta=None,
-        fmt: Optional[str] = None,
+        fmt: str | None = None,
         state=None,
         meta_headers=None,
-        bulk: Optional[list[Any]] = None,
+        bulk: list[Any] | None = None,
     ) -> bool:
         """
         Check calculate data changed and save it to collection
@@ -323,7 +323,7 @@ class DataStream:
     @classmethod
     def _get_current_data(
         cls, obj_id, delete=False
-    ) -> tuple[dict[str, Any], Optional[dict[str, Any]], Optional[dict[str, Any]]]:
+    ) -> tuple[dict[str, Any], dict[str, Any] | None, dict[str, Any] | None]:
         if delete:
             return cls.get_deleted_object(obj_id), None, None
         try:
@@ -447,7 +447,7 @@ class DataStream:
         limit: int = None,
         filters: list[str] = None,
         fmt=None,
-        filter_policy: Optional[str] = None,
+        filter_policy: str | None = None,
     ):
         """
         Iterate over data items beginning from change id
@@ -500,7 +500,7 @@ class DataStream:
         limit: int = None,
         filters: list[str] = None,
         fmt=None,
-        filter_policy: Optional[str] = None,
+        filter_policy: str | None = None,
     ):
         """
         Iterate over data items beginning from change id
@@ -676,7 +676,7 @@ class DataStream:
         return {"_id": {"$mod": [n_instances, instance]}}
 
     @classmethod
-    def get_format_role(cls, fmt: str) -> Optional[str]:
+    def get_format_role(cls, fmt: str) -> str | None:
         """
         Returns format role, if any
         :param fmt:
@@ -691,7 +691,7 @@ class DataStream:
         return None
 
     @classmethod
-    def get_meta_headers(cls, data: dict[str, Any]) -> Optional[dict[str, bytes]]:
+    def get_meta_headers(cls, data: dict[str, Any]) -> dict[str, bytes] | None:
         """
         Return MetaData for message headers
         :param data:
@@ -704,8 +704,8 @@ class DataStream:
         cls,
         data: dict[str, Any],
         change_id: bson.ObjectId,
-        mtype: Optional[str] = None,
-        additional_headers: Optional[dict[str, bytes]] = None,
+        mtype: str | None = None,
+        additional_headers: dict[str, bytes] | None = None,
     ) -> None:
         """
         Send MX message
@@ -749,9 +749,7 @@ class DataStream:
         return data
 
     @classmethod
-    def update_diagnostic_state(
-        cls, obj_id, is_blocked: bool = False, reason: Optional[str] = None
-    ):
+    def update_diagnostic_state(cls, obj_id, is_blocked: bool = False, reason: str | None = None):
         if not cls.DIAGNOSTIC:
             return
         from noc.sa.models.managedobject import ManagedObject

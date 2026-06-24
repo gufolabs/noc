@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import List, Dict, Any, Tuple
+from typing import Any
 
 # NOC modules
 from noc.services.discovery.jobs.base import DiscoveryCheck

@@ -8,7 +8,7 @@
 # Python modules
 import re
 import threading
-from typing import Optional, List, Dict, Union
+from typing import Optional
 import operator
 
 # Third-party modules
@@ -60,7 +60,7 @@ class MIB(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["MIB"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["MIB"]:
         return MIB.objects.filter(id=oid).first()
 
     @classmethod
@@ -396,7 +396,7 @@ class MIB(Document):
         return r
 
     @classmethod
-    def guess_encoding(cls, s: bytes, encodings: Optional[list[str]] = None) -> str:
+    def guess_encoding(cls, s: bytes, encodings: list[str] | None = None) -> str:
         """
         Try to guess encoding
         :param s:

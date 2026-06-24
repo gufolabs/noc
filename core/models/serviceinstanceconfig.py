@@ -9,7 +9,7 @@
 import enum
 from urllib.parse import urlparse
 from dataclasses import dataclass
-from typing import Optional, Any, List, ClassVar, Type
+from typing import Any, ClassVar
 
 # Third-party modules
 import bson
@@ -40,15 +40,15 @@ class InstanceType(enum.Enum):
 
 @dataclass
 class ServiceInstanceTypeConfig:
-    allow_resources: Optional[list[str]] = None
+    allow_resources: list[str] | None = None
     allow_manual: bool = False
     # For multiple object, control TTL ?
     only_one_instance: bool = True
     send_approve: bool = False
     allow_register: bool = False
-    ttl: Optional[int] = None
-    refs_caps: Optional[Any] = None
-    asset_group: Optional[Any] = None
+    ttl: int | None = None
+    refs_caps: Any | None = None
+    asset_group: Any | None = None
 
 
 @dataclass
@@ -61,10 +61,10 @@ class ServiceInstanceConfig:
 
     type: ClassVar[InstanceType]
     name: str
-    managed_object: Optional[Any] = None
-    remote_id: Optional[str] = None
-    nri_port: Optional[str] = None
-    fqdn: Optional[str] = None
+    managed_object: Any | None = None
+    remote_id: str | None = None
+    nri_port: str | None = None
+    fqdn: str | None = None
     addresses: list[str] = None
     services: list[bson.ObjectId] = None
     port: int = 0
@@ -91,7 +91,7 @@ class ServiceInstanceConfig:
         cls,
         settings: "ServiceInstanceTypeConfig",
         service,
-        name: Optional[str] = None,
+        name: str | None = None,
     ) -> list["ServiceInstanceConfig"]:
         """Create Config from settings"""
         raise NotImplementedError()
@@ -99,8 +99,8 @@ class ServiceInstanceConfig:
     @classmethod
     def from_config(
         cls,
-        name: Optional[str] = None,
-        fqdn: Optional[str] = None,
+        name: str | None = None,
+        fqdn: str | None = None,
         **kwargs,
     ):
         return cls(
@@ -141,7 +141,7 @@ class NetworkHostInstance(ServiceInstanceConfig):
         cls,
         settings: "ServiceInstanceTypeConfig",
         service,
-        name: Optional[str] = None,
+        name: str | None = None,
     ) -> list["ServiceInstanceConfig"]:
         """Create Config from settings"""
         if settings.asset_group and settings.asset_group.id in service.effective_client_groups:
@@ -172,7 +172,7 @@ class NetworkChannelInstance(ServiceInstanceConfig):
         cls,
         settings: "ServiceInstanceTypeConfig",
         service,
-        name: Optional[str] = None,
+        name: str | None = None,
     ) -> list["ServiceInstanceConfig"]:
         """Create Config from settings"""
         caps = service.get_caps()
@@ -211,7 +211,7 @@ class ServiceEndPoint(ServiceInstanceConfig):
         cls,
         settings: "ServiceInstanceTypeConfig",
         service,
-        name: Optional[str] = None,
+        name: str | None = None,
     ) -> list["ServiceInstanceConfig"]:
         """
         Create Config from settings
@@ -250,7 +250,7 @@ class ConfigInstance(ServiceInstanceConfig):
         cls,
         settings: "ServiceInstanceTypeConfig",
         service,
-        name: Optional[str] = None,
+        name: str | None = None,
     ) -> list["ServiceInstanceConfig"]:
         """Create Config from settings"""
         caps = service.get_caps()

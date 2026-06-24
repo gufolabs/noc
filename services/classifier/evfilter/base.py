@@ -8,7 +8,7 @@
 # Python modules
 import time
 from heapq import heappush, heappop
-from typing import Optional, Tuple, List, Dict, Any
+from typing import Any
 
 # Third-party modules
 from bson import ObjectId
@@ -56,7 +56,7 @@ class BaseEvFilter:
         return int(event.timestamp.timestamp())
 
     def register(
-        self, event: Event, event_config: EventConfig, event_vars: Optional[dict[str, Any]] = None
+        self, event: Event, event_config: EventConfig, event_vars: dict[str, Any] | None = None
     ) -> None:
         """Register event to filter"""
         fw = self.get_window(event_config)
@@ -76,8 +76,8 @@ class BaseEvFilter:
         self.events[eh] = (deadline, event_id)
 
     def find(
-        self, event: Event, event_config: EventConfig, event_vars: Optional[dict[str, Any]] = None
-    ) -> Optional[ObjectId]:
+        self, event: Event, event_config: EventConfig, event_vars: dict[str, Any] | None = None
+    ) -> ObjectId | None:
         """Check if event is duplicated"""
         eh = self.event_hash(event, event_config, event_vars)
         r = self.events.get(eh)

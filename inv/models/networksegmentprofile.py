@@ -9,7 +9,7 @@
 import operator
 import cachetools
 from threading import Lock
-from typing import Optional, Iterable, Union
+from typing import Optional, Iterable
 
 # Third-party modules
 from bson import ObjectId
@@ -125,8 +125,8 @@ class BioCollisionPolicy(EmbeddedDocument):
     def check(
         self,
         persistent: bool,
-        attacker_level: Optional[int] = None,
-        target_level: Optional[int] = None,
+        attacker_level: int | None = None,
+        target_level: int | None = None,
     ):
         if (
             attacker_level is not None
@@ -151,7 +151,7 @@ class BioCollisionPolicy(EmbeddedDocument):
         return not (self.match_type == "f" and persistent)
 
     def check_level(
-        self, attacker_level: Optional[int] = None, target_level: Optional[int] = None
+        self, attacker_level: int | None = None, target_level: int | None = None
     ) -> bool:
         if self.match_level == "-":
             return attacker_level is None and target_level is None
@@ -236,7 +236,7 @@ class NetworkSegmentProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["NetworkSegmentProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["NetworkSegmentProfile"]:
         return NetworkSegmentProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -294,5 +294,5 @@ class NetworkSegmentProfile(Document):
         if not n:
             yield DEFAULT_UPLINK_POLICY
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

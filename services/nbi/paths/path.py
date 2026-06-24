@@ -8,7 +8,7 @@
 # Python modules
 from collections import defaultdict
 from time import perf_counter
-from typing import Tuple, Optional, Dict, List, Iterable, DefaultDict, Any, Union
+from typing import Iterable, Any
 
 # Third-party modules
 from fastapi import APIRouter, Header, HTTPException
@@ -55,8 +55,8 @@ class InterfaceModel(BaseModel):
 
 # from: section
 class ObjectPointer(BaseModel):
-    object: Union[PointerId, PointerRemote]
-    interface: Optional[InterfaceModel]
+    object: PointerId | PointerRemote
+    interface: InterfaceModel | None
 
 
 class InterfaceModel_(BaseModel):
@@ -73,17 +73,17 @@ class LevelPointer(BaseModel):
 
 class ServiceOrderPointer(BaseModel):
     order_id: int
-    remote_system: Optional[str]
+    remote_system: str | None
 
 
 class ServicePointer(BaseModel):
-    service: Union[PointerId, PointerRemote, ServiceOrderPointer]
+    service: PointerId | PointerRemote | ServiceOrderPointer
 
 
-RequestFrom = Union[ObjectPointer, InterfacePointer, ServicePointer]
+RequestFrom = ObjectPointer | InterfacePointer | ServicePointer
 
 # to: section
-RequestTo = Union[ObjectPointer, LevelPointer, InterfacePointer, ServicePointer]
+RequestTo = ObjectPointer | LevelPointer | InterfacePointer | ServicePointer
 
 
 # config: section
@@ -94,21 +94,21 @@ class RequestConfig(BaseModel):
 
 # constraints: section
 class RequestVLANConstraint(BaseModel):
-    vlan: Optional[conint(ge=1, le=4095)] = None
-    interface_untagged: Optional[bool] = None
+    vlan: conint(ge=1, le=4095) | None = None
+    interface_untagged: bool | None = None
     strict: bool = False
 
 
 class RequestConstraints(BaseModel):
-    vlan: Optional[RequestVLANConstraint] = None
+    vlan: RequestVLANConstraint | None = None
     upwards: bool = False
 
 
 class PathRequest(BaseModel):
     from_: RequestFrom = Field(..., alias="from")
     to: RequestTo
-    config: Optional[RequestConfig] = None
-    constraints: Optional[RequestConstraints] = None
+    config: RequestConfig | None = None
+    constraints: RequestConstraints | None = None
 
 
 class PathAPI(NBIAPI):
@@ -185,10 +185,10 @@ class PathAPI(NBIAPI):
 
     def get_object_and_interface(
         self,
-        object: Optional[Union[PointerId, PointerRemote]] = None,
-        interface: Optional[Union[InterfaceModel, InterfaceModel_]] = None,
-        service: Optional[Union[PointerId, PointerRemote, ServiceOrderPointer]] = None,
-    ) -> tuple[ManagedObject, Optional[Interface]]:
+        object: PointerId | PointerRemote | None = None,
+        interface: InterfaceModel | InterfaceModel_ | None = None,
+        service: PointerId | PointerRemote | ServiceOrderPointer | None = None,
+    ) -> tuple[ManagedObject, Interface | None]:
         """
         Process from and to section of request and get object and interface
 
@@ -257,10 +257,10 @@ class PathAPI(NBIAPI):
     def iter_paths(
         self,
         start: ManagedObject,
-        start_iface: Optional[Interface],
+        start_iface: Interface | None,
         goal: BaseGoal,
-        end_iface: Optional[Interface],
-        constraints: Optional[BaseConstraint] = None,
+        end_iface: Interface | None,
+        constraints: BaseConstraint | None = None,
         max_depth: int = MAX_DEPTH_DEFAULT,
         n_shortest: int = N_SHORTEST_DEFAULT,
     ) -> Iterable[dict]:
@@ -323,9 +323,9 @@ class PathAPI(NBIAPI):
     def get_constraints(
         self,
         start: ManagedObject,
-        start_iface: Optional[Interface],
+        start_iface: Interface | None,
         constraints: RequestConstraints,
-    ) -> Optional[BaseConstraint]:
+    ) -> BaseConstraint | None:
         """
         Calculate path constraints
         :param start: Start of path

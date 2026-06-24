@@ -7,7 +7,7 @@
 
 # Python modules
 import logging
-from typing import Optional, List, Dict, Any, Iterable
+from typing import Any, Iterable
 
 # NOC modules
 from noc.models import is_document, get_model_id
@@ -21,7 +21,7 @@ caps_logger = logging.getLogger(__name__)
 
 
 def iter_model_caps(
-    self, scope: Optional[str] = None, include_default: bool = False
+    self, scope: str | None = None, include_default: bool = False
 ) -> Iterable[CapsValue]:
     """Iterate over Model Capabilities"""
     from noc.inv.models.capability import Capability
@@ -65,7 +65,7 @@ def iter_model_caps(
 
 
 def iter_document_caps(
-    self, scope: Optional[str] = None, include_default: bool = False
+    self, scope: str | None = None, include_default: bool = False
 ) -> Iterable[CapsValue]:
     """Iterate over document Capabilities"""
     from noc.inv.models.capability import Capability
@@ -108,7 +108,7 @@ def save_document_caps(
     caps: list[CapsValue],
     dry_run: bool = False,
     bulk=None,
-    changed_fields: Optional[list[ChangeField]] = None,
+    changed_fields: list[ChangeField] | None = None,
 ):
     """"""
     from noc.inv.models.capsitem import CapsItem
@@ -162,7 +162,7 @@ def save_model_caps(
     caps: list[CapsValue],
     dry_run: bool = False,
     bulk=None,
-    changed_fields: Optional[list[ChangeField]] = None,
+    changed_fields: list[ChangeField] | None = None,
 ):
     """"""
     prev_labels, caps_labels, new_caps = set(), set(), []
@@ -213,9 +213,7 @@ def save_model_caps(
     self._reset_caches(self.id, credential=True)
 
 
-def get_caps(
-    self, scope: Optional[str] = None, exposed_scope: Optional[str] = None
-) -> dict[str, Any]:
+def get_caps(self, scope: str | None = None, exposed_scope: str | None = None) -> dict[str, Any]:
     """
     Returns a dict of effective object capabilities
     """
@@ -239,9 +237,7 @@ def get_caps_config(self) -> dict[str, CapsConfig]:
     return {}
 
 
-def set_caps(
-    self, key: str, value: Any, source: str = "manual", scope: Optional[str] = None
-) -> None:
+def set_caps(self, key: str, value: Any, source: str = "manual", scope: str | None = None) -> None:
     """
     Set capability or update
     Args:
@@ -298,9 +294,9 @@ def set_caps(
 
 def reset_caps(
     self,
-    caps: Optional[str] = None,
-    scope: Optional[str] = None,
-    source: Optional[str] = None,
+    caps: str | None = None,
+    scope: str | None = None,
+    source: str | None = None,
 ):
     """
     Remove caps from object
@@ -334,10 +330,10 @@ def update_caps(
     self,
     caps: dict[str, Any],
     source: str,
-    scope: Optional[str] = None,
+    scope: str | None = None,
     dry_run: bool = False,
     bulk=None,
-    logger: Optional[logging.Logger] = None,
+    logger: logging.Logger | None = None,
 ) -> dict[str, Any]:
     """
     Update existing capabilities with a new ones.

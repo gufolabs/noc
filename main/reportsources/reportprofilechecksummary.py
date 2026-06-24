@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import List, Dict
 
 # Third-party modules
 import polars as pl

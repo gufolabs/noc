@@ -9,19 +9,19 @@
 import asyncio
 from collections import deque
 from threading import Lock
-from typing import Optional, Dict, Any
+from typing import Any
 
 # NOC modules
 from .message import PublishRequest
 
 
 class MessageStreamQueue:
-    def __init__(self, loop: Optional[asyncio.BaseEventLoop] = None):
+    def __init__(self, loop: asyncio.BaseEventLoop | None = None):
         self.queue: deque = deque()
         self.lock = Lock()
-        self.waiter: Optional[asyncio.Event] = None
-        self.drain_waiter: Optional[asyncio.Event] = None
-        self.loop: Optional[asyncio.BaseEventLoop] = loop
+        self.waiter: asyncio.Event | None = None
+        self.drain_waiter: asyncio.Event | None = None
+        self.loop: asyncio.BaseEventLoop | None = loop
         self.req_puts: int = 0
         self.req_gets: int = 0
         self.to_shutdown: bool = False
@@ -50,7 +50,7 @@ class MessageStreamQueue:
                 return
             self._notify_waiter(self.waiter)
 
-    async def get(self, timeout: Optional[float] = None) -> Optional[PublishRequest]:
+    async def get(self, timeout: float | None = None) -> PublishRequest | None:
         """
         Get request from queue. Wait forever, if timeout is None,
         of return None if timeout is expired.
@@ -97,7 +97,7 @@ class MessageStreamQueue:
                 self._notify_waiter(self.waiter)
         self.to_shutdown = True
 
-    async def drain(self, timeout: Optional[float] = None) -> bool:
+    async def drain(self, timeout: float | None = None) -> bool:
         """
         Wait until queue is empty
         :return:

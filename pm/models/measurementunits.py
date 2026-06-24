@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional
 from pathlib import Path
 
 # Third-party modules
@@ -116,7 +116,7 @@ class MeasurementUnits(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["MeasurementUnits"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["MeasurementUnits"]:
         return MeasurementUnits.objects.filter(id=oid).first()
 
     @classmethod
@@ -180,7 +180,7 @@ class MeasurementUnits(Document):
     def get_json_path(self) -> Path:
         return safe_json_path(self.name)
 
-    def humanize(self, value: Union[float, int], with_units: bool = False) -> str:
+    def humanize(self, value: float | int, with_units: bool = False) -> str:
         if self.code == "1":
             return str(value)
         if self.code == "s":

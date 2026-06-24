@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Optional, Iterable, Tuple, AsyncIterable, Union, List
+from typing import Iterable, AsyncIterable
 
 # Third-party modules
 from pymongo import ReadPreference
@@ -54,13 +54,13 @@ class LinkDetailDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
-        resource_group: Optional[ResourceGroup] = None,
-        segment: Optional[NetworkSegment] = None,
-        admin_domain_ads: Optional[list[int]] = None,
+        fields: Iterable[str] | None = None,
+        resource_group: ResourceGroup | None = None,
+        segment: NetworkSegment | None = None,
+        admin_domain_ads: list[int] | None = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[tuple[int, str, Union[str, int]]]:
+    ) -> AsyncIterable[tuple[int, str, str | int]]:
         def get_platform(id):
             return str(Platform.get_by_id(id)) if id else ""
 

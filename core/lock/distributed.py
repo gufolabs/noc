@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 import datetime
 import time
 import random
@@ -43,7 +42,7 @@ class DistributedLock(BaseLock):
     ```
     """
 
-    def __init__(self, category: str, owner: str, ttl: Optional[float] = None):
+    def __init__(self, category: str, owner: str, ttl: float | None = None):
         """
         :param category: Lock category name
         :param owner: Lock owner id
@@ -74,7 +73,7 @@ class DistributedLock(BaseLock):
         coll.create_index([("expires", pymongo.ASCENDING)], expireAfterSeconds=0)
         return coll
 
-    def acquire_by_items(self, items: list[str], ttl: Optional[float] = None) -> str:
+    def acquire_by_items(self, items: list[str], ttl: float | None = None) -> str:
         """
         Acquire lock by list of items
         """

@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Tuple, List, Dict
 
 # NOC modules
 from noc.inv.models.interface import Interface

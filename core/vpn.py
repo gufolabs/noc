@@ -7,7 +7,7 @@
 
 # Python modules
 import struct
-from typing import Any, Dict
+from typing import Any
 
 # Third-party modules
 from siphash24 import siphash24

@@ -7,7 +7,7 @@
 
 # Python modules
 import operator
-from typing import Optional, List, Set, Dict, Any, Iterable, Tuple
+from typing import Any, Iterable
 from collections import defaultdict
 from dataclasses import asdict
 
@@ -32,7 +32,7 @@ class TopologyBase:
 
     name: str  # Map Generator Name
     version: int = 0  # Generator version
-    header: Optional[str] = None
+    header: str | None = None
 
     PARAMS: set[str] = set()  # Allowed generator params
     CAPS: set[str] = set()
@@ -58,8 +58,8 @@ class TopologyBase:
 
     def __init__(self, **kwargs):
         # Hints
-        self.node_hints: Optional[dict[str, Any]] = kwargs.get("node_hints") or {}
-        self.link_hints: Optional[dict[str, Any]] = kwargs.get("link_hints") or {}
+        self.node_hints: dict[str, Any] | None = kwargs.get("node_hints") or {}
+        self.link_hints: dict[str, Any] | None = kwargs.get("link_hints") or {}
         self.pn = 0
         # Caches
         self._rings_cache = {}
@@ -79,7 +79,7 @@ class TopologyBase:
         return item.id in self.G
 
     @property
-    def gen_id(self) -> Optional[str]:
+    def gen_id(self) -> str | None:
         raise NotImplementedError
 
     @property
@@ -96,7 +96,7 @@ class TopologyBase:
         """Return uplink node for map. Use on tree layout."""
         return []
 
-    def add_node(self, n: TopologyNode, attrs: Optional[dict[str, Any]] = None) -> None:
+    def add_node(self, n: TopologyNode, attrs: dict[str, Any] | None = None) -> None:
         """
         Add node to map.
 
@@ -141,7 +141,7 @@ class TopologyBase:
         self.G.add_node(o_id, **attrs)
 
     def add_edge(
-        self, o1: str, o2: str, attrs: Optional[dict[str, Any]] = None, edge_type: str = "link"
+        self, o1: str, o2: str, attrs: dict[str, Any] | None = None, edge_type: str = "link"
     ):
         """Add link between interfaces to topology."""
         a = {"connector": "normal"}
@@ -415,10 +415,10 @@ class TopologyBase:
     def iter_maps(
         cls,
         parent: str = None,
-        query: Optional[str] = None,
-        limit: Optional[int] = None,
-        start: Optional[int] = None,
-        page: Optional[int] = None,
+        query: str | None = None,
+        limit: int | None = None,
+        start: int | None = None,
+        page: int | None = None,
     ) -> Iterable[MapItem]:
         """Iterate over available maps."""
 

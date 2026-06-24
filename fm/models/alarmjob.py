@@ -7,7 +7,7 @@
 
 # Python modules
 from enum import Enum
-from typing import Iterable, List, Optional
+from typing import Iterable
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
@@ -111,11 +111,11 @@ class ActionLog(EmbeddedDocument):
     action: AlarmAction = EnumField(AlarmAction, required=True)
     key: str = StringField()
     # Message
-    template: Optional[str] = StringField(required=False)
+    template: str | None = StringField(required=False)
     subject: str = StringField()
     # Status
     status: ActionStatus = EnumField(ActionStatus, default=ActionStatus.NEW)
-    error: Optional[str] = StringField()
+    error: str | None = StringField()
     document_id = StringField()
     # Condition
     min_severity: int = IntField(default=0)
@@ -131,8 +131,8 @@ class ActionLog(EmbeddedDocument):
     # Approve flag (is user Approved Received Message)
     # Notification adapter for sender
     # User Actions
-    user: Optional[int] = IntField()
-    tt_system: Optional[str] = StringField()
+    user: int | None = IntField()
+    tt_system: str | None = StringField()
     ctx = DictField()
 
 

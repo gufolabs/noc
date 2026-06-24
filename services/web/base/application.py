@@ -11,7 +11,7 @@ import os
 import datetime
 import functools
 from collections import OrderedDict
-from typing import TypeVar, Type, Optional, Dict, Any
+from typing import TypeVar, Any
 from http import HTTPStatus
 
 # Third-party modules
@@ -119,7 +119,7 @@ class Application(metaclass=ApplicationBase):
     config = settings.config  # @fixme remove
 
     app_alias = None  # Django 1.5 application aliases
-    require_feature: Optional[Feature] = None  # Feature required for application
+    require_feature: Feature | None = None  # Feature required for application
 
     TZ = get_current_timezone()
 
@@ -329,7 +329,7 @@ class Application(metaclass=ApplicationBase):
 
     @classmethod
     def _set_headers(
-        cls, resp: HttpResponse, headers: Optional[dict[str, Any]] = None
+        cls, resp: HttpResponse, headers: dict[str, Any] | None = None
     ) -> HttpResponse:
         if headers:
             for k, v in headers.items():
@@ -338,7 +338,7 @@ class Application(metaclass=ApplicationBase):
 
     @classmethod
     def render_json(
-        cls, obj, *, status: int = HTTPStatus.OK.value, headers: Optional[dict[str, Any]] = None
+        cls, obj, *, status: int = HTTPStatus.OK.value, headers: dict[str, Any] | None = None
     ) -> HttpResponse:
         """
         Create serialized JSON-encoded response

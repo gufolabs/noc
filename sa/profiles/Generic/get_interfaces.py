@@ -8,16 +8,10 @@
 # Python modules
 import re
 from typing import (
-    Dict,
-    Optional,
-    Union,
     Iterable,
-    Tuple,
     Callable,
-    List,
     Any,
     Iterator,
-    DefaultDict,
 )
 from collections import defaultdict
 from itertools import chain
@@ -84,7 +78,7 @@ class Script(BaseScript):
             )
         return mib["Q-BRIDGE-MIB::dot1qPvid"], mib["Q-BRIDGE-MIB::dot1qVlanCurrentEgressPorts"]
 
-    def get_switchport(self) -> defaultdict[int, dict[str, Union[int, list, None]]]:
+    def get_switchport(self) -> defaultdict[int, dict[str, int | list | None]]:
         # noc::interface::bridge_mode:: access/trunk/hybrid
         result = defaultdict(lambda: {"tagged_vlans": [], "untagged_vlan": None})
         pid_ifindex_mappings = self.get_bridge_ifindex_mappings()
@@ -391,9 +385,7 @@ class Script(BaseScript):
                     interfaces[i]["subinterfaces"] += [s]
         return list(vrfs.values())
 
-    def merge_tables(
-        self, *args: Optional[Iterable]
-    ) -> dict[int, dict[str, Union[int, bool, str]]]:
+    def merge_tables(self, *args: Iterable | None) -> dict[int, dict[str, int | bool | str]]:
         """
         Merge iterables into single table
 
@@ -425,7 +417,7 @@ class Script(BaseScript):
             return smart_text(desc, errors="replace")
         return desc
 
-    def clean_iftype(self, ifname: str, ifindex: Optional[int] = None) -> str:
+    def clean_iftype(self, ifname: str, ifindex: int | None = None) -> str:
         return self.profile.get_interface_type(ifname)
 
     def get_hints(self, ifname: str, iftype: str) -> list[str]:
@@ -445,8 +437,8 @@ class Script(BaseScript):
         return mtu
 
     def iter_iftable(
-        self, key: str, oid: str, ifindexes: Optional[Iterator[int]] = None, clean: Callable = None
-    ) -> Iterable[tuple[str, Union[str, int]]]:
+        self, key: str, oid: str, ifindexes: Iterator[int] | None = None, clean: Callable = None
+    ) -> Iterable[tuple[str, str | int]]:
         """
         Collect part of IF-MIB table.
 

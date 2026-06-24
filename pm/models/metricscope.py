@@ -9,7 +9,7 @@
 import operator
 from threading import Lock
 from dataclasses import dataclass
-from typing import Any, Dict, Optional, List, Callable, Union
+from typing import Any, Optional, Callable
 from pathlib import Path
 
 # Third-party modules
@@ -44,8 +44,8 @@ OLD_PM_SCHEMA_TABLE = "noc_old"
 class ExistingColumn:
     name: str
     type: str
-    default_kind: Optional[str] = None  # DEFAULT, MATERIALIZED
-    default_expression: Optional[str] = None
+    default_kind: str | None = None  # DEFAULT, MATERIALIZED
+    default_expression: str | None = None
 
 
 class KeyField(EmbeddedDocument):
@@ -144,7 +144,7 @@ class MetricScope(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["MetricScope"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["MetricScope"]:
         return MetricScope.objects.filter(id=oid).first()
 
     @classmethod

@@ -10,7 +10,7 @@ import contextlib
 import time
 from contextvars import ContextVar
 from collections import defaultdict
-from typing import Optional, Tuple, List, Dict, Literal, Set
+from typing import Optional, Literal
 from abc import ABCMeta, abstractmethod
 
 # NOC modules
@@ -27,10 +27,10 @@ AUDIT_CHANGE = "noc.core.change.change.audit_change"
 REACTION_HANDLER = "noc.core.change.change.apply_reactions"
 
 cv_policy: ContextVar[Optional["BaseChangeTrackerPolicy"]] = ContextVar("cv_policy", default=None)
-cv_policy_stack: ContextVar[Optional[list["BaseChangeTrackerPolicy"]]] = ContextVar(
+cv_policy_stack: ContextVar[list["BaseChangeTrackerPolicy"] | None] = ContextVar(
     "cv_policy_stack", default=None
 )
-c_user: ContextVar[Optional[str]] = ContextVar("c_user", default=None)
+c_user: ContextVar[str | None] = ContextVar("c_user", default=None)
 c_reaction_suppress: ContextVar[bool] = ContextVar("c_reaction_suppress", default=False)
 
 CHANGE_HANDLERS: dict[str, set[str]] = defaultdict(set)
@@ -82,7 +82,7 @@ class ChangeTracker:
             cv_policy.set(policy)
         return policy
 
-    def get_user(self) -> Optional[str]:
+    def get_user(self) -> str | None:
         """Getting user for changes"""
         from noc.core.middleware.tls import get_user
 
@@ -96,12 +96,12 @@ class ChangeTracker:
         op: Literal["create", "update", "delete"],
         model: str,
         id: str,
-        fields: Optional[list[ChangeField]] = None,
-        datastreams: Optional[list[tuple[str, str]]] = None,
-        domains: Optional[list[tuple[str, str]]] = None,
+        fields: list[ChangeField] | None = None,
+        datastreams: list[tuple[str, str]] | None = None,
+        domains: list[tuple[str, str]] | None = None,
         audit: bool = False,
-        caps: Optional[list[str]] = None,
-        reactions_rules: Optional[list[str]] = None,
+        caps: list[str] | None = None,
+        reactions_rules: list[str] | None = None,
     ) -> None:
         """
         Register datastream change
@@ -172,7 +172,7 @@ class ChangeTracker:
         return policy
 
     @contextlib.contextmanager
-    def bulk_changes(self, user: Optional[str] = None, suppress_reaction: bool = False):
+    def bulk_changes(self, user: str | None = None, suppress_reaction: bool = False):
         """
         Apply all changes at once
         """
@@ -232,7 +232,7 @@ class SimpleChangeTrackerPolicy(BaseChangeTrackerPolicy):
         if not c_reaction_suppress.get() and item.model_id in REACTION_MODELS:
             defer(REACTION_HANDLER, key=item.key, changes=[item])
 
-    def register_ds(self, items: Optional[list[tuple[str, str]]]):
+    def register_ds(self, items: list[tuple[str, str]] | None):
         defers: dict[int, dict[str, set[str]]] = {}
         for ds_name, item_id in items:
             key = hash_int(item_id)

@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import time
-from typing import Iterable, Dict, Optional, Any, List
+from typing import Iterable, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -81,7 +81,7 @@ class EscalationJob(SequenceJob):
             return
         self.remove_job()
 
-    def end_escalation(self, timestamp: Optional[datetime.datetime] = None):
+    def end_escalation(self, timestamp: datetime.datetime | None = None):
         """
         Processed end escalation handlers
         """
@@ -282,7 +282,7 @@ class EscalationJob(SequenceJob):
                     self.logger.info("Nothing waited")
                     return
 
-    def check_closed(self, reason: Optional[str] = None):
+    def check_closed(self, reason: str | None = None):
         """
         Close escalations
         """
@@ -319,7 +319,7 @@ class EscalationJob(SequenceJob):
             if r.status == EscalationStatus.TEMP:
                 self.set_temp_error(r.error)
 
-    def get_span_sample(self, tt_system: Optional[TTSystem] = None) -> int:
+    def get_span_sample(self, tt_system: TTSystem | None = None) -> int:
         """
         Calculate effective sample for escalation span
 
@@ -387,9 +387,7 @@ class EscalationJob(SequenceJob):
             r.append(TTActionContext(action=action))
         return r
 
-    def get_tt_system_context(
-        self, tt_system: TTSystem, tt_id: Optional[str] = None
-    ) -> TTSystemCtx:
+    def get_tt_system_context(self, tt_system: TTSystem, tt_id: str | None = None) -> TTSystemCtx:
         """
         Build TTSystem Context
         Args:
@@ -449,8 +447,8 @@ class EscalationJob(SequenceJob):
         tt_system: TTSystem,
         subject: str,
         body: str,
-        context: Optional[dict[str, Any]] = None,
-        tt_id: Optional[str] = None,
+        context: dict[str, Any] | None = None,
+        tt_id: str | None = None,
     ) -> EscalationResult:
         """
         Create Trouble Ticket on TT System
@@ -515,7 +513,7 @@ class EscalationJob(SequenceJob):
         return r
 
     def close_tt(
-        self, tt_system: TTSystem, tt_id: str, reason: Optional[str] = None
+        self, tt_system: TTSystem, tt_id: str, reason: str | None = None
     ) -> EscalationResult:
         """
         Close Trouble Ticket on TT System
@@ -577,9 +575,7 @@ class EscalationJob(SequenceJob):
         self.logger.info(error)
         return r
 
-    def notify(
-        self, notification_group, subject: str, body: Optional[str] = None
-    ) -> EscalationResult:
+    def notify(self, notification_group, subject: str, body: str | None = None) -> EscalationResult:
         """
         Send Notification
 
@@ -622,7 +618,7 @@ class EscalationJob(SequenceJob):
             tt_id: Number of document on TT System
         """
 
-    def alarm_ack(self, tt_system: Optional[TTSystem]):
+    def alarm_ack(self, tt_system: TTSystem | None):
         """
         Acknowledge alarm by tt_system or settings
 

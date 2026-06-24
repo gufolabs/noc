@@ -7,7 +7,7 @@
 
 # Python modules
 from enum import Enum
-from typing import Optional, Iterable, List, Tuple
+from typing import Optional, Iterable
 
 
 class EscalationPolicy(Enum):
@@ -53,7 +53,7 @@ class EscalationPolicy(Enum):
         """
         Calculate effective policy from a sequence of labels
         """
-        r: Optional[EscalationPolicy] = None
+        r: EscalationPolicy | None = None
         for l_set in labels:
             for label in l_set:
                 if label.startswith("noc::escalation::"):

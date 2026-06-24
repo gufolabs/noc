@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Literal, Optional, Tuple
+from typing import Literal
 from collections import defaultdict
 from dataclasses import dataclass
 
@@ -40,11 +40,11 @@ function_map = {
 class ThresholdProfile:
     window_type: str
     window_size: int
-    window_func: Optional[str]
+    window_func: str | None
     value: float
     condition: Literal["<", ">", "<=", ">="]
-    clear_value: Optional[float]
-    clear_condition: Optional[Literal["<", ">", "<=", ">="]]
+    clear_value: float | None
+    clear_condition: Literal["<", ">", "<=", ">="] | None
 
     def get_function(self):
         if not self.window_func:
@@ -52,7 +52,7 @@ class ThresholdProfile:
         func, *param = function_map.get(self.window_func)
         return func
 
-    def get_activate(self) -> tuple[float, Optional[float], bool]:
+    def get_activate(self) -> tuple[float, float | None, bool]:
         """
         Convert clear value to activation_level
         :return: activation_level, deactivation_level, inverse

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Optional, Iterable, Tuple, Any, AsyncIterable
+from typing import Iterable, Any, AsyncIterable
 
 # NOC modules
 from .base import FieldInfo, FieldType, BaseDataSource
@@ -39,7 +39,7 @@ class ManagedObjectLabelsStatDS(BaseDataSource):
 
     @classmethod
     async def iter_query(
-        cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
+        cls, fields: Iterable[str] | None = None, *args, **kwargs
     ) -> AsyncIterable[tuple[str, Any]]:
         query_fields = [ff.name for ff in cls.iter_ds_fields()][1:]
         row_num = 0

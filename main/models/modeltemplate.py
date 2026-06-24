@@ -8,7 +8,7 @@
 # Python modules
 import threading
 import operator
-from typing import Optional, Dict, List, Any, Union
+from typing import Optional, Any
 
 # Third-party modules
 import cachetools
@@ -54,15 +54,15 @@ class TemplateField(BaseModel):
     label: str
     type: str = "string"
     is_tree: bool = False
-    model_id: Optional[str] = None
-    choices: Optional[list[Any]] = None
-    rest_url: Optional[str] = None
+    model_id: str | None = None
+    choices: list[Any] | None = None
+    rest_url: str | None = None
 
 
 class ParamItem(BaseModel):
     name: str
-    model_id: Optional[str] = None
-    schema: Optional[Any] = None
+    model_id: str | None = None
+    schema: Any | None = None
     # Schema
 
     def clean(self, value) -> Any:
@@ -78,12 +78,12 @@ class ParamItem(BaseModel):
 class DataItem(BaseModel):
     name: str
     value: str
-    remote_system: Optional[str] = None  # Reference to Resource Group
+    remote_system: str | None = None  # Reference to Resource Group
 
 
 class CapsItem(BaseModel):
     capabilities: dict[str, Any]
-    remote_system: Optional[str] = None  # Scope
+    remote_system: str | None = None  # Scope
 
     def __str__(self):
         if not self.remote_system:
@@ -101,16 +101,16 @@ class ResourceItem(BaseModel):
     """
 
     data: list[DataItem]
-    id: Optional[str] = None
-    labels: Optional[list[str]] = None
-    service_groups: Optional[list[str]] = None
+    id: str | None = None
+    labels: list[str] | None = None
+    service_groups: list[str] | None = None
     # Remote System map
-    mappings: Optional[dict[str, str]] = None
+    mappings: dict[str, str] | None = None
     # Caps
-    caps: Optional[list[CapsItem]] = None
-    user: Optional[Any] = None  # User for changes
+    caps: list[CapsItem] | None = None
+    user: Any | None = None  # User for changes
     # Send workflow event
-    event: Optional[str] = None
+    event: str | None = None
 
     def merge_data(self, ri: "ResourceItem", systems_priority: list[str] = None):
         """Merge data over Multiple Resource Item"""
@@ -161,10 +161,10 @@ class ResourceItem(BaseModel):
 
 
 class Result(BaseModel):
-    id: Optional[str] = None
+    id: str | None = None
     status: bool = True
-    error: Optional[str] = None
-    error_code: Optional[str] = None
+    error: str | None = None
+    error_code: str | None = None
     error_fields: list[str] = None
 
 
@@ -184,7 +184,7 @@ class Param(EmbeddedDocument):
     hide = BooleanField(default=False)
     default_expression = StringField()
     param = StringField(required=False)
-    set_capability: Optional[Capability] = PlainReferenceField(Capability, required=False)
+    set_capability: Capability | None = PlainReferenceField(Capability, required=False)
     preferred_template_value = BooleanField(default=False)  # Template value override user
     override_existing = BooleanField(default=False)  # Template value
 
@@ -286,7 +286,7 @@ class ModelTemplate(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ModelTemplate"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ModelTemplate"]:
         return ModelTemplate.objects.filter(id=oid).first()
 
     @classmethod

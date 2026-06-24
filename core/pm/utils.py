@@ -10,7 +10,7 @@ import datetime
 import itertools
 from collections import defaultdict
 from dataclasses import dataclass
-from typing import Iterable, Union, Tuple, Dict, Optional, Any, List, Set, FrozenSet, DefaultDict
+from typing import Iterable, Optional, Any
 
 # Third-party modules
 import orjson
@@ -40,7 +40,7 @@ class Condition:
     field: str
     value: Any
     condition: str = "="
-    labels: Optional[list[str]] = None
+    labels: list[str] | None = None
 
     def get_expr(self) -> str:
         if self.condition == "in":
@@ -104,8 +104,8 @@ class Function:
 
     name: str
     function: Optional["Function"] = None
-    alias: Optional[str] = None
-    args: Optional[str] = None
+    alias: str | None = None
+    args: str | None = None
 
     def get_expr(self, field: str):
         if self.function:
@@ -130,19 +130,19 @@ class QueryField:
     def __init__(
         self,
         field: str,
-        alias: Optional[str] = None,
-        scale: Optional[Scale] = None,
-        measure: Optional[MeasurementUnits] = None,
-        function: Optional[Union[str, Function]] = None,
-        metric_type: Optional[MetricType] = None,
+        alias: str | None = None,
+        scale: Scale | None = None,
+        measure: MeasurementUnits | None = None,
+        function: str | Function | None = None,
+        metric_type: MetricType | None = None,
     ):
         self.field: str = field
         if isinstance(function, str):
             self.function = self.function_alias[function]
         else:
             self.function = function or Function("argMax", alias="last", args="ts")
-        self.scale: Optional[Scale] = scale
-        self.units: Optional[MeasurementUnits] = measure
+        self.scale: Scale | None = scale
+        self.units: MeasurementUnits | None = measure
         self._alias = alias
         self._type = metric_type
 
@@ -158,7 +158,7 @@ class QueryField:
 
     @classmethod
     def from_query(
-        cls, name: str, alias: Optional[str] = None, table_name: Optional[str] = None
+        cls, name: str, alias: str | None = None, table_name: str | None = None
     ) -> "QueryField":
         """
         Build QueryField from query alias
@@ -186,7 +186,7 @@ class QuerySet:
     def __init__(
         self,
         proxy: "MetricScopeProxy",
-        group_by: Optional[tuple[str, ...]] = None,
+        group_by: tuple[str, ...] | None = None,
     ):
         """
         # Cached return values
@@ -200,7 +200,7 @@ class QuerySet:
         # self.query_cache: Dict[str, List["MetricValue"]] = defaultdict(list)
         self.query_cache: dict[frozenset[tuple[str, str]], dict[str, list[MetricValue]]] = {}
         # List Metric Values - series
-        self.last_field: Optional[str] = None
+        self.last_field: str | None = None
         self.include_last_ts: bool = False
 
     def __str__(self) -> str:
@@ -213,8 +213,8 @@ class QuerySet:
     def __call__(
         self,
         *args,
-        field: Optional[str] = None,
-        function: Optional[Union[str, Function]] = None,
+        field: str | None = None,
+        function: str | Function | None = None,
         **kwargs,
     ) -> "QuerySet":
         if field:
@@ -240,7 +240,7 @@ class QuerySet:
             return field.alias in self.fields
         return False
 
-    def is_field_requested(self, field: Optional[str] = None) -> bool:
+    def is_field_requested(self, field: str | None = None) -> bool:
         """Check fields in Query Cache"""
         if not self.query_cache:
             return False
@@ -327,7 +327,7 @@ class QuerySet:
     def parse_query(cls, sql: str) -> "QuerySet":
         """Build Queryset by SQL Expression"""
 
-    def add_query_field(self, query: Union[QueryField, str], alias: Optional[str] = None):
+    def add_query_field(self, query: QueryField | str, alias: str | None = None):
         """Add Query field for build request"""
         if isinstance(query, str) and self.is_meta_field(query):
             query = QueryField(field=query)
@@ -362,7 +362,7 @@ class QuerySet:
             r[k] = (k, keys[k])
         return frozenset(r.values())
 
-    def value(self, name: Optional[str] = None, **kwargs) -> Optional[MetricValue]:  # ? params
+    def value(self, name: str | None = None, **kwargs) -> MetricValue | None:  # ? params
         """
         Getting value by field name
         Attrs:
@@ -380,7 +380,7 @@ class QuerySet:
         # r = self.query_cache[key][name]
         # return r[0]
 
-    def humanize_value(self, name: Optional[str] = None, with_units: bool = False, **kwargs) -> str:
+    def humanize_value(self, name: str | None = None, with_units: bool = False, **kwargs) -> str:
         """Getting human-readable metric form"""
         r = self.value(name, **kwargs)
         if r:
@@ -412,7 +412,7 @@ class QuerySet:
         for gk in self.query_cache:
             yield {k: v[0] for k, v in self.query_cache[gk].items()}
 
-    def metric_values(self, field: Optional[str] = None) -> Iterable[MetricValue]:
+    def metric_values(self, field: str | None = None) -> Iterable[MetricValue]:
         """Iterate ove all requested metrics"""
         field = field or self.last_field
         if not self.is_field_requested(field):
@@ -430,7 +430,7 @@ class MetricScopeProxy:
     def __init__(
         self,
         scope: MetricScope,
-        query: Optional[str] = None,
+        query: str | None = None,
     ):
         """
         Multiple QuerySet for different group_by query
@@ -439,9 +439,9 @@ class MetricScopeProxy:
             query: Query to Clickhouse for scope data
         """
         self.scope: MetricScope = scope
-        self.query: Optional[str] = query
-        self.last_group_by: Optional[tuple[str, ...]] = None
-        self.queries: dict[Optional[tuple[str, ...]], QuerySet] = {}
+        self.query: str | None = query
+        self.last_group_by: tuple[str, ...] | None = None
+        self.queries: dict[tuple[str, ...] | None, QuerySet] = {}
         self.query_conditions: list[Condition] = []
 
     def add_conditions(self, conditions: dict[str, Any]):
@@ -460,7 +460,7 @@ class MetricScopeProxy:
                 )
             )
 
-    def add_queryset(self, group_by: Optional[list[str]] = None):
+    def add_queryset(self, group_by: list[str] | None = None):
         """
         Add queryset for key by group_by. If not set used default group key
         Attrs:
@@ -477,7 +477,7 @@ class MetricScopeProxy:
         self.last_group_by = group_by
         return self.queries[group_by]
 
-    def get_queryset(self, group_by: Optional[list[str]] = None) -> Optional[QuerySet]:
+    def get_queryset(self, group_by: list[str] | None = None) -> QuerySet | None:
         """
         Get queryset by group key
         Attrs:
@@ -500,8 +500,8 @@ class MetricScopeProxy:
     def __call__(
         self,
         *args,
-        queries: Optional[list[Union[str, QueryField]]] = None,
-        group_by: Optional[list[str]] = None,
+        queries: list[str | QueryField] | None = None,
+        group_by: list[str] | None = None,
         **kwargs,
     ) -> "QuerySet":
         qs = self.get_queryset(group_by)
@@ -526,7 +526,7 @@ class MetricProxy:
         MetricProxy([("managed_object", 22222222, "interface": "1/1/1")]).interface(queries=["load_in", "load_out"]).values()
     """
 
-    def __init__(self, query_ts: Optional[datetime.datetime] = None, **kwargs):
+    def __init__(self, query_ts: datetime.datetime | None = None, **kwargs):
         self._scopes: dict[str, "MetricScopeProxy"] = {}  # Scope Storage
         self._conditions = kwargs
 
@@ -587,7 +587,7 @@ class MetricProxy:
 
 
 def get_objects_metrics(
-    managed_objects: Union[Iterable, int],
+    managed_objects: Iterable | int,
 ) -> tuple[dict[Any, dict[str, dict[str, int]]], dict[Any, datetime.datetime]]:
     """
     Attrs:
@@ -687,9 +687,9 @@ def get_objects_metrics(
 
 
 def get_interface_metrics(
-    managed_objects: Union[Iterable, int], metrics: Optional[dict[str, Any]] = None
+    managed_objects: Iterable | int, metrics: dict[str, Any] | None = None
 ) -> tuple[
-    dict[Any, dict[str, dict[str, Union[float, int]]]],
+    dict[Any, dict[str, dict[str, float | int]]],
     dict[Any, datetime.datetime],
 ]:
     """
@@ -752,9 +752,7 @@ def get_interface_metrics(
         ", ".join(bi_map),
     )
     ch = ch_connection()
-    metric_map: defaultdict["ManagedObject", dict[str, dict[str, Union[int, float]]]] = defaultdict(
-        dict
-    )
+    metric_map: defaultdict["ManagedObject", dict[str, dict[str, int | float]]] = defaultdict(dict)
     last_ts: dict["ManagedObject", datetime.datetime] = {}  # mo -> ts
     try:
         results = ch.execute(post=SQL, return_raw=True)

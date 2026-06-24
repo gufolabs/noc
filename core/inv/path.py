@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Iterable, List, Set, Dict, DefaultDict
+from typing import Iterable
 from dataclasses import dataclass
 from enum import Enum
 from collections import defaultdict
@@ -39,7 +39,7 @@ class AdjItem:
 
 def find_path(
     obj: Object, connection: str, target_protocols: Iterable[str], max_depth=100, trace_wire=False
-) -> Optional[list[PathItem]]:
+) -> list[PathItem] | None:
     """
     Build shortest path from object's connection until a connection with any of the
     target protocols found.
@@ -123,7 +123,7 @@ def find_path(
         # Process the wave
         for co in wave:
             # Find incoming
-            incoming: Optional[str] = None
+            incoming: str | None = None
             for adj in neighbors[co]:
                 pi = PathItem(obj=co, connection=adj.local_name)
                 if pi in prev:

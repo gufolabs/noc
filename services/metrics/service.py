@@ -8,7 +8,7 @@
 
 # Python modules
 from collections import defaultdict
-from typing import Any, Dict, Tuple, List, Optional, Set, Iterable, Union
+from typing import Any, Iterable
 from dataclasses import dataclass
 from time import perf_counter
 import sys
@@ -49,7 +49,7 @@ from noc.services.metrics.models.target import (
 from noc.config import config as global_config
 
 # MetricKey - scope, key ctx: (managed_object, <bi_id>), Key Labels
-ObjectTarget = Union[ManagedObjectTarget, SLAProbeTarget]
+ObjectTarget = ManagedObjectTarget | SLAProbeTarget
 
 
 @dataclass
@@ -79,15 +79,13 @@ class MetricsService(FastAPIService):
         super().__init__()
         # Metric Configs
         self.scopes: dict[str, ScopeInfo] = {}
-        self.metric_configs: dict[
-            tuple[str, str], Union[ProbeNodeConfig, ComposeProbeNodeConfig]
-        ] = {}
+        self.metric_configs: dict[tuple[str, str], ProbeNodeConfig | ComposeProbeNodeConfig] = {}
         self.compose_inputs: dict[str, set[str]] = {}
         self.scope_cdag: dict[str, CDAG] = {}  # Scope graph cache
         self.cards: dict[MetricKey, Card] = {}  # Metric cards
-        self.graph: Optional[CDAG] = None  # Service Metric Graph
+        self.graph: CDAG | None = None  # Service Metric Graph
         # Graph node State
-        self.change_log: Optional[ChangeLog] = None
+        self.change_log: ChangeLog | None = None
         self.start_state: dict[str, dict[str, Any]] = {}
         # Source Configs
         self.targets: dict[int, ObjectTarget] = {}
@@ -103,7 +101,7 @@ class MetricsService(FastAPIService):
         # Sync primitives
         self.mappings_ready_event = asyncio.Event()  # Load Metric Sources
         self.rules_ready_event = asyncio.Event()  # Load Metric Rules
-        self.sync_cursor_condition: Optional[asyncio.Condition] = (
+        self.sync_cursor_condition: asyncio.Condition | None = (
             None  # Condition for commit stream cursor
         )
         self.node_errors: dict[str, ErrorState] = {}
@@ -230,7 +228,7 @@ class MetricsService(FastAPIService):
             return
         self.unknown_sources.add(k[1])
 
-    def set_error(self, k: MetricKey, msg: str, ts: Optional[int] = None):
+    def set_error(self, k: MetricKey, msg: str, ts: int | None = None):
         """"""
         ts = int(ts or perf_counter())
         if msg in self.node_errors:
@@ -329,7 +327,7 @@ class MetricsService(FastAPIService):
     @staticmethod
     def get_key(
         si: ScopeInfo, data: MetricsItem
-    ) -> tuple[MetricKey, Optional[int], Optional[int], tuple[str, ...]]:
+    ) -> tuple[MetricKey, int | None, int | None, tuple[str, ...]]:
         def iter_labels(f_labels):
             if not labels or not f_labels:
                 return
@@ -368,7 +366,7 @@ class MetricsService(FastAPIService):
         return codecs.encode(d, "base_64")[:7].decode("utf-8")
 
     @staticmethod
-    def merge_labels(l1: Optional[list[str]], l2: list[str]) -> list[str]:
+    def merge_labels(l1: list[str] | None, l2: list[str]) -> list[str]:
         """
         Merge labels list
         :param l1:
@@ -386,9 +384,9 @@ class MetricsService(FastAPIService):
         self,
         k: MetricKey,
         labels: list[str],
-        target: Optional[ManagedObjectTarget] = None,
-        sensor: Optional[SensorComponentTarget] = None,
-    ) -> Optional[Card]:
+        target: ManagedObjectTarget | None = None,
+        sensor: SensorComponentTarget | None = None,
+    ) -> Card | None:
         """
         Generate part of computation graph and collect its viable inputs
         :param k: (scope, ((key field, key value), ...), (key label, ...))
@@ -426,7 +424,7 @@ class MetricsService(FastAPIService):
         card.refresh_card(k, labels, self.rules)
         return card
 
-    def get_scope_cdag(self, k: MetricKey) -> Optional[CDAG]:
+    def get_scope_cdag(self, k: MetricKey) -> CDAG | None:
         """
         Generate CDAG for a given metric key
         :param k:

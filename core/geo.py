@@ -7,7 +7,6 @@
 
 # Python modules
 import math
-from typing import Union, List, Tuple, Dict
 
 # Third-party modules
 import geojson
@@ -25,7 +24,7 @@ ELLIPSOIDS["PZ-90"] = (6378.1365, 6356.751758, 1 / 298.2564151)
 ELLIPSOID = config.gis.ellipsoid
 
 
-def _get_point(p: Union[GPoint, list[float], tuple[float, float], geojson.Point, dict]) -> GPoint:
+def _get_point(p: GPoint | list[float] | tuple[float, float] | geojson.Point | dict) -> GPoint:
     """
     Convert to geopy Point
     """

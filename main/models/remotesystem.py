@@ -9,7 +9,7 @@
 import operator
 import datetime
 from threading import Lock
-from typing import Optional, Union, List, Dict, Tuple, Any
+from typing import Optional, Any
 
 # Third-party modules
 import bson
@@ -158,7 +158,7 @@ class RemoteSystem(Document):
     enable_fmevent = BooleanField()
     enable_metrics = BooleanField()
     enable_maintenance = BooleanField()
-    api_key: Optional[APIKey] = ReferenceField(APIKey)
+    api_key: APIKey | None = ReferenceField(APIKey)
     remote_collectors_policy: str = StringField(
         choices=[
             ("D", "Disable"),
@@ -233,7 +233,7 @@ class RemoteSystem(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["RemoteSystem"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["RemoteSystem"]:
         return RemoteSystem.objects.filter(id=oid).first()
 
     @classmethod
@@ -316,11 +316,11 @@ class RemoteSystem(Document):
 
     def extract(
         self,
-        extractors: Optional[list[str]] = None,
+        extractors: list[str] | None = None,
         quiet: bool = False,
         incremental: bool = False,
-        checkpoint: Optional[str] = None,
-        exclude_fmevent: Optional[bool] = False,
+        checkpoint: str | None = None,
+        exclude_fmevent: bool | None = False,
     ) -> list[StepResult]:
         extractors = extractors or self.get_extractors(exclude_fmevent=exclude_fmevent)
         error, results = None, []
@@ -365,10 +365,10 @@ class RemoteSystem(Document):
 
     def load(
         self,
-        extractors: Optional[list[str]] = None,
+        extractors: list[str] | None = None,
         quiet: bool = False,
         exclude_fmevent: bool = False,
-    ) -> Optional[list[StepResult]]:
+    ) -> list[StepResult] | None:
         extractors = extractors or self.get_extractors(exclude_fmevent=exclude_fmevent)
         error, r = None, []
         try:
@@ -391,8 +391,8 @@ class RemoteSystem(Document):
         return r
 
     def check(
-        self, extractors: Optional[list[str]] = None, out=None
-    ) -> Optional[tuple[int, list[StepResult]]]:
+        self, extractors: list[str] | None = None, out=None
+    ) -> tuple[int, list[StepResult]] | None:
         extractors = extractors or self.get_extractors()
         try:
             return self.get_handler().check(extractors, out=out)
@@ -403,8 +403,8 @@ class RemoteSystem(Document):
         self,
         step: str,
         error: str,
-        recommended_actions: Optional[str] = None,
-        ts: Optional[datetime.datetime] = None,
+        recommended_actions: str | None = None,
+        ts: datetime.datetime | None = None,
     ):
         ts = ts or datetime.datetime.now()
         send_message(

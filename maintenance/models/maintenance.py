@@ -11,7 +11,7 @@ import operator
 import re
 import logging
 from threading import Lock
-from typing import Optional, List, Set, Union, Tuple, Dict, Any
+from typing import Optional, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -131,7 +131,7 @@ class Maintenance(Document):
     escalate_managed_object = ForeignKeyField(ManagedObject)
     # Time pattern when maintenance is active
     # None - active all the time
-    time_pattern: Optional[TimePattern] = ForeignKeyField(TimePattern)
+    time_pattern: TimePattern | None = ForeignKeyField(TimePattern)
     # Objects declared to be affected by maintenance
     direct_objects: list["MaintenanceObject"] = EmbeddedDocumentListField(MaintenanceObject)
     # Segments declared to be affected by maintenance
@@ -158,7 +158,7 @@ class Maintenance(Document):
     remote_objects: list["RemoteObject"] = EmbeddedDocumentListField(RemoteObject)
     # Watchers
     watchers: list[WatchDocumentItem] = EmbeddedDocumentListField(WatchDocumentItem)
-    watcher_wait_ts: Optional[datetime.datetime] = DateTimeField(required=False)
+    watcher_wait_ts: datetime.datetime | None = DateTimeField(required=False)
     # Object id in BI
     # bi_id = LongField(unique=True)
 
@@ -173,11 +173,11 @@ class Maintenance(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Maintenance"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Maintenance"]:
         return Maintenance.objects.filter(id=oid).first()
 
     @classmethod
-    def get_min_wait_ts(cls) -> Optional[datetime.datetime]:
+    def get_min_wait_ts(cls) -> datetime.datetime | None:
         """"""
         return (
             Maintenance.objects()
@@ -212,7 +212,7 @@ class Maintenance(Document):
             m_stop = datetime.datetime.fromisoformat(m_stop)
         return m_start, m_stop
 
-    def event(self, stage: str, data: Optional[dict[str, Any]] = None):
+    def event(self, stage: str, data: dict[str, Any] | None = None):
         """
         Process object-related event
         Args:
@@ -385,7 +385,7 @@ class Maintenance(Document):
         ManagedObject.reset_maintenance(self.id)
 
     @classmethod
-    def currently_affected(cls, objects: Optional[list[int]] = None) -> list[int]:
+    def currently_affected(cls, objects: list[int] | None = None) -> list[int]:
         """
         Returns a list of currently affected object ids
         """
@@ -412,7 +412,7 @@ class Maintenance(Document):
 
 
 def update_affected_objects(
-    maintenance_id, start: datetime.datetime, stop: Optional[datetime.datetime] = None
+    maintenance_id, start: datetime.datetime, stop: datetime.datetime | None = None
 ):
     """
     Calculate and fill affected objects

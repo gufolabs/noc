@@ -9,7 +9,6 @@
 
 # Python modules
 import re
-from typing import Tuple
 
 # NOC modules
 from noc.core.profile.base import BaseProfile

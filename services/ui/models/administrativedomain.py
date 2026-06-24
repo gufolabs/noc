@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel
@@ -21,21 +20,21 @@ class DefaultAdministrativeDomainItem(BaseModel):
     name: str
     labels: list[LabelItem]
     effective_labels: list[LabelItem]
-    parent: Optional[Reference] = None
-    description: Optional[str] = None
-    default_pool: Optional[Reference] = None
-    bioseg_floating_name_template: Optional[Reference] = None
-    bioseg_floating_parent_segment: Optional[Reference] = None
-    remote_system: Optional[Reference] = None
-    remote_id: Optional[str] = None
-    bi_id: Optional[str] = None
+    parent: Reference | None = None
+    description: str | None = None
+    default_pool: Reference | None = None
+    bioseg_floating_name_template: Reference | None = None
+    bioseg_floating_parent_segment: Reference | None = None
+    remote_system: Reference | None = None
+    remote_id: str | None = None
+    bi_id: str | None = None
 
 
 class FormAdministrativeDomainItem(BaseModel):
     name: str
-    parent: Optional[Reference] = None
-    description: Optional[str] = None
-    default_pool: Optional[Reference] = None
-    bioseg_floating_name_template: Optional[Reference] = None
-    bioseg_floating_parent_segment: Optional[Reference] = None
-    labels: Optional[list[str]] = None
+    parent: Reference | None = None
+    description: str | None = None
+    default_pool: Reference | None = None
+    bioseg_floating_name_template: Reference | None = None
+    bioseg_floating_parent_segment: Reference | None = None
+    labels: list[str] | None = None

@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from collections import defaultdict
-from typing import List, Dict, Any, Optional, Tuple, Set, Union, Callable, FrozenSet, Iterable
+from typing import Any, Optional, Callable, Iterable
 from threading import Lock
 
 # Third-party modules
@@ -194,7 +194,7 @@ class MetricRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["MetricRule"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["MetricRule"]:
         return MetricRule.objects.filter(id=oid).first()
 
     @classmethod
@@ -219,7 +219,7 @@ class MetricRule(Document):
                 continue
             yield match
 
-    def get_matcher(self) -> Optional[Callable]:
+    def get_matcher(self) -> Callable | None:
         """Build matcher structure"""
         expr = []
         for mr in self.iter_conditions():
@@ -291,7 +291,7 @@ class MetricRule(Document):
 
     @classmethod
     def get_affected_rules(
-        cls, ctx: dict[str, Any], scope: Optional[str] = None
+        cls, ctx: dict[str, Any], scope: str | None = None
     ) -> list[tuple[str, str]]:
         """Getting rules for ctx"""
         r = []

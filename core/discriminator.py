@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Union, Set, List, Tuple, Iterable
+from typing import Any, Union, Iterable
 
 # NOC modules
 from noc.core.text import ranges_to_list

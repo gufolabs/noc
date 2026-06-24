@@ -8,7 +8,7 @@
 # Python modules
 from threading import Lock
 import operator
-from typing import Optional, List, Dict, Any, Union
+from typing import Optional, Any
 from pathlib import Path
 
 # Third-party modules
@@ -136,7 +136,7 @@ class ModelInterface(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ModelInterface"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ModelInterface"]:
         return ModelInterface.objects.filter(id=oid).first()
 
     @classmethod
@@ -144,7 +144,7 @@ class ModelInterface(Document):
     def get_by_name(cls, name: str) -> Optional["ModelInterface"]:
         return ModelInterface.objects.filter(name=name).first()
 
-    def get_attr(self, name: str) -> Optional[ModelInterfaceAttr]:
+    def get_attr(self, name: str) -> ModelInterfaceAttr | None:
         for a in self.attrs:
             if a.name == name:
                 return a

@@ -7,7 +7,6 @@
 
 # Python modules
 from enum import Enum
-from typing import Optional
 from types import CodeType
 import sys
 
@@ -57,7 +56,7 @@ class ProbeSetting:
         address: str,
         name: str,
         interval,
-        status: Optional[bool] = None,
+        status: bool | None = None,
         policy: str = "f",
         size=64,
         count=3,
@@ -66,10 +65,10 @@ class ProbeSetting:
         report_attempts: bool = False,
         time_expr=None,
         expr_policy="D",
-        bi_id: Optional[int] = None,
-        fm_pool: Optional[str] = None,
+        bi_id: int | None = None,
+        fm_pool: str | None = None,
         is_fatal: bool = False,
-        interface: Optional[str] = None,
+        interface: str | None = None,
         *args,
         **kwargs,
     ):
@@ -82,7 +81,7 @@ class ProbeSetting:
         self.size = max(size, 64)
         self.count = max(count, 1)
         self.timeout = self._clean_timeout(timeout)
-        self.sent_status: Optional[bool] = None
+        self.sent_status: bool | None = None
         self.report_rtt = report_rtt
         self.report_attempts = report_attempts
         self.time_expr = time_expr
@@ -159,7 +158,7 @@ class ProbeSetting:
 
     @classmethod
     @cachetools.cachedmethod(lambda _: tp_cache)
-    def compile(cls, src: str) -> Optional[CodeType]:
+    def compile(cls, src: str) -> CodeType | None:
         if src:
             try:
                 return compile(src, "<string>", "eval")

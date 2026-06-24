@@ -10,7 +10,7 @@ from threading import Lock
 import operator
 from functools import partial
 from dataclasses import dataclass
-from typing import Optional, Dict, List, Union
+from typing import Optional
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
@@ -110,7 +110,7 @@ class SLAProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["SLAProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["SLAProfile"]:
         return SLAProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -144,7 +144,7 @@ class SLAProfile(Document):
 
     @staticmethod
     def config_from_settings(
-        m: "SLAProfileMetrics", profile_interval: Optional[int] = None
+        m: "SLAProfileMetrics", profile_interval: int | None = None
     ) -> "MetricConfig":
         """
         Returns MetricConfig from .metrics field
@@ -203,5 +203,5 @@ class SLAProfile(Document):
                 instance_filters=[("profile", self.id)],
             )
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

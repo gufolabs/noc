@@ -9,7 +9,7 @@
 from collections import defaultdict
 
 # Third-party modules
-from typing import Dict, List, Any, DefaultDict
+from typing import Any
 
 # NOC modules
 from noc.services.discovery.jobs.base import DiscoveryCheck

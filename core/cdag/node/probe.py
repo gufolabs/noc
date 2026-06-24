@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Dict, Callable, Iterable, Tuple
+from typing import Callable, Iterable
 from threading import Lock
 import sys
 import inspect
@@ -34,9 +34,9 @@ def unscope(x):
 
 
 class ProbeNodeState(BaseModel):
-    lt: Optional[int] = None
-    lv: Optional[ValueType] = None
-    flag: Optional[int] = None
+    lt: int | None = None
+    lv: ValueType | None = None
+    flag: int | None = None
 
 
 class ProbeNodeConfig(BaseModel):
@@ -70,15 +70,15 @@ class ProbeNode(BaseCDAGNode):
         super().__init__(*args, **kwargs)
         self.convert = self.get_convert(self.config.unit, self.config.is_delta)
         self.base, self.exp = self.get_scale(self.config.scale)
-        self.fatal_error: Optional[str] = None
+        self.fatal_error: str | None = None
 
     def __str__(self):
         return f"{self.name}: {self.node_id}"
 
-    def get_error(self) -> Optional[str]:
+    def get_error(self) -> str | None:
         return self.fatal_error or None
 
-    def _upscale(self, v: ValueType, scale: str) -> Optional[ValueType]:
+    def _upscale(self, v: ValueType, scale: str) -> ValueType | None:
         if v is None:
             return None  # Cannot scale None
         if scale == self.config.scale:
@@ -95,7 +95,7 @@ class ProbeNode(BaseCDAGNode):
             return v * self.base**-self.exp
         return v * (base**exp) * self.base**-self.exp
 
-    def get_value(self, x: ValueType, ts: int, unit: str) -> Optional[ValueType]:
+    def get_value(self, x: ValueType, ts: int, unit: str) -> ValueType | None:
         flag = None
         if "|" in unit:
             # <unit>|<flag>
@@ -180,7 +180,7 @@ class ProbeNode(BaseCDAGNode):
             return MAX32
         return MAX64
 
-    def get_delta(self, value: ValueType, ts: int) -> Optional[ValueType]:
+    def get_delta(self, value: ValueType, ts: int) -> ValueType | None:
         """
         Calculate value from delta, gently handling overflows
         :param value:
@@ -309,7 +309,7 @@ class ProbeNode(BaseCDAGNode):
         """
         cls._SCALE = {}
 
-    def get_time_delta(self, ts: int) -> Optional[int]:
+    def get_time_delta(self, ts: int) -> int | None:
         """
         Calculate time_delta from node ts
         return

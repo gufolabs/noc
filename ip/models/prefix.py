@@ -9,7 +9,7 @@
 from collections import defaultdict
 import operator
 from threading import Lock
-from typing import List, Optional, Iterable, Dict, Any
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 from django.db import models, connection
@@ -48,7 +48,7 @@ id_lock = Lock()
 
 class PoolItem(BaseModel):
     pool: Any
-    ip_filter: Optional[str] = None
+    ip_filter: str | None = None
 
 
 PoolItems = RootModel[list[PoolItem]]
@@ -114,7 +114,7 @@ class Prefix(NOCModel):
     vlan: "VLAN" = DocumentReferenceField(VLAN, null=True, blank=True)
     description: str = models.TextField(_("Description"), blank=True, null=True)
     # Pools
-    pools: Optional[list[PoolItem]] = PydanticField(
+    pools: list[PoolItem] | None = PydanticField(
         "Remote System Mapping Items",
         schema=PoolItems,
         blank=True,
@@ -224,7 +224,7 @@ class Prefix(NOCModel):
                 continue
             yield p
 
-    def get_pool_hints(self, pool) -> Optional[dict[str, Any]]:
+    def get_pool_hints(self, pool) -> dict[str, Any] | None:
         """Getting pool setting for L2Domain"""
         return {}
 
@@ -417,7 +417,7 @@ class Prefix(NOCModel):
         return ""
 
     @property
-    def netmask(self) -> Optional[str]:
+    def netmask(self) -> str | None:
         """
         returns Netmask for IPv4
         :return:
@@ -427,7 +427,7 @@ class Prefix(NOCModel):
         return None
 
     @property
-    def broadcast(self) -> Optional[str]:
+    def broadcast(self) -> str | None:
         """
         Returns Broadcast for IPv4
         :return:
@@ -437,7 +437,7 @@ class Prefix(NOCModel):
         return None
 
     @property
-    def wildcard(self) -> Optional[str]:
+    def wildcard(self) -> str | None:
         """
         Returns Cisco wildcard for IPv4
         :return:
@@ -447,7 +447,7 @@ class Prefix(NOCModel):
         return ""
 
     @property
-    def size(self) -> Optional[int]:
+    def size(self) -> int | None:
         """
         Returns IPv4 prefix size
         :return:
@@ -657,7 +657,7 @@ class Prefix(NOCModel):
         return self.profile.prefix_special_address_policy
 
     @property
-    def usage(self) -> Optional[float]:
+    def usage(self) -> float | None:
         if self.is_ipv4:
             usage = getattr(self, "_usage_cache", None)
             if usage is not None:
@@ -725,7 +725,7 @@ class Prefix(NOCModel):
             p._usage_cache = float(usage[p.id]) * 100.0 / float(size)
 
     @property
-    def address_usage(self) -> Optional[float]:
+    def address_usage(self) -> float | None:
         if not self.is_ipv4:
             # Fix for ipv6
             return None
@@ -811,16 +811,16 @@ class Prefix(NOCModel):
     def get_resource_pool_usage(
         cls,
         pools: list[ResourcePool],
-        domains: Optional[list["Prefix"]] = None,
+        domains: list["Prefix"] | None = None,
     ):
         """"""
         return 0.0
 
     @property
-    def resource_usage(self) -> Optional[float]:
+    def resource_usage(self) -> float | None:
         return self.address_usage
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.profile.get_css_class() if self.profile else None
 
 

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Third-party modules
-from typing import List, Dict, Set, Any
+from typing import Any
 
 # NOC modules
 from noc.core.hash import dict_hash_int

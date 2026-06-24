@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Tuple, Optional, Iterable, List
+from typing import Iterable
 
 # NOC Modules
 from noc.core.checkers.base import CheckResult, NODATA
@@ -19,15 +19,15 @@ class RemoteSystemConfig:
     id: str
     name: str
     bi_id: int
-    api_key: Optional[str] = None
-    code: Optional[str] = None
+    api_key: str | None = None
+    code: str | None = None
     is_banned: bool = False
     enable_event: bool = True
     enable_metrics: bool = True
     policy: str = "E"
     batch_signal: str = "A"
-    batch_size: Optional[int] = 50000
-    batch_delay_s: Optional[int] = 10
+    batch_size: int | None = 50000
+    batch_delay_s: int | None = 10
 
     @classmethod
     def from_data(cls, data) -> "RemoteSystemConfig":
@@ -51,11 +51,11 @@ class SensorConfig:
     name: str
     bi_id: int
     units: str = "1"
-    managed_object: Optional[int] = None
-    hints: Optional[tuple[str, ...]] = None
+    managed_object: int | None = None
+    hints: tuple[str, ...] | None = None
 
     @classmethod
-    def from_data(cls, data, managed_object: Optional[int] = None) -> "SensorConfig":
+    def from_data(cls, data, managed_object: int | None = None) -> "SensorConfig":
         return SensorConfig(
             name=data["name"],
             bi_id=data["bi_id"],
@@ -80,13 +80,13 @@ class SourceConfig:
     address: str
     fm_pool: str
     api_key: str
-    managed_object: Optional[int] = None
+    managed_object: int | None = None
     enable_metrics: bool = False
     enable_fmevent: bool = False
     no_data_check: bool = False
-    mapping_refs: Optional[tuple[str, ...]] = None
-    sensors: Optional[tuple[str, ...]] = None
-    services: Optional[tuple[int, ...]] = None
+    mapping_refs: tuple[str, ...] | None = None
+    sensors: tuple[str, ...] | None = None
+    services: tuple[int, ...] | None = None
 
     @classmethod
     def from_data(cls, data) -> "SourceConfig":

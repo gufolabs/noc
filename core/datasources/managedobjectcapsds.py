@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Optional, Iterable, Dict, Any, Tuple, List, AsyncIterable
+from typing import Iterable, Any, AsyncIterable
 
 # NOC modules
 from .base import FieldInfo, BaseDataSource, FieldType
@@ -89,7 +89,7 @@ class ManagedObjectCapsDS(BaseDataSource):
 
     @classmethod
     async def iter_query(
-        cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
+        cls, fields: Iterable[str] | None = None, *args, **kwargs
     ) -> Iterable[dict[str, Any]]:
         q_caps = {}
         for f in cls.iter_ds_fields():

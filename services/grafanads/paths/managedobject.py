@@ -7,7 +7,7 @@
 
 # Python modules
 import datetime
-from typing import Optional, List, Any, Dict
+from typing import Any
 from time import mktime
 
 # Third-party modules
@@ -41,7 +41,7 @@ class ManagedObjectJsonDS(JsonDSAPI):
         metric,
         name,
         user,
-        payload: Optional[dict[str, str]] = None,
+        payload: dict[str, str] | None = None,
     ) -> list[dict[str, str]]:
         """ """
         if name == "metric":
@@ -63,8 +63,8 @@ class ManagedObjectJsonDS(JsonDSAPI):
 
     @staticmethod
     def resolve_object_query(
-        model_id, value, query_function: Optional[list[str]] = None, user: User = None
-    ) -> Optional[Any]:
+        model_id, value, query_function: list[str] | None = None, user: User = None
+    ) -> Any | None:
         """
         Resolve object in Query by Value
         :param model_id:

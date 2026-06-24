@@ -7,7 +7,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any, Optional
+from typing import Any
 import orjson
 import datetime
 import smtplib
@@ -58,7 +58,7 @@ class MailSenderService(FastAPIService):
         )
 
     def send_mail(
-        self, message_id: int, data: dict[str, Any], address_to: Optional[str] = None
+        self, message_id: int, data: dict[str, Any], address_to: str | None = None
     ) -> None:
         attachments = data.get("attachments", [])
         now = datetime.datetime.now(config.timezone)

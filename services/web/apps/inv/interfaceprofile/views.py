@@ -5,7 +5,6 @@
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
-from typing import List, Tuple
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication

@@ -11,7 +11,7 @@ import struct
 import codecs
 
 # Third-party modules
-from typing import Tuple, Any, List, Optional
+from typing import Any
 
 # NOC modules
 from noc.core.comp import smart_bytes, smart_text
@@ -35,9 +35,9 @@ def did(tag_class: int, is_constructed: int, tag_id: int) -> int:
 
 class BERDecoder:
     def __init__(self, display_hints=None, include_raw=False):
-        self.last_oid: Optional[str] = None
-        self.oid_msg: Optional[bytes] = None
-        self.raw_pdu: Optional[bytes] = None
+        self.last_oid: str | None = None
+        self.oid_msg: bytes | None = None
+        self.raw_pdu: bytes | None = None
         self.raw_varbinds: list[tuple[str, Any, bytes]] = []
         self.display_hints = display_hints
         self.include_raw = include_raw
@@ -481,7 +481,7 @@ encoder = BEREncoder()
 
 def decode(
     msg: bytes, include_raw: bool = False
-) -> tuple[tuple[int, bytes, list[Any]], Optional[bytes], list[tuple[str, Any, bytes]]]:
+) -> tuple[tuple[int, bytes, list[Any]], bytes | None, list[tuple[str, Any, bytes]]]:
     decoder = BERDecoder(include_raw=include_raw)
     data, _ = decoder.parse_tlv(msg)
     return data, decoder.raw_pdu, decoder.raw_varbinds

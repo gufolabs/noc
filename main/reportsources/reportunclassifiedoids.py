@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import List, Dict
 
 # Third-party modules
 import orjson

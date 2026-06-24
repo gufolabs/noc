@@ -13,7 +13,7 @@ import operator
 from functools import reduce
 from collections import defaultdict
 from time import perf_counter
-from typing import Any, Optional, Set, Union
+from typing import Any
 
 # Third-party modules
 from atomicl import AtomicLong
@@ -160,7 +160,7 @@ class BaseScript(metaclass=BaseScriptMetaclass):
         session_idle_timeout=None,
         streaming=None,
         controller=None,
-        labels: Optional[set[str]] = None,
+        labels: set[str] | None = None,
     ):
         self.service = service
         self.tos = config.activator.tos
@@ -187,8 +187,8 @@ class BaseScript(metaclass=BaseScriptMetaclass):
         self.cli_stream = None
         self.mml_stream = None
         self.rtsp_stream = None
-        self._snmp: Optional[SNMP] = None
-        self._http: Optional[HTTP] = None
+        self._snmp: SNMP | None = None
+        self._http: HTTP | None = None
         self.to_disable_pager = not self.parent and self.profile.command_disable_pager
         self.scripts = ScriptsHub(self)
         # Store session id
@@ -817,18 +817,18 @@ class BaseScript(metaclass=BaseScriptMetaclass):
     def cli(
         self,
         cmd: str,
-        command_submit: Optional[bytes] = None,
+        command_submit: bytes | None = None,
         bulk_lines: Any = None,
         list_re: Any = None,
         cached: bool = False,
-        file: Optional[str] = None,
+        file: str | None = None,
         ignore_errors: Any = False,
         allow_empty_response: Any = True,
         nowait: Any = False,
         obj_parser: Any = None,
         cmd_next: Any = None,
         cmd_stop: Any = None,
-        labels: Optional[Union[str, set[str]]] = None,
+        labels: str | set[str] | None = None,
     ) -> str:
         """
         Execute CLI command and return result. Initiate cli session

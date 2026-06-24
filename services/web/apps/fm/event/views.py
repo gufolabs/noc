@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import Optional, List
 
 # Third-party modules
 import orjson
@@ -87,13 +86,13 @@ class EventApplication(ExtApplication):
     @classmethod
     def get_filter(
         cls,
-        managed_object: Optional[int] = None,
-        segment: Optional[str] = None,
-        from_query: Optional[str] = None,
-        to_query: Optional[str] = None,
-        groups: Optional[list[str]] = None,
-        administrative_domains: Optional[list[int]] = None,
-        event_class: Optional[str] = None,
+        managed_object: int | None = None,
+        segment: str | None = None,
+        from_query: str | None = None,
+        to_query: str | None = None,
+        groups: list[str] | None = None,
+        administrative_domains: list[int] | None = None,
+        event_class: str | None = None,
     ) -> list[str]:
         """"""
         r = []
@@ -127,15 +126,15 @@ class EventApplication(ExtApplication):
     @classmethod
     def event_query(
         cls,
-        managed_object: Optional[int] = None,
-        segment: Optional[str] = None,
-        from_query: Optional[datetime.date] = None,
-        to_query: Optional[datetime.date] = None,
-        groups: Optional[list[str]] = None,
-        event_class: Optional[str] = None,
-        administrative_domains: Optional[list[int]] = None,
-        offset: Optional[int] = None,
-        limit: Optional[int] = None,
+        managed_object: int | None = None,
+        segment: str | None = None,
+        from_query: datetime.date | None = None,
+        to_query: datetime.date | None = None,
+        groups: list[str] | None = None,
+        event_class: str | None = None,
+        administrative_domains: list[int] | None = None,
+        offset: int | None = None,
+        limit: int | None = None,
     ):
         """ """
         sql = [

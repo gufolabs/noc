@@ -7,7 +7,7 @@
 
 # Python modules
 import re
-from typing import Set, Dict, Any
+from typing import Any
 from collections import defaultdict
 
 # NOC modules

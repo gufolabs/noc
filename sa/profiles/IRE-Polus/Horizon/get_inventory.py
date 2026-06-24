@@ -8,7 +8,7 @@
 # Python modules
 import re
 from dataclasses import dataclass
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -34,8 +34,8 @@ class Device:
 class FRU:
     part_no: str
     serial: str
-    revision: Optional[str] = None
-    fw_version: Optional[str] = None
+    revision: str | None = None
+    fw_version: str | None = None
     type: str = "LINECARD"
     vendor: str = "IRE-Polus"
     is_rbs: bool = False
@@ -193,7 +193,7 @@ class Script(BaseScript):
 
         return f"odu::{outer_odu}::{dst_discriminator}"
 
-    def get_fru(self, c: Component) -> Optional[FRU]:
+    def get_fru(self, c: Component) -> FRU | None:
         """
         Getting FRU from component info
         """
@@ -411,7 +411,7 @@ class Script(BaseScript):
         dst: dict[str, str] = {}
         datatypes: dict[str, str] = {}
         port_states: dict[str, str] = {}
-        mode: Optional[str] = None
+        mode: str | None = None
         enable_oduflex = set()
         crossings = []
 
@@ -477,7 +477,7 @@ class Script(BaseScript):
         dst: dict[str, str] = {}
         datatypes: dict[str, str] = {}
         port_states: dict[str, str] = {}
-        mode: Optional[str] = None
+        mode: str | None = None
         enable_oduflex = set()
         crossings = []
         card_mode = None
@@ -550,7 +550,7 @@ class Script(BaseScript):
         dst: dict[str, str] = {}
         datatypes: dict[str, str] = {}
         port_states: dict[str, str] = {}
-        mode: Optional[str] = None
+        mode: str | None = None
         enable_oduflex = set()
         crossings = []
 

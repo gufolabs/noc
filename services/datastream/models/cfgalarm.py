@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Literal, Dict, Any
+from typing import Literal, Any
 
 # Third-party modules
 from pydantic import BaseModel
@@ -19,20 +19,20 @@ from .utils import DisposeAction
 class VarItem(BaseModel):
     name: str
     required: bool = False
-    default_labels: Optional[list[str]] = None
-    default: Optional[str] = None
-    component: Optional[str] = None
+    default_labels: list[str] | None = None
+    default: str | None = None
+    component: str | None = None
     # resource_model: Optional[str] = None
 
 
 class VarTransformItem(BaseModel):
     name: str
-    wildcard: Optional[str] = None  # set from label
+    wildcard: str | None = None  # set from label
     required: bool = False
-    affected_model: Optional[str] = None
-    alias: Optional[str] = None
-    value_type: Optional[ValueType] = None
-    update_oper_status: Optional[str] = None
+    affected_model: str | None = None
+    alias: str | None = None
+    value_type: ValueType | None = None
+    update_oper_status: str | None = None
 
 
 class ComboCondition(BaseModel):
@@ -44,12 +44,12 @@ class ComboCondition(BaseModel):
 
 class RuleGroup(BaseModel):
     reference_template: str
-    alarm_class: Optional[str] = None
-    title_template: Optional[str] = None
+    alarm_class: str | None = None
+    title_template: str | None = None
     min_threshold: int = 0
     max_threshold: int = 1
     window: int = 0
-    labels: Optional[list[str]] = None
+    labels: list[str] | None = None
 
 
 class RuleAction(BaseModel):
@@ -58,24 +58,24 @@ class RuleAction(BaseModel):
     when: str
     action: str
     key: str
-    template: Optional[str] = None
-    subject: Optional[str] = None
+    template: str | None = None
+    subject: str | None = None
 
 
 class Rule(BaseModel):
     id: str
     name: str
     is_active: bool = True
-    groups: Optional[list[RuleGroup]] = None
-    match_expr: Optional[list[dict[str, Any]]] = None
-    actions: Optional[list[RuleAction]] = None
+    groups: list[RuleGroup] | None = None
+    match_expr: list[dict[str, Any]] | None = None
+    actions: list[RuleAction] | None = None
     rule_action: Literal["drop", "rewrite", "continue"] = "continue"
-    rewrite_alarm_class: Optional[str] = None
-    severity_policy: Optional[str] = None
-    min_severity: Optional[int] = None
-    max_severity: Optional[int] = None
-    ttl_policy: Optional[str] = None
-    clear_after_ttl: Optional[int] = None
+    rewrite_alarm_class: str | None = None
+    severity_policy: str | None = None
+    min_severity: int | None = None
+    max_severity: int | None = None
+    ttl_policy: str | None = None
+    clear_after_ttl: int | None = None
     stop_processing: bool = False
 
 
@@ -83,17 +83,17 @@ class DispositionRule(BaseModel):
     name: str
     is_active: bool
     preference: int
-    event_classes: Optional[list[str]] = None
+    event_classes: list[str] | None = None
     stop_processing: bool = False
     action: Literal["ignore", "raise", "clear", "drop", "drop_mx"] = "ignore"
-    match_expr: Optional[dict[str, Any]] = None
-    vars_match_expr: Optional[dict[str, Any]] = None
-    vars_transform: Optional[list[VarTransformItem]] = None
-    combo_condition: Optional[ComboCondition] = None
-    object_avail_condition: Optional[bool] = None
+    match_expr: dict[str, Any] | None = None
+    vars_match_expr: dict[str, Any] | None = None
+    vars_transform: list[VarTransformItem] | None = None
+    combo_condition: ComboCondition | None = None
+    object_avail_condition: bool | None = None
     reference_lookup: bool = False
     # Target Actions
-    actions: Optional[list[DisposeAction]] = None
+    actions: list[DisposeAction] | None = None
     # handlers
 
 
@@ -104,12 +104,12 @@ class CfgAlarm(BaseModel):
     is_unique: bool = False
     is_ephemeral: bool = False
     by_reference: bool = False
-    reference: Optional[list[str]] = None
+    reference: list[str] | None = None
     user_clearable: bool = False
-    dispositions: Optional[list[DispositionRule]] = None
-    rules: Optional[list[Rule]] = None
+    dispositions: list[DispositionRule] | None = None
+    rules: list[Rule] | None = None
     # vars
-    vars: Optional[list[VarItem]] = None
+    vars: list[VarItem] | None = None
     # subject:
-    open_handlers: Optional[list[str]] = None
-    clear_handlers: Optional[list[str]] = None
+    open_handlers: list[str] | None = None
+    clear_handlers: list[str] | None = None

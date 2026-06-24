@@ -8,7 +8,7 @@
 # Python modules
 from pathlib import Path
 import re
-from typing import Any, Dict, Optional, List, Iterable, Tuple
+from typing import Any, Iterable
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
@@ -200,8 +200,8 @@ class ActionCommands(Document):
 
     def is_match(
         self,
-        platform: Optional[str] = None,
-        version: Optional[str] = None,
+        platform: str | None = None,
+        version: str | None = None,
         **kwargs,
     ) -> bool:
         if not self.match:

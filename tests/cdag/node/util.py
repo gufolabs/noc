@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Dict, Any, List, Tuple
+from typing import Any
 from contextlib import contextmanager
 from dataclasses import dataclass
 
@@ -36,7 +36,7 @@ class NodeCDAG:
     def activate(self, name: str, value: ValueType):
         self.tx.activate("node", name, value)
 
-    def get_value(self) -> Optional[ValueType]:
+    def get_value(self) -> ValueType | None:
         """
         Get measured value, None if node is not activated
         :return:
@@ -77,9 +77,9 @@ def publish_service():
 class PublishMsg:
     value: Any
     stream: str
-    partition: Optional[int] = None
-    key: Optional[bytes] = None
-    headers: Optional[dict[str, bytes]] = None
+    partition: int | None = None
+    key: bytes | None = None
+    headers: dict[str, bytes] | None = None
 
 
 class PublishStub(ServiceStub):
@@ -91,9 +91,9 @@ class PublishStub(ServiceStub):
         self,
         value: bytes,
         stream: str,
-        partition: Optional[int] = None,
-        key: Optional[bytes] = None,
-        headers: Optional[dict[str, bytes]] = None,
+        partition: int | None = None,
+        key: bytes | None = None,
+        headers: dict[str, bytes] | None = None,
     ):
         self.messages.append(
             PublishMsg(
@@ -115,5 +115,5 @@ class MetricTarget:
     type: str
     id: str
     bi_id: int
-    managed_object: Optional[int]
-    fm_pool: Optional[str]
+    managed_object: int | None
+    fm_pool: str | None

@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import operator
-from typing import List, Iterable, Dict, Any, Optional, Tuple, AsyncIterable
+from typing import Iterable, Any, AsyncIterable
 
 # Third-party modules
 import bson
@@ -218,9 +218,9 @@ class ReportDsAlarms(BaseDataSource):
     def iter_data(
         cls,
         start: datetime.datetime,
-        end: Optional[datetime.datetime],
-        admin_domain_ads: Optional[list[int]] = None,
-        **filters: Optional[dict[str, Any]],
+        end: datetime.datetime | None,
+        admin_domain_ads: list[int] | None = None,
+        **filters: dict[str, Any] | None,
     ) -> Iterable[dict[str, Any]]:
         if "objectids" in filters:
             match = {"_id": {"$in": [bson.ObjectId(x) for x in filters["objectids"]]}}
@@ -355,7 +355,7 @@ class ReportDsAlarms(BaseDataSource):
 
     @classmethod
     async def iter_query(
-        cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
+        cls, fields: Iterable[str] | None = None, *args, **kwargs
     ) -> AsyncIterable[tuple[str, str]]:
         if "start" not in kwargs:
             raise ValueError("Start filter is required")

@@ -7,7 +7,7 @@
 
 # Python modules
 import enum
-from typing import Dict, Any
+from typing import Any
 
 # Third-party module
 from mongoengine.document import Document

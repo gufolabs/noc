@@ -9,7 +9,7 @@
 import enum
 import datetime
 from functools import partial
-from typing import Callable, Optional, Any, Dict
+from typing import Callable, Any
 
 # NOC Modules
 from noc.core.diagnostic.types import DiagnosticState
@@ -86,7 +86,7 @@ class ActionType(enum.Enum):
         except Exception:
             pass
 
-    def from_config(self, key: str, **kwargs) -> Optional[Callable]:
+    def from_config(self, key: str, **kwargs) -> Callable | None:
         """Callable for execute action"""
         match self:
             case self.ACTION_COMMAND:
@@ -125,7 +125,7 @@ class ActionType(enum.Enum):
         obj.diagnostic.refresh_diagnostics(**kwargs)
 
     @staticmethod
-    def set_oper_status(obj, status, ts: Optional[datetime.datetime] = None, **kwargs):
+    def set_oper_status(obj, status, ts: datetime.datetime | None = None, **kwargs):
         """"""
         obj.set_oper_status(status=status, timestamp=ts)
 
@@ -134,8 +134,8 @@ class ActionType(enum.Enum):
         obj,
         diagnostic: str,
         status: bool,
-        ts: Optional[datetime.datetime] = None,
-        reason: Optional[str] = None,
+        ts: datetime.datetime | None = None,
+        reason: str | None = None,
         **kwargs,
     ):
         """UP/Down Diagnostic"""
@@ -154,9 +154,9 @@ class ActionType(enum.Enum):
     @staticmethod
     def run_discovery(
         obj,
-        delay: Optional[int] = None,
-        check: Optional[str] = None,
-        audit: Optional[int] = None,
+        delay: int | None = None,
+        check: str | None = None,
+        audit: int | None = None,
         **kwargs,
     ):
         """Run ManagedObject discovery"""
@@ -202,9 +202,9 @@ class ActionType(enum.Enum):
     def interaction_audit(
         obj,
         audit: int,
-        ts: Optional[datetime.datetime] = None,
-        command: Optional[str] = None,
-        user: Optional[str] = None,
+        ts: datetime.datetime | None = None,
+        command: str | None = None,
+        user: str | None = None,
         **kwargs,
     ):
         """Audit interaction"""

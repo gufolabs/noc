@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import enum
-from typing import Iterable, Optional, List, Tuple, Union
+from typing import Iterable
 
 # Third-party modules
 from pyVmomi import vim
@@ -100,7 +100,7 @@ class VCenterLinkExtractor(BaseExtractor):
     def extract_data(self, incremental=False):
         super().extract(incremental=incremental)
 
-    def iter_data(self, *, checkpoint: Optional[str] = None, **kwargs) -> Iterable[Link]:
+    def iter_data(self, *, checkpoint: str | None = None, **kwargs) -> Iterable[Link]:
         yield from self.links
 
 
@@ -109,7 +109,7 @@ class VCenterObjectExtractor(VCenterExtractor):
     name = "object"
     model = Object
 
-    def iter_data(self, *, checkpoint: Optional[str] = None, **kwargs) -> Iterable[Object]:
+    def iter_data(self, *, checkpoint: str | None = None, **kwargs) -> Iterable[Object]:
         content = self.connection.content
         vm_view = content.viewManager.CreateContainerView(
             content.rootFolder, [vim.HostSystem], True
@@ -179,21 +179,21 @@ class VCenterManagedObjectExtractor(VCenterExtractor):
         self.pool: str = self.config.get("POOL") or "default"
         self.fm_pool: str = self.config.get("FM_POOL")
 
-    def get_mappings(self, obj: Union[vim.VirtualMachine, vim.HostSystem]) -> list[MappingItem]:
+    def get_mappings(self, obj: vim.VirtualMachine | vim.HostSystem) -> list[MappingItem]:
         """Additional mappings"""
         return []
 
     def get_administrative_domain(
-        self, obj: Union[vim.VirtualMachine, vim.HostSystem]
-    ) -> Union[str, ETLMapping, RemoteReference]:
+        self, obj: vim.VirtualMachine | vim.HostSystem
+    ) -> str | ETLMapping | RemoteReference:
         """Detect ManagedObject"""
         return ETLMapping(value="default", scope="adm_domain")
 
-    def get_labels(self, obj: Union[vim.VirtualMachine, vim.HostSystem]) -> list[str]:
+    def get_labels(self, obj: vim.VirtualMachine | vim.HostSystem) -> list[str]:
         """Additional mappings"""
         return []
 
-    def get_vm_address(self, obj: vim.VirtualMachine) -> Optional[str]:
+    def get_vm_address(self, obj: vim.VirtualMachine) -> str | None:
         """Parse VM Management Address"""
         if not obj.guest or not obj.guest.ipAddress:
             return None
@@ -210,7 +210,7 @@ class VCenterManagedObjectExtractor(VCenterExtractor):
                     addresses.append(a)
         return addresses[0] if addresses else None
 
-    def get_host_mgmt_address(self, obj: vim.HostSystem) -> Optional[str]:
+    def get_host_mgmt_address(self, obj: vim.HostSystem) -> str | None:
         """Parse Management Address"""
         name, *domains = obj.summary.config.name.split(".", 1)
         addrs = [vv.spec.ip.ipAddress for vv in obj.config.network.vnic]

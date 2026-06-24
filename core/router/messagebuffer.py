@@ -7,7 +7,7 @@
 
 # Python modules
 from collections import deque
-from typing import Dict, Any, Optional, Iterable
+from typing import Any, Iterable
 from threading import Lock
 import math
 
@@ -26,7 +26,7 @@ class MBuffer:
 
     def __init__(
         self,
-        max_size: Optional[int] = None,
+        max_size: int | None = None,
     ):
         self.queue: deque = deque()
         self.buf: dict[str, Any] = {}
@@ -35,7 +35,7 @@ class MBuffer:
         self.req_gets: int = 0
         self.max_size = max_size or config.msgstream.max_message_size
 
-    def put(self, msg: Message, group_key: Optional[str] = None):
+    def put(self, msg: Message, group_key: str | None = None):
         """
         Put block of data to buffer
         :param msg:

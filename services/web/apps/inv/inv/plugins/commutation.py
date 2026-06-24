@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import List, Optional, Iterable, Tuple, Dict, DefaultDict, Any, Set
+from typing import Iterable, Any
 from collections import defaultdict
 
 # Third party modules
@@ -32,7 +32,7 @@ class Node:
     object: Object
     name: str
     model: str
-    parent_connection: Optional[str]
+    parent_connection: str | None
     children: list["Node"]
     is_external: bool
     connections: list[ConnectionItem]
@@ -211,7 +211,7 @@ class CommutationPlugin(InvPlugin):
             Pruned node
         """
 
-        def pruned_child(n: Node) -> Optional[Node]:
+        def pruned_child(n: Node) -> Node | None:
             if not n.children and not n.connections:
                 return None
             if not n.children and n.connections:

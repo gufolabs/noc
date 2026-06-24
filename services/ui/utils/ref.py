@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Union, TypeVar
+from typing import TypeVar
 
 # Third-party modules
 from django.db.models import Model
@@ -23,13 +23,13 @@ TModel = TypeVar("TModel", bound=Model)
 TDoc = TypeVar("TDoc", bound=Document)
 
 
-def get_reference(item: Optional[Union[TModel, TDoc]]) -> Optional[Reference]:
+def get_reference(item: TModel | TDoc | None) -> Reference | None:
     if not item:
         return None
     return Reference(id=str(item.id), label=str(item))
 
 
-def get_reference_label(item: "Label") -> Optional[LabelItem]:
+def get_reference_label(item: "Label") -> LabelItem | None:
     if not item:
         return None
     return LabelItem(
@@ -45,7 +45,7 @@ def get_reference_label(item: "Label") -> Optional[LabelItem]:
     )
 
 
-def get_reference_rg(item: "ResourceGroup") -> Optional[Reference]:
+def get_reference_rg(item: "ResourceGroup") -> Reference | None:
     if not item:
         return None
     rg = ResourceGroup.get_by_id(item)

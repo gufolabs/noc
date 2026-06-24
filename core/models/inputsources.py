@@ -7,7 +7,7 @@
 
 # Python modules
 import enum
-from typing import List, Optional, Iterable
+from typing import Iterable
 
 CODE_SOURCE_MAP = {
     "e": "etl",
@@ -49,7 +49,7 @@ class InputSource(enum.Enum):
     def code(self) -> str:
         return self.value[0]
 
-    def get_priority_weight(self, priority: Optional[str] = None) -> int:
+    def get_priority_weight(self, priority: str | None = None) -> int:
         """Return source priority. More,"""
         priority = priority or SOURCE_PRIORITY
         if self.code in priority:

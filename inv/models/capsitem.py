@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # Third-party modules
 from mongoengine.document import EmbeddedDocument
@@ -32,7 +32,7 @@ class CapsItem(EmbeddedDocument):
         return f"{self.capability.name} = {self.value}"
 
     @classmethod
-    def get_caps(cls, *args: list["CapsItem"], scope: Optional[str] = None) -> dict[str, Any]:
+    def get_caps(cls, *args: list["CapsItem"], scope: str | None = None) -> dict[str, Any]:
         """
         Consolidate capabilities list and return resulting dict of
         caps name -> caps value. First appearance of capability
@@ -61,7 +61,7 @@ class ModelCapsItem(BaseModel):
     value: Any
     # Source name like "caps", "interface", "manual"
     source: str = "manual"
-    scope: Optional[str] = ""
+    scope: str | None = ""
 
     def __str__(self):
         return self.capability.name

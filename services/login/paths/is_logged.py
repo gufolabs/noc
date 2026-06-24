@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # Third-party modules
 from fastapi import APIRouter, Cookie
@@ -22,7 +21,7 @@ router = APIRouter()
 
 
 @router.get("/api/login/is_logged/", tags=["login", "ext-ui"])
-async def is_logged(jwt_cookie: Optional[str] = Cookie(None, alias=config.login.jwt_cookie_name)):
+async def is_logged(jwt_cookie: str | None = Cookie(None, alias=config.login.jwt_cookie_name)):
     """
     Check if user is logged
     """

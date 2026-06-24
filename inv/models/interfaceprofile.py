@@ -10,7 +10,7 @@ import operator
 from threading import Lock, RLock
 from dataclasses import dataclass
 from functools import partial
-from typing import Optional, Dict, Union, Callable, Any, Tuple, List
+from typing import Optional, Callable, Any
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
@@ -281,7 +281,7 @@ class InterfaceProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["InterfaceProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["InterfaceProfile"]:
         return InterfaceProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -317,7 +317,7 @@ class InterfaceProfile(Document):
 
     @staticmethod
     def config_from_settings(
-        m: "InterfaceProfileMetrics", profile_interval: Optional[int] = None
+        m: "InterfaceProfileMetrics", profile_interval: int | None = None
     ) -> "MetricConfig":
         """
         Returns MetricConfig from .metrics field
@@ -369,9 +369,9 @@ class InterfaceProfile(Document):
 
     def allow_collected_metric(
         self,
-        admin_status: Optional[bool],
-        oper_status: Optional[bool],
-        metric_type: Optional[str] = None,
+        admin_status: bool | None,
+        oper_status: bool | None,
+        metric_type: str | None = None,
     ) -> bool:
         """
         Check metric collected policy by interface status
@@ -417,5 +417,5 @@ class InterfaceProfile(Document):
                 r[(str(ip.id), mr.dynamic_order)] = build_matcher(mr.get_match_expr())
         return tuple((x[0], r[x]) for x in sorted(r, key=lambda i: i[1]))
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

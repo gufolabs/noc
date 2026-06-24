@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Callable, Dict
+from typing import Callable
 
 # NOC modules
 from .base import BaseAction, ActionError

@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Any, Tuple, List, Optional, Literal, Dict
+from typing import Any, Literal
 
 MetricKey = tuple[str, tuple[tuple[str, Any], ...], tuple[str, ...]]
 
@@ -32,13 +32,13 @@ class SourceInfo:
     )
     bi_id: int
     fm_pool: str
-    sla_probe: Optional[str]
-    sensor: Optional[str]
-    service: Optional[str]
-    labels: Optional[list[str]]
-    metric_labels: Optional[list[str]]
-    composed_metrics: Optional[list[str]]
-    rules: Optional[list[str]]
+    sla_probe: str | None
+    sensor: str | None
+    service: str | None
+    labels: list[str] | None
+    metric_labels: list[str] | None
+    composed_metrics: list[str] | None
+    rules: list[str] | None
     meta: dict[str, Any]
 
 
@@ -74,8 +74,8 @@ class SourceConfig:
     type: Literal["managed_object", "sla_probe", "sensor", "agent"]
     bi_id: int
     fm_pool: str
-    labels: Optional[tuple[str, ...]]
-    exposed_labels: Optional[tuple[str, ...]]
+    labels: tuple[str, ...] | None
+    exposed_labels: tuple[str, ...] | None
     items: tuple[ItemConfig, ...]
     rules: list[str]
     meta: dict[str, Any]
@@ -103,5 +103,5 @@ class ManagedObjectInfo:
     id: int
     bi_id: int
     fm_pool: str
-    labels: Optional[list[str]]
-    metric_labels: Optional[list[str]]
+    labels: list[str] | None
+    metric_labels: list[str] | None

@@ -6,15 +6,14 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel, Field
 
 
 class ZkConfigConfigZeroconf(BaseModel):
-    id: Optional[int]
-    key: Optional[str]
+    id: int | None
+    key: str | None
     interval: int
 
 
@@ -25,7 +24,7 @@ class ZkConfigMetrics(BaseModel):
 
 class ZkConfigConfig(BaseModel):
     zeroconf: ZkConfigConfigZeroconf
-    metrics: Optional[ZkConfigMetrics]
+    metrics: ZkConfigMetrics | None
 
 
 class ZkConfigCollector(BaseModel, extra="allow"):

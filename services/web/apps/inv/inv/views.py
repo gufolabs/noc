@@ -10,7 +10,7 @@ import inspect
 import operator
 import os
 import threading
-from typing import Optional, Dict, List, Any, Tuple, Iterable
+from typing import Any, Iterable
 from collections import defaultdict
 
 # Third-party modules
@@ -221,7 +221,7 @@ class InvApplication(ExtApplication):
             "choice": StringParameter(required=False),
         },
     )
-    def api_attach(self, request, container: str, item: str, choice: Optional[str] = None):
+    def api_attach(self, request, container: str, item: str, choice: str | None = None):
         # Resolve items
         c_obj = self.get_object_or_404(Object, id=container)
         i_obj = self.get_object_or_404(Object, id=item)
@@ -274,7 +274,7 @@ class InvApplication(ExtApplication):
             )
         return {"choices": {"children": children, "expanded": True}}
 
-    def _attach_inner(self, container: Object, item: Object, choice: Optional[str] = None):
+    def _attach_inner(self, container: Object, item: Object, choice: str | None = None):
         """Insert item into chassis/module."""
 
         def to_tree(iter: Iterable[ModulePosition]) -> dict[str, Any] | None:
@@ -376,7 +376,7 @@ class InvApplication(ExtApplication):
             ),
         },
     )
-    def api_add(self, request, items: list[dict[str, str]], container: Optional[str] = None):
+    def api_add(self, request, items: list[dict[str, str]], container: str | None = None):
         if container:
             parent = self.get_object_or_404(Object, id=container)
         else:
@@ -493,9 +493,9 @@ class InvApplication(ExtApplication):
         request,
         o1: str,
         o2: str | None = None,
-        left_filter: Optional[str] = None,
-        right_filter: Optional[str] = None,
-        cable_filter: Optional[str] = None,
+        left_filter: str | None = None,
+        right_filter: str | None = None,
+        cable_filter: str | None = None,
         internal: bool = False,
     ):
         """
@@ -665,7 +665,7 @@ class InvApplication(ExtApplication):
         object,
         name,
         remote_name,
-        remote_object: Optional[str] = None,
+        remote_object: str | None = None,
         is_internal: bool = False,
     ):
         lo: Object = self.get_object_or_404(Object, id=object)

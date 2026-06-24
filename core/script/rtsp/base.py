@@ -9,7 +9,7 @@
 import os
 from urllib.request import parse_http_list, parse_keqv_list
 import asyncio
-from typing import Tuple, Dict, Any
+from typing import Any
 
 # Third-party modules
 import hashlib

@@ -11,7 +11,7 @@ import datetime
 import operator
 import time
 from dataclasses import dataclass
-from typing import List, Optional, Any, Union, Dict, Iterable, Tuple
+from typing import Optional, Any, Iterable
 
 # Third-party modules
 from bson import ObjectId
@@ -47,9 +47,9 @@ ALARM_WATCHER_JCLS = "noc.services.correlator.alarmjob.AlarmWatchersJob"
 @dataclass(repr=True)
 class ServiceItem:
     service: Service
-    managed_object_id: Optional[int] = None
+    managed_object_id: int | None = None
     service_status: ServiceStatus = ServiceStatus.UNKNOWN
-    status_from: Optional[ServiceStatus] = None
+    status_from: ServiceStatus | None = None
     # status_factors
     # ctx
     status: ItemStatus = ItemStatus.NEW
@@ -70,9 +70,9 @@ class Item:
     """Over Job Item"""
 
     #! Replace to alarm List, status
-    alarm: Union[ActiveAlarm, ArchivedAlarm]
+    alarm: ActiveAlarm | ArchivedAlarm
     # For requested Escalation by ManagedObject
-    managed_object_id: Optional[int] = None
+    managed_object_id: int | None = None
     status: ItemStatus = ItemStatus.NEW
     to_processed: bool = False
 
@@ -84,7 +84,7 @@ class Item:
         return self.status in {ItemStatus.NEW, ItemStatus.CHANGED}
 
     @property
-    def managed_object(self) -> Optional[ManagedObject]:
+    def managed_object(self) -> ManagedObject | None:
         return ManagedObject.get_by_id(self.managed_object_id)
 
     @property
@@ -110,7 +110,7 @@ class Item:
 @dataclass(repr=True)
 class AllowedAction:
     action: AlarmAction
-    login: Optional[str] = None
+    login: str | None = None
     stop_processing: bool = False
     # permission
 
@@ -130,10 +130,10 @@ class AlarmJob:
         self,
         items: list[Item],
         actions: list[ActionLog],
-        groups: Optional[list[bytes]] = None,
-        services: Optional[list[ServiceItem]] = None,
-        profile: Optional[str] = None,
-        allowed_actions: Optional[list[AllowedAction]] = None,
+        groups: list[bytes] | None = None,
+        services: list[ServiceItem] | None = None,
+        profile: str | None = None,
+        allowed_actions: list[AllowedAction] | None = None,
         maintenance_policy: str = None,
         item_policy: EscalationPolicy = EscalationPolicy.ROOT,
         end_condition: str = "CR",
@@ -142,15 +142,15 @@ class AlarmJob:
         max_repeats: int = 0,
         repeat_delay: int = 60,
         # Span Context
-        ctx_id: Optional[int] = None,
-        telemetry_sample: Optional[int] = None,
+        ctx_id: int | None = None,
+        telemetry_sample: int | None = None,
         # Id document
-        name: Optional[str] = None,
-        job_id: Optional[str] = None,
+        name: str | None = None,
+        job_id: str | None = None,
         # Debug
-        logger: Optional[logging.Logger] = None,
+        logger: logging.Logger | None = None,
         dry_run: bool = False,
-        static_delay: Optional[int] = None,
+        static_delay: int | None = None,
     ):
         self.id = job_id
         self.name = name
@@ -173,7 +173,7 @@ class AlarmJob:
         self.ctx_id = ctx_id
         self.telemetry_sample = telemetry_sample
         self.dry_run = dry_run
-        self.static_delay: Optional[int] = static_delay
+        self.static_delay: int | None = static_delay
         # Alarm Severity
         self.logger = PrefixLoggerAdapter(
             logger or logging.getLogger(__name__), f"{self.id}|{self.profile}|{self.alarm}"
@@ -250,7 +250,7 @@ class AlarmJob:
         """Check log for state logs"""
         return any(ll.status != ActionStatus.SKIP for ll in self.actions)
 
-    def get_next_ts(self) -> Optional[datetime.datetime]:
+    def get_next_ts(self) -> datetime.datetime | None:
         """
         Calculate next run ts. When set delay or Temp Error
         """
@@ -374,7 +374,7 @@ class AlarmJob:
 
     def run(
         self,
-        ts: Optional[datetime.datetime] = None,
+        ts: datetime.datetime | None = None,
         save_state: bool = True,
         force_end: bool = False,
         is_update: bool = False,
@@ -496,7 +496,7 @@ class AlarmJob:
         cls,
         policy: EscalationPolicy,
         alarm: ActiveAlarm,
-    ) -> tuple[Optional[ActiveAlarm], list[bytes]]:
+    ) -> tuple[ActiveAlarm | None, list[bytes]]:
         """Detect escalation Leader by Escalation Policy"""
         if policy in {EscalationPolicy.ALWAYS_FIRST, EscalationPolicy.ROOT_FIRST}:
             # Group
@@ -558,13 +558,13 @@ class AlarmJob:
     def from_request(
         cls,
         req: AlarmActionRequest,
-        alarm: Optional[ActiveAlarm] = None,
-        profile: Optional[str] = None,
+        alarm: ActiveAlarm | None = None,
+        profile: str | None = None,
         dry_run: bool = False,
         sample: int = 0,
-        static_delay: Optional[int] = None,
-        stub_tt_system: Optional[TTSystem] = None,
-        stub_user: Optional[User] = None,
+        static_delay: int | None = None,
+        stub_tt_system: TTSystem | None = None,
+        stub_user: User | None = None,
     ) -> "AlarmJob":
         """Create Job from Request"""
         if not alarm and req.item:
@@ -612,7 +612,7 @@ class AlarmJob:
         is_clear: bool = False,
         dry_run: bool = False,
         sample: int = 0,
-        static_delay: Optional[int] = None,
+        static_delay: int | None = None,
     ) -> "AlarmJob":
         """
         Restore Job State from Alarm:
@@ -774,7 +774,7 @@ class AlarmJob:
         cls,
         data: dict[str, Any],
         is_dirty: bool = False,
-        stub_alarms: Optional[list[ActiveAlarm]] = None,
+        stub_alarms: list[ActiveAlarm] | None = None,
     ) -> Optional["AlarmJob"]:
         """"""
         if stub_alarms:
@@ -820,9 +820,9 @@ class AlarmJob:
     def run_action(
         self,
         action: ActionConfig,
-        user: Optional[User] = None,
-        tt_system: Optional[TTSystem] = None,
-        timestamp: Optional[datetime.datetime] = None,
+        user: User | None = None,
+        tt_system: TTSystem | None = None,
+        timestamp: datetime.datetime | None = None,
     ):
         """Run action on Job"""
         from noc.fm.models.alarmjob import AlarmJob as AlarmJobState

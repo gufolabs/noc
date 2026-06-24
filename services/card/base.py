@@ -8,7 +8,6 @@
 # Python modules
 import os
 import hashlib
-from typing import List, Optional
 
 # Third-party modules
 from fastapi import APIRouter, Request
@@ -29,7 +28,7 @@ class BaseAPI:
     """
 
     # API name
-    api_name: Optional[str] = None
+    api_name: str | None = None
     # Tags for OpenAPI documentation
     openapi_tags: list[str] = []
 

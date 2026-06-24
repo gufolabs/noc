@@ -7,7 +7,7 @@
 
 # Python modules
 from threading import Lock
-from typing import Optional, Dict, Any, Union
+from typing import Optional, Any
 import operator
 from pathlib import Path
 
@@ -114,7 +114,7 @@ class TechDomain(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["TechDomain"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["TechDomain"]:
         return TechDomain.objects.filter(id=oid).first()
 
     @classmethod

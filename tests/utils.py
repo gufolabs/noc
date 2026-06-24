@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Protocol, Type
+from typing import Protocol
 import inspect
 
 

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Literal, Tuple, Dict, Union
+from typing import Literal
 from dataclasses import dataclass, field
 
 # NOC modules
@@ -52,16 +52,16 @@ class MetricCollectorConfig:
     collector: Literal["sla", "sensor", "managed_object", "cpe"]
     metrics: tuple[MetricItem, ...]  # Metric Type List
     # Key labels
-    labels: Optional[tuple[str, ...]] = None
+    labels: tuple[str, ...] | None = None
     # Like settings: ifindex::<ifindex>, oid::<oid>, ac::<SC/CS/S/C>
-    hints: Optional[list[str]] = None
-    service: Optional[int] = None  # Service BI_Id
+    hints: list[str] | None = None
+    service: int | None = None  # Service BI_Id
     # Collectors
-    sensor: Optional[int] = None  # Sensor BI_Id
-    sla_probe: Optional[int] = None  # SLA Probe BI_Id
-    cpe: Optional[int] = None
+    sensor: int | None = None  # Sensor BI_Id
+    sla_probe: int | None = None  # SLA Probe BI_Id
+    cpe: int | None = None
 
-    def get_hints(self) -> dict[str, Union[str, int]]:
+    def get_hints(self) -> dict[str, str | int]:
         if not self.hints:
             return {}
         return dict(v.split("::", 1) for v in self.hints)

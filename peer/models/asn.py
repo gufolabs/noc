@@ -7,7 +7,7 @@
 
 # Python modules
 from threading import Lock
-from typing import Optional, Dict, Any
+from typing import Optional, Any
 import operator
 
 # Third-party modules
@@ -62,7 +62,7 @@ class AS(NOCModel):
     )
     # RPSL descr field
     description = models.TextField("Description", null=True, blank=True)
-    organisation: Optional[Organisation] = models.ForeignKey(
+    organisation: Organisation | None = models.ForeignKey(
         Organisation, verbose_name="Organisation", null=True, blank=True, on_delete=models.CASCADE
     )
     administrative_contacts = models.ManyToManyField(
@@ -278,5 +278,5 @@ class AS(NOCModel):
             "profile": {"id": str(self.profile.id), "name": self.profile.name},
         }
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.profile.get_css_class() if self.profile else None

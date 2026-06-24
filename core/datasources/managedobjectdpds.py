@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Iterable, Tuple, AsyncIterable
+from typing import Iterable, AsyncIterable
 
 # Third-party modules
 from pymongo import ReadPreference
@@ -104,7 +104,7 @@ class ManagedObjectDPDS(BaseDataSource):
 
     @classmethod
     async def iter_query(
-        cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
+        cls, fields: Iterable[str] | None = None, *args, **kwargs
     ) -> AsyncIterable[tuple[str, str]]:
         num = 1
         for p in Pool.objects.all():

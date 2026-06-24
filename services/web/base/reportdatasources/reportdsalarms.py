@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Iterable, Dict, Any
+from typing import Iterable, Any
 import datetime
 
 # Third-party modules

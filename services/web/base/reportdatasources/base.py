@@ -9,7 +9,7 @@
 import datetime
 from dataclasses import dataclass, field
 from io import BytesIO, StringIO
-from typing import List, Optional, Dict, Iterable, Any, Tuple, Callable, Union
+from typing import Optional, Iterable, Any, Callable
 import time
 import re
 import heapq
@@ -297,11 +297,11 @@ class ReportModelFilter:
 class ReportField:
     name: str
     label: str
-    description: Optional[str] = ""
-    unit: Optional[str] = None
-    summary: Optional[bool] = False
-    default: Optional[str] = None
-    metric_name: Optional[str] = None  # Field name on clickhouse
+    description: str | None = ""
+    unit: str | None = None
+    summary: bool | None = False
+    default: str | None = None
+    metric_name: str | None = None  # Field name on clickhouse
     group: bool = False
     hidden: bool = False
 
@@ -317,7 +317,7 @@ class ReportFilter:
     name: str
     type: str
     description: str
-    values: Optional[FilterValues]
+    values: FilterValues | None
     required: bool
 
 
@@ -354,13 +354,13 @@ class ReportDataSource:
         fields: list[str],
         objectids: list[str] = None,
         allobjectids: bool = False,
-        start: Optional[datetime.datetime] = None,
-        end: Optional[datetime.datetime] = None,
-        interval: Optional[str] = None,
-        max_intervals: Optional[int] = None,
-        filters: Optional[list[dict[str, Union[list[str], str]]]] = None,
-        rows: Optional[int] = None,
-        groups: Optional[list[str]] = None,
+        start: datetime.datetime | None = None,
+        end: datetime.datetime | None = None,
+        interval: str | None = None,
+        max_intervals: int | None = None,
+        filters: list[dict[str, list[str] | str]] | None = None,
+        rows: int | None = None,
+        groups: list[str] | None = None,
         user: Optional["User"] = None,
     ):
         self.query_fields: list[str] = fields
@@ -368,7 +368,7 @@ class ReportDataSource:
         self.fields_summary = self.get_summary_fields(fields)
         self.objectids = objectids
         self.allobjectids: bool = allobjectids
-        self.filters: list[dict[str, Union[list[str], str]]] = filters or []
+        self.filters: list[dict[str, list[str] | str]] = filters or []
         self.interval: str = interval
         self.max_intervals: int = max_intervals
         self.rows: int = rows
@@ -433,12 +433,12 @@ class ReportDataSource:
         """
         raise NotImplementedError
 
-    def report_json(self, fmt: Optional[Callable] = None):
+    def report_json(self, fmt: Callable | None = None):
         import orjson
 
         return orjson.dumps(list(self.extract()))
 
-    def report_csv(self, fmt: Optional[Callable] = None) -> bytes:
+    def report_csv(self, fmt: Callable | None = None) -> bytes:
         import csv
 
         response = StringIO()
@@ -452,7 +452,7 @@ class ReportDataSource:
 
         return smart_bytes(response.getvalue())
 
-    def report_xlsx(self, fmt: Optional[Callable] = None) -> bytes:
+    def report_xlsx(self, fmt: Callable | None = None) -> bytes:
         import xlsxwriter
 
         response = BytesIO()

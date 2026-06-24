@@ -9,7 +9,7 @@
 # Python modules
 import datetime
 from dataclasses import dataclass
-from typing import Optional, Dict, Any, List, Set
+from typing import Any
 
 # NOC modules
 from noc.core.fm.request import ActionConfig, WhenCondition
@@ -34,10 +34,10 @@ class ActionResult:
     """
 
     status: ActionStatus
-    error: Optional[str] = None
-    document_id: Optional[str] = None
-    ctx: Optional[dict[str, str]] = None
-    actions: Optional[list[ActionConfig]] = None
+    error: str | None = None
+    document_id: str | None = None
+    ctx: dict[str, str] | None = None
+    actions: list[ActionConfig] | None = None
 
 
 class ActionLog:
@@ -49,43 +49,43 @@ class ActionLog:
         action: AlarmAction,
         key,
         # Match
-        time_pattern: Optional[TimePattern] = None,
-        min_severity: Optional[int] = None,
+        time_pattern: TimePattern | None = None,
+        min_severity: int | None = None,
         alarm_ack: str = "any",
         when: WhenCondition = WhenCondition.ANY,
-        has_effect: Optional[Effect] = None,
-        ex_effect: Optional[Effect] = None,
+        has_effect: Effect | None = None,
+        ex_effect: Effect | None = None,
         # Time ?
-        subject: Optional[str] = None,
-        timestamp: Optional[datetime.datetime] = None,
+        subject: str | None = None,
+        timestamp: datetime.datetime | None = None,
         status: ActionStatus = ActionStatus.NEW,
-        error: Optional[str] = None,
-        repeat_num: Optional[int] = None,
+        error: str | None = None,
+        repeat_num: int | None = None,
         # Stop processed after action
         stop_processing: bool = False,
         allow_fail: bool = True,
         # Source Task
-        user: Optional[User] = None,
-        tt_system: Optional[TTSystem] = None,
-        document_id: Optional[str] = None,
-        template: Optional[Template] = None,
+        user: User | None = None,
+        tt_system: TTSystem | None = None,
+        document_id: str | None = None,
+        template: Template | None = None,
         **kwargs,
     ):
         self.action = action
         self.key = key
         # To ctx ?
-        self.template: Optional[Template] = template
+        self.template: Template | None = template
         self.subject = subject
         self.timestamp = timestamp  # run_at
         self.status = status
         self.error = error
         self.document_id = document_id
         self.min_severity = min_severity or 0
-        self.time_pattern: Optional[TimePattern] = time_pattern
+        self.time_pattern: TimePattern | None = time_pattern
         self.alarm_ack: str = alarm_ack or "any"
         self.when: WhenCondition = when or WhenCondition.ANY
-        self.has_effect: Optional[Effect] = has_effect
-        self.ex_effect: Optional[Effect] = ex_effect
+        self.has_effect: Effect | None = has_effect
+        self.ex_effect: Effect | None = ex_effect
         self.stop_processing = stop_processing
         self.allow_fail = allow_fail
         self.repeat_num = repeat_num or 0
@@ -113,7 +113,7 @@ class ActionLog:
         severity: int,
         timestamp: datetime.datetime,
         ack_user: Any,
-        effects: Optional[set[Effect]] = None,
+        effects: set[Effect] | None = None,
     ):
         """Check job condition"""
         effects = effects or set()
@@ -131,8 +131,8 @@ class ActionLog:
 
     def get_ctx(
         self,
-        document_id: Optional[str] = None,
-        alarm_ctx: Optional[dict[str, Any]] = None,
+        document_id: str | None = None,
+        alarm_ctx: dict[str, Any] | None = None,
         wait_tt: bool = False,
     ) -> dict[str, Any]:
         """
@@ -207,10 +207,10 @@ class ActionLog:
         action: ActionConfig,
         started_at: datetime.datetime,
         one_time: bool = False,
-        user: Optional[int] = None,
-        tt_system: Optional[str] = None,
-        document_id: Optional[str] = None,
-        stub_tt_system: Optional[TTSystem] = None,
+        user: int | None = None,
+        tt_system: str | None = None,
+        document_id: str | None = None,
+        stub_tt_system: TTSystem | None = None,
     ) -> "ActionLog":
         """
         Create Action from Request

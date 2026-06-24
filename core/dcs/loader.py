@@ -11,7 +11,7 @@ import asyncio
 import logging
 
 # Third-party modules
-from typing import Optional, Dict, Awaitable, Any
+from typing import Awaitable, Any
 
 # NOC modules
 from noc.core.handler import get_handler
@@ -27,8 +27,8 @@ class DCSRunner:
 
     def __init__(self):
         self.lock = Lock()
-        self.thread: Optional[Thread] = None
-        self.loop: Optional[asyncio.BaseEventLoop] = None
+        self.thread: Thread | None = None
+        self.loop: asyncio.BaseEventLoop | None = None
         self.instances: dict[str, DCSBase] = {}
         self.ready_event = Event()
         self.logger = logging.getLogger()
@@ -43,7 +43,7 @@ class DCSRunner:
             raise ValueError("Cannot initialize DCS handler: %s", scheme)
         return handler
 
-    def get_dcs(self, url: Optional[str] = None) -> DCSBase:
+    def get_dcs(self, url: str | None = None) -> DCSBase:
         url = url or DEFAULT_DCS
         with self.lock:
             dcs = self.instances.get(url)

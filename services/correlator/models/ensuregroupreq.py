@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Dict, Any, List, Literal
+from typing import Any, Literal
 
 # Third-party modules
 from pydantic import BaseModel, Field
@@ -19,21 +19,21 @@ class AlarmItem(BaseModel):
     reference: str
     managed_object: str
     alarm_class: str
-    severity: Optional[int] = None
-    timestamp: Optional[str] = None
-    vars: Optional[dict[str, Any]] = None
-    labels: Optional[list[str]] = None
-    remote_system: Optional[str] = None
-    remote_id: Optional[str] = None
+    severity: int | None = None
+    timestamp: str | None = None
+    vars: dict[str, Any] | None = None
+    labels: list[str] | None = None
+    remote_system: str | None = None
+    remote_id: str | None = None
 
 
 class EnsureGroupRequest(BaseModel):
     op: Literal["ensure_group"] = Field(None, alias="$op")
     reference: str
     g_type: GroupType = GroupType.GROUP
-    severity: Optional[int] = None
-    name: Optional[str] = None
-    alarm_class: Optional[str] = None
-    labels: Optional[list[str]] = None
-    vars: Optional[dict[str, Any]] = None
+    severity: int | None = None
+    name: str | None = None
+    alarm_class: str | None = None
+    labels: list[str] | None = None
+    vars: dict[str, Any] | None = None
     alarms: list[AlarmItem]

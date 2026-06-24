@@ -8,7 +8,7 @@
 # Python modules
 import re
 from dataclasses import dataclass
-from typing import Any, Dict, Optional, List, Tuple
+from typing import Any
 
 # Third-party modules
 import jinja2
@@ -27,9 +27,9 @@ class ScopeConfig:
 
     name: str
     value: str
-    command: Optional[str] = None
-    after_enter: Optional[str] = None
-    before_exit: Optional[str] = None
+    command: str | None = None
+    after_enter: str | None = None
+    before_exit: str | None = None
     enter: bool = True
 
     def update_config(self, config: "ScopeConfig"):
@@ -52,9 +52,9 @@ class ActionCommandConfig:
     name: str
     commands: str
     config_mode: bool = False
-    scopes: Optional[list[ScopeConfig]] = None
-    cancel_prefix: Optional[str] = None
-    exit_command: Optional[str] = None
+    scopes: list[ScopeConfig] | None = None
+    cancel_prefix: str | None = None
+    exit_command: str | None = None
 
     @classmethod
     def render_command(cls, commands: str, **ctx: dict[str, Any]):
@@ -83,12 +83,12 @@ class ActionCommandConfig:
         self,
         ctx: dict[str, Any],
         scope_prepend: str = " ",
-        enable_commands: Optional[list[str]] = None,
-        disable_commands: Optional[list[str]] = None,
+        enable_commands: list[str] | None = None,
+        disable_commands: list[str] | None = None,
         clean_empty_string: bool = True,
         ignore_scope: bool = False,
         cancel: bool = False,
-        cancel_prefix: Optional[str] = None,
+        cancel_prefix: str | None = None,
     ):
         """
         Args:

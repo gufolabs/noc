@@ -7,7 +7,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Dict
+from typing import Any
 import orjson
 import logging
 import asyncio

@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 import datetime
 import orjson
 
@@ -78,7 +77,7 @@ class InterfaceStatusCheck(DiscoveryCheck):
             )
 
     def handler(self):
-        def get_interface(name) -> Optional[Interface]:
+        def get_interface(name) -> Interface | None:
             if_name = interfaces.get(name)
             if if_name:
                 return if_name

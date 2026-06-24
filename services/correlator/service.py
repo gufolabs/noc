@@ -12,7 +12,7 @@ import datetime
 import re
 from collections import defaultdict, deque
 import threading
-from typing import DefaultDict, Union, Any, Iterable, Optional, Tuple, Dict, List, Set
+from typing import Any, Iterable, Optional
 import operator
 from itertools import chain
 from hashlib import sha512
@@ -110,9 +110,9 @@ class CorrelatorService(FastAPIService):
         self.is_distributed = False
         self.is_default_scheduler = False
         # Scheduler
-        self.scheduler: Optional[Scheduler] = None
+        self.scheduler: Scheduler | None = None
         # Locks
-        self.topo_rca_lock: Optional[RCALock] = None
+        self.topo_rca_lock: RCALock | None = None
 
     async def on_activate(self):
         self.slot_number, self.total_slots = await self.acquire_slot()
@@ -331,7 +331,7 @@ class CorrelatorService(FastAPIService):
 
     @classmethod
     def get_default_reference(
-        cls, managed_object: ManagedObject, alarm_class: AlarmClass, vars: Optional[dict[str, Any]]
+        cls, managed_object: ManagedObject, alarm_class: AlarmClass, vars: dict[str, Any] | None
     ) -> str:
         """
         Generate default reference for event-based alarms.
@@ -368,7 +368,7 @@ class CorrelatorService(FastAPIService):
         reference: bytes,
         timestamp: datetime.datetime,
         event: Event = None,
-    ) -> Optional[ActiveAlarm]:
+    ) -> ActiveAlarm | None:
         """
         Try to reopen archived alarm
 
@@ -404,7 +404,7 @@ class CorrelatorService(FastAPIService):
         self,
         alarm: ActiveAlarm,
         timestamp: datetime.datetime,
-        severity: Optional[int] = None,
+        severity: int | None = None,
     ):
         """
         Refresh active alarm data
@@ -509,21 +509,21 @@ class CorrelatorService(FastAPIService):
 
     async def raise_alarm(
         self,
-        managed_object: Optional[ManagedObject],
+        managed_object: ManagedObject | None,
         timestamp: datetime.datetime,
         alarm_class: AlarmClass,
-        vars: Optional[dict[str, Any]],
-        event: Optional[Event] = None,
-        reference: Optional[str] = None,
-        remote_system: Optional[RemoteSystem] = None,
-        remote_id: Optional[str] = None,
-        groups: Optional[list[GroupItem]] = None,
-        labels: Optional[list[str]] = None,
-        min_group_size: Optional[int] = None,
-        severity: Optional[int] = None,
-        subject: Optional[str] = None,
-        group_type: Optional[GroupType] = None,
-    ) -> Optional[ActiveAlarm]:
+        vars: dict[str, Any] | None,
+        event: Event | None = None,
+        reference: str | None = None,
+        remote_system: RemoteSystem | None = None,
+        remote_id: str | None = None,
+        groups: list[GroupItem] | None = None,
+        labels: list[str] | None = None,
+        min_group_size: int | None = None,
+        severity: int | None = None,
+        subject: str | None = None,
+        group_type: GroupType | None = None,
+    ) -> ActiveAlarm | None:
         """
         Raise alarm
         Attrs:
@@ -739,7 +739,7 @@ class CorrelatorService(FastAPIService):
         rule: EventAlarmRule,
         event: Event,
         managed_object: ManagedObject,
-    ) -> Optional[ActiveAlarm]:
+    ) -> ActiveAlarm | None:
         """
         Raise alarm from incoming event
         """
@@ -831,7 +831,7 @@ class CorrelatorService(FastAPIService):
         rule: "EventAlarmRule",
         managed_object: ManagedObject,
         r_vars: dict[str, Any],
-        timestamp: Optional[datetime.datetime] = None,
+        timestamp: datetime.datetime | None = None,
         event: Optional["Event"] = None,
     ) -> Optional["ActiveAlarm"]:
         """Clear alarm by rule"""
@@ -860,7 +860,7 @@ class CorrelatorService(FastAPIService):
 
     def get_delayed_event(
         self, rule: "EventAlarmRule", event: Event, managed_object: ManagedObject
-    ) -> Optional[Event]:
+    ) -> Event | None:
         """
         Check wherever all delayed conditions are met
         Args:
@@ -1013,11 +1013,11 @@ class CorrelatorService(FastAPIService):
         self,
         reference: str,
         r_vars: dict[str, Any],
-        alarm_class: Optional[AlarmClass] = None,
-        event_class: Optional[EventClass] = None,
-        object_avail: Optional[bool] = None,
-        labels: Optional[list[str]] = None,
-        remote_system: Optional[RemoteSystem] = None,
+        alarm_class: AlarmClass | None = None,
+        event_class: EventClass | None = None,
+        object_avail: bool | None = None,
+        labels: list[str] | None = None,
+        remote_system: RemoteSystem | None = None,
     ):
         """
         Iterate over disposition rule
@@ -1086,8 +1086,8 @@ class CorrelatorService(FastAPIService):
     def get_disposition_reference(
         cls,
         alarm_class: AlarmClass,
-        a_vars: Optional[dict[str, Any]],
-        managed_object: Optional[ManagedObject] = None,
+        a_vars: dict[str, Any] | None,
+        managed_object: ManagedObject | None = None,
         code: str = "e",
     ):
         """Calculate reference for Dispostion Rule"""
@@ -1173,7 +1173,7 @@ class CorrelatorService(FastAPIService):
                 error_report()
 
     @classmethod
-    def parse_groups(cls, req_groups) -> Optional[list[GroupItem]]:
+    def parse_groups(cls, req_groups) -> list[GroupItem] | None:
         """Parse Alarm Group from request"""
         groups = []
         for gi in req_groups or []:
@@ -1200,7 +1200,7 @@ class CorrelatorService(FastAPIService):
         self.logger.debug("Using current time as alarm timestamp")
         return datetime.datetime.now()
 
-    def parse_object(self, oid) -> Optional[ManagedObject]:
+    def parse_object(self, oid) -> ManagedObject | None:
         """
         Resolve ManagedObject instance from message id
         :param oid:
@@ -1397,10 +1397,10 @@ class CorrelatorService(FastAPIService):
 
     async def clear_by_id(
         self,
-        id: Union[str, bytes],
-        ts: Optional[datetime.datetime] = None,
-        message: Optional[str] = None,
-        source: Optional[str] = None,
+        id: str | bytes,
+        ts: datetime.datetime | None = None,
+        message: str | None = None,
+        source: str | None = None,
     ) -> None:
         """
         Clear alarm by id
@@ -1437,11 +1437,11 @@ class CorrelatorService(FastAPIService):
 
     async def clear_by_reference(
         self,
-        reference: Union[str, bytes],
-        ts: Optional[datetime.datetime] = None,
-        message: Optional[str] = None,
-        event: Optional[Event] = None,
-    ) -> Optional[ActiveAlarm]:
+        reference: str | bytes,
+        ts: datetime.datetime | None = None,
+        message: str | None = None,
+        event: Event | None = None,
+    ) -> ActiveAlarm | None:
         """
         Clear alarm by reference
         """
@@ -1489,7 +1489,7 @@ class CorrelatorService(FastAPIService):
         Dispose event according to disposition rule
         """
 
-        def save_to_disposelog(action: str, a: Optional[ActiveAlarm] = None):
+        def save_to_disposelog(action: str, a: ActiveAlarm | None = None):
             # Send dispose information to clickhouse
             data = {
                 "date": e.timestamp.date(),
@@ -1604,7 +1604,7 @@ class CorrelatorService(FastAPIService):
                 return False
             return sum(1 for mo in a1.uplinks if mo in neighbor_alarms) == len(a1.uplinks)
 
-        def get_root(a1) -> Optional[ActiveAlarm]:
+        def get_root(a1) -> ActiveAlarm | None:
             """
             Get root cause for failed uplinks.
             Considering all uplinks are failed.
@@ -1764,7 +1764,7 @@ class CorrelatorService(FastAPIService):
         for group in groups:
             if group.reference == alarm.raw_reference:
                 continue  # Reference cycle
-            def_h_ref: Optional[bytes] = None
+            def_h_ref: bytes | None = None
             # Fetch or raise group alarm
             g_alarm = self.get_by_reference(group.reference)
             if not g_alarm:
@@ -1812,7 +1812,7 @@ class CorrelatorService(FastAPIService):
                 deferred.append(self.get_reference_hash(ref))
         return active, deferred
 
-    async def clear_groups(self, groups: list[bytes], ts: Optional[datetime.datetime]) -> None:
+    async def clear_groups(self, groups: list[bytes], ts: datetime.datetime | None) -> None:
         """
         Clear group alarms from list when necessary
 
@@ -1931,7 +1931,7 @@ class CorrelatorService(FastAPIService):
     def get_by_reference(cls, reference: str) -> Optional["ActiveAlarm"]:
         return ActiveAlarm.objects.filter(reference=cls.get_reference_hash(reference)).first()
 
-    def set_status(self, oid: int, status: bool, ts: Optional[datetime.datetime] = None) -> None:
+    def set_status(self, oid: int, status: bool, ts: datetime.datetime | None = None) -> None:
         """
         Add status changes to
         :param oid: ManagedObject Id for setting status

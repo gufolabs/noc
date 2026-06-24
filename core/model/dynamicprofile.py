@@ -8,7 +8,7 @@
 # Python modules
 import logging
 from functools import partial
-from typing import Callable, Optional
+from typing import Callable
 
 # NOC modules
 from noc.models import get_model, get_model_id, is_document
@@ -161,8 +161,8 @@ def update_profiles(
     instance_model_id,
     profile_model_id,
     profile_field: str = "profile",
-    profile_id: Optional[str] = None,
-    user: Optional[str] = None,
+    profile_id: str | None = None,
+    user: str | None = None,
 ):
     """Update profile"""
 

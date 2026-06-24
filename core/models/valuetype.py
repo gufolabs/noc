@@ -7,7 +7,7 @@
 
 # Python modules
 import enum
-from typing import Optional, Any, List, Annotated
+from typing import Any, Annotated
 
 # Third-party modules
 from pydantic import BaseModel, HttpUrl, ValidationError, StringConstraints, field_validator
@@ -233,7 +233,7 @@ class ValueType(enum.Enum):
                 return self.get_default(value)
             raise e
 
-    def clean_reference(self, value: Any, scope: Optional[str] = None) -> Optional[str]:
+    def clean_reference(self, value: Any, scope: str | None = None) -> str | None:
         """Generate References string for instance"""
         match self:
             case ValueType.MAC_ADDRESS:
@@ -251,7 +251,7 @@ class ValueType(enum.Enum):
         return None
 
     @property
-    def resource_model(self) -> Optional[str]:
+    def resource_model(self) -> str | None:
         match self:
             case ValueType.IFACE_NAME:
                 return "inv.Interface"
@@ -263,7 +263,7 @@ class ValueType(enum.Enum):
                 return "ip.Address"
         return None
 
-    def get_resource_instance(self) -> Optional[Any]:
+    def get_resource_instance(self) -> Any | None:
         """Getting resource instance"""
         m = self.resource_model
         if not m:

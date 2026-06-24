@@ -16,7 +16,7 @@ import shutil
 import functools
 from collections import defaultdict
 from io import StringIO, TextIOWrapper
-from typing import Any, Optional, Iterable, Tuple, List, Dict, Set, Union
+from typing import Any, Iterable
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter
@@ -94,11 +94,11 @@ class BaseLoader:
     # Effect
     # on_delete_effect: Optional[ObjectEffect] = None
     # Label
-    label_enable_setting: Optional[str] = None
+    label_enable_setting: str | None = None
     # Incremental
     checkpoint_field = "checkpoint"
     # Post save fields (example - capabilities)
-    post_save_fields: Optional[set[str]] = None
+    post_save_fields: set[str] | None = None
     # Remote mappings
     remote_mappings_supported: bool = False
 
@@ -214,7 +214,7 @@ class BaseLoader:
         return loader.mappings
 
     @classmethod
-    def get_mapping(cls, scope: str, value: Optional[str]) -> Optional[Any]:
+    def get_mapping(cls, scope: str, value: str | None) -> Any | None:
         """
         Resolve mapping by NOC Mapping
 
@@ -231,7 +231,7 @@ class BaseLoader:
             o = model.objects.filter(name=value).first()
         return o
 
-    def get_new_state(self) -> Optional[TextIOWrapper]:
+    def get_new_state(self) -> TextIOWrapper | None:
         """
         Returns file object of new state, or None when not present
         """
@@ -266,7 +266,7 @@ class BaseLoader:
         return compressor(path, "r").open()
 
     def iter_jsonl(
-        self, f: TextIOWrapper, data_model: Optional[BaseModel] = None
+        self, f: TextIOWrapper, data_model: BaseModel | None = None
     ) -> Iterable[BaseModel]:
         """
         Iterate over JSONl stream and yield model instances
@@ -285,7 +285,7 @@ class BaseLoader:
         new: Iterable[BaseModel],
         include_fields: set = None,
         return_wo_changes: bool = False,
-    ) -> Iterable[tuple[Optional[BaseModel], Optional[BaseModel]]]:
+    ) -> Iterable[tuple[BaseModel | None, BaseModel | None]]:
         """
         Compare old and new CSV files and yield pair of matches
         * old, new -- when changed
@@ -388,9 +388,9 @@ class BaseLoader:
 
     def find_by_remote_mappings(
         self,
-        remote_system: Optional[str] = None,
-        remote_id: Optional[str] = None,
-        mappings: Optional[dict[Any, str]] = None,
+        remote_system: str | None = None,
+        remote_id: str | None = None,
+        mappings: dict[Any, str] | None = None,
     ) -> list[Any]:
         """Find objects by Remote Mappings"""
         r = []
@@ -401,9 +401,7 @@ class BaseLoader:
                 r.append((rs, rid))
         return self.model.get_by_mappings(r)
 
-    def find_object(
-        self, v: dict[str, Any], mappings: Optional[dict[Any, str]] = None
-    ) -> Optional[Any]:
+    def find_object(self, v: dict[str, Any], mappings: dict[Any, str] | None = None) -> Any | None:
         """
         Find object by remote system/remote id
         Args:
@@ -452,8 +450,8 @@ class BaseLoader:
     def create_object(
         self,
         v,
-        state: Optional[str] = None,
-        mappings: Optional[dict[Any, str]] = None,
+        state: str | None = None,
+        mappings: dict[Any, str] | None = None,
     ):
         """
         Create object with attributes. Override to save complex
@@ -499,9 +497,9 @@ class BaseLoader:
         object_id: str,
         v: dict[str, Any],
         inc_changes: dict[str, dict[str, list]] = None,
-        state: Optional[str] = None,
-        state_changed: Optional[datetime.datetime] = None,
-        mappings: Optional[dict[Any, str]] = None,
+        state: str | None = None,
+        state_changed: datetime.datetime | None = None,
+        mappings: dict[Any, str] | None = None,
     ):
         """
         Change object with attributes
@@ -654,7 +652,7 @@ class BaseLoader:
         """
         self.pending_deletes += [(item.id, item)]
 
-    def change_workflow(self, o, state: str, changed_date: Optional[datetime.datetime] = None):
+    def change_workflow(self, o, state: str, changed_date: datetime.datetime | None = None):
         self.logger.debug("Change Workflow state: %s -> %s", o.state, state)
         if not o:
             return
@@ -666,7 +664,7 @@ class BaseLoader:
             self.logger.debug("Change workflow state: %s -> %s", o.state, state)
             o.set_state(state, changed_date)
 
-    def ensure_labels(self, labels: Optional[list[str]]):
+    def ensure_labels(self, labels: list[str] | None):
         from noc.main.models.label import Label
 
         if not labels:
@@ -758,7 +756,7 @@ class BaseLoader:
         return r
 
     @classmethod
-    def clean_object_mappings(cls, value: list[MappingItem]) -> Optional[dict[Any, str]]:
+    def clean_object_mappings(cls, value: list[MappingItem]) -> dict[Any, str] | None:
         from noc.main.models.remotesystem import RemoteSystem
 
         r = {}
@@ -780,7 +778,7 @@ class BaseLoader:
         return value
 
     @classmethod
-    def clean_str(cls, value) -> Optional[str]:
+    def clean_str(cls, value) -> str | None:
         if value:
             if isinstance(value, str):
                 return smart_text(value)
@@ -806,7 +804,7 @@ class BaseLoader:
         return value
 
     @classmethod
-    def clean_bool(cls, value: str) -> Optional[bool]:
+    def clean_bool(cls, value: str) -> bool | None:
         if value == "" or value is None:
             return None
         try:
@@ -816,7 +814,7 @@ class BaseLoader:
         value = value.lower()
         return value in ("t", "true", "y", "yes")
 
-    def clean_remote_reference(self, remote_system, loader_name, value) -> Optional[str]:
+    def clean_remote_reference(self, remote_system, loader_name, value) -> str | None:
         """
         Resolve value on Remote System Mapping
 
@@ -833,8 +831,8 @@ class BaseLoader:
         return self.remote_mappings[(remote_system, loader_name)][value]
 
     def clean_reference(
-        self, mappings: dict[str, str], r_model, loader_name: str, value: Union[str, dict[str, str]]
-    ) -> Optional[str]:
+        self, mappings: dict[str, str], r_model, loader_name: str, value: str | dict[str, str]
+    ) -> str | None:
         if not value:
             return None
         if self.disable_mappings and not mappings:
@@ -854,7 +852,7 @@ class BaseLoader:
 
     def clean_int_reference(
         self, mappings: dict[str, str], r_model, loader_name: str, value: str
-    ) -> Optional[int]:
+    ) -> int | None:
         if not value:
             return None
         if self.disable_mappings and not mappings:
@@ -985,7 +983,7 @@ class BaseLoader:
             self.logger.info("No new state, skipping")
             return 0
         new_state = self.iter_jsonl(ns)
-        uv: Union[str, tuple[str, str]] = set()
+        uv: str | tuple[str, str] = set()
         m_data = {}  # field_number -> set of mapped ids
         # Load mapped ids
         for f in self.mapped_fields:

@@ -8,7 +8,7 @@
 # Python modules
 import re
 from pathlib import Path
-from typing import List, Tuple, Dict, Iterable, Union
+from typing import Iterable
 
 
 # Third-party modules
@@ -21,7 +21,7 @@ SUMMARY_FILENAME = "SUMMARY.md"
 MKDOCS_CONF = Path("mkdocs.yml")
 rx_item = re.compile(r"\[(.*)].*\((.*)\)")
 
-T_NAV_ITEM = Union[str, dict[str, "T_NAV_ITEM"], list["T_NAV_ITEM"]]
+T_NAV_ITEM = str | dict[str, "T_NAV_ITEM"] | list["T_NAV_ITEM"]
 
 
 class ToC:

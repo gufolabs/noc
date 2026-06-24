@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List
 
 # Third-party modules
 from fastapi import APIRouter, Header, HTTPException

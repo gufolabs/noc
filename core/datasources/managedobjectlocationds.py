@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Optional, Iterable, Tuple, AsyncIterable
+from typing import Iterable, AsyncIterable
 
 # Third-party modules
 from pymongo.read_preferences import ReadPreference
@@ -29,7 +29,7 @@ class ManagedObjectLocationDS(BaseDataSource):
 
     @classmethod
     async def iter_query(
-        cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
+        cls, fields: Iterable[str] | None = None, *args, **kwargs
     ) -> AsyncIterable[tuple[str, str]]:
         match = {"data.interface": "address"}
         value = (

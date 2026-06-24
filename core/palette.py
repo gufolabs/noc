@@ -7,7 +7,6 @@
 
 # Python modules
 import itertools
-from typing import Tuple
 
 # Material 2014 color scheme from
 # https://material.io/design/color/the-color-system.html#tools-for-picking-colors

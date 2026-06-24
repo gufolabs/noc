@@ -7,7 +7,6 @@
 
 # Python modules
 import asyncio
-from typing import List
 
 # NOC modules
 from noc.core.runner.lock import LockManager

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Callable, Optional, Dict, List
+from typing import Callable
 from dataclasses import dataclass
 from threading import Lock
 
@@ -52,8 +52,8 @@ class MetricScopeCDAGFactory(BaseCDAGFactory):
         self,
         graph: CDAG,
         scope: MetricScope,
-        ctx: Optional[FactoryCtx] = None,
-        namespace: Optional[str] = None,
+        ctx: FactoryCtx | None = None,
+        namespace: str | None = None,
         spool: bool = True,
         spool_message: bool = False,
         sticky: bool = False,

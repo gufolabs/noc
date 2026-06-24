@@ -7,7 +7,7 @@
 
 # Python modules
 from threading import Lock
-from typing import Optional, Union
+from typing import Optional
 import operator
 
 # Third-party modules
@@ -58,7 +58,7 @@ class VLANProfile(Document):
     # VLAN workflow
     workflow = PlainReferenceField(Workflow, required=True)
     style = ForeignKeyField(Style)
-    role: Optional[VLANRole] = EnumField(VLANRole, required=False)
+    role: VLANRole | None = EnumField(VLANRole, required=False)
     provisioning_policy: str = StringField(
         choices=[
             ("P", "Domain"),
@@ -91,7 +91,7 @@ class VLANProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["VLANProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["VLANProfile"]:
         return VLANProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -129,5 +129,5 @@ class VLANProfile(Document):
         if self.role_label:
             Label.ensure_label(self.role_label, model_ids=["vc.VLAN", "inv.Interface"])
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

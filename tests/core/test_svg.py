@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Tuple, Dict, List
 import xml.etree.ElementTree as ET
 import tempfile
 
@@ -315,7 +314,7 @@ def test_defs_same() -> None:
         ({"style": "transform-origin: 5 10"}, (5.0, 10.0)),
     ],
 )
-def test_transform_origin(attrs: dict[str, str], expected: Optional[tuple[float, float]]) -> None:
+def test_transform_origin(attrs: dict[str, str], expected: tuple[float, float] | None) -> None:
     el = ET.Element("rect", attrs)
     transform_origin = SVG.get_transform_origin(el)
     assert transform_origin == expected
@@ -341,7 +340,7 @@ def test_transform_origin(attrs: dict[str, str], expected: Optional[tuple[float,
         ),
     ],
 )
-def test_translate(attrs: dict[str, str], expected: Optional[tuple[float, float]]) -> None:
+def test_translate(attrs: dict[str, str], expected: tuple[float, float] | None) -> None:
     el = ET.Element("rect", attrs)
     translate = SVG.get_transform(el)
     assert translate == expected

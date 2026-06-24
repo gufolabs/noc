@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Dict, Any
+from typing import Any
 
 # Third-party modules
 from mongoengine.queryset import Q
@@ -284,9 +284,9 @@ class ServiceApplication(ExtDocApplication):
         request,
         sid: str,
         iid: str,
-        name: Optional[str] = None,
-        fqdn: Optional[str] = None,
-        port: Optional[int] = None,
+        name: str | None = None,
+        fqdn: str | None = None,
+        port: int | None = None,
     ):
         si = self.get_object_or_404(ServiceInstance, id=iid)
         if si.name != name:
@@ -314,8 +314,8 @@ class ServiceApplication(ExtDocApplication):
         request,
         sid: str,
         i_type: str,
-        name: Optional[str] = None,
-        fqdn: Optional[str] = None,
+        name: str | None = None,
+        fqdn: str | None = None,
     ):
         o = self.get_object_or_404(Service, id=sid)
         try:
@@ -367,7 +367,7 @@ class ServiceApplication(ExtDocApplication):
         request,
         sid: str,
         iid: str,
-        managed_object: Optional[ManagedObject] = None,
+        managed_object: ManagedObject | None = None,
         resources: list[str] = None,
         addresses: list[dict[str, str]] = None,
     ):

@@ -7,7 +7,6 @@
 
 # Python modules
 import os
-from typing import Optional, Tuple, Dict
 
 # Third-party modules
 import uvicorn
@@ -120,7 +119,7 @@ class FastAPIService(BaseService):
             collect_req_api_metric=self.collect_req_api_metric,
         )
         self.app.add_middleware(SpanMiddleware, service_name=self.name)
-        self.server: Optional[uvicorn.Server] = None
+        self.server: uvicorn.Server | None = None
         # Initialize routers
         for path in loader.iter_classes():
             self.app.include_router(loader.get_class(path))

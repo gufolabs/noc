@@ -8,7 +8,7 @@
 # Python modules
 import logging
 import itertools
-from typing import Dict, List, Optional, Iterable
+from typing import Iterable
 
 # Third-party modules
 from bson import ObjectId
@@ -35,7 +35,7 @@ class L2DomainTopology(TopologyBase):
         self.logger = PrefixLoggerAdapter(logger, self.l2domain.name)
         super().__init__(**settings)
 
-    def gen_id(self) -> Optional[str]:
+    def gen_id(self) -> str | None:
         return str(self.l2domain.id)
 
     def load(self):
@@ -88,10 +88,10 @@ class L2DomainTopology(TopologyBase):
     def iter_maps(
         cls,
         parent: str = None,
-        query: Optional[str] = None,
-        limit: Optional[int] = None,
-        start: Optional[int] = None,
-        page: Optional[int] = None,
+        query: str | None = None,
+        limit: int | None = None,
+        start: int | None = None,
+        page: int | None = None,
     ) -> Iterable[MapItem]:
         data = L2Domain.objects.filter().order_by("name")
         if query:

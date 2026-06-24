@@ -10,7 +10,7 @@ from collections import defaultdict
 
 # Third-party modules
 from pymongo import ReadPreference
-from typing import Dict, List, Tuple, Set, Any, Optional
+from typing import Any
 
 # NOC modules
 from noc.core.text import ranges_to_list
@@ -273,12 +273,12 @@ class InterfaceCheck(PolicyDiscoveryCheck):
         self,
         name: str,
         i_type: str,
-        default_name: Optional[str] = None,
-        mac: Optional[str] = None,
-        description: Optional[str] = None,
+        default_name: str | None = None,
+        mac: str | None = None,
+        description: str | None = None,
         aggregated_interface=None,
         enabled_protocols: list[str] = None,
-        ifindex: Optional[int] = None,
+        ifindex: int | None = None,
         labels: list[str] = None,
         caps: dict[str, str] = None,
     ):
@@ -343,19 +343,19 @@ class InterfaceCheck(PolicyDiscoveryCheck):
         forwarding_instance: "ForwardingInstance",
         interface: "Interface",
         name: str,
-        description: Optional[str] = None,
-        mac: Optional[str] = None,
+        description: str | None = None,
+        mac: str | None = None,
         vlan_ids: list[int] = None,
         enabled_afi: list[str] = None,
         ipv4_addresses: list[str] = None,
         ipv6_addresses: list[str] = None,
         iso_addresses: list[str] = None,
-        vpi: Optional[int] = None,
-        vci: Optional[int] = None,
+        vpi: int | None = None,
+        vci: int | None = None,
         enabled_protocols: list[str] = None,
-        untagged_vlan: Optional[int] = None,
+        untagged_vlan: int | None = None,
         tagged_vlans: list[int] = None,
-        ifindex: Optional[int] = None,
+        ifindex: int | None = None,
     ):
         mac = mac or interface.mac
         enabled_afi, enabled_protocols = enabled_afi or [], enabled_protocols or []

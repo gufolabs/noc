@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Optional, List, Iterable, Dict, DefaultDict
+from typing import Any, Iterable
 from collections import defaultdict
 from dataclasses import dataclass
 
@@ -41,13 +41,13 @@ class ConfigMapping(BaseModel):
 class SubgraphConfig(BaseModel):
     # Yaml-serialized subgraph
     cdag: str
-    inputs: Optional[list[InputMapping]]
-    output: Optional[str]
-    config: Optional[list[ConfigMapping]]
+    inputs: list[InputMapping] | None
+    output: str | None
+    config: list[ConfigMapping] | None
 
 
 class SubgraphState(BaseModel):
-    state: Optional[dict[str, Any]] = None
+    state: dict[str, Any] | None = None
 
 
 class SubgraphCDAGFactory(ConfigCDAGFactory):
@@ -66,7 +66,7 @@ class SubgraphCDAGFactory(ConfigCDAGFactory):
         """
         self.node_cfg[node][param] = value
 
-    def clean_node_config(self, node_id: str, config: Optional[dict[str, Any]]) -> Any:
+    def clean_node_config(self, node_id: str, config: dict[str, Any] | None) -> Any:
         override = self.node_cfg[node_id]
         if override:
             config = config or {}
@@ -95,10 +95,10 @@ class SubgraphNode(BaseCDAGNode):
     def __init__(
         self,
         node_id: str,
-        prefix: Optional[str] = None,
-        state: Optional[dict[str, Any]] = None,
+        prefix: str | None = None,
+        state: dict[str, Any] | None = None,
         description: str = None,
-        config: Optional[dict[str, Any]] = None,
+        config: dict[str, Any] | None = None,
         sticky: bool = False,
     ):
         # Clean up config
@@ -144,7 +144,7 @@ class SubgraphNode(BaseCDAGNode):
             return IN_REQUIRED
         return IN_INVALID
 
-    def get_value(self, *args, **kwargs) -> Optional[ValueType]:
+    def get_value(self, *args, **kwargs) -> ValueType | None:
         # Start sub-transaction
         tx = self.cdag.begin()
         for p, v in kwargs.items():

@@ -10,7 +10,6 @@ import datetime
 from io import BytesIO
 from zipfile import ZipFile, ZIP_DEFLATED
 from tempfile import TemporaryFile
-from typing import Optional
 
 # Third-party modules
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
@@ -48,7 +47,7 @@ def get_column_width(name):
     return 15
 
 
-def get_col_widths(dataframe: "pl.DataFrame", index_filed: Optional[str] = None):
+def get_col_widths(dataframe: "pl.DataFrame", index_filed: str | None = None):
     # First we find the maximum length of the index column
     idx_max = 10
     if index_filed:

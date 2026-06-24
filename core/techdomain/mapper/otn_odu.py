@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from noc.inv.models.channel import Channel
@@ -22,8 +21,8 @@ class DWDMOdUMapper(BaseMapper):
 
     def render(
         self,
-        start: Optional[Endpoint] = None,
-        end: Optional[Endpoint] = None,
+        start: Endpoint | None = None,
+        end: Endpoint | None = None,
     ) -> None:
         def node_label(obj: Object) -> str:
             o_name = " > ".join(obj.get_local_name_path(True))

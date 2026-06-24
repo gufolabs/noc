@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 from datetime import datetime
 
 # Third-party modules
@@ -24,7 +23,7 @@ class DefaultRemoteSystemItem(BaseModel):
     handler: str
     # Environment variables
     environment: list[EnvItem]
-    description: Optional[str] = None
+    description: str | None = None
     # Enable extractors/loaders
     enable_admdiv: bool = False
     enable_administrativedomain: bool = False
@@ -45,12 +44,12 @@ class DefaultRemoteSystemItem(BaseModel):
     enable_project: bool = False
     enable_label: bool = False
     # Usage statistics
-    last_extract: Optional[datetime] = None
-    last_successful_extract: Optional[datetime] = None
-    extract_error: Optional[str] = None
-    last_load: Optional[datetime] = None
-    last_successful_load: Optional[datetime] = None
-    load_error: Optional[str] = None
+    last_extract: datetime | None = None
+    last_successful_extract: datetime | None = None
+    extract_error: str | None = None
+    last_load: datetime | None = None
+    last_successful_load: datetime | None = None
+    load_error: str | None = None
 
 
 class FormRemoteSystemItem(BaseModel):

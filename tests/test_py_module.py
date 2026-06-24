@@ -8,7 +8,7 @@
 # Python modules
 import os
 import ast
-from typing import Iterable, List
+from typing import Iterable
 from pathlib import Path
 
 # Third-party modules

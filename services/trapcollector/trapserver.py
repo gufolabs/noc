@@ -8,7 +8,6 @@
 # Python modules
 import logging
 import time
-from typing import Tuple
 import codecs
 import uuid
 

@@ -9,7 +9,7 @@
 import sys
 import json
 import os
-from typing import Dict, DefaultDict, Any, Iterable, List, Optional
+from typing import Any, Iterable
 from dataclasses import dataclass
 import enum
 import re
@@ -87,8 +87,8 @@ class EventClass:
     symptoms: str
     probable_causes: str
     recommended_actions: str
-    vars: Optional[list[EventClassVar]]
-    disposition: Optional[list[EventClassDisposition]]
+    vars: list[EventClassVar] | None
+    disposition: list[EventClassDisposition] | None
 
     @property
     def dir_path(self) -> list[str]:
@@ -107,7 +107,7 @@ class EventClass:
 class AlarmClassVar:
     name: str
     description: str
-    default: Optional[str]
+    default: str | None
 
     @property
     def default_mark(self) -> str:
@@ -136,11 +136,11 @@ class AlarmClass:
     symptoms: str
     probable_causes: str
     recommended_actions: str
-    vars: Optional[list[AlarmClassVar]]
-    root_causes: Optional[list[RoutCause]]
-    consequences: Optional[list[RoutCause]]
-    opening_events: Optional[list[AlarmEvent]]
-    closing_events: Optional[list[AlarmEvent]]
+    vars: list[AlarmClassVar] | None
+    root_causes: list[RoutCause] | None
+    consequences: list[RoutCause] | None
+    opening_events: list[AlarmEvent] | None
+    closing_events: list[AlarmEvent] | None
 
     @property
     def dir_path(self) -> list[str]:
@@ -172,7 +172,7 @@ class MetricScope:
     name: str
     uuid: str
     table_name: str
-    description: Optional[str]
+    description: str | None
     path: list[MetricScopePath]
     metric_types: list["MetricType"]
 
@@ -192,7 +192,7 @@ class MetricType:
     scope: MetricScope
     field_name: str
     field_type: str
-    description: Optional[str]
+    description: str | None
     measure: str
 
     @property
@@ -211,7 +211,7 @@ class MetricType:
 @dataclass
 class AltMeasurementUnits:
     name: str
-    description: Optional[str]
+    description: str | None
     label: str
     dashboard_label: str
     from_primary: str
@@ -222,11 +222,11 @@ class AltMeasurementUnits:
 class MeasurementUnits:
     name: str
     uuid: str
-    description: Optional[str]
+    description: str | None
     label: str
     dashboard_label: str
     scale_type: str
-    alt_units: Optional[list[AltMeasurementUnits]]
+    alt_units: list[AltMeasurementUnits] | None
 
     @property
     def file_name(self) -> str:
@@ -241,10 +241,10 @@ class MeasurementUnits:
 class ConnectionType:
     name: str
     uuid: str
-    description: Optional[str]
-    extend: Optional[str]
+    description: str | None
+    extend: str | None
     genders: str
-    c_group: Optional[list[str]]
+    c_group: list[str] | None
 
     @property
     def dir_path(self) -> list[str]:

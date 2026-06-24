@@ -10,7 +10,7 @@ import logging
 import operator
 from threading import Lock
 import datetime
-from typing import Optional, Union
+from typing import Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -95,7 +95,7 @@ class AlarmEscalation(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["AlarmEscalation"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["AlarmEscalation"]:
         return AlarmEscalation.objects.filter(id=oid).first()
 
     @property
@@ -123,7 +123,7 @@ class AlarmEscalation(Document):
         force: bool = False,
         timestamp_policy: str = "a",
         defer: bool = True,
-        prev_escalation: Optional[str] = None,
+        prev_escalation: str | None = None,
     ):
         if alarm.alarm_class.is_ephemeral:
             # Ephemeral alarm has not escalated
@@ -192,9 +192,9 @@ class AlarmEscalation(Document):
         alarm,
         tt_id: str,
         is_clear: bool = False,
-        subject: Optional[str] = None,
-        body: Optional[str] = None,
-        queue: Optional[str] = None,
+        subject: str | None = None,
+        body: str | None = None,
+        queue: str | None = None,
         force: bool = False,
         defer: bool = True,
         **kwargs,

@@ -7,7 +7,6 @@
 
 # Python modules
 import logging
-from typing import Set
 
 # NOC modules
 from noc.inv.models.object import Object

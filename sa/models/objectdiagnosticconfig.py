@@ -9,7 +9,7 @@
 import operator
 from collections import defaultdict
 from threading import Lock
-from typing import Optional, Dict, Any, Iterable, List, Union, Tuple, Callable
+from typing import Optional, Any, Iterable, Callable
 from pathlib import Path
 
 # Third-party modules
@@ -164,7 +164,7 @@ class ObjectDiagnosticConfig(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ObjectDiagnosticConfig"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ObjectDiagnosticConfig"]:
         return ObjectDiagnosticConfig.objects.filter(id=oid).first()
 
     @classmethod

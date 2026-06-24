@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Set, Optional, Tuple, Dict, Iterable
+from typing import Iterable
 from logging import getLogger
 import time
 from collections import defaultdict
@@ -114,7 +114,7 @@ class Topo:
         self.set_dirty(obj.id)
 
     @staticmethod
-    def clear_uplinks(s: Optional[Iterable[int]]) -> Optional[tuple[int, ...]]:
+    def clear_uplinks(s: Iterable[int] | None) -> tuple[int, ...] | None:
         """
         Normalize uplinks.
 
@@ -127,7 +127,7 @@ class Topo:
         return tuple(sorted(s)) if s else None
 
     @staticmethod
-    def to_set(s: Optional[set[int]]) -> set[int]:
+    def to_set(s: set[int] | None) -> set[int]:
         """
         Normalize None, Tuple or Set to Set
 

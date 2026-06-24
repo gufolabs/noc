@@ -7,7 +7,6 @@
 
 # Python modules
 import re
-from typing import Tuple, Optional
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -150,7 +149,7 @@ class Script(BaseScript):
                     r["attributes"]["Serial Number"] = s
                 return r
 
-    def execute_inventory_raw(self) -> tuple[str, Optional[str]]:
+    def execute_inventory_raw(self) -> tuple[str, str | None]:
         v = self.cli("show inventory raw")
         i = 0
         serial, platform = None, None

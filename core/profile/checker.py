@@ -11,7 +11,7 @@ import operator
 import re
 from collections import defaultdict
 from threading import Lock
-from typing import Optional, List, Dict, Tuple, Iterable
+from typing import Iterable
 
 # Third-party modules
 import cachetools
@@ -38,12 +38,12 @@ class ProfileChecker:
 
     def __init__(
         self,
-        address: Optional[str] = None,
-        pool: Optional[str] = None,
+        address: str | None = None,
+        pool: str | None = None,
         logger=None,
-        snmp_community: Optional[str] = None,
+        snmp_community: str | None = None,
         calling_service: str = "profilechecker",
-        snmp_version: Optional[list[int]] = None,
+        snmp_version: list[int] | None = None,
     ):
         self.address = address
         self.pool = pool
@@ -51,8 +51,8 @@ class ProfileChecker:
             logger or self.base_logger, "%s][%s" % (self.pool or "", self.address or "")
         )
         self.result_cache: dict[tuple[str, str], str] = {}  # (method, param) -> result
-        self.error: Optional[str] = None
-        self.snmp_check: Optional[bool] = None
+        self.error: str | None = None
+        self.snmp_check: bool | None = None
         self.snmp_community = snmp_community
         self.calling_service = calling_service
         self.snmp_version = snmp_version or [SNMP_v2c]
@@ -64,7 +64,7 @@ class ProfileChecker:
             self.logger.error("No SNMP credentials. Ignoring")
             self.ignoring_snmp = True
 
-    def find_profile(self, method: str, param: str, result: str) -> Optional[Profile]:
+    def find_profile(self, method: str, param: str, result: str) -> Profile | None:
         """
         Find profile by method
         :param method: Fingerprint getting method
@@ -86,7 +86,7 @@ class ProfileChecker:
                 # @todo: process MAYBE rule
                 return profile
 
-    def get_profile(self) -> Optional[Profile]:
+    def get_profile(self) -> Profile | None:
         """
         Returns profile for object, or None when not known
         """
@@ -120,7 +120,7 @@ class ProfileChecker:
         self.logger.info("Cannot detect profile: %s", self.error)
         return None
 
-    def get_error(self) -> Optional[str]:
+    def get_error(self) -> str | None:
         """
         Get error message
         :return:
@@ -175,7 +175,7 @@ class ProfileChecker:
     def get_re(cls, regexp):
         return re.compile(regexp)
 
-    def do_check(self, method: str, param: str) -> Optional[str]:
+    def do_check(self, method: str, param: str) -> str | None:
         """
         Perform check
         """

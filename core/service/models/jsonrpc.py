@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, List
+from typing import Any
 
 # Third-party modules
 from pydantic import BaseModel

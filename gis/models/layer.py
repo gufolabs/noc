@@ -9,7 +9,7 @@
 from pathlib import Path
 from threading import Lock
 import operator
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional
 
 # Third-party modules
 import bson
@@ -84,7 +84,7 @@ class Layer(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["Layer"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["Layer"]:
         return Layer.objects.filter(id=oid).first()
 
     @classmethod

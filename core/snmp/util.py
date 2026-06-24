@@ -9,7 +9,7 @@
 import re
 
 # Third-party modules
-from typing import Any, Optional, Union
+from typing import Any
 
 # NOC modules
 from noc.core.comp import smart_text
@@ -46,7 +46,7 @@ def render_tc_int(value: int, format: str) -> str:
     return smart_text(value, errors="ignore")
 
 
-def render_tc_octetstring(value, format: Union[bytes, str]) -> str:
+def render_tc_octetstring(value, format: bytes | str) -> str:
     if isinstance(value, bytes):
         value = list(value)
     else:
@@ -94,7 +94,7 @@ def render_tc_octetstring(value, format: Union[bytes, str]) -> str:
     return r
 
 
-def render_tc(value: Any, base_type: str, format: Optional[str] = None) -> str:
+def render_tc(value: Any, base_type: str, format: str | None = None) -> str:
     """
     Render SNMP TC using DISPLAY-HINT according to RFC 2579
 

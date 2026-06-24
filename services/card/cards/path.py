@@ -7,7 +7,6 @@
 
 # Third-party modules
 import orjson
-from typing import List
 
 # NOC modules
 from .base import BaseCard

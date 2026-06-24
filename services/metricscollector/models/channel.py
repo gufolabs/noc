@@ -10,7 +10,7 @@ import asyncio
 import logging
 from collections import defaultdict
 from time import perf_counter
-from typing import Optional, Set, Dict, Tuple, List, FrozenSet, Iterable, DefaultDict
+from typing import Iterable
 
 # NOC modules
 from noc.services.metricscollector.sourceconfig import RemoteSystemConfig
@@ -24,8 +24,8 @@ class RemoteSystemChannel:
         service,
         remote_system: RemoteSystemConfig,
         collector: str,
-        batch_delay: Optional[int] = None,
-        logger: Optional[logging.Logger] = None,
+        batch_delay: int | None = None,
+        logger: logging.Logger | None = None,
     ):
         self.service = service
         self.collector = collector
@@ -40,7 +40,7 @@ class RemoteSystemChannel:
         self.size: int = 0
         self.records: int = 0
         self.deduplicated: int = 0
-        self.expired: Optional[float] = None
+        self.expired: float | None = None
         self.feed_ready = asyncio.Event()
         self.feed_ready.set()
         self.flush_unknown_metrics = False
@@ -63,8 +63,8 @@ class RemoteSystemChannel:
         target: str,
         metric: str,
         values: list[tuple[int, float]],
-        labels: Optional[Iterable[str]] = None,
-        sensor_id: Optional[str] = None,
+        labels: Iterable[str] | None = None,
+        sensor_id: str | None = None,
     ):
         """Feed the message. Returns optional offset of last saved message"""
         # Try sensor
@@ -159,8 +159,8 @@ class RemoteSystemEventChannel:
         service,
         remote_system: RemoteSystemConfig,
         collector: str,
-        batch_delay: Optional[int] = None,
-        logger: Optional[logging.Logger] = None,
+        batch_delay: int | None = None,
+        logger: logging.Logger | None = None,
     ):
         self.service = service
         self.collector = collector
@@ -174,7 +174,7 @@ class RemoteSystemEventChannel:
         self.deferred = []
         self.records: int = 0
         self.deduplicated: int = 0
-        self.expired: Optional[float] = None
+        self.expired: float | None = None
         self.feed_ready = asyncio.Event()
         self.feed_ready.set()
         self.flush_unknown_hosts = False

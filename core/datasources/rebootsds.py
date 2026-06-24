@@ -7,7 +7,7 @@
 
 # Python Modules
 import datetime
-from typing import Optional, Iterable, Tuple, AsyncIterable
+from typing import Iterable, AsyncIterable
 
 # Third-party modules
 from django.db import connection
@@ -34,7 +34,7 @@ class RebootsDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
+        fields: Iterable[str] | None = None,
         start: datetime.datetime = None,
         end: datetime.datetime = None,
         *args,

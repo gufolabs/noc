@@ -9,7 +9,6 @@
 import datetime
 from time import perf_counter
 from collections import defaultdict
-from typing import List, Dict
 
 # NOC modules
 from noc.core.scheduler.periodicjob import PeriodicJob

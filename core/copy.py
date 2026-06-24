@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Dict
+from typing import Any
 
 
 def deep_copy(t: dict[Any, Any]) -> dict[Any, Any]:

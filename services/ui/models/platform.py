@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel
@@ -23,25 +22,25 @@ class DefaultPlatformItem(BaseModel):
     vendor: Reference
     labels: list[LabelItem]
     effective_labels: list[LabelItem]
-    full_name: Optional[str] = None
-    description: Optional[str] = None
-    start_of_sale: Optional[datetime.datetime] = None
-    end_of_sale: Optional[datetime.datetime] = None
-    end_of_support: Optional[datetime.datetime] = None
-    end_of_xsupport: Optional[datetime.datetime] = None
-    snmp_sysobjectid: Optional[str] = None
-    aliases: Optional[list[str]] = None
-    uuid: Optional[str] = None
-    bi_id: Optional[str] = None
+    full_name: str | None = None
+    description: str | None = None
+    start_of_sale: datetime.datetime | None = None
+    end_of_sale: datetime.datetime | None = None
+    end_of_support: datetime.datetime | None = None
+    end_of_xsupport: datetime.datetime | None = None
+    snmp_sysobjectid: str | None = None
+    aliases: list[str] | None = None
+    uuid: str | None = None
+    bi_id: str | None = None
 
 
 class FormPlatformItem(BaseModel):
     name: str
     vendor: Reference
-    description: Optional[str] = None
-    start_of_sale: Optional[datetime.datetime] = None
-    end_of_sale: Optional[datetime.datetime] = None
-    end_of_support: Optional[datetime.datetime] = None
-    end_of_xsupport: Optional[datetime.datetime] = None
-    snmp_sysobjectid: Optional[str] = None
-    labels: Optional[list[str]] = None
+    description: str | None = None
+    start_of_sale: datetime.datetime | None = None
+    end_of_sale: datetime.datetime | None = None
+    end_of_support: datetime.datetime | None = None
+    end_of_xsupport: datetime.datetime | None = None
+    snmp_sysobjectid: str | None = None
+    labels: list[str] | None = None

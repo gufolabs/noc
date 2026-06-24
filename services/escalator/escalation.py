@@ -10,7 +10,7 @@ import logging
 import datetime
 import operator
 import threading
-from typing import Iterable, Dict, DefaultDict, List, Optional, Any, NoReturn
+from typing import Iterable, Any, NoReturn
 from collections import defaultdict
 from abc import ABC, abstractmethod
 
@@ -124,7 +124,7 @@ class EscalationSequence(BaseSequence):
         login: str = "correlator",
         timestamp_policy: str = "a",
         force: bool = False,
-        prev_escalation: Optional[str] = None,
+        prev_escalation: str | None = None,
     ):
         super().__init__(alarm_id=alarm_id, login=login)
         self.alarm = self.get_alarm(alarm_id)
@@ -249,7 +249,7 @@ class EscalationSequence(BaseSequence):
             return True
         return self.alarm.managed_object.can_notify()
 
-    def get_timestamp(self) -> Optional[datetime.datetime]:
+    def get_timestamp(self) -> datetime.datetime | None:
         """
         Get effective timestamp according to timestamp policy
         """
@@ -328,9 +328,9 @@ class EscalationSequence(BaseSequence):
     def get_tt_system_context(
         self,
         tt_system: TTSystem,
-        tt_id: Optional[str] = None,
-        queue: Optional[str] = None,
-        pre_reason: Optional[str] = None,
+        tt_id: str | None = None,
+        queue: str | None = None,
+        pre_reason: str | None = None,
     ) -> TTSystemCtx:
         return TTSystemCtx(
             id=tt_id,
@@ -552,7 +552,7 @@ class EscalationSequence(BaseSequence):
                     labels.append(g_labels)
         return EscalationPolicy.get_effective_policy(labels)
 
-    def get_escalation_doc(self) -> Optional[Escalation]:
+    def get_escalation_doc(self) -> Escalation | None:
         """
         Get escalation document structure filled with filled EscalationItems
         """
@@ -790,10 +790,10 @@ class DeescalationSequence(BaseSequence):
         tt_id: str,
         subject: str,
         body: str,
-        notification_group_id: Optional[str] = None,
+        notification_group_id: str | None = None,
         close_tt: bool = False,
         login: str = "corellator",
-        queue: Optional[str] = None,
+        queue: str | None = None,
     ) -> None:
         super().__init__(alarm_id=alarm_id, login=login)
         self.alarm = self.get_alarm(alarm_id)
@@ -854,7 +854,7 @@ class DeescalationSequence(BaseSequence):
             is_unavailable=self.has_unavailable_alarm(),
         )
 
-    def get_tts(self, tt_id: Optional[str]) -> Optional[TTSystem]:
+    def get_tts(self, tt_id: str | None) -> TTSystem | None:
         """
         Get TT System from tt_id
         """
@@ -868,9 +868,7 @@ class DeescalationSequence(BaseSequence):
             return None
         return tts
 
-    def get_notification_group(
-        self, notification_group_id: Optional[str]
-    ) -> Optional[NotificationGroup]:
+    def get_notification_group(self, notification_group_id: str | None) -> NotificationGroup | None:
         """
         Get notification group by id.
 
@@ -1074,7 +1072,7 @@ def escalate(
     login: str = "correlator",
     timestamp_policy: str = "a",
     force: bool = False,
-    prev_escalation: Optional[str] = None,
+    prev_escalation: str | None = None,
     *args,
     **kwargs,
 ):
@@ -1100,10 +1098,10 @@ def notify_close(
     tt_id: str,
     subject: str,
     body: str,
-    notification_group_id: Optional[str] = None,
+    notification_group_id: str | None = None,
     close_tt: bool = False,
     login: str = "correlator",
-    queue: Optional[str] = None,
+    queue: str | None = None,
 ):
     try:
         DeescalationSequence(

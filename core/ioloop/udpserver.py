@@ -13,7 +13,7 @@ import os
 import platform
 import socket
 import sys
-from typing import Iterable, List, Tuple, Optional, Any
+from typing import Iterable, Any
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +83,7 @@ class UDPServer:
     def bind_udp_sockets(
         self,
         port: int,
-        address: Optional[str] = None,
+        address: str | None = None,
         family: int = socket.AF_UNSPEC,
         flags: Any = None,
     ):
@@ -205,7 +205,7 @@ class UDPServer:
         if self.has_frebind and self.enable_freebind():
             sock.setsockopt(socket.SOL_IP, self.get_ip_freebind(), 1)
 
-    def get_ip_freebind(self) -> Optional[int]:
+    def get_ip_freebind(self) -> int | None:
         """
         Many python distributions does not include IP_FREEBIND to socket module
         :return: IP_FREEBIND value or None

@@ -7,7 +7,7 @@
 
 # Python modules
 import operator
-from typing import Iterable, Tuple
+from typing import Iterable
 from pathlib import Path
 
 # Third-party modules

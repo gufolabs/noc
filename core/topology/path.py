@@ -10,7 +10,7 @@ from collections import defaultdict
 import operator
 
 # Third-party modules
-from typing import Optional, Iterable, List, Dict, Set, Tuple, DefaultDict, NamedTuple
+from typing import Iterable, NamedTuple
 from bson import ObjectId
 
 # NOC modules
@@ -60,15 +60,15 @@ class KSPFinder:
         self,
         start: ManagedObject,
         goal: BaseGoal,
-        constraint: Optional[BaseConstraint] = None,
-        max_depth: Optional[int] = MAX_PATH_LENGTH,
-        n_shortest: Optional[int] = 1,
+        constraint: BaseConstraint | None = None,
+        max_depth: int | None = MAX_PATH_LENGTH,
+        n_shortest: int | None = 1,
     ) -> None:
         self.start: ManagedObject = start
         self.goal: BaseGoal = goal
-        self.constraint: Optional[BaseConstraint] = constraint
-        self.max_depth: Optional[int] = max_depth
-        self.n_shortest: Optional[int] = n_shortest
+        self.constraint: BaseConstraint | None = constraint
+        self.max_depth: int | None = max_depth
+        self.n_shortest: int | None = n_shortest
         # Set of segments on path
         self.segments: set[NetworkSegment] = set()
         # Managed Object cache
@@ -90,7 +90,7 @@ class KSPFinder:
     def _find_shortest_path(
         self,
         start: ManagedObject,
-        pruned_links: Optional[list[ObjectId]] = None,
+        pruned_links: list[ObjectId] | None = None,
         max_depth: int = MAX_PATH_LENGTH,
     ) -> list[PathInfo]:
         """

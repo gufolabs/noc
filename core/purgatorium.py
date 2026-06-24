@@ -10,7 +10,7 @@ import datetime
 import socket
 import struct
 from collections import defaultdict
-from typing import Optional, Dict, List, Literal, Iterable, Tuple, Any
+from typing import Literal, Iterable, Any
 from dataclasses import dataclass
 
 # Third-party modules
@@ -78,14 +78,14 @@ class PurgatoriumData:
     """
 
     source: str
-    ts: Optional[datetime.datetime] = None
-    remote_system: Optional[str] = None
-    labels: Optional[list[str]] = None
-    service_groups: Optional[list[ObjectId]] = None
-    client_groups: Optional[list[ObjectId]] = None
-    data: Optional[dict[str, str]] = None
-    caps: Optional[dict[str, str]] = None
-    event: Optional[str] = None  # Workflow Event
+    ts: datetime.datetime | None = None
+    remote_system: str | None = None
+    labels: list[str] | None = None
+    service_groups: list[ObjectId] | None = None
+    client_groups: list[ObjectId] | None = None
+    data: dict[str, str] | None = None
+    caps: dict[str, str] | None = None
+    event: str | None = None  # Workflow Event
     is_delete: bool = False  # Delete Flag
 
     def __str__(self):
@@ -102,7 +102,7 @@ class PurgatoriumData:
         return f"{self.source}@{self.remote_system}"
 
     @property
-    def remote_id(self) -> Optional[str]:
+    def remote_id(self) -> str | None:
         """"""
         if not self.remote_system:
             return None
@@ -113,12 +113,12 @@ class PurgatoriumData:
 class ProtocolCheckResult:
     check: Literal["ICMP", "HTTP", "SSH", "TELNET", "TCP", "SNMP"]
     status: bool  # Available && Access && Check
-    port: Optional[int] = None
-    available: Optional[bool] = None  # Protocol (port) is available, for UDP equal to access
-    access: Optional[bool] = None  # None if not check (if available False)
-    credential: Optional[str] = None  # Set if access True
+    port: int | None = None
+    available: bool | None = None  # Protocol (port) is available, for UDP equal to access
+    access: bool | None = None  # None if not check (if available False)
+    credential: str | None = None  # Set if access True
     data: dict[str, str] = None
-    error: Optional[str] = None  # Error message
+    error: str | None = None  # Error message
 
 
 @dataclass
@@ -138,21 +138,21 @@ def register(
     address: str,  # 0.0.0.0
     pool: int,
     source: str,
-    description: Optional[str] = None,
-    border: Optional[int] = None,
-    chassis_id: Optional[str] = None,
-    router_id: Optional[str] = None,
-    hostname: Optional[str] = None,
-    remote_system: Optional[int] = None,
-    remote_id: Optional[str] = None,
-    uptime: Optional[int] = None,
-    labels: Optional[list[str]] = None,
-    service_groups: Optional[list[int]] = None,
-    clients_groups: Optional[list[int]] = None,
-    template: Optional[str] = None,
+    description: str | None = None,
+    border: int | None = None,
+    chassis_id: str | None = None,
+    router_id: str | None = None,
+    hostname: str | None = None,
+    remote_system: int | None = None,
+    remote_id: str | None = None,
+    uptime: int | None = None,
+    labels: list[str] | None = None,
+    service_groups: list[int] | None = None,
+    clients_groups: list[int] | None = None,
+    template: str | None = None,
     is_delete: bool = False,
-    checks: Optional[list[ProtocolCheckResult]] = None,
-    capabilities: Optional[list[CapsItem]] = None,
+    checks: list[ProtocolCheckResult] | None = None,
+    capabilities: list[CapsItem] | None = None,
     **kwargs,
 ):
     """
@@ -230,8 +230,8 @@ def register(
 
 
 def iter_discovered_object(
-    from_ts: Optional[datetime.datetime] = None,
-    ip_address: Optional[str] = None,
+    from_ts: datetime.datetime | None = None,
+    ip_address: str | None = None,
 ) -> Iterable[
     tuple[int, str, list[str], list[PurgatoriumData], list[ProtocolCheckResult], datetime.datetime]
 ]:

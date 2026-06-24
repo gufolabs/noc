@@ -7,7 +7,7 @@
 
 # Python modules
 from threading import Lock
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import Any, Optional
 import bisect
 import operator
 from pathlib import Path
@@ -69,7 +69,7 @@ class Scale(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Scale"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Scale"]:
         return Scale.objects.filter(id=oid).first()
 
     @classmethod
@@ -111,7 +111,7 @@ class Scale(Document):
         return safe_json_path(self.name)
 
     @classmethod
-    def humanize_time(cls, seconds: Union[int]) -> str:
+    def humanize_time(cls, seconds: int) -> str:
         """Convert seconds to format"""
         result = []
 
@@ -125,9 +125,7 @@ class Scale(Document):
         return ", ".join(result[:-1])
 
     @classmethod
-    def humanize(
-        cls, value: Union[int, float], base: int = 10, min_exp: int = 3
-    ) -> tuple[float, str]:
+    def humanize(cls, value: int | float, base: int = 10, min_exp: int = 3) -> tuple[float, str]:
         """
         Humanize integer value for Scale suffix
         Attrs:

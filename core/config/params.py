@@ -10,7 +10,7 @@ import itertools
 import logging
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from pathlib import Path
-from typing import Optional, TypeVar, Generic, Any, Iterable, Dict, List, Union
+from typing import TypeVar, Generic, Any, Iterable
 
 # NOC modules
 from noc.core.validators import is_int, is_ipv4, is_uuid
@@ -24,7 +24,7 @@ T = TypeVar("T")
 class BaseParameter(Generic[T]):
     PARAM_NUMBER = itertools.count()
 
-    def __init__(self, default: Optional[Union[T, str]] = None, help: Optional[str] = None):
+    def __init__(self, default: T | str | None = None, help: str | None = None):
         self.param_number = next(self.PARAM_NUMBER)
         if default is None:
             self.default = None
@@ -33,7 +33,7 @@ class BaseParameter(Generic[T]):
             self.orig_value = default
             self.default = self.clean(default)
         self.help = help
-        self.name: Optional[str] = None  # Set by metaclass
+        self.name: str | None = None  # Set by metaclass
         self.value: T = self.default  # Set by __set__ method
 
     def __get__(self, _instance, _owner) -> T:
@@ -56,9 +56,9 @@ class BaseParameter(Generic[T]):
 class StringParameter(BaseParameter[str]):
     def __init__(
         self,
-        default: Optional[str] = None,
-        help: Optional[str] = None,
-        choices: Optional[Iterable[str]] = None,
+        default: str | None = None,
+        help: str | None = None,
+        choices: Iterable[str] | None = None,
     ):
         self.choices = set(choices) if choices else None
         super().__init__(default=default, help=help)
@@ -73,7 +73,7 @@ class StringParameter(BaseParameter[str]):
 
 class SecretParameter(BaseParameter[str]):
     def __init__(
-        self, default: Optional[str] = None, help: Optional[str] = None, path: Optional[Path] = None
+        self, default: str | None = None, help: str | None = None, path: Path | None = None
     ):
         if path and path.exists():
             # Read defaults from file
@@ -112,10 +112,10 @@ class TimeZoneParameter(BaseParameter[ZoneInfo]):
 class IntParameter(BaseParameter[int]):
     def __init__(
         self,
-        default: Optional[int] = None,
-        help: Optional[str] = None,
-        min: Optional[int] = None,
-        max: Optional[int] = None,
+        default: int | None = None,
+        help: str | None = None,
+        min: int | None = None,
+        max: int | None = None,
     ):
         self.min = min
         self.max = max
@@ -147,9 +147,7 @@ class FloatParameter(BaseParameter[float]):
 
 
 class MapParameter(BaseParameter[T], Generic[T]):
-    def __init__(
-        self, mappings: dict[str, T], default: Optional[str] = None, help: Optional[str] = None
-    ):
+    def __init__(self, mappings: dict[str, T], default: str | None = None, help: str | None = None):
         self.mappings = mappings or {}
         super().__init__(default=default, help=help)
 
@@ -263,7 +261,7 @@ class BytesSizeParameter(BaseParameter[int]):
 
 
 class ListParameter(BaseParameter[list[T]], Generic[T]):
-    def __init__(self, item: BaseParameter[T], default: Any = None, help: Optional[str] = None):
+    def __init__(self, item: BaseParameter[T], default: Any = None, help: str | None = None):
         self.item = item
         super().__init__(default=default, help=help)
 
@@ -312,10 +310,10 @@ class ServiceParameter(BaseParameter[list[ServiceItem]]):
 
     def __init__(
         self,
-        service: Union[str, list[str]],
+        service: str | list[str],
         near: bool = False,
         wait: bool = True,
-        help: Optional[str] = None,
+        help: str | None = None,
         full_result: bool = True,
         critical: bool = True,
     ):

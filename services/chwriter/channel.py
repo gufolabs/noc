@@ -12,7 +12,6 @@ from time import perf_counter
 from urllib.parse import quote as urllib_quote
 
 # Third-party modules
-from typing import Optional, List
 
 # NOC modules
 from noc.config import config
@@ -28,7 +27,7 @@ class Channel:
         self.data: list[bytes] = []
         self.size: int = 0
         self.records: int = 0
-        self.expired: Optional[float] = None
+        self.expired: float | None = None
         self.q_sql = urllib_quote(f"INSERT INTO raw_{table} FORMAT JSONEachRow".encode())
         self.feed_ready = asyncio.Event()
         self.feed_ready.set()

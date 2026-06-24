@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from collections import defaultdict
-from typing import Dict, List, Tuple, Any
+from typing import Any
 
 # Third-party modules
 import cachetools

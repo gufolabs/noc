@@ -10,7 +10,6 @@ import logging
 import codecs
 
 # Third-party modules
-from typing import List, Optional
 
 # NOC modules
 from noc.core.perf import metrics
@@ -199,7 +198,7 @@ class TelnetStream(BaseStream):
         self.logger.debug("Send %s", self.iac_repr(cmd, opt))
         self.out_iac_seq += [bytes((IAC, cmd, opt))]
 
-    def send_iac_sb(self, opt: bytes, data: Optional[bytes] = None) -> None:
+    def send_iac_sb(self, opt: bytes, data: bytes | None = None) -> None:
         sb: list[bytes] = [B_IAC_SB, opt]
         if data:
             sb += [data]

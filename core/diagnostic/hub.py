@@ -10,7 +10,7 @@ import datetime
 import logging
 import itertools
 from functools import partial
-from typing import Optional, List, Dict, Any, Iterable, Tuple, Union, TypeVar
+from typing import Any, Iterable, TypeVar
 
 # Third-party modules
 import orjson
@@ -94,7 +94,7 @@ class DiagnosticHub:
         dry_run: bool = False,
         sync_alarm: bool = True,
         sync_labels: bool = True,
-        logger: Optional[logging.Logger] = None,
+        logger: logging.Logger | None = None,
     ):
         self.logger: logging.Logger = logger or logging.getLogger(__name__)
         self.__diagnostics: dict[str, DiagnosticItem] = None  # Actual diagnostic state
@@ -111,7 +111,7 @@ class DiagnosticHub:
         self.bulk_changes: int = 0
         # diagnostic state
 
-    def get(self, name: str) -> Optional[DiagnosticItem]:
+    def get(self, name: str) -> DiagnosticItem | None:
         if self.__diagnostics is None:
             self.__load_diagnostics()
         if name in self.__diagnostics:
@@ -126,7 +126,7 @@ class DiagnosticHub:
             raise KeyError
         return v
 
-    def __getattr__(self, name: str, default: Optional[Any] = None) -> "DiagnosticItem":
+    def __getattr__(self, name: str, default: Any | None = None) -> "DiagnosticItem":
         v = self.get(name)
         if v is None:
             raise AttributeError(f"Unknown diagnostic {name}")
@@ -181,7 +181,7 @@ class DiagnosticHub:
             return False
         return d.is_failed
 
-    def get_object_diagnostic_value(self, name: str) -> Optional[DiagnosticValue]:
+    def get_object_diagnostic_value(self, name: str) -> DiagnosticValue | None:
         """
         Get DiagnosticItem from Object
         Args:
@@ -220,7 +220,7 @@ class DiagnosticHub:
 
     @classmethod
     def get_check_env(
-        cls, obj, cfg: DiagnosticConfig, checks_data: Optional[dict[str, Any]] = None
+        cls, obj, cfg: DiagnosticConfig, checks_data: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         """Getting checks environment context"""
         ctx = obj.get_check_ctx(
@@ -244,10 +244,10 @@ class DiagnosticHub:
     def set_state(
         self,
         diagnostic: str,
-        state: Union[str, DiagnosticState] = "unknown",
-        reason: Optional[str] = None,
-        changed_ts: Optional[datetime.datetime] = None,
-        data: Optional[dict[str, Any]] = None,
+        state: str | DiagnosticState = "unknown",
+        reason: str | None = None,
+        changed_ts: datetime.datetime | None = None,
+        data: dict[str, Any] | None = None,
         to_sync: bool = True,
     ):
         """
@@ -358,9 +358,7 @@ class DiagnosticHub:
         if changed:
             self.sync_diagnostics()
 
-    def reset_diagnostics(
-        self, diagnostics: list[str], reason: Optional[str] = "By Reset Diagnostic"
-    ):
+    def reset_diagnostics(self, diagnostics: list[str], reason: str | None = "By Reset Diagnostic"):
         """
         Reset diagnostic data.
         * update config for resetting diagnostic
@@ -440,8 +438,8 @@ class DiagnosticHub:
 
     def sync_with_object(
         self,
-        update: Optional[list[DiagnosticItem]],
-        remove: Optional[list[str]] = None,
+        update: list[DiagnosticItem] | None,
+        remove: list[str] | None = None,
         sync_labels: bool = True,
     ):
         """
@@ -590,9 +588,9 @@ class DiagnosticHub:
         diagnostic: str,
         state: str,
         from_state: str = DiagnosticState.unknown,
-        reason: Optional[str] = None,
-        data: Optional[dict[str, Any]] = None,
-        ts: Optional[datetime.datetime] = None,
+        reason: str | None = None,
+        data: dict[str, Any] | None = None,
+        ts: datetime.datetime | None = None,
     ):
         """
         Save diagnostic state changes to Archive.

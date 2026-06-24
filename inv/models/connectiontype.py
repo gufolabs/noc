@@ -7,7 +7,7 @@
 
 # Python modules
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional
 from threading import Lock
 import operator
 
@@ -130,7 +130,7 @@ class ConnectionType(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ConnectionType"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ConnectionType"]:
         return ConnectionType.objects.filter(id=oid).first()
 
     @classmethod

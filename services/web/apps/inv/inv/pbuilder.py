@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Dict, Any, Iterable, Tuple, Set, List
+from typing import Any, Iterable
 
 # NOC modules
 from noc.inv.models.objectmodel import ObjectModel, ObjectModelConnection
@@ -20,10 +20,10 @@ class CrossingProposalsBuilder:
     def __init__(
         self,
         lo: Object,
-        ro: Optional[Object] = None,
-        left_filter: Optional[str] = None,
-        right_filter: Optional[str] = None,
-        cable_filter: Optional[str] = None,
+        ro: Object | None = None,
+        left_filter: str | None = None,
+        right_filter: str | None = None,
+        cable_filter: str | None = None,
         internal: bool = False,
     ):
         self.lo = lo
@@ -116,11 +116,11 @@ class _SideBuilder:
     def __init__(
         self,
         o_from: Object,
-        left_filter: Optional[str] = None,
-        o_to: Optional[Object] = None,
-        right_filter: Optional[str] = None,
+        left_filter: str | None = None,
+        o_to: Object | None = None,
+        right_filter: str | None = None,
         internal: bool = False,
-        cable: Optional[Object] = None,
+        cable: Object | None = None,
     ):
         self.o_from = o_from
         self.left_filter = left_filter
@@ -128,13 +128,13 @@ class _SideBuilder:
         self.right_filter = right_filter
         self.internal = internal
         self.wires = []
-        self.children: Optional[dict[str, Object]] = None
+        self.children: dict[str, Object] | None = None
         self.internal_connections = None
         self.internal_used = None
         self.cable = cable
         self.loops: set[str] = set()
 
-    def get_children(self, name: str) -> Optional[Object]:
+    def get_children(self, name: str) -> Object | None:
         """
         Get children connected to slot name.
         """

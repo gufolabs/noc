@@ -9,7 +9,7 @@
 import operator
 import logging
 from threading import Lock
-from typing import Optional, Union, Iterable, Dict, Any
+from typing import Optional, Iterable, Any
 from pathlib import Path
 
 # Third-party modules
@@ -219,7 +219,7 @@ class State(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["State"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["State"]:
         return State.objects.filter(id=oid).first()
 
     @classmethod
@@ -382,7 +382,7 @@ class State(Document):
                         f"Interaction {ia} not allowed for models: {self.workflow.allowed_models}"
                     )
 
-    def is_enabled_interaction(self, interaction: Union[str, Interaction]) -> bool:
+    def is_enabled_interaction(self, interaction: str | Interaction) -> bool:
         """
         Check diagnostic state: on/off
         :param interaction:

@@ -7,7 +7,7 @@
 
 # Python modules
 from pathlib import Path
-from typing import Any, Dict, Optional, List, Union
+from typing import Any, Optional
 from collections import defaultdict
 
 # Third-party modules
@@ -189,7 +189,7 @@ class MetricAction(Document):
         return self.name
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["MetricAction"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["MetricAction"]:
         return MetricAction.objects.filter(id=oid).first()
 
     def clean(self):
@@ -266,10 +266,10 @@ class MetricAction(Document):
         self,
         prefix: str = None,
         enable_dump: bool = False,
-        rule_id: Optional[str] = None,
-        thresholds: Optional[Any] = None,
+        rule_id: str | None = None,
+        thresholds: Any | None = None,
         **kwargs,
-    ) -> Optional[GraphConfig]:
+    ) -> GraphConfig | None:
         """
         Getting Graph config from MetricAction
         :param prefix: NodeID prefix

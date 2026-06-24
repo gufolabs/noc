@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, List, Set
 
 # Third-party modules
 from bson import ObjectId

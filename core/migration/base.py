@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Tuple, Set, Optional
 
 # NOC modules
 from noc.core.mongo.connection import get_db
@@ -16,7 +15,7 @@ from .db import db
 class BaseMigration:
     depends_on: list[tuple[str, str]] = []
     db = db
-    aliases: Optional[list[str]] = None
+    aliases: list[str] | None = None
 
     def __init__(self):
         # @todo: set_comprehensions

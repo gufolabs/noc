@@ -7,7 +7,7 @@
 
 # Third-party modules
 from dataclasses import dataclass
-from typing import Optional, List, Any
+from typing import Any
 
 
 @dataclass(frozen=True)
@@ -21,9 +21,9 @@ class PathItem:
     connection: Any
     context: str  # Model Context
     c_name: str  # Connection name
-    path_template: Optional[str] = None
-    stack_num: Optional[int] = None  # Number of stack (if stackable)
-    slot_num: Optional[str] = None  # number from get_inventory output
+    path_template: str | None = None
+    stack_num: int | None = None  # Number of stack (if stackable)
+    slot_num: str | None = None  # number from get_inventory output
 
     @classmethod
     def from_object(cls, o, c) -> "PathItem":
@@ -51,15 +51,15 @@ class PortItem:
     name: str
     protocols: list[str]
     path: list[PathItem]
-    internal_name: Optional[str] = None
-    combo: Optional[str] = None
+    internal_name: str | None = None
+    combo: str | None = None
 
     @property
     def context(self) -> str:
         return self.path[-1].context
 
     @property
-    def stack_num(self) -> Optional[int]:
+    def stack_num(self) -> int | None:
         return self.path[0].stack_num
 
     @property

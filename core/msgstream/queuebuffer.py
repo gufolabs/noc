@@ -7,7 +7,7 @@
 
 # Python modules
 from collections import defaultdict
-from typing import List, Tuple, DefaultDict, Dict, Any, Optional, Iterable
+from typing import Any, Iterable
 from threading import Lock
 
 # Third-party modules
@@ -22,7 +22,7 @@ class QBuffer:
     Buffered writes to queue, merge outgoing messages to a larger block
     """
 
-    def __init__(self, max_size: Optional[int] = None):
+    def __init__(self, max_size: int | None = None):
         self.buf: defaultdict[tuple[str, int], list[bytes]] = defaultdict(list)
         self.lock = Lock()
         self.max_size = max_size or config.liftbridge.max_message_size

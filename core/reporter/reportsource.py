@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Dict
 
 # Python Modules
 from noc.core.reporter.band import Band

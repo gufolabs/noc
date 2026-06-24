@@ -11,7 +11,7 @@ from collections import defaultdict
 from threading import Lock
 from functools import partial
 from dataclasses import dataclass
-from typing import Optional, List, Dict, Iterable, Set, Any, Tuple, Callable
+from typing import Optional, Iterable, Any, Callable
 
 # Third-party modules
 import cachetools
@@ -89,7 +89,7 @@ class MetricConfig:
 class ModelMetricConfigItem(BaseModel):
     metric_type: str
     is_stored: bool = True
-    interval: Optional[int] = 0
+    interval: int | None = 0
 
     def __str__(self):
         return self.metric_type
@@ -141,7 +141,7 @@ class MatchRule(BaseModel):
         return r
 
 
-MatchRules = RootModel[list[Optional[MatchRule]]]
+MatchRules = RootModel[list[MatchRule | None]]
 
 
 m_valid = DictListParameter(
@@ -565,7 +565,7 @@ class ManagedObjectProfile(NOCModel):
     address_profile_neighbor = DocumentReferenceField(AddressProfile, null=True, blank=True)
     address_profile_confdb = DocumentReferenceField(AddressProfile, null=True, blank=True)
     # BGP Peer discovery profiles
-    bgppeer_profile: Optional[PeerProfile] = models.ForeignKey(
+    bgppeer_profile: PeerProfile | None = models.ForeignKey(
         PeerProfile, verbose_name=_("PeerProfile"), blank=True, null=True, on_delete=models.CASCADE
     )
     # Config policy
@@ -1206,7 +1206,7 @@ class ManagedObjectProfile(NOCModel):
 
     def get_instance_affected_query(
         self,
-        changes: Optional[list[ChangeField]] = None,
+        changes: list[ChangeField] | None = None,
         include_match: bool = False,
     ) -> d_Q:
         """Return queryset for instance"""
@@ -1217,7 +1217,7 @@ class ManagedObjectProfile(NOCModel):
                 q |= mr.get_q()
         return q
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None
 
 

@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Third-party modules
-from typing import Optional, List, Set, Dict
 
 # NOC modules
 from noc.inv.models.networksegment import NetworkSegment
@@ -44,9 +43,7 @@ class ManagedObjectGoal(BaseGoal):
             return cost
         return self.DROP_COST
 
-    def cost_estimate(
-        self, neighbor: ManagedObject, current: Optional[ManagedObject] = None
-    ) -> int:
+    def cost_estimate(self, neighbor: ManagedObject, current: ManagedObject | None = None) -> int:
         cost = self.DEFAULT_COST
         # Apply segment penalty
         if self.use_segment_path:

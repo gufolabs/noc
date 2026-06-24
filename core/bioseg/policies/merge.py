@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Type
 
 # NOC modules
 from .base import BaseBioSegPolicy

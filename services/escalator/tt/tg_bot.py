@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import Optional, List
 from urllib.parse import urlparse
 
 
@@ -129,9 +128,9 @@ class TGBotTTSystem(BaseTTSystem):
 
     def get_updates(
         self,
-        last_run: Optional[datetime] = None,
-        last_update: Optional[str] = None,
-        tt_ids: Optional[list[str]] = None,
+        last_run: datetime | None = None,
+        last_update: str | None = None,
+        tt_ids: list[str] | None = None,
     ) -> list[TTChange]:
         status, _, body = self.http_client.get(f"{self.url}/getUpdates")
         r = []
@@ -173,7 +172,7 @@ class TGBotTTSystem(BaseTTSystem):
                 )
         return r
 
-    def get_tt(self, tt_id: str) -> Optional[TTInfo]:
+    def get_tt(self, tt_id: str) -> TTInfo | None:
         """
         getUpdates
         :param tt_id:

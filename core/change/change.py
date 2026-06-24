@@ -10,7 +10,7 @@ import datetime
 import time
 import uuid
 from logging import getLogger
-from typing import Optional, List, Set, DefaultDict, Tuple, Dict, Any
+from typing import Any
 from collections import defaultdict
 
 # Third-party modules
@@ -60,7 +60,7 @@ def audit_change(changes: list[dict[str, Any]]) -> None:
 
 
 def on_change(
-    changes: list[tuple[str, str, str, Optional[list[dict[str, str]]], Optional[float]]],
+    changes: list[tuple[str, str, str, list[dict[str, str]] | None, float | None]],
     *args,
     **kwargs,
 ) -> None:
@@ -103,7 +103,7 @@ def on_change(
             sensors_changes[model_id].add(item_id)
 
 
-def apply_datastream(ds_changes: Optional[dict[str, set[str]]] = None) -> None:
+def apply_datastream(ds_changes: dict[str, set[str]] | None = None) -> None:
     """
     Apply datastream changes
     :param ds_changes: Changes Items
@@ -137,7 +137,7 @@ def apply_ch_dictionary(changes: list[dict[str, Any]]) -> None:
             return
         bi_dict_changes[item.model_id].add((o, item.ts))
     for dcls_name in loader:
-        bi_dict_model: Optional["DictionaryModel"] = loader[dcls_name]
+        bi_dict_model: "DictionaryModel" | None = loader[dcls_name]
         if not bi_dict_model or bi_dict_model._meta.source_model not in bi_dict_changes:
             continue
         logger.info("[bi_dictionary] [%s] Apply changes", dcls_name)

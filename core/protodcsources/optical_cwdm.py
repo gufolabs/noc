@@ -7,7 +7,7 @@
 
 # Python modules
 import enum
-from typing import List, Iterable
+from typing import Iterable
 
 # NOC modules
 from .base import BaseDiscriminatorSource, DiscriminatorDataItem

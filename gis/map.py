@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Tuple
 
 # Third-party modules
 from pyproj import Transformer

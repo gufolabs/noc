@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, List
 
 # NOC modules
 from noc.core.script.base import BaseScript

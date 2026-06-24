@@ -9,7 +9,7 @@
 import logging
 import operator
 import re
-from typing import Optional, List, Set, Iterable, Dict, Any, Callable, Tuple, Union
+from typing import Optional, Iterable, Any, Callable
 from threading import Lock
 from collections import defaultdict
 from itertools import accumulate
@@ -329,7 +329,7 @@ class Label(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["Label"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["Label"]:
         return Label.objects.filter(id=oid).first()
 
     @classmethod
@@ -1004,7 +1004,7 @@ class Label(Document):
         model_id: str,
         add_labels: list[str] = None,
         remove_labels: list[str] = None,
-        instance_filters: Optional[list[tuple[str, Any]]] = None,
+        instance_filters: list[tuple[str, Any]] | None = None,
         effective_only: bool = True,
     ):
         """
@@ -1070,7 +1070,7 @@ class Label(Document):
         model_id: str,
         add_labels: list[str] = None,
         remove_labels: list[str] = None,
-        instance_filters: Optional[list[tuple[str, Any]]] = None,
+        instance_filters: list[tuple[str, Any]] | None = None,
         effective_only: bool = True,
     ):
         """
@@ -1113,7 +1113,7 @@ class Label(Document):
         cls,
         model_id: str,
         labels: list[str],
-        instance_filters: Optional[list[tuple[str, Any]]] = None,
+        instance_filters: list[tuple[str, Any]] | None = None,
     ):
         """
         Add Labels on models effective_labels field
@@ -1133,7 +1133,7 @@ class Label(Document):
         cls,
         model_id: str,
         labels: list[str],
-        instance_filters: Optional[list[tuple[str, Any]]] = None,
+        instance_filters: list[tuple[str, Any]] | None = None,
     ):
         """
         Remove labels from effective_labels field on models
@@ -1157,7 +1157,7 @@ class Label(Document):
         profile_model,
         labels: list[str],
         **kwargs,
-    ) -> Optional[str]:
+    ) -> str | None:
         """
         Return Profile ID for labels if it support Labels Classification
         :param profile_model:
@@ -1351,7 +1351,7 @@ class Label(Document):
         key=lambda c, ri: getattr(ri, "regexp", None),
         lock=lambda _: re_lock,
     )
-    def _get_re(cls, rxi: "RegexItem") -> Optional[re.Pattern]:
+    def _get_re(cls, rxi: "RegexItem") -> re.Pattern | None:
         flags = 0
         if rxi.flag_multiline:
             flags |= re.MULTILINE
@@ -1398,7 +1398,7 @@ class Label(Document):
         return list(Label.objects.filter(mq).values_list("name"))
 
     @classmethod
-    def get_effective_vlanfilter_labels(cls, scope: str, value: Union[int, list[int]]) -> list[str]:
+    def get_effective_vlanfilter_labels(cls, scope: str, value: int | list[int]) -> list[str]:
         """
 
         :param scope:
@@ -1443,7 +1443,7 @@ class Label(Document):
         model_id: str,
         model_profile_id: str,
         profile_field="profile",
-        query_filter: Optional[list[tuple[str, str]]] = None,
+        query_filter: list[tuple[str, str]] | None = None,
     ):
         """
         Update profile by match rule
@@ -1495,8 +1495,8 @@ class Label(Document):
         cls,
         model_id: str,
         model_profile_id: str,
-        query_filter: Optional[list[tuple[str, str]]] = None,
-    ) -> tuple[str, str, Optional[str]]:
+        query_filter: list[tuple[str, str]] | None = None,
+    ) -> tuple[str, str, str | None]:
         """
         Sync profile by match rule
         :param model_id: Instance model_id
@@ -1543,8 +1543,8 @@ class Label(Document):
         cls,
         model_id: str,
         model_profile_id: str,
-        query_filter: Optional[list[tuple[str, str]]] = None,
-    ) -> tuple[str, str, Optional[str]]:
+        query_filter: list[tuple[str, str]] | None = None,
+    ) -> tuple[str, str, str | None]:
         """
         Iterate over instance profile
         :param model_id: Instance model_id

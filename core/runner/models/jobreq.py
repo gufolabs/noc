@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Dict, Literal
+from typing import Literal
 import datetime
 
 # Third party modules
@@ -32,7 +32,7 @@ class InputMapping(BaseModel):
 
     name: str
     value: str
-    job: Optional[str] = None
+    job: str | None = None
 
     @property
     def is_kv(self) -> bool:
@@ -78,20 +78,20 @@ class JobRequest(BaseModel):
     op: Literal["submit"] = Field(None, alias="$op")
     id: str = Field(default_factory=lambda: str(ObjectId()))
     name: str
-    action: Optional[str] = None
-    description: Optional[str] = None
-    labels: Optional[list[str]] = None
+    action: str | None = None
+    description: str | None = None
+    labels: list[str] | None = None
     allow_fail: bool = False
-    locks: Optional[list[str]] = None
-    inputs: Optional[list[InputMapping]] = None
+    locks: list[str] | None = None
+    inputs: list[InputMapping] | None = None
     require_approval: bool = False
-    depends_on: Optional[list[str]] = None
-    environment: Optional[dict[str, str]] = None
-    after: Optional[datetime.datetime] = None
-    deadline: Optional[datetime.datetime] = None
-    resource_path: Optional[list[str]] = None
-    entity: Optional[str] = None
-    jobs: Optional[list["JobRequest"]] = None
+    depends_on: list[str] | None = None
+    environment: dict[str, str] | None = None
+    after: datetime.datetime | None = None
+    deadline: datetime.datetime | None = None
+    resource_path: list[str] | None = None
+    entity: str | None = None
+    jobs: list["JobRequest"] | None = None
 
     def submit(self) -> None:
         """Submit job request."""

@@ -10,7 +10,7 @@ import datetime
 import operator
 from dataclasses import dataclass
 from threading import Lock
-from typing import Optional, Any, Dict, Union, List, Set, Iterator
+from typing import Optional, Any, Union, Iterator
 import warnings
 
 # Third-party modules
@@ -31,7 +31,7 @@ from mongoengine.fields import (
 from mongoengine import signals
 from mongoengine.queryset.queryset import QuerySet
 import cachetools
-from typing import Iterable, Tuple
+from typing import Iterable
 
 # NOC modules
 from noc.gis.models.layer import Layer, DEFAULT_ZOOM
@@ -69,9 +69,9 @@ class ConnectionData:
     name: str
     protocols: list[ProtocolVariant]
     data: dict[str, Any]
-    cross: Optional[str] = None
-    group: Optional[str] = None
-    interface_name: Optional[str] = None
+    cross: str | None = None
+    group: str | None = None
+    interface_name: str | None = None
 
 
 class ObjectConnectionData(EmbeddedDocument):
@@ -142,7 +142,7 @@ class ObjectConfigurationData(EmbeddedDocument):
     conflicted_value = DynamicField(required=False)
     last_seen = DateTimeField()
     # Scope Code
-    contexts: Optional[list["ObjectConfigurationScope"]] = EmbeddedDocumentListField(
+    contexts: list["ObjectConfigurationScope"] | None = EmbeddedDocumentListField(
         ObjectConfigurationScope, required=False
     )
 
@@ -248,7 +248,7 @@ class Object(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Object"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Object"]:
         return Object.objects.filter(id=oid).first()
 
     @classmethod
@@ -428,9 +428,9 @@ class Object(Document):
         self,
         interface: str,
         key: str,
-        scope: Optional[str] = None,
-        connection: Optional[str] = None,
-        protocol: Optional[str] = None,
+        scope: str | None = None,
+        connection: str | None = None,
+        protocol: str | None = None,
     ) -> Any:
         attr = ModelInterface.get_interface_attr(interface, key)
         if attr.is_const:
@@ -450,7 +450,7 @@ class Object(Document):
         return None
 
     def get_data_dict(
-        self, interface: str, keys: Iterable, scope: Optional[str] = None
+        self, interface: str, keys: Iterable, scope: str | None = None
     ) -> dict[str, Any]:
         """
         Get multiple keys from single interface. Returns dict with values for every given key.
@@ -470,7 +470,7 @@ class Object(Document):
         return r
 
     def get_data_tuple(
-        self, interface: str, keys: Union[list, tuple], scope: Optional[str] = None
+        self, interface: str, keys: list | tuple, scope: str | None = None
     ) -> tuple[Any, ...]:
         """
         Get multiple keys from single interface. Returns tuple with values for every given key.
@@ -521,7 +521,7 @@ class Object(Document):
             ),
         )
 
-    def set_data(self, interface: str, key: str, value: Any, scope: Optional[str] = None) -> None:
+    def set_data(self, interface: str, key: str, value: Any, scope: str | None = None) -> None:
         attr = ModelInterface.get_interface_attr(interface, key)
         if attr.is_const:
             raise ModelDataError("Cannot set read-only value")
@@ -537,9 +537,7 @@ class Object(Document):
                 ObjectAttr(interface=interface, attr=attr.name, value=value, scope=scope or "")
             ]
 
-    def reset_data(
-        self, interface: str, key: Union[str, Iterable], scope: Optional[str] = None
-    ) -> None:
+    def reset_data(self, interface: str, key: str | Iterable, scope: str | None = None) -> None:
         if isinstance(key, str):
             kset = {key}
         else:
@@ -561,7 +559,7 @@ class Object(Document):
         """
         return True
 
-    def get_cfg_data(self, param: "ConfigurationParam", scope: Optional[str] = None) -> Any:
+    def get_cfg_data(self, param: "ConfigurationParam", scope: str | None = None) -> Any:
         """
         Getting Configuration Param Data. Scope - scope string
         """
@@ -579,7 +577,7 @@ class Object(Document):
         self,
         param: "ConfigurationParam",
         value: Any,
-        scope: Optional[str] = None,
+        scope: str | None = None,
         is_conflicted: bool = False,
         is_dirty: bool = False,
     ) -> None:
@@ -613,7 +611,7 @@ class Object(Document):
             ]
 
     def reset_cfg_data(
-        self, param: Union["ConfigurationParam", list["ConfigurationParam"]], scope: Optional[str]
+        self, param: Union["ConfigurationParam", list["ConfigurationParam"]], scope: str | None
     ):
         """
         Remove Configuration Data for param from scope
@@ -731,7 +729,7 @@ class Object(Document):
         )
 
     def get_crossing_proposals(
-        self, name: str, to_name: Optional[str] = None
+        self, name: str, to_name: str | None = None
     ) -> list[tuple[str, list[str]]]:
         """
         Return possible connections for connection name
@@ -788,7 +786,7 @@ class Object(Document):
         self,
         name: str,
         ro: "ObjectModel",
-        remote_name: Optional[str] = None,
+        remote_name: str | None = None,
         use_cable: bool = False,
     ) -> Iterable[tuple[Optional["ObjectModel"], str]]:
         """
@@ -811,9 +809,7 @@ class Object(Document):
         """
         return self.model.has_connection(name)
 
-    def get_p2p_connection(
-        self, name: str
-    ) -> tuple[Optional[Any], Optional["Object"], Optional[str]]:
+    def get_p2p_connection(self, name: str) -> tuple[Any | None, Optional["Object"], str | None]:
         """
         Get neighbor for p2p connection (s and mf types)
         Returns connection, remote object, remote connection or
@@ -943,7 +939,7 @@ class Object(Document):
         name: str,
         remote_object: "Object",
         remote_name: str,
-        data: Optional[dict[str, Any]] = None,
+        data: dict[str, Any] | None = None,
         reconnect: bool = False,
     ) -> None:
         """
@@ -1008,8 +1004,8 @@ class Object(Document):
         remote_object: "Object",
         remote_name: str,
         data: dict[str, Any] = None,
-        type: Optional[str] = None,
-        layer: Optional[Layer] = None,
+        type: str | None = None,
+        layer: Layer | None = None,
     ):
         """
         Connect two genderless connections
@@ -1261,7 +1257,7 @@ class Object(Document):
             c = c.parent
         return None
 
-    def get_coordinates_zoom(self) -> tuple[Optional[float], Optional[float], Optional[int]]:
+    def get_coordinates_zoom(self) -> tuple[float | None, float | None, int | None]:
         """
         Get managed object's coordinates
         # @todo: Speedup?
@@ -1367,7 +1363,7 @@ class Object(Document):
     def update_pop_links(self, delay: int = 20):
         call_later("noc.inv.util.pop_links.update_pop_links", delay, pop_id=self.id)
 
-    def get_address_text(self) -> Optional[str]:
+    def get_address_text(self) -> str | None:
         """
         Return first found address.text value upwards the path
         :return: Address text or None
@@ -1444,9 +1440,7 @@ class Object(Document):
         Sensor.sync_object(self)
 
     @classmethod
-    def iter_by_address_id(
-        cls, address: Union[str, list[str]], scope: str = None
-    ) -> Iterable["Object"]:
+    def iter_by_address_id(cls, address: str | list[str], scope: str = None) -> Iterable["Object"]:
         """
         Get objects
         :param address:
@@ -1484,7 +1478,7 @@ class Object(Document):
             data__match={"interface": "management", "attr": "managed_object", "value": agent}
         )
 
-    def get_effective_agent(self) -> Optional[Any]:
+    def get_effective_agent(self) -> Any | None:
         """
         Find effective agent for object
         """
@@ -1536,7 +1530,7 @@ class Object(Document):
             yield from self.model.cross
 
     def iter_cross(
-        self, name: str, discriminators: Optional[Iterable[str]] = None
+        self, name: str, discriminators: Iterable[str] | None = None
     ) -> Iterable[Crossing]:
         """
         Iterate crossed outputs.
@@ -1588,7 +1582,7 @@ class Object(Document):
                 )
             ]
 
-    def disconnect_internal(self, name: str, remote_name: Optional[str] = None):
+    def disconnect_internal(self, name: str, remote_name: str | None = None):
         """
         Remove internal crossing
         """
@@ -1600,7 +1594,7 @@ class Object(Document):
             if c.input != name and (not remote_name or remote_name == c.output)
         ]
 
-    def as_resource(self, path: Optional[str] = None) -> str:
+    def as_resource(self, path: str | None = None) -> str:
         """
         Convert instance or connection to the resource reference.
 

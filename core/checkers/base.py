@@ -11,7 +11,7 @@ import datetime
 import socket
 import struct
 from dataclasses import dataclass, field
-from typing import List, Optional, Dict, Any, Union, AsyncIterable, TypeVar, Callable, ClassVar
+from typing import Any, AsyncIterable, TypeVar, Callable, ClassVar
 import threading
 
 # Third-party modules
@@ -40,35 +40,30 @@ CHECK_HISTORY_TABLE = "checkhistory"
 class MetricValue:
     metric_type: str
     value: float
-    labels: Optional[list[str]] = None
+    labels: list[str] | None = None
 
 
 @dataclass(frozen=True)
 class DataItem:
     name: str
     value: Any
-    scope: Optional[str] = None  # caps/attribute
-    caps: Optional[str] = None  # Capability name
+    scope: str | None = None  # caps/attribute
+    caps: str | None = None  # Capability name
 
 
 @dataclass(frozen=True, eq=True)
 class Check:
     name: str  # Check name
-    args: Optional[dict[str, str]] = None
+    args: dict[str, str] | None = None
     # pool: Optional[str] = field(default=None, hash=False)  # Address Pool
     address: str = field(default=None, compare=False)  # IP Address
-    port: Optional[int] = None  # TCP/UDP port
-    script: Optional[str] = None
-    remote_system: Optional[str] = None
-    ttl: Optional[int] = None
-    credential: Optional[
-        Union[
-            SNMPCredential,
-            SNMPv3Credential,
-            CLICredential,
-            HTTPCredential,
-        ]
-    ] = field(default=None, compare=False, hash=False)
+    port: int | None = None  # TCP/UDP port
+    script: str | None = None
+    remote_system: str | None = None
+    ttl: int | None = None
+    credential: SNMPCredential | SNMPv3Credential | CLICredential | HTTPCredential | None = field(
+        default=None, compare=False, hash=False
+    )
 
     def __str__(self):
         return f"{self.name}?{self.args}"
@@ -140,7 +135,7 @@ class Check:
         return Check(**data)
 
     @property
-    def snmp_credential(self) -> Optional[SNMPCredential]:
+    def snmp_credential(self) -> SNMPCredential | None:
         if isinstance(self.credential, SNMPCredential):
             return self.credential
         return None
@@ -167,9 +162,9 @@ class Check:
 @dataclass(frozen=True)
 class CheckError:
     code: str  # Error code
-    message: Optional[str] = None  # Description if Fail
-    is_access: Optional[bool] = None  # Access to resource for credential
-    is_available: Optional[bool] = None  # Port/Address is available
+    message: str | None = None  # Description if Fail
+    is_access: bool | None = None  # Access to resource for credential
+    is_available: bool | None = None  # Port/Address is available
 
 
 @dataclass(frozen=True)
@@ -177,22 +172,20 @@ class CheckResult:
     check: str
     status: bool  # True - OK, False - Fail
     # For requested copied from Check
-    args: Optional[dict[str, Any]] = None  # Checked Argument
-    port: Optional[int] = None
-    address: Optional[str] = None
-    script: Optional[str] = None
+    args: dict[str, Any] | None = None  # Checked Argument
+    port: int | None = None
+    address: str | None = None
+    script: str | None = None
     skipped: bool = False  # Check was skipped (Example, no credential)
-    error: Optional[CheckError] = None  # Set if fail
-    data: Optional[list[DataItem]] = None  # Collected check data
-    remote_system: Optional[str] = None  # RemoteSystem
-    ttl: Optional[int] = None
+    error: CheckError | None = None  # Set if fail
+    data: list[DataItem] | None = None  # Collected check data
+    remote_system: str | None = None  # RemoteSystem
+    ttl: int | None = None
     # Action: Set Profile, Credential, Send Notification (Diagnostic Header) ?
     # Metrics collected
-    metrics: Optional[list[MetricValue]] = None
+    metrics: list[MetricValue] | None = None
     # Credentials List, Return if suggests flag is set
-    credential: Optional[Union[SNMPCredential, SNMPv3Credential, CLICredential, HTTPCredential]] = (
-        None
-    )
+    credential: SNMPCredential | SNMPv3Credential | CLICredential | HTTPCredential | None = None
 
     def __str__(self):
         return f"{self.check}?{self.args}: {self.status}"
@@ -292,13 +285,13 @@ class BaseChecker:
     CHECKS: ClassVar[list[str]]
     USER_DISCOVERY_USE: bool = True  # Allow use in User Discovery
     _executor_lock = threading.Lock()
-    _executor: Optional[ThreadPoolExecutor] = None
+    _executor: ThreadPoolExecutor | None = None
 
     def __init__(
         self,
         *,
-        logger: Optional[logging.Logger] = None,
-        address: Optional[str] = None,
+        logger: logging.Logger | None = None,
+        address: str | None = None,
         **kwargs,
     ):
         self.logger = PrefixLoggerAdapter(logger or logging.getLogger(self.name), self.name)
@@ -325,9 +318,9 @@ class BaseChecker:
 
 def register_checks(
     checks: list[CheckResult],
-    source: Union[str, InputSource] = InputSource.UNKNOWN,
-    managed_object: Optional[int] = None,
-    service: Optional[int] = None,
+    source: str | InputSource = InputSource.UNKNOWN,
+    managed_object: int | None = None,
+    service: int | None = None,
 ):
     """Push check result to history"""
     from noc.main.models.remotesystem import RemoteSystem

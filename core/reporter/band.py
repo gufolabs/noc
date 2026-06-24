@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Optional, Dict, Any, Iterable, List, Tuple
+from typing import Optional, Any, Iterable
 
 # Third-party modules
 import polars as pl
@@ -21,10 +21,10 @@ from noc.core.reporter.types import BandOrientation, ROOT_BAND, ReportBand
 class DataSet:
     name: str
     data: pl.DataFrame
-    rows: Optional[list[dict[str, Any]]] = None
-    query: Optional[str] = None
+    rows: list[dict[str, Any]] | None = None
+    query: str | None = None
     transpose: bool = False
-    transpose_columns: Optional[list[str]] = None
+    transpose_columns: list[str] | None = None
 
 
 class Band:
@@ -92,7 +92,7 @@ class Band:
         def get_band_instance_image(band: Band, offset: int) -> str:
             """Image for band only (without children bands)"""
 
-            def format_dataframe(df: Optional[pl.DataFrame]) -> str:
+            def format_dataframe(df: pl.DataFrame | None) -> str:
                 if df is None:
                     return "None"
                 return f"DataFrame (rows: {df.shape[0]}, cols: {df.shape[1]})"
@@ -240,7 +240,7 @@ class Band:
             for row in r.to_dicts():
                 yield tuple(row.get(f, "") for f in fields)
 
-    def add_dataset(self, data: DataSet, name: Optional[str] = None):
+    def add_dataset(self, data: DataSet, name: str | None = None):
         """
         Add dataset
         Attrs:
@@ -288,7 +288,7 @@ class Band:
                 return band
 
     @classmethod
-    def from_report(cls, band: ReportBand, params: Optional[dict[str, Any]] = None) -> "Band":
+    def from_report(cls, band: ReportBand, params: dict[str, Any] | None = None) -> "Band":
         """Create Band from configuration"""
         return Band(name=band.name, orientation=band.orientation, data=params)
 
@@ -304,7 +304,7 @@ class Band:
             b.add_child(rb)
         return b
 
-    def iter_report_bands(self, name: Optional[str] = None) -> Iterable["Band"]:
+    def iter_report_bands(self, name: str | None = None) -> Iterable["Band"]:
         """
         Iterable bands for report.
 

@@ -9,7 +9,6 @@
 import operator
 from threading import Lock
 from collections import namedtuple
-from typing import List
 from pathlib import Path
 
 # Third-party modules

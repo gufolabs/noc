@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, List
 
 # Third-party modules
 from pymongo import ReadPreference

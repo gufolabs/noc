@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Optional, Iterable, Tuple, AsyncIterable
+from typing import Iterable, AsyncIterable
 from collections import defaultdict
 
 # Third-party modules
@@ -76,7 +76,7 @@ class DiscoverySummaryDS(BaseDataSource):
 
     @classmethod
     async def iter_query(
-        cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
+        cls, fields: Iterable[str] | None = None, *args, **kwargs
     ) -> AsyncIterable[tuple[str, str]]:
         # Interface metrics
         p_metrics = {p.id: len(p.metrics) for p in InterfaceProfile.objects.filter()}

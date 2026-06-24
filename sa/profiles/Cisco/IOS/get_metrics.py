@@ -7,7 +7,6 @@
 
 # Python modules
 import re
-from typing import List, Dict, Tuple, Union
 
 # NOC modules
 from noc.sa.profiles.Generic.get_metrics import (
@@ -252,7 +251,7 @@ class Script(GetMetricsScript):
                 except ValueError:
                     pass
 
-    def get_cbqos_config_snmp(self) -> dict[str, dict[str, Union[str, int]]]:
+    def get_cbqos_config_snmp(self) -> dict[str, dict[str, str | int]]:
         """
         Return config for build metric index
         :return:

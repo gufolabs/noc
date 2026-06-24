@@ -8,7 +8,7 @@
 
 # Python modules
 import orjson
-from typing import Dict, Any, Optional, Iterable, Tuple
+from typing import Any, Iterable
 from urllib.parse import urlencode
 
 # Third-party modules
@@ -45,7 +45,7 @@ class TgSenderService(FastAPIService):
             await self.subscribe_stream(TGSENDER_STREAM, self.slot_number, self.on_message)
 
     @staticmethod
-    def parse_address(data, address_to) -> Optional[str]:
+    def parse_address(data, address_to) -> str | None:
         """Parse send address"""
         if address_to:
             return address_to
@@ -90,7 +90,7 @@ class TgSenderService(FastAPIService):
         cls,
         data: dict[str, Any],
         address_to: str,
-    ) -> Iterable[tuple[bytes, Optional[dict[str, bytes]]]]:
+    ) -> Iterable[tuple[bytes, dict[str, bytes] | None]]:
         """
         Render TG message
                 # HTML Style
@@ -196,10 +196,10 @@ class TgSenderService(FastAPIService):
         data: dict[str, Any],
         api_url: str,
         api_method: str = "POST",
-        api_authorization: Optional[str] = None,
-        to_param_name: Optional[str] = None,
-        message_param_name: Optional[str] = None,
-        content_type: Optional[str] = None,
+        api_authorization: str | None = None,
+        to_param_name: str | None = None,
+        message_param_name: str | None = None,
+        content_type: str | None = None,
         **kwargs,
     ):
         """Send WebHook"""

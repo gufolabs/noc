@@ -10,7 +10,7 @@ import operator
 import re
 from itertools import filterfalse
 from functools import partial
-from typing import List, Dict, Optional, Tuple, Set, Any, Union, FrozenSet
+from typing import Optional, Any
 from threading import Lock
 
 # Third-party modules
@@ -119,7 +119,7 @@ class MatchCheck(EmbeddedDocument):
             return f"{self.check}:{self.port} {self.match_state}"
         return f"{self.check} {self.match_state}"
 
-    def is_match(self, checks: dict[tuple[str, int], Optional[bool]]):
+    def is_match(self, checks: dict[tuple[str, int], bool | None]):
         if (self.check, self.port or 0) not in checks:
             return False
         value = checks[(self.check, self.port or 0)]
@@ -192,7 +192,7 @@ class SourceItem(EmbeddedDocument):
     meta = {"strict": False, "auto_create_index": False}
 
     source = StringField(choices=list(SOURCES), required=True)
-    remote_system: Optional[RemoteSystem] = PlainReferenceField(RemoteSystem, required=False)
+    remote_system: RemoteSystem | None = PlainReferenceField(RemoteSystem, required=False)
     update_last_seen = BooleanField(default=False)
     sync_policy = StringField(choices=[("A", "All"), ("M", "Mappings Only")], default="A")
     remove_policy = StringField(
@@ -263,7 +263,7 @@ class ObjectDiscoveryRule(Document):
     )
     # stop_processed = BooleanField(default=False)
     sync_approved = BooleanField(default=False)  # sync record on
-    default_template: Optional[ModelTemplate] = PlainReferenceField(ModelTemplate)
+    default_template: ModelTemplate | None = PlainReferenceField(ModelTemplate)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _prefix_cache = cachetools.TTLCache(maxsize=10, ttl=600)
@@ -274,7 +274,7 @@ class ObjectDiscoveryRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ObjectDiscoveryRule"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ObjectDiscoveryRule"]:
         return ObjectDiscoveryRule.objects.filter(id=oid).first()
 
     @property
@@ -291,7 +291,7 @@ class ObjectDiscoveryRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_rules_cache"), lock=lambda _: rules_lock)
-    def get_rules_by_source(cls, sources: Optional[frozenset[str]] = None):
+    def get_rules_by_source(cls, sources: frozenset[str] | None = None):
         """
         Return list rules match Instance for sources
         Args:
@@ -347,8 +347,8 @@ class ObjectDiscoveryRule(Document):
         address,
         pool: Pool,
         checks: list[Any],
-        data: Optional[list[Any]] = None,
-        sources: Optional[list[str]] = None,
+        data: list[Any] | None = None,
+        sources: list[str] | None = None,
     ) -> Optional["ObjectDiscoveryRule"]:
         """
         Return Effective rule by discovered data
@@ -464,7 +464,7 @@ class ObjectDiscoveryRule(Document):
         return any(c.is_match(labels, data, checks, groups) for c in self.conditions)
 
     @cachetools.cachedmethod(operator.attrgetter("_prefix_cache"), lock=lambda _: id_lock)
-    def get_prefixes(self, pool: Optional[Pool] = None) -> list["IPv4"]:
+    def get_prefixes(self, pool: Pool | None = None) -> list["IPv4"]:
         """Return configured prefixes"""
         r = []
         for net in self.network_ranges:
@@ -480,7 +480,7 @@ class ObjectDiscoveryRule(Document):
                 continue
         return r
 
-    def get_pool(self, address: str) -> Optional[Pool]:
+    def get_pool(self, address: str) -> Pool | None:
         """
         Return pool for address
         Args:
@@ -496,9 +496,9 @@ class ObjectDiscoveryRule(Document):
     def get_action(
         self,
         checks: list[Any],
-        labels: Optional[list[str]] = None,
-        data: Optional[dict[str, Any]] = None,
-        groups: Optional[list[str]] = None,
+        labels: list[str] | None = None,
+        data: dict[str, Any] | None = None,
+        groups: list[str] | None = None,
     ) -> str:
         """
         Return Discovered object action
@@ -518,8 +518,8 @@ class ObjectDiscoveryRule(Document):
     def get_sync_settings(
         self,
         source,
-        remote_system: Optional[RemoteSystem] = None,
-    ) -> Optional[SourceItem]:
+        remote_system: RemoteSystem | None = None,
+    ) -> SourceItem | None:
         """Get synced Setting for source"""
         r = None
         for s in self.sources:

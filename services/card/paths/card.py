@@ -10,7 +10,6 @@ import os
 import inspect
 from threading import Lock
 import operator
-from typing import Optional
 
 # Third-party modules
 import cachetools
@@ -46,7 +45,7 @@ class HandlerStub:
     def current_user(self):
         return self.user
 
-    def get_argument(self, name: str, default: Optional[str] = None, strict: bool = True):
+    def get_argument(self, name: str, default: str | None = None, strict: bool = True):
         """
 
         :param name: Argument Name
@@ -168,7 +167,7 @@ class CardAPI(BaseAPI):
         card_type: str,
         card_id: str,
         request: Request,
-        remote_user: Optional[str] = Header(None, alias="Remote-User"),
+        remote_user: str | None = Header(None, alias="Remote-User"),
     ):
         current_user = self.get_current_user(remote_user)
         if not current_user:
@@ -213,7 +212,7 @@ class CardAPI(BaseAPI):
         return Response(content=content, media_type="text/html", headers=headers)
 
     def handler_card_search(
-        self, scope: str, query: str, remote_user: Optional[str] = Header(None, alias="Remote-User")
+        self, scope: str, query: str, remote_user: str | None = Header(None, alias="Remote-User")
     ):
         query = query.strip()
         if not query or len(query) < MIN_SEARCH:

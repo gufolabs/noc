@@ -8,7 +8,6 @@
 # Python modules
 import logging
 import datetime
-from typing import Set
 
 # NOC modules
 from noc.core.mongo.connection import get_db

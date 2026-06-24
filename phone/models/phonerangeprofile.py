@@ -7,7 +7,7 @@
 
 # Python modules
 from threading import Lock
-from typing import Optional, Union
+from typing import Optional
 import operator
 
 # Third-party modules
@@ -47,8 +47,8 @@ class PhoneRangeProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["PhoneRangeProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["PhoneRangeProfile"]:
         return PhoneRangeProfile.objects.filter(id=oid).first()
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

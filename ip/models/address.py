@@ -7,7 +7,7 @@
 
 # Python modules
 import datetime
-from typing import Optional, Iterable, List, Tuple, Any
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 from django.db import models
@@ -306,10 +306,10 @@ class Address(NOCModel):
 
     def reserve(
         self,
-        allocated_till: Optional[datetime.datetime] = None,
-        user: Optional[Any] = None,
+        allocated_till: datetime.datetime | None = None,
+        user: Any | None = None,
         confirm: bool = True,
-        reservation_id: Optional[str] = None,
+        reservation_id: str | None = None,
     ):
         """
         Set record As reserve
@@ -330,11 +330,11 @@ class Address(NOCModel):
     def get_resource_keys(
         cls,
         prefix,
-        keys: Optional[list[int]] = None,
+        keys: list[int] | None = None,
         strategy: str = "L",
-        exclude_keys: Optional[Iterable[int]] = None,
+        exclude_keys: Iterable[int] | None = None,
         limit: int = 1,
-        address_ranges: Optional[str] = None,
+        address_ranges: str | None = None,
         **kwargs,
     ) -> list[IP]:
         """
@@ -376,7 +376,7 @@ class Address(NOCModel):
         keys: Iterable[str],
         domain,
         allow_create: bool = False,
-    ) -> Iterable[tuple[str, Optional["Address"], Optional[str]]]:
+    ) -> Iterable[tuple[str, Optional["Address"], str | None]]:
         processed = set()
         for addr in Address.objects.filter(prefix=domain, address__in=keys):
             yield addr.address, addr, None
@@ -402,7 +402,7 @@ class Address(NOCModel):
         cls,
         address: str,
         prefix,
-        name: Optional[str] = None,
+        name: str | None = None,
     ) -> "Address":
         """Create Address from Template"""
         addr = Address(
@@ -416,7 +416,7 @@ class Address(NOCModel):
             addr.name = name
         return addr
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.profile.get_css_class() if self.profile else None
 
 

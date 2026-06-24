@@ -13,7 +13,7 @@ import datetime
 import os
 import asyncio
 from collections import defaultdict
-from typing import Dict, Any, Tuple, Optional, List
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -139,9 +139,7 @@ class PingService(FastAPIService):
         for address in probes - processed:
             await self.delete_probe_address(p_id, address=address)
 
-    def find_probe_by_address(
-        self, p_id: str, address: Optional[str] = None
-    ) -> Optional[ProbeSetting]:
+    def find_probe_by_address(self, p_id: str, address: str | None = None) -> ProbeSetting | None:
         """Find probe by address"""
         if p_id not in self.probes:
             self.logger.warn("[%s] Probe id not in probes list", id)
@@ -191,7 +189,7 @@ class PingService(FastAPIService):
         else:
             self.clear_alarm(ps, reason="Address deleted from checks")
 
-    def set_status(self, ps: ProbeSetting, s: bool, ts=None, message: Optional[str] = None):
+    def set_status(self, ps: ProbeSetting, s: bool, ts=None, message: str | None = None):
         """Send status message to correlator service"""
         ts = ts or datetime.datetime.now().replace(microsecond=0).isoformat()
         # Set object status
@@ -208,7 +206,7 @@ class PingService(FastAPIService):
             partition=ps.partition,
         )
 
-    def clear_alarm(self, ps: ProbeSetting, ts=None, reason: Optional[str] = None):
+    def clear_alarm(self, ps: ProbeSetting, ts=None, reason: str | None = None):
         """Send Clear Alarm message to Correlator"""
         ts = ts or datetime.datetime.now().replace(microsecond=0).isoformat()
         # Clear alarm
@@ -267,7 +265,7 @@ class PingService(FastAPIService):
         """
         return {"source": "system", "$event": {"class": cls.PING_CLS[status], "vars": {}}}
 
-    async def _probe(self, ps: ProbeSetting) -> tuple[Optional[float], int]:
+    async def _probe(self, ps: ProbeSetting) -> tuple[float | None, int]:
         """
         Perform ping probe.
 

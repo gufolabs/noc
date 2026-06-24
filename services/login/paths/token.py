@@ -7,7 +7,6 @@
 
 # Python modules
 from http import HTTPStatus
-from typing import Optional, Dict
 import codecs
 
 # Third-party modules
@@ -32,7 +31,7 @@ async def token(
     request: Request,
     # @todo: Find the way to pass req to openapi schema
     # req: TokenRequest,
-    authorization: Optional[str] = Header(None, alias="Authorization"),
+    authorization: str | None = Header(None, alias="Authorization"),
     svc: LoginService = Depends(get_service),
 ):
     # NB: Some testing tools are dumb enough to support only application/x-www-form-urlencoded
@@ -62,7 +61,7 @@ async def token(
     except ValidationError as e:
         return await svc.request_validation_error_handler(request, e)
     # <-- MADNESS ABOVE
-    auth_req: Optional[dict[str, str]]
+    auth_req: dict[str, str] | None
     if req.grant_type == "refresh_token":
         # Refresh token
         if svc.is_revoked(req.refresh_token):

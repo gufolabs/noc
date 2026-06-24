@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Iterable, Any, List
+from typing import Iterable, Any
 
 # NOC modules
 from noc.inv.models.object import Object

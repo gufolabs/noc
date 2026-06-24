@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, List, Any
+from typing import Any
 
 # NOC modules
 from noc.inv.models.object import Object

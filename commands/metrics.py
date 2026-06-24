@@ -15,7 +15,7 @@ import time
 from dateutil.parser import parse
 from functools import partial
 from collections import defaultdict
-from typing import List, Optional, Iterable, Dict, Union, Any, Tuple
+from typing import Iterable, Any
 
 # Third-party modules
 import orjson
@@ -123,7 +123,7 @@ class Command(BaseCommand):
             self.die(f"Source {source}:{sid} is not found")
         return source, o
 
-    def handle_cdag_dot(self, config, output: Optional[str] = None, *args, **kwargs):
+    def handle_cdag_dot(self, config, output: str | None = None, *args, **kwargs):
         cdag = self.from_config_paths(config)
         if not output:
             self.print(cdag.get_dot())
@@ -162,8 +162,8 @@ class Command(BaseCommand):
         self,
         source: str,
         metrics: list[str],
-        start: Optional[datetime.datetime] = None,
-        end: Optional[datetime.datetime] = None,
+        start: datetime.datetime | None = None,
+        end: datetime.datetime | None = None,
         register_metric: bool = False,
     ):
         """
@@ -233,12 +233,12 @@ class Command(BaseCommand):
 
     def iter_metrics(
         self,
-        f_input: Optional[str],
-        metrics: Optional[list[str]] = None,
-        start: Optional[datetime.datetime] = None,
-        end: Optional[datetime.datetime] = None,
+        f_input: str | None,
+        metrics: list[str] | None = None,
+        start: datetime.datetime | None = None,
+        end: datetime.datetime | None = None,
         register_metric: bool = False,
-    ) -> Iterable[dict[str, Union[float, str]]]:
+    ) -> Iterable[dict[str, float | str]]:
         if ":" in f_input:
             yield from self.input_from_device(
                 f_input, metrics, start=start, end=end, register_metric=register_metric
@@ -249,10 +249,10 @@ class Command(BaseCommand):
     def handle_test_action(
         self,
         config,
-        f_input: Optional[str] = None,
-        f_output: Optional[str] = None,
-        start: Optional[str] = None,
-        end: Optional[str] = None,
+        f_input: str | None = None,
+        f_output: str | None = None,
+        start: str | None = None,
+        end: str | None = None,
         *args,
         **kwargs,
     ):
@@ -325,10 +325,10 @@ class Command(BaseCommand):
     def handle_test_service(
         self,
         config,
-        f_input: Optional[str] = None,
-        f_output: Optional[str] = None,
-        start: Optional[str] = None,
-        end: Optional[str] = None,
+        f_input: str | None = None,
+        f_output: str | None = None,
+        start: str | None = None,
+        end: str | None = None,
         *args,
         **kwargs,
     ):
@@ -392,7 +392,7 @@ class Command(BaseCommand):
         return cdag
 
     @staticmethod
-    def input_from_file(f_input: str) -> Iterable[dict[str, Union[float, str]]]:
+    def input_from_file(f_input: str) -> Iterable[dict[str, float | str]]:
         with open(f_input) as f:
             for line in f:
                 line = line.strip()

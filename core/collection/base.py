@@ -16,7 +16,7 @@ import threading
 import operator
 from base64 import b85decode
 from pathlib import Path
-from typing import Iterable, Dict, Any, Set, Union, Tuple
+from typing import Iterable, Any
 from dataclasses import dataclass
 
 # Third-party modules
@@ -268,7 +268,7 @@ class Collection:
         else:
             yield get_single(data)
 
-    def get_fields(self, model: Union[Document, NOCModelBase]):
+    def get_fields(self, model: Document | NOCModelBase):
         model = model or self.model
         if not isinstance(model, NOCModelBase):
             # Check Django Model

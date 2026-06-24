@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel
@@ -17,7 +16,7 @@ from noc.core.cdag.factory.config import GraphConfig
 
 class RuleCondition(BaseModel):
     labels: list[str]
-    exclude_labels: Optional[list[str]] = None
+    exclude_labels: list[str] | None = None
 
 
 class ActionInput(BaseModel):

@@ -10,7 +10,7 @@ import logging
 from dataclasses import dataclass
 from collections import defaultdict
 from functools import partial
-from typing import Dict, Tuple, Optional, Callable, List, Any, Iterable
+from typing import Callable, Any, Iterable
 
 # Third-party modules
 from pydantic import ValidationError
@@ -35,8 +35,8 @@ action_logger = logging.getLogger(__name__)
 class Action:
     name: str
     stop_processing: bool = False
-    match: Optional[Callable] = None
-    event_match: Optional[Callable] = None
+    match: Callable | None = None
+    event_match: Callable | None = None
     event: tuple[Callable, ...] = None
     target: tuple[Callable, ...] = None
     resource: dict[str, tuple[Callable, ...]] = None
@@ -187,7 +187,7 @@ class ActionSet:
             "service_groups": frozenset(target.effective_service_groups or []) if target else [],
             "remote_system": event.remote_system,
         }
-        drop_action: Optional[EventAction] = None
+        drop_action: EventAction | None = None
         to_dispose = False
         resource_action = None
         num = 0
@@ -277,7 +277,7 @@ class ActionSet:
     def send_notification(
         managed_object: ManagedObject,
         event: Event,
-        notification_group: Optional[str] = None,
+        notification_group: str | None = None,
         **kwargs,
     ):
         """Send Event Notification"""

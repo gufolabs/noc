@@ -9,7 +9,7 @@
 from pathlib import Path
 import operator
 from threading import Lock
-from typing import Any, Dict, Union, Optional, List
+from typing import Any, Optional
 
 # Third-party modules
 import bson
@@ -33,7 +33,7 @@ from noc.core.models.valuetype import ValueType, ARRAY_ANNEX
 
 id_lock = Lock()
 
-TCapsValue = Union[bool, str, int, float, list[Any]]
+TCapsValue = bool | str | int | float | list[Any]
 
 
 @on_delete_check(
@@ -77,7 +77,7 @@ class Capability(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["Capability"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["Capability"]:
         return Capability.objects.filter(id=oid).first()
 
     @classmethod
@@ -139,7 +139,7 @@ class Capability(Document):
             raise ValueError(f"Invalid type: {self.type}")
         return self.type.clean_value(v)
 
-    def get_references(self, v: TCapsValue, scope: Optional[str] = None) -> list[str]:
+    def get_references(self, v: TCapsValue, scope: str | None = None) -> list[str]:
         if self.multi and isinstance(v, list):
             return [
                 self.type.clean_reference(x, scope)
@@ -153,7 +153,7 @@ class Capability(Document):
             return [r]
         return []
 
-    def get_editor(self) -> Optional[dict[str, Any]]:
+    def get_editor(self) -> dict[str, Any] | None:
         if not self.allow_manual:
             return None
         r = {"type": self.type.value, "multiple": self.multi, "choices": []}

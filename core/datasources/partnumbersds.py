@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Any, Optional, Iterable, Tuple, AsyncIterable
+from typing import Any, Iterable, AsyncIterable
 
 # NOC modules
 from .base import FieldInfo, BaseDataSource
@@ -35,7 +35,7 @@ class PartNumbersDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
+        fields: Iterable[str] | None = None,
         *args,
         **kwargs,
     ) -> AsyncIterable[tuple[int, str, Any]]:

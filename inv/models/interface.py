@@ -10,7 +10,7 @@ import datetime
 import logging
 import operator
 import re
-from typing import Optional, Iterable, List, Union, Dict, Any
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 import cachetools
@@ -154,7 +154,7 @@ class Interface(Document):
         return "%s: %s" % (self.managed_object.name, self.name)
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Interface"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Interface"]:
         return Interface.objects.filter(id=oid).first()
 
     @classmethod
@@ -205,7 +205,7 @@ class Interface(Document):
         if si:
             return si.interface
 
-    def as_resource(self, path: Optional[str] = None) -> str:
+    def as_resource(self, path: str | None = None) -> str:
         """
         Convert instance or connection to the resource reference.
 
@@ -455,7 +455,7 @@ class Interface(Document):
             s += ["-", "-"]
         return "/".join(s)
 
-    def set_oper_status(self, status: bool, timestamp: Optional[datetime.datetime] = None):
+    def set_oper_status(self, status: bool, timestamp: datetime.datetime | None = None):
         """
         Set current oper status
         """
@@ -580,7 +580,7 @@ class Interface(Document):
 
     @classmethod
     def iter_collected_metrics(
-        cls, mo: "ManagedObject", run: int = 0, d_interval: Optional[int] = None
+        cls, mo: "ManagedObject", run: int = 0, d_interval: int | None = None
     ) -> Iterable[MetricCollectorConfig]:
         """
         Return metric settings

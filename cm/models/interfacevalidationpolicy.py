@@ -7,7 +7,7 @@
 
 # Python modules
 import threading
-from typing import Optional, Union
+from typing import Optional
 import operator
 
 # Third-party modules
@@ -68,7 +68,7 @@ class InterfaceValidationPolicy(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["InterfaceValidationPolicy"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["InterfaceValidationPolicy"]:
         return InterfaceValidationPolicy.objects.filter(id=oid).first()
 
     def iter_problems(self, engine, ifname: str) -> Iterable[ProblemItem]:

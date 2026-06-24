@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Iterable, Iterator, Tuple
+from typing import Iterable, Iterator
 
 # NOC modules
 from .line import LineTokenizer
@@ -20,9 +20,9 @@ class CurlyTokenizer(LineTokenizer):
         data,
         start_of_context: str = "{",
         end_of_context: str = "}",
-        explicit_eol: Optional[str] = None,
-        start_of_group: Optional[str] = None,
-        end_of_group: Optional[str] = None,
+        explicit_eol: str | None = None,
+        start_of_group: str | None = None,
+        end_of_group: str | None = None,
         **kwargs,
     ):
         self.start_of_context = start_of_context

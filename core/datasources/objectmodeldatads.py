@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Optional, Iterable, AsyncIterable, Tuple, Union
+from typing import Iterable, AsyncIterable
 
 # NOC modules
 from .base import FieldInfo, BaseDataSource, FieldType
@@ -68,11 +68,11 @@ class ObjectModelDataDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
+        fields: Iterable[str] | None = None,
         *args,
-        managed_only: Optional[bool] = False,
+        managed_only: bool | None = False,
         **kwargs,
-    ) -> AsyncIterable[tuple[int, str, Union[str, int]]]:
+    ) -> AsyncIterable[tuple[int, str, str | int]]:
         """"""
         if managed_only:
             filters = {"data__match": {"interface": "management", "attr": "managed", "value": True}}

@@ -9,7 +9,7 @@
 import operator
 from collections import defaultdict
 from threading import Lock, RLock
-from typing import Optional, Union, Dict, Any, Tuple, List, Callable
+from typing import Optional, Any, Callable
 from functools import partial
 from dataclasses import dataclass
 
@@ -178,7 +178,7 @@ class CPEProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["CPEProfile"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["CPEProfile"]:
         return CPEProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -300,7 +300,7 @@ class CPEProfile(Document):
 
     def get_instance_affected_query(
         self,
-        changes: Optional[list[ChangeField]] = None,
+        changes: list[ChangeField] | None = None,
         include_match: bool = False,
     ) -> m_q:
         """Return queryset for instance"""
@@ -310,5 +310,5 @@ class CPEProfile(Document):
                 q |= mr.get_q()
         return q
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

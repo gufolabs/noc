@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import AsyncIterable, Dict, List, Optional, Iterable, Tuple
+from typing import AsyncIterable, Iterable
 
 # NOC modules
 from noc.core.profile.loader import GENERIC_PROFILE as GENERIC_PROFILE_NAME
@@ -38,11 +38,11 @@ class TopologyProblemDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
-        pool: Optional[Pool] = None,
-        mo_profile: Optional[ManagedObjectProfile] = None,
+        fields: Iterable[str] | None = None,
+        pool: Pool | None = None,
+        mo_profile: ManagedObjectProfile | None = None,
         available_only: bool = False,
-        admin_domain_ads: Optional[list[int]] = None,
+        admin_domain_ads: list[int] | None = None,
         *args,
         **kwargs,
     ) -> AsyncIterable[tuple[str, str]]:

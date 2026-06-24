@@ -11,7 +11,7 @@ import logging
 from collections import defaultdict
 from time import perf_counter
 from dataclasses import dataclass
-from typing import Dict, Optional, Tuple, Any
+from typing import Any
 
 # NOC modules
 from noc.core.ioloop.timers import PeriodicCallback
@@ -42,10 +42,10 @@ class DataSourceRecord:
     raised_alarm: bool
     register_message: bool
     collector: str
-    remote_system: Optional[str]
+    remote_system: str | None
     # partial check: List[Tuple[ts, code]]
 
-    def is_no_data(self, ts: Optional[int] = None) -> bool:
+    def is_no_data(self, ts: int | None = None) -> bool:
         """Check item last received data over ttl"""
         ts = ts or int(perf_counter())
         return (ts - self.last_ts) > self.ttl
@@ -88,10 +88,10 @@ class NoDataChecker:
 
     def __init__(
         self,
-        nodata_record_ttl: Optional[int] = 3600,
-        nodata_round_duration: Optional[int] = 60,
-        alarm_class: Optional[str] = None,
-        collector: Optional[str] = None,
+        nodata_record_ttl: int | None = 3600,
+        nodata_round_duration: int | None = 60,
+        alarm_class: str | None = None,
+        collector: str | None = None,
     ):
         self.nodata_round_duration = nodata_round_duration
         self.nodata_record_ttl = nodata_record_ttl
@@ -114,8 +114,8 @@ class NoDataChecker:
     def device_is_no_data(
         self,
         source_id: str,
-        collector: Optional[str] = None,
-        remote_system: Optional[str] = None,
+        collector: str | None = None,
+        remote_system: str | None = None,
     ) -> bool:
         return self.source_table[
             (source_id, collector or self.collector, remote_system or "")
@@ -172,8 +172,8 @@ class NoDataChecker:
         self,
         source_id: str,
         ts: datetime.datetime,
-        collector: Optional[str] = None,
-        remote_system: Optional[str] = None,
+        collector: str | None = None,
+        remote_system: str | None = None,
     ):
         """
         Register received data from source

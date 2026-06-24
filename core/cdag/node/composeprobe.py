@@ -7,7 +7,7 @@
 
 # Python modules
 import logging
-from typing import Optional, Callable, FrozenSet
+from typing import Callable
 from time import time_ns
 
 # Third-party modules
@@ -49,7 +49,7 @@ class ComposeProbeNode(ProbeNode):
             get_vars(self.config.expression)
         )
 
-    def get_value(self, **kwargs) -> Optional[ValueType]:
+    def get_value(self, **kwargs) -> ValueType | None:
         try:
             x = self.expression(**kwargs)
         except Exception as e:

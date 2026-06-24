@@ -7,7 +7,6 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Dict, Optional
 
 
 @dataclass
@@ -27,7 +26,7 @@ class PublishRequest:
 
     stream: str
     data: bytes
-    partition: Optional[int]
-    headers: Optional[dict[str, bytes]]
+    partition: int | None
+    headers: dict[str, bytes] | None
     # Meta
-    key: Optional[bytes]
+    key: bytes | None

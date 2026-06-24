@@ -10,7 +10,7 @@ import operator
 import logging
 import itertools
 from collections import defaultdict
-from typing import Dict, List, Set, Optional, Iterable
+from typing import Iterable
 
 # Third-party modules
 import cachetools
@@ -54,7 +54,7 @@ class SegmentTopology(TopologyBase):
         super().__init__(**settings)
 
     @property
-    def gen_id(self) -> Optional[str]:
+    def gen_id(self) -> str | None:
         return str(self.segment.id)
 
     @property
@@ -309,10 +309,10 @@ class SegmentTopology(TopologyBase):
     def iter_maps(
         cls,
         parent: str = None,
-        query: Optional[str] = None,
-        limit: Optional[int] = None,
-        start: Optional[int] = None,
-        page: Optional[int] = None,
+        query: str | None = None,
+        limit: int | None = None,
+        start: int | None = None,
+        page: int | None = None,
     ) -> Iterable[MapItem]:
         if parent is not None:
             data = NetworkSegment.objects.filter(parent=parent).order_by("name")

@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Tuple, List
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication

@@ -7,7 +7,7 @@
 
 # Python modules
 import itertools
-from typing import Dict, List, Optional, Iterable, Any
+from typing import Iterable, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -37,7 +37,7 @@ class ConfiguredTopology(TopologyBase):
         super().__init__(**settings)
 
     @property
-    def gen_id(self) -> Optional[str]:
+    def gen_id(self) -> str | None:
         return str(self.cfgmap.id)
 
     @property
@@ -65,10 +65,10 @@ class ConfiguredTopology(TopologyBase):
     def iter_maps(
         cls,
         parent: str | None = None,
-        query: Optional[str] = None,
-        limit: Optional[int] = None,
-        start: Optional[int] = None,
-        page: Optional[int] = None,
+        query: str | None = None,
+        limit: int | None = None,
+        start: int | None = None,
+        page: int | None = None,
     ) -> Iterable[MapItem]:
         data = ConfiguredMap.objects.filter().order_by("name")
         if query:

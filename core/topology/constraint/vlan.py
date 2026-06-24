@@ -9,7 +9,6 @@
 import operator
 
 # Third-party modules
-from typing import Dict, Set
 import cachetools
 
 # NOC modules

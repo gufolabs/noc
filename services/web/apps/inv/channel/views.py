@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # NOC modules
-from typing import List, Optional, Dict
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
 from noc.inv.models.channel import Channel
 from noc.inv.models.endpoint import Endpoint, UsageItem, ConstraintItem
@@ -17,7 +16,7 @@ from noc.core.techdomain.mapper.loader import loader as mapper_loader
 from noc.core.feature import Feature
 
 
-def get_usage(v: Optional[list[UsageItem]]) -> list[dict[str, str]]:
+def get_usage(v: list[UsageItem] | None) -> list[dict[str, str]]:
     if not v:
         return []
     return [i.to_json() for i in v]

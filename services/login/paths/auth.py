@@ -7,7 +7,6 @@
 
 # Python modules
 import logging
-from typing import Optional, Tuple
 import codecs
 
 # Third-party modules
@@ -51,11 +50,11 @@ PINHOLE_PATHS = {
 @router.trace("/api/auth/auth/", tags=["auth"])
 async def auth(
     request: Request,
-    jwt_cookie: Optional[str] = Cookie(None, alias=config.login.jwt_cookie_name),
-    private_token: Optional[str] = Header(None, alias="Private-Token"),
-    authorization: Optional[str] = Header(None, alias="Authorization"),
-    original_uri: Optional[str] = Header(None, alias="X-Original-URI"),
-    remote_cert_subj: Optional[str] = Header(None, alias="X-Remote-Cert-Subject"),
+    jwt_cookie: str | None = Cookie(None, alias=config.login.jwt_cookie_name),
+    private_token: str | None = Header(None, alias="Private-Token"),
+    authorization: str | None = Header(None, alias="Authorization"),
+    original_uri: str | None = Header(None, alias="X-Original-URI"),
+    remote_cert_subj: str | None = Header(None, alias="X-Remote-Cert-Subject"),
     svc: LoginService = Depends(get_service),
 ):
     """
@@ -85,7 +84,7 @@ async def auth(
 
 
 async def auth_cookie(
-    request: Request, jwt_cookie: str, *, pinned_user: Optional[str] = None
+    request: Request, jwt_cookie: str, *, pinned_user: str | None = None
 ) -> ORJSONResponse:
     """
     Authorize against JWT token contained in cookie
@@ -101,7 +100,7 @@ async def auth_cookie(
 
 
 async def auth_private_token(
-    request: Request, private_token: str, *, pinned_user: Optional[str] = None
+    request: Request, private_token: str, *, pinned_user: str | None = None
 ) -> ORJSONResponse:
     """
     Authenticate against Private-Token header
@@ -146,7 +145,7 @@ def get_api_access(key: str, ip: str) -> tuple[str, str]:
 
 
 async def auth_authorization(
-    request: Request, authorization: str, svc: LoginService, *, pinned_user: Optional[str] = None
+    request: Request, authorization: str, svc: LoginService, *, pinned_user: str | None = None
 ) -> ORJSONResponse:
     """
     Authenticate against Authorization header
@@ -179,7 +178,7 @@ async def auth_authorization(
 
 
 async def auth_authorization_basic(
-    request: Request, data: str, *, pinned_user: Optional[str] = None
+    request: Request, data: str, *, pinned_user: str | None = None
 ) -> ORJSONResponse:
     """
     HTTP Basic authorization handler
@@ -205,7 +204,7 @@ async def auth_authorization_basic(
 
 
 async def auth_authorization_bearer(
-    request: Request, data: str, svc: LoginService, pinned_user: Optional[str] = None
+    request: Request, data: str, svc: LoginService, pinned_user: str | None = None
 ) -> ORJSONResponse:
     """
     HTTP Bearer autorization handler

@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel
@@ -19,8 +18,8 @@ class AdmDomainDataStreamItem(BaseModel):
     id: str
     name: str
     change_id: str
-    parent: Optional[str]
-    labels: Optional[list[str]]
-    tags: Optional[list[str]]
-    remote_system: Optional[RemoteSystemItem]
-    remote_id: Optional[str]
+    parent: str | None
+    labels: list[str] | None
+    tags: list[str] | None
+    remote_system: RemoteSystemItem | None
+    remote_id: str | None

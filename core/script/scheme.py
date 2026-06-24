@@ -8,7 +8,7 @@
 # Python modules
 import enum
 from dataclasses import dataclass, field
-from typing import Optional, List, Literal, Any, Tuple
+from typing import Literal, Any
 
 TELNET = 1
 SSH = 2
@@ -33,19 +33,19 @@ HTTP_PROTOCOLS = {HTTP, HTTPS}
 @dataclass(frozen=True)
 class ProtoConfig:
     alias: str
-    check: Optional[str] = None
-    snmp_version: Optional[int] = None
+    check: str | None = None
+    snmp_version: int | None = None
     is_http: bool = False
     is_cli: bool = False
     enable_suggest: bool = True
-    credential: Optional[Any] = None
+    credential: Any | None = None
 
 
 @dataclass(frozen=True)
 class SNMPCredential:
     snmp_ro: str
-    snmp_rw: Optional[str] = field(default=None, hash=True)
-    oids: Optional[list[str]] = field(default=None, hash=False)
+    snmp_rw: str | None = field(default=None, hash=True)
+    oids: list[str] | None = field(default=None, hash=False)
     snmp_v1_only: bool = field(default=False, hash=False)
 
     @property
@@ -62,12 +62,12 @@ class SNMPCredential:
 @dataclass(frozen=True)
 class SNMPv3Credential:
     username: str
-    context: Optional[str] = None
-    auth_key: Optional[str] = None
+    context: str | None = None
+    auth_key: str | None = None
     auth_proto: Literal["MD5", "SHA"] = "MD5"
-    private_key: Optional[str] = None
+    private_key: str | None = None
     private_proto: Literal["DES", "AES"] = "DES"
-    oids: Optional[list[str]] = field(default=None, hash=False)
+    oids: list[str] | None = field(default=None, hash=False)
 
     @property
     def protocol(self) -> "Protocol":
@@ -85,8 +85,8 @@ class SNMPv3Credential:
 @dataclass(frozen=True)
 class CLICredential:
     username: str
-    password: Optional[str] = None
-    super_password: Optional[str] = None
+    password: str | None = None
+    super_password: str | None = None
     raise_privilege: bool = False
     enable_protocols: tuple[int, ...] = (1, 2)
 
@@ -102,7 +102,7 @@ class CLICredential:
 @dataclass
 class HTTPCredential:
     username: str  # api_key, username
-    password: Optional[str] = None
+    password: str | None = None
     http_only: bool = True
 
     @property

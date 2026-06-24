@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel
@@ -34,7 +33,7 @@ class NthNode(BaseCDAGNode):
     state_cls = NthNodeState
     categories = [Category.WINDOW]
 
-    def get_value(self, x: ValueType) -> Optional[ValueType]:
+    def get_value(self, x: ValueType) -> ValueType | None:
         if self.config.n <= 0:
             return x
         # Fill window

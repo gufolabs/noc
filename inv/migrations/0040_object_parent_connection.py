@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Tuple, Optional, Any, List
+from typing import Any
 
 # Third-party modules
 from bson import ObjectId
@@ -18,7 +18,7 @@ from noc.core.migration.base import BaseMigration
 
 class Migration(BaseMigration):
     def migrate(self):
-        def get_dir(doc: dict[str, Any]) -> Optional[str]:
+        def get_dir(doc: dict[str, Any]) -> str | None:
             o = doc.get("object")
             if not o:
                 return None
@@ -55,7 +55,7 @@ class Migration(BaseMigration):
         parent_bulk = []
         ocm = self.mongo_db["noc.objectconnections"]
         for oc in ocm.find({}, {"_id": 1, "connection": 1}):
-            c: Optional[list[dict[str, Any]]] = oc.get("connection")
+            c: list[dict[str, Any]] | None = oc.get("connection")
             if not c or len(c) != 2:
                 continue
             if is_inner(c[0]) and is_outer(c[1]):

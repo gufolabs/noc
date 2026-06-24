@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Optional, Dict
+from typing import Any
 
 # NOC modules
 from noc.core.datastream.base import DataStream
@@ -238,7 +238,7 @@ class ServiceDataStream(DataStream):
         return {f"{cls.F_META}.client_groups": {"$elemMatch": {"$elemMatch": {"$in": [name]}}}}
 
     @classmethod
-    def get_meta_headers(cls, data: dict[str, Any]) -> Optional[dict[str, bytes]]:
+    def get_meta_headers(cls, data: dict[str, Any]) -> dict[str, bytes] | None:
         if "$deleted" in data:
             # @@todo Meta fields for deleted object
             return None

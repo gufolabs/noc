@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, List, Iterable, Optional, Set, Iterator, Type, DefaultDict, Union, Any
+from typing import Iterable, Optional, Iterator, Any
 from logging import getLogger
 from weakref import ref, ReferenceType
 import asyncio
@@ -43,7 +43,7 @@ class Input:
 
     name: str
     value: str
-    job: Optional[str] = None
+    job: str | None = None
 
     @property
     def canonical_name(self) -> str:
@@ -70,13 +70,13 @@ class Job:
         *,
         name: str,
         status: JobStatus,
-        id: Optional[str] = None,
-        action: Optional[type[BaseAction]] = None,
+        id: str | None = None,
+        action: type[BaseAction] | None = None,
         allow_fail: bool = False,
         parent: Optional["Job"] = None,
-        environment: Optional[dict[str, str]] = None,
-        locks: Optional[Iterable[str]] = None,
-        inputs: Optional[Iterable[Input]] = None,
+        environment: dict[str, str] | None = None,
+        locks: Iterable[str] | None = None,
+        inputs: Iterable[Input] | None = None,
     ) -> None:
         self.id = ObjectId(id) if id else ObjectId()
         self.name = name
@@ -85,7 +85,7 @@ class Job:
         self.status: JobStatus = status
         self.parent = parent
         self.environment = Environment(environment)
-        self.children: Optional[list[ReferenceType[Job]]] = None
+        self.children: list[ReferenceType[Job]] | None = None
         if self.parent:
             self.environment.set_parent(self.parent.environment)
             # Update children
@@ -95,9 +95,9 @@ class Job:
                 self.parent.children.append(ref(self))
         self.inputs = list(inputs) if inputs else None
         self.locks = list(locks) if locks is not None else None
-        self.depends_on: Optional[list[ReferenceType[Job]]] = None
-        self._task: Optional[ReferenceType[asyncio.Task]] = None
-        self.results: dict[str, Union[None, str, object]] = {}
+        self.depends_on: list[ReferenceType[Job]] | None = None
+        self._task: ReferenceType[asyncio.Task] | None = None
+        self.results: dict[str, None | str | object] = {}
         self._result_is_dirty = False
 
     def __str__(self) -> str:
@@ -426,7 +426,7 @@ class Job:
             yield from ch
 
     @classmethod
-    def from_dict(cls, doc: dict[str, Any], jmap: Optional[dict[ObjectId, "Job"]] = None) -> "Job":
+    def from_dict(cls, doc: dict[str, Any], jmap: dict[ObjectId, "Job"] | None = None) -> "Job":
         """
         Create job from database dict.
         """
@@ -450,7 +450,7 @@ class Job:
             job.depends_on = [ref(jmap[j]) for j in depends_on]
         return job
 
-    def set_task(self, task: Optional[asyncio.Task] = None) -> None:
+    def set_task(self, task: asyncio.Task | None = None) -> None:
         if self._task and not task:
             # Reset task
             self._task = None
@@ -528,7 +528,7 @@ class Job:
         Serialize results to JSON.
         """
 
-        def q(r: Union[str, object]) -> Union[str, dict[str, str]]:
+        def q(r: str | object) -> str | dict[str, str]:
             if isinstance(r, str):
                 return r
             return asdict(r)

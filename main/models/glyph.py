@@ -8,7 +8,7 @@
 # Python modules
 from threading import Lock
 import operator
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional
 from pathlib import Path
 
 # Third-party modules
@@ -54,7 +54,7 @@ class Glyph(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["Glyph"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["Glyph"]:
         return Glyph.objects.filter(id=oid).first()
 
     @property
@@ -73,7 +73,7 @@ class Glyph(Document):
         return safe_json_path(self.name)
 
     @property
-    def css_class(self) -> Optional[str]:
+    def css_class(self) -> str | None:
         """
         Generate CSS class
         """

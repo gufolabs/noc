@@ -12,7 +12,7 @@ import random
 import string
 import logging
 import datetime
-from typing import Optional, List, Union, Callable, Any
+from typing import Optional, Callable, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -92,7 +92,7 @@ class ResourcePool(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ResourcePool"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ResourcePool"]:
         return ResourcePool.objects.filter(id=oid).first()
 
     @property
@@ -110,7 +110,7 @@ class ResourcePool(Document):
         return model.get_by_resource_pool(self)
 
     @classmethod
-    def acquire(cls, pools: list["ResourcePool"], owner: Optional[str] = None):
+    def acquire(cls, pools: list["ResourcePool"], owner: str | None = None):
         """
         # Set Lock
         with ResourcePool.acquire([pool1, ..., poolN]):
@@ -162,15 +162,15 @@ class ResourcePool(Document):
     def allocate(
         self,
         limit: int = 1,
-        allocated_till: Optional[datetime.datetime] = None,
+        allocated_till: datetime.datetime | None = None,
         allow_free: bool = False,
-        reservation_id: Optional[str] = None,
-        user: Optional[str] = None,
+        reservation_id: str | None = None,
+        user: str | None = None,
         confirm: bool = True,
         is_dirty: bool = False,
         # Hints
-        resource_keys: Optional[list[str]] = None,
-        domain: Optional[Any] = None,
+        resource_keys: list[str] | None = None,
+        domain: Any | None = None,
         **kwargs,
     ):
         """
@@ -257,7 +257,7 @@ class ResourcePool(Document):
         return allocated
 
     @property
-    def usage(self) -> Optional[float]:
+    def usage(self) -> float | None:
         """Calculate pool resource usage"""
         from noc.ip.models.prefix import Prefix
         from noc.vc.models.l2domain import L2Domain

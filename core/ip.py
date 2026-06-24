@@ -8,7 +8,7 @@
 # Python modules
 import socket
 import struct
-from typing import List, Union, Iterable, Optional, Type
+from typing import Union, Iterable
 
 # NOC Modules
 from noc.core.validators import check_ipv4_prefix, check_ipv6_prefix
@@ -147,7 +147,7 @@ class IP:
             yield s
             s += dist
 
-    def iter_free(self, prefixes: list[Union[str, type["IP"]]]):
+    def iter_free(self, prefixes: list[str | type["IP"]]):
         """
         Return generator of free prefixes.
 
@@ -279,7 +279,7 @@ class IPv4(IP):
 
     afi = "4"
 
-    def __init__(self, prefix: str, netmask: Optional[str] = None):
+    def __init__(self, prefix: str, netmask: str | None = None):
         """
         :param prefix: String in format X.X.X.X or X.X.X.X/Y
         :type prefix: str

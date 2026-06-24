@@ -7,7 +7,6 @@
 
 # Python modules
 from collections import defaultdict
-from typing import Optional, Dict
 
 # Third-party modules
 from django.http import HttpResponse
@@ -212,8 +211,8 @@ class VLANApplication(ExtDocApplication):
         request,
         l2_domain: "L2Domain",
         pool: "ResourcePool" = None,
-        vlan_id: Optional[int] = None,
-        name: Optional[str] = None,
+        vlan_id: int | None = None,
+        name: str | None = None,
         **kwargs,
     ):
         # @todo check user permission

@@ -7,7 +7,6 @@
 
 # Python modules
 import xml.etree.ElementTree as ET
-from typing import Dict, Optional, Tuple
 from dataclasses import dataclass
 
 # NOC modules
@@ -46,7 +45,7 @@ class ConnectionTypeInfo:
     y: float
     width: float
     height: float
-    el: Optional[ET.Element]
+    el: ET.Element | None
 
     def inc_x(self: "ConnectionTypeInfo") -> None:
         """Increase current x position to width"""
@@ -184,7 +183,7 @@ def get_model_dimensions(model: ObjectModel) -> tuple[int, int]:
     return w, h
 
 
-def _get_outer_connection_type(model: ObjectModel) -> Optional[ConnectionType]:
+def _get_outer_connection_type(model: ObjectModel) -> ConnectionType | None:
     """
     Get connection type for outer connection.
 
@@ -213,7 +212,7 @@ def is_valid_model_for_template(model: ObjectModel) -> bool:
         return False
 
 
-def get_connection_facade(conn: ObjectModelConnection) -> Optional[SVG]:
+def get_connection_facade(conn: ObjectModelConnection) -> SVG | None:
     """
     Get facade for connection.
 

@@ -7,7 +7,6 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import List, Optional, Set, Dict
 
 # NOC modules
 from noc.services.discovery.jobs.base import PolicyDiscoveryCheck
@@ -23,8 +22,8 @@ from noc.config import config
 class DiscoveryVLAN:
     id: int
     l2domain: "L2Domain"
-    name: Optional[str] = None
-    description: Optional[str] = None
+    name: str | None = None
+    description: str | None = None
     allow_allocate: bool = False
     allow_seen: bool = True
 
@@ -52,7 +51,7 @@ class VLANCheck(PolicyDiscoveryCheck):
 
     def handler(self):
         self.logger.info("Checking VLANs")
-        object_l2domain: Optional["L2Domain"] = self.object.get_effective_l2_domain()
+        object_l2domain: "L2Domain" | None = self.object.get_effective_l2_domain()
         if not object_l2domain:
             self.logger.info("L2Domain for object is not set. Skipping")
             return

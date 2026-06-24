@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Iterator, Tuple
+from typing import Iterator
 
 
 class BaseTokenizer:

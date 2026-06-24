@@ -12,7 +12,7 @@ import operator
 
 # Third-party modules
 from jinja2 import Template, Environment
-from typing import Dict, Any
+from typing import Any
 
 # NOC modules
 from noc.core.translation import ugettext as _

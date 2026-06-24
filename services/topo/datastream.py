@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any, List
+from typing import Any
 
 # NOC modules
 from noc.core.datastream.client import DataStreamClient

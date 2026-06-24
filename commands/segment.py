@@ -8,7 +8,6 @@
 # Python modules
 import argparse
 import datetime
-from typing import Optional, List, Set, Dict, DefaultDict
 from collections import defaultdict
 
 # NOC modules
@@ -130,7 +129,7 @@ class Command(BaseCommand):
                 t0.isoformat(sep=" "),
             )
             ch = connection()
-            last_ts: Optional[str] = None
+            last_ts: str | None = None
             all_macs: list[str] = []
             mac_iface: dict[str, str] = {}
             for ts, iface, mac in ch.execute(post=sql):

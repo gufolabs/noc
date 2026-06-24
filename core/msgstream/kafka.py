@@ -9,7 +9,7 @@
 import logging
 import asyncio
 import random
-from typing import Optional, Dict, AsyncIterable, List, Union
+from typing import AsyncIterable
 from collections import defaultdict
 
 # Third-party modules
@@ -49,10 +49,10 @@ class KafkaClient:
 
     def __init__(self):
         self.bootstrap = None
-        self.producer: Optional[AIOKafkaProducer] = None
-        self.consumer: Optional[AIOKafkaConsumer] = None
-        self.client: Optional[AIOKafkaClient] = None
-        self.admin_client: Optional[AIOKafkaAdminClient] = None
+        self.producer: AIOKafkaProducer | None = None
+        self.consumer: AIOKafkaConsumer | None = None
+        self.client: AIOKafkaClient | None = None
+        self.admin_client: AIOKafkaAdminClient | None = None
         self.loop = asyncio.get_running_loop()
         self.stub = None
         kafka_logger = logging.getLogger("kafka")
@@ -111,7 +111,7 @@ class KafkaClient:
         return min(len(meta.brokers), 3) or 1
 
     async def fetch_metadata(
-        self, stream: Optional[str] = None, wait_for_stream: bool = False
+        self, stream: str | None = None, wait_for_stream: bool = False
     ) -> Metadata:
         """
         Fetch cluster metadata
@@ -266,7 +266,7 @@ class KafkaClient:
     async def create_stream(
         self,
         name: str,
-        group: Optional[str] = None,
+        group: str | None = None,
         partitions: int = 0,
         replication_factor: int = 0,
     ) -> None:
@@ -307,12 +307,12 @@ class KafkaClient:
         self,
         streams: list[str],
         group_id: str,
-        partition: Optional[int] = None,
-        start_offset: Optional[int] = None,
-        start_timestamp: Optional[float] = None,
+        partition: int | None = None,
+        start_offset: int | None = None,
+        start_timestamp: float | None = None,
         resume: bool = True,
-        cursor_id: Optional[str] = None,
-        timeout: Optional[int] = None,
+        cursor_id: str | None = None,
+        timeout: int | None = None,
     ) -> None:
         """
 
@@ -387,12 +387,12 @@ class KafkaClient:
     async def subscribe(
         self,
         stream: str,
-        partition: Optional[int] = None,
-        start_offset: Optional[int] = None,
-        start_timestamp: Optional[float] = None,
+        partition: int | None = None,
+        start_offset: int | None = None,
+        start_timestamp: float | None = None,
         resume: bool = False,
-        cursor_id: Optional[str] = None,
-        timeout: Optional[int] = None,
+        cursor_id: str | None = None,
+        timeout: int | None = None,
         allow_isr: bool = False,
     ) -> AsyncIterable[Message]:
         """
@@ -424,10 +424,10 @@ class KafkaClient:
     async def publish(
         self,
         value: bytes,
-        stream: Optional[str] = None,
-        key: Optional[bytes] = None,
-        partition: Optional[int] = None,
-        headers: Optional[dict[str, bytes]] = None,
+        stream: str | None = None,
+        key: bytes | None = None,
+        partition: int | None = None,
+        headers: dict[str, bytes] | None = None,
         **kwargs,
     ) -> None:
         """
@@ -504,7 +504,7 @@ class KafkaClient:
         self,
         from_topic,
         to_topic,
-        partitions: Optional[Union[dict[int, int], int]] = None,
+        partitions: dict[int, int] | int | None = None,
     ) -> dict[int, int]:
         """
         Copy message from one topic to another

@@ -7,7 +7,6 @@
 
 # Python modules
 from pathlib import Path
-from typing import Optional
 import re
 
 # NOC modules
@@ -31,7 +30,7 @@ def _clean_component(s: str) -> str:
     return r.replace(" ", "_")
 
 
-def safe_path(*args: str, sep: Optional[str] = None, suffix: Optional[str] = None) -> Path:
+def safe_path(*args: str, sep: str | None = None, suffix: str | None = None) -> Path:
     """
     Expand path components to safe relative path.
 
@@ -75,7 +74,7 @@ def safe_path(*args: str, sep: Optional[str] = None, suffix: Optional[str] = Non
     return path
 
 
-def safe_json_path(*args: str, sep: Optional[str] = "|", suffix: Optional[str] = ".json") -> Path:
+def safe_json_path(*args: str, sep: str | None = "|", suffix: str | None = ".json") -> Path:
     """
     Expand path components to JSON file path.
 

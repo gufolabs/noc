@@ -11,7 +11,7 @@ import logging
 import hashlib
 import codecs
 from dataclasses import dataclass
-from typing import Dict, Tuple, List, Optional, Set, Iterable, Union, Any, ClassVar, FrozenSet
+from typing import Iterable, Any, ClassVar
 from typing_extensions import TypedDict, NotRequired
 
 # Third-party modules
@@ -90,18 +90,18 @@ class Card:
 
     probes: dict[str, ProbeNode]
     senders: tuple[MetricsNode, ...]
-    alarms: list[Union[ThresholdNode, AlarmNode]]
+    alarms: list[ThresholdNode | AlarmNode]
     affected_rules: frozenset[str]
     graphs: dict[str, CDAG]
-    config: Optional[Union[ManagedObjectTarget, SLAProbeTarget]]
-    component: Optional[Union[ComponentTarget, SensorComponentTarget]]
+    config: ManagedObjectTarget | SLAProbeTarget | None
+    component: ComponentTarget | SensorComponentTarget | None
     is_dirty: bool
 
-    def get_sender(self, name: str) -> Optional[MetricsNode]:
+    def get_sender(self, name: str) -> MetricsNode | None:
         """Get probe sender by name"""
         return next((s for s in self.senders if s.config.scope == name), None)
 
-    def get_probe(self, metric: str) -> Optional[ProbeNode]:
+    def get_probe(self, metric: str) -> ProbeNode | None:
         return self.probes.get(metric)
 
     def add_probe(self, metric_field: str, probe: ProbeNode):
@@ -130,7 +130,7 @@ class Card:
         cls,
         n: BaseCDAGNode,
         prefix: str,
-        config: Optional[dict[str, Any]] = None,
+        config: dict[str, Any] | None = None,
         static_config=None,
     ) -> BaseCDAGNode:
         """
@@ -149,8 +149,8 @@ class Card:
         cls,
         src: CDAG,
         prefix: str,
-        config: Optional[ManagedObjectTarget] = None,
-        component: Optional[ComponentTarget] = None,
+        config: ManagedObjectTarget | None = None,
+        component: ComponentTarget | None = None,
     ):
         nodes: dict[str, BaseCDAGNode] = {}
         # Clone nodes
@@ -184,8 +184,8 @@ class Card:
         metric_field: str,
         k: MetricKey,
         is_composed: bool = False,
-        cfg: Optional[ProbeNodeConfig] = None,
-    ) -> Optional[ProbeNode]:
+        cfg: ProbeNodeConfig | None = None,
+    ) -> ProbeNode | None:
         """
         Add new probe to card
         Args:

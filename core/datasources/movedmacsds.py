@@ -11,7 +11,7 @@ import bisect
 import datetime
 from operator import itemgetter
 import re
-from typing import Any, AsyncIterable, Dict, List, Optional, Iterable, Tuple
+from typing import Any, AsyncIterable, Iterable
 
 # NOC modules
 from noc.config import config
@@ -117,11 +117,11 @@ class MovedMACsDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
-        admin_domain_ads: Optional[list[int]] = None,
+        fields: Iterable[str] | None = None,
+        admin_domain_ads: list[int] | None = None,
         start: datetime.datetime = None,
         end: datetime.datetime = None,
-        interface_profile: Optional[InterfaceProfile] = None,
+        interface_profile: InterfaceProfile | None = None,
         exclude_serial_change: bool = False,
         *args,
         **kwargs,

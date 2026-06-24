@@ -9,7 +9,6 @@
 import argparse
 import sys
 from contextlib import contextmanager
-from typing import List
 
 # NOC modules
 from noc.core.management.base import BaseCommand, CommandError

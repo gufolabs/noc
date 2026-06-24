@@ -6,13 +6,13 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Iterable, List, Set
+from typing import Iterable
 from abc import ABC, abstractmethod
 from contextvars import ContextVar
 
 DEFAULT_TTL = 60.0
 
-locked_items: ContextVar[Optional[set[str]]] = ContextVar("locked_items", default=None)
+locked_items: ContextVar[set[str] | None] = ContextVar("locked_items", default=None)
 
 
 class BaseLock(ABC):
@@ -29,7 +29,7 @@ class BaseLock(ABC):
     ```
     """
 
-    def __init__(self, category: str, owner: str, ttl: Optional[float] = None):
+    def __init__(self, category: str, owner: str, ttl: float | None = None):
         """
         :param category: Lock category name
         :param owner: Lock owner id
@@ -39,7 +39,7 @@ class BaseLock(ABC):
         self.owner = owner
         self.ttl = ttl or DEFAULT_TTL
 
-    def acquire(self, items: Iterable[str], ttl: Optional[float] = None) -> "Token":
+    def acquire(self, items: Iterable[str], ttl: float | None = None) -> "Token":
         """
         Acquire lock context manager.
 
@@ -55,7 +55,7 @@ class BaseLock(ABC):
         return Token(self, items, ttl=ttl)
 
     @abstractmethod
-    def acquire_by_items(self, items: list[str], ttl: Optional[float] = None) -> str:
+    def acquire_by_items(self, items: list[str], ttl: float | None = None) -> str:
         """
         Acquire lock by list of items
         """
@@ -72,11 +72,11 @@ class Token:
     Active lock context manager
     """
 
-    def __init__(self, lock: BaseLock, items: Iterable[str], ttl: Optional[float] = None):
+    def __init__(self, lock: BaseLock, items: Iterable[str], ttl: float | None = None):
         self.lock = lock
         self.items = list(items)
         self.ttl = ttl
-        self.lock_id: Optional[str] = None
+        self.lock_id: str | None = None
 
     def __enter__(self):
         if locked_items.get() is not None:

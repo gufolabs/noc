@@ -8,7 +8,6 @@
 # Python modules
 import re
 from threading import Lock
-from typing import List
 
 # NOC modules
 from noc.core.script.base import BaseScript

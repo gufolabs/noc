@@ -7,7 +7,7 @@
 
 # Python modules
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument

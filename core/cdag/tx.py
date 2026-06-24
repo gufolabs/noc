@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Dict, Tuple
+from typing import Any
 
 # NOC modules
 from .typing import ValueType

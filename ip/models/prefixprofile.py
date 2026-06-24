@@ -8,7 +8,7 @@
 # Python modules
 from threading import Lock
 from functools import partial
-from typing import Optional, Union, List
+from typing import Optional
 import operator
 
 # Third-party modules
@@ -123,7 +123,7 @@ class PrefixProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["PrefixProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["PrefixProfile"]:
         return PrefixProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -172,5 +172,5 @@ class PrefixProfile(Document):
             )
             # PrefixProfile.objects.filter(id=self.id).update(ip_ping_discovery_last_run=None)
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

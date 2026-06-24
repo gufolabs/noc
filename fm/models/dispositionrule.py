@@ -10,7 +10,7 @@ from pathlib import Path
 import operator
 import re
 from threading import Lock
-from typing import Optional, List, Union, Dict, Any, Callable
+from typing import Optional, Any, Callable
 
 # Third-party modules
 from bson import ObjectId
@@ -130,7 +130,7 @@ class VarItem(EmbeddedDocument):
             r["alias"] = self.alias
         return r
 
-    def get_action_config(self) -> Optional[dict[str, Any]]:
+    def get_action_config(self) -> dict[str, Any] | None:
         if self.update_oper_status in {"N", "V"}:
             return None
         return {
@@ -173,7 +173,7 @@ class Match(EmbeddedDocument):
     remote_system: Optional["RemoteSystem"] = ReferenceField(RemoteSystem, required=False)
     reference_rx = StringField()
     event_classes: list[ObjectId] = ListField(ObjectIdField(required=True))
-    object_status: Optional[str] = StringField(
+    object_status: str | None = StringField(
         choices=[("A", "Any"), ("U", "To Up"), ("D", "To Down")],
         required=False,
     )
@@ -237,7 +237,7 @@ class ActionItem(EmbeddedDocument):
     # Action API ? by object, move to instance ?
     action: ActionType = EnumField(ActionType, required=True)
     action_command: Optional["Action"] = ReferenceField(Action, required=False)
-    interaction_audit: Optional[Interaction] = EnumField(Interaction, required=False)
+    interaction_audit: Interaction | None = EnumField(Interaction, required=False)
     context: list[str] = ListField(StringField())
 
     def __str__(self):
@@ -406,7 +406,7 @@ class DispositionRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["DispositionRule"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["DispositionRule"]:
         return DispositionRule.objects.filter(id=oid).first()
 
     @classmethod
@@ -492,7 +492,7 @@ class DispositionRule(Document):
                 r += list(EventClass.objects.filter(name=re.compile(rr.event_class_re)))
         return r
 
-    def get_matcher(self) -> Optional[Callable]:
+    def get_matcher(self) -> Callable | None:
         """Getting matcher for rule"""
         expr = []
         if not self.conditions:

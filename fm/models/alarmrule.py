@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import Optional, List, Union, Callable, Dict, Any
+from typing import Optional, Callable, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -199,7 +199,7 @@ class AlarmRule(Document):
     match: list[Match] = EmbeddedDocumentListField(Match)
     groups: list[Group] = EmbeddedDocumentListField(Group)
     actions: list[Action] = EmbeddedDocumentListField(Action)
-    escalation_profile: Optional[EscalationProfile] = ReferenceField(EscalationProfile)
+    escalation_profile: EscalationProfile | None = ReferenceField(EscalationProfile)
     severity_policy = StringField(
         choices=[
             ("B", "Base"),
@@ -209,8 +209,8 @@ class AlarmRule(Document):
         ],
         default="AL",
     )
-    min_severity: Optional[AlarmSeverity] = ReferenceField(AlarmSeverity, required=False)
-    max_severity: Optional[AlarmSeverity] = ReferenceField(AlarmSeverity, required=False)
+    min_severity: AlarmSeverity | None = ReferenceField(AlarmSeverity, required=False)
+    max_severity: AlarmSeverity | None = ReferenceField(AlarmSeverity, required=False)
     # Set, Match, Increase, Severity
     # severity_policy = StringField(
     #     choices=["match", "set", "inc", "dec"], default="set"
@@ -250,7 +250,7 @@ class AlarmRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["AlarmRule"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["AlarmRule"]:
         return AlarmRule.objects.filter(id=oid).first()
 
     @classmethod

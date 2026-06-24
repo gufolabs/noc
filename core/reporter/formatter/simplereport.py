@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Optional
 
 # Third-party modules
 from jinja2 import Template as Jinja2Template
@@ -70,7 +69,7 @@ class SimpleReportFormatter(DataFormatter):
         return "Report 1"  # Report Title
 
     @staticmethod
-    def get_title(band, template: Optional[str] = None) -> str:
+    def get_title(band, template: str | None = None) -> str:
         """Render Band Title if setting template"""
         if not template:
             return band.name

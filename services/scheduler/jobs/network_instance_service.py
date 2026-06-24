@@ -7,7 +7,7 @@
 
 # Python modules
 import datetime
-from typing import Dict, Optional, Tuple, List, Any
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -172,7 +172,7 @@ class NetworkInstanceDiscoveryJob(PeriodicJob):
 
     @classmethod
     def get_mac_neighbors(
-        cls, start: Optional[datetime.datetime] = None, limit_mac_by_port: Optional[int] = None
+        cls, start: datetime.datetime | None = None, limit_mac_by_port: int | None = None
     ) -> dict[str, tuple[Interface, datetime.datetime]]:
         """Return Iface -> Mac Neighbor map"""
         limit_mac_by_port = limit_mac_by_port or LIMIT_MAC_BY_PORT

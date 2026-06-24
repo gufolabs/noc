@@ -9,7 +9,6 @@
 import argparse
 import datetime
 import os
-from typing import List
 
 # Third-party modules
 import bson

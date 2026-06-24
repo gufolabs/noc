@@ -13,7 +13,6 @@ import threading
 import time
 import asyncio
 from time import perf_counter
-from typing import List, Optional
 
 # Third-party modules
 import pymongo.errors
@@ -83,7 +82,7 @@ class Scheduler:
         self.bulk = []
         self.bulk_lock = threading.Lock()
         self.max_threads = max_threads
-        self.executor: Optional[ThreadPoolExecutor] = None
+        self.executor: ThreadPoolExecutor | None = None
         self.run_callback = None
         self.check_time = check_time
         self.read_ahead_interval = datetime.timedelta(milliseconds=check_time)

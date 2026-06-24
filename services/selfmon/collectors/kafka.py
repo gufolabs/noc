@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Tuple, Optional, Dict, DefaultDict, Iterable
+from typing import Iterable
 import struct
 from dataclasses import dataclass
 from collections import defaultdict
@@ -101,7 +101,7 @@ class KafkaStreamCollector(BaseCollector):
         ]
 
     @staticmethod
-    def parse_cursor_key(key: bytes) -> Optional[PartitionCursor]:
+    def parse_cursor_key(key: bytes) -> PartitionCursor | None:
         """Parse kafka cursor key."""
 
         def parse_uint16(k: bytes) -> tuple[int, bytes]:
@@ -127,7 +127,7 @@ class KafkaStreamCollector(BaseCollector):
         )
 
     @staticmethod
-    def parse_cursor_offset(value: bytes) -> Optional[int]:
+    def parse_cursor_offset(value: bytes) -> int | None:
         version, offset = COMMIT_VALUE.unpack(value[:10])
         if version != 3:
             return None

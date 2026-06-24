@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 from time import perf_counter_ns
 
 
@@ -20,9 +19,9 @@ class BaseRateLimit:
 
     def __init__(self, rate: float):
         self.min_delta: int = int(NS / rate)
-        self.next: Optional[int] = None
+        self.next: int | None = None
 
-    def get_sleep_timeout(self) -> Optional[float]:
+    def get_sleep_timeout(self) -> float | None:
         """
         Get timeout for next sleep
         :return:

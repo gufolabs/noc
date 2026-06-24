@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 from http import HTTPStatus
 
 # Third-party modules
@@ -21,13 +20,13 @@ router = APIRouter()
 
 @router.get("/api/zeroconf/config", response_model=ZkConfig)
 def config(
-    agent_id: Optional[str] = None,
-    serial: Optional[str] = None,
-    mac: Optional[list[str]] = Query(None),
-    ip: Optional[list[str]] = Query(None),
-    x_noc_agent_key: Optional[str] = Header(None),
-    host: Optional[str] = Header(None),
-    x_forwarded_proto: Optional[str] = Header(None),
+    agent_id: str | None = None,
+    serial: str | None = None,
+    mac: list[str] | None = Query(None),
+    ip: list[str] | None = Query(None),
+    x_noc_agent_key: str | None = Header(None),
+    host: str | None = Header(None),
+    x_forwarded_proto: str | None = Header(None),
 ):
     if agent_id and not x_noc_agent_key:
         raise HTTPException(status_code=HTTPStatus.FORBIDDEN)

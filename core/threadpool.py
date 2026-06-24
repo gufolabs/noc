@@ -16,7 +16,7 @@ from time import perf_counter
 import asyncio
 
 # Third-party modules
-from typing import Optional, Dict, Any, Set, List, Callable, TypeVar
+from typing import Any, Callable, TypeVar
 
 # NOC modules
 from noc.config import config
@@ -37,7 +37,7 @@ class ThreadPoolExecutor:
         max_workers: int,
         idle_timeout: int = DEFAULT_IDLE_TIMEOUT,
         shutdown_timeout: int = DEFAULT_SHUTDOWN_TIMEOUT,
-        name: Optional[str] = None,
+        name: str | None = None,
     ) -> None:
         self.max_workers = max_workers
         self.threads: set[threading.Thread] = set()

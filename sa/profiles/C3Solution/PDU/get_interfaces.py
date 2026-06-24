@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import List
 
 # NOC modules
 from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript

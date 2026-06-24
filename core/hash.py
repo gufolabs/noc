@@ -10,7 +10,7 @@ import struct
 
 # Third-party modules
 from siphash24 import siphash24
-from typing import Dict, Any
+from typing import Any
 
 # NOC modules
 from noc.core.comp import smart_text, smart_bytes

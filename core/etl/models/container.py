@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from .base import BaseModel
@@ -16,14 +15,14 @@ class Container(BaseModel):
     id: str
     name: str
     model: str
-    path: Optional[str] = None
-    addr_id: Optional[str] = None
+    path: str | None = None
+    addr_id: str | None = None
     lon: str = ""
     lat: str = ""
-    addr_text: Optional[str] = None
-    adm_contact_text: Optional[str] = None
-    tech_contact_text: Optional[str] = None
-    billing_contact_text: Optional[str] = None
+    addr_text: str | None = None
+    adm_contact_text: str | None = None
+    tech_contact_text: str | None = None
+    billing_contact_text: str | None = None
 
     _csv_fields = [
         "id",

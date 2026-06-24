@@ -6,11 +6,11 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Dict, Union
+from typing import Any
 
 # Third-party modules
 from pydantic import StrictInt, StrictFloat
 
-ValueType = Union[int, float]
-StrictValueType = Union[StrictInt, StrictFloat]
+ValueType = int | float
+StrictValueType = StrictInt | StrictFloat
 FactoryCtx = dict[str, Any]

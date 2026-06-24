@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel
@@ -29,49 +28,49 @@ class DefaultServiceItem(BaseModel):
     effective_service_groups: list[Reference]
     static_client_groups: list[Reference]
     effective_client_groups: list[Reference]
-    parent: Optional[Reference] = None
-    subscriber: Optional[Reference] = None
-    supplier: Optional[Reference] = None
-    description: Optional[str] = None
-    agreement_id: Optional[str] = None
-    order_id: Optional[str] = None
-    stage_id: Optional[str] = None
-    stage_name: Optional[str] = None
-    stage_start: Optional[datetime.datetime] = None
-    account_id: Optional[str] = None
-    address: Optional[str] = None
-    managed_object: Optional[Reference] = None
-    nri_port: Optional[str] = None
-    remote_system: Optional[Reference] = None
-    remote_id: Optional[str] = None
-    bi_id: Optional[int] = None
+    parent: Reference | None = None
+    subscriber: Reference | None = None
+    supplier: Reference | None = None
+    description: str | None = None
+    agreement_id: str | None = None
+    order_id: str | None = None
+    stage_id: str | None = None
+    stage_name: str | None = None
+    stage_start: datetime.datetime | None = None
+    account_id: str | None = None
+    address: str | None = None
+    managed_object: Reference | None = None
+    nri_port: str | None = None
+    remote_system: Reference | None = None
+    remote_id: str | None = None
+    bi_id: int | None = None
 
 
 class FormServiceItem(BaseModel):
     profile: Reference
-    parent: Optional[Reference] = None
-    subscriber: Optional[Reference] = None
-    supplier: Optional[Reference] = None
-    description: Optional[str] = None
-    agreement_id: Optional[str] = None
-    order_id: Optional[str] = None
-    stage_id: Optional[str] = None
-    stage_name: Optional[str] = None
-    stage_start: Optional[str] = None
-    account_id: Optional[str] = None
-    address: Optional[str] = None
-    managed_object: Optional[Reference] = None
-    nri_port: Optional[str] = None
-    labels: Optional[list[str]] = None
-    static_service_groups: Optional[list[Reference]] = None
-    static_client_groups: Optional[list[Reference]] = None
+    parent: Reference | None = None
+    subscriber: Reference | None = None
+    supplier: Reference | None = None
+    description: str | None = None
+    agreement_id: str | None = None
+    order_id: str | None = None
+    stage_id: str | None = None
+    stage_name: str | None = None
+    stage_start: str | None = None
+    account_id: str | None = None
+    address: str | None = None
+    managed_object: Reference | None = None
+    nri_port: str | None = None
+    labels: list[str] | None = None
+    static_service_groups: list[Reference] | None = None
+    static_client_groups: list[Reference] | None = None
 
 
 class PreviewServiceItem(BaseModel):
     id: str
     profile: Reference
-    parent: Optional[Reference] = None
+    parent: Reference | None = None
     state: Reference
-    state_changed: Optional[datetime.datetime] = None
+    state_changed: datetime.datetime | None = None
     description: str
     address: str

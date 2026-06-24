@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Optional, Iterable, Tuple, AsyncIterable
+from typing import Iterable, AsyncIterable
 
 # NOC modules
 from .base import FieldInfo, FieldType, ParamInfo, BaseDataSource
@@ -42,9 +42,9 @@ class DiscoveryIDCachePoisonDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
+        fields: Iterable[str] | None = None,
         filter_dup_macs=False,
-        pool: Optional[Pool] = None,
+        pool: Pool | None = None,
         *args,
         **kwargs,
     ) -> AsyncIterable[tuple[str, str]]:

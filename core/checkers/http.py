@@ -7,7 +7,7 @@
 
 # Python modules
 from urllib.parse import urlparse
-from typing import List, AsyncIterable
+from typing import AsyncIterable
 
 # NOC modules
 from .base import BaseChecker, CheckResult, Check, CheckError

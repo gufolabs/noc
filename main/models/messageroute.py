@@ -8,7 +8,7 @@
 # Python modules
 import threading
 import operator
-from typing import List, Optional, Union, Dict, Any
+from typing import Optional, Any
 
 # Third-party modules
 import bson
@@ -141,7 +141,7 @@ class MessageRoute(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["MessageRoute"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["MessageRoute"]:
         return MessageRoute.objects.filter(id=oid).first()
 
     def iter_changed_datastream(self, changed_fields=None):

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Dict, Any
+from typing import Any
 
 # Third-party modules
 from pydantic import BaseModel
@@ -22,7 +22,7 @@ class VarItem(BaseModel):
     type: ValueType
     required: bool = False
     match_suppress: bool = False
-    resource_model: Optional[str] = None
+    resource_model: str | None = None
 
 
 class ComboCondition(BaseModel):
@@ -38,20 +38,20 @@ class Rule(BaseModel):
     preference: int
     action: EventAction = EventAction.LOG
     # Disposition
-    alarm_class: Optional[str] = None
+    alarm_class: str | None = None
     on_disposition: bool = False
     stop_processing: bool = False
     # Conditions
-    match_expr: Optional[dict[str, Any]] = None
-    vars_match_expr: Optional[dict[str, Any]] = None
-    combo_condition: Optional[ComboCondition] = None
+    match_expr: dict[str, Any] | None = None
+    vars_match_expr: dict[str, Any] | None = None
+    combo_condition: ComboCondition | None = None
     # Actions
-    handlers: Optional[list[str]] = None
+    handlers: list[str] | None = None
     # Notification
-    notification_group: Optional[str] = None
-    subject_template: Optional[str] = None
+    notification_group: str | None = None
+    subject_template: str | None = None
     # Target Actions
-    actions: Optional[list[DisposeAction]] = None
+    actions: list[DisposeAction] | None = None
 
 
 class FilterConfig(BaseModel):
@@ -72,9 +72,9 @@ class CfgEvent(BaseModel):
     event_class: EventClass
     is_unique: bool = False
     link_event: bool = False
-    filters: Optional[list[FilterConfig]] = None
+    filters: list[FilterConfig] | None = None
     # vars
-    vars: Optional[list[VarItem]] = None
+    vars: list[VarItem] | None = None
     # subject:
     handlers: list[str] = None
-    rules: Optional[list[Rule]] = None
+    rules: list[Rule] | None = None

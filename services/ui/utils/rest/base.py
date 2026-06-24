@@ -9,16 +9,10 @@
 import typing
 from typing import (
     Any,
-    Optional,
     Callable,
-    Dict,
-    DefaultDict,
     TypeVar,
     Generic,
-    List,
     Iterable,
-    Tuple,
-    Union,
 )
 import inspect
 from http import HTTPStatus
@@ -65,10 +59,10 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
     prefix: str
     model: T
     list_ops: list[ListOp] = []
-    sort_fields: list[Union[str, tuple[str, str]]] = []
+    sort_fields: list[str | tuple[str, str]] = []
 
     def __init__(self, router: APIRouter):
-        def split_sort(x: Union[str, tuple[str, str]]) -> tuple[str, str]:
+        def split_sort(x: str | tuple[str, str]) -> tuple[str, str]:
             if isinstance(x, str):
                 return x, x
             return x[0], x[1]
@@ -169,7 +163,7 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
         return form_model
 
     @abstractmethod
-    def get_total_items(self, user: User, transforms: Optional[list[Callable]] = None) -> int:
+    def get_total_items(self, user: User, transforms: list[Callable] | None = None) -> int:
         """
         Calculate total amount of items, satisfying criteria
         :param user:
@@ -178,7 +172,7 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
 
     @abstractmethod
     def get_summary_items(
-        self, user: User, field: str, transforms: Optional[list[Callable]] = None
+        self, user: User, field: str, transforms: list[Callable] | None = None
     ) -> int:
         """
         Calculate total amount of items, satisfying criteria
@@ -195,7 +189,7 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
         sort: list[str],
         limit: int = config.ui.max_rest_limit,
         offset: int = 0,
-        transforms: Optional[list[Callable]] = None,
+        transforms: list[Callable] | None = None,
     ) -> list[T]:
         """
         Get list of items, satisfying criteria
@@ -208,7 +202,7 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
         """
 
     @abstractmethod
-    def get_item(self, id: str, user: User) -> Optional[T]:
+    def get_item(self, id: str, user: User) -> T | None:
         """
         Get item by id, if accessible to user
         :param id:
@@ -244,7 +238,7 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
         :return:
         """
 
-    def clean(self, data: BaseModel, id: Optional[str] = None) -> dict[str, Any]:
+    def clean(self, data: BaseModel, id: str | None = None) -> dict[str, Any]:
         """
         Process data to be stored, perform additional checks
         :param data: Pydantic model with store request
@@ -307,7 +301,7 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
             response: Response,
             limit: int = config.ui.max_rest_limit,
             offset: int = 0,
-            sort: Optional[str] = None,
+            sort: str | None = None,
             ops: dict = Depends(get_list_dep()),
             user: User = Security(get_user_scope, scopes=[self.get_scope_read(view)]),
         ):

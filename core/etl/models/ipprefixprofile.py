@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from .base import BaseModel
@@ -15,5 +14,5 @@ from .base import BaseModel
 class IPPrefixProfile(BaseModel):
     id: str
     name: str
-    description: Optional[str] = None
-    workflow: Optional[str] = None
+    description: str | None = None
+    workflow: str | None = None

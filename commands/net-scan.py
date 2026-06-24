@@ -9,7 +9,7 @@
 import argparse
 import asyncio
 import socket
-from typing import Optional, Iterable, List, Tuple, Union, Dict, Any
+from typing import Iterable, Any
 
 # Third-party modules
 import progressbar
@@ -125,16 +125,16 @@ class Command(BaseCommand):
         jobs,
         checks,
         pool: str,
-        adm_domain: Optional[str] = None,
-        labels: Optional[str] = None,
-        ports: Optional[str] = None,
-        community: Optional[str] = None,
-        snmp_user: Optional[str] = None,
+        adm_domain: str | None = None,
+        labels: str | None = None,
+        ports: str | None = None,
+        community: str | None = None,
+        snmp_user: str | None = None,
         dry_run: bool = False,
         print_out: bool = False,
-        print_file: Optional[str] = None,
+        print_file: str | None = None,
         ip_scan: bool = False,
-        rule: Optional[str] = None,
+        rule: str | None = None,
         *args,
         **options,
     ):
@@ -164,7 +164,7 @@ class Command(BaseCommand):
                 queue.put_nowait(None)
 
         addr_list = self.get_addresses(addresses, input, rule, ip_scan)
-        lock: Optional[asyncio.Lock] = None
+        lock: asyncio.Lock | None = None
         socket.setdefaulttimeout(SOCKET_DEFAULT_TIMEOUT)
         pool = self.get_pool(pool=pool)
         # SNMP Checker
@@ -183,7 +183,7 @@ class Command(BaseCommand):
 
     async def check_worker(
         self,
-        queue: Optional[asyncio.Queue],
+        queue: asyncio.Queue | None,
         lock: asyncio.Lock,
         addr_list: list[str],
         checks: str,
@@ -302,7 +302,7 @@ class Command(BaseCommand):
         return p.bi_id
 
     @staticmethod
-    def get_checker(name: str, **kwargs) -> Optional[BaseChecker]:
+    def get_checker(name: str, **kwargs) -> BaseChecker | None:
         """
         Return checker function by name
         """
@@ -323,7 +323,7 @@ class Command(BaseCommand):
         self,
         addresses: Iterable[str],
         input: Iterable[str],
-        rule: Optional[Any] = None,
+        rule: Any | None = None,
         ip_scan: bool = False,
     ) -> list[str]:
         """Getting addresses for net-scan"""
@@ -391,7 +391,7 @@ class Command(BaseCommand):
     @staticmethod
     def parse_credentials(
         community, snmp_user
-    ) -> list[tuple[Protocol, Union[SNMPCredential, SNMPv3Credential]]]:
+    ) -> list[tuple[Protocol, SNMPCredential | SNMPv3Credential]]:
         """
         Parse SNMP Credentials arguments
         Args:
@@ -421,10 +421,10 @@ class Command(BaseCommand):
     @staticmethod
     def parse_checks(
         address: str,
-        checks: Optional[str] = None,
-        ports: Optional[str] = None,
-        snmp_cred: Optional[SNMPCredential] = None,
-        rule: Optional[Any] = None,
+        checks: str | None = None,
+        ports: str | None = None,
+        snmp_cred: SNMPCredential | None = None,
+        rule: Any | None = None,
     ) -> Iterable[Check]:
         """
         Parse required checks

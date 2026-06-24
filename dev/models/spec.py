@@ -9,7 +9,7 @@
 from pathlib import Path
 import operator
 from threading import Lock
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional
 
 # Third-party modules
 import bson
@@ -80,7 +80,7 @@ class Spec(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["Spec"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["Spec"]:
         return Spec.objects.filter(id=oid).first()
 
     @classmethod

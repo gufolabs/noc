@@ -8,7 +8,7 @@
 # Python modules
 import re
 from functools import partial
-from typing import List, Tuple, FrozenSet, Callable, Dict, Any, Union, Iterable
+from typing import Callable, Any, Iterable
 
 # NOC Modules
 from noc.core.text import alnum_key
@@ -16,7 +16,7 @@ from noc.core.text import alnum_key
 NEGATIVE_SUFFIX = "_ne"
 
 
-def match(ctx: dict[str, Union[list, str, int]], expr: dict[str, Any]) -> bool:
+def match(ctx: dict[str, list | str | int], expr: dict[str, Any]) -> bool:
     return build_matcher(expr)(ctx)
 
 

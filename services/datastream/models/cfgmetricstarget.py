@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Literal, Any
+from typing import Literal, Any
 
 # Third-party modules
 from pydantic import BaseModel
@@ -19,20 +19,20 @@ class SensorItem(BaseModel):
     bi_id: int
     name: str
     units: str
-    exposed_labels: Optional[list[str]] = None
-    rules: Optional[list[str]] = None
-    profile: Optional[str] = None
+    exposed_labels: list[str] | None = None
+    rules: list[str] | None = None
+    profile: str | None = None
     protocol: str = "other"
-    mx_alias: Optional[str] = None
-    hints: Optional[list[str]] = None
+    mx_alias: str | None = None
+    hints: list[str] | None = None
 
 
 class MetricItem(BaseModel):
     key: Any
     # key_Hash ?
-    composed_metrics: Optional[list[str]] = None
-    exposed_labels: Optional[list[str]] = None
-    rules: Optional[list[str]] = None
+    composed_metrics: list[str] | None = None
+    exposed_labels: list[str] | None = None
+    rules: list[str] | None = None
 
 
 class RemoteChannelItem(BaseModel):
@@ -51,29 +51,29 @@ class CfgMetricsTarget(BaseModel):
     bi_id: int
     sharding_key: int
     # Service
-    services: Optional[list[str]] = None
-    mapping_refs: Optional[list[str]] = None
+    services: list[str] | None = None
+    mapping_refs: list[str] | None = None
     # Collector received
     enable_fmevent: bool = False
     enable_metrics: bool = True
-    profile: Optional[str] = None
-    api_key: Optional[str] = None  # Auth Key
+    profile: str | None = None
+    api_key: str | None = None  # Auth Key
     nodata_policy: str = "D"
-    nodata_ttl: Optional[int] = None
-    discovery_interval: Optional[int] = None
+    nodata_ttl: int | None = None
+    discovery_interval: int | None = None
     # Allowed address
-    addresses: Optional[list[str]] = None
+    addresses: list[str] | None = None
     # mirroring - mirror to collection
     # FM
-    fm_pool: Optional[str] = None
+    fm_pool: str | None = None
     # metric_key
     # key -> Rule
-    channel: Optional[RemoteChannelItem] = None
-    managed_object: Optional[int] = None
-    exposed_labels: Optional[list[str]] = None
-    rules: Optional[list[str]] = None
+    channel: RemoteChannelItem | None = None
+    managed_object: int | None = None
+    exposed_labels: list[str] | None = None
+    rules: list[str] | None = None
     # Optional, if rule, composed metrics or config set
-    composed_metrics: Optional[list[str]] = None
-    opaque_data: Optional[ManagedObjectOpaque] = None  # Kafka message data
-    items: Optional[list[MetricItem]] = None
-    sensors: Optional[list[SensorItem]] = None
+    composed_metrics: list[str] | None = None
+    opaque_data: ManagedObjectOpaque | None = None  # Kafka message data
+    items: list[MetricItem] | None = None
+    sensors: list[SensorItem] | None = None

@@ -7,7 +7,7 @@
 
 # Python modules
 import datetime
-from typing import List, Optional, Literal, Union, Tuple
+from typing import Literal
 
 # NOC modules
 from noc.services.discovery.jobs.base import DiscoveryCheck
@@ -31,7 +31,7 @@ class DiagnosticCheck(DiscoveryCheck):
 
     name = "diagnostic"
 
-    def __init__(self, job, run_order: Optional[Literal["S", "E"]] = None):
+    def __init__(self, job, run_order: Literal["S", "E"] | None = None):
         super().__init__(job)
         self.run_order = run_order
         self.suggest_rules = CredentialCheckRule.get_suggests(self.object)
@@ -70,7 +70,7 @@ class DiagnosticCheck(DiscoveryCheck):
                     continue
                 self.logger.info("[%s] Run diagnostic checks", di.diagnostic)
                 # Get checker
-                credential: Union[SNMPCredential, CLICredential, SNMPv3Credential] = None
+                credential: SNMPCredential | CLICredential | SNMPv3Credential = None
                 for do_checks in d_hub.iter_checks(di.diagnostic):
                     # Do nothing check ?
                     checks: list[CheckResult] = []

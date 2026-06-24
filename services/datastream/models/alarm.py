@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import Optional, List, Dict, Union
 
 # Third-party modules
 from pydantic import BaseModel
@@ -25,8 +24,8 @@ class ManagedObjectItem(BaseModel):
     id: str
     name: str
     object_profile: ManagedObjectProfileItem
-    remote_system: Optional[RemoteSystemItem]
-    remote_id: Optional[str]
+    remote_system: RemoteSystemItem | None
+    remote_id: str | None
 
 
 class AlarmClassItem(BaseModel):
@@ -38,9 +37,9 @@ class EscalationItem(BaseModel):
     timestamp: datetime.datetime
     tt_id: str
     tt_system: str
-    error: Optional[str]
-    close_timestamp: Optional[datetime.datetime]
-    close_error: Optional[str]
+    error: str | None
+    close_timestamp: datetime.datetime | None
+    close_error: str | None
 
 
 class ServiceProfileItem(BaseModel):
@@ -69,14 +68,14 @@ class AlarmDataStreamItem(BaseModel):
     timestamp: datetime.datetime
     severity: int
     reopens: int
-    labels: Optional[list[str]]
-    tags: Optional[list[str]]
-    root: Optional[str]
-    clear_timestamp: Optional[str]
+    labels: list[str] | None
+    tags: list[str] | None
+    root: str | None
+    clear_timestamp: str | None
     managed_object: ManagedObjectItem
     alarm_class: AlarmClassItem
-    vars: dict[str, Union[str, int]]
-    escalation: Optional[EscalationItem]
+    vars: dict[str, str | int]
+    escalation: EscalationItem | None
     direct_services: list[ServiceSummaryItem]
     total_services: list[ServiceSummaryItem]
     direct_subscribers: list[SubscriberSummaryItem]

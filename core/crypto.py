@@ -10,7 +10,6 @@ import random
 import hashlib
 
 # Third-party modules
-from typing import Optional
 
 # NOC modules
 from noc.core.comp import smart_bytes
@@ -30,7 +29,7 @@ def gen_salt(salt_len):
     return bytes([random.choice(SALT_SYMBOLS) for _ in range(salt_len)])
 
 
-def md5crypt(password: bytes, salt: Optional[bytes] = None, magic: bytes = b"$1$") -> bytes:
+def md5crypt(password: bytes, salt: bytes | None = None, magic: bytes = b"$1$") -> bytes:
     """
     MD5 password hash
     (Used for RIPE authentication)

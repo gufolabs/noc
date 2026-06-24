@@ -7,7 +7,6 @@
 
 # Python modules
 import argparse
-from typing import Optional
 
 # NOC modules
 from noc.core.inv.codec import decode, encode, InvData
@@ -92,7 +91,7 @@ class Command(BaseCommand):
         for n, sr in enumerate(reversed(list(iter_obj(obj)))):
             self.print("%s * %s" % ("  " * n, sr))
 
-    def handle_export(self, objects: list[str], output: Optional[str] = None):
+    def handle_export(self, objects: list[str], output: str | None = None):
         connect()
         inv_data, result_info = encode(Object.objects.filter(id__in=objects))
         json_data = inv_data.model_dump_json(indent=2, by_alias=True, exclude_none=True)
@@ -114,7 +113,7 @@ class Command(BaseCommand):
         self.printbox(f"  - cable connections: {result_info.found_connections_cable}")
         self.printbox_border()
 
-    def handle_import(self, input: str, container_id: Optional[str] = None):
+    def handle_import(self, input: str, container_id: str | None = None):
         connect()
         container = Object.get_by_id(container_id) if container_id else None
         with open(input) as f:

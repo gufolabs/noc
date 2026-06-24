@@ -9,7 +9,7 @@
 import logging
 from itertools import chain
 from collections import defaultdict
-from typing import Dict, Any, Tuple, Optional, List
+from typing import Any
 
 # NOC modules
 from .rule import Rule
@@ -42,17 +42,17 @@ logger = logging.getLogger(__name__)
 class RuleSet:
     def __init__(self):
         self.rules: dict[
-            tuple[Optional[str], str], RuleLookup
+            tuple[str | None, str], RuleLookup
         ] = {}  # (profile, chain) -> [rule, ..., rule]
         self.enumerations: dict[str, dict[str, str]] = {}  # name -> value -> enumerated
-        self.default_rule: Optional[Rule] = None
+        self.default_rule: Rule | None = None
         #
         # is_failed: bool = False
         # metric block
         self.add_rules: int = 0
         # processed: int = 0
 
-    def update_rule(self, data, r_format: Optional[str] = None):
+    def update_rule(self, data, r_format: str | None = None):
         """Update rule from lookup"""
         rule = Rule.from_config(data, self.enumerations, r_format=r_format)
         changed = False
@@ -143,7 +143,7 @@ class RuleSet:
         self,
         event: Event,
         vars: dict[str, Any],
-    ) -> tuple[Optional[Rule], Optional[dict[str, Any]]]:
+    ) -> tuple[Rule | None, dict[str, Any] | None]:
         """
         Find first matching classification rule
 
@@ -207,7 +207,7 @@ class RuleSet:
 
     def eval_vars(
         self, r_vars: dict[str, Any], managed_object: Any, e_cfg: EventConfig, by_test: bool = False
-    ) -> tuple[dict[str, Any], list[Any], Optional[str]]:
+    ) -> tuple[dict[str, Any], list[Any], str | None]:
         """Evaluate rule variables"""
         r = {}
         # Resolve resource

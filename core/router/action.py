@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import logging
-from typing import Type, Tuple, Dict, Iterator, Literal, Optional, List, Any, ClassVar
+from typing import Iterator, Literal, Any, ClassVar
 from dataclasses import dataclass
 
 # Third-party modules
@@ -51,10 +51,10 @@ class HeaderItem:
 @dataclass
 class ActionCfg:
     type: Literal["stream", "notification_group", "drop", "job"]
-    stream: Optional[str] = None
-    notification_group: Optional[str] = None
-    render_template: Optional[str] = None
-    headers: Optional[list[HeaderItem]] = None
+    stream: str | None = None
+    notification_group: str | None = None
+    render_template: str | None = None
+    headers: list[HeaderItem] | None = None
 
 
 class ActionBase(type):
@@ -214,10 +214,10 @@ class MessageAction(Action):
 
     def __init__(self, cfg: ActionCfg):
         super().__init__(cfg)
-        self.ng: Optional[str] = cfg.notification_group
-        self.rt: Optional[int] = cfg.render_template
+        self.ng: str | None = cfg.notification_group
+        self.rt: int | None = cfg.render_template
 
-    def get_notification_group(self, ng: Optional[bytes]):
+    def get_notification_group(self, ng: bytes | None):
         from noc.main.models.notificationgroup import NotificationGroup
 
         if ng:
@@ -233,9 +233,9 @@ class MessageAction(Action):
         self,
         message_type: MessageType,
         msg: Message,
-        language: Optional[str] = None,
-        notification_group: Optional[Any] = None,
-    ) -> Optional[dict[str, str]]:
+        language: str | None = None,
+        notification_group: Any | None = None,
+    ) -> dict[str, str] | None:
         """
         Render Body from template
         Args:
@@ -275,7 +275,7 @@ class MessageAction(Action):
             obj = msg.headers[MX_WATCH_FOR_ID].decode()[2:]
         ts = datetime.datetime.now()
         message_type = MessageType(message_type.decode())
-        body: Optional[dict[str, Any]] = None
+        body: dict[str, Any] | None = None
         for c in ng.get_active_contacts(obj, ts=ts):
             body = body or self.render_template(
                 message_type, msg, c.language, notification_group=ng

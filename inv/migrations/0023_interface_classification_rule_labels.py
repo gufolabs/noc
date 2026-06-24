@@ -7,7 +7,7 @@
 
 
 # Python modules
-from typing import Optional, List, Dict, Any
+from typing import Any
 import bson
 from collections import defaultdict
 
@@ -52,7 +52,7 @@ class InterfaceClassifierLabels:
         return f"noc::{category}::{name}::{matched_scope}{op}"
 
     @classmethod
-    def get_mongo_name_by_id(cls, collection, oid: str) -> Optional[str]:
+    def get_mongo_name_by_id(cls, collection, oid: str) -> str | None:
         coll = get_db()[collection]
         r = coll.find_one({"_id": bson.ObjectId(oid)}, {"name": 1})
         if not r:
@@ -60,7 +60,7 @@ class InterfaceClassifierLabels:
         return r["name"]
 
     @classmethod
-    def get_pg_name_by_id(cls, table, oid: str) -> Optional[str]:
+    def get_pg_name_by_id(cls, table, oid: str) -> str | None:
         cursor = cls.get_cursor()
         cursor.execute(f"SELECT name FROM {table} WHERE id = %s", [oid])
         r = cursor.fetchall()
@@ -133,7 +133,7 @@ class InterfaceClassifierLabels:
             return self.get_regex_label(f"^{value}$", field, rule_name)
         return None
 
-    def filter_address(self, field, op, value, prefix, rule_name: Optional[str] = None):
+    def filter_address(self, field, op, value, prefix, rule_name: str | None = None):
         if op == "in" and prefix:
             name = self.get_pg_name_by_id("main_prefixtable", prefix)
             if not name:
@@ -145,7 +145,7 @@ class InterfaceClassifierLabels:
             return self.get_match_label("prefixfilter", name, matched_scope=field, op="=")
         return None
 
-    def filter_vlan(self, field, op, value, vlan_filter, rule_name: Optional[str] = None):
+    def filter_vlan(self, field, op, value, vlan_filter, rule_name: str | None = None):
         if op == "in" and vlan_filter:
             name = self.get_pg_name_by_id("vc_vcfilter", vlan_filter)
             if not name:
@@ -158,7 +158,7 @@ class InterfaceClassifierLabels:
         return None
 
     def get_labels(
-        self, match_rules: list[dict[str, Any]], rule_name: Optional[str] = None
+        self, match_rules: list[dict[str, Any]], rule_name: str | None = None
     ) -> list[str]:
         """
 

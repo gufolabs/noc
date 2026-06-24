@@ -11,7 +11,7 @@ import datetime
 # Third-party modules
 from collections import defaultdict
 from pydantic import BaseModel
-from typing import Dict, List, Tuple, Any, Optional
+from typing import Any
 
 # NOC modules
 from noc.services.discovery.jobs.base import PolicyDiscoveryCheck
@@ -25,15 +25,15 @@ from noc.peer.models.peer import Peer
 class DiscoveredPeer(BaseModel):
     remote_address: Any
     local_as: int
-    remote_as: Optional[int] = None
-    router_id: Optional[Any] = None
-    local_address: Optional[Any] = None
+    remote_as: int | None = None
+    router_id: Any | None = None
+    local_address: Any | None = None
     protocol: str = "bgp"
     type: str = "external"
     admin_status: bool = True
-    description: Optional[str] = None
-    import_filter_name: Optional[str] = None
-    export_filter_name: Optional[str] = None
+    description: str | None = None
+    import_filter_name: str | None = None
+    export_filter_name: str | None = None
 
 
 class BGPPeerCheck(PolicyDiscoveryCheck):
@@ -191,7 +191,7 @@ class BGPPeerCheck(PolicyDiscoveryCheck):
     def get_data_from_script(self):
         """Not implemented for BGP Discovery"""
 
-    def get_data_from_confdb(self) -> Optional[list[dict[str, Any]]]:
+    def get_data_from_confdb(self) -> list[dict[str, Any]] | None:
         """Getting peer from database"""
         r = defaultdict(list)
         for peer in self.confdb.query(self.BGP_PEER_QUERY):

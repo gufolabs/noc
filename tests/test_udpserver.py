@@ -7,7 +7,6 @@
 
 # Python modules
 import asyncio
-from typing import Tuple
 import random
 import socket
 

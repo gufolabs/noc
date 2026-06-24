@@ -7,7 +7,6 @@
 
 # Python modules
 import time
-from typing import List
 
 # NOC modules
 from noc.sa.profiles.Generic.get_metrics import Script as GetMetricsScript, ProfileMetricConfig

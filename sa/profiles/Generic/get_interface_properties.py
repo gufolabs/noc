@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Optional, Union, Iterable, Tuple, Callable
+from typing import Iterable, Callable
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -93,9 +93,7 @@ class Script(BaseScript):
             result += [item]
         return result
 
-    def merge_tables(
-        self, *args: Optional[Iterable]
-    ) -> dict[int, dict[str, Union[int, bool, str]]]:
+    def merge_tables(self, *args: Iterable | None) -> dict[int, dict[str, int | bool | str]]:
         """
         Merge iterables into single table
 
@@ -122,8 +120,8 @@ class Script(BaseScript):
         return self.profile.convert_interface_name(v)
 
     def iter_iftable(
-        self, key: str, oid: str, ifindex: Optional[int] = None, clean: Callable = None
-    ) -> Iterable[tuple[str, Union[str, int]]]:
+        self, key: str, oid: str, ifindex: int | None = None, clean: Callable = None
+    ) -> Iterable[tuple[str, str | int]]:
         """
         Collect part of IF-MIB table.
 

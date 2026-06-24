@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Literal, List
+from typing import Literal
 
 # Third-party modules
 from pydantic import BaseModel, Field
@@ -15,9 +15,9 @@ from pydantic import BaseModel, Field
 class StatusItem(BaseModel):
     managed_object: str
     status: bool
-    timestamp: Optional[str] = None
-    labels: Optional[list[str]] = None
-    message: Optional[str] = None
+    timestamp: str | None = None
+    labels: list[str] | None = None
+    message: str | None = None
 
 
 class SetStatusRequest(BaseModel):

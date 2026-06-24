@@ -7,7 +7,7 @@
 
 # Python modules
 import asyncio
-from typing import Dict, Iterable, List
+from typing import Iterable
 from dataclasses import dataclass
 
 

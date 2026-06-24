@@ -9,7 +9,6 @@
 from collections import defaultdict
 from dataclasses import dataclass
 import logging
-from typing import Dict
 
 # NOC modules
 from noc.core.ioloop.timers import PeriodicCallback

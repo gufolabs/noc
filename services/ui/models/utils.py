@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # Third-party modules
 from pydantic import BaseModel
@@ -14,16 +13,16 @@ from pydantic import BaseModel
 
 class Reference(BaseModel):
     id: str
-    label: Optional[str] = None
+    label: str | None = None
 
 
 class LabelItem(BaseModel):
     id: str
     label: str
     # For tree structure fields
-    parent: Optional[Reference] = None
-    level: Optional[int] = None
-    has_children: Optional[bool] = None
+    parent: Reference | None = None
+    level: int | None = None
+    has_children: bool | None = None
 
 
 class SummaryItem(BaseModel):

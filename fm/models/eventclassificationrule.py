@@ -8,7 +8,7 @@
 # Python modules
 from pathlib import Path
 import re
-from typing import Iterable, List, Dict, Any, Tuple, Union, Optional
+from typing import Iterable, Any, Optional
 
 # Third-party modules
 from mongoengine.fields import (
@@ -189,7 +189,7 @@ class EventClassificationRule(Document):
         return self.name
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["EventClassificationRule"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["EventClassificationRule"]:
         return EventClassificationRule.objects.filter(id=oid).first()
 
     def iter_changed_datastream(self, changed_fields=None):

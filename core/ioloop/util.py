@@ -10,7 +10,7 @@ import asyncio
 import logging
 
 # Third-party modules
-from typing import Callable, TypeVar, Optional
+from typing import Callable, TypeVar
 
 # NOC modules
 from noc.config import config
@@ -60,7 +60,7 @@ class IOLoopContext:
             asyncio.get_event_loop_policy().reset_called()
         self.prev_loop = None
 
-    def get_loop(self) -> Optional[asyncio.AbstractEventLoop]:
+    def get_loop(self) -> asyncio.AbstractEventLoop | None:
         return self.new_loop
 
     def __enter__(self):

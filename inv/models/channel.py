@@ -7,7 +7,7 @@
 
 # Python modules
 from threading import Lock
-from typing import Optional, Union, Tuple
+from typing import Optional
 import operator
 
 
@@ -105,7 +105,7 @@ class Channel(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Channel"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Channel"]:
         return Channel.objects.filter(id=oid).first()
 
     @classmethod

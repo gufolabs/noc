@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Optional, List, Iterable, Dict, Any, Callable
+from typing import Optional, Iterable, Any, Callable
 
 # Third-party modules
 from jinja2 import Template
@@ -31,7 +31,7 @@ class Group:
     reference_template: Template
     alarm_class: AlarmClass
     title_template: Template
-    labels: Optional[list[str]] = None
+    labels: list[str] | None = None
     min_threshold: int = 0
     max_threshold: int = 0
     window: int = 0
@@ -54,7 +54,7 @@ class GroupItem:
     reference: str
     alarm_class: AlarmClass
     title: str
-    labels: Optional[list[str]] = None
+    labels: list[str] | None = None
     min_threshold: int = 0
     max_threshold: int = 0
     window: int = 0
@@ -65,31 +65,31 @@ class GroupItem:
 class JobConfig:
     name: str
     actions: list[ActionConfig]
-    repeat_delay: Optional[int] = None
-    max_repeats: Optional[int] = None
-    allowed_actions: Optional[list[AllowedAction]] = None
+    repeat_delay: int | None = None
+    max_repeats: int | None = None
+    allowed_actions: list[AllowedAction] | None = None
 
 
 class AlarmRule:
-    _default_alarm_class: Optional[AlarmClass] = None
+    _default_alarm_class: AlarmClass | None = None
     severity_policy: str = "AL"
-    min_severity: Optional[int] = None
-    max_severity: Optional[int] = None
+    min_severity: int | None = None
+    max_severity: int | None = None
     ttl_policy: str = "D"
-    clear_after_delay: Optional[int] = None
-    rewrite_alarm_class: Optional[AlarmClass] = None
-    action: Optional[str] = None
-    rule_apply_delay: Optional[int] = None
-    escalation_profile: Optional[str] = None
+    clear_after_delay: int | None = None
+    rewrite_alarm_class: AlarmClass | None = None
+    action: str | None = None
+    rule_apply_delay: int | None = None
+    escalation_profile: str | None = None
     escalation_delay: int = 60
 
     def __init__(self, name, rid):
         self.name = name
         self.id = rid
-        self.matcher: Optional[Callable] = None
+        self.matcher: Callable | None = None
         self.groups: list[Group] = []
         self.actions: list[ActionConfig] = []
-        self.job_config: Optional[JobConfig] = None
+        self.job_config: JobConfig | None = None
         self.severity_match: bool = True
 
     def get_severity(self, alarm: ActiveAlarm) -> int:
@@ -147,7 +147,7 @@ class AlarmRule:
             return build_matcher(expr[0])
         return build_matcher({"$or": expr})
 
-    def is_match(self, alarm: ActiveAlarm, severity: Optional[int] = None) -> bool:
+    def is_match(self, alarm: ActiveAlarm, severity: int | None = None) -> bool:
         """
         Check if alarm matches the rule
         """

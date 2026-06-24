@@ -10,7 +10,7 @@ import threading
 import operator
 import re
 from collections import defaultdict
-from typing import Any, Dict, Optional, Union, List, Tuple, Iterable
+from typing import Any, Optional, Iterable
 from pathlib import Path
 
 # Third-party modules
@@ -71,7 +71,7 @@ class ActionSetItem(EmbeddedDocument):
             return bool(set(self.domain_scopes).intersection({s.name for s in scopes}))
         return True
 
-    def get_ctx(self, scopes: Optional[Iterable[ScopeConfig]] = None, **kwargs) -> dict[str, Any]:
+    def get_ctx(self, scopes: Iterable[ScopeConfig] | None = None, **kwargs) -> dict[str, Any]:
         """Processed Context"""
         r = {}
         r |= kwargs
@@ -176,7 +176,7 @@ class Action(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Action"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Action"]:
         return Action.objects.filter(id=oid).first()
 
     @classmethod
@@ -221,7 +221,7 @@ class Action(Document):
 
     @classmethod
     def iter_topology(
-        cls, topology: TopologyBase, constraints: Optional[dict[str, Any]] = None
+        cls, topology: TopologyBase, constraints: dict[str, Any] | None = None
     ) -> Iterable[tuple[Any, dict[str, Any], dict[str, Any]]]:
         """Apply action to topology"""
         ports = {}
@@ -258,7 +258,7 @@ class Action(Document):
                 return ac
         return None
 
-    def expand_ex(self, profile, match_ctx: Optional[dict[str, Any]] = None, **kwargs):
+    def expand_ex(self, profile, match_ctx: dict[str, Any] | None = None, **kwargs):
         ctx = match_ctx or {}
         ac = self.get_commands(profile.id, ctx)
         if not ac:
@@ -273,7 +273,7 @@ class Action(Document):
     def get_config(
         self,
         profile,
-        match_ctx: Optional[dict[str, Any]] = None,
+        match_ctx: dict[str, Any] | None = None,
         **kwargs,
     ) -> ActionCommandConfig:
         """"""
@@ -362,7 +362,7 @@ class Action(Document):
     def render_action_commands(
         self,
         profile,
-        match_ctx: Optional[dict[str, Any]] = None,
+        match_ctx: dict[str, Any] | None = None,
         ignore_scope: bool = False,
         render_cancel: bool = False,
         **kwargs,
@@ -386,8 +386,8 @@ class Action(Document):
     def render_commands(
         self,
         profile,
-        match_ctx: Optional[dict[str, Any]] = None,
-        managed_object: Optional[Any] = None,
+        match_ctx: dict[str, Any] | None = None,
+        managed_object: Any | None = None,
         ignore_scope: bool = False,
         **kwargs,
     ):
@@ -403,7 +403,7 @@ class Action(Document):
         if not self.handler:
             raise ValueError()
         h = get_handler(self.handler)
-        req: Optional[JobRequest] = h(obj, **kwargs)
+        req: JobRequest | None = h(obj, **kwargs)
         req.submit()
 
     def get_execute_commands(self, managed_object, **kwargs) -> tuple[str, bool]:
@@ -423,7 +423,7 @@ class Action(Document):
         self,
         managed_object: Any,
         dry_run: bool = False,
-        username: Optional[str] = None,
+        username: str | None = None,
         **kwargs,
     ) -> JobRequest:
         """Run Action job"""
@@ -448,7 +448,7 @@ class Action(Document):
     def register_audit_command(
         self,
         commands,
-        username: Optional[str] = None,
+        username: str | None = None,
     ):
         """Register run command on Audit"""
 
@@ -476,7 +476,7 @@ class Action(Document):
     def iter_domain_ctx(
         cls,
         domain: Any,
-        managed_object: Optional[Any] = None,
+        managed_object: Any | None = None,
         **kwargs,
     ) -> Iterable[tuple[Any, list[ScopeConfig], dict[str, Any]]]:
         """Iterate ove Domain topology context"""
@@ -514,8 +514,8 @@ class Action(Document):
 
     def iter_action_ctxs(
         self,
-        domain: Optional[Any] = None,
-        managed_object: Optional[Any] = None,
+        domain: Any | None = None,
+        managed_object: Any | None = None,
         **kwargs,
     ) -> Iterable[tuple["Action", Any, dict[str, Any]]]:
         """Return action ctx"""
@@ -540,11 +540,11 @@ class Action(Document):
 
     def run(
         self,
-        domain: Optional[Any] = None,
-        managed_object: Optional[Any] = None,
+        domain: Any | None = None,
+        managed_object: Any | None = None,
         as_job: bool = False,
         dry_run: bool = False,
-        username: Optional[str] = None,
+        username: str | None = None,
         **kwargs,
     ):
         """
@@ -637,7 +637,7 @@ class Action(Document):
         obj,
         as_job: bool = False,
         dry_run: bool = False,
-        username: Optional[str] = None,
+        username: str | None = None,
         **kwargs,
     ):
         """Run actions to execute"""

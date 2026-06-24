@@ -7,7 +7,7 @@
 
 # Python modules
 import itertools
-from typing import Optional, Any, Dict, List
+from typing import Any
 
 # NOC modules
 from .node.base import BaseCDAGNode, ConfigProxy
@@ -16,7 +16,7 @@ from .tx import Transaction
 
 
 class CDAG:
-    def __init__(self, graph_id: str, state: Optional[dict[str, Any]] = None):
+    def __init__(self, graph_id: str, state: dict[str, Any] | None = None):
         self.graph_id = graph_id
         self.state: dict[str, Any] = state or {}
         self.nodes: dict[str, BaseCDAGNode] = {}
@@ -31,9 +31,9 @@ class CDAG:
         self,
         node_id: str,
         node_type: str,
-        description: Optional[str] = None,
-        config: Optional[dict[str, Any]] = None,
-        override_config: Optional[dict[str, Any]] = None,
+        description: str | None = None,
+        config: dict[str, Any] | None = None,
+        override_config: dict[str, Any] | None = None,
         sticky: bool = False,
     ) -> BaseCDAGNode:
         if node_id in self.nodes:
@@ -61,7 +61,7 @@ class CDAG:
         """
         return Transaction(self)
 
-    def get_node(self, name: str) -> Optional[BaseCDAGNode]:
+    def get_node(self, name: str) -> BaseCDAGNode | None:
         return self.nodes.get(name)
 
     def get_state(self) -> dict[str, Any]:
@@ -79,7 +79,7 @@ class CDAG:
             r[node_id] = ns.model_dump()
         return r
 
-    def merge(self, other: "CDAG", prefix: Optional[str] = "") -> "CDAG":
+    def merge(self, other: "CDAG", prefix: str | None = "") -> "CDAG":
         """
         Merge other graph into this one
         :param other:

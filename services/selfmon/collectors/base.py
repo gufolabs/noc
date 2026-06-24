@@ -8,7 +8,7 @@
 # Python modules
 import logging
 import time
-from typing import Any, Tuple, Iterable
+from typing import Any, Iterable
 
 # Third-party modules
 from django.db import connection

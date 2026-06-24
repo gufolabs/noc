@@ -9,7 +9,7 @@
 import re
 from functools import partial
 from dataclasses import dataclass
-from typing import List, Optional, Dict, Callable, Any, Tuple, FrozenSet
+from typing import Callable, Any
 from types import CodeType
 
 # NOC modules
@@ -28,12 +28,12 @@ safe_builtins = {"str": str, "int": int, "ord": ord, "float": float}
 @dataclass(slots=True)
 class VarTransformRule:
     name: str
-    var: Optional[str] = None
-    f_type: Optional[str] = None
-    default: Optional[str] = None
-    function: Optional[CodeType] = None
-    enums: Optional[dict[str, str]] = None
-    args: Optional[list[Any]] = None
+    var: str | None = None
+    f_type: str | None = None
+    default: str | None = None
+    function: CodeType | None = None
+    enums: dict[str, str] | None = None
+    args: list[Any] | None = None
 
     def transform(self, v: dict[str, Any], var_ctx: dict[str, Any]):
         if self.f_type == "ifindex":
@@ -92,21 +92,21 @@ class Rule:
     event_class_id: str
     event_class_name: str
     source: EventSource
-    profiles: Optional[frozenset[str]] = None
+    profiles: frozenset[str] | None = None
     preference: int = 100
-    message_rx: Optional[re.Pattern] = None
-    vars: Optional[dict[str, str]] = None
-    vars_transform: Optional[tuple[VarTransformRule, ...]] = None
-    matcher: Optional[tuple[Callable, ...]] = None
-    label_matchers: Optional[tuple[Callable, ...]] = None
-    set_labels: Optional[tuple[str, ...]] = None
+    message_rx: re.Pattern | None = None
+    vars: dict[str, str] | None = None
+    vars_transform: tuple[VarTransformRule, ...] | None = None
+    matcher: tuple[Callable, ...] | None = None
+    label_matchers: tuple[Callable, ...] | None = None
+    set_labels: tuple[str, ...] | None = None
     is_transparent_labels: bool = False
     is_unknown: bool = False
     is_unknown_syslog: bool = False
     to_drop: bool = False
 
     @classmethod
-    def from_config(cls, data: dict[str, Any], enumerations, r_format: Optional[str] = None):
+    def from_config(cls, data: dict[str, Any], enumerations, r_format: str | None = None):
         """Create from EventClassification rule config"""
         matcher, message_rx = [], data["message_rx"] if data["message_rx"] else None
         source = EventSource(data["sources"][0]) if data["sources"] else EventSource.OTHER
@@ -199,8 +199,8 @@ class Rule:
         self,
         message,
         vars: dict[str, Any],
-        labels: Optional[list[str]] = None,
-    ) -> Optional[dict[str, str]]:
+        labels: list[str] | None = None,
+    ) -> dict[str, str] | None:
         # if self.source != e.type.source:
         #    return None
         # if self.profile and self.profile != e.type.profile:
@@ -355,9 +355,9 @@ def match_k_v_regex(
 def match_scoped_label(
     scope: str,
     value: str,
-    ctx: dict[str, Optional[str]],
+    ctx: dict[str, str | None],
     storage: dict[str, str],
-    set_var: Optional[str] = None,
+    set_var: str | None = None,
     default_fail: bool = False,
 ) -> bool:
     # check scope in labels ctx
@@ -374,7 +374,7 @@ def match_label(
     label: str,
     ctx: dict[str, str],
     storage: dict[str, str],
-    set_var: Optional[str] = None,
+    set_var: str | None = None,
     default_fail: bool = False,
 ) -> bool:
     # check label value in labels ctx

@@ -7,7 +7,7 @@
 
 # Python modules
 import xml.etree.ElementTree as ET
-from typing import Type, Optional, Dict, Tuple, TextIO, Union, Iterable
+from typing import Optional, TextIO, Iterable
 from io import StringIO
 from copy import deepcopy
 from itertools import zip_longest
@@ -85,7 +85,7 @@ class SVG:
         return cls.from_string(data)
 
     @classmethod
-    def from_file(cls: type["SVG"], path: Union[str, Path]) -> "SVG":
+    def from_file(cls: type["SVG"], path: str | Path) -> "SVG":
         """
         Create SVG from file.
 
@@ -186,7 +186,7 @@ class SVG:
                 return False
         return True
 
-    def get_defs(self: "SVG") -> Optional[ET.Element]:
+    def get_defs(self: "SVG") -> ET.Element | None:
         """
         Get `<defs>` element.
 
@@ -228,7 +228,7 @@ class SVG:
         self: "SVG",
         element_id: str,
         source: Optional["SVG"],
-        additional: Optional[Iterable[str]] = None,
+        additional: Iterable[str] | None = None,
         **kwargs,
     ) -> None:
         """
@@ -341,7 +341,7 @@ class SVG:
         _add_prefix(self._tree.getroot())
 
     @classmethod
-    def get_transform_origin(cls: type["SVG"], el: ET.Element) -> Optional[tuple[float, float]]:
+    def get_transform_origin(cls: type["SVG"], el: ET.Element) -> tuple[float, float] | None:
         """
         Calculate effective transform origin for element.
 
@@ -394,7 +394,7 @@ class SVG:
             The value of `transform` property.
         """
 
-        def translate(x: float, y: float) -> Optional[str]:
+        def translate(x: float, y: float) -> str | None:
             """
             Get `translate` transform code.
             """

@@ -9,7 +9,7 @@
 import operator
 import logging
 from threading import Lock
-from typing import Optional, List, Union, Dict, Any, Callable, Tuple, Iterable
+from typing import Optional, Any, Callable, Iterable
 
 # from pathlib import Path
 
@@ -153,7 +153,7 @@ class FieldData(EmbeddedDocument):
     meta = {"strict": False, "auto_create_index": False}
 
     field = StringField(required=False)
-    capability: Optional[Capability] = ReferenceField(Capability)
+    capability: Capability | None = ReferenceField(Capability)
     wildcard = ReferenceField(Label, required=False)
     # operations: List[str] = ListField(StringField(
     #     choices=["create", "update", "delete", "topology", "any"], default="any"),
@@ -334,7 +334,7 @@ class ReactionRule(Document):
     )
     subject_template = StringField()
     # Validation
-    action_script: Optional[str] = StringField(required=False)
+    action_script: str | None = StringField(required=False)
     # Diagnostic, State Needed
     bi_id = LongField(unique=True)
 
@@ -349,7 +349,7 @@ class ReactionRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ReactionRule"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ReactionRule"]:
         return ReactionRule.objects.filter(id=oid).first()
 
     @classmethod
@@ -412,7 +412,7 @@ class ReactionRule(Document):
         lock=lambda _: matcher_lock,
         key=operator.attrgetter("id"),
     )
-    def get_matcher(self) -> Optional[Callable]:
+    def get_matcher(self) -> Callable | None:
         """Build matcher structure"""
         expr = []
         for mr in self.conditions or []:
@@ -500,9 +500,9 @@ class ReactionRule(Document):
     def run_actions(
         self,
         o: Any,
-        user: Optional[Any] = None,
+        user: Any | None = None,
         dry_run: bool = False,
-        logger: Optional[logging.Logger] = None,
+        logger: logging.Logger | None = None,
         **kwargs,
     ):
         """"""
@@ -538,10 +538,10 @@ class ReactionRule(Document):
     def run(
         self,
         o: Any,
-        domains: Optional[list[tuple[str, str]]] = None,
-        user: Optional[Any] = None,
+        domains: list[tuple[str, str]] | None = None,
+        user: Any | None = None,
         dry_run: bool = False,
-        logger: Optional[logging.Logger] = None,
+        logger: logging.Logger | None = None,
     ):
         """Run Rule for instance"""
         # logger = logger or react_logger

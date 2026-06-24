@@ -11,7 +11,7 @@ from pathlib import Path
 import operator
 from dataclasses import dataclass
 from threading import Lock
-from typing import Optional, Iterable, List, Any, Dict, Union
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -135,7 +135,7 @@ class ProtocolVariant:
 
     def get_discriminator(
         self,
-    ) -> Optional[Union[LambdaDiscriminator, OduDiscriminator, VlanDiscriminator]]:
+    ) -> LambdaDiscriminator | OduDiscriminator | VlanDiscriminator | None:
         if not self.protocol.discriminator:
             return None
         if self.protocol.discriminator != "loader":
@@ -231,7 +231,7 @@ class Protocol(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Protocol"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Protocol"]:
         return Protocol.objects.filter(id=oid).first()
 
     @classmethod
@@ -315,8 +315,8 @@ class Protocol(Document):
             yield ProtocolVariant(self, ">", code)
 
     def get_discriminator_source(
-        self, data: Optional[list[ProtocolAttr]] = None
-    ) -> Optional[BaseDiscriminatorSource]:
+        self, data: list[ProtocolAttr] | None = None
+    ) -> BaseDiscriminatorSource | None:
         from noc.core.protodcsources.loader import loader
 
         ds = loader[self.discriminator_loader]

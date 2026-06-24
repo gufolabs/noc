@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Iterable, Dict, Tuple, Optional, AsyncIterable
+from typing import Iterable, AsyncIterable
 
 # NOC modules
 from .base import BaseChecker, CheckResult, Check, CheckError
@@ -26,7 +26,7 @@ class CLIProtocolChecker(BaseChecker):
     PROTO_CHECK_MAP: dict[str, Protocol] = {p.config.check: p for p in Protocol if p.config.check}
     PARAMS = ["profile", "rules"]
 
-    def __init__(self, profile: Optional[str] = None, **kwargs):
+    def __init__(self, profile: str | None = None, **kwargs):
         super().__init__(**kwargs)
         self.profile = profile
 
@@ -119,7 +119,7 @@ class CLIProtocolChecker(BaseChecker):
         protocol: Protocol,
         profile: str,
         raise_privilege: bool = True,
-    ) -> tuple[bool, Optional[CheckError]]:
+    ) -> tuple[bool, CheckError | None]:
         script = f"{profile}.login"
         script_class = loader.get_script(script)
         if not script_class:

@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Dict
 
 # Third-party modules
 import pytest
@@ -25,7 +24,7 @@ class Pile(BaseModel):
     id: str
     parent: Reference["Pile"]
     color: Reference[Color]
-    color2: Optional[Reference[Color]]
+    color2: Reference[Color] | None
 
 
 @pytest.mark.parametrize(

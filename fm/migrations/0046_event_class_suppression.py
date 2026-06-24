@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Set
 
 # Third-party modules
 from pymongo import UpdateOne

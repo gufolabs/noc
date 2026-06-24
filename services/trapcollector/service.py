@@ -11,7 +11,7 @@ import datetime
 import asyncio
 from collections import defaultdict
 from dataclasses import asdict
-from typing import Optional, Any, Dict, List, Tuple, Set
+from typing import Any
 import base64
 
 # Third-party modules
@@ -58,7 +58,7 @@ class TrapCollectorService(FastAPIService):
         self.address_configs = {}  # address -> SourceConfig
         self.invalid_sources = defaultdict(int)  # ip -> count
         self.pool_partitions: dict[str, int] = {}
-        self.storm_protection: Optional[StormProtection] = None
+        self.storm_protection: StormProtection | None = None
         self.updated: set[str] = set()
 
     async def on_activate(self):
@@ -115,7 +115,7 @@ class TrapCollectorService(FastAPIService):
             self.pool_partitions[pool] = parts
         return parts
 
-    def lookup_config(self, address: str) -> Optional[SourceConfig]:
+    def lookup_config(self, address: str) -> SourceConfig | None:
         """
         Returns object config for given address or None when
         unknown source
@@ -135,7 +135,7 @@ class TrapCollectorService(FastAPIService):
         timestamp: int,
         body: dict[str, Any],
         address: str = None,
-        message_id: Optional[str] = None,
+        message_id: str | None = None,
     ):
         """
         Spool message to be sent
@@ -176,9 +176,9 @@ class TrapCollectorService(FastAPIService):
         self,
         cfg: SourceConfig,
         timestamp: int,
-        source_address: Optional[str] = None,
-        message_id: Optional[str] = None,
-        raw_pdu: Optional[bytes] = None,
+        source_address: str | None = None,
+        message_id: str | None = None,
+        raw_pdu: bytes | None = None,
         raw_varbinds: list[tuple[str, Any, bytes]] = None,
     ):
         metrics["events_mx_message"] += 1

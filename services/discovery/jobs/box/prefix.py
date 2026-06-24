@@ -9,7 +9,7 @@
 from collections import namedtuple, defaultdict
 
 # Third-party modules
-from typing import Dict, Tuple, List, DefaultDict, Optional
+from typing import Optional
 
 # NOC modules
 from noc.services.discovery.jobs.base import DiscoveryCheck
@@ -292,7 +292,7 @@ class PrefixCheck(DiscoveryCheck):
             return parent.effective_prefix_discovery == "E"
         return False
 
-    def get_prefix_name(self, prefix) -> Optional[str]:
+    def get_prefix_name(self, prefix) -> str | None:
         """
         Render address name
         :param prefix: DiscoveredAddress instance

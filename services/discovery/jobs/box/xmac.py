@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Third-party modules
-from typing import Optional, List, Dict, Tuple
 
 # NOC modules
 from noc.core.mac import MAC
@@ -38,7 +37,7 @@ class XMACCheck(TopologyDiscoveryCheck):
                 self.process_cloud(iface, macs[if_name])
 
     def process_direct_downlink(
-        self, iface: Interface, macs: list[MAC], name: Optional[str] = None
+        self, iface: Interface, macs: list[MAC], name: str | None = None
     ) -> None:
         """
         Direct downlink method. When:
@@ -81,7 +80,7 @@ class XMACCheck(TopologyDiscoveryCheck):
         self.confirm_interface_link(iface, ri)
 
     def process_chained_downlink(
-        self, iface: Interface, macs: list[MAC], name: Optional[str] = None
+        self, iface: Interface, macs: list[MAC], name: str | None = None
     ) -> None:
         """
         Chained downlink method. When:
@@ -172,7 +171,7 @@ class XMACCheck(TopologyDiscoveryCheck):
         for link in links:
             self.confirm_interface_link(*link)
 
-    def process_cloud(self, iface: Interface, macs: list[MAC], name: Optional[str] = None) -> None:
+    def process_cloud(self, iface: Interface, macs: list[MAC], name: str | None = None) -> None:
         """
         Cloud downlink methods. When:
 

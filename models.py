@@ -10,7 +10,7 @@ import logging
 from typing import Iterable
 
 # Third-party modules
-from typing import Dict, Any
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Iterator, Dict, Set, Optional, Any, Tuple
+from typing import Iterator, Any
 from logging import getLogger
 import asyncio
 from time import perf_counter_ns
@@ -35,7 +35,7 @@ class Runner:
     def __init__(
         self,
         concurrency: int = 10,
-        queue: Optional[asyncio.Queue[tuple[Optional[ObjectId], dict[str, Any]]]] = None,
+        queue: asyncio.Queue[tuple[ObjectId | None, dict[str, Any]]] | None = None,
     ):
         self._jobs: dict[ObjectId, Job] = {}
         self._tasks: set[asyncio.Task] = set()

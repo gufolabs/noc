@@ -7,7 +7,7 @@
 
 # Python modules
 from threading import Lock
-from typing import Optional, Union, Dict, Any, Tuple, Callable
+from typing import Optional, Any, Callable
 import operator
 
 # Third-party modules
@@ -93,7 +93,7 @@ class ASProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ASProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ASProfile"]:
         return ASProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -135,5 +135,5 @@ class ASProfile(Document):
                 r[(str(pp.id), mr.dynamic_order)] = build_matcher(mr.get_match_expr())
         return tuple((x[0], r[x]) for x in sorted(r, key=lambda i: i[1]))
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

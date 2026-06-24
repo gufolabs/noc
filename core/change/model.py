@@ -6,17 +6,17 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Any, Literal, List, Dict, Tuple
+from typing import Any, Literal
 from dataclasses import dataclass, field, replace
 
 
 @dataclass(frozen=True)
 class ChangeField:
     field: str  # FieldName
-    new: Optional[Any]  # New Value
-    new_label: Optional[str] = None
-    old: Optional[Any] = None  # Old Value
-    old_label: Optional[str] = None
+    new: Any | None  # New Value
+    new_label: str | None = None
+    old: Any | None = None  # Old Value
+    old_label: str | None = None
 
 
 @dataclass(frozen=True)
@@ -24,16 +24,16 @@ class ChangeItem:
     op: Literal["create", "update", "delete"] = field(compare=False)
     model_id: str
     item_id: str
-    changed_fields: Optional[list[ChangeField]] = field(default=None, compare=False)
-    changed_caps: Optional[list[str]] = field(default=None, compare=False)
-    domains: Optional[list[tuple[str, str]]] = None  # model, id, op (in/out)
-    affected_rules: Optional[list[str]] = field(default=None, compare=False)
+    changed_fields: list[ChangeField] | None = field(default=None, compare=False)
+    changed_caps: list[str] | None = field(default=None, compare=False)
+    domains: list[tuple[str, str]] | None = None  # model, id, op (in/out)
+    affected_rules: list[str] | None = field(default=None, compare=False)
     # datastreams: Optional[List[Tuple[str, str]]] = None
     # groups
     # labels
     # Matcher
-    ts: Optional[float] = field(default=None, compare=False)
-    user: Optional[str] = field(default=None, compare=False)
+    ts: float | None = field(default=None, compare=False)
+    user: str | None = field(default=None, compare=False)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "ChangeItem":
@@ -51,8 +51,8 @@ class ChangeItem:
 
     @staticmethod
     def merge_fields(
-        f1: Optional[list[ChangeField]], f2: Optional[list[ChangeField]]
-    ) -> Optional[list[ChangeField]]:
+        f1: list[ChangeField] | None, f2: list[ChangeField] | None
+    ) -> list[ChangeField] | None:
         processed = set()
         r = []
         for x in f1 or []:
@@ -63,7 +63,7 @@ class ChangeItem:
                 r.append(x)
         return r
 
-    def change(self, op: str, changed_fields: list[ChangeField], timestamp: Optional[float] = None):
+    def change(self, op: str, changed_fields: list[ChangeField], timestamp: float | None = None):
         """
         Args:
             op:
@@ -105,7 +105,7 @@ class ChangeItem:
         """Check field is changed"""
         return any(f.field == name for f in self.changed_fields)
 
-    def get_field(self, name: str) -> Optional[ChangeField]:
+    def get_field(self, name: str) -> ChangeField | None:
         """Getting changed fields"""
         for f in self.changed_fields:
             if f.field == name:

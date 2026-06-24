@@ -7,7 +7,7 @@
 
 # Python modules
 import threading
-from typing import Optional, Union
+from typing import Optional
 import operator
 import uuid
 import datetime
@@ -111,7 +111,7 @@ class Platform(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Platform"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Platform"]:
         return Platform.objects.filter(id=oid).first()
 
     @classmethod

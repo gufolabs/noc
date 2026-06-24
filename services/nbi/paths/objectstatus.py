@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Union
 
 # Third-party modules
 from fastapi import APIRouter, Header, HTTPException
@@ -20,7 +19,7 @@ router = APIRouter()
 
 
 class ObjectStatusRequest(BaseModel):
-    objects: list[Union[str, int]]
+    objects: list[str | int]
 
 
 class Status(BaseModel):

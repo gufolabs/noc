@@ -7,7 +7,6 @@
 
 # Python modules
 import random
-from typing import Optional
 import datetime
 import asyncio
 
@@ -27,7 +26,7 @@ class RCALock:
     """
 
     COLL_NAME = "rcalocks"
-    _coll: Optional[pymongo.collection.Collection] = None
+    _coll: pymongo.collection.Collection | None = None
 
     def __init__(self, items):
         self.items = items

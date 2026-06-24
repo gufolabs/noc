@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Callable, Set
+from typing import Callable
 from http import HTTPStatus
 import time
 import cachetools
@@ -38,7 +38,7 @@ def get_format_role(ds, fmt):
     return ds.get_format_role(fmt)
 
 
-def get_access_tokens_set(datastream, fmt: Optional[str] = None) -> set[str]:
+def get_access_tokens_set(datastream, fmt: str | None = None) -> set[str]:
     tokens = {"datastream:*", f"datastream:{datastream.name}"}
     if fmt:
         role = get_format_role(datastream, fmt)
@@ -181,15 +181,15 @@ class DatastreamAPI:
 
     def get_datastream_handler(self, datastream: "DataStream") -> Callable:
         async def inner_datastream(
-            limit: Optional[int] = datastream.DEFAULT_LIMIT,
-            ds_filter: Optional[list[str]] = Query(None, alias="filter"),
-            ds_id: Optional[list[str]] = Query(None, alias="id"),
-            ds_format: Optional[str] = Query(None, alias="format"),
-            ds_from: Optional[str] = Query(None, alias="from"),
-            ds_filter_policy: Optional[str] = Query(
+            limit: int | None = datastream.DEFAULT_LIMIT,
+            ds_filter: list[str] | None = Query(None, alias="filter"),
+            ds_id: list[str] | None = Query(None, alias="id"),
+            ds_format: str | None = Query(None, alias="format"),
+            ds_from: str | None = Query(None, alias="from"),
+            ds_filter_policy: str | None = Query(
                 None, alias="filter_policy", pattern=r"^(default|delete|keep|move)$"
             ),
-            block: Optional[int] = None,
+            block: int | None = None,
         ):
             # Increase limit by 1 to detect datastream has more data
             limit = min(limit, datastream.DEFAULT_LIMIT) + 1
@@ -256,9 +256,9 @@ class DatastreamAPI:
 
     def get_verify_token_hander(self, datastream: "DataStream") -> Callable:
         async def verify_token(
-            ds_format: Optional[str] = Query(None, alias="format"),
-            x_noc_api_access: Optional[str] = Header(None),
-            host: Optional[str] = Header(None),
+            ds_format: str | None = Query(None, alias="format"),
+            x_noc_api_access: str | None = Header(None),
+            host: str | None = Header(None),
         ):
             if not x_noc_api_access:
                 raise HTTPException(status_code=400, detail="X-NOC-API-Access header invalid")

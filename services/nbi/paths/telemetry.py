@@ -7,7 +7,7 @@
 
 # Python modules
 from collections import defaultdict
-from typing import Tuple, Optional, Set, List, Any
+from typing import Any
 
 # Third-party modules
 from fastapi import APIRouter, Header, HTTPException, Response
@@ -52,7 +52,7 @@ class TelemetryAPI(NBIAPI):
     async def handler(
         self, req: TelemetryRequest, access_header: str = Header(..., alias=API_ACCESS_HEADER)
     ):
-        def get_scope(label: str) -> tuple[Optional[str], str]:
+        def get_scope(label: str) -> tuple[str | None, str]:
             scope, *value = label.rsplit("::", 1)
             if not value:
                 return None, scope

@@ -7,7 +7,7 @@
 
 # Python modules
 import datetime
-from typing import Optional, List, Union, Literal
+from typing import Literal
 
 # Third-party modules
 from pydantic import BaseModel as _BaseModel
@@ -19,14 +19,14 @@ from .base import BaseModel
 class MaintenanceObject(_BaseModel):
     type: Literal["managed_object"]
     remote_id: str
-    name: Optional[str] = None
+    name: str | None = None
     # As Resource ?
 
 
 class MaintenanceService(_BaseModel):
     type: Literal["service"]
     remote_id: str
-    name: Optional[str] = None
+    name: str | None = None
 
 
 class Maintenance(BaseModel):
@@ -37,7 +37,7 @@ class Maintenance(BaseModel):
     stop: datetime.datetime
     contacts: str
     is_completed: bool = False
-    objects: list[Union[MaintenanceObject, MaintenanceService]]
-    description: Optional[str] = None
+    objects: list[MaintenanceObject | MaintenanceService]
+    description: str | None = None
     # Deadline
     suppress_alarms: bool = True

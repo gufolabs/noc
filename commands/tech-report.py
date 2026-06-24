@@ -21,7 +21,6 @@ import sys
 from dataclasses import dataclass
 from enum import IntEnum, auto
 from collections import defaultdict
-from typing import Dict, DefaultDict
 
 # NOC modules
 from noc.config import config

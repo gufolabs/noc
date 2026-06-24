@@ -8,16 +8,10 @@
 # Python modules
 import re
 from typing import (
-    Tuple,
-    Dict,
-    List,
     Iterator,
     Callable,
-    Union,
     Any,
-    Optional,
     Literal,
-    FrozenSet,
     Iterable,
 )
 from dataclasses import dataclass
@@ -46,7 +40,7 @@ from noc.core.mx import (
 )
 from .action import Action, NotificationAction, MessageAction, ActionCfg, JobAction, HeaderItem, FWD
 
-T_BODY = Union[bytes, Any]
+T_BODY = bytes | Any
 
 
 @dataclass
@@ -95,13 +89,13 @@ class HeaderMatchItem:
 
 @dataclass(frozen=True)
 class MatchItem:
-    labels: Optional[list[str]] = None
-    exclude_labels: Optional[list[str]] = None
-    administrative_domain: Optional[list[int]] = None
-    resource_groups: Optional[list[str]] = None
-    remote_systems: Optional[list[str]] = None
-    profile: Optional[str] = None
-    headers: Optional[list[HeaderMatchItem]] = None
+    labels: list[str] | None = None
+    exclude_labels: list[str] | None = None
+    administrative_domain: list[int] | None = None
+    resource_groups: list[str] | None = None
+    remote_systems: list[str] | None = None
+    profile: str | None = None
+    headers: list[HeaderMatchItem] | None = None
 
     @classmethod
     def from_data(cls, data: list[dict[str, Any]]) -> list["MatchItem"]:
@@ -167,7 +161,7 @@ class Route:
 
     MX_H_VALUE_SPLITTER = MX_H_VALUE_SPLITTER.encode(DEFAULT_ENCODING)
 
-    def __init__(self, name: str, r_type: str, order: int, telemetry_sample: Optional[int] = None):
+    def __init__(self, name: str, r_type: str, order: int, telemetry_sample: int | None = None):
         self.name = name
         self.type: frozenset[bytes] = (
             frozenset([r_type.encode()])
@@ -176,10 +170,10 @@ class Route:
         )
         self.order = order
         self.telemetry_sample = telemetry_sample or 0
-        self.match_co: Optional[Callable[[dict[str, Any]], bool]] = None  # Code object for matcher
+        self.match_co: Callable[[dict[str, Any]], bool] | None = None  # Code object for matcher
         self.actions: list[Action] = []
-        self.transmute_handler: Optional[Callable[[dict[str, bytes], T_BODY], T_BODY]] = None
-        self.transmute_template: Optional[TransmuteTemplate] = None
+        self.transmute_handler: Callable[[dict[str, bytes], T_BODY], T_BODY] | None = None
+        self.transmute_template: TransmuteTemplate | None = None
 
     def __str__(self):
         return f"{self.name} ({self.type}, {self.order}): {self.actions}"
@@ -219,7 +213,7 @@ class Route:
             return True
         return self.match_co(self.get_match_ctx(msg))
 
-    def transmute(self, headers: dict[str, bytes], data: T_BODY) -> Union[bytes, dict[str, Any]]:
+    def transmute(self, headers: dict[str, bytes], data: T_BODY) -> bytes | dict[str, Any]:
         """
         Transmute message body and apply template
         Attrs:
@@ -248,7 +242,7 @@ class Route:
         for a in self.actions:
             yield from a.iter_action(msg, message_type)
 
-    def set_type(self, r_type: Union[str, frozenset[bytes]]):
+    def set_type(self, r_type: str | frozenset[bytes]):
         if isinstance(r_type, str):
             self.type = frozenset([r_type.encode(encoding=DEFAULT_ENCODING)])
         else:
@@ -266,7 +260,7 @@ class Route:
         return True
 
     @classmethod
-    def get_matcher(cls, match) -> Optional[Callable[[dict[str, Any]], bool]]:
+    def get_matcher(cls, match) -> Callable[[dict[str, Any]], bool] | None:
         """"""
         expr = []
         for r in MatchItem.from_data(match):
@@ -328,7 +322,7 @@ class DefaultNotificationRoute(Route):
             return True
         return MX_NOTIFICATION_GROUP_ID in msg.headers
 
-    def transmute(self, headers: dict[str, bytes], data: bytes) -> Union[bytes, dict[str, Any]]:
+    def transmute(self, headers: dict[str, bytes], data: bytes) -> bytes | dict[str, Any]:
         return data
 
     def iter_action(

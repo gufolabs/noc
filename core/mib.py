@@ -10,7 +10,7 @@ import logging
 from threading import Lock
 
 # Third-party modules
-from typing import Union, Tuple, Dict, Optional, Any, Callable
+from typing import Any, Callable
 
 # NOC modules
 from noc.config import config
@@ -28,7 +28,7 @@ class MIBRegistry:
         self.hints = {}
         self.loaded_mibs = set()
 
-    def __getitem__(self, item: Union[str, tuple[str, int]]) -> str:
+    def __getitem__(self, item: str | tuple[str, int]) -> str:
         def maybe_get(k: str) -> str:
             v = self.mib.get(k)
             if v is not None:
@@ -114,7 +114,7 @@ class MIBRegistry:
             self.loaded_mibs = set()
 
     @staticmethod
-    def longest_match(d: dict[str, Any], k: str) -> Optional[Any]:
+    def longest_match(d: dict[str, Any], k: str) -> Any | None:
         """
         Returns longest match of key `k` in dict `d`
         :param d:
@@ -130,7 +130,7 @@ class MIBRegistry:
         self,
         oid: str,
         value: bytes,
-        display_hints: dict[str, Callable[[str, bytes], Union[str, bytes]]] = None,
+        display_hints: dict[str, Callable[[str, bytes], str | bytes]] = None,
     ) -> str:
         """Apply display-hint"""
         if display_hints:

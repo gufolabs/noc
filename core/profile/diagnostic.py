@@ -8,7 +8,7 @@
 # Python modules
 import logging
 from collections import defaultdict
-from typing import List, Iterable, Optional, Tuple, Union, Dict, Set
+from typing import Iterable
 
 # NOC modules
 from noc.core.mib import mib
@@ -35,9 +35,9 @@ class ProfileDiagnostic:
         self.config = config
         self.logger = logger or logging.getLogger("profilediagnostic")
         self.unsupported_method: set[str] = set()
-        self.reason: Optional[str] = None
+        self.reason: str | None = None
         self.result_cache: dict[tuple[str, str], str] = {}
-        self.profile: Optional[str] = None
+        self.profile: str | None = None
         self.ignoring_snmp = False
         self.oids = []
         self.urls = []
@@ -46,9 +46,9 @@ class ProfileDiagnostic:
     def iter_checks(
         self,
         address: str,
-        labels: Optional[list[str]] = None,
-        groups: Optional[list[str]] = None,
-        cred: Optional[Union[SNMPCredential, SNMPv3Credential]] = None,
+        labels: list[str] | None = None,
+        groups: list[str] | None = None,
+        cred: SNMPCredential | SNMPv3Credential | None = None,
         **kwargs,
     ) -> Iterable[tuple[Check, ...]]:
         if not cred:
@@ -95,7 +95,7 @@ class ProfileDiagnostic:
     def process_result(
         self,
         checks: list[CheckResult],
-        source: Optional[InputSource] = InputSource.UNKNOWN,
+        source: InputSource | None = InputSource.UNKNOWN,
     ) -> tuple[list[CheckStatus], list[DataItem]]:
         """Getting Diagnostic result: State and reason"""
         self.parse_checks(checks)
@@ -136,7 +136,7 @@ class ProfileDiagnostic:
         self,
         checks: list[CheckStatus],
         **kwargs,
-    ) -> tuple[Optional[DiagnosticState], Optional[str]]:
+    ) -> tuple[DiagnosticState | None, str | None]:
         """"""
         if self.profile:
             return DiagnosticState.enabled, self.reason
@@ -158,7 +158,7 @@ class ProfileDiagnostic:
                     self.urls.append((rule.method, rule.param))
         return r
 
-    def find_profile(self, key, result: str) -> Optional[SuggestProfile]:
+    def find_profile(self, key, result: str) -> SuggestProfile | None:
         if key not in self.rules:
             self.logger.warning("Not find rule for method: %s", key)
             return None
@@ -177,7 +177,7 @@ class ProfileDiagnostic:
             return None
         return param
 
-    def get_profile(self) -> tuple[Optional[str], Optional[str]]:
+    def get_profile(self) -> tuple[str | None, str | None]:
         unsupported_method = set()
         snmp_result, http_result = "", ""
         for method, param, pref in sorted(self.rules, key=lambda x: x[2]):

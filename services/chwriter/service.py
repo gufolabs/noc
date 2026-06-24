@@ -9,10 +9,9 @@
 # Python modules
 from time import perf_counter
 import asyncio
-from typing import AsyncIterable, List
+from typing import AsyncIterable
 
 # Third-party modules
-from typing import Dict
 
 # NOC modules
 from noc.core.service.fastapi import FastAPIService

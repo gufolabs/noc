@@ -8,7 +8,6 @@
 
 # Python modules
 import re
-from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass
 
 # NOC modules
@@ -142,11 +141,11 @@ cfg_param_map = {
 class PolusParam:
     name: str
     value: str
-    code: Optional[str] = None
-    prefix: Optional[str] = None
-    description: Optional[str] = None
+    code: str | None = None
+    prefix: str | None = None
+    description: str | None = None
 
-    def get_param_scopes(self) -> Optional[list[dict[str, str]]]:
+    def get_param_scopes(self) -> list[dict[str, str]] | None:
         r = []
         match = rx_param_match.match(self.name)
         if not match:
@@ -174,7 +173,7 @@ class PolusParam:
             r.append({"scope": "Module", "value": p_type.strip("_")})
         return r
 
-    def get_param_code(self) -> Optional[str]:
+    def get_param_code(self) -> str | None:
         match = rx_param_match.match(self.name)
         if not match or match.group("code") not in cfg_param_map:
             return None
@@ -188,7 +187,7 @@ class PolusParam:
         return self.code.lower() in INFO_PARAMS
 
     @property
-    def port(self) -> Optional[str]:
+    def port(self) -> str | None:
         """
         Return Port Name
         """
@@ -215,7 +214,7 @@ class PolusParam:
         return self.port and self.port.startswith("Cl")
 
     @property
-    def channel(self) -> Optional[str]:
+    def channel(self) -> str | None:
         """
         Return if Channel Param
         """
@@ -250,7 +249,7 @@ class PolusParam:
         return bool(rx_threshold.match(self.name))
 
     @property
-    def threshold_param(self) -> Optional[str]:
+    def threshold_param(self) -> str | None:
         if not self.is_threshold:
             return None
         return THRESHOLD_PARAM_MAP[rx_threshold.match(self.name).group("type")]
@@ -270,7 +269,7 @@ class PolusParam:
         )
 
     @property
-    def component_type(self) -> Optional[str]:
+    def component_type(self) -> str | None:
         if rx_transceiver.match(self.name):
             return "XCVR"
         if self.port:
@@ -282,7 +281,7 @@ class PolusParam:
         return "CARD"
 
     @property
-    def component(self) -> Optional[str]:
+    def component(self) -> str | None:
         """
         Return Asset component for param
         """
@@ -296,7 +295,7 @@ class PolusParam:
         return None
 
     @property
-    def slot(self) -> Optional[str]:
+    def slot(self) -> str | None:
         """
         Return Slot number
         """
@@ -304,7 +303,7 @@ class PolusParam:
             return self.port[-1]
 
     @property
-    def module(self) -> Optional[str]:
+    def module(self) -> str | None:
         """
         Return Module
         """
@@ -316,7 +315,7 @@ class PolusParam:
         return None
 
     @classmethod
-    def from_code(cls, name, value, description: Optional[str] = None, **kwargs) -> "PolusParam":
+    def from_code(cls, name, value, description: str | None = None, **kwargs) -> "PolusParam":
         """
         Parse param code
 

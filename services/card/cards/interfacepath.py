@@ -10,7 +10,7 @@ import datetime
 import codecs
 
 #  Third-party modules
-from typing import Dict, Any, List, Tuple, Set, Optional
+from typing import Any
 import orjson
 
 # NOC modules
@@ -272,7 +272,7 @@ class InterfacePathCard(BaseCard):
         statuses = {str(mo_map[mo_id]): obj_statuses.get(mo_id, True) for mo_id in obj_statuses}
         return {"metrics": metrics, "statuses": list(statuses.items())}
 
-    def get_constraint(self) -> Optional[BaseConstraint]:
+    def get_constraint(self) -> BaseConstraint | None:
         """
         Get optional path constraint
         :return:

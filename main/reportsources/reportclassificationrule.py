@@ -7,7 +7,6 @@
 
 # Python modules
 import re
-from typing import List, Dict
 
 # NOC modules
 from noc.core.reporter.reportsource import ReportSource

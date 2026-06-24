@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Dict, Any
+from typing import Any
 import os
 import re
 
@@ -56,7 +56,7 @@ class ExtApplication(Application):
     fav_status = "fav_status"
     wf_state = False
     default_ordering = []
-    exclude_fields: Optional[list[str]] = []
+    exclude_fields: list[str] | None = []
 
     rx_oper_splitter = re.compile(r"^(?P<field>\S+?)(?P<f_num>\d+)__in")
 

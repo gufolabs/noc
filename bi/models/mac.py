@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 from collections import defaultdict
-from typing import Dict, Any
+from typing import Any
 
 # NOC modules
 from noc.config import config

@@ -10,7 +10,7 @@ import threading
 import operator
 import re
 from dataclasses import dataclass
-from typing import List, Optional, Union, NoReturn, Any
+from typing import Optional, NoReturn, Any
 from pathlib import Path
 
 # Third-party modules
@@ -40,21 +40,21 @@ id_lock = threading.Lock()
 class ParamSchema(BaseModel):
     type: str  # number, string, bool
     # String Schema
-    pattern: Optional[str] = None
-    format: Optional[str] = None
-    min_length: Optional[int] = None
-    max_length: Optional[int] = None
+    pattern: str | None = None
+    format: str | None = None
+    min_length: int | None = None
+    max_length: int | None = None
     # Number Schema
-    min: Optional[float] = None
-    max: Optional[float] = None
-    recommended_min: Optional[float] = None
-    recommended_max: Optional[float] = None
-    step: Optional[float] = None
-    decimal: Optional[int] = None  # Choices 0, 0.1, 0.01, 0.001, 0.0001
+    min: float | None = None
+    max: float | None = None
+    recommended_min: float | None = None
+    recommended_max: float | None = None
+    step: float | None = None
+    decimal: int | None = None  # Choices 0, 0.1, 0.01, 0.001, 0.0001
     recommended_choices: list[str] = None
     choices: list[str] = None
 
-    def clean(self, value: str) -> Union[str, float, bool]:
+    def clean(self, value: str) -> str | float | bool:
         if self.type == "bool":
             return value in ("yes", "true")
         if self.type == "number":
@@ -111,7 +111,7 @@ class ParamSchema(BaseModel):
 @dataclass
 class ScopeVariant:
     scope: "ConfigurationScope"
-    value: Optional[str] = None
+    value: str | None = None
 
     def __str__(self):
         return self.code
@@ -146,8 +146,8 @@ class ScopeVariant:
 class ParamData:
     code: str
     schema: ParamSchema
-    scopes: Optional[list[ScopeVariant]] = None
-    value: Optional[Any] = None
+    scopes: list[ScopeVariant] | None = None
+    value: Any | None = None
 
     def __str__(self) -> str:
         if self.scopes:
@@ -263,7 +263,7 @@ class ConfigurationParam(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ConfigurationParam"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ConfigurationParam"]:
         return ConfigurationParam.objects.filter(id=oid).first()
 
     @classmethod
@@ -361,7 +361,7 @@ class ConfigurationParam(Document):
         return any(s for s in self.scopes if s.is_required)
 
     @property
-    def threshold_op(self) -> Optional[str]:
+    def threshold_op(self) -> str | None:
         if not self.threshold_type:
             return None
         if self.threshold_type.endswith("min"):

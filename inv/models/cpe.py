@@ -10,7 +10,7 @@ import operator
 import datetime
 import logging
 from threading import Lock
-from typing import Optional, Iterable, List, Any, Union, Dict
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 import bson
@@ -144,7 +144,7 @@ class CPE(Document):
         return str(self.controller)
 
     @property
-    def controller(self) -> Optional[ControllerItem]:
+    def controller(self) -> ControllerItem | None:
         for c in self.controllers:
             if c.is_active:
                 return c
@@ -152,7 +152,7 @@ class CPE(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["CPE"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["CPE"]:
         return CPE.objects.filter(id=oid).first()
 
     @classmethod
@@ -196,9 +196,9 @@ class CPE(Document):
 
     def seen(
         self,
-        controller: Optional[ManagedObject] = None,
-        local_id: Optional[str] = None,
-        interface: Optional[str] = None,
+        controller: ManagedObject | None = None,
+        local_id: str | None = None,
+        interface: str | None = None,
         status: bool = True,
     ):
         """
@@ -252,7 +252,7 @@ class CPE(Document):
         self.fire_event("seen")
         self.touch()  # Worflow expired
 
-    def unseen(self, controller: Optional[str] = None):
+    def unseen(self, controller: str | None = None):
         """
         Unseen sensor
         """
@@ -286,7 +286,7 @@ class CPE(Document):
 
     @classmethod
     def iter_collected_metrics(
-        cls, mo: "ManagedObject", run: int = 0, d_interval: Optional[int] = None
+        cls, mo: "ManagedObject", run: int = 0, d_interval: int | None = None
     ) -> Iterable[MetricCollectorConfig]:
         """
         Return metrics setting for collected
@@ -387,8 +387,8 @@ class CPE(Document):
     def set_oper_status(
         self,
         status: bool,
-        change_ts: Optional[datetime.datetime] = None,
-        bulk: Optional[list[Any]] = None,
+        change_ts: datetime.datetime | None = None,
+        bulk: list[Any] | None = None,
     ):
         """
         Set oper CPE status

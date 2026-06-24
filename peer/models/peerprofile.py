@@ -9,7 +9,7 @@
 import operator
 from threading import Lock, RLock
 from functools import partial
-from typing import Optional, Dict, List, Any
+from typing import Optional, Any
 
 # Third-party modules
 import cachetools
@@ -136,7 +136,7 @@ class PeerProfile(NOCModel):
             r[d["name"]] = d["value"]
         return r
 
-    def get_data(self, name: str) -> Optional[Any]:
+    def get_data(self, name: str) -> Any | None:
         for d in self.data:
             if d["name"] == name:
                 return d["value"]

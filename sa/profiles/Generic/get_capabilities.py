@@ -8,7 +8,6 @@
 # Python modules
 import functools
 import itertools
-from typing import List
 
 # NOC modules
 from noc.core.script.base import BaseScript

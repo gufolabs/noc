@@ -9,7 +9,7 @@
 import datetime
 import operator
 from threading import Lock
-from typing import Optional, Union
+from typing import Optional
 
 # Third-party modules
 import bson
@@ -72,7 +72,7 @@ class APIKey(Document):
         return self.name
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["APIKey"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["APIKey"]:
         return APIKey.objects.filter(id=oid).first()
 
     @classmethod

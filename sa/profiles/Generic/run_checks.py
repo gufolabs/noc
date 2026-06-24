@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import List, Dict, Any, Optional
+from typing import Any
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -23,7 +23,7 @@ class Script(BaseScript):
     name = "Generic.run_checks"
     interface = IDiagnosticCheck
 
-    def get_script_by_check(self, check) -> Optional[str]:
+    def get_script_by_check(self, check) -> str | None:
         iface = loader.get_interface_by_check(check)
         return iface.check_script
 

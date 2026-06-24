@@ -7,7 +7,7 @@
 
 # Python modules
 import re
-from typing import Optional, List, Dict, Any
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -62,11 +62,11 @@ class MACApplication(ExtApplication):
     @classmethod
     def get_filter(
         cls,
-        mac_query: Optional[str] = None,
-        managed_object: Optional[int] = None,
-        segment: Optional[str] = None,
-        interface_profile: Optional[str] = None,
-        is_uni: Optional[bool] = None,
+        mac_query: str | None = None,
+        managed_object: int | None = None,
+        segment: str | None = None,
+        interface_profile: str | None = None,
+        is_uni: bool | None = None,
     ) -> list[str]:
         """"""
         r = []
@@ -85,12 +85,12 @@ class MACApplication(ExtApplication):
     def macdb_query(
         self,
         mac_query: str,
-        managed_object: Optional[int] = None,
-        segment: Optional[str] = None,
-        interface_profile: Optional[str] = None,
-        is_uni: Optional[bool] = None,
-        offset: Optional[int] = None,
-        limit: Optional[int] = None,
+        managed_object: int | None = None,
+        segment: str | None = None,
+        interface_profile: str | None = None,
+        is_uni: bool | None = None,
+        offset: int | None = None,
+        limit: int | None = None,
     ):
         limit = limit or 50
 
@@ -225,12 +225,12 @@ class MACApplication(ExtApplication):
     def mac_history_query(
         cls,
         mac_query: str,
-        managed_object: Optional[int] = None,
-        segment: Optional[str] = None,
-        interface_profile: Optional[str] = None,
-        is_uni: Optional[bool] = None,
-        offset: Optional[int] = None,
-        limit: Optional[int] = None,
+        managed_object: int | None = None,
+        segment: str | None = None,
+        interface_profile: str | None = None,
+        is_uni: bool | None = None,
+        offset: int | None = None,
+        limit: int | None = None,
     ):
         sql = [
             f"SELECT ts, managed_object, interface, MACNumToString(mac) as mac_s, vlan, "

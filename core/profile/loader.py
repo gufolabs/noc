@@ -11,7 +11,6 @@ import glob
 import os
 import threading
 import importlib
-from typing import Optional, Type
 
 # NOC modules
 from noc.core.loader.base import BaseLoader
@@ -30,7 +29,7 @@ class ProfileLoader(BaseLoader):
         self.lock = threading.Lock()
         self.all_profiles = set()
 
-    def get_profile(self, name) -> Optional[type[BaseProfile]]:
+    def get_profile(self, name) -> type[BaseProfile] | None:
         """
         Load profile and return BaseProfile instance.
         Returns None when no profile found or loading error occured

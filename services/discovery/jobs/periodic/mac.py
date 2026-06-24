@@ -9,7 +9,6 @@
 import time
 from functools import reduce
 from collections import defaultdict
-from typing import Tuple, List, DefaultDict
 
 # NOC modules
 from noc.services.discovery.jobs.base import DiscoveryCheck

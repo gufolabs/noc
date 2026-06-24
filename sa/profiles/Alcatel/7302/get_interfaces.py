@@ -9,7 +9,6 @@
 import re
 from collections import defaultdict
 from itertools import chain
-from typing import Tuple
 
 # NOC modules
 from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript

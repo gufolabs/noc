@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel, Field
@@ -40,9 +39,9 @@ class PrefixDataStreamItem(BaseModel):
     source: str
     state: StateItem
     profile: PrefixProfileItem
-    description: Optional[str]
-    labels: Optional[list[str]]
-    tags: Optional[list[str]]
-    project: Optional[ProjectItem]
-    vrf: Optional[VRFItem]
-    asf: Optional[ASItem] = Field(None, alias="as")
+    description: str | None
+    labels: list[str] | None
+    tags: list[str] | None
+    project: ProjectItem | None
+    vrf: VRFItem | None
+    asf: ASItem | None = Field(None, alias="as")

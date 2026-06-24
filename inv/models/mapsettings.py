@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any, Optional
+from typing import Any
 import datetime
 import logging
 
@@ -158,9 +158,9 @@ class MapSettings(Document):
         self,
         nodes,
         links,
-        user: Optional[str] = None,
-        width: Optional[float] = None,
-        height: Optional[float] = None,
+        user: str | None = None,
+        width: float | None = None,
+        height: float | None = None,
     ):
         """
         Update settings.
@@ -274,9 +274,7 @@ class MapSettings(Document):
         )
 
     @classmethod
-    def get_map(
-        cls, gen_type: str, gen_id: Optional[str] = None, **kwargs
-    ) -> Optional[dict[str, Any]]:
+    def get_map(cls, gen_type: str, gen_id: str | None = None, **kwargs) -> dict[str, Any] | None:
         """
         Return Map Data.
 

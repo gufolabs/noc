@@ -12,7 +12,6 @@ import logging
 
 # NOC modules
 from .base import BaseCollator
-from typing import Tuple, List, Union, Set
 
 IFTYPE_SPLITTER = " "
 IFPATH_SPLITTER = "/"
@@ -71,7 +70,7 @@ class IfPathCollator(BaseCollator):
         return self.PROTOCOL_MAPPING.get(if_name.lower()[:2])
 
     @staticmethod
-    def name_path(if_name: str) -> tuple[Union[str, None], list[str], Union[str, None]]:
+    def name_path(if_name: str) -> tuple[str | None, list[str], str | None]:
         """
         Split Interface Name by path component: if_type, if_path, if_num.
          Example Gi 1/0/2: if_type: Gi, if_path: 1/0, if_num: 2;

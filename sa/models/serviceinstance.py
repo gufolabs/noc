@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import logging
-from typing import Optional, List, Iterable, Any, Dict, Tuple, Union
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -154,7 +154,7 @@ class ServiceInstance(Document):
         return None
 
     @property
-    def address(self) -> Optional[str]:
+    def address(self) -> str | None:
         """Return first active Address"""
         for a in self.addresses or []:
             if a.is_active:
@@ -189,7 +189,7 @@ class ServiceInstance(Document):
         return f"[{self.type}] {name}"
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ServiceInstance"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ServiceInstance"]:
         return ServiceInstance.objects.filter(id=oid).first()
 
     def on_save(self):
@@ -205,7 +205,7 @@ class ServiceInstance(Document):
         cls,
         service,
         cfg: ServiceInstanceConfig,
-        settings: Optional[ServiceInstanceTypeConfig] = None,
+        settings: ServiceInstanceTypeConfig | None = None,
     ) -> "ServiceInstance":
         """ """
         settings = settings or ServiceInstanceTypeConfig()
@@ -249,7 +249,7 @@ class ServiceInstance(Document):
     def seen(
         self,
         source: InputSource,
-        last_seen: Optional[datetime.datetime] = None,
+        last_seen: datetime.datetime | None = None,
         dry_run: bool = False,
     ):
         """Update source"""
@@ -415,7 +415,7 @@ class ServiceInstance(Document):
     @classmethod
     def get_instance_filter_by_alarm(
         cls, alarm: ActiveAlarm, include_object: bool = False
-    ) -> Optional[Q]:
+    ) -> Q | None:
         """Build Alarm filter for query affected instances"""
         # Instance | Save include managed object Global | Local reference
         if include_object and alarm.managed_object:
@@ -456,11 +456,11 @@ class ServiceInstance(Document):
     def register_endpoint(
         self,
         source: InputSource,
-        addresses: Optional[list[str]] = None,
-        port: Optional[str] = None,
-        session: Optional[str] = None,
-        pool: Optional[Pool] = None,
-        ts: Optional[datetime.datetime] = None,
+        addresses: list[str] | None = None,
+        port: str | None = None,
+        session: str | None = None,
+        pool: Pool | None = None,
+        ts: datetime.datetime | None = None,
     ):
         """
         Add endpoint address to instance
@@ -504,8 +504,8 @@ class ServiceInstance(Document):
     def deregister_endpoint(
         self,
         source: InputSource,
-        session: Optional[str] = None,
-        addresses: Optional[list[str]] = None,
+        session: str | None = None,
+        addresses: list[str] | None = None,
     ):
         """Remove endpoint address from instance"""
         address = []
@@ -549,7 +549,7 @@ class ServiceInstance(Document):
         self,
         res: list[Any],
         source: InputSource,
-        update_ts: Optional[datetime.datetime] = None,
+        update_ts: datetime.datetime | None = None,
         bulk=None,
     ):
         """

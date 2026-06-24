@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Dict, List
 
 # Pytest modules
 import pytest
@@ -42,7 +41,7 @@ def env(*e: dict[str, str]) -> Environment:
         (env({"a": "1", "b": "2"}, {"a": "3"}), "a", "3"),
     ],
 )
-def test_get(env: Environment, key: str, expected: Optional[str]):
+def test_get(env: Environment, key: str, expected: str | None):
     r = env.get(key)
     assert r == expected
 
@@ -56,7 +55,7 @@ def test_get(env: Environment, key: str, expected: Optional[str]):
         (env({"a": "1", "b": "2"}, {"a": "3"}), "a", "3"),
     ],
 )
-def test_getitem(env: Environment, key: str, expected: Optional[str]) -> None:
+def test_getitem(env: Environment, key: str, expected: str | None) -> None:
     r = env[key]
     assert r == expected
 

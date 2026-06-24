@@ -9,7 +9,6 @@
 import logging
 import re
 from collections import defaultdict
-from typing import Dict, List, Tuple
 
 # NOC modules
 from noc.core.validators import is_oid

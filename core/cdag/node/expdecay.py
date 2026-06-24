@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 from math import exp
 
 # Third-party modules
@@ -38,9 +37,7 @@ class ExpDecayNode(WindowNode):
     config_cls = ExpDecayNodeConfig
     categories = [Category.WINDOW]
 
-    def get_window_value(
-        self, values: list[ValueType], timestamps: list[int]
-    ) -> Optional[ValueType]:
+    def get_window_value(self, values: list[ValueType], timestamps: list[int]) -> ValueType | None:
         t0 = timestamps[-1] // NS
         nk = self.config.k
         return sum(v * exp(nk * t0 - ts // NS) for ts, v in zip(timestamps, values))

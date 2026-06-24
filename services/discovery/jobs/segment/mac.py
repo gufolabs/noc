@@ -9,7 +9,6 @@
 import datetime
 import logging
 import enum
-from typing import Set
 
 # NOC modules
 from noc.services.discovery.jobs.base import TopologyDiscoveryCheck

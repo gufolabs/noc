@@ -9,7 +9,7 @@
 import datetime
 import threading
 from collections import defaultdict
-from typing import Optional, List, Tuple, Dict
+from typing import Optional
 
 # NOC modules
 from noc.core.scheduler.job import Job
@@ -81,7 +81,7 @@ class CheckTTJob(Job):
         tts = self.object.get_system()
         waited_ids = self.get_waited_tt_ids()
         last_ts: datetime.datetime = datetime.datetime.now()
-        last_id: Optional[str] = self.object.last_update_id
+        last_id: str | None = self.object.last_update_id
         changes = defaultdict(list)
         for c in tts.get_updates(
             self.object.login,

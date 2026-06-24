@@ -17,7 +17,7 @@ import warnings
 from collections import defaultdict
 from dataclasses import dataclass
 from itertools import chain
-from typing import Tuple, Iterable, List, Any, Dict, Set, Optional, Union
+from typing import Iterable, Any, Optional
 
 # Third-party modules
 import cachetools
@@ -191,7 +191,7 @@ class Credentials:
     snmp_priv_proto: str
     snmp_rate_limit: int
 
-    def get_snmp_credential(self) -> Optional[Union[SNMPCredential, SNMPv3Credential]]:
+    def get_snmp_credential(self) -> SNMPCredential | SNMPv3Credential | None:
         if self.snmp_security_level == "Community" and self.snmp_ro:
             return SNMPCredential(snmp_ro=self.snmp_ro, snmp_rw=self.snmp_rw)
         if self.snmp_security_level != "Community" and self.snmp_username:
@@ -206,9 +206,9 @@ class Credentials:
 
     def get_cli_credential(
         self,
-        protocol: Optional[CredProtocol] = None,
+        protocol: CredProtocol | None = None,
         raise_privilege=True,
-    ) -> Optional[CLICredential]:
+    ) -> CLICredential | None:
         if not self.user:
             return None
         if protocol:
@@ -238,7 +238,7 @@ class Credentials:
 
     def update_credential(
         self,
-        credential: Union[SNMPCredential, SNMPv3Credential, CLICredential],
+        credential: SNMPCredential | SNMPv3Credential | CLICredential,
     ):
         """Update Credential"""
         if isinstance(credential, SNMPCredential):
@@ -326,8 +326,8 @@ class MaintenanceItem(BaseModel):
     start: datetime.datetime
     # Time pattern when maintenance is active
     # None - active all the time
-    time_pattern: Optional[int] = None
-    stop: Optional[datetime.datetime] = None
+    time_pattern: int | None = None
+    stop: datetime.datetime | None = None
 
 
 MaintenanceItems = RootModel[dict[str, MaintenanceItem]]
@@ -503,7 +503,7 @@ class ManagedObject(NOCModel):
     version: Optional["Firmware"] = DocumentReferenceField(Firmware, null=True, blank=True)
     # Firmware version to upgrade
     # Empty, when upgrade not scheduled
-    next_version: Optional[Firmware] = DocumentReferenceField(Firmware, null=True, blank=True)
+    next_version: Firmware | None = DocumentReferenceField(Firmware, null=True, blank=True)
     object_profile: "ManagedObjectProfile" = CachedForeignKey(
         ManagedObjectProfile, verbose_name="Object Profile", on_delete=CASCADE
     )
@@ -515,11 +515,9 @@ class ManagedObject(NOCModel):
     scheme = IntegerField("Scheme", choices=SCHEME_CHOICES)
     address: str = INETField("Address", null=True, blank=True)
     port: int = IntegerField("Port", blank=True, null=True)
-    user: Optional[str] = CharField("User", max_length=32, blank=True, null=True)
-    password: Optional[str] = CharField("Password", max_length=32, blank=True, null=True)
-    super_password: Optional[str] = CharField(
-        "Super Password", max_length=32, blank=True, null=True
-    )
+    user: str | None = CharField("User", max_length=32, blank=True, null=True)
+    password: str | None = CharField("Password", max_length=32, blank=True, null=True)
+    super_password: str | None = CharField("Super Password", max_length=32, blank=True, null=True)
     remote_path = CharField("Path", max_length=256, blank=True, null=True)
     trap_source_type = CharField(
         max_length=1,
@@ -550,8 +548,8 @@ class ManagedObject(NOCModel):
     )
     syslog_source_ip = INETField("Syslog Source IP", null=True, blank=True, default=None)
     trap_community = CharField("Trap Community", blank=True, null=True, max_length=64)
-    snmp_ro: Optional[str] = CharField("RO Community", blank=True, null=True, max_length=64)
-    snmp_rw: Optional[str] = CharField("RW Community", blank=True, null=True, max_length=64)
+    snmp_ro: str | None = CharField("RO Community", blank=True, null=True, max_length=64)
+    snmp_rw: str | None = CharField("RW Community", blank=True, null=True, max_length=64)
     snmp_rate_limit: int = IntegerField(default=0)
     access_preference = CharField(
         "Access Preference",
@@ -621,7 +619,7 @@ class ManagedObject(NOCModel):
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from
     remote_system = DocumentReferenceField(RemoteSystem, null=True, blank=True)
-    mappings: Optional[list[MappingItem]] = PydanticField(
+    mappings: list[MappingItem] | None = PydanticField(
         "Remote System Mapping Items",
         schema=MappingItems,
         blank=True,
@@ -910,14 +908,14 @@ class ManagedObject(NOCModel):
         ],
         default="Community",
     )
-    snmp_username: Optional[str] = CharField("SNMP user name", max_length=32, null=True, blank=True)
+    snmp_username: str | None = CharField("SNMP user name", max_length=32, null=True, blank=True)
     snmp_auth_proto: str = CharField(
         "Authentication protocol",
         max_length=3,
         choices=[("MD5", "MD5"), ("SHA", "SHA")],
         default="MD5",
     )
-    snmp_auth_key: Optional[str] = CharField(
+    snmp_auth_key: str | None = CharField(
         "Authentication key", max_length=32, null=True, blank=True
     )
     snmp_priv_proto: str = CharField(
@@ -926,8 +924,8 @@ class ManagedObject(NOCModel):
         choices=[("DES", "DES"), ("AES", "AES")],
         default="DES",
     )
-    snmp_priv_key: Optional[str] = CharField("Privacy key", max_length=32, null=True, blank=True)
-    snmp_ctx_name: Optional[str] = CharField("Context name", max_length=32, null=True, blank=True)
+    snmp_priv_key: str | None = CharField("Privacy key", max_length=32, null=True, blank=True)
+    snmp_ctx_name: str | None = CharField("Context name", max_length=32, null=True, blank=True)
 
     # Overridden objects manager
     objects = ManagedObjectManager()
@@ -1509,7 +1507,7 @@ class ManagedObject(NOCModel):
             delta=delta or self.pool.get_delta(),
         )
 
-    def event(self, event_id: str, data: Optional[dict[str, Any]] = None, delay=None, tag=None):
+    def event(self, event_id: str, data: dict[str, Any] | None = None, delay=None, tag=None):
         """
         Process object-related event
         :param event_id: ManagedObject.EV_*
@@ -1952,7 +1950,7 @@ class ManagedObject(NOCModel):
     def open_session(self, idle_timeout=None):
         return SessionContext(self, idle_timeout)
 
-    def can_escalate(self, depended=False, tt_system: Optional[TTSystem] = None):
+    def can_escalate(self, depended=False, tt_system: TTSystem | None = None):
         """
         Check alarm can be escalated
         """
@@ -2215,7 +2213,7 @@ class ManagedObject(NOCModel):
         tokenizer = t_cls(config, **t_config)
         yield from tokenizer
 
-    def iter_normalized_tokens(self, config=None, errors_policy: Optional[str] = None):
+    def iter_normalized_tokens(self, config=None, errors_policy: str | None = None):
         profile = self.profile.get_profile()
         n_handler, n_config = profile.get_config_normalizer(self)
         if not n_handler:
@@ -2234,8 +2232,8 @@ class ManagedObject(NOCModel):
         self,
         config=None,
         cleanup=True,
-        errors_policy: Optional[str] = None,
-    ) -> Optional[Engine]:
+        errors_policy: str | None = None,
+    ) -> Engine | None:
         """
         Returns ready ConfDB engine instance
 
@@ -2552,7 +2550,7 @@ class ManagedObject(NOCModel):
         """
         return any(self.get_active_maintenances())
 
-    def get_active_maintenances(self, timestamp: Optional[datetime.datetime] = None) -> list[str]:
+    def get_active_maintenances(self, timestamp: datetime.datetime | None = None) -> list[str]:
         """
         Getting device active maintenances ids
         :param timestamp:
@@ -2615,7 +2613,7 @@ class ManagedObject(NOCModel):
             )
         return r
 
-    def is_enabled_diagnostic(self, diag: str) -> tuple[bool, Optional[str]]:
+    def is_enabled_diagnostic(self, diag: str) -> tuple[bool, str | None]:
         """Check diagnostic enabled/blocked by settings"""
         if (
             diag in SA_DIAGS or diag == SA_DIAG
@@ -2667,7 +2665,7 @@ class ManagedObject(NOCModel):
         self.initial_data = _get_field_snapshot(self.__class__, self)
 
     def iter_collected_metrics(
-        self, run: int = 0, d_interval: Optional[int] = None
+        self, run: int = 0, d_interval: int | None = None
     ) -> Iterable[MetricCollectorConfig]:
         """
         Return metrics setting for collected by box or periodic
@@ -2910,7 +2908,7 @@ class ManagedObject(NOCModel):
         self._interactions = InteractionHub(self)
         return self._interactions
 
-    def get_mx_message_headers(self, labels: Optional[list[str]] = None) -> dict[str, bytes]:
+    def get_mx_message_headers(self, labels: list[str] | None = None) -> dict[str, bytes]:
         return {
             key.config.header: key.clean_header_value(value)
             for key, value in self.message_meta.items()
@@ -2938,7 +2936,7 @@ class ManagedObject(NOCModel):
     def update_object_watchers(
         self,
         to_watchers: list[WatchItem],
-        to_remove: Optional[list[tuple[ObjectEffect, str, Optional[str]]]],
+        to_remove: list[tuple[ObjectEffect, str, str | None]] | None,
         dry_run: bool = False,
         bulk=None,
     ):
@@ -2972,7 +2970,7 @@ class ManagedObject(NOCModel):
             scheduler.submit(jcls=WATCHER_JCLS, key="sa.ManagedObject", ts=get_next_ts(wait_ts))
 
     @classmethod
-    def get_min_wait_ts(cls) -> Optional[datetime.datetime]:
+    def get_min_wait_ts(cls) -> datetime.datetime | None:
         """"""
         r = ManagedObjectWatchers.objects.aggregate(Min("after"))
         return r.get("after__min")
@@ -2987,12 +2985,12 @@ class ManagedObject(NOCModel):
         administrative_domain: AdministrativeDomain,
         segment: NetworkSegment,
         scheme: int = TELNET,
-        state: Optional[State] = None,
-        template: Optional[Any] = None,
-        labels: Optional[list[str]] = None,
-        capabilities: Optional[dict[str, Any]] = None,
-        static_service_groups: Optional[list[ResourceGroup]] = None,
-        mappings: Optional[dict[RemoteSystem, str]] = None,
+        state: State | None = None,
+        template: Any | None = None,
+        labels: list[str] | None = None,
+        capabilities: dict[str, Any] | None = None,
+        static_service_groups: list[ResourceGroup] | None = None,
+        mappings: dict[RemoteSystem, str] | None = None,
         **data,
     ) -> "ManagedObject":
         """
@@ -3033,12 +3031,12 @@ class ManagedObject(NOCModel):
         address: str,
         pool: str,
         name: str,
-        state: Optional[State] = None,
-        template: Optional[Any] = None,
-        labels: Optional[list[str]] = None,
-        capabilities: Optional[dict[str, Any]] = None,
-        static_service_groups: Optional[list[ResourceGroup]] = None,
-        mappings: Optional[dict[RemoteSystem, str]] = None,
+        state: State | None = None,
+        template: Any | None = None,
+        labels: list[str] | None = None,
+        capabilities: dict[str, Any] | None = None,
+        static_service_groups: list[ResourceGroup] | None = None,
+        mappings: dict[RemoteSystem, str] | None = None,
         **data,
     ) -> bool:
         """Update object data from template"""
@@ -3094,7 +3092,7 @@ class ManagedObject(NOCModel):
 
     def update_credentials(
         self,
-        credential: Union[CLICredential, SNMPCredential, SNMPv3Credential],
+        credential: CLICredential | SNMPCredential | SNMPv3Credential,
         is_suggests: bool = True,
         preferred_profile: bool = True,
     ) -> bool:
@@ -3188,7 +3186,7 @@ class ManagedObject(NOCModel):
             r["platform"] = self.platform.name
         return r
 
-    def get_effective_managed_object(self) -> Optional[Any]:
+    def get_effective_managed_object(self) -> Any | None:
         """Return ManagedObject to upper level"""
         return self
 
@@ -3240,8 +3238,8 @@ class ManagedObject(NOCModel):
         objects: list["ManagedObject"],
         start: datetime.datetime,
         affected_topology: bool = False,
-        remote_system: Optional[RemoteSystem] = None,
-        remote_ids: Optional[list[str]] = None,
+        remote_system: RemoteSystem | None = None,
+        remote_ids: list[str] | None = None,
     ):
         """Update Maintenance"""
         updated = defaultdict(list)
@@ -3283,7 +3281,7 @@ class ManagedObject(NOCModel):
             cursor.execute(SQL_MAINTENANCE_REMOVE, [str(maintenance_id), str(maintenance_id)])
         ManagedObjectWatchers.objects.filter(key=maintenance_id).delete()
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.object_profile.get_css_class() if self.object_profile else None
 
 
@@ -3326,7 +3324,7 @@ class ManagedObjectStatus(NOCModel):
         return "%s: %s" % (self.managed_object, self.status)
 
     @classmethod
-    def get_last_status(cls, o) -> tuple[Optional[bool], Optional[datetime.datetime]]:
+    def get_last_status(cls, o) -> tuple[bool | None, datetime.datetime | None]:
         """
         Returns last registered status and update time
         :param o: Managed Object
@@ -3362,7 +3360,7 @@ class ManagedObjectStatus(NOCModel):
     @classmethod
     def update_status_bulk(
         cls,
-        statuses: list[tuple[int, bool, Optional[datetime.datetime]]],
+        statuses: list[tuple[int, bool, datetime.datetime | None]],
         update_jobs: bool = False,
     ):
         """
@@ -3666,12 +3664,12 @@ class InteractionHub:
     def load_supported_interactions():
         return {i for i in Interaction if "sa.ManagedObject" in i.config.models}
 
-    def __getattr__(self, name: str, default: Optional[Any] = None) -> Optional[Any]:
+    def __getattr__(self, name: str, default: Any | None = None) -> Any | None:
         if name not in self.__supported_interactions:
             return None
         return self.__state.is_enabled_interaction(name)
 
-    def __contains__(self, interaction: Union[str, Interaction]) -> bool:
+    def __contains__(self, interaction: str | Interaction) -> bool:
         if interaction not in self.__supported_interactions:
             return False
         return self.__state.is_enabled_interaction(interaction)

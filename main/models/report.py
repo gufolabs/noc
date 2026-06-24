@@ -9,7 +9,7 @@
 import operator
 from threading import Lock
 from collections import defaultdict
-from typing import Dict, Any, Optional, List, Set, Union
+from typing import Any, Optional
 from pathlib import Path
 
 # Third-party modules
@@ -275,7 +275,7 @@ class Report(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["Report"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["Report"]:
         return Report.objects.filter(id=oid).first()
 
     @classmethod
@@ -288,7 +288,7 @@ class Report(Document):
     def get_by_code(cls, code: str) -> Optional["Report"]:
         return Report.objects.filter(code=code).first()
 
-    def get_localization(self, field: str, lang: Optional[str] = None):
+    def get_localization(self, field: str, lang: str | None = None):
         from noc.config import config
 
         lang = lang or config.language
@@ -338,7 +338,7 @@ class Report(Document):
     def get_json_path(self) -> Path:
         return safe_json_path(self.name)
 
-    def get_param_by_name(self, param_name: str) -> Optional[ReportParam]:
+    def get_param_by_name(self, param_name: str) -> ReportParam | None:
         return next(
             (p for p in self.parameters if p.name == param_name),
             None,
@@ -348,7 +348,7 @@ class Report(Document):
     def config(self) -> ReportConfig:
         return self.get_config()
 
-    def get_config(self, pref_lang: Optional[str] = None) -> ReportConfig:
+    def get_config(self, pref_lang: str | None = None) -> ReportConfig:
         params = []
         for p in self.parameters:
             params.append(
@@ -431,20 +431,20 @@ class Report(Document):
             align_end_date_param=self.time_params == "A",
         )
 
-    def _get_band_by_condition(self, condition_value: str) -> Optional[Band]:
+    def _get_band_by_condition(self, condition_value: str) -> Band | None:
         return next(
             (b for b in self.bands if b.condition_value == condition_value),
             None,
         )
 
-    def _get_bandformat_by_condition(self, condition_value: str) -> Optional[BandFormat]:
+    def _get_bandformat_by_condition(self, condition_value: str) -> BandFormat | None:
         band = self._get_band_by_condition(condition_value)
         return next(
             (bf for bf in self.bands_format if bf.name == band.name),
             None,
         )
 
-    def get_bandformat(self, condition_value: Optional[str] = None) -> Optional[BandFormat]:
+    def get_bandformat(self, condition_value: str | None = None) -> BandFormat | None:
         if not self.bands_format:
             return None
         if condition_value:

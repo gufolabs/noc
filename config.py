@@ -14,7 +14,7 @@ import datetime
 from functools import partial, cached_property
 from urllib.parse import quote as urllib_quote
 from pathlib import Path
-from typing import Dict, Union, Optional, Iterable
+from typing import Iterable
 from types import ModuleType
 import importlib
 
@@ -1094,12 +1094,12 @@ class Config(BaseConfig):
         ds_limit = IntParameter(default=1000)
 
     # pylint: disable=super-init-not-called
-    def __init__(self, rewrites: Optional[Iterable[BaseRewrite]] = None):
+    def __init__(self, rewrites: Iterable[BaseRewrite] | None = None):
         super().__init__(rewrites=rewrites)
         self.setup_logging()
 
     @property
-    def pg_connection_args(self) -> dict[str, Union[str, int]]:
+    def pg_connection_args(self) -> dict[str, str | int]:
         """
         PostgreSQL database connection arguments
         suitable to pass to psycopg2.connect
@@ -1222,14 +1222,14 @@ class Config(BaseConfig):
             Yields appropriate instances.
         """
 
-        def get_module(mod_name: str) -> Optional[ModuleType]:
+        def get_module(mod_name: str) -> ModuleType | None:
             """Load module or return None."""
             try:
                 return importlib.import_module(mod_name)
             except ModuleNotFoundError:
                 return None
 
-        def check_and_yield(*args: Optional[ModuleType]) -> Iterable[ModuleType]:
+        def check_and_yield(*args: ModuleType | None) -> Iterable[ModuleType]:
             """Yield only not None modules."""
             for m in args:
                 if m:

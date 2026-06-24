@@ -7,7 +7,6 @@
 
 # Python modules
 import logging
-from typing import Optional, List, Dict
 from django.db import connection
 
 # NOC modules
@@ -30,9 +29,9 @@ class BaseBioSegPolicy:
         self,
         attacker: NetworkSegment,
         target: NetworkSegment,
-        logger: Optional[logging.Logger] = None,
-        calcified_profile: Optional[NetworkSegmentProfile] = None,
-        segment_power_function: Optional[str] = None,
+        logger: logging.Logger | None = None,
+        calcified_profile: NetworkSegmentProfile | None = None,
+        segment_power_function: str | None = None,
     ):
         self.attacker = attacker
         self.target = target

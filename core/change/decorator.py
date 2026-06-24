@@ -7,7 +7,6 @@
 
 # Python modules
 from logging import getLogger
-from typing import Optional, List, Tuple
 from functools import partial
 
 # NOC modules
@@ -19,19 +18,19 @@ from .model import ChangeField
 logger = getLogger(__name__)
 
 
-def get_datastreams(instance, changed_fields=None) -> Optional[list[tuple[str, str]]]:
+def get_datastreams(instance, changed_fields=None) -> list[tuple[str, str]] | None:
     if not hasattr(instance, "iter_changed_datastream"):
         return None
     return list(instance.iter_changed_datastream(changed_fields=changed_fields or {}))
 
 
-def get_domains(instance, changed_fields=None) -> Optional[list[tuple[str, str]]]:
+def get_domains(instance, changed_fields=None) -> list[tuple[str, str]] | None:
     if not hasattr(instance, "iter_changed_domains"):
         return None
     return list(instance.iter_changed_domains(changed_fields=changed_fields or {}))
 
 
-def get_applied_rules(instance, op: str, changed_fields=None) -> Optional[list[str]]:
+def get_applied_rules(instance, op: str, changed_fields=None) -> list[str] | None:
     """Build reaction rules"""
     from noc.sa.models.reactionrule import ReactionRule
 
@@ -88,7 +87,7 @@ def _track_model(model):
 
 
 def _on_document_change(sender, document, created=False, *args, **kwargs):
-    def get_changed(field_name: str) -> Optional[ChangeField]:
+    def get_changed(field_name: str) -> ChangeField | None:
         """
         Return changed field with new and old value
         """
@@ -180,7 +179,7 @@ def _on_document_delete(sender, document, *args, **kwargs):
 
 
 def _on_model_change(sender, instance, created=False, *args, **kwargs):
-    def get_changed(field_name: str) -> Optional[ChangeField]:
+    def get_changed(field_name: str) -> ChangeField | None:
         """
         Return changed field with new and old value
         """

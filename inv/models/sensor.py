@@ -11,7 +11,7 @@ import operator
 import datetime
 from collections import defaultdict
 from threading import Lock
-from typing import Dict, Optional, Iterable, List, Union, Any, DefaultDict, Tuple
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 import bson
@@ -127,7 +127,7 @@ class Sensor(Document):
     ipmi_id = StringField()
     # Watchers
     watchers: list[WatchDocumentItem] = EmbeddedDocumentListField(WatchDocumentItem)
-    watcher_wait_ts: Optional[datetime.datetime] = DateTimeField(required=False)
+    watcher_wait_ts: datetime.datetime | None = DateTimeField(required=False)
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from
     remote_system = PlainReferenceField(RemoteSystem)
@@ -155,7 +155,7 @@ class Sensor(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["Sensor"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["Sensor"]:
         return Sensor.objects.filter(id=oid).first()
 
     @classmethod
@@ -213,7 +213,7 @@ class Sensor(Document):
             return self.profile.alias_template
         return None
 
-    def seen(self, source: Optional[str] = None):
+    def seen(self, source: str | None = None):
         """
         Seen sensor
         """
@@ -223,7 +223,7 @@ class Sensor(Document):
         self.fire_event("seen")
         self.touch()  # Worflow expired
 
-    def unseen(self, source: Optional[str] = None):
+    def unseen(self, source: str | None = None):
         """
         Unseen sensor
         """
@@ -272,7 +272,7 @@ class Sensor(Document):
 
     @classmethod
     def iter_collected_metrics(
-        cls, mo: "ManagedObject", run: int = 0, d_interval: Optional[int] = None
+        cls, mo: "ManagedObject", run: int = 0, d_interval: int | None = None
     ) -> Iterable[MetricCollectorConfig]:
         """
         Return metrics setting for collected by box or periodic
@@ -320,10 +320,10 @@ class Sensor(Document):
     def set_value(
         self,
         value: float,
-        ts: Optional[datetime.datetime] = None,
-        units: Optional[MeasurementUnits] = None,
-        bulk: Optional[defaultdict[int, list[dict[str, Any]]]] = None,
-        shards: Optional[int] = None,
+        ts: datetime.datetime | None = None,
+        units: MeasurementUnits | None = None,
+        bulk: defaultdict[int, list[dict[str, Any]]] | None = None,
+        shards: int | None = None,
     ):
         """Set Sensor value to PM Database"""
         ts = ts or datetime.datetime.now().replace(microsecond=0)
@@ -446,7 +446,7 @@ class Sensor(Document):
         return self.profile.wiping_ttl
 
     @classmethod
-    def get_min_wait_ts(cls) -> Optional[datetime.datetime]:
+    def get_min_wait_ts(cls) -> datetime.datetime | None:
         """"""
         return (
             Sensor.objects()
@@ -457,7 +457,7 @@ class Sensor(Document):
     def update_object_watchers(
         self,
         to_watchers: list[WatchItem],
-        to_remove: Optional[list[tuple[ObjectEffect, str, Optional[str]]]],
+        to_remove: list[tuple[ObjectEffect, str, str | None]] | None,
         dry_run: bool = False,
         bulk=None,
     ):
@@ -490,7 +490,7 @@ class Sensor(Document):
         set_op = {"watchers": self.watchers, "watcher_wait_ts": self.watcher_wait_ts}
         self.update(**set_op)
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.profile.get_css_class() if self.profile else None
 
 

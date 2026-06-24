@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python Modules
-from typing import List
 import enum
 
 # NOC modules

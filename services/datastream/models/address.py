@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel
@@ -32,12 +31,12 @@ class AddressDataStreamItem(BaseModel):
     address: str
     source: str
     state: StateItem
-    description: Optional[str]
-    labels: Optional[list[str]]
-    tags: Optional[list[str]]
-    fqdn: Optional[str]
-    mac: Optional[str]
-    subinterface: Optional[str]
+    description: str | None
+    labels: list[str] | None
+    tags: list[str] | None
+    fqdn: str | None
+    mac: str | None
+    subinterface: str | None
     profile: AddressProfileItem
-    project: Optional[ProjectItem]
-    vrf: Optional[VRFItem]
+    project: ProjectItem | None
+    vrf: VRFItem | None

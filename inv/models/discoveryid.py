@@ -9,7 +9,7 @@
 import operator
 import bisect
 from threading import Lock
-from typing import Optional, Union, Iterable, List, Set
+from typing import Optional, Iterable
 
 # Third-party modules
 import bson
@@ -98,7 +98,7 @@ class DiscoveryID(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["DiscoveryID"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["DiscoveryID"]:
         return DiscoveryID.objects.filter(id=oid).first()
 
     def iter_changed_datastream(self, changed_fields=None):
@@ -107,7 +107,7 @@ class DiscoveryID(Document):
 
     @staticmethod
     def _macs_as_ints(
-        ranges: Optional[list[MACRange]] = None, additional: Optional[Iterable[str]] = None
+        ranges: list[MACRange] | None = None, additional: Iterable[str] | None = None
     ) -> list[int]:
         """
         Get all MAC addresses within ranges as integers.
@@ -142,8 +142,8 @@ class DiscoveryID(Document):
         Returns:
             Yields MACRanges
         """
-        first: Optional[int] = None
-        last: Optional[int] = None
+        first: int | None = None
+        last: int | None = None
         for mac in macs:
             if MACBlacklist.is_banned_mac(str(MAC(mac)), is_ignored=True):
                 continue
@@ -166,10 +166,10 @@ class DiscoveryID(Document):
     def submit(
         cls,
         object: ManagedObject,
-        chassis_mac: Optional[list[MACRange]] = None,
-        hostname: Optional[str] = None,
-        router_id: Optional[str] = None,
-        additional_macs: Optional[Iterable[str]] = None,
+        chassis_mac: list[MACRange] | None = None,
+        hostname: str | None = None,
+        router_id: str | None = None,
+        additional_macs: Iterable[str] | None = None,
     ):
         # Process ranges
         macs = cls._macs_as_ints(chassis_mac, additional_macs)
@@ -195,7 +195,7 @@ class DiscoveryID(Document):
             cache.delete_many([f"discovery-id-{m}" for m in macs])
         elif result is not None and macs:
             # Invalidate dereferenced macs
-            old_macs: Optional[list[int]] = result.get("macs")
+            old_macs: list[int] | None = result.get("macs")
             if old_macs and old_macs != macs:
                 cache.delete_many([f"discovery-id-{m}" for m in set(old_macs) - set(macs)])
 
@@ -205,7 +205,7 @@ class DiscoveryID(Document):
         return cls._get_collection().find_one({"udld_id": device_id}, {"_id": 0, "object": 1})
 
     @classmethod
-    def find_object_by_mac(cls, mac: str) -> Optional[ManagedObject]:
+    def find_object_by_mac(cls, mac: str) -> ManagedObject | None:
         """
         Find Managed Object by MAC.
 
@@ -234,7 +234,7 @@ class DiscoveryID(Document):
         return obj
 
     @classmethod
-    def find_object_by_hostname(cls, hostname: str) -> Optional[ManagedObject]:
+    def find_object_by_hostname(cls, hostname: str) -> ManagedObject | None:
         """
         Find object by hostname.
 
@@ -253,7 +253,7 @@ class DiscoveryID(Document):
         return ManagedObject.get_by_id(r["object"])
 
     @classmethod
-    def find_object_by_ip(cls, address: str) -> Optional[ManagedObject]:
+    def find_object_by_ip(cls, address: str) -> ManagedObject | None:
         """
         Find object by ipv4_address.
 
@@ -293,10 +293,10 @@ class DiscoveryID(Document):
     @classmethod
     def find_object(
         cls,
-        mac: Optional[str] = None,
-        ipv4_address: Optional[str] = None,
-        hostname: Optional[str] = None,
-    ) -> Optional[ManagedObject]:
+        mac: str | None = None,
+        ipv4_address: str | None = None,
+        hostname: str | None = None,
+    ) -> ManagedObject | None:
         """
         Find managed object.
         Args:

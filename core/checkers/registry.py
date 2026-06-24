@@ -8,7 +8,7 @@
 # Python modules
 import logging
 from collections import defaultdict
-from typing import List, Dict, Tuple, Iterable, Set
+from typing import Iterable
 
 # NOC Modules
 from noc.core.checkers.base import Check, CheckResult

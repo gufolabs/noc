@@ -8,7 +8,6 @@
 # Python modules
 import asyncio
 from collections import namedtuple
-from typing import Optional, Set
 
 # Third-party modules
 from fastapi import APIRouter, Header, Depends
@@ -50,7 +49,7 @@ class JSONRPCAPI:
     def __init__(self, router: APIRouter):
         self.service = get_service()
         self.logger = self.service.logger
-        self.current_user: Optional[User] = None
+        self.current_user: User | None = None
         self.router = router
         self.methods: set[str] = self.get_methods()
         self.setup_routes()
@@ -65,7 +64,7 @@ class JSONRPCAPI:
     async def api_endpoint(
         self,
         req: JSONRemoteProcedureCall,
-        remote_user: Optional[User] = Depends(get_current_user),
+        remote_user: User | None = Depends(get_current_user),
         span_ctx: int = Header(0, alias="X-NOC-Span-Ctx"),
         span_id: int = Header(0, alias="X-NOC-Span"),
         calling_service: str = Header("unknown", alias=CALLING_SERVICE_HEADER),

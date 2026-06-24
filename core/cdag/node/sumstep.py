@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 from enum import Enum
 
 # NOC modules
@@ -34,9 +33,7 @@ class SumStepNode(WindowNode):
     config_cls = SumStepNodeConfig
     categories = [Category.WINDOW]
 
-    def get_window_value(
-        self, values: list[ValueType], timestamps: list[int]
-    ) -> Optional[ValueType]:
+    def get_window_value(self, values: list[ValueType], timestamps: list[int]) -> ValueType | None:
         if self.config.direction == StepDirection.INC:
             return sum(x1 - x0 for x0, x1 in itertools.pairwise(values) if x1 > x0)
         if self.config.direction == StepDirection.DEC:

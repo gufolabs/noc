@@ -10,7 +10,7 @@ from threading import Lock
 import operator
 import re
 from collections import defaultdict
-from typing import Optional, Union, List, Tuple, Dict, FrozenSet
+from typing import Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -64,7 +64,7 @@ class VLANFilter(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["VLANFilter"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["VLANFilter"]:
         return VLANFilter.objects.filter(id=oid).first()
 
     def save(self, *args, **kwargs):
@@ -116,7 +116,7 @@ class VLANFilter(Document):
         return r
 
     @classmethod
-    def iter_match_vlanfilter(cls, vlan_list: Union[int, list[int]]) -> tuple["VLANFilter", str]:
+    def iter_match_vlanfilter(cls, vlan_list: int | list[int]) -> tuple["VLANFilter", str]:
         if isinstance(vlan_list, int):
             vlan_list = [vlan_list]
         match_expressions = cls.get_matcher()

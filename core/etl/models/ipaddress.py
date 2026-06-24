@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import Optional, List
 
 # Third-party modules
 from pydantic.networks import IPvAnyAddress
@@ -25,16 +24,16 @@ class IPAddress(BaseModel):
     name: str
     address: str
     profile: Reference["IPAddressProfile"]
-    fqdn: Optional[str] = None
+    fqdn: str | None = None
     # Workflow state
-    prefix: Optional[Reference[IPPrefix]] = None
-    ipv6_transition: Optional[Reference["IPAddress"]] = None
-    state: Optional[str] = None
+    prefix: Reference[IPPrefix] | None = None
+    ipv6_transition: Reference["IPAddress"] | None = None
+    state: str | None = None
     # Last state change
-    state_changed: Optional[datetime.datetime] = None
+    state_changed: datetime.datetime | None = None
     # Workflow event
-    event: Optional[str] = None
-    labels: Optional[list[str]] = None
+    event: str | None = None
+    labels: list[str] | None = None
 
     @field_validator("address")
     @classmethod

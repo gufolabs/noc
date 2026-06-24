@@ -15,7 +15,6 @@ from mongoengine.fields import (
     EmbeddedDocumentListField,
     ObjectIdField,
 )
-from typing import List, Set
 
 # NOC modules
 from noc.core.mongo.fields import PlainReferenceField, ForeignKeyField

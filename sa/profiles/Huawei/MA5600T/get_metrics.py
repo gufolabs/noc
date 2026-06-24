@@ -7,7 +7,6 @@
 
 # Python modules
 import re
-from typing import List
 from collections import defaultdict
 
 # NOC modules

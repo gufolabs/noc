@@ -8,7 +8,7 @@
 # Python modules
 from datetime import datetime
 import operator
-from typing import List, Optional, Any
+from typing import Any
 
 # Third-party modules
 from fastapi import APIRouter, Header, HTTPException
@@ -30,7 +30,7 @@ router = APIRouter()
 
 class Metrics(BaseModel):
     object: str
-    interfaces: Optional[list[str]] = None
+    interfaces: list[str] | None = None
     metric_types: list[str]
 
 
@@ -45,7 +45,7 @@ class ObjectMetricsResponseItem(BaseModel):
     metric_type: str
     path: list[str]
     values: list[list[Any]]
-    interface: Optional[str]
+    interface: str | None
 
 
 class ObjectMetricsResponse(BaseModel):

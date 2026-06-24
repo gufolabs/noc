@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Iterable, Dict, _GenericAlias, _SpecialForm
+from typing import Any, Iterable, _GenericAlias, _SpecialForm
 from itertools import zip_longest
 
 # Third-party modules

@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 
 # NOC modules
@@ -24,7 +23,7 @@ class NeNode(BaseCDAGNode):
     config_cls = CompConfig
     categories = [Category.COMPARE]
 
-    def get_value(self, x: ValueType, y: ValueType) -> Optional[ValueType]:
+    def get_value(self, x: ValueType, y: ValueType) -> ValueType | None:
         if abs(x - y) > self.config.epsilon:
             return self.config.true_level
         return self.config.false_level

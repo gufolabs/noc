@@ -16,7 +16,7 @@ import dataclasses
 import operator
 import re
 from time import perf_counter
-from typing import Any, List, Iterable, Type, Union, Tuple, Set, Optional
+from typing import Any, Iterable
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter
@@ -73,7 +73,7 @@ class BaseExtractor:
         self.quality_problems: list[Problem] = []
         self.extracted = 0
         # Checkpoint
-        self._force_checkpoint: Optional[str] = None
+        self._force_checkpoint: str | None = None
 
     def register_quality_problem(
         self, line: int, p_class: str, message: str, row: list[Any]
@@ -142,8 +142,8 @@ class BaseExtractor:
             f.close()
 
     def iter_data(
-        self, *, checkpoint: Optional[str] = None, **kwargs
-    ) -> Iterable[Union[BaseModel, RemovedItem, tuple[Any, ...]]]:
+        self, *, checkpoint: str | None = None, **kwargs
+    ) -> Iterable[BaseModel | RemovedItem | tuple[Any, ...]]:
         """
         Iterator to extract data.
 
@@ -163,7 +163,7 @@ class BaseExtractor:
     def clean(self, row):
         return row
 
-    def read_current_state(self) -> Optional[list[BaseModel]]:
+    def read_current_state(self) -> list[BaseModel] | None:
         """
         Read current state.
 
@@ -193,7 +193,7 @@ class BaseExtractor:
                 data.append(self.model.model_validate_json(line))
         return data
 
-    def get_checkpoint(self, data: list[BaseModel]) -> Optional[str]:
+    def get_checkpoint(self, data: list[BaseModel]) -> str | None:
         """
         Get latest checkpoint from the state.
 
@@ -215,7 +215,7 @@ class BaseExtractor:
         return cp
 
     def iter_merge_data(
-        self, current: Optional[list[BaseModel]], delta: Optional[list[BaseModel]]
+        self, current: list[BaseModel] | None, delta: list[BaseModel] | None
     ) -> Iterable[BaseModel]:
         """
         Merge current state with delta.
@@ -269,7 +269,7 @@ class BaseExtractor:
                 return s
             return str(s)
 
-        def get_model(raw: Union[BaseModel, tuple[Any, ...]]) -> BaseModel:
+        def get_model(raw: BaseModel | tuple[Any, ...]) -> BaseModel:
             if isinstance(raw, BaseModel):
                 return raw
             return self.model.from_iter(q(x) for x in row)
@@ -282,8 +282,8 @@ class BaseExtractor:
             "Incremental" if incremental else "Full",
         )
         # Prepare iterator
-        current: Optional[list[BaseModel]] = None
-        checkpoint: Optional[str] = None
+        current: list[BaseModel] | None = None
+        checkpoint: str | None = None
         if incremental:
             # Incremental extract
             current = self.read_current_state()

@@ -9,7 +9,7 @@
 import argparse
 import asyncio
 from time import perf_counter
-from typing import Tuple, Iterable
+from typing import Iterable
 
 # Third-party modules
 from gufo.snmp import SnmpSession, SnmpVersion, SnmpError as GSNMPError, SnmpAuthError

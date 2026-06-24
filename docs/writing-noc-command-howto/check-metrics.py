@@ -1,6 +1,5 @@
 # Python modules
 import argparse
-from typing import List, Dict
 
 # NOC modules
 from noc.core.management.base import BaseCommand

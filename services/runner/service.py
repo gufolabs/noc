@@ -8,7 +8,7 @@
 
 # Python modules
 import asyncio
-from typing import Optional, Dict, Any, Tuple, DefaultDict, List
+from typing import Any
 from time import perf_counter_ns
 from collections import defaultdict
 
@@ -42,8 +42,8 @@ class RunnerService(FastAPIService):
         super().__init__()
         self.slot_number = 0
         self.total_slots = 0
-        self.queue: asyncio.Queue[tuple[Optional[ObjectId], dict[str, Any]]] = asyncio.Queue()
-        self.runner: Optional[Runner] = None
+        self.queue: asyncio.Queue[tuple[ObjectId | None, dict[str, Any]]] = asyncio.Queue()
+        self.runner: Runner | None = None
 
     async def on_activate(self):
         connect_async()

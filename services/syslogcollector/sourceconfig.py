@@ -7,7 +7,6 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Tuple, Optional, List
 
 # NOC modules
 from noc.core.checkers.base import CheckResult, NODATA
@@ -26,7 +25,7 @@ class RemoteSystemData:
 class AdministrativeDomainData:
     id: int
     name: str
-    remote_system: Optional[RemoteSystemData] = None
+    remote_system: RemoteSystemData | None = None
 
 
 @dataclass
@@ -36,8 +35,8 @@ class ManagedObjectData:
     name: str
     administrative_domain: AdministrativeDomainData
     labels: list[str] = None
-    remote_system: Optional[RemoteSystemData] = None
-    remote_id: Optional[str] = None
+    remote_system: RemoteSystemData | None = None
+    remote_id: str | None = None
 
 
 @dataclass
@@ -49,15 +48,15 @@ class SourceConfig:
     archive_events: bool
     stream: str
     partition: int
-    sa_profile: Optional[str] = None
-    name: Optional[str] = None
+    sa_profile: str | None = None
+    name: str | None = None
     effective_labels: list[str] = None
-    managed_object: Optional[ManagedObjectData] = None
+    managed_object: ManagedObjectData | None = None
     storm_policy: str = "D"
     storm_threshold: int = 1000
-    trap_rcvd_ts: Optional[int] = None
-    trap_rcvd_address: Optional[str] = None
-    checks_send_ts: Optional[int] = None
+    trap_rcvd_ts: int | None = None
+    trap_rcvd_address: str | None = None
+    checks_send_ts: int | None = None
 
     def update_rcvd(self, timestamp: int, address: str) -> bool:
         """Update source stat"""

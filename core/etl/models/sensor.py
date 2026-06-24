@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # NOC modules
 from noc.core.models.sensorprotos import SensorProtocol
@@ -19,13 +18,13 @@ from .pmagent import PMAgent
 class Sensor(BaseModel):
     id: str
     local_id: str
-    label: Optional[str] = None
-    units: Optional[str] = None
-    object: Optional[Reference["Object"]] = None
-    managed_object: Optional[Reference["ManagedObject"]] = None
-    agent: Optional[Reference["PMAgent"]] = None
-    remote_host: Optional[str] = None
+    label: str | None = None
+    units: str | None = None
+    object: Reference["Object"] | None = None
+    managed_object: Reference["ManagedObject"] | None = None
+    agent: Reference["PMAgent"] | None = None
+    remote_host: str | None = None
     protocol: SensorProtocol = SensorProtocol.OTHER
     # Workflow state
-    state: Optional[str] = None
+    state: str | None = None
     labels: list[str] = []

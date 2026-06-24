@@ -10,7 +10,7 @@ import itertools
 import operator
 import logging
 from threading import Lock
-from typing import Optional, Union, Iterable, List, Dict, Any
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -126,7 +126,7 @@ class L2Domain(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["L2Domain"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["L2Domain"]:
         return L2Domain.objects.filter(id=oid).first()
 
     @classmethod
@@ -158,7 +158,7 @@ class L2Domain(Document):
                 continue
             yield p
 
-    def get_pool_hints(self, pool) -> Optional[dict[str, Any]]:
+    def get_pool_hints(self, pool) -> dict[str, Any] | None:
         """Getting pool setting for L2Domain"""
         for p in self.iter_pool_settings():
             if p.pool == pool:
@@ -290,7 +290,7 @@ class L2Domain(Document):
         return ManagedObject.objects.filter(q)
 
     @classmethod
-    def calculate_stats(cls, l2_domains: list["L2Domain"]) -> list[dict[str, Union[str, int]]]:
+    def calculate_stats(cls, l2_domains: list["L2Domain"]) -> list[dict[str, str | int]]:
         """Calculate statistics Pool usage"""
         # l2
         return []
@@ -305,13 +305,13 @@ class L2Domain(Document):
     def get_resource_pool_usage(
         cls,
         pools: list[ResourcePool],
-        domains: Optional[list["L2Domain"]] = None,
+        domains: list["L2Domain"] | None = None,
     ):
         """"""
         return 0.0
 
     @property
-    def resource_usage(self) -> Optional[float]:
+    def resource_usage(self) -> float | None:
         from noc.vc.models.vlan import VLAN
 
         vlans = VLAN.objects.filter(l2_domain=self).count()
@@ -320,14 +320,14 @@ class L2Domain(Document):
 
         return vlans * 100.0 / 4095
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.profile.get_css_class() if self.profile else None
 
     @property
     def enable_provisioning(self) -> bool:
         return self.profile.provisioning_policy != "D"
 
-    def get_topology(self) -> Optional[TopologyBase]:
+    def get_topology(self) -> TopologyBase | None:
         """Getting effective topology"""
         # Constraints
         topo = loader["l2domain"]

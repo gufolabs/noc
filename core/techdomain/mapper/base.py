@@ -8,7 +8,7 @@
 # Python modules
 import logging
 from dataclasses import dataclass
-from typing import List, Iterable, Optional, Dict, Any
+from typing import Iterable, Any
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter
@@ -94,18 +94,18 @@ class BaseMapper:
     def __init__(self, channel: Channel):
         self.logger = PrefixLoggerAdapter(logging.getLogger("tracer"), self.name)
         self.channel = channel
-        self.input: Optional[str] = None
-        self.input_port: Optional[str] = None
-        self.output: Optional[str] = None
-        self.output_port: Optional[str] = None
+        self.input: str | None = None
+        self.input_port: str | None = None
+        self.output: str | None = None
+        self.output_port: str | None = None
         self.g = self.get_graph()
         self._seen_edges = set()
         self._resources: dict[str, dict[str, Any]] = {}
 
     def render(
         self,
-        start: Optional[Endpoint] = None,
-        end: Optional[Endpoint] = None,
+        start: Endpoint | None = None,
+        end: Endpoint | None = None,
     ) -> None:
         """
         Render graph
@@ -114,8 +114,8 @@ class BaseMapper:
 
     def to_viz(
         self,
-        start: Optional[Endpoint] = None,
-        end: Optional[Endpoint] = None,
+        start: Endpoint | None = None,
+        end: Endpoint | None = None,
     ) -> dict[str, Any]:
         """
         Render graph and get vis-js JSON
@@ -169,8 +169,8 @@ class BaseMapper:
         self,
         start: str,
         end: str,
-        start_port: Optional[str] = None,
-        end_port: Optional[str] = None,
+        start_port: str | None = None,
+        end_port: str | None = None,
         **kwargs,
     ) -> None:
         # Note the edge starts from tail and goes to the head
@@ -213,9 +213,9 @@ class BaseMapper:
         self,
         name: str,
         *,
-        label: Optional[str] = None,
-        resource: Optional[str] = None,
-        ports: Optional[list[str]] = None,
+        label: str | None = None,
+        resource: str | None = None,
+        ports: list[str] | None = None,
     ) -> dict[str, Any]:
         attrs = {"class": self.SELECTABLE_CLASS, "tooltip": ""}
         attrs["shape"] = "record" if ports else "box"

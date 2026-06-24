@@ -10,7 +10,7 @@ import datetime
 import logging
 import operator
 from threading import Lock
-from typing import Tuple, Dict, Iterable, Optional, Any, Set, List, FrozenSet
+from typing import Iterable, Optional, Any
 from pathlib import Path
 
 # Third-party modules
@@ -78,8 +78,8 @@ class StaticMember(BaseModel):
 
     notification_method: str
     contact: str
-    language: Optional[str] = None
-    time_pattern: Optional[int] = None
+    language: str | None = None
+    time_pattern: int | None = None
 
     def get_contacts(self) -> list[NotificationContact]:
         """Build Notification Contact"""
@@ -116,9 +116,9 @@ class SubscriptionConditionItem(BaseModel):
             administrative_domain: Have Administrative domain in paths
     """
 
-    labels: Optional[list[str]] = None
-    resource_groups: Optional[list[str]] = None
-    administrative_domain: Optional[int] = None
+    labels: list[str] | None = None
+    resource_groups: list[str] | None = None
+    administrative_domain: int | None = None
     # profile, group, container, administrative_domain
 
 
@@ -131,8 +131,8 @@ class SubscriptionSettingItem(BaseModel):
         notify_if_subscribed: Send notification if Subscription Changed
     """
 
-    user: Optional[int] = None
-    group: Optional[int] = None
+    user: int | None = None
+    group: int | None = None
     allow_subscribe: bool = False
     auto_subscription: bool = False
     notify_if_subscribed: bool = False
@@ -152,8 +152,8 @@ SubscriptionConditions = RootModel[list[SubscriptionConditionItem]]
 
 class MessageTypeItem(BaseModel):
     message_type: MessageType
-    template: Optional[int] = None
-    language: Optional[str] = None
+    template: int | None = None
+    language: str | None = None
     deny: bool = False
 
 
@@ -223,14 +223,14 @@ class NotificationGroup(NOCModel):
         null=True,
         default=list,
     )
-    static_members: Optional[list[StaticMember]] = PydanticField(
+    static_members: list[StaticMember] | None = PydanticField(
         "Notification Contacts",
         schema=StaticMembers,
         blank=True,
         null=True,
         default=list,
     )
-    subscription_settings: Optional[list[SubscriptionSettingItem]] = PydanticField(
+    subscription_settings: list[SubscriptionSettingItem] | None = PydanticField(
         "Subscription Settings",
         schema=SubscriptionSettings,
         blank=True,
@@ -239,7 +239,7 @@ class NotificationGroup(NOCModel):
     )
     # subscribed = ArrayField(CharField(max_length=100))
     subscription_to: list[str] = ArrayField(CharField(max_length=100), blank=True, null=True)
-    conditions: Optional[list[SubscriptionConditionItem]] = PydanticField(
+    conditions: list[SubscriptionConditionItem] | None = PydanticField(
         "Condition for match Notification Group",
         schema=SubscriptionConditions,
         blank=True,
@@ -291,7 +291,7 @@ class NotificationGroup(NOCModel):
     def get_effective_template(
         self,
         message_type: MessageType,
-        language: Optional[str] = None,
+        language: str | None = None,
     ) -> Optional["Template"]:
         """Return effective template for Notification Group"""
         for mt in self.message_types or []:
@@ -318,7 +318,7 @@ class NotificationGroup(NOCModel):
     def get_object_subscriptions(
         cls,
         o: Any,
-        user: Optional[User] = None,
+        user: User | None = None,
     ) -> list["NotificationGroupSubscription"]:
         if not user:
             return NotificationGroupSubscription.objects.filter(
@@ -422,7 +422,7 @@ class NotificationGroup(NOCModel):
         return contacts
 
     def get_active_user_contacts(
-        self, user: User, ts: Optional[datetime.datetime] = None
+        self, user: User, ts: datetime.datetime | None = None
     ) -> list["NotificationContact"]:
         """Getting Active user Contacts for send notification"""
         r = []
@@ -446,8 +446,8 @@ class NotificationGroup(NOCModel):
 
     def get_active_contacts(
         self,
-        obj: Optional[str] = None,
-        ts: Optional[datetime.datetime] = None,
+        obj: str | None = None,
+        ts: datetime.datetime | None = None,
     ) -> list[NotificationContact]:
         now = ts or datetime.datetime.now()
         contacts = []
@@ -491,7 +491,7 @@ class NotificationGroup(NOCModel):
         )
 
     @property
-    def active_members(self) -> set[tuple[str, str, Optional[str]]]:
+    def active_members(self) -> set[tuple[str, str, str | None]]:
         """List of currently active members: (method, param, language)"""
         return {(c.method, c.contact, c.language) for c in self.members}
 
@@ -513,8 +513,8 @@ class NotificationGroup(NOCModel):
         method: str,
         address: str,
         subject: str,
-        body: Optional[str] = None,
-        attachments: Optional[list[dict[str, Any]]] = None,
+        body: str | None = None,
+        attachments: list[dict[str, Any]] | None = None,
     ):
         """
         Send notification message to MX service for processing
@@ -551,8 +551,8 @@ class NotificationGroup(NOCModel):
         cls,
         user: User,
         message_type: MessageType,
-        subject: Optional[str] = None,
-        body: Optional[str] = None,
+        subject: str | None = None,
+        body: str | None = None,
         **kwargs,
     ):
         """"""
@@ -561,11 +561,11 @@ class NotificationGroup(NOCModel):
         self,
         user: User,
         policy: str,
-        method: Optional[str] = None,
-        time_pattern: Optional[TimePattern] = None,
-        title_tag: Optional[str] = None,
-        expired_at: Optional[datetime.datetime] = None,
-        suppress: Optional[bool] = None,
+        method: str | None = None,
+        time_pattern: TimePattern | None = None,
+        title_tag: str | None = None,
+        expired_at: datetime.datetime | None = None,
+        suppress: bool | None = None,
     ) -> "NotificationGroupUserSettings":
         """
         Update User settings for NotificationGroup
@@ -610,7 +610,7 @@ class NotificationGroup(NOCModel):
         o: Any,
         watchers: list[Any],
         suppresses: list[Any],
-        remote_system: Optional[RemoteSystem] = None,
+        remote_system: RemoteSystem | None = None,
     ) -> "NotificationGroupSubscription":
         """Update notification subscription"""
         n = NotificationGroupSubscription.objects.get(
@@ -685,7 +685,7 @@ class NotificationGroup(NOCModel):
     def iter_object_subscription_settings(
         cls,
         o: Any,
-        remote_system: Optional[RemoteSystem] = None,
+        remote_system: RemoteSystem | None = None,
     ) -> Iterable["NotificationGroupSubscription"]:
         """
         Object Subscription settings
@@ -800,7 +800,7 @@ class NotificationGroup(NOCModel):
         self,
         message_type: str,
         meta: dict[MessageMeta, Any],
-        ts: Optional[datetime.datetime] = None,
+        ts: datetime.datetime | None = None,
     ) -> Iterable[tuple[str, dict[str, bytes], Optional["Template"]]]:
         """
         mx-compatible actions. Yields tuples of `stream`, `headers`
@@ -862,7 +862,7 @@ class NotificationGroupUserSettings(NOCModel):
     notification_group: NotificationGroup = ForeignKey(
         NotificationGroup, verbose_name="Notification Group", on_delete=CASCADE
     )
-    time_pattern: Optional[TimePattern] = ForeignKey(
+    time_pattern: TimePattern | None = ForeignKey(
         TimePattern, verbose_name="Time Pattern", on_delete=CASCADE, null=True, blank=True
     )
     user: User = ForeignKey(User, verbose_name="User", on_delete=CASCADE)
@@ -880,7 +880,7 @@ class NotificationGroupUserSettings(NOCModel):
         blank=False,
     )
     title_tag: str = CharField(max_length=30, blank=True)
-    expired_at: Optional[datetime.datetime] = DateTimeField(
+    expired_at: datetime.datetime | None = DateTimeField(
         "Expired Subscription After", auto_now_add=False
     )
     suppress = BooleanField("Deactivate Subscription", default=False)

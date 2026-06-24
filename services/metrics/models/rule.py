@@ -8,7 +8,7 @@
 # Python modules
 import sys
 from dataclasses import dataclass
-from typing import Any, Dict, Optional, Set, FrozenSet, List, Tuple
+from typing import Any
 
 # NOC modules
 from noc.services.datastream.models.cfgmetricrules import RuleAction, RuleCondition
@@ -25,7 +25,7 @@ class Rule:
 
     id: str
     match_labels: frozenset[frozenset[str]]
-    exclude_labels: Optional[frozenset[frozenset[str]]]
+    exclude_labels: frozenset[frozenset[str]] | None
     graph_config: GraphConfig
     match_scopes: set[str]
     inputs: set[str]

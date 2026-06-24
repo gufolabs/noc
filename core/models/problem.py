@@ -9,17 +9,17 @@
 from dataclasses import dataclass, field
 
 # Third-party modules
-from typing import List, Dict, Optional, Any
+from typing import Any
 
 
 @dataclass(frozen=True)
 class ProblemItem:
-    alarm_class: Optional[str]
+    alarm_class: str | None
     message: str = ""
     path: list[str] = field(default_factory=list)
     labels: list[str] = field(default_factory=list)
     fatal: bool = False
-    diagnostic: Optional[str] = None
+    diagnostic: str | None = None
     vars: dict[str, Any] = field(default_factory=dict)
-    code: Optional[str] = None
-    check: Optional[str] = None
+    code: str | None = None
+    check: str | None = None

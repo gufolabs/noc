@@ -12,7 +12,7 @@ import asyncio
 import uuid
 from collections import defaultdict
 from dataclasses import asdict
-from typing import Optional, Dict, Any, Set
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -56,7 +56,7 @@ class SyslogCollectorService(FastAPIService):
         self.address_configs = {}  # address -> SourceConfig
         self.invalid_sources = defaultdict(int)  # ip -> count
         self.pool_partitions: dict[str, int] = {}
-        self.storm_protection: Optional[StormProtection] = None
+        self.storm_protection: StormProtection | None = None
         self.updated: set[str] = set()
 
     async def on_activate(self):
@@ -113,7 +113,7 @@ class SyslogCollectorService(FastAPIService):
             self.pool_partitions[pool] = parts
         return parts
 
-    def lookup_config(self, address: str) -> Optional[SourceConfig]:
+    def lookup_config(self, address: str) -> SourceConfig | None:
         """
         Returns object id for given address or None when
         unknown source

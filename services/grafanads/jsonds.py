@@ -9,7 +9,7 @@
 import datetime
 import operator
 from dataclasses import dataclass
-from typing import Dict, List, Tuple, Optional, Iterable, Union, Set, Any
+from typing import Optional, Iterable, Any
 from collections import defaultdict
 
 # Third-party modules
@@ -66,7 +66,7 @@ router = APIRouter()
 class QueryConfig:
     metric_type: str
     query_expression: str
-    alias: Optional[str] = None
+    alias: str | None = None
     aggregate_function: str = "avg"
     if_combinator_condition: str = ""
     description: str = ""
@@ -79,7 +79,7 @@ class JsonDSAPI:
 
     QUERY_CONFIGS: list["QueryConfig"] = None
     openapi_tags: list[str] = ["api", "grafanads"]
-    api_name: Optional[str] = None
+    api_name: str | None = None
     query_response_model = list[TargetResponseItem]
     variable_payload = None
     allow_interval_limit: bool = True
@@ -208,7 +208,7 @@ class JsonDSAPI:
         return r
 
     @staticmethod
-    def clean_func_expr(field_name, function: Optional[str] = None) -> str:
+    def clean_func_expr(field_name, function: str | None = None) -> str:
         """
         Return function expression for field
         :param field_name:
@@ -367,7 +367,7 @@ class JsonDSAPI:
         return getattr(cls, f"format_{result_type}")(results)
 
     @staticmethod
-    def get_target_expression(table_name: str = None) -> tuple[str, Optional[str]]:
+    def get_target_expression(table_name: str = None) -> tuple[str, str | None]:
         """
         Getting Target name format for table
         :param table_name:
@@ -418,7 +418,7 @@ class JsonDSAPI:
         metric,
         name,
         user,
-        payload: Optional[dict[str, str]] = None,
+        payload: dict[str, str] | None = None,
     ) -> list[dict[str, str]]:
         """ """
         return []
@@ -436,8 +436,8 @@ class JsonDSAPI:
 
     @staticmethod
     def resolve_object_query(
-        model_id, value, query_function: Optional[list[str]] = None, user: User = None
-    ) -> Optional[Any]:
+        model_id, value, query_function: list[str] | None = None, user: User = None
+    ) -> Any | None:
         """
         Resolve object in Query by Value
         :param model_id:
@@ -470,7 +470,7 @@ class JsonDSAPI:
 
     def get_query_metric_type_condition(
         self,
-        payload: dict[str, Union[str, list[str]]],
+        payload: dict[str, str | list[str]],
         metric_type: Optional["MetricType"] = None,
         user: User = None,
     ) -> str:
@@ -619,7 +619,7 @@ class JsonDSAPI:
             path=f"/api/grafanads/{self.api_name}/variable",
             endpoint=self.api_grafanads_variable,
             methods=["POST"],
-            response_model=list[Union[dict[str, str], str]],
+            response_model=list[dict[str, str] | str],
             tags=self.openapi_tags,
             name=f"{self.api_name}_variable",
             description="Getting target variable",

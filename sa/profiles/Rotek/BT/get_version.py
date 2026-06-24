@@ -7,7 +7,6 @@
 
 # Python modules
 import re
-from typing import Tuple, Optional
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -27,7 +26,7 @@ class Script(BaseScript):
         re.IGNORECASE,
     )
 
-    def normalize_platform(self, oid: str) -> tuple[str, Optional[str], Optional[str]]:
+    def normalize_platform(self, oid: str) -> tuple[str, str | None, str | None]:
         """
         Normalize platform name from OID String
 

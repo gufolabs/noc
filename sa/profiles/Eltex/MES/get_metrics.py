@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import List
 
 # NOC Modules
 from noc.sa.profiles.Generic.get_metrics import Script as GetMetricsScript, metrics, MetricConfig

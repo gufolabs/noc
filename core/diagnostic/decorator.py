@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Iterable, Optional, Dict
+from typing import Iterable
 import datetime
 
 # NOC modules
@@ -50,7 +50,7 @@ def iter_diagnostics(self, to_display: bool = False) -> Iterable[DiagnosticItem]
 def save_document_diagnostics(
     self,
     diagnostics: list[DiagnosticValue],
-    resets: Optional[list[str]] = None,
+    resets: list[str] | None = None,
     dry_run: bool = False,
 ):
     """"""

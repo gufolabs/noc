@@ -10,7 +10,6 @@
 import datetime
 import operator
 from threading import Lock
-from typing import List, Dict, Tuple, Optional, Set
 
 # Third-party modules
 import cachetools
@@ -83,7 +82,7 @@ class ObjectStatus(Document):
         return oid in cls.get_failed_objects()
 
     @classmethod
-    def get_last_status(cls, object) -> tuple[Optional[bool], Optional[datetime.datetime]]:
+    def get_last_status(cls, object) -> tuple[bool | None, datetime.datetime | None]:
         """
         Returns last registred status and update time
         :param object: Managed Object id
@@ -140,7 +139,7 @@ class ObjectStatus(Document):
         return True
 
     @classmethod
-    def update_status_bulk(cls, statuses: list[tuple[int, bool, Optional[int]]]):
+    def update_status_bulk(cls, statuses: list[tuple[int, bool, int | None]]):
         """
         Update statuses bulk
         :param statuses:

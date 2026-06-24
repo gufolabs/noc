@@ -7,7 +7,7 @@
 
 # Python modules
 from collections import defaultdict
-from typing import List, AsyncIterable, Iterable, Dict, Tuple, Union, Optional, Any
+from typing import AsyncIterable, Iterable, Any
 
 # Third-party modules
 from gufo.snmp.async_client import SnmpSession
@@ -50,7 +50,7 @@ class SNMPProtocolChecker(BaseChecker):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.rules: list[Union[SNMPCredential, SNMPv3Credential]] = self.load_suggests(
+        self.rules: list[SNMPCredential | SNMPv3Credential] = self.load_suggests(
             kwargs.get("rules")
         )
 
@@ -92,9 +92,7 @@ class SNMPProtocolChecker(BaseChecker):
 
     def get_checks_by_address(
         self, checks: list[Check]
-    ) -> dict[
-        tuple[str, Optional[int]], dict[Union[SNMPCredential, SNMPv3Credential], list[Check]]
-    ]:
+    ) -> dict[tuple[str, int | None], dict[SNMPCredential | SNMPv3Credential, list[Check]]]:
         """Group checks by address"""
         # Group by address
         processed = {}
@@ -182,7 +180,7 @@ class SNMPProtocolChecker(BaseChecker):
     def get_session_config(
         cls,
         address,
-        cred: Union[SNMPCredential, SNMPv3Credential],
+        cred: SNMPCredential | SNMPv3Credential,
         timeout: int = 1,
     ) -> dict[str, Any]:
         """Build GufoSNMP Session config"""
@@ -206,11 +204,11 @@ class SNMPProtocolChecker(BaseChecker):
         self,
         address,
         oids: list[str],
-        cred: Union[SNMPCredential, SNMPv3Credential],
-        port: Optional[int] = None,
-        protocol: Optional[Protocol] = None,
-        timeout: Optional[int] = None,
-    ) -> tuple[Optional[dict[str, str]], Optional[CheckError]]:
+        cred: SNMPCredential | SNMPv3Credential,
+        port: int | None = None,
+        protocol: Protocol | None = None,
+        timeout: int | None = None,
+    ) -> tuple[dict[str, str] | None, CheckError | None]:
         cfg = self.get_session_config(address, cred, timeout=timeout)
         self.logger.debug(
             "Trying community '%s': %s, version: %s",

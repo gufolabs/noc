@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any, List
+from typing import Any
 
 # NOC modules
 from .base import BaseLoader

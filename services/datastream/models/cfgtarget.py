@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Dict
 
 # Third-party modules
 from pydantic import BaseModel
@@ -18,7 +17,7 @@ from .utils import ManagedObjectOpaque
 class TargetAddress(BaseModel):
     address: str  # IP address
     is_fatal: bool = False  # Address used for NOC access
-    interface: Optional[str] = None  # Assigned Interface name
+    interface: str | None = None  # Assigned Interface name
     syslog_source: bool = True
     trap_source: bool = True
     ping_check: bool = False
@@ -60,15 +59,15 @@ class CfgTarget(BaseModel):
     bi_id: int
     pool: str
     effective_labels: list[str]
-    opaque_data: Optional[ManagedObjectOpaque] = None  # Kafka message data
-    sa_profile: Optional[str] = None
-    fm_pool: Optional[str] = None
+    opaque_data: ManagedObjectOpaque | None = None  # Kafka message data
+    sa_profile: str | None = None
+    fm_pool: str | None = None
     process_events: bool = True
-    ping: Optional[PingSettings] = None
-    syslog: Optional[SyslogSettings] = None
-    trap: Optional[TrapSettings] = None
+    ping: PingSettings | None = None
+    syslog: SyslogSettings | None = None
+    trap: TrapSettings | None = None
     # checks: Optional[List[CheckConfig]] = None
-    services: Optional[list[dict[str, str]]] = None
-    dependencies: Optional[list[Dependency]] = None
-    mapping_refs: Optional[list[str]] = None
-    watchers: Optional[list[str]] = None
+    services: list[dict[str, str]] | None = None
+    dependencies: list[Dependency] | None = None
+    mapping_refs: list[str] | None = None
+    watchers: list[str] | None = None

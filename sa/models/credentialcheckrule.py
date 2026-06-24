@@ -8,7 +8,6 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import List, Set, Union, FrozenSet, Tuple
 from dataclasses import dataclass
 
 # Third-party modules
@@ -48,7 +47,7 @@ class SuggestItem:
         protocols: List of allowed protocols
     """
 
-    credentials: list[Union[SNMPCredential, CLICredential]]
+    credentials: list[SNMPCredential | CLICredential]
     labels: list[frozenset[str]]
     protocols: tuple[Protocol, ...]
 
@@ -195,9 +194,7 @@ class CredentialCheckRule(Document):
         return r
 
     @classmethod
-    def get_suggests(
-        cls, o
-    ) -> list[tuple[tuple[Protocol, ...], Union[SNMPCredential, CLICredential]]]:
+    def get_suggests(cls, o) -> list[tuple[tuple[Protocol, ...], SNMPCredential | CLICredential]]:
         r = []
         labels = set(o.effective_labels)
         for s in cls.get_suggest_rules():

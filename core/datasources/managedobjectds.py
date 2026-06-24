@@ -7,7 +7,7 @@
 
 # Python Modules
 from collections import defaultdict
-from typing import Optional, Iterable, Dict, Any, List, Tuple, AsyncIterable
+from typing import Iterable, Any, AsyncIterable
 
 # Third-party modules
 import polars as pl
@@ -262,7 +262,7 @@ class ManagedObjectDS(BaseDataSource):
     ]
 
     @classmethod
-    async def query(cls, fields: Optional[Iterable[str]] = None, *args, **kwargs) -> pl.DataFrame:
+    async def query(cls, fields: Iterable[str] | None = None, *args, **kwargs) -> pl.DataFrame:
         """
         Method for query report data. Return pandas dataframe.
         :param fields: list fields for filtered on query
@@ -357,7 +357,7 @@ class ManagedObjectDS(BaseDataSource):
             return {r[1]: (r[2], r[3]) for r in cursor}
 
     @classmethod
-    async def get_json(cls, fields: Optional[Iterable[str]] = None, *args, **kwargs):
+    async def get_json(cls, fields: Iterable[str] | None = None, *args, **kwargs):
         return [mm async for mm in cls.iter_row(fields, *args, **kwargs)]
 
     @staticmethod
@@ -487,8 +487,8 @@ class ManagedObjectDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
-        admin_domain_ads: Optional[list[int]] = None,
+        fields: Iterable[str] | None = None,
+        admin_domain_ads: list[int] | None = None,
         *args,
         user=None,
         **kwargs,

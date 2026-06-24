@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import Optional, Union
+from typing import Optional
 
 # Third-party modules
 import bson
@@ -65,7 +65,7 @@ class Street(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["Street"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["Street"]:
         return Street.objects.filter(id=oid).first()
 
     def __str__(self):

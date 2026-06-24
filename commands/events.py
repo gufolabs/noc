@@ -10,7 +10,6 @@ import re
 import datetime
 import argparse
 import time
-from typing import Optional, List
 from html.entities import name2codepoint
 
 # Third-party modules
@@ -112,10 +111,10 @@ class Command(BaseCommand):
     def handle_inject_event(
         self,
         *args,
-        syslog: Optional[str] = None,
-        object: Optional[str] = None,
-        remote_system: Optional[str] = None,
-        paths: Optional[list[str]] = None,
+        syslog: str | None = None,
+        object: str | None = None,
+        remote_system: str | None = None,
+        paths: list[str] | None = None,
         **options,
     ):
         # Inject syslog messages

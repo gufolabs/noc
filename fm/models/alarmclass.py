@@ -10,7 +10,7 @@ from pathlib import Path
 import re
 from threading import Lock
 import operator
-from typing import Any, Dict, Optional, List, Callable, Union
+from typing import Any, Optional, Callable
 
 # Third-party modules
 from bson import ObjectId
@@ -220,7 +220,7 @@ class AlarmClass(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["AlarmClass"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["AlarmClass"]:
         return AlarmClass.objects.filter(id=oid).first()
 
     @classmethod
@@ -240,7 +240,7 @@ class AlarmClass(Document):
         return AlarmClass.objects.filter(name=name_rx).first()
 
     @property
-    def severity(self) -> Optional[AlarmSeverity]:
+    def severity(self) -> AlarmSeverity | None:
         if self.labels and self.labels[0].startswith("noc::severity::"):
             return AlarmSeverity.get_by_code(self.labels[0][15:].upper())
         return None
@@ -404,7 +404,7 @@ class AlarmClass(Document):
             return self.config.notification_delay or None
         return self.notification_delay or None
 
-    def get_control_time(self, reopens: int) -> Optional[int]:
+    def get_control_time(self, reopens: int) -> int | None:
         if reopens == 0:
             if self.config:
                 return self.config.control_time0 or None

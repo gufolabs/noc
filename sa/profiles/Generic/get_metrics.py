@@ -11,7 +11,7 @@ import os
 import re
 import itertools
 import operator
-from typing import Union, Optional, List, Tuple, Callable, Dict, Any
+from typing import Callable, Any
 from collections import defaultdict
 from dataclasses import dataclass
 
@@ -307,7 +307,7 @@ class Script(BaseScript, metaclass=MetricScriptBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.metrics = []
-        self.ts: Optional[int] = None
+        self.ts: int | None = None
         # SNMP batch to be collected by collect_snmp_metrics
         # oid -> BatchConfig
         self.snmp_batch: dict[str, list[BatchConfig]] = defaultdict(list)
@@ -342,7 +342,7 @@ class Script(BaseScript, metaclass=MetricScriptBase):
         return metric
 
     def execute(
-        self, metrics: Optional[list[dict[str, Any]]] = None, collected: list[dict[str, Any]] = None
+        self, metrics: list[dict[str, Any]] | None = None, collected: list[dict[str, Any]] = None
     ):
         """
         Metrics is a list of:
@@ -652,19 +652,19 @@ class Script(BaseScript, metaclass=MetricScriptBase):
 
     def set_metric(
         self,
-        id: Union[int, tuple[str, Optional[list[str]]]],
+        id: int | tuple[str, list[str] | None],
         metric: str = None,
-        value: Union[int, float] = 0,
-        ts: Optional[int] = None,
-        labels: Optional[Union[list[str], tuple[str]]] = None,
+        value: int | float = 0,
+        ts: int | None = None,
+        labels: list[str] | tuple[str] | None = None,
         type: str = "gauge",
-        scale: Union[float, int, Callable[..., float]] = 1,
+        scale: float | int | Callable[..., float] = 1,
         units: str = "1",
         multi: bool = False,
-        sensor: Optional[int] = None,
-        sla_probe: Optional[int] = None,
-        cpe: Optional[int] = None,
-        service: Optional[int] = None,
+        sensor: int | None = None,
+        sla_probe: int | None = None,
+        cpe: int | None = None,
+        service: int | None = None,
     ):
         """
         Append metric to output
@@ -780,7 +780,7 @@ class Script(BaseScript, metaclass=MetricScriptBase):
                 labels=mc.labels,
             )
 
-    SENSOR_OID_SCALE: dict[str, Union[int, Callable[..., float]]] = {}  # oid -> scale
+    SENSOR_OID_SCALE: dict[str, int | Callable[..., float]] = {}  # oid -> scale
 
     def collect_sensor_metrics(self, metrics: list[MetricCollectorConfig]):
         """

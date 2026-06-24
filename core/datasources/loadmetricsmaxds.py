@@ -9,7 +9,7 @@
 from collections import defaultdict
 import datetime
 import time
-from typing import Any, AsyncIterable, Dict, List, Optional, Iterable, Tuple
+from typing import Any, AsyncIterable, Iterable
 
 # Third-party modules
 from pymongo import ReadPreference
@@ -164,14 +164,14 @@ class LoadMetricsMaxDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
+        fields: Iterable[str] | None = None,
         start: datetime.datetime = None,
         end: datetime.datetime = None,
-        mo_profile: Optional[ManagedObjectProfile] = None,
-        interface_profile: Optional[InterfaceProfile] = None,
-        description: Optional[str] = None,
+        mo_profile: ManagedObjectProfile | None = None,
+        interface_profile: InterfaceProfile | None = None,
+        description: str | None = None,
         exclude_zero: bool = False,
-        admin_domain_ads: Optional[list[int]] = None,
+        admin_domain_ads: list[int] | None = None,
         *args,
         **kwargs,
     ) -> AsyncIterable[tuple[str, str]]:

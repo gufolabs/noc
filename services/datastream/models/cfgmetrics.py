@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Any, Dict
+from typing import Any
 
 # Third-party modules
 from pydantic import BaseModel
@@ -17,9 +17,9 @@ class CollectorMapRule(BaseModel):
     field: str
     sender: str = Any
     allow_partial_match: bool = False
-    aliases: Optional[list[str]] = None
-    labels: Optional[list[str]] = None
-    unit: Optional[str] = None
+    aliases: list[str] | None = None
+    labels: list[str] | None = None
+    unit: str | None = None
     preference: int = 0
 
 
@@ -37,4 +37,4 @@ class CfgMetric(BaseModel):
     table: str
     field: str
     scope: ScopeInfo
-    rules: Optional[list[CollectorMapRule]] = None
+    rules: list[CollectorMapRule] | None = None

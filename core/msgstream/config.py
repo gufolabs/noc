@@ -7,7 +7,6 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Optional, List
 
 # NOC modules
 from noc.config import config
@@ -19,15 +18,15 @@ TEMPORARY_STREAM_PREFIX = "__tmp"
 class StreamConfig:
     name: str
     sharded: bool = False
-    slot: Optional[str] = None
-    partitions: Optional[int] = None
+    slot: str | None = None
+    partitions: int | None = None
     retention_bytes: int = 0
     segment_bytes: int = 0
     retention_ages: int = 86400
     segment_ages: int = 3600
     auto_pause_time: bool = False
     auto_pause_disable: bool = False
-    replication_factor: Optional[int] = None
+    replication_factor: int | None = None
 
     @property
     def is_temp(self) -> bool:
@@ -36,11 +35,11 @@ class StreamConfig:
 
 @dataclass(frozen=True)
 class StreamItem:
-    name: Optional[str]
-    shard: Optional[str] = None
-    slot: Optional[str] = None
+    name: str | None
+    shard: str | None = None
+    slot: str | None = None
     enable: bool = True  # Stream is active
-    config: Optional[StreamConfig] = None
+    config: StreamConfig | None = None
 
     def get_partitions(self) -> int:
         if self.config.partitions is not None:
@@ -52,7 +51,7 @@ class StreamItem:
         return config.get_slot_limits(slot)
 
     @property
-    def cursor_name(self) -> Optional[str]:
+    def cursor_name(self) -> str | None:
         name = self.slot or self.name
         if self.shard:
             return f"{name}.{self.shard}"

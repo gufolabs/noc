@@ -4,7 +4,6 @@
 # Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
-from typing import List
 
 # NOC modules
 from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript

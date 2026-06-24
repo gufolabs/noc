@@ -13,7 +13,6 @@ import types
 from collections import defaultdict
 import operator
 from urllib.parse import urlencode
-from typing import List, Dict, Set, Optional
 from threading import Lock
 import pkgutil
 import importlib
@@ -124,7 +123,7 @@ class Site:
         self.app_contributors = defaultdict(set)
         self.app_count = 0
         self.pending_applications = []
-        self.service: Optional[BaseService] = None
+        self.service: BaseService | None = None
 
     def set_service(self, service: BaseService) -> None:
         """

@@ -7,7 +7,6 @@
 
 # Python modules
 import random
-from typing import List, Union, Optional, Tuple
 from urllib.parse import quote as urllib_quote
 
 # NOC modules
@@ -41,13 +40,13 @@ class ClickhouseClient:
 
     def execute(
         self,
-        sql: Optional[str] = None,
-        args: Optional[list[str]] = None,
+        sql: str | None = None,
+        args: list[str] | None = None,
         nodb: bool = False,
         post: str = None,
         extra: list[tuple[str, str]] = None,
         return_raw: bool = False,
-    ) -> Union[list[str], str]:
+    ) -> list[str] | str:
         """
 
         :param sql: Query string

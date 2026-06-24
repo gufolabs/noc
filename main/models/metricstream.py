@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Dict, Any, Callable
+from typing import Any, Callable
 from threading import Lock
 
 # Third-party modules

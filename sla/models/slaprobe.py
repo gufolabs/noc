@@ -9,7 +9,7 @@
 import re
 import operator
 import datetime
-from typing import List, Iterable, Optional, Dict, Any, Union
+from typing import Iterable, Optional, Any
 from threading import Lock
 
 # Third-party modules
@@ -111,7 +111,7 @@ class SLAProbe(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["SLAProbe"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["SLAProbe"]:
         return SLAProbe.objects.filter(id=oid).first()
 
     @classmethod
@@ -138,7 +138,7 @@ class SLAProbe(Document):
             ]
 
     @cachetools.cached(_target_cache, key=lambda x: str(x.id), lock=id_lock)
-    def get_target(self) -> Optional[ManagedObject]:
+    def get_target(self) -> ManagedObject | None:
         from noc.inv.models.subinterface import SubInterface
 
         address = self.target
@@ -177,7 +177,7 @@ class SLAProbe(Document):
 
     @classmethod
     def iter_collected_metrics(
-        cls, mo, run: int = 0, d_interval: Optional[int] = None
+        cls, mo, run: int = 0, d_interval: int | None = None
     ) -> Iterable[MetricCollectorConfig]:
         """
         Return metric settings
@@ -352,7 +352,7 @@ class SLAProbe(Document):
             yield "sa.ManagedObject", str(self.managed_object.id)
         # Target - Role
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.profile.get_css_class() if self.profile else None
 
     def get_provisioning_op(self) -> str:

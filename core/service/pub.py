@@ -10,7 +10,6 @@
 import logging
 
 # Third-party modules
-from typing import Optional, Dict
 
 # NOC modules
 from noc.core.msgstream.client import MessageStreamClient
@@ -22,9 +21,9 @@ logger = logging.getLogger(__name__)
 def publish(
     value: bytes,
     stream: str,
-    partition: Optional[int] = None,
-    key: Optional[bytes] = None,
-    headers: Optional[dict[str, bytes]] = None,
+    partition: int | None = None,
+    key: bytes | None = None,
+    headers: dict[str, bytes] | None = None,
 ):
     async def wrap():
         async with MessageStreamClient() as client:

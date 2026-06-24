@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Iterable, Dict, Union
+from typing import Optional, Iterable
 from threading import Lock
 import operator
 import re
@@ -59,7 +59,7 @@ class IfDescPatterns(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["IfDescPatterns"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["IfDescPatterns"]:
         return IfDescPatterns.objects.filter(id=oid).first()
 
     def clean(self):
@@ -87,7 +87,7 @@ class IfDescPatterns(Document):
                 yield match.groupdict()
 
     @cachetools.cachedmethod(operator.attrgetter("_re_cache"), lock=lambda _: re_lock)
-    def _get_re(self, pattern: str) -> Optional[re.Pattern]:
+    def _get_re(self, pattern: str) -> re.Pattern | None:
         try:
             return re.compile(pattern)
         except re.error:
