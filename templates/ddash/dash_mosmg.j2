@@ -222,6 +222,36 @@
     {% endif %}
 
 
+    {%if port_types %}
+    ,
+        {% set comma = joiner(",") -%}
+        {% for port in port_types -%}
+            {{ comma() }}
+            {
+              "collapse": {% if port.type in selected_types and selected_types[port.type] %}false{% else %}true{% endif %},
+              "editable": false,
+              "height": "250px",
+              "showTitle": true,
+              "title": "{{port.name}}",
+              "internal_comment": "port_row",
+              "panels": [
+                {% if extra_template == "iface" %}
+                    {% from "graph_interface_multi.j2" import interface -%}
+                {% else %}
+                    {% from "graph_interface_load.j2" import interface -%}
+                {% endif %}
+                {{interface(port, loop.index)}}
+              ]
+            }
+        {%- endfor %}
+    {% endif %}
+
+    {% if port_types %}
+    ,
+        {% include "row_errors.j2" with context -%}
+    {% endif %}
+
+
     {%if object_check_metrics %}
       ,
       {

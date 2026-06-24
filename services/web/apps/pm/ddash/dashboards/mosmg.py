@@ -11,6 +11,8 @@ from mongoengine.queryset.visitor import Q as m_q
 
 # NOC modules
 from .mo import MODashboard
+from noc.core.text import alnum_key
+from noc.inv.models.interface import Interface
 from noc.inv.models.object import Object
 from noc.inv.models.sensor import Sensor
 from noc.pm.models.metrictype import MetricType
@@ -39,6 +41,44 @@ class MOSMGDashboard(MODashboard):
     ]
 
     def resolve_object_data(self, object):
+        def interface_profile_has_metrics(profile):
+            """
+            Check interface profile has metrics
+            """
+            for m in profile.metrics:
+                if (
+                    m.interval
+                    or profile.metrics_default_interval
+                    or self.object.object_profile.metrics_default_interval
+                ):
+                    return True
+            return False
+
+        port_types = []
+        selected_types = defaultdict(list)
+        # Get all interface profiles with configurable metrics
+        all_ifaces = list(Interface.objects.filter(managed_object=self.object.id))
+        iprof = {i.profile for i in all_ifaces}
+        # @todo: Order by priority
+        profiles = [p for p in iprof if interface_profile_has_metrics(p)]
+        # Create charts for configured interface metrics
+        for profile in profiles:
+            ifaces = [i for i in all_ifaces if i.profile == profile]
+            ports = []
+            for iface in sorted(ifaces, key=lambda el: alnum_key(el.name)):
+                if iface.type in ("physical", "tunnel"):
+                    ports += [
+                        {
+                            "name": iface.name,
+                            "descr": self.str_cleanup(
+                                iface.description, remove_letters=TITLE_BAD_CHARS
+                            ),
+                            "status": iface.status,
+                        }
+                    ]
+            if ports:
+                port_types += [{"type": profile.id, "name": profile.name, "ports": ports}]
+
         object_metrics = []
         if self.object.object_profile.report_ping_rtt:
             object_metrics += ["rtt"]
@@ -197,6 +237,8 @@ class MOSMGDashboard(MODashboard):
             )
             trunk_groups_data_channels[tg_name] = tg_data
         return {
+            "port_types": port_types,
+            "selected_types": selected_types,
             "object_metrics": object_metrics,
             "sensor_enum": sensor_enum,
             "sensor_types": sensor_types,
@@ -213,6 +255,8 @@ class MOSMGDashboard(MODashboard):
 
     def get_context(self):
         return {
+            "port_types": self.object_data["port_types"],
+            "selected_types": self.object_data["selected_types"],
             "object_metrics": self.object_data["object_metrics"],
             "device": self.object.name.replace('"', ""),
             "ip": self.object.address,
