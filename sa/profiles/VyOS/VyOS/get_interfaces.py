@@ -7,7 +7,7 @@
 
 # Python modules
 import re
-from typing import Any, Dict, List
+from typing import Any
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -27,7 +27,7 @@ class Script(BaseScript):
     rx_mac = re.compile(r"\s+link/ether\s+(?P<mac>\S+)")
     rx_ifindex = re.compile(r"^(?P<ifname>\S+):\s+ifIndex = (?P<ifindex>\d+)\n", re.MULTILINE)
 
-    def get_ifindex(self) -> Dict[str, int]:
+    def get_ifindex(self) -> dict[str, int]:
         """
         Returns mapping of if name -> ifindex
         """
@@ -38,7 +38,7 @@ class Script(BaseScript):
         }
 
     def execute_cli(self):
-        def update_ifindex(x: Dict[str, Any]) -> None:
+        def update_ifindex(x: dict[str, Any]) -> None:
             name = x.get("name")
             if not name:
                 return
@@ -65,7 +65,7 @@ class Script(BaseScript):
             sub["enabled_afi"] = enabled_afi
 
         ifindexes = self.get_ifindex()
-        r: List[Dict[str, Any]] = []  # Result
+        r: list[dict[str, Any]] = []  # Result
         current_iface = ""
         is_vif = False
         out = self.cli("show interfaces detail", cached=True)

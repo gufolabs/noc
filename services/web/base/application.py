@@ -11,7 +11,7 @@ import os
 import datetime
 import functools
 from collections import OrderedDict
-from typing import TypeVar, Type, Optional, Dict, Any
+from typing import TypeVar, Any
 from http import HTTPStatus
 
 # Third-party modules
@@ -86,7 +86,7 @@ class ApplicationBase(type):
     Application metaclass. Registers application class to site
     """
 
-    def __new__(mcs: "Type[Application]", name: str, bases, attrs):
+    def __new__(mcs: "type[Application]", name: str, bases, attrs):
         m = type.__new__(mcs, name, bases, attrs)
         for name in attrs:
             m.add_to_class(name, attrs[name])
@@ -119,7 +119,7 @@ class Application(metaclass=ApplicationBase):
     config = settings.config  # @fixme remove
 
     app_alias = None  # Django 1.5 application aliases
-    require_feature: Optional[Feature] = None  # Feature required for application
+    require_feature: Feature | None = None  # Feature required for application
 
     TZ = get_current_timezone()
 
@@ -260,7 +260,7 @@ class Application(metaclass=ApplicationBase):
         return r
 
     @staticmethod
-    def get_object_or_404(model: Type[T], *args, **kwargs) -> T:
+    def get_object_or_404(model: type[T], *args, **kwargs) -> T:
         """
         Shortcut to get_object_or_404
         """
@@ -329,7 +329,7 @@ class Application(metaclass=ApplicationBase):
 
     @classmethod
     def _set_headers(
-        cls, resp: HttpResponse, headers: Optional[Dict[str, Any]] = None
+        cls, resp: HttpResponse, headers: dict[str, Any] | None = None
     ) -> HttpResponse:
         if headers:
             for k, v in headers.items():
@@ -338,7 +338,7 @@ class Application(metaclass=ApplicationBase):
 
     @classmethod
     def render_json(
-        cls, obj, *, status: int = HTTPStatus.OK.value, headers: Optional[Dict[str, Any]] = None
+        cls, obj, *, status: int = HTTPStatus.OK.value, headers: dict[str, Any] | None = None
     ) -> HttpResponse:
         """
         Create serialized JSON-encoded response

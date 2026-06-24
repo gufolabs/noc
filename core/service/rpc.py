@@ -10,7 +10,6 @@ import itertools
 import logging
 import random
 from time import perf_counter
-from typing import Optional
 import asyncio
 import threading
 
@@ -69,7 +68,7 @@ class RPCProxy:
 
     def __getattr__(self, item):
         async def _call(method, *args, **kwargs):
-            async def make_call(url, body, limit=3) -> Optional[bytes]:
+            async def make_call(url, body, limit=3) -> bytes | None:
                 req_headers = {}
                 sample = 1 if span_ctx and span_id else 0
                 with Span(

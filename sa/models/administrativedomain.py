@@ -166,7 +166,7 @@ class AdministrativeDomain(NOCModel):
     def has_children(self):
         return bool(AdministrativeDomain.objects.filter(parent=self.id))
 
-    def get_bioseg_floating_name(self, object) -> Optional[str]:
+    def get_bioseg_floating_name(self, object) -> str | None:
         if self.bioseg_floating_name_template:
             return self.bioseg_floating_name_template.render_body(object=object)
         if self.parent:

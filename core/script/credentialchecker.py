@@ -8,7 +8,7 @@
 # Python modules
 import logging
 from dataclasses import dataclass
-from typing import Optional, List, Tuple, Union, Iterator, Iterable
+from typing import Iterator, Iterable
 
 # Third-party modules
 from pymongo import ReadPreference
@@ -32,25 +32,25 @@ CHECK_OIDS = [mib["SNMPv2-MIB::sysObjectID.0"]]
 @dataclass(frozen=True)
 class SNMPCredential:
     snmp_ro: str = None
-    snmp_rw: Optional[str] = None
-    oids: Optional[List[str]] = None
+    snmp_rw: str | None = None
+    oids: list[str] | None = None
 
 
 @dataclass(frozen=True)
 class CLICredential:
-    user: Optional[str] = None
-    password: Optional[str] = None
-    super_password: Optional[str] = None
+    user: str | None = None
+    password: str | None = None
+    super_password: str | None = None
     raise_privilege: bool = True
 
 
 @dataclass(frozen=True)
 class SuggestSNMPConfig:
-    protocols: Tuple[Protocol, ...]
+    protocols: tuple[Protocol, ...]
     check_method: str = "snmp_check"
-    snmp_ro: Optional[str] = None
-    snmp_rw: Optional[str] = None
-    check_oids: Optional[Tuple[str, ...]] = None
+    snmp_ro: str | None = None
+    snmp_rw: str | None = None
+    check_oids: tuple[str, ...] | None = None
 
     def get_credential(self) -> SNMPCredential:
         return SNMPCredential(self.snmp_ro, self.snmp_rw, oids=self.check_oids)
@@ -58,13 +58,13 @@ class SuggestSNMPConfig:
 
 @dataclass(frozen=True)
 class SuggestCLIConfig:
-    protocols: Tuple[Protocol, ...]
+    protocols: tuple[Protocol, ...]
     check_method: str = "cli_check"
-    user: Optional[str] = None
-    password: Optional[str] = None
-    super_password: Optional[str] = None
+    user: str | None = None
+    password: str | None = None
+    super_password: str | None = None
     raise_privileges: bool = True
-    access_preference: Optional[str] = "C"
+    access_preference: str | None = "C"
 
     def get_credential(self) -> CLICredential:
         return CLICredential(
@@ -80,13 +80,13 @@ class ProtocolResult:
     protocol: Protocol
     status: bool
     skipped: bool = False
-    error: Optional[str] = None
-    credential: Optional[Union[CLICredential, SNMPCredential]] = None
+    error: str | None = None
+    credential: CLICredential | SNMPCredential | None = None
 
 
-SUGGEST_SNMP: Tuple[Protocol, ...] = (Protocol(7), Protocol(6))
-SUGGEST_CLI: Tuple[Protocol, ...] = (Protocol(1), Protocol(2))
-SUGGEST_PROTOCOLS: Tuple[Protocol, ...] = SUGGEST_SNMP + SUGGEST_CLI
+SUGGEST_SNMP: tuple[Protocol, ...] = (Protocol(7), Protocol(6))
+SUGGEST_CLI: tuple[Protocol, ...] = (Protocol(1), Protocol(2))
+SUGGEST_PROTOCOLS: tuple[Protocol, ...] = SUGGEST_SNMP + SUGGEST_CLI
 
 
 class CredentialChecker:
@@ -100,13 +100,13 @@ class CredentialChecker:
         self,
         address,
         pool,
-        labels: List[str] = None,
-        port: Optional[str] = None,
+        labels: list[str] = None,
+        port: str | None = None,
         logger=None,
-        profile: Optional[str] = None,
+        profile: str | None = None,
         raise_privilege: bool = True,
         calling_service: str = "credentialchecker",
-        credentials: Optional[List[Union[SuggestCLIConfig, SuggestSNMPConfig]]] = None,
+        credentials: list[SuggestCLIConfig | SuggestSNMPConfig] | None = None,
         ignoring_rule: bool = False,
     ):
         """
@@ -129,10 +129,10 @@ class CredentialChecker:
             logger or self.base_logger, "%s][%s" % (self.pool or "", self.address or "")
         )
         self.calling_service = calling_service
-        self.profile: Optional["Profile"] = profile
+        self.profile: "Profile" | None = profile
         if isinstance(self.profile, str):
             self.profile = Profile.get_by_name(profile) if profile else None
-        self.credentials: List[Union[CLICredential, SNMPCredential]] = credentials or []
+        self.credentials: list[CLICredential | SNMPCredential] = credentials or []
         self.ignoring_rule = ignoring_rule
         self.ignoring_cli = False
         self.raise_privilege = raise_privilege
@@ -141,7 +141,7 @@ class CredentialChecker:
             self.ignoring_cli = True
 
     @staticmethod
-    def iter_protocols(*args, order: Tuple[Protocol, ...] = None) -> Iterable[Protocol]:
+    def iter_protocols(*args, order: tuple[Protocol, ...] = None) -> Iterable[Protocol]:
         """
 
         :param args:
@@ -169,8 +169,8 @@ class CredentialChecker:
         return "No supported authentication methods" in message
 
     def iter_suggests(
-        self, protocols: Tuple[Protocol, ...] = None
-    ) -> Iterator[Union[SuggestCLIConfig, SuggestSNMPConfig]]:
+        self, protocols: tuple[Protocol, ...] = None
+    ) -> Iterator[SuggestCLIConfig | SuggestSNMPConfig]:
         """
         Load ProfileCheckRules and return a list, grouped by preferences
 
@@ -201,7 +201,7 @@ class CredentialChecker:
                 )
         if self.ignoring_rule:
             return
-        ccr: List[CredentialCheckRule] = CredentialCheckRule.objects.filter(is_active=True)
+        ccr: list[CredentialCheckRule] = CredentialCheckRule.objects.filter(is_active=True)
         if self.labels:
             ccr = ccr.filter(
                 (m_q(match__labels__in=self.labels, match__exclude_labels__nin=self.labels))
@@ -249,7 +249,7 @@ class CredentialChecker:
                         check_oids=tuple(cc.suggest_snmp_oids or []) or None,
                     )
 
-    def iter_result(self, protocols: Optional[Iterable[Protocol]] = None) -> List[ProtocolResult]:
+    def iter_result(self, protocols: Iterable[Protocol] | None = None) -> list[ProtocolResult]:
         """
         Iterate over suggest result
         :param protocols: List protocols for check
@@ -327,7 +327,7 @@ class CredentialChecker:
             credential=cred,
         )
 
-    def check_oid(self, oid: str, community: str, version="snmp_v2c_get") -> Tuple[bool, str]:
+    def check_oid(self, oid: str, community: str, version="snmp_v2c_get") -> tuple[bool, str]:
         """
         Perform SNMP GET. Param is OID or symbolic name, version is activator method
         todo mass check
@@ -359,7 +359,7 @@ class CredentialChecker:
         super_password: str,
         protocol: Protocol,
         raise_privilege: bool = True,
-    ) -> Tuple[bool, str]:
+    ) -> tuple[bool, str]:
         """
         Check user, password for cli proto
         :param user:
@@ -400,7 +400,7 @@ class CredentialChecker:
             self.logger.debug("RPC Error: %s", e)
             return False, ""
 
-    def get_first(self, protocols: Iterable[Protocol]) -> List[ProtocolResult]:
+    def get_first(self, protocols: Iterable[Protocol]) -> list[ProtocolResult]:
         """
         Get first result
         :param protocols:

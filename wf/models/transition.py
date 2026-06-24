@@ -8,7 +8,7 @@
 # Python modules
 import operator
 import logging
-from typing import List, Dict, Any, Optional, Union
+from typing import Any, Optional
 from threading import Lock
 from pathlib import Path
 
@@ -42,19 +42,19 @@ id_lock = Lock()
 
 
 class RequiredRule(EmbeddedDocument):
-    labels: List[str] = ListField(StringField())
-    exclude_labels: List[str] = ListField(StringField())
+    labels: list[str] = ListField(StringField())
+    exclude_labels: list[str] = ListField(StringField())
 
     def __str__(self):
         return f"{', '.join(self.labels)}"
 
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "labels": list(self.labels),
             "exclude_labels": list(self.exclude_labels),
         }
 
-    def is_match(self, labels: List[str]):
+    def is_match(self, labels: list[str]):
         if self.exclude_labels and not set(self.exclude_labels) - set(labels):
             return False
         return bool(not set(self.labels) - set(labels))
@@ -68,7 +68,7 @@ class TransitionVertex(EmbeddedDocument):
     def __str__(self):
         return "%s, %s" % (self.x, self.y)
 
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "x": self.x,
             "y": self.y,
@@ -136,7 +136,7 @@ class Transition(Document):
         )
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "workflow__name": self.workflow.name,
             "from_state__uuid": str(self.from_state.uuid),
@@ -190,7 +190,7 @@ class Transition(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Transition"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Transition"]:
         return Transition.objects.filter(id=oid).first()
 
     @classmethod
@@ -205,7 +205,7 @@ class Transition(Document):
             raise ValueError("Workflow mismatch")
         self.workflow = self.from_state.workflow
 
-    def is_allowed(self, labels: List[str]) -> bool:
+    def is_allowed(self, labels: list[str]) -> bool:
         """
         Check transition allowed
         :param labels:
@@ -245,5 +245,5 @@ class Transition(Document):
     @cachetools.cachedmethod(
         operator.attrgetter("_active_transition_cache"), lock=lambda _: id_lock
     )
-    def get_active_transitions(cls, state: str, event: str) -> List["Transition"]:
+    def get_active_transitions(cls, state: str, event: str) -> list["Transition"]:
         return list(Transition.objects.filter(from_state=state, event=event, is_active=True))

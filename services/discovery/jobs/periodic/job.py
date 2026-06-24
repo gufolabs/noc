@@ -7,7 +7,6 @@
 
 # Python modules
 import random
-from typing import Optional
 
 # NOC modules
 from noc.services.discovery.jobs.base import MODiscoveryJob
@@ -48,7 +47,7 @@ class PeriodicDiscoveryJob(MODiscoveryJob):
             else:
                 self.run_checks()
 
-    def is_run_interval(self, interval: int, run: int, name: Optional[str] = None) -> bool:
+    def is_run_interval(self, interval: int, run: int, name: str | None = None) -> bool:
         """
 
         Attrs:

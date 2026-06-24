@@ -7,7 +7,7 @@
 
 # Python modules
 from collections import defaultdict
-from typing import List, AsyncIterable, Iterable, Dict, Tuple, Union, Optional, Any
+from typing import AsyncIterable, Iterable, Any
 
 # Third-party modules
 from gufo.snmp.async_client import SnmpSession
@@ -39,18 +39,18 @@ class SNMPProtocolChecker(BaseChecker):
     """
 
     name = "snmp"
-    CHECKS: List[str] = [
+    CHECKS: list[str] = [
         Protocol.SNMPv1.config.check,
         Protocol.SNMPv2c.config.check,
         Protocol.SNMPv3.config.check,
     ]
-    PROTO_CHECK_MAP: Dict[str, Protocol] = {p.config.check: p for p in Protocol if p.config.check}
+    PROTO_CHECK_MAP: dict[str, Protocol] = {p.config.check: p for p in Protocol if p.config.check}
     SNMP_TIMEOUT_SEC = 3
     PARAMS = ["rules"]
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.rules: List[Union[SNMPCredential, SNMPv3Credential]] = self.load_suggests(
+        self.rules: list[SNMPCredential | SNMPv3Credential] = self.load_suggests(
             kwargs.get("rules")
         )
 
@@ -61,7 +61,7 @@ class SNMPProtocolChecker(BaseChecker):
         return [x for _, x in credentials if isinstance(x, (SNMPCredential, SNMPv3Credential))]
 
     @staticmethod
-    def get_oids(check: Check, cred=None) -> List[str]:
+    def get_oids(check: Check, cred=None) -> list[str]:
         if check.args and "oids" in check.args:
             return check.args["oids"].split(",")
         if check.credential and check.credential.oids:
@@ -91,10 +91,8 @@ class SNMPProtocolChecker(BaseChecker):
             )
 
     def get_checks_by_address(
-        self, checks: List[Check]
-    ) -> Dict[
-        Tuple[str, Optional[int]], Dict[Union[SNMPCredential, SNMPv3Credential], List[Check]]
-    ]:
+        self, checks: list[Check]
+    ) -> dict[tuple[str, int | None], dict[SNMPCredential | SNMPv3Credential, list[Check]]]:
         """Group checks by address"""
         # Group by address
         processed = {}
@@ -117,7 +115,7 @@ class SNMPProtocolChecker(BaseChecker):
                     processed[key][cred].add(c)
         return processed
 
-    async def iter_result(self, checks: List[Check]) -> AsyncIterable[CheckResult]:
+    async def iter_result(self, checks: list[Check]) -> AsyncIterable[CheckResult]:
         """ """
         processed = self.get_checks_by_address(checks)
         self.logger.debug("Processed SNMP checks: %s", processed)
@@ -182,9 +180,9 @@ class SNMPProtocolChecker(BaseChecker):
     def get_session_config(
         cls,
         address,
-        cred: Union[SNMPCredential, SNMPv3Credential],
+        cred: SNMPCredential | SNMPv3Credential,
         timeout: int = 1,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Build GufoSNMP Session config"""
         config = {
             "addr": address,
@@ -205,12 +203,12 @@ class SNMPProtocolChecker(BaseChecker):
     async def check_oids(
         self,
         address,
-        oids: List[str],
-        cred: Union[SNMPCredential, SNMPv3Credential],
-        port: Optional[int] = None,
-        protocol: Optional[Protocol] = None,
-        timeout: Optional[int] = None,
-    ) -> Tuple[Optional[Dict[str, str]], Optional[CheckError]]:
+        oids: list[str],
+        cred: SNMPCredential | SNMPv3Credential,
+        port: int | None = None,
+        protocol: Protocol | None = None,
+        timeout: int | None = None,
+    ) -> tuple[dict[str, str] | None, CheckError | None]:
         cfg = self.get_session_config(address, cred, timeout=timeout)
         self.logger.debug(
             "Trying community '%s': %s, version: %s",

@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any, Iterable
+from typing import Any, Iterable
 from collections import defaultdict
 
 # Third-party modules
@@ -63,7 +63,7 @@ class ChannelPlugin(InvPlugin):
         )
 
     def get_data(self, request, object):
-        def q(ch: Channel) -> Dict[str, Any]:
+        def q(ch: Channel) -> dict[str, Any]:
             def key(s: str) -> str:
                 p = s.split(":")
                 return ":".join(p[:2])

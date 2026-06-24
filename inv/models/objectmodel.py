@@ -10,7 +10,7 @@ from threading import Lock
 import operator
 import re
 from uuid import UUID
-from typing import Any, Optional, List, Tuple, Union, Iterable
+from typing import Any, Optional, Iterable
 from pathlib import Path
 from enum import Enum
 
@@ -338,7 +338,7 @@ class ObjectModelConnection(EmbeddedDocument):
     gender = StringField(choices=["s", "m", "f"])
     combo = StringField(required=False)
     group = StringField(required=False)
-    cross_direction: Optional[str] = StringField(
+    cross_direction: str | None = StringField(
         choices=["i", "o", "s"], required=False
     )  # Inner  # Outer  # Any
     protocols: list["ProtocolVariantItem"] = EmbeddedDocumentListField(ProtocolVariantItem)
@@ -530,7 +530,7 @@ class ObjectModel(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ObjectModel"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ObjectModel"]:
         return ObjectModel.objects.filter(id=oid).first()
 
     @classmethod
@@ -567,7 +567,7 @@ class ObjectModel(Document):
         self,
         interface: str,
         key: str,
-        connection: Optional[str] = None,
+        connection: str | None = None,
         **params,
     ) -> Any:
         """
@@ -612,7 +612,7 @@ class ObjectModel(Document):
             return True
         return any(name in (c.input, c.output) for c in self.cross)
 
-    def iter_connection_proposals(self, name: str) -> Iterable[Tuple["ObjectId", str]]:
+    def iter_connection_proposals(self, name: str) -> Iterable[tuple["ObjectId", str]]:
         """
         Iterate possible connections from given one.
 
@@ -639,7 +639,7 @@ class ObjectModel(Document):
     @classmethod
     def check_connection(
         cls, lc: "ObjectModelConnection", rc: "ObjectModelConnection"
-    ) -> Tuple[bool, str]:
+    ) -> tuple[bool, str]:
         """
 
         :param lc:
@@ -664,7 +664,7 @@ class ObjectModel(Document):
         return True, ""
 
     @classmethod
-    def get_model(cls, vendor: "Vendor", part_no: Union[List[str], str]) -> Optional["ObjectModel"]:
+    def get_model(cls, vendor: "Vendor", part_no: list[str] | str) -> Optional["ObjectModel"]:
         """
         Get ObjectModel by part part_no,
         Search order:
@@ -729,7 +729,7 @@ class ObjectModel(Document):
         # Nothing found
         return None
 
-    def get_outer(self) -> Optional[ObjectModelConnection]:
+    def get_outer(self) -> ObjectModelConnection | None:
         """
         Get outer connection if any.
         """
@@ -830,7 +830,7 @@ class ObjectModel(Document):
         Returns:
             Yields connection objects.
         """
-        scn: Optional[ObjectModelConnection] = None
+        scn: ObjectModelConnection | None = None
         for cn in self.connections:
             # Wait for start
             if not scn:
@@ -853,7 +853,7 @@ class ObjectModel(Document):
                 return
 
     @property
-    def glyph_css_class(self) -> Optional[str]:
+    def glyph_css_class(self) -> str | None:
         # Explicitly defined glyph
         if self.glyph:
             return self.glyph.css_class

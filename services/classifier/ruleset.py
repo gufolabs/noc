@@ -9,7 +9,7 @@
 import logging
 from itertools import chain
 from collections import defaultdict
-from typing import Dict, Any, Tuple, Optional, List
+from typing import Any
 
 # NOC modules
 from .rule import Rule
@@ -41,18 +41,18 @@ logger = logging.getLogger(__name__)
 
 class RuleSet:
     def __init__(self):
-        self.rules: Dict[
-            Tuple[Optional[str], str], RuleLookup
+        self.rules: dict[
+            tuple[str | None, str], RuleLookup
         ] = {}  # (profile, chain) -> [rule, ..., rule]
-        self.enumerations: Dict[str, Dict[str, str]] = {}  # name -> value -> enumerated
-        self.default_rule: Optional[Rule] = None
+        self.enumerations: dict[str, dict[str, str]] = {}  # name -> value -> enumerated
+        self.default_rule: Rule | None = None
         #
         # is_failed: bool = False
         # metric block
         self.add_rules: int = 0
         # processed: int = 0
 
-    def update_rule(self, data, r_format: Optional[str] = None):
+    def update_rule(self, data, r_format: str | None = None):
         """Update rule from lookup"""
         rule = Rule.from_config(data, self.enumerations, r_format=r_format)
         changed = False
@@ -142,8 +142,8 @@ class RuleSet:
     def find_rule(
         self,
         event: Event,
-        vars: Dict[str, Any],
-    ) -> Tuple[Optional[Rule], Optional[Dict[str, Any]]]:
+        vars: dict[str, Any],
+    ) -> tuple[Rule | None, dict[str, Any] | None]:
         """
         Find first matching classification rule
 
@@ -182,7 +182,7 @@ class RuleSet:
         return None, None
 
     @classmethod
-    def resolve_resource(cls, v: VarItem, vv: Dict[str, Any], managed_object: Any):
+    def resolve_resource(cls, v: VarItem, vv: dict[str, Any], managed_object: Any):
         """"""
         m = get_model(v.resource_model)
         x = m.get_component(managed_object=managed_object, **vv)
@@ -206,8 +206,8 @@ class RuleSet:
         return x
 
     def eval_vars(
-        self, r_vars: Dict[str, Any], managed_object: Any, e_cfg: EventConfig, by_test: bool = False
-    ) -> Tuple[Dict[str, Any], List[Any], Optional[str]]:
+        self, r_vars: dict[str, Any], managed_object: Any, e_cfg: EventConfig, by_test: bool = False
+    ) -> tuple[dict[str, Any], list[Any], str | None]:
         """Evaluate rule variables"""
         r = {}
         # Resolve resource

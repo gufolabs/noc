@@ -8,7 +8,6 @@
 # Python modules
 import logging
 import datetime
-from typing import Set
 
 # NOC modules
 from noc.core.mongo.connection import get_db
@@ -38,7 +37,7 @@ class MigrationRunner:
             self.hist_coll.insert_one({"name": name, "ts": ts, "duration": delta.total_seconds()})
         self.logger.info("Done")
 
-    def get_history(self) -> Set[str]:
+    def get_history(self) -> set[str]:
         """
         Get set of performed migration names
         :return:

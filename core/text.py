@@ -11,7 +11,7 @@ import string
 from itertools import zip_longest, pairwise
 
 # Third-party modules
-from typing import List, Union, Iterable
+from typing import Iterable
 
 rx_header_start = re.compile(r"^\s*[-=]+[\s\+]+[-=]+")
 rx_col = re.compile(r"^([\s\+]*)([\-]+|[=]+)")
@@ -376,7 +376,7 @@ def _iter_split_alnum(s: str) -> Iterable[str]:
         yield match.group(0)
 
 
-def split_alnum(s: str) -> List[Union[str, int]]:
+def split_alnum(s: str) -> list[str | int]:
     """
     Split line to a sequence of iterating alpha and digit strings
 
@@ -395,7 +395,7 @@ def split_alnum(s: str) -> List[Union[str, int]]:
     ['ge-', 1, '/', 0, '/', 1, '.', 15]
     """
 
-    def maybe_int(v: str) -> Union[str, int]:
+    def maybe_int(v: str) -> str | int:
         try:
             return int(v)
         except ValueError:
@@ -713,7 +713,7 @@ legend = {
 
 
 def cyr_to_lat(s: str) -> str:
-    r: List[str] = []
+    r: list[str] = []
     for c in s:
         if c in legend:
             r.append(legend[c])

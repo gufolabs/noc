@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Tuple
 
 # Third-party modules
 from pyproj import Transformer
@@ -28,7 +27,7 @@ class Map:
         # Database projection
         self.db_srid = "EPSG:4326"
         # Cache for transformers
-        self.transformers: Dict[Tuple[str, str], Transformer] = {}
+        self.transformers: dict[tuple[str, str], Transformer] = {}
 
     def get_transformer(self, src_srid, dst_srid):
         srids = src_srid, dst_srid

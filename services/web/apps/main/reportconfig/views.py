@@ -7,7 +7,6 @@
 
 # Python modules
 from urllib.parse import quote
-from typing import Dict, List, Optional, Set
 from collections import defaultdict
 
 # Third-party modules
@@ -87,10 +86,10 @@ class ReportConfigApplication(ExtDocApplication):
     @staticmethod
     def get_columns_filter(
         report: Report,
-        checked: Optional[Set[str]] = None,
-        pref_lang: Optional[str] = None,
-        condition_value: Optional[str] = None,
-    ) -> List:
+        checked: set[str] | None = None,
+        pref_lang: str | None = None,
+        condition_value: str | None = None,
+    ) -> list:
         """
         Get columns filter
         :param report:
@@ -128,7 +127,7 @@ class ReportConfigApplication(ExtDocApplication):
 
     @view(url=r"^(?P<report_id>\S+)/form/$", method=["GET"], access="run", api=True)
     def api_form_report(self, request, report_id):
-        def update_choice_widget(result: Dict, cond_param: str, target_name: str):
+        def update_choice_widget(result: dict, cond_param: str, target_name: str):
             for cfg in result["params"]:
                 if cfg["name"] == cond_param:
                     cfg["reportMeta"] = {}

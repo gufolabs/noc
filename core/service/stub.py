@@ -10,7 +10,7 @@ import logging
 import threading
 from collections import defaultdict
 import asyncio
-from typing import Optional, Dict, List, Any
+from typing import Any
 from functools import partial
 import atexit
 
@@ -37,8 +37,8 @@ class ServiceStub:
         self.config = None
         self.slot_number = 0
         self._metrics = defaultdict(list)
-        self.loop: Optional[asyncio.BaseEventLoop] = None
-        self.publish_queue: Optional[MessageStreamQueue] = None
+        self.loop: asyncio.BaseEventLoop | None = None
+        self.publish_queue: MessageStreamQueue | None = None
 
     def start(self):
         t = threading.Thread(target=self._start, daemon=True)
@@ -79,7 +79,7 @@ class ServiceStub:
         for t in config.rpc.retry_timeout.split(","):
             yield float(t)
 
-    def register_metrics(self, table: str, data: List[Dict[str, Any]], key: Optional[int] = None):
+    def register_metrics(self, table: str, data: list[dict[str, Any]], key: int | None = None):
         self._metrics[table] += data
 
     def init_publisher(self) -> None:
@@ -118,9 +118,9 @@ class ServiceStub:
         self,
         value: bytes,
         stream: str,
-        partition: Optional[int] = None,
-        key: Optional[bytes] = None,
-        headers: Optional[Dict[str, bytes]] = None,
+        partition: int | None = None,
+        key: bytes | None = None,
+        headers: dict[str, bytes] | None = None,
     ):
         if not self.publish_queue:
             self.init_publisher()
@@ -133,7 +133,7 @@ class ServiceStub:
         self,
         data: Any,
         message_type: MessageType,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: dict[str, bytes] | None = None,
         sharding_key: int = 0,
     ):
         """

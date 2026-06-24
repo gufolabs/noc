@@ -7,7 +7,6 @@
 
 # Python modules
 import os
-from typing import Optional, Tuple, Dict
 
 # Third-party modules
 import uvicorn
@@ -34,7 +33,7 @@ class FastAPIService(BaseService):
         "JSON-RPC API": "Implemented by JSON-RPC specification 1.0",
     }
     # Additional OpenAPI tags docs, tag -> description
-    OPENAPI_TAGS_DOCS: Dict[str, str] = {}
+    OPENAPI_TAGS_DOCS: dict[str, str] = {}
 
     def __init__(self):
         super().__init__()
@@ -120,7 +119,7 @@ class FastAPIService(BaseService):
             collect_req_api_metric=self.collect_req_api_metric,
         )
         self.app.add_middleware(SpanMiddleware, service_name=self.name)
-        self.server: Optional[uvicorn.Server] = None
+        self.server: uvicorn.Server | None = None
         # Initialize routers
         for path in loader.iter_classes():
             self.app.include_router(loader.get_class(path))
@@ -161,7 +160,7 @@ class FastAPIService(BaseService):
             self.server.force_exit = True
         await self.server.shutdown()
 
-    def get_effective_address(self) -> Tuple[str, int]:
+    def get_effective_address(self) -> tuple[str, int]:
         for srv in self.server.servers:
             for sock in srv.sockets:
                 return sock.getsockname()

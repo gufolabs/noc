@@ -14,7 +14,6 @@ import os
 from urllib.parse import urlparse
 from time import perf_counter
 import asyncio
-from typing import Optional
 
 # NOC modules
 from noc.config import config
@@ -83,8 +82,8 @@ class DCSBase:
         pool=None,
         lock=None,
         tags=None,
-        check_interval: Optional[int] = None,
-        check_timeout: Optional[int] = None,
+        check_interval: int | None = None,
+        check_timeout: int | None = None,
     ):
         """
         Register service
@@ -104,7 +103,7 @@ class DCSBase:
         self.logger.info("Shooting self with SIGTERM")
         os.kill(os.getpid(), signal.SIGTERM)
 
-    async def get_slot_limit(self, name: str) -> Optional[int]:
+    async def get_slot_limit(self, name: str) -> int | None:
         """
         Return the current limit for given slot
         :param name:

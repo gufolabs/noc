@@ -7,7 +7,7 @@
 
 # Python modules
 import threading
-from typing import Optional, Union
+from typing import Optional
 import operator
 from pathlib import Path
 
@@ -106,7 +106,7 @@ class ConfDBQuery(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ConfDBQuery"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ConfDBQuery"]:
         return ConfDBQuery.objects.filter(id=oid).first()
 
     def get_json_path(self) -> Path:

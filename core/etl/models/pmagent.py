@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import IPvAnyAddress, field_validator
@@ -20,20 +19,20 @@ from .managedobject import ManagedObject
 class PMAgent(BaseModel):
     id: str
     name: str
-    fqdn: Optional[DomainName] = None
-    addresses: Optional[List[str]] = None
-    description: Optional[str] = None
-    managed_object: Optional[Reference["ManagedObject"]] = None
+    fqdn: DomainName | None = None
+    addresses: list[str] | None = None
+    description: str | None = None
+    managed_object: Reference["ManagedObject"] | None = None
     # Workflow state
-    state: Optional[str] = None
-    labels: List[str] = []
-    capabilities: Optional[List[CapsItem]] = None
-    checkpoint: Optional[str] = None
-    mappings: Optional[List[MappingItem]] = None
+    state: str | None = None
+    labels: list[str] = []
+    capabilities: list[CapsItem] | None = None
+    checkpoint: str | None = None
+    mappings: list[MappingItem] | None = None
 
     @field_validator("addresses")
     @classmethod
-    def address_must_ipaddress(cls, v: List[str]) -> List[str]:
+    def address_must_ipaddress(cls, v: list[str]) -> list[str]:
         r = []
         for x in v or []:
             IPvAnyAddress(x)

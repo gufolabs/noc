@@ -9,7 +9,7 @@
 import enum
 from urllib.parse import urlparse
 from dataclasses import dataclass
-from typing import Optional, Any, List, ClassVar, Type
+from typing import Any, ClassVar
 
 # Third-party modules
 import bson
@@ -40,15 +40,15 @@ class InstanceType(enum.Enum):
 
 @dataclass
 class ServiceInstanceTypeConfig:
-    allow_resources: Optional[List[str]] = None
+    allow_resources: list[str] | None = None
     allow_manual: bool = False
     # For multiple object, control TTL ?
     only_one_instance: bool = True
     send_approve: bool = False
     allow_register: bool = False
-    ttl: Optional[int] = None
-    refs_caps: Optional[Any] = None
-    asset_group: Optional[Any] = None
+    ttl: int | None = None
+    refs_caps: Any | None = None
+    asset_group: Any | None = None
 
 
 @dataclass
@@ -61,17 +61,17 @@ class ServiceInstanceConfig:
 
     type: ClassVar[InstanceType]
     name: str
-    managed_object: Optional[Any] = None
-    remote_id: Optional[str] = None
-    nri_port: Optional[str] = None
-    fqdn: Optional[str] = None
-    addresses: List[str] = None
-    services: List[bson.ObjectId] = None
+    managed_object: Any | None = None
+    remote_id: str | None = None
+    nri_port: str | None = None
+    fqdn: str | None = None
+    addresses: list[str] = None
+    services: list[bson.ObjectId] = None
     port: int = 0
-    asset_refs: List[str] = None
+    asset_refs: list[str] = None
 
     @classmethod
-    def get_type(cls, i_type: InstanceType) -> Type["ServiceInstanceConfig"]:
+    def get_type(cls, i_type: InstanceType) -> type["ServiceInstanceConfig"]:
         """Return Config instance by type"""
         match i_type:
             case InstanceType.ASSET:
@@ -91,16 +91,16 @@ class ServiceInstanceConfig:
         cls,
         settings: "ServiceInstanceTypeConfig",
         service,
-        name: Optional[str] = None,
-    ) -> List["ServiceInstanceConfig"]:
+        name: str | None = None,
+    ) -> list["ServiceInstanceConfig"]:
         """Create Config from settings"""
         raise NotImplementedError()
 
     @classmethod
     def from_config(
         cls,
-        name: Optional[str] = None,
-        fqdn: Optional[str] = None,
+        name: str | None = None,
+        fqdn: str | None = None,
         **kwargs,
     ):
         return cls(
@@ -128,7 +128,7 @@ class NetworkHostInstance(ServiceInstanceConfig):
     type = InstanceType.ASSET
 
     @classmethod
-    def from_group(cls, group) -> List["NetworkHostInstance"]:
+    def from_group(cls, group) -> list["NetworkHostInstance"]:
         from noc.inv.models.resourcegroup import ResourceGroup
 
         r = []
@@ -141,8 +141,8 @@ class NetworkHostInstance(ServiceInstanceConfig):
         cls,
         settings: "ServiceInstanceTypeConfig",
         service,
-        name: Optional[str] = None,
-    ) -> List["ServiceInstanceConfig"]:
+        name: str | None = None,
+    ) -> list["ServiceInstanceConfig"]:
         """Create Config from settings"""
         if settings.asset_group and settings.asset_group.id in service.effective_client_groups:
             return cls.from_group(settings.asset_group)
@@ -172,8 +172,8 @@ class NetworkChannelInstance(ServiceInstanceConfig):
         cls,
         settings: "ServiceInstanceTypeConfig",
         service,
-        name: Optional[str] = None,
-    ) -> List["ServiceInstanceConfig"]:
+        name: str | None = None,
+    ) -> list["ServiceInstanceConfig"]:
         """Create Config from settings"""
         caps = service.get_caps()
         if not settings.refs_caps or settings.refs_caps.name not in caps:
@@ -211,8 +211,8 @@ class ServiceEndPoint(ServiceInstanceConfig):
         cls,
         settings: "ServiceInstanceTypeConfig",
         service,
-        name: Optional[str] = None,
-    ) -> List["ServiceInstanceConfig"]:
+        name: str | None = None,
+    ) -> list["ServiceInstanceConfig"]:
         """
         Create Config from settings
         """
@@ -250,8 +250,8 @@ class ConfigInstance(ServiceInstanceConfig):
         cls,
         settings: "ServiceInstanceTypeConfig",
         service,
-        name: Optional[str] = None,
-    ) -> List["ServiceInstanceConfig"]:
+        name: str | None = None,
+    ) -> list["ServiceInstanceConfig"]:
         """Create Config from settings"""
         caps = service.get_caps()
         if not settings.refs_caps or settings.refs_caps.name not in caps:

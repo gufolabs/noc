@@ -8,7 +8,7 @@
 # Python modules
 import threading
 import operator
-from typing import Optional, Dict, List, Any, Union
+from typing import Optional, Any
 
 # Third-party modules
 import cachetools
@@ -54,15 +54,15 @@ class TemplateField(BaseModel):
     label: str
     type: str = "string"
     is_tree: bool = False
-    model_id: Optional[str] = None
-    choices: Optional[List[Any]] = None
-    rest_url: Optional[str] = None
+    model_id: str | None = None
+    choices: list[Any] | None = None
+    rest_url: str | None = None
 
 
 class ParamItem(BaseModel):
     name: str
-    model_id: Optional[str] = None
-    schema: Optional[Any] = None
+    model_id: str | None = None
+    schema: Any | None = None
     # Schema
 
     def clean(self, value) -> Any:
@@ -78,12 +78,12 @@ class ParamItem(BaseModel):
 class DataItem(BaseModel):
     name: str
     value: str
-    remote_system: Optional[str] = None  # Reference to Resource Group
+    remote_system: str | None = None  # Reference to Resource Group
 
 
 class CapsItem(BaseModel):
-    capabilities: Dict[str, Any]
-    remote_system: Optional[str] = None  # Scope
+    capabilities: dict[str, Any]
+    remote_system: str | None = None  # Scope
 
     def __str__(self):
         if not self.remote_system:
@@ -100,19 +100,19 @@ class ResourceItem(BaseModel):
         user: User setting data (for manual)
     """
 
-    data: List[DataItem]
-    id: Optional[str] = None
-    labels: Optional[List[str]] = None
-    service_groups: Optional[List[str]] = None
+    data: list[DataItem]
+    id: str | None = None
+    labels: list[str] | None = None
+    service_groups: list[str] | None = None
     # Remote System map
-    mappings: Optional[Dict[str, str]] = None
+    mappings: dict[str, str] | None = None
     # Caps
-    caps: Optional[List[CapsItem]] = None
-    user: Optional[Any] = None  # User for changes
+    caps: list[CapsItem] | None = None
+    user: Any | None = None  # User for changes
     # Send workflow event
-    event: Optional[str] = None
+    event: str | None = None
 
-    def merge_data(self, ri: "ResourceItem", systems_priority: List[str] = None):
+    def merge_data(self, ri: "ResourceItem", systems_priority: list[str] = None):
         """Merge data over Multiple Resource Item"""
         if not self.mappings:
             self.mappings = {}
@@ -151,7 +151,7 @@ class ResourceItem(BaseModel):
         """Check remote system data"""
         return any(d.remote_system for d in self.data)
 
-    def merge_caps(self, caps: List[CapsItem]):
+    def merge_caps(self, caps: list[CapsItem]):
         """Merge Capabilities"""
         rs_ids = {c.remote_system for c in self.caps if c.remote_system}
         for c in caps:
@@ -161,11 +161,11 @@ class ResourceItem(BaseModel):
 
 
 class Result(BaseModel):
-    id: Optional[str] = None
+    id: str | None = None
     status: bool = True
-    error: Optional[str] = None
-    error_code: Optional[str] = None
-    error_fields: List[str] = None
+    error: str | None = None
+    error_code: str | None = None
+    error_fields: list[str] = None
 
 
 class GroupItem(EmbeddedDocument):
@@ -184,7 +184,7 @@ class Param(EmbeddedDocument):
     hide = BooleanField(default=False)
     default_expression = StringField()
     param = StringField(required=False)
-    set_capability: Optional[Capability] = PlainReferenceField(Capability, required=False)
+    set_capability: Capability | None = PlainReferenceField(Capability, required=False)
     preferred_template_value = BooleanField(default=False)  # Template value override user
     override_existing = BooleanField(default=False)  # Template value
 
@@ -192,7 +192,7 @@ class Param(EmbeddedDocument):
         return self.name
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             # "preferred_template_value": self.preferred_template_value,
@@ -227,7 +227,7 @@ class ParamFormItem(EmbeddedDocument):
         return self.name
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "type": self.type,
@@ -269,12 +269,12 @@ class ModelTemplate(Document):
             ("vc.Vlan", "Vlan"),
         ],
     )
-    params: List[Param] = EmbeddedDocumentListField(Param)
-    params_form: List[ParamFormItem] = EmbeddedDocumentListField(ParamFormItem)
+    params: list[Param] = EmbeddedDocumentListField(Param)
+    params_form: list[ParamFormItem] = EmbeddedDocumentListField(ParamFormItem)
     allow_manual = BooleanField(default=False)  # Allow set by User
     sticky: bool = BooleanField(default=False)  # If used, set to resource as template
-    groups: List[GroupItem] = EmbeddedDocumentListField(GroupItem)
-    labels: List[str] = ListField(StringField())  # Manual Set
+    groups: list[GroupItem] = EmbeddedDocumentListField(GroupItem)
+    labels: list[str] = ListField(StringField())  # Manual Set
     # instances
     default_state: "State" = PlainReferenceField(State)
 
@@ -286,7 +286,7 @@ class ModelTemplate(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ModelTemplate"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ModelTemplate"]:
         return ModelTemplate.objects.filter(id=oid).first()
 
     @classmethod
@@ -295,7 +295,7 @@ class ModelTemplate(Document):
         return ModelTemplate.objects.filter(code=code).first()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -363,7 +363,7 @@ class ModelTemplate(Document):
             o.save()
         return changed
 
-    def get_env(self, item: ResourceItem, is_new: bool = False) -> Dict[str, Any]:
+    def get_env(self, item: ResourceItem, is_new: bool = False) -> dict[str, Any]:
         """
         Build environment from Resource Item:
         * data
@@ -375,10 +375,10 @@ class ModelTemplate(Document):
             item: Resource Item
             is_new: Flag for create instance
         """
-        r: Dict[str, Any] = {}
-        caps: Dict[str, Any] = {}
-        data: Dict[str, Any] = {}
-        params: Dict[str, ParamItem] = {}
+        r: dict[str, Any] = {}
+        caps: dict[str, Any] = {}
+        data: dict[str, Any] = {}
+        params: dict[str, ParamItem] = {}
         for p in self.get_template_params():
             params[p.name] = p
         for p in self.get_model_params():
@@ -457,7 +457,7 @@ class ModelTemplate(Document):
             r["mappings"] = item.mappings
         return r
 
-    def get_model_params(self) -> List[ParamItem]:
+    def get_model_params(self) -> list[ParamItem]:
         """Get param from Resource Model"""
         r = []
         for field in self.model_instance._meta.fields:
@@ -474,7 +474,7 @@ class ModelTemplate(Document):
             r.append(ParamItem(name=field.name, model_id=mid))
         return r
 
-    def get_template_params(self) -> List[ParamItem]:
+    def get_template_params(self) -> list[ParamItem]:
         """Get params defined on Template Form Setting"""
         r = []
         for p in self.params_form:
@@ -499,7 +499,7 @@ class ModelTemplate(Document):
         """Return schema for Web UI"""
 
     @classmethod
-    def get_templating_fields(cls) -> List[TemplateField]:
+    def get_templating_fields(cls) -> list[TemplateField]:
         m = get_model("sa.ManagedObject")
         r = []
         ignored = {"id", "bi_id", "state", "tt_system", "remote_id", "remote_system"}

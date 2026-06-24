@@ -7,7 +7,6 @@
 
 # Python modules
 import logging
-from typing import Optional
 
 # NOC modules
 from noc.inv.models.object import Object
@@ -18,7 +17,7 @@ from ..views import InvApplication
 class InvPlugin:
     name = None
     js = None
-    required_feature: Optional[Feature] = None
+    required_feature: Feature | None = None
 
     def __init__(self, app: InvApplication):
         self.app = app

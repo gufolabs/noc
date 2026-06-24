@@ -11,7 +11,7 @@ import operator
 import itertools
 from time import time_ns
 from collections import defaultdict
-from typing import List, DefaultDict, Iterator, Dict, Iterable, Optional, Any
+from typing import Iterator, Iterable, Any
 from functools import partial
 
 # Third-party modules
@@ -44,13 +44,13 @@ class Router:
     DEFAULT_ETL_EVENT_PUSH_JOB_CHAIN = "default_etl_event_push"
 
     def __init__(self):
-        self.chains: DefaultDict[bytes, List[Route]] = defaultdict(list)
-        self.routes: Dict[str, Route] = {
+        self.chains: defaultdict[bytes, list[Route]] = defaultdict(list)
+        self.routes: dict[str, Route] = {
             self.DEFAULT_N_CHAIN: DefaultNotificationRoute(),  # Add default route for notification
             self.DEFAULT_JOB_CHAIN: DefaultJobRoute(),  # Add default rout for send to job
             self.DEFAULT_ETL_EVENT_PUSH_JOB_CHAIN: DefaultETLEventRoute(),
         }
-        self.stream_partitions: Dict[str, int] = {}
+        self.stream_partitions: dict[str, int] = {}
         self.svc = get_service()
         # Add default
         self.rebuild_chains([b"*", b"job"])
@@ -79,7 +79,7 @@ class Router:
 
     @classmethod
     def build_message(
-        cls, msg: Message, body: Dict[str, Any], headers: Dict[str, bytes]
+        cls, msg: Message, body: dict[str, Any], headers: dict[str, bytes]
     ) -> Message:
         if not isinstance(body, bytes):
             body = orjson.dumps(body)
@@ -150,7 +150,7 @@ class Router:
         if r_type:
             self.rebuild_chains(r_type, deleted=True)
 
-    def rebuild_chains(self, r_types: Optional[Iterable[bytes]] = None, deleted: bool = False):
+    def rebuild_chains(self, r_types: Iterable[bytes] | None = None, deleted: bool = False):
         """
         Rebuild Router Chains
         Need lock ?
@@ -199,9 +199,9 @@ class Router:
         self,
         value: bytes,
         stream: str,
-        partition: Optional[int] = None,
-        key: Optional[bytes] = None,
-        headers: Optional[Dict[str, bytes]] = None,
+        partition: int | None = None,
+        key: bytes | None = None,
+        headers: dict[str, bytes] | None = None,
     ):
         # if self.out_queue:
         #    self.out_queue.put(stream, partition, data=value)
@@ -219,7 +219,7 @@ class Router:
     def get_message(
         data: Any,
         message_type: str,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: dict[str, bytes] | None = None,
         sharding_key: int = 0,
         raw_value: bool = False,
     ) -> Message:
@@ -247,9 +247,7 @@ class Router:
             key=sharding_key,
         )
 
-    def get_msg_partition(
-        self, stream: str, key: int, msg_id: Optional[str] = None
-    ) -> Optional[int]:
+    def get_msg_partition(self, stream: str, key: int, msg_id: str | None = None) -> int | None:
         """Calculate out partition for message"""
         partitions = self.stream_partitions.get(stream)
         if partitions is None:
@@ -265,7 +263,7 @@ class Router:
             return None
         return key % partitions
 
-    async def route_message(self, msg: Message, msg_id: Optional[str] = None):
+    async def route_message(self, msg: Message, msg_id: str | None = None):
         """
         Route message by rule
         Attrs:
@@ -293,8 +291,8 @@ class Router:
         route: Route,
         msg: Message,
         msg_type: str,
-        msg_id: Optional[str] = None,
-    ) -> Optional[bool]:
+        msg_id: str | None = None,
+    ) -> bool | None:
         """Forward message to route"""
         routed: bool = False
         with Span(

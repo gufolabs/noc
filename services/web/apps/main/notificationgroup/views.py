@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import Optional
 
 # NOC modules
 from noc.services.web.base.extmodelapplication import ExtModelApplication, view
@@ -79,11 +78,11 @@ class NotificationGroupApplication(ExtModelApplication):
         self,
         request,
         group_id,
-        user_policy: Optional[str] = None,
-        time_pattern: Optional[TimePattern] = None,
-        expired_at: Optional[str] = None,
-        title_tag: Optional[str] = None,
-        preferred_method: Optional[str] = None,
+        user_policy: str | None = None,
+        time_pattern: TimePattern | None = None,
+        expired_at: str | None = None,
+        title_tag: str | None = None,
+        preferred_method: str | None = None,
     ):
         o = self.get_object_or_404(NotificationGroup, pk=int(group_id))
         user = request.user

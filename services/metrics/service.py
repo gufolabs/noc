@@ -8,7 +8,7 @@
 
 # Python modules
 from collections import defaultdict
-from typing import Any, Dict, Tuple, List, Optional, Set, Iterable, Union
+from typing import Any, Iterable
 from dataclasses import dataclass
 from time import perf_counter
 import sys
@@ -49,7 +49,7 @@ from noc.services.metrics.models.target import (
 from noc.config import config as global_config
 
 # MetricKey - scope, key ctx: (managed_object, <bi_id>), Key Labels
-ObjectTarget = Union[ManagedObjectTarget, SLAProbeTarget]
+ObjectTarget = ManagedObjectTarget | SLAProbeTarget
 
 
 @dataclass
@@ -78,36 +78,34 @@ class MetricsService(FastAPIService):
     def __init__(self):
         super().__init__()
         # Metric Configs
-        self.scopes: Dict[str, ScopeInfo] = {}
-        self.metric_configs: Dict[
-            Tuple[str, str], Union[ProbeNodeConfig, ComposeProbeNodeConfig]
-        ] = {}
-        self.compose_inputs: Dict[str, Set[str]] = {}
-        self.scope_cdag: Dict[str, CDAG] = {}  # Scope graph cache
-        self.cards: Dict[MetricKey, Card] = {}  # Metric cards
-        self.graph: Optional[CDAG] = None  # Service Metric Graph
+        self.scopes: dict[str, ScopeInfo] = {}
+        self.metric_configs: dict[tuple[str, str], ProbeNodeConfig | ComposeProbeNodeConfig] = {}
+        self.compose_inputs: dict[str, set[str]] = {}
+        self.scope_cdag: dict[str, CDAG] = {}  # Scope graph cache
+        self.cards: dict[MetricKey, Card] = {}  # Metric cards
+        self.graph: CDAG | None = None  # Service Metric Graph
         # Graph node State
-        self.change_log: Optional[ChangeLog] = None
-        self.start_state: Dict[str, Dict[str, Any]] = {}
+        self.change_log: ChangeLog | None = None
+        self.start_state: dict[str, dict[str, Any]] = {}
         # Source Configs
-        self.targets: Dict[int, ObjectTarget] = {}
-        self.sensors: Dict[int, SensorComponentTarget] = {}
-        self.dispose_partitions: Dict[str, int] = {}
-        self.rules: Dict[str, Rule] = {}  # Action -> Graph Config
+        self.targets: dict[int, ObjectTarget] = {}
+        self.sensors: dict[int, SensorComponentTarget] = {}
+        self.dispose_partitions: dict[str, int] = {}
+        self.rules: dict[str, Rule] = {}  # Action -> Graph Config
         # Options
         self.lazy_init: bool = True  # Load Nodes on processed metrics
         self.disable_spool: bool = (
             global_config.metrics.disable_spool
         )  # Disable Send metric record to Clickhouse
-        self.target_card_map: Dict[int, List[MetricKey]] = defaultdict(list)
+        self.target_card_map: dict[int, list[MetricKey]] = defaultdict(list)
         # Sync primitives
         self.mappings_ready_event = asyncio.Event()  # Load Metric Sources
         self.rules_ready_event = asyncio.Event()  # Load Metric Rules
-        self.sync_cursor_condition: Optional[asyncio.Condition] = (
+        self.sync_cursor_condition: asyncio.Condition | None = (
             None  # Condition for commit stream cursor
         )
-        self.node_errors: Dict[str, ErrorState] = {}
-        self.unknown_sources: Set[Tuple[str, int]] = set()
+        self.node_errors: dict[str, ErrorState] = {}
+        self.unknown_sources: set[tuple[str, int]] = set()
 
     async def on_activate(self):
         self.slot_number, self.total_slots = await self.acquire_slot()
@@ -230,7 +228,7 @@ class MetricsService(FastAPIService):
             return
         self.unknown_sources.add(k[1])
 
-    def set_error(self, k: MetricKey, msg: str, ts: Optional[int] = None):
+    def set_error(self, k: MetricKey, msg: str, ts: int | None = None):
         """"""
         ts = int(ts or perf_counter())
         if msg in self.node_errors:
@@ -239,7 +237,7 @@ class MetricsService(FastAPIService):
             self.node_errors[msg] = ErrorState(message=msg, metric=k, last_update=ts)
 
     async def on_metrics(self, msg: Message) -> None:
-        data: List[MetricsItem] = orjson.loads(msg.value)
+        data: list[MetricsItem] = orjson.loads(msg.value)
         state = {}
         metrics["messages"] += 1
         for item in data:
@@ -288,7 +286,7 @@ class MetricsService(FastAPIService):
         Load ScopeInfo structures
         :return:
         """
-        units: Dict[str, Dict[str, str]] = defaultdict(dict)
+        units: dict[str, dict[str, str]] = defaultdict(dict)
         for mt in MetricType.objects.all():
             if mt.units:
                 units[mt.scope.id][mt.field_name] = mt.units.code
@@ -329,7 +327,7 @@ class MetricsService(FastAPIService):
     @staticmethod
     def get_key(
         si: ScopeInfo, data: MetricsItem
-    ) -> Tuple[MetricKey, Optional[int], Optional[int], Tuple[str, ...]]:
+    ) -> tuple[MetricKey, int | None, int | None, tuple[str, ...]]:
         def iter_labels(f_labels):
             if not labels or not f_labels:
                 return
@@ -368,7 +366,7 @@ class MetricsService(FastAPIService):
         return codecs.encode(d, "base_64")[:7].decode("utf-8")
 
     @staticmethod
-    def merge_labels(l1: Optional[List[str]], l2: List[str]) -> List[str]:
+    def merge_labels(l1: list[str] | None, l2: list[str]) -> list[str]:
         """
         Merge labels list
         :param l1:
@@ -385,10 +383,10 @@ class MetricsService(FastAPIService):
     async def get_card(
         self,
         k: MetricKey,
-        labels: List[str],
-        target: Optional[ManagedObjectTarget] = None,
-        sensor: Optional[SensorComponentTarget] = None,
-    ) -> Optional[Card]:
+        labels: list[str],
+        target: ManagedObjectTarget | None = None,
+        sensor: SensorComponentTarget | None = None,
+    ) -> Card | None:
         """
         Generate part of computation graph and collect its viable inputs
         :param k: (scope, ((key field, key value), ...), (key label, ...))
@@ -426,7 +424,7 @@ class MetricsService(FastAPIService):
         card.refresh_card(k, labels, self.rules)
         return card
 
-    def get_scope_cdag(self, k: MetricKey) -> Optional[CDAG]:
+    def get_scope_cdag(self, k: MetricKey) -> CDAG | None:
         """
         Generate CDAG for a given metric key
         :param k:
@@ -472,11 +470,11 @@ class MetricsService(FastAPIService):
         si: ScopeInfo,
         k: MetricKey,
         data: MetricsItem,
-    ) -> Dict[Tuple[str, str], Dict[str, Any]]:
+    ) -> dict[tuple[str, str], dict[str, Any]]:
         """
         Activate card and return changed state
         """
-        units: Dict[str, str] = data.get("_units") or {}
+        units: dict[str, str] = data.get("_units") or {}
         tx = self.graph.begin()
         ts = data["ts"]
         time_delta = None
@@ -526,7 +524,7 @@ class MetricsService(FastAPIService):
                 # Labels
         return tx.get_changed_state()
 
-    def update_sensors(self, target: ObjectTarget, sensors: List[Dict[str, Any]]):
+    def update_sensors(self, target: ObjectTarget, sensors: list[dict[str, Any]]):
         """Update sensors info"""
         if target.type != "managed_object":
             return
@@ -544,7 +542,7 @@ class MetricsService(FastAPIService):
             sensor = self.sensors.pop(sid)
             self.logger.info("[%s] Remove sensor: %s", target, sensor)
 
-    async def update_source_config(self, data: Dict[str, Any]) -> None:
+    async def update_source_config(self, data: dict[str, Any]) -> None:
         """
         Update source config.
         """
@@ -654,7 +652,7 @@ class MetricsService(FastAPIService):
                 num += 1
         self.logger.info("Invalidate %s cards", num)
 
-    async def update_rules(self, data: Dict[str, Any]) -> None:
+    async def update_rules(self, data: dict[str, Any]) -> None:
         """Apply Metric Rules change"""
         # Add Invalidate Graph
         try:

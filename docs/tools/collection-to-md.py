@@ -9,7 +9,7 @@
 import sys
 import json
 import os
-from typing import Dict, DefaultDict, Any, Iterable, List, Optional
+from typing import Any, Iterable
 from dataclasses import dataclass
 import enum
 import re
@@ -87,11 +87,11 @@ class EventClass:
     symptoms: str
     probable_causes: str
     recommended_actions: str
-    vars: Optional[List[EventClassVar]]
-    disposition: Optional[List[EventClassDisposition]]
+    vars: list[EventClassVar] | None
+    disposition: list[EventClassDisposition] | None
 
     @property
-    def dir_path(self) -> List[str]:
+    def dir_path(self) -> list[str]:
         return [quote_file_name(x) for x in self.name.split(" | ")][:-1]
 
     @property
@@ -107,7 +107,7 @@ class EventClass:
 class AlarmClassVar:
     name: str
     description: str
-    default: Optional[str]
+    default: str | None
 
     @property
     def default_mark(self) -> str:
@@ -136,14 +136,14 @@ class AlarmClass:
     symptoms: str
     probable_causes: str
     recommended_actions: str
-    vars: Optional[List[AlarmClassVar]]
-    root_causes: Optional[List[RoutCause]]
-    consequences: Optional[List[RoutCause]]
-    opening_events: Optional[List[AlarmEvent]]
-    closing_events: Optional[List[AlarmEvent]]
+    vars: list[AlarmClassVar] | None
+    root_causes: list[RoutCause] | None
+    consequences: list[RoutCause] | None
+    opening_events: list[AlarmEvent] | None
+    closing_events: list[AlarmEvent] | None
 
     @property
-    def dir_path(self) -> List[str]:
+    def dir_path(self) -> list[str]:
         return [quote_file_name(x) for x in self.name.split(" | ")][:-1]
 
     @property
@@ -172,9 +172,9 @@ class MetricScope:
     name: str
     uuid: str
     table_name: str
-    description: Optional[str]
-    path: List[MetricScopePath]
-    metric_types: List["MetricType"]
+    description: str | None
+    path: list[MetricScopePath]
+    metric_types: list["MetricType"]
 
     @property
     def file_name(self) -> str:
@@ -192,11 +192,11 @@ class MetricType:
     scope: MetricScope
     field_name: str
     field_type: str
-    description: Optional[str]
+    description: str | None
     measure: str
 
     @property
-    def dir_path(self) -> List[str]:
+    def dir_path(self) -> list[str]:
         return [quote_file_name(x) for x in self.name.split(" | ")][:-1]
 
     @property
@@ -211,7 +211,7 @@ class MetricType:
 @dataclass
 class AltMeasurementUnits:
     name: str
-    description: Optional[str]
+    description: str | None
     label: str
     dashboard_label: str
     from_primary: str
@@ -222,11 +222,11 @@ class AltMeasurementUnits:
 class MeasurementUnits:
     name: str
     uuid: str
-    description: Optional[str]
+    description: str | None
     label: str
     dashboard_label: str
     scale_type: str
-    alt_units: Optional[List[AltMeasurementUnits]]
+    alt_units: list[AltMeasurementUnits] | None
 
     @property
     def file_name(self) -> str:
@@ -241,13 +241,13 @@ class MeasurementUnits:
 class ConnectionType:
     name: str
     uuid: str
-    description: Optional[str]
-    extend: Optional[str]
+    description: str | None
+    extend: str | None
     genders: str
-    c_group: Optional[List[str]]
+    c_group: list[str] | None
 
     @property
-    def dir_path(self) -> List[str]:
+    def dir_path(self) -> list[str]:
         return [quote_file_name(x) for x in self.name.split(" | ")][:-1]
 
     @property
@@ -277,7 +277,7 @@ class FileWriter:
         self.changed_files = 0
         self.unmodified_files = 0
 
-    def write(self, path: str, data: List[str]):
+    def write(self, path: str, data: list[str]):
         path = os.path.join(self.root, path)
         # Ensure directory
         os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -319,13 +319,13 @@ class CollectionDoc:
         self.doc_root = os.path.join(self.src_root, "docs", "en", "docs")
         self.yml_path = os.path.join(self.src_root, "docs", "en", "mkdocs.yml")
         self.new_yml_path = f"{self.yml_path}.new"
-        self.event_class: Dict[str, EventClass] = {}
-        self.alarm_class: Dict[str, AlarmClass] = {}
-        self.metric_scope: Dict[str, MetricScope] = {}
-        self.metric_type: Dict[str, MetricType] = {}
-        self.measurement_units: Dict[str, MeasurementUnits] = {}
-        self.connection_types: Dict[str, ConnectionType] = {}
-        self.c_groups: DefaultDict[str, List[str]] = defaultdict(list)
+        self.event_class: dict[str, EventClass] = {}
+        self.alarm_class: dict[str, AlarmClass] = {}
+        self.metric_scope: dict[str, MetricScope] = {}
+        self.metric_type: dict[str, MetricType] = {}
+        self.measurement_units: dict[str, MeasurementUnits] = {}
+        self.connection_types: dict[str, ConnectionType] = {}
+        self.c_groups: defaultdict[str, list[str]] = defaultdict(list)
 
     def build(self):
         shutil.copy(self.yml_path, self.new_yml_path)
@@ -345,7 +345,7 @@ class CollectionDoc:
         self.read_measurement_units()
         self.read_connection_types()
 
-    def iter_jsons(self, path: str) -> Iterable[Dict[str, Any]]:
+    def iter_jsons(self, path: str) -> Iterable[dict[str, Any]]:
         for root, _, files in os.walk(path):
             for fn in files:
                 if fn.startswith(".") or not fn.endswith(".json"):
@@ -520,7 +520,7 @@ class CollectionDoc:
                 for c_group in ct.c_group:
                     self.c_groups[c_group] += [ct.name]
 
-    def update_toc(self, key: str, lines: List[str]):
+    def update_toc(self, key: str, lines: list[str]):
         r = []
         rx_key = re.compile(rf"^(\s+)- {key}:")
         indent = ""
@@ -557,7 +557,7 @@ class CollectionDoc:
         print("# Writing event classes doc:")
         toc = ["- Overview: event-classes-reference/index.md"]
         writer = FileWriter(os.path.join(self.doc_root, "user", "reference", "event-classes"))
-        last_path: List[str] = []
+        last_path: list[str] = []
         indent: str = ""
         for ec_name in sorted(self.event_class):
             ec = self.event_class[ec_name]
@@ -642,7 +642,7 @@ class CollectionDoc:
         print("# Writing alarm classes doc:")
         toc = ["- Overview: alarm-classes-reference/index.md"]
         writer = FileWriter(os.path.join(self.doc_root, "user", "reference", "alarm-classes"))
-        last_path: List[str] = []
+        last_path: list[str] = []
         indent: str = ""
         for ac_name in sorted(self.alarm_class):
             ac = self.alarm_class[ac_name]
@@ -808,7 +808,7 @@ class CollectionDoc:
     def build_metric_types(self):
         print("# Writing metric types doc:")
         writer = FileWriter(os.path.join(self.doc_root, "user", "reference", "metrics", "types"))
-        last_path: List[str] = []
+        last_path: list[str] = []
         indent: str = ""
         toc = ["- Overview: metric-types-reference/index.md"]
         for mt_name in sorted(self.metric_type):
@@ -900,7 +900,7 @@ class CollectionDoc:
     def build_connection_types(self):
         print("# Writing connection types doc:")
         writer = FileWriter(os.path.join(self.doc_root, "dev", "reference", "connection-type"))
-        last_path: List[str] = []
+        last_path: list[str] = []
         indent: str = ""
         toc = ["- Overview: connection-types-reference/index.md"]
         for ct_name in sorted(self.connection_types):

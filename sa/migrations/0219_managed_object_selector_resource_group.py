@@ -7,7 +7,7 @@
 
 # Python modules
 from collections import namedtuple, defaultdict
-from typing import NamedTuple, List, Optional
+from typing import NamedTuple
 import bson
 
 # Third-party modules
@@ -91,7 +91,7 @@ class ManagedObjectSelectorLabels:
         return f"noc::{category}::{name}::{matched_scope}{op}"
 
     @classmethod
-    def get_mongo_name_by_id(cls, collection, oid: str) -> Optional[str]:
+    def get_mongo_name_by_id(cls, collection, oid: str) -> str | None:
         coll = get_db()[collection]
         if not is_objectid(oid):
             print(f"[migrate_object_selector_resource] Unknown OID {oid}")
@@ -102,7 +102,7 @@ class ManagedObjectSelectorLabels:
         return r["name"]
 
     @classmethod
-    def get_pg_name_by_id(cls, table, oid: str) -> Optional[str]:
+    def get_pg_name_by_id(cls, table, oid: str) -> str | None:
         cursor = cls.get_cursor()
         cursor.execute(f"SELECT name FROM {table} WHERE id = %s", [oid])
         r = cursor.fetchall()
@@ -185,7 +185,7 @@ class ManagedObjectSelectorLabels:
             return None
         return self.get_match_label("adm_domain", name, op="<")
 
-    def get_labels(self, sel: NamedTuple) -> List[str]:
+    def get_labels(self, sel: NamedTuple) -> list[str]:
         r = []
         for f_name in sel._fields:
             if f_name in {"id", "name", "description", "source_combine_method"}:

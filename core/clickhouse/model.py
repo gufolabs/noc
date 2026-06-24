@@ -9,7 +9,6 @@
 import operator
 import string
 from random import choices
-from typing import List
 from time import perf_counter
 
 # NOC modules
@@ -145,7 +144,7 @@ class Model(metaclass=ModelBase):
             yield from field.iter_create_sql()
 
     @classmethod
-    def get_materialized_columns(cls) -> List[str]:
+    def get_materialized_columns(cls) -> list[str]:
         r = []
         for field in cls._meta.ordered_fields:
             if isinstance(field, MaterializedField):

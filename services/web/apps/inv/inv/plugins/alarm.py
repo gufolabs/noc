@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, DefaultDict, List, Any
+from typing import Any
 from collections import defaultdict
 
 # Third-party modules
@@ -33,11 +33,11 @@ class AlarmPlugin(InvPlugin):
         super().init_plugin()
 
     def get_data(self, request, obj: Object):
-        def get_path(resource: str) -> List[Dict[str, str]]:
+        def get_path(resource: str) -> list[dict[str, str]]:
             obj, name = Object.from_resource(resource)
             if not obj:
                 return []
-            path: List[Dict[str, str]] = []
+            path: list[dict[str, str]] = []
             if name:
                 path.append({"id": "", "title": name})
             while obj.parent and obj.as_resource() != current:
@@ -48,11 +48,11 @@ class AlarmPlugin(InvPlugin):
                 obj = obj.parent
             return list(reversed(path))
 
-        def get_node(a: ObjectId) -> Dict[str, Any]:
+        def get_node(a: ObjectId) -> dict[str, Any]:
             alarm = alarms[a]
             severity = AlarmSeverity.get_severity(alarm.severity)
             children_alarms = children[a]
-            r: Dict[str, Any] = {
+            r: dict[str, Any] = {
                 "id": str(a),
                 "title": alarm.subject,
                 "alarm_class": str(alarm.alarm_class.id),
@@ -87,16 +87,16 @@ class AlarmPlugin(InvPlugin):
         # @todo: Relative path
         current = obj.as_resource()
         # Get all alarms
-        alarms: Dict[ObjectId, ActiveAlarm] = {
+        alarms: dict[ObjectId, ActiveAlarm] = {
             a.id: a
             for a in ActiveAlarm.objects.filter(
                 resource_path__elemMatch={"code": PathCode.OBJECT.value, "path": current}
             )
         }
         # parent -> list of children
-        children: DefaultDict[ObjectId, List[ObjectId]] = defaultdict(list)
+        children: defaultdict[ObjectId, list[ObjectId]] = defaultdict(list)
         # top-level
-        top: List[ObjectId] = []
+        top: list[ObjectId] = []
         for a in alarms.values():
             if a.root and a.root in alarms:
                 children[a.root].append(a.id)

@@ -9,7 +9,7 @@
 from pathlib import Path
 import threading
 import operator
-from typing import Dict, Optional, Union, Any
+from typing import Optional, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -63,7 +63,7 @@ class Facade(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Facade"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Facade"]:
         return Facade.objects.filter(id=oid).first()
 
     @classmethod
@@ -72,7 +72,7 @@ class Facade(Document):
         return Facade.objects.filter(name=name).first()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],

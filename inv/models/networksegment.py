@@ -9,7 +9,7 @@
 import operator
 import cachetools
 from threading import Lock
-from typing import Optional, Union
+from typing import Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -174,7 +174,7 @@ class NetworkSegment(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["NetworkSegment"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["NetworkSegment"]:
         return NetworkSegment.objects.filter(id=oid).first()
 
     @classmethod
@@ -622,5 +622,5 @@ class NetworkSegment(Document):
             title=self.name,
         )
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.profile.get_css_class() if self.profile else None

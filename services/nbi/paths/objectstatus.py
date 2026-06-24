@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Union
 
 # Third-party modules
 from fastapi import APIRouter, Header, HTTPException
@@ -20,7 +19,7 @@ router = APIRouter()
 
 
 class ObjectStatusRequest(BaseModel):
-    objects: List[Union[str, int]]
+    objects: list[str | int]
 
 
 class Status(BaseModel):
@@ -29,7 +28,7 @@ class Status(BaseModel):
 
 
 class ObjectStatusResponse(BaseModel):
-    statuses: List[Status]
+    statuses: list[Status]
 
 
 class ObjectStatusAPI(NBIAPI):

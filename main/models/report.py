@@ -9,7 +9,7 @@
 import operator
 from threading import Lock
 from collections import defaultdict
-from typing import Dict, Any, Optional, List, Set, Union
+from typing import Any, Optional
 from pathlib import Path
 
 # Third-party modules
@@ -58,7 +58,7 @@ class ParamConditionValue(EmbeddedDocument):
     default_value = StringField(required=True)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "value": self.value,
             "default_value": self.default_value,
@@ -89,7 +89,7 @@ class ReportParam(EmbeddedDocument):
     required = BooleanField(default=False)
     default = StringField(required=False)
     condition_param = StringField(required=False)
-    condition_values: List[ParamConditionValue] = EmbeddedDocumentListField(
+    condition_values: list[ParamConditionValue] = EmbeddedDocumentListField(
         ParamConditionValue, required=False
     )
     hide = BooleanField(default=False)
@@ -99,7 +99,7 @@ class ReportParam(EmbeddedDocument):
         return self.name
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "description": self.description,
@@ -133,7 +133,7 @@ class Template(EmbeddedDocument):
     handler = StringField(default="simplereport", required=True)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "code": self.code,
             "output_type": self.output_type,
@@ -152,7 +152,7 @@ class Query(EmbeddedDocument):
     json = StringField()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {}
         if self.datasource:
             r["datasource"] = self.datasource
@@ -179,7 +179,7 @@ class BandFormat(EmbeddedDocument):
         return self.name
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "title_template": self.title_template,
@@ -205,7 +205,7 @@ class Band(EmbeddedDocument):
         return self.name == ROOT_BAND
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "orientation": self.orientation.value,
@@ -258,10 +258,10 @@ class Report(Document):
         ],
         default="N",
     )
-    parameters: List["ReportParam"] = EmbeddedDocumentListField(ReportParam)
-    templates: List["Template"] = EmbeddedDocumentListField(Template)
-    bands: List["Band"] = EmbeddedDocumentListField(Band)
-    bands_format: List["BandFormat"] = EmbeddedDocumentListField(BandFormat)
+    parameters: list["ReportParam"] = EmbeddedDocumentListField(ReportParam)
+    templates: list["Template"] = EmbeddedDocumentListField(Template)
+    bands: list["Band"] = EmbeddedDocumentListField(Band)
+    bands_format: list["BandFormat"] = EmbeddedDocumentListField(BandFormat)
     permissions = EmbeddedDocumentListField(Permission)
     localization = MapField(DictField())
 
@@ -275,7 +275,7 @@ class Report(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["Report"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["Report"]:
         return Report.objects.filter(id=oid).first()
 
     @classmethod
@@ -288,7 +288,7 @@ class Report(Document):
     def get_by_code(cls, code: str) -> Optional["Report"]:
         return Report.objects.filter(code=code).first()
 
-    def get_localization(self, field: str, lang: Optional[str] = None):
+    def get_localization(self, field: str, lang: str | None = None):
         from noc.config import config
 
         lang = lang or config.language
@@ -296,7 +296,7 @@ class Report(Document):
             return self.localization[field].get(lang)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -338,7 +338,7 @@ class Report(Document):
     def get_json_path(self) -> Path:
         return safe_json_path(self.name)
 
-    def get_param_by_name(self, param_name: str) -> Optional[ReportParam]:
+    def get_param_by_name(self, param_name: str) -> ReportParam | None:
         return next(
             (p for p in self.parameters if p.name == param_name),
             None,
@@ -348,7 +348,7 @@ class Report(Document):
     def config(self) -> ReportConfig:
         return self.get_config()
 
-    def get_config(self, pref_lang: Optional[str] = None) -> ReportConfig:
+    def get_config(self, pref_lang: str | None = None) -> ReportConfig:
         params = []
         for p in self.parameters:
             params.append(
@@ -431,20 +431,20 @@ class Report(Document):
             align_end_date_param=self.time_params == "A",
         )
 
-    def _get_band_by_condition(self, condition_value: str) -> Optional[Band]:
+    def _get_band_by_condition(self, condition_value: str) -> Band | None:
         return next(
             (b for b in self.bands if b.condition_value == condition_value),
             None,
         )
 
-    def _get_bandformat_by_condition(self, condition_value: str) -> Optional[BandFormat]:
+    def _get_bandformat_by_condition(self, condition_value: str) -> BandFormat | None:
         band = self._get_band_by_condition(condition_value)
         return next(
             (bf for bf in self.bands_format if bf.name == band.name),
             None,
         )
 
-    def get_bandformat(self, condition_value: Optional[str] = None) -> Optional[BandFormat]:
+    def get_bandformat(self, condition_value: str | None = None) -> BandFormat | None:
         if not self.bands_format:
             return None
         if condition_value:
@@ -452,7 +452,7 @@ class Report(Document):
         # without condition (by default) method returns first (!) band_format
         return self.bands_format[0]
 
-    def get_root_band_ds_columns(self) -> Dict[str, List[str]]:
+    def get_root_band_ds_columns(self) -> dict[str, list[str]]:
         r = defaultdict(list)
         root_band = None
         for b in self.bands:
@@ -478,7 +478,7 @@ class Report(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_effective_perm_cache"), lock=lambda _: perm_lock)
-    def get_effective_permissions(cls, user) -> Set[str]:
+    def get_effective_permissions(cls, user) -> set[str]:
         """
         Returns a set of effective user permissions,
         counting group and implied ones

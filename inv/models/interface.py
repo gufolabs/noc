@@ -10,7 +10,7 @@ import datetime
 import logging
 import operator
 import re
-from typing import Optional, Iterable, List, Union, Dict, Any
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 import cachetools
@@ -145,7 +145,7 @@ class Interface(Document):
     effective_labels = ListField(StringField())
     extra_labels = DictField()
     # Capabilities
-    caps: List[CapsItem] = EmbeddedDocumentListField(CapsItem)
+    caps: list[CapsItem] = EmbeddedDocumentListField(CapsItem)
 
     PROFILE_LINK = "profile"
     _component_cache = cachetools.TTLCache(maxsize=2000, ttl=60)
@@ -154,7 +154,7 @@ class Interface(Document):
         return "%s: %s" % (self.managed_object.name, self.name)
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Interface"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Interface"]:
         return Interface.objects.filter(id=oid).first()
 
     @classmethod
@@ -205,7 +205,7 @@ class Interface(Document):
         if si:
             return si.interface
 
-    def as_resource(self, path: Optional[str] = None) -> str:
+    def as_resource(self, path: str | None = None) -> str:
         """
         Convert instance or connection to the resource reference.
 
@@ -455,7 +455,7 @@ class Interface(Document):
             s += ["-", "-"]
         return "/".join(s)
 
-    def set_oper_status(self, status: bool, timestamp: Optional[datetime.datetime] = None):
+    def set_oper_status(self, status: bool, timestamp: datetime.datetime | None = None):
         """
         Set current oper status
         """
@@ -483,7 +483,7 @@ class Interface(Document):
                     headers=headers,
                 )
 
-    def get_message_context(self) -> Dict[str, Any]:
+    def get_message_context(self) -> dict[str, Any]:
         """Interface Message Ctx"""
         return {
             "name": self.name,
@@ -544,7 +544,7 @@ class Interface(Document):
         return Label.get_effective_setting(label, setting="enable_interface")
 
     @classmethod
-    def iter_effective_labels(cls, instance: "Interface") -> Iterable[List[str]]:
+    def iter_effective_labels(cls, instance: "Interface") -> Iterable[list[str]]:
         from noc.inv.models.subinterface import SubInterface
 
         yield list(instance.labels or [])
@@ -580,7 +580,7 @@ class Interface(Document):
 
     @classmethod
     def iter_collected_metrics(
-        cls, mo: "ManagedObject", run: int = 0, d_interval: Optional[int] = None
+        cls, mo: "ManagedObject", run: int = 0, d_interval: int | None = None
     ) -> Iterable[MetricCollectorConfig]:
         """
         Return metric settings
@@ -623,7 +623,7 @@ class Interface(Document):
                 continue  # No metrics configured
             elif i["type"] == "SVI" and i_profile.is_default and i["name"] not in s_map:
                 continue  # Not allowed apply default profile to SVI
-            metrics: List[MetricItem] = []
+            metrics: list[MetricItem] = []
             for mc in i_profile.metrics:
                 # Check metric collected policy
                 if not i_profile.allow_collected_metric(
@@ -730,7 +730,7 @@ class Interface(Document):
         r = next(r, {})
         return r.get("interval", 0)
 
-    def get_matcher_ctx(self) -> Dict[str, Any]:
+    def get_matcher_ctx(self) -> dict[str, Any]:
         """"""
         if not self.state:
             state = self.profile.workflow.get_default_state()

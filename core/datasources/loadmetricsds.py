@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import time
-from typing import Any, AsyncIterable, Dict, List, Optional, Iterable, Tuple
+from typing import Any, AsyncIterable, Iterable
 
 # Third-party modules
 import orjson
@@ -160,7 +160,7 @@ class LoadMetricsDS(BaseDataSource):
     ]
 
     @staticmethod
-    def get_filter(filters: Dict[str, Any]) -> Dict[str, Any]:
+    def get_filter(filters: dict[str, Any]) -> dict[str, Any]:
         r = {}
         if "resource_group" in filters:
             r["effective_service_groups__overlap"] = ResourceGroup.get_nested_ids(
@@ -174,16 +174,16 @@ class LoadMetricsDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
+        fields: Iterable[str] | None = None,
         reporttype: str = None,
         start: datetime.datetime = None,
         end: datetime.datetime = None,
-        interface_profile: Optional[InterfaceProfile] = None,
+        interface_profile: InterfaceProfile | None = None,
         exclude_zero: bool = False,
-        admin_domain_ads: Optional[List[int]] = None,
+        admin_domain_ads: list[int] | None = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         def get_interface_load_url(mo_bi_id):
             path = "/ui/grafana/dashboard/script/report.js"
             params = {

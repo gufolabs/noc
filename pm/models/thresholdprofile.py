@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import Optional, Union
+from typing import Optional
 from pathlib import Path
 
 # Third-party modules
@@ -159,7 +159,7 @@ class ThresholdProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ThresholdProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ThresholdProfile"]:
         return ThresholdProfile.objects.filter(id=oid).first()
 
     def get_window_function(self):

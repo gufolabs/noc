@@ -7,7 +7,7 @@
 
 # Python modules
 from threading import Lock
-from typing import Iterable, Optional, Tuple, Union
+from typing import Iterable, Optional
 import operator
 import logging
 
@@ -78,7 +78,7 @@ class VLANTemplate(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["VLANTemplate"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["VLANTemplate"]:
         return VLANTemplate.objects.filter(id=oid).first()
 
     def on_save(self):
@@ -89,7 +89,7 @@ class VLANTemplate(Document):
                 template_id=str(self.id),
             )
 
-    def iter_vlans(self) -> Iterable[Tuple[int, str, str, "VLANProfile"]]:
+    def iter_vlans(self) -> Iterable[tuple[int, str, str, "VLANProfile"]]:
         """
         Iterate over template vlans
         :return:

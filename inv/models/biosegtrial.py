@@ -60,8 +60,8 @@ class BioSegTrial(Document):
         cls,
         attacker: NetworkSegment,
         target: NetworkSegment,
-        attacker_object: Optional[ManagedObject] = None,
-        target_object: Optional[ManagedObject] = None,
+        attacker_object: ManagedObject | None = None,
+        target_object: ManagedObject | None = None,
         reason="manual",
     ) -> Optional["BioSegTrial"]:
         if target.id == attacker.id:

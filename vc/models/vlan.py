@@ -10,7 +10,7 @@ import operator
 import random
 import datetime
 from threading import Lock
-from typing import Optional, Set, Union, Iterable, List, Tuple, Any
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -100,7 +100,7 @@ class VLAN(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["VLAN"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["VLAN"]:
         return VLAN.objects.filter(id=oid).first()
 
     @classmethod
@@ -133,15 +133,15 @@ class VLAN(Document):
     def get_resource_keys(
         cls,
         domain: L2Domain,
-        vlan_filter: Optional[VLANFilter] = None,
-        keys: Optional[List[int]] = None,
+        vlan_filter: VLANFilter | None = None,
+        keys: list[int] | None = None,
         strategy: str = "L",
-        exclude_keys: Optional[Iterable[int]] = None,
+        exclude_keys: Iterable[int] | None = None,
         limit: int = 1,
         **kwargs,
-    ) -> List[int]:
+    ) -> list[int]:
         """Generate Non-used vlan keys"""
-        vlans: Set[int] = set(keys or []) or FULL_VLAN_RANGE
+        vlans: set[int] = set(keys or []) or FULL_VLAN_RANGE
         if vlan_filter:
             vlans &= set(vlan_filter.include_vlans)
         if vlan_filter and vlan_filter.exclude_vlans:
@@ -167,7 +167,7 @@ class VLAN(Document):
         keys: Iterable[int],
         domain: L2Domain,
         allow_create: bool = False,
-    ) -> Iterable[Tuple[int, Optional["VLAN"], Optional[str]]]:
+    ) -> Iterable[tuple[int, Optional["VLAN"], str | None]]:
         """
         Iterate resource over requested keys
         Args:
@@ -203,10 +203,10 @@ class VLAN(Document):
 
     def reserve(
         self,
-        allocated_till: Optional[datetime.datetime] = None,
-        user: Optional[Any] = None,
+        allocated_till: datetime.datetime | None = None,
+        user: Any | None = None,
         confirm: bool = True,
-        reservation_id: Optional[str] = None,
+        reservation_id: str | None = None,
     ):
         """
         Set record As reserve
@@ -225,7 +225,7 @@ class VLAN(Document):
         cls,
         vlan_id: int,
         l2_domain: L2Domain,
-        name: Optional[str] = None,
+        name: str | None = None,
     ) -> "VLAN":
         """Create VLAN from Template"""
         vlan = VLAN(
@@ -265,10 +265,10 @@ class VLAN(Document):
         return Label.get_effective_setting(label, "enable_vlan")
 
     @property
-    def vlan_role_label(self) -> Optional[str]:
+    def vlan_role_label(self) -> str | None:
         return self.profile.role_label
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.profile.get_css_class() if self.profile else None
 
     def get_provisioning_op(self) -> str:

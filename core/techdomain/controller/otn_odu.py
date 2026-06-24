@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Iterable, Any, List
+from typing import Iterable, Any
 
 # NOC modules
 from noc.inv.models.object import Object
@@ -64,7 +64,7 @@ class OTNODUController(BaseController):
                     yield Endpoint(object=obj, name=cn.name)
                     break
 
-    def get_supported_protocols(self, ep: Endpoint) -> List[str]:
+    def get_supported_protocols(self, ep: Endpoint) -> list[str]:
         cn = ep.object.model.get_model_connection(ep.name)
         if cn:
             return [
@@ -75,7 +75,7 @@ class OTNODUController(BaseController):
         return []
 
     def iter_path(self, start: Endpoint) -> Iterable[PathItem]:
-        def get_client_protocols(ep: Endpoint) -> List[str]:
+        def get_client_protocols(ep: Endpoint) -> list[str]:
             # @todo: Pass through profile controller
             cn = ep.object.model.get_model_connection(ep.name)
             if cn:

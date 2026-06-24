@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Tuple, Dict
 
 # NOC modules
 from noc.services.discovery.jobs.base import TopologyDiscoveryCheck
@@ -30,10 +29,10 @@ class IfDescCheck(TopologyDiscoveryCheck):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.if_cache: Dict[int, Dict[str, Interface]] = {}
+        self.if_cache: dict[int, dict[str, Interface]] = {}
 
     def handler(self):
-        candidates: List[Tuple[Interface, Interface]] = []
+        candidates: list[tuple[Interface, Interface]] = []
         ifaces = self.get_object_interfaces(self.object)
         for iface in ifaces.values():
             ri = self.resolve_remote_interface(iface)
@@ -48,7 +47,7 @@ class IfDescCheck(TopologyDiscoveryCheck):
                 candidates += [(iface, ri)]
         # Check other side
         if self.object.object_profile.ifdesc_symmetric:
-            confirmed: List[Tuple[Interface, Interface]] = []
+            confirmed: list[tuple[Interface, Interface]] = []
             for li, ri in candidates:
                 riri = self.resolve_remote_interface(ri)
                 if not riri:
@@ -86,7 +85,7 @@ class IfDescCheck(TopologyDiscoveryCheck):
         for li, ri in candidates:
             self.confirm_link(li.managed_object, li.name, ri.managed_object, ri.name)
 
-    def resolve_remote_interface(self, iface: Interface) -> Optional[Interface]:
+    def resolve_remote_interface(self, iface: Interface) -> Interface | None:
         direction = "local" if iface.managed_object.id == self.object.id else "remote"
         if not iface.description or not iface.description.strip():
             self.logger.info("%s interface %s has no description. Ignoring", direction, iface.name)
@@ -120,7 +119,7 @@ class IfDescCheck(TopologyDiscoveryCheck):
         # Not found
         return None
 
-    def resolve_via_handler(self, hi: Handler, iface: Interface) -> Optional[Interface]:
+    def resolve_via_handler(self, hi: Handler, iface: Interface) -> Interface | None:
         """
         Try to resolve remote interface via handler
         :param hi:
@@ -130,9 +129,7 @@ class IfDescCheck(TopologyDiscoveryCheck):
         handler = hi.get_handler()
         return handler(self.object, iface)
 
-    def resolve_via_patterns(
-        self, patterns: IfDescPatterns, iface: Interface
-    ) -> Optional[Interface]:
+    def resolve_via_patterns(self, patterns: IfDescPatterns, iface: Interface) -> Interface | None:
         self.logger.debug(
             "[%s] Checking patterns %s for '%s'", iface.name, patterns.name, iface.description
         )
@@ -168,11 +165,11 @@ class IfDescCheck(TopologyDiscoveryCheck):
     def resolve_object_via_patterns(
         self,
         lmo: ManagedObject,
-        name: Optional[str] = None,
-        address: Optional[str] = None,
-        hostname: Optional[str] = None,
-    ) -> Tuple[Optional[ManagedObject], Optional[str]]:
-        def get_nearest_object(objects: List[ManagedObject]) -> Optional[ManagedObject]:
+        name: str | None = None,
+        address: str | None = None,
+        hostname: str | None = None,
+    ) -> tuple[ManagedObject | None, str | None]:
+        def get_nearest_object(objects: list[ManagedObject]) -> ManagedObject | None:
             # Prefer same pool
             left = [x for x in objects if x.is_managed and x.pool.id == lmo.pool.id]
             if len(left) == 1:
@@ -214,10 +211,10 @@ class IfDescCheck(TopologyDiscoveryCheck):
     def resolve_interface_via_patterns(
         self,
         mo: ManagedObject,
-        interface: Optional[str] = None,
-        ifindex: Optional[str] = None,
-        ifdescrtoken: Optional[str] = None,
-    ) -> Optional[Interface]:
+        interface: str | None = None,
+        ifindex: str | None = None,
+        ifdescrtoken: str | None = None,
+    ) -> Interface | None:
         ifaces = self.get_object_interfaces(mo)
         if not ifaces:
             if interface:
@@ -257,7 +254,7 @@ class IfDescCheck(TopologyDiscoveryCheck):
             )
         return None
 
-    def get_object_interfaces(self, mo: ManagedObject) -> Dict[str, Interface]:
+    def get_object_interfaces(self, mo: ManagedObject) -> dict[str, Interface]:
         ifaces = self.if_cache.get(mo.id)
         if ifaces is not None:
             return ifaces
@@ -267,7 +264,7 @@ class IfDescCheck(TopologyDiscoveryCheck):
         self.if_cache[mo.id] = ifaces
         return ifaces
 
-    def maybe_create_interface(self, mo: ManagedObject, name: str) -> Optional[Interface]:
+    def maybe_create_interface(self, mo: ManagedObject, name: str) -> Interface | None:
         """
         Auto-create remote interface, if possible
 

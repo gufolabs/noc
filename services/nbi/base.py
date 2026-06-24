@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Optional
 
 # Third-party modules
 from fastapi import APIRouter
@@ -27,9 +26,9 @@ class NBIAPI:
     """
 
     # API name
-    api_name: Optional[str] = None
+    api_name: str | None = None
     # Tags for OpenAPI documentation
-    openapi_tags: List[str] = []
+    openapi_tags: list[str] = []
 
     def __init__(self, router: APIRouter):
         self.service = get_service()

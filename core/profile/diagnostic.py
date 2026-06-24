@@ -8,7 +8,7 @@
 # Python modules
 import logging
 from collections import defaultdict
-from typing import List, Iterable, Optional, Tuple, Union, Dict, Set
+from typing import Iterable
 
 # NOC modules
 from noc.core.mib import mib
@@ -34,23 +34,23 @@ class ProfileDiagnostic:
     def __init__(self, config: DiagnosticConfig, logger=None):
         self.config = config
         self.logger = logger or logging.getLogger("profilediagnostic")
-        self.unsupported_method: Set[str] = set()
-        self.reason: Optional[str] = None
-        self.result_cache: Dict[Tuple[str, str], str] = {}
-        self.profile: Optional[str] = None
+        self.unsupported_method: set[str] = set()
+        self.reason: str | None = None
+        self.result_cache: dict[tuple[str, str], str] = {}
+        self.profile: str | None = None
         self.ignoring_snmp = False
         self.oids = []
         self.urls = []
-        self.rules: Dict[Tuple[str, str, int], List[SuggestProfile]] = self.load_rules()
+        self.rules: dict[tuple[str, str, int], list[SuggestProfile]] = self.load_rules()
 
     def iter_checks(
         self,
         address: str,
-        labels: Optional[List[str]] = None,
-        groups: Optional[List[str]] = None,
-        cred: Optional[Union[SNMPCredential, SNMPv3Credential]] = None,
+        labels: list[str] | None = None,
+        groups: list[str] | None = None,
+        cred: SNMPCredential | SNMPv3Credential | None = None,
         **kwargs,
-    ) -> Iterable[Tuple[Check, ...]]:
+    ) -> Iterable[tuple[Check, ...]]:
         if not cred:
             self.ignoring_snmp = True
         if self.oids and cred and isinstance(cred, SNMPCredential):
@@ -78,7 +78,7 @@ class ProfileDiagnostic:
             for (m, url) in self.urls
         )
 
-    def parse_checks(self, checks: List[CheckResult]):
+    def parse_checks(self, checks: list[CheckResult]):
         """Update checks data"""
         for c in checks:
             if c.check.startswith("SNMP"):
@@ -94,9 +94,9 @@ class ProfileDiagnostic:
 
     def process_result(
         self,
-        checks: List[CheckResult],
-        source: Optional[InputSource] = InputSource.UNKNOWN,
-    ) -> Tuple[List[CheckStatus], List[DataItem]]:
+        checks: list[CheckResult],
+        source: InputSource | None = InputSource.UNKNOWN,
+    ) -> tuple[list[CheckStatus], list[DataItem]]:
         """Getting Diagnostic result: State and reason"""
         self.parse_checks(checks)
         if not self.result_cache:
@@ -134,15 +134,15 @@ class ProfileDiagnostic:
 
     def get_check_status(
         self,
-        checks: List[CheckStatus],
+        checks: list[CheckStatus],
         **kwargs,
-    ) -> Tuple[Optional[DiagnosticState], Optional[str]]:
+    ) -> tuple[DiagnosticState | None, str | None]:
         """"""
         if self.profile:
             return DiagnosticState.enabled, self.reason
         return DiagnosticState.failed, self.reason
 
-    def load_rules(self) -> Dict[Tuple[str, str, int], List[SuggestProfile]]:
+    def load_rules(self) -> dict[tuple[str, str, int], list[SuggestProfile]]:
         """
         Convert list to tree: (method, param) -> Rules
         """
@@ -158,7 +158,7 @@ class ProfileDiagnostic:
                     self.urls.append((rule.method, rule.param))
         return r
 
-    def find_profile(self, key, result: str) -> Optional[SuggestProfile]:
+    def find_profile(self, key, result: str) -> SuggestProfile | None:
         if key not in self.rules:
             self.logger.warning("Not find rule for method: %s", key)
             return None
@@ -177,7 +177,7 @@ class ProfileDiagnostic:
             return None
         return param
 
-    def get_profile(self) -> Tuple[Optional[str], Optional[str]]:
+    def get_profile(self) -> tuple[str | None, str | None]:
         unsupported_method = set()
         snmp_result, http_result = "", ""
         for method, param, pref in sorted(self.rules, key=lambda x: x[2]):

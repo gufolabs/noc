@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Tuple, Set, Optional
 
 # NOC modules
 from noc.core.mongo.connection import get_db
@@ -14,9 +13,9 @@ from .db import db
 
 
 class BaseMigration:
-    depends_on: List[Tuple[str, str]] = []
+    depends_on: list[tuple[str, str]] = []
     db = db
-    aliases: Optional[List[str]] = None
+    aliases: list[str] | None = None
 
     def __init__(self):
         # @todo: set_comprehensions
@@ -28,7 +27,7 @@ class BaseMigration:
     def add_dependency(self, name: str) -> None:
         self.dependencies.add(name)
 
-    def is_resolved(self, dependencies: Set[str]) -> bool:
+    def is_resolved(self, dependencies: set[str]) -> bool:
         """
         Check if all dependencies are resolved.
 
@@ -40,7 +39,7 @@ class BaseMigration:
         """
         return not bool(self.dependencies - dependencies)
 
-    def is_applied(self, applied: Set[str]) -> bool:
+    def is_applied(self, applied: set[str]) -> bool:
         """
         Check if migration is applied.
 

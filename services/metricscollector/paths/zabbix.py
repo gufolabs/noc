@@ -9,7 +9,6 @@
 import logging
 import asyncio
 import enum
-from typing import Optional
 from http import HTTPStatus
 
 # Third-party modules
@@ -55,8 +54,8 @@ class ZabbixAPI:
     async def send(
         self,
         req: bytes = Body(...),
-        remote_system_code: Optional[str] = None,
-        authorization: Optional[str] = Header(None, alias="Authorization"),
+        remote_system_code: str | None = None,
+        authorization: str | None = Header(None, alias="Authorization"),
     ) -> ORJSONResponse:
         if not authorization:
             raise HTTPException(status_code=HTTPStatus.FORBIDDEN)
@@ -122,8 +121,8 @@ class ZabbixAPI:
     async def events(
         self,
         req: bytes = Body(...),
-        remote_system_code: Optional[str] = None,
-        authorization: Optional[str] = Header(None, alias="Authorization"),
+        remote_system_code: str | None = None,
+        authorization: str | None = Header(None, alias="Authorization"),
     ) -> ORJSONResponse:
         if not authorization:
             raise HTTPException(status_code=HTTPStatus.FORBIDDEN)

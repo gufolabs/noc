@@ -7,7 +7,7 @@
 
 # Python Modules
 import datetime
-from typing import Optional, Iterable, Tuple, AsyncIterable, Union
+from typing import Iterable, AsyncIterable
 
 # Third-party modules
 import orjson
@@ -79,7 +79,7 @@ class ManagedObjectAvailabilityDS(BaseDataSource):
         start_date: datetime.datetime,
         stop_date: datetime.datetime,
         status: bool,
-        last: Optional[datetime.datetime] = None,
+        last: datetime.datetime | None = None,
     ) -> int:
         """
         Convert ManagedObjectStatus to outage interval
@@ -140,15 +140,15 @@ class ManagedObjectAvailabilityDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
-        start: Optional[datetime.datetime] = None,
-        end: Optional[datetime.datetime] = None,
+        fields: Iterable[str] | None = None,
+        start: datetime.datetime | None = None,
+        end: datetime.datetime | None = None,
         skip_full_avail=False,
         skip_zero_avail=False,
         skip_zero_access=False,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[int, str, Union[str, int]]]:
+    ) -> AsyncIterable[tuple[int, str, str | int]]:
         start, end = cls.clean_interval(start, end)
         td = int((end - start).total_seconds())
         rb = cls.get_reboots_by_object(start_date=start, stop_date=end)

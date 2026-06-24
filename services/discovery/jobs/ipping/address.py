@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import List
 
 # Third-party modules
 import orjson
@@ -40,7 +39,7 @@ class AddressCheck(BaseAddressCheck):
         addresses = {}
         return self.apply_addresses(addresses, self.get_purgatorium_address())
 
-    def get_purgatorium_address(self) -> List[DiscoveredAddress]:
+    def get_purgatorium_address(self) -> list[DiscoveredAddress]:
         """
         "vpn_id", "address", "profile", "description", "source", "subinterface", "mac", "fqdn"
         :return:

@@ -7,7 +7,7 @@
 
 # Python modules
 from threading import Lock
-from typing import Optional, Union
+from typing import Optional
 import operator
 
 # Third-party modules
@@ -84,7 +84,7 @@ class VPNProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["VPNProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["VPNProfile"]:
         return VPNProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -100,5 +100,5 @@ class VPNProfile(Document):
     def can_set_label(cls, label):
         return Label.get_effective_setting(label, "enable_vpn")
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

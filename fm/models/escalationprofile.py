@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import operator
-from typing import Optional, Union, List, FrozenSet, Dict, Any
+from typing import Optional, Any
 from threading import Lock
 
 # Third-party modules
@@ -76,12 +76,12 @@ class EscalationItem(EmbeddedDocument):
     create_tt = BooleanField(default=False)
     tt_queue: str = StringField(required=False)
     # TT System that create escalation, Device by default
-    tt_system: Optional[TTSystem] = ReferenceField(TTSystem, required=False)
+    tt_system: TTSystem | None = ReferenceField(TTSystem, required=False)
     # Repeat escalation
     repeat = BooleanField(default=False)
     # Subscribe
     # Assigned - User, From Contacts: Config, Local
-    assigned_user: Optional[User] = ForeignKeyField(User, required=False)
+    assigned_user: User | None = ForeignKeyField(User, required=False)
     ack_policy: str = StringField(
         choices=[
             ("D", "Disable"),
@@ -101,14 +101,14 @@ class EscalationItem(EmbeddedDocument):
         return f"{self.delay}: {self.create_tt}/{self.template}"
 
     @property
-    def member(self) -> Optional[EscalationMember]:
+    def member(self) -> EscalationMember | None:
         if self.create_tt:
             return EscalationMember.TT_SYSTEM
         if self.notification_group:
             return EscalationMember.NOTIFICATION_GROUP
         return None
 
-    def get_key(self, tt_system: Optional[str] = None) -> str:
+    def get_key(self, tt_system: str | None = None) -> str:
         if self.member == EscalationMember.TT_SYSTEM:
             tt_system = tt_system or self.tt_system.id
             return str(tt_system)
@@ -118,10 +118,10 @@ class EscalationItem(EmbeddedDocument):
 
     def get_config(
         self,
-        tt_login: Optional[str] = None,
-        pre_reason: Optional[str] = None,
-        promote_item: Optional[str] = None,
-    ) -> List["ActionConfig"]:
+        tt_login: str | None = None,
+        pre_reason: str | None = None,
+        promote_item: str | None = None,
+    ) -> list["ActionConfig"]:
         """"""
         r = []
         if self.notification_group:
@@ -213,7 +213,7 @@ class EscalationAction(EmbeddedDocument):
     log = BooleanField(default=False)
     subscribe = BooleanField(default=False)
 
-    def get_config(self) -> List[AllowedAction]:
+    def get_config(self) -> list[AllowedAction]:
         """"""
         r = []
         if self.ack:
@@ -251,8 +251,8 @@ class EscalationProfile(Document):
     escalation_policy = EnumField(EscalationPolicy, default=EscalationPolicy.ROOT)
     #     choices=["never", "rootfirst", "root", "alwaysfirst", "always"], default="root"
     # )
-    tt_system_config: List[TTSystemItem] = EmbeddedDocumentListField(TTSystemItem)
-    actions: List[EscalationAction] = EmbeddedDocumentListField(EscalationAction)
+    tt_system_config: list[TTSystemItem] = EmbeddedDocumentListField(TTSystemItem)
+    actions: list[EscalationAction] = EmbeddedDocumentListField(EscalationAction)
     maintenance_policy = StringField(choices=["w", "i", "e"], default="end")
     alarm_consequence_policy = StringField(
         required=True,
@@ -276,7 +276,7 @@ class EscalationProfile(Document):
     )
     # Close alarm after End
     close_alarm = BooleanField(default=False)
-    escalations: List[EscalationItem] = EmbeddedDocumentListField(EscalationItem)  # Chain
+    escalations: list[EscalationItem] = EmbeddedDocumentListField(EscalationItem)  # Chain
     repeat_escalations = StringField(
         choices=[
             ("N", "Newer"),
@@ -297,14 +297,14 @@ class EscalationProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["EscalationProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["EscalationProfile"]:
         return EscalationProfile.objects.filter(id=oid).first()
 
     def get_actions(
         self,
-        user: Optional[User] = None,
-        group: Optional[Group] = None,
-    ) -> FrozenSet[AlarmAction]:
+        user: User | None = None,
+        group: Group | None = None,
+    ) -> frozenset[AlarmAction]:
         """
         Getting TT System Action support
 
@@ -404,7 +404,7 @@ class EscalationProfile(Document):
         return self.escalations[0].delay
 
     @classmethod
-    def get_config(cls, profile: "EscalationProfile") -> Dict[str, Any]:
+    def get_config(cls, profile: "EscalationProfile") -> dict[str, Any]:
         """Build job config"""
         actions = []
         for e in profile.escalations:

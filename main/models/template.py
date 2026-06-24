@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import Optional, Dict, Any
+from typing import Optional, Any
 from pathlib import Path
 
 # Third-party modules
@@ -91,7 +91,7 @@ class Template(NOCModel):
         return self.name
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._json_collection["json_collection"],
@@ -135,7 +135,7 @@ class Template(NOCModel):
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_message_type_cache"), lock=lambda _: id_lock)
     def get_by_message_type(
-        cls, m_type: MessageType, language: Optional[str] = None
+        cls, m_type: MessageType, language: str | None = None
     ) -> Optional["Template"]:
         default = None
         for tmpl in Template.objects.filter(message_type=m_type.value):

@@ -9,7 +9,7 @@
 import inspect
 import re
 import os
-from typing import Dict, Iterable, Tuple, Optional, Any, Type, Set, List
+from typing import Iterable, Any
 import warnings
 
 # NOC modules
@@ -45,10 +45,10 @@ class ConfigSection(metaclass=ConfigSectionBase):
 class BaseRewrite:
     """Rewrite configuration parameter."""
 
-    def __init__(self, /, deprecation: Optional[Type[Warning]] = None) -> None:
+    def __init__(self, /, deprecation: type[Warning] | None = None) -> None:
         self.deprecation = deprecation
 
-    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+    def rewrite(self, key: str, value: Any) -> tuple[str, Any] | None:
         """
         Rewrite configuration parameter.
 
@@ -62,7 +62,7 @@ class BaseRewrite:
         """
         raise NotImplementedError
 
-    def reverse_rewrite(self, key: str) -> Optional[str]:
+    def reverse_rewrite(self, key: str) -> str | None:
         """
         Rewrite name back.
 
@@ -83,13 +83,13 @@ class PrefixRewrite(BaseRewrite):
     """Rewrite parameter's prefix."""
 
     def __init__(
-        self, prefix: str, rewrite_to: str, /, deprecation: Optional[Type[Warning]] = None
+        self, prefix: str, rewrite_to: str, /, deprecation: type[Warning] | None = None
     ) -> None:
         super().__init__(deprecation=deprecation)
         self.prefix = f"{prefix}."
         self.rewrite_to = f"{rewrite_to}."
 
-    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+    def rewrite(self, key: str, value: Any) -> tuple[str, Any] | None:
         if not key.startswith(self.prefix):
             return key, value
         new_key = f"{self.rewrite_to}{key[len(self.prefix) :]}"
@@ -98,7 +98,7 @@ class PrefixRewrite(BaseRewrite):
             warnings.warn(msg, self.deprecation)
         return new_key, value
 
-    def reverse_rewrite(self, key: str) -> Optional[str]:
+    def reverse_rewrite(self, key: str) -> str | None:
         if key.startswith(self.rewrite_to):
             return f"{self.prefix}{key[len(self.rewrite_to) :]}"
         return None
@@ -110,14 +110,14 @@ class ValueRewrite(BaseRewrite):
     """
 
     def __init__(
-        self, key: str, value: str, new_value: str, /, deprecation: Optional[Type[Warning]] = None
+        self, key: str, value: str, new_value: str, /, deprecation: type[Warning] | None = None
     ) -> None:
         super().__init__(deprecation=deprecation)
         self.key = key
         self.value = value
         self.new_value = new_value
 
-    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+    def rewrite(self, key: str, value: Any) -> tuple[str, Any] | None:
         if key != self.key or self.value != str(value):
             return key, value
         if self.deprecation:
@@ -127,14 +127,12 @@ class ValueRewrite(BaseRewrite):
 
 
 class DeprecatedValue(BaseRewrite):
-    def __init__(
-        self, key: str, value: str, /, deprecation: Optional[Type[Warning]] = None
-    ) -> None:
+    def __init__(self, key: str, value: str, /, deprecation: type[Warning] | None = None) -> None:
         super().__init__(deprecation=deprecation)
         self.key = key
         self.value = value
 
-    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+    def rewrite(self, key: str, value: Any) -> tuple[str, Any] | None:
         if key == self.key and self.value == str(value) and self.deprecation:
             msg = f"{key} = {value} is deprecated and will be removed"
             warnings.warn(msg, self.deprecation)
@@ -164,9 +162,9 @@ class BaseConfig(metaclass=ConfigBase):
     }
 
     _rx_env_sh = re.compile(r"\${([^:}]+)(:-[^}]+)?}")
-    _params: Dict[str, BaseParameter]
+    _params: dict[str, BaseParameter]
 
-    def __init__(self, rewrites: Optional[Iterable[BaseRewrite]] = None) -> None:
+    def __init__(self, rewrites: Iterable[BaseRewrite] | None = None) -> None:
         self._rewrites = list(rewrites) if rewrites else None
         self._params_order = sorted(self._params, key=lambda x: self._params[x].param_number)
         self._rewritten_params = self._get_rewritten_params()
@@ -176,11 +174,11 @@ class BaseConfig(metaclass=ConfigBase):
         if self._rewritten_params:
             yield from self._rewritten_params
 
-    def _get_rewritten_params(self) -> Optional[List[str]]:
+    def _get_rewritten_params(self) -> list[str] | None:
         """Find rewritten params, if any."""
         if not self._rewrites:
             return None
-        r: Set[str] = set()
+        r: set[str] = set()
         for rule in self._rewrites:
             for p in self._params_order:
                 old = rule.reverse_rewrite(p)
@@ -229,7 +227,7 @@ class BaseConfig(metaclass=ConfigBase):
             raise ConfigurationError(msg)
         p.set_value(value)
 
-    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+    def rewrite(self, key: str, value: Any) -> tuple[str, Any] | None:
         """
         Rewrite parameters.
 
@@ -315,7 +313,7 @@ class BaseConfig(metaclass=ConfigBase):
             if c and parts[-1] in c:
                 self.set_parameter(name, c[parts[-1]])
 
-    def iter_params(self) -> Iterable[Tuple[str, BaseParameter]]:
+    def iter_params(self) -> Iterable[tuple[str, BaseParameter]]:
         """
         Iterate over all known parameters.
 

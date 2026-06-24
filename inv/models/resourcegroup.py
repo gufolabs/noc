@@ -9,7 +9,7 @@
 import operator
 import threading
 import logging
-from typing import List, Union, Optional, Tuple
+from typing import Optional
 
 # Third-party modules
 import bson
@@ -152,7 +152,7 @@ class ResourceGroup(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ResourceGroup"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ResourceGroup"]:
         return ResourceGroup.objects.filter(id=oid).first()
 
     @classmethod
@@ -252,7 +252,7 @@ class ResourceGroup(Document):
     @classmethod
     def get_model_instance_ids(
         cls, model_id: str, resource_group: str, is_client: bool = False
-    ) -> List[Union[int, str]]:
+    ) -> list[int | str]:
         """
         Getting model instance ids that setting ResourceGroup
         :return:
@@ -270,7 +270,7 @@ class ResourceGroup(Document):
     @staticmethod
     def _remove_group(
         model_id: str,
-        group_id: Union[str, bson.ObjectId],
+        group_id: str | bson.ObjectId,
         is_client: bool = False,
     ):
         """
@@ -306,8 +306,8 @@ class ResourceGroup(Document):
     @staticmethod
     def _add_group(
         model_id: str,
-        group_id: Union[str, bson.ObjectId],
-        labels: List[str],
+        group_id: str | bson.ObjectId,
+        labels: list[str],
         is_client: bool = False,
     ):
         """
@@ -342,7 +342,7 @@ class ResourceGroup(Document):
             with pg_connection.cursor() as cursor:
                 cursor.execute(sql, [labels])
 
-    def unset_service_group(self, model_id: str, changed_ids: Optional[List[str]] = None):
+    def unset_service_group(self, model_id: str, changed_ids: list[str] | None = None):
         """
         Remove ServiceGroup from model
         :param model_id:
@@ -353,26 +353,26 @@ class ResourceGroup(Document):
             changed_ids += self.get_model_instance_ids(model_id, self.id)
         self._remove_group(model_id, self.id)
 
-    def unset_client_group(self, model_id: str, changed_ids: Optional[List[str]] = None):
+    def unset_client_group(self, model_id: str, changed_ids: list[str] | None = None):
         if changed_ids is not None:
             changed_ids += self.get_model_instance_ids(model_id, self.id, is_client=True)
         self._remove_group(model_id, self.id, is_client=True)
 
-    def add_service_group(self, model_id: str, changed_ids: Optional[List[str]] = None):
+    def add_service_group(self, model_id: str, changed_ids: list[str] | None = None):
         # @todo optimize for one operation
         for ml in self.dynamic_service_labels:
             self._add_group(model_id, self.id, ml.labels)
         if changed_ids is not None:
             changed_ids += self.get_model_instance_ids(model_id, self.id)
 
-    def add_client_group(self, model_id: str, changed_ids: Optional[List[str]] = None):
+    def add_client_group(self, model_id: str, changed_ids: list[str] | None = None):
         for ml in self.dynamic_service_labels:
             self._add_group(model_id, self.id, ml.labels, is_client=True)
         if changed_ids is not None:
             changed_ids += self.get_model_instance_ids(model_id, self.id, is_client=True)
 
     @classmethod
-    def get_dynamic_service_groups(cls, labels: List[str], model_id: str) -> List[str]:
+    def get_dynamic_service_groups(cls, labels: list[str], model_id: str) -> list[str]:
         """
         Getting dynamic service groups by labels
         """
@@ -419,7 +419,7 @@ class ResourceGroup(Document):
         return r
 
     @classmethod
-    def get_dynamic_client_groups(cls, labels: List[str], model_id: str) -> List[str]:
+    def get_dynamic_client_groups(cls, labels: list[str], model_id: str) -> list[str]:
         """
         Getting dynamic client groups by labels
         """
@@ -470,7 +470,7 @@ class ResourceGroup(Document):
         key=lambda s, x: tuple(x),
         lock=lambda _: rx_labels_lock,
     )
-    def get_lazy_labels(cls, resource_groups: List[str]) -> List[str]:
+    def get_lazy_labels(cls, resource_groups: list[str]) -> list[str]:
         match_rg = []
         for rg in resource_groups:
             if isinstance(rg, str):
@@ -515,9 +515,9 @@ class ResourceGroup(Document):
     def get_objects_from_expression(
         cls,
         s,
-        model_id: Optional[str] = None,
-        include_labels: List[str] = None,
-        exclude_labels: List[str] = None,
+        model_id: str | None = None,
+        include_labels: list[str] = None,
+        exclude_labels: list[str] = None,
     ):
         """
         Get list of Managed Object matching selector expression
@@ -653,7 +653,7 @@ class ResourceGroup(Document):
             yield from cursor
 
     @classmethod
-    def sync_model_groups(cls, model_id: str, table_filter: Optional[List[Tuple[str, str]]] = None):
+    def sync_model_groups(cls, model_id: str, table_filter: list[tuple[str, str]] | None = None):
         """
         Sync Groups on records by filter
         :return:
@@ -719,7 +719,7 @@ class ResourceGroup(Document):
         return len(self.get_model_instance_ids(self.technology.service_model, self.id))
 
 
-def invalidate_instance_cache(model_id: str, ids: List[int]):
+def invalidate_instance_cache(model_id: str, ids: list[int]):
     """
     Defer task for invalidate instance with __reset_caches
     :param model_id:

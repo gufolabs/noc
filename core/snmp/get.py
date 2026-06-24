@@ -8,7 +8,7 @@
 # Python modules
 import random
 from collections import namedtuple
-from typing import Optional, Callable, Dict, Union
+from typing import Callable
 
 # NOC modules
 from .ber import parse_p_oid, BERDecoder, encoder
@@ -109,11 +109,11 @@ GetResponse = namedtuple(
     "GetResponse", ["community", "request_id", "error_status", "error_index", "varbinds"]
 )
 
-_DisplayHints = Dict[str, Callable[[str, bytes], Union[str, bytes]]]
-_ResponseParser = Callable[[bytes, Optional[_DisplayHints]], GetResponse]
+_DisplayHints = dict[str, Callable[[str, bytes], str | bytes]]
+_ResponseParser = Callable[[bytes, _DisplayHints | None], GetResponse]
 
 
-def parse_get_response(pdu: bytes, display_hints: Optional[_DisplayHints] = None) -> GetResponse:
+def parse_get_response(pdu: bytes, display_hints: _DisplayHints | None = None) -> GetResponse:
     """
     Common response parser
     :param pdu:
@@ -134,9 +134,7 @@ def parse_get_response(pdu: bytes, display_hints: Optional[_DisplayHints] = None
     )
 
 
-def parse_get_response_raw(
-    pdu: bytes, display_hints: Optional[_DisplayHints] = None
-) -> GetResponse:
+def parse_get_response_raw(pdu: bytes, display_hints: _DisplayHints | None = None) -> GetResponse:
     """
     Raw response parser for beef collector
 
@@ -181,7 +179,7 @@ def parse_get_response_raw(
 
 
 def parse_get_response_strict(
-    pdu: bytes, display_hints: Optional[_DisplayHints] = None
+    pdu: bytes, display_hints: _DisplayHints | None = None
 ) -> GetResponse:
     """
     Strict response parser suspects that VarBind part of response

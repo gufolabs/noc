@@ -12,7 +12,7 @@ import random
 import string
 import logging
 import datetime
-from typing import Optional, List, Union, Callable, Any
+from typing import Optional, Callable, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -92,14 +92,14 @@ class ResourcePool(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ResourcePool"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ResourcePool"]:
         return ResourcePool.objects.filter(id=oid).first()
 
     @property
     def resource_model(self):
         return get_model(TYPE_RESOURCE_MAP[self.type])
 
-    def get_resource_domains(self) -> List[Any]:
+    def get_resource_domains(self) -> list[Any]:
         """Getting Resource Domains"""
         if self.type == "vlan":
             model = get_model("vc.L2Domain")
@@ -110,7 +110,7 @@ class ResourcePool(Document):
         return model.get_by_resource_pool(self)
 
     @classmethod
-    def acquire(cls, pools: List["ResourcePool"], owner: Optional[str] = None):
+    def acquire(cls, pools: list["ResourcePool"], owner: str | None = None):
         """
         # Set Lock
         with ResourcePool.acquire([pool1, ..., poolN]):
@@ -145,7 +145,7 @@ class ResourcePool(Document):
         return self.allocate
 
     @classmethod
-    def get_metrics(cls, pools: List["ResourcePool"]):
+    def get_metrics(cls, pools: list["ResourcePool"]):
         """
         Getting metrics for pools: total, used (by count)
         1. Group by type
@@ -162,15 +162,15 @@ class ResourcePool(Document):
     def allocate(
         self,
         limit: int = 1,
-        allocated_till: Optional[datetime.datetime] = None,
+        allocated_till: datetime.datetime | None = None,
         allow_free: bool = False,
-        reservation_id: Optional[str] = None,
-        user: Optional[str] = None,
+        reservation_id: str | None = None,
+        user: str | None = None,
         confirm: bool = True,
         is_dirty: bool = False,
         # Hints
-        resource_keys: Optional[List[str]] = None,
-        domain: Optional[Any] = None,
+        resource_keys: list[str] | None = None,
+        domain: Any | None = None,
         **kwargs,
     ):
         """
@@ -195,7 +195,7 @@ class ResourcePool(Document):
             domains = self.get_resource_domains()
         if not domains:
             return None
-        allocated: List[Any] = []
+        allocated: list[Any] = []
         d = domains.pop()
         # Replace to hints
         pool_hints = d.get_pool_hints(self)
@@ -257,7 +257,7 @@ class ResourcePool(Document):
         return allocated
 
     @property
-    def usage(self) -> Optional[float]:
+    def usage(self) -> float | None:
         """Calculate pool resource usage"""
         from noc.ip.models.prefix import Prefix
         from noc.vc.models.l2domain import L2Domain

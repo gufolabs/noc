@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Tuple, List
 
 # Third-party modules
 import pytest
@@ -33,7 +32,7 @@ from noc.main.models.label import Label
         ((["x", "scope1::scope2::x", "scope1::scope2::x"],), ["x", "scope1::scope2::x"]),
     ],
 )
-def test_merge_labels(iter_labels: Tuple[List[str]], expected: List[str]):
+def test_merge_labels(iter_labels: tuple[list[str]], expected: list[str]):
     assert Label.merge_labels(iter_labels) == expected
 
 
@@ -61,7 +60,7 @@ def test_is_wildcard(label: str, expected: bool):
         ("myscope::mysubscope::mylabel", ["myscope", "myscope::mysubscope"]),
     ],
 )
-def test_iter_scopes(label: str, expected: List[str]):
+def test_iter_scopes(label: str, expected: list[str]):
     instance = Label(name=label)
     scopes = list(instance.iter_scopes())
     assert scopes == expected

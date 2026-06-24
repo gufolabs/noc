@@ -10,7 +10,7 @@ import threading
 import operator
 import re
 from collections import defaultdict
-from typing import Any, Dict, Optional, Union, List, Tuple, Iterable
+from typing import Any, Optional, Iterable
 from pathlib import Path
 
 # Third-party modules
@@ -60,18 +60,18 @@ class ActionSetItem(EmbeddedDocument):
         default="S",
     )
     cancel: bool = BooleanField(default=False)
-    params_ctx: List[str] = ListField(StringField())
+    params_ctx: list[str] = ListField(StringField())
     # domain: str = StringField()
-    domain_scopes: List[str] = ListField(StringField())
+    domain_scopes: list[str] = ListField(StringField())
 
-    def is_match(self, scopes: List[ScopeConfig]) -> bool:
+    def is_match(self, scopes: list[ScopeConfig]) -> bool:
         if scopes and not self.domain_scopes:
             return False
         if scopes:
             return bool(set(self.domain_scopes).intersection({s.name for s in scopes}))
         return True
 
-    def get_ctx(self, scopes: Optional[Iterable[ScopeConfig]] = None, **kwargs) -> Dict[str, Any]:
+    def get_ctx(self, scopes: Iterable[ScopeConfig] | None = None, **kwargs) -> dict[str, Any]:
         """Processed Context"""
         r = {}
         r |= kwargs
@@ -88,7 +88,7 @@ class ActionSetItem(EmbeddedDocument):
         return r
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "action__name": self.action.name,
             "execute": self.execute,
@@ -118,7 +118,7 @@ class ActionParameter(EmbeddedDocument):
         return f"{self.name} ({self.type})"
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "type": self.type.value,
@@ -163,10 +163,10 @@ class Action(Document):
     handler: "Handler" = ReferenceField(Handler, required=False)
     action_job: str = StringField(default="action_commands")
     # Job, Action cfg job, test SLA/ SLA by separate task
-    action_set: List[ActionSetItem] = EmbeddedDocumentListField(ActionSetItem)
+    action_set: list[ActionSetItem] = EmbeddedDocumentListField(ActionSetItem)
     # rollback_policy - disable, cancel, action
     #
-    params: List[ActionParameter] = EmbeddedDocumentListField(ActionParameter)
+    params: list[ActionParameter] = EmbeddedDocumentListField(ActionParameter)
 
     _id_cache = cachetools.TTLCache(1000, ttl=60)
     _name_cache = cachetools.TTLCache(1000, ttl=60)
@@ -176,7 +176,7 @@ class Action(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Action"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Action"]:
         return Action.objects.filter(id=oid).first()
 
     @classmethod
@@ -188,7 +188,7 @@ class Action(Document):
         return safe_json_path(self.name)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -221,8 +221,8 @@ class Action(Document):
 
     @classmethod
     def iter_topology(
-        cls, topology: TopologyBase, constraints: Optional[Dict[str, Any]] = None
-    ) -> Iterable[Tuple[Any, Dict[str, Any], Dict[str, Any]]]:
+        cls, topology: TopologyBase, constraints: dict[str, Any] | None = None
+    ) -> Iterable[tuple[Any, dict[str, Any], dict[str, Any]]]:
         """Apply action to topology"""
         ports = {}
         mo_c, c_ports = constraints.get("managed_object"), set()
@@ -242,7 +242,7 @@ class Action(Document):
                 mo, ifname = ports[p]
                 yield mo, [ScopeConfig(name="interface", value=ifname)], {}
 
-    def get_commands(self, profile: str, ctx: Dict[str, Any]):
+    def get_commands(self, profile: str, ctx: dict[str, Any]):
         """
         Returns ActionCommands instance or None
         Args:
@@ -258,7 +258,7 @@ class Action(Document):
                 return ac
         return None
 
-    def expand_ex(self, profile, match_ctx: Optional[Dict[str, Any]] = None, **kwargs):
+    def expand_ex(self, profile, match_ctx: dict[str, Any] | None = None, **kwargs):
         ctx = match_ctx or {}
         ac = self.get_commands(profile.id, ctx)
         if not ac:
@@ -273,12 +273,12 @@ class Action(Document):
     def get_config(
         self,
         profile,
-        match_ctx: Optional[Dict[str, Any]] = None,
+        match_ctx: dict[str, Any] | None = None,
         **kwargs,
     ) -> ActionCommandConfig:
         """"""
 
-    def iter_scopes(self, **kwargs) -> Iterable[Tuple[ScopeConfig, ...]]:
+    def iter_scopes(self, **kwargs) -> Iterable[tuple[ScopeConfig, ...]]:
         """
         Iterates over contexts scopes
         Context Scope
@@ -311,7 +311,7 @@ class Action(Document):
 
     def iter_configs(
         self, profile, match_ctx, **kwargs
-    ) -> Tuple["ActionCommandConfig", Dict[str, Any], Dict[str, Any]]:
+    ) -> tuple["ActionCommandConfig", dict[str, Any], dict[str, Any]]:
         """Iterate over Action Commands Configurations"""
         # ActionSet First
         ctx = {}
@@ -362,11 +362,11 @@ class Action(Document):
     def render_action_commands(
         self,
         profile,
-        match_ctx: Optional[Dict[str, Any]] = None,
+        match_ctx: dict[str, Any] | None = None,
         ignore_scope: bool = False,
         render_cancel: bool = False,
         **kwargs,
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Iterate over action on Set
         """
@@ -386,8 +386,8 @@ class Action(Document):
     def render_commands(
         self,
         profile,
-        match_ctx: Optional[Dict[str, Any]] = None,
-        managed_object: Optional[Any] = None,
+        match_ctx: dict[str, Any] | None = None,
+        managed_object: Any | None = None,
         ignore_scope: bool = False,
         **kwargs,
     ):
@@ -403,10 +403,10 @@ class Action(Document):
         if not self.handler:
             raise ValueError()
         h = get_handler(self.handler)
-        req: Optional[JobRequest] = h(obj, **kwargs)
+        req: JobRequest | None = h(obj, **kwargs)
         req.submit()
 
-    def get_execute_commands(self, managed_object, **kwargs) -> Tuple[str, bool]:
+    def get_execute_commands(self, managed_object, **kwargs) -> tuple[str, bool]:
         """Execute commands"""
         match = managed_object.get_matcher_ctx()
         commands = self.render_action_commands(
@@ -423,7 +423,7 @@ class Action(Document):
         self,
         managed_object: Any,
         dry_run: bool = False,
-        username: Optional[str] = None,
+        username: str | None = None,
         **kwargs,
     ) -> JobRequest:
         """Run Action job"""
@@ -448,7 +448,7 @@ class Action(Document):
     def register_audit_command(
         self,
         commands,
-        username: Optional[str] = None,
+        username: str | None = None,
     ):
         """Register run command on Audit"""
 
@@ -476,9 +476,9 @@ class Action(Document):
     def iter_domain_ctx(
         cls,
         domain: Any,
-        managed_object: Optional[Any] = None,
+        managed_object: Any | None = None,
         **kwargs,
-    ) -> Iterable[Tuple[Any, List[ScopeConfig], Dict[str, Any]]]:
+    ) -> Iterable[tuple[Any, list[ScopeConfig], dict[str, Any]]]:
         """Iterate ove Domain topology context"""
         ctx = kwargs.copy()
         if hasattr(domain, "get_domain_ctx"):
@@ -498,7 +498,7 @@ class Action(Document):
             if p.scope and p.scope == name:
                 return p
 
-    def iter_scopes_ctx(self, scopes: List[ScopeConfig]) -> Iterable[Dict[str, Any]]:
+    def iter_scopes_ctx(self, scopes: list[ScopeConfig]) -> Iterable[dict[str, Any]]:
         """"""
         for s in scopes:
             p = self.get_scope_config(s.name)
@@ -514,10 +514,10 @@ class Action(Document):
 
     def iter_action_ctxs(
         self,
-        domain: Optional[Any] = None,
-        managed_object: Optional[Any] = None,
+        domain: Any | None = None,
+        managed_object: Any | None = None,
         **kwargs,
-    ) -> Iterable[Tuple["Action", Any, Dict[str, Any]]]:
+    ) -> Iterable[tuple["Action", Any, dict[str, Any]]]:
         """Return action ctx"""
         for mo, d_scopes, d_ctx in self.iter_domain_ctx(
             domain, managed_object=managed_object, **kwargs
@@ -540,11 +540,11 @@ class Action(Document):
 
     def run(
         self,
-        domain: Optional[Any] = None,
-        managed_object: Optional[Any] = None,
+        domain: Any | None = None,
+        managed_object: Any | None = None,
         as_job: bool = False,
         dry_run: bool = False,
-        username: Optional[str] = None,
+        username: str | None = None,
         **kwargs,
     ):
         """
@@ -585,7 +585,7 @@ class Action(Document):
 
     def get_job_by_actions(
         self,
-        actions: Dict[Any, List[Tuple["Action", Dict[str, Any]]]],
+        actions: dict[Any, list[tuple["Action", dict[str, Any]]]],
         dry_run: bool = False,
     ) -> "JobRequest":
         """"""
@@ -609,7 +609,7 @@ class Action(Document):
 
     def execute_actions(
         self,
-        actions: Dict[Any, List[Tuple["Action", Dict[str, Any]]]],
+        actions: dict[Any, list[tuple["Action", dict[str, Any]]]],
         dry_run: bool = False,
         as_job: bool = False,
     ):
@@ -637,7 +637,7 @@ class Action(Document):
         obj,
         as_job: bool = False,
         dry_run: bool = False,
-        username: Optional[str] = None,
+        username: str | None = None,
         **kwargs,
     ):
         """Run actions to execute"""
@@ -656,7 +656,7 @@ class Action(Document):
         self,
         managed_object,
         **kwargs,
-    ) -> List[KVInputMapping]:
+    ) -> list[KVInputMapping]:
         """Cleanup action arguments"""
         r = []
         args = self.clean_args(managed_object.profile, **kwargs)
@@ -666,7 +666,7 @@ class Action(Document):
             r.append(KVInputMapping(name=k, value=str(v)))
         return r
 
-    def clean_args(self, profile, **kwargs) -> Dict[str, Any]:
+    def clean_args(self, profile, **kwargs) -> dict[str, Any]:
         r = {}
         for p in self.params:
             # is_multy, to iteration

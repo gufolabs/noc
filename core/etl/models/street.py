@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 from datetime import date
 
 # NOC modules
@@ -20,7 +19,7 @@ class Street(BaseModel):
     parent: Reference["AdmDiv"]
     name: str
     short_name: str
-    start_date: Optional[date] = None
-    end_date: Optional[date] = None
+    start_date: date | None = None
+    end_date: date | None = None
 
     _csv_fields = ["id", "parent", "name", "short_name", "start_date", "end_date"]

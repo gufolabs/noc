@@ -7,7 +7,7 @@
 
 # Python modules
 import datetime
-from typing import Optional, Iterable, Union
+from typing import Optional, Iterable
 
 # Third-party modules
 from bson import ObjectId
@@ -132,7 +132,7 @@ class ArchivedAlarm(Document):
         return str(self.id)
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ArchivedAlarm"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ArchivedAlarm"]:
         return ArchivedAlarm.objects.filter(id=oid).first()
 
     @classmethod

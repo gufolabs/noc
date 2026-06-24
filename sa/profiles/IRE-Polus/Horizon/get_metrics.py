@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import List, Dict, Tuple
 
 # NOC modules
 from noc.sa.profiles.Generic.get_metrics import Script as GetMetricsScript, MetricCollectorConfig
@@ -26,14 +25,14 @@ class Script(GetMetricsScript):
         "%": "%",
     }
 
-    def collect_sensor_metrics(self, metrics: List[MetricCollectorConfig]):
+    def collect_sensor_metrics(self, metrics: list[MetricCollectorConfig]):
         """
         Collect sensor metrics method. Configured by profile
         :param metrics:
         :return:
         """
         # devices: Dict[int, Device] = {}  # slot -> device info
-        sensor_map: Dict[Tuple[str, str], int] = {}
+        sensor_map: dict[tuple[str, str], int] = {}
         for sensor in metrics:
             hints = sensor.get_hints()
             if "slot" not in hints:

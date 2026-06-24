@@ -9,7 +9,7 @@
 import argparse
 import asyncio
 from time import perf_counter
-from typing import Tuple, Iterable
+from typing import Iterable
 
 # Third-party modules
 from gufo.snmp import SnmpSession, SnmpVersion, SnmpError as GSNMPError, SnmpAuthError
@@ -234,7 +234,7 @@ class Command(BaseCommand):
     @classmethod
     def iter_credentials(
         cls, community, username, version
-    ) -> Iterable[Tuple[str, User, SnmpVersion]]:
+    ) -> Iterable[tuple[str, User, SnmpVersion]]:
         if version != SNMP_v3:
             for c in community:
                 yield c, None, SnmpVersion.v2c if not version else SnmpVersion.v1

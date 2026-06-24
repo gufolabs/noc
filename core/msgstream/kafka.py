@@ -9,7 +9,7 @@
 import logging
 import asyncio
 import random
-from typing import Optional, Dict, AsyncIterable, List, Union
+from typing import AsyncIterable
 from collections import defaultdict
 
 # Third-party modules
@@ -49,10 +49,10 @@ class KafkaClient:
 
     def __init__(self):
         self.bootstrap = None
-        self.producer: Optional[AIOKafkaProducer] = None
-        self.consumer: Optional[AIOKafkaConsumer] = None
-        self.client: Optional[AIOKafkaClient] = None
-        self.admin_client: Optional[AIOKafkaAdminClient] = None
+        self.producer: AIOKafkaProducer | None = None
+        self.consumer: AIOKafkaConsumer | None = None
+        self.client: AIOKafkaClient | None = None
+        self.admin_client: AIOKafkaAdminClient | None = None
         self.loop = asyncio.get_running_loop()
         self.stub = None
         kafka_logger = logging.getLogger("kafka")
@@ -111,7 +111,7 @@ class KafkaClient:
         return min(len(meta.brokers), 3) or 1
 
     async def fetch_metadata(
-        self, stream: Optional[str] = None, wait_for_stream: bool = False
+        self, stream: str | None = None, wait_for_stream: bool = False
     ) -> Metadata:
         """
         Fetch cluster metadata
@@ -121,7 +121,7 @@ class KafkaClient:
         """
         client = self.get_kafka_client()
         await client.bootstrap()
-        s_meta: Dict[str, Dict[int, PartitionMetadata]] = defaultdict(dict)
+        s_meta: dict[str, dict[int, PartitionMetadata]] = defaultdict(dict)
         req_parts = []
         r = await client.fetch_all_metadata()
         for stream_n, stream_m in r._partitions.items():
@@ -238,7 +238,7 @@ class KafkaClient:
         return self.admin_client
 
     @staticmethod
-    def get_topic_config(name, replication_factor: int = 1) -> Dict[str, str]:
+    def get_topic_config(name, replication_factor: int = 1) -> dict[str, str]:
         """
         Return topic retention settings
         :param name:
@@ -266,7 +266,7 @@ class KafkaClient:
     async def create_stream(
         self,
         name: str,
-        group: Optional[str] = None,
+        group: str | None = None,
         partitions: int = 0,
         replication_factor: int = 0,
     ) -> None:
@@ -305,14 +305,14 @@ class KafkaClient:
 
     async def _subscribe(
         self,
-        streams: List[str],
+        streams: list[str],
         group_id: str,
-        partition: Optional[int] = None,
-        start_offset: Optional[int] = None,
-        start_timestamp: Optional[float] = None,
+        partition: int | None = None,
+        start_offset: int | None = None,
+        start_timestamp: float | None = None,
         resume: bool = True,
-        cursor_id: Optional[str] = None,
-        timeout: Optional[int] = None,
+        cursor_id: str | None = None,
+        timeout: int | None = None,
     ) -> None:
         """
 
@@ -356,7 +356,7 @@ class KafkaClient:
             if start_offset is not None:
                 consumer.seek(tp, start_offset)
             elif start_timestamp is not None:
-                offset: Dict[TopicPartition, OffsetAndTimestamp] = await consumer.offsets_for_times(
+                offset: dict[TopicPartition, OffsetAndTimestamp] = await consumer.offsets_for_times(
                     {tp: start_timestamp}
                 )
                 consumer.seek(tp, offset[tp].offset)
@@ -387,12 +387,12 @@ class KafkaClient:
     async def subscribe(
         self,
         stream: str,
-        partition: Optional[int] = None,
-        start_offset: Optional[int] = None,
-        start_timestamp: Optional[float] = None,
+        partition: int | None = None,
+        start_offset: int | None = None,
+        start_timestamp: float | None = None,
         resume: bool = False,
-        cursor_id: Optional[str] = None,
-        timeout: Optional[int] = None,
+        cursor_id: str | None = None,
+        timeout: int | None = None,
         allow_isr: bool = False,
     ) -> AsyncIterable[Message]:
         """
@@ -424,10 +424,10 @@ class KafkaClient:
     async def publish(
         self,
         value: bytes,
-        stream: Optional[str] = None,
-        key: Optional[bytes] = None,
-        partition: Optional[int] = None,
-        headers: Optional[Dict[str, bytes]] = None,
+        stream: str | None = None,
+        key: bytes | None = None,
+        partition: int | None = None,
+        headers: dict[str, bytes] | None = None,
         **kwargs,
     ) -> None:
         """
@@ -504,8 +504,8 @@ class KafkaClient:
         self,
         from_topic,
         to_topic,
-        partitions: Optional[Union[Dict[int, int], int]] = None,
-    ) -> Dict[int, int]:
+        partitions: dict[int, int] | int | None = None,
+    ) -> dict[int, int]:
         """
         Copy message from one topic to another
         :param from_topic: From topic
@@ -513,7 +513,7 @@ class KafkaClient:
         :param partitions: Number of from partition
         :return:
         """
-        n_msg: Dict[int, int] = {}  # partition -> copied messages
+        n_msg: dict[int, int] = {}  # partition -> copied messages
         if not partitions:
             partitions = {0: 0}
         elif isinstance(partitions, int):

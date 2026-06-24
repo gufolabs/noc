@@ -8,7 +8,6 @@
 # Python modules
 import re
 import orjson
-from typing import Optional
 
 # NOC modules
 from noc.core.profile.base import BaseProfile
@@ -164,7 +163,7 @@ class Profile(BaseProfile):
                 return False
         return True
 
-    def command_exist(self, script, cmd) -> Optional[bool]:
+    def command_exist(self, script, cmd) -> bool | None:
         if not script.is_cli_help_supported:
             return None
         c = script.cli(

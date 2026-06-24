@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, List
+from typing import Any
 
 # Third-party modules
 from pydantic import BaseModel
@@ -14,7 +14,7 @@ from pydantic import BaseModel
 
 class JSONRemoteProcedureCall(BaseModel):
     method: str
-    params: List[Any]
+    params: list[Any]
     id: int
 
 

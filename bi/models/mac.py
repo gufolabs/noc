@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 from collections import defaultdict
-from typing import Dict, Any
+from typing import Any
 
 # NOC modules
 from noc.config import config
@@ -73,7 +73,7 @@ class MAC(Model):
     from_event = UInt8Field(description=_("Row deployed from event"))
 
     def mac_filter(
-        self, query: Dict[str, Any], offset: int = 0, limit: int = 400, convert_mac: bool = False
+        self, query: dict[str, Any], offset: int = 0, limit: int = 400, convert_mac: bool = False
     ):
         """
         Filter interface to MACDB

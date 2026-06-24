@@ -9,7 +9,7 @@
 from collections import defaultdict
 import datetime
 import time
-from typing import Any, AsyncIterable, Dict, List, Optional, Iterable, Tuple
+from typing import Any, AsyncIterable, Iterable
 
 # Third-party modules
 from pymongo import ReadPreference
@@ -89,7 +89,7 @@ class LoadMetricsMaxDS(BaseDataSource):
     ]
 
     @staticmethod
-    def get_filter(filters: Dict[str, Any]) -> Dict[str, Any]:
+    def get_filter(filters: dict[str, Any]) -> dict[str, Any]:
         r = {}
         if "resource_group" in filters:
             r["effective_service_groups__overlap"] = ResourceGroup.get_nested_ids(
@@ -164,17 +164,17 @@ class LoadMetricsMaxDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
+        fields: Iterable[str] | None = None,
         start: datetime.datetime = None,
         end: datetime.datetime = None,
-        mo_profile: Optional[ManagedObjectProfile] = None,
-        interface_profile: Optional[InterfaceProfile] = None,
-        description: Optional[str] = None,
+        mo_profile: ManagedObjectProfile | None = None,
+        interface_profile: InterfaceProfile | None = None,
+        description: str | None = None,
         exclude_zero: bool = False,
-        admin_domain_ads: Optional[List[int]] = None,
+        admin_domain_ads: list[int] | None = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         def str_to_float(str):
             return float("{0:.3f}".format(float(str)))
 
@@ -199,7 +199,7 @@ class LoadMetricsMaxDS(BaseDataSource):
         query = QUERY % ("%s", ts_start, ts_start, ts_end)
         # Write metrics data to 3-level dictionary
         # ifaces_metrics[mo_bi_id][iface_name][metric_name] -> value
-        ifaces_metrics: Dict[str, Dict[str, Dict[str, Any]]] = defaultdict(dict)
+        ifaces_metrics: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
         while mo_bi_ids:
             chunk, mo_bi_ids = mo_bi_ids[:CHUNK_SIZE], mo_bi_ids[CHUNK_SIZE:]
             mo_filter = "managed_object IN (%s)" % ", ".join([str(c) for c in chunk])

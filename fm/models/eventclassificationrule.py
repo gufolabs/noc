@@ -8,7 +8,7 @@
 # Python modules
 from pathlib import Path
 import re
-from typing import Iterable, List, Dict, Any, Tuple, Union, Optional
+from typing import Iterable, Any, Optional
 
 # Third-party modules
 from mongoengine.fields import (
@@ -167,20 +167,20 @@ class EventClassificationRule(Document):
     description = StringField(required=False)
     event_class: EventClass = PlainReferenceField(EventClass, required=True)
     preference = IntField(required=True, default=1000)
-    patterns: List[EventClassificationPattern] = EmbeddedDocumentListField(
+    patterns: list[EventClassificationPattern] = EmbeddedDocumentListField(
         EventClassificationPattern
     )
-    sources: List[EventSource] = ListField(
+    sources: list[EventSource] = ListField(
         EnumField(EventSource), default=lambda: [EventSource.OTHER]
     )
-    profiles: List[Profile] = ListField(ReferenceField(Profile))
+    profiles: list[Profile] = ListField(ReferenceField(Profile))
     message_rx: str = StringField()
     # datasources = EmbeddedDocumentListField(DataSource)
-    vars: List[EventClassificationRuleVar] = EmbeddedDocumentListField(EventClassificationRuleVar)
-    labels: List[EventClassificationRuleLabel] = EmbeddedDocumentListField(
+    vars: list[EventClassificationRuleVar] = EmbeddedDocumentListField(EventClassificationRuleVar)
+    labels: list[EventClassificationRuleLabel] = EmbeddedDocumentListField(
         EventClassificationRuleLabel
     )
-    test_cases: List[EventClassificationTestCase] = EmbeddedDocumentListField(
+    test_cases: list[EventClassificationTestCase] = EmbeddedDocumentListField(
         EventClassificationTestCase
     )
     category = ObjectIdField()
@@ -189,7 +189,7 @@ class EventClassificationRule(Document):
         return self.name
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["EventClassificationRule"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["EventClassificationRule"]:
         return EventClassificationRule.objects.filter(id=oid).first()
 
     def iter_changed_datastream(self, changed_fields=None):
@@ -210,7 +210,7 @@ class EventClassificationRule(Document):
         return self.name.split(" | ")[-1]
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -253,7 +253,7 @@ class EventClassificationRule(Document):
         return safe_json_path(self.name)
 
     @staticmethod
-    def resolve_vars(data: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def resolve_vars(data: list[dict[str, Any]]) -> dict[str, Any]:
         r = {}
         snmp_vars = {}
         for d in data:
@@ -266,7 +266,7 @@ class EventClassificationRule(Document):
             r.update(MIB.resolve_vars(snmp_vars))
         return r
 
-    def iter_cases(self) -> Iterable[Tuple[Event, Dict[str, Any]]]:
+    def iter_cases(self) -> Iterable[tuple[Event, dict[str, Any]]]:
         ts = 0
         mt = MessageType(profile=GENERIC_PROFILE, source=self.sources[0])
         if self.profiles:

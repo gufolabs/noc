@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Type
 from asyncio.exceptions import TimeoutError
 
 # NOC module
@@ -20,11 +19,11 @@ from .error import CLIConnectionReset
 class BaseCLI:
     name = "base"
 
-    def __init__(self, script, tos: Optional[int] = None):
+    def __init__(self, script, tos: int | None = None):
         self.script = script
         self.profile = script.profile
         self.logger = PrefixLoggerAdapter(self.script.logger, self.name)
-        self.stream: Optional[BaseStream] = None
+        self.stream: BaseStream | None = None
         self.tos = tos
         self.is_started = False
         # Current error to raise on TimeoutError
@@ -54,7 +53,7 @@ class BaseCLI:
         raise NotImplementedError
 
     def set_timeout(
-        self, timeout: Optional[float] = None, error: Optional[Type[Exception]] = None
+        self, timeout: float | None = None, error: type[Exception] | None = None
     ) -> None:
         if timeout:
             error = error or CLIConnectionReset

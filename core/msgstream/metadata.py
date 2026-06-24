@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Optional, Dict, List, Iterable
+from typing import Iterable
 
 
 @dataclass(frozen=True)
@@ -23,12 +23,12 @@ class PartitionMetadata:
     partition: int
     leader: str
     # The ids of all brokers that contain replicas of the partition
-    replicas: List[str]
+    replicas: list[str]
     # The ids of all brokers that contain in-sync replicas of the partition
-    isr: Optional[List[int]] = None
-    error: Optional[str] = None
-    high_watermark: Optional[int] = None
-    newest_offset: Optional[int] = None
+    isr: list[int] | None = None
+    error: str | None = None
+    high_watermark: int | None = None
+    newest_offset: int | None = None
 
     @property
     def id(self):
@@ -37,8 +37,8 @@ class PartitionMetadata:
 
 @dataclass(frozen=True)
 class Metadata:
-    brokers: List[Broker]
-    metadata: Dict[str, Dict[int, PartitionMetadata]]  # Stream -> Partition -> PartitionMetadata
+    brokers: list[Broker]
+    metadata: dict[str, dict[int, PartitionMetadata]]  # Stream -> Partition -> PartitionMetadata
 
     def iter_partitions(self) -> Iterable[PartitionMetadata]:
         for stream in self.metadata:

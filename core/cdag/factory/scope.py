@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Callable, Optional, Dict, List
+from typing import Callable
 from dataclasses import dataclass
 from threading import Lock
 
@@ -34,13 +34,13 @@ class ScopeConfig:
     name: str
     description: str
     config: MetricsNodeConfig
-    cleaners: Dict[str, Callable]
-    probes: List[ProbeConfig]
-    key_fields: List[str]
+    cleaners: dict[str, Callable]
+    probes: list[ProbeConfig]
+    key_fields: list[str]
     enable_timedelta: bool = False
 
 
-scope_config: Dict[str, ScopeConfig] = {}
+scope_config: dict[str, ScopeConfig] = {}
 
 
 class MetricScopeCDAGFactory(BaseCDAGFactory):
@@ -52,8 +52,8 @@ class MetricScopeCDAGFactory(BaseCDAGFactory):
         self,
         graph: CDAG,
         scope: MetricScope,
-        ctx: Optional[FactoryCtx] = None,
-        namespace: Optional[str] = None,
+        ctx: FactoryCtx | None = None,
+        namespace: str | None = None,
         spool: bool = True,
         spool_message: bool = False,
         sticky: bool = False,

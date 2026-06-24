@@ -10,7 +10,7 @@ import operator
 from threading import Lock, RLock
 from dataclasses import dataclass
 from functools import partial
-from typing import Optional, Dict, Union, Callable, Any, Tuple, List
+from typing import Optional, Callable, Any
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
@@ -71,7 +71,7 @@ class MatchRule(EmbeddedDocument):
     # name_patter = StringField()
     # description_patter = StringField()
 
-    def get_match_expr(self) -> Dict[str, Any]:
+    def get_match_expr(self) -> dict[str, Any]:
         r = {}
         if self.labels:
             r["labels"] = {"$all": list(self.labels)}
@@ -200,7 +200,7 @@ class InterfaceProfile(Document):
     default_notification_group = ForeignKeyField(NotificationGroup, required=False)
     metrics_default_interval = IntField(default=0, min_value=0)
     # Interface profile metrics
-    metrics: List[InterfaceProfileMetrics] = EmbeddedDocumentListField(InterfaceProfileMetrics)
+    metrics: list[InterfaceProfileMetrics] = EmbeddedDocumentListField(InterfaceProfileMetrics)
     # Alarm weight
     weight = IntField(default=0)
     # User network interface
@@ -224,7 +224,7 @@ class InterfaceProfile(Document):
         default="D",
     )
     # Capabilities
-    caps: List[CapsSettings] = EmbeddedDocumentListField(CapsSettings)
+    caps: list[CapsSettings] = EmbeddedDocumentListField(CapsSettings)
     # Dynamic Profile Classification
     dynamic_classification_policy = StringField(
         choices=[("R", "By Rule"), ("D", "Disable")],
@@ -281,7 +281,7 @@ class InterfaceProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["InterfaceProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["InterfaceProfile"]:
         return InterfaceProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -317,7 +317,7 @@ class InterfaceProfile(Document):
 
     @staticmethod
     def config_from_settings(
-        m: "InterfaceProfileMetrics", profile_interval: Optional[int] = None
+        m: "InterfaceProfileMetrics", profile_interval: int | None = None
     ) -> "MetricConfig":
         """
         Returns MetricConfig from .metrics field
@@ -331,7 +331,7 @@ class InterfaceProfile(Document):
     @cachetools.cachedmethod(
         operator.attrgetter("_interface_profile_metrics"), lock=lambda _: metrics_lock
     )
-    def get_interface_profile_metrics(cls, p_id: ObjectId) -> Dict[str, MetricConfig]:
+    def get_interface_profile_metrics(cls, p_id: ObjectId) -> dict[str, MetricConfig]:
         r = {}
         ipr = InterfaceProfile.get_by_id(p_id)
         if not ipr:
@@ -360,7 +360,7 @@ class InterfaceProfile(Document):
     def is_default(self):
         return self.name == self.DEFAULT_PROFILE_NAME
 
-    def get_caps_config(self) -> Dict[str, CapsConfig]:
+    def get_caps_config(self) -> dict[str, CapsConfig]:
         """Local Capabilities Config (from Profile)"""
         r = {}
         for c in self.caps:
@@ -369,9 +369,9 @@ class InterfaceProfile(Document):
 
     def allow_collected_metric(
         self,
-        admin_status: Optional[bool],
-        oper_status: Optional[bool],
-        metric_type: Optional[str] = None,
+        admin_status: bool | None,
+        oper_status: bool | None,
+        metric_type: str | None = None,
     ) -> bool:
         """
         Check metric collected policy by interface status
@@ -405,7 +405,7 @@ class InterfaceProfile(Document):
         return matcher(ctx)
 
     @classmethod
-    def get_profiles_matcher(cls, subinterface: bool = False) -> Tuple[Tuple[str, Callable], ...]:
+    def get_profiles_matcher(cls, subinterface: bool = False) -> tuple[tuple[str, Callable], ...]:
         """Build matcher based on Profile Match Rules"""
         r = {}
         if subinterface:
@@ -417,5 +417,5 @@ class InterfaceProfile(Document):
                 r[(str(ip.id), mr.dynamic_order)] = build_matcher(mr.get_match_expr())
         return tuple((x[0], r[x]) for x in sorted(r, key=lambda i: i[1]))
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

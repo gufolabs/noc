@@ -9,7 +9,6 @@
 import itertools
 from collections import defaultdict
 from functools import partial
-from typing import List
 
 # NOC modules
 from noc.core.ip import IP, IPv4, IPv6
@@ -33,7 +32,7 @@ class Node:
         else:
             self.token = token
         self.handler = None
-        self.children: List[Node] = []
+        self.children: list[Node] = []
         self.matcher = None
 
     def __repr__(self):

@@ -7,7 +7,6 @@
 
 # Python modules
 import io
-from typing import Optional
 
 
 class BaseCompressor:
@@ -18,7 +17,7 @@ class BaseCompressor:
     def __init__(self, path: str, mode: str = "r"):
         self.path = path
         self.mode = mode
-        self.f: Optional[io.TextIOBase] = None
+        self.f: io.TextIOBase | None = None
 
     def __enter__(self):
         self.f = self.open()

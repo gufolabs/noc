@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Dict, Any
+from typing import Any
 import os
 import re
 
@@ -56,7 +56,7 @@ class ExtApplication(Application):
     fav_status = "fav_status"
     wf_state = False
     default_ordering = []
-    exclude_fields: Optional[List[str]] = []
+    exclude_fields: list[str] | None = []
 
     rx_oper_splitter = re.compile(r"^(?P<field>\S+?)(?P<f_num>\d+)__in")
 
@@ -171,7 +171,7 @@ class ExtApplication(Application):
     def instance_to_dict_list(self, o, fields=None):
         raise NotImplementedError
 
-    def parse_request_query(self, request) -> Dict[str, Any]:
+    def parse_request_query(self, request) -> dict[str, Any]:
         """
 
         :param request:

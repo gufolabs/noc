@@ -8,7 +8,6 @@
 # Python modules
 import logging
 import datetime
-from typing import Optional, List
 
 # Third-party modules
 from pymongo import UpdateOne
@@ -149,7 +148,7 @@ def document_set_state(
 
 
 def document_touch(
-    self, bulk: Optional[List["UpdateOne"]] = None, ts: Optional[datetime.datetime] = None
+    self, bulk: list["UpdateOne"] | None = None, ts: datetime.datetime | None = None
 ):
     if not self.state:
         logger.info("[%s] No default state. Skipping", self)
@@ -293,9 +292,7 @@ def model_set_state(self, state, state_changed: datetime.datetime = None, bulk=N
         )
 
 
-def model_touch(
-    self, bulk: Optional[List["UpdateOne"]] = None, ts: Optional[datetime.datetime] = None
-):
+def model_touch(self, bulk: list["UpdateOne"] | None = None, ts: datetime.datetime | None = None):
     if not self.state:
         logger.info("[%s] No default state. Skipping", self)
         return
@@ -364,7 +361,7 @@ def _on_model_post_save(sender, instance, *args, **kwargs):
         instance.set_state(new_state, create=True)
 
 
-def get_wiping_ttl(self) -> Optional[datetime.datetime]:
+def get_wiping_ttl(self) -> datetime.datetime | None:
     """Getting"""
     return self.state.ttl
 

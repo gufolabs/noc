@@ -7,7 +7,7 @@
 
 # Python modules
 import enum
-from typing import List, Optional, Iterable
+from typing import Iterable
 
 CODE_SOURCE_MAP = {
     "e": "etl",
@@ -36,7 +36,7 @@ class InputSource(enum.Enum):
     UNKNOWN = "unknown"
 
     @classmethod
-    def from_sources(cls, code) -> List["InputSource"]:
+    def from_sources(cls, code) -> list["InputSource"]:
         """Convert code to InputSource List"""
         return [InputSource(CODE_SOURCE_MAP[c]) for c in code]
 
@@ -49,7 +49,7 @@ class InputSource(enum.Enum):
     def code(self) -> str:
         return self.value[0]
 
-    def get_priority_weight(self, priority: Optional[str] = None) -> int:
+    def get_priority_weight(self, priority: str | None = None) -> int:
         """Return source priority. More,"""
         priority = priority or SOURCE_PRIORITY
         if self.code in priority:

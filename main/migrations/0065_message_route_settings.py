@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Dict
 
 # Third-party modules
 import bson
@@ -18,7 +17,7 @@ from noc.core.migration.base import BaseMigration
 
 class Migration(BaseMigration):
     @staticmethod
-    def convert_match(match: List[Dict[str, str]], object_profile_map: Dict[int, str]):
+    def convert_match(match: list[dict[str, str]], object_profile_map: dict[int, str]):
         r = []
         for mm in match:
             xx = {}

@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Optional
 
 # Third-party modules
 from jinja2 import Template as Jinja2Template
@@ -70,14 +69,14 @@ class SimpleReportFormatter(DataFormatter):
         return "Report 1"  # Report Title
 
     @staticmethod
-    def get_title(band, template: Optional[str] = None) -> str:
+    def get_title(band, template: str | None = None) -> str:
         """Render Band Title if setting template"""
         if not template:
             return band.name
         return Jinja2Template(template).render(band.get_data())
 
     @classmethod
-    def get_columns_format(cls, bf: BandFormat) -> List[TableColumn]:
+    def get_columns_format(cls, bf: BandFormat) -> list[TableColumn]:
         """Return Columns by band Format"""
         if not bf.columns:
             return []
@@ -103,7 +102,7 @@ class SimpleReportFormatter(DataFormatter):
                 ]
         return columns
 
-    def get_report_columns(self) -> List[TableColumn]:
+    def get_report_columns(self) -> list[TableColumn]:
         """
         Report Columns used for print report table data
         Column may be set:

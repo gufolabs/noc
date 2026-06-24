@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Optional, Iterable, Dict, Any, Tuple, List, AsyncIterable
+from typing import Iterable, Any, AsyncIterable
 
 # NOC modules
 from .base import FieldInfo, BaseDataSource, FieldType
@@ -25,7 +25,7 @@ caps_dtype_map = {
 }
 
 
-def get_capabilities() -> Iterable[Tuple[str, str]]:
+def get_capabilities() -> Iterable[tuple[str, str]]:
     for key, c_type, value, multi in (
         Capability.objects.filter().order_by("name").scalar("id", "type", "name", "multi")
     ):
@@ -50,10 +50,10 @@ class ManagedObjectCapsDS(BaseDataSource):
     @classmethod
     async def iter_caps(
         cls,
-        caps: List[Dict[str, Any]],
-        requested_caps: Dict[str, Any] = None,
+        caps: list[dict[str, Any]],
+        requested_caps: dict[str, Any] = None,
         include_all: bool = False,
-    ) -> AsyncIterable[Tuple[str, Any]]:
+    ) -> AsyncIterable[tuple[str, Any]]:
         """
         Consolidate capabilities list and return resulting dict of
         caps name -> caps value. First appearance of capability
@@ -89,8 +89,8 @@ class ManagedObjectCapsDS(BaseDataSource):
 
     @classmethod
     async def iter_query(
-        cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
-    ) -> Iterable[Dict[str, Any]]:
+        cls, fields: Iterable[str] | None = None, *args, **kwargs
+    ) -> Iterable[dict[str, Any]]:
         q_caps = {}
         for f in cls.iter_ds_fields():
             c = (

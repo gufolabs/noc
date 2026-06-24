@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Tuple
 
 # NOC modules
 from noc.core.snmp.consts import (
@@ -42,8 +41,8 @@ class BeefSNMPSocket:
         self.logger = None
 
     async def send_and_receive(
-        self, data: bytes, address: Tuple[str, int]
-    ) -> Tuple[bytes, Tuple[str, int]]:
+        self, data: bytes, address: tuple[str, int]
+    ) -> tuple[bytes, tuple[str, int]]:
         from noc.core.snmp.ber import BERDecoder, BEREncoder
 
         pdu = BERDecoder().parse_sequence(data)[0]

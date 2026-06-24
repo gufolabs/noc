@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Iterable, Optional, Dict
+from typing import Iterable
 import datetime
 
 # NOC modules
@@ -20,7 +20,7 @@ from .item import DiagnosticItem
 DEFER_CHANGE_STATE = "noc.core.diagnostic.decorator.change_state"
 
 
-def get_model_diagnostic_values(self) -> Dict[str, DiagnosticValue]:
+def get_model_diagnostic_values(self) -> dict[str, DiagnosticValue]:
     """"""
     r = {}
     for d_name in self.diagnostics:
@@ -28,7 +28,7 @@ def get_model_diagnostic_values(self) -> Dict[str, DiagnosticValue]:
     return r
 
 
-def get_document_diagnostic_values(self) -> Dict[str, DiagnosticValue]:
+def get_document_diagnostic_values(self) -> dict[str, DiagnosticValue]:
     """"""
     r = {}
     for di in self.diagnostics:
@@ -49,14 +49,14 @@ def iter_diagnostics(self, to_display: bool = False) -> Iterable[DiagnosticItem]
 
 def save_document_diagnostics(
     self,
-    diagnostics: List[DiagnosticValue],
-    resets: Optional[List[str]] = None,
+    diagnostics: list[DiagnosticValue],
+    resets: list[str] | None = None,
     dry_run: bool = False,
 ):
     """"""
     # Expired/Add watchers
     self.diagnostics = [DiagnosticItemDoc.from_value(d) for d in diagnostics]
-    expired: List[datetime.datetime] = []
+    expired: list[datetime.datetime] = []
     for d in diagnostics:
         expired.extend(c.expired for c in d.checks or [] if c.expired)
     if expired:
@@ -69,10 +69,10 @@ def save_document_diagnostics(
     # self._reset_caches(self.id, credential=True)
 
 
-def save_model_diagnostics(self, diagnostics: List[DiagnosticItem], dry_run: bool = False):
+def save_model_diagnostics(self, diagnostics: list[DiagnosticItem], dry_run: bool = False):
     """Update Model Instance diagnostics"""
     self.diagnostics = {d.diagnostic: d.get_value().model_dump() for d in diagnostics}
-    expired: List[datetime.datetime] = []
+    expired: list[datetime.datetime] = []
     for d in diagnostics:
         expired.extend(c.expired for c in d.checks or [] if c.expired)
     if expired:

@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import List, Dict
 
 # Third-party modules
 import orjson
@@ -33,7 +32,7 @@ SQL = """
 class ReportUnclassifiedTrapOIDs(ReportSource):
     name = "reportunclassifiedtrapoids"
 
-    def get_formats(self) -> Dict[str, BandFormat]:
+    def get_formats(self) -> dict[str, BandFormat]:
         return {
             "header": BandFormat(
                 title_template="Unclassified Trap OIDs",
@@ -51,7 +50,7 @@ class ReportUnclassifiedTrapOIDs(ReportSource):
             ),
         }
 
-    def get_data(self, request=None, **kwargs) -> List[Band]:
+    def get_data(self, request=None, **kwargs) -> list[Band]:
         ch = connection()
         data = []
         ec = EventClass.objects.filter(name="Unknown | SNMP Trap").first()

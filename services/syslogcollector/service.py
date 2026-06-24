@@ -12,7 +12,7 @@ import asyncio
 import uuid
 from collections import defaultdict
 from dataclasses import asdict
-from typing import Optional, Dict, Any, Set
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -55,9 +55,9 @@ class SyslogCollectorService(FastAPIService):
         self.source_configs = {}  # id -> SourceConfig
         self.address_configs = {}  # address -> SourceConfig
         self.invalid_sources = defaultdict(int)  # ip -> count
-        self.pool_partitions: Dict[str, int] = {}
-        self.storm_protection: Optional[StormProtection] = None
-        self.updated: Set[str] = set()
+        self.pool_partitions: dict[str, int] = {}
+        self.storm_protection: StormProtection | None = None
+        self.updated: set[str] = set()
 
     async def on_activate(self):
         # Listen sockets
@@ -101,7 +101,7 @@ class SyslogCollectorService(FastAPIService):
         msg = {"$op": "clear"}
         self._publish_message(cfg, msg)
 
-    def _publish_message(self, cfg, msg: Dict[str, Any]):
+    def _publish_message(self, cfg, msg: dict[str, Any]):
         msg["timestamp"] = datetime.datetime.now().isoformat()
         msg["reference"] = f"{SYSLOGCOLLECTOR_STORM_ALARM_CLASS}{cfg.id}"
         self.publish(orjson.dumps(msg), stream=f"dispose.{config.pool}", partition=cfg.partition)
@@ -113,7 +113,7 @@ class SyslogCollectorService(FastAPIService):
             self.pool_partitions[pool] = parts
         return parts
 
-    def lookup_config(self, address: str) -> Optional[SourceConfig]:
+    def lookup_config(self, address: str) -> SourceConfig | None:
         """
         Returns object id for given address or None when
         unknown source

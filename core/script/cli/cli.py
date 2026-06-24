@@ -10,7 +10,7 @@ import re
 import functools
 from functools import reduce
 import asyncio
-from typing import Optional, Any, Type, Callable, Dict, Set, Union, List
+from typing import Any, Callable
 
 # NOC modules
 from noc.core.text import replace_re_group
@@ -80,12 +80,12 @@ class CLI(BaseCLI):
     def execute(
         self,
         cmd: str,
-        obj_parser: Optional[Callable] = None,
-        cmd_next: Optional[bytes] = None,
-        cmd_stop: Optional[bytes] = None,
+        obj_parser: Callable | None = None,
+        cmd_next: bytes | None = None,
+        cmd_stop: bytes | None = None,
         ignore_errors: bool = False,
         allow_empty_response: bool = True,
-        labels: Optional[Union[str, Set[str]]] = None,
+        labels: str | set[str] | None = None,
     ) -> str:
         self.buffer = b""
         self.command = cmd
@@ -179,7 +179,7 @@ class CLI(BaseCLI):
         await self.stream.write(cmd)
 
     async def read_until_prompt(self):
-        cleaned_chunks: List[bytes] = []  # Already processed chunks
+        cleaned_chunks: list[bytes] = []  # Already processed chunks
         active_chunk = self.buffer  # Active window
         while True:
             try:
@@ -358,9 +358,9 @@ class CLI(BaseCLI):
 
     def expect(
         self,
-        patterns: Dict[str, Any],
-        timeout: Optional[float] = None,
-        error: Optional[Type[Exception]] = None,
+        patterns: dict[str, Any],
+        timeout: float | None = None,
+        error: type[Exception] | None = None,
     ):
         """
         Send command if not none and set reply patterns

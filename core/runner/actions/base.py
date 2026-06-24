@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import TypeVar, Optional, Callable, Any
+from typing import TypeVar, Callable, Any
 import enum
 from logging import Logger
 from inspect import signature
@@ -42,7 +42,7 @@ class ActionMetaclass(type):
                 continue
             m.inputs[param.name] = (
                 not (param.default is param.empty)
-                or param.annotation == Optional[str]
+                or param.annotation == str | None
                 or param.annotation == str | None
             )
             if param.annotation == int:

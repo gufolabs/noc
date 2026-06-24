@@ -7,7 +7,7 @@
 
 # Python modules
 import logging
-from typing import Optional, Any, Iterable, Dict
+from typing import Any, Iterable
 import warnings
 
 # NOC modules
@@ -25,12 +25,10 @@ class BaseCache:
     """
 
     @staticmethod
-    def make_key(key: str, version: Optional[int] = None) -> str:
+    def make_key(key: str, version: int | None = None) -> str:
         return "%s|%s" % (key, version or 0)
 
-    def get(
-        self, key: str, default: Optional[Any] = None, version: Optional[int] = None
-    ) -> Optional[Any]:
+    def get(self, key: str, default: Any | None = None, version: int | None = None) -> Any | None:
         """
         Returns value or raise KeyError
         :param key:
@@ -40,9 +38,7 @@ class BaseCache:
         """
         return default
 
-    def set(
-        self, key: str, value: Any, ttl: Optional[int] = None, version: Optional[int] = None
-    ) -> None:
+    def set(self, key: str, value: Any, ttl: int | None = None, version: int | None = None) -> None:
         """
         Set key
         :param key:
@@ -51,13 +47,13 @@ class BaseCache:
         :return:
         """
 
-    def delete(self, key: str, version: Optional[Any] = None) -> None:
+    def delete(self, key: str, version: Any | None = None) -> None:
         pass
 
-    def has_key(self, key: str, version: Optional[int] = None) -> bool:
+    def has_key(self, key: str, version: int | None = None) -> bool:
         return self.get(key, version=version) is not None
 
-    def get_many(self, keys: Iterable, version: Optional[int] = None) -> Dict[str, Any]:
+    def get_many(self, keys: Iterable, version: int | None = None) -> dict[str, Any]:
         """
         Fetch a bunch of keys from the cache.
         """
@@ -69,16 +65,16 @@ class BaseCache:
         return d
 
     def set_many(
-        self, data: Dict[str, Any], ttl: Optional[int] = None, version: Optional[int] = None
+        self, data: dict[str, Any], ttl: int | None = None, version: int | None = None
     ) -> None:
         for k in data:
             self.set(k, data[k], ttl=ttl, version=version)
 
-    def delete_many(self, keys: Iterable, version: Optional[int] = None) -> None:
+    def delete_many(self, keys: Iterable, version: int | None = None) -> None:
         for k in keys:
             self.delete(k, version=version)
 
-    def __getitem__(self, item: str) -> Optional[Any]:
+    def __getitem__(self, item: str) -> Any | None:
         return self.get(item)
 
     def __contains__(self, item: str) -> bool:

@@ -8,7 +8,7 @@
 # Python modules
 import logging
 import datetime
-from typing import Optional, List, Any
+from typing import Any
 
 # Third-party modules
 from pydantic import BaseModel
@@ -22,8 +22,8 @@ from noc.core.service.loader import get_service
 
 class AlarmNodeState(BaseModel):
     active: bool = False
-    pool: Optional[str] = None
-    reference: Optional[str] = None
+    pool: str | None = None
+    reference: str | None = None
     last_raise: datetime.datetime = None
 
 
@@ -36,16 +36,16 @@ class AlarmNodeConfig(BaseModel):
     alarm_class: str
     rule_id: str
     action_id: str
-    reference: Optional[str] = None
+    reference: str | None = None
     dry_run: bool = False  # For service test used
     pool: str = ""
     partition: int = 0
-    labels: Optional[List[str]] = None
-    error_text_template: Optional[str] = None
+    labels: list[str] | None = None
+    error_text_template: str | None = None
     activation_level: float = 1.0
     deactivation_level: float = 1.0
     invert_condition: bool = False
-    vars: Optional[List[VarItem]] = None
+    vars: list[VarItem] | None = None
 
 
 logger = logging.getLogger(__name__)
@@ -65,7 +65,7 @@ class AlarmNode(BaseCDAGNode):
     def rule_id(self) -> str:
         return f"{self.config.rule_id}-{self.config.action_id}"
 
-    def get_value(self, x: ValueType, target: Any, **kwargs) -> Optional[ValueType]:
+    def get_value(self, x: ValueType, target: Any, **kwargs) -> ValueType | None:
         """
         * If x - check activate
         Args:
@@ -153,7 +153,7 @@ class AlarmNode(BaseCDAGNode):
             x,
         )
 
-    def clear_alarm(self, message: Optional[str] = None) -> None:
+    def clear_alarm(self, message: str | None = None) -> None:
         """
         Clear alarm
         """

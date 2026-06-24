@@ -10,7 +10,7 @@ from pathlib import Path
 import re
 from threading import Lock
 import operator
-from typing import Any, Dict, Optional, List, Callable, Union
+from typing import Any, Optional, Callable
 
 # Third-party modules
 from bson import ObjectId
@@ -69,7 +69,7 @@ class Component(EmbeddedDocument):
         return self.name == other.name and self.model == other.model and self.args == other.args
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "model": self.model,
@@ -96,7 +96,7 @@ class AlarmClassVar(EmbeddedDocument):
         )
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {"name": self.name, "description": self.description}
         if self.default:
             r["default"] = self.default
@@ -104,7 +104,7 @@ class AlarmClassVar(EmbeddedDocument):
             r["default_labels"] = self.default_labels
         return r
 
-    def get_config(self) -> Dict[str, Any]:
+    def get_config(self) -> dict[str, Any]:
         """"""
         r = {"name": self.name, "default": None}
         if self.default and self.default.startswith("="):
@@ -166,8 +166,8 @@ class AlarmClass(Document):
     # Can alarm status be cleared by user
     user_clearable = BooleanField(default=True)
     datasources = ListField(EmbeddedDocumentField(DataSource))
-    components: List[Component] = ListField(EmbeddedDocumentField(Component))
-    vars: List[AlarmClassVar] = ListField(EmbeddedDocumentField(AlarmClassVar))
+    components: list[Component] = ListField(EmbeddedDocumentField(Component))
+    vars: list[AlarmClassVar] = ListField(EmbeddedDocumentField(AlarmClassVar))
     # Text messages
     subject_template = StringField()
     body_template = StringField()
@@ -220,7 +220,7 @@ class AlarmClass(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["AlarmClass"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["AlarmClass"]:
         return AlarmClass.objects.filter(id=oid).first()
 
     @classmethod
@@ -240,7 +240,7 @@ class AlarmClass(Document):
         return AlarmClass.objects.filter(name=name_rx).first()
 
     @property
-    def severity(self) -> Optional[AlarmSeverity]:
+    def severity(self) -> AlarmSeverity | None:
         if self.labels and self.labels[0].startswith("noc::severity::"):
             return AlarmSeverity.get_by_code(self.labels[0][15:].upper())
         return None
@@ -251,7 +251,7 @@ class AlarmClass(Document):
             return True
         return {x.name for x in self.vars} == {x.name for x in alarm_class.vars}
 
-    def get_handlers(self) -> List[Callable]:
+    def get_handlers(self) -> list[Callable]:
         @cachetools.cached(self._handlers_cache, key=lambda x: x.id, lock=handlers_lock)
         def _get_handlers(alarm_class: AlarmClass):
             handlers = []
@@ -268,7 +268,7 @@ class AlarmClass(Document):
 
     def get_clear_handlers(self):
         @cachetools.cached(self._clear_handlers_cache, key=lambda x: x.id, lock=handlers_lock)
-        def _get_handlers(alarm_class: AlarmClass) -> List[Callable]:
+        def _get_handlers(alarm_class: AlarmClass) -> list[Callable]:
             handlers = []
             for hh in alarm_class.clear_handlers:
                 try:
@@ -302,7 +302,7 @@ class AlarmClass(Document):
         super().save(*args, **kwargs)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -404,7 +404,7 @@ class AlarmClass(Document):
             return self.config.notification_delay or None
         return self.notification_delay or None
 
-    def get_control_time(self, reopens: int) -> Optional[int]:
+    def get_control_time(self, reopens: int) -> int | None:
         if reopens == 0:
             if self.config:
                 return self.config.control_time0 or None
@@ -432,7 +432,7 @@ class AlarmClass(Document):
                 self._var_labels_map[ll.rstrip(":*")] = vv.name
         return self._var_labels_map
 
-    def convert_labels_var(self, labels: List[str]) -> Dict[str, str]:
+    def convert_labels_var(self, labels: list[str]) -> dict[str, str]:
         """
         Convert labels to dict
         :param labels:
@@ -448,7 +448,7 @@ class AlarmClass(Document):
         return r
 
     @classmethod
-    def get_config(cls, alarm_class: "AlarmClass") -> Dict[str, Any]:
+    def get_config(cls, alarm_class: "AlarmClass") -> dict[str, Any]:
         """Alarm Class configuration"""
         from noc.fm.models.dispositionrule import DispositionRule
         from noc.fm.models.alarmrule import AlarmRule

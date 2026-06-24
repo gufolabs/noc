@@ -8,7 +8,7 @@
 # Python modules
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import List, Iterable, Any
+from typing import Iterable, Any
 
 
 @dataclass(frozen=True)
@@ -23,7 +23,7 @@ class BaseDiscriminatorSource(ABC):
 
     name: str
 
-    def __init__(self, protocol, data: List[DiscriminatorDataItem] = None):
+    def __init__(self, protocol, data: list[DiscriminatorDataItem] = None):
         self.protocol = protocol
         self.data = data
 
@@ -38,14 +38,14 @@ class BaseDiscriminatorSource(ABC):
         """
 
     @abstractmethod
-    def get_data(self, code: str) -> List[DiscriminatorDataItem]:
+    def get_data(self, code: str) -> list[DiscriminatorDataItem]:
         """
         Get Discriminator Data by code
         """
         ...
 
     @abstractmethod
-    def get_code(self, data: List[DiscriminatorDataItem]) -> str:
+    def get_code(self, data: list[DiscriminatorDataItem]) -> str:
         """
         Get Discriminator Code by data
         """

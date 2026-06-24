@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Union, Tuple
 from enum import Enum
 
 # Third-party modules
@@ -20,7 +19,7 @@ HAS_FGALARMS = Feature.FGALARMS.is_active()
 HAS_CHANNEL = Feature.CHANNEL.is_active()
 
 
-def _is_required_index(x: Union[str, Tuple[str, ...]]) -> bool:
+def _is_required_index(x: str | tuple[str, ...]) -> bool:
     """Check if index is allowed by feature gates."""
     if isinstance(x, tuple) and sum(1 for v in x if "resource_path." in v) == 2:
         return HAS_FGALARMS

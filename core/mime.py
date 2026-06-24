@@ -23,7 +23,7 @@ class ContentType(IntEnum):
     MS_EXCEL = 1001
 
     @property
-    def content_type(self) -> Optional[str]:
+    def content_type(self) -> str | None:
         return _CONTENT_TYPE.get(self.value)
 
     @property

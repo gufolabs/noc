@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Iterable, Iterator, Tuple
+from typing import Iterable, Iterator
 
 # NOC modules
 from .line import LineTokenizer
@@ -20,9 +20,9 @@ class CurlyTokenizer(LineTokenizer):
         data,
         start_of_context: str = "{",
         end_of_context: str = "}",
-        explicit_eol: Optional[str] = None,
-        start_of_group: Optional[str] = None,
-        end_of_group: Optional[str] = None,
+        explicit_eol: str | None = None,
+        start_of_group: str | None = None,
+        end_of_group: str | None = None,
         **kwargs,
     ):
         self.start_of_context = start_of_context
@@ -32,14 +32,14 @@ class CurlyTokenizer(LineTokenizer):
         self.end_of_group = end_of_group
         super().__init__(data, **kwargs)
 
-    def iter_strip_explicit_eol(self, iter: Iterable) -> Iterator[Tuple[str]]:
+    def iter_strip_explicit_eol(self, iter: Iterable) -> Iterator[tuple[str]]:
         l_eol = len(self.explicit_eol)
         for tokens in iter:
             if tokens[-1].endswith(self.explicit_eol):
                 tokens = (*tokens[:-1], tokens[-1][:-l_eol])
             yield tokens
 
-    def repeat_groups(self, tokens: Tuple[str]) -> Iterator[Tuple[str]]:
+    def repeat_groups(self, tokens: tuple[str]) -> Iterator[tuple[str]]:
         if tokens[-1] == self.end_of_group and self.start_of_group in tokens:
             idx = tokens.index(self.start_of_group)
             prefix = tokens[:idx]
@@ -48,7 +48,7 @@ class CurlyTokenizer(LineTokenizer):
         else:
             yield tokens
 
-    def __iter__(self) -> Iterator[Tuple[str]]:
+    def __iter__(self) -> Iterator[tuple[str]]:
         contexts = []
         eoc = (self.end_of_context,)
         g = super().__iter__()

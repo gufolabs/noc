@@ -7,7 +7,7 @@
 
 # Python modules
 import threading
-from typing import Optional, Union
+from typing import Optional
 import operator
 import uuid
 from pathlib import Path
@@ -76,7 +76,7 @@ class Vendor(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Vendor"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Vendor"]:
         return Vendor.objects.filter(id=oid).first()
 
     @classmethod

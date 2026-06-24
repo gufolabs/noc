@@ -8,7 +8,7 @@
 # Python modules
 from __future__ import annotations
 import datetime
-from typing import Optional, List, Dict, Union, Any
+from typing import Any
 
 # Third-party modules
 from pydantic import BaseModel
@@ -25,22 +25,22 @@ class CapabilitiesItem(BaseModel):
 class SegmentItem(BaseModel):
     id: str
     name: str
-    remote_system: Optional[RemoteSystemItem]
-    remote_id: Optional[str]
+    remote_system: RemoteSystemItem | None
+    remote_id: str | None
 
 
 class ProjectItem(BaseModel):
     code: str
     name: str
-    remote_system: Optional[RemoteSystemItem]
-    remote_id: Optional[str]
+    remote_system: RemoteSystemItem | None
+    remote_id: str | None
 
 
 class AdministrativeDomainItem(BaseModel):
     id: str
     name: str
-    remote_system: Optional[RemoteSystemItem]
-    remote_id: Optional[str]
+    remote_system: RemoteSystemItem | None
+    remote_id: str | None
 
 
 class ObjectProfileItem(BaseModel):
@@ -50,10 +50,10 @@ class ObjectProfileItem(BaseModel):
     enable_ping: bool
     enable_box: bool
     enable_periodic: bool
-    labels: Optional[List[str]]
-    tags: Optional[List[str]]
-    remote_system: Optional[RemoteSystemItem]
-    remote_id: Optional[str]
+    labels: list[str] | None
+    tags: list[str] | None
+    remote_system: RemoteSystemItem | None
+    remote_id: str | None
 
 
 class ChassisMACItem(BaseModel):
@@ -62,20 +62,20 @@ class ChassisMACItem(BaseModel):
 
 
 class ChassisIDItem(BaseModel):
-    hostname: Optional[str]
-    macs: Optional[List[ChassisMACItem]]
-    router_id: Optional[str]
-    udld_id: Optional[str]
+    hostname: str | None
+    macs: list[ChassisMACItem] | None
+    router_id: str | None
+    udld_id: str | None
 
 
 class ForwardingInstanceItem(BaseModel):
     name: str
     type: str
-    subinterfaces: List[str]
-    rd: Optional[str]
-    vpn_id: Optional[str]
-    rt_export: Optional[str]
-    rt_import: Optional[str]
+    subinterfaces: list[str]
+    rd: str | None
+    vpn_id: str | None
+    rt_export: str | None
+    rt_import: str | None
 
 
 class ResourceGroupItem(BaseModel):
@@ -93,18 +93,18 @@ class InterfaceProfileItem(BaseModel):
 class SubinterfaceItem(BaseModel):
     name: str
     description: str
-    enabled_afi: List[str]
-    enabled_protocols: List[str]
-    snmp_ifindex: Optional[int]
-    mac: Optional[str]
-    ipv4_addresses: Optional[List[str]]
-    ipv6_addresses: Optional[List[str]]
-    iso_addresses: Optional[List[str]]
-    vlan_ids: Optional[List[str]]
-    vpi: Optional[str]
-    vci: Optional[str]
-    untagged_vlan: Optional[int]
-    tagged_vlans: Optional[List[int]]
+    enabled_afi: list[str]
+    enabled_protocols: list[str]
+    snmp_ifindex: int | None
+    mac: str | None
+    ipv4_addresses: list[str] | None
+    ipv6_addresses: list[str] | None
+    iso_addresses: list[str] | None
+    vlan_ids: list[str] | None
+    vpi: str | None
+    vci: str | None
+    untagged_vlan: int | None
+    tagged_vlans: list[int] | None
 
 
 class LinkItem(BaseModel):
@@ -118,15 +118,15 @@ class InterfaceItem(BaseModel):
     name: str
     type: str
     description: str
-    enabled_protocols: List[str]
+    enabled_protocols: list[str]
     admin_status: bool
-    hints: List[str]
-    snmp_ifindex: Optional[int]
-    mac: Optional[str]
-    aggregated_interface: Optional[str]
-    profile: Optional[InterfaceProfileItem]
-    subinterfaces: List[SubinterfaceItem]
-    link: List[LinkItem]
+    hints: list[str]
+    snmp_ifindex: int | None
+    mac: str | None
+    aggregated_interface: str | None
+    profile: InterfaceProfileItem | None
+    subinterfaces: list[SubinterfaceItem]
+    link: list[LinkItem]
 
 
 class VendorItem(BaseModel):
@@ -137,18 +137,18 @@ class VendorItem(BaseModel):
 class ModelItem(BaseModel):
     id: str
     name: str
-    description: Optional[str]
+    description: str | None
     vendor: VendorItem
-    labels: Optional[List[str]]
-    tags: Optional[List[str]]
+    labels: list[str] | None
+    tags: list[str] | None
 
 
 class SlotItem(BaseModel):
     name: str
     direction: str
-    protocols: List[str]
-    asset: Optional[Any]
-    interface: Optional[str]
+    protocols: list[str]
+    asset: Any | None
+    interface: str | None
 
 
 class AssetItem(BaseModel):
@@ -156,8 +156,8 @@ class AssetItem(BaseModel):
     model: ModelItem
     serial: str
     revision: str
-    data: Dict[str, Dict[str, Union[str, int, bool]]]
-    slots: List[SlotItem]
+    data: dict[str, dict[str, str | int | bool]]
+    slots: list[SlotItem]
 
 
 class ConfigItem(BaseModel):
@@ -173,25 +173,25 @@ class ManagedObjectDataStreamItem(BaseModel):
     bi_id: int
     profile: str
     is_managed: bool
-    address: Optional[str]
-    description: Optional[str]
-    labels: Optional[List[str]]
-    tags: Optional[List[str]]
-    project: Optional[ProjectItem]
-    remote_system: Optional[RemoteSystemItem]
-    remote_id: Optional[str]
-    pool: Optional[str]
-    vendor: Optional[str]
-    platform: Optional[str]
-    version: Optional[str]
-    capabilities: Optional[List[CapabilitiesItem]]
-    segment: Optional[SegmentItem]
-    administrative_domain: Optional[AdministrativeDomainItem]
+    address: str | None
+    description: str | None
+    labels: list[str] | None
+    tags: list[str] | None
+    project: ProjectItem | None
+    remote_system: RemoteSystemItem | None
+    remote_id: str | None
+    pool: str | None
+    vendor: str | None
+    platform: str | None
+    version: str | None
+    capabilities: list[CapabilitiesItem] | None
+    segment: SegmentItem | None
+    administrative_domain: AdministrativeDomainItem | None
     object_profile: ObjectProfileItem
-    chassis_id: Optional[ChassisIDItem]
-    forwarding_instances: Optional[List[ForwardingInstanceItem]]
-    interfaces: List[InterfaceItem]
-    service_groups: Optional[List[ResourceGroupItem]]
-    client_groups: Optional[List[ResourceGroupItem]]
-    asset: Optional[List[AssetItem]]
-    config: Optional[List[ConfigItem]]
+    chassis_id: ChassisIDItem | None
+    forwarding_instances: list[ForwardingInstanceItem] | None
+    interfaces: list[InterfaceItem]
+    service_groups: list[ResourceGroupItem] | None
+    client_groups: list[ResourceGroupItem] | None
+    asset: list[AssetItem] | None
+    config: list[ConfigItem] | None

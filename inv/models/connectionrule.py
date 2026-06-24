@@ -7,7 +7,7 @@
 
 # Python modules
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
@@ -36,7 +36,7 @@ class Context(EmbeddedDocument):
         )
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"type": self.type, "scope": self.scope, "reset_scopes": self.reset_scopes}
 
 
@@ -70,7 +70,7 @@ class Rule(EmbeddedDocument):
         )
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "match_type": self.match_type,
             "match_connection": self.match_connection,
@@ -106,7 +106,7 @@ class ConnectionRule(Document):
         return self.name
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "$collection": self._meta["json_collection"],

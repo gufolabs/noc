@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from .base import BaseModel
@@ -15,6 +14,6 @@ from .base import BaseModel
 class ManagedObjectProfile(BaseModel):
     id: str
     name: str
-    level: Optional[int] = 25
+    level: int | None = 25
 
     _csv_fields = ["id", "name", "level"]

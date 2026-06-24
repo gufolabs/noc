@@ -13,7 +13,6 @@ import types
 from collections import defaultdict
 import operator
 from urllib.parse import urlencode
-from typing import List, Dict, Set, Optional
 from threading import Lock
 import pkgutil
 import importlib
@@ -91,7 +90,7 @@ class AppPermission:
     title: str
     name: str
 
-    def to_dict(self) -> Dict[str, str]:
+    def to_dict(self) -> dict[str, str]:
         return {
             "module": self.module,
             "title": self.title,
@@ -114,7 +113,7 @@ class Site:
 
     def __init__(self):
         self.apps = {}  # app_id -> app instance
-        self.urlpatterns: List[URLPattern] = []
+        self.urlpatterns: list[URLPattern] = []
         self.menu = []
         self.menu_roots = {}  # app -> menu
         self.reports = []  # app_id -> title
@@ -124,7 +123,7 @@ class Site:
         self.app_contributors = defaultdict(set)
         self.app_count = 0
         self.pending_applications = []
-        self.service: Optional[BaseService] = None
+        self.service: BaseService | None = None
 
     def set_service(self, service: BaseService) -> None:
         """
@@ -136,7 +135,7 @@ class Site:
         self.service = service
 
     @property
-    def urls(self) -> List[URLPattern]:
+    def urls(self) -> list[URLPattern]:
         """
         Returns URLConf
         """
@@ -490,7 +489,7 @@ class Site:
         if self.is_initialized:
             return
         apps_root = "noc.services.web.apps"
-        seen_apps: Set[str] = set()
+        seen_apps: set[str] = set()
         # Type custom and repo roots
         logger.info("Loading web applications")
         for root in config.iter_customized_modules(apps_root, prefer_custom=True):
@@ -512,7 +511,7 @@ class Site:
                 # mark as loaded
                 seen_apps.add(app_id)
         # Initialize menu roots
-        app_order: Dict[str, int] = {
+        app_order: dict[str, int] = {
             app: n
             for n, app in enumerate(x[4:] for x in settings.INSTALLED_APPS if x.startswith("noc."))
         }
@@ -596,7 +595,7 @@ class Site:
         return False
 
     @cachetools.cachedmethod(operator.attrgetter("_perms_cache"), lock=lambda _: _perms_lock)
-    def get_app_permissions_list(self) -> List[AppPermission]:
+    def get_app_permissions_list(self) -> list[AppPermission]:
         """
         Get AppPermission for all installed apps.
         """

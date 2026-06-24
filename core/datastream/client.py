@@ -8,7 +8,6 @@
 # Python modules
 import asyncio
 import logging
-from typing import Optional
 
 # Third-party modules
 import orjson
@@ -65,12 +64,12 @@ class DataStreamClient:
 
     async def query(
         self,
-        change_id: Optional[str] = None,
+        change_id: str | None = None,
         filters=None,
         block: bool = False,
-        limit: Optional[int] = None,
-        ds_format: Optional[str] = None,
-        filter_policy: Optional[str] = None,
+        limit: int | None = None,
+        ds_format: str | None = None,
+        filter_policy: str | None = None,
     ):
         """
         Query datastream

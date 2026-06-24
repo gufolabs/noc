@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Dict, Union
+from typing import Optional
 
 # Third-party modules
 import bson
@@ -82,7 +82,7 @@ class NodeItem(EmbeddedDocument):
     height = IntField()
     # default options
     collapsed = BooleanField()
-    status_filter: List[AlarmFilter] = EmbeddedDocumentListField(AlarmFilter)
+    status_filter: list[AlarmFilter] = EmbeddedDocumentListField(AlarmFilter)
     # Link to other map
     portal_generator = StringField()
     portal_id = StringField()
@@ -125,7 +125,7 @@ class NodeItem(EmbeddedDocument):
         return None
 
     @property
-    def portal(self) -> Optional[Portal]:
+    def portal(self) -> Portal | None:
         if self.map_portal:
             return Portal(generator="configured", id=str(self.map_portal))
         if self.node_type == "objectgroup":
@@ -161,7 +161,7 @@ class NodeItem(EmbeddedDocument):
             n.object_filter = self.get_generator_settings()
         return n
 
-    def get_generator_settings(self) -> Optional[Dict[str, str]]:
+    def get_generator_settings(self) -> dict[str, str] | None:
         r = {}
         if not self.object_filter:
             return r
@@ -232,18 +232,18 @@ class ConfiguredMap(Document):
     add_topology_links = BooleanField(default=False)
     # Add portals to external nodes
     enable_node_portal = BooleanField(default=True)
-    nodes: List[NodeItem] = EmbeddedDocumentListField(NodeItem)
-    links: List[LinkItem] = EmbeddedDocumentListField(LinkItem)
+    nodes: list[NodeItem] = EmbeddedDocumentListField(NodeItem)
+    links: list[LinkItem] = EmbeddedDocumentListField(LinkItem)
     # lines
 
     def __str__(self):
         return self.name
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["ConfiguredMap"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["ConfiguredMap"]:
         return ConfiguredMap.objects.filter(id=oid).first()
 
-    def get_node_by_id(self, nid) -> Optional[NodeItem]:
+    def get_node_by_id(self, nid) -> NodeItem | None:
         for n in self.nodes:
             if n.id == nid:
                 return n

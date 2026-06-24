@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Set
 
 # Third-party modules
 from pymongo import UpdateOne
@@ -28,7 +27,7 @@ class Migration(BaseMigration):
             if not rs:
                 continue
             # Get suppress vars key
-            suppress_vars: Set[str] = set()
+            suppress_vars: set[str] = set()
             for k in rs[0]["match_condition"]:
                 if k.startswith("vars__"):
                     suppress_vars.add(k[6:])

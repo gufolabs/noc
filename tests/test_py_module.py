@@ -8,7 +8,7 @@
 # Python modules
 import os
 import ast
-from typing import Iterable, List
+from typing import Iterable
 from pathlib import Path
 
 # Third-party modules
@@ -38,9 +38,9 @@ def _allow_xfail(module: str) -> bool:
 
 
 @cachetools.cached(cache={})
-def get_files() -> List[Path]:
+def get_files() -> list[Path]:
     """Get list of all python files in src/noc."""
-    r: List[Path] = []
+    r: list[Path] = []
     for root, _, files in os.walk(Path("src", "noc"), followlinks=True):
         for f in files:
             if not f.startswith(".") and f.endswith(".py"):

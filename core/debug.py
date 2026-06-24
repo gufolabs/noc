@@ -14,7 +14,7 @@ import hashlib
 import pprint
 import traceback
 import uuid
-from typing import Type, Dict, Any
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -41,7 +41,7 @@ sentry_sdk = None
 
 if config.features.sentry:
 
-    def before_send(event: Dict[str, Any], hint: Dict[str, Any]) -> Dict[str, Any]:
+    def before_send(event: dict[str, Any], hint: dict[str, Any]) -> dict[str, Any]:
         exc_info = hint.get("exc_info")
         if exc_info is None:
             return event
@@ -211,7 +211,7 @@ def format_frames(frames, reverse=config.traceback.reverse):
     return "\n".join(r)
 
 
-def check_fatal_errors(t: "Type", v: "Exception"):
+def check_fatal_errors(t: "type", v: "Exception"):
     def die(msg, *args, **kwargs):
         logger.error(msg, *args, **kwargs)
         logger.error("Exiting due to fatal error")

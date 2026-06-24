@@ -8,7 +8,7 @@
 # Python modules
 import socket
 import struct
-from typing import List, Union, Iterable, Optional, Type
+from typing import Union, Iterable
 
 # NOC Modules
 from noc.core.validators import check_ipv4_prefix, check_ipv6_prefix
@@ -131,7 +131,7 @@ class IP:
             if (count and n >= count) or (until and a == until):
                 return
 
-    def iter_cover(self, mask: int) -> Iterable[Type["IP"]]:
+    def iter_cover(self, mask: int) -> Iterable[type["IP"]]:
         """
         Generate prefixes of size _mask_ covering basic prefix
         """
@@ -147,7 +147,7 @@ class IP:
             yield s
             s += dist
 
-    def iter_free(self, prefixes: List[Union[str, Type["IP"]]]):
+    def iter_free(self, prefixes: list[str | type["IP"]]):
         """
         Return generator of free prefixes.
 
@@ -279,7 +279,7 @@ class IPv4(IP):
 
     afi = "4"
 
-    def __init__(self, prefix: str, netmask: Optional[str] = None):
+    def __init__(self, prefix: str, netmask: str | None = None):
         """
         :param prefix: String in format X.X.X.X or X.X.X.X/Y
         :type prefix: str
@@ -316,7 +316,7 @@ class IPv4(IP):
                 break
         return n
 
-    def _get_parts(self) -> List[int]:
+    def _get_parts(self) -> list[int]:
         """
         get list of 4 integers (IPv4 octets)
 
@@ -1039,7 +1039,7 @@ class PrefixDB:
             yield root.__class__.from_bits(bits)
 
     @classmethod
-    def from_prefixes(cls, prefixes: List["IPv4"], key) -> "PrefixDB":
+    def from_prefixes(cls, prefixes: list["IPv4"], key) -> "PrefixDB":
         pdb = PrefixDB()
         for p in prefixes:
             pdb[p] = key

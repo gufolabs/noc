@@ -19,10 +19,6 @@ import asyncio
 import cachetools
 from functools import partial
 from typing import (
-    Optional,
-    Dict,
-    List,
-    Tuple,
     Callable,
     Any,
     TypeVar,
@@ -98,7 +94,7 @@ class BaseService:
     use_telemetry = False
     # Traefik routing rule
     # Requires config.features.traefik option
-    traefik_routes_rule: Optional[str] = None
+    traefik_routes_rule: str | None = None
     # Require DCS health status to be considered healthy
     # Usually means resolution error to required services
     # temporary leads service to unhealthy state
@@ -106,8 +102,8 @@ class BaseService:
     # Use embedded router for messages
     use_router = False
     # Use service based consul check timeout
-    dcs_check_interval: Optional[int] = None
-    dcs_check_timeout: Optional[int] = None
+    dcs_check_interval: int | None = None
+    dcs_check_timeout: int | None = None
     # Use watchdog for check Service register in consul
     use_watchdog = False
 
@@ -129,7 +125,7 @@ class BaseService:
     def __init__(self):
         set_service(self)
         sys.excepthook = excepthook
-        self.loop: Optional[asyncio.BaseEventLoop] = None
+        self.loop: asyncio.BaseEventLoop | None = None
         self.logger = logging.getLogger()
         self.service_id = str(uuid.uuid4())
         self.executors = {}
@@ -139,7 +135,7 @@ class BaseService:
         self.telemetry_callback = None
         self.dcs = None
         # Message routed
-        self.router: Optional[Router] = None
+        self.router: Router | None = None
         # Effective address and port
         self.address = None
         self.port = None
@@ -147,16 +143,16 @@ class BaseService:
         # Can be initialized in subclasses
         self.scheduler = None
         # Liftbridge publisher
-        self.publish_queue: Optional[MessageStreamQueue] = None
+        self.publish_queue: MessageStreamQueue | None = None
         self.publisher_start_lock = threading.Lock()
         # Metrics publisher buffer
-        self.metrics_queue: Optional[QBuffer] = None
+        self.metrics_queue: QBuffer | None = None
         # MX metrics publisher buffer
         self.mx_partitions: int = 0
-        self.mx_queue: Optional[MBuffer] = None
+        self.mx_queue: MBuffer | None = None
         self.active_subscribers = 0
-        self.subscriber_shutdown_waiter: Optional[asyncio.Event] = None
-        self.watchdog_waiter: Optional[asyncio.Event] = None
+        self.subscriber_shutdown_waiter: asyncio.Event | None = None
+        self.watchdog_waiter: asyncio.Event | None = None
         # Metrics partitions
         self.n_metrics_partitions = len(config.clickhouse.cluster_topology.split(","))
         self.metrics_key_lock = threading.Lock()
@@ -361,7 +357,7 @@ class BaseService:
         self.logger.warning("SIGTERM caught, Stopping")
         self.stop()
 
-    def get_service_address(self) -> Tuple[str, int]:
+    def get_service_address(self) -> tuple[str, int]:
         """
         Returns an (address, port) for HTTP service listener
         """
@@ -602,8 +598,8 @@ class BaseService:
             [Message],
             Awaitable[None],
         ],
-        start_timestamp: Optional[float] = None,
-        cursor_id: Optional[str] = None,
+        start_timestamp: float | None = None,
+        cursor_id: str | None = None,
         auto_set_cursor: bool = True,
         async_cursor: bool = False,
         async_cursor_condition: asyncio.Condition = None,
@@ -722,9 +718,9 @@ class BaseService:
         self,
         value: bytes,
         stream: str,
-        partition: Optional[int] = None,
-        key: Optional[bytes] = None,
-        headers: Optional[Dict[str, bytes]] = None,
+        partition: int | None = None,
+        key: bytes | None = None,
+        headers: dict[str, bytes] | None = None,
     ):
         """
         Schedule publish request
@@ -824,7 +820,7 @@ class BaseService:
                     await asyncio.sleep(to_sleep)
 
     async def publish_metrics(
-        self, queue: QBuffer, headers: Optional[Dict[str, bytes]] = None
+        self, queue: QBuffer, headers: dict[str, bytes] | None = None
     ) -> None:
         """
         Schedule metrics to send stream
@@ -841,9 +837,7 @@ class BaseService:
                 if to_sleep > 0:
                     await asyncio.sleep(to_sleep)
 
-    def register_metrics(
-        self, table: str, metrics: List[Dict[str, Any]], key: Optional[int] = None
-    ):
+    def register_metrics(self, table: str, metrics: list[dict[str, Any]], key: int | None = None):
         """
         Schedule metrics to be sent to the `table`.
 
@@ -894,7 +888,7 @@ class BaseService:
                 self.logger.info("Failed to get MX route settings: %s", e)
                 await asyncio.sleep(1)
 
-    async def update_route(self, data: Dict[str, Any]) -> None:
+    async def update_route(self, data: dict[str, Any]) -> None:
         self.router.change_route(data)
 
     async def delete_route(self, r_id: str) -> None:
@@ -904,7 +898,7 @@ class BaseService:
         self,
         data: Any,
         message_type: MessageType,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: dict[str, bytes] | None = None,
         sharding_key: int = 0,
         store: bool = False,
     ):
@@ -940,9 +934,9 @@ class BaseService:
         self,
         data: Any,
         message_type: MessageType,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: dict[str, bytes] | None = None,
         sharding_key: int = 0,
-        group_key: Optional[str] = None,
+        group_key: str | None = None,
     ):
         """
         Register message for deliver

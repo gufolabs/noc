@@ -7,7 +7,7 @@
 
 # Python modules
 import logging
-from typing import Optional, Callable, FrozenSet
+from typing import Callable
 from time import time_ns
 
 # Third-party modules
@@ -24,7 +24,7 @@ class ComposeProbeNodeConfig(BaseModel):
     expression: str
     is_delta: bool = False
     scale: str = "1"
-    compose_inputs: FrozenSet[str] = None
+    compose_inputs: frozenset[str] = None
 
 
 logger = logging.getLogger(__name__)
@@ -45,11 +45,11 @@ class ComposeProbeNode(ProbeNode):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.expression: Callable = get_fn(self.config.expression)
-        self.compose_inputs: FrozenSet[str] = self.config.compose_inputs or frozenset(
+        self.compose_inputs: frozenset[str] = self.config.compose_inputs or frozenset(
             get_vars(self.config.expression)
         )
 
-    def get_value(self, **kwargs) -> Optional[ValueType]:
+    def get_value(self, **kwargs) -> ValueType | None:
         try:
             x = self.expression(**kwargs)
         except Exception as e:

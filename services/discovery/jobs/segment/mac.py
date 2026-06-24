@@ -9,7 +9,6 @@
 import datetime
 import logging
 import enum
-from typing import Set
 
 # NOC modules
 from noc.services.discovery.jobs.base import TopologyDiscoveryCheck
@@ -158,7 +157,7 @@ class MACDiscoveryCheck(TopologyDiscoveryCheck):
                         )
 
     def get_uplink_weight(
-        self, mo: ManagedObject, if_fib: Set[ManagedObject], segments: Set[NetworkSegment]
+        self, mo: ManagedObject, if_fib: set[ManagedObject], segments: set[NetworkSegment]
     ) -> int:
         """
         Check if if_fib belongs to uplink interface and return weght by method

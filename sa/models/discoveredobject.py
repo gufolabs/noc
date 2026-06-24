@@ -9,7 +9,7 @@
 import datetime
 import logging
 import itertools
-from typing import Dict, Optional, List, Iterable, Tuple
+from typing import Optional, Iterable
 
 # Third-party modules
 from bson import ObjectId
@@ -68,10 +68,10 @@ class CheckStatus(EmbeddedDocument):
     name: str = StringField(required=True)
     port: int = IntField(required=False)
     status: bool = BooleanField(default=True)  # True - OK, False - Fail
-    arg0: Optional[str] = StringField(required=False)
+    arg0: str | None = StringField(required=False)
     skipped: bool = BooleanField(default=False)
     # data: Dict[str, str] # (for rules check)
-    error: Optional[str] = StringField(required=False)  # Description if Fail
+    error: str | None = StringField(required=False)  # Description if Fail
 
     def __hash__(self):
         return hash((self.name, self.port or 0, self.arg0 or "", self.status))
@@ -88,9 +88,9 @@ class DataItem(EmbeddedDocument):
     last_update = DateTimeField(required=False)
     remote_system: "RemoteSystem" = PlainReferenceField(RemoteSystem, required=False)
     remote_id: str = StringField(required=False)
-    labels: List[str] = ListField(StringField())
-    service_groups: List[ObjectId] = ListField(ObjectIdField())
-    client_groups: List[ObjectId] = ListField(ObjectIdField())
+    labels: list[str] = ListField(StringField())
+    service_groups: list[ObjectId] = ListField(ObjectIdField())
+    client_groups: list[ObjectId] = ListField(ObjectIdField())
     data = DictField()
     capabilities = DictField()
     event: str = StringField(required=False)
@@ -166,7 +166,7 @@ class DiscoveredObject(Document):
     hostname = StringField()
     chassis_id = StringField()
     # Sources that find object,     timestamp: str = DateTimeField(required=True)
-    sources: List[str] = ListField(StringField(choices=sorted(SOURCES)))
+    sources: list[str] = ListField(StringField(choices=sorted(SOURCES)))
     # Timestamp of last seen
     last_seen = DateTimeField()
     state_changed = DateTimeField()
@@ -175,19 +175,19 @@ class DiscoveredObject(Document):
     # Timestamp of first discovery
     first_discovered = DateTimeField(default=datetime.datetime.now)
     # checks
-    checks: List[CheckStatus] = EmbeddedDocumentListField(CheckStatus)
-    data: List[DataItem] = EmbeddedDocumentListField(DataItem)
+    checks: list[CheckStatus] = EmbeddedDocumentListField(CheckStatus)
+    data: list[DataItem] = EmbeddedDocumentListField(DataItem)
     duplicate_keys = ListField(LongField())
-    managed_object_id: Optional[int] = IntField(required=False)
+    managed_object_id: int | None = IntField(required=False)
     # Link to agent
     agent: Optional["ObjectId"] = ObjectIdField(required=False)
     # Link to Rule
     rule: Optional["ObjectDiscoveryRule"] = PlainReferenceField(ObjectDiscoveryRule, required=False)
-    effective_data: Dict[str, str] = DictField()
+    effective_data: dict[str, str] = DictField()
     # Labels
-    extra_labels: Dict[str, List[str]] = DictField()
-    labels: List[str] = ListField(StringField())  # Manual Set
-    effective_labels: List[str] = ListField(StringField())
+    extra_labels: dict[str, list[str]] = DictField()
+    labels: list[str] = ListField(StringField())  # Manual Set
+    effective_labels: list[str] = ListField(StringField())
     # Calculated duplicate hash
     # duplicate_hashes =
     # duplicate_keys =
@@ -250,7 +250,7 @@ class DiscoveredObject(Document):
         """Check record is duplicate"""
         return self.origin and self.origin != self.id
 
-    def iter_sorted_data(self, sources: Optional[List[str]] = None) -> Iterable["DataItem"]:
+    def iter_sorted_data(self, sources: list[str] | None = None) -> Iterable["DataItem"]:
         """Return data sorted by source"""
         sources = sources or self.sources
         yield from sorted(
@@ -258,11 +258,11 @@ class DiscoveredObject(Document):
             key=lambda x: sources.index(x.source),
         )
 
-    def set_dirty(self, msg: Optional[str] = None):
+    def set_dirty(self, msg: str | None = None):
         logger.debug("[%s] Set dirty %s", self.address, msg or "")
         self.is_dirty |= True
 
-    def is_ttl(self, ts: Optional[datetime.datetime] = None) -> bool:
+    def is_ttl(self, ts: datetime.datetime | None = None) -> bool:
         if not self.rule.expired_ttl:
             return False
         now = datetime.date.today()
@@ -274,7 +274,7 @@ class DiscoveredObject(Document):
         self.save()
 
     def refresh_rule(
-        self, sources: Optional[List[str]] = None, rule: Optional[ObjectDiscoveryRule] = None
+        self, sources: list[str] | None = None, rule: ObjectDiscoveryRule | None = None
     ):
         """Check assigned rules on Object"""
         sources = sources or list(self.sources)
@@ -310,8 +310,8 @@ class DiscoveredObject(Document):
         cls,
         address: str,
         pool: Pool,
-        data: List[PurgatoriumData],
-    ) -> List["DiscoveredObject"]:
+        data: list[PurgatoriumData],
+    ) -> list["DiscoveredObject"]:
         """Find Discovered object by data"""
         q = m_q(pool=pool, address=address)
         for d in data:
@@ -323,14 +323,14 @@ class DiscoveredObject(Document):
     @classmethod
     def ensure_discovered_object(
         cls,
-        sources: List[str],
+        sources: list[str],
         address: str,
         pool: Pool,
-        data: List[PurgatoriumData],
-        checks: Optional[List[ProtocolCheckResult]] = None,
-        labels: Optional[List[str]] = None,
-        rule: Optional[str] = None,
-        update_ts: Optional[datetime.datetime] = None,
+        data: list[PurgatoriumData],
+        checks: list[ProtocolCheckResult] | None = None,
+        labels: list[str] | None = None,
+        rule: str | None = None,
+        update_ts: datetime.datetime | None = None,
         dry_run: bool = False,
     ) -> "DiscoveredObject":
         """Check Discovered Object Exists"""
@@ -369,11 +369,11 @@ class DiscoveredObject(Document):
     @classmethod
     def merge_discovered_objects(
         cls,
-        objects: List["DiscoveredObject"],
+        objects: list["DiscoveredObject"],
         address: str,
-        data: List[PurgatoriumData],
+        data: list[PurgatoriumData],
         dry_run: bool = False,
-    ) -> Tuple["DiscoveredObject", List[PurgatoriumData]]:
+    ) -> tuple["DiscoveredObject", list[PurgatoriumData]]:
         """
         get_moved object
 
@@ -449,11 +449,11 @@ class DiscoveredObject(Document):
         cls,
         pool: Pool,
         address: str,
-        sources: List[str],
-        data: List[PurgatoriumData],
-        checks: Optional[List[ProtocolCheckResult]] = None,
-        labels: Optional[List[str]] = None,
-        update_ts: Optional[datetime.datetime] = None,
+        sources: list[str],
+        data: list[PurgatoriumData],
+        checks: list[ProtocolCheckResult] | None = None,
+        labels: list[str] | None = None,
+        update_ts: datetime.datetime | None = None,
         rule=None,
         dry_run: bool = False,
     ) -> Optional["DiscoveredObject"]:  # MergeRule
@@ -503,7 +503,7 @@ class DiscoveredObject(Document):
             o.touch(ts=update_ts)
         return o
 
-    def get_rule(self, sources: Optional[List[str]] = None) -> Optional["ObjectDiscoveryRule"]:
+    def get_rule(self, sources: list[str] | None = None) -> Optional["ObjectDiscoveryRule"]:
         """Get Discovered Object rule"""
         return ObjectDiscoveryRule.get_rule(
             self.address,
@@ -581,7 +581,7 @@ class DiscoveredObject(Document):
         return r
 
     @classmethod
-    def get_origin(cls, discovered: List["DiscoveredObject"]) -> "DiscoveredObject":
+    def get_origin(cls, discovered: list["DiscoveredObject"]) -> "DiscoveredObject":
         """Get origin records over Discovered Object"""
         origin = discovered[0]
         for d in discovered[1:]:
@@ -591,9 +591,9 @@ class DiscoveredObject(Document):
 
     def merge_duplicates(
         self,
-        duplicates: List["DiscoveredObject"],
+        duplicates: list["DiscoveredObject"],
         is_new: bool = False,
-    ) -> Tuple["DiscoveredObject", ResourceItem]:
+    ) -> tuple["DiscoveredObject", ResourceItem]:
         """
         Merge Duplicates Record, and data
         1. If not ETL sources, set duplicate to origin
@@ -616,7 +616,7 @@ class DiscoveredObject(Document):
         return origin, origin_ctx
 
     def get_managed_object_query(
-        self, pool: Optional[Pool] = None, addresses: Optional[List[str]] = None
+        self, pool: Pool | None = None, addresses: list[str] | None = None
     ):
         """Query for request Managed Object"""
         q = d_Q()
@@ -647,10 +647,10 @@ class DiscoveredObject(Document):
 
     def check_duplicate(
         self,
-        hostname: Optional[str] = None,
-        address: Optional[str] = None,
-        managed_object: Optional[ManagedObject] = None,
-    ) -> List["DiscoveredObject"]:
+        hostname: str | None = None,
+        address: str | None = None,
+        managed_object: ManagedObject | None = None,
+    ) -> list["DiscoveredObject"]:
         """Check duplicate"""
         from noc.inv.models.subinterface import SubInterface
         from mongoengine.queryset.visitor import Q
@@ -706,7 +706,7 @@ class DiscoveredObject(Document):
         logger.info("[%s] Rule and Source priority is same. Use address", self.address)
         return self.address_bin > do.address_bin
 
-    def check_duplicates(self, mos: List["ManagedObject"]) -> List["DiscoveredObject"]:
+    def check_duplicates(self, mos: list["ManagedObject"]) -> list["DiscoveredObject"]:
         """Getting DiscoveredObject duplicates record by ManagedObjects"""
         from noc.inv.models.subinterface import SubInterface
 
@@ -775,7 +775,7 @@ class DiscoveredObject(Document):
 
     def fix_duplicate_managed_object(
         self,
-        objects: List["ManagedObject"],
+        objects: list["ManagedObject"],
     ) -> Optional["ManagedObject"]:
         """Choice from multiple ManagedObject only own"""
         for o in objects:
@@ -890,13 +890,13 @@ class DiscoveredObject(Document):
     def set_data(
         self,
         source,
-        data: Dict[str, str],
-        labels: Optional[List[str]] = None,
-        service_groups: Optional[List[ObjectId]] = None,
-        client_groups: Optional[List[ObjectId]] = None,
-        capabilities: Optional[Dict[str, str]] = None,
-        remote_system: Optional[str] = None,
-        ts: Optional[datetime.datetime] = None,
+        data: dict[str, str],
+        labels: list[str] | None = None,
+        service_groups: list[ObjectId] | None = None,
+        client_groups: list[ObjectId] | None = None,
+        capabilities: dict[str, str] | None = None,
+        remote_system: str | None = None,
+        ts: datetime.datetime | None = None,
         event: str = False,
         is_delete: bool = False,
     ):
@@ -955,9 +955,7 @@ class DiscoveredObject(Document):
             ]
             self.set_dirty("Add New Data")
 
-    def get_data(
-        self, source: str, remote_system: Optional[RemoteSystem] = None
-    ) -> Optional[DataItem]:
+    def get_data(self, source: str, remote_system: RemoteSystem | None = None) -> DataItem | None:
         if source == ETL_SOURCE and not remote_system:
             raise AttributeError("")
         for item in self.data:
@@ -966,7 +964,7 @@ class DiscoveredObject(Document):
             if remote_system and item.remote_system == remote_system:
                 return item
 
-    def reset_data(self, source: str, remote_system: Optional[RemoteSystem] = None):
+    def reset_data(self, source: str, remote_system: RemoteSystem | None = None):
         """
         Remove data for source or remote identifier
         Args:
@@ -991,8 +989,8 @@ class DiscoveredObject(Document):
 
     def update_data(
         self,
-        data: Optional[List[PurgatoriumData]] = None,
-        checks: Optional[List[ProtocolCheckResult]] = None,
+        data: list[PurgatoriumData] | None = None,
+        checks: list[ProtocolCheckResult] | None = None,
     ):
         """
         *
@@ -1062,7 +1060,7 @@ class DiscoveredObject(Document):
 
     def sync_object_data(
         self, ctx: ResourceItem, managed_object: Optional["ManagedObject"] = None, dry_run=False
-    ) -> Optional[bool]:
+    ) -> bool | None:
         if not self.managed_object_id and not managed_object:
             logger.warning("Not exists ManagedObject. Skipping...")
             return
@@ -1121,7 +1119,7 @@ class DiscoveredObject(Document):
             mo.save()
 
     @property
-    def managed_object(self) -> Optional[ManagedObject]:
+    def managed_object(self) -> ManagedObject | None:
         if not self.managed_object_id:
             return None
         o = ManagedObject.get_by_id(self.managed_object_id)
@@ -1159,7 +1157,7 @@ def sync_object():
 
 
 def sync_purgatorium(
-    disable_sync: bool = False, dry_run: bool = False, print_addresses: Optional[List[str]] = None
+    disable_sync: bool = False, dry_run: bool = False, print_addresses: list[str] | None = None
 ):
     """
     Sync Discovered records with Purgatorium

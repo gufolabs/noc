@@ -8,7 +8,7 @@
 # Python modules
 import logging
 from dataclasses import dataclass
-from typing import Optional, List, Dict, Any, Iterable, FrozenSet
+from typing import Any, Iterable
 
 # Third-party modules
 from jinja2 import Template
@@ -26,7 +26,7 @@ DEFAULT_PRIORITY = "uem"
 class RemoteMappingValue:
     remote_system: Any
     remote_id: Any
-    sources: FrozenSet[InputSource]
+    sources: frozenset[InputSource]
     is_master: bool = False
 
     def __str__(self):
@@ -61,7 +61,7 @@ class RemoteMappingValue:
         )
 
     def set_remote_id(
-        self, remote_id: Any, source: Optional[InputSource] = None
+        self, remote_id: Any, source: InputSource | None = None
     ) -> "RemoteMappingValue":
         """Update value"""
         sources = self.sources
@@ -81,7 +81,7 @@ class RemoteMappingValue:
             sources=frozenset(sources),
         )
 
-    def get_object_form(self, obj: Any) -> Dict[str, str]:
+    def get_object_form(self, obj: Any) -> dict[str, str]:
         """Render Mapping Form"""
         return {
             "remote_system": str(self.remote_system.id),
@@ -152,7 +152,7 @@ def iter_document_mappings(self) -> Iterable[RemoteMappingValue]:
         )
 
 
-def save_document_mappings(self, mappings: List[RemoteMappingValue], dry_run: bool = False):
+def save_document_mappings(self, mappings: list[RemoteMappingValue], dry_run: bool = False):
     """"""
     from noc.main.models.remotemappingsitem import RemoteMappingItem
 
@@ -169,7 +169,7 @@ def save_document_mappings(self, mappings: List[RemoteMappingValue], dry_run: bo
     self.update(mappings=self.mappings)
 
 
-def save_model_mappings(self, mappings: List[RemoteMappingValue], dry_run: bool = False):
+def save_model_mappings(self, mappings: list[RemoteMappingValue], dry_run: bool = False):
     """"""
     self.mappings = [
         {
@@ -186,7 +186,7 @@ def save_model_mappings(self, mappings: List[RemoteMappingValue], dry_run: bool 
     self._reset_caches(self.id, credential=True)
 
 
-def set_mapping(self, remote_system: Any, remote_id: str, source: Optional[str] = None):
+def set_mapping(self, remote_system: Any, remote_id: str, source: str | None = None):
     """
     Set Object mapping
     Args:
@@ -196,7 +196,7 @@ def set_mapping(self, remote_system: Any, remote_id: str, source: Optional[str] 
     """
     source = InputSource(source or "unknown")
     weight = source.get_priority_weight(DEFAULT_PRIORITY)
-    new_mappings: List[RemoteMappingValue] = []
+    new_mappings: list[RemoteMappingValue] = []
     changed, is_new = False, True
 
     for item in self.iter_remote_mappings():
@@ -230,7 +230,7 @@ def set_mapping(self, remote_system: Any, remote_id: str, source: Optional[str] 
         self.save_remote_mappings(new_mappings)
 
 
-def get_mapping(self, remote_system: Any) -> Optional[str]:
+def get_mapping(self, remote_system: Any) -> str | None:
     """return object mapping for remote_system"""
     for m in self.iter_remote_mappings():
         if m.remote_system.id == remote_system.id:
@@ -238,7 +238,7 @@ def get_mapping(self, remote_system: Any) -> Optional[str]:
     return None
 
 
-def get_mappings(self) -> Dict[str, str]:
+def get_mappings(self) -> dict[str, str]:
     """return object mappings dict"""
     r = {}
     for m in self.iter_remote_mappings():
@@ -247,7 +247,7 @@ def get_mappings(self) -> Dict[str, str]:
 
 
 def update_remote_mappings(
-    self, mappings: Dict[Any, str], source: Optional[str] = None, dry_run: bool = False
+    self, mappings: dict[Any, str], source: str | None = None, dry_run: bool = False
 ) -> bool:
     """
     Update managed Object mappings

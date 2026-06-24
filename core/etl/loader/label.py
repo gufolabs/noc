@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # NOC modules
-from typing import Dict, Any
+from typing import Any
 
 # NOC modules
 from .base import BaseLoader
@@ -23,7 +23,7 @@ class LabelLoader(BaseLoader):
     model = LabelModel
     data_model = Label
 
-    def clean(self, item: Label) -> Dict[str, Any]:
+    def clean(self, item: Label) -> dict[str, Any]:
         """
         Cleanup row and return a dict of field name -> value
         """

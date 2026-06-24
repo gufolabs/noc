@@ -12,7 +12,7 @@ import operator
 
 # Third-party modules
 from jinja2 import Template, Environment
-from typing import Dict, Any
+from typing import Any
 
 # NOC modules
 from noc.core.translation import ugettext as _
@@ -87,7 +87,7 @@ class BaseCard:
                 raise self.NotFoundError()
         return None
 
-    def get_data(self) -> Dict[str, Any]:
+    def get_data(self) -> dict[str, Any]:
         """
         Returns template data
         """

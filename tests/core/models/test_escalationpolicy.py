@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Iterable, List
+from typing import Iterable
 
 # Third-party modules
 import pytest
@@ -30,7 +30,7 @@ def test_default():
         ("noc::escalation::always", EscalationPolicy.ALWAYS),
     ],
 )
-def test_try_from_label(label: str, expected: Optional[EscalationPolicy]):
+def test_try_from_label(label: str, expected: EscalationPolicy | None):
     assert EscalationPolicy.try_from_label(label) is expected
 
 
@@ -71,5 +71,5 @@ def test_try_from_label(label: str, expected: Optional[EscalationPolicy]):
         ),
     ],
 )
-def test_get_effective_policy(labels: Iterable[List[str]], expected: EscalationPolicy):
+def test_get_effective_policy(labels: Iterable[list[str]], expected: EscalationPolicy):
     assert EscalationPolicy.get_effective_policy(labels) is expected

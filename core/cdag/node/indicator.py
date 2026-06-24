@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # Third-party modules
 from pydantic import BaseModel
@@ -30,5 +29,5 @@ class IndicatorNode(BaseCDAGNode):
     config_cls = IndicatorConfig
     categories = [Category.ACTIVATION]
 
-    def get_value(self, x: ValueType) -> Optional[ValueType]:
+    def get_value(self, x: ValueType) -> ValueType | None:
         return self.config.true_level if x >= 0 else self.config.false_level

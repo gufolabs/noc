@@ -9,7 +9,7 @@
 import re
 import operator
 import datetime
-from typing import List, Iterable, Optional, Dict, Any, Union
+from typing import Iterable, Optional, Any
 from threading import Lock
 
 # Third-party modules
@@ -91,7 +91,7 @@ class SLAProbe(Document):
     type = StringField(choices=[(x, x) for x in PROBE_TYPES])
     tos = IntField(min=0, max=64)
     # Capabilities
-    caps: List[CapsItem] = EmbeddedDocumentListField(CapsItem)
+    caps: list[CapsItem] = EmbeddedDocumentListField(CapsItem)
     # IP address or URL, depending on type
     target = StringField()
     # Hardware timestamps
@@ -111,7 +111,7 @@ class SLAProbe(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["SLAProbe"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["SLAProbe"]:
         return SLAProbe.objects.filter(id=oid).first()
 
     @classmethod
@@ -138,7 +138,7 @@ class SLAProbe(Document):
             ]
 
     @cachetools.cached(_target_cache, key=lambda x: str(x.id), lock=id_lock)
-    def get_target(self) -> Optional[ManagedObject]:
+    def get_target(self) -> ManagedObject | None:
         from noc.inv.models.subinterface import SubInterface
 
         address = self.target
@@ -155,7 +155,7 @@ class SLAProbe(Document):
             return si.managed_object
 
     @classmethod
-    def iter_effective_labels(cls, probe: "SLAProbe") -> List[str]:
+    def iter_effective_labels(cls, probe: "SLAProbe") -> list[str]:
         return probe.labels + probe.profile.labels
 
     @classmethod
@@ -177,7 +177,7 @@ class SLAProbe(Document):
 
     @classmethod
     def iter_collected_metrics(
-        cls, mo, run: int = 0, d_interval: Optional[int] = None
+        cls, mo, run: int = 0, d_interval: int | None = None
     ) -> Iterable[MetricCollectorConfig]:
         """
         Return metric settings
@@ -301,7 +301,7 @@ class SLAProbe(Document):
         r = next(r, {})
         return r.get("interval", 0)
 
-    def get_message_context(self) -> Dict[str, Any]:
+    def get_message_context(self) -> dict[str, Any]:
         r = {"target": self.target, "tos": self.tos}
         if self.managed_object:
             r["source_object"] = self.managed_object.get_message_context()
@@ -312,7 +312,7 @@ class SLAProbe(Document):
             r["service"] = self.service.get_message_context()
         return r
 
-    def get_matcher_ctx(self) -> Dict[str, Any]:
+    def get_matcher_ctx(self) -> dict[str, Any]:
         """"""
         if not self.state:
             state = self.profile.workflow.get_default_state()
@@ -331,7 +331,7 @@ class SLAProbe(Document):
             r["service_groups"] = self.managed_object.effective_service_groups
         return r
 
-    def get_action_ctx(self) -> Dict[str, Any]:
+    def get_action_ctx(self) -> dict[str, Any]:
         """Context for running action"""
         return {
             "name": self.name,
@@ -352,7 +352,7 @@ class SLAProbe(Document):
             yield "sa.ManagedObject", str(self.managed_object.id)
         # Target - Role
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.profile.get_css_class() if self.profile else None
 
     def get_provisioning_op(self) -> str:

@@ -10,7 +10,7 @@ import datetime
 import logging
 import itertools
 from functools import partial
-from typing import Optional, List, Dict, Any, Iterable, Tuple, Union, TypeVar
+from typing import Any, Iterable, TypeVar
 
 # Third-party modules
 import orjson
@@ -61,7 +61,7 @@ def json_default(obj):
     raise TypeError
 
 
-DIAGNOSTIC_CHECK_STATE: Dict[bool, DiagnosticState] = {
+DIAGNOSTIC_CHECK_STATE: dict[bool, DiagnosticState] = {
     True: DiagnosticState("enabled"),
     False: DiagnosticState("failed"),
 }
@@ -94,16 +94,16 @@ class DiagnosticHub:
         dry_run: bool = False,
         sync_alarm: bool = True,
         sync_labels: bool = True,
-        logger: Optional[logging.Logger] = None,
+        logger: logging.Logger | None = None,
     ):
         self.logger: logging.Logger = logger or logging.getLogger(__name__)
-        self.__diagnostics: Dict[str, DiagnosticItem] = None  # Actual diagnostic state
+        self.__diagnostics: dict[str, DiagnosticItem] = None  # Actual diagnostic state
         self.__registry: DiagnosticCheckRegister = DiagnosticCheckRegister(self.logger)
-        self.__depended: Dict[str, str] = {}  # Depended diagnostics
+        self.__depended: dict[str, str] = {}  # Depended diagnostics
         if not hasattr(o, "diagnostics"):
             raise NotImplementedError("Diagnostic Interface not supported")
         self.__object = o
-        self.__data: Dict[str, Any] = {}
+        self.__data: dict[str, Any] = {}
         self.dry_run: bool = dry_run  # For test do not DB Sync
         self.sync_alarm = sync_alarm
         self.sync_labels = sync_labels
@@ -111,7 +111,7 @@ class DiagnosticHub:
         self.bulk_changes: int = 0
         # diagnostic state
 
-    def get(self, name: str) -> Optional[DiagnosticItem]:
+    def get(self, name: str) -> DiagnosticItem | None:
         if self.__diagnostics is None:
             self.__load_diagnostics()
         if name in self.__diagnostics:
@@ -126,7 +126,7 @@ class DiagnosticHub:
             raise KeyError
         return v
 
-    def __getattr__(self, name: str, default: Optional[Any] = None) -> "DiagnosticItem":
+    def __getattr__(self, name: str, default: Any | None = None) -> "DiagnosticItem":
         v = self.get(name)
         if v is None:
             raise AttributeError(f"Unknown diagnostic {name}")
@@ -181,7 +181,7 @@ class DiagnosticHub:
             return False
         return d.is_failed
 
-    def get_object_diagnostic_value(self, name: str) -> Optional[DiagnosticValue]:
+    def get_object_diagnostic_value(self, name: str) -> DiagnosticValue | None:
         """
         Get DiagnosticItem from Object
         Args:
@@ -220,8 +220,8 @@ class DiagnosticHub:
 
     @classmethod
     def get_check_env(
-        cls, obj, cfg: DiagnosticConfig, checks_data: Optional[Dict[str, Any]] = None
-    ) -> Dict[str, Any]:
+        cls, obj, cfg: DiagnosticConfig, checks_data: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         """Getting checks environment context"""
         ctx = obj.get_check_ctx(
             include_credentials=cfg.include_credentials,
@@ -234,7 +234,7 @@ class DiagnosticHub:
                 ctx[ci.alias or ci.name] = ci.value
         return ctx
 
-    def iter_checks(self, name: str) -> Iterable[Tuple[Check, ...]]:
+    def iter_checks(self, name: str) -> Iterable[tuple[Check, ...]]:
         di = self[name]
         ctx = self.get_check_env(self.__object, di.config, self.__data)
         for checks in di.iter_checks(**ctx, logger=self.logger):
@@ -244,10 +244,10 @@ class DiagnosticHub:
     def set_state(
         self,
         diagnostic: str,
-        state: Union[str, DiagnosticState] = "unknown",
-        reason: Optional[str] = None,
-        changed_ts: Optional[datetime.datetime] = None,
-        data: Optional[Dict[str, Any]] = None,
+        state: str | DiagnosticState = "unknown",
+        reason: str | None = None,
+        changed_ts: datetime.datetime | None = None,
+        data: dict[str, Any] | None = None,
         to_sync: bool = True,
     ):
         """
@@ -305,7 +305,7 @@ class DiagnosticHub:
 
     def update_checks(
         self,
-        checks: List[CheckResult],
+        checks: list[CheckResult],
         dry_run: bool = False,
         source: InputSource = InputSource.UNKNOWN,
     ):
@@ -358,9 +358,7 @@ class DiagnosticHub:
         if changed:
             self.sync_diagnostics()
 
-    def reset_diagnostics(
-        self, diagnostics: List[str], reason: Optional[str] = "By Reset Diagnostic"
-    ):
+    def reset_diagnostics(self, diagnostics: list[str], reason: str | None = "By Reset Diagnostic"):
         """
         Reset diagnostic data.
         * update config for resetting diagnostic
@@ -440,8 +438,8 @@ class DiagnosticHub:
 
     def sync_with_object(
         self,
-        update: Optional[List[DiagnosticItem]],
-        remove: Optional[List[str]] = None,
+        update: list[DiagnosticItem] | None,
+        remove: list[str] | None = None,
         sync_labels: bool = True,
     ):
         """
@@ -483,7 +481,7 @@ class DiagnosticHub:
     def sync_alarms(
         cls,
         o: T,
-        diagnostics: List[DiagnosticItem],
+        diagnostics: list[DiagnosticItem],
         alarm_disable: bool = False,
         dry_run: bool = False,
     ):
@@ -503,8 +501,8 @@ class DiagnosticHub:
         # Group Alarms
         groups = {}
         alarms = {}
-        alarm_config: Dict[str, Dict[str, Any]] = {}  # diagnostic -> AlarmClass Map
-        messages: List[Dict[str, Any]] = []  # Messages for send dispose
+        alarm_config: dict[str, dict[str, Any]] = {}  # diagnostic -> AlarmClass Map
+        messages: list[dict[str, Any]] = []  # Messages for send dispose
         processed = set()
         diagnostics = {d.diagnostic: d for d in diagnostics}
         for d in diagnostics.values():
@@ -590,9 +588,9 @@ class DiagnosticHub:
         diagnostic: str,
         state: str,
         from_state: str = DiagnosticState.unknown,
-        reason: Optional[str] = None,
-        data: Optional[Dict[str, Any]] = None,
-        ts: Optional[datetime.datetime] = None,
+        reason: str | None = None,
+        data: dict[str, Any] | None = None,
+        ts: datetime.datetime | None = None,
     ):
         """
         Save diagnostic state changes to Archive.
@@ -657,7 +655,7 @@ class DiagnosticHub:
             )
         # Send Notification
 
-    def register_diagnostic_metrics(self, metrics: List[MetricValue]):
+    def register_diagnostic_metrics(self, metrics: list[MetricValue]):
         """
         Metrics Labels:
           noc::diagnostic::<name>
@@ -695,7 +693,7 @@ class DiagnosticHub:
         for table, data in r.items():
             svc.register_metrics(table, list(data.values()), key=self.__object.bi_id)
 
-    def apply_context_data(self, d: DiagnosticItem, data: Dict[str, Any]):
+    def apply_context_data(self, d: DiagnosticItem, data: dict[str, Any]):
         self.__data |= data
         if not d.config.diagnostic_ctx:
             return
@@ -708,7 +706,7 @@ class DiagnosticHub:
         """Synchronize object data with diagnostic"""
 
 
-def update_diagnostic_checks(results: Dict[str, Dict[str, Any]]):
+def update_diagnostic_checks(results: dict[str, dict[str, Any]]):
     """Update changed Diagnostic statuses"""
     from noc.models import get_model
 

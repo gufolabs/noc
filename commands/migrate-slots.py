@@ -8,7 +8,6 @@
 # Python modules
 import os
 import asyncio
-from typing import Dict
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -36,7 +35,7 @@ class Command(BaseCommand):
                     changed = True
             return changed
 
-        slots: Dict[str, int] = {}
+        slots: dict[str, int] = {}
         for name, value in os.environ.items():
             if not name.startswith("NOC_MIGRATE_SLOTS_"):
                 continue

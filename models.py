@@ -10,7 +10,7 @@ import logging
 from typing import Iterable
 
 # Third-party modules
-from typing import Dict, Any
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +78,7 @@ def iter_model_id() -> Iterable[str]:
 
 
 # Model cache: model_id -> class
-_MCACHE: Dict[str, Any] = {}
+_MCACHE: dict[str, Any] = {}
 
 _MODELS = {
     # aaa models

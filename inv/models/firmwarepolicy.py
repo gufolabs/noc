@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import Optional, List, Dict, Any, Union
+from typing import Optional, Any
 
 # Third-party modules
 import bson
@@ -99,13 +99,11 @@ class FirmwarePolicy(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["FirmwarePolicy"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["FirmwarePolicy"]:
         return FirmwarePolicy.objects.filter(id=oid).first()
 
     @classmethod
-    def get_status(
-        cls, version: "Firmware", platform: Optional["Platform"] = None
-    ) -> Optional[str]:
+    def get_status(cls, version: "Firmware", platform: Optional["Platform"] = None) -> str | None:
         if not version:
             return None
         fps = cls.get_effective_policies(version, platform)
@@ -196,7 +194,7 @@ class FirmwarePolicy(Document):
     @classmethod
     def get_effective_policies(
         cls, version: "Firmware", platform: Optional["Platform"] = None
-    ) -> List["FirmwarePolicy"]:
+    ) -> list["FirmwarePolicy"]:
         """
 
         :param version:
@@ -217,14 +215,14 @@ class FirmwarePolicy(Document):
     def can_set_label(cls, label):
         return Label.get_effective_setting(label, setting="enable_firmwarepolicy")
 
-    def get_affected_firmwares(self) -> List["Firmware"]:
+    def get_affected_firmwares(self) -> list["Firmware"]:
         return [
             fw
             for fw in Firmware.objects.filter(profile=self.firmware.profile)
             if self.is_fw_match(fw)
         ]
 
-    def get_affected_managed_objects_ids(self) -> List[int]:
+    def get_affected_managed_objects_ids(self) -> list[int]:
         from noc.sa.models.managedobject import ManagedObject
 
         firmwares = self.get_affected_firmwares()
@@ -234,7 +232,7 @@ class FirmwarePolicy(Document):
             ManagedObject.objects.filter(version__in=firmwares).values_list("id", flat=True)
         )
 
-    def set_labels(self, labels: List[str] = None):
+    def set_labels(self, labels: list[str] = None):
         from django.db import connection
 
         fws = [str(fw.id) for fw in self.get_affected_firmwares()]
@@ -263,7 +261,7 @@ class FirmwarePolicy(Document):
         cursor.execute(sql, [self.labels, self.labels, fws])
 
     @property
-    def object_settings(self) -> Dict[str, Any]:
+    def object_settings(self) -> dict[str, Any]:
         r = {}
         if self.access_preference:
             r["access_preference"] = self.access_preference

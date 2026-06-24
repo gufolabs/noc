@@ -7,7 +7,6 @@
 
 # Python modules
 import re
-from typing import List, Dict
 
 # NOC modules
 from noc.core.reporter.reportsource import ReportSource
@@ -19,7 +18,7 @@ from noc.fm.models.eventclassificationrule import EventClassificationRule
 class ReportClassificationRule(ReportSource):
     name = "reportclassificationrule"
 
-    def get_formats(self) -> Dict[str, BandFormat]:
+    def get_formats(self) -> dict[str, BandFormat]:
         return {
             "header": BandFormat(title_template="Classification Rules"),
             "rule": BandFormat(
@@ -32,7 +31,7 @@ class ReportClassificationRule(ReportSource):
             ),
         }
 
-    def get_data(self, request=None, **kwargs) -> List[Band]:
+    def get_data(self, request=None, **kwargs) -> list[Band]:
         def get_profile(r):
             for p in r.patterns:
                 if p.key_re in ("profile", "^profile$"):

@@ -21,7 +21,7 @@ import bson
 import cachetools
 import orjson
 from pymongo import UpdateOne
-from typing import List, Dict, Any, Optional, Tuple
+from typing import Any
 
 # NOC modules
 from noc.core.scheduler.periodicjob import PeriodicJob
@@ -71,7 +71,7 @@ class MODiscoveryJob(PeriodicJob):
         self.out_buffer = StringIO()
         self.logger = PrefixLoggerAdapter(self.logger, "", target=self.out_buffer)
         self.check_timings = []
-        self.problems: List[ProblemItem] = []
+        self.problems: list[ProblemItem] = []
         self.caps = None
         self.has_fatal_error = False
         self.service = self.scheduler.service
@@ -139,12 +139,12 @@ class MODiscoveryJob(PeriodicJob):
 
     def set_problem(
         self,
-        check: Optional[str] = None,
-        alarm_class: Optional[str] = None,
-        path: Optional[List[str]] = None,
-        message: Optional[str] = None,
+        check: str | None = None,
+        alarm_class: str | None = None,
+        path: list[str] | None = None,
+        message: str | None = None,
         fatal: bool = False,
-        diagnostic: Optional[str] = None,
+        diagnostic: str | None = None,
         **kwargs,
     ):
         """
@@ -199,7 +199,7 @@ class MODiscoveryJob(PeriodicJob):
             self.caps = self.object.get_caps()
         return self.caps
 
-    def update_caps(self, caps, source, scope: Optional[str] = None):
+    def update_caps(self, caps, source, scope: str | None = None):
         self.caps = self.object.update_caps(caps, source=source, scope=scope, logger=self.logger)
 
     def allow_sessions(self):
@@ -223,7 +223,7 @@ class MODiscoveryJob(PeriodicJob):
             r.add(dc.diagnostic)
         return r
 
-    def update_diagnostics(self, problems: List[ProblemItem]):
+    def update_diagnostics(self, problems: list[ProblemItem]):
         """
         Syn problems to object diagnostic statuses
         :param problems:
@@ -253,7 +253,7 @@ class MODiscoveryJob(PeriodicJob):
         #         self.object.sync_diagnostic_alarm([d.diagnostic for d in bulk])
 
     def update_alarms(
-        self, problems: List[ProblemItem], group_cls: str = None, group_reference: str = None
+        self, problems: list[ProblemItem], group_cls: str = None, group_reference: str = None
     ):
         """
         Sync problems to alarm and use active_problems context variable
@@ -271,17 +271,17 @@ class MODiscoveryJob(PeriodicJob):
         from noc.fm.models.alarmclass import AlarmClass
 
         self.logger.info("Updating alarm statuses")
-        group_cls: Optional["AlarmClass"] = AlarmClass.get_by_name(group_cls or "Group")
+        group_cls: "AlarmClass" | None = AlarmClass.get_by_name(group_cls or "Group")
         if not group_cls:
             self.logger.info("No umbrella alarm class. Alarm statuses not updated")
             return
 
         group_reference = group_reference or f"g:d:{self.object.id}:{group_cls.name}"
-        active_problems: Dict[str, List[str]] = self.context.get("active_problems", {})
+        active_problems: dict[str, list[str]] = self.context.get("active_problems", {})
         if not problems and group_reference not in active_problems:
             # No money, no honey
             return
-        details: List[Dict[str, Any]] = []
+        details: list[dict[str, Any]] = []
         now = datetime.datetime.now()
         for p in problems:
             if not p.alarm_class:
@@ -433,7 +433,7 @@ class DiscoveryCheck:
     def get_caps(self):
         return self.job.get_caps()
 
-    def update_caps(self, caps, source, scope: Optional[str] = None):
+    def update_caps(self, caps, source, scope: str | None = None):
         self.job.update_caps(caps, source, scope=scope)
 
     def has_capability(self, cap):
@@ -514,7 +514,7 @@ class DiscoveryCheck:
         pass
 
     @staticmethod
-    def build_effective_labels(obj) -> List[str]:
+    def build_effective_labels(obj) -> list[str]:
         """
         Build object effective labels
         :param obj:
@@ -529,11 +529,11 @@ class DiscoveryCheck:
     def update_if_changed(
         self,
         obj,
-        values: Dict[str, Any],
-        caps: Optional[Dict[str, str]] = None,
-        ignore_empty: List[str] = None,
+        values: dict[str, Any],
+        caps: dict[str, str] | None = None,
+        ignore_empty: list[str] = None,
         wait: bool = True,
-        bulk: Optional[List[str]] = None,
+        bulk: list[str] | None = None,
         update_effective_labels: bool = False,
     ):
         """
@@ -587,7 +587,7 @@ class DiscoveryCheck:
             obj.update_caps(caps, source="discovery", bulk=bulk)  # scope Discovery Scope
         return changes
 
-    def log_changes(self, msg: str, changes: List[Tuple[str, Any]]):
+    def log_changes(self, msg: str, changes: list[tuple[str, Any]]):
         """
         Log changes
         :param msg: Message
@@ -692,11 +692,11 @@ class DiscoveryCheck:
 
     def set_problem(
         self,
-        alarm_class: Optional[str] = None,
-        path: Optional[List[str]] = None,
-        message: Optional[str] = None,
+        alarm_class: str | None = None,
+        path: list[str] | None = None,
+        message: str | None = None,
         fatal: bool = False,
-        diagnostic: Optional[str] = None,
+        diagnostic: str | None = None,
         **kwargs,
     ):
         """
@@ -730,7 +730,7 @@ class DiscoveryCheck:
         """
         self.job.set_artefact(name, value)
 
-    def get_artefact(self, name: str) -> Optional[Any]:
+    def get_artefact(self, name: str) -> Any | None:
         """
         Get artefact by name
         :param name: artefact name
@@ -1438,7 +1438,7 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
                 remote_interface,
             )
 
-    def confirm_cloud(self, root_interface: Interface, interfaces: List[Interface]) -> None:
+    def confirm_cloud(self, root_interface: Interface, interfaces: list[Interface]) -> None:
         """
         Ensure `root_interface` and `interfaces` are connected to same cloud link
 
@@ -1448,7 +1448,7 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
         if not interfaces:
             return
         # get existing links
-        links: Dict[Interface, Link] = {}
+        links: dict[Interface, Link] = {}
         for link in Link.objects.filter(
             interfaces__in=[root_interface.id] + [i.id for i in interfaces]
         ):

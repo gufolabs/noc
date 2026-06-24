@@ -8,7 +8,7 @@
 # Python modules
 import enum
 from dataclasses import dataclass
-from typing import Literal, Optional
+from typing import Literal
 
 
 class Status(enum.IntEnum):
@@ -23,8 +23,8 @@ class Status(enum.IntEnum):
 class AffectedItem:
     id: str
     reason: str
-    service_status: Optional[Status] = None
-    label: Optional[str] = None
+    service_status: Status | None = None
+    label: str | None = None
     weight: int = 0
     is_active: bool = True
     # Add Maintenance
