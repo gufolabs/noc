@@ -160,7 +160,7 @@ class DataStream:
         return hashlib.sha256(orjson.dumps(data)).hexdigest()[: DataStream.HASH_LEN]
 
     @classmethod
-    def bulk_update(cls, objects: list[id | str | bson.ObjectId]) -> None:
+    def bulk_update(cls, objects: list[str | bson.ObjectId]) -> None:
         coll = cls.get_collection()
         # Get possible formats
         fmt_coll: dict[str, pymongo.collection.Collection] = {}
