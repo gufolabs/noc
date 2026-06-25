@@ -48,7 +48,7 @@ class IDCheck(DiscoveryCheck):
                         e,
                     )
             if not chassis_mac:
-                self.logger.warning("All MAC ranges failed, check get_discovery_id script")
+                self.logger.error("All MAC ranges failed, check get_discovery_id script")
 
         DiscoveryID.submit(
             object=self.object,
