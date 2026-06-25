@@ -198,6 +198,10 @@ class Script(BaseScript):
         return r
 
 
-def trim_str(v: bytes) -> str:
+def trim_str(v: bytes | str) -> str:
     """Convert to string and stip trailing zeroes."""
-    return v.rstrip(b"\x00").decode()
+    if isinstance(v, str):
+        return v.rstrip("\x00")
+    if isinstance(v, bytes):
+        return v.rstrip(b"\x00").decode()
+    raise ValueError("value must be bytes or str")
