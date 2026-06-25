@@ -19,6 +19,10 @@ Ext.define("NOC.core.mixins.Polling", {
 
   startPolling: function(){
     if(!NOC.settings.features.includes("smartrefresh")){
+      // Without smartrefresh there is no IntersectionObserver/focus tracking,
+      // so force the "visible & focused" state the pollingTask guard relies on.
+      this.isIntersecting = true;
+      this._windowFocused = true;
       this.runPollingTask();
       return;
     }
