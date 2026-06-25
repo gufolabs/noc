@@ -8,7 +8,6 @@
 # Python modules
 import logging
 import time
-from typing import Tuple
 import codecs
 import uuid
 
@@ -33,7 +32,7 @@ class TrapServer(UDPServer):
     def enable_freebind(self):
         return config.trapcollector.enable_freebind
 
-    def on_read(self, data: bytes, address: Tuple[str, int]):
+    def on_read(self, data: bytes, address: tuple[str, int]):
         metrics["trap_msg_in"] += 1
         cfg = self.service.lookup_config(address[0])
         if not cfg:

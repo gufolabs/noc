@@ -10,7 +10,7 @@ import operator
 import datetime
 import logging
 from threading import Lock
-from typing import Optional, Iterable, List, Any, Union, Dict
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 import bson
@@ -102,7 +102,7 @@ class CPE(Document):
     }
 
     # (<managed object>, <local_id>) Must be unique
-    controllers: List[ControllerItem] = EmbeddedDocumentListField(ControllerItem)
+    controllers: list[ControllerItem] = EmbeddedDocumentListField(ControllerItem)
     global_id = StringField(unique=True)
     # Probe profile
     profile: CPEProfile = PlainReferenceField(CPEProfile, default=CPEProfile.get_default_profile)
@@ -125,7 +125,7 @@ class CPE(Document):
     address = StringField(validation=check_address)
     label = StringField(required=False)
     # Capabilities
-    caps: List[CapsItem] = EmbeddedDocumentListField(CapsItem)
+    caps: list[CapsItem] = EmbeddedDocumentListField(CapsItem)
     # Object id in BI
     bi_id = LongField(unique=True)
     # Labels
@@ -145,7 +145,7 @@ class CPE(Document):
         return str(self.controller)
 
     @property
-    def controller(self) -> Optional[ControllerItem]:
+    def controller(self) -> ControllerItem | None:
         for c in self.controllers:
             if c.is_active:
                 return c
@@ -153,7 +153,7 @@ class CPE(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["CPE"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["CPE"]:
         return CPE.objects.filter(id=oid).first()
 
     @classmethod
@@ -172,7 +172,7 @@ class CPE(Document):
             ]
 
     @classmethod
-    def iter_effective_labels(cls, instance: "CPE") -> List[str]:
+    def iter_effective_labels(cls, instance: "CPE") -> list[str]:
         yield list(instance.labels or [])
         if instance.profile.labels:
             yield list(instance.profile.labels)
@@ -197,9 +197,9 @@ class CPE(Document):
 
     def seen(
         self,
-        controller: Optional[ManagedObject] = None,
-        local_id: Optional[str] = None,
-        interface: Optional[str] = None,
+        controller: ManagedObject | None = None,
+        local_id: str | None = None,
+        interface: str | None = None,
         status: bool = True,
     ):
         """
@@ -253,7 +253,7 @@ class CPE(Document):
         self.fire_event("seen")
         self.touch()  # Worflow expired
 
-    def unseen(self, controller: Optional[str] = None):
+    def unseen(self, controller: str | None = None):
         """
         Unseen sensor
         """
@@ -287,7 +287,7 @@ class CPE(Document):
 
     @classmethod
     def iter_collected_metrics(
-        cls, mo: "ManagedObject", run: int = 0, d_interval: Optional[int] = None
+        cls, mo: "ManagedObject", run: int = 0, d_interval: int | None = None
     ) -> Iterable[MetricCollectorConfig]:
         """
         Return metrics setting for collected
@@ -388,8 +388,8 @@ class CPE(Document):
     def set_oper_status(
         self,
         status: bool,
-        change_ts: Optional[datetime.datetime] = None,
-        bulk: Optional[List[Any]] = None,
+        change_ts: datetime.datetime | None = None,
+        bulk: list[Any] | None = None,
     ):
         """
         Set oper CPE status
@@ -420,7 +420,7 @@ class CPE(Document):
         Get FTS index
         """
         card = f"CPE object {self.global_id} ({self.address})"
-        content: List[str] = [self.global_id, self.address]
+        content: list[str] = [self.global_id, self.address]
         if self.description:
             content += [self.description]
         return {
@@ -470,13 +470,13 @@ class CPE(Document):
         r = next(r, {})
         return r.get("interval", 0)
 
-    def get_stencil(self) -> Optional[Stencil]:
+    def get_stencil(self) -> Stencil | None:
         if self.profile.shape:
             # Use profile's shape
             return self.profile.shape
         return None
 
-    def get_shape_overlays(self) -> List[ShapeOverlay]:
+    def get_shape_overlays(self) -> list[ShapeOverlay]:
         return []
 
     def get_topology_node(self) -> TopologyNode:
@@ -496,7 +496,7 @@ class CPE(Document):
             },
         )
 
-    def get_matcher_ctx(self) -> Dict[str, Any]:
+    def get_matcher_ctx(self) -> dict[str, Any]:
         r = {
             "description": self.description,
             "labels": list(self.effective_labels),

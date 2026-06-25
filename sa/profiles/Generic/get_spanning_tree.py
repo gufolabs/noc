@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -29,7 +28,7 @@ class Script(BaseScript):
         6: "broken",
     }
 
-    def get_bridge_ifindex_mappings(self) -> Dict[int, int]:
+    def get_bridge_ifindex_mappings(self) -> dict[int, int]:
         """
         Getting mappings for bridge port number -> ifindex
         :return:

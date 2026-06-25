@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from .base import BaseModel
@@ -17,7 +16,7 @@ class ResourceGroup(BaseModel):
     id: str
     name: str
     technology: str
-    parent: Optional[Reference["ResourceGroup"]] = None
-    description: Optional[str] = None
+    parent: Reference["ResourceGroup"] | None = None
+    description: str | None = None
 
     _csv_fields = ["id", "name", "technology", "parent", "description"]

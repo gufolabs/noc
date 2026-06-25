@@ -9,7 +9,6 @@
 import socket
 import asyncio
 import contextlib
-from typing import Optional
 
 # NOC modules
 from noc.config import config
@@ -32,14 +31,14 @@ class BaseStream:
     KEEP_CNT = 3
 
     def __init__(self, cli: BaseCLI):
-        self._timeout: Optional[float] = None
+        self._timeout: float | None = None
         self.logger = cli.logger
         self.tos = cli.tos
-        self.socket: Optional[socket.socket] = None
+        self.socket: socket.socket | None = None
         self.connect_timeout: float = config.activator.connect_timeout
 
     async def connect(
-        self, address: str, port: Optional[int] = None, timeout: Optional[float] = None
+        self, address: str, port: int | None = None, timeout: float | None = None
     ):
         """
         Process connection sequence
@@ -152,11 +151,11 @@ class BaseStream:
             self.socket.close()
             self.socket = None
 
-    def set_timeout(self, timeout: Optional[float] = None):
+    def set_timeout(self, timeout: float | None = None):
         self._timeout = timeout
 
     @contextlib.contextmanager
-    def timeout(self, timeout: Optional[float] = None):
+    def timeout(self, timeout: float | None = None):
         old_timeout = self.timeout
         self.set_timeout(timeout)
         yield

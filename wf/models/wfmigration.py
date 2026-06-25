@@ -7,7 +7,7 @@
 
 # Python modules
 import os
-from typing import Dict, Any
+from typing import Any
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
@@ -33,7 +33,7 @@ class MigrationItem(EmbeddedDocument):
     description = StringField()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "from_state__name": self.from_state.name,
             "to_state__name": self.to_state.name,
@@ -59,7 +59,7 @@ class WFMigration(Document):
         return self.name
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "uuid": self.uuid,

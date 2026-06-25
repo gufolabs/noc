@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from .base import BaseModel
@@ -16,6 +15,6 @@ class Project(BaseModel):
     id: str
     name: str
     code: str
-    description: Optional[str] = None
+    description: str | None = None
 
     _csv_fields = ["id", "name", "code", "description"]

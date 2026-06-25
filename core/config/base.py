@@ -9,7 +9,7 @@
 import inspect
 import re
 import os
-from typing import Dict, Iterable, Tuple
+from typing import Iterable
 
 # NOC modules
 from .params import BaseParameter
@@ -61,7 +61,7 @@ class BaseConfig(metaclass=ConfigBase):
     }
 
     _rx_env_sh = re.compile(r"\${([^:}]+)(:-[^}]+)?}")
-    _params: Dict[str, BaseParameter]
+    _params: dict[str, BaseParameter]
 
     def __iter__(self):
         yield from self._params_order
@@ -157,7 +157,7 @@ class BaseConfig(metaclass=ConfigBase):
             if c and parts[-1] in c:
                 self.set_parameter(name, c[parts[-1]])
 
-    def iter_params(self) -> Iterable[Tuple[str, BaseParameter]]:
+    def iter_params(self) -> Iterable[tuple[str, BaseParameter]]:
         """
         Iterate over all known parameters.
 

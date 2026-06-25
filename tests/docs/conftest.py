@@ -8,7 +8,6 @@
 # Python modules
 import os
 import re
-from typing import List, Tuple
 
 # Third-party modules
 import pytest
@@ -27,7 +26,7 @@ class ToC:
             self.add_item([], kv)
 
     @staticmethod
-    def get_summary(path: str) -> List[Tuple[str, str]]:
+    def get_summary(path: str) -> list[tuple[str, str]]:
         if path[-1] == "/":
             path = path[:-1]
         pp = os.path.join(DOCS_DIR, path, SUMMARY_FILENAME)

@@ -10,7 +10,7 @@ import logging
 import socket
 import errno
 import asyncio
-from typing import Optional, Callable, Any, Dict, Union
+from typing import Callable, Any
 
 # NOC modules
 from noc.core.snmp.version import SNMP_v2c
@@ -43,7 +43,7 @@ BULK_MAX_REPETITIONS = 20
 
 
 def _get_parser(
-    parser: Optional[_ResponseParser] = None, raw_varbinds: bool = False
+    parser: _ResponseParser | None = None, raw_varbinds: bool = False
 ) -> _ResponseParser:
     if raw_varbinds:
         return parse_get_response_raw
@@ -58,11 +58,11 @@ async def snmp_get(
     version=SNMP_v2c,
     timeout=10,
     tos=None,
-    udp_socket: Optional[UDPSocket] = None,
+    udp_socket: UDPSocket | None = None,
     raw_varbinds=False,
     display_hints=None,
-    response_parser: Optional[_ResponseParser] = None,
-    rate_limit: Optional[AsyncRateLimit] = None,
+    response_parser: _ResponseParser | None = None,
+    rate_limit: AsyncRateLimit | None = None,
 ):
     """
     Perform SNMP get request and returns Future to be used
@@ -182,8 +182,8 @@ async def snmp_count(
     filter=None,
     max_repetitions=BULK_MAX_REPETITIONS,
     tos=None,
-    udp_socket: Optional[UDPSocket] = None,
-    rate_limit: Optional[AsyncRateLimit] = None,
+    udp_socket: UDPSocket | None = None,
+    rate_limit: AsyncRateLimit | None = None,
 ):
     """
     Perform SNMP get request and returns Future to be used
@@ -251,16 +251,16 @@ async def snmp_getnext(
     version: int = SNMP_v2c,
     timeout: float = 10,
     bulk: bool = False,
-    filter: Optional[Callable[[bytes, Any], bool]] = None,
+    filter: Callable[[bytes, Any], bool] | None = None,
     max_repetitions: int = BULK_MAX_REPETITIONS,
     only_first: bool = False,
-    tos: Optional[int] = None,
-    udp_socket: Optional[UDPSocket] = None,
+    tos: int | None = None,
+    udp_socket: UDPSocket | None = None,
     max_retries: int = 0,
     raw_varbinds: bool = False,
-    display_hints: Optional[Dict[str, Optional[Callable[[str, bytes], Union[str, bytes]]]]] = None,
-    response_parser: Optional[_ResponseParser] = None,
-    rate_limit: Optional[AsyncRateLimit] = None,
+    display_hints: dict[str, Callable[[str, bytes], str | bytes] | None] | None = None,
+    response_parser: _ResponseParser | None = None,
+    rate_limit: AsyncRateLimit | None = None,
 ):
     """
     Perform SNMP GETNEXT/BULK request and returns Future to be used
@@ -361,7 +361,7 @@ async def snmp_set(
     timeout=10,
     tos=None,
     udp_socket=None,
-    rate_limit: Optional[AsyncRateLimit] = None,
+    rate_limit: AsyncRateLimit | None = None,
 ):
     """
     Perform SNMP set request and returns Future to be used

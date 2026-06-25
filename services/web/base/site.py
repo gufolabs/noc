@@ -15,7 +15,6 @@ import types
 from collections import defaultdict
 import operator
 from urllib.parse import urlencode
-from typing import List, Dict
 from threading import Lock
 
 # Third-party modules
@@ -89,7 +88,7 @@ class AppPermission:
     title: str
     name: str
 
-    def to_dict(self) -> Dict[str, str]:
+    def to_dict(self) -> dict[str, str]:
         return {
             "module": self.module,
             "title": self.title,
@@ -559,7 +558,7 @@ class Site:
         return False
 
     @cachetools.cachedmethod(operator.attrgetter("_perms_cache"), lock=lambda _: _perms_lock)
-    def get_app_permissions_list(self) -> List[AppPermission]:
+    def get_app_permissions_list(self) -> list[AppPermission]:
         """
         Get AppPermission for all installed apps.
         """

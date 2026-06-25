@@ -9,7 +9,7 @@
 import os
 from threading import Lock
 import operator
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional
 
 # Third-party modules
 import bson
@@ -84,7 +84,7 @@ class Layer(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["Layer"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["Layer"]:
         try:
             return Layer.objects.get(id=oid)
         except Layer.DoesNotExist:
@@ -99,7 +99,7 @@ class Layer(Document):
             return None
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],

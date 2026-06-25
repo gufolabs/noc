@@ -10,7 +10,7 @@ import struct
 
 # Third-party modules
 from siphash24 import siphash24
-from typing import Dict, Any
+from typing import Any
 
 # NOC modules
 from noc.core.comp import smart_text, smart_bytes
@@ -33,7 +33,7 @@ def hash_int(value: Any) -> int:
     return hash_fmt.unpack(hash_str(value))[0]
 
 
-def dict_hash_int(d: Dict[str, Any]) -> int:
+def dict_hash_int(d: dict[str, Any]) -> int:
     r = ["%s=%s" % (k, d[k]) for k in sorted(d)]
     return hash_int(",".join(r))
 

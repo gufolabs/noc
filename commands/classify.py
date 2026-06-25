@@ -10,7 +10,6 @@ import argparse
 import os
 from pathlib import Path
 import time
-from typing import List
 
 # Third-party modules
 import orjson
@@ -51,7 +50,7 @@ class Command(BaseCommand):
         cmd = options.pop("cmd")
         return getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
-    def parse_syslog_text(self, profile: str, filepath: Path) -> List[Event]:
+    def parse_syslog_text(self, profile: str, filepath: Path) -> list[Event]:
         """
         Parse events from syslog-format file located on the path 'filepath'
         """
@@ -87,7 +86,7 @@ class Command(BaseCommand):
             events += [event]
         return events
 
-    def process_events(self, profile, ruleset, output_dir, filepath: Path, events: List[Event]):
+    def process_events(self, profile, ruleset, output_dir, filepath: Path, events: list[Event]):
         """
         Classify events for file located on the path 'filepath'
         """

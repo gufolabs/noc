@@ -93,7 +93,7 @@ class Command(BaseCommand):
             action="store",
             help="DNS Zone name to transfer",
         )
-        self.print((import_parser.print_help()))
+        self.print(import_parser.print_help())
 
     RR_TYPES = [
         "A",

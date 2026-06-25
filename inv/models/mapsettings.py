@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any, Optional
+from typing import Any
 import datetime
 import logging
 
@@ -107,7 +107,7 @@ class MapSettings(Document):
             nodes[n.node] = n
         return nodes
 
-    def get_generator_hints(self, **kwargs) -> Dict[str, str]:
+    def get_generator_hints(self, **kwargs) -> dict[str, str]:
         """
         Return Hints settings for generator
         :param kwargs: Additional hints
@@ -157,9 +157,9 @@ class MapSettings(Document):
         self,
         nodes,
         links,
-        user: Optional[str] = None,
-        width: Optional[float] = None,
-        height: Optional[float] = None,
+        user: str | None = None,
+        width: float | None = None,
+        height: float | None = None,
     ):
         """
         Update settings
@@ -275,8 +275,8 @@ class MapSettings(Document):
 
     @classmethod
     def get_map(
-        cls, gen_type: str, gen_id: Optional[str] = None, **kwargs
-    ) -> Optional[Dict[str, Any]]:
+        cls, gen_type: str, gen_id: str | None = None, **kwargs
+    ) -> dict[str, Any] | None:
         """
         Return Map Data
         :param gen_id: Generator Id param

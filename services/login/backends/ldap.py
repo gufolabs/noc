@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # Third-party modules
 import ldap3
@@ -160,8 +159,8 @@ class LdapBackend(BaseAuthBackend):
         self,
         ldap_domain: "AuthLDAPDomain",
         server_pool: "ldap3.ServerPool",
-        user: Optional[str] = None,
-        password: Optional[str] = None,
+        user: str | None = None,
+        password: str | None = None,
     ) -> "ldap3.Connection":
         # Connect and bind
         if not user and not ldap_domain.bind_user:

@@ -9,7 +9,7 @@
 import re
 import os
 from threading import Lock
-from typing import Optional, Union, List
+from typing import Optional
 import operator
 
 # Third-party modules
@@ -218,7 +218,7 @@ class EventClass(Document):
     action = StringField(
         required=True, choices=[("D", "Drop"), ("L", "Log"), ("A", "Log & Archive")]
     )
-    vars: List[EventClassVar] = EmbeddedDocumentListField(EventClassVar)
+    vars: list[EventClassVar] = EmbeddedDocumentListField(EventClassVar)
     # Text messages
     subject_template = StringField()
     body_template = StringField()
@@ -255,7 +255,7 @@ class EventClass(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["EventClass"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["EventClass"]:
         return EventClass.objects.filter(id=oid).first()
 
     @classmethod

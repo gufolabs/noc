@@ -8,7 +8,6 @@
 # Python modules
 import argparse
 import datetime
-from typing import Optional, List, Set, Dict, DefaultDict
 from collections import defaultdict
 
 # NOC modules
@@ -112,7 +111,7 @@ class Command(BaseCommand):
                 continue
             self.print("@@@ %s (%s, %s)", mo.name, mo.address, mo.id)
             # Get interfaces suitable for bulling
-            bulling_ifaces: Set[Interface] = {
+            bulling_ifaces: set[Interface] = {
                 iface
                 for iface in Interface.objects.filter(managed_object=mo.id)
                 if not iface.profile.allow_vacuum_bulling
@@ -130,9 +129,9 @@ class Command(BaseCommand):
                 t0.isoformat(sep=" "),
             )
             ch = connection()
-            last_ts: Optional[str] = None
-            all_macs: List[str] = []
-            mac_iface: Dict[str, str] = {}
+            last_ts: str | None = None
+            all_macs: list[str] = []
+            mac_iface: dict[str, str] = {}
             for ts, iface, mac in ch.execute(post=sql):
                 if last_ts is None:
                     last_ts = ts
@@ -144,15 +143,15 @@ class Command(BaseCommand):
             # Resolve MACs to known chassis-id
             mac_map = DiscoveryID.find_objects(all_macs)
             # Filter suitable rivals
-            seg_ifaces: DefaultDict[NetworkSegment, Set[str]] = defaultdict(set)
-            iface_segs: DefaultDict[str, Set[NetworkSegment]] = defaultdict(set)
+            seg_ifaces: defaultdict[NetworkSegment, set[str]] = defaultdict(set)
+            iface_segs: defaultdict[str, set[NetworkSegment]] = defaultdict(set)
             for mac, r_mo in mac_map.items():
                 iface = mac_iface.get(mac)
                 if not iface:
                     continue
                 seg_ifaces[r_mo.segment].add(iface)
                 iface_segs[iface].add(r_mo.segment)
-            rej_ifaces: Set[str] = set()
+            rej_ifaces: set[str] = set()
             for seg in seg_ifaces:
                 if len(seg_ifaces[seg]) > 1 or seg.profile.is_persistent or seg == mo.segment:
                     # Seen on multiple interfaces or persistent segment or same segment

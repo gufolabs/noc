@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Dict
+from typing import Any
 
 # NOC modules
 from noc.core.datastream.base import DataStream
@@ -18,7 +18,7 @@ class CfgEventRulesDataStream(DataStream):
     name = "cfgeventrules"
 
     @classmethod
-    def get_object(cls, oid: str) -> Dict[str, Any]:
+    def get_object(cls, oid: str) -> dict[str, Any]:
         rule_type, *oid = str(oid).split(":")
         if rule_type == DATASTREAM_RULE_PREFIX:
             # IgnorePattern

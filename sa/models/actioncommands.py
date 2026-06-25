@@ -8,7 +8,7 @@
 # Python modules
 import os
 import re
-from typing import Any, Dict, Optional, List, Iterable, Tuple
+from typing import Any, Iterable
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
@@ -41,7 +41,7 @@ class PlatformMatch(EmbeddedDocument):
         return "%s - %s" % (self.platform_re, self.version_re)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"platform_re": self.platform_re, "version_re": self.version_re}
 
 
@@ -71,7 +71,7 @@ class Scope(EmbeddedDocument):
         return f"{self.scope} - {self.command}"
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {"scope": self.scope, "enter_scope": self.enter_scope, "command": self.command}
         if self.exit_command:
             r["exit_command"] = self.exit_command
@@ -112,8 +112,8 @@ class ActionCommands(Document):
         ],
         default="N",
     )
-    scopes: List["Scope"] = EmbeddedDocumentListField(Scope)
-    match: List[PlatformMatch] = EmbeddedDocumentListField(PlatformMatch)
+    scopes: list["Scope"] = EmbeddedDocumentListField(Scope)
+    match: list[PlatformMatch] = EmbeddedDocumentListField(PlatformMatch)
     exit_scope_commands = StringField()
     commands = StringField()
     # cancel commands
@@ -121,7 +121,7 @@ class ActionCommands(Document):
     # cancel_prefix
     preference = IntField(default=1000)
     timeout = IntField(default=60)
-    test_cases: List[ActionCommandsTestCase] = EmbeddedDocumentListField(ActionCommandsTestCase)
+    test_cases: list[ActionCommandsTestCase] = EmbeddedDocumentListField(ActionCommandsTestCase)
 
     def __str__(self):
         return self.name
@@ -131,7 +131,7 @@ class ActionCommands(Document):
         return os.path.join(*p) + ".json"
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -172,7 +172,7 @@ class ActionCommands(Document):
             ],
         )
 
-    def get_config(self, scopes: List[ScopeConfig]) -> "ActionCommandConfig":
+    def get_config(self, scopes: list[ScopeConfig]) -> "ActionCommandConfig":
         """Get commands config"""
         profile = self.profile.get_profile()
         cfg = self.get_scope_configs()
@@ -190,7 +190,7 @@ class ActionCommands(Document):
             scopes=r,
         )
 
-    def get_scope_configs(self) -> Dict[str, ScopeConfig]:
+    def get_scope_configs(self) -> dict[str, ScopeConfig]:
         """Build local configs for Scope"""
         r = {}
         for sc in self.scopes:
@@ -201,8 +201,8 @@ class ActionCommands(Document):
 
     def is_match(
         self,
-        platform: Optional[str] = None,
-        version: Optional[str] = None,
+        platform: str | None = None,
+        version: str | None = None,
         **kwargs,
     ) -> bool:
         if not self.match:
@@ -214,7 +214,7 @@ class ActionCommands(Document):
                 return True
         return False
 
-    def iter_cases(self) -> Iterable[Tuple[str, Dict[str, Any]]]:
+    def iter_cases(self) -> Iterable[tuple[str, dict[str, Any]]]:
         """Iterate over test cases"""
         for tc in self.test_cases:
             yield tc.output, tc.context

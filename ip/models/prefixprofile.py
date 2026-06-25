@@ -8,7 +8,7 @@
 # Python modules
 from threading import Lock
 from functools import partial
-from typing import Optional, Union, List
+from typing import Optional
 import operator
 
 # Third-party modules
@@ -83,7 +83,7 @@ class PrefixProfile(Document):
         Workflow, default=partial(Workflow.get_default_workflow, "ip.PrefixProfile")
     )
     style = ForeignKeyField(Style)
-    pools: List["PoolItem"] = EmbeddedDocumentListField(PoolItem)
+    pools: list["PoolItem"] = EmbeddedDocumentListField(PoolItem)
     # Template.subject to render Prefix.name
     name_template = ForeignKeyField(Template)
     default_address_profile: Optional["AddressProfile"] = ReferenceField(
@@ -123,7 +123,7 @@ class PrefixProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["PrefixProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["PrefixProfile"]:
         return PrefixProfile.objects.filter(id=oid).first()
 
     @classmethod

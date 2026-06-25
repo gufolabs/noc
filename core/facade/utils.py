@@ -26,7 +26,7 @@ def name_to_title(name: str) -> str:
     """
     Use last part of name as title.
     """
-    return name.split("|")[-1].strip()
+    return name.rsplit("|", maxsplit=1)[-1].strip()
 
 
 def slot_to_id(name: str) -> str:

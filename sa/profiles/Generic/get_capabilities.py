@@ -8,7 +8,6 @@
 # Python modules
 import functools
 import itertools
-from typing import List
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -370,7 +369,7 @@ class Script(BaseScript):
         return None
 
     @false_on_snmp_error
-    def get_snmp_table_idx(self, oid) -> List[int]:
+    def get_snmp_table_idx(self, oid) -> list[int]:
         r = []
         for oid, value in self.snmp.getnext(oid):
             _, idx = oid.rsplit(".", 1)

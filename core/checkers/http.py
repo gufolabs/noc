@@ -7,7 +7,7 @@
 
 # Python modules
 from urllib.parse import urlparse
-from typing import List, AsyncIterable
+from typing import AsyncIterable
 
 # NOC modules
 from .base import BaseChecker, CheckResult, Check, CheckError
@@ -36,7 +36,7 @@ class HTTPChecker(BaseChecker):
             url = url._replace(netloc=address)
         return url.geturl()
 
-    async def iter_result(self, checks: List[Check]) -> AsyncIterable[CheckResult]:
+    async def iter_result(self, checks: list[Check]) -> AsyncIterable[CheckResult]:
         client = HttpClient(
             max_redirects=None,
             headers={"X-NOC-Calling-Service": b"noc-check"},

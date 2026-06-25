@@ -8,7 +8,7 @@
 # Python modules
 import logging
 from urllib.parse import urlparse
-from typing import Optional, Dict, Tuple, Any, Callable
+from typing import Any, Callable
 
 # Third-party modules
 from gufo.http import BasicAuth, RequestMethod, DEFLATE, GZIP, BROTLI, Proxy, HttpError
@@ -56,15 +56,15 @@ class HttpClient(GufoHttpClient):
     def __init__(
         self: "HttpClient",
         /,
-        max_redirects: Optional[int] = config.http_client.max_redirects,
-        headers: Optional[Dict[str, bytes]] = None,
-        compression: Optional[int] = DEFLATE | GZIP | BROTLI,
+        max_redirects: int | None = config.http_client.max_redirects,
+        headers: dict[str, bytes] | None = None,
+        compression: int | None = DEFLATE | GZIP | BROTLI,
         validate_cert: bool = config.http_client.validate_certs,
         connect_timeout: float = config.http_client.connect_timeout,
         timeout: float = config.http_client.request_timeout,
-        user_agent: Optional[str] = None,
-        user: Optional[str] = None,
-        password: Optional[str] = None,
+        user_agent: str | None = None,
+        user: str | None = None,
+        password: str | None = None,
         allow_proxy=False,
         proxies=None,
         resolver=None,
@@ -76,7 +76,7 @@ class HttpClient(GufoHttpClient):
             proxy = (proxies or SYSTEM_PROXIES).get("https")
         else:
             proxy = None
-        self.resolver: Optional[Callable] = resolver or resolve_async
+        self.resolver: Callable | None = resolver or resolve_async
         super().__init__(
             max_redirects=max_redirects,
             headers=headers,
@@ -115,9 +115,9 @@ class HttpClient(GufoHttpClient):
         method: str,
         url: str,
         /,
-        body: Optional[bytes] = None,
-        headers: Optional[Dict[str, bytes]] = None,
-    ) -> Tuple[int, Dict[str, Any], bytes]:
+        body: bytes | None = None,
+        headers: dict[str, bytes] | None = None,
+    ) -> tuple[int, dict[str, Any], bytes]:
         m = RequestMethod.get(method)
         if not m:
             raise NotImplementedError("Not implementer method: %s", method)
@@ -140,8 +140,8 @@ class HttpClient(GufoHttpClient):
         return r.status, r.headers, r.content
 
     async def get(
-        self, url: str, /, headers: Optional[Dict[str, bytes]] = None
-    ) -> Tuple[int, Dict[str, Any], bytes]:
+        self, url: str, /, headers: dict[str, bytes] | None = None
+    ) -> tuple[int, dict[str, Any], bytes]:
         metrics["httpclient_requests", ("method", "get")] += 1
         try:
             url = await self.resolve(url)
@@ -165,8 +165,8 @@ class HttpClient(GufoHttpClient):
         url: str,
         body: bytes,
         /,
-        headers: Optional[Dict[str, bytes]] = None,
-    ) -> Tuple[int, Dict[str, Any], bytes]:
+        headers: dict[str, bytes] | None = None,
+    ) -> tuple[int, dict[str, Any], bytes]:
         metrics["httpclient_requests", ("method", "post")] += 1
         try:
             url = await self.resolve(url)
@@ -190,8 +190,8 @@ class HttpClient(GufoHttpClient):
         url: str,
         body: bytes,
         /,
-        headers: Optional[Dict[str, bytes]] = None,
-    ) -> Tuple[int, Dict[str, Any], bytes]:
+        headers: dict[str, bytes] | None = None,
+    ) -> tuple[int, dict[str, Any], bytes]:
         metrics["httpclient_requests", ("method", "put")] += 1
         try:
             url = await self.resolve(url)

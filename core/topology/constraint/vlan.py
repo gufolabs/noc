@@ -9,7 +9,6 @@
 import operator
 
 # Third-party modules
-from typing import Dict, Set
 import cachetools
 
 # NOC modules
@@ -40,14 +39,14 @@ class VLANConstraint(BaseConstraint):
         self.vlan = vlan
         self.allow_tagged = allow_tagged
         self.allow_untagged = allow_untagged
-        self._is_valid_link_cache: Dict[Link, bool] = {}
+        self._is_valid_link_cache: dict[Link, bool] = {}
         self.strict = strict
 
     @cachetools.cachedmethod(operator.attrgetter("_is_valid_link_cache"))
     def is_valid_link(self, link: Link) -> bool:
-        bridged_mo: Set[int] = set()
-        tagged_mo: Set[int] = set()
-        untagged_mo: Set[int] = set()
+        bridged_mo: set[int] = set()
+        tagged_mo: set[int] = set()
+        untagged_mo: set[int] = set()
         l3_mo = set()
         for doc in SubInterface._get_collection().find(
             {"interface": {"$in": link.interface_ids}},

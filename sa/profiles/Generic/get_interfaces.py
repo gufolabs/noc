@@ -8,16 +8,10 @@
 # Python modules
 import re
 from typing import (
-    Dict,
-    Optional,
-    Union,
     Iterable,
-    Tuple,
     Callable,
-    List,
     Any,
     Iterator,
-    DefaultDict,
 )
 from collections import defaultdict
 from itertools import chain
@@ -59,7 +53,7 @@ class Script(BaseScript):
 
     rx_vlan_interface = re.compile(r"^vlan\w*?\s*?(?P<vlan_num>\d+)$", re.IGNORECASE)
 
-    def get_bridge_ifindex_mappings(self) -> Dict[int, int]:
+    def get_bridge_ifindex_mappings(self) -> dict[int, int]:
         """
         Getting mappings for bridge port number -> ifindex
         :return:
@@ -74,7 +68,7 @@ class Script(BaseScript):
             pid_ifindex_mappings[int(oid.split(".")[-1])] = v
         return pid_ifindex_mappings
 
-    def get_port_vlan_oids(self) -> Tuple[str, str]:
+    def get_port_vlan_oids(self) -> tuple[str, str]:
         """Return oid for collection port <-> Vlan map"""
         if self.has_capability("SNMP | MIB | IEEE8021-Q-BRIDGE-MIB"):
             self.logger.debug("Use IEEE8021-Q-BRIDGE-MIB for collected switchport")
@@ -84,7 +78,7 @@ class Script(BaseScript):
             )
         return mib["Q-BRIDGE-MIB::dot1qPvid"], mib["Q-BRIDGE-MIB::dot1qVlanCurrentEgressPorts"]
 
-    def get_switchport(self) -> DefaultDict[int, Dict[str, Union[int, list, None]]]:
+    def get_switchport(self) -> defaultdict[int, dict[str, int | list | None]]:
         # noc::interface::bridge_mode:: access/trunk/hybrid
         result = defaultdict(lambda: {"tagged_vlans": [], "untagged_vlan": None})
         pid_ifindex_mappings = self.get_bridge_ifindex_mappings()
@@ -133,7 +127,7 @@ class Script(BaseScript):
                 result[pid_ifindex_mappings[port]]["tagged_vlans"] += [vlan_num]
         return result
 
-    def get_portchannels(self) -> Dict[int, int]:
+    def get_portchannels(self) -> dict[int, int]:
         r = {}
         for ifindex, sel_pc, att_pc in self.snmp.get_tables(
             [
@@ -149,7 +143,7 @@ class Script(BaseScript):
     def get_enabled_proto(self):
         return {}
 
-    def get_ip_ifaces(self) -> Dict[int, List[IPv4]]:
+    def get_ip_ifaces(self) -> dict[int, list[IPv4]]:
         """Getting IP Address -> iface by RFC1213-MIB"""
         r = defaultdict(list)
         ip_mask = {}
@@ -169,7 +163,7 @@ class Script(BaseScript):
             r[ifindex] += ip_mask[address]
         return r
 
-    def get_ip_ifaces_ip_mib(self) -> Dict[int, List[IPv4]]:
+    def get_ip_ifaces_ip_mib(self) -> dict[int, list[IPv4]]:
         """Getting IP Address -> Iface by IP-MIB"""
         r = defaultdict(list)
         ip_mask = {}
@@ -205,7 +199,7 @@ class Script(BaseScript):
                 r[ifindex] += ip_mask[address]
         return r
 
-    def get_mpls_vpn_mappings(self) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, str]]:
+    def get_mpls_vpn_mappings(self) -> tuple[dict[str, dict[str, Any]], dict[str, str]]:
         # Process VRFs
         vrfs = {"default": {"forwarding_instance": "default", "type": "table", "interfaces": []}}
         imap = {}  # interface -> VRF
@@ -391,9 +385,7 @@ class Script(BaseScript):
                     interfaces[i]["subinterfaces"] += [s]
         return list(vrfs.values())
 
-    def merge_tables(
-        self, *args: Optional[Iterable]
-    ) -> Dict[int, Dict[str, Union[int, bool, str]]]:
+    def merge_tables(self, *args: Iterable | None) -> dict[int, dict[str, int | bool | str]]:
         """
         Merge iterables into single table
 
@@ -425,10 +417,10 @@ class Script(BaseScript):
             return smart_text(desc, errors="replace")
         return desc
 
-    def clean_iftype(self, ifname: str, ifindex: Optional[int] = None) -> str:
+    def clean_iftype(self, ifname: str, ifindex: int | None = None) -> str:
         return self.profile.get_interface_type(ifname)
 
-    def get_hints(self, ifname: str, iftype: str) -> List[str]:
+    def get_hints(self, ifname: str, iftype: str) -> list[str]:
         return []
 
     def clean_mac(self, mac: str):
@@ -445,8 +437,8 @@ class Script(BaseScript):
         return mtu
 
     def iter_iftable(
-        self, key: str, oid: str, ifindexes: Optional[Iterator[int]] = None, clean: Callable = None
-    ) -> Iterable[Tuple[str, Union[str, int]]]:
+        self, key: str, oid: str, ifindexes: Iterator[int] | None = None, clean: Callable = None
+    ) -> Iterable[tuple[str, str | int]]:
         """
         Collect part of IF-MIB table.
 

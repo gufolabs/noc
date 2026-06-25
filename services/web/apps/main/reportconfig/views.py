@@ -7,7 +7,6 @@
 
 # Python modules
 from urllib.parse import quote
-from typing import Optional, Set
 from collections import defaultdict
 
 # Third-party modules
@@ -87,8 +86,8 @@ class ReportConfigApplication(ExtDocApplication):
     @staticmethod
     def get_columns_filter(
         report: "Report",
-        checked: Optional[Set[str]] = None,
-        pref_lang: Optional[str] = None,
+        checked: set[str] | None = None,
+        pref_lang: str | None = None,
     ):
         """
         Get columns filter

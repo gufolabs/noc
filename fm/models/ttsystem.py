@@ -10,7 +10,7 @@ import operator
 import datetime
 import logging
 from threading import Lock
-from typing import Optional, Union
+from typing import Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -108,7 +108,7 @@ class TTSystem(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["TTSystem"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["TTSystem"]:
         return TTSystem.objects.filter(id=oid).first()
 
     @classmethod
@@ -180,7 +180,7 @@ class TTSystem(Document):
         logger.info("[%s] Setting failure status till %s", self.name, d)
         self._get_collection().update_one({"_id": self.id}, {"$set": {"failed_till": d}})
 
-    def register_update(self, last_update_ts, last_update_id: Optional[str] = None):
+    def register_update(self, last_update_ts, last_update_id: str | None = None):
         """
         Save last fetched update info
         Args:
@@ -208,7 +208,7 @@ class TTSystem(Document):
             return True
         return bool(self.get_object_tt_id(obj))
 
-    def get_object_tt_id(self, obj) -> Optional[str]:
+    def get_object_tt_id(self, obj) -> str | None:
         """Getting Object TT ID by Policy"""
         if self.promote_items == "T" and hasattr(obj, "tt_system_id"):
             return obj.tt_system_id

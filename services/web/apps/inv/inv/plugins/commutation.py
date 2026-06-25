@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import List, Optional, Iterable, Tuple, Dict, DefaultDict, Any, Set
+from typing import Iterable, Any
 from collections import defaultdict
 
 # Third party modules
@@ -32,10 +32,10 @@ class Node:
     object: Object
     name: str
     model: str
-    parent_connection: Optional[str]
-    children: List["Node"]
+    parent_connection: str | None
+    children: list["Node"]
     is_external: bool
-    connections: List[ConnectionItem]
+    connections: list[ConnectionItem]
 
     @classmethod
     def from_object(cls, obj: Object) -> "Node":
@@ -130,9 +130,9 @@ class CommutationPlugin(InvPlugin):
         root = str(obj.id)
         # Get objects by hierarchy
         hier_ids = obj.get_nested_ids()
-        nodes: Dict[str, Node] = {}
+        nodes: dict[str, Node] = {}
         omap = {}
-        containers: List[Tuple[str, str]] = []  # (node_id, container_id)
+        containers: list[tuple[str, str]] = []  # (node_id, container_id)
         for o in Object.objects.filter(id__in=hier_ids):
             omap[o.id] = o
             node = Node.from_object(o)
@@ -159,7 +159,7 @@ class CommutationPlugin(InvPlugin):
             if remote.object.model.get_data("length", "length"):
                 cables[remote.object.id] = remote.object
         # Get other side of cables
-        conns: DefaultDict[ObjectId] = defaultdict(list)
+        conns: defaultdict[ObjectId] = defaultdict(list)
         ext_nodes_roots = set()
         for c in ObjectConnection.objects.filter(connection__object__in=list(cables)):
             if len(c.connection) != 2:
@@ -211,7 +211,7 @@ class CommutationPlugin(InvPlugin):
             Pruned node
         """
 
-        def pruned_child(n: Node) -> Optional[Node]:
+        def pruned_child(n: Node) -> Node | None:
             if not n.children and not n.connections:
                 return None
             if not n.children and n.connections:
@@ -228,7 +228,7 @@ class CommutationPlugin(InvPlugin):
 
         return pruned_child(node)
 
-    def to_viz(self, nodes: Iterable[Node]) -> Dict[str, Any]:
+    def to_viz(self, nodes: Iterable[Node]) -> dict[str, Any]:
         """
         Render nodes to viz-js JSON
 
@@ -247,11 +247,11 @@ class CommutationPlugin(InvPlugin):
                 parts.append(model)
             return "\\n".join(parts)
 
-        def get_graph_template() -> Dict[str, Any]:
+        def get_graph_template() -> dict[str, Any]:
             """Get graph template."""
             return {"graphAttributes": {}, "nodes": [], "edges": [], "subgraphs": []}
 
-        def render(node: Node, r: Dict[str, Any]) -> None:
+        def render(node: Node, r: dict[str, Any]) -> None:
             """Render node to given parent."""
             if node.children:
                 render_subgraph(node, r)
@@ -267,7 +267,7 @@ class CommutationPlugin(InvPlugin):
                         remote_name=c.remote_name,
                     )
 
-        def render_subgraph(node: Node, r: Dict[str, Any]) -> None:
+        def render_subgraph(node: Node, r: dict[str, Any]) -> None:
             g = get_graph_template()
             g["graphAttributes"]["label"] = get_label(
                 node.parent_connection if node.parent_connection else node.name, node.model
@@ -298,7 +298,7 @@ class CommutationPlugin(InvPlugin):
                     }
                 )
 
-        def render_node(node: Node, r: Dict[str, Any]) -> None:
+        def render_node(node: Node, r: dict[str, Any]) -> None:
             slots = [
                 get_label(
                     node.parent_connection if node.parent_connection else node.name, node.model
@@ -361,7 +361,7 @@ class CommutationPlugin(InvPlugin):
             # Add to seen connections
             seen_conns.add(c_hash)
 
-        seen_conns: Set[str] = set()
+        seen_conns: set[str] = set()
         top = get_graph_template()
         top["directed"] = False
         top["graphAttributes"]["rankdir"] = "LR"
@@ -375,7 +375,7 @@ class CommutationPlugin(InvPlugin):
             render(node, top)
         return top
 
-    def to_data(self, nodes: Iterable[Node]) -> List[Dict[str, Any]]:
+    def to_data(self, nodes: Iterable[Node]) -> list[dict[str, Any]]:
         """
         Prepare commutation table
         """
@@ -423,7 +423,7 @@ class CommutationPlugin(InvPlugin):
                 collect(child)
 
         # Collect node labels
-        node_labels: Dict[str, str] = {}
+        node_labels: dict[str, str] = {}
         for node in nodes:
             update_labels(node)
         data = []

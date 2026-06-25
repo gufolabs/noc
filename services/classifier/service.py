@@ -17,7 +17,7 @@ import struct
 import asyncio
 import datetime
 from time import perf_counter
-from typing import Optional, Dict, List, Callable, Tuple, Any
+from typing import Optional, Callable, Any
 
 # Third-party modules
 import cachetools
@@ -121,12 +121,12 @@ class ClassifierService(FastAPIService):
         self.ruleset: RuleSet = RuleSet()
         self.pattern_set: PatternSet = PatternSet()
         self.action_set: ActionSet = ActionSet(logger=self.logger)
-        self.event_config: Dict[str, EventConfig] = {}
+        self.event_config: dict[str, EventConfig] = {}
         self.default_event_config: EventConfig = None
-        self.alter_handlers: List[Tuple[str, bool, Callable]] = []
+        self.alter_handlers: list[tuple[str, bool, Callable]] = []
         self.unclassified_codebook_depth = 5
-        self.unclassified_codebook: Dict[str, List[str]] = {}  # object id -> [<codebook>]
-        self.handlers: Dict[str, List[Callable]] = {}  # event class id -> [<handler>]
+        self.unclassified_codebook: dict[str, list[str]] = {}  # object id -> [<codebook>]
+        self.handlers: dict[str, list[Callable]] = {}  # event class id -> [<handler>]
         self.dedup_filter: DedupFilter = DedupFilter()
         self.suppress_filter: SuppressFilter = SuppressFilter()
         self.abduct_detector: AbductDetector = AbductDetector()
@@ -138,20 +138,20 @@ class ClassifierService(FastAPIService):
         self.event_config_ready = asyncio.Event()
         self.event_source_ready = asyncio.Event()
         # Reporting
-        self.last_ts: Optional[float] = None
-        self.stats: Dict[EventMetrics, int] = {}
+        self.last_ts: float | None = None
+        self.stats: dict[EventMetrics, int] = {}
         self.slot_number = 0
         self.total_slots = 0
         self.add_configs = 0
         self.add_sources = 0
-        self.pool_partitions: Dict[str, int] = {}
-        self.cable_abduct_ecls: Optional[EventClass] = None
+        self.pool_partitions: dict[str, int] = {}
+        self.cable_abduct_ecls: EventClass | None = None
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_interface_cache"))
     def get_interface(
-        cls, managed_object_id, name, ifindex: Optional[int] = None
-    ) -> Optional[Tuple[str, Any]]:
+        cls, managed_object_id, name, ifindex: int | None = None
+    ) -> tuple[str, Any] | None:
         """
         Get interface instance
         """
@@ -279,8 +279,8 @@ class ClassifierService(FastAPIService):
         self,
         event: "Event",
         event_config: EventConfig,
-        resolved_vars: Dict[str, Any],
-        mo: Optional[ManagedObject],
+        resolved_vars: dict[str, Any],
+        mo: ManagedObject | None,
     ):
         """
         Send event message to MX service
@@ -330,7 +330,7 @@ class ClassifierService(FastAPIService):
         event: Event,
         event_config: EventConfig,
         message: str,
-        managed_object: Optional[ManagedObject] = None,
+        managed_object: ManagedObject | None = None,
     ):
         """
         Register Event log
@@ -362,8 +362,8 @@ class ClassifierService(FastAPIService):
     async def classify_event(
         self,
         event: Event,
-        raw_vars: Dict[str, Any],
-    ) -> Tuple[EventAction, Optional["EventConfig"], Optional[Dict[str, Any]]]:
+        raw_vars: dict[str, Any],
+    ) -> tuple[EventAction, Optional["EventConfig"], dict[str, Any] | None]:
         """
         Perform event classification.
         Classification steps are:
@@ -520,7 +520,7 @@ class ClassifierService(FastAPIService):
         self,
         event: Event,
         event_config: EventConfig,
-        event_vars: Dict[str, Any],
+        event_vars: dict[str, Any],
     ) -> bool:
         """
         Deduplicate event when necessary
@@ -587,7 +587,7 @@ class ClassifierService(FastAPIService):
         return False
 
     @classmethod
-    def resolve_vars(cls, event: Event) -> Dict[str, Any]:
+    def resolve_vars(cls, event: Event) -> dict[str, Any]:
         """
         Resolve Event data list to vars
         Args:
@@ -615,8 +615,8 @@ class ClassifierService(FastAPIService):
         return raw_vars
 
     def resolve_object(
-        self, target: Target, remote_system: Optional[str] = None
-    ) -> Optional[ManagedObject]:
+        self, target: Target, remote_system: str | None = None
+    ) -> ManagedObject | None:
         """
         Resolve Managed Object by target
 
@@ -803,9 +803,9 @@ class ClassifierService(FastAPIService):
         event: Event,
         event_config: EventConfig,
         action: EventAction,
-        resolved_vars: Dict[str, Any],
-        mo: Optional[ManagedObject] = None,
-        error: Optional[str] = None,
+        resolved_vars: dict[str, Any],
+        mo: ManagedObject | None = None,
+        error: str | None = None,
     ):
         """
         Send Event to Clickhouse (Archive)
@@ -886,7 +886,7 @@ class ClassifierService(FastAPIService):
             len(self.pattern_set.i_patterns),
         )
 
-    async def update_rule(self, data: Dict[str, Any]) -> None:
+    async def update_rule(self, data: dict[str, Any]) -> None:
         """Apply Classification Rules changes"""
         rule_type = data.pop("$type", "old_rule")
         if rule_type == DATASTREAM_RULE_PREFIX:
@@ -909,7 +909,7 @@ class ClassifierService(FastAPIService):
         else:
             self.ruleset.delete_rule(rule_type)
 
-    async def update_config(self, data: Dict[str, Any]) -> None:
+    async def update_config(self, data: dict[str, Any]) -> None:
         """Apply Event Config changes"""
         self.event_config[data["id"]] = EventConfig.from_config(data)
         if data.get("rules"):

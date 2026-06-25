@@ -7,7 +7,7 @@
 
 # Python modules
 import os
-from typing import Any, Dict, Optional, List, Union
+from typing import Any, Optional
 from collections import defaultdict
 
 # Third-party modules
@@ -46,7 +46,7 @@ from noc.sa.interfaces.base import (
 )
 from noc.config import config
 
-TYPE_MAP: Dict[str, Parameter] = {
+TYPE_MAP: dict[str, Parameter] = {
     "str": StringParameter(),
     "int": IntParameter(),
     "float": FloatParameter(),
@@ -91,11 +91,11 @@ class InputMapping(EmbeddedDocument):
     input_name = StringField(default="in")
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"metric_type__name": self.metric_type.name, "input_name": self.input_name}
 
     @property
-    def config(self) -> Dict[str, str]:
+    def config(self) -> dict[str, str]:
         return {
             "input_name": self.input_name,
             "probe_id": self.metric_type.field_name,
@@ -113,7 +113,7 @@ class AlarmConfig(EmbeddedDocument):
     vars = DictField()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {}
         if self.alarm_class:
             r["alarm_class__name"] = self.alarm_class.name
@@ -141,7 +141,7 @@ class ActivationConfig(EmbeddedDocument):
     activation_config = DictField()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {}
         if self.window_function:
             r.update(
@@ -176,8 +176,8 @@ class MetricAction(Document):
     name = StringField(unique=True)
     uuid = UUIDField(binary=True)
     description = StringField()
-    params: List["MetricActionParam"] = EmbeddedDocumentListField(MetricActionParam)
-    compose_inputs: List["InputMapping"] = ListField(EmbeddedDocumentField(InputMapping))
+    params: list["MetricActionParam"] = EmbeddedDocumentListField(MetricActionParam)
+    compose_inputs: list["InputMapping"] = ListField(EmbeddedDocumentField(InputMapping))
     compose_expression = StringField(default=None)
     compose_metric_type: "MetricType" = PlainReferenceField(MetricType)
     activation_config: ActivationConfig = EmbeddedDocumentField(ActivationConfig)
@@ -189,7 +189,7 @@ class MetricAction(Document):
         return self.name
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["MetricAction"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["MetricAction"]:
         return MetricAction.objects.filter(id=oid).first()
 
     def clean(self):
@@ -227,7 +227,7 @@ class MetricAction(Document):
                 )
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -267,10 +267,10 @@ class MetricAction(Document):
         self,
         prefix: str = None,
         enable_dump: bool = False,
-        rule_id: Optional[str] = None,
-        thresholds: Optional[Any] = None,
+        rule_id: str | None = None,
+        thresholds: Any | None = None,
         **kwargs,
-    ) -> Optional[GraphConfig]:
+    ) -> GraphConfig | None:
         """
         Getting Graph config from MetricAction
         :param prefix: NodeID prefix
@@ -293,8 +293,8 @@ class MetricAction(Document):
                 continue
             node_configs[node][config_name] = value
         # Inputs Probe node
-        inputs: List[InputItem] = []  # External Probe Inputs
-        nodes: Dict[str, NodeItem] = {}
+        inputs: list[InputItem] = []  # External Probe Inputs
+        nodes: dict[str, NodeItem] = {}
         prefix: str = f"{prefix}-" if prefix else ""
         for num, ci in enumerate(self.compose_inputs):
             inputs += [InputItem(name=ci.metric_type.field_name, node=ci.metric_type.field_name)]

@@ -152,8 +152,6 @@ lint.ignore = [
   "RUF051", # Use `pop` instead of `key in dict` followed by `del dict[key]`  
   "RUF059", # Unpacked variable `epsilon` is never used
   "RUF100", # Unused blanket `noqa` directive
-  "UP006", # Use `dict` instead of `Dict` for type annotation
-  "UP007", # Use `X | Y` for type annotations
   "UP014", # Convert `PathInfo` from `NamedTuple` functional to class syntax
   "UP017", # Use `datetime.UTC` alias
   "UP030", # Use implicit references for positional format fields
@@ -162,7 +160,6 @@ lint.ignore = [
   "UP035", # `typing.Dict` is deprecated, use `dict` instead
   "UP041", # Replace aliased errors with `TimeoutError`
   "UP042", # Class Interaction inherits from both `str` and `enum.Enum`
-  "UP045", # Use `X | None` for type annotations
   "UP046", # Generic class `BaseResourceAPI` uses `Generic` subclass instead of type parameters
   "UP037", # Remove quotes from type annotation
   "UP047", # Generic function `get_reference` should use type parameters  

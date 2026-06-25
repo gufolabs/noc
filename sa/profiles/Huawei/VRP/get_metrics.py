@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import List
 
 # NOC modules
 from noc.sa.profiles.Generic.get_metrics import (
@@ -256,7 +255,7 @@ class Script(GetMetricsScript):
         elif self.has_capability("Huawei | OID | hwCBQoSClassifierStatisticsTable"):
             self.get_interface_cbqos_metrics_classifier_snmp(metrics)
 
-    def get_interface_cbqos_metrics_classifier_snmp(self, metrics: List[MetricConfig]):
+    def get_interface_cbqos_metrics_classifier_snmp(self, metrics: list[MetricConfig]):
         self.logger.debug("Use hwCBQoSClassifierStatisticsTable for collected metrics")
         ifaces = {m.ifindex: m for m in metrics if m.ifindex}
         direction_map = {1: "In", 2: "Out"}
@@ -296,7 +295,7 @@ class Script(GetMetricsScript):
                     service=sc.service,
                 )
 
-    def get_interface_cbqos_metrics_policy_snmp(self, metrics: List[MetricConfig]):
+    def get_interface_cbqos_metrics_policy_snmp(self, metrics: list[MetricConfig]):
         self.logger.debug("Use hwCBQoSPolicyStatisticsClassifierTable for collected metrics")
         ifaces = {m.ifindex: m for m in metrics if m.ifindex}
         direction_map = {"1": "In", "2": "Out"}
@@ -348,7 +347,7 @@ class Script(GetMetricsScript):
                     service=sc.service,
                 )
 
-    def collect_sla_metrics(self, metrics: List[MetricCollectorConfig]):
+    def collect_sla_metrics(self, metrics: list[MetricCollectorConfig]):
         # SLA Metrics
         if not self.has_capability("Huawei | NQA | Probes"):
             return
@@ -373,7 +372,7 @@ class Script(GetMetricsScript):
 
     def get_ip_sla_udp_jitter_metrics_snmp(
         self,
-        metrics: List[MetricCollectorConfig],
+        metrics: list[MetricCollectorConfig],
         metric_map,
         status_oid="NQA-MIB::nqaResultsCompletions",
     ):
@@ -739,7 +738,7 @@ class Script(GetMetricsScript):
         has_capability="Huawei | OID | hwOpticalModuleInfoTable",
         volatile=False,
     )  # SNMP version
-    def get_optical_transceiver_metrics(self, metrics: List[MetricConfig]):
+    def get_optical_transceiver_metrics(self, metrics: list[MetricConfig]):
         """
         Huawei used physical index for DOM Oids.
         For convert it to ifindex used mappings from ENTITY-MIB::entAliasMappingIdentifier table

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Iterable, List, Set, Dict, DefaultDict
+from typing import Iterable
 from dataclasses import dataclass
 from enum import Enum
 from collections import defaultdict
@@ -39,7 +39,7 @@ class AdjItem:
 
 def find_path(
     obj: Object, connection: str, target_protocols: Iterable[str], max_depth=100, trace_wire=False
-) -> Optional[List[PathItem]]:
+) -> list[PathItem] | None:
     """
     Build shortest path from object's connection until a connection with any of the
     target protocols found.
@@ -90,8 +90,8 @@ def find_path(
         return None
     # Process starting connection
     tp = {ProtocolVariant.get_by_code(p) for p in target_protocols}
-    wave: Set[Object] = set()  # Search wave
-    prev: Dict[PathItem, PathItem] = {}
+    wave: set[Object] = set()  # Search wave
+    prev: dict[PathItem, PathItem] = {}
     p0 = PathItem(obj=obj, connection=connection)
     for c in oc.connection:
         if c.object == obj and c.name == connection:
@@ -110,11 +110,11 @@ def find_path(
     if not wave:
         return None  # No suitable completion
     # Process waves
-    seen: Set[Object] = {obj}  # Seen objects should never be present in wave
+    seen: set[Object] = {obj}  # Seen objects should never be present in wave
     while wave and max_depth > 0:
-        new_wave: Set[Object] = set()  # Wave for the next step
+        new_wave: set[Object] = set()  # Wave for the next step
         # Collapse the wave and build adjacency matrix
-        neighbors: DefaultDict[Object, List[AdjItem]] = defaultdict(list)
+        neighbors: defaultdict[Object, list[AdjItem]] = defaultdict(list)
         for oc in ObjectConnection.objects.filter(connection__object__in=list(wave)):
             for c1, c2 in permutations(oc.connection, 2):
                 neighbors[c1.object] += [
@@ -123,7 +123,7 @@ def find_path(
         # Process the wave
         for co in wave:
             # Find incoming
-            incoming: Optional[str] = None
+            incoming: str | None = None
             for adj in neighbors[co]:
                 pi = PathItem(obj=co, connection=adj.local_name)
                 if pi in prev:

@@ -9,7 +9,7 @@
 import enum
 import datetime
 from collections import defaultdict
-from typing import Iterable, Dict, Optional, List, Tuple
+from typing import Iterable
 
 # Third-party modules
 from pydantic import BaseModel, Field
@@ -95,20 +95,20 @@ class ZabbixHostInterfaceType(enum.IntEnum):
 class ZabbixMedia(BaseModel):
     media_id: int
     type: MediaType
-    topic_id: Optional[str] = None
+    topic_id: str | None = None
 
 
 class ZabbixTag(BaseModel):
     tag: str
     value: str
-    automatic: Optional[int] = None
+    automatic: int | None = None
 
 
 class ZabbixHostGroup(BaseModel):
     name: str
     group_id: int = Field(alias="groupid")
-    flags: Optional[int] = None
-    uuid: Optional[str] = None
+    flags: int | None = None
+    uuid: str | None = None
 
     @property
     def hormalize_name(self):
@@ -121,14 +121,14 @@ class ZabbixHostInterface(BaseModel):
     type: ZabbixHostInterfaceType
     use_ip: int = Field(alias="useip")
     available: int
-    host_id: Optional[int] = Field(None, alias="hostid")
-    ip: Optional[str] = None
-    dns: Optional[str] = None
-    port: Optional[int] = None
-    error: Optional[str] = None
-    errors_from: Optional[int] = None
-    disable_until: Optional[int] = None
-    details: Optional[List[str]] = None
+    host_id: int | None = Field(None, alias="hostid")
+    ip: str | None = None
+    dns: str | None = None
+    port: int | None = None
+    error: str | None = None
+    errors_from: int | None = None
+    disable_until: int | None = None
+    details: list[str] | None = None
 
 
 class ZabbixHost(BaseModel):
@@ -143,23 +143,23 @@ class ZabbixHost(BaseModel):
     flags: int
     inventory_mode: int
     status: int
-    tags: Optional[List[ZabbixTag]] = None
-    active_available: Optional[int] = None
-    monitored_by: Optional[int] = None
-    name: Optional[str] = None
-    ipmi_authtype: Optional[int] = None
-    ipmi_password: Optional[str] = None
-    ipmi_privilege: Optional[str] = None
-    ipmi_username: Optional[str] = None
-    maintenance_from: Optional[int] = None
-    maintenance_status: Optional[int] = None
-    maintenance_type: Optional[int] = None
+    tags: list[ZabbixTag] | None = None
+    active_available: int | None = None
+    monitored_by: int | None = None
+    name: str | None = None
+    ipmi_authtype: int | None = None
+    ipmi_password: str | None = None
+    ipmi_privilege: str | None = None
+    ipmi_username: str | None = None
+    maintenance_from: int | None = None
+    maintenance_status: int | None = None
+    maintenance_type: int | None = None
     maintenance_id: int = Field(None, alias="hostid")
-    host_groups: Optional[List[ZabbixHostGroup]] = Field(None, alias="hostgroups")
-    interfaces: Optional[List[ZabbixHostInterface]] = None
+    host_groups: list[ZabbixHostGroup] | None = Field(None, alias="hostgroups")
+    interfaces: list[ZabbixHostInterface] | None = None
 
     @property
-    def main_interface(self) -> Optional[ZabbixHostInterface]:
+    def main_interface(self) -> ZabbixHostInterface | None:
         for hi in self.interfaces:
             if hi.main:
                 return hi
@@ -174,15 +174,15 @@ class ZabbixEventItem(BaseModel):
     name: str
     type: ItemType
     key: str = Field(alias="key_")
-    snmp_oid: Optional[str] = None
-    triggers: List[Dict[str, str]]
+    snmp_oid: str | None = None
+    triggers: list[dict[str, str]]
 
     @property
     def is_snmp_interface_item(self) -> bool:
         return self.key.startswith("net.if")
 
     @property
-    def ifindex(self) -> Optional[int]:
+    def ifindex(self) -> int | None:
         """Return"""
         if self.is_snmp_interface_item and self.snmp_oid:
             return int(self.snmp_oid.rsplit(".", 1)[-1])
@@ -200,24 +200,24 @@ class ZabbixEvent(BaseModel):
     value: int
     opdata: str
     severity: ZabbixSeverity
-    r_eventid: Optional[int] = None
-    r_clock: Optional[int] = None
-    c_eventid: Optional[int] = None
-    cause_eventid: Optional[int] = None
-    correlationid: Optional[int] = None
-    userid: Optional[int] = None
-    suppressed: Optional[int] = None
-    urls: Optional[List[str]] = None
-    tags: Optional[List[ZabbixTag]] = None
-    relatedObject: Optional[Dict[str, str]] = None
-    hosts: Optional[List[ZabbixEventHost]] = None
+    r_eventid: int | None = None
+    r_clock: int | None = None
+    c_eventid: int | None = None
+    cause_eventid: int | None = None
+    correlationid: int | None = None
+    userid: int | None = None
+    suppressed: int | None = None
+    urls: list[str] | None = None
+    tags: list[ZabbixTag] | None = None
+    relatedObject: dict[str, str] | None = None
+    hosts: list[ZabbixEventHost] | None = None
 
     @property
     def created(self) -> datetime.datetime:
         return datetime.datetime.fromtimestamp(self.clock)
 
     @property
-    def host(self) -> Optional[int]:
+    def host(self) -> int | None:
         if not self.hosts:
             return None
         return self.hosts[0].host_id
@@ -353,7 +353,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
     model = FMEventObject
     DISABLE_INCREMENTAL_MERGE = True
 
-    severity_map: Dict[ZabbixSeverity, EventSeverity] = {
+    severity_map: dict[ZabbixSeverity, EventSeverity] = {
         ZabbixSeverity.NOT_CLASSIFIED: EventSeverity.INDETERMINATE,  # Ignored
         ZabbixSeverity.INFORMATION: EventSeverity.INDETERMINATE,
         ZabbixSeverity.WARNING: EventSeverity.WARNING,
@@ -367,9 +367,9 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
 
     def __init__(self, system):
         super().__init__(system)
-        self.targets: Dict[int, RemoteObject] = {}
-        self.items: Dict[int, ZabbixEventItem] = {}
-        self.media_types: Dict[int, ZabbixMedia] = {}
+        self.targets: dict[int, RemoteObject] = {}
+        self.items: dict[int, ZabbixEventItem] = {}
+        self.media_types: dict[int, ZabbixMedia] = {}
         self.load_media()
 
     def load_media(self):
@@ -382,7 +382,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
                     m.topic_id = p["value"]
             self.media_types[m.media_id] = m
 
-    def get_next_event_ts(self, from_ts: Optional[datetime.datetime] = None):
+    def get_next_event_ts(self, from_ts: datetime.datetime | None = None):
         params = {
             "sortorder": "ASC",
             "limit": 1,
@@ -403,7 +403,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
             self.logger.info("Extracting all events from: %s", time_from)
         return time_from or datetime.datetime.now() - datetime.timedelta(days=1)
 
-    def get_alerts_tags(self, alerts) -> List[Dict[str, str]]:
+    def get_alerts_tags(self, alerts) -> list[dict[str, str]]:
         """"""
         r = []
         for a in alerts:
@@ -419,7 +419,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
             r += [{"tag": "alerts", "value": send_to}]
         return r
 
-    def iter_events(self, start: Optional[datetime.datetime] = None) -> Iterable[ZabbixEvent]:
+    def iter_events(self, start: datetime.datetime | None = None) -> Iterable[ZabbixEvent]:
         params = {
             "selectHosts": ["hostid", "name"],
             # "selectRelatedObject": "extend",
@@ -521,7 +521,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
                 remote_id=h["hostid"],
             )
 
-    def get_event_class(self, e: ZabbixEvent, labels: List[str]) -> Optional[str]:
+    def get_event_class(self, e: ZabbixEvent, labels: list[str]) -> str | None:
         """"""
         name = e.name.strip() if e.name else ""
         if "ICMP::Unavailable" in labels or name in {
@@ -541,7 +541,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
             return "Zabbix | ICMP RTT | Too High"
         return None
 
-    def get_event_start_ts(self, event: ZabbixEvent) -> Optional[int]:
+    def get_event_start_ts(self, event: ZabbixEvent) -> int | None:
         """Resolve Start TS for old_event"""
         if not event.object_id:
             return None
@@ -634,10 +634,10 @@ class ZabbixMetricsExtractor(ZabbixExtractor):
 
     def iter_history(
         self,
-        item_ids: List[str],
+        item_ids: list[str],
         start: datetime.datetime,
-        end: Optional[datetime.datetime] = None,
-    ) -> Iterable[Tuple[int, datetime.datetime, float, float]]:
+        end: datetime.datetime | None = None,
+    ) -> Iterable[tuple[int, datetime.datetime, float, float]]:
         """Iter over Zabbix item history"""
         prev_value, prev_id = None, None
         while True:
@@ -666,10 +666,10 @@ class ZabbixMetricsExtractor(ZabbixExtractor):
 
     def iter_metrics(
         self,
-        item_ids: List[str],
-        end_ts: Optional[datetime.datetime] = None,
+        item_ids: list[str],
+        end_ts: datetime.datetime | None = None,
         **kwargs,
-    ) -> Iterable[Tuple[str, Optional[str], List[Tuple[int, float]]]]:
+    ) -> Iterable[tuple[str, str | None, list[tuple[int, float]]]]:
         """"""
         now = datetime.datetime.now().replace(microsecond=0)
         end_ts = end_ts or now

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Dict, Any
+from typing import Any
 
 # Third-party modules
 from pydantic import BaseModel
@@ -27,15 +27,15 @@ class InputItem(BaseModel):
 class NodeItem(BaseModel):
     name: str
     type: str
-    description: Optional[str] = None
-    config: Optional[Dict[str, Any]] = None
-    inputs: Optional[List[InputItem]] = None
-    match: Optional[Dict[str, Any]] = None
+    description: str | None = None
+    config: dict[str, Any] | None = None
+    inputs: list[InputItem] | None = None
+    match: dict[str, Any] | None = None
     sticky: bool = False
 
 
 class GraphConfig(BaseModel):
-    nodes: List[NodeItem]
+    nodes: list[NodeItem]
 
 
 class ConfigCDAGFactory(BaseCDAGFactory):
@@ -47,27 +47,27 @@ class ConfigCDAGFactory(BaseCDAGFactory):
         self,
         graph: CDAG,
         config: GraphConfig,
-        ctx: Optional[FactoryCtx] = None,
-        namespace: Optional[str] = None,
-        nodes_config: Optional[Dict[str, Dict[str, Any]]] = None,
-        node_config_prefix: Optional[str] = None,
+        ctx: FactoryCtx | None = None,
+        namespace: str | None = None,
+        nodes_config: dict[str, dict[str, Any]] | None = None,
+        node_config_prefix: str | None = None,
     ):
         super().__init__(graph, ctx, namespace)
         self.config = config
         self.nodes_config = nodes_config or {}
         self.node_config_prefix = node_config_prefix
 
-    def requirements_met(self, inputs: Optional[List[InputItem]]):
+    def requirements_met(self, inputs: list[InputItem] | None):
         if not inputs:
             return True
         return all(self.expand_input(input.node) in self.graph for input in inputs)
 
-    def is_matched(self, expr: Optional[FactoryCtx]) -> bool:
+    def is_matched(self, expr: FactoryCtx | None) -> bool:
         if not expr:
             return True
         return match(self.ctx, expr)
 
-    def clean_node_config(self, node_id: str, config: Optional[Dict[str, Any]]) -> Any:
+    def clean_node_config(self, node_id: str, config: dict[str, Any] | None) -> Any:
         return config
 
     def construct(self) -> None:

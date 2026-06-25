@@ -9,7 +9,7 @@
 import os
 import operator
 from threading import Lock
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional
 
 # Third-party modules
 import bson
@@ -39,7 +39,7 @@ class SpecChange(EmbeddedDocument):
     changes = StringField()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"date": self.date.isoformat(), "changes": self.changes}
 
 
@@ -49,7 +49,7 @@ class SpecAnswer(EmbeddedDocument):
     value = StringField()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"name": self.name, "type": self.type, "value": self.value}
 
 
@@ -80,7 +80,7 @@ class Spec(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["Spec"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["Spec"]:
         return Spec.objects.filter(id=oid).first()
 
     @classmethod
@@ -89,7 +89,7 @@ class Spec(Document):
         return Spec.objects.filter(name=name).first()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "$collection": self._meta["json_collection"],

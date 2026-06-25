@@ -7,7 +7,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Union, List
 from collections import defaultdict
 
 # Third-party modules
@@ -41,7 +40,7 @@ class KafkaSenderService(FastAPIService):
 
     def __init__(self):
         super().__init__()
-        self.producer: Optional[AIOKafkaProducer] = None
+        self.producer: AIOKafkaProducer | None = None
 
     async def on_activate(self):
         self.slot_number, self.total_slots = await self.acquire_slot()
@@ -74,7 +73,7 @@ class KafkaSenderService(FastAPIService):
         metrics["messages_processed"] += 1
 
     async def send_to_kafka(
-        self, topic: str, data: bytes, key: Optional[bytes] = None, partition: Optional[int] = None
+        self, topic: str, data: bytes, key: bytes | None = None, partition: int | None = None
     ) -> None:
         """
         Send data to kafka topic
@@ -144,7 +143,7 @@ class KafkaSenderService(FastAPIService):
         return self.producer
 
     @classmethod
-    def get_partition(cls, partitions: Union[bytes, List], topic: bytes) -> Union[bytes, None]:
+    def get_partition(cls, partitions: bytes | list, topic: bytes) -> bytes | None:
         """
         Get partitions from headers kafka.
 

@@ -11,7 +11,7 @@ import datetime
 # Third-party modules
 from collections import defaultdict
 from pydantic import BaseModel
-from typing import Dict, List, Tuple, Any, Optional
+from typing import Any
 
 # NOC modules
 from noc.services.discovery.jobs.base import PolicyDiscoveryCheck
@@ -25,15 +25,15 @@ from noc.peer.models.peer import Peer
 class DiscoveredPeer(BaseModel):
     remote_address: Any
     local_as: int
-    remote_as: Optional[int] = None
-    router_id: Optional[Any] = None
-    local_address: Optional[Any] = None
+    remote_as: int | None = None
+    router_id: Any | None = None
+    local_address: Any | None = None
     protocol: str = "bgp"
     type: str = "external"
     admin_status: bool = True
-    description: Optional[str] = None
-    import_filter_name: Optional[str] = None
-    export_filter_name: Optional[str] = None
+    description: str | None = None
+    import_filter_name: str | None = None
+    export_filter_name: str | None = None
 
 
 class BGPPeerCheck(PolicyDiscoveryCheck):
@@ -63,7 +63,7 @@ class BGPPeerCheck(PolicyDiscoveryCheck):
         self.sync_peers(peers)
         self.update_caps({"DB | BGP Peers": len(peers)}, source="database", scope="bgppeer")
 
-    def get_bgp_peer(self) -> Dict[Tuple[AS, IP], DiscoveredPeer]:
+    def get_bgp_peer(self) -> dict[tuple[AS, IP], DiscoveredPeer]:
         """Return BGP Peer. Local AS, RemoteIP"""
         r = {}
         data = self.get_data() or []
@@ -80,7 +80,7 @@ class BGPPeerCheck(PolicyDiscoveryCheck):
                 r[(local_as, p.remote_address)] = p
         return r
 
-    def sync_peers(self, peers: Dict[Tuple[AS, IP], DiscoveredPeer]):
+    def sync_peers(self, peers: dict[tuple[AS, IP], DiscoveredPeer]):
         """
         Apply Peers to database
         Attrs:
@@ -191,7 +191,7 @@ class BGPPeerCheck(PolicyDiscoveryCheck):
     def get_data_from_script(self):
         """Not implemented for BGP Discovery"""
 
-    def get_data_from_confdb(self) -> Optional[List[Dict[str, Any]]]:
+    def get_data_from_confdb(self) -> list[dict[str, Any]] | None:
         """Getting peer from database"""
         r = defaultdict(list)
         for peer in self.confdb.query(self.BGP_PEER_QUERY):

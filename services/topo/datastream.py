@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any, List
+from typing import Any
 
 # NOC modules
 from noc.core.datastream.client import DataStreamClient
@@ -14,9 +14,9 @@ from .types import ObjectSnapshot
 
 
 class TopoDataStreamClient(DataStreamClient):
-    async def on_change(self, data: Dict[str, Any]):
-        links: List[int] = []
-        uplinks: List[int] = []
+    async def on_change(self, data: dict[str, Any]):
+        links: list[int] = []
+        uplinks: list[int] = []
         for iface in data.get("interfaces", []):
             for link in iface.get("link", []):
                 links.append(int(link["object"]))

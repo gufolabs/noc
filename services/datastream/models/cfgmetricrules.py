@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel
@@ -16,8 +15,8 @@ from noc.core.cdag.factory.config import GraphConfig
 
 
 class RuleCondition(BaseModel):
-    labels: List[str]
-    exclude_labels: Optional[List[str]] = None
+    labels: list[str]
+    exclude_labels: list[str] | None = None
 
 
 class ActionInput(BaseModel):
@@ -30,12 +29,12 @@ class RuleAction(BaseModel):
     id: str
     name: str
     graph_config: GraphConfig
-    inputs: List[ActionInput]
+    inputs: list[ActionInput]
     # outputs
 
 
 class CfgMetricRule(BaseModel):
     id: str
     name: str
-    actions: List[RuleAction]
-    match: List[RuleCondition]
+    actions: list[RuleAction]
+    match: list[RuleCondition]

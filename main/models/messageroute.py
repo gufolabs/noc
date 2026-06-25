@@ -8,7 +8,7 @@
 # Python modules
 import threading
 import operator
-from typing import List, Optional, Union, Dict, Any
+from typing import Optional, Any
 
 # Third-party modules
 import bson
@@ -66,7 +66,7 @@ class MRMatch(EmbeddedDocument):
     exclude_labels = ListField(StringField())
     resource_groups = PlainReferenceListField(ResourceGroup)
     administrative_domain = ForeignKeyField(AdministrativeDomain)
-    headers_match: List[HeaderMatch] = EmbeddedDocumentListField(HeaderMatch)
+    headers_match: list[HeaderMatch] = EmbeddedDocumentListField(HeaderMatch)
     remote_system = PlainReferenceField(RemoteSystem)
 
     def __str__(self):
@@ -75,7 +75,7 @@ class MRMatch(EmbeddedDocument):
     def get_labels(self):
         return list(Label.objects.filter(name__in=self.labels))
 
-    def get_matcher(self) -> Dict[str, Any]:
+    def get_matcher(self) -> dict[str, Any]:
         """"""
         return {
             MessageMeta.LABELS.value: list(self.labels),
@@ -115,7 +115,7 @@ class MessageRoute(Document):
     # Message-Type header value
     type: MessageType = EnumField(MessageType, required=True)
     # Match message headers
-    match: List[MRMatch] = EmbeddedDocumentListField(MRMatch)
+    match: list[MRMatch] = EmbeddedDocumentListField(MRMatch)
     telemetry_sample = IntField()
     # Message transmuting handler
     transmute_handler = PlainReferenceField(Handler)
@@ -135,13 +135,13 @@ class MessageRoute(Document):
     stream = StringField()
     notification_group = ForeignKeyField(NotificationGroup)
     render_template = ForeignKeyField(Template)
-    headers: List[MRAHeader] = EmbeddedDocumentListField(MRAHeader)
+    headers: list[MRAHeader] = EmbeddedDocumentListField(MRAHeader)
 
     _id_cache = cachetools.TTLCache(100, ttl=60)
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["MessageRoute"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["MessageRoute"]:
         return MessageRoute.objects.filter(id=oid).first()
 
     def iter_changed_datastream(self, changed_fields=None):

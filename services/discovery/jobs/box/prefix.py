@@ -9,7 +9,7 @@
 from collections import namedtuple, defaultdict
 
 # Third-party modules
-from typing import Dict, Tuple, List, DefaultDict, Optional
+from typing import Optional
 
 # NOC modules
 from noc.services.discovery.jobs.base import DiscoveryCheck
@@ -45,26 +45,26 @@ class PrefixCheck(DiscoveryCheck):
         prefixes = self.get_prefixes()
         self.sync_prefixes(prefixes)
 
-    def get_prefixes(self) -> Dict[Tuple[str, str], DiscoveredPrefix]:
+    def get_prefixes(self) -> dict[tuple[str, str], DiscoveredPrefix]:
         """
         Discover prefixes
         :return: dict of (vpn_id, prefix) => DiscoveredPrefix
         """
         # vpn_id, prefix => DiscoveredPrefix
-        prefixes: Dict[Tuple[str, str], DiscoveredPrefix] = {}
+        prefixes: dict[tuple[str, str], DiscoveredPrefix] = {}
         # Apply interface prefixes
         if self.object.object_profile.enable_box_discovery_prefix_interface:
             prefixes = self.apply_prefixes(prefixes, self.get_interface_prefixes())
         return prefixes
 
-    def sync_prefixes(self, prefixes: Dict[Tuple[str, str], DiscoveredPrefix]):
+    def sync_prefixes(self, prefixes: dict[tuple[str, str], DiscoveredPrefix]):
         """
         Apply prefixes to database
         :param prefixes:
         :return:
         """
         # vpn_id -> [prefix, ]
-        vrf_prefixes: DefaultDict[str, List[str]] = defaultdict(list)
+        vrf_prefixes: defaultdict[str, list[str]] = defaultdict(list)
         for vpn_id, p in prefixes:
             vrf_prefixes[vpn_id] += [p]
         # build vpn_id -> VRF mapping
@@ -95,8 +95,8 @@ class PrefixCheck(DiscoveryCheck):
 
     @staticmethod
     def apply_prefixes(
-        prefixes: Dict[Tuple[str, str], DiscoveredPrefix],
-        discovered_prefixes: List[DiscoveredPrefix],
+        prefixes: dict[tuple[str, str], DiscoveredPrefix],
+        discovered_prefixes: list[DiscoveredPrefix],
     ):
         """
         Apply list of discovered prefixes to prefix dict
@@ -122,7 +122,7 @@ class PrefixCheck(DiscoveryCheck):
             return False
         return self.is_enabled_for_object(self.object)
 
-    def get_interface_prefixes(self) -> List["DiscoveredPrefix"]:
+    def get_interface_prefixes(self) -> list["DiscoveredPrefix"]:
         """
         Get prefixes from interface discovery artifact
         :return:
@@ -292,7 +292,7 @@ class PrefixCheck(DiscoveryCheck):
             return parent.effective_prefix_discovery == "E"
         return False
 
-    def get_prefix_name(self, prefix) -> Optional[str]:
+    def get_prefix_name(self, prefix) -> str | None:
         """
         Render address name
         :param prefix: DiscoveredAddress instance

@@ -10,7 +10,7 @@ import itertools
 import operator
 import logging
 from threading import Lock
-from typing import Optional, Union, Iterable, List, Dict, Any
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -88,7 +88,7 @@ class L2Domain(Document):
     description = StringField()
     # L2Domain workflow
     state: State = PlainReferenceField(State)
-    pools: List[PoolItem] = EmbeddedDocumentListField(PoolItem)
+    pools: list[PoolItem] = EmbeddedDocumentListField(PoolItem)
     vlan_template = ReferenceField(VLANTemplate)
     default_vlan_profile: "VLANProfile" = ReferenceField(VLANProfile, required=False)
     # Discovery settings
@@ -126,7 +126,7 @@ class L2Domain(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["L2Domain"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["L2Domain"]:
         return L2Domain.objects.filter(id=oid).first()
 
     @classmethod
@@ -139,7 +139,7 @@ class L2Domain(Document):
         return Label.get_effective_setting(label, "enable_l2domain")
 
     @classmethod
-    def get_by_resource_pool(cls, pool: ResourcePool) -> List["L2Domain"]:
+    def get_by_resource_pool(cls, pool: ResourcePool) -> list["L2Domain"]:
         """Getting L2Domains for resource pool"""
         q = Q(pools__pool=pool)
         profiles = list(L2DomainProfile.objects.filter(pools__pool=pool))
@@ -158,7 +158,7 @@ class L2Domain(Document):
                 continue
             yield p
 
-    def get_pool_hints(self, pool) -> Optional[Dict[str, Any]]:
+    def get_pool_hints(self, pool) -> dict[str, Any] | None:
         """Getting pool setting for L2Domain"""
         for p in self.iter_pool_settings():
             if p.pool == pool:
@@ -197,7 +197,7 @@ class L2Domain(Document):
             for mo_id in self.get_l2_domain_object_ids(str(self.id)):
                 ManagedObject._reset_caches(mo_id)
 
-    def get_effective_pools(self, pool: "ResourcePool" = None) -> List["PoolItem"]:
+    def get_effective_pools(self, pool: "ResourcePool" = None) -> list["PoolItem"]:
         """"""
         return list(
             itertools.filterfalse(
@@ -241,7 +241,7 @@ class L2Domain(Document):
         vlan_filter: Optional["VLANFilter"] = None,
         pool: "ResourcePool" = None,
         policy_order: bool = False,
-    ) -> List[int]:
+    ) -> list[int]:
         """
         Build effective vlan number. Default - 1 - 4096 range
          If Set Pool - limit it by vlan_filter
@@ -290,7 +290,7 @@ class L2Domain(Document):
         return ManagedObject.objects.filter(q)
 
     @classmethod
-    def calculate_stats(cls, l2_domains: List["L2Domain"]) -> List[Dict[str, Union[str, int]]]:
+    def calculate_stats(cls, l2_domains: list["L2Domain"]) -> list[dict[str, str | int]]:
         """Calculate statistics Pool usage"""
         # l2
         return []
@@ -304,14 +304,14 @@ class L2Domain(Document):
     @classmethod
     def get_resource_pool_usage(
         cls,
-        pools: List[ResourcePool],
-        domains: Optional[List["L2Domain"]] = None,
+        pools: list[ResourcePool],
+        domains: list["L2Domain"] | None = None,
     ):
         """"""
         return 0.0
 
     @property
-    def resource_usage(self) -> Optional[float]:
+    def resource_usage(self) -> float | None:
         from noc.vc.models.vlan import VLAN
 
         vlans = VLAN.objects.filter(l2_domain=self).count()
@@ -324,13 +324,13 @@ class L2Domain(Document):
     def enable_provisioning(self) -> bool:
         return self.profile.provisioning_policy != "D"
 
-    def get_topology(self) -> Optional[TopologyBase]:
+    def get_topology(self) -> TopologyBase | None:
         """Getting effective topology"""
         # Constraints
         topo = loader["l2domain"]
         return topo(self.id)
 
-    def get_domain_ctx(self) -> Dict[str, Any]:
+    def get_domain_ctx(self) -> dict[str, Any]:
         """get_action_ctx"""
         from noc.vc.models.vlan import VLAN
 

@@ -12,7 +12,7 @@ import operator
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
 from mongoengine.fields import StringField, BooleanField, ListField, EmbeddedDocumentField
-from typing import Union, Optional, Iterable, Dict, Any, Callable, Tuple
+from typing import Optional, Iterable, Any, Callable
 from bson import ObjectId
 import cachetools
 
@@ -47,7 +47,7 @@ class DataStreamConfig(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["DataStreamConfig"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["DataStreamConfig"]:
         return DataStreamConfig.objects.filter(id=oid).first()
 
     @classmethod
@@ -57,7 +57,7 @@ class DataStreamConfig(Document):
 
     def iter_formats(
         self,
-    ) -> Iterable[Tuple[str, Callable[[Dict[str, Any]], Iterable[Dict[str, Any]]]]]:
+    ) -> Iterable[tuple[str, Callable[[dict[str, Any]], Iterable[dict[str, Any]]]]]:
         for fmt in self.formats:
             if fmt.is_active:
                 handler = fmt.handler.get_handler()

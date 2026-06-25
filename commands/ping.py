@@ -8,7 +8,7 @@
 # Python modules
 import argparse
 import asyncio
-from typing import Optional, Iterable, List
+from typing import Iterable
 
 # Third-party modules
 from gufo.ping import Ping
@@ -55,7 +55,7 @@ class Command(BaseCommand):
 
         # Run ping
         addr_list = self.get_addresses(addresses, input)
-        lock: Optional[asyncio.Lock] = None
+        lock: asyncio.Lock | None = None
         ping = Ping(tos=config.ping.tos, timeout=1.0)
         setup_asyncio()
         run_sync(runner)
@@ -63,7 +63,7 @@ class Command(BaseCommand):
             f"Stat: down - {metrics.get('address_down').value}; up - {metrics.get('address_up').value}"
         )
 
-    def get_addresses(self, addresses: Iterable[str], input: Iterable[str]) -> List[str]:
+    def get_addresses(self, addresses: Iterable[str], input: Iterable[str]) -> list[str]:
         addresses = {a for a in addresses if is_ipv4(a)}
         # Read addresses from files
         if input:

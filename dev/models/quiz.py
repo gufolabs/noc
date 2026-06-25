@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional
 
 # Third-party modules
 import bson
@@ -45,7 +45,7 @@ class QuizChange(EmbeddedDocument):
     changes = StringField()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"date": self.date.isoformat(), "changes": self.changes}
 
 
@@ -59,7 +59,7 @@ class QuizQuestion(EmbeddedDocument):
     when = StringField(default="True")
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"name": self.name, "question": self.question, "type": self.type, "when": self.when}
 
 
@@ -90,7 +90,7 @@ class Quiz(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["Quiz"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["Quiz"]:
         return Quiz.objects.filter(id=oid).first()
 
     @classmethod
@@ -99,7 +99,7 @@ class Quiz(Document):
         return Quiz.objects.filter(name=name).first()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "$collection": self._meta["json_collection"],

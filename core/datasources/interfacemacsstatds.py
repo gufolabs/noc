@@ -7,7 +7,7 @@
 
 # Python Modules
 import datetime
-from typing import Optional, Iterable, AsyncIterable, Tuple
+from typing import Iterable, AsyncIterable
 
 # Third-party modules
 import orjson
@@ -58,14 +58,14 @@ class InterfaceMACsStatDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
+        fields: Iterable[str] | None = None,
         start: "datetime.datetime" = None,
         end: "datetime.datetime" = None,
-        period_active: Optional[int] = None,
+        period_active: int | None = None,
         resolve_managedobject_id: bool = True,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         """
         Args:
             fields:

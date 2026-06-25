@@ -12,7 +12,7 @@ from io import BytesIO
 from zipfile import ZipFile, ZIP_DEFLATED
 from tempfile import TemporaryFile
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Any
+from typing import Any
 
 # Third-party modules
 from pydantic import BaseModel, ConfigDict
@@ -59,12 +59,12 @@ class FieldFormat(enum.Enum):
 
 class ReportQuery(BaseModel):
     name: str
-    datasource: Optional[str] = None  # DataSource Name
-    query: Optional[str] = None  # DataFrame query
-    params: Dict[str, Any] = None
-    json_data: Optional[str] = None
+    datasource: str | None = None  # DataSource Name
+    query: str | None = None  # DataFrame query
+    params: dict[str, Any] = None
+    json_data: str | None = None
     transpose: bool = False
-    transpose_columns: Optional[List[str]] = None
+    transpose_columns: list[str] | None = None
 
 
 class BandCondition(BaseModel):
@@ -80,17 +80,17 @@ class BandCondition(BaseModel):
 
 class ReportBand(BaseModel):
     name: str
-    queries: Optional[List[ReportQuery]] = None
-    source: Optional[str] = None
-    parent: Optional[str] = None  # Parent Band
+    queries: list[ReportQuery] | None = None
+    source: str | None = None
+    parent: str | None = None  # Parent Band
     orientation: BandOrientation = "H"  # Relevant only for xlsx template
-    conditions: Optional[List[BandCondition]] = None
+    conditions: list[BandCondition] | None = None
     # children: Optional[List["ReportBand"]] = None
 
     def __str__(self):
         return self.name
 
-    def is_match(self, params: Dict[str, Any]) -> bool:
+    def is_match(self, params: dict[str, Any]) -> bool:
         if not self.conditions:
             return True
         for c in self.conditions:
@@ -118,18 +118,18 @@ class ColumnFormat(BaseModel):
     """Format settings for column"""
 
     name: str
-    title: Optional[str] = None
+    title: str | None = None
     align: ColumnAlign = ColumnAlign(1)
-    format_type: Optional[str] = None
-    total: Optional[str] = None  # Calculate summary stat
+    format_type: str | None = None
+    total: str | None = None  # Calculate summary stat
     total_label: str = "Total"
 
 
 class BandFormat(BaseModel):
     """Configuration for autogenerate template"""
 
-    title_template: Optional[str] = None  # Title format for Section row
-    columns: Optional[List[ColumnFormat]] = None  # ColumnName -> ColumnFormat
+    title_template: str | None = None  # Title format for Section row
+    columns: list[ColumnFormat] | None = None  # ColumnName -> ColumnFormat
 
 
 class Template(BaseModel):
@@ -143,11 +143,11 @@ class Template(BaseModel):
     output_type: OutputType
     code: str = "DEFAULT"
     # documentPath: str
-    content: Optional[bytes] = None
-    formatter: Optional[str] = None
-    bands_format: Optional[Dict[str, BandFormat]] = None
-    output_name_pattern: Optional[str] = "report.html"
-    handler: Optional[str] = None  # For custom code
+    content: bytes | None = None
+    formatter: str | None = None
+    bands_format: dict[str, BandFormat] | None = None
+    output_name_pattern: str | None = "report.html"
+    handler: str | None = None  # For custom code
     custom: bool = False
 
     def get_document_name(self):
@@ -159,9 +159,9 @@ class Parameter(BaseModel):
     type: str  # Param Class ?
     # "integer", "string", "date", "model", "choice", "bool", "fields_selector"
     required: bool = False
-    alias: Optional[str] = None  # for system use
-    default_value: Optional[str] = None
-    model_id: Optional[str] = None
+    alias: str | None = None  # for system use
+    default_value: str | None = None
+    model_id: str | None = None
 
     model_config = ConfigDict(protected_namespaces=())
 
@@ -196,9 +196,9 @@ class ReportConfig(BaseModel):
     """
 
     name: str  # Report Name
-    bands: List[ReportBand]  # Report Band (Band Configuration)
-    templates: Dict[str, Template]  # Report Templates: template_code -> Template
-    parameters: Optional[List[Parameter]] = None  # Report Parameters
+    bands: list[ReportBand]  # Report Band (Band Configuration)
+    templates: dict[str, Template]  # Report Templates: template_code -> Template
+    parameters: list[Parameter] | None = None  # Report Parameters
     align_end_date_param: bool = False
     # field_format: Optional[List[ReportField]] = None  # Field Formatter
 
@@ -219,15 +219,15 @@ class RunParams(BaseModel):
     """
 
     report: ReportConfig
-    report_template: Optional[str] = None  # Report Template Code, Use default if not set
-    output_type: Optional[OutputType] = None  # Requested OutputType (if not set used from template)
-    params: Optional[Dict[str, Any]] = None  # Requested report params
-    output_name_pattern: Optional[str] = None  # Output document file name
+    report_template: str | None = None  # Report Template Code, Use default if not set
+    output_type: OutputType | None = None  # Requested OutputType (if not set used from template)
+    params: dict[str, Any] | None = None  # Requested report params
+    output_name_pattern: str | None = None  # Output document file name
 
     def get_template(self) -> "Template":
         return self.report.get_template(self.report_template)
 
-    def get_params(self) -> Dict[str, Any]:
+    def get_params(self) -> dict[str, Any]:
         r = {}
         if self.params:
             r.update(self.params)

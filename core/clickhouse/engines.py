@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Tuple
 
 # NOC modules
 from noc.config import config
@@ -23,9 +22,9 @@ class MergeTree(BaseEngine):
     def __init__(
         self,
         date_field: str,
-        order_by: Tuple[str, ...],
-        primary_keys: Optional[Tuple[str, ...]] = None,
-        partition_function: Optional[str] = None,
+        order_by: tuple[str, ...],
+        primary_keys: tuple[str, ...] | None = None,
+        partition_function: str | None = None,
         granularity=DEFAULT_MERGE_TREE_GRANULARITY,
     ):
         self.date_field = date_field

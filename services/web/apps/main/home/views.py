@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Dict, Any
+from typing import Any
 import importlib.resources
 
 # Third-party modules
@@ -34,8 +34,8 @@ class HomeAppplication(ExtApplication):
     """
 
     title = _("Home")
-    _welcome_text: Optional[str] = None
-    _community_text: Optional[str] = None
+    _welcome_text: str | None = None
+    _community_text: str | None = None
 
     @view("^dashboard/", access=True, api=True)
     def api_welcome(self, request):
@@ -51,7 +51,7 @@ class HomeAppplication(ExtApplication):
         ]
         return {"widgets": [x for x in widgets if x]}
 
-    def get_favorites(self, user: User) -> Optional[Dict[str, Any]]:
+    def get_favorites(self, user: User) -> dict[str, Any] | None:
         """
         Generate favorites widget.
         """
@@ -72,7 +72,7 @@ class HomeAppplication(ExtApplication):
             tpl = Template(fp.read())
             return tpl.render()
 
-    def get_welcome(self, user: User) -> Optional[Dict[str, Any]]:
+    def get_welcome(self, user: User) -> dict[str, Any] | None:
         """
         Generate welcome text.
         """
@@ -84,7 +84,7 @@ class HomeAppplication(ExtApplication):
             "data": {"text": self._welcome_text or ""},
         }
 
-    def get_community(self, user: User) -> Optional[Dict[str, Any]]:
+    def get_community(self, user: User) -> dict[str, Any] | None:
         """
         Generate community links
         """
@@ -96,7 +96,7 @@ class HomeAppplication(ExtApplication):
             "data": {"text": self._comminity_text or ""},
         }
 
-    def get_inventory_summary(self, user: User) -> Optional[Dict[str, Any]]:
+    def get_inventory_summary(self, user: User) -> dict[str, Any] | None:
         """
         Generate inventory summary widget.
         """
@@ -132,7 +132,7 @@ class HomeAppplication(ExtApplication):
             ],
         }
 
-    def get_mo_summary(self, user: User) -> Optional[Dict[str, Any]]:
+    def get_mo_summary(self, user: User) -> dict[str, Any] | None:
         """
         Generate managed object summary widget.
         """
@@ -158,7 +158,7 @@ class HomeAppplication(ExtApplication):
             ],
         }
 
-    def get_alarms(self, user: User) -> Optional[Dict[str, Any]]:
+    def get_alarms(self, user: User) -> dict[str, Any] | None:
         """
         Generate managed object summary widget.
         """
@@ -182,7 +182,7 @@ class HomeAppplication(ExtApplication):
             ],
         }
 
-    def get_channels(self, user: User) -> Optional[Dict[str, Any]]:
+    def get_channels(self, user: User) -> dict[str, Any] | None:
         if not Permission.has_perm(user, "inv:channel:launch"):
             return None  # No access to channels
         summary = {

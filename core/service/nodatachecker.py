@@ -11,7 +11,7 @@ import logging
 from collections import defaultdict
 from time import perf_counter
 from dataclasses import dataclass
-from typing import Dict, Optional, Tuple, Any
+from typing import Any
 
 # NOC modules
 from noc.core.ioloop.timers import PeriodicCallback
@@ -42,10 +42,10 @@ class DataSourceRecord:
     raised_alarm: bool
     register_message: bool
     collector: str
-    remote_system: Optional[str]
+    remote_system: str | None
     # partial check: List[Tuple[ts, code]]
 
-    def is_no_data(self, ts: Optional[int] = None) -> bool:
+    def is_no_data(self, ts: int | None = None) -> bool:
         """Check item last received data over ttl"""
         ts = ts or int(perf_counter())
         return (ts - self.last_ts) > self.ttl
@@ -62,7 +62,7 @@ class DataSourceRecord:
     def is_out_ttl(self, ts: int) -> bool:
         return (ts - self.last_ts) > (self.ttl + 3600)
 
-    def get_check_status_msg(self, status: bool) -> Dict[str, Any]:
+    def get_check_status_msg(self, status: bool) -> dict[str, Any]:
         """"""
         r = {
             "check": NODATA,
@@ -88,17 +88,17 @@ class NoDataChecker:
 
     def __init__(
         self,
-        nodata_record_ttl: Optional[int] = 3600,
-        nodata_round_duration: Optional[int] = 60,
-        alarm_class: Optional[str] = None,
-        collector: Optional[str] = None,
+        nodata_record_ttl: int | None = 3600,
+        nodata_round_duration: int | None = 60,
+        alarm_class: str | None = None,
+        collector: str | None = None,
     ):
         self.nodata_round_duration = nodata_round_duration
         self.nodata_record_ttl = nodata_record_ttl
         self.alarm_class = alarm_class
         self.service = get_service()
         self.collector = collector or self.service.name
-        self.source_table: Dict[Tuple[str, str, str], DataSourceRecord] = {}
+        self.source_table: dict[tuple[str, str, str], DataSourceRecord] = {}
 
     def initialize(self):
         """
@@ -114,8 +114,8 @@ class NoDataChecker:
     def device_is_no_data(
         self,
         source_id: str,
-        collector: Optional[str] = None,
-        remote_system: Optional[str] = None,
+        collector: str | None = None,
+        remote_system: str | None = None,
     ) -> bool:
         return self.source_table[
             (source_id, collector or self.collector, remote_system or "")
@@ -152,7 +152,7 @@ class NoDataChecker:
         logger.info("End of NoData Check round: found %d no data devices", no_data_count)
         logger.info("Data Sources: %s", len(self.source_table))
 
-    async def register_status_messages(self, records: Dict[str, Dict[str, Any]]):
+    async def register_status_messages(self, records: dict[str, dict[str, Any]]):
         """Register status message"""
         logger.debug("Register status message on: %s", records)
         # id: str
@@ -172,8 +172,8 @@ class NoDataChecker:
         self,
         source_id: str,
         ts: datetime.datetime,
-        collector: Optional[str] = None,
-        remote_system: Optional[str] = None,
+        collector: str | None = None,
+        remote_system: str | None = None,
     ):
         """
         Register received data from source

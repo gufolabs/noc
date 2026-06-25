@@ -9,7 +9,7 @@
 import os
 import datetime
 from collections import defaultdict
-from typing import List, Optional, Iterable, Dict, Union
+from typing import Iterable
 
 # Third-party modules
 import orjson
@@ -54,7 +54,7 @@ class Command(BaseCommand):
     def handle(self, cmd, *args, **options):
         return getattr(self, "handle_%s" % cmd)(*args, **options)
 
-    def handle_dot(self, config, output: Optional[str] = None, *args, **kwargs):
+    def handle_dot(self, config, output: str | None = None, *args, **kwargs):
         cdag = self.from_config_paths(config)
         if not output:
             self.print(cdag.get_dot())
@@ -63,7 +63,7 @@ class Command(BaseCommand):
             f.write(cdag.get_dot())
 
     @staticmethod
-    def input_from_file(f_input: str) -> Iterable[Dict[str, Union[float, str]]]:
+    def input_from_file(f_input: str) -> Iterable[dict[str, float | str]]:
         with open(f_input) as f:
             for line in f:
                 line = line.strip()
@@ -71,7 +71,7 @@ class Command(BaseCommand):
                     continue
                 yield orjson.loads(line)
 
-    def get_source(self, name, iface: Optional[str] = None):
+    def get_source(self, name, iface: str | None = None):
         """
         Get source
         :param name:
@@ -92,7 +92,7 @@ class Command(BaseCommand):
                 self.die(f"Interface {iface} is not found")
         return source
 
-    def input_from_device(self, source: str, metrics: List[str]):
+    def input_from_device(self, source: str, metrics: list[str]):
         from noc.core.clickhouse.connect import connection
         from noc.sla.models.slaprobe import SLAProbe
 
@@ -161,8 +161,8 @@ class Command(BaseCommand):
             yield row
 
     def iter_metrics(
-        self, f_input: Optional[str], metrics: Optional[List[str]] = None
-    ) -> Iterable[Dict[str, Union[float, str]]]:
+        self, f_input: str | None, metrics: list[str] | None = None
+    ) -> Iterable[dict[str, float | str]]:
         if (
             f_input.startswith("cpu://")
             or f_input.startswith("iface://")
@@ -175,8 +175,8 @@ class Command(BaseCommand):
     def handle_metrics(
         self,
         config,
-        f_input: Optional[str] = None,
-        f_output: Optional[str] = None,
+        f_input: str | None = None,
+        f_output: str | None = None,
         *args,
         **kwargs,
     ):
@@ -232,7 +232,7 @@ class Command(BaseCommand):
         if f_output:
             f_output.close()
 
-    def from_config_paths(self, paths: List[str]) -> CDAG:
+    def from_config_paths(self, paths: list[str]) -> CDAG:
         from noc.core.mongo.connection import connect
 
         connect()

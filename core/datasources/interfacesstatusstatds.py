@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Optional, Iterable, Dict, Tuple, List, AsyncIterable
+from typing import Iterable, AsyncIterable
 
 # Third-party modules
 from pymongo.read_preferences import ReadPreference
@@ -32,7 +32,7 @@ class InterfacesStatusStatDS(BaseDataSource):
     ]
 
     @staticmethod
-    def humanize_speed(speed: Optional[int]) -> str:
+    def humanize_speed(speed: int | None) -> str:
         if not speed:
             return "-"
         for t, n in [(1000000, "G"), (1000, "M"), (1, "k")]:
@@ -43,7 +43,7 @@ class InterfacesStatusStatDS(BaseDataSource):
         return str(speed)
 
     @classmethod
-    def get_result(cls, fields: Dict[str, int], statuses: List[Dict[str, int]]) -> Dict[str, int]:
+    def get_result(cls, fields: dict[str, int], statuses: list[dict[str, int]]) -> dict[str, int]:
         # @todo Column filter
         r = fields.copy()
         for ss in statuses:
@@ -55,8 +55,8 @@ class InterfacesStatusStatDS(BaseDataSource):
 
     @classmethod
     async def iter_query(
-        cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
-    ) -> AsyncIterable[Tuple[str, str]]:
+        cls, fields: Iterable[str] | None = None, *args, **kwargs
+    ) -> AsyncIterable[tuple[str, str]]:
         match = {"type": "physical"}
         query_fields = {ff.name: None for ff in cls.fields if not fields or ff.name in fields}
         row_num = 0

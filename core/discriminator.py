@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Union, Set, List, Tuple, Iterable
+from typing import Any, Union, Iterable
 
 # NOC modules
 from noc.core.text import ranges_to_list
@@ -87,7 +87,7 @@ class VlanDiscriminator:
 
     def __init__(self, value: str):
         try:
-            self.vlan: Set[int] = set(ranges_to_list(value))
+            self.vlan: set[int] = set(ranges_to_list(value))
         except SyntaxError as e:
             msg = f"Invalid VLAN: {value}"
             raise ValueError(msg) from e
@@ -157,7 +157,7 @@ class OduDiscriminator:
     scope: str = "odu"
 
     def __init__(self, value: str):
-        self.odu: List[Tuple[str, int]] = list(self._iter_parse(value))
+        self.odu: list[tuple[str, int]] = list(self._iter_parse(value))
         # Check odu
         prev_odu = None
         for n, idx in self.odu:
@@ -178,8 +178,8 @@ class OduDiscriminator:
             prev_odu = n
 
     @staticmethod
-    def _iter_parse(value: str) -> Iterable[Tuple[str, int]]:
-        def q(x: str) -> Tuple[str, int]:
+    def _iter_parse(value: str) -> Iterable[tuple[str, int]]:
+        def q(x: str) -> tuple[str, int]:
             if "-" in x:
                 n, y = x.split("-", 1)
                 return n, int(y)
@@ -222,7 +222,7 @@ class OduDiscriminator:
             return 0
         return ODU_LIMITS[c][p]
 
-    def get_crossing_proposals(self, d: Union[str, "OduDiscriminator"]) -> List[str]:
+    def get_crossing_proposals(self, d: Union[str, "OduDiscriminator"]) -> list[str]:
         """
         Same discriminator - container
         :param d: Payload

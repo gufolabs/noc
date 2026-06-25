@@ -9,7 +9,6 @@
 # Python modules
 import logging
 import asyncio
-from typing import List, Union
 
 # Third-party modules
 import orjson
@@ -80,9 +79,7 @@ async def _run_script(current_user, oid, script, args, span_id=0, bi_id=None):
         return {"id": str(oid), "result": r}
 
 
-async def _iterdata(
-    req: List[Union[MRTCommandScript, MRTInterfaceScript, MRTAnyScript]], current_user
-):
+async def _iterdata(req: list[MRTCommandScript | MRTInterfaceScript | MRTAnyScript], current_user):
     service = get_service()
     metrics["mrt_requests"] += 1
     # Object ids
@@ -146,7 +143,7 @@ async def _iterdata(
 
 @router.post("/api/mrt/")
 async def api_mrt(
-    req: List[Union[MRTCommandScript, MRTInterfaceScript, MRTAnyScript]],
+    req: list[MRTCommandScript | MRTInterfaceScript | MRTAnyScript],
     current_user: User = Depends(get_current_user),
 ):
     # Disable nginx proxy buffering

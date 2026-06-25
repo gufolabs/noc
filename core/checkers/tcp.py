@@ -7,7 +7,7 @@
 
 # Python modules
 import asyncio
-from typing import List, AsyncIterable
+from typing import AsyncIterable
 
 # NOC modules
 from .base import BaseChecker, CheckResult, Check, TCP_CHECK
@@ -19,10 +19,10 @@ class TCPConnectChecker(BaseChecker):
     """
 
     name = "tcp"
-    CHECKS: List[str] = [TCP_CHECK]
+    CHECKS: list[str] = [TCP_CHECK]
     SOCKET_TIMEOUT = 2
 
-    async def iter_result(self, checks: List[Check]) -> AsyncIterable[CheckResult]:
+    async def iter_result(self, checks: list[Check]) -> AsyncIterable[CheckResult]:
         for c in checks:
             if not c.port:
                 yield CheckResult(

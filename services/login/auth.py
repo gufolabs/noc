@@ -7,7 +7,7 @@
 
 # Python modules
 import logging
-from typing import Optional, Any
+from typing import Any
 import datetime
 
 # Third-party modules
@@ -78,7 +78,7 @@ def register_last_login(user: str):
             u.register_login()
 
 
-def get_jwt_token(user: str, expire: Optional[int] = None, audience: Optional[str] = None) -> str:
+def get_jwt_token(user: str, expire: int | None = None, audience: str | None = None) -> str:
     """
     Build JWT token for given user
     :param user: User name
@@ -97,7 +97,7 @@ def get_jwt_token(user: str, expire: Optional[int] = None, audience: Optional[st
     return jwt.encode(payload, jwt_key, algorithm=config.login.jwt_algorithm)
 
 
-def get_user_from_jwt(token: str, audience: Optional[str] = None) -> str:
+def get_user_from_jwt(token: str, audience: str | None = None) -> str:
     """
     Check JWT token and return user.
     Raise ValueError if failed
@@ -122,7 +122,7 @@ def get_user_from_jwt(token: str, audience: Optional[str] = None) -> str:
         raise ValueError(str(e))
 
 
-def get_exp_from_jwt(token: str, audience: Optional[str] = None) -> datetime:
+def get_exp_from_jwt(token: str, audience: str | None = None) -> datetime:
     """
     Check JWT token and return exp.
     Raise ValueError if failed

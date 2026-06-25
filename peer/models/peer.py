@@ -91,7 +91,7 @@ class Peer(NOCModel):
     last_seen = DateTimeField("Last Seen", null=True, blank=True)
     # Timestamp of first discovery
     first_discovered = DateTimeField("First Discovered", null=True, blank=True)
-    oper_status: Optional[int] = IntegerField(
+    oper_status: int | None = IntegerField(
         choices=[
             (1, "idle"),
             (2, "connect"),
@@ -115,11 +115,11 @@ class Peer(NOCModel):
     remote_backup_ip = INETField("Remote Backup IP", null=True, blank=True)
     import_filter = CharField("Import filter", max_length=64, default="any")
     # Override PeerProfile.local_pref
-    local_pref: Optional[int] = IntegerField("Local Pref", null=True, blank=True)
+    local_pref: int | None = IntegerField("Local Pref", null=True, blank=True)
     # Override PeerProfile.import_med
-    import_med: Optional[int] = IntegerField("Import MED", blank=True, null=True)
+    import_med: int | None = IntegerField("Import MED", blank=True, null=True)
     # Override PeerGroup.export_med
-    export_med: Optional[int] = IntegerField("Export MED", blank=True, null=True)
+    export_med: int | None = IntegerField("Export MED", blank=True, null=True)
     export_filter = CharField("Export filter", max_length=64, default="any")
     description = TextField("Description", null=True, blank=True)
     # Peer remark to be shown in RPSL
@@ -129,10 +129,10 @@ class Peer(NOCModel):
     # and PeeringProfile.communities
     communities = CharField("Import Communities", max_length=128, blank=True, null=True)
     max_prefixes = IntegerField("Max. Prefixes", default=100)
-    import_filter_name: Optional[str] = CharField(
+    import_filter_name: str | None = CharField(
         "Import Filter Name", max_length=64, blank=True, null=True
     )
-    export_filter_name: Optional[str] = CharField(
+    export_filter_name: str | None = CharField(
         "Export Filter Name", max_length=64, blank=True, null=True
     )
     labels = ArrayField(CharField(max_length=250), blank=True, null=True, default=list)
@@ -213,7 +213,7 @@ class Peer(NOCModel):
         s += " announce %s" % self.export_filter
         return s
 
-    def get_effective_peer_data(self, name: str) -> Optional[str]:
+    def get_effective_peer_data(self, name: str) -> str | None:
         """Getting effective peer attribute by name"""
 
     @property
@@ -294,7 +294,7 @@ class Peer(NOCModel):
         if si:
             return si.managed_object
 
-    def set_oper_status(self, status: BGPState, timestamp: Optional[datetime.datetime] = None):
+    def set_oper_status(self, status: BGPState, timestamp: datetime.datetime | None = None):
         """
         Set Operational Status for Service
         Args:

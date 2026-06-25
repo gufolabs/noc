@@ -11,7 +11,6 @@ import logging
 from operator import itemgetter
 from xml.etree.ElementTree import parse as xml_parse, ParseError as XMLParseError
 from dataclasses import dataclass
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +35,7 @@ class StencilRegistry:
         self.stencils = {}  # id -> stencil
 
     @classmethod
-    def _stencil_from_svg(cls, path: str) -> Optional[Stencil]:
+    def _stencil_from_svg(cls, path: str) -> Stencil | None:
         """
         Read SVG and fetch metadata
 

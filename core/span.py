@@ -16,7 +16,6 @@ import logging
 import uuid
 from collections import namedtuple
 from contextvars import ContextVar
-from typing import Optional, Dict
 
 # NOC modules
 from noc.core.error import NO_ERROR, ERR_UNKNOWN
@@ -46,8 +45,8 @@ SpanItemFields = [
 SpanItem = namedtuple("SpanItem", SpanItemFields)
 # Collected spans, protected by lock
 span_lock = threading.Lock()
-cv_span_context: ContextVar[Optional[int]] = ContextVar("cv_span_context", default=None)
-cv_span_parent: ContextVar[Optional[int]] = ContextVar("cv_span_parent", default=None)
+cv_span_context: ContextVar[int | None] = ContextVar("cv_span_context", default=None)
+cv_span_parent: ContextVar[int | None] = ContextVar("cv_span_parent", default=None)
 spans = []
 
 DEFAULT_CLIENT = "NOC"
@@ -73,7 +72,7 @@ class Span:
         context=DEFAULT_ID,
         hist=None,
         quantile=None,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: dict[str, bytes] | None = None,
         suppress_trace=False,
     ):
         self.client = client
@@ -178,7 +177,7 @@ class Span:
         if self.suppress_trace:
             return True
 
-    def set_error(self, code: Optional[int] = None, text: Optional[str] = None) -> None:
+    def set_error(self, code: int | None = None, text: str | None = None) -> None:
         """
         Set error result and code for current span
         :param code: Optional error code
@@ -190,7 +189,7 @@ class Span:
         if text is not None:
             self.error_text = text
 
-    def set_error_from_exc(self, exc: Exception, code: Optional[int] = ERR_UNKNOWN) -> None:
+    def set_error_from_exc(self, exc: Exception, code: int | None = ERR_UNKNOWN) -> None:
         """
         Set error result and code for current span from exception
         :param exc: Raised exception

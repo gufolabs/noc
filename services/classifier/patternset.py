@@ -9,7 +9,6 @@
 import logging
 import re
 from collections import defaultdict
-from typing import Dict, List, Tuple
 
 # NOC modules
 from noc.core.validators import is_oid
@@ -23,8 +22,8 @@ logger = logging.getLogger(__name__)
 
 class PatternSet:
     def __init__(self):
-        self.i_patterns: Dict[
-            str, List[Tuple[str, str]]
+        self.i_patterns: dict[
+            str, list[tuple[str, str]]
         ] = {}  # (profile, chain) -> [rule, ..., rule]
         self.add_patterns = 0
 

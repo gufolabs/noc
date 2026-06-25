@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import Optional, List
 from urllib.parse import urlparse
 
 
@@ -73,7 +72,7 @@ class TGBotTTSystem(BaseTTSystem):
             )
 
     @staticmethod
-    def get_inline_keyboard(actions: List[TTActionContext]):
+    def get_inline_keyboard(actions: list[TTActionContext]):
         r = []
         if not actions:
             return {}
@@ -129,10 +128,10 @@ class TGBotTTSystem(BaseTTSystem):
 
     def get_updates(
         self,
-        last_run: Optional[datetime] = None,
-        last_update: Optional[str] = None,
-        tt_ids: Optional[List[str]] = None,
-    ) -> List[TTChange]:
+        last_run: datetime.datetime | None = None,
+        last_update: str | None = None,
+        tt_ids: list[str] | None = None,
+    ) -> list[TTChange]:
         status, _, body = self.http_client.get(f"{self.url}/getUpdates")
         r = []
         if status != 200:
@@ -173,7 +172,7 @@ class TGBotTTSystem(BaseTTSystem):
                 )
         return r
 
-    def get_tt(self, tt_id: str) -> Optional[TTInfo]:
+    def get_tt(self, tt_id: str) -> TTInfo | None:
         """
         getUpdates
         :param tt_id:

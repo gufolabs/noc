@@ -12,7 +12,7 @@ import warnings
 from itertools import product
 
 # Third-party modules
-from typing import Dict, Callable, Union, Optional, List, Tuple
+from typing import Callable
 
 # NOC modules
 from noc.core.ip import IPv4
@@ -401,7 +401,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
     Increase if box send unprivileged prompt twice
     """
 
-    snmp_display_hints: Dict[str, Optional[Callable[[str, bytes], Union[str, bytes]]]] = {}
+    snmp_display_hints: dict[str, Callable[[str, bytes], str | bytes] | None] = {}
     """
     Additional hints for snmp binary OctetString data processing
     Contains mapping of
@@ -436,13 +436,13 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
     Timeout for snmp GET request for get_interface_status_ex
     """
 
-    snmp_response_parser: Optional[Callable] = None
+    snmp_response_parser: Callable | None = None
     """
     _ResponseParser for customized SNMP response processing.
     Broken SNMP implementations are urged to use `parse_get_response_strict`
     """
 
-    snmp_rate_limit: Dict[str, Optional[float]] = {}
+    snmp_rate_limit: dict[str, float | None] = {}
     """
     matcher_name -> snmp rate limit
     for default get_snmp_rate_limit() implementation
@@ -818,7 +818,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
 
     port_splitter = " "
 
-    def get_protocol_prefixes(self, protocols: List[str]) -> List[str]:
+    def get_protocol_prefixes(self, protocols: list[str]) -> list[str]:
         """
         Return interface prefix by Protocol
         :param protocols: Protocols code list
@@ -830,7 +830,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
                     return self.proto_prefixes[pp]
         return []
 
-    def get_interfaces_by_port(self, port: PortItem) -> List[str]:
+    def get_interfaces_by_port(self, port: PortItem) -> list[str]:
         """
         1. If device is not stackable and not module (len path) - return slot num
         2. Append num from last path element
@@ -842,7 +842,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         """
         if len(port.path) <= 1 and port.stack_num is None:
             return [port.name]
-        r: List[str] = []
+        r: list[str] = []
         x = []
         for p in reversed(port.path):
             x.insert(0, self.get_connection_path(p.c_name))
@@ -937,7 +937,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         """
         return neighbor
 
-    def get_lacp_port_by_id(self, port_id: int) -> Optional[str]:
+    def get_lacp_port_by_id(self, port_id: int) -> str | None:
         """
         Return possible port aliases by LACP Port id,
         i.e. for LACP discovery method without script support
@@ -953,7 +953,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         setattr(script, name, f)
 
     @classmethod
-    def cmp_version(cls, v1, v2) -> Optional[int]:
+    def cmp_version(cls, v1, v2) -> int | None:
         """
         Compare two versions.
         Must return:
@@ -1172,7 +1172,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         return cls.snmp_display_hints
 
     @classmethod
-    def get_snmp_response_parser(cls, script) -> Optional[Callable]:
+    def get_snmp_response_parser(cls, script) -> Callable | None:
         return cls.snmp_response_parser
 
     @classmethod
@@ -1189,7 +1189,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         Return dict of compiled regular expressions
         """
 
-        def get_commands(pattern_more) -> List[Union[bytes, Dict[Tuple[str, ...], str]]]:
+        def get_commands(pattern_more) -> list[bytes | dict[tuple[str, ...], str]]:
             commands = []
             for x in pattern_more:
                 c = x[1]
@@ -1282,7 +1282,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
                     raise ValueError("Invalid rogue char expression: %r" % rc)
         return chain
 
-    def get_snmp_rate_limit(self, script) -> Optional[float]:
+    def get_snmp_rate_limit(self, script) -> float | None:
         if not self.snmp_rate_limit:
             return None
         limits = [

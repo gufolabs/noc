@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Type
 
 # NOC modules
 from noc.config import config
@@ -14,4 +13,4 @@ from noc.core.compressor.base import BaseCompressor
 from noc.core.compressor.loader import loader
 
 
-compressor: Type[BaseCompressor] = loader.get_class(config.etl.compression)
+compressor: type[BaseCompressor] = loader.get_class(config.etl.compression)

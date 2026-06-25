@@ -10,7 +10,7 @@ import os
 import threading
 import operator
 import uuid
-from typing import Dict, Optional, Union
+from typing import Optional
 
 # Third-party modules
 import bson
@@ -119,7 +119,7 @@ class Firmware(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["Firmware"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["Firmware"]:
         return Firmware.objects.filter(id=oid).first()
 
     @classmethod
@@ -186,7 +186,7 @@ class Firmware(Document):
         return self._profile
 
     @cachetools.cached(_object_settings_cache, key=lambda x: str(x.id))
-    def get_effective_object_settings(self) -> Dict[str, Union[str, int]]:
+    def get_effective_object_settings(self) -> dict[str, str | int]:
         from .firmwarepolicy import FirmwarePolicy
 
         r = {}

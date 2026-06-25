@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Optional, List, Iterable, Any, Tuple
+from typing import Iterable, Any
 from collections import defaultdict
 import logging
 
@@ -83,8 +83,8 @@ class ServiceSummary(Document):
     def get_service_for_object(
         cls,
         managed_object,
-        states: Optional[List[str]] = None,
-    ) -> Iterable[Tuple[str, List[Dict[str, Any]], str, Optional[str], Optional[str]]]:
+        states: list[str] | None = None,
+    ) -> Iterable[tuple[str, list[dict[str, Any]], str, str | None, str | None]]:
         """Build service from ServiceInstance"""
         from noc.sa.models.serviceinstance import ServiceInstance
 
@@ -351,7 +351,7 @@ class ServiceSummary(Document):
         return kk
 
     @classmethod
-    def get_weight(cls, summary: Dict[str, Dict[str, int]]) -> int:
+    def get_weight(cls, summary: dict[str, dict[str, int]]) -> int:
         """
         Convert result of *get_object_summary* to alarm weight
         """

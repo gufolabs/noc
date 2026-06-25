@@ -8,7 +8,7 @@
 # Python modules
 from enum import Enum
 from dataclasses import dataclass
-from typing import Optional, Dict, Any, List, Literal
+from typing import Any, Literal
 
 
 class Layout(str, Enum):
@@ -48,13 +48,13 @@ class MapItem:
     generator: str
     has_children: bool = False
     only_container: bool = False
-    code: Optional[str] = None
+    code: str | None = None
 
 
 @dataclass
 class MapSize:
-    width: Optional[int] = None
-    height: Optional[int] = None
+    width: int | None = None
+    height: int | None = None
 
 
 @dataclass
@@ -73,8 +73,8 @@ class PathItem:
 @dataclass
 class Portal:
     generator: str
-    id: Optional[str] = None
-    settings: Optional[Dict[str, Any]] = None
+    id: str | None = None
+    settings: dict[str, Any] | None = None
 
 
 @dataclass
@@ -88,21 +88,21 @@ class TopologyNode:
         "container",
         "other",
     ] = "other"
-    resource_id: Optional[str] = None
+    resource_id: str | None = None
     # Ссылка на node_id группы
-    parent: Optional[str] = None
+    parent: str | None = None
     # Подпись
-    title: Optional[str] = ""
-    title_position: Optional[ShapeOverlayPosition] = "S"
-    title_metric_template: Optional[str] = ""
-    stencil: Optional[str] = None
-    overlays: List[ShapeOverlay] = None
-    portal: Optional[Portal] = None
+    title: str | None = ""
+    title_position: ShapeOverlayPosition | None = "S"
+    title_metric_template: str | None = ""
+    stencil: str | None = None
+    overlays: list[ShapeOverlay] = None
+    portal: Portal | None = None
     level: int = 25
-    attrs: Optional[Dict[str, Any]] = None
-    object_filter: Optional[Dict[str, Any]] = None
+    attrs: dict[str, Any] | None = None
+    object_filter: dict[str, Any] | None = None
 
-    def get_attr(self) -> Dict[str, Any]:
+    def get_attr(self) -> dict[str, Any]:
         return self.attrs or {}
 
     def get_caps(self):
@@ -112,9 +112,9 @@ class TopologyNode:
 @dataclass
 class MapMeta:
     title: str
-    image: Optional[BackgroundImage] = None
-    width: Optional[int] = None
-    height: Optional[int] = None
+    image: BackgroundImage | None = None
+    width: int | None = None
+    height: int | None = None
     layout: Layout = Layout("A")
     object_status_refresh_interval: int = 60
     max_links: int = 1000

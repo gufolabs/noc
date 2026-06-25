@@ -7,7 +7,7 @@
 
 # Python modules
 import time
-from typing import Optional, List, Dict, Callable, Any
+from typing import Callable, Any
 
 # Third-party modules
 from pydantic import BaseModel
@@ -29,8 +29,8 @@ class MetricsNodeConfig(BaseModel):
 NS = 1_000_000_000
 
 # scope -> name -> cleaner
-scope_cleaners: Dict[str, Dict[str, Callable[[ValueType], ValueType]]] = {}
-mx_converters: Optional[Dict[str, Callable[[Dict[str, Any]], Dict[str, Any]]]] = None
+scope_cleaners: dict[str, dict[str, Callable[[ValueType], ValueType]]] = {}
+mx_converters: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] | None = None
 
 
 class MetricsNode(BaseCDAGNode):
@@ -45,8 +45,8 @@ class MetricsNode(BaseCDAGNode):
     mx_scopes = set(config.message.enable_metric_scopes)
 
     def get_value(
-        self, ts: int, labels: List[str], target: Optional[Any], component: Optional[Any], **kwargs
-    ) -> Optional[Dict[str, ValueType]]:
+        self, ts: int, labels: list[str], target: Any | None, component: Any | None, **kwargs
+    ) -> dict[str, ValueType] | None:
         r = {}
         rk = {}
         cleaners = scope_cleaners.get(self.config.scope) or {}
@@ -84,7 +84,7 @@ class MetricsNode(BaseCDAGNode):
 
     @staticmethod
     def set_scope_cleaners(
-        scope: str, cleaners: Dict[str, Callable[[ValueType], ValueType]]
+        scope: str, cleaners: dict[str, Callable[[ValueType], ValueType]]
     ) -> None:
         """
         Set cleaners for scope

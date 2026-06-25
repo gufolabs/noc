@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Union
+from typing import Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -69,7 +69,7 @@ class ObjectConnection(Document):
         return "<%s>" % ", ".join(smart_text(c) for c in self.connection)
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ObjectConnection"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ObjectConnection"]:
         return ObjectConnection.objects.filter(id=oid).first()
 
     def iter_changed_datastream(self, changed_fields=None):

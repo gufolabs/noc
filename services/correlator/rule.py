@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Dict, Any, Callable
+from typing import Any, Callable
 from dataclasses import dataclass
 
 # NOC modules
@@ -24,15 +24,15 @@ class VarTransformRule:
     """Transform variables by rule"""
 
     name: str
-    wildcard: Optional[str] = None
+    wildcard: str | None = None
     required: bool = False
-    affected_model: Optional[Any] = None
-    alias: Optional[str] = None
-    value_type: Optional[ValueType] = None
+    affected_model: Any | None = None
+    alias: str | None = None
+    value_type: ValueType | None = None
     update_oper_status: bool = False
 
     @classmethod
-    def from_item(cls, item, alias: Optional[str] = None) -> "VarTransformRule":
+    def from_item(cls, item, alias: str | None = None) -> "VarTransformRule":
         """Create var transform rule from config item"""
         if item.affected_model:
             model = get_model(item.affected_model)
@@ -49,7 +49,7 @@ class VarTransformRule:
             update_oper_status=item.update_oper_status,
         )
 
-    def transform(self, v: Dict[str, Any], var_ctx: Dict[str, Any]):
+    def transform(self, v: dict[str, Any], var_ctx: dict[str, Any]):
         """Transform vars"""
         if self.value_type:
             v[self.name] = self.value_type.clean_value(v[self.name])
@@ -62,16 +62,16 @@ class EventAlarmRule:
     event_class: EventClass
     action: str
     unique: bool
-    vars_transform: List[VarTransformRule]
+    vars_transform: list[VarTransformRule]
     # component
     managed_object: str = "managed_object"
-    match: Optional[Callable] = None
-    match_vars: Optional[Callable] = None
-    object_avail_condition: Optional[str] = None
-    combo_condition: Optional[str] = None
+    match: Callable | None = None
+    match_vars: Callable | None = None
+    object_avail_condition: str | None = None
+    combo_condition: str | None = None
     combo_window: int = 0
     combo_count: int = 0
-    combo_event_classes: List[str] = None
+    combo_event_classes: list[str] = None
     preference: int = 999
     reference_lookup: bool = False
     stop_disposition: bool = False
@@ -85,7 +85,7 @@ class EventAlarmRule:
         cls,
         rule: DispositionRule,
         alarm_class: AlarmClass,
-        event_class: Optional[EventClass] = None,
+        event_class: EventClass | None = None,
     ) -> "EventAlarmRule":
         """"""
         a_vars = {v.name: v for v in alarm_class.vars}
@@ -123,19 +123,19 @@ class EventAlarmRule:
             r.object_avail_condition = rule.object_avail_condition
         return r
 
-    def is_match(self, ctx: Dict[str, Any]) -> bool:
+    def is_match(self, ctx: dict[str, Any]) -> bool:
         return not (self.match and not self.match(ctx))
 
-    def is_vars(self, r_vars: Dict[str, Any]) -> bool:
+    def is_vars(self, r_vars: dict[str, Any]) -> bool:
         return not (self.match_vars and not self.match_vars(r_vars))
 
     def match_event(self, e: Event) -> bool:
         return not (self.match_vars and not self.match_vars(e.vars))
 
-    def get_vars(self, e_vars: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def get_vars(self, e_vars: dict[str, Any]) -> dict[str, Any] | None:
         if not self.vars_transform:
             return None
-        ctx: Dict[str, Any] = {}
+        ctx: dict[str, Any] = {}
         # Transform
         for k in self.vars_transform:
             if k.name in e_vars:

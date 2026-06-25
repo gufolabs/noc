@@ -7,7 +7,6 @@
 
 # Python modules
 from collections import defaultdict
-from typing import Optional, Dict
 
 # Third-party modules
 from django.http import HttpResponse
@@ -45,7 +44,7 @@ class VLANApplication(ExtDocApplication):
         return o.profile.style.css_class_name if o.profile and o.profile.style else ""
 
     @cachedmethod(key="vlans-interface-count-%s", ttl=180)
-    def get_l2domain_interfaces_count(self, l2_domain: str) -> Dict[int, int]:
+    def get_l2domain_interfaces_count(self, l2_domain: str) -> dict[int, int]:
         """
         Calculate VLAN Count by interface on ManagedObject list
         :param l2_domain:
@@ -215,8 +214,8 @@ class VLANApplication(ExtDocApplication):
         request,
         l2_domain: "L2Domain",
         pool: "ResourcePool" = None,
-        vlan_id: Optional[int] = None,
-        name: Optional[str] = None,
+        vlan_id: int | None = None,
+        name: str | None = None,
         **kwargs,
     ):
         # @todo check user permission

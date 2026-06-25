@@ -245,7 +245,7 @@ class Script(BaseScript):
                 if ifname in oam:
                     iface["enabled_protocols"] += ["OAM"]
                 interfaces += [iface]
-            c = self.cli(("show interface port-list 1-%d switchport" % self.port_count))
+            c = self.cli("show interface port-list 1-%d switchport" % self.port_count)
             for match in self.rx_switchport_beta.finditer(c):
                 ifname = match.group("port")
                 for iface in interfaces:

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Dict, Callable, Iterable, Tuple
+from typing import Callable, Iterable
 from threading import Lock
 import sys
 import inspect
@@ -34,9 +34,9 @@ def unscope(x):
 
 
 class ProbeNodeState(BaseModel):
-    lt: Optional[int] = None
-    lv: Optional[ValueType] = None
-    flag: Optional[int] = None
+    lt: int | None = None
+    lv: ValueType | None = None
+    flag: int | None = None
 
 
 class ProbeNodeConfig(BaseModel):
@@ -56,13 +56,13 @@ class ProbeNode(BaseCDAGNode):
     state_cls = ProbeNodeState
     categories = [Category.UTIL]
     dot_shape = "cds"
-    _conversions: Dict[Tuple[str, bool], Dict[str, Callable[..., float]]] = {}
-    _scales: Dict[str, Tuple[int, int]] = {}
+    _conversions: dict[tuple[str, bool], dict[str, Callable[..., float]]] = {}
+    _scales: dict[str, tuple[int, int]] = {}
     _conv_lock = Lock()
     # Test stub, set by .set_convert() classmethod
-    _MS_CONVERT: Dict[str, Dict[str, str]] = {}
+    _MS_CONVERT: dict[str, dict[str, str]] = {}
     # Test stub, set by .set_scale() classmethod
-    _SCALE: Dict[str, Tuple[int, int]] = {}
+    _SCALE: dict[str, tuple[int, int]] = {}
 
     __slots__ = "base", "convert", "exp", "fatal_error"
 
@@ -70,15 +70,15 @@ class ProbeNode(BaseCDAGNode):
         super().__init__(*args, **kwargs)
         self.convert = self.get_convert(self.config.unit, self.config.is_delta)
         self.base, self.exp = self.get_scale(self.config.scale)
-        self.fatal_error: Optional[str] = None
+        self.fatal_error: str | None = None
 
     def __str__(self):
         return f"{self.name}: {self.node_id}"
 
-    def get_error(self) -> Optional[str]:
+    def get_error(self) -> str | None:
         return self.fatal_error or None
 
-    def _upscale(self, v: ValueType, scale: str) -> Optional[ValueType]:
+    def _upscale(self, v: ValueType, scale: str) -> ValueType | None:
         if v is None:
             return None  # Cannot scale None
         if scale == self.config.scale:
@@ -95,7 +95,7 @@ class ProbeNode(BaseCDAGNode):
             return v * self.base**-self.exp
         return v * (base**exp) * self.base**-self.exp
 
-    def get_value(self, x: ValueType, ts: int, unit: str) -> Optional[ValueType]:
+    def get_value(self, x: ValueType, ts: int, unit: str) -> ValueType | None:
         flag = None
         if "|" in unit:
             # <unit>|<flag>
@@ -180,7 +180,7 @@ class ProbeNode(BaseCDAGNode):
             return MAX32
         return MAX64
 
-    def get_delta(self, value: ValueType, ts: int) -> Optional[ValueType]:
+    def get_delta(self, value: ValueType, ts: int) -> ValueType | None:
         """
         Calculate value from delta, gently handling overflows
         :param value:
@@ -204,7 +204,7 @@ class ProbeNode(BaseCDAGNode):
         return d_wrap
 
     @classmethod
-    def get_convert(cls, unit: str, is_delta: bool = False) -> Dict[str, Callable[..., float]]:
+    def get_convert(cls, unit: str, is_delta: bool = False) -> dict[str, Callable[..., float]]:
         def q(expr: str) -> Callable[..., float]:
             fn = get_fn(expr)
             params = inspect.signature(fn).parameters
@@ -228,7 +228,7 @@ class ProbeNode(BaseCDAGNode):
             return cls._conversions[(unit, is_delta)]
 
     @classmethod
-    def get_scale(cls, code: str) -> Tuple[int, int]:
+    def get_scale(cls, code: str) -> tuple[int, int]:
         """
         Get scale base and exponent by code
         :param code: Scale code
@@ -248,7 +248,7 @@ class ProbeNode(BaseCDAGNode):
             return cls._scales[code]
 
     @classmethod
-    def iter_conversion(cls, code: str) -> Iterable[Tuple[str, str]]:
+    def iter_conversion(cls, code: str) -> Iterable[tuple[str, str]]:
         """
         Iterate all possible conversions for unit code
         :param code:
@@ -265,7 +265,7 @@ class ProbeNode(BaseCDAGNode):
                     yield conv.unit.code, conv.expr
 
     @classmethod
-    def iter_scales(cls) -> Iterable[Tuple[str, int, int]]:
+    def iter_scales(cls) -> Iterable[tuple[str, int, int]]:
         if cls._SCALE:
             # Test branch
             for code, (base, exp) in cls._SCALE.items():
@@ -276,7 +276,7 @@ class ProbeNode(BaseCDAGNode):
                 yield scale.code, scale.base, scale.exp
 
     @classmethod
-    def set_convert(cls, data: Dict[str, Dict[str, str]]) -> None:
+    def set_convert(cls, data: dict[str, dict[str, str]]) -> None:
         """
         Override database-based measure units by test data
         :param data:
@@ -293,7 +293,7 @@ class ProbeNode(BaseCDAGNode):
         cls._MS_CONVERT = {}
 
     @classmethod
-    def set_scale(cls, data: Dict[str, Tuple[int, int]]) -> None:
+    def set_scale(cls, data: dict[str, tuple[int, int]]) -> None:
         """
         Override database-based scales by test data
         :param data:
@@ -309,7 +309,7 @@ class ProbeNode(BaseCDAGNode):
         """
         cls._SCALE = {}
 
-    def get_time_delta(self, ts: int) -> Optional[int]:
+    def get_time_delta(self, ts: int) -> int | None:
         """
         Calculate time_delta from node ts
         return

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Generic, TypeVar, Any, Optional, Union, Annotated
+from typing import Generic, TypeVar, Any, Annotated
 
 # Third-party modules
 from pydantic_core import CoreSchema, core_schema
@@ -20,7 +20,7 @@ class RemoteReference(BaseModel):
     """For reference field to Remote System Value"""
 
     id: str
-    remote_system: Optional[str]
+    remote_system: str | None
 
 
 class MappingItem(BaseModel):
@@ -35,16 +35,16 @@ class ETLMapping(BaseModel):
 
     value: str
     scope: str
-    remote_id: Optional[str] = None
+    remote_id: str | None = None
 
 
 class CapsItem(BaseModel):
     name: str
-    value: Union[str, bool, int, list]
+    value: str | bool | int | list
 
 
 class Reference(Generic[T]):
-    def __init__(self, name: str, model: T, value: Any, remote_system: Optional[str] = None):
+    def __init__(self, name: str, model: T, value: Any, remote_system: str | None = None):
         self.name = name
         self.model = model
         self.value = value
@@ -55,7 +55,7 @@ class Reference(Generic[T]):
         cls, source_type: Any, handler: GetCoreSchemaHandler
     ) -> CoreSchema:
         return core_schema.no_info_after_validator_function(
-            cls.validate, handler(Union[str, RemoteReference, ETLMapping])
+            cls.validate, handler(str | RemoteReference | ETLMapping)
         )
 
     @classmethod

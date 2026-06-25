@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from .base import BaseModel
@@ -15,7 +14,7 @@ from .base import BaseModel
 class SubscriberProfile(BaseModel):
     id: str
     name: str
-    description: Optional[str] = None
-    workflow: Optional[str] = None
+    description: str | None = None
+    workflow: str | None = None
 
     _csv_fields = ["id", "name", "description", "workflow"]

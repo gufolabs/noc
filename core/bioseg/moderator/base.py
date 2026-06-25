@@ -7,7 +7,6 @@
 
 # Python modules
 import logging
-from typing import Optional, Tuple, Type
 
 # NOC modules
 from noc.inv.models.biosegtrial import BioSegTrial
@@ -106,9 +105,9 @@ def moderate_trial(trial: BioSegTrial) -> None:
 def moderate(
     attacker: NetworkSegment,
     target: NetworkSegment,
-    attacker_object: Optional[ManagedObject] = None,
-    target_object: Optional[ManagedObject] = None,
-) -> Tuple[Optional[str], Optional[str], bool]:
+    attacker_object: ManagedObject | None = None,
+    target_object: ManagedObject | None = None,
+) -> tuple[str | None, str | None, bool]:
     """
     Perform trial moderation
 
@@ -168,9 +167,9 @@ def moderate(
 def get_collision_policy(
     seg: NetworkSegment,
     is_persistent: bool,
-    attacker_object: Optional[ManagedObject] = None,
-    target_object: Optional[ManagedObject] = None,
-) -> Optional[Type[BioCollisionPolicy]]:
+    attacker_object: ManagedObject | None = None,
+    target_object: ManagedObject | None = None,
+) -> type[BioCollisionPolicy] | None:
     attacker_level = attacker_object.object_profile.level if attacker_object else None
     target_level = target_object.object_profile.level if target_object else None
     for cp in seg.profile.bio_collision_policy:

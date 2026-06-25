@@ -11,7 +11,7 @@ import asyncio
 import math
 
 # Third-party modules
-from typing import Optional, Coroutine
+from typing import Coroutine
 
 
 class PeriodicCallback:
@@ -31,8 +31,8 @@ class PeriodicCallback:
         self.interval = float(interval) / 1000.0
         self.delay = float(delay) / 1000.0
         self._running = False
-        self._timer: Optional[asyncio.TimerHandle] = None
-        self._start_time: Optional[float] = None
+        self._timer: asyncio.TimerHandle | None = None
+        self._start_time: float | None = None
 
     def start(self):
         self._running = True

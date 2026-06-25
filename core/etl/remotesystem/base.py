@@ -9,7 +9,7 @@
 import logging
 from dataclasses import dataclass
 from time import perf_counter
-from typing import Optional, List, Dict, Tuple, Any
+from typing import Any
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter
@@ -24,8 +24,8 @@ class StepResult:
     step: str
     loader: str
     duration: float
-    error: Optional[str] = None
-    summary: Optional[Dict[str, int]] = None
+    error: str | None = None
+    summary: dict[str, int] | None = None
 
     @property
     def has_changed(self) -> bool:
@@ -78,7 +78,7 @@ class BaseRemoteSystem:
     def __init__(self, remote_system):
         self.remote_system = remote_system
         self.name: str = remote_system.name
-        self.config: Dict[str, str] = self.remote_system.config
+        self.config: dict[str, str] = self.remote_system.config
         self.logger = PrefixLoggerAdapter(logger, self.name)
 
     def get_loader_chain(self):
@@ -90,8 +90,8 @@ class BaseRemoteSystem:
         return chain
 
     def extract(
-        self, extractors=None, incremental: bool = False, checkpoint: Optional[str] = None
-    ) -> List[StepResult]:
+        self, extractors=None, incremental: bool = False, checkpoint: str | None = None
+    ) -> list[StepResult]:
         extractors = extractors or []
         r = []
         for en in reversed(self.extractors_order):
@@ -125,7 +125,7 @@ class BaseRemoteSystem:
             )
         return r
 
-    def load(self, loaders=None) -> List[StepResult]:
+    def load(self, loaders=None) -> list[StepResult]:
         loaders = loaders or []
         # Build chain
         chain = self.get_loader_chain()
@@ -155,7 +155,7 @@ class BaseRemoteSystem:
             ll.purge()
         return r
 
-    def check(self, extractors=None, out=None) -> Tuple[int, List[StepResult]]:
+    def check(self, extractors=None, out=None) -> tuple[int, list[StepResult]]:
         extractors = extractors or []
         chain = self.get_loader_chain()
         # Check
@@ -186,7 +186,7 @@ class BaseRemoteSystem:
             out.write("\n".join(summary) + "\n")
         return n_errors, r
 
-    def get_events(self, events: List[Dict[str, Any]], deferred, **kwargs) -> List[Event]:
+    def get_events(self, events: list[dict[str, Any]], deferred, **kwargs) -> list[Event]:
         """Push extract FM Events"""
         if not self.extractors or FM_EVENT_EXTRACTOR not in self.extractors[self.__module__]:
             self.logger.info("Extractor %s is not implemented. Skipping", FM_EVENT_EXTRACTOR)

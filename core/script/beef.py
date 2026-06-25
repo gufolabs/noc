@@ -15,7 +15,7 @@ from io import StringIO
 
 # Third-party modules
 import orjson
-from typing import Optional, List, NamedTuple, Tuple, Dict
+from typing import NamedTuple
 
 # NOC modules
 from noc.core.comp import smart_text, smart_bytes
@@ -35,13 +35,13 @@ class BoxData(NamedTuple):
 
 class CLIFSMData(NamedTuple):
     state: str
-    reply: List[bytes]
+    reply: list[bytes]
 
 
 class CLIData(NamedTuple):
-    names: List[str]
+    names: list[str]
     request: bytes
-    reply: List[bytes]
+    reply: list[bytes]
 
 
 class MIBData(NamedTuple):
@@ -51,18 +51,18 @@ class MIBData(NamedTuple):
 
 class Beef:
     def __init__(self):
-        self.version: Optional[str] = None
+        self.version: str | None = None
         self.uuid = None
         self.spec = None
-        self.box: Optional[BoxData] = None
+        self.box: BoxData | None = None
         self.changed = None
-        self.description: Optional[str] = None
-        self.cli_fsm: Optional[List[CLIFSMData]] = None
-        self.cli: Optional[List[CLIData]] = None
-        self.mib: Optional[List[MIBData]] = None
-        self.mib_encoding: Optional[str] = None
-        self.mib_oid_values: Optional[Dict[str, bytes]] = None
-        self.mib_oids: Optional[List[Tuple[int]]] = None
+        self.description: str | None = None
+        self.cli_fsm: list[CLIFSMData] | None = None
+        self.cli: list[CLIData] | None = None
+        self.mib: list[MIBData] | None = None
+        self.mib_encoding: str | None = None
+        self.mib_oid_values: dict[str, bytes] | None = None
+        self.mib_oids: list[tuple[int]] | None = None
 
     @classmethod
     def from_json(cls, data):
@@ -318,7 +318,7 @@ class Beef:
             self.mib_oid_values = {m.oid: m.value for m in self.mib}
         return self.mib_oid_values
 
-    def get_mib_value(self, oid: str) -> Optional[bytes]:
+    def get_mib_value(self, oid: str) -> bytes | None:
         """
         Lookup mib and return oid value
         :param oid:
@@ -335,7 +335,7 @@ class Beef:
         :return:
         """
         if self.mib_oids is None:
-            self.mib_oids = sorted((tuple(int(c) for c in m.oid.split(".")) for m in self.mib))
+            self.mib_oids = sorted(tuple(int(c) for c in m.oid.split(".")) for m in self.mib)
         return self.mib_oids
 
     def iter_mib_oids(self, oid):

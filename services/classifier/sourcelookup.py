@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Dict, Tuple, Optional, Iterable
+from typing import Iterable
 
 # NOC modules
 from noc.core.fm.event import Target
@@ -21,11 +21,11 @@ class SourceConfig:
     bi_id: int
     address: str
     fm_pool: str
-    sa_profile: Optional[str] = None
-    effective_labels: Tuple[str, ...] = None
-    watchers: Optional[Tuple[str, ...]] = None
-    services: Optional[Tuple[int, ...]] = None
-    mapping_refs: Optional[Tuple[str, ...]] = None
+    sa_profile: str | None = None
+    effective_labels: tuple[str, ...] = None
+    watchers: tuple[str, ...] | None = None
+    services: tuple[int, ...] | None = None
+    mapping_refs: tuple[str, ...] | None = None
 
     @classmethod
     def from_data(cls, data) -> "SourceConfig":
@@ -55,12 +55,12 @@ class SourceConfig:
 
 class SourceLookup:
     def __init__(self):
-        self.source_configs: Dict[str, SourceConfig] = {}  # id -> SourceConfig
-        self.source_map: Dict[str, str] = {}
+        self.source_configs: dict[str, SourceConfig] = {}  # id -> SourceConfig
+        self.source_map: dict[str, str] = {}
 
     def resolve_object(
-        self, target: Target, remote_system: Optional[str] = None
-    ) -> Optional[ManagedObject]:
+        self, target: Target, remote_system: str | None = None
+    ) -> ManagedObject | None:
         """
         Resolve Managed Object by target
 
@@ -83,8 +83,8 @@ class SourceLookup:
             return ManagedObject.get_by_id(int(mo))
 
     def resolve_target(
-        self, target: Target, remote_system: Optional[str] = None
-    ) -> Optional[SourceConfig]:
+        self, target: Target, remote_system: str | None = None
+    ) -> SourceConfig | None:
         """
         Resolve Managed Object by target
 
@@ -114,7 +114,7 @@ class SourceLookup:
                 del self.source_map[m]
         return True
 
-    def update_mappings(self, sid, new: Iterable[str], old: Optional[Iterable[str]] = None):
+    def update_mappings(self, sid, new: Iterable[str], old: Iterable[str] | None = None):
         """"""
         # Delete Old Mappings
         for m in set(old or []) - set(new):

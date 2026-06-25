@@ -9,7 +9,6 @@
 import datetime
 from time import perf_counter
 from collections import defaultdict
-from typing import List, Dict
 
 # NOC modules
 from noc.core.scheduler.periodicjob import PeriodicJob
@@ -33,7 +32,7 @@ class RemoteSystemJob(PeriodicJob):
     def handler(self, **kwargs):
         """Processed Sync"""
 
-    def process_detail(self, details: List[StepResult], duration: float = 0):
+    def process_detail(self, details: list[StepResult], duration: float = 0):
         """Process details"""
         # Send report
         summary = defaultdict(dict)
@@ -162,7 +161,7 @@ class ETLMetricSyncJob(RemoteSystemJob):
             self.logger.warning("No active Metrics service. Skipping...")
             return
         parts = defaultdict(list)
-        extract_sensors: Dict[str, Sensor] = {}
+        extract_sensors: dict[str, Sensor] = {}
         sensors, values, s_values = 0, 0, 0
         for s in Sensor.objects.filter(
             remote_system=self.object,

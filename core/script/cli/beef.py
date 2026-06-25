@@ -7,7 +7,6 @@
 
 # Python modules
 import asyncio
-from typing import Optional
 
 # NOC modules
 from .cli import CLI
@@ -26,7 +25,7 @@ class BeefStream(TelnetStream):
     def close(self):
         self.cli = None
 
-    async def connect(self, address: str, port: Optional[int] = None):
+    async def connect(self, address: str, port: int | None = None):
         self.beef = self.cli.script.request_beef()
         if not self.beef:
             # Connection refused

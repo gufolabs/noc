@@ -7,7 +7,7 @@
 
 # Python modules
 import datetime
-from typing import Optional, Dict, Any, List
+from typing import Any
 
 # Third-party modules
 from pydantic import BaseModel
@@ -30,7 +30,7 @@ class StateItem(BaseModel):
     id: str
     name: str
     workflow: WorkflowItem
-    allocated_till: Optional[datetime.datetime]
+    allocated_till: datetime.datetime | None
 
 
 class ProjectItem(BaseModel):
@@ -46,8 +46,8 @@ class RemoteMapItem(BaseModel):
 class AdministrativeDomain(BaseModel):
     id: str
     name: str
-    remote_system: Optional[RemoteSystemItem] = None
-    remote_id: Optional[str] = None
+    remote_system: RemoteSystemItem | None = None
+    remote_id: str | None = None
 
 
 class Service(BaseModel):
@@ -68,8 +68,8 @@ class DisposeAction(BaseModel):
 
     action: ActionType
     key: str
-    args: Optional[Dict[str, Any]] = None
-    model_id: Optional[str] = None
+    args: dict[str, Any] | None = None
+    model_id: str | None = None
 
     @property
     def is_target(self) -> bool:
@@ -79,9 +79,9 @@ class DisposeAction(BaseModel):
 class ManagedObjectOpaque(BaseModel):
     id: str
     name: str
-    adm_path: List[int]
+    adm_path: list[int]
     administrative_domain: AdministrativeDomain
-    remote_system: Optional[RemoteSystemItem] = None
-    remote_id: Optional[str] = None
-    mappings: Optional[List[RemoteMapItem]] = None
-    services: Optional[List[Service]] = None
+    remote_system: RemoteSystemItem | None = None
+    remote_id: str | None = None
+    mappings: list[RemoteMapItem] | None = None
+    services: list[Service] | None = None

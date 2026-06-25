@@ -9,7 +9,6 @@
 import argparse
 import datetime
 import os
-from typing import List
 
 # Third-party modules
 import bson
@@ -221,7 +220,7 @@ class Command(BaseCommand):
                     if mpath.startswith(mirror):
                         safe_rewrite(mpath, data)
                     else:
-                        self.print("    !!! mirror path violation for" % address)
+                        self.print(f"    !!! mirror path violation for {address}")
         self.print("Done")
 
     def _forget(self, mo, revision: str, dry_run=False):
@@ -260,7 +259,7 @@ class Command(BaseCommand):
 
     def handle_forget_history(
         self,
-        objects: List[str],
+        objects: list[str],
         before_days: int = None,
         before_revision: str = None,
         approve=False,

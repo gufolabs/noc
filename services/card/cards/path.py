@@ -7,7 +7,6 @@
 
 # Third-party modules
 import orjson
-from typing import List
 
 # NOC modules
 from .base import BaseCard
@@ -23,7 +22,7 @@ class PathCard(BaseCard):
     card_css = ["/ui/pkg/leaflet/leaflet.css", "/ui/card/css/path.css"]
 
     @property
-    def card_js(self) -> List[str]:
+    def card_js(self) -> list[str]:
         res = [
             "/ui/pkg/leaflet/leaflet.js",
         ]

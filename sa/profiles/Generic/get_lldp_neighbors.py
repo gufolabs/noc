@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -87,7 +86,7 @@ class Script(BaseScript):
             raise NotImplementedError()
         return r
 
-    def get_snmp_remote_address(self) -> Dict[str, IP]:
+    def get_snmp_remote_address(self) -> dict[str, IP]:
         """Getting remote IP address for LLDP records"""
         r = {}
         for oid, v in self.snmp.getnext(

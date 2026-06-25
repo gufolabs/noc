@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any, Optional
+from typing import Any
 
 # NOC modules
 from noc.inv.models.capability import Capability
@@ -51,7 +51,7 @@ class ServiceLoader(BaseLoader):
             )
         ]
 
-    def post_save(self, o: ServiceModel, fields: Dict[str, Any]):
+    def post_save(self, o: ServiceModel, fields: dict[str, Any]):
         if not fields:
             capabilities, instances = [], []
         else:
@@ -74,8 +74,8 @@ class ServiceLoader(BaseLoader):
         )
 
     def find_object(
-        self, v: Dict[str, Any], mappings: Optional[Dict[Any, str]] = None, **kwargs
-    ) -> Optional[Any]:
+        self, v: dict[str, Any], mappings: dict[Any, str] | None = None, **kwargs
+    ) -> Any | None:
         """
         Find object by remote system/remote id
 

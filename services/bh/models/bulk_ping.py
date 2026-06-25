@@ -6,23 +6,22 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel
 
 
 class PingRequest(BaseModel):
-    addresses: List[str]
-    timeout: Optional[int]
+    addresses: list[str]
+    timeout: int | None
     n: int = 1
-    tos: Optional[int]
+    tos: int | None
 
 
 class PingItem(BaseModel):
     address: str
-    rtt: List[Optional[float]]
+    rtt: list[float | None]
 
 
 class PingResponse(BaseModel):
-    items: List[PingItem]
+    items: list[PingItem]

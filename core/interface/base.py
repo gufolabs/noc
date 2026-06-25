@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any
+from typing import Any
 
 # NOC modules
 from .error import InterfaceTypeError
@@ -121,7 +121,7 @@ class BaseInterface(metaclass=BaseInterfaceMetaclass):
             r += [p.get_form_field(n)]
         return r
 
-    def get_check_params(self, check) -> Dict[str, Any]:
+    def get_check_params(self, check) -> dict[str, Any]:
         """Convert check args to script param"""
         return {}
 

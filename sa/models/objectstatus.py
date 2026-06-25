@@ -10,7 +10,6 @@
 import datetime
 import operator
 from threading import Lock
-from typing import List, Dict, Tuple, Optional, Set
 
 # Third-party modules
 import cachetools
@@ -60,7 +59,7 @@ class ObjectStatus(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_failed_object_cache"), lock=lambda _: id_lock)
-    def get_failed_objects(cls) -> Set[int]:
+    def get_failed_objects(cls) -> set[int]:
         r = next(
             ObjectStatus._get_collection().aggregate(
                 [
@@ -83,7 +82,7 @@ class ObjectStatus(Document):
         return oid in cls.get_failed_objects()
 
     @classmethod
-    def get_last_status(cls, object) -> Tuple[Optional[bool], Optional[datetime.datetime]]:
+    def get_last_status(cls, object) -> tuple[bool | None, datetime.datetime | None]:
         """
         Returns last registred status and update time
         :param object: Managed Object id
@@ -95,7 +94,7 @@ class ObjectStatus(Document):
         return None, None
 
     @classmethod
-    def get_statuses(cls, objects: List[int]) -> Dict[int, bool]:
+    def get_statuses(cls, objects: list[int]) -> dict[int, bool]:
         """
         Returns a map of object id -> status
         for a list od object ids
@@ -140,7 +139,7 @@ class ObjectStatus(Document):
         return True
 
     @classmethod
-    def update_status_bulk(cls, statuses: List[Tuple[int, bool, Optional[int]]]):
+    def update_status_bulk(cls, statuses: list[tuple[int, bool, int | None]]):
         """
         Update statuses bulk
         :param statuses:
@@ -152,7 +151,7 @@ class ObjectStatus(Document):
         coll = ObjectStatus._get_collection()
 
         bulk = []
-        outages: List[Tuple[int, datetime.datetime, datetime.datetime]] = []
+        outages: list[tuple[int, datetime.datetime, datetime.datetime]] = []
         # Getting current status
         cs = {
             x["object"]: {"status": x["status"], "last": x.get("last")}

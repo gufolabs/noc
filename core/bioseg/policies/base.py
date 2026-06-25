@@ -7,7 +7,6 @@
 
 # Python modules
 import logging
-from typing import Optional, List, Dict
 from django.db import connection
 
 # NOC modules
@@ -30,16 +29,16 @@ class BaseBioSegPolicy:
         self,
         attacker: NetworkSegment,
         target: NetworkSegment,
-        logger: Optional[logging.Logger] = None,
-        calcified_profile: Optional[NetworkSegmentProfile] = None,
-        segment_power_function: Optional[str] = None,
+        logger: logging.Logger | None = None,
+        calcified_profile: NetworkSegmentProfile | None = None,
+        segment_power_function: str | None = None,
     ):
         self.attacker = attacker
         self.target = target
         self.logger = logger or logging.getLogger(__name__)
         self.calcified_profile = calcified_profile
         self.segment_power_function = segment_power_function or "SUM"
-        self._powers: Dict[NetworkSegment, int] = {}
+        self._powers: dict[NetworkSegment, int] = {}
 
     def trial(self) -> str:
         """
@@ -77,7 +76,7 @@ class BaseBioSegPolicy:
     def set_power(self, seg: NetworkSegment, power: int) -> None:
         self._powers[seg] = power
 
-    def get_objects(self, seg: NetworkSegment) -> List[ManagedObject]:
+    def get_objects(self, seg: NetworkSegment) -> list[ManagedObject]:
         return list(ManagedObject.objects.filter(segment=seg.id))
 
     def consume_objects(self, src: NetworkSegment, dst: NetworkSegment) -> None:
@@ -88,7 +87,7 @@ class BaseBioSegPolicy:
         :return:
         """
         self.logger.info("%s consumes objects from %s", dst.name, src.name)
-        objects: List[ManagedObject] = self.get_objects(src)
+        objects: list[ManagedObject] = self.get_objects(src)
         if not objects:
             self.logger.info("Nothing to consume. Giving up.")
             return

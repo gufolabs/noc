@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Optional, TypeVar, List, Dict, Callable
+from typing import Any, TypeVar, Callable
 from http import HTTPStatus
 
 # Third-party modules
@@ -43,7 +43,7 @@ class ModelResourceAPI(BaseResourceAPI[T]):
         """
         return cls.model.objects.all()
 
-    def get_total_items(self, user: User, transforms: Optional[List[Callable]] = None) -> int:
+    def get_total_items(self, user: User, transforms: list[Callable] | None = None) -> int:
         qs = self.queryset(user)
         if transforms:
             for t in transforms:
@@ -51,8 +51,8 @@ class ModelResourceAPI(BaseResourceAPI[T]):
         return qs.count()
 
     def get_summary_items(
-        self, user: User, field: str, transforms: Optional[List[Callable]] = None
-    ) -> List[SummaryItem]:
+        self, user: User, field: str, transforms: list[Callable] | None = None
+    ) -> list[SummaryItem]:
         """
         Calculate total amount of items, satisfying criteria
         :param user:
@@ -78,11 +78,11 @@ class ModelResourceAPI(BaseResourceAPI[T]):
     def get_items(
         self,
         user: User,
-        sort: List[str],
+        sort: list[str],
         limit: int = config.ui.max_rest_limit,
         offset: int = 0,
-        transforms: Optional[List[Callable]] = None,
-    ) -> List[T]:
+        transforms: list[Callable] | None = None,
+    ) -> list[T]:
         # Start from initial restrictions
         qs = self.queryset(user)
         # Then apply transformations passed by query
@@ -94,7 +94,7 @@ class ModelResourceAPI(BaseResourceAPI[T]):
         # Finally, limit to selected frame
         return qs[offset : offset + limit]
 
-    def get_item(self, id: str, user: User) -> Optional[T]:
+    def get_item(self, id: str, user: User) -> T | None:
         return self.queryset(user).filter(pk=id).first()
 
     def create_item(self, user: User, **kwargs) -> None:
@@ -125,10 +125,10 @@ class ModelResourceAPI(BaseResourceAPI[T]):
         return bool(item)
 
     def add_ref_cleaner(self, name: str, remote: SupportsGetById) -> None:
-        def inner(value: Optional[Dict[str, Any]]) -> Optional[Any]:
+        def inner(value: dict[str, Any] | None) -> Any | None:
             if not value:
                 return None
-            if not isinstance(value, Dict):
+            if not isinstance(value, dict):
                 raise ValueError("Must be dict")
             item = remote.get_by_id(value["id"])
             if not item:

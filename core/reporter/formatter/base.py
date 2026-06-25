@@ -7,7 +7,6 @@
 
 # Python modules
 import logging
-from typing import Optional
 from io import BytesIO
 
 # NOC modules
@@ -24,7 +23,7 @@ class DataFormatter:
     Create result document by setted format
     """
 
-    label: Optional[str] = None
+    label: str | None = None
 
     def __init__(
         self,
@@ -40,7 +39,7 @@ class DataFormatter:
         self.csv_delimiter = config.web.report_csv_delimiter
         self.logger = logger
 
-    def get_band_format(self, band: str) -> Optional[BandFormat]:
+    def get_band_format(self, band: str) -> BandFormat | None:
         if self.report_template.bands_format and band in self.report_template.bands_format:
             return self.report_template.bands_format[band]
 

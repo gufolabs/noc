@@ -7,7 +7,7 @@
 
 # Python modules
 import operator
-from typing import Optional, List
+from typing import Optional
 from threading import Lock
 
 # Third-party modules
@@ -34,8 +34,8 @@ id_lock = Lock()
 
 class MatchRule(BaseModel):
     dynamic_order: int = 0
-    labels: List[str] = []
-    handler: Optional[str]
+    labels: list[str] = []
+    handler: str | None
 
     @field_validator("handler")
     def handler_must_handler(cls, v):  # pylint: disable=no-self-argument
@@ -49,7 +49,7 @@ class MatchRule(BaseModel):
         return str(h.id)
 
 
-MatchRules = RootModel[List[Optional[MatchRule]]]
+MatchRules = RootModel[list[MatchRule | None]]
 
 
 @Label.model
