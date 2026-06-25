@@ -13,7 +13,7 @@ from time import perf_counter
 import asyncio
 
 # Third-party modules
-from typing import Dict, Any
+from typing import Any
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter
@@ -107,7 +107,7 @@ class Job:
         self.start_time = None
         self.duration = None
         self.logger = PrefixLoggerAdapter(scheduler.logger, self.get_display_key())
-        self.context: Dict[str, Any] = {}
+        self.context: dict[str, Any] = {}
 
     def load_context(self, data):
         self.context = data or {}

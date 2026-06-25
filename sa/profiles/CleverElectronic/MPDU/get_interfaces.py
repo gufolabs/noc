@@ -4,7 +4,6 @@
 # Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
-from typing import List
 
 # NOC modules
 from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
@@ -16,7 +15,7 @@ class Script(BaseScript):
     name = "CleverElectronic.MPDU.get_interfaces"
     interface = IGetInterfaces
 
-    def get_hints(self, ifname: str, iftype: str) -> List[str]:
+    def get_hints(self, ifname: str, iftype: str) -> list[str]:
         if ifname.startswith("eth"):
             return ["noc::interface::role::uplink"]
 

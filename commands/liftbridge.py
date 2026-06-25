@@ -12,7 +12,6 @@ import argparse
 import random
 from dateutil.parser import parse
 from time import perf_counter
-from typing import Optional
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -128,7 +127,7 @@ class Command(BaseCommand):
     def handle_create_stream(
         self,
         name: str,
-        subject: Optional[str] = None,
+        subject: str | None = None,
         partitions: int = 1,
         rf: int = 1,
         *args,
@@ -256,7 +255,7 @@ class Command(BaseCommand):
             print("batch")
             run_sync(batch_publisher)
 
-    def handle_benchmark_subscriber(self, name: str, cursor: Optional[str] = None, *args, **kwargs):
+    def handle_benchmark_subscriber(self, name: str, cursor: str | None = None, *args, **kwargs):
         async def subscriber():
             async with LiftbridgeClient(self._broker) as client:
                 report_interval = 1.0

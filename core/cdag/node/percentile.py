@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # NOC modules
 from .base import ValueType, Category
@@ -27,8 +26,8 @@ class PercentileNode(WindowNode):
     categories = [Category.WINDOW]
 
     def get_window_value(
-        self, values: List[ValueType], timestamps: List[int]
-    ) -> Optional[ValueType]:
+        self, values: list[ValueType], timestamps: list[int]
+    ) -> ValueType | None:
         wl = sorted(values)
         i = len(wl) * self.config.percentile // 100
         return wl[i]

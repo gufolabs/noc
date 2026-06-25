@@ -9,7 +9,6 @@
 import argparse
 import sys
 from contextlib import contextmanager
-from typing import List
 
 # NOC modules
 from noc.core.management.base import BaseCommand, CommandError
@@ -37,7 +36,7 @@ class Command(BaseCommand):
         parser.add_argument("ids", nargs=argparse.REMAINDER, help="List of extractor names")
 
     def handle(
-        self, model, state=None, dry_run: bool = False, ids: List[str] = None, *args, **options
+        self, model, state=None, dry_run: bool = False, ids: list[str] = None, *args, **options
     ):
         """"""
         print(model, state, args, ids)
@@ -67,7 +66,7 @@ class Command(BaseCommand):
                     except Exception:
                         error_report()
 
-    def iter_objects(self, mid, ids: List[str], state=None):
+    def iter_objects(self, mid, ids: list[str], state=None):
         if state:
             self.print("Iter objects with state")
         model = get_model(mid)

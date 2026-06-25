@@ -8,7 +8,6 @@
 # Python modules
 import datetime
 import threading
-from typing import Optional
 
 # NOC modules
 from noc.core.scheduler.job import Job
@@ -26,7 +25,7 @@ next_retry = datetime.datetime.now()
 class SequenceJob(Job):
     def __init__(self, job, attrs):
         super().__init__(job, attrs)
-        self.error: Optional[str] = None
+        self.error: str | None = None
 
     def schedule_next(self, status):
         # Get next run

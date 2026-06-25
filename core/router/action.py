@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import logging
-from typing import Type, Tuple, Dict, Iterator, Literal, Optional, List, Any, ClassVar
+from typing import Iterator, Literal, Any, ClassVar
 from dataclasses import dataclass
 
 # Third-party modules
@@ -39,7 +39,7 @@ DROP = ""
 PASS = "<pass>"
 DUMP = "<dump>"
 FWD = "<fwd>"
-ACTION_TYPES: Dict[str, Type["Action"]] = {}
+ACTION_TYPES: dict[str, type["Action"]] = {}
 
 
 @dataclass
@@ -51,10 +51,10 @@ class HeaderItem:
 @dataclass
 class ActionCfg:
     type: Literal["stream", "notification_group", "drop", "job"]
-    stream: Optional[str] = None
-    notification_group: Optional[str] = None
-    render_template: Optional[str] = None
-    headers: Optional[List[HeaderItem]] = None
+    stream: str | None = None
+    notification_group: str | None = None
+    render_template: str | None = None
+    headers: list[HeaderItem] | None = None
 
 
 class ActionBase(type):
@@ -71,7 +71,7 @@ class Action(metaclass=ActionBase):
     name: ClassVar[str]
 
     def __init__(self, cfg: ActionCfg):
-        self.headers: Dict[str, bytes] = {
+        self.headers: dict[str, bytes] = {
             h.header: h.value.encode(encoding=DEFAULT_ENCODING) for h in cfg.headers or []
         }
 
@@ -93,12 +93,12 @@ class Action(metaclass=ActionBase):
         )
 
     @classmethod
-    def get_headers(cls, data) -> List[HeaderItem]:
+    def get_headers(cls, data) -> list[HeaderItem]:
         """Parse internal headers"""
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], bytes]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], bytes]]:
         raise NotImplementedError
 
 
@@ -107,7 +107,7 @@ class DropAction(Action):
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], bytes]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], bytes]]:
         yield DROP, {}, msg.value
 
 
@@ -116,7 +116,7 @@ class DumpAction(Action):
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], bytes]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], bytes]]:
         yield DUMP, {}, msg.value
 
 
@@ -129,7 +129,7 @@ class StreamAction(Action):
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], bytes]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], bytes]]:
         yield self.stream, self.headers, msg.value
 
 
@@ -141,7 +141,7 @@ class NotificationAction(Action):
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], bytes]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], bytes]]:
         if MX_NOTIFICATION_METHOD not in msg.headers:
             # Processed send notification
             logger.error("Notification without Method set. Skipping...")
@@ -171,7 +171,7 @@ class MetricAction(Action):
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], bytes]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], bytes]]:
         yield self.stream, self.headers, msg.value
 
 
@@ -190,7 +190,7 @@ class JobAction(Action):
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], bytes]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], bytes]]:
         if MX_JOB_HANDLER in self.headers:
             handler = self.headers[MX_JOB_HANDLER]
         elif MX_JOB_HANDLER in msg.headers:
@@ -214,10 +214,10 @@ class MessageAction(Action):
 
     def __init__(self, cfg: ActionCfg):
         super().__init__(cfg)
-        self.ng: Optional[str] = cfg.notification_group
-        self.rt: Optional[int] = cfg.render_template
+        self.ng: str | None = cfg.notification_group
+        self.rt: int | None = cfg.render_template
 
-    def get_notification_group(self, ng: Optional[bytes]):
+    def get_notification_group(self, ng: bytes | None):
         from noc.main.models.notificationgroup import NotificationGroup
 
         if ng:
@@ -233,9 +233,9 @@ class MessageAction(Action):
         self,
         message_type: MessageType,
         msg: Message,
-        language: Optional[str] = None,
-        notification_group: Optional[Any] = None,
-    ) -> Optional[Dict[str, str]]:
+        language: str | None = None,
+        notification_group: Any | None = None,
+    ) -> dict[str, str] | None:
         """
         Render Body from template
         Args:
@@ -264,7 +264,7 @@ class MessageAction(Action):
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], bytes]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], bytes]]:
         """"""
         ng = self.get_notification_group(msg.headers.get(MX_NOTIFICATION_GROUP_ID))
         if not ng:
@@ -275,7 +275,7 @@ class MessageAction(Action):
             obj = msg.headers[MX_WATCH_FOR_ID].decode()[2:]
         ts = datetime.datetime.now()
         message_type = MessageType(message_type.decode())
-        body: Optional[Dict[str, Any]] = None
+        body: dict[str, Any] | None = None
         for c in ng.get_active_contacts(obj, ts=ts):
             body = body or self.render_template(
                 message_type, msg, c.language, notification_group=ng

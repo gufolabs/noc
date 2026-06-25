@@ -9,7 +9,7 @@
 import datetime
 import logging
 import uuid
-from typing import Optional, Any, Dict, List
+from typing import Any
 from logging import Logger
 
 # Third Party modules
@@ -45,18 +45,18 @@ class AlarmActionRunner:
 
     def __init__(
         self,
-        items: List[Any],
-        allowed_actions: List[AlarmAction] = None,
-        logger: Optional[Logger] = None,
-        services: Optional[List[str]] = None,
-        groups: List[int] = None,
+        items: list[Any],
+        allowed_actions: list[AlarmAction] = None,
+        logger: Logger | None = None,
+        services: list[str] | None = None,
+        groups: list[int] = None,
         dry_run: bool = False,
     ):
         self.items = items
         self.alarm: "ActiveAlarm" = items[0].alarm
-        self.services: List[str] = services or []
+        self.services: list[str] = services or []
         self.groups = groups
-        self.allowed_actions: List[AllowedAction] = allowed_actions or []
+        self.allowed_actions: list[AllowedAction] = allowed_actions or []
         self.logger = logger or logging.getLogger("AlarmActionRunner")
         self.alarm_log = []
         self.dry_run = dry_run
@@ -64,7 +64,7 @@ class AlarmActionRunner:
     def run_action(
         self,
         action: AlarmAction,
-        **ctx: Dict[str, str],
+        **ctx: dict[str, str],
     ) -> ActionResult:
         """
         Execute action
@@ -101,7 +101,7 @@ class AlarmActionRunner:
                 raise NotImplementedError("Action %s not implemented" % action)
         return r
 
-    def check_escalated(self, tt_system: TTSystem) -> Optional[str]:
+    def check_escalated(self, tt_system: TTSystem) -> str | None:
         """Check alarm have tt_id for tt_system"""
         if self.alarm.status == "C":
             return self.alarm.escalation_tt
@@ -112,8 +112,8 @@ class AlarmActionRunner:
         return None
 
     def get_escalation_items(
-        self, tt_system: TTSystem, promote_items: Optional[str] = None
-    ) -> List[ECtxItem]:
+        self, tt_system: TTSystem, promote_items: str | None = None
+    ) -> list[ECtxItem]:
         """
         Build escalation items for Escalation Doc
         Args:
@@ -160,7 +160,7 @@ class AlarmActionRunner:
             r.append(ei)
         return r
 
-    def get_action_context(self) -> List[TTActionContext]:
+    def get_action_context(self) -> list[TTActionContext]:
         """Return Available Action Context for escalation"""
         r = []
         for aa in self.allowed_actions:
@@ -180,12 +180,12 @@ class AlarmActionRunner:
     def get_tt_system_context(
         self,
         tt_system: TTSystem,
-        tt_id: Optional[str] = None,
-        timestamp: Optional[datetime.datetime] = None,
-        login: Optional[str] = None,
-        queue: Optional[str] = None,
-        pre_reason: Optional[str] = None,
-        user: Optional[User] = None,
+        tt_id: str | None = None,
+        timestamp: datetime.datetime | None = None,
+        login: str | None = None,
+        queue: str | None = None,
+        pre_reason: str | None = None,
+        user: User | None = None,
     ) -> TTSystemCtx:
         """
         Build TTSystem Context
@@ -234,7 +234,7 @@ class AlarmActionRunner:
             self.alarm.log_message(msg)  # bulk=self.alarm_log
             self.alarm.safe_save()
 
-    def get_bulk(self) -> List[Any]:
+    def get_bulk(self) -> list[Any]:
         return self.alarm_log
 
     def comment_alarm_state(
@@ -242,11 +242,11 @@ class AlarmActionRunner:
         tt_system: TTSystem,
         tt_id: str,
         subject: str,
-        timestamp: Optional[datetime.datetime] = None,
-        login: Optional[str] = None,
-        queue: Optional[str] = None,
-        pre_reason: Optional[str] = None,
-        from_system: Optional[TTSystem] = None,
+        timestamp: datetime.datetime | None = None,
+        login: str | None = None,
+        queue: str | None = None,
+        pre_reason: str | None = None,
+        from_system: TTSystem | None = None,
         **kwargs,
     ) -> ActionResult:
         """Comment alarm status"""
@@ -286,11 +286,11 @@ class AlarmActionRunner:
         tt_system: TTSystem,
         tt_id: str,
         subject: str,
-        timestamp: Optional[datetime.datetime] = None,
-        login: Optional[str] = None,
-        queue: Optional[str] = None,
-        pre_reason: Optional[str] = None,
-        from_system: Optional[TTSystem] = None,
+        timestamp: datetime.datetime | None = None,
+        login: str | None = None,
+        queue: str | None = None,
+        pre_reason: str | None = None,
+        from_system: TTSystem | None = None,
         **kwargs,
     ) -> ActionResult:
         """
@@ -333,7 +333,7 @@ class AlarmActionRunner:
         return ActionResult(status=ActionStatus.FAILED, error=error)
 
     def notify(
-        self, notification_group, subject: str, body: Optional[str] = None, **kwargs
+        self, notification_group, subject: str, body: str | None = None, **kwargs
     ) -> ActionResult:
         """
         Send Notification
@@ -357,8 +357,8 @@ class AlarmActionRunner:
     def alarm_ack(
         self,
         user: User,
-        requester: Optional[TTSystem] = None,
-        subject: Optional[str] = None,
+        requester: TTSystem | None = None,
+        subject: str | None = None,
         **kwargs,
     ):
         """
@@ -375,9 +375,9 @@ class AlarmActionRunner:
     def alarm_unack(
         self,
         user: User,
-        requester: Optional[TTSystem] = None,
-        subject: Optional[str] = None,
-        timestamp: Optional[datetime.datetime] = None,
+        requester: TTSystem | None = None,
+        subject: str | None = None,
+        timestamp: datetime.datetime | None = None,
         **kwargs,
     ):
         """
@@ -394,9 +394,9 @@ class AlarmActionRunner:
     def alarm_clear(
         self,
         user: User,
-        from_system: Optional[TTSystem] = None,
-        subject: Optional[str] = None,
-        timestamp: Optional[datetime.datetime] = None,
+        from_system: TTSystem | None = None,
+        subject: str | None = None,
+        timestamp: datetime.datetime | None = None,
         **kwargs,
     ):
         """
@@ -418,8 +418,8 @@ class AlarmActionRunner:
     def alarm_subscribe(
         self,
         user: User,
-        from_system: Optional[TTSystem] = None,
-        subject: Optional[str] = None,
+        from_system: TTSystem | None = None,
+        subject: str | None = None,
         **kwargs,
     ):
         """
@@ -434,14 +434,14 @@ class AlarmActionRunner:
         tt_system: TTSystem,
         subject: str,
         body: str,
-        tt_id: Optional[str] = None,
-        timestamp: Optional[datetime.datetime] = None,
-        login: Optional[str] = None,
-        queue: Optional[str] = None,
-        pre_reason: Optional[str] = None,
+        tt_id: str | None = None,
+        timestamp: datetime.datetime | None = None,
+        login: str | None = None,
+        queue: str | None = None,
+        pre_reason: str | None = None,
         wait_tt: bool = False,
-        from_system: Optional[TTSystem] = None,
-        user: Optional[User] = None,
+        from_system: TTSystem | None = None,
+        user: User | None = None,
         **kwargs,
     ) -> ActionResult:
         """
@@ -572,14 +572,14 @@ class AlarmActionRunner:
         self,
         tt_system: TTSystem,
         tt_id: str,
-        subject: Optional[str] = None,
-        body: Optional[str] = None,
-        timestamp: Optional[datetime.datetime] = None,
-        login: Optional[str] = None,
-        queue: Optional[str] = None,
-        pre_reason: Optional[str] = None,
-        from_system: Optional[TTSystem] = None,
-        user: Optional[User] = None,
+        subject: str | None = None,
+        body: str | None = None,
+        timestamp: datetime.datetime | None = None,
+        login: str | None = None,
+        queue: str | None = None,
+        pre_reason: str | None = None,
+        from_system: TTSystem | None = None,
+        user: User | None = None,
         **kwargs,
     ) -> ActionResult:
         """
@@ -630,14 +630,14 @@ class AlarmActionRunner:
         self,
         subject: str,
         body: str,
-        tt_id: Optional[str] = None,
-        timestamp: Optional[datetime.datetime] = None,
-        login: Optional[str] = None,
-        queue: Optional[str] = None,
-        pre_reason: Optional[str] = None,
+        tt_id: str | None = None,
+        timestamp: datetime.datetime | None = None,
+        login: str | None = None,
+        queue: str | None = None,
+        pre_reason: str | None = None,
         wait_tt: bool = False,
-        from_system: Optional[TTSystem] = None,
-        user: Optional[User] = None,
+        from_system: TTSystem | None = None,
+        user: User | None = None,
         **kwargs,
     ) -> ActionStatus:
         """Generate escalation state Message"""

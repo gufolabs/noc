@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Union, Protocol, Optional
+from typing import Any, Protocol
 
 # Third-party modules
 from bson import ObjectId
@@ -18,7 +18,7 @@ class SupportsGetById(Protocol):
     """
 
     @classmethod
-    def get_by_id(cls, id: Union[int, ObjectId, str]) -> Any:  # -> Self
+    def get_by_id(cls, id: int | ObjectId | str) -> Any:  # -> Self
         ...
 
 
@@ -28,4 +28,4 @@ class AsResource(Protocol):
     an instance or its part to a resource reference.
     """
 
-    def as_resource(self, path: Optional[str] = None) -> str: ...
+    def as_resource(self, path: str | None = None) -> str: ...

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Literal
+from typing import Literal
 
 # NOC modules
 from .base import BaseModel
@@ -20,20 +20,20 @@ class RegexMatch(BaseModel):
 class Label(BaseModel):
     id: str
     name: str
-    is_protected: Optional[bool] = None
-    description: Optional[str] = None
-    match_regex: Optional[RegexMatch] = None
-    enable_division: Optional[bool] = None
-    enable_managedobject: Optional[bool] = None
-    enable_managedobjectprofile: Optional[bool] = None
-    enable_administrativedomain: Optional[bool] = None
-    enable_authprofile: Optional[bool] = None
-    enable_networksegment: Optional[bool] = None
-    enable_resourcegroup: Optional[bool] = None
-    enable_object: Optional[bool] = None
-    enable_service: Optional[bool] = None
-    enable_serviceprofile: Optional[bool] = None
-    enable_subscriber: Optional[bool] = None
+    is_protected: bool | None = None
+    description: str | None = None
+    match_regex: RegexMatch | None = None
+    enable_division: bool | None = None
+    enable_managedobject: bool | None = None
+    enable_managedobjectprofile: bool | None = None
+    enable_administrativedomain: bool | None = None
+    enable_authprofile: bool | None = None
+    enable_networksegment: bool | None = None
+    enable_resourcegroup: bool | None = None
+    enable_object: bool | None = None
+    enable_service: bool | None = None
+    enable_serviceprofile: bool | None = None
+    enable_subscriber: bool | None = None
     expose_metric: bool = False
     expose_datastream: bool = False
     expose_alarm: bool = False

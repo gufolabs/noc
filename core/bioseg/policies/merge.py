@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Type
 
 # NOC modules
 from .base import BaseBioSegPolicy
@@ -46,7 +45,7 @@ class MergeBioSegPolicy(BaseBioSegPolicy):
         self.logger.info("Effective policy is %s", policy_cls.name)
         return policy_cls(self.attacker, self.target, logger=self.logger).trial()
 
-    def get_effective_policy(self) -> Type[BaseBioSegPolicy]:
+    def get_effective_policy(self) -> type[BaseBioSegPolicy]:
         """
         Calculate effective policy
         :return:

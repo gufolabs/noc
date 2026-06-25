@@ -8,7 +8,7 @@
 # Python modules
 import logging
 from dataclasses import dataclass
-from typing import List, Iterable, Optional, Dict, Any
+from typing import Iterable, Any
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter
@@ -19,20 +19,20 @@ from ..controller.base import Endpoint
 @dataclass
 class Node:
     label: str
-    endpoints: List[str]
-    inputs: List[str]
-    outputs: List[str]
+    endpoints: list[str]
+    inputs: list[str]
+    outputs: list[str]
 
     @property
     def node_id(self) -> str:
         return str(id(self))
 
-    def to_viz(self) -> Dict[str, Any]:
+    def to_viz(self) -> dict[str, Any]:
         """
         Render node as subgraph.
         """
 
-        def get_node(node_id: str, names: Iterable[str]) -> Dict[str, Any]:
+        def get_node(node_id: str, names: Iterable[str]) -> dict[str, Any]:
             label = "|".join(f"<{n}>{n}" for n in names)
             return {
                 "name": node_id,
@@ -84,17 +84,17 @@ class BaseMapper:
     def __init__(self, channel: Channel):
         self.logger = PrefixLoggerAdapter(logging.getLogger("tracer"), self.name)
         self.channel = channel
-        self.input: Optional[str] = None
-        self.input_port: Optional[str] = None
-        self.output: Optional[str] = None
-        self.output_port: Optional[str] = None
+        self.input: str | None = None
+        self.input_port: str | None = None
+        self.output: str | None = None
+        self.output_port: str | None = None
         self.g = self.get_graph()
         self._seen_edges = set()
 
     def render(
         self,
-        start: Optional[Endpoint] = None,
-        end: Optional[Endpoint] = None,
+        start: Endpoint | None = None,
+        end: Endpoint | None = None,
     ) -> None:
         """
         Render graph
@@ -103,9 +103,9 @@ class BaseMapper:
 
     def to_viz(
         self,
-        start: Optional[Endpoint] = None,
-        end: Optional[Endpoint] = None,
-    ) -> Dict[str, Any]:
+        start: Endpoint | None = None,
+        end: Endpoint | None = None,
+    ) -> dict[str, Any]:
         """
         Render graph and get vis-js JSON
         """
@@ -113,7 +113,7 @@ class BaseMapper:
         return self.g
 
     @staticmethod
-    def get_graph() -> Dict[str, Any]:
+    def get_graph() -> dict[str, Any]:
         """
         Generate graph template
         """
@@ -136,8 +136,8 @@ class BaseMapper:
         self,
         start: str,
         end: str,
-        start_port: Optional[str] = None,
-        end_port: Optional[str] = None,
+        start_port: str | None = None,
+        end_port: str | None = None,
         **kwargs,
     ) -> None:
         # Note the edge starts from tail and goes to the head
@@ -159,19 +159,19 @@ class BaseMapper:
         self.g["edges"].append(r)
         self._seen_edges.add(h)
 
-    def add_node(self, node: Dict[str, Any]) -> None:
+    def add_node(self, node: dict[str, Any]) -> None:
         """Add node to graph."""
         self.g["nodes"].append(node)
 
-    def add_nodes(self, iter: Iterable[Dict[str, Any]]) -> None:
+    def add_nodes(self, iter: Iterable[dict[str, Any]]) -> None:
         """Add nodes from iterable."""
         self.g["nodes"].extend(iter)
 
-    def add_subgraph(self, node: Dict[str, Any]) -> None:
+    def add_subgraph(self, node: dict[str, Any]) -> None:
         """Add subgraph to graph."""
         self.g["subgraphs"].append(node)
 
-    def add_subgraphs(self, iter: Iterable[Dict[str, Any]]) -> None:
+    def add_subgraphs(self, iter: Iterable[dict[str, Any]]) -> None:
         """Add nodes from iterable."""
         self.g["subgraphs"].extend(iter)
 

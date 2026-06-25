@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Iterator, Tuple
+from typing import Iterator
 
 
 class BaseTokenizer:
@@ -15,5 +15,5 @@ class BaseTokenizer:
     def __init__(self, data: str):
         self.data = data
 
-    def __iter__(self) -> Iterator[Tuple[str]]:
+    def __iter__(self) -> Iterator[tuple[str]]:
         return iter(())

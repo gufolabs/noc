@@ -11,7 +11,7 @@ import asyncio
 import logging
 
 # Third-party modules
-from typing import Callable, TypeVar, Tuple, Any, Optional
+from typing import Callable, TypeVar, Any
 
 # NOC modules
 from noc.config import config
@@ -62,7 +62,7 @@ class IOLoopContext:
             asyncio.get_event_loop_policy().reset_called()
         self.prev_loop = None
 
-    def get_loop(self) -> Optional[asyncio.AbstractEventLoop]:
+    def get_loop(self) -> asyncio.AbstractEventLoop | None:
         return self.new_loop
 
     def __enter__(self):
@@ -95,8 +95,8 @@ def run_sync(cb: Callable[..., T], close_all: bool = True) -> T:
     if not _setup_completed:
         setup_asyncio()
 
-    result: Optional[T] = None
-    error: Optional[Tuple[Any, Any, Any]] = None
+    result: T | None = None
+    error: tuple[Any, Any, Any] | None = None
 
     with IOLoopContext() as loop:
         loop.run_until_complete(wrapper())

@@ -12,7 +12,6 @@ import gzip
 import time
 import random
 import argparse
-from typing import List, Optional
 from functools import partial
 from gc import collect
 
@@ -150,7 +149,7 @@ class Command(BaseCommand):
     def handle_dictionaries(self, *args, **options):
         # Extract dictionaries
         for dcls_name in loader:
-            dcls: Optional["DictionaryModel"] = loader[dcls_name]
+            dcls: "DictionaryModel" | None = loader[dcls_name]
             if not dcls:
                 continue
             # Temporary XML
@@ -188,7 +187,7 @@ class Command(BaseCommand):
                 yield from m.objects.values_list("id", flat=True).order_by("id")
 
     def handle_rebuild_dictionary(self, dictionaries=None, *args, **options):
-        async def upload(table: str, data: List[bytes]):
+        async def upload(table: str, data: list[bytes]):
             CHUNK = 500
             n_parts = len(config.clickhouse.cluster_topology.split(","))
             async with MessageStreamClient() as client:
@@ -209,7 +208,7 @@ class Command(BaseCommand):
             if dictionaries and dcls_name not in dictionaries:
                 continue
             self.print(f"Rebuild Dictionary: {dcls_name}")
-            bi_dict_model: Optional["DictionaryModel"] = loader[dcls_name]
+            bi_dict_model: "DictionaryModel" | None = loader[dcls_name]
             if not bi_dict_model:
                 continue
             model = get_model(bi_dict_model._meta.source_model)
@@ -258,7 +257,7 @@ class Command(BaseCommand):
             e.clean(force=force)
 
     def handle_load(self):
-        async def upload(table: str, data: List[bytes]):
+        async def upload(table: str, data: list[bytes]):
             CHUNK = 500
             n_parts = len(config.clickhouse.cluster_topology.split(","))
             async with MessageStreamClient() as client:

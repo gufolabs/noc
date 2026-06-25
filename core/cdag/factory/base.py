@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from ..typing import FactoryCtx
@@ -20,7 +19,7 @@ class BaseCDAGFactory:
     """
 
     def __init__(
-        self, graph: CDAG, ctx: Optional[FactoryCtx] = None, namespace: Optional[str] = None
+        self, graph: CDAG, ctx: FactoryCtx | None = None, namespace: str | None = None
     ):
         self.graph = graph
         self.ctx = ctx

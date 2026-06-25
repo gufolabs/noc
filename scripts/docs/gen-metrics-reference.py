@@ -11,7 +11,7 @@ import re
 import json
 import operator
 from dataclasses import dataclass
-from typing import List, Iterable, Dict, Any
+from typing import Iterable, Any
 import logging
 from pathlib import Path
 
@@ -112,7 +112,7 @@ class KeyField:
     model: str
 
     @classmethod
-    def from_json(cls, data: Dict[str, Any]) -> "KeyField":
+    def from_json(cls, data: dict[str, Any]) -> "KeyField":
         return KeyField(field_name=data["field_name"], model=data["model"])
 
 
@@ -123,7 +123,7 @@ class Label:
     store_column: str
 
     @classmethod
-    def from_json(cls, data: Dict[str, Any]) -> "Label":
+    def from_json(cls, data: dict[str, Any]) -> "Label":
         return Label(
             label=data["label"],
             view_column=data.get("view_column", ""),
@@ -146,9 +146,9 @@ class Data:
     name: str
     description: str
     table_name: str
-    key_fields: List[KeyField]
-    labels: List[Label]
-    metrics: List[Metric]
+    key_fields: list[KeyField]
+    labels: list[Label]
+    metrics: list[Metric]
 
     @classmethod
     def read(cls, path: Path) -> "Data":

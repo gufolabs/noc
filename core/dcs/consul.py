@@ -12,7 +12,6 @@ import orjson
 import uuid
 from urllib.parse import unquote
 import asyncio
-from typing import Optional
 
 # Third-party modules
 from consul.exceptions import NotFound
@@ -189,8 +188,8 @@ class ConsulDCS(DCSBase):
         pool=None,
         lock=None,
         tags=None,
-        check_interval: Optional[int] = None,
-        check_timeout: Optional[int] = None,
+        check_interval: int | None = None,
+        check_timeout: int | None = None,
     ):
         if pool:
             name = f"{name}-{pool}"
@@ -339,7 +338,7 @@ class ConsulDCS(DCSBase):
         """
         return f"{self.consul_prefix}/slots/{name}/manifest"
 
-    async def get_slot_limit(self, name: str) -> Optional[int]:
+    async def get_slot_limit(self, name: str) -> int | None:
         """
         Return the current limit for given slot
         :param name:

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Any, Dict
+from typing import Any
 
 # Third-party modules
 from fastapi import APIRouter
@@ -129,7 +129,7 @@ class GrafanaJsonDS(JsonDSAPI):
         return r
 
     @staticmethod
-    def resolve_managed_object(payload: Dict[str, str]) -> ManagedObject:
+    def resolve_managed_object(payload: dict[str, str]) -> ManagedObject:
         """
         Find ManagedObject by query
         """
@@ -155,8 +155,8 @@ class GrafanaJsonDS(JsonDSAPI):
         metric,
         name,
         user,
-        payload: Optional[Dict[str, str]] = None,
-    ) -> List[Dict[str, str]]:
+        payload: dict[str, str] | None = None,
+    ) -> list[dict[str, str]]:
         """ """
         r = []
         if name == "metric":
@@ -192,8 +192,8 @@ class GrafanaJsonDS(JsonDSAPI):
 
     @staticmethod
     def resolve_object_query(
-        model_id, value, query_function: Optional[List[str]] = None, user: User = None
-    ) -> Optional[Any]:
+        model_id, value, query_function: list[str] | None = None, user: User = None
+    ) -> Any | None:
         """
         Resolve object in Query by Value
         :param model_id:

@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import List, Union, Optional, Dict
 
 # Third-party modules
 from fastapi import APIRouter, Header, HTTPException
@@ -36,8 +35,8 @@ class RemoteId(BaseModel):
 
 
 class ServiceStatusRequest(BaseModel):
-    services: List[Union[ServiceId, RemoteId]]
-    changed_at: Optional[datetime.datetime] = None
+    services: list[ServiceId | RemoteId]
+    changed_at: datetime.datetime | None = None
     suppress_not_found: bool = False
 
 
@@ -46,13 +45,13 @@ class Status(BaseModel):
     status: ServiceStatus
     change: datetime.datetime
     in_maintenance: bool = False
-    parent: Optional[str] = None
-    remote_mappings: Optional[Dict[str, str]] = None
+    parent: str | None = None
+    remote_mappings: dict[str, str] | None = None
 
 
 class ServiceStatusResponse(BaseModel):
-    statuses: List[Status]
-    not_found_queries: Optional[List[Union[ServiceId, RemoteId]]] = None
+    statuses: list[Status]
+    not_found_queries: list[ServiceId | RemoteId] | None = None
 
 
 class ServiceStatusAPI(NBIAPI):

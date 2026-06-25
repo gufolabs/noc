@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Iterable, Dict, Any
+from typing import Iterable, Any
 import datetime
 
 # Third-party modules
@@ -38,7 +38,7 @@ class ReportDsAlarms(ReportDataSource):
     SEGMENT_PATH_DEPTH = 7
     CONTAINER_PATH_DEPTH = 7
 
-    FIELDS: List[ReportField] = (
+    FIELDS: list[ReportField] = (
         [
             ReportField(
                 name="alarm_id",
@@ -192,7 +192,7 @@ class ReportDsAlarms(ReportDataSource):
                     r[f.name] = f
         return r
 
-    def iter_data(self) -> Iterable[Dict[str, Any]]:
+    def iter_data(self) -> Iterable[dict[str, Any]]:
         if self.objectids:
             match = {"_id": {"$in": [bson.ObjectId(x) for x in self.objectids]}}
         else:
@@ -289,7 +289,7 @@ class ReportDsAlarms(ReportDataSource):
                 .aggregate(pipeline)
             )
 
-    def extract(self) -> Iterable[Dict[str, int]]:
+    def extract(self) -> Iterable[dict[str, int]]:
         # moss = MOCache()
         self._moss = {
             mo["id"]: mo

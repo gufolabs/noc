@@ -7,7 +7,6 @@
 
 # Python modules
 from collections import defaultdict
-from typing import Optional
 
 # Python modules
 from noc.inv.models.endpoint import Endpoint as DBEndpoint
@@ -22,8 +21,8 @@ class OTNOMSMapper(BaseMapper):
 
     def render(
         self,
-        start: Optional[Endpoint] = None,
-        end: Optional[Endpoint] = None,
+        start: Endpoint | None = None,
+        end: Endpoint | None = None,
     ) -> None:
         def get_node_key(pi: PathItem) -> str:
             parts = [str(pi.object.id)]

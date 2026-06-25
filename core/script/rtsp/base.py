@@ -9,7 +9,7 @@
 import os
 from urllib.request import parse_http_list, parse_keqv_list
 import asyncio
-from typing import Tuple, Dict, Any
+from typing import Any
 
 # Third-party modules
 import hashlib
@@ -40,7 +40,7 @@ class RTSPBase(BaseCLI):
         self.path = None
         self.cseq = 1
         self.method = None
-        self.headers: Dict[str, Any] = None
+        self.headers: dict[str, Any] = None
         self.auth = None
         self.buffer: bytes = b""
         self.is_started = False
@@ -142,7 +142,7 @@ class RTSPBase(BaseCLI):
         return self.result
 
     @staticmethod
-    def parse_rtsp_header(data: bytes) -> Tuple[int, Dict[str, Any], bytes]:
+    def parse_rtsp_header(data: bytes) -> tuple[int, dict[str, Any], bytes]:
         code, headers, msg = 200, {}, b""
         for line in data.splitlines():
             if line.startswith(b"RTSP/1.0"):

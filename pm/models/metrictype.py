@@ -9,7 +9,7 @@
 import os
 import operator
 from threading import Lock
-from typing import Any, Dict, Callable, Optional, Union, List
+from typing import Any, Callable, Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -64,7 +64,7 @@ class CollectorMappingItem(EmbeddedDocument):
     def __str__(self):
         return f"{self.collector}.{self.field}"
 
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "sender": self.sender,
             "collector": self.collector,
@@ -157,7 +157,7 @@ class MetricType(Document):
     compose_inputs = ListField(ReferenceField("self", reverse_delete_rule=NULLIFY))
     compose_expression = StringField()
     # Remote Mappings
-    collector_mappings: List[CollectorMappingItem] = EmbeddedDocumentListField(CollectorMappingItem)
+    collector_mappings: list[CollectorMappingItem] = EmbeddedDocumentListField(CollectorMappingItem)
     # Optional required capability
     required_capability = PlainReferenceField(Capability)
     # Object id in BI, used for counter context hashing
@@ -177,7 +177,7 @@ class MetricType(Document):
         return bool(self.compose_expression)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -244,7 +244,7 @@ class MetricType(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["MetricType"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["MetricType"]:
         return MetricType.objects.filter(id=oid).first()
 
     @classmethod
@@ -254,7 +254,7 @@ class MetricType(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_field_cache"), lock=lambda _: id_lock)
-    def get_by_field_name(cls, fname, scope: Optional[str] = None) -> Optional["MetricType"]:
+    def get_by_field_name(cls, fname, scope: str | None = None) -> Optional["MetricType"]:
         if scope:
             scope = MetricScope.get_by_table_name(scope)
             return MetricType.objects.filter(field_name=fname, scope=scope).first()

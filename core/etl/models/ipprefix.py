@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import Optional, List
 
 # Third-party modules
 from pydantic.networks import IPvAnyNetwork
@@ -27,17 +26,17 @@ class IPPrefix(BaseModel):
     name: str
     profile: Reference["IPPrefixProfile"]
     # Workflow state
-    state: Optional[str] = None
+    state: str | None = None
     # Last state change
-    state_changed: Optional[datetime.datetime] = None
+    state_changed: datetime.datetime | None = None
     # Workflow event
-    event: Optional[str] = None
-    description: Optional[str] = None
-    parent: Optional[Reference["IPPrefix"]] = None
-    vrf: Optional[Reference[IPVRF]] = None
-    ipv6_transition: Optional[Reference["IPPrefix"]] = None
-    project: Optional[Reference["Project"]] = None
-    labels: Optional[List[str]] = None
+    event: str | None = None
+    description: str | None = None
+    parent: Reference["IPPrefix"] | None = None
+    vrf: Reference[IPVRF] | None = None
+    ipv6_transition: Reference["IPPrefix"] | None = None
+    project: Reference["Project"] | None = None
+    labels: list[str] | None = None
 
     @field_validator("prefix")
     @classmethod

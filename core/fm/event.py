@@ -7,7 +7,7 @@
 
 # Python modules
 import datetime
-from typing import Optional, List, Dict, Any, Tuple
+from typing import Optional, Any
 
 # Third-party modules
 import orjson
@@ -69,11 +69,11 @@ class Target(BaseModel):
 
     address: str
     name: str
-    id: Optional[str] = None
-    pool: Optional[str] = None
+    id: str | None = None
+    pool: str | None = None
     is_agent: bool = False
-    remote_id: Optional[str] = None
-    service: Optional[str] = None
+    remote_id: str | None = None
+    service: str | None = None
     # Remote System if used remote_id on other RemoteSystem
 
     @property
@@ -93,12 +93,12 @@ class MessageType(BaseModel):
     """
 
     source: EventSource = EventSource.OTHER  # Format for parsed event
-    id: Optional[str] = None  # Event type, purpose for format.
+    id: str | None = None  # Event type, purpose for format.
     # trap_id for SNMP, event_id for external, code for internal
     severity: EventSeverity = EventSeverity.INDETERMINATE  # Event severity level
-    facility: Optional[int] = None  # Event facility (for syslog)
-    profile: Optional[str] = None  # Link to SA Profile for classification
-    event_class: Optional[str] = None  # For PreClassified message
+    facility: int | None = None  # Event facility (for syslog)
+    profile: str | None = None  # Link to SA Profile for classification
+    event_class: str | None = None  # For PreClassified message
     # AlarmClass ? PreClassify alarm
     # EventClass ? Pre Classify event
 
@@ -106,7 +106,7 @@ class MessageType(BaseModel):
 class Var(BaseModel):
     name: str  # Variable Name
     value: str  # Variable Value
-    scope: Optional[str] = None  # Scope for variable
+    scope: str | None = None  # Scope for variable
     snmp_raw: bool = False  # SNMP Raw value
     escaped: bool = False
 
@@ -137,26 +137,26 @@ class Event(BaseModel):
 
     ts: int  # Event Registered ts
     target: Target  # Message Sender Target
-    data: List[Var]  # Message Vars
-    id: Optional[str] = None
+    data: list[Var]  # Message Vars
+    id: str | None = None
     type: MessageType = MessageType()
-    remote_system: Optional[str] = None  # Remote System send event
-    remote_id: Optional[str] = None  # Remote Id event on Remote System
-    labels: Optional[List[str]] = None  # Event labels
-    message: Optional[str] = None  # Event message string
-    vars: Optional[Dict[str, Any]] = None  # Event variables
-    start_ts: Optional[int] = None  # For cleared events - timestamp when create
+    remote_system: str | None = None  # Remote System send event
+    remote_id: str | None = None  # Remote Id event on Remote System
+    labels: list[str] | None = None  # Event labels
+    message: str | None = None  # Event message string
+    vars: dict[str, Any] | None = None  # Event variables
+    start_ts: int | None = None  # For cleared events - timestamp when create
 
     @property
     def timestamp(self):
         return datetime.datetime.fromtimestamp(self.ts)
 
     @property
-    def event_class(self) -> Optional[str]:
+    def event_class(self) -> str | None:
         return self.type.event_class
 
     @staticmethod
-    def resolve_managed_object_target(bi_id) -> Tuple[str, str]:
+    def resolve_managed_object_target(bi_id) -> tuple[str, str]:
         """
         Try resolva ManagedObject for old format event
         :param bi_id:
@@ -170,7 +170,7 @@ class Event(BaseModel):
         return "", ""
 
     @classmethod
-    def from_json(cls, data: Dict[str, Any]) -> "Event":
+    def from_json(cls, data: dict[str, Any]) -> "Event":
         """
         Build instance from clickhouse query
         :param data:
@@ -270,12 +270,12 @@ class Event(BaseModel):
     def get_rule(
         cls,
         source: EventSource,
-        message: Optional[str] = None,
-        labels: Optional[List[str]] = None,
-        data: Optional[List[Dict[str, str]]] = None,
-        description: Optional[str] = None,
-        profile: Optional[str] = None,
-        snmp_trap_oid: Optional[str] = None,
+        message: str | None = None,
+        labels: list[str] | None = None,
+        data: list[dict[str, str]] | None = None,
+        description: str | None = None,
+        profile: str | None = None,
+        snmp_trap_oid: str | None = None,
     ):
         """
         Create Event Rule by
@@ -326,7 +326,7 @@ class Event(BaseModel):
             r["labels"].append({"wildcard": ll, "is_required": True})
         return r
 
-    def get_message_context(self, managed_object: Any) -> Dict[str, Any]:
+    def get_message_context(self, managed_object: Any) -> dict[str, Any]:
         """"""
         return {
             "ts": self.timestamp,

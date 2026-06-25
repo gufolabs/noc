@@ -17,7 +17,7 @@ import asyncio
 
 # Third-party modules
 import orjson
-from typing import Optional, List, Tuple, Any, Dict
+from typing import Any
 
 # NOC modules
 from noc.core.perf import metrics
@@ -53,7 +53,7 @@ async def fetch(
     url: str,
     method: str = "GET",
     headers=None,
-    body: Optional[bytes] = None,
+    body: bytes | None = None,
     connect_timeout=DEFAULT_CONNECT_TIMEOUT,
     request_timeout=DEFAULT_REQUEST_TIMEOUT,
     resolver=resolve_async,
@@ -63,11 +63,11 @@ async def fetch(
     validate_cert=config.http_client.validate_certs,
     allow_proxy: bool = False,
     proxies=None,
-    user: Optional[str] = None,
-    password: Optional[str] = None,
-    content_encoding: Optional[str] = None,
-    eof_mark: Optional[bytes] = None,
-) -> Tuple[int, Dict[str, Any], bytes]:
+    user: str | None = None,
+    password: str | None = None,
+    content_encoding: str | None = None,
+    eof_mark: bytes | None = None,
+) -> tuple[int, dict[str, Any], bytes]:
     """
 
     :param url: Fetch URL
@@ -253,7 +253,7 @@ async def fetch(
             metrics["httpclient_timeouts"] += 1
             return ERR_TIMEOUT, {}, b"Timed out while sending request"
         parser = HttpParser()
-        response_body: List[bytes] = []
+        response_body: list[bytes] = []
         while not parser.is_message_complete():
             try:
                 data = await asyncio.wait_for(reader.read(max_buffer_size), request_timeout)
@@ -326,7 +326,7 @@ def fetch_sync(
     url: str,
     method: str = "GET",
     headers=None,
-    body: Optional[bytes] = None,
+    body: bytes | None = None,
     connect_timeout=DEFAULT_CONNECT_TIMEOUT,
     request_timeout=DEFAULT_REQUEST_TIMEOUT,
     resolver=resolve_async,
@@ -336,10 +336,10 @@ def fetch_sync(
     validate_cert=config.http_client.validate_certs,
     allow_proxy: bool = False,
     proxies=None,
-    user: Optional[str] = None,
-    password: Optional[str] = None,
-    content_encoding: Optional[str] = None,
-    eof_mark: Optional[bytes] = None,
+    user: str | None = None,
+    password: str | None = None,
+    content_encoding: str | None = None,
+    eof_mark: bytes | None = None,
 ):
     async def _fetch():
         return await fetch(

@@ -18,7 +18,7 @@ from noc.models import is_document
 
 def int_or_oid(x) -> str:
     if is_document(x):
-        return "typing.Union[str, bson.objectid.ObjectId]"
+        return "str | bson.objectid.ObjectId"
     return "int"
 
 

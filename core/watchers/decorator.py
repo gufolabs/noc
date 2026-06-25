@@ -7,7 +7,7 @@
 
 # Python modules
 import datetime
-from typing import Optional, List, Iterable, Tuple
+from typing import Iterable
 
 # Python modules
 from noc.models import is_document, get_model_id
@@ -19,7 +19,7 @@ WAIT_DEFAULT_INTERVAL_SEC = 180
 MIN_NEXT_SHIFT_SEC = 30
 
 
-def get_next_ts(next_ts: Optional[datetime.datetime]):
+def get_next_ts(next_ts: datetime.datetime | None):
     now = datetime.datetime.now().replace(microsecond=0)
     if not next_ts:
         next_ts = now + datetime.timedelta(seconds=WAIT_DEFAULT_INTERVAL_SEC)
@@ -30,8 +30,8 @@ def get_next_ts(next_ts: Optional[datetime.datetime]):
 
 def update_watchers(
     self,
-    to_watchers: List[WatchItem],
-    to_remove: Optional[List[Tuple[ObjectEffect, str, Optional[str]]]] = None,
+    to_watchers: list[WatchItem],
+    to_remove: list[tuple[ObjectEffect, str, str | None]] | None = None,
     dry_run: bool = False,
     bulk=None,
 ):
@@ -41,7 +41,7 @@ def update_watchers(
 
 def save_watchers(
     self,
-    watchers: List[WatchItem],
+    watchers: list[WatchItem],
     dry_run: bool = False,
     bulk=None,
     # changed_fields: Optional[List[ChangeField]] = None,
@@ -64,7 +64,7 @@ def iter_document_watchers(self) -> Iterable["WatchItem"]:
         yield w.item
 
 
-def get_wait_ts(self, timestamp: Optional[datetime.datetime] = None):
+def get_wait_ts(self, timestamp: datetime.datetime | None = None):
     """Return near watch time"""
     wait_ts = []
     for w in self.iter_watchers():
@@ -80,11 +80,11 @@ def get_wait_ts(self, timestamp: Optional[datetime.datetime] = None):
 def add_watch(
     self,
     effect: ObjectEffect,
-    key: Optional[str] = None,
+    key: str | None = None,
     once: bool = True,
-    after: Optional[datetime.datetime] = None,
+    after: datetime.datetime | None = None,
     wait_avail: bool = False,
-    remote_system: Optional[str] = None,
+    remote_system: str | None = None,
     dry_run: bool = False,
     # action: Optional[ActionType] = None, # Reaction ?
     **kwargs,
@@ -132,8 +132,8 @@ def add_watch(
 def stop_watch(
     self,
     effect: ObjectEffect,
-    key: Optional[str] = None,
-    remote_system: Optional[str] = None,
+    key: str | None = None,
+    remote_system: str | None = None,
     stop_effect: bool = False,
     dry_run: bool = False,
 ):
@@ -156,10 +156,10 @@ def stop_watch(
 
 def touch_watch(
     self,
-    effect: Optional[ObjectEffect] = None,
+    effect: ObjectEffect | None = None,
     is_avail: bool = False,
     dry_run: bool = True,
-) -> List[WatchItem]:
+) -> list[WatchItem]:
     """
     Processed watchers
     Args:
@@ -199,8 +199,8 @@ def touch_watch(
 
 def update_document_watchers(
     self,
-    to_watchers: List[WatchItem],
-    to_remove: Optional[List[Tuple[ObjectEffect, str, Optional[str]]]] = None,
+    to_watchers: list[WatchItem],
+    to_remove: list[tuple[ObjectEffect, str, str | None]] | None = None,
     dry_run: bool = False,
     bulk=None,
 ):

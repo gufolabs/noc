@@ -14,15 +14,11 @@ from collections import defaultdict
 from itertools import chain
 from typing import (
     Optional,
-    Set,
     Any,
-    Dict,
     Iterable,
     Protocol,
     runtime_checkable,
     Generic,
-    Union,
-    List,
 )
 
 # Third-party modules
@@ -114,7 +110,7 @@ class ActiveAlarm(Document):
     # Alarm reference is a hash of discriminator
     # for external systems
     reference = BinaryField(required=False)
-    log: List[AlarmLog] = EmbeddedDocumentListField(AlarmLog)
+    log: list[AlarmLog] = EmbeddedDocumentListField(AlarmLog)
     # Manual acknowledgement timestamp
     ack_ts = DateTimeField(required=False)
     # Manual acknowledgement user name
@@ -122,7 +118,7 @@ class ActiveAlarm(Document):
     opening_event = ObjectIdField(required=False)
     closing_event = ObjectIdField(required=False)
     # List of subscribers
-    watchers: List[WatchItem] = EmbeddedDocumentListField(WatchItem)
+    watchers: list[WatchItem] = EmbeddedDocumentListField(WatchItem)
     custom_subject = StringField(required=False)
     custom_object = StringField(required=False)
     custom_style = ForeignKeyField(Style, required=False)
@@ -138,7 +134,7 @@ class ActiveAlarm(Document):
     deferred_groups = ListField(BinaryField())
     # span context
     escalation_ctx = LongField(required=False)
-    wait_ts: Optional[datetime.datetime] = DateTimeField(required=False)
+    wait_ts: datetime.datetime | None = DateTimeField(required=False)
     # Directly affected services summary, grouped by profiles
     # (connected to the same managed object)
     direct_objects = ListField(EmbeddedDocumentField(ObjectSummaryItem))
@@ -175,7 +171,7 @@ class ActiveAlarm(Document):
         return str(self.id)
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ActiveAlarm"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ActiveAlarm"]:
         return ActiveAlarm.objects.filter(id=oid).first()
 
     @classmethod
@@ -186,25 +182,25 @@ class ActiveAlarm(Document):
         if config.datastream.enable_alarm:
             yield "alarm", str(self.id)
 
-    def get_escalation_log(self, tt_system: TTSystem) -> Optional[AlarmLog]:
+    def get_escalation_log(self, tt_system: TTSystem) -> AlarmLog | None:
         for ll in self.log:
             if ll.tt_id and ll.tt_id.startswith(f"{tt_system.name}:"):
                 return ll
 
     @property
-    def escalation_tt(self) -> Optional[str]:
+    def escalation_tt(self) -> str | None:
         for ll in self.log:
             if ll.tt_id:
                 return ll.tt_id
 
     @property
-    def escalation_ts(self) -> Optional[datetime.datetime]:
+    def escalation_ts(self) -> datetime.datetime | None:
         for ll in self.log:
             if ll.tt_id:
                 return ll.timestamp
 
     @property
-    def escalation_error(self) -> Optional[str]:
+    def escalation_error(self) -> str | None:
         from noc.fm.models.escalation import Escalation
 
         esc = Escalation.objects.filter(items__alarm=self.id, close_timestamp__exists=False).first()
@@ -221,7 +217,7 @@ class ActiveAlarm(Document):
         return DEFAULT_TTSYSTEM_SHARD
 
     @property
-    def severity_policy(self) -> Optional[str]:
+    def severity_policy(self) -> str | None:
         """Getting severity policy for alarm"""
         if self.alarm_class.affected_service:
             policy = "AB"
@@ -233,14 +229,14 @@ class ActiveAlarm(Document):
         return policy
 
     @property
-    def clear_timestamp(self) -> Optional[datetime.datetime]:
+    def clear_timestamp(self) -> datetime.datetime | None:
         """Return clear timestamp for Template Compat"""
         if hasattr(self, "_clear_ts"):
             return self._clear_ts
         return None
 
     @classmethod
-    def get_min_wait_ts(cls) -> Optional[datetime.datetime]:
+    def get_min_wait_ts(cls) -> datetime.datetime | None:
         """"""
         return (
             ActiveAlarm.objects()
@@ -295,7 +291,7 @@ class ActiveAlarm(Document):
         self,
         user="",
         delta=None,
-        severity: Optional[Union[int, AlarmSeverity]] = None,
+        severity: int | AlarmSeverity | None = None,
         to_save=True,
     ):
         """
@@ -323,10 +319,10 @@ class ActiveAlarm(Document):
         self,
         message,
         to_save=True,
-        bulk: Optional[List[Any]] = None,
-        source: Optional[str] = None,
-        tt_id: Optional[str] = None,
-        timestamp: Optional[datetime.datetime] = None,
+        bulk: list[Any] | None = None,
+        source: str | None = None,
+        tt_id: str | None = None,
+        timestamp: datetime.datetime | None = None,
         is_internal: bool = True,
         quiet: bool = False,
     ):
@@ -378,7 +374,7 @@ class ActiveAlarm(Document):
     def clear_alarm(
         self,
         message,
-        ts: Optional[datetime.datetime] = None,
+        ts: datetime.datetime | None = None,
         force: bool = False,
         source=None,
         dry_run: bool = False,
@@ -494,7 +490,7 @@ class ActiveAlarm(Document):
         # Return archived
         return a
 
-    def get_template_vars(self) -> Dict[str, Any]:
+    def get_template_vars(self) -> dict[str, Any]:
         """
         Prepare template variables
         """
@@ -521,8 +517,8 @@ class ActiveAlarm(Document):
 
     def get_message_body(
         self,
-        template: Optional[Template] = None,
-        subject_tag: Optional[str] = None,
+        template: Template | None = None,
+        subject_tag: str | None = None,
         is_clear: bool = False,
     ):
         """
@@ -614,7 +610,7 @@ class ActiveAlarm(Document):
             self.touch_watch()
 
     def register_clear(
-        self, msg: str, user: Optional[User] = None, timestamp: Optional[datetime.datetime] = None
+        self, msg: str, user: User | None = None, timestamp: datetime.datetime | None = None
     ):
         """
         Register Alarm Clear Request on Correlator
@@ -650,7 +646,7 @@ class ActiveAlarm(Document):
             partition=partition % num_partitions,
         )
 
-    def get_wait_ts(self, timestamp: Optional[datetime.datetime] = None):
+    def get_wait_ts(self, timestamp: datetime.datetime | None = None):
         wait_ts = []
         for w in self.watchers:
             if w.root_only and self.root:
@@ -671,8 +667,8 @@ class ActiveAlarm(Document):
         immediate: bool = False,
         clear_only: bool = False,
         root_only: bool = False,
-        after: Optional[datetime.datetime] = None,
-        job: Optional[str] = None,
+        after: datetime.datetime | None = None,
+        job: str | None = None,
         keep_args: bool = False,
         **kwargs,
     ):
@@ -726,7 +722,7 @@ class ActiveAlarm(Document):
             self.watchers = r
             self.wait_ts = self.get_wait_ts()
 
-    def get_watchers(self, effect: Effect, key: Optional[str] = None) -> List[WatchItem]:
+    def get_watchers(self, effect: Effect, key: str | None = None) -> list[WatchItem]:
         """Getting watchers by effect"""
         r = []
         for w in self.watchers:
@@ -739,7 +735,7 @@ class ActiveAlarm(Document):
         self,
         is_clear: bool = False,
         is_update: bool = False,
-        effect: Optional[Effect] = None,
+        effect: Effect | None = None,
         dry_run: bool = False,
     ):
         """
@@ -862,9 +858,9 @@ class ActiveAlarm(Document):
 
     def get_effective_severity(
         self,
-        summary: Optional[Dict[str, Any]] = None,
-        severity: Optional[int] = None,
-        policy: Optional[str] = None,
+        summary: dict[str, Any] | None = None,
+        severity: int | None = None,
+        policy: str | None = None,
     ) -> int:
         """
         Calculate Alarm Severities for policy
@@ -1231,8 +1227,8 @@ class ActiveAlarm(Document):
         self,
         tt_id,
         close_tt: bool = False,
-        wait_tt: Optional[str] = None,
-        template: Optional[Template] = None,
+        wait_tt: str | None = None,
+        template: Template | None = None,
         supress_job: bool = False,
         **kwargs,
     ):
@@ -1358,7 +1354,7 @@ class ActiveAlarm(Document):
     def can_set_label(cls, label):
         return Label.get_effective_setting(label, "enable_alarm")
 
-    def get_matcher_ctx(self) -> Dict[str, Any]:
+    def get_matcher_ctx(self) -> dict[str, Any]:
         r = {
             "alarm_class": str(self.alarm_class.id),
             "labels": list(self.effective_labels),
@@ -1435,7 +1431,7 @@ class ActiveAlarm(Document):
         profile: str,
         is_clear: bool = False,
         is_update: bool = False,
-        job_id: Optional[str] = None,
+        job_id: str | None = None,
     ):
         """"""
         from noc.services.correlator.alarmjob import AlarmJob
@@ -1461,7 +1457,7 @@ class ActiveAlarm(Document):
         job_id: str,
         is_clear: bool = False,
         is_update: bool = False,
-        pool: Optional[str] = None,
+        pool: str | None = None,
     ):
         """Refresh Alarm Job by changes"""
         shard = 0
@@ -1480,7 +1476,7 @@ class ActiveAlarm(Document):
             is_clear=is_clear,
         )
 
-    def get_resources(self) -> List[str]:
+    def get_resources(self) -> list[str]:
         """"""
         try:
             return self.components.get_resources()
@@ -1501,16 +1497,16 @@ class ComponentHub:
     """
 
     def __init__(
-        self, alarm_class: AlarmClass, managed_object: ManagedObject, vars: Dict[str, Any] = None
+        self, alarm_class: AlarmClass, managed_object: ManagedObject, vars: dict[str, Any] = None
     ):
         self.logger = logging.getLogger(__name__)
         self.__alarm_class = alarm_class
         self.__managed_object = managed_object
         self.__vars = vars or {}
-        self.__components: Dict[str, Any] = {}
-        self.__all_components: Optional[Set[str]] = None
+        self.__components: dict[str, Any] = {}
+        self.__all_components: set[str] | None = None
 
-    def get_resources(self) -> List[str]:
+    def get_resources(self) -> list[str]:
         """Return resources"""
         r = []
         for c in self.__alarm_class.components:
@@ -1520,7 +1516,7 @@ class ComponentHub:
         self.__refresh_all_components()
         return r
 
-    def get(self, name: str, default: Optional[Any] = None) -> Optional[Any]:
+    def get(self, name: str, default: Any | None = None) -> Any | None:
         if name in self.__components:
             return self.__components[name] if self.__components[name] is not None else default
         self.__refresh_all_components()
@@ -1542,7 +1538,7 @@ class ComponentHub:
             raise KeyError
         return v
 
-    def __getattr__(self, name: str, default: Optional[Any] = None) -> Optional[Any]:
+    def __getattr__(self, name: str, default: Any | None = None) -> Any | None:
         v = self.get(name)
         # if v is None and default is None:
         #     raise AttributeError
@@ -1554,7 +1550,7 @@ class ComponentHub:
         except AttributeError:
             return False
 
-    def __get_component(self, name: str) -> Optional[Any]:
+    def __get_component(self, name: str) -> Any | None:
         for c in self.__alarm_class.components:
             if c.name != name:
                 continue

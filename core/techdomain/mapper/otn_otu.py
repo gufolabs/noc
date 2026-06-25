@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any, Optional, List
+from typing import Any
 
 # Python modules
 from noc.inv.models.endpoint import Endpoint as DBEndpoint
@@ -20,10 +20,10 @@ class DWDMOTUMapper(BaseMapper):
 
     def render(
         self,
-        start: Optional[Endpoint] = None,
-        end: Optional[Endpoint] = None,
-    ) -> Dict[str, Any]:
-        def add_termination_node(name: str, card: Endpoint) -> Dict[str, Any]:
+        start: Endpoint | None = None,
+        end: Endpoint | None = None,
+    ) -> dict[str, Any]:
+        def add_termination_node(name: str, card: Endpoint) -> dict[str, Any]:
             o_name = " > ".join(card.object.get_local_name_path(True))
             model = card.object.model.get_short_label()
             label = f"{o_name}\n{model}"
@@ -49,7 +49,7 @@ class DWDMOTUMapper(BaseMapper):
                 }
             )
 
-        def render_path(path: List[PathItem], forward: bool) -> None:
+        def render_path(path: list[PathItem], forward: bool) -> None:
             if not path:
                 # Direct connection
                 self.add_edge(

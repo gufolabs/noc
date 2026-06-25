@@ -11,7 +11,7 @@ import re
 import operator
 from dataclasses import dataclass
 from threading import Lock
-from typing import Any, Dict, ClassVar, Literal, Optional
+from typing import Any, ClassVar, Literal
 
 # Third-party modules
 import cachetools
@@ -38,9 +38,9 @@ class SuggestProfile:
     value: str
     profile: str
     preference: int
-    name: Optional[str] = None
+    name: str | None = None
 
-    _re_cache: ClassVar[Dict[str, str]] = {}
+    _re_cache: ClassVar[dict[str, str]] = {}
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_re_cache"))
@@ -109,7 +109,7 @@ class ProfileCheckRule(Document):
             raise ValidationError("SNMP Param must not be started with dot")
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "$collection": self._meta["json_collection"],

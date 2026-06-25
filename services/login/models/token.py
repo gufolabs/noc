@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Union, Literal
+from typing import Literal
 
 # Third-party modules
 from pydantic import BaseModel
@@ -21,7 +21,7 @@ class ROPCGrantRequest(BaseModel):
     grant_type: Literal["password"]
     username: str
     password: str
-    scope: Optional[str] = None
+    scope: str | None = None
 
 
 class CCGrantRequest(BaseModel):
@@ -31,7 +31,7 @@ class CCGrantRequest(BaseModel):
     """
 
     grant_type: Literal["client_credentials"]
-    scope: Optional[str] = None
+    scope: str | None = None
 
 
 class RefreshRequest(BaseModel):
@@ -42,10 +42,10 @@ class RefreshRequest(BaseModel):
 
     grant_type: Literal["refresh_token"]
     refresh_token: str
-    scope: Optional[str] = None
+    scope: str | None = None
 
 
-TokenRequest = Union[RefreshRequest, ROPCGrantRequest, CCGrantRequest]
+TokenRequest = RefreshRequest | ROPCGrantRequest | CCGrantRequest
 
 
 class TokenResponse(BaseModel):

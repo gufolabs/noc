@@ -10,7 +10,7 @@ import datetime
 import time
 import uuid
 from logging import getLogger
-from typing import Optional, List, Set, DefaultDict, Tuple, Dict, Any
+from typing import Any
 from collections import defaultdict
 
 # Third-party modules
@@ -26,7 +26,7 @@ from noc.config import config
 logger = getLogger(__name__)
 
 
-def audit_change(changes: List[Dict[str, Any]]) -> None:
+def audit_change(changes: list[dict[str, Any]]) -> None:
     """Processed Audit changes"""
 
     svc = get_service()
@@ -60,15 +60,15 @@ def audit_change(changes: List[Dict[str, Any]]) -> None:
 
 
 def on_change(
-    changes: List[Tuple[str, str, str, Optional[List[Dict[str, str]]], Optional[float]]],
+    changes: list[tuple[str, str, str, list[dict[str, str]] | None, float | None]],
     *args,
     **kwargs,
 ) -> None:
     """Common changes worker"""
     # BI Dictionary changes
-    bi_dict_changes: DefaultDict[str, Set[Tuple[str, float]]] = defaultdict(set)
+    bi_dict_changes: defaultdict[str, set[tuple[str, float]]] = defaultdict(set)
     # Sensors object
-    sensors_changes: DefaultDict[str, Set[str]] = defaultdict(set)
+    sensors_changes: defaultdict[str, set[str]] = defaultdict(set)
     # Iterate over changes
     for op, model_id, item_id, changed_fields, ts in changes:
         # Resolve item
@@ -103,7 +103,7 @@ def on_change(
             sensors_changes[model_id].add(item_id)
 
 
-def apply_datastream(ds_changes: Optional[Dict[str, Set[str]]] = None) -> None:
+def apply_datastream(ds_changes: dict[str, set[str]] | None = None) -> None:
     """
     Apply datastream changes
     :param ds_changes: Changes Items
@@ -120,7 +120,7 @@ def apply_datastream(ds_changes: Optional[Dict[str, Set[str]]] = None) -> None:
         ds.bulk_update(sorted(items))
 
 
-def apply_ch_dictionary(changes: List[Dict[str, Any]]) -> None:
+def apply_ch_dictionary(changes: list[dict[str, Any]]) -> None:
     """Apply Clickhouse BI Dictionary"""
     from noc.core.bi.dictionaries.loader import loader
     from noc.core.clickhouse.model import DictionaryModel
@@ -137,7 +137,7 @@ def apply_ch_dictionary(changes: List[Dict[str, Any]]) -> None:
             return
         bi_dict_changes[item.model_id].add((o, item.ts))
     for dcls_name in loader:
-        bi_dict_model: Optional["DictionaryModel"] = loader[dcls_name]
+        bi_dict_model: "DictionaryModel" | None = loader[dcls_name]
         if not bi_dict_model or bi_dict_model._meta.source_model not in bi_dict_changes:
             continue
         logger.info("[bi_dictionary] [%s] Apply changes", dcls_name)
@@ -158,7 +158,7 @@ def apply_ch_dictionary(changes: List[Dict[str, Any]]) -> None:
             )
 
 
-def apply_sync_sensors(changes: List[Dict[str, Any]]) -> None:
+def apply_sync_sensors(changes: list[dict[str, Any]]) -> None:
     """Apply sync sensor if ObjectModel changed"""
     from noc.inv.models.object import Object
     from noc.inv.models.sensor import sync_object
@@ -190,7 +190,7 @@ def apply_sync_sensors(changes: List[Dict[str, Any]]) -> None:
         sync_object(o)
 
 
-def apply_reactions(changes: List[Dict[str, Any]]) -> None:
+def apply_reactions(changes: list[dict[str, Any]]) -> None:
     """Apply reactions"""
     from noc.sa.models.reactionrule import ReactionRule
 

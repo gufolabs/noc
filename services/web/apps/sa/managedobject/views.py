@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any, Tuple, List, Iterable
+from typing import Any, Iterable
 from collections import defaultdict
 import zlib
 
@@ -398,7 +398,7 @@ class ManagedObjectApplication(ExtModelApplication):
             extra["where"] = extra_condition
         return extra, order
 
-    def get_caps_Q(self, nq: Dict[str, Any]) -> Tuple["d_Q", List[str]]:
+    def get_caps_Q(self, nq: dict[str, Any]) -> tuple["d_Q", list[str]]:
         """
         Resolve caps on query to queryset
         :param nq:
@@ -480,7 +480,7 @@ class ManagedObjectApplication(ExtModelApplication):
     def api_links(self, request, id):
         def split_local_ifaces(
             interfaces: Iterable[Interface],
-        ) -> Tuple[List[Interface], List[Interface]]:
+        ) -> tuple[list[Interface], list[Interface]]:
             """
             Returns:
                 tuple of <local interfaces>, <remote interfaces>
@@ -1028,7 +1028,7 @@ class ManagedObjectApplication(ExtModelApplication):
         key = "discovery-%s-%s" % (job, o.id)
         d = get_db()["noc.joblog"].find_one({"_id": key})
         if d and d["log"]:
-            return self.render_plain_text(zlib.decompress(smart_bytes((d["log"]))))
+            return self.render_plain_text(zlib.decompress(smart_bytes(d["log"])))
         return self.render_plain_text("No data")
 
     @view(url=r"^(?P<id>\d+)/interactions/$", method=["GET"], access="interactions", api=True)

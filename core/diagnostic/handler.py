@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Tuple, Iterable
+from typing import Iterable
 
 # NOC modules
 from noc.core.models.inputsources import InputSource
@@ -25,9 +25,9 @@ class DiagnosticHandler:
 
     def get_check_status(
         self,
-        checks: List[CheckStatus],
+        checks: list[CheckStatus],
         **kwargs,
-    ) -> Tuple[Optional[DiagnosticState], Optional[str]]:
+    ) -> tuple[DiagnosticState | None, str | None]:
         """Local checks for L Policy Diagnostic Discovery"""
         state = None
         # Default Status
@@ -44,13 +44,13 @@ class DiagnosticHandler:
             state = DiagnosticState.failed
         return state, None
 
-    def iter_checks(self, **kwargs) -> Iterable[Tuple[Check, ...]]:
+    def iter_checks(self, **kwargs) -> Iterable[tuple[Check, ...]]:
         """Iterate over checks"""
 
     def process_result(
         self,
-        checks: List[CheckResult],
-        source: Optional[InputSource] = InputSource.UNKNOWN,
-    ) -> Tuple[List[CheckStatus], List[DataItem]]:
+        checks: list[CheckResult],
+        source: InputSource | None = InputSource.UNKNOWN,
+    ) -> tuple[list[CheckStatus], list[DataItem]]:
         """Processed checks result and Return Status"""
         return [CheckStatus.from_result(c, source=source) for c in checks], []

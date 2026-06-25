@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Optional, Any, List
+from typing import Any
 
 # NOC modules
 from noc.core.models.valuetype import ValueType
@@ -17,11 +17,11 @@ from noc.core.models.inputsources import InputSource
 @dataclass(frozen=True)
 class CapsConfig:
     allow_manual: bool = False
-    default_value: Optional[Any] = None
-    ref_scope: Optional[str] = None
-    set_label: Optional[str] = None
+    default_value: Any | None = None
+    ref_scope: str | None = None
+    set_label: str | None = None
     required: bool = False
-    expose_models: Optional[List[str]] = None
+    expose_models: list[str] | None = None
 
 
 @dataclass(frozen=True)
@@ -29,7 +29,7 @@ class CapsValue:
     capability: Any
     value: Any
     source: InputSource
-    scope: Optional[str] = None
+    scope: str | None = None
     config: CapsConfig = CapsConfig()
 
     def __str__(self):
@@ -64,7 +64,7 @@ class CapsValue:
             "editor": self.capability.get_editor() if self.config.allow_manual else None,
         }
 
-    def get_labels(self) -> Optional[List[str]]:
+    def get_labels(self) -> list[str] | None:
         """Get caps Label"""
         if not self.config.set_label:
             return None

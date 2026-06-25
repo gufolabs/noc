@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import logging
-from typing import Optional, List, Iterable, Any, Dict, Tuple, Union
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -61,7 +61,7 @@ class AddressItem(EmbeddedDocument):
     address: str = StringField(required=True)
     address_bin = IntField()
     is_active = BooleanField(default=True)
-    sources: List[InputSource] = ListField(EnumField(InputSource))
+    sources: list[InputSource] = ListField(EnumField(InputSource))
     # session
 
     def clean(self):
@@ -110,7 +110,7 @@ class ServiceInstance(Document):
     type: InstanceType = EnumField(InstanceType, required=True, default=InstanceType.OTHER)
     name: str = StringField(required=False)
     # Sources that approved data
-    sources: List[InputSource] = ListField(EnumField(InputSource))
+    sources: list[InputSource] = ListField(EnumField(InputSource))
     # Object
     managed_object: Optional["ManagedObject"] = ForeignKeyField(ManagedObject, required=False)
     # For ETL services, Object id in remote system
@@ -121,14 +121,14 @@ class ServiceInstance(Document):
     reference = BinaryField(required=False)
     # Endpoint Data
     fqdn: str = StringField()
-    addresses: List[AddressItem] = EmbeddedDocumentListField(AddressItem)
+    addresses: list[AddressItem] = EmbeddedDocumentListField(AddressItem)
     port = IntField(min_value=0, max_value=65536, default=0)
     # Asset Data
-    asset_refs: List[str] = ListField(StringField(required=True))
+    asset_refs: list[str] = ListField(StringField(required=True))
     # Used Resources
-    resources: List[str] = ListField(StringField(required=True))
+    resources: list[str] = ListField(StringField(required=True))
     # Service Dependencies
-    dependencies: List[str] = ListField(ObjectIdField(required=True))
+    dependencies: list[str] = ListField(ObjectIdField(required=True))
     # Operation Attributes
     oper_status: bool = BooleanField()
     oper_status_change = DateTimeField()
@@ -154,7 +154,7 @@ class ServiceInstance(Document):
         return None
 
     @property
-    def address(self) -> Optional[str]:
+    def address(self) -> str | None:
         """Return first active Address"""
         for a in self.addresses or []:
             if a.is_active:
@@ -189,7 +189,7 @@ class ServiceInstance(Document):
         return f"[{self.type}] {name}"
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ServiceInstance"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ServiceInstance"]:
         return ServiceInstance.objects.filter(id=oid).first()
 
     def on_save(self):
@@ -205,7 +205,7 @@ class ServiceInstance(Document):
         cls,
         service,
         cfg: ServiceInstanceConfig,
-        settings: Optional[ServiceInstanceTypeConfig] = None,
+        settings: ServiceInstanceTypeConfig | None = None,
     ) -> "ServiceInstance":
         """ """
         settings = settings or ServiceInstanceTypeConfig()
@@ -249,7 +249,7 @@ class ServiceInstance(Document):
     def seen(
         self,
         source: InputSource,
-        last_seen: Optional[datetime.datetime] = None,
+        last_seen: datetime.datetime | None = None,
         dry_run: bool = False,
     ):
         """Update source"""
@@ -393,7 +393,7 @@ class ServiceInstance(Document):
         return True
 
     @classmethod
-    def get_alarm_reference(cls, alarm: "ActiveAlarm") -> List[str]:
+    def get_alarm_reference(cls, alarm: "ActiveAlarm") -> list[str]:
         """"""
         r = []
         if "mac" in alarm.vars:
@@ -403,7 +403,7 @@ class ServiceInstance(Document):
         return r
 
     @classmethod
-    def get_alarm_addresses(cls, alarm: "ActiveAlarm") -> List[str]:
+    def get_alarm_addresses(cls, alarm: "ActiveAlarm") -> list[str]:
         """Convert Active Alarm to addresses"""
         r = []
         # Alarm Class Vars ?
@@ -415,7 +415,7 @@ class ServiceInstance(Document):
     @classmethod
     def get_instance_filter_by_alarm(
         cls, alarm: ActiveAlarm, include_object: bool = False
-    ) -> Optional[Q]:
+    ) -> Q | None:
         """Build Alarm filter for query affected instances"""
         # Instance | Save include managed object Global | Local reference
         if include_object and alarm.managed_object:
@@ -456,11 +456,11 @@ class ServiceInstance(Document):
     def register_endpoint(
         self,
         source: InputSource,
-        addresses: Optional[List[str]] = None,
-        port: Optional[str] = None,
-        session: Optional[str] = None,
-        pool: Optional[Pool] = None,
-        ts: Optional[datetime.datetime] = None,
+        addresses: list[str] | None = None,
+        port: str | None = None,
+        session: str | None = None,
+        pool: Pool | None = None,
+        ts: datetime.datetime | None = None,
     ):
         """
         Add endpoint address to instance
@@ -504,8 +504,8 @@ class ServiceInstance(Document):
     def deregister_endpoint(
         self,
         source: InputSource,
-        session: Optional[str] = None,
-        addresses: Optional[List[str]] = None,
+        session: str | None = None,
+        addresses: list[str] | None = None,
     ):
         """Remove endpoint address from instance"""
         address = []
@@ -547,9 +547,9 @@ class ServiceInstance(Document):
 
     def update_resources(
         self,
-        res: List[Any],
+        res: list[Any],
         source: InputSource,
-        update_ts: Optional[datetime.datetime] = None,
+        update_ts: datetime.datetime | None = None,
         bulk=None,
     ):
         """
@@ -613,7 +613,7 @@ class ServiceInstance(Document):
                 ServiceSummary.refresh_object(self.managed_object)
 
     @classmethod
-    def get_object_resources(cls, oid: int) -> Dict[str, Tuple[str, int, str]]:
+    def get_object_resources(cls, oid: int) -> dict[str, tuple[str, int, str]]:
         """Return all resources used by object"""
         r = {}
         # Secondary Preferred
@@ -650,7 +650,7 @@ class ServiceInstance(Document):
         """"""
         from noc.inv.models.interface import Interface
 
-        ref_mac_instance: Dict[str, ServiceInstance] = {}
+        ref_mac_instance: dict[str, ServiceInstance] = {}
         bulk = []
         for si in ServiceInstance.objects.filter(
             type=InstanceType.NETWORK_CHANNEL,
@@ -674,7 +674,7 @@ class ServiceInstance(Document):
         if bulk:
             coll.bulk_write(bulk)
 
-    def get_checks(self) -> List[Check]:
+    def get_checks(self) -> list[Check]:
         """Getting check for instance. For multiple - applied Any? policy"""
         # Update instance status
         if not self.config.checks:

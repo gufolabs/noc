@@ -8,7 +8,7 @@
 # Python modules
 import re
 from functools import partial
-from typing import List, Tuple, FrozenSet, Callable, Dict, Any, Union, Iterable
+from typing import Callable, Any, Iterable
 
 # NOC Modules
 from noc.core.text import alnum_key
@@ -16,7 +16,7 @@ from noc.core.text import alnum_key
 NEGATIVE_SUFFIX = "_ne"
 
 
-def match(ctx: Dict[str, Union[List, str, int]], expr: Dict[str, Any]) -> bool:
+def match(ctx: dict[str, list | str | int], expr: dict[str, Any]) -> bool:
     return build_matcher(expr)(ctx)
 
 
@@ -56,13 +56,13 @@ def get_matcher(op: str, field: str, value: Any) -> Callable:
     return partial(matchers[op], value, field)
 
 
-def match_ctx(cv: str, handler: Callable, ctx: Dict[str, Any]) -> bool:
+def match_ctx(cv: str, handler: Callable, ctx: dict[str, Any]) -> bool:
     if cv not in ctx:
         return False
     return handler(cv=ctx[cv], ctx=ctx)
 
 
-def match_version(cv: str, op: str, ctx: Dict[str, Any]) -> bool:
+def match_version(cv: str, op: str, ctx: dict[str, Any]) -> bool:
     match op:
         case "$gt":
             return alnum_key(ctx["version"]) > cv
@@ -76,7 +76,7 @@ def match_version(cv: str, op: str, ctx: Dict[str, Any]) -> bool:
             raise ValueError("Unknown operation")
 
 
-def iter_matchers(expr: Dict[str, Any]) -> Iterable[Callable]:
+def iter_matchers(expr: dict[str, Any]) -> Iterable[Callable]:
     for field, matcher in expr.items():
         if field == "$or":
             yield partial(match_or, tuple(build_matcher(m) for m in matcher))
@@ -88,13 +88,13 @@ def iter_matchers(expr: Dict[str, Any]) -> Iterable[Callable]:
                 yield get_matcher(op, field, value)
 
 
-def build_matcher(expr: Dict[str, Any]) -> Callable:
+def build_matcher(expr: dict[str, Any]) -> Callable:
     """Build matcher function by expression"""
     # If not tuple, matcher works one time
     return partial(match_and, tuple(iter_matchers(expr)))
 
 
-def match_or(c_iter: Tuple[Callable, ...], ctx: Dict[str, Any]) -> bool:
+def match_or(c_iter: tuple[Callable, ...], ctx: dict[str, Any]) -> bool:
     for c in c_iter:
         try:
             if c(ctx):
@@ -106,7 +106,7 @@ def match_or(c_iter: Tuple[Callable, ...], ctx: Dict[str, Any]) -> bool:
     return False
 
 
-def match_and(c_iter: Tuple[Callable, ...], ctx: Dict[str, Any]) -> bool:
+def match_and(c_iter: tuple[Callable, ...], ctx: dict[str, Any]) -> bool:
     for c in c_iter:
         try:
             if not c(ctx):
@@ -118,43 +118,43 @@ def match_and(c_iter: Tuple[Callable, ...], ctx: Dict[str, Any]) -> bool:
     return True
 
 
-def match_regex(rx: re.Pattern, field: str, ctx: Dict[str, Any]) -> bool:
+def match_regex(rx: re.Pattern, field: str, ctx: dict[str, Any]) -> bool:
     return bool(rx.search(ctx[field]))
 
 
-def match_in(c_iter: FrozenSet, field: str, ctx: Dict[str, Any]) -> bool:
+def match_in(c_iter: frozenset, field: str, ctx: dict[str, Any]) -> bool:
     return ctx[field] in c_iter
 
 
-def match_all(c_iter: FrozenSet, field: str, ctx: Dict[str, Any]) -> bool:
+def match_all(c_iter: frozenset, field: str, ctx: dict[str, Any]) -> bool:
     return not bool(c_iter - set(ctx[field]))
 
 
-def match_any(c_iter: FrozenSet, field: str, ctx: Dict[str, Any]) -> bool:
+def match_any(c_iter: frozenset, field: str, ctx: dict[str, Any]) -> bool:
     return bool(set(ctx[field]).intersection(c_iter))
 
 
-def match_gt(cv: str, field: str, ctx: Dict[str, Any]) -> bool:
+def match_gt(cv: str, field: str, ctx: dict[str, Any]) -> bool:
     return ctx[field] > cv
 
 
-def match_gte(cv: str, field: str, ctx: Dict[str, Any]) -> bool:
+def match_gte(cv: str, field: str, ctx: dict[str, Any]) -> bool:
     return ctx[field] >= cv
 
 
-def match_lt(cv: str, field: str, ctx: Dict[str, Any]) -> bool:
+def match_lt(cv: str, field: str, ctx: dict[str, Any]) -> bool:
     return ctx[field] < cv
 
 
-def match_lte(cv: str, field: str, ctx: Dict[str, Any]) -> bool:
+def match_lte(cv: str, field: str, ctx: dict[str, Any]) -> bool:
     return ctx[field] <= cv
 
 
-def match_eq(cv: str, field: str, ctx: Dict[str, Any]) -> bool:
+def match_eq(cv: str, field: str, ctx: dict[str, Any]) -> bool:
     return ctx[field] == cv
 
 
-def match_ne(cv: str, field: str, ctx: Dict[str, Any]) -> bool:
+def match_ne(cv: str, field: str, ctx: dict[str, Any]) -> bool:
     return ctx[field] != cv
 
 

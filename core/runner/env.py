@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Optional, Iterable, Tuple
+from typing import Iterable
 
 
 class Environment:
@@ -18,11 +18,11 @@ class Environment:
     environment.
     """
 
-    def __init__(self, data: Optional[Dict[str, str]] = None) -> None:
-        self._data: Dict[str, str] = {}
+    def __init__(self, data: dict[str, str] | None = None) -> None:
+        self._data: dict[str, str] = {}
         if data:
             self._data.update(data.items())
-        self._parent: Optional[Environment] = None
+        self._parent: Environment | None = None
         self._is_dirty = False
 
     @property
@@ -38,7 +38,7 @@ class Environment:
         """
         self._is_dirty = False
 
-    def raw_data(self) -> Dict[str, str]:
+    def raw_data(self) -> dict[str, str]:
         """
         Returns data directly belonging to the environment.
         """
@@ -50,7 +50,7 @@ class Environment:
         """
         self._parent = parent
 
-    def get(self, name: str) -> Optional[str]:
+    def get(self, name: str) -> str | None:
         """
         Check for key.
 
@@ -131,7 +131,7 @@ class Environment:
                     yield v
                     seen.add(k)
 
-    def items(self) -> Iterable[Tuple[str, str]]:
+    def items(self) -> Iterable[tuple[str, str]]:
         """Iterate over key-values pairs."""
         seen = set(self._data)
         yield from self._data.items()

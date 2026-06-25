@@ -8,7 +8,7 @@
 # Python modules
 import logging
 from collections import defaultdict
-from typing import List, Dict, Tuple, Iterable, Set
+from typing import Iterable
 
 # NOC Modules
 from noc.core.checkers.base import Check, CheckResult
@@ -21,11 +21,11 @@ class DiagnosticCheckRegister:
 
     def __init__(self, logger=None):
         self.logger: logging.Logger = logger
-        self.checks: Dict[str, Check] = {}
-        self.w_checks: Dict[str, List[Check]] = defaultdict(list)  # Wildcard checks
-        self.check_diagnostic_map: Dict[str, Set[str]] = defaultdict(set)
-        self.affected_diagnostics: Dict[str, List[str]] = defaultdict(set)
-        self.results: Dict[str, List[CheckResult]] = defaultdict(list)
+        self.checks: dict[str, Check] = {}
+        self.w_checks: dict[str, list[Check]] = defaultdict(list)  # Wildcard checks
+        self.check_diagnostic_map: dict[str, set[str]] = defaultdict(set)
+        self.affected_diagnostics: dict[str, list[str]] = defaultdict(set)
+        self.results: dict[str, list[CheckResult]] = defaultdict(list)
         self.loaded: bool = False
 
     @property
@@ -33,7 +33,7 @@ class DiagnosticCheckRegister:
         """Loaded all checks flag"""
         return self.loaded
 
-    def add_checks(self, checks: List[Check], diagnostic: str):
+    def add_checks(self, checks: list[Check], diagnostic: str):
         """Add check config"""
         for c in checks:
             self.checks[c.key] = c
@@ -67,7 +67,7 @@ class DiagnosticCheckRegister:
             if c.is_match(result):
                 self.add_result(c.key, result)
 
-    def get_diagnostic_checks(self, diagnostic: str) -> List[CheckResult]:
+    def get_diagnostic_checks(self, diagnostic: str) -> list[CheckResult]:
         """Getting Active checks"""
         r = []
         for key in self.affected_diagnostics.get(diagnostic, []):
@@ -94,7 +94,7 @@ class DiagnosticCheckRegister:
         """Reset processed result"""
         self.results = defaultdict(list)
 
-    def iter_affected_diagnostics(self) -> Iterable[Tuple[str, List[CheckResult]]]:
+    def iter_affected_diagnostics(self) -> Iterable[tuple[str, list[CheckResult]]]:
         """Iter over Status Affected Diagnostics"""
         for d in self.affected_diagnostics:
             yield d, self.affected_diagnostics[d]

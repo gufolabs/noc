@@ -105,7 +105,7 @@ class MonitorApplication(ObjectListApplication):
             d = get_db()["noc.joblog"].find_one({"_id": key})
             if d and d["log"]:
                 r += [b"\n", smart_bytes(job), b"\n"]
-                r += [zlib.decompress(smart_bytes((d["log"])))]
+                r += [zlib.decompress(smart_bytes(d["log"]))]
         if r:
             return self.render_plain_text(b"".join(r))
         return self.render_plain_text("No data")

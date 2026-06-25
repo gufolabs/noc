@@ -7,7 +7,6 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Union, Optional, List
 from xmlrpc.client import boolean
 
 # NOC modules
@@ -17,23 +16,23 @@ from .patterns import BasePattern
 @dataclass
 class SyntaxDef:
     __slots__ = ("children", "default", "gen", "multi", "name", "required", "token")
-    token: Union[str, BasePattern]
-    children: Optional[List["SyntaxDef"]]
+    token: str | BasePattern
+    children: list["SyntaxDef"] | None
     required: boolean
-    name: Optional[str]
+    name: str | None
     multi: boolean
-    default: Optional[str]
-    gen: Optional[str]
+    default: str | None
+    gen: str | None
 
 
 def DEF(
-    token: Union[str, BasePattern],
-    children: Optional[List[SyntaxDef]] = None,
+    token: str | BasePattern,
+    children: list[SyntaxDef] | None = None,
     required: boolean = False,
     multi: boolean = False,
-    name: Optional[str] = None,
-    default: Optional[str] = None,
-    gen: Optional[str] = None,
+    name: str | None = None,
+    default: str | None = None,
+    gen: str | None = None,
 ) -> SyntaxDef:
     return SyntaxDef(
         token=token,

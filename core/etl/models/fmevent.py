@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # NOC modules
 from .base import BaseModel, _BaseModel
@@ -21,11 +20,11 @@ class Var(_BaseModel):
 class RemoteObject(BaseModel):
     id: str = None  # For ManagedObject or Agent message Send
     name: str  # Name message initiator
-    address: Optional[str] = None  # IP Address message initiator
-    pool: Optional[str] = None  # Pool message receiver
+    address: str | None = None  # IP Address message initiator
+    pool: str | None = None  # Pool message receiver
     is_agent: bool = False  # Agent message send
-    remote_id: Optional[str] = None  # Id on remote System that message Send
-    remote_system: Optional[str] = None
+    remote_id: str | None = None  # Id on remote System that message Send
+    remote_system: str | None = None
 
     def get_target(self) -> Target:
         return Target(
@@ -41,11 +40,11 @@ class FMEventObject(BaseModel):
     id: str  # Event Id
     ts: int  # Event Registered ts
     object: RemoteObject  # Message Send object
-    data: List[Var]  # Message Vars
+    data: list[Var]  # Message Vars
     severity: str
-    event_class: Optional[str] = None
+    event_class: str | None = None
     is_cleared: bool = False  # Set flag for cleared severity
-    labels: Optional[List[str]] = None  # Event labels
-    message: Optional[str] = None  # Event message string
-    start_ts: Optional[int] = None  # Event Start ts
-    checkpoint: Optional[str] = None
+    labels: list[str] | None = None  # Event labels
+    message: str | None = None  # Event message string
+    start_ts: int | None = None  # Event Start ts
+    checkpoint: str | None = None

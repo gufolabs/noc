@@ -7,7 +7,7 @@
 
 # Python modules
 from functools import partial
-from typing import Optional, Dict, Callable, List, Union, Tuple, Any
+from typing import Callable, Any
 import weakref
 
 # Third-party modules
@@ -69,7 +69,7 @@ class SNMP:
 
     SNMPError = SNMPError
 
-    def __init__(self, script, rate: Optional[float] = None):
+    def __init__(self, script, rate: float | None = None):
         self._script = weakref.ref(script)
         self.logger = PrefixLoggerAdapter(script.logger, self.name)
         self.timeouts_limit = 0
@@ -79,7 +79,7 @@ class SNMP:
         self.snmp_version = None
         self.rate_limit = rate
 
-    def _get_auth_key(self) -> Union[Md5Key, Sha1Key]:
+    def _get_auth_key(self) -> Md5Key | Sha1Key:
         """
         Getting SNMPv3 Authenticate Key
         """
@@ -90,7 +90,7 @@ class SNMP:
             passphrase, key_type=KeyType.Password
         )
 
-    def _get_private_key(self) -> Union[DesKey, Aes128Key]:
+    def _get_private_key(self) -> DesKey | Aes128Key:
         """
         Getting SNMPv3 Private Key
         """
@@ -101,7 +101,7 @@ class SNMP:
             passphrase, key_type=KeyType.Password
         )
 
-    def _get_engine_id(self) -> Optional[bytes]:
+    def _get_engine_id(self) -> bytes | None:
         """
         Get SNMPv3 EngineId from Capabilities 'SNMP | EngineID'
         bytes.fromhex(engine_id[2:])
@@ -206,7 +206,7 @@ class SNMP:
             self.display_hints = self.script.profile.get_snmp_display_hints(self.script)
         return self.display_hints
 
-    def _get_snmp_credentials(self, version: Optional[int] = None) -> Tuple[str, int]:
+    def _get_snmp_credentials(self, version: int | None = None) -> tuple[str, int]:
         version = self._get_snmp_version(version)
         if self.script.is_beefed:
             return "public", SNMP_v2c
@@ -218,14 +218,14 @@ class SNMP:
 
     def get(
         self,
-        oids: Union[Dict[str, str], str],
+        oids: dict[str, str] | str,
         cached: bool = False,
-        version: Optional[int] = None,
+        version: int | None = None,
         timeout: int = 10,
         raw_varbinds=False,
-        display_hints: Optional[Dict[str, Callable]] = None,
+        display_hints: dict[str, Callable] | None = None,
         strict_value=False,
-    ) -> Union[Any, Dict[str, Any]]:
+    ) -> Any | dict[str, Any]:
         """
         Perform SNMP GET request by gufo_snmp library
         Args:
@@ -347,7 +347,7 @@ class SNMP:
 
         return run_sync(partial(run, filter or (lambda x, y: True)), close_all=False)
 
-    def get_max_repetitions(self, max_repetitions: Optional[int] = None) -> Optional[int]:
+    def get_max_repetitions(self, max_repetitions: int | None = None) -> int | None:
         """Return max_repetition on SNMP Bulk Request"""
         max_repetitions = max_repetitions or BULK_MAX_REPETITIONS
         caps_limit = self.script.get_snmp_bulk_repetition()
@@ -358,19 +358,19 @@ class SNMP:
     def getnext(
         self,
         oid: str,
-        community_suffix: Optional[str] = None,
+        community_suffix: str | None = None,
         filter=None,
         cached: bool = False,
         only_first: bool = False,
-        bulk: Optional[bool] = None,
-        max_repetitions: Optional[int] = None,
-        version: Optional[int] = None,
+        bulk: bool | None = None,
+        max_repetitions: int | None = None,
+        version: int | None = None,
         max_retries: int = 0,
         timeout: int = 10,
         raw_varbinds: bool = False,
-        display_hints: Optional[Dict[str, Callable]] = None,
-        max_records: Optional[int] = None,
-    ) -> List[Tuple[str, Any]]:
+        display_hints: dict[str, Callable] | None = None,
+        max_records: int | None = None,
+    ) -> list[tuple[str, Any]]:
         """
         Perform SNMP GETNEXT request by gufo_snmp library
         :param oid: string
@@ -470,16 +470,16 @@ class SNMP:
 
     def get_tables(
         self,
-        oids: List[str],
+        oids: list[str],
         community_suffix: str = None,
-        bulk: Optional[bool] = None,
-        min_index: Optional[int] = None,
-        max_index: Optional[int] = None,
-        cached: Optional[bool] = False,
-        max_repetitions: Optional[int] = None,
+        bulk: bool | None = None,
+        min_index: int | None = None,
+        max_index: int | None = None,
+        cached: bool | None = False,
+        max_repetitions: int | None = None,
         timeout: int = 15,
         max_retries: int = 0,
-        display_hints: Optional[Dict[str, Callable]] = None,
+        display_hints: dict[str, Callable] | None = None,
     ):
         """
         Query list of SNMP tables referenced by oids and yields

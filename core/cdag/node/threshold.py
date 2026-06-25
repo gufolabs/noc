@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import logging
-from typing import Optional, List, Dict, Literal, Iterable, Any
+from typing import Literal, Iterable, Any
 
 # Third-party modules
 import orjson
@@ -23,12 +23,12 @@ from noc.core.service.loader import get_service
 class ThresholdState(BaseModel):
     active: bool = False
     reference: str = None
-    pool: Optional[str] = None
+    pool: str | None = None
     last_raise: datetime.datetime = None
 
 
 class ThresholdNodeState(BaseModel):
-    thresholds: Dict[str, ThresholdState] = {}
+    thresholds: dict[str, ThresholdState] = {}
 
 
 class VarItem(BaseModel):
@@ -39,9 +39,9 @@ class VarItem(BaseModel):
 class ThresholdItem(BaseModel):
     value: float = 1
     op: Literal[">", ">=", "<", "<="] = ">="
-    clear_value: Optional[float] = None
-    alarm_class: Optional[str] = "NOC | PM | Out of Thresholds"
-    alarm_labels: Optional[List[str]] = None
+    clear_value: float | None = None
+    alarm_class: str | None = "NOC | PM | Out of Thresholds"
+    alarm_labels: list[str] | None = None
 
     def is_open_match(self, value: ValueType) -> bool:
         """
@@ -79,20 +79,20 @@ class ThresholdItem(BaseModel):
 
 
 class ThresholdNodeConfig(BaseModel):
-    alarm_class: Optional[str] = None
-    reference: Optional[str] = None
-    error_text_template: Optional[str] = None
-    vars: Optional[List[VarItem]] = None
+    alarm_class: str | None = None
+    reference: str | None = None
+    error_text_template: str | None = None
+    vars: list[VarItem] | None = None
     pool: str = ""
     dry_run: bool = False  # For service test used
     partition: int = 0
     rule_id: str
     action_id: str
-    thresholds: List[ThresholdItem]
+    thresholds: list[ThresholdItem]
 
 
 logger = logging.getLogger(__name__)
-ta_ListThresholdItem = TypeAdapter(List[ThresholdItem])
+ta_ListThresholdItem = TypeAdapter(list[ThresholdItem])
 
 
 class ThresholdNode(BaseCDAGNode):
@@ -121,7 +121,7 @@ class ThresholdNode(BaseCDAGNode):
             elif th.is_open_match(x) and not self.is_active(str(num)):
                 self.raise_alarm(x, target, th, str(num))
 
-    def get_vars(self) -> List[VarItem]:
+    def get_vars(self) -> list[VarItem]:
         return [VarItem(**v) for v in self.config.vars or []]
 
     def get_reference(self, th: ThresholdItem, target: Any) -> str:
@@ -182,7 +182,7 @@ class ThresholdNode(BaseCDAGNode):
             x,
         )
 
-    def clear_alarm(self, threshold: Optional[str] = None, message: Optional[str] = None) -> None:
+    def clear_alarm(self, threshold: str | None = None, message: str | None = None) -> None:
         """
         Clear alarm
         """
@@ -201,7 +201,7 @@ class ThresholdNode(BaseCDAGNode):
             "",
         )
 
-    def is_active(self, threshold: Optional[str] = None) -> bool:
+    def is_active(self, threshold: str | None = None) -> bool:
         if threshold and threshold in self.state.thresholds:
             return self.state.thresholds[threshold].active
         if threshold:
@@ -209,7 +209,7 @@ class ThresholdNode(BaseCDAGNode):
         return any(t.active for t in self.state.thresholds.values())
 
     def set_state(
-        self, threshold: str, reference: Optional[str] = None, pool: Optional[str] = None
+        self, threshold: str, reference: str | None = None, pool: str | None = None
     ):
         if threshold in self.state.thresholds:
             self.state.thresholds[threshold].active = True
@@ -226,7 +226,7 @@ class ThresholdNode(BaseCDAGNode):
                 pool=pool,
             )
 
-    def reset_state(self, threshold: Optional[str] = None):
+    def reset_state(self, threshold: str | None = None):
         """Reset Alarm Node state"""
         if not self.is_active(threshold):
             return
@@ -248,7 +248,7 @@ class ThresholdNode(BaseCDAGNode):
     def __del__(self):
         self.reset_state()
 
-    def clean_state(self, state: Optional[Dict[str, Any]]) -> Optional[BaseModel]:
+    def clean_state(self, state: dict[str, Any] | None) -> BaseModel | None:
         if not hasattr(self, "state_cls"):
             return None
         state = state or {}

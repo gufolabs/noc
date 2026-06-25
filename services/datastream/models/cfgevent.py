@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Dict, Any
+from typing import Any
 
 # Third-party modules
 from pydantic import BaseModel
@@ -22,12 +22,12 @@ class VarItem(BaseModel):
     type: ValueType
     required: bool = False
     match_suppress: bool = False
-    resource_model: Optional[str] = None
+    resource_model: str | None = None
 
 
 class ComboCondition(BaseModel):
     combo_condition: str
-    combo_event_classes: List[str]
+    combo_event_classes: list[str]
     combo_window: int = 0
     combo_count: int = 0
 
@@ -38,20 +38,20 @@ class Rule(BaseModel):
     preference: int
     action: EventAction = EventAction.LOG
     # Disposition
-    alarm_class: Optional[str] = None
+    alarm_class: str | None = None
     on_disposition: bool = False
     stop_processing: bool = False
     # Conditions
-    match_expr: Optional[Dict[str, Any]] = None
-    vars_match_expr: Optional[Dict[str, Any]] = None
-    combo_condition: Optional[ComboCondition] = None
+    match_expr: dict[str, Any] | None = None
+    vars_match_expr: dict[str, Any] | None = None
+    combo_condition: ComboCondition | None = None
     # Actions
-    handlers: Optional[List[str]] = None
+    handlers: list[str] | None = None
     # Notification
-    notification_group: Optional[str] = None
-    subject_template: Optional[str] = None
+    notification_group: str | None = None
+    subject_template: str | None = None
     # Target Actions
-    actions: Optional[List[DisposeAction]] = None
+    actions: list[DisposeAction] | None = None
 
 
 class FilterConfig(BaseModel):
@@ -72,9 +72,9 @@ class CfgEvent(BaseModel):
     event_class: EventClass
     is_unique: bool = False
     link_event: bool = False
-    filters: Optional[List[FilterConfig]] = None
+    filters: list[FilterConfig] | None = None
     # vars
-    vars: Optional[List[VarItem]] = None
+    vars: list[VarItem] | None = None
     # subject:
-    handlers: List[str] = None
-    rules: Optional[List[Rule]] = None
+    handlers: list[str] = None
+    rules: list[Rule] | None = None

@@ -17,7 +17,6 @@ import sys
 import threading
 import operator
 from base64 import b85decode
-from typing import Tuple, Dict
 
 # Third-party modules
 import orjson
@@ -60,7 +59,7 @@ class Collection:
     def __init__(self, name, stdout=None):
         self.name = name
         self._model = None
-        self.ref_cache: Dict[Tuple[Document, str, str], Document] = {}
+        self.ref_cache: dict[tuple[Document, str, str], Document] = {}
         self._name_field = None
         self.stdout = stdout or sys.stdout
         self.partial_errors = {}

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Dict, Tuple
+from typing import Any
 
 # NOC modules
 from .typing import ValueType
@@ -16,10 +16,10 @@ class Transaction:
     def __init__(self, cdag):
         self.cdag = cdag
         # id(node) -> value
-        self.inputs: Dict[str, Dict[str, ValueType]] = {}
+        self.inputs: dict[str, dict[str, ValueType]] = {}
         # id(node) -> int
-        self.req_left: Dict[str, int] = {}
-        self._states: Dict[Tuple[str, str], Any] = {}
+        self.req_left: dict[str, int] = {}
+        self._states: dict[tuple[str, str], Any] = {}
 
     def activate(self, node: str, name: str, value: ValueType) -> None:
         # Find node
@@ -28,7 +28,7 @@ class Transaction:
             raise KeyError(f"Invalid node {node}")
         n.activate(self, name, value)
 
-    def get_inputs(self, node) -> Dict[str, ValueType]:
+    def get_inputs(self, node) -> dict[str, ValueType]:
         """
         Get node's actual inputs
         :param node:
@@ -74,7 +74,7 @@ class Transaction:
         if d:
             self._states[node.node_id, node.name] = d
 
-    def get_changed_state(self) -> Dict[Tuple[str, str], Any]:
+    def get_changed_state(self) -> dict[tuple[str, str], Any]:
         """
         Get side effect of transaction
         :return:

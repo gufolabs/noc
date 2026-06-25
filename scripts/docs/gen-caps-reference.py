@@ -10,7 +10,7 @@ import time
 import re
 import json
 from dataclasses import dataclass
-from typing import List, Iterable, DefaultDict, Tuple
+from typing import Iterable
 import logging
 from collections import defaultdict
 from pathlib import Path
@@ -84,7 +84,7 @@ class Data:
         return rx_md_anchor.sub("-", self.name.lower())
 
     @property
-    def bucket(self) -> Tuple[str, ...]:
+    def bucket(self) -> tuple[str, ...]:
         return tuple(islice((x.strip() for x in self.name.split("|", 1)), 0, BUCKET_DEPTH))
 
     def link_from(self, src: "Data") -> str:
@@ -132,8 +132,8 @@ def iter_data() -> Iterable[Data]:
     logger.info("%d items read in %.3fs", n, dt)
 
 
-def get_buckets() -> DefaultDict[Tuple[str, ...], List[Data]]:
-    buckets: DefaultDict[Tuple[str, ...], List[Data]] = defaultdict(list)
+def get_buckets() -> defaultdict[tuple[str, ...], list[Data]]:
+    buckets: defaultdict[tuple[str, ...], list[Data]] = defaultdict(list)
     for data in iter_data():
         buckets[data.bucket].append(data)
     return buckets
@@ -146,7 +146,7 @@ def canonical_name(s: str) -> str:
     return s.replace(" | ", "-").replace(" ", "-").lower()
 
 
-def bucket_path(s: Tuple[str, ...]) -> Path:
+def bucket_path(s: tuple[str, ...]) -> Path:
     """
     Convert bucket tuple to .md path
     """

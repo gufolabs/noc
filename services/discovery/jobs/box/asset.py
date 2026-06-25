@@ -12,7 +12,7 @@ import base64
 from threading import Lock
 import operator
 import re
-from typing import Optional, List, Dict, Set, Tuple, Iterable, Any, Union
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 import cachetools
@@ -51,39 +51,39 @@ class AssetCheck(DiscoveryCheck):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.unknown_part_no: Dict[str, Set[str]] = {}  # part_no -> list of variants
-        self.pn_description: Dict[str, str] = {}  # part_no -> Description
-        self.vendors: Dict[str, Vendor] = {}  # code -> Vendor instance
-        self.objects: List[
-            Tuple[
+        self.unknown_part_no: dict[str, set[str]] = {}  # part_no -> list of variants
+        self.pn_description: dict[str, str] = {}  # part_no -> Description
+        self.vendors: dict[str, Vendor] = {}  # code -> Vendor instance
+        self.objects: list[
+            tuple[
                 str,
-                Union[Object, str],
-                Dict[str, Union[int, str]],
-                Optional[str],
-                List[ObjectAttr],
-                List[ObjectAttr],
+                Object | str,
+                dict[str, int | str],
+                str | None,
+                list[ObjectAttr],
+                list[ObjectAttr],
             ]
         ] = []  # [(type, object, context, serial, data)]
-        self.sensors: Dict[
-            Tuple[Optional[Object], str], Dict[str, Any]
+        self.sensors: dict[
+            tuple[Object | None, str], dict[str, Any]
         ] = {}  # object, sensor -> sensor data
         # Upper object, lower object
-        self.to_disconnect: Set[Tuple[Object, Object]] = set()
-        self.rule: Dict[str, List[ConnectionRule]] = defaultdict(
+        self.to_disconnect: set[tuple[Object, Object]] = set()
+        self.rule: dict[str, list[ConnectionRule]] = defaultdict(
             list
         )  # Connection rule. type -> [rule1, ruleN]
         self.rule_context = {}
-        self.ctx: Dict[str, Union[int, str]] = {}
-        self.stack_member: Dict["Object", str] = {}  # object -> stack member numbers
-        self.managed: Set[str] = set()  # Object ids
-        self.unk_model: Dict[str, ObjectModel] = {}  # name -> model
+        self.ctx: dict[str, int | str] = {}
+        self.stack_member: dict["Object", str] = {}  # object -> stack member numbers
+        self.managed: set[str] = set()  # Object ids
+        self.unk_model: dict[str, ObjectModel] = {}  # name -> model
         self.lost_and_found = self.get_lost_and_found(self.object)
         self.generic_vendor = Vendor.get_by_code("GENERIC")
         self.noname_vendor = Vendor.get_by_code("NONAME")
-        self.generic_models: List[str] = self.get_generic_models()
+        self.generic_models: list[str] = self.get_generic_models()
         # CPEs
-        self.cpes: Dict[str, Tuple[str, str, str, str, str]] = self.load_cpe()
-        self.object_param_artifacts: Dict[str, List[Dict[str, Any]]] = {}  # oid: [Data]
+        self.cpes: dict[str, tuple[str, str, str, str, str]] = self.load_cpe()
+        self.object_param_artifacts: dict[str, list[dict[str, Any]]] = {}  # oid: [Data]
 
     def handler(self):
         self.logger.info("Checking assets")
@@ -131,19 +131,19 @@ class AssetCheck(DiscoveryCheck):
     def submit(
         self,
         o_type: str,
-        part_no: List[str],
-        number: Optional[str] = None,
+        part_no: list[str],
+        number: str | None = None,
         builtin: bool = False,
-        vendor: Optional[str] = None,
-        revision: Optional[str] = None,
-        serial: Optional[str] = None,
-        mfg_date: Optional[str] = None,
-        description: Optional[str] = None,
-        sensors: List[Dict[str, Any]] | None = None,
-        sa_data: List[Dict[str, Any]] | None = None,
-        param_data: List[Dict[str, Any]] | None = None,
-        cpe_id: Optional[str] = None,
-        crossing: List[Dict[str, str]] | None = None,
+        vendor: str | None = None,
+        revision: str | None = None,
+        serial: str | None = None,
+        mfg_date: str | None = None,
+        description: str | None = None,
+        sensors: list[dict[str, Any]] | None = None,
+        sa_data: list[dict[str, Any]] | None = None,
+        param_data: list[dict[str, Any]] | None = None,
+        cpe_id: str | None = None,
+        crossing: list[dict[str, str]] | None = None,
         mode: str | None = None,
     ):
         # Check the vendor and the serial are sane
@@ -375,8 +375,8 @@ class AssetCheck(DiscoveryCheck):
         self.sync_crossing(o, crossing)
 
     def clean_sa_data(
-        self, data: List[Dict[str, str]]
-    ) -> Tuple[List[ObjectAttr], List[ObjectAttr]]:
+        self, data: list[dict[str, str]]
+    ) -> tuple[list[ObjectAttr], list[ObjectAttr]]:
         """
         Cleanup data from script, Split it to Object Data and Constant Data
         """
@@ -407,7 +407,7 @@ class AssetCheck(DiscoveryCheck):
                 ]
         return o_data, c_data
 
-    def sync_data(self, obj: Object, data: List[ObjectAttr]):
+    def sync_data(self, obj: Object, data: list[ObjectAttr]):
         """
         Sync script data with object
         """
@@ -447,7 +447,7 @@ class AssetCheck(DiscoveryCheck):
         if changed:
             obj.save()
 
-    def prepare_context(self, o_type: str, number: Optional[str]):
+    def prepare_context(self, o_type: str, number: str | None):
         self.set_context("N", number)
         if o_type and o_type in self.rule_context:
             scope, reset_scopes = self.rule_context[o_type]
@@ -456,7 +456,7 @@ class AssetCheck(DiscoveryCheck):
             if reset_scopes:
                 self.reset_context(reset_scopes)
 
-    def update_name(self, obj: Object, cpe_id: Optional[str] = None):
+    def update_name(self, obj: Object, cpe_id: str | None = None):
         cpe = None
         if cpe_id:
             cpe = self.cpes[cpe_id][0]
@@ -474,7 +474,7 @@ class AssetCheck(DiscoveryCheck):
 
     def iter_object(
         self, i: int, scope: str, value: int, target_type: str, fwd: bool
-    ) -> Iterable[Tuple[str, Union[Object, str], Dict[str, Union[int, str]]]]:
+    ) -> Iterable[tuple[str, Object | str, dict[str, int | str]]]:
         # Search backwards
         if not fwd:
             for j in range(i - 1, -1, -1):
@@ -494,7 +494,7 @@ class AssetCheck(DiscoveryCheck):
                 else:
                     return
 
-    def expand_context(self, s: str, ctx: Dict[str, int]) -> str:
+    def expand_context(self, s: str, ctx: dict[str, int]) -> str:
         """
         Replace values in context
         """
@@ -623,7 +623,7 @@ class AssetCheck(DiscoveryCheck):
         self.connect_p2p(o1, c, o2, c2)
 
     def sync_sensors(self):
-        obj_sensors: Dict[Tuple[Optional[Object], str], Sensor] = {
+        obj_sensors: dict[tuple[Object | None, str], Sensor] = {
             (s.object, s.local_id): s for s in Sensor.objects.filter(managed_object=self.object)
         }
         for obj, sn in obj_sensors:
@@ -669,11 +669,11 @@ class AssetCheck(DiscoveryCheck):
         obj: Object,
         name: str,
         status: bool = True,
-        units: Optional[str] = "Scalar",
-        label: Optional[str] = None,
-        snmp_oid: Optional[str] = None,
-        ipmi_id: Optional[str] = None,
-        labels: List[str] = None,
+        units: str | None = "Scalar",
+        label: str | None = None,
+        snmp_oid: str | None = None,
+        ipmi_id: str | None = None,
+        labels: list[str] = None,
     ):
         self.logger.info("[%s|%s] Creating new sensor '%s'", obj.name if obj else "-", "-", name)
         s = Sensor(
@@ -710,11 +710,11 @@ class AssetCheck(DiscoveryCheck):
         self,
         sensor: Sensor,
         status: bool = True,
-        units: Optional[str] = "Scalar",
-        label: Optional[str] = None,
-        snmp_oid: Optional[str] = None,
-        ipmi_id: Optional[str] = None,
-        labels: Optional[List[str]] = None,
+        units: str | None = "Scalar",
+        label: str | None = None,
+        snmp_oid: str | None = None,
+        ipmi_id: str | None = None,
+        labels: list[str] | None = None,
     ):
         sensor.seen(source="asset")
         if not status:
@@ -789,7 +789,7 @@ class AssetCheck(DiscoveryCheck):
                 )
 
     def register_unknown_part_no(
-        self, vendor: "Vendor", part_no: Union[List[str], str], descripton: Optional[str]
+        self, vendor: "Vendor", part_no: list[str] | str, descripton: str | None
     ):
         """
         Register missed part number
@@ -803,12 +803,12 @@ class AssetCheck(DiscoveryCheck):
                 self.unknown_part_no[p].add(pp)
             UnknownModel.mark_unknown(vendor.code[0], self.object, p, descripton)
 
-    def register_sensors(self, sensors: List[Dict[str, Any]], t_object: Optional[Object] = None):
+    def register_sensors(self, sensors: list[dict[str, Any]], t_object: Object | None = None):
         """"""
         for s in sensors:
             self.sensors[(t_object, s["name"])] = s
 
-    def get_unknown_part_no(self) -> List[List[str]]:
+    def get_unknown_part_no(self) -> list[list[str]]:
         """
         Get list of missed part number variants
         """
@@ -819,7 +819,7 @@ class AssetCheck(DiscoveryCheck):
                 r += [n]
         return r
 
-    def get_vendor(self, v: Optional[str], o_type: Optional[str] = "") -> Optional["Vendor"]:
+    def get_vendor(self, v: str | None, o_type: str | None = "") -> Optional["Vendor"]:
         """
         Get vendor instance or None. Create vendor if object type is XCVR.
         """
@@ -857,7 +857,7 @@ class AssetCheck(DiscoveryCheck):
         for r in rule.rules:
             self.rule[r.match_type] += [r]
 
-    def set_context(self, name: str, value: Optional[str]):
+    def set_context(self, name: str, value: str | None):
         self.ctx[name] = value
         n = "N%s" % name
         if n not in self.ctx:
@@ -866,7 +866,7 @@ class AssetCheck(DiscoveryCheck):
             self.ctx[n] += 1
         self.logger.debug("Set context %s = %s -> %s", name, value, str_dict(self.ctx))
 
-    def reset_context(self, names: List[str]):
+    def reset_context(self, names: list[str]):
         for n in names:
             if n in self.ctx:
                 del self.ctx[n]
@@ -928,7 +928,7 @@ class AssetCheck(DiscoveryCheck):
         t_object: Object,
         t_c: str,
         serial: str,
-        data: List[ObjectAttr],
+        data: list[ObjectAttr],
     ) -> Optional["Object"]:
         """
         Resolve object type
@@ -988,9 +988,9 @@ class AssetCheck(DiscoveryCheck):
     def get_model_map(
         self,
         vendor: str,
-        part_no: Union[List[str], str],
-        serial: Optional[str],
-        cpe_id: Optional[str] = None,
+        part_no: list[str] | str,
+        serial: str | None,
+        cpe_id: str | None = None,
     ) -> Optional["ObjectModel"]:
         """
         Try to resolve using model map
@@ -1030,7 +1030,7 @@ class AssetCheck(DiscoveryCheck):
             return None
         return lf
 
-    def get_generic_models(self) -> List[str]:
+    def get_generic_models(self) -> list[str]:
         """ """
         return [
             om.id
@@ -1039,7 +1039,7 @@ class AssetCheck(DiscoveryCheck):
             )
         ]
 
-    def load_cpe(self) -> Dict[str, Tuple[str, str, str, str, str]]:
+    def load_cpe(self) -> dict[str, tuple[str, str, str, str, str]]:
         """
         Load CPE from CPE Discovery Artefacts
         """
@@ -1060,7 +1060,7 @@ class AssetCheck(DiscoveryCheck):
             )
         return r
 
-    def generate_serial(self, model: ObjectModel, number: Optional[str]) -> str:
+    def generate_serial(self, model: ObjectModel, number: str | None) -> str:
         """
         Generate virtual serial number
         """
@@ -1072,7 +1072,7 @@ class AssetCheck(DiscoveryCheck):
 
     @staticmethod
     def get_name(
-        obj: Object, managed_object: Optional[Any] = None, cpe_name: Optional[str] = None
+        obj: Object, managed_object: Any | None = None, cpe_name: str | None = None
     ) -> str:
         """
         Generate discovered object's name
@@ -1106,7 +1106,7 @@ class AssetCheck(DiscoveryCheck):
             # Move o2 to lost&found
             o2.put_into(self.lost_and_found)
 
-    def clean_serial(self, model: "ObjectModel", number: Optional[str], serial: Optional[str]):
+    def clean_serial(self, model: "ObjectModel", number: str | None, serial: str | None):
         # Empty value
         if not serial or serial == "None":
             new_serial = self.generate_serial(model, number)

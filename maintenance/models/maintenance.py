@@ -11,7 +11,7 @@ import operator
 import re
 import logging
 from threading import Lock
-from typing import Optional, List, Set, Union, Tuple, Dict, Any
+from typing import Optional, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -131,13 +131,13 @@ class Maintenance(Document):
     escalate_managed_object = ForeignKeyField(ManagedObject)
     # Time pattern when maintenance is active
     # None - active all the time
-    time_pattern: Optional[TimePattern] = ForeignKeyField(TimePattern)
+    time_pattern: TimePattern | None = ForeignKeyField(TimePattern)
     # Objects declared to be affected by maintenance
-    direct_objects: List["MaintenanceObject"] = EmbeddedDocumentListField(MaintenanceObject)
+    direct_objects: list["MaintenanceObject"] = EmbeddedDocumentListField(MaintenanceObject)
     # Segments declared to be affected by maintenance
-    direct_segments: List["MaintenanceSegment"] = EmbeddedDocumentListField(MaintenanceSegment)
+    direct_segments: list["MaintenanceSegment"] = EmbeddedDocumentListField(MaintenanceSegment)
     #  Service declared to be affected by maintenance
-    direct_services: List["MaintenanceService"] = EmbeddedDocumentListField(MaintenanceService)
+    direct_services: list["MaintenanceService"] = EmbeddedDocumentListField(MaintenanceService)
     # direct_group =
     # All Administrative Domain for all affected objects
     administrative_domain = ListField(ForeignKeyField(AdministrativeDomain))
@@ -155,10 +155,10 @@ class Maintenance(Document):
     # Object id in remote system
     remote_id = StringField()
     # Array remote objects and service ids
-    remote_objects: List["RemoteObject"] = EmbeddedDocumentListField(RemoteObject)
+    remote_objects: list["RemoteObject"] = EmbeddedDocumentListField(RemoteObject)
     # Watchers
-    watchers: List[WatchDocumentItem] = EmbeddedDocumentListField(WatchDocumentItem)
-    watcher_wait_ts: Optional[datetime.datetime] = DateTimeField(required=False)
+    watchers: list[WatchDocumentItem] = EmbeddedDocumentListField(WatchDocumentItem)
+    watcher_wait_ts: datetime.datetime | None = DateTimeField(required=False)
     # Object id in BI
     # bi_id = LongField(unique=True)
 
@@ -173,11 +173,11 @@ class Maintenance(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Maintenance"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Maintenance"]:
         return Maintenance.objects.filter(id=oid).first()
 
     @classmethod
-    def get_min_wait_ts(cls) -> Optional[datetime.datetime]:
+    def get_min_wait_ts(cls) -> datetime.datetime | None:
         """"""
         return (
             Maintenance.objects()
@@ -203,7 +203,7 @@ class Maintenance(Document):
         return self.start <= now
 
     @property
-    def active_interval(self) -> Tuple[datetime.datetime, datetime.datetime]:
+    def active_interval(self) -> tuple[datetime.datetime, datetime.datetime]:
         """For old fixes, String to datetime fields"""
         m_start, m_stop = self.start, self.stop
         if isinstance(m_start, str):
@@ -212,7 +212,7 @@ class Maintenance(Document):
             m_stop = datetime.datetime.fromisoformat(m_stop)
         return m_start, m_stop
 
-    def event(self, stage: str, data: Optional[Dict[str, Any]] = None):
+    def event(self, stage: str, data: dict[str, Any] | None = None):
         """
         Process object-related event
         Args:
@@ -229,7 +229,7 @@ class Maintenance(Document):
             headers={MX_TO_STAGE_NAME: stage.encode()},
         )
 
-    def get_message_context(self) -> Dict[str, Any]:
+    def get_message_context(self) -> dict[str, Any]:
         """Service Message Ctx"""
         # Direct maintenance
         r = {
@@ -249,7 +249,7 @@ class Maintenance(Document):
         # Affected ?
         return r
 
-    def update_remote_objects(self, objects: List[Dict[str, Any]]):
+    def update_remote_objects(self, objects: list[dict[str, Any]]):
         """Update remote Object"""
         r = []
         for o in objects:
@@ -385,7 +385,7 @@ class Maintenance(Document):
         ManagedObject.reset_maintenance(self.id)
 
     @classmethod
-    def currently_affected(cls, objects: Optional[List[int]] = None) -> List[int]:
+    def currently_affected(cls, objects: list[int] | None = None) -> list[int]:
         """
         Returns a list of currently affected object ids
         """
@@ -412,20 +412,20 @@ class Maintenance(Document):
 
 
 def update_affected_objects(
-    maintenance_id, start: datetime.datetime, stop: Optional[datetime.datetime] = None
+    maintenance_id, start: datetime.datetime, stop: datetime.datetime | None = None
 ):
     """
     Calculate and fill affected objects
     """
 
     # All affected maintenance objects
-    mai_objects: List[int] = list(
+    mai_objects: list[int] = list(
         ManagedObject.objects.filter(
             is_managed=True, affected_maintenances__has_key=str(maintenance_id)
         ).values_list("id", flat=True)
     )
 
-    def get_downlinks(objects: Set[int]):
+    def get_downlinks(objects: set[int]):
         # Get all additional objects which may be affected
         r = {
             mo_id
@@ -463,7 +463,7 @@ def update_affected_objects(
         return
     logger.info("[%s] Processed update Maintenance affected", data.id)
     # Calculate affected objects
-    affected: Set[int] = {o.object.id for o in data.direct_objects if o.object}
+    affected: set[int] = {o.object.id for o in data.direct_objects if o.object}
     for o in data.direct_segments:
         if o.segment:
             affected |= get_segment_objects(o.segment.id)
@@ -566,7 +566,7 @@ def stop(maintenance_id):
     Maintenance._get_collection().update_many(
         {"_id": maintenance_id}, {"$set": {"is_completed": True}}
     )
-    mai_objects: List[int] = list(
+    mai_objects: list[int] = list(
         ManagedObject.objects.filter(
             is_managed=True, affected_maintenances__has_key=str(maintenance_id)
         ).values_list("id", flat=True)

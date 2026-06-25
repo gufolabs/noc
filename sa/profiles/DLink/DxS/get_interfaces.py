@@ -7,7 +7,7 @@
 
 # Python modules
 import re
-from typing import Optional, Iterable, Callable, Tuple, Union
+from typing import Iterable, Callable
 
 # NOC modules
 from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
@@ -171,13 +171,13 @@ class Script(BaseScript):
         return self.MAX_REPETITIONS
 
     def iter_iftable(
-        self, key: str, oid: str, ifindexes: Optional[Iterable[int]] = None, clean: Callable = None
-    ) -> Iterable[Tuple[str, Union[str, int]]]:
+        self, key: str, oid: str, ifindexes: Iterable[int] | None = None, clean: Callable = None
+    ) -> Iterable[tuple[str, str | int]]:
         if key == "mac" and self.is_bad_ifmib_snmp:
             oid = "LLDP-MIB::lldpLocPortId"
         return super().iter_iftable(key=key, oid=oid, ifindexes=ifindexes, clean=clean)
 
-    def clean_iftype(self, ifname: str, ifindex: Optional[int] = None) -> str:
+    def clean_iftype(self, ifname: str, ifindex: int | None = None) -> str:
         if not getattr(self, "_iftype_map", None):
             self._iftype_map = {
                 int(oid.split(".")[-1]): iftype

@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any, Set
+from typing import Any
 from collections import defaultdict
 
 # NOC modules
@@ -19,7 +19,7 @@ class CrossingPlugin(InvPlugin):
     name = "crossing"
     js = "NOC.inv.inv.plugins.crossing.CrossingPanel"
 
-    def get_data(self, request, o: Object) -> Dict[str, Any]:
+    def get_data(self, request, o: Object) -> dict[str, Any]:
         crossings = list(o.iter_effective_crossing())
         data = [
             {
@@ -37,9 +37,9 @@ class CrossingPlugin(InvPlugin):
             if c.input_discriminator:
                 n_input_discriminators[c.input] += 1
         # Build list
-        inputs: Set[str] = set()
-        outputs: Set[str] = set()
-        mixed: Set[str] = set()
+        inputs: set[str] = set()
+        outputs: set[str] = set()
+        mixed: set[str] = set()
         for c in crossings:
             # Process inputs
             if c.input not in mixed:
@@ -105,7 +105,7 @@ class CrossingPlugin(InvPlugin):
             viz["edges"].append(edge)
         return {"id": str(o.id), "data": data, "viz": viz}
 
-    def _render_node(self, name: str, items: Set[str]) -> Dict[str, Any]:
+    def _render_node(self, name: str, items: set[str]) -> dict[str, Any]:
         """
         Render Viz node
         """

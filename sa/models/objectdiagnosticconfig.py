@@ -9,7 +9,7 @@
 import operator
 from collections import defaultdict
 from threading import Lock
-from typing import Optional, Dict, Any, Iterable, List, Union, Tuple, Callable
+from typing import Optional, Any, Iterable, Callable
 
 # Third-party modules
 from bson import ObjectId
@@ -61,7 +61,7 @@ class Match(EmbeddedDocument):
     def get_labels(self):
         return list(Label.objects.filter(name__in=self.labels))
 
-    def get_match_expr(self) -> Dict[str, Any]:
+    def get_match_expr(self) -> dict[str, Any]:
         r = {}
         if self.labels:
             r["labels"] = {"$all": list(self.labels)}
@@ -101,7 +101,7 @@ class DiagnosticCheck(EmbeddedDocument):
         return f"{self.check}:{self.ctx}"
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {"check": self.check}
         if self.ctx:
             r["ctx"] = self.ctx
@@ -133,7 +133,7 @@ class ObjectDiagnosticConfig(Document):
     #
     default_state = EnumField(DiagnosticState, default=DiagnosticState.unknown)
     state_policy = StringField(choices=["ALL", "ANY"], default="ANY")
-    checks: List[DiagnosticCheck] = EmbeddedDocumentListField(DiagnosticCheck)
+    checks: list[DiagnosticCheck] = EmbeddedDocumentListField(DiagnosticCheck)
     diagnostics = ListField(ReferenceField("self", reverse_delete_rule=NULLIFY))
     # Alarm Settings
     alarm_class = ReferenceField(AlarmClass)
@@ -162,7 +162,7 @@ class ObjectDiagnosticConfig(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ObjectDiagnosticConfig"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ObjectDiagnosticConfig"]:
         return ObjectDiagnosticConfig.objects.filter(id=oid).first()
 
     @classmethod
@@ -179,10 +179,10 @@ class ObjectDiagnosticConfig(Document):
     @cachetools.cachedmethod(
         operator.attrgetter("_active_diagnostic_cache"), lock=lambda _: id_lock
     )
-    def get_active_diagnostics(cls) -> List["ObjectDiagnosticConfig"]:
+    def get_active_diagnostics(cls) -> list["ObjectDiagnosticConfig"]:
         return list(ObjectDiagnosticConfig.objects.filter())
 
-    def is_allowed(self, labels: List[str]) -> bool:
+    def is_allowed(self, labels: list[str]) -> bool:
         """Check transition allowed"""
         if not self.match:
             return True
@@ -193,7 +193,7 @@ class ObjectDiagnosticConfig(Document):
             raise ValidationError({"diagnostics": "Same diagnostic in depend check not allowed"})
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -289,7 +289,7 @@ class ObjectDiagnosticConfig(Document):
         key=lambda x: "ruleset",
         lock=lambda _: rule_lock,
     )
-    def get_diagnostics_matcher(cls) -> Tuple[Tuple[str, Tuple[Callable, ...]], ...]:
+    def get_diagnostics_matcher(cls) -> tuple[tuple[str, tuple[Callable, ...]], ...]:
         """Build matcher based on Profile Match Rules"""
         r = defaultdict(list)
         for mop_id, rules in ObjectDiagnosticConfig.objects.filter().values_list("id", "match"):

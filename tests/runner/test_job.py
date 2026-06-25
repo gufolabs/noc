@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Iterable, Dict, Tuple, Any
+from typing import Iterable, Any
 import asyncio
 
 # Third-party modules
@@ -62,8 +62,8 @@ def test_initial_status(req: JobRequest, expected: JobStatus) -> None:
         ),
     ],
 )
-def test_unique_names(jobs: List[JobRequest], expected: bool) -> None:
-    def jobs_iter(jobs: List[JobRequest]) -> Iterable[Job]:
+def test_unique_names(jobs: list[JobRequest], expected: bool) -> None:
+    def jobs_iter(jobs: list[JobRequest]) -> Iterable[Job]:
         for req in jobs:
             yield from Job.from_req(req)
 
@@ -470,7 +470,7 @@ def get_scenario_id(x) -> str:
     ],
     ids=get_scenario_id,
 )
-def test_scenario(req: JobRequest, expected: Dict[str, JobStatus]):
+def test_scenario(req: JobRequest, expected: dict[str, JobStatus]):
     async def inner() -> None:
         runner = RunnerWrapper()
         runner.submit(req)
@@ -500,7 +500,7 @@ def test_scenario(req: JobRequest, expected: Dict[str, JobStatus]):
         ),
     ],
 )
-def test_job_env(req: JobRequest, expected: List[Tuple[str, str]]) -> None:
+def test_job_env(req: JobRequest, expected: list[tuple[str, str]]) -> None:
     job = list(Job.from_req(req))[-1]
     r = sorted(job.environment.items())
     assert r == expected
@@ -538,7 +538,7 @@ def test_job_env(req: JobRequest, expected: List[Tuple[str, str]]) -> None:
         ),
     ],
 )
-def test_iter_locks(req: JobRequest, expected: List[str]) -> None:
+def test_iter_locks(req: JobRequest, expected: list[str]) -> None:
     job = list(Job.from_req(req))[-1]
     r = sorted(job.iter_lock_names())
     assert r == expected
@@ -631,7 +631,7 @@ def test_locks(req: JobRequest) -> None:
     ],
 )
 def test_inputs(req: JobRequest) -> None:
-    async def inner() -> Dict[str, JobStatus]:
+    async def inner() -> dict[str, JobStatus]:
         runner = RunnerWrapper()
         runner.submit(req)
         await asyncio.wait_for(runner.drain(), 1.0)
@@ -693,7 +693,7 @@ def test_inputs(req: JobRequest) -> None:
     ],
 )
 def test_queue(req: JobRequest) -> None:
-    async def inner() -> Dict[str, JobStatus]:
+    async def inner() -> dict[str, JobStatus]:
         queue = asyncio.Queue()
         runner = RunnerWrapper(queue=queue)
         runner.submit(req)
@@ -728,7 +728,7 @@ def test_queue(req: JobRequest) -> None:
         assert len(list(runner2.iter_jobs())) == 0
         assert not any(True for x in runner2.last_state.values() if x != JobStatus.SUCCESS)
 
-    def iter_resolved(data: Iterable[Dict[str, Any]], rmap=None) -> Iterable[Dict[str, Any]]:
+    def iter_resolved(data: Iterable[dict[str, Any]], rmap=None) -> Iterable[dict[str, Any]]:
         rmap = set() if rmap is None else rmap
         blocked = []
         for d in data:

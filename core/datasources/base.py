@@ -15,7 +15,7 @@ from time import perf_counter
 from dataclasses import dataclass
 from functools import partial
 from collections import defaultdict
-from typing import Tuple, Union, Optional, Iterable, List, Dict, AsyncIterable, Set, Any
+from typing import Iterable, AsyncIterable, Any
 
 # Third-party modules
 import polars as pl
@@ -33,8 +33,8 @@ from noc.config import config
 class ClickhouseColumn:
     name: str
     type: str
-    default_kind: Optional[str] = None  # DEFAULT, MATERIALIZED
-    default_expression: Optional[str] = None
+    default_kind: str | None = None  # DEFAULT, MATERIALIZED
+    default_expression: str | None = None
 
     def __hash__(self):
         """"""
@@ -47,9 +47,9 @@ class DSSnapshot:
 
     name: str
     report_ts: datetime.datetime
-    report_uuid: Optional[uuid.UUID] = None
-    job_uuid: Optional[uuid.UUID] = None
-    labels: Optional[List[str]] = None
+    report_uuid: uuid.UUID | None = None
+    job_uuid: uuid.UUID | None = None
+    labels: list[str] | None = None
 
 
 clean_map = {
@@ -114,13 +114,13 @@ class FieldInfo:
     """
 
     name: str  # Name for external interaction
-    description: Optional[str] = None
-    internal_name: Optional[str] = None  # Name for internal DataSource used
+    description: str | None = None
+    internal_name: str | None = None  # Name for internal DataSource used
     type: FieldType = FieldType.STRING  # Field type
     is_caps: bool = False  # Capability field
     is_virtual: bool = False  # Virtual Field not sending to output
     is_vector: bool = False  # Multiple column by requested one field
-    is_diagnostic_state: Optional[DiagnosticState] = None  # Request Diagnostic State field
+    is_diagnostic_state: DiagnosticState | None = None  # Request Diagnostic State field
 
     @property
     def clickhouse_column(self) -> ClickhouseColumn:
@@ -137,12 +137,12 @@ class ParamInfo:
     required: bool = False
     allow_multi: bool = False
     resolve_nested: bool = True
-    display_label: Optional[str] = None
-    description: Optional[str] = None
-    default: Optional[Any] = None
-    model: Optional[str] = None
+    display_label: str | None = None
+    description: str | None = None
+    default: Any | None = None
+    model: str | None = None
 
-    def clean_value(self, value: Union[str, List[str]]):
+    def clean_value(self, value: str | list[str]):
         if not isinstance(value, list):
             value = [value]
         if self.model and self.resolve_nested and self.allow_multi:
@@ -163,7 +163,7 @@ class ParamInfo:
             return value
         return clean_map[self.type](value)
 
-    def clean_nested_model(self, values: List[Any]) -> List[Any]:
+    def clean_nested_model(self, values: list[Any]) -> list[Any]:
         r = set()
         m = get_model(self.model)
         for v in values:
@@ -171,7 +171,7 @@ class ParamInfo:
             r |= set(m.get_nested_ids(v.id))
         return list(r)
 
-    def clean_model(self, model, value: Union[str, Any]) -> Optional[Any]:
+    def clean_model(self, model, value: str | Any) -> Any | None:
         """Convert value to model filter"""
         if not isinstance(value, model):
             value = model.get_by_id(value)
@@ -186,9 +186,9 @@ class BaseDataSource:
     ENABLE_CH_MIRROR = False
 
     name: str
-    fields: List[FieldInfo]
-    params: Optional[List[ParamInfo]] = None
-    row_index: Union[str, Tuple[str, ...]] = "id"
+    fields: list[FieldInfo]
+    params: list[ParamInfo] | None = None
+    row_index: str | tuple[str, ...] = "id"
 
     @classmethod
     def clickhouse_mirror(cls) -> bool:
@@ -196,7 +196,7 @@ class BaseDataSource:
         return cls.ENABLE_CH_MIRROR
 
     @classmethod
-    def join_fields(cls) -> List[str]:
+    def join_fields(cls) -> list[str]:
         if not cls.row_index:
             return []
         if cls.row_index and isinstance(cls.row_index, str):
@@ -208,7 +208,7 @@ class BaseDataSource:
         yield from cls.fields
 
     @classmethod
-    def clean_params(cls, params: Dict[str, Any]) -> Dict[str, Any]:
+    def clean_params(cls, params: dict[str, Any]) -> dict[str, Any]:
         r = {}
         if "user" in params or "administrative_domain" in params:
             idx = cls.get_ads_filter(
@@ -230,9 +230,9 @@ class BaseDataSource:
 
     @staticmethod
     def get_ads_filter(
-        user: Optional[Any] = None,
-        administrative_domain: Optional[Union[List[Any], Any]] = None,
-    ) -> Optional[List[int]]:
+        user: Any | None = None,
+        administrative_domain: list[Any] | Any | None = None,
+    ) -> list[int] | None:
         """
         Build Administrative Domain filter
         """
@@ -262,16 +262,16 @@ class BaseDataSource:
     def clean_interval(
         cls,
         start: datetime.datetime,
-        end: Optional[datetime.datetime] = None,
-        period: Optional[int] = None,
-    ) -> Tuple[datetime.datetime, datetime.datetime]:
+        end: datetime.datetime | None = None,
+        period: int | None = None,
+    ) -> tuple[datetime.datetime, datetime.datetime]:
         """Clean datetime interval"""
         end = (end or datetime.datetime.now()).replace(microsecond=0)
         start = start or end - datetime.timedelta(seconds=period or cls.DEFAULT_INTERVAL)
         return start, end
 
     @classmethod
-    def query_sync(cls, fields: Optional[Iterable[str]] = None, *args, **kwargs) -> pl.DataFrame:
+    def query_sync(cls, fields: Iterable[str] | None = None, *args, **kwargs) -> pl.DataFrame:
         """
         Sync method for query report data
         :param fields: list fields for filtered on query
@@ -284,7 +284,7 @@ class BaseDataSource:
         return run_sync(partial(cls.query, fields, *args, **kwargs))
 
     @classmethod
-    def get_columns_dtype(cls, fields: Optional[List[str]] = None):
+    def get_columns_dtype(cls, fields: list[str] | None = None):
         """
         Return Column Dtype
         columns=[("col1", pl.Float32), ("col2", pl.Int64)]
@@ -310,7 +310,7 @@ class BaseDataSource:
         return any(f.name == name for f in cls.iter_ds_fields())
 
     @classmethod
-    def is_out_field(cls, f: FieldInfo, fields: Optional[Set[str]] = None) -> bool:
+    def is_out_field(cls, f: FieldInfo, fields: set[str] | None = None) -> bool:
         """
         Check field allowed to out
         """
@@ -328,7 +328,7 @@ class BaseDataSource:
         return True
 
     @classmethod
-    def get_series_from_data(cls, data: Dict[str, List[Any]], fields: Optional[Set[str]] = None):
+    def get_series_from_data(cls, data: dict[str, list[Any]], fields: set[str] | None = None):
         """Getting dataframe from series columns data"""
         series = []
         for c in cls.iter_ds_fields():
@@ -348,9 +348,9 @@ class BaseDataSource:
     @classmethod
     async def query(
         cls,
-        fields: Optional[Iterable[str]] = None,
+        fields: Iterable[str] | None = None,
         mirror_clickhouse: bool = False,
-        report_uuid: Optional[uuid.UUID] = None,
+        report_uuid: uuid.UUID | None = None,
         *args,
         **kwargs,
     ) -> pl.DataFrame:
@@ -391,7 +391,7 @@ class BaseDataSource:
         # return pl.DataFrame(r, columns=[(c.name, c.type.value) for c in cls.fields])
 
     @classmethod
-    def get_clickhouse_snapshots(cls, ttl: Optional[datetime.datetime] = None) -> List[DSSnapshot]:
+    def get_clickhouse_snapshots(cls, ttl: datetime.datetime | None = None) -> list[DSSnapshot]:
         """Return available snapshots for Datasource"""
         if not cls.clickhouse_mirror():
             return []
@@ -423,7 +423,7 @@ class BaseDataSource:
         return r
 
     @classmethod
-    def get_latest_snapshot(cls, ttl: Optional[int] = None) -> Optional[DSSnapshot]:
+    def get_latest_snapshot(cls, ttl: int | None = None) -> DSSnapshot | None:
         """"""
         snapshots = cls.get_clickhouse_snapshots(ttl)
         if not snapshots:
@@ -432,7 +432,7 @@ class BaseDataSource:
         return r[0]
 
     @classmethod
-    def from_clickhouse(cls, report_uuid: Optional[uuid.UUID] = None) -> Optional[pl.DataFrame]:
+    def from_clickhouse(cls, report_uuid: uuid.UUID | None = None) -> pl.DataFrame | None:
         """Extract Datasource data from Clickhouse"""
         ch: "ClickhouseClient" = connection()
         snapshot = cls.get_latest_snapshot()
@@ -451,9 +451,9 @@ class BaseDataSource:
     async def publish_clickhouse(
         cls,
         df: pl.DataFrame,
-        report_uuid: Optional[uuid.UUID] = None,
-        job_uuid: Optional[uuid.UUID] = None,
-        ts: Optional[datetime.datetime] = None,
+        report_uuid: uuid.UUID | None = None,
+        job_uuid: uuid.UUID | None = None,
+        ts: datetime.datetime | None = None,
     ):
         """Send DataFrame to clickhouse"""
         ts = (ts or datetime.datetime.now()).replace(microsecond=0)
@@ -492,8 +492,8 @@ class BaseDataSource:
 
     @classmethod
     async def iter_row(
-        cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
-    ) -> AsyncIterable[Dict[str, str]]:
+        cls, fields: Iterable[str] | None = None, *args, **kwargs
+    ) -> AsyncIterable[dict[str, str]]:
         """
         Iterate data as row
         :param fields: list fields for filtered on query
@@ -513,8 +513,8 @@ class BaseDataSource:
 
     @classmethod
     async def iter_query(
-        cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
-    ) -> AsyncIterable[Tuple[int, str, Union[str, int]]]:
+        cls, fields: Iterable[str] | None = None, *args, **kwargs
+    ) -> AsyncIterable[tuple[int, str, str | int]]:
         """
         Method for query report data. Iterate over field data
         :param fields: list fields for filtered on query

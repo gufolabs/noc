@@ -7,7 +7,6 @@
 
 # Python modules
 from contextvars import ContextVar
-from typing import Dict, Optional
 import uuid
 
 # NOC modules
@@ -106,7 +105,7 @@ class Session:
 
 class SessionContext:
     # Thread-local storage holding session context for threads
-    cv_sessions_smap: ContextVar[Optional[Dict[int, Session]]] = ContextVar(
+    cv_sessions_smap: ContextVar[dict[int, Session] | None] = ContextVar(
         "cv_sessions_smap", default=None
     )
 

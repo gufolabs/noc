@@ -21,7 +21,6 @@ import sys
 from dataclasses import dataclass
 from enum import IntEnum, auto
 from collections import defaultdict
-from typing import Dict, DefaultDict
 
 # NOC modules
 from noc.config import config
@@ -116,7 +115,7 @@ class Command(BaseCommand):
         self.handle_dependencies(*args, **options)
 
     @property
-    def flags(self) -> Dict[LibStatus, str]:
+    def flags(self) -> dict[LibStatus, str]:
         if self.is_ansi:
             return _ANSI_FLAGS
         return _UNICODE_FLAGS
@@ -187,7 +186,7 @@ class Command(BaseCommand):
                 libraries[lib_name].inst_version = distribution.version
         # Display information
         col_lib_name, col_required, col_installed = 25, 25, 25
-        summary: DefaultDict[LibStatus, int] = defaultdict(int)
+        summary: defaultdict[LibStatus, int] = defaultdict(int)
         self.print(
             "   | "
             f"{'Library':{col_lib_name}} | {'Required':{col_required}} | "

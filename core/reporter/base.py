@@ -10,7 +10,7 @@ import logging
 import datetime
 from io import BytesIO
 from collections import defaultdict
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -52,7 +52,7 @@ class ReportEngine:
         self.report_print_error = report_print_error
         self.suppress_error_log = True
 
-    def run_report(self, r_params: RunParams, user: Optional[Any] = None):
+    def run_report(self, r_params: RunParams, user: Any | None = None):
         """
         Run report withs params
         :param r_params: Report params
@@ -102,12 +102,12 @@ class ReportEngine:
         cls,
         report: ReportConfig,
         start: datetime.datetime,
-        params: Dict[str, Any],
-        end: Optional[datetime.datetime] = None,
+        params: dict[str, Any],
+        end: datetime.datetime | None = None,
         successfully: bool = False,
         canceled: bool = False,
-        error_text: Optional[str] = None,
-        user: Optional[str] = None,
+        error_text: str | None = None,
+        user: str | None = None,
     ):
         """
         :param report:
@@ -151,7 +151,7 @@ class ReportEngine:
         template: Template,
         output_type: OutputType,
         output_stream: bytes,
-        params: Dict[str, Any],
+        params: dict[str, Any],
         band: Band,
     ):
         """Render document"""
@@ -166,7 +166,7 @@ class ReportEngine:
         """Align end date parameter"""
         return (date + datetime.timedelta(days=1)).replace(hour=0, minute=0, second=0)
 
-    def clean_param(self, report: ReportConfig, params: Dict[str, Any]):
+    def clean_param(self, report: ReportConfig, params: dict[str, Any]):
         """Clean and validata input params"""
         # clean_params = params.copy()
         clean_params = {}
@@ -185,8 +185,8 @@ class ReportEngine:
         return clean_params
 
     def parse_fields(
-        self, band: ReportBand, template: Template, fields: Optional[List[str]] = None
-    ) -> Dict[str, List[str]]:
+        self, band: ReportBand, template: Template, fields: list[str] | None = None
+    ) -> dict[str, list[str]]:
         """Parse requested fields for apply to datasource query"""
         logger.info("[%s] Request datasource fields for band", band.name)
         if not template.bands_format and not fields:
@@ -211,7 +211,7 @@ class ReportEngine:
         return r
 
     def load_bands(
-        self, report: ReportConfig, params: Dict[str, Any], template: Optional[Template] = None
+        self, report: ReportConfig, params: dict[str, Any], template: Template | None = None
     ) -> Band:
         """
         Generate Report Bands from Config
@@ -264,14 +264,14 @@ class ReportEngine:
 
     @classmethod
     def get_dataset(
-        cls, queries: List[ReportQuery], ctx: Dict[str, Any], fields_map: Dict[str, List[str]]
-    ) -> List[DataSet]:
+        cls, queries: list[ReportQuery], ctx: dict[str, Any], fields_map: dict[str, list[str]]
+    ) -> list[DataSet]:
         """
         Attrs:
             queries: Configuration dataset
             ctx: Report params
         """
-        r: List[DataSet] = []
+        r: list[DataSet] = []
         if not queries:
             return []
         joined_field = {}
@@ -314,10 +314,10 @@ class ReportEngine:
     def query_datasource(
         cls,
         query: ReportQuery,
-        ctx: Dict[str, Any],
-        joined_field: Optional[str] = None,
-        fields: Optional[List[str]] = None,
-    ) -> Tuple[Optional[pl.DataFrame], List[str]]:
+        ctx: dict[str, Any],
+        joined_field: str | None = None,
+        fields: list[str] | None = None,
+    ) -> tuple[pl.DataFrame | None, list[str]]:
         """
         Resolve Datasource for Query
         Attrs:

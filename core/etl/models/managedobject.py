@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import Optional, List
 from enum import Enum
 
 # Third-party modules
@@ -41,49 +40,49 @@ class ManagedObject(BaseModel):
     id: str
     name: str
     # Workflow state
-    state: Optional[str] = None
+    state: str | None = None
     # Last state change
-    state_changed: Optional[datetime.datetime] = None
+    state_changed: datetime.datetime | None = None
     # Workflow event
-    event: Optional[str] = None
-    container: Optional[Reference["Object"]] = None
+    event: str | None = None
+    container: Reference["Object"] | None = None
     administrative_domain: Reference["AdministrativeDomain"]
     pool: str
-    fm_pool: Optional[str] = None
+    fm_pool: str | None = None
     segment: Reference["NetworkSegment"]
-    profile: Optional[str] = None
+    profile: str | None = None
     object_profile: Reference["ManagedObjectProfile"]
-    static_client_groups: Optional[List[Reference["ResourceGroup"]]] = None
-    static_service_groups: Optional[List[Reference["ResourceGroup"]]] = None
+    static_client_groups: list[Reference["ResourceGroup"]] | None = None
+    static_service_groups: list[Reference["ResourceGroup"]] | None = None
     scheme: str
-    address: Optional[str] = None
-    fqdn: Optional[DomainName] = None
-    port: Optional[str] = None
-    user: Optional[str] = None
-    password: Optional[str] = None
-    super_password: Optional[str] = None
-    snmp_ro: Optional[str] = None
-    trap_source_type: Optional[SourceType] = SourceType.d
-    trap_source_ip: Optional[str] = None
-    syslog_source_type: Optional[SourceType] = SourceType.d
-    syslog_source_ip: Optional[str] = None
-    description: Optional[str] = None
-    auth_profile: Optional[Reference["AuthProfile"]] = None
-    controller: Optional[Reference["ManagedObject"]] = None
-    l2_domain: Optional[Reference["L2Domain"]] = None
-    vrf: Optional[Reference["IPVRF"]] = None
-    labels: Optional[List[str]] = None
-    tt_system: Optional[Reference["TTSystem"]] = None
-    tt_queue: Optional[str] = None
-    tt_system_id: Optional[str] = None
-    project: Optional[Reference["Project"]] = None
-    capabilities: Optional[List[CapsItem]] = None
-    checkpoint: Optional[str] = None
-    mappings: Optional[List[MappingItem]] = None
+    address: str | None = None
+    fqdn: DomainName | None = None
+    port: str | None = None
+    user: str | None = None
+    password: str | None = None
+    super_password: str | None = None
+    snmp_ro: str | None = None
+    trap_source_type: SourceType | None = SourceType.d
+    trap_source_ip: str | None = None
+    syslog_source_type: SourceType | None = SourceType.d
+    syslog_source_ip: str | None = None
+    description: str | None = None
+    auth_profile: Reference["AuthProfile"] | None = None
+    controller: Reference["ManagedObject"] | None = None
+    l2_domain: Reference["L2Domain"] | None = None
+    vrf: Reference["IPVRF"] | None = None
+    labels: list[str] | None = None
+    tt_system: Reference["TTSystem"] | None = None
+    tt_queue: str | None = None
+    tt_system_id: str | None = None
+    project: Reference["Project"] | None = None
+    capabilities: list[CapsItem] | None = None
+    checkpoint: str | None = None
+    mappings: list[MappingItem] | None = None
 
     @field_validator("address")
     @classmethod
-    def address_must_ipaddress(cls, v: str) -> Optional[str]:
+    def address_must_ipaddress(cls, v: str) -> str | None:
         if v:
             IPvAnyAddress(v)
             return v.strip()

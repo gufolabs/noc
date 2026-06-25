@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Third-party modules
-from typing import Optional
 
 # NOC modules
 from noc.sa.models.managedobject import ManagedObject
@@ -28,7 +27,7 @@ class ManagedObjectLevelGoal(BaseGoal):
         self.level = level
 
     def cost_estimate(
-        self, neighbor: ManagedObject, current: Optional[ManagedObject] = None
+        self, neighbor: ManagedObject, current: ManagedObject | None = None
     ) -> int:
         if current:
             current_level = current.object_profile.level

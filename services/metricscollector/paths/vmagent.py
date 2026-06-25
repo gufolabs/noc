@@ -8,7 +8,7 @@
 # Python modules
 import asyncio
 import logging
-from typing import Optional, Any, List, Tuple
+from typing import Any
 from http import HTTPStatus
 
 # Third-party modules
@@ -56,8 +56,8 @@ class VMAgentAPI:
 
     @staticmethod
     def parse_labels(
-        labels: List[Any],
-    ) -> Tuple[Optional[str], Optional[str], Optional[str], Tuple[str, ...]]:
+        labels: list[Any],
+    ) -> tuple[str | None, str | None, str | None, tuple[str, ...]]:
         """Parse input labels"""
         name, instance, host, r = None, None, None, []
         for ll in labels:
@@ -81,10 +81,10 @@ class VMAgentAPI:
         self,
         request: Request,
         req: bytes = Body(...),
-        remote_system_code: Optional[str] = None,
-        authorization: Optional[str] = Header(None, alias="Authorization"),
-        content_encoding: Optional[str] = Header(None, alias="content-encoding"),
-        remote_write_version: Optional[str] = Header(
+        remote_system_code: str | None = None,
+        authorization: str | None = Header(None, alias="Authorization"),
+        content_encoding: str | None = Header(None, alias="content-encoding"),
+        remote_write_version: str | None = Header(
             None, alias="x-victoriametrics-remote-write-version"
         ),
     ) -> ORJSONResponse:
@@ -115,7 +115,7 @@ class VMAgentAPI:
             "remote_msg_in", ("collector", VMAGENT_COLLECTOR), ("remote_system", rs_cfg.name)
         ] += 1
         # Lock ?
-        channel: Optional[RemoteSystemChannel] = self.service.get_channel(
+        channel: RemoteSystemChannel | None = self.service.get_channel(
             rs_cfg,
             VMAGENT_COLLECTOR,
             batch_delay=30,

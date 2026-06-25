@@ -9,7 +9,6 @@
 import enum
 import datetime
 from dataclasses import dataclass
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel
@@ -47,10 +46,10 @@ class CtxItem:
     """"""
 
     name: str
-    value: Optional[str] = None
-    capability: Optional[str] = None
-    alias: Optional[str] = None
-    set_method: Optional[str] = None
+    value: str | None = None
+    capability: str | None = None
+    alias: str | None = None
+    set_method: str | None = None
 
     @classmethod
     def from_string(cls, value: str) -> "CtxItem":
@@ -93,32 +92,32 @@ class DiagnosticConfig:
     blocked: bool = False
     default_state: DiagnosticState = DiagnosticState.unknown
     # Check config
-    checks: Optional[List[Check]] = None
-    diagnostic_handler: Optional[str] = None
-    dependent: Optional[List[str]] = None
+    checks: list[Check] | None = None
+    diagnostic_handler: str | None = None
+    dependent: list[str] | None = None
     include_credentials: bool = False
     allow_set_credentials: bool = False
-    diagnostic_ctx: Optional[List[CtxItem]] = None
+    diagnostic_ctx: list[CtxItem] | None = None
     # Calculate State on checks.
     state_policy: str = "ANY"
-    reason: Optional[str] = None
+    reason: str | None = None
     # Discovery Config
     check_discovery_policy: str = "R"
     run_policy: str = "A"
     run_order: str = "S"
     discovery_box: bool = False
     discovery_periodic: bool = False
-    workflow_enabled_event: Optional[str] = None
-    workflow_event: Optional[str] = None
+    workflow_enabled_event: str | None = None
+    workflow_event: str | None = None
     save_history: bool = False
     # Display Config
     show_in_display: bool = True
     hide_enable: bool = False
-    display_description: Optional[str] = None
+    display_description: str | None = None
     display_order: int = 0
     # FM Config
-    alarm_class: Optional[str] = None
-    alarm_labels: Optional[List[str]] = None
+    alarm_class: str | None = None
+    alarm_labels: list[str] | None = None
 
     @property
     def is_local_status(self):
@@ -142,14 +141,14 @@ class CheckStatus(BaseModel):
 
     name: str
     status: bool
-    arg0: Optional[str] = None
+    arg0: str | None = None
     skipped: bool = False
-    error: Optional[str] = None
-    remote_system: Optional[str] = None
-    expired: Optional[datetime.datetime] = None
+    error: str | None = None
+    remote_system: str | None = None
+    expired: datetime.datetime | None = None
     source: InputSource = InputSource.UNKNOWN
 
-    def is_expired(self, ts: Optional[datetime.datetime] = None) -> bool:
+    def is_expired(self, ts: datetime.datetime | None = None) -> bool:
         if not self.expired:
             return False
         ts = ts or datetime.datetime.now()
@@ -185,14 +184,14 @@ class DiagnosticValue(BaseModel):
 
     diagnostic: str
     state: DiagnosticState = DiagnosticState("unknown")
-    checks: Optional[List[CheckStatus]] = None
+    checks: list[CheckStatus] | None = None
     # scope: Literal["access", "all", "discovery", "default"] = "default"
     # policy: str = "ANY
-    reason: Optional[str] = None
-    changed: Optional[datetime.datetime] = None
+    reason: str | None = None
+    changed: datetime.datetime | None = None
 
     @property
-    def expired(self) -> Optional[datetime.datetime]:
+    def expired(self) -> datetime.datetime | None:
         """Return expired check timestamp"""
         r = [c.expired for c in self.checks or [] if c.expired]
         if r:

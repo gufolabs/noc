@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Dict
+from typing import Any
 
 # NOC modules
 from noc.core.datastream.base import DataStream
@@ -18,7 +18,7 @@ class CfgMetricsTargetDataStream(DataStream):
     name = "cfgmetricstarget"
 
     @classmethod
-    def get_object(cls, id: str) -> Dict[str, Any]:
+    def get_object(cls, id: str) -> dict[str, Any]:
         # Split source by model_id and bi_id
         model, sid = id.split("::")
         sid = int(sid)

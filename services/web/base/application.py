@@ -11,7 +11,7 @@ import os
 import datetime
 import functools
 from collections import OrderedDict
-from typing import TypeVar, Type, Optional
+from typing import TypeVar
 
 # Third-party modules
 from django.http import (
@@ -85,7 +85,7 @@ class ApplicationBase(type):
     Application metaclass. Registers application class to site
     """
 
-    def __new__(mcs: "Type[Application]", name: str, bases, attrs):
+    def __new__(mcs: "type[Application]", name: str, bases, attrs):
         m = type.__new__(mcs, name, bases, attrs)
         for name in attrs:
             m.add_to_class(name, attrs[name])
@@ -118,7 +118,7 @@ class Application(metaclass=ApplicationBase):
     config = settings.config  # @fixme remove
 
     app_alias = None  # Django 1.5 application aliases
-    require_feature: Optional[Feature] = None  # Feature required for application
+    require_feature: Feature | None = None  # Feature required for application
 
     TZ = get_current_timezone()
 
@@ -259,7 +259,7 @@ class Application(metaclass=ApplicationBase):
         return r
 
     @staticmethod
-    def get_object_or_404(model: Type[T], *args, **kwargs) -> T:
+    def get_object_or_404(model: type[T], *args, **kwargs) -> T:
         """
         Shortcut to get_object_or_404
         """

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Iterable, Dict, _GenericAlias, _SpecialForm
+from typing import Any, Iterable, _GenericAlias, _SpecialForm
 from itertools import zip_longest
 
 # Third-party modules
@@ -47,7 +47,7 @@ class BaseModel(_BaseModel):
         return cls(**{fn: val for fn, val in zip_longest(cls._csv_fields.default, value) if fn})
 
     @classmethod
-    def get_mapped_fields(cls) -> Dict[str, str]:
+    def get_mapped_fields(cls) -> dict[str, str]:
         def q(field: FieldInfo) -> str:
             annotation = field.annotation
             ref = None

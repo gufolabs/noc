@@ -9,7 +9,7 @@
 import os
 import operator
 import threading
-from typing import Optional, Union
+from typing import Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -64,7 +64,7 @@ class Technology(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Technology"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Technology"]:
         return Technology.objects.filter(id=oid).first()
 
     @classmethod

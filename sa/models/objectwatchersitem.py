@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # Third-party modules
 from mongoengine.document import EmbeddedDocument
@@ -55,7 +54,7 @@ class WatchDocumentItem(EmbeddedDocument):
         )
 
     @classmethod
-    def from_item(cls, item: WatchItem, remote_system: Optional[str] = None) -> "WatchDocumentItem":
+    def from_item(cls, item: WatchItem, remote_system: str | None = None) -> "WatchDocumentItem":
         """Create record from WatchItem"""
         if item.after:
             after = item.after.replace(microsecond=0)

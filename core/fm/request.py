@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import enum
-from typing import Optional, Literal, List
+from typing import Literal
 
 # Third-party modules
 from bson import ObjectId
@@ -43,23 +43,23 @@ class ActionConfig(BaseModel):
     """
 
     action: AlarmAction
-    key: Optional[str] = None
+    key: str | None = None
     delay: int = 0
     ack: Literal["any", "ack", "unack"] = "any"
     when: WhenCondition = WhenCondition.ANY  # Manually, end sequence
-    time_pattern: Optional[str] = None
-    min_severity: Optional[int] = None
-    has_effect: Optional[Effect] = None
-    ex_effect: Optional[Effect] = None
+    time_pattern: str | None = None
+    min_severity: int | None = None
+    has_effect: Effect | None = None
+    ex_effect: Effect | None = None
     # Retry until - Disable, Count, TTL
     max_retries: int = 1
-    template: Optional[str] = None
-    subject: Optional[str] = None
+    template: str | None = None
+    subject: str | None = None
     # TT System Settings
-    pre_reason: Optional[str] = None
-    login: Optional[str] = None  # queue
-    queue: Optional[str] = None
-    promote_item_policy: Optional[str] = None
+    pre_reason: str | None = None
+    login: str | None = None  # queue
+    queue: str | None = None
+    promote_item_policy: str | None = None
     # End options
     stop_processing: bool = False
     allow_fail: bool = True
@@ -68,7 +68,7 @@ class ActionConfig(BaseModel):
     # If approve required, it suspend processing and send
     # Message to approver
     manually: bool = False
-    assigned: Optional[str] = None
+    assigned: str | None = None
     # Manual, Group Access
     # root_only: bool = True
     # already_escalated
@@ -83,8 +83,8 @@ class ActionPermission(BaseModel):
 
 class AllowedAction(BaseModel):
     action: AlarmAction
-    login: Optional[str] = None
-    access: Optional[List[ActionPermission]] = None
+    login: str | None = None
+    access: list[ActionPermission] | None = None
     stop_processing: bool = False
 
 
@@ -98,7 +98,7 @@ class ActionItem(BaseModel):
     """
 
     alarm: str
-    group: Optional[bytes] = None
+    group: bytes | None = None
     # service: Optional[str] = None
 
 
@@ -117,10 +117,10 @@ class AlarmActionRequest(BaseModel):
     """
 
     id: str = Field(default_factory=lambda: str(ObjectId()))
-    actions: List[ActionConfig]
-    allowed_actions: Optional[List[AllowedAction]] = None
-    start_at: Optional[datetime.datetime] = None
-    item: Optional[ActionItem] = None
+    actions: list[ActionConfig]
+    allowed_actions: list[AllowedAction] | None = None
+    start_at: datetime.datetime | None = None
+    item: ActionItem | None = None
     item_policy: EscalationPolicy = EscalationPolicy.ROOT
     # Group
     end_condition: Literal["CR", "CA", "CT", "M", "E"] = "CR"
@@ -131,8 +131,8 @@ class AlarmActionRequest(BaseModel):
     # Repeat Until
     repeat_delay: int = 60
     # Span
-    ctx: Optional[int] = None
-    name: Optional[str] = None
+    ctx: int | None = None
+    name: str | None = None
     # From
-    tt_system: Optional[str] = None
-    user: Optional[int] = None
+    tt_system: str | None = None
+    user: int | None = None

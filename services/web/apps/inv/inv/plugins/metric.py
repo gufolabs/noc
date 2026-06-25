@@ -8,7 +8,7 @@ import datetime
 
 # Python modules
 import operator
-from typing import List, Dict, Any, Tuple, Optional
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -27,7 +27,7 @@ class MetricPlugin(InvPlugin):
     name = "metric"
     js = "NOC.inv.inv.plugins.metric.MetricPanel"
 
-    def get_sensor_values(self) -> Dict[int, float]:
+    def get_sensor_values(self) -> dict[int, float]:
         r = {}
         ch = connection()
         now = datetime.datetime.now().replace(microsecond=0)
@@ -84,7 +84,7 @@ class MetricPlugin(InvPlugin):
 
     def get_threshold_ranges(
         self, thresholds, value
-    ) -> Tuple[Optional[int], Optional[int], float, List[Dict[str, Any]]]:
+    ) -> tuple[int | None, int | None, float, list[dict[str, Any]]]:
         """
         Getting Thresholds Value Ranges, Caclculate if value has settings thresholds
         "left": 50,

@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -46,7 +46,7 @@ class ConvertFrom(EmbeddedDocument):
             raise ValidationError("Expression syntax error")
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "unit__code": self.unit.code,
             "expr": self.expr,
@@ -61,7 +61,7 @@ class EnumValue(EmbeddedDocument):
         return f"{self.key}: {self.value}"
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"key": self.key, "value": self.value}
 
 
@@ -115,7 +115,7 @@ class MeasurementUnits(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["MeasurementUnits"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["MeasurementUnits"]:
         return MeasurementUnits.objects.filter(id=oid).first()
 
     @classmethod
@@ -136,7 +136,7 @@ class MeasurementUnits(Document):
         return MeasurementUnits.objects.filter(name=cls.DEFAULT_MU_NAME).first()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -179,7 +179,7 @@ class MeasurementUnits(Document):
     def get_json_path(self) -> str:
         return f"{quote_safe_path(self.name)}.json"
 
-    def humanize(self, value: Union[float, int], with_units: bool = False) -> str:
+    def humanize(self, value: float | int, with_units: bool = False) -> str:
         if self.code == "1":
             return str(value)
         if self.code == "s":

@@ -6,7 +6,7 @@
 # Python modules
 import logging
 import random
-from typing import Optional, Dict, AsyncIterable, Union
+from typing import AsyncIterable
 from collections import defaultdict
 
 # Third-party modules
@@ -58,7 +58,7 @@ class LiftBridgeClient(GugoLiftbridgeClient):
         return min(len(meta.brokers), 2)
 
     @staticmethod
-    def get_topic_config(name, replication_factor: Optional[int] = 0) -> Dict[str, int]:
+    def get_topic_config(name, replication_factor: int | None = 0) -> dict[str, int]:
         """
         Return topic retention settings
         :param name:
@@ -87,7 +87,7 @@ class LiftBridgeClient(GugoLiftbridgeClient):
     async def create_stream(
         self,
         name: str,
-        group: Optional[str] = None,
+        group: str | None = None,
         partitions: int = 0,
         replication_factor: int = 0,
         **kwargs,
@@ -114,7 +114,7 @@ class LiftBridgeClient(GugoLiftbridgeClient):
             pass
 
     async def fetch_metadata(
-        self, stream: Optional[str] = None, wait_for_stream: bool = False
+        self, stream: str | None = None, wait_for_stream: bool = False
     ) -> Metadata:
         r = await self.get_metadata(stream=stream, wait_for_stream=wait_for_stream)
         s_meta = defaultdict(dict)
@@ -138,13 +138,13 @@ class LiftBridgeClient(GugoLiftbridgeClient):
     async def subscribe(
         self,
         stream: str,
-        partition: Optional[int] = None,
+        partition: int | None = None,
         start_position: StartPosition = StartPosition.NEW_ONLY,
-        start_offset: Optional[int] = None,
-        start_timestamp: Optional[float] = None,
+        start_offset: int | None = None,
+        start_timestamp: float | None = None,
         resume: bool = False,
-        cursor_id: Optional[str] = None,
-        timeout: Optional[int] = None,
+        cursor_id: str | None = None,
+        timeout: int | None = None,
         allow_isr: bool = False,
         **kwargs,
     ) -> AsyncIterable[Message]:
@@ -172,8 +172,8 @@ class LiftBridgeClient(GugoLiftbridgeClient):
         self,
         from_topic,
         to_topic,
-        partitions: Optional[Union[Dict[int, int], int]] = None,
-    ) -> Dict[int, int]:
+        partitions: dict[int, int] | int | None = None,
+    ) -> dict[int, int]:
         """
         Copy message from one topic to another
         :param from_topic: From topic
@@ -181,7 +181,7 @@ class LiftBridgeClient(GugoLiftbridgeClient):
         :param partitions: Number of from partition or MAP
         :return:
         """
-        n_msg: Dict[int, int] = {}  # partition -> copied messages
+        n_msg: dict[int, int] = {}  # partition -> copied messages
         s = get_stream(from_topic)
         if not partitions:
             partitions = {0: 0}

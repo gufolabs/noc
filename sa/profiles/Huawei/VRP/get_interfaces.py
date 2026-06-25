@@ -7,11 +7,6 @@
 
 
 # Python modules
-from typing import (
-    Dict,
-    Union,
-    DefaultDict,
-)
 import re
 from collections import defaultdict
 from itertools import compress, chain
@@ -132,7 +127,7 @@ class Script(BaseScript):
                 continue
             yield iface, ranges_to_list(vlan, None)
 
-    def get_switchport_cli(self) -> DefaultDict[str, Dict[str, Union[int, list, None]]]:
+    def get_switchport_cli(self) -> defaultdict[str, dict[str, int | list | None]]:
         result = defaultdict(lambda: {"untagged": None, "tagged": []})
         try:
             if self.is_cloud_engine_switch or self.is_quidway_S9xxx or self.is_quidway_S5xxx:
@@ -200,7 +195,7 @@ class Script(BaseScript):
                 result[self.profile.convert_interface_name(iface)]["tagged"] += vlans
         return result
 
-    def get_switchport(self) -> DefaultDict[int, Dict[str, Union[int, list, None]]]:
+    def get_switchport(self) -> defaultdict[int, dict[str, int | list | None]]:
         result = defaultdict(lambda: {"tagged_vlans": [], "untagged_vlan": None})
         pid_ifindex_mappings = {}
         for port_num, ifindex, port_type, pvid in self.snmp.get_tables(

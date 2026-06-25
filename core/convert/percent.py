@@ -5,7 +5,6 @@
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
-from typing import Optional
 
 
 def normalize_percent(v):
@@ -25,7 +24,7 @@ def normalize_percent(v):
     return float(max(0, min(v, 100)))
 
 
-def normalize_range(v, min_value: Optional[float] = None, max_value: Optional[float] = None):
+def normalize_range(v, min_value: float | None = None, max_value: float | None = None):
     """
     Scalar to Percent
     mW = 10^(dBm/10)

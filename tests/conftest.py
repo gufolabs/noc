@@ -7,7 +7,6 @@
 
 # Python modules
 from collections import defaultdict
-from typing import DefaultDict, Dict
 from time import perf_counter_ns
 
 # NOC modules
@@ -15,9 +14,9 @@ from noc.tests.fixtures.database import database  # noqa
 
 
 _stats = None
-_durations: DefaultDict[str, int] = defaultdict(int)
-_counts: DefaultDict[str, int] = defaultdict(int)
-_start_times: Dict[str, int] = {}
+_durations: defaultdict[str, int] = defaultdict(int)
+_counts: defaultdict[str, int] = defaultdict(int)
+_start_times: dict[str, int] = {}
 
 
 def pytest_runtest_setup(item):

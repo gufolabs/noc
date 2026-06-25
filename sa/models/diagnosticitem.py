@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import Dict, List, Optional
 
 # Third-party modules
 from mongoengine.document import EmbeddedDocument
@@ -30,11 +29,11 @@ class CheckItem(EmbeddedDocument):
 
     name: str = StringField(required=True)
     status: bool = BooleanField(required=True)
-    args: Dict[str, str] = DictField(required=False)
+    args: dict[str, str] = DictField(required=False)
     skipped: bool = BooleanField(default=False)
-    expired: Optional[datetime.datetime] = DateTimeField(required=False)
+    expired: datetime.datetime | None = DateTimeField(required=False)
     source: InputSource = EnumField(InputSource, required=True, default=InputSource.UNKNOWN)
-    error: Optional[str] = StringField(required=False)
+    error: str | None = StringField(required=False)
 
     def __str__(self):
         if not self.args:
@@ -70,9 +69,9 @@ class DiagnosticItem(EmbeddedDocument):
 
     diagnostic = StringField(required=True)
     state: DiagnosticState = EnumField(DiagnosticState, default=DiagnosticState("unknown"))
-    checks: Optional[List[CheckItem]] = EmbeddedDocumentListField(CheckItem)
-    reason: Optional[str] = StringField(required=False)
-    changed: Optional[datetime.datetime] = DateTimeField(required=False)
+    checks: list[CheckItem] | None = EmbeddedDocumentListField(CheckItem)
+    reason: str | None = StringField(required=False)
+    changed: datetime.datetime | None = DateTimeField(required=False)
 
     def __str__(self):
         return f"{self.diagnostic}: {','.join(c.name for c in self.checks)}; C: {self.changed}"

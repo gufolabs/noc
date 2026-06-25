@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Tuple, List
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -16,7 +15,7 @@ from noc.main.models.label import MATCH_BADGES, MATCH_OPS
 from noc.core.translation import ugettext as _
 
 
-def clean_label(label: str) -> Tuple[str, str, List[str]]:
+def clean_label(label: str) -> tuple[str, str, list[str]]:
     r = label.split("::")
     badges = []
     if len(r) == 1:

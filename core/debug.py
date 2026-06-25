@@ -15,7 +15,6 @@ import hashlib
 import pprint
 import traceback
 import uuid
-from typing import Type
 
 # Third-party modules
 import orjson
@@ -214,7 +213,7 @@ def format_frames(frames, reverse=config.traceback.reverse):
     return "\n".join(r)
 
 
-def check_fatal_errors(t: "Type", v: "Exception"):
+def check_fatal_errors(t: "type", v: "Exception"):
     def die(msg, *args, **kwargs):
         logger.error(msg, *args, **kwargs)
         logger.error("Exiting due to fatal error")

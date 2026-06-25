@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Iterable, Dict, Tuple, Optional, AsyncIterable
+from typing import Iterable, AsyncIterable
 
 # NOC modules
 from .base import BaseChecker, CheckResult, Check, CheckError
@@ -21,12 +21,12 @@ class CLIProtocolChecker(BaseChecker):
     """
 
     name = "cli"
-    CHECKS: List[str] = ["TELNET", "SSH"]
+    CHECKS: list[str] = ["TELNET", "SSH"]
     GENERIC_PROFILE = "Generic.Host"
-    PROTO_CHECK_MAP: Dict[str, Protocol] = {p.config.check: p for p in Protocol if p.config.check}
+    PROTO_CHECK_MAP: dict[str, Protocol] = {p.config.check: p for p in Protocol if p.config.check}
     PARAMS = ["profile", "rules"]
 
-    def __init__(self, profile: Optional[str] = None, **kwargs):
+    def __init__(self, profile: str | None = None, **kwargs):
         super().__init__(**kwargs)
         self.profile = profile
 
@@ -54,7 +54,7 @@ class CLIProtocolChecker(BaseChecker):
     def iter_credential(
         self,
         check: Check,
-    ) -> Iterable[Tuple[Protocol, CLICredential]]:
+    ) -> Iterable[tuple[Protocol, CLICredential]]:
         """
 
         :param check:
@@ -63,7 +63,7 @@ class CLIProtocolChecker(BaseChecker):
         if check.credential:
             yield self.PROTO_CHECK_MAP[check.name], check.credential
 
-    async def iter_result(self, checks: List[Check]) -> AsyncIterable[CheckResult]:
+    async def iter_result(self, checks: list[Check]) -> AsyncIterable[CheckResult]:
         """ """
         # Group by address
         for c in checks:
@@ -119,7 +119,7 @@ class CLIProtocolChecker(BaseChecker):
         protocol: Protocol,
         profile: str,
         raise_privilege: bool = True,
-    ) -> Tuple[bool, Optional[CheckError]]:
+    ) -> tuple[bool, CheckError | None]:
         script = f"{profile}.login"
         script_class = loader.get_script(script)
         if not script_class:

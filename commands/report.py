@@ -9,7 +9,7 @@
 import argparse
 import os
 import re
-from typing import Optional, Dict, Any
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -55,7 +55,7 @@ class Command(BaseCommand):
         self,
         report: str,
         arguments,
-        user: Optional[str] = None,
+        user: str | None = None,
         lang="en",
         out_type="csv",
         **kwargs,
@@ -94,7 +94,7 @@ class Command(BaseCommand):
         for ds in loader:
             self.print(f"Datasource: {ds}")
 
-    def handle_query_ds(self, datasource, query, arguments, export: Optional[str] = None, **kwargs):
+    def handle_query_ds(self, datasource, query, arguments, export: str | None = None, **kwargs):
         args = self.get_report_args(arguments)
         ds = loader[datasource]
         self.print(f"Running DataSource with arguments: {args}")
@@ -105,7 +105,7 @@ class Command(BaseCommand):
 
     rx_arg = re.compile(r"^(?P<name>[a-zA-Z][a-zA-Z0-9_]*)(?P<op>:?=@?)(?P<value>.*)$")
 
-    def get_report_args(self, arguments) -> Dict[str, Any]:
+    def get_report_args(self, arguments) -> dict[str, Any]:
         """
         Parse arguments and return script's
         """

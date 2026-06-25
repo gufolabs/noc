@@ -7,7 +7,7 @@
 
 # Python modules
 import datetime
-from typing import Optional, List, Iterable, Tuple, Union, Dict, Any
+from typing import Iterable, Union, Any
 
 # Third-party modules
 from pydantic import BaseModel, PrivateAttr
@@ -20,7 +20,7 @@ from .handler import DiagnosticHandler
 from .types import DiagnosticState, DiagnosticConfig, CheckStatus, DiagnosticValue
 
 
-DIAGNOSTIC_CHECK_STATE: Dict[bool, DiagnosticState] = {
+DIAGNOSTIC_CHECK_STATE: dict[bool, DiagnosticState] = {
     True: DiagnosticState("enabled"),
     False: DiagnosticState("failed"),
 }
@@ -31,16 +31,16 @@ class DiagnosticItem(BaseModel):
 
     diagnostic: str
     state: DiagnosticState = DiagnosticState("unknown")
-    checks: Optional[List[CheckStatus]] = None
+    checks: list[CheckStatus] | None = None
     # scope: Literal["access", "all", "discovery", "default"] = "default"
     # policy: str = "ANY
-    reason: Optional[str] = None
-    changed: Optional[datetime.datetime] = None
+    reason: str | None = None
+    changed: datetime.datetime | None = None
     is_dirty: bool = False
-    _config: Optional[DiagnosticConfig] = PrivateAttr()
-    _handler: Optional[DiagnosticHandler] = PrivateAttr()
+    _config: DiagnosticConfig | None = PrivateAttr()
+    _handler: DiagnosticHandler | None = PrivateAttr()
 
-    def __init__(self, cfg: Optional[DiagnosticConfig] = None, **data):
+    def __init__(self, cfg: DiagnosticConfig | None = None, **data):
         super().__init__(**data)
         self._config: DiagnosticConfig = cfg
 
@@ -71,7 +71,7 @@ class DiagnosticItem(BaseModel):
         return self.config.show_in_display
 
     @property
-    def workflow_event(self) -> Optional[str]:
+    def workflow_event(self) -> str | None:
         if not self.config.workflow_event:
             return None
         if self.state not in (DiagnosticState.enabled, DiagnosticState.blocked):
@@ -103,7 +103,7 @@ class DiagnosticItem(BaseModel):
     def from_config(
         cls,
         cfg: DiagnosticConfig,
-        value: Optional[DiagnosticValue] = None,
+        value: DiagnosticValue | None = None,
     ) -> "DiagnosticItem":
         """Create item from config"""
         checks, reason, is_dirty = None, cfg.reason, False
@@ -158,7 +158,7 @@ class DiagnosticItem(BaseModel):
         self,
         logger=None,
         **kwargs,
-    ) -> Iterable[Tuple[Check, ...]]:
+    ) -> Iterable[tuple[Check, ...]]:
         """Iterate over configured checks"""
         if not self.config.diagnostic_handler and not self.config.checks:
             return
@@ -168,7 +168,7 @@ class DiagnosticItem(BaseModel):
         h = self.get_handler(logger=logger)
         yield from h.iter_checks(**kwargs)
 
-    def get_check_status(self) -> Tuple[Optional[DiagnosticState], Optional[str]]:
+    def get_check_status(self) -> tuple[DiagnosticState | None, str | None]:
         """
         Calculate check status, ANY or ALL policy apply
         """
@@ -194,9 +194,9 @@ class DiagnosticItem(BaseModel):
 
     def update_checks(
         self,
-        checks: List[CheckResult],
-        source: Optional[InputSource] = InputSource.UNKNOWN,
-    ) -> Tuple[List[CheckStatus], List[DataItem]]:
+        checks: list[CheckResult],
+        source: InputSource | None = InputSource.UNKNOWN,
+    ) -> tuple[list[CheckStatus], list[DataItem]]:
         """Processed checks result and Update Item checks status"""
         if self.config.diagnostic_handler:
             h = self.get_handler()
@@ -221,7 +221,7 @@ class DiagnosticItem(BaseModel):
             self.is_dirty |= True
         return changed, data
 
-    def get_object_form(self) -> Dict[str, Any]:
+    def get_object_form(self) -> dict[str, Any]:
         """Displayed form"""
         return {
             "name": self.diagnostic[:6],

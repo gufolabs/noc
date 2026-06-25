@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Any
+from typing import Any
 
 # Third-party modules
 from pyVmomi import vim
@@ -29,8 +29,8 @@ class VIM:
         self.script = script
         if script:  # For testing purposes
             self.logger = PrefixLoggerAdapter(script.logger, "vim")
-        self.connection: Optional[vim.ServiceInstance] = None
-        self._content: Optional[Any] = None
+        self.connection: vim.ServiceInstance | None = None
+        self._content: Any | None = None
 
     def get_session_alias(self):
         if self.script.controller:
@@ -109,7 +109,7 @@ class VIM:
             raise VIMError("Host with Id '%s' Not found" % hid)
         return h
 
-    def get_vm_by_id(self, vid: str) -> Optional[vim.VirtualMachine]:
+    def get_vm_by_id(self, vid: str) -> vim.VirtualMachine | None:
         """Getting vMachine by id, example: 'vm-1030'"""
         vm = self.find_by_uuid(vid, find_vm=True)
         if not vm:
@@ -128,7 +128,7 @@ class VIM:
             raise VIMError("Not Authenticated")
         return view
 
-    def get_vm_by_name(self, name: str) -> Optional[vim.VirtualMachine]:
+    def get_vm_by_name(self, name: str) -> vim.VirtualMachine | None:
         vm_view = self.get_container_view(vim.VirtualMachine)
         vms = [h for h in vm_view.view if h.name == name]
         vm_view.Destroy()

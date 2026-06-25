@@ -10,7 +10,7 @@ import time
 import re
 import json
 from dataclasses import dataclass
-from typing import Iterable, Dict, Any, List
+from typing import Iterable, Any
 import logging
 from pathlib import Path
 import os
@@ -50,7 +50,7 @@ class Item:
     is_const: bool
 
     @classmethod
-    def from_json(cls, data: Dict[str, Any]) -> "Item":
+    def from_json(cls, data: dict[str, Any]) -> "Item":
         """
         Read from JSON.
 
@@ -89,7 +89,7 @@ class Data:
     """
 
     name: str
-    items: List[Item]
+    items: list[Item]
 
     @classmethod
     def read(cls, path: Path) -> "Data":

@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, List
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -23,12 +22,12 @@ class Script(BaseScript):
     interface = IGetChassisID
     # OIDS to get MACs via SNMP GET
     # capability -> [oid, ...]
-    SNMP_GET_OIDS: Dict[str, List[str]] = {
+    SNMP_GET_OIDS: dict[str, list[str]] = {
         "SNMP": [mib["BRIDGE-MIB::dot1dBaseBridgeAddress", 0], mib["LLDP-MIB::lldpLocChassisId", 0]]
     }
     # OIDS to get MACs via SNMP GETNEXT request
     # capability -> [oid, ...]
-    SNMP_GETNEXT_OIDS: Dict[str, List[str]] = {}
+    SNMP_GETNEXT_OIDS: dict[str, list[str]] = {}
     IGNORED_MACS = {
         "00:00:00:00:00:00",  # Empty MAC
         "00:01:02:03:04:00",  # Very Smart programmer

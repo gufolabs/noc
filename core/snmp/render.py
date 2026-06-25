@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Third-party modules
-from typing import Optional, Callable
+from typing import Callable
 
 # NOC modules
 from noc.core.comp import smart_text
@@ -32,7 +32,7 @@ def render_utf8(oid: str, value: bytes) -> str:
     return smart_text(value, errors="ignore")
 
 
-def get_text_renderer(encoding: Optional[str] = "utf-8") -> Callable[[str, bytes], str]:
+def get_text_renderer(encoding: str | None = "utf-8") -> Callable[[str, bytes], str]:
     """
     Return text renderer for arbitrary encoding
     :param encoding:

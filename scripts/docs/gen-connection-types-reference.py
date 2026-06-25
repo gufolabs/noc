@@ -10,7 +10,7 @@ import time
 import re
 import json
 from dataclasses import dataclass
-from typing import Optional, List, Iterable, DefaultDict, Tuple, Dict
+from typing import Iterable
 import logging
 from collections import defaultdict
 from pathlib import Path
@@ -68,7 +68,7 @@ class Data:
 
     name: str
     description: str
-    c_group: Optional[List[str]]
+    c_group: list[str] | None
     genders: str
 
     @classmethod
@@ -95,7 +95,7 @@ class Data:
             c_group=data.get("c_group") or None,
         )
 
-    def peer_types(self, cgroup: str, cgroups: Dict[str, List["Data"]]) -> List["Data"]:
+    def peer_types(self, cgroup: str, cgroups: dict[str, list["Data"]]) -> list["Data"]:
         items = cgroups.get(cgroup) or []
         return [x for x in items if x.genders in PEER_GENDERS[self.genders]]
 
@@ -111,7 +111,7 @@ class Data:
         return rx_md_anchor.sub("-", self.name.lower())
 
     @property
-    def bucket(self) -> Tuple[str, ...]:
+    def bucket(self) -> tuple[str, ...]:
         return tuple(islice((x.strip() for x in self.name.split("|", 1)), 0, BUCKET_DEPTH))
 
     def link_from(self, src: "Data") -> str:
@@ -159,8 +159,8 @@ def iter_data() -> Iterable[Data]:
     logger.info("%d items read in %.3fs", n, dt)
 
 
-def get_buckets() -> DefaultDict[Tuple[str, ...], List[Data]]:
-    buckets: DefaultDict[Tuple[str, ...], List[Data]] = defaultdict(list)
+def get_buckets() -> defaultdict[tuple[str, ...], list[Data]]:
+    buckets: defaultdict[tuple[str, ...], list[Data]] = defaultdict(list)
     for data in iter_data():
         buckets[data.bucket].append(data)
     return buckets
@@ -173,7 +173,7 @@ def canonical_name(s: str) -> str:
     return s.replace(" | ", "-").replace(" ", "-").lower()
 
 
-def bucket_path(s: Tuple[str, ...]) -> Path:
+def bucket_path(s: tuple[str, ...]) -> Path:
     """
     Convert bucket tuple to .md path
     """
@@ -217,7 +217,7 @@ def main():
     # Load buckets
     buckets = get_buckets()
     # Fill cgroups
-    cgroups: DefaultDict[str, List[Data]] = defaultdict(list)
+    cgroups: defaultdict[str, list[Data]] = defaultdict(list)
     for items in buckets.values():
         for item in items:
             if item.c_group:

@@ -8,7 +8,7 @@
 
 # Python modules
 import asyncio
-from typing import Optional, Dict, Any, Tuple, DefaultDict, List
+from typing import Any
 from time import perf_counter_ns
 from collections import defaultdict
 
@@ -42,8 +42,8 @@ class RunnerService(FastAPIService):
         super().__init__()
         self.slot_number = 0
         self.total_slots = 0
-        self.queue: asyncio.Queue[Tuple[Optional[ObjectId], Dict[str, Any]]] = asyncio.Queue()
-        self.runner: Optional[Runner] = None
+        self.queue: asyncio.Queue[tuple[ObjectId | None, dict[str, Any]]] = asyncio.Queue()
+        self.runner: Runner | None = None
 
     async def on_activate(self):
         connect_async()
@@ -53,7 +53,7 @@ class RunnerService(FastAPIService):
 
     async def on_msg(self, msg: Message):
         metrics["requests"] += 1
-        data: Dict[str, Any] = orjson.loads(msg.value)
+        data: dict[str, Any] = orjson.loads(msg.value)
         # Parse request
         try:
             req = ta_RunnerRequest.validate_python(data)
@@ -115,7 +115,7 @@ class RunnerService(FastAPIService):
             await asyncio.sleep(1.0)
 
     async def restore_state(self):
-        def create_job(doc: Dict[str, Any]) -> Job:
+        def create_job(doc: dict[str, Any]) -> Job:
             job = Job.from_dict(doc, jmap=jobs)
             jobs[job.id] = job
             # Release blocked jobs
@@ -134,7 +134,7 @@ class RunnerService(FastAPIService):
         t0 = perf_counter_ns()
         self.logger.info("Restoring state")
         # Find non-complete leaders
-        jobs: Dict[ObjectId, Job] = {}
+        jobs: dict[ObjectId, Job] = {}
         async for doc in coll.find(
             {
                 "parent": None,
@@ -150,13 +150,13 @@ class RunnerService(FastAPIService):
         ):
             create_job(doc)
         # Find all children
-        blocked: Dict[ObjectId, Dict[str, Any]] = {}
-        blocks: DefaultDict[ObjectId, List[ObjectId]] = defaultdict(list)
+        blocked: dict[ObjectId, dict[str, Any]] = {}
+        blocks: defaultdict[ObjectId, list[ObjectId]] = defaultdict(list)
         wave = list(jobs)
         while wave:
-            new_wave: List[ObjectId] = []
+            new_wave: list[ObjectId] = []
             async for doc in coll.find({"parent": {"$in": wave}}):
-                depends_on: List[ObjectId] = doc.get("depends_on") or []
+                depends_on: list[ObjectId] = doc.get("depends_on") or []
                 if not depends_on:
                     # Not blocked, no dependencies
                     create_job(doc)

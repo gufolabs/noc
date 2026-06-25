@@ -7,7 +7,7 @@
 
 # Python modules
 from functools import partial
-from typing import Iterable, Optional
+from typing import Iterable
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -74,7 +74,7 @@ class Command(BaseCommand):
             if ds_report_model and ds_report_model.clickhouse_mirror():
                 yield f"ch.{ds_report_model._get_db_table()}"
 
-    async def apply_stream_settings(self, slots: Optional[int] = None) -> bool:
+    async def apply_stream_settings(self, slots: int | None = None) -> bool:
         changed = False
         async with MessageStreamClient() as client:
             for stream in self.iter_streams():

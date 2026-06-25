@@ -7,7 +7,7 @@
 
 # Python modules
 import enum
-from typing import Any, Optional, Dict
+from typing import Any
 from threading import Lock
 from dataclasses import dataclass
 from functools import partial
@@ -24,7 +24,7 @@ from noc.settings import LANGUAGE_CODE
 @dataclass
 class Message:
     value: bytes
-    headers: Dict[str, bytes]
+    headers: dict[str, bytes]
     timestamp: int
     key: int
 
@@ -45,10 +45,10 @@ class NotificationContact:
     contact: str
     language: str = LANGUAGE_CODE
     method: str = "mail"
-    title_tag: Optional[str] = None
-    time_pattern: Optional[TimePatternList] = None
-    headers: Optional[Dict[str, Any]] = None
-    route: Optional[str] = None
+    title_tag: str | None = None
+    time_pattern: TimePatternList | None = None
+    headers: dict[str, Any] | None = None
+    route: str | None = None
 
     def __hash__(self):
         return hash(f"{self.method}_{self.contact}")
@@ -197,16 +197,16 @@ NOTIFICATION_METHODS = {
     "webhook": b"tgsender",
 }
 
-_mx_partitions: Optional[int] = None
+_mx_partitions: int | None = None
 _mx_lock = Lock()
 
 
 def send_message(
     data: Any,
     message_type: MessageType,
-    headers: Optional[Dict[str, bytes]],
+    headers: dict[str, bytes] | None,
     sharding_key: int = 0,
-    fwd_to: Optional[str] = None,
+    fwd_to: str | None = None,
 ):
     """
     Build message and schedule to send to mx service
@@ -241,7 +241,7 @@ def send_notification(
     body: str,
     to: str,  # ? method::/address
     notification_method: str = "mail",
-    fwd_to: Optional[str] = None,
+    fwd_to: str | None = None,
     **kwargs,
 ):
     """

@@ -16,7 +16,7 @@ import shutil
 import functools
 from collections import defaultdict
 from io import StringIO, TextIOWrapper
-from typing import Any, Optional, Iterable, Tuple, List, Dict, Set, Union
+from typing import Any, Iterable
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter
@@ -71,7 +71,7 @@ class BaseLoader:
     tags = []
 
     # Register model as Mapping Scope
-    model_mappings: Dict[str, str] = {}  # scope -> Model
+    model_mappings: dict[str, str] = {}  # scope -> Model
 
     rx_archive = re.compile(
         r"^import-\d{4}(?:-\d{2}){5}.jsonl%s$" % compressor.ext.replace(".", r"\.")
@@ -81,12 +81,12 @@ class BaseLoader:
     discard_deferred = False
     # Ignore auto-generated unique fields
     ignore_unique = {"bi_id"}
-    unique_index: Tuple[str, ...] = None
+    unique_index: tuple[str, ...] = None
     # Array fields need merge values
     incremental_change = {"labels", "static_client_groups", "static_service_groups"}
     # Workflow fields
     workflow_state_sync = False
-    workflow_fields: Set[str] = {"state", "state_changed", "event"}
+    workflow_fields: set[str] = {"state", "state_changed", "event"}
     workflow_event_model = False
     workflow_seen_supported = False
     workflow_add_event = "seen"
@@ -94,11 +94,11 @@ class BaseLoader:
     # Effect
     # on_delete_effect: Optional[ObjectEffect] = None
     # Label
-    label_enable_setting: Optional[str] = None
+    label_enable_setting: str | None = None
     # Incremental
     checkpoint_field = "checkpoint"
     # Post save fields (example - capabilities)
-    post_save_fields: Optional[Set[str]] = None
+    post_save_fields: set[str] | None = None
     # Remote mappings
     remote_mappings_supported: bool = False
 
@@ -115,21 +115,21 @@ class BaseLoader:
         self.import_dir = os.path.join(config.path.etl_import, self.system.name, self.name)
         self.archive_dir = os.path.join(self.import_dir, "archive")
         self.mappings_path = os.path.join(self.import_dir, "mappings.csv")
-        self.mappings: Dict[str, str] = {}
-        self.remote_mappings: Dict[Tuple[str, str], Dict[str, str]] = {}
+        self.mappings: dict[str, str] = {}
+        self.remote_mappings: dict[tuple[str, str], dict[str, str]] = {}
         self.wf_state_mappings = {}
         self.new_state_path = None
         self.c_add = 0
         self.c_change = 0
         self.c_delete = 0
         # Mapped fields
-        self.mapped_fields: Dict[str, str] = (
+        self.mapped_fields: dict[str, str] = (
             self.data_model.get_mapped_fields()
         )  # field_name -> loader_name
         # Build clean map
         self.clean_map = {}  # field name -> clean function
-        self.pending_deletes: List[Tuple[str, BaseModel]] = []  # (id, BaseModel)
-        self.referred_errors: List[Tuple[str, BaseModel]] = []  # (id, BaseModel)
+        self.pending_deletes: list[tuple[str, BaseModel]] = []  # (id, BaseModel)
+        self.referred_errors: list[tuple[str, BaseModel]] = []  # (id, BaseModel)
         if not self.model:
             return
         if self.is_document:
@@ -194,7 +194,7 @@ class BaseLoader:
             self.wf_state_mappings[(str(ws.workflow.id), ws.name)] = ws
 
     @classmethod
-    def get_remote_mappings(cls, remote_system: str, name: str) -> Dict[str, str]:
+    def get_remote_mappings(cls, remote_system: str, name: str) -> dict[str, str]:
         """
         Return mappings from another remote_system
 
@@ -214,7 +214,7 @@ class BaseLoader:
         return loader.mappings
 
     @classmethod
-    def get_mapping(cls, scope: str, value: Optional[str]) -> Optional[Any]:
+    def get_mapping(cls, scope: str, value: str | None) -> Any | None:
         """
         Resolve mapping by NOC Mapping
 
@@ -231,7 +231,7 @@ class BaseLoader:
             o = model.objects.filter(name=value).first()
         return o
 
-    def get_new_state(self) -> Optional[TextIOWrapper]:
+    def get_new_state(self) -> TextIOWrapper | None:
         """
         Returns file object of new state, or None when not present
         """
@@ -266,7 +266,7 @@ class BaseLoader:
         return compressor(path, "r").open()
 
     def iter_jsonl(
-        self, f: TextIOWrapper, data_model: Optional[BaseModel] = None
+        self, f: TextIOWrapper, data_model: BaseModel | None = None
     ) -> Iterable[BaseModel]:
         """
         Iterate over JSONl stream and yield model instances
@@ -283,9 +283,9 @@ class BaseLoader:
         self,
         old: Iterable[BaseModel],
         new: Iterable[BaseModel],
-        include_fields: Set = None,
+        include_fields: set = None,
         return_wo_changes: bool = False,
-    ) -> Iterable[Tuple[Optional[BaseModel], Optional[BaseModel]]]:
+    ) -> Iterable[tuple[BaseModel | None, BaseModel | None]]:
         """
         Compare old and new CSV files and yield pair of matches
         * old, new -- when changed
@@ -388,10 +388,10 @@ class BaseLoader:
 
     def find_by_remote_mappings(
         self,
-        remote_system: Optional[str] = None,
-        remote_id: Optional[str] = None,
-        mappings: Optional[Dict[Any, str]] = None,
-    ) -> List[Any]:
+        remote_system: str | None = None,
+        remote_id: str | None = None,
+        mappings: dict[Any, str] | None = None,
+    ) -> list[Any]:
         """Find objects by Remote Mappings"""
         r = []
         if remote_system and remote_id:
@@ -402,8 +402,8 @@ class BaseLoader:
         return self.model.get_by_mappings(r)
 
     def find_object(
-        self, v: Dict[str, Any], mappings: Optional[Dict[Any, str]] = None
-    ) -> Optional[Any]:
+        self, v: dict[str, Any], mappings: dict[Any, str] | None = None
+    ) -> Any | None:
         """
         Find object by remote system/remote id
         Args:
@@ -452,8 +452,8 @@ class BaseLoader:
     def create_object(
         self,
         v,
-        state: Optional[str] = None,
-        mappings: Optional[Dict[Any, str]] = None,
+        state: str | None = None,
+        mappings: dict[Any, str] | None = None,
     ):
         """
         Create object with attributes. Override to save complex
@@ -497,11 +497,11 @@ class BaseLoader:
     def change_object(
         self,
         object_id: str,
-        v: Dict[str, Any],
-        inc_changes: Dict[str, Dict[str, List]] = None,
-        state: Optional[str] = None,
-        state_changed: Optional[datetime.datetime] = None,
-        mappings: Optional[Dict[Any, str]] = None,
+        v: dict[str, Any],
+        inc_changes: dict[str, dict[str, list]] = None,
+        state: str | None = None,
+        state_changed: datetime.datetime | None = None,
+        mappings: dict[Any, str] | None = None,
     ):
         """
         Change object with attributes
@@ -568,7 +568,7 @@ class BaseLoader:
         for fn in set(v).intersection(self.workflow_fields):
             del v[fn]
         # Post save update fields (example capabilities)
-        psf: Dict[str, Any] = {}
+        psf: dict[str, Any] = {}
         if self.post_save_fields:
             for fn in self.post_save_fields:
                 psf[fn] = v.pop(fn)
@@ -613,7 +613,7 @@ class BaseLoader:
         incremental_changes = {}
         ov = self.clean(o)
         # Post save update fields (example capabilities)
-        psf: Dict[str, Any] = {}
+        psf: dict[str, Any] = {}
         mappings = None
         for fn in self.data_model.model_fields:
             if fn == "id" or fn in self.workflow_fields:
@@ -654,7 +654,7 @@ class BaseLoader:
         """
         self.pending_deletes += [(item.id, item)]
 
-    def change_workflow(self, o, state: str, changed_date: Optional[datetime.datetime] = None):
+    def change_workflow(self, o, state: str, changed_date: datetime.datetime | None = None):
         self.logger.debug("Change Workflow state: %s -> %s", o.state, state)
         if not o:
             return
@@ -666,7 +666,7 @@ class BaseLoader:
             self.logger.debug("Change workflow state: %s -> %s", o.state, state)
             o.set_state(state, changed_date)
 
-    def ensure_labels(self, labels: Optional[List[str]]):
+    def ensure_labels(self, labels: list[str] | None):
         from noc.main.models.label import Label
 
         if not labels:
@@ -735,7 +735,7 @@ class BaseLoader:
         mdata = "\n".join(f"{k},{self.mappings[k]}" for k in sorted(self.mappings))
         safe_rewrite(self.mappings_path, mdata)
 
-    def post_save(self, o, fields: Dict[str, Any]):
+    def post_save(self, o, fields: dict[str, Any]):
         """
         Method fields updated separate method (example - capabilities)
         :param o:
@@ -744,7 +744,7 @@ class BaseLoader:
         """
         return
 
-    def clean(self, item: BaseModel) -> Dict[str, Any]:
+    def clean(self, item: BaseModel) -> dict[str, Any]:
         """
         Cleanup row and return a dict of field name -> value
         """
@@ -758,7 +758,7 @@ class BaseLoader:
         return r
 
     @classmethod
-    def clean_object_mappings(cls, value: List[MappingItem]) -> Optional[Dict[Any, str]]:
+    def clean_object_mappings(cls, value: list[MappingItem]) -> dict[Any, str] | None:
         from noc.main.models.remotesystem import RemoteSystem
 
         r = {}
@@ -770,7 +770,7 @@ class BaseLoader:
         return r
 
     @classmethod
-    def clean_ed_list(cls, model, value: List[Dict[str, Any]]):
+    def clean_ed_list(cls, model, value: list[dict[str, Any]]):
         if not value:
             return None
         return [model(**v) for v in value]
@@ -780,7 +780,7 @@ class BaseLoader:
         return value
 
     @classmethod
-    def clean_str(cls, value) -> Optional[str]:
+    def clean_str(cls, value) -> str | None:
         if value:
             if isinstance(value, str):
                 return smart_text(value)
@@ -789,7 +789,7 @@ class BaseLoader:
             return value
         return None
 
-    def clean_map_str(self, mappings: Dict[str, str], loader_name, value):
+    def clean_map_str(self, mappings: dict[str, str], loader_name, value):
         value = self.clean_str(value)
         if self.disable_mappings and not mappings:
             return value
@@ -806,7 +806,7 @@ class BaseLoader:
         return value
 
     @classmethod
-    def clean_bool(cls, value: str) -> Optional[bool]:
+    def clean_bool(cls, value: str) -> bool | None:
         if value == "" or value is None:
             return None
         try:
@@ -816,7 +816,7 @@ class BaseLoader:
         value = value.lower()
         return value in ("t", "true", "y", "yes")
 
-    def clean_remote_reference(self, remote_system, loader_name, value) -> Optional[str]:
+    def clean_remote_reference(self, remote_system, loader_name, value) -> str | None:
         """
         Resolve value on Remote System Mapping
 
@@ -833,8 +833,8 @@ class BaseLoader:
         return self.remote_mappings[(remote_system, loader_name)][value]
 
     def clean_reference(
-        self, mappings: Dict[str, str], r_model, loader_name: str, value: Union[str, Dict[str, str]]
-    ) -> Optional[str]:
+        self, mappings: dict[str, str], r_model, loader_name: str, value: str | dict[str, str]
+    ) -> str | None:
         if not value:
             return None
         if self.disable_mappings and not mappings:
@@ -853,8 +853,8 @@ class BaseLoader:
         return self.chain.cache[r_model, value]
 
     def clean_int_reference(
-        self, mappings: Dict[str, str], r_model, loader_name: str, value: str
-    ) -> Optional[int]:
+        self, mappings: dict[str, str], r_model, loader_name: str, value: str
+    ) -> int | None:
         if not value:
             return None
         if self.disable_mappings and not mappings:
@@ -985,7 +985,7 @@ class BaseLoader:
             self.logger.info("No new state, skipping")
             return 0
         new_state = self.iter_jsonl(ns)
-        uv: Union[str, Tuple[str, str]] = set()
+        uv: str | tuple[str, str] = set()
         m_data = {}  # field_number -> set of mapped ids
         # Load mapped ids
         for f in self.mapped_fields:

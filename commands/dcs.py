@@ -7,7 +7,6 @@
 
 # Python modules
 import argparse
-from typing import Dict
 import asyncio
 
 # NOC modules
@@ -32,7 +31,7 @@ class Command(BaseCommand):
             for k, v in sorted(limits.items()):
                 await dcs.set_slot_limit(k, v)
 
-        limits: Dict[str, int] = {}
+        limits: dict[str, int] = {}
         files = options.get("file")
         if files:
             for fn in files:

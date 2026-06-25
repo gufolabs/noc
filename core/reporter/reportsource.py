@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Dict
 
 # Python Modules
 from .report import Band
@@ -20,7 +19,7 @@ class ReportSource:
 
     name = None
 
-    def get_formats(self) -> Dict[str, BandFormat]:
+    def get_formats(self) -> dict[str, BandFormat]:
         """
         Report Format describe
         :return:
@@ -32,7 +31,7 @@ class ReportSource:
         :return:
         """
 
-    def get_data(self, request, **kwargs) -> List[Band]:
+    def get_data(self, request, **kwargs) -> list[Band]:
         """
         Return Report Data
         :param request:

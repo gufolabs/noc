@@ -11,7 +11,7 @@ import argparse
 import sys
 from dataclasses import dataclass
 import os
-from typing import Iterable, Optional, List
+from typing import Iterable
 from xml.sax.saxutils import escape
 
 
@@ -22,8 +22,8 @@ class Item:
 
 
 def iter_problems(tee: bool = False) -> Iterable[Item]:
-    section: List[str] = []
-    current_file: Optional[str] = None
+    section: list[str] = []
+    current_file: str | None = None
     for line in sys.stdin:
         if tee:
             sys.stdout.write(line)
@@ -38,7 +38,7 @@ def iter_problems(tee: bool = False) -> Iterable[Item]:
         yield Item(path=current_file, text="".join(section))
 
 
-def process(out: Optional[str] = None, tee: bool = False) -> int:
+def process(out: str | None = None, tee: bool = False) -> int:
     problems = list(iter_problems(tee))
     r = [
         '<?xml version="1.0" encoding="utf-8"?>',

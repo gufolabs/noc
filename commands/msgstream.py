@@ -10,7 +10,6 @@ import datetime
 import argparse
 import functools
 from dateutil.parser import parse
-from typing import Optional
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -88,7 +87,7 @@ class Command(BaseCommand):
     def handle(self, cmd, *args, **options):
         return getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
-    def handle_show_metadata(self, name: Optional[str] = None, *args, **options):
+    def handle_show_metadata(self, name: str | None = None, *args, **options):
         async def get_meta() -> Metadata:
             async with MessageStreamClient() as client:
                 return await client.fetch_metadata()
@@ -184,8 +183,8 @@ class Command(BaseCommand):
         name: str,
         partition: int = 0,
         cursor: str = "",
-        start_offset: Optional[int] = None,
-        start_ts: Optional[int] = None,
+        start_offset: int | None = None,
+        start_ts: int | None = None,
         *args,
         **kwargs,
     ):

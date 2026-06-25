@@ -43,7 +43,7 @@ class Script(BaseScript):
 
         return {
             "vendor": "MEINBERG",
-            "platform": "".join((plat.strip())),
+            "platform": "".join(plat.strip()),
             "version": version,
             "attributes": {
                 "codename": codename,

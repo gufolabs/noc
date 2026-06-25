@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel
@@ -18,4 +17,4 @@ class ErrorItem(BaseModel):
 
 class StatusResponse(BaseModel):
     status: bool
-    errors: Optional[List[ErrorItem]] = None
+    errors: list[ErrorItem] | None = None

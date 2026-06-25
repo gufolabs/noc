@@ -10,7 +10,7 @@ import operator
 import re
 from collections import defaultdict
 from threading import Lock
-from typing import Optional, Union, Dict, Any, Tuple, List, Callable
+from typing import Optional, Any, Callable
 from functools import partial
 
 # Third-party modules
@@ -60,7 +60,7 @@ class MatchRule(EmbeddedDocument):
     def __str__(self):
         return ", ".join(self.labels)
 
-    def get_match_expr(self) -> Dict[str, Any]:
+    def get_match_expr(self) -> dict[str, Any]:
         r = {}
         if self.labels:
             r["labels"] = {"$all": list(self.labels)}
@@ -115,7 +115,7 @@ class SensorProfile(Document):
     enable_collect = BooleanField(default=False)
     collect_interval = IntField(default=60)
     # PM Integration
-    units: Optional[MeasurementUnits] = PlainReferenceField(MeasurementUnits)
+    units: MeasurementUnits | None = PlainReferenceField(MeasurementUnits)
     metric_type: Optional["MetricType"] = PlainReferenceField(MetricType)
     mx_policy = StringField(
         choices=[("D", "Disable"), ("L", "Sensor Label"), ("A", "By Alias")], defaul="D"
@@ -147,7 +147,7 @@ class SensorProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["SensorProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["SensorProfile"]:
         return SensorProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -217,7 +217,7 @@ class SensorProfile(Document):
         key=lambda x: "ruleset",
         lock=lambda _: rule_lock,
     )
-    def get_profiles_matcher(cls) -> Tuple[Tuple[str, Tuple[Callable, ...]], ...]:
+    def get_profiles_matcher(cls) -> tuple[tuple[str, tuple[Callable, ...]], ...]:
         """Build matcher based on Profile Match Rules"""
         r = defaultdict(list)
         for mop_id, rules in SensorProfile.objects.filter(
@@ -242,7 +242,7 @@ class SensorProfile(Document):
 
     def get_instance_affected_query(
         self,
-        changes: Optional[List[ChangeField]] = None,
+        changes: list[ChangeField] | None = None,
         include_match: bool = False,
     ) -> m_q:
         """Return queryset for instance"""

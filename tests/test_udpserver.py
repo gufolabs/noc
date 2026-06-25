@@ -7,7 +7,6 @@
 
 # Python modules
 import asyncio
-from typing import Tuple
 import random
 import socket
 
@@ -29,11 +28,11 @@ class UDPServerStub(UDPServer):
         self.received = 0
         self.ready = asyncio.Event()
 
-    def on_read(self, data: bytes, address: Tuple[str, int]):
+    def on_read(self, data: bytes, address: tuple[str, int]):
         self.received += 1
 
     @property
-    def sock_addr(self) -> Tuple[str, int]:
+    def sock_addr(self) -> tuple[str, int]:
         return self._sockaddr[0]
 
     def setup_socket(self, sock: socket.socket):

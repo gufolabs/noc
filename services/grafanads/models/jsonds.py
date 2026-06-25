@@ -7,15 +7,15 @@
 
 # Python modules
 import datetime
-from typing import List, Optional, Dict, Any, Union, Tuple, Literal
+from typing import Any, Literal
 
 # Third-party modules
 from pydantic import BaseModel, Field
 
 
 class RangeSingle(BaseModel):
-    from_: Union[datetime.datetime, str] = Field(..., alias="from")
-    to: Union[datetime.datetime, str]
+    from_: datetime.datetime | str = Field(..., alias="from")
+    to: datetime.datetime | str
 
 
 class RangeSection(BaseModel):
@@ -32,7 +32,7 @@ class DataSourceItem(BaseModel):
 # Annotations
 class AnnotationSection(BaseModel):
     name: str
-    datasource: Union[str, DataSourceItem]
+    datasource: str | DataSourceItem
     enable: bool
     icon_color: str = Field(..., alias="iconColor")
     query: str
@@ -60,30 +60,30 @@ class AdhocFilterItem(BaseModel):
 class TargetItem(BaseModel):
     target: str
     ref_id: str = Field("A", alias="refId")
-    datasource: Optional[Union[str, DataSourceItem]] = None
-    payload: Optional[Dict[str, Any]] = None
+    datasource: str | DataSourceItem | None = None
+    payload: dict[str, Any] | None = None
 
 
 class QueryRequest(BaseModel):
     # string when query on Explorer
-    panel_id: Union[int, str] = Field(..., alias="panelId")
+    panel_id: int | str = Field(..., alias="panelId")
     range: RangeSection
-    range_raw: Optional[Dict[str, str]] = Field(None, alias="rangeRaw")
-    request_id: Optional[str] = Field(None, alias="requestId")
-    timezone: Optional[str] = None
+    range_raw: dict[str, str] | None = Field(None, alias="rangeRaw")
+    request_id: str | None = Field(None, alias="requestId")
+    timezone: str | None = None
     # When query on Explorer
-    app: Optional[str] = None
+    app: str | None = None
     interval: str = "30s"
     interval_ms: int = Field(30_000, alias="intervalMs")
     max_datapoints: int = Field(500, alias="maxDataPoints")
-    targets: List[TargetItem]
-    adhoc_filters: Optional[List[AdhocFilterItem]] = Field(None, alias="adhocFilters")
+    targets: list[TargetItem]
+    adhoc_filters: list[AdhocFilterItem] | None = Field(None, alias="adhocFilters")
     result_type: str = Field("time_series", alias="format")  # matrix
 
 
 class TargetResponseItem(BaseModel):
     target: str
-    datapoints: List[Tuple[float, int]]
+    datapoints: list[tuple[float, int]]
 
 
 class SearchResponseItem(BaseModel):
@@ -98,7 +98,7 @@ class SearchRequset(BaseModel):
 
 class PayloadSelectOptionItem(BaseModel):
     value: str
-    label: Optional[str] = None  # The label of the payload select option.
+    label: str | None = None  # The label of the payload select option.
 
 
 class MetricPayload(BaseModel):
@@ -114,25 +114,25 @@ class MetricPayload(BaseModel):
         False, alias="reloadMetric"
     )  # Whether to overload the metrics API after modifying the value of the payload.
     width: int = 10  # Set the input / selection box width to a multiple of 8px.
-    options: Optional[List[PayloadSelectOptionItem]] = None
+    options: list[PayloadSelectOptionItem] | None = None
 
 
 class MetricsResponseItem(BaseModel):
     value: str
-    label: Optional[str] = None
-    payloads: Optional[List[MetricPayload]] = None
+    label: str | None = None
+    payloads: list[MetricPayload] | None = None
 
 
 # Metrics
 class MetricsPayloadRequest(BaseModel):
-    payload: Optional[Dict[str, Any]]
+    payload: dict[str, Any] | None
 
 
 # Metric Payload Options
 class MetricPayloadOptionsRequest(BaseModel):
     metric: str  # Current metric
     name: str  # The payload name of the option list needs to be obtained.
-    payload: Optional[Dict[str, Any]] = None  # Current payload
+    payload: dict[str, Any] | None = None  # Current payload
 
 
 class VariableRequestTarget(BaseModel):
@@ -151,7 +151,7 @@ class VariableItem(BaseModel):
 
 
 class TagKeyItem(BaseModel):
-    type_: Optional[str] = Field(..., alias="type")
+    type_: str | None = Field(..., alias="type")
     text: str
 
 

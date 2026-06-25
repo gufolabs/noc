@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import bisect
-from typing import Iterable, Optional, Union, Tuple, Any
+from typing import Iterable, Any
 from urllib.parse import urlparse
 
 # Third-party modules
@@ -323,8 +323,8 @@ class NetBoxIPPrefixExtractor(NetBoxExtractor):
     model = IPPrefix
 
     def iter_data(
-        self, *, checkpoint: Optional[str] = None, **kwargs
-    ) -> Iterable[Union[BaseModel, RemovedItem, Tuple[Any, ...]]]:
+        self, *, checkpoint: str | None = None, **kwargs
+    ) -> Iterable[BaseModel | RemovedItem | tuple[Any, ...]]:
         duplicate = set()
         roles = set()
         for r in self.iter_records("/api/ipam/prefixes/"):
@@ -360,8 +360,8 @@ class NetBoxIPAddressExtractor(NetBoxExtractor):
     model = IPAddress
 
     def iter_data(
-        self, *, checkpoint: Optional[str] = None, **kwargs
-    ) -> Iterable[Union[BaseModel, RemovedItem, Tuple[Any, ...]]]:
+        self, *, checkpoint: str | None = None, **kwargs
+    ) -> Iterable[BaseModel | RemovedItem | tuple[Any, ...]]:
         duplicate = set()
         for r in self.iter_records("/api/ipam/ip-addresses/"):
             address = r["address"].split("/")[0]

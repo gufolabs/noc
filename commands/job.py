@@ -9,7 +9,6 @@
 import argparse
 from datetime import datetime, timedelta
 from collections import defaultdict
-from typing import Optional, List
 from functools import partial
 import math
 import csv
@@ -400,8 +399,8 @@ class Command(BaseCommand):
     def handle_stats(
         self,
         scheduler: Scheduler,
-        mos: Optional[List[int]] = None,
-        slots: Optional[List[int]] = None,
+        mos: list[int] | None = None,
+        slots: list[int] | None = None,
         **options,
     ):
         from noc.sa.models.profile import Profile
@@ -445,7 +444,7 @@ class Command(BaseCommand):
         scheduler: Scheduler,
         min_duration=5,
         buckets=5,
-        slots: Optional[List[int]] = None,
+        slots: list[int] | None = None,
         detail: bool = False,
         *args,
         **options,
@@ -482,7 +481,7 @@ class Command(BaseCommand):
         scheduler: Scheduler,
         min_duration=5,
         buckets=5,
-        slots: Optional[List[int]] = None,
+        slots: list[int] | None = None,
         detail: bool = False,
         *args,
         **options,

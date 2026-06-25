@@ -7,7 +7,6 @@
 
 # Python modules
 import logging
-from typing import Optional, Tuple
 import codecs
 
 # Third-party modules
@@ -46,10 +45,10 @@ PINHOLE_PATHS = {
 @router.trace("/api/auth/auth/", tags=["auth"])
 async def auth(
     request: Request,
-    jwt_cookie: Optional[str] = Cookie(None, alias=config.login.jwt_cookie_name),
-    private_token: Optional[str] = Header(None, alias="Private-Token"),
-    authorization: Optional[str] = Header(None, alias="Authorization"),
-    original_uri: Optional[str] = Header(None, alias="X-Original-URI"),
+    jwt_cookie: str | None = Cookie(None, alias=config.login.jwt_cookie_name),
+    private_token: str | None = Header(None, alias="Private-Token"),
+    authorization: str | None = Header(None, alias="Authorization"),
+    original_uri: str | None = Header(None, alias="X-Original-URI"),
     svc: LoginService = Depends(get_service),
 ):
     """
@@ -110,7 +109,7 @@ api_key_cache = cachetools.TTLCache(100, ttl=3)
 
 
 @cachetools.cached(api_key_cache)
-def get_api_access(key: str, ip: str) -> Tuple[str, str]:
+def get_api_access(key: str, ip: str) -> tuple[str, str]:
     """
     Cached API key data
 

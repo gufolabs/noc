@@ -9,7 +9,7 @@
 import datetime
 import operator
 from threading import Lock
-from typing import Optional, List
+from typing import Optional
 
 # Third-party modules
 import cachetools
@@ -263,7 +263,7 @@ class User(NOCModel):
         return must_change(self.password)
 
     @property
-    def contacts(self) -> List[NotificationContact]:
+    def contacts(self) -> list[NotificationContact]:
         from .usercontact import UserContact
 
         return [
@@ -277,7 +277,7 @@ class User(NOCModel):
         ]
 
     @property
-    def active_contacts(self) -> List[NotificationContact]:
+    def active_contacts(self) -> list[NotificationContact]:
         """
         Get list of currently active contacts
 
@@ -305,7 +305,7 @@ class User(NOCModel):
         self.save(update_fields=["last_login"])
 
     @property
-    def avatar_url(self) -> Optional[str]:
+    def avatar_url(self) -> str | None:
         """
         Get user's avatar URL
         :return:
@@ -315,7 +315,7 @@ class User(NOCModel):
         return f"/api/ui/avatar/{self.id}"
 
     @property
-    def avatar_label(self) -> Optional[str]:
+    def avatar_label(self) -> str | None:
         """
         Get avatar's textual label
         :return:

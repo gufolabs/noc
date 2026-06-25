@@ -7,7 +7,6 @@
 
 # NOC modules
 import datetime
-from typing import List, Optional
 
 # Python modules
 from pydantic import BaseModel
@@ -21,17 +20,17 @@ from .base import BaseCard
 
 
 class ResourceKey(BaseModel):
-    key: Optional[str] = None
-    domain: Optional[str] = None
+    key: str | None = None
+    domain: str | None = None
 
 
 class AllocatorRequest(BaseModel):
     # [{"domain": XXX, "key": XXXX}]
     resource_pool: str
     limit: int = 1
-    keys: List[ResourceKey]
-    tt_id: Optional[str] = None
-    allocated_till: Optional[datetime.date] = None
+    keys: list[ResourceKey]
+    tt_id: str | None = None
+    allocated_till: datetime.date | None = None
     action: str = "allocate"
     confirm: bool = False
 
@@ -73,7 +72,7 @@ class ResourcePoolCard(BaseCard):
         cls,
         item: AllocatorRequest,
         request: Request,
-        remote_user: Optional[str] = Header(None, alias="Remote-User"),
+        remote_user: str | None = Header(None, alias="Remote-User"),
     ):
         """
         keys: [{"domain": XXX, "key": XXXX}]

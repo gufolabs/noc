@@ -10,7 +10,6 @@ import socket
 import asyncio
 import threading
 import random
-from typing import Optional
 
 # Third-party modules
 import cachetools
@@ -24,7 +23,7 @@ ns_cache = cachetools.TTLCache(
 )
 
 
-async def resolve_async(host: str) -> Optional[str]:
+async def resolve_async(host: str) -> str | None:
     """
     Resolve host and return address
     :param host:
@@ -48,7 +47,7 @@ async def resolve_async(host: str) -> Optional[str]:
         return None
 
 
-def resolve_sync(host: str) -> Optional[str]:
+def resolve_sync(host: str) -> str | None:
     """
     Resolve host and return address
     :param host:

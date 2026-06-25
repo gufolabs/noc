@@ -9,7 +9,6 @@
 import re
 from collections import defaultdict
 from itertools import chain
-from typing import Tuple
 
 # NOC modules
 from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
@@ -495,7 +494,7 @@ class Script(BaseScript):
             interfaces[iface["name"]] = iface
         return [{"interfaces": list(interfaces.values())}]
 
-    def get_port_id(self, ifindex: int) -> Tuple[int, int, int, int]:
+    def get_port_id(self, ifindex: int) -> tuple[int, int, int, int]:
         # Convert ifindex to rack, shelf, slot, port
         slot_id = ifindex >> 16
         rack, shelf, slot = self.profile.get_slot(slot_id)

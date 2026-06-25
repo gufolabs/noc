@@ -7,7 +7,7 @@
 
 # Python modules
 import enum
-from typing import List, Iterable
+from typing import Iterable
 
 # NOC modules
 from .base import BaseDiscriminatorSource, DiscriminatorDataItem
@@ -58,13 +58,13 @@ class ProtocolDiscriminatorSource(BaseDiscriminatorSource):
             return False
         return True
 
-    def get_data(self, code: str) -> List[DiscriminatorDataItem]:
+    def get_data(self, code: str) -> list[DiscriminatorDataItem]:
         """
         Get Discriminator Data by code
         """
         return [DiscriminatorDataItem("optical", "tx_wavelength", int(code) + 1)]
 
-    def get_code(self, data: List[DiscriminatorDataItem]) -> str:
+    def get_code(self, data: list[DiscriminatorDataItem]) -> str:
         """
         Get Discriminator Code by data
         """

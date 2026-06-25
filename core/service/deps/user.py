@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # Third-party modules
 from fastapi import Header, HTTPException
@@ -20,8 +19,8 @@ svc = get_service()
 
 
 async def get_current_user(
-    remote_user: Optional[str] = Header(None, alias="Remote-User"),
-) -> Optional[User]:
+    remote_user: str | None = Header(None, alias="Remote-User"),
+) -> User | None:
     """
     Get request current user
 
@@ -41,7 +40,7 @@ async def get_current_user(
 
 
 def get_user_scope(
-    scopes: SecurityScopes, remote_user: Optional[str] = Header(None, alias="Remote-User")
+    scopes: SecurityScopes, remote_user: str | None = Header(None, alias="Remote-User")
 ) -> User:
     """
     Get request current user, when having scope access
