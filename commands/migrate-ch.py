@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # CH database schema migration tool
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -30,10 +30,17 @@ class Command(BaseCommand):
             help="Allow migrate column when type mismatch",
         )
 
-    def handle(self, host=None, port=None, allow_type=False, *args, **options):
+    def handle(
+        self,
+        host: str | None = None,
+        port: int | None = None,
+        allow_type: bool = False,
+        *args,
+        **options,
+    ):
         self.host = host or None
         self.port = port or None
-        self.connect()
+        self.ch_connect()
         mongo_connect()
         self.ensure_db()
         self.create_dictionaries_db()
@@ -46,7 +53,7 @@ class Command(BaseCommand):
         else:
             self.print("OK")
 
-    def connect(self):
+    def ch_connect(self):
         """
         Connect to database
         :return:
