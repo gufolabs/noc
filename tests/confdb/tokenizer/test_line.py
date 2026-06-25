@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Test line tokenizer
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -96,6 +96,24 @@ TOKENS6 = [
 ]
 
 
+CFG7 = """
+!
+interface gigabitethernet 0/1
+  description "##XXXXXXXXXX 222222222##
+"
+  no lldp transmit
+  no lldp receive
+!
+"""
+
+TOKENS7 = [
+    ("interface", "gigabitethernet", "0/1"),
+    ("description", "##XXXXXXXXXX 222222222##"),
+    ("no", "lldp", "transmit"),
+    ("no", "lldp", "receive"),
+]
+
+
 @pytest.mark.parametrize(
     ("input", "config", "expected"),
     [
@@ -116,6 +134,11 @@ TOKENS6 = [
                 "rewrite": [(re.compile(r"^queue mode"), "  queue mode")],
             },
             TOKENS6,
+        ),
+        (
+            CFG7,
+            {"line_comment": "!", "string_quote": '"'},
+            TOKENS7,
         ),
     ],
 )
