@@ -1,12 +1,9 @@
 # ----------------------------------------------------------------------
 # CH database schema migration tool
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
-
-# Python modules
-from typing import Optional
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -35,8 +32,8 @@ class Command(BaseCommand):
 
     def handle(
         self,
-        host: Optional[str] = None,
-        port: Optional[int] = None,
+        host: str | None = None,
+        port: int | None = None,
         allow_type: bool = False,
         *args,
         **options,

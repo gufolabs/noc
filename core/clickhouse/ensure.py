@@ -1,13 +1,12 @@
 # ----------------------------------------------------------------------
 # Ensure ClickHouse database schema
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import logging
-from typing import Optional
 
 # NOC modules
 from noc.config import config
@@ -18,7 +17,7 @@ from ..bi.dictionaries.loader import loader as bi_dictionary_loader
 logger = logging.getLogger(__name__)
 
 
-def ensure_bi_models(connect: Optional[ClickhouseClient] = None, allow_type: bool = False) -> bool:
+def ensure_bi_models(connect: ClickhouseClient | None = None, allow_type: bool = False) -> bool:
     logger.info("Ensuring BI models:")
     # Ensure fields
     allow_type |= config.clickhouse.enable_migrate_type
@@ -35,7 +34,7 @@ def ensure_bi_models(connect: Optional[ClickhouseClient] = None, allow_type: boo
 
 
 def ensure_dictionary_models(
-    connect: Optional[ClickhouseClient] = None, allow_type: bool = False
+    connect: ClickhouseClient | None = None, allow_type: bool = False
 ) -> bool:
     logger.info("Ensuring Dictionaries:")
     # Ensure fields
@@ -56,7 +55,7 @@ def ensure_dictionary_models(
     return changed
 
 
-def ensure_pm_scopes(connect: Optional[ClickhouseClient] = None, allow_type: bool = False) -> bool:
+def ensure_pm_scopes(connect: ClickhouseClient | None = None, allow_type: bool = False) -> bool:
     from noc.pm.models.metricscope import MetricScope
 
     logger.info("Ensuring PM scopes")
@@ -86,7 +85,7 @@ def ensure_all_pm_scopes() -> None:
 
 
 def ensure_report_ds_scopes(
-    connect: Optional[ClickhouseClient] = None, allow_type: bool = False
+    connect: ClickhouseClient | None = None, allow_type: bool = False
 ) -> bool:
     from noc.core.datasources.loader import loader
 
