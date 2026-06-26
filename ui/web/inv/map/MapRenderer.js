@@ -157,8 +157,14 @@ Ext.define("NOC.inv.map.MapRenderer", {
     let document = this.topoMap.convertMapData(data);
     this.topoMap.loadDocument(document);
     this.panel.app.viewStpButton.setDisabled(!data.caps.includes("Network | STP"));
-    // Run status polling
-    this.panel.startPolling();
+    // Run status polling. On segment change the panel is reused, so avoid
+    // tearing down and recreating the observer/listeners on every render —
+    // just trigger an immediate refresh if polling is already active.
+    if(this.panel.isPolling()){
+      this.panel.runPollingTask();
+    } else{
+      this.panel.startPolling();
+    }
     this.panel.fireEvent("renderdone");
   },
 

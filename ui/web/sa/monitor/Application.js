@@ -24,7 +24,7 @@ Ext.define("NOC.sa.monitor.Application", {
   stateId: "monitor.appPanel",
 
   defaults: {
-    resizable: true,
+    // resizable: true,
     animCollapse: false,
     collapseMode: "mini",
     hideCollapseTool: true,

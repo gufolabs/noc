@@ -39,8 +39,17 @@ Ext.define("NOC.core.mixins.Polling", {
       threshold: 0.1,
     });
 
-    if(this.getEl() && this.getEl().dom){
-      this.observer.observe(this.getEl().dom);
+    if(!this.observeTarget()){
+      // Element is not rendered yet — defer observe() until the host
+      // component fires afterrender, otherwise isIntersecting would stay
+      // false forever and polling would never fetch.
+      var cmp = Ext.isFunction(this.getView) ? this.getView() : this;
+      if(cmp && Ext.isFunction(cmp.on)){
+        cmp.on("afterrender", function(){
+          if(this.destroyed || !this.observer) return;
+          this.observeTarget();
+        }, this, {single: true});
+      }
     }
 
     this._windowFocused = document.hasFocus();
@@ -65,6 +74,19 @@ Ext.define("NOC.core.mixins.Polling", {
     document.addEventListener("visibilitychange", this._handleVisibilityChange);
 
     this.runPollingTask();
+  },
+
+  isPolling: function(){
+    return !!this.observer || !Ext.isEmpty(this.pollingTaskId);
+  },
+
+  observeTarget: function(){
+    var el = this.getEl();
+    if(el && el.dom){
+      this.observer.observe(el.dom);
+      return true;
+    }
+    return false;
   },
 
   runPollingTask: function(){
