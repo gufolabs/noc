@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # line tokenizer
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -75,7 +75,7 @@ class LineTokenizer(BaseTokenizer):
         for line in iter:
             yield line.replace("\t", tr)
 
-    def iter_rewrite(self, iter: Iterable) -> Iterator[tuple[str]]:
+    def iter_rewrite(self, iter: Iterable[str]) -> Iterator[tuple[str]]:
         """
         Apply `rewrite`
         :param iter:
@@ -88,11 +88,15 @@ class LineTokenizer(BaseTokenizer):
                     break
             yield line
 
-    def iter_line_tokens(self, line) -> Iterator[tuple[str]]:
+    def iter_line_tokens(self, line: str) -> Iterator[tuple[str]]:
         """
-        Iterate line tokens
-        :param line:
-        :return:
+        Iterate line tokens.
+
+        Args:
+            line: Input line.
+
+        Returns:
+            Yields tuples of tokens.
         """
         if self.keep_indent:
             match = self.rx_indent.match(line)
@@ -101,11 +105,15 @@ class LineTokenizer(BaseTokenizer):
                 line = line[match.end() :]
         yield from line.split()
 
-    def iter_line_quoted_tokens(self, line) -> Iterator[tuple[str]]:
+    def iter_line_quoted_tokens(self, line: str) -> Iterator[tuple[str]]:
         """
-        Iterate line tokens considering strings
-        :param line:
-        :return:
+        Iterate line tokens considering strings.
+
+        Args:
+            line: Input line.
+
+        Returns:
+            Yields tuples of tokens.
         """
         if self.keep_indent:
             match = self.rx_indent.match(line)
@@ -148,4 +156,5 @@ class LineTokenizer(BaseTokenizer):
         else:
             g_tokens = self.iter_line_tokens
         for line in g:
-            yield tuple(g_tokens(line))
+            if tokens := tuple(g_tokens(line)):
+                yield tokens
