@@ -1,11 +1,11 @@
 {
-  "title": "Telephony | SIP | Sessions | Active",
+  "title": "Telephony | Voice | GlobalCPS",
   "aliasColors": {},
   "bars": false,
   "datasource": null,
   "fill": 1,
   "grid": {},
-  "id": 8836324228329,
+  "id": 4662538328623,
     "legend": {
     "alignAsTable": true,
     "avg": false,
@@ -41,7 +41,7 @@
       "dateColDataType": "date",
       "table": "object",
       "intervalFactor": 1,
-      "query": "SELECT $timeSeries as t, avg(sip_sessions_active) as `Active SIP Session` FROM $table WHERE managed_object=$bi_id and $timeFilter and has(labels,'noc::telephony::SIP::Sessions::Active') GROUP BY t ORDER BY t",
+      "query": "SELECT $timeSeries as t, avg(voice_global_cps) as `Clobal CPS` FROM $table WHERE managed_object=$bi_id and $timeFilter and has(labels,'noc::telephony::Voice::GlobalCPS') GROUP BY t ORDER BY t",
       "refId": "A",
       "resultFormat": "time_series"
     }

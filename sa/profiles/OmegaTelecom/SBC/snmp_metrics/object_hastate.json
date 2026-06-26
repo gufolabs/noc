@@ -1,6 +1,7 @@
 {
-    "$metric": "Check | Status",
+    "$metric": "Object | HAState",
     "$type": "oid",
+    "labels": ["noc::object::HAState"],
     "oid": "1.2.643.2.124.1.3.2.1.1.4.0",
     "units": "1"
 }

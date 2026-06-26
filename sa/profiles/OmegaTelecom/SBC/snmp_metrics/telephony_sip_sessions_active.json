@@ -1,6 +1,7 @@
 {
     "$metric": "Telephony | SIP | Sessions | Active",
     "$type": "oid",
+    "labels": ["noc::telephony::SIP::Sessions::Active"],
     "oid": "1.2.643.2.124.1.3.2.1.1.5.0",
     "units": "1"
 }
