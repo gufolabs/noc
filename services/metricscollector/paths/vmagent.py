@@ -16,7 +16,7 @@ import snappy
 import zstd
 from google.protobuf.message import DecodeError
 from fastapi import APIRouter, Header, HTTPException, Body, Request
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import JSONResponse
 
 # NOC modules
 from noc.core.service.loader import get_service
@@ -87,7 +87,7 @@ class VMAgentAPI:
         remote_write_version: str | None = Header(
             None, alias="x-victoriametrics-remote-write-version"
         ),
-    ) -> ORJSONResponse:
+    ) -> JSONResponse:
         if not authorization:
             raise HTTPException(status_code=HTTPStatus.FORBIDDEN)
         _, key = authorization.split(" ")
@@ -98,14 +98,14 @@ class VMAgentAPI:
                 "error", ("type", "unknown_remote_system"), ("collector", VMAGENT_COLLECTOR)
             ] += 1
             # IP Address
-            return ORJSONResponse(
+            return JSONResponse(
                 {
                     "error": f"Unknown Remote System {remote_system_code}",
                 },
                 status_code=HTTPStatus.NOT_FOUND,
             )
         if rs_cfg.api_key != key:
-            return ORJSONResponse(
+            return JSONResponse(
                 {
                     "error": f"Remote System API Key not Authorization {remote_system_code}",
                 },
@@ -122,7 +122,7 @@ class VMAgentAPI:
         )
         if not channel or channel.is_banned:
             # IP Address
-            return ORJSONResponse(
+            return JSONResponse(
                 {
                     "error": f"Not Found Remote System by key {remote_system_code}",
                 },
@@ -138,7 +138,7 @@ class VMAgentAPI:
             parser.ParseFromString(req)
         except DecodeError as e:
             logger.error("Error when parsed: %s", str(e))
-            return ORJSONResponse({}, status_code=200)
+            return JSONResponse({}, status_code=200)
         logger.debug("VMAgent, Parsed %s", parser)
         for ts in parser.timeseries:
             metric_name, instance, host, labels = self.parse_labels(ts.labels)
@@ -157,7 +157,7 @@ class VMAgentAPI:
             logger.info(
                 "[%s|%s] Received series: %s", self.api_name, channel.remote_system.name, received
             )
-        return ORJSONResponse({}, status_code=200)
+        return JSONResponse({}, status_code=200)
 
     def setup_endpoints(self):
         self.router.add_api_route(

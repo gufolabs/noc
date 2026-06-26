@@ -11,7 +11,7 @@ from collections import namedtuple
 
 # Third-party modules
 from fastapi import APIRouter, Header, Depends
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import JSONResponse
 
 # NOC modules
 from noc.aaa.models.user import User
@@ -76,7 +76,7 @@ class JSONRPCAPI:
 
         self.current_user = remote_user
         if req.method not in self.methods:
-            return ORJSONResponse(
+            return JSONResponse(
                 content={
                     "error": {"message": f"Method not found: '{req.method}'", "code": -32601},
                     "id": req.id,
@@ -111,21 +111,21 @@ class JSONRPCAPI:
                     result = await result
                 if isinstance(result, Redirect):
                     # Redirect protocol extension
-                    return ORJSONResponse(
+                    return JSONResponse(
                         content={"method": result.method, "params": result.params, "id": req.id},
                         status_code=307,
                         headers={"location": result.location},
                     )
-                return ORJSONResponse(content={"result": result, "id": req.id})
+                return JSONResponse(content={"result": result, "id": req.id})
             except NOCError as e:
                 span.set_error_from_exc(e, e.code)
-                return ORJSONResponse(
+                return JSONResponse(
                     content={"error": {"message": f"Failed: {e}", "code": e.code}, "id": req.id}
                 )
             except Exception as e:
                 error_report()
                 span.set_error_from_exc(e)
-                return ORJSONResponse(
+                return JSONResponse(
                     content={"error": {"message": f"Failed: {e}", "code": -32000}, "id": req.id}
                 )
 

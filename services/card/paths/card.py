@@ -15,7 +15,7 @@ from urllib.parse import unquote
 # Third-party modules
 import cachetools
 from fastapi import APIRouter, Header, HTTPException, Request, Response
-from fastapi.responses import HTMLResponse, RedirectResponse, ORJSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from jinja2 import Template
 import orjson
 
@@ -143,7 +143,7 @@ class CardAPI(BaseAPI):
             "path": "/api/card/search/",
             "method": "GET",
             "endpoint": self.handler_card_search,
-            "response_class": ORJSONResponse,
+            "response_class": JSONResponse,
             "response_model": None,
             "name": "card-search",
             "description": "",
@@ -155,7 +155,7 @@ class CardAPI(BaseAPI):
                     "path": f"/api/card/resourcepool/{a}/",
                     "method": "POST",
                     "endpoint": endpoint,
-                    "response_class": ORJSONResponse,
+                    "response_class": JSONResponse,
                     "response_model": None,
                     "name": f"card-{a}",
                     "description": "",
