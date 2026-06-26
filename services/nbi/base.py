@@ -9,7 +9,7 @@
 
 # Third-party modules
 from fastapi import APIRouter
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import JSONResponse
 
 # NOC modules
 from noc.core.service.loader import get_service
@@ -63,7 +63,7 @@ class NBIAPI:
                 path=route["path"],
                 methods=[route["method"]],  # ["POST"]
                 endpoint=route["endpoint"],
-                response_class=route.get("response_class", ORJSONResponse),
+                response_class=route.get("response_class", JSONResponse),
                 response_model=route["response_model"],
                 name=route["name"],
                 description=route["description"],

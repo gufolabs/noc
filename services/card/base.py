@@ -11,7 +11,7 @@ import hashlib
 
 # Third-party modules
 from fastapi import APIRouter, Request
-from fastapi.responses import ORJSONResponse, HTMLResponse
+from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 # NOC modules
@@ -56,7 +56,7 @@ class BaseAPI:
                 path=route["path"],
                 methods=[route["method"]],  # ["POST"]
                 endpoint=route["endpoint"],
-                response_class=route.get("response_class", ORJSONResponse),
+                response_class=route.get("response_class", JSONResponse),
                 response_model=route["response_model"],
                 name=route["name"],
                 description=route["description"],

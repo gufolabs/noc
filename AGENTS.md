@@ -21,6 +21,8 @@ The codebase follows a modular architecture similar to Django apps — each "app
 
 - **Language:** English only in code artifacts — comments, docstrings, logs, CLI output, configs. Never Russian or any other language.
 
+- **FastAPI Response:** use `JSONResponse(content=data)`, NOT ~~`ORJSONResponse`~~ — it's deprecated and Pydantic-native serialization is faster.
+
 ## Encoding
 
 NOC uses UTF-8 for all text data — no `smart_text()` needed. All strings, HTTP responses, ClickHouse query results, and file I/O are UTF-8. Python `.decode()` with the default UTF-8 encoding is sufficient; never fall back to `smart_text` as a "safe" alternative.
