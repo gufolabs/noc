@@ -86,6 +86,14 @@ Ext.define("NOC.fm.alarm.view.grids.ContainerController", {
   getEl: function(){
     return this.getView().getEl();
   },
+  // Override the mixin's generateIcon to keep the 4px left padding the inline
+  // "{alarmsTotal}{icon}" toolbar text relies on (matches the default icon).
+  generateIcon: function(isUpdatable, icon, color, msg){
+    if(isUpdatable){
+      return `<i class='fa fa-${icon}' style='padding-left:4px;color:${color};width:16px;' data-qtip='${msg}'></i>`;
+    }
+    return "<i class='fa fa-fw' style='padding-left:4px;width:16px;'></i>";
+  },
   pollingTask: function(){
     if(this.destroyed) return;
     if(!document.hidden && this.isFocused() && this.isIntersecting){
