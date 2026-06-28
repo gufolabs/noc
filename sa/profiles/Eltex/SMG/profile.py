@@ -20,7 +20,7 @@ class Profile(BaseProfile):
 
     @classmethod
     def get_interface_type(cls, name):
-        if name.startswith("front"):
+        if name.startswith(("front", "host")):
             return "physical"
-        if name.startswith(("host", "sm", "eth")):
+        if name.startswith(("sm", "eth")):
             return "other"
