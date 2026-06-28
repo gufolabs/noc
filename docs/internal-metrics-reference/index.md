@@ -37,7 +37,6 @@ The cache is divided into 2 types:
 - external ( L2, external) cache is organized by the cache service specified in the system settings. It can be located:
 
   - mongodb (by default, unless otherwise specified)
-  - memcached - external service memcached
   - redis - external service redis
 
 Each element of the system that uses the cache is assigned a unique key - cache_key. It is used as tag.

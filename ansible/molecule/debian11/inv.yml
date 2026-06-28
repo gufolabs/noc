@@ -83,7 +83,6 @@ all:
           has_svc_liftbridge: true
           has_svc_login: true
           has_svc_mailsender: true
-          has_svc_memcached: true
           has_svc_mongod: true
           has_svc_metrics: true
           has_svc_mrt: true
@@ -127,8 +126,6 @@ all:
           mailsender_smtp_server: null
           mailsender_smtp_user: null
           mailsender_use_tls: "False"
-          memcached_max_clients: 1024
-          memcached_max_memory: 64
           mongod_db: noc
           mongod_logging_destination: syslog
           mongod_password: noc
@@ -1080,15 +1077,6 @@ all:
             noc-node-debian11: {}
         svc-mailsender-read: {}
     svc-mailsender-exec:
-      hosts:
-        noc-node-debian11: {}
-    svc-memcached:
-      children:
-        cfg-memcached-noc-node-debian11:
-          hosts:
-            noc-node-debian11: {}
-        svc-memcached-read: {}
-    svc-memcached-exec:
       hosts:
         noc-node-debian11: {}
     svc-mongod:
