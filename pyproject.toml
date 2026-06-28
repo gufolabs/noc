@@ -76,7 +76,7 @@ node = [
   "FastAPI==0.138.0",
   "Jinja2==3.1.6",
   "PyYAML==6.0.2",
-  "Pygments==2.19.1",
+  "Pygments==2.20.0",
   "XlsxWriter==3.2.2",
   "atomicl==0.1.1",
   "blinker==1.9.0",
