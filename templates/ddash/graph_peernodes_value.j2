@@ -41,7 +41,7 @@
       "dateColDataType": "date",
       "table": "object",
       "intervalFactor": 1,
-      "query": "SELECT $timeSeries as t, avg(peer_nodes_value) as `PeerNodes | Value` FROM $table WHERE managed_object=$bi_id and $timeFilter GROUP BY t ORDER BY t",
+      "query": "SELECT t, groupArray((name, value)) AS groupArr FROM (SELECT $timeSeries as t, avg(peer_nodes_value) as value, labels[1] as name FROM $table WHERE managed_object=$bi_id and $timeFilter and startsWith(labels[1], 'noc::peer_node') GROUP BY labels[1], t ORDER BY labels[1], t) GROUP BY t ORDER BY t ASC",
       "refId": "A",
       "resultFormat": "time_series"
     }
