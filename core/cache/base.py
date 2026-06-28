@@ -1,14 +1,13 @@
 # ----------------------------------------------------------------------
 # BaseCache
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2017 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import logging
 from typing import Any, Iterable
-import warnings
 
 # NOC modules
 from noc.config import config
