@@ -13,7 +13,7 @@ CPU_USAGE_TYPE_MAP = {
     "cpuUsr": 1,
     "cpuSys": 2,
     "cpuNic": 3,
-    "cpuIdle": 4,
+    # "cpuIdle": 4,
     "cpuIo": 5,
     "cpuIrq": 6,
     "cpuSirq": 7,
