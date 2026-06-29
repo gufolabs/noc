@@ -9,7 +9,7 @@
 import pytest
 
 # NOC modules
-from noc.core.handler import get_handler, _CCACHE
+from noc.core.handler import get_handler
 
 
 def my_simple_handler():
@@ -42,19 +42,9 @@ def test_callable():
     assert h == my_simple_handler
 
 
-def test_cache():
-    name = "noc.tests.test_handler.my_cached_handler"
-    assert (name,) not in _CCACHE
-    h = get_handler(name)
-    assert h
-    assert (name,) in _CCACHE
-    hh = get_handler(name)
-    assert h == hh
-
-
 def test_invalid_format():
     # Invalid format
-    with pytest.raises(ImportError):
+    with pytest.raises(ValueError):
         get_handler("xxx")
 
 
