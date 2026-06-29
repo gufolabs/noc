@@ -62,13 +62,15 @@ class Script(GetMetricsScript):
             bulk=True,
         )
         for node_metrics in t:
-            hostname = node_metrics[1]
+            host = node_metrics[1]
             for metric_type, idx in PEER_NODE_METRIC_TYPE_MAP.items():
                 metric = node_metrics[idx]
-
                 self.set_metric(
                     id=("PeerNodes | Value", None),
                     value=metric,
-                    labels=[f"noc::peer_node::{hostname}.{metric_type}"],
+                    labels=[
+                        f"noc::peer_nodes::host::{host}",
+                        f"noc::peer_nodes::metric::{metric_type}",
+                    ],
                     multi=True,
                 )
