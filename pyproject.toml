@@ -116,6 +116,7 @@ node = [
   "gufo-liftbridge==0.2.0",
   "gufo-snmp==0.12.0",
   "gufo_noc_speedup==0.1.0",
+  "gufo-loader==2.0.0",
 ]
 ping = ["gufo-ping==0.7.0"]
 prod-tools = [

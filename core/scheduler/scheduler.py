@@ -17,14 +17,16 @@ from time import perf_counter
 # Third-party modules
 import pymongo.errors
 from pymongo import DeleteOne, UpdateOne
+from gufo.loader import ImportPathResolver
 
 # NOC modules
 from noc.core.mongo.connection import get_db
-from noc.core.handler import get_handler
 from noc.core.threadpool import ThreadPoolExecutor
 from noc.core.perf import metrics
 from noc.config import config
 from .job import Job
+
+get_job_handler = ImportPathResolver[type[Job]]()
 
 
 class Scheduler:
@@ -269,7 +271,7 @@ class Scheduler:
             for job in qs:
                 job[Job.ATTR_SAMPLE] = self.sample
                 try:
-                    jcls = get_handler(job[Job.ATTR_CLASS])
+                    jcls = get_job_handler(job[Job.ATTR_CLASS])
                     yield jcls(self, job)
                 except ImportError as e:
                     self.logger.error("Invalid job class %s", job[Job.ATTR_CLASS])
