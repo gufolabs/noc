@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # discovery commands
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -14,7 +14,6 @@ from functools import partial
 # NOC modules
 from noc.core.management.base import BaseCommand
 from noc.core.mongo.connection import connect
-from noc.core.handler import get_handler
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.inv.models.networksegment import NetworkSegment
 from noc.core.scheduler.scheduler import Scheduler
@@ -23,6 +22,7 @@ from noc.core.cache.base import cache
 from noc.core.span import Span, get_spans
 from noc.core.service.pub import publish
 from noc.core.comp import smart_bytes
+from noc.services.discovery.jobs.base import get_discovery_job
 
 
 class Command(BaseCommand):
@@ -138,7 +138,7 @@ class Command(BaseCommand):
         else:
             job_args = {Job.ATTR_ID: "fakeid", Job.ATTR_KEY: mo.id}
         job_args["_checks"] = checks
-        job = get_handler(jcls)(scheduler, job_args)
+        job = get_discovery_job(jcls)(scheduler, job_args)
         if job.context_version:
             ctx_key = job.get_context_cache_key()
             self.print("Loading job context from %s" % ctx_key)

@@ -15,13 +15,14 @@ import types
 import operator
 from io import StringIO
 from time import perf_counter
+from typing import Any
 
 # Third-party modules
 import bson
 import cachetools
 import orjson
 from pymongo import UpdateOne
-from typing import Any
+from gufo.loader import ImportPathResolver
 
 # NOC modules
 from noc.core.scheduler.periodicjob import PeriodicJob
@@ -1637,3 +1638,6 @@ class PolicyDiscoveryCheck(DiscoveryCheck):
 
     def has_required_script(self):
         return super().has_required_script() or self.get_policy() != ["script"]
+
+
+get_discovery_job = ImportPathResolver[type[MODiscoveryJob]]()
