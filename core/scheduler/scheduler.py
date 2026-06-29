@@ -21,7 +21,6 @@ from gufo.loader import ImportPathResolver
 
 # NOC modules
 from noc.core.mongo.connection import get_db
-from noc.core.handler import get_handler
 from noc.core.threadpool import ThreadPoolExecutor
 from noc.core.perf import metrics
 from noc.config import config
