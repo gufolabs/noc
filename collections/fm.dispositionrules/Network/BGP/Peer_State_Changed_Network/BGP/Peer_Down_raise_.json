@@ -10,7 +10,7 @@
     }],
     "default_action": "R",
     "stop_processing": true,
-    "vars": [
+    "vars_op": [
         {
             "name": "to_state",
             "condition": "ne",
