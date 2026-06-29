@@ -436,7 +436,7 @@ class DispositionRule(Document):
         if self.conditions:
             r["conditions"] = [m.json_data for m in self.conditions]
         if self.vars_op:
-            r["vars"] = [m.json_data for m in self.vars_op]
+            r["vars_op"] = [m.json_data for m in self.vars_op]
             r["vars_conditions_op"] = self.vars_conditions_op
         if self.replace_rule:
             r |= {
