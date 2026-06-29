@@ -10,7 +10,7 @@
     }],
     "default_action": "R",
     "stop_processing": false,
-    "vars": [
+    "vars_op": [
         {
             "name": "interface",
             "affected_model": "inv.Interface",
