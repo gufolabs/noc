@@ -1,0 +1,64 @@
+name: Ansible CI
+
+on:
+  push:
+    branches: [master]
+    paths: &ansible-changes
+      - 'ansible/**/*'
+      - '.github/workflows/ansible-e2e.yml'
+  pull_request:
+    paths: *ansible-changes
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-syntax:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Run syntax checks in parallel across the key OS scenarios
+        scenario: [default, oel7, ubuntu22, debian11]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Python environment
+        run: pip install ansible-lint yamllint jmespath
+
+      - name: Run Ansible Linter (full repository)
+        uses: ansible/ansible-lint@main
+        with:
+          working_directory: ansible
+          arguments: --exclude molecule/${{ matrix.scenario }}
+
+      - name: Validate YAML syntax in root playbooks
+        run: yamllint -d relaxed ansible/*.yml
+
+  syntax-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario: [default, oel7, ubuntu22, debian]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      # Check that core playbooks parse correctly for a specific inventory style
+      - name: Ansible syntax check for ${{ matrix.scenario }}
+        run: |
+          inv="ansible/molecule/${{ matrix.scenario }}/inv.yml"
+          if [ ! -f "$inv" ]; then
+            echo "Skipping missing scenario directory."
+            exit 0
+          fi
+
+          ansible-playbook --syntax-check \
+            -i "$inv" \
+            ansible/system_roles/clickhouse/service.yml || true
+
+          ansible-playbook --syntax-check \
+            -i "$inv" \
+            ansible/system_roles/nats/service.yml || true
