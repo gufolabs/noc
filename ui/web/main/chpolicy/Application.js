@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // main.chpolicy application
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2035 The NOC Project
+// Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.main.chpolicy.Application");
