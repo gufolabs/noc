@@ -1,12 +1,12 @@
 # ----------------------------------------------------------------------
 # noc.core.text tests
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any
+from typing import Any
 
 # Third-party modules
 import pytest
@@ -537,6 +537,6 @@ def test_str_distance(s1: str, s2: str, expected: int) -> None:
         ("abc[aaa())[][][[]]xddd]", {"start": 3, "closing": "]"}, 22),
     ],
 )
-def test_find_balanced(s: str, conf: Dict[str, Any], expected: int) -> None:
+def test_find_balanced(s: str, conf: dict[str, Any], expected: int) -> None:
     r = find_balanced(s, **conf)
     assert r == expected

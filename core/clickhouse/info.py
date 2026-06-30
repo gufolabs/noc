@@ -1,13 +1,13 @@
 # ----------------------------------------------------------------------
 # Clickhouse DDL Parser
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 from dataclasses import dataclass
-from typing import Optional, Iterable
+from typing import Iterable
 import re
 
 # NOC modules
@@ -17,7 +17,7 @@ from .connect import connection
 
 
 @dataclass
-class TableInfo(object):
+class TableInfo:
     """
     Parsed DDL info.
 
@@ -27,7 +27,7 @@ class TableInfo(object):
     """
 
     name: str
-    table_ttl: Optional[int] = None
+    table_ttl: int | None = None
 
     @classmethod
     def from_sql(cls, sql: str) -> "TableInfo":

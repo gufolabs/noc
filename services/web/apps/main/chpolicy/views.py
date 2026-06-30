@@ -18,7 +18,7 @@ from noc.core.clickhouse.connect import connection
 
 
 @dataclass
-class TableStats(object):
+class TableStats:
     table: str
     rows: int
     size: int
