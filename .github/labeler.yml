@@ -1,0 +1,140 @@
+# Skip file-based labeling if more than 100 files changed
+max-files-changed: 100
+
+adapter:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "sa/profiles/**"
+collections:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "collections/**"
+c-fm:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "collections/fm.*/**"
+c-inv:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "collections/inv.*/**"
+c-pm:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "collections/pm.*/**"
+c-sa:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "collections/sa.*/**"
+c-other:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "collections/bi.dashboardlayouts/**"
+          - "collections/bi.dashboards/**"
+          - "collections/cm.configurationparams/**"
+          - "collections/cm.configurationscopes/**"
+          - "collections/cm.errortypes/**"
+          - "collections/dev.quiz/**"
+          - "collections/dev.specs/**"
+          - "collections/gis.layers/**"
+          - "collections/main.glyphs/**"
+          - "collections/main.handlers/**"
+          - "collections/main.labels/**"
+          - "collections/main.modeltemplates/**"
+          - "collections/main.reports/**"
+          - "collections/main.templates/**"
+          - "collections/sa.actioncommands/**"
+          - "collections/sa.actions/**"
+          - "collections/wf.states/**"
+          - "collections/wf.transitions/**"
+          - "collections/wf.workflows/**"
+core:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "core/**"
+deploy:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "ansible/**"
+docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "docs/**"
+          - "mkdocs.yml"
+github:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**"
+master:
+  - base-branch: ["master"]
+migrations:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "*/migrations/*.py"
+release-25.1:
+  - base-branch: ["release-25.1"]
+setup:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "pyproject.toml"
+s-discovery:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "services/bh/**"
+          - "services/discovery/**"
+s-fm:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "services/classifier/**"
+          - "services/correlator/**"
+          - "services/syslogcollector/**"
+          - "services/trapcollector/**"
+          - "services/ping/**"
+          - "services/escalator/**"
+          - "services/mib/**"
+s-integration:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "services/datastream/**"
+          - "services/nbi/**"
+          - "services/kafkasender/**"
+          - "services/mailsender/**"
+          - "services/mx/**"
+          - "services/tgsender/**"
+s-pm:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "services/metrics/**"
+          - "services/metricscollector/**"
+s-sa:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "services/activator/**"
+          - "services/runner/**"
+          - "services/mrt/**"
+          - "services/sae/**"
+s-web:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "services/web/**"
+          - "services/ui/**"
+          - "services/card/**"
+s-other:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "services/bi/**"
+          - "services/chwriter/**"
+          - "services/grafanads/**"
+          - "services/login/**"
+          - "services/scheduler/**"
+          - "services/selfmon/**"
+          - "services/topo/**"
+          - "services/worker/**"
+          - "services/zeroconf/**"
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "tests/**"
+ui:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "ui/**"
