@@ -29,6 +29,20 @@ TRUNK_METRICS = [
     ("trunkChansBusy", "1.3.6.1.4.1.35265.1.29.46.1.1.15"),
 ]
 
+VOIPSUBM_METRICS = [
+    ("voip0busyChannels", "1.3.6.1.4.1.35265.1.29.40.1"),
+    ("voip1busyChannels", "1.3.6.1.4.1.35265.1.29.40.2"),
+    ("voip2busyChannels", "1.3.6.1.4.1.35265.1.29.40.3"),
+    ("voip3busyChannels", "1.3.6.1.4.1.35265.1.29.40.4"),
+    ("voip4busyChannels", "1.3.6.1.4.1.35265.1.29.40.5"),
+    ("voip5busyChannels", "1.3.6.1.4.1.35265.1.29.40.6"),
+    ("voip0freeChannels", "1.3.6.1.4.1.35265.1.29.40.7"),
+    ("voip1freeChannels", "1.3.6.1.4.1.35265.1.29.40.8"),
+    ("voip2freeChannels", "1.3.6.1.4.1.35265.1.29.40.9"),
+    ("voip3freeChannels", "1.3.6.1.4.1.35265.1.29.40.10"),
+    ("voip4freeChannels", "1.3.6.1.4.1.35265.1.29.40.11"),
+    ("voip5freeChannels", "1.3.6.1.4.1.35265.1.29.40.12"),
+]
 
 class Script(BaseScript):
     name = "Eltex.SMG.get_inventory"
@@ -97,4 +111,15 @@ class Script(BaseScript):
                     "snmp_oid": f"{metric_oid}.{trunk_index}",
                 }
                 r.append(d)
+        # VoIP submodules
+        for m in VOIPSUBM_METRICS:
+            self.snmp.get(m[1])
+            d = {
+                "name": f"{m[0]}",
+                "status": True,
+                "description": "",
+                "measurement": "1",
+                "snmp_oid": f"{m[1]}",
+            }
+            r.append(d)
         return r
