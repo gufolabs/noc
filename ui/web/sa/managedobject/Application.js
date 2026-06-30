@@ -103,7 +103,8 @@ const defaultColumns = [
   {
     text: __('FQDN'),
     dataIndex: 'fqdn',
-    flex: 1,
+    width: 200,
+    hidden: true
   },   
   {
     text: __("Interfaces"),
