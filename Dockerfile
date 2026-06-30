@@ -27,6 +27,9 @@ RUN\
     bzip2 \
     curl \
     ca-certificates \
+    && corepack enable \
+    && corepack prepare pnpm@10.33.0 --activate \
+    && (cd ui/ && pnpm install --frozen-lockfile) \    
     && ./scripts/build/build-ui
 
 # Base layer containing system packages and requirements
