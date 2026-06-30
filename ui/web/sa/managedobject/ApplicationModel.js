@@ -73,7 +73,7 @@ Ext.define("NOC.sa.managedobject.ApplicationModel", {
     },
     {
       name: "fqdn",
-      type: "string"
+      type: "string",
     },
     {
       name: "interface_count",
