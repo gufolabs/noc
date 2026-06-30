@@ -142,24 +142,29 @@
       ]
     }
 
-
-    {%if fan_sensors %}
-    ,
-        {% set comma = joiner(",") -%}
+    {% if object_metrics %}
+        ,
         {
           "collapse": false,
           "editable": false,
           "height": "250px",
           "showTitle": true,
-          "title": "Вентилляторы",
-          "internal_comment": "fan_sensors_row",
+          "internal_comment": "object_metrics",
+          "title": "Objects metrics",
           "panels": [
-              {% from "graph_fan.j2" import sensors -%}
-              {% for s in fan_sensors -%}
-                  {{ comma() }}
-                  {{sensors(s, loop.index)}}
-              {%- endfor %}
+            {% set comma = joiner(",") -%}
+            {% for graph in object_metrics -%}
+              {% if "Subscribers | Summary" in graph %}
+                {{ comma() }}{% include "graph_subscribers_summary_total.j2" with context -%},
+                {% include "graph_subscribers_summary_slot.j2" with context -%},
+                {% include "graph_subscribers_summary_port.j2" with context -%}
+              {% else %}
+                {% set template = 'graph_' + graph | lower() |replace(" ","") | replace("|","_") + '.j2' %}
+                {{ comma() }}{% include [template, "graph_default.j2"] ignore missing with context %}
+              {% endif %}
+            {%- endfor %}
           ]
+
         }
     {% endif %}
 
@@ -181,6 +186,55 @@
               {%- endfor %}
           ]
         }
+    {% endif %}
+
+    {%if fan_sensors %}
+    ,
+        {% set comma = joiner(",") -%}
+        {
+          "collapse": false,
+          "editable": false,
+          "height": "250px",
+          "showTitle": true,
+          "title": "Вентиляторы",
+          "internal_comment": "fan_sensors_row",
+          "panels": [
+              {% from "graph_fan.j2" import sensors -%}
+              {% for s in fan_sensors -%}
+                  {{ comma() }}
+                  {{sensors(s, loop.index)}}
+              {%- endfor %}
+          ]
+        }
+    {% endif %}
+
+    {%if port_types %}
+    ,
+        {% set comma = joiner(",") -%}
+        {% for port in port_types -%}
+            {{ comma() }}
+            {
+              "collapse": false,
+              "editable": false,
+              "height": "250px",
+              "showTitle": true,
+              "title": "Интерфейсы; профиль: {{port.name}}",
+              "internal_comment": "port_row",
+              "panels": [
+                {% if extra_template == "iface" %}
+                    {% from "graph_interface_multi.j2" import interface -%}
+                {% else %}
+                    {% from "graph_interface_load.j2" import interface -%}
+                {% endif %}
+                {{interface(port, loop.index)}}
+              ]
+            }
+        {%- endfor %}
+    {% endif %}
+
+    {% if port_types %}
+    ,
+        {% include "row_errors.j2" with context -%}
     {% endif %}
 
     {%if trunk_groups %}
@@ -220,86 +274,5 @@
           }
         {%- endfor %}
     {% endif %}
-
-
-    {%if port_types %}
-    ,
-        {% set comma = joiner(",") -%}
-        {% for port in port_types -%}
-            {{ comma() }}
-            {
-              "collapse": {% if port.type in selected_types and selected_types[port.type] %}false{% else %}true{% endif %},
-              "editable": false,
-              "height": "250px",
-              "showTitle": true,
-              "title": "{{port.name}}",
-              "internal_comment": "port_row",
-              "panels": [
-                {% if extra_template == "iface" %}
-                    {% from "graph_interface_multi.j2" import interface -%}
-                {% else %}
-                    {% from "graph_interface_load.j2" import interface -%}
-                {% endif %}
-                {{interface(port, loop.index)}}
-              ]
-            }
-        {%- endfor %}
-    {% endif %}
-
-    {% if port_types %}
-    ,
-        {% include "row_errors.j2" with context -%}
-    {% endif %}
-
-
-    {%if object_check_metrics %}
-      ,
-      {
-        "collapse": true,
-        "editable": false,
-        "height": "250px",
-        "showTitle": true,
-        "internal_comment": "object_check_metrics",
-        "title": "Check metrics",
-        "panels": [
-            {% for metric in object_check_metrics -%}
-              {% if "result" in metric.metric %}
-                {% include "graph_check_result.j2" with context -%},
-              {% endif %}
-              {% if "rtt" in metric.metric %}
-                {% include "graph_check_ping.j2" with context -%},
-              {% endif %}
-            {%- endfor %}
-        ]
-
-      }
-    {% endif %}
-
-    {% if object_metrics %}
-        ,
-        {
-          "collapse": false,
-          "editable": false,
-          "height": "250px",
-          "showTitle": true,
-          "internal_comment": "object_metrics",
-          "title": "Objects metrics",
-          "panels": [
-            {% set comma = joiner(",") -%}
-            {% for graph in object_metrics -%}
-              {% if "Subscribers | Summary" in graph %}
-                {{ comma() }}{% include "graph_subscribers_summary_total.j2" with context -%},
-                {% include "graph_subscribers_summary_slot.j2" with context -%},
-                {% include "graph_subscribers_summary_port.j2" with context -%}
-              {% else %}
-                {% set template = 'graph_' + graph | lower() |replace(" ","") | replace("|","_") + '.j2' %}
-                {{ comma() }}{% include [template, "graph_default.j2"] ignore missing with context %}
-              {% endif %}
-            {%- endfor %}
-          ]
-
-        }
-    {% endif %}
-
   ]
 }
