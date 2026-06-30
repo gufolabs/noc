@@ -104,7 +104,7 @@ const defaultColumns = [
     text: __("FQDN"),
     dataIndex: "fqdn",
     width: 200,
-    hidden: true
+    hidden: true,
   },
   {
     text: __("Interfaces"),
