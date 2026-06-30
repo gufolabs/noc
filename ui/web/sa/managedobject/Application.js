@@ -105,7 +105,7 @@ const defaultColumns = [
     dataIndex: 'fqdn',
     width: 200,
     hidden: true
-  },   
+  },
   {
     text: __("Interfaces"),
     dataIndex: "interface_count",
