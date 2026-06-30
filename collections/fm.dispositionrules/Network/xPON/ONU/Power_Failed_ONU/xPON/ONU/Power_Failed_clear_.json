@@ -1,0 +1,15 @@
+{
+    "name": "Network | xPON | ONU | Power Failed (Network | xPON | ONU | Power Failed,clear)",
+    "$collection": "fm.dispositionrules",
+    "uuid": "60fd2bb0-8356-4912-96f0-b2bce922ae50",
+    "description": null,
+    "preference": 1000,
+    "alarm_disposition__name": "Network | xPON | ONU | Power Failed",
+    "conditions": [
+        {
+            "event_class_re": "Network | xPON | ONU | Discovered"
+        }
+    ],
+    "default_action": "C",
+    "stop_processing": false
+}

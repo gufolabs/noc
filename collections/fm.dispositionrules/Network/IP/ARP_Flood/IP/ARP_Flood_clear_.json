@@ -1,0 +1,13 @@
+{
+    "name": "Network | IP | ARP Flood (Network | IP | ARP Flood,clear)",
+    "$collection": "fm.dispositionrules",
+    "uuid": "92b54fe5-1f82-45ee-9549-02e2d33b4b0b",
+    "description": null,
+    "preference": 1000,
+    "alarm_disposition__name": "Network | IP | ARP Flood",
+    "conditions": [{
+        "event_class_re": "Network | IP | ARP Flood Cleared"
+    }],
+    "default_action": "C",
+    "stop_processing": false
+}
