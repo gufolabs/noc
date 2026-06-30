@@ -1,12 +1,11 @@
 # Basic Python image
 FROM python:3.13-slim-trixie AS python
 ENV \
-    PYTHONPATH=/opt
+    PYTHONPATH=/opt\
+    DEBIAN_FRONTEND=noninteractive
 RUN \
     set -x \
     && apt-get update\
-    && apt-get dist-upgrade -y\
-    && apt-get clean\
     && apt-get install -y --no-install-recommends \
     bzip2 \
     curl \
@@ -20,6 +19,8 @@ RUN \
 FROM node:24-trixie-slim AS build-ui
 COPY . /opt/noc
 WORKDIR /opt/noc
+ENV \
+    DEBIAN_FRONTEND=noninteractive
 RUN\
     set -x\
     && apt-get update\
