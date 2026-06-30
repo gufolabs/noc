@@ -1,0 +1,40 @@
+name: Backport merges
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  backport:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run backport action
+        uses: korthout/backport-action@v4
+        with:
+          # PR number is automatically inferred, but explicit is safer
+          pull-request: ${{ github.event.pull_request.number }}
+
+          # map labels → target branches
+          target-branches: |
+            backport-25.1: release-25.1
+            backport-24.1: release-24.1
+
+          # optional but recommended: ensures traceability
+          commit-message-suffix: "(backport #${{ github.event.pull_request.number }})"
+
+          # keep PRs clean and traceable
+          title-template: "Backport PR #%original_pr_number% to %target_branch%"
+
+      - name: Log result
+        run: echo "Backport process completed"
