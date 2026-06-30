@@ -64,14 +64,10 @@ github:
   - changed-files:
       - any-glob-to-any-file:
           - ".github/**"
-master:
-  - base-branch: ["master"]
 migrations:
   - changed-files:
       - any-glob-to-any-file:
           - "*/migrations/*.py"
-release-25.1:
-  - base-branch: ["release-25.1"]
 setup:
   - changed-files:
       - any-glob-to-any-file:
