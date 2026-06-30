@@ -1,0 +1,8 @@
+{
+    "name": "CPE | Revision",
+    "$collection": "inv.capabilities",
+    "uuid": "8a033966-2b36-4bf6-85fd-6ed25b91aeca",
+    "description": "CPE hardware revisonon",
+    "type": "str",
+    "card_template": null
+}
