@@ -1,0 +1,8 @@
+{
+    "name": "OmegaTelecom",
+    "uuid": "d40f595c-2aef-46e8-979d-7aa32ad84035",
+    "full_name": "OmegaTelecom",
+    "code": ["OMEGATELECOM"],
+    "site": "https://www.omegatelecom.ru/",
+    "$collection": "inv.vendors"
+}
