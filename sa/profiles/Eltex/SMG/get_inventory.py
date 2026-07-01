@@ -30,19 +30,20 @@ TRUNK_METRICS = [
 ]
 
 VOIPSUBM_METRICS = [
-    ("voip0busyChannels", "1.3.6.1.4.1.35265.1.29.40.1"),
-    ("voip1busyChannels", "1.3.6.1.4.1.35265.1.29.40.2"),
-    ("voip2busyChannels", "1.3.6.1.4.1.35265.1.29.40.3"),
-    ("voip3busyChannels", "1.3.6.1.4.1.35265.1.29.40.4"),
-    ("voip4busyChannels", "1.3.6.1.4.1.35265.1.29.40.5"),
-    ("voip5busyChannels", "1.3.6.1.4.1.35265.1.29.40.6"),
-    ("voip0freeChannels", "1.3.6.1.4.1.35265.1.29.40.7"),
-    ("voip1freeChannels", "1.3.6.1.4.1.35265.1.29.40.8"),
-    ("voip2freeChannels", "1.3.6.1.4.1.35265.1.29.40.9"),
-    ("voip3freeChannels", "1.3.6.1.4.1.35265.1.29.40.10"),
-    ("voip4freeChannels", "1.3.6.1.4.1.35265.1.29.40.11"),
-    ("voip5freeChannels", "1.3.6.1.4.1.35265.1.29.40.12"),
+    ("voip0busyChannels", "1.3.6.1.4.1.35265.1.29.40.1.0"),
+    ("voip1busyChannels", "1.3.6.1.4.1.35265.1.29.40.2.0"),
+    ("voip2busyChannels", "1.3.6.1.4.1.35265.1.29.40.3.0"),
+    ("voip3busyChannels", "1.3.6.1.4.1.35265.1.29.40.4.0"),
+    ("voip4busyChannels", "1.3.6.1.4.1.35265.1.29.40.5.0"),
+    ("voip5busyChannels", "1.3.6.1.4.1.35265.1.29.40.6.0"),
+    ("voip0freeChannels", "1.3.6.1.4.1.35265.1.29.40.7.0"),
+    ("voip1freeChannels", "1.3.6.1.4.1.35265.1.29.40.8.0"),
+    ("voip2freeChannels", "1.3.6.1.4.1.35265.1.29.40.9.0"),
+    ("voip3freeChannels", "1.3.6.1.4.1.35265.1.29.40.10.0"),
+    ("voip4freeChannels", "1.3.6.1.4.1.35265.1.29.40.11.0"),
+    ("voip5freeChannels", "1.3.6.1.4.1.35265.1.29.40.12.0"),
 ]
+
 
 class Script(BaseScript):
     name = "Eltex.SMG.get_inventory"
