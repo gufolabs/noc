@@ -54,32 +54,6 @@ RUN \
     && useradd -d /opt/noc -M -r -u 1200 -U noc -s /bin/sh \
     && chown noc /opt/noc
 
-# https://code.getnoc.com/noc/noc/-/issues/1480
-#HEALTHCHECK --interval=10s --timeout=1s \
-#    CMD curl -f http://0.0.0.0:1200/health/ || exit 1
-
-#
-# Developer's container
-#
-FROM code AS dev
-ENV\
-    PATH=$PATH:/opt/node_modules/.bin
-RUN \
-    apt-get update\
-    && apt-get install -y --no-install-recommends \
-    snmp \
-    vim \
-    git \
-    && uv pip install --system -e .[dev,docs,lint,test]\
-    && uv cache clean \
-    && (curl -fsSL https://deb.nodesource.com/setup_24.x | bash -)\
-    && apt-get install -y --no-install-recommends nodejs \
-    && corepack enable \
-    && corepack prepare pnpm@10.33.0 --activate \
-    && (cd ui/ && pnpm install --frozen-lockfile) \
-    && mv ui/node_modules /opt\
-    && rm -rf /var/lib/apt/lists/*
-
 FROM python AS devcontainer
 ENV\
     DJANGO_SETTINGS_MODULE=noc.settings \
@@ -106,13 +80,3 @@ RUN \
     && (cd ui/ && pnpm install --frozen-lockfile) \
     && mv ui/node_modules /workspaces\
     && rm -rf /var/lib/apt/lists/* /tmp/*.whl
-
-#
-# Self-serving static ui files
-#
-FROM nginx:alpine AS static
-
-RUN apk add --no-cache curl
-
-COPY --from=code /usr/local/lib/python3.12/site-packages/django /usr/lib/python3.1/site-packages/django
-COPY --from=code /opt/noc/ui /opt/noc/ui
