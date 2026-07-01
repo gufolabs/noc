@@ -61,7 +61,6 @@ Ext.define("NOC.core.mixins.Polling", {
     };
     this._handleWindowBlur = () => {
       if(this.destroyed) return;
-      if(this.isFullScreen()) return;
       this._windowFocused = false;
       this.disableHandler(true);
     };
@@ -100,10 +99,6 @@ Ext.define("NOC.core.mixins.Polling", {
     } else{
       this.pollingTask();
     }
-  },
-
-  isFullScreen: function(){
-    return window.outerWidth === screen.width || window.outerHeight === screen.height;
   },
 
   stopPolling: function(){
