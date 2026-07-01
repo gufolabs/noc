@@ -187,6 +187,12 @@ Ext.define("NOC.sa.monitor.SelectionGrid", {
         html: __("Selected") + ": {total.selection}",
       },
     },
+    {
+      xtype: "tbtext",
+      bind: {
+        html: "{icon}",
+      },
+    },
   ],
   listeners: {
     selectionchange: "onSelectionChange",

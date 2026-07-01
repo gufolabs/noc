@@ -18,6 +18,15 @@ Ext.define("NOC.core.mixins.Polling", {
   observer: null,
 
   startPolling: function(){
+    if(!NOC.settings.features.includes("smartrefresh")){
+      // Without smartrefresh there is no IntersectionObserver/focus tracking,
+      // so force the "visible & focused" state the pollingTask guard relies on.
+      this.isIntersecting = true;
+      this._windowFocused = true;
+      this.runPollingTask();
+      return;
+    }
+
     if(this.observer){
       this.stopPolling();
     }
@@ -30,8 +39,17 @@ Ext.define("NOC.core.mixins.Polling", {
       threshold: 0.1,
     });
 
-    if(this.getEl() && this.getEl().dom){
-      this.observer.observe(this.getEl().dom);
+    if(!this.observeTarget()){
+      // Element is not rendered yet — defer observe() until the host
+      // component fires afterrender, otherwise isIntersecting would stay
+      // false forever and polling would never fetch.
+      var cmp = Ext.isFunction(this.getView) ? this.getView() : this;
+      if(cmp && Ext.isFunction(cmp.on)){
+        cmp.on("afterrender", function(){
+          if(this.destroyed || !this.observer) return;
+          this.observeTarget();
+        }, this, {single: true});
+      }
     }
 
     this._windowFocused = document.hasFocus();
@@ -43,7 +61,6 @@ Ext.define("NOC.core.mixins.Polling", {
     };
     this._handleWindowBlur = () => {
       if(this.destroyed) return;
-      if(this.isFullScreen()) return;
       this._windowFocused = false;
       this.disableHandler(true);
     };
@@ -55,6 +72,23 @@ Ext.define("NOC.core.mixins.Polling", {
     window.addEventListener("blur", this._handleWindowBlur);
     document.addEventListener("visibilitychange", this._handleVisibilityChange);
 
+    this.runPollingTask();
+  },
+
+  isPolling: function(){
+    return !!this.observer || !Ext.isEmpty(this.pollingTaskId);
+  },
+
+  observeTarget: function(){
+    var el = this.getEl();
+    if(el && el.dom){
+      this.observer.observe(el.dom);
+      return true;
+    }
+    return false;
+  },
+
+  runPollingTask: function(){
     if(Ext.isEmpty(this.pollingTaskId)){
       var jitter = this.pollingInterval * 0.1 * (2 * Math.random() - 1);
       this.pollingTaskId = Ext.TaskManager.start({
@@ -65,10 +99,6 @@ Ext.define("NOC.core.mixins.Polling", {
     } else{
       this.pollingTask();
     }
-  },
-
-  isFullScreen: function(){
-    return window.outerWidth === screen.width || window.outerHeight === screen.height;
   },
 
   stopPolling: function(){

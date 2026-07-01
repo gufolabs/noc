@@ -326,8 +326,8 @@ Ext.define("NOC.inv.map.Application", {
     });
 
     me.statusIndicator = Ext.create("Ext.toolbar.TextItem", {
-      padding: "3 4 0 4",
-      html: "<i class='fa fa-fw' style='width:16px;'></i>",
+      padding: "3 4 0 0",
+      html: "<i class='fa fa-fw' style='padding-left:4px;width:16px;'></i>",
     });
 
     me.miniMapButton = Ext.create("Ext.button.Button", {

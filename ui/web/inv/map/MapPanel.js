@@ -354,6 +354,15 @@ Ext.define("NOC.inv.map.MapPanel", {
       ));
   },
 
+  // Override the mixin's generateIcon to carry the 4px left padding on the icon
+  // itself (statusIndicator container no longer adds it), matching other panels.
+  generateIcon: function(isUpdatable, icon, color, msg){
+    if(isUpdatable){
+      return `<i class='fa fa-${icon}' style='padding-left:4px;color:${color};width:16px;' data-qtip='${msg}'></i>`;
+    }
+    return "<i class='fa fa-fw' style='padding-left:4px;width:16px;'></i>";
+  },
+
   overlayPollingTask: function(){
     if(this.destroyed) return;
     if(!document.hidden && this.isFocused() && this.isIntersecting){
