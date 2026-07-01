@@ -208,6 +208,26 @@
         }
     {% endif %}
 
+    {%if voip_submodules %}
+    ,
+        {% set comma = joiner(",") -%}
+        {
+          "collapse": false,
+          "editable": false,
+          "height": "250px",
+          "showTitle": true,
+          "title": "VoIP-субмодули",
+          "internal_comment": "voip_submodules_row",
+          "panels": [
+              {% from "graph_voip_submodule.j2" import submodules -%}
+              {% for s in voip_submodules -%}
+                  {{ comma() }}
+                  {{submodules(s["name"], s["sensors"][0]["id"], s["sensors"][0]["bi_id"], s["sensors"][1]["bi_id"], loop.index)}}
+              {%- endfor %}
+          ]
+        }
+    {% endif %}
+
     {%if port_types %}
     ,
         {% set comma = joiner(",") -%}

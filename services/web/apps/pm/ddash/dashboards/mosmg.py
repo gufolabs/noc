@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
-# DVBC dynamic dashboard
+# SMG dynamic dashboard
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -38,6 +38,15 @@ class MOSMGDashboard(MODashboard):
         "trunkCPSAlarm",
         "trunkChansFree",
         "trunkChansBusy",
+    ]
+
+    VOIP_SUBMODULES = [
+        {"name": "Submodule 1", "sensor_names": ("voip0busyChannels", "voip0freeChannels")},
+        {"name": "Submodule 2", "sensor_names": ("voip1busyChannels", "voip1freeChannels")},
+        {"name": "Submodule 3", "sensor_names": ("voip2busyChannels", "voip2freeChannels")},
+        {"name": "Submodule 4", "sensor_names": ("voip3busyChannels", "voip3freeChannels")},
+        {"name": "Submodule 5", "sensor_names": ("voip4busyChannels", "voip4freeChannels")},
+        {"name": "Submodule 6", "sensor_names": ("voip5busyChannels", "voip5freeChannels")},
     ]
 
     def resolve_object_data(self, object):
@@ -95,6 +104,7 @@ class MOSMGDashboard(MODashboard):
         fan_sensors = []
         pm_sensors = []
         trunk_group_sensors = {}
+        voip_submodules_sensors_map = {}
         o = Object.get_managed(self.object.id) or []
         for s in Sensor.objects.filter(m_q(managed_object=self.object) | m_q(object__in=o)):
             s_type = s.profile.name
@@ -138,6 +148,15 @@ class MOSMGDashboard(MODashboard):
             for metric in self.TRUNK_METRICS:
                 if s.local_id.endswith(f".{metric}"):
                     trunk_group_sensors[s.local_id] = s
+            # VoIP-submodules sensors
+            if s.local_id.startswith("voip"):
+                voip_submodules_sensors_map[s.local_id] = {
+                    "label": s.dashboard_label or s.label,
+                    "units": s.munits,
+                    "bi_id": s.bi_id,
+                    "local_id": s.local_id,
+                    "id": int(str(s.bi_id)[-10:]),
+                }
         # Trunk groups
         trunk_groups = []
         for s_name, s in trunk_group_sensors.items():
@@ -236,6 +255,18 @@ class MOSMGDashboard(MODashboard):
                 }
             )
             trunk_groups_data_channels[tg_name] = tg_data
+        # VoIP-submodules
+        voip_submodules = [
+            {"name": sm["name"], "sensor_names": sm["sensor_names"], "sensors": [None, None]}
+            for sm in self.VOIP_SUBMODULES
+        ]
+        for sm in voip_submodules:
+            sensor_name = sm["sensor_names"][0]
+            if sensor_name in voip_submodules_sensors_map:
+                sm["sensors"][0] = voip_submodules_sensors_map[sensor_name]
+            sensor_name = sm["sensor_names"][1]
+            if sensor_name in voip_submodules_sensors_map:
+                sm["sensors"][1] = voip_submodules_sensors_map[sensor_name]
         return {
             "port_types": port_types,
             "selected_types": selected_types,
@@ -251,6 +282,7 @@ class MOSMGDashboard(MODashboard):
             "trunk_groups_data_cps": trunk_groups_data_cps,
             "trunk_groups_data_channels": trunk_groups_data_channels,
             "trunk_metrics": self.TRUNK_METRICS,
+            "voip_submodules": voip_submodules,
         }
 
     def get_context(self):
@@ -276,6 +308,7 @@ class MOSMGDashboard(MODashboard):
             "trunk_groups_data_cps": self.object_data["trunk_groups_data_cps"],
             "trunk_groups_data_channels": self.object_data["trunk_groups_data_channels"],
             "trunk_metrics": self.object_data["trunk_metrics"],
+            "voip_submodules": self.object_data["voip_submodules"],
             "bi_id": self.object.bi_id,
             "pool": self.object.pool.name,
             "extra_template": self.extra_template,
