@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # pytest configuration
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -23,6 +23,7 @@ from django.db import models
 from noc.config import config
 from noc.models import get_model, is_document
 from noc.core.model.fields import DocumentReferenceField, CachedForeignKey
+from noc.core.management.base import command_loader
 
 IN_GITHUB_ACTIONS = bool(os.getenv("GITHUB_ACTIONS", ""))
 IS_COLLECT_ONLY = any("--collect-only" in arg for arg in sys.argv)
@@ -213,32 +214,28 @@ def _create_mongo_db():
 
 @with_timing("migrate_db")
 def _migrate_db():
-    m = __import__("noc.commands.migrate", {}, {}, "Command")
-    r = m.Command().run_from_argv([])
+    r = command_loader["migrate"]().run_from_argv([])
     if r:
         raise RuntimeError("Failed to migrate database")
 
 
 @with_timing("migrate_kafka")
 def _migrate_kafka():
-    m = __import__("noc.commands.migrate-liftbridge", {}, {}, "Command")
-    r = m.Command().run_from_argv(["--slots", "1"])
+    r = command_loader["migrate-liftbridge"]().run_from_argv(["--slots", "1"])
     if r:
         raise RuntimeError("Failed to create Kafka topics")
 
 
 @with_timing("migrate_clickhouse")
 def _migrate_clickhouse():
-    m = __import__("noc.commands.migrate-ch", {}, {}, "Command")
-    r = m.Command().run_from_argv([])
+    r = command_loader["migrate-ch"]().run_from_argv([])
     if r:
         raise RuntimeError("Failed to migrate ClickHouse database")
 
 
 @with_timing("ensure_indexes")
 def _ensure_indexes():
-    m = __import__("noc.commands.ensure-indexes", {}, {}, "Command")
-    r = m.Command().run_from_argv([])
+    r = command_loader["ensure-indexes"]().run_from_argv([])
     if r:
         raise RuntimeError("Failed to create indexes")
 
@@ -252,8 +249,7 @@ def _load_collections():
 
 @with_timing("load_mibs")
 def _load_mibs():
-    m = __import__("noc.commands.sync-mibs", {}, {}, "Command")
-    r = m.Command().run_from_argv([])
+    r = command_loader["sync-mibs"]().run_from_argv([])
     if r:
         raise RuntimeError("Failed to load MIBs")
 
