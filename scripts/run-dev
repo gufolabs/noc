@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Find the devcontainer associated with the current working tree.
+CID=$(
+    docker ps -q \
+        --filter "label=devcontainer.local_folder=$(pwd)"
+)
+# Container must be running
+if [ -z "$CID" ]; then
+    echo "No running devcontainer found for $(pwd)" >&2
+    exit 7
+fi
+# Run command inside the container
+exec docker exec "$CID" "$@"
