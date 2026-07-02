@@ -22,16 +22,26 @@ DB_TYPE = DjangoModel | Document
 
 def is_document(obj: DB_TYPE) -> bool:
     """
-    Check object is mongoengine document
-    :param obj:
-    :return:
+    Check object is mongoengine document.
+
+    Args:
+        obj: Django model instance or mongoengine document.
+
+    Returns:
+        True: if obj is document.
     """
     return getattr(obj, "_is_document", False)
 
 
 def get_model_id(obj: DB_TYPE) -> str:
     """
-    Returns model id for instance object
+    Returns model id for instance object.
+
+    Args:
+        obj: Django model or mongoengine document.
+
+    Returns:
+        Model id in form `<module>.<model>`
     """
     if is_document(obj):
         # Document
