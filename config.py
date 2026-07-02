@@ -45,7 +45,7 @@ from noc.core.config.params import (
     UUIDParameter,
     TimeZoneParameter,
 )
-from noc.core.log import ErrorFormatter
+
 
 SECRETS_BASE = Path("/", "run", "secrets")
 
@@ -1172,6 +1172,8 @@ class Config(BaseConfig):
         """
         logger = logging.getLogger()
         if len(logger.handlers):
+            from noc.core.log import ErrorFormatter
+
             # Logger is already initialized
             fmt = ErrorFormatter(self.log_format, None)
             for h in logging.root.handlers:
