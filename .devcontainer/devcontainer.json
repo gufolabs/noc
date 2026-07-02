@@ -2,6 +2,7 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.202.3/containers/docker-existing-dockerfile
 {
 	"name": "NOC",
+	"containerName": "noc-dev",
 	"runArgs": [
 		"--init"
 	],
