@@ -277,7 +277,3 @@ class Command(BaseCommand):
                             ro,
                             reason="link",
                         )
-
-
-if __name__ == "__main__":
-    Command().run()

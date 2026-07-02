@@ -9,7 +9,10 @@
 import sys
 import os
 import argparse
-from typing import NoReturn
+from typing import NoReturn, Sequence
+
+# Third-party modules
+from gufo.loader import Loader
 
 # NOC modules
 from noc.config import config
@@ -44,7 +47,7 @@ class BaseCommand:
         """
         sys.exit(self.run_from_argv(sys.argv[1:]))
 
-    def run_from_argv(self, argv):
+    def run_from_argv(self, argv: Sequence[str]) -> int:
         """
         Execute command. Usually from script
 
@@ -212,3 +215,6 @@ class BaseCommand:
     @property
     def is_debug(self) -> bool:
         return config.loglevel <= 10  # logging.DEBUG
+
+
+command_loader = Loader[type[BaseCommand]](bases=config.iter_customized_bases("noc.commands"))

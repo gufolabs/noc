@@ -118,7 +118,3 @@ class Command(BaseCommand):
 
         self.print("[RCA Lock] Indexing")
         RCALock.create_indexes()
-
-
-if __name__ == "__main__":
-    Command().run()

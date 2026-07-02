@@ -74,7 +74,3 @@ class Command(BaseCommand):
                 m, queryset=self.get_queryset(m, args[1:]), first_row_only=options.get("template")
             )
         )
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -439,7 +439,3 @@ class Command(BaseCommand):
         factory = MetricScopeCDAGFactory(cdag, scope=ms, spool=False, sticky=True)
         factory.construct()
         return cdag
-
-
-if __name__ == "__main__":
-    Command().run()

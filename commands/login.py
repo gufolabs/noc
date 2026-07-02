@@ -37,7 +37,3 @@ class Command(BaseCommand):
         except backend.LoginError as e:
             self.die("Failed to login: %s" % e)
         self.print("Login successful")
-
-
-if __name__ == "__main__":
-    Command().run()

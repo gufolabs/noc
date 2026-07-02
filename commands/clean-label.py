@@ -80,7 +80,3 @@ class Command(BaseCommand):
             self.print("Done")
         else:
             self.print(f"{label} doesn't exist")
-
-
-if __name__ == "__main__":
-    Command().run()

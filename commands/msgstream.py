@@ -232,7 +232,3 @@ class Command(BaseCommand):
                 print(cursor)
 
         run_sync(fetch_cursor)
-
-
-if __name__ == "__main__":
-    Command().run()

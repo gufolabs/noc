@@ -115,7 +115,3 @@ class Command(BaseCommand):
             show_watch()
         else:
             show()
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -72,7 +72,3 @@ class Command(BaseCommand):
                 for o, r in data:
                     self.stdout.write("@@@ %s %s\n%s\n" % (o.address, o.name, "".join(r)))
                     left -= 1
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -228,7 +228,3 @@ class Command(BaseCommand):
                 except Exception as e:
                     self.print(e)
                     self.print("End variables: ", var_ctx)
-
-
-if __name__ == "__main__":
-    Command().run()

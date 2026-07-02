@@ -141,7 +141,3 @@ class Command(BaseCommand):
                 # Set to JSON value from a file
                 args[name] = parse_json(read_file(value))
         return args
-
-
-if __name__ == "__main__":
-    Command().run()

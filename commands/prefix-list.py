@@ -73,7 +73,3 @@ class Command(BaseCommand):
         if not ll.endswith("\n"):
             ll += "\n"
         out.write(ll)
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -193,7 +193,3 @@ class ServiceStub:
 
         dcs = get_dcs(DEFAULT_DCS)
         return run_sync(partial(dcs.get_slot_limit, slot_name))
-
-
-if __name__ == "__main__":
-    Command().run()

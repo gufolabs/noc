@@ -304,7 +304,3 @@ class Command(BaseCommand):
     def check_ct_cfp(self, c):
         self.check_direction(c, ["i", "o"])
         self.check_protocols(c, ["TransEth40G", "TransEth100G"])
-
-
-if __name__ == "__main__":
-    Command().run()

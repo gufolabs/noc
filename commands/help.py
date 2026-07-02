@@ -65,7 +65,3 @@ class Command(BaseCommand):
         # Command not found
         self.print("Unknown command '%s'" % cmd)
         return 1
-
-
-if __name__ == "__main__":
-    Command().run()

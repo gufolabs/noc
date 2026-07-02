@@ -44,7 +44,3 @@ class Command(BaseCommand):
             self.stdout.write(pprint.pformat(result) + "\n")
         else:
             self.stdout.write(str(result) + "\n")
-
-
-if __name__ == "__main__":
-    Command().run()

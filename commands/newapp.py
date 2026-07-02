@@ -311,7 +311,3 @@ class Command(BaseCommand):
                         dn = os.path.join(*pp)
                     self.create_dir(dn)
                     self.create_file(os.path.join(dn, fn[:-3]), content)
-
-
-if __name__ == "__main__":
-    Command().run()

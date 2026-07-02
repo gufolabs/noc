@@ -123,7 +123,3 @@ class Command(BaseCommand):
             else:
                 self.stdout.write("Removing %s\n" % u)
                 os.unlink(path)
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -63,7 +63,3 @@ class Command(BaseCommand):
                 TextIndex.update_index(model, o)
                 n += 1
             self.stdout.write("%d records indexed\n" % n)
-
-
-if __name__ == "__main__":
-    Command().run()

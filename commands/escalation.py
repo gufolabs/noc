@@ -251,7 +251,3 @@ class Command(BaseCommand):
 
     def run_alarm(self, alarm):
         AlarmEscalation.watch_escalations(alarm)
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -11,11 +11,6 @@ NOC_CMD="$0"
 export NOC_CMD
 CMD="$1"
 
-error_exit ( ) {
-    printf "\\033[1;31m%s: ${1:-'Unknown error'}\\033[0m\\n" "$PROGNAME" 1>&2
-    exit 1
-}
-
 if [ -f "$PWD/.env" ]; then
   # shellcheck disable=SC1091
     . "$PWD/.env"
@@ -38,19 +33,9 @@ if [ -f "${CUSTOM_PATH}/commands/$CMD.sh" ]; then
     exec /bin/sh "${CUSTOM_PATH}/commands/$CMD.sh" "$@"
 fi
 
-if [ -f "${CUSTOM_PATH}/commands/$CMD.py" ]; then
-    shift
-    exec ${PYTHON_INTERPRETER} "${CUSTOM_PATH}/commands/$CMD.py" "$@"
-fi
-
 if [ -f "./commands/$CMD.sh" ]; then
     shift
     exec /bin/sh "./commands/$CMD.sh" "$@"
 fi
 
-if [ -f "./commands/$CMD.py" ]; then
-    shift
-    exec ${PYTHON_INTERPRETER} "./commands/$CMD.py" "$@"
-fi
-
-error_exit "Invalid command $1"
+exec ${PYTHON_INTERPRETER} -m noc.core.management.run "$@"

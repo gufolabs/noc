@@ -68,7 +68,3 @@ class Command(BaseCommand):
             print("Apply %s ..." % f, file=self.stdout)
             fix()
             print("... done", file=self.stdout)
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -66,7 +66,3 @@ class Command(BaseCommand):
                     *sorted(r, key=lambda x: alnum_key(x[0])),
                 ]
                 self.stdout.write("%s\n" % format_table([0, 0, 0, 0], r, sep=" | ", hsep="-+-"))
-
-
-if __name__ == "__main__":
-    Command().run()

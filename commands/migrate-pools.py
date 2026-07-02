@@ -80,7 +80,3 @@ class Command(BaseCommand):
                         name=pool_name, description=pool_name, discovery_reschedule_limit=int(value)
                     )
         return list(pools.values())
-
-
-if __name__ == "__main__":
-    Command().run()

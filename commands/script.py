@@ -517,7 +517,3 @@ class StorageStub:
 
     class Error(Exception):
         pass
-
-
-if __name__ == "__main__":
-    Command().run()

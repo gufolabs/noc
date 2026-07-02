@@ -176,7 +176,3 @@ class Command(BaseCommand):
                             i.save()
                             v = "Not matched. Reset to default"
                     self.show_interface(tps, i, v, el - oel)
-
-
-if __name__ == "__main__":
-    Command().run()

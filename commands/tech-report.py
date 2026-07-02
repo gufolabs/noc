@@ -212,7 +212,3 @@ class Command(BaseCommand):
         )
         self.print(f"{self.flags[LibStatus.SKIPPED]} Library is optional and missing")
         self.print("")
-
-
-if __name__ == "__main__":
-    Command().run()

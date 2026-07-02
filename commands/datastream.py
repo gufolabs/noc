@@ -222,7 +222,3 @@ class Command(BaseCommand):
             collection = ds.get_collection()
             collection.delete_many({"_id": {"$lte": ObjectId.from_datetime(start_date)}})
         self.print("Done")
-
-
-if __name__ == "__main__":
-    Command().run()

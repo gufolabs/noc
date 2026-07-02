@@ -28,7 +28,3 @@ class Command(BaseCommand):
                 for svc_id, address in service.dcs.resolvers[sn].services.items():
                     out += [[sn, svc_id, address]]
         self.stdout.write(format_table([0, 0, 0, 0, 0], out) + "\n")
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -591,7 +591,3 @@ class Command(BaseCommand):
                 raise ValueError("Invalid TTL")
             v += t * m
         return v
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -54,7 +54,3 @@ class Command(BaseCommand):
             self.stdout.write(
                 "%s,%s,%s,%s\n" % (o.profile.name, platform, "SNMPv2-MIB::sysObjectID.0", v)
             )
-
-
-if __name__ == "__main__":
-    Command().run()

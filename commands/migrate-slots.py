@@ -48,7 +48,3 @@ class Command(BaseCommand):
         dcs = get_dcs()
         changed = asyncio.run(inner())
         self.print("CHANGED" if changed else "OK")
-
-
-if __name__ == "__main__":
-    Command().run()

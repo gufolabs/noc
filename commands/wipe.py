@@ -272,7 +272,3 @@ class Command(BaseCommand):
         # Finally delete user
         with self.log("Deleting user"):
             o.delete()
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -139,7 +139,3 @@ class ServiceStub:
 
     def __init__(self, pool):
         self.config = self.ServiceConfig(pool=pool)
-
-
-if __name__ == "__main__":
-    Command().run()

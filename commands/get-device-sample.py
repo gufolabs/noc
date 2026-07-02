@@ -63,7 +63,3 @@ class Command(BaseCommand):
                 x += 1
                 if x >= sample:
                     break
-
-
-if __name__ == "__main__":
-    Command().run()
