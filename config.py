@@ -30,7 +30,7 @@ from noc.core.config.base import (
     ValueRewrite,
     DeprecatedValue,
 )
-from noc.core.deprecations import RemovedInNOC2601Warning
+from noc.core.deprecations import RemovedInNOC26Warning
 from noc.core.config.params import (
     StringParameter,
     MapParameter,
@@ -1291,17 +1291,17 @@ class Config(BaseConfig):
 
 config = Config(
     rewrites=[
-        PrefixRewrite("redpanda", "kafka", deprecation=RemovedInNOC2601Warning),
+        PrefixRewrite("redpanda", "kafka", deprecation=RemovedInNOC26Warning),
         ValueRewrite(
             "msgstream.client_class",
             "noc.core.msgstream.redpanda.RedPandaClient",
             "noc.core.msgstream.kafka.KafkaClient",
-            deprecation=RemovedInNOC2601Warning,
+            deprecation=RemovedInNOC26Warning,
         ),
         DeprecatedValue(
             "msgstream.client_class",
             "noc.core.msgstream.liftbridge.LiftBridgeClient",
-            deprecation=RemovedInNOC2601Warning,
+            deprecation=RemovedInNOC26Warning,
         ),
     ]
 )
