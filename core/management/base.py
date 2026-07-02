@@ -28,7 +28,6 @@ class BaseCommand:
         self.verbose_level = 0
         self.stdout = stdout
         self.stderr = stderr
-        self.is_debug = False
 
     def print(self, *args, **kwargs) -> None:
         if "file" not in kwargs:
@@ -214,3 +213,7 @@ class BaseCommand:
             f" Involuntary context sw. : {stop.ru_nivcsw - start.ru_nivcsw}",
         ]
         self.print("\n".join(r))
+
+    @property
+    def is_debug(self) -> bool:
+        return config.loglevel <= 10  # logging.DEBUG
