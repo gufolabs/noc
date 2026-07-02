@@ -33,8 +33,13 @@ _counts: defaultdict[str, int] = defaultdict(int)
 _start_times: dict[str, int] = {}
 
 
+def _setup_config() -> None:
+    config.setup()
+
+
 def pytest_configure(config: pytest.Config) -> None:
     """Register marters."""
+    _setup_config()
     config.addinivalue_line("markers", "run_on_setup")
     config.addinivalue_line("markers", "fatal")
 
