@@ -37,6 +37,29 @@ Ext.define("NOC.sa.capsprofile.Application", {
           text: "Name",
           dataIndex: "name",
         },
+        {
+          text: __("SNMP"),
+          dataIndex: "enable_snmp",
+          width: 50,
+          renderer: NOC.render.Bool,
+        },
+        {
+          text: __("L2"),
+          dataIndex: "enable_l2",
+          width: 50,
+          renderer: NOC.render.Bool,
+        },
+        {
+          text: __("L3"),
+          dataIndex: "enable_l3",
+          width: 50,
+          renderer: NOC.render.Bool,
+        },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
+        },
       ],
 
       fields: [

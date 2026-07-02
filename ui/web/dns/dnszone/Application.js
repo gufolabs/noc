@@ -79,14 +79,14 @@ Ext.define("NOC.dns.dnszone.Application", {
           width: 100,
         },
         {
-          text: __("Description"),
-          dataIndex: "description",
-          flex: 1,
-        },
-        {
           text: __("Labels"),
           dataIndex: "labels",
           renderer: NOC.render.LabelField,
+        },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
         },
       ],
       fields: [

@@ -38,6 +38,11 @@ Ext.define("NOC.vc.l2domainprofile.Application", {
           width: 100,
           renderer: NOC.render.Lookup("workflow"),
         },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
+        },
       ],
 
       fields: [

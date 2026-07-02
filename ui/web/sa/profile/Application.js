@@ -9,7 +9,7 @@ console.debug("Defining NOC.sa.profile.Application");
 Ext.define("NOC.sa.profile.Application", {
   extend: "NOC.core.ModelApplication",
   requires: [
-    "NOC.core.JSONPreview",
+    "NOC.core.JSONPreviewII",
     "NOC.sa.profile.Model",
   ],
   model: "NOC.sa.profile.Model",
@@ -18,7 +18,7 @@ Ext.define("NOC.sa.profile.Application", {
   initComponent: function(){
     var me = this;
 
-    me.jsonPanel = Ext.create("NOC.core.JSONPreview", {
+    me.jsonPanel = Ext.create("NOC.core.JSONPreviewII", {
       app: me,
       restUrl: "/sa/profile/{0}/json/",
       previewName: "Profile: {0}",
@@ -31,14 +31,19 @@ Ext.define("NOC.sa.profile.Application", {
         {
           text: "Name",
           dataIndex: "name",
-          flex: 1,
+          width: 200,
         },
         {
           text: __("Builtin"),
           dataIndex: "is_builtin",
-          width: 30,
+          width: 50,
           renderer: NOC.render.Bool,
           sortable: false,
+        },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
         },
       ],
 
