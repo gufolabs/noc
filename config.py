@@ -11,6 +11,7 @@ import os
 import socket
 import sys
 import datetime
+import time
 from functools import partial, cached_property
 from urllib.parse import quote as urllib_quote
 from pathlib import Path
@@ -1164,6 +1165,7 @@ class Config(BaseConfig):
         if hasattr(self, "_applied"):
             return
         self._setup_logging()
+        self._setup_timezone()
         setattr(self, "_applied", True)
 
     def _setup_logging(self) -> None:
@@ -1185,6 +1187,11 @@ class Config(BaseConfig):
             # Initialize logger
             logging.basicConfig(stream=sys.stdout, format=self.log_format, level=self.loglevel)
         logging.captureWarnings(True)
+
+    def _setup_timezone(self) -> None:
+        """Perform timezone setup."""
+        os.environ["TZ"] = self.timezone.key
+        time.tzset()
 
     def get_customized_paths(self, *args, **kwargs):
         """
