@@ -45,6 +45,7 @@ from noc.core.config.params import (
     UUIDParameter,
     TimeZoneParameter,
 )
+from noc.core.log import ErrorFormatter
 
 SECRETS_BASE = Path("/", "run", "secrets")
 
@@ -1172,7 +1173,7 @@ class Config(BaseConfig):
         logger = logging.getLogger()
         if len(logger.handlers):
             # Logger is already initialized
-            fmt = logging.Formatter(self.log_format, None)
+            fmt = ErrorFormatter(self.log_format, None)
             for h in logging.root.handlers:
                 if isinstance(h, logging.StreamHandler):
                     h.stream = sys.stdout
@@ -1180,7 +1181,7 @@ class Config(BaseConfig):
             logging.root.setLevel(self.loglevel)
         else:
             # Initialize logger
-            logging.basicConfig(stream=sys.stdout, format=self.log_format, level=loglevel)
+            logging.basicConfig(stream=sys.stdout, format=self.log_format, level=self.loglevel)
         logging.captureWarnings(True)
 
     def get_customized_paths(self, *args, **kwargs):

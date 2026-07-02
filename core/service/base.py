@@ -34,7 +34,6 @@ import setproctitle
 # NOC modules
 from noc.config import config
 from noc.core.debug import excepthook, error_report
-from noc.core.log import ErrorFormatter
 from noc.core.perf import apply_metrics
 from noc.core.hist.monitor import apply_hists
 from noc.core.quantile.monitor import apply_quantiles
