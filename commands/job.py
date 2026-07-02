@@ -583,7 +583,3 @@ class Command(BaseCommand):
             },
         ]
         return scheduler.aggregate(pipeline)
-
-
-if __name__ == "__main__":
-    Command().run()

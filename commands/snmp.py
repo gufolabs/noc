@@ -282,7 +282,3 @@ class Command(BaseCommand):
             queue.task_done()
             if not a:
                 break
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -346,7 +346,3 @@ class Command(BaseCommand):
                 aa.clear_alarm("By manual")
         else:
             self.print("For Really remove data run commands with --force argument")
-
-
-if __name__ == "__main__":
-    Command().run()

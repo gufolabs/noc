@@ -30,7 +30,3 @@ class Command(BaseCommand):
             self.print("\n".join(sys.path))
         else:
             self.print(":".join(sys.path))
-
-
-if __name__ == "__main__":
-    Command().run()

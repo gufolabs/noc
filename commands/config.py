@@ -66,7 +66,3 @@ class Command(BaseCommand):
         self.print(f"Writing {path}")
         with open(path, "w") as fp:
             fp.write("\n".join(r))
-
-
-if __name__ == "__main__":
-    Command().run()

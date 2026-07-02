@@ -92,7 +92,3 @@ class Command(BaseCommand):
         writer.writerow(header)
         for d in Division.get_top():
             self.dump_division(writer, d, ctr, [])
-
-
-if __name__ == "__main__":
-    Command().run()

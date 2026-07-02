@@ -535,7 +535,3 @@ class Command(BaseCommand):
         except Exception:
             return None
         return next(iter(result))
-
-
-if __name__ == "__main__":
-    Command().run()

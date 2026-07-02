@@ -189,7 +189,3 @@ class Command(BaseCommand):
                     iface = link.interfaces[0]
                     iface.unlink()
             self.print("# Done.")
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -134,7 +134,3 @@ class Command(BaseCommand):
         self.printbox(f"  - cables: {result_info.created_cable}")
         self.printbox(f"  - cable connections: {result_info.created_connections_cable}")
         self.printbox_border()
-
-
-if __name__ == "__main__":
-    Command().run()

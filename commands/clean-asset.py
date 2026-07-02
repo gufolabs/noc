@@ -35,7 +35,3 @@ class Command(BaseCommand):
         for child in obj.iter_children():
             self.clean_obj(child)
         obj.delete()
-
-
-if __name__ == "__main__":
-    Command().run()

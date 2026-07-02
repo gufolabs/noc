@@ -203,7 +203,3 @@ class Command(BaseCommand):
         for a in iter_downlink_alarms(alarm):
             correlate(a)
         self.print("<<< done")
-
-
-if __name__ == "__main__":
-    Command().run()

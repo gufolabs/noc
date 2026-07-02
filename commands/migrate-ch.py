@@ -77,7 +77,3 @@ class Command(BaseCommand):
         self.connect.execute(
             post=f"CREATE DATABASE IF NOT EXISTS {config.clickhouse.db_dictionaries}", nodb=True
         )
-
-
-if __name__ == "__main__":
-    Command().run()

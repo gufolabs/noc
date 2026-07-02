@@ -127,7 +127,3 @@ class Command(BaseCommand):
                 raw_vars={"collector": "default", "message": line[:-1]},
                 repeats=1,
             )
-
-
-if __name__ == "__main__":
-    Command().run()

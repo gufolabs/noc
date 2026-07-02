@@ -43,7 +43,3 @@ class Command(BaseCommand):
             self.die("Invalid profile %s" % profile)
         prefixes = WhoisCache.resolve_as_set_prefixes_maxlen(as_set[0])
         self.print(p.get_profile().generate_prefix_list(name, prefixes))
-
-
-if __name__ == "__main__":
-    Command().run()

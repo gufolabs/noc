@@ -217,4 +217,4 @@ class BaseCommand:
         return config.loglevel <= 10  # logging.DEBUG
 
 
-command_loader = Loader[type[BaseCommand]]("noc.commands")
+command_loader = Loader[type[BaseCommand]](bases=config.iter_customized_bases("noc.commands"))

@@ -283,7 +283,3 @@ class ServiceStub:
         self.logger = logging.getLogger(__name__)
         self.address = "127.0.0.1"
         self.port = 0
-
-
-if __name__ == "__main__":
-    Command().run()

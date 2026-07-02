@@ -86,7 +86,3 @@ class Command(BaseCommand):
                 self.print("Sending message to group: %s" % g.name)
             if not dry_run:
                 g.notify(subject=subject, body=body)
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -52,7 +52,3 @@ class Command(BaseCommand):
                 print("%50s:%5d: %s" % (path, nl, todo))
                 n += 1
         return n
-
-
-if __name__ == "__main__":
-    Command().run()

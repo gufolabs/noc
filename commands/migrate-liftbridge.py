@@ -81,7 +81,3 @@ class Command(BaseCommand):
                 self.print("Ensuring stream %s" % stream)
                 changed |= await client.ensure_stream(stream, partitions=slots)
         return changed
-
-
-if __name__ == "__main__":
-    Command().run()

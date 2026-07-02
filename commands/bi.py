@@ -279,7 +279,3 @@ class Command(BaseCommand):
             table = fn.split("-", 1)[0]
             run_sync(partial(upload, table, data))
             os.unlink(path)
-
-
-if __name__ == "__main__":
-    Command().run()

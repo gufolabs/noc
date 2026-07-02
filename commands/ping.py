@@ -74,7 +74,3 @@ class Command(BaseCommand):
                 except OSError as e:
                     self.die(f"Cannot read file {fn}: {e}\n")
         return sorted(addresses)
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -58,7 +58,3 @@ class Command(BaseCommand):
         for rb in loaded_refbooks.values():
             self.print("DELETE REFBOOK: %s" % rb.name)
             rb.delete()
-
-
-if __name__ == "__main__":
-    Command().run()

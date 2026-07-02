@@ -228,7 +228,3 @@ class Command(BaseCommand):
                     rd = None  # Missed data
             self.rd_cache[object, fi] = rd
         return rd
-
-
-if __name__ == "__main__":
-    Command().run()

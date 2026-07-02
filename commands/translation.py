@@ -185,7 +185,3 @@ class Command(BaseCommand):
 def ls() -> list[str]:
     f = subprocess.Popen(["git", "ls-files"], stdout=subprocess.PIPE).stdout
     return f.read().splitlines()
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -485,7 +485,3 @@ class Command(BaseCommand):
         self.stdout.write(
             f"{address} {rtt * 1_000:.2f}ms| {';'.join('%s:%s %s' % (c.check, c.port or '', 'OK' if c.status else 'FAIL') for c in checks)}\n"
         )
-
-
-if __name__ == "__main__":
-    Command().run()

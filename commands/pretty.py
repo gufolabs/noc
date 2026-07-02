@@ -34,7 +34,3 @@ class Command(BaseCommand):
             pprint.pprint(data)
         elif format == "yaml":
             yaml.dump(data, sys.stdout)
-
-
-if __name__ == "__main__":
-    Command().run()

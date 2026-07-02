@@ -122,7 +122,3 @@ class Command(BaseCommand):
                 self.print("  %s" % c)
                 if not dry_run:
                     c.fire_event("expired")
-
-
-if __name__ == "__main__":
-    Command().run()

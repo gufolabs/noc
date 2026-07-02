@@ -147,7 +147,3 @@ class Command(BaseCommand):
 
     def convert_body(self, body):
         return body
-
-
-if __name__ == "__main__":
-    Command().run()

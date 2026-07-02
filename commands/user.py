@@ -82,7 +82,3 @@ class Command(BaseCommand):
                 perm.save()
             perm.users.add(u)
         print(passwd)
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -173,7 +173,3 @@ class Command(BaseCommand):
                     x_name = getattr(o, "name", o)
                     print(f'export "{x_name}" to {path}', file=self.stdout)
                     safe_rewrite(path, o.to_json(), mode=0o644)
-
-
-if __name__ == "__main__":
-    Command().run()

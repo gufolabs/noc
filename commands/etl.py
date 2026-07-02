@@ -278,7 +278,3 @@ class Command(BaseCommand):
                 self.print("Clean %s" % path)
                 os.unlink(path)
             self.print("# Done.")
-
-
-if __name__ == "__main__":
-    Command().run()

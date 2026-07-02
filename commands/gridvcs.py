@@ -304,7 +304,3 @@ class Command(BaseCommand):
                     self.print(f"[{mo.name}] Not found revision. Continue")
                     continue
                 self._forget(mo, r["_id"], dry_run=not approve)
-
-
-if __name__ == "__main__":
-    Command().run()

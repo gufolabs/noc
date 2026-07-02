@@ -22,7 +22,3 @@ class Command(BaseCommand):
         connect()
         runner = MigrationRunner()
         runner.migrate()
-
-
-if __name__ == "__main__":
-    Command().run()

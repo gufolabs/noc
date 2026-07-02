@@ -349,7 +349,3 @@ class Command(BaseCommand):
                 data = orjson.loads(fp.read())
             stats = Stats.from_json(path, data["stats"])
             self.print(str(stats))
-
-
-if __name__ == "__main__":
-    Command().run()

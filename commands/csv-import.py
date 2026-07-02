@@ -81,7 +81,3 @@ class Command(BaseCommand):
                 if count is None:
                     raise CommandError(error)
                 print("... %d rows imported/updated" % count)
-
-
-if __name__ == "__main__":
-    Command().run()

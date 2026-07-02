@@ -281,7 +281,3 @@ class Command(BaseCommand):
                         )
 
         run_sync(subscriber)
-
-
-if __name__ == "__main__":
-    Command().run()

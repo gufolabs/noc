@@ -220,7 +220,3 @@ class Command(BaseCommand):
                 self.die("Managed Object not found")
         confdb = mo.get_confdb(cleanup=not show_hints)
         self.print(confdb.dump())
-
-
-if __name__ == "__main__":
-    Command().run()

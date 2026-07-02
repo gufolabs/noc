@@ -138,7 +138,3 @@ class Command(BaseCommand):
         # Upload
         if d["data"]:
             mib.load_data(d["data"])
-
-
-if __name__ == "__main__":
-    Command().run()

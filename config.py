@@ -1225,7 +1225,24 @@ class Config(BaseConfig):
             return [rpath, cpath]
         return [rpath]
 
-    def iter_customized_modules(self, name: str, prefer_custom=True) -> Iterable[ModuleType]:
+    def iter_customized_bases(self, name: str, prefer_custom: bool = True) -> Iterable[str]:
+        """
+        Iterate module string names.
+
+        For use in loader.
+        """
+        if not name.startswith("noc."):
+            return
+        c_name = f"noc.custom.{name[4:]}"
+        if self.path.custom_path and prefer_custom:
+            yield c_name
+        yield name
+        if self.path.custom_path and not prefer_custom:
+            yield c_name
+
+    def iter_customized_modules(
+        self, name: str, prefer_custom: bool = True
+    ) -> Iterable[ModuleType]:
         """
         Iterate module instances.
 

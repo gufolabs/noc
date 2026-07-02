@@ -33,7 +33,3 @@ class Command(BaseCommand):
         print("TIME      : %04d-%02d-%02d %02d:%02d:%02d" % ts[:6])
         print("-" * 72)
         print(data.get("traceback"))
-
-
-if __name__ == "__main__":
-    Command().run()
