@@ -1092,7 +1092,6 @@ class Config(BaseConfig):
     # pylint: disable=super-init-not-called
     def __init__(self, rewrites: Iterable[BaseRewrite] | None = None):
         super().__init__(rewrites=rewrites)
-        self.setup_logging()
 
     @property
     def pg_connection_args(self) -> dict[str, str | int]:
@@ -1152,12 +1151,24 @@ class Config(BaseConfig):
             self._mongo_connection_args["uuidRepresentation"] = "pythonLegacy"
         return self._mongo_connection_args
 
-    def setup_logging(self, loglevel=None):
+    def setup(self) -> None:
+        """
+        Apply settings according to config.
+
+        Must be called explicitly to apply configured system settings.
+
+        Set up:
+        * logging
+        """
+        if hasattr(self, "_applied"):
+            return
+        self._setup_logging()
+        setattr(self, "_applied", True)
+
+    def _setup_logging(self) -> None:
         """
         Create new or setup existing logger
         """
-        if not loglevel:
-            loglevel = self.loglevel
         logger = logging.getLogger()
         if len(logger.handlers):
             # Logger is already initialized
@@ -1166,7 +1177,7 @@ class Config(BaseConfig):
                 if isinstance(h, logging.StreamHandler):
                     h.stream = sys.stdout
                 h.setFormatter(fmt)
-            logging.root.setLevel(loglevel)
+            logging.root.setLevel(self.loglevel)
         else:
             # Initialize logger
             logging.basicConfig(stream=sys.stdout, format=self.log_format, level=loglevel)
@@ -1306,4 +1317,3 @@ config = Config(
     ]
 )
 config.load()
-config.setup_logging()

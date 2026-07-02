@@ -109,13 +109,6 @@ class BaseService:
 
     LOG_FORMAT = config.log_format
 
-    LOG_LEVELS = {
-        "critical": logging.CRITICAL,
-        "error": logging.ERROR,
-        "warning": logging.WARNING,
-        "info": logging.INFO,
-        "debug": logging.DEBUG,
-    }
     DEFAULT_SHARDING_KEY = "managed_object"
     SHARDING_KEYS = {"span": "ctx"}
 
@@ -174,9 +167,8 @@ class BaseService:
         parser.add_argument(
             "--loglevel",
             action="store",
-            choices=list(self.LOG_LEVELS),
+            choices=["critical", "error", "warning", "info", "debug"],
             dest="loglevel",
-            default=config.loglevel,
             help="Logging level",
         )
         parser.add_argument(
@@ -215,28 +207,6 @@ class BaseService:
         sys.stdout.flush()
         os._exit(1)
 
-    def setup_logging(self, loglevel=None):
-        """
-        Create new or setup existing logger
-        """
-        # @todo: Duplicates config.setup_logging
-        if not loglevel:
-            loglevel = config.loglevel
-        logger = logging.getLogger()
-        if len(logger.handlers):
-            # Logger is already initialized
-            fmt = ErrorFormatter(self.LOG_FORMAT, None)
-            for h in logging.root.handlers:
-                if isinstance(h, logging.StreamHandler):
-                    h.stream = sys.stdout
-                h.setFormatter(fmt)
-            logging.root.setLevel(loglevel)
-        else:
-            # Initialize logger
-            logging.basicConfig(stream=sys.stdout, format=self.LOG_FORMAT, level=loglevel)
-        self.logger = logging.getLogger(self.name)
-        logging.captureWarnings(True)
-
     def setup_test_logging(self):
         self.logger = logging.getLogger(self.name)
 
@@ -250,14 +220,7 @@ class BaseService:
             if "_" not in DEFAULT_NAMESPACE:
                 DEFAULT_NAMESPACE["_"] = ugettext
 
-    def on_change_loglevel(self, old_value, new_value):
-        if new_value not in self.LOG_LEVELS:
-            self.logger.error("Invalid loglevel '%s'. Ignoring", new_value)
-            return
-        self.logger.warning("Changing loglevel to %s", new_value)
-        logging.getLogger().setLevel(self.LOG_LEVELS[new_value])
-
-    def log_separator(self, symbol="*", length=72):
+    def log_separator(self, symbol: str = "*", length: int = 72) -> None:
         """
         Log a separator string to visually split log
         """
@@ -296,7 +259,12 @@ class BaseService:
         cmd_options = vars(options)
         cmd_options.pop("args", ())
         # Bootstrap logging with --loglevel
-        self.setup_logging(cmd_options["loglevel"])
+        # Apply --loglevel when necessary
+        loglevel = cmd_options.get("loglevel")
+        if loglevel:
+            config.loglevel = loglevel
+        # Apply configuration setup
+        config.setup()
         self.log_separator()
         # Setup timezone
         try:

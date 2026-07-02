@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # CLI Command
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -66,11 +66,14 @@ class BaseCommand:
         args = cmd_options.pop("args", ())
         loglevel = cmd_options.pop("loglevel")
         if loglevel:
-            self.setup_logging(loglevel)
+            config.loglevel = loglevel
         enable_profiling = cmd_options.pop("enable_profiling", False)
         show_metrics = cmd_options.pop("show_metrics", False)
         show_usage = cmd_options.pop("show_usage", False)
         self.no_progressbar = cmd_options.pop("no_progressbar", False)
+        # Apply config settings
+        config.setup()
+        # Run
         if enable_profiling:
             # Start profiler
             import yappi
@@ -169,37 +172,6 @@ class BaseCommand:
 
     def die(self, msg: str) -> NoReturn:
         raise CommandError(msg)
-
-    def setup_logging(self, loglevel: str) -> None:
-        """
-        Set loglevel
-        """
-        import logging
-
-        level = {
-            "critical": logging.CRITICAL,
-            "error": logging.ERROR,
-            "warning": logging.WARNING,
-            "info": logging.INFO,
-            "debug": logging.DEBUG,
-            "none": logging.NOTSET,
-        }[loglevel]
-        # Get Root logger
-        logger = logging.getLogger()
-        if logger.level != level:
-            logger.setLevel(level)
-        logging.captureWarnings(True)
-        fmt = logging.Formatter(self.LOG_FORMAT, None)
-        for h in logger.handlers:
-            h.setFormatter(fmt)
-        for lg in logger.manager.loggerDict.values():
-            if isinstance(lg, logging.Logger) and lg.name.startswith("pymongo"):
-                # Fix spam debug messages on pymongo
-                lg.setLevel(logging.INFO)
-                continue
-            if hasattr(lg, "setLevel"):
-                lg.setLevel(level)
-        self.is_debug = level <= logging.DEBUG
 
     def progress(self, iter, max_value=None):
         """
