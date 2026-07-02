@@ -46,6 +46,7 @@ from noc.core.config.params import (
     TimeZoneParameter,
 )
 
+
 SECRETS_BASE = Path("/", "run", "secrets")
 
 
@@ -1092,7 +1093,6 @@ class Config(BaseConfig):
     # pylint: disable=super-init-not-called
     def __init__(self, rewrites: Iterable[BaseRewrite] | None = None):
         super().__init__(rewrites=rewrites)
-        self.setup_logging()
 
     @property
     def pg_connection_args(self) -> dict[str, str | int]:
@@ -1152,24 +1152,38 @@ class Config(BaseConfig):
             self._mongo_connection_args["uuidRepresentation"] = "pythonLegacy"
         return self._mongo_connection_args
 
-    def setup_logging(self, loglevel=None):
+    def setup(self) -> None:
+        """
+        Apply settings according to config.
+
+        Must be called explicitly to apply configured system settings.
+
+        Set up:
+        * logging
+        """
+        if hasattr(self, "_applied"):
+            return
+        self._setup_logging()
+        setattr(self, "_applied", True)
+
+    def _setup_logging(self) -> None:
         """
         Create new or setup existing logger
         """
-        if not loglevel:
-            loglevel = self.loglevel
         logger = logging.getLogger()
         if len(logger.handlers):
+            from noc.core.log import ErrorFormatter
+
             # Logger is already initialized
-            fmt = logging.Formatter(self.log_format, None)
+            fmt = ErrorFormatter(self.log_format, None)
             for h in logging.root.handlers:
                 if isinstance(h, logging.StreamHandler):
                     h.stream = sys.stdout
                 h.setFormatter(fmt)
-            logging.root.setLevel(loglevel)
+            logging.root.setLevel(self.loglevel)
         else:
             # Initialize logger
-            logging.basicConfig(stream=sys.stdout, format=self.log_format, level=loglevel)
+            logging.basicConfig(stream=sys.stdout, format=self.log_format, level=self.loglevel)
         logging.captureWarnings(True)
 
     def get_customized_paths(self, *args, **kwargs):
@@ -1306,4 +1320,3 @@ config = Config(
     ]
 )
 config.load()
-config.setup_logging()
