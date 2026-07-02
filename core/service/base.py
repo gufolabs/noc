@@ -40,7 +40,6 @@ from noc.core.quantile.monitor import apply_quantiles
 from noc.core.dcs.loader import get_dcs, DEFAULT_DCS
 from noc.core.threadpool import ThreadPoolExecutor
 from noc.core.span import get_spans, span_to_dict
-from noc.core.tz import setup_timezone
 from noc.core.msgstream.client import MessageStreamClient
 from noc.core.msgstream.queue import MessageStreamQueue
 from noc.core.msgstream.queuebuffer import QBuffer
@@ -265,12 +264,6 @@ class BaseService:
         # Apply configuration setup
         config.setup()
         self.log_separator()
-        # Setup timezone
-        try:
-            self.logger.info("Setting timezone to %s", config.timezone)
-            setup_timezone()
-        except ValueError as e:
-            self.die(str(e))
         # Setup title
         self.set_proc_title()
         # Setup signal handlers
