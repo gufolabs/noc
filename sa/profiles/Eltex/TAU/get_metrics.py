@@ -1,11 +1,12 @@
 # ----------------------------------------------------------------------
 # Eltex.TAU.get_metrics
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # NOC modules
+from noc.core.script.metrics import percent
 from noc.sa.profiles.Generic.get_metrics import Script as GetMetricsScript, metrics
 
 
@@ -35,95 +36,39 @@ class Script(GetMetricsScript):
         volatile=False,
         access="S",
     )
-    def get_memory_free(self, metrics):
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.9.5.0", cached=True)
-        if v:
-            mem_usage = float(v[:-2]) / 446.44
-            self.set_metric(
-                id=("Memory | Usage", None),
-                value=int(mem_usage),
-                multi=True,
-                units="%",
-            )
+    def get_memory_usage(self, metrics):
+        mem_real = self.snmp.get("1.3.6.1.4.1.2021.4.5.0", cached=True)  # memTotalReal
+        mem_free = self.snmp.get("1.3.6.1.4.1.2021.4.11.0", cached=True)  # memTotalFree
+        mem_usage = percent(mem_real - mem_free, mem_real)
+        self.set_metric(
+            id=("Memory | Usage", None),
+            value=int(mem_usage),
+            multi=True,
+            units="%",
+        )
 
     @metrics(
-        ["Environment | Temperature"],
+        [
+            "Telephony | Voice | Calls Count",
+            "Telephony | Voice | Lost Packets",
+            "Telephony | Voice | Peak Jitter",
+        ],
         volatile=False,
         access="S",
     )
-    def get_temperature(self, metrics):
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.9.10.5.0", cached=True)
-        if v:
+    def get_voice_metrics(self, metrics):
+        metric_oid_map = {
+            "Telephony | Voice | Calls Count": "1.3.6.1.4.1.35265.1.9.23.1.3",
+            "Telephony | Voice | Lost Packets": "1.3.6.1.4.1.35265.1.9.23.1.6",
+            "Telephony | Voice | Peak Jitter": "1.3.6.1.4.1.35265.1.9.23.1.5",
+        }
+        m = metrics[0]
+        metric_oid = metric_oid_map[m.metric]
+        t = self.snmp.get_tables([metric_oid], bulk=True)
+        for port_id, value in t:
             self.set_metric(
-                id=("Environment | Temperature", None),
-                labels=["noc::sensor::Temperature 1"],
-                value=v,
-                multi=True,
-                units="C",
-            )
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.9.10.6.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Temperature", None),
-                labels=["noc::sensor::Temperature 2"],
-                value=v,
-                multi=True,
-                units="C",
-            )
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.9.10.7.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Temperature", None),
-                labels=["noc::sensor::Temperature 3"],
-                value=v,
-                multi=True,
-                units="C",
-            )
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.9.10.8.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Temperature", None),
-                labels=["noc::sensor::Temperature 4"],
-                value=v,
-                multi=True,
-                units="C",
-            )
-
-    @metrics(
-        ["Environment | Sensor Status"],
-        volatile=False,
-        access="S",
-    )
-    def get_sensor_status(self, metrics):
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.9.10.9.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Sensor Status", None),
-                labels=["noc::sensor::Fan State"],
-                value=v,
-                multi=True,
-            )
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.9.10.10.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Sensor Status", None),
-                labels=["noc::sensor::Fan 1 Rotate"],
-                value=v,
-                multi=True,
-            )
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.9.10.11.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Sensor Status", None),
-                labels=["noc::sensor::Fan 2 Rotate"],
-                value=v,
-                multi=True,
-            )
-        v = self.snmp.get("1.3.6.1.4.1.35265.1.9.10.14.0", cached=True)
-        if v:
-            self.set_metric(
-                id=("Environment | Sensor Status", None),
-                labels=["noc::sensor::Device Power (ac/dc)"],
-                value=v,
+                id=(m.metric, None),
+                labels=[f"noc::voice::port::{port_id}"],
+                value=value,
                 multi=True,
             )
