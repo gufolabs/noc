@@ -948,8 +948,10 @@ Ext.define("NOC.sa.managedobject.Controller", {
   },
   onExportBasket: function(){
     var date = "_" + Ext.Date.format(new Date(), "YmdHis"),
-      filename = this.getView().appId.replace(/\./g, "_") + date + ".csv";
-    this.save(this.lookupReference("saManagedobjectSelectedGrid1"), filename);
+      filename = this.getView().appId.replace(/\./g, "_") + date + ".csv",
+      grid = this.lookupReference("saManagedobjectSelectedGrid1");
+    grid.plugins = undefined;
+    this.save(grid, filename);
   },
   cleanSearchField: function(field){
     field.setValue(null);
