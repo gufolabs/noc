@@ -12,6 +12,7 @@ from time import perf_counter_ns
 import functools
 import os
 import sys
+import warnings
 
 # Third-party modules
 import pytest
@@ -32,6 +33,7 @@ _stats = None
 _durations: defaultdict[str, int] = defaultdict(int)
 _counts: defaultdict[str, int] = defaultdict(int)
 _start_times: dict[str, int] = {}
+_deprecations: defaultdict[str, int] = defaultdict(int)
 
 
 def _setup_config() -> None:
@@ -72,6 +74,13 @@ def pytest_runtest_teardown(item: pytest.Item, nextitem: pytest.Item):
     func_name: str = item.originalname or item.name.split("[")[0]
     _durations[func_name] += duration
     _counts[func_name] += 1
+
+
+def pytest_warning_recorded(
+    warning_message: warnings.WarningMessage, when: str, nodeid: str, location: Any
+) -> None:
+    msg = f"{warning_message.category.__name__}[{warning_message.message}]"
+    _deprecations[msg] += 1
 
 
 def with_timing(name: str):
@@ -127,6 +136,12 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
             label = f"{label} (x{other_count})"
         terminalreporter.write_line(f"{label:<40} {other_time:.3f}s ({percent:.3f}%)")
     terminalreporter.write_line(f"Total: {total:.3f}s")
+    if _deprecations:
+        terminalreporter.write_sep("=", "Deprecations summary")
+        total = sum(_deprecations.values())
+        for dep_msg, count in sorted(_deprecations.items(), key=lambda x: x[1], reverse=True):
+            terminalreporter.write_line(f"{dep_msg:<40}: {count}")
+        terminalreporter.write_line(f"Total: {total}")
     _stats = terminalreporter.stats
 
 
