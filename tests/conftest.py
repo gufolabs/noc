@@ -7,7 +7,7 @@
 
 # Python modules
 from collections import defaultdict
-from typing import Any, TextIO
+from typing import Any, TextIO, Callable
 from time import perf_counter_ns
 import functools
 import os
@@ -33,7 +33,9 @@ _stats = None
 _durations: defaultdict[str, int] = defaultdict(int)
 _counts: defaultdict[str, int] = defaultdict(int)
 _start_times: dict[str, int] = {}
-_original_showwarning = None
+_original_showwarning: (
+    Callable[[Warning, type[Warning], str, int, TextIO | None, str | None], None] | None
+) = None
 _deprecations: defaultdict[type[DeprecationWarning], int] = defaultdict(int)
 
 
@@ -347,7 +349,7 @@ def _show_warning(
     lineno: int,
     file: TextIO | None = None,
     line: str | None = None,
-):
+) -> None:
     """Collect deprecation warnings"""
     global _deprecations
     if issubclass(category, DeprecationWarning):
