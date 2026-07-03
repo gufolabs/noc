@@ -17,10 +17,11 @@ from bson import ObjectId
 
 logger = logging.getLogger(__name__)
 
-DB_TYPE = DjangoModel | Document
+DB_MODEL_INSTANCE = DjangoModel | Document
+DB_MODEL_TYPE = type[DjangoModel] | type[Document]
 
 
-def is_document(obj: DB_TYPE) -> bool:
+def is_document(obj: DB_MODEL_INSTANCE) -> bool:
     """
     Check object is mongoengine document.
 
@@ -33,7 +34,7 @@ def is_document(obj: DB_TYPE) -> bool:
     return getattr(obj, "_is_document", False)
 
 
-def get_model_id(obj: DB_TYPE) -> str:
+def get_model_id(obj: DB_MODEL_INSTANCE) -> str:
     """
     Returns model id for instance object.
 
@@ -53,7 +54,7 @@ def get_model_id(obj: DB_TYPE) -> str:
     return f"{app}.{model}"
 
 
-def get_model(model_id: str) -> DB_TYPE:
+def get_model(model_id: str) -> DB_MODEL_TYPE:
     """
     Returns model/document class for given model id
     """
@@ -69,7 +70,7 @@ def get_model(model_id: str) -> DB_TYPE:
     return m
 
 
-def get_object(model_id: str, object_id: int | str | ObjectId) -> DB_TYPE:
+def get_object(model_id: str, object_id: int | str | ObjectId) -> DB_MODEL_INSTANCE:
     """
     Return an object instance or None
     """
@@ -93,7 +94,7 @@ def iter_model_id() -> Iterable[str]:
 
 
 # Model cache: model_id -> class
-_MCACHE: dict[str, DB_TYPE] = {}
+_MCACHE: dict[str, DB_MODEL_TYPE] = {}
 
 _MODELS = {
     # aaa models
