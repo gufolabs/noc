@@ -141,7 +141,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
         total = sum(_deprecations.values())
         for dep_msg, count in sorted(_deprecations.items(), key=lambda x: x[1], reverse=True):
             terminalreporter.write_line(f"{dep_msg:<40}: {count}")
-        terminalreporter.write_line(f"Total: {total:.5d}")
+        terminalreporter.write_line(f"Total: {total}")
     _stats = terminalreporter.stats
 
 
