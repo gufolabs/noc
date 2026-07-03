@@ -7,7 +7,7 @@
 
 # Python modules
 from collections import defaultdict
-from typing import Any, TextIO, Callable
+from typing import Any
 from time import perf_counter_ns
 import functools
 import os
