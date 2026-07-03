@@ -1,44 +1,60 @@
 # ---------------------------------------------------------------------
 # NOC models lazy loading and utilities
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import logging
+import importlib
 from typing import Iterable
 
 # Third-party modules
-from typing import Any
+from django.db.models import Model as DjangoModel
+from mongoengine.document import Document
+from bson import ObjectId
 
 logger = logging.getLogger(__name__)
 
-
-def is_document(object):
-    """
-    Check object is mongoengine document
-    :param object:
-    :return:
-    """
-    return getattr(object, "_is_document", False)
+DB_MODEL_INSTANCE = DjangoModel | Document
+DB_MODEL_TYPE = type[DjangoModel] | type[Document]
 
 
-def get_model_id(object):
+def is_document(obj: DB_MODEL_INSTANCE) -> bool:
     """
-    Returns model id for instance object
+    Check object is mongoengine document.
+
+    Args:
+        obj: Django model instance or mongoengine document.
+
+    Returns:
+        True: if obj is document.
     """
-    if is_document(object):
+    return getattr(obj, "_is_document", False)
+
+
+def get_model_id(obj: DB_MODEL_INSTANCE) -> str:
+    """
+    Returns model id for instance object.
+
+    Args:
+        obj: Django model or mongoengine document.
+
+    Returns:
+        Model id in form `<module>.<model>`
+    """
+    if is_document(obj):
         # Document
-        app = object.__module__.split(".")[1]
-        model = object._class_name
+        app = obj.__module__.split(".")[1]
+        model = obj._class_name
     else:
-        app = object._meta.app_label if object._meta.app_label != "auth" else "main"
-        model = object._meta.object_name
+        app = obj._meta.app_label if obj._meta.app_label != "auth" else "main"
+        model = obj._meta.object_name
     return f"{app}.{model}"
 
 
-def get_model(model_id):
+def get_model(model_id: str) -> DB_MODEL_TYPE:
     """
     Returns model/document class for given model id
     """
@@ -48,13 +64,13 @@ def get_model(model_id):
         logger.debug("Loading model %s", model_id)
         mp = _MODELS[model_id]
         mod_name, cls_name = mp.rsplit(".", 1)
-        mod = __import__(mod_name, {}, {}, [cls_name])
+        mod = importlib.import_module(mod_name)
         m = getattr(mod, cls_name)
         _MCACHE[model_id] = m
     return m
 
 
-def get_object(model_id, object_id):
+def get_object(model_id: str, object_id: int | str | ObjectId) -> DB_MODEL_INSTANCE:
     """
     Return an object instance or None
     """
@@ -65,7 +81,7 @@ def get_object(model_id, object_id):
         return None
 
 
-def load_models():
+def load_models() -> None:
     for alias in _MODELS:
         get_model(alias)
 
@@ -78,7 +94,7 @@ def iter_model_id() -> Iterable[str]:
 
 
 # Model cache: model_id -> class
-_MCACHE: dict[str, Any] = {}
+_MCACHE: dict[str, DB_MODEL_TYPE] = {}
 
 _MODELS = {
     # aaa models
