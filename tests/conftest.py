@@ -33,22 +33,7 @@ _stats = None
 _durations: defaultdict[str, int] = defaultdict(int)
 _counts: defaultdict[str, int] = defaultdict(int)
 _start_times: dict[str, int] = {}
-_original_showwarning: (
-    Callable[[Warning, type[Warning], str, int, TextIO | None, str | None], None] | None
-) = None
-_deprecations: defaultdict[type[DeprecationWarning], int] = defaultdict(int)
-
-
-def pytest_sessionstart(session: pytest.Session) -> None:
-    global _original_showwarning
-    _original_showwarning = warnings.showwarning
-    # Show all deprecation warnings
-    warnings.simplefilter("always", DeprecationWarning)
-    warnings.showwarning = _show_warning
-
-
-def pytest_sessionfinish(session: pytest.Session, exitstatus: pytest.ExitCode) -> None:
-    warnings.showwarning = _original_showwarning
+_deprecations: defaultdict[str, int] = defaultdict(int)
 
 
 def _setup_config() -> None:
@@ -89,6 +74,13 @@ def pytest_runtest_teardown(item: pytest.Item, nextitem: pytest.Item):
     func_name: str = item.originalname or item.name.split("[")[0]
     _durations[func_name] += duration
     _counts[func_name] += 1
+
+
+def pytest_warning_recorded(
+    warning_message: warnings.WarningMessage, when: str, nodeid: str, location: Any
+) -> None:
+    msg = f"{warning_message.category.__name__}[{warning_message.message}]"
+    _deprecations[msg] += 1
 
 
 def with_timing(name: str):
@@ -146,8 +138,8 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
     terminalreporter.write_line(f"Total: {total:.3f}s")
     if _deprecations:
         terminalreporter.write_sep("=", "Deprecations summary")
-        for dep_type, count in sorted(_deprecations.items(key=lambda x: x[1], reverse=True)):
-            terminalreporter.write_line(f"{dep_type:<20}: {count}")
+        for dep_msg, count in sorted(_deprecations.items(), key=lambda x: x[1], reverse=True):
+            terminalreporter.write_line(f"{dep_msg:<40}: {count}")
     _stats = terminalreporter.stats
 
 
@@ -340,18 +332,3 @@ def _load_data(data: list[dict[str, Any]]) -> None:
     for k in m2m:
         for r in m2m[k]:
             getattr(d, k).add(r)
-
-
-def _show_warning(
-    message: Warning,
-    category: type[Warning],
-    filename: str,
-    lineno: int,
-    file: TextIO | None = None,
-    line: str | None = None,
-) -> None:
-    """Collect deprecation warnings"""
-    global _deprecations
-    if issubclass(category, DeprecationWarning):
-        _deprecations[type(message)] += 1
-    return _original_showwarning(message, category, filename, lineno, file=file, line=line)
