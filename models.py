@@ -21,7 +21,7 @@ DB_MODEL_INSTANCE = DjangoModel | Document
 DB_MODEL_TYPE = type[DjangoModel] | type[Document]
 
 
-def is_document(obj: DB_MODEL_INSTANCE) -> bool:
+def is_document(obj: DB_MODEL_INSTANCE | DB_MODEL_TYPE) -> bool:
     """
     Check object is mongoengine document.
 
@@ -34,7 +34,7 @@ def is_document(obj: DB_MODEL_INSTANCE) -> bool:
     return getattr(obj, "_is_document", False)
 
 
-def get_model_id(obj: DB_MODEL_INSTANCE) -> str:
+def get_model_id(obj: DB_MODEL_INSTANCE | DB_MODEL_TYPE) -> str:
     """
     Returns model id for instance object.
 
