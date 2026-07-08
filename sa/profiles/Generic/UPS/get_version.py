@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
-# NOC.UPS.get_version
+# Generic.UPS.get_version
 # ----------------------------------------------------------------------
 # Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Python modules
+import re
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -12,7 +15,7 @@ from noc.core.mib import mib
 
 
 class Script(BaseScript):
-    name = "NOC.UPS.get_version"
+    name = "Generic.UPS.get_version"
     interface = IGetVersion
     cache = True
 
@@ -24,7 +27,7 @@ class Script(BaseScript):
     def execute_snmp(self):
         vendor = self.snmp.get(self.MANUFACTURER_OID).strip() or "Generic"
         model = self.snmp.get(self.MODEL_OID).strip() or "NOCUPS"
-        # ups_software = self.snmp.get(self.UPS_SOFTWARE_VER_OID).strip()
+        ups_software = self.snmp.get(self.UPS_SOFTWARE_VER_OID).strip()
         ups_agent_software = self.snmp.get(self.AGENT_SOFTWARE_VER_OID).strip()
 
         return {

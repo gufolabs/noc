@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------
-# NOC.UPS.get_capabilities
+# Generic.UPS.get_capabilities
 # ---------------------------------------------------------------------
 # Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
@@ -10,7 +10,7 @@ from noc.sa.profiles.Generic.get_capabilities import Script as BaseScript
 
 
 class Script(BaseScript):
-    name = "NOC.UPS.get_capabilities"
+    name = "Generic.UPS.get_capabilities"
 
     def execute_platform_snmp(self, caps):
         caps["Device | UPS"] = True
