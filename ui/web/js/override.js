@@ -231,6 +231,74 @@ Ext.define("EXTJS-15862.tab.Bar", {
 //   },
 // });
 
+//
+// Disable the per-grid/tree load mask globally. Store traffic now flows
+// through NOC.api and is indicated by the shared #noc-api-bar spinner,
+// so the local overlay is redundant.
+//
+Ext.override(Ext.panel.Table, {
+  loadMask: false,
+});
+
+//
+// Route Ext.data.Connection.request (and therefore Ext.Ajax and all
+// Ext.data.proxy.Ajax / Rest proxies used by stores and combos) through
+// NOC.api.requestLegacy — a fetch-based transport. This eliminates the
+// last XHR path in the app and unifies store/proxy traffic with the
+// #noc-api-bar in-flight indicator.
+//
+Ext.override(Ext.data.Connection, {
+  request: function(options){
+    options = options || {};
+    var scope = options.scope,
+      origSuccess = options.success,
+      origFailure = options.failure,
+      origCallback = options.callback,
+      url = options.url,
+      hasBody = options.jsonData !== undefined
+                || options.rawData !== undefined
+                || options.params !== undefined,
+      method = (options.method || (hasBody ? "POST" : "GET")).toUpperCase(),
+      params = options.params;
+
+    // GET requests carry params in the query string, not the body
+    if(method === "GET" && params !== undefined){
+      var qs = typeof params === "string" ? params : Ext.Object.toQueryString(params);
+      if(qs){
+        url = url + (url.indexOf("?") === -1 ? "?" : "&") + qs;
+      }
+      params = undefined;
+    }
+
+    NOC.api.requestLegacy({
+      url: url,
+      method: method,
+      jsonData: options.jsonData,
+      params: params,
+      defaultPostHeader: options.defaultPostHeader,
+      success: function(response){
+        if(typeof origSuccess === "function"){
+          origSuccess.call(scope, response, options);
+        }
+        if(typeof origCallback === "function"){
+          origCallback.call(scope, options, true, response);
+        }
+      },
+      failure: function(response){
+        if(typeof origFailure === "function"){
+          origFailure.call(scope, response, options);
+        }
+        if(typeof origCallback === "function"){
+          origCallback.call(scope, options, false, response);
+        }
+      },
+    });
+
+    // Stub handle: current fetch-based transport does not expose abort()
+    return {abort: Ext.emptyFn, isLoading: function(){ return false; }};
+  },
+});
+
 Ext.define("Override.grid.header.Container", {
   override: "Ext.grid.header.Container",
     
