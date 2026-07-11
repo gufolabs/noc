@@ -440,7 +440,6 @@ Ext.define("NOC.core.label.LabelField", {
 
     Ext.destroy(
       me.componentLayout,
-      me.loadMask,
       me.floatingDescendants,
     );
   },
