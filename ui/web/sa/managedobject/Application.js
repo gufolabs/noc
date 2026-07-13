@@ -336,6 +336,7 @@ Ext.define("NOC.sa.managedobject.Application", {
               stateful: true,
               stateId: "sa.managedobject-selected1-grid",
               reference: "saManagedobjectSelectedGrid1",
+              bufferedRenderer: false,
               region: "east",
               width: "50%",
               collapsed: true,
