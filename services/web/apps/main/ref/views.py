@@ -1,13 +1,12 @@
 # ---------------------------------------------------------------------
 # main.ref application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import os
-import re
 import operator
 
 # Third-party modules
