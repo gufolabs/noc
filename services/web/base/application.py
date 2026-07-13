@@ -81,6 +81,34 @@ def view(url, access, url_name=None, menu=None, method=None, validate=None, api=
     return decorate
 
 
+class BoundView:
+    """
+    Callable wrapper for a bound method that prevents descriptor binding.
+
+    Views are stored as attributes on application classes. A regular function
+    assigned to a class becomes a descriptor and receives the application
+    instance as the first argument when called. This is not desired for views
+    backed by already bound methods, because the method instance is already
+    captured by the bound method itself.
+
+    This wrapper keeps the callable object semantics of ``functools.partial``
+    used previously: calls are forwarded directly to the original bound method
+    without adding an extra ``self`` argument.
+
+    Attributes:
+        func: Original bound method.
+        __self__: Instance the original method is bound to.
+    """
+
+    def __init__(self, func):
+        self.func = func
+        self.__self__ = func.__self__
+        functools.update_wrapper(self, func)
+
+    def __call__(self, *args, **kwargs):
+        return self.func(*args, **kwargs)
+
+
 class ApplicationBase(type):
     """
     Application metaclass. Registers application class to site
@@ -164,11 +192,8 @@ class Application(metaclass=ApplicationBase):
         validate=None,
         api=False,
     ):
-        # Create function wrapper to avoid binding as method
-        def f(*args, **kwargs):
-            return func(*args, **kwargs)
-
-        functools.update_wrapper(f, func)
+        # wrap view
+        f = BoundView(func)
         # Add to class
         cls.add_to_class(
             name,
