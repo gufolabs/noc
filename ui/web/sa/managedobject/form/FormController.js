@@ -335,7 +335,7 @@ Ext.define("NOC.sa.managedobject.form.FormController", {
             message = "Internal error";
           }
           NOC.error(message);
-          this.unmask();
+          this.getView().unmask();
         },
       });
     }
