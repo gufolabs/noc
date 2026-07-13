@@ -440,6 +440,15 @@ Ext.define("NOC.sa.serviceprofile.Application", {
                   },
                   width: 200,
                 },
+
+                {
+                  text: __("Remote System"),
+                  dataIndex: "remote_system",
+                  width: 200,
+                  editor: "main.remotesystem.LookupField",
+                  allowBlank: true,
+                  renderer: NOC.render.Lookup("remote_system"),
+                },                
                 {
                   text: __("Ref. Only"),
                   dataIndex: "required_reference",
