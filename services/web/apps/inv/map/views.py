@@ -563,7 +563,17 @@ class MapApplication(ExtApplication):
 
     @classmethod
     @cachedmethod(key="managedobject-name-to-id-%s", lock=lambda _: tags_lock)
-    def managedobject_name_to_id(cls, name):
+    def managedobject_name_to_id(cls, name: str) -> int | None:
+        """
+        Get managed object's id by name.
+
+        Args:
+            name: Managed Object's name.
+
+        Returns:
+            ManagedObject id: if found.
+            None: otherwise.
+        """
         r = ManagedObject.objects.filter(name=name).values_list("id")
         if r:
             return r[0][0]
@@ -571,9 +581,22 @@ class MapApplication(ExtApplication):
 
     @classmethod
     @cachedmethod(key="interface-tags-to-id-%s-%s", lock=lambda _: tags_lock)
-    def interface_tags_to_id(cls, object_name, interface_name):
+    def interface_tags_to_id(cls, object_name: str, interface_name: str) -> ObjectId | None:
+        """
+        Get interface id.
+
+        Args:
+            object_name: Managed object name.
+            interface_name: Interface name.
+
+        Returns:
+            Interface id: if found.
+            None: if interface is not found.
+        """
         mo = cls.managedobject_name_to_id(object_name)
-        i = Interface._get_collection().find_one({"managed_object": mo, "name": interface_name})
+        i = Interface._get_collection().find_one(
+            {"managed_object": mo, "name": interface_name}, {"_id": 1}
+        )
         if i:
             return i["_id"]
         return None
