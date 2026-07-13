@@ -164,10 +164,11 @@ class Application(metaclass=ApplicationBase):
         validate=None,
         api=False,
     ):
-        # Decorate function to clear attributes
-        f = functools.partial(func)
-        f.__self__ = func.__self__
-        f.__name__ = func.__name__
+        # Create function wrapper to avoid binding as method
+        def f(*args, **kwargs):
+            return func(*args, **kwargs)
+
+        functools.update_wrapper(f, func)
         # Add to class
         cls.add_to_class(
             name,
