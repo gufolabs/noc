@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 // sa.serviceprofile application
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2024 The NOC Project
+// Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 console.debug("Defining NOC.sa.serviceprofile.Application");
@@ -13,7 +13,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
     "NOC.sa.serviceprofile.Model",
     "NOC.sa.serviceprofile.LookupField",
     "NOC.sa.capsprofile.LookupField",
-    "NOC.main.ref.glyph.LookupField",
+    "NOC.main.glyph.LookupField",
     "NOC.main.remotesystem.LookupField",
     "NOC.main.handler.LookupField",
     "NOC.inv.interfaceprofile.LookupField",
@@ -123,7 +123,7 @@ Ext.define("NOC.sa.serviceprofile.Application", {
             },
             {
               name: "glyph",
-              xtype: "main.ref.glyph.LookupField",
+              xtype: "main.glyph.LookupField",
               fieldLabel: __("Icon"),
               allowBlank: true,
               uiStyle: "medium",

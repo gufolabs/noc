@@ -1,13 +1,12 @@
 # ---------------------------------------------------------------------
 # main.ref application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import os
-import re
 import operator
 
 # Third-party modules
@@ -129,17 +128,6 @@ class RefAppplication(ExtApplication):
             {"id": lang[0], "label": lang[1]}
             for lang in sorted(settings.LANGUAGES, key=operator.itemgetter(1))
         ]
-
-    rx_fa_glyph = re.compile(r"\.fa-([^:]+):before\{content:", re.MULTILINE | re.DOTALL)
-
-    def build_glyph(self):
-        r = [{"id": "", "label": "---"}]
-        if os.path.exists(self.FA_CSS_PATH):
-            with open(self.FA_CSS_PATH) as f:
-                for match in self.rx_fa_glyph.finditer(f.read()):
-                    glyph = match.group(1)
-                    r += [{"id": "fa fa-%s" % glyph, "label": glyph}]
-        return r
 
     def build_sound(self):
         r = [{"id": "", "label": "---"}]
