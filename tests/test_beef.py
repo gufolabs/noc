@@ -1,14 +1,13 @@
 # ----------------------------------------------------------------------
 # Beef test
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import re
 import bz2
-import os
 
 # Third-party modules
 import pytest

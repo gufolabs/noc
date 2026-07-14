@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-import os.path
 from collections import defaultdict
 
 # Third-party modules
