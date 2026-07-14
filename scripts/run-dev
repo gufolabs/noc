@@ -1,14 +1,60 @@
 #!/bin/sh
 
-# Find the devcontainer associated with the current working tree.
+set -eu
+
+# Must be inside a git working tree.
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "Current directory is not inside a git working tree" >&2
+    exit 6
+fi
+
+# Current worktree root.
+WT_ROOT=$(git rev-parse --show-toplevel)
+
+# Main repository root.
+COMMON_DIR=$(git rev-parse --git-common-dir)
+REPO_ROOT=$(cd "$COMMON_DIR/.." && pwd)
+
+# Find devcontainer attached to the main repository.
 CID=$(
     docker ps -q \
-        --filter "label=devcontainer.local_folder=$(pwd)"
+        --filter "label=devcontainer.local_folder=$REPO_ROOT"
 )
-# Container must be running
+
 if [ -z "$CID" ]; then
-    echo "No running devcontainer found for $(pwd)" >&2
+    echo "No running devcontainer found for $REPO_ROOT" >&2
     exit 7
 fi
-# Run command inside the container
-exec docker exec "$CID" "$@"
+
+# Find repository mount inside the container.
+CONTAINER_ROOT=$(
+    docker inspect \
+        --format '{{range .Mounts}}{{if eq .Source "'"$REPO_ROOT"'"}}{{println .Destination}}{{end}}{{end}}' \
+        "$CID"
+)
+
+if [ -z "$CONTAINER_ROOT" ]; then
+    echo "Repository is not mounted inside the devcontainer" >&2
+    exit 8
+fi
+
+# Worktree relative to repository.
+if [ "$WT_ROOT" = "$REPO_ROOT" ]; then
+    REL_WT=""
+else
+    REL_WT=${WT_ROOT#"$REPO_ROOT"/}
+fi
+
+# Current directory relative to worktree.
+if [ "$PWD" = "$WT_ROOT" ]; then
+    REL_PWD=""
+else
+    REL_PWD=${PWD#"$WT_ROOT"/}
+fi
+
+WORKDIR=$CONTAINER_ROOT
+
+[ -n "$REL_WT" ] && WORKDIR="$WORKDIR/$REL_WT"
+[ -n "$REL_PWD" ] && WORKDIR="$WORKDIR/$REL_PWD"
+
+exec docker exec -w "$WORKDIR" "$CID" "$@"
