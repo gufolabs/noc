@@ -3,6 +3,7 @@
 .docker/
 .mypy_cache/
 .pytest_cache/
+.worktrees/
 etc/
 build/
 docs/
