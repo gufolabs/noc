@@ -27,15 +27,18 @@ if [ -z "$CID" ]; then
 fi
 
 # Find repository mount inside the container.
-CONTAINER_ROOT=$(
+if ! CONTAINER_ROOT=$(
     docker inspect \
         --format '{{range .Mounts}}{{if eq .Source "'"$REPO_ROOT"'"}}{{println .Destination}}{{end}}{{end}}' \
         "$CID"
-)
+); then
+    echo "Failed to inspect devcontainer $CID" >&2
+    exit 8
+fi
 
 if [ -z "$CONTAINER_ROOT" ]; then
     echo "Repository is not mounted inside the devcontainer" >&2
-    exit 8
+    exit 9
 fi
 
 # Worktree relative to repository.
@@ -54,7 +57,12 @@ fi
 
 WORKDIR=$CONTAINER_ROOT
 
-[ -n "$REL_WT" ] && WORKDIR="$WORKDIR/$REL_WT"
-[ -n "$REL_PWD" ] && WORKDIR="$WORKDIR/$REL_PWD"
+if [ -n "$REL_WT" ]; then
+    WORKDIR="$WORKDIR/$REL_WT"
+fi
+
+if [ -n "$REL_PWD" ]; then
+    WORKDIR="$WORKDIR/$REL_PWD"
+fi
 
 exec docker exec -w "$WORKDIR" "$CID" "$@"
