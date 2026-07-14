@@ -46,10 +46,6 @@ Clickhouse service configuration
 
 {{ config_param("clickhouse.encoding") }}
 
-## enable_low_cardinality
-
-{{ config_param("clickhouse.enable_low_cardinality") }}
-
 ## cluster
 
 {{ config_param("clickhouse.cluster") }}
