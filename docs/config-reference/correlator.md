@@ -10,10 +10,6 @@
 
 {{ config_param("correlator.topology_rca_window") }}
 
-## oo_close_delay
-
-{{ config_param("correlator.oo_close_delay") }}
-
 ## discovery_delay
 
 {{ config_param("correlator.discovery_delay") }}
