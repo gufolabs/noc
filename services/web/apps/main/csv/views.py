@@ -134,13 +134,13 @@ class CSVApplication(Application):
                     resp_msg = ""
                 else:
                     csv_file, resp_msg = import_check_perms()
-                count, error = csv_import(m, csv_file, resolution=form.cleaned_data["resolve"])
-                else:
-                    return HttpResponse(
-                        "%d records are imported/updated" % count + resp_msg,
-                        content_type="text/plain",
-                    )
-                return self.response_redirect(form.cleaned_data["referer"])
+                count, _error = csv_import(m, csv_file, resolution=form.cleaned_data["resolve"])
+                if count is None:
+                    return self.response_redirect(form.cleaned_data["referer"])
+                return HttpResponse(
+                    f"{count + resp_msg} records are imported/updated",
+                    content_type="text/plain",
+                )
         else:
             form = self.ImportForm({"referer": request.META.get("HTTP_REFERER", "/")})
         # Prepare fields description
