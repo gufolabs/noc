@@ -10,9 +10,9 @@ Cache service configuration
 
 {{ config_param("cache.vcprefixes") }}
 
-## cache\_
+## cache_class
 
-{{ config_param("cache.cache_") }}
+{{ config_param("cache.cache_class") }}
 
 ## default_ttl
 
