@@ -1,0 +1,5 @@
+/* Patch NOC theme */
+.x-tree-icon-parent.gf,
+.x-tree-icon-leaf.gf {
+    color: #000000;
+}
