@@ -16,7 +16,6 @@ import orjson
 
 # NOC modules
 from noc.core.msgstream.message import Message
-from noc.core.comp import DEFAULT_ENCODING
 from noc.core.defer import JOBS_STREAM
 from noc.core.mx import (
     MessageType,
@@ -71,9 +70,7 @@ class Action(metaclass=ActionBase):
     name: ClassVar[str]
 
     def __init__(self, cfg: ActionCfg):
-        self.headers: dict[str, bytes] = {
-            h.header: h.value.encode(encoding=DEFAULT_ENCODING) for h in cfg.headers or []
-        }
+        self.headers: dict[str, bytes] = {h.header: h.value.encode() for h in cfg.headers or []}
 
     @classmethod
     def from_data(cls, data):
@@ -167,7 +164,7 @@ class MetricAction(Action):
 
         for mss in MetricStream.objects.filter():
             if mss.is_active and mss.scope.table_name in set(config.message.enable_metric_scopes):
-                self.mx_metrics_scopes[mss.scope.table_name.encode(DEFAULT_ENCODING)] = mss.to_mx
+                self.mx_metrics_scopes[mss.scope.table_name.encode()] = mss.to_mx
 
     def iter_action(
         self, msg: Message, message_type: bytes
@@ -289,7 +286,7 @@ class MessageAction(Action):
                     "body": body["body"],
                 }
             headers = {
-                MX_TO: c.contact.encode(encoding=DEFAULT_ENCODING),
+                MX_TO: c.contact.encode(),
                 MX_NOTIFICATION_METHOD: c.method.encode(),
             }
             if c.route:

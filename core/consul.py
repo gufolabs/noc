@@ -14,7 +14,6 @@ from consul.exceptions import Timeout
 # NOC modules
 from noc.config import config
 from noc.core.http.async_client import HttpClient
-from noc.core.comp import DEFAULT_ENCODING
 
 ConsulRepeatableCodes = {500, 503, 598, 599}
 ConsulRepeatableErrors = Timeout
@@ -34,7 +33,7 @@ class ConsulHTTPClient(consul.base.HTTPClient):
             code, headers, body = await client.request(
                 method,
                 url,
-                body=body.encode(DEFAULT_ENCODING) if body is not None else body,
+                body=body.encode() if body is not None else body,
             )
 
             if code in ConsulRepeatableCodes:

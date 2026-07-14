@@ -14,7 +14,6 @@ from functools import partial
 
 # NOC services
 from noc.core.service.loader import get_service
-from noc.core.comp import DEFAULT_ENCODING
 from noc.core.ioloop.util import run_sync
 from noc.models import get_model_id
 from noc.core.timepattern import TimePatternList
@@ -164,8 +163,8 @@ class MessageMeta(enum.Enum):
         if self.config.is_list:
             if not isinstance(value, list):
                 value = [value]
-            return MX_H_VALUE_SPLITTER.join([str(x) for x in value]).encode(DEFAULT_ENCODING)
-        return str(value).encode(DEFAULT_ENCODING)
+            return MX_H_VALUE_SPLITTER.join([str(x) for x in value]).encode()
+        return str(value).encode()
 
 
 MESSAGE_HEADERS = {
@@ -219,7 +218,7 @@ def send_message(
     """
     msg_headers = {
         MX_MESSAGE_TYPE: message_type.value,
-        MX_SHARDING_KEY: str(sharding_key).encode(DEFAULT_ENCODING),
+        MX_SHARDING_KEY: str(sharding_key).encode(),
     }
     if headers:
         msg_headers.update(headers)
@@ -257,7 +256,7 @@ def send_notification(
     msg_headers = {
         MX_MESSAGE_TYPE: MessageType.NOTIFICATION.value.encode(),
         MX_NOTIFICATION_METHOD: notification_method.encode(),
-        MX_TO: to.encode(DEFAULT_ENCODING),
+        MX_TO: to.encode(),
     }
     if fwd_to:
         msg_headers[MX_FWD_ROUTER] = fwd_to.encode()

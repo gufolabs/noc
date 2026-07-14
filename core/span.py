@@ -20,7 +20,6 @@ from contextvars import ContextVar
 # NOC modules
 from noc.core.error import NO_ERROR, ERR_UNKNOWN
 from noc.core.perf import metrics
-from noc.core.comp import DEFAULT_ENCODING
 from noc.config import config
 
 forensic_logger = logging.getLogger("noc.core.forensic")
@@ -164,7 +163,7 @@ class Span:
             sample=self.sample,
             in_label=str(self.in_label or ""),
             out_label=str(self.out_label or ""),
-            in_headers={k: v.decode(DEFAULT_ENCODING) for k, v in self.headers.items()},
+            in_headers={k: v.decode() for k, v in self.headers.items()},
         )
         with span_lock:
             spans += [span]

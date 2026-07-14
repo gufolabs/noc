@@ -12,7 +12,6 @@ from urllib.parse import quote as urllib_quote
 
 # NOC modules
 from noc.core.http.sync_client import HttpClient
-from noc.core.comp import DEFAULT_ENCODING
 from noc.config import config
 from .error import ClickhouseError
 
@@ -111,7 +110,7 @@ class ClickhouseClient:
         addr = random.choice(self.addresses)
         q_args = "&".join(qs)
         url = f"http://{addr}/?{q_args}"
-        code, _headers, body = self.http_client.post(url, post.encode(DEFAULT_ENCODING))
+        code, _headers, body = self.http_client.post(url, post.encode())
         if code != 200:
             msg = f"{code}: {body}"
             raise ClickhouseError(msg)

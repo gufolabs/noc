@@ -10,7 +10,6 @@ import orjson
 
 # NOC modules
 from noc.services.discovery.jobs.base import PolicyDiscoveryCheck
-from noc.core.comp import DEFAULT_ENCODING
 
 
 class CapsCheck(PolicyDiscoveryCheck):
@@ -48,7 +47,7 @@ class CapsCheck(PolicyDiscoveryCheck):
         else:
             self.logger.debug(
                 "Received capabilities: \n%s",
-                orjson.dumps(result, option=orjson.OPT_INDENT_2).decode(DEFAULT_ENCODING),
+                orjson.dumps(result, option=orjson.OPT_INDENT_2).decode(),
             )
             self.update_caps(result, source="discovery")
         object_attrs = self.get_artefact("object_attributes")

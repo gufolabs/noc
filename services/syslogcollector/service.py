@@ -38,7 +38,6 @@ from noc.core.checkers.base import register_checks
 from noc.services.syslogcollector.syslogserver import SyslogServer
 from noc.services.syslogcollector.datastream import SysologDataStreamClient
 from noc.services.syslogcollector.sourceconfig import SourceConfig, ManagedObjectData
-from noc.core.comp import DEFAULT_ENCODING
 
 SYSLOGCOLLECTOR_STORM_ALARM_CLASS = "NOC | Managed Object | Storm Control"
 
@@ -227,10 +226,8 @@ class SyslogCollectorService(FastAPIService):
                 partition=int(cfg.id) % n_partitions,
                 headers={
                     MX_MESSAGE_TYPE: MessageType.SYSLOG.value.encode(),
-                    MX_LABELS: MX_H_VALUE_SPLITTER.join(cfg.effective_labels).encode(
-                        DEFAULT_ENCODING
-                    ),
-                    MX_SHARDING_KEY: str(cfg.id).encode(DEFAULT_ENCODING),
+                    MX_LABELS: MX_H_VALUE_SPLITTER.join(cfg.effective_labels).encode(),
+                    MX_SHARDING_KEY: str(cfg.id).encode(),
                 },
             )
 

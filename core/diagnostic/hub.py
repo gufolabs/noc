@@ -20,7 +20,6 @@ from pydantic import BaseModel
 from noc.core.ioloop.util import run_sync
 from noc.core.checkers.base import Check, CheckResult, MetricValue, register_checks
 from noc.core.checkers.registry import DiagnosticCheckRegister
-from noc.core.comp import DEFAULT_ENCODING
 from noc.core.models.inputsources import InputSource
 from noc.config import config
 from noc.models import is_document
@@ -634,7 +633,7 @@ class DiagnosticHub:
         if reason:
             dd["reason"] = reason
         if data:
-            dd["data"] = orjson.dumps(data).decode(DEFAULT_ENCODING)
+            dd["data"] = orjson.dumps(data).decode()
         svc.register_metrics("diagnostichistory", [dd], key=self.__object.bi_id)
         # Send Stream
         # ? always send (from policy)

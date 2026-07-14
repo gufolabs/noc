@@ -16,7 +16,6 @@ import orjson
 from noc.core.http.async_client import HttpClient, ERR_TIMEOUT, ERR_READ_TIMEOUT
 from noc.core.error import NOCError, ERR_DS_BAD_CODE, ERR_DS_PARSE_ERROR
 from noc.core.dcs.error import ResolutionError
-from noc.core.comp import DEFAULT_ENCODING
 from noc.core.timeout import retry_timeout
 
 logger = logging.getLogger(__name__)
@@ -31,7 +30,7 @@ class DataStreamClient:
         self.service = service
         self._is_ready = False
         self.client = HttpClient(
-            headers={"X-NOC-API-Access": f"datastream:{self.name}".encode(DEFAULT_ENCODING)},
+            headers={"X-NOC-API-Access": f"datastream:{self.name}".encode()},
             resolver=self.resolve,
         )
 
@@ -144,7 +143,7 @@ class DataStreamClient:
                 self._is_ready = True
             # Continue from last change
             if "X-NOC-DataStream-Last-Change" in headers:
-                change_id = headers["X-NOC-DataStream-Last-Change"].decode(DEFAULT_ENCODING)
+                change_id = headers["X-NOC-DataStream-Last-Change"].decode()
                 continue
             if block and self._is_ready:
                 # Do not set block=1 before is_ready, otherwise

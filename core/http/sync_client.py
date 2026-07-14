@@ -17,7 +17,6 @@ from gufo.http.sync_client import HttpClient as GufoHttpClient
 
 # NOC modules
 from noc.core.perf import metrics
-from noc.core.comp import DEFAULT_ENCODING
 from noc.config import config
 from noc.core.validators import is_ipv4
 from .proxy import SYSTEM_PROXIES
@@ -202,7 +201,7 @@ class HttpClient(GufoHttpClient):
             return ERR_TIMEOUT, {}, b"Connection reset while sending request"
         except (ConnectionError, HttpError) as e:
             metrics["httpclient_timeouts"] += 1
-            return ERR_TIMEOUT, {}, b"Connection error: %s" % str(e).encode(DEFAULT_ENCODING)
+            return ERR_TIMEOUT, {}, b"Connection error: %s" % str(e).encode()
         except TimeoutError:
             metrics["httpclient_timeouts"] += 1
             return ERR_TIMEOUT, {}, b"Timed out while sending request"
@@ -219,7 +218,7 @@ class HttpClient(GufoHttpClient):
             return ERR_TIMEOUT, {}, b"Connection reset while sending request"
         except (ConnectionError, HttpError) as e:
             metrics["httpclient_timeouts"] += 1
-            return ERR_TIMEOUT, {}, b"Connection error: %s" % str(e).encode(DEFAULT_ENCODING)
+            return ERR_TIMEOUT, {}, b"Connection error: %s" % str(e).encode()
         except TimeoutError:
             metrics["httpclient_timeouts"] += 1
             return ERR_TIMEOUT, {}, b"Timed out while sending request"
@@ -259,7 +258,7 @@ class HttpClient(GufoHttpClient):
             return ERR_TIMEOUT, {}, b"Connection reset while sending request"
         except (ConnectionError, HttpError) as e:
             metrics["httpclient_timeouts"] += 1
-            return ERR_TIMEOUT, {}, b"Connection error: %s" % str(e).encode(DEFAULT_ENCODING)
+            return ERR_TIMEOUT, {}, b"Connection error: %s" % str(e).encode()
         except TimeoutError:
             metrics["httpclient_timeouts"] += 1
             return ERR_TIMEOUT, {}, b"Timed out while sending request"
@@ -280,7 +279,7 @@ class HttpClient(GufoHttpClient):
             return ERR_TIMEOUT, {}, b"Connection reset while sending request"
         except (ConnectionError, HttpError) as e:
             metrics["httpclient_timeouts"] += 1
-            return ERR_TIMEOUT, {}, b"Connection error: %s" % str(e).encode(DEFAULT_ENCODING)
+            return ERR_TIMEOUT, {}, b"Connection error: %s" % str(e).encode()
         except TimeoutError:
             metrics["httpclient_timeouts"] += 1
             return ERR_TIMEOUT, {}, b"Timed out while sending request"

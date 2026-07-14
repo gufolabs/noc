@@ -24,7 +24,6 @@ from noc.core.msgstream.message import Message
 from noc.core.mx import MX_TO
 from noc.core.perf import metrics
 from noc.config import config
-from noc.core.comp import DEFAULT_ENCODING
 
 MAILSENDER_STREAM = "mailsender"
 
@@ -53,9 +52,7 @@ class MailSenderService(FastAPIService):
             metrics["messages_drops"] += 1
             return None
         metrics["messages_processed"] += 1
-        return self.send_mail(
-            msg.offset, orjson.loads(msg.value), dst.decode(encoding=DEFAULT_ENCODING)
-        )
+        return self.send_mail(msg.offset, orjson.loads(msg.value), dst.decode())
 
     def send_mail(
         self, message_id: int, data: dict[str, Any], address_to: str | None = None

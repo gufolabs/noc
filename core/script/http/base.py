@@ -16,7 +16,6 @@ from noc.core.log import PrefixLoggerAdapter
 from noc.core.http.sync_client import HttpClient
 from noc.core.error import NOCError, ERR_HTTP_UNKNOWN
 from noc.core.handler import get_handler
-from noc.core.comp import DEFAULT_ENCODING
 from .middleware.base import BaseMiddleware
 from .middleware.loader import loader
 
@@ -107,7 +106,7 @@ class HTTP:
                 except ValueError as e:
                     raise HTTPError("Failed to decode JSON: %s" % e)
             elif not raw_result:
-                result = result.decode(DEFAULT_ENCODING, errors="ignore")
+                result = result.decode(errors="ignore")
             self.logger.debug("Result: %r", result)
             if cached:
                 self.script.root.http_cache[cache_key] = result
@@ -171,7 +170,7 @@ class HTTP:
                 except ValueError as e:
                     raise HTTPError(msg="Failed to decode JSON: %s" % e)
             elif not raw_result:
-                result = result.decode(DEFAULT_ENCODING, errors="ignore")
+                result = result.decode(errors="ignore")
             self.logger.debug("Result: %r", result)
             if cached:
                 self.script.root.http_cache[cache_key] = result
@@ -232,9 +231,7 @@ class HTTP:
             headers = {}
         if self.cookies:
             headers["Cookie"] = (
-                self.cookies.output(header="", sep=";", attrs="value")
-                .lstrip()
-                .encode(DEFAULT_ENCODING)
+                self.cookies.output(header="", sep=";", attrs="value").lstrip().encode()
             )
         return headers
 
@@ -246,7 +243,7 @@ class HTTP:
         :return:
         """
         self.logger.debug("Set header: %s = %s", name, value)
-        self.headers[name] = str(value).encode(DEFAULT_ENCODING)
+        self.headers[name] = str(value).encode()
 
     def set_session_id(self, session_id):
         """

@@ -42,7 +42,7 @@ from noc.core.mx import (
 )
 from noc.core.model.decorator import on_delete_check, on_save
 from noc.core.change.decorator import change
-from noc.core.comp import DEFAULT_ENCODING
+
 from noc.core.prettyjson import to_json
 from noc.core.path import safe_json_path
 from noc.aaa.models.user import User
@@ -809,7 +809,7 @@ class NotificationGroup(NOCModel):
         if MessageMeta.WATCH_FOR in meta:
             obj = meta[MessageMeta.WATCH_FOR].decode()
         for c in self.get_active_contacts(obj, ts=ts):
-            yield c.method, {MX_TO: c.contact.encode(encoding=DEFAULT_ENCODING)}, None
+            yield c.method, {MX_TO: c.contact.encode()}, None
 
     @classmethod
     def render_message(
