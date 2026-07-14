@@ -562,9 +562,8 @@ class Command(BaseCommand):
             self.print("Configs for tests %s", test_config)
         r = []
         with storage.get_storage() as blob:
-            file_filter = []
             for beef_path in blob.scan(path):
-                if beef_path.endswith(".yml") or not file_filter(beef_path):
+                if beef_path.endswith(".yml"):
                     continue
                 try:
                     beef = self.get_beef(storage, beef_path)
