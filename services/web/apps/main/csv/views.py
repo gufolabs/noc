@@ -135,8 +135,6 @@ class CSVApplication(Application):
                 else:
                     csv_file, resp_msg = import_check_perms()
                 count, error = csv_import(m, csv_file, resolution=form.cleaned_data["resolve"])
-                if count is None:
-                    self.message_user(request, "Error importing data: %s" % error)
                 else:
                     return HttpResponse(
                         "%d records are imported/updated" % count + resp_msg,

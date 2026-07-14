@@ -125,7 +125,6 @@ class RefBookAppplication(Application):
                 data[i] = request.POST["field_%d" % i]
             rbr.value = data
             rbr.save()
-            self.message_user(request, "Record updated successfully")
             return self.response_redirect("main:refbook:item", rb.id, rbr.id)
         return self.render(request, "edit.html", {"rb": rb, "record": rbr})
 
@@ -148,7 +147,6 @@ class RefBookAppplication(Application):
             return self.response_forbidden()
         rbd = get_object_or_404(RefBookData, ref_book=rb, id=int(record_id))
         rbd.delete()
-        self.message_user(request, "Record deleted")
         return self.response_redirect("main:refbook:view", rb.id)
 
     @view(url=r"^(?P<refbook_id>\d+)/new/$", url_name="new", access="add")
@@ -175,6 +173,5 @@ class RefBookAppplication(Application):
                 data[i] = request.POST["field_%d" % i]
             rbr = RefBookData(ref_book=rb, value=data)
             rbr.save()
-            self.message_user(request, "Record added")
             return self.response_redirect("main:refbook:item", rb.id, rbr.id)
         return self.render(request, "new.html", {"rb": rb})
