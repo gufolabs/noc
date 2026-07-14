@@ -24,10 +24,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Set Up Python ${{ env.TEST_PYTHON_VERSION }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ env.TEST_PYTHON_VERSION }}
 
@@ -113,10 +113,10 @@ jobs:
           - 10004:22
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Set Up Python ${{ env.TEST_PYTHON_VERSION }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "${{ env.TEST_PYTHON_VERSION }}"
 

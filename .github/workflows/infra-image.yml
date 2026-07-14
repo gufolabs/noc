@@ -20,7 +20,7 @@ jobs:
       testtelnetd: ${{ steps.filter.outputs.testtelnetd }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: Filter Items
         uses: dorny/paths-filter@v3
         id: filter
@@ -50,7 +50,7 @@ jobs:
             changed: ${{ needs.changes.outputs.testsshd }}
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         if: matrix.changed == 'true'
 
       - name: Log in to GHCR
