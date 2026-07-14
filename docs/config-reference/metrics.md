@@ -6,25 +6,13 @@
 
 Run log compaction on service start
 
-|                 |                                |
-| --------------- | ------------------------------ |
-| Default value   | `True`                         |
-| Possible values | `True` or `False`              |
-| YAML Path       | `metrics.compact_on_start`     |
-| Key-Value Path  | `metrics/compact_on_start`     |
-| Environment     | `NOC_METRICS_COMPACT_ON_START` |
+{{ config_param("metrics.compact_on_start") }}
 
 ## compact_on_stop
 
 Run log compaction on service stop
 
-|                 |                               |
-| --------------- | ----------------------------- |
-| Default value   | `True`                        |
-| Possible values | `True` or `False`             |
-| YAML Path       | `metrics.compact_on_stop`     |
-| Key-Value Path  | `metrics/compact_on_stop`     |
-| Environment     | `NOC_METRICS_COMPACT_ON_STOP` |
+{{ config_param("metrics.compact_on_stop") }}
 
 ## flush_interval
 
@@ -34,13 +22,7 @@ You may loose up to `flush_interval` seconds of changes on unexpected crash.
 To disable runtime flushing set parameter to `0`. Changes will be flushed on
 graceful shutdown anyway.
 
-|                 |                              |
-| --------------- | ---------------------------- |
-| Default value   | `1s`                         |
-| Possible values |                              |
-| YAML Path       | `metrics.flush_interval`     |
-| Key-Value Path  | `metrics/flush_interval`     |
-| Environment     | `NOC_METRICS_FLUSH_INTERVAL` |
+{{ config_param("metrics.flush_interval") }}
 
 ## compact_interval
 
@@ -56,13 +38,4 @@ parameters.
     Disabling of runtime compaction may lead to unlimited disk usages and may
     greatly increase the service startup time.
 
-|                 |                              |
-| --------------- | ---------------------------- |
-| Default value   | `1s`                         |
-| Possible values |                              |
-| YAML Path       | `metrics.flush_interval`     |
-| Key-Value Path  | `metrics/flush_interval`     |
-| Environment     | `NOC_METRICS_FLUSH_INTERVAL` |
-
-
-
+{{ config_param("metrics.flush_interval") }}

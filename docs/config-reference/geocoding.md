@@ -4,56 +4,26 @@ Geocoding service configuration
 
 ## order
 
-|                |                       |
-| -------------- | --------------------- |
-| Default value  | `yandex,google`       |
-| YAML Path      | `geocoding.order`     |
-| Key-Value Path | `geocoding/order`     |
-| Environment    | `NOC_GEOCODING_ORDER` |
+{{ config_param("geocoding.order") }}
 
 ## yandex_key
 
-|                |                            |
-| -------------- | -------------------------- |
-| Default value  | ``                         |
-| YAML Path      | `geocoding.yandex_key`     |
-| Key-Value Path | `geocoding/yandex_key`     |
-| Environment    | `NOC_GEOCODING_YANDEX_KEY` |
+{{ config_param("geocoding.yandex_key") }}
 
 ## yandex_apikey
 
-|                |                               |
-| -------------- | ----------------------------- |
-| Default value  | ``                            |
-| YAML Path      | `geocoding.yandex_apikey`     |
-| Key-Value Path | `geocoding/yandex_apikey`     |
-| Environment    | `NOC_GEOCODING_YANDEX_APIKEY` |
+{{ config_param("geocoding.yandex_apikey") }}
 
 ## google_key
 
-|                |                            |
-| -------------- | -------------------------- |
-| Default value  | ``                         |
-| YAML Path      | `geocoding.google_key`     |
-| Key-Value Path | `geocoding/google_key`     |
-| Environment    | `NOC_GEOCODING_GOOGLE_KEY` |
+{{ config_param("geocoding.google_key") }}
 
 ## google_language
 
-|                |                                 |
-| -------------- | ------------------------------- |
-| Default value  | `en`                            |
-| YAML Path      | `geocoding.google_language`     |
-| Key-Value Path | `geocoding/google_language`     |
-| Environment    | `NOC_GEOCODING_GOOGLE_LANGUAGE` |
+{{ config_param("geocoding.google_language") }}
 
 ## negative_ttl
 
 Period then saving bad result
 
-|                |                              |
-| -------------- | ---------------------------- |
-| Default value  | `7d`                         |
-| YAML Path      | `geocoding.negative_ttl`     |
-| Key-Value Path | `geocoding/negative_ttl`     |
-| Environment    | `NOC_GEOCODING_NEGATIVE_TTL` |
+{{ config_param("geocoding.negative_ttl") }}

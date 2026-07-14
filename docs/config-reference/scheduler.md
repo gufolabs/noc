@@ -4,63 +4,28 @@
 
 ## max_threads
 
-|                |                             |
-| -------------- | --------------------------- |
-| Default value  | `20`                        |
-| YAML Path      | `scheduler.max_threads`     |
-| Key-Value Path | `scheduler/max_threads`     |
-| Environment    | `NOC_SCHEDULER_MAX_THREADS` |
+{{ config_param("scheduler.max_threads") }}
 
 ## submit_threshold_factor
 
-|                |                                         |
-| -------------- | --------------------------------------- |
-| Default value  | `10`                                    |
-| YAML Path      | `scheduler.submit_threshold_factor`     |
-| Key-Value Path | `scheduler/submit_threshold_factor`     |
-| Environment    | `NOC_SCHEDULER_SUBMIT_THRESHOLD_FACTOR` |
+{{ config_param("scheduler.submit_threshold_factor") }}
 
 ## max_chunk_factor
 
-|                |                                  |
-| -------------- | -------------------------------- |
-| Default value  | `1`                              |
-| YAML Path      | `scheduler.max_chunk_factor`     |
-| Key-Value Path | `scheduler/max_chunk_factor`     |
-| Environment    | `NOC_SCHEDULER_MAX_CHUNK_FACTOR` |
+{{ config_param("scheduler.max_chunk_factor") }}
 
 ## updates_per_check
 
-|                |                                   |
-| -------------- | --------------------------------- |
-| Default value  | `4`                               |
-| YAML Path      | `scheduler.updates_per_check`     |
-| Key-Value Path | `scheduler/updates_per_check`     |
-| Environment    | `NOC_SCHEDULER_UPDATES_PER_CHECK` |
+{{ config_param("scheduler.updates_per_check") }}
 
 ## cache_default_ttl
 
-|                |                                   |
-| -------------- | --------------------------------- |
-| Default value  | `1d`                              |
-| YAML Path      | `scheduler.cache_default_ttl`     |
-| Key-Value Path | `scheduler/cache_default_ttl`     |
-| Environment    | `NOC_SCHEDULER_CACHE_DEFAULT_TTL` |
+{{ config_param("scheduler.cache_default_ttl") }}
 
 ## autointervaljob_interval
 
-|                |                                          |
-| -------------- | ---------------------------------------- |
-| Default value  | `1d`                                     |
-| YAML Path      | `scheduler.autointervaljob_interval`     |
-| Key-Value Path | `scheduler/autointervaljob_interval`     |
-| Environment    | `NOC_SCHEDULER_AUTOINTERVALJOB_INTERVAL` |
+{{ config_param("scheduler.autointervaljob_interval") }}
 
 ## autointervaljob_initial_submit_interval
 
-|                |                                                         |
-| -------------- | ------------------------------------------------------- |
-| Default value  | `1d`                                                    |
-| YAML Path      | `scheduler.autointervaljob_initial_submit_interval`     |
-| Key-Value Path | `scheduler/autointervaljob_initial_submit_interval`     |
-| Environment    | `NOC_SCHEDULER_AUTOINTERVALJOB_INITIAL_SUBMIT_INTERVAL` |
+{{ config_param("scheduler.autointervaljob_initial_submit_interval") }}

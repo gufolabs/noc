@@ -4,32 +4,17 @@ Liftbridge service configuration
 
 ## addresses
 
-|                |                            |
-| -------------- | -------------------------- |
-| Default value  | `liftbridge`               |
-| YAML Path      | `liftbridge.addresses`     |
-| Key-Value Path | `liftbridge/addresses`     |
-| Environment    | `NOC_LIFTBRIDGE_ADDRESSES` |
+{{ config_param("liftbridge.addresses") }}
 
 ## max_message_size
 
 Max message size for GRPC client
 
-|                |                                   |
-| -------------- | --------------------------------- |
-| Default value  | `-1`                              |
-| YAML Path      | `liftbridge.max_message_size`     |
-| Key-Value Path | `liftbridge/max_message_size`     |
-| Environment    | `NOC_LIFTBRIDGE_MAX_MESSAGE_SIZE` |
+{{ config_param("liftbridge.max_message_size") }}
 
 ## publish_async_ack_timeout
 
-|                |                                            |
-| -------------- | ------------------------------------------ |
-| Default value  | `10`                                       |
-| YAML Path      | `liftbridge.publish_async_ack_timeout`     |
-| Key-Value Path | `liftbridge/publish_async_ack_timeout`     |
-| Environment    | `NOC_LIFTBRIDGE_PUBLISH_ASYNC_ACK_TIMEOUT` |
+{{ config_param("liftbridge.publish_async_ack_timeout") }}
 
 ## metrics_send_delay
 
@@ -39,9 +24,4 @@ decreases overall system load by the price of increased
 end-to-end delay between metric collection and persistent
 storage in database.
 
-|                |                                     |
-| -------------- | ----------------------------------- |
-| Default value  | `0.25`                              |
-| YAML Path      | `liftbridge.metrics_send_delay`     |
-| Key-Value Path | `liftbridge/metrics_send_delay`     |
-| Environment    | `NOC_LIFTBRIDGE_METRICS_SEND_DELAY` |
+{{ config_param("liftbridge.metrics_send_delay") }}

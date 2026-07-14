@@ -4,27 +4,12 @@
 
 ## db_threads
 
-|                |                      |
-| -------------- | -------------------- |
-| Default value  | `20`                 |
-| YAML Path      | `sae.db_threads`     |
-| Key-Value Path | `sae/db_threads`     |
-| Environment    | `NOC_SAE_DB_THREADS` |
+{{ config_param("sae.db_threads") }}
 
 ## activator_resolution_retries
 
-|                |                                        |
-| -------------- | -------------------------------------- |
-| Default value  | `5`                                    |
-| YAML Path      | `sae.activator_resolution_retries`     |
-| Key-Value Path | `sae/activator_resolution_retries`     |
-| Environment    | `NOC_SAE_ACTIVATOR_RESOLUTION_RETRIES` |
+{{ config_param("sae.activator_resolution_retries") }}
 
 ## activator_resolution_timeout
 
-|                |                                        |
-| -------------- | -------------------------------------- |
-| Default value  | `2s`                                   |
-| YAML Path      | `sae.activator_resolution_timeout`     |
-| Key-Value Path | `sae/activator_resolution_timeout`     |
-| Environment    | `NOC_SAE_ACTIVATOR_RESOLUTION_TIMEOUT` |
+{{ config_param("sae.activator_resolution_timeout") }}
