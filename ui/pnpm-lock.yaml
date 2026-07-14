@@ -20,7 +20,7 @@ importers:
         version: 4.2.4
       color-input:
         specifier: github:argyleink/css-color-component#cdn-latest
-        version: hdr-color-input@https://codeload.github.com/argyleink/css-color-component/tar.gz/5131c919d8ad6d8038e215593c1a8b0d0f13cc3e
+        version: hdr-color-input@https://codeload.github.com/argyleink/css-color-component/tar.gz/d4cf1a0042be235c7d876ac107119b355077bb96
       dompurify:
         specifier: ^3.3.3
         version: 3.4.0
@@ -64,6 +64,12 @@ importers:
       '@types/node':
         specifier: ^24.12.0
         version: 24.12.2
+      '@typescript-eslint/types':
+        specifier: ^8.58.2
+        version: 8.58.2
+      '@typescript-eslint/typescript-estree':
+        specifier: ^8.58.2
+        version: 8.58.2(typescript@5.9.3)
       astring:
         specifier: ^1.9.0
         version: 1.9.0
@@ -1050,9 +1056,9 @@ packages:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
 
-  hdr-color-input@https://codeload.github.com/argyleink/css-color-component/tar.gz/5131c919d8ad6d8038e215593c1a8b0d0f13cc3e:
-    resolution: {tarball: https://codeload.github.com/argyleink/css-color-component/tar.gz/5131c919d8ad6d8038e215593c1a8b0d0f13cc3e}
-    version: 0.4.0
+  hdr-color-input@https://codeload.github.com/argyleink/css-color-component/tar.gz/d4cf1a0042be235c7d876ac107119b355077bb96:
+    resolution: {tarball: https://codeload.github.com/argyleink/css-color-component/tar.gz/d4cf1a0042be235c7d876ac107119b355077bb96}
+    version: 0.4.3
 
   http-errors@1.8.1:
     resolution: {integrity: sha512-Kpk9Sm7NmI+RHhnj6OIWDI1d6fIoFAtFt9RLaTMRlg/8w49juAStsrBgp0Dp4OdxdVbRIeKhtCUvoi/RuAhO4g==}
@@ -2689,7 +2695,7 @@ snapshots:
 
   has-flag@4.0.0: {}
 
-  hdr-color-input@https://codeload.github.com/argyleink/css-color-component/tar.gz/5131c919d8ad6d8038e215593c1a8b0d0f13cc3e:
+  hdr-color-input@https://codeload.github.com/argyleink/css-color-component/tar.gz/d4cf1a0042be235c7d876ac107119b355077bb96:
     dependencies:
       '@preact/signals-core': 1.14.1
       colorjs.io: 0.6.1
