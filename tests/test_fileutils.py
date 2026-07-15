@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # noc.core.fileutils tests
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ import os
 import pytest
 
 # NOC modules
-from noc.core.fileutils import safe_rewrite, safe_append, read_file, write_tempfile, temporary_file
+from noc.core.fileutils import safe_rewrite, read_file, write_tempfile, temporary_file
 
 
 @pytest.mark.parametrize(
@@ -26,7 +26,8 @@ from noc.core.fileutils import safe_rewrite, safe_append, read_file, write_tempf
 def test_read_write(start, tail, expected):
     fn = os.path.join("/tmp", "noc-test-fu-%d" % time.time())
     safe_rewrite(fn, start)
-    safe_append(fn, tail)
+    with open(fn, "a") as f:
+        f.write(tail)
     data = read_file(fn)
     os.unlink(fn)
     assert data == expected
