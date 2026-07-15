@@ -28,7 +28,6 @@ from django.utils.html import escape
 from django.template import loader
 from django import forms
 from django.utils.timezone import get_current_timezone
-from django.views.static import serve as serve_static
 from django.http import Http404
 import orjson
 import jinja2
