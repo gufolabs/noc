@@ -8,6 +8,7 @@
 # Python modules
 import os
 import hashlib
+from pathlib import Path
 
 # Third-party modules
 from fastapi import APIRouter, Request
@@ -16,7 +17,6 @@ from fastapi.templating import Jinja2Templates
 
 # NOC modules
 from noc.config import config
-from noc.core.comp import smart_bytes
 from noc.core.service.loader import get_service
 
 FORBIDDEN_MESSAGE = "<html><title>403: Forbidden</title><body>403: Forbidden</body></html>"
@@ -108,18 +108,11 @@ class BaseAPI:
         result.headers["Expires"] = "0"
         return result
 
-    def hashed(self, url):
-        """
-        Convert path to path?hash version
-        :param path:
-        :return:
-        """
-        u = url
-        if u.startswith("/"):
-            u = url[1:]
-        path = os.path.join(self.PREFIX, u)
-        if not os.path.exists(path):
-            return "%s?%s" % (url, "00000000")
-        with open(path) as f:
-            hash = hashlib.sha256(smart_bytes(f.read())).hexdigest()[:8]
-        return "%s?%s" % (url, hash)
+    def hashed(self, url: str) -> str:
+        """Convert path to path?hash version."""
+        u = url.lstrip("/")
+        file_path = Path(self.PREFIX, u)
+        hash_hex = "00000000"
+        if file_path.is_file():
+            hash_hex = hashlib.sha256(file_path.read_bytes()).hexdigest()[:8]
+        return f"{url}?{hash_hex}"
