@@ -138,7 +138,7 @@ class CSVApplication(Application):
                 if count is None:
                     return self.response_redirect(form.cleaned_data["referer"])
                 return HttpResponse(
-                    f"{count + resp_msg} records are imported/updated",
+                    f"{count} records are imported/updated{resp_msg}",
                     content_type="text/plain",
                 )
         else:
