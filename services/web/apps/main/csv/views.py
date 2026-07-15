@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # CSV Export/Import application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -134,15 +134,13 @@ class CSVApplication(Application):
                     resp_msg = ""
                 else:
                     csv_file, resp_msg = import_check_perms()
-                count, error = csv_import(m, csv_file, resolution=form.cleaned_data["resolve"])
+                count, _error = csv_import(m, csv_file, resolution=form.cleaned_data["resolve"])
                 if count is None:
-                    self.message_user(request, "Error importing data: %s" % error)
-                else:
-                    return HttpResponse(
-                        "%d records are imported/updated" % count + resp_msg,
-                        content_type="text/plain",
-                    )
-                return self.response_redirect(form.cleaned_data["referer"])
+                    return self.response_redirect(form.cleaned_data["referer"])
+                return HttpResponse(
+                    f"{count} records are imported/updated{resp_msg}",
+                    content_type="text/plain",
+                )
         else:
             form = self.ImportForm({"referer": request.META.get("HTTP_REFERER", "/")})
         # Prepare fields description

@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Application class
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -38,7 +38,6 @@ from noc.core.forms import NOCForm
 from noc import settings
 from noc.sa.interfaces.base import DictParameter
 from noc.core.feature import Feature
-from noc.core.cache.base import cache
 from noc.core.comp import smart_text
 from noc.models import is_document
 from .access import HasPerm, Permit, Deny
@@ -260,15 +259,6 @@ class Application(metaclass=ApplicationBase):
         Reverse URL name to URL
         """
         return self.site.reverse(url, *args, **kwargs)
-
-    def message_user(self, request, message):
-        """
-        Send a message to user
-        """
-        if "noc_user" in request.COOKIES:
-            session_id = request.COOKIES["noc_user"].rsplit("|", 1)[-1]
-            key = "msg-%s" % session_id
-            cache.set(key, smart_text(orjson.dumps([message])), ttl=30, version=1)
 
     def get_template_path(self, template):
         """
