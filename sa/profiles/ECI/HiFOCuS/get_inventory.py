@@ -64,7 +64,7 @@ class Script(BaseScript):
                     "number": "0",
                     "vendor": "ECI",
                     "part_no": [hw_descr, catalog_num],
-                    "serial": serial.split(smart_text("\x00"))[0],
+                    "serial": serial.split("\x00")[0],
                     "revision": rev,
                     "description": "",
                 }

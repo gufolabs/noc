@@ -12,6 +12,45 @@ console.debug("Using theme: " + NOC.theme);
 // Review after any ExtJS upgrade
 //---------------------------------------------------------------------
 
+//
+// Deferred override queue for classes the *theme* also overrides.
+//
+// ExtJS is no longer the application root: it is booted on demand by the
+// framework-neutral loader via startExtApplication() -> Ext.application()
+// (see ui/web/main/desktop/loader/ext-application.js), which runs AFTER
+// external.js and after Ext.onReady. The theme overrides of Ext.Component /
+// Ext.panel.Table (Ext.theme.neptune/noc.*, concatenated after this file) are
+// only finalized during that boot, so any override of those base classes
+// applied here at parse time OR in Ext.onReady is clobbered by the theme
+// afterwards (verified: the identical override applied from the console, i.e.
+// post-boot, sticks and works).
+//
+// To win, such overrides are queued here and flushed at the very start of
+// Ext.application's launch — that runs after class/theme finalization and
+// before any application component (grid, form, login view) is created.
+// Overrides whose target the theme does NOT touch (Ext.data.Connection,
+// Ext.tab.Bar, Ext.grid.header.Container, ...) are applied immediately below
+// and do not need this.
+//
+NOC._deferredExtPatches = [];
+(function(){
+var origApplication = Ext.application;
+Ext.application = function(config){
+  config = config || {};
+  var origLaunch = config.launch;
+  config.launch = function(){
+    for(var i = 0; i < NOC._deferredExtPatches.length; i++){
+      NOC._deferredExtPatches[i]();
+    }
+    NOC._deferredExtPatches.length = 0;
+    if(origLaunch){
+      return origLaunch.apply(this, arguments);
+    }
+  };
+  return origApplication.call(Ext, config);
+};
+})();
+
 //---------------------------------------------------------------------
 // ExtJS core function improvements
 //---------------------------------------------------------------------
@@ -232,12 +271,145 @@ Ext.define("EXTJS-15862.tab.Bar", {
 // });
 
 //
-// Disable the per-grid/tree load mask globally. Store traffic now flows
-// through NOC.api and is indicated by the shared #noc-api-bar spinner,
-// so the local overlay is redundant.
+// Disable the native per-grid/tree load overlay (loadMask). Store traffic
+// flows through NOC.api and is indicated by the shared #noc-api-bar spinner.
+// Instead of the .x-mask overlay, a grid is disabled (blocked from
+// interaction) while its store performs a FULL load — reusing the
+// disable()/enable() semantics of Component#mask below.
 //
-Ext.override(Ext.panel.Table, {
-  loadMask: false,
+// Only beforeload/load are bound (initial load, sort, filter, reload).
+// Buffered-scroll prefetch (cachemiss/cachefilled) is intentionally NOT
+// bound, so scrolling a BufferedStore stays usable. Trees are skipped so
+// node-expand loads don't block the whole tree.
+//
+// Deferred to Ext.application launch (see NOC._deferredExtPatches above):
+// Ext.panel.Table is itself overridden by the theme
+// (Ext.theme.neptune.panel.Table, concatenated after this file), which
+// clobbers an override applied here at parse time or in Ext.onReady (verified:
+// _nocBindLoadBlocker was absent from the prototype at runtime with both
+// forms). The flush runs after theme finalization and before any grid is
+// created, and our initComponent's callParent chains onto the theme's.
+//
+NOC._deferredExtPatches.push(function(){
+  Ext.override(Ext.panel.Table, {
+    loadMask: false,
+
+    initComponent: function(){
+      this.callParent(arguments);
+      if(!this.isTree){
+        this._nocBindLoadBlocker();
+        this.on({
+          afterrender: this._nocBindLoadBlocker,
+          reconfigure: this._nocBindLoadBlocker,
+          scope: this,
+        });
+      }
+    },
+
+    _nocBindLoadBlocker: function(){
+      var me = this,
+        store = me.getStore && me.getStore();
+      if(store === me._nocBlockStore){
+        return;
+      }
+      if(me._nocBlockStore){
+        me.mun(me._nocBlockStore, "beforeload", me._nocOnBeforeLoad, me);
+        me.mun(me._nocBlockStore, "load", me._nocOnLoad, me);
+      }
+      me._nocBlockStore = store || null;
+      if(store){
+        // managed listeners: auto-removed when the grid is destroyed
+        me.mon(store, "beforeload", me._nocOnBeforeLoad, me);
+        me.mon(store, "load", me._nocOnLoad, me);
+      }
+    },
+
+    _nocOnBeforeLoad: function(){
+      if(!this.destroying && !this.destroyed){
+        this.mask();
+      }
+    },
+
+    _nocOnLoad: function(){
+      this.unmask();
+    },
+  });
+});
+
+//
+// Redefine Component#mask / #unmask: instead of rendering the native
+// .x-mask overlay, disable() / enable() the component. Loading is indicated
+// globally by #noc-api-bar; the per-element "mask" only blocks interaction
+// (prevents double-submit / clicks while a request is in flight).
+//
+// maskOnDisable is forced off, which is essential here:
+//   1. A disabled component already blocks interaction via the
+//      x-item-disabled class (pointer-events:none), so no overlay is needed
+//      — matching "disable without the native spinner/overlay".
+//   2. Ext.Component#onDisable calls me.mask() when maskOnDisable is true.
+//      With mask() routed to disable() that would recurse forever
+//      (mask -> disable -> onDisable -> mask -> ...). Turning it off breaks
+//      the cycle in both directions (onEnable -> unmask is gated the same way).
+//
+// Reference-counted so overlapping mask() calls don't enable() early, and a
+// component disabled by application logic stays disabled after unmask().
+//
+// Deferred to Ext.application launch (see NOC._deferredExtPatches above).
+// Unlike EXTJS-15862.tab.Bar / Override.grid.header.Container above,
+// Ext.Component is itself overridden by the theme (Ext.theme.neptune.Component
+// / Ext.theme.noc.Component, both override:"Ext.Component") concatenated AFTER
+// this file, and — because ExtJS is booted late via Ext.application — that
+// theme override is only finalized during boot, after both parse time and
+// Ext.onReady. The immediate Ext.override, the deferred
+// Ext.define(override:"Ext.Component") and the Ext.onReady forms were all
+// clobbered by the theme (verified in-runtime: the very same override applied
+// from the console, i.e. after boot, sticks and works). Flushing at launch
+// wins.
+//
+// Only the public Component#mask/#unmask is redefined. Ext.LoadMask
+// (Component#setLoading, and the explicit instances in NOC.core.MRT /
+// NOC.sa.managedobject.ScriptPanel showing "Running task...") renders
+// independently and is intentionally untouched.
+//
+NOC._deferredExtPatches.push(function(){
+  Ext.override(Ext.Component, {
+    maskOnDisable: false,
+
+    // mask()/unmask() are idempotent, matching the historical overlay
+    // semantics they replace: the native overlay coalesced repeated mask()
+    // calls into a single overlay that one unmask() fully cleared. A lot of
+    // app code relies on this (mask() several times, unmask() once) — e.g.
+    // fm/alarm ApplicationController masks a grid on each of several filter
+    // bindings during first render, while its BufferedStore load fires only
+    // one completion callback. A reference count would leave such a grid
+    // permanently disabled (N masks, 1 unmask). So instead of counting we
+    // track only whether *we* disabled the component (_maskDidDisable), which
+    // also preserves an app-logic disabled state across unmask().
+    //
+    // disable()/enable() are called with silent=true so masking does NOT fire
+    // the disable/enable events. Historically mask() never fired those events;
+    // some components wire string listeners on them (e.g. core/InlineGrid.js:
+    // {disable:"onDisable", enable:"onEnable"}) that resolve to an ancestor
+    // view controller which may not implement the handler — firing here would
+    // throw "No method named onDisable on ...". The x-item-disabled class, the
+    // onDisable()/onEnable() methods and the interaction block are all still
+    // applied; only the events are suppressed.
+    mask: function(){
+      var me = this;
+      if(!me._maskDidDisable && !me.disabled){
+        me._maskDidDisable = true;
+        me.disable(true);
+      }
+    },
+
+    unmask: function(){
+      var me = this;
+      if(me._maskDidDisable){
+        me._maskDidDisable = false;
+        me.enable(true);
+      }
+    },
+  });
 });
 
 //
