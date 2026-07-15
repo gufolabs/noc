@@ -1,14 +1,16 @@
 # ----------------------------------------------------------------------
 # IP address manipulation routines
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
+
 import socket
 import struct
-from typing import Union, Iterable
+from typing import Iterable, Callable
 
 # NOC Modules
 from noc.core.validators import check_ipv4_prefix, check_ipv6_prefix
@@ -39,7 +41,7 @@ class IP:
 
     def __repr__(self):
         """Returns string representation of prefix."""
-        return "<IPv%s %s>" % (self.afi, self.prefix)
+        return "<IPv{self.afi} {self.prefix}>"
 
     def __str__(self):
         """Returns string containing prefix."""
@@ -93,7 +95,7 @@ class IP:
         return "4"
 
     @classmethod
-    def prefix(cls, prefix) -> Union["IPv4", "IPv6"]:
+    def prefix(cls, prefix) -> IPv4 | IPv6:
         """Convert a string to the appropriate IP prefix instance.
 
         Args:
@@ -109,8 +111,8 @@ class IP:
     def iter_address(
         self,
         count: int | None = None,
-        until: Union[str, "IP"] | None = None,
-        filter=None,  # Callable[[IP], bool] | None
+        until: str | IP | None = None,
+        filter: Callable[[IP], bool] | None = None,
     ):
         """Yield continuing addresses beginning from this prefix.
 
@@ -137,7 +139,7 @@ class IP:
             if (count and n >= count) or (until and a == until):
                 return
 
-    def iter_cover(self, mask: int) -> Iterable[type["IP"]]:
+    def iter_cover(self, mask: int) -> Iterable[IP]:
         """Generate prefixes of size *mask* covering this prefix.
 
         Args:
@@ -158,7 +160,7 @@ class IP:
             yield s
             s += dist
 
-    def iter_free(self, prefixes: list[str | "IP"]):
+    def iter_free(self, prefixes: list[IP]):
         """Yield free sub-prefixes within this prefix.
 
         Args:
@@ -182,11 +184,11 @@ class IP:
 
     def area_spot(
         self,
-        addresses: list[Union[str, "IP"]],
+        addresses: list[str | IP],
         dist: int,
         sep: bool = False,
         exclude_special: bool = True,
-    ) -> list[Union["IP", None]]:
+    ) -> list[IP | None]:
         """Return addresses inside the prefix covering an area around the given ones.
 
         Args:
@@ -253,7 +255,7 @@ class IP:
                 return [a for a in spot if a is None or a not in ignored]
         return spot
 
-    def rebase(self, base: "IP", new_base: "IP") -> Union["IPv4", "IPv6"]:
+    def rebase(self, base: IP, new_base: IP) -> IPv4 | IPv6:
         """Rebase this prefix from *base* to *new_base*.
 
         Args:
@@ -342,7 +344,7 @@ class IPv4(IP):
         return [int(d) for d in self.address.split(".")]
 
     @classmethod
-    def _to_prefix(cls, s: int, mask: int) -> "IPv4":
+    def _to_prefix(cls, s: int, mask: int) -> IPv4:
         """Convert an integer and mask length into a new IPv4 instance.
 
         Args:
@@ -376,7 +378,7 @@ class IPv4(IP):
         """> operator."""
         return self.d > other.d or (self.d == other.d and self.mask > other.mask)
 
-    def __add__(self, n: int) -> "IPv4":
+    def __add__(self, n: int) -> IPv4:
         """Add an integer distance to this address.
 
         Args:
@@ -387,7 +389,7 @@ class IPv4(IP):
         """
         return self._to_prefix((self.d + n) & B32, self.mask)
 
-    def __sub__(self, n) -> "IPv4":
+    def __sub__(self, n) -> IPv4:
         """Subtract an integer or compute distance to another IPv4 address.
 
         If *n* is an integer, returns a new IPv4 instance shifted by *n*.
@@ -418,7 +420,7 @@ class IPv4(IP):
             m >>= 1
 
     @classmethod
-    def from_bits(cls, bits: list[int]) -> "IPv4":
+    def from_bits(cls, bits: list[int]) -> IPv4:
         """Create a new IPv4 instance from a list of bits.
 
         Args:
@@ -442,28 +444,28 @@ class IPv4(IP):
         return 2 ** (32 - self.mask)
 
     @property
-    def first(self) -> "IPv4":
+    def first(self) -> IPv4:
         """Return the first address of the block (network address)."""
         return self._to_prefix(self.d & (((1 << self.mask) - 1) << (32 - self.mask)), self.mask)
 
     @property
-    def last(self) -> "IPv4":
+    def last(self) -> IPv4:
         """Return the last address of the block (broadcast address)."""
         return self._to_prefix(
             self.d | (B32 ^ (((1 << self.mask) - 1) << (32 - self.mask))), self.mask
         )
 
     @property
-    def netmask(self) -> "IPv4":
+    def netmask(self) -> IPv4:
         """Return an IPv4 instance representing the netmask in dotted-decimal form."""
         return self._to_prefix(((1 << self.mask) - 1) << (32 - self.mask), 32)
 
     @property
-    def wildcard(self) -> "IPv4":
+    def wildcard(self) -> IPv4:
         """Return an IPv4 instance representing the Cisco-style wildcard mask."""
         return self._to_prefix((2 ** (32 - self.mask)) - 1, 32)
 
-    def contains(self, other: "IPv4") -> bool:
+    def contains(self, other: IPv4) -> bool:
         """Check if *other* is contained within this prefix.
 
         Args:
@@ -478,11 +480,11 @@ class IPv4(IP):
         return (self.d & m) == (other.d & m)
 
     @property
-    def normalized(self) -> "IPv4":
+    def normalized(self) -> IPv4:
         """Return a new IPv4 instance in normalized minimal form."""
         return self._to_prefix(self.d & ((1 << self.mask) - 1) << (32 - self.mask), self.mask)
 
-    def set_mask(self, mask: int = 32) -> "IPv4":
+    def set_mask(self, mask: int = 32) -> IPv4:
         """Return a new IPv4 instance with the specified mask value.
 
         Args:
@@ -496,9 +498,9 @@ class IPv4(IP):
     @classmethod
     def range_to_prefixes(
         cls,
-        first: Union[str, "IPv4"],
-        last: Union[str, "IPv4"],
-    ) -> list["IPv4"]:
+        first: str | IPv4,
+        last: str | IPv4,
+    ) -> list[IPv4]:
         """Convert an IPv4 address range to a minimal list of covering prefixes.
 
         >>> IPv4.range_to_prefixes('192.168.0.2', '192.168.0.2')
@@ -545,7 +547,7 @@ class IPv4(IP):
         return addr
 
     @property
-    def special_addresses(self) -> set["IPv4"]:
+    def special_addresses(self) -> set[IPv4]:
         """Set of 'special' addresses for this IPv4 prefix.
 
         Returns the first and last addresses (network and broadcast) when
@@ -671,7 +673,7 @@ class IPv6(IP):
         return masks
 
     @classmethod
-    def _to_prefix(cls, d0: int, d1: int, d2: int, d3: int, mask: int) -> "IPv6":
+    def _to_prefix(cls, d0: int, d1: int, d2: int, d3: int, mask: int) -> IPv6:
         """Convert four 32-bit integers and a mask into a new IPv6 instance.
 
         Applies :: compression where appropriate and expands mapped IPv4
@@ -774,7 +776,7 @@ class IPv6(IP):
             return self.mask > other.mask
         return self.d3 > other.d3
 
-    def __add__(self, n: int) -> "IPv6":
+    def __add__(self, n: int) -> IPv6:
         """Add an integer distance to this address.
 
         Args:
@@ -801,7 +803,7 @@ class IPv6(IP):
             # d3+=1
         return self._to_prefix(d0, d1, d2, d3, self.mask)
 
-    def __sub__(self, n) -> Union["IPv6", int]:
+    def __sub__(self, n) -> IPv6 | int:
         """Subtract an integer or compute distance to another IPv6 prefix.
 
         If *n* is an integer, returns a new IPv6 instance shifted by *n*.
@@ -851,7 +853,7 @@ class IPv6(IP):
             m >>= 1
 
     @classmethod
-    def from_bits(cls, bits: list[int]) -> "IPv6":
+    def from_bits(cls, bits: list[int]) -> IPv6:
         """Create a new IPv6 prefix instance from a list of bits.
 
         Args:
@@ -869,7 +871,7 @@ class IPv6(IP):
             d[n // 32] <<= 32 - (n % 32)
         return cls._to_prefix(d[0], d[1], d[2], d[3], n)
 
-    def contains(self, other: "IPv6") -> bool:
+    def contains(self, other: IPv6) -> bool:
         """Check if *other* is contained within this prefix.
 
         Args:
@@ -892,7 +894,7 @@ class IPv6(IP):
         return True
 
     @property
-    def first(self) -> "IPv6":
+    def first(self) -> IPv6:
         """Return the first address of this prefix (network address)."""
         masks = self._get_masks()
         return self._to_prefix(
@@ -904,7 +906,7 @@ class IPv6(IP):
         )
 
     @property
-    def last(self) -> "IPv6":
+    def last(self) -> IPv6:
         """Return the last address of this prefix (broadcast address)."""
         masks = [B32 ^ m for m in self._get_masks()]
         return self._to_prefix(
@@ -916,11 +918,11 @@ class IPv6(IP):
         )
 
     @property
-    def normalized(self) -> "IPv6":
+    def normalized(self) -> IPv6:
         """Return a new IPv6 instance in its normalized minimal form."""
         return self._to_prefix(self.d0, self.d1, self.d2, self.d3, self.mask)
 
-    def set_mask(self, mask: int = 128) -> "IPv6":
+    def set_mask(self, mask: int = 128) -> IPv6:
         """Return a new IPv6 instance with the specified mask value.
 
         Args:
@@ -996,7 +998,7 @@ class PrefixDB:
         self.children = [None, None]
         self.key = key
 
-    def __getitem__(self, prefix: Union["IPv4", "IPv6"]):
+    def __getitem__(self, prefix: "IPv4" | "IPv6"):
         """Get the value stored for *prefix*.
 
         Args:
@@ -1018,7 +1020,7 @@ class PrefixDB:
             return node.key
         raise KeyError
 
-    def __setitem__(self, prefix: Union["IPv4", "IPv6"], key):
+    def __setitem__(self, prefix: "IPv4" | "IPv6", key):
         """Store a *key* at the location identified by *prefix*.
 
         Creates intermediate nodes automatically.
@@ -1036,7 +1038,7 @@ class PrefixDB:
             node = c
         node.key = key
 
-    def __contains__(self, prefix: Union["IPv4", str]) -> bool:
+    def __contains__(self, prefix: "IPv4" | str) -> bool:
         """Check whether a key is stored for *prefix*."""
         if isinstance(prefix, str):
             prefix = IPv4.prefix(prefix)
@@ -1048,7 +1050,7 @@ class PrefixDB:
             node = c
         return bool(node.key)
 
-    def iter_free(self, root: Union["IPv4", "IPv6"]):
+    def iter_free(self, root: "IPv4" | "IPv6"):
         """Yield free (unoccupied) sub-prefixes within *root*.
 
         Walks the tree starting at the bit-path of *root* and yields every
