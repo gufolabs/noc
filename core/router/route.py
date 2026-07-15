@@ -24,7 +24,6 @@ import orjson
 from noc.core.msgstream.message import Message
 from noc.core.matcher import build_matcher
 from noc.core.defer import JOBS_STREAM
-from noc.core.comp import DEFAULT_ENCODING
 from noc.core.mx import (
     MX_H_VALUE_SPLITTER,
     MX_NOTIFICATION_METHOD,
@@ -62,7 +61,7 @@ class TransmuteTemplate:
     template: JTemplate
 
     def render_body(self, ctx: dict[str, Any]) -> dict[str, Any]:
-        return orjson.loads(self.template.render(**ctx).encode(encoding=DEFAULT_ENCODING))
+        return orjson.loads(self.template.render(**ctx).encode())
 
 
 @dataclass
@@ -145,11 +144,11 @@ class MatchItem:
             return r
         for h in self.headers:
             if h.op == "regex":
-                r[h.header] = {"$regex": re.compile(h.value.encode(DEFAULT_ENCODING))}
+                r[h.header] = {"$regex": re.compile(h.value.encode())}
             elif h.op == "!=":
-                r[h.header] = {"$ne": h.value.encode(DEFAULT_ENCODING)}
+                r[h.header] = {"$ne": h.value.encode()}
             else:
-                r[h.header] = h.value.encode(DEFAULT_ENCODING)
+                r[h.header] = h.value.encode()
         return r
 
 
@@ -159,7 +158,7 @@ class Route:
     If condition is matched - do action
     """
 
-    MX_H_VALUE_SPLITTER = MX_H_VALUE_SPLITTER.encode(DEFAULT_ENCODING)
+    MX_H_VALUE_SPLITTER = MX_H_VALUE_SPLITTER.encode()
 
     def __init__(self, name: str, r_type: str, order: int, telemetry_sample: int | None = None):
         self.name = name
@@ -244,7 +243,7 @@ class Route:
 
     def set_type(self, r_type: str | frozenset[bytes]):
         if isinstance(r_type, str):
-            self.type = frozenset([r_type.encode(encoding=DEFAULT_ENCODING)])
+            self.type = frozenset([r_type.encode()])
         else:
             self.type = frozenset(x for x in r_type)
 

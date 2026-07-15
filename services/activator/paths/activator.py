@@ -19,7 +19,7 @@ from noc.core.script.base import BaseScript
 from noc.core.ioloop.snmp import snmp_get, SNMPError
 from noc.core.snmp.version import SNMP_v1, SNMP_v2c
 from noc.core.http.async_client import HttpClient
-from noc.core.comp import DEFAULT_ENCODING, smart_text
+from noc.core.comp import smart_text
 from noc.core.perf import metrics
 from noc.core.debug import error_report
 from noc.core.checkers.loader import loader as checker_loader
@@ -323,13 +323,13 @@ class ActivatorAPI(JSONRPCAPI):
         ) as client:
             code, headers, body = await client.get(url)
             if 200 <= code <= 299:
-                return body.decode(DEFAULT_ENCODING, errors="replace")
+                return body.decode(errors="replace")
             if ignore_errors:
                 metrics["error", ("type", f"http_error_{code}")] += 1
                 self.logger.debug("HTTP GET %s failed: %s %s", url, code, body)
                 return str(
-                    {k: v.decode(DEFAULT_ENCODING, errors="replace") for k, v in headers.items()}
-                ) + body.decode(DEFAULT_ENCODING, errors="replace")
+                    {k: v.decode(errors="replace") for k, v in headers.items()}
+                ) + body.decode(errors="replace")
             metrics["error", ("type", f"http_error_{code}")] += 1
             self.logger.debug("HTTP GET %s failed: %s %s", url, code, body)
             return None

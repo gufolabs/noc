@@ -23,7 +23,7 @@ from typing import Any, Iterable, Callable
 # NOC modules
 from noc.core.perf import metrics
 from noc.core.mongo.connection import get_db
-from noc.core.comp import smart_text, DEFAULT_ENCODING
+from noc.core.comp import smart_text
 from noc.models import get_model
 from noc.core.hash import hash_int
 from noc.core.mx import send_message, MessageType, MX_CHANGE_ID, MX_DATA_ID
@@ -298,7 +298,7 @@ class DataStream:
             "$set": {
                 cls.F_CHANGEID: change_id,
                 cls.F_HASH: hash,
-                cls.F_DATA: orjson.dumps(data).decode(DEFAULT_ENCODING),
+                cls.F_DATA: orjson.dumps(data).decode(),
             }
         }
         if meta:
@@ -719,8 +719,8 @@ class DataStream:
         data["$changeid"] = str(change_id)
         # Build headers
         headers = {
-            MX_CHANGE_ID: str(change_id).encode(DEFAULT_ENCODING),
-            MX_DATA_ID: str(data["id"]).encode(DEFAULT_ENCODING),
+            MX_CHANGE_ID: str(change_id).encode(),
+            MX_DATA_ID: str(data["id"]).encode(),
         }
         if additional_headers:
             headers.update(additional_headers)

@@ -21,7 +21,6 @@ from noc.core.mx import MX_TO, MX_WH_API_URL, MX_NOTIFICATION_METHOD
 from noc.core.perf import metrics
 from noc.config import config
 from noc.core.http.sync_client import HttpClient, ERR_TIMEOUT
-from noc.core.comp import DEFAULT_ENCODING
 from noc.core.text import split_text
 
 TG_API = "https://api.telegram.org/bot"
@@ -68,7 +67,7 @@ class TgSenderService(FastAPIService):
             metrics["messages_drops"] += 1
             return
         metrics["messages_processed"] += 1
-        data, dst = orjson.loads(msg.value), dst.decode(encoding=DEFAULT_ENCODING)
+        data, dst = orjson.loads(msg.value), dst.decode()
         address = self.parse_address(data, dst)
         if not address:
             self.logger.warning("[%s] Message without address", msg.offset)

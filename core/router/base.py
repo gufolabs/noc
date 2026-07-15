@@ -27,7 +27,6 @@ from noc.core.mx import (
     MX_FWD_ROUTER,
 )
 from noc.core.service.loader import get_service
-from noc.core.comp import DEFAULT_ENCODING
 from noc.core.perf import metrics
 from noc.core.ioloop.util import run_sync
 from noc.core.msgstream.config import get_stream
@@ -233,8 +232,8 @@ class Router:
             raw_value:
         """
         msg_headers = {
-            MX_MESSAGE_TYPE: message_type.encode(DEFAULT_ENCODING),
-            MX_SHARDING_KEY: str(sharding_key).encode(DEFAULT_ENCODING),
+            MX_MESSAGE_TYPE: message_type.encode(),
+            MX_SHARDING_KEY: str(sharding_key).encode(),
         }
         if headers:
             msg_headers.update(headers)
@@ -284,7 +283,7 @@ class Router:
                 break
             if not routed:
                 logger.debug("[%s] Not routed", msg_id)
-                metrics["route_misses", ("message_type", msg_type.decode(DEFAULT_ENCODING))] += 1
+                metrics["route_misses", ("message_type", msg_type.decode())] += 1
 
     async def to_route(
         self,
@@ -359,8 +358,8 @@ class Router:
                 metrics[("forwards", ("stream", stream))] += 1
                 logger.debug("[%s] Routing to %s:%s", msg_id, stream, partition)
                 if route.telemetry_sample:
-                    headers[MX_SPAN_ID] = str(span.span_id).encode(DEFAULT_ENCODING)
-                    headers[MX_SPAN_CTX] = str(span.span_context).encode(DEFAULT_ENCODING)
+                    headers[MX_SPAN_ID] = str(span.span_id).encode()
+                    headers[MX_SPAN_CTX] = str(span.span_context).encode()
                     span.headers = headers
                 await self.publish(value=body, stream=stream, partition=partition, headers=headers)
                 routed |= True

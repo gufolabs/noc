@@ -24,7 +24,6 @@ from noc.config import config
 from noc.core.span import Span, get_current_span
 from noc.core.ioloop.util import run_sync
 from .error import RPCError, RPCNoService, RPCHTTPError, RPCException, RPCRemoteError
-from noc.core.comp import DEFAULT_ENCODING
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +58,7 @@ class RPCProxy:
         self._client = HttpClient(
             max_redirects=None,
             headers={
-                "X-NOC-Calling-Service": self._service.name.encode(DEFAULT_ENCODING),
+                "X-NOC-Calling-Service": self._service.name.encode(),
                 "Content-Type": b"application/json",
             },
             connect_timeout=CONNECT_TIMEOUT,
@@ -79,10 +78,8 @@ class RPCProxy:
                     parent=span_id,
                 ) as span:
                     if sample:
-                        req_headers["X-NOC-Span-Ctx"] = str(span.span_context).encode(
-                            DEFAULT_ENCODING
-                        )
-                        req_headers["X-NOC-Span"] = str(span.span_id).encode(DEFAULT_ENCODING)
+                        req_headers["X-NOC-Span-Ctx"] = str(span.span_context).encode()
+                        req_headers["X-NOC-Span"] = str(span.span_id).encode()
                     code, headers, data = await self._client.post(url, body, headers=req_headers)
                     # Process response
                     if code == 200:
@@ -93,7 +90,7 @@ class RPCProxy:
                             raise RPCException("Redirects limit exceeded")
                         url = headers.get("location")
                         self._logger.debug("Redirecting to %s", url)
-                        return await make_call(url.decode(DEFAULT_ENCODING), data, limit - 1)
+                        return await make_call(url.decode(), data, limit - 1)
                     if code in (598, 599):
                         span.set_error(code)
                         self._logger.debug("Timed out")
