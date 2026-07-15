@@ -313,6 +313,8 @@ params:
   discovery.job_check_interval:
     default: '1000'
     min: '1000'
+  discovery.max_id_mac_range:
+    min: '0'
   discovery.max_threads:
     default: '20'
   discovery.min_metric_interval:
@@ -339,10 +341,10 @@ params:
     default: '60'
   etl.compression:
     choices:
-    - bz2
-    - lzma
     - gzip
     - plain
+    - lzma
+    - bz2
     default: gzip
   features.consul_healthchecks:
     default: 'True'
@@ -470,11 +472,11 @@ params:
   kafka.bootstrap_servers: {}
   kafka.compression_type:
     choices:
-    - none
-    - snappy
-    - lz4
     - zstd
+    - lz4
     - gzip
+    - snappy
+    - none
     default: lz4
   kafka.max_batch_size:
     default: '16384'
@@ -492,20 +494,20 @@ params:
     default: PLAIN
   kafka.security_protocol:
     choices:
-    - SASL_PLAINTEXT
-    - SSL
     - PLAINTEXT
     - SASL_SSL
+    - SSL
+    - SASL_PLAINTEXT
     default: PLAINTEXT
   kafka.username: {}
   kafkasender.bootstrap_servers: {}
   kafkasender.compression_type:
     choices:
-    - none
-    - snappy
-    - lz4
     - zstd
+    - lz4
     - gzip
+    - snappy
+    - none
     default: none
   kafkasender.max_batch_size:
     default: '16384'
@@ -521,10 +523,10 @@ params:
     default: PLAIN
   kafkasender.security_protocol:
     choices:
-    - SASL_PLAINTEXT
-    - SSL
     - PLAINTEXT
     - SASL_SSL
+    - SSL
+    - SASL_PLAINTEXT
     default: PLAINTEXT
   kafkasender.username: {}
   language:
@@ -557,8 +559,8 @@ params:
   liftbridge.compression_method:
     choices:
     - ''
-    - zlib
     - lzma
+    - zlib
     default: zlib
   liftbridge.compression_threshold:
     default: '524288'
@@ -577,9 +579,9 @@ params:
     default: '604800'
   login.jwt_algorithm:
     choices:
+    - HS384
     - HS256
     - HS512
-    - HS384
     default: HS256
   login.jwt_cookie_name:
     default: noc_jwt

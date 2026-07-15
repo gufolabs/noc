@@ -6,10 +6,6 @@ Geocoding service configuration
 
 {{ config_param("geocoding.order") }}
 
-## yandex_key
-
-{{ config_param("geocoding.yandex_key") }}
-
 ## yandex_apikey
 
 {{ config_param("geocoding.yandex_apikey") }}

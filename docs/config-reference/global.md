@@ -2,6 +2,14 @@
 
 Global settings applicable to all services
 
+## host
+
+Hostname.
+
+!!! note
+
+    This parameter is read-only and cannot be modified
+
 ## loglevel
 
 {{ config_param("loglevel") }}
@@ -55,10 +63,6 @@ API listen address in form `<address>:<port>`, where `<address>` is one of:
 ## version_format
 
 {{ config_param("version_format") }}
-
-## node
-
-{{ config_param("node") }}
 
 ## pool
 

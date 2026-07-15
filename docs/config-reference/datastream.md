@@ -22,36 +22,6 @@ Activate Wait Mode for Alarm datastream (Mongo greater 3.6 needed)
 
 {{ config_param("datastream.enable_alarm_wait") }}
 
-## enable_cfgping
-
-{{ config_param("datastream.enable_cfgping") }}
-
-## enable_cfgping_wait
-
-Activate Wait Mode for CfgPing datastream (Mongo greater 3.6 needed)
-
-{{ config_param("datastream.enable_cfgping_wait") }}
-
-## enable_cfgsyslog
-
-{{ config_param("datastream.enable_cfgsyslog") }}
-
-## enable_cfgsyslog_wait
-
-Activate Wait Mode for CfgSyslog datastream (Mongo greater 3.6 needed)
-
-{{ config_param("datastream.enable_cfgsyslog_wait") }}
-
-## enable_cfgtrap
-
-{{ config_param("datastream.enable_cfgtrap") }}
-
-## enable_cfgtrap_wait
-
-Activate Wait Mode for CfgTrap datastream (Mongo greater 3.6 needed)
-
-{{ config_param("datastream.enable_cfgtrap_wait") }}
-
 ## enable_dnszone
 
 {{ config_param("datastream.enable_dnszone") }}
