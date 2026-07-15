@@ -41,7 +41,7 @@ class IP:
 
     def __repr__(self):
         """Returns string representation of prefix."""
-        return "<IPv{self.afi} {self.prefix}>"
+        return f"<IPv{self.afi} {self.prefix}>"
 
     def __str__(self):
         """Returns string containing prefix."""
