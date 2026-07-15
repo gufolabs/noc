@@ -476,29 +476,6 @@ class Application(metaclass=ApplicationBase):
         cursor.execute(sql, args)
         return cursor.fetchall()
 
-    def lookup(self, request, func):
-        """
-        AJAX lookup wrapper
-        @todo: Remove
-        """
-        result = []
-        if request.GET and "q" in request.GET:
-            q = request.GET["q"]
-            if len(q) > 2:  # Ignore requests shorter than 3 letters
-                result = list(func(q))
-        return self.render_plain_text("\n".join(result))
-
-    def lookup_json(self, request, func, id_field="id", name_field="name"):
-        """
-        Ajax lookup wrapper, returns JSON list of hashes
-        """
-        result = []
-        if request.GET and "q" in request.GET:
-            q = request.GET["q"]
-            for r in func(q):
-                result += [{id_field: r, name_field: r}]
-        return self.render_json(result)
-
     def iter_views(self):
         """
         Iterator returning application views
