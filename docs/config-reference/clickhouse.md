@@ -4,142 +4,55 @@ Clickhouse service configuration
 
 ## rw_addresses
 
-|                |                                   |
-| -------------- | --------------------------------- |
-| Default value  | `service="clickhouse", wait=True` |
-| YAML Path      | `clickhouse.rw_addresses`         |
-| Key-Value Path | `clickhouse/rw_addresses`         |
-| Environment    | `NOC_CLICKHOUSE_RW_ADDRESSES`     |
+{{ config_param("clickhouse.rw_addresses") }}
 
 ## db
 
-|                |                     |
-| -------------- | ------------------- |
-| Default value  | `noc`               |
-| YAML Path      | `clickhouse.db`     |
-| Key-Value Path | `clickhouse/db`     |
-| Environment    | `NOC_CLICKHOUSE_DB` |
+{{ config_param("clickhouse.db") }}
 
 ## rw_user
 
-|                |                          |
-| -------------- | ------------------------ |
-| Default value  | `default`                |
-| YAML Path      | `clickhouse.rw_user`     |
-| Key-Value Path | `clickhouse/rw_user`     |
-| Environment    | `NOC_CLICKHOUSE_RW_USER` |
+{{ config_param("clickhouse.rw_user") }}
 
 ## rw_password
 
-|                |                              |
-| -------------- | ---------------------------- |
-| Default value  | `None`                       |
-| YAML Path      | `clickhouse.rw_password`     |
-| Key-Value Path | `clickhouse/rw_password`     |
-| Environment    | `NOC_CLICKHOUSE_RW_PASSWORD` |
+{{ config_param("clickhouse.rw_password") }}
 
 ## ro_addresses
 
-|                |                                   |
-| -------------- | --------------------------------- |
-| Default value  | `service="clickhouse", wait=True` |
-| YAML Path      | `clickhouse.ro_addresses`         |
-| Key-Value Path | `clickhouse/ro_addresses`         |
-| Environment    | `NOC_CLICKHOUSE_RO_ADDRESSES`     |
+{{ config_param("clickhouse.ro_addresses") }}
 
 ## ro_user
 
-|                |                          |
-| -------------- | ------------------------ |
-| Default value  | `readonly`               |
-| YAML Path      | `clickhouse.ro_user`     |
-| Key-Value Path | `clickhouse/ro_user`     |
-| Environment    | `NOC_CLICKHOUSE_RO_USER` |
+{{ config_param("clickhouse.ro_user") }}
 
 ## ro_password
 
-|                |                              |
-| -------------- | ---------------------------- |
-| Default value  | `None`                       |
-| YAML Path      | `clickhouse.ro_password`     |
-| Key-Value Path | `clickhouse/ro_password`     |
-| Environment    | `NOC_CLICKHOUSE_RO_PASSWORD` |
+{{ config_param("clickhouse.ro_password") }}
 
 ## request_timeout
 
-|                |                                  |
-| -------------- | -------------------------------- |
-| Default value  | `1h`                             |
-| YAML Path      | `clickhouse.request_timeout`     |
-| Key-Value Path | `clickhouse/request_timeout`     |
-| Environment    | `NOC_CLICKHOUSE_REQUEST_TIMEOUT` |
+{{ config_param("clickhouse.request_timeout") }}
 
 ## connect_timeout
 
-|                |                                  |
-| -------------- | -------------------------------- |
-| Default value  | `10s`                            |
-| YAML Path      | `clickhouse.connect_timeout`     |
-| Key-Value Path | `clickhouse/connect_timeout`     |
-| Environment    | `NOC_CLICKHOUSE_CONNECT_TIMEOUT` |
+{{ config_param("clickhouse.connect_timeout") }}
 
 ## default_merge_tree_granularity
 
-|                |                                                 |
-| -------------- | ----------------------------------------------- |
-| Default value  | `8192`                                          |
-| YAML Path      | `clickhouse.default_merge_tree_granularity`     |
-| Key-Value Path | `clickhouse/default_merge_tree_granularity`     |
-| Environment    | `NOC_CLICKHOUSE_DEFAULT_MERGE_TREE_GRANULARITY` |
+{{ config_param("clickhouse.default_merge_tree_granularity") }}
 
 ## encoding
 
-Default value
-:
-
-Possible values
-:
-
--
-
-- deflate
-- gzip
-
-YAML Path
-: clickhouse.encoding
-
-Key-Value Path
-: clickhouse/encoding
-
-Environment
-: NOC_CLICKHOUSE_ENCODING
-
-## enable_low_cardinality
-
-|                |                                         |
-| -------------- | --------------------------------------- |
-| Default value  | `False`                                 |
-| YAML Path      | `clickhouse.enable_low_cardinality`     |
-| Key-Value Path | `clickhouse/enable_low_cardinality`     |
-| Environment    | `NOC_CLICKHOUSE_ENABLE_LOW_CARDINALITY` |
+{{ config_param("clickhouse.encoding") }}
 
 ## cluster
 
-|                |                          |
-| -------------- | ------------------------ |
-| Default value  | ``                       |
-| YAML Path      | `clickhouse.cluster`     |
-| Key-Value Path | `clickhouse/cluster`     |
-| Environment    | `NOC_CLICKHOUSE_CLUSTER` |
+{{ config_param("clickhouse.cluster") }}
 
 ## cluster_topology
 
-|                |                                   |
-| -------------- | --------------------------------- |
-| Default value  | `1`                               |
-| YAML Path      | `clickhouse.cluster_topology`     |
-| Key-Value Path | `clickhouse/cluster_topology`     |
-| Environment    | `NOC_CLICKHOUSE_CLUSTER_TOPOLOGY` |
+{{ config_param("clickhouse.cluster_topology") }}
 
 Examples:
 

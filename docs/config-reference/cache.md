@@ -4,45 +4,20 @@ Cache service configuration
 
 ## vcinterfacescount
 
-|                |                               |
-| -------------- | ----------------------------- |
-| Default value  | `1h`                          |
-| YAML Path      | `cache.vcinterfacescount`     |
-| Key-Value Path | `cache/vcinterfacescount`     |
-| Environment    | `NOC_CACHE_VCINTERFACESCOUNT` |
+{{ config_param("cache.vcinterfacescount") }}
 
 ## vcprefixes
 
-|                |                        |
-| -------------- | ---------------------- |
-| Default value  | `1h`                   |
-| YAML Path      | `cache.vcprefixes`     |
-| Key-Value Path | `cache/vcprefixes`     |
-| Environment    | `NOC_CACHE_VCPREFIXES` |
+{{ config_param("cache.vcprefixes") }}
 
-## cache\_
+## cache_class
 
-|                |                                   |
-| -------------- | --------------------------------- |
-| Default value  | `noc.core.cache.mongo.MongoCache` |
-| YAML Path      | `cache.cache_`                    |
-| Key-Value Path | `cache/cache_`                    |
-| Environment    | `NOC_CACHE_CACHE_`                |
+{{ config_param("cache.cache_class") }}
 
 ## default_ttl
 
-|                |                         |
-| -------------- | ----------------------- |
-| Default value  | `1d`                    |
-| YAML Path      | `cache.default_ttl`     |
-| Key-Value Path | `cache/default_ttl`     |
-| Environment    | `NOC_CACHE_DEFAULT_TTL` |
+{{ config_param("cache.default_ttl") }}
 
 ## pool_size
 
-|                |                       |
-| -------------- | --------------------- |
-| Default value  | `8`                   |
-| YAML Path      | `cache.pool_size`     |
-| Key-Value Path | `cache/pool_size`     |
-| Environment    | `NOC_CACHE_POOL_SIZE` |
+{{ config_param("cache.pool_size") }}

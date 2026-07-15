@@ -2,88 +2,45 @@
 
 Global settings applicable to all services
 
+## host
+
+Hostname.
+
+!!! note
+
+    This parameter is read-only and cannot be modified
+
 ## loglevel
 
-Default value
-: info
-
-Possible values
-: _ critical
-_ error
-_ warning
-_ info \* debug
-
-YAML Path
-: loglevel
-
-Key-Value Path
-: loglevel
-
-Environment
-: NOC_LOGLEVEL
+{{ config_param("loglevel") }}
 
 ## brand
 
-|                |             |
-| -------------- | ----------- |
-| Default value  | `NOC`       |
-| YAML Path      | `brand`     |
-| Key-Value Path | `brand`     |
-| Environment    | `NOC_BRAND` |
+{{ config_param("brand") }}
 
 ## global_n_instances
 
-|                |                          |
-| -------------- | ------------------------ |
-| Default value  | `1`                      |
-| YAML Path      | `global_n_instances`     |
-| Key-Value Path | `global_n_instances`     |
-| Environment    | `NOC_GLOBAL_N_INSTANCES` |
+{{ config_param("global_n_instances") }}
 
 ## installation_name
 
-|                |                             |
-| -------------- | --------------------------- |
-| Default value  | `Unconfigured installation` |
-| YAML Path      | `installation_name`         |
-| Key-Value Path | `installation_name`         |
-| Environment    | `NOC_INSTALLATION_NAME`     |
+{{ config_param("installation_name") }}
 
 ## installation_id
 
-|                |                       |
-| -------------- | --------------------- |
-| Default value  | ``                    |
-| YAML Path      | `installation_id`     |
-| Key-Value Path | `installation_id`     |
-| Environment    | `NOC_INSTALLATION_ID` |
+{{ config_param("installation_id") }}
 
 ## instance
 
-|                |                |
-| -------------- | -------------- |
-| Default value  | `0`            |
-| YAML Path      | `instance`     |
-| Key-Value Path | `instance`     |
-| Environment    | `NOC_INSTANCE` |
+{{ config_param("instance") }}
 
 ## language
 
-|                |                |
-| -------------- | -------------- |
-| Default value  | `en`           |
-| YAML Path      | `language`     |
-| Key-Value Path | `language`     |
-| Environment    | `NOC_LANGUAGE` |
+{{ config_param("language") }}
 
 ## language_code
 
-|                |                     |
-| -------------- | ------------------- |
-| Default value  | `en`                |
-| YAML Path      | `language_code`     |
-| Key-Value Path | `language_code`     |
-| Environment    | `NOC_LANGUAGE_CODE` |
+{{ config_param("language_code") }}
 
 ## listen
 
@@ -93,72 +50,28 @@ API listen address in form `<address>:<port>`, where `<address>` is one of:
 * interface name, like `eth0`
 * IP address.
 
-|                |              |
-| -------------- | ------------ |
-| Default value  | `auto:0`     |
-| YAML Path      | `listen`     |
-| Key-Value Path | `listen`     |
-| Environment    | `NOC_LISTEN` |
+{{ config_param("listen") }}
 
 ## log_format
 
-|                |                                      |
-| -------------- | ------------------------------------ |
-| Default value  | `%(asctime)s [%(name)s] %(message)s` |
-| YAML Path      | `log_format`                         |
-| Key-Value Path | `log_format`                         |
-| Environment    | `NOC_LOG_FORMAT`                     |
+{{ config_param("log_format") }}
 
 ## thread_stack_size
 
-|                |                         |
-| -------------- | ----------------------- |
-| Default value  | `0`                     |
-| YAML Path      | `thread_stack_size`     |
-| Key-Value Path | `thread_stack_size`     |
-| Environment    | `NOC_THREAD_STACK_SIZE` |
+{{ config_param("thread_stack_size") }}
 
 ## version_format
 
-|                |                                                   |
-| -------------- | ------------------------------------------------- |
-| Default value  | `%(version)s+%(branch)s.%(number)s.%(changeset)s` |
-| YAML Path      | `version_format`                                  |
-| Key-Value Path | `version_format`                                  |
-| Environment    | `NOC_VERSION_FORMAT`                              |
-
-## node
-
-|                |                        |
-| -------------- | ---------------------- |
-| Default value  | `socket.gethostname()` |
-| YAML Path      | `node`                 |
-| Key-Value Path | `node`                 |
-| Environment    | `NOC_NODE`             |
+{{ config_param("version_format") }}
 
 ## pool
 
-|                |                                 |
-| -------------- | ------------------------------- |
-| Default value  | `os.environ.get("NOC_POOL", ")` |
-| YAML Path      | `pool`                          |
-| Key-Value Path | `pool`                          |
-| Environment    | `NOC_POOL`                      |
+{{ config_param("pool") }}
 
 ## secret_key
 
-|                |                  |
-| -------------- | ---------------- |
-| Default value  | `12345`          |
-| YAML Path      | `secret_key`     |
-| Key-Value Path | `secret_key`     |
-| Environment    | `NOC_SECRET_KEY` |
+{{ config_param("secret_key") }}
 
 ## timezone
 
-|                |                 |
-| -------------- | --------------- |
-| Default value  | `Europe/Moscow` |
-| YAML Path      | `timezone`      |
-| Key-Value Path | `timezone`      |
-| Environment    | `NOC_TIMEZONE`  |
+{{ config_param("timezone") }}

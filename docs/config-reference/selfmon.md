@@ -4,109 +4,48 @@ Selfmon service configuration
 
 ## enable_managedobject
 
-|                |                                    |
-| -------------- | ---------------------------------- |
-| Default value  | `True`                             |
-| YAML Path      | `selfmon.enable_managedobject`     |
-| Key-Value Path | `selfmon/enable_managedobject`     |
-| Environment    | `NOC_SELFMON_ENABLE_MANAGEDOBJECT` |
+{{ config_param("selfmon.enable_managedobject") }}
 
 ## managedobject_ttl
 
-|                |                                 |
-| -------------- | ------------------------------- |
-| Default value  | `30`                            |
-| YAML Path      | `selfmon.managedobject_ttl`     |
-| Key-Value Path | `selfmon/managedobject_ttl`     |
-| Environment    | `NOC_SELFMON_MANAGEDOBJECT_TTL` |
+{{ config_param("selfmon.managedobject_ttl") }}
 
 ## enable_task
 
-|                |                           |
-| -------------- | ------------------------- |
-| Default value  | `False`                   |
-| YAML Path      | `selfmon.enable_task`     |
-| Key-Value Path | `selfmon/enable_task`     |
-| Environment    | `NOC_SELFMON_ENABLE_TASK` |
+{{ config_param("selfmon.enable_task") }}
 
 ## task_ttl
 
-|                |                        |
-| -------------- | ---------------------- |
-| Default value  | `30`                   |
-| YAML Path      | `selfmon.task_ttl`     |
-| Key-Value Path | `selfmon/task_ttl`     |
-| Environment    | `NOC_SELFMON_TASK_TTL` |
+{{ config_param("selfmon.task_ttl") }}
 
 ## enable_inventory
 
-|                |                                |
-| -------------- | ------------------------------ |
-| Default value  | `False`                        |
-| YAML Path      | `selfmon.enable_inventory`     |
-| Key-Value Path | `selfmon/enable_inventory`     |
-| Environment    | `NOC_SELFMON_ENABLE_INVENTORY` |
+{{ config_param("selfmon.enable_inventory") }}
 
 ## inventory_ttl
 
-|                |                             |
-| -------------- | --------------------------- |
-| Default value  | `30`                        |
-| YAML Path      | `selfmon.inventory_ttl`     |
-| Key-Value Path | `selfmon/inventory_ttl`     |
-| Environment    | `NOC_SELFMON_INVENTORY_TTL` |
+{{ config_param("selfmon.inventory_ttl") }}
 
 ## enable_fm
 
-|                |                         |
-| -------------- | ----------------------- |
-| Default value  | `False`                 |
-| YAML Path      | `selfmon.enable_fm`     |
-| Key-Value Path | `selfmon/enable_fm`     |
-| Environment    | `NOC_SELFMON_ENABLE_FM` |
+{{ config_param("selfmon.enable_fm") }}
 
 ## fm_ttl
 
-|                |                      |
-| -------------- | -------------------- |
-| Default value  | `30`                 |
-| YAML Path      | `selfmon.fm_ttl`     |
-| Key-Value Path | `selfmon/fm_ttl`     |
-| Environment    | `NOC_SELFMON_FM_TTL` |
+{{ config_param("selfmon.fm_ttl") }}
 
 ## enable_liftbridge
 
-|                |                                 |
-| -------------- | ------------------------------- |
-| Default value  | `False`                         |
-| YAML Path      | `selfmon.enable_liftbridge`     |
-| Key-Value Path | `selfmon/enable_liftbridge`     |
-| Environment    | `NOC_SELFMON_ENABLE_LIFTBRIDGE` |
+{{ config_param("selfmon.enable_liftbridge") }}
 
 ## liftbridge_ttl
 
-|                |                              |
-| -------------- | ---------------------------- |
-| Default value  | `30`                         |
-| YAML Path      | `selfmon.liftbridge_ttl`     |
-| Key-Value Path | `selfmon/liftbridge_ttl`     |
-| Environment    | `NOC_SELFMON_LIFTBRIDGE_TTL` |
+{{ config_param("selfmon.liftbridge_ttl") }}
 
 ## enable_kafka
 
-|                |                            |
-| -------------- | -------------------------- |
-| Default value  | `False`                    |
-| YAML Path      | `selfmon.enable_kafka`     |
-| Key-Value Path | `selfmon/enable_kafka`     |
-| Environment    | `NOC_SELFMON_ENABLE_KAFKA` |
+{{ config_param("selfmon.enable_kafka") }}
 
 ## kafka_ttl
 
-|                |                         |
-| -------------- | ----------------------- |
-| Default value  | `30`                    |
-| YAML Path      | `selfmon.kafka_ttl`     |
-| Key-Value Path | `selfmon/kafka_ttl`     |
-| Environment    | `NOC_SELFMON_KAFKA_TTL` |
-
+{{ config_param("selfmon.kafka_ttl") }}

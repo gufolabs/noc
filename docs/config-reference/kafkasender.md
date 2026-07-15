@@ -8,65 +8,19 @@
 
 ## username
 
-|                |                            |
-| -------------- | -------------------------- |
-| Default value  | ``                         |
-| YAML Path      | `kafkasender.username`     |
-| Key-Value Path | `kafkasender/username`     |
-| Environment    | `NOC_KAFKASENDER_USERNAME` |
+{{ config_param("kafkasender.username") }}
 
 ## password
 
-|                |                            |
-| -------------- | -------------------------- |
-| Default value  | `None`                     |
-| YAML Path      | `kafkasender.password`     |
-| Key-Value Path | `kafkasender/password`     |
-| Environment    | `NOC_KAFKASENDER_PASSWORD` |
+{{ config_param("kafkasender.password") }}
 
 ## sasl_mechanism
 
-Default value
-: PLAIN
-
-Possible values
-:
-
-- PLAIN
-- GSSAPI
-- SCRAM-SHA-256
-- SCRAM-SHA-512
-
-YAML Path
-: kafkasender.sasl_mechanism
-
-Key-Value Path
-: kafkasender/sasl_mechanism
-
-Environment
-: NOC_KAFKASENDER_SASL_MECHANISM
+{{ config_param("kafkasender.sasl_mechanism") }}
 
 ## security_protocol
 
-Default value
-: PLAINTEXT
-
-Possible values
-:
-
-- PLAINTEXT
-- SASL_PLAINTEXT
-- SSL
-- SASL_SSL
-
-YAML Path
-: kafkasender.security_protocol
-
-Key-Value Path
-: kafkasender/security_protocol
-
-Environment
-: NOC_KAFKASENDER_SECURITY_PROTOCOL
+{{ config_param("kafkasender.security_protocol") }}
 
 ## max_request_size
 

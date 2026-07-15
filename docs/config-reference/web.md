@@ -4,78 +4,38 @@
 
 ## theme
 
-|                |                 |
-| -------------- | --------------- |
-| Default value  | `gray`          |
-| YAML Path      | `web.theme`     |
-| Key-Value Path | `web/theme`     |
-| Environment    | `NOC_WEB_THEME` |
+{{ config_param("web.theme") }}
 
 ## api_row_limit
 
-|                |                         |
-| -------------- | ----------------------- |
-| Default value  | `0`                     |
-| YAML Path      | `web.api_row_limit`     |
-| Key-Value Path | `web/api_row_limit`     |
-| Environment    | `NOC_WEB_API_ROW_LIMIT` |
+{{ config_param("web.api_row_limit") }}
 
 ## api_unlimited_row_limit
 
-|                |                                   |
-| -------------- | --------------------------------- |
-| Default value  | `1000`                            |
-| YAML Path      | `web.api_unlimited_row_limit`     |
-| Key-Value Path | `web/api_unlimited_row_limit`     |
-| Environment    | `NOC_WEB_API_UNLIMITED_ROW_LIMIT` |
+{{ config_param("web.api_unlimited_row_limit") }}
 
 ## api_arch_alarm_limit
 
-|                |                                |
-| -------------- | ------------------------------ |
-| Default value  | `4 * 86400`                    |
-| YAML Path      | `web.api_arch_alarm_limit`     |
-| Key-Value Path | `web/api_arch_alarm_limit`     |
-| Environment    | `NOC_WEB_API_ARCH_ALARM_LIMIT` |
+{{ config_param("web.api_arch_alarm_limit") }}
 
 ## max_upload_size
 
 The maximum size in bytes that a request body may be
 before a RequestDataTooBig is raised.
 
-|                |                           |
-| -------------- | ------------------------- |
-| Default value  | `16777216`                |
-| YAML Path      | `web.max_upload_size`     |
-| Key-Value Path | `web/max_upload_size`     |
-| Environment    | `NOC_WEB_MAX_UPLOAD_SIZE` |
+{{ config_param("web.max_upload_size") }}
 
 ## language
 
-|                |                    |
-| -------------- | ------------------ |
-| Default value  | `en`               |
-| YAML Path      | `web.language`     |
-| Key-Value Path | `web/language`     |
-| Environment    | `NOC_WEB_LANGUAGE` |
+{{ config_param("web.language") }}
 
 ## install_collection
 
-|                |                              |
-| -------------- | ---------------------------- |
-| Default value  | `False`                      |
-| YAML Path      | `web.install_collection`     |
-| Key-Value Path | `web/install_collection`     |
-| Environment    | `NOC_WEB_INSTALL_COLLECTION` |
+{{ config_param("web.install_collection") }}
 
 ## max_threads
 
-|                |                       |
-| -------------- | --------------------- |
-| Default value  | `10`                  |
-| YAML Path      | `web.max_threads`     |
-| Key-Value Path | `web/max_threads`     |
-| Environment    | `NOC_WEB_MAX_THREADS` |
+{{ config_param("web.max_threads") }}
 
 ## macdb_window
 

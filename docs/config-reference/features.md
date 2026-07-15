@@ -4,90 +4,45 @@ Features service configuration
 
 ## use_uvloop
 
-|                |                           |
-| -------------- | ------------------------- |
-| Default value  | `False`                   |
-| YAML Path      | `features.use_uvloop`     |
-| Key-Value Path | `features/use_uvloop`     |
-| Environment    | `NOC_FEATURES_USE_UVLOOP` |
+{{ config_param("features.use_uvloop") }}
 
 ## cp
 
-|                |                   |
-| -------------- | ----------------- |
-| Default value  | `True`            |
-| YAML Path      | `features.cp`     |
-| Key-Value Path | `features/cp`     |
-| Environment    | `NOC_FEATURES_CP` |
+{{ config_param("features.cp") }}
 
 ## sentry
 
-|                |                       |
-| -------------- | --------------------- |
-| Default value  | `False`               |
-| YAML Path      | `features.sentry`     |
-| Key-Value Path | `features/sentry`     |
-| Environment    | `NOC_FEATURES_SENTRY` |
+{{ config_param("features.sentry") }}
 
 ## traefik
 
-|                |                        |
-| -------------- | ---------------------- |
-| Default value  | `False`                |
-| YAML Path      | `features.traefik`     |
-| Key-Value Path | `features/traefik`     |
-| Environment    | `NOC_FEATURES_TRAEFIK` |
+{{ config_param("features.traefik") }}
 
 ## cpclient
 
-|                |                         |
-| -------------- | ----------------------- |
-| Default value  | `False`                 |
-| YAML Path      | `features.cpclient`     |
-| Key-Value Path | `features/cpclient`     |
-| Environment    | `NOC_FEATURES_CPCLIENT` |
+{{ config_param("features.cpclient") }}
 
 ## telemetry
 
 Enable internal telemetry export to Clickhouse
 
-|                |                          |
-| -------------- | ------------------------ |
-| Default value  | `False`                  |
-| YAML Path      | `features.telemetry`     |
-| Key-Value Path | `features/telemetry`     |
-| Environment    | `NOC_FEATURES_TELEMETRY` |
+{{ config_param("features.telemetry") }}
 
 ## consul_healthchecks
 
 While registering serive in consul also register health check
 
-|                |                                    |
-| -------------- | ---------------------------------- |
-| Default value  | `True`                             |
-| YAML Path      | `features.consul_healthchecks`     |
-| Key-Value Path | `features/consul_healthchecks`     |
-| Environment    | `NOC_FEATURES_CONSUL_HEALTHCHECKS` |
+{{ config_param("features.consul_healthchecks") }}
 
 ## service_registration
 
 Permit consul self registration
 
-|                |                                     |
-| -------------- | ----------------------------------- |
-| Default value  | `True`                              |
-| YAML Path      | `features.service_registration`     |
-| Key-Value Path | `features/service_registration`     |
-| Environment    | `NOC_FEATURES_SERVICE_REGISTRATION` |
+{{ config_param("features.service_registration") }}
 
 ## forensic
 
-|                |                         |
-| -------------- | ----------------------- |
-| Default value  | `False`                 |
-| YAML Path      | `features.forensic`     |
-| Key-Value Path | `features/forensic`     |
-| Environment    | `NOC_FEATURES_FORENSIC` |
+{{ config_param("features.forensic") }}
 
 ## gate
 

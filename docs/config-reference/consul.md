@@ -4,128 +4,58 @@ Consul service configuration
 
 ## token
 
-|                |                    |
-| -------------- | ------------------ |
-| Default value  | `None`             |
-| YAML Path      | `consul.token`     |
-| Key-Value Path | `consul/token`     |
-| Environment    | `NOC_CONSUL_TOKEN` |
+{{ config_param("consul.token") }}
 
 ## connect_timeout
 
-|                |                              |
-| -------------- | ---------------------------- |
-| Default value  | `5s`                         |
-| YAML Path      | `consul.connect_timeout`     |
-| Key-Value Path | `consul/connect_timeout`     |
-| Environment    | `NOC_CONSUL_CONNECT_TIMEOUT` |
+{{ config_param("consul.connect_timeout") }}
 
 ## request_timeout
 
-|                |                              |
-| -------------- | ---------------------------- |
-| Default value  | `1h`                         |
-| YAML Path      | `consul.request_timeout`     |
-| Key-Value Path | `consul/request_timeout`     |
-| Environment    | `NOC_CONSUL_REQUEST_TIMEOUT` |
+{{ config_param("consul.request_timeout") }}
 
 ## near_retry_timeout
 
-|                |                                 |
-| -------------- | ------------------------------- |
-| Default value  | `1`                             |
-| YAML Path      | `consul.near_retry_timeout`     |
-| Key-Value Path | `consul/near_retry_timeout`     |
-| Environment    | `NOC_CONSUL_NEAR_RETRY_TIMEOUT` |
+{{ config_param("consul.near_retry_timeout") }}
 
 ## host
 
-|                |                   |
-| -------------- | ----------------- |
-| Default value  | `consul`          |
-| YAML Path      | `consul.host`     |
-| Key-Value Path | `consul/host`     |
-| Environment    | `NOC_CONSUL_HOST` |
+{{ config_param("consul.host") }}
 
 ## port
 
-|                |                   |
-| -------------- | ----------------- |
-| Default value  | `8500`            |
-| YAML Path      | `consul.port`     |
-| Key-Value Path | `consul/port`     |
-| Environment    | `NOC_CONSUL_PORT` |
+{{ config_param("consul.port") }}
 
 ## check_interval
 
-|                |                             |
-| -------------- | --------------------------- |
-| Default value  | `10s`                       |
-| YAML Path      | `consul.check_interval`     |
-| Key-Value Path | `consul/check_interval`     |
-| Environment    | `NOC_CONSUL_CHECK_INTERVAL` |
+{{ config_param("consul.check_interval") }}
 
 ## check_timeout
 
-|                |                            |
-| -------------- | -------------------------- |
-| Default value  | `1s`                       |
-| YAML Path      | `consul.check_timeout`     |
-| Key-Value Path | `consul/check_timeout`     |
-| Environment    | `NOC_CONSUL_CHECK_TIMEOUT` |
+{{ config_param("consul.check_timeout") }}
 
 ## release
 
-|                |                      |
-| -------------- | -------------------- |
-| Default value  | `1M`                 |
-| YAML Path      | `consul.release`     |
-| Key-Value Path | `consul/release`     |
-| Environment    | `NOC_CONSUL_RELEASE` |
+{{ config_param("consul.release") }}
 
 ## session_ttl
 
-|                |                          |
-| -------------- | ------------------------ |
-| Default value  | `10s`                    |
-| YAML Path      | `consul.session_ttl`     |
-| Key-Value Path | `consul/session_ttl`     |
-| Environment    | `NOC_CONSUL_SESSION_TTL` |
+{{ config_param("consul.session_ttl") }}
 
 ## lock_delay
 
-|                |                         |
-| -------------- | ----------------------- |
-| Default value  | `20s`                   |
-| YAML Path      | `consul.lock_delay`     |
-| Key-Value Path | `consul/lock_delay`     |
-| Environment    | `NOC_CONSUL_LOCK_DELAY` |
+{{ config_param("consul.lock_delay") }}
 
 ## retry_timeout
 
-|                |                            |
-| -------------- | -------------------------- |
-| Default value  | `1s`                       |
-| YAML Path      | `consul.retry_timeout`     |
-| Key-Value Path | `consul/retry_timeout`     |
-| Environment    | `NOC_CONSUL_RETRY_TIMEOUT` |
+{{ config_param("consul.retry_timeout") }}
 
 ## keepalive_attempts
 
-|                |                                 |
-| -------------- | ------------------------------- |
-| Default value  | `5`                             |
-| YAML Path      | `consul.keepalive_attempts`     |
-| Key-Value Path | `consul/keepalive_attempts`     |
-| Environment    | `NOC_CONSUL_KEEPALIVE_ATTEMPTS` |
+{{ config_param("consul.keepalive_attempts") }}
 
 ## base
 
 kv lookup base
 
-|                |                   |
-| -------------- | ----------------- |
-| Default value  | `noc`             |
-| YAML Path      | `consul.base`     |
-| Key-Value Path | `consul/base`     |
-| Environment    | `NOC_CONSUL_BASE` |
+{{ config_param("consul.base") }}

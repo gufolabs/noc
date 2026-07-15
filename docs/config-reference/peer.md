@@ -4,63 +4,28 @@ Peer service configuration
 
 ## enable_ripe
 
-|                |                        |
-| -------------- | ---------------------- |
-| Default value  | `True`                 |
-| YAML Path      | `peer.enable_ripe`     |
-| Key-Value Path | `peer/enable_ripe`     |
-| Environment    | `NOC_PEER_ENABLE_RIPE` |
+{{ config_param("peer.enable_ripe") }}
 
 ## enable_arin
 
-|                |                        |
-| -------------- | ---------------------- |
-| Default value  | `True`                 |
-| YAML Path      | `peer.enable_arin`     |
-| Key-Value Path | `peer/enable_arin`     |
-| Environment    | `NOC_PEER_ENABLE_ARIN` |
+{{ config_param("peer.enable_arin") }}
 
 ## enable_radb
 
-|                |                        |
-| -------------- | ---------------------- |
-| Default value  | `True`                 |
-| YAML Path      | `peer.enable_radb`     |
-| Key-Value Path | `peer/enable_radb`     |
-| Environment    | `NOC_PEER_ENABLE_RADB` |
+{{ config_param("peer.enable_radb") }}
 
 ## prefix_list_optimization
 
-|                |                                     |
-| -------------- | ----------------------------------- |
-| Default value  | `True`                              |
-| YAML Path      | `peer.prefix_list_optimization`     |
-| Key-Value Path | `peer/prefix_list_optimization`     |
-| Environment    | `NOC_PEER_PREFIX_LIST_OPTIMIZATION` |
+{{ config_param("peer.prefix_list_optimization") }}
 
 ## prefix_list_optimization_threshold
 
-|                |                                               |
-| -------------- | --------------------------------------------- |
-| Default value  | `1000`                                        |
-| YAML Path      | `peer.prefix_list_optimization_threshold`     |
-| Key-Value Path | `peer/prefix_list_optimization_threshold`     |
-| Environment    | `NOC_PEER_PREFIX_LIST_OPTIMIZATION_THRESHOLD` |
+{{ config_param("peer.prefix_list_optimization_threshold") }}
 
 ## max_prefix_length
 
-|                |                              |
-| -------------- | ---------------------------- |
-| Default value  | `24`                         |
-| YAML Path      | `peer.max_prefix_length`     |
-| Key-Value Path | `peer/max_prefix_length`     |
-| Environment    | `NOC_PEER_MAX_PREFIX_LENGTH` |
+{{ config_param("peer.max_prefix_length") }}
 
 ## rpsl_inverse_pref_style
 
-|                |                                    |
-| -------------- | ---------------------------------- |
-| Default value  | `False`                            |
-| YAML Path      | `peer.rpsl_inverse_pref_style`     |
-| Key-Value Path | `peer/rpsl_inverse_pref_style`     |
-| Environment    | `NOC_PEER_RPSL_INVERSE_PREF_STYLE` |
+{{ config_param("peer.rpsl_inverse_pref_style") }}
