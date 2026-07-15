@@ -108,13 +108,25 @@ export function requestLegacy(cfg){
     scope,
   } = cfg;
 
+  // GET/HEAD carry params in the query string, not the body (matches
+  // Ext.Ajax.request: GET params -> URL, POST params -> body). fetch() also
+  // throws if a GET/HEAD request is given a body.
+  const upper = method.toUpperCase();
+  const bodyMethod = upper !== "GET" && upper !== "HEAD";
+
+  let requestUrl = url;
   let body, contentType;
   if(jsonData !== undefined){
     body = JSON.stringify(jsonData);
     contentType = "application/json";
   } else if(params !== undefined){
-    body = typeof params === "string" ? params : new URLSearchParams(params).toString();
-    contentType = defaultPostHeader || "application/x-www-form-urlencoded";
+    const qs = typeof params === "string" ? params : new URLSearchParams(params).toString();
+    if(bodyMethod){
+      body = qs;
+      contentType = defaultPostHeader || "application/x-www-form-urlencoded";
+    } else if(qs){
+      requestUrl = url + (url.indexOf("?") === -1 ? "?" : "&") + qs;
+    }
   }
 
   const headers = {};
@@ -136,7 +148,7 @@ export function requestLegacy(cfg){
   };
 
   _begin();
-  fetch(url, init)
+  fetch(requestUrl, init)
     .then(async(res) => {
       const text = await res.text();
       const response = {
