@@ -1,20 +1,15 @@
 # ----------------------------------------------------------------------
 # ECMA-48 control sequences processing
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import re
 
-# NOC modules
-from noc.core.comp import smart_bytes
 
-# @todo: Python 2.7 doesn't support rb"...". So we use smart_bytes(r"...")
-
-
-def c(x, y):
+def c(x: int, y: int) -> int:
     """
     Convert ECMA-48 character notation to 8-bit form
 
@@ -44,8 +39,8 @@ rx_char = re.compile(r"^(\d\d)/(\d\d)$")
 rx_range = re.compile(r"^\[(\d\d)/(\d\d)-(\d\d)/(\d\d)\](\*?)$")
 
 
-def compile_ecma_def(s):
-    r = []
+def compile_ecma_def(s: str) -> str:
+    r: list[str] = []
     for token in s.split(","):
         match = rx_range.match(token)
         if match:
@@ -67,11 +62,12 @@ def compile_ecma_def(s):
         if match:
             r += [r"\x%02x" % c(int(match.group(1)), int(match.group(2)))]
             continue
-        raise SyntaxError("Invalid token: <%s>" % token)
+        msg = f"Invalid token: <{token}>"
+        raise SyntaxError(msg)
     return "".join(r)
 
 
-def get_ecma_re():
+def get_ecma_re() -> bytes:
     """
     Compile ECMA-48 definitions to regular expression
     :return:
@@ -86,20 +82,20 @@ def get_ecma_re():
     # .replace("\\x09","") # \n,\r, ESC, \t, BS
     re_vt100 = "\\x1b[c()78]"  # VT100
     re_other = "\\x1b[^[]"  # Last resort. Skip all ESC+char
-    return smart_bytes("|".join(["(?:%s)" % r for r in (re_csi, re_c1, re_c0, re_vt100, re_other)]))
+    return ("|".join([f"(?:{r})" for r in (re_csi, re_c1, re_c0, re_vt100, re_other)])).encode()
 
 
 #
 # Backspace pattern
 #
 BS = b"\x08"
-rx_bs_sol = re.compile(smart_bytes(r"^\x08+"), re.MULTILINE)
-rx_bs = re.compile(smart_bytes(r"[^\x08]\x08 ?"))
+rx_bs_sol = re.compile(rb"^\x08+", re.MULTILINE)
+rx_bs = re.compile(rb"[^\x08]\x08 ?")
 
 #
 # \r<spaces>\r should be cut
 #
-rx_lf_spaces = re.compile(smart_bytes(r"\r\s+\r"))
+rx_lf_spaces = re.compile(rb"\r\s+\r")
 #
 # Remove ECMA-48 Control Sequences from a string
 #
