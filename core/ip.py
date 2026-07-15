@@ -389,7 +389,7 @@ class IPv4(IP):
         """
         return self._to_prefix((self.d + n) & B32, self.mask)
 
-    def __sub__(self, n) -> IPv4:
+    def __sub__(self, n: int | IPv4) -> IPv4 | int:
         """Subtract an integer or compute distance to another IPv4 address.
 
         If *n* is an integer, returns a new IPv4 instance shifted by *n*.
@@ -998,7 +998,7 @@ class PrefixDB:
         self.children = [None, None]
         self.key = key
 
-    def __getitem__(self, prefix: "IPv4" | "IPv6"):
+    def __getitem__(self, prefix: IPv4 | IPv6):
         """Get the value stored for *prefix*.
 
         Args:
@@ -1020,7 +1020,7 @@ class PrefixDB:
             return node.key
         raise KeyError
 
-    def __setitem__(self, prefix: "IPv4" | "IPv6", key):
+    def __setitem__(self, prefix: IPv4 | IPv6, key):
         """Store a *key* at the location identified by *prefix*.
 
         Creates intermediate nodes automatically.
@@ -1038,7 +1038,7 @@ class PrefixDB:
             node = c
         node.key = key
 
-    def __contains__(self, prefix: "IPv4" | str) -> bool:
+    def __contains__(self, prefix: IPv4 | str) -> bool:
         """Check whether a key is stored for *prefix*."""
         if isinstance(prefix, str):
             prefix = IPv4.prefix(prefix)
@@ -1050,7 +1050,7 @@ class PrefixDB:
             node = c
         return bool(node.key)
 
-    def iter_free(self, root: "IPv4" | "IPv6"):
+    def iter_free(self, root: IPv4 | IPv6):
         """Yield free (unoccupied) sub-prefixes within *root*.
 
         Walks the tree starting at the bit-path of *root* and yields every
@@ -1084,7 +1084,7 @@ class PrefixDB:
             yield root.__class__.from_bits(bits)
 
     @classmethod
-    def from_prefixes(cls, prefixes: list["IPv4"], key) -> "PrefixDB":
+    def from_prefixes(cls, prefixes: list[IPv4], key) -> "PrefixDB":
         """Create a PrefixDB populated with the same key for all given prefixes.
 
         Args:
