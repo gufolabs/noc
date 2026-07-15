@@ -367,30 +367,6 @@ class Application(metaclass=ApplicationBase):
         cls._set_headers(resp, headers)
         return resp
 
-    def render_success(self, request, subject=None, text=None):
-        """
-        Render "success" page
-        """
-        return self.site.views.main.message.success(request, subject=subject, text=text)
-
-    def render_failure(self, request, subject=None, text=None):
-        """
-        Render "failure" page
-        """
-        return self.site.views.main.message.failure(request, subject=subject, text=text)
-
-    def render_wait(self, request, subject=None, text=None, url=None, timeout=5, progress=None):
-        """
-        Render wait page
-        """
-        return self.site.views.main.message.wait(
-            request, subject=subject, text=text, timeout=timeout, url=url, progress=progress
-        )
-
-    def render_static(self, request, path, document_root=None):
-        document_root = document_root or self.document_root
-        return serve_static(request, path, document_root=document_root)
-
     def response_redirect(self, url, *args, **kwargs):
         """
         Redirect to URL
@@ -443,12 +419,6 @@ class Application(metaclass=ApplicationBase):
         if location:
             r["Location"] = location
         return r
-
-    def close_popup(self, request):
-        """
-        Render javascript closing popup window
-        """
-        return self.render(request, "close_popup.html")
 
     def html_escape(self, s):
         """
