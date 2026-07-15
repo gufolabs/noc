@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # EdgeCore.ES.get_lldp_neighbors
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -30,7 +30,6 @@ from noc.core.lldp import (
     LLDP_CAP_STATION_ONLY,
     lldp_caps_to_bits,
 )
-from noc.core.comp import smart_text
 
 
 class Script(BaseScript):
@@ -139,7 +138,7 @@ class Script(BaseScript):
                         remote_port = binascii.unhexlify("".join(match.group("p_id").split("-")))
                     except TypeError:
                         remote_port = str(match.group("p_id"))
-                    remote_port = remote_port.rstrip(smart_text("\x00"))
+                    remote_port = remote_port.rstrip("\x00")
                 else:
                     remote_port = match.group("p_id").strip()
                 n["remote_chassis_id"] = match.group("id")

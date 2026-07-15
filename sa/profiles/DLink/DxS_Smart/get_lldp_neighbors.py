@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # DLink.DxS_Smart.get_lldp_neighbors
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -13,7 +13,6 @@ from noc.core.script.base import BaseScript
 from noc.sa.interfaces.igetlldpneighbors import IGetLLDPNeighbors
 from noc.core.mac import MAC
 from noc.core.lldp import LLDP_CHASSIS_SUBTYPE_MAC, LLDP_PORT_SUBTYPE_MAC
-from noc.core.comp import smart_text
 from noc.core.snmp.render import render_bin
 
 
@@ -91,7 +90,7 @@ class Script(BaseScript):
                 neigh["remote_port"] = neigh["remote_port"].decode("utf8")
             for i in neigh:
                 if isinstance(neigh[i], str):
-                    neigh[i] = neigh[i].rstrip(smart_text("\x00"))
+                    neigh[i] = neigh[i].rstrip("\x00")
             if neigh["remote_capabilities"]:
                 neigh["remote_capabilities"] = int(
                     "".join(
