@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # SimpleReport implementation
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -493,7 +493,7 @@ class TableSection(ReportSection):
         self.columns = []
         for c in columns or []:
             if isinstance(c, str) or hasattr(c, "__unicode__"):
-                self.columns += [TableColumn(smart_text(c))]
+                self.columns += [TableColumn(c)]
             else:
                 self.columns += [c]
         self.data = data or []

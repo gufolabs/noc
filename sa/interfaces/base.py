@@ -1018,7 +1018,7 @@ class TagsParameter(Parameter):
             v = [smart_text(v).strip() for v in value]
             return [x for x in v if x]
         if isinstance(value, str):
-            v = [smart_text(x.strip()) for x in value.split(",")]
+            v = [x.strip() for x in value.split(",")]
             return [x for x in v if x]
         self.raise_error("Invalid tags: %s" % value)
 

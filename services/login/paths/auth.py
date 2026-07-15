@@ -18,7 +18,7 @@ import cachetools
 # NOC modules
 from noc.config import config
 from noc.aaa.models.apikey import APIKey
-from noc.core.comp import smart_text, smart_bytes
+from noc.core.comp import smart_bytes
 from ..auth import (
     authenticate,
     register_last_login,
@@ -200,7 +200,7 @@ async def auth_authorization_basic(
     HTTP Basic authorization handler
     """
     remote_ip = request.client.host
-    auth_data = smart_text(codecs.decode(smart_bytes(data), "base64"))
+    auth_data = codecs.decode(smart_bytes(data), "base64").decode()
     if ":" not in auth_data:
         logger.error("[Authorization|Basic][%s] Denied: Malformed data", remote_ip)
         return JSONResponse({"status": False}, status_code=401)

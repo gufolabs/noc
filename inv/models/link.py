@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Link model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -20,7 +20,6 @@ from noc.config import config
 from noc.core.mongo.fields import PlainReferenceListField
 from noc.core.model.decorator import on_delete, on_save
 from noc.core.change.decorator import change
-from noc.core.comp import smart_text
 from noc.main.models.label import Label
 
 
@@ -84,8 +83,9 @@ class Link(Document):
 
     def __str__(self):
         if self.interfaces:
-            return "(%s)" % ", ".join(smart_text(i) for i in self.interfaces)
-        return "Stale link (%s)" % self.id
+            si = ", ".join(str(i) for i in self.interfaces)
+            return f"({si})"
+        return f"Stale link ({self.id})"
 
     @classmethod
     def get_by_id(cls, oid: str | ObjectId) -> Optional["Link"]:

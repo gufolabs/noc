@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # ObjectConnection model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -25,7 +25,6 @@ import geojson
 from noc.inv.models.object import Object
 from noc.core.mongo.fields import PlainReferenceField
 from noc.gis.models.layer import Layer
-from noc.core.comp import smart_text
 from noc.core.change.decorator import change
 from noc.core.model.decorator import on_save, on_delete
 from noc.config import config
@@ -39,7 +38,7 @@ class ObjectConnectionItem(EmbeddedDocument):
     name = StringField()
 
     def __str__(self):
-        return "%s: %s" % (smart_text(self.object), self.name)
+        return f"{self.object}: {self.name}"
 
 
 @change
@@ -65,8 +64,9 @@ class ObjectConnection(Document):
     layer = ReferenceField(Layer)
     line = LineStringField(auto_index=True)
 
-    def __str__(self):
-        return "<%s>" % ", ".join(smart_text(c) for c in self.connection)
+    def __str__(self) -> str:
+        conns = ", ".join(str(c) for c in self.connection)
+        return f"<{conns}>"
 
     @classmethod
     def get_by_id(cls, oid: str | ObjectId) -> Optional["ObjectConnection"]:

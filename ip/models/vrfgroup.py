@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # VRFGroup model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -13,7 +13,6 @@ from django.contrib.postgres.fields import ArrayField
 # NOC modules
 from noc.core.model.base import NOCModel
 from noc.core.model.decorator import on_delete_check
-from noc.core.comp import smart_text
 from noc.main.models.label import Label
 
 
@@ -50,9 +49,9 @@ class VRFGroup(NOCModel):
         models.CharField(max_length=250), blank=True, null=True, default=list
     )
 
-    def __str__(self):
-        return smart_text(self.name)
+    def __str__(self) -> str:
+        return self.name
 
     @classmethod
-    def can_set_label(cls, label):
+    def can_set_label(cls, label: str) -> bool:
         return Label.get_effective_setting(label, setting="enable_vrfgroup")

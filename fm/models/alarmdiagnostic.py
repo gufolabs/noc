@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # AlarmDiagnostic model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ from mongoengine.fields import StringField, ObjectIdField, DateTimeField, Binary
 import bson
 
 # NOC modules
-from noc.core.comp import smart_bytes, smart_text
+from noc.core.comp import smart_bytes
 
 
 class AlarmDiagnostic(Document):
@@ -53,7 +53,7 @@ class AlarmDiagnostic(Document):
                 {
                     "timestamp": d.timestamp,
                     "state": d.state,
-                    "data": smart_text(zlib.decompress(smart_bytes(d.data))),
+                    "data": zlib.decompress(smart_bytes(d.data)).decode(),
                 }
             ]
         return r

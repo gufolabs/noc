@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # KBGlobalBookmark
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -11,7 +11,6 @@ from django.db import models
 # NOC modules
 from noc.core.model.base import NOCModel
 from noc.kb.models.kbentry import KBEntry
-from noc.core.comp import smart_text
 
 
 class KBGlobalBookmark(NOCModel):
@@ -31,4 +30,4 @@ class KBGlobalBookmark(NOCModel):
     )
 
     def __str__(self):
-        return smart_text(self.kb_entry)
+        return str(self.kb_entry)
