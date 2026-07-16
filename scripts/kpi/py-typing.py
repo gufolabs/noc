@@ -45,9 +45,9 @@ class KPISummary:
         typed_modules: Modules with all typed functions.
         typed_classes: Classes with all typed functions.
         typed_functions: Fully typed functions.
-        typed_modules_percent: Percentage of typed modules, None - if cannot deducted.
-        typed_classes_percent: Percentage of typed classes, None - if cannot deducted.
-        typed_functions_percent: Percentage of typed functions, None - if cannot deducted.
+        typed_modules_percent: Percentage of typed modules, None - if cannot deduced.
+        typed_classes_percent: Percentage of typed classes, None - if cannot deduced.
+        typed_functions_percent: Percentage of typed functions, None - if cannot deduced.
     """
 
     total_packages: int
@@ -263,9 +263,7 @@ def get_module_name(path: Path) -> str:
     return ".".join(("noc", *parts))
 
 
-def estimate_kpi(
-    path: Path,
-) -> Iterable[KPI]:
+def scan_module(path: Path) -> Iterable[KPI]:
     try:
         source = path.read_text(encoding="utf-8")
         tree = ast.parse(source)
@@ -284,7 +282,7 @@ def estimate_kpi(
     return visitor.rows
 
 
-def to_estimate(path: Path) -> bool:
+def can_scan(path: Path) -> bool:
     parts = path.parts
 
     for part in parts:
@@ -311,14 +309,14 @@ def scan_tree() -> Iterable[KPI]:
     seen: set[Path] = set()
     for path in sorted(root.rglob("*.py")):
         rel_path = path.relative_to(root)
-        if not to_estimate(rel_path):
+        if not can_scan(rel_path):
             continue
         canonical_path = canonical_name(rel_path)
         effective_path = canonical_path if canonical_path.exists() else rel_path
         if effective_path in seen:
             continue
 
-        yield from estimate_kpi(effective_path)
+        yield from scan_module(effective_path)
 
 
 def write_csv(
