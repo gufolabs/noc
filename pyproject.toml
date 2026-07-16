@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = ["setuptools>=61.2", "wheel"]
+requires = ["setuptools>=83.0.0", "wheel"]
 
 [project]
 authors = [{name = "Gufo Labs"}]
