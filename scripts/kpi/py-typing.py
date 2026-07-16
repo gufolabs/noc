@@ -45,9 +45,9 @@ class KPISummary:
         typed_modules: Modules with all typed functions.
         typed_classes: Classes with all typed functions.
         typed_functions: Fully typed functions.
-        typed_modules_percent: Percentage of typed modules, None - if cannot deduced.
-        typed_classes_percent: Percentage of typed classes, None - if cannot deduced.
-        typed_functions_percent: Percentage of typed functions, None - if cannot deduced.
+        typed_modules_percent: Percentage of typed modules, None - if cannot be calculated.
+        typed_classes_percent: Percentage of typed classes, None - if cannot be calculated.
+        typed_functions_percent: Percentage of typed functions, None - if cannot be calculated.
     """
 
     total_packages: int
