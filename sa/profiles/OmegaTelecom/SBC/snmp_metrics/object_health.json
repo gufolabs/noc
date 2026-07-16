@@ -1,0 +1,7 @@
+{
+    "$metric": "Object | Health",
+    "$type": "oid",
+    "labels": ["noc::object::Health"],
+    "oid": "1.2.643.2.124.1.3.2.1.1.3.0",
+    "units": "%"
+}

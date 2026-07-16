@@ -23,5 +23,24 @@
         }
     ],
     "enable_timedelta": false,
-    "labels": []
+    "labels": [
+        {
+            "is_key_label": true,
+            "is_order_key": true,
+            "is_path": true,
+            "is_primary_key": false,
+            "is_required": false,
+            "label": "noc::peer_nodes::host::*",
+            "store_column": "pn_host"
+        },
+        {
+            "is_key_label": true,
+            "is_order_key": true,
+            "is_path": true,
+            "is_primary_key": false,
+            "is_required": false,
+            "label": "noc::peer_nodes::metric::*",
+            "store_column": "pn_metric"
+        }
+    ]
 }
