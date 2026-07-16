@@ -22,7 +22,7 @@ class SelfMonService(FastAPIService):
     name = "selfmon"
     use_mongo = True
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.collectors = []
         self.runner_thread = None

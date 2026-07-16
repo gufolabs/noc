@@ -309,7 +309,7 @@ class DefaultNotificationRoute(Route):
 
     MX_METRIC = MessageType.METRICS.value.encode()
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(name="default", r_type="*", order=-1)
         self.notification_action = NotificationAction(ActionCfg("notification_group"))
         self.message_action = MessageAction(ActionCfg("notification_group"))
@@ -343,7 +343,7 @@ class DefaultJobRoute(Route):
 
     MX_JOB = MessageType.JOB.value.encode()
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(name="jobs", r_type="job", order=999)
         self.job_action = JobAction(ActionCfg("job", stream=JOBS_STREAM))
 
@@ -365,7 +365,7 @@ class DefaultETLEventRoute(Route):
     MX_JOB = MessageType.ETL_PUSH.value.encode()
     DEFAULT_HANDLER = "noc.main.models.remotesystem.processed_remote_event"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(name="etl_jobs", r_type="*", order=999)
         self.job_action = JobAction(
             ActionCfg(

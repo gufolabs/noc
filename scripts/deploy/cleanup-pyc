@@ -9,12 +9,13 @@
 # Python modules
 import os
 import sys
+
 # NOC modules
 from noc.settings import INSTALLED_APPS
 
 
-class Cleanup(object):
-    def __init__(self):
+class Cleanup:
+    def __init__(self) -> None:
         self.errors = []
         self.changed = []
 
@@ -51,14 +52,13 @@ class Cleanup(object):
             for e in self.errors:
                 print(e)
             return 1
-        elif self.changed:
+        if self.changed:
             print("CHANGED")
             for c in self.changed:
                 print("Removed %s" % c)
             return 0
-        else:
-            print("OK")
-            return 0
+        print("OK")
+        return 0
 
 
 if __name__ == "__main__":

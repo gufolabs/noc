@@ -198,7 +198,7 @@ class BaseChangeTrackerPolicy(metaclass=ABCMeta):
     Base class for change tracker policies
     """
 
-    def __init__(self): ...
+    def __init__(self) -> None: ...
 
     @abstractmethod
     def register(self, item: ChangeItem, audit: bool = False) -> None: ...
@@ -248,7 +248,7 @@ class SimpleChangeTrackerPolicy(BaseChangeTrackerPolicy):
 
 
 class BulkChangeTrackerPolicy(BaseChangeTrackerPolicy):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.changes: dict[str, dict[int, ChangeItem]] = defaultdict(dict)
         self.ds_changes: dict[str, set[str]] = defaultdict(set)

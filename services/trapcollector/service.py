@@ -50,7 +50,7 @@ class TrapCollectorService(FastAPIService):
     pooled = True
     process_name = "noc-%(name).10s-%(pool).5s"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.mappings_callback = None
         self.report_invalid_callback = None

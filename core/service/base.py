@@ -113,7 +113,7 @@ class BaseService:
     class RegistrationError(Exception):
         pass
 
-    def __init__(self):
+    def __init__(self) -> None:
         set_service(self)
         sys.excepthook = excepthook
         self.loop: asyncio.BaseEventLoop | None = None

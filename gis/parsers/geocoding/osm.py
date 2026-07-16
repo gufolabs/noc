@@ -15,7 +15,7 @@ from .base import GeocodingParser
 class OSMXMLParser(GeocodingParser):
     ID_ADDR = "OSM_ID"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.xml_parser = ParserCreate()
         self.xml_parser.StartElementHandler = self.xml_start_element

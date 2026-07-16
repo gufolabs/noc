@@ -38,7 +38,7 @@ class KafkaSenderService(FastAPIService):
     use_telemetry = True
     number_message = defaultdict(lambda: AtomicLong(-1))
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.producer: AIOKafkaProducer | None = None
 

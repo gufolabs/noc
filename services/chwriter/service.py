@@ -28,7 +28,7 @@ class CHWriterService(FastAPIService):
 
     CH_SUSPEND_ERRORS = {598, 599}
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.channels: dict[str, Channel] = {}
         self.last_ts = None

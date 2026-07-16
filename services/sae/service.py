@@ -26,7 +26,7 @@ class SAEService(FastAPIService):
     require_dcs_health = False
     use_mongo = True
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.pool_cache = {}
         self.activators = {}

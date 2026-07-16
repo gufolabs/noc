@@ -111,7 +111,7 @@ class Site:
     JSON_CONTENT_TYPES = {"text/json", "application/json"}
     _perms_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.apps = {}  # app_id -> app instance
         self.urlpatterns: list[URLPattern] = []
         self.menu = []

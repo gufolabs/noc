@@ -114,7 +114,7 @@ class ClassifierService(FastAPIService):
 
     _interface_cache = cachetools.TTLCache(maxsize=10000, ttl=60)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.version: str = version.version
         self.ruleset: RuleSet = RuleSet()

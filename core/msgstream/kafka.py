@@ -47,7 +47,7 @@ class KafkaClient:
     SUBSCRIBE_BULK = True
     RESOLVE_RETRY = 1.0
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.bootstrap = None
         self.producer: AIOKafkaProducer | None = None
         self.consumer: AIOKafkaConsumer | None = None

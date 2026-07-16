@@ -23,7 +23,7 @@ SERVER_ADDRESS = "127.0.0.1"
 
 
 class UDPServerStub(UDPServer):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.received = 0
         self.ready = asyncio.Event()

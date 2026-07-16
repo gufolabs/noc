@@ -242,7 +242,7 @@ class ReportModelFilter:
 
     model = ManagedObject  # Set on base class
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.formulas = """2is1.3hs0, 2is1.3hs0.5is1, 2is1.3hs0.5is2,
                 2is1.3hs0.5is2.4hs0, 2is1.3hs0.5is2.4hs1, 2is1.3hs0.5is2.4hs1.5hs1"""
         self.f_map = {

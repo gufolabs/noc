@@ -22,7 +22,7 @@ from noc.core.ioloop.util import IOLoopContext
 class ScriptStub(BaseScript):
     name = "Generic.Host"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(None, {})
 
     def interface(self):
@@ -38,7 +38,7 @@ class ProfileStub:
 
 
 class CLIStub(BaseCLI):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(ScriptStub())
         self.tos = 0
         self.logger = logging.getLogger("CLIStub")
@@ -46,7 +46,7 @@ class CLIStub(BaseCLI):
 
 
 class MyTelnetStream(TelnetStream):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(CLIStub())
         self.writer = BytesIO()
 

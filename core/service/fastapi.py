@@ -35,7 +35,7 @@ class FastAPIService(BaseService):
     # Additional OpenAPI tags docs, tag -> description
     OPENAPI_TAGS_DOCS: dict[str, str] = {}
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.app = None
         # WSGI application of any third-party framework that will be attached to the main

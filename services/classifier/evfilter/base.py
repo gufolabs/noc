@@ -31,7 +31,7 @@ class BaseEvFilter:
 
     update_deadline: bool = False
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.events: dict[int, tuple[int, ObjectId]] = {}
         self.pq: list[tuple[int, int]] = []
 

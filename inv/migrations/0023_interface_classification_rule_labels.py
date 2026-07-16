@@ -24,7 +24,7 @@ class InterfaceClassifierLabels:
     Class for convert ManagedObjectSelector Fields to Labels set
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.profiles = {}
         self.regex_label = {}
         self.regex_bulk = []

@@ -24,7 +24,7 @@ class BaseLoader:
     base_path = None  # Tuple of path components
     ignored_names = set()
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = PrefixLoggerAdapter(logger, self.name)
         self.classes = {}
         self.lock = threading.Lock()

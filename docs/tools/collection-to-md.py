@@ -313,7 +313,7 @@ class FileWriter:
 class CollectionDoc:
     rx_indent = re.compile(r"^(\s+)-")
 
-    def __init__(self):
+    def __init__(self) -> None:
         full_path = os.path.abspath(sys.argv[0])
         self.src_root = os.path.abspath(os.path.join(os.path.dirname(full_path), "..", ".."))
         self.doc_root = os.path.join(self.src_root, "docs", "en", "docs")

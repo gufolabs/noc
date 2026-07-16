@@ -42,7 +42,7 @@ class Router:
     DEFAULT_JOB_CHAIN = "default_job"
     DEFAULT_ETL_EVENT_PUSH_JOB_CHAIN = "default_etl_event_push"
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.chains: defaultdict[bytes, list[Route]] = defaultdict(list)
         self.routes: dict[str, Route] = {
             self.DEFAULT_N_CHAIN: DefaultNotificationRoute(),  # Add default route for notification

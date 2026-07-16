@@ -16,7 +16,7 @@ class BIService(FastAPIService):
     use_mongo = True
     traefik_routes_rule = "PathPrefix(`/api/bi`)"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
 

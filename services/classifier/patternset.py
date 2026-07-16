@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class PatternSet:
-    def __init__(self):
+    def __init__(self) -> None:
         self.i_patterns: dict[
             str, list[tuple[str, str]]
         ] = {}  # (profile, chain) -> [rule, ..., rule]

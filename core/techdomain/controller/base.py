@@ -119,7 +119,7 @@ class BaseController:
     # False - return whole object
     adhoc_endpoints: bool = False
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = PrefixLoggerAdapter(logging.getLogger("controller"), self.name)
         self.constraints = ConstraintSet()
 

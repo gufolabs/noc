@@ -67,7 +67,7 @@ class ManagedObjectSelectorLabels:
         "filter_tt_system": {"collection": "noc.ttsystem", "category": "ttsystem"},
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.profiles = {}
         self.regex_label = {}
         self.regex_bulk = []

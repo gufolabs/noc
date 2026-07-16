@@ -18,7 +18,7 @@ class _Waiter:
 
 
 class LockManager:
-    def __init__(self):
+    def __init__(self) -> None:
         self._lock = asyncio.Lock()
         self._waiters: dict[str, _Waiter] = {}
 

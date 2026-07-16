@@ -43,7 +43,7 @@ class MessageStreamClient:
     ? MessageQueueBuffer (SaveHeaders)
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.client = self.get_client()
 
     @classmethod

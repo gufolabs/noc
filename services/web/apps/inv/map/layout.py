@@ -18,7 +18,7 @@ class Layout:
     SCALE_FACTOR = 130
     LINK_SPACING = 10
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.G = nx.Graph()
         self.seen_links = {}  # n1, n2 -> count
         self.link_ids = defaultdict(list)  # n1, n2 -> [link id]

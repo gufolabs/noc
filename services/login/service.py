@@ -35,7 +35,7 @@ class LoginService(FastAPIService):
         "ext-ui": "Legacy ExtJS UI services. To be removed with decline of legacy UI",
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.revoked_tokens = set()
         self.revoked_expiry = []

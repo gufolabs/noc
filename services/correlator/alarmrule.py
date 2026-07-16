@@ -217,7 +217,7 @@ class AlarmRuleSet:
     Full set of alarm rules
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.common_rules = []
         self.alarm_class_rules: dict[str, list[AlarmRule]] = {}
 

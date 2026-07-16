@@ -17,7 +17,7 @@ class BaseAuthBackend:
 
     _methods = {}
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = logger
 
     def authenticate(self, **kwargs) -> str:

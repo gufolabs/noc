@@ -17,7 +17,7 @@ class BaseMigration:
     db = db
     aliases: list[str] | None = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         # @todo: set_comprehensions
         self.dependencies = {f"{x[0]}.{x[1]}" for x in self.depends_on}
 

@@ -25,7 +25,7 @@ DEFAULT_DCS = "consul://%s:%s/%s" % (config.consul.host, config.consul.port, con
 class DCSRunner:
     HANDLERS = {"consul": "noc.core.dcs.consul.ConsulDCS"}
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.lock = Lock()
         self.thread: Thread | None = None
         self.loop: asyncio.BaseEventLoop | None = None
