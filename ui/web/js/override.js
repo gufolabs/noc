@@ -413,6 +413,31 @@ NOC._deferredExtPatches.push(function(){
 });
 
 //
+// ExtJS 6.0.1: CheckboxModel#onHeaderClick ignores showHeaderCheckbox:false —
+// the flag only hides the checkbox visual, while a click on the (empty)
+// checkbox column header still triggers selectAll/deselectAll. selectAll()
+// then crashes on a BufferedStore-backed grid (Ext.selection.Model#selectAll
+// -> store.getRange -> rangeCached/hasRange walks the page map and hits an
+// uncached page: "me.getPage(...) is undefined"). Seen on the sa.managedobject
+// selection grid (checkboxmodel, MULTI, showHeaderCheckbox:false, buffered
+// selectionStore). Backport of the later ExtJS behaviour: respect the flag.
+//
+// Deferred to Ext.application launch: the theme overrides
+// Ext.theme.noc.selection.CheckboxModel, so a parse-time override of the same
+// class would be clobbered (see NOC._deferredExtPatches above).
+//
+NOC._deferredExtPatches.push(function(){
+  Ext.override(Ext.selection.CheckboxModel, {
+    onHeaderClick: function(){
+      if(this.showHeaderCheckbox === false){
+        return;
+      }
+      this.callParent(arguments);
+    },
+  });
+});
+
+//
 // Route Ext.data.Connection.request (and therefore Ext.Ajax and all
 // Ext.data.proxy.Ajax / Rest proxies used by stores and combos) through
 // NOC.api.requestLegacy — a fetch-based transport. This eliminates the

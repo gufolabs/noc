@@ -520,7 +520,7 @@ Ext.define("NOC.sa.managedobject.Controller", {
   },
   //
   getNRows: function(m, n){
-    var params, me = this,
+    let params,
       selectionGrid = this.lookupReference("saManagedobjectSelectionGrid"),
       limit = Number.parseInt(n),
       start = Number.parseInt(m);
@@ -539,13 +539,15 @@ Ext.define("NOC.sa.managedobject.Controller", {
         url: this.lookupReference("saManagedobjectSelectionGrid").getStore().rest_url,
         method: "POST",
         jsonData: params,
-        scope: me,
+        scope: this,
         success: function(response){
-          var params = Ext.decode(response.request.requestOptions.data);
+          let store = this.lookupReference("saManagedobjectSelectedGrid1").getStore();
           selectionGrid.unmask();
-          selectionGrid.getSelectionModel().selectRange(params.__start, params.__start + params.__limit - 1);
-          me.lookupReference("saManagedobjectSelectedGrid1").getStore()
-                        .insert(0, Ext.decode(response.responseText));
+          selectionGrid.getSelectionModel().selectRange(start, start + limit - 1);
+          if(store){
+            let data = Ext.decode(response.responseText);
+            store.insert(0, data);
+          }
         },
         failure: function(){
           selectionGrid.unmask();
