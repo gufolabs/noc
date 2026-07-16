@@ -29,7 +29,7 @@ class RemoteMappingValue:
     sources: frozenset[InputSource]
     is_master: bool = False
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.remote_system.name}@{self.remote_id} ({self.sources})"
 
     @property

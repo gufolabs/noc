@@ -71,7 +71,7 @@ class BandCondition(BaseModel):
     param: str
     value: str
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.param} == {self.value}"
 
 
@@ -87,7 +87,7 @@ class ReportBand(BaseModel):
     conditions: list[BandCondition] | None = None
     # children: Optional[List["ReportBand"]] = None
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'ReportBand "{self.name}"'
 
     def __repr__(self):
@@ -140,7 +140,7 @@ class BandFormat(BaseModel):
     title_template: str | None = None  # Title format for Section row
     columns: list[ColumnFormat] | None = None  # ColumnName -> ColumnFormat
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'BandFormat "{self.title_template}"'
 
     def __repr__(self):
@@ -172,7 +172,7 @@ class Template(BaseModel):
     def get_document_name(self):
         return self.output_name_pattern or "report"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'Template "{self.code}"'
 
     def __repr__(self):
@@ -232,7 +232,7 @@ class ReportConfig(BaseModel):
     align_end_date_param: bool = False
     # field_format: Optional[List[ReportField]] = None  # Field Formatter
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'ReportConfig "{self.name}"'
 
     def __repr__(self):
@@ -265,7 +265,7 @@ class RunParams(BaseModel):
     params: dict[str, Any] | None = None  # Requested report params
     output_name_pattern: str | None = None  # Output document file name
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'RunParams "{self.report_config.name}"'
 
     def __repr__(self):

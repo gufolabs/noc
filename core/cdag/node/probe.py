@@ -72,7 +72,7 @@ class ProbeNode(BaseCDAGNode):
         self.base, self.exp = self.get_scale(self.config.scale)
         self.fatal_error: str | None = None
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name}: {self.node_id}"
 
     def get_error(self) -> str | None:

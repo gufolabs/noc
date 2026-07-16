@@ -116,7 +116,7 @@ class Var(BaseModel):
     snmp_raw: bool = False  # SNMP Raw value
     escaped: bool = False
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name}: {self.value}"
 
     def to_json(self):

@@ -88,7 +88,7 @@ class PurgatoriumData:
     event: str | None = None  # Workflow Event
     is_delete: bool = False  # Delete Flag
 
-    def __str__(self):
+    def __str__(self) -> str:
         if self.remote_system and self.is_delete:
             return f"|DELETE]{self.source}@{self.remote_system}]: {self.data}"
         if self.remote_system:

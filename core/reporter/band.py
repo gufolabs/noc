@@ -61,7 +61,7 @@ class Band:
         # self.format: Optional[BandFormat] = None
         # self.report_field_format: Dict[str, ReportField] = {}
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'Band "{self.name}"'
 
     def __repr__(self):

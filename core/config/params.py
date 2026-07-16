@@ -281,7 +281,7 @@ class ServiceItem:
         self.host = host
         self.port = port
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.host}:{self.port}"
 
     def __repr__(self):

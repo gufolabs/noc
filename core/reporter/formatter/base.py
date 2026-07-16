@@ -41,7 +41,7 @@ class DataFormatter:
         self.csv_delimiter = config.web.report_csv_delimiter
         self.logger = logger
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"DataFormatter/{self.__class__.__name__}"
 
     def __repr__(self):

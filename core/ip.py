@@ -43,7 +43,7 @@ class IP:
         """Returns string representation of prefix."""
         return f"<IPv{self.afi} {self.prefix}>"
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Returns string containing prefix."""
         return self.prefix
 

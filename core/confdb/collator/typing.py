@@ -38,7 +38,7 @@ class PathItem:
             # slot_num=o.get_data("slot", "number"),
         )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.c_name} ({self.context})"
 
 

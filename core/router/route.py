@@ -70,7 +70,7 @@ class HeaderMatchItem:
     op: Literal["==", "!=", "regex"]
     value: str
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.op} {self.header} {self.value}"
 
     @property
@@ -174,7 +174,7 @@ class Route:
         self.transmute_handler: Callable[[dict[str, bytes], T_BODY], T_BODY] | None = None
         self.transmute_template: TransmuteTemplate | None = None
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name} ({self.type}, {self.order}): {self.actions}"
 
     def __repr__(self):

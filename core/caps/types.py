@@ -32,7 +32,7 @@ class CapsValue:
     scope: str | None = None
     config: CapsConfig = CapsConfig()
 
-    def __str__(self):
+    def __str__(self) -> str:
         if self.scope:
             return f"{self.capability.name}@{self.scope} = {self.value}"
         return f"{self.capability.name} = {self.value}"

@@ -65,7 +65,7 @@ class MetricValue:
     value_units: Optional["MeasurementUnits"] = None
     value_type: Optional["MetricType"] = None
 
-    def __str__(self):
+    def __str__(self) -> str:
         # Type, Scale for int value
         if not self.meta:
             return str(self.value)
