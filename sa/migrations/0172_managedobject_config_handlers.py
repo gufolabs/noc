@@ -19,7 +19,7 @@ class Migration(BaseMigration):
     rx_fn = re.compile(r"^@pyrule\s*\ndef\s+([^(]+)\(", re.MULTILINE)
     rx_strip_decorator = re.compile(r"^@pyrule\s*", re.MULTILINE)
 
-    def migrate(self):
+    def migrate(self) -> None:
         new_coll = self.mongo_db["pyrules"]
         #  Create handler fields
         self.db.add_column(

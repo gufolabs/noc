@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Adding field 'PeerGroup.local_pref'
         self.db.add_column(
             "peer_peergroup", "local_pref", models.IntegerField("Local Pref", null=True, blank=True)

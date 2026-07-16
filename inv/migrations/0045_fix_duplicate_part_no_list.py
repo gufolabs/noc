@@ -15,7 +15,7 @@ BULK_SIZE = 1000
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         coll = self.mongo_db["noc.objects"]
         bulk = []
         for row in coll.find({"data.attr": "part_no"}, {"data": 1}):

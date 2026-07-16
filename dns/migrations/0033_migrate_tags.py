@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     TAG_MODELS = ["dns_dnszone", "dns_dnszonerecord"]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Create temporary tags fields
         for m in self.TAG_MODELS:
             self.db.add_column(m, "tmp_tags", TagsField("Tags", null=True, blank=True))

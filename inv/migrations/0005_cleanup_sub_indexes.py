@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         c = self.mongo_db.noc.subinterfaces
         for i in ("is_ipv4_1", "is_ipv6_1", "is_bridge_1"):
             try:

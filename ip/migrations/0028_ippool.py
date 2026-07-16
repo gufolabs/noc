@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("sa", "0082_termination_group")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         AFI_CHOICES = [("4", "IPv4"), ("6", "IPv6")]
         VRF = self.db.mock_model(model_name="VRF", db_table="ip_vrf")
         TerminationGroup = self.db.mock_model(

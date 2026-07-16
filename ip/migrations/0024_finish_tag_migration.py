@@ -12,7 +12,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     TAG_MODELS = ["ip_vrfgroup", "ip_vrf", "ip_prefix", "ip_address", "ip_addressrange"]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Drop old tags
         for m in self.TAG_MODELS:
             self.db.delete_column(m, "tags")

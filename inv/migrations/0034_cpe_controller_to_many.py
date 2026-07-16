@@ -14,7 +14,7 @@ from pymongo.errors import OperationFailure
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         db = self.mongo_db
         # Migrate profiles
         cpe_coll = db["cpes"]

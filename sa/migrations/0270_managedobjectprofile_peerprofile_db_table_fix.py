@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("sa", "0261_managedobjectprofile_add_discovery_bgpeer")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.delete_column("sa_managedobjectprofile", "bgppeer_profile_id")
         PeerProfile = self.db.mock_model(model_name="PeerProfile", db_table="peer_peerprofile")
         self.db.add_column(

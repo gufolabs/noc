@@ -16,7 +16,7 @@ from noc.models import LABEL_MODELS
 class Migration(BaseMigration):
     depends_on = []
 
-    def migrate(self):
+    def migrate(self) -> None:
         l_coll = self.mongo_db["labels"]
         bulk = []
         setting_map = {v: k for k, v in LABEL_MODELS.items()}

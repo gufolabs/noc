@@ -16,5 +16,5 @@ class Migration(BaseMigration):
         ("project", "0005_reset_glyphs"),
     ]
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.mongo_db["glyph"].drop()

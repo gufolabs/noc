@@ -16,7 +16,7 @@ from noc.core.ip import IPv4
 class Migration(BaseMigration):
     depends_on = [("main", "0035_prefix_table")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         PrefixTable = self.db.mock_model(model_name="PrefixTable", db_table="main_prefixtable")
         self.db.add_column(
             "sa_activator",

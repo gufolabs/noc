@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("aaa", "0002_default_user")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Mock Models
         User = self.db.mock_model(model_name="User", db_table="auth_user")
 

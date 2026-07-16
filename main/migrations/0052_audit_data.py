@@ -23,7 +23,7 @@ logger = logging.getLogger("migration")
 class Migration(BaseMigration):
     rx_field = re.compile("^[a-zA-Z0-9_]+$")
 
-    def migrate(self):
+    def migrate(self) -> None:
         def q(s):
             if s is None:
                 return None

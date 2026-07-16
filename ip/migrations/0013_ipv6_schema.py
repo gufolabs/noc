@@ -16,7 +16,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0027_style")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         AFI_CHOICES = [("4", "IPv4"), ("6", "IPv6")]
         # Style
         Style = self.db.mock_model(model_name="Style", db_table="main_style")

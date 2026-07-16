@@ -17,7 +17,7 @@ PG_CHUNK = 500
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # IP Models
         TABLES = ["ip_vrf", "ip_prefix", "ip_address"]
         for table in TABLES:

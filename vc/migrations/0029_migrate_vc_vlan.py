@@ -19,7 +19,7 @@ DEFAULT_L2_DOMAIN_ID = bson.ObjectId("61bee7425c42c21338453614")
 class Migration(BaseMigration):
     depends_on = [("sa", "0223_managed_object_l2domain")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Create default VLAN Profile
         # Check VC - if count more 0 - migrate VC
         ((vc_count,),) = self.db.execute(

@@ -30,7 +30,7 @@ class Migration(BaseMigration):
                 )
         return ng_id
 
-    def migrate(self):
+    def migrate(self) -> None:
         if (
             self.db.execute("SELECT COUNT(*) FROM main_timepattern WHERE name=%s", ["Any"])[0][0]
             == 0

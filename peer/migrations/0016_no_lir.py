@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         Maintainer = self.db.mock_model(model_name="Maintainer", db_table="peer_maintainer")
 
         rir_id = self.db.execute("SELECT id FROM peer_rir LIMIT 1")[0][0]

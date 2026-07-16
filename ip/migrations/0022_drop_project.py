@@ -40,7 +40,7 @@ class Migration(BaseMigration):
             # Drop column
             self.db.delete_column(table, "project")
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.migrate_project("ip_vrf")
         self.migrate_project("ip_prefix")
         self.migrate_project("ip_address")

@@ -22,7 +22,7 @@ class Migration(BaseMigration):
 
     TAG_MODELS = [("dns_dnszone", "dnszone"), ("dns_dnszonerecord", "dnszonerecord")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         labels = defaultdict(set)  # label: settings
         # Create labels fields
         for table, setting in self.TAG_MODELS:

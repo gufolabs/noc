@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0021_permission")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         PROBEUSER = "noc-probe"
         mdb = self.mongo_db
         # Check probe has no storage and credentials

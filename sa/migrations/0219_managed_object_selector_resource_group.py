@@ -219,7 +219,7 @@ class Migration(BaseMigration):
 
     migrate_map = defaultdict(dict)
 
-    def migrate(self):
+    def migrate(self) -> None:
         sources_map = defaultdict(list)
         for sel_from, sel_to in self.db.execute(
             """

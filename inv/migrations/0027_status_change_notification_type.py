@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         l_coll = self.mongo_db["noc.interface_profiles"]
         l_coll.bulk_write(
             [

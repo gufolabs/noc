@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         handlers = set()
         proccessed = set()
         for (h,) in self.db.execute("SELECT DISTINCT config_filter_handler FROM sa_managedobject"):

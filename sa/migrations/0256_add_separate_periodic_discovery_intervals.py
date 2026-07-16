@@ -21,7 +21,7 @@ class Migration(BaseMigration):
         "periodic_discovery_cpestatus_interval",
     ]
 
-    def migrate(self):
+    def migrate(self) -> None:
         for n in self.INTERVAL_COLUMNS:
             self.db.add_column(
                 "sa_managedobjectprofile",

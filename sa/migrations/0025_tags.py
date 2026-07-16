@@ -13,7 +13,7 @@ from noc.core.model.fields import AutoCompleteTagsField
 class Migration(BaseMigration):
     TAG_MODELS = ["sa_activator", "sa_managedobject"]
 
-    def migrate(self):
+    def migrate(self) -> None:
         for m in self.TAG_MODELS:
             self.db.add_column(m, "tags", AutoCompleteTagsField("Tags", null=True, blank=True))
         self.db.add_column(

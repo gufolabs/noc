@@ -11,7 +11,7 @@ from noc.core.validators import is_ipv4, is_ipv6
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         fixes, dot_fixes = [], []
         for mo_id, address in self.db.execute("SELECT id, address FROM sa_managedobject"):
             if not address:

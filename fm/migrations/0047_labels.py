@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     TAG_COLLETIONS = [("noc.alarms.active", ""), ("noc.alarms.archived", "")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Mongo models
         for collection, setting in self.TAG_COLLETIONS:
             coll = self.mongo_db[collection]

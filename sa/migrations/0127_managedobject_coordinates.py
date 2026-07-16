@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column("sa_managedobject", "x", models.FloatField(null=True, blank=True))
         self.db.add_column("sa_managedobject", "y", models.FloatField(null=True, blank=True))
         self.db.add_column(

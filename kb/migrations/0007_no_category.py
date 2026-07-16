@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.delete_table("kb_kbentrytemplate_categories")
         self.db.delete_table("kb_kbentry_categories")
         self.db.delete_table("kb_kbcategory")

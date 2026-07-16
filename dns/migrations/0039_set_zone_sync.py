@@ -14,7 +14,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         now = datetime.datetime.now()
         sc = self.mongo_db["noc.synccaches"]
         for zone_id, sync_id in self.db.execute(

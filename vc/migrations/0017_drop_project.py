@@ -40,5 +40,5 @@ class Migration(BaseMigration):
             # Drop column
             self.db.delete_column(table, "project")
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.migrate_project("vc_vc")

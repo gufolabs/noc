@@ -10,6 +10,6 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.delete_column("sa_managedobject", "is_configuration_managed")
         self.db.delete_column("sa_managedobject", "repo_path")

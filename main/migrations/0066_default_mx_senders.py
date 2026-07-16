@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         mr_coll = self.mongo_db["messageroutes"]
         cfg_coll = self.mongo_db["ds_cfgmxroute"]
         routes = []

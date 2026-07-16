@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.delete_table("peer_prefixlistcache")
         self.db.delete_table("peer_whoiscache")
         self.db.delete_table("peer_whoislookup")

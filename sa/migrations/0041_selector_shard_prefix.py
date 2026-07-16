@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0035_prefix_table")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         Shard = self.db.mock_model(model_name="Shard", db_table="main_shard")
         PrefixTable = self.db.mock_model(model_name="PrefixTable", db_table="main_prefixtable")
         self.db.add_column(

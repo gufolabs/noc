@@ -16,7 +16,7 @@ from noc.core.model.fields import DocumentReferenceField
 class Migration(BaseMigration):
     WF_DEFAULT_STATE = "67650a398db9f670c21e14d6"
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Remote Constraint
         non_required_columns = ["peering_point_id", "local_ip"]
         for column in non_required_columns:

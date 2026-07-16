@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         batch = []
         coll = self.mongo_db["noc.eventclasses"]
         coll.update_many({}, {"$set": {"suppression_window": 0}})

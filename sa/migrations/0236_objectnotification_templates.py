@@ -86,7 +86,7 @@ Context variables are
 class Migration(BaseMigration):
     depends_on = [("main", "0037_template")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         for name, sys_name, description, subject, body in [
             CONFIG_CHANGED,
             OBJECT_NEW,

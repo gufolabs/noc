@@ -12,7 +12,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("sa", "0008_copy_objects")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # self.db.execute("DROP INDEX cm_config_managed_object_id")
         # self.db.execute("CREATE UNIQUE INDEX cm_config_managed_object_id ON cm_config(managed_object_id)")
         self.db.delete_column("cm_objectnotify", "category_id")

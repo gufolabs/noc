@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         IPv4Block = self.db.mock_model(model_name="IPv4Block", db_table="ip_ipv4block")
         User = self.db.mock_model(model_name="User", db_table="auth_user")
         # Adding model 'IPv4BlockBookmark'

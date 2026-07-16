@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         expires = datetime.datetime.now() + datetime.timedelta(days=7)
         c = self.mongo_db["noc.log.sa.failed_scripts"]
         c.update_many({}, {"$set": {"expires": expires}})

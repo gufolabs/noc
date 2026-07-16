@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0013_notifications")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Get data
         pc = {}
         for vc_domain_id, selector_id, key, value in self.db.execute(

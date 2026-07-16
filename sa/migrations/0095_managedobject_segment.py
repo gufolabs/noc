@@ -13,7 +13,7 @@ from noc.core.model.fields import DocumentReferenceField
 class Migration(BaseMigration):
     depends_on = [("inv", "0010_default_segment")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column(
             "sa_managedobject", "segment", DocumentReferenceField("self", null=True, blank=True)
         )

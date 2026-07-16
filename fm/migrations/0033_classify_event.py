@@ -52,5 +52,5 @@ class Migration(BaseMigration):
     DROP_CLASSIFY_EVENT = """
         DROP FUNCTION classify_event(INTEGER, INTEGER, INTEGER, INTEGER, CHAR, VARCHAR, TEXT, TEXT[][])"""
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.execute(self.CREATE_CLASSIFY_EVENT)

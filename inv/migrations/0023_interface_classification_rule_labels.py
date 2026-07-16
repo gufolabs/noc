@@ -186,7 +186,7 @@ class InterfaceClassifierLabels:
 class Migration(BaseMigration):
     depends_on = [("sa", "0219_managed_object_selector_resource_group")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         profile_rules = defaultdict(list)
         match_labels = defaultdict(set)
         icrl = InterfaceClassifierLabels()

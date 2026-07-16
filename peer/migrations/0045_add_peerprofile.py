@@ -19,7 +19,7 @@ class Migration(BaseMigration):
 
     depends_on = [("wf", "0014_add_peer_default_workflow")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Model 'PeerGroup'
         self.db.create_table(
             "peer_peerprofile",

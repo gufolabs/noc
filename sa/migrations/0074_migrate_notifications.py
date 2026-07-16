@@ -12,7 +12,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("cm", "0014_object_notifify_drop_emails")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         selectors = {}  # administrative domain id -> selector id
         for domain, group in self.db.execute(
             """

@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         collection = self.mongo_db["noc.extnrittmap"]
         mappings = [
             (d["managed_object"], str(d["tt_system"]), str(d["queue"]), str(d["remote_id"]))

@@ -22,7 +22,7 @@ vc_checks = {
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Save old VCs
         vc_data = self.db.execute(
             "SELECT vc_domain_id,type,l1,l2,description FROM vc_vc ORDER by id"

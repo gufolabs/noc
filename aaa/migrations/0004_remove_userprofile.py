@@ -16,7 +16,7 @@ from noc.settings import LANGUAGE_CODE
 class Migration(BaseMigration):
     depends_on = [("main", "0056_userprofile_heatmap")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Add fields to user
         self.db.add_column(
             "auth_user",

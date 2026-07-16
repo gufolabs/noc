@@ -153,7 +153,7 @@ class Migration(BaseMigration):
             r["name"] += f" for function {settings['window_function']}"
         return r
 
-    def migrate(self):
+    def migrate(self) -> None:
         thps = {}
         for rp in self.mongo_db["thresholdprofiles"].find():
             if not rp.get("thresholds"):

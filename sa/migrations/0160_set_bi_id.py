@@ -18,7 +18,7 @@ MONGO_CHUNK = 500
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         MODELS = [
             "sa_administrativedomain",
             "sa_authprofile",

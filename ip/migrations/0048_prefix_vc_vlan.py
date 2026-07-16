@@ -16,7 +16,7 @@ from noc.core.model.fields import DocumentReferenceField
 class Migration(BaseMigration):
     depends_on = [("vc", "0029_migrate_vc_vlan")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Make legacy Address.state_id field nullable
         self.db.execute("ALTER TABLE ip_prefix DROP COLUMN vc_id")
         # Create new Address.state

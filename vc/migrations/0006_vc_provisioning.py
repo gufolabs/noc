@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("sa", "0015_managedobjectselector")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         VCDomain = self.db.mock_model(model_name="VCDomain", db_table="vc_vcdomain")
         ManagedObjectSelector = self.db.mock_model(
             model_name="ManagedObjectSelector", db_table="sa_managedobjectselector"

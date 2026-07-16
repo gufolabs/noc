@@ -18,7 +18,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0066_default_mx_senders")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         rg_map = {str(rg["_id"]): rg["name"] for rg in self.mongo_db["resourcegroups"].find()}
         route_bulk = []
         cfgroute_bulk = []

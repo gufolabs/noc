@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.execute("UPDATE sa_managedobject SET bi_id=NULL")
         self.db.execute("ALTER TABLE sa_managedobject ALTER COLUMN bi_id TYPE bigint")
         self.db.execute("UPDATE sa_administrativedomain SET bi_id=NULL")

@@ -40,7 +40,7 @@ class Migration(BaseMigration):
                 r.append(xx)
         return r
 
-    def migrate(self):
+    def migrate(self) -> None:
         mr_coll = self.mongo_db["messageroutes"]
         bulk = []
 

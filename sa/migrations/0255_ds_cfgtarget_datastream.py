@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         scheduler = self.mongo_db["noc.schedules.scheduler"]
         ts = datetime.datetime.now() + datetime.timedelta(minutes=20)
         scheduler.insert_one(

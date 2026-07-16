@@ -19,7 +19,7 @@ NEW_VLANS_REPORT_BODY = """{{ count }} new VLANs discovered
 class Migration(BaseMigration):
     depends_on = [("main", "0037_template")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         for tn, description, subject, body in [
             (
                 "inv.discovery.new_vlans_report",

@@ -15,7 +15,7 @@ from noc.core.password.hasher import check_password
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         r = self.db.execute("SELECT id, username, password, change_at FROM auth_user LIMIT 2")
         if len(r) != 1:
             return

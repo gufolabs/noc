@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         ManagedObjectProfile = self.db.mock_model(
             model_name="ManagedObjectProfile", db_table="sa_managedobjectprofile"
         )

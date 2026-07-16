@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("sa", "0150_managed_object_profile")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Get profile record mappings
         pcoll = self.mongo_db["noc.profiles"]
         pmap = {}  # name -> id

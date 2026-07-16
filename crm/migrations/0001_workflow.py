@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("wf", "0001_default_wf")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         db = self.mongo_db
         wf = bson.ObjectId("5a1d078e1bb627000151a17d")
         state = bson.ObjectId("5a1d07b41bb627000151a18b")

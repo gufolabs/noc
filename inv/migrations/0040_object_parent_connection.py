@@ -17,7 +17,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         def get_dir(doc: dict[str, Any]) -> str | None:
             o = doc.get("object")
             if not o:

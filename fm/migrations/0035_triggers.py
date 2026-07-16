@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0037_template")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         Template = self.db.mock_model(model_name="Template", db_table="main_template")
 
         TimePattern = self.db.mock_model(model_name="TimePattern", db_table="main_timepattern")

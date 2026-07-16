@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.execute(
             """update sa_managedobjectprofile
             set shape=upper(substring(shape from 1 for 1))||lower(substring(shape from 2 for length(shape)))"""

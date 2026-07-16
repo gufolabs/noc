@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         VCFilter = self.db.mock_model(model_name="VCFilter", db_table="vc_vcfilter")
         self.db.add_column(
             "vc_vcdomainprovisioningconfig",

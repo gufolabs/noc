@@ -12,7 +12,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0018_systemnotification")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         if not self.db.execute(
             "SELECT COUNT(*) FROM main_systemnotification WHERE name=%s", ["dns.domain_expired"]
         )[0][0]:

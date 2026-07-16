@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0004_language")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Model "KBCategory"
         self.db.create_table(
             "kb_kbcategory",
