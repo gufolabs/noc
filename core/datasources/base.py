@@ -36,7 +36,7 @@ class ClickhouseColumn:
     default_kind: str | None = None  # DEFAULT, MATERIALIZED
     default_expression: str | None = None
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         """"""
         return hash(self.name)
 

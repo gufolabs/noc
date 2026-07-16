@@ -243,7 +243,7 @@ class ThresholdNode(BaseCDAGNode):
         svc = get_service()
         svc.publish(orjson.dumps(msg), stream=f"dispose.{pool}", partition=self.config.partition)
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.reset_state()
 
     def clean_state(self, state: dict[str, Any] | None) -> BaseModel | None:

@@ -49,7 +49,7 @@ class NotificationContact:
     headers: dict[str, Any] | None = None
     route: str | None = None
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(f"{self.method}_{self.contact}")
 
 

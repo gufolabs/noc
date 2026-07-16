@@ -34,7 +34,7 @@ class UDPSocket:
             self.socket.setsockopt(socket.IPPROTO_IP, socket.IP_TOS, tos)
         self.socket.setblocking(False)
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.close()
 
     def close(self):
