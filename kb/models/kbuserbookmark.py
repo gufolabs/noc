@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # KBUserBookmark
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -12,7 +12,6 @@ from django.db import models
 from noc.core.model.base import NOCModel
 from noc.aaa.models.user import User
 from noc.kb.models.kbentry import KBEntry
-from noc.core.comp import smart_text
 
 
 class KBUserBookmark(NOCModel):
@@ -30,5 +29,5 @@ class KBUserBookmark(NOCModel):
     user = models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)
     kb_entry = models.ForeignKey(KBEntry, verbose_name="KBEntry", on_delete=models.CASCADE)
 
-    def __str__(self):
-        return "%s: %s" % (smart_text(self.user), smart_text(self.kb_entry))
+    def __str__(self) -> str:
+        return f"{self.user}: {self.kb_entry}"

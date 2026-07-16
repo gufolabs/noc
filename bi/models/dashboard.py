@@ -27,7 +27,6 @@ from noc.aaa.models.user import User
 from noc.aaa.models.group import Group
 from noc.core.mongo.fields import ForeignKeyField
 from noc.core.prettyjson import to_json
-from noc.core.comp import smart_text
 from noc.core.path import safe_json_path
 
 DAL_NONE = -1
@@ -169,7 +168,7 @@ class Dashboard(Document):
                 "uuid": str(self.uuid),
                 "description": self.description,
                 "format": self.format,
-                "config": smart_text(b85encode(self.config)),
+                "config": b85encode(self.config).decode(),
                 "created": self.created.isoformat(),
                 "changed": self.changed.isoformat(),
             },

@@ -67,7 +67,7 @@ class GridVCS:
         :param delta:
         :return:
         """
-        return smart_text(delta)
+        return delta.decode()
 
     @staticmethod
     def apply_delta_b(src: str, delta: bytes) -> str:
@@ -79,14 +79,14 @@ class GridVCS:
         :return:
         """
         last = pos = 0
-        r = []
+        r: list[str] = []
         d_len = len(delta)
 
         while pos < d_len:
             p1, p2, p_len = struct.unpack(">lll", delta[pos : pos + 12])
             pos += 12
             r.append(src[last:p1])
-            r.append(smart_text(delta[pos : pos + p_len]))
+            r.append(delta[pos : pos + p_len].decode())
             pos += p_len
             last = p2
         r.append(src[last:])
@@ -100,18 +100,18 @@ class GridVCS:
         :param delta:
         :return:
         """
-        return smart_text(bsdiff4.patch(src, delta))
+        return bsdiff4.patch(src, delta).decode()
 
     @classmethod
     def compress(cls, data: bytes, method: str | None = None) -> bytes:
         if method:
-            return getattr(cls, "compress_%s" % method)(data)
+            return getattr(cls, f"compress_{method}")(data)
         return data
 
     @classmethod
     def decompress(cls, data: bytes, method: str | None = None) -> bytes:
         if method:
-            return getattr(cls, "decompress_%s" % method)(data)
+            return getattr(cls, f"decompress_{method}")(data)
         return data
 
     @staticmethod

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # /api/login/token handler
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -16,7 +16,7 @@ from pydantic import ValidationError, TypeAdapter
 
 # NOC modules
 from noc.config import config
-from noc.core.comp import smart_text, smart_bytes
+from noc.core.comp import smart_bytes
 from noc.core.service.deps.service import get_service
 from ..models.token import TokenRequest, TokenResponse
 from ..auth import authenticate, register_last_login, get_jwt_token, get_user_from_jwt
@@ -95,7 +95,7 @@ async def token(
                 },
                 status_code=HTTPStatus.BAD_REQUEST,
             )
-        auth_data = smart_text(codecs.decode(smart_bytes(data), "base64"))
+        auth_data = codecs.decode(smart_bytes(data), "base64").decode()
         if ":" not in auth_data:
             return JSONResponse(
                 content={

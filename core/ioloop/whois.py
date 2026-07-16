@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Whois client
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -12,7 +12,7 @@ import socket
 
 # NOC modules
 from noc.core.validators import is_fqdn
-from noc.core.comp import smart_bytes, smart_text
+from noc.core.comp import smart_bytes
 from noc.core.ioloop.util import run_sync
 
 DEFAULT_WHOIS_SERVER = "whois.ripe.net"
@@ -91,7 +91,7 @@ async def whois_async(query, fields=None):
     except socket.gaierror as e:
         logger.error(f"Cannot resolve host {server}: {e}")
         return None
-    data = smart_text(data)
+    data = data.decode()
     data = parse_response(data)
     if fields:
         data = [(k, v) for k, v in data if k in fields]

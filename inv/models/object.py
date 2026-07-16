@@ -243,8 +243,8 @@ class Object(Document):
 
     REBUILD_CONNECTIONS = ["links", "conduits"]
 
-    def __str__(self):
-        return smart_text(self.name or self.id)
+    def __str__(self) -> str:
+        return self.name or str(self.id)
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)

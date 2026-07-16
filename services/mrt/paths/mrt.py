@@ -29,7 +29,6 @@ from noc.sa.models.useraccess import UserAccess
 from noc.core.debug import error_report
 from noc.core.error import ERR_UNKNOWN
 from noc.config import config
-from noc.core.comp import smart_text
 
 
 logger = logging.getLogger(__name__)
@@ -38,8 +37,8 @@ router = APIRouter()
 
 
 async def _write_chunk(obj):
-    data = smart_text(orjson.dumps(obj))
-    data_str = "%s|%s" % (len(data), data)
+    data = orjson.dumps(obj).decode()
+    data_str = f"{len(data)}|{data}"
     logger.debug(data_str)
     return data_str
 
