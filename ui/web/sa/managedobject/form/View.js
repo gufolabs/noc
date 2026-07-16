@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2023 The NOC Project
+// Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 this.fieldSetDefaults = {
@@ -28,6 +28,8 @@ Ext.define("NOC.sa.managedobject.form.View", {
     "NOC.core.MonacoPanel",
     "NOC.core.plugins.DynamicModalEditing",
     "NOC.main.glyph.LookupField",
+    "NOC.main.ref.soposition.LookupField",
+    "NOC.main.ref.soform.LookupField",
     "NOC.sa.managedobject.AttributesModel",
     "NOC.sa.managedobject.CapabilitiesModel",
     "NOC.sa.managedobject.form.FormController",
@@ -258,51 +260,18 @@ Ext.define("NOC.sa.managedobject.form.View", {
               items: [
                 {
                   name: "shape_overlay_position",
-                  xtype: "combobox",
-                  uiStyle: "medium-combo",
+                  xtype: "main.ref.soposition.LookupField",
                   fieldLabel: __("Position"),
                   tabIndex: 90,
                   allowBlank: true,
-                  queryMode: "local",
-                  forceSelection: true,
-                  editable: false,
-                  valueField: "id",
-                  displayField: "name",
-                  store: {
-                    fields: ["id", "name"],
-                    data: [
-                      {id: "NW", name: "NW", icon: "xmark-small"},
-                      {id: "N", name: "N", icon: "arrow-up"},
-                      {id: "NE", name: "NE", icon: "xmark-small"},
-                      {id: "E", name: "E", icon: "arrow-right"},
-                      {id: "SE", name: "SE", icon: "xmark-small"},
-                      {id: "S", name: "S", icon: "arrow-down"},
-                      {id: "SW", name: "SW", icon: "xmark-small"},
-                      {id: "W", name: "W", icon: "arrow-left"},
-                    ],
-                  },
-                  tpl: '<tpl for="."><div class="x-boundlist-item"><i class="gf {[values.icon]}"></i>&nbsp; {[values.name]}</div></tpl>',
                 },
                 {
                   name: "shape_overlay_form",
-                  xtype: "combobox",
+                  xtype: "main.ref.soform.LookupField",
                   uiStyle: "medium-combo",
                   fieldLabel: __("Form"),
                   tabIndex: 100,
                   allowBlank: true,
-                  queryMode: "local",
-                  forceSelection: true,
-                  editable: false,
-                  valueField: "id",
-                  displayField: "name",
-                  store: {
-                    fields: ["id", "name", "icon"],
-                    data: [
-                      {id: "c", name: "Circle", icon: "fa-circle"},
-                      {id: "s", name: "Square", icon: "fa-square"},
-                    ],
-                  },
-                  tpl: '<tpl for="."><div class="x-boundlist-item"><i class="fa {[values.icon]}"></i>&nbsp; {[values.name]}</div></tpl>',
                 },
                 {
                   name: "shape_title_template",
