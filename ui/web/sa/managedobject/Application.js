@@ -215,6 +215,7 @@ Ext.define("NOC.sa.managedobject.Application", {
               selModel: {
                 mode: "MULTI",
                 selType: "checkboxmodel",
+                showHeaderCheckbox: false,
               },
               listeners: {
                 selectionchange: "onSelectionChange",
