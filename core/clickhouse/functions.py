@@ -13,7 +13,7 @@ class AggregateFunction:
         self.function = self.db_name or function
         self.params = params
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.function
 
     # get expression

@@ -39,7 +39,7 @@ class IP:
         self.address, self.mask = prefix.split("/")
         self.mask = int(self.mask)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Returns string representation of prefix."""
         return f"<IPv{self.afi} {self.prefix}>"
 

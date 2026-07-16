@@ -51,7 +51,7 @@ class RR:
         l_suffix = len(to_idna(zone)) + 1
         self._sorder = self._idna[:-l_suffix]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "<RR %s %s %s>" % (self.name, self.type, self.rdata)
 
     def __lt__(self, other):

@@ -16,7 +16,7 @@ class Node:
         self.token = token
         self.children = None
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "<Node %s>" % self.token
 
     def find(self, token):

@@ -99,7 +99,7 @@ class SNMPError(Exception):
         self.code = code
         self.oid = oid
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         try:
             name = SNMPErrorCode(self.code).name
         except ValueError:

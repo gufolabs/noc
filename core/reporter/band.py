@@ -64,7 +64,7 @@ class Band:
     def __str__(self) -> str:
         return f'Band "{self.name}"'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             f'Band "{self.name}" (parent: {self.parent}, '
             f"children_bands: {len(self.children_bands)}, "

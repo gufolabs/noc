@@ -32,7 +32,7 @@ class ANY(BasePattern):
     def match(token):
         return True
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "ANY"
 
 
@@ -43,7 +43,7 @@ class REST(BasePattern):
     def match(token):
         return True
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "REST"
 
 
@@ -55,7 +55,7 @@ class Token(BasePattern):
     def match(self, token):
         return token == self.token
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return repr(self.token)
 
 
