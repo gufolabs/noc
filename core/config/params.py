@@ -86,7 +86,7 @@ class SecretParameter(BaseParameter[str]):
     def clean(self, v: Any) -> str:
         return smart_text(v)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "****hidden****"
 
 
@@ -284,7 +284,7 @@ class ServiceItem:
     def __str__(self) -> str:
         return f"{self.host}:{self.port}"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<ServiceItem {self.host}:{self.port}>"
 
     def __contains__(self, item) -> bool:

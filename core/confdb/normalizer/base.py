@@ -35,7 +35,7 @@ class Node:
         self.children: list[Node] = []
         self.matcher = None
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         if self.handler:
             return "<Node %s (%s)>" % (repr(self.token), self.handler.__name__)
         return "<Node %s>" % repr(self.token)
@@ -99,7 +99,7 @@ class RootNode(Node):
     def __init__(self, token=None):
         super().__init__(token)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "<RootNode>"
 
     def match(self, token):

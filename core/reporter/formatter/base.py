@@ -44,7 +44,7 @@ class DataFormatter:
     def __str__(self) -> str:
         return f"DataFormatter/{self.__class__.__name__}"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             f"DataFormatter/{self.__class__.__name__} ("
             f"root_band: {self.root_band}, "

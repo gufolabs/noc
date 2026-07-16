@@ -13,7 +13,7 @@ class Var:
     def __str__(self) -> str:
         return self.name
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "<Var '%s' at %s>" % (self.name, id(self))
 
     def get(self, ctx):

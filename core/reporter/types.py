@@ -90,7 +90,7 @@ class ReportBand(BaseModel):
     def __str__(self) -> str:
         return f'ReportBand "{self.name}"'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             f'ReportBand "{self.name}" ('
             f"queries: {len(self.queries) if self.queries is not None else None}, "
@@ -143,7 +143,7 @@ class BandFormat(BaseModel):
     def __str__(self) -> str:
         return f'BandFormat "{self.title_template}"'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             f'BandFormat "{self.title_template}" ('
             f"title_template: {self.title_template}, "
@@ -175,7 +175,7 @@ class Template(BaseModel):
     def __str__(self) -> str:
         return f'Template "{self.code}"'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             f'Template "{self.code}" (output_type: {self.output_type}, '
             f"content: {self.content}, "
@@ -235,7 +235,7 @@ class ReportConfig(BaseModel):
     def __str__(self) -> str:
         return f'ReportConfig "{self.name}"'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             f'ReportConfig "{self.name}" ('
             f"bands: {len(self.bands)}, "
@@ -268,7 +268,7 @@ class RunParams(BaseModel):
     def __str__(self) -> str:
         return f'RunParams "{self.report_config.name}"'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             f'RunParams "{self.report_config.name}" ('
             f"report_config: {self.report_config}, "
