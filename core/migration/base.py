@@ -21,7 +21,7 @@ class BaseMigration:
         # @todo: set_comprehensions
         self.dependencies = {f"{x[0]}.{x[1]}" for x in self.depends_on}
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.get_name()
 
     def add_dependency(self, name: str) -> None:

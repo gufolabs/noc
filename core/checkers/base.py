@@ -65,7 +65,7 @@ class Check:
         default=None, compare=False, hash=False
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name}?{self.args}"
 
     def __hash__(self):
@@ -187,7 +187,7 @@ class CheckResult:
     # Credentials List, Return if suggests flag is set
     credential: SNMPCredential | SNMPv3Credential | CLICredential | HTTPCredential | None = None
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.check}?{self.args}: {self.status}"
 
     def __hash__(self):

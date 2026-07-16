@@ -57,7 +57,7 @@ class StreamItem:
             return f"{name}.{self.shard}"
         return name
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
