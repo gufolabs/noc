@@ -71,7 +71,7 @@ class TopologyBase:
         self.settings = kwargs or {}
         self.load()  # Load nodes
 
-    def __len__(self):
+    def __len__(self) -> int:
         """Map nodes count."""
         return len(self.G)
 

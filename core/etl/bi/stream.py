@@ -34,7 +34,7 @@ class Stream:
         self.chunk_size = 0
         self.ts_field = self.model._meta.ordered_fields[1].name
 
-    def __del__(self):
+    def __del__(self) -> None:
         if self.out:
             os.unlink(self.out_path)
 

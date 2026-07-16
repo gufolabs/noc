@@ -200,5 +200,5 @@ class AlarmNode(BaseCDAGNode):
             return True
         return super().is_required_input(name)
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.reset_state()

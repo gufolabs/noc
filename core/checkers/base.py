@@ -68,7 +68,7 @@ class Check:
     def __str__(self) -> str:
         return f"{self.name}?{self.args}"
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.key)
 
     @property
@@ -190,7 +190,7 @@ class CheckResult:
     def __str__(self) -> str:
         return f"{self.check}?{self.args}: {self.status}"
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.key)
 
     @property

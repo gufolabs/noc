@@ -43,7 +43,7 @@ class SSHStream(BaseStream):
         self.channel = None
         self.credentials = cli.script.credentials
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.channel = None
         self.session = None
 

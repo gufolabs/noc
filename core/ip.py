@@ -47,7 +47,7 @@ class IP:
         """Returns string containing prefix."""
         return self.prefix
 
-    def __len__(self):
+    def __len__(self) -> int:
         """Returns mask length (in bits)."""
         return self.mask
 
@@ -358,7 +358,7 @@ class IPv4(IP):
             "%d.%d.%d.%d/%d" % ((s >> 24) & 0xFF, (s >> 16) & 0xFF, (s >> 8) & 0xFF, s & 0xFF, mask)
         )
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         """Hash the IPv4 instance."""
         return self.d
 
@@ -727,7 +727,7 @@ class IPv6(IP):
             )
         return IPv6(":".join(["%x" % p for p in r]) + "/%d" % mask)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         """Hash the IPv6 instance (by prefix string)."""
         return hash(self.prefix)
 
