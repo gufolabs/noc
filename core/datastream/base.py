@@ -32,8 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 class DataStream:
-    """
-    Datastream stored in collection named ds_<name>.
+    """Datastream stored in collection named ds_<name>.
     Fields:
     _id: Object id
     changeid: Change ID
@@ -78,10 +77,7 @@ class DataStream:
 
     @classmethod
     def get_collection(cls, fmt: str | None = None) -> pymongo.collection.Collection:
-        """
-        Get pymongo Collection object
-        :return:
-        """
+        """Get pymongo Collection object"""
         c_name = cls.get_collection_name(fmt)
         coll = cls._collections.get(c_name)
         if coll is None:
@@ -91,10 +87,7 @@ class DataStream:
 
     @classmethod
     def get_collection_async(cls, fmt: str | None = None) -> pymongo.collection.Collection:
-        """
-        Get pymongo Collection object
-        :return:
-        """
+        """Get pymongo Collection object"""
         c_name = cls.get_collection_name(fmt)
         if c_name not in cls._collections_async:
             from noc.core.mongo.connection_async import connect_async, get_db
@@ -106,10 +99,7 @@ class DataStream:
 
     @classmethod
     def ensure_collection(cls):
-        """
-        Ensure collection is created and properly indexed
-        :return:
-        """
+        """Ensure collection is created and properly indexed"""
         coll = cls.get_collection()
         coll.create_index(cls.F_CHANGEID, unique=True)
         meta = cls.get_meta({})
@@ -119,39 +109,45 @@ class DataStream:
 
     @classmethod
     def get_object(cls, id):
-        """
-        Generate datastream object for given id.
+        """Generate datastream object for given id.
         Raise KeyError if object is not found
         Must be overriden
-        :param id: Object id
-        :return: dict containing object data
+
+        Args:
+            id: Object id
+
+        Returns:
+            dict containing object data
         """
         raise NotImplementedError()
 
     @classmethod
     def get_meta(cls, data: dict[str, Any]) -> dict | None:
-        """
-        Extract additional metadata from .get_object() result for additional indexing
-        :param data: .get_object() result
-        :return: dict or None
+        """Extract additional metadata from .get_object() result for additional indexing
+
+        Args:
+            data: .get_object() result
+
+        Returns:
+            dict or None
         """
         return None
 
     @classmethod
     def get_deleted_object(cls, id):
-        """
-        Generate item for deleted object
-        :param id:
-        :return:
+        """Generate item for deleted object
+
+        Args:
+            id
         """
         return {"id": str(id), cls.F_DELETED: True}
 
     @classmethod
     def get_moved_object(cls, id: str | int) -> dict[str, Any]:
-        """
-        Generate item for deleted object
-        :param id:
-        :return:
+        """Generate item for deleted object
+
+        Args:
+            id
         """
         return {"id": str(id), "$moved": True}
 
@@ -213,12 +209,11 @@ class DataStream:
 
     @classmethod
     def clean_meta(cls, meta: dict[str, list[Any]], current_meta: dict[str, Any]):
-        """
-        Calculate actual meta from calculate and current records
+        """Calculate actual meta from calculate and current records
 
-        :param meta: Calculated meta
-        :param current_meta: Meta value for current record
-        :return:
+        Args:
+            meta: Calculated meta
+            current_meta: Meta value for current record
         """
         r = {}  # current meta
         # Compare meta
@@ -254,15 +249,15 @@ class DataStream:
         meta_headers=None,
         bulk: list[Any] | None = None,
     ) -> bool:
-        """
-        Check calculate data changed and save it to collection
-        :param data: Object Data
-        :param meta: Filter metadata
-        :param fmt: Format
-        :param state: Current saved data state
-        :param meta_headers: Headers for changed message
-        :param bulk: Bulk accumulator
-        :return:
+        """Check calculate data changed and save it to collection
+
+        Args:
+            data: Object Data
+            meta: Filter metadata
+            fmt: Format
+            state: Current saved data state
+            meta_headers: Headers for changed message
+            bulk: Bulk accumulator
         """
 
         def is_changed(d, h):
@@ -339,11 +334,14 @@ class DataStream:
 
     @classmethod
     def update_object(cls, id, delete=False) -> bool:
-        """
-        Generate and update object in stream
-        :param id: Object id
-        :param delete: Object must be marked as deleted
-        :return: True if object has been updated
+        """Generate and update object in stream
+
+        Args:
+            id: Object id
+            delete: Object must be marked as deleted
+
+        Returns:
+            True if object has been updated
         """
         data, meta, meta_h = cls._get_current_data(id, delete=delete)
         r = cls._update_object(data=data, meta=meta, meta_headers=meta_h)
@@ -354,10 +352,10 @@ class DataStream:
 
     @classmethod
     def delete_object(cls, id):
-        """
-        Mark object as deleted
-        :param id:
-        :return:
+        """Mark object as deleted
+
+        Args:
+            id
         """
         cls.update_object(id, delete=True)
 
@@ -377,23 +375,20 @@ class DataStream:
 
     @classmethod
     def get_total(cls, fmt=None):
-        """
-        Return total amount of items in datastream
-        :return:
-        """
+        """Return total amount of items in datastream"""
         return cls.get_collection(fmt).estimated_document_count()
 
     @classmethod
     def clean_change_id(cls, change_id):
-        """
-        Convert change_id to ObjectId. Following formats are possible:
+        """Convert change_id to ObjectId. Following formats are possible:
         * ObjectId
         * string containing ObjectId
         * ISO 8601 timestamp either in form
           * YYYY-DD-MM
           * YYYY-DD-MMThh:mm:ss
-        :param change_id: Cleaned change_id
-        :return:
+
+        Args:
+            change_id: Cleaned change_id
         """
         # ObjectId
         if isinstance(change_id, bson.ObjectId):
@@ -416,11 +411,11 @@ class DataStream:
 
     @classmethod
     def is_moved(cls, meta: dict[str, list[Any]], meta_filters: dict[str, Any]) -> bool:
-        """
-        Check record is out of filter scope. Check filter diff on meta and record value
-        :param meta:
-        :param meta_filters:
-        :return:
+        """Check record is out of filter scope. Check filter diff on meta and record value
+
+        Args:
+            meta
+            meta_filters
         """
         for field, field_value in meta_filters.items():
             if not field.startswith("meta."):
@@ -449,20 +444,22 @@ class DataStream:
         fmt=None,
         filter_policy: str | None = None,
     ):
-        """
-        Iterate over data items beginning from change id
+        """Iterate over data items beginning from change id
 
         Raises ValueError if filters has incorrect input parameters
-        :param change_id: Staring change id
-        :param limit: Records limit
-        :param filters: List of strings with filter expression
-        :param fmt: Format
-        :param filter_policy: Metadata changed policy. Behavior if metadata change out of filter scope
-                   * default - no changes
-                   * delete - return $delete message
-                   * keep - ignore filter, return full record
-                   * move - return $moved message
-        :return: (id, change_id, data)
+
+        Args:
+            change_id: Starting change id
+            limit: Records limit
+            filters: List of strings with filter expression
+            fmt: Format
+            filter_policy: Metadata changed policy. Behavior if metadata
+                change out of filter scope * default - no changes *
+                delete - return $delete message * keep - ignore filter,
+                return full record * move - return $moved message
+
+        Returns:
+            (id, change_id, data)
         """
         q, meta_filters = {}, {}
         if filters:
@@ -502,20 +499,22 @@ class DataStream:
         fmt=None,
         filter_policy: str | None = None,
     ):
-        """
-        Iterate over data items beginning from change id
+        """Iterate over data items beginning from change id
 
         Raises ValueError if filters has incorrect input parameters
-        :param change_id: Staring change id
-        :param limit: Records limit
-        :param filters: List of strings with filter expression
-        :param fmt: Format
-        :param filter_policy: Metadata changed policy. Behavior if metadata change out of filter scope
-                   * default - no changes
-                   * delete - return $delete message
-                   * keep - ignore filter, return full record
-                   * move - return $moved message
-        :return: (id, change_id, data)
+
+        Args:
+            change_id: Starting change id
+            limit: Records limit
+            filters: List of strings with filter expression
+            fmt: Format
+            filter_policy: Metadata changed policy. Behavior if metadata
+                change out of filter scope * default - no changes *
+                delete - return $delete message * keep - ignore filter,
+                return full record * move - return $moved message
+
+        Returns:
+            (id, change_id, data)
         """
         q, meta_filters = {}, {}
         if filters:
@@ -548,47 +547,47 @@ class DataStream:
 
     @classmethod
     def on_change(cls, data):
-        """
-        Called when datastream changed. May alter data
-        :param data:
-        :return: True, if data is altered and hash must be recalculated
+        """Called when datastream changed. May alter data
+
+        Args:
+            data
+
+        Returns:
+            True, if data is altered and hash must be recalculated
         """
         return False
 
     @classmethod
     def clean_id(cls, id):
-        """
-        Convert arbitrary string to id data type
+        """Convert arbitrary string to id data type
         Raise ValueError if invalid type given
-        :param id:
-        :return:
+
+        Args:
+            id
         """
         return id
 
     @classmethod
     def clean_id_int(cls, id):
-        """
-        Convert arbitrary string id to int
-        :param id:
-        :return:
+        """Convert arbitrary string id to int
+
+        Args:
+            id
         """
         return int(id)
 
     @classmethod
     def clean_id_bson(cls, id):
-        """
-        Convert arbitrary string id to bson int
-        :param id:
-        :return:
+        """Convert arbitrary string id to bson int
+
+        Args:
+            id
         """
         return bson.ObjectId(id)
 
     @classmethod
     def wait(cls):
-        """
-        Block until datastream receives changes
-        :return:
-        """
+        """Block until datastream receives changes"""
         coll = cls.get_collection()
         with coll.watch() as stream:
             next(stream)
@@ -596,10 +595,10 @@ class DataStream:
 
     @staticmethod
     def qs(s):
-        """
-        Encode string to utf-8
-        :param s:
-        :return:
+        """Encode string to utf-8
+
+        Args:
+            s
         """
         if not s:
             return ""
@@ -609,10 +608,13 @@ class DataStream:
 
     @classmethod
     def _parse_filter(cls, expr):
-        """
-        Convert single filter expression to a S-expression
-        :param expr: filter expression in form name(arg1, .., argN)
-        :return: (name, arg1, argN)
+        """Convert single filter expression to a S-expression
+
+        Args:
+            expr: filter expression in form name(arg1, .., argN)
+
+        Returns:
+            (name, arg1, argN)
         """
         if not isinstance(expr, str):
             raise ValueError("Expression must be string")
@@ -625,10 +627,13 @@ class DataStream:
 
     @classmethod
     def compile_filters(cls, exprs):
-        """
-        Compile list of filter expressions to MongoDB query
-        :param exprs: List of strings with expressions
-        :return: dict with query
+        """Compile list of filter expressions to MongoDB query
+
+        Args:
+            exprs: List of strings with expressions
+
+        Returns:
+            dict with query
         """
         if not isinstance(exprs, list):
             raise ValueError("expressions must be list of string")
@@ -643,13 +648,13 @@ class DataStream:
 
     @classmethod
     def filter_id(cls, id1, *args):
-        """
-        Filter by id. Usage:
+        """Filter by id. Usage:
 
         id(id1, .., idN)
-        :param id1:
-        :param args:
-        :return:
+
+        Args:
+            id1
+            *args
         """
         ids = [cls.clean_id(id1)] + [cls.clean_id(x) for x in args]
         if len(ids) == 1:
@@ -658,11 +663,11 @@ class DataStream:
 
     @classmethod
     def filter_shard(cls, instance, n_instances):
-        """
-        Sharding by id
-        :param instance:
-        :param n_instances:
-        :return:
+        """Sharding by id
+
+        Args:
+            instance
+            n_instances
         """
         # Raise ValueError if not integer
         instance = int(instance)
@@ -677,10 +682,10 @@ class DataStream:
 
     @classmethod
     def get_format_role(cls, fmt: str) -> str | None:
-        """
-        Returns format role, if any
-        :param fmt:
-        :return:
+        """Returns format role, if any
+
+        Args:
+            fmt
         """
         doc = get_db()["datastreamconfigs"].find_one({"name": cls.name})
         if not doc:
@@ -692,10 +697,10 @@ class DataStream:
 
     @classmethod
     def get_meta_headers(cls, data: dict[str, Any]) -> dict[str, bytes] | None:
-        """
-        Return MetaData for message headers
-        :param data:
-        :return:
+        """Return MetaData for message headers
+
+        Args:
+            data
         """
         return None
 
@@ -707,14 +712,13 @@ class DataStream:
         mtype: str | None = None,
         additional_headers: dict[str, bytes] | None = None,
     ) -> None:
-        """
-        Send MX message
+        """Send MX message
 
-        :param data:
-        :param change_id:
-        :param mtype: Message Type
-        :param additional_headers:
-        :return:
+        Args:
+            data
+            change_id
+            mtype: Message Type
+            additional_headers
         """
         data["$changeid"] = str(change_id)
         # Build headers
