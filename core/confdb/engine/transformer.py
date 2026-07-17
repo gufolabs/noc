@@ -114,10 +114,10 @@ class PredicateTransformer(ast.NodeTransformer):
         return node
 
     def visit_Name(self, node: ast.Name):
-        """
-        Convert Name(id=name) to self.fn_Var(name)
-        :param node:
-        :return:
+        """Convert Name(id=name) to self.fn_Var(name)
+
+        Args:
+            node
         """
         new_node = ast.Call(
             func=ast.Attribute(

@@ -14,9 +14,7 @@ from .base import BaseTokenizer
 
 
 class LineTokenizer(BaseTokenizer):
-    """
-    Line tokenizer. Splits line to tokens
-    """
+    """Line tokenizer. Splits line to tokens"""
 
     name = "line"
     rx_indent = re.compile(r"^\s+")
@@ -76,10 +74,10 @@ class LineTokenizer(BaseTokenizer):
             yield line.replace("\t", tr)
 
     def iter_rewrite(self, iter: Iterable[str]) -> Iterator[tuple[str]]:
-        """
-        Apply `rewrite`
-        :param iter:
-        :return:
+        """Apply `rewrite`
+
+        Args:
+            iter
         """
         for line in iter:
             for pattern, repl in self.rewrite:
@@ -89,8 +87,7 @@ class LineTokenizer(BaseTokenizer):
             yield line
 
     def iter_line_tokens(self, line: str) -> Iterator[tuple[str]]:
-        """
-        Iterate line tokens.
+        """Iterate line tokens.
 
         Args:
             line: Input line.
@@ -106,8 +103,7 @@ class LineTokenizer(BaseTokenizer):
         yield from line.split()
 
     def iter_line_quoted_tokens(self, line: str) -> Iterator[tuple[str]]:
-        """
-        Iterate line tokens considering strings.
+        """Iterate line tokens considering strings.
 
         Args:
             line: Input line.

@@ -10,9 +10,7 @@ from .query import QueryApplicator
 
 
 class DefaultCDPStatusApplicator(QueryApplicator):
-    """
-    Apply non-disabled CDP interfaces
-    """
+    """Apply non-disabled CDP interfaces"""
 
     CHECK_QUERY = "Match('hints', 'protocols', 'cdp', 'status')"
     QUERY = [

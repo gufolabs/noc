@@ -42,10 +42,10 @@ class Engine:
         return compile(tree, "<ast>", "eval")
 
     def _expr_to_python(self, expr):
-        """
-        Convert expression to python expression
-        :param expr:
-        :return:
+        """Convert expression to python expression
+
+        Args:
+            expr
         """
         import astor
 
@@ -61,11 +61,11 @@ class Engine:
         yield from g
 
     def any(self, expr, **kwargs):
-        """
-        Run query and return True if any result found
-        :param expr:
-        :param kwargs:
-        :return:
+        """Run query and return True if any result found
+
+        Args:
+            expr
+            **kwargs
         """
         for _ in self.query(expr, **kwargs):
             return True
@@ -80,11 +80,14 @@ class Engine:
         self.db.insert_bulk(iter)
 
     def trim_and_append(self, path, value):
-        """
-        Trim all children nodes of path and append value
-        :param path: Tuple containing path
-        :param value: iterable yielding path
-        :return: True if value replaced, False otherwise
+        """Trim all children nodes of path and append value
+
+        Args:
+            path: Tuple containing path
+            value: iterable yielding path
+
+        Returns:
+            True if value replaced, False otherwise
         """
         current = self.db.db
         for p in path:
@@ -96,10 +99,10 @@ class Engine:
         return True
 
     def find(self, *args):
-        """
-        Find node by path
-        :param args: Path
-        :return:
+        """Find node by path
+
+        Args:
+            *args: Path
         """
         assert self.db, "Database is not initialized"
         root = self.db.db
@@ -150,10 +153,10 @@ class Engine:
 
     @staticmethod
     def iter_unique(g):
-        """
-        Deduplicate generator
-        :param g:
-        :return:
+        """Deduplicate generator
+
+        Args:
+            g
         """
         seen = set()
         for ctx in g:
@@ -164,11 +167,11 @@ class Engine:
 
     @staticmethod
     def resolve_var(ctx, v):
-        """
-        Resolve bound variable if necessary
-        :param ctx:
-        :param v:
-        :return:
+        """Resolve bound variable if necessary
+
+        Args:
+            ctx
+            v
         """
         if isinstance(v, Var):
             return v.get(ctx)
@@ -177,10 +180,7 @@ class Engine:
         return v
 
     def cleanup(self):
-        """
-        Remove temporary nodes
-        :return:
-        """
+        """Remove temporary nodes"""
         assert self.db, "Database is not initialized"
         current = self.db.db
         if current.children:
@@ -189,13 +189,13 @@ class Engine:
                     del current.children[c]
 
     def fn_Set(self, _input, **kwargs):
-        """
-        Set(k1=v1, ..., kN=vN)
+        """Set(k1=v1, ..., kN=vN)
 
         Modify context with additional variables. If v is list, apply all variables product.
-        :param _input:
-        :param kwargs:
-        :return:
+
+        Args:
+            _input
+            **kwargs
         """
 
         def g():
@@ -209,13 +209,13 @@ class Engine:
         return self.iter_unique(g())
 
     def fn_Dump(self, _input, message=None):
-        """
-        Dump()
+        """Dump()
         Dump(message)
         Dump current context and pass unmodified
-        :param _input:
-        :param message:
-        :return:
+
+        Args:
+            _input
+            message
         """
         for ctx in _input:
             if message:
@@ -225,37 +225,37 @@ class Engine:
             yield ctx
 
     def fn_True(self, _input):
-        """
-        Pass context unmodified
-        :param _input:
-        :return:
+        """Pass context unmodified
+
+        Args:
+            _input
         """
         yield from _input
 
     def fn_False(self, _input):
-        """
-        Break predicate chain
-        :param _input:
-        :return:
+        """Break predicate chain
+
+        Args:
+            _input
         """
         return iter(())
 
     def fn_Var(self, name):
-        """
-        Internal function referring to context variable
-        :param name:
-        :return:
+        """Internal function referring to context variable
+
+        Args:
+            name
         """
         return Var(name)
 
     @visitor("vx")
     def fn_Sprintf(self, _input, name, fmt, *args):
         """
-        :param _input:
-        :param name:
-        :param fmt:
-        :param args:
-        :return:
+        Args:
+            _input
+            name
+            fmt
+            *args
         """
         assert isinstance(name, Var)
         for ctx in _input:
@@ -266,11 +266,11 @@ class Engine:
             yield nctx
 
     def fn_Match(self, _input, *args):
-        """
-        Match *args against database. Bind unbound variables on match
-        :param _input:
-        :param args:
-        :return:
+        """Match *args against database. Bind unbound variables on match
+
+        Args:
+            _input
+            *args
         """
 
         def match_token(node, c, current, rest):
@@ -309,11 +309,11 @@ class Engine:
             yield from match(self.db.db, ctx, args)
 
     def fn_NotMatch(self, _input, *args):
-        """
-        Check *args is not in database. Bind unbound variables
-        :param _input:
-        :param args:
-        :return:
+        """Check *args is not in database. Bind unbound variables
+
+        Args:
+            _input
+            *args
         """
 
         def not_match_token(node, c, current, rest):
@@ -352,14 +352,14 @@ class Engine:
             yield from not_match(self.db.db, ctx, args)
 
     def fn_Re(self, _input, pattern, name, ignore_case=None):
-        """
-        Match variable *name* against regular expression pattern.
+        """Match variable *name* against regular expression pattern.
         Pass context further if matched. If regular expression contains
         named groups, i.e. (?P<group_name>....), apply them as context variables
-        :param _input:
-        :param pattern:
-        :param name:
-        :return:
+
+        Args:
+            _input
+            pattern
+            name
         """
         flags = 0
         if ignore_case:
@@ -389,10 +389,10 @@ class Engine:
                     yield ctx
 
     def op_Not(self, g):
-        """
-        Context negation. Yields empty context if input is empty, Drops input otherwise
-        :param g:
-        :return:
+        """Context negation. Yields empty context if input is empty, Drops input otherwise
+
+        Args:
+            g
         """
 
         try:
@@ -408,11 +408,11 @@ class Engine:
         return self.iter_unique(itertools.chain(*gens))
 
     def fn_Del(self, _input, *args):
-        """
-        Delete variables from context. Deduplicate contexts when necessary
-        :param _input:
-        :param args: String or variable
-        :return:
+        """Delete variables from context. Deduplicate contexts when necessary
+
+        Args:
+            _input
+            *args: String or variable
         """
 
         def g():
@@ -431,11 +431,11 @@ class Engine:
         return self.iter_unique(g())
 
     def fn_Fact(self, _input, *args):
-        """
-        Set Fact to database
-        :param _input:
-        :param args: Path of fact, eigther constants or bound variables
-        :return:
+        """Set Fact to database
+
+        Args:
+            _input
+            *args: Path of fact, eigther constants or bound variables
         """
         assert self.db, "Current database is not set"
         for ctx in _input:
@@ -444,12 +444,12 @@ class Engine:
 
     @visitor("xx")
     def fn_HasVLAN(self, _input, vlan_filter, vlan_id):
-        """
-        Check `vlan_id` is within `vlan_filter` expression
-        :param _input:
-        :param vlan_filter:
-        :param vlan_id:
-        :return:
+        """Check `vlan_id` is within `vlan_filter` expression
+
+        Args:
+            _input
+            vlan_filter
+            vlan_id
         """
         for ctx in _input:
             vf = self.resolve_var(ctx, vlan_filter)
@@ -463,12 +463,12 @@ class Engine:
 
     @visitor("xx")
     def fn_MatchAnyVLAN(self, _input, vlan_filter, vlans):
-        """
-        Check any `vlans` is within `vlan_filter` expression
-        :param _input:
-        :param vlan_filter:
-        :param vlans:
-        :return:
+        """Check any `vlans` is within `vlan_filter` expression
+
+        Args:
+            _input
+            vlan_filter
+            vlans
         """
         for ctx in _input:
             vf = self.resolve_var(ctx, vlan_filter)
@@ -487,12 +487,12 @@ class Engine:
 
     @visitor("xx")
     def fn_MatchAllVLAN(self, _input, vlan_filter, vlans):
-        """
-        Check all `vlans` is within `vlan_filter` expression
-        :param _input:
-        :param vlan_filter:
-        :param vlans:
-        :return:
+        """Check all `vlans` is within `vlan_filter` expression
+
+        Args:
+            _input
+            vlan_filter
+            vlans
         """
         for ctx in _input:
             vf = self.resolve_var(ctx, vlan_filter)
@@ -511,12 +511,12 @@ class Engine:
 
     @visitor("xx")
     def fn_MatchExactVLAN(self, _input, vlan_filter, vlans):
-        """
-        Check all `vlans` is within `vlan_filter` expression
-        :param _input:
-        :param vlan_filter:
-        :param vlans:
-        :return:
+        """Check all `vlans` is within `vlan_filter` expression
+
+        Args:
+            _input
+            vlan_filter
+            vlans
         """
         for ctx in _input:
             vf = self.resolve_var(ctx, vlan_filter)
@@ -535,12 +535,12 @@ class Engine:
 
     @visitor("xx")
     def fn_MatchPrefix(self, _input, prefix, address):
-        """
-        Check `address` is within prefix
-        :param _input:
-        :param prefix:
-        :param address:
-        :return:
+        """Check `address` is within prefix
+
+        Args:
+            _input
+            prefix
+            address
         """
         for ctx in _input:
             prefix = self.resolve_var(ctx, prefix)
@@ -554,11 +554,11 @@ class Engine:
 
     @visitor("x")
     def fn_Filter(self, _input, expr):
-        """
-        Pass context only if `expr` is evaluated as true
-        :param _input:
-        :param expr:
-        :return:
+        """Pass context only if `expr` is evaluated as true
+
+        Args:
+            _input
+            expr
         """
         for ctx in _input:
             if callable(expr):
@@ -605,13 +605,13 @@ class Engine:
         return optimize_filter(joinrange.join(values))
 
     def fn_Collapse(self, _input, *args, **kwargs):
-        """
-        Collapse multiple keys to a single one following rules
-        :param _input:
-        :param args:
-        :param kwargs: One of collapse operation should be specified
-            * join=<sep> -- join lines with separator sep
-        :return:
+        """Collapse multiple keys to a single one following rules
+
+        Args:
+            _input
+            *args
+            **kwargs: One of collapse operation should be specified *
+                join=<sep> -- join lines with separator sep
         """
         assert self.db, "Current database is not set"
         # Check operations

@@ -13,9 +13,7 @@ from .base import BaseTokenizer
 
 
 class INITokenizer(BaseTokenizer):
-    """
-    .ini file parser. Yields (section, key, value)
-    """
+    """.ini file parser. Yields (section, key, value)"""
 
     name = "ini"
 

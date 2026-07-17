@@ -12,9 +12,7 @@ from typing import Any
 
 @dataclass(frozen=True)
 class PathItem:
-    """
-    Connection Path. From chassis to last module
-    """
+    """Connection Path. From chassis to last module"""
 
     # Components: path, c_name, c_num, stack_num, slot_num, protocol_prefix
     object: Any
@@ -44,9 +42,7 @@ class PathItem:
 
 @dataclass
 class PortItem:
-    """
-    Connection port, by selected protocols
-    """
+    """Connection port, by selected protocols"""
 
     name: str
     protocols: list[str]

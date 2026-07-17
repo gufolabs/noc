@@ -10,9 +10,7 @@ from .query import QueryApplicator
 
 
 class DefaultSTPPriorityApplicator(QueryApplicator):
-    """
-    Set platform's STP priority if not set explicitly
-    """
+    """Set platform's STP priority if not set explicitly"""
 
     CHECK_QUERY = (
         "Match('hints', 'protocols', 'spanning-tree', 'status') and "

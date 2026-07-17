@@ -10,9 +10,7 @@ from .query import QueryApplicator
 
 
 class DefaultInterfaceUntaggedVlanApplicator(QueryApplicator):
-    """
-    Apply Default Untagged vlan on interfaces
-    """
+    """Apply Default Untagged vlan on interfaces"""
 
     QUERY = [
         # Get all physical interfaces and bind to variable X

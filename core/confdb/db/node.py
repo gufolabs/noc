@@ -20,21 +20,23 @@ class Node:
         return "<Node %s>" % self.token
 
     def find(self, token):
-        """
-        Find children Node by token
+        """Find children Node by token
 
-        :param token: token as string
-        :return: Child Node or None
+        Args:
+            token: token as string
+
+        Returns:
+            Child Node or None
         """
         if not self.children:
             return None
         return self.children.get(token)
 
     def find_path(self, tokens):
-        """
-        Recursively find by path
-        :param tokens: Iterable containing tokens
-        :return:
+        """Recursively find by path
+
+        Args:
+            tokens: Iterable containing tokens
         """
         current = self
         for p in tokens:
@@ -44,10 +46,10 @@ class Node:
         return current
 
     def merge_children(self, children):
-        """
-        Apply children
-        :param children: Dict of children
-        :return:
+        """Apply children
+
+        Args:
+            children: Dict of children
         """
         if not children:
             return
@@ -60,10 +62,13 @@ class Node:
         return token
 
     def insert(self, tokens):
-        """
-        Populate children with tokens
-        :param tokens: tuple of tokens
-        :return: Inserted node
+        """Populate children with tokens
+
+        Args:
+            tokens: tuple of tokens
+
+        Returns:
+            Inserted node
         """
         if self.children is None:
             self.children = {}

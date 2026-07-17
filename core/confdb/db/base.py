@@ -16,18 +16,18 @@ class ConfDB:
         self.db = Node(None)
 
     def insert(self, tokens):
-        """
-        Put tokens to database
-        :param tokens: tuple of tokens
-        :return:
+        """Put tokens to database
+
+        Args:
+            tokens: tuple of tokens
         """
         self.db.insert(tokens)
 
     def insert_bulk(self, iter):
-        """
-        Put tokens from iterator
-        :param iter: iterator
-        :return:
+        """Put tokens from iterator
+
+        Args:
+            iter: iterator
         """
         for tokens in iter:
             self.insert(tokens)

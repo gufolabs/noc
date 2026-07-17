@@ -58,10 +58,13 @@ class Node:
         return "\n".join(_dump(self))
 
     def get_children(self, token):
-        """
-        Find children by token
-        :param token:
-        :return: Node instance or None
+        """Find children by token
+
+        Args:
+            token
+
+        Returns:
+            Node instance or None
         """
         for n in self.children:
             if n.match(token):
@@ -209,11 +212,11 @@ class BaseNormalizer(metaclass=BaseNormalizerMetaclass):
         return self.object.profile.get_profile().convert_interface_name(" ".join(args))
 
     def to_prefix(self, address, netmask):
-        """
-        Convert address and netmask to prefix form
-        :param address:
-        :param netmask:
-        :return:
+        """Convert address and netmask to prefix form
+
+        Args:
+            address
+            netmask
         """
         return IPv4(address, netmask=netmask).prefix
 
@@ -283,11 +286,14 @@ class BaseNormalizer(metaclass=BaseNormalizerMetaclass):
         return None
 
     def _resolve_vars(self, ctx, d_map):
-        """
-        Resolve deferable variables mapping
-        :param ctx: Context
-        :param d_map: name -> context name mapping
-        :return: Dict if fully resolved, None otherwise
+        """Resolve deferable variables mapping
+
+        Args:
+            ctx: Context
+            d_map: name -> context name mapping
+
+        Returns:
+            Dict if fully resolved, None otherwise
         """
         r = {}
         for k in d_map:
@@ -299,15 +305,14 @@ class BaseNormalizer(metaclass=BaseNormalizerMetaclass):
         return r
 
     def rebase(self, src, dst):
-        """
-        Mark the part of tree to be rebased to new location
+        """Mark the part of tree to be rebased to new location
 
         Usage:
         yield self.rebase(src, dst)
 
-        :param src: Source path
-        :param dst: Destination path
-        :return:
+        Args:
+            src: Source path
+            dst: Destination path
         """
 
         def wrap():
@@ -331,9 +336,9 @@ def match(*args, **kwargs):
 
 
 def deferable(name):
-    """
-    Denote deferable (i.e. restorable from context, may be later) variable
-    :param name: Variable name
-    :return:
+    """Denote deferable (i.e. restorable from context, may be later) variable
+
+    Args:
+        name: Variable name
     """
     return (name,)

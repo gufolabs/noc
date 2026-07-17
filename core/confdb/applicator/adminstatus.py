@@ -10,9 +10,7 @@ from .query import QueryApplicator
 
 
 class DefaultAdminStatusApplicator(QueryApplicator):
-    """
-    Set missed interface's AdminStatus from "hints interfaces defaults admin-status"
-    """
+    """Set missed interface's AdminStatus from "hints interfaces defaults admin-status""""
 
     CHECK_QUERY = "Match('hints', 'interfaces', 'defaults', 'admin-status')"
     QUERY = [

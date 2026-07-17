@@ -12,9 +12,7 @@ from .base import BaseCollator
 
 
 class ProfileCollator(BaseCollator):
-    """
-    Direct map between connection name and interface name
-    """
+    """Direct map between connection name and interface name"""
 
     def collate(self, physical_port, interfaces) -> str | None:
         for iface_name in self.profile.get_interfaces_by_port(physical_port):

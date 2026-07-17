@@ -47,10 +47,10 @@ class RouterOSTokenizer(LineTokenizer):
                     yield (*context, k, v)
 
     def iter_line_tokens(self, line):
-        """
-        Iterate line tokens
-        :param line:
-        :return:
+        """Iterate line tokens
+
+        Args:
+            line
         """
         for match in self.rx_param.finditer(line):
             yield match.group(0)

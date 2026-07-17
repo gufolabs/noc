@@ -18,10 +18,10 @@ class ContextTokenizer(LineTokenizer):
         self.contexts = contexts or []
 
     def is_matched(self, tokens):
-        """
-        Check tokens exactly matched context
-        :param tokens:
-        :return:
+        """Check tokens exactly matched context
+
+        Args:
+            tokens
         """
         lt = len(tokens)
         for ctx in self.contexts:

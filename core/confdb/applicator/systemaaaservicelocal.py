@@ -10,9 +10,7 @@ from .query import QueryApplicator
 
 
 class DefaultSystemAAAServiceLocalApplicator(QueryApplicator):
-    """
-    Set forwarding instance type if not set
-    """
+    """Set forwarding instance type if not set"""
 
     QUERY = [
         "NotMatch('system', 'aaa', 'service', service, 'type', 'local') and "

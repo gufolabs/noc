@@ -10,9 +10,7 @@ from .query import QueryApplicator
 
 
 class DefaultAAASourceAddressLookupApplicator(QueryApplicator):
-    """
-    Lookup source-address hints from default-interface
-    """
+    """Lookup source-address hints from default-interface"""
 
     CHECK_QUERY = (
         "NotMatch('hints', 'system', 'aaa', 'service-type', stype, 'default-address') and"

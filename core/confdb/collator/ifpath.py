@@ -25,8 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 class IfPathCollator(BaseCollator):
-    """
-    Direct map between connection name and interface name by it path.
+    """Direct map between connection name and interface name by it path.
     1) - split SA interface name on path_component by name_path method
     2) - iterate over component on Inventory Item path from end to start
     3) - Compare SA path and Inventory item path by component. If equal - return interface
@@ -62,21 +61,21 @@ class IfPathCollator(BaseCollator):
 
     # TransEth1G,TransEth10G
     def get_protocols(self, if_name: str) -> set[str]:
-        """
-        Getting protocols by ifname.
-        :param if_name: Interface name
-        :return:
+        """Getting protocols by ifname.
+
+        Args:
+            if_name: Interface name
         """
         return self.PROTOCOL_MAPPING.get(if_name.lower()[:2])
 
     @staticmethod
     def name_path(if_name: str) -> tuple[str | None, list[str], str | None]:
-        """
-        Split Interface Name by path component: if_type, if_path, if_num.
+        """Split Interface Name by path component: if_type, if_path, if_num.
          Example Gi 1/0/2: if_type: Gi, if_path: 1/0, if_num: 2;
          10: if_type: None, if_path: [], if_num: 10
-        :param if_name:
-        :return:
+
+        Args:
+            if_name
         """
         match = rx_ifname_splitter.match(if_name)
         if not match:
@@ -89,10 +88,10 @@ class IfPathCollator(BaseCollator):
         return if_type, if_path or [], if_num
 
     def iter_path_component(self, path) -> str:
-        """
-        Iterator by path_component in PathItem. Return path component from end to start
-        :param path:
-        :return:
+        """Iterator by path_component in PathItem. Return path component from end to start
+
+        Args:
+            path
         """
         if not path:
             return None
