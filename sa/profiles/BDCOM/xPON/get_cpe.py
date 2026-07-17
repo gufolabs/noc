@@ -39,7 +39,7 @@ class Script(BaseScript):
     rx_onu_sw = re.compile(r"^Software Version\s+:\s+(?P<version>\S+)\s*\n", re.MULTILINE)
     rx_onu_hw = re.compile(r"^Hardware Version\s+: (?P<revision>\S+)\s*\n", re.MULTILINE)
 
-    STATUS_MAP = {
+    CLI_STATUS_MAP = {
         "auto-configured": "active",
         "auto-configuring": "provisioning",
         "authenticated": "active",
@@ -57,7 +57,7 @@ class Script(BaseScript):
         "BDCM": {
             "3024": "P1004B",
             "3022": "P1501B",
-            "151C": "P1501С",
+            "151C": "P1501C",
             "1004": "P1004T",
             "104C": "P1004C",
             "1154": "GP1702-1Gv2",
@@ -119,19 +119,16 @@ class Script(BaseScript):
                 onu["vendor"] = i[1]
                 if i[2] != "N/A":
                     onu["model"] = self.get_onu_model(i[1], i[2])
-                onu_status = i[5]
-                onu["status"] = self.STATUS_MAP.get(onu_status, "inactive")
+                onu["status"] = self.CLI_STATUS_MAP.get(i[5], "inactive")
                 r[onu["id"]] = dict(onu)
             v = self.cli("show gpon active-onu")
-            for ifaces in re.split(r"Interface GPON\d+/\d+ has bound \d+ active ONUs:\n", v):
-                for i in parse_table(v):
-                    r[i[0]]["distance"] = int(float(i[5]))
+            for i in parse_table(v):
+                r[i[0]]["distance"] = int(float(i[5]))
             v = self.cli("show gpon onu-description")
-            for ifaces in v.split("\n\n"):
-                for i in parse_table(v):
-                    if i[1] == "N/A":
-                        continue
-                    r[i[0]]["description"] = i[1]
+            for i in parse_table(v):
+                if i[1] == "N/A":
+                    continue
+                r[i[0]]["description"] = i[1]
             v = self.cli("show gpon onu-image-information")
             for i in v.split("\n\n"):
                 onu_id = self.rx_gpon_image_iface.search(i)
@@ -155,21 +152,16 @@ class Script(BaseScript):
                     onu["model"] = self.get_onu_model(i[1], i[2])
                 if i[4] != "N/A":
                     onu["description"] = i[4]
-                onu_status = i[6]
-                onu["status"] = self.STATUS_MAP.get(onu_status, "inactive")
+                onu["status"] = self.CLI_STATUS_MAP.get(i[6], "inactive")
                 r[onu["id"]] = dict(onu)
             v = self.cli("show epon active-onu")
-            for ifaces in re.split(
-                r"Interface EPON\d+/\d+ has bound \d+ ONUs auto-configured:\n", v
-            ):
-                for i in parse_table(v):
-                    if is_int(i[4]):
-                        r[i[0]]["distance"] = i[4]
+            for i in parse_table(v):
+                if is_int(i[4]):
+                    r[i[0]]["distance"] = i[4]
             v = self.cli("show epon onu-software-version")
-            for ifaces in v.split("auto-configured:\n"):
-                for i in parse_table(v):
-                    if i[0].startswith("EPON"):
-                        r[i[0]]["version"] = i[1]
+            for i in parse_table(v):
+                if i[0].startswith("EPON"):
+                    r[i[0]]["version"] = i[1]
 
         return sorted(r.values(), key=lambda x: x["id"])
 
@@ -302,7 +294,7 @@ class Script(BaseScript):
                 ifindex = int(oid.split(".")[-1])
                 value = int(value)
                 if ifindex in r:
-                    r[ifindex]["status"] = self.STATUS_MAP.get(value, "inactive")
+                    r[ifindex]["status"] = self.SNMP_STATUS_MAP.get(value, "inactive")
             # NMS-EPON-MIB::onuDistance
             for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.101.10.1.1.27"):
                 ifindex = int(oid.split(".")[-1])

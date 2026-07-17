@@ -8,6 +8,7 @@
 # NOC modules
 from noc.core.script.base import BaseScript
 from noc.sa.interfaces.igetcpestatus import IGetCPEStatus
+from noc.core.text import parse_table
 from noc.core.mac import MAC
 
 
@@ -16,6 +17,12 @@ class Script(BaseScript):
     interface = IGetCPEStatus
     always_prefer = "S"
 
+    CLI_STATUS_MAP = {
+        "auto-configured": True,
+        "auto-configuring": False,
+        "authenticated": True,
+        "active": True,
+    }
     SNMP_STATUS_MAP = {
         0: True,  # authenticated
         1: True,  # registered
@@ -24,6 +31,30 @@ class Script(BaseScript):
         4: False,  # lost
         5: True,  # standby
     }
+
+    def execute_cli(self, **kwargs):
+        r = []
+        if self.is_gpon:
+            v = self.cli("show gpon onu-information", cached=True)
+            for i in parse_table(v):
+                onu = {
+                    "interface": i[0],
+                    "local_id": i[0],
+                    "global_id": i[3],
+                }
+                onu["oper_status"] = self.CLI_STATUS_MAP.get(i[5], False)
+                r.append(onu)
+        else:
+            v = self.cli("show epon onu-information", cached=True)
+            for i in parse_table(v):
+                onu = {
+                    "interface": i[0],
+                    "local_id": i[0],
+                    "global_id": i[3],
+                }
+                onu["oper_status"] = self.CLI_STATUS_MAP.get(i[6], "inactive")
+                r.append(onu)
+        return r
 
     def execute_snmp(self, **kwargs):
         r = {}
