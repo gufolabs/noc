@@ -90,7 +90,7 @@ class CorrelatorService(FastAPIService):
     _reference_cache = cachetools.TTLCache(100, ttl=60)
     AVAIL_CLS = "NOC | Managed Object | Ping Failed"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.version = version.version
         self.rules: dict[ObjectId, list[EventAlarmRule]] = {}

@@ -15,7 +15,7 @@ from .loader import MigrationLoader
 
 
 class MigrationRunner:
-    def __init__(self):
+    def __init__(self) -> None:
         self.db = get_db()
         self.hist_coll = self.db["migrations"]
         self.logger = logging.getLogger("migration")

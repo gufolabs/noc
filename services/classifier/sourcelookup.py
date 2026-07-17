@@ -54,7 +54,7 @@ class SourceConfig:
 
 
 class SourceLookup:
-    def __init__(self):
+    def __init__(self) -> None:
         self.source_configs: dict[str, SourceConfig] = {}  # id -> SourceConfig
         self.source_map: dict[str, str] = {}
 

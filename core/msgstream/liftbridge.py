@@ -28,7 +28,7 @@ class LiftBridgeClient(GugoLiftbridgeClient):
     SUBSCRIBE_BULK = False
     TIMESTAMP_MULTIPLIER = 1000_0000_00
 
-    def __init__(self):
+    def __init__(self) -> None:
         broker = run_sync(self.resolve_broker)
         super().__init__(
             [broker],

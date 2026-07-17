@@ -30,7 +30,7 @@ class ServiceStub:
     name = "stub"
     pooled = False
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = logging.getLogger("stub")
         self.is_ready = threading.Event()
         self.is_publisher_stopped = threading.Event()

@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 class InterfaceLoader:
     rx_class = re.compile(r"^class\s+(?P<name>\S+)\(", re.MULTILINE)
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.interfaces = {}  # Load interfaces
         self.lock = threading.Lock()
         self.all_interfaces = set()

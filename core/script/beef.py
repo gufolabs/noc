@@ -50,7 +50,7 @@ class MIBData(NamedTuple):
 
 
 class Beef:
-    def __init__(self):
+    def __init__(self) -> None:
         self.version: str | None = None
         self.uuid = None
         self.spec = None

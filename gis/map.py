@@ -21,7 +21,7 @@ from noc.core.geo import distance, get_bbox
 class Map:
     CONDUITS_LAYERS = ["manholes", "cableentries"]
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.layers = {}
         self.srid_map = {}
         # Database projection

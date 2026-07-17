@@ -75,7 +75,7 @@ class MetricsService(FastAPIService):
     dcs_check_interval = global_config.metrics.check_interval
     dcs_check_timeout = global_config.metrics.check_timeout
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         # Metric Configs
         self.scopes: dict[str, ScopeInfo] = {}

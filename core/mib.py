@@ -23,7 +23,7 @@ class MIBRegistry:
     PATHS = config.get_customized_paths("cmibs")
     load_lock = Lock()
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.mib: dict[str, str] = {}
         self.hints = {}
         self.loaded_mibs = set()

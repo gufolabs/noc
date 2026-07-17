@@ -37,7 +37,7 @@ class PingService(FastAPIService):
 
     PING_CLS = "NOC | Ping Failed"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.mappings_callback = None
         self.probes: dict[str, tuple[ProbeSetting, ...]] = defaultdict(

@@ -18,7 +18,7 @@ class NBIService(FastAPIService):
     use_watchdog = config.watchdog.enable_watchdog
     traefik_routes_rule = "PathPrefix(`/api/nbi`)"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.collect_req_api_metric = True
 

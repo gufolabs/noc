@@ -34,7 +34,7 @@ class UDPServerProtocol(asyncio.DatagramProtocol):
 
 
 class UDPServer:
-    def __init__(self):
+    def __init__(self) -> None:
         self._transports: list[asyncio.BaseTransport] = []
         self._sockaddr: list[tuple[str, int]] = []
 

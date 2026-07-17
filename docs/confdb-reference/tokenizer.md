@@ -140,7 +140,7 @@ It is advised to call superclass' constructor:
 ```python
 class MyTokenizer(BaseTokenizer):
     ...
-    def __init__(self, data, param1=default1, ...):
+    def __init__(self, data, param1=default1, ...) -> None:
         super(MyTokenizer, self).__init__(data)
 ```
 

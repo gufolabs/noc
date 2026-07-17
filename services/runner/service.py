@@ -38,7 +38,7 @@ class RunnerService(FastAPIService):
     name = "runner"
     use_mongo = True
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.slot_number = 0
         self.total_slots = 0

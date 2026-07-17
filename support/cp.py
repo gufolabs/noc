@@ -34,7 +34,7 @@ class CPClient:
     CRASHINFO_SERVICE = "/api/v1.0/CrashinfoService/"
     PASTE_SERVICE = "/api/v1.0/PasteService/"
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.cp_url = self.CP_URL
         self.account_uuid = None
         self.account_name = None

@@ -148,7 +148,7 @@ class NOCCustomLoader(NOCLoader):
 class NOCImportRouter(importlib.abc.MetaPathFinder):
     """Finder that delegates to NOC-specific loaders based on prefix."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._check_custom = config.path.custom_path and os.path.exists(config.path.custom_path)
 
     def find_spec(

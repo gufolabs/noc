@@ -23,7 +23,7 @@ GENERIC_PROFILE = "Generic.Host"
 class ProfileLoader(BaseLoader):
     name = "profile"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.profiles = {}  # Load profiles
         self.lock = threading.Lock()

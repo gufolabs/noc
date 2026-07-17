@@ -171,7 +171,7 @@ class Command(BaseCommand):
 
 
 class ServiceStub:
-    def __init__(self):
+    def __init__(self) -> None:
         self.metrics = defaultdict(list)
         self.service_id = "stub"
         self.address = "127.0.0.1"

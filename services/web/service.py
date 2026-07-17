@@ -29,7 +29,7 @@ class WebService(FastAPIService):
     use_watchdog = config.watchdog.enable_watchdog
     traefik_routes_rule = "!PathPrefix(`/api/`) && !PathPrefix(`/ui/`) && PathPrefix(`/`)"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "noc.settings")
         self.wsgi_app = get_wsgi_application()

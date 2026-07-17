@@ -26,7 +26,7 @@ class TopoService(FastAPIService):
     name = "topo"
     use_mongo = True
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.topo = Topo(check=config.topo.check)
         self.topo_lock = asyncio.Lock()

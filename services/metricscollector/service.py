@@ -85,7 +85,7 @@ class MetricsCollectorService(FastAPIService):
     _rx_name_cache = cachetools.LRUCache(1000)
     _rs_key_cache = cachetools.TTLCache(10, ttl=120)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.mappings: defaultdict[tuple[str, str], list[CfgItem]] = defaultdict(list)
         self.rx_mappings: defaultdict[tuple[str, re.Pattern], list[CfgItem]] = defaultdict(list)

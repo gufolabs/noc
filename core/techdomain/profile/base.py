@@ -26,5 +26,5 @@ class BaseProfileController:
 
     name: str
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = PrefixLoggerAdapter(logging.getLogger("controller"), self.name)

@@ -32,7 +32,7 @@ def visitor(args):
 class Engine:
     CLEANUP_NODES = {"hints"}
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.db = None
 
     def compile(self, expr):

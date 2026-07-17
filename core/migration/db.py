@@ -24,7 +24,7 @@ class DB:
 
     MAX_NAME_LENGTH = 63
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.deferred_sql = []
 
     @staticmethod

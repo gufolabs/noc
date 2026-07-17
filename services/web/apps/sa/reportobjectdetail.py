@@ -80,7 +80,7 @@ class ReportAdPath:
     Return AD path
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.out = self.load()
 
     def load(self):

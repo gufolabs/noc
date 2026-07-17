@@ -12,7 +12,7 @@ import itertools
 class GeocodingParser:
     ID_ADDR = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def parse(self, f):

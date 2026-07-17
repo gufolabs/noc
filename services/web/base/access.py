@@ -21,7 +21,7 @@ class Permission:
     and optional queryset method
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.app = None
 
     def queryset(self, request):

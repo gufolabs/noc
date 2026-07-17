@@ -12,7 +12,7 @@ from noc.inv.models.interface import Interface
 
 
 class AbductDetector:
-    def __init__(self):
+    def __init__(self) -> None:
         self.active: dict[int, list[tuple[int, str]]] = {}
 
     def register_up(self, ts: int, interface: Interface):

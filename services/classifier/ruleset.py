@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
 
 
 class RuleSet:
-    def __init__(self):
+    def __init__(self) -> None:
         self.rules: dict[
             tuple[str | None, str], RuleLookup
         ] = {}  # (profile, chain) -> [rule, ..., rule]

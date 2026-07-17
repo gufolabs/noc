@@ -26,7 +26,7 @@ class _VarVisitor(ast.NodeVisitor):
     Collect all variable names from expression
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.vars: set[str] = set()
         self.skip: set[str] = set()

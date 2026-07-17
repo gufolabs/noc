@@ -12,7 +12,7 @@ from .marshall.loader import loader
 
 
 class ConfDB:
-    def __init__(self):
+    def __init__(self) -> None:
         self.db = Node(None)
 
     def insert(self, tokens):
