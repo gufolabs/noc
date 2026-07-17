@@ -6,11 +6,13 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
+# Python modules
 from __future__ import annotations
 
 import sys
 import ast
 import csv
+from contextlib import suppress
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, TextIO
@@ -255,11 +257,9 @@ class KPIVisitor:
 
 def get_module_name(path: Path) -> str:
     """Convert path to module name."""
-    if path.parts[:2] == ("src", "noc"):
-        parts = list(path.parts[2:])
-    else:
-        parts = list(path.parts)
-    parts[-1] = parts[-1].rstrip(".py")
+    parts = path.with_suffix("").parts
+    if parts[:2] == ("src", "noc"):
+        parts = parts[2:]
     return ".".join(("noc", *parts))
 
 
@@ -338,19 +338,20 @@ def write_csv(
         ]
     )
 
-    for row in rows:
-        writer.writerow(
-            [
-                row.file,
-                row.module,
-                row.cls,
-                row.function,
-                row.lineno,
-                "yes" if row.args_typed else "no",
-                "yes" if row.return_typed else "no",
-                "yes" if row.uses_any else "no",
-            ]
-        )
+    with suppress(BrokenPipeError):
+        for row in rows:
+            writer.writerow(
+                [
+                    row.file,
+                    row.module,
+                    row.cls,
+                    row.function,
+                    row.lineno,
+                    "yes" if row.args_typed else "no",
+                    "yes" if row.return_typed else "no",
+                    "yes" if row.uses_any else "no",
+                ]
+            )
 
 
 def dump_summary(rows: Iterable[KPI]):
