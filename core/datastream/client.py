@@ -70,7 +70,7 @@ class DataStreamClient:
         """Query datastream
 
         Args:
-            change_id: Staring change id
+            change_id: Starting change id
             filters: List of strings with filter expression
             block
             limit: Records limit

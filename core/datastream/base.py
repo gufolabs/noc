@@ -449,7 +449,7 @@ class DataStream:
         Raises ValueError if filters has incorrect input parameters
 
         Args:
-            change_id: Staring change id
+            change_id: Starting change id
             limit: Records limit
             filters: List of strings with filter expression
             fmt: Format
@@ -504,7 +504,7 @@ class DataStream:
         Raises ValueError if filters has incorrect input parameters
 
         Args:
-            change_id: Staring change id
+            change_id: Starting change id
             limit: Records limit
             filters: List of strings with filter expression
             fmt: Format
