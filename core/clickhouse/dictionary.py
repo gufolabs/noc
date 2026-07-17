@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import importlib
 import os
 import operator
 
@@ -136,7 +137,7 @@ class Dictionary(metaclass=DictionaryBase):
         :param name:
         :return:
         """
-        m = __import__("noc.core.bi.dictionaries.%s" % name, {}, {}, "*")
+        m = importlib.import_module("noc.core.bi.dictionaries.%s" % name)
         for a in dir(m):
             o = getattr(m, a)
             if not hasattr(o, "_meta"):

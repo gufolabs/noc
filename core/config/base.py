@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import importlib
 import inspect
 import re
 import os
@@ -274,7 +275,7 @@ class BaseConfig(metaclass=ConfigBase):
         if h:
             # NB: We cannot use get_handler, so use naive implementation
             module_name, handler_class = h.rsplit(".", 1)
-            module = __import__(module_name, {}, {}, [handler_class])
+            module = importlib.import_module(module_name)
             return getattr(module, handler_class)
         msg = f"Invalid protocol: {p}"
         raise ValueError(msg)

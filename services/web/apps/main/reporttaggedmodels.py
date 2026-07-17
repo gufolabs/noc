@@ -5,6 +5,9 @@
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
+# Python modules
+import importlib
+
 # Third-party modules
 from django.db import models as django_models
 
@@ -22,7 +25,7 @@ class ReportTaggedModels(SimpleReport):
         for app in INSTALLED_APPS:
             if app.startswith("noc."):
                 models = app + ".models"
-                module = __import__(models, {}, {}, "*")
+                module = importlib.import_module(models)
                 for n in dir(module):
                     obj = getattr(module, n)
                     try:

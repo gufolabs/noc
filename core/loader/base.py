@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import importlib
 import logging
 import inspect
 import threading
@@ -40,7 +41,7 @@ class BaseLoader:
         :return: class reference or None
         """
         try:
-            sm = __import__(module_name, {}, {}, "*")
+            sm = importlib.import_module(module_name)
             for n in dir(sm):
                 o = getattr(sm, n)
                 if (

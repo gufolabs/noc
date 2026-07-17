@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import importlib
 import os
 import inspect
 from threading import Lock
@@ -114,7 +115,7 @@ class CardAPI(BaseAPI):
                 if not f.endswith(".py"):
                     continue
                 mn = "%s.%s.%s" % (basename, cls.CARDS_PREFIX.replace(os.path.sep, "."), f[:-3])
-                m = __import__(mn, {}, {}, "*")
+                m = importlib.import_module(mn)
                 for d in dir(m):
                     c = getattr(m, d)
                     if (

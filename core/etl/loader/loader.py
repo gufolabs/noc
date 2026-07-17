@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import importlib
 import logging
 import inspect
 import threading
@@ -36,7 +37,7 @@ class LoaderLoader:
                     base = "noc.custom" if p else "noc.core"
                     module_name = "%s.etl.loader.%s" % (base, name)
                     try:
-                        sm = __import__(module_name, {}, {}, "*")
+                        sm = importlib.import_module(module_name)
                         for n in dir(sm):
                             o = getattr(sm, n)
                             if (
