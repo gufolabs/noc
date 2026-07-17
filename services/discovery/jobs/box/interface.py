@@ -67,7 +67,7 @@ class InterfaceCheck(PolicyDiscoveryCheck):
         Match("protocols", "lacp", "interface", if_name, "mode", lacp_status)
     ) and Group("if_name")"""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         # self.get_interface_profile = partial(Label.get_instance_profile, InterfaceProfile)
         self.get_interface_profile = InterfaceProfile.get_profiles_matcher()

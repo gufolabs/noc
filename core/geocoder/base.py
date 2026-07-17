@@ -29,7 +29,7 @@ class GeoCoderResult:
 class BaseGeocoder:
     name = None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         pass
 
     def forward(self, query: str, bounds=None) -> GeoCoderResult:

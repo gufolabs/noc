@@ -16,7 +16,7 @@ from .tx import Transaction
 
 
 class CDAG:
-    def __init__(self, graph_id: str, state: dict[str, Any] | None = None):
+    def __init__(self, graph_id: str, state: dict[str, Any] | None = None) -> None:
         self.graph_id = graph_id
         self.state: dict[str, Any] = state or {}
         self.nodes: dict[str, BaseCDAGNode] = {}

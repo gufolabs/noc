@@ -22,7 +22,7 @@ class QBuffer:
     Buffered writes to queue, merge outgoing messages to a larger block
     """
 
-    def __init__(self, max_size: int | None = None):
+    def __init__(self, max_size: int | None = None) -> None:
         self.buf: defaultdict[tuple[str, int], list[bytes]] = defaultdict(list)
         self.lock = Lock()
         self.max_size = max_size or config.liftbridge.max_message_size

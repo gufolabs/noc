@@ -31,7 +31,7 @@ class TGBotTTSystem(BaseTTSystem):
     TU_REQUEST_TIMEOUT = 30
     actions = [TTAction.ACK, TTAction.UN_ACK]
 
-    def __init__(self, name, connection):
+    def __init__(self, name, connection) -> None:
         """
         Connection is WSDL path
         """

@@ -20,7 +20,7 @@ from noc.core.mib import mib
 
 
 class PCRHelper(CollectionTestHelper):
-    def __init__(self, model):
+    def __init__(self, model) -> None:
         super().__init__(model)
         self._oid_count = defaultdict(int)
 

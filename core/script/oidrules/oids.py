@@ -14,7 +14,7 @@ class OIDsRule:
 
     name = "oids"
 
-    def __init__(self, oids):
+    def __init__(self, oids) -> None:
         self.oids = oids
 
     def iter_oids(self, script, metric):

@@ -15,7 +15,7 @@ class MatcherRule:
 
     name = "match"
 
-    def __init__(self, oids, matchers):
+    def __init__(self, oids, matchers) -> None:
         self.oids = oids
         self.matchers = matchers
 

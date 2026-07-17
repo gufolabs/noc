@@ -24,11 +24,11 @@ rx_tc = re.compile(r"^.+/\d\d\d\d\.\S+\.json\.bz2")
 
 class ServiceStub:
     class ServiceConfig:
-        def __init__(self, pool, tos=None):
+        def __init__(self, pool, tos=None) -> None:
             self.pool = pool
             self.tos = tos
 
-    def __init__(self, pool):
+    def __init__(self, pool) -> None:
         self.config = self.ServiceConfig(pool=pool)
         setup_asyncio()
 

@@ -22,7 +22,7 @@ from noc.core.fileutils import make_persistent
 class Stream:
     CHUNK_SIZE = config.bi.chunk_size
 
-    def __init__(self, model, prefix, date=None):
+    def __init__(self, model, prefix, date=None) -> None:
         self.prefix = prefix
         self.model = model
         self.date = date or datetime.date.today()

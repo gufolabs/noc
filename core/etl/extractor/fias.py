@@ -86,7 +86,7 @@ class AdmDivExtractor(BaseExtractor):
         "х",
     )
 
-    def __init__(self, system, *args, **kwargs):
+    def __init__(self, system, *args, **kwargs) -> None:
         super().__init__(system)
         self.oktmo_url = str(self.config.get("OKTMO_URL"))
         self.cache_path = str(self.config.get("CACHE_PATH"))
@@ -182,7 +182,7 @@ class StreetExtractor(BaseExtractor):
     name = "street"
     model = Street
 
-    def __init__(self, system, *args, **kwargs):
+    def __init__(self, system, *args, **kwargs) -> None:
         super().__init__(system)
         self.fias_url = str(self.config.get("FIAS_URL"))
         self.cache_path = str(self.config.get("CACHE_PATH"))
@@ -306,7 +306,7 @@ class AddressExtractor(BaseExtractor):
     name = "address"
     model = Address
 
-    def __init__(self, system, *args, **kwargs):
+    def __init__(self, system, *args, **kwargs) -> None:
         super().__init__(system)
         self.fias_url = str(self.config.get("FIAS_URL"))
         self.cache_path = str(self.config.get("CACHE_PATH"))
@@ -401,7 +401,7 @@ class BuildingExtractor(BaseExtractor):
     name = "building"
     model = Building
 
-    def __init__(self, system, *args, **kwargs):
+    def __init__(self, system, *args, **kwargs) -> None:
         super().__init__(system)
         self.fias_url = str(self.config.get("FIAS_URL"))
         self.cache_path = str(self.config.get("CACHE_PATH"))

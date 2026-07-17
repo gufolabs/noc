@@ -96,7 +96,7 @@ class Job:
     # List of exceptions to be considered failed jobs
     failed_exceptions = (JobFailed,)
 
-    def __init__(self, scheduler, attrs):
+    def __init__(self, scheduler, attrs) -> None:
         """
         :param scheduler: Scheduler instance
         :param attrs: dict containing record from scheduler's collection

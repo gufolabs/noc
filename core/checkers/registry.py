@@ -19,7 +19,7 @@ class DiagnosticCheckRegister:
     Register diagnostic checks for processed result
     """
 
-    def __init__(self, logger=None):
+    def __init__(self, logger=None) -> None:
         self.logger: logging.Logger = logger
         self.checks: dict[str, Check] = {}
         self.w_checks: dict[str, list[Check]] = defaultdict(list)  # Wildcard checks

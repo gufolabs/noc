@@ -58,7 +58,7 @@ class ModelInline:
     clean_fields = {}  # field name -> Parameter instance
     custom_fields = {}  # name -> handler, populated automatically
 
-    def __init__(self, model):
+    def __init__(self, model) -> None:
         self.model = model
         self.app = None
         self.pk_field_name = self.model._meta.pk.name

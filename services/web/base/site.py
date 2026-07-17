@@ -50,7 +50,7 @@ class URL:
     URL Data wrapper
     """
 
-    def __init__(self, url, name=None, method=None):
+    def __init__(self, url, name=None, method=None) -> None:
         self.url = url
         self.name = name
         if method is None:

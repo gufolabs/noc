@@ -104,7 +104,7 @@ OPTS = {B_OPT_TTYPE_IS: "TTYPE IS", B_OPT_WS: "WS"}
 class TelnetStream(BaseStream):
     default_port = 23
 
-    def __init__(self, cli: CLI):
+    def __init__(self, cli: CLI) -> None:
         super().__init__(cli)
         self.send_on_connect = cli.profile.telnet_send_on_connect
         self.naws = cli.profile.get_telnet_naws()

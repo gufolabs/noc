@@ -24,7 +24,7 @@ class OIDRule:
 
     _scale_locals = {}
 
-    def __init__(self, oid, type=None, scale=1, units=None, labels=None):
+    def __init__(self, oid, type=None, scale=1, units=None, labels=None) -> None:
         self.oid = oid
         self.is_complex = not isinstance(oid, str)
         self.type = type or self.default_type

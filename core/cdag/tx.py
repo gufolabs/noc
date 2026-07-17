@@ -13,7 +13,7 @@ from .typing import ValueType
 
 
 class Transaction:
-    def __init__(self, cdag):
+    def __init__(self, cdag) -> None:
         self.cdag = cdag
         # id(node) -> value
         self.inputs: dict[str, dict[str, ValueType]] = {}

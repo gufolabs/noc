@@ -110,7 +110,7 @@ class AlarmApplication(ExtApplication):
 
     DEFAULT_ARCH_ALARM = datetime.timedelta(seconds=config.web.api_arch_alarm_limit)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         ExtApplication.__init__(self, *args, **kwargs)
         from .plugins.base import AlarmPlugin
 

@@ -25,7 +25,7 @@ class BaseExtractor:
     # or just a snapshot of existing data
     is_snapshot = False
 
-    def __init__(self, prefix, start, stop):
+    def __init__(self, prefix, start, stop) -> None:
         self.prefix = prefix
         self.start = start
         self.stop = stop

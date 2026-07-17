@@ -20,7 +20,7 @@ class MockManagedObject:
     _is_document = True
     _created = True
 
-    def __init__(self, mappings=None):
+    def __init__(self, mappings=None) -> None:
         self.mappings = mappings or []
 
     def update(self, **kwargs):

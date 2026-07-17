@@ -28,7 +28,7 @@ class RCALock:
     COLL_NAME = "rcalocks"
     _coll: pymongo.collection.Collection | None = None
 
-    def __init__(self, items):
+    def __init__(self, items) -> None:
         self.items = items
         self.lock_id = None
 

@@ -24,7 +24,7 @@ class ReportMetrics(BaseReportColumn):
     CUSTOM_FILTER = {"having": [], "where": []}
     KEY_FIELDS = None
 
-    def __init__(self, mos_ids, f_date, to_date, columns=None):
+    def __init__(self, mos_ids, f_date, to_date, columns=None) -> None:
         super().__init__(mos_ids)
         self.from_date = f_date
         self.to_date = to_date

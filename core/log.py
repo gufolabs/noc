@@ -19,7 +19,7 @@ class PrefixLoggerAdapter:
     Add [prefix] to log message
     """
 
-    def __init__(self, logger, prefix, target=None):
+    def __init__(self, logger, prefix, target=None) -> None:
         """
         :param logger: Parent logger
         :param prefix: Prefix to add in front of every message
@@ -98,7 +98,7 @@ class ColorFormatter(logging.Formatter):
         logging.ERROR: 1,  # Red
     }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         self._colors = {}
         self._end_color = ""
         self.setup_colors()

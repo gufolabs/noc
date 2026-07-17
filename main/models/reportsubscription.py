@@ -53,7 +53,7 @@ class ReportSubscription(Document):
     JCLS = "noc.main.models.reportsubscription.ReportJob"
 
     class RequestStub:
-        def __init__(self, user):
+        def __init__(self, user) -> None:
             self.user = user
 
     @classmethod

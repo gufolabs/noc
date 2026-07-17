@@ -51,7 +51,7 @@ class BaseTTSystem:
     processed_items = False
     actions: list[TTAction] = []
 
-    def __init__(self, name: str, connection: str):
+    def __init__(self, name: str, connection: str) -> None:
         self.connection = connection
         self.name = name
         self.logger = logging.getLogger(f"tt.{self.name}")

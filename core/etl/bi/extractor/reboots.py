@@ -19,7 +19,7 @@ class RebootsExtractor(BaseExtractor):
     extract_delay = config.bi.extract_delay_reboots
     clean_delay = config.bi.clean_delay_reboots
 
-    def __init__(self, prefix, start, stop):
+    def __init__(self, prefix, start, stop) -> None:
         super().__init__(prefix, start, stop)
         self.reboot_stream = Stream(Reboots, prefix)
 

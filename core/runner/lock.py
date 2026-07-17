@@ -49,7 +49,7 @@ class LockManager:
 
 
 class LockCtx:
-    def __init__(self, parent: LockManager, names: Iterable[str]):
+    def __init__(self, parent: LockManager, names: Iterable[str]) -> None:
         self._parent = parent
         self._names = list(names)
 

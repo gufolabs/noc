@@ -26,7 +26,7 @@ REST = REST
 class Node:
     __slots__ = ["children", "handler", "matcher", "token"]
 
-    def __init__(self, token):
+    def __init__(self, token) -> None:
         if isinstance(token, str):
             self.token = Token(token)
         else:
@@ -99,7 +99,7 @@ class Node:
 class RootNode(Node):
     __slots__ = ["children", "handler", "matcher", "token"]
 
-    def __init__(self, token=None):
+    def __init__(self, token=None) -> None:
         super().__init__(token)
 
     def __repr__(self) -> str:
@@ -191,7 +191,7 @@ class BaseNormalizer(metaclass=BaseNormalizerMetaclass):
     # Custom syntax to enrich ConfDB
     SYNTAX = []
 
-    def __init__(self, object, tokenizer, errors_policy: str = "strict"):
+    def __init__(self, object, tokenizer, errors_policy: str = "strict") -> None:
         self.object = object
         self.tokenizer = tokenizer
         self.deferable_contexts = defaultdict(dict)  # Name -> Context

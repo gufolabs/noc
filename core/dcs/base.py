@@ -32,7 +32,7 @@ class DCSBase:
     # and must be temporary removed from resolver
     HEALTH_FAILED_HTTP_CODE = 429
 
-    def __init__(self, runner, url):
+    def __init__(self, runner, url) -> None:
         self.runner = runner
         self.logger = logging.getLogger(__name__)
         self.url = url
@@ -226,7 +226,7 @@ class DCSBase:
 
 
 class ResolverBase:
-    def __init__(self, dcs, name, critical=False, near=False, track=True):
+    def __init__(self, dcs, name, critical=False, near=False, track=True) -> None:
         self.dcs = dcs
         self.name = name
         self.to_shutdown = False

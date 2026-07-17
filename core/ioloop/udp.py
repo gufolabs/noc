@@ -28,7 +28,7 @@ class UDPSocket:
         sock.close()
     """
 
-    def __init__(self, tos: int | None = None):
+    def __init__(self, tos: int | None = None) -> None:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         if tos:
             self.socket.setsockopt(socket.IPPROTO_IP, socket.IP_TOS, tos)
@@ -70,7 +70,7 @@ class UDPSocket:
 
 
 class UDPSocketContext:
-    def __init__(self, sock: UDPSocket | None = None, tos: int | None = None):
+    def __init__(self, sock: UDPSocket | None = None, tos: int | None = None) -> None:
         if sock:
             self.sock = sock
             self.to_close = False

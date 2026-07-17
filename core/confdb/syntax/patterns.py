@@ -48,7 +48,7 @@ class REST(BasePattern):
 
 
 class Token(BasePattern):
-    def __init__(self, token):
+    def __init__(self, token) -> None:
         super().__init__()
         self.token = token
 

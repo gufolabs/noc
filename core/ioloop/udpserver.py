@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class UDPServerProtocol(asyncio.DatagramProtocol):
-    def __init__(self, server):
+    def __init__(self, server) -> None:
         super().__init__()
         self._server = server
 

@@ -23,7 +23,9 @@ class BaseField:
     db_type = None
     default_value = ""
 
-    def __init__(self, default=None, description: str | None = None, low_cardinality: bool = False):
+    def __init__(
+        self, default=None, description: str | None = None, low_cardinality: bool = False
+    ) -> None:
         """
 
         :param default: Default field value (if value not set)
@@ -226,7 +228,7 @@ class BooleanField(UInt8Field):
 
 
 class ArrayField(BaseField):
-    def __init__(self, field_type, description=None):
+    def __init__(self, field_type, description=None) -> None:
         super().__init__(description=description)
         self.field_type = field_type
 
@@ -246,7 +248,7 @@ class ArrayField(BaseField):
 
 
 class MaterializedField(BaseField):
-    def __init__(self, field_type, expression, description=None, low_cardinality=True):
+    def __init__(self, field_type, expression, description=None, low_cardinality=True) -> None:
         super().__init__(description=description, low_cardinality=low_cardinality)
         self.field_type = field_type
         self.expression = expression
@@ -263,7 +265,7 @@ class ReferenceField(BaseField):
     default_value = 0
     SELF_REFERENCE = "self"
 
-    def __init__(self, dict_type, description=None, model=None, low_cardinality=False):
+    def __init__(self, dict_type, description=None, model=None, low_cardinality=False) -> None:
         super().__init__(description=description, low_cardinality=low_cardinality)
         self.is_self_reference = dict_type == self.SELF_REFERENCE
         self.dict_type = dict_type
@@ -326,7 +328,7 @@ class IPv6Field(BaseField):
 
 
 class AggregatedField(BaseField):
-    def __init__(self, expression, field_type, agg_function, params=None, description=None):
+    def __init__(self, expression, field_type, agg_function, params=None, description=None) -> None:
         super().__init__(description=description)
         self.field_type = field_type
         self.agg_function = agg_function
@@ -346,7 +348,7 @@ class AggregatedField(BaseField):
 
 
 class MapField(BaseField):
-    def __init__(self, field_type, description=None):
+    def __init__(self, field_type, description=None) -> None:
         super().__init__(description=description)
         self.field_type = field_type
 

@@ -18,7 +18,7 @@ Q_SUFFIX_LEN = len(Q_SUFFIX)
 
 
 class Quantile(Summary):
-    def __init__(self, scale=DEFAULT_QUANTILE_SCALE):
+    def __init__(self, scale=DEFAULT_QUANTILE_SCALE) -> None:
         super().__init__(
             config.perfomance.default_quantiles_window,
             1,

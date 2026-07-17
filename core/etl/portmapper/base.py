@@ -46,7 +46,7 @@ class BasePortMapper(metaclass=PortMapperBase):
     _profile_to_remote = {}
     _platform_to_remote = {}
 
-    def __init__(self, managed_object):
+    def __init__(self, managed_object) -> None:
         self.managed_object = managed_object
         self.profile = self.managed_object.profile.name
         self.platform = self.managed_object.platform.name if self.managed_object.platform else None

@@ -99,7 +99,7 @@ class Model(metaclass=ModelBase):
         sample = False
         tags = None
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         self.values = kwargs
 
     @classmethod

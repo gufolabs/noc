@@ -10,7 +10,7 @@ from django.http import Http404
 
 
 class RepoInline:
-    def __init__(self, field, access="read"):
+    def __init__(self, field, access="read") -> None:
         self.field = field
         self.app = None
         self.parent_model = None

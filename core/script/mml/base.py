@@ -25,7 +25,7 @@ class MMLBase(BaseCLI):
     MATCH_TAIL = 256
     SYNTAX_ERROR_CODE = b"+@@@NOC:SYNTAXERROR@@@+"
 
-    def __init__(self, script, tos=None):
+    def __init__(self, script, tos=None) -> None:
         super().__init__(script, tos)
         self.command = None
         self.buffer = ""

@@ -18,7 +18,7 @@ from noc.services.web.base.site import site
 
 
 class RequestStub:
-    def __init__(self, user):
+    def __init__(self, user) -> None:
         self.user = user
 
 

@@ -25,7 +25,7 @@ class VIMError(NOCError):
 class VIM:
     VIMError = VIMError
 
-    def __init__(self, script):
+    def __init__(self, script) -> None:
         self.script = script
         if script:  # For testing purposes
             self.logger = PrefixLoggerAdapter(script.logger, "vim")

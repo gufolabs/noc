@@ -51,7 +51,7 @@ class ManagedObjectLoader(BaseLoader):
         "vrf": VRF,
     }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.clean_map["pool"] = Pool.get_by_name
         self.clean_map["fm_pool"] = lambda x: Pool.get_by_name(x) if x else None

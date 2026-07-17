@@ -19,7 +19,7 @@ from .error import CLIConnectionReset
 class BaseCLI:
     name = "base"
 
-    def __init__(self, script, tos: int | None = None):
+    def __init__(self, script, tos: int | None = None) -> None:
         self.script = script
         self.profile = script.profile
         self.logger = PrefixLoggerAdapter(self.script.logger, self.name)

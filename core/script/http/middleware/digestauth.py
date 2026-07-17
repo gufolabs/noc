@@ -22,7 +22,7 @@ class DigestAuthMiddeware(BaseMiddleware):
 
     name = "digestauth"
 
-    def __init__(self, http, eof_mark=None):
+    def __init__(self, http, eof_mark=None) -> None:
         super().__init__(http)
         self.logger = http.logger
         self.eof_mark = eof_mark

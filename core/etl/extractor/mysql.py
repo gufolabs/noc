@@ -26,7 +26,7 @@ class MySQLExtractor(SQLExtractor):
     *MYSQL_CHARSET* - Mysql charset
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.connect = None
 

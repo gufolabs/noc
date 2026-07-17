@@ -25,7 +25,7 @@ T_NAV_ITEM = str | dict[str, "T_NAV_ITEM"] | list["T_NAV_ITEM"]
 
 
 class ToC:
-    def __init__(self, path: Path):
+    def __init__(self, path: Path) -> None:
         self.items: dict[tuple[str, ...], str] = {}
         for kv in self.iter_nav(path):
             self.add_item([], kv)

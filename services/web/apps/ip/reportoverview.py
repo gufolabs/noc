@@ -80,7 +80,7 @@ TABLE TR TD {
 
 
 class Node:
-    def __init__(self, app):
+    def __init__(self, app) -> None:
         self.app = app
         self.children = []
         self.height = 0
@@ -138,7 +138,7 @@ class Node:
 
 
 class VRFGroupNode(Node):
-    def __init__(self, app, vrf_group):
+    def __init__(self, app, vrf_group) -> None:
         self.vrf_group = vrf_group
         self.vrfs = list(vrf_group.vrf_set.all())
         super().__init__(app)
@@ -157,7 +157,7 @@ class VRFGroupNode(Node):
 
 
 class VRFNode(Node):
-    def __init__(self, app, vrf):
+    def __init__(self, app, vrf) -> None:
         self.vrf = vrf
         super().__init__(app)
 
@@ -173,7 +173,7 @@ class VRFNode(Node):
 class PrefixNode(Node):
     show_vrf = False
 
-    def __init__(self, app, prefix):
+    def __init__(self, app, prefix) -> None:
         self.prefix = prefix
         if self.prefix.afi == "4":
             self.size = 2 ** (32 - int(self.prefix.prefix.split("/")[1]))
@@ -240,7 +240,7 @@ class PrefixNode(Node):
 class GPrefixNode(PrefixNode):
     show_vrf = True
 
-    def __init__(self, app, prefix, vrfs):
+    def __init__(self, app, prefix, vrfs) -> None:
         self.vrfs = vrfs
         super().__init__(app, prefix)
 

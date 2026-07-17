@@ -9,7 +9,7 @@
 class AggregateFunction:
     db_name = None
 
-    def __init__(self, function: str | None = None, **params):
+    def __init__(self, function: str | None = None, **params) -> None:
         self.function = self.db_name or function
         self.params = params
 

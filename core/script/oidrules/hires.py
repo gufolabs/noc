@@ -16,7 +16,7 @@ class HiresRule:
 
     name = "hires"
 
-    def __init__(self, hires, normal):
+    def __init__(self, hires, normal) -> None:
         self.hires = hires
         self.normal = normal
 

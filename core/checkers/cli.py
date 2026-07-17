@@ -26,7 +26,7 @@ class CLIProtocolChecker(BaseChecker):
     PROTO_CHECK_MAP: dict[str, Protocol] = {p.config.check: p for p in Protocol if p.config.check}
     PARAMS = ["profile", "rules"]
 
-    def __init__(self, profile: str | None = None, **kwargs):
+    def __init__(self, profile: str | None = None, **kwargs) -> None:
         super().__init__(**kwargs)
         self.profile = profile
 

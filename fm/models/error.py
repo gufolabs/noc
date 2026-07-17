@@ -7,7 +7,7 @@
 
 
 class MIBRequiredException(Exception):
-    def __init__(self, mib, requires_mib):
+    def __init__(self, mib, requires_mib) -> None:
         super().__init__()
         self.mib = mib
         self.requires_mib = requires_mib
@@ -17,7 +17,7 @@ class MIBRequiredException(Exception):
 
 
 class MIBNotFoundException(Exception):
-    def __init__(self, mib):
+    def __init__(self, mib) -> None:
         super().__init__()
         self.mib = mib
 
@@ -30,7 +30,7 @@ class InvalidTypedef(Exception):
 
 
 class OIDCollision(Exception):
-    def __init__(self, oid, name1, name2, msg=None):
+    def __init__(self, oid, name1, name2, msg=None) -> None:
         super().__init__()
         self.oid = oid
         self.name1 = name1

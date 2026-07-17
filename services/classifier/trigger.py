@@ -15,7 +15,7 @@ from noc.core.handler import get_handler
 
 
 class Trigger:
-    def __init__(self, t, handler=None):
+    def __init__(self, t, handler=None) -> None:
         self.name = t.name
         # Condition
         self.condition = compile(t.condition, "<string>", "eval")

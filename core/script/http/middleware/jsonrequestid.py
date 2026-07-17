@@ -17,7 +17,7 @@ class JSONRequestIdMiddleware(BaseMiddleware):
 
     name = "jsonrequestid"
 
-    def __init__(self, http, request_id_param="request_id"):
+    def __init__(self, http, request_id_param="request_id") -> None:
         super().__init__(http)
         self.request_id_param = request_id_param
 

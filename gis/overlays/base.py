@@ -9,7 +9,7 @@
 
 
 class OverlayHandler:
-    def __init__(self, **config):
+    def __init__(self, **config) -> None:
         """
         Overlay configuration will be passed
         :param config:

@@ -35,7 +35,7 @@ MIN_SEARCH = 2
 
 
 class HandlerStub:
-    def __init__(self, user, arguments):
+    def __init__(self, user, arguments) -> None:
         self.user: "User" = user
         self.arguments = {}
         for key in arguments:
@@ -70,7 +70,7 @@ class CardAPI(BaseAPI):
 
     _user_cache = cachetools.TTLCache(maxsize=1000, ttl=60)
 
-    def __init__(self, router: APIRouter):
+    def __init__(self, router: APIRouter) -> None:
         if not self.CARD_TEMPLATE:
             with open(self.CARD_TEMPLATE_PATH) as f:
                 self.CARD_TEMPLATE = Template(f.read())

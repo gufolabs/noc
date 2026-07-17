@@ -29,7 +29,7 @@ class RR:
         "zone",
     ]
 
-    def __init__(self, zone, name, ttl, type, rdata, priority=None):
+    def __init__(self, zone, name, ttl, type, rdata, priority=None) -> None:
         self.zone = zone
         self.name = name
         self.ttl = ttl

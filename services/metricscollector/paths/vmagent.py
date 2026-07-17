@@ -44,7 +44,7 @@ class VMAgentAPI:
     # https://github.com/leegin/remote_pb2
     """
 
-    def __init__(self, router: APIRouter):
+    def __init__(self, router: APIRouter) -> None:
         self.router = router
         self.openapi_tags = ["api", "metricscollector"]
         self.api_name = "metricscollector"

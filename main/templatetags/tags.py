@@ -12,7 +12,7 @@ register = template.Library()
 
 
 class TagsNode(template.Node):
-    def __init__(self, object):
+    def __init__(self, object) -> None:
         self.object = template.Variable(object)
 
     def render(self, context):

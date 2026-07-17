@@ -23,7 +23,7 @@ next_retry = datetime.datetime.now()
 
 
 class SequenceJob(Job):
-    def __init__(self, job, attrs):
+    def __init__(self, job, attrs) -> None:
         super().__init__(job, attrs)
         self.error: str | None = None
 

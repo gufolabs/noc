@@ -85,7 +85,7 @@ class LambdaDiscriminator:
 class VlanDiscriminator:
     scope: str = "vlan"
 
-    def __init__(self, value: str):
+    def __init__(self, value: str) -> None:
         try:
             self.vlan: set[int] = set(ranges_to_list(value))
         except SyntaxError as e:
@@ -156,7 +156,7 @@ ODU_LIMITS = {
 class OduDiscriminator:
     scope: str = "odu"
 
-    def __init__(self, value: str):
+    def __init__(self, value: str) -> None:
         self.odu: list[tuple[str, int]] = list(self._iter_parse(value))
         # Check odu
         prev_odu = None

@@ -64,7 +64,7 @@ class LogicPermision(Permission):
     using logic condition
     """
 
-    def __init__(self, left, right):
+    def __init__(self, left, right) -> None:
         super().__init__()
         self.left = left
         self.right = right
@@ -137,7 +137,7 @@ class HasPerm(Permission):
     Permit if the user has permission _perm_
     """
 
-    def __init__(self, perm):
+    def __init__(self, perm) -> None:
         super().__init__()
         self.perm = perm
 

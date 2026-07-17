@@ -16,7 +16,7 @@ from noc.core.etl.loader.base import BaseLoader
 
 
 class LoaderChain:
-    def __init__(self, system):
+    def __init__(self, system) -> None:
         self.system = system
         self.loaders: dict[str, BaseLoader] = {}  # name -> loader
         self.lseq: list[BaseLoader] = []

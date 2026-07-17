@@ -17,7 +17,7 @@ class BasicAuthMiddeware(BaseMiddleware):
 
     name = "basicauth"
 
-    def __init__(self, http, user=None, password=None):
+    def __init__(self, http, user=None, password=None) -> None:
         super().__init__(http)
         self.user = user
         self.password = password

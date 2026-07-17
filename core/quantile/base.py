@@ -32,7 +32,7 @@ class Stream:
     :param n:
     """
 
-    def __init__(self, buff_size):
+    def __init__(self, buff_size) -> None:
         self.buff_size = buff_size
         self.sorted = False
         self.samples = []
@@ -225,7 +225,7 @@ class BiasedStream(Stream):
     :param epsilon:
     """
 
-    def __init__(self, n, epsilon):
+    def __init__(self, n, epsilon) -> None:
         super().__init__(n)
         self.epsilon = epsilon
 
@@ -270,7 +270,7 @@ class TargetedStream(Stream):
     :param targets: List of (quantile, epsilon)
     """
 
-    def __init__(self, n, targets):
+    def __init__(self, n, targets) -> None:
         super().__init__(n)
         self.targets = targets
 
@@ -298,7 +298,7 @@ class Summary:
     :param *args: `Stream` constructor parameters
     """
 
-    def __init__(self, ttl, n, kls, *args):
+    def __init__(self, ttl, n, kls, *args) -> None:
         self.ttl = ttl
         self.slots = deque()
         for _ in range(n + 1):

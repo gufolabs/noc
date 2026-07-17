@@ -1017,7 +1017,7 @@ class DeescalationSequence(BaseSequence):
 
 
 class CloseCheckSequence(BaseSequence):
-    def __init__(self, doc_id: str):
+    def __init__(self, doc_id: str) -> None:
         super().__init__(doc_id)
         self.escalation_doc = self.get_escalation_doc(doc_id)
 

@@ -67,7 +67,7 @@ class MODiscoveryJob(PeriodicJob):
     # Get diagnostics with enabled discovery (Box/Periodic filtered)
     discovery_diagnostics = set()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.out_buffer = StringIO()
         self.logger = PrefixLoggerAdapter(self.logger, "", target=self.out_buffer)
@@ -408,7 +408,7 @@ class DiscoveryCheck:
         ERR_CLI_SSH_PROTOCOL_ERROR: "Discovery | Error | SSH Protocol",
     }
 
-    def __init__(self, job):
+    def __init__(self, job) -> None:
         self.service = job.service
         self.job = job
         self.object: ManagedObject = self.job.object
@@ -786,7 +786,7 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
     # clean_interface settings
     aliased_names_only = False
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.neighbor_hostname_cache = {}  # (method, id) -> managed object
         self.neighbor_ip_cache = {}  # (method, ip) -> managed object

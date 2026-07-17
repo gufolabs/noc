@@ -26,7 +26,7 @@ class BaseCommand:
     LOG_FORMAT = config.log_format
     help = ""  # Help text (shows ./noc help)
 
-    def __init__(self, stdout=sys.stdout, stderr=sys.stderr):
+    def __init__(self, stdout=sys.stdout, stderr=sys.stderr) -> None:
         self.verbose_level = 0
         self.stdout = stdout
         self.stderr = stderr

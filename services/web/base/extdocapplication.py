@@ -77,7 +77,7 @@ class ExtDocApplication(ExtApplication):
     # Add `__label` items
     field_labels = {}  # field_name -> callable(field_value) -> result
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.pk = "id"  # @todo: detect properly
         self.has_uuid = False

@@ -16,7 +16,7 @@ from .message import PublishRequest
 
 
 class MessageStreamQueue:
-    def __init__(self, loop: asyncio.BaseEventLoop | None = None):
+    def __init__(self, loop: asyncio.BaseEventLoop | None = None) -> None:
         self.queue: deque = deque()
         self.lock = Lock()
         self.waiter: asyncio.Event | None = None

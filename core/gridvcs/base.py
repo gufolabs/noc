@@ -32,7 +32,7 @@ class GridVCS:
     ENCODING = "utf-8"
     DEFAULT_COMPRESS = "z"
 
-    def __init__(self, repo):
+    def __init__(self, repo) -> None:
         self.fs = gridfs.GridFS(get_db(), collection="noc.gridvcs.%s" % repo)
         self.files = self.fs._GridFS__files
 

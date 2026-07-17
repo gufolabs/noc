@@ -66,7 +66,7 @@ class BaseAction(metaclass=ActionMetaclass):
     inputs: dict[str, bool]  # Set by metaclass
     clean: dict[str, Callable[[Any], Any]]  # Set by metaclass
 
-    def __init__(self, env: Environment, logger: Logger):
+    def __init__(self, env: Environment, logger: Logger) -> None:
         self.env = env
         self.logger = logger
 

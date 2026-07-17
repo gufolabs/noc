@@ -58,7 +58,7 @@ def do_python(parser, token):
 # Renderers
 #
 class VarNode(template.Node):
-    def __init__(self, name, vartype):
+    def __init__(self, name, vartype) -> None:
         self.name = name
         self.vartype = vartype
 
@@ -67,7 +67,7 @@ class VarNode(template.Node):
 
 
 class PythonNode(template.Node):
-    def __init__(self, nodelist):
+    def __init__(self, nodelist) -> None:
         py_code = nodelist.render({}).replace("\r", "")
         self.code = compile(py_code, "string", "exec")
 

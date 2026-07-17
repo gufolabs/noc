@@ -29,7 +29,7 @@ class Topo:
         check: Check if uplink is really adjaced to node.
     """
 
-    def __init__(self, check: bool = False):
+    def __init__(self, check: bool = False) -> None:
         self.check = check
         self.graph = nx.Graph()
         self.dirty_nodes: set[int] = set()

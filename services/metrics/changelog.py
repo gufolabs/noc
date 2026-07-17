@@ -36,7 +36,7 @@ class ChangeLog:
     COLL_NAME = "metricslog"
     MAX_DATA = 15_000_000
 
-    def __init__(self, slot: int):
+    def __init__(self, slot: int) -> None:
         self.slot = slot
         self.state: dict[str, dict[str, Any]] = {}
         self.logger = logging.getLogger(__name__)

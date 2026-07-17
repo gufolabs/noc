@@ -27,7 +27,7 @@ class HTTPError(NOCError):
 class HTTP:
     HTTPError = HTTPError
 
-    def __init__(self, script):
+    def __init__(self, script) -> None:
         self.script = script
         if script:  # For testing purposes
             self.logger = PrefixLoggerAdapter(script.logger, "http")

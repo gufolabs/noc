@@ -31,7 +31,7 @@ class ProfileDiagnostic:
         "https_get": HTTPS_DIAG,
     }
 
-    def __init__(self, config: DiagnosticConfig, logger=None):
+    def __init__(self, config: DiagnosticConfig, logger=None) -> None:
         self.config = config
         self.logger = logger or logging.getLogger("profilediagnostic")
         self.unsupported_method: set[str] = set()

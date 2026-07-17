@@ -526,7 +526,7 @@ class MetricProxy:
         MetricProxy([("managed_object", 22222222, "interface": "1/1/1")]).interface(queries=["load_in", "load_out"]).values()
     """
 
-    def __init__(self, query_ts: datetime.datetime | None = None, **kwargs):
+    def __init__(self, query_ts: datetime.datetime | None = None, **kwargs) -> None:
         self._scopes: dict[str, "MetricScopeProxy"] = {}  # Scope Storage
         self._conditions = kwargs
 

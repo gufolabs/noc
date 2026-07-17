@@ -29,7 +29,7 @@ class ReportApplication(Application):
     inline_styles = ""
     ISO_DATE_MASK = "%Y-%m-%d"
 
-    def __init__(self, site):
+    def __init__(self, site) -> None:
         super().__init__(site)
         site.reports += [self]
 
@@ -114,7 +114,7 @@ class ReportByConfigApplication(Application):
     report_id: str = None
     report_config = None
 
-    def __init__(self, site):
+    def __init__(self, site) -> None:
         self.site = site
         self.service = None  # Set by web
         self.module = self.get_module()

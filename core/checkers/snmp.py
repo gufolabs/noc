@@ -48,7 +48,7 @@ class SNMPProtocolChecker(BaseChecker):
     SNMP_TIMEOUT_SEC = 3
     PARAMS = ["rules"]
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self.rules: list[SNMPCredential | SNMPv3Credential] = self.load_suggests(
             kwargs.get("rules")

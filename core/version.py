@@ -22,7 +22,7 @@ if os.name == "nt":
 
 
 class cachedproperty:
-    def __init__(self, f):
+    def __init__(self, f) -> None:
         self.f = f
         self.n = "_%s" % f.__name__
         self.__doc__ = f.__doc__

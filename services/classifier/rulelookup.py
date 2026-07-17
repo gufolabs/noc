@@ -10,7 +10,7 @@ import operator
 
 
 class RuleLookup:
-    def __init__(self, rules):
+    def __init__(self, rules) -> None:
         self.rules = rules
 
     def lookup_rules(self, msg, vars):

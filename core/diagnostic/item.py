@@ -40,7 +40,7 @@ class DiagnosticItem(BaseModel):
     _config: DiagnosticConfig | None = PrivateAttr()
     _handler: DiagnosticHandler | None = PrivateAttr()
 
-    def __init__(self, cfg: DiagnosticConfig | None = None, **data):
+    def __init__(self, cfg: DiagnosticConfig | None = None, **data) -> None:
         super().__init__(**data)
         self._config: DiagnosticConfig = cfg
 

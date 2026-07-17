@@ -105,7 +105,7 @@ class TimePattern:
     True
     """
 
-    def __init__(self, pattern):
+    def __init__(self, pattern) -> None:
         self.code = compile(self.compile_to_python(pattern), "<string>", "eval")
 
     def match(self, d):
@@ -161,7 +161,7 @@ class TimePatternList:
     Enclosure for a list of time patterns
     """
 
-    def __init__(self, patterns):
+    def __init__(self, patterns) -> None:
         self.patterns = patterns
 
     def match(self, d):

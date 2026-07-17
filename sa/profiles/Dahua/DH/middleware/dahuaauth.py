@@ -23,7 +23,7 @@ class DahuaAuthMiddeware(BaseMiddleware):
 
     name = "dahuaauth"
 
-    def __init__(self, http):
+    def __init__(self, http) -> None:
         super().__init__(http)
         self.user = self.http.script.credentials.get("user")
         self.password = self.http.script.credentials.get("password")

@@ -91,7 +91,7 @@ class BaseMapper:
     SELECTABLE_CLASS = "ch-selectable"
     ALARM_SYMBOL = "\U0001f525"  # Fire
 
-    def __init__(self, channel: Channel):
+    def __init__(self, channel: Channel) -> None:
         self.logger = PrefixLoggerAdapter(logging.getLogger("tracer"), self.name)
         self.channel = channel
         self.input: str | None = None

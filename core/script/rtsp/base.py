@@ -35,7 +35,7 @@ class RTSPBase(BaseCLI):
     MATCH_TAIL = 256
     SYNTAX_ERROR_CODE = b"+@@@NOC:SYNTAXERROR@@@+"
 
-    def __init__(self, script, tos=None):
+    def __init__(self, script, tos=None) -> None:
         super().__init__(script, tos)
         self.path = None
         self.cseq = 1
@@ -215,7 +215,7 @@ class DigestAuth:
 
     name = "digestauth"
 
-    def __init__(self, user=None, password=None):
+    def __init__(self, user=None, password=None) -> None:
         self.user = user
         self.password = password
         self.last_nonce = None

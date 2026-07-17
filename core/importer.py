@@ -29,7 +29,7 @@ class NOCLoader(importlib.abc.Loader):
     INIT_SOURCE = ""
     packages: set[str] = set()
 
-    def __init__(self, path_entry: str | None = None):
+    def __init__(self, path_entry: str | None = None) -> None:
         self.base_path = Path(path_entry or "")
         self.packages.add(self.PREFIX)
 

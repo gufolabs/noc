@@ -22,7 +22,7 @@ class ManagedObjectLevelGoal(BaseGoal):
     SAME_LEVEL_COST = 10
     BACKWARDS_COST = 100
 
-    def __init__(self, level):
+    def __init__(self, level) -> None:
         super().__init__()
         self.level = level
 

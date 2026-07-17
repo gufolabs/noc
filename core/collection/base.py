@@ -74,7 +74,7 @@ class Collection:
 
     _state_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 
-    def __init__(self, name, stdout=None):
+    def __init__(self, name, stdout=None) -> None:
         self.name = name
         self._model = None
         self._api_version = self.DEFAULT_API_VERSION

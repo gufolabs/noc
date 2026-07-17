@@ -75,7 +75,7 @@ class BaseRemoteSystem:
         "maintenance",
     ]
 
-    def __init__(self, remote_system):
+    def __init__(self, remote_system) -> None:
         self.remote_system = remote_system
         self.name: str = remote_system.name
         self.config: dict[str, str] = self.remote_system.config

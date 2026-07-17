@@ -143,7 +143,7 @@ class LegacyProtocol(BaseProtocol):
         ("web-global-%(node)s.max_threads", "web.max_threads"),
     ]
 
-    def __init__(self, config, url):
+    def __init__(self, config, url) -> None:
         super().__init__(config, url)
         if self.parsed_url.path == "/":
             self.path = config.path.legacy_config

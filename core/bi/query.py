@@ -18,7 +18,9 @@ class OP:
     :param convert: Convert function name
     """
 
-    def __init__(self, min=None, max=None, join=None, prefix=None, convert=None, function=None):
+    def __init__(
+        self, min=None, max=None, join=None, prefix=None, convert=None, function=None
+    ) -> None:
         self.min = min
         self.max = max
         self.join = join

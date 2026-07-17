@@ -31,11 +31,11 @@ BROKEN_PW = TEST_PW + "X"
 
 class ServiceStub:
     class ServiceConfig:
-        def __init__(self, pool, tos=None):
+        def __init__(self, pool, tos=None) -> None:
             self.pool = pool
             self.tos = tos
 
-    def __init__(self, pool="default"):
+    def __init__(self, pool="default") -> None:
         self.config = self.ServiceConfig(pool=pool)
 
 

@@ -234,7 +234,7 @@ class ZabbixRemoteSystem(BaseRemoteSystem):
 
 
 class ZabbixExtractor(BaseExtractor):
-    def __init__(self, system):
+    def __init__(self, system) -> None:
         super().__init__(system)
         self.url = self.config.get("API_URL", None)
         self.token = self.config.get("API_TOKEN", None)
@@ -365,7 +365,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
     # def filter(self, row) -> bool:
     #     return False
 
-    def __init__(self, system):
+    def __init__(self, system) -> None:
         super().__init__(system)
         self.targets: dict[int, RemoteObject] = {}
         self.items: dict[int, ZabbixEventItem] = {}

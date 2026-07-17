@@ -23,7 +23,7 @@ TDoc = TypeVar("TDoc", bound=Document)
 
 
 class ListOp:
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         self.name = name
 
     def __str__(self):
@@ -47,7 +47,7 @@ class FilterExact(ListOp):
 
 
 class RefFilter(ListOp):
-    def __init__(self, name: str, model: TModel | TDoc):
+    def __init__(self, name: str, model: TModel | TDoc) -> None:
         super().__init__(name)
         self.model = model
 
@@ -86,7 +86,7 @@ class RefFilter(ListOp):
 
 
 class FuncFilter(ListOp):
-    def __init__(self, name: str, function: Callable):
+    def __init__(self, name: str, function: Callable) -> None:
         super().__init__(name)
         self.function = function
 

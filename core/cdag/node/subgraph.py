@@ -51,7 +51,7 @@ class SubgraphState(BaseModel):
 
 
 class SubgraphCDAGFactory(ConfigCDAGFactory):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         # node -> [(param, value)]
         self.node_cfg: defaultdict[str, dict[str, Any]] = defaultdict(dict)
         super().__init__(*args, **kwargs)

@@ -36,7 +36,7 @@ class SSHStream(BaseStream):
 
     _key_cache = cachetools.TTLCache(100, ttl=60)
 
-    def __init__(self, cli: CLI):
+    def __init__(self, cli: CLI) -> None:
         super().__init__(cli)
         self.script = cli.script  # @todo: Remove
         self.session = None

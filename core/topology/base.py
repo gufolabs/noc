@@ -56,7 +56,7 @@ class TopologyBase:
     DEFAULT_GLYPH = 0xF22C
     CLOUD_GLYPH = 0xF004
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         # Hints
         self.node_hints: dict[str, Any] | None = kwargs.get("node_hints") or {}
         self.link_hints: dict[str, Any] | None = kwargs.get("link_hints") or {}

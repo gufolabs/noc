@@ -83,7 +83,7 @@ class AlarmRule:
     escalation_profile: str | None = None
     escalation_delay: int = 60
 
-    def __init__(self, name, rid):
+    def __init__(self, name, rid) -> None:
         self.name = name
         self.id = rid
         self.matcher: Callable | None = None

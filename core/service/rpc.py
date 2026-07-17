@@ -46,7 +46,7 @@ class RPCProxy:
 
     RPCError = RPCError
 
-    def __init__(self, service, service_name, sync=False, hints=None):
+    def __init__(self, service, service_name, sync=False, hints=None) -> None:
         self._logger = PrefixLoggerAdapter(logger, service_name)
         self._service = service
         self._service_name = service_name

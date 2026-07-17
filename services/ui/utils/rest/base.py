@@ -61,7 +61,7 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
     list_ops: list[ListOp] = []
     sort_fields: list[str | tuple[str, str]] = []
 
-    def __init__(self, router: APIRouter):
+    def __init__(self, router: APIRouter) -> None:
         def split_sort(x: str | tuple[str, str]) -> tuple[str, str]:
             if isinstance(x, str):
                 return x, x

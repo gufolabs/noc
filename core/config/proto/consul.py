@@ -29,7 +29,7 @@ class ConsulProtocol(BaseProtocol):
     REQUEST_TIMEOUT = 30
     CONNECT_TIMEOUT = 30
 
-    def __init__(self, config, url):
+    def __init__(self, config, url) -> None:
         super().__init__(config, url)
         if ":" in self.parsed_url.netloc:
             h, p = self.parsed_url.netloc.rsplit(":", 1)

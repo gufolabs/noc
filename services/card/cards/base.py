@@ -45,7 +45,7 @@ class BaseCard:
     class NotFoundError(Exception):
         pass
 
-    def __init__(self, handler, id):
+    def __init__(self, handler, id) -> None:
         self.handler = handler
         self.id = id
         self.object = self.dereference(id)

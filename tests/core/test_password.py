@@ -55,7 +55,7 @@ def test_check_password(password: str, encoded: str) -> None:
 
 
 class ErrContext:
-    def __init__(self, msg: str | None = None):
+    def __init__(self, msg: str | None = None) -> None:
         self._msg = msg
 
     def __enter__(self) -> "ErrContext":

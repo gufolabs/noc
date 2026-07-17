@@ -14,7 +14,7 @@ CVAR_NAME = "_ctx"
 
 
 class PredicateTransformer(ast.NodeTransformer):
-    def __init__(self, engine):
+    def __init__(self, engine) -> None:
         self.engine = engine
         self.input_counter = itertools.count()
         super().__init__()

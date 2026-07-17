@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class SQLNode(Q):
-    def __init__(self, sql):
+    def __init__(self, sql) -> None:
         super().__init__(id__rawsql=sql)
 
 

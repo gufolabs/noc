@@ -25,7 +25,7 @@ class DataStreamClient:
     RETRY_TIMEOUT = 1.0
     NEXT_GET_DELAY = 2.0
 
-    def __init__(self, name, service=None):
+    def __init__(self, name, service=None) -> None:
         self.name = name
         self.service = service
         self._is_ready = False

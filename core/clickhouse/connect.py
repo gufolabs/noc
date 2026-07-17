@@ -19,7 +19,9 @@ from .error import ClickhouseError
 class ClickhouseClient:
     DEFAULT_PORT = 8123
 
-    def __init__(self, host: str | None = None, port: int | None = None, read_only: bool = True):
+    def __init__(
+        self, host: str | None = None, port: int | None = None, read_only: bool = True
+    ) -> None:
         self.read_only = read_only
         if read_only:
             self.user = config.clickhouse.ro_user

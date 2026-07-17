@@ -36,7 +36,7 @@ class PMAgentLoader(BaseLoader):
 
     post_save_fields = {"capabilities", "addresses"}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.available_caps = {x.name for x in Capability.objects.filter()}
 

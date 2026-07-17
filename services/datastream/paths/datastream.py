@@ -48,7 +48,7 @@ def get_access_tokens_set(datastream, fmt: str | None = None) -> set[str]:
 
 
 class DatastreamAPI:
-    def __init__(self, router: APIRouter):
+    def __init__(self, router: APIRouter) -> None:
         self.router = router
         self.openapi_tags = ["api", "datastream"]
         self.api_name = "datastream"

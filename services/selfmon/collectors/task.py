@@ -27,7 +27,7 @@ class TaskObjectCollector(BaseCollector):
         ("discovery", Pool.objects.all().order_by("name").values_list("name")),
     ]  # Schedulers (name, shards)
 
-    def __init__(self, service):
+    def __init__(self, service) -> None:
         self.schedulers_list = self.load_discovery()
         super().__init__(service)
 

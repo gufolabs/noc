@@ -64,7 +64,7 @@ class BaseExtractor:
         r"^import-\d{4}(?:-\d{2}){5}.jsonl%s$" % compressor.ext.replace(".", r"\.")
     )
 
-    def __init__(self, system: "BaseRemoteSystem"):
+    def __init__(self, system: "BaseRemoteSystem") -> None:
         self.system = system
         self.config = system.config
         self.logger = PrefixLoggerAdapter(logger, "%s][%s" % (system.name, self.name))

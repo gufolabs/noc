@@ -14,7 +14,7 @@ from .typing import PortItem
 
 
 class BaseCollator:
-    def __init__(self, profile: BaseProfile | None):
+    def __init__(self, profile: BaseProfile | None) -> None:
         self.profile = profile
 
     def collate(self, physical_port: PortItem, interfaces: dict[str, Any]) -> str | None:

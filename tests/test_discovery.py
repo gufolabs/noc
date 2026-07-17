@@ -44,7 +44,7 @@ _configs = {}  # mo -> config
 
 
 class ServiceStub:
-    def __init__(self, pool):
+    def __init__(self, pool) -> None:
         self.pool = pool
         self.metrics = defaultdict(list)
         self.service_id = "stub"
@@ -56,7 +56,7 @@ class ServiceStub:
 
 
 class BeefCallWrapper:
-    def __init__(self, obj, name):
+    def __init__(self, obj, name) -> None:
         self.name = name
         self.object = obj
 
