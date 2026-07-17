@@ -232,10 +232,7 @@ class Script(BaseScript):
             result[pid_ifindex_mappings[port_num]]["tagged_vlans"] += list(
                 compress(
                     vlans,
-                    [
-                        int(x)
-                        for x in chain.from_iterable("{0:08b}".format(mask) for mask in vlans_bank)
-                    ],
+                    [int(x) for x in chain.from_iterable(f"{mask:08b}" for mask in vlans_bank)],
                 )
             )
         return result
