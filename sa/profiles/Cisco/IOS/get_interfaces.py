@@ -339,10 +339,7 @@ class Script(BaseScript):
             result[int(ifindex)]["tagged_vlans"] += list(
                 compress(
                     range(4096),
-                    [
-                        int(x)
-                        for x in chain.from_iterable(f"{mask:08b}" for mask in vlans_bank)
-                    ],
+                    [int(x) for x in chain.from_iterable(f"{mask:08b}" for mask in vlans_bank)],
                 )
             )
         time.sleep(2)
