@@ -81,7 +81,8 @@ def scale(n, float_round=None):
         float_round: Number of decimal places
 
     Returns:
-        If float_round, return round value
+        A callable that scales values by the given factor.
+        If float_round is set, returns a rounded result with that precision
     """
 
     def inner(v):
