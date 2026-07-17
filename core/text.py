@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Various text-processing utilities
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,15 +9,23 @@
 import re
 import string
 from itertools import zip_longest, pairwise
+from typing import Iterable, overload, Any, Sequence, Iterator
 
-# Third-party modules
-from typing import Iterable
 
 rx_header_start = re.compile(r"^\s*[-=]+[\s\+]+[-=]+")
 rx_col = re.compile(r"^([\s\+]*)([\-]+|[=]+)")
 
 
-def default_line_wrapper(p_line):
+def default_line_wrapper(p_line: str) -> str:
+    """
+    Expand tab characters in a line.
+
+    Args:
+        p_line: Input line.
+
+    Returns:
+        The input line with all tab characters expanded.
+    """
     return p_line.expandtabs()
 
 
@@ -137,23 +145,52 @@ def parse_table(
     return r
 
 
-#
-# Convert HTML to plain text
-#
 rx_html_tags = re.compile("</?[^>+]+>", re.MULTILINE | re.DOTALL)
 
 
-def strip_html_tags(s):
+def strip_html_tags(s: str) -> str:
+    """
+    Remove HTML tags from a string and decode a small subset of HTML entities.
+
+    Args:
+        s: Input string containing HTML markup.
+
+    Returns:
+        Plain text with HTML tags removed. The entities `&nbsp;`,
+        `&lt;`, `&gt;`, and `&amp;` are replaced with their
+        corresponding characters.
+
+    Notes:
+        This function performs simple text processing and is not a
+        full HTML parser.
+    """
     t = rx_html_tags.sub("", s)
     for k, v in [("&nbsp;", " "), ("&lt;", "<"), ("&gt;", ">"), ("&amp;", "&")]:
         t = t.replace(k, v)
     return t
 
 
-#
-# Convert XML to list of elements
-#
-def xml_to_table(s, root, row):
+def xml_to_table(s: str, root: str, row: str) -> list[dict[str, str]]:
+    """
+    Extract a table from a simple XML document.
+
+    The function searches for the specified root element, then extracts
+    all child elements with the given row name. Each direct child element
+    of a row is converted into a key-value pair.
+
+    Args:
+        s: XML document as a string.
+        root: Name of the root element containing the table.
+        row: Name of the row element.
+
+    Returns:
+        A list of dictionaries representing table rows. Returns an empty
+        list if the specified root element is not found.
+
+    Notes:
+        This function uses regular expressions and is intended only for
+        simple, well-formed XML. It is not a general-purpose XML parser.
+    """
     # pylint: disable=line-too-long
     """
     >>> xml_to_table('<?xml version="1.0" encoding="UTF-8" ?><response><action><row><a>1</a><b>2</b></row><row><a>3</a><b>4</b></row></action></response>','action','row') # noqa
@@ -166,33 +203,31 @@ def xml_to_table(s, root, row):
     s = match.group(1)
     row_re = re.compile(r"<%s>(.*?)</%s>" % (row, row), re.DOTALL | re.IGNORECASE)
     item_re = re.compile(r"<([^\]+])>(.*?)</\1>", re.DOTALL | re.IGNORECASE)
-    r = []
+    r: list[dict[str, str]] = []
     for m in [x for x in row_re.split(s) if x]:
         data = item_re.findall(m)
         if data:
-            r += [dict(data)]
+            r.append(dict(data))
     return r
 
 
-#
-# Convert list of values to string of ranges
-#
-def list_to_ranges(s):
+def list_to_ranges(s: Iterable[int]) -> str:
     """
-    >>> list_to_ranges([])
-    ''
-    >>> list_to_ranges([1])
-    '1'
-    >>> list_to_ranges([1,2])
-    '1-2'
-    >>> list_to_ranges([1,2,3])
-    '1-3'
-    >>> list_to_ranges([1,2,3,5])
-    '1-3,5'
-    >>> list_to_ranges([1,2,3,5,6,7])
-    '1-3,5-7'
-    >>> list_to_ranges(range(1,4001))
-    '1-4000'
+    Convert an iterable of integers to a compact range representation.
+
+    Consecutive values are merged into ranges, while isolated values are
+    represented as single numbers. The input is sorted before processing.
+
+    Args:
+        s: Iterable of integer values.
+
+    Returns:
+        A comma-separated string of individual values and inclusive ranges.
+        Returns an empty string if the input is empty.
+
+    Examples:
+        ``[1, 2, 3, 5, 6, 7]`` -> ``"1-3,5-7"``
+        ``[1, 3, 5]`` -> ``"1,3,5"``
     """
 
     def f():
@@ -202,44 +237,53 @@ def list_to_ranges(s):
 
     last_start = None
     last_end = None
-    r = []
+    r: list[str] = []
     for i in sorted(s):
         if last_end is not None and i == last_end + 1:
             last_end += 1
         else:
             if last_start is not None:
-                r += [f()]
+                r.append(f())
             last_start = i
             last_end = i
     if last_start is not None:
-        r += [f()]
+        r.append(f())
     return ",".join(r)
 
 
-#
-# Convert range string to a list of integers
-#
 rx_range = re.compile(r"^(\d+)\s*-\s*(\d+)$")
 
 
-def ranges_to_list(s, splitter=","):
+def ranges_to_list(s: str, splitter: str = ",") -> list[int]:
     """
-    >>> ranges_to_list("1")
-    [1]
-    >>> ranges_to_list("1, 2")
-    [1, 2]
-    >>> ranges_to_list("1, 10-12")
-    [1, 10, 11, 12]
-    >>> ranges_to_list("1, 10-12, 15, 17-19")
-    [1, 10, 11, 12, 15, 17, 18, 19]
+    Convert a string of integer ranges to a sorted list of integers.
+
+    Individual values and inclusive ranges are accepted. Ranges may be
+    specified either as ``N-M`` or ``N to M``.
+
+    Args:
+        s: Comma-separated string containing integer values and ranges.
+        splitter: Separator between items. Defaults to ``,``
+            .
+
+    Returns:
+        A sorted list of integers.
+
+    Raises:
+        SyntaxError: If the input contains an invalid range or malformed
+            syntax.
+
+    Examples:
+        ``"1,10-12"`` -> ``[1, 10, 11, 12]``
+        ``"1,10 to 12"`` -> ``[1, 10, 11, 12]``
     """
-    r = []
+    r: list[int] = []
     if "to" in s:
         s = s.replace(" to ", "-")
     for p in s.split(splitter):
         p = p.strip()
         try:
-            r += [int(p)]
+            r.append(int(p))
             continue
         except ValueError:
             pass
@@ -249,12 +293,33 @@ def ranges_to_list(s, splitter=","):
         f, t = [int(x) for x in match.groups()]
         if f >= t:
             raise SyntaxError
-        for i in range(f, t + 1):
-            r += [i]
+        r.extend(range(f, t + 1))
     return sorted(r)
 
 
-def replace_re_group(expr, group, pattern):
+@overload
+def replace_re_group(expr: str, group: str, pattern: str) -> str: ...
+
+
+@overload
+def replace_re_group(expr: bytes, group: bytes, pattern: bytes) -> bytes: ...
+
+
+def replace_re_group(expr: str | bytes, group: str | bytes, pattern: str | bytes) -> str | bytes:
+    """
+    Replace regular expression groups in text or binary data.
+
+    Args:
+        expr: Input string or byte sequence containing regex groups.
+        group: Group prefix to search for.
+        pattern: Replacement value.
+
+    Returns:
+        Input data with matching groups replaced.
+
+    Raises:
+        TypeError: If text and binary arguments are mixed.
+    """
     if isinstance(expr, bytes):
         return _replace_re_group_binary(expr, group, pattern)
     return _replace_re_group_text(expr, group, pattern)
@@ -262,14 +327,23 @@ def replace_re_group(expr, group, pattern):
 
 def _replace_re_group_text(expr: str, group: str, pattern: str) -> str:
     """
-    Replace regular expression group with pattern
+    Replace matching regular expression groups in a text string.
 
-    >>> replace_re_group("nothing","(?P<groupname>","groupvalue")
-    'nothing'
-    >>> replace_re_group("the (?P<groupname>simple) test","(?P<groupname>","groupvalue")
-    'the groupvalue test'
-    >>> replace_re_group("the (?P<groupname> nested (test)>)","(?P<groupname>","groupvalue")
-    'the groupvalue'
+    The function searches for groups starting with the specified prefix
+    and replaces their complete contents, including nested parentheses,
+    with the given pattern.
+
+    Args:
+        expr: Input text containing regular expression groups.
+        group: Group prefix to search for (for example, ``"(?P<name>"``).
+        pattern: Replacement text.
+
+    Returns:
+        Text with matching groups replaced.
+
+    Notes:
+        This is a lightweight parser for simple regular expression group
+        syntax and does not handle all possible regex constructs.
     """
     r = []
     lg = len(group)
@@ -304,14 +378,23 @@ def _replace_re_group_text(expr: str, group: str, pattern: str) -> str:
 
 def _replace_re_group_binary(expr: bytes, group: bytes, pattern: bytes) -> bytes:
     """
-    Replace regular expression group with pattern
+    Replace matching regular expression groups in binary data.
 
-    >>> replace_re_group("nothing","(?P<groupname>","groupvalue")
-    'nothing'
-    >>> replace_re_group("the (?P<groupname>simple) test","(?P<groupname>","groupvalue")
-    'the groupvalue test'
-    >>> replace_re_group("the (?P<groupname> nested (test)>)","(?P<groupname>","groupvalue")
-    'the groupvalue'
+    The function searches for groups starting with the specified byte prefix
+    and replaces their complete contents, including nested parentheses,
+    with the given byte pattern.
+
+    Args:
+        expr: Input byte sequence containing regular expression groups.
+        group: Group prefix to search for (for example, ``b"(?P<name>"``).
+        pattern: Replacement byte sequence.
+
+    Returns:
+        Byte sequence with matching groups replaced.
+
+    Notes:
+        This is a lightweight parser for simple regular expression group
+        syntax and does not handle all possible regex constructs.
     """
     r = []
     lg = len(group)
@@ -344,17 +427,19 @@ def _replace_re_group_binary(expr: bytes, group: bytes, pattern: bytes) -> bytes
     return b"".join(r)
 
 
-def indent(text, n=4):
+def indent(text: str, n: int = 4) -> str:
     """
-    Indent each line of text with spaces
+    Indent each line of text by a fixed number of spaces.
 
-    :param text: text
-    :param n: amount of spaces to ident
+    Args:
+        text: Input text.
+        n: Number of spaces to prepend to each line. Defaults to 4.
 
-    >>> indent("")
-    ''
-    >>> indent("the quick brown fox\\njumped over an lazy dog\\nend")
-    '    the quick brown fox\\n    jumped over an lazy dog\\n    end'
+    Returns:
+        The indented text. Empty input returns an empty string.
+
+    Examples:
+        ``"foo\\nbar"`` with ``n=2`` returns ``"  foo\\n  bar"``.
     """
     if not text:
         return ""
@@ -367,10 +452,17 @@ rx_split_alnum = re.compile(r"(\d+|[^0-9]+)")
 
 def _iter_split_alnum(s: str) -> Iterable[str]:
     """
-    Iterator yielding alphabetic and numeric sections if string
+    Iterate over alphanumeric and non-alphanumeric sections of a string.
 
-    :param s:
-    :return:
+    The input string is split into consecutive numeric and non-numeric
+    parts. Numeric sections contain only decimal digits; all other
+    characters are grouped together.
+
+    Args:
+        s: Input string.
+
+    Yields:
+        Consecutive numeric or non-numeric sections of the string.
     """
     for match in rx_split_alnum.finditer(s):
         yield match.group(0)
@@ -378,21 +470,20 @@ def _iter_split_alnum(s: str) -> Iterable[str]:
 
 def split_alnum(s: str) -> list[str | int]:
     """
-    Split line to a sequence of iterating alpha and digit strings
+    Split a string into alternating numeric and non-numeric parts.
 
-    :param s:
-    :type s: str
-    :return: list
-    :rtype: list
+    Numeric sections are converted to integers, while non-numeric sections
+    remain strings.
 
-    >>> split_alnum("Fa 0/1")
-    ['Fa ', 0, '/', 1]
-    >>> split_alnum("Fa 0/1.15")
-    ['Fa ', 0, '/', 1, '.', 15]
-    >>> split_alnum("ge-1/0/1")
-    ['ge-', 1, '/', 0, '/', 1]
-    >>> split_alnum("ge-1/0/1.15")
-    ['ge-', 1, '/', 0, '/', 1, '.', 15]
+    Args:
+        s: Input string.
+
+    Returns:
+        A list containing strings and integers extracted from the input.
+
+    Examples:
+        ``"Fa 0/1"`` -> ``["Fa ", 0, "/", 1]``
+        ``"ge-1/0/1.15"`` -> ``["ge-", 1, "/", 0, "/", 1, ".", 15]``
     """
 
     def maybe_int(v: str) -> str | int:
@@ -406,14 +497,25 @@ def split_alnum(s: str) -> list[str | int]:
 
 def alnum_key(s: str) -> str:
     """
-    Comparable alpha-numeric key
-    :param s:
-    :return:
+    Generate a comparable alphanumeric sorting key.
+
+    Numeric parts of the input string are converted to zero-padded values,
+    allowing strings containing numbers to be compared in natural order.
+
+    Args:
+        s: Input string.
+
+    Returns:
+        A string key suitable for lexicographical comparison.
+
+    Examples:
+        ``"ge-1/0/10"`` produces a key that sorts after
+        ``"ge-1/0/2"``.
     """
 
     def maybe_formatted_int(v: str) -> str:
         try:
-            return "%012d" % int(v)
+            return f"{int(v):012d}"
         except ValueError:
             return v
 
@@ -423,22 +525,37 @@ def alnum_key(s: str) -> str:
 rx_notspace = re.compile(r"^\S+")
 
 
-def find_indented(s):
+def find_indented(s: str) -> list[str]:
     """
-    Parses following text structure:
+    Extract top-level sections with their indented content.
 
-    section 1 header
-        line 1
-        line 2
-    section 2 header
-        line 1
-        line 2
+    The input is split into sections where a non-indented line starts a new
+    section. Following indented non-empty lines are considered part of the
+    section. Sections without indented content are ignored.
 
-    >>> find_idented("section0\\nsection 1\\n  line 1-1\\n  line 1-2\\n\\n"\
-                     "section 2\\n  line 2-1\\n  line 2-2")
-    ['section 1\n  line 1-1\n  line 1-2', 'section 2\n  line 2-1\n  line 2-2']
-    :param s:
-    :return:
+    Args:
+        s: Input text.
+
+    Returns:
+        A list of section strings, each containing a header and its
+        indented lines.
+
+    Examples:
+        Input::
+
+            section 1
+              line 1
+              line 2
+
+            section 2
+              line 3
+
+        Returns::
+
+            [
+                "section 1\\n  line 1\\n  line 2",
+                "section 2\\n  line 3",
+            ]
     """
     r = []
     cr = []
@@ -455,11 +572,21 @@ def find_indented(s):
     return r
 
 
-def parse_kv(kmap, data, sep=":"):
+def parse_kv(kmap: dict[str, str], data: str, sep: str = ":") -> dict[str, str]:
     """
-    :param kmap: text -> dict mapping
-    :param data:
-    :return: dict
+    Parse key-value pairs from text using a key mapping.
+
+    Lines containing the separator are parsed as key-value pairs.
+    Input keys are stripped, converted to lowercase, and mapped to
+    output keys using ``kmap``. Unknown keys are ignored.
+
+    Args:
+        kmap: Mapping of input keys to output keys.
+        data: Text containing key-value pairs.
+        sep: Key-value separator. Defaults to ``":"``.
+
+    Returns:
+        Dictionary containing mapped keys and parsed string values.
     """
     r = {}
     for line in data.splitlines():
@@ -472,50 +599,81 @@ def parse_kv(kmap, data, sep=":"):
     return r
 
 
-def str_dict(d):
+def str_dict(d: dict[str, Any]) -> str:
     """
-    Convert dict to key=value, key=value, .... string
-    :type d: dict
-    :rtype: str
+    Convert a dictionary to a comma-separated key=value string.
+
+    Args:
+        d: Mapping to convert.
+
+    Returns:
+        String containing dictionary entries formatted as
+        ``key=value`` pairs separated by commas.
     """
-    return ", ".join("%s=%s" % (k, d[k]) for k in d)
+    return ", ".join(f"{k}={v}" for k, v in d.items())
 
 
-def to_seconds(v):
+_seconds_multipliers = {
+    "h": 3600,
+    "d": 24 * 3600,
+    "w": 7 * 24 * 3600,
+    "m": 30 * 24 * 3600,
+    "y": 365 * 24 * 3600,
+}
+
+
+def to_seconds(v: str) -> int:
     """
-    Convert string value to seconds.
-    Available acronyms are h, d, w, m, y
+    Convert a time string to a number of seconds.
+
+    Supported suffixes are:
+    - ``h`` — hours
+    - ``d`` — days
+    - ``w`` — weeks
+    - ``m`` — months (30 days)
+    - ``y`` — years (365 days)
+
+    Args:
+        v: Time value as a string.
+
+    Returns:
+        Time value converted to seconds.
+
+    Raises:
+        ValueError: If the input value is not a valid integer time value.
     """
-    m = 1
-    if v.endswith("h"):
+    multiplier = 1
+    if v[-1:] in _seconds_multipliers:
+        multiplier = _seconds_multipliers[v[-1]]
         v = v[:-1]
-        m = 3600
-    elif v.endswith("d"):
-        v = v[:-1]
-        m = 24 * 3600
-    elif v.endswith("w"):
-        v = v[:-1]
-        m = 7 * 24 * 3600
-    elif v.endswith("m"):
-        v = v[:-1]
-        m = 30 * 24 * 3600
-    elif v.endswith("y"):
-        v = v[:-1]
-        m = 365 * 24 * 3600
     try:
-        v = int(v)
-    except ValueError:
-        raise "Invalid time: %s" % v
-    return v * m
+        return int(v) * multiplier
+    except ValueError as e:
+        msg = f"Invalid time: {v}"
+        raise ValueError(msg) from e
 
 
-def format_table(widths, data, sep=" ", hsep=" "):
+def format_table(
+    widths: Iterable[int],
+    data: Sequence[Sequence[object]],
+    sep: str = " ",
+    hsep: str = " ",
+) -> str:
     """
-    Print formatted table.
-    :param widths: list of minimal column widths
-    :param data: list of rows, first row is the header
-    :param sep: column separator
-    :param hsep: header line separator
+    Format tabular data as an aligned text table.
+
+    The first row is treated as a header and is followed by a separator
+    line. Column widths are automatically expanded to fit the longest
+    value in each column.
+
+    Args:
+        widths: Initial minimum width for each column.
+        data: Table rows. The first row is used as the header.
+        sep: Separator between columns.
+        hsep: Separator used in the header underline.
+
+    Returns:
+        Formatted table as a string.
     """
     # Calculate column widths
     widths = list(widths)
@@ -536,31 +694,36 @@ def format_table(widths, data, sep=" ", hsep=" "):
 rx_non_numbers = re.compile("[^0-9]+")
 
 
-def clean_number(n):
+def clean_number(n: str) -> str:
     """
-    Remove all non-number occurences
-    :param n:
-    :return:
+    Remove all non-digit characters from a string.
+
+    Args:
+        n: Input string containing digits and other characters.
+
+    Returns:
+        String containing only decimal digits.
     """
     return rx_non_numbers.sub("", n)
 
 
-def safe_shadow(text):
+def safe_shadow(text: object) -> str:
     """
-    Shadow string to first and last char
-    :param text:
-    :return:
+    Mask sensitive text while preserving first and last characters.
 
-    >>> safe_shadow(None)
-    'None'
-    >>>safe_shadow("s")
-    '******'
-    >>>safe_shadow("sssssss")
-    's******s'
-    >>> safe_shadow(1)
-    '******'
-    >>> safe_shadow([1, 2])
-    '******'
+    Non-string values and short strings are replaced with a fixed mask.
+    Empty values are represented as ``"None"``.
+
+    Args:
+        text: Value to mask.
+
+    Returns:
+        Masked string representation.
+
+    Examples:
+        ``"secret"`` -> ``"s******t"``
+        ``"x"`` -> ``"******"``
+        ``None`` -> ``"None"``
     """
     if not text:
         return "None"
@@ -571,7 +734,19 @@ def safe_shadow(text):
     return "******"
 
 
-def ch_escape(s):
+def ch_escape(s: str) -> str:
+    """
+    Escape characters for ClickHouse string literals.
+
+    Escapes newline and tab characters using ClickHouse-compatible escape
+    sequences and escapes backslashes.
+
+    Args:
+        s: Input string.
+
+    Returns:
+        String with characters escaped for ClickHouse.
+    """
     return s.replace("\n", "\\n").replace("\t", "\\t").replace("\\", "\\\\")
 
 
@@ -580,19 +755,54 @@ ESC_REPLACEMENTS = {re.escape("\n"): " ", re.escape("\t"): "        "}
 rx_escape = re.compile("|".join(ESC_REPLACEMENTS))
 
 
-def tsv_escape(text):
+def tsv_escape(text: str) -> str:
+    """
+    Escape characters that are not allowed in TSV fields.
+
+    Replaces newline characters with spaces and tab characters with spaces
+    to keep field boundaries intact.
+
+    Args:
+        text: Input field value.
+
+    Returns:
+        Escaped text suitable for TSV output.
+    """
     return rx_escape.sub(lambda match: ESC_REPLACEMENTS[re.escape(match.group(0))], text)
 
 
-def parse_table_header(v):
+def parse_table_header(v: Sequence[str]) -> dict[int, str]:
     """
-    Parse header structured multiline format:
-    Config    Current Agg     Min    Ld Share  Flags Ld Share  Agg Link  Link Up
-    Master    Master  Control Active Algorithm       Group     Mbr State Transitions
-    :param v:
-    :return: Dictionary {start column position: header}
-    {10: 'Config Master', 18: 'Current Master', 26: 'Agg Control', 33: 'Min Active',
-     43: 'Ld Share Algorithm', 49: 'Flags ', 59: 'Ld Share Group', 63: 'Agg Mbr', 69: 'Link State'}
+    Parse a multiline table header into column names.
+
+    The input contains multiple header lines. Columns are detected by
+    their character positions and vertically merged into complete names.
+
+    Args:
+        v: Header lines.
+
+    Returns:
+        Mapping of column start positions to parsed column names.
+
+    Examples:
+        Given the following multiline header::
+
+            Config    Current Agg     Min    Ld Share  Flags Ld Share  Agg Link  Link Up
+            Master    Master  Control Active Algorithm       Group     Mbr State Transitions
+
+        returns::
+
+            {
+                10: "Config Master",
+                18: "Current Master",
+                26: "Agg Control",
+                33: "Min Active",
+                43: "Ld Share Algorithm",
+                49: "Flags",
+                59: "Ld Share Group",
+                63: "Agg Mbr",
+                69: "Link State",
+            }
     """
     from numpy import array
 
@@ -618,12 +828,20 @@ def parse_table_header(v):
     return header
 
 
-def split_text(text: str, max_chunk: int) -> Iterable[str]:
+def split_text(text: str, max_chunk: int) -> Iterator[str]:
     """
-    Split text by splitline if len > max_chunk
-    :param text:
-    :param max_chunk:
-    :return: Iterable[str]
+    Split text into chunks by line boundaries.
+
+    Lines are accumulated until adding another line would exceed
+    the specified maximum chunk size. Chunks preserve original line
+    separation.
+
+    Args:
+        text: Input text.
+        max_chunk: Maximum chunk size in characters.
+
+    Yields:
+        Text chunks containing one or more complete lines.
     """
     size = 0
     result = []
@@ -639,7 +857,16 @@ def split_text(text: str, max_chunk: int) -> Iterable[str]:
 
 
 def filter_non_printable(text: str) -> str:
-    return "".join(filter(lambda x: x in string.printable, text))
+    """
+    Remove non-printable characters from a string.
+
+    Args:
+        text: Input string.
+
+    Returns:
+        String containing only printable characters.
+    """
+    return "".join(x for x in text if x in string.printable)
 
 
 legend = {
@@ -713,6 +940,18 @@ legend = {
 
 
 def cyr_to_lat(s: str) -> str:
+    """
+    Transliterate Cyrillic characters to Latin characters.
+
+    Cyrillic letters are replaced according to the transliteration table.
+    Spaces are replaced with underscores; all other characters are preserved.
+
+    Args:
+        s: Input string.
+
+    Returns:
+        Transliterated string.
+    """
     r: list[str] = []
     for c in s:
         if c in legend:
