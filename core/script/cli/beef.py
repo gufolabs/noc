@@ -92,7 +92,5 @@ class BeefCLI(CLI):
         return True
 
     async def send_pager_reply(self, data, match):
-        """
-        Beef need no pagers
-        """
+        """Beef need no pagers"""
         self.collected_data += [data]

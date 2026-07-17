@@ -87,10 +87,13 @@ class BeefSNMPSocket:
         return response, address
 
     def snmp_get_response(self, pdu):
-        """
-        Process SNMP GET request
-        :param pdu: Parsed request PDU
-        :return: error_status, error_index, varbinds
+        """Process SNMP GET request
+
+        Args:
+            pdu: Parsed request PDU
+
+        Returns:
+            error_status, error_index, varbinds
         """
         beef = self.script.request_beef()
         r = []
@@ -108,10 +111,13 @@ class BeefSNMPSocket:
         return err_status, err_index, r
 
     def snmp_getnext_response(self, pdu):
-        """
-        Process SNMP GETNEXT request
-        :param pdu: Parsed request PDU
-        :return: error_status, error_index, varbinds
+        """Process SNMP GETNEXT request
+
+        Args:
+            pdu: Parsed request PDU
+
+        Returns:
+            error_status, error_index, varbinds
         """
         beef = self.script.request_beef()
         err_status = NO_ERROR
@@ -129,10 +135,13 @@ class BeefSNMPSocket:
         return err_status, err_index, r
 
     def snmp_getbulk_response(self, pdu):
-        """
-        Process SNMP GETBULK request
-        :param pdu: Parsed request PDU
-        :return: error_status, error_index, varbinds
+        """Process SNMP GETBULK request
+
+        Args:
+            pdu: Parsed request PDU
+
+        Returns:
+            error_status, error_index, varbinds
         """
         beef = self.script.request_beef()
         r = []

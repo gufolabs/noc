@@ -10,9 +10,7 @@ from .oid import OIDRule
 
 
 class CounterRule(OIDRule):
-    """
-    SNMP OID for SNMP counters
-    """
+    """SNMP OID for SNMP counters"""
 
     name = "counter"
     default_type = "counter"

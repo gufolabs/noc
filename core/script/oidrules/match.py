@@ -11,9 +11,7 @@ from .loader import load_rule
 
 
 class MatcherRule:
-    """
-    Multiple items for single metric
-    """
+    """Multiple items for single metric"""
 
     name = "match"
 

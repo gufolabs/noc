@@ -10,8 +10,7 @@ from .base import BaseMiddleware
 
 
 class URLRequestIdMiddleware(BaseMiddleware):
-    """
-    Append &request_id=XXXXX to requests.
+    """Append &request_id=XXXXX to requests.
     Request id is automatically increased with each next request.
     `request_id` name may be changed via `request_id_param`
     """

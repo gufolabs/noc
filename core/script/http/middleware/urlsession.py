@@ -10,8 +10,7 @@ from .base import BaseMiddleware
 
 
 class URLSessionMiddleware(BaseMiddleware):
-    """
-    Append &session_id=XXXXX to requests.
+    """Append &session_id=XXXXX to requests.
     `session_id` name may be changed via `session_param`
     """
 

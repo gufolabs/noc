@@ -15,12 +15,11 @@ cv_oid_rule_resolver: ContextVar[Callable | None] = ContextVar("cv_oid_rule_reso
 
 @contextmanager
 def with_resolver(resolver):
-    """
-    OIDRule resolver context.
+    """OIDRule resolver context.
 
-    :param resolver: callable accepting name and returning
-        OIDRule class with given type
-    :return:
+    Args:
+        resolver: callable accepting name and returning OIDRule class
+            with given type
     """
     cv_oid_rule_resolver.set(resolver)
     yield
@@ -28,11 +27,11 @@ def with_resolver(resolver):
 
 
 def load_rule(data):
-    """
-    Create OIDRule instance from data structure.
+    """Create OIDRule instance from data structure.
     MUST be called within resolver_context
-    :param data: parsed from json file
-    :return:
+
+    Args:
+        data: parsed from json file
     """
     resolver = cv_oid_rule_resolver.get()
     assert resolver, "Should be calles within with_resolver context"

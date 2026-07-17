@@ -55,10 +55,10 @@ class Session:
         self._pool = None
 
     def _get_hints(self):
-        """
-        Get activator address
-        :param pool:
-        :return:
+        """Get activator address
+
+        Args:
+            pool
         """
         try:
             svc = get_dcs().resolve_sync("activator-%s" % self._pool, hint=self._hints[0])

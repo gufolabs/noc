@@ -161,12 +161,12 @@ class RTSPBase(BaseCLI):
         return int(code), headers, msg
 
     def execute(self, path, method, **kwargs):
-        """
-        Perform request and return result
-        :param path:
-        :param method:
-        :param kwargs:
-        :return:
+        """Perform request and return result
+
+        Args:
+            path
+            method
+            **kwargs
         """
         self.buffer = b""
         self.path = path
@@ -211,9 +211,7 @@ class RTSPBase(BaseCLI):
 
 
 class DigestAuth:
-    """
-    Append HTTP Digest authorisation headers
-    """
+    """Append HTTP Digest authorisation headers"""
 
     name = "digestauth"
 
@@ -227,11 +225,10 @@ class DigestAuth:
 
     def get_digest(self, uri, realm, method):
         """
-
-        :param uri:
-        :param realm:
-        :param method: GET/POST
-        :return:
+        Args:
+            uri
+            realm
+            method: GET/POST
         """
         # print("Get Digest", uri, realm, method, self.user, self.password)
         A1 = "%s:%s:%s" % (self.user, realm, self.password)
@@ -244,12 +241,10 @@ class DigestAuth:
 
     def build_digest_header(self, url, method, digest_response):
         """
-
-        :param url: query URL
-        :param method: GET/POST method
-        :param digest_response:  dict response header
-        :type digest_response: dict
-        :return:
+        Args:
+            url: query URL
+            method: GET/POST method
+            digest_response (dict): dict response header
         """
         # p_parsed = urlparse(url)
         # uri = p_parsed.path or "/"

@@ -66,10 +66,7 @@ class BaseCLI:
             self.stream.set_timeout(None)
 
     def get_stream(self) -> "BaseStream":
-        """
-        Stream factory. Must be overriden in subclasses.
-        :return:
-        """
+        """Stream factory. Must be overriden in subclasses."""
         raise NotImplementedError
 
     async def start_stream(self):

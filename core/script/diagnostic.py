@@ -19,9 +19,7 @@ from noc.sa.models.credentialcheckrule import CredentialCheckRule
 
 
 class SNMPSuggestsDiagnostic:
-    """
-    Run diagnostic by config and check status
-    """
+    """Run diagnostic by config and check status"""
 
     def __init__(self, config: DiagnosticConfig, logger=None):
         self.config = config
@@ -85,9 +83,7 @@ class SNMPSuggestsDiagnostic:
 
 
 class CLISuggestsDiagnostic:
-    """
-    Run diagnostic by config and check status
-    """
+    """Run diagnostic by config and check status"""
 
     def __init__(self, config: DiagnosticConfig, logger=None):
         self.config = config

@@ -38,12 +38,12 @@ class BaseStream:
         self.connect_timeout: float = config.activator.connect_timeout
 
     async def connect(self, address: str, port: int | None = None, timeout: float | None = None):
-        """
-        Process connection sequence
-        :param address:
-        :param port:
-        :param timeout:
-        :return:
+        """Process connection sequence
+
+        Args:
+            address
+            port
+            timeout
         """
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         if self.tos:
@@ -75,16 +75,10 @@ class BaseStream:
             raise ConnectionRefusedError
 
     async def startup(self):
-        """
-        Setup connection after startup
-        :return:
-        """
+        """Setup connection after startup"""
 
     async def wait_for_read(self):
-        """
-        Wait until data available for read
-        :return:
-        """
+        """Wait until data available for read"""
 
         def on_readable() -> None:
             if not fut.done():
@@ -103,10 +97,7 @@ class BaseStream:
             loop.remove_reader(fileno)
 
     async def wait_for_write(self):
-        """
-        Wait until socket will be available for write
-        :return:
-        """
+        """Wait until socket will be available for write"""
         if not self.socket:
             return
         loop = asyncio.get_running_loop()
@@ -119,11 +110,11 @@ class BaseStream:
             loop.remove_writer(fileno)
 
     async def read(self, n: int) -> bytes:
-        """
-        Read up to n bytes from socket.
+        """Read up to n bytes from socket.
         Return empty bytes on EOF
-        :param n:
-        :return:
+
+        Args:
+            n
         """
         await self.wait_for_read()
         try:
@@ -133,10 +124,10 @@ class BaseStream:
             raise asyncio.TimeoutError
 
     async def write(self, data: bytes):
-        """
-        Write data to socket
-        :param data:
-        :return:
+        """Write data to socket
+
+        Args:
+            data
         """
         while data:
             await self.wait_for_write()

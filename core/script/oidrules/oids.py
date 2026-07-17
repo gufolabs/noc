@@ -10,9 +10,7 @@ from .oid import OIDRule
 
 
 class OIDsRule:
-    """
-    Multiple items for single metric
-    """
+    """Multiple items for single metric"""
 
     name = "oids"
 
