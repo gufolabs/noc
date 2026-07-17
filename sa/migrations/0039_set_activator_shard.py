@@ -12,6 +12,6 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     NAME = "default"
 
-    def migrate(self):
+    def migrate(self) -> None:
         shard_id = self.db.execute("SELECT id FROM main_shard WHERE name=%s", [self.NAME])[0][0]
         self.db.execute("UPDATE sa_activator SET shard_id=%s", [shard_id])

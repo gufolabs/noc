@@ -14,7 +14,7 @@ MONGO_CHUNK = 500
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         coll = self.mongo_db["labels"]
         updates = []
         for d in coll.find({"uuid": {"$exists": False}}, {"_id": 1}):

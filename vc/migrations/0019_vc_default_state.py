@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Get default resource state id
         r = self.db.execute("SELECT id FROM main_resourcestate WHERE is_default = true")
         if len(r) != 1:

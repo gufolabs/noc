@@ -21,7 +21,7 @@ NEW_PREFIXES_REPORT_BODY = (
 class Migration(BaseMigration):
     depends_on = [("main", "0037_template")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.execute(
             "INSERT INTO main_template(name, subject, body) VALUES(%s, %s, %s)",
             [

@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         i = 0
         for user_id, administrative_domain_id, group_id in self.db.execute(
             "SELECT user_id,administrative_domain_id,group_id FROM sa_useraccess"

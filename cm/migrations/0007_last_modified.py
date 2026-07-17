@@ -21,7 +21,7 @@ TYPES = {"config": "config", "prefixlist": "prefix-list", "dns": "dns", "rpsl": 
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         repo_root = config.path.repo
         for ot in TYPES:
             self.db.add_column(

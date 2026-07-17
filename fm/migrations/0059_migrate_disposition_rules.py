@@ -31,7 +31,7 @@ discovery_funcs = {"on_system_start", "on_config_change", "schedule_discovery"}
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         bulk = []
         names = set()
         ac_map = {}

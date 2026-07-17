@@ -16,7 +16,7 @@ from noc.core.comp import smart_bytes
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         db = self.mongo_db
         ac_map = {}
         for ac in db["noc.alarmclasses"].find({}, {"name": 1}):

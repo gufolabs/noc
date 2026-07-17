@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         func = """create or replace function cast_test_to_inet(varchar) returns inet as $$
         declare
              i inet;

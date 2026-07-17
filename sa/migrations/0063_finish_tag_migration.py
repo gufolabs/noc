@@ -12,7 +12,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     TAG_MODELS = ["sa_activator", "sa_managedobject", "sa_commandsnippet"]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Drop old tags
         for m in self.TAG_MODELS:
             self.db.delete_column(m, "tags")

@@ -197,7 +197,7 @@ LANGUAGES = [
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         for lang, native in LANGUAGES:
             self.db.execute(
                 "INSERT INTO main_language(name,native_name,is_active) VALUES(%s,%s,%s)",

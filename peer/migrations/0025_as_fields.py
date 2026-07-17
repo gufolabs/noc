@@ -18,7 +18,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("ip", "0004_default_vrf")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         rx_remarks = re.compile(r"^remarks:\s*")
 
         RIR = self.db.mock_model(model_name="RIR", db_table="peer_rir")

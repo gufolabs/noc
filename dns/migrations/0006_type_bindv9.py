@@ -12,5 +12,5 @@ NAME = "BINDv9"
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         pass

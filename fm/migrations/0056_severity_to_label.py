@@ -15,7 +15,7 @@ from noc.core.bi.decorator import bi_hash
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         s_coll = self.mongo_db["noc.alarmseverities"]
         l_coll = self.mongo_db["labels"]
         severity_weight_map = {}

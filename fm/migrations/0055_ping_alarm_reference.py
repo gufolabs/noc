@@ -19,7 +19,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     PF_UUID = "ec26e28d-0b64-4738-8c07-5ee3daca16f4"
 
-    def migrate(self):
+    def migrate(self) -> None:
         acls_coll = self.mongo_db["noc.alarmclasses"]
         pf_doc = acls_coll.find_one({"uuid": uuid.UUID(self.PF_UUID)}, {"_id": 1})
         if not pf_doc:

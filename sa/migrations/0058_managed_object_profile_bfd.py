@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     d_types = ["bfd"]
 
-    def migrate(self):
+    def migrate(self) -> None:
         for d in self.d_types:
             self.db.add_column(
                 "sa_managedobjectprofile",

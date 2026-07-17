@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         mdb = self.mongo_db
         segments = mdb.noc.networksegments
         cstate = mdb.noc.inv.networkchartstate

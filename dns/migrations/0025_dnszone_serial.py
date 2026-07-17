@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.execute("ALTER TABLE dns_dnszone ALTER serial DROP DEFAULT")
         self.db.execute("ALTER TABLE dns_dnszone ALTER serial TYPE INTEGER USING serial::integer")
         self.db.execute("ALTER TABLE dns_dnszone ALTER serial SET DEFAULT 0")

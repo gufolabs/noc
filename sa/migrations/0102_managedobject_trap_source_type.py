@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0055_default_pool")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column(
             "sa_managedobject",
             "trap_source_type",

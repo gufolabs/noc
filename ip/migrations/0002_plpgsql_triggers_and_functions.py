@@ -12,7 +12,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("sa", "0002_trigger")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         if not self.has_column("ip_ipv4block", "prefix_cidr"):
             self.db.execute("ALTER TABLE ip_ipv4block ADD prefix_cidr CIDR")
             self.db.execute("UPDATE ip_ipv4block SET prefix_cidr=prefix::cidr")

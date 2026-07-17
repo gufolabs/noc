@@ -16,7 +16,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("sa", "0007_managed_object")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         ManagedObject = self.db.mock_model(model_name="ManagedObject", db_table="sa_managedobject")
         self.db.add_column("ip_ipv4address", "mac", MACField("MAC", null=True, blank=True))
         self.db.add_column(

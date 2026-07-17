@@ -13,7 +13,7 @@ from noc.config import config
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Create default admin user if no user exists
         if self.db.execute("SELECT COUNT(*) FROM auth_user")[0][0] != 0:
             return

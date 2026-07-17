@@ -18,7 +18,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("wf", "0001_default_wf")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         s_map = {
             # 1: bson.ObjectId("5a17f61b1bb6270001bd0328"),  # ALLOCATED -> Free
             2: bson.ObjectId("5a17f7391bb6270001bd033e"),  # EXPIRED -> Cooldown

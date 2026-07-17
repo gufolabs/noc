@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         PyRule = self.db.mock_model(model_name="PyRule", db_table="main_pyrule")
         self.db.add_column(
             "sa_managedobject",

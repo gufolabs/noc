@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column("main_template", "uuid", models.UUIDField(null=True))
 
         for id in self.db.execute("SELECT id FROM main_template"):

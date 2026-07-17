@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         s = self.mongo_db.noc.stomp_access
         if not s.count_documents({}):
             s.insert_one({"user": "noc", "password": "noc", "is_active": True})

@@ -74,7 +74,7 @@ class Migration(BaseMigration):
             unique=True,
         )
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.create_subscription()
         self.db.add_column("main_notificationgroup", "uuid", models.UUIDField(null=True))
         for id in self.db.execute("SELECT id FROM main_notificationgroup"):

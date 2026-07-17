@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.execute("UPDATE fm_event SET status='U' WHERE subject IS NULL")
         self.db.execute(
             """UPDATE fm_event SET status='C' WHERE subject IS NOT NULL

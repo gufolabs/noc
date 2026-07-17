@@ -12,5 +12,5 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("sa", "0077_drop_repo_path")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.delete_table("cm_config")

@@ -14,7 +14,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Create default profile
         P_ID = "5ae04bcb45ce8300f385edb2"
         pcoll = self.mongo_db["asprofiles"]

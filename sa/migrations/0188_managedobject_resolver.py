@@ -14,7 +14,7 @@ from noc.core.model.fields import DocumentReferenceField
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # ManagedObject profile
         self.db.delete_column("sa_managedobjectprofile", "sync_ipam")
         self.db.delete_column("sa_managedobjectprofile", "fqdn_template")

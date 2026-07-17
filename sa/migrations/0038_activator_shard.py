@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0034_default_shard")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         Shard = self.db.mock_model(model_name="Shard", db_table="main_shard")
 
         self.db.add_column(

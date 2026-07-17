@@ -20,7 +20,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("wf", "0001_default_wf")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         coll = self.mongo_db["prefixprofiles"]
         default_id = bson.ObjectId()
         wf = bson.ObjectId("5a01d980b6f529000100d37a")

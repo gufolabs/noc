@@ -22,7 +22,7 @@ class ObjectEffect(models.TextChoices):
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         ManagedObject = self.db.mock_model(model_name="ManagedObject", db_table="sa_managedobject")
         self.db.create_table(
             "sa_managedobjectwatchers",

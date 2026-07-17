@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         Prefix = self.db.mock_model(model_name="Prefix", db_table="ip_prefix")
 
         Address = self.db.mock_model(model_name="Address", db_table="ip_address")

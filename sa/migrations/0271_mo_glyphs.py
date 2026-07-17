@@ -81,7 +81,7 @@ SHAPE_MAP: dict[str, int] = {
 class Migration(BaseMigration):
     aliases = ["sa.0270_mo_glyphs"]
 
-    def migrate(self):
+    def migrate(self) -> None:
         tables = ("sa_managedobjectprofile", "sa_managedobject")
         # Create `glyph` field
         for table in tables:

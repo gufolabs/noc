@@ -46,7 +46,7 @@ RECORD_TYPES = [
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         rt = []
         for rtype, is_visible in RECORD_TYPES:
             if (

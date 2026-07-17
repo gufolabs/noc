@@ -22,7 +22,7 @@ SQL_ADD = """
 class Migration(BaseMigration):
     depends_on = [("sa", "0231_managedobject_affected_maintenances")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         db = self.mongo_db
         processed = {
             am

@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         for col in ["organisation_id", "rir_id", "description"]:
             self.db.execute(f"ALTER TABLE peer_as ALTER {col} DROP NOT NULL")
         # Set Exists AS Profile set default

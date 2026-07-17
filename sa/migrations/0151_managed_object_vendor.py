@@ -36,7 +36,7 @@ DUPLICATE_VENDOR_MAP = {"EXTREME NETWORKS": "Extreme", "ALCATEL": "ALU"}
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         #
         # Vendor
         #

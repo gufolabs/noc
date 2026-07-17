@@ -17,7 +17,7 @@ from noc.core.bi.decorator import bi_hash
 class Migration(BaseMigration):
     depends_on = [("inv", "0017_initial_technologies")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Get existing termination groups
         tg_data = self.db.execute(
             "SELECT id, name, description, remote_system, remote_id, tags FROM sa_terminationgroup"

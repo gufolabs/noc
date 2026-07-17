@@ -10,6 +10,6 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.delete_column("dns_dnszonerecord", "type_id")
         self.db.delete_table("dns_dnszonerecordtype")

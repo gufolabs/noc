@@ -21,7 +21,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     _ac_cache = cachetools.TTLCache(maxsize=5, ttl=60)
 
-    def migrate(self):
+    def migrate(self) -> None:
         current = itertools.count()
         db = self.mongo_db
         # Migrate profiles

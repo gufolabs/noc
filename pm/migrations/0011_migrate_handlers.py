@@ -18,7 +18,7 @@ HTYPE = {
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Create handlers
         self.migrate_create_handlers()
         # Change handlers

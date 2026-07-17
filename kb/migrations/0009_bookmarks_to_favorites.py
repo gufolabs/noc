@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         favs = defaultdict(list)
         mdb = self.mongo_db
         fav_coll = mdb["noc.favorites"]

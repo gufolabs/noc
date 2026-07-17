@@ -16,7 +16,7 @@ OBJECT_TYPE_CHOICES = [(x, x) for x in OBJECT_TYPES]
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.delete_column("cm_objectcategory", "notify_immediately")
         self.db.delete_column("cm_objectcategory", "notify_delayed")
 

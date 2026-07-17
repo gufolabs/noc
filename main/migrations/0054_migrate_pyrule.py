@@ -23,7 +23,7 @@ class Migration(BaseMigration):
         ("version_inventory", "IReduceTask"),
     ]
 
-    def migrate(self):
+    def migrate(self) -> None:
         for name, iface in self.PMAP:
             handler = "noc.solutions.noc.default.pyrules.%s.%s" % (name, name)
             if self.db.execute("SELECT COUNT(*) FROM main_pyrule WHERE name = %s", [name])[0][0]:

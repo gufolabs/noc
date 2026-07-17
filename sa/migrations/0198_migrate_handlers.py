@@ -16,7 +16,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0054_migrate_pyrule")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Managed Object Profile
         self.migrate_handler_ids()
         self.migrate_handler("sa_managedobjectprofile", "hk_handler", allow_housekeeping=True)

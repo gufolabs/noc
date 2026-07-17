@@ -18,7 +18,7 @@ class Migration(BaseMigration):
         ("vc", "0022_finish_tag_migration"),
     ]
 
-    def migrate(self):
+    def migrate(self) -> None:
         c = self.mongo_db.noc.tags
         for m in [
             "sa_activator",

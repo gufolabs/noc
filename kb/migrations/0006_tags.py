@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     TAG_MODELS = ["kb_kbentry", "kb_kbentrytemplate"]
 
-    def migrate(self):
+    def migrate(self) -> None:
         for m in self.TAG_MODELS:
             self.db.add_column(m, "tags", AutoCompleteTagsField("Tags", null=True, blank=True))
 

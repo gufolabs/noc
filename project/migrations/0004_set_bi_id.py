@@ -13,7 +13,7 @@ PG_CHUNK = 500
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         table = "project_project"
         rows = self.db.execute("SELECT id FROM %s WHERE bi_id IS NULL" % table)
         values = ["(%d, %d)" % (r[0], bi_hash(r[0])) for r in rows]

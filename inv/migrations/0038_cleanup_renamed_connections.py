@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Get model connections
         model_conns: dict[ObjectId, set[str]] = {}
         for doc in self.mongo_db["noc.objectmodels"].find({}, {"_id": 1, "connections": 1}):

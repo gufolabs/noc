@@ -28,7 +28,7 @@ EVENT_CATEGORY = [
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         for priority, name, description in EVENT_PRIORITY:
             self.db.execute(
                 "INSERT INTO fm_eventpriority(name,priority,description) VALUES(%s,%s,%s)",

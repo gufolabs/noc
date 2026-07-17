@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Mock Models
         DNSZoneProfile = self.db.mock_model(
             model_name="DNSZoneProfile", db_table="dns_dnszoneprofile"
