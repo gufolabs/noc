@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # DefaultAdminStatusApplicator
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -10,7 +10,7 @@ from .query import QueryApplicator
 
 
 class DefaultAdminStatusApplicator(QueryApplicator):
-    """Set missed interface's AdminStatus from "hints interfaces defaults admin-status""""
+    """Set missed interface's AdminStatus from "hints interfaces defaults admin-status"""
 
     CHECK_QUERY = "Match('hints', 'interfaces', 'defaults', 'admin-status')"
     QUERY = [
