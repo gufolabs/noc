@@ -46,7 +46,7 @@ class Command(BaseCommand):
         try:
             return datetime.strptime(s, "%Y-%m-%d %H:%M")
         except ValueError:
-            msg = "Not a valid date: '{0}'.".format(s)
+            msg = f"Not a valid date: '{s}'."
             raise argparse.ArgumentTypeError(msg)
 
     @staticmethod

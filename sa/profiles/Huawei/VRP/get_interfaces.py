@@ -234,7 +234,7 @@ class Script(BaseScript):
                     vlans,
                     [
                         int(x)
-                        for x in chain.from_iterable("{0:08b}".format(mask) for mask in vlans_bank)
+                        for x in chain.from_iterable(f"{mask:08b}" for mask in vlans_bank)
                     ],
                 )
             )

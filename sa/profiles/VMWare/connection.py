@@ -92,9 +92,9 @@ def connect(host=None, alias=DEFAULT_CONNECTION_NAME, **kwargs):
 
         if new_conn_settings != prev_conn_setting:
             err_msg = (
-                "A different connection with alias `{}` was already "
+                f"A different connection with alias `{alias}` was already "
                 "registered. Use disconnect() first"
-            ).format(alias)
+            )
             raise ConnectionFailure(err_msg)
     else:
         register_connection(alias, host, **kwargs)

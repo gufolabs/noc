@@ -63,7 +63,7 @@ class Script(BaseScript):
         for line in vlans.splitlines():
             for vlan_pack in line.split()[0]:
                 # for is_v in bin(int(vlan_pack, 16)):
-                for is_v in "{0:04b}".format(vlan_pack):
+                for is_v in f"{vlan_pack:04b}":
                     yield int(is_v)
 
     def execute_snmp(self, **kwargs):

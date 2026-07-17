@@ -33,7 +33,7 @@ class Command(BaseCommand):
         try:
             return int(parse(s).timestamp())
         except ValueError:
-            msg = "Not a valid date: '{0}'.".format(s)
+            msg = f"Not a valid date: '{s}'."
             raise argparse.ArgumentTypeError(msg)
 
     def add_arguments(self, parser):

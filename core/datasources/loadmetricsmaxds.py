@@ -176,7 +176,7 @@ class LoadMetricsMaxDS(BaseDataSource):
         **kwargs,
     ) -> AsyncIterable[tuple[str, str]]:
         def str_to_float(str):
-            return float("{0:.3f}".format(float(str)))
+            return float(f"{float(str):.3f}")
 
         diff = end - start
         q_filter = cls.get_filter(kwargs)
@@ -231,8 +231,8 @@ class LoadMetricsMaxDS(BaseDataSource):
                     "max_load_out_time": max_load_out_time,
                     "avg_load_in": avg_in,
                     "avg_load_out": avg_out,
-                    "total_in": float("{0:.1f}".format(total_in)),
-                    "total_out": float("{0:.1f}".format(total_out)),
+                    "total_in": float(f"{total_in:.1f}"),
+                    "total_out": float(f"{total_out:.1f}"),
                 }
         # Yielding data
         num = 1

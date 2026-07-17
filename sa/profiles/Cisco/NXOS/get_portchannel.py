@@ -31,7 +31,7 @@ class Script(BaseScript):
             for l in s.splitlines():
                 pc, rest = l.split(" ", 1)
                 pc = pc[2:]
-                v = self.cli("show interface port-channel {0} | i Member_[0-9]+".format(pc))
+                v = self.cli(f"show interface port-channel {pc} | i Member_[0-9]+")
                 out_if = {
                     "interface": "Po %s" % pc,
                     "members": [],

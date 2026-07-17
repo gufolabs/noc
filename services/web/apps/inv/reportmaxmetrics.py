@@ -156,7 +156,7 @@ class ReportMaxMetricsmaxDetailApplication(ExtApplication):
             return [row[i] for i in cmap]
 
         def str_to_float(str):
-            return float("{0:.3f}".format(float(str)))
+            return float(f"{float(str):.3f}")
 
         cols = [
             "object_id",
@@ -343,8 +343,8 @@ class ReportMaxMetricsmaxDetailApplication(ExtApplication):
                 "max_load_out_time": row[8],
                 "avg_load_in": avg_in,
                 "avg_load_out": avg_out,
-                "total_in": float("{0:.1f}".format(total_in)),
-                "total_out": float("{0:.1f}".format(total_out)),
+                "total_in": float(f"{total_in:.1f}"),
+                "total_out": float(f"{total_out:.1f}"),
             }
 
         # find uplinks

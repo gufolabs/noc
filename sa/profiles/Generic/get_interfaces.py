@@ -115,7 +115,7 @@ class Script(BaseScript):
             vlan_num = int(oid.split(".")[-1])
             # Getting port as mask,  convert to vlan: Iface list
             for port, is_egress in enumerate(
-                chain.from_iterable("{0:08b}".format(mask) for mask in ports_mask), start=1
+                chain.from_iterable(f"{mask:08b}" for mask in ports_mask), start=1
             ):
                 if is_egress == "0":
                     continue

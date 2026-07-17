@@ -121,7 +121,7 @@ class Scale(Document):
                 seconds -= value * count
                 if value == 1:
                     name = name.rstrip("s")
-                result.append("{}{}".format(value, name))
+                result.append(f"{value}{name}")
         return ", ".join(result[:-1])
 
     @classmethod
