@@ -35,31 +35,28 @@ class DataStreamClient:
         )
 
     async def on_change(self, data):
-        """
-        Called on each item received through datastream
-        :param data:
-        :return:
+        """Called on each item received through datastream
+
+        Args:
+            data
         """
 
     async def on_move(self, data):
-        """
-        Called on each moved item received through datastream
-        :param data:
-        :return:
+        """Called on each moved item received through datastream
+
+        Args:
+            data
         """
 
     async def on_delete(self, data):
-        """
-        Called on each deleted item received through datastream
-        :param data:
-        :return:
+        """Called on each deleted item received through datastream
+
+        Args:
+            data
         """
 
     async def on_ready(self):
-        """
-        Called when initial data is ready and processed.
-        :return:
-        """
+        """Called when initial data is ready and processed."""
 
     async def query(
         self,
@@ -70,19 +67,18 @@ class DataStreamClient:
         ds_format: str | None = None,
         filter_policy: str | None = None,
     ):
-        """
-        Query datastream
-        :param change_id: Staring change id
-        :param filters: List of strings with filter expression
-        :param block:
-        :param limit: Records limit
-        :param ds_format: DataStream Format
-        :param filter_policy: Metadata changed policy. Behavior if metadata change out of filter scope
-                   * default - no changes
-                   * delete - return $delete message
-                   * keep - ignore filter, return full record
-                   * move - return $moved message
-        :return:
+        """Query datastream
+
+        Args:
+            change_id: Staring change id
+            filters: List of strings with filter expression
+            block
+            limit: Records limit
+            ds_format: DataStream Format
+            filter_policy: Metadata changed policy. Behavior if metadata
+                change out of filter scope * default - no changes *
+                delete - return $delete message * keep - ignore filter,
+                return full record * move - return $moved message
         """
         # Basic URL and query
         base_url = f"http://datastream/api/datastream/{self.name}"
