@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import importlib
 import operator
 from typing import Iterable
 from pathlib import Path
@@ -64,7 +65,7 @@ class MigrationLoader:
             mn = f"noc.custom.{app}.migrations.{mname}"
         else:
             mn = f"noc.{app}.migrations.{mname}"
-        m = __import__(mn, {}, {}, "Migration")
+        m = importlib.import_module(mn)
         return m.Migration()
 
     @classmethod

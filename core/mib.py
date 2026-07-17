@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import importlib
 import logging
 from threading import Lock
 
@@ -85,7 +86,7 @@ class MIBRegistry:
             logger.debug("Loading MIB: %s", name)
             mn = "%s.cmibs.%s" % (base_name, mod_name)
             try:
-                m = __import__(mn, {}, {}, ["MIB"])
+                m = importlib.import_module(mn)
             except ModuleNotFoundError:
                 continue
             self.mib.update(getattr(m, "MIB"))

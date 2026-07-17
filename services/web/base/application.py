@@ -6,6 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+import importlib
 import logging
 import os
 import datetime
@@ -159,8 +160,8 @@ class Application(metaclass=ApplicationBase):
         else:
             self.module = parts[4]
             self.app = parts[5]
-        self.module_title = __import__(
-            "noc.services.web.apps.%s" % self.module, {}, {}, ["MODULE_NAME"]
+        self.module_title = importlib.import_module(
+            "noc.services.web.apps.%s" % self.module
         ).MODULE_NAME
         self.app_id = "%s.%s" % (self.module, self.app)
         self.menu_url = None  # Set by site.autodiscover()

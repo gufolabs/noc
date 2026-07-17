@@ -6,6 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+import importlib
 import os
 import glob
 
@@ -50,7 +51,7 @@ class ReportLOC(SimpleReport):
         # Scan modules
         for m in [m for m in settings.INSTALLED_APPS if m.startswith("noc.")]:
             m = m[4:]
-            module_name = __import__("noc.%s" % m, {}, {}, ["MODULE_NAME"]).MODULE_NAME
+            module_name = importlib.import_module("noc.%s" % m).MODULE_NAME
             data += [SectionRow(module_name)]
             # Scan models
             models_path = os.path.join(m, "models.py")

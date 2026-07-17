@@ -6,6 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+import importlib
 import os
 import inspect
 import datetime
@@ -120,7 +121,7 @@ class AlarmApplication(ExtApplication):
             if not f.endswith(".py") or f == "base.py" or f.startswith("_"):
                 continue
             mn = "noc.services.web.apps.fm.alarm.plugins.%s" % f[:-3]
-            m = __import__(mn, {}, {}, "*")
+            m = importlib.import_module(mn)
             for on in dir(m):
                 o = getattr(m, on)
                 if (

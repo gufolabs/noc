@@ -6,6 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+import importlib
 import os
 import ast
 from typing import Iterable
@@ -72,7 +73,7 @@ def iter_init() -> Iterable[Path]:
 @pytest.mark.parametrize("module", iter_py_modules())
 def test_import(module: str) -> None:
     try:
-        m = __import__(module, {}, {}, "*")
+        m = importlib.import_module(module)
         assert m
     except (ImportError, ModuleNotFoundError, NotImplementedError) as e:
         if _allow_xfail(module):

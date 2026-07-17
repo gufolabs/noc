@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import importlib
 import inspect
 
 # Third-party modules
@@ -32,7 +33,7 @@ class Overlay(Document):
         if self.overlay not in self._overlay_cache:
             from noc.gis.overlays.base import OverlayHandler
 
-            m = __import__("noc.gis.overlays.%s" % self.overlay, {}, {}, "*")
+            m = importlib.import_module("noc.gis.overlays.%s" % self.overlay)
             for n in dir(m):
                 o = getattr(m, n)
                 if inspect.isclass(o) and o != OverlayHandler and issubclass(o, OverlayHandler):

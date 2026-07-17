@@ -6,6 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+import importlib
 import argparse
 import os
 import datetime
@@ -197,11 +198,11 @@ class Command(BaseCommand):
             if tv["model"]:
                 tv["requires"] = ["NOC.%s.%s.Model" % (m, tv["model"].lower())]
                 tv["modelimport"] = "noc.%s.models.%s" % (m, a)
-                models = __import__(tv["modelimport"], {}, {}, tv["model"])
+                models = importlib.import_module(tv["modelimport"])
                 model = getattr(models, tv["model"])
                 if model is None:
                     tv["modelimport"] = "noc.%s.models" % m
-                    models = __import__(tv["modelimport"], {}, {}, "*")
+                    models = importlib.import_module(tv["modelimport"])
                     model = getattr(models, tv["model"])
                 if issubclass(model, Model):
                     # Model

@@ -445,7 +445,7 @@ class Site:
 
     def add_module_menu(self, m):
         mn = "noc.services.web.apps.%s" % m[4:]  # Strip noc.
-        mod_name = __import__(mn, {}, {}, ["MODULE_NAME"]).MODULE_NAME
+        mod_name = importlib.import_module(mn).MODULE_NAME
         r = {"id": self.get_menu_id([m]), "title": mod_name, "children": []}
         self.menu += [r]
         return r
@@ -606,7 +606,7 @@ class Site:
         apps = list(self.apps)
         for module in [m for m in settings.INSTALLED_APPS if m.startswith("noc.")]:
             mod = module[4:]
-            m = __import__(f"noc.services.web.apps.{mod}", {}, {}, "MODULE_NAME")
+            m = importlib.import_module(f"noc.services.web.apps.{mod}")
             module_name = m.MODULE_NAME
             for app in [app for app in apps if app.startswith(mod + ".")]:
                 app_perms = sorted([p for p in perms if p.startswith(app.replace(".", ":") + ":")])

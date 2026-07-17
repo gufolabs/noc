@@ -6,6 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+import importlib
 import inspect
 import operator
 import os
@@ -89,7 +90,7 @@ class InvApplication(ExtApplication):
             if not f.endswith(".py") or f == "base.py" or f.startswith("_"):
                 continue
             mn = "noc.services.web.apps.inv.inv.plugins.%s" % f[:-3]
-            m = __import__(mn, {}, {}, "*")
+            m = importlib.import_module(mn)
             for on in dir(m):
                 o = getattr(m, on)
                 if inspect.isclass(o) and issubclass(o, InvPlugin) and o.__module__.startswith(mn):
