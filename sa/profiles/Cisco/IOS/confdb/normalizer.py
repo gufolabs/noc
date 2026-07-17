@@ -41,8 +41,15 @@ class CiscoIOSNormalizer(BaseNormalizer):
 
     @match("snmp-server", "community", ANY, ANY, ANY)
     def normalize_snmp_protocol(self, tokens):
+        if tokens[2] == "7":
+            community = tokens[3]
+            level = tokens[4]
+        else:
+            community = tokens[2]
+            level = tokens[3]
         yield self.make_snmp_community_level(
-            community=tokens[2], level={"RO": "read-only", "RW": "read-write"}[tokens[3]]
+            community=community,
+            level={"RO": "read-only", "RW": "read-write"}[level],
         )
 
     @match("vlan", "database", "vlan", REST)
