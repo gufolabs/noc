@@ -15,7 +15,7 @@ DEFAULT_HIST_SCALE = 1000000
 
 
 class Histogram:
-    def __init__(self, config=None, scale=DEFAULT_HIST_SCALE):
+    def __init__(self, config=None, scale=DEFAULT_HIST_SCALE) -> None:
         self.scale = DEFAULT_HIST_SCALE
         self.labels = [str(x) for x in config] + ["+Inf"]
         self.thresholds = [int(x * scale) for x in config]

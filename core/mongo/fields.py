@@ -29,7 +29,7 @@ class PlainReferenceField(BaseField):
     dereferenced on access (lazily). Maps to plain ObjectId
     """
 
-    def __init__(self, document_type, *args, **kwargs):
+    def __init__(self, document_type, *args, **kwargs) -> None:
         if not isinstance(document_type, str):
             if not issubclass(document_type, (Document, str)):
                 raise ValidationError(
@@ -165,7 +165,7 @@ class ForeignKeyField(BaseField):
     dereferenced on access (lazily). Maps to integer
     """
 
-    def __init__(self, model, **kwargs):
+    def __init__(self, model, **kwargs) -> None:
         if not issubclass(model, Model):
             raise ValidationError("Argument to ForeignKeyField constructor must be a Model class")
         self.document_type = model

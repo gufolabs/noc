@@ -12,7 +12,7 @@ from .base import BaseCollator
 class IfNameCollator(BaseCollator):
     """Direct map between connection name and interface name"""
 
-    def __init__(self, profile=None):
+    def __init__(self, profile=None) -> None:
         super().__init__(profile=profile)
         self.names = None
 

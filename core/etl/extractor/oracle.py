@@ -34,7 +34,7 @@ class ORACLEExtractor(SQLExtractor):
     *ORACLE_ARRAYSIZE* - oracle client array size
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.connect = None
 

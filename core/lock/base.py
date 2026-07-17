@@ -29,7 +29,7 @@ class BaseLock(ABC):
     ```
     """
 
-    def __init__(self, category: str, owner: str, ttl: float | None = None):
+    def __init__(self, category: str, owner: str, ttl: float | None = None) -> None:
         """
         :param category: Lock category name
         :param owner: Lock owner id
@@ -72,7 +72,7 @@ class Token:
     Active lock context manager
     """
 
-    def __init__(self, lock: BaseLock, items: Iterable[str], ttl: float | None = None):
+    def __init__(self, lock: BaseLock, items: Iterable[str], ttl: float | None = None) -> None:
         self.lock = lock
         self.items = list(items)
         self.ttl = ttl

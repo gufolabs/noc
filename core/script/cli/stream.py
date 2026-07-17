@@ -30,7 +30,7 @@ class BaseStream:
     # Terminate connection after N keepalive failures
     KEEP_CNT = 3
 
-    def __init__(self, cli: BaseCLI):
+    def __init__(self, cli: BaseCLI) -> None:
         self._timeout: float | None = None
         self.logger = cli.logger
         self.tos = cli.tos

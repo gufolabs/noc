@@ -31,7 +31,7 @@ class MaintenanceLoader(BaseLoader):
         "managed_object": "sa.ManagedObject",
     }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.clean_map["type"] = MaintenanceType.get_by_name
 

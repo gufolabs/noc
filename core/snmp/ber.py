@@ -34,7 +34,7 @@ def did(tag_class: int, is_constructed: int, tag_id: int) -> int:
 
 
 class BERDecoder:
-    def __init__(self, display_hints=None, include_raw=False):
+    def __init__(self, display_hints=None, include_raw=False) -> None:
         self.last_oid: str | None = None
         self.oid_msg: bytes | None = None
         self.raw_pdu: bytes | None = None

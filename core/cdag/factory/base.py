@@ -18,7 +18,9 @@ class BaseCDAGFactory:
     together
     """
 
-    def __init__(self, graph: CDAG, ctx: FactoryCtx | None = None, namespace: str | None = None):
+    def __init__(
+        self, graph: CDAG, ctx: FactoryCtx | None = None, namespace: str | None = None
+    ) -> None:
         self.graph = graph
         self.ctx = ctx
         self.namespace = namespace

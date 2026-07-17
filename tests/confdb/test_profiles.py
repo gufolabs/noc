@@ -36,7 +36,7 @@ def iter_test_paths():
 
 
 class MockProfile:
-    def __init__(self, profile_cls):
+    def __init__(self, profile_cls) -> None:
         self.profile = profile_cls()
 
     def get_profile(self):
@@ -44,7 +44,7 @@ class MockProfile:
 
 
 class MockManagedObject:
-    def __init__(self, profile):
+    def __init__(self, profile) -> None:
         self.profile = MockProfile(profile)
 
 

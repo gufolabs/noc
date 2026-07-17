@@ -29,7 +29,7 @@ class IP:
 
     afi = None
 
-    def __init__(self, prefix: str):
+    def __init__(self, prefix: str) -> None:
         """Return new prefix instance.
 
         Args:
@@ -299,7 +299,7 @@ class IPv4(IP):
 
     afi = "4"
 
-    def __init__(self, prefix: str, netmask: str | None = None):
+    def __init__(self, prefix: str, netmask: str | None = None) -> None:
         """Create a new IPv4 prefix.
 
         Args:
@@ -584,7 +584,7 @@ class IPv6(IP):
 
     afi = "6"
 
-    def __init__(self, prefix: str, netmask: str | None = None):
+    def __init__(self, prefix: str, netmask: str | None = None) -> None:
         """Create a new IPv6 prefix instance.
 
         Args:
@@ -994,7 +994,7 @@ class PrefixDB:
         key: Value stored at this node (None if empty).
     """
 
-    def __init__(self, key=None):
+    def __init__(self, key=None) -> None:
         self.children = [None, None]
         self.key = key
 

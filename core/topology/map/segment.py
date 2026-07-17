@@ -37,7 +37,7 @@ class SegmentTopology(TopologyBase):
     CAPS: set[str] = {"Network | STP"}
     PARAMS = {"segment"}
 
-    def __init__(self, segment, **settings):
+    def __init__(self, segment, **settings) -> None:
         self.segment = (
             segment if isinstance(segment, NetworkSegment) else NetworkSegment.get_by_id(segment)
         )

@@ -17,7 +17,7 @@ class INITokenizer(BaseTokenizer):
 
     name = "ini"
 
-    def __init__(self, data):
+    def __init__(self, data) -> None:
         super().__init__(data)
         self.config = RawConfigParser()
         self.config.read_string(data)

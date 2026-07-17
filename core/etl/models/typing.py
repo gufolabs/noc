@@ -44,7 +44,7 @@ class CapsItem(BaseModel):
 
 
 class Reference(Generic[T]):
-    def __init__(self, name: str, model: T, value: Any, remote_system: str | None = None):
+    def __init__(self, name: str, model: T, value: Any, remote_system: str | None = None) -> None:
         self.name = name
         self.model = model
         self.value = value

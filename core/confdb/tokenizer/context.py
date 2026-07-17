@@ -12,7 +12,7 @@ from .line import LineTokenizer
 class ContextTokenizer(LineTokenizer):
     name = "context"
 
-    def __init__(self, data, end_of_context=None, contexts=None, **kwargs):
+    def __init__(self, data, end_of_context=None, contexts=None, **kwargs) -> None:
         super().__init__(data, **kwargs)
         self.end_of_context = end_of_context
         self.contexts = contexts or []

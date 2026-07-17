@@ -11,7 +11,7 @@ class ConfigurationContextManager:
     Configuration context manager to use with "with" statement
     """
 
-    def __init__(self, script):
+    def __init__(self, script) -> None:
         self.script = script
 
     def __enter__(self):
@@ -25,7 +25,7 @@ class ConfigurationContextManager:
 
 
 class CacheContextManager:
-    def __init__(self, script):
+    def __init__(self, script) -> None:
         self.script = script
         self.changed = False
 
@@ -44,7 +44,7 @@ class IgnoredExceptionsContextManager:
     Silently ignore specific exceptions
     """
 
-    def __init__(self, iterable):
+    def __init__(self, iterable) -> None:
         self.exceptions = set(iterable)
 
     def __enter__(self):

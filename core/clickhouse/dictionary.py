@@ -36,7 +36,7 @@ class DictionaryBase(type):
 
 
 class DictionaryMeta:
-    def __init__(self, name=None, layout=None, lifetime_min=None, lifetime_max=None):
+    def __init__(self, name=None, layout=None, lifetime_min=None, lifetime_max=None) -> None:
         self.name = name
         self.layout = layout
         self.lifetime_min = lifetime_min

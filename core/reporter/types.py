@@ -107,7 +107,7 @@ class ReportBand(BaseModel):
                 return c.value in params[c.param]
         return True
 
-    # def __init__(self, **data):
+    # def __init__(self, **data) -> None:
     #     super().__init__(**data)
     #     self.children = self.children or []
     #     for c in self.children:

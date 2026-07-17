@@ -59,7 +59,7 @@ def get_column_width(name):
 class ReportLinksDetail:
     """Report for MO links detail"""
 
-    def __init__(self, mo_ids):
+    def __init__(self, mo_ids) -> None:
         self.mo_ids = mo_ids
         self.out = self.load(mo_ids)
 

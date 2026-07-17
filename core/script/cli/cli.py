@@ -51,7 +51,7 @@ class CLI(BaseCLI):
     class InvalidPagerCommand(Exception):
         pass
 
-    def __init__(self, script, tos=None):
+    def __init__(self, script, tos=None) -> None:
         super().__init__(script, tos)
         self.motd = ""
         self.command = None

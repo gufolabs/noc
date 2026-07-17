@@ -19,7 +19,7 @@ class InvPlugin:
     js = None
     required_feature: Feature | None = None
 
-    def __init__(self, app: InvApplication):
+    def __init__(self, app: InvApplication) -> None:
         self.app = app
         self.logger = logging.getLogger("%s.%s" % (__name__.rsplit(".", 1)[0], self.name))
         self.init_plugin()

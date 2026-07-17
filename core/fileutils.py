@@ -59,7 +59,7 @@ class temporary_file:
              subprocess.Popen(["wc","-l",p])
     """
 
-    def __init__(self, text=""):
+    def __init__(self, text="") -> None:
         self.text = text
 
     def __enter__(self):

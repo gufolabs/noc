@@ -21,7 +21,7 @@ class NOCBoundField(BoundField):
     Bound field with django-admin like label-tag
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.is_checkbox = isinstance(self.field.widget, CheckboxInput)
 
@@ -49,7 +49,7 @@ class NOCForm(Form):
     class Media:
         css = {"all": ["/ui/pkg/django-media/admin/css/forms.css"]}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.disabled_fields = set()
 

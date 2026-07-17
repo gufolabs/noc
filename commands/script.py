@@ -413,41 +413,41 @@ class Command(BaseCommand):
 
 class ServiceStub:
     class ServiceConfig:
-        def __init__(self, pool, tos=None):
+        def __init__(self, pool, tos=None) -> None:
             self.pool = pool
             self.tos = tos
 
-    def __init__(self, pool):
+    def __init__(self, pool) -> None:
         self.config = self.ServiceConfig(pool=pool)
 
 
 class PoolStub:
-    def __init__(self, name):
+    def __init__(self, name) -> None:
         self.name = name
 
 
 class ProfileStub:
-    def __init__(self, name):
+    def __init__(self, name) -> None:
         self.name = name
 
 
 class VendorStub:
-    def __init__(self, name):
+    def __init__(self, name) -> None:
         self.name = name
 
 
 class PlatformStub:
-    def __init__(self, name):
+    def __init__(self, name) -> None:
         self.name = name
 
 
 class VersionStub:
-    def __init__(self, version):
+    def __init__(self, version) -> None:
         self.version = version
 
 
 class JSONObject:
-    def __init__(self, path):
+    def __init__(self, path) -> None:
         with open(path) as f:
             data = orjson.loads(f.read())
         self.scheme = {"telnet": TELNET, "ssh": SSH, "http": HTTP, "https": HTTPS}.get(

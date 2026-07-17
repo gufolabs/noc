@@ -42,7 +42,7 @@ class DistributedLock(BaseLock):
     ```
     """
 
-    def __init__(self, category: str, owner: str, ttl: float | None = None):
+    def __init__(self, category: str, owner: str, ttl: float | None = None) -> None:
         """
         :param category: Lock category name
         :param owner: Lock owner id

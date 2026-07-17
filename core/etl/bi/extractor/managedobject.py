@@ -61,7 +61,7 @@ class ManagedObjectsExtractor(BaseExtractor):
         "xmac": "xmac_links",
     }
 
-    def __init__(self, prefix, start, stop):
+    def __init__(self, prefix, start, stop) -> None:
         super().__init__(prefix, start, stop)
         self.mo_stream = Stream(ManagedObjectBI, prefix)
 

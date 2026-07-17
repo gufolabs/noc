@@ -3558,7 +3558,7 @@ class ManagedObjectWatchers(NOCModel):
 
 # object.scripts. ...
 class ScriptsProxy:
-    def __init__(self, obj, caller=None):
+    def __init__(self, obj, caller=None) -> None:
         self._object = obj
         self._cache = {}
         self._caller = caller or ScriptCaller
@@ -3589,7 +3589,7 @@ class ScriptsProxy:
 
 class ActionsProxy:
     class CallWrapper:
-        def __init__(self, obj, name, action):
+        def __init__(self, obj, name, action) -> None:
             self.name = name
             self.object = obj
             self.action = action
@@ -3597,7 +3597,7 @@ class ActionsProxy:
         def __call__(self, **kwargs):
             return self.action.execute(self.object, **kwargs)
 
-    def __init__(self, obj):
+    def __init__(self, obj) -> None:
         self._object = obj
         self._cache = {}
 
@@ -3613,7 +3613,7 @@ class ActionsProxy:
 
 
 class MatchersProxy:
-    def __init__(self, obj):
+    def __init__(self, obj) -> None:
         self._object = obj
         self._data = None
 
@@ -3651,7 +3651,7 @@ class InteractionHub:
     If interaction is supported - return enabled/disabled
     """
 
-    def __init__(self, obj):
+    def __init__(self, obj) -> None:
         self.logger = logging.getLogger(__name__)
         self.__supported_interactions: set[Interaction] = self.load_supported_interactions()
         self.__state: State = obj.state or obj.object_profile.workflow.get_default_state()

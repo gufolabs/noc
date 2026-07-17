@@ -19,7 +19,7 @@ class DiagnosticHandler:
     Run diagnostic by config and check status
     """
 
-    def __init__(self, config: DiagnosticConfig, logger=None):
+    def __init__(self, config: DiagnosticConfig, logger=None) -> None:
         self.config = config
         self.logger = logger
 

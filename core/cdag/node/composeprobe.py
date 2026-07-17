@@ -42,7 +42,7 @@ class ComposeProbeNode(ProbeNode):
 
     __slots__ = ("compose_inputs", "expression")
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.expression: Callable = get_fn(self.config.expression)
         self.compose_inputs: frozenset[str] = self.config.compose_inputs or frozenset(

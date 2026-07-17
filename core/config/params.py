@@ -24,7 +24,7 @@ T = TypeVar("T")
 class BaseParameter(Generic[T]):
     PARAM_NUMBER = itertools.count()
 
-    def __init__(self, default: T | str | None = None, help: str | None = None):
+    def __init__(self, default: T | str | None = None, help: str | None = None) -> None:
         self.param_number = next(self.PARAM_NUMBER)
         if default is None:
             self.default = None
@@ -147,7 +147,9 @@ class FloatParameter(BaseParameter[float]):
 
 
 class MapParameter(BaseParameter[T], Generic[T]):
-    def __init__(self, mappings: dict[str, T], default: str | None = None, help: str | None = None):
+    def __init__(
+        self, mappings: dict[str, T], default: str | None = None, help: str | None = None
+    ) -> None:
         self.mappings = mappings or {}
         super().__init__(default=default, help=help)
 
@@ -261,7 +263,9 @@ class BytesSizeParameter(BaseParameter[int]):
 
 
 class ListParameter(BaseParameter[list[T]], Generic[T]):
-    def __init__(self, item: BaseParameter[T], default: Any = None, help: str | None = None):
+    def __init__(
+        self, item: BaseParameter[T], default: Any = None, help: str | None = None
+    ) -> None:
         self.item = item
         super().__init__(default=default, help=help)
 
@@ -277,7 +281,7 @@ class ListParameter(BaseParameter[list[T]], Generic[T]):
 class ServiceItem:
     __slots__ = ["host", "port"]
 
-    def __init__(self, host: str, port: int):
+    def __init__(self, host: str, port: int) -> None:
         self.host = host
         self.port = port
 

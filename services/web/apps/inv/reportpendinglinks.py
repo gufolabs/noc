@@ -30,7 +30,7 @@ from noc.core.translation import ugettext as _
 
 
 class ReportPendingLinks:
-    def __init__(self, ids, cache_key=None, ignore_profiles=None, filter_exists_link=False):
+    def __init__(self, ids, cache_key=None, ignore_profiles=None, filter_exists_link=False) -> None:
         self.ids = ids
         self.ignore_profiles = ignore_profiles
         self.filter_exists_link = filter_exists_link

@@ -26,7 +26,7 @@ class NoneParameter(Parameter):
     Checks value is None
     """
 
-    def __init__(self, required=True):
+    def __init__(self, required=True) -> None:
         super().__init__(required=required)
 
     def clean(self, value):
@@ -40,7 +40,9 @@ class StringParameter(Parameter):
     Check value is string
     """
 
-    def __init__(self, required=True, default=None, choices=None, aliases=None, strip_value=False):
+    def __init__(
+        self, required=True, default=None, choices=None, aliases=None, strip_value=False
+    ) -> None:
         self.choices = set(choices) if choices else None
         self.aliases = aliases
         self.strip_value = strip_value
@@ -85,7 +87,7 @@ class REStringParameter(StringParameter):
     Check value is string matching regular expression
     """
 
-    def __init__(self, regexp, required=True, default=None):
+    def __init__(self, regexp, required=True, default=None) -> None:
         self.rx = re.compile(regexp)  # Compile before calling the constructor
         super().__init__(required=required, default=default)
 
@@ -149,7 +151,7 @@ class IntParameter(Parameter):
     Check value is integer
     """
 
-    def __init__(self, required=True, default=None, min_value=None, max_value=None):
+    def __init__(self, required=True, default=None, min_value=None, max_value=None) -> None:
         self.min_value = min_value
         self.max_value = max_value
         super().__init__(required=required, default=default)
@@ -173,7 +175,7 @@ class FloatParameter(Parameter):
     Check value is float
     """
 
-    def __init__(self, required=True, default=None, min_value=None, max_value=None):
+    def __init__(self, required=True, default=None, min_value=None, max_value=None) -> None:
         self.min_value = min_value
         self.max_value = max_value
         super().__init__(required=required, default=default)
@@ -218,7 +220,7 @@ class InstanceOfParameter(Parameter):
     Check value is an instance of class
     """
 
-    def __init__(self, cls, required=True, default=None):
+    def __init__(self, cls, required=True, default=None) -> None:
         super().__init__(required=required, default=default)
         self.cls = cls
         if isinstance(cls, str):
@@ -251,7 +253,7 @@ class SubclassOfParameter(Parameter):
     Check value is subclass of given class
     """
 
-    def __init__(self, cls, required=True, default=None):
+    def __init__(self, cls, required=True, default=None) -> None:
         super().__init__(required=required, default=default)
         self.cls = cls
         if isinstance(cls, str):
@@ -291,7 +293,7 @@ class ListOfParameter(ListParameter):
     Check value is a list of given parameter type
     """
 
-    def __init__(self, element, required=True, default=None, convert=False):
+    def __init__(self, element, required=True, default=None, convert=False) -> None:
         self.element = element
         self.is_list = isinstance(element, (list, tuple))
         self.convert = convert
@@ -335,7 +337,9 @@ class StringListParameter(ListOfParameter):
     Check value is list of strings
     """
 
-    def __init__(self, required=True, default=None, convert=False, choices=None, strict=False):
+    def __init__(
+        self, required=True, default=None, convert=False, choices=None, strict=False
+    ) -> None:
         self.strict = strict
         super().__init__(
             element=StringParameter(choices=choices),
@@ -419,7 +423,7 @@ class DictParameter(Parameter):
     Check value is a dict
     """
 
-    def __init__(self, required=True, default=None, attrs=None, truncate=False):
+    def __init__(self, required=True, default=None, attrs=None, truncate=False) -> None:
         super().__init__(required=required, default=default)
         self.attrs = attrs or {}
         self.truncate = truncate
@@ -503,7 +507,7 @@ class DictListParameter(ListOfParameter):
     Check value is a list of dicts of given structure
     """
 
-    def __init__(self, required=True, default=None, attrs=None, convert=False):
+    def __init__(self, required=True, default=None, attrs=None, convert=False) -> None:
         super().__init__(
             element=DictParameter(attrs=attrs), required=required, default=default, convert=convert
         )
@@ -574,7 +578,7 @@ class IPv4Parameter(StringParameter):
     Check value is IPv4 address
     """
 
-    def __init__(self, required=True, default=None, accept_bin=True):
+    def __init__(self, required=True, default=None, accept_bin=True) -> None:
         self.accept_bin = accept_bin
         super().__init__(required=required, default=default)
 
@@ -704,7 +708,7 @@ class VLANIDParameter(IntParameter):
     Check value is VLAN ID
     """
 
-    def __init__(self, required=True, default=None):
+    def __init__(self, required=True, default=None) -> None:
         super().__init__(required=required, default=default, min_value=1, max_value=4095)
 
 
@@ -713,7 +717,7 @@ class VLANStackParameter(ListOfParameter):
     Check value is a stack of of VLAN ID
     """
 
-    def __init__(self, required=True, default=None):
+    def __init__(self, required=True, default=None) -> None:
         super().__init__(element=IntParameter(), required=required, default=default, convert=True)
 
     def clean(self, value):
@@ -728,7 +732,7 @@ class VLANStackParameter(ListOfParameter):
 class IntEnumParameter(IntParameter):
     """Check Parameter on Enum class"""
 
-    def __init__(self, enum, required=True, default=None):
+    def __init__(self, enum, required=True, default=None) -> None:
         self.enum = enum
         super().__init__(required=required, default=default)
 
@@ -744,7 +748,7 @@ class VLANIDListParameter(ListOfParameter):
     Check value is a list of arbitrary vlans
     """
 
-    def __init__(self, required=True, default=None):
+    def __init__(self, required=True, default=None) -> None:
         super().__init__(element=VLANIDParameter(), required=required, default=default)
 
 
@@ -768,7 +772,7 @@ class MACAddressParameter(StringParameter):
     Check value is MAC address
     """
 
-    def __init__(self, required=True, default=None, accept_bin=True):
+    def __init__(self, required=True, default=None, accept_bin=True) -> None:
         self.accept_bin = accept_bin
         super().__init__(required=required, default=default)
 
@@ -888,7 +892,7 @@ class RDParameter(Parameter):
 
 
 class ObjectIdParameter(REStringParameter):
-    def __init__(self, required=True, default=None):
+    def __init__(self, required=True, default=None) -> None:
         super().__init__("^[0-9a-f]{24}$", required=required, default=default)
 
 
@@ -932,7 +936,7 @@ class ModelParameter(Parameter):
     Model reference parameter
     """
 
-    def __init__(self, model, required=True):
+    def __init__(self, model, required=True) -> None:
         super().__init__(required=required)
         self.model = model
 
@@ -960,7 +964,7 @@ class DocumentParameter(Parameter):
     Document reference parameter
     """
 
-    def __init__(self, document, required=True):
+    def __init__(self, document, required=True) -> None:
         super().__init__(required=required)
         self.document = document
         self.has_get_by_id = bool(getattr(self.document, "get_by_id", None))
@@ -981,7 +985,7 @@ class DocumentParameter(Parameter):
 
 
 class EmbeddedDocumentParameter(Parameter):
-    def __init__(self, document, required=True):
+    def __init__(self, document, required=True) -> None:
         super().__init__(required=required)
         self.document = document
 
@@ -1047,7 +1051,7 @@ class ColorParameter(Parameter):
 class ASNParameter(IntParameter):
     """Check Value is ASN Number"""
 
-    def __init__(self, required=True, default=None):
+    def __init__(self, required=True, default=None) -> None:
         super().__init__(required=required, default=default, min_value=1, max_value=4_294_967_295)
 
     def clean(self, value):

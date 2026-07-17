@@ -160,7 +160,9 @@ class Route:
 
     MX_H_VALUE_SPLITTER = MX_H_VALUE_SPLITTER.encode()
 
-    def __init__(self, name: str, r_type: str, order: int, telemetry_sample: int | None = None):
+    def __init__(
+        self, name: str, r_type: str, order: int, telemetry_sample: int | None = None
+    ) -> None:
         self.name = name
         self.type: frozenset[bytes] = (
             frozenset([r_type.encode()])

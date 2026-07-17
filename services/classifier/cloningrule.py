@@ -14,14 +14,14 @@ from noc.services.classifier.exception import InvalidPatternException
 
 class CloningRule:
     class Pattern:
-        def __init__(self, key_re, value_re):
+        def __init__(self, key_re, value_re) -> None:
             self.key_re = key_re
             self.value_re = value_re
 
         def __str__(self):
             return "%s : %s" % (self.key_re, self.value_re)
 
-    def __init__(self, rule):
+    def __init__(self, rule) -> None:
         self.re_mode = rule.re != r"^.*$"  # Search by "re"
         self.name = rule.name
         try:

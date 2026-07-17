@@ -33,7 +33,7 @@ def unroll_link(s):
 class RackSet:
     """RackSet representation"""
 
-    def __init__(self, id, label):
+    def __init__(self, id, label) -> None:
         self.id = id
         self.racks = []
         if label is None:
@@ -157,7 +157,7 @@ class RackSet:
 # Rack Representation
 #
 class Rack:
-    def __init__(self, rackset, id, height):
+    def __init__(self, rackset, id, height) -> None:
         self.rackset = rackset
         self.id = id
         self.height = height
@@ -282,7 +282,7 @@ class Slot:
 #                    `-> slot attrs: id, model, hostname, description, reserved, assetno, href, serial
 #
 class XMLParser:
-    def __init__(self, text):
+    def __init__(self, text) -> None:
         self.parser = xml.parsers.expat.ParserCreate()
         self.parser.StartElementHandler = self.start_element
         self.parser.EndElementHandler = self.end_element

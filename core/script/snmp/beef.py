@@ -30,7 +30,7 @@ class BeefSNMP(SNMP):
 
 
 class BeefSNMPSocket:
-    def __init__(self, snmp):
+    def __init__(self, snmp) -> None:
         self.script = snmp.script
         self.logger = snmp.logger
         if not self.script.request_beef():

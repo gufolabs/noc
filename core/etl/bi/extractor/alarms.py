@@ -31,7 +31,7 @@ class AlarmsExtractor(ArchivingExtractor):
     archive_batch_limit = config.bi.alarms_archive_batch_limit
     archive_collection_template = config.bi.alarms_archive_policy
 
-    def __init__(self, prefix, start, stop, use_archive=False):
+    def __init__(self, prefix, start, stop, use_archive=False) -> None:
         self.use_archive = use_archive
         super().__init__(prefix, start, stop)
         self.alarm_stream = Stream(Alarms, prefix)

@@ -133,9 +133,9 @@ class Command(BaseCommand):
 
 class ServiceStub:
     class ServiceConfig:
-        def __init__(self, pool, tos=None):
+        def __init__(self, pool, tos=None) -> None:
             self.pool = pool
             self.tos = tos
 
-    def __init__(self, pool):
+    def __init__(self, pool) -> None:
         self.config = self.ServiceConfig(pool=pool)

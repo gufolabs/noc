@@ -33,7 +33,7 @@ class ServiceLoader(BaseLoader):
 
     post_save_fields = {"capabilities", "instances"}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.available_caps = {x.name for x in Capability.objects.filter()}
         self.clean_map["static_service_groups"] = lambda x: [

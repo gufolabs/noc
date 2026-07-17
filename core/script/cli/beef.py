@@ -15,7 +15,7 @@ from .telnet import TelnetStream
 
 
 class BeefStream(TelnetStream):
-    def __init__(self, cli: CLI):
+    def __init__(self, cli: CLI) -> None:
         super().__init__(cli)
         self.cli = cli
         self.beef = None
@@ -62,7 +62,7 @@ class BeefStream(TelnetStream):
 class BeefCLI(CLI):
     name = "beef_cli"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.state = "notconnected"
 

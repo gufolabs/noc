@@ -14,7 +14,7 @@ from noc.core.span import Span
 
 
 class SpanMiddleware:
-    def __init__(self, app, service_name="service"):
+    def __init__(self, app, service_name="service") -> None:
         self.app = app
         self.service_name = service_name
 

@@ -176,7 +176,7 @@ def test_is_leader() -> None:
 
 
 class RunnerWrapper(Runner):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.last_state = {}
 

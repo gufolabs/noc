@@ -24,7 +24,7 @@ class StubTTSystem(BaseTTSystem):
 
     promote_group_tt = True
 
-    def __init__(self, name, connection):
+    def __init__(self, name, connection) -> None:
         super().__init__(name, connection)
         self.logger = logging.getLogger("StubTTSystem.%s" % name)
 

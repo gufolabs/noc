@@ -79,7 +79,7 @@ class InvApplication(ExtApplication):
     }
     _id_cache = cachetools.TTLCache(1000, ttl=60)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         ExtApplication.__init__(self, *args, **kwargs)
         # Load plugins
         from .plugins.base import InvPlugin

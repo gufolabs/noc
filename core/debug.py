@@ -399,7 +399,7 @@ class ErrorReport:
     error_report context wrapper
     """
 
-    def __init__(self, reverse=config.traceback.reverse, logger=logger):
+    def __init__(self, reverse=config.traceback.reverse, logger=logger) -> None:
         self.reverse = reverse
         self.logger = logger
 

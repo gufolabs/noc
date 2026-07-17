@@ -27,7 +27,7 @@ class IfDescCheck(TopologyDiscoveryCheck):
     IFACE_REF_NAMES = {"interface", "ifindex"}
     MAX_MO_CANDIDATES = 100
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.if_cache: dict[int, dict[str, Interface]] = {}
 

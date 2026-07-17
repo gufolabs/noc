@@ -35,6 +35,6 @@ class RPCNoService(RPCError):
 class RPCRemoteError(RPCError):
     default_code = ERR_RPC_REMOTE_ERROR
 
-    def __init__(self, msg, remote_code=None):
+    def __init__(self, msg, remote_code=None) -> None:
         super().__init__(msg)
         self.remote_code = remote_code

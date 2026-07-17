@@ -89,7 +89,7 @@ class ProfileMetricConfig:
 class BatchConfig:
     __slots__ = ("id", "labels", "metric", "scale", "service", "type", "units")
 
-    def __init__(self, id, metric, labels, type, scale, units, service=None):
+    def __init__(self, id, metric, labels, type, scale, units, service=None) -> None:
         self.id: int = id
         self.metric: str = metric
         self.labels: list[str] = labels
@@ -304,7 +304,7 @@ class Script(BaseScript, metaclass=MetricScriptBase):
         OIDsRule,
     ]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.metrics = []
         self.ts: int | None = None

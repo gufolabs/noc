@@ -102,7 +102,7 @@ rx_table = re.compile(r"<table[^>]*>", re.MULTILINE | re.DOTALL)
 
 
 class NOCTableNode(template.Node):
-    def __init__(self, nodelist):
+    def __init__(self, nodelist) -> None:
         super().__init__()
         self.nodelist = nodelist
 

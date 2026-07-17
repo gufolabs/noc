@@ -33,7 +33,7 @@ class ObjectLevelNeighborTopology(TopologyBase):
 
     PARAMS = {"mo_id"}
 
-    def __init__(self, mo_id, **settings):
+    def __init__(self, mo_id, **settings) -> None:
         self.mo = ManagedObject.get_by_id(mo_id)
         self.logger = PrefixLoggerAdapter(logger, self.mo.name)
         super().__init__(**settings)

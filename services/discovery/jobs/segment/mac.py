@@ -32,7 +32,7 @@ class MACDiscoveryCheck(TopologyDiscoveryCheck):
 
     MAC_WINDOW = 2 * 86400
 
-    def __init__(self, job):
+    def __init__(self, job) -> None:
         super().__init__(job)
 
     def handler(self):

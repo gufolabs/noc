@@ -7,7 +7,7 @@
 
 
 class BaseApplicator:
-    def __init__(self, object, confdb):
+    def __init__(self, object, confdb) -> None:
         self.object = object
         self.confdb = confdb
         self.config = {}

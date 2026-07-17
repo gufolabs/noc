@@ -53,7 +53,7 @@ class RefAppplication(ExtApplication):
     FA_CSS_PATH = "ui/pkg/fontawesome/css/font-awesome.min.css"
     NOC_SOUND_PATH = "ui/pkg/nocsound"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         ExtApplication.__init__(self, *args, **kwargs)
         self.refs = {}  # Name -> [(key, value)]
         # Fill refs

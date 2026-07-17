@@ -49,7 +49,7 @@ class AssetCheck(DiscoveryCheck):
 
     fatal_errors = {}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.unknown_part_no: dict[str, set[str]] = {}  # part_no -> list of variants
         self.pn_description: dict[str, str] = {}  # part_no -> Description

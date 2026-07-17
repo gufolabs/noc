@@ -35,7 +35,7 @@ class ObjectContainerTopology(TopologyBase):
     PARAMS = {"container"}
     CONTAINER_MODELS = None
 
-    def __init__(self, container, **settings):
+    def __init__(self, container, **settings) -> None:
         self.container = Object.get_by_id(container)
         self.logger = PrefixLoggerAdapter(logger, self.container.name)
         super().__init__(**settings)

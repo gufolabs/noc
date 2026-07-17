@@ -98,7 +98,7 @@ class BoundView:
         __self__: Instance the original method is bound to.
     """
 
-    def __init__(self, func):
+    def __init__(self, func) -> None:
         self.func = func
         self.__self__ = func.__self__
         functools.update_wrapper(self, func)
@@ -149,7 +149,7 @@ class Application(metaclass=ApplicationBase):
 
     TZ = get_current_timezone()
 
-    def __init__(self, site):
+    def __init__(self, site) -> None:
         self.site = site
         self.service = None  # Set by web
         parts = self.__class__.__module__.split(".")

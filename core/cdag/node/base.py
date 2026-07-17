@@ -56,7 +56,7 @@ class ConfigProxy:
 
     __slots__ = ("__base", "__override")
 
-    def __init__(self, base: BaseModel, override: dict[str, Any]):
+    def __init__(self, base: BaseModel, override: dict[str, Any]) -> None:
         """
         Base Configuration (on BaseModel)
         :param base:

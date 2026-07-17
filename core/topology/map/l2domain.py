@@ -30,7 +30,7 @@ class L2DomainTopology(TopologyBase):
     name = "l2domain"
     header = _("L2 Domains")
 
-    def __init__(self, l2domain, **settings):
+    def __init__(self, l2domain, **settings) -> None:
         self.l2domain = L2Domain.get_by_id(l2domain)
         self.logger = PrefixLoggerAdapter(logger, self.l2domain.name)
         super().__init__(**settings)

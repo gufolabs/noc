@@ -59,7 +59,7 @@ class DocInline:
     field_labels = {}  # field_name -> callable(field_value) -> result
     render_fields = {}  # field_name -> callable(field_value) -> result
 
-    def __init__(self, model):
+    def __init__(self, model) -> None:
         self.model = model
         self.app = None
         self.pk_field_name = "id"

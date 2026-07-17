@@ -26,7 +26,7 @@ Metric = tuple[tuple[Any], int]
 class BaseCollector:
     name = None
 
-    def __init__(self, service):
+    def __init__(self, service) -> None:
         self.service = service
         self.ttl = getattr(config.selfmon, "%s_ttl" % self.name, 30)
         self.last_metrics = {}

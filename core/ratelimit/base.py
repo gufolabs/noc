@@ -17,7 +17,7 @@ class BaseRateLimit:
     Limit calls to `wait*` methods to `rate` requests per second.
     """
 
-    def __init__(self, rate: float):
+    def __init__(self, rate: float) -> None:
         self.min_delta: int = int(NS / rate)
         self.next: int | None = None
 

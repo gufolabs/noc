@@ -12,7 +12,7 @@ from typing import Iterator
 class BaseTokenizer:
     name = None
 
-    def __init__(self, data: str):
+    def __init__(self, data: str) -> None:
         self.data = data
 
     def __iter__(self) -> Iterator[tuple[str]]:

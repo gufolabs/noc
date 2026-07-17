@@ -103,7 +103,7 @@ class NOCError(Exception):
     default_msg = None
     default_code = ERR_UNKNOWN
 
-    def __init__(self, msg=None, code=None):
+    def __init__(self, msg=None, code=None) -> None:
         super().__init__(msg or self.default_msg)
         self.code = code or self.default_code
         metrics[f"err_{self.code}"] += 1

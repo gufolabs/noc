@@ -23,7 +23,7 @@ from noc.core.service.stub import ServiceStub
 
 
 class NodeCDAG:
-    def __init__(self, node_type: str, config=None, state=None):
+    def __init__(self, node_type: str, config=None, state=None) -> None:
         self.cdag = CDAG("test", state or {})
         self.node = self.cdag.add_node("node", node_type, config=config)
         self.measure_node = self.cdag.add_node("measure", "none")
@@ -83,7 +83,7 @@ class PublishMsg:
 
 
 class PublishStub(ServiceStub):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.messages: list[PublishMsg] = []
 

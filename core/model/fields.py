@@ -32,7 +32,7 @@ class CIDRField(models.Field):
     CIDRField maps to PostgreSQL CIDR
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
     def db_type(self, connection):
@@ -208,7 +208,7 @@ class TagsContainsLookup(models.Lookup):
 
 
 class DocumentReferenceDescriptor:
-    def __init__(self, field):
+    def __init__(self, field) -> None:
         self.field = field
         self.document = self.field.document
         self.cache_name = field.get_cache_name()
@@ -293,7 +293,7 @@ class DocumentReferenceDescriptor:
 
 
 class DocumentReferenceField(models.Field):
-    def __init__(self, document, *args, **kwargs):
+    def __init__(self, document, *args, **kwargs) -> None:
         self.document = document
         super().__init__(*args, **kwargs)
 
@@ -342,7 +342,7 @@ class ObjectIDArrayField(ArrayField):
     ObjectIDArrayField maps to PostgreSQL CHAR[] type
     """
 
-    def __init__(self, size=None, **kwargs):
+    def __init__(self, size=None, **kwargs) -> None:
         super().__init__(CharField24(max_length=24), size=size, **kwargs)
 
     def db_type(self, connection):

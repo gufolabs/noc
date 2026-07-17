@@ -13,7 +13,7 @@ class BaseCalculator:
     form_class = None
     template = "calculator.html"
 
-    def __init__(self, app):
+    def __init__(self, app) -> None:
         self.app = app
 
     def render(self, request):

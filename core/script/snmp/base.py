@@ -69,7 +69,7 @@ class SNMP:
 
     SNMPError = SNMPError
 
-    def __init__(self, script, rate: float | None = None):
+    def __init__(self, script, rate: float | None = None) -> None:
         self._script = weakref.ref(script)
         self.logger = PrefixLoggerAdapter(script.logger, self.name)
         self.timeouts_limit = 0

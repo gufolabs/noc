@@ -1092,7 +1092,7 @@ class Config(BaseConfig):
         ds_limit = IntParameter(default=1000)
 
     # pylint: disable=super-init-not-called
-    def __init__(self, rewrites: Iterable[BaseRewrite] | None = None):
+    def __init__(self, rewrites: Iterable[BaseRewrite] | None = None) -> None:
         super().__init__(rewrites=rewrites)
 
     @property

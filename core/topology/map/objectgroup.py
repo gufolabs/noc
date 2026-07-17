@@ -32,7 +32,7 @@ class ObjectGroupTopology(TopologyBase):
 
     PARAMS = {"resource_group"}
 
-    def __init__(self, resource_group, **settings):
+    def __init__(self, resource_group, **settings) -> None:
         self.rg = ResourceGroup.get_by_id(resource_group)
         self.logger = PrefixLoggerAdapter(logger, self.rg.name)
         super().__init__(**settings)

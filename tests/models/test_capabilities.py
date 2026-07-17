@@ -16,7 +16,7 @@ from noc.core.caps.decorator import capabilities
 class MockManagedObject:
     name = "mock"
 
-    def __init__(self, caps=None):
+    def __init__(self, caps=None) -> None:
         self.caps = caps or []
 
     def save_caps(self, caps, **kwargs):

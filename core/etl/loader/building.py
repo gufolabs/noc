@@ -33,7 +33,7 @@ class BuildingLoader(BaseLoader):
         "adm_division": "admdiv",
     }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         division_dict = {}
         for r in Division.objects.all():

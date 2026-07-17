@@ -29,7 +29,7 @@ class DatabaseStorage(Storage):
       mtime_field
     """
 
-    def __init__(self, option):
+    def __init__(self, option) -> None:
         self.db_table = option["db_table"]
         self.name_field = option["name_field"]
         self.data_field = option["data_field"]

@@ -74,7 +74,7 @@ class BaseReportColumn:
     multiple_series = False  # Extract return dict columns dataseries
     # {"Series1_name": dataseries1, "Series2_name": dataseries2}
 
-    def __init__(self, sync_ids=None):
+    def __init__(self, sync_ids=None) -> None:
         """
 
         :param sync_ids:
@@ -199,7 +199,7 @@ class LongestIter:
     hostname = LongestIter(did)
     """
 
-    def __init__(self, it):
+    def __init__(self, it) -> None:
         self._iterator = it
         self._end_iterator = False
         self._id = 0

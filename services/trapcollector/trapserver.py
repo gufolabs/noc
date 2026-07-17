@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class TrapServer(UDPServer):
-    def __init__(self, service):
+    def __init__(self, service) -> None:
         super().__init__()
         self.service = service
 

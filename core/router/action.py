@@ -69,7 +69,7 @@ class ActionBase(type):
 class Action(metaclass=ActionBase):
     name: ClassVar[str]
 
-    def __init__(self, cfg: ActionCfg):
+    def __init__(self, cfg: ActionCfg) -> None:
         self.headers: dict[str, bytes] = {h.header: h.value.encode() for h in cfg.headers or []}
 
     @classmethod
@@ -120,7 +120,7 @@ class DumpAction(Action):
 class StreamAction(Action):
     name = "stream"
 
-    def __init__(self, cfg: ActionCfg):
+    def __init__(self, cfg: ActionCfg) -> None:
         super().__init__(cfg)
         self.stream: str = cfg.stream
 
@@ -133,7 +133,7 @@ class StreamAction(Action):
 class NotificationAction(Action):
     name = "notification"
 
-    def __init__(self, cfg: ActionCfg):
+    def __init__(self, cfg: ActionCfg) -> None:
         super().__init__(cfg)
 
     def iter_action(
@@ -153,7 +153,7 @@ class NotificationAction(Action):
 class MetricAction(Action):
     name = "metrics"
 
-    def __init__(self, cfg: ActionCfg):
+    def __init__(self, cfg: ActionCfg) -> None:
         super().__init__(cfg)
         self.stream: str = cfg.stream
         self.mx_metrics_scopes = {}
@@ -209,7 +209,7 @@ class JobAction(Action):
 class MessageAction(Action):
     name = "message"
 
-    def __init__(self, cfg: ActionCfg):
+    def __init__(self, cfg: ActionCfg) -> None:
         super().__init__(cfg)
         self.ng: str | None = cfg.notification_group
         self.rt: int | None = cfg.render_template

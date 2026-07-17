@@ -35,7 +35,7 @@ class BaseAPI:
     hash = None
     PREFIX = os.getcwd()
 
-    def __init__(self, router: APIRouter):
+    def __init__(self, router: APIRouter) -> None:
         self.service = get_service()
         self.logger = self.service.logger
         self.router = router

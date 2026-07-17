@@ -24,7 +24,7 @@ from noc.models import get_model
 
 
 class Dict2Class:
-    def __init__(self, d: dict):
+    def __init__(self, d: dict) -> None:
         for k, v in d.items():
             setattr(self, k, v)
 
@@ -485,9 +485,9 @@ class Command(BaseCommand):
 
 class ServiceStub:
     class ServiceConfig:
-        def __init__(self, pool, tos=None):
+        def __init__(self, pool, tos=None) -> None:
             self.pool = pool
             self.tos = tos
 
-    def __init__(self, pool):
+    def __init__(self, pool) -> None:
         self.config = self.ServiceConfig(pool=pool)

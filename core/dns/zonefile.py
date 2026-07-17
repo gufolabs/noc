@@ -26,7 +26,7 @@ class ZoneFile:
     TABSTOP = 8
     MAX_TXT = 128
 
-    def __init__(self, data):
+    def __init__(self, data) -> None:
         records = data.get("records", [])
         if not records:
             raise ValueError("Zone must contain SOA record")

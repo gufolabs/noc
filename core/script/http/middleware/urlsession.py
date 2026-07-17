@@ -17,7 +17,7 @@ class URLSessionMiddleware(BaseMiddleware):
 
     name = "urlsession"
 
-    def __init__(self, http, session_param="session_id"):
+    def __init__(self, http, session_param="session_id") -> None:
         super().__init__(http)
         self.session_param = session_param
 

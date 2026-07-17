@@ -59,7 +59,7 @@ class VCenterExtractor(BaseExtractor):
         self.client.vcenter.vm.guest.networking.Interfaces.list(x[1].vm)
     """
 
-    def __init__(self, system):
+    def __init__(self, system) -> None:
         super().__init__(system)
 
         self.url = self.config.get("API_URL", None)
@@ -173,7 +173,7 @@ class VCenterManagedObjectExtractor(VCenterExtractor):
     name = "managedobject"
     model = ManagedObject
 
-    def __init__(self, system):
+    def __init__(self, system) -> None:
         super().__init__(system)
         self.links = []
         self.pool: str = self.config.get("POOL") or "default"

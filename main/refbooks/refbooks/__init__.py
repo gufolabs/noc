@@ -98,7 +98,7 @@ class Field:
     RefBook fields
     """
 
-    def __init__(self, name, description=None, is_required=True, search_method=None):
+    def __init__(self, name, description=None, is_required=True, search_method=None) -> None:
         self.name = name
         self.description = description
         self.is_required = is_required

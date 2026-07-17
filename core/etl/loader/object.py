@@ -40,7 +40,7 @@ class ObjectLoader(BaseLoader):
         "container",
     ]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         # @todo check None model
         self.clean_map["model"] = clean_model

@@ -12,7 +12,7 @@ from typing import Any
 class BaseMiddleware:
     name = None
 
-    def __init__(self, http):
+    def __init__(self, http) -> None:
         self.http = http
 
     def process_request(self, url: str, body: Any, headers: dict[str, bytes]):

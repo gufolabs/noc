@@ -13,16 +13,17 @@ import tempfile
 import json
 import shutil
 from urllib.parse import urlparse, urlunparse
+
 # NOC modules
 from noc.core.fileutils import urlopen
 from noc.config import config
 
 
-class NPkg(object):
+class NPkg:
     VAR = config.path.npkg_root
     CDN = config.path.cdn_url
 
-    def __init__(self, config, verbose=False):
+    def __init__(self, config, verbose=False) -> None:
         self.config = config
         self.url = None
         self.required_versions = None
@@ -86,11 +87,7 @@ class NPkg(object):
             tf.flush()
             f.close()
             # Process archive
-            manifest = {
-                "name": pkg,
-                "version": version,
-                "files": []
-            }
+            manifest = {"name": pkg, "version": version, "files": []}
             tar = tarfile.open(tf.name, "r:bz2")
             for mi in tar.getmembers():
                 if mi.name.startswith("/") or ".." in mi.name:
@@ -124,7 +121,10 @@ class NPkg(object):
         for pkg in self.required_versions:
             if pkg in self.installed_versions:
                 if self.installed_versions[pkg] != self.required_versions[pkg]:
-                    self.log("Installed version mismatch: %s != %s. Uninstalling" % (self.installed_versions[pkg], self.required_versions[pkg]))
+                    self.log(
+                        "Installed version mismatch: %s != %s. Uninstalling"
+                        % (self.installed_versions[pkg], self.required_versions[pkg])
+                    )
                     self.uninstall(pkg)
                 else:
                     self.log("Already installed. Skipping.")

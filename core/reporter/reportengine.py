@@ -46,7 +46,9 @@ class ReportEngine:
     RunParams -> ReportEngine -> load_data -> Band -> Formatter -> DocumentFile
     """
 
-    def __init__(self, report_execution_history: bool = False, report_print_error: bool = False):
+    def __init__(
+        self, report_execution_history: bool = False, report_print_error: bool = False
+    ) -> None:
         self.logger = logger
         self.report_execution_history = report_execution_history
         self.report_print_error = report_print_error

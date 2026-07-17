@@ -12,7 +12,7 @@ from .line import LineTokenizer
 class IndentTokenizer(LineTokenizer):
     name = "indent"
 
-    def __init__(self, data, end_of_context=None, **kwargs):
+    def __init__(self, data, end_of_context=None, **kwargs) -> None:
         kwargs["keep_indent"] = True
         self.end_of_context = end_of_context
         super().__init__(data, **kwargs)

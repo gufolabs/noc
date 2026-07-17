@@ -31,7 +31,7 @@ class DiagnosticCheck(DiscoveryCheck):
 
     name = "diagnostic"
 
-    def __init__(self, job, run_order: Literal["S", "E"] | None = None):
+    def __init__(self, job, run_order: Literal["S", "E"] | None = None) -> None:
         super().__init__(job)
         self.run_order = run_order
         self.suggest_rules = CredentialCheckRule.get_suggests(self.object)

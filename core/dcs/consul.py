@@ -92,7 +92,7 @@ class ConsulDCS(DCSBase):
 
     resolver_cls = ConsulResolver
 
-    def __init__(self, runner, url):
+    def __init__(self, runner, url) -> None:
         self.name = None
         self.consul_host = self.DEFAULT_CONSUL_HOST
         self.consul_port = self.DEFAULT_CONSUL_PORT

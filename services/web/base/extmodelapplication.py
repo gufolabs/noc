@@ -78,7 +78,7 @@ class ExtModelApplication(ExtApplication):
     SECRET_MASK = "********"
     file_fields_mask = None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.db_table = self.model._meta.db_table
         self.pk_field_name = self.model._meta.pk.name

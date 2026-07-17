@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class Trigger:
-    def __init__(self, t):
+    def __init__(self, t) -> None:
         self.name = t.name
         # Condition
         self.condition = compile(t.condition, "<string>", "eval")

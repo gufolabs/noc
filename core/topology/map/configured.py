@@ -32,7 +32,7 @@ class ConfiguredTopology(TopologyBase):
     NORMALIZE_POSITION = False
     ISOLATED_WIDTH = 600
 
-    def __init__(self, gen_id, **settings):
+    def __init__(self, gen_id, **settings) -> None:
         self.cfgmap: ConfiguredMap = ConfiguredMap.get_by_id(gen_id)
         super().__init__(**settings)
 

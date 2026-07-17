@@ -41,7 +41,7 @@ class EscalationJob(SequenceJob):
     model = Escalation
     lock = ProcessLock(category="escalator", owner="escalator")
 
-    def __init__(self, job, attrs, dry_run: bool = False):
+    def __init__(self, job, attrs, dry_run: bool = False) -> None:
         super().__init__(job, attrs)
         # self.object: Escalation
         self.dry_run = dry_run

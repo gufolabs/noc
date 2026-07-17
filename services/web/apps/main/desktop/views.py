@@ -28,7 +28,7 @@ class DesktopApplication(ExtApplication):
     main.desktop application
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         ExtApplication.__init__(self, *args, **kwargs)
         # Login restrictions
         self.restrict_to_group = self.get_group(config.login.restrict_to_group)

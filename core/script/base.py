@@ -1278,7 +1278,7 @@ class ScriptsHub:
     """
 
     class _CallWrapper:
-        def __init__(self, script_class, parent):
+        def __init__(self, script_class, parent) -> None:
             self.parent = parent
             self.script_class = script_class
 
@@ -1293,7 +1293,7 @@ class ScriptsHub:
                 timeout=self.parent.timeout,
             ).run()
 
-    def __init__(self, script):
+    def __init__(self, script) -> None:
         self._script = script
 
     def __getattr__(self, item):

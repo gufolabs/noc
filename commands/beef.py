@@ -118,7 +118,7 @@ class Command(BaseCommand):
         from noc.dev.models.spec import Spec
 
         class FakeSpec:
-            def __init__(self, name):
+            def __init__(self, name) -> None:
                 self.name = name
                 self.uuid = "4ec10fd8-3a33-4f23-b96e-91e3967c3b1b"
 
@@ -642,9 +642,9 @@ class Command(BaseCommand):
 
 class ServiceStub:
     class ServiceConfig:
-        def __init__(self, pool, tos=None):
+        def __init__(self, pool, tos=None) -> None:
             self.pool = pool
             self.tos = tos
 
-    def __init__(self, pool):
+    def __init__(self, pool) -> None:
         self.config = self.ServiceConfig(pool=pool)

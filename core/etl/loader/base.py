@@ -107,7 +107,7 @@ class BaseLoader:
     class Deferred(Exception):
         pass
 
-    def __init__(self, chain):
+    def __init__(self, chain) -> None:
         self.chain = chain
         self.system = chain.system
         self.logger = PrefixLoggerAdapter(logger, "%s][%s" % (self.system.name, self.name))

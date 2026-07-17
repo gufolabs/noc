@@ -19,7 +19,7 @@ from noc.core.msgstream.message import Message
 
 
 class Channel:
-    def __init__(self, service, table: str):
+    def __init__(self, service, table: str) -> None:
         self.service = service
         self.table = table
         self.stream = f"ch.{table}"

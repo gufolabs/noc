@@ -336,7 +336,7 @@ PathItem = namedtuple("PathItem", ["object", "connection"])
 
 
 class MockObject:
-    def __init__(self, name, data):
+    def __init__(self, name, data) -> None:
         self.name = name
         self.data = data
 
@@ -346,13 +346,13 @@ class MockObject:
 
 
 class MockObjectConnection:
-    def __init__(self, name, protocols):
+    def __init__(self, name, protocols) -> None:
         self.name = name
         self.protocols = protocols
 
 
 class MockInterface:
-    def __init__(self, name, default_name, type):
+    def __init__(self, name, default_name, type) -> None:
         self.name = name
         self.default_name = default_name
         self.type = type

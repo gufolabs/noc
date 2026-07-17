@@ -66,7 +66,7 @@ class ProbeNode(BaseCDAGNode):
 
     __slots__ = "base", "convert", "exp", "fatal_error"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.convert = self.get_convert(self.config.unit, self.config.is_delta)
         self.base, self.exp = self.get_scale(self.config.scale)

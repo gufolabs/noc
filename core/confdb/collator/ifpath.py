@@ -32,7 +32,7 @@ class IfPathCollator(BaseCollator):
     4) - If more that one interfaces has equal path, but different if_type, use protocols for detect right
     """
 
-    def __init__(self, profile=None):
+    def __init__(self, profile=None) -> None:
         super().__init__(profile)
         self.paths = defaultdict(list)
 

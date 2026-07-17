@@ -29,7 +29,7 @@ class FatalError(Exception):
 
 
 class TestCase:
-    def __init__(self, name=None, path=None, fatal=False, ref=None):
+    def __init__(self, name=None, path=None, fatal=False, ref=None) -> None:
         self.name = name
         self.path = path
         self.fatal = fatal
@@ -81,7 +81,7 @@ class TestSuite:
     KIND_LABELS = ["kind::feature", "kind::improvement", "kind::bug", "kind::cleanup"]
     BACKPORT = "backport"
 
-    def __init__(self, files, verbose=False):
+    def __init__(self, files, verbose=False) -> None:
         self.files = files
         self.tests = []
         self.start = None

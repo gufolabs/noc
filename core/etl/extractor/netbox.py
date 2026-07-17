@@ -55,7 +55,7 @@ class NetBoxExtractor(BaseExtractor):
 
     LIMIT = 300
 
-    def __init__(self, system):
+    def __init__(self, system) -> None:
         super().__init__(system)
         self.url = self.config.get("API_URL", None)
         self.token = self.config.get("API_TOKEN", None)
@@ -114,7 +114,7 @@ class NetBoxObjectExtractor(NetBoxExtractor):
 
     device_mode_mapping = {"Generic | Access | Switch"}
 
-    def __init__(self, system):
+    def __init__(self, system) -> None:
         super().__init__(system)
         self.racks = set()
         self.object_model_map = self.load_model_map()
@@ -395,7 +395,7 @@ class NetBoxHostExtractor(NetBoxExtractor):
     name = "managedobject"
     model = ManagedObject
 
-    def __init__(self, system):
+    def __init__(self, system) -> None:
         super().__init__(system)
         self.pool: str = self.config.get("POOL") or "default"
         self.fm_pool: str = self.config.get("FM_POOL")

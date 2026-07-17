@@ -271,7 +271,7 @@ GENDER_DESC = {
 
 
 class FileWriter:
-    def __init__(self, root: str):
+    def __init__(self, root: str) -> None:
         self.root = root
         self.new_files = 0
         self.changed_files = 0

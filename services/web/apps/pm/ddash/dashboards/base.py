@@ -22,7 +22,7 @@ class BaseDashboard:
     class NotFound(Exception):
         pass
 
-    def __init__(self, object, extra_template=None, extra_vars=None):
+    def __init__(self, object, extra_template=None, extra_vars=None) -> None:
         self.object = self.resolve_object(object)
         self.extra_template = extra_template
         self.extra_vars = extra_vars

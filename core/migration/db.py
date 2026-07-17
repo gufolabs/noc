@@ -150,7 +150,7 @@ class DB:
         pk_field_kwargs = pk_field_kwargs or {}
 
         class MockOptions:
-            def __init__(self, model):
+            def __init__(self, model) -> None:
                 self.db_table = db_table
                 self.db_tablespace = ""
                 self.object_name = model_name

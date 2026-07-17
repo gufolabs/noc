@@ -84,7 +84,7 @@ class JsonDSAPI:
     variable_payload = None
     allow_interval_limit: bool = True
 
-    def __init__(self, router: APIRouter):
+    def __init__(self, router: APIRouter) -> None:
         self.service = get_service()
         self.logger = self.service.logger
         self.router = router

@@ -36,7 +36,7 @@ class GridVCSField:
     print o.data.diff(rev1, rev2)
     """
 
-    def __init__(self, repo):
+    def __init__(self, repo) -> None:
         self.repo = repo
         self.model = None
 
@@ -55,7 +55,7 @@ class GridVCSField:
 
 
 class GridVCSObjectDescriptor:
-    def __init__(self, field):
+    def __init__(self, field) -> None:
         self.field = field
         self.repo = field.repo
 
@@ -66,7 +66,7 @@ class GridVCSObjectDescriptor:
 class GridVCSObjectProxy:
     _cache = {}
 
-    def __init__(self, repo, id):
+    def __init__(self, repo, id) -> None:
         self.repo = repo
         self.id = id
 

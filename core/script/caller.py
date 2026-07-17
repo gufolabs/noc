@@ -21,7 +21,7 @@ DEFAULT_IDLE_TIMEOUT = config.script.caller_timeout
 
 
 class ScriptCaller:
-    def __init__(self, obj, name):
+    def __init__(self, obj, name) -> None:
         if "." in name:
             self.name = name.split(".")[-1]
         else:
@@ -47,7 +47,7 @@ class ScriptCaller:
 
 
 class Session:
-    def __init__(self, object_id, idle_timeout=None):
+    def __init__(self, object_id, idle_timeout=None) -> None:
         self._object_id = object_id
         self._idle_timeout = idle_timeout or config.script.caller_timeout
         self._id = str(uuid.uuid4())
@@ -109,7 +109,7 @@ class SessionContext:
         "cv_sessions_smap", default=None
     )
 
-    def __init__(self, object, idle_timeout=None):
+    def __init__(self, object, idle_timeout=None) -> None:
         self._object_id = object.id
         self._idle_timeout = idle_timeout
 

@@ -112,7 +112,7 @@ class MonitorApplication(ObjectListApplication):
 
 
 class JobF:
-    def __init__(self, scheduler="discovery", pool="default"):
+    def __init__(self, scheduler="discovery", pool="default") -> None:
         self.scheduler = scheduler
         self.pool = pool
         self.mos_filter = None

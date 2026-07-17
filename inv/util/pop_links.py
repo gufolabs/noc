@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class LinkedPoP:
-    def __init__(self, pop_id):
+    def __init__(self, pop_id) -> None:
         self.pop = Object.get_by_id(pop_id)
 
     def iter_db_links(self, level):

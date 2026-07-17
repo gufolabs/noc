@@ -14,7 +14,7 @@ class BaseCompressor:
     # Default file extension
     ext = None
 
-    def __init__(self, path: str, mode: str = "r"):
+    def __init__(self, path: str, mode: str = "r") -> None:
         self.path = path
         self.mode = mode
         self.f: io.TextIOBase | None = None

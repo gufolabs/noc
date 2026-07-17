@@ -60,7 +60,7 @@ class Action:
 
 
 class ActionSet:
-    def __init__(self, logger=None):
+    def __init__(self, logger=None) -> None:
         # EventClass
         # Abduct Detector
         self.logger = logger or action_logger
