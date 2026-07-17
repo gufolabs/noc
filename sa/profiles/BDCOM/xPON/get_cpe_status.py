@@ -52,7 +52,7 @@ class Script(BaseScript):
                     "local_id": i[0],
                     "global_id": i[3],
                 }
-                onu["oper_status"] = self.CLI_STATUS_MAP.get(i[6], "inactive")
+                onu["oper_status"] = self.CLI_STATUS_MAP.get(i[6], False)
                 r.append(onu)
         return r
 
