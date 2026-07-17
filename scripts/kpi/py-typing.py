@@ -282,8 +282,23 @@ def scan_module(path: Path) -> Iterable[KPI]:
     return visitor.rows
 
 
+_ignored_dirs = {
+    "ansible",
+    "ui",
+    "docs",
+    "dist",
+    "build",
+    "docker",
+    "examples",
+    "var",
+}
+
+
 def can_scan(path: Path) -> bool:
     parts = path.parts
+
+    if parts and parts[0] in _ignored_dirs:
+        return False
 
     for part in parts:
         if part.startswith("."):
