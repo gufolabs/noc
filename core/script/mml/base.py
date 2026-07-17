@@ -98,11 +98,11 @@ class MMLBase(BaseCLI):
         return self.result
 
     def execute(self, cmd, **kwargs):
-        """
-        Perform command and return result
-        :param cmd:
-        :param kwargs:
-        :return:
+        """Perform command and return result
+
+        Args:
+            cmd
+            **kwargs
         """
         self.buffer = b""
         self.command = self.profile.get_mml_command(cmd, **kwargs)

@@ -163,8 +163,7 @@ class CLI(BaseCLI):
         return False
 
     def cleaned_input(self, s: bytes) -> bytes:
-        """
-        Clean up received input and wipe out control sequences
+        """Clean up received input and wipe out control sequences
         and rogue chars
         """
         # Wipe out rogue chars
@@ -247,14 +246,13 @@ class CLI(BaseCLI):
 
     async def parse_object_stream(self, parser=None, cmd_next=None, cmd_stop=None):
         """
-        :param parser: callable accepting buffer and returning
-                       (key, data, rest) or None.
-                       key - string with object distinguisher
-                       data - dict containing attributes
-                       rest -- unparsed rest of string
-        :param cmd_next: Sequence to go to the next page
-        :param cmd_stop: Sequence to stop
-        :return:
+        Args:
+            parser: callable accepting buffer and returning (key, data,
+                rest) or None. key - string with object distinguisher
+                data - dict containing attributes rest -- unparsed rest
+                of string
+            cmd_next: Sequence to go to the next page
+            cmd_stop: Sequence to stop
         """
         self.logger.debug("Parsing object stream")
         objects = []
@@ -330,9 +328,7 @@ class CLI(BaseCLI):
         return objects
 
     async def send_pager_reply(self, data, match):
-        """
-        Send proper pager reply
-        """
+        """Send proper pager reply"""
         pg = match.group(0)
         for p, c in self.patterns["more_patterns_commands"]:
             if p.search(pg):
@@ -362,9 +358,7 @@ class CLI(BaseCLI):
         timeout: float | None = None,
         error: type[Exception] | None = None,
     ):
-        """
-        Send command if not none and set reply patterns
-        """
+        """Send command if not none and set reply patterns"""
         self.pattern_table = {}
         for pattern_name in patterns:
             rx = self.patterns.get(pattern_name)
@@ -572,9 +566,7 @@ class CLI(BaseCLI):
         await self.on_start(data, match)
 
     def resolve_pattern_prompt(self, match):
-        """
-        Resolve adaptive pattern prompt
-        """
+        """Resolve adaptive pattern prompt"""
         old_pattern_prompt = self.patterns["prompt"].pattern
         pattern_prompt = old_pattern_prompt
         sl = self.profile.can_strip_hostname_to
@@ -599,27 +591,21 @@ class CLI(BaseCLI):
         self.patterns["prompt"] = re.compile(pattern_prompt, re.DOTALL | re.MULTILINE)
 
     def push_prompt_pattern(self, pattern):
-        """
-        Override prompt pattern
-        """
+        """Override prompt pattern"""
         self.logger.debug("New prompt pattern: %s", pattern)
         self.prompt_stack += [self.patterns["prompt"]]
         self.patterns["prompt"] = re.compile(pattern, re.DOTALL | re.MULTILINE)
         self.pattern_table[self.patterns["prompt"]] = self.on_prompt
 
     def pop_prompt_pattern(self):
-        """
-        Restore prompt pattern
-        """
+        """Restore prompt pattern"""
         self.logger.debug("Restore prompt pattern")
         pattern = self.prompt_stack.pop(-1)
         self.patterns["prompt"] = pattern
         self.pattern_table[self.patterns["prompt"]] = self.on_prompt
 
     def get_motd(self):
-        """
-        Return collected message of the day
-        """
+        """Return collected message of the day"""
         return self.motd
 
     def set_script(self, script):
@@ -638,12 +624,12 @@ class CLI(BaseCLI):
             self.profile.shutdown_session(self.script)
 
     async def on_error_sequence(self, seq, command, error_text):
-        """
-        Process error sequence
-        :param seq:
-        :param command:
-        :param error_text:
-        :return:
+        """Process error sequence
+
+        Args:
+            seq
+            command
+            error_text
         """
         if isinstance(seq, str):
             self.logger.debug("Recovering sequece must byte type")

@@ -80,9 +80,7 @@ class SNMP:
         self.rate_limit = rate
 
     def _get_auth_key(self) -> Md5Key | Sha1Key:
-        """
-        Getting SNMPv3 Authenticate Key
-        """
+        """Getting SNMPv3 Authenticate Key"""
         if not self.script.credentials["snmp_auth_key"]:
             raise SNMPError("Unknown Authentication Key")
         passphrase = self.script.credentials["snmp_auth_key"].encode("utf-8")
@@ -91,9 +89,7 @@ class SNMP:
         )
 
     def _get_private_key(self) -> DesKey | Aes128Key:
-        """
-        Getting SNMPv3 Private Key
-        """
+        """Getting SNMPv3 Private Key"""
         if not self.script.credentials["snmp_priv_key"]:
             raise SNMPError("Unknown Private Key")
         passphrase = self.script.credentials["snmp_priv_key"].encode("utf-8")
@@ -102,8 +98,7 @@ class SNMP:
         )
 
     def _get_engine_id(self) -> bytes | None:
-        """
-        Get SNMPv3 EngineId from Capabilities 'SNMP | EngineID'
+        """Get SNMPv3 EngineId from Capabilities 'SNMP | EngineID'
         bytes.fromhex(engine_id[2:])
         """
         if self.script and not self.script.reuse_snmpv3_engine_id:
@@ -163,10 +158,10 @@ class SNMP:
         return self._script()
 
     def set_timeout_limits(self, n):
-        """
-        Set sequental timeouts l
-        :param n:
-        :return:
+        """Set sequental timeouts l
+
+        Args:
+            n
         """
         self.timeouts_limit = n
         self.timeouts = n
@@ -226,8 +221,7 @@ class SNMP:
         display_hints: dict[str, Callable] | None = None,
         strict_value=False,
     ) -> Any | dict[str, Any]:
-        """
-        Perform SNMP GET request by gufo_snmp library
+        """Perform SNMP GET request by gufo_snmp library
         Args:
             oids: dict with oids in form {name: oid, ...} or string contains oid
             cached: True if get results can be cached during session
@@ -302,21 +296,23 @@ class SNMP:
         return run_sync(run)
 
     def set(self, *args):
-        """
-        Perform SNMP GET request by gufo_snmp library
-        :param args:
-        :returns:
+        """Perform SNMP GET request by gufo_snmp library
+
+        Args:
+            *args
         """
         raise NotImplementedError(
             "Method `set` is not yet implemented in gufo SNMP implementation."
         )
 
     def count(self, oid, filter=None, version=None, timeout: int = 10) -> int:
-        """
-        Iterate MIB subtree and count matching instances by gufo_snmp library
-        :param oid: OID
-        :param filter: Callable accepting oid and value and returning boolean
-        :param timeout: Timeout for SNMP Response
+        """Iterate MIB subtree and count matching instances by gufo_snmp library
+
+        Args:
+            oid: OID
+            filter: Callable accepting oid and value and returning
+                boolean
+            timeout: Timeout for SNMP Response
         """
 
         async def run(filter: Callable):
@@ -371,22 +367,27 @@ class SNMP:
         display_hints: dict[str, Callable] | None = None,
         max_records: int | None = None,
     ) -> list[tuple[str, Any]]:
-        """
-        Perform SNMP GETNEXT request by gufo_snmp library
-        :param oid: string
-        :param community_suffix:
-        :param filter:
-        :param cached: True if get results can be cached during session
-        :param only_first: Return first result
-        :param bulk: False - disable GetBulk, None - Enable by 'SNMP | Bulk' capabilities
-        :param max_repetitions: Max OID in Bulk result
-        :param version: SNMP Version: 0 - v1, 1 - v2c
-        :param max_retries: Mac count trying when no response
-        :param timeout: Timeout for SNMP Response
-        :param raw_varbinds: Return value in BER encoding
-        :param display_hints: Dict of  oid -> render_function. See BaseProfile.snmp_display_hints for details
-        :param max_records: Return only set record count
-        :returns: result in list of tuples (name, value)
+        """Perform SNMP GETNEXT request by gufo_snmp library
+
+        Args:
+            oid: string
+            community_suffix
+            filter
+            cached: True if get results can be cached during session
+            only_first: Return first result
+            bulk: False - disable GetBulk, None - Enable by 'SNMP |
+                Bulk' capabilities
+            max_repetitions: Max OID in Bulk result
+            version: SNMP Version: 0 - v1, 1 - v2c
+            max_retries: Mac count trying when no response
+            timeout: Timeout for SNMP Response
+            raw_varbinds: Return value in BER encoding
+            display_hints: Dict of  oid -> render_function. See
+                BaseProfile.snmp_display_hints for details
+            max_records: Return only set record count
+
+        Returns:
+            result in list of tuples (name, value)
         """
 
         async def run(max_retries, filter):
@@ -442,9 +443,7 @@ class SNMP:
         return run_sync(partial(run, max_retries, filter or (lambda x, y: True)))
 
     def get_table(self, oid, community_suffix=None, cached=False, display_hints=None):
-        """
-        GETNEXT wrapper. Returns a hash of <index> -> <value>
-        """
+        """GETNEXT wrapper. Returns a hash of <index> -> <value>"""
         r = {}
         for o, v in self.getnext(
             oid, community_suffix=community_suffix, cached=cached, display_hints=display_hints
@@ -453,9 +452,7 @@ class SNMP:
         return r
 
     def join_tables(self, oid1, oid2, community_suffix=None, cached=False, display_hints=None):
-        """
-        Generator returning a rows of two snmp tables joined by index
-        """
+        """Generator returning a rows of two snmp tables joined by index"""
         t1 = self.get_table(
             oid1, community_suffix=community_suffix, cached=cached, display_hints=display_hints
         )
@@ -481,21 +478,21 @@ class SNMP:
         max_retries: int = 0,
         display_hints: dict[str, Callable] | None = None,
     ):
-        """
-        Query list of SNMP tables referenced by oids and yields
+        """Query list of SNMP tables referenced by oids and yields
         tuples of (key, value1, ..., valueN)
 
-        :param oids: List of OIDs
-        :param community_suffix: Optional suffix to be added to community
-        :param bulk: Use BULKGETNEXT if true
-        :param min_index:
-        :param max_index:
-        :param cached:
-        :param max_repetitions: Max OID in Bulk result
-        :param max_retries: Mac count trying when no response
-        :param timeout: Timeout for SNMP Response
-        :param display_hints: Dict of  oid -> render_function. See BaseProfile.snmp_display_hints for details
-        :return:
+        Args:
+            oids: List of OIDs
+            community_suffix: Optional suffix to be added to community
+            bulk: Use BULKGETNEXT if true
+            min_index
+            max_index
+            cached
+            max_repetitions: Max OID in Bulk result
+            max_retries: Mac count trying when no response
+            timeout: Timeout for SNMP Response
+            display_hints: Dict of  oid -> render_function. See
+                BaseProfile.snmp_display_hints for details
         """
 
         def gen_table(oid):
@@ -523,8 +520,7 @@ class SNMP:
             yield [".".join([str(x) for x in i])] + [t.get(i) for t in tables]
 
     def join(self, oids, community_suffix=None, cached=False, join="left"):
-        """
-        Query list of tables, merge by oid index
+        """Query list of tables, merge by oid index
         Tables are records of:
         * <oid>.<index> = value
 
@@ -554,13 +550,15 @@ class SNMP:
                 yield tuple([k] + [t.get(k) for t in tables])
 
     def get_chunked(self, oids, chunk_size=20, timeout_limits=3):
-        """
-        Fetch list of oids splitting to several operations when necessary
+        """Fetch list of oids splitting to several operations when necessary
 
-        :param oids: List of oids
-        :param chunk_size: Maximal GET chunk size
-        :param timeout_limits: SNMP timeout limits
-        :return: dict of oid -> value for all retrieved values
+        Args:
+            oids: List of oids
+            chunk_size: Maximal GET chunk size
+            timeout_limits: SNMP timeout limits
+
+        Returns:
+            dict of oid -> value for all retrieved values
         """
         results = {}
         self.set_timeout_limits(timeout_limits)
@@ -579,9 +577,7 @@ class SNMP:
         return results
 
     def get_engine_id(self, *args):
-        """
-        Getting SNMPv3 EngineId from address
-        """
+        """Getting SNMPv3 EngineId from address"""
 
         async def run():
             address = self.script.credentials["address"]

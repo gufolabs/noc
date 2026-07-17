@@ -10,8 +10,7 @@ from .base import BaseMiddleware
 
 
 class JSONSessionMiddleware(BaseMiddleware):
-    """
-    Append session_id: XXXXX to body.
+    """Append session_id: XXXXX to body.
     `session_id` name may be changed via `session_param`
     """
 

@@ -10,8 +10,7 @@ from .oid import OIDRule
 
 
 class CapabilityIndexRule(OIDRule):
-    """
-    Expand {{index}} to range given in capability
+    """Expand {{index}} to range given in capability
     capability: Integer capability containing number of iterations
     start: starting index
     """

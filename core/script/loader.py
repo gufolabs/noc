@@ -34,8 +34,7 @@ class ScriptLoader(BaseLoader):
         self.all_scripts = set()
 
     def get_script(self, name):
-        """
-        Load script and return BaseScript instance.
+        """Load script and return BaseScript instance.
         Returns None when no script found or loading error occured
         """
         if name in self.protected_names:
@@ -80,9 +79,7 @@ class ScriptLoader(BaseLoader):
             return script
 
     def reload(self):
-        """
-        Reset script cache and release all modules
-        """
+        """Reset script cache and release all modules"""
         with self.lock:
             self.logger.info("Reloading scripts")
             for s in self.scripts:
@@ -95,9 +92,7 @@ class ScriptLoader(BaseLoader):
         return ".." not in name
 
     def find_scripts(self):
-        """
-        Scan all available scripts
-        """
+        """Scan all available scripts"""
         ns = set()
         # Load generic scripts
         generics = {}  # Name -> dependencies
@@ -138,17 +133,13 @@ class ScriptLoader(BaseLoader):
             self.all_scripts = ns
 
     def iter_scripts(self):
-        """
-        Returns all available script names
-        """
+        """Returns all available script names"""
         if not self.all_scripts:
             self.find_scripts()
         yield from sorted(self.all_scripts)
 
     def has_script(self, name):
-        """
-        Check script is exists
-        """
+        """Check script is exists"""
         if not self.all_scripts:
             self.find_scripts()
         return name in self.all_scripts

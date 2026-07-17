@@ -10,9 +10,7 @@ from .oid import OIDRule
 
 
 class BooleanRule(OIDRule):
-    """
-    SNMP OID for booleans
-    """
+    """SNMP OID for booleans"""
 
     name = "bool"
     default_type = "bool"

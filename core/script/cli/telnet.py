@@ -138,11 +138,13 @@ class TelnetStream(BaseStream):
         return data.replace(B_IAC, B_IAC2)
 
     async def feed(self, chunk: bytes) -> bytes:
-        """
-        Feed chunk of data to parser
+        """Feed chunk of data to parser
 
-        :param chunk: String
-        :return: Parsed data
+        Args:
+            chunk: String
+
+        Returns:
+            Parsed data
         """
         if self.iac_seq and chunk:
             # Restore incomplete IAC context
@@ -192,9 +194,7 @@ class TelnetStream(BaseStream):
         return b"".join(r)
 
     def send_iac(self, cmd: int, opt: int) -> None:
-        """
-        Send IAC response
-        """
+        """Send IAC response"""
         self.logger.debug("Send %s", self.iac_repr(cmd, opt))
         self.out_iac_seq += [bytes((IAC, cmd, opt))]
 
@@ -210,9 +210,7 @@ class TelnetStream(BaseStream):
         self.out_iac_seq += sb
 
     def process_iac(self, cmd: int, opt: int) -> None:
-        """
-        Process IAC command.
-        """
+        """Process IAC command."""
         self.logger.debug("Received %s", self.iac_repr(cmd, opt))
         if cmd == DO:
             r = WILL if opt in ACCEPTED_TELNET_OPTIONS else WONT
@@ -238,11 +236,11 @@ class TelnetStream(BaseStream):
 
     @staticmethod
     def iac_repr(cmd: int, opt: int) -> str:
-        """
-        Human-readable IAC sequence
-        :param cmd:
-        :param opt:
-        :return:
+        """Human-readable IAC sequence
+
+        Args:
+            cmd
+            opt
         """
         return "%s %s" % (IAC_CMD.get(cmd, cmd), TELNET_OPTIONS.get(opt, opt))
 

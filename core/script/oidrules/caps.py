@@ -10,8 +10,7 @@ from .loader import load_rule
 
 
 class CapabilityRule:
-    """
-    Capability-based selection
+    """Capability-based selection
 
     oids is the list of (Capability, OIDRule)
     """

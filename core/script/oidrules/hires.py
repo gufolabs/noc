@@ -10,8 +10,7 @@ from .loader import load_rule
 
 
 class HiresRule:
-    """
-    Select *hires* chain if SNMP | IF-MIB HC capability set,
+    """Select *hires* chain if SNMP | IF-MIB HC capability set,
     Select *normal* capability otherwise
     """
 

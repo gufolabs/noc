@@ -196,16 +196,18 @@ class Beef:
         return bz2.decompress(data)
 
     def save(self, storage: ExtStorage, path: str) -> tuple[int, int]:
-        """
-        Write beef to external storage. Compression depends on extension.
+        """Write beef to external storage. Compression depends on extension.
         Following extensions are supported:
         * .json - JSON without compression
         * .json.gz - JSON with gzip compression
         * .json.bz2 - JSON with bzip2 compression
 
-        :param storage: ExtStorage instance
-        :param path: Beef path
-        :return: Compressed, Uncompressed sizes
+        Args:
+            storage: ExtStorage instance
+            path: Beef path
+
+        Returns:
+            Compressed, Uncompressed sizes
         """
         data = orjson.dumps(self.get_data())
         usize = len(data)
@@ -222,11 +224,11 @@ class Beef:
 
     @classmethod
     def load(cls, storage, path):
-        """
-        Load beef from storage
-        :param storage:
-        :param path:
-        :return:
+        """Load beef from storage
+
+        Args:
+            storage
+            path
         """
         if isinstance(storage, str):
             # Load from URL
@@ -248,10 +250,10 @@ class Beef:
         return Beef.from_json(smart_text(data))
 
     def iter_fsm_state_reply(self, state: str) -> bytes:
-        """
-        Iterate fsm states
-        :param state:
-        :return:
+        """Iterate fsm states
+
+        Args:
+            state
         """
         for fsm in self.cli_fsm:
             if fsm.state == state:
@@ -260,10 +262,10 @@ class Beef:
                 break
 
     def iter_cli_reply(self, command: bytes) -> bytes:
-        """
-        Iterate fsm states
-        :param command:
-        :return:
+        """Iterate fsm states
+
+        Args:
+            command
         """
         # typo
         # cmd = smart_bytes(command)
@@ -280,28 +282,28 @@ class Beef:
 
     @staticmethod
     def mib_decode_base64(value: bytes) -> bytes:
-        """
-        Decode base64
-        :param value:
-        :return:
+        """Decode base64
+
+        Args:
+            value
         """
         return codecs.decode(value, "base64")
 
     @staticmethod
     def mib_decode_hex(value):
-        """
-        Decode base64
-        :param value:
-        :return:
+        """Decode base64
+
+        Args:
+            value
         """
         return value.decode("hex")
 
     @staticmethod
     def cli_decode_quopri(value: bytes) -> bytes:
-        """
-        Decode quoted-printable
-        :param value:
-        :return:
+        """Decode quoted-printable
+
+        Args:
+            value
         """
         return codecs.decode(value, "quopri")
 
@@ -311,10 +313,13 @@ class Beef:
         return self.mib_oid_values
 
     def get_mib_value(self, oid: str) -> bytes | None:
-        """
-        Lookup mib and return oid value
-        :param oid:
-        :return: Binary OID data or None
+        """Lookup mib and return oid value
+
+        Args:
+            oid
+
+        Returns:
+            Binary OID data or None
         """
         v = self.get_mib_oid_values().get(oid)
         if v is None:
@@ -322,19 +327,16 @@ class Beef:
         return self._mib_decoder(v)
 
     def get_mib_oids(self):
-        """
-        Return sorted list of MIB oids
-        :return:
-        """
+        """Return sorted list of MIB oids"""
         if self.mib_oids is None:
             self.mib_oids = sorted(tuple(int(c) for c in m.oid.split(".")) for m in self.mib)
         return self.mib_oids
 
     def iter_mib_oids(self, oid):
-        """
-        Generator yielding all consequentive oids
-        :param oid:
-        :return:
+        """Generator yielding all consequentive oids
+
+        Args:
+            oid
         """
         start = tuple(int(c) for c in oid.split("."))
         oids = self.get_mib_oids()

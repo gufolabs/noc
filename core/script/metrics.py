@@ -11,27 +11,21 @@ from functools import reduce
 
 
 def percent(value, total):
-    """
-    Convert absolute and total values to percent
-    """
+    """Convert absolute and total values to percent"""
     if total:
         return float(value) * 100.0 / float(total)
     return 100.0
 
 
 def percent_usage(value, total):
-    """
-    Convert avail and usage values to percent
-    """
+    """Convert avail and usage values to percent"""
     if total:
         return float(value) * 100.0 / (float(total) + float(value))
     return 100.0
 
 
 def percent_invert(value, total):
-    """
-    Convert avail and total values to percent
-    """
+    """Convert avail and total values to percent"""
     if total:
         v = (float(total) - float(value)) * 100.0 / float(total)
         if v >= 0.0:
@@ -40,8 +34,7 @@ def percent_invert(value, total):
 
 
 def convert_percent_str(x):
-    """
-    Convert 09% to 9.0 value
+    """Convert 09% to 9.0 value
     Convert 09 to 9.0 value
     If x = None, return 0
     """
@@ -51,23 +44,17 @@ def convert_percent_str(x):
 
 
 def sum(*args):
-    """
-    Returns sum of all arguments
-    """
+    """Returns sum of all arguments"""
     return reduce(lambda x, y: x + y, args)
 
 
 def diff(*args):
-    """
-    Returns diff of all arguments
-    """
+    """Returns diff of all arguments"""
     return reduce(lambda x, y: x - y, args)
 
 
 def subtract(*args):
-    """
-    Subtract from first arguments
-    """
+    """Subtract from first arguments"""
     return args[0] - reduce(lambda x, y: x + y, args[1:])
 
 
@@ -76,15 +63,12 @@ def is1(x):
 
 
 def invert0(x):
-    """
-    Invert 0 -> 1 if OK = 0, FALSE > 1
-    """
+    """Invert 0 -> 1 if OK = 0, FALSE > 1"""
     return 0 if x > 0 else 1
 
 
 def scale(n, float_round=None):
-    """
-    High-order function to scale result to arbitrary value.
+    """High-order function to scale result to arbitrary value.
 
     f = scale(10)
     f(5) -> 50
@@ -92,10 +76,13 @@ def scale(n, float_round=None):
     f = scale(0.1, 2)
     f(10) -> 10.2
 
-    :param n: Scaling factor
-    :param float_round: Number of decimal places
-    :return: Callable, performing scaling
-    :return: If float_round, return round value
+    Args:
+        n: Scaling factor
+        float_round: Number of decimal places
+
+    Returns:
+        A callable that scales values by the given factor.
+        If float_round is set, returns a rounded result with that precision
     """
 
     def inner(v):
@@ -111,12 +98,15 @@ def scale(n, float_round=None):
 
 
 def fix_range(l_left, l_right, over_value=0):
-    """
-    Check value in interval (l_left, l_right), if over - return over_value
-    :param l_left: left endpoint
-    :param l_right: right endpoint
-    :param over_value: return if value over interval
-    :return: Callable, performing scaling
+    """Check value in interval (l_left, l_right), if over - return over_value
+
+    Args:
+        l_left: left endpoint
+        l_right: right endpoint
+        over_value: return if value over interval
+
+    Returns:
+        Callable, performing scaling
     """
 
     def innner_fix_range(v):
@@ -129,9 +119,7 @@ def fix_range(l_left, l_right, over_value=0):
 
 
 def convert_float(value):
-    """
-    Convert absolute and total values to percent
-    """
+    """Convert absolute and total values to percent"""
     if isinstance(value, bytes):
         value = value.decode("utf-8")
     return float(value)

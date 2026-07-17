@@ -13,9 +13,7 @@ from .base import BaseMiddleware
 
 
 class BasicAuthMiddeware(BaseMiddleware):
-    """
-    Append HTTP Basic authorisation headers
-    """
+    """Append HTTP Basic authorisation headers"""
 
     name = "basicauth"
 

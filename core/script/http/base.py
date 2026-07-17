@@ -58,15 +58,17 @@ class HTTP:
         use_basic=False,
         raw_result=False,
     ):
-        """
-        Perform HTTP GET request
-        :param path: URI
-        :param headers: Dict of additional headers
-        :param cached: Cache result
-        :param json: Decode json if set to True
-        :param eof_mark: Waiting eof_mark in stream for end session (perhaps device return length 0)
-        :param use_basic: Use basic authentication
-        :param raw_result: Return raw result
+        """Perform HTTP GET request
+
+        Args:
+            path: URI
+            headers: Dict of additional headers
+            cached: Cache result
+            json: Decode json if set to True
+            eof_mark: Waiting eof_mark in stream for end session
+                (perhaps device return length 0)
+            use_basic: Use basic authentication
+            raw_result: Return raw result
         """
         self.ensure_session()
         self.request_id += 1
@@ -123,15 +125,17 @@ class HTTP:
         use_basic=False,
         raw_result=False,
     ):
-        """
-        Perform HTTP GET request
-        :param path: URI
-        :param headers: Dict of additional headers
-        :param cached: Cache result
-        :param json: Decode json if set to True
-        :param eof_mark: Waiting eof_mark in stream for end session (perhaps device return length 0)
-        :param use_basic: Use basic authentication
-        :param raw_result: Return raw result
+        """Perform HTTP GET request
+
+        Args:
+            path: URI
+            headers: Dict of additional headers
+            cached: Cache result
+            json: Decode json if set to True
+            eof_mark: Waiting eof_mark in stream for end session
+                (perhaps device return length 0)
+            use_basic: Use basic authentication
+            raw_result: Return raw result
         """
         self.ensure_session()
         self.request_id += 1
@@ -181,10 +185,10 @@ class HTTP:
             self.shutdown_session()
 
     def _process_cookies(self, headers: dict[str, bytes], allow_multiple_header: bool = False):
-        """
-        Process and store cookies from response headers
-        :param headers:
-        :return:
+        """Process and store cookies from response headers
+
+        Args:
+            headers
         """
         cdata = headers.get("Set-Cookie")
         if not cdata:
@@ -206,20 +210,23 @@ class HTTP:
             self.cookies.load(c.strip())
 
     def get_cookie(self, name):
-        """
-        Get cookie name by value
-        :param name:
-        :return: Morsel object or None
+        """Get cookie name by value
+
+        Args:
+            name
+
+        Returns:
+            Morsel object or None
         """
         if not self.cookies:
             return None
         return self.cookies.get(name)
 
     def _get_effective_headers(self, headers: dict[str, bytes]):
-        """
-        Append session headers when necessary. Apply effective cookies
-        :param headers:
-        :return:
+        """Append session headers when necessary. Apply effective cookies
+
+        Args:
+            headers
         """
         if self.headers:
             if headers:
@@ -236,20 +243,23 @@ class HTTP:
         return headers
 
     def set_header(self, name: str, value: str):
-        """
-        Set HTTP header to be set with all following requests
-        :param name:
-        :param value:
-        :return:
+        """Set HTTP header to be set with all following requests
+
+        Args:
+            name
+            value
         """
         self.logger.debug("Set header: %s = %s", name, value)
         self.headers[name] = str(value).encode()
 
     def set_session_id(self, session_id):
-        """
-        Set session_id to be reused by middleware
-        :param session_id:
-        :return: None
+        """Set session_id to be reused by middleware
+
+        Args:
+            session_id
+
+        Returns:
+            None
         """
         if session_id is not None:
             self.session_id = session_id

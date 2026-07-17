@@ -10,9 +10,7 @@ from .oid import OIDRule
 
 
 class InterfaceRule(OIDRule):
-    """
-    Expand {{ifIndex}}
-    """
+    """Expand {{ifIndex}}"""
 
     name = "ifindex"
 
