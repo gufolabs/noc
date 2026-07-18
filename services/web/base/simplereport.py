@@ -73,12 +73,6 @@ class ReportNode:
         i = INDENT * n
         return i + s.replace("\n", "\n" + i)
 
-    def to_xml(self):
-        """
-        Return XML presentation of Node
-        """
-        return ""
-
     def to_html(self, **kwargs):
         """
         Return HTML presentation of Node
@@ -105,18 +99,6 @@ class Report(ReportNode):
 
     def append_section(self, s):
         self.sections += [s]
-
-    def to_xml(self):
-        """
-        Return XML code for report
-        :return:
-        """
-        s = [self.format_opening_xml_tag(name=self.name)]
-        s += [self.indent("<sections>")]
-        s += [self.indent(x.to_xml(), 2) for x in self.sections]
-        s += [self.indent("</sections>")]
-        s += [self.format_closing_xml_tag()]
-        return "\n".join(s)
 
     def to_html(self, include_buttons=True, **kwargs):
         """
@@ -163,15 +145,6 @@ class TextSection(ReportSection):
         if isinstance(self.text, str):
             return [self.text]
         return self.text
-
-    def to_xml(self):
-        """
-        Return XML presentation of text section
-        """
-        s = [self.format_opening_xml_tag(name=self.name, title=self.title)]
-        s += [self.indent("<par>%s</par>" % self.quote(p)) for p in self.paragraphs]
-        s += [self.format_closing_xml_tag()]
-        return "\n".join(s)
 
     def to_html(self, include_buttons=True):
         """
@@ -243,13 +216,6 @@ class TableColumn(ReportNode):
         """
         return self.total
 
-    def start_section(self):
-        """
-        Reset sub-totals
-        :return:
-        """
-        self.subtotal_data = []
-
     def contribute_data(self, s):
         """
         Contribute data to totals
@@ -270,17 +236,6 @@ class TableColumn(ReportNode):
         if not self.format:
             return s
         return self.format(s)
-
-    def to_xml(self):
-        """
-        Return XML representation of column
-        :return:
-        """
-        return (
-            self.format_opening_xml_tag(name=self.name, align=self.align)
-            + self.quote(self.title)
-            + self.format_closing_xml_tag()
-        )
 
     def html_td_attrs(self):
         """
@@ -502,17 +457,6 @@ class TableSection(ReportSection):
             lambda x, y: x or y, [c.has_total for c in self.columns], False
         )  # Check werether table has totals
 
-    def to_xml(self):
-        """
-        Return XML representation of table
-        """
-        s = [self.format_opening_xml_tag(name=self.name)]
-        s += [self.indent("<columns>")]
-        s += [self.indent(c.to_xml(), 2) for c in self.columns]
-        s += [self.indent("</columns>")]
-        s += [self.format_closing_xml_tag()]
-        return "\n".join(s)
-
     def to_html(self, include_buttons=True):
         """
         Return HTML representation of table
@@ -665,91 +609,6 @@ class TableSection(ReportSection):
                         continue
                     writer.writerow(row)
         return f.getvalue()
-
-    def to_ssv2(self, delimiter=";", mrf="center", date=None):
-        """
-        Return CSV representation of table
-        :return:
-        """
-        f = StringIO()
-        writer = csv.writer(f, delimiter=delimiter)
-        section = "default"
-        prefix = [mrf, section]
-        prefix_c = ["mrf", "pool"]
-        if date:
-            prefix_c += ["date"]
-            prefix += [date]
-        if self.enumerate:
-            writer.writerow(["#"] + prefix_c + [c.title for c in self.columns])
-        else:
-            writer.writerow(prefix_c + [c.title for c in self.columns])
-        if self.data:
-            if self.enumerate:
-                n = 1
-                for row in self.data:
-                    if isinstance(row, SectionRow):
-                        # writer.writerow([row.name])
-                        prefix = [mrf, row.name]
-                        if date:
-                            prefix += [date]
-                        continue
-                    writer.writerow([n, *prefix, *list(row)])
-                    n += 1
-            else:
-                for row in self.data:
-                    if isinstance(row, SectionRow):
-                        # writer.writerow([row.name])
-                        prefix = [mrf, row.name]
-                        if date:
-                            prefix += [date]
-                        continue
-                    writer.writerow(prefix + list(row))
-        return f.getvalue()
-
-
-class MatrixSection(ReportSection):
-    """
-    Data is a list of (row, column, data)
-    """
-
-    def __init__(self, name, data=None, enumerate=False):
-        super().__init__(name=name)
-        self.data = data or []
-        self.enumerate = enumerate
-
-    def to_html(self, **kwargs):
-        # Build rows and columns
-        data = {}
-        cl = set()
-        rl = set()
-        for r, c, d in self.data:
-            rl.add(r)
-            cl.add(c)
-            data[r, c] = d
-        cl = sorted(cl)
-        rl = sorted(rl)
-        # Render
-        s = ["<table summary='%s' border='1'>" % self.quote(self.name)]
-        # Header row
-        s += ["<tr><th></th>"]
-        if self.enumerate:
-            s += ["<th></th>"]
-        s += ["<th><div class='vtext'>%s</div></th>" % c for c in cl]
-        # Data rows
-        n = 0
-        for r in rl:
-            s += ["<tr class='row%d'>" % (n % 2 + 1)]
-            if self.enumerate:
-                s += ["<td align='right'>%d</td>" % (n + 1)]
-            s += ["<td><b>%s</b></td>" % self.quote(r)]
-            for c in cl:
-                try:
-                    s += ["<td>%s</td>" % self.quote(data[r, c])]
-                except KeyError:
-                    s += ["<td></td>"]
-            n += 1
-            s += ["</tr>"]
-        return "\n".join(s)
 
 
 class SimpleReport(ReportApplication):
