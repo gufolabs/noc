@@ -513,7 +513,7 @@ class RemoteSystem(Document):
         _, name, remote_id = reference.split(":")
         rs = RemoteSystem.get_by_name(name)
         if not rs:
-            raise ValueError("Unknown Remote System by name %s" % name)
+            raise ValueError(f"Unknown Remote System by name {name}")
         return rs, remote_id
 
     def reset_lock(self):

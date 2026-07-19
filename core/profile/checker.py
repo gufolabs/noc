@@ -48,7 +48,7 @@ class ProfileChecker:
         self.address = address
         self.pool = pool
         self.logger = PrefixLoggerAdapter(
-            logger or self.base_logger, "%s][%s" % (self.pool or "", self.address or "")
+            logger or self.base_logger, "{}][{}".format(self.pool or "", self.address or "")
         )
         self.result_cache: dict[tuple[str, str], str] = {}  # (method, param) -> result
         self.error: str | None = None

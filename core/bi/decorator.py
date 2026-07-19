@@ -63,10 +63,10 @@ def bi_sync(cls):
     """
     if is_document(cls):
         f = cls._fields.get(BI_ID_FIELD)
-        assert f, "%s field must be defined" % BI_ID_FIELD
+        assert f, f"{BI_ID_FIELD} field must be defined"
     else:
         f = [f for f in cls._meta.fields if f.name == BI_ID_FIELD]
-        assert f, "%s field must be defined" % BI_ID_FIELD
+        assert f, f"{BI_ID_FIELD} field must be defined"
         f = f[0]
     f.default = new_bi_id
     return cls

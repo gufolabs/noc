@@ -56,7 +56,7 @@ def process_vlan_map(vlans, rules):
         elif op is None:
             raise ValueError("Missed operation")
         else:
-            raise ValueError("Invalid operation: %s" % op)
+            raise ValueError(f"Invalid operation: {op}")
     return result
 
 

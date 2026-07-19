@@ -164,7 +164,7 @@ class ServiceStub:
                             return len(meta.metadata[stream])
                         break
                 # Cluster election in progress or cluster is misconfigured
-                self.logger.info("Stream '%s' has no active partitions. Waiting" % stream)
+                self.logger.info(f"Stream '{stream}' has no active partitions. Waiting")
                 await asyncio.sleep(1)
 
     @staticmethod

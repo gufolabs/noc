@@ -44,9 +44,9 @@ class HTTP:
         address = self.script.credentials["address"]
         port = self.script.credentials.get("http_port")
         if port:
-            address += ":%s" % port
+            address += f":{port}"
         proto = self.script.credentials.get("http_protocol", "http")
-        return "%s://%s%s" % (proto, address, path)
+        return f"{proto}://{address}{path}"
 
     def get(
         self,
@@ -74,7 +74,7 @@ class HTTP:
         self.request_id += 1
         self.logger.debug("GET %s", path)
         if cached:
-            cache_key = "get_%s" % path
+            cache_key = f"get_{path}"
             r = self.script.root.http_cache.get(cache_key)
             if r is not None:
                 self.logger.debug("Use cached result")
@@ -100,13 +100,13 @@ class HTTP:
         ) as client:
             code, headers, result = client.get(url, headers=hdr)
             if not 200 <= code <= 299:
-                raise HTTPError(msg="HTTP Error (%s)" % result[:256], code=code)
+                raise HTTPError(msg=f"HTTP Error ({result[:256]})", code=code)
             self._process_cookies(headers)
             if json:
                 try:
                     result = orjson.loads(result)
                 except ValueError as e:
-                    raise HTTPError("Failed to decode JSON: %s" % e)
+                    raise HTTPError(f"Failed to decode JSON: {e}")
             elif not raw_result:
                 result = result.decode(errors="ignore")
             self.logger.debug("Result: %r", result)
@@ -141,7 +141,7 @@ class HTTP:
         self.request_id += 1
         self.logger.debug("POST %s %s", path, data)
         if cached:
-            cache_key = "post_%s" % path
+            cache_key = f"post_{path}"
             r = self.script.root.http_cache.get(cache_key)
             if r is not None:
                 self.logger.debug("Use cached result")
@@ -166,13 +166,13 @@ class HTTP:
         ) as client:
             code, headers, result = client.post(url, data, headers=hdr)
             if not 200 <= code <= 299:
-                raise HTTPError(msg="HTTP Error (%s)" % result[:256], code=code)
+                raise HTTPError(msg=f"HTTP Error ({result[:256]})", code=code)
             self._process_cookies(headers)
             if json:
                 try:
                     return orjson.loads(result)
                 except ValueError as e:
-                    raise HTTPError(msg="Failed to decode JSON: %s" % e)
+                    raise HTTPError(msg=f"Failed to decode JSON: {e}")
             elif not raw_result:
                 result = result.decode(errors="ignore")
             self.logger.debug("Result: %r", result)

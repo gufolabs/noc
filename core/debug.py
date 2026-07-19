@@ -189,8 +189,8 @@ def format_frames(frames, reverse=config.traceback.reverse):
     if reverse:
         fr.reverse()
     for f in fr:
-        r += ["File: %s (Line: %s)" % (os.path.relpath(f["filename"]), f["lineno"])]
-        r += ["Function: %s" % (f["function"])]
+        r += ["File: {} (Line: {})".format(os.path.relpath(f["filename"]), f["lineno"])]
+        r += ["Function: {}".format(f["function"])]
         if "pre_context_lineno" in f:
             r += [format_source(f["pre_context_lineno"], f["pre_context"])]
             r += ["%5d ==> %s" % (f["lineno"], f["context_line"])]
@@ -280,8 +280,8 @@ def excepthook(t, v, tb):
     import sys
 
     now = datetime.datetime.now()
-    r = ["UNHANDLED EXCEPTION (%s)" % str(now)]
-    r += ["Working directory: %s" % os.getcwd()]
+    r = [f"UNHANDLED EXCEPTION ({now!s})"]
+    r += [f"Working directory: {os.getcwd()}"]
     r += [str(t), str(v)]
     r += [format_frames(get_traceback_frames(tb))]
     sys.stdout.write("\n".join(r))
@@ -335,8 +335,8 @@ def frame_report(frame, caption=None, logger=logger):
     r = []
     if caption:
         r += [caption]
-    r += ["EXECUTION FRAME REPORT (%s)" % str(now)]
-    r += ["Working directory: %s" % os.getcwd()]
+    r += [f"EXECUTION FRAME REPORT ({now!s})"]
+    r += [f"Working directory: {os.getcwd()}"]
     r += [format_frames(get_execution_frames(frame))]
     logger.error("\n".join(r))
 
@@ -387,11 +387,11 @@ def dump_stacks(thread_id=None):
     for tid, stack in sys._current_frames().items():
         if thread_id and tid != thread_id:
             continue
-        print("[THREAD #%s]" % tid)
+        print(f"[THREAD #{tid}]")
         for filename, lineno, name, line in traceback.extract_stack(stack):
             print("File: '%s', line %d, in %s" % (filename, lineno, name))
             if line:
-                print("    %s" % line.strip())
+                print(f"    {line.strip()}")
 
 
 class ErrorReport:

@@ -38,7 +38,7 @@ def setup_proxies():
     else:
         logger.debug(
             "Using proxy servers: %s",
-            ", ".join("%s = %s" % (k, SYSTEM_PROXIES[k]) for k in sorted(SYSTEM_PROXIES)),
+            ", ".join(f"{k} = {SYSTEM_PROXIES[k]}" for k in sorted(SYSTEM_PROXIES)),
         )
 
 
@@ -53,9 +53,7 @@ def setup_urllib_proxies():
     _urllib_proxies_installed = True
     if not SYSTEM_PROXIES:
         return
-    proxies = {
-        k: "%s://%s:%s" % (k, SYSTEM_PROXIES[k][0], SYSTEM_PROXIES[k][1]) for k in SYSTEM_PROXIES
-    }
+    proxies = {k: f"{k}://{SYSTEM_PROXIES[k][0]}:{SYSTEM_PROXIES[k][1]}" for k in SYSTEM_PROXIES}
     from urllib.request import ProxyHandler, build_opener, install_opener
 
     proxy_handler = ProxyHandler(proxies)

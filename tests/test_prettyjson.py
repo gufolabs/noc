@@ -27,5 +27,5 @@ def test_prettyjson(config, expected):
     ("config", "expected"), [(("key1", "value1", "key2", "value2", "key3", "value3"), True)]
 )
 def test_prettyjson_error(config, expected):
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         assert to_json(config).startswith("{\n") == expected

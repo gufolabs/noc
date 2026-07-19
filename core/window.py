@@ -289,7 +289,7 @@ def handler(
     """
     h = get_handler(config)
     if not h:
-        raise ValueError("Invalid handler %s" % config)
+        raise ValueError(f"Invalid handler {config}")
     return h(window)
 
 

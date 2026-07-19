@@ -61,13 +61,13 @@ class BaseExtractor:
     suppress_deduplication_log: bool = False
 
     rx_archive = re.compile(
-        r"^import-\d{4}(?:-\d{2}){5}.jsonl%s$" % compressor.ext.replace(".", r"\.")
+        r"^import-\d{{4}}(?:-\d{{2}}){{5}}.jsonl{}$".format(compressor.ext.replace(".", r"\."))
     )
 
     def __init__(self, system: "BaseRemoteSystem") -> None:
         self.system = system
         self.config = system.config
-        self.logger = PrefixLoggerAdapter(logger, "%s][%s" % (system.name, self.name))
+        self.logger = PrefixLoggerAdapter(logger, f"{system.name}][{self.name}")
         self.import_dir = os.path.join(self.PREFIX, system.name, self.name)
         self.fatal_problems: list[Problem] = []
         self.quality_problems: list[Problem] = []
@@ -361,11 +361,11 @@ class BaseExtractor:
             self.logger.warning("Line num\tType\tProblem string")
             for p in self.fatal_problems:
                 self.logger.warning(
-                    "Fatal problem, line was rejected: %s\t%s\t%s" % (p.line, p.p_class, p.message)
+                    f"Fatal problem, line was rejected: {p.line}\t{p.p_class}\t{p.message}"
                 )
             for p in self.quality_problems:
                 self.logger.warning(
-                    "Data quality problem in line:  %s\t%s\t%s" % (p.line, p.p_class, p.message)
+                    f"Data quality problem in line:  {p.line}\t{p.p_class}\t{p.message}"
                 )
             # Dump problem to file
             try:

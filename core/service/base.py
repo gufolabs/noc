@@ -490,11 +490,11 @@ class BaseService:
         return
 
     async def acquire_lock(self):
-        await self.dcs.acquire_lock("lock-%s" % self.name)
+        await self.dcs.acquire_lock(f"lock-{self.name}")
 
     async def acquire_slot(self):
         if self.pooled:
-            name = "%s-%s" % (self.name, config.pool)
+            name = f"{self.name}-{config.pool}"
         else:
             name = self.name
         slot_number, total_slots = await self.dcs.acquire_slot(name, config.global_n_instances)
@@ -510,7 +510,7 @@ class BaseService:
         Returns RPC proxy object.
         """
         if pool:
-            svc = "%s-%s" % (name, pool)
+            svc = f"{name}-{pool}"
         else:
             svc = name
         return RPCProxy(self, svc, sync=sync, hints=hints)
@@ -748,7 +748,7 @@ class BaseService:
         """
         executor = self.executors.get(name)
         if not executor:
-            xt = "%s.%s_threads" % (self.name, name)
+            xt = f"{self.name}.{name}_threads"
             max_threads = config.get_parameter(xt)
             self.logger.info(
                 "Starting threadpool executor %s (up to %d threads)", name, max_threads
@@ -981,7 +981,7 @@ class BaseService:
                             return len(meta.metadata[stream])
                         break
                 # Cluster election in progress or cluster is misconfigured
-                self.logger.info("Stream '%s' has no active partitions. Waiting" % stream)
+                self.logger.info(f"Stream '{stream}' has no active partitions. Waiting")
                 await asyncio.sleep(1)
 
     @staticmethod

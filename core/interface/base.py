@@ -77,14 +77,14 @@ class BaseInterface(metaclass=BaseInterfaceMetaclass):
                     else:
                         out[k] = param.clean(value)
                 except InterfaceTypeError as e:
-                    raise InterfaceTypeError("Invalid value for '%s': %s" % (k, e))
+                    raise InterfaceTypeError(f"Invalid value for '{k}': {e}")
             elif k != "__profile":
                 # Not found, pass as-is
                 out[k] = kwargs[k]
         # Check all required parameters present
         missed = self._REQUIRED_INPUT - set(out)
         if missed:
-            raise InterfaceTypeError("Parameter '%s' required" % missed.pop())
+            raise InterfaceTypeError(f"Parameter '{missed.pop()}' required")
         return out
 
     def clean_result(self, result):

@@ -27,10 +27,10 @@ rx_os_format = re.compile(
 def render_tc_int(value: int, format: str) -> str:
     if format == "x":
         # Hexadecimal
-        return "%x" % value
+        return f"{value:x}"
     if format == "o":
         # Octal
-        return "%o" % value
+        return f"{value:o}"
     if format == "b":
         # Binary
         pass
@@ -42,7 +42,7 @@ def render_tc_int(value: int, format: str) -> str:
             v = str(value)
             if len(v) <= p:
                 v = "0" * (p - len(v) + 1) + v
-            return "%s.%s" % (v[:-p], v[-p:])
+            return f"{v[:-p]}.{v[-p:]}"
     return smart_text(value, errors="ignore")
 
 
@@ -80,13 +80,13 @@ def render_tc_octetstring(value, format: bytes | str) -> str:
                     for j in range(size):
                         v = (v << 8) + value.pop(0)
                     if fmt == "x":
-                        rr += ["%02x" % v]
+                        rr += [f"{v:02x}"]
                     elif fmt == "d":
                         rr += ["%d" % v]
                     elif fmt == "o":
-                        rr += ["%03o" % v]
+                        rr += [f"{v:03o}"]
                     else:
-                        raise ValueError("Unknown format: %s" % fmt)
+                        raise ValueError(f"Unknown format: {fmt}")
             # Join with repeat separator
             r += rt.join(rr)
             if value and dsep:

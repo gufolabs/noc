@@ -124,7 +124,7 @@ class CredentialChecker:
         self.port = port
         self.labels = labels
         self.logger = PrefixLoggerAdapter(
-            logger or self.base_logger, "%s][%s" % (self.pool or "", self.address or "")
+            logger or self.base_logger, "{}][{}".format(self.pool or "", self.address or "")
         )
         self.calling_service = calling_service
         self.profile: "Profile" | None = profile

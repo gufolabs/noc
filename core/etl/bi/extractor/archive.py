@@ -43,7 +43,7 @@ class ArchivingExtractor(BaseExtractor):
     def get_archived_template(self):
         # "alarms.{{doc[\"clear_timestamp\"].strftime(\"y%Yw%W\")}}"
         # print(self.archive_collection_template)
-        template = "%s.%s" % (self.name, self.archive_collection_template)
+        template = f"{self.name}.{self.archive_collection_template}"
         return Template(template)
 
     def iter_archived_items(self):

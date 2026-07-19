@@ -23,7 +23,7 @@ class URLSessionMiddleware(BaseMiddleware):
     def process_request(self, url, body, headers):
         if self.http.session_id:
             if "?" in url:
-                url += "&%s=%s" % (self.session_param, self.http.session_id)
+                url += f"&{self.session_param}={self.http.session_id}"
             else:
-                url += "?%s=%s" % (self.session_param, self.http.session_id)
+                url += f"?{self.session_param}={self.http.session_id}"
         return url, body, headers

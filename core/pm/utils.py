@@ -82,7 +82,7 @@ class MetricValue:
         if self.value is None:
             return "-"
         if not self.value_units:
-            return "%s %s" % Scale.humanize(int(self.value))
+            return "{} {}".format(*Scale.humanize(int(self.value)))
         if self.value_units.code == "s":
             return Scale.humanize_time(int(self.value))
         return self.value_units.humanize(self.value, with_units=with_units)
@@ -170,7 +170,7 @@ class QueryField:
         #    ...
         mt = MetricType.get_by_field_name(name, scope=table_name or None)
         if not mt:
-            raise AttributeError("Unknown Field Name: %s" % name)
+            raise AttributeError(f"Unknown Field Name: {name}")
         return QueryField(
             field=mt.field_name,
             scale=mt.scale,
@@ -272,20 +272,20 @@ class QuerySet:
                 continue
             select.append(f"{f.query_expr} AS {alias}")
         return """
-              SELECT %s
-              FROM %s
+              SELECT {}
+              FROM {}
               WHERE
-              date >= %%s
-              AND ts >= %%s
-              AND (%s)
-              %s
+              date >= %s
+              AND ts >= %s
+              AND ({})
+              {}
               FORMAT JSONEachRow
-           """ % (
+           """.format(
             ", ".join(select),
             self.metric_proxy.scope.table_name,
             " AND ".join(c.get_expr() for c in self.metric_proxy.query_conditions),
             # " AND hasAny(labels, [%s]) " % ", ".join(labels) if labels else "",
-            "GROUP BY %s" % ", ".join(sorted(group_by)) if group_by else "",
+            "GROUP BY {}".format(", ".join(sorted(group_by))) if group_by else "",
         )
 
     def query_metrics(self):
@@ -540,7 +540,7 @@ class MetricProxy:
             return self._scopes[item]
         scope = MetricScope.get_by_table_name(item)
         if not scope:
-            raise AttributeError("Unknown scope: %s" % item)
+            raise AttributeError(f"Unknown scope: {item}")
         msp = MetricScopeProxy(scope)
         if self._conditions:
             msp.add_conditions(self._conditions)
@@ -641,15 +641,15 @@ def get_objects_metrics(
 
     for table, fields in itertools.groupby(sorted(mmm, key=lambda x: x[0]), key=lambda x: x[0]):
         fields = list(fields)
-        SQL = """SELECT managed_object, argMax(ts, ts), %%s %s
-              FROM %s
+        SQL = """SELECT managed_object, argMax(ts, ts), %s {}
+              FROM {}
               WHERE
-                date >= toDate('%s')
-                AND ts >= toDateTime('%s')
-                AND managed_object IN (%s)
-              GROUP BY managed_object %%s
-              """ % (
-            ", ".join(["argMax(%s, ts) as %s" % (f[1], f[1]) for f in fields]),
+                date >= toDate('{}')
+                AND ts >= toDateTime('{}')
+                AND managed_object IN ({})
+              GROUP BY managed_object %s
+              """.format(
+            ", ".join([f"argMax({f[1]}, ts) as {f[1]}" for f in fields]),
             table,
             from_date.date().isoformat(),
             from_date.isoformat(sep=" "),
@@ -735,16 +735,16 @@ def get_interface_metrics(
             continue
         metric_fields[alias] = mt.field_name
         requested_metrics += [f"argMax({mt.field_name}, ts) as {alias}"]
-    SQL = """SELECT managed_object, argMax(ts, ts) as tsm,  splitByString('::', arrayFirst(x -> startsWith(x, 'noc::interface::'), labels))[-1] as iface, labels, %s
-            FROM %s
+    SQL = """SELECT managed_object, argMax(ts, ts) as tsm,  splitByString('::', arrayFirst(x -> startsWith(x, 'noc::interface::'), labels))[-1] as iface, labels, {}
+            FROM {}
             WHERE
-              date >= toDate('%s')
-              AND ts >= toDateTime('%s')
-              AND managed_object IN (%s)
+              date >= toDate('{}')
+              AND ts >= toDateTime('{}')
+              AND managed_object IN ({})
               AND NOT arrayExists(x -> startsWith(x, 'noc::subinterface::'), labels)
             GROUP BY managed_object, labels
             FORMAT JSON
-            """ % (
+            """.format(
         ", ".join(requested_metrics),
         metrics["table_name"],
         from_date.date().isoformat(),

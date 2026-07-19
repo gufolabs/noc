@@ -24,7 +24,7 @@ def set_translation(service, lang):
 
     if lang != "en":
         # Check .mo file
-        mo_path = "services/%s/translations/%s/LC_MESSAGES/messages.mo" % (service, lang)
+        mo_path = f"services/{service}/translations/{lang}/LC_MESSAGES/messages.mo"
         if os.path.exists(mo_path):
             logger.info("Setting '%s' translation", mo_path)
             with open(mo_path, mode="rb") as f:

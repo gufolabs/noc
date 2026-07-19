@@ -33,7 +33,7 @@ class GridVCS:
     DEFAULT_COMPRESS = "z"
 
     def __init__(self, repo) -> None:
-        self.fs = gridfs.GridFS(get_db(), collection="noc.gridvcs.%s" % repo)
+        self.fs = gridfs.GridFS(get_db(), collection=f"noc.gridvcs.{repo}")
         self.files = self.fs._GridFS__files
 
     def get_delta(self, src: str, dst: str) -> tuple[str, bytes]:
@@ -57,7 +57,7 @@ class GridVCS:
         :param delta: Delta
         :return: Patched string
         """
-        return getattr(cls, "apply_delta_%s" % type)(src, delta)
+        return getattr(cls, f"apply_delta_{type}")(src, delta)
 
     @staticmethod
     def apply_delta_F(src: str, delta: bytes) -> str:

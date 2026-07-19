@@ -61,10 +61,10 @@ class Session:
             pool
         """
         try:
-            svc = get_dcs().resolve_sync("activator-%s" % self._pool, hint=self._hints[0])
+            svc = get_dcs().resolve_sync(f"activator-{self._pool}", hint=self._hints[0])
             self._hints[0] = svc
         except ResolutionError:
-            raise RPCNoService("activator-%s" % self._pool)
+            raise RPCNoService(f"activator-{self._pool}")
 
     def __call__(self, name, args, timeout=None, streaming=None, return_metrics=False):
         # Call SAE for credentials

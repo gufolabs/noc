@@ -81,7 +81,7 @@ class MMLBase(BaseCLI):
             if code:
                 # MML Error
                 self.result = ""
-                self.error = MMLError("%s (code=%s)" % (msg, code))
+                self.error = MMLError(f"{msg} (code={code})")
                 return None
             # Process continuation
             if self.rx_mml_continue:

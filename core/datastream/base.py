@@ -72,8 +72,8 @@ class DataStream:
     @classmethod
     def get_collection_name(cls, format: str | None = None) -> str:
         if format:
-            return "ds_%s_%s" % (cls.name, format)
-        return "ds_%s" % cls.name
+            return f"ds_{cls.name}_{format}"
+        return f"ds_{cls.name}"
 
     @classmethod
     def get_collection(cls, fmt: str | None = None) -> pymongo.collection.Collection:
@@ -105,7 +105,7 @@ class DataStream:
         meta = cls.get_meta({})
         if meta:
             for m in meta:
-                coll.create_index("%s.%s" % (cls.F_META, m))
+                coll.create_index(f"{cls.F_META}.{m}")
 
     @classmethod
     def get_object(cls, id):
@@ -640,9 +640,9 @@ class DataStream:
         q = {}
         for fx in exprs:
             pv = cls._parse_filter(fx)
-            h = getattr(cls, "filter_%s" % pv[0], None)
+            h = getattr(cls, f"filter_{pv[0]}", None)
             if not h:
-                raise ValueError("Invalid filter %s" % pv[0])
+                raise ValueError(f"Invalid filter {pv[0]}")
             q.update(h(*pv[1:]))
         return q
 

@@ -34,7 +34,7 @@ class BaseExtractor:
 
     @classmethod
     def is_enabled(cls):
-        return getattr(config.bi, "enable_%s" % cls.name, False)
+        return getattr(config.bi, f"enable_{cls.name}", False)
 
     def extract(self, *args, **options):
         pass

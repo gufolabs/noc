@@ -239,7 +239,7 @@ class ArrayField(BaseField):
         return f"Array({self.field_type.get_db_type()})"
 
     def get_displayed_type(self):
-        return "Array(%s)" % self.field_type.get_db_type()
+        return f"Array({self.field_type.get_db_type()})"
 
     def to_python(self, value):
         if not value or value == "[]":
@@ -378,17 +378,17 @@ class NestedField(ArrayField):
             for f in item:
                 self.field_type._meta.fields[f].apply_json(row, item[f])
             for nested_name in row:
-                full_name = "%s.%s" % (self.name, nested_name)
+                full_name = f"{self.name}.{nested_name}"
                 arrays[full_name] += [row[nested_name]]
         row_json.update(arrays)
 
     def get_db_type(self, name=None):
         if name is None:
-            return "Nested (\n%s \n)" % self.field_type.get_create_sql()
-        return "Array(%s)" % self.field_type._meta.fields[name].get_db_type()
+            return f"Nested (\n{self.field_type.get_create_sql()} \n)"
+        return f"Array({self.field_type._meta.fields[name].get_db_type()})"
 
     def get_displayed_type(self):
-        return "Nested (\n%s \n)" % self.field_type.get_create_sql()
+        return f"Nested (\n{self.field_type.get_create_sql()} \n)"
 
     def to_python(self, value):
         if not value or value == "[]":
@@ -403,11 +403,10 @@ class NestedField(ArrayField):
         ]
 
     def get_select_sql(self):
-        m = [
-            "toString(%s.%s[x])" % (self.name, f.name) for f in self.field_type._meta.ordered_fields
-        ]
+        m = [f"toString({self.name}.{f.name}[x])" for f in self.field_type._meta.ordered_fields]
         r = [
-            "arrayMap(x -> [%s], arrayEnumerate(%s.%s))"
-            % (",".join(m), self.name, self.field_type.get_pk_name())
+            "arrayMap(x -> [{}], arrayEnumerate({}.{}))".format(
+                ",".join(m), self.name, self.field_type.get_pk_name()
+            )
         ]
         return "".join(r)

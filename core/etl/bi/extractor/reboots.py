@@ -56,7 +56,7 @@ class RebootsExtractor(BaseExtractor):
 
     def clean(self, force=False):
         if force:
-            print("Clean Reboots collection before %s" % self.clean_ts)
+            print(f"Clean Reboots collection before {self.clean_ts}")
             Reboot._get_collection().remove({"ts": {"$lte": self.clean_ts}})
 
     @classmethod

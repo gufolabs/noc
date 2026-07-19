@@ -77,7 +77,7 @@ class BaseGeocoder:
             code, headers, body = client.get(url)
             if 200 <= code <= 299:
                 return code, body
-            raise GeoCoderError("HTTP Error %s" % code)
+            raise GeoCoderError(f"HTTP Error {code}")
 
     @staticmethod
     def get_path(data, path):

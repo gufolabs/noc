@@ -30,5 +30,5 @@ def rpsl_format(rpsl, ident=None):
 def rpsl_multiple(key, value):
     if not value:
         return []
-    mask = "%s: %%s" % key
+    mask = f"{key}: %s"
     return [mask % x for x in value.split("\n")]

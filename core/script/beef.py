@@ -69,17 +69,17 @@ class Beef:
         if isinstance(data, str):
             data = orjson.loads(data)
         version = data.get("version", "1")
-        decoder = "decode_v%s" % version
+        decoder = f"decode_v{version}"
         beef = Beef()
         if not hasattr(cls, decoder):
-            raise ValueError("Unknown beef version '%s'" % version)
+            raise ValueError(f"Unknown beef version '{version}'")
         getattr(beef, decoder)(data)
         return beef
 
     @staticmethod
     def get_or_die(d, k):
         if k not in d:
-            raise ValueError("Missed '%s' key" % k)
+            raise ValueError(f"Missed '{k}' key")
         return d[k]
 
     def decode_v1(self, data):
@@ -115,9 +115,9 @@ class Beef:
             MIB(oid=self.get_or_die(d, "oid"), value=smart_bytes(self.get_or_die(d, "value")))
             for d in self.get_or_die(data, "mib")
         ]
-        self._mib_decoder = getattr(self, "mib_decode_%s" % self.mib_encoding)
+        self._mib_decoder = getattr(self, f"mib_decode_{self.mib_encoding}")
         self.cli_encoding = self.get_or_die(data, "cli_encoding")
-        self._cli_decoder = getattr(self, "cli_decode_%s" % self.cli_encoding)
+        self._cli_decoder = getattr(self, f"cli_decode_{self.cli_encoding}")
 
     def get_data(self, decode=False):
         return {

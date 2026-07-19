@@ -46,10 +46,10 @@ def get_vpn_id(vpn: dict[str, Any]) -> str:
         identity = vpn["name"]
     else:
         raise ValueError("Cannot calculate VPN id")
-    identity = "%s:%s" % (T_MAP.get(vpn["type"], vpn["type"]), identity)
+    identity = "{}:{}".format(T_MAP.get(vpn["type"], vpn["type"]), identity)
     # RFC2685 declares VPN ID as <IEEE OUI (3 octets)>:<VPN number (4 octets)
     # Use reserved OUI range 00 00 00 - 00 00 FF to generate
     # So we have 5 octets to fill vpn id
     # Use last 5 octets of siphash 2-4
     i_hash = siphash24(smart_bytes(identity), key=SIPHASH_SEED).digest()
-    return "%x:%x" % struct.unpack("!BI", i_hash[3:])
+    return "{:x}:{:x}".format(*struct.unpack("!BI", i_hash[3:]))

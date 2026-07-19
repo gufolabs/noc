@@ -551,9 +551,9 @@ class BaseDataSource:
         """
         # Key Fields
         r = [
-            "CREATE TABLE IF NOT EXISTS %s (" % cls._get_raw_db_table(),
+            f"CREATE TABLE IF NOT EXISTS {cls._get_raw_db_table()} (",
             ",\n".join(
-                f"  {c.name} {c.type} {c.default_kind or ''} {'DEFAULT %s' % c.default_expression if c.default_expression else ''}"
+                f"  {c.name} {c.type} {c.default_kind or ''} {f'DEFAULT {c.default_expression}' if c.default_expression else ''}"
                 for c in cls.iter_create_sql()
             ),
             ") ENGINE = MergeTree() ORDER BY (date, job_uuid)\n",
@@ -596,7 +596,7 @@ class BaseDataSource:
     def quote_name(name):
         """Clickhouse-safe field names"""
         if "." in name:
-            return "`%s`" % name
+            return f"`{name}`"
         return name
 
     @classmethod

@@ -19,7 +19,7 @@ from noc.core.ioloop.util import setup_asyncio
 from noc.config import config
 from .base import DCSBase
 
-DEFAULT_DCS = "consul://%s:%s/%s" % (config.consul.host, config.consul.port, config.consul.base)
+DEFAULT_DCS = f"consul://{config.consul.host}:{config.consul.port}/{config.consul.base}"
 
 
 class DCSRunner:
@@ -37,7 +37,7 @@ class DCSRunner:
     def get_dcs_class(cls, url: str):
         scheme = url.split(":", 1)[0]
         if scheme not in cls.HANDLERS:
-            raise ValueError("Unknown DCS handler: %s" % scheme)
+            raise ValueError(f"Unknown DCS handler: {scheme}")
         handler = get_handler(cls.HANDLERS[scheme])
         if not handler:
             raise ValueError("Cannot initialize DCS handler: %s", scheme)
@@ -55,7 +55,7 @@ class DCSRunner:
                     self.thread.start()
                     self.ready_event.wait()
                     self.logger.debug("DCS runner thread is ready")
-                self.logger.debug("Starting DCS %s" % url)
+                self.logger.debug(f"Starting DCS {url}")
                 dcs_cls = self.get_dcs_class(url)
                 dcs = dcs_cls(self, url)
                 self.instances[url] = dcs

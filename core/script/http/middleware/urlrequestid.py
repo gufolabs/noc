@@ -23,7 +23,7 @@ class URLRequestIdMiddleware(BaseMiddleware):
 
     def process_request(self, url, body, headers):
         if "?" in url:
-            url += "&%s=%s" % (self.request_id_param, self.http.request_id)
+            url += f"&{self.request_id_param}={self.http.request_id}"
         else:
-            url += "?%s=%s" % (self.request_id_param, self.http.request_id)
+            url += f"?{self.request_id_param}={self.http.request_id}"
         return url, body, headers

@@ -14,7 +14,7 @@ class Var:
         return self.name
 
     def __repr__(self) -> str:
-        return "<Var '%s' at %s>" % (self.name, id(self))
+        return f"<Var '{self.name}' at {id(self)}>"
 
     def get(self, ctx):
         return ctx.get(self.name)

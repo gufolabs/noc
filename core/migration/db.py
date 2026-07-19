@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Migration db property
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -40,17 +40,18 @@ class DB:
         assert len(table_name) <= self.MAX_NAME_LENGTH, "Too long table name"
         columns = [self.column_sql(table_name, field_name, field) for field_name, field in fields]
         self.execute(
-            "CREATE TABLE %s (%s)"
-            % (self.quote_name(table_name), ", ".join(col for col in columns if col))
+            "CREATE TABLE {} ({})".format(
+                self.quote_name(table_name), ", ".join(col for col in columns if col)
+            )
         )
         self.execute_deferred_sql()
 
     def delete_table(self, table_name, cascade=True):
         tn = self.quote_name(table_name)
         if cascade:
-            self.execute("DROP TABLE %s CASCADE;" % tn)
+            self.execute(f"DROP TABLE {tn} CASCADE;")
         else:
-            self.execute("DROP TABLE %s;" % tn)
+            self.execute(f"DROP TABLE {tn};")
 
     def has_column(self, table_name, name):
         """
@@ -70,28 +71,18 @@ class DB:
         )[0][0]
 
     def add_column(self, table_name, name, field):
-        sql = "ALTER TABLE %s ADD COLUMN %s;" % (
-            self.quote_name(table_name),
-            self.column_sql(table_name, name, field),
-        )
+        sql = f"ALTER TABLE {self.quote_name(table_name)} ADD COLUMN {self.column_sql(table_name, name, field)};"
         self.execute(sql)
         self.execute_deferred_sql()
 
     def delete_column(self, table_name, field_name):
-        sql = "ALTER TABLE %s DROP COLUMN %s CASCADE;" % (
-            self.quote_name(table_name),
-            self.quote_name(field_name),
-        )
+        sql = f"ALTER TABLE {self.quote_name(table_name)} DROP COLUMN {self.quote_name(field_name)} CASCADE;"
         self.execute(sql)
 
     def rename_column(self, table_name, old, new):
         if old == new:
             return
-        sql = "ALTER TABLE %s RENAME COLUMN %s TO %s;" % (
-            self.quote_name(table_name),
-            self.quote_name(old),
-            self.quote_name(new),
-        )
+        sql = f"ALTER TABLE {self.quote_name(table_name)} RENAME COLUMN {self.quote_name(old)} TO {self.quote_name(new)};"
         self.execute(sql)
 
     def execute(self, sql, params=None):
@@ -118,18 +109,18 @@ class DB:
         index_unique_name = ""
 
         if len(column_names) > 1:
-            index_unique_name = "_%x" % abs(hash((table_name, ",".join(column_names))))
+            index_unique_name = "_{:x}".format(abs(hash((table_name, ",".join(column_names)))))
 
         # If the index name is too long, truncate it
         index_name = (
-            ("%s_%s%s" % (idx_table_name, column_names[0], index_unique_name))
+            (f"{idx_table_name}_{column_names[0]}{index_unique_name}")
             .replace('"', "")
             .replace(".", "_")
         )
         if len(index_name) > 63:
-            part = "_%s%s" % (column_names[0], index_unique_name)
-            index_name = "%s%s" % (idx_table_name[: self.MAX_NAME_LENGTH - len(part)], part)
-        sql = "CREATE %sINDEX %s ON %s (%s);" % (
+            part = f"_{column_names[0]}{index_unique_name}"
+            index_name = f"{idx_table_name[: self.MAX_NAME_LENGTH - len(part)]}{part}"
+        sql = "CREATE {}INDEX {} ON {} ({});".format(
             "UNIQUE " if unique else "",
             self.quote_name(index_name),
             self.quote_name(table_name),
@@ -211,12 +202,12 @@ class DB:
                 if callable(default):
                     default = default()
                 if isinstance(default, str):
-                    default = "'%s'" % default.replace("'", "''")
+                    default = "'{}'".format(default.replace("'", "''"))
                 elif isinstance(default, (datetime.date, datetime.time, datetime.datetime)):
-                    default = "'%s'" % default
+                    default = f"'{default}'"
                 if isinstance(default, str):
                     default = default.replace("%", "%%")
-                sql += ["DEFAULT %s" % default]
+                sql += [f"DEFAULT {default}"]
                 params += [default]
             elif (not field.null and field.blank) or (field.get_default() == ""):
                 if (
@@ -244,19 +235,15 @@ class DB:
         """
         Generates a full SQL statement to add a foreign key constraint
         """
-        constraint_name = "%s_refs_%s_%x" % (
-            from_column_name,
-            to_column_name,
-            abs(hash((from_table_name, to_table_name))),
-        )
-        return "ALTER TABLE %s ADD CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s (%s)%s;" % (
-            self.quote_name(from_table_name),
-            self.quote_name(truncate_name(constraint_name, connection.ops.max_name_length())),
-            self.quote_name(from_column_name),
-            self.quote_name(to_table_name),
-            self.quote_name(to_column_name),
-            connection.ops.deferrable_sql(),  # Django knows this
-        )
+        constraint_name = f"{from_column_name}_refs_{to_column_name}_{abs(hash((from_table_name, to_table_name))):x}"
+        qn = self.quote_name
+        const_name = truncate_name(constraint_name, connection.ops.max_name_length())
+        return f"""ALTER TABLE {qn(from_table_name)}
+        ADD CONSTRAINT {qn(const_name)}
+        FOREIGN KEY ({qn(from_column_name)})
+        REFERENCES {qn(to_table_name)} ({qn(to_column_name)})
+        {connection.ops.deferrable_sql()}
+        """
 
     def execute_deferred_sql(self):
         for sql in self.deferred_sql:
@@ -275,19 +262,14 @@ class DB:
         def qn(name):
             if name.startswith('"') and name.endswith('"'):
                 return name  # Quoting once is enough.
-            return '"%s"' % name
+            return f'"{name}"'
 
         max_name_length = 63
 
         if field.db_index and not field.unique:
             i_name = names_digest(model._meta.db_table, field.column, length=8)
             return [
-                "CREATE INDEX %s ON %s(%s)"
-                % (
-                    qn(truncate_name(i_name, max_name_length)),
-                    qn(model._meta.db_table),
-                    qn(field.column),
-                )
+                f"CREATE INDEX {qn(truncate_name(i_name, max_name_length))} ON {qn(model._meta.db_table)}({qn(field.column)})"
             ]
         return []
 

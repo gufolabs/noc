@@ -82,7 +82,7 @@ class CustomField(NOCModel):
     _table_fields = None
 
     def __str__(self):
-        return "%s.%s" % (self.table, self.name)
+        return f"{self.table}.{self.name}"
 
     @property
     def is_table(self):
@@ -90,11 +90,11 @@ class CustomField(NOCModel):
 
     @property
     def db_column(self):
-        return "cust_%s" % self.name
+        return f"cust_{self.name}"
 
     @property
     def index_name(self):
-        return "%s_%s" % (self.table, self.name)
+        return f"{self.table}_{self.name}"
 
     def get_enums(self):
         """
@@ -155,7 +155,7 @@ class CustomField(NOCModel):
         # field.db_type ?
         if self.type == "str":
             ms = self.max_length if self.max_length else 256
-            r = "VARCHAR(%s)" % ms
+            r = f"VARCHAR({ms})"
         elif self.type == "int":
             r = "INTEGER"
         elif self.type == "bool":
@@ -165,12 +165,12 @@ class CustomField(NOCModel):
         elif self.type == "datetime":
             r = "TIMESTAMP"
         else:
-            raise ValueError("Invalid field type '%s'" % self.type)
-        return 'ALTER TABLE %s ADD COLUMN "%s" %s NULL' % (self.table, self.db_column, r)
+            raise ValueError(f"Invalid field type '{self.type}'")
+        return f'ALTER TABLE {self.table} ADD COLUMN "{self.db_column}" {r} NULL'
 
     @property
     def db_drop_statement(self):
-        return 'ALTER TABLE %s DROP COLUMN "%s"' % (self.table, self.db_column)
+        return f'ALTER TABLE {self.table} DROP COLUMN "{self.db_column}"'
 
     def execute(self, sql):
         logger.debug("Execute: %s", sql)
@@ -190,14 +190,12 @@ class CustomField(NOCModel):
     def create_index(self):
         logger.info("Creating index %s", self.index_name)
         if self.is_table:
-            self.execute(
-                "CREATE INDEX %s ON %s(%s)" % (self.index_name, self.table, self.db_column)
-            )
+            self.execute(f"CREATE INDEX {self.index_name} ON {self.table}({self.db_column})")
 
     def drop_index(self):
         logger.info("Dropping index %s", self.index_name)
         if self.is_table:
-            self.execute("DROP INDEX %s" % self.index_name)
+            self.execute(f"DROP INDEX {self.index_name}")
 
     def rename(self, old):
         logger.info(
@@ -208,9 +206,7 @@ class CustomField(NOCModel):
             self.name,
         )
         if self.is_table:
-            self.execute(
-                'ALTER TABLE %s RENAME "%s" TO "%s"' % (self.table, old.name, self.db_column)
-            )
+            self.execute(f'ALTER TABLE {self.table} RENAME "{old.name}" TO "{self.db_column}"')
 
     def save(self, *args, **kwargs):
         """
@@ -404,7 +400,7 @@ class CustomField(NOCModel):
                 f["format"] = "Y-m-d H:i:s"
                 f["altFormats"] = "Y-m-d\\TH:i:s"
         else:
-            raise ValueError("Invalid field type '%s'" % self.type)
+            raise ValueError(f"Invalid field type '{self.type}'")
         return f
 
     def get_choices(self):
@@ -413,12 +409,11 @@ class CustomField(NOCModel):
         """
         c = connection.cursor()
         c.execute(
-            """
-            SELECT DISTINCT \"%(col)s\"
-            FROM %(table)s
-            WHERE \"%(col)s\" IS NOT NULL AND \"%(col)s\" != ''
-            ORDER BY \"%(col)s\""""
-            % {"col": self.db_column, "table": self.table}
+            f"""
+            SELECT DISTINCT \"{self.db_column}\"
+            FROM {self.table}
+            WHERE \"{self.db_column}\" IS NOT NULL AND \"{self.db_column}\" != ''
+            ORDER BY \"{self.db_column}\""""
         )
         return [(x, x) for (x,) in c.fetchall()]
 
@@ -427,7 +422,7 @@ class CustomField(NOCModel):
         q = []
         for f in CustomField.objects.filter(is_active=True, table=table, is_searchable=True):
             if f.type == "str":
-                q += [{"%s__icontains" % f.name: query}]
+                q += [{f"{f.name}__icontains": query}]
             elif f.type == "int":
                 if is_int(query):
                     q += [{f.name: int(query)}]

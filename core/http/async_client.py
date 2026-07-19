@@ -102,9 +102,9 @@ class HttpClient(GufoHttpClient):
             return url
         addr = await self.resolver(host)
         if not addr:
-            raise TimeoutError("Cannot resolve host: %s" % host)
+            raise TimeoutError(f"Cannot resolve host: {host}")
         if isinstance(addr, tuple):
-            host = "%s:%s" % addr
+            host = "{}:{}".format(*addr)
         else:
             host = f"{addr}:{port}"
         return u._replace(netloc=host).geturl()

@@ -25,7 +25,7 @@ if os.name == "nt":
 class cachedproperty:
     def __init__(self, f) -> None:
         self.f = f
-        self.n = "_%s" % f.__name__
+        self.n = f"_{f.__name__}"
         self.__doc__ = f.__doc__
 
     def __get__(self, instance, owner):
@@ -138,7 +138,7 @@ class Version:
                         if v.startswith('"') and v.endswith('"'):
                             v = v[1:-1]
                         vdata[k] = v
-                return "%s %s" % (vdata["NAME"], vdata["VERSION_ID"])
+                return "{} {}".format(vdata["NAME"], vdata["VERSION_ID"])
             # Old SuSE?
             if os.path.exists("/etc/SuSE-release"):
                 # SuSE
@@ -153,10 +153,10 @@ class Version:
             return "Unknown Linux"
         if o == "freebsd":
             u = os.uname()
-            return "%s %s" % (u[0], u[2])
+            return f"{u[0]} {u[2]}"
         if o == "darwin":
             # OS X
-            return "Mac OS X %s" % platform.mac_ver()[0]
+            return f"Mac OS X {platform.mac_ver()[0]}"
         return None
 
     @cachedproperty

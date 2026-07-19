@@ -58,11 +58,11 @@ class YAMLProtocol(BaseProtocol):
                 # Common part
                 current = [x for x, y in zip_longest(current, prefix) if x == y]
                 for pp in prefix[len(current) :]:
-                    r += ["%s%s:" % (self.INDENT * len(current), pp)]
+                    r += [f"{self.INDENT * len(current)}{pp}:"]
                     current += [pp]
             if isinstance(v, str) and v.startswith(self.ESCAPE_START):
                 v = "\\" + v
-            r += ["%s%s: %s" % (self.INDENT * len(current), p[-1], v)]
+            r += [f"{self.INDENT * len(current)}{p[-1]}: {v}"]
         r = "\n".join(r)
         if self.path:
             with open(self.path, "w") as f:

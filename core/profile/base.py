@@ -45,13 +45,13 @@ class BaseProfileMetaclass(type):
         n.rogue_char_cleaners = n._get_rogue_chars_cleaners()
         if n.command_more:
             warnings.warn(
-                "%s: 'command_more' is deprecated and will be removed in NOC 20.3" % n.name,
+                f"{n.name}: 'command_more' is deprecated and will be removed in NOC 20.3",
                 RemovedInNOC2003Warning,
             )
         if isinstance(n.pattern_more, (str, bytes)):
             warnings.warn(
-                "%s: 'pattern_more' must be a list of (pattern, command). "
-                "Support for textual 'command_more' will be removed in NOC 20.3" % n.name,
+                f"{n.name}: 'pattern_more' must be a list of (pattern, command). "
+                "Support for textual 'command_more' will be removed in NOC 20.3",
                 RemovedInNOC2003Warning,
             )
             n.pattern_more = [(n.pattern_more, n.command_more)]
@@ -61,8 +61,7 @@ class BaseProfileMetaclass(type):
             v = getattr(n, attr, None)
             if v is not None and isinstance(v, str):
                 warnings.warn(
-                    "%s: '%s' must be of binary type. Support for text values will be removed in NOC 20.3"
-                    % (n.name, attr),
+                    f"{n.name}: '{attr}' must be of binary type. Support for text values will be removed in NOC 20.3",
                     RemovedInNOC2003Warning,
                 )
                 setattr(n, attr, smart_bytes(v))
@@ -71,14 +70,14 @@ class BaseProfileMetaclass(type):
         for pattern, cmd in n.pattern_more:
             if not isinstance(pattern, bytes):
                 warnings.warn(
-                    "%s: 'pattern_more' %r pattern must be of binary type. "
-                    "Support for text values will be removed in NOC 20.2" % (n.name, pattern)
+                    f"{n.name}: 'pattern_more' {pattern!r} pattern must be of binary type. "
+                    "Support for text values will be removed in NOC 20.2"
                 )
                 pattern = smart_bytes(pattern)
             if isinstance(cmd, str):
                 warnings.warn(
-                    "%s: 'pattern_more' %r command must be of binary type. "
-                    "Support for text values will be removed in NOC 20.2" % (n.name, cmd)
+                    f"{n.name}: 'pattern_more' {cmd!r} command must be of binary type. "
+                    "Support for text values will be removed in NOC 20.2"
                 )
                 cmd = smart_bytes(cmd)
             pattern_more += [(pattern, cmd)]
@@ -569,7 +568,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         """
         if "/" in prefix and self.requires_netmask_conversion:
             prefix = IPv4(prefix)
-            return "%s %s" % (prefix.address, prefix.netmask.address)
+            return f"{prefix.address} {prefix.netmask.address}"
         return prefix
 
     def convert_mac_to_colon(self, mac):
@@ -603,7 +602,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         :rtype: str
         """
         v = mac.replace(":", "").lower()
-        return "%s.%s.%s" % (v[:4], v[4:8], v[8:])
+        return f"{v[:4]}.{v[4:8]}.{v[8:]}"
 
     def convert_mac_to_huawei(self, mac):
         """
@@ -617,7 +616,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         :rtype: str
         """
         v = mac.replace(":", "").lower()
-        return "%s-%s-%s" % (v[:4], v[4:8], v[8:])
+        return f"{v[:4]}-{v[4:8]}-{v[8:]}"
 
     def convert_mac_to_dashed(self, mac):
         """
@@ -632,7 +631,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         :rtype: str
         """
         v = mac.replace(":", "").lower()
-        return "%s-%s-%s-%s-%s-%s" % (v[:2], v[2:4], v[4:6], v[6:8], v[8:10], v[10:])
+        return f"{v[:2]}-{v[2:4]}-{v[4:6]}-{v[6:8]}-{v[8:10]}-{v[10:]}"
 
     convert_mac = convert_mac_to_colon
     """
@@ -683,8 +682,8 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         """
         match = self.rx_cisco_interface_name.match(s)
         if not match:
-            raise InterfaceTypeError("Invalid interface '%s'" % s)
-        return "%s %s" % (match.group("type").capitalize(), match.group("number"))
+            raise InterfaceTypeError(f"Invalid interface '{s}'")
+        return "{} {}".format(match.group("type").capitalize(), match.group("number"))
 
     def root_interface(self, name):
         """
@@ -1039,22 +1038,22 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         """
 
         def qi(s):
-            return '"%s"' % s
+            return f'"{s}"'
 
         def nqi(s):
             if isinstance(s, str):
-                return '"%s"' % s
+                return f'"{s}"'
             return str(s)
 
         if ";" in cmd:
-            return "%s\r\n" % cmd
+            return f"{cmd}\r\n"
         r = [cmd, ":"]
         if kwargs:
             if self.mml_always_quote:
                 q = qi
             else:
                 q = nqi
-            r += [", ".join("%s=%s" % (k, q(kwargs[k])) for k in kwargs)]
+            r += [", ".join(f"{k}={q(kwargs[k])}" for k in kwargs)]
         r += [";", "\r\n"]
         return "".join(r)
 
@@ -1109,9 +1108,9 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
             else:
                 a_handler, a_cfg = cfg
             if not a_handler.startswith("noc."):
-                a_handler = "noc.sa.profiles.%s.confdb.applicator.%s" % (profile_name, a_handler)
+                a_handler = f"noc.sa.profiles.{profile_name}.confdb.applicator.{a_handler}"
             a_cls = get_handler(a_handler)
-            assert a_cls, "Invalid applicator %s" % a_handler
+            assert a_cls, f"Invalid applicator {a_handler}"
             applicator = a_cls(object, confdb, **a_cfg)
             if applicator.can_apply():
                 return applicator
@@ -1141,7 +1140,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
             if not c_handler.startswith("noc."):
                 c_handler = f"noc.sa.profiles.{profile_name}.confdb.collator.{c_handler}"
             c_cls = get_handler(c_handler)
-            assert c_cls, "Invalid collator %s" % c_handler
+            assert c_cls, f"Invalid collator {c_handler}"
             return c_cls(**c_cfg)
 
         profile_name = obj.get_profile().name
@@ -1254,8 +1253,8 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
             for rc in cls.rogue_chars:
                 if isinstance(rc, str):
                     warnings.warn(
-                        "%s: 'rogue_char' %r pattern must be of binary type. "
-                        "Support for text values will be removed in NOC 20.2" % (cls.name, rc)
+                        f"{cls.name}: 'rogue_char' {rc!r} pattern must be of binary type. "
+                        "Support for text values will be removed in NOC 20.2"
                     )
                     chain += [get_bytes_cleaner(smart_bytes(rc))]
                 elif isinstance(rc, bytes):
@@ -1264,22 +1263,20 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
                     if not isinstance(rc.pattern, bytes):
                         # Recompile as binary re
                         warnings.warn(
-                            "%s: 'rogue_char' %r pattern must be of binary type. "
+                            f"{cls.name}: 'rogue_char' {rc.pattern!r} pattern must be of binary type. "
                             "Support for text values will be removed in NOC 20.2"
-                            % (cls.name, rc.pattern)
                         )
                         # Remove re.UNICODE flag
                         flags = rc.flags
                         if flags & re.UNICODE:
                             warnings.warn(
-                                "%s: 'rogue_char' %r pattern cannot be compiled with re.UNICODE flag."
-                                % (cls.name, rc.pattern)
+                                f"{cls.name}: 'rogue_char' {rc.pattern!r} pattern cannot be compiled with re.UNICODE flag."
                             )
                             flags &= ~re.UNICODE
                         rc = re.compile(smart_bytes(rc.pattern), flags)
                     chain += [get_re_cleaner(rc)]
                 else:
-                    raise ValueError("Invalid rogue char expression: %r" % rc)
+                    raise ValueError(f"Invalid rogue char expression: {rc!r}")
         return chain
 
     def get_snmp_rate_limit(self, script) -> float | None:

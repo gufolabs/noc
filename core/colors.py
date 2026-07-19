@@ -50,7 +50,7 @@ def get_colors(N):
             hs = [i * d for i in range(p)]
         H = hs.pop(len(hs) // 2 if N % 2 else 0)
         # Yield current color
-        yield "#%02x%02x%02x" % (hsv_to_rgb(H, S, V))
+        yield "#{:02x}{:02x}{:02x}".format(*hsv_to_rgb(H, S, V))
         N = N - 1
         if not hs:
             # Reduce value for next round

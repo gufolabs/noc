@@ -81,7 +81,7 @@ async def whois_async(query, fields=None):
     if is_fqdn(query):
         # Use TLD.whois-servers.net for domain lookup
         tld = query.split(".")[-1]
-        server = "%s.whois-servers.net" % tld
+        server = f"{tld}.whois-servers.net"
     else:
         server = DEFAULT_WHOIS_SERVER
     # Perform query

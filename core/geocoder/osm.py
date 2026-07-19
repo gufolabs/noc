@@ -24,10 +24,10 @@ class OSMNominatimGeocoder(BaseGeocoder):
         q = urllib_quote(query)
         url = f"https://nominatim.openstreetmap.org/search?q={q}&format=json&addressdetails=1"
         if bounds:
-            url += "viewbox=%s,%s" % bounds
+            url += "viewbox={},{}".format(*bounds)
         code, response = self.get("".join(url))
         if code != 200:
-            raise GeoCoderError("%s: %s" % (code, response))
+            raise GeoCoderError(f"{code}: {response}")
         try:
             r = orjson.loads(response)
         except ValueError:

@@ -36,4 +36,4 @@ class SQLLookup(Lookup):
     prepare_rhs = False
 
     def as_sql(self, compiler, connection):
-        return "(%s)" % self.rhs, []
+        return f"({self.rhs})", []

@@ -146,11 +146,11 @@ class WhoisCacheLoader:
         try:
             f = self.urlopen(url)
         except URLError as e:
-            logger.error("Failed to download %s: %s" % (url, e))
-            raise self.DownloadError("Failed to download %s: %s" % (url, e))
+            logger.error(f"Failed to download {url}: {e}")
+            raise self.DownloadError(f"Failed to download {url}: {e}")
         except OSError as e:
-            logger.error("Failed to download %s: %s" % (url, e))
-            raise self.DownloadError("Failed to download %s: %s" % (url, e))
+            logger.error(f"Failed to download {url}: {e}")
+            raise self.DownloadError(f"Failed to download {url}: {e}")
         logger.info("Parsing")
         for o in parser(f, [key_field, values_field]):
             if key_field in o and values_field in o:
@@ -195,7 +195,7 @@ class WhoisCacheLoader:
         """
         # Get AS with discovered routes
         discoverable_as = {
-            "AS%s" % a.asn
+            f"AS{a.asn}"
             for a in AS.objects.all()
             if a.profile.enable_discovery_prefix_whois_route and a.profile
         }

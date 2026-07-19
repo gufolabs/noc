@@ -139,8 +139,8 @@ class NOCTableNode(template.Node):
                 if v is None:
                     a += [k]
                 else:
-                    a += ["%s='%s'" % (k, v)]
-            tt = "<table %s>" % " ".join(a)
+                    a += [f"{k}='{v}'"]
+            tt = "<table {}>".format(" ".join(a))
             return NOCTableTemplate % attrs + output.replace(t, tt) + "</div>"
         # Return untouched
         return output

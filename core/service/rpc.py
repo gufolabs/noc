@@ -134,7 +134,7 @@ class RPCProxy:
                         with _orjson_crash_lock:
                             result = orjson.loads(response)
                     except ValueError as e:
-                        raise RPCHTTPError("Cannot decode json: %s" % e)
+                        raise RPCHTTPError(f"Cannot decode json: {e}")
                     if result.get("error"):
                         self._logger.error("RPC call failed: %s", result["error"])
                         raise RPCRemoteError(

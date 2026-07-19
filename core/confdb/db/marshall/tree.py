@@ -27,13 +27,14 @@ class TreeMarshaller(BaseMarshaller):
             new_mask = 1 << level
             if mask is None:
                 # Last line
-                r.insert(0, "%s+- %s" % ("  " * level, token))
+                r.insert(0, "{}+- {}".format("  " * level, token))
                 mask = new_mask
             else:
                 mask = (new_mask | mask) & ((1 << (level + 1)) - 1)
                 r.insert(
                     0,
-                    "%s+- %s"
-                    % ("".join("| " if mask & (1 << i) else "  " for i in range(level)), token),
+                    "{}+- {}".format(
+                        "".join("| " if mask & (1 << i) else "  " for i in range(level)), token
+                    ),
                 )
         return "\n".join(r)

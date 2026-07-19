@@ -594,7 +594,7 @@ class IPv6(IP):
         """
         if "/" not in prefix:
             if netmask:
-                prefix += "/%s" % IPv6.mask_to_bits(netmask)
+                prefix += f"/{IPv6.mask_to_bits(netmask)}"
             else:
                 prefix += "/128"
         check_ipv6_prefix(prefix)
@@ -623,7 +623,7 @@ class IPv6(IP):
         parts = address.split(":")
         if "." in parts[-1]:
             p = [int(x) for x in parts[-1].split(".")]
-            parts = [*parts[:-1], "%02x%02x" % (p[0], p[1]), "%02x%02x" % (p[2], p[3])]
+            parts = [*parts[:-1], f"{p[0]:02x}{p[1]:02x}", f"{p[2]:02x}{p[3]:02x}"]
         if len(parts) == 8:
             parts = [pp if pp else "0" for pp in parts]
         else:
@@ -723,9 +723,9 @@ class IPv6(IP):
             t = r[lp + ll :]
             return IPv6(
                 "%s::%s/%d"
-                % (":".join(["%x" % p for p in h]), ":".join(["%x" % p for p in t]), mask)
+                % (":".join([f"{p:x}" for p in h]), ":".join([f"{p:x}" for p in t]), mask)
             )
-        return IPv6(":".join(["%x" % p for p in r]) + "/%d" % mask)
+        return IPv6(":".join([f"{p:x}" for p in r]) + "/%d" % mask)
 
     def __hash__(self) -> int:
         """Hash the IPv6 instance (by prefix string)."""
@@ -937,7 +937,7 @@ class IPv6(IP):
     def digits(self) -> list[str]:
         """Return the 32 hexadecimal digits of this address as a list."""
         return list(
-            "".join(["%08x" % self.d0, "%08x" % self.d1, "%08x" % self.d2, "%08x" % self.d3])
+            "".join([f"{self.d0:08x}", f"{self.d1:08x}", f"{self.d2:08x}", f"{self.d3:08x}"])
         )
 
     def ptr(self, origin_len: int) -> str:
@@ -977,9 +977,9 @@ class IPv6(IP):
         np = lp + rp
         xs = ":".join(["0"] * (8 - np))
         if lp:
-            xs = ":%s" % xs
+            xs = f":{xs}"
         if rp:
-            xs = "%s:" % xs
+            xs = f"{xs}:"
         return addr.replace("::", xs)
 
 

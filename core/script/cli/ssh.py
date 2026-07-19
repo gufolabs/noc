@@ -104,7 +104,7 @@ class SSHStream(BaseStream):
             self.session.set_blocking(False)
         except SSH2Error as e:
             self.logger.info("SSH Error: %s", e)
-            raise CLISSHProtocolError("SSH Error: %s" % e)
+            raise CLISSHProtocolError(f"SSH Error: {e}")
 
     async def read(self, n: int) -> bytes:
         while True:
@@ -128,9 +128,9 @@ class SSHStream(BaseStream):
                     return data
 
                 metrics["ssh_errors", ("code", code)] += 1
-                raise CLISSHProtocolError("SSH Error code %s" % code)
+                raise CLISSHProtocolError(f"SSH Error code {code}")
             except SSH2Error as e:
-                raise CLISSHProtocolError("SSH Error: %s" % e)
+                raise CLISSHProtocolError(f"SSH Error: {e}")
 
     async def write(self, data: bytes):
         metrics["ssh_writes"] += 1
@@ -141,7 +141,7 @@ class SSHStream(BaseStream):
                 metrics["ssh_write_bytes"] += sent
                 data = data[sent:]
             except SSH2Error as e:
-                raise CLISSHProtocolError("SSH Error: %s" % e)
+                raise CLISSHProtocolError(f"SSH Error: {e}")
 
     def close(self, exc_info=False):
         if self.channel:
@@ -174,7 +174,7 @@ class SSHStream(BaseStream):
         """
         self.logger.debug("Supported authentication methods: %s", ", ".join(methods))
         for method in methods:
-            auth_handler = getattr(self, "auth_%s" % method.replace("-", ""), None)
+            auth_handler = getattr(self, "auth_{}".format(method.replace("-", "")), None)
             if not auth_handler:
                 self.logger.debug("'%s' method is not supported, skipping", method)
                 continue

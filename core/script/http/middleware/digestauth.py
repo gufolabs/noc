@@ -73,7 +73,7 @@ class DigestAuthMiddeware(BaseMiddleware):
             self.request_id += 1
         else:
             self.request_id = 1
-        ncvalue = "%08x" % self.request_id
+        ncvalue = f"{self.request_id:08x}"
 
         s = nonce.encode("utf-8")
         # s += time.ctime().encode('utf-8')
@@ -81,33 +81,27 @@ class DigestAuthMiddeware(BaseMiddleware):
         cnonce = hashlib.sha1(smart_bytes(s)).hexdigest()[:16]
 
         if not qop:
-            respdig = hashlib.md5(smart_bytes("%s:%s:%s" % (HA1, nonce, HA2))).hexdigest()
+            respdig = hashlib.md5(smart_bytes(f"{HA1}:{nonce}:{HA2}")).hexdigest()
         elif qop == "auth" or "auth" in qop.split(","):
-            noncebit = "%s:%s:%s:%s:%s" % (nonce, ncvalue, cnonce, "auth", HA2)
-            respdig = hashlib.md5(smart_bytes("%s:%s" % (HA1, noncebit))).hexdigest()
+            noncebit = "{}:{}:{}:{}:{}".format(nonce, ncvalue, cnonce, "auth", HA2)
+            respdig = hashlib.md5(smart_bytes(f"{HA1}:{noncebit}")).hexdigest()
         else:
             respdig = None
 
-        base = 'username="%s", realm="%s", nonce="%s", uri="%s", response="%s"' % (
-            self.user,
-            realm,
-            nonce,
-            uri,
-            respdig,
-        )
+        base = f'username="{self.user}", realm="{realm}", nonce="{nonce}", uri="{uri}", response="{respdig}"'
 
         if opaque:
-            base += ', opaque="%s"' % opaque
+            base += f', opaque="{opaque}"'
         if algorithm:
-            base += ', algorithm="%s"' % algorithm
+            base += f', algorithm="{algorithm}"'
         # if entdig:
         #     base += ', digest="%s"' % entdig
         if qop:
-            base += ', qop="auth", nc=%s, cnonce="%s"' % ("%08x" % self.request_id, cnonce)
+            base += ', qop="auth", nc={}, cnonce="{}"'.format(f"{self.request_id:08x}", cnonce)
         self.last_nonce = nonce
         self.last_realm = realm
         self.last_opaque = opaque
-        return "Digest %s" % (str(base))
+        return f"Digest {base!s}"
 
     def process_request(self, url, body, headers):
         if not headers:

@@ -35,7 +35,7 @@ class LoaderLoader:
                 logger.info("Loading loader %s", name)
                 for p in config.get_customized_paths("", prefer_custom=True):
                     base = "noc.custom" if p else "noc.core"
-                    module_name = "%s.etl.loader.%s" % (base, name)
+                    module_name = f"{base}.etl.loader.{name}"
                     try:
                         sm = importlib.import_module(module_name)
                         for n in dir(sm):

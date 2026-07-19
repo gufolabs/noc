@@ -90,9 +90,9 @@ class BaseCommand:
             return 3
         except AssertionError as e:
             if e.args and e.args[0]:
-                self.print("ERROR: %s" % e.args[0])
+                self.print(f"ERROR: {e.args[0]}")
             else:
-                self.print("Assertion error: %s" % e)
+                self.print(f"Assertion error: {e}")
             return 4
         except Exception:
             from noc.core.debug import error_report
@@ -126,7 +126,7 @@ class BaseCommand:
     def create_parser(self) -> argparse.ArgumentParser:
         cmd = os.path.basename(sys.argv[0])
         if cmd.endswith(".py"):
-            cmd = "noc %s" % cmd[:-3]
+            cmd = f"noc {cmd[:-3]}"
         return argparse.ArgumentParser(prog=cmd)
 
     def handle(self, *args, **options):

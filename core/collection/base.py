@@ -290,7 +290,7 @@ class Collection:
                 # Lookup
                 k, f = k.split("__")
                 if k not in self.get_fields(model):
-                    raise ValueError("Invalid lookup field: %s" % k)
+                    raise ValueError(f"Invalid lookup field: {k}")
                 ref = self.get_fields(model)[k].document_type
                 v = self.lookup(ref, f, v)
             # Get field
@@ -320,7 +320,7 @@ class Collection:
                     v = [self.lookup(edoc, "name", x) for x in d[k]]
                 except ValueError as e:
                     self.partial_errors[d["uuid"]] = str(e)
-                    raise ValueError("Invalid lookup field: %s" % k)
+                    raise ValueError(f"Invalid lookup field: {k}")
             # Dereference binary field
             if isinstance(field, BinaryField):
                 v = b85decode(v)
@@ -355,13 +355,13 @@ class Collection:
         o = self.model.objects.filter(uuid=data["uuid"]).first()
         if o:
             self.stdout.write(
-                "[%s|%s] Updating %s\n" % (self.name, data["uuid"], getattr(o, self.name_field))
+                "[{}|{}] Updating {}\n".format(self.name, data["uuid"], getattr(o, self.name_field))
             )
             set_attrs(o, d)
             o.save()
             return True
         self.stdout.write(
-            "[%s|%s] Creating %s\n" % (self.name, data["uuid"], data.get(self.name_field))
+            "[{}|{}] Creating {}\n".format(self.name, data["uuid"], data.get(self.name_field))
         )
         o = self.model()
         set_attrs(o, d)
@@ -384,14 +384,15 @@ class Collection:
                 qs = {}
                 for fk in k:
                     if isinstance(d[fk], list):
-                        qs["%s__in" % fk] = d[fk]
+                        qs[f"{fk}__in"] = d[fk]
                     else:
                         qs[fk] = d[fk]
                 o = self.model.objects.filter(**qs).first()
                 if o:
                     self.stdout.write(
-                        "[%s|%s] Changing local uuid %s (%s)\n"
-                        % (self.name, data["uuid"], o.uuid, getattr(o, self.name_field))
+                        "[{}|{}] Changing local uuid {} ({})\n".format(
+                            self.name, data["uuid"], o.uuid, getattr(o, self.name_field)
+                        )
                     )
                     o.uuid = data["uuid"]
                     if is_document(self.model):
@@ -400,23 +401,23 @@ class Collection:
                         o.save()
                     # Try again
                     return self.update_item(data)
-                self.stdout.write("Not find object by query: %s\n" % qs)
+                self.stdout.write(f"Not find object by query: {qs}\n")
             raise
 
     def delete_item(self, uuid):
         o = self.model.objects.filter(uuid=uuid).first()
         if not o:
             return
-        self.stdout.write("[%s|%s] Deleting %s\n" % (self.name, uuid, getattr(o, self.name_field)))
+        self.stdout.write(f"[{self.name}|{uuid}] Deleting {getattr(o, self.name_field)}\n")
         o.delete()
 
     def sync(self):
         # Read collection from JSON files
         cdata = self.get_items()
         if not cdata:
-            self.stdout.write("[%s] Ignoring empty collection\n" % self.name)
+            self.stdout.write(f"[{self.name}] Ignoring empty collection\n")
             return
-        self.stdout.write("[%s] Synchronizing\n" % self.name)
+        self.stdout.write(f"[{self.name}] Synchronizing\n")
         # Get previous state
         cs = self.get_state()
         current_uuids = set(cs)
@@ -440,12 +441,11 @@ class Collection:
             if len(self.partial_errors) == pl:
                 # Cannot resolve partials
                 for u in self.partial_errors:
-                    self.stdout.write(
-                        "[%s|%s] Error: %s\n" % (self.name, u, self.partial_errors[u])
-                    )
+                    self.stdout.write(f"[{self.name}|{u}] Error: {self.partial_errors[u]}\n")
                 raise ValueError(
-                    "[%s] Cannot resolve references for %s"
-                    % (self.name, ", ".join(self.partial_errors))
+                    "[{}] Cannot resolve references for {}".format(
+                        self.name, ", ".join(self.partial_errors)
+                    )
                 )
         # Deleted items
         for u in current_uuids - new_uuids:
@@ -496,7 +496,7 @@ class Collection:
         path = Path(cls.PREFIX, c.name) / o.get_json_path()
         if "uuid" not in data:
             raise ValueError("Invalid JSON: No UUID")
-        c.stdout.write("[%s|%s] Installing %s\n" % (c.name, data["uuid"], path))
+        c.stdout.write("[{}|{}] Installing {}\n".format(c.name, data["uuid"], path))
         safe_rewrite(path, json_data, mode=0o644)
 
     @classmethod

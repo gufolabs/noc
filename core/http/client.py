@@ -127,7 +127,7 @@ async def fetch(
     else:
         addr = await resolver(host)
     if not addr:
-        return ERR_TIMEOUT, {}, "Cannot resolve host: %s" % host
+        return ERR_TIMEOUT, {}, f"Cannot resolve host: {host}"
     # Detect proxy server
     if allow_proxy:
         proxy = (proxies or SYSTEM_PROXIES).get(u.scheme)
@@ -190,7 +190,7 @@ async def fetch(
             code = parser.get_status_code()
             logger.debug("Proxy response: %s", code)
             if not 200 <= code <= 299:
-                return code, parser.get_headers(), "Proxy error: %s" % code
+                return code, parser.get_headers(), f"Proxy error: {code}"
         # Process request
         body = body or ""
         content_type = "application/binary"
@@ -230,13 +230,13 @@ async def fetch(
             h["Content-Type"] = content_type
         if user and password:
             # Include basic auth header
-            uh = smart_text("%s:%s" % (user, password))
+            uh = smart_text(f"{user}:{password}")
             h["Authorization"] = b"Basic %s" % codecs.encode(uh.encode("utf-8"), "base64").strip()
         if headers:
             h.update(headers)
         path = u.path
         if u.query:
-            path += "?%s" % u.query
+            path += f"?{u.query}"
         req = b"%s %s HTTP/1.1\r\n%s\r\n\r\n%s" % (
             smart_bytes(method),
             smart_bytes(path),

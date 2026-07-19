@@ -54,7 +54,7 @@ class LoggingMiddleware:
                 metrics["mon_requests"] += 1
             else:
                 if scope["query_string"]:
-                    path = "%s?%s" % (path, smart_text(scope["query_string"]))
+                    path = "{}?{}".format(path, smart_text(scope["query_string"]))
                 remote_ip = scope["client"][0]
                 status = 200
                 if self.is_wsgi_app:

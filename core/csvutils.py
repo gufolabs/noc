@@ -164,12 +164,12 @@ def csv_import(model, f, resolution=IR_FAIL, delimiter=","):
     # Check field names
     for h in header:
         if h not in field_names:
-            return None, "Invalid field '%s'" % h
+            return None, f"Invalid field '{h}'"
         left.remove(h)
     # Check all required fields present
     for h in left:
         if h in required_fields:
-            return None, "Required field '%s' is missed" % h
+            return None, f"Required field '{h}' is missed"
     # Load data
     count = 0
     l_header = len(header)
@@ -200,14 +200,14 @@ def csv_import(model, f, resolution=IR_FAIL, delimiter=","):
                     except ValueError:
                         return (
                             None,
-                            "Cannot resolve '%s' in field '%s' at line '%s'" % (v, h, count),
+                            f"Cannot resolve '{v}' in field '{h}' at line '{count}'",
                         )
                     try:
                         ro = rel.objects.get(**{"id": id})
                     except rel.DoesNotExist:
                         return (
                             None,
-                            "Cannot resolve '%s' in field '%s' at line '%s'" % (v, h, count),
+                            f"Cannot resolve '{v}' in field '{h}' at line '{count}'",
                         )
                 variables[h] = ro
             elif h in booleans:
@@ -218,7 +218,7 @@ def csv_import(model, f, resolution=IR_FAIL, delimiter=","):
                 try:
                     variables[h] = int(v)
                 except ValueError as e:
-                    raise ValueError("Invalid integer: %s" % e)
+                    raise ValueError(f"Invalid integer: {e}")
             elif h in {
                 "tags",
                 "labels",

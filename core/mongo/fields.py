@@ -80,7 +80,7 @@ class PlainReferenceField(BaseField):
             if v is not None:
                 instance._data[self.name] = v
                 return v
-            raise ValidationError("Unable to dereference %s:%s" % (self.document_type, value))
+            raise ValidationError(f"Unable to dereference {self.document_type}:{value}")
         return value
 
     def to_mongo(self, document):
@@ -120,7 +120,7 @@ class PlainReferenceListField(PlainReferenceField):
                     return self.document_type.get_by_id(ObjectId(value))
                 v = self.document_type.objects(id=value).first()
                 if v is None:
-                    raise ValidationError("Unable to dereference %s:%s" % (self.document_type, v))
+                    raise ValidationError(f"Unable to dereference {self.document_type}:{v}")
                 return v
             return value
 
@@ -201,7 +201,7 @@ class ForeignKeyField(BaseField):
             if v is not None:
                 instance._data[self.name] = v
                 return v
-            raise ValidationError("Unable to dereference %s:%s" % (self.document_type, value))
+            raise ValidationError(f"Unable to dereference {self.document_type}:{value}")
         return value
 
     def __set__(self, instance, value):
@@ -242,7 +242,7 @@ class ForeignKeyListField(ForeignKeyField):
                 if v is not None:
                     instance._data[self.name] = v
                     return v
-                raise ValidationError("Unable to dereference %s:%s" % (self.document_type, value))
+                raise ValidationError(f"Unable to dereference {self.document_type}:{value}")
             return value
 
         if instance is None:
