@@ -190,10 +190,12 @@
   register: s
   changed_when: "'CHANGED' in s.stdout"
 
-- name: Uninstall bad python packages
+- name: Remove conflicting python packages
   pip:
+    name:
+      - polars
+      - ssh2-python312
     chdir: "{{ noc_root }}"
-    requirements: ./.requirements/reverted_modules.xtx
     virtualenv: "{{ noc_root }}"
     state: absent
   environment:
