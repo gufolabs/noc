@@ -160,11 +160,11 @@ class ObjectCard(BaseCard):
         SQL = """SELECT managed_object, arrayStringConcat(path) as iface, argMax(ts, ts), argMax(load_in, ts), argMax(load_out, ts), argMax(errors_in, ts), argMax(errors_out, ts)
                 FROM interface
                 WHERE
-                  date >= toDate('%s')
-                  AND ts >= toDateTime('%s')
-                  AND managed_object IN (%s)
+                  date >= toDate('{}')
+                  AND ts >= toDateTime('{}')
+                  AND managed_object IN ({})
                 GROUP BY managed_object, iface
-                """ % (
+                """.format(
             from_date.date().isoformat(),
             from_date.isoformat(sep=" "),
             ", ".join(bi_map),
@@ -209,15 +209,15 @@ class ObjectCard(BaseCard):
             # tb_fields = [f[1] for f in fields]
             # mt_name = [f[2] for f in fields]
             fields = list(fields)
-            SQL = """SELECT managed_object, argMax(ts, ts), %s
-                  FROM %s
+            SQL = """SELECT managed_object, argMax(ts, ts), {}
+                  FROM {}
                   WHERE
-                    date >= toDate('%s')
-                    AND ts >= toDateTime('%s')
-                    AND managed_object IN (%s)
+                    date >= toDate('{}')
+                    AND ts >= toDateTime('{}')
+                    AND managed_object IN ({})
                   GROUP BY managed_object
-                  """ % (
-                ", ".join(["argMax(%s, ts) as %s" % (f[1], f[1]) for f in fields]),
+                  """.format(
+                ", ".join([f"argMax({f[1]}, ts) as {f[1]}" for f in fields]),
                 table,
                 from_date.date().isoformat(),
                 from_date.isoformat(sep=" "),

@@ -198,12 +198,12 @@ class BaseCard:
                     if collapse and c < 2:
                         badge = ""
                     else:
-                        badge = ' <span class="badge">%s</span>' % c
+                        badge = f' <span class="badge">{c}</span>'
                     order = getattr(pv, "display_order", 100)
                     v += [
                         (
                             (order, -c),
-                            '<i class="%s" title="%s"></i>%s' % (pv.glyph, pv.name, badge),
+                            f'<i class="{pv.glyph}" title="{pv.name}"></i>{badge}',
                         )
                     ]
             return " ".join(i[1] for i in sorted(v, key=operator.itemgetter(0)))
@@ -221,8 +221,9 @@ class BaseCard:
             r += [get_summary(s["service"], ServiceProfile)]
         if s.get("fresh_alarms"):
             r += [
-                '<i class="fa fa-exclamation-triangle"></i><span class="badge">%s</span>'
-                % s["fresh_alarms"]["FreshAlarm"]
+                '<i class="fa fa-exclamation-triangle"></i><span class="badge">{}</span>'.format(
+                    s["fresh_alarms"]["FreshAlarm"]
+                )
             ]
         r = [x for x in r if x]
         return "&nbsp;".join(r)
@@ -261,11 +262,7 @@ class BaseCard:
     @classmethod
     def f_object_console(cls, object):
         s = {1: "telnet", 2: "ssh", 3: "http", 4: "https"}[object.scheme]
-        return "<a href='%s://%s/'><i class='fa fa-terminal'></i> %s</a>" % (
-            s,
-            object.address,
-            s.upper(),
-        )
+        return f"<a href='{s}://{object.address}/'><i class='fa fa-terminal'></i> {s.upper()}</a>"
 
     @staticmethod
     def update_dict(s, d):

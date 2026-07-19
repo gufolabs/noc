@@ -84,4 +84,4 @@ class TTCard(BaseCard):
             )
         if not a:
             return
-        self.redirect("/api/card/view/alarm/%s/" % a.id)
+        self.redirect(f"/api/card/view/alarm/{a.id}/")

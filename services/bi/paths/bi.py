@@ -469,7 +469,7 @@ class BIAPI(JSONRPCAPI):
                 {
                     "id": u.id,
                     "username": u.username,
-                    "full_name": "%s %s" % (u.last_name, u.first_name),
+                    "full_name": f"{u.last_name} {u.first_name}",
                 }
                 for u in qs
             ),
@@ -498,7 +498,7 @@ class BIAPI(JSONRPCAPI):
             if ar.user:
                 i["user"] = {
                     "id": ar.user.id,
-                    "name": "%s %s" % (ar.user.last_name, ar.user.first_name),
+                    "name": f"{ar.user.last_name} {ar.user.first_name}",
                 }
             if ar.group:
                 i["group"] = {"id": ar.group.id, "name": ar.group.name}
@@ -546,7 +546,7 @@ class BIAPI(JSONRPCAPI):
         except ValueError as e:
             self.logger.error("Validation items with rights: %s", e)
             metrics["error", ("type", "validation")] += 1
-            raise APIError("Validation error %s" % e)
+            raise APIError(f"Validation error {e}")
         for i in items:
             da = DashboardAccess(level=i.get("level", -1))
             if i.get("user"):

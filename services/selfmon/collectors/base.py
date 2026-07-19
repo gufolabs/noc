@@ -28,7 +28,7 @@ class BaseCollector:
 
     def __init__(self, service) -> None:
         self.service = service
-        self.ttl = getattr(config.selfmon, "%s_ttl" % self.name, 30)
+        self.ttl = getattr(config.selfmon, f"{self.name}_ttl", 30)
         self.last_metrics = {}
         self.logger = PrefixLoggerAdapter(logger, self.name)
         self.t0 = int(time.time())
@@ -36,7 +36,7 @@ class BaseCollector:
 
     @classmethod
     def is_enabled(cls):
-        return getattr(config.selfmon, "enable_%s" % cls.name)
+        return getattr(config.selfmon, f"enable_{cls.name}")
 
     def can_run_at(self, t):
         """

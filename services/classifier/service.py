@@ -199,7 +199,7 @@ class ClassifierService(FastAPIService):
         report_callback = PeriodicCallback(self.report, 1000)
         report_callback.start()
         await self.subscribe_stream(
-            "events.%s" % config.pool,
+            f"events.{config.pool}",
             self.slot_number,
             self.on_event,
             async_cursor=config.classifier.allowed_async_cursor,

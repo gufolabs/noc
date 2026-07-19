@@ -53,11 +53,11 @@ class MACDiscoveryCheck(TopologyDiscoveryCheck):
         SQL = """SELECT managed_object, mac, argMax(ts, ts), argMax(interface, ts)
         FROM mac
         WHERE
-          date >= toDate('%s')
-          AND ts >= toDateTime('%s')
-          AND managed_object IN (%s)
+          date >= toDate('{}')
+          AND ts >= toDateTime('{}')
+          AND managed_object IN ({})
         GROUP BY ts, managed_object, mac
-        """ % (
+        """.format(
             t0.date().isoformat(),
             t0.isoformat(sep=" "),
             ", ".join(bi_map),

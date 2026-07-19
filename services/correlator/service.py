@@ -149,7 +149,7 @@ class CorrelatorService(FastAPIService):
         # Subscribe stream, move to separate task to let the on_activate to terminate
         self.loop.create_task(
             self.subscribe_stream(
-                "dispose.%s" % config.pool,
+                f"dispose.{config.pool}",
                 self.slot_number,
                 self.on_dispose_event,
                 async_cursor=config.correlator.allowed_async_cursor,
@@ -276,7 +276,7 @@ class CorrelatorService(FastAPIService):
         # Prepare traceback
         t, v, tb = sys.exc_info()
         now = datetime.datetime.now()
-        r = ["UNHANDLED EXCEPTION (%s)" % str(now)]
+        r = [f"UNHANDLED EXCEPTION ({now!s})"]
         r += [str(t), str(v)]
         r += [format_frames(get_traceback_frames(tb))]
         r = "\n".join(r)

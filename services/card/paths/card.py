@@ -114,7 +114,7 @@ class CardAPI(BaseAPI):
             for f in os.listdir(p):
                 if not f.endswith(".py"):
                     continue
-                mn = "%s.%s.%s" % (basename, cls.CARDS_PREFIX.replace(os.path.sep, "."), f[:-3])
+                mn = "{}.{}.{}".format(basename, cls.CARDS_PREFIX.replace(os.path.sep, "."), f[:-3])
                 m = importlib.import_module(mn)
                 for d in dir(m):
                     c = getattr(m, d)

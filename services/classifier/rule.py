@@ -76,7 +76,7 @@ class VarTransformRule:
         """
         if len(v) != 6:
             return v
-        return ":".join("%02X" % ord(x) for x in v)
+        return ":".join(f"{ord(x):02X}" for x in v)
 
     @staticmethod
     def oid_to_str(v: str):
@@ -259,7 +259,7 @@ class Rule:
                 rx_key = re.compile(cls.unhex_re(key_re), re.MULTILINE | re.DOTALL)
                 rxs.append(key_re)
             except Exception as e:
-                raise InvalidPatternException("Error in '%s': %s" % (key_re, e))
+                raise InvalidPatternException(f"Error in '{key_re}': {e}")
         # Process value pattern
         if cls.is_exact(value_re):
             x_value = cls.unescape(value_re.strip("^$"))
@@ -268,7 +268,7 @@ class Rule:
                 rx_value = re.compile(cls.unhex_re(value_re), re.MULTILINE | re.DOTALL)
                 rxs.append(value_re)
             except Exception as e:
-                raise InvalidPatternException("Error in '%s': %s" % (value_re, e))
+                raise InvalidPatternException(f"Error in '{value_re}': {e}")
         # Save patterns
         if x_key and x_value:
             return partial(match_eq, x_value, x_key), rxs

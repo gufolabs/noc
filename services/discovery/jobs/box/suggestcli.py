@@ -46,7 +46,7 @@ class SuggestCLICheck(DiscoveryCheck):
         self.logger.info("Failed to guess CLI credentials")
         self.set_problem(
             alarm_class="Discovery | Guess | CLI Credentials",
-            message="Failed to guess CLI credentials (%s)" % message,
+            message=f"Failed to guess CLI credentials ({message})",
             fatal=True,
         )
 
@@ -62,7 +62,7 @@ class SuggestCLICheck(DiscoveryCheck):
             r = open_sync_rpc(
                 "activator", pool=self.object.pool.name, calling_service="discovery"
             ).script(
-                "%s.login" % self.object.profile.name,
+                f"{self.object.profile.name}.login",
                 {
                     "cli_protocol": "ssh" if self.object.scheme == SSH else "telnet",
                     "address": self.object.address,

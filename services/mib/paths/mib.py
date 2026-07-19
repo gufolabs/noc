@@ -52,7 +52,7 @@ class MIBAPI(JSONRPCAPI):
         :param name: MIB name
         :return: path
         """
-        return os.path.join(config.path.mib_path, "%s.mib" % name)
+        return os.path.join(config.path.mib_path, f"{name}.mib")
 
     @api
     def get_text(self, name):
@@ -104,7 +104,7 @@ class MIBAPI(JSONRPCAPI):
                     self.logger.error("Required MIB missed: %s", smart_text(match.group(1)))
                     return {
                         "status": False,
-                        "msg": "Required MIB missed: %s" % smart_text(match.group(1)),
+                        "msg": f"Required MIB missed: {smart_text(match.group(1))}",
                         "code": ERR_MIB_MISSED,
                     }
                 match = self.rx_macro_not_imported.search(line.strip())
@@ -124,14 +124,12 @@ class MIBAPI(JSONRPCAPI):
                 if match:
                     return {
                         "status": False,
-                        "msg": "Illegal subtype: %s" % smart_text(match.group(1)),
+                        "msg": f"Illegal subtype: {smart_text(match.group(1))}",
                         "code": ERR_MIB_MISSED,
                     }
                 match = self.rx_object_identifier_unknown.search(line.strip())
                 if match:
-                    self.logger.warning(
-                        "Object Identifier unknown: %s" % smart_text(match.group(1))
-                    )
+                    self.logger.warning(f"Object Identifier unknown: {smart_text(match.group(1))}")
                     # return {
                     #     "status": False,
                     #     "msg": "Object Identifier unknown: %s" % smart_text(match.group(1)),
@@ -165,7 +163,7 @@ class MIBAPI(JSONRPCAPI):
                     if md is None:
                         return {
                             "status": False,
-                            "msg": "Required MIB missed: %s" % rm,
+                            "msg": f"Required MIB missed: {rm}",
                             "code": ERR_MIB_MISSED,
                         }
                     depends_on[rm] = md
@@ -210,7 +208,7 @@ class MIBAPI(JSONRPCAPI):
                 if i in m.MIB:
                     cdata += [
                         {
-                            "name": "%s::%s" % (mib_name, node),
+                            "name": f"{mib_name}::{node}",
                             "oid": v["oid"],
                             "description": v.get("description"),
                             "syntax": (

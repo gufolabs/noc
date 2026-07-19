@@ -147,7 +147,7 @@ class EventAlarmRule:
             elif ctx and ctx.get(k.alias):
                 v = ctx[k.alias]
             elif k.required:
-                raise ValueError("Not exists required var: %s" % k.name)
+                raise ValueError(f"Not exists required var: {k.name}")
             else:
                 continue
             if k.value_type:

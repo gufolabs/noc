@@ -26,7 +26,7 @@ class StubTTSystem(BaseTTSystem):
 
     def __init__(self, name, connection) -> None:
         super().__init__(name, connection)
-        self.logger = logging.getLogger("StubTTSystem.%s" % name)
+        self.logger = logging.getLogger(f"StubTTSystem.{name}")
 
     def create(self, ctx: EscalationContext) -> str:
         with Span(server="stub_tt", service="create"):

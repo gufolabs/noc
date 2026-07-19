@@ -37,7 +37,7 @@ class TGBotTTSystem(BaseTTSystem):
         """
         super().__init__(name, connection)
         p = urlparse(connection)
-        self.url = "https://%s%s" % (p.netloc, p.path)
+        self.url = f"https://{p.netloc}{p.path}"
         self.http_client = HttpClient(
             connect_timeout=10,
             timeout=self.TU_REQUEST_TIMEOUT,

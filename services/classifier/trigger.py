@@ -43,7 +43,7 @@ class Trigger:
     def call(self, event):
         if not self.match(event):
             return
-        logging.debug("Calling trigger '%s'" % self.name)
+        logging.debug(f"Calling trigger '{self.name}'")
         # Notify if necessary
         if self.notification_group and self.template:
             subject = {}

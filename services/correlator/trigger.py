@@ -45,7 +45,7 @@ class Trigger:
         if not self.match(alarm):
             return
         print(self.resource_group)
-        logger.info("Calling trigger '%s'" % self.name)
+        logger.info(f"Calling trigger '{self.name}'")
         # Notify if necessary
         if self.notification_group and self.template:
             self.notification_group.notify(

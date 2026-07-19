@@ -61,7 +61,7 @@ class PhoneNumberCard(BaseCard):
                 {
                     "scope": "phonenumber",
                     "id": str(p.id),
-                    "label": "%s: %s" % (p.dialplan.name, p.number),
+                    "label": f"{p.dialplan.name}: {p.number}",
                 }
             ]
         return r

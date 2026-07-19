@@ -61,7 +61,7 @@ async def _run_script(current_user, oid, script, args, span_id=0, bi_id=None):
             span.set_error_from_exc(e, getattr(e, "remote_code", 1))
             return {"id": str(oid), "error": str(e)}
         except RPCError as e:
-            logger.error("RPC Error: %s" % str(e))
+            logger.error(f"RPC Error: {e!s}")
             span.set_error_from_exc(e, getattr(e, "code", 1))
             return {"id": str(oid), "error": str(e)}
         except Exception as e:
