@@ -74,7 +74,7 @@ nav:
       - Connect Zabbix Remote System as Managed Object Source: howto-add-zabbix-rs-to-noc/index.md
   - Background:
       - Overview: sections-overview/background.md
-      - NOC Governace: governance/index.md
+      - NOC Governance: governance/index.md
       - Connection Restrictions: connection-restrictions/index.md
       - Connection Type Restrictions: connection-type-restrictions/index.md
       - Topology Processing Features: topology-processing-features/index.md
