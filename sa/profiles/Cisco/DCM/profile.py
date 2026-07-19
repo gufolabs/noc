@@ -1,4 +1,3 @@
-__author__ = "boris"
 from noc.core.profile.base import BaseProfile
 
 

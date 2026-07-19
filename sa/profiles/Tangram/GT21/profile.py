@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-__author__ = "boris"
+
 from noc.core.profile.base import BaseProfile
 
 
