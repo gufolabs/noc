@@ -145,7 +145,7 @@ namespaces = true
 where = ["src"]
 
 [tool.setuptools.dynamic]
-version = {file = "VERSION"}
+version = {attr = "noc.__version__"}
 
 [tool.setuptools.package-data]
 "noc" = ["py.typed", "**/*.j2"]

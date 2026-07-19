@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # NOC components versions
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -13,6 +13,7 @@ import platform
 
 # NOC modules
 from noc.config import config
+from noc import __version__
 
 CHANGESET_LEN = 8
 BRAND_PATH = config.get_customized_paths("BRAND", prefer_custom=True)
@@ -87,21 +88,14 @@ class Version:
 
     @cachedproperty
     def version(self) -> str:
-        def static_version() -> str:
-            """
-            Read VERSION file
-            """
-            with open("VERSION") as f:
-                return f.read().strip()
-
         if not self.has_git:
-            return static_version()
+            return __version__
         try:
             v = subprocess.check_output(
                 ["git", "describe", "--tags", f"--abbrev={CHANGESET_LEN}"], encoding="utf-8"
             )
         except subprocess.CalledProcessError:
-            return static_version()  # Git is broken, fallback
+            return __version__  # Git is broken, fallback
         if "-" not in v:
             return v.strip()
         r = v.rsplit("-", 2)
