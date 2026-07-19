@@ -58,7 +58,7 @@ class ReportEventSummary(ReportSource):
         elif "profile" in report_type:
             obj_field = "dictGetString('noc_dict.managedobject','profile', managed_object)"
         else:
-            raise Exception("Invalid report type: %s" % report_type)
+            raise Exception("Invalid report type: {}".format(report_type))
         ch = connection()
         data = []
         r = ch.execute(SQL % obj_field, return_raw=True)

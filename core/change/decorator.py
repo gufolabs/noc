@@ -52,7 +52,7 @@ def change(model=None, *, audit=True):
         return partial(change, audit=audit)
 
     if not hasattr(model, "get_by_id"):
-        raise ValueError("[%s] Missed .get_by_id" % get_model_id(model))
+        raise ValueError(f"[{get_model_id(model)}] Missed .get_by_id")
     if audit and not hasattr(model, "_flag_audit"):
         model._flag_audit = audit
     if is_document(model):

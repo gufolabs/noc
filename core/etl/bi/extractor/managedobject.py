@@ -263,8 +263,7 @@ class ManagedObjectsExtractor(BaseExtractor):
         ch = connection()
         res = ch.execute(
             "SELECT managed_object, sum(stp_topology_changes_delta) as changes "
-            "FROM routing WHERE ts > '%s' and ts < '%s' GROUP BY managed_object FORMAT JSONEachRow"
-            % (
+            "FROM routing WHERE ts > '{}' and ts < '{}' GROUP BY managed_object FORMAT JSONEachRow".format(
                 start.replace(microsecond=0).isoformat(sep=" "),
                 stop.replace(microsecond=0).isoformat(sep=" "),
             ),

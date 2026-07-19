@@ -87,7 +87,7 @@ $TTL %(ttl)d
                 # Strip domain from content
                 content = content[:-lnsuffix]
             if r.priority:
-                content = "%s %s" % (r.priority, content)
+                content = f"{r.priority} {content}"
             rr += [(name, r.type, content)]
         # prepare mask for 3-column format
         if rr:
@@ -104,7 +104,7 @@ $TTL %(ttl)d
         # Add RRs
         for r in rr:
             if is_idna(r[0]):
-                z += ["; %s" % from_idna(r[0])]
+                z += [f"; {from_idna(r[0])}"]
             if r[1] == "TXT":
                 content = self.split_txt(r[2])
                 z += [mask % (r[0], r[1], content.pop(0))]
@@ -148,13 +148,13 @@ $TTL %(ttl)d
         """
         if len(value) <= cls.MAX_TXT:
             if value[0] != '"':
-                value = '"%s"' % value
+                value = f'"{value}"'
             return [value]
         if value[0] == '"' and value[-1] == '"':
             value = value[1:-1]
         v = ["("]
         while value:
-            v += ['"%s"' % value[: cls.MAX_TXT]]
+            v += [f'"{value[: cls.MAX_TXT]}"']
             value = value[cls.MAX_TXT :]
         v += [")"]
         return v

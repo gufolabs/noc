@@ -304,13 +304,13 @@ class CLI(BaseCLI):
                         if repeats >= 3 and cmd_stop and not stop_sent:
                             # Stop loop at final page
                             # After 3 repeats
-                            self.logger.debug("Stopping stream. Sending %r" % cmd_stop)
+                            self.logger.debug(f"Stopping stream. Sending {cmd_stop!r}")
                             await self.send(cmd_stop)
                             stop_sent = True
                 else:
                     r_key = key
                     if cmd_next:
-                        self.logger.debug("Next screen. Sending %r" % cmd_next)
+                        self.logger.debug(f"Next screen. Sending {cmd_next!r}")
                         await self.send(cmd_next)
             # Check for prompt
             for rx, handler in self.pattern_table.items():

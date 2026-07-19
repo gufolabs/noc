@@ -28,7 +28,7 @@ def get_matcher(op: str, field: str, value: Any) -> Callable:
         op = op[:-3]
         inverse = True
     if op not in matchers:
-        raise ValueError("Unknown matcher: %s" % op)
+        raise ValueError(f"Unknown matcher: {op}")
     if isinstance(value, str) and value.startswith("=="):
         return partial(match_ctx, value[2:], partial(matchers[op], field=field))
     # Clean Argument
@@ -102,7 +102,7 @@ def match_or(c_iter: tuple[Callable, ...], ctx: dict[str, Any]) -> bool:
         except KeyError:
             return False
         except TypeError:
-            raise AssertionError("Not supported operation for field: %s" % c)
+            raise AssertionError(f"Not supported operation for field: {c}")
     return False
 
 
@@ -114,7 +114,7 @@ def match_and(c_iter: tuple[Callable, ...], ctx: dict[str, Any]) -> bool:
         except KeyError:
             return False
         except TypeError:
-            raise AssertionError("Not supported operation for field: %s" % c)
+            raise AssertionError(f"Not supported operation for field: {c}")
     return True
 
 

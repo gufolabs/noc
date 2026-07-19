@@ -26,7 +26,7 @@ def decode_trap(packet, raw=False):
     (version, community, pdu), raw_pdu, raw_varbinds = decode(packet, include_raw=raw)
     decoder = PDU_PARSERS.get(version)
     if decoder is None:
-        raise UnsupportedSNMPVersion("Unsupported SNMP version %s" % version)
+        raise UnsupportedSNMPVersion(f"Unsupported SNMP version {version}")
     return community, decoder(pdu), raw_pdu, raw_varbinds
 
 

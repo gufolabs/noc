@@ -111,8 +111,8 @@ class TextArrayField(models.Field):
         if self.has_default():
             r = []
             for v in self.default:
-                r += ['"%s"' % v.replace("\\", "\\\\").replace('"', '""')]
-            return "{%s}" % ",".join(r)
+                r += ['"{}"'.format(v.replace("\\", "\\\\").replace('"', '""'))]
+            return "{{{}}}".format(",".join(r))
         return ""
 
 
@@ -204,7 +204,7 @@ class TagsContainsLookup(models.Lookup):
             t = adapt(t.strip())
             t.encoding = "utf8"
             tags += [smart_text(t).strip()]
-        return "(ARRAY[%s] <@ %s)" % (",".join(tags), self.lhs.as_sql(compiler, connection)[0]), []
+        return "(ARRAY[{}] <@ {})".format(",".join(tags), self.lhs.as_sql(compiler, connection)[0]), []
 
 
 class DocumentReferenceDescriptor:
@@ -263,7 +263,7 @@ class DocumentReferenceDescriptor:
 
     def __set__(self, instance, value):
         if instance is None:
-            raise AttributeError("%s must be accessed via instance" % self.field.name)
+            raise AttributeError(f"{self.field.name} must be accessed via instance")
         if not self.dereference:
             self.set_dereference()
         # If null=True, we can assign null here, but otherwise the value needs
@@ -272,8 +272,7 @@ class DocumentReferenceDescriptor:
             value = self.field.get_default()
         if value is None and self.field.null is False:
             raise ValueError(
-                'Cannot assign None: "%s.%s" does not allow null values.'
-                % (instance._meta.object_name, self.field.name)
+                f'Cannot assign None: "{instance._meta.object_name}.{self.field.name}" does not allow null values.'
             )
         if value is None or isinstance(value, str):
             self._reset_cache(instance)
@@ -286,8 +285,7 @@ class DocumentReferenceDescriptor:
             value = str(value.id)
         else:
             raise ValueError(
-                'Cannot assign "%r": "%s.%s" must be a "%s" instance.'
-                % (value, instance._meta.object_name, self.field.name, self.document)
+                f'Cannot assign "{value!r}": "{instance._meta.object_name}.{self.field.name}" must be a "{self.document}" instance.'
             )
         instance.__dict__[self.name] = value
 
@@ -316,7 +314,7 @@ class DocumentReferenceField(models.Field):
         return str(value.id)
 
     def get_cache_name(self):
-        return "_%s_cache" % self.name
+        return f"_{self.name}_cache"
 
 
 class CachedForeignKeyDescriptor(ForwardManyToOneDescriptor):
@@ -353,9 +351,9 @@ class ObjectIDArrayField(ArrayField):
             return None
         if isinstance(value, (str, ObjectId)):
             value = [value]
-        return "{ %s }" % ", ".join(
+        return "{{ {} }}".format(", ".join(
             str(x) for x in sorted(set(value), key=lambda x: value.index(x)) if is_objectid(str(x))
-        )
+        ))
 
     def validate(self, value, model_instance):
         # Only form.full_clean execute

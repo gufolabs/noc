@@ -347,7 +347,7 @@ class ModelTemplate(Document):
         if dry_run:
             return None
         if not hasattr(self.model_instance, "from_template"):
-            raise ValueError("Resource '%s' does not supported Templating" % self.model_instance)
+            raise ValueError("Resource '{}' does not supported Templating".format(self.model_instance))
         o = self.model_instance.from_template(**env)
         o.full_clean()
         return o
@@ -355,7 +355,7 @@ class ModelTemplate(Document):
     def update_instance_data(self, o, item: ResourceItem, dry_run: bool = False) -> bool:
         env = self.get_env(item)
         if not hasattr(o, "update_template_data"):
-            raise ValueError("Resource '%s' does not supported Templating" % self.model_instance)
+            raise ValueError("Resource '{}' does not supported Templating".format(self.model_instance))
         changed = o.update_template_data(**env)
         if changed:
             o.full_clean()
@@ -395,7 +395,7 @@ class ModelTemplate(Document):
                 data.pop(p.name, None)
                 continue
             if p.name not in data and p.required:
-                raise ValueError("Parameter %s is required" % p.name)
+                raise ValueError("Parameter {} is required".format(p.name))
             if not is_new and not p.override_existing:
                 data.pop(p.name, None)
                 continue

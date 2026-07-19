@@ -165,7 +165,7 @@ class BaseScript(metaclass=BaseScriptMetaclass):
         self._motd = None
         name = name or self.name
         self.logger = PrefixLoggerAdapter(
-            self.base_logger, "%s] [%s" % (self.name, credentials.get("address", "-"))
+            self.base_logger, "{}] [{}".format(self.name, credentials.get("address", "-"))
         )
         if self.parent:
             self.profile = self.parent.profile
@@ -217,7 +217,7 @@ class BaseScript(metaclass=BaseScriptMetaclass):
         if not parent and version and not name.endswith(".get_version"):
             self.logger.debug("Filling get_version cache with %s", version)
             s = name.split(".")
-            self.set_cache("%s.%s.get_version" % (s[0], s[1]), {}, version)
+            self.set_cache(f"{s[0]}.{s[1]}.get_version", {}, version)
         if (
             self.is_beefed
             and not parent
@@ -359,7 +359,7 @@ class BaseScript(metaclass=BaseScriptMetaclass):
                 o = "exact"
                 # Check field name
             if f not in ("vendor", "platform", "version", "image"):
-                raise Exception("Invalid field '%s'" % f)
+                raise Exception(f"Invalid field '{f}'")
                 # Compile lookup functions
             if o == "exact":
                 c += [lambda self, x, f=f, v=v: x[f] == v]
@@ -397,9 +397,9 @@ class BaseScript(metaclass=BaseScriptMetaclass):
                 elif o == "gte":  # >=
                     c += [lambda self, x, v=v: self.profile.cmp_version(x["version"], v) >= 0]
                 else:
-                    raise Exception("Invalid lookup operation: %s" % o)
+                    raise Exception(f"Invalid lookup operation: {o}")
             else:
-                raise Exception("Invalid lookup operation: %s" % o)
+                raise Exception(f"Invalid lookup operation: {o}")
         # Combine expressions into single lambda
         return reduce(
             lambda x, y: lambda self, v, x=x, y=y: x(self, v) and y(self, v),  # pylint: disable=undefined-variable
@@ -485,12 +485,12 @@ class BaseScript(metaclass=BaseScriptMetaclass):
             elif m == "*":
                 handler = fallback_handler
             else:
-                raise self.NotSupportedError("Invalid access method '%s'" % m)
+                raise self.NotSupportedError(f"Invalid access method '{m}'")
             # Resolve handler when necessary
             if isinstance(handler, str):
                 handler = getattr(self, handler, None)
             if handler is None:
-                self.logger.debug("No '%s' handler. Passing to next method" % m)
+                self.logger.debug(f"No '{m}' handler. Passing to next method")
                 continue
             # Call handler
             try:
@@ -515,7 +515,7 @@ class BaseScript(metaclass=BaseScriptMetaclass):
                     "Access method '%s' is not implemented. Passing to next method", m
                 )
         raise self.NotSupportedError(
-            "Access preference '%s' is not supported" % access_preference[:-1]
+            f"Access preference '{access_preference[:-1]}' is not supported"
         )
 
     def execute_cli(self, **kwargs):
@@ -628,7 +628,7 @@ class BaseScript(metaclass=BaseScriptMetaclass):
 
     def hexstring_to_mac(self, s):
         """Convert a 6-octet string to MAC address"""
-        return ":".join(["%02X" % ord(x) for x in s])
+        return ":".join([f"{ord(x):02X}" for x in s])
 
     @property
     def root(self):
@@ -770,7 +770,7 @@ class BaseScript(metaclass=BaseScriptMetaclass):
         Returns:
             str: Boolean string
         """
-        return "".join(self.hexbin[c] for c in "".join("%02x" % ord(d) for d in s))
+        return "".join(self.hexbin[c] for c in "".join(f"{ord(d):02x}" for d in s))
 
     def push_prompt_pattern(self, pattern):
         self.get_cli_stream().push_prompt_pattern(pattern)
@@ -1255,7 +1255,7 @@ class ScriptsHub:
             return self.__dict__[item]
         from .loader import loader as script_loader
 
-        sc = script_loader.get_script("%s.%s" % (self._script.profile.name, item))
+        sc = script_loader.get_script(f"{self._script.profile.name}.{item}")
         if sc:
             return self._CallWrapper(sc, self._script)
         raise AttributeError(item)
@@ -1266,7 +1266,7 @@ class ScriptsHub:
 
         if "." not in item:
             # Normalize to full name
-            item = "%s.%s" % (self._script.profile.name, item)
+            item = f"{self._script.profile.name}.{item}"
         return script_loader.has_script(item)
 
 

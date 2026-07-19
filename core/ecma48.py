@@ -47,20 +47,20 @@ def compile_ecma_def(s: str) -> str:
             c1 = c(int(match.group(1)), int(match.group(2)))
             c2 = c(int(match.group(3)), int(match.group(4)))
             if c1 == c2:
-                x = [r"\x%02x" % c1]
+                x = [rf"\x{c1:02x}"]
             elif c1 < c2:
-                rr = [r"\x%02x" % x for x in range(c1, c2 + 1)]
-                x = ["[%s]" % "".join(rr)]
+                rr = [rf"\x{x:02x}" for x in range(c1, c2 + 1)]
+                x = ["[{}]".format("".join(rr))]
             else:
-                rr = [r"\x%02x" % x for x in range(c2, c1 + 1)]
-                x = ["[%s]" % "".join(rr)]
+                rr = [rf"\x{x:02x}" for x in range(c2, c1 + 1)]
+                x = ["[{}]".format("".join(rr))]
             if match.group(5):
                 x += ["*"]
             r += x
             continue
         match = rx_char.match(token)
         if match:
-            r += [r"\x%02x" % c(int(match.group(1)), int(match.group(2)))]
+            r += [rf"\x{c(int(match.group(1)), int(match.group(2))):02x}"]
             continue
         msg = f"Invalid token: <{token}>"
         raise SyntaxError(msg)

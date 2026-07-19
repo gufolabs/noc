@@ -37,8 +37,8 @@ class Node:
 
     def __repr__(self) -> str:
         if self.handler:
-            return "<Node %s (%s)>" % (repr(self.token), self.handler.__name__)
-        return "<Node %s>" % repr(self.token)
+            return f"<Node {self.token!r} ({self.handler.__name__})>"
+        return f"<Node {self.token!r}>"
 
     def clone(self) -> "Node":
         node = self.__class__(self.token)
@@ -50,7 +50,7 @@ class Node:
     def dump(self) -> str:
         def _dump(node, indent=0):
             prefix = "  " * indent
-            r = ["%s%s" % (prefix, repr(node))]
+            r = [f"{prefix}{node!r}"]
             for c in node.children:
                 r += _dump(c, indent + 1)
             return r
@@ -162,7 +162,7 @@ class BaseNormalizerMetaclass(type):
     def contribute_gen(mcs, ncls, path, replace=False):
         sdef = path[-1]
         # Check function name is not duplicated
-        assert not hasattr(ncls, sdef.gen), "Duplicated generator name: %s" % sdef.gen
+        assert not hasattr(ncls, sdef.gen), f"Duplicated generator name: {sdef.gen}"
         # Generate function
         args = []
         kw = {}
@@ -176,12 +176,12 @@ class BaseNormalizerMetaclass(type):
                     args += [p.token.compile_gen_kwarg(p.name, p.default)]
                     r += [p.token.compile_value(p.name)]
             else:
-                r += ["'%s'" % p.token]
+                r += [f"'{p.token}'"]
         if replace:
             kw["replace"] = True
         if kw:
             r += [str(kw)]
-        body = "def %s(self, %s):\n    return %s" % (sdef.gen, ", ".join(args), ", ".join(r))
+        body = "def {}(self, {}):\n    return {}".format(sdef.gen, ", ".join(args), ", ".join(r))
         ctx = {}
         exec(body, {"BOOL": BOOL, "IPv4": IPv4, "IPv6": IPv6, "IP": IP}, ctx)
         setattr(ncls, sdef.gen, ctx[sdef.gen])

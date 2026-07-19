@@ -64,7 +64,7 @@ def render_mac(oid: str, value: bytes) -> str:
     """
     if len(value) != 6:
         return ""
-    return "%02X:%02X:%02X:%02X:%02X:%02X" % tuple(value)
+    return "{:02X}:{:02X}:{:02X}:{:02X}:{:02X}:{:02X}".format(*tuple(value))
 
 
 def render_IPV6(oid: str, value: bytes) -> str:
@@ -76,7 +76,7 @@ def render_IPV6(oid: str, value: bytes) -> str:
     """
     if len(value) != 16:
         return ""
-    return "%02X%02X:%02X%02X:%02X%02X:%02X%02X:%02X%02X:%02X%02X:%02X%02X:%02X%02X" % tuple(value)
+    return "{:02X}{:02X}:{:02X}{:02X}:{:02X}{:02X}:{:02X}{:02X}:{:02X}{:02X}:{:02X}{:02X}:{:02X}{:02X}:{:02X}{:02X}".format(*tuple(value))
 
 
 def get_string_renderer(v: str) -> Callable[[str, bytes], str]:

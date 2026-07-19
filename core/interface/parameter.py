@@ -33,7 +33,7 @@ class BaseParameter:
         :type msg: String
         :raises InterfaceTypeError
         """
-        raise InterfaceTypeError("%s: %s. %s" % (self.__class__.__name__, repr(value), msg))
+        raise InterfaceTypeError(f"{self.__class__.__name__}: {value!r}. {msg}")
 
     def clean(self, value):
         """

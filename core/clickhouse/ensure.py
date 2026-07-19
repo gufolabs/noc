@@ -27,7 +27,7 @@ def ensure_bi_models(connect: ClickhouseClient | None = None, allow_type: bool =
         model = loader[name]
         if not model:
             continue
-        logger.info("Ensure table %s" % model._meta.db_table)
+        logger.info(f"Ensure table {model._meta.db_table}")
         changed |= model.ensure_schema(connect=connect)
         changed |= model.ensure_table(connect=connect)
         changed |= model.ensure_views(connect=connect, changed=changed)
@@ -45,7 +45,7 @@ def ensure_dictionary_models(
         model = bi_dictionary_loader[name]
         if not model:
             continue
-        logger.info("Ensure dictionary %s" % model._meta.db_table)
+        logger.info(f"Ensure dictionary {model._meta.db_table}")
         table_changed = model.ensure_table(connect=connect)
         changed |= table_changed
         if table_changed:
@@ -63,7 +63,7 @@ def ensure_pm_scopes(connect: ClickhouseClient | None = None, allow_type: bool =
     allow_type |= config.clickhouse.enable_migrate_type
     changed = False
     for s in MetricScope.objects.all():
-        logger.info("Ensure scope %s" % s.table_name)
+        logger.info(f"Ensure scope {s.table_name}")
         changed |= s.ensure_table(connect=connect, allow_type=allow_type)
     return changed
 

@@ -266,7 +266,7 @@ class ResolverBase:
                 if services:
                     self.dcs.clear_faulty_status()
                 else:
-                    self.dcs.set_faulty_status("No active services %s" % self.name)
+                    self.dcs.set_faulty_status(f"No active services {self.name}")
             self.services = services
             self.service_ids = sorted(services.keys())
             self.service_addresses = set(services.values())
@@ -274,7 +274,7 @@ class ResolverBase:
                 self.logger.info(
                     "[%s] Set active services to: %s",
                     self.name,
-                    ", ".join("%s: %s" % (i, self.services[i]) for i in self.services),
+                    ", ".join(f"{i}: {self.services[i]}" for i in self.services),
                 )
                 self.set_ready()
             else:
@@ -303,14 +303,14 @@ class ResolverBase:
         except asyncio.TimeoutError:
             metrics["errors", ("type", "dcs_resolver_timeout")] += 1
             if self.critical:
-                self.dcs.set_faulty_status("Failed to resolve %s: Timeout" % self.name)
+                self.dcs.set_faulty_status(f"Failed to resolve {self.name}: Timeout")
             raise ResolutionError()
 
     def _wait_for_services_sync(self, timeout):
         if not self.ready_event_sync.wait(timeout):
             metrics["errors", ("type", "dcs_resolver_timeout")] += 1
             if self.critical:
-                self.dcs.set_faulty_status("Failed to resolve %s: Timeout" % self.name)
+                self.dcs.set_faulty_status(f"Failed to resolve {self.name}: Timeout")
             raise ResolutionError()
 
     async def _wait_for_services(self, timeout=None):
@@ -327,7 +327,7 @@ class ResolverBase:
             await self._wait_for_services(timeout)
         if not wait and not self.is_ready:
             if self.critical:
-                self.dcs.set_faulty_status("Failed to resolve %s: No active services" % self.name)
+                self.dcs.set_faulty_status(f"Failed to resolve {self.name}: No active services")
             raise ResolutionError()
         with self.lock:
             if hint and hint in self.service_addresses:

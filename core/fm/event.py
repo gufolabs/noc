@@ -325,7 +325,7 @@ class Event(BaseModel):
             ):
                 patterns[k["name"]] = k["value"]
         r["patterns"] = [
-            {"key_re": "^%s$" % k, "value_re": "^%s$" % patterns[k].strip()} for k in patterns
+            {"key_re": f"^{k}$", "value_re": f"^{patterns[k].strip()}$"} for k in patterns
         ]
         r["labels"] = []
         for ll in labels or []:

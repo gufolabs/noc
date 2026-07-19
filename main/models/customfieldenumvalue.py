@@ -36,4 +36,4 @@ class CustomFieldEnumValue(NOCModel):
     value = models.CharField("Value", max_length=256)
 
     def __str__(self):
-        return "%s@%s:%s" % (self.enum_group.name, self.key, self.value)
+        return "{}@{}:{}".format(self.enum_group.name, self.key, self.value)

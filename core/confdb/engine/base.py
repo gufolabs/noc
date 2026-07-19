@@ -219,7 +219,7 @@ class Engine:
         """
         for ctx in _input:
             if message:
-                print("%s: %r" % (message, ctx))
+                print(f"{message}: {ctx!r}")
             else:
                 print(ctx)
             yield ctx
@@ -617,7 +617,7 @@ class Engine:
         # Check operations
         op = None
         for k in kwargs:
-            op = getattr(self, "_collapse_%s" % k, None)
+            op = getattr(self, f"_collapse_{k}", None)
             if op:
                 break
         assert op, "Collapse operation is not set"

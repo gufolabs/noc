@@ -138,7 +138,7 @@ class AlarmsExtractor(ArchivingExtractor):
         super().clean()
         # Clean
         if force:
-            print("Clean ArchivedAlarm collection before %s" % self.clean_ts)
+            print(f"Clean ArchivedAlarm collection before {self.clean_ts}")
             ArchivedAlarm._get_collection().remove({"clear_timestamp": {"$lte": self.clean_ts}})
 
     @classmethod

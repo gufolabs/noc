@@ -227,7 +227,7 @@ class TopologyBase:
             out_bw = bandwidth(t_out_bw, d_in_bw) * 1000
             # Add link
             if is_pmp:
-                link_id = "%s-%s-%s" % (link.id, self.pn, self.pn + 1)
+                link_id = f"{link.id}-{self.pn}-{self.pn + 1}"
             else:
                 link_id = str(link.id)
             self.add_edge(

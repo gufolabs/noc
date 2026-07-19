@@ -45,14 +45,14 @@ class InterfaceLoader:
                 return None
             imname = name.lower()
             for p in config.get_customized_paths("", prefer_custom=True):
-                if os.path.exists(os.path.join(p, "sa", "interfaces", "%s.py" % imname)):
+                if os.path.exists(os.path.join(p, "sa", "interfaces", f"{imname}.py")):
                     if p:
                         # Custom script
                         base_name = os.path.basename(os.path.dirname(config.path.custom_path))
                     else:
                         # Common script
                         base_name = "noc"
-                    module_name = "%s.sa.interfaces.%s" % (base_name, imname)
+                    module_name = f"{base_name}.sa.interfaces.{imname}"
                     break
             else:
                 logger.error("Interface not found: %s", name)

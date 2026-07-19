@@ -55,13 +55,13 @@ FROM (
      groupArray(interface) as migrate_ifaces,
      uniq(interface) as iface_count
      FROM mac
-     WHERE %%s and %s and date >= '%%s' and date < '%%s'
+     WHERE %s and {} and date >= '%s' and date < '%s'
      GROUP BY mac, managed_object, vlan
      HAVING iface_count > 1
 )
-    """ % " AND ".join(
-    "(mac < %s or mac > %s)" % (int(MAC(x[0])), int(MAC(x[1]))) for x in MULTICAST_MACS
-)
+    """.format(" AND ".join(
+    f"(mac < {int(MAC(x[0]))} or mac > {int(MAC(x[1]))})" for x in MULTICAST_MACS
+))
 
 rx_port_num = re.compile(r"\d+$")
 

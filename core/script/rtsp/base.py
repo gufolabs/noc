@@ -58,8 +58,8 @@ class RTSPBase(BaseCLI):
         if not port:
             port = RTSPStream.default_port
         if port:
-            address += ":%s" % port
-        return "rtsp://%s%s" % (address, self.path)
+            address += f":{port}"
+        return f"rtsp://{address}{self.path}"
 
     async def send(self, method: str = None, body: str = None):
         # @todo: Apply encoding
@@ -129,12 +129,12 @@ class RTSPBase(BaseCLI):
             )
             if code == 401:
                 self.result = ""
-                self.error = RTSPAuthFailed("%s (code=%s)" % (msg, code), code=int(code))
+                self.error = RTSPAuthFailed(f"{msg} (code={code})", code=int(code))
                 return None
             if not 200 <= code <= 299:
                 # RTSP Error
                 self.result = ""
-                self.error = RTSPError("%s (code=%s)" % (msg, code), code=int(code))
+                self.error = RTSPError(f"{msg} (code={code})", code=int(code))
                 return None
             result += [r]
             break
@@ -231,8 +231,8 @@ class DigestAuth:
             method: GET/POST
         """
         # print("Get Digest", uri, realm, method, self.user, self.password)
-        A1 = "%s:%s:%s" % (self.user, realm, self.password)
-        A2 = "%s:%s" % (method, uri)
+        A1 = f"{self.user}:{realm}:{self.password}"
+        A2 = f"{method}:{uri}"
 
         HA1 = hashlib.md5(smart_bytes(A1)).hexdigest()
         HA2 = hashlib.md5(smart_bytes(A2)).hexdigest()
@@ -261,7 +261,7 @@ class DigestAuth:
             self.request_id += 1
         else:
             self.request_id = 1
-        ncvalue = "%08x" % self.request_id
+        ncvalue = f"{self.request_id:08x}"
 
         s = nonce.encode("utf-8")
         # s += time.ctime().encode('utf-8')
@@ -269,34 +269,28 @@ class DigestAuth:
         cnonce = hashlib.sha1(smart_bytes(s)).hexdigest()[:16]
 
         if not qop:
-            respdig = hashlib.md5(smart_bytes("%s:%s:%s" % (HA1, nonce, HA2))).hexdigest()
+            respdig = hashlib.md5(smart_bytes(f"{HA1}:{nonce}:{HA2}")).hexdigest()
         elif qop == "auth" or "auth" in qop.split(","):
-            noncebit = "%s:%s:%s:%s:%s" % (nonce, ncvalue, cnonce, "auth", HA2)
-            respdig = hashlib.md5(smart_bytes("%s:%s" % (HA1, noncebit))).hexdigest()
+            noncebit = "{}:{}:{}:{}:{}".format(nonce, ncvalue, cnonce, "auth", HA2)
+            respdig = hashlib.md5(smart_bytes(f"{HA1}:{noncebit}")).hexdigest()
         else:
             respdig = None
 
-        base = 'username="%s", realm="%s", nonce="%s", uri="%s", response="%s"' % (
-            self.user,
-            realm,
-            nonce,
-            uri,
-            respdig,
-        )
+        base = f'username="{self.user}", realm="{realm}", nonce="{nonce}", uri="{uri}", response="{respdig}"'
 
         if opaque:
-            base += ', opaque="%s"' % opaque
+            base += f', opaque="{opaque}"'
         if algorithm:
-            base += ', algorithm="%s"' % algorithm
+            base += f', algorithm="{algorithm}"'
         # if entdig:
         #     base += ', digest="%s"' % entdig
         if qop:
-            base += ', qop="auth", nc=%s, cnonce="%s"' % ("%08x" % self.request_id, cnonce)
+            base += ', qop="auth", nc={}, cnonce="{}"'.format(f"{self.request_id:08x}", cnonce)
         self.last_nonce = nonce
         self.last_realm = realm
         self.last_opaque = opaque
 
-        return "Digest %s" % (str(base))
+        return f"Digest {base!s}"
 
 
 class RTSPStream(BaseStream):

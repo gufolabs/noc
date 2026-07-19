@@ -243,7 +243,7 @@ class Job:
                 return False
         # Adjust logging
         self.logger.set_prefix(
-            "%s][%s][%s" % (self.scheduler.name, self.name, self.get_display_key())
+            f"{self.scheduler.name}][{self.name}][{self.get_display_key()}"
         )
         return True
 

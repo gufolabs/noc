@@ -24,7 +24,7 @@ class BaseCache:
 
     @staticmethod
     def make_key(key: str, version: int | None = None) -> str:
-        return "%s|%s" % (key, version or 0)
+        return f"{key}|{version or 0}"
 
     def get(self, key: str, default: Any | None = None, version: int | None = None) -> Any | None:
         """

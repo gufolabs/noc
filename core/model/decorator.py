@@ -304,7 +304,7 @@ def on_delete_check(
         yield from model.objects.filter(**qs)
 
     def iter_models(name):
-        nn = "_%s" % name
+        nn = f"_{name}"
         c = cfg.get(nn)
         if c is None:
             c = [(get_model(x[0]), x[0], x[1]) for x in cfg[name]]

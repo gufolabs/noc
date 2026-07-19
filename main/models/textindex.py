@@ -56,7 +56,7 @@ class TextIndex(Document):
     rx_phrases = re.compile(r"(\d+(?:[-_.:]\d+)+)")
 
     def __str__(self):
-        return "%s:%s" % (self.model, self.object)
+        return "{}:{}".format(self.model, self.object)
 
     def get_object(self):
         """

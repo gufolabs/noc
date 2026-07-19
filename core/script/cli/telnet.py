@@ -205,7 +205,7 @@ class TelnetStream(BaseStream):
         sb += [B_IAC_SE]
         s_opt = OPTS.get(opt)
         if not s_opt:
-            s_opt = "%r" % opt
+            s_opt = f"{opt!r}"
         self.logger.debug("Send IAC SB %s %r IAC SE", s_opt, data)
         self.out_iac_seq += sb
 
@@ -242,7 +242,7 @@ class TelnetStream(BaseStream):
             cmd
             opt
         """
-        return "%s %s" % (IAC_CMD.get(cmd, cmd), TELNET_OPTIONS.get(opt, opt))
+        return f"{IAC_CMD.get(cmd, cmd)} {TELNET_OPTIONS.get(opt, opt)}"
 
 
 class TelnetCLI(CLI):

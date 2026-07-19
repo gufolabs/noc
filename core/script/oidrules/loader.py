@@ -42,5 +42,5 @@ def load_rule(data):
     t = data["$type"]
     rule = resolver(t)
     if not rule:
-        raise ValueError("Invalid $type '%s'" % t)
+        raise ValueError(f"Invalid $type '{t}'")
     return rule.from_json(data)

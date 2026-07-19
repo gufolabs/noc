@@ -46,7 +46,7 @@ class HeaderMatch(EmbeddedDocument):
     value = StringField()
 
     def __str__(self):
-        return "%s %s %s" % (self.op, self.header, self.value)
+        return "{} {} {}".format(self.op, self.header, self.value)
 
     @property
     def is_eq(self) -> bool:

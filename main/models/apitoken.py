@@ -23,4 +23,4 @@ class APIToken(Document):
     token = StringField()
 
     def __str__(self):
-        return "%s:%s" % (self.type, self.user)
+        return "{}:{}".format(self.type, self.user)

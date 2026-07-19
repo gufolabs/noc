@@ -87,7 +87,7 @@ def call_later(
             # Hidden attribute JobClass, remove it from data
             q[k] = data[k]
             continue
-        q["%s.%s" % (Job.ATTR_DATA, k)] = data[k]
+        q[f"{Job.ATTR_DATA}.{k}"] = data[k]
     op = {"$set": set_op, "$setOnInsert": iset_op}
     logger.info("Delayed call to %s(%s) in %ss", name, data, delay or "0")
     logger.debug("update(%s, %s, upsert=True)", q, op)

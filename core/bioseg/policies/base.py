@@ -61,12 +61,11 @@ class BaseBioSegPolicy:
                 "Used '%s' function for calculate segment power", self.segment_power_function
             )
             query = (
-                """
-                SELECT %s(p.level)
+                f"""
+                SELECT {self.segment_power_function}(p.level)
                 FROM sa_managedobject mo JOIN sa_managedobjectprofile p ON mo.object_profile_id = p.id
-                WHERE segment = %%s
+                WHERE segment = %s
             """
-                % self.segment_power_function
             )
             cursor.execute(query, [str(seg.id)])
             pwr = cursor.fetchall()[0][0] or 0
@@ -136,7 +135,7 @@ class BaseBioSegPolicy:
         :param seg:
         :return:
         """
-        self.logger.info("Try to destroy segment %s" % seg.name)
+        self.logger.info(f"Try to destroy segment {seg.name}")
         if seg.profile.is_persistent:
             self.logger.info("Cannot destroy persistent segment. Giving up.")
             return
@@ -149,7 +148,7 @@ class BaseBioSegPolicy:
             c_seg.parent = seg.parent
             c_seg.save()
         # Finally destroy segment
-        self.logger.info("Deleting segment %s" % seg.name)
+        self.logger.info(f"Deleting segment {seg.name}")
         seg.delete()
         # Invalidate TTL cache
         NetworkSegment._reset_caches(seg.id)

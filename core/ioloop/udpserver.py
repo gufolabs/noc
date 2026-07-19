@@ -30,7 +30,7 @@ class UDPServerProtocol(asyncio.DatagramProtocol):
         self._server.on_read(data, addr)
 
     def error_received(self, exc):
-        logger.error("UDP server received error %s" % exc)
+        logger.error(f"UDP server received error {exc}")
 
 
 class UDPServer:

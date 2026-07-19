@@ -78,7 +78,7 @@ class PredicateTransformer(ast.NodeTransformer):
             return self.visit_UnaryOp(node)
         if not _input:
             _input = ast.Name(id="_input", ctx=ast.Load())
-        attr_name = "fn_%s" % self._get_node_id(node.func)
+        attr_name = f"fn_{self._get_node_id(node.func)}"
         fn = getattr(self.engine, attr_name)
         new_node = ast.Call(
             func=ast.Attribute(

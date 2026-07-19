@@ -252,7 +252,7 @@ def send_notification(
         notification_method: Notification method (for to param)
     """
     if notification_method not in NOTIFICATION_METHODS:
-        raise ValueError("Unknown notification method: %s" % notification_method)
+        raise ValueError(f"Unknown notification method: {notification_method}")
     msg_headers = {
         MX_MESSAGE_TYPE: MessageType.NOTIFICATION.value.encode(),
         MX_NOTIFICATION_METHOD: notification_method.encode(),

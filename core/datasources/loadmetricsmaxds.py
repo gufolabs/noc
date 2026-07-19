@@ -202,7 +202,7 @@ class LoadMetricsMaxDS(BaseDataSource):
         ifaces_metrics: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
         while mo_bi_ids:
             chunk, mo_bi_ids = mo_bi_ids[:CHUNK_SIZE], mo_bi_ids[CHUNK_SIZE:]
-            mo_filter = "managed_object IN (%s)" % ", ".join([str(c) for c in chunk])
+            mo_filter = "managed_object IN ({})".format(", ".join([str(c) for c in chunk]))
             for (
                 mo_bi_id,
                 iface_name,

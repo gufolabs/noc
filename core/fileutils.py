@@ -80,7 +80,7 @@ def urlopen(url, auto_deflate=False):
     setup_urllib_proxies()
 
     if url.startswith("http://") or url.startswith("https://"):
-        r = Request(url, headers={"User-Agent": "NOC/%s" % version.version.strip()})
+        r = Request(url, headers={"User-Agent": f"NOC/{version.version.strip()}"})
     else:
         r = url
     if auto_deflate and url.endswith(".gz"):

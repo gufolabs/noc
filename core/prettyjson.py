@@ -27,7 +27,7 @@ class PrettyJSON:
         if o is None:
             return indent("null", i)
         if isinstance(o, str):
-            return indent('"%s"' % json_escape(o), i)
+            return indent(f'"{json_escape(o)}"', i)
         if isinstance(o, bool):
             return indent("true" if o else "false", i)
         if isinstance(o, int):
@@ -35,7 +35,7 @@ class PrettyJSON:
         if isinstance(o, float):
             return indent(str(o), i)
         if isinstance(o, uuid.UUID):
-            return indent('"%s"' % o, i)
+            return indent(f'"{o}"', i)
         if isinstance(o, list):
             if len(o) == 0:
                 return indent("[]", i)
@@ -48,7 +48,7 @@ class PrettyJSON:
                 r += [",\n".join(indent(x, i + 4) for x in t)]
                 r += [indent("]", i)]
                 return "\n".join(r)
-            r = "[%s]" % ", ".join(t)
+            r = "[{}]".format(", ".join(t))
             return indent(r, i)
         if isinstance(o, dict):
             if not o:
@@ -61,8 +61,8 @@ class PrettyJSON:
             r = ",\n".join(
                 f"{cls.convert(k, 0, order)}: {cls.convert(o[k], 0, order)}" for k in keys
             )
-            return indent("{\n%s\n}" % indent(r, 4), i)
-        raise ValueError("Cannot encode %r" % o)
+            return indent(f"{{\n{indent(r, 4)}\n}}", i)
+        raise ValueError(f"Cannot encode {o!r}")
 
 
 to_json = PrettyJSON.to_json

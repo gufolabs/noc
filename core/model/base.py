@@ -54,7 +54,7 @@ class NOCModelBase(ModelBase):
         :return:
         """
         label = kls._meta.app_label
-        app_name = "noc.%s" % label
+        app_name = f"noc.{label}"
         # Fake up apps.populate
         app_config = apps.app_configs.get(label)
         if not app_config:

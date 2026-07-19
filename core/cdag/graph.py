@@ -37,10 +37,10 @@ class CDAG:
         sticky: bool = False,
     ) -> BaseCDAGNode:
         if node_id in self.nodes:
-            raise ValueError("Node %s is already configured" % node_id)
+            raise ValueError(f"Node {node_id} is already configured")
         node_cls = loader.get_class(node_type)
         if not node_cls:
-            raise ValueError("Invalid node type: %s" % node_type)
+            raise ValueError(f"Invalid node type: {node_type}")
         config = config or {}
         if override_config:
             config = ConfigProxy(node_cls.config_cls(**config), override_config)

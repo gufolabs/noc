@@ -74,7 +74,7 @@ class BaseLoader:
     model_mappings: dict[str, str] = {}  # scope -> Model
 
     rx_archive = re.compile(
-        r"^import-\d{4}(?:-\d{2}){5}.jsonl%s$" % compressor.ext.replace(".", r"\.")
+        r"^import-\d{{4}}(?:-\d{{2}}){{5}}.jsonl{}$".format(compressor.ext.replace(".", r"\."))
     )
 
     # Discard records which cannot be dereferenced
@@ -110,7 +110,7 @@ class BaseLoader:
     def __init__(self, chain) -> None:
         self.chain = chain
         self.system = chain.system
-        self.logger = PrefixLoggerAdapter(logger, "%s][%s" % (self.system.name, self.name))
+        self.logger = PrefixLoggerAdapter(logger, f"{self.system.name}][{self.name}")
         self.disable_mappings = False
         self.import_dir = os.path.join(config.path.etl_import, self.system.name, self.name)
         self.archive_dir = os.path.join(self.import_dir, "archive")
@@ -206,7 +206,7 @@ class BaseLoader:
 
         rs = RemoteSystem.get_by_name(remote_system)
         if not rs:
-            raise ValueError("Unknown Remote System: %s" % remote_system)
+            raise ValueError(f"Unknown Remote System: {remote_system}")
         ch = rs.get_loader_chain()
         loader = ch.get_loader(name)
         if not loader.mappings:
@@ -223,7 +223,7 @@ class BaseLoader:
             value: Resolve value
         """
         if scope not in cls.model_mappings:
-            raise ValueError("Unknown Scope: %s" % scope)
+            raise ValueError(f"Unknown Scope: {scope}")
         model = cls.model_mappings[scope]
         if hasattr(model, "get_by_name"):
             o = model.get_by_name(value)
@@ -1083,9 +1083,9 @@ class BaseLoader:
 
     def check_diff(self):
         def dump(cmd, row):
-            print("%s %s" % (cmd, row.json()))
+            print(f"{cmd} {row.json()}")
 
-        print("--- %s.%s" % (self.chain.system.name, self.name))
+        print(f"--- {self.chain.system.name}.{self.name}")
         ns = self.get_new_state()
         if not ns:
             return

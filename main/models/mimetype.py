@@ -34,7 +34,7 @@ class MIMEType(NOCModel):
     mime_type = models.CharField("MIME Type", max_length=63, validators=[check_mimetype])
 
     def __str__(self):
-        return "%s -> %s" % (self.extension, self.mime_type)
+        return "{} -> {}".format(self.extension, self.mime_type)
 
     @classmethod
     def get_mime_type(cls, filename):

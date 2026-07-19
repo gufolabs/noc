@@ -33,16 +33,16 @@ class Quantile(Summary):
         if name.endswith(Q_SUFFIX):
             name = name[:-Q_SUFFIX_LEN]
         # Prepare labels
-        ext_labels = ['%s="%s"' % (i.lower(), labels[i]) for i in labels]
+        ext_labels = [f'{i.lower()}="{labels[i]}"' for i in labels]
         for quantile in config.perfomance.default_quantiles:
             (value,) = self.query(quantile, 0)
             all_labels = [
                 *ext_labels,
-                'quantile="%s"' % quantile,
-                'window="%s"' % config.perfomance.default_quantiles_window,
+                f'quantile="{quantile}"',
+                f'window="{config.perfomance.default_quantiles_window}"',
             ]
-            yield "# TYPE %s untyped" % name
-            yield "%s{%s} %s" % (name, ",".join(all_labels), float(value) / self.scale)
+            yield f"# TYPE {name} untyped"
+            yield "{}{{{}}} {}".format(name, ",".join(all_labels), float(value) / self.scale)
 
 
 quantiles = {}

@@ -148,11 +148,11 @@ class BERDecoder:
                 if f & 0x3F == 0x03:  # ISO 6093 NR3 form
                     return float(msg[1:])  # 0123e456
             except ValueError:
-                raise ValueError("Invalid REAL representation: %s" % msg[1:])
+                raise ValueError(f"Invalid REAL representation: {msg[1:]}")
         elif f & 0x40:  # infinitive, 8.5.8
             return float("-inf" if f & 0x01 else "inf")
         else:
-            raise ValueError("Unknown REAL encoding: %s" % f)
+            raise ValueError(f"Unknown REAL encoding: {f}")
 
     def parse_p_bitstring(self, msg: bytes) -> bytes:
         unused = msg[0]
@@ -188,7 +188,7 @@ class BERDecoder:
 
     def parse_a_ipaddress(self, msg: bytes) -> str:
         if not msg:
-            raise ValueError("Invalid IP Address: '%s'" % msg.encode("hex"))
+            raise ValueError("Invalid IP Address: '{}'".format(msg.encode("hex")))
         return "%d.%d.%d.%d" % (msg[0], msg[1], msg[2], msg[3])
 
     def parse_p_oid(self, msg: bytes) -> str:

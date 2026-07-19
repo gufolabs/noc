@@ -30,7 +30,7 @@ class Stream:
         self.out = None
         self.out_path = None
         now = datetime.datetime.now()
-        self.fs = "%s-%s" % (self.model._meta.db_table, now.strftime("%Y-%m-%d-%H-%M-%S-%f"))
+        self.fs = "{}-{}".format(self.model._meta.db_table, now.strftime("%Y-%m-%d-%H-%M-%S-%f"))
         self.chunk_size = 0
         self.ts_field = self.model._meta.ordered_fields[1].name
 

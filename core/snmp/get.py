@@ -124,7 +124,7 @@ def parse_get_response(pdu: bytes, display_hints: _DisplayHints | None = None) -
     data = decoder.parse_sequence(pdu)[0]
     pdu = data[2]
     if pdu[0] != PDU_RESPONSE:
-        raise ValueError("Invalid response PDU type: %s" % pdu[0])
+        raise ValueError(f"Invalid response PDU type: {pdu[0]}")
     return GetResponse(
         community=data[1],
         request_id=pdu[1],
@@ -168,7 +168,7 @@ def parse_get_response_raw(pdu: bytes, display_hints: _DisplayHints | None = Non
     data = decoder.parse_sequence(pdu)[0]
     pdu = data[2]
     if pdu[0] != PDU_RESPONSE:
-        raise ValueError("Invalid response PDU type: %s" % pdu[0])
+        raise ValueError(f"Invalid response PDU type: {pdu[0]}")
     return GetResponse(
         community=data[1],
         request_id=pdu[1],
@@ -195,7 +195,7 @@ def parse_get_response_strict(
     data = decoder.parse_sequence(pdu)[0]
     pdu = data[2]
     if pdu[0] != PDU_RESPONSE:
-        raise ValueError("Invalid response PDU type: %s" % pdu[0])
+        raise ValueError(f"Invalid response PDU type: {pdu[0]}")
     _, request_id, err_status, err_index, varbinds = pdu
     cleaned_varbinds = []
     for n, item in enumerate(varbinds):

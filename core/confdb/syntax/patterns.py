@@ -19,8 +19,8 @@ class BasePattern:
     @staticmethod
     def compile_gen_kwarg(name, value=None):
         if value is None:
-            return "%s=None" % name
-        return "%s='%s'" % (name, value.replace("'", "\\'"))
+            return f"{name}=None"
+        return "{}='{}'".format(name, value.replace("'", "\\'"))
 
     @staticmethod
     def compile_value(name):
@@ -68,95 +68,95 @@ class BOOL(ANY):
 
     @staticmethod
     def compile_gen_kwarg(name, value=None):
-        return "%s=%s" % (name, BOOL.clean(value))
+        return f"{name}={BOOL.clean(value)}"
 
     @staticmethod
     def compile_value(name):
-        return "BOOL.clean(%s)" % name
+        return f"BOOL.clean({name})"
 
 
 class INTEGER(ANY):
     @staticmethod
     def compile_gen_kwarg(name, value=None):
         if value is None:
-            return "%s=None" % name
-        return "%s=%s" % (name, int(value))
+            return f"{name}=None"
+        return f"{name}={int(value)}"
 
     @staticmethod
     def compile_value(name):
-        return "int(%s)" % name
+        return f"int({name})"
 
 
 class FLOAT(ANY):
     @staticmethod
     def compile_gen_kwarg(name, value=None):
         if value is None:
-            return "%s=None" % name
-        return "%s=%s" % (name, float(value))
+            return f"{name}=None"
+        return f"{name}={float(value)}"
 
     @staticmethod
     def compile_value(name):
-        return "float(%s)" % name
+        return f"float({name})"
 
 
 class IP_ADDRESS(ANY):
     @staticmethod
     def compile_gen_kwarg(name, value=None):
         if value is None:
-            return "%s=None" % name
-        return "%s=%s" % (name, IP.prefix(value))
+            return f"{name}=None"
+        return f"{name}={IP.prefix(value)}"
 
     @staticmethod
     def compile_value(name):
-        return "IP.prefix(%s)" % name
+        return f"IP.prefix({name})"
 
 
 class IPv4_ADDRESS(ANY):
     @staticmethod
     def compile_gen_kwarg(name, value=None):
         if value is None:
-            return "%s=None" % name
-        return "%s=%s" % (name, IPv4(value))
+            return f"{name}=None"
+        return f"{name}={IPv4(value)}"
 
     @staticmethod
     def compile_value(name):
-        return "IPv4(%s)" % name
+        return f"IPv4({name})"
 
 
 class IPv4_PREFIX(ANY):
     @staticmethod
     def compile_gen_kwarg(name, value=None):
         if value is None:
-            return "%s=None" % name
-        return "%s=%s" % (name, IPv4(value))
+            return f"{name}=None"
+        return f"{name}={IPv4(value)}"
 
     @staticmethod
     def compile_value(name):
-        return "IPv4(%s)" % name
+        return f"IPv4({name})"
 
 
 class IPv6_ADDRESS(ANY):
     @staticmethod
     def compile_gen_kwarg(name, value=None):
         if value is None:
-            return "%s=None" % name
-        return "%s=%s" % (name, IPv6(value))
+            return f"{name}=None"
+        return f"{name}={IPv6(value)}"
 
     @staticmethod
     def compile_value(name):
-        return "IPv6(%s)" % name
+        return f"IPv6({name})"
 
 
 class IPv6_PREFIX(ANY):
     @staticmethod
     def compile_gen_kwarg(name, value=None):
         if value is None:
-            return "%s=None" % name
-        return "%s=%s" % (name, IPv6(value))
+            return f"{name}=None"
+        return f"{name}={IPv6(value)}"
 
     @staticmethod
     def compile_value(name):
-        return "IPv6(%s)" % name
+        return f"IPv6({name})"
 
 
 # Matches any token value

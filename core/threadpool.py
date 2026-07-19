@@ -72,7 +72,7 @@ class ThreadPoolExecutor:
         with self.mutex:
             if not len(self.waiters) and len(self.threads) < self.max_workers:
                 # Start new thread
-                name = "worker-%s" % next(self.worker_id)
+                name = f"worker-{next(self.worker_id)}"
                 t = threading.Thread(target=self.worker, name=name)
                 t.daemon = True
                 self.threads.add(t)
@@ -260,13 +260,13 @@ class ThreadPoolExecutor:
             idle = len(self.waiters)
             d.update(
                 {
-                    "%s_max_workers" % self.name: self.max_workers,
-                    "%s_workers" % self.name: workers,
-                    "%s_idle_workers" % self.name: idle,
-                    "%s_running_workers" % self.name: workers - idle,
-                    "%s_submitted_tasks" % self.name: self.submitted_tasks,
-                    "%s_queued_jobs" % self.name: len(self.queue),
-                    "%s_uptime" % self.name: perf_counter() - self.started,
+                    f"{self.name}_max_workers": self.max_workers,
+                    f"{self.name}_workers": workers,
+                    f"{self.name}_idle_workers": idle,
+                    f"{self.name}_running_workers": workers - idle,
+                    f"{self.name}_submitted_tasks": self.submitted_tasks,
+                    f"{self.name}_queued_jobs": len(self.queue),
+                    f"{self.name}_uptime": perf_counter() - self.started,
                 }
             )
 

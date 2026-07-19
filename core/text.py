@@ -128,7 +128,7 @@ def parse_table(
                             and not r[-1][i].endswith(n_row_delim)
                             and not x.startswith(n_row_delim)
                         ):
-                            r[-1][i] += "%s%s" % (n_row_delim, row_wrapper(x) if row_wrapper else x)
+                            r[-1][i] += f"{n_row_delim}{row_wrapper(x) if row_wrapper else x}"
                         else:
                             r[-1][i] += row_wrapper(x) if row_wrapper else x
                 else:
@@ -197,11 +197,11 @@ def xml_to_table(s: str, root: str, row: str) -> list[dict[str, str]]:
     [{'a': '1', 'b': '2'}, {'a': '3', 'b': '4'}]
     """
     # Detect root element
-    match = re.search(r"<%s>(.*)</%s>" % (root, root), s, re.DOTALL | re.IGNORECASE)
+    match = re.search(rf"<{root}>(.*)</{root}>", s, re.DOTALL | re.IGNORECASE)
     if not match:
         return []
     s = match.group(1)
-    row_re = re.compile(r"<%s>(.*?)</%s>" % (row, row), re.DOTALL | re.IGNORECASE)
+    row_re = re.compile(rf"<{row}>(.*?)</{row}>", re.DOTALL | re.IGNORECASE)
     item_re = re.compile(r"<([^\]+])>(.*?)</\1>", re.DOTALL | re.IGNORECASE)
     r: list[dict[str, str]] = []
     for m in [x for x in row_re.split(s) if x]:
@@ -730,7 +730,7 @@ def safe_shadow(text: object) -> str:
     if not isinstance(text, str):
         return "******"
     if len(text) > 2:
-        return "%s******%s" % (text[0], text[-1])
+        return f"{text[0]}******{text[-1]}"
     return "******"
 
 

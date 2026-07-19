@@ -43,7 +43,7 @@ class ConsulResolver(ResolverBase):
                 )
             except ConsulRepeatableErrors as e:
                 if self.critical:
-                    self.dcs.set_faulty_status("Consul error: %s" % e)
+                    self.dcs.set_faulty_status(f"Consul error: {e}")
                 continue
             try:
                 index = int(index)
@@ -58,8 +58,7 @@ class ConsulResolver(ResolverBase):
                     "[%s] Index changed %d -> %d. Applying changes", self.name, old_index, index
                 )
                 r = {
-                    str(svc["Service"]["ID"]): "%s:%s"
-                    % (
+                    str(svc["Service"]["ID"]): "{}:{}".format(
                         str(svc["Service"]["Address"] or svc["Node"]["Address"]),
                         str(svc["Service"]["Port"]),
                     )
@@ -196,7 +195,7 @@ class ConsulDCS(DCSBase):
         self.name = name
         if lock:
             await self.acquire_lock(lock)
-        svc_id = self.session or str("svc-%s" % uuid.uuid4())
+        svc_id = self.session or str(f"svc-{uuid.uuid4()}")
         tags = tags[:] if tags else []
         tags += [svc_id]
         self.svc_check_url = f"http://{address}:{port}/health/?service={svc_id}"
@@ -384,10 +383,10 @@ class ConsulDCS(DCSBase):
             await self.create_session()
         if self.total_slots is not None:
             return self.slot_number, self.total_slots
-        prefix = "%s/slots/%s" % (self.consul_prefix, name)
-        contender_path = "%s/%s" % (prefix, self.session)
+        prefix = f"{self.consul_prefix}/slots/{name}"
+        contender_path = f"{prefix}/{self.session}"
         contender_info = self.session
-        manifest_path = "%s/manifest" % prefix
+        manifest_path = f"{prefix}/manifest"
         self.logger.info("Writing contender slot info into %s", contender_path)
         while True:
             try:
@@ -498,24 +497,23 @@ class ConsulDCS(DCSBase):
                 self.logger.info("Consul error: %s", e)
                 if critical:
                     metrics["error", ("type", "dcs_consul_failed_resolve_critical_near")] += 1
-                    self.set_faulty_status("Consul error: %s" % e)
+                    self.set_faulty_status(f"Consul error: {e}")
                 time.sleep(config.consul.near_retry_timeout)
                 continue
             if not services and wait:
-                metrics["error", ("type", "dcs_consul_no_active_service %s" % name)] += 1
+                metrics["error", ("type", f"dcs_consul_no_active_service {name}")] += 1
                 self.logger.info("No active service %s. Waiting", name)
                 if critical:
                     metrics[
-                        "error", ("type", "dcs_consul_no_active_critical_service %s" % name)
+                        "error", ("type", f"dcs_consul_no_active_critical_service {name}")
                     ] += 1
-                    self.set_faulty_status("No active service %s. Waiting" % name)
+                    self.set_faulty_status(f"No active service {name}. Waiting")
                 time.sleep(config.consul.near_retry_timeout)
                 continue
             r = []
             for svc in services:
                 r += [
-                    "%s:%s"
-                    % (
+                    "{}:{}".format(
                         str(svc["Service"]["Address"] or svc["Node"]["Address"]),
                         str(svc["Service"]["Port"]),
                     )

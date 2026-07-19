@@ -84,7 +84,7 @@ class MIBRegistry:
                 # Common script
                 base_name = "noc"
             logger.debug("Loading MIB: %s", name)
-            mn = "%s.cmibs.%s" % (base_name, mod_name)
+            mn = f"{base_name}.cmibs.{mod_name}"
             try:
                 m = importlib.import_module(mn)
             except ModuleNotFoundError:
