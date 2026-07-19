@@ -30,8 +30,9 @@ class Script(BaseScript):
 
     def execute(self, **kwargs):
         res = self.http.get(
-            "/cgi-bin/configManager.cgi?action=getConfig&%s"
-            % "&".join(["%s=%s" % ("name", c) for c in self.config_sections])
+            "/cgi-bin/configManager.cgi?action=getConfig&{}".format(
+                "&".join(["{}={}".format("name", c) for c in self.config_sections])
+            )
         )
         ptz = ""
         if not self.is_rvi:

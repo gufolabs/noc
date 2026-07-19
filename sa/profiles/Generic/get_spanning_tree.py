@@ -123,7 +123,9 @@ class Script(BaseScript):
                     # Designated bridge ID
                     "designated_bridge_id": MAC(d_bridge),
                     # Designated bridge priority
-                    "designated_bridge_priority": int("%02X%02X" % tuple(d_priority), 16),
+                    "designated_bridge_priority": int(
+                        "{:02X}{:02X}".format(*tuple(d_priority)), 16
+                    ),
                     # Designated port id
                     "designated_port_id": d_port,
                     # P2P indicator

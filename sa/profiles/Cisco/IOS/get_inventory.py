@@ -88,7 +88,9 @@ class Script(BaseScript):
             for match in self.rx_item.finditer(v):
                 vendor, serial = "", ""
                 if match.group("name") in self.IGNORED_NAMES:
-                    self.logger.debug("Part %s in ignored name. Skipping" % match.group("name"))
+                    self.logger.debug(
+                        "Part {} in ignored name. Skipping".format(match.group("name"))
+                    )
                     continue
                 self.logger.debug(
                     "Get type: %s, %s, %s",
@@ -125,13 +127,13 @@ class Script(BaseScript):
                         if not part_no:
                             continue
                     elif type == "MOTHERBOARD":
-                        part_no = "CISCO%s-MB" % match.group("descr")[1:5]
+                        part_no = "CISCO{}-MB".format(match.group("descr")[1:5])
                     else:
                         continue
                 if serial in self.IGNORED_SERIAL:
                     serial = None
                 if part_no in self.ISR_MB and type == "MOTHERBOARD":
-                    part_no = "%s-MB" % part_no
+                    part_no = f"{part_no}-MB"
                 if not vendor:
                     if "NoName" in part_no or "Unknown" in part_no:
                         vendor = "NONAME"
@@ -213,10 +215,10 @@ class Script(BaseScript):
 
     def get_idprom(self, iface, descr):
         try:
-            t = self.cli("show idprom int %s | i Vendor" % iface)
+            t = self.cli(f"show idprom int {iface} | i Vendor")
             match = self.rx_idprom.search(t)
             if not match and self.is_cat4000 and descr == "10GBASE-LR":
-                t = self.cli("show idprom int %s | i endor" % iface)
+                t = self.cli(f"show idprom int {iface} | i endor")
                 match = self.rx_idprom1.search(t)
             if match:
                 v = self.rx_cvend.search(match.group("t_vendor").upper())
@@ -549,7 +551,7 @@ class Script(BaseScript):
             return "NoName | Transceiver | 1G | SFP T"
         match = self.rx_trans.search(descr.upper().replace("-", ""))
         if match:
-            return "Unknown | Transceiver | %s" % match.group(1).upper()
+            return f"Unknown | Transceiver | {match.group(1).upper()}"
         return None
 
     def execute_2960(self):

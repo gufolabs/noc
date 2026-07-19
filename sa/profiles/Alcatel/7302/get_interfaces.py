@@ -280,7 +280,7 @@ class Script(BaseScript):
         for match in self.rx_ip.finditer(v):
             ip_address = match.group("ip")
             ip_subnet = match.group("mask")
-            ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+            ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
             interfaces[match.group("iface")] = {
                 "name": match.group("iface"),
                 "admin_status": match.group("admin_status") == "up",
@@ -396,7 +396,7 @@ class Script(BaseScript):
                 continue
             ifname = "%d/%d/%d/%d" % port_id
             if "prefix" in self.PROCCESSED_TYPE[iftype]:
-                ifname = "%s:%s" % (self.PROCCESSED_TYPE[iftype]["prefix"], ifname)
+                ifname = "{}:{}".format(self.PROCCESSED_TYPE[iftype]["prefix"], ifname)
             if iftype in {6, 24}:
                 # Ethernet ifaces
                 hints = []

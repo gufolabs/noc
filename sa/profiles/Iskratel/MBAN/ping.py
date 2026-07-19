@@ -28,13 +28,13 @@ class Script(BaseScript):
     def execute(
         self, address, count=None, source_address=None, size=None, df=None, *args, **kwargs
     ):
-        cmd = "show ping %s" % address
+        cmd = f"show ping {address}"
         if count is not None:
-            cmd += " number %s" % count
+            cmd += f" number {count}"
         else:
             count = 3
         if size is not None:
-            cmd += " packetsize %s" % size
+            cmd += f" packetsize {size}"
         match = self.rx_result.search(self.cli(cmd))
         if match:
             return {

@@ -56,7 +56,7 @@ class Script(BaseScript):
         interfaces = []
         self.cli("SELGRP Status")
         for etherswitch in ["1", "2"]:
-            c = self.cli("GET ethernet%s/" % etherswitch)
+            c = self.cli(f"GET ethernet{etherswitch}/")
             match = self.rx_eth_iface.search(c)
             ifname = match.group("ifname").replace('"', "")
             # ifname = "port" + ifname[-1]
@@ -77,10 +77,10 @@ class Script(BaseScript):
                 ],
             }
             interfaces += [iface]
-            c = self.cli("GET ethernet%s/" % etherswitch, command_submit=b"\x09")
+            c = self.cli(f"GET ethernet{etherswitch}/", command_submit=b"\x09")
             self.cli("")
             for i in self.rx_hw_port.finditer(c):
-                v = self.cli("GET ethernet%s/%s/" % (etherswitch, i.group("port")))
+                v = self.cli("GET ethernet{}/{}/".format(etherswitch, i.group("port")))
                 match = self.rx_eth_iface.search(v)
                 ifname = match.group("ifname").replace('"', "")
                 ifname = "port" + ifname[-1]
@@ -101,7 +101,7 @@ class Script(BaseScript):
                     ],
                 }
                 interfaces += [iface]
-            c = self.cli("GET ethernet%s/vtuTable[]/" % etherswitch)
+            c = self.cli(f"GET ethernet{etherswitch}/vtuTable[]/")
             for match in self.rx_vlan.finditer(c):
                 vlan_id = match.group("vlan_id")
                 for match1 in self.rx_vlan_port.finditer(match.group("ports")):
@@ -126,7 +126,7 @@ class Script(BaseScript):
                 # "admin_status": True,
                 "oper_status": match.group("oper_status") == "up",
                 "enabled_afi": ["IPv4"],
-                "ipv4_addresses": ["%s/%s" % (ip, mask)],
+                "ipv4_addresses": [f"{ip}/{mask}"],
             }
             found = False
             if ifname.startswith("eth"):

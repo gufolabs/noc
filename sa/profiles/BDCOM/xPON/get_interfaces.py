@@ -102,7 +102,7 @@ class Script(BaseScript):
             if i["type"] == "physical":
                 sub["enabled_afi"] = ["BRIDGE"]
                 time.sleep(2)  # Do not remove this!
-                c = self.cli("show vlan interface %s" % ifname)
+                c = self.cli(f"show vlan interface {ifname}")
                 for r in parse_table(c, allow_wrap=True, n_row_delim=","):
                     if not is_int(r[2]):
                         continue
@@ -117,7 +117,7 @@ class Script(BaseScript):
                 sub["vlan_ids"] = ifname[4:]
             if ifname.startswith("GigaEthernet") or ifname.startswith("TGigaEthernet"):
                 time.sleep(1)  # Do not remove this!
-                c = self.cli("show lldp interface %s" % ifname)
+                c = self.cli(f"show lldp interface {ifname}")
                 for match1 in self.rx_lldp.finditer(c):
                     if (
                         match1.group("lldp_rx") == "enabled"

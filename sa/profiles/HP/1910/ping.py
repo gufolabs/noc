@@ -32,8 +32,8 @@ class Script(BaseScript):
         if size:
             cmd += " -s %d" % int(size)
         if source_address:
-            cmd += " -a %s" % source_address
-        cmd += " %s" % address
+            cmd += f" -a {source_address}"
+        cmd += f" {address}"
         ping = self.cli(cmd)
         result = self.rx_result.search(ping)
         return {

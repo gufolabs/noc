@@ -177,7 +177,7 @@ class Script(BaseScript):
             instance.update(match.groupdict())
             for p in self.rx_port.finditer(v):
                 ifname = p.group("port").replace(" ", "")
-                p1 = self.cli("display stp port %s" % ifname)
+                p1 = self.cli(f"display stp port {ifname}")
                 if "spanning tree protocol is disabled" in p1:
                     continue
                 iface = {"interface": ifname}
@@ -189,7 +189,7 @@ class Script(BaseScript):
                 iface["priority"] = match.group("priority")
                 match = self.rx_rstp_designated.search(p1)
                 iface.update(match.groupdict())
-                iface["designated_port_id"] = "%0.4X.%s" % (
+                iface["designated_port_id"] = "{:004X}.{}".format(
                     int(iface["designated_bridge_priority"]),
                     iface["designated_bridge_id"][-4:],
                 )

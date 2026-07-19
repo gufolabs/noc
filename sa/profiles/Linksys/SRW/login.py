@@ -27,4 +27,4 @@ class Script(BaseScript):
         except NOCError as e:
             return {"result": False, "message": f"Error: {e.default_msg} ({e!r})"}
         except Exception as e:
-            return {"result": False, "message": "Exception: %s" % repr(e)}
+            return {"result": False, "message": f"Exception: {e!r}"}

@@ -40,7 +40,7 @@ class Script(BaseScript):
         if interface is None:
             interface = "all"
         try:
-            s = self.cli("show ports %s" % interface)
+            s = self.cli(f"show ports {interface}")
         except self.CLISyntaxError:
             raise self.NotSupportedError()
 

@@ -50,7 +50,7 @@ class Script(BaseScript):
             ]
         ):
             if v[0]:
-                m = ":".join(["%02x" % int(c) for c in v[0].split(".")])
+                m = ":".join([f"{int(c):02x}" for c in v[0].split(".")])
                 m = m[m.index(":") + 1 :]
                 if mac is not None and m != mac:
                     continue
@@ -92,9 +92,9 @@ class Script(BaseScript):
     def execute_cli(self, interface=None, vlan=None, mac=None):
         cmd = "show fdb"
         if mac is not None:
-            cmd += " mac_address %s" % mac
+            cmd += f" mac_address {mac}"
         if interface is not None:
-            cmd += " port %s" % interface
+            cmd += f" port {interface}"
         if vlan is not None:
             if (
                 self.match_version(DES3200, version__gte="1.33")
@@ -110,7 +110,7 @@ class Script(BaseScript):
             else:
                 for v in self.scripts.get_vlans():
                     if v["vlan_id"] == vlan:
-                        cmd += " vlan %s" % v["name"]
+                        cmd += " vlan {}".format(v["name"])
                         break
         r = []
         for match in self.rx_line.finditer(self.cli(cmd)):

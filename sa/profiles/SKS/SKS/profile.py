@@ -86,9 +86,9 @@ class Profile(BaseProfile):
         iftype, ifnum = self.rx_iface_format.match(interface).groups()
         if not iftype:
             # VLAN on SNMP
-            ifname = "Vlan%s" % ifnum
+            ifname = f"Vlan{ifnum}"
         elif iftype.lower() in self.iface_type_map:
-            ifname = "%s%s" % (self.iface_type_map[iftype.lower()], ifnum)
+            ifname = f"{self.iface_type_map[iftype.lower()]}{ifnum}"
         else:
             ifname = interface
         return ifname

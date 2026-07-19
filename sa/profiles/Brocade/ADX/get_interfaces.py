@@ -103,7 +103,7 @@ class Script(BaseScript):
             elif port.find("n") > 0:
                 ift = "tunnel"
             else:
-                self.logger.debug("NOT FOUND: %s\n" % port)
+                self.logger.debug(f"NOT FOUND: {port}\n")
                 continue
             i = {
                 "name": port,
@@ -122,16 +122,14 @@ class Script(BaseScript):
             if ift == "SVI":
                 if untagged[port]:
                     i["subinterfaces"][0].update({"vlan_ids": [untagged[port]]})
-                ipa = self.cli("show run int %s | inc ip addr" % port)
+                ipa = self.cli(f"show run int {port} | inc ip addr")
                 ipal = ipa.splitlines()
                 ip_address = []
                 for line in ipal:
                     line = line.strip()
                     self.debug("ip.split len:" + str(len(line.split())))
                     if len(line.split()) > 3:
-                        ip_address += [
-                            "%s/%s" % (line.split()[2], IPv4.netmask_to_len(line.split()[3]))
-                        ]
+                        ip_address += [f"{line.split()[2]}/{IPv4.netmask_to_len(line.split()[3])}"]
                     else:
                         ip_address.append(line.split()[2])
                 i["subinterfaces"][0].update({"enabled_afi": ["IPv4"]})

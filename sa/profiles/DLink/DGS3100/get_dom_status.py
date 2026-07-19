@@ -23,7 +23,7 @@ class Script(BaseScript):
         if interface is None:
             interface = "9-24"
         try:
-            s = self.cli("show optical-transceiver %s" % interface)
+            s = self.cli(f"show optical-transceiver {interface}")
         except self.CLISyntaxError:
             raise self.NotSupportedError()
 

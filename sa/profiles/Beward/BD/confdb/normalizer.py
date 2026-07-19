@@ -114,7 +114,7 @@ class BDNormalizer(BaseNormalizer):
             )
             yield self.make_media_streams_video_resolution_height(name=stream_name, height=height)
             yield self.make_media_streams_video_resolution_width(name=stream_name, width=width)
-            yield self.make_stream_rtsp_path(name=stream_name, path="/%s" % stream_name)
+            yield self.make_stream_rtsp_path(name=stream_name, path=f"/{stream_name}")
             if stream_name == "mjpeg":
                 yield self.make_media_streams_video_codec_mpeg4(name=stream_name)
             else:

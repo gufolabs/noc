@@ -24,7 +24,7 @@ class Script(BaseScript):
     )
 
     def execute_cli(self, address):
-        cmd = "ping %s" % address
+        cmd = f"ping {address}"
         pr = self.cli(cmd)
         match = self.rx_result.search(pr)
         min = match.group("min")

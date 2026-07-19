@@ -29,7 +29,7 @@ class Script(BaseScript):
             return []
         for match in self.rx_id.finditer(s):
             lid = match.group("id")
-            c = self.cli("display lacp link-aggregation verbose %s" % lid)
+            c = self.cli(f"display lacp link-aggregation verbose {lid}")
             iface = {"interface": lid, "type": "L", "members": []}
             for match1 in self.rx_iface.finditer(c):
                 iface["members"] += [match1.group("port")]

@@ -121,8 +121,8 @@ class Script(BaseScript):
         # self.snmp.get(mib[".1.3.6.1.4.1.27514.1.1.1.1.1.1", 0], cached=True)
         platform = self.qtech_platforms.get(oid)
         if platform is None:
-            self.logger.info("Unknown platform OID: %s" % oid)
-            raise NotImplementedError("Unknown platform OID: %s" % oid)
+            self.logger.info(f"Unknown platform OID: {oid}")
+            raise NotImplementedError(f"Unknown platform OID: {oid}")
         if oid == "1.3.6.1.4.1.27514.1.1.1.310":
             # Both QSW-3580-28T-AC and QSW-3470-28T-AC has same OID
             temp = self.snmp.get(mib["ENTITY-MIB::entPhysicalModelName", 1])
@@ -192,7 +192,7 @@ class Script(BaseScript):
         return {
             "vendor": "Qtech",
             "platform": platform,
-            "version": "%s (%s)" % (r["fw_ver"], r["fw_date"]),
+            "version": "{} ({})".format(r["fw_ver"], r["fw_date"]),
         }
 
     def execute_cli(self, **kwargs):

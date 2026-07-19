@@ -28,29 +28,28 @@ class Script(BaseScript):
             name = l["name"]
             if len(l["prefix_list"]) == 0:
                 result += [{"name": name, "status": False}]
-                self.logger.error("Refusing to apply empty policy-option %s" % name)
+                self.logger.error(f"Refusing to apply empty policy-option {name}")
                 continue
             suffix = "exact" if l["strict"] else "orlonger"
             # Retrieve prefix list
             pl = self.cli(
-                "show configuration policy-options policy-statement %s | display set" % name
+                f"show configuration policy-options policy-statement {name} | display set"
             )
             applied_pl = set()
             for ln in pl.splitlines():
                 match = rx_pl.match(ln)
                 if match:
-                    applied_pl.add("%s %s" % (match.group(1), match.group(2)))
+                    applied_pl.add(f"{match.group(1)} {match.group(2)}")
             # Build new prefix-list
-            new_pl = {"%s %s" % (x, suffix) for x in l["prefix_list"]}
+            new_pl = {f"{x} {suffix}" for x in l["prefix_list"]}
             # Delete obsolete records
             actions += [
-                "delete policy-options policy-statement %s term pass from "
-                "route-filter %s" % (name, x)
+                f"delete policy-options policy-statement {name} term pass from route-filter {x}"
                 for x in applied_pl.difference(new_pl)
             ]
             # Add new records
             actions += [
-                "set policy-options policy-statement %s term pass from route-filter %s" % (name, x)
+                f"set policy-options policy-statement {name} term pass from route-filter {x}"
                 for x in new_pl.difference(applied_pl)
             ]
             result += [{"name": name, "status": True}]

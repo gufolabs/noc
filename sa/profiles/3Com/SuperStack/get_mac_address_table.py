@@ -29,11 +29,11 @@ class Script(BaseScript):
     def execute(self, interface=None, vlan=None, mac=None):
         cmd = "bridge port address list"
         if interface is not None:
-            cmd += " %s" % interface
+            cmd += f" {interface}"
         else:
             cmd += " all"
         if mac is not None:
-            cmd = "bridge port address find %s" % self.profile.convert_mac(mac)
+            cmd = f"bridge port address find {self.profile.convert_mac(mac)}"
         macs = self.cli(cmd)
         r = []
         if mac is None:

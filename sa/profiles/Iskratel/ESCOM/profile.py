@@ -64,5 +64,5 @@ class Profile(BaseProfile):
             # ESCOM L Port-channel/Portgroup
             return f"Port-aggregator {interface[1:]}"
         if match:
-            interface = "%si %s" % (match.group("type"), match.group("number"))
+            interface = "{}i {}".format(match.group("type"), match.group("number"))
         return self.convert_interface_name_cisco(interface.strip("?"))

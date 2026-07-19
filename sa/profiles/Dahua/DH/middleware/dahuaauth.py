@@ -46,15 +46,17 @@ class DahuaAuthMiddeware(BaseMiddleware):
         :rtype: str
         """
         if params["encryption"] == "Basic":
-            return codecs.encode("%s:%s" % (self.user, self.password), "base64")
+            return codecs.encode(f"{self.user}:{self.password}", "base64")
         if params["encryption"] == "Default":
             A1 = (
-                hashlib.md5(smart_bytes("%s:%s:%s" % (self.user, params["realm"], self.password)))
+                hashlib.md5(
+                    smart_bytes("{}:{}:{}".format(self.user, params["realm"], self.password))
+                )
                 .hexdigest()
                 .upper()
             )
             return (
-                hashlib.md5(smart_bytes("%s:%s:%s" % (self.user, params["random"], A1)))
+                hashlib.md5(smart_bytes("{}:{}:{}".format(self.user, params["random"], A1)))
                 .hexdigest()
                 .upper()
             )

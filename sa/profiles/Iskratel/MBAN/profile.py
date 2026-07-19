@@ -38,7 +38,7 @@ class Profile(BaseProfile):
     def convert_interface_name(self, s, board=0):
         if board and self.rx_iface_match.match(s):
             # appen boarn number to ifName
-            return "%s%s/%s" % (
+            return "{}{}/{}".format(
                 self.rx_iface_match.match(s).group(1),
                 board if board else "",
                 self.rx_iface_match.match(s).group(2),

@@ -26,7 +26,7 @@ class Script(BaseScript):
         cpu_mac = self.scripts.get_chassis_id()[0]["first_chassis_mac"]
         cmd = "show bridge mactable"
         if interface is not None:
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
         r = []
         for match in self.rx_line.finditer(self.cli(cmd)):
             if match.group("mac") == cpu_mac:

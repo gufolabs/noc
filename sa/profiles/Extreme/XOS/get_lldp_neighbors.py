@@ -106,7 +106,7 @@ class Script(BaseScript):
             else:
                 n["remote_chassis_id_subtype"] = LLDP_CHASSIS_SUBTYPE_LOCAL
             try:
-                c = self.cli("show lldp ports %s neighbors detailed" % local_interface)
+                c = self.cli(f"show lldp ports {local_interface} neighbors detailed")
                 match = self.rx_lldp_detail.search(c)
                 if match:
                     port_descr = match.group("port_descr")

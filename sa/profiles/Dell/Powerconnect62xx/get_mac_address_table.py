@@ -24,7 +24,7 @@ class Script(BaseScript):
     def execute(self, interface=None, vlan=None, mac=None):
         cmd = "show bridge address-table"
         if interface is not None:
-            cmd += " ethernet %s" % interface
+            cmd += f" ethernet {interface}"
         if vlan is not None:
             cmd += " vlan %d" % vlan
         r = []

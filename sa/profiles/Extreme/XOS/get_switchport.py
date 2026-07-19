@@ -78,7 +78,7 @@ class Script(BaseScript):
         v = "\n"
         for p in self.get_description():
             descriptions[p["interface"]] = p["description"]
-            vv = self.cli("show port %s information detail" % p["interface"])
+            vv = self.cli("show port {} information detail".format(p["interface"]))
             v = v + vv + "\n"
         # Get vlans
         known_vlans = {vlan["vlan_id"] for vlan in self.scripts.get_vlans()}

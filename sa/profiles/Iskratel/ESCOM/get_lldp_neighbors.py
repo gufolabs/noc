@@ -68,7 +68,7 @@ class Script(BaseScript):
             match = self.rx_search.search(line)
             if not match:
                 continue
-            iface = self.cli("show lldp neighbors interface %s" % match.group("iface"))
+            iface = self.cli("show lldp neighbors interface {}".format(match.group("iface")))
             iface_match = self.rx_port2.search(iface)
             chassis_id = iface_match.group("device_id")
             if is_ipv4(chassis_id) or is_ipv6(chassis_id):
@@ -140,7 +140,7 @@ class Script(BaseScript):
             if i[3]:
                 neighbor["remote_system_name"] = i[3]
             try:
-                v = self.cli("show lldp neighbors %s" % i[0])
+                v = self.cli(f"show lldp neighbors {i[0]}")
                 match = self.rx_port.search(v)
             except self.CLISyntaxError:
                 pass

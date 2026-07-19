@@ -20,8 +20,8 @@ class Script(BaseScript):
         r = {}
         if self.is_platform_MXA24:
             o = "1.3.6.1.4.1.34300.1.6"
-            ooid = "%s.15.2.1.2" % o
-            aoid = "%s.10.2.1.2" % o
+            ooid = f"{o}.15.2.1.2"
+            aoid = f"{o}.10.2.1.2"
             for oid, name in self.snmp.getnext(aoid, max_retries=8):
                 if oid.endswith(".0"):
                     ifindex = int(oid.split(".")[-2])
@@ -32,7 +32,7 @@ class Script(BaseScript):
                 if " " in name:
                     name = name.split()[2]
                 if name.startswith("p"):
-                    name = "s%s" % name
+                    name = f"s{name}"
                 if oid.endswith(".0"):
                     ifindex = int(oid.split(".")[-2])
                 else:
@@ -43,10 +43,10 @@ class Script(BaseScript):
                 o = "1.3.6.1.4.1.35265.1.28"
             else:
                 o = "1.3.6.1.4.1.35265.1.33"
-            aoid = "%s.10.2.1.2" % o
+            aoid = f"{o}.10.2.1.2"
             for oid, name in self.snmp.getnext(mib["IF-MIB::ifDescr"], max_retries=8):
                 if name.startswith("p"):
-                    name = "s%s" % name
+                    name = f"s{name}"
                 ifindex = int(oid.split(".")[-1])
                 r[name] = ifindex
 

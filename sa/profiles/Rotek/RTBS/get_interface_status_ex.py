@@ -84,16 +84,16 @@ class Script(BaseScript):
         ver = self.snmp.get("1.3.6.1.2.1.1.2.0")
         # check sysObjectID
         obj = ver.split(".")[-1]
-        for soid, sname in self.snmp.getnext("1.3.6.1.4.1.%s.3.5.1.2.1.1.4" % obj):
+        for soid, sname in self.snmp.getnext(f"1.3.6.1.4.1.{obj}.3.5.1.2.1.1.4"):
             sifindex = int(soid.split(".")[-1])
-            name = self.snmp.get("1.3.6.1.2.1.2.2.1.2.%s" % sifindex)
+            name = self.snmp.get(f"1.3.6.1.2.1.2.2.1.2.{sifindex}")
             if name is None:
                 continue
-            if_speed = self.snmp.get("1.3.6.1.2.1.2.2.1.5.%s" % sifindex)
-            admin_status = self.snmp.get("1.3.6.1.2.1.2.2.1.7.%s" % sifindex)
-            oper_status = self.snmp.get("1.3.6.1.2.1.2.2.1.8.%s" % sifindex)
+            if_speed = self.snmp.get(f"1.3.6.1.2.1.2.2.1.5.{sifindex}")
+            admin_status = self.snmp.get(f"1.3.6.1.2.1.2.2.1.7.{sifindex}")
+            oper_status = self.snmp.get(f"1.3.6.1.2.1.2.2.1.8.{sifindex}")
             r[sifindex] = {
-                "interface": "%s.%s" % (name, sname),
+                "interface": f"{name}.{sname}",
                 "in_speed": int(if_speed) // 1000,
                 "out_speed": int(if_speed) // 1000,
                 "admin_status": admin_status,

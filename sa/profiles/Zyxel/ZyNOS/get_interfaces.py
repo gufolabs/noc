@@ -52,7 +52,7 @@ class Script(BaseScript):
         """
         Returns admin status of the interface
         """
-        s = self.cli("show interface config %s" % iface)
+        s = self.cli(f"show interface config {iface}")
         match = self.rx_admin_status.search(s)
         return match.group("admin").lower() == "yes"
 

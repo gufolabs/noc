@@ -65,7 +65,7 @@ class Script(BaseScript):
                 tun["remote_address"] = ipif["network"]
                 return
         iftype = tun_type.lower()
-        ifname = self.cli_detail("/interface %s print detail without-paging" % iftype, cached=True)
+        ifname = self.cli_detail(f"/interface {iftype} print detail without-paging", cached=True)
         for n1, f1, r1 in ifname:
             if self.si["name"] == r1["name"]:
                 # in eoip-tunnel on routerboard: 411AH firmware: 2.20, local-address is not exist
@@ -313,7 +313,7 @@ class Script(BaseScript):
                     for sub in i["subinterfaces"]:
                         if sub["name"] == r["interface"]:
                             self.logger.debug(
-                                "\nError: subinterfaces already exists in interface \n%s\n" % i
+                                f"\nError: subinterfaces already exists in interface \n{i}\n"
                             )
                             break
                     else:

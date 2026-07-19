@@ -30,11 +30,11 @@ class Script(BaseScript):
             vlans[i["name"]] = i["vlan_id"]
         c = "show forward-entry"
         if mac is not None:
-            c += " mac %s" % mac
+            c += f" mac {mac}"
         if vlan is not None:
             for i in v:
                 if i["vlan_id"] == vlan:
-                    c += " vlan %s" % i["name"]
+                    c += " vlan {}".format(i["name"])
                     break
         v = self.cli(c, cached=True)
         for match in self.rx_mac.finditer(v):

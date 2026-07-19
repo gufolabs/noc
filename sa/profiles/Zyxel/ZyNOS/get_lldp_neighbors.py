@@ -65,7 +65,7 @@ class Script(BaseScript):
 
             # Get neighbor details
             try:
-                v = self.cli("sh lldp info remote interface port-channel %s" % local_if)
+                v = self.cli(f"sh lldp info remote interface port-channel {local_if}")
             except self.CLISyntaxError:
                 raise self.NotSupportedError()
 

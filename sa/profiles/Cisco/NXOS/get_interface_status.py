@@ -38,7 +38,7 @@ class Script(BaseScript):
         # Fallback to CLI
         r = []
         if interface:
-            cmd = "show interface %s brief" % interface
+            cmd = f"show interface {interface} brief"
         else:
             cmd = "show interface brief | no-more"
 

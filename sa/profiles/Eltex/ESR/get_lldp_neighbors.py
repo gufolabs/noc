@@ -62,7 +62,7 @@ class Script(BaseScript):
         for match in self.rx_neighbor.finditer(v):
             local_interface = match.group("local_interface")
             i = {"local_interface": local_interface, "neighbors": []}
-            v1 = self.cli("show lldp neighbors %s" % local_interface)
+            v1 = self.cli(f"show lldp neighbors {local_interface}")
             for match1 in self.rx_detail.finditer(v1):
                 remote_chassis_id = match1.group("chassis_id")
                 remote_chassis_id_subtype = self.CHASSIS_TYPES[

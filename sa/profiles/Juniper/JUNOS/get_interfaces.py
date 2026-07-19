@@ -92,7 +92,7 @@ class Script(BaseScript):
         for iface in ifaces:
             if not self.filter_interface(0, iface, True):
                 continue
-            v = self.cli("show interfaces %s" % iface)
+            v = self.cli(f"show interfaces {iface}")
             L = self.rx_log_split.split(v)
             phy = L.pop(0)
             phy = phy.replace(" )", "")
@@ -197,21 +197,21 @@ class Script(BaseScript):
                     elif proto == "inet":
                         # Protocol IPv4
                         si["enabled_afi"] += ["IPv4"]
-                        si["ipv4_addresses"] = ["%s/32" % a for a in local_addresses]
+                        si["ipv4_addresses"] = [f"{a}/32" for a in local_addresses]
                         # Find connected networks
                         for match in self.rx_log_netaddress.finditer(p):
                             net, addr = match.groups()
                             n, m = net.split("/")
-                            si["ipv4_addresses"] += ["%s/%s" % (addr, m)]
+                            si["ipv4_addresses"] += [f"{addr}/{m}"]
                     elif proto == "inet6":
                         # Protocol IPv6
                         si["enabled_afi"] += ["IPv6"]
-                        si["ipv6_addresses"] = ["%s/128" % a for a in local_addresses]
+                        si["ipv6_addresses"] = [f"{a}/128" for a in local_addresses]
                         # Find connected networks
                         for match in self.rx_log_netaddress6.finditer(p):
                             net, addr = match.groups()
                             n, m = net.split("/")
-                            si["ipv6_addresses"] += ["%s/%s" % (addr, m)]
+                            si["ipv6_addresses"] += [f"{addr}/{m}"]
                     elif proto == "aenet":
                         # Aggregated
                         match = self.rx_log_ae.search(p)

@@ -165,7 +165,7 @@ class Script(GetMetricsScript):
             return
         self.cli("config")
         for iface, ont_ids in ont_ifaces.items():
-            self.cli("interface gpon %s/%s" % iface)  # Fix from cpes
+            self.cli("interface gpon {}/{}".format(*iface))  # Fix from cpes
             for probe, frame, slot, port, ont_id in ont_ids:
                 v = self.cli(f"display ont optical-info {port} {ont_id}")
                 results = parse_kv(self.kv_map, v)

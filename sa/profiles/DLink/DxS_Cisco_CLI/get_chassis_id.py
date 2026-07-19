@@ -32,7 +32,7 @@ class Script(BaseScript):
             raise self.NotSupportedError()
         for match in self.rx_vlan_int.finditer(v):
             vlan_id = match.group("vlan_id")
-            c = "show interface vlan %s | include Hardware" % vlan_id
+            c = f"show interface vlan {vlan_id} | include Hardware"
             match2 = self.re_search(self.rx_ver, self.cli(c))
             m = match2.group("id")
             if m not in macs:

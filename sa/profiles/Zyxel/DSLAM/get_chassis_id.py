@@ -24,7 +24,7 @@ class Script(BaseScript):
         r = []
         for i in range(1, 19):
             try:
-                v = self.cli("lcman show %s" % i)
+                v = self.cli(f"lcman show {i}")
                 for match in self.rx_mac1.finditer(v):
                     r += [
                         {

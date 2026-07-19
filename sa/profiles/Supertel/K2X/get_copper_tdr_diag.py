@@ -30,11 +30,11 @@ class Script(BaseScript):
         r = []
         if interface is None:
             for i in self.scripts.get_interface_status():
-                self.cli("test copper-port tdr %s" % i["interface"])
+                self.cli("test copper-port tdr {}".format(i["interface"]))
             cmd = "show copper-ports tdr"
         else:
-            self.cli("test copper-port tdr %s" % interface)
-            cmd = "show copper-ports tdr %s" % interface
+            self.cli(f"test copper-port tdr {interface}")
+            cmd = f"show copper-ports tdr {interface}"
 
         status = {"OK": "T", "Open cable": "O", "Short cable": "S", "No cable": "N"}
 

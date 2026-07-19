@@ -18,7 +18,7 @@ class Script(BaseScript):
         v = self.scripts.get_version()
         cmd = "create vlan tag %d" % vlan_id
         if v["version"][0] >= "5":  # sofrware version 5.0.0 or above
-            cmd += " desc %s" % name
+            cmd += f" desc {name}"
         with self.configure():
             self.cli(cmd)
             if tagged_ports:

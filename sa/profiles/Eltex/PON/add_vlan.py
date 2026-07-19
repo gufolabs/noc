@@ -49,10 +49,10 @@ class Script(BaseScript):
             self.cli("configure\r")  # Fix BUG...
             self.cli("vlan %d\r" % vlan_id)
             if name:
-                self.cli("name %s\r" % name)
+                self.cli(f"name {name}\r")
             if tagged_ports:
                 for port in tagged_ports:
-                    self.cli("tagged %s\r" % port)
+                    self.cli(f"tagged {port}\r")
             self.cli("exit\r")  # Fix BUG...
             self.cli("exit\r")  # Fix BUG...
         self.save_config()

@@ -34,7 +34,7 @@ class Script(BaseScript):
     def execute_cli(self, interface=None):
         cmd = "show ddm ports status"
         if interface is not None:
-            cmd = "show ddm ports %s status" % interface
+            cmd = f"show ddm ports {interface} status"
         try:
             ports = self.cli(cmd, obj_parser=self.parse_ports, cmd_next="n", cmd_stop="q")
         except self.CLISyntaxError:

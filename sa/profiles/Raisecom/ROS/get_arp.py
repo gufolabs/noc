@@ -39,7 +39,7 @@ class Script(BaseScript):
                     {
                         "ip": match.group("ip"),
                         "mac": match.group("mac"),
-                        "interface": "ip%s" % match.group("interface"),
+                        "interface": "ip{}".format(match.group("interface")),
                     }
                 ]
         else:

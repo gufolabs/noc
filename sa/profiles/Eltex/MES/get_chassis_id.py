@@ -35,7 +35,7 @@ class Script(BaseScript):
         r = []
         if self.has_capability("Stack | Members"):
             for unit in self.capabilities["Stack | Member Ids"].split(" | "):
-                c = self.cli("show system unit %s" % unit, cached=True)
+                c = self.cli(f"show system unit {unit}", cached=True)
                 match = self.rx_mac.search(c)
                 if not match:
                     continue

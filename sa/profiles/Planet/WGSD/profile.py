@@ -50,5 +50,5 @@ class Profile(BaseProfile):
         'vlan 19'
         """
         if is_int(s):
-            return "vlan %s" % s
+            return f"vlan {s}"
         return s

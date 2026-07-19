@@ -93,7 +93,7 @@ class Script(BaseScript):
                     n["remote_system_name"] = remote_system_name
 
                 try:
-                    c = self.cli("show lldp neighbors interface %s" % local_interface)
+                    c = self.cli(f"show lldp neighbors interface {local_interface}")
                     match = self.rx_detail.search(c)
                     if match:
                         if match.group("port_descr").strip():

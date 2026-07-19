@@ -29,7 +29,7 @@ class Script(BaseScript):
     def execute_cli(self, interface=None):
         r = []
         if interface:
-            cmd = "show interface brief | include ^%s" % interface
+            cmd = f"show interface brief | include ^{interface}"
         else:
             cmd = "show interface brief | excl Port"
 

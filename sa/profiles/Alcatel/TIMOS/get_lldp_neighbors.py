@@ -94,7 +94,7 @@ class Script(BaseScript):
 
     def get_port_info(self, port):
         try:
-            v = self.cli("show port %s ethernet lldp remote-info" % port)
+            v = self.cli(f"show port {port} ethernet lldp remote-info")
         except self.CLISyntaxError:
             raise self.NotSupportedError()
         else:
@@ -117,7 +117,7 @@ class Script(BaseScript):
             if not match:
                 continue
             port = match.group("port")
-            local_lldp = self.cli("show port %s ethernet detail | match IfIndex" % port)
+            local_lldp = self.cli(f"show port {port} ethernet detail | match IfIndex")
             lldp_match = self.rx_local_lldp.search(local_lldp)
             if not lldp_match:
                 continue

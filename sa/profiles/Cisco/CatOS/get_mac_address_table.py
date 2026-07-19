@@ -24,13 +24,13 @@ class Script(BaseScript):
     def execute(self, interface=None, vlan=None, mac=None):
         cmd = "show cam"
         if mac is not None:
-            cmd += " %s" % self.profile.convert_mac(mac)
+            cmd += f" {self.profile.convert_mac(mac)}"
             if vlan is not None:
-                cmd += " %s" % vlan
+                cmd += f" {vlan}"
         elif interface is not None:
-            cmd += " dynamic %s" % interface
+            cmd += f" dynamic {interface}"
         elif vlan is not None:
-            cmd += " dynamic %s" % vlan
+            cmd += f" dynamic {vlan}"
         else:
             cmd += " dynamic"
         vlans = self.cli(cmd)

@@ -148,5 +148,5 @@ class Script(BaseScript):
     def get_transceiver_pid(self, descr):
         match = self.rx_trans.search(descr)
         if match:
-            return "Unknown | Transceiver | %s" % match.group(1).upper()
+            return f"Unknown | Transceiver | {match.group(1).upper()}"
         return "Unknown | Transceiver | Unknown"

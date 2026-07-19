@@ -27,7 +27,7 @@ class Script(BaseScript):
         if self.is_kernelgte_5_3:
             displayarp = "display arp"
         elif vrf:
-            displayarp = "display arp vpn-instance %s" % vrf
+            displayarp = f"display arp vpn-instance {vrf}"
         else:
             displayarp = "display arp all"
         return self.cli(displayarp, list_re=self.rx_arp_line_vrp5)

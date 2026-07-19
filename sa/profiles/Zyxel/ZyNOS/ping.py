@@ -25,7 +25,7 @@ class Script(BaseScript):
     )
 
     def execute(self, address, size=None, *args, **kwargs):
-        cmd = "ping %s" % address
+        cmd = f"ping {address}"
         if size:
             cmd += " size %d" % size
         # some default values

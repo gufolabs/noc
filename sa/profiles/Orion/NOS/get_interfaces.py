@@ -183,7 +183,7 @@ class Script(BaseScript):
                 if match.group("address") and match.group("mask"):
                     ip_address = match.group("address")
                     ip_subnet = match.group("mask")
-                    ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+                    ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                     iface["subinterfaces"][0]["enabled_afi"] += ["IPv4"]
                     iface["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
                 interfaces += [iface]
@@ -264,17 +264,17 @@ class Script(BaseScript):
             for match in self.rx_ip_beta.finditer(c):
                 ip_address = match.group("ip_address")
                 ip_subnet = match.group("ip_subnet")
-                ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+                ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                 ifname = match.group("ifname")
                 iface = {
-                    "name": "ip%s" % ifname,
+                    "name": f"ip{ifname}",
                     "type": "SVI",
                     "admin_status": True,
                     "oper_status": True,
                     "mac": mac,
                     "subinterfaces": [
                         {
-                            "name": "ip%s" % ifname,
+                            "name": f"ip{ifname}",
                             "admin_status": True,
                             "oper_status": True,
                             "mac": mac,
@@ -286,7 +286,7 @@ class Script(BaseScript):
                 interfaces += [iface]
             c = self.cli("show interface ip vlan")
             for match in self.rx_ip_beta_vlan.finditer(c):
-                ifname = "ip%s" % match.group("ifname")
+                ifname = "ip{}".format(match.group("ifname"))
                 vid = match.group("vlan_id")
                 for iface in interfaces:
                     if iface["name"] == ifname:
@@ -336,7 +336,7 @@ class Script(BaseScript):
                     iface["description"] = i["descr"].strip()
                     sub["description"] = i["descr"].strip()
                     break
-            s = self.cli("show interface port %s switchport" % ifname)
+            s = self.cli(f"show interface port {ifname} switchport")
             match1 = self.rx_switchport.search(s)
             if match1.group("mode") == "access":
                 sub["untagged_vlan"] = int(match1.group("access_vlan"))
@@ -360,17 +360,17 @@ class Script(BaseScript):
         for match in self.rx_ip.finditer(v):
             ip_address = match.group("ip_address")
             ip_subnet = match.group("ip_subnet")
-            ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+            ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
             ifname = match.group("ifname")
             iface = {
-                "name": "ip%s" % ifname,
+                "name": f"ip{ifname}",
                 "type": "SVI",
                 "admin_status": match.group("admin_status") == "active",
                 "oper_status": match.group("admin_status") == "active",
                 "mac": mac,
                 "subinterfaces": [
                     {
-                        "name": "ip%s" % ifname,
+                        "name": f"ip{ifname}",
                         "admin_status": match.group("admin_status") == "active",
                         "oper_status": match.group("admin_status") == "active",
                         "mac": mac,

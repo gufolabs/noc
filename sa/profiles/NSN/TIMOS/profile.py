@@ -72,7 +72,7 @@ class Profile(BaseProfile):
         """
 
         def number_to_hex(number: str):
-            return "%02X" % int(number)
+            return f"{int(number):02X}"
 
         ip = ip.split(".")
         ip_new = ""

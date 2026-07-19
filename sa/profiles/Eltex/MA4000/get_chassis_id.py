@@ -23,7 +23,7 @@ class Script(BaseScript):
     def execute(self):
         r = []
         for i in ["1", "2"]:
-            c = self.cli("show system information %s" % i, cached=True)
+            c = self.cli(f"show system information {i}", cached=True)
             match = self.rx_mac.search(c)
             if match:
                 r += [

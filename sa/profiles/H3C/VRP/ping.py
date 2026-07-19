@@ -29,8 +29,8 @@ class Script(BaseScript):
         if size:
             cmd += " -s %d" % int(size)
         if source_address:
-            cmd += " -a %s" % source_address
-        cmd += " %s" % address
+            cmd += f" -a {source_address}"
+        cmd += f" {address}"
         pr = self.cli(cmd)
         m1 = self.re_search(self.rx_count, pr)
         m2 = self.re_search(self.rx_rtt, pr)

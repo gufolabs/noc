@@ -436,7 +436,7 @@ class Script(BaseScript):
         except self.CLISyntaxError:
             c = ""
         for match in self.rx_trunk.finditer(c):
-            ifname = "T%s" % match.group("trunk")
+            ifname = "T{}".format(match.group("trunk"))
             ifstatus = match.group("status").lower() == "enabled"
             i = {
                 "name": ifname,
@@ -490,7 +490,7 @@ class Script(BaseScript):
                 i["subinterfaces"][0]["description"] = desc
             ip_address = match.group("ip_address")
             ip_subnet = match.group("ip_subnet")
-            ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+            ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
             i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
             ipv6_address = match.group("ipv6_address")
             if ipv6_address is not None:
@@ -613,7 +613,7 @@ class Script(BaseScript):
             }
             ip_address = match.group("ip_address")
             ip_subnet = match.group("ip_subnet")
-            ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+            ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
             i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
             vlan_name = match.group("vlan_name")
             if not vlan_name:
@@ -653,7 +653,7 @@ class Script(BaseScript):
                 }
                 ip_address = match.group("ip_address")
                 ip_subnet = match.group("ip_subnet")
-                ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+                ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                 i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
                 interfaces += [i]
 
@@ -678,7 +678,7 @@ class Script(BaseScript):
                 match = self.rx_ipif_des_a1.search(ipif)
                 ip_address = match.group("ip_address")
                 ip_subnet = match.group("ip_subnet")
-                ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+                ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                 i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
                 v = self.cli("show management vlan")
                 match = self.rx_mgmt_vlan.search(v)
@@ -694,7 +694,7 @@ class Script(BaseScript):
                 ip_address = match.group("ip_address")
                 ip_subnet = match.group("ip_subnet")
                 vlan_name = match.group("vlan_name")
-                ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+                ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                 i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
                 for v in vlans:
                     if vlan_name == v["vlan_name"]:

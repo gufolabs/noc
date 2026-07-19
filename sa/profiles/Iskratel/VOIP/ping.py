@@ -30,7 +30,7 @@ class Script(BaseScript):
     def execute(
         self, address, count=None, source_address=None, size=None, df=None, *args, **kwargs
     ):
-        cmd = "ping %s" % address
+        cmd = f"ping {address}"
         match = self.rx_result.search(self.cli(cmd))
         if match:
             return {

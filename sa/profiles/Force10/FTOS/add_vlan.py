@@ -17,9 +17,9 @@ class Script(BaseScript):
     def execute(self, vlan_id, name, tagged_ports):
         with self.configure():
             self.cli("interface vlan %d" % vlan_id)
-            self.cli("name %s" % name)
+            self.cli(f"name {name}")
             for tp in tagged_ports:
-                self.cli("tagged %s" % tp)
+                self.cli(f"tagged {tp}")
             self.cli("no shutdown")
             self.cli("exit")
         self.save_config()

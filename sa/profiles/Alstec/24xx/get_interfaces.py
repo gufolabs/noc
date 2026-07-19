@@ -70,7 +70,7 @@ class Script(BaseScript):
         """
         for ifname in sorted(interfaces, reverse=True, key=alnum_key)[:3]:
             try:
-                v = self.cli("show port description %s" % ifname)
+                v = self.cli(f"show port description {ifname}")
             except self.CLISyntaxError:
                 self.logger.error("'show port description' is not supported")
                 break
@@ -123,7 +123,7 @@ class Script(BaseScript):
         match = self.rx_ip.search(v)
         ip_address = match.group("ip_address")
         ip_subnet = match.group("ip_subnet")
-        ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+        ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
         interfaces["0/0"] = {
             "name": "0/0",
             "type": "SVI",

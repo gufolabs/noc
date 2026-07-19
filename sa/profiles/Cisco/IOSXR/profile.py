@@ -44,11 +44,11 @@ class Profile(BaseProfile):
         """
         match = self.rx_interface_name.match(s)
         if not match:
-            raise InterfaceTypeError("Invalid interface '%s'" % s)
+            raise InterfaceTypeError(f"Invalid interface '{s}'")
         t = match.group(1)[:2]
         if t.lower() == "bu":
             t = "BE"
-        return "%s%s" % (t, match.group(2))
+        return f"{t}{match.group(2)}"
 
     def generate_prefix_list(self, name, pl):
         """
@@ -62,7 +62,7 @@ class Profile(BaseProfile):
                 r += [me % prefix]
             else:
                 r += [mne % (prefix, max_len)]
-        return "\n".join(["prefix-set %s" % name, ",\n".join(r), "end-set"])
+        return "\n".join([f"prefix-set {name}", ",\n".join(r), "end-set"])
 
     INTERFACE_TYPES = {
         "As": "physical",  # Async

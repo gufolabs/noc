@@ -79,7 +79,7 @@ class Script(BaseScript):
         for i in interfaces:
             sub = i["subinterfaces"][0]
             v = self.cli(
-                "show port statistics interface %s" % i["name"],
+                "show port statistics interface {}".format(i["name"]),
                 cached=True,  # used in get_mac_address_table
             )
             match = self.rx_port_stat.search(v)
@@ -96,7 +96,7 @@ class Script(BaseScript):
 
         for vlans in self.scripts.get_vlans():
             vlan_id = vlans["vlan_id"]
-            v = self.cli("show vlan %s" % vlan_id)
+            v = self.cli(f"show vlan {vlan_id}")
             for match in self.rx_vlan.finditer(v):
                 vlan_list = match.group("vlans").strip()
                 if not vlan_list or vlan_list.startswith("locked by"):
@@ -145,7 +145,7 @@ class Script(BaseScript):
 
         # Do not use range s1-s10 due to high CPU utilization
         for s in range(11):
-            v = self.cli("show lre s%s xdsl atm vcctp-info" % s)
+            v = self.cli(f"show lre s{s} xdsl atm vcctp-info")
             for match in self.rx_line.finditer(v):
                 if match.group("ifname"):
                     ifname = match.group("ifname")
@@ -154,7 +154,7 @@ class Script(BaseScript):
                     ifname = old_port
                 # Normalize ifname from "01/01" to "1/1"
                 ifname = "/".join([str(int(x)) for x in ifname.split("/")])
-                subname = "%s/%s" % (ifname, match.group("sub"))
+                subname = "{}/{}".format(ifname, match.group("sub"))
                 for i in interfaces:
                     if i["name"] == ifname:
                         for sub in i["subinterfaces"]:

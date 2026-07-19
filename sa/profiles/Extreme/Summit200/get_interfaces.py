@@ -87,7 +87,7 @@ class Script(BaseScript):
                             break
             if match.group("ip"):
                 ip = match.group("ip")
-                ip_address = "%s/%s" % (ip, IPv4.netmask_to_len(match.group("mask")))
+                ip_address = "{}/{}".format(ip, IPv4.netmask_to_len(match.group("mask")))
                 iface = {
                     "name": match.group("vlan_name"),
                     "type": "SVI",

@@ -89,7 +89,7 @@ class Script(BaseScript):
             shelf, slot, port, mani, _, sw_ver, boot_ver, hw_ver, serial, _, _ = row
             if int(port):
                 continue
-            detail = self.cli("ginv %s %s %s %s" % (shelf, slot, port, mani))
+            detail = self.cli(f"ginv {shelf} {slot} {port} {mani}")
             if not detail:
                 continue
             x = parse_kv(self.slot_detail_map, detail)

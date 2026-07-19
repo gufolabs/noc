@@ -29,7 +29,7 @@ class Script(BaseScript):
         for match in self.rx_trunk_370.finditer(self.cli("show trunk")):
             r += [
                 {
-                    "interface": "T%s" % match.group("trunk"),
+                    "interface": "T{}".format(match.group("trunk")),
                     "type": "L",  # @todo: type detection is not implemented yet
                     "members": self.expand_rangelist(
                         re.sub(r"\s+", ",", match.group("ports").strip())
@@ -53,7 +53,7 @@ class Script(BaseScript):
         for match in self.rx_trunk.finditer(self.cli("show trunk")):
             r += [
                 {
-                    "interface": "T%s" % match.group("trunk"),
+                    "interface": "T{}".format(match.group("trunk")),
                     "type": "L" if match.group("lacp").lower() == "lacp" else "S",
                     "members": self.expand_rangelist(
                         re.sub(r"\s+", ",", match.group("ports").strip())

@@ -81,7 +81,7 @@ class Script(BaseScript):
         v = self.cli("show interface", cached=True)
         for match in self.rx_iface.finditer(v):
             try:
-                cmd = self.cli("show ethernet-oam local interface %s" % match.group("ifname"))
+                cmd = self.cli("show ethernet-oam local interface {}".format(match.group("ifname")))
                 match = self.rx_oam.search(cmd)
                 if not match:
                     return True

@@ -26,7 +26,7 @@ class Script(BaseScript):
         # "show mac address-table" command do not show port name on some cases
         port_count = self.profile.get_port_count(self)
         for port in range(1, port_count + 1):
-            v = self.cli("show mac-address-table l2-address port %s" % port)
+            v = self.cli(f"show mac-address-table l2-address port {port}")
             for match1 in self.rx_line.finditer(v):
                 r += [
                     {

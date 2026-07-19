@@ -25,32 +25,28 @@ class Script(BaseScript):
                     cpename = v[1]
                     cpeid = v[0][len("1.3.6.1.4.1.25053.1.2.2.4.1.1.1.1.5") + 1 :]
                     s = str(
-                        self.snmp.get("1.3.6.1.4.1.25053.1.4.2.1.1.2.2.1.1.%s" % cpeid, cached=True)
+                        self.snmp.get(f"1.3.6.1.4.1.25053.1.4.2.1.1.2.2.1.1.{cpeid}", cached=True)
                     )
                     mac = MACAddressParameter().clean(s)  # convert mac
                     # print "%s\n" % mac
                     key = ".".join(str(int(x, 16)) for x in mac.split(":"))  # convert mac - > bytes
                     # print "%s\n" % key
                     status = self.snmp.get(
-                        "1.3.6.1.4.1.25053.1.4.2.1.1.2.2.1.16.6.%s" % key, cached=True
+                        f"1.3.6.1.4.1.25053.1.4.2.1.1.2.2.1.16.6.{key}", cached=True
                     )
-                    ip = self.snmp.get(
-                        "1.3.6.1.4.1.25053.1.4.2.1.1.2.2.1.10.%s" % cpeid, cached=True
-                    )
+                    ip = self.snmp.get(f"1.3.6.1.4.1.25053.1.4.2.1.1.2.2.1.10.{cpeid}", cached=True)
                     location = self.snmp.get(
-                        "1.3.6.1.4.1.25053.1.4.2.1.1.2.2.1.19.6.%s" % cpeid, cached=True
+                        f"1.3.6.1.4.1.25053.1.4.2.1.1.2.2.1.19.6.{cpeid}", cached=True
                     )
                     description = self.snmp.get(
-                        "1.3.6.1.4.1.25053.1.4.2.1.1.2.2.1.22.6.%s" % key, cached=True
+                        f"1.3.6.1.4.1.25053.1.4.2.1.1.2.2.1.22.6.{key}", cached=True
                     )
-                    sn = self.snmp.get(
-                        "1.3.6.1.4.1.25053.1.4.2.1.1.2.2.1.9.6.%s" % key, cached=True
-                    )
+                    sn = self.snmp.get(f"1.3.6.1.4.1.25053.1.4.2.1.1.2.2.1.9.6.{key}", cached=True)
                     model = self.snmp.get(
-                        "1.3.6.1.4.1.25053.1.4.2.1.1.2.2.1.8.6.%s" % key, cached=True
+                        f"1.3.6.1.4.1.25053.1.4.2.1.1.2.2.1.8.6.{key}", cached=True
                     )
                     version = self.snmp.get(
-                        "1.3.6.1.4.1.25053.1.4.2.1.1.2.2.1.7.6.%s" % key, cached=True
+                        f"1.3.6.1.4.1.25053.1.4.2.1.1.2.2.1.7.6.{key}", cached=True
                     )
                     r.append(
                         {

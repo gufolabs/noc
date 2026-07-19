@@ -32,7 +32,7 @@ class Script(BaseScript):
                 "mtu": res[f"table.Network.{name}.MTU"],
                 "mac": res[f"table.Network.{name}.PhysicalAddress"],
             }
-            ip_address = "%s/%s" % (
+            ip_address = "{}/{}".format(
                 res[f"table.Network.{name}.IPAddress"],
                 IPv4.netmask_to_len(res[f"table.Network.{name}.SubnetMask"]),
             )

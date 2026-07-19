@@ -25,7 +25,7 @@ class Script(BaseScript):
     def execute_cli(self, interface=None):
         r = []
         if interface:
-            cmd = "show interfaces status %s" % interface
+            cmd = f"show interfaces status {interface}"
         else:
             cmd = "show interfaces status"
 

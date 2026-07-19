@@ -30,7 +30,7 @@ class Profile(BaseProfile):
     def convert_interface_name(self, interface):
         il = interface.lower()
         if il.startswith("iscsi"):
-            return "iscsi %s" % interface[5:].strip()
+            return f"iscsi {interface[5:].strip()}"
         if il.startswith("sup-fc"):
             return il.strip()
         if il.startswith("mgmt"):

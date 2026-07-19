@@ -44,7 +44,7 @@ class Script(BaseScript):
             "1.3.6.1.4.1.2011.5.25.42.2.1.3.1.4", max_retries=1, max_repetitions=20, timeout=20
         ):
             mac, vlan_id, vid1, vid2 = oid.rsplit(".", 3)
-            mac = ":".join("%02X" % int(x) for x in mac.split(".")[-6:])
+            mac = ":".join(f"{int(x):02X}" for x in mac.split(".")[-6:])
             if int(vlan_id) == 0:
                 self.logger.warning("[%s|%s] VLAN ids is 0", interface_mappings[port], mac)
                 continue
@@ -61,7 +61,7 @@ class Script(BaseScript):
     def execute_cli(self, interface=None, vlan=None, mac=None, **kwargs):
         cmd = "display mac-address"
         if mac is not None:
-            cmd += " %s" % self.profile.convert_mac(mac)
+            cmd += f" {self.profile.convert_mac(mac)}"
         v = self.cli(cmd)
         version = self.profile.fix_version(self.scripts.get_version())
         if version.startswith("3"):

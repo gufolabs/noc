@@ -111,7 +111,7 @@ class Script(BaseScript):
             i["revision"] = revision
         match = cls.rx_mfg_date.search(mfg_date)
         if match:
-            d = "20%s-%s-%s" % (match.group("year"), match.group("month"), match.group("day"))
+            d = "20{}-{}-{}".format(match.group("year"), match.group("month"), match.group("day"))
             try:
                 valid_date = datetime.date.fromisoformat(d)
                 if valid_date < datetime.date.today():

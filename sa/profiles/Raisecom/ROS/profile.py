@@ -88,7 +88,7 @@ class Profile(BaseProfile):
             return match.group("port")
         if self.rx_port_ip.match(interface):
             match = self.rx_port_ip.match(interface)
-            return "ip %s" % match.group("port")
+            return "ip {}".format(match.group("port"))
         return interface
 
     INTERFACE_TYPES = {

@@ -60,7 +60,7 @@ class Script(BaseScript):
                     desc = match.group("desc")
                 else:
                     try:
-                        p = self.cli("show interface port %s" % ifname)
+                        p = self.cli(f"show interface port {ifname}")
                     except self.CLISyntaxError:
                         pass
                     if p:

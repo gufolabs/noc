@@ -54,11 +54,11 @@ class Script(BaseScript):
 
         cmd = "show mac address-table"
         if mac is not None:
-            cmd += " address %s" % self.profile.convert_mac(mac)
+            cmd += f" address {self.profile.convert_mac(mac)}"
         if interface is not None:
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
         try:
             macs = self.cli(cmd)
         except self.CLISyntaxError:

@@ -46,7 +46,7 @@ class Script(BaseScript):
             if " " in name:
                 name = name.split()[2]
             if name.startswith("p"):
-                name = "s%s" % name
+                name = f"s{name}"
             r[ifindex] = {"interface": name}
         # Apply ifAdminStatus
         self.apply_table(r, "IF-MIB::ifAdminStatus", "admin_status", lambda x: x == 1)
@@ -66,20 +66,20 @@ class Script(BaseScript):
 
     def get_data_sw(self, o):
         # ifIndex -> ifName mapping
-        sw_oid = "%s.15.2.1.2" % o
+        sw_oid = f"{o}.15.2.1.2"
         r = {}  # ifindex -> data
         for ifindex, name in self.get_iftable(sw_oid).items():
             if " " in name:
                 name = name.split()[2]
             if name.startswith("p"):
-                name = "s%s" % name
+                name = f"s{name}"
             r[ifindex] = {"interface": name}
         # Apply ifAdminStatus
-        self.apply_table(r, "%s.15.2.1.3" % o, "admin_status", lambda x: x == "UP" or "1")
+        self.apply_table(r, f"{o}.15.2.1.3", "admin_status", lambda x: x == "UP" or "1")
         # Apply ifOperStatus
-        self.apply_table(r, "%s.15.2.1.3" % o, "oper_status", lambda x: x == "UP" or "1")
+        self.apply_table(r, f"{o}.15.2.1.3", "oper_status", lambda x: x == "UP" or "1")
         # Apply ifSpeed
-        for ifindex, s in self.get_iftable("%s.15.2.1.4" % o).items():
+        for ifindex, s in self.get_iftable(f"{o}.15.2.1.4").items():
             ri = r.get(ifindex)
             if isinstance(s, int):
                 s = s
@@ -96,18 +96,18 @@ class Script(BaseScript):
     def get_data_adsl(self, o):
         # ifIndex -> ifName mapping
         if self.is_platform_MXA32 or self.is_platform_MXA64:
-            s_oid = "%s.10.2.1.5" % o
+            s_oid = f"{o}.10.2.1.5"
         else:
-            s_oid = "%s.10.2.1.7" % o
-        adsl_oid = "%s.10.2.1.2" % o
+            s_oid = f"{o}.10.2.1.7"
+        adsl_oid = f"{o}.10.2.1.2"
         r = {}  # ifindex -> data
         for ifindex, name in self.get_iftable(adsl_oid).items():
             r[ifindex] = {"interface": name}
 
         # Apply ifAdminStatus
-        self.apply_table(r, "%s.10.2.1.3" % o, "admin_status", lambda x: x in ("up", 1))
+        self.apply_table(r, f"{o}.10.2.1.3", "admin_status", lambda x: x in ("up", 1))
         # Apply ifOperStatus
-        self.apply_table(r, "%s.10.2.1.3" % o, "oper_status", lambda x: x in ("up", 1))
+        self.apply_table(r, f"{o}.10.2.1.3", "oper_status", lambda x: x in ("up", 1))
         # Apply ifSpeed
         for ifindex, s in self.get_iftable(s_oid).items():
             ri = r.get(ifindex)

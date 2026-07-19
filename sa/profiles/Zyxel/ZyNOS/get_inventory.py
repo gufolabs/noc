@@ -113,9 +113,9 @@ class Script(BaseScript):
                     part_no = part_no + "1G | SFP BXD"
                 else:
                     part_no = part_no + "Unknown SFP"
-            description = "%s (%s)" % (match.group("type"), vendor)
+            description = "{} ({})".format(match.group("type"), vendor)
             if part_no_orig:
-                description = "%s (p/n: %s)" % (description, part_no_orig)
+                description = f"{description} (p/n: {part_no_orig})"
             o = {
                 "type": "XCVR",
                 "number": xcvr_n(match.group("number")),

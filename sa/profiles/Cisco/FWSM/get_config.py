@@ -19,7 +19,7 @@ class Script(BaseScript):
             context = self.access_profile.path
             if context.startswith("/"):
                 context = context[1:]
-            self.cli("changeto context %s" % context)
+            self.cli(f"changeto context {context}")
         self.cli("terminal pager 0")
         config = self.cli("show running-config")
         return self.cleaned_config(config)

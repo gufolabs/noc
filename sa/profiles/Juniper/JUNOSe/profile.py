@@ -75,9 +75,9 @@ class Profile(BaseProfile):
         :param pl: List of (prefix, min len, max len)
         :return:
         """
-        me = "ip prefix-list %s permit %%s" % name
-        mne = "ip prefix-list %s permit %%s le %%d" % name
-        r = ["no ip prefix-list %s" % name]
+        me = f"ip prefix-list {name} permit %s"
+        mne = f"ip prefix-list {name} permit %s le %d"
+        r = [f"no ip prefix-list {name}"]
         for prefix, min_len, max_len in pl:
             if min_len == max_len:
                 r += [me % prefix]
@@ -96,12 +96,12 @@ class Profile(BaseProfile):
             match = self.rx_adapter.search(hardware)
             if match:
                 if match.group("name") == "10GE PR IOA":
-                    r += ["TenGigabitEthernet%s/0" % match.group("slot")]
+                    r += ["TenGigabitEthernet{}/0".format(match.group("slot"))]
                 elif match.group("name") == "GE-4 IOA":
                     for i in range(4):
-                        r += ["GigabitEthernet%s/%s" % (match.group("slot"), i)]
+                        r += ["GigabitEthernet{}/{}".format(match.group("slot"), i)]
                 elif match.group("name") == "SRP IOA":
-                    r += ["FastEthernet%s/0" % match.group("slot")]
+                    r += ["FastEthernet{}/0".format(match.group("slot"))]
         return r
 
     def valid_interface_name(self, name):

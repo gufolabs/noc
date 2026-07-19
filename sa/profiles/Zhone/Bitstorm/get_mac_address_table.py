@@ -29,7 +29,7 @@ class Script(BaseScript):
         for match in self.rx_line.finditer(self.cli(cmd)):
             ifname = match.group("interfaces")
             if match.group("slot") and not ifname.startswith("eth"):
-                ifname = "%s/%s" % (match.group("slot"), ifname)
+                ifname = "{}/{}".format(match.group("slot"), ifname)
             if interface and interface != ifname:
                 continue
             ifname = ifname.replace(":", "/")

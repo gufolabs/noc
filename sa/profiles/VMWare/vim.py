@@ -106,14 +106,14 @@ class VIM:
         """Getting vCenter host by id, example: 'host-5260'"""
         h = self.find_by_uuid(hid, find_vm=False)
         if not h:
-            raise VIMError("Host with Id '%s' Not found" % hid)
+            raise VIMError(f"Host with Id '{hid}' Not found")
         return h
 
     def get_vm_by_id(self, vid: str) -> vim.VirtualMachine | None:
         """Getting vMachine by id, example: 'vm-1030'"""
         vm = self.find_by_uuid(vid, find_vm=True)
         if not vm:
-            raise VIMError("Virtual Machine with Id '%s' Not found" % vid)
+            raise VIMError(f"Virtual Machine with Id '{vid}' Not found")
         return vm
 
     def get_container_view(self, o_type) -> vim.view.ContainerView:
@@ -134,7 +134,7 @@ class VIM:
         vm_view.Destroy()
         if vms:
             return vms[0]
-        raise VIMError("Host %s Not found" % name)
+        raise VIMError(f"Host {name} Not found")
 
     @staticmethod
     def has_internet_adapter(item) -> bool:

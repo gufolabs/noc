@@ -25,7 +25,7 @@ class Script(BaseScript):
             try:
                 return self.cli(c)
             except self.CLISyntaxError as e:
-                return "%%ERROR: %s" % e
+                return f"%ERROR: {e}"
 
         cli = safe_cli if ignore_cli_errors else self.cli
         with self.configure():

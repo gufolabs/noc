@@ -21,7 +21,7 @@ class Script(BaseScript):
         o = o.split()
         platform = o[0]
         if len(o) == 3:
-            version = "%s%s" % (o[1], o[2])
+            version = f"{o[1]}{o[2]}"
         else:
             version = "None"
         vendor = "Qtech"

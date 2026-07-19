@@ -28,9 +28,9 @@ class Script(BaseScript):
         for c in configs:
             iface = c["interface"]
             if protect_switchport and iface not in ports:
-                errors += ["Interface '%s' is not switchport" % iface]
+                errors += [f"Interface '{iface}' is not switchport"]
             if protect_type and is_access(c) != is_access(ports[iface]):
-                errors += ["Invalid port type for interface '%s'" % iface]
+                errors += [f"Invalid port type for interface '{iface}'"]
         if errors:
             return {"status": False, "message": ".\n".join(errors)}
         # Prepare scenario
@@ -54,7 +54,7 @@ class Script(BaseScript):
                 and c["description"]
                 and ("description" not in p or c["description"] != p["description"])
             ):
-                ic += [" description %s" % c["description"]]
+                ic += [" description {}".format(c["description"])]
             # Check status
             if c["status"] and not p["status"]:
                 ic += [" no shutdown"]
@@ -66,7 +66,7 @@ class Script(BaseScript):
                 ic += [" switchport"]
             # Save commands
             if ic:
-                commands += ["interface %s" % iface, *ic, " exit"]
+                commands += [f"interface {iface}", *ic, " exit"]
             # Prepare VLAN mappings
             if is_access(c):
                 # Configuring access port
@@ -103,10 +103,10 @@ class Script(BaseScript):
             vc = []
             for i in remove_untagged[v]:
                 if i not in add_untagged[v]:
-                    vc += [" no untagged %s" % i]
+                    vc += [f" no untagged {i}"]
             for i in remove_tagged[v]:
                 if i not in add_tagged[v]:
-                    vc += [" no tagged %s" % i]
+                    vc += [f" no tagged {i}"]
             if vc:
                 commands += ["interface Vlan %d" % v, *vc, " exit"]
         # Add interfaces
@@ -114,10 +114,10 @@ class Script(BaseScript):
             vc = []
             for i in add_untagged[v]:
                 if i not in remove_untagged[v]:
-                    vc += [" untagged %s" % i]
+                    vc += [f" untagged {i}"]
             for i in add_tagged[v]:
                 if i not in remove_tagged[v]:
-                    vc += [" tagged %s" % i]
+                    vc += [f" tagged {i}"]
             if vc:
                 commands += ["interface Vlan %d" % v, *vc, " exit"]
         # Apply commands

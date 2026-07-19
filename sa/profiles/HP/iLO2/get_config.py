@@ -17,7 +17,7 @@ class Script(BaseScript):
     EXCLUDE_TARGETS = {"/map1/firmware1", "/map1/log1"}
 
     def walk(self, dir):
-        r = self.cli("show %s" % dir).split("\n")
+        r = self.cli(f"show {dir}").split("\n")
         if r[0] != "status=0" and r[1] != "status_tag=COMMAND COMPLETED":
             return []
         r = r[5:]
@@ -38,7 +38,7 @@ class Script(BaseScript):
                 properties += [line]
         result = [(dir, [p.split("=", 1) for p in properties if "=" in p])]
         for t in targets:
-            path = "%s/%s" % (dir, t)
+            path = f"{dir}/{t}"
             if path in self.EXCLUDE_TARGETS:
                 continue
             result += self.walk(path)
@@ -49,6 +49,6 @@ class Script(BaseScript):
         for dir, args in self.walk("/map1"):
             if not args:
                 continue
-            r += ["set %s %s" % (dir, " ".join(["%s=%s" % (k, v) for k, v in args]))]
+            r += ["set {} {}".format(dir, " ".join([f"{k}={v}" for k, v in args]))]
         config = "\n".join(sorted(r))
         return self.cleaned_config(config)

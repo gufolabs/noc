@@ -26,12 +26,12 @@ class Script(BaseScript):
             _, boards = self.profile.get_board(self)
             for board in boards:
                 if board["type"] == "GPON" and board["status"] == "Normal":
-                    interfaces += ["0/%s/0" % board["num"]]
+                    interfaces += ["0/{}/0".format(board["num"])]
         r = []
         for iface in interfaces:
             self.cli("config")
             frame, slot, port = iface.split("/")
-            self.cli("interface gpon %s/%s" % (frame, slot))  # Fix from cpes
+            self.cli(f"interface gpon {frame}/{slot}")  # Fix from cpes
             r = []
             v = self.cli("display port state all")
             for port in self.splitter.split(v):
@@ -43,7 +43,7 @@ class Script(BaseScript):
                 if not port:
                     continue
                 if port["Port state"] == "Offline":
-                    self.logger.info("Port %s is offline mode" % port["Port state"])
+                    self.logger.info("Port {} is offline mode".format(port["Port state"]))
                     continue
                 r += [
                     {

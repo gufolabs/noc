@@ -156,9 +156,7 @@ class Script(BaseScript):
             if instance_id not in ports:
                 continue
             try:
-                instance_list = self.cli("display stp instance %s" % instance_id).split(
-                    r"-------\["
-                )
+                instance_list = self.cli(f"display stp instance {instance_id}").split(r"-------\[")
             except self.CLISyntaxError:
                 # Not support command "display stp instance NUM"
                 instance_list = self.cli("display stp").split(r"-------\[")
@@ -198,7 +196,9 @@ class Script(BaseScript):
                     interfaces[instance_id] += [
                         {
                             "interface": interface,
-                            "port_id": "%s.%s" % (match.group("priority"), match.group("port_id")),
+                            "port_id": "{}.{}".format(
+                                match.group("priority"), match.group("port_id")
+                            ),
                             "state": port_attrs["state"],
                             "role": port_attrs["role"],
                             "priority": match.group("priority"),

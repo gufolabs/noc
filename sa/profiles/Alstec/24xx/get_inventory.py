@@ -125,7 +125,7 @@ class Script(BaseScript):
         serial = self.snmp.get("1.3.6.1.4.1.27142.1.1.1.1.1.4.0")
         port_num = self.snmp.get("1.3.6.1.2.1.2.1.0")
         if port_num in self.port_map:
-            platform = "%s-0%s" % (platform, self.port_map[port_num])
+            platform = f"{platform}-0{self.port_map[port_num]}"
         if not platform:
             raise NotImplementedError
         r = {

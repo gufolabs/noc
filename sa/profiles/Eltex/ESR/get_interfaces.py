@@ -34,7 +34,7 @@ class Script(BaseScript):
         vrrp = []
         c = self.cli("show vrrp", cached=True)
         for router, v_ip, pri, pre, state in parse_table(c, allow_wrap=True):
-            v = self.cli("show vrrp %s" % router)
+            v = self.cli(f"show vrrp {router}")
             match = self.rx_iface.search(v)
             vrrp += [match.group("iface")]
         descriptions = {}

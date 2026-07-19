@@ -58,7 +58,7 @@ class Script(BaseScript):
             interfaces += [iface]
         for v in self.scripts.get_vlans():
             vlan_id = v["vlan_id"]
-            c = self.cli("vlan %s -s" % vlan_id)
+            c = self.cli(f"vlan {vlan_id} -s")
             match = self.rx_vlan.search(c)
             if match:
                 for port in match.group("ports").split(","):
@@ -81,7 +81,7 @@ class Script(BaseScript):
         match = self.rx_ip.search(v)
         ip_address = match.group("ip_address")
         ip_subnet = match.group("ip_subnet")
-        ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+        ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
         iface = {
             "name": "MGMT",
             "type": "SVI",

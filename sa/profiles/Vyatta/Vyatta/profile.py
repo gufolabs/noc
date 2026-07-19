@@ -30,4 +30,4 @@ class Profile(BaseProfile):
             return "aggregated"
         if name.startswith("vtun"):
             return "tunnel"
-        raise Exception("Cannot detect interface type for %s" % name)
+        raise Exception(f"Cannot detect interface type for {name}")

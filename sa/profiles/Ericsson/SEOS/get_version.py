@@ -29,8 +29,8 @@ class Script(BaseScript):
     def execute_snmp(self):
         platform = self.snmp.get("1.3.6.1.2.1.1.1.0", cached=True)
         active_rev = self.snmp.get("1.3.6.1.4.1.193.81.2.7.1.3.0", cached=True)
-        version = self.snmp.get("1.3.6.1.4.1.193.81.2.7.1.2.1.3.%s" % active_rev, cached=True)
-        serial = self.snmp.get("1.3.6.1.4.1.193.81.2.7.1.2.1.2.%s" % active_rev, cached=True)
+        version = self.snmp.get(f"1.3.6.1.4.1.193.81.2.7.1.2.1.3.{active_rev}", cached=True)
+        serial = self.snmp.get(f"1.3.6.1.4.1.193.81.2.7.1.2.1.2.{active_rev}", cached=True)
         return {
             "vendor": "Ericsson",
             "platform": platform.replace("Traffic Node", "TN").replace("Compact Node", "CN"),

@@ -32,7 +32,7 @@ class Script(BaseScript):
         for match in self.rx_portgroup.finditer(cmd):
             r += [
                 {
-                    "interface": "Port-Channel%s" % match.group("pc"),
+                    "interface": "Port-Channel{}".format(match.group("pc")),
                     "members": [],
                     "type": "L" if match.group("mode").lower() != "on" else "S",
                 }

@@ -54,7 +54,7 @@ class Script(BaseScript):
         for i in parse_table(v):
             if i[2] == "none":
                 continue
-            c = self.cli("show slot %s information" % i[0])
+            c = self.cli(f"show slot {i[0]} information")
             match = self.rx_slot.search(c)
             if i[1] == "none" and i[2] == "plc8":
                 r = {
@@ -75,7 +75,7 @@ class Script(BaseScript):
                 }
             res += [r]
             sfp = []
-            c = self.cli("show interface gpon-port %s/all state" % i[0])
+            c = self.cli(f"show interface gpon-port {i[0]}/all state")
             match = self.rx_gpon_port.search(c)
             if not match:
                 continue

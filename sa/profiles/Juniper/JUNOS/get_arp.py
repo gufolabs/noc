@@ -27,4 +27,4 @@ class Script(BaseScript):
     def execute(self, vrf=None):
         if not vrf:
             vrf = "default"
-        return self.cli("show arp no-resolve vpn %s | except demux" % vrf, list_re=self.rx_line)
+        return self.cli(f"show arp no-resolve vpn {vrf} | except demux", list_re=self.rx_line)

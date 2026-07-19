@@ -31,11 +31,11 @@ class Script(BaseScript):
         r = []
         cmd = "show mac address-table"
         if mac is not None:
-            cmd += "address %s" % mac
+            cmd += f"address {mac}"
         if interface is not None:
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
         c = self.cli(cmd)
         if bool(self.rx_status.search(c)):
             rx_line = self.rx_line1

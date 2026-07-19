@@ -45,7 +45,7 @@ class Script(BaseScript):
         # Fallback to CLI
         r = []
         if interface:
-            cmd = "show interface %s | include is" % interface
+            cmd = f"show interface {interface} | include is"
         else:
             cmd = "show interface | include is"
 

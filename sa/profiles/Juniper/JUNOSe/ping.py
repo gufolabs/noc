@@ -29,12 +29,12 @@ class Script(BaseScript):
         else:
             cmd += " ipv6"
         if vrf:
-            cmd += " vrf %s" % vrf
-        cmd += " %s" % address
+            cmd += f" vrf {vrf}"
+        cmd += f" {address}"
         if count:
             cmd += " %d" % int(count)
         if source_address:
-            cmd += " source address %s" % source_address
+            cmd += f" source address {source_address}"
         if size:
             cmd += " data-size %d" % int(size)
         s = self.cli(cmd)

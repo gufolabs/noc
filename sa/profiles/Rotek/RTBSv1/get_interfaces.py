@@ -78,7 +78,7 @@ class Script(BaseScript):
                 if ifname in interfaces:
                     interfaces[ifname]["subinterfaces"] += [
                         {
-                            "name": "%s.%s" % (ifname, vlan_ids),
+                            "name": f"{ifname}.{vlan_ids}",
                             "snmp_ifindex": ifindex,
                             "admin_status": admin_status,
                             "oper_status": oper_status,
@@ -111,15 +111,16 @@ class Script(BaseScript):
             if self.is_platform_BS24:
                 for i in ss.items():
                     if int(i[0]) == ifindex:
-                        vname = "%s.%s" % (ifname, i[1]["ssid"])
+                        vname = "{}.{}".format(ifname, i[1]["ssid"])
                         interfaces[vname] = {
                             "type": iftype,
                             "name": vname,
                             "admin_status": admin_status,
                             "oper_status": oper_status,
                             "snmp_ifindex": ifindex,
-                            "description": "ssid_broadcast=%s, ieee_mode=%s, channel=%s, freq=%sGHz"
-                            % (i[1]["broadcast"], i[1]["ieee_mode"], i[1]["channel"], i[1]["freq"]),
+                            "description": "ssid_broadcast={}, ieee_mode={}, channel={}, freq={}GHz".format(
+                                i[1]["broadcast"], i[1]["ieee_mode"], i[1]["channel"], i[1]["freq"]
+                            ),
                             "subinterfaces": [
                                 {
                                     "name": vname,
@@ -145,16 +146,16 @@ class Script(BaseScript):
             match = self.re_ath.match(ra_iface.strip())
             if match:
                 ath = match.group("ath")
-                s = self.cli("show interface %s ssid" % ath)
-                v = self.cli("show interface %s vlan-to-ssid" % ath)
-                a = self.cli("show interface %s ssid-broadcast" % ath)
+                s = self.cli(f"show interface {ath} ssid")
+                v = self.cli(f"show interface {ath} vlan-to-ssid")
+                a = self.cli(f"show interface {ath} ssid-broadcast")
                 i = self.cli("show interface wifi0 ieee-mode")
                 c = self.cli("show interface wifi0 channel")
                 f = self.cli("show interface wifi0 freq")
                 res = s.split(":")[1].strip().replace('"', "")
                 resv = v.split(":")[2].strip()
                 ssid_broadcast = a.split(":")[1].strip()
-                ieee_mode = "IEEE 802.11%s" % i.split(":")[1].strip()
+                ieee_mode = "IEEE 802.11{}".format(i.split(":")[1].strip())
                 channel = c.strip().splitlines()[0].split(":")[1].strip()
                 freq = f.strip().splitlines()[0].split(":")[1].strip()
                 ssid[ath] = {
@@ -215,16 +216,17 @@ class Script(BaseScript):
                         o_status = False  # Do not touch !!!
                     iface = {
                         "type": "physical",
-                        "name": "%s.%s" % (ifname, ri["ssid"]),
+                        "name": "{}.{}".format(ifname, ri["ssid"]),
                         "admin_status": a_status,
                         "oper_status": o_status,
                         "mac": MAC(mac),
                         "snmp_ifindex": match.group("ifindex"),
-                        "description": "ssid_broadcast=%s, ieee_mode=%s, channel=%s, freq=%sGHz"
-                        % (ssid_broadcast, ri["ieee_mode"], ri["channel"], ri["freq"]),
+                        "description": "ssid_broadcast={}, ieee_mode={}, channel={}, freq={}GHz".format(
+                            ssid_broadcast, ri["ieee_mode"], ri["channel"], ri["freq"]
+                        ),
                         "subinterfaces": [
                             {
-                                "name": "%s.%s" % (ifname, ri["ssid"]),
+                                "name": "{}.{}".format(ifname, ri["ssid"]),
                                 "enabled_afi": ["BRIDGE"],
                                 "admin_status": a_status,
                                 "oper_status": o_status,

@@ -93,7 +93,7 @@ class Script(BaseScript):
                     "part_no": [match.group("name")],
                     "description": [match.group("comments")],
                 }
-                c = self.cli("show card %s detail" % number)
+                c = self.cli(f"show card {number} detail")
                 match1 = self.rx_hw.search(c)
                 if match1:
                     p["part_no"] = match1.group("part_no")
@@ -109,7 +109,7 @@ class Script(BaseScript):
                     "vendor": "ALU",
                     "part_no": [match.group("name")],
                 }
-                c = self.cli("show card %s detail" % number)
+                c = self.cli(f"show card {number} detail")
                 match1 = self.rx_hw.search(c)
                 if match1:
                     p["part_no"] = match1.group("part_no")
@@ -126,7 +126,7 @@ class Script(BaseScript):
                     "vendor": "ALU",
                     "part_no": [match.group("name")],
                 }
-                c = self.cli("show mda %s/%s detail" % (match.group("slot"), number))
+                c = self.cli("show mda {}/{} detail".format(match.group("slot"), number))
                 match1 = self.rx_hw.search(c)
                 if match1:
                     p["part_no"] = match1.group("part_no")
@@ -143,7 +143,7 @@ class Script(BaseScript):
                     "vendor": "ALU",
                     "part_no": [match.group("name")],
                 }
-                c = self.cli("show card %s detail" % number)
+                c = self.cli(f"show card {number} detail")
                 match1 = self.rx_hw.search(c)
                 if match1:
                     p["part_no"] = match1.group("part_no")
@@ -174,7 +174,7 @@ class Script(BaseScript):
                     "vendor": "ALU",
                     "part_no": [match.group("name")],
                 }
-                c = self.cli("show card %s detail" % number)
+                c = self.cli(f"show card {number} detail")
                 match1 = self.rx_hw.search(c)
                 if match1:
                     p["part_no"] = match1.group("part_no")

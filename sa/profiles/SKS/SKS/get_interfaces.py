@@ -157,7 +157,7 @@ class Script(BaseScript):
             if switchport_support:
                 # 1.5.11.3 supported, but 1.5.3 is not supported "show interfaces switchport" command
                 try:
-                    s = self.cli("show interfaces switchport %s" % ifname)
+                    s = self.cli(f"show interfaces switchport {ifname}")
                     for match1 in self.rx_vlan.finditer(s):
                         vlan_id = match1.group("vlan_id")
                         if match1.group("membership") == "System":
@@ -221,7 +221,7 @@ class Script(BaseScript):
             }
             if iface["type"] == "physical":
                 sub["enabled_afi"] = ["BRIDGE"]
-                c = self.cli("show vlan interface %s" % ifname)
+                c = self.cli(f"show vlan interface {ifname}")
                 t = parse_table(c, allow_wrap=True, n_row_delim=",")
                 for i in t:
                     if i[1] == "Access" and i[4]:

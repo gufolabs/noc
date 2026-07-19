@@ -26,12 +26,12 @@ class Script(BaseScript):
     def execute(self):
         r = []
         for cg in range(1, 9):
-            c = self.cli("show channel-group summary %s" % cg)
+            c = self.cli(f"show channel-group summary {cg}")
             match = self.rx_cg.search(c)
             if match:
                 r += [
                     {
-                        "interface": "port-channel %s" % cg,
+                        "interface": f"port-channel {cg}",
                         "type": "L" if match.group("mode") == "LACP" else "S",
                         "members": self.rx_iface.findall(match.group("members")),
                     }

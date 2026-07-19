@@ -35,11 +35,11 @@ class Script(BaseScript):
         r = []
         cmd = "show mac"
         if mac is not None:
-            cmd += " %s" % mac
+            cmd += f" {mac}"
         if (interface is not None) and (interface.lower().startswith("enet")):
-            cmd += " %s" % interface
+            cmd += f" {interface}"
         if vlan is not None:
-            cmd += " vid %s" % vlan
+            cmd += f" vid {vlan}"
         try:
             macs = self.cli(cmd)
             for match in self.rx_line.finditer(macs):

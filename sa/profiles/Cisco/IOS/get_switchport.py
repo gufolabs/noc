@@ -214,7 +214,7 @@ class Script(BaseScript):
                 #
                 elif "more" in vlans:
                     try:
-                        c = self.cli("show interface %s trunk" % interface)
+                        c = self.cli(f"show interface {interface} trunk")
                         match1 = self.rx_tagged.search(c)
                         if match1:  # If not `none` in returned list
                             tagged = self.expand_rangelist(match1.group(1))

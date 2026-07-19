@@ -83,13 +83,13 @@ class Script(BaseScript):
                             fwmin = self.snmp.get("1.3.6.1.4.1.890.1.5.8.%d.1.2.0" % oid)
                             fwmod = self.snmp.get("1.3.6.1.4.1.890.1.5.8.%d.1.3.0" % oid)
                             fwver = self.snmp.get("1.3.6.1.4.1.890.1.5.8.%d.1.4.0" % oid)
-                            r["version"] = "%s.%s(%s.%s)" % (fwmaj, fwmin, fwmod, fwver)
+                            r["version"] = f"{fwmaj}.{fwmin}({fwmod}.{fwver})"
                         if "Serial Number" not in attributes:
                             # Get Serial Number
                             fwser = self.snmp.get("1.3.6.1.4.1.890.1.5.8.%d.1.10.0" % oid)
                             attributes["Serial Number"] = fwser
                     else:
-                        self.logger.error("Cannot find base OID for model '%s'" % platform)
+                        self.logger.error(f"Cannot find base OID for model '{platform}'")
                         raise self.snmp.TimeOutError  # Fallback to CLI
                 except self.snmp.TimeOutError:
                     pass

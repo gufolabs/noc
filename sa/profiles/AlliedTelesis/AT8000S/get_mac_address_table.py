@@ -23,12 +23,12 @@ class Script(BaseScript):
     def execute(self, interface=None, vlan=None, mac=None):
         cmd = "show bridge address-table"
         if mac is not None:
-            cmd += " address %s" % mac
+            cmd += f" address {mac}"
         # interface option not working for port-channel trunks
         if interface is not None:
-            cmd += " ethernet %s" % interface
+            cmd += f" ethernet {interface}"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
         self.cli("terminal datadump")
         vlans = self.cli(cmd)
         vlans = self.strip_first_lines(vlans, 4)
