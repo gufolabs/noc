@@ -28,22 +28,21 @@ class Migration(BaseMigration):
         ]
         # Update postgresql tables
         for table in MODELS:
-            rows = self.db.execute("SELECT id FROM %s WHERE bi_id IS NULL" % table)
+            rows = self.db.execute(f"SELECT id FROM {table} WHERE bi_id IS NULL")
             values = ["(%d, %d)" % (r[0], bi_hash(r[0])) for r in rows]
             while values:
                 chunk, values = values[:PG_CHUNK], values[PG_CHUNK:]
                 self.db.execute(
                     """
-                    UPDATE %s AS t
+                    UPDATE {} AS t
                     SET
                       bi_id = c.bi_id
                     FROM (
                       VALUES
-                      %s
+                      {}
                     ) AS c(id, bi_id)
                     WHERE c.id = t.id
-                    """
-                    % (table, ",\n".join(chunk))
+                    """.format(table, ",\n".join(chunk))
                 )
         # Update mongodb collections
         mdb = self.mongo_db
@@ -61,5 +60,5 @@ class Migration(BaseMigration):
                 coll.bulk_write(updates)
         # Alter bi_id fields and create indexes
         for table in MODELS:
-            self.db.execute("ALTER TABLE %s ALTER bi_id SET NOT NULL" % table)
+            self.db.execute(f"ALTER TABLE {table} ALTER bi_id SET NOT NULL")
             self.db.create_index(table, ["bi_id"], unique=True)

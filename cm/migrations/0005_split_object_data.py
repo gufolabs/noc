@@ -53,4 +53,4 @@ class Migration(BaseMigration):
             elif handler_class_name == "prefix-list":
                 self.db.execute("INSERT INTO cm_prefixlist(repo_path) VALUES(%s)", [repo_path])
             else:
-                raise Exception("Unsupported handler_class_name='%s'" % handler_class_name)
+                raise Exception(f"Unsupported handler_class_name='{handler_class_name}'")

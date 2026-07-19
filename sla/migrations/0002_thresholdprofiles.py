@@ -49,7 +49,7 @@ class Migration(BaseMigration):
                     tp = {"_id": tp_id}
                 # Fill profile
                 tp["name"] = "sp-%05d-%03d" % (next(current), n)
-                tp["description"] = "Migrated for SLA profile '%s' metric '%s'" % (
+                tp["description"] = "Migrated for SLA profile '{}' metric '{}'".format(
                     doc["name"],
                     metric["metric_type"],
                 )

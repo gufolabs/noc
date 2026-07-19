@@ -20,10 +20,9 @@ class Migration(BaseMigration):
         # Migrate data
         for m in self.TAG_MODELS:
             self.db.execute(
-                """
-            UPDATE %s
+                f"""
+            UPDATE {m}
             SET tmp_tags = string_to_array(regexp_replace(tags, ',$', ''), ',')
             WHERE tags != ''
             """
-                % m
             )

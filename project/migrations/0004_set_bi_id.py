@@ -15,21 +15,20 @@ PG_CHUNK = 500
 class Migration(BaseMigration):
     def migrate(self) -> None:
         table = "project_project"
-        rows = self.db.execute("SELECT id FROM %s WHERE bi_id IS NULL" % table)
+        rows = self.db.execute(f"SELECT id FROM {table} WHERE bi_id IS NULL")
         values = ["(%d, %d)" % (r[0], bi_hash(r[0])) for r in rows]
         while values:
             chunk, values = values[:PG_CHUNK], values[PG_CHUNK:]
             self.db.execute(
                 """
-                UPDATE %s AS t
+                UPDATE {} AS t
                 SET
                   bi_id = c.bi_id
                 FROM (
                   VALUES
-                  %s
+                  {}
                 ) AS c(id, bi_id)
                 WHERE c.id = t.id
-                """
-                % (table, ",\n".join(chunk))
+                """.format(table, ",\n".join(chunk))
             )
-        self.db.execute("ALTER TABLE %s ALTER bi_id SET NOT NULL" % table)
+        self.db.execute(f"ALTER TABLE {table} ALTER bi_id SET NOT NULL")

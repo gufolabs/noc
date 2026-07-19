@@ -42,8 +42,8 @@ class Migration(BaseMigration):
             p_id = bson.ObjectId()
             p = {
                 "_id": p_id,
-                "name": "Style %s" % style_id,
-                "description": "Auto-converted for style %s" % style_id,
+                "name": f"Style {style_id}",
+                "description": f"Auto-converted for style {style_id}",
                 "workflow": wf,
                 "style": style_id,
                 "bi_id": bson.int64.Int64(bi_hash(p_id)),
@@ -61,11 +61,11 @@ class Migration(BaseMigration):
         # Migrate profile styles
         for style_id in style_profiles:
             if style_id:
-                cond = "style_id = %s" % style_id
+                cond = f"style_id = {style_id}"
             else:
                 cond = "style_id IS NULL"
             self.db.execute(
-                "UPDATE ip_address SET profile = %%s WHERE %s" % cond,
+                f"UPDATE ip_address SET profile = %s WHERE {cond}",
                 [str(style_profiles[style_id])],
             )
         # Make Prefix.profile not nullable

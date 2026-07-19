@@ -37,12 +37,11 @@ class Migration(BaseMigration):
             "peer_peer",
         ]:
             for tag, count in self.db.execute(
-                """
+                f"""
                     SELECT unnest(tags), COUNT(*)
-                    FROM %s
+                    FROM {m}
                     GROUP BY 1
                     """
-                % m
             ):
                 c.update_many(
                     {"tag": tag},

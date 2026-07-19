@@ -12,11 +12,10 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     def migrate_project(self, table):
         r = self.db.execute(
-            """
+            f"""
             SELECT COUNT(*)
-            FROM %s
+            FROM {table}
             WHERE project IS NOT NULL AND project != ''"""
-            % table
         )[0][0]
         if r:
             # Create custom field
@@ -31,10 +30,9 @@ class Migration(BaseMigration):
 
             # Move data
             self.db.execute(
-                """
-                ALTER TABLE %s RENAME project TO cust_project
+                f"""
+                ALTER TABLE {table} RENAME project TO cust_project
             """
-                % table
             )
         else:
             # Drop column

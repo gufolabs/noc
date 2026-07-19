@@ -46,12 +46,12 @@ class Migration(BaseMigration):
 
         for ot in OBJECT_TYPES:
             self.db.add_column(
-                "cm_%s" % ot,
+                f"cm_{ot}",
                 "location",
                 models.ForeignKey(ObjectLocation, null=True, blank=True, on_delete=models.CASCADE),
             )
-            self.db.execute("UPDATE cm_%s SET location_id=%%s" % ot, [loc_id])
-            self.db.execute("ALTER TABLE cm_%s ALTER location_id SET NOT NULL" % ot)
+            self.db.execute(f"UPDATE cm_{ot} SET location_id=%s", [loc_id])
+            self.db.execute(f"ALTER TABLE cm_{ot} ALTER location_id SET NOT NULL")
 
         # Mock Models
         ObjectCategory = self.db.mock_model(

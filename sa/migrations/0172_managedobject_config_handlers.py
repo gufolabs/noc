@@ -45,10 +45,9 @@ class Migration(BaseMigration):
             ("config_validation_rule_id", "config_validation_handler"),
         ]:
             for row in self.db.execute(
-                """
-                    SELECT DISTINCT %s
-                    FROM sa_managedobject WHERE %s IS NOT NULL"""
-                % (old_field, old_field)
+                f"""
+                    SELECT DISTINCT {old_field}
+                    FROM sa_managedobject WHERE {old_field} IS NOT NULL"""
             ):
                 pyrule_id = row[0]
                 if not pyrule_id:
@@ -59,12 +58,11 @@ class Migration(BaseMigration):
                     handler = self.migrate_pyrule(new_coll, pyrule_id)
                     pmap[pyrule_id] = handler
                 self.db.execute(
-                    """
+                    f"""
                     UPDATE sa_managedobject
-                    SET %s = %%s
-                    WHERE %s = %%s
-                    """
-                    % (new_field, old_field),
+                    SET {new_field} = %s
+                    WHERE {old_field} = %s
+                    """,
                     [handler, pyrule_id],
                 )
             self.db.delete_column("sa_managedobject", old_field)
@@ -83,6 +81,6 @@ class Migration(BaseMigration):
         new_text = self.rx_strip_decorator.sub("", text)
         fn = match.group(1)
         new_name = "config.filter%d" % pyrule_id
-        handler = "noc.pyrules.%s.%s" % (new_name, fn)
+        handler = f"noc.pyrules.{new_name}.{fn}"
         coll.insert_one({"name": new_name, "source": new_text})
         return handler

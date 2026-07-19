@@ -43,7 +43,7 @@ class Migration(BaseMigration):
                     tp = {"_id": tp_id}
                 # Fill profile
                 tp["name"] = "ip-%05d-%03d" % (next(current), n)
-                tp["description"] = "Migrated for interface profile '%s' metric '%s'" % (
+                tp["description"] = "Migrated for interface profile '{}' metric '{}'".format(
                     doc["name"],
                     metric["metric_type"],
                 )

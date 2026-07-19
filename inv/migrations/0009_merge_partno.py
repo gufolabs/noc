@@ -24,10 +24,10 @@ class Migration(BaseMigration):
             for k in om["data"]["asset"]:
                 if k.startswith("part_no") and k != "part_no":
                     part_no += [om["data"]["asset"][k]]
-                    uso["data.asset.%s" % k] = ""
+                    uso[f"data.asset.{k}"] = ""
                 elif k.startswith("order_part_no") and k != "order_part_no":
                     order_part_no += [om["data"]["asset"][k]]
-                    uso["data.asset.%s" % k] = ""
+                    uso[f"data.asset.{k}"] = ""
             if not part_no and not order_part_no:
                 continue
             if part_no:

@@ -72,7 +72,7 @@ class Migration(BaseMigration):
                 o = {
                     "timestamp": timestamp,
                     "user": user_cache[user_id],
-                    "model_id": "%s.%s" % (db_table.split("_")[0], model),
+                    "model_id": "{}.{}".format(db_table.split("_")[0], model),
                     "op": op,
                     "expires": timestamp + delta,
                 }
@@ -103,7 +103,7 @@ class Migration(BaseMigration):
                             continue
                         changes += [{"field": k, "old": None, "new": v}]
                 else:
-                    raise ValueError("Invalid op '%s'" % op)
+                    raise ValueError(f"Invalid op '{op}'")
                 o["changes"] = changes
                 bulk += [InsertOne(o)]
                 last_id = a_id

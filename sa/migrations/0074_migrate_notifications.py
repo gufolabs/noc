@@ -39,7 +39,7 @@ class Migration(BaseMigration):
                 domain_name = self.db.execute(
                     "SELECT name FROM sa_administrativedomain WHERE id = %s", [domain]
                 )[0][0]
-                s_name = "~~~ON~~~ %s" % domain_name
+                s_name = f"~~~ON~~~ {domain_name}"
                 self.db.execute(
                     """
                 INSERT INTO sa_managedobjectselector(
@@ -47,7 +47,7 @@ class Migration(BaseMigration):
                     is_enabled, filter_administrative_domain_id)
                 VALUES(%s, %s, %s, %s)
                 """,
-                    [s_name, "Auto-generated selector for %s domain" % domain_name, True, domain],
+                    [s_name, f"Auto-generated selector for {domain_name} domain", True, domain],
                 )
                 selector_id = self.db.execute(
                     "SELECT id FROM sa_managedobjectselector WHERE name = %s", [s_name]

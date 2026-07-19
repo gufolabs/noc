@@ -31,7 +31,7 @@ class Migration(BaseMigration):
         )
         # Migrate data
         for id, name, ip, to_ip in self.db.execute("SELECT id, name, ip, to_ip FROM sa_activator"):
-            pt_name = "Activator::%s" % name
+            pt_name = f"Activator::{name}"
             self.db.execute(
                 """
                 INSERT INTO main_prefixtable(name)

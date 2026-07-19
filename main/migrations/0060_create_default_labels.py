@@ -84,11 +84,10 @@ class Migration(BaseMigration):
                 ]
             # Fill labels
             for (name,) in self.db.execute(
-                """
+                f"""
                 SELECT DISTINCT name
-                FROM %s
+                FROM {table}
                 """
-                % table
             ):
                 label = f"noc::{scope}::{name}::="
                 if label not in current_labels:

@@ -34,20 +34,19 @@ class Migration(BaseMigration):
             self.db.add_column(table, "bi_id", models.BigIntegerField(null=True, blank=True))
         # Set BI_ID
         for table in TABLES:
-            rows = self.db.execute("SELECT id FROM %s WHERE bi_id IS NULL" % table)
+            rows = self.db.execute(f"SELECT id FROM {table} WHERE bi_id IS NULL")
             values = ["(%d, %d)" % (r[0], bi_hash(r[0])) for r in rows]
             while values:
                 chunk, values = values[:PG_CHUNK], values[PG_CHUNK:]
                 self.db.execute(
                     """
-                    UPDATE %s AS t
+                    UPDATE {} AS t
                     SET
                       bi_id = c.bi_id
                     FROM (
                       VALUES
-                      %s
+                      {}
                     ) AS c(id, bi_id)
                     WHERE c.id = t.id
-                    """
-                    % (table, ",\n".join(chunk))
+                    """.format(table, ",\n".join(chunk))
                 )

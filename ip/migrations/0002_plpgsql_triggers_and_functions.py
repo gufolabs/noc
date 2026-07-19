@@ -30,21 +30,19 @@ class Migration(BaseMigration):
 
     def has_column(self, table, name):
         return self.db.execute(
-            """SELECT COUNT(*)>0
+            f"""SELECT COUNT(*)>0
             FROM pg_attribute a JOIN pg_class p ON (p.oid=a.attrelid)
-            WHERE p.relname='%s'
-              AND a.attname='%s'
+            WHERE p.relname='{table}'
+              AND a.attname='{name}'
             """
-            % (table, name)
         )[0][0]
 
     def has_trigger(self, table, name):
         return self.db.execute(
-            """SELECT COUNT(*)>0
+            f"""SELECT COUNT(*)>0
             FROM pg_trigger t JOIN pg_class p ON (p.oid=t.tgrelid)
-            WHERE p.relname='%s'
-              AND t.tgname='%s'"""
-            % (table, name)
+            WHERE p.relname='{table}'
+              AND t.tgname='{name}'"""
         )[0][0]
 
 

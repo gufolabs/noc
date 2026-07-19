@@ -48,9 +48,9 @@ class Migration(BaseMigration):
             p_id = bson.ObjectId()
             p = {
                 "_id": p_id,
-                "name": "VRF Style %s" % style_id,
+                "name": f"VRF Style {style_id}",
                 "type": "vrf",
-                "description": "Auto-converted for VRF style %s" % style_id,
+                "description": f"Auto-converted for VRF style {style_id}",
                 "workflow": wf,
                 "style": style_id,
                 "default_prefix_profile": default_prefix_profile,
@@ -67,11 +67,11 @@ class Migration(BaseMigration):
         # Migrate profile styles
         for style_id in style_profiles:
             if style_id:
-                cond = "style_id = %s" % style_id
+                cond = f"style_id = {style_id}"
             else:
                 cond = "style_id IS NULL"
             self.db.execute(
-                "UPDATE ip_vrf SET profile = %%s WHERE %s" % cond, [str(style_profiles[style_id])]
+                f"UPDATE ip_vrf SET profile = %s WHERE {cond}", [str(style_profiles[style_id])]
             )
         # Make Prefix.profile not nullable
         self.db.execute("ALTER TABLE ip_vrf ALTER profile SET NOT NULL")

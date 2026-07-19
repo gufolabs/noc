@@ -50,12 +50,11 @@ class Migration(BaseMigration):
     def migrate_handler(self, table, field, **kwargs):
         h_coll = self.mongo_db["handlers"]
         for mop_id, handler in self.db.execute(
+            f"""
+            SELECT id, {field}
+            FROM {table}
+            WHERE {field} IS NOT NULL
             """
-            SELECT id, %s
-            FROM %s
-            WHERE %s IS NOT NULL
-            """
-            % (field, table, field)
         ):
             # Create handler
             h_id = bson.ObjectId()
@@ -63,18 +62,17 @@ class Migration(BaseMigration):
                 "_id": h_id,
                 "handler": handler,
                 "name": handler,
-                "description": "Migrated %s's %s %s" % (table, field, handler),
+                "description": f"Migrated {table}'s {field} {handler}",
             }
             h_data.update(kwargs)
             h_coll.insert_one(h_data)
             # Migrate profile
             self.db.execute(
-                """
-                UPDATE %s
-                SET %s = %%s
-                WHERE %s = %%s
-                """
-                % (table, field, field),
+                f"""
+                UPDATE {table}
+                SET {field} = %s
+                WHERE {field} = %s
+                """,
                 [str(h_id), handler],
             )
-        self.db.execute("ALTER TABLE %s ALTER COLUMN %s TYPE CHAR(24)" % (table, field))
+        self.db.execute(f"ALTER TABLE {table} ALTER COLUMN {field} TYPE CHAR(24)")
