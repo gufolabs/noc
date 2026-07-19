@@ -110,7 +110,7 @@ class Script(GetMetricsScript):
                     self.set_metric(
                         id=("Environment | Temperature", None),
                         metric="Environment | Temperature",
-                        labels=["noc::sensor::Temperature_%s" % module],
+                        labels=[f"noc::sensor::Temperature_{module}"],
                         value=float(v.split()[0]),
                         units="C",
                         multi=True,
@@ -119,7 +119,7 @@ class Script(GetMetricsScript):
                     self.set_metric(
                         id=("Environment | Voltage", None),
                         metric="Environment | Voltage",
-                        labels=["noc::sensor::Voltage_%s" % module],
+                        labels=[f"noc::sensor::Voltage_{module}"],
                         value=float(v.split()[0]),
                         units="VDC",
                         multi=True,
@@ -128,7 +128,7 @@ class Script(GetMetricsScript):
                     self.set_metric(
                         id=("Environment | Electric current", None),
                         metric="Environment | Electric current",
-                        labels=["noc::sensor::ElectricCurrent_%s" % module],
+                        labels=[f"noc::sensor::ElectricCurrent_{module}"],
                         value=float(v.split()[0]) * 1000.0,
                         multi=True,
                         units="A",

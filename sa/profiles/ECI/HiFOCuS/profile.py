@@ -70,8 +70,8 @@ class Profile(BaseProfile):
         if match:
             # SNMP format
             if int(match.group("uni")) == 0:
-                return "%(shelf)s/%(slot)s/%(port)s/%(mani)s" % match.groupdict()
-            return "%(shelf)s/%(slot)s/%(port)s/%(mani)s.%(layer)s:%(uni)s" % match.groupdict()
+                return "{shelf}/{slot}/{port}/{mani}".format(**match.groupdict())
+            return "{shelf}/{slot}/{port}/{mani}.{layer}:{uni}".format(**match.groupdict())
         return s
 
     rx_header = re.compile(r"(?:\=+\|?)+")

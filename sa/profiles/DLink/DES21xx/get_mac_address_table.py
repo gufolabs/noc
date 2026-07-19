@@ -22,12 +22,12 @@ class Script(BaseScript):
     def execute(self, interface=None, vlan=None, mac=None):
         cmd = "show fdb port "
         if interface is not None:
-            cmd += "%s" % interface
+            cmd += f"{interface}"
             macs = self.cli(cmd)
         else:
             macs = ""
             for s in self.scripts.get_interface_status():
-                macs += self.cli(cmd + "%s" % s["interface"])
+                macs += self.cli(cmd + "{}".format(s["interface"]))
         r = []
         for l in macs.split("\n"):
             match = self.rx_line.match(l.strip())

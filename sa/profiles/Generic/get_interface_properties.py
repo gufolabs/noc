@@ -135,7 +135,7 @@ class Script(BaseScript):
             oid = mib[oid]
         if ifindex:
             # Single interface
-            v = self.snmp.get("%s.%s" % (oid, ifindex))
+            v = self.snmp.get(f"{oid}.{ifindex}")
             try:
                 yield key, ifindex, clean(v)
             except ValueError:

@@ -20,15 +20,15 @@ class Script(BaseScript):
     )
 
     def execute(self, address, count=None, source_address=None, size=None, df=None):
-        cmd = "ping %s" % address
+        cmd = f"ping {address}"
         if count:
             cmd += " -count=%d" % int(count)
         else:
             cmd += " -count=5"
         if source_address:
-            cmd += " -srcip=%s" % source_address
+            cmd += f" -srcip={source_address}"
         if size:
-            cmd += " -length=%s" % size
+            cmd += f" -length={size}"
 
         result = self.cli(cmd)
         match = self.rx_result.search(result)

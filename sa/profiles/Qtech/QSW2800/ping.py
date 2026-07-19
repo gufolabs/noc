@@ -24,7 +24,7 @@ class Script(BaseScript):
 
     def execute(self, address, count=None, source_address=None, size=None, df=None):
         cmd = "ping"
-        cmd += " %s" % address
+        cmd += f" {address}"
         ping = self.cli(cmd)
         result = self.rx_stat.search(ping)
         return {

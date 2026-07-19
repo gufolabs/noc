@@ -22,7 +22,7 @@ class Script(BaseScript):
     )
 
     def execute(self, address, count=None, source_address=None, size=None, df=None):
-        cmd = "ip ping %s" % address
+        cmd = f"ip ping {address}"
         success = 0
         count = 3  # 3 times by default
         min = 0

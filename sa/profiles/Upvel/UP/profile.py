@@ -38,11 +38,11 @@ class Profile(BaseProfile):
         """
         s = s.strip()
         if s.startswith("Gi "):
-            return "GigabitEthernet %s" % s[3:].strip()
+            return f"GigabitEthernet {s[3:].strip()}"
         if s.startswith("2.5G "):
-            return "2.5GigabitEthernet %s" % s[5:].strip()
+            return f"2.5GigabitEthernet {s[5:].strip()}"
         if s.startswith("10G G "):
-            return "10GigabitEthernet %s" % s[4:].strip()
+            return f"10GigabitEthernet {s[4:].strip()}"
         return s
 
     def get_interface_names(self, name):
@@ -53,9 +53,9 @@ class Profile(BaseProfile):
         """
 
         return [
-            "GigabitEthernet 1/%s" % name,
-            "2.5GigabitEthernet 1/%s" % name,
-            "10GigabitEthernet 1/%s" % name,
+            f"GigabitEthernet 1/{name}",
+            f"2.5GigabitEthernet 1/{name}",
+            f"10GigabitEthernet 1/{name}",
         ]
 
     INTERFACE_TYPES = {

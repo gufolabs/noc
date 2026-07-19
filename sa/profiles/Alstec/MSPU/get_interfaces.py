@@ -72,7 +72,7 @@ class Script(BaseScript):
         for match in self.rx_port_phys.finditer(v):
             ifname = match.group("port")
             descr = match.group("descr").strip()
-            c = self.cli("port adsl %s show" % ifname)
+            c = self.cli(f"port adsl {ifname} show")
             iface = self.get_phys_iface(c, ifname, descr)
             interfaces += [iface]
         try:
@@ -83,7 +83,7 @@ class Script(BaseScript):
         for match in self.rx_port_phys.finditer(v):
             ifname = match.group("port")
             descr = match.group("descr").strip()
-            c = self.cli("port uplink %s show" % ifname)
+            c = self.cli(f"port uplink {ifname} show")
             iface = self.get_phys_iface(c, ifname, descr)
             interfaces += [iface]
         for l in self.cli("context ip router ifconfig").split("\n\n"):
@@ -115,7 +115,7 @@ class Script(BaseScript):
             if match:
                 ip_address = match.group("ip")
                 ip_subnet = match.group("mask")
-                ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+                ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                 sub["ipv4_addresses"] = [ip_address]
                 sub["enabled_afi"] = ["IPv4"]
             # found = False

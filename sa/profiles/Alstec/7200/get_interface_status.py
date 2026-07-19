@@ -24,7 +24,7 @@ class Script(BaseScript):
         r = []
         cmd = "show port"
         if interface is not None:
-            cmd += " %s" % interface
+            cmd += f" {interface}"
         else:
             cmd += " all"
         for match in self.rx_port.finditer(self.cli(cmd)):

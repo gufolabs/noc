@@ -69,7 +69,7 @@ class Script(BaseScript):
                         continue
                     if rt_name.startswith("target:"):
                         vpn["rt_import"] += [rt_name[7:]]
-                    c = self.cli("show policy %s" % rt_name)
+                    c = self.cli(f"show policy {rt_name}")
                     for rd in self.rx_vrf_target.finditer(c):
                         vpn["rt_import"] += [rd.group("rd")]
             if match.group("vrf_export"):
@@ -80,7 +80,7 @@ class Script(BaseScript):
                         continue
                     if rt_name.startswith("target:"):
                         vpn["rt_export"] += [rt_name[7:]]
-                    c = self.cli("show policy %s" % rt_name)
+                    c = self.cli(f"show policy {rt_name}")
                     for rd in self.rx_vrf_target.finditer(c):
                         vpn["rt_export"] += [rd.group("rd")]
             vpns += [vpn]

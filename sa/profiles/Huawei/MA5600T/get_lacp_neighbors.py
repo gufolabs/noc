@@ -33,7 +33,7 @@ class Script(BaseScript):
         for pc in self.scripts.get_portchannel():
             lacp = {"lag_id": pc["interface"], "interface": pc["interface"], "bundle": []}
             for port in pc["members"]:
-                c = self.cli("display lacp link-aggregation port %s" % port)
+                c = self.cli(f"display lacp link-aggregation port {port}")
                 match = self.rx_bundle.search(c)
                 if not match:
                     continue

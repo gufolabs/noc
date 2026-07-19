@@ -146,7 +146,7 @@ class Script(BaseScript):
                     sub["tagged_vlan"] = tagged[ifname]
 
                 if ift == "SVI":  # IPv4 addresses
-                    shint = self.cli("show interfaces %s" % ifname)
+                    shint = self.cli(f"show interfaces {ifname}")
                     for str in shint.split("\r\n"):
                         match = self.rx_int_ipv4.search(str)
                         if match:

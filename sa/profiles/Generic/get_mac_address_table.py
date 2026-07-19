@@ -71,7 +71,7 @@ class Script(BaseScript):
                 self.logger.error(
                     "Unknown interface index %s, for MAC: %s",
                     iface,
-                    ":".join("%02x" % int(c) for c in r_oid[1:]),
+                    ":".join(f"{int(c):02x}" for c in r_oid[1:]),
                 )
                 continue
             iface = iface_map[iface]
@@ -88,7 +88,7 @@ class Script(BaseScript):
             r_oid = tuple(r_oid.rsplit(".", 7)[-7:])
             if r_oid not in mac_port:
                 continue
-            vlan_id, mac = r_oid[0], ":".join("%02x" % int(c) for c in r_oid[1:])
+            vlan_id, mac = r_oid[0], ":".join(f"{int(c):02x}" for c in r_oid[1:])
             # Some devices return CPU/management vlan as 0
             if vlan_id != "0" and not is_vlan(vlan_id):
                 # Found vlan `4155` on Eltex MES-3124F fw 2.5.48.6

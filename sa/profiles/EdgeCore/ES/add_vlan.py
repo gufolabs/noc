@@ -21,7 +21,7 @@ class Script(BaseScript):
             self.cli("end")
             if tagged_ports:
                 for port in tagged_ports:
-                    self.cli("interface eth %s" % port)
-                    self.cli("switchport allowed vlan add %s tagged" % vlan_id)
+                    self.cli(f"interface eth {port}")
+                    self.cli(f"switchport allowed vlan add {vlan_id} tagged")
                     self.cli("end")
         return True

@@ -32,9 +32,9 @@ class Script(BaseScript):
         with self.configure():
             cmd = "show mac-address "
             if interface is not None:
-                cmd += "port %s" % interface
+                cmd += f"port {interface}"
             elif vlan is not None:
-                cmd += "vlan %s" % vlan
+                cmd += f"vlan {vlan}"
             else:
                 cmd += "all"
             v = self.cli(cmd)

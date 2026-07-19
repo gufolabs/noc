@@ -112,7 +112,7 @@ class Script(BaseScript):
         for i in ifs:
             if i["local_interface"] in local_port_ids:
                 i["local_interface_id"] = local_port_ids[i["local_interface"]]
-            v = self.cli("show lldp info remote detail %s" % i["local_interface"])
+            v = self.cli("show lldp info remote detail {}".format(i["local_interface"]))
             match = self.re_search(self.rx_detail, v)
             n = {"remote_chassis_id_subtype": LLDP_CHASSIS_SUBTYPE_MAC}
             if match:

@@ -180,9 +180,9 @@ class Profile(BaseProfile):
         """
         match = self.rx_eltex_interface_name.match(str(s))
         if is_int(s):
-            return "Vl %s" % s
+            return f"Vl {s}"
         if s in ["oob", "stack-port"]:
             return s
         if match:
-            return "%s %s" % (match.group("type").capitalize(), match.group("number"))
-        raise InterfaceTypeError("Invalid interface '%s'" % s)
+            return "{} {}".format(match.group("type").capitalize(), match.group("number"))
+        raise InterfaceTypeError(f"Invalid interface '{s}'")

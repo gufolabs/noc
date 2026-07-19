@@ -23,10 +23,10 @@ class Script(BaseScript):
                 self.cli("vlan %d" % vlan_id)
                 self.cli("exit")
                 self.cli("interface vlan %d" % vlan_id)
-                self.cli("name %s" % name)
+                self.cli(f"name {name}")
                 self.cli("exit")
             for p in tagged_ports:
-                self.cli("interface ethernet %s" % p)
+                self.cli(f"interface ethernet {p}")
                 self.cli("switchport mode general")
                 self.cli("switchport general allowed vlan add %d" % vlan_id)
                 self.cli("exit")

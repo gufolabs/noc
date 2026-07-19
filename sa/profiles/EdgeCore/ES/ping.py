@@ -22,7 +22,7 @@ class Script(BaseScript):
     rx_count = re.compile(r"(?P<count>\d+) packets transmitted, (?P<success>\d+) packets received")
 
     def execute(self, address, count=None, source_address=None, size=None, df=None, vrf=None):
-        cmd = "ping %s" % address
+        cmd = f"ping {address}"
         if count:
             cmd += " count %d" % int(count)
         if size:

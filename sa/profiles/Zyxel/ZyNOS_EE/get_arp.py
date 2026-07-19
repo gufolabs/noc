@@ -31,13 +31,13 @@ class Script(BaseScript):
                 for mac, ip in self.snmp.join_tables(
                     "1.3.6.1.2.1.4.22.1.2", "1.3.6.1.2.1.4.22.1.3", cached=True
                 ):  # IP-MIB
-                    mac = ":".join(["%02x" % ord(c) for c in mac])
-                    ip = ["%02x" % ord(c) for c in ip]
+                    mac = ":".join([f"{ord(c):02x}" for c in mac])
+                    ip = [f"{ord(c):02x}" for c in ip]
                     mac_ip[mac] = ".".join(str(int(c, 16)) for c in ip)
                 for i, mac in self.snmp.join_tables(
                     "1.3.6.1.2.1.4.22.1.1", "1.3.6.1.2.1.4.22.1.2", cached=True
                 ):  # IP-MIB
-                    mac = ":".join(["%02x" % ord(c) for c in mac])
+                    mac = ":".join([f"{ord(c):02x}" for c in mac])
                     interface = self.snmp.get(
                         "1.3.6.1.2.1.2.2.1.1." + str(i), cached=True
                     )  # IF-MIB

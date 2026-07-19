@@ -76,7 +76,7 @@ class Script(BaseScript):
         self.logger.debug("Collecting CLI beef")
         self.start_tracking()
         for cmd in cmd_answers:
-            self.logger.debug("Collecting command: %s" % cmd)
+            self.logger.debug(f"Collecting command: {cmd}")
             # Issue command
             try:
                 self.cli(cmd)

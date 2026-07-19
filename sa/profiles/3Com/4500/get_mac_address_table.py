@@ -36,12 +36,12 @@ class Script(BaseScript):
             mac = self.profile.convert_mac(mac)
             mac = mac.replace(":", "")
             mac = mac[0:4] + "-" + mac[4:8] + "-" + mac[8:]
-            cmd += " %s" % mac
+            cmd += f" {mac}"
         if interface is not None:
             interface = interface.replace("Po ", "Bridge-Aggregation")
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
 
         # Fallback to CLI
         for match in self.rx_line.finditer(self.cli(cmd)):

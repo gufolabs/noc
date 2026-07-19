@@ -132,7 +132,7 @@ class Script(BaseScript):
                     iface["description"] = i["descr"]
                     sub["description"] = i["descr"]
                     break
-            s = self.cli("show interfaces switchport %s" % ifname)
+            s = self.cli(f"show interfaces switchport {ifname}")
             for match1 in self.rx_vlan.finditer(s):
                 vlan_id = match1.group("vlan_id")
                 if match1.group("membership") == "System":

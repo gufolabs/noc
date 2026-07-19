@@ -42,5 +42,5 @@ class Profile(BaseProfile):
         match = self.rx_ifname.match(s)
         if match:
             iface = s.split()
-            return "%s-%s" % (iface[1], iface[0])
+            return f"{iface[1]}-{iface[0]}"
         return s

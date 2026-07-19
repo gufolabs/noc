@@ -53,7 +53,7 @@ class Script(BaseScript):
                 local_num = match.group("port_num")
                 local_interface = f"{local_type}{local_num}"
 
-                c = self.cli("show lldp neighbor-info port %s %s" % (local_type, local_num))
+                c = self.cli(f"show lldp neighbor-info port {local_type} {local_num}")
                 for match1 in self.rx_remote.finditer(c):
                     chassis_id = match1.group("chassis_id")
 

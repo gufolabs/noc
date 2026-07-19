@@ -31,5 +31,5 @@ class Profile(BaseProfile):
     def convert_interface_name(self, s):
         match = self.rx_interface_name.match(s)
         if not match:
-            raise InterfaceTypeError("Invalid interface '%s'" % s)
-        return "%s%s" % (match.group("type")[:2], match.group("number"))
+            raise InterfaceTypeError(f"Invalid interface '{s}'")
+        return "{}{}".format(match.group("type")[:2], match.group("number"))

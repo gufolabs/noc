@@ -54,7 +54,7 @@ class Script(BaseScript):
             interface = loader.get_interface_by_check(c["name"])
             if interface.check != c["name"]:
                 raise ValueError(
-                    "Interface %s Not supported check: %s" % (str(interface), c["name"])
+                    "Interface {} Not supported check: {}".format(str(interface), c["name"])
                 )
             params = interface().get_check_params(c)
             result = script(**params)

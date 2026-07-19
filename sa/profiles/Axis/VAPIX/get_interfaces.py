@@ -40,7 +40,7 @@ class Script(BaseScript):
                 ip = c.get(f"root.Network.eth{i}.IPAddress")
                 mask = c.get(f"root.Network.eth{i}.SubnetMask")
                 if ip and ip != "0.0.0.0" and mask and mask != "0.0.0.0":
-                    ip_address = "%s/%s" % (ip, IPv4.netmask_to_len(mask))
+                    ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
                     sub["ipv4_addresses"] = [ip_address]
                     sub["enabled_afi"] += ["IPv4"]
                 ipv6 = c.get("root.Network.eth%d.IPv6.IPAddresses" % i)

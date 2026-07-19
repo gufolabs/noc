@@ -28,11 +28,11 @@ class Script(BaseScript):
         r = []
         cmd = "show mac address-table"
         if mac is not None:
-            cmd += "address %s" % mac
+            cmd += f"address {mac}"
         if interface is not None:
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
         re_find = self.rx_line
         if self.is_escom_l:
             re_find = self.rx_escom_l_line

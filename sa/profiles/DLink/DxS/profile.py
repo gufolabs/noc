@@ -145,7 +145,7 @@ class Profile(BaseProfile):
             if "/" not in name:
                 r += [name.replace(":", "/")]
         else:
-            r += ["1/%s" % name, "1:%s" % name]
+            r += [f"1/{name}", f"1:{name}"]
         return r
 
     @classmethod
@@ -180,9 +180,9 @@ class Profile(BaseProfile):
                     match.group("re_platform").startswith(p) for p in platforms_with_stacked_ports
                 )
             ):
-                return "%s:%s" % (match.group("re_slot"), match.group("re_port"))
+                return "{}:{}".format(match.group("re_slot"), match.group("re_port"))
             if match.group("re_port"):
-                return "%s" % match.group("re_port")
+                return "{}".format(match.group("re_port"))
         elif s.startswith("Slot0/"):
             return s[6:]
         else:
@@ -240,8 +240,8 @@ class Profile(BaseProfile):
                     self.cluster_member = p[8:].strip()
         # Switch to cluster member, if necessary
         if self.cluster_member:
-            script.logger.debug("Switching to SIM member %s" % script.cluster_member)
-            script.cli("reconfig member_id %s" % script.cluster_member)
+            script.logger.debug(f"Switching to SIM member {script.cluster_member}")
+            script.cli(f"reconfig member_id {script.cluster_member}")
 
     def shutdown_session(self, script):
         if self.cluster_member:
@@ -308,7 +308,7 @@ class Profile(BaseProfile):
                 "trap_state": match.group("trap_state"),
                 "desc": descr,
             }
-            key = "%s-%s" % (port, media_type)
+            key = f"{port}-{media_type}"
             return key, obj, s[match.end() :]
         return None
 
@@ -328,7 +328,7 @@ class Profile(BaseProfile):
         ) and not script.match_version(DES3200, platform="DES-3200-28F"):
             objects = []
             if interface is not None:
-                c = script.cli("show ports %s description" % interface)
+                c = script.cli(f"show ports {interface} description")
             else:
                 c = script.cli("show ports description")
             for match in self.rx_port.finditer(c):
@@ -382,7 +382,7 @@ class Profile(BaseProfile):
             try:
                 if interface is not None:
                     objects = script.cli(
-                        "show ports %s description" % interface,
+                        f"show ports {interface} description",
                         obj_parser=self.parse_interface,
                         cmd_next="n",
                         cmd_stop="q",
@@ -637,9 +637,9 @@ def get_platform(platform, hw_revision):
         or platform.startswith("DGS-3620-")
     ):
         if hw_revision is not None:
-            if platform.endswith("/%s" % hw_revision):
+            if platform.endswith(f"/{hw_revision}"):
                 return platform
         elif platform.startswith("DES-1210-"):
             hw_revision = "A1"
-        return "%s/%s" % (platform, hw_revision)
+        return f"{platform}/{hw_revision}"
     return platform

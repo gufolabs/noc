@@ -19,7 +19,7 @@ class Script(BaseScript):
         r = []
         cmd = "show mac"
         if interface is not None:
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
         else:
             cmd += " all"
         t = parse_table(self.cli(cmd))

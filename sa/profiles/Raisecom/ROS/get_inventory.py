@@ -42,9 +42,7 @@ class Script(BaseScript):
             if iftype not in ["fastethernet", "gigaethernet"]:
                 continue
             ifunit = match.group("ifunit")
-            port = self.cli(
-                "show transceiver information %s %s " % (iftype, ifunit), ignore_errors=True
-            )
+            port = self.cli(f"show transceiver information {iftype} {ifunit} ", ignore_errors=True)
             if port.strip() == "":
                 continue
             match = self.rx_portnum.search(ifunit)

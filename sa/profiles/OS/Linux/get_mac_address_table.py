@@ -59,7 +59,7 @@ class Script(BaseScript):
             mac = mac.lower()
         if vlan is not None:
             bridge = "br" + str(vlan)
-            cmd = self.cli("brctl showmacs %s" % bridge)
+            cmd = self.cli(f"brctl showmacs {bridge}")
             for match in self.rx_showmacs.finditer(cmd):
                 if match.group("type") == "0.00":
                     typ = "S"
@@ -85,7 +85,7 @@ class Script(BaseScript):
 
         for vlan_id in vlans:
             bridge = "br" + vlan_id
-            cmd = self.cli("brctl showmacs %s" % bridge)
+            cmd = self.cli(f"brctl showmacs {bridge}")
             for match in self.rx_showmacs.finditer(cmd):
                 if match.group("type") == "0.00":
                     typ = "S"

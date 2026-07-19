@@ -96,10 +96,10 @@ class Script(BaseScript):
             image_id = 0
             for oid, v in self.snmp.getnext(info_entry, max_repetitions=10):
                 # AGENT-MIB::swMultiImageInfoID
-                if oid.startswith("%s.1" % info_entry):
+                if oid.startswith(f"{info_entry}.1"):
                     image_id = int(v)
                 # AGENT-MIB::swMultiImageVersion
-                if oid.startswith("%s.2.%s" % (info_entry, image_id)):
+                if oid.startswith(f"{info_entry}.2.{image_id}"):
                     version = v
                     if version.startswith("Build "):
                         version = version[6:]

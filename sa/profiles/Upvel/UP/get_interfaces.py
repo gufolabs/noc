@@ -138,7 +138,7 @@ class Script(BaseScript):
                 "enabled_afi": ["BRIDGE"],
                 "tagged_vlans": [],
             }
-            s = self.cli("show interface %s switchport" % ifname)
+            s = self.cli(f"show interface {ifname} switchport")
             match1 = self.rx_switchport.search(s)
             if match1.group("mode") == "access":
                 sub["untagged_vlan"] = int(match1.group("access_vlan"))
@@ -158,8 +158,8 @@ class Script(BaseScript):
         v = self.cli("show ip interface brief")
         for match in self.rx_vlan.finditer(v):
             vlan_id = match.group("vlan")
-            ll = self.cli("show interface vlan %s" % vlan_id)
-            ifname = "VLAN%s" % vlan_id
+            ll = self.cli(f"show interface vlan {vlan_id}")
+            ifname = f"VLAN{vlan_id}"
             match1 = self.rx_link.search(ll)
             iface = {
                 "name": ifname,

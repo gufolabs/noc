@@ -30,7 +30,7 @@ class Script(BaseScript):
         r = []
         cmd = "show port"
         if interface:
-            cmd += " %s" % interface
+            cmd += f" {interface}"
         for match in self.rx_port.finditer(self.cli(cmd)):
             r += [
                 {

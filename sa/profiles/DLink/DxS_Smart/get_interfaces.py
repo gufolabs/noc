@@ -108,7 +108,7 @@ class Script(BaseScript):
             }
             ip_address = match.group("ip_address")
             ip_subnet = match.group("ip_subnet")
-            ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+            ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
             i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
             ch_id = self.scripts.get_chassis_id()
             i["mac"] = ch_id[0]["first_chassis_mac"]

@@ -40,7 +40,7 @@ class Script(BaseScript):
         t = parse_table(v, allow_wrap=True)
         for i in t:
             interface = i[0]
-            c = self.cli("show lldp remote-device detail %s" % interface)
+            c = self.cli(f"show lldp remote-device detail {interface}")
             match = self.rx_remote.search(c)
             if match:
                 n = {}

@@ -19,9 +19,9 @@ class Script(BaseScript):
         cmd = "/interface ethernet switch host print detail without-paging where dynamic"
         out = []
         if mac is not None:
-            cmd += " mac-address=%s" % mac
+            cmd += f" mac-address={mac}"
         if interface is not None:
-            cmd += " ports=%s" % interface
+            cmd += f" ports={interface}"
         if vlan is not None:
             cmd += " vlan-id=%d" % vlan
         try:

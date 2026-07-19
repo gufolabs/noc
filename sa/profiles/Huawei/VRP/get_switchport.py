@@ -152,7 +152,7 @@ class Script(BaseScript):
             try:
                 v = self.cli("display port vlan")
             except self.CLISyntaxError:
-                v = "%s\n%s" % (self.cli("display port trunk"), self.cli("display port hybrid"))
+                v = "{}\n{}".format(self.cli("display port trunk"), self.cli("display port hybrid"))
 
         for match in rx_line.finditer(v):
             # port = {}

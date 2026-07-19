@@ -109,46 +109,46 @@ class Profile(BaseProfile):
         if il.startswith("bvi"):
             return "BVI" + interface[3:]
         if il.startswith("e1"):
-            return "E1 %s" % interface[2:].strip()
+            return f"E1 {interface[2:].strip()}"
         if il.startswith("t1"):
-            return "T1 %s" % interface[2:].strip()
+            return f"T1 {interface[2:].strip()}"
         if il.startswith("fxo null"):
-            return "FXO %s" % interface[8:].strip()
+            return f"FXO {interface[8:].strip()}"
         if il.startswith("fxs"):
-            return "FXS %s" % interface[3:].strip()
+            return f"FXS {interface[3:].strip()}"
         if il.startswith("foreign exchange station"):
-            return "FXS %s" % interface[24:].strip()
+            return f"FXS {interface[24:].strip()}"
         if il.startswith("receive and transmit"):
-            return "E&M %s" % interface[21:].strip()
+            return f"E&M {interface[21:].strip()}"
         if il.startswith("cas channel"):
-            return "ds0-group %s" % interface[11:].strip()
+            return f"ds0-group {interface[11:].strip()}"
         if il.startswith("voice encapsulation (pots)"):
-            return "Dial-peer voice %s" % interface[33:].strip()
+            return f"Dial-peer voice {interface[33:].strip()}"
         if il.startswith("voice over ip peer"):
-            return "Dial-peer voip %s" % interface[20:].strip()
+            return f"Dial-peer voip {interface[20:].strip()}"
         if il.startswith("efxs"):
-            return "EFXS %s" % interface[4:].strip()
+            return f"EFXS {interface[4:].strip()}"
         if il.startswith("cpp"):
             return "CPP"
         if il.startswith("srp"):
-            return "SRP %s" % interface[3:].strip()
+            return f"SRP {interface[3:].strip()}"
         if il.startswith("twe"):
             # TwentyFiveGigE, 3-chars suffix
             name = self.convert_interface_name_cisco(interface)
-            return "Twe %s" % name[2:].strip()
+            return f"Twe {name[2:].strip()}"
         if il.startswith("cable"):
             match = self.rx_cable_if.search(interface)
             if match:
-                return "Ca %s/%s" % (match.group("pr_if"), match.group("sub_if"))
+                return "Ca {}/{}".format(match.group("pr_if"), match.group("sub_if"))
         # StackSub, Stack
         if il.startswith("stack"):
             return il
         if il.endswith(" type tunnel"):
             il = il[:-12]
         if il.startswith("virtual-template"):
-            return "Vi %s" % il[16:].strip()
+            return f"Vi {il[16:].strip()}"
         if il.startswith("service-engine"):
-            return "Service-Engine %s" % il[14:].strip()
+            return f"Service-Engine {il[14:].strip()}"
         # Serial0/1/0:15-Signaling -> Serial0/1/0:15
         # GigabitEthernet0/1.100-802.1Q vLAN subif -> GigabitEthernet0/1.100
         if (il.startswith("se") or il.endswith("vlan subif")) and "-" in interface:
@@ -166,9 +166,9 @@ class Profile(BaseProfile):
         """
         Generate prefix list _name_. pl is a list of (prefix, min_len, max_len)
         """
-        me = "ip prefix-list %s permit %%s" % name
-        mne = "ip prefix-list %s permit %%s le %%d" % name
-        r = ["no ip prefix-list %s" % name]
+        me = f"ip prefix-list {name} permit %s"
+        mne = f"ip prefix-list {name} permit %s le %d"
+        r = [f"no ip prefix-list {name}"]
         for prefix, min_len, max_len in pl:
             if min_len == max_len:
                 r += [me % prefix]
@@ -191,8 +191,8 @@ class Profile(BaseProfile):
                     cluster_member = p[8:].strip()
             # Switch to cluster member, if necessary
             if cluster_member:
-                script.logger.debug("Switching to cluster member '%s'" % cluster_member)
-                script.cli("rc %s" % cluster_member)
+                script.logger.debug(f"Switching to cluster member '{cluster_member}'")
+                script.cli(f"rc {cluster_member}")
 
     INTERFACE_TYPES = {
         "As": "physical",  # Async

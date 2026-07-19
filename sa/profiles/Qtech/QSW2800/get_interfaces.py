@@ -62,7 +62,7 @@ class Script(BaseScript):
 
     def get_interface_oam(self, ifname):
         try:
-            v = self.cli("show ethernet-oam local interface %s" % ifname)
+            v = self.cli(f"show ethernet-oam local interface {ifname}")
             match = self.rx_oam.search(v)
             if not match:
                 return True

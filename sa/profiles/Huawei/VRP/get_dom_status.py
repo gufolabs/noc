@@ -58,7 +58,7 @@ class Script(BaseScript):
         """
         cmd = "display interface phy-option"
         if interface is not None:
-            cmd += " %s" % interface
+            cmd += f" {interface}"
         try:
             c = self.cli(cmd)
         except self.CLISyntaxError:
@@ -121,7 +121,7 @@ class Script(BaseScript):
         """
         cmd = "dis transceiver verbose"
         if interface is not None:
-            cmd = "dis transceiver interface %s verbose" % interface
+            cmd = f"dis transceiver interface {interface} verbose"
         try:
             c = self.cli(cmd)
         except self.CLISyntaxError:
@@ -163,7 +163,7 @@ class Script(BaseScript):
             return self.execute_ar(interface=interface)
         cmd = "display transceiver diagnosis interface"
         if interface is not None:
-            cmd += " %s" % interface
+            cmd += f" {interface}"
         try:
             c = self.cli(cmd)
         except self.CLISyntaxError:

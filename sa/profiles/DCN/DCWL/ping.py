@@ -34,7 +34,7 @@ class Script(BaseScript):
         if size:
             cmd += " -s %d" % int(size)
         if source_address:
-            cmd += " -I %s" % source_address
+            cmd += f" -I {source_address}"
         result = None
         try:
             ping = self.cli(cmd, ignore_errors=True)

@@ -105,7 +105,7 @@ class Profile(BaseProfile):
         if match:
             return "Ethernet1/%d" % int(match.group("number"))
         if self.rx_split_ifname.match(s):
-            return "Ethernet%s" % self.rx_split_ifname.match(s).group(1)
+            return f"Ethernet{self.rx_split_ifname.match(s).group(1)}"
         return s
 
     _IF_TYPES = {

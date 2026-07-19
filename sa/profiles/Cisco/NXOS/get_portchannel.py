@@ -33,7 +33,7 @@ class Script(BaseScript):
                 pc = pc[2:]
                 v = self.cli(f"show interface port-channel {pc} | i Member_[0-9]+")
                 out_if = {
-                    "interface": "Po %s" % pc,
+                    "interface": f"Po {pc}",
                     "members": [],
                     "type": "S",  # <!> TODO: port-channel type detection
                 }
@@ -46,16 +46,14 @@ class Script(BaseScript):
         for ll in s.splitlines():
             pc, rest = ll.split(" ", 1)
             pc = pc[2:]
-            v = self.cli(
-                'show interface port-channel %s | i "Members in this channel"' % pc
-            ).strip()
+            v = self.cli(f'show interface port-channel {pc} | i "Members in this channel"').strip()
             if not v:
                 continue
             if v.startswith("Members in this channel"):
                 x, y = v.split(":", 1)
                 r += [
                     {
-                        "interface": "Po %s" % pc,
+                        "interface": f"Po {pc}",
                         "members": [m.strip() for m in y.strip().split(",")],
                         "type": "L",  # <!> TODO: port-channel type detection
                     }
@@ -63,7 +61,7 @@ class Script(BaseScript):
             else:
                 r += [
                     {
-                        "interface": "Po %s" % pc,
+                        "interface": f"Po {pc}",
                         "members": [],
                         "type": "L",  # <!> TODO: port-channel type detection
                     }

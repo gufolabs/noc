@@ -30,16 +30,16 @@ class Script(BaseScript):
         # Fallback to CLI
         cmd = "show fdb"
         if mac is not None:
-            cmd += " mac_address %s" % mac
+            cmd += f" mac_address {mac}"
         if interface is not None:
-            cmd += " port %s" % interface
+            cmd += f" port {interface}"
         if vlan is not None:
             if self.match_version(DGS3100, version__gte="3.60.30"):
                 cmd += " vlanid %d" % vlan
             else:
                 for v in self.scripts.get_vlans():
                     if v["vlan_id"] == vlan:
-                        cmd += " vlan %s" % v["name"]
+                        cmd += " vlan {}".format(v["name"])
                         break
         r = []
         for match in self.rx_line.finditer(self.cli(cmd)):

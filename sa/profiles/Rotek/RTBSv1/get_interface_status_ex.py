@@ -96,7 +96,7 @@ class Script(BaseScript):
             ifindex = int(oid.split(".")[-1])
             for i in ss.items():
                 if int(i[0]) == ifindex:
-                    v = "%s.%s" % (v, i[1])
+                    v = f"{v}.{i[1]}"
                     r[ifindex] = {"interface": v}
         # Apply ifAdminStatus
         self.apply_table(r, "IF-MIB::ifAdminStatus", "admin_status", lambda x: x == 1)

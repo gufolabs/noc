@@ -36,11 +36,11 @@ class Script(BaseScript):
         # Switch ports
         cmd = "show mac"
         if vlan is not None:
-            cmd += " include vlan %s" % vlan
+            cmd += f" include vlan {vlan}"
         elif interface is not None:
-            cmd += " include interface %s" % interface
+            cmd += f" include interface {interface}"
         elif mac is not None:
-            cmd += " include mac %s" % self.profile.convert_mac(mac)
+            cmd += f" include mac {self.profile.convert_mac(mac)}"
         with self.profile.switch(self):
             t = parse_table(self.cli(cmd))
             for i in t:
@@ -56,7 +56,7 @@ class Script(BaseScript):
         # GPON ports
         cmd = "show mac interface gpon-port "
         if interface is not None:
-            cmd += " %s" % interface
+            cmd += f" {interface}"
         else:
             cmd += " 0-7"
         for match in self.rx_gpon.finditer(self.cli(cmd)):

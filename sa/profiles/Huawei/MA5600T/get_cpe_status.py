@@ -69,7 +69,7 @@ class Script(BaseScript):
                     tables_data += self.profile.parse_table1(body, head)
                 for t in tables_data:
                     if "ONT-ID" in t:
-                        ont_id = "%s/%s" % (t["F/S/P"][0].replace(" ", ""), t["ONT-ID"][0])
+                        ont_id = "{}/{}".format(t["F/S/P"][0].replace(" ", ""), t["ONT-ID"][0])
                         # if ont_id in r:
                         #    r[ont_id]["description"] = t["Description"][0]
                         continue
@@ -83,13 +83,13 @@ class Script(BaseScript):
                         #                       ID                     flag        state    state    state    side
                         #  -----------------------------------------------------------------------------
                         #
-                        self.logger.warning("Shift header row. %s" % "\n".join(header))
+                        self.logger.warning("Shift header row. {}".format("\n".join(header)))
                         ont_id, serial = t["ONT"][0].split()
                         status = self.status_map[t["Run ID"][0]]
                     # else:
                     #    self.logger.warning("Unknown ID")
                     #    continue
-                    ont_id = "%s/%s" % (t["F/S/P"][0].replace(" ", ""), ont_id)
+                    ont_id = "{}/{}".format(t["F/S/P"][0].replace(" ", ""), ont_id)
                     r[ont_id] = {
                         "interface": t["F/S/P"][0].replace(" ", ""),
                         "oper_status": status,
@@ -110,7 +110,7 @@ class Script(BaseScript):
             display_hints={mib["HUAWEI-XPON-MIB::hwGponDeviceOntSn"]: render_bin},
         ):
             ifindex, ont_id = ont_index.split(".")
-            ont_id = "%s/%s" % (names[int(ifindex)], ont_id)
+            ont_id = f"{names[int(ifindex)]}/{ont_id}"
             r[ont_index] = {
                 "interface": names[int(ifindex)],
                 "oper_status": False,

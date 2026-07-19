@@ -59,7 +59,7 @@ class VRPNormalizer(BaseNormalizer):
 
     @match("aaa", "local-user", ANY, "privilege", "level", ANY)
     def normalize_username_access_level(self, tokens):
-        yield self.make_user_class(username=tokens[2], class_name="level-%s" % tokens[5])
+        yield self.make_user_class(username=tokens[2], class_name=f"level-{tokens[5]}")
 
     @match("aaa", "local-user", ANY, "password", REST)
     def normalize_username_password(self, tokens):
@@ -222,7 +222,7 @@ class VRPNormalizer(BaseNormalizer):
 
     @match("interface", ANY, "eth-trunk", ANY)
     def normalize_interface_lag_member(self, tokens):
-        lag_name = "Eth-Trunk%s" % tokens[3]
+        lag_name = f"Eth-Trunk{tokens[3]}"
         yield self.make_interface_lag_members(
             member_interface_name=self.interface_name(tokens[1]), interface=lag_name
         )
@@ -271,13 +271,13 @@ class VRPNormalizer(BaseNormalizer):
     # Interfaces
     @match("interface", "vlan", ANY)
     def normalize_interface_vlan(self, tokens):
-        if_name = self.interface_name("Vlanif%s " % tokens[2])
+        if_name = self.interface_name(f"Vlanif{tokens[2]} ")
         yield self.make_unit_description(interface=if_name, unit=if_name, description="")
 
     @match("interface", "vlan", ANY, "ip", "address", ANY, ANY, "sub")
     @match("interface", "vlan", ANY, "ip", "address", ANY, ANY)
     def normalize_vlan_ip(self, tokens):
-        if_name = self.interface_name("Vlanif%s " % tokens[2])
+        if_name = self.interface_name(f"Vlanif{tokens[2]} ")
         yield self.make_unit_inet_address(
             interface=if_name, unit=if_name, address=self.to_prefix(tokens[5], tokens[6])
         )

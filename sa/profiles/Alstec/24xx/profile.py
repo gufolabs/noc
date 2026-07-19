@@ -96,5 +96,5 @@ class Profile(BaseProfile):
         'ALS-24110LVT'
         """
         if self.rx_bad_platform.match(name):
-            name = "%s-%s" % self.rx_bad_platform.match(name).groups()
+            name = "{}-{}".format(*self.rx_bad_platform.match(name).groups())
         return name

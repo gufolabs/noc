@@ -90,7 +90,7 @@ class Script(BaseScript):
                     ip = line[2]
                     continue
                 if line[0] == "---" and ip != "":
-                    ip_address = "%s/%s" % (ip, IPv4.netmask_to_len(line[2]))
+                    ip_address = f"{ip}/{IPv4.netmask_to_len(line[2])}"
                     mtu = line[3]
                     vlan_id = vlan.replace("vlan", "")
                     i = {

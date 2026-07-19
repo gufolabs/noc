@@ -210,16 +210,13 @@ class Script(BaseScript):
                 }
                 if ift == "SVI":
                     i["subinterfaces"][0].update({"vlan_ids": [untagged[ifname]]})
-                    ipa = self.cli("show run int %s | inc ip addr" % ifname)
+                    ipa = self.cli(f"show run int {ifname} | inc ip addr")
                     ipa = ipa.strip()
                     if len(ipa) > 1:
                         i["subinterfaces"][0].update({"enabled_afi": ["IPv4"]})
                         self.logger.debug("ip.split len:" + str(len(ipa.split())))
                         if len(ipa.split()) > 3:
-                            ip_address = "%s/%s" % (
-                                ipa.split()[2],
-                                IPv4.netmask_to_len(ipa.split()[3]),
-                            )
+                            ip_address = f"{ipa.split()[2]}/{IPv4.netmask_to_len(ipa.split()[3])}"
                         else:
                             ip_address = ipa.split()[2]
                         i["subinterfaces"][0].update({"ipv4_addresses": [ip_address]})

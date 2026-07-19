@@ -37,7 +37,7 @@ class Script(BaseScript):
         t = parse_table(v, allow_wrap=True)
         for i in t:
             local_if = i[0]
-            v = self.cli("show lldp neighbors %s" % local_if)
+            v = self.cli(f"show lldp neighbors {local_if}")
             match = self.rx_neighbor.search(v)
             remote_chassis_id = match.group("remote_chassis_id")
             if is_ipv4(remote_chassis_id) or is_ipv6(remote_chassis_id):

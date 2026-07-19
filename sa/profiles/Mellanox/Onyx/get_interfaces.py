@@ -140,7 +140,7 @@ class Script(BaseScript):
                         iface["subinterfaces"][0]["enabled_afi"] = ["IPv4"]
                         ip = match.group("ip").strip()
                         mask = match.group("mask")
-                        ip_address = "%s/%s" % (ip, IPv4.netmask_to_len(mask))
+                        ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
                         iface["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
                     if match.group("ipv6_enable") == "yes":
                         if "enabled_afi" in iface["subinterfaces"][0]:

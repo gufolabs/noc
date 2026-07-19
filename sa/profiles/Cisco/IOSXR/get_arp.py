@@ -28,9 +28,9 @@ class Script(BaseScript):
     def execute(self, vrf=None):
         if vrf:
             try:
-                s = self.cli("show arp vrf %s" % vrf)
+                s = self.cli(f"show arp vrf {vrf}")
             except self.CLISyntaxError:
-                s = self.cli("show arp table %s" % vrf)
+                s = self.cli(f"show arp table {vrf}")
         else:
             s = self.cli("show arp")
         r = {}  # ip -> (mac, interface)

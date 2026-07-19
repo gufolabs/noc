@@ -47,7 +47,7 @@ class Script(BaseScript):
                 diag = ""
                 for iface in self.scripts.get_interface_status():
                     diag = self.cli(
-                        "interface %s" % iface["interface"].replace("Ge ", "GigabitEthernet ")
+                        "interface {}".format(iface["interface"].replace("Ge ", "GigabitEthernet "))
                     )
                     diag = self.cli("virtual-cable-test")
                     match = self.rx_diag.search(diag)
@@ -59,7 +59,7 @@ class Script(BaseScript):
                             pairs.append(self.parce_pair(i, status, length))
                         r.append({"interface": iface["interface"], "pairs": pairs})
             else:
-                diag = self.cli("interface %s" % interface.replace("Ge ", "GigabitEthernet "))
+                diag = self.cli("interface {}".format(interface.replace("Ge ", "GigabitEthernet ")))
                 diag = self.cli("virtual-cable-test")
                 match = self.rx_diag.search(diag)
                 if match:

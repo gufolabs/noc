@@ -36,7 +36,7 @@ class Script(BaseScript):
                     "description": data["hostname"].encode("UTF8"),
                     "mac": data["mac"].encode("UTF8"),
                     "enabled_afi": ["IPv4"],
-                    "ipv4_addresses": ["%s/%s" % (ip, mask)],
+                    "ipv4_addresses": [f"{ip}/{mask}"],
                 }
             ],
         }

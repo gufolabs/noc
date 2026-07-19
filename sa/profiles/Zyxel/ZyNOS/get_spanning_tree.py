@@ -73,7 +73,7 @@ class Script(BaseScript):
             instances += [{"id": match.group("id"), "vlans": match.group("vlans").rstrip(",")}]
         # get instances' config and status
         for i in instances:
-            cmd = self.cli("show mstp instance %s" % i["id"])
+            cmd = self.cli("show mstp instance {}".format(i["id"]))
             # get bridge id and priority
             match = self.rx_bridge.search(cmd)
             if match:

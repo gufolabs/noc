@@ -23,13 +23,13 @@ class Script(BaseScript):
     )
 
     def execute(self, address, count=None, source_address=None, size=None, df=None, vrf=None):
-        cmd = "ping %s" % address
+        cmd = f"ping {address}"
         if count:
             cmd += " repaat %d" % int(count)
         if size:
             cmd += " size %d" % int(size)
         if source_address:
-            cmd += " source %s" % source_address
+            cmd += f" source {source_address}"
         v = self.cli(cmd)
         match = self.rx_success.search(v)
         if match:

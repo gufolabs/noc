@@ -42,7 +42,7 @@ class Script(BaseScript):
 
         # Fallback to CLI
         if interface:
-            cmd = "show interface brief ethernet %s" % interface[1:]
+            cmd = f"show interface brief ethernet {interface[1:]}"
         else:
             cmd = "show interface brief"
         try:
@@ -53,7 +53,7 @@ class Script(BaseScript):
                     r.append({"interface": iface, "status": match.group("status") == "up"})
         except self.CLISyntaxError:
             if interface:
-                cmd = "show interface ethernet %s status" % interface
+                cmd = f"show interface ethernet {interface} status"
             else:
                 cmd = "show interface ethernet status"
             c = self.cli(cmd)

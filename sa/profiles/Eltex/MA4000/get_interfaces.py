@@ -93,7 +93,7 @@ class Script(BaseScript):
                 interfaces += [iface]
         c = self.cli("show management")
         match = self.rx_mgmt.search(c)
-        ip_address = "%s/%s" % (match.group("ip"), IPv4.netmask_to_len(match.group("mask")))
+        ip_address = "{}/{}".format(match.group("ip"), IPv4.netmask_to_len(match.group("mask")))
         iface = {
             "name": "management",
             "type": "SVI",
@@ -113,7 +113,7 @@ class Script(BaseScript):
         interfaces += [iface]
         portchannels = self.scripts.get_portchannel()
         for pc in portchannels:
-            c = self.cli("show interface %s vlans" % pc["interface"])
+            c = self.cli("show interface {} vlans".format(pc["interface"]))
             t = parse_table(c, allow_wrap=True, footer="N/A - interface doesn't exist")
             for i in t:
                 iface = self.create_iface(i, "port-channel")

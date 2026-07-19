@@ -26,18 +26,18 @@ class Script(BaseScript):
                     cpename = v[1]
                     cpeid = v[0][len("1.3.6.1.4.1.25053.1.2.2.4.1.1.1.1.5") + 1 :]
                     # cpename = self.snmp.get("1.3.6.1.4.1.25053.1.2.2.4.1.1.1.1.5." + cpeid)
-                    s = str(self.snmp.get("1.3.6.1.4.1.25053.1.2.2.4.1.1.1.1.2.%s" % cpeid))
+                    s = str(self.snmp.get(f"1.3.6.1.4.1.25053.1.2.2.4.1.1.1.1.2.{cpeid}"))
                     mac = MACAddressParameter().clean(s)  # convert mac
                     # print "%s\n" % mac
                     key = ".".join(str(int(x, 16)) for x in mac.split(":"))  # convert mac - > bytes
                     # print "%s\n" % key
-                    status = self.snmp.get("1.3.6.1.4.1.25053.1.2.2.1.1.2.1.1.3.6.%s" % key)
-                    ip = self.snmp.get("1.3.6.1.4.1.25053.1.2.2.1.1.2.1.1.10.6.%s" % key)
-                    location = self.snmp.get("1.3.6.1.4.1.25053.1.2.2.4.1.1.1.1.7.%s" % cpeid)
-                    description = self.snmp.get("1.3.6.1.4.1.25053.1.2.2.1.1.2.1.1.2.6.%s" % key)
-                    sn = self.snmp.get("1.3.6.1.4.1.25053.1.2.2.1.1.2.1.1.5.6.%s" % key)
-                    model = self.snmp.get("1.3.6.1.4.1.25053.1.2.2.1.1.2.1.1.4.6.%s" % key)
-                    version = self.snmp.get("1.3.6.1.4.1.25053.1.2.2.1.1.2.1.1.7.6.%s" % key)
+                    status = self.snmp.get(f"1.3.6.1.4.1.25053.1.2.2.1.1.2.1.1.3.6.{key}")
+                    ip = self.snmp.get(f"1.3.6.1.4.1.25053.1.2.2.1.1.2.1.1.10.6.{key}")
+                    location = self.snmp.get(f"1.3.6.1.4.1.25053.1.2.2.4.1.1.1.1.7.{cpeid}")
+                    description = self.snmp.get(f"1.3.6.1.4.1.25053.1.2.2.1.1.2.1.1.2.6.{key}")
+                    sn = self.snmp.get(f"1.3.6.1.4.1.25053.1.2.2.1.1.2.1.1.5.6.{key}")
+                    model = self.snmp.get(f"1.3.6.1.4.1.25053.1.2.2.1.1.2.1.1.4.6.{key}")
+                    version = self.snmp.get(f"1.3.6.1.4.1.25053.1.2.2.1.1.2.1.1.7.6.{key}")
                     r.append(
                         {
                             "vendor": "Ruckus",

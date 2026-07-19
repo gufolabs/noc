@@ -98,7 +98,7 @@ class Script(BaseScript):
                     if vlan != "none":
                         sub["vlan_ids"] = [vlan]
                     else:
-                        self.logger.error("Not configured VlanId on subinterfaces %s" % ifname)
+                        self.logger.error(f"Not configured VlanId on subinterfaces {ifname}")
                 match = self.rx_snmp_int.search(s)
                 if match:
                     ifindex = match.group("ifindex")

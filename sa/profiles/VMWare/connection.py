@@ -117,7 +117,7 @@ def get_connection(alias=DEFAULT_CONNECTION_NAME, reconnect=False):
         if alias == DEFAULT_CONNECTION_NAME:
             msg = "You have not defined a default connection"
         else:
-            msg = 'Connection with alias "%s" has not been defined' % alias
+            msg = f'Connection with alias "{alias}" has not been defined'
         raise ConnectionFailure(msg)
 
     conn_settings = _vim_connection_settings[alias].copy()

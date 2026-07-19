@@ -27,11 +27,11 @@ class Script(BaseScript):
         r = []
         cmd = "display mac-address"
         if mac is not None:
-            cmd += " %s" % mac
+            cmd += f" {mac}"
         if interface is not None:
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
         for match in self.rx_line.finditer(self.cli(cmd)):
             iface = match.group("interfaces")
             # if iface == '0':

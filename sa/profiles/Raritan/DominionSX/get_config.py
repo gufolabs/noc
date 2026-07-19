@@ -24,8 +24,7 @@ class Script(BaseScript):
             p = urlparse(ftp.get_url(self.access_profile.address))
             path, file = os.path.split(p.path)
             self.cli(
-                "backup ip %s login anonymous password anonymous path %s file %s"
-                % (p.netloc, path, file)
+                f"backup ip {p.netloc} login anonymous password anonymous path {path} file {file}"
             )
             config = ftp.get_data()
         self.cli("top")

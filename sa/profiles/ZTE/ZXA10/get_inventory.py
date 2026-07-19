@@ -161,7 +161,7 @@ class Script(BaseScript):
             r[0]["serial"] = serial
         ports = self.profile.fill_ports(self)
         for p in ports:
-            v = self.cli("show card shelfno %s slotno %s" % (p["shelf"], p["slot"]))
+            v = self.cli("show card shelfno {} slotno {}".format(p["shelf"], p["slot"]))
             match = self.rx_card.search(v)
             if not match:
                 match = self.rx_card2.search(v)
@@ -185,18 +185,18 @@ class Script(BaseScript):
             if prefix == "":
                 continue
             for i in range(int(p["port"])):
-                port_num = "%s/%s/%s" % (p["shelf"], p["slot"], str(i + 1))
-                ifname = "%s%s" % (prefix, port_num)
+                port_num = "{}/{}/{}".format(p["shelf"], p["slot"], str(i + 1))
+                ifname = f"{prefix}{port_num}"
                 try:
-                    v = self.cli("show interface optical-module-info %s" % ifname)
+                    v = self.cli(f"show interface optical-module-info {ifname}")
                 except self.CLISyntaxError:
                     # In some card we has both gei_ and xgei_ interfaces
                     if prefix == "gei_":
-                        ifname = "xgei_%s" % port_num
-                        v = self.cli("show interface optical-module-info %s" % ifname)
+                        ifname = f"xgei_{port_num}"
+                        v = self.cli(f"show interface optical-module-info {ifname}")
                     if prefix == "gei-":
-                        ifname = "xgei-%s" % port_num
-                        v = self.cli("show interface optical-module-info %s" % ifname)
+                        ifname = f"xgei-{port_num}"
+                        v = self.cli(f"show interface optical-module-info {ifname}")
                 match = self.rx_tran.search(v)
                 if not match or "N/A" in match.group("vendor") or match.group("pn").strip() == "":
                     continue

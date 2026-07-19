@@ -56,7 +56,7 @@ class Script(BaseScript):
         return r
 
     def get_bss_status(self, bss):
-        v = self.cli("get bss %s detail" % bss)
+        v = self.cli(f"get bss {bss} detail")
         value = self.profile.table_parser(v)
         if value.get("beacon-interface"):
             return {
@@ -84,7 +84,7 @@ class Script(BaseScript):
                 bss = self.get_bss_status(value["bss"])
                 if not bss:
                     continue
-                if_ssid = "%s.%s" % (ifname, ssid)
+                if_ssid = f"{ifname}.{ssid}"
                 r[ifname] = {
                     "interface": ifname,
                     "admin_status": bss["admin_status"],

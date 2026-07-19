@@ -34,7 +34,7 @@ class Script(BaseScript):
     def execute(self, interface=None, vlan=None, mac=None):
         cmd = "sh port mac-learning"
         if interface is not None:
-            cmd += " %s" % int(interface.replace("Port", ""))
+            cmd += " {}".format(int(interface.replace("Port", "")))
             macs = self.cli(cmd)
             r = []
             for l in macs.splitlines():
@@ -59,7 +59,7 @@ class Script(BaseScript):
                 continue
             cmd = "sh port mac-learning"
             port = i["interface"]
-            cmd += " %s" % int(port.replace("Port", ""))
+            cmd += " {}".format(int(port.replace("Port", "")))
             macs = self.cli(cmd)
             for l in macs.splitlines():
                 match = self.rx_macs.match(l)

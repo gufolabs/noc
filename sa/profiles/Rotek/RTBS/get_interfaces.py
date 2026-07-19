@@ -36,12 +36,12 @@ class Script(BaseScript):
         ss = {}
         # SNMP
         m = self.snmp.get("1.3.6.1.2.1.1.2.0")
-        for soid, sname in self.snmp.getnext("%s.3.5.1.2.1.1.4" % m):
+        for soid, sname in self.snmp.getnext(f"{m}.3.5.1.2.1.1.4"):
             sifindex = int(soid.split(".")[-1])
-            ieee_mode = self.snmp.get("%s.3.5.1.2.1.1.2.%s" % (m, sifindex))
-            freq = self.snmp.get("%s.3.5.1.2.1.1.7.%s" % (m, sifindex))
-            channel = self.snmp.get("%s.3.5.1.2.1.1.8.%s" % (m, sifindex))
-            channelbandwidth = self.snmp.get("%s.3.5.1.2.1.1.9.%s" % (m, sifindex))
+            ieee_mode = self.snmp.get(f"{m}.3.5.1.2.1.1.2.{sifindex}")
+            freq = self.snmp.get(f"{m}.3.5.1.2.1.1.7.{sifindex}")
+            channel = self.snmp.get(f"{m}.3.5.1.2.1.1.8.{sifindex}")
+            channelbandwidth = self.snmp.get(f"{m}.3.5.1.2.1.1.9.{sifindex}")
             ss[sifindex] = {
                 "ssid": sname,
                 "ieee_mode": ieee_mode,
@@ -60,7 +60,7 @@ class Script(BaseScript):
             if "peer" in name:
                 continue
             mac = self.snmp.get(mib["IF-MIB::ifPhysAddress", ifindex])
-            mtu = self.snmp.get("1.3.6.1.2.1.2.2.1.4.%s" % str(ifindex))
+            mtu = self.snmp.get(f"1.3.6.1.2.1.2.2.1.4.{ifindex!s}")
             astatus = self.snmp.get(mib["IF-MIB::ifAdminStatus", ifindex])
             if astatus == 1:
                 admin_status = True
@@ -94,22 +94,21 @@ class Script(BaseScript):
             interfaces += [iface]
             for i in ss.items():
                 if int(i[0]) == ifindex:
-                    a = self.cli("show interface %s ssid-broadcast" % name)
+                    a = self.cli(f"show interface {name} ssid-broadcast")
                     sb = a.split(":")[1].strip()
                     if sb == "enabled":
                         ssid_broadcast = "enable"
                     else:
                         ssid_broadcast = "disable"
-                    vname = "%s.%s" % (name, i[1]["ssid"])
+                    vname = "{}.{}".format(name, i[1]["ssid"])
                     iface = {
                         "type": "physical",
                         "name": vname,
                         "admin_status": admin_status,
                         "oper_status": oper_status,
                         "snmp_ifindex": ifindex,
-                        "description": "ssid_broadcast=%s, ieee_mode=%s, channel=%s,"
-                        "freq=%sGHz, channelbandwidth=%sMHz"
-                        % (
+                        "description": "ssid_broadcast={}, ieee_mode={}, channel={},"
+                        "freq={}GHz, channelbandwidth={}MHz".format(
                             ssid_broadcast,
                             i[1]["ieee_mode"],
                             i[1]["channel"],
@@ -142,16 +141,16 @@ class Script(BaseScript):
             match = self.rx_ra.match(ifaces.strip())
             if match:
                 ra = match.group("ra")
-                s = self.cli("show interface %s ssid" % ra)
-                v = self.cli("show interface %s vlan-to-ssid" % ra)
-                a = self.cli("show interface %s ssid-broadcast" % ra)
-                i = self.cli("show interface %s ieee-mode" % ra)
-                c = self.cli("show interface %s channel" % ra)
-                f = self.cli("show interface %s freq" % ra)
+                s = self.cli(f"show interface {ra} ssid")
+                v = self.cli(f"show interface {ra} vlan-to-ssid")
+                a = self.cli(f"show interface {ra} ssid-broadcast")
+                i = self.cli(f"show interface {ra} ieee-mode")
+                c = self.cli(f"show interface {ra} channel")
+                f = self.cli(f"show interface {ra} freq")
                 res = s.split(":")[1].strip().replace('"', "")
                 resv = v.split(":")[1].strip().replace('"', "")
                 ssid_broadcast = a.split(":")[1].strip()
-                ieee_mode = "IEEE 802.%s" % i.split(":")[1].strip()
+                ieee_mode = "IEEE 802.{}".format(i.split(":")[1].strip())
                 channel = c.split(":")[1].strip()
                 freq = f.split(":")[1].strip()
                 ssid[ra] = {
@@ -215,16 +214,17 @@ class Script(BaseScript):
                         o_status = False  # Do not touch !!!
                     iface = {
                         "type": "physical",
-                        "name": "%s.%s" % (ifname, ri["ssid"]),
+                        "name": "{}.{}".format(ifname, ri["ssid"]),
                         "admin_status": a_status,
                         "oper_status": o_status,
                         "mac": MAC(mac),
                         "snmp_ifindex": match.group("ifindex"),
-                        "description": "ssid_broadcast=%s, ieee_mode=%s, channel=%s, freq=%sGHz"
-                        % (ssid_broadcast, ri["ieee_mode"], ri["channel"], ri["freq"]),
+                        "description": "ssid_broadcast={}, ieee_mode={}, channel={}, freq={}GHz".format(
+                            ssid_broadcast, ri["ieee_mode"], ri["channel"], ri["freq"]
+                        ),
                         "subinterfaces": [
                             {
-                                "name": "%s.%s" % (ifname, ri["ssid"]),
+                                "name": "{}.{}".format(ifname, ri["ssid"]),
                                 "enabled_afi": ["BRIDGE"],
                                 "admin_status": a_status,
                                 "oper_status": o_status,

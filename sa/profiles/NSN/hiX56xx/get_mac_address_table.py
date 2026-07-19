@@ -33,11 +33,11 @@ class Script(BaseScript):
         reset = ""
         port_map = {}
         if mac is not None:
-            reset += " address %s" % self.profile.convert_mac(mac)
+            reset += f" address {self.profile.convert_mac(mac)}"
         if interface is not None:
-            reset += " port %s" % interface
+            reset += f" port {interface}"
         if vlan is not None:
-            reset += " vlan %s" % vlan
+            reset += f" vlan {vlan}"
         if not reset:
             ports = []
             # Do not use range s1-s10 due to high CPU utilization
@@ -46,12 +46,12 @@ class Script(BaseScript):
                 ifname = match.group("port")
                 ports += [ifname]
                 v1 = self.cli(
-                    "show port statistics interface %s" % ifname,
+                    f"show port statistics interface {ifname}",
                     cached=True,  # used in get_interfaces
                 )
                 match1 = self.rx_port_name.search(v1)
                 port_map[ifname] = match1.group("ifname")
-            reset = " port %s-%s" % (ports[0], ports[-1])
+            reset = f" port {ports[0]}-{ports[-1]}"
         cmd = cmd + reset
         try:
             macs = self.cli(cmd)

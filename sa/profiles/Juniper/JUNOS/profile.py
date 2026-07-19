@@ -107,7 +107,7 @@ class Profile(BaseProfile):
         rf = []
         for prefix, min_len, max_len in pl:
             if min_len == max_len:
-                rf += ["    route-filter %s exact;" % prefix]
+                rf += [f"    route-filter {prefix} exact;"]
             else:
                 rf += ["    route-filter %s upto /%d" % (prefix, max_len)]
         r = ["term pass {", "    from {"]

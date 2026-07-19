@@ -18,7 +18,7 @@ class Script(BaseScript):
     def execute(self, interface=None):
         cmd = "show arp"
         if interface is not None:
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
         v = self.cli(cmd)
         r = []
         t = parse_table(v)

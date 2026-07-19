@@ -60,7 +60,7 @@ class Script(BaseScript):
             for match in self.rx_route_iface.finditer(c):
                 ifname = match.group("ifname")
                 if ifname not in ifnames:
-                    v = "%s\n%s" % (v, self.cli("IFSHOW %s" % ifname))
+                    v = "{}\n{}".format(v, self.cli(f"IFSHOW {ifname}"))
                     ifnames += [ifname]
         interfaces = {}
         ifname = None
@@ -95,14 +95,14 @@ class Script(BaseScript):
                 # format inet 224.0.0.1  mask 240.0.0.0
                 address = l3.group("address")
                 netmask = str(IPv4.netmask_to_len(l3.group("netmask")))
-                l3_addresses += ["%s/%s" % (address, netmask)]
+                l3_addresses += [f"{address}/{netmask}"]
             for l3 in self.rx_iface_l3_address2.finditer(block):
                 # format      Internet address: 192.168.20.1
                 #      Broadcast address: 192.168.20.255
                 #      Netmask 0xffffff00 Subnetmask 0xffffff00
                 address = l3.group("address")
                 netmask = format(int(l3.group("netmask"), 16), "b").count("1")
-                l3_addresses += ["%s/%s" % (address, netmask)]
+                l3_addresses += [f"{address}/{netmask}"]
             if l3_addresses:
                 interfaces[ifname]["subinterfaces"][0]["ipv4_addresses"] = l3_addresses
                 interfaces[ifname]["subinterfaces"][0]["enabled_afi"] = ["IPv4"]
@@ -114,7 +114,7 @@ class Script(BaseScript):
             ifindex = int(oid.split(".")[-1])
             match = self.rx_snmp_iface.match(name)
             if match:
-                ifname = "%(shelf)s/%(slot)s/%(port)s/%(mani)s" % match.groupdict()
+                ifname = "{shelf}/{slot}/{port}/{mani}".format(**match.groupdict())
             else:
                 ifname = name
             if ifname not in interfaces:
@@ -126,7 +126,7 @@ class Script(BaseScript):
                     "ifindex": ifindex,
                     "subinterfaces": [
                         {
-                            "name": "%s.%s:%s" % (ifname, 0, 0),
+                            "name": f"{ifname}.{0}:{0}",
                             "type": "physical",
                             "admin_status": True,
                             "oper_status": True,
@@ -156,7 +156,7 @@ class Script(BaseScript):
             if int(port) == 0:
                 continue
             # detail = self.cli("ginv %s %s %s %s" % (shelf, slot, port, mani))
-            ifname = "%s/%s/%s/%s" % (shelf, slot, port, mani)
+            ifname = f"{shelf}/{slot}/{port}/{mani}"
             interfaces[ifname] = {
                 "name": ifname,
                 "type": "physical",
@@ -167,7 +167,7 @@ class Script(BaseScript):
             }
             interfaces[ifname]["subinterfaces"] += [
                 {
-                    "name": "%s.%s:%s" % (ifname, 0, 0),
+                    "name": f"{ifname}.{0}:{0}",
                     "type": "physical",
                     "admin_status": True,
                     "oper_status": True,

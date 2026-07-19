@@ -24,7 +24,7 @@ class Script(BaseScript):
     )
 
     def execute_cli(self, address, count=None, source_address=None, size=None, df=None):
-        cmd = "ping %s" % address
+        cmd = f"ping {address}"
         if self.is_iscom2624g:
             if count:
                 cmd += " c %d" % int(count)

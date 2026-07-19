@@ -33,7 +33,7 @@ class Script(BaseScript):
             else:
                 iface = interface
             break
-        cmd = "context ip router brctl showmacs %s" % iface
+        cmd = f"context ip router brctl showmacs {iface}"
         for match in self.rx_line.finditer(self.cli(cmd, cached=True)):
             r += [
                 {

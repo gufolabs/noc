@@ -114,9 +114,9 @@ class Script(BaseScript):
             for match1 in self.rx_sub.finditer(match.group("subs")):
                 ip = match1.group("ip")
                 mask = match1.group("mask")
-                ip_address = "%s/%s" % (ip, IPv4.netmask_to_len(mask))
+                ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
                 sub = {
-                    "name": "inband%s" % sub_number,
+                    "name": f"inband{sub_number}",
                     "enabled_afi": ["IPv4"],
                     "ipv4_addresses": [ip_address],
                     "vlan_ids": [match1.group("vlan_id")],
@@ -126,7 +126,7 @@ class Script(BaseScript):
             interfaces += [i]
             ip = match.group("ip")
             mask = match.group("mask")
-            ip_address = "%s/%s" % (ip, IPv4.netmask_to_len(mask))
+            ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
             i = {
                 "name": "outb",
                 "type": "SVI",
@@ -140,7 +140,7 @@ class Script(BaseScript):
             if match:
                 ip = match.group("ip")
                 mask = match.group("mask")
-                ip_address = "%s/%s" % (ip, IPv4.netmask_to_len(mask))
+                ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
                 i = {
                     "name": match.group("ifname"),
                     "type": "SVI",
@@ -161,7 +161,7 @@ class Script(BaseScript):
             match = self.rx_ip_host.search(v)
             ip = match.group("ip")
             mask = match.group("mask")
-            ip_address = "%s/%s" % (ip, IPv4.netmask_to_len(mask))
+            ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
             i = {
                 "name": "host",
                 "type": "management",
@@ -179,9 +179,9 @@ class Script(BaseScript):
             if ports == 0:
                 continue
             for port_n in range(int(ports)):
-                ifname = "%s/%s" % (slot, port_n + 1)
+                ifname = f"{slot}/{port_n + 1}"
                 try:
-                    v = self.cli("show interface %s" % ifname)
+                    v = self.cli(f"show interface {ifname}")
                 except self.CLISyntaxError:
                     continue
                 match = self.rx_ethernet.search(v)
@@ -216,11 +216,11 @@ class Script(BaseScript):
                         "hints": ["technology::dsl::adsl"],
                         "subinterfaces": [],
                     }
-                    v = self.cli("show atm pvc interface %s" % ifname)
+                    v = self.cli(f"show atm pvc interface {ifname}")
                     match1 = self.rx_pvc.search(v)
                     i["subinterfaces"] = [
                         {
-                            "name": "%s/%s" % (ifname, "1"),
+                            "name": "{}/{}".format(ifname, "1"),
                             "enabled_afi": ["BRIDGE", "ATM"],
                             "mtu": match.group("mtu"),
                             "vlan_ids": [match.group("pvid1")],
@@ -228,7 +228,7 @@ class Script(BaseScript):
                             "vci": match1.group("vci1"),
                         },
                         {
-                            "name": "%s/%s" % (ifname, "2"),
+                            "name": "{}/{}".format(ifname, "2"),
                             "enabled_afi": ["BRIDGE", "ATM"],
                             "mtu": match.group("mtu"),
                             "vlan_ids": [match.group("pvid2")],
@@ -236,7 +236,7 @@ class Script(BaseScript):
                             "vci": match1.group("vci2"),
                         },
                         {
-                            "name": "%s/%s" % (ifname, "3"),
+                            "name": "{}/{}".format(ifname, "3"),
                             "enabled_afi": ["BRIDGE", "ATM"],
                             "mtu": match.group("mtu"),
                             "vlan_ids": [match.group("pvid3")],
@@ -244,7 +244,7 @@ class Script(BaseScript):
                             "vci": match1.group("vci3"),
                         },
                         {
-                            "name": "%s/%s" % (ifname, "4"),
+                            "name": "{}/{}".format(ifname, "4"),
                             "enabled_afi": ["BRIDGE", "ATM"],
                             "mtu": match.group("mtu"),
                             "vlan_ids": [match.group("pvid4")],
@@ -252,7 +252,7 @@ class Script(BaseScript):
                             "vci": match1.group("vci4"),
                         },
                         {
-                            "name": "%s/%s" % (ifname, "5"),
+                            "name": "{}/{}".format(ifname, "5"),
                             "enabled_afi": ["BRIDGE", "ATM"],
                             "mtu": match.group("mtu"),
                             "vlan_ids": [match.group("pvid5")],
@@ -260,7 +260,7 @@ class Script(BaseScript):
                             "vci": match1.group("vci5"),
                         },
                         {
-                            "name": "%s/%s" % (ifname, "6"),
+                            "name": "{}/{}".format(ifname, "6"),
                             "enabled_afi": ["BRIDGE", "ATM"],
                             "mtu": match.group("mtu"),
                             "vlan_ids": [match.group("pvid6")],
@@ -268,7 +268,7 @@ class Script(BaseScript):
                             "vci": match1.group("vci6"),
                         },
                         {
-                            "name": "%s/%s" % (ifname, "7"),
+                            "name": "{}/{}".format(ifname, "7"),
                             "enabled_afi": ["BRIDGE", "ATM"],
                             "mtu": match.group("mtu"),
                             "vlan_ids": [match.group("pvid7")],
@@ -276,7 +276,7 @@ class Script(BaseScript):
                             "vci": match1.group("vci7"),
                         },
                         {
-                            "name": "%s/%s" % (ifname, "8"),
+                            "name": "{}/{}".format(ifname, "8"),
                             "enabled_afi": ["BRIDGE", "ATM"],
                             "mtu": match.group("mtu"),
                             "vlan_ids": [match.group("pvid8")],
@@ -309,7 +309,7 @@ class Script(BaseScript):
                             }
                         ],
                     }
-                    v = self.cli("show interface %s vlan-config" % ifname)
+                    v = self.cli(f"show interface {ifname} vlan-config")
                     match = self.rx_ether_vlan.search(v)
                     if match.group("tagged").strip():
                         i["subinterfaces"][0]["tagged_vlans"] = self.expand_rangelist(
@@ -335,10 +335,10 @@ class Script(BaseScript):
                         "hints": ["technology::dsl::adsl"],
                         "subinterfaces": [],
                     }
-                    v = self.cli("show atm vc %s" % ifname)
+                    v = self.cli(f"show atm vc {ifname}")
                     for match in self.rx_pvc_9806h.finditer(v):
                         sub = {
-                            "name": "%s/%s" % (ifname, match.group("pvcid")),
+                            "name": "{}/{}".format(ifname, match.group("pvcid")),
                             "admin_status": True,
                             "oper_status": match.group("state") == "enable",
                             "enabled_afi": ["BRIDGE", "ATM"],

@@ -236,9 +236,9 @@ class MetricScriptBase(BaseScriptMetaclass):
         try:
             data = orjson.loads(data)
         except ValueError as e:
-            raise ValueError("Failed to parse file '%s': %s" % (path, e))
+            raise ValueError(f"Failed to parse file '{path}': {e}")
         if not isinstance(data, dict):
-            raise ValueError("Error in file '%s': Must be defined as object" % path)
+            raise ValueError(f"Error in file '{path}': Must be defined as object")
         if "$metric" not in data:
             raise ValueError("$metric key is required")
         script._mt_map[data["$metric"]] += [
@@ -263,7 +263,7 @@ class MetricScriptBase(BaseScriptMetaclass):
         setattr(script, fn, f)
         ff = getattr(script, fn)
         ff.__name__ = fn
-        ff.__qualname__ = "%s.%s" % (script.__name__, fn)
+        ff.__qualname__ = f"{script.__name__}.{fn}"
         return ff
 
     rx_mt_name = re.compile("[^a-z0-9]+")
@@ -275,7 +275,7 @@ class MetricScriptBase(BaseScriptMetaclass):
         :param metric:
         :return:
         """
-        return "get_snmp_json_%s" % mcs.rx_mt_name.sub("_", str(metric.lower()))
+        return "get_snmp_json_{}".format(mcs.rx_mt_name.sub("_", str(metric.lower())))
 
 
 class Script(BaseScript, metaclass=MetricScriptBase):

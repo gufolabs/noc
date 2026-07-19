@@ -27,7 +27,7 @@ class Script(BaseScript):
         platform, version, _, hw, *_ = v.split(",")
         match = self.rx_platform.match(platform)
         if not match:
-            raise self.NotSupportedError("Not supported platform: %s" % platform)
+            raise self.NotSupportedError(f"Not supported platform: {platform}")
         bootprom = hw.split()[1].strip()
         return {
             "vendor": "HP",

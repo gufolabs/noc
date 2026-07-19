@@ -215,9 +215,9 @@ class Profile(BaseProfile):
         return cls.INTERFACE_TYPES.get(name)
 
     def generate_prefix_list(self, name, pl, strict=True):
-        me = "ip ip-prefix %s permit %%s" % name
-        mne = "ip ip-prefix %s permit %%s le %%d" % name
-        r = ["undo ip ip-prefix %s" % name]
+        me = f"ip ip-prefix {name} permit %s"
+        mne = f"ip ip-prefix {name} permit %s le %d"
+        r = [f"undo ip ip-prefix {name}"]
         for prefix, min_len, max_len in pl:
             if min_len == max_len:
                 r += [me % prefix]
@@ -248,7 +248,7 @@ class Profile(BaseProfile):
         match = self.rx_interface_name.match(s)
         if not match:
             return s
-        return "%s%s" % (
+        return "{}{}".format(
             {
                 "Loop": "LoopBack",
                 "Ten-GigabitEthernet": "XGigabitEthernet",
@@ -269,7 +269,7 @@ class Profile(BaseProfile):
         Convert 00:11:22:33:44:55 style MAC-address to 0011-2233-4455
         """
         v = mac.replace(":", "").lower()
-        return "%s-%s-%s" % (v[:4], v[4:8], v[8:])
+        return f"{v[:4]}-{v[4:8]}-{v[8:]}"
 
     spaces_rx = re.compile(r"^\s{42}|^\s{16}", re.DOTALL | re.MULTILINE)
 

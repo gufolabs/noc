@@ -27,6 +27,6 @@ class Script(BaseScript):
         if match:
             fqdn = match.group("hostname")
             if match.group("dname"):
-                fqdn = "%s.%s" % (fqdn, match.group("dname"))
+                fqdn = "{}.{}".format(fqdn, match.group("dname"))
             return fqdn
         raise NotImplementedError

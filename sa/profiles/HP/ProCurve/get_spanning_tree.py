@@ -20,7 +20,7 @@ class Script(BaseScript):
 
     # walkMIB wrapper. Return single value
     def mib_get(self, oid):
-        v = self.cli("walkMIB %s" % oid)
+        v = self.cli(f"walkMIB {oid}")
         return v.split("=", 1)[1].strip()
 
     # Returns hash of index->value
@@ -28,7 +28,7 @@ class Script(BaseScript):
         r = {}
         last_id = None
         l_oid = len(oid) + 1
-        for l in self.cli("walkMIB %s" % oid).splitlines():
+        for l in self.cli(f"walkMIB {oid}").splitlines():
             if l.startswith(oid):
                 # New value
                 k, v = [x.strip() for x in l.split("=", 1)]
@@ -58,7 +58,7 @@ class Script(BaseScript):
         }
         # Get bridge id
         bridge_id = self.mib_get("dot1dBaseBridgeAddress").replace(" ", "")
-        bridge_id = "%s-%s" % (bridge_id[:6], bridge_id[6:])
+        bridge_id = f"{bridge_id[:6]}-{bridge_id[6:]}"
         # Create instances
         instances = {}  # id -> {data}
         """
@@ -78,7 +78,7 @@ class Script(BaseScript):
             if instance_id in instances:
                 root = v[instance_id].replace(" ", "")
                 root_priority = int(root[:2] + "00", 16)
-                root = "%s-%s" % (root[4:10], root[10:])
+                root = f"{root[4:10]}-{root[10:]}"
                 instances[instance_id]["root_id"] = root
                 instances[instance_id]["root_priority"] = root_priority
         # Set bridge priority
@@ -174,7 +174,7 @@ class Script(BaseScript):
         for instance_id, port_id in v:
             bridge = v[instance_id, port_id].replace(" ", "")
             priority = int(bridge[:2] + "00", 16)
-            bridge = "%s-%s" % (bridge[4:10], bridge[10:])
+            bridge = f"{bridge[4:10]}-{bridge[10:]}"
             instance_ports[instance_id][port_id]["designated_bridge_id"] = bridge
             instance_ports[instance_id][port_id]["designated_bridge_priority"] = priority
         # Designated port
@@ -215,7 +215,7 @@ class Script(BaseScript):
         r = {"mode": "RSTP"}
         # Get bridge id
         bridge_id = self.mib_get("dot1dBaseBridgeAddress").replace(" ", "")
-        bridge_id = "%s-%s" % (bridge_id[:6], bridge_id[6:])
+        bridge_id = f"{bridge_id[:6]}-{bridge_id[6:]}"
 
         # Create instances
         instance = {"id": 0, "vlans": "1-4095", "bridge_id": bridge_id}
@@ -266,7 +266,7 @@ class Script(BaseScript):
 
             for p in ports:
                 if iface["interface"] == ports[p]["interface"]:
-                    iface["port_id"] = "%s.%s" % (pri, ports[p]["port_id"])
+                    iface["port_id"] = "{}.{}".format(pri, ports[p]["port_id"])
                     iface["edge"] = ports[p]["edge"]
                     iface["point_to_point"] = ports[p]["point_to_point"]
             try:

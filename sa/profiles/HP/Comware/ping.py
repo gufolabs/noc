@@ -32,12 +32,12 @@ class Script(BaseScript):
         else:
             cmd += " -c 5"
         if source_address:
-            cmd += " -a %s" % source_address
+            cmd += f" -a {source_address}"
         if size:
             cmd += " -s %d" % int(size)
         if df:
             cmd += " -f"
-        cmd = "%s %s" % (cmd, address)
+        cmd = f"{cmd} {address}"
         match = self.rx_result.search(self.cli(cmd))
         if not match:
             raise self.NotSupportedError()

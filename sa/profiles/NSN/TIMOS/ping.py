@@ -30,13 +30,13 @@ class Script(BaseScript):
     def execute_cli(
         self, address, count=None, source_address=None, size=None, df=None, *args, **kwargs
     ):
-        cmd = "ping %s" % address
+        cmd = f"ping {address}"
         if count:
             cmd += " times %d" % int(count)
         else:
             count = 5
         if source_address:
-            cmd += " source %s" % source_address
+            cmd += f" source {source_address}"
         if size:
             cmd += " size %d" % int(size)
         if df:

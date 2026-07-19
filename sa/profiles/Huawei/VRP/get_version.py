@@ -204,10 +204,10 @@ class Script(BaseScript):
         # Convert NetEngine to NE
         if platform.lower().startswith("netengine"):
             n, p = platform.split(" ", 1)
-            platform = "NE%s" % p.strip().upper()
+            platform = f"NE{p.strip().upper()}"
         elif platform.lower().startswith("multiserviceengine"):
             n, p = platform.split(" ", 1)
-            platform = "ME%s" % p.strip().upper()
+            platform = f"ME{p.strip().upper()}"
         # Found in AR1220 and AR1220E
         elif platform.upper().startswith("HUAWEI"):
             n, p = platform.upper().split("HUAWEI", 1)
@@ -236,7 +236,7 @@ class Script(BaseScript):
             version2 = self.snmp.get(
                 mib["ENTITY-MIB::entPhysicalSoftwareRev", 7]
             )  # "V200R001B02D015SP02"
-            version = "%s (%s)" % (version1.split()[0], version2)
+            version = f"{version1.split()[0]} ({version2})"
         serial = []
         for oid, x in self.snmp.getnext(mib["ENTITY-MIB::entPhysicalSerialNum"]):
             if not x:
@@ -248,7 +248,7 @@ class Script(BaseScript):
         r = {"vendor": "Huawei", "platform": platform, "version": version}
         attributes = {}
         if image:
-            r["version"] = "%s (%s)" % (version, image)
+            r["version"] = f"{version} ({image})"
             r["image"] = image
         if serial:
             attributes["Serial Number"] = serial[0]
@@ -271,7 +271,7 @@ class Script(BaseScript):
         r = {"vendor": "Huawei", "platform": platform, "version": version}
         attributes = {}
         if image:
-            r["version"] = "%s (%s)" % (version, image)
+            r["version"] = f"{version} ({image})"
             r["image"] = image
         serial = self.parse_serial()
         if serial:

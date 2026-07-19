@@ -251,9 +251,9 @@ class Script(BaseScript):
                 port = match.group("port")
                 vlan_id = int(match.group("vlan_id"))
                 if port not in pvm:
-                    pvm[port] = ["%s" % vlan_id]
+                    pvm[port] = [f"{vlan_id}"]
                 else:
-                    pvm[port] += ["%s" % vlan_id]
+                    pvm[port] += [f"{vlan_id}"]
         return pvm
 
     def get_mpls_vpn(self):
@@ -442,7 +442,7 @@ class Script(BaseScript):
             if not match:
                 # Secondary ip?
                 continue
-            ip = "%s/%s" % (match.group("address"), match.group("mask"))
+            ip = "{}/{}".format(match.group("address"), match.group("mask"))
             ipv6_interfaces[c_iface] += [ip]
         interfaces = {}
         # Get OSPF interfaces

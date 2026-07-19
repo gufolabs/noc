@@ -18,8 +18,8 @@ class Script(BaseScript):
     def iter_interface_ifindex(self, name: str):
         if self.is_platform_MXA24:
             o = "1.3.6.1.4.1.34300.1.6"
-            ooid = "%s.15.2.1.2" % o
-            aoid = "%s.10.2.1.2" % o
+            ooid = f"{o}.15.2.1.2"
+            aoid = f"{o}.10.2.1.2"
             for oid, ifname in self.snmp.getnext(aoid, max_retries=8):
                 if oid.endswith(".0"):
                     ifindex = int(oid.split(".")[-2])
@@ -30,7 +30,7 @@ class Script(BaseScript):
                 if " " in ifname:
                     ifname = ifname.split()[2]
                 if ifname.startswith("p"):
-                    ifname = "s%s" % ifname
+                    ifname = f"s{ifname}"
                 if oid.endswith(".0"):
                     ifindex = int(oid.split(".")[-2])
                 else:
@@ -41,7 +41,7 @@ class Script(BaseScript):
                 o = "1.3.6.1.4.1.35265.1.28"
             else:
                 o = "1.3.6.1.4.1.35265.1.33"
-            aoid = "%s.10.2.1.2" % o
+            aoid = f"{o}.10.2.1.2"
             for oid, ifname in self.snmp.getnext(
                 aoid,
                 max_repetitions=self.get_max_repetitions(),
@@ -59,6 +59,6 @@ class Script(BaseScript):
                 max_retries=self.get_getnext_retires(),
             ):
                 if ifname.startswith("p"):
-                    ifname = "s%s" % ifname
+                    ifname = f"s{ifname}"
                 ifindex = int(oid.split(".")[-1])
                 yield "name", ifindex, ifname

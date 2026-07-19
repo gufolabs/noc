@@ -74,14 +74,14 @@ class Script(BaseScript):
             try:
                 out = self.cli(cmd)
             except self.CLISyntaxError as e:
-                out = "%s%s" % (self.ERROR_PREFIX, str(e).strip())
+                out = f"{self.ERROR_PREFIX}{str(e).strip()}"
                 d["error"] = str(e).strip()
                 d["code"] = getattr(e, "code", None)
                 if not ignore_cli_errors:
                     r["errors"] = True
                     break
             if include_commands:
-                out = "%s%s%s" % (cmd, self.CMD_SEP, out)
+                out = f"{cmd}{self.CMD_SEP}{out}"
             r["output"] += [out]
             r["details"] += [d]
         return r

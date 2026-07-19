@@ -37,12 +37,12 @@ class Script(BaseScript):
         # Fallback to CLI
         cmd = "show mac"
         if mac is not None:
-            cmd += " %s" % self.profile.convert_mac(mac)
+            cmd += f" {self.profile.convert_mac(mac)}"
         if interface is not None and mac is None:
             interface = interface[1:]
-            cmd += " interface ethernet %s" % interface
+            cmd += f" interface ethernet {interface}"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
 
         try:
             v = self.cli(cmd)

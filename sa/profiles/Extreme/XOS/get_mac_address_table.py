@@ -25,11 +25,11 @@ class Script(BaseScript):
     def execute(self, interface=None, vlan=None, mac=None):
         cmd = "show fdb"
         if mac is not None:
-            cmd += " %s" % self.profile.convert_mac(mac)
+            cmd += f" {self.profile.convert_mac(mac)}"
         if interface is not None:
-            cmd += " ports %s" % interface
+            cmd += f" ports {interface}"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
         vlans = self.cli(cmd)
         r = []
         for l in vlans.split("\n"):

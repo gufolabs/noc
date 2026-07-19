@@ -137,7 +137,7 @@ class Profile(BaseProfile):
         objects = []
         try:
             if interface is not None:
-                c = script.cli(("show ports %s" % interface), cached=True)
+                c = script.cli((f"show ports {interface}"), cached=True)
             else:
                 c = script.cli("show ports", cached=True)
         except script.CLISyntaxError:

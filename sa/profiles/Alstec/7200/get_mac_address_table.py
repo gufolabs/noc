@@ -28,13 +28,13 @@ class Script(BaseScript):
         cmd = "show mac-addr-table"
         rx_line = self.rx_all
         if interface is not None:
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
             rx_line = self.rx_iface
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
             rx_line = self.rx_vlan
         if (mac is not None) and (vlan is not None):
-            cmd += " %s %s" % (mac, vlan)
+            cmd += f" {mac} {vlan}"
             rx_line = self.rx_all
         r = []
         for match in rx_line.finditer(self.cli(cmd)):

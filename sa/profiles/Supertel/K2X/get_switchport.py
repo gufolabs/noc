@@ -156,10 +156,10 @@ class Script(BaseScript):
                     if interface in p["members"]:
                         interface = p["interface"]
                         port_channels.remove(p)
-                        cmd = "show interfaces switchport port-channel %s" % interface[2:]
+                        cmd = f"show interfaces switchport port-channel {interface[2:]}"
                         break
             else:
-                cmd = "show interfaces switchport ethernet %s" % interface
+                cmd = f"show interfaces switchport ethernet {interface}"
             if interface not in port_vlans:
                 port_vlans.update({interface: {"tagged": [], "untagged": ""}})
             for vlan in self.rx_vlan.finditer(self.cli(cmd)):
@@ -189,7 +189,7 @@ class Script(BaseScript):
                         for interface in p["members"]:
                             if interface_status.get(interface):
                                 status = True
-                        cmd = "show interfaces description port-channel %s" % name[2:]
+                        cmd = f"show interfaces description port-channel {name[2:]}"
                         desc = self.cli(cmd)
                         match = self.rx_channel_description.search(desc)
                         if match:

@@ -52,7 +52,7 @@ class Script(BaseScript):
         v = self.cli("show lldp neighbors")
         for match in self.rx_local_port.finditer(v):
             local_interface = match.group("port")
-            c = self.cli("show lldp neighbors interface %s" % local_interface)
+            c = self.cli(f"show lldp neighbors interface {local_interface}")
             match1 = self.rx_remote1.search(c)
             if match1:
                 chassis_id = match1.group("chassis_id")

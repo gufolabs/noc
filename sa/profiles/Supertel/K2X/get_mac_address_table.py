@@ -28,14 +28,14 @@ class Script(BaseScript):
         # Fallback to CLI
         cmd = "show bridge address-table"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
         if interface is not None:
             if interface[:1] == "g":
-                cmd += " ethernet %s" % interface
+                cmd += f" ethernet {interface}"
             elif interface[:2] == "ch":
-                cmd += " port-channel %s" % interface
+                cmd += f" port-channel {interface}"
         if mac is not None:
-            cmd += " address %s" % self.profile.convert_mac(mac)
+            cmd += f" address {self.profile.convert_mac(mac)}"
         for match in self.rx_line.finditer(self.cli(cmd)):
             interfaces = match.group("interfaces")
             if interfaces == "0":

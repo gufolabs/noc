@@ -39,7 +39,7 @@ class Script(BaseScript):
             if not name:
                 continue
             if r.get(name):
-                name = "%s-%s" % (name, d[index])
+                name = f"{name}-{d[index]}"
             try:
                 v = self.profile.convert_interface_name(name.strip())
             except InterfaceTypeError as e:

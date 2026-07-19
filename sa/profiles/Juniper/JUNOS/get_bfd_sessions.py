@@ -32,11 +32,12 @@ class Script(BaseScript):
         r"^(?P<remote_address>\S+)\s+(?P<state>Up)\s+"
         r"(?P<local_interface>\S+)\s+(?P<detect_time>\d+\.\d+)\s+"
         r"(?P<transmit>\d+\.\d+)\s+(?P<multiplier>\d+)\s*\n"
-        r"^\s+Client\s+(?P<client>(?:%s)(?:\s+(?:%s))*).+?\n"
+        r"^\s+Client\s+(?P<client>(?:{})(?:\s+(?:{}))*).+?\n"
         r".+?"
         r"^\s+Local discriminator (?P<local_discriminator>\d+), "
-        r"remote discriminator (?P<remote_discriminator>\d+)"
-        % ("|".join(client_map), "|".join(client_map)),
+        r"remote discriminator (?P<remote_discriminator>\d+)".format(
+            "|".join(client_map), "|".join(client_map)
+        ),
         re.MULTILINE | re.DOTALL | re.IGNORECASE,
     )
 

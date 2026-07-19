@@ -24,7 +24,7 @@ class Script(BaseScript):
     def execute(self, interface=None):
         cmd = "show fiber-ports optical-transceiver detailed"
         if interface is not None:
-            cmd = "show fiber-ports optical-transceiver interface %s detailed" % interface
+            cmd = f"show fiber-ports optical-transceiver interface {interface} detailed"
         try:
             v = self.cli(cmd)
         except self.CLISyntaxError:

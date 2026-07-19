@@ -29,13 +29,13 @@ class Script(BaseScript):
     def execute(
         self, address, count=None, source_address=None, size=None, df=None, *args, **kwargs
     ):
-        cmd = "ping %s" % address
+        cmd = f"ping {address}"
         if count:
             cmd += " times %d" % int(count)
         else:
             cmd += " times 5"
         if source_address:
-            cmd += " source_ip %s" % source_address
+            cmd += f" source_ip {source_address}"
         # Not implemented, may be in future firmware revisions ?
         # if size:
         #    cmd+=" size %d"%int(size)

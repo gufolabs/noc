@@ -133,9 +133,9 @@ class Script(BaseScript):
                     sub["description"] = i["descr"]
                     break
             if ifname.startswith("ch"):
-                s = self.cli("show interfaces switchport port-channel %s" % ifname[2:])
+                s = self.cli(f"show interfaces switchport port-channel {ifname[2:]}")
             else:
-                s = self.cli("show interfaces switchport ethernet %s" % ifname)
+                s = self.cli(f"show interfaces switchport ethernet {ifname}")
             for match1 in self.rx_vlan.finditer(s):
                 vlan_id = match1.group("vlan_id")
                 if match1.group("membership") == "System":

@@ -65,7 +65,7 @@ class ArubaOSNormalizer(BaseNormalizer):
             # )
             if_name = self.interface_name(tokens[1])
             yield self.defer(
-                "fi.iface.%s" % if_name,
+                f"fi.iface.{if_name}",
                 self.make_unit_description,
                 instance=deferable("instance"),
                 interface=if_name,

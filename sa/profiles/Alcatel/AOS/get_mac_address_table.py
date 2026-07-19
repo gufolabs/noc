@@ -34,7 +34,7 @@ class Script(BaseScript):
             iface = match.group("interfaces")
             if iface.startswith("0/"):
                 # LAG 0/1 -> Ag 1
-                iface = "Ag %s" % iface[2:]
+                iface = f"Ag {iface[2:]}"
             r += [
                 {
                     "vlan_id": match.group("vlan_id"),

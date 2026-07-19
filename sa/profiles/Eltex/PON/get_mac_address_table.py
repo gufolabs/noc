@@ -36,7 +36,7 @@ class Script(BaseScript):
         # PON ports
         cmd = "show mac table"
         if interface is not None:
-            cmd += " %s" % interface
+            cmd += f" {interface}"
         else:
             cmd += " x"
         for match in self.rx_olt.finditer(self.cli(cmd)):
@@ -56,11 +56,11 @@ class Script(BaseScript):
         # Switch ports
         cmd = "show mac"
         if vlan is not None:
-            cmd += " include vlan %s" % vlan
+            cmd += f" include vlan {vlan}"
         elif interface is not None:
-            cmd += " include interface %s" % interface
+            cmd += f" include interface {interface}"
         elif mac is not None:
-            cmd += " include mac %s" % self.profile.convert_mac(mac)
+            cmd += f" include mac {self.profile.convert_mac(mac)}"
         cmd += "\r"
         with self.profile.switch(self):
             for match in self.rx_switch.finditer(self.cli(cmd)):

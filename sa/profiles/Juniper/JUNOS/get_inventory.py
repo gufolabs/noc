@@ -376,14 +376,14 @@ class Script(BaseScript):
             t, s, m = n
         elif len(n) == 4 and description.startswith("SFP-1000BASE-BX10-"):
             # SFP-1000BASE-BX10-U, SFP-1000BASE-BX10-D
-            return "NoName | Transceiver | 1G | SFP BX10%s" % n[-1]
+            return f"NoName | Transceiver | 1G | SFP BX10{n[-1]}"
         elif len(n) == 4 and description.startswith("SFP-1000BASE-BX40-"):
             # SFP-1000BASE-BX40-U, SFP-1000BASE-BX40-D
-            return "NoName | Transceiver | 1G | SFP BX%s" % n[-1]
+            return f"NoName | Transceiver | 1G | SFP BX{n[-1]}"
         else:
             self.logger.error("Cannot detect transceiver type: '%s'", description)
             return self.UNKNOWN_XCVR
-        return "NoName | Transceiver | %s | %s %s" % (s, t, m)
+        return f"NoName | Transceiver | {s} | {t} {m}"
 
     def get_sensor_dict(self, chassis_id, env_name, env_status, sens_type_num, status_oid):
         sens_type = self.ENV_TYPE_MAP_SNMP.get(sens_type_num, "temperature")

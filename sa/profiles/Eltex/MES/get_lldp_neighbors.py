@@ -124,7 +124,7 @@ class Script(BaseScript):
                 r += [i]
                 continue
             try:
-                c = self.cli("show lldp neighbors %s" % local_interface)
+                c = self.cli(f"show lldp neighbors {local_interface}")
                 match = self.rx_detail.search(c)
                 if match:
                     remote_chassis_id = match.group("dev_id")

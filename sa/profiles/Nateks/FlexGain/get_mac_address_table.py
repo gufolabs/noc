@@ -25,11 +25,11 @@ class Script(BaseScript):
     def execute(self, interface=None, vlan=None, mac=None):
         cmd = "show fdb"
         if interface is not None:
-            cmd += " grep %s" % interface
+            cmd += f" grep {interface}"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
         if mac is not None:
-            cmd += " grep %s" % mac
+            cmd += f" grep {mac}"
         macs = self.cli(cmd)
         r = []
         for match in self.rx_line.finditer(macs):

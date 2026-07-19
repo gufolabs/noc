@@ -85,7 +85,7 @@ class Script(BaseScript):
             i = {"local_interface": local_if, "neighbors": []}
             # Get neighbors details
             try:
-                v = self.cli("show lldp neighbors interface %s" % local_if)
+                v = self.cli(f"show lldp neighbors interface {local_if}")
             except self.CLISyntaxError:
                 # Found strange CLI syntax on Catalyst 4900
                 # Allow ONLY interface name or "detail"

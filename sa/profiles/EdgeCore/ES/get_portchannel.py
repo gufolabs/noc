@@ -34,7 +34,7 @@ class Script(BaseScript):
             channels = self.cli("show port-group brief")
             r = []
             for match in self.rx_chan_line_4626.finditer(channels):
-                details = self.cli("show port-group %s port-channel" % match.group("number"))
+                details = self.cli("show port-group {} port-channel".format(match.group("number")))
                 r += [
                     {
                         "interface": "Port-Channel" + match.group("number"),

@@ -189,7 +189,7 @@ class Script(BaseScript):
                 pass
             elif self.is_cloud_engine and self.sfp_number.match(name):
                 # Port_10GE1/0/48, Port_10GE2/0/48
-                num = "%s%s" % self.sfp_number.match(name).groups()
+                num = "{}{}".format(*self.sfp_number.match(name).groups())
             elif self.sfp_number.match(name):
                 # Port_GigabitEthernet2/0/19 format
                 num = self.sfp_number.match(name).group("num")
