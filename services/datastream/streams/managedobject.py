@@ -525,7 +525,7 @@ class ManagedObjectDataStream(DataStream):
 
     @classmethod
     def filter_pool(cls, name: str):
-        return {"%s.pool" % cls.F_META: name}
+        return {f"{cls.F_META}.pool": name}
 
     @classmethod
     def filter_service_group(cls, name: str):

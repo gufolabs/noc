@@ -108,7 +108,7 @@ class SyslogCollectorService(FastAPIService):
     async def get_pool_partitions(self, pool: str) -> int:
         parts = self.pool_partitions.get(pool)
         if not parts:
-            parts = await self.get_stream_partitions("events.%s" % pool)
+            parts = await self.get_stream_partitions(f"events.{pool}")
             self.pool_partitions[pool] = parts
         return parts
 
@@ -260,7 +260,7 @@ class SyslogCollectorService(FastAPIService):
             self.logger.info(
                 "Dropping %d messages with invalid sources: %s",
                 total,
-                ", ".join("%s: %s" % (s, self.invalid_sources[s]) for s in self.invalid_sources),
+                ", ".join(f"{s}: {self.invalid_sources[s]}" for s in self.invalid_sources),
             )
             self.invalid_sources = defaultdict(int)
         if not self.updated:

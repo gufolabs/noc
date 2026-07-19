@@ -137,14 +137,10 @@ class ObjectMetricsAPI(NBIAPI):
         from_date = from_ts.strftime("%Y-%m-%d")
         to_date = to_ts.strftime("%Y-%m-%d")
         if from_date == to_date:
-            date_q = "date = '%s'" % from_date
+            date_q = f"date = '{from_date}'"
         else:
-            date_q = "date >= '%s' AND date <= '%s'" % (from_date, to_date)
-        date_q = "%s AND ts >= '%s' AND ts <= '%s'" % (
-            date_q,
-            from_ts.replace(tzinfo=None).isoformat(),
-            to_ts.replace(tzinfo=None).isoformat(),
-        )
+            date_q = f"date >= '{from_date}' AND date <= '{to_date}'"
+        date_q = f"{date_q} AND ts >= '{from_ts.replace(tzinfo=None).isoformat()}' AND ts <= '{to_ts.replace(tzinfo=None).isoformat()}'"
         connect = ClickhouseClient()
         scope_data = {}
         for table in scopes:
@@ -160,10 +156,10 @@ class ObjectMetricsAPI(NBIAPI):
                 else:
                     qx += [
                         "(managed_object = %d AND path[4] IN (%s))"
-                        % (wx[0], ", ".join("'%s'" % x for x in wx[1]))
+                        % (wx[0], ", ".join(f"'{x}'" for x in wx[1]))
                     ]
             fields = ["ts", "managed_object", "path", *sorted(scopes[table][0])]
-            query = "SELECT %s FROM %s WHERE %s AND (%s)" % (
+            query = "SELECT {} FROM {} WHERE {} AND ({})".format(
                 ", ".join(fields),
                 table,
                 date_q,

@@ -134,7 +134,7 @@ class MonMapCard(BaseCard):
             str(o["_id"]): (
                 o["name"],
                 {
-                    "%s.%s" % (item["interface"], item["attr"]): item["value"]
+                    "{}.{}".format(item["interface"], item["attr"]): item["value"]
                     for item in o.get("data", [])
                 },
             )
@@ -166,7 +166,7 @@ class MonMapCard(BaseCard):
                 ss[status] += 1
                 ss["total"] += 1
                 services_ss = [
-                    "%s-%s" % (sm, status) for sm in services_map.get(mo_id, [self.fake_service])
+                    f"{sm}-{status}" for sm in services_map.get(mo_id, [self.fake_service])
                 ]
                 ss["objects"] += [
                     {"id": mo_id, "name": mo_name, "status": status, "services": services_ss}
@@ -299,7 +299,7 @@ class MonMapCard(BaseCard):
                     elif collapse and c < 2:
                         badge = "</div>"
                     else:
-                        badge = '<span class="badge">%s</span></div>' % c
+                        badge = f'<span class="badge">{c}</span></div>'
                     html2 = "".join(
                         [
                             "<td style='text-align: center; width: ",
@@ -325,8 +325,9 @@ class MonMapCard(BaseCard):
             r += [get_summary(s["service"], ServiceProfile)]
         if s.get("fresh_alarms"):
             r += [
-                '<i class="fa fa-exclamation-triangle"></i><span class="badge">%s</span>'
-                % s["fresh_alarms"]["FreshAlarm"]
+                '<i class="fa fa-exclamation-triangle"></i><span class="badge">{}</span>'.format(
+                    s["fresh_alarms"]["FreshAlarm"]
+                )
             ]
         r = [x for x in r if x]
         return "&nbsp;".join(r)
@@ -339,8 +340,8 @@ class MonMapCard(BaseCard):
         if not info_all:
             pipeline += [{"$match": {"managed_object": {"$in": mos_ids}}}]
 
-        group = {"_id": {"mo": "$managed_object"}, "count": {"$push": "$%s.profile" % name}}
-        pipeline += [{"$unwind": "$%s" % name}, {"$group": group}]
+        group = {"_id": {"mo": "$managed_object"}, "count": {"$push": f"${name}.profile"}}
+        pipeline += [{"$unwind": f"${name}"}, {"$group": group}]
         for ss in (
             ServiceSummary._get_collection()
             .with_options(read_preference=ReadPreference.SECONDARY_PREFERRED)

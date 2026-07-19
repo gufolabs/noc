@@ -137,7 +137,7 @@ class PathAPI(NBIAPI):
                 start, start_iface = self.get_object_and_interface(**dict(req.from_))
         except ValueError as e:
             raise HTTPException(
-                404, {"status": False, "error": "Failed to find start of path: %s" % e}
+                404, {"status": False, "error": f"Failed to find start of path: {e}"}
             )
         # Find end of path
         if hasattr(req.to, "level"):
@@ -150,7 +150,7 @@ class PathAPI(NBIAPI):
                 goal = ManagedObjectGoal(end)
             except ValueError as e:
                 raise HTTPException(
-                    404, {"status": False, "error": "Failed to find end of path: %s" % e}
+                    404, {"status": False, "error": f"Failed to find end of path: {e}"}
                 )
         # Trace the path
         if hasattr(req, "config"):

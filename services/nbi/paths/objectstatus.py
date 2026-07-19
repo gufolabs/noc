@@ -55,7 +55,7 @@ class ObjectStatusAPI(NBIAPI):
         try:
             objects = [int(o) for o in req.objects]
         except ValueError as e:
-            raise HTTPException(400, "Bad request: %s" % e)
+            raise HTTPException(400, f"Bad request: {e}")
         statuses = ManagedObject.get_statuses(objects)
         return {"statuses": [{"id": str(o), "status": statuses.get(o, False)} for o in objects]}
 

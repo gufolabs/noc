@@ -83,7 +83,7 @@ class MODiscoveryJob(PeriodicJob):
         if self.check_timings:
             self.logger.info(
                 "Timings: %s",
-                ", ".join("%s = %.2fms" % (n, t * 1000) for n, t in self.check_timings),
+                ", ".join(f"{n} = {t * 1000:.2f}ms" for n, t in self.check_timings),
             )
         super().schedule_next(status)
         # Update alarm statuses
@@ -93,7 +93,7 @@ class MODiscoveryJob(PeriodicJob):
         # Update diagnostics statuses
         self.update_diagnostics(self.problems)
         # Write job log
-        key = "discovery-%s-%s" % (self.attrs[self.ATTR_CLASS], self.attrs[self.ATTR_KEY])
+        key = f"discovery-{self.attrs[self.ATTR_CLASS]}-{self.attrs[self.ATTR_KEY]}"
         problems = {}
         for p in list(self.problems):
             if not p.check:
@@ -412,7 +412,7 @@ class DiscoveryCheck:
         self.service = job.service
         self.job = job
         self.object: ManagedObject = self.job.object
-        self.logger = self.job.logger.get_logger("[%s" % self.name)
+        self.logger = self.job.logger.get_logger(f"[{self.name}")
         self.if_name_cache = {}  # mo, name -> Interface
         self.if_mac_cache = {}  # mo, mac -> Interface
         self.if_ip_cache = {}
@@ -595,7 +595,7 @@ class DiscoveryCheck:
         :type msg: str
         """
         if changes:
-            self.logger.info("%s: %s" % (msg, ", ".join("%s = %s" % (k, v) for k, v in changes)))
+            self.logger.info("{}: {}".format(msg, ", ".join(f"{k} = {v}" for k, v in changes)))
 
     def get_interface_by_name(self, name, mo=None):
         """
@@ -641,7 +641,7 @@ class DiscoveryCheck:
             li = list(
                 Interface.objects.filter(
                     managed_object=self.object.id,
-                    ipv4_addresses__startswith="%s/" % ip,
+                    ipv4_addresses__startswith=f"{ip}/",
                     type="physical",
                 )
             )
@@ -759,11 +759,9 @@ class DiscoveryCheck:
         if not obj.object_profile.neighbor_cache_ttl:
             # Disabled cache
             return
-        keys = [
-            "mo-neighbors-%s-%s" % (x, obj.id) for x in obj.segment.profile.get_topology_methods()
-        ]
+        keys = [f"mo-neighbors-{x}-{obj.id}" for x in obj.segment.profile.get_topology_methods()]
         if keys:
-            self.logger.info("Invalidating neighor cache: %s" % ", ".join(keys))
+            self.logger.info("Invalidating neighor cache: {}".format(", ".join(keys)))
             cache.delete_many(keys, TopologyDiscoveryCheck.NEIGHBOR_CACHE_VERSION)
 
     def get_confdb(self):
@@ -806,20 +804,19 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
         loops = {}  # first interface, second interface
         problems = {}
         # Check local side
-        ln_key = "mo-neighbors-%s-%s" % (self.name, self.object.id)
+        ln_key = f"mo-neighbors-{self.name}-{self.object.id}"
         for li, ro, ri in self.cached_neighbors(self.object, ln_key, self.iter_neighbors):
             # Resolve remote object
             remote_object = self.get_neighbor(ro)
             if not remote_object:
-                problems[li] = "Remote object '%s' is not found" % str(ro)
+                problems[li] = f"Remote object '{ro!s}' is not found"
                 self.logger.info("Remote object '%s' is not found. Skipping", str(ro))
                 continue
             # Resolve remote interface name
             remote_interface = self.get_remote_interface(remote_object, ri)
             if not remote_interface:
-                problems[li] = "Cannot resolve remote interface %s:%r. Skipping" % (
-                    remote_object.name,
-                    ri,
+                problems[li] = (
+                    f"Cannot resolve remote interface {remote_object.name}:{ri!r}. Skipping"
                 )
                 self.logger.info(
                     "Cannot resolve remote interface %s:%r. Skipping", remote_object.name, ri
@@ -866,7 +863,7 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
                 continue
             else:
                 try:
-                    rn_key = "mo-neighbors-%s-%s" % (self.name, remote_object.id)
+                    rn_key = f"mo-neighbors-{self.name}-{remote_object.id}"
                     remote_neighbors = self.cached_neighbors(
                         remote_object, rn_key, self.iter_neighbors
                     )
@@ -876,15 +873,14 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
                     )
                     self.set_problem(
                         path=next(iter(candidates[remote_object]))[0],
-                        message="Cannot get neighbors from candidate %s: %s"
-                        % (remote_object.name, e),
+                        message=f"Cannot get neighbors from candidate {remote_object.name}: {e}",
                     )
                     continue
                 confirmed = set()
             for li, ro_id, ri in remote_neighbors:
                 ro = self.get_neighbor(ro_id)
                 if not ro or ro.id != self.object.id:
-                    self.logger.debug("Candidates check %s %s %s %s" % (li, ro_id, ro, ri))
+                    self.logger.debug(f"Candidates check {li} {ro_id} {ro} {ri}")
                     continue  # To other objects
                 remote_interface = self.get_remote_interface(self.object, ri)
                 if remote_interface:
@@ -894,7 +890,7 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
                     "Candidates: %s, Confirmed: %s", candidates[remote_object], confirmed
                 )
             for ll, rr in candidates[remote_object] - confirmed:
-                problems[ll] = "Pending link: %s - %s:%s" % (ll, remote_object, rr)
+                problems[ll] = f"Pending link: {ll} - {remote_object}:{rr}"
                 li = self.clean_interface(self.object, ll)
                 if not li:
                     self.logger.info("Cannot clean interface %s:%s. Skipping", self.object, ll)
@@ -949,12 +945,12 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
                     if (mo.id, n[0]) in self.interface_aliases
                 }
                 cache.set(
-                    "%s-aliases" % key, alias_cache, ttl=ttl, version=self.NEIGHBOR_CACHE_VERSION
+                    f"{key}-aliases", alias_cache, ttl=ttl, version=self.NEIGHBOR_CACHE_VERSION
                 )
             metrics["neighbor_cache_misses"] += 1
         else:
             self.logger.info("Use neighbors cache")
-            alias_cache = cache.get("%s-aliases" % key, version=self.NEIGHBOR_CACHE_VERSION)
+            alias_cache = cache.get(f"{key}-aliases", version=self.NEIGHBOR_CACHE_VERSION)
             self.logger.debug("Alias cache is %s", alias_cache)
             if alias_cache:
                 self.interface_aliases.update(alias_cache)
@@ -1269,13 +1265,13 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
                 try:
                     li.unlink()
                 except ValueError as e:
-                    self.logger.info("Failed to unlink %s: %s" % (llink, e))
+                    self.logger.info(f"Failed to unlink {llink}: {e}")
                     return
             if rlink:
                 try:
                     ri.unlink()
                 except ValueError as e:
-                    self.logger.info("Failed to unlink %s: %s" % (llink, e))
+                    self.logger.info(f"Failed to unlink {llink}: {e}")
                     return
             self.logger.info(
                 "Linking: %s:%s -- %s:%s",
@@ -1584,10 +1580,10 @@ class PolicyDiscoveryCheck(DiscoveryCheck):
         :return:
         """
         for method in self.policy_map[self.get_policy()]:
-            check = getattr(self, "can_get_data_from_%s" % method)
+            check = getattr(self, f"can_get_data_from_{method}")
             if not check():
                 continue
-            getter = getattr(self, "request_data_from_%s" % method)
+            getter = getattr(self, f"request_data_from_{method}")
             data = getter()
             if data is not None:
                 return data

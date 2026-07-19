@@ -905,7 +905,7 @@ class DeescalationSequence(BaseSequence):
             metrics["escalation_tt_close_retry"] += 1
             self.tts.register_failure()
             self.alarm.set_escalation_close_error(
-                "[%s] %s" % (self.alarm.managed_object.tt_system.name, r.error)
+                f"[{self.alarm.managed_object.tt_system.name}] {r.error}"
             )
             self.escalation_doc.leader.escalation_status = "temp"
             self.escalation_doc.leader.escalation_error = str(r.error)
@@ -915,7 +915,7 @@ class DeescalationSequence(BaseSequence):
             self.logger.info("Failed to close tt %s: %s", self.tt_id, r.error)
             metrics["escalation_tt_close_fail"] += 1
             self.alarm.set_escalation_close_error(
-                "[%s] %s" % (self.alarm.managed_object.tt_system.name, r.error)
+                f"[{self.alarm.managed_object.tt_system.name}] {r.error}"
             )
             self.escalation_doc.leader.escalation_status = "fail"
             self.escalation_doc.leader.escalation_error = str(r.error)
@@ -976,7 +976,7 @@ class DeescalationSequence(BaseSequence):
         """
         if not self.notification_group:
             return
-        self.log_alarm("Sending close notification to group %s" % self.notification_group.name)
+        self.log_alarm(f"Sending close notification to group {self.notification_group.name}")
         self.notification_group.notify(self.subject, self.body)
         metrics["escalation_notify"] += 1
 

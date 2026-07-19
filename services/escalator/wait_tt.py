@@ -42,7 +42,7 @@ def wait_tt(alarm_id):
     if ti and ti["resolved"]:
         # Close alarm
         alarm.clear_alarm(
-            "Closed by TT %s" % alarm.escalation_tt,
+            f"Closed by TT {alarm.escalation_tt}",
             ts=ti.get("close_ts", datetime.datetime.now()),
             force=True,
         )

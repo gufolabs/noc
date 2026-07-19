@@ -236,30 +236,22 @@ class PrefixCheck(DiscoveryCheck):
         if self.is_preferred(prefix.source, discovered_prefix.source):
             changes = []
             if prefix.source != discovered_prefix.source:
-                changes += ["source: %s -> %s" % (prefix.source, discovered_prefix.source)]
+                changes += [f"source: {prefix.source} -> {discovered_prefix.source}"]
                 prefix.source = discovered_prefix.source
             if discovered_prefix.source in LOCAL_SRC:
                 # Check name
                 name = self.get_prefix_name(discovered_prefix)
                 if name and name != prefix.name:
-                    changes += ["name: %s -> %s" % (prefix.name, name)]
+                    changes += [f"name: {prefix.name} -> {name}"]
                     prefix.name = name
             if discovered_prefix.asn and prefix.asn != discovered_prefix.asn:
                 changes += [
-                    "asn: %s -> %s"
-                    % (
-                        prefix.asn.asn if prefix.asn else None,
-                        discovered_prefix.asn.asn if discovered_prefix.asn else None,
-                    )
+                    f"asn: {prefix.asn.asn if prefix.asn else None} -> {discovered_prefix.asn.asn if discovered_prefix.asn else None}"
                 ]
                 prefix.asn = discovered_prefix.asn
             if discovered_prefix.vlan and prefix.vlan != discovered_prefix.vlan:
                 changes += [
-                    "vlan: %s -> %s"
-                    % (
-                        str(prefix.vlan) if prefix.vlan else None,
-                        str(discovered_prefix.vlan) if discovered_prefix.vlan else None,
-                    )
+                    f"vlan: {str(prefix.vlan) if prefix.vlan else None} -> {str(discovered_prefix.vlan) if discovered_prefix.vlan else None}"
                 ]
                 prefix.vlan = discovered_prefix.vlan
             if changes:

@@ -32,7 +32,7 @@ class PrefixDataStream(DataStream):
             "id": str(prefix.id),
             "name": qs(prefix.name),
             "prefix": qs(prefix.prefix),
-            "afi": "ipv%s" % prefix.afi,
+            "afi": f"ipv{prefix.afi}",
             "source": prefix.source,
         }
         if prefix.description:

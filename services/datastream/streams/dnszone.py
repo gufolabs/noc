@@ -153,7 +153,7 @@ class DNSZoneDataStream(DataStream):
         :param zone:
         :return:
         """
-        suffix = ".%s." % zone.name
+        suffix = f".{zone.name}."
         length = len(zone.name)
         for z in zone.children:
             nested_nses = set()
@@ -205,11 +205,11 @@ class DNSZoneDataStream(DataStream):
         # @todo: Get ttl from profile
         # Build query
         length = len(zone.name) + 1
-        q = Q(fqdn__iexact=zone.name) | Q(fqdn__iendswith=".%s" % zone.name)
-        for z in DNSZone.objects.filter(name__iendswith=".%s" % zone.name).values_list(
+        q = Q(fqdn__iexact=zone.name) | Q(fqdn__iendswith=f".{zone.name}")
+        for z in DNSZone.objects.filter(name__iendswith=f".{zone.name}").values_list(
             "name", flat=True
         ):
-            q &= ~(Q(fqdn__iexact=z) | Q(fqdn__iendswith=".%s" % z))
+            q &= ~(Q(fqdn__iexact=z) | Q(fqdn__iendswith=f".{z}"))
         for afi, fqdn, address in Address.objects.filter(q).values_list("afi", "fqdn", "address"):
             yield RR(
                 zone=zone.name,
@@ -233,7 +233,7 @@ class DNSZoneDataStream(DataStream):
             """
             x = a.split(".")
             x.reverse()
-            return "%s.in-addr.arpa" % (".".join(x))
+            return "{}.in-addr.arpa".format(".".join(x))
 
         length = len(zone.name) + 1
         for a in Address.objects.filter(afi="4").extra(
@@ -275,7 +275,7 @@ class DNSZoneDataStream(DataStream):
         :param zone:
         :return:
         """
-        suffix = ".%s." % zone.name
+        suffix = f".{zone.name}."
         # Create missed A records for NSses from zone
         # Find in-zone NSes
         in_zone_nses = {}
@@ -315,14 +315,14 @@ class DNSZoneDataStream(DataStream):
                     name=n,
                     ttl=zone.profile.zone_ttl,
                     type="CNAME",
-                    rdata="%s.%s/32" % (n, n),
+                    rdata=f"{n}.{n}/32",
                 )
                 for ns in nses:
                     if not ns.endswith("."):
                         ns += "."
                     yield RR(
                         zone=zone.name,
-                        name="%s/32" % n,
+                        name=f"{n}/32",
                         ttl=zone.profile.zone_ttl,
                         type="NS",
                         rdata=ns,

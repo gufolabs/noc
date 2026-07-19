@@ -263,14 +263,14 @@ class VPNCheck(DiscoveryCheck):
         if self.is_preferred(vpn.source, discovered_vpn.source):
             changes = []
             if vpn.source != discovered_vpn.source:
-                changes += ["source: %s -> %s" % (vpn.source, discovered_vpn.source)]
+                changes += [f"source: {vpn.source} -> {discovered_vpn.source}"]
                 vpn.source = discovered_vpn.source
             if (
                 discovered_vpn.name
                 and discovered_vpn.name != vpn.name
                 and self.get_unique_vpn_name(discovered_vpn) != vpn.name
             ):
-                changes += ["name: %s -> %s" % (vpn.name, discovered_vpn.name)]
+                changes += [f"name: {vpn.name} -> {discovered_vpn.name}"]
                 vpn.name = discovered_vpn.name
             if changes:
                 self.logger.info("Changing %s: %s", vpn.vpn_id, ", ".join(changes))
@@ -324,4 +324,4 @@ class VPNCheck(DiscoveryCheck):
         :param vpn: DiscoveredVPN
         :return: unique name
         """
-        return "%s (%s)" % (self.get_vpn_name(vpn), vpn.vpn_id or vpn.rd)
+        return f"{self.get_vpn_name(vpn)} ({vpn.vpn_id or vpn.rd})"

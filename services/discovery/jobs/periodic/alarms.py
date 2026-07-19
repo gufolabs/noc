@@ -61,8 +61,9 @@ class AlarmsCheck(DiscoveryCheck):
                     if not managed_object:
                         managed_object = self.object
                         self.logger.warning(
-                            "No object %s for alarm: \n%s"
-                            % (objcet_alarms[new_event]["path"][0], objcet_alarms[new_event])
+                            "No object {} for alarm: \n{}".format(
+                                objcet_alarms[new_event]["path"][0], objcet_alarms[new_event]
+                            )
                         )
                 else:
                     managed_object = self.object
@@ -78,7 +79,7 @@ class AlarmsCheck(DiscoveryCheck):
                 raw_vars = event.raw_vars
                 self.raise_event(event.managed_object.id, event.managed_object.pool.name, raw_vars)
                 event.mark_as_archived("Close event")
-                self.logger.info("Close event %s" % event)
+                self.logger.info(f"Close event {event}")
 
     @classmethod
     def find_cpe(cls, name, co_id=None):

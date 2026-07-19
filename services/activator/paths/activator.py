@@ -115,7 +115,7 @@ class ActivatorAPI(JSONRPCAPI):
             result = script.run()
         except script.ScriptError as e:
             metrics["error", ("type", "script_error")] += 1
-            raise APIError("Script error: %s" % e.__doc__)
+            raise APIError(f"Script error: {e.__doc__}")
         if not streaming or not result:
             if return_metrics:
                 return {"metrics": script.apply_metrics({}), "result": result}

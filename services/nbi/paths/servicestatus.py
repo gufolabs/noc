@@ -86,7 +86,7 @@ class ServiceStatusAPI(NBIAPI):
                 if svc:
                     ids.add(svc.id)
         except ValueError as e:
-            raise HTTPException(400, "Bad request: %s" % e)
+            raise HTTPException(400, f"Bad request: {e}")
         if not ids:
             raise HTTPException(400, "Not requested service")
         statuses = []

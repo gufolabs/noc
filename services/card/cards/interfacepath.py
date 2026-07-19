@@ -159,7 +159,7 @@ class InterfacePathCard(BaseCard):
             if cv >= t:
                 if cv // t * t == cv:
                     return "%d%s" % (cv // t, n)
-                return "%.2f%s" % (float(cv) / t, n)
+                return f"{float(cv) / t:.2f}{n}"
         return str(cv)
 
     def get_ajax_data(self, **kwargs):
@@ -180,11 +180,11 @@ class InterfacePathCard(BaseCard):
             argMax(errors_out, ts) AS errors_out
           FROM interface
           WHERE
-            date >= toDate('%s')
-            AND ts >= toDateTime('%s')
-            AND (%s)
+            date >= toDate('{}')
+            AND ts >= toDateTime('{}')
+            AND ({})
           GROUP BY managed_object, iface
-        """ % (
+        """.format(
             from_ts.date().isoformat(),
             from_ts.isoformat(sep=" "),
             " OR ".join(

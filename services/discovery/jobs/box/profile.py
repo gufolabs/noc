@@ -84,5 +84,5 @@ class ProfileCheck(DiscoveryCheck):
             message=checker.get_error(),
             fatal=self.object.profile.id == Profile.get_generic_profile_id(),
         )
-        self.logger.debug("Result %s" % self.job.problems)
+        self.logger.debug(f"Result {self.job.problems}")
         return None

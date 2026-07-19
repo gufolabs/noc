@@ -68,7 +68,7 @@ class PhoneRangeCard(BaseCard):
                 {
                     "scope": "phonerange",
                     "id": str(p.id),
-                    "label": "%s (%s - %s)" % (p.name, p.from_number, p.to_number),
+                    "label": f"{p.name} ({p.from_number} - {p.to_number})",
                 }
             ]
         return r

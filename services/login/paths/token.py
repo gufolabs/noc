@@ -75,7 +75,7 @@ async def token(
             return JSONResponse(
                 content={
                     "error": "unauthorized_client",
-                    "error_description": "Access denied (%s)" % e,
+                    "error_description": f"Access denied ({e})",
                 },
                 status_code=HTTPStatus.FORBIDDEN,
             )

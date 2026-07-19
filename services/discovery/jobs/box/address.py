@@ -368,24 +368,24 @@ class AddressCheck(DiscoveryCheck):
         if self.is_preferred(address.source, discovered_address.source):
             changes = []
             if address.source != discovered_address.source:
-                changes += ["source: %s -> %s" % (address.source, discovered_address.source)]
+                changes += [f"source: {address.source} -> {discovered_address.source}"]
                 address.source = discovered_address.source
             if discovered_address.source in LOCAL_SRC:
                 # Check name
                 name = self.get_address_name(discovered_address)
                 if name and name != address.name:
-                    changes += ["name: %s -> %s" % (address.name, name)]
+                    changes += [f"name: {address.name} -> {name}"]
                     address.name = name
                 # Check fqdn
                 if discovered_address.fqdn != address.fqdn and discovered_address.fqdn:
-                    changes += ["fqdn: %s -> %s" % (address.fqdn, discovered_address.fqdn)]
+                    changes += [f"fqdn: {address.fqdn} -> {discovered_address.fqdn}"]
                     address.fqdn = discovered_address.fqdn
                 # @todo: Change profile
                 # Change managed object
                 if discovered_address.source in LOCAL_SRC and (
                     not address.managed_object or address.managed_object.id != self.object.id
                 ):
-                    changes += ["object: %s -> %s" % (address.managed_object, self.object)]
+                    changes += [f"object: {address.managed_object} -> {self.object}"]
                     address.managed_object = self.object
                 # Change subinterface
                 if (
@@ -393,12 +393,11 @@ class AddressCheck(DiscoveryCheck):
                     and address.subinterface != discovered_address.subinterface
                 ):
                     changes += [
-                        "subinterface: %s -> %s"
-                        % (address.subinterface, discovered_address.subinterface)
+                        f"subinterface: {address.subinterface} -> {discovered_address.subinterface}"
                     ]
                     address.subinterface = discovered_address.subinterface
             if discovered_address.mac and address.mac != discovered_address.mac:
-                changes += ["mac: %s -> %s" % (address.mac, discovered_address.mac)]
+                changes += [f"mac: {address.mac} -> {discovered_address.mac}"]
                 address.mac = discovered_address.mac
             if changes:
                 self.logger.info(

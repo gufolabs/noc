@@ -97,7 +97,7 @@ class PingService(FastAPIService):
                 await client.query(
                     limit=config.ping.ds_limit,
                     filters=[
-                        "pool(%s)" % config.pool,
+                        f"pool({config.pool})",
                         "shard(%d,%d)" % (self.slot_number, self.total_slots),
                     ],
                     block=True,

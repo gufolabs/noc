@@ -36,9 +36,9 @@ class TaskObjectCollector(BaseCollector):
         for name, shard in self.schedulers:
             if shard:
                 for s in shard:
-                    r["noc.schedules.%s.%s" % (name, s)] = {"name": name, "shard": s}
+                    r[f"noc.schedules.{name}.{s}"] = {"name": name, "shard": s}
             else:
-                r["noc.schedules.%s" % name] = {"name": name}
+                r[f"noc.schedules.{name}"] = {"name": name}
         return r
 
     def iter_metrics(self):

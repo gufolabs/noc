@@ -98,7 +98,7 @@ class AlarmActionRunner:
                 self.log_alarm(message=ctx["subject"])
                 r = ActionResult(status=ActionStatus.SUCCESS)
             case _:
-                raise NotImplementedError("Action %s not implemented" % action)
+                raise NotImplementedError(f"Action {action} not implemented")
         return r
 
     def check_escalated(self, tt_system: TTSystem) -> str | None:

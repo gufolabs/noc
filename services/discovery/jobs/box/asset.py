@@ -311,7 +311,9 @@ class AssetCheck(DiscoveryCheck):
             o.set_data("asset", "revision", revision)
             o.save()
             o.log(
-                "Object revision changed: %s -> %s" % (o.get_data("asset", "revision"), revision),
+                "Object revision changed: {} -> {}".format(
+                    o.get_data("asset", "revision"), revision
+                ),
                 system="DISCOVERY",
                 managed_object=self.object,
                 op="CHANGE",
@@ -329,7 +331,9 @@ class AssetCheck(DiscoveryCheck):
             o.set_data("asset", "mfg_date", mfg_date)
             o.save()
             o.log(
-                "Object manufacturing date: %s -> %s" % (o.get_data("asset", "mfg_date"), mfg_date),
+                "Object manufacturing date: {} -> {}".format(
+                    o.get_data("asset", "mfg_date"), mfg_date
+                ),
                 system="DISCOVERY",
                 managed_object=self.object,
                 op="CHANGE",
@@ -466,7 +470,7 @@ class AssetCheck(DiscoveryCheck):
             self.logger.info("Changing name to '%s'", n)
             obj.save()
             obj.log(
-                "Change name to '%s'" % n,
+                f"Change name to '{n}'",
                 system="DISCOVERY",
                 managed_object=self.object,
                 op="CHANGE",
@@ -500,7 +504,7 @@ class AssetCheck(DiscoveryCheck):
         """
         s = s or ""
         for c in ctx:
-            s = s.replace("{%s}" % c, str(ctx[c]))
+            s = s.replace(f"{{{c}}}", str(ctx[c]))
         return s
 
     def submit_connections(self):
@@ -765,7 +769,7 @@ class AssetCheck(DiscoveryCheck):
                 o.set_data("stack", "member", m)
                 o.save()
                 o.log(
-                    "Setting stack member %s" % m,
+                    f"Setting stack member {m}",
                     system="DISCOVERY",
                     managed_object=self.object,
                     op="CHANGE",
@@ -859,7 +863,7 @@ class AssetCheck(DiscoveryCheck):
 
     def set_context(self, name: str, value: str | None):
         self.ctx[name] = value
-        n = "N%s" % name
+        n = f"N{name}"
         if n not in self.ctx:
             self.ctx[n] = 0
         else:
@@ -870,7 +874,7 @@ class AssetCheck(DiscoveryCheck):
         for n in names:
             if n in self.ctx:
                 del self.ctx[n]
-            m = "N%s" % n
+            m = f"N{n}"
             if m in self.ctx:
                 del self.ctx[m]
         self.logger.debug("Reset context scopes %s -> %s", ", ".join(names), str_dict(self.ctx))
@@ -1085,7 +1089,7 @@ class AssetCheck(DiscoveryCheck):
             sm = obj.get_data("stack", "member")
             if sm is not None:
                 # Stack member
-                name += "#%s" % sm
+                name += f"#{sm}"
         return name
 
     def disconnect_connections(self):
