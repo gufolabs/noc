@@ -14,7 +14,7 @@
 
 > [!WARNING]
 >
-> Для работы адаптера потребуется установить библиотеку [python-zabbix-utils](https://github.com/zabbix/python-zabbix-utils), это можно сделать командой `./bin/pip install -r .requirements/zabbix.txt` из директории `noc`
+> Для работы адаптера потребуется установить библиотеку [python-zabbix-utils](https://github.com/zabbix/python-zabbix-utils), это можно сделать командой `./bin/pip install .[zabbix]` из директории `noc`
 
 ## Добавление внешней системы
 
