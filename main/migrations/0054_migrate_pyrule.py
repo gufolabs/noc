@@ -25,7 +25,7 @@ class Migration(BaseMigration):
 
     def migrate(self) -> None:
         for name, iface in self.PMAP:
-            handler = "noc.solutions.noc.default.pyrules.%s.%s" % (name, name)
+            handler = f"noc.solutions.noc.default.pyrules.{name}.{name}"
             if self.db.execute("SELECT COUNT(*) FROM main_pyrule WHERE name = %s", [name])[0][0]:
                 # Pyrule exists, change handler
                 self.db.execute(
@@ -36,5 +36,5 @@ class Migration(BaseMigration):
                 self.db.execute(
                     """INSERT INTO main_pyrule(name, interface, handler, description, changed)
                     VALUES(%s, %s, %s, %s, now())""",
-                    [name, iface, handler, "%s solution" % handler],
+                    [name, iface, handler, f"{handler} solution"],
                 )

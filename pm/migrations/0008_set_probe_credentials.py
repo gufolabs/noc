@@ -40,10 +40,10 @@ class Migration(BaseMigration):
         if not os.path.exists("etc/noc-probe.conf"):
             return
         # Create user and set config
-        os.system("./scripts/set-conf.py etc/noc-probe.conf autoconf user %s" % PROBEUSER)
+        os.system(f"./scripts/set-conf.py etc/noc-probe.conf autoconf user {PROBEUSER}")
         r = os.system(
-            "PW=`./noc user --add --username=%s --email=test@example.com --template=probe --pwgen` &&"
-            "./scripts/set-conf.py etc/noc-probe.conf autoconf passwd $PW" % PROBEUSER
+            f"PW=`./noc user --add --username={PROBEUSER} --email=test@example.com --template=probe --pwgen` &&"
+            "./scripts/set-conf.py etc/noc-probe.conf autoconf passwd $PW"
         )
         if r != 0:
             import sys

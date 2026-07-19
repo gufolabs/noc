@@ -49,7 +49,7 @@ class Migration(BaseMigration):
                     "_id": h_id,
                     "handler": handler,
                     "name": handler,
-                    "description": "Migrated %s %s" % ("thresholdprofiles", handler),
+                    "description": "Migrated {} {}".format("thresholdprofiles", handler),
                     HTYPE.get(h_type): True,
                 }
                 h_coll.insert_one(h_data)

@@ -66,7 +66,7 @@ class Migration(BaseMigration):
                  UPDATE sa_managedobject
                  SET diagnostics = diagnostics  #- %s  #- %s
                  """,
-            ["{%s}" % SNMPTRAP_DIAG, "{%s}" % SYSLOG_DIAG],
+            [f"{{{SNMPTRAP_DIAG}}}", f"{{{SYSLOG_DIAG}}}"],
         )
 
     def sync_labels(self, labels):

@@ -22,7 +22,7 @@ class Migration(BaseMigration):
                 VALUES(%s,%s,%s)""",
                 [
                     name,
-                    "Auto created from (%s,%s,%s)" % (user_id, administrative_domain_id, group_id),
+                    f"Auto created from ({user_id},{administrative_domain_id},{group_id})",
                     administrative_domain_id,
                 ],
             )

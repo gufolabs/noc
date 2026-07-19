@@ -25,16 +25,16 @@ class Migration(BaseMigration):
         repo_root = config.path.repo
         for ot in TYPES:
             self.db.add_column(
-                "cm_%s" % ot,
+                f"cm_{ot}",
                 "last_modified",
                 models.DateTimeField("Last Modified", blank=True, null=True),
             )
             if repo_root:
                 repo = os.path.join(repo_root, TYPES[ot])
-                for id, repo_path in self.db.execute("SELECT id,repo_path FROM cm_%s" % ot):
+                for id, repo_path in self.db.execute(f"SELECT id,repo_path FROM cm_{ot}"):
                     path = os.path.join(repo, repo_path)
                     if os.path.exists(path):
                         lm = datetime.datetime.fromtimestamp(os.stat(path)[stat.ST_MTIME])
                         self.db.execute(
-                            "UPDATE cm_%s SET last_modified=%%s WHERE id=%%s" % ot, [lm, id]
+                            f"UPDATE cm_{ot} SET last_modified=%s WHERE id=%s", [lm, id]
                         )

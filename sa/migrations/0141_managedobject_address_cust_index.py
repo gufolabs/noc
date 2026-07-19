@@ -28,7 +28,7 @@ class Migration(BaseMigration):
                           WHERE tablename='sa_managedobject' AND indexname='x_managedobject_addressprefix'"""
         )
         if i:
-            self.db.execute("DROP INDEX %s" % "x_managedobject_addressprefix")
+            self.db.execute("DROP INDEX {}".format("x_managedobject_addressprefix"))
 
         self.db.execute(func)
         self.db.execute(

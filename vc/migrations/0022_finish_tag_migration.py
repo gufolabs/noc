@@ -21,4 +21,4 @@ class Migration(BaseMigration):
             self.db.rename_column(m, "tmp_tags", "tags")
         # Create indexes
         for m in self.TAG_MODELS:
-            self.db.execute('CREATE INDEX x_%s_tags ON "%s" USING GIN("tags")' % (m, m))
+            self.db.execute(f'CREATE INDEX x_{m}_tags ON "{m}" USING GIN("tags")')
