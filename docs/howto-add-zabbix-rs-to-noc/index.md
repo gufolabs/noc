@@ -12,7 +12,7 @@ For this scheme, NOCa includes an adapter for integration with Zabbix, it allows
 
 > [!WARNING]
 >
-> The [python-zabbix-utils](https://github.com/zabbix/python-zabbix-utils) library will need to be installed for the adapter to work, this can be done with the `./bin/pip install -r .[zabbix.txt]` command from the `noc` directory.
+> The [python-zabbix-utils](https://github.com/zabbix/python-zabbix-utils) library will need to be installed for the adapter to work, this can be done with the `./bin/pip install .[zabbix]` command from the `noc` directory.
 
 
 ## Adding an external system
