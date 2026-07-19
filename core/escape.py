@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Escape/unescape to various encodings
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -12,9 +12,17 @@ import binascii
 from noc.core.comp import smart_bytes, smart_text
 
 
-def json_escape(s):
+def json_escape(s: str | bool | None) -> str:
     """
-    Escape JSON predefined sequences
+    Escape a value for safe inclusion into a JSON string.
+
+    Args:
+        s: String value to escape. ``bool`` values are converted to JSON
+            literals (``"true"`` or ``"false"``), while ``None`` is
+            converted to an empty string.
+
+    Returns:
+        Escaped string representation of the value.
     """
     if isinstance(s, bool):
         return "true" if s else "false"
