@@ -5,7 +5,7 @@ site_url: https://getnoc.com/
 repo_url: https://github.com/gufolabs/noc
 repo_name: GitHub
 edit_uri: -/edit/master/docs/
-copyright: 2007-2025, Gufo Labs
+copyright: 2007-2026, Gufo Labs
 nav:
   - Home: index.md
   - Installation: installation-guide/
@@ -74,6 +74,7 @@ nav:
       - Connect Zabbix Remote System as Managed Object Source: howto-add-zabbix-rs-to-noc/index.md
   - Background:
       - Overview: sections-overview/background.md
+      - NOC Governance: governance/index.md
       - Connection Restrictions: connection-restrictions/index.md
       - Connection Type Restrictions: connection-type-restrictions/index.md
       - Topology Processing Features: topology-processing-features/index.md
