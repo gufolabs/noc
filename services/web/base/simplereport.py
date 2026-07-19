@@ -53,10 +53,10 @@ class ReportNode:
         """
         Return opening XML tag
         """
-        s = "<%s" % self.tag
+        s = f"<{self.tag}"
         for k, v in kwargs.items():
             if v:
-                s += " %s='%s'" % (k, self.quote(v))
+                s += f" {k}='{self.quote(v)}'"
         s += ">"
         return s
 
@@ -64,7 +64,7 @@ class ReportNode:
         """
         Return closing XML tag
         """
-        return "</%s>" % self.tag
+        return f"</{self.tag}>"
 
     def indent(self, s, n=1):
         """
@@ -152,8 +152,8 @@ class TextSection(ReportSection):
         """
         s = []
         if self.title:
-            s += ["<h2>%s</h2>" % self.quote(self.title)]
-        s += ["<p>%s</p>" % self.quote(p) for p in self.paragraphs]
+            s += [f"<h2>{self.quote(self.title)}</h2>"]
+        s += [f"<p>{self.quote(p)}</p>" for p in self.paragraphs]
         return "\n".join(s)
 
 
@@ -202,8 +202,8 @@ class TableColumn(ReportNode):
             if align
             else None
         )
-        self.format = getattr(self, "f_%s" % format) if isinstance(format, str) else format
-        self.total = getattr(self, "ft_%s" % total) if isinstance(total, str) else total
+        self.format = getattr(self, f"f_{format}") if isinstance(format, str) else format
+        self.total = getattr(self, f"ft_{total}") if isinstance(total, str) else total
         self.total_label = total_label
         self.total_data = []
         self.subtotal_data = []
@@ -250,7 +250,7 @@ class TableColumn(ReportNode):
                 attrs["align"] = "right"
             elif self.align & self.H_ALIGN_MASK == self.ALIGN_CENTER:
                 attrs["align"] = "center"
-        return " " + " ".join(["%s='%s'" % (k, self.quote(v)) for k, v in attrs.items()])
+        return " " + " ".join([f"{k}='{self.quote(v)}'" for k, v in attrs.items()])
 
     def format_html(self, s):
         """
@@ -261,7 +261,7 @@ class TableColumn(ReportNode):
         d = self.format_data(s)
         if not isinstance(d, SafeString):
             d = self.quote(d)
-        return "<td%s>%s</td>" % (self.html_td_attrs(), d)
+        return f"<td{self.html_td_attrs()}>{d}</td>"
 
     def format_html_total(self):
         """
@@ -274,7 +274,7 @@ class TableColumn(ReportNode):
             total = self.total_label
         else:
             total = ""
-        return "<td%s><b>%s</b></td>" % (self.html_td_attrs(), total)
+        return f"<td{self.html_td_attrs()}><b>{total}</b></td>"
 
     def format_html_subtotal(self, d):
         """
@@ -288,7 +288,7 @@ class TableColumn(ReportNode):
             total = self.total_label
         else:
             total = ""
-        return "<td%s><b>%s</b></td>" % (self.html_td_attrs(), total)
+        return f"<td{self.html_td_attrs()}><b>{total}</b></td>"
 
     def f_date(self, f):
         """
@@ -323,9 +323,9 @@ class TableColumn(ReportNode):
         f = decimal.Decimal(f)
         for limit, divider, suffix in SIZE_DATA:
             if f < limit:
-                return ("%8.2f%s" % (f / divider, suffix)).strip()
+                return (f"{f / divider:8.2f}{suffix}").strip()
         limit, divider, suffix = SIZE_DATA[-1]
-        return ("%8.2f%s" % (f / divider, suffix)).strip()
+        return (f"{f / divider:8.2f}{suffix}").strip()
 
     def f_numeric(self, f):
         """
@@ -369,7 +369,7 @@ class TableColumn(ReportNode):
         """
         Display url field
         """
-        return SafeString('<a href="%s", target="_blank">Link</a>' % url)
+        return SafeString(f'<a href="{url}", target="_blank">Link</a>')
 
     def f_integer(self, f):
         """
@@ -387,7 +387,7 @@ class TableColumn(ReportNode):
         """
         Returns a pretty-printed object
         """
-        return SafeString("<pre>%s</pre>" % pprint.pformat(f))
+        return SafeString(f"<pre>{pprint.pformat(f)}</pre>")
 
     def f_string(self, f):
         """
@@ -515,16 +515,16 @@ class TableSection(ReportSection):
                 "   var buttons = $('.button').prop('disabled', false);",
                 "});",
                 "</script>",
-                "<table class='report-table' summary='%s'>" % self.quote(self.name),
+                f"<table class='report-table' summary='{self.quote(self.name)}'>",
             ]
         else:
-            s = ["<table class='report-table' summary='%s'>" % self.quote(self.name)]
+            s = [f"<table class='report-table' summary='{self.quote(self.name)}'>"]
         # Render header
         s += ["<thead>"]
         s += ["<tr>"]
         if self.enumerate:
             s += ["<th>#</th>"]
-        s += ["<th>%s</th>" % self.quote(c.title) for c in self.columns]
+        s += [f"<th>{self.quote(c.title)}</th>" for c in self.columns]
         s += ["</tr>"]
         s += ["</thead>"]
         s += ["<tbody>"]

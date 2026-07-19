@@ -84,8 +84,7 @@ class ReportRebootsApplication(SimpleReport):
                 """
                 SELECT id, address, name
                 FROM sa_managedobject
-                WHERE id IN (%s)"""
-                % ", ".join(chunk)
+                WHERE id IN ({})""".format(", ".join(chunk))
             )
             mo_names.update({c[0]: c[1:3] for c in cursor})
         if not request.user.is_superuser:

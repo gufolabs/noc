@@ -21,7 +21,7 @@ class RackPlugin(InvPlugin):
     def init_plugin(self):
         super().init_plugin()
         self.add_view(
-            "api_plugin_%s_set_rackload" % self.name,
+            f"api_plugin_{self.name}_set_rackload",
             self.api_set_rack_load,
             url=f"^(?P<id>[0-9a-f]{{24}})/plugin/{self.name}/rackload/$",
             method=["POST"],

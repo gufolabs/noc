@@ -434,10 +434,10 @@ class ReportMaxMetricsmaxDetailApplication(ExtApplication):
                 if ss:
                     r += [translate_row(row2, cmap)]
 
-        filename = "metrics_detail_report_%s" % datetime.datetime.now().strftime("%Y%m%d")
+        filename = "metrics_detail_report_{}".format(datetime.datetime.now().strftime("%Y%m%d"))
         if o_format == "csv":
             response = HttpResponse(content_type="text/csv")
-            response["Content-Disposition"] = 'attachment; filename="%s.csv"' % filename
+            response["Content-Disposition"] = f'attachment; filename="{filename}.csv"'
             writer = csv.writer(response, dialect="excel", delimiter=",", quoting=csv.QUOTE_MINIMAL)
             writer.writerows(r)
             return response
@@ -448,12 +448,12 @@ class ReportMaxMetricsmaxDetailApplication(ExtApplication):
             writer.writerows(r)
             f.seek(0)
             with ZipFile(response, "w", compression=ZIP_DEFLATED) as zf:
-                zf.writestr("%s.csv" % filename, f.read())
-                zf.filename = "%s.csv.zip" % filename
+                zf.writestr(f"{filename}.csv", f.read())
+                zf.filename = f"{filename}.csv.zip"
             # response = HttpResponse(content_type="text/csv")
             response.seek(0)
             response = HttpResponse(response.getvalue(), content_type="application/zip")
-            response["Content-Disposition"] = 'attachment; filename="%s.csv.zip"' % filename
+            response["Content-Disposition"] = f'attachment; filename="{filename}.csv.zip"'
             return response
         if o_format == "xlsx":
             response = BytesIO()
@@ -480,6 +480,6 @@ class ReportMaxMetricsmaxDetailApplication(ExtApplication):
             wb.close()
             response.seek(0)
             response = HttpResponse(response.getvalue(), content_type="application/vnd.ms-excel")
-            response["Content-Disposition"] = 'attachment; filename="%s.xlsx"' % filename
+            response["Content-Disposition"] = f'attachment; filename="{filename}.xlsx"'
             response.close()
             return response

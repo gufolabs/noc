@@ -80,9 +80,9 @@ class AuditTrailApplication(ExtApplication):
 
         queries = []
         if _query:
-            queries.append("object_name = '%s'\n" % (_query))
+            queries.append(f"object_name = '{_query}'\n")
         if _op:
-            queries.append("op = '%s'\n" % (_op))
+            queries.append(f"op = '{_op}'\n")
 
         if queries:
             ch_query += "WHERE\n" + " AND ".join(queries)

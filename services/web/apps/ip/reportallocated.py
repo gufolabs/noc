@@ -76,10 +76,7 @@ class ReportAllocated(SimpleReport):
             if k in cfn and v is not None and v != "":
                 q &= Q(**{str(k): v})
         return self.from_dataset(
-            title=_(
-                "Allocated blocks in VRF %(vrf)s (IPv%(afi)s), %(prefix)s"
-                % {"vrf": vrf.name, "afi": afi, "prefix": prefix.prefix}
-            ),
+            title=_(f"Allocated blocks in VRF {vrf.name} (IPv{afi}), {prefix.prefix}"),
             columns=columns,
             data=[get_row(p) for p in prefix.children_set.filter(q).order_by("prefix")],
             enumerate=True,

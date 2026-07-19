@@ -21,47 +21,46 @@ class RepoInline:
     def contribute_to_class(self, app, name):
         # Get last revision
         app.add_view(
-            "api_%s_get" % name,
+            f"api_{name}_get",
             self.api_get,
             method=["GET"],
-            url="^(?P<parent>[^/]+)/repo/%s/$" % name,
+            url=f"^(?P<parent>[^/]+)/repo/{name}/$",
             access=self.access,
             api=True,
         )
         # Get list of revisions
         app.add_view(
-            "api_%s_revisions" % name,
+            f"api_{name}_revisions",
             self.api_revisions,
             method=["GET"],
-            url="^(?P<parent>[^/]+)/repo/%s/revisions/$" % name,
+            url=f"^(?P<parent>[^/]+)/repo/{name}/revisions/$",
             access=self.access,
             api=True,
         )
         # Get particular revision
         app.add_view(
-            "api_%s_get_revision" % name,
+            f"api_{name}_get_revision",
             self.api_get_revision,
             method=["GET"],
-            url="^(?P<parent>[^/]+)/repo/%s/(?P<revision>[0-9a-f]{24})/$" % name,
+            url=f"^(?P<parent>[^/]+)/repo/{name}/(?P<revision>[0-9a-f]{{24}})/$",
             access=self.access,
             api=True,
         )
         # Get diff
         app.add_view(
-            "api_%s_diff" % name,
+            f"api_{name}_diff",
             self.api_get_diff,
             method=["GET"],
-            url="^(?P<parent>[^/]+)/repo/%s/(?P<rev1>[0-9a-f]{24})/(?P<rev2>[0-9a-f]{24})/$" % name,
+            url=f"^(?P<parent>[^/]+)/repo/{name}/(?P<rev1>[0-9a-f]{{24}})/(?P<rev2>[0-9a-f]{{24}})/$",
             access=self.access,
             api=True,
         )
         # Get mdiff
         app.add_view(
-            "api_%s_mdiff" % name,
+            f"api_{name}_mdiff",
             self.api_get_mdiff,
             method=["GET"],
-            url="^(?P<parent>[^/]+)/repo/%s/(?P<rev1>[0-9a-f]{24})/(?P<obj2>[^/]+)/(?P<rev2>[0-9a-f]{24})/$"
-            % name,
+            url=f"^(?P<parent>[^/]+)/repo/{name}/(?P<rev1>[0-9a-f]{{24}})/(?P<obj2>[^/]+)/(?P<rev2>[0-9a-f]{{24}})/$",
             access=self.access,
             api=True,
         )
@@ -70,7 +69,7 @@ class RepoInline:
         self.app = app
         self.logger = app.logger
         self.parent_model = self.app.model
-        self.check_access = getattr(self.app, "has_repo_%s_access" % self.field, None)
+        self.check_access = getattr(self.app, f"has_repo_{self.field}_access", None)
 
     def clean_parent(self, v):
         return int(v)

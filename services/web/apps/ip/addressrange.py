@@ -32,9 +32,9 @@ class AddressRangeApplication(ExtModelApplication):
         # Check AFI
         address_validator = is_ipv4 if afi == "4" else is_ipv6
         if not address_validator(from_address):
-            raise ValueError("Invalid IPv%(afi)s 'From Address'" % {"afi": afi})
+            raise ValueError(f"Invalid IPv{afi} 'From Address'")
         if not address_validator(to_address):
-            raise ValueError("Invalid IPv%(afi)s 'To Address'" % {"afi": afi})
+            raise ValueError(f"Invalid IPv{afi} 'To Address'")
         # Check from address not greater than to address
         if IP.prefix(from_address) > IP.prefix(to_address):
             raise ValueError("'To Address' must be greater or equal than 'From Address'")
@@ -53,7 +53,7 @@ class AddressRangeApplication(ExtModelApplication):
             for ns in reverse_nses.split(","):
                 ns = ns.strip()
                 if not is_ipv4(ns) and not is_ipv6(ns) and not is_fqdn(ns):
-                    raise ValueError("%s is invalid nameserver" % ns)
+                    raise ValueError(f"{ns} is invalid nameserver")
         # Check no locked range overlaps another locked range
         if data["is_locked"]:
             r = [
@@ -65,6 +65,6 @@ class AddressRangeApplication(ExtModelApplication):
             ]
             if r:
                 raise ValueError(
-                    "Locked range overlaps with ahother locked range: %s" % smart_text(r[0])
+                    f"Locked range overlaps with ahother locked range: {smart_text(r[0])}"
                 )
         return data

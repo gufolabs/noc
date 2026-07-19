@@ -17,4 +17,4 @@ class PlainTextParser(BaseParser):
 
     @classmethod
     def to_html(cls, kb_entry):
-        return "<pre>%s</pre>" % kb_entry.body
+        return f"<pre>{kb_entry.body}</pre>"

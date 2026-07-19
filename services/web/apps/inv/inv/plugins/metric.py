@@ -240,9 +240,9 @@ class MetricPlugin(InvPlugin):
     def init_plugin(self):
         super().init_plugin()
         self.add_view(
-            "api_plugin_%s_set_metric_threshold" % self.name,
+            f"api_plugin_{self.name}_set_metric_threshold",
             self.api_set_metric_threshold,
-            url="^(?P<id>[0-9a-f]{24})/plugin/%s/(?P<sid>[0-9a-f]{24})/set_threshold/$" % self.name,
+            url=f"^(?P<id>[0-9a-f]{{24}})/plugin/{self.name}/(?P<sid>[0-9a-f]{{24}})/set_threshold/$",
             method=["POST"],
             validate={
                 "thresholds": DictListParameter(

@@ -123,8 +123,9 @@ class DiscoveredObjectApplication(ExtDocApplication):
         if synced != len(req["ids"]):
             return {
                 "status": False,
-                "error": "Synced %s/%s. Set default_template on Object Discovery Rule"
-                % (synced, len(req["ids"])),
+                "error": "Synced {}/{}. Set default_template on Object Discovery Rule".format(
+                    synced, len(req["ids"])
+                ),
             }
         return {"status": True}
 

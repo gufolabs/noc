@@ -34,7 +34,7 @@ class JSONImportApplication(ExtApplication):
         try:
             jdata = orjson.loads(json)
         except Exception as e:
-            return {"status": False, "error": "Invalid JSON: %s" % e}
+            return {"status": False, "error": f"Invalid JSON: {e}"}
         try:
             if isinstance(jdata, list):
                 for d in jdata:

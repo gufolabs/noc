@@ -40,7 +40,7 @@ class ReportStaleDiscoveryJob(SimpleReport):
                     if "text" in tb and "code" in tb:
                         if tb["text"].endswith("END OF TRACEBACK"):
                             tb["text"] = "Job crashed"
-                        msg = "(%s) %s" % (tb["text"], tb["code"])
+                        msg = "({}) {}".format(tb["text"], tb["code"])
                 data += [
                     [
                         mo.administrative_domain.name,

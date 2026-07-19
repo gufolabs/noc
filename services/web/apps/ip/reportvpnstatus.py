@@ -33,9 +33,7 @@ class ReportVPNStatusApplication(SimpleReport):
                 if si:
                     d += [[fi.managed_object.name, ", ".join(si)]]
             if d:
-                data += [
-                    SectionRow(name="VRF %s, RD: %s [%s]" % (vrf.name, vrf.rd, vrf.state.name))
-                ]
+                data += [SectionRow(name=f"VRF {vrf.name}, RD: {vrf.rd} [{vrf.state.name}]")]
                 data += d
         return self.from_dataset(
             title=self.title, columns=[_("Managed Object"), _("Interfaces")], data=data

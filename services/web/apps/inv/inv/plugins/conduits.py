@@ -35,15 +35,15 @@ class ConduitsPlugin(InvPlugin):
     def init_plugin(self):
         super().init_plugin()
         self.add_view(
-            "api_plugin_%s_get_neighbors" % self.name,
+            f"api_plugin_{self.name}_get_neighbors",
             self.api_get_neighbors,
-            url="^(?P<id>[0-9a-f]{24})/plugin/%s/get_neighbors/$" % self.name,
+            url=f"^(?P<id>[0-9a-f]{{24}})/plugin/{self.name}/get_neighbors/$",
             method=["GET"],
         )
         self.add_view(
-            "api_plugin_%s_create_ducts" % self.name,
+            f"api_plugin_{self.name}_create_ducts",
             self.api_create_ducts,
-            url="^(?P<id>[0-9a-f]{24})/plugin/%s/$" % self.name,
+            url=f"^(?P<id>[0-9a-f]{{24}})/plugin/{self.name}/$",
             method=["POST"],
             validate={
                 "ducts": DictListParameter(

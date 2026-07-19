@@ -276,7 +276,7 @@ class InterfaceApplication(ExtDocApplication):
     def api_unlinked(self, request, object_id):
         def get_label(i):
             if i.description:
-                return "%s (%s)" % (i.name, i.description)
+                return f"{i.name} ({i.description})"
             return i.name
 
         o = self.get_object_or_404(ManagedObject, id=int(object_id))

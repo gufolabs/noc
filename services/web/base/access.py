@@ -143,13 +143,13 @@ class HasPerm(Permission):
 
     def __repr__(self):
         if hasattr(self, "perm_id"):
-            return "<HasPerm '%s' object at 0x%x>" % (self.perm_id, id(self))
-        return "<HasPerm object at 0x%x>" % id(self)
+            return f"<HasPerm '{self.perm_id}' object at 0x{id(self):x}>"
+        return f"<HasPerm object at 0x{id(self):x}>"
 
     def get_permission(self, app):
         if ":" in self.perm:
             return self.perm
-        return "%s:%s:%s" % (app.module, app.app, self.perm)
+        return f"{app.module}:{app.app}:{self.perm}"
 
     def check(self, app, user, obj=None):
         return DBPermission.has_perm(user, self.get_permission(app))

@@ -263,7 +263,7 @@ class ReportModelFilter:
         ids = []
         moss = self.model.objects.filter()
         for f in formula.split("."):
-            self.logger.debug("Decoding: %s" % f)
+            self.logger.debug(f"Decoding: {f}")
             f_num, f_type, f_val = self.decode_re.findall(f.lower())[0]
             func_stat = self.f_map[f_type]
             func_stat = getattr(func_stat, "get_stat")(f_num, f_val)

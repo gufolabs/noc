@@ -22,7 +22,7 @@ class ParamPlugin(InvPlugin):
     def init_plugin(self):
         super().init_plugin()
         self.add_view(
-            "api_plugin_%s_save_data" % self.name,
+            f"api_plugin_{self.name}_save_data",
             self.api_save_data,
             url="^(?P<id>[0-9a-f]{24})/plugin/param/$",
             method=["PUT"],
@@ -35,7 +35,7 @@ class ParamPlugin(InvPlugin):
             ),
         )
         self.add_view(
-            "api_plugin_%s_schema" % self.name,
+            f"api_plugin_{self.name}_schema",
             self.api_save_data,
             url="^(?P<id>[0-9a-f]{24})/plugin/param/schema/$",
             method=["GET"],
@@ -45,7 +45,7 @@ class ParamPlugin(InvPlugin):
             },
         )
         self.add_view(
-            "api_plugin_%s_scopes" % self.name,
+            f"api_plugin_{self.name}_scopes",
             self.api_scopes,
             url="^(?P<id>[0-9a-f]{24})/plugin/param/scopes/$",
             method=["GET"],

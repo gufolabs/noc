@@ -110,7 +110,7 @@ class Node:
 
     def update_report(self, r, current_level, max_level):
         if self.height > 1:
-            r += ["<td rowspan='%s' class='block'>" % self.height]
+            r += [f"<td rowspan='{self.height}' class='block'>"]
         else:
             r += ["<td class='block'>"]
         r += [self.get_html(), "</td>"]
@@ -145,14 +145,14 @@ class VRFGroupNode(Node):
 
     def populate(self):
         if self.vrfs:
-            vid = "{%s}" % ",".join([str(v.id) for v in self.vrfs])
+            vid = "{{{}}}".format(",".join([str(v.id) for v in self.vrfs]))
             root = Prefix.objects.get(vrf=self.vrfs[0], prefix="0.0.0.0/0")
             c = GPrefixNode(self.app, root, vid)
             self.children = c.children  # Relink
 
     def get_html(self):
-        r = ["<b>VRF Group: %s</b>" % self.vrf_group.name]
-        r += ["&nbsp;&nbsp;<b>%s</b> (RD: %s)" % (v.name, v.rd) for v in self.vrfs]
+        r = [f"<b>VRF Group: {self.vrf_group.name}</b>"]
+        r += [f"&nbsp;&nbsp;<b>{v.name}</b> (RD: {v.rd})" for v in self.vrfs]
         return "<br>".join(r)
 
 
@@ -167,7 +167,7 @@ class VRFNode(Node):
             self.children += [PrefixNode(self.app, p)]
 
     def get_html(self):
-        return "<b>VRF %s</b><br/>RD: %s" % (self.vrf.name, self.vrf.rd)
+        return f"<b>VRF {self.vrf.name}</b><br/>RD: {self.vrf.rd}"
 
 
 class PrefixNode(Node):
@@ -187,7 +187,7 @@ class PrefixNode(Node):
         return self.prefix
 
     def __repr__(self):
-        return "<%s %s>" % (self.__class__.__name__, self.prefix)
+        return f"<{self.__class__.__name__} {self.prefix}>"
 
     def populate(self):
         if not self.app.prefix_children.get(self.prefix.id):
@@ -196,13 +196,13 @@ class PrefixNode(Node):
             self.children += [PrefixNode(self.app, p)]
 
     def get_html(self):
-        r = ["<b><u>%s</u></b>" % self.prefix.prefix]
+        r = [f"<b><u>{self.prefix.prefix}</u></b>"]
         if self.prefix.description:
-            r += ["<br/>%s" % self.prefix.description]
+            r += [f"<br/>{self.prefix.description}"]
         if self.show_vrf:
-            r += ["<br/>VRF: %s" % self.prefix.vrf.name]
+            r += [f"<br/>VRF: {self.prefix.vrf.name}"]
         if self.used is not None:
-            r += ["<br/>%s" % self.get_bar(self.used)]
+            r += [f"<br/>{self.get_bar(self.used)}"]
         # Show custom fields
         for f in prefix_fields:
             v = getattr(self.prefix, f.name)
@@ -210,10 +210,10 @@ class PrefixNode(Node):
                 continue
             if f.type == "bool":
                 t = "check" if f else "times"
-                icon = "<i class='fa fa-%s'></i>" % t
-                r += ["<br/>%s: %s" % (f.label, icon)]
+                icon = f"<i class='fa fa-{t}'></i>"
+                r += [f"<br/>{f.label}: {icon}"]
             else:
-                r += ["<br/>%s: %s" % (f.label, v)]
+                r += [f"<br/>{f.label}: {v}"]
         return "".join(r)
 
     def update_usage(self):

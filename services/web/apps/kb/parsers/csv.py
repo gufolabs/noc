@@ -20,10 +20,10 @@ class CSVParser(BaseParser):
     def to_html(cls, kb_entry):
         reader = csv.reader(list(kb_entry.body.splitlines()))
         r = ["<TABLE BORDER='1' ID='csvtable' class='tablesorter'>", "<thead>"]
-        r += ["<TR>"] + ["<TH>%s</TH>" % smart_text(c) for c in next(reader)] + ["</TR>"]
+        r += ["<TR>"] + [f"<TH>{smart_text(c)}</TH>" for c in next(reader)] + ["</TR>"]
         r += ["</thead>", "<tbody>"]
         for row in reader:
-            r += ["<TR>"] + ["<TD>%s</TD>" % smart_text(c) for c in row] + ["</TR>"]
+            r += ["<TR>"] + [f"<TD>{smart_text(c)}</TD>" for c in row] + ["</TR>"]
         r += ["</tbody></TABLE>"]
         r += [
             "<script type='text/javascript'>",

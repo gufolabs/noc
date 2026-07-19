@@ -178,7 +178,7 @@ class WorkflowApplication(ExtDocApplication):
             try:
                 get_model(am)
             except ImportError:
-                raise ValueError("Bad Model: %s" % am)
+                raise ValueError(f"Bad Model: {am}")
             wf.allowed_models += [am]
         wf.save()
         # Get current state
@@ -257,7 +257,7 @@ class WorkflowApplication(ExtDocApplication):
         # Get all clone names
         m = 0
         for d in Workflow._get_collection().find(
-            {"name": {"$regex": re.compile(r"^%s\(Copy #\d+\)$" % re.escape(wf.name))}},
+            {"name": {"$regex": re.compile(rf"^{re.escape(wf.name)}\(Copy #\d+\)$")}},
             {"_id": 0, "name": 1},
         ):
             match = self.rx_clone_name.search(d["name"])

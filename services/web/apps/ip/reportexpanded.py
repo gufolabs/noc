@@ -71,10 +71,7 @@ class ExpandedReport(SimpleReport):
         columns += ["Description", TableColumn(_("Tags"), format="tags")]
         data = get_info(prefix)
         return self.from_dataset(
-            title=_(
-                "All allocated blocks in VRF %(vrf)s (IPv%(afi)s), %(prefix)s"
-                % {"vrf": vrf.name, "afi": afi, "prefix": prefix.prefix}
-            ),
+            title=_(f"All allocated blocks in VRF {vrf.name} (IPv{afi}), {prefix.prefix}"),
             columns=columns,
             data=data,
             enumerate=True,

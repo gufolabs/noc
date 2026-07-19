@@ -623,7 +623,7 @@ class MapApplication(ExtApplication):
             return s
 
         def qt(t):
-            return "|".join(["%s=%s" % (v, t[v]) for v in sorted(t)])
+            return "|".join([f"{v}={t[v]}" for v in sorted(t)])
 
         # Filter misformated metrics
         filtered_metrics = [

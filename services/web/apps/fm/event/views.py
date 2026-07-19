@@ -159,7 +159,7 @@ class EventApplication(ExtApplication):
             event_class,
         )
         if filter_x:
-            sql += ["WHERE %s" % " AND ".join(filter_x)]
+            sql += ["WHERE {}".format(" AND ".join(filter_x))]
         sql += ["ORDER BY ts DESC"]
         if limit and offset:
             sql += [f"LIMIT {offset}, {limit}"]

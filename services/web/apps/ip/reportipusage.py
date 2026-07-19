@@ -30,7 +30,7 @@ class ReportIPUsageApplication(SimpleReport):
         c.execute(self.QUERY)
         for vrf, rd, afi, prefix, description, used in c:
             if last_vrf != vrf:
-                data += [SectionRow("%s (%s)" % (vrf, rd))]
+                data += [SectionRow(f"{vrf} ({rd})")]
                 last_vrf = vrf
             p = IP.prefix(prefix)
             if afi == "4":

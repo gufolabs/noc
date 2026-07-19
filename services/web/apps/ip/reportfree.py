@@ -46,10 +46,7 @@ class FreeBlocksReport(SimpleReport):
     def get_data(self, vrf, afi, prefix, **kwargs):
         p = IP.prefix(prefix.prefix)
         return self.from_dataset(
-            title=_(
-                "Free blocks in VRF %(vrf)s (IPv%(afi)s), %(prefix)s"
-                % {"vrf": vrf.name, "afi": afi, "prefix": prefix.prefix}
-            ),
+            title=_(f"Free blocks in VRF {vrf.name} (IPv{afi}), {prefix.prefix}"),
             columns=["Free Blocks"],
             data=[
                 [smart_text(f)]

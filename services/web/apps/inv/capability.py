@@ -70,7 +70,7 @@ class CapabilityApplication(ExtDocApplication):
                 for f in caps_d[e]
             ]
             if not e:
-                self.logger.warning("Not e: %s, children: %s" % (caps_d[e], children))
+                self.logger.warning(f"Not e: {caps_d[e]}, children: {children}")
                 # @todo Update inside list
                 context[children[0]["text"]] += children
             for b in reversed(e):

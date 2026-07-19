@@ -107,7 +107,7 @@ class PrefixApplication(ExtModelApplication):
             o.delete_recursive()
         except ValueError as e:
             return self.render_json(
-                {"success": False, "message": "ERROR: %s" % e}, status=self.CONFLICT
+                {"success": False, "message": f"ERROR: {e}"}, status=self.CONFLICT
             )
         return HttpResponse(status=self.DELETED)
 

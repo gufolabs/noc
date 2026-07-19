@@ -15,4 +15,4 @@ class TotalOutageApplication(ExtApplication):
     title = _("Total Outages")
     menu = _("Total Outages")
     glyph = "bolt"
-    link = "/api/card/view/totaloutage/1/?refresh=%s" % config.fm.total_outage_refresh
+    link = f"/api/card/view/totaloutage/1/?refresh={config.fm.total_outage_refresh}"

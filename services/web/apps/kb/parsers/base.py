@@ -51,7 +51,7 @@ class BaseParser:
         if text is None:
             text = link
         if link.startswith("KB") and is_int(link[2:]):
-            return "<a href='%s/%s/'>%s</a>" % (BASE_PATH, link[2:], text)
+            return f"<a href='{BASE_PATH}/{link[2:]}/'>{text}</a>"
         if link.startswith("TT"):
             return link[2:]
         if link.startswith("attach:"):
@@ -66,9 +66,9 @@ class BaseParser:
             return "<a href='/kb/kbentry/%d/attachment/%s/'>%s</a>" % (kb_entry.id, link, text)
         try:
             le = kb_entry.__class__.objects.get(subject=link)
-            return "<a href='%s/%s/'>%s</a>" % (BASE_PATH, le.id, text)
+            return f"<a href='{BASE_PATH}/{le.id}/'>{text}</a>"
         except kb_entry.__class__.DoesNotExist:
-            return "<a href='%s'>%s</a>" % (link, text)
+            return f"<a href='{link}'>{text}</a>"
 
     @classmethod
     def convert_attach(cls, kb_entry, href):

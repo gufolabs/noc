@@ -67,7 +67,7 @@ class VLANFilterApplication(ExtDocApplication):
         value = IntParameter().clean(value)
         filters = [str(f.id) for f in VLANFilter.objects.filters(include_vlans__in=[value])]
         if filters:
-            x = "(id IN (%s))" % ", ".join(filters)
+            x = "(id IN ({}))".format(", ".join(filters))
         else:
             x = "FALSE"
         try:

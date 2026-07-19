@@ -150,7 +150,7 @@ class ReportAvailabilityApplication(SimpleReport):
             start_date=from_date, stop_date=to_date, skip_zero_avail=skip_zero_avail
         )
         rb = self.get_reboots(start_date=from_date, stop_date=to_date)
-        r = [SectionRow("Report from %s to %s" % (from_date, to_date))]
+        r = [SectionRow(f"Report from {from_date} to {to_date}")]
         mos = ManagedObject.objects.filter(is_managed=True)
 
         if not request.user.is_superuser:

@@ -51,7 +51,7 @@ class ReportLOC(SimpleReport):
         # Scan modules
         for m in [m for m in settings.INSTALLED_APPS if m.startswith("noc.")]:
             m = m[4:]
-            module_name = importlib.import_module("noc.%s" % m).MODULE_NAME
+            module_name = importlib.import_module(f"noc.{m}").MODULE_NAME
             data += [SectionRow(module_name)]
             # Scan models
             models_path = os.path.join(m, "models.py")
@@ -97,7 +97,7 @@ class ReportLOC(SimpleReport):
                             py_loc += lines(os.path.join(dirpath, f))
                         for f in [f for f in filenames if f.endswith(".html")]:
                             html_loc += lines(os.path.join(dirpath, f))
-                data += [["Application", "%s.%s" % (m, app), py_loc, html_loc, tests_loc]]
+                data += [["Application", f"{m}.{app}", py_loc, html_loc, tests_loc]]
                 # Scan Profiles
             if m == "sa":
                 for d in glob.glob("sa/profiles/*/*"):

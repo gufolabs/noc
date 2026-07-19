@@ -147,13 +147,13 @@ class ReportPendingLinks:
                         problems[mo.id][iface] = {
                             "problem": "Not found iface on remote",
                             "detail": detail,
-                            "remote_id": "%s::: %s" % (rmo.name, rmo.profile.name),
+                            "remote_id": f"{rmo.name}::: {rmo.profile.name}",
                             "remote_iface": pend_str.group("remote_iface"),
                         }
                         problems[rmo.id][pend_str.group("remote_iface")] = {
                             "problem": "Not found local iface on remote",
                             "detail": detail,
-                            "remote_id": "%s::: %s" % (mo.name, mo.profile.name),
+                            "remote_id": f"{mo.name}::: {mo.profile.name}",
                             "remote_iface": iface,
                         }
                         # print(discovery["problems"]["lldp"])

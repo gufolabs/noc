@@ -59,7 +59,7 @@ class EventClassificationRuleApplication(ExtDocApplication):
                     data["profile"] = event.managed_object.profile.name
                     data["source"] = event.source
                 else:
-                    errors += ["Event not found: %s" % q["data"]]
+                    errors += ["Event not found: {}".format(q["data"])]
             else:
                 # Decode json
                 try:
@@ -97,13 +97,15 @@ class EventClassificationRuleApplication(ExtDocApplication):
                         k = re.compile(p["key_re"])
                     except re.error as why:
                         errors += [
-                            "Invalid key regular expression <<<%s>>>: %s" % (p["key_re"], why)
+                            "Invalid key regular expression <<<{}>>>: {}".format(p["key_re"], why)
                         ]
                     try:
                         v = re.compile(p["value_re"])
                     except re.error as why:
                         errors += [
-                            "Invalid value regular expression <<<%s>>>: %s" % (p["value_re"], why)
+                            "Invalid value regular expression <<<{}>>>: {}".format(
+                                p["value_re"], why
+                            )
                         ]
                     if k and v:
                         patterns += [(k, v)]
@@ -170,13 +172,13 @@ class EventClassificationRuleApplication(ExtDocApplication):
                     try:
                         vars[v["name"]] = eval(v["value"][1:], {}, vars)
                     except Exception as why:
-                        errors += ["Error when evaluating '%s': %s" % (v["name"], why)]
+                        errors += ["Error when evaluating '{}': {}".format(v["name"], why)]
                 else:
                     vars[v["name"]] = v["value"]
         # Check required variables
         for rvars in required_vars:
             if rvars not in vars:
-                errors += ["Missed required variable: %s" % rvars]
+                errors += [f"Missed required variable: {rvars}"]
         # Fill event class template
         if event_class:
             # lang = "en"

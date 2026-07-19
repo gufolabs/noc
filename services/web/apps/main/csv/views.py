@@ -48,7 +48,9 @@ class CSVApplication(Application):
                     return self.render_plain_text(
                         csv_export(model), content_type="text/csv; encoding=utf-8"
                     )
-                return self.response_redirect("/main/csv/import/%s/" % form.cleaned_data["model"])
+                return self.response_redirect(
+                    "/main/csv/import/{}/".format(form.cleaned_data["model"])
+                )
         else:
             form = ModelForm()
         return self.render(request, "index.html", form=form)
@@ -66,9 +68,9 @@ class CSVApplication(Application):
 
     def address_in_network(self, ip, net):
         """Is an address in a network"""
-        ipaddr = int("".join(["%02x" % int(x) for x in ip.split(".")]), 16)
+        ipaddr = int("".join([f"{int(x):02x}" for x in ip.split(".")]), 16)
         netstr, bits = net.split("/")
-        netaddr = int("".join(["%02x" % int(x) for x in netstr.split(".")]), 16)
+        netaddr = int("".join([f"{int(x):02x}" for x in netstr.split(".")]), 16)
         mask = (0xFFFFFFFF << (32 - int(bits))) & 0xFFFFFFFF
         return (ipaddr & mask) == (netaddr & mask)
 
@@ -148,12 +150,12 @@ class CSVApplication(Application):
         for name, required, rel, rname in get_model_fields(m):
             if rel:
                 if isinstance(rel._meta, dict):
-                    r = ["%s.%s" % (rel._meta["collection"], rname)]
+                    r = ["{}.{}".format(rel._meta["collection"], rname)]
                 else:
                     db_table = rel._meta.db_table
-                    r = ['%s."id"' % db_table]
+                    r = [f'{db_table}."id"']
                     if rname != "id":
-                        r = ['%s."%s"' % (db_table, rname), *r]
+                        r = [f'{db_table}."{rname}"', *r]
             else:
                 r = []
             fields += [(name, required, " or ".join(r))]

@@ -37,8 +37,8 @@ class IsolatorClass:
     @cachetools.cached(cachetools.TTLCache(maxsize=20, ttl=600))
     def get_stat(self, num, value):
         # print("%s a %s, %s" % (self.name, num, value))
-        if hasattr(self, "_%s_%s" % (num, self.name)):
-            a = getattr(self, "_%s_%s" % (num, self.name))
+        if hasattr(self, f"_{num}_{self.name}"):
+            a = getattr(self, f"_{num}_{self.name}")
             return a(value)
         return self.default(num, value)
 
@@ -85,7 +85,7 @@ class AttributeIsolator(IsolatorClass):
             # Cross link
             num1, num2 = num.split("0", 1)
             ff2 = [n.name for n in self.OP_ATTR_MAP[num]["model"]._meta.fields][int(num2)]
-            field = "%s__%s" % (self.fields[int(num1)], ff2)
+            field = f"{self.fields[int(num1)]}__{ff2}"
         else:
             field = self.fields[int(num)]
 

@@ -54,8 +54,7 @@ class ReportHistoryApplication(SimpleReport):
     def format_detail(self, o):
         r = [m.groups() for m in self.rx_detail.finditer(o)]
         s = "<br/>".join(
-            "<b>%s</b>: %s &rArr; %s"
-            % (self.html_escape(g[0]), self.html_escape(g[1]), self.html_escape(g[2]))
+            f"<b>{self.html_escape(g[0])}</b>: {self.html_escape(g[1])} &rArr; {self.html_escape(g[2])}"
             for g in r
         )
         return SafeString(s)
@@ -123,7 +122,7 @@ class ReportHistoryApplication(SimpleReport):
             for c in ll.changes:
                 if c.old is None and c.new is None:
                     continue
-                chg += ["%s: %s -> %s" % (c.field, c.old, c.new)]
+                chg += [f"{c.field}: {c.old} -> {c.new}"]
             r += [
                 (
                     self.to_json(ll.timestamp),

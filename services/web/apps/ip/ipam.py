@@ -372,13 +372,13 @@ class IPAMApplication(ExtApplication):
         # Prefix discovery
         dmap = {"E": "Enabled", "D": "Disabled"}
         if prefix.prefix_discovery_policy == "P":
-            t = "Profile (%s)" % dmap[prefix.profile.prefix_discovery_policy]
+            t = f"Profile ({dmap[prefix.profile.prefix_discovery_policy]})"
         else:
             t = dmap[prefix.prefix_discovery_policy]
         prefix_info += [("Prefix Discovery", t)]
         # Address discovery
         if prefix.address_discovery_policy == "P":
-            t = "Profile (%s)" % dmap[prefix.profile.address_discovery_policy]
+            t = f"Profile ({dmap[prefix.profile.address_discovery_policy]})"
         else:
             t = dmap[prefix.address_discovery_policy]
         prefix_info += [("Address Discovery", t)]

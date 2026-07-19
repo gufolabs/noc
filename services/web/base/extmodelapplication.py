@@ -120,15 +120,13 @@ class ExtModelApplication(ExtApplication):
         if not self.query_fields:
             # By default - search in unique text fields
             self.query_fields = [
-                "%s__%s" % (f.name, self.query_condition)
+                f"{f.name}__{self.query_condition}"
                 for f in self.model._meta.fields
                 if f.unique and isinstance(f, CharField)
             ]
         # Add searchable custom fields
         self.query_fields += [
-            "%s__%s" % (f.name, self.query_condition)
-            for f in self.get_custom_fields()
-            if f.is_searchable
+            f"{f.name}__{self.query_condition}" for f in self.get_custom_fields() if f.is_searchable
         ]
         # Install JSON API call when necessary
         if hasattr(self.model, "_json_collection"):
@@ -163,7 +161,7 @@ class ExtModelApplication(ExtApplication):
     def get_permissions(self):
         p = super().get_permissions()
         if self.secret_fields:
-            p.add("%s:secret" % self.get_app_id().replace(".", ":"))
+            p.add("{}:secret".format(self.get_app_id().replace(".", ":")))
         return p
 
     def get_validator(self, field):
@@ -229,7 +227,7 @@ class ExtModelApplication(ExtApplication):
 
         def get_q(f):
             if "__" not in f:
-                return "%s__%s" % (f, self.query_condition)
+                return f"{f}__{self.query_condition}"
             return f
 
         q = reduce(
@@ -307,9 +305,9 @@ class ExtModelApplication(ExtApplication):
                 if match:
                     field = self.rx_oper_splitter.match(p).group("field") + self.in_param
                     if field not in q:
-                        q[field] = "%s" % (q[p])
+                        q[field] = f"{q[p]}"
                     else:
-                        q[field] += ",%s" % (q[p])
+                        q[field] += f",{q[p]}"
                     del q[p]
         for p in q:
             if p.endswith("__exists"):
@@ -343,20 +341,15 @@ class ExtModelApplication(ExtApplication):
                 app, fn = v.split("__", 1)
                 model = getattr(self.site.apps[app], "model", None)
                 if model and not is_document(model):
-                    extra_where = '%s."%s" IN (SELECT "%s" FROM %s)' % (
-                        self.model._meta.db_table,
-                        self.model._meta.pk.name,
-                        model._meta.get_field(fn).attname,
-                        model._meta.db_table,
-                    )
+                    extra_where = f'{self.model._meta.db_table}."{self.model._meta.pk.name}" IN (SELECT "{model._meta.get_field(fn).attname}" FROM {model._meta.db_table})'
                     if None in nq:
                         nq[None] += [extra_where]
                     else:
                         nq[None] = [extra_where]
                 continue
-            if lt and hasattr(self, "lookup_%s" % lt):
+            if lt and hasattr(self, f"lookup_{lt}"):
                 # Custom lookup
-                getattr(self, "lookup_%s" % lt)(nq, np, v)
+                getattr(self, f"lookup_{lt}")(nq, np, v)
                 continue
             if np in {"effective_service_groups", "effective_client_groups"} and v:
                 nq[f"{np}__overlap"] = ResourceGroup.get_nested_ids(v)
@@ -381,7 +374,7 @@ class ExtModelApplication(ExtApplication):
         Check current user has *secret* permission on given app
         :return:
         """
-        perm_name = "%s:secret" % (self.get_app_id().replace(".", ":"))
+        perm_name = "{}:secret".format(self.get_app_id().replace(".", ":"))
         return perm_name in Permission.get_effective_permissions(get_user())
 
     def has_field_editable(self, field):
@@ -416,10 +409,10 @@ class ExtModelApplication(ExtApplication):
                 v = getattr(o, f.name)
                 if v:
                     r[f.name] = str(v.pk)
-                    r["%s__label" % f.name] = smart_text(v)
+                    r[f"{f.name}__label"] = smart_text(v)
                 else:
                     r[f.name] = None
-                    r["%s__label" % f.name] = ""
+                    r[f"{f.name}__label"] = ""
             elif not is_related_field(f):
                 v = f.value_from_object(o)
                 if (
@@ -437,10 +430,10 @@ class ExtModelApplication(ExtApplication):
                 v = getattr(o, f.name)
                 if v:
                     r[f.name] = v._get_pk_val()
-                    r["%s__label" % f.name] = smart_text(v)
+                    r[f"{f.name}__label"] = smart_text(v)
                 else:
                     r[f.name] = None
-                    r["%s__label" % f.name] = ""
+                    r[f"{f.name}__label"] = ""
         # Add m2m fields
         for n in self.m2m_fields:
             r[n] = [{"id": str(mmo.pk), "label": smart_text(mmo)} for mmo in getattr(o, n).all()]
@@ -463,7 +456,7 @@ class ExtModelApplication(ExtApplication):
             return
         if isinstance(value, str):
             value = [value]
-        tq = ("%%s::text[] <@ %s.tags" % self.db_table, [value])
+        tq = (f"%s::text[] <@ {self.db_table}.tags", [value])
         if None in q:
             q[None] += [tq]
         else:
@@ -651,9 +644,9 @@ class ExtModelApplication(ExtApplication):
             except ValidationError as e:
                 e_msg = []
                 for f in e.message_dict:
-                    e_msg += ["%s: %s" % (f, "; ".join(e.message_dict[f]))]
+                    e_msg += ["{}: {}".format(f, "; ".join(e.message_dict[f]))]
                 return self.render_json(
-                    {"status": False, "message": "Validation error: %s" % " | ".join(e_msg)},
+                    {"status": False, "message": "Validation error: {}".format(" | ".join(e_msg))},
                     status=self.BAD_REQUEST,
                 )
             # Check permissions
@@ -671,7 +664,7 @@ class ExtModelApplication(ExtApplication):
                     self.update_file(request.FILES, o, file_attrs)
             except IntegrityError as e:
                 return self.render_json(
-                    {"status": False, "message": "Integrity error: %s" % e}, status=self.CONFLICT
+                    {"status": False, "message": f"Integrity error: {e}"}, status=self.CONFLICT
                 )
             # Check format
             if request.is_extjs:
@@ -739,9 +732,9 @@ class ExtModelApplication(ExtApplication):
         except ValidationError as e:
             e_msg = []
             for f in e.message_dict:
-                e_msg += ["%s: %s" % (f, "; ".join(e.message_dict[f]))]
+                e_msg += ["{}: {}".format(f, "; ".join(e.message_dict[f]))]
             return self.render_json(
-                {"status": False, "message": "Validation error: %s" % " | ".join(e_msg)},
+                {"status": False, "message": "Validation error: {}".format(" | ".join(e_msg))},
                 status=self.BAD_REQUEST,
             )
         # Check permissions
@@ -789,7 +782,7 @@ class ExtModelApplication(ExtApplication):
             o.delete()
         except ValueError as e:
             return self.render_json(
-                {"status": False, "message": "ERROR: %s" % e}, status=self.CONFLICT
+                {"status": False, "message": f"ERROR: {e}"}, status=self.CONFLICT
             )
         return HttpResponse(status=self.DELETED)
 
@@ -811,7 +804,7 @@ class ExtModelApplication(ExtApplication):
         coll_name = self.model._json_collection["json_collection"]
         return {
             "path": str(Path("collections", coll_name) / o.get_json_path()),
-            "title": "%s: %s" % (coll_name, str(o)),
+            "title": f"{coll_name}: {o!s}",
             "content": o.to_json(),
             "description": "",
         }

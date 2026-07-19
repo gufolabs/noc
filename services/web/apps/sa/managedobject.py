@@ -105,53 +105,65 @@ class ManagedObjectApplication(ExtModelApplication):
     order_map = {
         "link_count": " cardinality(links) ",
         "-link_count": " cardinality(links) ",
-        "profile": "CASE %s END"
-        % " ".join(
-            [
-                "WHEN %s='%s' THEN %s" % ("profile", pk, i)
-                for i, pk in enumerate(Profile.objects.filter().order_by("name").values_list("id"))
-            ]
+        "profile": "CASE {} END".format(
+            " ".join(
+                [
+                    "WHEN {}='{}' THEN {}".format("profile", pk, i)
+                    for i, pk in enumerate(
+                        Profile.objects.filter().order_by("name").values_list("id")
+                    )
+                ]
+            )
         ),
-        "-profile": "CASE %s END"
-        % " ".join(
-            [
-                "WHEN %s='%s' THEN %s" % ("profile", pk, i)
-                for i, pk in enumerate(Profile.objects.filter().order_by("-name").values_list("id"))
-            ]
+        "-profile": "CASE {} END".format(
+            " ".join(
+                [
+                    "WHEN {}='{}' THEN {}".format("profile", pk, i)
+                    for i, pk in enumerate(
+                        Profile.objects.filter().order_by("-name").values_list("id")
+                    )
+                ]
+            )
         ),
-        "platform": "CASE %s END"
-        % " ".join(
-            [
-                "WHEN %s='%s' THEN %s" % ("platform", pk, i)
-                for i, pk in enumerate(Platform.objects.filter().order_by("name").values_list("id"))
-            ]
+        "platform": "CASE {} END".format(
+            " ".join(
+                [
+                    "WHEN {}='{}' THEN {}".format("platform", pk, i)
+                    for i, pk in enumerate(
+                        Platform.objects.filter().order_by("name").values_list("id")
+                    )
+                ]
+            )
         ),
-        "-platform": "CASE %s END"
-        % " ".join(
-            [
-                "WHEN %s='%s' THEN %s" % ("platform", pk, i)
-                for i, pk in enumerate(
-                    Platform.objects.filter().order_by("-name").values_list("id")
-                )
-            ]
+        "-platform": "CASE {} END".format(
+            " ".join(
+                [
+                    "WHEN {}='{}' THEN {}".format("platform", pk, i)
+                    for i, pk in enumerate(
+                        Platform.objects.filter().order_by("-name").values_list("id")
+                    )
+                ]
+            )
         ),
-        "version": "CASE %s END"
-        % " ".join(
-            [
-                "WHEN %s='%s' THEN %s" % ("version", pk, i)
-                for i, pk in enumerate(
-                    Firmware.objects.filter().order_by("version").values_list("id")
-                )
-            ]
+        "version": "CASE {} END".format(
+            " ".join(
+                [
+                    "WHEN {}='{}' THEN {}".format("version", pk, i)
+                    for i, pk in enumerate(
+                        Firmware.objects.filter().order_by("version").values_list("id")
+                    )
+                ]
+            )
         ),
-        "-version": "CASE %s END"
-        % " ".join(
-            [
-                "WHEN %s='%s' THEN %s" % ("version", pk, i)
-                for i, pk in enumerate(
-                    Firmware.objects.filter().order_by("-version").values_list("id")
-                )
-            ]
+        "-version": "CASE {} END".format(
+            " ".join(
+                [
+                    "WHEN {}='{}' THEN {}".format("version", pk, i)
+                    for i, pk in enumerate(
+                        Firmware.objects.filter().order_by("-version").values_list("id")
+                    )
+                ]
+            )
         ),
     }
     resource_group_fields = [
@@ -685,16 +697,16 @@ class ManagedObjectApplication(ExtModelApplication):
             if link.is_ptp:
                 # ptp
                 o = link.other_ptp(i)
-                label = "%s:%s" % (o.managed_object.name, o.name)
+                label = f"{o.managed_object.name}:{o.name}"
             elif link.is_lag:
                 # unresolved LAG
                 o = [ii for ii in link.other(i) if ii.managed_object.id != i.managed_object.id]
-                label = "LAG %s: %s" % (o[0].managed_object.name, ", ".join(ii.name for ii in o))
+                label = "LAG {}: {}".format(
+                    o[0].managed_object.name, ", ".join(ii.name for ii in o)
+                )
             else:
                 # Broadcast
-                label = ", ".join(
-                    "%s:%s" % (ii.managed_object.name, ii.name) for ii in link.other(i)
-                )
+                label = ", ".join(f"{ii.managed_object.name}:{ii.name}" for ii in link.other(i))
             return {"id": str(link.id), "label": label}
 
         # Get object
@@ -712,9 +724,9 @@ class ManagedObjectApplication(ExtModelApplication):
                 load_out = r[o.bi_id][iface]["load_out"]
 
                 if load_in is not None:
-                    ctx["load_in"] = "%.2f%s" % Scale.humanize(int(load_in))
+                    ctx["load_in"] = "{:.2f}{}".format(*Scale.humanize(int(load_in)))
                 if load_out is not None:
-                    ctx["load_out"] = "%.2f%s" % Scale.humanize(int(load_out))
+                    ctx["load_out"] = "{:.2f}{}".format(*Scale.humanize(int(load_out)))
 
                 metrics[iface] = self.iface_metric_template.render(**ctx)
         # Physical interfaces
@@ -1018,7 +1030,7 @@ class ManagedObjectApplication(ExtModelApplication):
         if not o.has_access(request.user):
             return self.response_forbidden("Access denied")
         # fs = gridfs.GridFS(get_db(), "noc.joblog")
-        key = "discovery-%s-%s" % (job, o.id)
+        key = f"discovery-{job}-{o.id}"
         d = get_db()["noc.joblog"].find_one({"_id": key})
         if d and d["log"]:
             return self.render_plain_text(zlib.decompress(smart_bytes(d["log"])))
@@ -1063,7 +1075,7 @@ class ManagedObjectApplication(ExtModelApplication):
         if not o.has_access(request.user):
             return {"error": "Access denied"}
         if name not in o.scripts:
-            return {"error": "Script not found: %s" % name}
+            return {"error": f"Script not found: {name}"}
         params = self.deserialize(request.body)
         try:
             result = o.scripts[name](**params)

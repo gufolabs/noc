@@ -22,7 +22,7 @@ class FacadePlugin(InvPlugin):
     def init_plugin(self):
         super().init_plugin()
         self.add_view(
-            "api_plugin_%s_facade" % self.name,
+            f"api_plugin_{self.name}_facade",
             self.api_facade_svg,
             url="^(?P<id>[0-9a-f]{24})/plugin/facade/(?P<name>front|rear).svg$",
             method=["GET"],

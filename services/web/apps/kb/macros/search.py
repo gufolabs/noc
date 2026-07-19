@@ -55,22 +55,22 @@ class SearchMacro(BaseMacro):
             for f in args["display_list"].split(","):
                 f = f.strip()
                 if f not in ("id", "subject"):
-                    raise Exception("Invalid field %s" % f)
+                    raise Exception(f"Invalid field {f}")
                 display_list.append(f)
         else:
             display_list = ["id", "subject"]
         # Render
         out = ["<table border='0'>"]
         if "title" in args:
-            out += ["<tr><th>%s</th></tr>" % args["title"]]
+            out += ["<tr><th>{}</th></tr>".format(args["title"])]
         for a in q:
             link = "/api/card/view/kb/%d/" % a.id
             out += ["<tr>"]
             for f in display_list:
                 if f == "id":
-                    out += ["<td><a href='%s'>KB%s</a></td>" % (link, getattr(a, f))]
+                    out += [f"<td><a href='{link}'>KB{getattr(a, f)}</a></td>"]
                 else:
-                    out += ["<td><a href='%s'>%s</a></td>" % (link, getattr(a, f))]
+                    out += [f"<td><a href='{link}'>{getattr(a, f)}</a></td>"]
             out += ["</tr>"]
         out += ["</table>"]
         return "\n".join(out)
