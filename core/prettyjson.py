@@ -48,7 +48,8 @@ class PrettyJSON:
                 r += [",\n".join(indent(x, i + 4) for x in t)]
                 r += [indent("]", i)]
                 return "\n".join(r)
-            r = "[{}]".format(", ".join(t))
+            items = ", ".join(t)
+            r = f"[{items}]"
             return indent(r, i)
         if isinstance(o, dict):
             if not o:
