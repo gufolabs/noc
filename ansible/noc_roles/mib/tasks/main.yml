@@ -12,7 +12,7 @@
     - "{{ mib_path }}"
 
 - name: Install mibs for working MIB-import
-  command: "{{ noc_root }}/scripts/deploy/install-packages requirements/mib.json"
+  command: "{{ noc_root }}/scripts/deploy/install-packages npkg/mib.json"
   args:
     chdir: "{{ noc_root }}"
   register: s

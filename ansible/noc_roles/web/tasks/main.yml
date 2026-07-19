@@ -4,7 +4,7 @@
   include_tasks: "os/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/main.yml"
 
 - name: Install assets
-  command: "{{ noc_root }}/scripts/deploy/install-packages requirements/{{ item }}.json"
+  command: "{{ noc_root }}/scripts/deploy/install-packages npkg/{{ item }}.json"
   args:
     chdir: "{{ noc_root }}"
   register: s
@@ -22,7 +22,7 @@
     - requirements
 
 - name: "Install NOC theme"
-  command: "{{ noc_root }}/scripts/deploy/install-packages requirements/theme-noc.json"
+  command: "{{ noc_root }}/scripts/deploy/install-packages npkg/theme-noc.json"
   args:
     chdir: "{{ noc_root }}"
   environment:
