@@ -40,7 +40,9 @@ class DB:
         assert len(table_name) <= self.MAX_NAME_LENGTH, "Too long table name"
         columns = [self.column_sql(table_name, field_name, field) for field_name, field in fields]
         self.execute(
-            "CREATE TABLE {} ({})".format(self.quote_name(table_name), ", ".join(col for col in columns if col))
+            "CREATE TABLE {} ({})".format(
+                self.quote_name(table_name), ", ".join(col for col in columns if col)
+            )
         )
         self.execute_deferred_sql()
 

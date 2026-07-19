@@ -59,9 +59,9 @@ FROM (
      GROUP BY mac, managed_object, vlan
      HAVING iface_count > 1
 )
-    """.format(" AND ".join(
-    f"(mac < {int(MAC(x[0]))} or mac > {int(MAC(x[1]))})" for x in MULTICAST_MACS
-))
+    """.format(
+    " AND ".join(f"(mac < {int(MAC(x[0]))} or mac > {int(MAC(x[1]))})" for x in MULTICAST_MACS)
+)
 
 rx_port_num = re.compile(r"\d+$")
 

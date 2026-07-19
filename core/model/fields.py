@@ -204,7 +204,9 @@ class TagsContainsLookup(models.Lookup):
             t = adapt(t.strip())
             t.encoding = "utf8"
             tags += [smart_text(t).strip()]
-        return "(ARRAY[{}] <@ {})".format(",".join(tags), self.lhs.as_sql(compiler, connection)[0]), []
+        return "(ARRAY[{}] <@ {})".format(
+            ",".join(tags), self.lhs.as_sql(compiler, connection)[0]
+        ), []
 
 
 class DocumentReferenceDescriptor:
@@ -351,9 +353,13 @@ class ObjectIDArrayField(ArrayField):
             return None
         if isinstance(value, (str, ObjectId)):
             value = [value]
-        return "{{ {} }}".format(", ".join(
-            str(x) for x in sorted(set(value), key=lambda x: value.index(x)) if is_objectid(str(x))
-        ))
+        return "{{ {} }}".format(
+            ", ".join(
+                str(x)
+                for x in sorted(set(value), key=lambda x: value.index(x))
+                if is_objectid(str(x))
+            )
+        )
 
     def validate(self, value, model_instance):
         # Only form.full_clean execute

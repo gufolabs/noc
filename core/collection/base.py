@@ -390,7 +390,9 @@ class Collection:
                 o = self.model.objects.filter(**qs).first()
                 if o:
                     self.stdout.write(
-                        "[{}|{}] Changing local uuid {} ({})\n".format(self.name, data["uuid"], o.uuid, getattr(o, self.name_field))
+                        "[{}|{}] Changing local uuid {} ({})\n".format(
+                            self.name, data["uuid"], o.uuid, getattr(o, self.name_field)
+                        )
                     )
                     o.uuid = data["uuid"]
                     if is_document(self.model):
@@ -439,11 +441,11 @@ class Collection:
             if len(self.partial_errors) == pl:
                 # Cannot resolve partials
                 for u in self.partial_errors:
-                    self.stdout.write(
-                        f"[{self.name}|{u}] Error: {self.partial_errors[u]}\n"
-                    )
+                    self.stdout.write(f"[{self.name}|{u}] Error: {self.partial_errors[u]}\n")
                 raise ValueError(
-                    "[{}] Cannot resolve references for {}".format(self.name, ", ".join(self.partial_errors))
+                    "[{}] Cannot resolve references for {}".format(
+                        self.name, ", ".join(self.partial_errors)
+                    )
                 )
         # Deleted items
         for u in current_uuids - new_uuids:

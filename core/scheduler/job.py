@@ -242,9 +242,7 @@ class Job:
             except self.model.DoesNotExist:
                 return False
         # Adjust logging
-        self.logger.set_prefix(
-            f"{self.scheduler.name}][{self.name}][{self.get_display_key()}"
-        )
+        self.logger.set_prefix(f"{self.scheduler.name}][{self.name}][{self.get_display_key()}")
         return True
 
     def get_display_key(self):

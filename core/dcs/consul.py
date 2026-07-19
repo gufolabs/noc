@@ -504,9 +504,7 @@ class ConsulDCS(DCSBase):
                 metrics["error", ("type", f"dcs_consul_no_active_service {name}")] += 1
                 self.logger.info("No active service %s. Waiting", name)
                 if critical:
-                    metrics[
-                        "error", ("type", f"dcs_consul_no_active_critical_service {name}")
-                    ] += 1
+                    metrics["error", ("type", f"dcs_consul_no_active_critical_service {name}")] += 1
                     self.set_faulty_status(f"No active service {name}. Waiting")
                 time.sleep(config.consul.near_retry_timeout)
                 continue

@@ -130,7 +130,9 @@ def f_duration(seq, model=None):
     """
     return (
         "SUM(arraySum(i -> ((i[2] > close_ts ? close_ts: i[2]) - (ts > i[1] ? ts: i[1]) < 0) ? 0 :"
-        " ((i[2] > close_ts ? close_ts: i[2]) - (ts > i[1] ? ts: i[1])), [{}]))".format(",".join(seq))
+        " ((i[2] > close_ts ? close_ts: i[2]) - (ts > i[1] ? ts: i[1])), [{}]))".format(
+            ",".join(seq)
+        )
     )
 
 

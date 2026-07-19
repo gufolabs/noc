@@ -105,7 +105,9 @@ class Scheduler:
         self.cache_set_ops = {}
         self.service = service
         if self.service:
-            self.scheduler_id = f"{self.service.service_id}[{self.service.address}:{self.service.port}]"
+            self.scheduler_id = (
+                f"{self.service.service_id}[{self.service.address}:{self.service.port}]"
+            )
         else:
             self.scheduler_id = "standalone scheduler"
         self.sample = sample

@@ -60,13 +60,11 @@ class BaseBioSegPolicy:
             self.logger.debug(
                 "Used '%s' function for calculate segment power", self.segment_power_function
             )
-            query = (
-                f"""
+            query = f"""
                 SELECT {self.segment_power_function}(p.level)
                 FROM sa_managedobject mo JOIN sa_managedobjectprofile p ON mo.object_profile_id = p.id
                 WHERE segment = %s
             """
-            )
             cursor.execute(query, [str(seg.id)])
             pwr = cursor.fetchall()[0][0] or 0
         self.set_power(seg, pwr)
