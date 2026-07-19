@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Test python module loading
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -84,9 +84,8 @@ def test_import(module: str) -> None:
 
 @pytest.mark.parametrize("path", iter_init())
 def test_init(path: Path) -> None:
-    with open(path) as f:
-        data = f.read()
+    data = path.read_text()
     if "TESTS: ALLOW_NON_EMPTY_INIT" in data:
-        return  # exclusion
+        pytest.skip("allowed to be non-empty")
     n = compile(data, path, "exec", ast.PyCF_ONLY_AST)
-    assert bool(n.body) or not bool(data), "__init__.py must be empty"
+    assert bool(n.body) or not bool(data), f"{path} must be empty"
