@@ -23,7 +23,7 @@ rx_link = re.compile(r"^(.*)\|(https?://.+)$")
 def unroll_link(s):
     match = rx_link.match(s)
     if match:
-        return "<a href='%s'>%s</a>" % (
+        return "<a href='{}'>{}</a>".format(
             match.group(2),
             escape(match.group(1)).replace(r"\n", "<br/>"),
         )
@@ -121,14 +121,14 @@ class RackSet:
         rack_labels = ["<tr>"]
         for r in self.racks:
             if r.id:
-                rack_labels += ["<td colspan='2' class='racklabel'>%s</td>" % escape(r.id)]
+                rack_labels += [f"<td colspan='2' class='racklabel'>{escape(r.id)}</td>"]
             else:
                 rack_labels += ["<td colspan='2' class='racklabel'></td>"]
         rack_labels += ["</tr>"]
         # Render the matrix
         out = ["<table class='rackset'>"]
         if self.id:
-            out += ["<caption>%s</caption>" % escape(self.id)]
+            out += [f"<caption>{escape(self.id)}</caption>"]
         if self.label in ["both", "top"]:
             out += rack_labels
         for i in range(self.height, 0, -1):
@@ -139,7 +139,7 @@ class RackSet:
                     td = "<td "
                     for attr in ["colspan", "rowspan", "class"]:
                         if attr in v:
-                            td += "%s='%s' " % (attr, v[attr])
+                            td += f"{attr}='{v[attr]}' "
                     td += ">"
                     # Render allocation
                     if v.get("text"):
@@ -199,7 +199,7 @@ class Allocation:
         self.slots = []
 
     def __repr__(self):
-        return "Allocation: id=%s position=%s height=%s" % (self.id, self.position, self.height)
+        return f"Allocation: id={self.id} position={self.position} height={self.height}"
 
     def to_html(self):
         """
@@ -208,25 +208,25 @@ class Allocation:
         """
         r = []
         if self.id:
-            r += ["<b>%s</b>" % unroll_link(self.id)]
+            r += [f"<b>{unroll_link(self.id)}</b>"]
         if self.hostname:
-            r += ["<u>%s</u>" % unroll_link(self.hostname)]
+            r += [f"<u>{unroll_link(self.hostname)}</u>"]
         if self.model:
             r += [unroll_link(self.model)]
         if self.serial:
-            r += ["S/N: %s" % unroll_link(self.serial)]
+            r += [f"S/N: {unroll_link(self.serial)}"]
         if self.asset_no:
-            r += ["#%s" % unroll_link(self.asset_no)]
+            r += [f"#{unroll_link(self.asset_no)}"]
         if self.description:
-            r += ["<i>%s</i>" % unroll_link(self.description)]
+            r += [f"<i>{unroll_link(self.description)}</i>"]
         if self.href:
-            r += ["<a href='%s'>Link...</a>" % self.href]
+            r += [f"<a href='{self.href}'>Link...</a>"]
         if self.slots:
             rr = ["<table border='1'>"]
             for s in self.slots:
-                rr += ["<tr><td><b>%s</b></td>" % s.id]
+                rr += [f"<tr><td><b>{s.id}</b></td>"]
                 a = " class='reserved'" if s.reserved else ""
-                rr += ["<td%s>%s</td></tr>" % (a, s.to_html())]
+                rr += [f"<td{a}>{s.to_html()}</td></tr>"]
             rr += ["</table>"]
             r += ["".join(rr)]
         return "<br/>".join(r)
@@ -259,17 +259,17 @@ class Slot:
     def to_html(self):
         r = []
         if self.hostname:
-            r += ["<u>%s</u>" % unroll_link(self.hostname)]
+            r += [f"<u>{unroll_link(self.hostname)}</u>"]
         if self.model:
             r += [unroll_link(self.model)]
         if self.serial:
-            r += ["S/N: %s" % unroll_link(self.serial)]
+            r += [f"S/N: {unroll_link(self.serial)}"]
         if self.asset_no:
-            r += ["#%s" % unroll_link(self.asset_no)]
+            r += [f"#{unroll_link(self.asset_no)}"]
         if self.description:
-            r += ["<i>%s</i>" % unroll_link(self.description)]
+            r += [f"<i>{unroll_link(self.description)}</i>"]
         if self.href:
-            r += ["<a href='%s'>Link...</a>" % self.href]
+            r += [f"<a href='{self.href}'>Link...</a>"]
         return "<br/>".join(r)
 
 

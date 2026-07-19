@@ -81,7 +81,7 @@ class KBEntryApplication(ExtModelApplication):
         attach = self.get_object_or_404(KBEntryAttachment, kb_entry=o, name=name)
         file_mime = mimetypes.guess_type(attach.file.name)
         response = HttpResponse(attach.file, content_type=file_mime or "application/octet-stream")
-        response["Content-Disposition"] = 'attachment; filename="%s"' % attach.file.name
+        response["Content-Disposition"] = f'attachment; filename="{attach.file.name}"'
         return response
 
     @view(r"^(?P<id>\d+)/attachment/(?P<name>.+)/$", access="delete", api=True, method=["DELETE"])

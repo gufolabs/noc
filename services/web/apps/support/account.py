@@ -27,7 +27,7 @@ class AccountApplication(ExtApplication):
         if c.has_account():
             data["account"] = c.account_info()
             for i in data["account"].get("industries", []):
-                data["account"]["ind_%s" % i] = True
+                data["account"][f"ind_{i}"] = True
         if c.has_system():
             data["system"] = c.system_info()
         return data

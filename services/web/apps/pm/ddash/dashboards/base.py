@@ -26,7 +26,7 @@ class BaseDashboard:
         self.object = self.resolve_object(object)
         self.extra_template = extra_template
         self.extra_vars = extra_vars
-        self.logger = logging.getLogger("dashboard.%s" % self.name)
+        self.logger = logging.getLogger(f"dashboard.{self.name}")
         self.object_data = self.resolve_object_data(object)
         self.templates_path = ""
         self.templates = self.load_templates()

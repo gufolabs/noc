@@ -161,9 +161,9 @@ class Application(metaclass=ApplicationBase):
             self.module = parts[4]
             self.app = parts[5]
         self.module_title = importlib.import_module(
-            "noc.services.web.apps.%s" % self.module
+            f"noc.services.web.apps.{self.module}"
         ).MODULE_NAME
-        self.app_id = "%s.%s" % (self.module, self.app)
+        self.app_id = f"{self.module}.{self.app}"
         self.menu_url = None  # Set by site.autodiscover()
         self.logger = logging.getLogger(self.app_id)
         self.j2_env = None
@@ -244,15 +244,15 @@ class Application(metaclass=ApplicationBase):
         """
         parts = cls.__module__.split(".")
         if parts[1] == "custom":
-            return "%s.%s" % (parts[5], parts[6])
-        return "%s.%s" % (parts[4], parts[5])
+            return f"{parts[5]}.{parts[6]}"
+        return f"{parts[4]}.{parts[5]}"
 
     @property
     def base_url(self):
         """
         Application's base URL
         """
-        return "/%s/%s/" % (self.module, self.app)
+        return f"/{self.module}/{self.app}/"
 
     def reverse(self, url, *args, **kwargs):
         """
@@ -458,7 +458,7 @@ class Application(metaclass=ApplicationBase):
         Return a set of permissions, used by application
         """
         prefix = self.get_app_id().replace(".", ":")
-        p = {"%s:launch" % prefix}
+        p = {f"{prefix}:launch"}
         # View permissions from HasPerm
         for view in self.iter_views():
             if isinstance(view.access, HasPerm):
@@ -470,7 +470,7 @@ class Application(metaclass=ApplicationBase):
                 if isinstance(c["access"], HasPerm):
                     p.add(c["access"].get_permission(self))
                 elif isinstance(c["access"], str):
-                    p.add("%s:%s" % (prefix, c["access"]))
+                    p.add("{}:{}".format(prefix, c["access"]))
         # extra_permissions
         if callable(self.extra_permissions):
             extra = self.extra_permissions()
@@ -535,7 +535,7 @@ class Application(metaclass=ApplicationBase):
             elif f.type == "datetime":
                 ff = forms.DateTimeField(required=False, label=f.label)
             else:
-                raise ValueError("Invalid field type: '%s'" % f.type)
+                raise ValueError(f"Invalid field type: '{f.type}'")
             fields += [(str(f.name), ff)]
         form.base_fields.update(OrderedDict(fields))
         return form

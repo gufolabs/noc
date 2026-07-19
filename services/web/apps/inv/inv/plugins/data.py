@@ -327,7 +327,7 @@ class DataPlugin(InvPlugin):
                             m = self.app.get_object_or_404(ObjectModel, id=value)
                             o.model = m
                             o.log(
-                                message="Changing model to %s" % m.name,
+                                message=f"Changing model to {m.name}",
                                 user=request.user,
                                 system="WEB",
                             )

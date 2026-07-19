@@ -89,7 +89,7 @@ class InvApplication(ExtApplication):
         for f in os.listdir("services/web/apps/inv/inv/plugins/"):
             if not f.endswith(".py") or f == "base.py" or f.startswith("_"):
                 continue
-            mn = "noc.services.web.apps.inv.inv.plugins.%s" % f[:-3]
+            mn = f"noc.services.web.apps.inv.inv.plugins.{f[:-3]}"
             m = importlib.import_module(mn)
             for on in dir(m):
                 o = getattr(m, on)

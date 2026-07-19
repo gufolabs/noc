@@ -41,7 +41,7 @@ class TimePatternApplication(ExtModelApplication):
         },
     )
     def api_action_test(self, request, ids, date=None, time=None):
-        d = "%sT%s" % (date, time)
+        d = f"{date}T{time}"
         dt = datetime.datetime.strptime(d, "%Y-%m-%dT%H:%M")
         return {
             "ts": dt.isoformat(),

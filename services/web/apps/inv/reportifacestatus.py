@@ -133,7 +133,7 @@ class ReportInterfaceStatusApplication(ExtApplication):
                 if speed >= t:
                     if speed // t * t == speed:
                         return "%d%s" % (speed // t, n)
-                    return "%.2f%s" % (float(speed) / t, n)
+                    return f"{float(speed) / t:.2f}{n}"
             return str(speed)
 
         def row(row):
@@ -246,8 +246,7 @@ class ReportInterfaceStatusApplication(ExtApplication):
                         [
                             mo[i["managed_object"]]["name"],
                             mo[i["managed_object"]]["address"],
-                            "%s %s"
-                            % (
+                            "{} {}".format(
                                 smart_text(mo[i["managed_object"]]["vendor"]),
                                 smart_text(mo[i["managed_object"]]["platform"]),
                             ),
@@ -270,10 +269,10 @@ class ReportInterfaceStatusApplication(ExtApplication):
                 )
             ]
 
-        filename = "interface_status_report_%s" % datetime.datetime.now().strftime("%Y%m%d")
+        filename = "interface_status_report_{}".format(datetime.datetime.now().strftime("%Y%m%d"))
         if o_format == "csv":
             response = HttpResponse(content_type="text/csv")
-            response["Content-Disposition"] = 'attachment; filename="%s.csv"' % filename
+            response["Content-Disposition"] = f'attachment; filename="{filename}.csv"'
             writer = csv.writer(response, dialect="excel", delimiter=";")
             writer.writerows(r)
             return response
@@ -284,12 +283,12 @@ class ReportInterfaceStatusApplication(ExtApplication):
             writer.writerows(r)
             f.seek(0)
             with ZipFile(response, "w", compression=ZIP_DEFLATED) as zf:
-                zf.writestr("%s.csv" % filename, f.read())
-                zf.filename = "%s.csv.zip" % filename
+                zf.writestr(f"{filename}.csv", f.read())
+                zf.filename = f"{filename}.csv.zip"
             # response = HttpResponse(content_type="text/csv")
             response.seek(0)
             response = HttpResponse(response.getvalue(), content_type="application/zip")
-            response["Content-Disposition"] = 'attachment; filename="%s.csv.zip"' % filename
+            response["Content-Disposition"] = f'attachment; filename="{filename}.csv.zip"'
             return response
         if o_format == "xlsx":
             response = BytesIO()
@@ -318,6 +317,6 @@ class ReportInterfaceStatusApplication(ExtApplication):
             response = HttpResponse(response.getvalue(), content_type="application/vnd.ms-excel")
             # response = HttpResponse(
             #     content_type="application/x-ms-excel")
-            response["Content-Disposition"] = 'attachment; filename="%s.xlsx"' % filename
+            response["Content-Disposition"] = f'attachment; filename="{filename}.xlsx"'
             response.close()
             return response

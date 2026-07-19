@@ -95,12 +95,12 @@ class ExtApplication(Application):
     @property
     def js_app_class(self):
         m, a = self.get_app_id().split(".")
-        return "NOC.%s.%s.Application" % (m, a)
+        return f"NOC.{m}.{a}.Application"
 
     @property
     def launch_access(self):
         m, a = self.get_app_id().split(".")
-        return HasPerm("%s:%s:launch" % (m, a))
+        return HasPerm(f"{m}:{a}:launch")
 
     def deserialize(self, data):
         return orjson.loads(data)
@@ -196,18 +196,18 @@ class ExtApplication(Application):
             try:
                 limit = max(int(limit), 0)
             except ValueError:
-                return HttpResponse(400, "Invalid %s param" % self.limit_param)
+                return HttpResponse(400, f"Invalid {self.limit_param} param")
         if limit and limit < 0:
-            return HttpResponse(400, "Invalid %s param" % self.limit_param)
+            return HttpResponse(400, f"Invalid {self.limit_param} param")
         # page = q.get(self.page_param)
         start = q.get(self.start_param) or 0
         if start:
             try:
                 start = max(int(start), 0)
             except ValueError:
-                return HttpResponse(400, "Invalid %s param" % self.start_param)
+                return HttpResponse(400, f"Invalid {self.start_param} param")
         elif start and start < 0:
-            return HttpResponse(400, "Invalid %s param" % self.start_param)
+            return HttpResponse(400, f"Invalid {self.start_param} param")
         query = q.get(self.query_param)
         only = q.get(self.only_param)
         if only:
@@ -216,14 +216,14 @@ class ExtApplication(Application):
         if request.is_extjs and self.sort_param in q:
             for r in self.deserialize(q[self.sort_param]):
                 if r["direction"] == "DESC":
-                    ordering += ["-%s" % r["property"]]
+                    ordering += ["-{}".format(r["property"])]
                 else:
                     ordering += [r["property"]]
         grouping = None
         if request.is_extjs and self.group_param in q:
             r = self.deserialize(q[self.group_param])
             if r["direction"] == "DESC":
-                grouping = "-%s" % r["property"]
+                grouping = "-{}".format(r["property"])
             else:
                 grouping = r["property"]
         fs = None
@@ -374,4 +374,4 @@ class ExtApplication(Application):
         f = SlowOp.submit(fn, self.get_app_id(), request.user.username, *args, **kwargs)
         if f.done():
             return f.result()
-        return self.response_accepted(location="%sfutures/%s/" % (self.base_url, f.slow_op.id))
+        return self.response_accepted(location=f"{self.base_url}futures/{f.slow_op.id}/")

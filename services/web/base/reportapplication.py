@@ -74,7 +74,7 @@ class ReportApplication(Application):
         query = {}
         # Check format is valid for application
         if format not in self.supported_formats():
-            return self.response_not_found("Unsupported format '%s'" % format)
+            return self.response_not_found(f"Unsupported format '{format}'")
             # Display and check form if necessary
         form_class = self.get_form()
         if form_class:
@@ -97,7 +97,7 @@ class ReportApplication(Application):
                     inline_styles=self.inline_styles,
                 )
                 # Build result
-        rdata = getattr(self, "report_%s" % format)(request=request, **query)
+        rdata = getattr(self, f"report_{format}")(request=request, **query)
         # Render result
         if format == "html":
             return self.render(request, "report.html", data=rdata, app=self, is_report=True)

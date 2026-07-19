@@ -80,76 +80,62 @@ class ReportObjectsSummary(SimpleReport):
             # wr_and = ("AND sam.administrative_domain_id in ", ad)
             wr_and2 = ("AND administrative_domain_id in ", ad)
             if len(ad) == 1:
-                wr = ("WHERE administrative_domain_id in (%s)" % ad, "")
+                wr = (f"WHERE administrative_domain_id in ({ad})", "")
                 # wr_and = ("AND sam.administrative_domain_id in (%s)" % ad, "")
-                wr_and2 = ("AND administrative_domain_id in (%s)" % ad, "")
+                wr_and2 = (f"AND administrative_domain_id in ({ad})", "")
         # By Profile
         if report_type == "profile":
             columns = [_("Profile")]
-            query = (
-                """SELECT profile,COUNT(*) FROM sa_managedobject
-                    %s%s GROUP BY 1 ORDER BY 2 DESC"""
-                % wr
-            )
+            query = """SELECT profile,COUNT(*) FROM sa_managedobject
+                    {}{} GROUP BY 1 ORDER BY 2 DESC""".format(*wr)
         # By Administrative Domain
         elif report_type == "domain":
             columns = [_("Administrative Domain")]
-            query = (
-                """SELECT a.name,COUNT(*)
+            query = """SELECT a.name,COUNT(*)
                   FROM sa_managedobject o JOIN sa_administrativedomain a ON (o.administrative_domain_id=a.id)
-                  %s%s
+                  {}{}
                   GROUP BY 1
-                  ORDER BY 2 DESC"""
-                % wr
-            )
+                  ORDER BY 2 DESC""".format(*wr)
         # By Profile and Administrative Domains
         elif report_type == "domain-profile":
             columns = [_("Administrative Domain"), _("Profile")]
-            query = (
-                """SELECT d.name,profile,COUNT(*)
+            query = """SELECT d.name,profile,COUNT(*)
                     FROM sa_managedobject o JOIN sa_administrativedomain d ON (o.administrative_domain_id=d.id)
-                    %s%s
+                    {}{}
                     GROUP BY 1,2
-                    """
-                % wr
-            )
+                    """.format(*wr)
         # By Labels
         elif report_type == "label":
             columns = [_("Label")]
-            query = (
-                """
+            query = """
               SELECT t.label, COUNT(*)
               FROM (
                 SELECT unnest(labels) AS label
                 FROM sa_managedobject
                 WHERE
                   labels IS NOT NULL
-                  %s%s
+                  {}{}
                   AND array_length(labels, 1) > 0
                 ) t
               GROUP BY 1
               ORDER BY 2 DESC;
-            """
-                % wr_and2
-            )
+            """.format(*wr_and2)
         elif report_type == "platform":
             columns = [_("Platform"), _("Profile")]
-            query = (
-                """select sam.profile, sam.platform, COUNT(platform)
-                    from sa_managedobject sam %s%s group by 1,2 order by count(platform) desc;"""
-                % wr
+            query = """select sam.profile, sam.platform, COUNT(platform)
+                    from sa_managedobject sam {}{} group by 1,2 order by count(platform) desc;""".format(
+                *wr
             )
 
         elif report_type == "version":
             columns = [_("Profile"), _("Version"), _("Firmware Policy")]
-            query = (
-                """select sam.profile, sam.version, COUNT(version)
-                    from sa_managedobject sam %s%s group by 1,2 order by count(version) desc;"""
-                % wr
+            query = """select sam.profile, sam.version, COUNT(version)
+                    from sa_managedobject sam {}{} group by 1,2 order by count(version) desc;""".format(
+                *wr
             )
 
         else:
-            raise Exception("Invalid report type: %s" % report_type)
+            raise Exception(f"Invalid report type: {report_type}")
         for r, t in report_types:
             if r == report_type:
                 title = self.title + ": " + t

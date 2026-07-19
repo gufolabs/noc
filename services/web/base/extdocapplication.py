@@ -123,7 +123,7 @@ class ExtDocApplication(ExtApplication):
                 self.has_uuid = True
         if not self.query_fields:
             self.query_fields = [
-                "%s__%s" % (n, self.query_condition)
+                f"{n}__{self.query_condition}"
                 for n, f in self.model._fields.items()
                 if f.unique and isinstance(f, StringField)
             ]
@@ -178,7 +178,7 @@ class ExtDocApplication(ExtApplication):
     def get_permissions(self):
         p = super().get_permissions()
         if self.secret_fields:
-            p.add("%s:secret" % self.get_app_id().replace(".", ":"))
+            p.add("{}:secret".format(self.get_app_id().replace(".", ":")))
         return p
 
     def get_custom_fields(self):
@@ -216,7 +216,7 @@ class ExtDocApplication(ExtApplication):
                     return f
                 return None
             if "__" not in f:
-                return "%s__%s" % (f, self.query_condition)
+                return f"{f}__{self.query_condition}"
             return f
 
         qfx = [get_q(f) for f in self.query_fields]
@@ -313,7 +313,7 @@ class ExtDocApplication(ExtApplication):
         Check current user has *secret* permission on given app
         :return:
         """
-        perm_name = "%s:secret" % (self.get_app_id().replace(".", ":"))
+        perm_name = "{}:secret".format(self.get_app_id().replace(".", ":"))
         return perm_name in Permission.get_effective_permissions(get_user())
 
     def set_file(self, files, o, file_attrs=None):
@@ -350,23 +350,23 @@ class ExtDocApplication(ExtApplication):
                 elif isinstance(f, GeoPointField):
                     pass
                 elif isinstance(f, EnumField):
-                    r["%s__label" % f.name] = v.name
+                    r[f"{f.name}__label"] = v.name
                     v = v.value
                 elif isinstance(f, ForeignKeyListField):
                     v = [{"label": str(vv.name), "id": vv.id} for vv in v]
                 elif isinstance(f, PlainReferenceListField):
                     v = [{"label": str(vv.name), "id": str(vv.id)} for vv in v]
                 elif isinstance(f, ForeignKeyField):
-                    r["%s__label" % f.name] = smart_text(v)
+                    r[f"{f.name}__label"] = smart_text(v)
                     v = v.id
                 elif isinstance(f, PlainReferenceField):
-                    r["%s__label" % f.name] = smart_text(v)
+                    r[f"{f.name}__label"] = smart_text(v)
                     if hasattr(v, "id"):
                         v = str(v.id)
                     else:
                         v = str(v)
                 elif isinstance(f, ReferenceField):
-                    r["%s__label" % f.name] = smart_text(v)
+                    r[f"{f.name}__label"] = smart_text(v)
                     if hasattr(v, "id"):
                         v = str(v.id)
                     else:
@@ -445,9 +445,9 @@ class ExtDocApplication(ExtApplication):
         model = self.parent_model or self.model
         parent = q.get("parent")
         if not parent:
-            qs = {"%s__exists" % self.parent_field: False}
+            qs = {f"{self.parent_field}__exists": False}
         else:
-            qs = {"%s" % self.parent_field: parent}
+            qs = {f"{self.parent_field}": parent}
         if model == DocCategory:
             qs["type"] = DocCategory._senders[self.model]
         data = model.objects.filter(**qs)
@@ -584,7 +584,7 @@ class ExtDocApplication(ExtApplication):
             o.delete()
         except ValueError as e:
             return self.render_json(
-                {"status": False, "message": "ERROR: %s" % e}, status=self.CONFLICT
+                {"status": False, "message": f"ERROR: {e}"}, status=self.CONFLICT
             )
         return HttpResponse(status=self.DELETED)
 

@@ -30,36 +30,36 @@ class MapPlugin(InvPlugin):
     def init_plugin(self):
         super().init_plugin()
         self.add_view(
-            "api_plugin_%s_get_layer" % self.name,
+            f"api_plugin_{self.name}_get_layer",
             self.api_get_layer,
-            url=r"^plugin/%s/layers/(?P<layer>\S+)/$" % self.name,
+            url=rf"^plugin/{self.name}/layers/(?P<layer>\S+)/$",
             method=["GET"],
         )
         self.add_view(
-            "api_plugin_%s_object_data" % self.name,
+            f"api_plugin_{self.name}_object_data",
             self.api_object_data,
-            url="^(?P<id>[0-9a-f]{24})/plugin/%s/object_data/$" % self.name,
+            url=f"^(?P<id>[0-9a-f]{{24}})/plugin/{self.name}/object_data/$",
             method=["GET"],
         )
         self.add_view(
-            "api_plugin_%s_set_geopoint" % self.name,
+            f"api_plugin_{self.name}_set_geopoint",
             self.api_set_geopoint,
-            url="^(?P<id>[0-9a-f]{24})/plugin/%s/set_geopoint/$" % self.name,
+            url=f"^(?P<id>[0-9a-f]{{24}})/plugin/{self.name}/set_geopoint/$",
             method=["POST"],
             validate={"srid": StringParameter(), "x": FloatParameter(), "y": FloatParameter()},
         )
         self.add_view(
-            "api_plugin_%s_set_layer_visibility" % self.name,
+            f"api_plugin_{self.name}_set_layer_visibility",
             self.api_set_layer_visibility,
-            url="^plugin/%s/layer_visibility/$" % self.name,
+            url=f"^plugin/{self.name}/layer_visibility/$",
             method=["POST"],
             validate={"layer": StringParameter(), "status": BooleanParameter()},
         )
 
         self.add_view(
-            "api_plugin_%s_create" % self.name,
+            f"api_plugin_{self.name}_create",
             self.api_create,
-            url="^plugin/%s/$" % self.name,
+            url=f"^plugin/{self.name}/$",
             method=["POST"],
             validate={
                 "model": DocumentParameter(ObjectModel),
@@ -87,8 +87,8 @@ class MapPlugin(InvPlugin):
                 "code": layer.code,
                 "min_zoom": layer.min_zoom,
                 "max_zoom": layer.max_zoom,
-                "stroke_color": "#%06x" % layer.stroke_color,
-                "fill_color": "#%06x" % layer.fill_color,
+                "stroke_color": f"#{layer.stroke_color:06x}",
+                "fill_color": f"#{layer.fill_color:06x}",
                 "stroke_width": layer.stroke_width,
                 "point_radius": layer.point_radius,
                 "show_labels": layer.show_labels,

@@ -25,7 +25,7 @@ class ReportCompareApplication(SimpleReport):
             ).order_by("name"):
                 ru = m.get_data("rackmount", "units")
                 if ru:
-                    ru = "%sU" % ru
+                    ru = f"{ru}U"
                 else:
                     ru = ""
                 weight = m.get_data("weight", "weight")

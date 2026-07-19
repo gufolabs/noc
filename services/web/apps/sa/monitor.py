@@ -84,12 +84,12 @@ class MonitorApplication(ObjectListApplication):
             prefix = self.job_map[job["jcls"]]
             result.update(
                 {
-                    "%s_time_start" % prefix: self.to_json(job[Job.ATTR_TS]),
-                    "%s_last_success" % prefix: self.to_json(job.get(Job.ATTR_LAST)),
-                    "%s_status" % prefix: job.get(Job.ATTR_STATUS, "--"),
-                    "%s_time" % prefix: job.get(Job.ATTR_LAST_DURATION, 0),
-                    "%s_duration" % prefix: job.get(Job.ATTR_LAST_DURATION, 0),
-                    "%s_last_status" % prefix: job.get(Job.ATTR_LAST_STATUS),
+                    f"{prefix}_time_start": self.to_json(job[Job.ATTR_TS]),
+                    f"{prefix}_last_success": self.to_json(job.get(Job.ATTR_LAST)),
+                    f"{prefix}_status": job.get(Job.ATTR_STATUS, "--"),
+                    f"{prefix}_time": job.get(Job.ATTR_LAST_DURATION, 0),
+                    f"{prefix}_duration": job.get(Job.ATTR_LAST_DURATION, 0),
+                    f"{prefix}_last_status": job.get(Job.ATTR_LAST_STATUS),
                 }
             )
         return result
@@ -101,7 +101,7 @@ class MonitorApplication(ObjectListApplication):
             return self.response_forbidden("Access denied")
         r = []
         for job in self.job_map:
-            key = "discovery-%s-%s" % (job, o.id)
+            key = f"discovery-{job}-{o.id}"
             d = get_db()["noc.joblog"].find_one({"_id": key})
             if d and d["log"]:
                 r += [b"\n", smart_bytes(job), b"\n"]

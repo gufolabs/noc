@@ -22,21 +22,21 @@ class FilePlugin(InvPlugin):
     def init_plugin(self):
         super().init_plugin()
         self.add_view(
-            "api_plugin_%s_upload" % self.name,
+            f"api_plugin_{self.name}_upload",
             self.api_upload,
-            url="^(?P<id>[0-9a-f]{24})/plugin/%s/upload/$" % self.name,
+            url=f"^(?P<id>[0-9a-f]{{24}})/plugin/{self.name}/upload/$",
             method=["POST"],
         )
         self.add_view(
-            "api_plugin_%s_download" % self.name,
+            f"api_plugin_{self.name}_download",
             self.api_download,
-            url="^(?P<id>[0-9a-f]{24})/plugin/%s/(?P<file_id>[0-9a-f]{24})/$" % self.name,
+            url=f"^(?P<id>[0-9a-f]{{24}})/plugin/{self.name}/(?P<file_id>[0-9a-f]{{24}})/$",
             method=["GET"],
         )
         self.add_view(
-            "api_plugin_%s_delete" % self.name,
+            f"api_plugin_{self.name}_delete",
             self.api_delete,
-            url="^(?P<id>[0-9a-f]{24})/plugin/%s/(?P<file_id>[0-9a-f]{24})/$" % self.name,
+            url=f"^(?P<id>[0-9a-f]{{24}})/plugin/{self.name}/(?P<file_id>[0-9a-f]{{24}})/$",
             method=["DELETE"],
         )
 
@@ -64,7 +64,7 @@ class FilePlugin(InvPlugin):
         failed = False
         for name in left:
             # file_XXX -> description_XXX
-            dn = "description_%s" % name[5:]
+            dn = f"description_{name[5:]}"
             f = left[name]
             of = ObjectFile(
                 object=o.id,

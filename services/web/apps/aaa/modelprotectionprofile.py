@@ -35,7 +35,7 @@ class ModelProtectionProfileApplication(ExtDocApplication):
             model = get_model(model_id=model_id)
         except AssertionError:
             return self.render_json(
-                {"status": False, "message": "Not found model by id: %s" % model_id},
+                {"status": False, "message": f"Not found model by id: {model_id}"},
                 status=self.NOT_FOUND,
             )
         # Get links

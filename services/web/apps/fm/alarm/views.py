@@ -120,7 +120,7 @@ class AlarmApplication(ExtApplication):
         for f in os.listdir("services/web/apps/fm/alarm/plugins/"):
             if not f.endswith(".py") or f == "base.py" or f.startswith("_"):
                 continue
-            mn = "noc.services.web.apps.fm.alarm.plugins.%s" % f[:-3]
+            mn = f"noc.services.web.apps.fm.alarm.plugins.{f[:-3]}"
             m = importlib.import_module(mn)
             for on in dir(m):
                 o = getattr(m, on)
@@ -319,9 +319,9 @@ class AlarmApplication(ExtApplication):
                         field: {"$elemMatch": {"profile": c_id, "summary": {"$regex": c_query}}}
                     }
         if c_in:
-            q["%s__profile__in" % field] = c_in
+            q[f"{field}__profile__in"] = c_in
         if c_nin:
-            q["%s__profile__nin" % field] = c_nin
+            q[f"{field}__profile__nin"] = c_nin
 
         return q
 
@@ -720,7 +720,7 @@ class AlarmApplication(ExtApplication):
         if alarm.status != "A":
             return self.response_not_found()
         if alarm.ack_ts:
-            return {"status": False, "message": "Already acknowledged by %s" % alarm.ack_user}
+            return {"status": False, "message": f"Already acknowledged by {alarm.ack_user}"}
         alarm.acknowledge(request.user, msg)
         return {"status": True}
 
@@ -841,7 +841,7 @@ class AlarmApplication(ExtApplication):
             if r:
                 s = AlarmSeverity.get_severity(r[0]["severity"])
                 if s and s.sound and s.volume:
-                    sound = "/ui/pkg/nocsound/%s.mp3" % s.sound
+                    sound = f"/ui/pkg/nocsound/{s.sound}.mp3"
                     volume = float(s.volume) / 100.0
         return {"new_alarms": n, "sound": sound, "volume": volume}
 
@@ -865,16 +865,16 @@ class AlarmApplication(ExtApplication):
                     if collapse and c < 2:
                         badge = ""
                     else:
-                        badge = '<span class="x-display-tag">%s</span>' % c
+                        badge = f'<span class="x-display-tag">{c}</span>'
                     order = getattr(pv, "display_order", 100)
                     v += [
                         (
                             (order, -c),
-                            '<i class="%s" title="%s"></i>%s' % (pv.glyph, pv.name, badge),
+                            f'<i class="{pv.glyph}" title="{pv.name}"></i>{badge}',
                         )
                     ]
-            return "<span class='x-summary'>%s</span>" % "".join(
-                i[1] for i in sorted(v, key=operator.itemgetter(0))
+            return "<span class='x-summary'>{}</span>".format(
+                "".join(i[1] for i in sorted(v, key=operator.itemgetter(0)))
             )
 
         if not isinstance(s, dict):
@@ -908,7 +908,7 @@ class AlarmApplication(ExtApplication):
                 continue
             if alarm.escalation_tt:
                 alarm.log_message(
-                    "Already escalated with TT #%s" % alarm.escalation_tt,
+                    f"Already escalated with TT #{alarm.escalation_tt}",
                     source=request.user.username,
                 )
             elif alarm.root:
@@ -918,7 +918,7 @@ class AlarmApplication(ExtApplication):
                 )
             else:
                 alarm.log_message(
-                    "Alarm has been escalated by %s" % request.user.username,
+                    f"Alarm has been escalated by {request.user.username}",
                     source=request.user.username,
                 )
                 AlarmEscalation.watch_escalations(alarm, force=True)

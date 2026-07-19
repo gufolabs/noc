@@ -19,7 +19,7 @@ class Reportreportmissedreverse(SimpleReport):
             n, m = p.split("/")
             n = n.split(".")[:-1]
             n.reverse()
-            return "%s.%s.%s.in-addr.arpa" % (n[0], n[1], n[2])
+            return f"{n[0]}.{n[1]}.{n[2]}.in-addr.arpa"
 
         vrf_id = VRF.get_global().id
         return self.from_query(

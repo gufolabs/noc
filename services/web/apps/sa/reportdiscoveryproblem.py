@@ -153,7 +153,7 @@ class ReportFilterApplication(SimpleReport):
             pool = Pool.get_by_id(pool)
         else:
             pool = Pool.objects.filter()[0]
-        data += [SectionRow(name="Report by %s" % pool.name)]
+        data += [SectionRow(name=f"Report by {pool.name}")]
         if resource_group:
             resource_group = ResourceGroup.get_by_id(resource_group)
             mos = ManagedObject.objects.filter(

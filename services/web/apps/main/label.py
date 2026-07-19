@@ -179,10 +179,10 @@ class LabelApplication(ExtDocApplication):
                     "scope": ll.scope,
                     "value": ll.value,
                     "badges": ll.badges,
-                    "bg_color1": "#%x" % ll.bg_color1,
-                    "fg_color1": "#%x" % ll.fg_color1,
-                    "bg_color2": "#%x" % ll.bg_color2,
-                    "fg_color2": "#%x" % ll.fg_color2,
+                    "bg_color1": f"#{ll.bg_color1:x}",
+                    "fg_color1": f"#{ll.fg_color1:x}",
+                    "bg_color2": f"#{ll.bg_color2:x}",
+                    "fg_color2": f"#{ll.fg_color2:x}",
                     # "checked": False,
                 }
             )

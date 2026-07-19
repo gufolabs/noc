@@ -39,10 +39,7 @@ class CreoleParser(BaseParser):
         def custom_image_emit(node):
             target = cls.convert_attach(kb_entry, node.content)
             text = html_emitter.get_text(node)
-            return '<img src="%s" alt="%s" />' % (
-                html_emitter.attr_escape(target),
-                html_emitter.attr_escape(text),
-            )
+            return f'<img src="{html_emitter.attr_escape(target)}" alt="{html_emitter.attr_escape(text)}" />'
 
         parser = creole.Parser(smart_text(kb_entry.body))
         html_emitter = creole.HtmlEmitter(parser.parse(), macros=cls.get_macro_wrapper())

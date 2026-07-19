@@ -261,7 +261,7 @@ class ReportAlarmCommentsApplication(ExtApplication):
         filename = "alarm_comments.csv"
         if o_format == "csv":
             response = HttpResponse(content_type="text/csv")
-            response["Content-Disposition"] = 'attachment; filename="%s"' % filename
+            response["Content-Disposition"] = f'attachment; filename="{filename}"'
             writer = csv.writer(response)
             writer.writerows(r)
             return response
@@ -274,11 +274,11 @@ class ReportAlarmCommentsApplication(ExtApplication):
             f.seek(0)
             with ZipFile(response, "w", compression=ZIP_DEFLATED) as zf:
                 zf.writestr(filename, f.read())
-                zf.filename = "%s.zip" % filename
+                zf.filename = f"{filename}.zip"
             # response = HttpResponse(content_type="text/csv")
             response.seek(0)
             response = HttpResponse(response.getvalue(), content_type="application/zip")
-            response["Content-Disposition"] = 'attachment; filename="%s.zip"' % filename
+            response["Content-Disposition"] = f'attachment; filename="{filename}.zip"'
             return response
         if o_format == "xlsx":
             response = BytesIO()

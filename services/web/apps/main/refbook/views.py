@@ -74,8 +74,8 @@ class RefBookAppplication(Application):
                     continue
                 w += x["where"]
                 p += x["params"]
-            w = " OR ".join(["(%s)" % xx for xx in w])
-            queryset = queryset.extra(where=["(%s)" % w], params=p)
+            w = " OR ".join([f"({xx})" for xx in w])
+            queryset = queryset.extra(where=[f"({w})"], params=p)
         else:
             query = ""
         # Use generic view for final result

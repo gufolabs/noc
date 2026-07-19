@@ -102,7 +102,7 @@ class RefAppplication(ExtApplication):
         r += [
             {
                 "id": m._meta.db_table,
-                "label": "%s.%s" % (m._meta.app_label, m.__name__),
+                "label": f"{m._meta.app_label}.{m.__name__}",
                 "table": m._meta.db_table,
             }
             for m in apps.get_models()
@@ -111,7 +111,7 @@ class RefAppplication(ExtApplication):
         r += [
             {
                 "id": c._get_collection_name(),
-                "label": "%s.%s" % (c.__module__.split(".")[1], n),
+                "label": "{}.{}".format(c.__module__.split(".")[1], n),
                 "collection": c._get_collection_name(),
             }
             for n, c in _document_registry.items()

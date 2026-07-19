@@ -168,7 +168,7 @@ class ToolsAppplication(Application):
                         profile=ap,
                         fqdn=fqdn,
                         name=fqdn,
-                        description="Imported from %s zone" % zone,
+                        description=f"Imported from {zone} zone",
                     )
                     a.save()
                     create += 1

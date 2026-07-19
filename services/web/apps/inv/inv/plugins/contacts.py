@@ -18,9 +18,9 @@ class ContactsPlugin(InvPlugin):
     def init_plugin(self):
         super().init_plugin()
         self.add_view(
-            "api_plugin_%s_set_contacts" % self.name,
+            f"api_plugin_{self.name}_set_contacts",
             self.api_set_contacts,
-            url="^(?P<id>[0-9a-f]{24})/plugin/%s/$" % self.name,
+            url=f"^(?P<id>[0-9a-f]{{24}})/plugin/{self.name}/$",
             method=["POST"],
             validate={
                 "administrative": UnicodeParameter(),

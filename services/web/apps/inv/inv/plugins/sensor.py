@@ -44,9 +44,9 @@ class SensorPlugin(InvPlugin):
     def init_plugin(self):
         super().init_plugin()
         self.add_view(
-            "api_plugin_%s_set_sensor" % self.name,
+            f"api_plugin_{self.name}_set_sensor",
             self.api_set_sensor,
-            url="^(?P<id>[0-9a-f]{24})/plugin/%s/$" % self.name,
+            url=f"^(?P<id>[0-9a-f]{{24}})/plugin/{self.name}/$",
             method=["POST"],
             validate={
                 "profile": ObjectIdParameter(required=False),

@@ -69,10 +69,10 @@ class ReportDiscoveryIDPoisonApplication(SimpleReport):
                 if filter_dup_macs:
                     continue
                 data += [
-                    SectionRow(name="%s %s (%s)" % (MAC(f["macs"][0]), reason, "On duplicated"))
+                    SectionRow(name="{} {} ({})".format(MAC(f["macs"][0]), reason, "On duplicated"))
                 ]
             else:
-                data += [SectionRow(name="%s %s" % (MAC(f["macs"][0]), reason))]
+                data += [SectionRow(name="{} {}".format(MAC(f["macs"][0]), reason))]
             data += data_c
 
         return self.from_dataset(

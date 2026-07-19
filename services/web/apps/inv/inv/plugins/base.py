@@ -21,7 +21,7 @@ class InvPlugin:
 
     def __init__(self, app: InvApplication) -> None:
         self.app = app
-        self.logger = logging.getLogger("%s.%s" % (__name__.rsplit(".", 1)[0], self.name))
+        self.logger = logging.getLogger("{}.{}".format(__name__.rsplit(".", 1)[0], self.name))
         self.init_plugin()
 
     def set_app(self, app: InvApplication):

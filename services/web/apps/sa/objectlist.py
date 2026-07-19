@@ -33,7 +33,7 @@ class ObjectListApplication(ExtApplication):
         """
         Filter records for lookup
         """
-        self.logger.info("Queryset %s" % query)
+        self.logger.info(f"Queryset {query}")
         if self.managed_filter:
             q = d_Q(is_managed=True)
         else:
@@ -128,7 +128,7 @@ class ObjectListApplication(ExtApplication):
         for k in q:
             if not k.startswith("_") and "__" not in k:
                 nq[k] = q[k]
-        self.logger.debug("Cleaned query: %s" % nq)
+        self.logger.debug(f"Cleaned query: {nq}")
         if "ids" in nq:
             nq["id__in"] = list({int(nid) for nid in nq["ids"]})
             del nq["ids"]
@@ -153,7 +153,7 @@ class ObjectListApplication(ExtApplication):
         for x in xf:
             if x in ["address__in", "id__in", "administrative_domain__in"]:
                 continue
-            self.logger.warning("Remove element not in model: %s" % x)
+            self.logger.warning(f"Remove element not in model: {x}")
             del nq[x]
         return nq
 
@@ -166,7 +166,7 @@ class ObjectListApplication(ExtApplication):
             extra["select"]["ex_address"] = " address "
             extra["order_by"] = ["-ex_address", "-address"]
 
-        self.logger.info("Extra: %s" % extra)
+        self.logger.info(f"Extra: {extra}")
         return extra, [] if "order_by" in extra else order
 
     @view(method=["GET", "POST"], url="^$", access="read", api=True)

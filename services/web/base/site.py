@@ -62,16 +62,16 @@ class URL:
                 raise TypeError("Invalid type for 'method'")
             for m in method:
                 if m not in HTTP_METHODS:
-                    raise ValueError("Invalid method '%s'" % m)
+                    raise ValueError(f"Invalid method '{m}'")
             self.method = set(method)
 
     def __repr__(self):
-        return "<URL %s>" % smart_text(self)
+        return f"<URL {smart_text(self)}>"
 
     def __str__(self):
         s = self.url
         if self.name:
-            s += ", name='%s'" % self.name
+            s += f", name='{self.name}'"
         return s
 
 
@@ -214,7 +214,7 @@ class Site:
                                 g = orjson.loads(request.body)
                             except ValueError as e:
                                 logger.error("Unable to decode JSON: %s", e)
-                                errors = "Unable to decode JSON: %s" % e
+                                errors = f"Unable to decode JSON: {e}"
                         else:
                             g = {k: v[0] if len(v) == 1 else v for k, v in request.POST.lists()}
                         if not errors:
@@ -257,10 +257,10 @@ class Site:
                             stmt = q["sql"].strip().split(" ", 1)[0].upper()
                             sc[stmt] += 1
                             tsc += 1
-                            app_logger.debug("SQL %(sql)s %(time)ss" % q)
+                            app_logger.debug("SQL {sql} {time}s".format(**q))
                     x = ", ".join("%s: %d" % (k, cv) for k, cv in sc.items())
                     if x:
-                        x = " (%s)" % x
+                        x = f" ({x})"
                     app_logger.debug("SQL statements: %d%s" % (tsc, x))
             except PermissionDenied as e:
                 return HttpResponseForbidden(e)
@@ -323,7 +323,7 @@ class Site:
             else:
                 r = {"id": self.get_menu_id(path), "title": p, "children": []}
                 if p in self.folder_glyps:
-                    r["iconCls"] = "fa fa-%s" % self.folder_glyps[p]
+                    r["iconCls"] = f"fa fa-{self.folder_glyps[p]}"
                 root["children"] += [r]
                 root = r
         path += parts
@@ -332,11 +332,11 @@ class Site:
             "id": self.get_menu_id(path),
             "title": parts[0],
             "app": app,
-            "iconCls": "fa fa-%s noc-edit" % app.glyph,
+            "iconCls": f"fa fa-{app.glyph} noc-edit",
         }
         if view:
             r["access"] = self.site_access(app, view)
-            app.menu_url = ("/%s/%s/%s" % (app.module, app.app, view.url[1:])).replace("$", "")
+            app.menu_url = (f"/{app.module}/{app.app}/{view.url[1:]}").replace("$", "")
         else:
             r["access"] = lambda user: app.launch_access.check(app, user)
         root["children"] += [r]
@@ -373,7 +373,7 @@ class Site:
                 elif isinstance(view.url, URL):
                     view_url = view.url
                 else:
-                    raise ValueError("Invalid URL object: %s" % view.url)
+                    raise ValueError(f"Invalid URL object: {view.url}")
                 app_url_map[view_url.url] += [(view_url, view)]
             # Install URLs
             for url in app_url_map:
@@ -396,9 +396,9 @@ class Site:
             # Collect nested application routes
             mod_includes = []
             for app in sorted(patterns[module]):
-                mod_includes += [path("%s/" % app, include((patterns[module][app], app)))]
+                mod_includes += [path(f"{app}/", include((patterns[module][app], app)))]
             # Install module routes
-            self.urlpatterns += [path("%s/" % module, include((mod_includes, module)))]
+            self.urlpatterns += [path(f"{module}/", include((mod_includes, module)))]
         # Django JS Translation
         # @todo: Remove?
         self.urlpatterns.append(
@@ -418,7 +418,7 @@ class Site:
         """
         app_id = app_class.get_app_id()
         if app_id in self.apps:
-            raise Exception("Application %s is already registered" % app_id)
+            raise Exception(f"Application {app_id} is already registered")
         self.pending_applications += [app_class]
 
     def do_register(self, app_class):
@@ -431,7 +431,7 @@ class Site:
         # Register application
         app_id = app_class.get_app_id()
         if app_id in self.apps:
-            raise Exception("Application %s is already registered" % app_id)
+            raise Exception(f"Application {app_id} is already registered")
         # Initialize application
         app = app_class(self)
         self.apps[app_id] = app
@@ -444,7 +444,7 @@ class Site:
         self.app_count += 1
 
     def add_module_menu(self, m):
-        mn = "noc.services.web.apps.%s" % m[4:]  # Strip noc.
+        mn = f"noc.services.web.apps.{m[4:]}"  # Strip noc.
         mod_name = importlib.import_module(mn).MODULE_NAME
         r = {"id": self.get_menu_id([m]), "title": mod_name, "children": []}
         self.menu += [r]
@@ -545,7 +545,7 @@ class Site:
             kw = kwargs.copy()
             query = ""
             if "QUERY" in kw:
-                query = "?%s" % urlencode(kw["QUERY"])
+                query = "?{}".format(urlencode(kw["QUERY"]))
                 del kw["QUERY"]
             return reverse(url, args=args, kwargs=kw) + query
         return url
@@ -577,7 +577,7 @@ class Site:
             pr = getattr(self.apps[app], "predefined_reports", None)
             if pr:
                 for pr in self.apps[app].predefined_reports:
-                    yield "%s:%s" % (app, pr), self.apps[app].predefined_reports[pr]
+                    yield f"{app}:{pr}", self.apps[app].predefined_reports[pr]
 
     @classmethod
     def is_json(cls, content_type: str) -> bool:

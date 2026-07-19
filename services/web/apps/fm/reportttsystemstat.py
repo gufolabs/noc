@@ -114,7 +114,7 @@ class ReportTTSystemStatApplication(SimpleReport):
                 where service IN ('create_massive_damage_outer', 'change_massive_damage_outer_close') and
                       error_code <> 0 and %s"""
 
-        q_where = ["server IN ('%s')" % "', '".join(tt_systems)]
+        q_where = ["server IN ('{}')".format("', '".join(tt_systems))]
         # q_where = ["managed_object IN (%s)" % ", ".join(mo_bi_dict.keys())]
         q_where += [
             "(date >= toDate(%d)) AND (ts >= toDateTime(%d) AND ts <= toDateTime(%d))"
@@ -167,8 +167,9 @@ class ReportTTSystemStatApplication(SimpleReport):
 
             r += [
                 SectionRow(
-                    name="Report from %s to %s"
-                    % (from_date.strftime("%d.%m.%Y %H:%M"), to_date.strftime("%d.%m.%Y %H:%M"))
+                    name="Report from {} to {}".format(
+                        from_date.strftime("%d.%m.%Y %H:%M"), to_date.strftime("%d.%m.%Y %H:%M")
+                    )
                 )
             ]
             for line in sorted(tt_s, key=lambda x: x[0]):
