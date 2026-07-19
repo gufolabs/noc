@@ -33,7 +33,7 @@ To create your own translations, you can place additional folders next to the ma
 To work with localization, install the development dependencies:
 
 ```shell
-pip install -r requirements/dev.txt
+pip install .[dev]
 ```
 
 ## Localization Steps
@@ -167,5 +167,5 @@ ImportError: No module named babel.util
 Install development dependencies:
 
 ```bash
-pip install -r requirements/dev.txt
+pip install .[dev]
 ```
