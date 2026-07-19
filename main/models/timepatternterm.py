@@ -39,7 +39,7 @@ class TimePatternTerm(NOCModel):
     term = models.CharField("Term", max_length=256)
 
     def __str__(self):
-        return "{}: {}".format(self.time_pattern.name, self.term)
+        return f"{self.time_pattern.name}: {self.term}"
 
     @classmethod
     def get_by_id(cls, oid: int) -> Optional["TimePatternTerm"]:

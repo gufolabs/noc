@@ -27,7 +27,7 @@ def do_var(parser, token):
             raise ValueError
     except ValueError:
         raise template.TemplateSyntaxError(
-            "{} tag requires at least 3 arguments".format(token.contents.split()[0])
+            f"{token.contents.split()[0]} tag requires at least 3 arguments"
         )
     tag, name, vartype = t[:3]
     if vartype not in VARTYPES:
@@ -51,7 +51,7 @@ def do_python(parser, token):
     try:
         return PythonNode(nodelist)
     except SyntaxError as e:
-        raise template.TemplateSyntaxError("Python syntax error: {}".format(e))
+        raise template.TemplateSyntaxError(f"Python syntax error: {e}")
 
 
 #

@@ -51,7 +51,7 @@ class CronTab(Document):
         try:
             self.get_entry()
         except ValueError as e:
-            raise ValidationError("Invalid crontab expression: {}".format(e))
+            raise ValidationError(f"Invalid crontab expression: {e}")
         if not self.get_handler():
             raise ValidationError("Invalid handler")
 

@@ -49,12 +49,12 @@ class RefBookField(NOCModel):
     rx_mac_3_octets = re.compile("^([0-9A-F]{6}|[0-9A-F]{12})$", re.IGNORECASE)
 
     def __str__(self):
-        return "{}: {}".format(self.ref_book, self.name)
+        return f"{self.ref_book}: {self.name}"
 
     # Return **kwargs for extra
     def get_extra(self, search):
         if self.search_method:
-            return getattr(self, "search_{}".format(self.search_method))(search)
+            return getattr(self, f"search_{self.search_method}")(search)
         return {}
 
     def search_string(self, search):

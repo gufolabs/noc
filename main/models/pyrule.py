@@ -29,13 +29,13 @@ class PyRule(Document):
 
     @property
     def full_name(self):
-        return "noc.pyrules.{}".format(self.name)
+        return f"noc.pyrules.{self.name}"
 
     def clean(self):
         # Check source code
         try:
             compile(str(self.source), "<string>", "exec")
         except SyntaxError as e:
-            raise ValidationError("Cannot compile pyRule: {}".format(e))
+            raise ValidationError(f"Cannot compile pyRule: {e}")
         # Update last_changed
         self.last_changed = datetime.datetime.now()

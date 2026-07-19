@@ -23,7 +23,7 @@ def do_tags(parser, token):
     try:
         tag_name, object = token.split_contents()
     except ValueError:
-        raise template.SyntaxError("{!r} tag requires a single argument".format(token.contents.split()[0]))
+        raise template.SyntaxError(f"{token.contents.split()[0]!r} tag requires a single argument")
     return TagsNode(object)
 
 

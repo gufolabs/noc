@@ -40,7 +40,7 @@ class RefBookData(NOCModel):
     objects = RBDManader()
 
     def __str__(self):
-        return "{}: {}".format(self.ref_book, self.value)
+        return f"{self.ref_book}: {self.value}"
 
     @property
     def items(self):

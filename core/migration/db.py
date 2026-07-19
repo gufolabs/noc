@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Migration db property
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -236,14 +236,14 @@ class DB:
         Generates a full SQL statement to add a foreign key constraint
         """
         constraint_name = f"{from_column_name}_refs_{to_column_name}_{abs(hash((from_table_name, to_table_name))):x}"
-        return "ALTER TABLE {} ADD CONSTRAINT {} FOREIGN KEY ({}) REFERENCES {} ({}){};".format(
-            self.quote_name(from_table_name),
-            self.quote_name(truncate_name(constraint_name, connection.ops.max_name_length())),
-            self.quote_name(from_column_name),
-            self.quote_name(to_table_name),
-            self.quote_name(to_column_name),
-            connection.ops.deferrable_sql(),  # Django knows this
-        )
+        qn = self.quote_name
+        const_name = truncate_name(constraint_name, connection.ops.max_name_length())
+        return f"""ALTER TABLE {qn(from_table_name)}
+        ADD CONSTRAINT {qn(const_name)}
+        FOREIGN KEY ({qn(from_column_name)})
+        REFERENCES {qn(to_table_name)} ({qn(to_column_name)})
+        {connection.ops.deferrable_sql()}
+        """
 
     def execute_deferred_sql(self):
         for sql in self.deferred_sql:

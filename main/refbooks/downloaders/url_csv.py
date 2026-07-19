@@ -38,7 +38,7 @@ class CsvUrlDownloader(BaseDownloader):
         ) as client:
             code, headers, body = client.get(url)
             if code != 200:
-                raise OSError("Invalid HTTP response: {}".format(code))
+                raise OSError(f"Invalid HTTP response: {code}")
 
             data = StringIO(body)
             # Wrap GzipFile for gzipped content

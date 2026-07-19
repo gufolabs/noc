@@ -90,7 +90,7 @@ class PrefixTablePrefix(NOCModel):
     prefix = CIDRField(_("Prefix"))
 
     def __str__(self):
-        return "{} {}".format(self.table.name, self.prefix)
+        return f"{self.table.name} {self.prefix}"
 
     def save(self, *args, **kwargs):
         # Set AFI

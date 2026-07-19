@@ -22,4 +22,4 @@ class UserState(Document):
     value = StringField()
 
     def __str__(self):
-        return "{}: {}".format(self.user_id, self.key)
+        return f"{self.user_id}: {self.key}"
