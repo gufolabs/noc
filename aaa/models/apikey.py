@@ -37,7 +37,7 @@ class APIAccess(EmbeddedDocument):
     role = StringField()
 
     def __str__(self):
-        return "%s:%s" % (self.api, self.role)
+        return f"{self.api}:{self.role}"
 
 
 class APIAccessACL(EmbeddedDocument):
@@ -48,7 +48,7 @@ class APIAccessACL(EmbeddedDocument):
     def __str__(self):
         if self.is_active:
             return self.prefix
-        return "%s (inactive)" % self.prefix
+        return f"{self.prefix} (inactive)"
 
 
 @on_delete_check(check=[("main.RemoteSystem", "api_key")])
@@ -133,7 +133,7 @@ class APIKey(Document):
         :param ip: IP address to check against ACL
         :return: String of '<api>:<role>,<api>:<role>,...'
         """
-        return str(",".join("%s:%s" % a for a in cls.get_name_and_access(key, ip)[1]))
+        return str(",".join("{}:{}".format(*a) for a in cls.get_name_and_access(key, ip)[1]))
 
     @classmethod
     def get_name_and_access_str(cls, key, ip=None):
@@ -146,4 +146,4 @@ class APIKey(Document):
         name, permissions = cls.get_name_and_access(key, ip)
         if not name:
             return None, ""
-        return name, str(",".join("%s:%s" % a for a in permissions))
+        return name, str(",".join("{}:{}".format(*a) for a in permissions))

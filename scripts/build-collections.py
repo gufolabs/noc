@@ -18,7 +18,7 @@ def build(spath):
     dst_prefix = spec["dst_prefix"]
     if dst_prefix.startswith("/"):
         dst_prefix = dst_prefix[1:]
-    dist_path = os.path.join("dist", "%s@%s.tar.bz2" % (pkg, version))
+    dist_path = os.path.join("dist", f"{pkg}@{version}.tar.bz2")
     tmp_path = dist_path + ".tmp"
     tf = tarfile.open(tmp_path, "w:bz2")
     src_root = "src"

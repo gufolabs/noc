@@ -25,7 +25,7 @@ class Command(BaseCommand):
         apply_parser.add_argument("fixes", nargs=argparse.REMAINDER, help="Apply named fixes")
 
     def handle(self, cmd, *args, **options):
-        return getattr(self, "handle_%s" % cmd)(*args, **options)
+        return getattr(self, f"handle_{cmd}")(*args, **options)
 
     def handle_list(self, *args, **options):
         fixes = set()
@@ -35,9 +35,11 @@ class Command(BaseCommand):
             files = os.listdir(d)
             if "__init__.py" not in files:
                 print(
-                    "WARNING: %s is missed. "
+                    "WARNING: {} is missed. "
                     "Create empty file "
-                    "or all fixes from %s will be ignored" % (os.path.join(d, "__init__.py"), d),
+                    "or all fixes from {} will be ignored".format(
+                        os.path.join(d, "__init__.py"), d
+                    ),
                     file=self.stdout,
                 )
                 continue
@@ -49,8 +51,8 @@ class Command(BaseCommand):
 
     def get_fix(self, name):
         for d in self.FIX_DIRS:
-            if os.path.isfile(os.path.join(d, "%s.py" % name)):
-                return get_handler("noc.%s.%s.fix" % (d.replace(os.sep, "."), name))
+            if os.path.isfile(os.path.join(d, f"{name}.py")):
+                return get_handler("noc.{}.{}.fix".format(d.replace(os.sep, "."), name))
         return None
 
     def handle_apply(self, fixes=None, *args, **options):
@@ -64,7 +66,7 @@ class Command(BaseCommand):
         for f in fixes:
             fix = self.get_fix(f)
             if not fix:
-                self.die("Invalid fix '%s'" % f)
-            print("Apply %s ..." % f, file=self.stdout)
+                self.die(f"Invalid fix '{f}'")
+            print(f"Apply {f} ...", file=self.stdout)
             fix()
             print("... done", file=self.stdout)

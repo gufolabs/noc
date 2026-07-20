@@ -48,7 +48,7 @@ class Command(BaseCommand):
         for ng in notification_group:
             g = NotificationGroup.get_by_name(ng)
             if not g:
-                self.die("Invalid notification group '%s'" % ng)
+                self.die(f"Invalid notification group '{ng}'")
             groups += [g]
         if subject and (body or body_file):
             # Get message from command line
@@ -59,7 +59,7 @@ class Command(BaseCommand):
             # Get message from template
             t = Template.get_by_name(template)
             if not t:
-                self.die("Invalid template name '%s'" % template)
+                self.die(f"Invalid template name '{template}'")
             # Convert variables
             var = var or []
             ctx = {}
@@ -77,12 +77,12 @@ class Command(BaseCommand):
         if not body:
             self.die("Body is empty")
         if self.is_debug:
-            self.print("Subject: %s" % subject)
+            self.print(f"Subject: {subject}")
             self.print("---[Body]---------")
             self.print(body)
             self.print("---[End]----------")
         for g in groups:
             if self.is_debug:
-                self.print("Sending message to group: %s" % g.name)
+                self.print(f"Sending message to group: {g.name}")
             if not dry_run:
                 g.notify(subject=subject, body=body)

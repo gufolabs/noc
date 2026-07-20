@@ -34,7 +34,7 @@ DEFAULT_CLEAN = datetime.timedelta(weeks=4)
 CLEAN_WINDOW = datetime.timedelta(weeks=1)
 
 name2codepoint["#39"] = 39
-rx_cp = re.compile("&(%s);" % "|".join(name2codepoint))
+rx_cp = re.compile("&({});".format("|".join(name2codepoint)))
 
 
 def unescape(s):
@@ -92,7 +92,7 @@ class Command(BaseCommand):
 
     def handle(self, cmd, *args, **options):
         connect()
-        return getattr(self, "handle_%s" % cmd.replace("-", "_"))(*args, **options)
+        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
 
     def handle_json(self, option, events):
         return self.handle_show(option, events, show_json=True)

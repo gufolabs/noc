@@ -34,7 +34,7 @@ def check_query(query: str, args: dict[str, Any], expected: list[dict[str, Any]]
         else:
             not_found.add(ctx)
     for ctx_hash in not_found:
-        print("Unexpected return result: %s" % not_found[ctx_hash])
+        print(f"Unexpected return result: {not_found[ctx_hash]}")
     for ctx in left:
-        print("Missed result:  %s" % ctx)
+        print(f"Missed result:  {ctx}")
     return not left and not not_found

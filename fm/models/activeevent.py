@@ -70,7 +70,7 @@ class ActiveEvent(Document):
     expires = DateTimeField(required=False)
 
     def __str__(self):
-        return "%s" % self.id
+        return f"{self.id}"
 
     @classmethod
     @cachedmethod(key="activeevent-%s", lock=lambda _: id_lock, ttl=900)
@@ -111,7 +111,7 @@ class ActiveEvent(Document):
         """
         Move event into noc.events.failed
         """
-        message = "Failed to classify on NOC version %s" % version
+        message = f"Failed to classify on NOC version {version}"
         log = [
             *self.log,
             EventLog(

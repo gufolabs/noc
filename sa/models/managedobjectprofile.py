@@ -110,7 +110,7 @@ class MatchRule(BaseModel):
         for g in v:
             rg = ResourceGroup.get_by_id(g)
             if not rg:
-                raise ValueError("Unknown Group with id: %s" % g)
+                raise ValueError(f"Unknown Group with id: {g}")
         return v
 
     @model_validator(mode="after")

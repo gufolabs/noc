@@ -181,7 +181,7 @@ class Command(BaseCommand):
         if "infile" in options and not sys.stdin.isatty():
             for line in options["infile"]:
                 options["key"] += [int(line)]
-        return getattr(self, "handle_%s" % cmd.replace("-", "_"))(*args, **options)
+        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
 
     def handle_list(self, scheduler: Scheduler, *args, **options):
         q = {}
@@ -190,18 +190,18 @@ class Command(BaseCommand):
         if options.get("key"):
             q["key"] = {"$in": [int(x) for x in options["key"]]}
         fname = options.get("format", "csv")
-        format = getattr(self, "format_%s" % fname)
+        format = getattr(self, f"format_{fname}")
         # Print header
-        getattr(self, "init_%s" % fname)()
+        getattr(self, f"init_{fname}")()
         # Print jobs
         for j in scheduler.get_collection().find(q).sort("ts").limit(50):
             format(j)
 
     def handle_get(self, scheduler, *args, **options):
         fname = options.get("format", "csv")
-        format = getattr(self, "format_%s" % fname)
+        format = getattr(self, f"format_{fname}")
         # Print header
-        getattr(self, "init_%s" % fname)()
+        getattr(self, f"init_{fname}")()
         # Print jobs
         for j in scheduler.find().sort("ts"):
             format(j)
@@ -319,12 +319,12 @@ class Command(BaseCommand):
                 r[p][c[1]] = c[2]
                 if "sum_task_per_seconds" not in r[p]:
                     r[p]["sum_task_per_seconds"] = 0.0
-                if "%s_task_per_seconds" % s not in r[p]:
-                    r[p]["%s_task_per_seconds" % s] = 0.0
+                if f"{s}_task_per_seconds" not in r[p]:
+                    r[p][f"{s}_task_per_seconds"] = 0.0
                 r[p]["sum_task_per_seconds"] += float(c[2]) / float(c[1])
-                r[p]["%s_task_per_seconds" % s] += float(c[2]) / float(c[1])
+                r[p][f"{s}_task_per_seconds"] += float(c[2]) / float(c[1])
                 r["all"]["sum_task_per_seconds"] += float(c[2]) / float(c[1])
-                r["all"]["%s_task_per_seconds" % s] += float(c[2]) / float(c[1])
+                r["all"][f"{s}_task_per_seconds"] += float(c[2]) / float(c[1])
         return r
 
     @staticmethod

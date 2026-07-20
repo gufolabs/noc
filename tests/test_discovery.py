@@ -61,7 +61,7 @@ class BeefCallWrapper:
         self.object = obj
 
     def __call__(self, **kwargs):
-        script_name = "%s.%s" % (self.object.profile.name, self.name)
+        script_name = f"{self.object.profile.name}.{self.name}"
         scls = loader.get_script(script_name)
         # Build credentials
         credentials = {
@@ -200,7 +200,7 @@ def get_by_path(mo, path):
 
 def get_discovery_object_name(x):
     if isinstance(x, tuple):
-        return "%s:%s" % (x[2], x[0])
+        return f"{x[2]}:{x[0]}"
     return None
 
 

@@ -70,7 +70,7 @@ class Street(Document):
 
     def __str__(self):
         if self.short_name:
-            return "%s, %s" % (self.name, self.short_name)
+            return f"{self.name}, {self.short_name}"
         return self.name
 
     @property

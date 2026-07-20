@@ -34,10 +34,10 @@ class UserAccess(NOCModel):
     )
 
     def __str__(self):
-        r = ["user=%s" % self.user.username]
+        r = [f"user={self.user.username}"]
         if self.administrative_domain:
-            r += ["domain=%s" % self.administrative_domain.name]
-        return "(%s)" % ", ".join(r)
+            r += [f"domain={self.administrative_domain.name}"]
+        return "({})".format(", ".join(r))
 
     @classmethod
     def Q(cls, user):

@@ -67,7 +67,7 @@ class Command(BaseCommand):
         if options.get("local"):
             self.svc = MIBAPI(APIRouter())
         connect()
-        return getattr(self, "handle_%s" % cmd.replace("-", "_"))(*args, **options)
+        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
 
     def handle_lookup(self, oids, *args, **kwargs):
         for oid in oids:
@@ -77,11 +77,11 @@ class Command(BaseCommand):
         try:
             r = self.svc.lookup(v)
             if r.get("status"):
-                self.print("%s = %s" % (r["name"], r["oid"]))
+                self.print("{} = {}".format(r["name"], r["oid"]))
             else:
-                self.print("%s: Not found" % v)
+                self.print(f"{v}: Not found")
         except RPCError as e:
-            self.die("RPC Error: %s" % e)
+            self.die(f"RPC Error: {e}")
 
     def handle_get(self, oids, *args, **kwargs):
         for oid in oids:
@@ -93,9 +93,9 @@ class Command(BaseCommand):
             if r.get("status"):
                 self.print(r["data"])
             else:
-                self.print("%s: Not found" % v)
+                self.print(f"{v}: Not found")
         except RPCError as e:
-            self.die("RPC Error: %s" % e)
+            self.die(f"RPC Error: {e}")
 
     @contextlib.contextmanager
     def open_output(self, path=None):
@@ -106,7 +106,7 @@ class Command(BaseCommand):
         """
         if path:
             self.prepare_dirs(path)
-            self.print("Writing to file %s" % path)
+            self.print(f"Writing to file {path}")
             if os.path.splitext(path)[-1] == ".gz":
                 with gzip.GzipFile(path, "w") as f:
                     yield lambda x: f.write(smart_bytes(x))
@@ -141,7 +141,7 @@ class Command(BaseCommand):
                         "description": dd.description,
                         "syntax": dd.syntax,
                     }
-                    for dd in MIBData.objects.filter(aliases__startswith="%s::" % mib.name)
+                    for dd in MIBData.objects.filter(aliases__startswith=f"{mib.name}::")
                 ],
                 key=lambda x: x["oid"],
             )
@@ -185,27 +185,27 @@ class Command(BaseCommand):
         # Get MIB
         mib = MIB.get_by_name(mib_name[0])
         if not mib:
-            self.print("MIB not found: %s" % mib_name[0])
+            self.print(f"MIB not found: {mib_name[0]}")
             self.die("")
         # Build cmib
         year = datetime.date.today().year
         r = [
             "# ----------------------------------------------------------------------",
-            "# %s" % mib,
+            f"# {mib}",
             "# Compiled MIB",
             "# Do not modify this file directly",
             "# Run ./noc mib make-cmib instead",
             "# ----------------------------------------------------------------------",
-            "# Copyright (C) 2007-%s The NOC Project" % year,
+            f"# Copyright (C) 2007-{year} The NOC Project",
             "# See LICENSE for details",
             "# ----------------------------------------------------------------------",
             "",
             "# MIB Name",
-            'NAME = "%s"' % mib,
+            f'NAME = "{mib}"',
             "",
             "# Metadata",
-            'LAST_UPDATED = "%s"' % mib.last_updated.isoformat().split("T")[0],
-            'COMPILED = "%s"' % datetime.date.today().isoformat(),
+            'LAST_UPDATED = "{}"'.format(mib.last_updated.isoformat().split("T")[0]),
+            f'COMPILED = "{datetime.date.today().isoformat()}"',
             "",
             "# MIB Data: name -> oid",
             "MIB = {",
@@ -214,12 +214,13 @@ class Command(BaseCommand):
             MIBData.objects.filter(mib=mib.id),
             key=lambda x: [int(y) for y in x.oid.split(".")],
         )
-        r += ["\n".join('    "%s": "%s",' % (md.name, md.oid) for md in mib_data)]
+        r += ["\n".join(f'    "{md.name}": "{md.oid}",' for md in mib_data)]
         r += ["}", "", "DISPLAY_HINTS = {"]
         r += [
             "\n".join(
-                '    "%s": ("%s", "%s"),  # %s'
-                % (md.oid, md.syntax["base_type"], md.syntax["display_hint"], md.name)
+                '    "{}": ("{}", "{}"),  # {}'.format(
+                    md.oid, md.syntax["base_type"], md.syntax["display_hint"], md.name
+                )
                 for md in mib_data
                 if has_worth_hint(md.syntax)
             )
@@ -250,7 +251,7 @@ class Command(BaseCommand):
                     done.add(p)
             if not done:
                 # Cannot load additional mibs
-                self.die("Cannot load MIBs: %s" % ", ".join(left_paths))
+                self.die("Cannot load MIBs: {}".format(", ".join(left_paths)))
             left_paths = [x for x in left_paths if x not in done]
 
     def upload_mib(self, path, local=False):
@@ -267,14 +268,14 @@ class Command(BaseCommand):
             if r.get("status"):
                 return True
             if r.get("code") == ERR_MIB_MISSED:
-                self.print("Cannot upload %s: MIB Missed - %s" % (path, r.get("msg")))
+                self.print("Cannot upload {}: MIB Missed - {}".format(path, r.get("msg")))
                 return False
-            self.die("Cannot upload %s: %s" % (path, r.get("msg")))
+            self.die("Cannot upload {}: {}".format(path, r.get("msg")))
         except OIDCollision as e:
-            self.print("Cannot upload %s: MIB OID Collision: %s" % (path, e))
+            self.print(f"Cannot upload {path}: MIB OID Collision: {e}")
             return False
         except RPCError as e:
-            self.die("RPC Error: %s" % e)
+            self.die(f"RPC Error: {e}")
 
 
 class ServiceStub:

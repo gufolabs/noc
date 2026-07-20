@@ -13,7 +13,7 @@ class MIBRequiredException(Exception):
         self.requires_mib = requires_mib
 
     def __str__(self):
-        return "%s requires %s" % (self.mib, self.requires_mib)
+        return f"{self.mib} requires {self.requires_mib}"
 
 
 class MIBNotFoundException(Exception):
@@ -22,7 +22,7 @@ class MIBNotFoundException(Exception):
         self.mib = mib
 
     def __str__(self):
-        return "MIB not found: %s" % self.mib
+        return f"MIB not found: {self.mib}"
 
 
 class InvalidTypedef(Exception):
@@ -38,7 +38,7 @@ class OIDCollision(Exception):
         self.msg = msg
 
     def __str__(self):
-        s = "Cannot resolve OID %s collision between %s and %s" % (self.oid, self.name1, self.name2)
+        s = f"Cannot resolve OID {self.oid} collision between {self.name1} and {self.name2}"
         if self.msg:
-            s += ". %s" % self.msg
+            s += f". {self.msg}"
         return s

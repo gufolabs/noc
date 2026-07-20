@@ -67,7 +67,7 @@ class IfDescPatterns(Document):
         for p in self.patterns:
             rx = self._get_re(p.pattern)
             if not rx:
-                raise ValidationError("Invalid regular expression: %s" % p.pattern)
+                raise ValidationError(f"Invalid regular expression: {p.pattern}")
 
     def iter_match(self, s: str) -> Iterable[dict[str, str]]:
         """

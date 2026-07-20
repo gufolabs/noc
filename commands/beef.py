@@ -206,7 +206,7 @@ class Command(BaseCommand):
             f"Spec     : {beef.spec}",
             f"Changed  : {beef.changed}",
         ]
-        r += ["Description:\n  %s\n" % beef.description.replace("\n", "\n  ")]
+        r += ["Description:\n  {}\n".format(beef.description.replace("\n", "\n  "))]
         r += ["--[CLI FSM]----------"]
         for c in beef.cli_fsm:
             r += [f"---- State: {c.state}"]

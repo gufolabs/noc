@@ -104,7 +104,7 @@ class Permission(NOCModel):
             try:
                 Permission.objects.get(name=p).users.add(user)
             except Permission.DoesNotExist:
-                raise Permission.DoesNotExist("Permission '%s' does not exist" % p)
+                raise Permission.DoesNotExist(f"Permission '{p}' does not exist")
         # Revoke permission
         for p in current - perms:
             Permission.objects.get(name=p).users.remove(user)
@@ -168,7 +168,7 @@ class Permission(NOCModel):
         def normalize(app, perm):
             if ":" in perm:
                 return perm
-            return "%s:%s" % (app.get_app_id().replace(".", ":"), perm)
+            return "{}:{}".format(app.get_app_id().replace(".", ":"), perm)
 
         def get_implied(name):
             try:
@@ -194,10 +194,10 @@ class Permission(NOCModel):
         # Check all implied permissions are present
         for p in implied_permissions:
             if p not in new_perms:
-                raise ValueError("Implied permission '%s' is not found" % p)
+                raise ValueError(f"Implied permission '{p}' is not found")
             nf = [pp for pp in implied_permissions[p] if pp not in new_perms]
             if nf:
-                raise ValueError("Invalid implied permissions: %s" % nf)
+                raise ValueError(f"Invalid implied permissions: {nf}")
         old_perms = set(Permission.objects.values_list("name", flat=True))
         # New permissions
         created_perms = {}  # name -> permission
@@ -205,19 +205,19 @@ class Permission(NOCModel):
             # @todo: add implied permissions
             p = Permission(name=name, implied=get_implied(name))
             p.save()
-            print("+ %s" % name)
+            print(f"+ {name}")
             created_perms[name] = p
         # Check implied permissions match
         for name in old_perms.intersection(new_perms):
             implied = get_implied(name)
             p = Permission.objects.get(name=name)
             if p.implied != implied:
-                print("~ %s" % name)
+                print(f"~ {name}")
                 p.implied = implied
                 p.save()
         # Deleted permissions
         for name in old_perms - new_perms:
-            print("- %s" % name)
+            print(f"- {name}")
             Permission.objects.get(name=name).delete()
         # Diverge created permissions
         for name in created_perms:
@@ -228,7 +228,7 @@ class Permission(NOCModel):
             op = Permission.get_by_name(op_name)
             if not op:
                 continue
-            print(": %s -> (%s, %s)" % (op_name, op_name, name))
+            print(f": {op_name} -> ({op_name}, {name})")
             # Migrate users
             dp = created_perms[name]
             for u in op.users.all():

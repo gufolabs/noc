@@ -16,7 +16,7 @@ def fix():
     for p in Platform.objects.filter():
         if p.snmp_sysobjectid:
             continue  # Already filled
-        print("Checked platform: %s" % p.name)
+        print(f"Checked platform: {p.name}")
         # Get sample devices
         for mo in ManagedObject.objects.filter(is_managed=True, platform=p.id).order_by("?"):
             caps = mo.get_caps()
@@ -31,7 +31,7 @@ def fix():
                 continue
             if not v:
                 continue
-            print("%s sysObjectID.0 %s" % (p.full_name, v))
+            print(f"{p.full_name} sysObjectID.0 {v}")
             p.snmp_sysobjectid = v
             p.save()
             break

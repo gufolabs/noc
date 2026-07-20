@@ -92,8 +92,8 @@ class ObjectAttr(EmbeddedDocument):
 
     def __str__(self):
         if self.scope:
-            return "%s.%s@%s = %s" % (self.interface, self.attr, self.scope, self.value)
-        return "%s.%s = %s" % (self.interface, self.attr, self.value)
+            return f"{self.interface}.{self.attr}@{self.scope} = {self.value}"
+        return f"{self.interface}.{self.attr} = {self.value}"
 
 
 class ObjectConfigurationScope(EmbeddedDocument):
@@ -516,8 +516,8 @@ class Object(Document):
         # Return sorted result
         return sorted(
             r,
-            key=lambda oa: (
-                "%s.%s" % (sorting_keys.get(f"{oa.interface}.{oa.attr}", "999999.999999"), oa.scope)
+            key=lambda oa: "{}.{}".format(
+                sorting_keys.get(f"{oa.interface}.{oa.attr}", "999999.999999"), oa.scope
             ),
         )
 
@@ -719,7 +719,7 @@ class Object(Document):
         """
         c = self.model.get_model_connection(name)
         if c is None:
-            raise ConnectionError("Local connection not found: %s" % name)
+            raise ConnectionError(f"Local connection not found: {name}")
         return ConnectionData(
             c.name,
             protocols=[ProtocolVariant.get_by_code(p.code) for p in c.protocols],
@@ -949,11 +949,11 @@ class Object(Document):
 
         lc = self.model.get_model_connection(name)
         if lc is None:
-            raise ConnectionError("Local connection not found: %s" % name)
+            raise ConnectionError(f"Local connection not found: {name}")
         name = lc.name
         rc = remote_object.model.get_model_connection(remote_name)
         if rc is None:
-            raise ConnectionError("Remote connection not found: %s" % remote_name)
+            raise ConnectionError(f"Remote connection not found: {remote_name}")
         remote_name = rc.name
         valid, cause = self.model.check_connection(lc, rc)
         if not valid:
@@ -994,9 +994,7 @@ class Object(Document):
                 ],
                 data=data,
             ).save()
-        self.log(
-            "%s:%s -> %s:%s" % (self, name, remote_object, remote_name), system="CORE", op="CONNECT"
-        )
+        self.log(f"{self}:{name} -> {remote_object}:{remote_name}", system="CORE", op="CONNECT")
 
     def connect_genderless(
         self,
@@ -1014,16 +1012,16 @@ class Object(Document):
 
         lc = self.model.get_model_connection(name)
         if lc is None:
-            raise ConnectionError("Local connection not found: %s" % name)
+            raise ConnectionError(f"Local connection not found: {name}")
         name = lc.name
         rc = remote_object.model.get_model_connection(remote_name)
         if rc is None:
-            raise ConnectionError("Remote connection not found: %s" % remote_name)
+            raise ConnectionError(f"Remote connection not found: {remote_name}")
         remote_name = rc.name
         if lc.gender != "s":
-            raise ConnectionError("Local connection '%s' must be genderless" % name)
+            raise ConnectionError(f"Local connection '{name}' must be genderless")
         if rc.gender != "s":
-            raise ConnectionError("Remote connection '%s' must be genderless" % remote_name)
+            raise ConnectionError(f"Remote connection '{remote_name}' must be genderless")
         # Check for connection
         for c, ro, rname in self.get_genderless_connections(name):
             if ro.id == remote_object.id and rname == remote_name:
@@ -1043,9 +1041,7 @@ class Object(Document):
             type=type or None,
             layer=layer,
         ).save()
-        self.log(
-            "%s:%s -> %s:%s" % (self, name, remote_object, remote_name), system="CORE", op="CONNECT"
-        )
+        self.log(f"{self}:{name} -> {remote_object}:{remote_name}", system="CORE", op="CONNECT")
 
     def put_into(self, container: "Object") -> None:
         """
@@ -1561,7 +1557,7 @@ class Object(Document):
         """ """
         input = self.model.get_model_connection(input)
         if not input:
-            raise ValueError("Not found connection: %s" % input)
+            raise ValueError(f"Not found connection: {input}")
         output = self.model.get_model_connection(output)
         for c in self.cross:
             if c.input != input.name:

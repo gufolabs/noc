@@ -1189,7 +1189,7 @@ class ManagedObject(NOCModel):
 
     def on_save(self):
         # Invalidate caches
-        deleted_cache_keys = ["managedobject-name-to-id-%s" % self.name]
+        deleted_cache_keys = [f"managedobject-name-to-id-{self.name}"]
         diagnostics = []
         # Notify new object
         if not self.initial_data["id"]:
@@ -1221,7 +1221,7 @@ class ManagedObject(NOCModel):
             or "remote_path" in self.changed_fields
             or "snmp_rate_limit" in self.changed_fields
         ):
-            cache.delete("cred-%s" % self.id, version=CREDENTIAL_CACHE_VERSION)
+            cache.delete(f"cred-{self.id}", version=CREDENTIAL_CACHE_VERSION)
         if self.initial_data["id"] is None or self._access_fields.intersection(
             set(self.changed_fields)
         ):
@@ -1259,7 +1259,7 @@ class ManagedObject(NOCModel):
             if self.container:
                 for o in Object.get_managed(self):
                     o.container = self.container.id
-                    o.log("Moved to container %s (%s)" % (self.container, self.container.id))
+                    o.log(f"Moved to container {self.container} ({self.container.id})")
                     o.save()
         # Rebuild summary
         if "object_profile" in self.changed_fields:
@@ -1345,7 +1345,7 @@ class ManagedObject(NOCModel):
 
     @classmethod
     def get_search_result_url(cls, obj_id):
-        return "/api/card/view/managedobject/%s/" % obj_id
+        return f"/api/card/view/managedobject/{obj_id}/"
 
     @property
     def is_router(self):
@@ -1545,8 +1545,9 @@ class ManagedObject(NOCModel):
             r = []
             for d in sorted(data, key=operator.itemgetter("name")):
                 r += [
-                    "==[ %s ]========================================\n%s"
-                    % (d["name"], d["config"])
+                    "==[ {} ]========================================\n{}".format(
+                        d["name"], d["config"]
+                    )
                 ]
             data = "\n".join(r)
         # Wipe out unnecessary parts
@@ -1930,7 +1931,7 @@ class ManagedObject(NOCModel):
             elif is_ipv4_prefix(query):
                 # Match by prefix
                 p = IP.prefix(query)
-                return SQL("address <<= '%s'" % p)
+                return SQL(f"address <<= '{p}'")
             else:
                 try:
                     mac = MACAddressParameter().clean(query)
@@ -2215,7 +2216,7 @@ class ManagedObject(NOCModel):
         if not n_handler:
             return
         if not n_handler.startswith("noc."):
-            n_handler = "noc.sa.profiles.%s.confdb.normalizer.%s" % (profile.name, n_handler)
+            n_handler = f"noc.sa.profiles.{profile.name}.confdb.normalizer.{n_handler}"
         n_cls = get_handler(n_handler)
         if not n_cls:
             return
@@ -3296,7 +3297,7 @@ class ManagedObjectAttribute(NOCModel):
     value = CharField("Value", max_length=4096, blank=True, null=True)
 
     def __str__(self):
-        return "%s: %s" % (self.managed_object, self.key)
+        return f"{self.managed_object}: {self.key}"
 
     def on_save(self):
         cache.delete(f"cred-{self.managed_object.id}", version=CREDENTIAL_CACHE_VERSION)
@@ -3317,7 +3318,7 @@ class ManagedObjectStatus(NOCModel):
     last = DateTimeField("Last update Time", auto_now_add=True)
 
     def __str__(self):
-        return "%s: %s" % (self.managed_object, self.status)
+        return f"{self.managed_object}: {self.status}"
 
     @classmethod
     def get_last_status(cls, o) -> tuple[bool | None, datetime.datetime | None]:
@@ -3566,8 +3567,8 @@ class ScriptsProxy:
     def __getattr__(self, name):
         if name in self._cache:
             return self._cache[name]
-        if not script_loader.has_script("%s.%s" % (self._object.profile.name, name)):
-            raise AttributeError("Invalid script %s" % name)
+        if not script_loader.has_script(f"{self._object.profile.name}.{name}"):
+            raise AttributeError(f"Invalid script {name}")
         cw = self._caller(self._object, name)
         self._cache[name] = cw
         return cw
@@ -3579,7 +3580,7 @@ class ScriptsProxy:
         """Check object has script name"""
         if "." not in item:
             # Normalize to full name
-            item = "%s.%s" % (self._object.profile.name, item)
+            item = f"{self._object.profile.name}.{item}"
         return script_loader.has_script(item)
 
     def __iter__(self):

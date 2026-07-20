@@ -44,7 +44,7 @@ class ConnectionMatcher(EmbeddedDocument):
     protocol = StringField()
 
     def __str__(self):
-        return "<ConnectionMatcher %s:%s>" % (self.scope, self.protocol)
+        return f"<ConnectionMatcher {self.scope}:{self.protocol}>"
 
     @property
     def json_data(self) -> dict[str, Any]:
@@ -61,7 +61,7 @@ class ModelAttr(EmbeddedDocument):
     value = DynamicField()
 
     def __str__(self) -> str:
-        return "%s.%s = %s" % (self.interface, self.attr, self.value)
+        return f"{self.interface}.{self.attr} = {self.value}"
 
     @property
     def json_data(self) -> dict[str, Any]:

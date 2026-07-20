@@ -43,7 +43,7 @@ def fix():
 def ensure_format(path: str) -> None:
     dst_comp = loader[config.etl.compression]
     if path.endswith(dst_comp.ext) and (path.endswith(".csv") and not dst_comp.ext):
-        print("[%s] Already compressed" % path)
+        print(f"[{path}] Already compressed")
         return  # Already compressed
     src_ext = ""
     for ext in ext_map:
@@ -51,11 +51,11 @@ def ensure_format(path: str) -> None:
             src_ext = ext
             break
     if src_ext == dst_comp.ext:
-        print("[%s] Already compressed. Skipping" % path)
+        print(f"[{path}] Already compressed. Skipping")
         return
     src_comp = ext_map[src_ext]
     dst_path = path[: -len(src_ext) if src_ext else None] + dst_comp.ext
-    print("Repacking %s -> %s" % (path, dst_path))
+    print(f"Repacking {path} -> {dst_path}")
     with src_comp(path, "r") as src, dst_comp(dst_path, "w") as dst:
         dst.write(src.read())
     os.unlink(path)

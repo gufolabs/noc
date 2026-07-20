@@ -39,7 +39,7 @@ class Command(BaseCommand):
             method = getattr(client, method)
             result = method(*arguments)
         except RPCError as e:
-            self.die("RPC Error: %s" % e)
+            self.die(f"RPC Error: {e}")
         if pretty:
             self.stdout.write(pprint.pformat(result) + "\n")
         else:

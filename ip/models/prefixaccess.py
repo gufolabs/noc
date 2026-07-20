@@ -46,7 +46,7 @@ class PrefixAccess(NOCModel):
             perms += ["View"]
         if self.can_change:
             perms += ["Change"]
-        return "%s: %s(%s): %s: %s" % (
+        return "{}: {}({}): {}: {}".format(
             self.user.username,
             self.vrf.name,
             self.afi,
@@ -144,15 +144,15 @@ class PrefixAccess(NOCModel):
                 stmt += [
                     "(%s = %d AND %s = '%s' AND %s <<= '%s')"
                     % (
-                        "%s.vrf_id" % table if table else "vrf_id",
+                        f"{table}.vrf_id" if table else "vrf_id",
                         vrf,
-                        "%s.afi" % table if table else "afi",
+                        f"{table}.afi" if table else "afi",
                         afi,
-                        "%s.%s" % (table, field) if table else field,
+                        f"{table}.{field}" if table else field,
                         p,
                     )
                 ]
-        return SQL(reduce(lambda x, y: "%s OR %s" % (x, y), stmt))
+        return SQL(reduce(lambda x, y: f"{x} OR {y}", stmt))
 
 
 # Avoid circular references

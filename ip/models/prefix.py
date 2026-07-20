@@ -311,28 +311,26 @@ class Prefix(NOCModel):
         # Reconnect children children prefixes
         c = connection.cursor()
         c.execute(
-            """
-            UPDATE %s
-            SET    parent_id=%%s
+            f"""
+            UPDATE {Prefix._meta.db_table}
+            SET    parent_id=%s
             WHERE
-                    vrf_id=%%s
-                AND afi=%%s
-                AND prefix << %%s
-                AND parent_id=%%s
-            """
-            % Prefix._meta.db_table,
+                    vrf_id=%s
+                AND afi=%s
+                AND prefix << %s
+                AND parent_id=%s
+            """,
             [self.id, self.vrf.id, self.afi, self.prefix, self.parent.id if self.parent else None],
         )
         # Reconnect children addresses
         c.execute(
-            """
-            UPDATE %s
-            SET prefix_id=%%s
+            f"""
+            UPDATE {Address._meta.db_table}
+            SET prefix_id=%s
             WHERE
-                    prefix_id=%%s
-                AND address << %%s
-            """
-            % Address._meta.db_table,
+                    prefix_id=%s
+                AND address << %s
+            """,
             [self.id, self.parent.id if self.parent else None, self.prefix],
         )
 
@@ -383,26 +381,25 @@ class Prefix(NOCModel):
         @todo: PostgreSQL-independent implementation
         """
         return User.objects.raw(
-            """
+            f"""
             SELECT id,username,first_name,last_name
-            FROM %s u
+            FROM {User._meta.db_table} u
             WHERE
                 is_active=TRUE
                 AND
                     (is_superuser=TRUE
                     OR
                     EXISTS(SELECT id
-                           FROM %s a
+                           FROM {PrefixAccess._meta.db_table} a
                            WHERE
                                     user_id=u.id
-                                AND vrf_id=%%s
-                                AND afi=%%s
-                                AND prefix>>=%%s
+                                AND vrf_id=%s
+                                AND afi=%s
+                                AND prefix>>=%s
                                 AND can_change=TRUE
                            ))
             ORDER BY username
-            """
-            % (User._meta.db_table, PrefixAccess._meta.db_table),
+            """,
             [self.vrf.id, self.afi, self.prefix],
         )
 
@@ -501,12 +498,12 @@ class Prefix(NOCModel):
         Full-text search
         """
         content = [self.prefix]
-        card = "Prefix %s" % self.prefix
+        card = f"Prefix {self.prefix}"
         if self.description:
             content += [self.description]
-            card += " (%s)" % self.description
+            card += f" ({self.description})"
         r = {
-            "id": "ip.prefix:%s" % self.id,
+            "id": f"ip.prefix:{self.id}",
             "title": self.prefix,
             "content": "\n".join(content),
             "card": card,
@@ -684,7 +681,7 @@ class Prefix(NOCModel):
         u = self.usage
         if u is None:
             return ""
-        return "%.2f%%" % u
+        return f"{u:.2f}%"
 
     @staticmethod
     def update_prefixes_usage(prefixes):
@@ -757,7 +754,7 @@ class Prefix(NOCModel):
         u = self.address_usage
         if u is None:
             return "-"
-        return "%.2f%%" % u
+        return f"{u:.2f}%"
 
     def is_empty(self) -> bool:
         """

@@ -45,7 +45,7 @@ class Command(BaseCommand):
         print(msg)
 
     def handle(self, cmd, *args, **options):
-        return getattr(self, "handle_%s" % cmd)(*args, **options)
+        return getattr(self, f"handle_{cmd}")(*args, **options)
 
     def handle_add(self, *args, **options):
         if "username" not in options:
@@ -63,7 +63,7 @@ class Command(BaseCommand):
             raise CommandError("template permission not set")
         for t in options["template"]:
             if t not in self.TEMPLATES:
-                raise CommandError("Invalid template '%s'" % t)
+                raise CommandError(f"Invalid template '{t}'")
             permissions.update(self.TEMPLATES[t])
         if not permissions:
             raise CommandError("No permissions set")

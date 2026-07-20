@@ -39,7 +39,7 @@ class Command(BaseCommand):
         incomplete_parser.add_argument("--watch", action="store_true", help="Watch mode")
 
     def handle(self, cmd, *args, **options):
-        getattr(self, "handle_%s" % cmd)(*args, **options)
+        getattr(self, f"handle_{cmd}")(*args, **options)
 
     def handle_incomplete(self, watch=False, *args, **kwargs):
         def show():

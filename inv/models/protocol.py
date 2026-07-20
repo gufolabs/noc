@@ -120,7 +120,7 @@ class ProtocolVariant:
         p_code, *vd_code = p_code.strip("::").split("::")
         # Detect Protocol Code
         if len(vd_code) > 1:
-            raise ValueError("Unknown variant format: %s" % code)
+            raise ValueError(f"Unknown variant format: {code}")
         if vd_code:
             vd_code = vd_code[0]
         protocol = Protocol.get_by_code(p_code)

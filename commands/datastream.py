@@ -80,7 +80,7 @@ class Command(BaseCommand):
         clean_parser.add_argument("--datastream", help="Datastream name")
 
     def handle(self, cmd, *args, **options):
-        getattr(self, "handle_%s" % cmd)(*args, **options)
+        getattr(self, f"handle_{cmd}")(*args, **options)
 
     def handle_list(self):
         for ds_name in sorted(loader.iter_classes()):
@@ -150,7 +150,9 @@ class Command(BaseCommand):
             yield from range(len(bulk))
 
         if not datastream:
-            self.die("--datastream is not set. Set one from list: %s" % ", ".join(self.MODELS))
+            self.die(
+                "--datastream is not set. Set one from list: {}".format(", ".join(self.MODELS))
+            )
         if datastream in self.OLD_MAP:
             datastream = self.OLD_MAP[datastream]
         model = self.get_model(datastream)
@@ -192,7 +194,9 @@ class Command(BaseCommand):
 
     def handle_get(self, datastream, objects, filter, *args, **kwargs):
         if not datastream:
-            self.die("--datastream is not set. Set one from list: %s" % ", ".join(self.MODELS))
+            self.die(
+                "--datastream is not set. Set one from list: {}".format(", ".join(self.MODELS))
+            )
         connect()
         if datastream in self.OLD_MAP:
             datastream = self.OLD_MAP[datastream]
@@ -202,20 +206,20 @@ class Command(BaseCommand):
         filter = filter or []
         filters = filter[:]
         if objects:
-            filters += ["id(%s)" % ",".join(objects)]
+            filters += ["id({})".format(",".join(objects))]
         for obj_id, change_id, data in ds.iter_data(filters=filters):
             gt = change_id.generation_time.strftime("%Y-%m-%d %H:%M:%S")
-            self.print(
-                "===[id: %s, change id: %s, time: %s]================" % (obj_id, change_id, gt)
-            )
+            self.print(f"===[id: {obj_id}, change id: {change_id}, time: {gt}]================")
             d = orjson.loads(data)
             self.print(smart_text(orjson.dumps(d, option=orjson.OPT_INDENT_2)))
 
     def handle_clean(self, datastream, *args, **options):
         if datastream not in self.MODELS:
-            self.die("--datastream is not set. Set one from list: %s" % ", ".join(self.MODELS))
+            self.die(
+                "--datastream is not set. Set one from list: {}".format(", ".join(self.MODELS))
+            )
         connect()
-        ttl = getattr(config.datastream, "%s_ttl" % datastream, 0)
+        ttl = getattr(config.datastream, f"{datastream}_ttl", 0)
         if ttl:
             start_date = datetime.datetime.now() - datetime.timedelta(seconds=ttl)
             ds = loader[datastream]

@@ -583,7 +583,7 @@ class ObjectModel(Document):
         if connection:
             c = self.get_model_connection(connection)
             if not c:
-                raise ValueError("Unknown connection: %s" % c)
+                raise ValueError(f"Unknown connection: {c}")
             data = c.data
         else:
             data = self.data
@@ -649,18 +649,18 @@ class ObjectModel(Document):
         # Check genders are compatible
         r_gender = ConnectionType.OPPOSITE_GENDER[rc.gender]
         if lc.gender != r_gender:
-            return False, "Incompatible genders: %s - %s" % (lc.gender, rc.gender)
+            return False, f"Incompatible genders: {lc.gender} - {rc.gender}"
         # Check directions are compatible
         if (
             (lc.direction == "i" and rc.direction != "o")
             or (lc.direction == "o" and rc.direction != "i")
             or (lc.direction == "s" and rc.direction != "s")
         ):
-            return False, "Incompatible directions: %s - %s" % (lc.direction, rc.direction)
+            return False, f"Incompatible directions: {lc.direction} - {rc.direction}"
         # Check types are compatible
         c_types = lc.type.get_compatible_types(lc.gender)
         if rc.type.id not in c_types:
-            return False, "Incompatible connection types: %s - %s" % (lc.type.name, rc.type.name)
+            return False, f"Incompatible connection types: {lc.type.name} - {rc.type.name}"
         return True, ""
 
     @classmethod

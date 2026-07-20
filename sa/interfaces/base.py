@@ -449,12 +449,12 @@ class DictParameter(Parameter):
                 try:
                     out[k] = param.clean(v)
                 except InterfaceTypeError as e:
-                    self.raise_error("Invalid value for '%s': %s" % (k, e))
+                    self.raise_error(f"Invalid value for '{k}': {e}")
             elif not self.truncate:
                 out[k] = value[k]
         missed = self._required_input - set(out)
         if missed:
-            raise InterfaceTypeError("Parameter '%s' required" % missed.pop())
+            raise InterfaceTypeError(f"Parameter '{missed.pop()}' required")
         return out
 
     def script_clean_input(self, profile, value):
@@ -468,12 +468,12 @@ class DictParameter(Parameter):
         out_value = {}
         for a_name, attr in self.attrs.items():
             if a_name not in in_value and attr.required:
-                self.raise_error(value, "Attribute '%s' required" % a_name)
+                self.raise_error(value, f"Attribute '{a_name}' required")
             if a_name in in_value:
                 try:
                     out_value[a_name] = attr.script_clean_input(profile, in_value[a_name])
                 except InterfaceTypeError:
-                    self.raise_error(value, "Invalid value for '%s'" % a_name)
+                    self.raise_error(value, f"Invalid value for '{a_name}'")
                 del in_value[a_name]
         for k, v in in_value.items():
             out_value[k] = v
@@ -490,12 +490,12 @@ class DictParameter(Parameter):
         out_value = {}
         for a_name, attr in self.attrs.items():
             if a_name not in in_value and attr.required:
-                self.raise_error(value, "Attribute '%s' required" % a_name)
+                self.raise_error(value, f"Attribute '{a_name}' required")
             if a_name in in_value:
                 try:
                     out_value[a_name] = attr.script_clean_result(profile, in_value[a_name])
                 except InterfaceTypeError:
-                    self.raise_error(value, "Invalid value for '%s'" % a_name)
+                    self.raise_error(value, f"Invalid value for '{a_name}'")
                 del in_value[a_name]
         for k, v in in_value.items():
             out_value[k] = v
@@ -595,7 +595,7 @@ class IPv4Parameter(StringParameter):
                 value = ".".join(str(c) for c in value)
             elif len(value) == 4:
                 # IP address in binary form
-                value = ".".join("%02X" % ord(c) for c in value)
+                value = ".".join(f"{ord(c):02X}" for c in value)
         v = super().clean(value)
         parts = v.split(".")
         if len(parts) != 4:
@@ -647,7 +647,7 @@ class IPv6Parameter(StringParameter):
         if value is None and self.default is not None:
             return self.default
         if len(value) == 16 and isinstance(value, bytes):
-            value = ":".join("%02X%02X" % (x, y) for x, y in zip(value[0::2], value[1::2]))
+            value = ":".join(f"{x:02X}{y:02X}" for x, y in zip(value[0::2], value[1::2]))
         v = super().clean(value)
         if not is_ipv6(v):
             self.raise_error(value)
@@ -799,7 +799,7 @@ class DiscriminatorParameter(StringParameter):
             discriminator(value)
             return value
         except ValueError as e:
-            self.raise_error("Bad discriminator: %s" % str(e))
+            self.raise_error(f"Bad discriminator: {e!s}")
 
 
 class InterfaceNameParameter(StringParameter):
@@ -888,7 +888,7 @@ class RDParameter(Parameter):
                     self.raise_error(value)
             elif right > 0xFFFFFFFF:  # 2-byte ASN
                 self.raise_error(value)
-        return "%s:%s" % (left, right)
+        return f"{left}:{right}"
 
 
 class ObjectIdParameter(REStringParameter):
@@ -1024,7 +1024,7 @@ class TagsParameter(Parameter):
         if isinstance(value, str):
             v = [x.strip() for x in value.split(",")]
             return [x for x in v if x]
-        self.raise_error("Invalid tags: %s" % value)
+        self.raise_error(f"Invalid tags: {value}")
 
 
 class ColorParameter(Parameter):

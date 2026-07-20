@@ -98,7 +98,7 @@ class Command(BaseCommand):
 
     def handle(self, cmd, *args, **options):
         connect()
-        return getattr(self, "handle_%s" % cmd)(*args, **options)
+        return getattr(self, f"handle_{cmd}")(*args, **options)
 
     def handle_run(
         self, job, managed_objects, check=None, trace=False, dump_buffer=False, *args, **options
@@ -119,8 +119,9 @@ class Command(BaseCommand):
         for c in checks:
             if c not in self.checks[job]:
                 self.die(
-                    "Unknown check '%s' for job '%s'. Available checks are: %s\n"
-                    % (c, job, ", ".join(self.checks[job]))
+                    "Unknown check '{}' for job '{}'. Available checks are: {}\n".format(
+                        c, job, ", ".join(self.checks[job])
+                    )
                 )
         for mo in mos:
             self.run_job(job, mo, checks, dump_buffer=dump_buffer)
@@ -134,14 +135,14 @@ class Command(BaseCommand):
         # Try to dereference job
         job_args = scheduler.get_collection().find_one({Job.ATTR_CLASS: jcls, Job.ATTR_KEY: mo.id})
         if job_args:
-            self.print("Job ID: %s" % job_args["_id"])
+            self.print("Job ID: {}".format(job_args["_id"]))
         else:
             job_args = {Job.ATTR_ID: "fakeid", Job.ATTR_KEY: mo.id}
         job_args["_checks"] = checks
         job = get_discovery_job(jcls)(scheduler, job_args)
         if job.context_version:
             ctx_key = job.get_context_cache_key()
-            self.print("Loading job context from %s" % ctx_key)
+            self.print(f"Loading job context from {ctx_key}")
             ctx = cache.get(ctx_key, version=job.context_version)
             if not ctx:
                 self.print("Job context is empty")
@@ -157,11 +158,11 @@ class Command(BaseCommand):
         if scheduler.service.metrics:
             self.print("Collected CH data:")
             for t in scheduler.service.metrics:
-                self.print("Table: %s" % t)
+                self.print(f"Table: {t}")
                 self.print("\n".join(str(x) for x in scheduler.service.metrics[t]))
         # job.update_alarms()
         if job.context_version and job.context:
-            self.print("Saving job context to %s" % ctx_key)
+            self.print(f"Saving job context to {ctx_key}")
             scheduler.cache_set(key=ctx_key, value=job.context, version=job.context_version)
             scheduler.apply_cache_ops()
             time.sleep(3)

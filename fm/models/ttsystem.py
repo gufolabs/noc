@@ -129,7 +129,7 @@ class TTSystem(Document):
 
         # Invalidate ManagedObject cache
         deleted_cache_keys = [
-            "managedobject-id-%s" % mo_id
+            f"managedobject-id-{mo_id}"
             for mo_id in ManagedObject.objects.filter(tt_system=self.id).values_list(
                 "id", flat=True
             )

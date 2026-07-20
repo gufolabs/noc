@@ -107,7 +107,7 @@ class SLAProbe(Document):
     _bi_id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 
     def __str__(self):
-        return "%s: %s" % (self.managed_object.name, self.name)
+        return f"{self.managed_object.name}: {self.name}"
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)

@@ -520,7 +520,7 @@ class ServiceInstance(Document):
     def bind_resource(self, o):
         """Add Resource to ServiceInstance"""
         if not hasattr(o, "as_resource"):
-            raise AttributeError("Model %s not Supported Resource Method" % get_model_id(o))
+            raise AttributeError(f"Model {get_model_id(o)} not Supported Resource Method")
         rid = o.as_resource()
         if rid in self.resources:
             return
@@ -566,7 +566,7 @@ class ServiceInstance(Document):
                 # Bad resource value.
                 continue
             if not hasattr(o, "as_resource"):
-                raise AttributeError("Model %s not Supported Resource Method" % get_model_id(o))
+                raise AttributeError(f"Model {get_model_id(o)} not Supported Resource Method")
             if hasattr(o, "state") and cfg.send_approve:
                 o.fire_event("approved")
             rid = o.as_resource()

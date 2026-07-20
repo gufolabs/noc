@@ -78,6 +78,6 @@ class Command(BaseCommand):
         changed = False
         async with MessageStreamClient() as client:
             for stream in self.iter_streams():
-                self.print("Ensuring stream %s" % stream)
+                self.print(f"Ensuring stream {stream}")
                 changed |= await client.ensure_stream(stream, partitions=slots)
         return changed

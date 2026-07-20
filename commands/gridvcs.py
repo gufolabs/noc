@@ -109,7 +109,7 @@ class Command(BaseCommand):
         for o_id in args:
             data = self.vcs.get(self.clean_id(o_id))
             if data:
-                self.print("@@@ %s" % o_id)
+                self.print(f"@@@ {o_id}")
                 self.print(data)
 
     def handle_compress(self, *args, **options):
@@ -205,7 +205,7 @@ class Command(BaseCommand):
         from noc.main.models.pool import Pool
 
         mirror = os.path.realpath(path)
-        self.print("Mirroring to %s" % path)
+        self.print(f"Mirroring to {path}")
         if self.repo == "config":
             for o_id, address, pool in self.progress(
                 ManagedObject.objects.filter().values_list("id", "address", "pool")

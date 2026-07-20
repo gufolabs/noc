@@ -139,7 +139,7 @@ class Command(BaseCommand):
                                     else:
                                         self.hosts_exclude.add(line)
                     except OSError as e:
-                        self.die("Cannot read file %s: %s\n" % (fn, e))
+                        self.die(f"Cannot read file {fn}: {e}\n")
             # Direct addresses 10.0.0.1 or 10.0.0.0/24
             for a in addresses:
                 self.addresses = set()
@@ -186,7 +186,7 @@ class Command(BaseCommand):
                                         await queue.put(line)
 
                     except OSError as e:
-                        self.die("Cannot read file %s: %s\n" % (fn, e))
+                        self.die(f"Cannot read file {fn}: {e}\n")
             await queue.join()
 
         async def snmp_task():
@@ -216,7 +216,7 @@ class Command(BaseCommand):
         # administrative_domain = "default"
         profile = "Generic.Host"
         # object_profile = "default"
-        description = "create object %s" % (datetime.datetime.now().strftime("%Y%m%d"))
+        description = "create object {}".format(datetime.datetime.now().strftime("%Y%m%d"))
         # segment = "ALL"
         # scheme = "1"
         # address = ""
@@ -257,7 +257,7 @@ class Command(BaseCommand):
         try:
             self.pool = Pool.objects.get(name=pool)
         except Pool.DoesNotExist:
-            self.die("Invalid pool-%s" % pool)
+            self.die(f"Invalid pool-{pool}")
         # snmp community
         if not community:
             community = []
@@ -265,7 +265,7 @@ class Command(BaseCommand):
                 try:
                     self.cred = CredentialCheckRule.objects.get(name=credential)
                 except CredentialCheckRule.DoesNotExist:
-                    self.die("Invalid credential profile-%s" % credential)
+                    self.die(f"Invalid credential profile-{credential}")
                 for snmp in self.cred.suggest_snmp:
                     community.append(snmp.snmp_ro)
             else:
@@ -421,12 +421,12 @@ class Command(BaseCommand):
             bodymessage = "Report in attachment.\n\nscan network:\n"
             for adr in self.nets:
                 bodymessage += adr + "\n"
-            filename = "found_ip_%s" % (datetime.datetime.now().strftime("%Y%m%d"))
+            filename = "found_ip_{}".format(datetime.datetime.now().strftime("%Y%m%d"))
             if formats == "csv":
-                f = "%s.csv" % filename
+                f = f"{filename}.csv"
                 attach = [{"filename": f, "data": data}]
             elif formats == "xlsx":
-                f = "%s.xlsx" % filename
+                f = f"{filename}.xlsx"
                 response = BytesIO()
                 wb = xlsxwriter.Workbook(response)
                 ws = wb.add_worksheet("Objects")
@@ -451,7 +451,7 @@ class Command(BaseCommand):
                 self.i += 1
                 msg = {
                     "address": boxmail,
-                    "subject": "Report (%s)" % pool,
+                    "subject": f"Report ({pool})",
                     "body": bodymessage,
                     "attachments": attach,
                 }

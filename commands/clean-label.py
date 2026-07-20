@@ -57,7 +57,7 @@ class Command(BaseCommand):
                 ]
             )
         else:
-            label = '{"%s"}' % label_name
+            label = f'{{"{label_name}"}}'
             sql = f"""
             UPDATE {model_ins._meta.db_table}
             SET {field}=array_remove({field}, '{label_name}')

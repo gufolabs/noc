@@ -29,7 +29,7 @@ class GroupAccess(NOCModel):
     )
 
     def __str__(self):
-        r = ["group=%s" % self.group.name]
+        r = [f"group={self.group.name}"]
         if self.administrative_domain:
-            r += ["domain=%s" % self.administrative_domain.name]
-        return "(%s)" % ", ".join(r)
+            r += [f"domain={self.administrative_domain.name}"]
+        return "({})".format(", ".join(r))

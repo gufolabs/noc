@@ -88,7 +88,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, cmd, *args, **options):
-        getattr(self, "handle_%s" % cmd)(*args, **options)
+        getattr(self, f"handle_{cmd}")(*args, **options)
 
     def handle_sync(self):
         connect()
@@ -102,7 +102,7 @@ class Command(BaseCommand):
         install_files = install_files or []
         for fp in install_files:
             if not os.path.isfile(fp):
-                self.die("File not found: %s" % fp)
+                self.die(f"File not found: {fp}")
             with open(fp) as f:
                 data = orjson.loads(f.read())
             try:
@@ -111,7 +111,7 @@ class Command(BaseCommand):
                     c = Collection(data["$collection"])
                     c.update_item(data)
             except ValueError as e:
-                self.die("%s - %s" % (fp, (str(e))))
+                self.die(f"{fp} - {e!s}")
             if remove:
                 os.unlink(fp)
 

@@ -187,7 +187,7 @@ class Peer(NOCModel):
         if not self.peering_point:
             return ""
         s = "import: from AS%d" % self.remote_asn
-        s += " at %s" % self.peering_point.hostname
+        s += f" at {self.peering_point.hostname}"
         actions = []
         local_pref = self.effective_local_pref
         if local_pref:
@@ -202,15 +202,15 @@ class Peer(NOCModel):
             actions += ["med=%d;" % import_med]
         if actions:
             s += " action " + " ".join(actions)
-        s += " accept %s\n" % self.import_filter
+        s += f" accept {self.import_filter}\n"
         actions = []
         export_med = self.effective_export_med
         if export_med:
             actions += ["med=%d;" % export_med]
-        s += "export: to AS%s at %s" % (self.remote_asn, self.peering_point.hostname)
+        s += f"export: to AS{self.remote_asn} at {self.peering_point.hostname}"
         if actions:
             s += " action " + " ".join(actions)
-        s += " announce %s" % self.export_filter
+        s += f" announce {self.export_filter}"
         return s
 
     def get_effective_peer_data(self, name: str) -> str | None:

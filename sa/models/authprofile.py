@@ -157,7 +157,7 @@ class AuthProfile(NOCModel):
         from .managedobject import CREDENTIAL_CACHE_VERSION
 
         cache.delete_many(
-            ["cred-%s" % x for x in self.managedobject_set.values_list("id", flat=True)],
+            [f"cred-{x}" for x in self.managedobject_set.values_list("id", flat=True)],
             version=CREDENTIAL_CACHE_VERSION,
         )
 

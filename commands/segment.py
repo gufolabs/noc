@@ -62,7 +62,7 @@ class Command(BaseCommand):
         subparsers.add_parser("show-floating")
 
     def handle(self, cmd, *args, **options):
-        return getattr(self, "handle_%s" % cmd.replace("-", "_"))(*args, **options)
+        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
 
     def handle_split_floating(self, profile, ids, *args, **options):
         connect()
@@ -74,19 +74,19 @@ class Command(BaseCommand):
         for seg_id in ids:
             seg = NetworkSegment.get_by_id(seg_id)
             if not seg:
-                self.print("@@@ %s - not found. Skipping" % seg_id)
+                self.print(f"@@@ {seg_id} - not found. Skipping")
                 continue
-            self.print("@@@ Splitting %s (%s)" % (seg.name, seg_id))
+            self.print(f"@@@ Splitting {seg.name} ({seg_id})")
             objects = list(ManagedObject.objects.filter(is_managed=True, segment=seg_id))
             for mo in objects:
                 new_segment = NetworkSegment(
                     name=mo.administrative_domain.get_bioseg_floating_name(mo)
-                    or "Bubble for %s" % mo.name,
+                    or f"Bubble for {mo.name}",
                     profile=p,
                     parent=mo.administrative_domain.get_bioseg_floating_parent_segment(),
                 )
                 new_segment.save()
-                self.print("  Moving '%s' to segment '%s'" % (mo.name, new_segment.name))
+                self.print(f"  Moving '{mo.name}' to segment '{new_segment.name}'")
                 mo.segment = new_segment
                 mo.save()
             # Establish trials
@@ -97,8 +97,7 @@ class Command(BaseCommand):
                         if ro == mo:
                             continue
                         self.print(
-                            "  '%s' challenging '%s' over %s -- %s"
-                            % (mo.segment.name, ro.segment.name, mo.name, ro.name)
+                            f"  '{mo.segment.name}' challenging '{ro.segment.name}' over {mo.name} -- {ro.name}"
                         )
                         BioSegTrial.schedule_trial(mo.segment, ro.segment, mo, ro, reason="link")
 
@@ -124,7 +123,7 @@ class Command(BaseCommand):
             t0 = t0.replace(microsecond=0)
             sql = self.GET_MACS_SQL % (
                 mo.bi_id,
-                ", ".join("'%s'" % iface.name.replace("'", "''") for iface in bulling_ifaces),
+                ", ".join("'{}'".format(iface.name.replace("'", "''")) for iface in bulling_ifaces),
                 t0.date().isoformat(),
                 t0.isoformat(sep=" "),
             )
@@ -161,7 +160,7 @@ class Command(BaseCommand):
                 if iface in rej_ifaces:
                     continue
                 for seg in iface_segs[iface]:
-                    self.print("  '%s' challenging '%s' on %s" % (mo.segment.name, seg.name, iface))
+                    self.print(f"  '{mo.segment.name}' challenging '{seg.name}' on {iface}")
                     BioSegTrial.schedule_trial(seg, mo.segment)
 
     def handle_show_trials(self):
@@ -211,7 +210,7 @@ class Command(BaseCommand):
             trials = list(BioSegTrial.objects.filter(processed=False).order_by("id"))
         with change_tracker.bulk_changes():
             for trial in trials:
-                self.print("@@@ Processing trial %s" % trial.id)
+                self.print(f"@@@ Processing trial {trial.id}")
                 moderate_trial(trial)
 
     def handle_retry_trials(self, ids, *args, **options):
@@ -232,7 +231,7 @@ class Command(BaseCommand):
                 "@@@ %s (%d objects, power = %d, id = %s)" % (seg.name, len(objects), power, seg.id)
             )
             for mo in objects:
-                self.print("    %s" % mo.name)
+                self.print(f"    {mo.name}")
                 n_mo += 1
             n_seg += 1
         self.print("### %d objects are floating in %d segments" % (n_mo, n_seg))
@@ -256,9 +255,9 @@ class Command(BaseCommand):
         for seg_id in ns.scalar("id"):
             seg = NetworkSegment.get_by_id(seg_id)
             if not seg:
-                self.print("@@@ %s - not found. Skipping" % seg_id)
+                self.print(f"@@@ {seg_id} - not found. Skipping")
                 continue
-            self.print("@@@ Reactivating %s (%s)" % (seg.name, seg_id))
+            self.print(f"@@@ Reactivating {seg.name} ({seg_id})")
             objects = list(ManagedObject.objects.filter(is_managed=True, segment=seg_id))
             # Establish trials
             for mo in objects:
@@ -267,8 +266,7 @@ class Command(BaseCommand):
                         if ro == mo:
                             continue
                         self.print(
-                            "  '%s' challenging '%s' over %s -- %s"
-                            % (mo.segment.name, ro.segment.name, mo.name, ro.name)
+                            f"  '{mo.segment.name}' challenging '{ro.segment.name}' over {mo.name} -- {ro.name}"
                         )
                         BioSegTrial.schedule_trial(
                             mo.segment,

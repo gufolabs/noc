@@ -17,7 +17,7 @@ def check_pg():
     try:
         connection.cursor()
     except psycopg2.OperationalError as why:
-        sys.stderr.write("ERROR: %s\n" % why)
+        sys.stderr.write(f"ERROR: {why}\n")
         sys.exit(1)
 
 
@@ -28,7 +28,7 @@ def check_mongo():
     try:
         db = get_db()
     except pymongo.errors.OperationFailure as why:
-        sys.stderr.write("ERROR: %s\n" % why)
+        sys.stderr.write(f"ERROR: {why}\n")
         sys.exit(1)
     version = db.connection.server_info()["version"]
     major, minor, rest = version.split(".", 2)

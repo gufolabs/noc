@@ -115,7 +115,7 @@ class MAC(Model):
                 arg = query[k]
             if isinstance(arg, str):
                 arg = arg.strip()
-            f_filter["$and"] += [{"$%s" % q: [{"$field": field}, arg]}]
+            f_filter["$and"] += [{f"${q}": [{"$field": field}, arg]}]
         if not f_filter:
             return
         fields = [

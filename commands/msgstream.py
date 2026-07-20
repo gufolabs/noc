@@ -117,20 +117,22 @@ class Command(BaseCommand):
                         functools.partial(get_partition_meta, stream, p)
                     )
                 except Exception as e:
-                    print("[%s|%s] Failed getting data for partition: %s" % (stream, p, e))
+                    print(f"[{stream}|{p}] Failed getting data for partition: {e}")
                     error_report()
                     continue
-                print("    Leader        : %s" % b_map[p_meta.leader])
+                print(f"    Leader        : {b_map[p_meta.leader]}")
                 print(
-                    "    Replicas      : %s"
-                    % ", ".join([str(b_map[x]) for x in sorted(p_meta.replicas)])
+                    "    Replicas      : {}".format(
+                        ", ".join([str(b_map[x]) for x in sorted(p_meta.replicas)])
+                    )
                 )
                 print(
-                    "    ISR           : %s"
-                    % ", ".join([str(b_map[x]) for x in sorted(p_meta.isr)])
+                    "    ISR           : {}".format(
+                        ", ".join([str(b_map[x]) for x in sorted(p_meta.isr)])
+                    )
                 )
-                print("    HighWatermark : %s" % p_meta.high_watermark)
-                print("    NewestOffset  : %s" % p_meta.newest_offset)
+                print(f"    HighWatermark : {p_meta.high_watermark}")
+                print(f"    NewestOffset  : {p_meta.newest_offset}")
 
     def handle_create_stream(
         self,

@@ -47,7 +47,7 @@ class PeeringPoint(NOCModel):
 
     def __str__(self):
         if self.location:
-            return " %s (%s)" % (self.hostname, self.location)
+            return f" {self.hostname} ({self.location})"
         return self.hostname
 
     @property
@@ -74,16 +74,16 @@ class PeeringPoint(NOCModel):
                 ifaddrs.add(p.local_backup_ip)
                 peers[p.remote_backup_ip, p.remote_asn] = None
         s = []
-        s += ["inet-rtr: %s" % self.hostname]
+        s += [f"inet-rtr: {self.hostname}"]
         s += ["local-as: AS%d" % self.local_as.asn]
         for ip in sorted(ifaddrs):
             if "/" in ip:
                 ip, masklen = ip.split("/")
             else:
                 masklen = "30"
-            s += ["ifaddr: %s masklen %s" % (ip, masklen)]
+            s += [f"ifaddr: {ip} masklen {masklen}"]
         for remote_ip, remote_as in sorted(peers, key=lambda x: x[0]):
             if "/" in remote_ip:
                 remote_ip, masklen = remote_ip.split("/")
-            s += ["peer: BGP4 %s asno(%s)" % (remote_ip, remote_as)]
+            s += [f"peer: BGP4 {remote_ip} asno({remote_as})"]
         return rpsl_format("\n".join(s))

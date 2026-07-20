@@ -53,7 +53,7 @@ class VertexPosition(EmbeddedDocument):
     y = FloatField()
 
     def __str__(self):
-        return "(%s, %s)" % (self.x, self.y)
+        return f"({self.x}, {self.y})"
 
 
 class LinkSettings(EmbeddedDocument):
@@ -66,7 +66,7 @@ class LinkSettings(EmbeddedDocument):
     vertices = ListField(EmbeddedDocumentField(VertexPosition))
 
     def __str__(self):
-        return "%s:%s" % (self.type, self.id)
+        return f"{self.type}:{self.id}"
 
 
 class MapSettings(Document):

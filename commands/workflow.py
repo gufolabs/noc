@@ -65,19 +65,20 @@ class Command(BaseCommand):
     def handle(self, cmd, *args, **options):
         connect()
 
-        return getattr(self, "handle_%s" % cmd)(*args, **options)
+        return getattr(self, f"handle_{cmd}")(*args, **options)
 
     def handle_migrate(
         self, dry_run=False, migration=None, profile=None, profiles=None, *args, **kwargs
     ):
         if profile not in self.PROFILE_MAP:
             self.die(
-                "Invalid profile %s. Possible profiles:\n%s"
-                % (profile, "\n".join(self.PROFILE_MAP))
+                "Invalid profile {}. Possible profiles:\n{}".format(
+                    profile, "\n".join(self.PROFILE_MAP)
+                )
             )
         wfm = WFMigration.objects.filter(name=migration).first()
         if not wfm:
-            self.die("Invalid migration %s" % wfm.name)
+            self.die(f"Invalid migration {wfm.name}")
         pmodel = get_model(profile)
         models = self.PROFILE_MAP[profile]
         if isinstance(models, str):
@@ -86,8 +87,8 @@ class Command(BaseCommand):
         for pid in profiles:
             p = pmodel.get_by_id(pid)
             if not p:
-                self.die("Profile %s is not found" % pid)
-            self.print("Migrating profile %s" % p)
+                self.die(f"Profile {pid} is not found")
+            self.print(f"Migrating profile {p}")
             tr = wfm.get_translation_map(p.workflow)
             if not tr:
                 self.print("No translations")
@@ -112,13 +113,13 @@ class Command(BaseCommand):
         for m in model:
             c = get_model(m)
             if not c:
-                self.die("Invalid model: %s" % m)
+                self.die(f"Invalid model: {m}")
             if not getattr(c, "_has_expired", False):
-                self.die("Model %s does not support expiration" % m)
-            self.print("Expiring %s:" % m)
+                self.die(f"Model {m} does not support expiration")
+            self.print(f"Expiring {m}:")
             for c in c.objects.filter(expired__lt=now):
                 if not c.state.ttl:
                     continue
-                self.print("  %s" % c)
+                self.print(f"  {c}")
                 if not dry_run:
                     c.fire_event("expired")

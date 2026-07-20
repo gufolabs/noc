@@ -72,7 +72,7 @@ class Dashboard(Document):
     @property
     def name(self):
         # For collection sync
-        return "%s: %s" % (
+        return "{}: {}".format(
             self.owner.username if self.owner else "noc",
             self.title or str(self.uuid),
         )

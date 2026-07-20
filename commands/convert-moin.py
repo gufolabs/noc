@@ -89,7 +89,7 @@ class Command(BaseCommand):
 
         root = os.path.join(self.pages, page)
         name = rx_hexseq.sub(convert_hexseq, page)
-        self.out("Converting %s (%s)..." % (page, name))
+        self.out(f"Converting {page} ({name})...")
         # Find current revisions
         current_path = os.path.join(root, "current")
         if not os.path.exists(current_path):
@@ -128,7 +128,7 @@ class Command(BaseCommand):
         attachments_root = os.path.join(root, "attachments")
         if os.path.isdir(attachments_root):
             for a in os.listdir(attachments_root):
-                self.out("     %s..." % a)
+                self.out(f"     {a}...")
                 a_path = os.path.join(attachments_root, a)
                 mtime = datetime.datetime.fromtimestamp(
                     os.stat(a_path)[stat.ST_MTIME]

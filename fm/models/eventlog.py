@@ -19,9 +19,4 @@ class EventLog(document.EmbeddedDocument):
     message = fields.StringField()
 
     def __str__(self):
-        return "%s [%s -> %s]: %s" % (
-            self.timestamp,
-            self.from_status,
-            self.to_status,
-            self.message,
-        )
+        return f"{self.timestamp} [{self.from_status} -> {self.to_status}]: {self.message}"

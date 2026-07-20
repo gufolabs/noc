@@ -38,15 +38,15 @@ class Person(NOCModel):
     rpsl = GridVCSField("rpsl_person")
 
     def __str__(self):
-        return " %s (%s)" % (self.nic_hdl, self.person)
+        return f" {self.nic_hdl} ({self.person})"
 
     def get_rpsl(self):
         s = []
         if self.type == "R":
-            s += ["role: %s" % self.person]
+            s += [f"role: {self.person}"]
         else:
-            s += ["person: %s" % self.person]
-        s += ["nic-hdl: %s" % self.nic_hdl]
+            s += [f"person: {self.person}"]
+        s += [f"nic-hdl: {self.nic_hdl}"]
         s += rpsl_multiple("address", self.address)
         s += rpsl_multiple("phone", self.phone)
         s += rpsl_multiple("fax-no", self.fax_no)

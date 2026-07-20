@@ -47,7 +47,7 @@ def test_mib_lookup(input, expected):
 )
 def test_compiled_mib(name):
     mod_name = name[:-3]
-    mn = "noc.cmibs.%s" % mod_name
+    mn = f"noc.cmibs.{mod_name}"
     m = importlib.import_module(mn)
     assert hasattr(m, "NAME")
     assert mib.mib_to_modname(m.NAME) == mod_name

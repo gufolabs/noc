@@ -66,7 +66,7 @@ class TransitionVertex(EmbeddedDocument):
     y = IntField(default=0)
 
     def __str__(self):
-        return "%s, %s" % (self.x, self.y)
+        return f"{self.x}, {self.y}"
 
     def json_data(self) -> dict[str, Any]:
         return {
@@ -128,12 +128,7 @@ class Transition(Document):
     _active_transition_cache = cachetools.TTLCache(maxsize=100, ttl=600)
 
     def __str__(self):
-        return "%s[%s]: %s -> %s" % (
-            self.workflow.name,
-            self.label,
-            str(self.from_state.name),
-            str(self.to_state.name),
-        )
+        return f"{self.workflow.name}[{self.label}]: {self.from_state.name!s} -> {self.to_state.name!s}"
 
     @property
     def json_data(self) -> dict[str, Any]:
@@ -227,7 +222,7 @@ class Transition(Document):
                 try:
                     h = get_handler(str(hn))
                 except ImportError as e:
-                    logger.error("Error import handler: %s" % e)
+                    logger.error(f"Error import handler: {e}")
                     h = None
                 if h:
                     logger.debug("[%s|%s|%s] Running %s", obj, obj.state.name, self.label, hn)

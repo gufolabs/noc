@@ -54,7 +54,7 @@ class RIR(NOCModel):
         :return:
         """
         rir = "RIPE" if self.name == "RIPE NCC" else self.name
-        return getattr(self, "update_rir_db_%s" % rir)(data, maintainer)
+        return getattr(self, f"update_rir_db_{rir}")(data, maintainer)
 
     def update_rir_db_RIPE(self, data, maintainer):
         """
@@ -65,7 +65,7 @@ class RIR(NOCModel):
         """
         data = [x for x in data.split("\n") if x]  # Strip empty lines
         if maintainer.password:
-            data += ["password: %s" % maintainer.password]
+            data += [f"password: {maintainer.password}"]
         admin = maintainer.admins.all()[0]
         T = time.gmtime()
         data += ["changed: %s %04d%02d%02d" % (admin.email, T[0], T[1], T[2])]
@@ -75,5 +75,5 @@ class RIR(NOCModel):
             f = urlopen(url=RIPE_SYNCUPDATES_URL, data=urlencode({"DATA": data}))
             data = f.read()
         except URLError as why:
-            data = "Update failed: %s" % why
+            data = f"Update failed: {why}"
         return data
