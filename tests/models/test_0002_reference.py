@@ -62,7 +62,7 @@ def iter_referred_models():
 @pytest.mark.parametrize(("model", "refs"), iter_referred_models())
 def test_on_delete_check(model, refs):
     assert hasattr(model, "_on_delete"), (
-        "Must have @on_delete_check decorator (Referenced from %s)" % refs
+        f"Must have @on_delete_check decorator (Referenced from {refs})"
     )
     x_checks = set(model._on_delete["check"])
     x_checks |= set(model._on_delete["clean"])

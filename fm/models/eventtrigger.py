@@ -46,4 +46,4 @@ class EventTrigger(NOCModel):
     handler = models.CharField("Handler", max_length=128, null=True, blank=True)
 
     def __str__(self):
-        return "%s <<<%s>>>" % (self.event_class_re, self.condition)
+        return f"{self.event_class_re} <<<{self.condition}>>>"

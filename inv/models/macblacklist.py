@@ -40,7 +40,7 @@ class MACBlacklistAffected(EmbeddedDocument):
 
     def __str__(self):
         if self.platform:
-            return "%s:%s" % (self.vendor.name, self.platform.name)
+            return f"{self.vendor.name}:{self.platform.name}"
         return self.vendor.name
 
     def to_json(self) -> str:

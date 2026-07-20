@@ -232,12 +232,12 @@ class VRF(NOCModel):
         Full-text search
         """
         content = [self.name, str(self.rd)]
-        card = "VRF %s. RD %s" % (self.name, self.rd)
+        card = f"VRF {self.name}. RD {self.rd}"
         if self.description:
             content += [self.description]
-            card += " (%s)" % self.description
+            card += f" ({self.description})"
         r = {
-            "id": "ip.vrf:%s" % self.id,
+            "id": f"ip.vrf:{self.id}",
             "title": self.name,
             "content": "\n".join(content),
             "card": card,
@@ -248,7 +248,7 @@ class VRF(NOCModel):
 
     @classmethod
     def get_search_result_url(cls, obj_id):
-        return "/api/card/view/vrf/%s/" % obj_id
+        return f"/api/card/view/vrf/{obj_id}/"
 
     def delete(self, *args, **kwargs):
         # Cleanup prefixes

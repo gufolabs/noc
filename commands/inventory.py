@@ -52,7 +52,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, cmd, *args, **options):
-        getattr(self, "handle_%s" % cmd.replace("-", "_"))(*args, **options)
+        getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
 
     def handle_find_serial(self, serials):
         connect()
@@ -60,20 +60,20 @@ class Command(BaseCommand):
             for obj in Object.objects.filter(
                 data__match={"interface": "asset", "attr": "serial", "value": serial}
             ):
-                self.print("@@@ Serial %s" % serial)
+                self.print(f"@@@ Serial {serial}")
                 self.dump_object(obj)
 
     def dump_object(self, obj):
         def obj_str(o, conn_name=None):
             r = []
             if conn_name:
-                r += ["%s:" % conn_name]
+                r += [f"{conn_name}:"]
             if o.name:
                 r += [str(o.name)]
-            r += ["(%s)" % o.model.name]
+            r += [f"({o.model.name})"]
             sn = o.get_data("asset", "serial")
             if sn:
-                r += ["Serial=%s" % sn]
+                r += [f"Serial={sn}"]
             return " ".join(r)
 
         def iter_obj(o):
@@ -89,7 +89,7 @@ class Command(BaseCommand):
                     yield from iter_obj(o.parent)
 
         for n, sr in enumerate(reversed(list(iter_obj(obj)))):
-            self.print("%s * %s" % ("  " * n, sr))
+            self.print("{} * {}".format("  " * n, sr))
 
     def handle_export(self, objects: list[str], output: str | None = None):
         connect()

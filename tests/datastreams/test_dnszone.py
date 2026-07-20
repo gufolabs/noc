@@ -98,7 +98,7 @@ def test_data(zone_id, masters, slaves, records):
     assert data["records"][0]["type"] == "SOA"
     for name, type, content in records:
         assert find_record(data["records"], name, type, content), (
-            "%s (%s) is expected but missed" % (name, type)
+            f"{name} ({type}) is expected but missed"
         )
     # Test meta
     meta = DNSZoneDataStream().get_meta(data)

@@ -146,7 +146,7 @@ class Command(BaseCommand):
 
         for fn in input:
             # Read data
-            self.print("Reading file %s" % fn)
+            self.print(f"Reading file {fn}")
             if fn.endswith(".gz"):
                 with gzip.GzipFile(fn) as f:
                     records = f.read().replace("\r", "").splitlines()

@@ -214,7 +214,7 @@ class Command(BaseCommand):
                             if is_ipv4(line):
                                 self.addresses.add(line)
                 except OSError as e:
-                    self.die("Cannot read file %s: %s\n" % (fn, e))
+                    self.die(f"Cannot read file {fn}: {e}\n")
         # @todo: Add community oid check
         if not community:
             community = [self.DEFAULT_COMMUNITY]

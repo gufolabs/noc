@@ -91,7 +91,7 @@ class Crashinfo(Document):
 
     @property
     def json_path(self):
-        return os.path.join(self.NEW_ROOT, "%s.json" % self.uuid)
+        return os.path.join(self.NEW_ROOT, f"{self.uuid}.json")
 
     @property
     def json(self):

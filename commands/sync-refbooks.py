@@ -57,5 +57,5 @@ class Command(BaseCommand):
                 del loaded_refbooks[name]
         # Delete stale refbooks
         for rb in loaded_refbooks.values():
-            self.print("DELETE REFBOOK: %s" % rb.name)
+            self.print(f"DELETE REFBOOK: {rb.name}")
             rb.delete()

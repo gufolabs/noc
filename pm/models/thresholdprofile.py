@@ -58,7 +58,7 @@ class ThresholdConfig(EmbeddedDocument):
     template = ForeignKeyField(Template)
 
     def __str__(self):
-        return "%s %s %s %s" % (self.op, self.value, self.clear_op, self.clear_value)
+        return f"{self.op} {self.value} {self.clear_op} {self.clear_value}"
 
     def is_open_match(self, value):
         """
@@ -88,7 +88,7 @@ class ThresholdConfig(EmbeddedDocument):
 
     @property
     def name(self):
-        return "%s %s %s %s" % (self.op, self.value, self.clear_op, self.clear_value)
+        return f"{self.op} {self.value} {self.clear_op} {self.clear_value}"
 
     def to_json(self):
         v = {

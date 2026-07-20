@@ -74,7 +74,7 @@ class ModelInterfaceAttr(EmbeddedDocument):
         )
 
     def _clean(self, value):
-        return getattr(self, "clean_%s" % self.type)(value)
+        return getattr(self, f"clean_{self.type}")(value)
 
     def clean_str(self, value):
         return value
@@ -154,19 +154,19 @@ class ModelInterface(Document):
         ar = []
         for a in self.attrs:
             r = ["        {"]
-            r += ['            "name": "%s",' % q(a.name)]
-            r += ['            "type": "%s",' % q(a.type)]
-            r += ['            "description": "%s",' % q(a.description)]
-            r += ['            "required": %s,' % q(a.required)]
-            r += ['            "is_const": %s' % q(a.is_const)]
+            r += [f'            "name": "{q(a.name)}",']
+            r += [f'            "type": "{q(a.type)}",']
+            r += [f'            "description": "{q(a.description)}",']
+            r += [f'            "required": {q(a.required)},']
+            r += [f'            "is_const": {q(a.is_const)}']
             r += ["        }"]
             ar += ["\n".join(r)]
         r = [
             "{",
-            '    "name": "%s",' % q(self.name),
-            '    "$collection": "%s",' % self._meta["json_collection"],
-            '    "uuid": "%s",' % str(self.uuid),
-            '    "description": "%s",' % q(self.description),
+            f'    "name": "{q(self.name)}",',
+            '    "$collection": "{}",'.format(self._meta["json_collection"]),
+            f'    "uuid": "{self.uuid!s}",',
+            f'    "description": "{q(self.description)}",',
             '    "attrs": [',
             ",\n".join(ar),
             "    ]",

@@ -26,7 +26,7 @@ class Context(EmbeddedDocument):
     reset_scopes = ListField(StringField())
 
     def __str__(self):
-        return "%s, %s" % (self.type, self.scope)
+        return f"{self.type}, {self.scope}"
 
     def __eq__(self, other):
         return (
@@ -50,14 +50,7 @@ class Rule(EmbeddedDocument):
     target_connection = StringField()
 
     def __str__(self):
-        return "%s:%s -(%s)-> %s %s:%s" % (
-            self.match_type,
-            self.match_connection,
-            self.scope,
-            self.target_type,
-            self.target_number,
-            self.target_connection,
-        )
+        return f"{self.match_type}:{self.match_connection} -({self.scope})-> {self.target_type} {self.target_number}:{self.target_connection}"
 
     def __eq__(self, other):
         return (

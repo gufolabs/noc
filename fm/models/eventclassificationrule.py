@@ -118,7 +118,7 @@ class EventClassificationPattern(EmbeddedDocument):
     value_re = StringField(required=True)
 
     def __str__(self):
-        return "'%s' : '%s'" % (self.key_re, self.value_re)
+        return f"'{self.key_re}' : '{self.value_re}'"
 
     def __eq__(self, other):
         return self.key_re == other.key_re and self.value_re == other.value_re

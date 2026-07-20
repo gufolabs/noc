@@ -148,7 +148,7 @@ class ResourceGroup(Document):
     _lazy_labels_cache = cachetools.TTLCache(maxsize=1000, ttl=60)
 
     def __str__(self):
-        return "%s (%s)" % (self.name, self.technology.name)
+        return f"{self.name} ({self.technology.name})"
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)

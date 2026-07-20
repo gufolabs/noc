@@ -129,7 +129,7 @@ class EventDispositionRule(EmbeddedDocument):
     stop_disposition = BooleanField(required=False, default=True)
 
     def __str__(self):
-        return "%s: %s" % (self.action, self.alarm_class.name)
+        return f"{self.action}: {self.alarm_class.name}"
 
     def __eq__(self, other):
         for a in [
@@ -324,21 +324,21 @@ class EventClass(Document):
     def to_json(self) -> str:
         c = self
         r = ["{"]
-        r += ['    "name": "%s",' % q(c.name)]
-        r += ['    "$collection": "%s",' % self._meta["json_collection"]]
-        r += ['    "uuid": "%s",' % c.uuid]
+        r += [f'    "name": "{q(c.name)}",']
+        r += ['    "$collection": "{}",'.format(self._meta["json_collection"])]
+        r += [f'    "uuid": "{c.uuid}",']
         if c.description:
-            r += ['    "description": "%s",' % q(c.description)]
-        r += ['    "action": "%s",' % q(c.action)]
+            r += [f'    "description": "{q(c.description)}",']
+        r += [f'    "action": "{q(c.action)}",']
         # vars
         vars = []
         for v in c.vars:
             vd = ["        {"]
-            vd += ['            "name": "%s",' % q(v.name)]
-            vd += ['            "description": "%s",' % q(v.description)]
-            vd += ['            "type": "%s",' % q(v.type.value)]
-            vd += ['            "required": %s,' % q(v.required)]
-            vd += ['            "match_suppress": %s' % q(v.match_suppress)]
+            vd += [f'            "name": "{q(v.name)}",']
+            vd += [f'            "description": "{q(v.description)}",']
+            vd += [f'            "type": "{q(v.type.value)}",']
+            vd += [f'            "required": {q(v.required)},']
+            vd += [f'            "match_suppress": {q(v.match_suppress)}']
             vd += ["        }"]
             vars += ["\n".join(vd)]
         r += ['    "vars": [']
@@ -351,30 +351,30 @@ class EventClass(Document):
         r += ['    "ttl": %d,' % self.ttl]
         # Handlers
         if self.handlers:
-            hh = ['        "%s"' % h for h in self.handlers]
+            hh = [f'        "{h}"' for h in self.handlers]
             r += ['    "handlers": [']
             r += [",\n\n".join(hh)]
             r += ["    ],"]
         # Text
-        r += ['    "subject_template": "%s",' % q(c.subject_template)]
-        r += ['    "body_template": "%s",' % q(c.body_template)]
-        r += ['    "symptoms": "%s",' % q(c.symptoms)]
-        r += ['    "probable_causes": "%s",' % q(c.probable_causes)]
-        r += ['    "recommended_actions": "%s",' % q(c.recommended_actions)]
+        r += [f'    "subject_template": "{q(c.subject_template)}",']
+        r += [f'    "body_template": "{q(c.body_template)}",']
+        r += [f'    "symptoms": "{q(c.symptoms)}",']
+        r += [f'    "probable_causes": "{q(c.probable_causes)}",']
+        r += [f'    "recommended_actions": "{q(c.recommended_actions)}",']
         # Disposition rules
         if c.disposition:
             r += ['    "disposition": [']
             disp = []
             for d in c.disposition:
                 ll = ["        {"]
-                lll = ['            "name": "%s"' % q(d.name)]
-                lll += ['            "condition": "%s"' % q(d.condition)]
-                lll += ['            "action": "%s"' % q(d.action)]
+                lll = [f'            "name": "{q(d.name)}"']
+                lll += [f'            "condition": "{q(d.condition)}"']
+                lll += [f'            "action": "{q(d.action)}"']
                 if d.alarm_class:
-                    lll += ['            "alarm_class__name": "%s"' % q(d.alarm_class.name)]
-                lll += ['            "stop_disposition": "%s"' % q(d.stop_disposition)]
+                    lll += [f'            "alarm_class__name": "{q(d.alarm_class.name)}"']
+                lll += [f'            "stop_disposition": "{q(d.stop_disposition)}"']
                 if d.managed_object:
-                    lll += ['            "managed_object": "%s"' % q(d.managed_object)]
+                    lll += [f'            "managed_object": "{q(d.managed_object)}"']
                 ll += [",\n".join(lll)]
                 ll += ["        }"]
                 disp += ["\n".join(ll)]
@@ -389,12 +389,12 @@ class EventClass(Document):
             plugins = []
             for p in self.plugins:
                 pd = ["        {"]
-                pd += ['            "name": "%s"' % p.name]
+                pd += [f'            "name": "{p.name}"']
                 if p.config:
                     pd[-1] += ","
                     pc = []
                     for v in p.config:
-                        pc += ['                "%s": "%s"' % (v, p.config.vars[v])]
+                        pc += [f'                "{v}": "{p.config.vars[v]}"']
                     pd += ['            "config": {']
                     pd += [",\n".join(pc)]
                     pd += ["            }"]

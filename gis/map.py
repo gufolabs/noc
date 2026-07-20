@@ -56,7 +56,7 @@ class Map:
         if layer:
             self.layers[name] = layer.id
             return self.layers[name]
-        raise Exception("Layer not found: %s" % name)
+        raise Exception(f"Layer not found: {name}")
 
     @staticmethod
     def get_default_zoom(layer: str, object=None):

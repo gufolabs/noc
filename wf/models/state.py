@@ -271,7 +271,7 @@ class State(Document):
                 try:
                     h = get_handler(str(hn))
                 except ImportError as e:
-                    logger.error("Error import on_enter handler: %s" % e)
+                    logger.error(f"Error import on_enter handler: {e}")
                     h = None
                 if h:
                     logger.debug("[%s|%s] Running %s", obj, self.name, hn)
@@ -284,7 +284,7 @@ class State(Document):
             try:
                 h = get_handler(self.job_handler)
             except ImportError as e:
-                logger.error("Error import state job handler: %s" % e)
+                logger.error(f"Error import state job handler: {e}")
                 h = None
             if h:
                 defer(
@@ -311,7 +311,7 @@ class State(Document):
                 try:
                     h = get_handler(str(hn))
                 except ImportError as e:
-                    logger.error("Error import on_leave_state handler: %s" % e)
+                    logger.error(f"Error import on_leave_state handler: {e}")
                     h = None
                 if h:
                     logger.debug("[%s|%s] Running %s", obj, self.name, hn)

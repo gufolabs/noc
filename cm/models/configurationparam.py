@@ -77,7 +77,7 @@ class ParamSchema(BaseModel):
         if self.pattern:
             match = re.match(self.pattern, value)
             if match:
-                raise ValueError("Value is not match pattern: %s" % value)
+                raise ValueError(f"Value is not match pattern: {value}")
         return value
 
     def merge(self, schema: "ParamSchema") -> NoReturn: ...
@@ -137,7 +137,7 @@ class ScopeVariant:
         scope, *v = code.split("::")
         s = ConfigurationScope.get_by_name(scope.strip("@"))
         if not s:
-            ValueError("Unknown scope: %s" % scope)
+            ValueError(f"Unknown scope: {scope}")
         # check value by helper
         return ScopeVariant(s, v[0] if v else None)
 
@@ -330,7 +330,7 @@ class ConfigurationParam(Document):
         for s in scope.strip("@").split("@"):
             sv = ScopeVariant.from_code(s)
             if not param.has_scope(sv.scope.name):
-                raise ValueError("Not supported scope '%s' on param: %s" % (s, param.code))
+                raise ValueError(f"Not supported scope '{s}' on param: {param.code}")
         if scope.startswith("@"):
             return scope
         return f"@{scope}"

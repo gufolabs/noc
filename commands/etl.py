@@ -94,12 +94,12 @@ class Command(BaseCommand):
 
     def handle(self, cmd, *args, **options):
         connect()
-        return getattr(self, "handle_%s" % cmd.replace("-", "_"))(*args, **options)
+        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
 
     def handle_load(self, *args, **options):
         remote_system = RemoteSystem.get_by_name(options["system"])
         if not remote_system:
-            self.die("Invalid remote system: %s" % options["system"])
+            self.die("Invalid remote system: {}".format(options["system"]))
         remote_system.load(options.get("loaders", []), quiet=options.get("quiet", False))
         if not remote_system.load_error:
             return 0
@@ -108,7 +108,7 @@ class Command(BaseCommand):
     def handle_extract(self, *args, **options):
         remote_system = RemoteSystem.get_by_name(options["system"])
         if not remote_system:
-            self.die("Invalid remote system: %s" % options["system"])
+            self.die("Invalid remote system: {}".format(options["system"]))
         remote_system.extract(
             options.get("extractors", []),
             quiet=options.get("quiet", False),
@@ -122,14 +122,14 @@ class Command(BaseCommand):
     def handle_check(self, *args, **options):
         remote_system = RemoteSystem.get_by_name(options["system"])
         if not remote_system:
-            self.die("Invalid remote system: %s" % options["system"])
+            self.die("Invalid remote system: {}".format(options["system"]))
         n_errors, _ = remote_system.check(out=self.stdout)
         return 1 if n_errors else 0
 
     def handle_diff(self, summary=False, *args, **options):
         remote_system = RemoteSystem.get_by_name(options["system"])
         if not remote_system:
-            self.die("Invalid remote system: %s" % options["system"])
+            self.die("Invalid remote system: {}".format(options["system"]))
 
         diffs = set(options.get("diffs", []))
         if summary:
@@ -139,9 +139,9 @@ class Command(BaseCommand):
             try:
                 control_dict = orjson.loads(options["control_dict"])
             except ValueError as e:
-                self.die("Failed to parse JSON: %s in %s" % (e, options["control_dict"]))
+                self.die("Failed to parse JSON: {} in {}".format(e, options["control_dict"]))
             except TypeError as e:
-                self.die("Failed to parse JSON: %s in %s" % (e, options["control_dict"]))
+                self.die("Failed to parse JSON: {} in {}".format(e, options["control_dict"]))
         chain = remote_system.get_loader_chain()
         for ldr in chain:
             if diffs and ldr.name not in diffs:
@@ -181,7 +181,7 @@ class Command(BaseCommand):
 
         remote_system = RemoteSystem.get_by_name(options["system"])
         if not remote_system:
-            self.die("Invalid remote system: %s" % options["system"])
+            self.die("Invalid remote system: {}".format(options["system"]))
         loader = options["extractor"]
         include_fields = None
         if options.get("fields"):
@@ -223,7 +223,7 @@ class Command(BaseCommand):
     def handle_clean(self, files=None, ttl=None, dry_run=True, *args, **options):
         remote_system = RemoteSystem.get_by_name(options["system"])
         if not remote_system:
-            self.die("Invalid remote system: %s" % options["system"])
+            self.die("Invalid remote system: {}".format(options["system"]))
         if files and files < CLEANUP_SAFE_FILES_COUNT:
             self.die("3 is minimal value to save file")
 
@@ -231,7 +231,7 @@ class Command(BaseCommand):
         if ttl:
             today = datetime.datetime.now()
             deadline = today - datetime.timedelta(days=ttl)
-            self.print("Cleaned files before: %s" % deadline)
+            self.print(f"Cleaned files before: {deadline}")
 
         if not files and not deadline:
             self.die("Set one of policy setting (ttl or files")
@@ -275,6 +275,6 @@ class Command(BaseCommand):
                 self.print("%d\n" % i)
                 time.sleep(1)
             for path in list(clean_paths):
-                self.print("Clean %s" % path)
+                self.print(f"Clean {path}")
                 os.unlink(path)
             self.print("# Done.")

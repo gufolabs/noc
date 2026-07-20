@@ -49,7 +49,7 @@ class Command(BaseCommand):
 
     def handle(self, cmd, *args, **options):
         connect()
-        return getattr(self, "handle_%s" % cmd.replace("-", "_"))(*args, **options)
+        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
 
     def handle_run(
         self,
@@ -112,7 +112,7 @@ class Command(BaseCommand):
 
         def read_file(path):
             if not os.path.exists(path):
-                self.die("Cannot open file '%s'" % path)
+                self.die(f"Cannot open file '{path}'")
             with open(path) as f:
                 return f.read()
 
@@ -120,13 +120,13 @@ class Command(BaseCommand):
             try:
                 return orjson.loads(j)
             except ValueError as e:
-                self.die("Failed to parse JSON: %s" % e)
+                self.die(f"Failed to parse JSON: {e}")
 
         args = {}
         for a in arguments:
             match = self.rx_arg.match(a)
             if not match:
-                self.die("Malformed parameter: '%s'" % a)
+                self.die(f"Malformed parameter: '{a}'")
             name, op, value = match.groups()
             if op == "=":
                 # Set parameter

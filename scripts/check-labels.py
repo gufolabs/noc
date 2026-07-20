@@ -100,8 +100,8 @@ class TestSuite:
 
     def check(self):
         if self.verbose:
-            print("# MR Labels:\n%s\n" % "\n".join(self.labels))
-            print("# Affected files:\n%s\n" % "\n".join(self.files))
+            print("# MR Labels:\n{}\n".format("\n".join(self.labels)))
+            print("# Affected files:\n{}\n".format("\n".join(self.files)))
         self.start = time.time()
         try:
             self.do_check()

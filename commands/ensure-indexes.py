@@ -23,7 +23,7 @@ class Command(BaseCommand):
         for model_id in iter_model_id():
             model = get_model(model_id)
             if not model:
-                self.die("Invalid model: %s" % model_id)
+                self.die(f"Invalid model: {model_id}")
             if not is_document(model):
                 continue
             # Rename collections when necessary
@@ -31,7 +31,7 @@ class Command(BaseCommand):
             for old_name in legacy_collections:
                 if old_name in collections:
                     new_name = model._meta["collection"]
-                    self.print("[%s] Renaming %s to %s" % (model_id, old_name, new_name))
+                    self.print(f"[{model_id}] Renaming {old_name} to {new_name}")
                     db[old_name].rename(new_name)
                     break
             # Ensure only documents with auto_create_index == False
@@ -57,7 +57,7 @@ class Command(BaseCommand):
         :param model: model class
         :return:
         """
-        self.print("[%s] Checking indexes" % model_id)
+        self.print(f"[{model_id}] Checking indexes")
         coll = model._get_collection()
         # Get existing unique indexes
         idx_info = coll.index_information()
@@ -81,24 +81,24 @@ class Command(BaseCommand):
                     du = xi.get("unique", False)
                     if du != x_unique[fields]:
                         # Uniqueness mismatch
-                        self.print("[%s] Dropping mismatched index %s" % (model_id, x_name[fields]))
+                        self.print(f"[{model_id}] Dropping mismatched index {x_name[fields]}")
                         coll.drop_index(x_name[fields])
                     elif du and x_unique[fields]:
                         # Remove unique index from left
                         left_unique.remove(fields)
             # Delete state unique indexes
             for fields in left_unique:
-                self.print("[%s] Dropping stale unique index %s" % (model_id, x_name[fields]))
+                self.print(f"[{model_id}] Dropping stale unique index {x_name[fields]}")
                 coll.drop_index(x_name[fields])
         # Apply indexes
         model.ensure_indexes()
 
     def index_datastreams(self):
         for name in ds_loader:
-            if not getattr(config.datastream, "enable_%s" % name, False):
+            if not getattr(config.datastream, f"enable_{name}", False):
                 continue
             ds = ds_loader[name]
-            self.print("[%s] Indexing datastream" % ds.name)
+            self.print(f"[{ds.name}] Indexing datastream")
             ds.ensure_collection()
 
     def index_gridvcs(self):
@@ -110,7 +110,7 @@ class Command(BaseCommand):
 
         if not hasattr(cache, "ensure_indexes"):
             return
-        self.print("[%s] Indexing cache" % cache.__class__.__name__)
+        self.print(f"[{cache.__class__.__name__}] Indexing cache")
         cache.ensure_indexes()
 
     def index_rca_lock(self):

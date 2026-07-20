@@ -298,7 +298,7 @@ class Command(BaseCommand):
 
         p = Pool.get_by_name(pool)
         if not p:
-            raise ValueError("Unknown pool: %s" % pool)
+            raise ValueError(f"Unknown pool: {pool}")
         return p.bi_id
 
     @staticmethod
@@ -483,5 +483,5 @@ class Command(BaseCommand):
         # for c in checks:
         #     r.append(f"{c.check}:{c.port} {'OK' if c.status else 'FAIL'}")
         self.stdout.write(
-            f"{address} {rtt * 1_000:.2f}ms| {';'.join('%s:%s %s' % (c.check, c.port or '', 'OK' if c.status else 'FAIL') for c in checks)}\n"
+            f"{address} {rtt * 1_000:.2f}ms| {';'.join('{}:{} {}'.format(c.check, c.port or '', 'OK' if c.status else 'FAIL') for c in checks)}\n"
         )

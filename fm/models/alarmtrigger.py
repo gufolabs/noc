@@ -46,4 +46,4 @@ class AlarmTrigger(NOCModel):
     handler = models.CharField("Handler", max_length=128, null=True, blank=True)
 
     def __str__(self):
-        return "%s <<<%s>>>" % (self.alarm_class_re, self.condition)
+        return f"{self.alarm_class_re} <<<{self.condition}>>>"

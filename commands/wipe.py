@@ -82,27 +82,27 @@ class Command(BaseCommand):
         for o_id in ids:
             o = g(o_id)
             if not o:  # Not found
-                raise CommandError("Object '%s' is not found" % o_id)
+                raise CommandError(f"Object '{o_id}' is not found")
             yield o
 
     def handle_1(self, *args, **options):
         if len(args) < 1:
-            print("USAGE: %s <model> <object id> [.. <object id>]" % sys.argv[0])
+            print(f"USAGE: {sys.argv[0]} <model> <object id> [.. <object id>]")
             sys.exit(1)
         m = args[0].replace("-", "_")
         connect()
         if m not in self.models:
             raise CommandError(
-                "Invalid model '%s'. Valid models are: %s" % (m, ", ".join(self.models))
+                "Invalid model '{}'. Valid models are: {}".format(m, ", ".join(self.models))
             )
         objects = []
-        getter = getattr(self, "get_%s" % m)
-        wiper = getattr(self, "wipe_%s" % m)
+        getter = getattr(self, f"get_{m}")
+        wiper = getattr(self, f"wipe_{m}")
         # Get objects
         for o_id in args[1:]:
             o = getter(o_id)
             if not o:  # Not found
-                raise CommandError("Object '%s' is not found" % o_id)
+                raise CommandError(f"Object '{o_id}' is not found")
             objects += [o]
         # Wipe objects
         from noc.core.debug import error_report

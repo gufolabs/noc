@@ -531,7 +531,7 @@ def sync_object(obj: "Object") -> None:
         if sensor.modbus_register:
             if not m_proto:
                 continue
-            s.protocol = "modbus_%s" % m_proto[0].lower()
+            s.protocol = f"modbus_{m_proto[0].lower()}"
             s.modbus_register = sensor.modbus_register
             s.modbus_format = sensor.modbus_format or "u16_be"
         elif sensor.snmp_oid:

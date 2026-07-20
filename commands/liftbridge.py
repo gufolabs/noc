@@ -90,7 +90,7 @@ class Command(BaseCommand):
 
     def handle(self, cmd, *args, **options):
         run_sync(self.resolve_liftbridge)
-        return getattr(self, "handle_%s" % cmd.replace("-", "_"))(*args, **options)
+        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
 
     def handle_show_metadata(self, *args, **options):
         async def get_meta() -> Metadata:
@@ -108,7 +108,7 @@ class Command(BaseCommand):
             self.print("%-20s | %s:%s" % (broker.id, broker.host, broker.port))
         self.print("# Streams")
         for stream in meta.metadata:
-            print("  ## Name: %s Subject: %s" % (stream.name, stream.subject))
+            print(f"  ## Name: {stream.name} Subject: {stream.subject}")
             for p in sorted(stream.partitions):
                 print("    ### Partition: %d" % p)
                 try:
@@ -116,13 +116,17 @@ class Command(BaseCommand):
                         functools.partial(get_partition_meta, stream.name, p)
                     )
                 except Exception as e:
-                    print("[%s|%s] Failed getting data for partition: %s" % (stream.name, p, e))
+                    print(f"[{stream.name}|{p}] Failed getting data for partition: {e}")
                     continue
-                print("    Leader        : %s" % p_meta.leader)
-                print("    Replicas      : %s" % ", ".join(sorted(p_meta.replicas, key=alnum_key)))
-                print("    ISR           : %s" % ", ".join(sorted(p_meta.isr, key=alnum_key)))
-                print("    HighWatermark : %s" % p_meta.high_watermark)
-                print("    NewestOffset  : %s" % p_meta.newest_offset)
+                print(f"    Leader        : {p_meta.leader}")
+                print(
+                    "    Replicas      : {}".format(
+                        ", ".join(sorted(p_meta.replicas, key=alnum_key))
+                    )
+                )
+                print("    ISR           : {}".format(", ".join(sorted(p_meta.isr, key=alnum_key))))
+                print(f"    HighWatermark : {p_meta.high_watermark}")
+                print(f"    NewestOffset  : {p_meta.newest_offset}")
 
     def handle_create_stream(
         self,
@@ -173,8 +177,7 @@ class Command(BaseCommand):
                     start_timestamp=start_ts,
                 ):
                     print(
-                        "# Subject: %s Partition: %s Offset: %s Timestamp: %s Key: %s Headers: %s"
-                        % (
+                        "# Subject: {} Partition: {} Offset: {} Timestamp: {} Key: {} Headers: {}".format(
                             msg.subject,
                             msg.partition,
                             msg.offset,

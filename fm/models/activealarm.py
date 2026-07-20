@@ -630,7 +630,7 @@ class ActiveAlarm(Document):
         self.ack_ts = datetime.datetime.now()
         self.ack_user = user.username
         self.log_message(
-            message="Acknowledged by %s(%s): %s" % (user.get_full_name(), user.username, msg),
+            message=f"Acknowledged by {user.get_full_name()}({user.username}): {msg}",
             source=user.username,
             timestamp=self.ack_ts,
             is_internal=False,
@@ -643,7 +643,7 @@ class ActiveAlarm(Document):
         self.ack_ts = None
         self.ack_user = None
         self.log_message(
-            message="Unacknowledged by %s(%s): %s" % (user.get_full_name(), user.username, msg),
+            message=f"Unacknowledged by {user.get_full_name()}({user.username}): {msg}",
             source=user.username,
             is_internal=False,
         )
@@ -1249,9 +1249,9 @@ class ActiveAlarm(Document):
         bulk += [
             UpdateOne({"_id": self.id}, {"$set": {"root": root_alarm.id, "rca_type": rca_type}})
         ]
-        self.log_message("Alarm %s has been marked as root cause" % root_alarm.id, bulk=bulk)
+        self.log_message(f"Alarm {root_alarm.id} has been marked as root cause", bulk=bulk)
         # self.save()  Saved by log_message
-        root_alarm.log_message("Alarm %s has been marked as child" % self.id, bulk=bulk)
+        root_alarm.log_message(f"Alarm {self.id} has been marked as child", bulk=bulk)
         if self.id:
             ActiveAlarm._get_collection().bulk_write(bulk, ordered=True)
         # Bulk
@@ -1300,7 +1300,7 @@ class ActiveAlarm(Document):
                     pool=self.managed_object.escalator_shard,
                     alarm_id=self.id,
                 )
-        self.log_message("Escalated to %s" % tt_id, tt_id=tt_id, to_save=True)
+        self.log_message(f"Escalated to {tt_id}", tt_id=tt_id, to_save=True)
         # q = {"_id": self.id}
         # op = {
         #     "$push": {

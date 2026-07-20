@@ -30,17 +30,17 @@ class Command(BaseCommand):
 
     def handle(self, cmd, *args, **options):
         connect()
-        return getattr(self, "handle_%s" % cmd)(*args, **options)
+        return getattr(self, f"handle_{cmd}")(*args, **options)
 
     def handle_portmap(self, portmap_objects=None):
         for po in portmap_objects or []:
             for o in ResourceGroup.get_objects_from_expression(po, model_id="sa.ManagedObject"):
                 if not o.remote_system:
-                    self.stdout.write("%s (%s, %s) NRI: N/A\n" % (o.name, o.address, o.platform))
+                    self.stdout.write(f"{o.name} ({o.address}, {o.platform}) NRI: N/A\n")
                     continue
                 portmapper = loader[o.remote_system.name](o)
                 nri = o.remote_system.name
-                self.stdout.write("%s (%s, %s) NRI: %s\n" % (o.name, o.address, o.platform, nri))
+                self.stdout.write(f"{o.name} ({o.address}, {o.platform}) NRI: {nri}\n")
                 r = []
                 for i in Interface._get_collection().find(
                     {"managed_object": o.id, "type": "physical"},
@@ -65,4 +65,6 @@ class Command(BaseCommand):
                     ("Local", "Remote", "Interface NRI", "Status"),
                     *sorted(r, key=lambda x: alnum_key(x[0])),
                 ]
-                self.stdout.write("%s\n" % format_table([0, 0, 0, 0], r, sep=" | ", hsep="-+-"))
+                self.stdout.write(
+                    "{}\n".format(format_table([0, 0, 0, 0], r, sep=" | ", hsep="-+-"))
+                )

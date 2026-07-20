@@ -280,19 +280,19 @@ class CapsProfile(Document):
         """
 
         def l2_is_enabled(method):
-            cp = getattr(self, "%s_policy" % method)
+            cp = getattr(self, f"{method}_policy")
             if cp == "E":
                 return True
             if cp == "D":
                 return False
-            mopp = getattr(mop, "enable_box_discovery_%s" % method)
+            mopp = getattr(mop, f"enable_box_discovery_{method}")
             if not mopp:
                 return False
             tm = nsp.get_topology_methods()
             return method in tm
 
         def l3_is_enabled(method):
-            cp = getattr(self, "%s_policy" % method)
+            cp = getattr(self, f"{method}_policy")
             # Treat `T` policy as `E` temporarily
             return cp != "D"
 

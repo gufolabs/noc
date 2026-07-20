@@ -60,7 +60,7 @@ def get_model(model_id: str) -> DB_MODEL_TYPE:
     """
     m = _MCACHE.get(model_id)
     if not m:
-        assert model_id in _MODELS, "Invalid model id: %s" % model_id
+        assert model_id in _MODELS, f"Invalid model id: {model_id}"
         logger.debug("Loading model %s", model_id)
         mp = _MODELS[model_id]
         mod_name, cls_name = mp.rsplit(".", 1)

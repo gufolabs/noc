@@ -151,7 +151,7 @@ class Interface(Document):
     _component_cache = cachetools.TTLCache(maxsize=2000, ttl=60)
 
     def __str__(self):
-        return "%s: %s" % (self.managed_object.name, self.name)
+        return f"{self.managed_object.name}: {self.name}"
 
     @classmethod
     def get_by_id(cls, oid: str | ObjectId) -> Optional["Interface"]:
@@ -374,7 +374,7 @@ class Interface(Document):
                 return link
             if other.type == "aggregated" and other.profile.allow_lag_mismatch:
                 return link_mismatched_lag(other, self)
-            raise ValueError("Cannot connect %s interface to %s" % (self.type, other.type))
+            raise ValueError(f"Cannot connect {self.type} interface to {other.type}")
         if self.type == "aggregated":
             # LAG
             if other.type == "aggregated":
@@ -392,7 +392,7 @@ class Interface(Document):
                 return None
             if self.profile.allow_lag_mismatch:
                 return link_mismatched_lag(self, other)
-            raise ValueError("Cannot connect %s interface to %s" % (self.type, other.type))
+            raise ValueError(f"Cannot connect {self.type} interface to {other.type}")
         raise ValueError("Cannot link")
 
     @classmethod
@@ -402,13 +402,13 @@ class Interface(Document):
         and return interface instance or None
         """
         if "@" not in s:
-            raise ValueError("Invalid interface: %s" % s)
+            raise ValueError(f"Invalid interface: {s}")
         o, i = s.rsplit("@", 1)
         # Get managed object
         try:
             mo = ManagedObject.objects.get(name=o)
         except ManagedObject.DoesNotExist:
-            raise ValueError("Invalid manged object: %s" % o)
+            raise ValueError(f"Invalid manged object: {o}")
         # Normalize interface name
         i = mo.get_profile().convert_interface_name(i)
         # Look for interface
@@ -440,7 +440,7 @@ class Interface(Document):
                 if speed >= t:
                     if speed // t * t == speed:
                         return "%d%s" % (speed // t, n)
-                    return "%.2f%s" % (float(speed) / t, n)
+                    return f"{float(speed) / t:.2f}{n}"
             return str(speed)
 
         s = [{True: "Up", False: "Down", None: "-"}[self.oper_status]]

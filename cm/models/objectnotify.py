@@ -39,4 +39,4 @@ class ObjectNotify(NOCModel):
     )
 
     def __str__(self):
-        return "(%s, %s, %s)" % (self.type, self.administrative_domain, self.notification_group)
+        return f"({self.type}, {self.administrative_domain}, {self.notification_group})"

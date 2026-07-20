@@ -45,6 +45,6 @@ def fix():
             link.update_topology()
             ManagedObject.update_links(link.linked_objects)
         except AssertionError:
-            print("Assertion Error, check link with id: %s" % link.id)
+            print(f"Assertion Error, check link with id: {link.id}")
         except Exception as e:
-            print("Exception : |%s|%s|" % (e, link.id))
+            print(f"Exception : |{e}|{link.id}|")

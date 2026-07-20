@@ -38,7 +38,7 @@ class PlatformMatch(EmbeddedDocument):
     version_re = StringField()
 
     def __str__(self):
-        return "%s - %s" % (self.platform_re, self.version_re)
+        return f"{self.platform_re} - {self.version_re}"
 
     @property
     def json_data(self) -> dict[str, Any]:

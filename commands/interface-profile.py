@@ -56,7 +56,7 @@ class Command(BaseCommand):
         connect()
         if "mos" not in options:
             options["mos"] = []
-        return getattr(self, "handle_%s" % cmd.replace("-", "_"))(*args, **options)
+        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
 
     @staticmethod
     def get_objects(exprs):
@@ -94,7 +94,7 @@ class Command(BaseCommand):
             return
         for o in self.get_objects(mos):
             self.stdout.write(
-                "%s (%s):\n" % (o.name, (o.platform.name if o.platform else None) or o.profile.name)
+                f"{o.name} ({(o.platform.name if o.platform else None) or o.profile.name}):\n"
             )
             ifaces = self.get_interfaces(o)
             if not ifaces:
@@ -109,7 +109,7 @@ class Command(BaseCommand):
             self.stdout.write("Reset Locked Profile on Interfaces\n")
             for i in Interface.objects.filter(profile_locked=True):
                 if i.profile:
-                    self.stdout.write("    resetting profile on %s to default\n" % i.name)
+                    self.stdout.write(f"    resetting profile on {i.name} to default\n")
                     i.profile = InterfaceProfile.get_default_profile()
                     i.profile_locked = False
                     i.save()
@@ -119,11 +119,11 @@ class Command(BaseCommand):
             return
         for o in self.get_objects(mos):
             self.stdout.write(
-                "%s (%s):\n" % (o.name, (o.platform.name if o.platform else None) or o.profile.name)
+                f"{o.name} ({(o.platform.name if o.platform else None) or o.profile.name}):\n"
             )
             for i in Interface.objects.filter(managed_object=o.id):
                 if i.profile:
-                    self.stdout.write("    resetting profile on %s to default\n" % i.name)
+                    self.stdout.write(f"    resetting profile on {i.name} to default\n")
                     i.profile = InterfaceProfile.get_default_profile()
                     i.profile_locked = False
                     i.save()
@@ -137,9 +137,7 @@ class Command(BaseCommand):
         get_profile = InterfaceProfile.get_profiles_matcher()
         pcache = {}
         for o in self.get_objects(mos):
-            self.stdout.write(
-                "%s (%s):\n" % (o.name, o.platform.name if o.platform else o.profile.name)
-            )
+            self.stdout.write(f"{o.name} ({o.platform.name if o.platform else o.profile.name}):\n")
             ifaces = self.get_interfaces(o)
             if not ifaces:
                 self.stdout.write("No ifaces on object\n")

@@ -64,11 +64,11 @@ class Command(BaseCommand):
         if not action:
             action = "show"
         connect()
-        getattr(self, "handle_%s" % action.replace("-", "_"))(*args, **options)
+        getattr(self, "handle_{}".format(action.replace("-", "_")))(*args, **options)
 
     def show_link(self, link, show_method=False):
         def format_interface(i):
-            return "%s@%s" % (i.managed_object.name, i.name)
+            return f"{i.managed_object.name}@{i.name}"
 
         i = defaultdict(list)
         for li in link.interfaces:
@@ -108,10 +108,10 @@ class Command(BaseCommand):
             raise CommandError("Usage: ./noc link --add <iface1> <iface2>")
         i1 = Interface.get_interface(args[0])
         if not i1:
-            raise CommandError("Invalid interface: %s" % args[0])
+            raise CommandError(f"Invalid interface: {args[0]}")
         i2 = Interface.get_interface(args[1])
         if not i2:
-            raise CommandError("Invalid interface: %s" % args[1])
+            raise CommandError(f"Invalid interface: {args[1]}")
         try:
             i1.link_ptp(i2)
         except ValueError as why:

@@ -239,9 +239,9 @@ class MetricScope(Document):
             if label.is_primary_key:
                 pk += [f"arrayFirst(x -> startsWith(x, '{label.label_prefix}'), labels)"]
         r = [
-            "CREATE TABLE IF NOT EXISTS %s (" % self._get_raw_db_table(),
+            f"CREATE TABLE IF NOT EXISTS {self._get_raw_db_table()} (",
             ",\n".join(
-                f"  {n} {t} {me} {'DEFAULT %s' % de if de else ''}"
+                f"  {n} {t} {me} {f'DEFAULT {de}' if de else ''}"
                 for n, t, me, de in self.iter_fields()
             ),
             f") ENGINE = MergeTree() ORDER BY ({', '.join(ok)})\n",
@@ -254,13 +254,7 @@ class MetricScope(Document):
         Get CREATE TABLE for Distributed engine
         :return:
         """
-        return "CREATE TABLE IF NOT EXISTS %s AS %s ENGINE = Distributed(%s, %s, %s)" % (
-            self._get_distributed_db_table(),
-            self._get_raw_db_table(),
-            config.clickhouse.cluster,
-            config.clickhouse.db,
-            self._get_raw_db_table(),
-        )
+        return f"CREATE TABLE IF NOT EXISTS {self._get_distributed_db_table()} AS {self._get_raw_db_table()} ENGINE = Distributed({config.clickhouse.cluster}, {config.clickhouse.db}, {self._get_raw_db_table()})"
 
     def get_create_view_sql(self):
         view = self._get_db_table()

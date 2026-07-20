@@ -70,9 +70,9 @@ def test_get_avatar_bg_color():
 def test_split_rgb(color: str):
     r, g, b = split_rgb(color)
     assert color[0] == "#"
-    assert color[1:3] == "%02X" % r
-    assert color[3:5] == "%02X" % g
-    assert color[5:] == "%02X" % b
+    assert color[1:3] == f"{r:02X}"
+    assert color[3:5] == f"{g:02X}"
+    assert color[5:] == f"{b:02X}"
 
 
 @pytest.mark.parametrize("color", [c for c in ALL_COLORS if c not in FG])

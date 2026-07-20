@@ -35,5 +35,5 @@ class Command(BaseCommand):
         try:
             auth.authenticate(user=user, password=password)
         except backend.LoginError as e:
-            self.die("Failed to login: %s" % e)
+            self.die(f"Failed to login: {e}")
         self.print("Login successful")

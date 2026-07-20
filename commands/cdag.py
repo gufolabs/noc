@@ -52,7 +52,7 @@ class Command(BaseCommand):
         metrics.add_argument("--output", dest="f_output", help="Output path in JSONLine format")
 
     def handle(self, cmd, *args, **options):
-        return getattr(self, "handle_%s" % cmd)(*args, **options)
+        return getattr(self, f"handle_{cmd}")(*args, **options)
 
     def handle_dot(self, config, output: str | None = None, *args, **kwargs):
         cdag = self.from_config_paths(config)

@@ -26,22 +26,10 @@ class AlarmLog(EmbeddedDocument):
     def __str__(self):
 
         if self.tt_id:
-            return "%s [%s -> %s]: [TT_ID: %s] %s" % (
-                self.timestamp,
-                self.from_status,
-                self.to_status,
-                self.tt_id,
-                self.message,
-            )
+            return f"{self.timestamp} [{self.from_status} -> {self.to_status}]: [TT_ID: {self.tt_id}] {self.message}"
         prefix = " "
         if self.tt_id:
             prefix += f"[TT_ID: {self.tt_id}] "
         if self.error_code:
             prefix += "[ERROR] "
-        return "%s [%s -> %s]:%s%s" % (
-            self.timestamp,
-            self.from_status,
-            self.to_status,
-            prefix,
-            self.message,
-        )
+        return f"{self.timestamp} [{self.from_status} -> {self.to_status}]:{prefix}{self.message}"

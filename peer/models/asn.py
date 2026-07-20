@@ -122,16 +122,16 @@ class AS(NOCModel):
     def get_rpsl(self):
         sep = "remarks: %s" % ("-" * 72)
         s = []
-        s += ["aut-num: AS%s" % self.asn]
+        s += [f"aut-num: AS{self.asn}"]
         if self.as_name:
-            s += ["as-name: %s" % self.as_name]
+            s += [f"as-name: {self.as_name}"]
         if self.description:
-            s += ["descr: %s" % x for x in self.description.split("\n")]
+            s += [f"descr: {x}" for x in self.description.split("\n")]
         if self.organisation:
-            s += ["org: %s" % self.organisation.organisation]
+            s += [f"org: {self.organisation.organisation}"]
         # Add header remarks
         if self.header_remarks:
-            s += ["remarks: %s" % x for x in self.header_remarks.split("\n")]
+            s += [f"remarks: {x}" for x in self.header_remarks.split("\n")]
         # Find AS peers
         pg = {}  # Peer Group -> AS -> peering_point -> [(import, export, localpref, import_med, export_med, remark)]
         for peer in self.peer_set.filter():
@@ -171,7 +171,7 @@ class AS(NOCModel):
         inverse_pref = config.peer.rpsl_inverse_pref_style
         for peer_group in pg:
             s += [sep]
-            s += ["remarks: -- %s" % x for x in peer_group.description.split("\n")]
+            s += [f"remarks: -- {x}" for x in peer_group.description.split("\n")]
             s += [sep]
             for asn in sorted(pg[peer_group]):
                 add_at = len(pg[peer_group][asn]) != 1
@@ -180,11 +180,11 @@ class AS(NOCModel):
                         import_filter, export_filter, localpref, import_med, export_med, remark = R
                         # Prepend import and export with remark when given
                         if remark:
-                            s += ["remarks: # %s" % remark]
+                            s += [f"remarks: # {remark}"]
                         # Build import statement
                         i_s = "import: from AS%d" % asn
                         if add_at:
-                            i_s += " at %s" % pp.hostname
+                            i_s += f" at {pp.hostname}"
                         actions = []
                         if localpref:
                             pref = (65535 - localpref) if inverse_pref else localpref
@@ -193,29 +193,29 @@ class AS(NOCModel):
                             actions += ["med=%d;" % import_med]
                         if actions:
                             i_s += " action " + " ".join(actions)
-                        i_s += " accept %s" % import_filter
+                        i_s += f" accept {import_filter}"
                         s += [i_s]
                         # Build export statement
                         e_s = "export: to AS%d" % asn
                         if add_at:
-                            e_s += " at %s" % pp.hostname
+                            e_s += f" at {pp.hostname}"
                         if export_med:
                             e_s += " action med=%d;" % export_med
-                        e_s += " announce %s" % export_filter
+                        e_s += f" announce {export_filter}"
                         s += [e_s]
         # Add contacts
         for c in self.administrative_contacts.order_by("nic_hdl"):
-            s += ["admin-c: %s" % c.nic_hdl]
+            s += [f"admin-c: {c.nic_hdl}"]
         for c in self.tech_contacts.order_by("nic_hdl"):
-            s += ["tech-c: %s" % c.nic_hdl]
+            s += [f"tech-c: {c.nic_hdl}"]
         # Add maintainers
         for m in self.maintainers.all():
-            s += ["mnt-by: %s" % m.maintainer]
+            s += [f"mnt-by: {m.maintainer}"]
         for m in self.routes_maintainers.all():
-            s += ["mnt-routes: %s" % m.maintainer]
+            s += [f"mnt-routes: {m.maintainer}"]
         # Add footer remarks
         if self.footer_remarks:
-            s += ["remarks: %s" % x for x in self.footer_remarks.split("\n")]
+            s += [f"remarks: {x}" for x in self.footer_remarks.split("\n")]
         return rpsl_format("\n".join(s))
 
     def touch_rpsl(self):
@@ -251,9 +251,9 @@ class AS(NOCModel):
             ("peers", list(peers.values())),
             ("downlinks", list(downlinks.values())),
         ]:
-            s += ["subgraph %s {" % subgraph]
+            s += [f"subgraph {subgraph} {{"]
             for p in peers:
-                attrs = ['taillabel=" %s"' % p.import_filter, 'headlabel=" %s"' % p.export_filter]
+                attrs = [f'taillabel=" {p.import_filter}"', f'headlabel=" {p.export_filter}"']
                 if p.import_filter == "ANY":
                     attrs += ["arrowtail=open"]
                 if p.export_filter == "ANY":

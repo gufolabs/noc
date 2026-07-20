@@ -39,7 +39,7 @@ class Command(BaseCommand):
         clear_parser.add_argument("clear_uuids", nargs=argparse.REMAINDER, help="Crashinfo UUIDs")
 
     def handle(self, cmd, *args, **options):
-        return getattr(self, "handle_%s" % cmd)(*args, **options)
+        return getattr(self, f"handle_{cmd}")(*args, **options)
 
     def handle_list(self):
         # Get last update timestamp
@@ -62,14 +62,14 @@ class Command(BaseCommand):
                 if service.startswith("services/") and service.endswith("/service.py"):
                     service = service[9:-11]
                 elif service.startswith("commands/"):
-                    service = "noc %s" % service[9:-3]
+                    service = f"noc {service[9:-3]}"
                 x = "Unknown exception"
                 for xline in data["traceback"].splitlines()[:7]:
                     sl = str(xline)
                     if sl.startswith("EXCEPTION: "):
                         x = sl[11:]
                         break
-                x = self.rx_xtype.sub(lambda match: "%s: " % match.group("xtype"), x)
+                x = self.rx_xtype.sub(lambda match: "{}: ".format(match.group("xtype")), x)
                 x = smart_text(x)[:100].encode("utf-8")
                 fl += [
                     {
@@ -96,9 +96,9 @@ class Command(BaseCommand):
 
     def handle_view(self, view_uuids, *args, **options):
         for u in view_uuids:
-            path = os.path.join(self.PREFIX, "%s.json" % u)
+            path = os.path.join(self.PREFIX, f"{u}.json")
             if not os.path.exists(path):
-                self.stderr.write("Crashinfo not found: %s\n" % u)
+                self.stderr.write(f"Crashinfo not found: {u}\n")
                 if os.path.exists(u):
                     path = u
                 else:
@@ -117,9 +117,9 @@ class Command(BaseCommand):
         if clear_uuids and clear_uuids[0] == "all":
             clear_uuids = [fn[:-5] for fn in os.listdir(self.PREFIX) if fn.endswith(".json")]
         for u in clear_uuids:
-            path = os.path.join(self.PREFIX, "%s.json" % u)
+            path = os.path.join(self.PREFIX, f"{u}.json")
             if not os.path.exists(path):
-                self.stderr.write("Crashinfo not found: %s\n" % u)
+                self.stderr.write(f"Crashinfo not found: {u}\n")
             else:
-                self.stdout.write("Removing %s\n" % u)
+                self.stdout.write(f"Removing {u}\n")
                 os.unlink(path)

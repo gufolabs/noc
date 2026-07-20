@@ -31,4 +31,4 @@ class CoveredObject(Document):
     object = PlainReferenceField(Object)
 
     def __str__(self):
-        return "%s %s" % (self.coverage.name, self.object.name or self.object.id)
+        return f"{self.coverage.name} {self.object.name or self.object.id}"

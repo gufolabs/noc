@@ -48,7 +48,7 @@ class MACDB(Document):
         try:
             super().save(*args, **kwargs)
         except Exception as e:
-            raise ValueError("%s: %s" % (e.__doc__, e.message))
+            raise ValueError(f"{e.__doc__}: {e.message}")
 
     @classmethod
     def submit(cls, mac, vc_domain, vlan, interface, timestamp=None):

@@ -103,7 +103,7 @@ class Command(BaseCommand):
     def create_dir(self, path):
         if os.path.isdir(path):
             return
-        self.print("    Creating directory %s ..." % path)
+        self.print(f"    Creating directory {path} ...")
         try:
             os.mkdir(path)
             self.print("done")
@@ -112,7 +112,7 @@ class Command(BaseCommand):
             raise CommandError("Failed to create directory")
 
     def create_file(self, path, data):
-        self.print("    Writing file %s ..." % path)
+        self.print(f"    Writing file {path} ...")
         try:
             with open(path, "w") as f:
                 f.write(data)
@@ -144,7 +144,7 @@ class Command(BaseCommand):
                 :return:
                 """
                 if isinstance(s, str):
-                    return '"%s"' % s
+                    return f'"{s}"'
                 if isinstance(s, bool):
                     return "true" if s else "false"
                 return str(s)
@@ -152,7 +152,7 @@ class Command(BaseCommand):
             n = len(data)
             r = ["{"]
             for k, v in data:
-                r += ["    %s: %s%s" % (k, js_v(v), "," if n > 1 else "")]
+                r += ["    {}: {}{}".format(k, js_v(v), "," if n > 1 else "")]
                 n -= 1
             r += ["}"]
             return r
@@ -181,27 +181,27 @@ class Command(BaseCommand):
         # Check templateset
         ts_root = os.path.join("templates", "newapp", templateset)
         if not os.path.isdir(ts_root):
-            raise CommandError("Inconsistent template set %s" % templateset)
+            raise CommandError(f"Inconsistent template set {templateset}")
         # Fill templates
         for app in args:
-            self.print("Creating skeleton for %s" % app)
+            self.print(f"Creating skeleton for {app}")
             m, a = app.split(".", 1)
             if "." in a:
                 raise CommandError("Application name must be in form <module>.<app>")
             if not os.path.isdir(Path("services", "web", "apps", m)):
-                raise CommandError("Invalid module: %s" % m)
+                raise CommandError(f"Invalid module: {m}")
             # Fill template variables
             tv = vars.copy()
             tv["module"] = m
             tv["app"] = a
             # Initialize model if necessary
             if tv["model"]:
-                tv["requires"] = ["NOC.%s.%s.Model" % (m, tv["model"].lower())]
-                tv["modelimport"] = "noc.%s.models.%s" % (m, a)
+                tv["requires"] = ["NOC.{}.{}.Model".format(m, tv["model"].lower())]
+                tv["modelimport"] = f"noc.{m}.models.{a}"
                 models = importlib.import_module(tv["modelimport"])
                 model = getattr(models, tv["model"])
                 if model is None:
-                    tv["modelimport"] = "noc.%s.models" % m
+                    tv["modelimport"] = f"noc.{m}.models"
                     models = importlib.import_module(tv["modelimport"])
                     model = getattr(models, tv["model"])
                 if issubclass(model, Model):
@@ -214,18 +214,18 @@ class Command(BaseCommand):
                         if fc in ("ForeignKey", "OneToOneField"):
                             # Foreign key
                             fr = f.remote_field.model
-                            rc = "%s.%s" % (fr.__module__.split(".")[1], fr.__name__.lower())
+                            rc = "{}.{}".format(fr.__module__.split(".")[1], fr.__name__.lower())
                             fd = {
                                 "type": "int",
                                 "name": f.name,
                                 "label": smart_text(f.verbose_name),
                                 "blank": f.null,
-                                "widget": "%s.LookupField" % rc,
+                                "widget": f"{rc}.LookupField",
                             }
                             fields += [fd]
-                            fd = {"type": "string", "name": "%s__label" % f.name, "persist": False}
+                            fd = {"type": "string", "name": f"{f.name}__label", "persist": False}
                             fields += [fd]
-                            tv["requires"] += ["NOC.%s.LookupField" % rc]
+                            tv["requires"] += [f"NOC.{rc}.LookupField"]
                         else:
                             fd = {
                                 "type": self.model_map[fc][0],
@@ -286,7 +286,7 @@ class Command(BaseCommand):
             # Check applications is not exists
             app_root = os.path.join("services", "web", "apps", m, a)
             if os.path.exists(app_root):
-                raise CommandError("Application %s is already exists" % app)
+                raise CommandError(f"Application {app} is already exists")
             # Create apps/__init__.py if missed
             ui_root = os.path.join("ui", "web", m, a)
             # Create application directory

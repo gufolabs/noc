@@ -671,7 +671,7 @@ class Action(Document):
         for p in self.params:
             # is_multy, to iteration
             if p.name not in kwargs and p.is_required and not p.default:
-                raise ValueError("Required parameter '%s' is missed" % p.name)
+                raise ValueError(f"Required parameter '{p.name}' is missed")
             v = kwargs.get(p.name, p.default)
             if v is None:
                 continue
@@ -680,17 +680,17 @@ class Action(Document):
                     tmpl = jinja2.Template(v)
                     v = tmpl.render(**kwargs)
                 except jinja2.exceptions.TemplateError as e:
-                    raise ValueError("Parameter '%s', Render Error: %s" % (p.name, e))
+                    raise ValueError(f"Parameter '{p.name}', Render Error: {e}")
             if p.type == ValueType.IFACE_NAME:
                 # Interface
                 try:
                     v = profile.get_profile().convert_interface_name(v)
                 except Exception:
-                    raise ValueError("Invalid interface name in parameter '%s': '%s'" % (p.name, v))
+                    raise ValueError(f"Invalid interface name in parameter '{p.name}': '{v}'")
             elif p.type == ValueType.IP_VRF:
                 v = p.type.clean_value(v)
                 if not v:
-                    raise ValueError("Unknown VRF in parameter '%s': '%s'" % (p.name, v))
+                    raise ValueError(f"Unknown VRF in parameter '{p.name}': '{v}'")
             elif isinstance(v, str) and v.startswith(ARRAY_ANNEX):
                 v = ValueType.convert_to_array(v[len(ARRAY_ANNEX) :])
             elif p.multi and isinstance(v, list):

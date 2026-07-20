@@ -35,12 +35,12 @@ class Command(BaseCommand):
         if platform:
             p = Platform.objects.filter(name=platform).first()
             if not p:
-                self.die("Invalid platform %s" % platform)
+                self.die(f"Invalid platform {platform}")
             pqs["name"] = platform
         if profile:
             p = Profile.objects.filter(name=profile).first()
             if not p:
-                self.die("Invalid profile %s" % profile)
+                self.die(f"Invalid profile {profile}")
             mqs["profile"] = str(p.id)
         for platform in Platform.objects.filter(**pqs):
             qs = mqs.copy()

@@ -115,5 +115,5 @@ class ObjectNotification(NOCModel):
         :return: subject, body tuple
         """
         # Render template
-        template = "object/%s.html" % event_id
+        template = f"object/{event_id}.html"
         return render_message(template, context)

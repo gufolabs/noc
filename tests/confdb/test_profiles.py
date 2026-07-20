@@ -75,7 +75,7 @@ def test_profile(path):
     # Load profile
     profile_name = ".".join(path.split(os.sep)[:2])
     profile = profile_loader.get_profile(profile_name)
-    assert profile, "Invalid profile '%s'" % profile_name
+    assert profile, f"Invalid profile '{profile_name}'"
     # Create mock object
     mo = MockManagedObject(profile=profile)
     # Setup tokenizer
@@ -86,10 +86,7 @@ def test_profile(path):
     # Setup normalizer
     normalizer_name, normalizer_conf = profile.get_config_normalizer(mo)
     if not normalizer_name.startswith("noc."):
-        normalizer_name = "noc.sa.profiles.%s.confdb.normalizer.%s" % (
-            profile.name,
-            normalizer_name,
-        )
+        normalizer_name = f"noc.sa.profiles.{profile.name}.confdb.normalizer.{normalizer_name}"
     normalizer_cls = get_handler(normalizer_name)
     assert normalizer_cls, "Normalizer not found"
     normalizer = normalizer_cls(mo, tokenizer, **normalizer_conf)

@@ -145,7 +145,7 @@ class PhoneRange(Document):
         rr = PhoneRange.objects.filter(q).first()
         if rr:
             raise ValidationError(
-                "Overlapped ranges: %s - %s (%s)" % (rr.from_number, rr.to_number, rr.name)
+                f"Overlapped ranges: {rr.from_number} - {rr.to_number} ({rr.name})"
             )
         q = {
             "dialplan": self.dialplan,
@@ -222,7 +222,7 @@ class PhoneRange(Document):
         # Nested ranges
         nrxc = []
         for r in PhoneRange.objects.filter(parent=self.id):
-            nrxc += ["(x >= '%s' and x <= '%s')" % (r.from_number, r.to_number)]
+            nrxc += [f"(x >= '{r.from_number}' and x <= '{r.to_number}')"]
         if nrxc:
             nrx = compile(" or ".join(nrxc), "<string>", "eval")
         else:

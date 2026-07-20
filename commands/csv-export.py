@@ -38,13 +38,13 @@ class Command(BaseCommand):
 
     def _usage(self):
         print("Usage:")
-        print("%s csv-export [-t] <model>" % (sys.argv[0]))
+        print(f"{sys.argv[0]} csv-export [-t] <model>")
         print("Where <model> is one of:")
         load_models()
         for m in apps.get_models():
             t = m._meta.db_table
             app, model = t.split("_", 1)
-            print("%s.%s" % (app, model))
+            print(f"{app}.{model}")
         sys.exit(1)
 
     def get_queryset(self, model, args):

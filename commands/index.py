@@ -38,7 +38,7 @@ class Command(BaseCommand):
         for qr in TextIndex.search(query[0]):
             r += [
                 {
-                    "id": str("%s:%s" % (qr.model, qr.object)),
+                    "id": str(f"{qr.model}:{qr.object}"),
                     "title": str(qr.title),
                     "card": str(qr.card),
                 }
@@ -56,7 +56,7 @@ class Command(BaseCommand):
 
     def handle_rebuild(self, *args, **options):
         for model_id in FTS_MODELS:
-            self.stdout.write("Indexing %s: " % model_id)
+            self.stdout.write(f"Indexing {model_id}: ")
             model = get_model(model_id)
             n = 0
             for o in model.objects.all():

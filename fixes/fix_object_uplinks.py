@@ -41,4 +41,4 @@ def fix():
             st = SegmentTopology(ns)
             ManagedObject.update_uplinks(st.iter_uplinks())
         except Exception as e:
-            print("[%s] %s" % (ns.name, e))
+            print(f"[{ns.name}] {e}")

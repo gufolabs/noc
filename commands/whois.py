@@ -26,7 +26,7 @@ class Command(BaseCommand):
 
     def handle(self, cmd, *args, **options):
         connect()
-        return getattr(self, "handle_%s" % cmd.replace("-", "_"))(*args, **options)
+        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
 
     def handle_update_cache(self, *args, **options):
         from noc.core.whois import WhoisCacheLoader
@@ -40,6 +40,6 @@ class Command(BaseCommand):
 
         p = Profile.get_by_name(profile)
         if not p:
-            self.die("Invalid profile %s" % profile)
+            self.die(f"Invalid profile {profile}")
         prefixes = WhoisCache.resolve_as_set_prefixes_maxlen(as_set[0])
         self.print(p.get_profile().generate_prefix_list(name, prefixes))

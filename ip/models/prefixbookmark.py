@@ -35,7 +35,7 @@ class PrefixBookmark(NOCModel):
     prefix = models.ForeignKey(Prefix, verbose_name="Prefix", on_delete=models.CASCADE)
 
     def __str__(self):
-        return "Bookmark at %s for %s" % (self.prefix, self.user.username)
+        return f"Bookmark at {self.prefix} for {self.user.username}"
 
     @classmethod
     def user_bookmarks(cls, user, vrf=None, afi=None):

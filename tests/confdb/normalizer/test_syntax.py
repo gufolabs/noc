@@ -27,6 +27,6 @@ from noc.core.confdb.normalizer.base import BaseNormalizer
 def test_syntax_gen(name, args, paths):
     normalizer = BaseNormalizer(None, None)
     gen = getattr(normalizer, name, None)
-    assert gen, "Generator '%s' is not defined" % gen
+    assert gen, f"Generator '{gen}' is not defined"
     result = list(gen(**args))
     assert paths == result

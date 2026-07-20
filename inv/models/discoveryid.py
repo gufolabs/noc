@@ -397,7 +397,7 @@ class DiscoveryID(Document):
         # Reset cache
         macs = {m.first_mac for m in self.chassis_mac}
         if macs:
-            cache.delete_many(["discoveryid-mac-%s" % m for m in macs])
+            cache.delete_many([f"discoveryid-mac-{m}" for m in macs])
 
     @classmethod
     def clean_for_object(cls, mo):

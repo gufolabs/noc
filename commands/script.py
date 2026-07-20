@@ -109,10 +109,10 @@ class Command(BaseCommand):
         # Load script
         script = script[0]
         if "." not in script:
-            script = "%s.%s" % (obj.profile.name, script)
+            script = f"{obj.profile.name}.{script}"
         script_class = loader.get_script(script)
         if not script_class:
-            self.die("Failed to load script %s" % script_class)
+            self.die(f"Failed to load script {script_class}")
         # Get capabilities
         caps = obj.get_caps()
         if not use_snmp:
@@ -165,7 +165,7 @@ class Command(BaseCommand):
 
             yaml.dump(result, sys.stdout)
         else:
-            self.stdout.write("%s\n" % result)
+            self.stdout.write(f"{result}\n")
         if update_spec:
             self.update_spec(update_spec, scr)
         if beef_output:
@@ -191,7 +191,7 @@ class Command(BaseCommand):
         try:
             return ManagedObject.objects.get(q)
         except ManagedObject.DoesNotExist:
-            self.die("Object is not found: %s" % object_name)
+            self.die(f"Object is not found: {object_name}")
 
     def get_credentials(self, obj):
         """
@@ -253,7 +253,7 @@ class Command(BaseCommand):
 
         def read_file(path):
             if not os.path.exists(path):
-                self.die("Cannot open file '%s'" % path)
+                self.die(f"Cannot open file '{path}'")
             with open(path) as f:
                 return f.read()
 
@@ -261,13 +261,13 @@ class Command(BaseCommand):
             try:
                 return orjson.loads(j)
             except ValueError as e:
-                self.die("Failed to parse JSON: %s" % e)
+                self.die(f"Failed to parse JSON: {e}")
 
         args = {}
         for a in arguments:
             match = self.rx_arg.match(a)
             if not match:
-                self.die("Malformed parameter: '%s'" % a)
+                self.die(f"Malformed parameter: '{a}'")
             name, op, value = match.groups()
             if op == "=":
                 # Set parameter
@@ -296,7 +296,7 @@ class Command(BaseCommand):
         from noc.sa.models.profile import Profile
 
         connect()
-        self.print("Updating spec: %s" % name)
+        self.print(f"Updating spec: {name}")
         spec = Spec.get_by_name(name)
         changed = False
         if not spec:
@@ -309,7 +309,7 @@ class Command(BaseCommand):
             # Create Ad-Hoc spec for profile
             spec = Spec(
                 name,
-                description="Auto-generated Ad-Hoc spec for %s profile" % script.profile.name,
+                description=f"Auto-generated Ad-Hoc spec for {script.profile.name} profile",
                 revision=1,
                 quiz=quiz,
                 author="NOC",
@@ -327,7 +327,7 @@ class Command(BaseCommand):
             # Delete last \\n symbol and add command
             commands.add(span.in_label[:-1].decode("string_escape").strip())
         # Update specs
-        s_name = "cli_%s" % script.name.rsplit(".", 1)[-1]
+        s_name = "cli_{}".format(script.name.rsplit(".", 1)[-1])
         names = set()
         for ans in spec.answers:
             if (ans.name == s_name or ans.name.startswith(s_name + ".")) and ans.type == "cli":
@@ -342,7 +342,7 @@ class Command(BaseCommand):
                 if "." in n:
                     nn = int(n.rsplit(".", 1)[-1])
                     max_n = max(nn, max_n)
-            ntpl = "%s.%%d" % s_name
+            ntpl = f"{s_name}.%d"
             for nn, cmd in enumerate(sorted(commands)):
                 spec.answers += [SpecAnswer(name=ntpl % (nn + 1), type="cli", value=cmd)]
             changed = True

@@ -32,8 +32,7 @@ class Command(BaseCommand):
     def _usage(self):
         print("Usage:")
         print(
-            "%s csv-import [--resolve=action] [--delimiter=<char>] <model> <file1> .. <fileN>"
-            % (sys.argv[0])
+            f"{sys.argv[0]} csv-import [--resolve=action] [--delimiter=<char>] <model> <file1> .. <fileN>"
         )
         print("<action> is one of:")
         print("        fail - fail when record is already exists")
@@ -44,7 +43,7 @@ class Command(BaseCommand):
         for m in apps.get_models():
             t = m._meta.db_table
             app, model = t.split("_", 1)
-            print("%s.%s" % (app, model))
+            print(f"{app}.{model}")
         sys.exit(1)
 
     def handle(self, *args, **options):
@@ -72,10 +71,10 @@ class Command(BaseCommand):
         try:
             resolve = {"fail": IR_FAIL, "skip": IR_SKIP, "update": IR_UPDATE}[options["resolve"]]
         except KeyError:
-            raise CommandError("Invalid resolve option: %s" % options["resolve"])
+            raise CommandError("Invalid resolve option: {}".format(options["resolve"]))
         # Begin import
         for f in args[1:]:
-            print("Importing %s" % f)
+            print(f"Importing {f}")
             with open(f) as f:
                 count, error = csv_import(m, f, resolution=resolve, delimiter=options["delimiter"])
                 if count is None:

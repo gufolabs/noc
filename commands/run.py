@@ -34,7 +34,7 @@ class Command(BaseCommand):
         # script_parser = subparsers.add_parser("script")
 
     def handle(self, cmd, *args, **options):
-        return getattr(self, "handle_%s" % cmd)(*args, **options)
+        return getattr(self, f"handle_{cmd}")(*args, **options)
 
     def iter_objects(self, objects):
         r = set()
@@ -70,5 +70,5 @@ class Command(BaseCommand):
                         cond.wait()
                     data, buffer = buffer, []
                 for o, r in data:
-                    self.stdout.write("@@@ %s %s\n%s\n" % (o.address, o.name, "".join(r)))
+                    self.stdout.write("@@@ {} {}\n{}\n".format(o.address, o.name, "".join(r)))
                     left -= 1

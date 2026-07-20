@@ -351,24 +351,24 @@ class Command(BaseCommand):
 
     def print_debug(self, rec) -> None:
         if rec.connector:
-            self.stdout.write("        CONNECTOR: %s\n" % rec.connector)
+            self.stdout.write(f"        CONNECTOR: {rec.connector}\n")
 
         if rec.ttype1g:
-            self.stdout.write("        TTYPE1G: %s\n" % rec.ttype1g)
+            self.stdout.write(f"        TTYPE1G: {rec.ttype1g}\n")
 
         if rec.ttype10g:
-            self.stdout.write("        TTYPE10G: %s\n" % rec.ttype10g)
+            self.stdout.write(f"        TTYPE10G: {rec.ttype10g}\n")
 
         if rec.distance:
-            self.stdout.write("        Distance: %sm\n" % rec.distance)
+            self.stdout.write(f"        Distance: {rec.distance}m\n")
         if rec.rx:
-            self.stdout.write("        RX: %s\n" % rec.rx)
+            self.stdout.write(f"        RX: {rec.rx}\n")
         if rec.tx:
-            self.stdout.write("        TX: %s\n" % rec.tx)
-        self.stdout.write("        BIDI: %s\n" % rec.isbidi)
-        self.stdout.write("        XWDM: %s\n" % rec.isxwdm)
+            self.stdout.write(f"        TX: {rec.tx}\n")
+        self.stdout.write(f"        BIDI: {rec.isbidi}\n")
+        self.stdout.write(f"        XWDM: {rec.isxwdm}\n")
         self.stdout.write("\n")
-        self.stdout.write("        XPON: %s\n" % rec.isxpon)
+        self.stdout.write(f"        XPON: {rec.isxpon}\n")
 
         self.stdout.write("\n")
 
@@ -393,9 +393,9 @@ class Command(BaseCommand):
             description = self.clear_description(description)
 
             res = self.parse_description(description)
-            self.stdout.write("%s\n" % o.get("name", ""))
+            self.stdout.write("{}\n".format(o.get("name", "")))
             if self.is_debug:
-                self.stdout.write("    %s\n" % description)
+                self.stdout.write(f"    {description}\n")
                 self.print_debug(res)
 
             if self.__backup_dir:
@@ -428,9 +428,9 @@ class Command(BaseCommand):
             description = self.clear_description(description)
 
             res = self.parse_description(description)
-            self.stdout.write("%s\n" % o.name)
+            self.stdout.write(f"{o.name}\n")
             if self.is_debug:
-                self.stdout.write("    %s\n" % description)
+                self.stdout.write(f"    {description}\n")
                 self.print_debug(res)
 
             if self.__backup_dir:
@@ -470,11 +470,11 @@ class Command(BaseCommand):
             return
 
         if output_dir and not os.path.isdir(output_dir) and os.access(output_dir, os.W_OK):
-            self.stdout.write("Output dir not exists or not writeable '%s'\n" % output_dir)
+            self.stdout.write(f"Output dir not exists or not writeable '{output_dir}'\n")
             return
 
         if backup_dir and not os.path.isdir(backup_dir) and os.access(backup_dir, os.W_OK):
-            self.stdout.write("Backup dir not exists or not writeable '%s'\n" % backup_dir)
+            self.stdout.write(f"Backup dir not exists or not writeable '{backup_dir}'\n")
             return
 
         if mongo:

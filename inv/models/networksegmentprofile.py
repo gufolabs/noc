@@ -120,7 +120,7 @@ class BioCollisionPolicy(EmbeddedDocument):
     calcified_profile = PlainReferenceField("inv.NetworkSegmentProfile")
 
     def __str__(self):
-        return "%s %s -> %s" % (self.match_type, self.match_level, self.policy)
+        return f"{self.match_type} {self.match_level} -> {self.policy}"
 
     def check(
         self,

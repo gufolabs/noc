@@ -62,7 +62,7 @@ class KBEntry(NOCModel):
     def __str__(self):
         if self.id:
             return "KB%d: %s" % (self.id, self.subject)
-        return "New: %s" % self.subject
+        return f"New: {self.subject}"
 
     def save(self, *args, **kwargs):
         """
