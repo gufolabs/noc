@@ -34,9 +34,9 @@ class Profile(BaseProfile):
             return interface
         if ":" in interface:
             interface = interface.split(":")[0]
-        if interface.startswith("gpon"):
+        if interface.lower().startswith("gpon"):
             return "GPON" + interface[4:]
-        if interface.startswith("epon"):
+        if interface.lower().startswith("epon"):
             return "EPON" + interface[4:]
         if interface.startswith("f"):
             return interface.replace("f", "FastEthernet")

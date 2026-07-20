@@ -26,8 +26,7 @@ class Script(BaseScript):
         re.MULTILINE | re.DOTALL,
     )
 
-    rx_hver = re.compile(r"^hardware version:(?:V|)(?P<hversion>\S+)", re.MULTILINE)
-
+    #rx_hver = re.compile(r"^hardware version:(?:V|)(?P<hversion>\S+)", re.MULTILINE)
     # todo: add hardware ver for P3310C, P3608 (snmp output need)
 
     def execute_snmp(self):
@@ -36,7 +35,7 @@ class Script(BaseScript):
         return {
             "vendor": "BDCOM",
             "platform": match.group("platform"),
-            "version": "%s, %s" % (match.group("version"), match.group("build")),
+            "version": f"{match.group('version')}, {match.group('build')}",
             "attributes": {
                 "Build": match.group("build"),
                 "Boot PROM": match.group("boot"),
@@ -51,7 +50,7 @@ class Script(BaseScript):
             return {
                 "vendor": "BDCOM",
                 "platform": match.group("platform"),
-                "version": "%s, %s" % (match.group("version"), match.group("build")),
+                "version": f"{match.group('version')}, {match.group('build')}",
                 "attributes": {
                     "Build": match.group("build"),
                     "Boot PROM": match.group("boot"),

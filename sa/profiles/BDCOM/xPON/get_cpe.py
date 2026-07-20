@@ -302,12 +302,13 @@ class Script(BaseScript):
                 if ifindex in r and value != 0:
                     r[ifindex]["distance"] = value
             # NMS-EPON-MIB::onuExtModelID
-            try:
-                for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.101.10.1.1.85"):
-                    ifindex = int(oid.split(".")[-1])
-                    if ifindex in r and value != "":
-                        value = self.get_onu_model(r[ifindex]["vendor"], value)
-                        r[ifindex]["model"] = value
-            except:
-                pass
+            for oid, value in self.snmp.getnext("1.3.6.1.4.1.3320.101.10.1.1.85"):
+                ifindex = int(oid.split(".")[-1])
+                if (
+                    ifindex in r
+                    and r[ifindex].get("vendor") is not None 
+                    and value != ""
+                ):
+                    value = self.get_onu_model(r[ifindex]["vendor"], value)
+                    r[ifindex]["model"] = value
         return list(r.values())
