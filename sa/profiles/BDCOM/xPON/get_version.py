@@ -26,8 +26,8 @@ class Script(BaseScript):
         re.MULTILINE | re.DOTALL,
     )
 
-    #rx_hver = re.compile(r"^hardware version:(?:V|)(?P<hversion>\S+)", re.MULTILINE)
     # todo: add hardware ver for P3310C, P3608 (snmp output need)
+    # rx_hver = re.compile(r"^hardware version:(?:V|)(?P<hversion>\S+)", re.MULTILINE)
 
     def execute_snmp(self):
         v = self.snmp.get(mib["SNMPv2-MIB::sysDescr.0"], cached=True)
