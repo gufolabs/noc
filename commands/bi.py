@@ -246,7 +246,7 @@ class Command(BaseCommand):
                     f"All data before {e.name} from collection {stop - datetime.timedelta(seconds=ecls.clean_delay)} will be Remove..\n"
                 )
                 for i in reversed(range(1, 10)):
-                    self.print("%d\n" % i)
+                    self.print(f"{i}\n")
                     time.sleep(1)
             e.clean(force=force)
 
