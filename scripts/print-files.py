@@ -14,6 +14,7 @@ from typing import Iterable
 import sys
 
 HEADER_LEN = 72
+NO_NEWLINE_MARKER = r"\ No newline at end of file"
 
 
 def iter_files(paths: Iterable[str]) -> Iterable[Path]:
@@ -31,9 +32,15 @@ def main(*args: str) -> None:
         header = f"===[ File: {path} ]"
         if len(header) < HEADER_LEN:
             header += "=" * (HEADER_LEN - len(header))
+        content = path.read_text()
+        has_trailing_newline = content.endswith("\n")
         print(header)
-        print(path.read_text())
-        print()
+        print(content, end="")
+        if has_trailing_newline:
+            print()
+        else:
+            print()
+            print(NO_NEWLINE_MARKER)
 
 
 if __name__ == "__main__":
