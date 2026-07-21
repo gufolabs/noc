@@ -17,9 +17,7 @@ Each supported container platform **MUST** have a dedicated requirement document
 
 Container images and containerized deployments **MUST** run on all supported container platforms.
 
-Container-specific requirements **MUST NOT** change the
-functional behavior of NOC compared with non-containerized
-deployments.
+Container-specific requirements **MUST NOT** change the functional behavior of NOC compared with non-containerized deployments.
 
 ## Why?
 

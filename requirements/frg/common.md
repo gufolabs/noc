@@ -2,8 +2,7 @@
 
 ## Scope
 
-All requirement documents inside the `requirements/`
-directory.
+All requirement documents inside the `requirements/` directory.
 
 ## Requirements
 
@@ -38,6 +37,7 @@ Each requirement document **MUST** follow this structure:
 ## Front Matter
 
 Requirement files MUST start with YAML front matter.
+
 Example:
 ```
 ---
@@ -62,11 +62,9 @@ Scope defines the area where the requirement applies.
 
 ## Requirements Section
 
-A requirement document defining normative behavior
-**MUST** contain at least one normative statement.
+A requirement document defining normative behavior **MUST** contain at least one normative statement.
 
-A requirement document used only for grouping through
-requires **MAY** omit normative statements.
+A requirement document used only for grouping through requires **MAY** omit normative statements.
 
 Normative keywords **MUST** always be written in bold format.
 
@@ -77,7 +75,6 @@ The following normative keywords are used:
 - **SHOULD** — defines a recommended condition that is expected to be followed unless there is a justified reason not to.
 - **SHOULD NOT** — defines a discouraged condition that should be avoided unless there is a justified reason.
 - **MAY** — defines an optional condition that is permitted but not required.
-
 
 ## Why?
 

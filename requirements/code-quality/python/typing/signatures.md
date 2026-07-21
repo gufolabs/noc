@@ -14,5 +14,4 @@ All Python code
 
 ## Requirements
 
-All functions and class methods **MUST** have typing signatures
-for all input parameters, as well as an output type.
+All functions and class methods **MUST** have typing signatures for all input parameters, as well as an output type.

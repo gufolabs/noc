@@ -17,8 +17,7 @@ FRG configuration file `.frg.yml`.
 
 ## Requirements
 
-The FRG configuration file **MUST** satisfy the following
-requirements:
+The FRG configuration file **MUST** satisfy the following requirements:
 
 - Requirements directory **MUST** be `requirements/`.
 - Canonical language **MUST** be `en`.

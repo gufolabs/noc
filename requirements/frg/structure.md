@@ -3,8 +3,7 @@
 
 ## Scope
 
-Organization and decomposition of requirement documents
-inside the FRG graph.
+Organization and decomposition of requirement documents inside the FRG graph.
 
 ## Requirements
 

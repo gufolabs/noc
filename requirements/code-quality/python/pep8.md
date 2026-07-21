@@ -13,6 +13,4 @@ All Python code
 
 ## Requirements
 
-All Python code **MUST** follow style guide defined by [PEP8 specification][PEP8].
-
-[PEP8]: https://peps.python.org/pep-0008/
+All Python code **MUST** follow style guide defined by [PEP8 specification](https://peps.python.org/pep-0008/).
