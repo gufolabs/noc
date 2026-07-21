@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # BDCOM.xPON.get_version
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -26,9 +26,8 @@ class Script(BaseScript):
         re.MULTILINE | re.DOTALL,
     )
 
-    rx_hver = re.compile(r"^hardware version:(?:V|)(?P<hversion>\S+)", re.MULTILINE)
-
     # todo: add hardware ver for P3310C, P3608 (snmp output need)
+    # rx_hver = re.compile(r"^hardware version:(?:V|)(?P<hversion>\S+)", re.MULTILINE)
 
     def execute_snmp(self):
         v = self.snmp.get(mib["SNMPv2-MIB::sysDescr.0"], cached=True)
@@ -36,7 +35,7 @@ class Script(BaseScript):
         return {
             "vendor": "BDCOM",
             "platform": match.group("platform"),
-            "version": match.group("version"),
+            "version": f"{match.group('version')}, {match.group('build')}",
             "attributes": {
                 "Build": match.group("build"),
                 "Boot PROM": match.group("boot"),
@@ -51,7 +50,7 @@ class Script(BaseScript):
             return {
                 "vendor": "BDCOM",
                 "platform": match.group("platform"),
-                "version": match.group("version"),
+                "version": f"{match.group('version')}, {match.group('build')}",
                 "attributes": {
                     "Build": match.group("build"),
                     "Boot PROM": match.group("boot"),
