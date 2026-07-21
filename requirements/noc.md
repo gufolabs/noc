@@ -2,6 +2,8 @@
 requires:
 - frg/
 - open-source.md
+- regulations/
+- standards/
 - functional/
 - security/
 - non-functional/
