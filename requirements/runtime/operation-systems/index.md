@@ -1,3 +1,9 @@
+---
+requires:
+- debian-12
+- debian-13
+- ubuntu-24.04
+---
 # Supported Operating Systems
 
 ## Scope
