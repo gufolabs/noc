@@ -36,6 +36,30 @@ Dependencies **MUST** be compatible with the supported runtime requirements.
 
 The project **MUST NOT** introduce dependencies that cannot be supported within the defined runtime environment.
 
+## Execution Model
+
+NOC **MUST** support execution using any of the following deployment models:
+
+- bare metal with any supported operating system;
+- any supported virtualization platform with any supported guest operating system;
+- any supported container platform running on any supported operating system.
+
+For each deployment model, all supported combinations **MUST** be supported.
+
+The deployment models are independent alternatives and **MUST NOT** be interpreted as cumulative requirements.
+
+## Execution Model
+
+NOC **MUST** support execution using any of the following deployment models:
+
+- bare metal with any supported operating system;
+- any supported virtualization platform with any supported guest operating system;
+- any supported container platform running on any supported operating system.
+
+For each deployment model, all supported combinations **MUST** be supported.
+
+The deployment models are independent alternatives and **MUST NOT** be interpreted as cumulative requirements.
+
 ## Why?
 
 Runtime requirements establish a clear contract between the NOC project and its operational environment.
