@@ -1,6 +1,6 @@
 # Federated Requirements Graph (FRG) configuration
 requirements: requirements/
 entrypoints:
-  - frg
+  - noc
 language:
   canonical: en
