@@ -150,10 +150,6 @@ version = {attr = "noc.__version__"}
 [tool.setuptools.package-data]
 "noc" = ["py.typed", "**/*.j2"]
 
-[tool.black]
-line-length = 100 # Must be same as tool.ruff.line-length
-target-version = ['py310'] 
-
 [tool.coverage.run]
 omit = ['*tests*']
 
@@ -165,8 +161,8 @@ directory = "build/coverage"
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
-exclude = [".git", "build", "dist", "var", "share", "collections", "node_modules", "ansible"] 
-line-length = 100 # Must be same as tool.black.line-length
+exclude = [".git", "build", "dist", "var", "share", "collections", "node_modules", "ansible"]
+line-length = 100
 # Assume Python 3.12
 target-version = "py312"
 # Always autofix, but never try to fix `F401` (unused imports).
