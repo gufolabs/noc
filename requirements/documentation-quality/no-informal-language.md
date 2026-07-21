@@ -6,9 +6,9 @@ All documentation and comments.
 
 ## Requirement
 
-Informal expressions and conversational phrases MUST NOT be used.
+Informal expressions and conversational phrases **MUST NOT** be used.
 
-Documentation MUST use professional technical language.
+Documentation **MUST** use professional technical language.
 
 ## Why?
 

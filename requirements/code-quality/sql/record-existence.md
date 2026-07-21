@@ -15,7 +15,7 @@ WHERE <condition>
 LIMIT 1
 ```
 
-and *MUST NOT* use following approach:
+and **MUST NOT** use following approach:
 
 ```sql
 SELECT COUNT(*)

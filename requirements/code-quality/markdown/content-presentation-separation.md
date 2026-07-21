@@ -6,9 +6,9 @@ All Markdown files.
 
 ## Requirement
 
-Markdown syntax MUST represent document structure and meaning.
+Markdown syntax **MUST** represent document structure and meaning.
 
-Markdown syntax MUST NOT be used only for visual decoration.
+Markdown syntax **MUST NOT** be used only for visual decoration.
 
 ## Why?
 

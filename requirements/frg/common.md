@@ -36,7 +36,7 @@ Each requirement document **MUST** follow this structure:
 
 ## Front Matter
 
-Requirement files MUST start with YAML front matter.
+Requirement files **MUST** start with YAML front matter.
 
 Example:
 ```
@@ -48,7 +48,7 @@ checks:
 
 ## Title
 
-Each requirement document MUST start with a title.
+Each requirement document **MUST** start with a title.
 
 ```
 # Requirement Title
@@ -56,7 +56,7 @@ Each requirement document MUST start with a title.
 
 ## Scope Section
 
-Each requirement document MUST define its scope.
+Each requirement document **MUST** define its scope.
 
 Scope defines the area where the requirement applies.
 

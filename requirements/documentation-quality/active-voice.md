@@ -6,9 +6,9 @@ All documentation and comments.
 
 ## Requirement
 
-Active voice SHOULD be preferred when it improves clarity.
+Active voice **SHOULD** be preferred when it improves clarity.
 
-Passive voice MAY be used when the actor is unknown, irrelevant, or intentionally omitted.
+Passive voice **MAY** be used when the actor is unknown, irrelevant, or intentionally omitted.
 
 ## Why?
 

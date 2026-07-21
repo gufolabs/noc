@@ -6,9 +6,9 @@ All documentation and comments.
 
 ## Requirement
 
-The same concept MUST use the same terminology throughout the project.
+The same concept **MUST** use the same terminology throughout the project.
 
-Different terms MUST NOT be used for the same concept without an explicit distinction.
+Different terms **MUST NOT** be used for the same concept without an explicit distinction.
 
 ## Why?
 

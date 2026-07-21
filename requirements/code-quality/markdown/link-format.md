@@ -6,9 +6,9 @@ All Markdown files containing links.
 
 ## Requirement
 
-Markdown links MUST use inline link syntax.
+Markdown links **MUST** use inline link syntax.
 
-Reference-style links MUST NOT be used.
+Reference-style links **MUST NOT** be used.
 
 Example:
 

@@ -6,9 +6,9 @@ All Markdown files containing quoted content.
 
 ## Requirement
 
-Blockquotes MUST use the Markdown blockquote syntax.
+Blockquotes **MUST** use the Markdown blockquote syntax.
 
-Blockquotes MUST be used only for quotations or explicitly marked notes.
+Blockquotes **MUST** be used only for quotations or explicitly marked notes.
 
 Example:
 

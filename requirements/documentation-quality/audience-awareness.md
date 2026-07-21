@@ -6,9 +6,9 @@ All documentation and comments.
 
 ## Requirement
 
-Documentation MUST consider the intended audience.
+Documentation **MUST** consider the intended audience.
 
-The required level of technical detail MUST match the purpose of the document.
+The required level of technical detail **MUST** match the purpose of the document.
 
 ## Why?
 

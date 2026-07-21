@@ -6,9 +6,9 @@ All documentation and comments.
 
 ## Requirement
 
-Documentation MUST avoid unnecessary words and repetition.
+Documentation **MUST** avoid unnecessary words and repetition.
 
-Information MUST be presented using the shortest form that preserves the intended meaning.
+Information **MUST** be presented using the shortest form that preserves the intended meaning.
 
 ## Why?
 

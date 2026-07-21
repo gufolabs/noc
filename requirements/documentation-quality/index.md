@@ -24,11 +24,11 @@ All documentation and comments maintained as part of the NOC project.
 
 ## Requirements
 
-All documentation and comments MUST satisfy the documentation quality requirements.
+All documentation and comments **MUST** satisfy the documentation quality requirements.
 
-Common documentation quality requirements MUST apply to all supported languages.
+Common documentation quality requirements **MUST** apply to all supported languages.
 
-Language-specific requirements MAY define additional rules for a particular language.
+Language-specific requirements **MAY** define additional rules for a particular language.
 
 ## Why?
 

@@ -6,11 +6,11 @@ All documentation and comments.
 
 ## Requirement
 
-Documentation MUST use an objective technical perspective.
+Documentation **MUST** use an objective technical perspective.
 
-First-person references such as "I", "we", and "our" MUST NOT be used.
+First-person references such as "I", "we", and "our" **MUST NOT** be used.
 
-Second-person references SHOULD be avoided unless writing direct instructions.
+Second-person references **SHOULD** be avoided unless writing direct instructions.
 
 ## Why?
 

@@ -6,7 +6,7 @@ All documentation and comments containing abbreviations.
 
 ## Requirement
 
-Abbreviations MUST be defined at their first occurrence.
+Abbreviations **MUST** be defined at their first occurrence.
 
 Example:
 
@@ -14,7 +14,7 @@ Example:
 Network Operations Center (NOC)
 ```
 
-After definition, the abbreviation MAY be used.
+After definition, the abbreviation **MAY** be used.
 
 ## Why?
 

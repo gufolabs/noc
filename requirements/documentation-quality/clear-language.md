@@ -6,11 +6,11 @@ All documentation and comments.
 
 ## Requirement
 
-Documentation MUST be clear and understandable.
+Documentation **MUST** be clear and understandable.
 
-Each sentence SHOULD express a single main idea.
+Each sentence **SHOULD** express a single main idea.
 
-Complex constructions SHOULD be avoided when simpler alternatives are available.
+Complex constructions **SHOULD** be avoided when simpler alternatives are available.
 
 ## Why?
 

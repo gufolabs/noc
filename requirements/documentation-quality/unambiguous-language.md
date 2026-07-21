@@ -6,9 +6,9 @@ All documentation and comments.
 
 ## Requirement
 
-Documentation MUST avoid ambiguous statements.
+Documentation **MUST** avoid ambiguous statements.
 
-Each statement MUST have a single intended interpretation.
+Each statement **MUST** have a single intended interpretation.
 
 ## Why?
 

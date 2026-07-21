@@ -6,9 +6,9 @@ All Markdown files.
 
 ## Requirement
 
-Manual line breaks MUST NOT be used for paragraph formatting.
+Manual line breaks **MUST NOT** be used for paragraph formatting.
 
-The `<br>` tag MUST NOT be used except inside table cells where an explicit line break is required.
+The `<br>` tag **MUST NOT** be used except inside table cells where an explicit line break is required.
 
 ## Why?
 

@@ -6,9 +6,9 @@ All documentation and comments.
 
 ## Requirement
 
-References to entities MUST be explicit and unambiguous.
+References to entities **MUST** be explicit and unambiguous.
 
-Pronouns and generic references MUST NOT be used when they may cause confusion.
+Pronouns and generic references **MUST NOT** be used when they may cause confusion.
 
 ## Why?
 

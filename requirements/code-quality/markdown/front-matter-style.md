@@ -6,11 +6,11 @@ All Markdown files using metadata.
 
 ## Requirement
 
-Front matter MUST use YAML format.
+Front matter **MUST** use YAML format.
 
-Front matter MUST be located at the beginning of the file.
+Front matter **MUST** be located at the beginning of the file.
 
-A Markdown file MUST contain no more than one front matter block.
+A Markdown file **MUST** contain no more than one front matter block.
 
 ## Why?
 

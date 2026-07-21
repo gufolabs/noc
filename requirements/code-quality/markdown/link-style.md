@@ -6,9 +6,9 @@ All Markdown files containing links.
 
 ## Requirement
 
-Link text MUST describe the target content.
+Link text **MUST** describe the target content.
 
-Generic link descriptions such as "click here" MUST NOT be used.
+Generic link descriptions such as "click here" **MUST NOT** be used.
 
 ## Why?
 

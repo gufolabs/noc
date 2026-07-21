@@ -12,11 +12,11 @@ The `*` and `+` markers **MUST NOT** be used for unordered lists.
 
 Ordered lists **MUST** use numeric markers.
 
-All elements within the same list MUST use consistent punctuation.
+All elements within the same list **MUST** use consistent punctuation.
 
-List elements written as complete sentences MUST end with a period.
+List elements written as complete sentences **MUST** end with a period.
 
-List elements written as fragments MUST NOT end with punctuation.
+List elements written as fragments **MUST NOT** end with punctuation.
 
 ## Why?
 

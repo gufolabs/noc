@@ -6,7 +6,7 @@ All documentation and comments.
 
 ## Requirement
 
-Documentation MUST use terminology consistent with other project artifacts.
+Documentation **MUST** use terminology consistent with other project artifacts.
 
 This includes source code, APIs, user interfaces, and requirements.
 
