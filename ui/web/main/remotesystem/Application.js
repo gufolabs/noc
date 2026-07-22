@@ -37,6 +37,7 @@ Ext.define("NOC.main.remotesystem.Application", {
         {
           name: "name",
           xtype: "textfield",
+          fieldLabel: __("Name"),
           allowBlank: false,
           uiStyle: "medium",
         },
