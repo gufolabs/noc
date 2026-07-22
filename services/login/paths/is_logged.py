@@ -12,7 +12,6 @@ from fastapi import APIRouter, Cookie
 from fastapi.responses import JSONResponse
 import jwt
 from jwt import InvalidTokenError
-import orjson
 
 # NOC modules
 from noc.config import config
