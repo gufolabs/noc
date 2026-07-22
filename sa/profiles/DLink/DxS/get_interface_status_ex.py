@@ -23,7 +23,7 @@ class Script(BaseScript):
         :return:
         """
         # Avoiding crashes on service interfaces
-        if data.get("oper_status") is None:
+        if "oper_status" not in data:
             return False
         # Some devices reporting 1410065408 instead 4294967295
         return speed in [1410065408, 4294967295] and data["oper_status"]
