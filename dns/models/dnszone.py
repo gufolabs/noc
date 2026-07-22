@@ -295,7 +295,6 @@ class DNSZone(NOCModel):
         at the end.
 
         :return: List of zone master NSes
-                :return:
         """
         return sorted(self.get_ns_name(ns) for ns in self.profile.masters.all())
 
@@ -306,7 +305,6 @@ class DNSZone(NOCModel):
         at the end.
 
         :return: List of zone slave NSes
-                :return:
         """
         return sorted(self.get_ns_name(ns) for ns in self.profile.slaves.all())
 

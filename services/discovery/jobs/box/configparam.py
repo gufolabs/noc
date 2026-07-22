@@ -29,7 +29,6 @@ class ConfigParamCheck(DiscoveryCheck):
             self.submit_param_data(o, data)
 
     def submit_param_data(self, o: "Object", data):
-        """ """
         ed: dict[ParamData, Any] = {}
         for pd in o.get_effective_cfg_params():
             ed[pd] = pd.value

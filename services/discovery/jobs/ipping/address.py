@@ -30,8 +30,6 @@ JCLS_IPPING_PREFIX = "noc.services.discovery.jobs.ipping.job.IPPingDiscoveryJob"
 
 
 class AddressCheck(BaseAddressCheck):
-    """ """
-
     do_detaching = False
 
     def get_addresses(self):

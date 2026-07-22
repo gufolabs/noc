@@ -1035,7 +1035,6 @@ class AssetCheck(DiscoveryCheck):
         return lf
 
     def get_generic_models(self) -> list[str]:
-        """ """
         return [
             om.id
             for om in ObjectModel.objects.filter(

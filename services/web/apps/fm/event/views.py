@@ -136,7 +136,6 @@ class EventApplication(ExtApplication):
         offset: int | None = None,
         limit: int | None = None,
     ):
-        """ """
         sql = [
             f"SELECT  e.event_id as id, e.ts as timestamp, nullIf(e.event_class, 0) as event_class_bi_id,"
             f" nullIf(e.managed_object, 0) as managed_object_bi_id, e.target as target, e.target_name as target_name,"

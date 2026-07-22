@@ -401,7 +401,6 @@ class JsonDSAPI:
         user,
         payload: dict[str, str] | None = None,
     ) -> list[dict[str, str]]:
-        """ """
         return []
 
     async def api_metric_payload_options(

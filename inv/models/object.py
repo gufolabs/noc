@@ -1548,7 +1548,6 @@ class Object(Document):
                 seen.add(item.output)
 
     def set_internal_connection(self, input: str, output: str, data: dict[str, str] = None):
-        """ """
         input = self.model.get_model_connection(input)
         if not input:
             raise ValueError(f"Not found connection: {input}")

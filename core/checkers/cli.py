@@ -62,7 +62,6 @@ class CLIProtocolChecker(BaseChecker):
             yield self.PROTO_CHECK_MAP[check.name], check.credential
 
     async def iter_result(self, checks: list[Check]) -> AsyncIterable[CheckResult]:
-        """ """
         # Group by address
         for c in checks:
             if c.name not in self.CHECKS:

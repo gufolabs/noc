@@ -49,7 +49,6 @@ class ReportEventSummary(ReportSource):
         }
 
     def get_data(self, request=None, **kwargs) -> list[Band]:
-        """ """
         report_type = kwargs.get("report_type") or []
         if "class" in report_type:
             obj_field = "dictGetString('noc_dict.eventclass','name', event_class)"

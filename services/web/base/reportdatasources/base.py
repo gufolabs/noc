@@ -75,7 +75,6 @@ class BaseReportColumn:
     # {"Series1_name": dataseries1, "Series2_name": dataseries2}
 
     def __init__(self, sync_ids=None) -> None:
-        """ """
         self.sync_ids = sync_ids  # Sorted Index list
         self.sync_ids_i = iter(self.sync_ids)
         self._current_id = self.next_id()

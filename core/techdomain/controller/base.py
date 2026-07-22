@@ -26,8 +26,6 @@ from noc.core.constraint.wave import LambdaConstraint
 
 @dataclass
 class Endpoint:
-    """ """
-
     object: Object
     name: str
     channel: Channel | None = None

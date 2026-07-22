@@ -397,8 +397,6 @@ class LabelParameter(Parameter):
 
 
 class LabelListParameter(ListOfParameter):
-    """ """
-
     def __init__(
         self,
         required=True,

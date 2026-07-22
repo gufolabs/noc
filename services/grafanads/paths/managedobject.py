@@ -43,7 +43,6 @@ class ManagedObjectJsonDS(JsonDSAPI):
         user,
         payload: dict[str, str] | None = None,
     ) -> list[dict[str, str]]:
-        """ """
         if name == "metric":
             return super().get_metrics()
         if name == "managed_object":

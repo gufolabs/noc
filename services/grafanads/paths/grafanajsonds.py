@@ -157,7 +157,6 @@ class GrafanaJsonDS(JsonDSAPI):
         user,
         payload: dict[str, str] | None = None,
     ) -> list[dict[str, str]]:
-        """ """
         r = []
         if name == "metric":
             for mt in MetricType.objects.filter(scope=metric):
