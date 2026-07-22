@@ -1,0 +1,27 @@
+{
+    "name": "BDCOM | xPON | Unknown | Ignore CTC OAM message (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "a7e5828b-f5e9-4ae4-80e7-cea458b5ee8e",
+    "description": "Ignore CTC OAM message",
+    "event_class__name": "Unknown | Ignore",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "Interface \\S+ (?:OAM Operational Status: \\S+|CTC OAM extension negotiated successfully!)",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "Interface EPON0/3:8's OAM Operational Status: Operational",
+            "raw_vars": []
+        },
+        {
+            "message": "Interface EPON0/3:25's OAM Operational Status: Linkfault",
+            "raw_vars": []
+        },
+        {
+            "message": "Interface EPON0/3:25's CTC OAM extension negotiated successfully!",
+            "raw_vars": []
+        }
+    ]
+}

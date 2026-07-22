@@ -1,0 +1,25 @@
+{
+    "name": "Network | xPON | ONU | Config Failed",
+    "$collection": "fm.alarmclasses",
+    "uuid": "53f8d105-cb43-4894-acfd-2d939d08d6a4",
+    "is_unique": true,
+    "reference": ["onu"],
+    "is_ephemeral": false,
+    "user_clearable": true,
+    "vars": [
+        {
+            "name": "interface",
+            "description": "xPON interface"
+        },
+        {
+            "name": "onu",
+            "description": "ONU MAC/Serial"
+        }
+    ],
+    "subject_template": "ONU {{onu}} config failed{% if interface %} on {{interface}}{% endif %}",
+    "body_template": "ONU {{onu}} config failed{% if interface %} on {{interface}}{% endif %}",
+    "symptoms": "Subscriber connection loss",
+    "probable_causes": "",
+    "recommended_actions": "",
+    "labels": ["noc::severity::info"]
+}

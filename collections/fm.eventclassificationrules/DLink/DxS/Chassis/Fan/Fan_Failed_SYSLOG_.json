@@ -7,11 +7,17 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "(Unit \\d+, )?(?P<name>\\S+\\s+Fan\\s*\\d*) failed$",
+    "message_rx": "\\S+ (Unit \\d+, )?(?P<name>\\.+\\s+Fan\\s*\\d*) failed$",
     "profiles": ["DLink.DxS"],
     "sources": ["syslog"],
-    "test_cases": [{
-        "message": "WARN: Unit 1, Back Fan failed",
-        "raw_vars": []
-    }]
+    "test_cases": [
+        {
+            "message": "WARN: Unit 1, Back Fan failed",
+            "raw_vars": []
+        },
+        {
+            "message": "CRIT(2) Right Side Fan 1 failed",
+            "raw_vars": []
+        }
+    ]
 }

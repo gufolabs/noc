@@ -1,5 +1,5 @@
 {
-    "name": "Network | xPON | ONU | Power Failed (Network | xPON | ONU | Power Failed,clear)",
+    "name": "Network | xPON | ONU | Discovered (Network | xPON | ONU | Power Failed,clear)",
     "$collection": "fm.dispositionrules",
     "uuid": "60fd2bb0-8356-4912-96f0-b2bce922ae50",
     "description": null,

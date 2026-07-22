@@ -97,6 +97,56 @@
             }
         },
         {
+            "name": "UDLD Protocol Error Detected",
+            "root__name": "Network | UDLD | UDLD Protocol Error Detected",
+            "window": 10,
+            "condition": "True",
+            "match_condition": {
+                "vars__interface": "alarm.vars['interface']",
+                "managed_object": "alarm.managed_object.id"
+            }
+        },
+        {
+            "name": "Storm Detected",
+            "root__name": "Network | Storm Control | Storm Detected",
+            "window": 10,
+            "condition": "True",
+            "match_condition": {
+                "vars__interface": "alarm.vars['interface']",
+                "managed_object": "alarm.managed_object.id"
+            }
+        },
+        {
+            "name": "Broadcast Storm Detected",
+            "root__name": "Network | Storm Control | Broadcast Storm Detected",
+            "window": 10,
+            "condition": "True",
+            "match_condition": {
+                "vars__interface": "alarm.vars['interface']",
+                "managed_object": "alarm.managed_object.id"
+            }
+        },
+        {
+            "name": "Multicast Storm Detected",
+            "root__name": "Network | Storm Control | Multicast Storm Detected",
+            "window": 10,
+            "condition": "True",
+            "match_condition": {
+                "vars__interface": "alarm.vars['interface']",
+                "managed_object": "alarm.managed_object.id"
+            }
+        },
+        {
+            "name": "Unicast Storm Detected",
+            "root__name": "Network | Storm Control | Unicast Storm Detected",
+            "window": 10,
+            "condition": "True",
+            "match_condition": {
+                "vars__interface": "alarm.vars['interface']",
+                "managed_object": "alarm.managed_object.id"
+            }
+        },
+        {
             "name": "err-disable",
             "root__name": "Network | Link | Err-Disable",
             "window": 10,
