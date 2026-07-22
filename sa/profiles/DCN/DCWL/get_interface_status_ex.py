@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # DCN.DCWL.get_interface_status_ex
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -11,7 +11,6 @@ import codecs
 # NOC modules
 from noc.core.script.base import BaseScript
 from noc.sa.interfaces.igetinterfacestatusex import IGetInterfaceStatusEx
-from noc.core.comp import smart_text
 
 
 class Script(BaseScript):
@@ -75,7 +74,7 @@ class Script(BaseScript):
                 ssid = value["ssid"].replace(" ", "").replace("Managed", "")
                 if ssid.startswith("2a2d"):
                     # 2a2d - hex string
-                    ssid = smart_text(codecs.decode(ssid, "hex"))
+                    ssid = codecs.decode(ssid, "hex").decode()
                 bss = self.get_bss_status(value["bss"])
                 if not bss:
                     continue

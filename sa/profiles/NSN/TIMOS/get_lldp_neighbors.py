@@ -71,7 +71,7 @@ class Script(BaseScript):
             #                       "XGigabitEthernet0/0/48"
             remote_port_name1, remote_port__name2 = port.rsplit("\n", 1)
             remote_port_name1 = re.sub(r"\n|\s+", "", remote_port_name1)
-            return smart_text(codecs.decode(remote_port_name1.strip().replace(":", ""), "hex"))
+            return codecs.decode(remote_port_name1.strip().replace(":", ""), "hex").decode()
         if port_type == "7":
             return port.replace("\n", "")
         return port
