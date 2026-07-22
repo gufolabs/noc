@@ -207,7 +207,6 @@ class ServiceInstance(Document):
         cfg: ServiceInstanceConfig,
         settings: ServiceInstanceTypeConfig | None = None,
     ) -> "ServiceInstance":
-        """ """
         settings = settings or ServiceInstanceTypeConfig()
         qs = cfg.get_queryset(service, settings)
         instance = ServiceInstance.objects.filter(qs).first()

@@ -116,7 +116,6 @@ class SNMPProtocolChecker(BaseChecker):
         return processed
 
     async def iter_result(self, checks: list[Check]) -> AsyncIterable[CheckResult]:
-        """ """
         processed = self.get_checks_by_address(checks)
         self.logger.debug("Processed SNMP checks: %s", processed)
         # Process checks

@@ -105,7 +105,6 @@ class Command(BaseCommand):
         return User(name=str(user), auth_key=auth, priv_key=priv)
 
     def handle_get(self, address, community, timeout, oids, username, *args, **options):
-        """ """
 
         async def main():
             async with SnmpSession(
@@ -126,7 +125,6 @@ class Command(BaseCommand):
             self.die("Authentication failed")
 
     def handle_getnext(self, address, community, timeout, oid, username, *args, **options):
-        """ """
 
         async def main():
             r = []
@@ -150,7 +148,6 @@ class Command(BaseCommand):
             self.die("Authentication failed")
 
     def handle_getbulk(self, address, community, timeout, oid, username, *args, **options):
-        """ """
 
         async def main():
             r = []

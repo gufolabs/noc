@@ -248,8 +248,6 @@ class ZabbixExtractor(BaseExtractor):
 
 @ZabbixRemoteSystem.extractor
 class ZBAuthProfileExtractor(BaseExtractor):
-    """ """
-
     name = "authprofile"
     model = AuthProfile
     data = [

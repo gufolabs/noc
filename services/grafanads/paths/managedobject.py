@@ -43,7 +43,6 @@ class ManagedObjectJsonDS(JsonDSAPI):
         user,
         payload: dict[str, str] | None = None,
     ) -> list[dict[str, str]]:
-        """ """
         if name == "metric":
             return super().get_metrics()
         if name == "managed_object":
@@ -67,10 +66,6 @@ class ManagedObjectJsonDS(JsonDSAPI):
     ) -> Any | None:
         """
         Resolve object in Query by Value
-        :param model_id:
-        :param value:
-        :param query_function:
-        :param user:
         :return:
         """
         model = get_model(model_id)

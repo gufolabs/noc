@@ -157,7 +157,6 @@ class GrafanaJsonDS(JsonDSAPI):
         user,
         payload: dict[str, str] | None = None,
     ) -> list[dict[str, str]]:
-        """ """
         r = []
         if name == "metric":
             for mt in MetricType.objects.filter(scope=metric):
@@ -196,10 +195,6 @@ class GrafanaJsonDS(JsonDSAPI):
     ) -> Any | None:
         """
         Resolve object in Query by Value
-        :param model_id:
-        :param value:
-        :param query_function:
-        :param user:
         :return:
         """
         model = get_model(model_id)

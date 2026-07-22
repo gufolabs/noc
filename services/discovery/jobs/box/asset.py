@@ -1035,7 +1035,6 @@ class AssetCheck(DiscoveryCheck):
         return lf
 
     def get_generic_models(self) -> list[str]:
-        """ """
         return [
             om.id
             for om in ObjectModel.objects.filter(
@@ -1190,7 +1189,6 @@ class AssetCheck(DiscoveryCheck):
     def get_serial_mask(self, mask):
         """
         Compile serial mask and cache value
-        :param mask:
         :return:
         """
         return re.compile(mask)
