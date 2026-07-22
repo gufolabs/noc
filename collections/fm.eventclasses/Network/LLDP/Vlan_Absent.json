@@ -1,0 +1,41 @@
+{
+    "name": "Network | LLDP | Vlan Absent",
+    "$collection": "fm.eventclasses",
+    "uuid": "28bea629-8abc-4048-8dcf-2e327e1593ca",
+    "description": "LLDP Vlan is missing",
+    "action": "L",
+    "vars": [
+        {
+            "name": "interface",
+            "description": "Affected interface",
+            "type": "interface_name",
+            "required": true
+        },
+        {
+            "name": "vlan",
+            "description": "VLAN ID",
+            "type": "int",
+            "required": true
+        },
+        {
+            "name": "neighbor",
+            "description": "Remote System Name",
+            "type": "str",
+            "required": false
+        },
+        {
+            "name": "neighbor_port",
+            "description": "Remote Port",
+            "type": "str",
+            "required": false
+        }
+    ],
+    "deduplication_window": 3,
+    "suppression_window": 120,
+    "ttl": 86400,
+    "subject_template": "LLDP: Vlan {{vlan}} is missing on {{interface}}.",
+    "body_template": "LLDP: Vlan {{vlan}} is missing on {{interface}}.{% if neighbor %}\nRemote system name: {{neighbor}}.{% endif %}{% if neighbor_port %}\nRemote port: {{neighbor_port}}.{% endif %}",
+    "symptoms": "",
+    "probable_causes": " ",
+    "recommended_actions": "check configuration ports"
+}

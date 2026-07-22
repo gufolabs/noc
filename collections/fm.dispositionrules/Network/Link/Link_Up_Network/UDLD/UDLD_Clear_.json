@@ -1,0 +1,13 @@
+{
+    "name": "Network | Link | Link Up (Network | UDLD | UDLD Protocol Error Detected,clear)",
+    "$collection": "fm.dispositionrules",
+    "uuid": "3a64bdea-164d-40b9-8716-86a949447a5a",
+    "description": null,
+    "preference": 1000,
+    "alarm_disposition__name": "Network | UDLD | UDLD Protocol Error Detected",
+    "conditions": [{
+        "event_class_re": "Network | Link | Link Up"
+    }],
+    "default_action": "C",
+    "stop_processing": false
+}

@@ -1,0 +1,13 @@
+{
+    "name": "Network | Link | Link Up (Network | Link | DOM | Alarm: Out of Threshold,clear)",
+    "$collection": "fm.dispositionrules",
+    "uuid": "8708518b-158d-4f97-b6bd-1e2cc7be9fdf",
+    "description": null,
+    "preference": 1000,
+    "alarm_disposition__name": "Network | Link | DOM | Alarm: Out of Threshold",
+    "conditions": [{
+        "event_class_re": "Network | Link | Link Up"
+    }],
+    "default_action": "C",
+    "stop_processing": false
+}
