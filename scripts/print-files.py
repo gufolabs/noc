@@ -14,7 +14,7 @@ from typing import Iterable
 import sys
 
 HEADER_LEN = 72
-NO_NEWLINE_MARKER = r"\ No newline at end of file"
+NO_NEWLINE_MARKER = r"\ No newline at end of file"  # backslash is to match git output
 
 
 def iter_files(paths: Iterable[str]) -> Iterable[Path]:
@@ -36,10 +36,8 @@ def main(*args: str) -> None:
         has_trailing_newline = content.endswith("\n")
         print(header)
         print(content, end="")
-        if has_trailing_newline:
-            print()
-        else:
-            print()
+        print()
+        if not has_trailing_newline:
             print(NO_NEWLINE_MARKER)
 
 
