@@ -1,12 +1,11 @@
 # ---------------------------------------------------------------------
 # EventClass model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
-import re
 from pathlib import Path
 from threading import Lock
 from typing import Optional
@@ -455,16 +454,3 @@ class EventClass(Document):
                 }
             )
         return r
-
-
-rx_rule_name_quote = re.compile("[^a-zA-Z0-9]+")
-
-
-def rulename_quote(s):
-    """
-    Convert arbitrary string to pyrule name
-
-    >>> rulename_quote("Unknown | Default")
-    'Unknown_Default'
-    """
-    return rx_rule_name_quote.sub("_", s)
