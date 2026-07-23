@@ -39,7 +39,7 @@ class Command(BaseCommand):
             msg = f"Not a valid date: '{s}'."
             raise argparse.ArgumentTypeError(msg)
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # show-metadata
         subparsers.add_parser("show-metadata")

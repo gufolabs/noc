@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # cleaning label commands
 # ----------------------------------------------------------------------
-# Copyright (C) 2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Python modules
+import argparse
 
 # Third-party modules
 from django.db import connection
@@ -27,7 +30,7 @@ models = [
 class Command(BaseCommand):
     help = "Cleaning label"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         (
             parser.add_argument(
                 "label",

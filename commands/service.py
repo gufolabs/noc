@@ -15,7 +15,7 @@ from noc.core.text import format_table
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("services", nargs=argparse.REMAINDER, help="Service names")
 
     def handle(self, services=None, *args, **options):

@@ -111,7 +111,7 @@ class Command(BaseCommand):
     DEFAULT_TARGET = Target.default()
     UNKNOWN_SYSLOG = "Unknown | Syslog"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # import
         import_parser = subparsers.add_parser("import", help="Parse and import text files")

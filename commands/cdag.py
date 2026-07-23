@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import argparse
 import os
 import datetime
 from collections import defaultdict
@@ -34,7 +35,7 @@ NS = 1_000_000_000
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # Args
         parser.add_argument("--config", help="Graph config path", action="append", required=True)

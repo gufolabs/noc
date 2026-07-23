@@ -39,7 +39,7 @@ class Command(BaseCommand):
 
     EXPIRE_MODELS = ["vc.VLAN", "ip.Address"]
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # extract command
         migrate_parser = subparsers.add_parser("migrate")

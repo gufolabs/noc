@@ -26,7 +26,7 @@ class Command(BaseCommand):
 
     models = {"managed_object": "sa.ManagedObject", "user": "aaa.User"}
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("model", nargs=1, help="List of extractor names")
         parser.add_argument("--state", help="Filter by state (if model supported")
         parser.add_argument(

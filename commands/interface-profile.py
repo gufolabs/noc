@@ -21,7 +21,7 @@ from noc.core.text import alnum_key
 class Command(BaseCommand):
     help = "Apply interface classification"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # extract command
         show_parser = subparsers.add_parser("show", help="Show interface profiles")

@@ -38,7 +38,7 @@ class Command(BaseCommand):
     DEFAULT_COMMUNITY = "public"
     VERSION_MAP = {"v1": SNMP_v1, "v2c": SNMP_v2c, "v3": SNMP_v3}
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         get = subparsers.add_parser("get")
         get.add_argument("--community", help="SNMP community")

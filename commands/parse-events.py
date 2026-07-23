@@ -29,7 +29,7 @@ from noc.sa.models.profile import Profile
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("paths", nargs="+", help="List of input file paths")
         parser.add_argument("--profile", default="Generic.Host", help="Object profile")
         parser.add_argument("--format", default="syslog", help="Input format")

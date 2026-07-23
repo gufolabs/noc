@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 #  Pretty command
 # ----------------------------------------------------------------------
-#  Copyright (C) 2007-2019 The NOC Project
+#  Copyright (C) 2007-2026 The NOC Project
 #  See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -9,6 +9,7 @@
 import json
 import sys
 import pprint
+import argparse
 
 # Third-party modules
 import yaml
@@ -18,7 +19,7 @@ from noc.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "--yaml", action="store_const", dest="format", const="yaml", help="YAML output"
         )

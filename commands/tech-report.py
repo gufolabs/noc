@@ -1,17 +1,18 @@
 # ---------------------------------------------------------------------
 # Display system and dependencies information
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
-# Using:
-# ./noc tech-report system
-# ./noc tech-report dependencies
-# ./noc tech-report
-# ./noc tech-report --ansi-symbols system
-# and so on
+"""
+./noc tech-report system
+./noc tech-report dependencies
+./noc tech-report
+./noc tech-report --ansi-symbols system
+"""
 
 # Python modules
+import argparse
 from importlib import metadata
 import os
 from pathlib import Path
@@ -95,7 +96,7 @@ class Command(BaseCommand):
     help = "Display system and dependencies information"
     is_ansi = False
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd")
         parser.add_argument(
             "-a", "--ansi-symbols", action="store_true", help="Use ANSI instead of Unicode symbols"

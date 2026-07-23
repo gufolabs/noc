@@ -23,7 +23,7 @@ from noc.core.mongo.connection import connect
 class Command(BaseCommand):
     help = "Export model to CSV"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         (
             parser.add_argument(
                 "-t",

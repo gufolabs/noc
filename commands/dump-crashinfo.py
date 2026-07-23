@@ -17,7 +17,7 @@ from noc.core.management.base import BaseCommand
 class Command(BaseCommand):
     help = "Dump crashinfo file"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("args", nargs=argparse.REMAINDER, help="List traceback files")
 
     def handle(self, *args, **options):

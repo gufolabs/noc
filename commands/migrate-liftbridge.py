@@ -1,13 +1,14 @@
 # ----------------------------------------------------------------------
 # Liftbridge streams synchronization tool
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 from functools import partial
 from typing import Iterable
+import argparse
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -23,7 +24,7 @@ from noc.main.models.pool import Pool
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "--slots",
             dest="slots",

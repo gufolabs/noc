@@ -42,7 +42,7 @@ class Command(BaseCommand):
     EXTRACT_WINDOW = config.bi.extract_window
     MIN_WINDOW = datetime.timedelta(seconds=2)
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # Args
         parser.add_argument(

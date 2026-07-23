@@ -24,7 +24,7 @@ from noc.core.mongo.connection import connect
 class Command(BaseCommand):
     help = "Import data from csv file"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         (parser.add_argument("-r", "--resolve", dest="resolve", action="store", default="fail"),)
         (parser.add_argument("-d", "--delimiter", dest="delimiter", action="store", default=","),)
         parser.add_argument("args", nargs=argparse.REMAINDER, help="List of extractor names")

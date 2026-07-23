@@ -16,7 +16,7 @@ from noc.core.service.error import RPCError
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "--pretty",
             action="store_true",

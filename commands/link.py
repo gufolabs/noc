@@ -28,7 +28,7 @@ ALARM_CLASSES_NAME = [
 class Command(BaseCommand):
     help = "Show Links"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # show command
         show_parser = subparsers.add_parser("show", help="Show link")

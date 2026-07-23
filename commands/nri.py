@@ -20,7 +20,7 @@ from noc.core.text import alnum_key, format_table
 class Command(BaseCommand):
     PORT_ERROR = "ERROR!"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # portmap command
         portmap_parser = subparsers.add_parser("portmap")

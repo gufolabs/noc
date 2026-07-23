@@ -26,7 +26,7 @@ class Command(BaseCommand):
     def printbox_border(self):
         self.print("=" * (self.PB_LENGTH + 4))
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # find-serial command
         find_serial_parser = subparsers.add_parser("find-serial")

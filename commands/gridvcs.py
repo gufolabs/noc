@@ -43,7 +43,7 @@ class Command(BaseCommand):
         "object_comment",
     }
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         parser.add_argument(
             "--repo",

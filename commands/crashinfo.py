@@ -27,7 +27,7 @@ class Command(BaseCommand):
 
     rx_xtype = re.compile(r"^<(?:type|class) '(?P<xtype>[^']+)'>\s+")
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # list command
         subparsers.add_parser("list")

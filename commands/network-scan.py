@@ -51,7 +51,7 @@ class Command(BaseCommand):
     CHECK_VERSION = {SNMP_v1: "snmp_v2c_get", SNMP_v2c: "snmp_v1_get"}
     SNMP_VERSION = {0: "SNMP_v1", 1: "SNMP_v2c"}
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("--in", action="append", dest="inputs", help="File with addresses")
         parser.add_argument(
             "--import", action="append", dest="imports", help="File to import into NOC"

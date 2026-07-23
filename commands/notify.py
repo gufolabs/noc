@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # Notification utility
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2017 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Python modules
+import argparse
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -12,7 +15,7 @@ from noc.main.models.notificationgroup import NotificationGroup
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("--dry-run", action="store_true", help="Dry Run (Do not send message)")
         parser.add_argument(
             "--notification-group",

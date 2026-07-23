@@ -30,7 +30,7 @@ class Command(BaseCommand):
 
     help = "Create application skeleton"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         (parser.add_argument("--model", "-m", dest="model", help="List configs"),)
         (
             parser.add_argument(
