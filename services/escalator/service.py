@@ -2,7 +2,7 @@
 # ---------------------------------------------------------------------
 # Escalator
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ class EscalatorService(FastAPIService):
     async def on_activate(self) -> None:
         self.apply_shards()
 
-    async def on_deactivate(self):
+    async def on_deactivate(self) -> None:
         for s in self.shards:
             self.logger.info("Shutting down shard %s", s)
             try:
@@ -40,7 +40,7 @@ class EscalatorService(FastAPIService):
             except asyncio.TimeoutError:
                 self.logger.info("Cannot shutdown shard %s cleanly: Timeout", s)
 
-    def apply_shards(self):
+    def apply_shards(self) -> None:
         # Get shards settings
         shard_threads: defaultdict[str, int] = defaultdict(int)
         shard_threads[DEFAULT_TTSYSTEM_SHARD] = config.escalator.max_threads
