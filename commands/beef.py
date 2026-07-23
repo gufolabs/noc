@@ -32,7 +32,7 @@ class Command(BaseCommand):
     DEFAULT_BEEF_IMPORT_PATH_TEMPLATE = "imports/{0.box.profile}/{0.uuid}.beef.json.bz2"
     DEFAULT_TEST_CASE_TEMPLATE = "ad-hoc/{0.profile.name}/{0.uuid}/"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # collect command
         collect_parser = subparsers.add_parser("collect")

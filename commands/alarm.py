@@ -92,7 +92,7 @@ class AlarmConfig(BaseModel):
 class Command(BaseCommand):
     help = "Manage alarms"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         test_rule = subparsers.add_parser("test-rule", help="Test Alarm Rule")
         test_rule.add_argument("--rule", help="Alarm Rule", required=False)

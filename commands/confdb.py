@@ -20,7 +20,7 @@ from noc.core.text import format_table
 class Command(BaseCommand):
     PREFIX = config.path.cp_new
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # syntax command
         syntax_parser = subparsers.add_parser("syntax")

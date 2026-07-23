@@ -39,7 +39,7 @@ class Command(BaseCommand):
     GROUP BY mac
     """
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         split_floating_parser = subparsers.add_parser("split-floating")
         split_floating_parser.add_argument("--profile", help="Floating segment profile id")

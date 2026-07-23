@@ -37,7 +37,7 @@ class Command(BaseCommand):
 
     svc = open_sync_rpc("mib")
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("--local", action="store_true", help="Not use mib service for import")
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # get

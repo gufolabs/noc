@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # Full-Text search manipulation
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2015 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Python modules
+import argparse
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -13,7 +16,7 @@ from noc.models import FTS_MODELS, get_model
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", help="sub-commands help", required=True)
         # Search parameters
         search_parser = subparsers.add_parser("search", help="Full-text search")

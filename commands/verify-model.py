@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # Link management CLI interface
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Python modules
+import argparse
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -15,7 +18,7 @@ from noc.inv.models.protocol import ProtocolVariant
 class Command(BaseCommand):
     help = "Verify models"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "-r",
             "--rebuild",

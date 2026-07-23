@@ -18,7 +18,7 @@ from noc.config import config
 class Command(BaseCommand):
     FIX_DIRS = config.get_customized_paths("fixes")
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         subparsers.add_parser("list")
         apply_parser = subparsers.add_parser("apply")

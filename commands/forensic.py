@@ -1,11 +1,12 @@
 # ----------------------------------------------------------------------
 # forensic
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
+import argparse
 import sys
 import re
 from collections import namedtuple
@@ -32,7 +33,7 @@ class Command(BaseCommand):
 
     REFRESH_INTERVAL = 1
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", help="sub-commands help", required=True)
         # sync
         incomplete_parser = subparsers.add_parser("incomplete", help="Show incomplete operations")

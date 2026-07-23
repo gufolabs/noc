@@ -21,7 +21,7 @@ from noc.inv.models.resourcegroup import ResourceGroup
 class Command(BaseCommand):
     DEFAULT_LIMIT = 20
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         cli_parser = subparsers.add_parser("cli")
         cli_parser.add_argument("--limit", default=self.DEFAULT_LIMIT, help="Concurrency limit")

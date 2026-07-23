@@ -31,7 +31,7 @@ rx_hexseq = re.compile(r"\(((?:[0-9a-f][0-9a-f])+)\)")
 class Command(BaseCommand):
     help = "Import MoinMoin wiki into NOC KB"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         (
             parser.add_argument(
                 "-e", "--encoding", dest="encoding", default="utf-8", help="Encoding"

@@ -1,11 +1,12 @@
 # ----------------------------------------------------------------------
 # ./noc script
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
+import argparse
 
 # Third-party modules
 import orjson
@@ -17,7 +18,7 @@ from noc.core.profile.loader import loader as profile_loader
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "--json",
             action="store_true",

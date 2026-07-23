@@ -27,7 +27,7 @@ from noc.main.models.report import Report
 class Command(BaseCommand):
     DEFAULT_LIMIT = 20
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         run_parser = subparsers.add_parser("run")
         run_parser.add_argument("--report", "-r", help="Report to run", required=True)

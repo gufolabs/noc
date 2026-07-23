@@ -49,7 +49,7 @@ Credentials = namedtuple(
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         # Output options
         out_group = parser.add_mutually_exclusive_group()
         out_group.add_argument(

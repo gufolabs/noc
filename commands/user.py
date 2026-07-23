@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # Maintain users
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2013 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import random
+import argparse
 
 # NOC modules
 from noc.core.management.base import BaseCommand, CommandError
@@ -17,7 +18,7 @@ from noc.aaa.models.permission import Permission
 class Command(BaseCommand):
     help = "Manage users"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # extract command
         user_create = subparsers.add_parser("add")

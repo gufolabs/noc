@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # ./noc apply-nri-links
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Python modules
+import argparse
 
 # Third-party modules
 from pymongo.errors import BulkWriteError
@@ -21,7 +24,7 @@ from noc.core.etl.portmapper.loader import loader
 class Command(BaseCommand):
     BATCH_SIZE = 100
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # view command
         subparsers.add_parser("apply")

@@ -19,7 +19,7 @@ from noc.gis.models.division import Division
 class Command(BaseCommand):
     help = "Dump address database"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         # parser.add_argument("-c", "--country",
         #                     dest="countries",
         #                     action="append")

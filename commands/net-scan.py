@@ -41,7 +41,7 @@ ICMP_DIAG = "ICMP"
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("--in", action="append", dest="input", help="File with addresses")
         parser.add_argument(
             "--pool",

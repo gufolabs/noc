@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # Get sample devices for each platform
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2017 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Python modules
+import argparse
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -14,7 +17,7 @@ from noc.sa.models.managedobject import ManagedObject
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "-s", "--sample", type=int, default=5, help="Amount of samples for each platform"
         )

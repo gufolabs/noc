@@ -1,11 +1,12 @@
 # ---------------------------------------------------------------------
 # L3 topology
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
+import argparse
 import os
 import tempfile
 import subprocess
@@ -26,7 +27,7 @@ class Command(BaseCommand):
     help = "Show L3 topology"
     LAYOUT = ["neato", "cicro", "sfdp", "dot", "twopi"]
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         (
             parser.add_argument(
                 "--afi", dest="afi", action="store", default="4", help="AFI (ipv4/ipv6)"

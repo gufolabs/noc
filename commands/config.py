@@ -15,7 +15,7 @@ from noc.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         dump_parser = subparsers.add_parser("dump")
         dump_parser.add_argument(

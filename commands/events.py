@@ -47,7 +47,7 @@ def unescape(s):
 class Command(BaseCommand):
     help = "Manage events"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         # parser.add_argument("-s", "--selector", dest="selector", help="Selector name"),
         # parser.add_argument("-s", "--resource-group", dest="resource_group", help="Group"),
         # parser.add_argument("-o", "--object", dest="object", help="Managed Object's name"),

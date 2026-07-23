@@ -17,7 +17,7 @@ from noc.core.error import NOCError
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "devices",
             nargs=argparse.REMAINDER,

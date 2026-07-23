@@ -5,6 +5,9 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
+# Python modules
+import argparse
+
 # NOC modules
 from noc.core.management.base import BaseCommand
 from noc.core.clickhouse.connect import connection
@@ -21,7 +24,7 @@ from noc.config import config
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("--host", dest="host", help="ClickHouse address")
         parser.add_argument("--port", dest="port", type=int, help="ClickHouse port")
         parser.add_argument(

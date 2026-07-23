@@ -83,7 +83,7 @@ class Command(BaseCommand):
         "segment": ["mac"],
     }
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         run_parser = subparsers.add_parser("run")
         run_parser.add_argument(

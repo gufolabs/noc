@@ -63,7 +63,7 @@ class Command(BaseCommand):
     }
     BI_ID_DATASTREAM = {"cfgmetricsources", "cfgmetricstarget"}  # DataStream that used bi_id as ID
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         subparsers.add_parser("list")
         # rebuild

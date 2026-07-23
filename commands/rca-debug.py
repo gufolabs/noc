@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ./noc rca-debug
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -9,6 +9,7 @@
 import datetime
 from collections import namedtuple
 import operator
+import argparse
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -34,7 +35,7 @@ Record = namedtuple(
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("--delta", type=int, default=60, help="Alarm delta")
         parser.add_argument(
             "--trace", action="store_true", default=False, help="Trace RCA decision"

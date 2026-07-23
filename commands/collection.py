@@ -23,7 +23,7 @@ from noc.models import is_document
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", help="sub-commands help", required=True)
         # sync
         subparsers.add_parser("sync", help="Synchronize collections")

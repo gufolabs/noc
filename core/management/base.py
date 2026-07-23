@@ -7,15 +7,18 @@
 
 # Python modules
 import sys
-import os
 import argparse
-from typing import NoReturn, Sequence
+from typing import Sequence, Never, TextIO, Iterable, Iterator, TypeVar
+from pathlib import Path
+import resource
 
 # Third-party modules
 from gufo.loader import Loader
 
 # NOC modules
 from noc.config import config
+
+T = TypeVar("T")
 
 
 class CommandError(Exception):
@@ -26,34 +29,74 @@ class BaseCommand:
     LOG_FORMAT = config.log_format
     help = ""  # Help text (shows ./noc help)
 
-    def __init__(self, stdout=sys.stdout, stderr=sys.stderr) -> None:
+    def __init__(self, stdout: TextIO | None = None, stderr: TextIO | None = None) -> None:
         self.verbose_level = 0
-        self.stdout = stdout
-        self.stderr = stderr
+        self.stdout: TextIO = sys.stdout if stdout is None else stdout
+        self.stderr: TextIO = sys.stderr if stderr is None else stderr
 
-    def print(self, *args, **kwargs) -> None:
-        if "file" not in kwargs:
-            kwargs["file"] = self.stdout
-        if "flush" in kwargs and kwargs.pop("flush"):
-            self.stdout.flush()
-        print(*args, **kwargs)
+    def print(
+        self,
+        *args: object,
+        sep: str | None = " ",
+        end: str | None = "\n",
+        file: TextIO | None = None,
+        flush: bool = False,
+    ) -> None:
+        """Print values to the configured output stream.
 
-    def run(self):
+        This method behaves like the built-in ``print`` function, but uses
+        the instance configured output stream when ``file`` is not specified.
+
+        The output stream can be replaced for testing purposes by passing
+        a custom ``TextIO`` object to the constructor, allowing tests to
+        capture and verify printed output without redirecting process-wide
+        stdout.
+
+        Args:
+            *args: Values to print.
+            sep: String inserted between values.
+            end: String appended after the last value.
+            file: Output stream. Uses the configured output stream by default.
+            flush: Whether to forcibly flush the output stream.
         """
-        Execute command. Usually from script
+        print(*args, sep=sep, end=end, file=self.stdout if file is None else file, flush=flush)
 
+    def run(self) -> Never:
+        """
+        Execute the command using command-line arguments.
+
+        This method is intended to be called from a command-line entry point
+        or a script main block.
+
+        Example:
+
+        ```python
         if __name__ == "__main__":
             Command().run()
+        ```
+
+        The method terminates the process with the exit code returned by
+        `run_from_argv`.
         """
         sys.exit(self.run_from_argv(sys.argv[1:]))
 
     def run_from_argv(self, argv: Sequence[str]) -> int:
         """
-        Execute command. Usually from script
+        Execute the command using the provided command-line arguments.
 
+        This method parses and executes a command using the specified
+        argument list and returns the process exit code.
+
+        It can be used from a command-line entry point or a script main block.
+
+        Example:
+
+        ```python
         if __name__ == "__main__":
             import sys
-            sys.exit(Command.run_from_argv())
+
+            sys.exit(Command().run_from_argv(sys.argv[1:]))
+        ```
         """
         parser = self.create_parser()
         self.add_default_arguments(parser)
@@ -124,7 +167,16 @@ class BaseCommand:
                     self.print("%40s : %s" % (k, d[k]))
 
     def create_parser(self) -> argparse.ArgumentParser:
-        cmd = os.path.basename(sys.argv[0])
+        """Create the command-line argument parser.
+
+        The program name is derived from `sys.argv[0]`. For Python scripts,
+        the `.py` suffix is removed and the command name is prefixed with
+        `noc`.
+
+        Returns:
+            Configured argument parser instance.
+        """
+        cmd = Path(sys.argv[0]).name
         if cmd.endswith(".py"):
             cmd = f"noc {cmd[:-3]}"
         return argparse.ArgumentParser(prog=cmd)
@@ -135,8 +187,14 @@ class BaseCommand:
         """
 
     def add_default_arguments(self, parser: argparse.ArgumentParser) -> None:
-        """
-        Apply default parser arguments
+        """Add common command-line arguments to the parser.
+
+        Adds options shared by all commands, including logging configuration,
+        profiling, metrics output, progress bar control, and resource usage
+        reporting.
+
+        Args:
+            parser: Argument parser to extend with default command options.
         """
         group = parser.add_mutually_exclusive_group()
         group.add_argument(
@@ -164,28 +222,55 @@ class BaseCommand:
 
     def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         """
-        Apply additional parser arguments
+        Add command-specific arguments to the parser.
+
+        This method can be overridden by subclasses to register additional
+        command-line options specific to the command implementation.
+
+        Args:
+            parser: Argument parser to extend with command-specific options.
         """
 
-    def die(self, msg: str) -> NoReturn:
+    def die(self, msg: str) -> Never:
+        """
+        Terminate command execution by raising a command error.
+
+        Args:
+            msg: Error message describing the command failure.
+
+        Raises:
+            CommandError: Always raised with the provided error message.
+        """
         raise CommandError(msg)
 
-    def progress(self, iter, max_value=None):
-        """
-        Yield iterable and show progressbar
-        :return:
+    def progress(self, iterable: Iterable[T], max_value: int | None = None) -> Iterator[T]:
+        """Wrap an iterable with a progress bar.
+
+        The progress bar can be disabled using the ``no_progressbar`` option.
+        When disabled, items are yielded directly from the original iterable.
+
+        Args:
+            iterable: Iterable to process while displaying progress.
+            max_value: Optional total number of items for the progress bar.
+
+        Yields:
+            Items from the input iterable.
         """
         if self.no_progressbar:
-            yield from iter
+            yield from iterable
         else:
             import progressbar
 
-            yield from progressbar.progressbar(iter, max_value=max_value)
+            yield from progressbar.progressbar(iterable, max_value=max_value)
 
-    def show_usage(self, start, stop):
-        """
-        Show resource usage
-        :return:
+    def show_usage(self, start: resource.struct_rusage, stop: resource.struct_rusage) -> None:
+        """Show resource usage statistics.
+
+        Displays the difference between two resource usage snapshots.
+
+        Args:
+            start: Resource usage snapshot taken before the operation.
+            stop: Resource usage snapshot taken after the operation.
         """
         r = [
             "Resource usage:",

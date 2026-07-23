@@ -30,7 +30,7 @@ class Command(BaseCommand):
     SUMMARY_MASK = "%20s | %8s | %8s | %8s\n"
     CONTROL_MESSAGE = """Summary of %s changes: %d, overload control number: %d\n"""
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("--system", action="append", help="System to extract")
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # load command

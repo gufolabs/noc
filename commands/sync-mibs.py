@@ -27,7 +27,7 @@ from noc.core.comp import smart_text
 class Command(BaseCommand):
     help = "Upload bundled MIBs"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         (
             parser.add_argument(
                 "-f",
