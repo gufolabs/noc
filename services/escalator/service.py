@@ -28,7 +28,7 @@ class EscalatorService(FastAPIService):
         super().__init__(*args, **kwargs)
         self.shards: dict[str, Scheduler] = {}
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         self.apply_shards()
 
     async def on_deactivate(self):

@@ -107,7 +107,7 @@ class MetricsService(FastAPIService):
         self.node_errors: dict[str, ErrorState] = {}
         self.unknown_sources: set[tuple[str, int]] = set()
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         self.slot_number, self.total_slots = await self.acquire_slot()
         self.change_log = ChangeLog(self.slot_number)
         connect_async()

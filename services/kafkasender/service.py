@@ -42,7 +42,7 @@ class KafkaSenderService(FastAPIService):
         super().__init__()
         self.producer: AIOKafkaProducer | None = None
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         self.slot_number, self.total_slots = await self.acquire_slot()
         await self.subscribe_stream(
             KAFKASENDER_STREAM, self.slot_number, self.on_message, async_cursor=True

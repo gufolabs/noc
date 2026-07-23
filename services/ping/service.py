@@ -51,7 +51,7 @@ class PingService(FastAPIService):
         self.failed_event = self.get_status_message(False)
         self.pool_partitions: dict[str, int] = {}
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         # Acquire slot
         self.slot_number, self.total_slots = await self.acquire_slot()
         if self.total_slots > 1:

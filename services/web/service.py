@@ -35,7 +35,7 @@ class WebService(FastAPIService):
         self.wsgi_app = get_wsgi_application()
         self.extended_logging = True
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         # Initialize audit trail
         from noc.main.models.audittrail import AuditTrail
 

@@ -31,7 +31,7 @@ class SchedulerService(FastAPIService):
 
     UPDATE_CHECKERS_JOB = "noc.services.scheduler.jobs.update_checks.UpdateCheckersJob"
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         self.scheduler = Scheduler(
             "scheduler", reset_running=True, max_threads=config.scheduler.max_threads
         )

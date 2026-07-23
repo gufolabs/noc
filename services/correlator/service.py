@@ -113,7 +113,7 @@ class CorrelatorService(FastAPIService):
         # Locks
         self.topo_rca_lock: RCALock | None = None
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         self.slot_number, self.total_slots = await self.acquire_slot()
         self.is_distributed = self.total_slots > 1
         self.is_default_scheduler = (
@@ -155,7 +155,7 @@ class CorrelatorService(FastAPIService):
             )
         )
 
-    def on_start(self):
+    def on_start(self) -> None:
         """
         Load rules from database just after loading config
         """

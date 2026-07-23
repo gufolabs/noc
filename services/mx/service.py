@@ -42,7 +42,7 @@ class MXService(FastAPIService):
         # Pass further initialization
         self.ready_event.set()
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         self.logger.info("Loader %s chains: %s", len(self.router.chains), list(self.router.chains))
         self.slot_number, self.total_slots = await self.acquire_slot()
         await self.subscribe_stream(MX_STREAM, self.slot_number, self.on_message, async_cursor=True)

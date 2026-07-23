@@ -171,7 +171,7 @@ class ClassifierService(FastAPIService):
         if si:
             return si
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         """
         Load rules from database after loading config
         """

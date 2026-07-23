@@ -22,7 +22,7 @@ from typing import (
     Callable,
     Any,
     TypeVar,
-    NoReturn,
+    Never,
     Awaitable,
     Iterable,
 )
@@ -63,14 +63,10 @@ dcs_slot_lock = threading.Lock()
 
 
 class BaseService:
-    """
-    Basic service implementation.
-
-    * on_change_<var> - subscribed to changes of config variable <var>
-    """
+    """Basic service implementation."""
 
     # Service name
-    name = None
+    name: str
     # Leader lock name
     # Only one active instance per leader lock can be active
     # at given moment
@@ -150,15 +146,11 @@ class BaseService:
         self.metrics_key_seq: int = 0
 
     def create_parser(self) -> argparse.ArgumentParser:
-        """
-        Return argument parser
-        """
+        """Return argument parser"""
         return argparse.ArgumentParser()
 
     def add_arguments(self, parser: argparse.ArgumentParser) -> None:
-        """
-        Apply additional parser arguments
-        """
+        """Apply additional parser arguments"""
         parser.add_argument(
             "--node", action="store", dest="node", default=config.node, help="NOC node name"
         )
@@ -197,18 +189,16 @@ class BaseService:
             )
 
     @classmethod
-    def die(cls, msg: str = "") -> NoReturn:
-        """
-        Dump message to stdout and terminate process with error code
-        """
+    def die(cls, msg: str = "") -> Never:
+        """Dump message to stdout and terminate process with error code"""
         sys.stdout.write(str(msg) + "\n")
         sys.stdout.flush()
         os._exit(1)
 
-    def setup_test_logging(self):
+    def setup_test_logging(self) -> None:
         self.logger = logging.getLogger(self.name)
 
-    def setup_translation(self):
+    def setup_translation(self) -> None:
         from noc.core.translation import set_translation, ugettext
 
         set_translation(self.name, config.language)
@@ -219,17 +209,13 @@ class BaseService:
                 DEFAULT_NAMESPACE["_"] = ugettext
 
     def log_separator(self, symbol: str = "*", length: int = 72) -> None:
-        """
-        Log a separator string to visually split log
-        """
+        """Log a separator string to visually split log"""
         self.logger.warning(symbol * length)
         if config.features.forensic:
             self.logger.warning("[noc.core.forensic] [=Process restarted]")
 
-    def setup_signal_handlers(self):
-        """
-        Set up signal handlers
-        """
+    def setup_signal_handlers(self) -> None:
+        """Set up signal handlers"""
         signal.signal(signal.SIGTERM, self.on_SIGTERM)
         if os.name == "nt":
             # Ctrl+C. For cancel traced Ctrl + Break
@@ -237,19 +223,15 @@ class BaseService:
         else:
             signal.signal(signal.SIGHUP, self.on_SIGHUP)
 
-    def set_proc_title(self):
-        """
-        Set process title
-        """
+    def set_proc_title(self) -> None:
+        """Set process title"""
         v = {"name": self.name, "instance": config.instance or "", "pool": config.pool or ""}
         title = self.process_name % v
         self.logger.debug("Setting process title to: %s", title)
         setproctitle.setproctitle(title)
 
-    def start(self):
-        """
-        Run main server loop
-        """
+    def start(self) -> None:
+        """Run main server loop"""
         self.startup_ts = perf_counter()
         parser = self.create_parser()
         self.add_arguments(parser)
@@ -298,29 +280,25 @@ class BaseService:
     def get_event_loop(self) -> asyncio.BaseEventLoop:
         return self.loop
 
-    def on_start(self):
-        """
-        Reload config
-        """
+    def on_start(self) -> None:
+        """Reload config"""
         if self.use_translation:
             self.setup_translation()
 
-    def stop(self):
+    def stop(self) -> None:
         self.logger.warning("Stopping")
         self.loop.create_task(self.deactivate())
 
-    def on_SIGHUP(self, signo, frame):
+    def on_SIGHUP(self, signo, frame) -> None:
         # self.logger.warning("SIGHUP caught, rereading config")
         pass
 
-    def on_SIGTERM(self, signo, frame):
+    def on_SIGTERM(self, signo, frame) -> None:
         self.logger.warning("SIGTERM caught, Stopping")
         self.stop()
 
     def get_service_address(self) -> tuple[str, int]:
-        """
-        Returns an (address, port) for HTTP service listener
-        """
+        """Returns an (address, port) for HTTP service listener"""
         if self.address and self.port:
             return self.address, self.port  # Already resolved
         if config.listen:
@@ -339,8 +317,7 @@ class BaseService:
         return addr, port
 
     def resolve_addr(self, addr: str) -> str:
-        """
-        Resolve symbolic name to address.
+        """Resolve symbolic name to address.
 
         Tries to:
 
@@ -362,24 +339,16 @@ class BaseService:
                 return r[0]
         return addr  # Leave untouched
 
-    async def init_api(self):
-        """
-        Initialize API routers and handlers
-        :return:
-        """
+    async def init_api(self) -> None:
+        """Initialize API routers and handlers"""
         raise NotImplementedError
 
-    async def shutdown_api(self):
-        """
-        Stop API services
-        :return:
-        """
+    async def shutdown_api(self) -> None:
+        """Stop API services"""
         raise NotImplementedError
 
-    async def activate(self):
-        """
-        Initialize services before run
-        """
+    async def activate(self) -> None:
+        """Initialize services before run"""
         self.logger.warning("Activating service")
         if self.use_mongo:
             from noc.core.mongo.connection import connect
@@ -397,7 +366,7 @@ class BaseService:
             self.start_telemetry_callback()
         self.loop.create_task(self.on_register())
 
-    async def deactivate(self):
+    async def deactivate(self) -> None:
         if not self.is_active:
             self.logger.info("Not Active")
             return
@@ -436,7 +405,7 @@ class BaseService:
         self.logger.info("Post-mortem metrics: %s", m)
         self.die("")
 
-    def get_register_tags(self):
+    def get_register_tags(self) -> list[str]:
         tags = ["noc"]
         if config.features.traefik and self.traefik_routes_rule and self.name:
             tags += [
@@ -459,7 +428,7 @@ class BaseService:
             #     tags += [f"traefik.backend.maxconn.amount={limit}"]
         return tags
 
-    async def on_register(self):
+    async def on_register(self) -> None:
         addr, port = self.get_service_address()
         r = await self.dcs.register(
             self.name,
@@ -483,16 +452,13 @@ class BaseService:
         else:
             raise self.RegistrationError()
 
-    async def on_activate(self):
-        """
-        Called when service activated
-        """
-        return
+    async def on_activate(self) -> None:
+        """Called when service activated"""
 
-    async def acquire_lock(self):
+    async def acquire_lock(self) -> None:
         await self.dcs.acquire_lock(f"lock-{self.name}")
 
-    async def acquire_slot(self):
+    async def acquire_slot(self) -> None:
         if self.pooled:
             name = f"{self.name}-{config.pool}"
         else:
@@ -502,26 +468,18 @@ class BaseService:
             self.die("Service misconfiguration detected: Invalid total_slots")
         return slot_number, total_slots
 
-    async def on_deactivate(self):
-        return
+    async def on_deactivate(self) -> None:
+        return None
 
-    def open_rpc(self, name, pool=None, sync=False, hints=None):
-        """
-        Returns RPC proxy object.
-        """
-        if pool:
-            svc = f"{name}-{pool}"
-        else:
-            svc = name
-        return RPCProxy(self, svc, sync=sync, hints=hints)
+    def open_rpc(self, name: sre, pool: str | None = None, sync: bool = False, hints=None):
+        """Returns RPC proxy object."""
+        return RPCProxy(self, f"{name}-{pool}" if pool else name, sync=sync, hints=hints)
 
-    def get_mon_status(self):
+    def get_mon_status(self) -> bool:
         return True
 
-    def get_mon_data(self):
-        """
-        Returns monitoring data
-        """
+    def get_mon_data(self) -> dict[str, Any]:
+        """Returns monitoring data"""
         r = {
             "status": self.get_mon_status(),
             "service": self.name,
@@ -544,9 +502,7 @@ class BaseService:
         return r
 
     def iter_rpc_retry_timeout(self) -> Iterable[float]:
-        """
-        Yield timeout to wait after unsuccessful RPC connection
-        """
+        """Yield timeout to wait after unsuccessful RPC connection"""
         for t in config.rpc.retry_timeout.split(","):
             yield float(t)
 
@@ -562,14 +518,12 @@ class BaseService:
         cursor_id: str | None = None,
         auto_set_cursor: bool = True,
         async_cursor: bool = False,
-        async_cursor_condition: asyncio.Condition = None,
+        async_cursor_condition: asyncio.Condition | None = None,
     ) -> None:
         # @todo: Restart on failure
         async def set_cursor_sync(offset: int) -> None:
-            """
-            Synchronous version of cursor setter.
+            """Synchronous version of cursor setter.
             Blocks until the cursor is really set.
-            :return:
             """
             await client.set_cursor(
                 stream=stream,
@@ -579,10 +533,8 @@ class BaseService:
             )
 
         async def set_cursor_async(offset: int) -> None:
-            """
-            Asynchronous version of cursor setter. Doesn't block subscriber loop,
+            """Asynchronous version of cursor setter. Doesn't block subscriber loop,
             though committed cursor position may lag behind the really processed one.
-            :return:
             """
             nonlocal cursor_cond, cursor_offset
             async with cursor_cond:
@@ -657,11 +609,8 @@ class BaseService:
         if self.subscriber_shutdown_waiter and not self.active_subscribers:
             self.subscriber_shutdown_waiter.set()
 
-    def _init_publisher(self):
-        """
-        Spin-up publisher and queue
-        :return:
-        """
+    def _init_publisher(self) -> None:
+        """Spin-up publisher and queue"""
         with self.publisher_start_lock:
             if self.publish_queue:
                 return  # Created in concurrent thread
@@ -679,11 +628,8 @@ class BaseService:
         partition: int | None = None,
         key: bytes | None = None,
         headers: dict[str, bytes] | None = None,
-    ):
-        """
-        Schedule publish request
-        :return:
-        """
+    ) -> None:
+        """Schedule publish request"""
         if not self.publish_queue:
             self._init_publisher()
         req = MessageStreamClient.get_publish_request(
@@ -691,7 +637,7 @@ class BaseService:
         )
         self.publish_queue.put(req)
 
-    async def publisher(self):
+    async def publisher(self) -> None:
         async with MessageStreamClient() as client:
             while not self.publish_queue.to_shutdown:
                 req = await self.publish_queue.get(timeout=1)
@@ -705,7 +651,7 @@ class BaseService:
                     await asyncio.sleep(1)
                     self.publish_queue.put(req, fifo=False)
 
-    async def shutdown_executors(self):
+    async def shutdown_executors(self) -> None:
         if self.executors:
             self.logger.info("Shutting down executors")
             for x in self.executors:
@@ -715,7 +661,7 @@ class BaseService:
                 except asyncio.TimeoutError:
                     self.logger.info("Timed out when shutting down %s", x)
 
-    async def shutdown_subscriptions(self):
+    async def shutdown_subscriptions(self) -> None:
         self.logger.info("Shutting down subscriptions")
         self.subscriber_shutdown_waiter = asyncio.Event()
         try:
@@ -725,7 +671,7 @@ class BaseService:
                 "Timed out when shutting down subscriptions. Some message may be still processing"
             )
 
-    async def shutdown_publisher(self):
+    async def shutdown_publisher(self) -> None:
         if self.publish_queue:
             r = await self.publish_queue.drain(5.0)
             if not r:
@@ -736,9 +682,7 @@ class BaseService:
             self.publish_queue.shutdown()
 
     def get_executor(self, name: str) -> ThreadPoolExecutor:
-        """
-        Return or start named executor
-        """
+        """Return or start named executor"""
         executor = self.executors.get(name)
         if not executor:
             xt = f"{self.name}.{name}_threads"
@@ -756,11 +700,8 @@ class BaseService:
         executor = self.get_executor(name)
         return executor.submit(fn, *args, **kwargs)
 
-    async def message_route(self):
-        """
-        Route messages from mx_queue
-        :return:
-        """
+    async def message_route(self) -> None:
+        """Route messages from mx_queue"""
         self.logger.info("Starting Message Routing")
         while not (self.publish_queue.to_shutdown and self.mx_queue.is_empty()):
             t0 = perf_counter()
@@ -775,11 +716,11 @@ class BaseService:
     async def publish_metrics(
         self, queue: QBuffer, headers: dict[str, bytes] | None = None
     ) -> None:
-        """
-        Schedule metrics to send stream
+        """Schedule metrics to send stream
 
-        :param queue: Metrics Queue
-        :param headers: Message Headers
+        Args:
+            queue: Metrics Queue
+            headers: Message Headers
         """
         while not (self.publish_queue.to_shutdown and queue.is_empty()):
             t0 = perf_counter()
@@ -791,13 +732,12 @@ class BaseService:
                     await asyncio.sleep(to_sleep)
 
     def register_metrics(self, table: str, metrics: list[dict[str, Any]], key: int | None = None):
-        """
-        Schedule metrics to be sent to the `table`.
+        """Schedule metrics to be sent to the `table`.
 
-        :param table: Table name
-        :param metrics: List of dicts containing metrics records
-        :param key: Sharding key, None for round-robin distribution
-        :return:
+        Args:
+            table: Table name
+            metrics: List of dicts containing metrics records
+            key: Sharding key, None for round-robin distribution
         """
         if key is None:
             with self.metrics_key_lock:
@@ -810,27 +750,18 @@ class BaseService:
         )
 
     def start_telemetry_callback(self) -> None:
-        """
-        Run telemetry callback
-        :return:
-        """
+        """Run telemetry callback"""
         self.telemetry_callback = PeriodicCallback(self.send_telemetry, 250)
         self.telemetry_callback.start()
 
-    async def send_telemetry(self):
-        """
-        Publish telemetry data
-
-        :return:
-        """
+    async def send_telemetry(self) -> None:
+        """Publish telemetry data"""
         spans = get_spans()
         if spans:
             self.register_metrics("span", [span_to_dict(s) for s in spans])
 
-    async def get_mx_routes_config(self):
-        """
-        Subscribe and track datastream changes
-        """
+    async def get_mx_routes_config(self) -> None:
+        """Subscribe and track datastream changes"""
         client = RouteDataStreamClient("cfgmxroute", service=self)
         # Track stream changes
         while True:
@@ -854,16 +785,15 @@ class BaseService:
         headers: dict[str, bytes] | None = None,
         sharding_key: int = 0,
         store: bool = False,
-    ):
-        """
-        Build message and schedule to send to mx service
+    ) -> None:
+        """Build message and schedule to send to mx service
 
-        :param data: Data for transmit
-        :param message_type: Message type
-        :param headers: additional message headers
-        :param sharding_key: Key for sharding over MX services
-        :param store: Append message to buffer for deliver
-        :return:
+        Args:
+            data: Data for transmit
+            message_type: Message type
+            headers: additional message headers
+            sharding_key: Key for sharding over MX services
+            store: Append message to buffer for deliver
         """
         msg = Router.get_message(data, message_type.value, headers, sharding_key)
         self.logger.debug("Send message: %s", msg)
@@ -890,14 +820,14 @@ class BaseService:
         headers: dict[str, bytes] | None = None,
         sharding_key: int = 0,
         group_key: str | None = None,
-    ):
-        """
-        Register message for deliver
-        :param data: Data for transmit
-        :param message_type: Message type
-        :param headers: additional message headers
-        :param sharding_key: Key for sharding over MX services
-        :return:
+    ) -> None:
+        """Register message for deliver
+
+        Args:
+            data: Data for transmit
+            message_type: Message type
+            headers: additional message headers
+            sharding_key: Key for sharding over MX services
         """
         msg = Router.get_message(
             data,
@@ -908,60 +838,50 @@ class BaseService:
         )
         self.mx_queue.put(msg, group_key)
 
-    def get_leader_lock_name(self):
+    def get_leader_lock_name(self) -> str | None:
         if self.leader_lock_name:
             return self.leader_lock_name % {"pool": config.pool}
         return None
 
-    def get_backend_weight(self):
-        """
-        Return backend weight for weighted load balancers
+    def get_backend_weight(self) -> int | None:
+        """Return backend weight for weighted load balancers
         (i.e. traefik).
         Return None for default weight
-        :return:
         """
-        return
+        return None
 
-    def get_backend_limit(self):
-        """
-        Return backend connection limit for load balancers
+    def get_backend_limit(self) -> int | None:
+        """Return backend connection limit for load balancers
         (i.e. traefik)
         Return None for no limits
-        :return:
         """
         return
 
-    def is_valid_health_check(self, service_id):
-        """
-        Check received service id matches own service id
-        :return:
-        """
+    def is_valid_health_check(self, service_id: str) -> bool:
+        """Check received service id matches own service id"""
         return not (
             self.dcs
             and self.dcs.health_check_service_id
             and self.dcs.health_check_service_id != service_id
         )
 
-    def get_health_status(self):
-        """
-        Check service health to be reported to service registry
-        :return: (http code, message)
+    def get_health_status(self) -> tuple[int, str]:
+        """Check service health to be reported to service registry
+
+        Returns:
+            (http code, message)
         """
         if self.dcs and self.require_dcs_health:
             # DCS is initialized
             return self.dcs.get_status()
         return 200, "OK"
 
-    def uptime(self):
+    def uptime(self) -> float:
         if not self.startup_ts:
             return 0
         return perf_counter() - self.startup_ts
 
     async def get_stream_partitions(self, stream: str) -> int:
-        """
-
-        :return:
-        """
         async with MessageStreamClient() as client:
             while True:
                 meta = await client.fetch_metadata()
@@ -976,9 +896,8 @@ class BaseService:
 
     @staticmethod
     @cachetools.cached(cachetools.TTLCache(maxsize=128, ttl=60), lock=dcs_slot_lock)
-    def get_slot_limits(slot_name):
-        """
-        Get slot count
+    def get_slot_limits(slot_name) -> int | None:
+        """Get slot count
         Args:
             slot_name:
         """
@@ -989,16 +908,12 @@ class BaseService:
         return run_sync(partial(dcs.get_slot_limit, slot_name))
 
     async def on_route_rules_ready(self) -> None:
-        """
-        Called when all Router rules are ready.
-        """
+        """Called when all Router rules are ready."""
         return
 
-    async def watchdog(self):
-        """
-        WatchDog task. View watchdog_waiter event, by setting /health API.
+    async def watchdog(self) -> None:
+        """WatchDog task. View watchdog_waiter event, by setting /health API.
         If not set event - force reboot process
-        :return:
         """
         failed, delay, deviation = 0, config.watchdog.check_interval, 0.5
         while True:

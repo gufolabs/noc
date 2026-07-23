@@ -61,7 +61,7 @@ class TrapCollectorService(FastAPIService):
         self.storm_protection: StormProtection | None = None
         self.updated: set[str] = set()
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         # Listen sockets
         server = TrapServer(service=self)
         for addr, port in server.iter_listen(config.trapcollector.listen):
