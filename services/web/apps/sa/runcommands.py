@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # Parallel command execution
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2016 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extapplication import ExtApplication
@@ -22,7 +25,7 @@ class RunCommandsApplication(ExtApplication):
 
     implied_permissions = {"launch": ["sa:objectlist:read"]}
 
-    def get_launch_info(self, request):
+    def get_launch_info(self, request: HttpRequest):
         """
         Return Alias to ManagedObject
         """
@@ -39,7 +42,7 @@ class RunCommandsApplication(ExtApplication):
         }
 
     @view(url=r"^form/snippet/(?P<snippet_id>\d+)/$", method=["GET"], access="launch", api=True)
-    def api_form_snippet(self, request, snippet_id):
+    def api_form_snippet(self, request: HttpRequest, snippet_id):
         snippet = self.get_object_or_404(CommandSnippet, id=int(snippet_id))
         r = []
         vars = snippet.vars
@@ -56,7 +59,7 @@ class RunCommandsApplication(ExtApplication):
     @view(
         url=r"^form/action/(?P<action_id>[0-9a-f]{24})/$", method=["GET"], access="launch", api=True
     )
-    def api_form_action(self, request, action_id):
+    def api_form_action(self, request: HttpRequest, action_id):
         action = self.get_object_or_404(Action, id=action_id)
         r = []
         for p in action.params:
@@ -82,7 +85,7 @@ class RunCommandsApplication(ExtApplication):
         access="launch",
         api=True,
     )
-    def api_render_snippet(self, request, snippet_id, objects, config):
+    def api_render_snippet(self, request: HttpRequest, snippet_id, objects, config):
         snippet = self.get_object_or_404(CommandSnippet, id=int(snippet_id))
         r = {}
         for mo in objects:
@@ -100,7 +103,7 @@ class RunCommandsApplication(ExtApplication):
         access="launch",
         api=True,
     )
-    def api_render_action(self, request, action_id, objects, config):
+    def api_render_action(self, request: HttpRequest, action_id, objects, config):
         action = self.get_object_or_404(Action, id=action_id)
         r = {}
         # as job - 202 Accepted

@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # inv.inv job plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.inv.models.object import Object
@@ -20,7 +23,7 @@ class JobPlugin(InvPlugin):
     def init_plugin(self):
         super().init_plugin()
 
-    def get_data(self, request, obj: Object):
+    def get_data(self, request: HttpRequest, obj: Object):
         if obj.is_xcvr and obj.parent and obj.parent_connection:
             root = obj.parent.as_resource(obj.parent_connection)
         else:

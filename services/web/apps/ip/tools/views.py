@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Tools
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ from io import StringIO
 
 # Third-party modules
 from django import forms
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 
 # NOC Modules
 from noc.services.web.base.application import Application, HasPerm, view
@@ -40,7 +40,7 @@ class ToolsAppplication(Application):
         url_name="index",
         access=HasPerm("view"),
     )
-    def view_index(self, request, vrf_id, afi, prefix):
+    def view_index(self, request: HttpRequest, vrf_id, afi, prefix):
         """
         An index of tools available for block
         :return:
@@ -63,7 +63,7 @@ class ToolsAppplication(Application):
         url_name="download_ip",
         access=HasPerm("view"),
     )
-    def view_download_ip(self, request, vrf_id, afi, prefix):
+    def view_download_ip(self, request: HttpRequest, vrf_id, afi, prefix):
         """
         Download block's allocated IPs in CSV format
         Columns are: ip,fqdn,description,tt
@@ -104,7 +104,7 @@ class ToolsAppplication(Application):
         url_name="upload_axfr",
         access=HasPerm("view"),
     )
-    def view_upload_axfr(self, request, vrf_id, afi, prefix):
+    def view_upload_axfr(self, request: HttpRequest, vrf_id, afi, prefix):
         """
         Import via zone transfer
         :return:

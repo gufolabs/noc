@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # FM Events and Alarms Hierarchy Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.reportapplication import ReportApplication
@@ -20,7 +23,7 @@ class HierarchyReportAppplication(ReportApplication):
 
     title = _("Events and Alarm Hierarchy")
 
-    def report_html(self, request, result=None, query=None):
+    def report_html(self, request: HttpRequest, result=None, query=None):
         # Event classes
         ec = []
         ne = 0

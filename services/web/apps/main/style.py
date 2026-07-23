@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # main.style application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extmodelapplication import ExtModelApplication, view
@@ -25,5 +28,5 @@ class StyleApplication(ExtModelApplication):
     clean_fields = {"background_color": ColorParameter(), "font_color": ColorParameter()}
 
     @view("^scheme/$", method=["GET"], access=True)
-    def api_style(self, request):
+    def api_style(self, request: HttpRequest):
         return Style.get_scheme()

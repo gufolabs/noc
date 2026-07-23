@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # inv.inv metric plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 import datetime
@@ -11,6 +11,7 @@ import operator
 from typing import Any
 
 # Third-party modules
+from django.http import HttpRequest
 import orjson
 
 # NOC modules
@@ -198,7 +199,7 @@ class MetricPlugin(InvPlugin):
             r,
         )
 
-    def get_data(self, request, o):
+    def get_data(self, request: HttpRequest, o):
         """
         Getting Object sensors
         """
@@ -256,7 +257,7 @@ class MetricPlugin(InvPlugin):
             },
         )
 
-    def api_set_metric_threshold(self, request, id, sid, thresholds):
+    def api_set_metric_threshold(self, request: HttpRequest, id, sid, thresholds):
         s = self.app.get_object_or_404(Sensor, id=sid)
         for t in thresholds:
             param, scope = t["name"].split("@", 1)

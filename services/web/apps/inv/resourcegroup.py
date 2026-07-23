@@ -1,11 +1,12 @@
 # ----------------------------------------------------------------------
 # inv.resourcegroup application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
-# Python modules
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -113,7 +114,7 @@ class ResourceGroupApplication(ExtDocApplication):
         return {"id": str(o.id), "label": smart_text(o), "has_children": o.has_children}
 
     @view("^(?P<id>[0-9a-f]{24})/get_path/$", access="read", api=True)
-    def api_get_path(self, request, id):
+    def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(ResourceGroup, id=id)
         path = [ResourceGroup.get_by_id(rg) for rg in o.get_path()]
         return {

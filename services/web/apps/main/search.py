@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # main.search application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extapplication import ExtApplication, view
@@ -25,7 +28,7 @@ class SearchApplication(ExtApplication):
     @view(
         url="^$", method=["POST"], access="launch", api=True, validate={"query": UnicodeParameter()}
     )
-    def api_search(self, request, query):
+    def api_search(self, request: HttpRequest, query):
         r = []
         for qr in TextIndex.search(query):
             model = get_model(qr["model"])

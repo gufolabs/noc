@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # main.apitoken application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extapplication import ExtApplication, view
@@ -18,7 +21,7 @@ class APITokenApplication(ExtApplication):
     """
 
     @view("^(?P<type>[^/]+)/$", method=["GET"], access=PermitLogged(), api=True)
-    def api_get_token(self, request, type):
+    def api_get_token(self, request: HttpRequest, type):
         token = APIToken.objects.filter(type=type, user=request.user.id).first()
         if token:
             return {"type": token.type, "token": token.token}
@@ -31,7 +34,7 @@ class APITokenApplication(ExtApplication):
         validate={"token": StringParameter()},
         api=True,
     )
-    def api_set_token(self, request, type, token=None):
+    def api_set_token(self, request: HttpRequest, type, token=None):
         APIToken._get_collection().update_many(
             {"type": type, "user": request.user.id}, {"$set": {"token": token}}, upsert=True
         )

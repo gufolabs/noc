@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # kb.kbentry application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,7 +9,7 @@
 import re
 
 # Third-party modules
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 import mimetypes
 
 # NOC modules
@@ -44,7 +44,7 @@ class KBEntryApplication(ExtModelApplication):
         return r
 
     @view(r"^(?P<id>\d+)/history/$", access="read", api=True)
-    def api_get_entry_history(self, request, id):
+    def api_get_entry_history(self, request: HttpRequest, id):
         o = self.get_object_or_404(KBEntry, id=id)
         return {
             "data": [
@@ -54,16 +54,16 @@ class KBEntryApplication(ExtModelApplication):
         }
 
     @view(r"^(?P<id>\d+)/html/$", access="read", api=True)
-    def api_get_entry_html(self, request, id):
+    def api_get_entry_html(self, request: HttpRequest, id):
         o = self.get_object_or_404(KBEntry, id=id)
         return self.render_plain_text(o.html)
 
     @view(r"^most_popular/$", access="read", api=True)
-    def api_get_most_popular(self, request):
+    def api_get_most_popular(self, request: HttpRequest):
         return KBEntry.most_popular()
 
     @view(r"^(?P<id>\d+)/attachments/$", access="read", api=True, method=["GET"])
-    def api_list_attachments(self, request, id):
+    def api_list_attachments(self, request: HttpRequest, id):
         o = self.get_object_or_404(KBEntry, id=id)
         return [
             {
@@ -76,7 +76,7 @@ class KBEntryApplication(ExtModelApplication):
         ]
 
     @view(r"^(?P<id>\d+)/attachment/(?P<name>.+)/$", access="read", api=True, method=["GET"])
-    def api_get_attachment(self, request, id, name):
+    def api_get_attachment(self, request: HttpRequest, id, name):
         o = self.get_object_or_404(KBEntry, id=id)
         attach = self.get_object_or_404(KBEntryAttachment, kb_entry=o, name=name)
         file_mime = mimetypes.guess_type(attach.file.name)
@@ -85,14 +85,14 @@ class KBEntryApplication(ExtModelApplication):
         return response
 
     @view(r"^(?P<id>\d+)/attachment/(?P<name>.+)/$", access="delete", api=True, method=["DELETE"])
-    def api_delete_attachment(self, request, id, name):
+    def api_delete_attachment(self, request: HttpRequest, id, name):
         o = self.get_object_or_404(KBEntry, id=id)
         attach = self.get_object_or_404(KBEntryAttachment, kb_entry=o, name=name)
         attach.delete()
         return self.response({"result": "Delete succesful"}, status=self.OK)
 
     @view(r"^(?P<id>\d+)/attach/$", access="write", api=True, method=["POST"])
-    def api_post_set_attachment(self, request, id):
+    def api_post_set_attachment(self, request: HttpRequest, id):
         o = self.get_object_or_404(KBEntry, id=id)
         attach = KBEntryAttachment(
             kb_entry=o, name="uploaded_file1", description="", file=request.FILES["file"]
@@ -123,5 +123,5 @@ class KBEntryApplication(ExtModelApplication):
         return True
 
     @view(r"^(?P<id>\d+)/?$", access="update", api=True, method=["POST"])
-    def api_post_update(self, request, id):
+    def api_post_update(self, request: HttpRequest, id):
         return self.api_update(request, id)

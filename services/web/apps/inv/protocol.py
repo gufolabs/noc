@@ -1,12 +1,15 @@
 # ----------------------------------------------------------------------
 # inv.protocol application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 from collections import defaultdict
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -68,7 +71,7 @@ class ProtocolApplication(ExtDocApplication):
         return super().clean(data)
 
     @view(url="^lookup_tree/", method=["GET"], access=True)
-    def api_protocols_lookup_tree(self, request):
+    def api_protocols_lookup_tree(self, request: HttpRequest):
         r = {}
         protocol_filter = {}
         query = request.GET.get("__query")

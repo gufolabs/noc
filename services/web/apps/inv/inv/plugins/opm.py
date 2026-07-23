@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 # Third-party modules
+from django.http import HttpRequest
 import orjson
 
 # NOC modules
@@ -168,7 +169,7 @@ class OPMPlugin(InvPlugin):
             },
         )
 
-    def get_data(self, request, o: Object):
+    def get_data(self, request: HttpRequest, o: Object):
         cfg = self.CARDS.get(o.model.uuid)
         if not cfg:
             return {"status": False, "msg": "Unsupported card"}
@@ -178,7 +179,7 @@ class OPMPlugin(InvPlugin):
             "bands": [x.value for x in cfg.bands],
         }
 
-    def api_data(self, request, id: str, g: str, b: str):
+    def api_data(self, request: HttpRequest, id: str, g: str, b: str):
         obj = self.app.get_object_or_404(Object, id=id)
         card = self.CARDS.get(obj.model.uuid)
         if not card:

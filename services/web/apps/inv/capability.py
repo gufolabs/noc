@@ -1,12 +1,16 @@
 # ---------------------------------------------------------------------
 # inv.capability application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2014 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
+# Python modules
 import itertools
 from collections import defaultdict
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -29,7 +33,7 @@ class CapabilityApplication(ExtDocApplication):
     parent_field = "parent"
 
     @view(method=["GET"], url="^tree$", access="read", api=True)
-    def get_tree(self, request):
+    def get_tree(self, request: HttpRequest):
         """
         Return capabilities for tree build.
         root: {

@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # Peer cone analysys
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
@@ -16,7 +19,7 @@ from noc.core.translation import ugettext as _
 class ReportLOC(SimpleReport):
     title = _("Cone Analysis")
 
-    def get_data(self, request):
+    def get_data(self, request: HttpRequest):
         def ppower(prefix):
             m = int(prefix.split("/")[1])
             if m <= powermask:

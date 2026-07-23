@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # peer.peer application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extmodelapplication import ExtModelApplication, view
@@ -83,7 +86,7 @@ class PeerApplication(ExtModelApplication):
             raise ValueError("All neighboring addresses must have same address family")
         return data
 
-    def set_peer_status(self, request, queryset, event, message):
+    def set_peer_status(self, request: HttpRequest, queryset, event, message):
         """
         Change peer status
         :return:
@@ -103,7 +106,7 @@ class PeerApplication(ExtModelApplication):
         api=True,
         validate={"ids": ListOfParameter(element=ModelParameter(Peer))},
     )
-    def api_action_planned(self, request, ids):
+    def api_action_planned(self, request: HttpRequest, ids):
         return self.set_peer_status(request, ids, "planned", "planned")
 
     api_action_planned.short_description = "Mark as planned"
@@ -115,7 +118,7 @@ class PeerApplication(ExtModelApplication):
         api=True,
         validate={"ids": ListOfParameter(element=ModelParameter(Peer))},
     )
-    def api_action_active(self, request, ids):
+    def api_action_active(self, request: HttpRequest, ids):
         return self.set_peer_status(request, ids, "up", "active")
 
     api_action_active.short_description = "Mark as active"
@@ -127,7 +130,7 @@ class PeerApplication(ExtModelApplication):
         api=True,
         validate={"ids": ListOfParameter(element=ModelParameter(Peer))},
     )
-    def api_action_shutdown(self, request, ids):
+    def api_action_shutdown(self, request: HttpRequest, ids):
         return self.set_peer_status(request, ids, "down", "shutdown")
 
     api_action_shutdown.short_description = "Mark as shutdown"

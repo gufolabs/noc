@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # inv.inv channel plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -12,6 +12,7 @@ from collections import defaultdict
 # Third-party modules
 from bson import ObjectId
 from mongoengine.errors import NotUniqueError
+from django.http import HttpRequest
 
 # NOC modules
 from noc.inv.models.object import Object
@@ -62,7 +63,7 @@ class ChannelPlugin(InvPlugin):
             },
         )
 
-    def get_data(self, request, object):
+    def get_data(self, request: HttpRequest, object):
         def q(ch: Channel) -> dict[str, Any]:
             def key(s: str) -> str:
                 p = s.split(":")
@@ -156,7 +157,7 @@ class ChannelPlugin(InvPlugin):
         parts.append(f" [{ep.object.model.get_short_label()}]")
         return "".join(parts)
 
-    def api_get_adhoc_list(self, request, id):
+    def api_get_adhoc_list(self, request: HttpRequest, id):
         def ep_hash(ep1: Endpoint, ep2: Endpoint) -> tuple[str, str]:
             # Only for bi-di
             r1 = ep1.as_resource()

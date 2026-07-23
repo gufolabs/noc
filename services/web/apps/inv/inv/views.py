@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # inv.inv application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -17,6 +17,7 @@ from collections import defaultdict
 # Third-party modules
 import cachetools
 from mongoengine import ValidationError
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extapplication import ExtApplication, view
@@ -98,7 +99,7 @@ class InvApplication(ExtApplication):
                         self.plugins[o.name] = o(self)
 
     @view("^node/$", method=["GET"], access="read", api=True)
-    def api_node(self, request):
+    def api_node(self, request: HttpRequest):
         children = []
         if request.GET and "node" in request.GET:
             parent = request.GET["node"]
@@ -222,7 +223,9 @@ class InvApplication(ExtApplication):
             "choice": StringParameter(required=False),
         },
     )
-    def api_attach(self, request, container: str, item: str, choice: str | None = None):
+    def api_attach(
+        self, request: HttpRequest, container: str, item: str, choice: str | None = None
+    ):
         # Resolve items
         c_obj = self.get_object_or_404(Object, id=container)
         i_obj = self.get_object_or_404(Object, id=item)
@@ -341,7 +344,7 @@ class InvApplication(ExtApplication):
             "serial": UnicodeParameter(required=False),
         },
     )
-    def api_add_group(self, request, type, name, container=None, serial=None):
+    def api_add_group(self, request: HttpRequest, type, name, container=None, serial=None):
         if is_objectid(container):
             c = Object.get_by_id(container)
             if not c:
@@ -377,7 +380,9 @@ class InvApplication(ExtApplication):
             ),
         },
     )
-    def api_add(self, request, items: list[dict[str, str]], container: str | None = None):
+    def api_add(
+        self, request: HttpRequest, items: list[dict[str, str]], container: str | None = None
+    ):
         if container:
             parent = self.get_object_or_404(Object, id=container)
         else:
@@ -427,7 +432,7 @@ class InvApplication(ExtApplication):
             "container": ObjectIdParameter(required=True),
         },
     )
-    def api_remove_connections(self, request, container: str):
+    def api_remove_connections(self, request: HttpRequest, container: str):
         obj = self.get_object_or_404(Object, id=container)
         remove_connections(obj)
         return {"status": True, "message": "Conections cleared"}
@@ -443,7 +448,7 @@ class InvApplication(ExtApplication):
             "position": StringParameter(),
         },
     )
-    def api_insert(self, request, container, objects, position):
+    def api_insert(self, request: HttpRequest, container, objects, position):
         """
         :param container: ObjectID after/in that insert
         :param objects: List ObjectID for insert
@@ -464,7 +469,7 @@ class InvApplication(ExtApplication):
         return True
 
     @view("^(?P<id>[0-9a-f]{24})/path/$", method=["GET"], access="read", api=True)
-    def api_get_path(self, request, id):
+    def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(Object, id=id)
         path = [{"id": str(o.id), "name": o.name}]
         while o.parent:
@@ -705,7 +710,7 @@ class InvApplication(ExtApplication):
         return False
 
     @view(url=r"^(?P<oid>[0-9a-f]{24})/map_lookup/$", method=["GET"], access="read", api=True)
-    def api_map_lookup(self, request, oid):
+    def api_map_lookup(self, request: HttpRequest, oid):
         o: Object = self.get_object_or_404(Object, id=oid)
         if not o.is_container:
             return []
@@ -757,7 +762,7 @@ class InvApplication(ExtApplication):
         api=True,
         validate=DictParameter(attrs={"resource": StringParameter(required=True)}),
     )
-    def api_baloon(self, request, resource: str):
+    def api_baloon(self, request: HttpRequest, resource: str):
         try:
             i = info(resource)
         except ValueError:
@@ -790,7 +795,7 @@ class InvApplication(ExtApplication):
         api=True,
         validate={"q": UnicodeParameter(required=True)},
     )
-    def api_search(self, request, q: str, **kwargs):
+    def api_search(self, request: HttpRequest, q: str, **kwargs):
         def path(o: Object) -> list[dict]:
             result = []
             for oid in o.get_path():
@@ -863,7 +868,7 @@ class InvApplication(ExtApplication):
         api=True,
         validate={"resources": StringListParameter()},
     )
-    def api_resource_status(self, request, resources: list[str]):
+    def api_resource_status(self, request: HttpRequest, resources: list[str]):
         # @todo: Limit access
         alarmed = ActiveAlarm.get_resource_statuses(resources)
         return self.render_json(

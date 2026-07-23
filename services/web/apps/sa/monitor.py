@@ -1,15 +1,16 @@
 # ---------------------------------------------------------------------
 # sa.monitor application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python module
 import re
+import zlib
 
 # Third-party modules
-import zlib
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.apps.sa.objectlist import ObjectListApplication, view
@@ -49,7 +50,7 @@ class MonitorApplication(ObjectListApplication):
             extra["pool"] = Pool.get_by_id(q["pool"]).name
         return extra, []
 
-    def queryset(self, request, query=None):
+    def queryset(self, request: HttpRequest, query=None):
         r = JobF(pool="default")
         r.mos_filter = super().queryset(request, query)
         return r
@@ -94,7 +95,7 @@ class MonitorApplication(ObjectListApplication):
         return result
 
     @view(url=r"^(?P<id>\d+)/discovery_job_log/$", method=["GET"], access="read", api=True)
-    def api_job_log(self, request, id):
+    def api_job_log(self, request: HttpRequest, id):
         o = self.get_object_or_404(ManagedObject, id=id)
         if not o.has_access(request.user):
             return self.response_forbidden("Access denied")

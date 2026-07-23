@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # main.remotesystem application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2017 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -21,7 +24,7 @@ class RemoteSystemApplication(ExtDocApplication):
     model = RemoteSystem
 
     @view(method=["GET"], url="^brief_lookup/$", access="lookup", api=True)
-    def api_brief(self, request):
+    def api_brief(self, request: HttpRequest):
         return [
             {
                 "id": str(rs.id),

@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # inv.inv map plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.gis.map import map
@@ -80,7 +83,7 @@ class MapPlugin(InvPlugin):
                 return p
             p = p.parent
 
-    def get_data(self, request, o):
+    def get_data(self, request: HttpRequest, o):
         layers = [
             {
                 "name": layer.name,
@@ -115,7 +118,7 @@ class MapPlugin(InvPlugin):
             "add_menu": self.get_add_menu(),
         }
 
-    def api_get_layer(self, request, layer):
+    def api_get_layer(self, request: HttpRequest, layer):
         bbox = request.GET["bbox"].split(",")
         x0 = float(bbox[0])
         y0 = float(bbox[1])
@@ -130,7 +133,7 @@ class MapPlugin(InvPlugin):
             builder = map.get_layer_objects
         return builder(layer, x0, y0, x1, y1, srid)
 
-    def api_set_geopoint(self, request, id, srid=None, x=None, y=None):
+    def api_set_geopoint(self, request: HttpRequest, id, srid=None, x=None, y=None):
         o = self.app.get_object_or_404(Object, id=id)
         o.set_data("geopoint", "srid", srid)
         o.set_data("geopoint", "x", x)
@@ -138,7 +141,7 @@ class MapPlugin(InvPlugin):
         o.save()
         return {"status": True}
 
-    def api_object_data(self, request, id):
+    def api_object_data(self, request: HttpRequest, id):
         mos = {}
         o = self.app.get_object_or_404(Object, id=id)
         for mo in ManagedObject.objects.filter(container=id)[:10]:
@@ -153,7 +156,7 @@ class MapPlugin(InvPlugin):
         line = Layer.get_by_code(layer)
         return map.get_connection_layer(line, x0, y0, x1, y1, srid)
 
-    def api_set_layer_visibility(self, request, layer, status):
+    def api_set_layer_visibility(self, request: HttpRequest, layer, status):
         line = self.app.get_object_or_404(Layer, code=layer)
         LayerUserSettings.set_layer_visibility(request.user, line, status)
         return {"status": True}
@@ -186,7 +189,7 @@ class MapPlugin(InvPlugin):
             m[parts[-1]] = str(mt.id)
         return get_menu_item(d)
 
-    def api_create(self, request, model=None, name=None, srid=None, x=None, y=None):
+    def api_create(self, request: HttpRequest, model=None, name=None, srid=None, x=None, y=None):
         # Find suitable container
         to_pop = model.name == "Ducts | Cable Entry"
         p = (x, y, srid)

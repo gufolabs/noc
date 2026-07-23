@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # Objects Summary Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2016 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Third-party modules
 from django import forms
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.simplereport import SimpleReport, TableColumn, PredefinedReport
@@ -60,7 +61,7 @@ class ReportObjectsSummary(SimpleReport):
         ),
     }
 
-    def get_data(self, request, report_type=None, **kwargs):
+    def get_data(self, request: HttpRequest, report_type=None, **kwargs):
         wr = ("", "")
         # wr_and = ("", "",)
         wr_and2 = ("", "")

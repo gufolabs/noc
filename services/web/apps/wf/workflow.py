@@ -1,13 +1,16 @@
 # ----------------------------------------------------------------------
 # wf.workflow application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import re
 from copy import deepcopy
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -38,7 +41,7 @@ class WorkflowApplication(ExtDocApplication):
     NEW_ID = "000000000000000000000000"
 
     @view(r"^(?P<id>[0-9a-f]{24})/config/", method=["GET"], access="write", api=True)
-    def api_get_config(self, request, id):
+    def api_get_config(self, request: HttpRequest, id):
         wf = self.get_object_or_404(Workflow, id=id)
         r = {
             "id": str(wf.id),
@@ -252,7 +255,7 @@ class WorkflowApplication(ExtDocApplication):
     rx_clone_name = re.compile(r"\(Copy #(\d+)\)$")
 
     @view(r"^(?P<id>[0-9a-f]{24})/clone/", method=["POST"], access="write", api=True)
-    def api_clone(self, request, id):
+    def api_clone(self, request: HttpRequest, id):
         wf = self.get_object_or_404(Workflow, id=id)
         # Get all clone names
         m = 0

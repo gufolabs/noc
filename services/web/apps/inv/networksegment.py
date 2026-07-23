@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # inv.networksegment application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Third-party modules
 from django.db.models import Count
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -39,7 +40,7 @@ class NetworkSegmentApplication(ExtDocApplication):
                 r["adm_domains"] = UserAccess.get_domains(user)
         return r
 
-    def queryset(self, request, query=None):
+    def queryset(self, request: HttpRequest, query=None):
         qs = super().queryset(request, query)
         if not request.user.is_superuser:
             qs = qs.filter(adm_domains__in=UserAccess.get_domains(request.user))
@@ -61,7 +62,7 @@ class NetworkSegmentApplication(ExtDocApplication):
         return data
 
     @view("^(?P<id>[0-9a-f]{24})/get_path/$", access="read", api=True)
-    def api_get_path(self, request, id):
+    def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(NetworkSegment, id=id)
         path = [NetworkSegment.get_by_id(ns) for ns in o.get_path()]
         return {
@@ -72,6 +73,6 @@ class NetworkSegmentApplication(ExtDocApplication):
         }
 
     @view("^(?P<id>[0-9a-f]{24})/effective_settings/$", access="read", api=True)
-    def api_effective_settings(self, request, id):
+    def api_effective_settings(self, request: HttpRequest, id):
         o = self.get_object_or_404(NetworkSegment, id=id)
         return o.effective_settings

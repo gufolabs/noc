@@ -1,15 +1,14 @@
 # ---------------------------------------------------------------------
 # maintenance.maintenance application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
-# Python modules
-import orjson
-
 # Third-party modules
+import orjson
 from mongoengine.queryset.visitor import Q
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -36,7 +35,7 @@ class MaintenanceApplication(ExtDocApplication):
     query_condition = "icontains"
     query_fields = ["subject"]
 
-    def queryset(self, request, query=None):
+    def queryset(self, request: HttpRequest, query=None):
         """
         Filter records for lookup
         """
@@ -63,7 +62,7 @@ class MaintenanceApplication(ExtDocApplication):
         return qs
 
     @view(url=r"^(?P<id>[a-z0-9]{24})/add/", method=["POST"], api=True, access="update")
-    def api_add(self, request, id):
+    def api_add(self, request: HttpRequest, id):
         body = orjson.loads(request.body)
         o = self.model.objects.filter(**{self.pk: id}).first()
         if body["mode"] == "Object":
@@ -85,7 +84,7 @@ class MaintenanceApplication(ExtDocApplication):
         return self.response({"result": "Add object"}, status=self.OK)
 
     @view(url="(?P<id>[0-9a-f]{24})/objects/", method=["GET"], access="read", api=True)
-    def api_test(self, request, id):
+    def api_test(self, request: HttpRequest, id):
         r = []
         for mo in (
             ManagedObject.objects.filter(is_managed=True, affected_maintenances__has_key=id)

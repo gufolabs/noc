@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # Classification Quality Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2011 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
@@ -15,7 +18,7 @@ from noc.core.translation import ugettext as _
 class ReportClassificationQuality(SimpleReport):
     title = _("Classification Quality")
 
-    def get_data(self, request, **kwargs):
+    def get_data(self, request: HttpRequest, **kwargs):
         default_ids = [c.id for c in EventClass.objects.filter(name__startswith="Unknown | ")]
         count = ActiveEvent.objects.count()
         not_classified = ActiveEvent.objects.filter(event_class__in=default_ids).count()

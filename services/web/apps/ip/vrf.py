@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # ip.vrf application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extmodelapplication import ExtModelApplication, view
@@ -61,7 +64,7 @@ class VRFApplication(ExtModelApplication):
             )
         },
     )
-    def api_bulk_import(self, request, items):
+    def api_bulk_import(self, request: HttpRequest, items):
         n = 0
         for i in items:
             if not VRF.objects.filter(name=i["name"], rd=i["rd"]).exists():

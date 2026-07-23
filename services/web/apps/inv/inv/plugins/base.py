@@ -1,12 +1,15 @@
 # ---------------------------------------------------------------------
 # inv.inv plugins
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import logging
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.inv.models.object import Object
@@ -37,9 +40,9 @@ class InvPlugin:
             url=f"^(?P<id>[0-9a-f]{{24}})/plugin/{self.name}/$",
         )
 
-    def api_get_data(self, request, id):
+    def api_get_data(self, request: HttpRequest, id):
         o = self.app.get_object_or_404(Object, id=id)
         return self.get_data(request, o)
 
-    def get_data(self, request, object):
+    def get_data(self, request: HttpRequest, object):
         return None

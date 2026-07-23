@@ -12,7 +12,8 @@ import os
 import datetime
 import functools
 from collections import OrderedDict
-from typing import TypeVar, Any
+from collections.abc import Callable
+from typing import TypeVar, Any, ParamSpec
 from http import HTTPStatus
 
 # Third-party modules
@@ -43,10 +44,20 @@ from noc.models import is_document
 from .access import HasPerm, Permit, Deny
 from .site import site
 
+P = ParamSpec("P")
+R = TypeVar("R")
 T = TypeVar("T")
 
 
-def view(url, access, url_name=None, menu=None, method=None, validate=None, api=False):
+def view(
+    url: str,
+    access,
+    url_name: str | None = None,
+    menu=None,
+    method: list[str] | None = None,
+    validate=None,
+    api: bool = False,
+) -> Callable[[Callable[P, R]], Callable[P, R]]:
     """
     @view decorator
     :param url: URL relative to application root
@@ -54,7 +65,7 @@ def view(url, access, url_name=None, menu=None, method=None, validate=None, api=
     :param api: Does the view exposed as API function
     """
 
-    def decorate(f):
+    def decorate(f: Callable[P, R]) -> Callable[P, R]:
         f.url = url
         f.url_name = url_name
         # Process access

@@ -1,12 +1,15 @@
 # ---------------------------------------------------------------------
 # inv.inv conduits plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 from collections import defaultdict
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.inv.models.objectmodel import ObjectModel
@@ -65,7 +68,7 @@ class ConduitsPlugin(InvPlugin):
         )
         self.conduits_model = ObjectModel.objects.filter(name=self.CONDUITS_MODEL).first()
 
-    def get_data(self, request, object):
+    def get_data(self, request: HttpRequest, object):
         ducts = []
         # Get all conduits
         conduits = defaultdict(list)
@@ -112,7 +115,7 @@ class ConduitsPlugin(InvPlugin):
     def is_single_connection(self, o):
         return o.model.name in self.SINGLE_CONNECTION_MODELS
 
-    def api_get_neighbors(self, request, id):
+    def api_get_neighbors(self, request: HttpRequest, id):
         o = self.app.get_object_or_404(Object, id=id)
         if not o.point:
             return []
@@ -149,7 +152,7 @@ class ConduitsPlugin(InvPlugin):
             ]
         return r
 
-    def api_create_ducts(self, request, id, ducts=None):
+    def api_create_ducts(self, request: HttpRequest, id, ducts=None):
         o = self.app.get_object_or_404(Object, id=id)
         conns = {}  # target -> conneciton
         for c, t, _ in o.get_genderless_connections("ducts"):

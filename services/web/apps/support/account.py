@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # support.account application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extapplication import ExtApplication, view
@@ -21,7 +24,7 @@ class AccountApplication(ExtApplication):
     menu = [_("Setup"), _("Account")]
 
     @view(url=r"^$", method=["GET"], access="launch", api=True)
-    def api_get(self, request):
+    def api_get(self, request: HttpRequest):
         c = CPClient()
         data = {}
         if c.has_account():
@@ -39,7 +42,7 @@ class AccountApplication(ExtApplication):
         api=True,
         validate={"name": StringParameter(), "password": StringParameter(required=False)},
     )
-    def api_attach_account(self, request, name, password):
+    def api_attach_account(self, request: HttpRequest, name, password):
         c = CPClient()
         if c.has_account():
             self.response_forbidden()
@@ -65,7 +68,7 @@ class AccountApplication(ExtApplication):
     )
     def api_save_account(
         self,
-        request,
+        request: HttpRequest,
         name,
         email,
         password=None,
@@ -107,7 +110,9 @@ class AccountApplication(ExtApplication):
         api=True,
         validate={"old_password": StringParameter(), "new_password": StringParameter()},
     )
-    def api_change_password(self, request, old_password, new_password, *args, **kwargs):
+    def api_change_password(
+        self, request: HttpRequest, old_password, new_password, *args, **kwargs
+    ):
         c = CPClient()
         if not c.has_account():
             return {"status": False, "message": "Account is not registred"}
@@ -127,7 +132,9 @@ class AccountApplication(ExtApplication):
             "description": StringParameter(required=False),
         },
     )
-    def api_save_system(self, request, name, type=None, description=None, *args, **kwargs):
+    def api_save_system(
+        self, request: HttpRequest, name, type=None, description=None, *args, **kwargs
+    ):
         c = CPClient()
         if c.has_system():
             try:

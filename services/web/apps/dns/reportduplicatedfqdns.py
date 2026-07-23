@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # Duplicated FQDNs Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.simplereport import SimpleReport
@@ -14,7 +17,7 @@ from noc.core.translation import ugettext as _
 class Reportreportduplicatedfqdns(SimpleReport):
     title = _("Duplicated FQDNs")
 
-    def get_data(self, request, **kwargs):
+    def get_data(self, request: HttpRequest, **kwargs):
         vrf_id = VRF.get_global().id
         return self.from_query(
             title=self.title,

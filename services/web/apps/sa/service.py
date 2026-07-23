@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # sa.service application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -10,6 +10,7 @@ from typing import Any
 
 # Third-party modules
 from mongoengine.queryset import Q
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -120,7 +121,7 @@ class ServiceApplication(ExtDocApplication):
             )
         return r
 
-    def get_Q(self, request, query):
+    def get_Q(self, request: HttpRequest, query):
         if is_objectid(query):
             q = Q(id=query)
         elif is_ipv4(query.strip()):
@@ -183,7 +184,7 @@ class ServiceApplication(ExtDocApplication):
         return super().clean(data)
 
     @view("^(?P<id>[0-9a-f]{24})/get_path/$", access="read", api=True)
-    def api_get_path(self, request, id):
+    def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(Service, id=id)
         path = [Service.get_by_id(ns) for ns in o.get_path()]
         return {
@@ -233,7 +234,7 @@ class ServiceApplication(ExtDocApplication):
         return r
 
     @view(r"^(?P<sid>[0-9a-f]{24})/resource/(?P<r_type>\S+)/", access="read", api=True)
-    def api_get_instance_resources(self, request, sid: str, r_type: str):
+    def api_get_instance_resources(self, request: HttpRequest, sid: str, r_type: str):
         # o = self.get_object_or_404(Service, id=sid)
         q = self.parse_request_query(request)
         if "managed_object" not in q:
@@ -261,7 +262,7 @@ class ServiceApplication(ExtDocApplication):
         return r
 
     @view("^(?P<sid>[0-9a-f]{24})/instance/$", access="read", api=True)
-    def api_get_instance(self, request, sid: str):
+    def api_get_instance(self, request: HttpRequest, sid: str):
         o = self.get_object_or_404(Service, id=sid)
         r = []
         for si in ServiceInstance.objects.filter(service=o):

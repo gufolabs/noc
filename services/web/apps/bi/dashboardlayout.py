@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # bi.dashboardlayout application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2016 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -21,6 +24,6 @@ class DashboardLayoutApplication(ExtDocApplication):
     model = DashboardLayout
 
     @view(url="^(?P<id>[0-9a-f]{24})/json/$", method=["GET"], access="read", api=True)
-    def api_json(self, request, id):
+    def api_json(self, request: HttpRequest, id):
         layout = self.get_object_or_404(DashboardLayout, id=id)
         return layout.to_json()
