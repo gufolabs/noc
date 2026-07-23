@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Translation utilities
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -33,9 +33,9 @@ def set_translation(service, lang):
             logger.info("No translation for language '%s'. Using 'en' instead", lang)
 
 
-def _ugettext(x):
+def _ugettext(x: str) -> str:
     return x
 
 
-def ugettext(x):
+def ugettext(x: str) -> str:
     return smart_text(_ugettext(x))
