@@ -471,7 +471,7 @@ class BaseService:
     async def on_deactivate(self) -> None:
         return None
 
-    def open_rpc(self, name: sre, pool: str | None = None, sync: bool = False, hints=None):
+    def open_rpc(self, name: str, pool: str | None = None, sync: bool = False, hints=None):
         """Returns RPC proxy object."""
         return RPCProxy(self, f"{name}-{pool}" if pool else name, sync=sync, hints=hints)
 
