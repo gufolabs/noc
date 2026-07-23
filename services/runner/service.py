@@ -45,7 +45,7 @@ class RunnerService(FastAPIService):
         self.queue: asyncio.Queue[tuple[ObjectId | None, dict[str, Any]]] = asyncio.Queue()
         self.runner: Runner | None = None
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         connect_async()
         self.runner = Runner(concurrency=config.runner.max_running, queue=self.queue)
         asyncio.create_task(self.sync_task())

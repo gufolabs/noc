@@ -107,7 +107,7 @@ class LoginService(FastAPIService):
             auto_set_cursor=False,
         )
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         self.loop.create_task(self.subscribe_lift())
 
 

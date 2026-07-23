@@ -356,7 +356,7 @@ class MetricsCollectorService(FastAPIService):
         # Process as usual
         await super().init_api()
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         check_callback = PeriodicCallback(
             self.check_channels, config.metricscollector.batch_delay_s
         )

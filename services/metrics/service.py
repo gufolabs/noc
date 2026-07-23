@@ -107,7 +107,7 @@ class MetricsService(FastAPIService):
         self.node_errors: dict[str, ErrorState] = {}
         self.unknown_sources: set[tuple[str, int]] = set()
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         self.slot_number, self.total_slots = await self.acquire_slot()
         self.change_log = ChangeLog(self.slot_number)
         connect_async()
@@ -140,14 +140,14 @@ class MetricsService(FastAPIService):
             async_cursor_condition=self.sync_cursor_condition,
         )
 
-    async def on_deactivate(self):
+    async def on_deactivate(self) -> None:
         if self.change_log:
             await self.change_log.flush()
             async with self.sync_cursor_condition:
                 self.sync_cursor_condition.notify_all()
             self.change_log = None
 
-    async def log_runner(self):
+    async def log_runner(self) -> None:
         self.logger.info("Run log runner")
         self.sync_cursor_condition = asyncio.Condition()
         while True:
@@ -157,7 +157,7 @@ class MetricsService(FastAPIService):
                 async with self.sync_cursor_condition:
                     self.sync_cursor_condition.notify_all()
 
-    async def get_object_mappings(self):
+    async def get_object_mappings(self) -> None:
         """
         Subscribe and track datastream changes
         """
@@ -181,7 +181,7 @@ class MetricsService(FastAPIService):
                 self.logger.info("Failed to get object mappings: %s", e)
                 await asyncio.sleep(1)
 
-    async def get_metric_rules_mappings(self):
+    async def get_metric_rules_mappings(self) -> None:
         """
         Subscribe and track datastream changes
         """
@@ -200,7 +200,7 @@ class MetricsService(FastAPIService):
                 self.logger.info("Failed to get object mappings: %s", e)
                 await asyncio.sleep(1)
 
-    async def report(self):
+    async def report(self) -> None:
         """Report report some processed errors"""
         if not self.node_errors and not self.unknown_sources:
             return
@@ -223,13 +223,12 @@ class MetricsService(FastAPIService):
             )
             self.unknown_sources = set()
 
-    def register_unknown_source(self, k: MetricKey):
+    def register_unknown_source(self, k: MetricKey) -> None:
         if len(self.unknown_sources) > 200:
             return
         self.unknown_sources.add(k[1])
 
-    def set_error(self, k: MetricKey, msg: str, ts: int | None = None):
-        """"""
+    def set_error(self, k: MetricKey, msg: str, ts: int | None = None) -> None:
         ts = int(ts or perf_counter())
         if msg in self.node_errors:
             self.node_errors[msg].touch(ts)
@@ -281,7 +280,7 @@ class MetricsService(FastAPIService):
         if state:
             await self.change_log.feed(state)
 
-    def load_scopes(self):
+    def load_scopes(self) -> None:
         """
         Load ScopeInfo structures
         :return:

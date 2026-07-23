@@ -48,7 +48,7 @@ class CHWriterService(FastAPIService):
         # Queue of channels to flush
         self.flush_queue = asyncio.Queue()
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         report_callback = PeriodicCallback(self.report, 10000)
         report_callback.start()
         check_callback = PeriodicCallback(self.check_channels, config.chwriter.batch_delay_ms)

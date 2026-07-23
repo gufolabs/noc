@@ -27,7 +27,7 @@ class WorkerService(FastAPIService):
         self.slot_number = 0
         self.total_slots = 0
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         self.slot_number, self.total_slots = await self.acquire_slot()
         await self.subscribe_stream("jobs", self.slot_number, self.on_job, async_cursor=True)
 

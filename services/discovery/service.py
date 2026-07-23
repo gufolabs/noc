@@ -2,9 +2,12 @@
 # ----------------------------------------------------------------------
 # Discovery
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Python modules
+from typing import Any
 
 # NOC modules
 from noc.config import config
@@ -26,13 +29,12 @@ class DiscoveryService(FastAPIService):
         self.slot_number = 0
         self.total_slots = 0
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         self.slot_number, self.total_slots = await self.acquire_slot()
         if self.total_slots > 1:
             self.logger.info(
                 "Enabling distributed mode: Slot %d/%d", self.slot_number, self.total_slots
             )
-            # ifilter = {"key": {"$mod": [self.total_slots, self.slot_number]}}
             ifilter = {"shard": self.slot_number}
         else:
             self.logger.info("Enabling standalone mode")
@@ -62,7 +64,7 @@ class DiscoveryService(FastAPIService):
         # Run scheduler
         self.scheduler.run()
 
-    def get_mon_data(self):
+    def get_mon_data(self) -> dict[str, Any]:
         r = super().get_mon_data()
         if self.scheduler:
             self.scheduler.apply_metrics(r)

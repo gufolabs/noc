@@ -34,7 +34,7 @@ class TgSenderService(FastAPIService):
     name = "tgsender"
     use_telemetry = True
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         if not config.tgsender.token:
             self.logger.info("No Telegram Bot token defined")
             self.url = None
