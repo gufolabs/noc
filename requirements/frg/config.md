@@ -6,7 +6,7 @@ checks:
 - id: canonical-is-en
   description: Canonical language is `en`
 - id: entrypoint-is-noc
-  description: Entrypoint is a single requirement named `noc`
+  description: Entrypoint is a single requirement named `index`
 ---
 
 # FRG Configuration Requirements
@@ -21,7 +21,7 @@ The FRG configuration file **MUST** satisfy the following requirements:
 
 - Requirements directory **MUST** be `requirements/`.
 - Canonical language **MUST** be `en`.
-- The entrypoint **MUST** be a single requirement named `noc`.
+- The entrypoint **MUST** be a single requirement named `index`.
 
 ## Why?
 
