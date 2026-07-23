@@ -350,7 +350,11 @@ class Application(metaclass=ApplicationBase):
 
     @classmethod
     def render_json(
-        cls, obj, *, status: int = HTTPStatus.OK.value, headers: dict[str, Any] | None = None
+        cls,
+        obj: object,
+        *,
+        status: int = HTTPStatus.OK.value,
+        headers: dict[str, Any] | None = None,
     ) -> HttpResponse:
         """
         Create serialized JSON-encoded response
