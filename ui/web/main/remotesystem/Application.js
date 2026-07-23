@@ -379,8 +379,16 @@ Ext.define("NOC.main.remotesystem.Application", {
               startDay: 1,
               fieldLabel: __("Run Sync At"),
               allowBlank: true,
-              format: "d-M-Y Н:i",
+              format: "d-M-Y H:i",
               submitFormat: "Y-m-d\\TH:i:s",
+              width: 312, // for NOC theme
+              altFormats: "Y-m-d H:i:s|Y-m-d\\TH:i:s|Y-m-d H:i|d.m.Y H:i|d.m.Y",
+              getModelData: function(){
+                var v = this.getValue(),
+                  o = {};
+                o[this.getName()] = v ? Ext.Date.format(v, "Y-m-d\\TH:i:s") : null;
+                return o;
+              },
             },
             {
               name: "event_sync_interval",
