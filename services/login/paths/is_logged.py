@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # /api/login/is_logged/ path
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -10,12 +10,11 @@
 # Third-party modules
 from fastapi import APIRouter, Cookie
 from fastapi.responses import JSONResponse
-from jose import jwt, JWTError
-import orjson
+import jwt
+from jwt import InvalidTokenError
 
 # NOC modules
 from noc.config import config
-from noc.core.comp import smart_text
 
 router = APIRouter()
 
@@ -30,11 +29,11 @@ async def is_logged(jwt_cookie: str | None = Cookie(None, alias=config.login.jwt
         try:
             token = jwt.decode(
                 jwt_cookie,
-                smart_text(orjson.dumps(config.secret_key)),
+                config.secret_key,
                 algorithms=[config.login.jwt_algorithm],
                 audience="auth",
             )
             result = isinstance(token, dict) and "sub" in token
-        except JWTError:
+        except InvalidTokenError:
             pass
     return JSONResponse(result, status_code=200)
