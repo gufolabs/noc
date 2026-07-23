@@ -24,7 +24,7 @@ from mongoengine.fields import (
 
 # NOC modules
 from noc.core.topology.types import TopologyNode, Portal
-from noc.core.topology.loader import loader as topo_loader
+from noc.core.topology.base import loader as topo_loader
 from noc.core.topology.types import Layout
 from noc.core.mongo.fields import ForeignKeyField, PlainReferenceField
 from noc.main.models.imagestore import ImageStore

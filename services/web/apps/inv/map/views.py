@@ -41,7 +41,7 @@ from noc.core.validators import is_objectid
 from noc.core.pm.utils import get_interface_metrics, MetricProxy
 from noc.core.translation import ugettext as _
 from noc.core.cache.decorator import cachedmethod
-from noc.core.topology.loader import loader
+from noc.core.topology.base import loader
 
 tags_lock = threading.RLock()
 
