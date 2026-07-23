@@ -855,7 +855,7 @@ class BaseService:
         (i.e. traefik)
         Return None for no limits
         """
-        return
+        return None
 
     def is_valid_health_check(self, service_id: str) -> bool:
         """Check received service id matches own service id"""
