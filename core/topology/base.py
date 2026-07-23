@@ -414,11 +414,10 @@ class TopologyBase:
     @classmethod
     def iter_maps(
         cls,
-        parent: str = None,
+        parent: str | None = None,
         query: str | None = None,
         limit: int | None = None,
         start: int | None = None,
-        page: int | None = None,
     ) -> Iterable[MapItem]:
         """Iterate over available maps."""
 

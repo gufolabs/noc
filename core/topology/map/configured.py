@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Configured Map class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -68,7 +68,6 @@ class ConfiguredTopology(TopologyBase):
         query: str | None = None,
         limit: int | None = None,
         start: int | None = None,
-        page: int | None = None,
     ) -> Iterable[MapItem]:
         data = ConfiguredMap.objects.filter().order_by("name")
         if query:
