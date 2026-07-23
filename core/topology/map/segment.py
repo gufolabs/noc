@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # SegmentTopology class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -308,11 +308,10 @@ class SegmentTopology(TopologyBase):
     @classmethod
     def iter_maps(
         cls,
-        parent: str = None,
+        parent: str | None = None,
         query: str | None = None,
         limit: int | None = None,
         start: int | None = None,
-        page: int | None = None,
     ) -> Iterable[MapItem]:
         if parent is not None:
             data = NetworkSegment.objects.filter(parent=parent).order_by("name")

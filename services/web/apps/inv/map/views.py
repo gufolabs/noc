@@ -328,13 +328,12 @@ class MapApplication(ExtApplication):
                 status=self.NOT_FOUND,
             )
         # Search for maps
-        r = []
+        r: list[dict[str, Any]] = []
         for mi in gen.iter_maps(
             parent=parent if parent not in ("0", gen.name) else None,
             query=g.get(self.query_param, ""),
             limit=int(g.get(self.limit_param, 500)),
             start=int(g.get(self.start_param, 0)),
-            page=int(g.get(self.page_param, 1)),
         ):
             r.append(
                 {
