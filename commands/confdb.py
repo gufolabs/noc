@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ./noc confdb
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -15,7 +15,6 @@ from noc.config import config
 from noc.core.mongo.connection import connect
 from noc.core.profile.loader import loader
 from noc.core.text import format_table
-from noc.core.comp import smart_text
 
 
 class Command(BaseCommand):
@@ -29,18 +28,18 @@ class Command(BaseCommand):
         syntax_parser.add_argument("path", nargs=argparse.REMAINDER)
         # tokenizer command
         tokenizer_parser = subparsers.add_parser("tokenizer")
-        tokenizer_parser.add_argument("--object", type=smart_text, help="Managed Object ID")
+        tokenizer_parser.add_argument("--object", help="Managed Object ID")
         tokenizer_parser.add_argument("--profile", help="Profile Name")
         tokenizer_parser.add_argument("--config", help="Config Path")
         # config command
         normalizer_parser = subparsers.add_parser("normalizer")
-        normalizer_parser.add_argument("--object", type=smart_text, help="Managed Object ID")
+        normalizer_parser.add_argument("--object", help="Managed Object ID")
         normalizer_parser.add_argument("--profile", help="Profile Name")
         normalizer_parser.add_argument("--config", help="Config Path")
         normalizer_parser.add_argument("--errors-policy", help="Errors Policy")
         # query command
         query_parser = subparsers.add_parser("query")
-        query_parser.add_argument("--object", type=smart_text, help="Managed Object ID")
+        query_parser.add_argument("--object", help="Managed Object ID")
         query_parser.add_argument("--profile", help="Profile Name")
         query_parser.add_argument("--config", help="Config Path")
         query_parser.add_argument("query", help="Query request")
@@ -49,7 +48,7 @@ class Command(BaseCommand):
         dump_parser.add_argument(
             "--show-hints", action="store_true", help="Disable cleanup hints section"
         )
-        dump_parser.add_argument("--object", type=smart_text, help="Managed Object ID")
+        dump_parser.add_argument("--object", help="Managed Object ID")
 
     def handle(self, cmd, *args, **options):
         return getattr(self, f"handle_{cmd}")(*args, **options)

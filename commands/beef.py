@@ -44,34 +44,34 @@ class Command(BaseCommand):
             help="Ignore beef policy setings in ManagedObject",
         )
         collect_parser.add_argument("--storage", help="External storage name or url")
-        collect_parser.add_argument("--path", type=smart_text, help="Path name")
-        collect_parser.add_argument("--description", type=smart_text, help="Set beef description")
+        collect_parser.add_argument("--path", help="Path name")
+        collect_parser.add_argument("--description", help="Set beef description")
         collect_parser.add_argument("objects", nargs=argparse.REMAINDER, help="Object names or ids")
         # view command
         view_parser = subparsers.add_parser("view")
         view_parser.add_argument("--storage", help="External storage name or url")
-        view_parser.add_argument("--path", type=smart_text, help="Beef UUID or path name")
+        view_parser.add_argument("--path", help="Beef UUID or path name")
         # edit command
         export_parser = subparsers.add_parser("export")
         export_parser.add_argument("--storage", help="External storage name or url")
-        export_parser.add_argument("--path", type=smart_text, help="Beef UUID or path name")
+        export_parser.add_argument("--path", help="Beef UUID or path name")
         export_parser.add_argument("--export-path", help="Path file for export")
         # edit command
         import_parser = subparsers.add_parser("import")
         import_parser.add_argument("--storage", help="External storage name or url")
-        import_parser.add_argument("--path", type=smart_text, help="Path name")
+        import_parser.add_argument("--path", help="Path name")
         import_parser.add_argument("paths", nargs=argparse.REMAINDER, help="Path to imported beef")
         # list command
         list_parser = subparsers.add_parser("list")  # noqa
         list_parser.add_argument("--storage", help="External storage name or url")
-        list_parser.add_argument("--path", type=smart_text, help="Beef UUID or path name")
+        list_parser.add_argument("--path", help="Beef UUID or path name")
         # test command
         run_parser = subparsers.add_parser("run")
         run_parser.add_argument(
             "--script", action="append", help="Script name for runs. Default (get_version)"
         )
         run_parser.add_argument("--storage", help="External storage name")
-        run_parser.add_argument("--path", type=smart_text, help="Beef UUID or path name")
+        run_parser.add_argument("--path", help="Beef UUID or path name")
         run_parser.add_argument("--access-preference", default="CS", help="Access preference")
         out_group = run_parser.add_mutually_exclusive_group()
         out_group.add_argument(
@@ -88,20 +88,18 @@ class Command(BaseCommand):
         # create-test-case
         create_test_case_parser = subparsers.add_parser("create-test-case")
         create_test_case_parser.add_argument("--storage", help="External storage name")
-        create_test_case_parser.add_argument("--path", type=smart_text, help="Path name")
+        create_test_case_parser.add_argument("--path", help="Path name")
         create_test_case_parser.add_argument("--test-storage", help="External storage name")
-        create_test_case_parser.add_argument("--test-path", type=smart_text, help="Path name")
+        create_test_case_parser.add_argument("--test-path", help="Path name")
         create_test_case_parser.add_argument("--config-storage", help="External storage name")
-        create_test_case_parser.add_argument(
-            "--config-path", type=smart_text, default="/", help="Path name"
-        )
+        create_test_case_parser.add_argument("--config-path", default="/", help="Path name")
         create_test_case_parser.add_argument(
             "--build", action="store_true", default=False, help="Build test case after create"
         )
         # build-test-case
         build_test_case_parser = subparsers.add_parser("build-test-case")
         build_test_case_parser.add_argument("--test-storage", help="External storage name")
-        build_test_case_parser.add_argument("--test-path", type=smart_text, help="Path name")
+        build_test_case_parser.add_argument("--test-path", help="Path name")
 
     def handle(self, cmd, *args, **options):
         setup_asyncio()
