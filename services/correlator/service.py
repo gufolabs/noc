@@ -92,7 +92,6 @@ class CorrelatorService(FastAPIService):
 
     def __init__(self) -> None:
         super().__init__()
-        self.version = version.version
         self.rules: dict[ObjectId, list[EventAlarmRule]] = {}
         self.disposition_rules: dict[ObjectId, list[EventAlarmRule]] = {}
         self.object_avail_rules: dict[bool, list[EventAlarmRule]] = {}
@@ -280,7 +279,7 @@ class CorrelatorService(FastAPIService):
         r += [str(t), str(v)]
         r += [format_frames(get_traceback_frames(tb))]
         r = "\n".join(r)
-        event.mark_as_failed(version=self.version, traceback=r)
+        event.mark_as_failed(version=version.version, traceback=r)
 
     def set_root_cause(self, a: ActiveAlarm) -> bool:
         """
