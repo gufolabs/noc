@@ -35,7 +35,7 @@ from noc.core.bi.decorator import bi_sync
 from noc.core.model.decorator import on_delete_check, on_save
 from noc.core.change.decorator import change
 from noc.core.topology.base import TopologyBase
-from noc.core.topology.loader import loader
+from noc.core.topology.base import loader
 from noc.inv.models.resourcepool import ResourcePool
 from .vlanprofile import VLANProfile
 from .vlanfilter import VLANFilter

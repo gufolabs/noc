@@ -22,7 +22,7 @@ from noc.core.script.loader import loader as script_loader
 from noc.core.checkers.loader import loader as checker_loader
 from noc.core.window import wf_choices
 from noc.core.topology.types import ShapeOverlayPosition, ShapeOverlayForm
-from noc.core.topology.loader import loader as topo_loader
+from noc.core.topology.base import loader as topo_loader
 from noc.core.mx import MessageType, MESSAGE_HEADERS
 from noc.core.datasources.loader import loader as ds_loader
 from noc.core.protodcsources.loader import loader as pds_loader

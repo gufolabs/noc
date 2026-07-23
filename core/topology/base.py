@@ -15,6 +15,7 @@ from dataclasses import asdict
 import networkx as nx
 import numpy as np
 import cachetools
+from gufo.loader import Loader
 from bson import ObjectId
 
 # NOC modules
@@ -425,3 +426,6 @@ class TopologyBase:
     @classmethod
     def iter_path(cls, gen_id) -> Iterable[PathItem]:
         """Return map by hierarchy path."""
+
+
+loader = Loader[type[TopologyBase]](base="noc.core.topology.map")

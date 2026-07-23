@@ -26,7 +26,7 @@ from mongoengine.queryset.visitor import Q
 from mongoengine.errors import NotUniqueError
 
 # NOC modules
-from noc.core.topology.loader import loader as t_loader
+from noc.core.topology.base import loader as t_loader
 from noc.core.topology.base import TopologyBase
 from noc.core.topology.types import Layout, TopologyNodeType
 from noc.config import config
