@@ -27,7 +27,7 @@ from pathlib import Path
 
 CURRENT_YEAR = datetime.date.today().year
 
-COPYRIGHT_RE = re.compile(r"(#\s*Copyright\s+\(C\)\s+\d{4}-)(\d{4})")
+COPYRIGHT_RE = re.compile(r"(# Copyright \(C\) \d{4}-)(\d{4})")
 
 
 def iter_changed_files() -> list[Path]:
