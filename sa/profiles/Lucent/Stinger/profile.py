@@ -2,8 +2,8 @@
 #  Vendor: Lucent
 #  OS:     Stinger
 # ---------------------------------------------------------------------
-#  Copyright (C) 2007-2016 The NOC Project
-#  See LICENSE for details
+# Copyright (C) 2007-2016 The NOC Project
+# See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules

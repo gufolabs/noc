@@ -2,7 +2,7 @@
 #  main.home application
 # ----------------------------------------------------------------------
 # Copyright (C) 2007-2025 The NOC Project
-#  See LICENSE for details
+# See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
