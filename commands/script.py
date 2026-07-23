@@ -76,9 +76,7 @@ class Command(BaseCommand):
             help="Set SNMP Rate-limit setting",
         )
         parser.add_argument("--update-spec", help="Append all issued commands to spec")
-        parser.add_argument(
-            "-o", dest="beef_output", type=smart_text, help="Save script output to beef"
-        )
+        parser.add_argument("-o", dest="beef_output", help="Save script output to beef")
         parser.add_argument("script", nargs=1, help="Script name")
         parser.add_argument("object_name", nargs=1, help="Object name")
         parser.add_argument(
