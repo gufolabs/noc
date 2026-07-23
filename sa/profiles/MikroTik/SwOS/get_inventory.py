@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # MikroTik.SwOS.get_inventory
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -11,7 +11,6 @@ import codecs
 # NOC modules
 from noc.core.script.base import BaseScript
 from noc.sa.interfaces.igetinventory import IGetInventory
-from noc.core.comp import smart_text
 
 
 class Script(BaseScript):
@@ -34,11 +33,11 @@ class Script(BaseScript):
         if sfps.get("vnd"):
             sfp_count = len(sfps["vnd"])
             for i in range(sfp_count):
-                vendor = smart_text(codecs.decode(sfps["vnd"][i], "hex")).strip()
-                part_no = smart_text(codecs.decode(sfps["pnr"][i], "hex")).strip()
-                revision = smart_text(codecs.decode(sfps["rev"][i], "hex")).strip()
-                serial = smart_text(codecs.decode(sfps["ser"][i], "hex")).strip()
-                date = smart_text(codecs.decode(sfps["dat"][i], "hex")).strip()
+                vendor = codecs.decode(sfps["vnd"][i], "hex").decode().strip()
+                part_no = codecs.decode(sfps["pnr"][i], "hex").decode().strip()
+                revision = codecs.decode(sfps["rev"][i], "hex").decode().strip()
+                serial = codecs.decode(sfps["ser"][i], "hex").decode().strip()
+                date = codecs.decode(sfps["dat"][i], "hex").decode().strip()
                 dt = date.split("-")
                 year = "20" + dt[0]
                 parts = [year, dt[1], dt[2]]
@@ -58,11 +57,11 @@ class Script(BaseScript):
                     }
                 ]
         elif sfps.get("vndr"):
-            vendor = smart_text(codecs.decode(sfps["vndr"], "hex")).strip()
-            part_no = smart_text(codecs.decode(sfps["ptnr"], "hex")).strip()
-            revision = smart_text(codecs.decode(sfps["rev"], "hex")).strip()
-            serial = smart_text(codecs.decode(sfps["ser"], "hex")).strip()
-            date = smart_text(codecs.decode(sfps["date"], "hex")).strip()
+            vendor = codecs.decode(sfps["vndr"], "hex").decode().strip()
+            part_no = codecs.decode(sfps["ptnr"], "hex").decode().strip()
+            revision = codecs.decode(sfps["rev"], "hex").decode().strip()
+            serial = codecs.decode(sfps["ser"], "hex").decode().strip()
+            date = codecs.decode(sfps["date"], "hex").decode().strip()
             dt = date.split("-")
             year = "20" + dt[0]
             parts = [year, dt[1], dt[2]]

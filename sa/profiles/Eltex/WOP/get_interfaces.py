@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Eltex.WOP.get_interfaces
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -13,7 +13,6 @@ import enum
 from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
 from noc.sa.interfaces.igetinterfaces import IGetInterfaces
 from noc.core.ip import IPv4
-from noc.core.comp import smart_text
 from noc.core.mib import mib
 
 
@@ -130,7 +129,7 @@ class Script(BaseScript):
                 ssid = value["ssid"].replace(" ", "").replace("Managed", "")
                 if ssid.startswith("2a2d"):
                     # 2a2d - hex string
-                    ssid = smart_text(codecs.decode(ssid, "hex"))
+                    ssid = codecs.decode(ssid, "hex").decode()
                 r = self.get_bss_detail(value["bss"])
                 bss_ifname = f"{ifname}.{ssid}"
                 if r:
