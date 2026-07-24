@@ -1,8 +1,8 @@
 # ----------------------------------------------------------------------
 #  Pretty command
 # ----------------------------------------------------------------------
-#  Copyright (C) 2007-2026 The NOC Project
-#  See LICENSE for details
+# Copyright (C) 2007-2026 The NOC Project
+# See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
