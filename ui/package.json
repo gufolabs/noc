@@ -80,7 +80,7 @@
     "vitest": "^4.1.3"
   },
   "dependencies": {
-    "@gufo-labs/font": "^0.0.9",
+    "@gufo-labs/font": "^0.0.10",
     "@joint/core": "^4.2.4",
     "color-input": "github:argyleink/css-color-component#cdn-latest",
     "dompurify": "^3.3.3",
