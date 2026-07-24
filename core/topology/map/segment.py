@@ -320,7 +320,7 @@ class SegmentTopology(TopologyBase):
             qs["parent"] = parent
         user = User.get_current_user()
         if user and not user.is_superuser:
-            adm_domains = UserAccess.get_domains(users)
+            adm_domains = UserAccess.get_domains(user)
             if not adm_domains:
                 return
             qs["adm_domains__in"] = adm_domains
