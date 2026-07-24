@@ -107,7 +107,7 @@ class L2DomainTopology(TopologyBase):
             )
 
     @classmethod
-    def iter_path(cls, gen_id) -> Iterable[PathItem]:
+    def iter_path(cls, gen_id: str) -> Iterable[PathItem]:
         o = L2Domain.get_by_id(gen_id)
         if not o:
             return

@@ -84,7 +84,7 @@ class ConfiguredTopology(TopologyBase):
             )
 
     @classmethod
-    def iter_path(cls, gen_id) -> Iterable[PathItem]:
+    def iter_path(cls, gen_id: str) -> Iterable[PathItem]:
         cfg = ConfiguredMap.get_by_id(gen_id)
         yield PathItem(title=str(cfg.name), id=str(cfg.id), level=1)
 
