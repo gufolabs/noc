@@ -6,10 +6,14 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+from __future__ import annotations
+
 import datetime
+from contextvars import ContextVar
+from contextlib import contextmanager
 import operator
 from threading import Lock
-from typing import Optional
+from typing import Iterator
 import logging
 
 # Third-party modules
@@ -129,25 +133,25 @@ class User(NOCModel):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: int) -> Optional["User"]:
+    def get_by_id(cls, oid: int) -> "User" | None:
         return User.objects.filter(id=oid).first()
 
     @classmethod
-    def get_by_id_uncached(cls, oid: int) -> Optional["User"]:
+    def get_by_id_uncached(cls, oid: int) -> "User" | None:
         return User.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_name_cache"), lock=lambda _: id_lock)
-    def get_by_username(cls, name: str) -> Optional["User"]:
+    def get_by_username(cls, name: str) -> "User" | None:
         return User.objects.filter(username=name).first()
 
     @classmethod
-    def get_by_username_uncached(cls, name: str) -> Optional["User"]:
+    def get_by_username_uncached(cls, name: str) -> "User" | None:
         return User.objects.filter(username=name).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_contact_cache"), lock=lambda _: id_lock)
-    def get_by_contact(cls, contact) -> Optional["User"]:
+    def get_by_contact(cls, contact) -> "User" | None:
         from .usercontact import UserContact
 
         uc = UserContact.objects.filter(params=contact).first()
@@ -397,3 +401,33 @@ class User(NOCModel):
         # Finally save
         user.save()
         return user.blocked_till
+
+    @contextmanager
+    def with_user(self) -> Iterator["User"]:
+        """
+        Set this user as the current execution context user.
+
+        The previous current user is restored automatically when leaving
+        the context, including when an exception is raised.
+
+        Yields:
+            The user instance active within the context.
+        """
+        token = _current_user.set(self)
+        try:
+            yield self
+        finally:
+            _current_user.reset(token)
+
+    @classmethod
+    def get_current_user(cls) -> User | None:
+        """
+        Return the user associated with the current execution context.
+
+        Returns:
+            The current user instance, or ``None`` if no user is set.
+        """
+        return _current_user.get()
+
+
+_current_user = ContextVar[User | None]("current_user", default=None)
