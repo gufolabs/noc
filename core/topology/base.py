@@ -413,8 +413,8 @@ class TopologyBase(ABC):
         """Check if topology is empty."""
         return False
 
-    @abstractmethod
     @classmethod
+    @abstractmethod
     def iter_maps(
         cls,
         parent: str | None = None,
@@ -424,8 +424,8 @@ class TopologyBase(ABC):
     ) -> Iterable[MapItem]:
         """Iterate over available maps."""
 
-    @abstractmethod
     @classmethod
+    @abstractmethod
     def iter_path(cls, gen_id: str) -> Iterable[PathItem]:
         """Return map by hierarchy path."""
 
