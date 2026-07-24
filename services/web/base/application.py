@@ -130,7 +130,13 @@ class ViewAPI:
             A view decorator.
         """
         return view(
-            url=url, method=["GET"], access=access, url_name=url_name, menu=menu, validate=validate
+            url=url,
+            method=["GET"],
+            access=access,
+            url_name=url_name,
+            menu=menu,
+            validate=validate,
+            api=True,
         )
 
     def post(
@@ -155,7 +161,13 @@ class ViewAPI:
             A view decorator.
         """
         return view(
-            url=url, method=["POST"], access=access, url_name=url_name, menu=menu, validate=validate
+            url=url,
+            method=["POST"],
+            access=access,
+            url_name=url_name,
+            menu=menu,
+            validate=validate,
+            api=True,
         )
 
     def put(
@@ -180,7 +192,13 @@ class ViewAPI:
             A view decorator.
         """
         return view(
-            url=url, method=["PUT"], access=access, url_name=url_name, menu=menu, validate=validate
+            url=url,
+            method=["PUT"],
+            access=access,
+            url_name=url_name,
+            menu=menu,
+            validate=validate,
+            api=True,
         )
 
     def delete(
@@ -211,6 +229,7 @@ class ViewAPI:
             url_name=url_name,
             menu=menu,
             validate=validate,
+            api=True,
         )
 
 
