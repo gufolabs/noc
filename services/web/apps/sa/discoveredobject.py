@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # sa.discoveredobject application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Third-party modules
 from mongoengine.queryset import Q
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -98,7 +99,7 @@ class DiscoveredObjectApplication(ExtDocApplication):
             del q["last_update"]
         return super().cleaned_query(q)
 
-    def get_Q(self, request, query):
+    def get_Q(self, request: HttpRequest, query):
         q = super().get_Q(request, query)
         query = query.strip()
         if query and is_ipv4_prefix(query):
@@ -107,7 +108,7 @@ class DiscoveredObjectApplication(ExtDocApplication):
         return q
 
     @view(url=r"actions/sync_records/$", method=["POST"], access="action", api=True)
-    def api_sync_action(self, request):
+    def api_sync_action(self, request: HttpRequest):
         req = self.parse_request_query(request)
         if "template" in req["args"]:
             template = ModelTemplate.get_by_id(req["args"]["template"])
@@ -130,14 +131,14 @@ class DiscoveredObjectApplication(ExtDocApplication):
         return {"status": True}
 
     @view(url=r"actions/send_event/$", method=["POST"], access="action", api=True)
-    def api_send_event_action(self, request):
+    def api_send_event_action(self, request: HttpRequest):
         req = self.parse_request_query(request)
         for do in DiscoveredObject.objects.filter(id__in=req["ids"]):
             do.fire_event(req["args"]["event"])
         return {"status": True}
 
     @view(url=r"^template_lookup/$", method=["GET"], access="read", api=True)
-    def api_sync_template_lookup(self, request):
+    def api_sync_template_lookup(self, request: HttpRequest):
         r = [
             {
                 "id": str(1),
@@ -158,7 +159,7 @@ class DiscoveredObjectApplication(ExtDocApplication):
         return r
 
     @view(url=r"^action_lookup/$", method=["GET"], access="read", api=True)
-    def api_action_lookup(self, request):
+    def api_action_lookup(self, request: HttpRequest):
         r = {}
         wfs = Workflow.objects.filter(allowed_models__in=["sa.DiscoveredObject"])
         for tr in Transition.objects.filter(workflow__in=wfs, enable_manual=True):
@@ -189,5 +190,5 @@ class DiscoveredObjectApplication(ExtDocApplication):
             "credentials": StringListParameter(required=False),
         },
     )
-    def api_sync_lookup(self, request, addresses, checks=None, credentials=None):
+    def api_sync_lookup(self, request: HttpRequest, addresses, checks=None, credentials=None):
         return {"status": True}

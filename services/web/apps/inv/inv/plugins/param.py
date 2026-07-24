@@ -1,12 +1,15 @@
 # ---------------------------------------------------------------------
 # inv.inv param data plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 from typing import Any
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.inv.models.object import Object
@@ -51,7 +54,7 @@ class ParamPlugin(InvPlugin):
             method=["GET"],
         )
 
-    def get_data(self, request, o: Object):
+    def get_data(self, request: HttpRequest, o: Object):
         data = []
         q = self.app.parse_request_query(request)
         scopes = set()
@@ -77,7 +80,7 @@ class ParamPlugin(InvPlugin):
             data[-1].update(cd.schema.json_schema)
         return {"id": str(o.id), "name": o.name, "model": o.model.name, "data": data}
 
-    def api_save_data(self, request, id, **kwargs):
+    def api_save_data(self, request: HttpRequest, id, **kwargs):
         o: "Object" = self.app.get_object_or_404(Object, id=id)
         data: list[dict[str, Any]] = self.app.deserialize(request.body)
         for d in data:
@@ -95,7 +98,7 @@ class ParamPlugin(InvPlugin):
             return {"status": False, "message": str(e), "traceback": str(e)}
         return {"status": True}
 
-    def api_scopes(self, request, id, **kwargs):
+    def api_scopes(self, request: HttpRequest, id, **kwargs):
         """"""
         o = self.app.get_object_or_404(Object, id=id)
         scopes = set()
@@ -105,7 +108,7 @@ class ParamPlugin(InvPlugin):
             scopes |= {s.code for s in p.scopes}
         return [{"id": f"@{s}", "label": s} for s in scopes]
 
-    # def api_get_schema(self, request, id, param=None, scope: Optional[str] = None):
+    # def api_get_schema(self, request:HttpRequest, id, param=None, scope: Optional[str] = None):
     #     """
     #     Getting Param Schema
     #     """

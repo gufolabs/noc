@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # inv.configuredmap application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -101,7 +104,7 @@ class ConfiguredMapApplication(ExtDocApplication):
         return super().clean(data)
 
     @view(r"^(?P<map_id>[0-9a-f]{24})/nodes/$", method=["GET"], access="read", api=True)
-    def get_map_nodes(self, request, map_id):
+    def get_map_nodes(self, request: HttpRequest, map_id):
         r = []
         rid = request.GET.getlist("id")
         o = ConfiguredMap.get_by_id(map_id)

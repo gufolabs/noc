@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # inv.channel application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -49,7 +52,7 @@ class ChannelApplication(ExtDocApplication):
     require_feature = Feature.CHANNEL
 
     @view(url="^(?P<id>[0-9a-f]{24})/viz/", method=["GET"], api=True, access="read")
-    def api_viz(self, request, id: str):
+    def api_viz(self, request: HttpRequest, id: str):
         channel = self.get_object_or_404(Channel, id=id)
         mapper = mapper_loader[channel.tech_domain.code](channel)
         data = mapper.to_viz()

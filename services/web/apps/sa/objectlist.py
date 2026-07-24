@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # sa.objectlist application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Third-party modules
 from django.db.models import Q as d_Q
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extapplication import ExtApplication, view
@@ -29,7 +30,7 @@ class ObjectListApplication(ExtApplication):
     # Default filter by is_managed
     managed_filter = True
 
-    def queryset(self, request, query=None):
+    def queryset(self, request: HttpRequest, query=None):
         """
         Filter records for lookup
         """
@@ -170,7 +171,7 @@ class ObjectListApplication(ExtApplication):
         return extra, [] if "order_by" in extra else order
 
     @view(method=["GET", "POST"], url="^$", access="read", api=True)
-    def api_list(self, request):
+    def api_list(self, request: HttpRequest):
         return self.list_data(request, self.instance_to_dict)
 
     @view(
@@ -184,6 +185,6 @@ class ObjectListApplication(ExtApplication):
             )
         },
     )
-    def api_action_ip_list(self, request, query):
+    def api_action_ip_list(self, request: HttpRequest, query):
         # @todo Required user vault implementation
         return self.render_json({"status": True})

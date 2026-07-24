@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # main.userprofile application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extapplication import ExtApplication, view, PermitLogged
@@ -24,7 +27,7 @@ class UserProfileApplication(ExtApplication):
     implied_permissions = {"launch": ["main:timepattern:lookup"]}
 
     @view(url="^$", method=["GET"], access=PermitLogged(), api=True)
-    def api_get(self, request):
+    def api_get(self, request: HttpRequest):
         user = request.user
         language = user.preferred_language
         contacts = [
@@ -99,7 +102,7 @@ class UserProfileApplication(ExtApplication):
             ),
         },
     )
-    def api_save(self, request, preferred_language, contacts):
+    def api_save(self, request: HttpRequest, preferred_language, contacts):
         user = request.user
         user.preferred_language = preferred_language
         user.save()

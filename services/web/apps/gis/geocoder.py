@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # gis.geocoder application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.config import config
@@ -15,7 +18,7 @@ class GeoCoderApplication(ExtApplication):
     name = "geocoder"
 
     @view(url=r"^lookup/$", method=["GET"], access="lookup", api=True)
-    def api_lookup(self, request, ref=None):
+    def api_lookup(self, request: HttpRequest, ref=None):
         q = {str(k): v[0] if len(v) == 1 else v for k, v in request.GET.lists()}
         limit = int(q.get(self.limit_param, 0))
         start = int(q.get(self.start_param, 0))

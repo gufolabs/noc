@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # inv.connectionrule application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -30,7 +33,7 @@ class ConnectionRuleApplication(ExtDocApplication):
         validate={"ids": ListOfParameter(element=DocumentParameter(ConnectionRule), convert=True)},
         api=True,
     )
-    def api_action_json(self, request, ids):
+    def api_action_json(self, request: HttpRequest, ids):
         r = [o.json_data for o in ids]
         s = to_json(r, order=["name", "description"])
         return {"data": s}

@@ -1,12 +1,15 @@
 # ---------------------------------------------------------------------
 # support.crashinfo application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2016 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import uuid
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -24,6 +27,6 @@ class CrashinfoApplication(ExtDocApplication):
     model = Crashinfo
 
     @view(url=r"^(?P<id>\S+)/traceback/", method=["GET"], access="read", api=True)
-    def api_traceback(self, request, id):
+    def api_traceback(self, request: HttpRequest, id):
         ci = self.get_object_or_404(Crashinfo, uuid=uuid.UUID(id))
         return ci.traceback

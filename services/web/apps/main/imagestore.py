@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # Image Store
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Third-party modules
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -40,6 +40,6 @@ class ImageStoreApplication(ExtDocApplication):
         return True
 
     @view("^(?P<id>[0-9a-f]{24})/image/$", access="read", api=True)
-    def api_image(self, request, id):
+    def api_image(self, request: HttpRequest, id):
         o = self.get_object_or_404(ImageStore, id=id)
         return HttpResponse(o.file.read(), content_type=o.get_content_type())

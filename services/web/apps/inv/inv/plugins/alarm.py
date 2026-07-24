@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # inv.inv alarm plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -11,6 +11,7 @@ from collections import defaultdict
 
 # Third-party modules
 from bson import ObjectId
+from django.http import HttpRequest
 
 # NOC modules
 from noc.inv.models.object import Object
@@ -32,7 +33,7 @@ class AlarmPlugin(InvPlugin):
     def init_plugin(self):
         super().init_plugin()
 
-    def get_data(self, request, obj: Object):
+    def get_data(self, request: HttpRequest, obj: Object):
         def get_path(resource: str) -> list[dict[str, str]]:
             obj, name = Object.from_resource(resource)
             if not obj:

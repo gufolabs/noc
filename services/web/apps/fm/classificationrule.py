@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # fm.classificationrule application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -10,6 +10,7 @@ import re
 
 # Third-party modules
 from django.template import Template, Context
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -38,7 +39,7 @@ class EventClassificationRuleApplication(ExtDocApplication):
     query_condition = "icontains"
 
     @view(url="^test/$", method=["POST"], access="test", api=True)
-    def api_test(self, request):
+    def api_test(self, request: HttpRequest):
         q = self.deserialize(request.body)
         errors = []
         patterns = []
@@ -204,7 +205,7 @@ class EventClassificationRuleApplication(ExtDocApplication):
     @view(
         url="^from_event/(?P<event_id>[0-9a-f]{24})/$", method=["POST"], access="create", api=True
     )
-    def api_from_event(self, request, event_id):
+    def api_from_event(self, request: HttpRequest, event_id):
         """
         Create classification rule from event
         :return:

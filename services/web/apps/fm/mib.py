@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # fm.mib application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Third-party modules
 import networkx as nx
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -28,7 +29,7 @@ class MIBApplication(ExtDocApplication):
     model = MIB
 
     @view(url="^(?P<id>[0-9a-f]{24})/data/$", method=["GET"], access="launch", api=True)
-    def api_data(self, request, id):
+    def api_data(self, request: HttpRequest, id):
         def insert_tree(data, ds):
             if len(data["path"]) + 1 == len(ds["path"]) and data["path"] == ds["path"][:-1]:
                 # Direct child
@@ -153,7 +154,7 @@ class MIBApplication(ExtDocApplication):
         return "\n".join(s)
 
     @view(url="^upload/", method=["POST"], access="create", api=True)
-    def api_upload(self, request):
+    def api_upload(self, request: HttpRequest):
         left = {}  # name -> data
         for f in request.FILES:
             left[f] = request.FILES[f]
@@ -180,7 +181,7 @@ class MIBApplication(ExtDocApplication):
         )
 
     @view(url="^(?P<id>[0-9a-f]{24})/text/$", method=["GET"], access="launch", api=True)
-    def api_text(self, request, id):
+    def api_text(self, request: HttpRequest, id):
         mib = self.get_object_or_404(MIB, id=id)
         try:
             svc = open_sync_rpc("mib")

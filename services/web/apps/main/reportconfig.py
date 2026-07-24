@@ -11,7 +11,7 @@ from collections import defaultdict
 
 # Third-party modules
 from pydantic import ValidationError
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -123,7 +123,7 @@ class ReportConfigApplication(ExtDocApplication):
         return r
 
     @view(url=r"^(?P<report_id>\S+)/form/$", method=["GET"], access="run", api=True)
-    def api_form_report(self, request, report_id):
+    def api_form_report(self, request: HttpRequest, report_id):
         def update_choice_widget(result: dict, cond_param: str, target_name: str):
             for cfg in result["params"]:
                 if cfg["name"] == cond_param:
@@ -275,7 +275,7 @@ class ReportConfigApplication(ExtDocApplication):
         return r
 
     @view(method=["GET"], url=r"^(?P<report_id>\S+)/run/$", access="run", api=True)
-    def api_report_run(self, request, report_id: str):
+    def api_report_run(self, request: HttpRequest, report_id: str):
         """
 
         :return:

@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # inv.reportdiscovery
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Third-party modules
 from django import forms
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.simplereport import SimpleReport
@@ -48,7 +49,9 @@ class ReportDiscoveryTopologyProblemApplication(SimpleReport):
 
         return ReportForm
 
-    def get_data(self, request, pool=None, obj_profile=None, available_only=False, **kwargs):
+    def get_data(
+        self, request: HttpRequest, pool=None, obj_profile=None, available_only=False, **kwargs
+    ):
         problems = {}  # id -> problem
 
         mos = ManagedObject.objects.filter(is_managed=True, pool=pool)

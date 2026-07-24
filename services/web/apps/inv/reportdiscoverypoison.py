@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # inv.reportdiscovery
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Third-party modules
 from django import forms
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.simplereport import SimpleReport, SectionRow
@@ -32,7 +33,7 @@ class ReportDiscoveryIDPoisonApplication(SimpleReport):
     title = _("Discovery ID cache poison")
     form = ReportForm
 
-    def get_data(self, request, pool=None, filter_dup_macs=False, **kwargs):
+    def get_data(self, request: HttpRequest, pool=None, filter_dup_macs=False, **kwargs):
         data = []
         # Find object with equal ID
         find = DiscoveryID._get_collection().aggregate(

@@ -1,12 +1,15 @@
 # ---------------------------------------------------------------------
 # main.timepattern application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2013 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import datetime
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extmodelapplication import ExtModelApplication, view
@@ -40,7 +43,7 @@ class TimePatternApplication(ExtModelApplication):
             "time": StringParameter(required=True),
         },
     )
-    def api_action_test(self, request, ids, date=None, time=None):
+    def api_action_test(self, request: HttpRequest, ids, date=None, time=None):
         d = f"{date}T{time}"
         dt = datetime.datetime.strptime(d, "%Y-%m-%dT%H:%M")
         return {

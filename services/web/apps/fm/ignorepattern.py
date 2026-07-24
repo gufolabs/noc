@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # fm.ignorepattern application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -24,7 +27,7 @@ class IgnorePatternApplication(ExtDocApplication):
     @view(
         url="^from_event/(?P<event_id>[0-9a-f]{24})/$", method=["POST"], access="create", api=True
     )
-    def api_from_event(self, request, event_id):
+    def api_from_event(self, request: HttpRequest, event_id):
         """
         Create ignore pattern rule from event
         :return:

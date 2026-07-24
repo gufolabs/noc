@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # vc.vlan application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -9,7 +9,7 @@
 from collections import defaultdict
 
 # Third-party modules
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from mongoengine import Q
 
 # NOC modules
@@ -131,7 +131,7 @@ class VLANApplication(ExtDocApplication):
         return data
 
     @view(url=r"^(?P<vlan_id>[0-9a-f]{24})/interfaces/$", method=["GET"], access="read", api=True)
-    def api_interfaces(self, request, vlan_id: int):
+    def api_interfaces(self, request: HttpRequest, vlan_id: int):
         """
         Returns a dict of {untagged: ..., tagged: ...., l3: ...}
         :return:

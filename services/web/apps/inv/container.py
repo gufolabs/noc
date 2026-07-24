@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # inv.container application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extapplication import ExtApplication, view
@@ -19,7 +22,7 @@ class ObjectContainerApplication(ExtApplication):
     menu = None
     query_fields = ["name__icontains", "description__icontains"]
 
-    def queryset(self, request, query=None):
+    def queryset(self, request: HttpRequest, query=None):
         # if not request.user.is_superuser:
         # qs = qs.filter(adm_domains__in=UserAccess.get_domains(request.user))
         models = list(
@@ -53,11 +56,11 @@ class ObjectContainerApplication(ExtApplication):
         return {"id": str(o.id), "label": (o.name), "has_children": o.has_children}
 
     @view(method=["GET"], url=r"^lookup/$", access="lookup", api=True)
-    def api_lookup(self, request):
+    def api_lookup(self, request: HttpRequest):
         return self.list_data(request, self.instance_to_lookup)
 
     @view("^(?P<oid>[0-9a-f]{24})/get_path/$", access="read", api=True)
-    def api_get_path(self, request, oid):
+    def api_get_path(self, request: HttpRequest, oid):
         o = self.get_object_or_404(Object, id=oid)
         path = [Object.get_by_id(ns) for ns in o.get_path()]
         return {

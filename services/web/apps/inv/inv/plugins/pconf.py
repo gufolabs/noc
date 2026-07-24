@@ -13,6 +13,7 @@ import uuid
 from collections import defaultdict
 
 # Third-party modules
+from django.http import HttpRequest
 import orjson
 
 # NOC modules
@@ -195,7 +196,7 @@ class PConfPlugin(InvPlugin):
             validate={"name": StringParameter(), "value": StringParameter()},
         )
 
-    def get_data(self, request, o: Object):
+    def get_data(self, request: HttpRequest, o: Object):
         def q_table(t: Table) -> dict[str, str | int]:
             r = {"id": t.value, "label": t.name.capitalize()}
             if t == Table.STATUS:
@@ -216,7 +217,7 @@ class PConfPlugin(InvPlugin):
             r["mgmt_url"] = data.mgmt_url
         return r
 
-    def api_data(self, request, id: str, t: str, g: str) -> dict[str, Any]:
+    def api_data(self, request: HttpRequest, id: str, t: str, g: str) -> dict[str, Any]:
         obj = self.app.get_object_or_404(Object, id=id)
         try:
             tbl = Table(int(t))
@@ -385,7 +386,7 @@ class PConfPlugin(InvPlugin):
             options=dict(ADM200_VMAP.items()),
         )
 
-    def api_set(self, request, id: str, name: str, value: str):
+    def api_set(self, request: HttpRequest, id: str, name: str, value: str):
         obj = self.app.get_object_or_404(Object, id=id)
         mo = self.get_managed_object(obj)
         if mo is None:

@@ -13,6 +13,7 @@ from typing import Any
 
 # Third-party modules
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from django.http import HttpRequest
 from jinja2.environment import Environment
 from jinja2.exceptions import TemplateError
 from bson import ObjectId
@@ -75,7 +76,7 @@ class MapApplication(ExtApplication):
         access="read",
         api=True,
     )
-    def api_data(self, request, gen_type, gen_id):
+    def api_data(self, request: HttpRequest, gen_type, gen_id):
         """
         Return data for render map
         :return:
@@ -93,7 +94,7 @@ class MapApplication(ExtApplication):
         access="write",
         api=True,
     )
-    def api_save(self, request, gen_type, gen_id):
+    def api_save(self, request: HttpRequest, gen_type, gen_id):
         """
         Save Manual layout
         :return:
@@ -110,7 +111,7 @@ class MapApplication(ExtApplication):
         access="write",
         api=True,
     )
-    def api_reset(self, request, gen_type, gen_id):
+    def api_reset(self, request: HttpRequest, gen_type, gen_id):
         # MapSettings.objects.filter(gen_type=gen_type, gen_id=gen_id).delete()
         settings = MapSettings.objects.filter(gen_type=gen_type, gen_id=gen_id).first()
         if settings:
@@ -121,7 +122,7 @@ class MapApplication(ExtApplication):
 
     # Inspectors
 
-    def inspector_managedobject(self, request, id, mo_id):
+    def inspector_managedobject(self, request: HttpRequest, id, mo_id):
         # segment = self.get_object_or_404(NetworkSegment, id=id)
         if is_objectid(id):
             segment = NetworkSegment.get_by_id(str(id))
@@ -146,7 +147,7 @@ class MapApplication(ExtApplication):
             "console_url": f"{s}://{object.address}/",
         }
 
-    def inspector_objectgroup(self, request, id, rg_id):
+    def inspector_objectgroup(self, request: HttpRequest, id, rg_id):
         object = self.get_object_or_404(ResourceGroup, id=rg_id)
         return {
             "id": str(object.id),
@@ -156,7 +157,7 @@ class MapApplication(ExtApplication):
             "external_segment": {},
         }
 
-    def inspector_objectsegment(self, request, id, rg_id):
+    def inspector_objectsegment(self, request: HttpRequest, id, rg_id):
         object = self.get_object_or_404(NetworkSegment, id=rg_id)
         return {
             "id": str(object.id),
@@ -166,7 +167,7 @@ class MapApplication(ExtApplication):
             "external_segment": {},
         }
 
-    def inspector_link(self, request, id, link_id):
+    def inspector_link(self, request: HttpRequest, id, link_id):
         """
         Link inpector
         :return:
@@ -220,7 +221,7 @@ class MapApplication(ExtApplication):
                 r["utilisation"] = 0
         return r
 
-    def inspector_cloud(self, request, id, link_id):
+    def inspector_cloud(self, request: HttpRequest, id, link_id):
         self.get_object_or_404(NetworkSegment, id=id)
         link = self.get_object_or_404(Link, id=link_id)
         r = {
@@ -246,7 +247,7 @@ class MapApplication(ExtApplication):
             ]
         return r
 
-    def inspector_cpe(self, request, id, cpe_id):
+    def inspector_cpe(self, request: HttpRequest, id, cpe_id):
         cpe: "CPE" = self.get_object_or_404(CPE, id=cpe_id)
         caps = cpe.get_caps()
         return {
@@ -266,7 +267,7 @@ class MapApplication(ExtApplication):
         access="read",
         api=True,
     )
-    def inspector(self, request, inspector, gen_id, r_id):
+    def inspector(self, request: HttpRequest, inspector, gen_id, r_id):
         """
         API for map inspectors
         :param inspector: Inspector name (node type)
@@ -281,7 +282,7 @@ class MapApplication(ExtApplication):
         return hi(request, gen_id, r_id)
 
     @view(url=r"^info/segment/(?P<id>[0-9a-f]{24})/$", method=["GET"], access="read", api=True)
-    def api_info_segment(self, request, id):
+    def api_info_segment(self, request: HttpRequest, id):
         segment = self.get_object_or_404(NetworkSegment, id=id)
         return {
             "name": segment.name,
@@ -290,7 +291,7 @@ class MapApplication(ExtApplication):
         }
 
     @view(method=["GET"], url=r"^lookup/$", access="lookup", api=True)
-    def api_lookup(self, request):
+    def api_lookup(self, request: HttpRequest):
         """
         Lookup available map by generator.
         """
@@ -350,11 +351,7 @@ class MapApplication(ExtApplication):
     @view(
         method=["GET"], url=r"^(?P<gen_id>[0-9a-f]{24}|\d+)/get_path/$", access="lookup", api=True
     )
-    def api_lookup_maps_get_path(self, request, gen_id):
-        """
-
-        :return:
-        """
+    def api_lookup_maps_get_path(self, request: HttpRequest, gen_id):
         # Parse params
         q = {str(k): v[0] if len(v) == 1 else v for k, v in request.GET.lists()}
         if self.gen_param not in q:
@@ -390,7 +387,7 @@ class MapApplication(ExtApplication):
             )
         },
     )
-    def api_objects_statuses(self, request, nodes: list[dict[str, str]]):
+    def api_objects_statuses(self, request: HttpRequest, nodes: list[dict[str, str]]):
         def get_alarms(objects: list[int]) -> set[int]:
             """
             Returns a set of objects with alarms
@@ -603,7 +600,7 @@ class MapApplication(ExtApplication):
             )
         },
     )
-    def api_metrics(self, request, metrics):
+    def api_metrics(self, request: HttpRequest, metrics):
         def q(s):
             if isinstance(s, str):
                 s = s.encode("utf-8")
@@ -670,7 +667,7 @@ class MapApplication(ExtApplication):
         api=True,
         validate={"objects": ListOfParameter(IntParameter())},
     )
-    def api_objects_stp_status(self, request, objects):
+    def api_objects_stp_status(self, request: HttpRequest, objects):
         def get_stp_status(object_id: int) -> tuple[set[int], set[str]]:
             roots: set[int] = set()
             blocked: set[str] = set()

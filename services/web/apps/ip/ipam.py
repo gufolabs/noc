@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # IP Address space management application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -10,6 +10,7 @@ from operator import itemgetter
 
 # Third-party modules modules
 import orjson
+from django.http import HttpRequest
 
 from noc.aaa.models.permission import Permission
 from noc.core.colors import get_colors
@@ -53,7 +54,7 @@ class IPAMApplication(ExtApplication):
         )
 
     @view(url=r"^(?P<prefix_id>\d+)/toggle_bookmark/$", method=["GET"], api=True, access="launch")
-    def view_toggle_bookmark(self, request, prefix_id):
+    def view_toggle_bookmark(self, request: HttpRequest, prefix_id):
         """
         Toggle block bookmark status
         """
@@ -67,7 +68,7 @@ class IPAMApplication(ExtApplication):
         api=True,
         access="launch",
     )
-    def get_vrf_prefix(self, request, vrf_id, afi, prefix=None):
+    def get_vrf_prefix(self, request: HttpRequest, vrf_id, afi, prefix=None):
         vrf = self.get_object_or_404(VRF, id=int(vrf_id))
 
         if not prefix:
@@ -80,12 +81,12 @@ class IPAMApplication(ExtApplication):
         return self.prefix_contents(request, prefix=prefix)
 
     @view(url=r"^contents/(?P<prefix_id>\d+)/$", method=["GET"], api=True, access="launch")
-    def get_prefix_content(self, request, prefix_id):
+    def get_prefix_content(self, request: HttpRequest, prefix_id):
         prefix = self.get_object_or_404(Prefix, id=int(prefix_id))
         return self.prefix_contents(request, prefix=prefix)
 
     @view(url=r"^(?P<vrf_id>\d+)/(?P<afi>[46])/quickjump/$", url_name="quickjump", access="view")
-    def view_quickjump(self, request, vrf_id, afi):
+    def view_quickjump(self, request: HttpRequest, vrf_id, afi):
         """
         Quickjump to closest suitable block
         """
@@ -127,7 +128,7 @@ class IPAMApplication(ExtApplication):
             return {"id": prefix.id}
         return self.response_redirect_to_referrer(request)
 
-    def prefix_contents(self, request, prefix):
+    def prefix_contents(self, request: HttpRequest, prefix):
         vrf = prefix.vrf
         # List of nested prefixes
         # @todo: prefetch_related

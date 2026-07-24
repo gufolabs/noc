@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # ip.reportoverview
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Third-party modules
 from django.db import connection
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.reportapplication import ReportApplication
@@ -303,7 +304,7 @@ class ReportOverviewApplication(ReportApplication):
         )
         return dict(c.fetchall())
 
-    def report_html(self, request, result=None, query=None):
+    def report_html(self, request: HttpRequest, result=None, query=None):
         self.ip_usage = self.get_ip_usage()
         self.prefix_children = self.get_prefix_children()
         # Prepare tree

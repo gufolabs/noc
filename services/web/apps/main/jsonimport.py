@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # main.jsonimport application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2015 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Third-party modules
 import orjson
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extapplication import ExtApplication, view
@@ -30,7 +31,7 @@ class JSONImportApplication(ExtApplication):
         validate={"json": StringParameter(required=True)},
         api=True,
     )
-    def api_import(self, request, json):
+    def api_import(self, request: HttpRequest, json):
         try:
             jdata = orjson.loads(json)
         except Exception as e:

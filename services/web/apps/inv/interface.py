@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # inv.interface application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Third-party modules
 from mongoengine import Q
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.decorators.state import state_handler
@@ -59,7 +60,7 @@ class InterfaceApplication(ExtDocApplication):
         ]
     }
 
-    def get_Q(self, request, query):
+    def get_Q(self, request: HttpRequest, query):
         q = super().get_Q(request, query)
         sq = Interface.get_search_Q(query)
         if sq:
@@ -152,7 +153,7 @@ class InterfaceApplication(ExtDocApplication):
         return r
 
     @view(url=r"^(?P<managed_object>\d+)/$", method=["GET"], access="view", api=True)
-    def api_get_interfaces(self, request, managed_object):
+    def api_get_interfaces(self, request: HttpRequest, managed_object):
         """
         GET interfaces
         :return:
@@ -252,7 +253,7 @@ class InterfaceApplication(ExtDocApplication):
         access="link",
         api=True,
     )
-    def api_link(self, request, type, interfaces):
+    def api_link(self, request: HttpRequest, type, interfaces):
         if type == "ptp":
             if len(interfaces) == 2:
                 interfaces[0].link_ptp(interfaces[1])
@@ -261,7 +262,7 @@ class InterfaceApplication(ExtDocApplication):
         return {"status": False}
 
     @view(url=r"^unlink/(?P<iface_id>[0-9a-f]{24})/$", method=["POST"], access="link", api=True)
-    def api_unlink(self, request, iface_id):
+    def api_unlink(self, request: HttpRequest, iface_id):
         i = Interface.objects.filter(id=iface_id).first()
         if not i:
             return self.response_not_found()
@@ -272,7 +273,7 @@ class InterfaceApplication(ExtDocApplication):
             return {"status": False, "msg": str(why)}
 
     @view(url=r"^unlinked/(?P<object_id>\d+)/$", method=["GET"], access="link", api=True)
-    def api_unlinked(self, request, object_id):
+    def api_unlinked(self, request: HttpRequest, object_id):
         def get_label(i):
             if i.description:
                 return f"{i.name} ({i.description})"
@@ -293,7 +294,7 @@ class InterfaceApplication(ExtDocApplication):
         access="profile",
         api=True,
     )
-    def api_change_profile(self, request, iface_id, profile):
+    def api_change_profile(self, request: HttpRequest, iface_id, profile):
         i = Interface.objects.filter(id=iface_id).first()
         if not i:
             return self.response_not_found()
@@ -310,7 +311,7 @@ class InterfaceApplication(ExtDocApplication):
         access="profile",
         api=True,
     )
-    def api_change_project(self, request, iface_id, project):
+    def api_change_project(self, request: HttpRequest, iface_id, project):
         i = Interface.objects.filter(id=iface_id).first()
         if not i:
             return self.response_not_found()

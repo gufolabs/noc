@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # User Manager
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,7 +9,7 @@
 import re
 
 # Third-party modules
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 
 # NOC modules
 from noc.services.web.base.site import site
@@ -54,7 +54,7 @@ class UserApplication(ExtModelApplication):
     custom_m2m_fields = {"permissions": Permission}
 
     @view(method=["POST"], url=r"^$", access="create", api=True)
-    def api_create(self, request):
+    def api_create(self, request: HttpRequest):
         response = super().api_create(request)
         if response.status_code == self.CREATED:
             user_id = self.deserialize(response.content).get("id")
@@ -69,7 +69,7 @@ class UserApplication(ExtModelApplication):
         return response
 
     @view(method=["GET"], url=r"^(?P<id>\d+)/?$", access="read", api=True)
-    def api_read(self, request, id):
+    def api_read(self, request: HttpRequest, id):
         """
         Returns dict with object's fields and values
         """
@@ -118,7 +118,7 @@ class UserApplication(ExtModelApplication):
             super().update_m2m(o, name, values)
 
     @view(method=["GET"], url=r"^new_permissions/$", access="read", api=True)
-    def api_read_permission(self, request):
+    def api_read_permission(self, request: HttpRequest):
         """
         Returns dict available permissions
         """
@@ -145,7 +145,7 @@ class UserApplication(ExtModelApplication):
         access="change",
         validate={"password": StringParameter(required=True)},
     )
-    def view_change_password(self, request, object_id, password):
+    def view_change_password(self, request: HttpRequest, object_id, password):
         """
         Change user's password
         :return:

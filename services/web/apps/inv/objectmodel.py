@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # inv.objectmodel application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ from collections import defaultdict
 
 # Third-party modules
 from mongoengine.queryset import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -42,7 +42,7 @@ class ObjectModelApplication(ExtDocApplication):
     ]
     default_ordering = ["name"]
 
-    def get_Q(self, request, query):
+    def get_Q(self, request: HttpRequest, query):
         q = super().get_Q(request, query)
         q |= Q(
             data__match={
@@ -138,7 +138,7 @@ class ObjectModelApplication(ExtDocApplication):
         return super().cleaned_query(q)
 
     @view(url="^(?P<id>[0-9a-f]{24})/compatible/$", method=["GET"], access="read", api=True)
-    def api_compatible(self, request, id):
+    def api_compatible(self, request: HttpRequest, id):
         o = self.get_object_or_404(ObjectModel, id=id)
         # Connections
         r = []
@@ -188,7 +188,7 @@ class ObjectModelApplication(ExtDocApplication):
         validate={"ids": ListOfParameter(element=DocumentParameter(ObjectModel), convert=True)},
         api=True,
     )
-    def api_action_json(self, request, ids):
+    def api_action_json(self, request: HttpRequest, ids):
         r = [o.json_data for o in ids]
         s = to_json(r, order=["name", "vendor__code", "description"])
         return {"data": s}
@@ -199,7 +199,7 @@ class ObjectModelApplication(ExtDocApplication):
         access="read",
         api=True,
     )
-    def api_template(self, request, id: str, name: str):
+    def api_template(self, request: HttpRequest, id: str, name: str):
         o = self.get_object_or_404(ObjectModel, id=id)
         last_part = o.name.split("|")[-1].strip()
         if name == "rear":
@@ -219,6 +219,6 @@ class ObjectModelApplication(ExtDocApplication):
         access="read",
         api=True,
     )
-    def api_is_valid_template(self, request, id: str):
+    def api_is_valid_template(self, request: HttpRequest, id: str):
         o = self.get_object_or_404(ObjectModel, id=id)
         return self.render_json({"status": is_valid_model_for_template(o)})

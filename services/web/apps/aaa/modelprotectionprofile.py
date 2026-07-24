@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # aaa.modelprotectionprofile application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -30,7 +33,7 @@ class ModelProtectionProfileApplication(ExtDocApplication):
     # glyph = "key"
 
     @view(url=r"^(?P<model_id>\w+\.\w+)/fields/lookup/$", method=["GET"], access="lookup", api=True)
-    def api_model_fields_lookup(self, request, model_id):
+    def api_model_fields_lookup(self, request: HttpRequest, model_id):
         try:
             model = get_model(model_id=model_id)
         except AssertionError:

@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # inv.inv log plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from .base import InvPlugin
@@ -13,7 +16,7 @@ class LogPlugin(InvPlugin):
     name = "log"
     js = "NOC.inv.inv.plugins.log.LogPanel"
 
-    def get_data(self, request, o):
+    def get_data(self, request: HttpRequest, o):
         return {
             "id": str(o.id),
             "name": o.name,
