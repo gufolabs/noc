@@ -13,11 +13,12 @@ import datetime
 import functools
 from collections import OrderedDict
 from collections.abc import Callable
-from typing import TypeVar, Any, ParamSpec
+from typing import TypeVar, Any, ParamSpec, Concatenate
 from http import HTTPStatus
 
 # Third-party modules
 from django.http import (
+    HttpRequest,
     HttpResponse,
     HttpResponseRedirect,
     HttpResponseForbidden,
@@ -39,25 +40,27 @@ from noc.core.forms import NOCForm
 from noc import settings
 from noc.sa.interfaces.base import DictParameter
 from noc.core.feature import Feature
-from noc.core.comp import smart_text
 from noc.models import is_document
-from .access import HasPerm, Permit, Deny
+from .access import HasPerm, Permit, Deny, Permission
 from .site import site
 
 P = ParamSpec("P")
 R = TypeVar("R")
 T = TypeVar("T")
+Self = TypeVar("Self")
 
 
 def view(
     url: str,
-    access,
+    access: str | bool | Permission,
     url_name: str | None = None,
-    menu=None,
+    menu: list[str] | None = None,  # @todo: dead code?
     method: list[str] | None = None,
-    validate=None,
+    validate: dict[str, Any] | None = None,
     api: bool = False,
-) -> Callable[[Callable[P, R]], Callable[P, R]]:
+) -> Callable[
+    [Callable[Concatenate[Self, HttpRequest, P], R]], Callable[Concatenate[Self, HttpRequest, P], R]
+]:
     """
     @view decorator
     :param url: URL relative to application root
@@ -65,7 +68,9 @@ def view(
     :param api: Does the view exposed as API function
     """
 
-    def decorate(f: Callable[P, R]) -> Callable[P, R]:
+    def decorate(
+        f: Callable[Concatenate[Self, HttpRequest, P], R],
+    ) -> Callable[Concatenate[Self, HttpRequest, P], R]:
         f.url = url
         f.url_name = url_name
         # Process access
@@ -138,7 +143,7 @@ class Application(metaclass=ApplicationBase):
     Each method accepts requests and returns reply
     """
 
-    title = "APPLICATION TITLE"
+    title: str
     icon = "icon_application"
     glyph = "file"
     extra_permissions = []  # List of additional permissions, not related with views
@@ -216,7 +221,7 @@ class Application(metaclass=ApplicationBase):
         site.add_contributor(cls, func.__self__)
 
     @property
-    def js_app_class(self):
+    def js_app_class(self) -> str:
         return "NOC.main.desktop.IFramePanel"
 
     def get_launch_info(self, request):
@@ -235,7 +240,7 @@ class Application(metaclass=ApplicationBase):
         app_perms = [p[lps:] for p in user_perms & self.get_permissions()]
         return {
             "class": self.js_app_class,
-            "title": smart_text(self.title),
+            "title": self.title,
             "params": {
                 "url": self.menu_url,
                 "permissions": app_perms,
@@ -313,7 +318,9 @@ class Application(metaclass=ApplicationBase):
             )
         return self.j2_env
 
-    def render(self, request, template, dict=None, **kwargs):
+    def render(
+        self, request: HttpRequest, template: str, dict: dict[str, Any] | None = None, **kwargs
+    ) -> HttpResponse:
         """
         Render template within context
         """
@@ -328,7 +335,7 @@ class Application(metaclass=ApplicationBase):
             ctx.update(kwargs)
         return render(request, self.get_template_path(template), ctx)
 
-    def render_template(self, template, dict=None, **kwargs):
+    def render_template(self, template, dict=None, **kwargs) -> HttpResponse:
         """
         Render template to string
         """
@@ -337,7 +344,7 @@ class Application(metaclass=ApplicationBase):
         return loader.render_to_string(tp, dict or kwargs)
 
     @staticmethod
-    def render_response(data, content_type="text/plain"):
+    def render_response(data: Any, content_type="text/plain") -> HttpResponse:
         """
         Render arbitrary Content-Type response
         """
