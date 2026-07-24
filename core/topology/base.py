@@ -10,6 +10,7 @@ import operator
 from typing import Any, Iterable
 from collections import defaultdict
 from dataclasses import asdict
+from abc import ABC, abstractmethod
 
 # Third-Party modules
 import networkx as nx
@@ -26,7 +27,7 @@ from .layout.tree import TreeLayout
 from .types import TopologyNode, MapMeta, MapItem, PathItem
 
 
-class TopologyBase:
+class TopologyBase(ABC):
     """
     Base Class for Map generators. Loaded by name
     """
@@ -412,6 +413,7 @@ class TopologyBase:
         """Check if topology is empty."""
         return False
 
+    @abstractmethod
     @classmethod
     def iter_maps(
         cls,
@@ -422,8 +424,9 @@ class TopologyBase:
     ) -> Iterable[MapItem]:
         """Iterate over available maps."""
 
+    @abstractmethod
     @classmethod
-    def iter_path(cls, gen_id) -> Iterable[PathItem]:
+    def iter_path(cls, gen_id: str) -> Iterable[PathItem]:
         """Return map by hierarchy path."""
 
 
