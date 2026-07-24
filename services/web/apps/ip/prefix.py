@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # ip.prefix application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,7 +9,7 @@
 from operator import attrgetter
 
 # Third-party modules
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 
 # NOC modules
 from noc.services.web.base.extmodelapplication import ExtModelApplication, view
@@ -41,7 +41,7 @@ class PrefixApplication(ExtModelApplication):
     def can_delete(self, user, obj):
         return PrefixAccess.user_can_change(user, obj.vrf, obj.afi, obj.prefix)
 
-    def queryset(self, request, query=None):
+    def queryset(self, request: HttpRequest, query=None):
         qs = super().queryset(request, query=query)
         return qs.filter(PrefixAccess.read_Q(request.user))
 
@@ -52,7 +52,7 @@ class PrefixApplication(ExtModelApplication):
         api=True,
         validate={"to_vrf": ModelParameter(VRF), "to_prefix": PrefixParameter()},
     )
-    def api_rebase(self, request, prefix_id, to_vrf, to_prefix):
+    def api_rebase(self, request: HttpRequest, prefix_id, to_vrf, to_prefix):
         prefix = self.get_object_or_404(Prefix, id=int(prefix_id))
         try:
             new_prefix = prefix.rebase(to_vrf, to_prefix)
@@ -61,7 +61,7 @@ class PrefixApplication(ExtModelApplication):
             return self.response_bad_request(str(e))
 
     @view(url=r"^(?P<prefix_id>\d+)/suggest_free/$", method=["GET"], access="read", api=True)
-    def api_suggest_free(self, request, prefix_id):
+    def api_suggest_free(self, request: HttpRequest, prefix_id):
         """
         Suggest free blocks of different sizes
         :return:
@@ -89,7 +89,7 @@ class PrefixApplication(ExtModelApplication):
         return suggestions
 
     @view(method=["DELETE"], url=r"^(?P<id>\d+)/recursive/$", access="delete", api=True)
-    def api_delete_recursive(self, request, id):
+    def api_delete_recursive(self, request: HttpRequest, id):
         try:
             o = self.queryset(request).get(**{self.pk: int(id)})
         except self.model.DoesNotExist:
@@ -110,7 +110,7 @@ class PrefixApplication(ExtModelApplication):
         return HttpResponse(status=self.DELETED)
 
     @view(r"^(?P<id>\d+)/get_path/$", access="read", api=True)
-    def api_get_path(self, request, id):
+    def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(Prefix, id=int(id))
         try:
             path = [Prefix.objects.get(id=ns) for ns in o.get_path()]

@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # pm.agent application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -24,7 +27,7 @@ class AgentApplication(ExtDocApplication):
     model = Agent
 
     @view(url="^(?P<id>[0-9a-f]{24})/config/$", method=["GET"], access="config", api=True)
-    def api_config(self, request, id):
+    def api_config(self, request: HttpRequest, id):
         from noc.services.zeroconf.util import get_config
 
         agent = self.get_object_or_404(Agent, id=id)

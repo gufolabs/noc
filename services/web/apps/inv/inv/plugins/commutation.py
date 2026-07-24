@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # inv.inv commutation plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -12,6 +12,7 @@ from collections import defaultdict
 
 # Third party modules
 from bson import ObjectId
+from django.http import HttpRequest
 
 # NOC modules
 from noc.inv.models.object import Object
@@ -73,7 +74,7 @@ class CommutationPlugin(InvPlugin):
     def init_plugin(self):
         super().init_plugin()
 
-    def get_data(self, request, obj):
+    def get_data(self, request: HttpRequest, obj):
         inv = list(self.iter_nested_inventory(obj))
         return {"viz": self.to_viz(inv), "data": self.to_data(inv)}
 

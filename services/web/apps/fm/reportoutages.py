@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # fm.reportoutages
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -12,6 +12,7 @@ from collections import defaultdict
 # Third-party modules
 from django import forms
 from mongoengine.queryset.visitor import Q
+from django.http import HttpRequest
 
 # NOC modules
 from noc.fm.models.outage import Outage
@@ -48,7 +49,7 @@ class ReportOutagesApplication(SimpleReport):
         "30d": PredefinedReport(_("Outages (30 day)"), {"duration": 30 * 86400}),
     }
 
-    def get_data(self, request, duration, from_date=None, to_date=None, **kwargs):
+    def get_data(self, request: HttpRequest, duration, from_date=None, to_date=None, **kwargs):
         now = datetime.datetime.now()
         if not from_date:
             duration = 1

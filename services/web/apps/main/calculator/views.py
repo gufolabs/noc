@@ -1,12 +1,15 @@
 # ---------------------------------------------------------------------
 # Calculator application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import operator
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.application import Application, HasPerm, view
@@ -18,13 +21,13 @@ class CalculatorApplication(Application):
     title = _("Calculators")
 
     @view(url=r"^$", url_name="index", menu="Calculators", access=HasPerm("view"))
-    def view_index(self, request):
+    def view_index(self, request: HttpRequest):
         r = [(cn, loader[cn].title) for cn in loader]
         r = sorted(r, key=operator.itemgetter(1))
         return self.render(request, "index.html", {"calculators": r})
 
     @view(url=r"^(?P<calculator>\S+)/$", url_name="calculate", access=HasPerm("view"))
-    def view_calculate(self, request, calculator):
+    def view_calculate(self, request: HttpRequest, calculator):
         try:
             c = loader[calculator](self)
         except KeyError:

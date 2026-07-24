@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # sa.administrativedomain application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extmodelapplication import ExtModelApplication, view
@@ -30,7 +33,7 @@ class AdministrativeDomainApplication(ExtModelApplication):
         return {"id": o.id, "label": smart_text(o), "has_children": o.has_children}
 
     @view(r"^(?P<id>\d+)/get_path/$", access="read", api=True)
-    def api_get_path(self, request, id):
+    def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(AdministrativeDomain, id=id)
         path = [AdministrativeDomain.objects.get(id=ns) for ns in o.get_path()]
         return {

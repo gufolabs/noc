@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # main.audittrail application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,6 +9,7 @@
 import logging
 
 # Third-party modules
+from django.http import HttpRequest
 import orjson
 
 # NOC modules
@@ -58,7 +59,7 @@ class AuditTrailApplication(ExtApplication):
             "object_name": o["object_name"],
         }
 
-    def list_data(self, request, formatter):
+    def list_data(self, request: HttpRequest, formatter):
         """
         Returns a list of requested object objects
         """
@@ -110,5 +111,5 @@ class AuditTrailApplication(ExtApplication):
         )
 
     @view(method=["GET"], url=r"^$", access="read", api=True)
-    def api_list(self, request):
+    def api_list(self, request: HttpRequest):
         return self.list_data(request, None)

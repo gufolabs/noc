@@ -1,10 +1,12 @@
 # ---------------------------------------------------------------------
 # ip.reportfilter
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
+# Third-party modules
+from django.http import HttpRequest
 from django import forms
 
 # NOC modules
@@ -33,7 +35,7 @@ class ReportFilterApplication(SimpleReport):
     title = _("Managed Object Serial Number")
     form = ReportForm
 
-    def get_data(self, request, resource_group=None):
+    def get_data(self, request: HttpRequest, resource_group=None):
         qs = ManagedObject.objects
         if not request.user.is_superuser:
             qs = ManagedObject.objects.filter(

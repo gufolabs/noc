@@ -1,12 +1,15 @@
 # ---------------------------------------------------------------------
 # main.notificationgroup application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import datetime
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extmodelapplication import ExtModelApplication, view
@@ -56,7 +59,7 @@ class NotificationGroupApplication(ExtModelApplication):
             "body": UnicodeParameter(),
         },
     )
-    def api_action_test(self, request, ids, subject, body):
+    def api_action_test(self, request: HttpRequest, ids, subject, body):
         for g in ids:
             g.notify(subject=subject, body=body)
         return "Notification message has been sent"

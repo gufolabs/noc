@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # fm.reportettsystemstat
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -12,6 +12,7 @@ import time
 # Third-party modules
 from django import forms
 from django.forms import widgets
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.simplereport import SimpleReport, PredefinedReport, SectionRow
@@ -54,7 +55,15 @@ class ReportTTSystemStatApplication(SimpleReport):
         ),
     }
 
-    def get_data(self, request, interval=1, repo_format=0, from_date=None, to_date=None, **kwargs):
+    def get_data(
+        self,
+        request: HttpRequest,
+        interval=1,
+        repo_format=0,
+        from_date=None,
+        to_date=None,
+        **kwargs,
+    ):
         # Date Time Block
         if from_date:
             from_date = datetime.datetime.strptime(from_date, self.ISO_DATE_MASK)

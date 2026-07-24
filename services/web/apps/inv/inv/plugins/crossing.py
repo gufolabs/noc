@@ -1,13 +1,16 @@
 # ---------------------------------------------------------------------
 # inv.inv crossing plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 from typing import Any
 from collections import defaultdict
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from .base import InvPlugin
@@ -19,7 +22,7 @@ class CrossingPlugin(InvPlugin):
     name = "crossing"
     js = "NOC.inv.inv.plugins.crossing.CrossingPanel"
 
-    def get_data(self, request, o: Object) -> dict[str, Any]:
+    def get_data(self, request: HttpRequest, o: Object) -> dict[str, Any]:
         def render_node(name: str, items: set[str]) -> dict[str, Any]:
             """
             Render Viz node

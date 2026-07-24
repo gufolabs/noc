@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # fm.alarm application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -15,6 +15,7 @@ from typing import Any
 
 # Third-party modules
 import bson
+from django.http import HttpRequest
 import orjson
 from pymongo import ReadPreference
 from mongoengine.errors import DoesNotExist
@@ -407,7 +408,7 @@ class AlarmApplication(ExtApplication):
         r["__tmp_groups"] = o.groups[0] if o.groups else None
         return r
 
-    def get_request_status(self, request) -> str:
+    def get_request_status(self, request: HttpRequest) -> str:
         status = "A"
         ctype = request.META.get("CONTENT_TYPE")
         if request.GET and "status" in request.GET:
@@ -420,7 +421,7 @@ class AlarmApplication(ExtApplication):
             status = orjson.loads(request.body).get("status", "A")
         return status
 
-    def queryset(self, request, query=None):
+    def queryset(self, request: HttpRequest, query=None):
         """
         Filter records for lookup
         """
@@ -435,11 +436,11 @@ class AlarmApplication(ExtApplication):
         ).read_preference(ReadPreference.SECONDARY_PREFERRED)
 
     @view(method=["GET", "POST"], url=r"^$", access="launch", api=True)
-    def api_list(self, request):
+    def api_list(self, request: HttpRequest):
         return self.list_data(request, self.instance_to_dict)
 
     @view(url=r"^(?P<id>[a-z0-9]{24})/$", method=["GET"], api=True, access="launch")
-    def api_alarm(self, request, id):
+    def api_alarm(self, request: HttpRequest, id):
         alarm = get_alarm(id)
         if not alarm:
             self.response_not_found()
@@ -660,7 +661,7 @@ class AlarmApplication(ExtApplication):
         access="launch",
         validate={"msg": UnicodeParameter()},
     )
-    def api_post(self, request, id, msg):
+    def api_post(self, request: HttpRequest, id, msg):
         alarm = get_alarm(id)
         if not alarm:
             self.response_not_found()
@@ -677,7 +678,7 @@ class AlarmApplication(ExtApplication):
             "msg": UnicodeParameter(),
         },
     )
-    def api_comment_post(self, request, ids, msg):
+    def api_comment_post(self, request: HttpRequest, ids, msg):
         alarms = list(ActiveAlarm.objects.filter(id__in=ids))
         alarms += list(ArchivedAlarm.objects.filter(id__in=ids))
         if not alarms:
@@ -696,7 +697,7 @@ class AlarmApplication(ExtApplication):
             "fav_status": BooleanParameter(),
         },
     )
-    def api_group_favorites(self, request, ids: list[str], fav_status: bool):
+    def api_group_favorites(self, request: HttpRequest, ids: list[str], fav_status: bool):
         if fav_status:
             Favorites.add_items(request.user, self.app_id, ids)
         else:
@@ -712,7 +713,7 @@ class AlarmApplication(ExtApplication):
             "msg": UnicodeParameter(default=""),
         },
     )
-    def api_acknowledge(self, request, id, msg=""):
+    def api_acknowledge(self, request: HttpRequest, id, msg=""):
         alarm = get_alarm(id)
         if not alarm:
             return self.response_not_found()
@@ -732,7 +733,7 @@ class AlarmApplication(ExtApplication):
             "msg": UnicodeParameter(default=""),
         },
     )
-    def api_unacknowledge(self, request, id, msg=""):
+    def api_unacknowledge(self, request: HttpRequest, id, msg=""):
         alarm = get_alarm(id)
         if not alarm:
             return self.response_not_found()
@@ -744,7 +745,7 @@ class AlarmApplication(ExtApplication):
         return {"status": True}
 
     @view(url=r"^(?P<id>[a-z0-9]{24})/subscribe/", method=["POST"], api=True, access="launch")
-    def api_subscribe(self, request, id):
+    def api_subscribe(self, request: HttpRequest, id):
         alarm = get_alarm(id)
         if not alarm:
             return self.response_not_found()
@@ -754,7 +755,7 @@ class AlarmApplication(ExtApplication):
         return []
 
     @view(url=r"^(?P<id>[a-z0-9]{24})/unsubscribe/", method=["POST"], api=True, access="launch")
-    def api_unsubscribe(self, request, id):
+    def api_unsubscribe(self, request: HttpRequest, id):
         alarm = get_alarm(id)
         if not alarm:
             return self.response_not_found()
@@ -772,7 +773,7 @@ class AlarmApplication(ExtApplication):
             "msg": UnicodeParameter(default=""),
         },
     )
-    def api_clear(self, request, id, msg=""):
+    def api_clear(self, request: HttpRequest, id, msg=""):
         alarm = get_alarm(id)
         if not alarm.alarm_class.user_clearable:
             return {"status": False, "error": "Deny clear alarm by user"}
@@ -791,7 +792,7 @@ class AlarmApplication(ExtApplication):
             "alarms": ListOfParameter(ObjectIdParameter()),
         },
     )
-    def api_group_clear(self, request, msg: str, alarms: list[str]):
+    def api_group_clear(self, request: HttpRequest, msg: str, alarms: list[str]):
         success = 0
         failed = 0
         for alarm_id in alarms:
@@ -812,7 +813,7 @@ class AlarmApplication(ExtApplication):
         access="launch",
         validate={"root": StringParameter()},
     )
-    def api_set_root(self, request, id, root):
+    def api_set_root(self, request: HttpRequest, id, root):
         alarm = get_alarm(id)
         r = get_alarm(root)
         if not r:
@@ -821,7 +822,7 @@ class AlarmApplication(ExtApplication):
         return True
 
     @view(url=r"notification/$", method=["GET"], api=True, access="launch")
-    def api_notification(self, request):
+    def api_notification(self, request: HttpRequest):
         delta = request.GET.get("delta")
         n = 0
         sound = None
@@ -897,7 +898,7 @@ class AlarmApplication(ExtApplication):
         access="escalate",
         validate={"ids": StringListParameter(required=True)},
     )
-    def api_escalation_alarm(self, request, ids):
+    def api_escalation_alarm(self, request: HttpRequest, ids):
         alarms = list(ActiveAlarm.objects.filter(id__in=ids))
         if not alarms:
             return self.response_not_found()
@@ -1060,7 +1061,7 @@ class AlarmApplication(ExtApplication):
         return data
 
     @view(url=r"profile_lookup/$", access="launch", method=["GET"], api=True)
-    def api_profile_lookup(self, request):
+    def api_profile_lookup(self, request: HttpRequest):
         r = []
         for model, short_type, field_id in (
             (ServiceProfile, _("Service"), "total_services"),

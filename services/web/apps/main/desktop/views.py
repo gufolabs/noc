@@ -1,13 +1,16 @@
 # ---------------------------------------------------------------------
 # main.desktop application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # NOC modules
 import datetime
 import os
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.config import config
@@ -49,7 +52,7 @@ class DesktopApplication(ExtApplication):
             self.error(f"Group '{name}' is not found")
             return None
 
-    def get_language(self, request):
+    def get_language(self, request: HttpRequest):
         """
         Get language for request
         """
@@ -58,7 +61,7 @@ class DesktopApplication(ExtApplication):
         return request.user.preferred_language or config.language
 
     @view(method=["GET"], url="/index.html", url_name="desktop", access=True)
-    def view_desktop(self, request):
+    def view_desktop(self, request: HttpRequest):
         """
         Render application root template
         """
@@ -71,7 +74,7 @@ class DesktopApplication(ExtApplication):
         )
 
     @view(method=["GET"], url="^settings/$", access=True, api=True)
-    def api_settings(self, request):
+    def api_settings(self, request: HttpRequest):
         cp = CPClient()
         if request.user.is_authenticated():
             enable_search = Permission.has_perm(request.user, "main:search:launch")
@@ -140,7 +143,7 @@ class DesktopApplication(ExtApplication):
         }
 
     @view(method=["GET"], url="^version/$", access=True, api=True)
-    def api_version(self, request):
+    def api_version(self, request: HttpRequest):
         """
         Return current NOC version
 
@@ -149,7 +152,7 @@ class DesktopApplication(ExtApplication):
         return version.version
 
     @view(method=["GET"], url="^is_logged/$", access=True, api=True)
-    def api_is_logged(self, request):
+    def api_is_logged(self, request: HttpRequest):
         """
         Check wrether the session is authenticated.
 
@@ -158,7 +161,7 @@ class DesktopApplication(ExtApplication):
         return request.user.is_authenticated()
 
     @view(method=["GET"], url="^user_settings/$", access=PermitLogged(), api=True)
-    def api_user_settings(self, request):
+    def api_user_settings(self, request: HttpRequest):
         """
         Get user settings
         """
@@ -180,7 +183,7 @@ class DesktopApplication(ExtApplication):
             },
         }
 
-    def get_navigation(self, request):
+    def get_navigation(self, request: HttpRequest):
         """
         Return user's navigation menu tree
 
@@ -221,7 +224,7 @@ class DesktopApplication(ExtApplication):
         return get_children(root, request.user)
 
     @view(method=["GET"], url="^launch_info/$", access=PermitLogged(), api=True)
-    def api_launch_info(self, request):
+    def api_launch_info(self, request: HttpRequest):
         """
         Get application launch information
         :param node: Menu node id
@@ -236,7 +239,7 @@ class DesktopApplication(ExtApplication):
         return menu["app"].get_launch_info(request)
 
     @view(method=["GET"], url="^state/", access=PermitLogged(), api=True)
-    def api_get_state(self, request):
+    def api_get_state(self, request: HttpRequest):
         """
         Get user state
         :return:
@@ -245,7 +248,7 @@ class DesktopApplication(ExtApplication):
         return {r.key: r.value for r in UserState.objects.filter(user_id=uid)}
 
     @view(method=["GET"], url="^state/(?P<name>.+)/$", access=PermitLogged(), api=True)
-    def api_get_state_by_name(self, request, name):
+    def api_get_state_by_name(self, request: HttpRequest, name):
         """
         Get user state
         :return:
@@ -254,7 +257,7 @@ class DesktopApplication(ExtApplication):
         return {r.key: r.value for r in UserState.objects.filter(user_id=uid, key=name)}
 
     @view(method=["DELETE"], url="^state/(?P<name>.+)/$", access=PermitLogged(), api=True)
-    def api_clear_state(self, request, name):
+    def api_clear_state(self, request: HttpRequest, name):
         """
         Clear user state
         :return:
@@ -264,7 +267,7 @@ class DesktopApplication(ExtApplication):
         return True
 
     @view(method=["POST"], url="^state/(?P<name>.+)/$", access=PermitLogged(), api=True)
-    def api_set_state(self, request, name):
+    def api_set_state(self, request: HttpRequest, name):
         """
         Clear user state
         :return:
@@ -288,7 +291,7 @@ class DesktopApplication(ExtApplication):
         return True
 
     @view(url="^favapps/$", method=["GET"], access=PermitLogged(), api=True)
-    def api_favapps(self, request):
+    def api_favapps(self, request: HttpRequest):
         favapps = [
             f.app
             for f in Favorites.objects.filter(user=request.user.id, favorite_app=True).only("app")
@@ -303,7 +306,7 @@ class DesktopApplication(ExtApplication):
         ]
 
     @view(url="^about/", method=["GET"], access=True, api=True)
-    def api_about(self, request):
+    def api_about(self, request: HttpRequest):
         current_year = datetime.date.today().year
         data = {
             "brand": config.brand,

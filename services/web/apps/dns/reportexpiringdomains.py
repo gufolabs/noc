@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # Expiring Domains Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2017 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Third-party modules
 from django import forms
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
@@ -22,7 +23,7 @@ class Reportreportexpiringdomains(SimpleReport):
     title = _("Expiring Domains")
     form = ReportForm
 
-    def get_data(self, request, days, **kwargs):
+    def get_data(self, request: HttpRequest, days, **kwargs):
         return self.from_query(
             title=self.title,
             columns=[

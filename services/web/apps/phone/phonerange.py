@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # phone.phonerange application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Third-party modules
 from mongoengine.queryset import Q
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -66,7 +67,7 @@ class PhoneRangeApplication(ExtDocApplication):
         return super().clean(data)
 
     @view("^(?P<id>[0-9a-f]{24})/get_path/$", access="read", api=True)
-    def api_get_path(self, request, id):
+    def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(PhoneRange, id=id)
         path = [PhoneRange.get_by_id(r) for r in o.get_path()]
         return {
@@ -76,7 +77,7 @@ class PhoneRangeApplication(ExtDocApplication):
             ]
         }
 
-    def get_Q(self, request, query):
+    def get_Q(self, request: HttpRequest, query):
         q = super().get_Q(request, query)
         q |= Q(from_number__lte=query, to_number__gte=query)
         return q

@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # inv.inv data plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -12,6 +12,7 @@ import math
 
 # Third-party modules
 from bson import ObjectId
+from django.http import HttpRequest
 
 # NOC modules
 from noc.inv.models.object import Object
@@ -52,7 +53,7 @@ class DataPlugin(InvPlugin):
             },
         )
 
-    def get_data(self, request, o: Object):
+    def get_data(self, request: HttpRequest, o: Object):
         data = []
         data.extend(self.iter_common(o))
         if self.app.can_show_topo(o):

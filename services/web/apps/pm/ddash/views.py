@@ -1,10 +1,12 @@
 # ---------------------------------------------------------------------
 # pm.ddash application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extapplication import ExtApplication, view
@@ -21,7 +23,7 @@ class DynamicDashboardApplication(ExtApplication):
     title = _("Dynamic Dashboard")
 
     @view(url=r"^$", method="GET", access="launch", api=True)
-    def api_dashboard(self, request):
+    def api_dashboard(self, request: HttpRequest):
         dash_name = request.GET.get("dashboard")
         try:
             dt = loader[dash_name]

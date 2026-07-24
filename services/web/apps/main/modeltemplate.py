@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # sa.modeltemplates application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view, HttpResponse
@@ -48,7 +51,7 @@ class ModelTemplateApplication(ExtDocApplication):
         return super().clean(data)
 
     @view(url=r"^directory/(?P<type>\w+)/fields/?$", method=["GET"], access="read", api=True)
-    def api_get_template_fields(self, request, type):
+    def api_get_template_fields(self, request: HttpRequest, type):
         r = ModelTemplate.get_templating_fields()
         return sorted([x.model_dump() for x in r], key=lambda x: x["id"].lower())
 
@@ -58,7 +61,7 @@ class ModelTemplateApplication(ExtDocApplication):
         access="read",
         api=True,
     )
-    def api_get_template_field(self, request, type, field):
+    def api_get_template_field(self, request: HttpRequest, type, field):
         r = [x for x in ModelTemplate.get_templating_fields() if x.id == field]
         if not r:
             return HttpResponse("", status=self.NOT_FOUND)

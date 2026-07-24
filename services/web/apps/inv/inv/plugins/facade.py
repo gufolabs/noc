@@ -1,12 +1,15 @@
 # ---------------------------------------------------------------------
 # inv.inv facade plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import random
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from .base import InvPlugin
@@ -28,7 +31,7 @@ class FacadePlugin(InvPlugin):
             method=["GET"],
         )
 
-    def get_data(self, request, o: Object):
+    def get_data(self, request: HttpRequest, o: Object):
         r = {"id": str(o.id), "views": []}
         seed = random.randint(0, 0x7FFFFFFF)
         if o.model.front_facade:
@@ -47,7 +50,7 @@ class FacadePlugin(InvPlugin):
             )
         return r
 
-    def api_facade_svg(self, request, id: str, name: str):
+    def api_facade_svg(self, request: HttpRequest, id: str, name: str):
         obj = self.app.get_object_or_404(Object, id=id)
         svg = get_svg_for_box(obj, name)
         if svg is None:

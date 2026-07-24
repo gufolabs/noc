@@ -1,12 +1,15 @@
 # ---------------------------------------------------------------------
 # inv.inv file plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import datetime
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.inv.models.object import Object
@@ -40,7 +43,7 @@ class FilePlugin(InvPlugin):
             method=["DELETE"],
         )
 
-    def get_data(self, request, o):
+    def get_data(self, request: HttpRequest, o):
         files = []
         for f in ObjectFile.objects.filter(object=o.id).order_by("name"):
             files += [
@@ -55,7 +58,7 @@ class FilePlugin(InvPlugin):
             ]
         return {"id": str(o.id), "files": files}
 
-    def api_upload(self, request, id):
+    def api_upload(self, request: HttpRequest, id):
         o = self.app.get_object_or_404(Object, id=id)
         left = {}  # name -> data
         for f in request.FILES:
@@ -78,14 +81,14 @@ class FilePlugin(InvPlugin):
             of.save()
         return {"success": not failed, "errors": errors}
 
-    def api_download(self, request, id, file_id):
+    def api_download(self, request: HttpRequest, id, file_id):
         o = self.app.get_object_or_404(Object, id=id)
         of = self.app.get_object_or_404(ObjectFile, id=file_id)
         if of.object != o.id:
             return self.app.response_not_found()
         return self.app.render_response(of.file.read(), content_type=of.mime_type)
 
-    def api_delete(self, request, id, file_id):
+    def api_delete(self, request: HttpRequest, id, file_id):
         o = self.app.get_object_or_404(Object, id=id)
         of = self.app.get_object_or_404(ObjectFile, id=file_id)
         if of.object != o.id:

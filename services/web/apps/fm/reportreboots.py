@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # fm.reportreboots
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -11,6 +11,7 @@ import datetime
 # Third-party modules
 from django import forms
 from django.db import connection
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.simplereport import SimpleReport, TableColumn, PredefinedReport
@@ -42,7 +43,7 @@ class ReportRebootsApplication(SimpleReport):
         "30d": PredefinedReport(_("Reboot (30 day)"), {"interval": 30}),
     }
 
-    def get_data(self, request, interval, from_date=None, to_date=None, **kwargs):
+    def get_data(self, request: HttpRequest, interval, from_date=None, to_date=None, **kwargs):
         interval = int(interval)
         if not from_date:
             interval = 1

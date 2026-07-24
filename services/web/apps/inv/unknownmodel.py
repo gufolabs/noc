@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # inv.unknownmodel application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2016 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -31,7 +34,7 @@ class UnknownModelApplication(ExtDocApplication):
         api=True,
         validate={"ids": ListOfParameter(element=DocumentParameter(UnknownModel), convert=True)},
     )
-    def api_action_run_discovery(self, request, ids):
+    def api_action_run_discovery(self, request: HttpRequest, ids):
         objects = UnknownModel.objects.filter(id__in=[x.id for x in ids])
         self.logger.debug("Group action on '%s'", objects)
         for o in objects:

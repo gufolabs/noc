@@ -1,12 +1,15 @@
 # ---------------------------------------------------------------------
 # main.prefixtable application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 from collections import defaultdict
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extmodelapplication import ExtModelApplication, view
@@ -35,7 +38,7 @@ class PrefixTableApplication(ExtModelApplication):
         api=True,
         validate={"ids": ListOfParameter(element=ModelParameter(PrefixTable)), "ip": IPParameter()},
     )
-    def api_action_test(self, request, ids, ip):
+    def api_action_test(self, request: HttpRequest, ids, ip):
         return {
             "ip": ip,
             "result": [{"id": pt.id, "name": pt.name, "result": ip in pt} for pt in ids],

@@ -11,6 +11,7 @@ import operator
 
 # Third-party modules
 from django.apps import apps
+from django.http import HttpRequest
 from mongoengine.base.common import _document_registry
 
 # NOC modules
@@ -251,7 +252,7 @@ class RefAppplication(ExtApplication):
         return [{"id": x.value, "label": x.name} for x in ContainerType]
 
     @view(url=r"^(?P<ref>\S+)/lookup/$", method=["GET"], access=True, api=True)
-    def api_lookup(self, request, ref=None):
+    def api_lookup(self, request: HttpRequest, ref=None):
         if ref not in self.refs:
             if ref == "report":
                 self.refs["report"] = self._build_report()

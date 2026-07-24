@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # inv.reportdiscoverycaps
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Third-party modules
 from django import forms
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.simplereport import SimpleReport
@@ -39,7 +40,7 @@ class ReportDiscoveryCapsApplication(SimpleReport):
 
         return ReportForm
 
-    def get_data(self, request, pool=None, obj_profile=None, **kwargs):
+    def get_data(self, request: HttpRequest, pool=None, obj_profile=None, **kwargs):
         data = []
         if pool:
             pool = Pool.get_by_id(pool)

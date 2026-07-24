@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # ip.address application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extmodelapplication import ExtModelApplication
@@ -31,6 +34,6 @@ class AddressApplication(ExtModelApplication):
     def can_delete(self, user, obj):
         return PrefixAccess.user_can_change(user, obj.vrf, obj.afi, obj.prefix)
 
-    def queryset(self, request, query=None):
+    def queryset(self, request: HttpRequest, query=None):
         qs = super().queryset(request, query=query)
         return qs.filter(PrefixAccess.read_Q(request.user, field="address", table="ip_address"))

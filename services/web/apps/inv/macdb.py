@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # inv.macdb application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -10,6 +10,7 @@ import re
 from typing import Any
 
 # Third-party modules
+from django.http import HttpRequest
 import orjson
 
 # NOC modules
@@ -183,7 +184,7 @@ class MACApplication(ExtApplication):
         return out, rows_count
 
     @view(method=["GET", "POST"], url="^$", access="read", api=True)
-    def api_list(self, request):
+    def api_list(self, request: HttpRequest):
         q = self.parse_request_query(request)
         query = q.get("__query")
         start = q.get("__start") or 0
@@ -252,7 +253,7 @@ class MACApplication(ExtApplication):
         return orjson.loads(r)
 
     @view(url="^(?P<mac>[0-9A-F:]+)/$", method=["GET"], access="view", api=True)
-    def api_get_maclog(self, request, mac):
+    def api_get_maclog(self, request: HttpRequest, mac):
         """GET maclog"""
 
         out = []

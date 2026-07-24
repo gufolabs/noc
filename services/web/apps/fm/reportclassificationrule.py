@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Classification Rules Report
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -10,6 +10,7 @@ import re
 
 # Third-party modules
 from django import forms
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.simplereport import SimpleReport, SectionRow
@@ -26,7 +27,7 @@ class ReportClassificationRules(SimpleReport):
     title = _("Classification Rules")
     form = ReportForm
 
-    def get_data(self, request, profile):
+    def get_data(self, request: HttpRequest, profile):
         def get_profile(r):
             for p in r.patterns:
                 if p.key_re in ("profile", "^profile$"):

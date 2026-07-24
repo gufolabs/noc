@@ -1,14 +1,14 @@
 # ---------------------------------------------------------------------
 # Group Group Manager
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 import threading
 
 # Third-party modules
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 
 # NOC modules
 from noc.services.web.base.site import site
@@ -35,7 +35,7 @@ class GroupsApplication(ExtModelApplication):
     custom_m2m_fields = {"permissions": Permission}
 
     @view(method=["GET"], url=r"^(?P<id>\d+)/?$", access="read", api=True)
-    def api_read(self, request, id):
+    def api_read(self, request: HttpRequest, id):
         """
         Returns dict with object's fields and values
         """
@@ -71,7 +71,7 @@ class GroupsApplication(ExtModelApplication):
             super().update_m2m(o, name, values)
 
     @view(method=["GET"], url=r"^new_permissions/$", access="read", api=True)
-    def api_read_permission(self, request):
+    def api_read_permission(self, request: HttpRequest):
         """
         Returns dict available permissions
         """

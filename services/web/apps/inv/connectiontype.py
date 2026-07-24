@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # inv.connectiontype application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -31,7 +34,7 @@ class ConnectionTypeApplication(ExtDocApplication):
         return super().clean(data)
 
     @view(url="^(?P<id>[0-9a-f]{24})/compatible/$", method=["GET"], access="read", api=True)
-    def api_compatible(self, request, id):
+    def api_compatible(self, request: HttpRequest, id):
         def fn(t, gender, reason):
             return {
                 "id": str(t.id),

@@ -12,7 +12,7 @@ from io import StringIO
 # Third-party modules
 from django import forms
 from django.apps import apps as d_apps
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from noc.core.translation import ugettext as _
 
 # NOC modules
@@ -25,7 +25,7 @@ class CSVApplication(Application):
     title = _("CSV Export/Import")
 
     @view(url="^$", url_name="index", menu=[_("Setup"), _("CSV Export/Import")], access="import")
-    def view_index(self, request):
+    def view_index(self, request: HttpRequest):
         load_models()
 
         class ModelForm(forms.Form):
@@ -77,7 +77,7 @@ class CSVApplication(Application):
     @view(
         url=r"^import/(?P<model>[a-zA-Z1-9]+\.[a-zA-Z1-9]+)/$", url_name="import", access="import"
     )
-    def view_import(self, request, model):
+    def view_import(self, request: HttpRequest, model):
         """
         Import from CSV file
         :return:

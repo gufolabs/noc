@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # ip.reportfilter
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Third-party modules
 from django import forms
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.simplereport import SimpleReport, TableColumn
@@ -40,7 +41,7 @@ class ReportFilterApplication(SimpleReport):
         self.customize_form(RForm, "ip_prefix", search=True)
         return RForm
 
-    def get_data(self, request, **kwargs):
+    def get_data(self, request: HttpRequest, **kwargs):
         def get_row(p):
             vlan = VLAN.get_by_id(p.vlan.id) if p.vlan else None
             r = [

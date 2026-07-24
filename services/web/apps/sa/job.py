@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # sa.job application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -9,6 +9,9 @@
 from typing import Any
 from dataclasses import dataclass
 from typing import Iterable
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication, view
@@ -58,7 +61,7 @@ class JobApplication(ExtDocApplication):
         return r
 
     @view("^(?P<id>[0-9a-f]{24})/viz/$", access="read")
-    def view_viz(self, request, id: str):
+    def view_viz(self, request: HttpRequest, id: str):
         job = self.get_object_or_404(Job, id=id)
         return self.get_viz(job)
 

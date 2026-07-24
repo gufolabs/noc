@@ -1,13 +1,16 @@
 # ----------------------------------------------------------------------
 # main.label application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import re
 from collections import defaultdict
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.sa.interfaces.base import ColorParameter
@@ -86,7 +89,7 @@ class LabelApplication(ExtDocApplication):
         return super().clean(data)
 
     @view(url="^ac_lookup/", method=["GET"], access=True)
-    def api_ac_lookup(self, request):
+    def api_ac_lookup(self, request: HttpRequest):
         """
         Legacy AutoCompleteTags widget support
         :return:
@@ -149,7 +152,7 @@ class LabelApplication(ExtDocApplication):
         }
 
     @view(url="^lookup_tree/", method=["GET"], access=True)
-    def api_labels_lookup_tree(self, request):
+    def api_labels_lookup_tree(self, request: HttpRequest):
         leafs = defaultdict(list)
         level = 1
         labels_filter = {}

@@ -1,10 +1,12 @@
 # ---------------------------------------------------------------------
 # inv.inv data plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.inv.models.object import Object
@@ -39,7 +41,7 @@ class RackPlugin(InvPlugin):
             method=["GET"],
         )
 
-    def get_data(self, request, o):
+    def get_data(self, request: HttpRequest, o):
         r = {
             "id": str(o.id),
             "rack": {k: o.get_data("rack", k) for k in ("units", "width", "depth")},
@@ -67,7 +69,9 @@ class RackPlugin(InvPlugin):
             ]
         return r
 
-    def api_set_rack_load(self, request, id, cid, position_front, position_rear, shift):
+    def api_set_rack_load(
+        self, request: HttpRequest, id, cid, position_front, position_rear, shift
+    ):
         o = self.app.get_object_or_404(Object, id=id)
         co = self.app.get_object_or_404(Object, id=cid)
         if co.parent.id != o.id:
@@ -109,7 +113,7 @@ class RackPlugin(InvPlugin):
                 op="CHANGE",
             )
 
-    def api_facade_svg(self, request, id: str, name: str):
+    def api_facade_svg(self, request: HttpRequest, id: str, name: str):
         obj = self.app.get_object_or_404(Object, id=id)
         # Get SVG
         svg = get_svg_for_rack(obj, name=name)
