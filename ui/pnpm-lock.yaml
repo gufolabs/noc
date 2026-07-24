@@ -13,8 +13,8 @@ importers:
   .:
     dependencies:
       '@gufo-labs/font':
-        specifier: ^0.0.9
-        version: 0.0.9
+        specifier: ^0.0.10
+        version: 0.0.10
       '@joint/core':
         specifier: ^4.2.4
         version: 4.2.4
@@ -347,6 +347,9 @@ packages:
   '@eslint/plugin-kit@0.7.1':
     resolution: {integrity: sha512-rZAP3aVgB9ds9KOeUSL+zZ21hPmo8dh6fnIFwRQj5EAZl9gzR7wxYbYXYysAM8CTqGmUGyp2S4kUdV17MnGuWQ==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+
+  '@gufo-labs/font@0.0.10':
+    resolution: {integrity: sha512-LUXr1SJUweK3VC+IzwUK4V/3nBEQcbj3PgyhLsuCFo3NXaox+O43iwV3tdQ1uJCjsbH5+MtP2Q+MS5VYBphOng==}
 
   '@gufo-labs/font@0.0.9':
     resolution: {integrity: sha512-YcnDG77sDUp6xz8jweCLCLAYE7Rck7xZ+iMbJfd6ZjAb1B7og8QVJTclgFwDd7j4Gdg0bgPsoK2nbIaF5OsOBw==}
@@ -1937,6 +1940,8 @@ snapshots:
     dependencies:
       '@eslint/core': 1.2.1
       levn: 0.4.1
+
+  '@gufo-labs/font@0.0.10': {}
 
   '@gufo-labs/font@0.0.9': {}
 
