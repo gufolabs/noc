@@ -31,14 +31,19 @@ Ext.define("NOC.sa.profile.Application", {
         {
           text: "Name",
           dataIndex: "name",
-          flex: 1,
+          width: 200,
         },
         {
           text: __("Builtin"),
           dataIndex: "is_builtin",
-          width: 30,
+          width: 50,
           renderer: NOC.render.Bool,
           sortable: false,
+        },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
         },
       ],
 

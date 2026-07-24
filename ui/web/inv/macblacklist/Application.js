@@ -45,10 +45,23 @@ Ext.define("NOC.inv.macblacklist.Application", {
           width: 150,
         },
         {
-          text: __("Duplicate"),
+          text: __("Duplicated"),
           dataIndex: "is_duplicated",
-          width: 50,
+          width: 100,
           renderer: NOC.render.Bool,
+          align: "center",
+        },
+        {
+          text: __("Ignored"),
+          dataIndex: "is_ignored",
+          width: 100,
+          renderer: NOC.render.Bool,
+          align: "center",
+        },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
         },
       ],
 

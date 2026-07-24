@@ -51,14 +51,19 @@ Ext.define("NOC.inv.firmware.Application", {
         {
           text: __("Version"),
           dataIndex: "version",
-          flex: 1,
+          width: 100,
         },
         {
           text: __("Builtin"),
           dataIndex: "is_builtin",
-          width: 30,
+          width: 50,
           renderer: NOC.render.Bool,
           sortable: false,
+        },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
         },
       ],
 

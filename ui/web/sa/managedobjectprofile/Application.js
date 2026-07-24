@@ -174,7 +174,7 @@ Ext.define("NOC.sa.managedobjectprofile.Application", {
                 {
                     text: __("Description"),
                     dataIndex: "description",
-                    width: 300,
+                    flex: 1,
                     sortable: false,
                     renderer: function(value, meta) {
                         meta.tdAttr = 'data-qtip="' + value + '"';

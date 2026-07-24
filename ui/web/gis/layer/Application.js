@@ -74,6 +74,11 @@ Ext.define("NOC.gis.layer.Application", {
           width: 50,
           renderer: me.renderStyle,
         },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
+        },
       ],
       fields: [
         {

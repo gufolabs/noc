@@ -40,8 +40,14 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
         {
           text: __("Name"),
           dataIndex: "name",
-          width: 100,
+          width: 250,
           align: "left",
+        },
+        {
+          text: __("WorkFlow"),
+          dataIndex: "workflow",
+          width: 250,
+          renderer: NOC.render.Lookup("workflow"),
         },
         {
           text: __("Builtin"),
@@ -49,13 +55,14 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
           width: 50,
           renderer: NOC.render.Bool,
           sortable: false,
+          align: "center",
         },
         {
           text: __("Active"),
           dataIndex: "is_active",
           renderer: NOC.render.Bool,
           width: 50,
-          align: "left",
+          align: "center",
         },
         {
           text: __("Pref."),
@@ -75,7 +82,12 @@ Ext.define("NOC.sa.objectdiscoveryrule.Application", {
           dataIndex: "enable_ip_scan_discovery",
           renderer: NOC.render.Bool,
           width: 100,
-          align: "left",
+          align: "center",
+        },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
         },
       ],
 

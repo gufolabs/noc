@@ -33,13 +33,17 @@ Ext.define("NOC.inv.cpeprofile.Application", {
         {
           text: __("Name"),
           dataIndex: "name",
-          flex: 1
         },
         {
           text: __("Labels"),
           dataIndex: "labels",
           renderer: NOC.render.LabelField,
           width: 100
+        },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1
         }
       ],
 

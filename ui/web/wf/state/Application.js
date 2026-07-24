@@ -90,6 +90,11 @@ Ext.define("NOC.wf.state.Application", {
           width: 200,
           renderer: NOC.render.LabelField,
         },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
+        },
       ],
 
       fields: [

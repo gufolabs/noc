@@ -55,20 +55,28 @@ Ext.define("NOC.inv.technology.Application", {
         {
           text: __("Single Service"),
           dataIndex: "single_service",
-          width: 50,
+          width: 80,
           renderer: NOC.render.Bool,
+          align: "center"
         },
         {
           text: __("Single Client"),
           dataIndex: "single_client",
-          width: 50,
+          width: 80,
           renderer: NOC.render.Bool,
+          align: "center"
         },
         {
           text: __("Allow Children"),
           dataIndex: "allow_children",
-          width: 50,
+          width: 80,
           renderer: NOC.render.Bool,
+          align: "center"
+        },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
         },
       ],
       fields: [

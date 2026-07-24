@@ -21,6 +21,28 @@ Ext.define("NOC.pm.agentprofile.Application", {
                 {
                     text: __("Name"),
                     dataIndex: "name",
+                },
+                {
+                    text: __("Check Interval"),
+                    dataIndex: "zk_check_interval",
+                    align: "right",
+                },
+                {
+                    text: __("Update Addresses"),
+                    dataIndex: "update_addresses",
+                    width: 100,
+                    renderer: NOC.render.Bool,
+                    align: "center",
+                },
+                {
+                    text: __("Workflow"),
+                    dataIndex: "workflow",
+                    width: 250,
+                    renderer: NOC.render.Lookup("workflow"),
+                },
+                {
+                    text: __("Description"),
+                    dataIndex: "description",
                     flex: 1
                 }
             ],

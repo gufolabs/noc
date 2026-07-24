@@ -29,12 +29,15 @@ Ext.define("NOC.pm.metricscope.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: "Name",
+          text: __("Name"),
           dataIndex: "name",
+        },
+        {
+          text: __("Description"),
+          dataIndex: "description",
           flex: 1,
         },
       ],
-
       fields: [
         {
           name: "name",

@@ -48,13 +48,17 @@ Ext.define("NOC.sa.reactionrule.Application", {
     {
       text: __("Alarm Disposition"),
       dataIndex: "alarm_disposition",
-      flex: 1,
       renderer: NOC.render.Lookup("alarm_disposition"),
     },
     {
       text: __("Pref"),
       dataIndex: "preference",
       width: 50,
+    },
+    {
+      text: __("Description"),
+      dataIndex: "description",
+      flex: 1,
     },
   ],
 

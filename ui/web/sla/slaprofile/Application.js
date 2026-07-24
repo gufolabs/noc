@@ -27,13 +27,30 @@ Ext.define("NOC.sla.slaprofile.Application", {
         {
           text: __("Name"),
           dataIndex: "name",
-          flex: 1,
+          width: 200,
         },
         {
           text: __("Labels"),
           dataIndex: "labels",
           renderer: NOC.render.LabelField,
           width: 100,
+        },
+        {
+          text: __("Raise Alarm to target"),
+          dataIndex: "raise_alarm_to_target",
+          width: 50,
+          renderer: NOC.render.Bool,
+          align: "center",
+        },
+        {
+          text: __("Workflow"),
+          dataIndex: "workflow",
+          renderer: NOC.render.Lookup("workflow")
+        },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
         },
       ],
 

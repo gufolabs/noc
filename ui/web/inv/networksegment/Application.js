@@ -70,11 +70,6 @@ Ext.define("NOC.inv.networksegment.Application", {
                     width: 200
                 },
                 {
-                    text: __("Description"),
-                    dataIndex: "description",
-                    flex: 1
-                },
-                {
                     text: __("Labels"),
                     dataIndex: "labels",
                     width: 100,
@@ -103,6 +98,11 @@ Ext.define("NOC.inv.networksegment.Application", {
                     text: __("Max Objects"),
                     dataIndex: "max_objects",
                     width: 70
+                },
+                {
+                    text: __("Description"),
+                    dataIndex: "description",
+                    flex: 1
                 }
             ],
 
