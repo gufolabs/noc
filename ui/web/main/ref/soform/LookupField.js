@@ -19,9 +19,9 @@ Ext.define("NOC.main.ref.soform.LookupField", {
   store: {
     fields: ["id", "name", "icon"],
     data: [
-      {id: "c", name: __("Circle"), icon: "fa-circle"},
-      {id: "s", name: __("Square"), icon: "fa-square"},
+      {id: "c", name: __("Circle"), icon: "circle-o"},
+      {id: "s", name: __("Square"), icon: "rectangle-o"},
     ],
   },
-  tpl: '<tpl for="."><div class="x-boundlist-item"><i class="fa {[values.icon]}"></i>&nbsp; {[values.name]}</div></tpl>',
+  tpl: '<tpl for="."><div class="x-boundlist-item"><i class="gf {[values.icon]}"></i>&nbsp; {[values.name]}</div></tpl>',
 });
