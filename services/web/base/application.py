@@ -92,6 +92,131 @@ def view(
     return decorate
 
 
+class ViewAPI:
+    """
+    API view decorator factory.
+
+    Provides HTTP method-specific decorators that create API endpoints
+    using the common :func:`view` decorator.
+
+    Example:
+        @api.get(
+            url="^brief_lookup/$",
+            access="lookup",
+        )
+        def api_brief(self, request: HttpRequest):
+            ...
+    """
+
+    def get(
+        self,
+        url: str,
+        access: str | bool | Permission,
+        url_name: str | None = None,
+        menu: list[str] | None = None,  # @todo: dead code?
+        validate: dict[str, Any] | None = None,
+    ):
+        """
+        Decorate a GET API endpoint.
+
+        Args:
+            url: URL pattern relative to the application root.
+            access: Access control rule.
+            url_name: Optional URL name.
+            menu: Optional menu entry metadata.
+            validate: Optional request parameter validation schema.
+
+        Returns:
+            A view decorator.
+        """
+        return view(
+            url=url, method=["GET"], access=access, url_name=url_name, menu=menu, validate=validate
+        )
+
+    def post(
+        self,
+        url: str,
+        access: str | bool | Permission,
+        url_name: str | None = None,
+        menu: list[str] | None = None,  # @todo: dead code?
+        validate: dict[str, Any] | None = None,
+    ):
+        """
+        Decorate a POST API endpoint.
+
+        Args:
+            url: URL pattern relative to the application root.
+            access: Access control rule.
+            url_name: Optional URL name.
+            menu: Optional menu entry metadata.
+            validate: Optional request parameter validation schema.
+
+        Returns:
+            A view decorator.
+        """
+        return view(
+            url=url, method=["POST"], access=access, url_name=url_name, menu=menu, validate=validate
+        )
+
+    def put(
+        self,
+        url: str,
+        access: str | bool | Permission,
+        url_name: str | None = None,
+        menu: list[str] | None = None,  # @todo: dead code?
+        validate: dict[str, Any] | None = None,
+    ):
+        """
+        Decorate a PUT endpoint.
+
+        Args:
+            url: URL pattern relative to the application root.
+            access: Access control rule.
+            url_name: Optional URL name.
+            menu: Optional menu entry metadata.
+            validate: Optional request parameter validation schema.
+
+        Returns:
+            A view decorator.
+        """
+        return view(
+            url=url, method=["PUT"], access=access, url_name=url_name, menu=menu, validate=validate
+        )
+
+    def delete(
+        self,
+        url: str,
+        access: str | bool | Permission,
+        url_name: str | None = None,
+        menu: list[str] | None = None,  # @todo: dead code?
+        validate: dict[str, Any] | None = None,
+    ):
+        """
+        Decorate a DELETE API endpoint.
+
+        Args:
+            url: URL pattern relative to the application root.
+            access: Access control rule.
+            url_name: Optional URL name.
+            menu: Optional menu entry metadata.
+            validate: Optional request parameter validation schema.
+
+        Returns:
+            A view decorator.
+        """
+        return view(
+            url=url,
+            method=["DELETE"],
+            access=access,
+            url_name=url_name,
+            menu=menu,
+            validate=validate,
+        )
+
+
+api = ViewAPI()
+
+
 class BoundView:
     """
     Callable wrapper for a bound method that prevents descriptor binding.
