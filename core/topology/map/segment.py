@@ -331,7 +331,7 @@ class SegmentTopology(TopologyBase):
             )
 
     @classmethod
-    def iter_path(cls, gen_id) -> Iterable[PathItem]:
+    def iter_path(cls, gen_id: str) -> Iterable[PathItem]:
         o = NetworkSegment.get_by_id(gen_id)
         if not o:
             return
