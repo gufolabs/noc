@@ -49,7 +49,7 @@ def int_or_oid(x) -> str:
     ],
 )
 @pytest.mark.parametrize("model", get_all_models(), ids=lambda x: x.__name__)
-def test_signatures(name: str, is_classmethod: bool, args, return_type, model) -> None:
+def test_get_by_signatures(name: str, is_classmethod: bool, args, return_type, model) -> None:
     method = getattr(model, name, None)
     if not method:
         pytest.skip(f"No {name} method")
@@ -74,7 +74,11 @@ def test_signatures(name: str, is_classmethod: bool, args, return_type, model) -
             f"Parameter `{param_name}` must be `{param_type!s}`. Current is `{pa}`"
         )
     # Check return type signature
-    expanded_type = return_type.replace("{model}", model.__name__)
-    assert str(sig.return_annotation) == expanded_type, (
-        f"Return type must be {expanded_type} (has {sig.return_annotation!s})"
+    expected_types = [
+        "typing.Optional[ForwardRef('{model}')]".replace("{model}", model.__name__),
+        f"{model.__name__} | None",
+        f"'{model.__name__}' | None",
+    ]
+    assert str(sig.return_annotation) in expected_types, (
+        f"Return type must in {expected_types!r} (has {sig.return_annotation!s})"
     )
