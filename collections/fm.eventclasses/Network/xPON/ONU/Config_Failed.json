@@ -6,6 +6,12 @@
     "action": "A",
     "vars": [
         {
+            "name": "onu",
+            "description": "ONU MAC/Serial",
+            "type": "str",
+            "required": false
+        },
+        {
             "name": "interface",
             "description": "ONU interface",
             "type": "str",
@@ -18,8 +24,8 @@
             "required": false
         }
     ],
-    "subject_template": "Config ONU on {{interface}} failed",
-    "body_template": "Config ONU on {{interface}} failed{% if reason %}: {{reason}}{% endif %}",
+    "subject_template": "Config ONU{% if onu %} {{onu}}{% endif %} on {{interface}} failed",
+    "body_template": "Config ONU{% if onu %} {{onu}}{% endif %} on {{interface}} failed{% if reason %}: {{reason}}{% endif %}",
     "symptoms": "",
     "probable_causes": "",
     "recommended_actions": "",

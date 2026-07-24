@@ -3,21 +3,25 @@
     "$collection": "fm.alarmclasses",
     "uuid": "53f8d105-cb43-4894-acfd-2d939d08d6a4",
     "is_unique": true,
-    "reference": ["onu"],
+    "reference": ["interface"],
     "is_ephemeral": false,
     "user_clearable": true,
     "vars": [
+        {
+            "name": "onu",
+            "description": "ONU MAC/Serial"
+        },
         {
             "name": "interface",
             "description": "xPON interface"
         },
         {
-            "name": "onu",
-            "description": "ONU MAC/Serial"
+            "name": "reason",
+            "description": "reason"
         }
     ],
-    "subject_template": "ONU {{onu}} config failed{% if interface %} on {{interface}}{% endif %}",
-    "body_template": "ONU {{onu}} config failed{% if interface %} on {{interface}}{% endif %}",
+    "subject_template": "Config ONU{% if onu %} {{onu}}{% endif %} on {{interface}} failed",
+    "body_template": "Config ONU{% if onu %} {{onu}}{% endif %} on {{interface}} failed{% if reason %}: {{reason}}{% endif %}",
     "symptoms": "Subscriber connection loss",
     "probable_causes": "",
     "recommended_actions": "",
