@@ -56,6 +56,11 @@ Ext.define("NOC.vc.vpnprofile.Application", {
                     dataIndex: "workflow",
                     width: 150,
                     renderer: NOC.render.Lookup("workflow")
+                },
+                {
+                    text: __("Description"),
+                    dataIndex: "description",
+                    flex: 1
                 }
             ],
 

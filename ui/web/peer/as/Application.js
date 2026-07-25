@@ -34,15 +34,15 @@ Ext.define("NOC.peer.as.Application", {
       renderer: NOC.render.Lookup("profile"),
     },
     {
-      text: __("Description"),
-      dataIndex: "description",
-      flex: 1,
-    },
-    {
       text: __("RIR"),
       dataIndex: "rir",
       renderer: NOC.render.Lookup("rir"),
       width: 100,
+    },
+    {
+      text: __("Description"),
+      dataIndex: "description",
+      flex: 1,
     },
   ],
   fields: [

@@ -55,6 +55,11 @@ Ext.define("NOC.ip.prefixprofile.Application", {
                         E: __("Enabled"),
                         D: __("Disabled")
                     })
+                },
+                {
+                    text: __("Description"),
+                    dataIndex: "description",
+                    flex: 1
                 }
             ],
 

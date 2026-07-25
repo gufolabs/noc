@@ -38,14 +38,14 @@ Ext.define("NOC.ip.vrfgroup.Application", {
             width: 50
         },
         {
+            text: __("Labels"),
+            dataIndex: "labels",
+            renderer: NOC.render.LabelField
+        },
+        {
             text: __("Description"),
             dataIndex: "description",
             flex: 1
-        },
-        {
-            text: __("Tags"),
-            dataIndex: "tags",
-            renderer: "NOC.render.Tags"
         }
     ],
     fields: [

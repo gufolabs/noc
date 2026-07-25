@@ -25,11 +25,16 @@ Ext.define("NOC.vc.vlanfilter.Application", {
         {
             text: __("Include Expression"),
             dataIndex: "include_expression",
-            flex: 1
+            width: 250
         },
         {
             text: __("Exclude Expression"),
             dataIndex: "exclude_expression",
+            width: 250
+        },
+        {
+            text: __("Description"),
+            dataIndex: "description",
             flex: 1
         }
     ],

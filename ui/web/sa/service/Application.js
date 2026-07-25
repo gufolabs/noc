@@ -115,7 +115,7 @@ Ext.define("NOC.sa.service.Application", {
         {
           text: __("Label"),
           dataIndex: "label",
-          width: 260,
+          width: 200,
         },
         {
           text: __("Subscriber"),
@@ -132,6 +132,11 @@ Ext.define("NOC.sa.service.Application", {
         {
           text: __("Parent"),
           dataIndex: "parent",
+          width: 200,
+        },
+        {
+          text: __("Description"),
+          dataIndex: "description",
           flex: 1,
         },
       ],

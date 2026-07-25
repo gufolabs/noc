@@ -19,25 +19,22 @@ Ext.define("NOC.peer.asset.Application", {
   columns: [
     {
       text: __("Name"),
-      flex: 1,
       dataIndex: "name",
     },
     {
-      text: __("Description"),
-      flex: 1,
-      dataIndex: "description",
-    },
-    {
       text: __("Members"),
-      flex: 1,
       dataIndex: "members",
       renderer: NOC.render.WrapColumn,
     },
     {
       text: __("Labels"),
-      flex: 1,
       dataIndex: "labels",
       renderer: NOC.render.LabelField,
+    },
+    {
+      text: __("Description"),
+      dataIndex: "description",
+      flex: 1,
     },
   ],
   fields: [

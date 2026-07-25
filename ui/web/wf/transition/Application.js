@@ -69,6 +69,11 @@ Ext.define("NOC.wf.transition.Application", {
         {
           text: __("Label"),
           dataIndex: "label",
+          width: 100,
+        },
+        {
+          text: __("Description"),
+          dataIndex: "description",
           flex: 1,
         },
       ],

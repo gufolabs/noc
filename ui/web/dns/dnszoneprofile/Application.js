@@ -20,27 +20,27 @@ Ext.define("NOC.dns.dnszoneprofile.Application", {
         {
             text: __("Name"),
             dataIndex: "name",
-            flex: 1
         },
         {
             text: __("TTL"),
             dataIndex: "zone_ttl",
-            flex: 1
         },
         {
             text: __("Notification Group"),
             dataIndex: "notification_group",
             renderer: NOC.render.Lookup("notification_group"),
-            flex: 1
         },
         {
             text: __("Masters"),
             dataIndex: "masterslabel",
-            flex: 1
         },
         {
             text: __("Slaves"),
             dataIndex: "slaveslabel",
+        },
+        {
+            text: __("Description"),
+            dataIndex: "description",
             flex: 1
         }
     ],

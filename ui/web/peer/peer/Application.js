@@ -82,13 +82,11 @@ Ext.define("NOC.peer.peer.Application", {
     },
     {
       text: __("Peering Point"),
-      flex: 1,
       dataIndex: "peering_point",
       renderer: NOC.render.Lookup("peering_point"),
     },
     {
       text: __("Peer Profile"),
-      flex: 1,
       dataIndex: "profile",
       renderer: NOC.render.Lookup("profile"),
     },
@@ -99,13 +97,11 @@ Ext.define("NOC.peer.peer.Application", {
     },
     {
       text: __("Local AS"),
-      flex: 1,
       dataIndex: "local_asn",
       renderer: NOC.render.Lookup("local_asn"),
     },
     {
       text: __("Remote AS"),
-      flex: 1,
       dataIndex: "remote_asn",
     },
     {
@@ -116,44 +112,37 @@ Ext.define("NOC.peer.peer.Application", {
     },
     {
       text: __("Import Filter"),
-      flex: 1,
       dataIndex: "import_filter",
     },
     {
       text: __("Export Filter"),
-      flex: 1,
       dataIndex: "export_filter",
     },
     {
       text: __("Local Address"),
-      flex: 1,
       dataIndex: "local_ip",
     },
     {
       text: __("Remote Address"),
-      flex: 1,
       dataIndex: "remote_ip",
     },
     {
       text: __("TT"),
-      flex: 1,
       dataIndex: "tt",
     },
     {
-      text: __("Description"),
-      flex: 1,
-      dataIndex: "description",
-    },
-    {
       text: __("Import Communities"),
-      flex: 1,
       dataIndex: "communities",
     },
     {
       text: __("Labels"),
-      flex: 1,
       dataIndex: "labels",
       renderer: NOC.render.LabelField,
+    },
+    {
+      text: __("Description"),
+      dataIndex: "description",
+      flex: 1,
     },
   ],
   fields: [

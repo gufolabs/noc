@@ -68,6 +68,11 @@ Ext.define("NOC.inv.protocol.Application", {
           dataIndex: "connection_schema",
           width: 100,
         },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
+        },
       ],
 
       fields: [

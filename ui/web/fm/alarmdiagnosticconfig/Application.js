@@ -34,8 +34,13 @@ Ext.define("NOC.fm.alarmdiagnosticconfig.Application", {
                 {
                     text: __("Alarm Class"),
                     dataIndex: "alarm_class",
-                    flex: 1,
+                    width: 250,
                     renderer: NOC.render.Lookup("alarm_class")
+                },
+                {
+                    text: __("Description"),
+                    dataIndex: "description",
+                    flex: 1,
                 }
             ],
 

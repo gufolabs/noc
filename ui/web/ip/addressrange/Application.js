@@ -20,7 +20,7 @@ Ext.define("NOC.ip.addressrange.Application", {
         {
             text: __("Name"),
             dataIndex: "name",
-            flex: 1
+            width: 100
         },
         {
             dataIndex: "is_active",
@@ -65,14 +65,15 @@ Ext.define("NOC.ip.addressrange.Application", {
             }
         },
         {
-            text: __("Description"),
-            dataIndex: "description"
-        },
-        {
             text: __("Labels"),
             dataIndex: "labels",
             renderer: NOC.render.LabelField
-        }
+        },
+        {
+            text: __("Description"),
+            dataIndex: "description",
+            flex: 1
+        },
     ],
     fields: [
         {

@@ -63,15 +63,15 @@ Ext.define("NOC.sla.slaprobe.Application", {
                     renderer: NOC.render.Lookup("managed_object")
                 },
                 {
-                    text: __("Description"),
-                    dataIndex: "description",
-                    flex: 1
-                },
-                {
                     text: __("Labels"),
                     dataIndex: "labels",
                     renderer: NOC.render.LabelField,
                     width: 100
+                },
+                {
+                    text: __("Description"),
+                    dataIndex: "description",
+                    flex: 1
                 }
             ],
 

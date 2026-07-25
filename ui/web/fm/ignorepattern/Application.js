@@ -32,7 +32,7 @@ Ext.define("NOC.fm.ignorepattern.Application", {
         {
           text: __("Pattern"),
           dataIndex: "pattern",
-          flex: 1,
+          width: 200,
         },
         {
           text: __("Description"),

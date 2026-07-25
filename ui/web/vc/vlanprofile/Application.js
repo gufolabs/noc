@@ -41,6 +41,11 @@ Ext.define("NOC.vc.vlanprofile.Application", {
                     dataIndex: "enable_provisioning",
                     width: 50,
                     renderer: NOC.render.Bool
+                },
+                {
+                    text: __("Description"),
+                    dataIndex: "description",
+                    flex: 1
                 }
             ],
 

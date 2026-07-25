@@ -56,6 +56,11 @@ Ext.define("NOC.sa.actioncommands.Application", {
           width: 100,
           align: "right",
         },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
+        },
       ],
 
       fields: [

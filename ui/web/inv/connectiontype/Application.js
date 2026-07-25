@@ -49,25 +49,31 @@ Ext.define("NOC.inv.connectiontype.Application", {
       columns: [
         {
           text: __("Name"),
-          width: 300,
           dataIndex: "name",
+          width: 300,
         },
         {
           text: __("Builtin"),
-          width: 50,
           dataIndex: "is_builtin",
+          width: 50,
           renderer: NOC.render.Bool,
           sortable: false,
         },
         {
           text: __("Genders"),
-          width: 50,
           dataIndex: "genders",
+          width: 50,
+        },
+        {
+          text: __("Compatible groups"),
+          dataIndex: "c_group",
+          renderer: NOC.render.LabelField,
+          width: 200,
         },
         {
           text: __("Description"),
-          flex: 1,
           dataIndex: "description",
+          flex: 1,
         },
       ],
       fields: [

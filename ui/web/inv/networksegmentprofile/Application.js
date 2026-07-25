@@ -40,6 +40,10 @@ Ext.define("NOC.inv.networksegmentprofile.Application", {
                     text: __("Style"),
                     dataIndex: "style",
                     renderer: NOC.render.Lookup("style"),
+                },
+                {
+                    text: __("Description"),
+                    dataIndex: "description",
                     flex: 1
                 }
             ],

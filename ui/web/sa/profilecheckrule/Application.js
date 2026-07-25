@@ -76,9 +76,13 @@ Ext.define("NOC.sa.profilecheckrule.Application", {
         {
           text: __("Profile"),
           dataIndex: "profile",
-          flex: 1,
           width: 150,
           renderer: NOC.render.Lookup("profile"),
+        },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
         },
       ],
 

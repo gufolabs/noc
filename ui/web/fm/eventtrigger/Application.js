@@ -56,8 +56,12 @@ Ext.define("NOC.fm.eventtrigger.Application", {
         {
             text: __("Handler"),
             dataIndex: "handler",
+        },
+        {
+            text: __("Description"),
+            dataIndex: "description",
             flex: 1
-        }
+        },
     ],
     fields: [
         {

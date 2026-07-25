@@ -59,6 +59,10 @@ Ext.define("NOC.fm.alarmtrigger.Application", {
         {
             text: __("Handler"),
             dataIndex: "handler",
+        },
+        {
+            text: __("Description"),
+            dataIndex: "description",
             flex: 1
         }
     ],

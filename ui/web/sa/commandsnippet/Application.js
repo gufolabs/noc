@@ -21,8 +21,8 @@ Ext.define("NOC.sa.commandsnippet.Application", {
             dataIndex: "name"
         },
         {
-            dataIndex: "is_enabled",
             text: __("Enabled"),
+            dataIndex: "is_enabled",
             renderer: NOC.render.Bool
         },
         {
@@ -32,32 +32,33 @@ Ext.define("NOC.sa.commandsnippet.Application", {
             width: 200
         },
         {
-            text: __("Description"),
-            dataIndex: "description"
-        },
-        {
-            dataIndex: "require_confirmation",
             text: __("Require Confirmation"),
+            dataIndex: "require_confirmation",
             renderer: NOC.render.Bool
         },
         {
-            dataIndex: "ignore_cli_errors",
             text: __("Ignore CLI Errors"),
-            renderer: NOC.render.Bool 
+            dataIndex: "ignore_cli_errors",
+            renderer: NOC.render.Bool
         },
         {
-            text: __("Permission"),    
+            text: __("Permission"),
             dataIndex: "permission_name"
         },
-        {   
-            dataIndex: "display_in_menu",   
-            text: __("Show in menu"), 
+        {
+            text: __("Show in menu"),
+            dataIndex: "display_in_menu",
             renderer: NOC.render.Bool
         },
         {
-            text: __("Tags"),
-            dataIndex: "tags",
-            renderer: NOC.render.Tags
+            text: __("Labels"),
+            dataIndex: "labels",
+            renderer: NOC.render.LabelField
+        },
+        {
+            text: __("Description"),
+            dataIndex: "description",
+            flex: 1
         }
     ],
     fields: [

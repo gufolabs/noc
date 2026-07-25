@@ -13,7 +13,8 @@ Ext.define("NOC.fm.ignoreeventrule.Application", {
     columns: [
         {
             text: __("Name"),
-            dataIndex: "name"
+            dataIndex: "name",
+            width: 100,
         },
         {
             text: __("Active"),
@@ -24,11 +25,16 @@ Ext.define("NOC.fm.ignoreeventrule.Application", {
         {
             text: __("Left RE"),
             dataIndex: "left_re",
-            flex: 1
+            width: 200,
         },
         {
             text: __("Right RE"),
             dataIndex: "right_re",
+            width: 200,
+        },
+        {
+            text: __("Description"),
+            dataIndex: "description",
             flex: 1
         }
     ],

@@ -51,10 +51,14 @@ Ext.define("NOC.inv.firmwarepolicy.Application", {
                 {
                     text: __("Management"),
                     dataIndex: "management",
-                    flex: 1,
                     renderer: function(v) {
                         return map((v || []).map(function(x) {return x.protocol;})).join(", ")
                     }
+                },
+                {
+                    text: __("Description"),
+                    dataIndex: "description",
+                    flex: 1,
                 }
             ],
 

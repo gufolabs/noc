@@ -37,13 +37,19 @@ Ext.define("NOC.wf.workflow.Application", {
         {
           text: __("Name"),
           dataIndex: "name",
-          flex: 1,
+          width: 250,
         },
         {
           text: __("Active"),
           dataIndex: "is_active",
-          width: 25,
+          width: 50,
           renderer: NOC.render.Bool,
+          align: "center",
+        },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
         },
       ],
 

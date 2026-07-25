@@ -34,6 +34,11 @@ Ext.define("NOC.ip.addressprofile.Application", {
                     dataIndex: "workflow",
                     width: 100,
                     renderer: NOC.render.Lookup("workflow")
+                },
+                {
+                    text: __("Description"),
+                    dataIndex: "description",
+                    flex: 1
                 }
             ],
 

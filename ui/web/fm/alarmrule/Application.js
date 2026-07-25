@@ -43,10 +43,26 @@ Ext.define("NOC.fm.alarmrule.Application", {
           align: "left",
         },
         {
+            text: __("TT Policy"),
+            dataIndex: "ttl_policy",
+            width: 100,
+            renderer: function(value, meta, record) {
+                var v = record.get("ttl_policy");
+                v += " " + NOC.render.Duration(record.get("clear_after_delay"));
+                return v;
+            },
+            align: "center"
+        },
+        {
           text: __("Escalation Profile"),
           dataIndex: "escalation_profile",
           width: 200,
           renderer: NOC.render.Lookup("escalation_profile"),
+        },
+        {
+          text: __("Description"),
+          dataIndex: "description",
+          flex: 1,
         },
       ],
 

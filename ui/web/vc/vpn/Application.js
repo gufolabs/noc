@@ -50,6 +50,11 @@ Ext.define("NOC.vc.vpn.Application", {
                     dataIndex: "project",
                     width: 150,
                     renderer: NOC.render.Lookup("project")
+                },
+                {
+                    text: __("Description"),
+                    dataIndex: "description",
+                    flex: 1
                 }
             ],
 

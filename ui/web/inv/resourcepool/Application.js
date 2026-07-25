@@ -28,14 +28,32 @@ Ext.define("NOC.inv.resourcepool.Application", {
         Ext.apply(me, {
             columns: [
                 {
-                    text: "Name",
+                    text: __("Name"),
                     dataIndex: "name",
-                    flex: 150
+                    width: 150
                 },
                 {
-                    text: "Type",
+                    text: __("Type"),
                     dataIndex: "type",
-                    flex: 100
+                    width: 100
+                },
+                {
+                    text: __("Unique"),
+                    dataIndex: "is_unique",
+                    width: 100,
+                    renderer: NOC.render.Bool,
+                    align: "center",
+                },
+                {
+                    text: __("Allocate Strategy"),
+                    dataIndex: "strategy",
+                    width: 100,
+                    align: "center",
+                },
+                {
+                    text: __("Description"),
+                    dataIndex: "description",
+                    flex: 1
                 }
             ],
 
