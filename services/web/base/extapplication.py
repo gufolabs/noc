@@ -22,8 +22,11 @@ from noc.main.models.slowop import SlowOp
 from noc.config import config
 from noc.models import is_document
 from noc.aaa.models.user import User
-from .application import Application, view
+from .api import api, view
+from .application import Application
 from .access import HasPerm, PermitLogged
+
+__all__ = ["ExtApplication", "api", "view"]
 
 
 class ExtApplication(Application):

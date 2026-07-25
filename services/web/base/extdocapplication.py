@@ -57,7 +57,10 @@ from noc.main.models.label import Label
 from noc.core.collection.base import Collection
 from noc.core.comp import smart_text
 from noc.models import get_model_id
-from .extapplication import ExtApplication, view
+from .api import api, view
+from .extapplication import ExtApplication
+
+__all__ = ["ExtDocApplication", "api", "view"]
 
 
 class ExtDocApplication(ExtApplication):

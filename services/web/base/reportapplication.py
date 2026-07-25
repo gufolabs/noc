@@ -14,6 +14,8 @@ from noc.core.middleware.tls import get_user
 from .application import Application, view
 from .access import Permission
 
+__all__ = ["ReportApplication", "view"]
+
 
 class ReportApplication(Application):
     # django.forms.Form class for report queries

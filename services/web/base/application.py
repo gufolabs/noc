@@ -40,8 +40,10 @@ from noc import settings
 from noc.core.feature import Feature
 from noc.models import is_document
 from .access import HasPerm
-from .api import view, api  # noqa: F401 @todo: remove
+from .api import view, api
 from .site import site
+
+__all__ = ["Application", "api", "view"]
 
 T = TypeVar("T")
 
