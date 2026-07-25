@@ -22,10 +22,6 @@ Ext.define("NOC.peer.asset.Application", {
       dataIndex: "name",
     },
     {
-      text: __("Description"),
-      dataIndex: "description",
-    },
-    {
       text: __("Members"),
       dataIndex: "members",
       renderer: NOC.render.WrapColumn,

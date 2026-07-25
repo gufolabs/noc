@@ -34,7 +34,7 @@ Ext.define("NOC.sa.capsprofile.Application", {
     Ext.apply(me, {
       columns: [
         {
-          text: "Name",
+          text: __("Name"),
           dataIndex: "name",
         },
         {
