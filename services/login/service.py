@@ -92,7 +92,7 @@ class LoginService(FastAPIService):
         async with self.revoked_cond:
             self.revoked_cond.notify_all()
 
-    async def subscrube_streams(self):
+    async def subscribe_streams(self):
         # revokedtokens is optional, so mark liftbridge as non-critical service.
         match config.msgstream.client_class:
             case "noc.core.msgstream.liftbridge.LiftBridgeClient":
@@ -114,7 +114,7 @@ class LoginService(FastAPIService):
         )
 
     async def on_activate(self) -> None:
-        self.loop.create_task(self.subscrube_streams())
+        self.loop.create_task(self.subscribe_streams())
 
 
 if __name__ == "__main__":
