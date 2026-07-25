@@ -269,7 +269,7 @@ class BaseConfig(metaclass=ConfigBase):
         return self._params[path].dump_value()
 
     @classmethod
-    def get_protocol(cls, url: str) -> str:
+    def get_protocol(cls, url):
         p = url.split(":", 1)[0]
         h = cls.PROTOCOLS.get(p)
         if h:
