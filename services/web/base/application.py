@@ -12,8 +12,7 @@ import os
 import datetime
 import functools
 from collections import OrderedDict
-from collections.abc import Callable
-from typing import TypeVar, Any, ParamSpec, Concatenate
+from typing import TypeVar, Any
 from http import HTTPStatus
 
 # Third-party modules
@@ -38,202 +37,13 @@ import jinja2
 # NOC modules
 from noc.core.forms import NOCForm
 from noc import settings
-from noc.sa.interfaces.base import DictParameter
 from noc.core.feature import Feature
 from noc.models import is_document
-from .access import HasPerm, Permit, Deny, Permission
+from .access import HasPerm
+from .api import view, api  # noqa: F401 @todo: remove
 from .site import site
 
-P = ParamSpec("P")
-R = TypeVar("R")
 T = TypeVar("T")
-Self = TypeVar("Self")
-
-
-def view(
-    url: str,
-    access: str | bool | Permission,
-    url_name: str | None = None,
-    menu: list[str] | None = None,  # @todo: dead code?
-    method: list[str] | None = None,
-    validate: dict[str, Any] | None = None,
-    api: bool = False,
-) -> Callable[
-    [Callable[Concatenate[Self, HttpRequest, P], R]], Callable[Concatenate[Self, HttpRequest, P], R]
-]:
-    """
-    @view decorator
-    :param url: URL relative to application root
-    :param validate: Form class or callable to check input
-    :param api: Does the view exposed as API function
-    """
-
-    def decorate(
-        f: Callable[Concatenate[Self, HttpRequest, P], R],
-    ) -> Callable[Concatenate[Self, HttpRequest, P], R]:
-        f.url = url
-        f.url_name = url_name
-        # Process access
-        if isinstance(access, bool):
-            f.access = Permit() if access else Deny()
-        elif isinstance(access, str):
-            f.access = HasPerm(access)
-        else:
-            f.access = access
-        f.menu = menu
-        f.method = method
-        f.api = api
-        if isinstance(validate, dict):
-            f.validate = DictParameter(attrs=validate)
-        else:
-            f.validate = validate
-        return f
-
-    return decorate
-
-
-class ViewAPI:
-    """
-    API view decorator factory.
-
-    Provides HTTP method-specific decorators that create API endpoints
-    using the common :func:`view` decorator.
-
-    Example:
-        @api.get(
-            url="^brief_lookup/$",
-            access="lookup",
-        )
-        def api_brief(self, request: HttpRequest):
-            ...
-    """
-
-    def get(
-        self,
-        url: str,
-        access: str | bool | Permission,
-        url_name: str | None = None,
-        menu: list[str] | None = None,  # @todo: dead code?
-        validate: dict[str, Any] | None = None,
-    ):
-        """
-        Decorate a GET API endpoint.
-
-        Args:
-            url: URL pattern relative to the application root.
-            access: Access control rule.
-            url_name: Optional URL name.
-            menu: Optional menu entry metadata.
-            validate: Optional request parameter validation schema.
-
-        Returns:
-            A view decorator.
-        """
-        return view(
-            url=url,
-            method=["GET"],
-            access=access,
-            url_name=url_name,
-            menu=menu,
-            validate=validate,
-            api=True,
-        )
-
-    def post(
-        self,
-        url: str,
-        access: str | bool | Permission,
-        url_name: str | None = None,
-        menu: list[str] | None = None,  # @todo: dead code?
-        validate: dict[str, Any] | None = None,
-    ):
-        """
-        Decorate a POST API endpoint.
-
-        Args:
-            url: URL pattern relative to the application root.
-            access: Access control rule.
-            url_name: Optional URL name.
-            menu: Optional menu entry metadata.
-            validate: Optional request parameter validation schema.
-
-        Returns:
-            A view decorator.
-        """
-        return view(
-            url=url,
-            method=["POST"],
-            access=access,
-            url_name=url_name,
-            menu=menu,
-            validate=validate,
-            api=True,
-        )
-
-    def put(
-        self,
-        url: str,
-        access: str | bool | Permission,
-        url_name: str | None = None,
-        menu: list[str] | None = None,  # @todo: dead code?
-        validate: dict[str, Any] | None = None,
-    ):
-        """
-        Decorate a PUT endpoint.
-
-        Args:
-            url: URL pattern relative to the application root.
-            access: Access control rule.
-            url_name: Optional URL name.
-            menu: Optional menu entry metadata.
-            validate: Optional request parameter validation schema.
-
-        Returns:
-            A view decorator.
-        """
-        return view(
-            url=url,
-            method=["PUT"],
-            access=access,
-            url_name=url_name,
-            menu=menu,
-            validate=validate,
-            api=True,
-        )
-
-    def delete(
-        self,
-        url: str,
-        access: str | bool | Permission,
-        url_name: str | None = None,
-        menu: list[str] | None = None,  # @todo: dead code?
-        validate: dict[str, Any] | None = None,
-    ):
-        """
-        Decorate a DELETE API endpoint.
-
-        Args:
-            url: URL pattern relative to the application root.
-            access: Access control rule.
-            url_name: Optional URL name.
-            menu: Optional menu entry metadata.
-            validate: Optional request parameter validation schema.
-
-        Returns:
-            A view decorator.
-        """
-        return view(
-            url=url,
-            method=["DELETE"],
-            access=access,
-            url_name=url_name,
-            menu=menu,
-            validate=validate,
-            api=True,
-        )
-
-
-api = ViewAPI()
 
 
 class BoundView:
@@ -345,7 +155,7 @@ class Application(metaclass=ApplicationBase):
         menu=None,
         method=None,
         validate=None,
-        api=False,
+        api=False,  # noqa: F811 @todo: Remove
     ):
         # wrap view
         f = BoundView(func)
@@ -620,9 +430,9 @@ class Application(metaclass=ApplicationBase):
         prefix = self.get_app_id().replace(".", ":")
         p = {f"{prefix}:launch"}
         # View permissions from HasPerm
-        for view in self.iter_views():
-            if isinstance(view.access, HasPerm):
-                p.add(view.access.get_permission(self))
+        for app_view in self.iter_views():
+            if isinstance(app_view.access, HasPerm):
+                p.add(app_view.access.get_permission(self))
         # mrt_config permissions
         for mrt in self.mrt_config:
             c = self.mrt_config[mrt]
