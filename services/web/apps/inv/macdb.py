@@ -183,7 +183,7 @@ class MACApplication(ExtApplication):
             )
         return out, rows_count
 
-    @view(method=["GET", "POST"], url="^$", access="read", api=True)
+    @view(method=["GET"], url="^$", access="read", api=True)
     def api_list(self, request: HttpRequest):
         q = self.parse_request_query(request)
         query = q.get("__query")
