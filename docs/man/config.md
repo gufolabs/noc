@@ -19,9 +19,9 @@ Refer to [admin-configuration](../config-reference/index.md) for details.
 
 ## Examples
 
-```
-    /opt/noc$ ./noc config dump
-    /opt/noc$ NOC_CONFIG=legacy:/// ./noc config dump
+```bash
+$ ./noc config dump
+$ NOC_CONFIG=yaml:///etc/noc.yml ./noc config dump
 ```
 
 ## See also

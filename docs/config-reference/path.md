@@ -50,10 +50,6 @@ Path service configuration
 
 {{ config_param("path.supervisor_cfg") }}
 
-## legacy_config
-
-{{ config_param("path.legacy_config") }}
-
 ## npkg_root
 
 {{ config_param("path.npkg_root") }}

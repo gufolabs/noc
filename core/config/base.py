@@ -159,7 +159,6 @@ class BaseConfig(metaclass=ConfigBase):
         "consul": "noc.core.config.proto.consul.ConsulProtocol",
         "env": "noc.core.config.proto.env.EnvProtocol",
         "yaml": "noc.core.config.proto.yaml.YAMLProtocol",
-        "legacy": "noc.core.config.proto.legacy.LegacyProtocol",
     }
 
     _rx_env_sh = re.compile(r"\${([^:}]+)(:-[^}]+)?}")
