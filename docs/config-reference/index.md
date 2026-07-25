@@ -28,7 +28,7 @@ Which means:
 1. Load new YAML config from "settings.yml", provisioned by `Tower` (See [yaml](#yaml) for details)
 2. Apply NOC_xxx environment variables passed to process (See [env](#env) for details)
 
-Proposed apporoach allows to start with deployed config, if exists, then apply per-process tweaks via environment variables.
+Proposed approach allows to start with deployed config, if exists, then apply per-process tweaks via environment variables.
 
 You can set own `NOC_CONFIG` environment variable passed to process
 to apply custom configuration processing order.
