@@ -774,8 +774,6 @@ params:
   path.dig: {}
   path.etl_import:
     default: /var/lib/noc/import
-  path.legacy_config:
-    default: etc/noc.yml
   path.mac_vendor_medium_url:
     default: https://standards-oui.ieee.org/oui28/mam.txt
   path.mac_vendor_url:
