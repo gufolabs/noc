@@ -23,7 +23,7 @@ from noc.config import config
 from noc.models import is_document
 from noc.aaa.models.user import User
 from .api import api, view
-from .application import Application, view
+from .application import Application
 from .access import HasPerm, PermitLogged
 
 __all__ = ["ExtApplication", "api", "view"]
