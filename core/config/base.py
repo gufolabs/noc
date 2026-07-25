@@ -248,7 +248,7 @@ class BaseConfig(metaclass=ConfigBase):
                 key, value = r
         return key, value
 
-    def find_parameter(self, path) -> BaseParameter:
+    def find_parameter(self, path: str) -> BaseParameter:
         """
         Get parameter instance by name.
 
@@ -260,10 +260,10 @@ class BaseConfig(metaclass=ConfigBase):
         """
         return self._params[path]
 
-    def get_parameter(self, path):
+    def get_parameter(self, path: str):
         return self._params[path].value
 
-    def dump_parameter(self, path):
+    def dump_parameter(self, path: str):
         if self._rewritten_params and path in self._rewritten_params:
             return None
         return self._params[path].dump_value()
@@ -280,7 +280,7 @@ class BaseConfig(metaclass=ConfigBase):
         msg = f"Invalid protocol: {p}"
         raise ValueError(msg)
 
-    def load(self):
+    def load(self) -> None:
         with warnings.catch_warnings():
             warnings.simplefilter("always")
             paths = os.environ.get("NOC_CONFIG", DEFAULT_CONFIG)
@@ -290,12 +290,12 @@ class BaseConfig(metaclass=ConfigBase):
                 proto = pcls(self, p)
                 proto.load()
 
-    def dump(self, url=DEFAULT_DUMP_URL, section=None):
+    def dump(self, url: str = DEFAULT_DUMP_URL, section: str | None = None) -> None:
         pcls = self.get_protocol(url)
         proto = pcls(self, url)
         proto.dump(section=section)
 
-    def update(self, cfg):
+    def update(self, cfg) -> None:
         """
         Update config from dictionary
         :return:
