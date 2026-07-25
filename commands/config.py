@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Collections manipulation
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -9,6 +9,7 @@
 import argparse
 from noc.config import config
 from pathlib import Path
+from contextlib import suppress
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -29,8 +30,24 @@ class Command(BaseCommand):
     def handle(self, cmd, *args, **options):
         getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
-    def handle_dump(self, section=None, *args, **options):
-        config.dump(url="yaml://", section=section)
+    def handle_dump(self, section: list[str] | None = None, *args, **options) -> None:
+        import yaml
+
+        data = {}
+        start = f"{'.'.join(section)}." if section else None
+        for name in config:
+            if start and not name.startswith(start):
+                continue
+            current = data
+            parts = name.split(".")
+            while len(parts) > 1:
+                key = parts.pop(0)
+                if key not in current:
+                    current[key] = {}
+                current = current[key]
+            with suppress(KeyError):
+                current[parts[0]] = config.get_parameter(name)
+        self.print(yaml.dump(data, default_flow_style=False))
 
     def handle_compile_docs(self, *args, **options) -> None:
         import yaml
