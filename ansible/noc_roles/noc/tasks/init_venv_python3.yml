@@ -57,7 +57,7 @@
 
 # Archive whole directory with old python2.* version and then delete folder's content
 - block:
-    - name:
+    - name: "Clean directory"
       include_tasks: "clean_dir.yml"
 
     - name: Bring Python of {{ noc_py3_ver }} version when system's python differs
@@ -247,6 +247,14 @@
     python_deps: "{{ python_deps + ['cache-redis'] }}"
   when:
     - "'svc-redis-exec' in groups and groups['svc-redis-exec']|length>0"
+  tags:
+    - requirements
+
+- name: Add -liftbridge- python packages
+  set_fact:
+    python_deps: "{{ python_deps + ['liftbridge'] }}"
+  when:
+    - "'svc-liftbridge-exec' in groups and groups['svc-liftbridge-exec']|length>0"
   tags:
     - requirements
 
