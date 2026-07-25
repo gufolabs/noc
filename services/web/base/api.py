@@ -16,6 +16,8 @@ from django.http import HttpRequest
 from noc.sa.interfaces.base import DictParameter
 from .access import HasPerm, Permit, Deny, Permission
 
+__all__ = ["api", "view"]
+
 P = ParamSpec("P")
 R = TypeVar("R")
 T = TypeVar("T")

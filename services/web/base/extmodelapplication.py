@@ -54,8 +54,11 @@ from noc.core.protocols.get_css_class import GetCssClass
 from noc.models import get_model_id
 from noc.core.model.util import is_related_field
 from noc.inv.models.resourcegroup import ResourceGroup
-from .extapplication import ExtApplication, view
+from .api import api, view
+from .extapplication import ExtApplication
 from .interfaces import DateParameter, DateTimeParameter
+
+__all__ = ["ExtModelApplication", "api", "view"]
 
 
 class ExtModelApplication(ExtApplication):
