@@ -341,10 +341,10 @@ params:
     default: '60'
   etl.compression:
     choices:
-    - gzip
-    - plain
-    - lzma
     - bz2
+    - gzip
+    - lzma
+    - plain
     default: gzip
   features.consul_healthchecks:
     default: 'True'
@@ -472,11 +472,11 @@ params:
   kafka.bootstrap_servers: {}
   kafka.compression_type:
     choices:
-    - zstd
-    - lz4
     - gzip
-    - snappy
+    - lz4
     - none
+    - snappy
+    - zstd
     default: lz4
   kafka.max_batch_size:
     default: '16384'
@@ -487,27 +487,27 @@ params:
     default: '3'
   kafka.sasl_mechanism:
     choices:
-    - SCRAM-SHA-256
-    - SCRAM-SHA-512
     - GSSAPI
     - PLAIN
+    - SCRAM-SHA-256
+    - SCRAM-SHA-512
     default: PLAIN
   kafka.security_protocol:
     choices:
     - PLAINTEXT
+    - SASL_PLAINTEXT
     - SASL_SSL
     - SSL
-    - SASL_PLAINTEXT
     default: PLAINTEXT
   kafka.username: {}
   kafkasender.bootstrap_servers: {}
   kafkasender.compression_type:
     choices:
-    - zstd
-    - lz4
     - gzip
-    - snappy
+    - lz4
     - none
+    - snappy
+    - zstd
     default: none
   kafkasender.max_batch_size:
     default: '16384'
@@ -516,17 +516,17 @@ params:
   kafkasender.password: {}
   kafkasender.sasl_mechanism:
     choices:
-    - SCRAM-SHA-256
-    - SCRAM-SHA-512
     - GSSAPI
     - PLAIN
+    - SCRAM-SHA-256
+    - SCRAM-SHA-512
     default: PLAIN
   kafkasender.security_protocol:
     choices:
     - PLAINTEXT
+    - SASL_PLAINTEXT
     - SASL_SSL
     - SSL
-    - SASL_PLAINTEXT
     default: PLAINTEXT
   kafkasender.username: {}
   language:
@@ -579,8 +579,8 @@ params:
     default: '604800'
   login.jwt_algorithm:
     choices:
-    - HS384
     - HS256
+    - HS384
     - HS512
     default: HS256
   login.jwt_cookie_name:
