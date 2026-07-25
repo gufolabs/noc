@@ -1310,15 +1310,7 @@ class ManagedObjectApplication(ExtModelApplication):
             ]
         return r
 
-    @view(url=r"^full/", method=["GET", "POST"], access="read", api=True)
-    def api_list_full(self, request: HttpRequest):
-        try:
-            return self.list_data(request, self.instance_to_dict)
-        except Exception as e:
-            error_report()
-            return self.response({"status": False, "message": str(e)}, status=self.INTERNAL_ERROR)
-
-    @view(url=r"^list/", method=["GET", "POST"], access="read", api=True)
+    @view(url=r"^list/", method=["POST"], access="read", api=True)
     def api_list_short(self, request: HttpRequest):
         try:
             return self.list_data(request, self.instance_to_dict_list)
