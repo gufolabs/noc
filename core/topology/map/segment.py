@@ -17,6 +17,8 @@ import cachetools
 from bson import ObjectId
 
 # NOC modules
+from noc.aaa.models.user import User
+from noc.sa.models.useraccess import UserAccess
 from noc.core.log import PrefixLoggerAdapter
 from noc.core.ip import IP
 from noc.core.graph.nexthop import iter_next_hops
@@ -313,10 +315,16 @@ class SegmentTopology(TopologyBase):
         limit: int | None = None,
         start: int | None = None,
     ) -> Iterable[MapItem]:
+        qs = {}
         if parent is not None:
-            data = NetworkSegment.objects.filter(parent=parent).order_by("name")
-        else:
-            data = NetworkSegment.objects.filter().order_by("name")
+            qs["parent"] = parent
+        user = User.get_current_user()
+        if user and not user.is_superuser:
+            adm_domains = UserAccess.get_domains(user)
+            if not adm_domains:
+                return
+            qs["adm_domains__in"] = adm_domains
+        data = NetworkSegment.objects.filter(**qs).order_by("name")
         if query:
             data = data.filter(name__icontains=query)
         # Apply paging

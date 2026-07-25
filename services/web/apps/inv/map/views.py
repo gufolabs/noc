@@ -330,23 +330,24 @@ class MapApplication(ExtApplication):
             )
         # Search for maps
         r: list[dict[str, Any]] = []
-        for mi in gen.iter_maps(
-            parent=parent if parent not in ("0", gen.name) else None,
-            query=g.get(self.query_param, ""),
-            limit=int(g.get(self.limit_param, 500)),
-            start=int(g.get(self.start_param, 0)),
-        ):
-            r.append(
-                {
-                    "label": mi.title,
-                    "generator": mi.generator,
-                    "id": str(mi.id),
-                    "has_children": mi.has_children,
-                    "only_container": mi.only_container,
-                    "code": mi.code,
-                }
-            )
-        return r
+        with request.user.with_user():
+            for mi in gen.iter_maps(
+                parent=parent if parent not in ("0", gen.name) else None,
+                query=g.get(self.query_param, ""),
+                limit=int(g.get(self.limit_param, 500)),
+                start=int(g.get(self.start_param, 0)),
+            ):
+                r.append(
+                    {
+                        "label": mi.title,
+                        "generator": mi.generator,
+                        "id": str(mi.id),
+                        "has_children": mi.has_children,
+                        "only_container": mi.only_container,
+                        "code": mi.code,
+                    }
+                )
+            return r
 
     @view(
         method=["GET"], url=r"^(?P<gen_id>[0-9a-f]{24}|\d+)/get_path/$", access="lookup", api=True
