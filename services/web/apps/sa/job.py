@@ -60,7 +60,7 @@ class JobApplication(ExtDocApplication):
             r["effective_environment"] = o.effective_environment
         return r
 
-    @view("^(?P<id>[0-9a-f]{24})/viz/$", access="read")
+    @api.get("^(?P<id>[0-9a-f]{24})/viz/$", access="read")
     def view_viz(self, request: HttpRequest, id: str):
         job = self.get_object_or_404(Job, id=id)
         return self.get_viz(job)

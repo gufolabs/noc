@@ -40,7 +40,7 @@ class EventApplication(ExtApplication):
     icon = "icon_find"
     ignored_params = ["status", "_dc"]
 
-    @view(method=["GET", "POST"], url="^$", access="read", api=True)
+    @api.get("^$", access="read")
     def api_list(self, request: HttpRequest):
         q = self.parse_request_query(request)
         start = q.get("__start") or 0

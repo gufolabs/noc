@@ -183,7 +183,7 @@ class ServiceApplication(ExtDocApplication):
         # Clean other
         return super().clean(data)
 
-    @view("^(?P<id>[0-9a-f]{24})/get_path/$", access="read")
+    @api.get("^(?P<id>[0-9a-f]{24})/get_path/$", access="read")
     def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(Service, id=id)
         path = [Service.get_by_id(ns) for ns in o.get_path()]
@@ -233,7 +233,7 @@ class ServiceApplication(ExtDocApplication):
             ]
         return r
 
-    @view(r"^(?P<sid>[0-9a-f]{24})/resource/(?P<r_type>\S+)/", access="read")
+    @api.get(r"^(?P<sid>[0-9a-f]{24})/resource/(?P<r_type>\S+)/", access="read")
     def api_get_instance_resources(self, request: HttpRequest, sid: str, r_type: str):
         # o = self.get_object_or_404(Service, id=sid)
         q = self.parse_request_query(request)
@@ -261,7 +261,7 @@ class ServiceApplication(ExtDocApplication):
             )
         return r
 
-    @view("^(?P<sid>[0-9a-f]{24})/instance/$", access="read")
+    @api.get("^(?P<sid>[0-9a-f]{24})/instance/$", access="read")
     def api_get_instance(self, request: HttpRequest, sid: str):
         o = self.get_object_or_404(Service, id=sid)
         r = []
