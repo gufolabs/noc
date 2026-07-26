@@ -107,7 +107,7 @@ def from_url(url: str) -> BaseConfigBackend:
 
     The backend scheme is used to locate the corresponding implementation.
     For example, ``yaml://...`` creates an instance of the YAML configuration
-    backemd.
+    backend.
 
     Args:
         url: Configuration backend URL.
