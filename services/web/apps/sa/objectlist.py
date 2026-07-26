@@ -10,7 +10,7 @@ from django.db.models import Q as d_Q
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view, api
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.sa.models.managedobject import ManagedObject
 from noc.sa.models.administrativedomain import AdministrativeDomain
 from noc.inv.models.resourcegroup import ResourceGroup
@@ -170,7 +170,7 @@ class ObjectListApplication(ExtApplication):
         self.logger.info(f"Extra: {extra}")
         return extra, [] if "order_by" in extra else order
 
-    @view(method=["POST"], url="^$", access="read", api=True)
+    @api.post("^$", access="read")
     def api_list(self, request: HttpRequest):
         return self.list_data(request, self.instance_to_dict)
 

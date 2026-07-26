@@ -19,7 +19,7 @@ from django.db.models import Q as d_Q
 from mongoengine.queryset import Q as MQ
 
 # NOC modules
-from noc.services.web.base.extmodelapplication import ExtModelApplication, view, api
+from noc.services.web.base.extmodelapplication import ExtModelApplication, api
 from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.decorators.caps import capabilities_handler
 from noc.sa.models.administrativedomain import AdministrativeDomain
@@ -1293,7 +1293,7 @@ class ManagedObjectApplication(ExtModelApplication):
             ]
         return r
 
-    @view(url=r"^full/", method=["POST"], access="read", api=True)
+    @api.post("^full/", access="read")
     def api_list_full(self, request: HttpRequest):
         try:
             return self.list_data(request, self.instance_to_dict)
@@ -1301,7 +1301,7 @@ class ManagedObjectApplication(ExtModelApplication):
             error_report()
             return self.response({"status": False, "message": str(e)}, status=self.INTERNAL_ERROR)
 
-    @view(url=r"^list/", method=["POST"], access="read", api=True)
+    @api.post(r"^list/", access="read")
     def api_list_short(self, request: HttpRequest):
         try:
             return self.list_data(request, self.instance_to_dict_list)

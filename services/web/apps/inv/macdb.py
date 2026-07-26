@@ -14,7 +14,7 @@ from django.http import HttpRequest
 import orjson
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtApplication, view, api
+from noc.services.web.base.extdocapplication import ExtApplication, api
 from noc.sa.models.managedobject import ManagedObject
 from noc.sa.interfaces.base import MACAddressParameter
 from noc.core.mac import MAC
@@ -183,7 +183,7 @@ class MACApplication(ExtApplication):
             )
         return out, rows_count
 
-    @view(method=["GET"], url="^$", access="read", api=True)
+    @api.get("^$", access="read")
     def api_list(self, request: HttpRequest):
         q = self.parse_request_query(request)
         query = q.get("__query")
