@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------
-// Copyright (C) 2007-2023 The NOC Project
+// Copyright (C) 2007-2026 The NOC Project
 // See LICENSE for details
 //---------------------------------------------------------------------
 this.fieldSetDefaults = {
@@ -28,6 +28,8 @@ Ext.define("NOC.sa.managedobject.form.View", {
     "NOC.core.MonacoPanel",
     "NOC.core.plugins.DynamicModalEditing",
     "NOC.main.glyph.LookupField",
+    "NOC.main.ref.soposition.LookupField",
+    "NOC.main.ref.soform.LookupField",
     "NOC.sa.managedobject.AttributesModel",
     "NOC.sa.managedobject.CapabilitiesModel",
     "NOC.sa.managedobject.form.FormController",
@@ -258,17 +260,14 @@ Ext.define("NOC.sa.managedobject.form.View", {
               items: [
                 {
                   name: "shape_overlay_position",
-                  xtype: "core.combo",
-                  restUrl: "/main/ref/soposition/lookup/",
-                  uiStyle: "medium-combo",
+                  xtype: "main.ref.soposition.LookupField",
                   fieldLabel: __("Position"),
                   tabIndex: 90,
                   allowBlank: true,
                 },
                 {
                   name: "shape_overlay_form",
-                  xtype: "core.combo",
-                  restUrl: "/main/ref/soform/lookup/",
+                  xtype: "main.ref.soform.LookupField",
                   uiStyle: "medium-combo",
                   fieldLabel: __("Form"),
                   tabIndex: 100,

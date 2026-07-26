@@ -22,7 +22,6 @@ from noc.core.profile.loader import loader as profile_loader
 from noc.core.script.loader import loader as script_loader
 from noc.core.checkers.loader import loader as checker_loader
 from noc.core.window import wf_choices
-from noc.core.topology.types import ShapeOverlayPosition, ShapeOverlayForm
 from noc.core.topology.base import loader as topo_loader
 from noc.core.mx import MessageType, MESSAGE_HEADERS
 from noc.core.datasources.loader import loader as ds_loader
@@ -160,12 +159,6 @@ class RefAppplication(ExtApplication):
 
     def build_kbparser(self):
         return [{"id": x, "label": x} for x in sorted(kbparser_loader)]
-
-    def build_soposition(self):
-        return [{"id": x.value, "label": x.name} for x in ShapeOverlayPosition]
-
-    def build_soform(self):
-        return [{"id": x.value, "label": x.name} for x in ShapeOverlayForm]
 
     def build_messagetype(self):
         return [{"id": x.value, "label": x.name} for x in sorted(MessageType, key=lambda x: x.name)]
