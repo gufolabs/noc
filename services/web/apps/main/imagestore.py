@@ -9,7 +9,7 @@
 from django.http import HttpResponse, HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.main.models.imagestore import ImageStore
 from noc.core.translation import ugettext as _
 from noc.core.mime import _R_CONTENT_TYPE
@@ -39,7 +39,7 @@ class ImageStoreApplication(ExtDocApplication):
         o.file.put(file.read(), content_type=file.content_type, filename=file_attrs.get("filename"))
         return True
 
-    @view("^(?P<id>[0-9a-f]{24})/image/$", access="read", api=True)
+    @api.get(r"^(?P<id>[0-9a-f]{24})/image/$", access="read")
     def api_image(self, request: HttpRequest, id):
         o = self.get_object_or_404(ImageStore, id=id)
         return HttpResponse(o.file.read(), content_type=o.get_content_type())

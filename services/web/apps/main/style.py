@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extmodelapplication import ExtModelApplication, view
+from noc.services.web.base.extmodelapplication import ExtModelApplication, api
 from noc.main.models.style import Style
 from noc.sa.interfaces.base import ColorParameter
 from noc.core.translation import ugettext as _
@@ -27,6 +27,6 @@ class StyleApplication(ExtModelApplication):
 
     clean_fields = {"background_color": ColorParameter(), "font_color": ColorParameter()}
 
-    @view("^scheme/$", method=["GET"], access=True)
+    @api.get("^scheme/$", access=True)
     def api_style(self, request: HttpRequest):
         return Style.get_scheme()

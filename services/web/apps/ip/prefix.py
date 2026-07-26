@@ -12,7 +12,7 @@ from operator import attrgetter
 from django.http import HttpResponse, HttpRequest
 
 # NOC modules
-from noc.services.web.base.extmodelapplication import ExtModelApplication, view
+from noc.services.web.base.extmodelapplication import ExtModelApplication, api
 from noc.ip.models.vrf import VRF
 from noc.ip.models.prefix import Prefix
 from noc.ip.models.prefixaccess import PrefixAccess
@@ -45,11 +45,9 @@ class PrefixApplication(ExtModelApplication):
         qs = super().queryset(request, query=query)
         return qs.filter(PrefixAccess.read_Q(request.user))
 
-    @view(
-        url=r"^(?P<prefix_id>\d+)/rebase/$",
-        method=["POST"],
+    @api.post(
+        r"^(?P<prefix_id>\d+)/rebase/$",
         access="rebase",
-        api=True,
         validate={"to_vrf": ModelParameter(VRF), "to_prefix": PrefixParameter()},
     )
     def api_rebase(self, request: HttpRequest, prefix_id, to_vrf, to_prefix):
@@ -60,7 +58,7 @@ class PrefixApplication(ExtModelApplication):
         except ValueError as e:
             return self.response_bad_request(str(e))
 
-    @view(url=r"^(?P<prefix_id>\d+)/suggest_free/$", method=["GET"], access="read", api=True)
+    @api.get(r"^(?P<prefix_id>\d+)/suggest_free/$", access="read")
     def api_suggest_free(self, request: HttpRequest, prefix_id):
         """
         Suggest free blocks of different sizes
@@ -88,7 +86,7 @@ class PrefixApplication(ExtModelApplication):
                     break
         return suggestions
 
-    @view(method=["DELETE"], url=r"^(?P<id>\d+)/recursive/$", access="delete", api=True)
+    @api.delete(r"^(?P<id>\d+)/recursive/$", access="delete")
     def api_delete_recursive(self, request: HttpRequest, id):
         try:
             o = self.queryset(request).get(**{self.pk: int(id)})
@@ -109,7 +107,7 @@ class PrefixApplication(ExtModelApplication):
             )
         return HttpResponse(status=self.DELETED)
 
-    @view(r"^(?P<id>\d+)/get_path/$", access="read", api=True)
+    @api.get(r"^(?P<id>\d+)/get_path/$", access="read")
     def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(Prefix, id=int(id))
         try:

@@ -25,7 +25,7 @@ from mongoengine.queryset.visitor import Q
 from noc.config import config
 from noc.core.clickhouse.connect import connection
 from noc.core.comp import smart_text
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, view, api
 from noc.inv.models.object import Object
 from noc.inv.models.networksegment import NetworkSegment
 from noc.fm.models.activealarm import ActiveAlarm, Effect
@@ -440,7 +440,7 @@ class AlarmApplication(ExtApplication):
     def api_list(self, request: HttpRequest):
         return self.list_data(request, self.instance_to_dict)
 
-    @view(url=r"^(?P<id>[a-z0-9]{24})/$", method=["GET"], api=True, access="launch")
+    @api.get(r"^(?P<id>[a-z0-9]{24})/$", access="launch")
     def api_alarm(self, request: HttpRequest, id):
         alarm = get_alarm(id)
         if not alarm:
@@ -655,13 +655,7 @@ class AlarmApplication(ExtApplication):
                     processed.add(c["id"])
         return children
 
-    @view(
-        url=r"^(?P<id>[a-z0-9]{24})/post/",
-        method=["POST"],
-        api=True,
-        access="launch",
-        validate={"msg": UnicodeParameter()},
-    )
+    @api.post(r"^(?P<id>[a-z0-9]{24})/post/", access="launch", validate={"msg": UnicodeParameter()})
     def api_post(self, request: HttpRequest, id, msg):
         alarm = get_alarm(id)
         if not alarm:
@@ -669,10 +663,8 @@ class AlarmApplication(ExtApplication):
         alarm.log_message(msg, source=request.user.username)
         return True
 
-    @view(
-        url=r"^comment/post/",
-        method=["POST"],
-        api=True,
+    @api.post(
+        r"^comment/post/",
         access="launch",
         validate={
             "ids": StringListParameter(required=True),
@@ -688,10 +680,8 @@ class AlarmApplication(ExtApplication):
             alarm.log_message(msg, source=request.user.username)
         return True
 
-    @view(
-        url=r"^group/favorites/",
-        method=["POST"],
-        api=True,
+    @api.post(
+        r"^group/favorites/",
         access="launch",
         validate={
             "ids": StringListParameter(required=True),
@@ -705,10 +695,8 @@ class AlarmApplication(ExtApplication):
             Favorites.remove_items(request.user, self.app_id, ids)
         return {"status": True}
 
-    @view(
-        url=r"^(?P<id>[a-z0-9]{24})/acknowledge/",
-        method=["POST"],
-        api=True,
+    @api.post(
+        r"^(?P<id>[a-z0-9]{24})/acknowledge/",
         access="acknowledge",
         validate={
             "msg": UnicodeParameter(default=""),
@@ -725,10 +713,8 @@ class AlarmApplication(ExtApplication):
         alarm.acknowledge(request.user, msg)
         return {"status": True}
 
-    @view(
-        url=r"^(?P<id>[a-z0-9]{24})/unacknowledge/",
-        method=["POST"],
-        api=True,
+    @api.post(
+        r"^(?P<id>[a-z0-9]{24})/unacknowledge/",
         access="acknowledge",
         validate={
             "msg": UnicodeParameter(default=""),
@@ -745,7 +731,7 @@ class AlarmApplication(ExtApplication):
         alarm.unacknowledge(request.user, msg=msg)
         return {"status": True}
 
-    @view(url=r"^(?P<id>[a-z0-9]{24})/subscribe/", method=["POST"], api=True, access="launch")
+    @api.post(r"^(?P<id>[a-z0-9]{24})/subscribe/", access="launch")
     def api_subscribe(self, request: HttpRequest, id):
         alarm = get_alarm(id)
         if not alarm:
@@ -755,7 +741,7 @@ class AlarmApplication(ExtApplication):
             return self.get_alarm_subscribers(alarm)
         return []
 
-    @view(url=r"^(?P<id>[a-z0-9]{24})/unsubscribe/", method=["POST"], api=True, access="launch")
+    @api.post(r"^(?P<id>[a-z0-9]{24})/unsubscribe/", access="launch")
     def api_unsubscribe(self, request: HttpRequest, id):
         alarm = get_alarm(id)
         if not alarm:
@@ -765,10 +751,8 @@ class AlarmApplication(ExtApplication):
             return self.get_alarm_subscribers(alarm)
         return []
 
-    @view(
-        url=r"^(?P<id>[a-z0-9]{24})/clear/",
-        method=["POST"],
-        api=True,
+    @api.post(
+        r"^(?P<id>[a-z0-9]{24})/clear/",
         access="clear",
         validate={
             "msg": UnicodeParameter(default=""),
@@ -783,10 +767,8 @@ class AlarmApplication(ExtApplication):
             alarm.register_clear(f"Cleared by user: {request.user.username}", user=request.user)
         return True
 
-    @view(
-        url=r"^clear/",
-        method=["POST"],
-        api=True,
+    @api.post(
+        r"^clear/",
         access="clear",
         validate={
             "msg": UnicodeParameter(default=""),
@@ -807,10 +789,8 @@ class AlarmApplication(ExtApplication):
             return {"status": True}
         return {"status": False, "message": _("Failed to clear alarms")}
 
-    @view(
-        url=r"^(?P<id>[a-z0-9]{24})/set_root/",
-        method=["POST"],
-        api=True,
+    @api.post(
+        r"^(?P<id>[a-z0-9]{24})/set_root/",
         access="launch",
         validate={"root": StringParameter()},
     )
@@ -822,7 +802,7 @@ class AlarmApplication(ExtApplication):
         alarm.set_root(r)
         return True
 
-    @view(url=r"notification/$", method=["GET"], api=True, access="launch")
+    @api.get(r"notification/$", access="launch")
     def api_notification(self, request: HttpRequest):
         delta = request.GET.get("delta")
         n = 0
@@ -892,12 +872,8 @@ class AlarmApplication(ExtApplication):
         r = [x for x in r if x]
         return "".join(r)
 
-    @view(
-        url=r"^escalate/",
-        method=["POST"],
-        api=True,
-        access="escalate",
-        validate={"ids": StringListParameter(required=True)},
+    @api.post(
+        r"^escalate/", access="escalate", validate={"ids": StringListParameter(required=True)}
     )
     def api_escalation_alarm(self, request: HttpRequest, ids):
         alarms = list(ActiveAlarm.objects.filter(id__in=ids))
@@ -1061,7 +1037,7 @@ class AlarmApplication(ExtApplication):
             x["group_subject"] = subj_map[g]
         return data
 
-    @view(url=r"profile_lookup/$", access="launch", method=["GET"], api=True)
+    @api.get(r"profile_lookup/$", access="launch")
     def api_profile_lookup(self, request: HttpRequest):
         r = []
         for model, short_type, field_id in (

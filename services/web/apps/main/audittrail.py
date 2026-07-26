@@ -13,7 +13,7 @@ from django.http import HttpRequest
 import orjson
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.core.translation import ugettext as _
 from noc.core.clickhouse.connect import connection
 from noc.models import get_object, get_model
@@ -110,6 +110,6 @@ class AuditTrailApplication(ExtApplication):
             status=self.OK,
         )
 
-    @view(method=["GET"], url=r"^$", access="read", api=True)
+    @api.get(r"^$", access="read")
     def api_list(self, request: HttpRequest):
         return self.list_data(request, None)

@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extmodelapplication import ExtModelApplication, view
+from noc.services.web.base.extmodelapplication import ExtModelApplication, api
 from noc.services.web.base.decorators.state import state_handler
 from noc.peer.models.peer import Peer
 from noc.core.validators import is_prefix
@@ -99,11 +99,9 @@ class PeerApplication(ExtModelApplication):
             return f"1 peer marked as {message}"
         return f"{count} peers marked as {message}"
 
-    @view(
-        url="^actions/planned/$",
-        method=["POST"],
+    @api.post(
+        "^actions/planned/$",
         access="update",
-        api=True,
         validate={"ids": ListOfParameter(element=ModelParameter(Peer))},
     )
     def api_action_planned(self, request: HttpRequest, ids):
@@ -111,11 +109,9 @@ class PeerApplication(ExtModelApplication):
 
     api_action_planned.short_description = "Mark as planned"
 
-    @view(
-        url="^actions/active/$",
-        method=["POST"],
+    @api.post(
+        "^actions/active/$",
         access="update",
-        api=True,
         validate={"ids": ListOfParameter(element=ModelParameter(Peer))},
     )
     def api_action_active(self, request: HttpRequest, ids):
@@ -123,11 +119,9 @@ class PeerApplication(ExtModelApplication):
 
     api_action_active.short_description = "Mark as active"
 
-    @view(
-        url="^actions/shutdown/$",
-        method=["POST"],
+    @api.post(
+        "^actions/shutdown/$",
         access="update",
-        api=True,
         validate={"ids": ListOfParameter(element=ModelParameter(Peer))},
     )
     def api_action_shutdown(self, request: HttpRequest, ids):

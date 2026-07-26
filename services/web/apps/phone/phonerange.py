@@ -10,7 +10,7 @@ from mongoengine.queryset import Q
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.phone.models.phonerange import PhoneRange
 from noc.services.web.base.decorators.state import state_handler
@@ -66,7 +66,7 @@ class PhoneRangeApplication(ExtDocApplication):
         # Clean other
         return super().clean(data)
 
-    @view("^(?P<id>[0-9a-f]{24})/get_path/$", access="read", api=True)
+    @api.get(r"^(?P<id>[0-9a-f]{24})/get_path/$", access="read")
     def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(PhoneRange, id=id)
         path = [PhoneRange.get_by_id(r) for r in o.get_path()]

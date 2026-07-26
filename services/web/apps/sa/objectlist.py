@@ -10,7 +10,7 @@ from django.db.models import Q as d_Q
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, view, api
 from noc.sa.models.managedobject import ManagedObject
 from noc.sa.models.administrativedomain import AdministrativeDomain
 from noc.inv.models.resourcegroup import ResourceGroup
@@ -174,11 +174,9 @@ class ObjectListApplication(ExtApplication):
     def api_list(self, request: HttpRequest):
         return self.list_data(request, self.instance_to_dict)
 
-    @view(
-        method=["POST"],
-        url="^iplist/$",
+    @api.post(
+        "^iplist/$",
         access="launch",
-        api=True,
         validate={
             "query": DictParameter(
                 attrs={"addresses": ListOfParameter(element=IPv4Parameter(), convert=True)}

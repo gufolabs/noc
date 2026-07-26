@@ -19,7 +19,7 @@ from jinja2.exceptions import TemplateError
 from bson import ObjectId
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.inv.models.networksegment import NetworkSegment
 from noc.inv.models.interface import Interface
 from noc.inv.models.discoveryid import DiscoveryID
@@ -70,12 +70,7 @@ class MapApplication(ExtApplication):
     ST_DOWN = 4  # Object is down
     ST_MAINTENANCE = 32  # Maintenance bit
 
-    @view(
-        r"^(?P<gen_type>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/data/$",
-        method=["GET"],
-        access="read",
-        api=True,
-    )
+    @api.get(r"^(?P<gen_type>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/data/$", access="read")
     def api_data(self, request: HttpRequest, gen_type, gen_id):
         """
         Return data for render map
@@ -88,12 +83,7 @@ class MapApplication(ExtApplication):
         except ValueError as e:
             return {"id": gen_id, "name": f"{gen_type}: {gen_id}", "error": str(e)}
 
-    @view(
-        r"^(?P<gen_type>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/data/$",
-        method=["POST"],
-        access="write",
-        api=True,
-    )
+    @api.post(r"^(?P<gen_type>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/data/$", access="write")
     def api_save(self, request: HttpRequest, gen_type, gen_id):
         """
         Save Manual layout
@@ -105,12 +95,7 @@ class MapApplication(ExtApplication):
         MapSettings.load_json(data, request.user.username)
         return {"status": True}
 
-    @view(
-        r"^(?P<gen_type>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/data/$",
-        method=["DELETE"],
-        access="write",
-        api=True,
-    )
+    @api.delete(r"^(?P<gen_type>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/data/$", access="write")
     def api_reset(self, request: HttpRequest, gen_type, gen_id):
         # MapSettings.objects.filter(gen_type=gen_type, gen_id=gen_id).delete()
         settings = MapSettings.objects.filter(gen_type=gen_type, gen_id=gen_id).first()
@@ -261,11 +246,9 @@ class MapApplication(ExtApplication):
             "caps": caps,
         }
 
-    @view(
-        url=r"^info/(?P<inspector>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/(?P<r_id>([0-9a-f]{24}|\d+))/$",
-        method=["GET"],
+    @api.get(
+        r"^info/(?P<inspector>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/(?P<r_id>([0-9a-f]{24}|\d+))/$",
         access="read",
-        api=True,
     )
     def inspector(self, request: HttpRequest, inspector, gen_id, r_id):
         """
@@ -281,7 +264,7 @@ class MapApplication(ExtApplication):
         hi = getattr(self, f"inspector_{inspector}")
         return hi(request, gen_id, r_id)
 
-    @view(url=r"^info/segment/(?P<id>[0-9a-f]{24})/$", method=["GET"], access="read", api=True)
+    @api.get(r"^info/segment/(?P<id>[0-9a-f]{24})/$", access="read")
     def api_info_segment(self, request: HttpRequest, id):
         segment = self.get_object_or_404(NetworkSegment, id=id)
         return {
@@ -290,7 +273,7 @@ class MapApplication(ExtApplication):
             "objects": segment.managed_objects.count(),
         }
 
-    @view(method=["GET"], url=r"^lookup/$", access="lookup", api=True)
+    @api.get(r"^lookup/$", access="lookup")
     def api_lookup(self, request: HttpRequest):
         """
         Lookup available map by generator.
@@ -349,9 +332,7 @@ class MapApplication(ExtApplication):
                 )
             return r
 
-    @view(
-        method=["GET"], url=r"^(?P<gen_id>[0-9a-f]{24}|\d+)/get_path/$", access="lookup", api=True
-    )
+    @api.get(r"^(?P<gen_id>[0-9a-f]{24}|\d+)/get_path/$", access="lookup")
     def api_lookup_maps_get_path(self, request: HttpRequest, gen_id):
         # Parse params
         q = {str(k): v[0] if len(v) == 1 else v for k, v in request.GET.lists()}
@@ -371,11 +352,9 @@ class MapApplication(ExtApplication):
             ]
         }
 
-    @view(
-        url=r"^objects_statuses/$",
-        method=["POST"],
+    @api.post(
+        r"^objects_statuses/$",
         access="read",
-        api=True,
         validate={
             "nodes": DictListParameter(
                 attrs={
@@ -586,11 +565,9 @@ class MapApplication(ExtApplication):
             return i["_id"]
         return None
 
-    @view(
-        url=r"^metrics/$",
-        method=["POST"],
+    @api.post(
+        r"^metrics/$",
         access="read",
-        api=True,
         validate={
             "metrics": DictListParameter(
                 attrs={
@@ -661,12 +638,8 @@ class MapApplication(ExtApplication):
             r[pid]["Interface | Load | Out"] = int(metric_map[rq_mo][rq_iface]["load_out"])
         return r
 
-    @view(
-        url=r"^stp/status/$",
-        method=["POST"],
-        access="read",
-        api=True,
-        validate={"objects": ListOfParameter(IntParameter())},
+    @api.post(
+        r"^stp/status/$", access="read", validate={"objects": ListOfParameter(IntParameter())}
     )
     def api_objects_stp_status(self, request: HttpRequest, objects):
         def get_stp_status(object_id: int) -> tuple[set[int], set[str]]:

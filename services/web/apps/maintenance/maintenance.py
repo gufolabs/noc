@@ -11,7 +11,7 @@ from mongoengine.queryset.visitor import Q
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.maintenance.models.maintenance import (
     Maintenance,
     MaintenanceObject,
@@ -61,7 +61,7 @@ class MaintenanceApplication(ExtDocApplication):
             return qs.filter(type=None)
         return qs
 
-    @view(url=r"^(?P<id>[a-z0-9]{24})/add/", method=["POST"], api=True, access="update")
+    @api.post(r"^(?P<id>[a-z0-9]{24})/add/", access="update")
     def api_add(self, request: HttpRequest, id):
         body = orjson.loads(request.body)
         o = self.model.objects.filter(**{self.pk: id}).first()
@@ -83,7 +83,7 @@ class MaintenanceApplication(ExtDocApplication):
             o.save()
         return self.response({"result": "Add object"}, status=self.OK)
 
-    @view(url="(?P<id>[0-9a-f]{24})/objects/", method=["GET"], access="read", api=True)
+    @api.get("(?P<id>[0-9a-f]{24})/objects/", access="read")
     def api_test(self, request: HttpRequest, id):
         r = []
         for mo in (

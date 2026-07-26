@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.inv.models.objectmodel import ObjectModel
 from noc.inv.models.object import Object
 
@@ -55,11 +55,11 @@ class ObjectContainerApplication(ExtApplication):
     def instance_to_lookup(self, o, fields=None):
         return {"id": str(o.id), "label": (o.name), "has_children": o.has_children}
 
-    @view(method=["GET"], url=r"^lookup/$", access="lookup", api=True)
+    @api.get(r"^lookup/$", access="lookup")
     def api_lookup(self, request: HttpRequest):
         return self.list_data(request, self.instance_to_lookup)
 
-    @view("^(?P<oid>[0-9a-f]{24})/get_path/$", access="read", api=True)
+    @api.get("^(?P<oid>[0-9a-f]{24})/get_path/$", access="read")
     def api_get_path(self, request: HttpRequest, oid):
         o = self.get_object_or_404(Object, id=oid)
         path = [Object.get_by_id(ns) for ns in o.get_path()]

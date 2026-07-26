@@ -12,7 +12,7 @@ from collections import defaultdict
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.inv.models.protocol import Protocol
 from noc.inv.models.modelinterface import ModelInterface
 from noc.core.translation import ugettext as _
@@ -70,7 +70,7 @@ class ProtocolApplication(ExtDocApplication):
         # Clean other
         return super().clean(data)
 
-    @view(url="^lookup_tree/", method=["GET"], access=True)
+    @api.get("^lookup_tree/", access=True)
     def api_protocols_lookup_tree(self, request: HttpRequest):
         r = {}
         protocol_filter = {}

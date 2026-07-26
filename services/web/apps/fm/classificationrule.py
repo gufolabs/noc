@@ -13,7 +13,7 @@ from django.template import Template, Context
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.fm.models.eventclassificationrule import (
     EventClassificationRule,
     EventClassificationRuleCategory,
@@ -38,7 +38,7 @@ class EventClassificationRuleApplication(ExtDocApplication):
     parent_field = "parent"
     query_condition = "icontains"
 
-    @view(url="^test/$", method=["POST"], access="test", api=True)
+    @api.post("^test/$", access="test")
     def api_test(self, request: HttpRequest):
         q = self.deserialize(request.body)
         errors = []
@@ -202,9 +202,7 @@ class EventClassificationRuleApplication(ExtDocApplication):
 
     IGNORED_OIDS = {"RFC1213-MIB::sysUpTime.0", "SNMPv2-MIB::sysUpTime.0"}
 
-    @view(
-        url="^from_event/(?P<event_id>[0-9a-f]{24})/$", method=["POST"], access="create", api=True
-    )
+    @api.post("^from_event/(?P<event_id>[0-9a-f]{24})/$", access="create")
     def api_from_event(self, request: HttpRequest, event_id):
         """
         Create classification rule from event

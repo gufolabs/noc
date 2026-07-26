@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view, PermitLogged
+from noc.services.web.base.extapplication import ExtApplication, api, PermitLogged
 from noc.sa.interfaces.base import StringParameter, ListOfParameter, DictParameter, ModelParameter
 from noc.settings import LANGUAGES
 from noc.main.models.timepattern import TimePattern
@@ -26,7 +26,7 @@ class UserProfileApplication(ExtApplication):
     title = _("User Profile")
     implied_permissions = {"launch": ["main:timepattern:lookup"]}
 
-    @view(url="^$", method=["GET"], access=PermitLogged(), api=True)
+    @api.get("^$", access=PermitLogged())
     def api_get(self, request: HttpRequest):
         user = request.user
         language = user.preferred_language
@@ -82,11 +82,9 @@ class UserProfileApplication(ExtApplication):
             "subscription_settings": subscription_settings,
         }
 
-    @view(
-        url="^$",
-        method=["POST"],
+    @api.post(
+        "^$",
         access=PermitLogged(),
-        api=True,
         validate={
             "preferred_language": StringParameter(choices=[x[0] for x in LANGUAGES]),
             "contacts": ListOfParameter(

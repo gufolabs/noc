@@ -14,7 +14,7 @@ from django.http import HttpRequest
 import orjson
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtApplication, view
+from noc.services.web.base.extdocapplication import ExtApplication, view, api
 from noc.sa.models.managedobject import ManagedObject
 from noc.sa.interfaces.base import MACAddressParameter
 from noc.core.mac import MAC
@@ -252,7 +252,7 @@ class MACApplication(ExtApplication):
         r = ch.execute(sql, return_raw=True)
         return orjson.loads(r)
 
-    @view(url="^(?P<mac>[0-9A-F:]+)/$", method=["GET"], access="view", api=True)
+    @api.get("^(?P<mac>[0-9A-F:]+)/$", access="view")
     def api_get_maclog(self, request: HttpRequest, mac):
         """GET maclog"""
 

@@ -10,7 +10,7 @@ from django.db.models import Count
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.inv.models.networksegment import NetworkSegment
 from noc.sa.models.managedobject import ManagedObject
 from noc.sa.models.useraccess import UserAccess
@@ -61,7 +61,7 @@ class NetworkSegmentApplication(ExtDocApplication):
             row["count"] = counts.get(row["id"], 0)
         return data
 
-    @view("^(?P<id>[0-9a-f]{24})/get_path/$", access="read", api=True)
+    @api.get(r"^(?P<id>[0-9a-f]{24})/get_path/$", access="read")
     def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(NetworkSegment, id=id)
         path = [NetworkSegment.get_by_id(ns) for ns in o.get_path()]
@@ -72,7 +72,7 @@ class NetworkSegmentApplication(ExtDocApplication):
             ]
         }
 
-    @view("^(?P<id>[0-9a-f]{24})/effective_settings/$", access="read", api=True)
+    @api.get(r"^(?P<id>[0-9a-f]{24})/effective_settings/$", access="read")
     def api_effective_settings(self, request: HttpRequest, id):
         o = self.get_object_or_404(NetworkSegment, id=id)
         return o.effective_settings

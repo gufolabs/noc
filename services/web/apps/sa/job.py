@@ -14,7 +14,7 @@ from typing import Iterable
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.sa.models.job import Job, JobStatus
 from noc.core.feature import Feature
 from noc.core.translation import ugettext as _
@@ -60,7 +60,7 @@ class JobApplication(ExtDocApplication):
             r["effective_environment"] = o.effective_environment
         return r
 
-    @view("^(?P<id>[0-9a-f]{24})/viz/$", access="read")
+    @api.get("^(?P<id>[0-9a-f]{24})/viz/$", access="read")
     def view_viz(self, request: HttpRequest, id: str):
         job = self.get_object_or_404(Job, id=id)
         return self.get_viz(job)

@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.fm.models.ignorepattern import IgnorePattern
 from noc.core.fm.event import EventSource
 from noc.core.translation import ugettext as _
@@ -24,9 +24,7 @@ class IgnorePatternApplication(ExtDocApplication):
     menu = [_("Setup"), _("Ignore Patterns")]
     model = IgnorePattern
 
-    @view(
-        url="^from_event/(?P<event_id>[0-9a-f]{24})/$", method=["POST"], access="create", api=True
-    )
+    @api.post("^from_event/(?P<event_id>[0-9a-f]{24})/$", access="create")
     def api_from_event(self, request: HttpRequest, event_id):
         """
         Create ignore pattern rule from event

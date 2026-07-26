@@ -12,7 +12,7 @@ from collections import defaultdict
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extmodelapplication import ExtModelApplication, view
+from noc.services.web.base.extmodelapplication import ExtModelApplication, api
 from noc.services.web.base.modelinline import ModelInline
 from noc.main.models.prefixtable import PrefixTable, PrefixTablePrefix
 from noc.main.models.label import Label
@@ -31,11 +31,9 @@ class PrefixTableApplication(ExtModelApplication):
 
     prefixes = ModelInline(PrefixTablePrefix)
 
-    @view(
-        url="^actions/test/$",
-        method=["POST"],
+    @api.post(
+        "^actions/test/$",
         access="update",
-        api=True,
         validate={"ids": ListOfParameter(element=ModelParameter(PrefixTable)), "ip": IPParameter()},
     )
     def api_action_test(self, request: HttpRequest, ids, ip):

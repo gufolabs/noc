@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.inv.models.channel import Channel
 from noc.inv.models.endpoint import Endpoint, UsageItem, ConstraintItem
 from noc.core.translation import ugettext as _
@@ -51,7 +51,7 @@ class ChannelApplication(ExtDocApplication):
     query_fields = ["name__icontains"]
     require_feature = Feature.CHANNEL
 
-    @view(url="^(?P<id>[0-9a-f]{24})/viz/", method=["GET"], api=True, access="read")
+    @api.get("^(?P<id>[0-9a-f]{24})/viz/", access="read")
     def api_viz(self, request: HttpRequest, id: str):
         channel = self.get_object_or_404(Channel, id=id)
         mapper = mapper_loader[channel.tech_domain.code](channel)

@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.support.cp import CPClient
 from noc.sa.interfaces.base import StringParameter, REStringParameter
 from noc.core.translation import ugettext as _
@@ -23,7 +23,7 @@ class AccountApplication(ExtApplication):
     title = _("Account")
     menu = [_("Setup"), _("Account")]
 
-    @view(url=r"^$", method=["GET"], access="launch", api=True)
+    @api.get(r"^$", access="launch")
     def api_get(self, request: HttpRequest):
         c = CPClient()
         data = {}
@@ -35,11 +35,9 @@ class AccountApplication(ExtApplication):
             data["system"] = c.system_info()
         return data
 
-    @view(
-        url="^account/attach/$",
-        method=["POST"],
+    @api.post(
+        "^account/attach/$",
         access="launch",
-        api=True,
         validate={"name": StringParameter(), "password": StringParameter(required=False)},
     )
     def api_attach_account(self, request: HttpRequest, name, password):
@@ -52,11 +50,9 @@ class AccountApplication(ExtApplication):
             return {"status": False, "message": str(e)}
         return {"status": True, "message": "Ok"}
 
-    @view(
-        url="^account/$",
-        method=["POST"],
+    @api.post(
+        "^account/$",
         access="launch",
-        api=True,
         validate={
             "name": REStringParameter(r"^[a-zA-Z0-9\.\-_]+$"),
             "email": StringParameter(),
@@ -103,11 +99,9 @@ class AccountApplication(ExtApplication):
                 return {"status": False, "message": str(e)}
         return {"status": True, "message": "Account saved"}
 
-    @view(
-        url=r"^account/change_password/$",
-        method=["POST"],
+    @api.post(
+        r"^account/change_password/$",
         access="launch",
-        api=True,
         validate={"old_password": StringParameter(), "new_password": StringParameter()},
     )
     def api_change_password(
@@ -121,11 +115,9 @@ class AccountApplication(ExtApplication):
         c.change_password(new_password)
         return {"status": True, "message": "Password has been changed"}
 
-    @view(
-        url=r"^system/$",
-        method=["POST"],
+    @api.post(
+        r"^system/$",
         access="launch",
-        api=True,
         validate={
             "name": REStringParameter(r"^[a-zA-Z0-9\.\-_]+$"),
             "type": StringParameter(required=False),

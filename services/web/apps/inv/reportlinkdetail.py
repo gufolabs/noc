@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # fm.reportobjectdetail application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -20,7 +20,7 @@ import xlsxwriter
 
 # NOC modules
 from noc.core.mongo.connection import get_db
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.main.models.pool import Pool
 from noc.sa.models.managedobject import ManagedObject
 from noc.inv.models.resourcegroup import ResourceGroup
@@ -115,11 +115,9 @@ class ReportLinkDetailApplication(ExtApplication):
     SEGMENT_PATH_DEPTH = 7
     CONTAINER_PATH_DEPTH = 7
 
-    @view(
+    @api.get(
         "^download/$",
-        method=["GET"],
         access="launch",
-        api=True,
         validate={
             "administrative_domain": StringParameter(required=False),
             "pool": StringParameter(required=False),

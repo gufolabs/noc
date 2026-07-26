@@ -9,7 +9,7 @@
 from django.http import HttpResponse, HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.main.models.doccategory import DocCategory
 from noc.inv.models.facade import Facade
 from noc.core.translation import ugettext as _
@@ -28,7 +28,7 @@ class FacadeApplication(ExtDocApplication):
     query_fields = ["name__icontains", "description__icontains"]
     glyph = "table"
 
-    @view(url="^(?P<id>[0-9a-f]{24})/facade.svg$", method=["GET"], access="read", api=True)
+    @api.get("^(?P<id>[0-9a-f]{24})/facade.svg$", access="read")
     def api_svg(self, request: HttpRequest, id: str):
         o = self.get_object_or_404(Facade, id)
         return HttpResponse(o.data, content_type="image/svg+xml", status=200)

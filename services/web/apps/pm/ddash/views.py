@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from .dashboards.loader import loader
 from .dashboards.base import BaseDashboard
 from noc.core.translation import ugettext as _
@@ -22,7 +22,7 @@ class DynamicDashboardApplication(ExtApplication):
 
     title = _("Dynamic Dashboard")
 
-    @view(url=r"^$", method="GET", access="launch", api=True)
+    @api.get(r"^$", access="launch")
     def api_dashboard(self, request: HttpRequest):
         dash_name = request.GET.get("dashboard")
         try:

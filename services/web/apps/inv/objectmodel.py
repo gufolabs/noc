@@ -14,7 +14,7 @@ from mongoengine.queryset import Q
 from django.http import HttpResponse, HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.main.models.doccategory import DocCategory
 from noc.inv.models.objectmodel import ObjectModel, ProtocolVariantItem, ContainerType
 from noc.inv.models.modelinterface import ModelInterface
@@ -137,7 +137,7 @@ class ObjectModelApplication(ExtDocApplication):
             del q["is_container"]
         return super().cleaned_query(q)
 
-    @view(url="^(?P<id>[0-9a-f]{24})/compatible/$", method=["GET"], access="read", api=True)
+    @api.get("^(?P<id>[0-9a-f]{24})/compatible/$", access="read")
     def api_compatible(self, request: HttpRequest, id):
         o = self.get_object_or_404(ObjectModel, id=id)
         # Connections
@@ -181,24 +181,17 @@ class ObjectModelApplication(ExtDocApplication):
         #         rc += [{"y": c.name, "x": c.cross, "v": "1"}]
         return {"connections": r, "crossing": rc}
 
-    @view(
-        url="^actions/json/$",
-        method=["POST"],
+    @api.post(
+        "^actions/json/$",
         access="read",
         validate={"ids": ListOfParameter(element=DocumentParameter(ObjectModel), convert=True)},
-        api=True,
     )
     def api_action_json(self, request: HttpRequest, ids):
         r = [o.json_data for o in ids]
         s = to_json(r, order=["name", "vendor__code", "description"])
         return {"data": s}
 
-    @view(
-        url="^(?P<id>[0-9a-f]{24})/(?P<name>front|rear)/template.svg$",
-        method=["GET"],
-        access="read",
-        api=True,
-    )
+    @api.get("^(?P<id>[0-9a-f]{24})/(?P<name>front|rear)/template.svg$", access="read")
     def api_template(self, request: HttpRequest, id: str, name: str):
         o = self.get_object_or_404(ObjectModel, id=id)
         last_part = o.name.split("|")[-1].strip()
@@ -213,12 +206,7 @@ class ObjectModelApplication(ExtDocApplication):
             status=200,
         )
 
-    @view(
-        url="^(?P<id>[0-9a-f]{24})/is_valid_template/$",
-        method=["GET"],
-        access="read",
-        api=True,
-    )
+    @api.get("^(?P<id>[0-9a-f]{24})/is_valid_template/$", access="read")
     def api_is_valid_template(self, request: HttpRequest, id: str):
         o = self.get_object_or_404(ObjectModel, id=id)
         return self.render_json({"status": is_valid_model_for_template(o)})

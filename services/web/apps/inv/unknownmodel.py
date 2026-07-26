@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.inv.models.unknownmodel import UnknownModel
 from noc.sa.interfaces.base import ListOfParameter, DocumentParameter
 from noc.core.translation import ugettext as _
@@ -27,11 +27,9 @@ class UnknownModelApplication(ExtDocApplication):
     query_condition = "icontains"
     query_fields = ["vendor", "managed_object", "platform", "part_no", "description"]
 
-    @view(
-        url="^actions/remove/$",
-        method=["POST"],
+    @api.post(
+        "^actions/remove/$",
         access="launch",
-        api=True,
         validate={"ids": ListOfParameter(element=DocumentParameter(UnknownModel), convert=True)},
     )
     def api_action_run_discovery(self, request: HttpRequest, ids):

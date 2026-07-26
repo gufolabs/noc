@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # fm.reportalarmdetail application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -16,7 +16,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFou
 import polars as pl
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.sa.interfaces.base import StringParameter, IntParameter, ObjectIdParameter
 from noc.sa.models.useraccess import UserAccess
 from noc.sa.models.administrativedomain import AdministrativeDomain
@@ -90,11 +90,9 @@ class ReportAlarmDetailApplication(ExtApplication):
         "location": _("LOCATION"),
     }
 
-    @view(
+    @api.get(
         "^download/$",
-        method=["GET"],
         access="launch",
-        api=True,
         validate={
             "from_date": StringParameter(required=False),
             "to_date": StringParameter(required=False),

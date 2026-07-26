@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # inv.reportmaxmetrics
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ from noc.services.web.base.reportdatasources.report_metrics import ReportInterfa
 from noc.sa.models.managedobject import ManagedObject
 from noc.services.web.base.reportdatasources.report_container import ReportContainerData
 from noc.sa.models.useraccess import UserAccess
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.sa.interfaces.base import StringParameter, BooleanParameter
 from noc.core.comp import smart_text
 from noc.inv.models.resourcegroup import ResourceGroup
@@ -61,11 +61,9 @@ class ReportMaxMetricsmaxDetailApplication(ExtApplication):
     menu = _("Reports") + "|" + _("Load Metrics max")
     title = _("Load Metrics max")
 
-    @view(
+    @api.get(
         r"^download/$",
-        method=["GET"],
         access="launch",
-        api=True,
         validate={
             "from_date": StringParameter(required=True),
             "to_date": StringParameter(required=True),

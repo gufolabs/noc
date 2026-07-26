@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view, HttpResponse
+from noc.services.web.base.extdocapplication import ExtDocApplication, api, HttpResponse
 from noc.main.models.modeltemplate import ModelTemplate, Param
 from noc.core.translation import ugettext as _
 from noc.models import get_model
@@ -50,17 +50,12 @@ class ModelTemplateApplication(ExtDocApplication):
                 p["default_expression"] = str(p["default_expression"])
         return super().clean(data)
 
-    @view(url=r"^directory/(?P<type>\w+)/fields/?$", method=["GET"], access="read", api=True)
+    @api.get(r"^directory/(?P<type>\w+)/fields/?$", access="read")
     def api_get_template_fields(self, request: HttpRequest, type):
         r = ModelTemplate.get_templating_fields()
         return sorted([x.model_dump() for x in r], key=lambda x: x["id"].lower())
 
-    @view(
-        url=r"^directory/(?P<type>\w+)/fields/(?P<field>[\w_]+)/?$",
-        method=["GET"],
-        access="read",
-        api=True,
-    )
+    @api.get(r"^directory/(?P<type>\w+)/fields/(?P<field>[\w_]+)/?$", access="read")
     def api_get_template_field(self, request: HttpRequest, type, field):
         r = [x for x in ModelTemplate.get_templating_fields() if x.id == field]
         if not r:

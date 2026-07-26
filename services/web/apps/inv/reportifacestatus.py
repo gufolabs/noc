@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # inv.reportinterfacestatus
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -20,7 +20,7 @@ from bson import ObjectId
 import xlsxwriter
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.inv.models.interfaceprofile import InterfaceProfile
 from noc.inv.models.interface import Interface
 from noc.sa.models.managedobject import ManagedObject
@@ -99,11 +99,9 @@ class ReportInterfaceStatusApplication(ExtApplication):
     menu = _("Reports") + "|" + _("Interface Status")
     title = _("Interface Status")
 
-    @view(
+    @api.get(
         "^download/$",
-        method=["GET"],
         access="launch",
-        api=True,
         validate={
             "administrative_domain": StringParameter(required=False),
             "interface_profile": StringParameter(required=False),
