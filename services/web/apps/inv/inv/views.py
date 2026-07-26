@@ -98,7 +98,7 @@ class InvApplication(ExtApplication):
                     if not o.required_feature or o.required_feature.is_active():
                         self.plugins[o.name] = o(self)
 
-    @api.get("^node/$", method=["GET"], access="read")
+    @api.get("^node/$", access="read")
     def api_node(self, request: HttpRequest):
         children = []
         if request.GET and "node" in request.GET:
@@ -456,7 +456,7 @@ class InvApplication(ExtApplication):
                 x.put_into(cc)
         return True
 
-    @api.get(r"^(?P<id>[0-9a-f]{24})/path/$", method=["GET"], access="read")
+    @api.get(r"^(?P<id>[0-9a-f]{24})/path/$", access="read")
     def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(Object, id=id)
         path = [{"id": str(o.id), "name": o.name}]
