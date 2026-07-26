@@ -2,7 +2,7 @@
 
 ## Scope
 
-Python packages and modules used by the NOC project.
+Third-party Python packages used by the NOC project.
 
 ## Requirements
 

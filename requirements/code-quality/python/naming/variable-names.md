@@ -10,6 +10,8 @@ Variable names **MUST** be written in lowercase and use underscores (`_`) as wor
 
 Constant names **MUST** be written in uppercase and use underscores (`_`) as word separators.
 
+Variables that are intentionally unused or internal **SHOULD** start with an underscore (`_`).
+
 Examples:
 
 Valid:
@@ -20,6 +22,11 @@ max_retry_count = 5
 
 DEFAULT_TIMEOUT = 30
 MAX_CONNECTIONS = 100
+
+_unused_value = calculate_result()
+
+for _ in range(10):
+    process()
 ```
 
 Invalid:
@@ -30,6 +37,9 @@ UserName = "admin"
 
 defaultTimeout = 30
 MaxConnections = 100
+
+for i in range(10):
+    process()
 ```
 
 ## Why?
