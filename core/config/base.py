@@ -1,12 +1,11 @@
 # ----------------------------------------------------------------------
 # Configuration class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-import importlib
 import inspect
 import re
 import os
@@ -14,10 +13,9 @@ from typing import Iterable, Any
 import warnings
 
 # NOC modules
+from noc.core.typing import SENTINEL
 from .params import BaseParameter
-
-DEFAULT_CONFIG = "yaml:///opt/noc/etc/tower.yml,yaml:///opt/noc/etc/settings.yml,env:///NOC"
-DEFAULT_DUMP_URL = "yaml://"
+from .backends.base import from_url, BaseConfigBackend
 
 
 class ConfigurationError(Exception):
@@ -25,7 +23,19 @@ class ConfigurationError(Exception):
 
 
 class ConfigSectionBase(type):
+    """Metaclass for collecting configuration section parameters."""
+
     def __new__(mcs, name, bases, attrs):
+        """Create configuration section class and collect parameters.
+
+        Args:
+            name: Class name.
+            bases: Base classes.
+            attrs: Class attributes.
+
+        Returns:
+            Created configuration section class.
+        """
         cls = type.__new__(mcs, name, bases, attrs)
         cls._params = {}
         for k in attrs:
@@ -40,7 +50,7 @@ class ConfigSectionBase(type):
 
 
 class ConfigSection(metaclass=ConfigSectionBase):
-    pass
+    """Base class for nested configuration sections."""
 
 
 class BaseRewrite:
@@ -141,7 +151,19 @@ class DeprecatedValue(BaseRewrite):
 
 
 class ConfigBase(type):
+    """Metaclass for collecting configuration parameters."""
+
     def __new__(mcs, name, bases, attrs):
+        """Create configuration class and collect parameters.
+
+        Args:
+            name: Class name.
+            bases: Base classes.
+            attrs: Class attributes.
+
+        Returns:
+            Created configuration class.
+        """
         cls = type.__new__(mcs, name, bases, attrs)
         cls._params = {}
         for k in attrs:
@@ -155,11 +177,14 @@ class ConfigBase(type):
 
 
 class BaseConfig(metaclass=ConfigBase):
-    PROTOCOLS = {
-        "consul": "noc.core.config.proto.consul.ConsulProtocol",
-        "env": "noc.core.config.proto.env.EnvProtocol",
-        "yaml": "noc.core.config.proto.yaml.YAMLProtocol",
-    }
+    """Base configuration class.
+
+    Provides parameter discovery, loading from configuration backends,
+    parameter rewriting and serialization support.
+
+    Args:
+        rewrites: Optional parameter rewrite rules.
+    """
 
     _rx_env_sh = re.compile(r"\${([^:}]+)(:-[^}]+)?}")
     _params: dict[str, BaseParameter]
@@ -170,12 +195,22 @@ class BaseConfig(metaclass=ConfigBase):
         self._rewritten_params = self._get_rewritten_params()
 
     def __iter__(self):
+        """Iterate over known configuration parameter names.
+
+        Yields:
+            Configuration parameter names.
+        """
         yield from self._params_order
         if self._rewritten_params:
             yield from self._rewritten_params
 
     def _get_rewritten_params(self) -> list[str] | None:
-        """Find rewritten params, if any."""
+        """Find parameter names available through rewrite rules.
+
+        Returns:
+            List of rewritten parameter names or None when no rewrite rules
+            are configured.
+        """
         if not self._rewrites:
             return None
         r: set[str] = set()
@@ -188,6 +223,25 @@ class BaseConfig(metaclass=ConfigBase):
 
     @classmethod
     def expand(cls, value):
+        """Expand environment variables in configuration value.
+
+        Supports shell-style expansion::
+
+            ${VAR}
+            ${VAR:-default}
+
+        and registry-style expansion::
+
+            _env:VAR
+            _env:VAR:default
+
+        Args:
+            value: Value to expand.
+
+        Returns:
+            Expanded value.
+        """
+
         def env_repl(match):
             name, default = match.groups()
             if default is None:
@@ -213,6 +267,17 @@ class BaseConfig(metaclass=ConfigBase):
         return cls._rx_env_sh.sub(env_repl, value)
 
     def set_parameter(self, path, value):
+        """Set configuration parameter value.
+
+        The value is expanded, rewritten and validated before being assigned.
+
+        Args:
+            path: Dot-separated parameter name.
+            value: Parameter value.
+
+        Raises:
+            ConfigurationError: If parameter is unknown.
+        """
         if value is None:
             return
         if isinstance(value, str):
@@ -260,44 +325,71 @@ class BaseConfig(metaclass=ConfigBase):
         return self._params[path]
 
     def get_parameter(self, path: str):
+        """Get current parameter value.
+
+        Args:
+            path: Parameter name.
+
+        Returns:
+            Current parameter value.
+        """
         return self._params[path].value
 
     def dump_parameter(self, path: str):
+        """Serialize parameter value.
+
+        Rewritten aliases are not dumped to avoid duplicate output.
+
+        Args:
+            path: Parameter name.
+
+        Returns:
+            Serialized parameter value or None when parameter is hidden.
+        """
         if self._rewritten_params and path in self._rewritten_params:
             return None
         return self._params[path].dump_value()
 
     @classmethod
-    def get_protocol(cls, url):
-        p = url.split(":", 1)[0]
-        h = cls.PROTOCOLS.get(p)
-        if h:
-            # NB: We cannot use get_handler, so use naive implementation
-            module_name, handler_class = h.rsplit(".", 1)
-            module = importlib.import_module(module_name)
-            return getattr(module, handler_class)
-        msg = f"Invalid protocol: {p}"
-        raise ValueError(msg)
+    def get_backend(cls, url: str) -> BaseConfigBackend:
+        """Create configuration backend from URL.
 
-    def load(self) -> None:
+        Args:
+            url: Backend URL.
+
+        Returns:
+            Initialized configuration backend.
+        """
+        return from_url(url)
+
+    def load(self, cfg: str) -> None:
+        """Load configuration values from backends.
+
+        Multiple backends can be specified as comma-separated URLs.
+        Values from later backends override values from earlier backends.
+
+        Args:
+            cfg: Comma-separated backend URLs.
+        """
         with warnings.catch_warnings():
             warnings.simplefilter("always")
-            paths = os.environ.get("NOC_CONFIG", DEFAULT_CONFIG)
-            for p in paths.split(","):
-                p = p.strip()
-                pcls = self.get_protocol(p)
-                proto = pcls(self, p)
-                proto.load()
-
-    def dump(self, url: str = DEFAULT_DUMP_URL, section: str | None = None) -> None:
-        pcls = self.get_protocol(url)
-        proto = pcls(self, url)
-        proto.dump(section=section)
+            backends = [self.get_backend(p) for p in cfg.split(",")]
+            for name in self:
+                v = SENTINEL
+                for backend in backends:
+                    nv = backend.get(name, SENTINEL)
+                    if nv is not SENTINEL:
+                        v = nv
+                if v is not SENTINEL:
+                    self.set_parameter(name, v)
 
     def update(self, cfg) -> None:
-        """
-        Update config from dictionary
-        :return:
+        """Update configuration from dictionary.
+
+        Nested dictionaries are resolved using dot-separated parameter names.
+
+        Args:
+            cfg: Configuration mapping.
         """
         assert isinstance(cfg, dict)
         for name in self:
@@ -313,10 +405,9 @@ class BaseConfig(metaclass=ConfigBase):
                 self.set_parameter(name, c[parts[-1]])
 
     def iter_params(self) -> Iterable[tuple[str, BaseParameter]]:
-        """
-        Iterate over all known parameters.
+        """Iterate over registered parameters.
 
         Returns:
-            Yields of tuples of (parameter name, `BaseParameter instance)
+            Iterator yielding parameter name and parameter instance pairs.
         """
         yield from self._params.items()

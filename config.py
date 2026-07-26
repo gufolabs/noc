@@ -1339,4 +1339,6 @@ config = Config(
         ),
     ]
 )
-config.load()
+
+DEFAULT_CONFIG = "yaml:///opt/noc/etc/tower.yml,yaml:///opt/noc/etc/settings.yml,env:///NOC"
+config.load(os.environ.get("NOC_CONFIG", DEFAULT_CONFIG))
