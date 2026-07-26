@@ -31,7 +31,6 @@ from noc.sa.models.useraccess import UserAccess
 from noc.sa.interfaces.base import StringParameter, BooleanParameter
 from noc.sa.models.administrativedomain import AdministrativeDomain
 from noc.core.translation import ugettext as _
-from noc.core.comp import smart_text
 from noc.core.datasources.loader import loader as ds_loader
 
 
@@ -155,9 +154,8 @@ class ReportMetricsDetailApplication(ExtApplication):
         d_url = {
             "path": "/ui/grafana/dashboard/script/report.js",
             "rname": map_table[reporttype],
-            "from": smart_text(int(ts_from_date * 1000)),
-            "to": smart_text(int(ts_to_date * 1000)),
-            # o.name.replace("#", "%23")
+            "from": str(int(ts_from_date * 1000)),
+            "to": str(int(ts_to_date * 1000)),
             "biid": "",
             "oname": "",
             "iname": "",

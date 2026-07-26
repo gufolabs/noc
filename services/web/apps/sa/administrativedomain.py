@@ -11,7 +11,6 @@ from django.http import HttpRequest
 # NOC modules
 from noc.services.web.base.extmodelapplication import ExtModelApplication, api
 from noc.sa.models.administrativedomain import AdministrativeDomain
-from noc.core.comp import smart_text
 from noc.core.translation import ugettext as _
 
 
@@ -30,15 +29,12 @@ class AdministrativeDomainApplication(ExtModelApplication):
         return o.managedobject_set.count()
 
     def instance_to_lookup(self, o, fields=None):
-        return {"id": o.id, "label": smart_text(o), "has_children": o.has_children}
+        return {"id": o.id, "label": str(o), "has_children": o.has_children}
 
     @api.get(r"^(?P<id>\d+)/get_path/$", access="read")
     def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(AdministrativeDomain, id=id)
         path = [AdministrativeDomain.objects.get(id=ns) for ns in o.get_path()]
         return {
-            "data": [
-                {"level": path.index(p) + 1, "id": str(p.id), "label": smart_text(p.name)}
-                for p in path
-            ]
+            "data": [{"level": path.index(p) + 1, "id": str(p.id), "label": p.name} for p in path]
         }

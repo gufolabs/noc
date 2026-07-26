@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -129,7 +129,7 @@ class Script(BaseScript):
                 for oid, x in self.snmp.getnext(mib["ENTITY-MIB::entPhysicalSerialNum"]):
                     if not x:
                         continue
-                    r += [x.strip(smart_text(" \x00"))]
+                    r += [x.strip(" \x00")]
                 if r:
                     return r
             except (self.snmp.TimeOutError, self.snmp.SNMPError):
@@ -157,7 +157,7 @@ class Script(BaseScript):
                 for oid, x in self.snmp.getnext(mib["HUAWEI-SYS-MAN-MIB::hwPatchVersion", 0]):
                     if not x:
                         continue
-                    r += [x.strip(smart_text(" \x00"))]
+                    r += [x.strip(" \x00")]
                 if r:
                     return r
             except (self.snmp.TimeOutError, self.snmp.SNMPError):
@@ -240,7 +240,7 @@ class Script(BaseScript):
         for oid, x in self.snmp.getnext(mib["ENTITY-MIB::entPhysicalSerialNum"]):
             if not x:
                 continue
-            serial += [smart_text(x, errors="replace").strip(smart_text(" \x00"))]
+            serial += [smart_text(x, errors="replace").strip(" \x00")]
         if platform in self.hw_series:
             # series name, fix
             platform = self.fix_platform_name(platform)

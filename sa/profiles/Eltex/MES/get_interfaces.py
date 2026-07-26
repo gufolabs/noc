@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Eltex.MES.get_interfaces
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ from noc.sa.interfaces.igetinterfaces import IGetInterfaces
 from noc.sa.interfaces.base import MACAddressParameter
 from noc.core.text import parse_table
 from noc.core.mib import mib
-from noc.core.comp import smart_text, smart_bytes
+from noc.core.comp import smart_text
 
 
 class Script(BaseScript):
@@ -104,7 +104,7 @@ class Script(BaseScript):
     # if ascii or rus text in description
     def convert_description(self, desc):
         if desc:
-            return smart_bytes(smart_text(desc, errors="replace"))
+            return smart_text(desc, errors="replace").encode()
         return desc
 
     def get_ip_ifindex(self):

@@ -3,7 +3,7 @@
 # USAGE:
 # python manage.py convert-moin [--encoding=charset] [--language=lang] [--tags=<taglist>] <path to moin data/ >
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ from noc.main.models.language import Language
 from noc.main.models.databasestorage import database_storage
 from noc.kb.models.kbentry import KBEntry
 from noc.kb.models.kbentryattachment import KBEntryAttachment
-from noc.core.comp import smart_text, smart_bytes
+from noc.core.comp import smart_text
 
 rx_hexseq = re.compile(r"\(((?:[0-9a-f][0-9a-f])+)\)")
 
@@ -68,7 +68,7 @@ class Command(BaseCommand):
         if isinstance(s, str):
             sys.stdout.write(s.encode("utf-8"))
         else:
-            sys.stdout.write(smart_bytes(smart_text(s, encoding=self.encoding)))
+            sys.stdout.write(smart_text(s, encoding=self.encoding).encode())
         sys.stdout.flush()
 
     #

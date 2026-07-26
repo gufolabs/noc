@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # mib API
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ from noc.config import config
 from noc.core.fileutils import temporary_file, safe_rewrite
 from noc.fm.models.mib import MIB
 from noc.core.error import ERR_MIB_NOT_FOUND, ERR_MIB_MISSED, ERR_MIB_TOOL_MISSED
-from noc.core.comp import smart_text, smart_bytes
+from noc.core.comp import smart_text
 from noc.core.service.jsonrpcapi import JSONRPCAPI, api
 
 router = APIRouter()
@@ -143,7 +143,7 @@ class MIBAPI(JSONRPCAPI):
                     env=self.SMI_ENV,
                 )
                 with open(py_path) as f:
-                    p_data = smart_bytes(smart_text(f.read(), encoding="ascii", errors="ignore"))
+                    p_data = smart_text(f.read(), encoding="ascii", errors="ignore").encode()
                 with open(py_path, "wb") as f:
                     f.write(p_data)
                 m = SourceFileLoader("mib", py_path).load_module()
