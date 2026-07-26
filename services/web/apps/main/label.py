@@ -14,7 +14,7 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.sa.interfaces.base import ColorParameter
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.main.models.label import Label
 from noc.core.translation import ugettext as _
 from noc.models import LABEL_MODELS
@@ -88,7 +88,7 @@ class LabelApplication(ExtDocApplication):
                     data["allow_models"].append(Label.ENABLE_MODEL_ID_MAP[k])
         return super().clean(data)
 
-    @view(url="^ac_lookup/", method=["GET"], access=True)
+    @api.get(url="^ac_lookup/", access=True)
     def api_ac_lookup(self, request: HttpRequest):
         """
         Legacy AutoCompleteTags widget support
@@ -151,7 +151,7 @@ class LabelApplication(ExtDocApplication):
             "success": True,
         }
 
-    @view(url="^lookup_tree/", method=["GET"], access=True)
+    @api.get(url="^lookup_tree/", access=True)
     def api_labels_lookup_tree(self, request: HttpRequest):
         leafs = defaultdict(list)
         level = 1

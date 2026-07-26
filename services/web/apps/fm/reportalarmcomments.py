@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # fm.reportalarmcomments application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -20,7 +20,7 @@ from django.http import HttpResponse
 # from pymongo import ReadPreference
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.sa.interfaces.base import StringParameter
 from noc.fm.models.archivedalarm import ArchivedAlarm
 from noc.fm.models.activealarm import ActiveAlarm
@@ -56,11 +56,9 @@ class ReportAlarmCommentsApplication(ExtApplication):
     menu = _("Reports") + "|" + _("Alarm Comments")
     title = _("Alarm Comments Detail")
 
-    @view(
+    @api.get(
         "^download/$",
-        method=["GET"],
         access="launch",
-        api=True,
         validate={
             "from_date": StringParameter(required=True),
             "to_date": StringParameter(required=True),

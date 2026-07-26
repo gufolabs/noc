@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # fm.reportmovedmac application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ from django.http import HttpResponse
 from noc.core.clickhouse.connect import connection
 from noc.core.mac import MAC
 from noc.main.models.pool import Pool
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.sa.interfaces.base import StringParameter, BooleanParameter
 from noc.sa.models.managedobject import ManagedObject
 from noc.inv.models.resourcegroup import ResourceGroup
@@ -152,11 +152,9 @@ class ReportMovedMacApplication(ExtApplication):
                 mos = mos.filter(segment__in=segment.get_nested_ids())
         return mos
 
-    @view(
-        r"^download/$",
-        method=["GET"],
+    @api.get(
+        url=r"^download/$",
         access="launch",
-        api=True,
         validate={
             "from_date": StringParameter(required=True),
             "to_date": StringParameter(required=True),

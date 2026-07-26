@@ -10,7 +10,7 @@ from django.http import HttpRequest
 
 # NOC modules
 from noc.services.web.base.extapplication import ExtApplication
-from noc.services.web.base.application import view
+from noc.services.web.base.application import api
 from noc.core.translation import ugettext as _
 from noc.core.models.valuetype import ValueType
 from noc.sa.models.managedobject import ManagedObject
@@ -41,7 +41,7 @@ class RunCommandsApplication(ExtApplication):
             },
         }
 
-    @view(url=r"^form/snippet/(?P<snippet_id>\d+)/$", method=["GET"], access="launch", api=True)
+    @api.get(url=r"^form/snippet/(?P<snippet_id>\d+)/$", access="launch")
     def api_form_snippet(self, request: HttpRequest, snippet_id):
         snippet = self.get_object_or_404(CommandSnippet, id=int(snippet_id))
         r = []
@@ -56,9 +56,7 @@ class RunCommandsApplication(ExtApplication):
             r += [cfg]
         return r
 
-    @view(
-        url=r"^form/action/(?P<action_id>[0-9a-f]{24})/$", method=["GET"], access="launch", api=True
-    )
+    @api.get(url=r"^form/action/(?P<action_id>[0-9a-f]{24})/$", access="launch")
     def api_form_action(self, request: HttpRequest, action_id):
         action = self.get_object_or_404(Action, id=action_id)
         r = []
@@ -75,15 +73,13 @@ class RunCommandsApplication(ExtApplication):
             r += [cfg]
         return r
 
-    @view(
+    @api.post(
         url=r"^render/snippet/(?P<snippet_id>\d+)/$",
-        method=["POST"],
         validate={
             "objects": ListOfParameter(element=ModelParameter(ManagedObject)),
             "config": DictParameter(),
         },
         access="launch",
-        api=True,
     )
     def api_render_snippet(self, request: HttpRequest, snippet_id, objects, config):
         snippet = self.get_object_or_404(CommandSnippet, id=int(snippet_id))
@@ -93,15 +89,13 @@ class RunCommandsApplication(ExtApplication):
             r[mo.id] = snippet.expand(config)
         return r
 
-    @view(
+    @api.post(
         url=r"^render/action/(?P<action_id>[0-9a-f]{24})/$",
-        method=["POST"],
         validate={
             "objects": ListOfParameter(element=ModelParameter(ManagedObject)),
             "config": DictParameter(),
         },
         access="launch",
-        api=True,
     )
     def api_render_action(self, request: HttpRequest, action_id, objects, config):
         action = self.get_object_or_404(Action, id=action_id)

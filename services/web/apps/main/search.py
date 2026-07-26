@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.sa.interfaces.base import UnicodeParameter
 from noc.main.models.textindex import TextIndex
 from noc.models import get_model
@@ -25,9 +25,7 @@ class SearchApplication(ExtApplication):
     menu = _("Search")
     glyph = "search noc-preview"
 
-    @view(
-        url="^$", method=["POST"], access="launch", api=True, validate={"query": UnicodeParameter()}
-    )
+    @api.post(url="^$", access="launch", validate={"query": UnicodeParameter()})
     def api_search(self, request: HttpRequest, query):
         r = []
         for qr in TextIndex.search(query):

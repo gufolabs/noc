@@ -10,7 +10,7 @@ import orjson
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.sa.interfaces.base import StringParameter
 from noc.core.collection.base import Collection
 from noc.core.translation import ugettext as _
@@ -24,13 +24,7 @@ class JSONImportApplication(ExtApplication):
     title = _("JSON Import")
     menu = [_("Setup"), _("JSON Import")]
 
-    @view(
-        url="^$",
-        method=["POST"],
-        access="launch",
-        validate={"json": StringParameter(required=True)},
-        api=True,
-    )
+    @api.post(url="^$", access="launch", validate={"json": StringParameter(required=True)})
     def api_import(self, request: HttpRequest, json):
         try:
             jdata = orjson.loads(json)

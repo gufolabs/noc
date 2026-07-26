@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.inv.models.modelinterface import ModelInterface
 from noc.inv.models.connectiontype import ConnectionType
 from noc.main.models.doccategory import DocCategory
@@ -33,7 +33,7 @@ class ConnectionTypeApplication(ExtDocApplication):
             data["data"] = ModelInterface.clean_data(data["data"])
         return super().clean(data)
 
-    @view(url="^(?P<id>[0-9a-f]{24})/compatible/$", method=["GET"], access="read", api=True)
+    @api.get(url="^(?P<id>[0-9a-f]{24})/compatible/$", access="read")
     def api_compatible(self, request: HttpRequest, id):
         def fn(t, gender, reason):
             return {

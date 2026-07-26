@@ -13,7 +13,7 @@ import zlib
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.apps.sa.objectlist import ObjectListApplication, view
+from noc.services.web.apps.sa.objectlist import ObjectListApplication, api
 from noc.core.scheduler.scheduler import Scheduler
 from noc.core.scheduler.job import Job
 from noc.core.mongo.connection import get_db
@@ -94,7 +94,7 @@ class MonitorApplication(ObjectListApplication):
             )
         return result
 
-    @view(url=r"^(?P<id>\d+)/discovery_job_log/$", method=["GET"], access="read", api=True)
+    @api.get(url=r"^(?P<id>\d+)/discovery_job_log/$", access="read")
     def api_job_log(self, request: HttpRequest, id):
         o = self.get_object_or_404(ManagedObject, id=id)
         if not o.has_access(request.user):

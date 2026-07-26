@@ -12,7 +12,7 @@ from django.http import HttpResponse, HttpRequest
 
 # NOC modules
 from noc.services.web.base.site import site
-from noc.services.web.base.extmodelapplication import ExtModelApplication, view
+from noc.services.web.base.extmodelapplication import ExtModelApplication, api
 from noc.aaa.models.group import Group
 from noc.aaa.models.permission import Permission
 from noc.core.translation import ugettext as _
@@ -34,7 +34,7 @@ class GroupsApplication(ExtModelApplication):
     default_ordering = ["name"]
     custom_m2m_fields = {"permissions": Permission}
 
-    @view(method=["GET"], url=r"^(?P<id>\d+)/?$", access="read", api=True)
+    @api.get(url=r"^(?P<id>\d+)/?$", access="read")
     def api_read(self, request: HttpRequest, id):
         """
         Returns dict with object's fields and values
@@ -70,7 +70,7 @@ class GroupsApplication(ExtModelApplication):
         else:
             super().update_m2m(o, name, values)
 
-    @view(method=["GET"], url=r"^new_permissions/$", access="read", api=True)
+    @api.get(url=r"^new_permissions/$", access="read")
     def api_read_permission(self, request: HttpRequest):
         """
         Returns dict available permissions

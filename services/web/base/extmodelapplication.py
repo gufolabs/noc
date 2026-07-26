@@ -580,7 +580,7 @@ class ExtModelApplication(ExtApplication):
     def instance_to_dict_list(self, o, fields=None):
         return self.instance_to_dict(o, fields=fields)
 
-    @view(method=["GET"], url=r"^$", access="read", api=True)
+    @api.get(url=r"^$", access="read")
     def api_list(self, request):
         try:
             return self.list_data(request, self.instance_to_dict_list)
@@ -588,7 +588,7 @@ class ExtModelApplication(ExtApplication):
             error_report()
             return self.response({"status": False, "message": str(e)}, status=self.INTERNAL_ERROR)
 
-    @view(method=["GET"], url=r"^lookup/$", access="lookup", api=True)
+    @api.get(url=r"^lookup/$", access="lookup")
     def api_lookup(self, request):
         try:
             return self.list_data(request, self.instance_to_lookup)
@@ -598,7 +598,7 @@ class ExtModelApplication(ExtApplication):
             error_report()
             return self.response({"status": False, "message": str(e)}, status=self.INTERNAL_ERROR)
 
-    @view(method=["POST"], url=r"^$", access="create", api=True)
+    @api.post(url=r"^$", access="create")
     def api_create(self, request):
         if self.site.is_json(request.META.get("CONTENT_TYPE")):
             attrs, m2m_attrs = self.split_mtm(self.deserialize(request.body))
@@ -668,7 +668,7 @@ class ExtModelApplication(ExtApplication):
                 rs = self.instance_to_dict(o)
             return self.response(rs, status=self.CREATED)
 
-    @view(method=["GET"], url=r"^(?P<id>\d+)/?$", access="read", api=True)
+    @api.get(url=r"^(?P<id>\d+)/?$", access="read")
     def api_read(self, request, id):
         """
         Returns dict with object's fields and values
@@ -686,7 +686,7 @@ class ExtModelApplication(ExtApplication):
             error_report()
             return self.response({"status": False, "message": str(e)}, status=self.INTERNAL_ERROR)
 
-    @view(method=["PUT"], url=r"^(?P<id>\d+)/?$", access="update", api=True)
+    @api.put(url=r"^(?P<id>\d+)/?$", access="update")
     def api_update(self, request, id):
         if self.site.is_json(request.META.get("CONTENT_TYPE")):
             attrs, m2m_attrs = self.split_mtm(self.deserialize(request.body))
@@ -760,7 +760,7 @@ class ExtModelApplication(ExtApplication):
             r = self.instance_to_dict(o)
         return self.response(r, status=self.OK)
 
-    @view(method=["DELETE"], url=r"^(?P<id>\d+)/?$", access="delete", api=True)
+    @api.delete(url=r"^(?P<id>\d+)/?$", access="delete")
     def api_delete(self, request, id):
         try:
             o = self.queryset(request).get(**{self.pk: int(id)})
@@ -813,7 +813,7 @@ class ExtModelApplication(ExtApplication):
             x["is_builtin"] = u and u in builtins
         return data
 
-    @view(url=r"^actions/group_edit/$", method=["POST"], access="update", api=True)
+    @api.post(url=r"^actions/group_edit/$", access="update")
     def api_action_group_edit(self, request):
         validator = DictParameter(
             attrs={"ids": ListOfParameter(element=ModelParameter(self.model), convert=True)}

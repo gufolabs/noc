@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.main.models.remotesystem import RemoteSystem
 from noc.core.translation import ugettext as _
 
@@ -23,7 +23,7 @@ class RemoteSystemApplication(ExtDocApplication):
     menu = [_("Setup"), _("Remote Systems")]
     model = RemoteSystem
 
-    @view(method=["GET"], url="^brief_lookup/$", access="lookup", api=True)
+    @api.get(url="^brief_lookup/$", access="lookup")
     def api_brief(self, request: HttpRequest):
         return [
             {

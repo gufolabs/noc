@@ -13,7 +13,7 @@ from django.http import HttpResponse, HttpRequest
 
 # NOC modules
 from noc.services.web.base.site import site
-from noc.services.web.base.extmodelapplication import ExtModelApplication, view
+from noc.services.web.base.extmodelapplication import ExtModelApplication, api
 from noc.aaa.models.permission import Permission
 from noc.sa.interfaces.base import StringParameter
 from noc.core.translation import ugettext as _
@@ -53,7 +53,7 @@ class UserApplication(ExtModelApplication):
     ignored_fields = {"id", "bi_id", "password"}
     custom_m2m_fields = {"permissions": Permission}
 
-    @view(method=["POST"], url=r"^$", access="create", api=True)
+    @api.post(url=r"^$", access="create")
     def api_create(self, request: HttpRequest):
         response = super().api_create(request)
         if response.status_code == self.CREATED:
@@ -68,7 +68,7 @@ class UserApplication(ExtModelApplication):
             user.save()
         return response
 
-    @view(method=["GET"], url=r"^(?P<id>\d+)/?$", access="read", api=True)
+    @api.get(url=r"^(?P<id>\d+)/?$", access="read")
     def api_read(self, request: HttpRequest, id):
         """
         Returns dict with object's fields and values
@@ -117,7 +117,7 @@ class UserApplication(ExtModelApplication):
         else:
             super().update_m2m(o, name, values)
 
-    @view(method=["GET"], url=r"^new_permissions/$", access="read", api=True)
+    @api.get(url=r"^new_permissions/$", access="read")
     def api_read_permission(self, request: HttpRequest):
         """
         Returns dict available permissions
@@ -139,9 +139,8 @@ class UserApplication(ExtModelApplication):
             status=self.OK,
         )
 
-    @view(
+    @api.post(
         url=r"^(\d+)/password/$",
-        method=["POST"],
         access="change",
         validate={"password": StringParameter(required=True)},
     )

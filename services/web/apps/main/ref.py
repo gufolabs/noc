@@ -15,7 +15,7 @@ from django.http import HttpRequest
 from mongoengine.base.common import _document_registry
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.services.web.base.site import site
 from noc.core.interface.loader import loader as interface_loader
 from noc.core.profile.loader import loader as profile_loader
@@ -251,7 +251,7 @@ class RefAppplication(ExtApplication):
         """Container type loolup"""
         return [{"id": x.value, "label": x.name} for x in ContainerType]
 
-    @view(url=r"^(?P<ref>\S+)/lookup/$", method=["GET"], access=True, api=True)
+    @api.get(url=r"^(?P<ref>\S+)/lookup/$", access=True)
     def api_lookup(self, request: HttpRequest, ref=None):
         if ref not in self.refs:
             if ref == "report":

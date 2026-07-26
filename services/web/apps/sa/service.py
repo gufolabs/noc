@@ -13,7 +13,7 @@ from mongoengine.queryset import Q
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, view, api
 from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.decorators.caps import capabilities_handler
 from noc.services.web.base.decorators.watch import watch_handler
@@ -183,7 +183,7 @@ class ServiceApplication(ExtDocApplication):
         # Clean other
         return super().clean(data)
 
-    @view("^(?P<id>[0-9a-f]{24})/get_path/$", access="read", api=True)
+    @view("^(?P<id>[0-9a-f]{24})/get_path/$", access="read")
     def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(Service, id=id)
         path = [Service.get_by_id(ns) for ns in o.get_path()]
@@ -233,7 +233,7 @@ class ServiceApplication(ExtDocApplication):
             ]
         return r
 
-    @view(r"^(?P<sid>[0-9a-f]{24})/resource/(?P<r_type>\S+)/", access="read", api=True)
+    @view(r"^(?P<sid>[0-9a-f]{24})/resource/(?P<r_type>\S+)/", access="read")
     def api_get_instance_resources(self, request: HttpRequest, sid: str, r_type: str):
         # o = self.get_object_or_404(Service, id=sid)
         q = self.parse_request_query(request)
@@ -261,7 +261,7 @@ class ServiceApplication(ExtDocApplication):
             )
         return r
 
-    @view("^(?P<sid>[0-9a-f]{24})/instance/$", access="read", api=True)
+    @view("^(?P<sid>[0-9a-f]{24})/instance/$", access="read")
     def api_get_instance(self, request: HttpRequest, sid: str):
         o = self.get_object_or_404(Service, id=sid)
         r = []
@@ -269,16 +269,14 @@ class ServiceApplication(ExtDocApplication):
             r.append(self.instance_to_dict_si(si))
         return r
 
-    @view(
-        "^(?P<sid>[0-9a-f]{24})/instance/(?P<iid>[0-9a-f]{24})/$",
-        method=["PUT"],
+    @api.put(
+        url=r"^(?P<sid>[0-9a-f]{24})/instance/(?P<iid>[0-9a-f]{24})/$",
         access="update",
         validate={
             "name": UnicodeParameter(required=False),
             "fqdn": UnicodeParameter(required=False),
             "port": IntParameter(required=False, min_value=0, max_value=65536),
         },
-        api=True,
     )
     def api_update_instance(
         self,
@@ -299,16 +297,13 @@ class ServiceApplication(ExtDocApplication):
         si.save()
         return {"success": True, "data": self.instance_to_dict_si(si)}
 
-    # New Instance working
-    @view(
-        r"^(?P<sid>[0-9a-f]{24})/register_instance/(?P<i_type>\S+)/$",
-        method=["POST"],
+    @api.post(
+        url=r"^(?P<sid>[0-9a-f]{24})/register_instance/(?P<i_type>\S+)/$",
         access="register_instance",
         validate={
             "name": UnicodeParameter(required=False),
             "fqdn": UnicodeParameter(required=False),
         },
-        api=True,
     )
     def api_register_instance(
         self,
@@ -326,11 +321,9 @@ class ServiceApplication(ExtDocApplication):
         si = o.register_instance(i_type, name=name, fqdn=fqdn)
         return {"success": True, "data": self.instance_to_dict_si(si)}
 
-    @view(
-        r"^(?P<sid>[0-9a-f]{24})/unregister_instance/(?P<iid>[0-9a-f]{24})/$",
-        method=["POST"],
+    @api.post(
+        url=r"^(?P<sid>[0-9a-f]{24})/unregister_instance/(?P<iid>[0-9a-f]{24})/$",
         access="unregister_instance",
-        api=True,
     )
     def api_unregister_instance(
         self,
@@ -344,9 +337,8 @@ class ServiceApplication(ExtDocApplication):
         return {"success": True}
 
     # Resource Working
-    @view(
-        r"^(?P<sid>[0-9a-f]{24})/instance/(?P<iid>[0-9a-f]{24})/bind/$",
-        method=["PUT"],
+    @api.put(
+        url=r"^(?P<sid>[0-9a-f]{24})/instance/(?P<iid>[0-9a-f]{24})/bind/$",
         access="update",
         validate=DictParameter(
             attrs={
@@ -361,7 +353,6 @@ class ServiceApplication(ExtDocApplication):
                 "resources": StringListParameter(required=False),
             },
         ),
-        api=True,
     )
     def api_instance_bind(
         self,
@@ -387,11 +378,9 @@ class ServiceApplication(ExtDocApplication):
             si.update_resources(r, source=InputSource.MANUAL)
         return {"success": True, "data": self.instance_to_dict_si(si)}
 
-    @view(
-        r"^(?P<sid>[0-9a-f]{24})/instance/(?P<iid>[0-9a-f]{24})/unbind/(?P<r_type>\S+)/",
-        method=["PUT"],
+    @api.put(
+        url=r"^(?P<sid>[0-9a-f]{24})/instance/(?P<iid>[0-9a-f]{24})/unbind/(?P<r_type>\S+)/",
         access="update",
-        api=True,
     )
     def api_instance_unbind(
         self,

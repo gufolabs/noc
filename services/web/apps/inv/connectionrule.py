@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.inv.models.connectionrule import ConnectionRule
 from noc.sa.interfaces.base import ListOfParameter, DocumentParameter
 from noc.core.prettyjson import to_json
@@ -26,12 +26,10 @@ class ConnectionRuleApplication(ExtDocApplication):
     model = ConnectionRule
     query_fields = ["name__icontains", "description__icontains"]
 
-    @view(
+    @api.post(
         url="^actions/json/$",
-        method=["POST"],
         access="read",
         validate={"ids": ListOfParameter(element=DocumentParameter(ConnectionRule), convert=True)},
-        api=True,
     )
     def api_action_json(self, request: HttpRequest, ids):
         r = [o.json_data for o in ids]

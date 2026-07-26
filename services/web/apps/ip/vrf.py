@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extmodelapplication import ExtModelApplication, view
+from noc.services.web.base.extmodelapplication import ExtModelApplication, api
 from noc.ip.models.vrfgroup import VRFGroup
 from noc.ip.models.vrf import VRF
 from noc.sa.interfaces.base import (
@@ -44,11 +44,9 @@ class VRFApplication(ExtModelApplication):
             data["vpn_id"] = get_vpn_id(vdata)
         return super().clean(data)
 
-    @view(
+    @api.post(
         url="^bulk/import/$",
-        method=["POST"],
         access="import",
-        api=True,
         validate={
             "items": ListOfParameter(
                 element=DictParameter(

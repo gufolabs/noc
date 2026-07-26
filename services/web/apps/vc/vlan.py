@@ -13,7 +13,7 @@ from django.http import HttpResponse, HttpRequest
 from mongoengine import Q
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.services.web.base.decorators.state import state_handler
 from noc.inv.models.subinterface import SubInterface
 from noc.inv.models.resourcepool import ResourcePool
@@ -130,7 +130,7 @@ class VLANApplication(ExtDocApplication):
             ]
         return data
 
-    @view(url=r"^(?P<vlan_id>[0-9a-f]{24})/interfaces/$", method=["GET"], access="read", api=True)
+    @api.get(url=r"^(?P<vlan_id>[0-9a-f]{24})/interfaces/$", access="read")
     def api_interfaces(self, request: HttpRequest, vlan_id: int):
         """
         Returns a dict of {untagged: ..., tagged: ...., l3: ...}
@@ -191,11 +191,9 @@ class VLANApplication(ExtDocApplication):
             "l3": sorted(l3, key=lambda x: x["managed_object_name"]),
         }
 
-    @view(
+    @api.get(
         url="^allocate/$",
-        method=["GET"],
         access="allocate",
-        api=True,
         validate={
             "l2_domain": DocumentParameter(L2Domain),
             "pool": DocumentParameter(ResourcePool, required=True),

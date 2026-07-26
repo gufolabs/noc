@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # inv.reportmetrics
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ from noc.inv.models.networksegment import NetworkSegment
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.services.web.base.reportdatasources.loader import loader
 from noc.services.web.base.reportdatasources.report_container import ReportContainerData
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.sa.models.useraccess import UserAccess
 from noc.sa.interfaces.base import StringParameter, BooleanParameter
 from noc.sa.models.administrativedomain import AdministrativeDomain
@@ -75,11 +75,9 @@ class ReportMetricsDetailApplication(ExtApplication):
         },
     }
 
-    @view(
-        r"^download/$",
-        method=["GET"],
+    @api.get(
+        url=r"^download/$",
         access="launch",
-        api=True,
         validate={
             "from_date": StringParameter(required=True),
             "to_date": StringParameter(required=True),

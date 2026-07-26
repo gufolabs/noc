@@ -13,7 +13,7 @@ import orjson
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, view, api
 from noc.fm.models.eventclass import EventClass
 from noc.sa.models.managedobject import ManagedObject
 from noc.sa.models.useraccess import UserAccess
@@ -40,7 +40,7 @@ class EventApplication(ExtApplication):
     icon = "icon_find"
     ignored_params = ["status", "_dc"]
 
-    @view(method=["GET"], url="^$", access="read", api=True)
+    @view(method=["GET", "POST"], url="^$", access="read", api=True)
     def api_list(self, request: HttpRequest):
         q = self.parse_request_query(request)
         start = q.get("__start") or 0
@@ -232,7 +232,7 @@ class EventApplication(ExtApplication):
             out += [r]
         return out, rows_count
 
-    @view(url=r"^(?P<id>[a-z0-9]{24})/reclassify/$", method=["POST"], api=True, access="reclassify")
+    @api.post(url=r"^(?P<id>[a-z0-9]{24})/reclassify/$", access="reclassify")
     def api_reclassify(self, request: HttpRequest, id):
         q = self.parse_request_query(request)
         if q.get("managed_object_id"):
@@ -277,7 +277,7 @@ class EventApplication(ExtApplication):
         svc.publish(orjson.dumps(data), stream=s, partition=p)
         return {"status": True}
 
-    @view(url=r"^(?P<id>[a-z0-9]{24})/json/$", method=["GET"], api=True, access="launch")
+    @api.get(url=r"^(?P<id>[a-z0-9]{24})/json/$", access="launch")
     def api_json(self, request: HttpRequest, id):
         e = Event.get_by_id(id)
         return orjson.dumps(e.model_dump(), option=orjson.OPT_INDENT_2).decode()

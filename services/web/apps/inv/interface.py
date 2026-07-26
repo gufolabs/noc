@@ -12,7 +12,7 @@ from django.http import HttpRequest
 # NOC modules
 from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.decorators.caps import capabilities_handler
-from noc.services.web.base.extapplication import view
+from noc.services.web.base.extapplication import api
 from noc.services.web.base.extdocapplication import ExtDocApplication
 from noc.sa.models.managedobject import ManagedObject
 from noc.inv.models.interface import Interface
@@ -152,7 +152,7 @@ class InterfaceApplication(ExtDocApplication):
             r["link__label"] = link["label"]
         return r
 
-    @view(url=r"^(?P<managed_object>\d+)/$", method=["GET"], access="view", api=True)
+    @api.get(url=r"^(?P<managed_object>\d+)/$", access="view")
     def api_get_interfaces(self, request: HttpRequest, managed_object):
         """
         GET interfaces
@@ -243,15 +243,13 @@ class InterfaceApplication(ExtDocApplication):
             "l3": sorted_iname(l3),
         }
 
-    @view(
+    @api.post(
         url=r"^link/$",
-        method=["POST"],
         validate={
             "type": StringParameter(choices=["ptp"]),
             "interfaces": ListOfParameter(element=DocumentParameter(Interface)),
         },
         access="link",
-        api=True,
     )
     def api_link(self, request: HttpRequest, type, interfaces):
         if type == "ptp":
@@ -261,7 +259,7 @@ class InterfaceApplication(ExtDocApplication):
             raise ValueError("Invalid interfaces length")
         return {"status": False}
 
-    @view(url=r"^unlink/(?P<iface_id>[0-9a-f]{24})/$", method=["POST"], access="link", api=True)
+    @api.post(url=r"^unlink/(?P<iface_id>[0-9a-f]{24})/$", access="link")
     def api_unlink(self, request: HttpRequest, iface_id):
         i = Interface.objects.filter(id=iface_id).first()
         if not i:
@@ -272,7 +270,7 @@ class InterfaceApplication(ExtDocApplication):
         except ValueError as why:
             return {"status": False, "msg": str(why)}
 
-    @view(url=r"^unlinked/(?P<object_id>\d+)/$", method=["GET"], access="link", api=True)
+    @api.get(url=r"^unlinked/(?P<object_id>\d+)/$", access="link")
     def api_unlinked(self, request: HttpRequest, object_id):
         def get_label(i):
             if i.description:
@@ -287,12 +285,10 @@ class InterfaceApplication(ExtDocApplication):
         ]
         return sorted(r, key=lambda x: alnum_key(x["label"]))
 
-    @view(
+    @api.post(
         url=r"^l1/(?P<iface_id>[0-9a-f]{24})/change_profile/$",
         validate={"profile": DocumentParameter(InterfaceProfile)},
-        method=["POST"],
         access="profile",
-        api=True,
     )
     def api_change_profile(self, request: HttpRequest, iface_id, profile):
         i = Interface.objects.filter(id=iface_id).first()
@@ -304,12 +300,10 @@ class InterfaceApplication(ExtDocApplication):
             i.save()
         return True
 
-    @view(
+    @api.post(
         url=r"^l1/(?P<iface_id>[0-9a-f]{24})/change_project/$",
         validate={"project": ModelParameter(Project, required=False)},
-        method=["POST"],
         access="profile",
-        api=True,
     )
     def api_change_project(self, request: HttpRequest, iface_id, project):
         i = Interface.objects.filter(id=iface_id).first()

@@ -10,7 +10,7 @@ import networkx as nx
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.fm.models.mib import MIB
 from noc.fm.models.mibdata import MIBData
 from noc.fm.models.syntaxalias import SyntaxAlias
@@ -28,7 +28,7 @@ class MIBApplication(ExtDocApplication):
     menu = _("MIB")
     model = MIB
 
-    @view(url="^(?P<id>[0-9a-f]{24})/data/$", method=["GET"], access="launch", api=True)
+    @api.get(url="^(?P<id>[0-9a-f]{24})/data/$", access="launch")
     def api_data(self, request: HttpRequest, id):
         def insert_tree(data, ds):
             if len(data["path"]) + 1 == len(ds["path"]) and data["path"] == ds["path"][:-1]:
@@ -153,7 +153,7 @@ class MIBApplication(ExtDocApplication):
             s += syntax_descr(sa)
         return "\n".join(s)
 
-    @view(url="^upload/", method=["POST"], access="create", api=True)
+    @api.post(url="^upload/", access="create")
     def api_upload(self, request: HttpRequest):
         left = {}  # name -> data
         for f in request.FILES:
@@ -180,7 +180,7 @@ class MIBApplication(ExtDocApplication):
             {"success": len(left) == 0, "message": f"ERROR: {errors}"}, status=self.OK
         )
 
-    @view(url="^(?P<id>[0-9a-f]{24})/text/$", method=["GET"], access="launch", api=True)
+    @api.get(url="^(?P<id>[0-9a-f]{24})/text/$", access="launch")
     def api_text(self, request: HttpRequest, id):
         mib = self.get_object_or_404(MIB, id=id)
         try:

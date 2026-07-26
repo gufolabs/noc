@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # fm.reportobjectdetail application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -20,7 +20,7 @@ from django.http import HttpResponse
 
 # NOC modules
 from noc.main.models.pool import Pool
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.services.web.base.reportdatasources.base import ReportModelFilter
 from noc.services.web.base.reportdatasources.report_objectlinkcount import ReportObjectLinkCount
 from noc.services.web.base.reportdatasources.report_objectifacestypestat import (
@@ -143,11 +143,9 @@ class ReportObjectDetailApplication(ExtApplication):
                 mos = mos.filter(segment__in=segment.get_nested_ids())
         return mos
 
-    @view(
+    @api.get(
         "^download/$",
-        method=["GET"],
         access="launch",
-        api=True,
         validate={
             "administrative_domain": StringParameter(required=False),
             "pool": StringParameter(required=False),

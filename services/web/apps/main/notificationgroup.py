@@ -12,7 +12,7 @@ import datetime
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extmodelapplication import ExtModelApplication, view
+from noc.services.web.base.extmodelapplication import ExtModelApplication, api
 from noc.services.web.base.extapplication import PermitLogged
 from noc.core.mx import NOTIFICATION_METHODS
 from noc.aaa.models.user import User
@@ -48,11 +48,9 @@ class NotificationGroupApplication(ExtModelApplication):
         "xmpp": "Jabber",
     }
 
-    @view(
+    @api.post(
         url="^actions/test/$",
-        method=["POST"],
         access="update",
-        api=True,
         validate={
             "ids": ListOfParameter(element=ModelParameter(NotificationGroup)),
             "subject": UnicodeParameter(),
@@ -64,7 +62,7 @@ class NotificationGroupApplication(ExtModelApplication):
             g.notify(subject=subject, body=body)
         return "Notification message has been sent"
 
-    @view(
+    @api.post(
         url=r"^(?P<group_id>\d+)/change_user_subscription/$",
         validate={
             "user_policy": StringParameter(choices=["D", "W", "F", "A"]),
@@ -73,9 +71,7 @@ class NotificationGroupApplication(ExtModelApplication):
             "title_tag": StringParameter(required=False),
             "preferred_method": StringParameter(choices=list(NOTIFICATION_METHODS), required=False),
         },
-        method=["POST"],
         access=PermitLogged(),
-        api=True,
     )
     def api_change_user_subscription(
         self,

@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.bi.models.dashboardlayout import DashboardLayout
 from noc.core.translation import ugettext as _
 
@@ -23,7 +23,7 @@ class DashboardLayoutApplication(ExtDocApplication):
     menu = [_("Setup"), _("Dashboard Layout")]
     model = DashboardLayout
 
-    @view(url="^(?P<id>[0-9a-f]{24})/json/$", method=["GET"], access="read", api=True)
+    @api.get(url="^(?P<id>[0-9a-f]{24})/json/$", access="read")
     def api_json(self, request: HttpRequest, id):
         layout = self.get_object_or_404(DashboardLayout, id=id)
         return layout.to_json()

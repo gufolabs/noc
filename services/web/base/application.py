@@ -557,7 +557,7 @@ class Application(metaclass=ApplicationBase):
             return v.astimezone(self.TZ).isoformat()
         raise Exception("Invalid to_json type")
 
-    @view(url="^launch_info/$", method=["GET"], access="launch", api=True)
+    @api.get(url="^launch_info/$", access="launch")
     def api_launch_info(self, request):
         return self.get_launch_info(request)
 

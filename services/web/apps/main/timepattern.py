@@ -12,7 +12,7 @@ import datetime
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extmodelapplication import ExtModelApplication, view
+from noc.services.web.base.extmodelapplication import ExtModelApplication, api
 from noc.main.models.timepattern import TimePattern
 from noc.main.models.timepatternterm import TimePatternTerm
 from noc.services.web.base.modelinline import ModelInline
@@ -32,11 +32,9 @@ class TimePatternApplication(ExtModelApplication):
 
     terms = ModelInline(TimePatternTerm)
 
-    @view(
+    @api.post(
         url="^actions/test/",
-        method=["POST"],
         access="read",
-        api=True,
         validate={
             "ids": ListOfParameter(element=ModelParameter(TimePattern)),
             "date": StringParameter(required=True),

@@ -23,7 +23,7 @@ from noc.ip.models.vrf import VRF
 from noc.main.models.customfield import CustomField
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, view, api
 
 
 class IPAMApplication(ExtApplication):
@@ -53,7 +53,7 @@ class IPAMApplication(ExtApplication):
             [a.address for a in prefix.address_set.all()] + extra, dist=dist, sep=sep
         )
 
-    @view(url=r"^(?P<prefix_id>\d+)/toggle_bookmark/$", method=["GET"], api=True, access="launch")
+    @api.get(url=r"^(?P<prefix_id>\d+)/toggle_bookmark/$", access="launch")
     def view_toggle_bookmark(self, request: HttpRequest, prefix_id):
         """
         Toggle block bookmark status
@@ -62,10 +62,8 @@ class IPAMApplication(ExtApplication):
         prefix.toggle_bookmark(request.user)
         return {"has_bookmark": prefix.has_bookmark(request.user)}
 
-    @view(
+    @api.get(
         url=r"get_vrf_prefix/(?P<vrf_id>\d+)/(?P<afi>[46])/(?:(?P<prefix>[0-9a-f.:/]+)/)?$",
-        method=["GET"],
-        api=True,
         access="launch",
     )
     def get_vrf_prefix(self, request: HttpRequest, vrf_id, afi, prefix=None):
@@ -80,7 +78,7 @@ class IPAMApplication(ExtApplication):
         prefix = self.get_object_or_404(Prefix, vrf=vrf, afi=afi, prefix=prefix)
         return self.prefix_contents(request, prefix=prefix)
 
-    @view(url=r"^contents/(?P<prefix_id>\d+)/$", method=["GET"], api=True, access="launch")
+    @api.get(url=r"^contents/(?P<prefix_id>\d+)/$", access="launch")
     def get_prefix_content(self, request: HttpRequest, prefix_id):
         prefix = self.get_object_or_404(Prefix, id=int(prefix_id))
         return self.prefix_contents(request, prefix=prefix)

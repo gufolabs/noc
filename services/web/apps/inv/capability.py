@@ -13,7 +13,7 @@ from collections import defaultdict
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.inv.models.capability import Capability
 from noc.main.models.doccategory import DocCategory
 from noc.core.translation import ugettext as _
@@ -32,7 +32,7 @@ class CapabilityApplication(ExtDocApplication):
     parent_model = DocCategory
     parent_field = "parent"
 
-    @view(method=["GET"], url="^tree$", access="read", api=True)
+    @api.get(url="^tree$", access="read")
     def get_tree(self, request: HttpRequest):
         """
         Return capabilities for tree build.

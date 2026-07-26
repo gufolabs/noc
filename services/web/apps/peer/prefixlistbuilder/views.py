@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.peer.models.peeringpoint import PeeringPoint
 from noc.peer.models.whoiscache import WhoisCache
 from noc.sa.interfaces.base import UnicodeParameter, ModelParameter
@@ -26,11 +26,9 @@ class PrefixListBuilderApplication(ExtApplication):
     title = _("Prefix List Builder")
     menu = _("Prefix List Builder")
 
-    @view(
-        method=["GET"],
+    @api.get(
         url=r"^$",
         access="read",
-        api=True,
         validate={
             "peering_point": ModelParameter(PeeringPoint),
             "name": UnicodeParameter(required=False),

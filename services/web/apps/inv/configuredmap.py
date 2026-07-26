@@ -9,7 +9,7 @@
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.inv.models.configuredmap import ConfiguredMap, ObjectFilter
 from noc.core.translation import ugettext as _
 
@@ -103,7 +103,7 @@ class ConfiguredMapApplication(ExtDocApplication):
             node["object_filter"] = object_filter or None
         return super().clean(data)
 
-    @view(r"^(?P<map_id>[0-9a-f]{24})/nodes/$", method=["GET"], access="read", api=True)
+    @api.get(r"^(?P<map_id>[0-9a-f]{24})/nodes/$", access="read")
     def get_map_nodes(self, request: HttpRequest, map_id):
         r = []
         rid = request.GET.getlist("id")

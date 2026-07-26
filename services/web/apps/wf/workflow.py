@@ -13,7 +13,7 @@ from copy import deepcopy
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.main.models.label import Label
 from noc.wf.models.workflow import Workflow
 from noc.wf.models.state import State
@@ -40,7 +40,7 @@ class WorkflowApplication(ExtDocApplication):
 
     NEW_ID = "000000000000000000000000"
 
-    @view(r"^(?P<id>[0-9a-f]{24})/config/", method=["GET"], access="write", api=True)
+    @api.get(r"^(?P<id>[0-9a-f]{24})/config/", access="write")
     def api_get_config(self, request: HttpRequest, id):
         wf = self.get_object_or_404(Workflow, id=id)
         r = {
@@ -104,11 +104,9 @@ class WorkflowApplication(ExtDocApplication):
             r["transitions"] += [tr]
         return r
 
-    @view(
+    @api.post(
         r"^(?P<id>[0-9a-f]{24})/config/",
-        method=["POST"],
         access="write",
-        api=True,
         validate={
             "name": StringParameter(),
             "description": StringParameter(default=""),
@@ -254,7 +252,7 @@ class WorkflowApplication(ExtDocApplication):
 
     rx_clone_name = re.compile(r"\(Copy #(\d+)\)$")
 
-    @view(r"^(?P<id>[0-9a-f]{24})/clone/", method=["POST"], access="write", api=True)
+    @api.post(r"^(?P<id>[0-9a-f]{24})/clone/", access="write")
     def api_clone(self, request: HttpRequest, id):
         wf = self.get_object_or_404(Workflow, id=id)
         # Get all clone names

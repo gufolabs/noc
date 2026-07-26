@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 #  main.home application
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -14,7 +14,7 @@ from jinja2 import Template
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.core.translation import ugettext as _
 from noc.aaa.models.user import User
 from noc.config import config
@@ -38,7 +38,7 @@ class HomeAppplication(ExtApplication):
     _welcome_text: str | None = None
     _community_text: str | None = None
 
-    @view("^dashboard/", access=True, api=True)
+    @api.get(url=r"^dashboard/", access=True)
     def api_welcome(self, request: HttpRequest):
         def append_if(is_enabled: bool, h: Callable[[User], dict[str, Any] | None]) -> None:
             if not is_enabled:
