@@ -59,7 +59,7 @@ class ObjectContainerApplication(ExtApplication):
     def api_lookup(self, request: HttpRequest):
         return self.list_data(request, self.instance_to_lookup)
 
-    @api.get()
+    @api.get("^(?P<oid>[0-9a-f]{24})/get_path/$", access="read")
     def api_get_path(self, request: HttpRequest, oid):
         o = self.get_object_or_404(Object, id=oid)
         path = [Object.get_by_id(ns) for ns in o.get_path()]
