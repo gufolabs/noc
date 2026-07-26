@@ -62,26 +62,16 @@
     mode: "0644"
   no_log: "{{ tower_show_secrets }}"
 
-# Generating local etc/settings.yml file
-- block:
-    - name: Ensure settings.yml is exists
-      file:
-        path: "{{ noc_root }}/etc/settings.yml"
-        state: touch
-        owner: root
-
-    - name: Edit settings.yml for kafka's configuration
-      yedit:
-        src: "{{ noc_root }}/etc/settings.yml"
-        state: present
-        edits:
-          - key: msgstream.client_class
-            value: "noc.core.msgstream.kafka.KafkaClient"
-          - key: kafka.addresses
-            value: "kafka"
-
+- name: Generate settings.yml for kafka configuration
+  template:
+    src: "etc/settings.yml.j2"
+    dest: "{{ noc_root }}/etc/settings.yml"
+    mode: "0640"
+    owner: "{{ noc_user }}"
+    group: "{{ noc_group }}"
+  no_log: "{{ tower_show_secrets }}"
   when:
-    - "'consul://' not in config_order"
-    - "'svc-kafka-exec' in groups"
+     - "'consul://' not in config_order"
+     - "'svc-kafka-exec' in groups"
   tags:
-    - config
+     - config

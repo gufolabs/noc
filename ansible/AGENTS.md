@@ -25,8 +25,7 @@ ansible/
 │   ├── migrate/             # Database migration helper roles
 │   └── ...                  # Other service-specific roles
 ├── system_roles/            # Generic infrastructure Ansible roles
-├── library/                 # Custom Ansible module(s) — currently yedit.py (YAML editing)
-├── lookup_plugins/          # Custom Jinja2 lookups for inventory/configuration data
+├── lookup_plugins/           # Custom Jinja2 lookups for inventory/configuration data
 ├── vars/                    # Ansible variable files and group/host vars
 ├── deploy.yml               # Main deployment playbook
 ├── site.yml                 # Full site configuration playbook
@@ -79,16 +78,9 @@ Run Molecule tests: `molecule test -s default`
 
 Do not create standalone playbooks outside this structure. New deployment functionality should be added as roles under existing or new directory trees, then referenced from deploy.yml or site.yml.
 
-## Custom Modules & Lookups
+## Lookups
 
-- `library/yedit.py` — YAML file editing module (read/write/update/delete keys)
 - Lookups in `lookup_plugins/` extend Jinja2 with inventory-aware variables and dynamic value generation for device configurations
-
-When adding modules:
-1. Ensure they follow Ansible module best practices (argument_spec, result dicts)
-2. Include docstrings in ReST format — this allows proper documentation generation
-3. Test both positive/negative paths to confirm idempotency
-4. Never import external Python packages; only use stdlib or core Ansible modules
 
 ## Important Notes
 
