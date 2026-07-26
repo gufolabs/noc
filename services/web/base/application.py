@@ -143,9 +143,6 @@ class Application(metaclass=ApplicationBase):
         else:
             setattr(cls, name, value)
 
-    def set_app(self, app):
-        pass
-
     @classmethod
     def add_view(
         cls,
@@ -174,7 +171,6 @@ class Application(metaclass=ApplicationBase):
                 api=api,
             )(f),
         )
-        site.add_contributor(cls, func.__self__)
 
     @property
     def js_app_class(self) -> str:
