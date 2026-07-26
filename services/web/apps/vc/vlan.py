@@ -130,7 +130,7 @@ class VLANApplication(ExtDocApplication):
             ]
         return data
 
-    @api.get(url=r"^(?P<vlan_id>[0-9a-f]{24})/interfaces/$", access="read")
+    @api.get(r"^(?P<vlan_id>[0-9a-f]{24})/interfaces/$", access="read")
     def api_interfaces(self, request: HttpRequest, vlan_id: int):
         """
         Returns a dict of {untagged: ..., tagged: ...., l3: ...}
@@ -192,7 +192,7 @@ class VLANApplication(ExtDocApplication):
         }
 
     @api.get(
-        url="^allocate/$",
+        "^allocate/$",
         access="allocate",
         validate={
             "l2_domain": DocumentParameter(L2Domain),

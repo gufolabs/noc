@@ -152,7 +152,7 @@ class InterfaceApplication(ExtDocApplication):
             r["link__label"] = link["label"]
         return r
 
-    @api.get(url=r"^(?P<managed_object>\d+)/$", access="view")
+    @api.get(r"^(?P<managed_object>\d+)/$", access="view")
     def api_get_interfaces(self, request: HttpRequest, managed_object):
         """
         GET interfaces
@@ -244,7 +244,7 @@ class InterfaceApplication(ExtDocApplication):
         }
 
     @api.post(
-        url=r"^link/$",
+        r"^link/$",
         validate={
             "type": StringParameter(choices=["ptp"]),
             "interfaces": ListOfParameter(element=DocumentParameter(Interface)),
@@ -259,7 +259,7 @@ class InterfaceApplication(ExtDocApplication):
             raise ValueError("Invalid interfaces length")
         return {"status": False}
 
-    @api.post(url=r"^unlink/(?P<iface_id>[0-9a-f]{24})/$", access="link")
+    @api.post(r"^unlink/(?P<iface_id>[0-9a-f]{24})/$", access="link")
     def api_unlink(self, request: HttpRequest, iface_id):
         i = Interface.objects.filter(id=iface_id).first()
         if not i:
@@ -270,7 +270,7 @@ class InterfaceApplication(ExtDocApplication):
         except ValueError as why:
             return {"status": False, "msg": str(why)}
 
-    @api.get(url=r"^unlinked/(?P<object_id>\d+)/$", access="link")
+    @api.get(r"^unlinked/(?P<object_id>\d+)/$", access="link")
     def api_unlinked(self, request: HttpRequest, object_id):
         def get_label(i):
             if i.description:
@@ -286,7 +286,7 @@ class InterfaceApplication(ExtDocApplication):
         return sorted(r, key=lambda x: alnum_key(x["label"]))
 
     @api.post(
-        url=r"^l1/(?P<iface_id>[0-9a-f]{24})/change_profile/$",
+        r"^l1/(?P<iface_id>[0-9a-f]{24})/change_profile/$",
         validate={"profile": DocumentParameter(InterfaceProfile)},
         access="profile",
     )
@@ -301,7 +301,7 @@ class InterfaceApplication(ExtDocApplication):
         return True
 
     @api.post(
-        url=r"^l1/(?P<iface_id>[0-9a-f]{24})/change_project/$",
+        r"^l1/(?P<iface_id>[0-9a-f]{24})/change_project/$",
         validate={"project": ModelParameter(Project, required=False)},
         access="profile",
     )

@@ -318,7 +318,7 @@ class ExtApplication(Application):
         """
         return self.apply_bulk_fields(data)
 
-    @api.post(url=r"^favorites/app/(?P<action>set|reset)/$", access=PermitLogged())
+    @api.post(r"^favorites/app/(?P<action>set|reset)/$", access=PermitLogged())
     def api_favorites_app(self, request, action):
         """
         Set/reset favorite app status
@@ -333,9 +333,7 @@ class ExtApplication(Application):
             Favorites(user=request.user, app=self.app_id, favorite_app=v).save()
         return True
 
-    @api.post(
-        url=r"^favorites/item/(?P<item>[0-9a-f]+)/(?P<action>set|reset)/$", access=PermitLogged()
-    )
+    @api.post(r"^favorites/item/(?P<item>[0-9a-f]+)/(?P<action>set|reset)/$", access=PermitLogged())
     def api_favorites_items(self, request, item, action):
         """
         Set/reset favorite items
@@ -347,7 +345,7 @@ class ExtApplication(Application):
             Favorites.remove_item(request.user, self.app_id, item)
         return True
 
-    @api.get(url=r"^futures/(?P<f_id>[0-9a-f]{24})/$", access="launch")
+    @api.get(r"^futures/(?P<f_id>[0-9a-f]{24})/$", access="launch")
     def api_future_status(self, request, f_id):
         op = self.get_object_or_404(
             SlowOp, id=f_id, app_id=self.get_app_id(), user=request.user.username

@@ -32,7 +32,7 @@ class AdministrativeDomainApplication(ExtModelApplication):
     def instance_to_lookup(self, o, fields=None):
         return {"id": o.id, "label": smart_text(o), "has_children": o.has_children}
 
-    @api.get(url=r"^(?P<id>\d+)/get_path/$", access="read")
+    @api.get(r"^(?P<id>\d+)/get_path/$", access="read")
     def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(AdministrativeDomain, id=id)
         path = [AdministrativeDomain.objects.get(id=ns) for ns in o.get_path()]

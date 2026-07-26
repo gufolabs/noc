@@ -28,7 +28,7 @@ class UnknownModelApplication(ExtDocApplication):
     query_fields = ["vendor", "managed_object", "platform", "part_no", "description"]
 
     @api.post(
-        url="^actions/remove/$",
+        "^actions/remove/$",
         access="launch",
         validate={"ids": ListOfParameter(element=DocumentParameter(UnknownModel), convert=True)},
     )

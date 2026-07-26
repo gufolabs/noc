@@ -33,7 +33,7 @@ class ConnectionTypeApplication(ExtDocApplication):
             data["data"] = ModelInterface.clean_data(data["data"])
         return super().clean(data)
 
-    @api.get(url="^(?P<id>[0-9a-f]{24})/compatible/$", access="read")
+    @api.get("^(?P<id>[0-9a-f]{24})/compatible/$", access="read")
     def api_compatible(self, request: HttpRequest, id):
         def fn(t, gender, reason):
             return {

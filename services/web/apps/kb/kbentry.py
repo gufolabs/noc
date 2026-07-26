@@ -43,7 +43,7 @@ class KBEntryApplication(ExtModelApplication):
         ]
         return r
 
-    @api.get(url=r"^(?P<id>\d+)/history/$", access="read")
+    @api.get(r"^(?P<id>\d+)/history/$", access="read")
     def api_get_entry_history(self, request: HttpRequest, id):
         o = self.get_object_or_404(KBEntry, id=id)
         return {
@@ -53,16 +53,16 @@ class KBEntryApplication(ExtModelApplication):
             ]
         }
 
-    @api.get(url=r"^(?P<id>\d+)/html/$", access="read")
+    @api.get(r"^(?P<id>\d+)/html/$", access="read")
     def api_get_entry_html(self, request: HttpRequest, id):
         o = self.get_object_or_404(KBEntry, id=id)
         return self.render_plain_text(o.html)
 
-    @api.get(url=r"^most_popular/$", access="read")
+    @api.get(r"^most_popular/$", access="read")
     def api_get_most_popular(self, request: HttpRequest):
         return KBEntry.most_popular()
 
-    @api.get(url=r"^(?P<id>\d+)/attachments/$", access="read")
+    @api.get(r"^(?P<id>\d+)/attachments/$", access="read")
     def api_list_attachments(self, request: HttpRequest, id):
         o = self.get_object_or_404(KBEntry, id=id)
         return [
@@ -75,7 +75,7 @@ class KBEntryApplication(ExtModelApplication):
             for x in KBEntryAttachment.objects.filter(kb_entry=o, is_hidden=False).order_by("name")
         ]
 
-    @api.get(url=r"^(?P<id>\d+)/attachment/(?P<name>.+)/$", access="read")
+    @api.get(r"^(?P<id>\d+)/attachment/(?P<name>.+)/$", access="read")
     def api_get_attachment(self, request: HttpRequest, id, name):
         o = self.get_object_or_404(KBEntry, id=id)
         attach = self.get_object_or_404(KBEntryAttachment, kb_entry=o, name=name)
@@ -84,14 +84,14 @@ class KBEntryApplication(ExtModelApplication):
         response["Content-Disposition"] = f'attachment; filename="{attach.file.name}"'
         return response
 
-    @api.delete(url=r"^(?P<id>\d+)/attachment/(?P<name>.+)/$", access="delete")
+    @api.delete(r"^(?P<id>\d+)/attachment/(?P<name>.+)/$", access="delete")
     def api_delete_attachment(self, request: HttpRequest, id, name):
         o = self.get_object_or_404(KBEntry, id=id)
         attach = self.get_object_or_404(KBEntryAttachment, kb_entry=o, name=name)
         attach.delete()
         return self.response({"result": "Delete succesful"}, status=self.OK)
 
-    @api.post(url=r"^(?P<id>\d+)/attach/$", access="write")
+    @api.post(r"^(?P<id>\d+)/attach/$", access="write")
     def api_post_set_attachment(self, request: HttpRequest, id):
         o = self.get_object_or_404(KBEntry, id=id)
         attach = KBEntryAttachment(
@@ -122,6 +122,6 @@ class KBEntryApplication(ExtModelApplication):
                 attach.save()
         return True
 
-    @api.post(url=r"^(?P<id>\d+)/?$", access="update")
+    @api.post(r"^(?P<id>\d+)/?$", access="update")
     def api_post_update(self, request: HttpRequest, id):
         return self.api_update(request, id)

@@ -252,7 +252,7 @@ class MACApplication(ExtApplication):
         r = ch.execute(sql, return_raw=True)
         return orjson.loads(r)
 
-    @api.get(url="^(?P<mac>[0-9A-F:]+)/$", access="view")
+    @api.get("^(?P<mac>[0-9A-F:]+)/$", access="view")
     def api_get_maclog(self, request: HttpRequest, mac):
         """GET maclog"""
 

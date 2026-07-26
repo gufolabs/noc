@@ -76,7 +76,7 @@ class ReportMetricsDetailApplication(ExtApplication):
     }
 
     @api.get(
-        url=r"^download/$",
+        r"^download/$",
         access="launch",
         validate={
             "from_date": StringParameter(required=True),

@@ -22,7 +22,7 @@ class DynamicDashboardApplication(ExtApplication):
 
     title = _("Dynamic Dashboard")
 
-    @api.get(url=r"^$", access="launch")
+    @api.get(r"^$", access="launch")
     def api_dashboard(self, request: HttpRequest):
         dash_name = request.GET.get("dashboard")
         try:

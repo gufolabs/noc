@@ -23,7 +23,7 @@ class RemoteSystemApplication(ExtDocApplication):
     menu = [_("Setup"), _("Remote Systems")]
     model = RemoteSystem
 
-    @api.get(url="^brief_lookup/$", access="lookup")
+    @api.get("^brief_lookup/$", access="lookup")
     def api_brief(self, request: HttpRequest):
         return [
             {

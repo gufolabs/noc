@@ -24,7 +24,7 @@ class IgnorePatternApplication(ExtDocApplication):
     menu = [_("Setup"), _("Ignore Patterns")]
     model = IgnorePattern
 
-    @api.post(url="^from_event/(?P<event_id>[0-9a-f]{24})/$", access="create")
+    @api.post("^from_event/(?P<event_id>[0-9a-f]{24})/$", access="create")
     def api_from_event(self, request: HttpRequest, event_id):
         """
         Create ignore pattern rule from event

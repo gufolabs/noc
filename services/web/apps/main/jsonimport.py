@@ -24,7 +24,7 @@ class JSONImportApplication(ExtApplication):
     title = _("JSON Import")
     menu = [_("Setup"), _("JSON Import")]
 
-    @api.post(url="^$", access="launch", validate={"json": StringParameter(required=True)})
+    @api.post("^$", access="launch", validate={"json": StringParameter(required=True)})
     def api_import(self, request: HttpRequest, json):
         try:
             jdata = orjson.loads(json)

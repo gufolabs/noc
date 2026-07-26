@@ -60,7 +60,7 @@ class DesktopApplication(ExtApplication):
             return config.language
         return request.user.preferred_language or config.language
 
-    @api.get(url="/index.html", url_name="desktop", access=True)
+    @api.get("/index.html", url_name="desktop", access=True)
     def view_desktop(self, request: HttpRequest):
         """
         Render application root template
@@ -73,7 +73,7 @@ class DesktopApplication(ExtApplication):
             brand=version.brand,
         )
 
-    @api.get(url="^settings/$", access=True)
+    @api.get("^settings/$", access=True)
     def api_settings(self, request: HttpRequest):
         cp = CPClient()
         if request.user.is_authenticated():
@@ -142,7 +142,7 @@ class DesktopApplication(ExtApplication):
             "color_scheme": Style.get_scheme(),
         }
 
-    @api.get(url="^version/$", access=True)
+    @api.get("^version/$", access=True)
     def api_version(self, request: HttpRequest):
         """
         Return current NOC version
@@ -151,7 +151,7 @@ class DesktopApplication(ExtApplication):
         """
         return version.version
 
-    @api.get(url="^is_logged/$", access=True)
+    @api.get("^is_logged/$", access=True)
     def api_is_logged(self, request: HttpRequest):
         """
         Check wrether the session is authenticated.
@@ -160,7 +160,7 @@ class DesktopApplication(ExtApplication):
         """
         return request.user.is_authenticated()
 
-    @api.get(url="^user_settings/$", access=PermitLogged())
+    @api.get("^user_settings/$", access=PermitLogged())
     def api_user_settings(self, request: HttpRequest):
         """
         Get user settings
@@ -223,7 +223,7 @@ class DesktopApplication(ExtApplication):
                 return self.response_not_found()
         return get_children(root, request.user)
 
-    @api.get(url="^launch_info/$", access=PermitLogged())
+    @api.get("^launch_info/$", access=PermitLogged())
     def api_launch_info(self, request: HttpRequest):
         """
         Get application launch information
@@ -238,7 +238,7 @@ class DesktopApplication(ExtApplication):
             return self.response_not_found()
         return menu["app"].get_launch_info(request)
 
-    @api.get(url="^state/", access=PermitLogged())
+    @api.get("^state/", access=PermitLogged())
     def api_get_state(self, request: HttpRequest):
         """
         Get user state
@@ -247,7 +247,7 @@ class DesktopApplication(ExtApplication):
         uid = request.user.id
         return {r.key: r.value for r in UserState.objects.filter(user_id=uid)}
 
-    @api.get(url="^state/(?P<name>.+)/$", access=PermitLogged())
+    @api.get("^state/(?P<name>.+)/$", access=PermitLogged())
     def api_get_state_by_name(self, request: HttpRequest, name):
         """
         Get user state
@@ -256,7 +256,7 @@ class DesktopApplication(ExtApplication):
         uid = request.user.id
         return {r.key: r.value for r in UserState.objects.filter(user_id=uid, key=name)}
 
-    @api.delete(url="^state/(?P<name>.+)/$", access=PermitLogged())
+    @api.delete("^state/(?P<name>.+)/$", access=PermitLogged())
     def api_clear_state(self, request: HttpRequest, name):
         """
         Clear user state
@@ -266,7 +266,7 @@ class DesktopApplication(ExtApplication):
         UserState.objects.filter(user_id=uid, key=name).delete()
         return True
 
-    @api.post(url="^state/(?P<name>.+)/$", access=PermitLogged())
+    @api.post("^state/(?P<name>.+)/$", access=PermitLogged())
     def api_set_state(self, request: HttpRequest, name):
         """
         Clear user state
@@ -290,7 +290,7 @@ class DesktopApplication(ExtApplication):
             UserState.objects.filter(user_id=uid, key=name).delete()
         return True
 
-    @api.get(url="^favapps/$", access=PermitLogged())
+    @api.get("^favapps/$", access=PermitLogged())
     def api_favapps(self, request: HttpRequest):
         favapps = [
             f.app
@@ -305,7 +305,7 @@ class DesktopApplication(ExtApplication):
             for fa in favapps
         ]
 
-    @api.get(url="^about/", access=True)
+    @api.get("^about/", access=True)
     def api_about(self, request: HttpRequest):
         current_year = datetime.date.today().year
         data = {

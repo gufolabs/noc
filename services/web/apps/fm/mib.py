@@ -28,7 +28,7 @@ class MIBApplication(ExtDocApplication):
     menu = _("MIB")
     model = MIB
 
-    @api.get(url="^(?P<id>[0-9a-f]{24})/data/$", access="launch")
+    @api.get("^(?P<id>[0-9a-f]{24})/data/$", access="launch")
     def api_data(self, request: HttpRequest, id):
         def insert_tree(data, ds):
             if len(data["path"]) + 1 == len(ds["path"]) and data["path"] == ds["path"][:-1]:
@@ -153,7 +153,7 @@ class MIBApplication(ExtDocApplication):
             s += syntax_descr(sa)
         return "\n".join(s)
 
-    @api.post(url="^upload/", access="create")
+    @api.post("^upload/", access="create")
     def api_upload(self, request: HttpRequest):
         left = {}  # name -> data
         for f in request.FILES:
@@ -180,7 +180,7 @@ class MIBApplication(ExtDocApplication):
             {"success": len(left) == 0, "message": f"ERROR: {errors}"}, status=self.OK
         )
 
-    @api.get(url="^(?P<id>[0-9a-f]{24})/text/$", access="launch")
+    @api.get("^(?P<id>[0-9a-f]{24})/text/$", access="launch")
     def api_text(self, request: HttpRequest, id):
         mib = self.get_object_or_404(MIB, id=id)
         try:

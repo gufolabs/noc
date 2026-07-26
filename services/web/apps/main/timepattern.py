@@ -33,7 +33,7 @@ class TimePatternApplication(ExtModelApplication):
     terms = ModelInline(TimePatternTerm)
 
     @api.post(
-        url="^actions/test/",
+        "^actions/test/",
         access="read",
         validate={
             "ids": ListOfParameter(element=ModelParameter(TimePattern)),

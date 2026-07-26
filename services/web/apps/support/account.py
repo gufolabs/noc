@@ -23,7 +23,7 @@ class AccountApplication(ExtApplication):
     title = _("Account")
     menu = [_("Setup"), _("Account")]
 
-    @api.get(url=r"^$", access="launch")
+    @api.get(r"^$", access="launch")
     def api_get(self, request: HttpRequest):
         c = CPClient()
         data = {}
@@ -36,7 +36,7 @@ class AccountApplication(ExtApplication):
         return data
 
     @api.post(
-        url="^account/attach/$",
+        "^account/attach/$",
         access="launch",
         validate={"name": StringParameter(), "password": StringParameter(required=False)},
     )
@@ -51,7 +51,7 @@ class AccountApplication(ExtApplication):
         return {"status": True, "message": "Ok"}
 
     @api.post(
-        url="^account/$",
+        "^account/$",
         access="launch",
         validate={
             "name": REStringParameter(r"^[a-zA-Z0-9\.\-_]+$"),
@@ -100,7 +100,7 @@ class AccountApplication(ExtApplication):
         return {"status": True, "message": "Account saved"}
 
     @api.post(
-        url=r"^account/change_password/$",
+        r"^account/change_password/$",
         access="launch",
         validate={"old_password": StringParameter(), "new_password": StringParameter()},
     )
@@ -116,7 +116,7 @@ class AccountApplication(ExtApplication):
         return {"status": True, "message": "Password has been changed"}
 
     @api.post(
-        url=r"^system/$",
+        r"^system/$",
         access="launch",
         validate={
             "name": REStringParameter(r"^[a-zA-Z0-9\.\-_]+$"),

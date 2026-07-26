@@ -23,7 +23,7 @@ class DashboardLayoutApplication(ExtDocApplication):
     menu = [_("Setup"), _("Dashboard Layout")]
     model = DashboardLayout
 
-    @api.get(url="^(?P<id>[0-9a-f]{24})/json/$", access="read")
+    @api.get("^(?P<id>[0-9a-f]{24})/json/$", access="read")
     def api_json(self, request: HttpRequest, id):
         layout = self.get_object_or_404(DashboardLayout, id=id)
         return layout.to_json()

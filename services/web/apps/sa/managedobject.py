@@ -481,7 +481,7 @@ class ManagedObjectApplication(ExtModelApplication):
         #    qs = qs.exclude(state__in=[str(s) for s in w_states])
         return qs
 
-    @api.get(url=r"^(?P<id>\d+)/links/$", access="read")
+    @api.get(r"^(?P<id>\d+)/links/$", access="read")
     def api_links(self, request: HttpRequest, id):
         def split_local_ifaces(
             interfaces: Iterable[Interface],
@@ -535,7 +535,7 @@ class ManagedObjectApplication(ExtModelApplication):
                     )
         return result
 
-    @api.get(url=r"^(?P<id>\d+)/discovery/$", access="read")
+    @api.get(r"^(?P<id>\d+)/discovery/$", access="read")
     def api_discovery(self, request: HttpRequest, id):
         from noc.core.scheduler.job import Job
 
@@ -584,7 +584,7 @@ class ManagedObjectApplication(ExtModelApplication):
         return r
 
     @api.post(
-        url=r"^actions/set_managed/$",
+        r"^actions/set_managed/$",
         access="create",
         validate={"ids": ListOfParameter(element=ModelParameter(ManagedObject), convert=True)},
     )
@@ -597,7 +597,7 @@ class ManagedObjectApplication(ExtModelApplication):
         return "Selected objects set to managed state"
 
     @api.post(
-        url=r"^actions/set_unmanaged/$",
+        r"^actions/set_unmanaged/$",
         access="create",
         validate={"ids": ListOfParameter(element=ModelParameter(ManagedObject), convert=True)},
     )
@@ -609,7 +609,7 @@ class ManagedObjectApplication(ExtModelApplication):
             o.save()
         return "Selected objects set to unmanaged state"
 
-    @api.post(url=r"^(?P<id>\d+)/discovery/run/$", access="change_discovery")
+    @api.post(r"^(?P<id>\d+)/discovery/run/$", access="change_discovery")
     def api_run_discovery(self, request: HttpRequest, id):
         o = self.get_object_or_404(ManagedObject, id=id)
         if not o.has_access(request.user):
@@ -635,7 +635,7 @@ class ManagedObjectApplication(ExtModelApplication):
             Job.submit("discovery", jcls, key=o.id, pool=o.pool.name, shard=shard)
         return {"success": True}
 
-    @api.post(url=r"^(?P<id>\d+)/discovery/stop/$", access="change_discovery")
+    @api.post(r"^(?P<id>\d+)/discovery/stop/$", access="change_discovery")
     def api_stop_discovery(self, request: HttpRequest, id):
         o = self.get_object_or_404(ManagedObject, id=id)
         if not o.has_access(request.user):
@@ -658,7 +658,7 @@ class ManagedObjectApplication(ExtModelApplication):
             Job.remove("discovery", jcls, key=o.id, pool=o.pool.name)
         return {"success": True}
 
-    @api.get(url=r"^(?P<id>\d+)/interface/$", access="read")
+    @api.get(r"^(?P<id>\d+)/interface/$", access="read")
     def api_interface(self, request: HttpRequest, id):
         """
         GET interfaces
@@ -797,7 +797,7 @@ class ManagedObjectApplication(ExtModelApplication):
             "l3": sorted_iname(l3),
         }
 
-    @api.delete(url=r"^(?P<id>\d+)/interface/(?P<if_id>[0-9a-f]{24})/$", access="change_interface")
+    @api.delete(r"^(?P<id>\d+)/interface/(?P<if_id>[0-9a-f]{24})/$", access="change_interface")
     def api_delete_interface(self, request: HttpRequest, id, if_id):
         o = self.get_object_or_404(ManagedObject, id=int(id))
         if not o.has_access(request.user):
@@ -807,7 +807,7 @@ class ManagedObjectApplication(ExtModelApplication):
             iface.delete()
         return {"success": True}
 
-    @api.post(url=r"^(?P<id>\d+)/interface/$", access="change_interface")
+    @api.post(r"^(?P<id>\d+)/interface/$", access="change_interface")
     def api_set_interface(self, request: HttpRequest, id):
         def get_or_none(c, v):
             if not v:
@@ -841,7 +841,7 @@ class ManagedObjectApplication(ExtModelApplication):
         i.save()
         return {"success": True}
 
-    @api.delete(url=r"^(?P<id>\d+)/?$", access="delete")
+    @api.delete(r"^(?P<id>\d+)/?$", access="delete")
     def api_delete(self, request: HttpRequest, id):
         """
         Override default method
@@ -865,7 +865,7 @@ class ManagedObjectApplication(ExtModelApplication):
         return HttpResponse(orjson.dumps({"status": True}), status=self.DELETED)
 
     @api.post(
-        url=r"^actions/run_discovery/$",
+        r"^actions/run_discovery/$",
         access="launch",
         validate={"ids": ListOfParameter(element=ModelParameter(ManagedObject), convert=True)},
     )
@@ -954,7 +954,7 @@ class ManagedObjectApplication(ExtModelApplication):
             r["leaf"] = True
         return r
 
-    @api.get(url=r"^(?P<id>\d+)/inventory/$", access="read")
+    @api.get(r"^(?P<id>\d+)/inventory/$", access="read")
     def api_inventory(self, request: HttpRequest, id):
         o = self.get_object_or_404(ManagedObject, id=id)
         if not o.has_access(request.user):
@@ -966,7 +966,7 @@ class ManagedObjectApplication(ExtModelApplication):
             r += [c]
         return {"expanded": True, "children": r}
 
-    @api.get(url=r"^(?P<id>\d+)/confdb/$", access="config")
+    @api.get(r"^(?P<id>\d+)/confdb/$", access="config")
     def api_confdb(self, request: HttpRequest, id):
         o = self.get_object_or_404(ManagedObject, id=id)
         if not o.has_access(request.user):
@@ -979,7 +979,7 @@ class ManagedObjectApplication(ExtModelApplication):
         return self.render_plain_text(cdb.dump("json"), content_type="text/json")
 
     @api.post(
-        url=r"^(?P<id>\d+)/confdb/$",
+        r"^(?P<id>\d+)/confdb/$",
         validate={
             "query": StringParameter(),
             "cleanup": BooleanParameter(default=True),
@@ -1001,7 +1001,7 @@ class ManagedObjectApplication(ExtModelApplication):
             result = {"status": False, "message": str(e)}
         return result
 
-    @api.get(url=r"^(?P<id>\d+)/job_log/(?P<job>\S+)/$", access="read")
+    @api.get(r"^(?P<id>\d+)/job_log/(?P<job>\S+)/$", access="read")
     def api_job_log(self, request: HttpRequest, id, job):
         o = self.get_object_or_404(ManagedObject, id=id)
         if not o.has_access(request.user):
@@ -1013,7 +1013,7 @@ class ManagedObjectApplication(ExtModelApplication):
             return self.render_plain_text(zlib.decompress(smart_bytes(d["log"])))
         return self.render_plain_text("No data")
 
-    @api.get(url=r"^(?P<id>\d+)/interactions/$", access="interactions")
+    @api.get(r"^(?P<id>\d+)/interactions/$", access="interactions")
     def api_interactions(self, request: HttpRequest, id):
         o = self.get_object_or_404(ManagedObject, id=id)
         if not o.has_access(request.user):
@@ -1023,7 +1023,7 @@ class ManagedObjectApplication(ExtModelApplication):
             for i in InteractionLog.objects.filter(object=o.id).order_by("-timestamp")
         ]
 
-    @api.get(url=r"^(?P<id>\d+)/scripts/$", access="script")
+    @api.get(r"^(?P<id>\d+)/scripts/$", access="script")
     def api_scripts(self, request: HttpRequest, id):
         o = self.get_object_or_404(ManagedObject, id=id)
         if not o.has_access(request.user):
@@ -1046,7 +1046,7 @@ class ManagedObjectApplication(ExtModelApplication):
             r += [ss]
         return r
 
-    @api.post(url=r"^(?P<id>\d+)/scripts/(?P<name>[^/]+)/$", access="script")
+    @api.post(r"^(?P<id>\d+)/scripts/(?P<name>[^/]+)/$", access="script")
     def api_run_script(self, request: HttpRequest, id, name):
         o = self.get_object_or_404(ManagedObject, id=id)
         if not o.has_access(request.user):
@@ -1060,7 +1060,7 @@ class ManagedObjectApplication(ExtModelApplication):
             return {"error": str(e)}
         return {"result": result}
 
-    @api.post(url=r"^(?P<id>\d+)/console/$", access="console")
+    @api.post(r"^(?P<id>\d+)/console/$", access="console")
     def api_console_command(self, request: HttpRequest, id):
         o = self.get_object_or_404(ManagedObject, id=id)
         if not o.has_access(request.user):
@@ -1074,7 +1074,7 @@ class ManagedObjectApplication(ExtModelApplication):
             return {"error": str(e)}
         return {"result": result}
 
-    @api.get(url=r"(?P<id>\d+)/caps/$", access="read")
+    @api.get(r"(?P<id>\d+)/caps/$", access="read")
     def api_get_caps(self, request: HttpRequest, id):
         o = self.get_object_or_404(ManagedObject, id=id)
         if not o.has_access(request.user):
@@ -1088,7 +1088,7 @@ class ManagedObjectApplication(ExtModelApplication):
             r.append(caps)
         return sorted(r, key=lambda x: x["capability"])
 
-    @api.post(url=r"(?P<id>\d+)/actions/(?P<action>\S+)/$", access="action")
+    @api.post(r"(?P<id>\d+)/actions/(?P<action>\S+)/$", access="action")
     def api_action(self, request: HttpRequest, id, action):
         def execute(o, a, args):
             return a.execute(o, **args)
@@ -1105,7 +1105,7 @@ class ManagedObjectApplication(ExtModelApplication):
         return self.submit_slow_op(request, execute, o, a, args)
 
     @api.post(
-        url=r"(?P<id>\d+)/mappings/$",
+        r"(?P<id>\d+)/mappings/$",
         access="change_mappings",
         validate={
             "mappings": DictListParameter(
@@ -1126,7 +1126,7 @@ class ManagedObjectApplication(ExtModelApplication):
         r = [m.get_object_form(o) for m in o.iter_remote_mappings()]
         return {"status": True, "data": r}
 
-    @api.post(url=r"^link/fix/(?P<link_id>[0-9a-f]{24})/$", access="change_link")
+    @api.post(r"^link/fix/(?P<link_id>[0-9a-f]{24})/$", access="change_link")
     def api_fix_links(self, request: HttpRequest, link_id):
         def get_mac(arp, ip):
             for r in arp:
@@ -1208,7 +1208,7 @@ class ManagedObjectApplication(ExtModelApplication):
         iface1.link_ptp(iface2, method="macfix")
         return success_status("Relinked")
 
-    @api.get(url=r"^(?P<id>\d+)/cpe/$", access="read")
+    @api.get(r"^(?P<id>\d+)/cpe/$", access="read")
     def api_cpe(self, request: HttpRequest, id):
         """
         GET CPEs
@@ -1260,7 +1260,7 @@ class ManagedObjectApplication(ExtModelApplication):
             return True
         return ManagedObject.objects.filter(id=obj.id).filter(UserAccess.Q(user)).exists()
 
-    @api.get(url=r"^(?P<id>\d+)/map_lookup/$", access="read")
+    @api.get(r"^(?P<id>\d+)/map_lookup/$", access="read")
     def api_map_lookup(self, request: HttpRequest, id):
         o: ManagedObject = self.get_object_or_404(ManagedObject, id=id)
         if not o.has_access(request.user):

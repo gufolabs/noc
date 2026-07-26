@@ -26,7 +26,7 @@ class UserProfileApplication(ExtApplication):
     title = _("User Profile")
     implied_permissions = {"launch": ["main:timepattern:lookup"]}
 
-    @api.get(url="^$", access=PermitLogged())
+    @api.get("^$", access=PermitLogged())
     def api_get(self, request: HttpRequest):
         user = request.user
         language = user.preferred_language
@@ -83,7 +83,7 @@ class UserProfileApplication(ExtApplication):
         }
 
     @api.post(
-        url="^$",
+        "^$",
         access=PermitLogged(),
         validate={
             "preferred_language": StringParameter(choices=[x[0] for x in LANGUAGES]),

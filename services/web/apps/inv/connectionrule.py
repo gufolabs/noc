@@ -27,7 +27,7 @@ class ConnectionRuleApplication(ExtDocApplication):
     query_fields = ["name__icontains", "description__icontains"]
 
     @api.post(
-        url="^actions/json/$",
+        "^actions/json/$",
         access="read",
         validate={"ids": ListOfParameter(element=DocumentParameter(ConnectionRule), convert=True)},
     )

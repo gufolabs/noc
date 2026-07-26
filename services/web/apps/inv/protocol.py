@@ -70,7 +70,7 @@ class ProtocolApplication(ExtDocApplication):
         # Clean other
         return super().clean(data)
 
-    @api.get(url="^lookup_tree/", access=True)
+    @api.get("^lookup_tree/", access=True)
     def api_protocols_lookup_tree(self, request: HttpRequest):
         r = {}
         protocol_filter = {}

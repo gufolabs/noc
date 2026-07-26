@@ -46,7 +46,7 @@ class PrefixApplication(ExtModelApplication):
         return qs.filter(PrefixAccess.read_Q(request.user))
 
     @api.post(
-        url=r"^(?P<prefix_id>\d+)/rebase/$",
+        r"^(?P<prefix_id>\d+)/rebase/$",
         access="rebase",
         validate={"to_vrf": ModelParameter(VRF), "to_prefix": PrefixParameter()},
     )
@@ -58,7 +58,7 @@ class PrefixApplication(ExtModelApplication):
         except ValueError as e:
             return self.response_bad_request(str(e))
 
-    @api.get(url=r"^(?P<prefix_id>\d+)/suggest_free/$", access="read")
+    @api.get(r"^(?P<prefix_id>\d+)/suggest_free/$", access="read")
     def api_suggest_free(self, request: HttpRequest, prefix_id):
         """
         Suggest free blocks of different sizes
@@ -86,7 +86,7 @@ class PrefixApplication(ExtModelApplication):
                     break
         return suggestions
 
-    @api.delete(url=r"^(?P<id>\d+)/recursive/$", access="delete")
+    @api.delete(r"^(?P<id>\d+)/recursive/$", access="delete")
     def api_delete_recursive(self, request: HttpRequest, id):
         try:
             o = self.queryset(request).get(**{self.pk: int(id)})
@@ -107,7 +107,7 @@ class PrefixApplication(ExtModelApplication):
             )
         return HttpResponse(status=self.DELETED)
 
-    @api.get(url=r"^(?P<id>\d+)/get_path/$", access="read")
+    @api.get(r"^(?P<id>\d+)/get_path/$", access="read")
     def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(Prefix, id=int(id))
         try:

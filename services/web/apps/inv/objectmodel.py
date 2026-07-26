@@ -137,7 +137,7 @@ class ObjectModelApplication(ExtDocApplication):
             del q["is_container"]
         return super().cleaned_query(q)
 
-    @api.get(url="^(?P<id>[0-9a-f]{24})/compatible/$", access="read")
+    @api.get("^(?P<id>[0-9a-f]{24})/compatible/$", access="read")
     def api_compatible(self, request: HttpRequest, id):
         o = self.get_object_or_404(ObjectModel, id=id)
         # Connections
@@ -182,7 +182,7 @@ class ObjectModelApplication(ExtDocApplication):
         return {"connections": r, "crossing": rc}
 
     @api.post(
-        url="^actions/json/$",
+        "^actions/json/$",
         access="read",
         validate={"ids": ListOfParameter(element=DocumentParameter(ObjectModel), convert=True)},
     )
@@ -191,7 +191,7 @@ class ObjectModelApplication(ExtDocApplication):
         s = to_json(r, order=["name", "vendor__code", "description"])
         return {"data": s}
 
-    @api.get(url="^(?P<id>[0-9a-f]{24})/(?P<name>front|rear)/template.svg$", access="read")
+    @api.get("^(?P<id>[0-9a-f]{24})/(?P<name>front|rear)/template.svg$", access="read")
     def api_template(self, request: HttpRequest, id: str, name: str):
         o = self.get_object_or_404(ObjectModel, id=id)
         last_part = o.name.split("|")[-1].strip()
@@ -206,7 +206,7 @@ class ObjectModelApplication(ExtDocApplication):
             status=200,
         )
 
-    @api.get(url="^(?P<id>[0-9a-f]{24})/is_valid_template/$", access="read")
+    @api.get("^(?P<id>[0-9a-f]{24})/is_valid_template/$", access="read")
     def api_is_valid_template(self, request: HttpRequest, id: str):
         o = self.get_object_or_404(ObjectModel, id=id)
         return self.render_json({"status": is_valid_model_for_template(o)})

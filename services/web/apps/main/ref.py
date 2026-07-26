@@ -251,7 +251,7 @@ class RefAppplication(ExtApplication):
         """Container type loolup"""
         return [{"id": x.value, "label": x.name} for x in ContainerType]
 
-    @api.get(url=r"^(?P<ref>\S+)/lookup/$", access=True)
+    @api.get(r"^(?P<ref>\S+)/lookup/$", access=True)
     def api_lookup(self, request: HttpRequest, ref=None):
         if ref not in self.refs:
             if ref == "report":

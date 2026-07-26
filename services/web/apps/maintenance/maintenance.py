@@ -61,7 +61,7 @@ class MaintenanceApplication(ExtDocApplication):
             return qs.filter(type=None)
         return qs
 
-    @api.post(url=r"^(?P<id>[a-z0-9]{24})/add/", access="update")
+    @api.post(r"^(?P<id>[a-z0-9]{24})/add/", access="update")
     def api_add(self, request: HttpRequest, id):
         body = orjson.loads(request.body)
         o = self.model.objects.filter(**{self.pk: id}).first()
@@ -83,7 +83,7 @@ class MaintenanceApplication(ExtDocApplication):
             o.save()
         return self.response({"result": "Add object"}, status=self.OK)
 
-    @api.get(url="(?P<id>[0-9a-f]{24})/objects/", access="read")
+    @api.get("(?P<id>[0-9a-f]{24})/objects/", access="read")
     def api_test(self, request: HttpRequest, id):
         r = []
         for mo in (

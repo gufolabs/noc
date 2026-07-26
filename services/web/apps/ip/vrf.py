@@ -45,7 +45,7 @@ class VRFApplication(ExtModelApplication):
         return super().clean(data)
 
     @api.post(
-        url="^bulk/import/$",
+        "^bulk/import/$",
         access="import",
         validate={
             "items": ListOfParameter(

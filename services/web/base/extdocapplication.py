@@ -422,18 +422,18 @@ class ExtDocApplication(ExtApplication):
             r["row_class"] = o.get_css_class() or ""
         return r
 
-    @api.get(url=r"^$", access="read")
+    @api.get(r"^$", access="read")
     def api_list(self, request):
         return self.list_data(request, self.instance_to_dict_list)
 
-    @api.get(url=r"^lookup/$", access="lookup")
+    @api.get(r"^lookup/$", access="lookup")
     def api_lookup(self, request):
         try:
             return self.list_data(request, self.instance_to_lookup)
         except ValueError:
             return self.response(self.lookup_default, status=self.OK)
 
-    @api.get(url=r"^tree_lookup/$", access="lookup")
+    @api.get(r"^tree_lookup/$", access="lookup")
     def api_lookup_tree(self, request):
         def trim(s):
             return smart_text(s).rsplit(" | ")[-1]
@@ -457,7 +457,7 @@ class ExtDocApplication(ExtApplication):
         data = [{"id": str(o.id), "label": trim(o)} for o in data]
         return {"total": count, "status": True, "data": data}
 
-    @api.post(url="^$", access="create")
+    @api.post("^$", access="create")
     def api_create(self, request):
         is_json = self.site.is_json(request.META.get("CONTENT_TYPE"))
         try:
@@ -507,7 +507,7 @@ class ExtDocApplication(ExtApplication):
         return self.response(r, status=self.CREATED)
 
     @api.get(
-        url=r"^(?P<id>[0-9a-f]{24}|\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$",
+        r"^(?P<id>[0-9a-f]{24}|\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$",
         access="read",
     )
     def api_read(self, request, id):
@@ -526,7 +526,7 @@ class ExtDocApplication(ExtApplication):
         return self.response(self.instance_to_dict(o, fields=only), status=self.OK)
 
     @api.put(
-        url=r"^(?P<id>[0-9a-f]{24}|\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$",
+        r"^(?P<id>[0-9a-f]{24}|\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$",
         access="update",
     )
     def api_update(self, request, id):
@@ -565,7 +565,7 @@ class ExtDocApplication(ExtApplication):
         return self.response(r, status=self.OK)
 
     @api.delete(
-        url=r"^(?P<id>[0-9a-f]{24}|\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$",
+        r"^(?P<id>[0-9a-f]{24}|\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$",
         access="delete",
     )
     def api_delete(self, request, id):
@@ -627,7 +627,7 @@ class ExtDocApplication(ExtApplication):
             x["is_builtin"] = u and u in builtins
         return data
 
-    @api.post(url=r"^actions/group_edit/$", access="update")
+    @api.post(r"^actions/group_edit/$", access="update")
     def api_action_group_edit(self, request):
         validator = DictParameter(
             attrs={"ids": ListOfParameter(element=DocumentParameter(self.model), convert=True)}

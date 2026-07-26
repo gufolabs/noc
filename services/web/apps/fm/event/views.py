@@ -232,7 +232,7 @@ class EventApplication(ExtApplication):
             out += [r]
         return out, rows_count
 
-    @api.post(url=r"^(?P<id>[a-z0-9]{24})/reclassify/$", access="reclassify")
+    @api.post(r"^(?P<id>[a-z0-9]{24})/reclassify/$", access="reclassify")
     def api_reclassify(self, request: HttpRequest, id):
         q = self.parse_request_query(request)
         if q.get("managed_object_id"):
@@ -277,7 +277,7 @@ class EventApplication(ExtApplication):
         svc.publish(orjson.dumps(data), stream=s, partition=p)
         return {"status": True}
 
-    @api.get(url=r"^(?P<id>[a-z0-9]{24})/json/$", access="launch")
+    @api.get(r"^(?P<id>[a-z0-9]{24})/json/$", access="launch")
     def api_json(self, request: HttpRequest, id):
         e = Event.get_by_id(id)
         return orjson.dumps(e.model_dump(), option=orjson.OPT_INDENT_2).decode()

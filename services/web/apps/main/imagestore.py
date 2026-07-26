@@ -39,7 +39,7 @@ class ImageStoreApplication(ExtDocApplication):
         o.file.put(file.read(), content_type=file.content_type, filename=file_attrs.get("filename"))
         return True
 
-    @api.get(url=r"^(?P<id>[0-9a-f]{24})/image/$", access="read")
+    @api.get(r"^(?P<id>[0-9a-f]{24})/image/$", access="read")
     def api_image(self, request: HttpRequest, id):
         o = self.get_object_or_404(ImageStore, id=id)
         return HttpResponse(o.file.read(), content_type=o.get_content_type())

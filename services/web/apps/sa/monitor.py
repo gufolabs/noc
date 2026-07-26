@@ -94,7 +94,7 @@ class MonitorApplication(ObjectListApplication):
             )
         return result
 
-    @api.get(url=r"^(?P<id>\d+)/discovery_job_log/$", access="read")
+    @api.get(r"^(?P<id>\d+)/discovery_job_log/$", access="read")
     def api_job_log(self, request: HttpRequest, id):
         o = self.get_object_or_404(ManagedObject, id=id)
         if not o.has_access(request.user):

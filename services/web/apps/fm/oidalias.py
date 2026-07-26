@@ -23,7 +23,7 @@ class OIDAliasApplication(ExtDocApplication):
     menu = [_("Setup"), _("OID Aliases")]
     model = OIDAlias
 
-    @api.get(url="^(?P<id>[0-9a-f]{24})/json/$", access="read")
+    @api.get("^(?P<id>[0-9a-f]{24})/json/$", access="read")
     def api_json(self, request: HttpRequest, id):
         oa = self.get_object_or_404(OIDAlias, id=id)
         return oa.to_json()

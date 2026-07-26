@@ -28,7 +28,7 @@ class FacadeApplication(ExtDocApplication):
     query_fields = ["name__icontains", "description__icontains"]
     glyph = "table"
 
-    @api.get(url="^(?P<id>[0-9a-f]{24})/facade.svg$", access="read")
+    @api.get("^(?P<id>[0-9a-f]{24})/facade.svg$", access="read")
     def api_svg(self, request: HttpRequest, id: str):
         o = self.get_object_or_404(Facade, id)
         return HttpResponse(o.data, content_type="image/svg+xml", status=200)

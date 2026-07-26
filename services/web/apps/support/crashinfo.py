@@ -26,7 +26,7 @@ class CrashinfoApplication(ExtDocApplication):
     menu = _("Crashinfo")
     model = Crashinfo
 
-    @api.get(url=r"^(?P<id>\S+)/traceback/", access="read")
+    @api.get(r"^(?P<id>\S+)/traceback/", access="read")
     def api_traceback(self, request: HttpRequest, id):
         ci = self.get_object_or_404(Crashinfo, uuid=uuid.UUID(id))
         return ci.traceback

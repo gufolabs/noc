@@ -38,7 +38,7 @@ class HomeAppplication(ExtApplication):
     _welcome_text: str | None = None
     _community_text: str | None = None
 
-    @api.get(url=r"^dashboard/", access=True)
+    @api.get(r"^dashboard/", access=True)
     def api_welcome(self, request: HttpRequest):
         def append_if(is_enabled: bool, h: Callable[[User], dict[str, Any] | None]) -> None:
             if not is_enabled:

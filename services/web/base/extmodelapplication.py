@@ -580,7 +580,7 @@ class ExtModelApplication(ExtApplication):
     def instance_to_dict_list(self, o, fields=None):
         return self.instance_to_dict(o, fields=fields)
 
-    @api.get(url=r"^$", access="read")
+    @api.get(r"^$", access="read")
     def api_list(self, request):
         try:
             return self.list_data(request, self.instance_to_dict_list)
@@ -588,7 +588,7 @@ class ExtModelApplication(ExtApplication):
             error_report()
             return self.response({"status": False, "message": str(e)}, status=self.INTERNAL_ERROR)
 
-    @api.get(url=r"^lookup/$", access="lookup")
+    @api.get(r"^lookup/$", access="lookup")
     def api_lookup(self, request):
         try:
             return self.list_data(request, self.instance_to_lookup)
@@ -598,7 +598,7 @@ class ExtModelApplication(ExtApplication):
             error_report()
             return self.response({"status": False, "message": str(e)}, status=self.INTERNAL_ERROR)
 
-    @api.post(url=r"^$", access="create")
+    @api.post(r"^$", access="create")
     def api_create(self, request):
         if self.site.is_json(request.META.get("CONTENT_TYPE")):
             attrs, m2m_attrs = self.split_mtm(self.deserialize(request.body))
@@ -668,7 +668,7 @@ class ExtModelApplication(ExtApplication):
                 rs = self.instance_to_dict(o)
             return self.response(rs, status=self.CREATED)
 
-    @api.get(url=r"^(?P<id>\d+)/?$", access="read")
+    @api.get(r"^(?P<id>\d+)/?$", access="read")
     def api_read(self, request, id):
         """
         Returns dict with object's fields and values
@@ -686,7 +686,7 @@ class ExtModelApplication(ExtApplication):
             error_report()
             return self.response({"status": False, "message": str(e)}, status=self.INTERNAL_ERROR)
 
-    @api.put(url=r"^(?P<id>\d+)/?$", access="update")
+    @api.put(r"^(?P<id>\d+)/?$", access="update")
     def api_update(self, request, id):
         if self.site.is_json(request.META.get("CONTENT_TYPE")):
             attrs, m2m_attrs = self.split_mtm(self.deserialize(request.body))
@@ -760,7 +760,7 @@ class ExtModelApplication(ExtApplication):
             r = self.instance_to_dict(o)
         return self.response(r, status=self.OK)
 
-    @api.delete(url=r"^(?P<id>\d+)/?$", access="delete")
+    @api.delete(r"^(?P<id>\d+)/?$", access="delete")
     def api_delete(self, request, id):
         try:
             o = self.queryset(request).get(**{self.pk: int(id)})
@@ -813,7 +813,7 @@ class ExtModelApplication(ExtApplication):
             x["is_builtin"] = u and u in builtins
         return data
 
-    @api.post(url=r"^actions/group_edit/$", access="update")
+    @api.post(r"^actions/group_edit/$", access="update")
     def api_action_group_edit(self, request):
         validator = DictParameter(
             attrs={"ids": ListOfParameter(element=ModelParameter(self.model), convert=True)}

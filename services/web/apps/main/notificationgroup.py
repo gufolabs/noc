@@ -49,7 +49,7 @@ class NotificationGroupApplication(ExtModelApplication):
     }
 
     @api.post(
-        url="^actions/test/$",
+        "^actions/test/$",
         access="update",
         validate={
             "ids": ListOfParameter(element=ModelParameter(NotificationGroup)),
@@ -63,7 +63,7 @@ class NotificationGroupApplication(ExtModelApplication):
         return "Notification message has been sent"
 
     @api.post(
-        url=r"^(?P<group_id>\d+)/change_user_subscription/$",
+        r"^(?P<group_id>\d+)/change_user_subscription/$",
         validate={
             "user_policy": StringParameter(choices=["D", "W", "F", "A"]),
             "time_pattern": ModelParameter(TimePattern, required=False),

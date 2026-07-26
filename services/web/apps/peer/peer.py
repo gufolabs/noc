@@ -100,7 +100,7 @@ class PeerApplication(ExtModelApplication):
         return f"{count} peers marked as {message}"
 
     @api.post(
-        url="^actions/planned/$",
+        "^actions/planned/$",
         access="update",
         validate={"ids": ListOfParameter(element=ModelParameter(Peer))},
     )
@@ -110,7 +110,7 @@ class PeerApplication(ExtModelApplication):
     api_action_planned.short_description = "Mark as planned"
 
     @api.post(
-        url="^actions/active/$",
+        "^actions/active/$",
         access="update",
         validate={"ids": ListOfParameter(element=ModelParameter(Peer))},
     )
@@ -120,7 +120,7 @@ class PeerApplication(ExtModelApplication):
     api_action_active.short_description = "Mark as active"
 
     @api.post(
-        url="^actions/shutdown/$",
+        "^actions/shutdown/$",
         access="update",
         validate={"ids": ListOfParameter(element=ModelParameter(Peer))},
     )

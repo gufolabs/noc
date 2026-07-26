@@ -51,7 +51,7 @@ class ChannelApplication(ExtDocApplication):
     query_fields = ["name__icontains"]
     require_feature = Feature.CHANNEL
 
-    @api.get(url="^(?P<id>[0-9a-f]{24})/viz/", access="read")
+    @api.get("^(?P<id>[0-9a-f]{24})/viz/", access="read")
     def api_viz(self, request: HttpRequest, id: str):
         channel = self.get_object_or_404(Channel, id=id)
         mapper = mapper_loader[channel.tech_domain.code](channel)

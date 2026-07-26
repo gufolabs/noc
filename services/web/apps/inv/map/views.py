@@ -247,7 +247,7 @@ class MapApplication(ExtApplication):
         }
 
     @api.get(
-        url=r"^info/(?P<inspector>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/(?P<r_id>([0-9a-f]{24}|\d+))/$",
+        r"^info/(?P<inspector>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/(?P<r_id>([0-9a-f]{24}|\d+))/$",
         access="read",
     )
     def inspector(self, request: HttpRequest, inspector, gen_id, r_id):
@@ -264,7 +264,7 @@ class MapApplication(ExtApplication):
         hi = getattr(self, f"inspector_{inspector}")
         return hi(request, gen_id, r_id)
 
-    @api.get(url=r"^info/segment/(?P<id>[0-9a-f]{24})/$", access="read")
+    @api.get(r"^info/segment/(?P<id>[0-9a-f]{24})/$", access="read")
     def api_info_segment(self, request: HttpRequest, id):
         segment = self.get_object_or_404(NetworkSegment, id=id)
         return {
@@ -273,7 +273,7 @@ class MapApplication(ExtApplication):
             "objects": segment.managed_objects.count(),
         }
 
-    @api.get(url=r"^lookup/$", access="lookup")
+    @api.get(r"^lookup/$", access="lookup")
     def api_lookup(self, request: HttpRequest):
         """
         Lookup available map by generator.
@@ -332,7 +332,7 @@ class MapApplication(ExtApplication):
                 )
             return r
 
-    @api.get(url=r"^(?P<gen_id>[0-9a-f]{24}|\d+)/get_path/$", access="lookup")
+    @api.get(r"^(?P<gen_id>[0-9a-f]{24}|\d+)/get_path/$", access="lookup")
     def api_lookup_maps_get_path(self, request: HttpRequest, gen_id):
         # Parse params
         q = {str(k): v[0] if len(v) == 1 else v for k, v in request.GET.lists()}
@@ -353,7 +353,7 @@ class MapApplication(ExtApplication):
         }
 
     @api.post(
-        url=r"^objects_statuses/$",
+        r"^objects_statuses/$",
         access="read",
         validate={
             "nodes": DictListParameter(
@@ -566,7 +566,7 @@ class MapApplication(ExtApplication):
         return None
 
     @api.post(
-        url=r"^metrics/$",
+        r"^metrics/$",
         access="read",
         validate={
             "metrics": DictListParameter(
@@ -639,7 +639,7 @@ class MapApplication(ExtApplication):
         return r
 
     @api.post(
-        url=r"^stp/status/$", access="read", validate={"objects": ListOfParameter(IntParameter())}
+        r"^stp/status/$", access="read", validate={"objects": ListOfParameter(IntParameter())}
     )
     def api_objects_stp_status(self, request: HttpRequest, objects):
         def get_stp_status(object_id: int) -> tuple[set[int], set[str]]:

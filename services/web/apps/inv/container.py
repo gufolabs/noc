@@ -55,7 +55,7 @@ class ObjectContainerApplication(ExtApplication):
     def instance_to_lookup(self, o, fields=None):
         return {"id": str(o.id), "label": (o.name), "has_children": o.has_children}
 
-    @api.get(url=r"^lookup/$", access="lookup")
+    @api.get(r"^lookup/$", access="lookup")
     def api_lookup(self, request: HttpRequest):
         return self.list_data(request, self.instance_to_lookup)
 

@@ -53,7 +53,7 @@ class UserApplication(ExtModelApplication):
     ignored_fields = {"id", "bi_id", "password"}
     custom_m2m_fields = {"permissions": Permission}
 
-    @api.post(url=r"^$", access="create")
+    @api.post(r"^$", access="create")
     def api_create(self, request: HttpRequest):
         response = super().api_create(request)
         if response.status_code == self.CREATED:
@@ -68,7 +68,7 @@ class UserApplication(ExtModelApplication):
             user.save()
         return response
 
-    @api.get(url=r"^(?P<id>\d+)/?$", access="read")
+    @api.get(r"^(?P<id>\d+)/?$", access="read")
     def api_read(self, request: HttpRequest, id):
         """
         Returns dict with object's fields and values
@@ -117,7 +117,7 @@ class UserApplication(ExtModelApplication):
         else:
             super().update_m2m(o, name, values)
 
-    @api.get(url=r"^new_permissions/$", access="read")
+    @api.get(r"^new_permissions/$", access="read")
     def api_read_permission(self, request: HttpRequest):
         """
         Returns dict available permissions
@@ -140,7 +140,7 @@ class UserApplication(ExtModelApplication):
         )
 
     @api.post(
-        url=r"^(\d+)/password/$",
+        r"^(\d+)/password/$",
         access="change",
         validate={"password": StringParameter(required=True)},
     )

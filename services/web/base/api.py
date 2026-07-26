@@ -89,8 +89,7 @@ class ViewAPI:
     using the common :func:`view` decorator.
 
     Example:
-        @api.get(
-            url="^brief_lookup/$",
+        @api.get("^brief_lookup/$",
             access="lookup",
         )
         def api_brief(self, request: HttpRequest):

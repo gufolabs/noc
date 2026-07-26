@@ -122,7 +122,7 @@ class ReportConfigApplication(ExtDocApplication):
             r.append(row)
         return r
 
-    @api.get(url=r"^(?P<report_id>\S+)/form/$", access="run")
+    @api.get(r"^(?P<report_id>\S+)/form/$", access="run")
     def api_form_report(self, request: HttpRequest, report_id):
         def update_choice_widget(result: dict, cond_param: str, target_name: str):
             for cfg in result["params"]:
@@ -274,7 +274,7 @@ class ReportConfigApplication(ExtDocApplication):
         # formats
         return r
 
-    @api.get(url=r"^(?P<report_id>\S+)/run/$", access="run")
+    @api.get(r"^(?P<report_id>\S+)/run/$", access="run")
     def api_report_run(self, request: HttpRequest, report_id: str):
         """
 

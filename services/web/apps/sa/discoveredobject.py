@@ -107,7 +107,7 @@ class DiscoveredObjectApplication(ExtDocApplication):
             q |= Q(address_bin__gte=int(prefix.first.d), address_bin__lte=int(prefix.last.d))
         return q
 
-    @api.post(url=r"actions/sync_records/$", access="action")
+    @api.post(r"actions/sync_records/$", access="action")
     def api_sync_action(self, request: HttpRequest):
         req = self.parse_request_query(request)
         if "template" in req["args"]:
@@ -130,14 +130,14 @@ class DiscoveredObjectApplication(ExtDocApplication):
             }
         return {"status": True}
 
-    @api.post(url=r"actions/send_event/$", access="action")
+    @api.post(r"actions/send_event/$", access="action")
     def api_send_event_action(self, request: HttpRequest):
         req = self.parse_request_query(request)
         for do in DiscoveredObject.objects.filter(id__in=req["ids"]):
             do.fire_event(req["args"]["event"])
         return {"status": True}
 
-    @api.get(url=r"^template_lookup/$", access="read")
+    @api.get(r"^template_lookup/$", access="read")
     def api_sync_template_lookup(self, request: HttpRequest):
         r = [
             {
@@ -158,7 +158,7 @@ class DiscoveredObjectApplication(ExtDocApplication):
             )
         return r
 
-    @api.get(url=r"^action_lookup/$", access="read")
+    @api.get(r"^action_lookup/$", access="read")
     def api_action_lookup(self, request: HttpRequest):
         r = {}
         wfs = Workflow.objects.filter(allowed_models__in=["sa.DiscoveredObject"])
@@ -174,7 +174,7 @@ class DiscoveredObjectApplication(ExtDocApplication):
         return list(r.values())
 
     @api.post(
-        url=r"^scan_run/$",
+        r"^scan_run/$",
         access="scan",
         validate={
             "addresses": StringListParameter(),

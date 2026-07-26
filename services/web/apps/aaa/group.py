@@ -34,7 +34,7 @@ class GroupsApplication(ExtModelApplication):
     default_ordering = ["name"]
     custom_m2m_fields = {"permissions": Permission}
 
-    @api.get(url=r"^(?P<id>\d+)/?$", access="read")
+    @api.get(r"^(?P<id>\d+)/?$", access="read")
     def api_read(self, request: HttpRequest, id):
         """
         Returns dict with object's fields and values
@@ -70,7 +70,7 @@ class GroupsApplication(ExtModelApplication):
         else:
             super().update_m2m(o, name, values)
 
-    @api.get(url=r"^new_permissions/$", access="read")
+    @api.get(r"^new_permissions/$", access="read")
     def api_read_permission(self, request: HttpRequest):
         """
         Returns dict available permissions

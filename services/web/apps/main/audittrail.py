@@ -110,6 +110,6 @@ class AuditTrailApplication(ExtApplication):
             status=self.OK,
         )
 
-    @api.get(url=r"^$", access="read")
+    @api.get(r"^$", access="read")
     def api_list(self, request: HttpRequest):
         return self.list_data(request, None)

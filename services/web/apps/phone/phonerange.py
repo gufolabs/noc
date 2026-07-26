@@ -66,7 +66,7 @@ class PhoneRangeApplication(ExtDocApplication):
         # Clean other
         return super().clean(data)
 
-    @api.get(url=r"^(?P<id>[0-9a-f]{24})/get_path/$", access="read")
+    @api.get(r"^(?P<id>[0-9a-f]{24})/get_path/$", access="read")
     def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(PhoneRange, id=id)
         path = [PhoneRange.get_by_id(r) for r in o.get_path()]

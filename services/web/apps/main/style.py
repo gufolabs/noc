@@ -27,6 +27,6 @@ class StyleApplication(ExtModelApplication):
 
     clean_fields = {"background_color": ColorParameter(), "font_color": ColorParameter()}
 
-    @api.get(url="^scheme/$", access=True)
+    @api.get("^scheme/$", access=True)
     def api_style(self, request: HttpRequest):
         return Style.get_scheme()

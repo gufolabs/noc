@@ -32,7 +32,7 @@ class ModelProtectionProfileApplication(ExtDocApplication):
     model = ModelProtectionProfile
     # glyph = "key"
 
-    @api.get(url=r"^(?P<model_id>\w+\.\w+)/fields/lookup/$", access="lookup")
+    @api.get(r"^(?P<model_id>\w+\.\w+)/fields/lookup/$", access="lookup")
     def api_model_fields_lookup(self, request: HttpRequest, model_id):
         try:
             model = get_model(model_id=model_id)

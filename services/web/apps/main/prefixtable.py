@@ -32,7 +32,7 @@ class PrefixTableApplication(ExtModelApplication):
     prefixes = ModelInline(PrefixTablePrefix)
 
     @api.post(
-        url="^actions/test/$",
+        "^actions/test/$",
         access="update",
         validate={"ids": ListOfParameter(element=ModelParameter(PrefixTable)), "ip": IPParameter()},
     )

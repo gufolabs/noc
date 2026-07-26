@@ -440,7 +440,7 @@ class AlarmApplication(ExtApplication):
     def api_list(self, request: HttpRequest):
         return self.list_data(request, self.instance_to_dict)
 
-    @api.get(url=r"^(?P<id>[a-z0-9]{24})/$", access="launch")
+    @api.get(r"^(?P<id>[a-z0-9]{24})/$", access="launch")
     def api_alarm(self, request: HttpRequest, id):
         alarm = get_alarm(id)
         if not alarm:
@@ -655,9 +655,7 @@ class AlarmApplication(ExtApplication):
                     processed.add(c["id"])
         return children
 
-    @api.post(
-        url=r"^(?P<id>[a-z0-9]{24})/post/", access="launch", validate={"msg": UnicodeParameter()}
-    )
+    @api.post(r"^(?P<id>[a-z0-9]{24})/post/", access="launch", validate={"msg": UnicodeParameter()})
     def api_post(self, request: HttpRequest, id, msg):
         alarm = get_alarm(id)
         if not alarm:
@@ -666,7 +664,7 @@ class AlarmApplication(ExtApplication):
         return True
 
     @api.post(
-        url=r"^comment/post/",
+        r"^comment/post/",
         access="launch",
         validate={
             "ids": StringListParameter(required=True),
@@ -683,7 +681,7 @@ class AlarmApplication(ExtApplication):
         return True
 
     @api.post(
-        url=r"^group/favorites/",
+        r"^group/favorites/",
         access="launch",
         validate={
             "ids": StringListParameter(required=True),
@@ -698,7 +696,7 @@ class AlarmApplication(ExtApplication):
         return {"status": True}
 
     @api.post(
-        url=r"^(?P<id>[a-z0-9]{24})/acknowledge/",
+        r"^(?P<id>[a-z0-9]{24})/acknowledge/",
         access="acknowledge",
         validate={
             "msg": UnicodeParameter(default=""),
@@ -716,7 +714,7 @@ class AlarmApplication(ExtApplication):
         return {"status": True}
 
     @api.post(
-        url=r"^(?P<id>[a-z0-9]{24})/unacknowledge/",
+        r"^(?P<id>[a-z0-9]{24})/unacknowledge/",
         access="acknowledge",
         validate={
             "msg": UnicodeParameter(default=""),
@@ -733,7 +731,7 @@ class AlarmApplication(ExtApplication):
         alarm.unacknowledge(request.user, msg=msg)
         return {"status": True}
 
-    @api.post(url=r"^(?P<id>[a-z0-9]{24})/subscribe/", access="launch")
+    @api.post(r"^(?P<id>[a-z0-9]{24})/subscribe/", access="launch")
     def api_subscribe(self, request: HttpRequest, id):
         alarm = get_alarm(id)
         if not alarm:
@@ -743,7 +741,7 @@ class AlarmApplication(ExtApplication):
             return self.get_alarm_subscribers(alarm)
         return []
 
-    @api.post(url=r"^(?P<id>[a-z0-9]{24})/unsubscribe/", access="launch")
+    @api.post(r"^(?P<id>[a-z0-9]{24})/unsubscribe/", access="launch")
     def api_unsubscribe(self, request: HttpRequest, id):
         alarm = get_alarm(id)
         if not alarm:
@@ -754,7 +752,7 @@ class AlarmApplication(ExtApplication):
         return []
 
     @api.post(
-        url=r"^(?P<id>[a-z0-9]{24})/clear/",
+        r"^(?P<id>[a-z0-9]{24})/clear/",
         access="clear",
         validate={
             "msg": UnicodeParameter(default=""),
@@ -770,7 +768,7 @@ class AlarmApplication(ExtApplication):
         return True
 
     @api.post(
-        url=r"^clear/",
+        r"^clear/",
         access="clear",
         validate={
             "msg": UnicodeParameter(default=""),
@@ -792,7 +790,7 @@ class AlarmApplication(ExtApplication):
         return {"status": False, "message": _("Failed to clear alarms")}
 
     @api.post(
-        url=r"^(?P<id>[a-z0-9]{24})/set_root/",
+        r"^(?P<id>[a-z0-9]{24})/set_root/",
         access="launch",
         validate={"root": StringParameter()},
     )
@@ -804,7 +802,7 @@ class AlarmApplication(ExtApplication):
         alarm.set_root(r)
         return True
 
-    @api.get(url=r"notification/$", access="launch")
+    @api.get(r"notification/$", access="launch")
     def api_notification(self, request: HttpRequest):
         delta = request.GET.get("delta")
         n = 0
@@ -875,7 +873,7 @@ class AlarmApplication(ExtApplication):
         return "".join(r)
 
     @api.post(
-        url=r"^escalate/", access="escalate", validate={"ids": StringListParameter(required=True)}
+        r"^escalate/", access="escalate", validate={"ids": StringListParameter(required=True)}
     )
     def api_escalation_alarm(self, request: HttpRequest, ids):
         alarms = list(ActiveAlarm.objects.filter(id__in=ids))
@@ -1039,7 +1037,7 @@ class AlarmApplication(ExtApplication):
             x["group_subject"] = subj_map[g]
         return data
 
-    @api.get(url=r"profile_lookup/$", access="launch")
+    @api.get(r"profile_lookup/$", access="launch")
     def api_profile_lookup(self, request: HttpRequest):
         r = []
         for model, short_type, field_id in (

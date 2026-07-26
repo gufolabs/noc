@@ -25,7 +25,7 @@ class SearchApplication(ExtApplication):
     menu = _("Search")
     glyph = "search noc-preview"
 
-    @api.post(url="^$", access="launch", validate={"query": UnicodeParameter()})
+    @api.post("^$", access="launch", validate={"query": UnicodeParameter()})
     def api_search(self, request: HttpRequest, query):
         r = []
         for qr in TextIndex.search(query):

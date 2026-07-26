@@ -27,7 +27,7 @@ class PrefixListBuilderApplication(ExtApplication):
     menu = _("Prefix List Builder")
 
     @api.get(
-        url=r"^$",
+        r"^$",
         access="read",
         validate={
             "peering_point": ModelParameter(PeeringPoint),

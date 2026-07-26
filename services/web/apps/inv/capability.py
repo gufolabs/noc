@@ -32,7 +32,7 @@ class CapabilityApplication(ExtDocApplication):
     parent_model = DocCategory
     parent_field = "parent"
 
-    @api.get(url="^tree$", access="read")
+    @api.get("^tree$", access="read")
     def get_tree(self, request: HttpRequest):
         """
         Return capabilities for tree build.

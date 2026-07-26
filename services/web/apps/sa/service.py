@@ -270,7 +270,7 @@ class ServiceApplication(ExtDocApplication):
         return r
 
     @api.put(
-        url=r"^(?P<sid>[0-9a-f]{24})/instance/(?P<iid>[0-9a-f]{24})/$",
+        r"^(?P<sid>[0-9a-f]{24})/instance/(?P<iid>[0-9a-f]{24})/$",
         access="update",
         validate={
             "name": UnicodeParameter(required=False),
@@ -298,7 +298,7 @@ class ServiceApplication(ExtDocApplication):
         return {"success": True, "data": self.instance_to_dict_si(si)}
 
     @api.post(
-        url=r"^(?P<sid>[0-9a-f]{24})/register_instance/(?P<i_type>\S+)/$",
+        r"^(?P<sid>[0-9a-f]{24})/register_instance/(?P<i_type>\S+)/$",
         access="register_instance",
         validate={
             "name": UnicodeParameter(required=False),
@@ -322,7 +322,7 @@ class ServiceApplication(ExtDocApplication):
         return {"success": True, "data": self.instance_to_dict_si(si)}
 
     @api.post(
-        url=r"^(?P<sid>[0-9a-f]{24})/unregister_instance/(?P<iid>[0-9a-f]{24})/$",
+        r"^(?P<sid>[0-9a-f]{24})/unregister_instance/(?P<iid>[0-9a-f]{24})/$",
         access="unregister_instance",
     )
     def api_unregister_instance(
@@ -338,7 +338,7 @@ class ServiceApplication(ExtDocApplication):
 
     # Resource Working
     @api.put(
-        url=r"^(?P<sid>[0-9a-f]{24})/instance/(?P<iid>[0-9a-f]{24})/bind/$",
+        r"^(?P<sid>[0-9a-f]{24})/instance/(?P<iid>[0-9a-f]{24})/bind/$",
         access="update",
         validate=DictParameter(
             attrs={
@@ -379,7 +379,7 @@ class ServiceApplication(ExtDocApplication):
         return {"success": True, "data": self.instance_to_dict_si(si)}
 
     @api.put(
-        url=r"^(?P<sid>[0-9a-f]{24})/instance/(?P<iid>[0-9a-f]{24})/unbind/(?P<r_type>\S+)/",
+        r"^(?P<sid>[0-9a-f]{24})/instance/(?P<iid>[0-9a-f]{24})/unbind/(?P<r_type>\S+)/",
         access="update",
     )
     def api_instance_unbind(

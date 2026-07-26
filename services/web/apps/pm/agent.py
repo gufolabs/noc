@@ -26,7 +26,7 @@ class AgentApplication(ExtDocApplication):
     menu = [_("Setup"), _("Agent")]
     model = Agent
 
-    @api.get(url="^(?P<id>[0-9a-f]{24})/config/$", access="config")
+    @api.get("^(?P<id>[0-9a-f]{24})/config/$", access="config")
     def api_config(self, request: HttpRequest, id):
         from noc.services.zeroconf.util import get_config
 

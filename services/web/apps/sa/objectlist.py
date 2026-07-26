@@ -170,16 +170,12 @@ class ObjectListApplication(ExtApplication):
         self.logger.info(f"Extra: {extra}")
         return extra, [] if "order_by" in extra else order
 
-<<<<<<< HEAD
     @view(method=["POST"], url="^$", access="read", api=True)
-=======
-    @view(method=["GET", "POST"], url="^$", access="read")
->>>>>>> 943534c252 (Refactor @view to @api.XXX)
     def api_list(self, request: HttpRequest):
         return self.list_data(request, self.instance_to_dict)
 
     @api.post(
-        url="^iplist/$",
+        "^iplist/$",
         access="launch",
         validate={
             "query": DictParameter(

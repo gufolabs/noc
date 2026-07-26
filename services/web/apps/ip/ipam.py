@@ -53,7 +53,7 @@ class IPAMApplication(ExtApplication):
             [a.address for a in prefix.address_set.all()] + extra, dist=dist, sep=sep
         )
 
-    @api.get(url=r"^(?P<prefix_id>\d+)/toggle_bookmark/$", access="launch")
+    @api.get(r"^(?P<prefix_id>\d+)/toggle_bookmark/$", access="launch")
     def view_toggle_bookmark(self, request: HttpRequest, prefix_id):
         """
         Toggle block bookmark status
@@ -63,7 +63,7 @@ class IPAMApplication(ExtApplication):
         return {"has_bookmark": prefix.has_bookmark(request.user)}
 
     @api.get(
-        url=r"get_vrf_prefix/(?P<vrf_id>\d+)/(?P<afi>[46])/(?:(?P<prefix>[0-9a-f.:/]+)/)?$",
+        r"get_vrf_prefix/(?P<vrf_id>\d+)/(?P<afi>[46])/(?:(?P<prefix>[0-9a-f.:/]+)/)?$",
         access="launch",
     )
     def get_vrf_prefix(self, request: HttpRequest, vrf_id, afi, prefix=None):
@@ -78,7 +78,7 @@ class IPAMApplication(ExtApplication):
         prefix = self.get_object_or_404(Prefix, vrf=vrf, afi=afi, prefix=prefix)
         return self.prefix_contents(request, prefix=prefix)
 
-    @api.get(url=r"^contents/(?P<prefix_id>\d+)/$", access="launch")
+    @api.get(r"^contents/(?P<prefix_id>\d+)/$", access="launch")
     def get_prefix_content(self, request: HttpRequest, prefix_id):
         prefix = self.get_object_or_404(Prefix, id=int(prefix_id))
         return self.prefix_contents(request, prefix=prefix)

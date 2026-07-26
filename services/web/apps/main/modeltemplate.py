@@ -50,12 +50,12 @@ class ModelTemplateApplication(ExtDocApplication):
                 p["default_expression"] = str(p["default_expression"])
         return super().clean(data)
 
-    @api.get(url=r"^directory/(?P<type>\w+)/fields/?$", access="read")
+    @api.get(r"^directory/(?P<type>\w+)/fields/?$", access="read")
     def api_get_template_fields(self, request: HttpRequest, type):
         r = ModelTemplate.get_templating_fields()
         return sorted([x.model_dump() for x in r], key=lambda x: x["id"].lower())
 
-    @api.get(url=r"^directory/(?P<type>\w+)/fields/(?P<field>[\w_]+)/?$", access="read")
+    @api.get(r"^directory/(?P<type>\w+)/fields/(?P<field>[\w_]+)/?$", access="read")
     def api_get_template_field(self, request: HttpRequest, type, field):
         r = [x for x in ModelTemplate.get_templating_fields() if x.id == field]
         if not r:

@@ -41,7 +41,7 @@ class RunCommandsApplication(ExtApplication):
             },
         }
 
-    @api.get(url=r"^form/snippet/(?P<snippet_id>\d+)/$", access="launch")
+    @api.get(r"^form/snippet/(?P<snippet_id>\d+)/$", access="launch")
     def api_form_snippet(self, request: HttpRequest, snippet_id):
         snippet = self.get_object_or_404(CommandSnippet, id=int(snippet_id))
         r = []
@@ -56,7 +56,7 @@ class RunCommandsApplication(ExtApplication):
             r += [cfg]
         return r
 
-    @api.get(url=r"^form/action/(?P<action_id>[0-9a-f]{24})/$", access="launch")
+    @api.get(r"^form/action/(?P<action_id>[0-9a-f]{24})/$", access="launch")
     def api_form_action(self, request: HttpRequest, action_id):
         action = self.get_object_or_404(Action, id=action_id)
         r = []
@@ -74,7 +74,7 @@ class RunCommandsApplication(ExtApplication):
         return r
 
     @api.post(
-        url=r"^render/snippet/(?P<snippet_id>\d+)/$",
+        r"^render/snippet/(?P<snippet_id>\d+)/$",
         validate={
             "objects": ListOfParameter(element=ModelParameter(ManagedObject)),
             "config": DictParameter(),
@@ -90,7 +90,7 @@ class RunCommandsApplication(ExtApplication):
         return r
 
     @api.post(
-        url=r"^render/action/(?P<action_id>[0-9a-f]{24})/$",
+        r"^render/action/(?P<action_id>[0-9a-f]{24})/$",
         validate={
             "objects": ListOfParameter(element=ModelParameter(ManagedObject)),
             "config": DictParameter(),
