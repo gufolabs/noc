@@ -13,7 +13,7 @@ from mongoengine.queryset import Q
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view, api
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.services.web.base.decorators.state import state_handler
 from noc.services.web.base.decorators.caps import capabilities_handler
 from noc.services.web.base.decorators.watch import watch_handler

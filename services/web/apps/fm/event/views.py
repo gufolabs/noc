@@ -13,7 +13,7 @@ import orjson
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view, api
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.fm.models.eventclass import EventClass
 from noc.sa.models.managedobject import ManagedObject
 from noc.sa.models.useraccess import UserAccess

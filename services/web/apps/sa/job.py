@@ -14,7 +14,7 @@ from typing import Iterable
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extdocapplication import ExtDocApplication, view
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
 from noc.sa.models.job import Job, JobStatus
 from noc.core.feature import Feature
 from noc.core.translation import ugettext as _
