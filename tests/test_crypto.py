@@ -22,8 +22,11 @@ def test_salt_length(raw, value):
 @pytest.mark.parametrize(
     ("raw", "value"),
     [
-        ({"password": "test", "salt": "1234"}, b"$1$1234$InX9CGnHSFgHD3OZHTyt3."),
-        ({"password": "test", "salt": "1234", "magic": "$5$"}, b"$5$1234$x29w4cwzSDnesjss/m2O1."),
+        ({"password": b"test", "salt": b"1234"}, b"$1$1234$InX9CGnHSFgHD3OZHTyt3."),
+        (
+            {"password": b"test", "salt": b"1234", "magic": b"$5$"},
+            b"$5$1234$x29w4cwzSDnesjss/m2O1.",
+        ),
     ],
 )
 def test_md5_crypt(raw, value):
