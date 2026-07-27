@@ -1,0 +1,8 @@
+{
+    "name": "Delta",
+    "uuid": "61ee27c6-64ea-40da-a141-7ddcc124f095",
+    "full_name": "Delta",
+    "code": ["DELTA"],
+    "site": null,
+    "$collection": "inv.vendors"
+}
