@@ -26,7 +26,6 @@ from django.http import (
 from django.shortcuts import render
 from django.db import connection
 from django.shortcuts import get_object_or_404
-from django.utils.html import escape
 from django.template import loader
 from django import forms
 from django.utils.timezone import get_current_timezone
@@ -359,12 +358,6 @@ class Application(metaclass=ApplicationBase):
             back_url = self.base_url
         return self.response_redirect(request.META.get("HTTP_REFERER", back_url))
 
-    def response_redirect_to_object(self, object):
-        """
-        Redirect to object: {{base.url}}/{{object.id}}/
-        """
-        return self.response_redirect("%s%d/" % (self.base_url, object.id))
-
     def response_forbidden(self, text=None):
         """
         Render Forbidden response
@@ -393,12 +386,6 @@ class Application(metaclass=ApplicationBase):
         if location:
             r["Location"] = location
         return r
-
-    def html_escape(self, s):
-        """
-        Escape HTML
-        """
-        return escape(s)
 
     def debug(self, message):
         self.logger.debug(message)
@@ -453,30 +440,6 @@ class Application(metaclass=ApplicationBase):
         for e in extra:
             p.add(HasPerm(e).get_permission(self))
         return p
-
-    def user_access_list(self, user):
-        """
-        Return a list of user access entries
-        """
-        return []
-
-    def group_access_list(self, group):
-        """
-        Return a list of group access entries
-        """
-        return []
-
-    def user_access_change_url(self, user):
-        """
-        Return an URL to change user access
-        """
-        return
-
-    def group_access_change_url(self, group):
-        """
-        Return an URL to change group access
-        """
-        return
 
     def customize_form(self, form, table, search=False):
         """

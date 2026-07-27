@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # ip.reporthistory
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -11,6 +11,7 @@ import re
 
 # Third-party modules
 from django import forms
+from django.utils.html import escape
 
 # NOC modules
 from noc.services.web.base.simplereport import SimpleReport, SectionRow, SafeString
@@ -53,10 +54,7 @@ class ReportHistoryApplication(SimpleReport):
 
     def format_detail(self, o):
         r = [m.groups() for m in self.rx_detail.finditer(o)]
-        s = "<br/>".join(
-            f"<b>{self.html_escape(g[0])}</b>: {self.html_escape(g[1])} &rArr; {self.html_escape(g[2])}"
-            for g in r
-        )
+        s = "<br/>".join(f"<b>{escape(g[0])}</b>: {escape(g[1])} &rArr; {escape(g[2])}" for g in r)
         return SafeString(s)
 
     def get_data(
