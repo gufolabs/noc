@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # BaseReportDatasource
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -22,7 +22,6 @@ from django.db.models import Q as d_Q
 
 # NOC modules
 from noc.aaa.models.user import User
-from noc.core.comp import smart_bytes
 from noc.sa.models.managedobject import ManagedObject
 from .report_objectstat import (
     AttributeIsolator,
@@ -445,7 +444,7 @@ class ReportDataSource:
         for row in self.extract():
             writer.writerow(row[f] for f in self.fields if not self.fields[f].hidden)
 
-        return smart_bytes(response.getvalue())
+        return response.getvalue().encode()
 
     def report_xlsx(self, fmt: Callable | None = None) -> bytes:
         import xlsxwriter

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # GridVCS
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -110,11 +110,11 @@ class GridVCS:
 
     @staticmethod
     def compress_z(data: bytes) -> bytes:
-        return zlib.compress(smart_bytes(data))
+        return zlib.compress(data)
 
     @staticmethod
     def decompress_z(data: bytes) -> bytes:
-        return zlib.decompress(smart_bytes(data))
+        return zlib.decompress(data)
 
     def put(self, object: int, data: str, ts: datetime.datetime | None = None) -> bool:
         """

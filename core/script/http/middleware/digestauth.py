@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # HTTP Digest Auth Middleware
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -78,7 +78,7 @@ class DigestAuthMiddeware(BaseMiddleware):
         s = nonce.encode("utf-8")
         # s += time.ctime().encode('utf-8')
         s += os.urandom(8)
-        cnonce = hashlib.sha1(smart_bytes(s)).hexdigest()[:16]
+        cnonce = hashlib.sha1(s).hexdigest()[:16]
 
         if not qop:
             respdig = hashlib.md5(smart_bytes(f"{HA1}:{nonce}:{HA2}")).hexdigest()
