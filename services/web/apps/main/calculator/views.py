@@ -20,7 +20,7 @@ from .calculators.loader import loader
 class CalculatorApplication(Application):
     title = _("Calculators")
 
-    @api.get(url=r"^$", url_name="index", menu="Calculators", access=HasPerm("view"))
+    @api.get(r"^$", url_name="index", menu="Calculators", access=HasPerm("view"))
     def api_index(self, request: HttpRequest):
         r = [(cn, loader[cn].title) for cn in loader]
         r = sorted(r, key=operator.itemgetter(1))
