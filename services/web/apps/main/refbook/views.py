@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.application import Application, view
+from noc.services.web.base.application import Application, view, api
 from noc.aaa.models.permission import Permission
 from noc.main.models.refbook import RefBook
 from noc.main.models.refbookdata import RefBookData
@@ -40,8 +40,8 @@ class RefBookList(ListView):
 class RefBookAppplication(Application):
     title = _("Reference Books")
 
-    @view(url=r"^$", url_name="index", menu=[_("Setup"), _("Reference Books")], access="view")
-    def view_index(self, request: HttpRequest):
+    @api.get(r"^$", url_name="index", menu=[_("Setup"), _("Reference Books")], access="view")
+    def api_index(self, request: HttpRequest):
         """
         Render list of refbooks
         :return:
@@ -49,8 +49,8 @@ class RefBookAppplication(Application):
         ref_books = RefBook.objects.filter(is_enabled=True).order_by("name")
         return self.render(request, "index.html", ref_books=ref_books)
 
-    @view(url=r"^(?P<refbook_id>\d+)/$", url_name="view", access="view")
-    def view_view(self, request: HttpRequest, refbook_id):
+    @api.get(r"^(?P<refbook_id>\d+)/$", url_name="view", access="view")
+    def api_view(self, request: HttpRequest, refbook_id):
         """
         Refbook preview
         :return:
@@ -81,8 +81,8 @@ class RefBookAppplication(Application):
         request._gv_ctx = {"rb": rb, "can_edit": can_edit, "query": query, "app": self}
         return RefBookList().get(request)
 
-    @view(url=r"^(?P<refbook_id>\d+)/(?P<record_id>\d+)/$", url_name="item", access="view")
-    def view_item(self, request: HttpRequest, refbook_id, record_id):
+    @api.get(r"^(?P<refbook_id>\d+)/(?P<record_id>\d+)/$", url_name="item", access="view")
+    def api_item(self, request: HttpRequest, refbook_id, record_id):
         """
         Item preview
         :return:

@@ -16,7 +16,7 @@ from django import forms
 from django.http import HttpResponse, HttpRequest
 
 # NOC Modules
-from noc.services.web.base.application import Application, HasPerm, view
+from noc.services.web.base.application import Application, HasPerm, api
 from noc.core.ip import IP, IPv4, IPv6
 from noc.core.validators import is_ipv4, is_ipv6
 from noc.ip.models.address import Address
@@ -35,12 +35,12 @@ from noc.core.translation import ugettext as _
 class ToolsAppplication(Application):
     title = _("Tools")
 
-    @view(
-        url=r"^(?P<vrf_id>\d+)/(?P<afi>[46])/(?P<prefix>\S+?/\d+)/$",
+    @api.get(
+        r"^(?P<vrf_id>\d+)/(?P<afi>[46])/(?P<prefix>\S+?/\d+)/$",
         url_name="index",
         access=HasPerm("view"),
     )
-    def view_index(self, request: HttpRequest, vrf_id, afi, prefix):
+    def api_index(self, request: HttpRequest, vrf_id, afi, prefix):
         """
         An index of tools available for block
         :return:
@@ -58,12 +58,12 @@ class ToolsAppplication(Application):
             upload_ips_axfr_form=self.AXFRForm(),
         )
 
-    @view(
-        url=r"^(?P<vrf_id>\d+)/(?P<afi>[46])/(?P<prefix>\S+)/download_ip/$",
+    @api.post(
+        r"^(?P<vrf_id>\d+)/(?P<afi>[46])/(?P<prefix>\S+)/download_ip/$",
         url_name="download_ip",
         access=HasPerm("view"),
     )
-    def view_download_ip(self, request: HttpRequest, vrf_id, afi, prefix):
+    def api_download_ip(self, request: HttpRequest, vrf_id, afi, prefix):
         """
         Download block's allocated IPs in CSV format
         Columns are: ip,fqdn,description,tt
@@ -99,12 +99,12 @@ class ToolsAppplication(Application):
         )
         zone = forms.CharField(label=_("Zone"), help_text=_("DNS Zone name to transfer"))
 
-    @view(
-        url=r"^(?P<vrf_id>\d+)/(?P<afi>[46])/(?P<prefix>\S+)/upload_axfr/$",
+    @api.post(
+        r"^(?P<vrf_id>\d+)/(?P<afi>[46])/(?P<prefix>\S+)/upload_axfr/$",
         url_name="upload_axfr",
         access=HasPerm("view"),
     )
-    def view_upload_axfr(self, request: HttpRequest, vrf_id, afi, prefix):
+    def api_upload_axfr(self, request: HttpRequest, vrf_id, afi, prefix):
         """
         Import via zone transfer
         :return:
