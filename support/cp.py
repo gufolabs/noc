@@ -14,7 +14,7 @@ from configparser import RawConfigParser
 import orjson
 
 # Python modules
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 from noc.core.version import version
 from noc.core.comp import smart_text
 

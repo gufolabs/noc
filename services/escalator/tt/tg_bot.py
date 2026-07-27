@@ -24,7 +24,7 @@ from noc.core.tt.types import (
     TTChange,
 )
 from noc.core.span import Span
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 
 
 class TGBotTTSystem(BaseTTSystem):

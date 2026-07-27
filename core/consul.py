@@ -13,7 +13,7 @@ from consul.exceptions import Timeout
 
 # NOC modules
 from noc.config import config
-from noc.core.http.async_client import HttpClient
+from noc.core.http.aio import HttpClient
 
 ConsulRepeatableCodes = {500, 503, 598, 599}
 ConsulRepeatableErrors = Timeout

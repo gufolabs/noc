@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from typing import Any, Iterator
 
 # NOC modules
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 from .errors import GeoCoderError
 
 

@@ -20,7 +20,7 @@ from noc.core.msgstream.message import Message
 from noc.core.mx import MX_TO, MX_WH_API_URL, MX_NOTIFICATION_METHOD
 from noc.core.perf import metrics
 from noc.config import config
-from noc.core.http.sync_client import HttpClient, ERR_TIMEOUT
+from noc.core.http.sync import HttpClient, ERR_TIMEOUT
 from noc.core.text import split_text
 
 TG_API = "https://api.telegram.org/bot"

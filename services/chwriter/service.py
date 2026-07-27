@@ -15,7 +15,7 @@ from typing import AsyncIterable
 
 # NOC modules
 from noc.core.service.fastapi import FastAPIService
-from noc.core.http.async_client import HttpClient, DEFLATE, GZIP
+from noc.core.http.aio import HttpClient, DEFLATE, GZIP
 from noc.config import config
 from noc.core.perf import metrics
 from noc.services.chwriter.channel import Channel

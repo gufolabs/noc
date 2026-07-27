@@ -15,7 +15,7 @@ from urllib.parse import urlparse
 import orjson
 
 # NOC modules
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 from noc.core.etl.extractor.base import BaseExtractor, RemovedItem
 from noc.core.etl.models.base import BaseModel
 from noc.core.etl.remotesystem.base import BaseRemoteSystem
