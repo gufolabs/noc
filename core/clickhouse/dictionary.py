@@ -1,11 +1,12 @@
 # ----------------------------------------------------------------------
 # ClickHouse Dictionaries
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
+from typing import Any, cast
 import importlib
 import os
 import operator
@@ -17,8 +18,13 @@ __all__ = ["Dictionary"]
 
 
 class DictionaryBase(type):
-    def __new__(mcs, name, bases, attrs):
-        cls = type.__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[DictionaryBase]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["Dictionary"]:
+        cls = cast(type["Dictionary"], type.__new__(mcs, name, bases, attrs))
         cls._fields = {}
         cls._tsv_encoders = {}
         cls._meta = DictionaryMeta(

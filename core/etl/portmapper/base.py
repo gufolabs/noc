@@ -1,9 +1,10 @@
 # ----------------------------------------------------------------------
 # NRI Port mapper
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+from typing import Any, cast
 
 
 class PortMapperBase(type):
@@ -11,8 +12,13 @@ class PortMapperBase(type):
     Process @match decorators
     """
 
-    def __new__(mcs, name, bases, attrs):
-        n = type.__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[PortMapperBase]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["BasePortMapper"]:
+        n = cast(type["BasePortMapper"], type.__new__(mcs, name, bases, attrs))
         for m in dir(n):
             mm = getattr(n, m)
             if hasattr(mm, "_match"):

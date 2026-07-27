@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # BaseNormalizer
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -11,6 +11,7 @@ from collections import defaultdict
 from functools import partial
 
 # NOC modules
+from typing import Any, cast
 from noc.core.ip import IP, IPv4, IPv6
 from noc.core.validators import ValidationError
 from ..syntax.patterns import ANY, REST, BOOL, Token, BasePattern
@@ -117,8 +118,13 @@ class RootNode(Node):
 
 
 class BaseNormalizerMetaclass(type):
-    def __new__(mcs, name, bases, attrs):
-        n = type.__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[BaseNormalizerMetaclass]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["BaseNormalizer"]:
+        n = cast(type["BaseNormalizer"], type.__new__(mcs, name, bases, attrs))
         # Initialize matching tree
         n.mtree = RootNode()
         for base in bases:

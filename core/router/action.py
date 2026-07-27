@@ -1,14 +1,14 @@
 # ----------------------------------------------------------------------
 # Action
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import datetime
 import logging
-from typing import Iterator, Literal, Any, ClassVar
+from typing import Iterator, Literal, Any, ClassVar, cast
 from dataclasses import dataclass
 
 # Third-party modules
@@ -57,9 +57,11 @@ class ActionCfg:
 
 
 class ActionBase(type):
-    def __new__(mcs, name, bases, attrs):
+    def __new__(
+        mcs: "type[ActionBase]", name: str, bases: tuple[type[Any], ...], attrs: dict[str, Any]
+    ) -> type["Action"]:
         global ACTION_TYPES
-        cls = type.__new__(mcs, name, bases, attrs)
+        cls = cast(type["Action"], type.__new__(mcs, name, bases, attrs))
         name = getattr(cls, "name", None)
         if name:
             ACTION_TYPES[name] = cls

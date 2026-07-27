@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # SA Profile Base
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -12,7 +12,7 @@ import warnings
 from itertools import product
 
 # Third-party modules
-from typing import Callable
+from typing import Any, cast, Callable
 
 # NOC modules
 from noc.core.ip import IPv4
@@ -40,8 +40,13 @@ class BaseProfileMetaclass(type):
         "command_super",
     )
 
-    def __new__(mcs, name, bases, attrs):
-        n = type.__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[BaseProfileMetaclass]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["BaseProfile"]:
+        n = cast(type["BaseProfile"], type.__new__(mcs, name, bases, attrs))
         n.rogue_char_cleaners = n._get_rogue_chars_cleaners()
         if n.command_more:
             warnings.warn(

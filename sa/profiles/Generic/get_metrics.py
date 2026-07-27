@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Generic.get_metrics
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ import os
 import re
 import itertools
 import operator
-from typing import Callable, Any
+from typing import Callable, Any, cast
 from collections import defaultdict
 from dataclasses import dataclass
 
@@ -156,8 +156,13 @@ class MetricScriptBase(BaseScriptMetaclass):
     get_metrics metaclass. Performs @metrics decorator processing
     """
 
-    def __new__(mcs, name, bases, attrs):
-        m = super().__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[MetricScriptBase]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["Script"]:  # type: ignore[return-value]
+        m = cast(type["Script"], super().__new__(mcs, name, bases, attrs))
         # Inject metric_type -> [handler] mappings
         m._mt_map = defaultdict(list)
         # Get @metrics handlers

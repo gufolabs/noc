@@ -1,13 +1,13 @@
 # ----------------------------------------------------------------------
 # Horizon utilities
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 from dataclasses import dataclass
-from typing import Iterable
+from typing import Any, cast, Iterable
 from uuid import UUID
 
 # NOC modules
@@ -149,7 +149,12 @@ class HorizonMixin:
 
 
 class ChannelMetaclass(type):
-    def __new__(mcs, name, bases, attrs):
+    def __new__(
+        mcs: "type[ChannelMetaclass]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["ChannelMixin"]:
         attrs["_SETUP_HANDLERS"] = {}
         attrs["_CLEANUP_HANDLERS"] = {}
         for v in attrs.values():
@@ -163,7 +168,7 @@ class ChannelMetaclass(type):
                 for uuid in v._CLEANUP_HANDLERS:
                     attrs["_CLEANUP_HANDLERS"][uuid] = v
                 delattr(v, "_CLEANUP_HANDLERS")
-        return type.__new__(mcs, name, bases, attrs)
+        return cast(type["ChannelMixin"], type.__new__(mcs, name, bases, attrs))
 
 
 class ChannelMixin(HorizonMixin, metaclass=ChannelMetaclass):

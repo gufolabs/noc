@@ -9,7 +9,7 @@
 import inspect
 import re
 import os
-from typing import Iterable, Any
+from typing import Iterable, Any, cast
 import warnings
 
 # NOC modules
@@ -25,7 +25,12 @@ class ConfigurationError(Exception):
 class ConfigSectionBase(type):
     """Metaclass for collecting configuration section parameters."""
 
-    def __new__(mcs, name, bases, attrs):
+    def __new__(
+        mcs: "type[ConfigSectionBase]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["ConfigSection"]:
         """Create configuration section class and collect parameters.
 
         Args:
@@ -36,7 +41,7 @@ class ConfigSectionBase(type):
         Returns:
             Created configuration section class.
         """
-        cls = type.__new__(mcs, name, bases, attrs)
+        cls = cast(type["ConfigSection"], type.__new__(mcs, name, bases, attrs))
         cls._params = {}
         for k in attrs:
             if isinstance(attrs[k], BaseParameter):
@@ -153,7 +158,12 @@ class DeprecatedValue(BaseRewrite):
 class ConfigBase(type):
     """Metaclass for collecting configuration parameters."""
 
-    def __new__(mcs, name, bases, attrs):
+    def __new__(
+        mcs: "type[ConfigBase]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["BaseConfig"]:
         """Create configuration class and collect parameters.
 
         Args:
@@ -164,7 +174,7 @@ class ConfigBase(type):
         Returns:
             Created configuration class.
         """
-        cls = type.__new__(mcs, name, bases, attrs)
+        cls = cast(type["BaseConfig"], type.__new__(mcs, name, bases, attrs))
         cls._params = {}
         for k in attrs:
             if isinstance(attrs[k], BaseParameter):

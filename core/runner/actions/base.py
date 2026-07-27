@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # Action Base Class
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import TypeVar, Callable, Any
+from typing import TypeVar, Callable, Any, cast
 import enum
 from logging import Logger
 from inspect import signature
@@ -31,8 +31,13 @@ class ActionError(NOCError):
 
 
 class ActionMetaclass(type):
-    def __new__(mcs, name, bases, attrs):
-        m = type.__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[ActionMetaclass]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["BaseAction"]:
+        m = cast(type["BaseAction"], type.__new__(mcs, name, bases, attrs))
         # Get inputs
         m.inputs = {}
         m.clean = {}
