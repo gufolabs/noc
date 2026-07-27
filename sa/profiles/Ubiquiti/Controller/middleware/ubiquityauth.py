@@ -11,7 +11,7 @@ import orjson
 # NOC modules
 from noc.core.script.http.middleware.base import BaseMiddleware
 from noc.core.script.http.base import HTTPError
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 
 
 class UbiquitiAuthMiddeware(BaseMiddleware):

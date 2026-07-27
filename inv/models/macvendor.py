@@ -19,7 +19,7 @@ from mongoengine.document import Document
 from mongoengine.fields import StringField
 
 # NOC Modules
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 from noc.config import config
 
 logger = logging.getLogger(__name__)

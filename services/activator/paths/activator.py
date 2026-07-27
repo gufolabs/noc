@@ -18,7 +18,7 @@ from noc.core.script.loader import loader
 from noc.core.script.base import BaseScript
 from noc.core.ioloop.snmp import snmp_get, SNMPError
 from noc.core.snmp.version import SNMP_v1, SNMP_v2c
-from noc.core.http.async_client import HttpClient
+from noc.core.http.aio import HttpClient
 from noc.core.comp import smart_text
 from noc.core.perf import metrics
 from noc.core.debug import error_report

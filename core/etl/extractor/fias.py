@@ -22,7 +22,7 @@ from ..models.address import Address
 from ..models.building import Building
 from ..models.admdiv import AdmDiv
 from noc.core.etl.remotesystem.base import BaseRemoteSystem
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 
 logger = logging.getLogger(__name__)
 

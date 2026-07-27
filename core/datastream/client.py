@@ -13,7 +13,7 @@ import logging
 import orjson
 
 # NOC modules
-from noc.core.http.async_client import HttpClient, ERR_TIMEOUT, ERR_READ_TIMEOUT
+from noc.core.http.aio import HttpClient, ERR_TIMEOUT, ERR_READ_TIMEOUT
 from noc.core.error import NOCError, ERR_DS_BAD_CODE, ERR_DS_PARSE_ERROR
 from noc.core.dcs.error import ResolutionError
 from noc.core.timeout import retry_timeout

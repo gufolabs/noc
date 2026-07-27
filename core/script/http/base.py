@@ -13,7 +13,7 @@ import orjson
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 from noc.core.error import NOCError, ERR_HTTP_UNKNOWN
 from noc.core.handler import get_handler
 from .middleware.base import BaseMiddleware

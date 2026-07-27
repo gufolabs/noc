@@ -13,7 +13,7 @@ from urllib.request import parse_http_list, parse_keqv_list
 
 # NOC modules
 from .base import BaseMiddleware
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 from noc.core.comp import smart_bytes
 
 

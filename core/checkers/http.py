@@ -11,7 +11,7 @@ from typing import AsyncIterable
 
 # NOC modules
 from .base import BaseChecker, CheckResult, Check, CheckError
-from noc.core.http.async_client import HttpClient
+from noc.core.http.aio import HttpClient
 
 HTTP_CHECK = "HTTP"
 HTTPS_CHECK = "HTTPS"

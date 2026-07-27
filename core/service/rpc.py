@@ -18,7 +18,7 @@ import orjson
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter
-from noc.core.http.async_client import HttpClient
+from noc.core.http.aio import HttpClient
 from noc.core.perf import metrics
 from noc.config import config
 from noc.core.span import Span, get_current_span

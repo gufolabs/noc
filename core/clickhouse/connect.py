@@ -11,7 +11,7 @@ from typing import overload, Literal, Any
 from urllib.parse import quote as urllib_quote
 
 # NOC modules
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 from noc.config import config
 from .error import ClickhouseError
 
