@@ -21,7 +21,7 @@ from ssh2.error_codes import LIBSSH2_ERROR_EAGAIN
 # NOC modules
 from noc.config import config
 from noc.core.perf import metrics
-from noc.core.comp import smart_bytes, smart_text
+from noc.core.comp import smart_bytes
 from .cli import CLI
 from .base import BaseStream
 from .error import CLIAuthFailed, CLISSHProtocolError
