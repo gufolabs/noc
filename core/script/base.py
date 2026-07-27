@@ -1,11 +1,12 @@
 # ----------------------------------------------------------------------
 # SA Script base
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
+from typing import Any, cast
 import re
 import logging
 import itertools
@@ -13,7 +14,6 @@ import operator
 from functools import reduce
 from collections import defaultdict
 from time import perf_counter
-from typing import Any
 
 # Third-party modules
 from atomicl import AtomicLong
@@ -49,8 +49,13 @@ from .sessionstore import SessionStore
 class BaseScriptMetaclass(type):
     """Process @match decorators"""
 
-    def __new__(mcs, name, bases, attrs):
-        n = type.__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[BaseScriptMetaclass]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["BaseScript"]:
+        n = cast(type["BaseScript"], type.__new__(mcs, name, bases, attrs))
         n._execute_chain = sorted(
             (v for v in attrs.values() if hasattr(v, "_seq")), key=operator.attrgetter("_seq")
         )

@@ -1,11 +1,12 @@
 # ----------------------------------------------------------------------
 # Clickhouse models
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
+from typing import Any, cast
 import operator
 import string
 from random import choices
@@ -26,9 +27,14 @@ OLD_PM_SCHEMA_TABLE = "noc_old"
 
 
 class ModelBase(type):
-    def __new__(mcs, name, bases, attrs):
+    def __new__(
+        mcs: "type[ModelBase]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["Model"]:
         # Initialize class
-        cls = type.__new__(mcs, name, bases, attrs)
+        cls = cast(type["Model"], type.__new__(mcs, name, bases, attrs))
         # Append _meta
         cls._meta = ModelMeta(
             engine=getattr(cls.Meta, "engine", None),
@@ -515,11 +521,16 @@ class NestedModel(Model):
 
 
 class DictionaryBase(ModelBase):
-    def __new__(mcs, name, bases, attrs):
+    def __new__(
+        mcs: "type[DictionaryBase]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["DictionaryModel"]:
         from .fields import DateTimeField, UInt64Field
 
         # Initialize class
-        cls = type.__new__(mcs, name, bases, attrs)
+        cls = cast(type["DictionaryModel"], type.__new__(mcs, name, bases, attrs))
         # Append _meta
         cls._meta = DictionaryMeta(
             name=getattr(cls.Meta, "name"),

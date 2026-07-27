@@ -1,12 +1,12 @@
 # ----------------------------------------------------------------------
 # Interface base class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any
+from typing import Any, cast
 
 # NOC modules
 from .error import InterfaceTypeError
@@ -17,8 +17,13 @@ RESERVED_NAMES = {"returns", "template", "form", "preview", "check"}
 
 
 class BaseInterfaceMetaclass(type):
-    def __new__(mcs, name, bases, attrs):
-        n = type.__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[BaseInterfaceMetaclass]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["BaseInterface"]:
+        n = cast(type["BaseInterface"], type.__new__(mcs, name, bases, attrs))
         n._INPUT_PARAMS = []  # Populated by metaclass
         n._INPUT_MAP = {}  # name -> parameter, Populated by metaclass
         n._INPUT_DEFAULTS = {}  # name -> default, populated by metaclass

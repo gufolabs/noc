@@ -12,7 +12,7 @@ import os
 import datetime
 import functools
 from collections import OrderedDict
-from typing import TypeVar, Any
+from typing import TypeVar, Any, cast
 from http import HTTPStatus
 
 # Third-party modules
@@ -81,8 +81,10 @@ class ApplicationBase(type):
     Application metaclass. Registers application class to site
     """
 
-    def __new__(mcs: "type[Application]", name: str, bases, attrs):
-        m = type.__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[Application]", name: str, bases: tuple[type[Any], ...], attrs: dict[str, Any]
+    ) -> type["Application"]:
+        m = cast(type["Application"], type.__new__(mcs, name, bases, attrs))
         for name in attrs:
             m.add_to_class(name, attrs[name])
         if "apps" in m.__module__:

@@ -1,12 +1,12 @@
 # ----------------------------------------------------------------------
 # BaseNode
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Optional, Iterable
+from typing import Any, Optional, Iterable, cast
 from enum import Enum
 import inspect
 from dataclasses import dataclass
@@ -75,8 +75,13 @@ class ConfigProxy:
 
 
 class BaseCDAGNodeMetaclass(type):
-    def __new__(mcs, name, bases, attrs):
-        n = type.__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[BaseCDAGNodeMetaclass]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["BaseCDAGNode"]:
+        n = cast(type["BaseCDAGNode"], type.__new__(mcs, name, bases, attrs))
         sig = inspect.signature(n.get_value)
         n.allow_dynamic = "kwargs" in sig.parameters
         n.static_inputs = {sys.intern(x) for x in sig.parameters if x not in ("self", "kwargs")}
