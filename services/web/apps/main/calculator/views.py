@@ -12,7 +12,7 @@ import operator
 from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.application import Application, HasPerm, view
+from noc.services.web.base.application import Application, HasPerm, view, api
 from noc.core.translation import ugettext as _
 from .calculators.loader import loader
 
@@ -20,8 +20,8 @@ from .calculators.loader import loader
 class CalculatorApplication(Application):
     title = _("Calculators")
 
-    @view(url=r"^$", url_name="index", menu="Calculators", access=HasPerm("view"))
-    def view_index(self, request: HttpRequest):
+    @api.get(r"^$", url_name="index", menu="Calculators", access=HasPerm("view"))
+    def api_index(self, request: HttpRequest):
         r = [(cn, loader[cn].title) for cn in loader]
         r = sorted(r, key=operator.itemgetter(1))
         return self.render(request, "index.html", {"calculators": r})

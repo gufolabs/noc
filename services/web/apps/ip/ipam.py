@@ -23,7 +23,7 @@ from noc.ip.models.vrf import VRF
 from noc.main.models.customfield import CustomField
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view, api
+from noc.services.web.base.extapplication import ExtApplication, api
 
 
 class IPAMApplication(ExtApplication):
@@ -83,8 +83,8 @@ class IPAMApplication(ExtApplication):
         prefix = self.get_object_or_404(Prefix, id=int(prefix_id))
         return self.prefix_contents(request, prefix=prefix)
 
-    @view(url=r"^(?P<vrf_id>\d+)/(?P<afi>[46])/quickjump/$", url_name="quickjump", access="view")
-    def view_quickjump(self, request: HttpRequest, vrf_id, afi):
+    @api.post(r"^(?P<vrf_id>\d+)/(?P<afi>[46])/quickjump/$", access="view")
+    def api_quickjump(self, request: HttpRequest, vrf_id, afi):
         """
         Quickjump to closest suitable block
         """
