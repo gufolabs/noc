@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # HTTP Client
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -183,7 +183,7 @@ async def fetch(
         body = body or ""
         content_type = "application/binary"
         if not isinstance(body, (str, bytes)):
-            body = smart_text(orjson.dumps(body))
+            body = orjson.dumps(body).decode()
             content_type = "application/json"
         body = smart_bytes(body)  # Here and below body is binary
         h = {"Host": str(u.netloc), "Connection": "close", "User-Agent": DEFAULT_USER_AGENT}

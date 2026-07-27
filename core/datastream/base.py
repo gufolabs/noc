@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # DataStream
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -487,7 +487,7 @@ class DataStream:
                 data = {cls.F_CHANGEID: str(doc[cls.F_CHANGEID])}
                 h = {"delete": cls.get_deleted_object, "move": cls.get_moved_object}[filter_policy]
                 data.update(h(doc[cls.F_ID]))
-                data = smart_text(orjson.dumps(data))
+                data = orjson.dumps(data).decode()
             yield doc[cls.F_ID], doc[cls.F_CHANGEID], data
 
     @classmethod
@@ -542,7 +542,7 @@ class DataStream:
                 data = {cls.F_CHANGEID: str(doc[cls.F_CHANGEID])}
                 h = {"delete": cls.get_deleted_object, "move": cls.get_moved_object}[filter_policy]
                 data.update(h(doc[cls.F_ID]))
-                data = smart_text(orjson.dumps(data))
+                data = orjson.dumps(data).decode()
             yield doc[cls.F_ID], doc[cls.F_CHANGEID], data
 
     @classmethod

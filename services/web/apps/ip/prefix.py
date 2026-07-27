@@ -20,7 +20,6 @@ from noc.core.translation import ugettext as _
 from noc.sa.interfaces.base import ModelParameter, PrefixParameter
 from noc.core.ip import IP
 from noc.services.web.base.decorators.state import state_handler
-from noc.core.comp import smart_text
 
 
 @state_handler
@@ -112,8 +111,6 @@ class PrefixApplication(ExtModelApplication):
         o = self.get_object_or_404(Prefix, id=int(id))
         try:
             path = [Prefix.objects.get(id=ns) for ns in o.get_path()]
-            return {
-                "data": [{"id": str(p.id), "name": smart_text(p.name), "afi": p.afi} for p in path]
-            }
+            return {"data": [{"id": str(p.id), "name": p.name, "afi": p.afi} for p in path]}
         except ValueError as e:
             return self.response_bad_request(str(e))

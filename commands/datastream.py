@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # noc datastream command
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -23,7 +23,6 @@ from noc.core.datastream.loader import loader
 from noc.core.mongo.connection import connect
 from noc.models import get_model, get_model_id
 from noc.models import is_document
-from noc.core.comp import smart_text
 
 BATCH_SIZE = 20000
 
@@ -211,7 +210,7 @@ class Command(BaseCommand):
             gt = change_id.generation_time.strftime("%Y-%m-%d %H:%M:%S")
             self.print(f"===[id: {obj_id}, change id: {change_id}, time: {gt}]================")
             d = orjson.loads(data)
-            self.print(smart_text(orjson.dumps(d, option=orjson.OPT_INDENT_2)))
+            self.print(orjson.dumps(d, option=orjson.OPT_INDENT_2).decode())
 
     def handle_clean(self, datastream, *args, **options):
         if datastream not in self.MODELS:
