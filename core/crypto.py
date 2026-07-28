@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Crypto-related snippets
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -9,10 +9,6 @@
 import random
 import hashlib
 
-# Third-party modules
-
-# NOC modules
-from noc.core.comp import smart_bytes
 
 # Symbols used in salt
 ITOA64 = b"./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
@@ -20,7 +16,7 @@ SALT_SYMBOLS = list(ITOA64)
 REARRANGED_BITS = ((0, 6, 12), (1, 7, 13), (2, 8, 14), (3, 9, 15), (4, 10, 5))
 
 
-def gen_salt(salt_len):
+def gen_salt(salt_len: int) -> bytes:
     """
     Generate random salt of given length
     >>> len(gen_salt(10)) == 10
@@ -33,20 +29,18 @@ def md5crypt(password: bytes, salt: bytes | None = None, magic: bytes = b"$1$") 
     """
     MD5 password hash
     (Used for RIPE authentication)
-    >>> md5crypt("test", salt="1234")
-    '$1$1234$InX9CGnHSFgHD3OZHTyt3.'
-    >>> md5crypt("test", salt="1234")
-    '$1$1234$InX9CGnHSFgHD3OZHTyt3.'
-    >>> md5crypt("test", salt="1234", magic="$5$")
-    '$5$1234$x29w4cwzSDnesjss/m2O1.'
+    >>> md5crypt(b"test", salt=b"1234")
+    b'$1$1234$InX9CGnHSFgHD3OZHTyt3.'
+    >>> md5crypt(b"test", salt=b"1234")
+    b'$1$1234$InX9CGnHSFgHD3OZHTyt3.'
+    >>> md5crypt(b"test", salt=b"1234", magic=b"$5$")
+    b'$5$1234$x29w4cwzSDnesjss/m2O1.'
     """
-    password = smart_bytes(password)
-    magic = smart_bytes(magic)
-    salt = smart_bytes(salt) if salt else gen_salt(8)
+    salt = salt if salt else gen_salt(8)
     # /* The password first, since that is what is most unknown */ /* Then our magic string */ /* Then the raw salt */
-    m = hashlib.md5(smart_bytes(password + magic + salt))
+    m = hashlib.md5(password + magic + salt)
     # /* Then just as many characters of the MD5(pw,salt,pw) */
-    mixin = hashlib.md5(smart_bytes(password + salt + password)).digest()
+    mixin = hashlib.md5(password + salt + password).digest()
     for i in range(len(password)):
         m.update(bytes([mixin[i % 16]]))
     # /* Then something really weird... */
@@ -63,17 +57,17 @@ def md5crypt(password: bytes, salt: bytes | None = None, magic: bytes = b"$1$") 
     for i in range(1000):
         m2 = hashlib.md5()
         if i & 1:
-            m2.update(smart_bytes(password))
+            m2.update(password)
         else:
-            m2.update(smart_bytes(final))
+            m2.update(final)
         if i % 3:
-            m2.update(smart_bytes(salt))
+            m2.update(salt)
         if i % 7:
-            m2.update(smart_bytes(password))
+            m2.update(password)
         if i & 1:
-            m2.update(smart_bytes(final))
+            m2.update(final)
         else:
-            m2.update(smart_bytes(password))
+            m2.update(password)
         final = m2.digest()
     # This is the bit that uses to64() in the original code.
     rearranged = []

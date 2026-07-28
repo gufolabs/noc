@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # SSH CLI
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ from ssh2.error_codes import LIBSSH2_ERROR_EAGAIN
 # NOC modules
 from noc.config import config
 from noc.core.perf import metrics
-from noc.core.comp import smart_bytes, smart_text
+from noc.core.comp import smart_bytes
 from .cli import CLI
 from .base import BaseStream
 from .error import CLIAuthFailed, CLISSHProtocolError
@@ -77,7 +77,7 @@ class SSHStream(BaseStream):
         try:
             self.session.handshake(self.socket)
             host_hash = smart_bytes(self.session.hostkey_hash(LIBSSH2_HOSTKEY_HASH_SHA1))
-            hex_hash = smart_text(codecs.encode(host_hash, "hex"))
+            hex_hash = codecs.encode(host_hash, "hex").decode()
             self.logger.debug("Connected. Host fingerprint is %s", hex_hash)
             # libssh2's userauth_list implementation tries to authenticate
             # using `none` method internally. So calling `userauth_list`

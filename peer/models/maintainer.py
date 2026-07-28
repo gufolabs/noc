@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Peer module models
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -44,7 +44,7 @@ class Maintainer(NOCModel):
         s += [f"mntner: {self.maintainer}"]
         s += [f"descr: {self.description}"]
         if self.password:
-            s += [f"auth: MD5-PW {md5crypt(self.password)}"]
+            s += [f"auth: MD5-PW {md5crypt(self.password.encode())}"]
         s += [f"admins: {x.nic_hdl}" for x in self.admins.all()]
         s += [f"mnt-by: {self.maintainer}"]
         if self.extra:
