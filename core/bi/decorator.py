@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # BI decorators
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -15,7 +15,6 @@ import bson
 # NOC modules
 from noc.config import config
 from noc.models import is_document
-from noc.core.comp import smart_bytes
 from noc.core.typing import SupportsStr
 
 _ZEROx16 = b"\x00" * 16
