@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # BI decorators
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ import bson
 # NOC modules
 from noc.config import config
 from noc.models import is_document
-from noc.core.comp import smart_bytes
+from noc.core.typing import SupportsStr
 
 _ZEROx16 = b"\x00" * 16
 
@@ -33,23 +33,39 @@ def _get_siphash_seed():
 
 SIPHASH_SEED = _get_siphash_seed()
 BI_ID_FIELD = "bi_id"
+BI_HASH_MASK = 0x7FFFFFFFFFFFFFFF
 
 
-def bi_hash(v):
+def bi_hash(v: str | SupportsStr) -> int:
     """
-    Calculate BI hash from given value
-    :return:
+    Calculate a stable BI hash value for the given object.
+
+    The object is converted to its string representation and mapped to a
+    fixed-size integer hash value. Objects with the same string
+    representation produce the same hash value.
+
+    Args:
+        v: Object to hash. Must be a string or provide a string representation
+            via `__str__`.
+
+    Returns:
+        Stable integer hash value limited to the BI hash range.
     """
     if not isinstance(v, str):
         v = str(v)
-    bh = siphash24(smart_bytes(v), key=SIPHASH_SEED).digest()
-    return int(struct.unpack("!Q", bh)[0] & 0x7FFFFFFFFFFFFFFF)
+    bh = siphash24(v.encode(), key=SIPHASH_SEED).digest()
+    return int(struct.unpack("!Q", bh)[0] & BI_HASH_MASK)
 
 
-def new_bi_id():
+def new_bi_id() -> int:
     """
-    Generate new bi_id
-    :return:
+    Generate a new BI identifier.
+
+    A unique ObjectId is converted into a stable BI hash value to produce
+    a compact integer identifier.
+
+    Returns:
+        New BI identifier.
     """
     return bi_hash(bson.ObjectId())
 
