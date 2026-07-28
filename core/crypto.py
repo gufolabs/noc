@@ -30,11 +30,11 @@ def md5crypt(password: bytes, salt: bytes | None = None, magic: bytes = b"$1$") 
     MD5 password hash
     (Used for RIPE authentication)
     >>> md5crypt(b"test", salt=b"1234")
-    '$1$1234$InX9CGnHSFgHD3OZHTyt3.'
+    b'$1$1234$InX9CGnHSFgHD3OZHTyt3.'
     >>> md5crypt(b"test", salt=b"1234")
-    '$1$1234$InX9CGnHSFgHD3OZHTyt3.'
+    b'$1$1234$InX9CGnHSFgHD3OZHTyt3.'
     >>> md5crypt(b"test", salt=b"1234", magic=b"$5$")
-    '$5$1234$x29w4cwzSDnesjss/m2O1.'
+    b'$5$1234$x29w4cwzSDnesjss/m2O1.'
     """
     salt = salt if salt else gen_salt(8)
     # /* The password first, since that is what is most unknown */ /* Then our magic string */ /* Then the raw salt */
