@@ -44,7 +44,6 @@ class Script(BaseScript):
         tagged = {}
         untagged = {}
         for v in shrunvlan.split("!"):
-            # self.debug('\nPROCESSING:' + v + '\n')
             match = self.rx_vlan_list.findall(v)
             if match:
                 for m in match:
@@ -64,10 +63,8 @@ class Script(BaseScript):
                             untagged[n] = vlan
                     if m[5]:
                         ve = m[5].replace(" ", "")
-                        self.debug("\nFOUND VE: " + m[5] + "\n")
                         untagged[ve] = vlan
                     else:
-                        self.debug("\nVE NOT FOUND " + m[0] + "\n")
                         continue
         v = ""
         # XXX
@@ -77,7 +74,6 @@ class Script(BaseScript):
                 match = self.re_search(self.rx_sh_int, v)
             except Exception:
                 continue
-            # self.debug('\nPROCESSING LINE: ' + v + '\n')
             port = match.group("interface")
             admin_status = match.group("admin_status")
             admin_status = admin_status.lower().replace("forward", "up")
@@ -127,7 +123,7 @@ class Script(BaseScript):
                 ip_address = []
                 for line in ipal:
                     line = line.strip()
-                    self.debug("ip.split len:" + str(len(line.split())))
+                    self.logger.debug("ip.split len:" + str(len(line.split())))
                     if len(line.split()) > 3:
                         ip_address += [f"{line.split()[2]}/{IPv4.netmask_to_len(line.split()[3])}"]
                     else:

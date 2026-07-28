@@ -172,7 +172,7 @@ class ToolsAppplication(Application):
                 answer = dns.resolver.resolve(qname=body["ns"], rdtype="A", lifetime=5.0)
                 ip = answer[0].address
             except dns.exception.DNSException as e:
-                self.error(f"Resolv Error: {e}")
+                self.logger.error(f"Resolv Error: {e}")
                 return HttpResponse(e, status=500)
         else:
             ip = body["ns"]
@@ -190,10 +190,10 @@ class ToolsAppplication(Application):
                 if "@" not in _zone[z_node].to_text(z_node)
             )
         except dns.exception.DNSException as e:
-            self.error(f"DNS Error: {e}")
+            self.logger.error(f"DNS Error: {e}")
             return HttpResponse(e, status=400)
         except Exception as e:
-            self.error(f"Other Error: {e}")
+            self.logger.error(f"Other Error: {e}")
             return HttpResponse(e, status=500)
 
         if data:

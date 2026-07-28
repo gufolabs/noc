@@ -49,7 +49,7 @@ class DesktopApplication(ExtApplication):
         try:
             return Group.objects.get(name=name)
         except Group.DoesNotExist:
-            self.error(f"Group '{name}' is not found")
+            self.logger.error(f"Group '{name}' is not found")
             return None
 
     def get_language(self, request: HttpRequest):
