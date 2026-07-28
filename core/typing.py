@@ -49,3 +49,11 @@ class AsResource(Protocol):
     """
 
     def as_resource(self, path: str | None = None) -> str: ...
+
+
+class SupportsStr(Protocol):
+    """
+    Defines `__str__` function and supports `str()`
+    """
+
+    def __str__(self) -> str: ...

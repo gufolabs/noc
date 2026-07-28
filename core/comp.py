@@ -5,14 +5,11 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
-# Python modules
-from typing import Protocol
+
+# NOC modules
+from noc.core.typing import SupportsStr
 
 DEFAULT_ENCODING = "utf-8"
-
-
-class SupportsStr(Protocol):
-    def __str__(self) -> str: ...
 
 
 def smart_bytes(s: bytes | str | SupportsStr, encoding: str = DEFAULT_ENCODING) -> bytes:
