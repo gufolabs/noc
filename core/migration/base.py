@@ -8,7 +8,7 @@
 # Python modules
 
 # NOC modules
-from noc.core.mongo.connection import get_db
+from noc.core.mongo.connection import get_db, Database
 from .db import db
 
 
@@ -59,7 +59,7 @@ class BaseMigration:
         return f"{parts[1]}.{parts[3]}"
 
     @property
-    def mongo_db(self):
+    def mongo_db(self) -> Database:
         return get_db()
 
     def migrate(self) -> None:
