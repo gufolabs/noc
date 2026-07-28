@@ -11,7 +11,9 @@ import time
 import sys
 
 # Third-party modules
+from pymongo.mongo_client import MongoClient
 from pymongo.errors import AutoReconnect
+from pymongo.database import Database
 from mongoengine.connection import (
     ConnectionFailure,
     connect as mongo_connect,
@@ -27,13 +29,17 @@ logger = logging.getLogger(__name__)
 _connected = False
 
 
-def connect():
+def connect() -> None:
     """
-    Connect to the mongo database
+    Establish connection to the MongoDB database.
 
-    .. versionadded:: 19.3
+    The function initializes the MongoDB connection using configured
+    connection parameters. If the connection is already established,
+    no action is performed.
 
-    :return:
+    Temporary connection errors are retried according to the configured
+    retry count and timeout. The process exits if the connection cannot
+    be established after all retries.
     """
     global _connected
     if _connected:
@@ -63,25 +69,33 @@ def connect():
                 sys.exit(1)
 
 
-def is_connected():
+def is_connected() -> bool:
     """
-    Check if mongo database connection is active
+    Check whether the MongoDB connection has been established.
 
-    .. versionadded: 19.3
-
-    :return: True if connect() has been called, False otherwise
+    Returns:
+        True: if connect() has been called
+        False:  otherwise
     """
     global _connected
     return _connected
 
 
-def get_connection():
+def get_connection() -> MongoClient:
+    """
+    Get the current MongoDB client instance.
+
+    Returns:
+        MongoDB client instance.
+    """
     return _get_connection()
 
 
-def get_db():
+def get_db() -> Database:
     """
+    Get the current MongoDB database instance.
 
-    :return:
+    Returns:
+        MongoDB database instance.
     """
     return _get_db()
