@@ -387,12 +387,6 @@ class Application(metaclass=ApplicationBase):
             r["Location"] = location
         return r
 
-    def debug(self, message):
-        self.logger.debug(message)
-
-    def error(self, message):
-        self.logger.error(message)
-
     def cursor(self):
         """
         Returns db cursor
