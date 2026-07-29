@@ -10,7 +10,7 @@
     }],
     "default_action": "C",
     "stop_processing": false,
-    "vars": [
+    "vars_op": [
         {
             "name": "to_state",
             "condition": "eq",
