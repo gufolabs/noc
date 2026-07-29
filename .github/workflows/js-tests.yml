@@ -1,0 +1,66 @@
+name: Run JS Tests
+on:
+  push:
+    branches: [master]
+    paths: &changed-paths
+      - ".github/workflows/js-tests.yml"
+      - "ui/package.json"
+      - "ui/pnpm-lock.yaml"
+      - "ui/**.js"
+      - "scripts/build/build-ui"
+  pull_request:
+    branches: [master]
+    paths: *changed-paths
+  release:
+    types: ["published"]
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  js-lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v7
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: latest
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: "pnpm"
+          cache-dependency-path: "ui/pnpm-lock.yaml"
+
+      - name: Filter package.json
+        run: pnpm install
+        working-directory: ui
+
+      - name: Run eslint
+        run: npx eslint web
+        working-directory: ui
+
+  build-ui:
+    runs-on: ubuntu-24.04
+    needs: [js-lint]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: latest
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: "pnpm"
+          cache-dependency-path: "ui/pnpm-lock.yaml"
+
+      - name: Build UI
+        run: ./scripts/build/build-ui
