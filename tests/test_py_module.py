@@ -62,7 +62,7 @@ def get_files():
             data = subprocess.check_output(["find", ".", "-type", "f", "-print"]).decode()
             return [p[2:] for p in data.splitlines()]
 
-    return [x for x in _get_files() if not x.startswith("docs") and no x.startswith("src")]
+    return [x for x in _get_files() if not x.startswith("docs") and not x.startswith("src")]
 
 
 @cachetools.cached(cache={})
