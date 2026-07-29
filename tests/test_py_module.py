@@ -55,16 +55,14 @@ def _allow_xfail(module: str) -> bool:
 def get_files():
     def _get_files():
         try:
-            data = smart_text(
-                subprocess.check_output(["git", "ls-tree", "HEAD", "-r", "--name-only"])
-            )
+            data = subprocess.check_output(["git", "ls-tree", "HEAD", "-r", "--name-only"]).decode()
             return data.splitlines()
         except (OSError, subprocess.CalledProcessError):
             # No git, emulate
-            data = smart_text(subprocess.check_output(["find", ".", "-type", "f", "-print"]))
+            data = subprocess.check_output(["find", ".", "-type", "f", "-print"]).decode()
             return [p[2:] for p in data.splitlines()]
 
-    return [x for x in _get_files() if not x.startswith("docs")]
+    return [x for x in _get_files() if not x.startswith("docs") and no x.startswith("src")]
 
 
 @cachetools.cached(cache={})
