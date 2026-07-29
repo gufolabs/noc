@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Test python module loading
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -14,8 +14,6 @@ import ast
 import pytest
 import cachetools
 
-# NOC modules
-from noc.core.comp import smart_text
 
 ALLOW_XFAIL = {
     "noc.services.login.backends.pam",
