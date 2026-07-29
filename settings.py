@@ -128,7 +128,6 @@ INSTALLED_APPS = [
     "noc.peer",
     "noc.kb",
     "noc.maintenance",
-    "noc.support",
     "noc.bi",
     "noc.sla",
     "noc.phone",
