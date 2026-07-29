@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # CLI Command
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -10,6 +10,9 @@ import sys
 import os
 import argparse
 from typing import NoReturn
+
+# Third-party modules
+from gufo.loader import Loader
 
 # NOC modules
 from noc.config import config
@@ -242,3 +245,6 @@ class BaseCommand:
             f" Involuntary context sw. : {stop.ru_nivcsw - start.ru_nivcsw}",
         ]
         self.print("\n".join(r))
+
+
+command_loader = Loader[type[BaseCommand]](bases=config.iter_customized_bases("noc.commands"))

@@ -11,6 +11,7 @@ import os
 import socket
 import sys
 from functools import partial
+from typing import Iterable
 from urllib.parse import quote as urllib_quote
 
 # Third-party modules
@@ -1213,6 +1214,21 @@ class Config(BaseConfig):
 
         dcs = get_dcs()
         return run_sync(partial(dcs.get_slot_limit, slot_name))
+
+    def iter_customized_bases(self, name: str, prefer_custom: bool = True) -> Iterable[str]:
+        """
+        Iterate module string names.
+
+        For use in loader.
+        """
+        if not name.startswith("noc."):
+            return
+        c_name = f"noc.custom.{name[4:]}"
+        if self.path.custom_path and prefer_custom:
+            yield c_name
+        yield name
+        if self.path.custom_path and not prefer_custom:
+            yield c_name
 
 
 config = Config()
