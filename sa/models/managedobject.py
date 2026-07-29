@@ -517,9 +517,7 @@ class ManagedObject(NOCModel):
     port: int = IntegerField("Port", blank=True, null=True)
     user: str | None = CharField("User", max_length=32, blank=True, null=True)
     password: str | None = CharField("Password", max_length=32, blank=True, null=True)
-    super_password: str | None = CharField(
-        "Super Password", max_length=32, blank=True, null=True
-    )
+    super_password: str | None = CharField("Super Password", max_length=32, blank=True, null=True)
     remote_path = CharField("Path", max_length=256, blank=True, null=True)
     trap_source_type = CharField(
         max_length=1,

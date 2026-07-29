@@ -103,9 +103,7 @@ class FirmwarePolicy(Document):
         return FirmwarePolicy.objects.filter(id=oid).first()
 
     @classmethod
-    def get_status(
-        cls, version: "Firmware", platform: Optional["Platform"] = None
-    ) -> str | None:
+    def get_status(cls, version: "Firmware", platform: Optional["Platform"] = None) -> str | None:
         if not version:
             return None
         fps = cls.get_effective_policies(version, platform)

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # SNMP testing
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -17,19 +17,21 @@ from noc.core.snmp.version import SNMP_v2c
 from noc.sa.interfaces.igetdict import IGetDict
 from noc.core.script.snmp.base import SNMP
 from noc.core.mib import mib
+from noc.config import config
 
 
-SNMP_HOST = "snmpd"
+SNMP_HOST = config.tests.snmpd_host
+SNMP_PORT = config.tests.snmpd_port
 SNMP_COMMUNITY = "public"
 
 
 class ServiceStub:
     class ServiceConfig:
-        def __init__(self, pool, tos=None):
+        def __init__(self, pool, tos=None) -> None:
             self.pool = pool
             self.tos = tos
 
-    def __init__(self, pool="default"):
+    def __init__(self, pool="default") -> None:
         self.config = self.ServiceConfig(pool=pool)
 
 
@@ -49,7 +51,7 @@ class GetDiagScript(BaseScript):
 
 
 @pytest.mark.parametrize(
-    "host,version,community,xcls",
+    ("host", "version", "community", "xcls"),
     [
         (SNMP_HOST, SNMP_v2c, SNMP_COMMUNITY, None),
         (SNMP_HOST, SNMP_v2c, SNMP_COMMUNITY + "X", SNMP.TimeOutError),
@@ -59,7 +61,7 @@ def test_snmp(host, version, community, xcls):
     try:
         address = socket.gethostbyname(host)
     except socket.gaierror:
-        pytest.fail("Cannot resolve host '%s'" % host)
+        pytest.fail(f"Cannot resolve host '{host}'")
     scr = GetDiagScript(
         service=ServiceStub(),
         credentials={"access_preference": "S", "address": address, "snmp_ro": community},

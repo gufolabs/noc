@@ -809,9 +809,7 @@ class BaseService:
                 if to_sleep > 0:
                     await asyncio.sleep(to_sleep)
 
-    def register_metrics(
-        self, table: str, metrics: list[dict[str, Any]], key: int | None = None
-    ):
+    def register_metrics(self, table: str, metrics: list[dict[str, Any]], key: int | None = None):
         """
         Schedule metrics to be sent to the `table`.
 

@@ -129,9 +129,7 @@ class IfDescCheck(TopologyDiscoveryCheck):
         handler = hi.get_handler()
         return handler(self.object, iface)
 
-    def resolve_via_patterns(
-        self, patterns: IfDescPatterns, iface: Interface
-    ) -> Interface | None:
+    def resolve_via_patterns(self, patterns: IfDescPatterns, iface: Interface) -> Interface | None:
         self.logger.debug(
             "[%s] Checking patterns %s for '%s'", iface.name, patterns.name, iface.description
         )

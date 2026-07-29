@@ -37,9 +37,7 @@ class BaseStream:
         self.socket: socket.socket | None = None
         self.connect_timeout: float = config.activator.connect_timeout
 
-    async def connect(
-        self, address: str, port: int | None = None, timeout: float | None = None
-    ):
+    async def connect(self, address: str, port: int | None = None, timeout: float | None = None):
         """
         Process connection sequence
         :param address:

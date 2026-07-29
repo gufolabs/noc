@@ -749,9 +749,7 @@ class DataStream:
         return data
 
     @classmethod
-    def update_diagnostic_state(
-        cls, obj_id, is_blocked: bool = False, reason: str | None = None
-    ):
+    def update_diagnostic_state(cls, obj_id, is_blocked: bool = False, reason: str | None = None):
         if not cls.DIAGNOSTIC:
             return
         from noc.sa.models.managedobject import ManagedObject

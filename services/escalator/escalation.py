@@ -868,9 +868,7 @@ class DeescalationSequence(BaseSequence):
             return None
         return tts
 
-    def get_notification_group(
-        self, notification_group_id: str | None
-    ) -> NotificationGroup | None:
+    def get_notification_group(self, notification_group_id: str | None) -> NotificationGroup | None:
         """
         Get notification group by id.
 

@@ -11,6 +11,7 @@ import os
 import socket
 import sys
 from functools import partial
+from typing import Iterable
 from urllib.parse import quote as urllib_quote
 
 # Third-party modules
@@ -1017,6 +1018,18 @@ class Config(BaseConfig):
         events_paths = ListParameter(item=StringParameter())
         # List of pyfilesystem URLs holding beef test cases
         beef_paths = ListParameter(item=StringParameter())
+        # SSHD hostname and port
+        sshd_host = StringParameter(default="sshd")
+        sshd_port = IntParameter(default=22)
+        # Dropbear hostname and port
+        dropbear_host = StringParameter(default="dropbear")
+        dropbear_port = IntParameter(default=22)
+        # Telnetd
+        telnetd_host = StringParameter(default="telnetd")
+        telnetd_port = IntParameter(default=23)
+        # Snmpd
+        snmpd_host = StringParameter(default="snmpd")
+        snmpd_port = IntParameter(default=161)
 
     class peer(ConfigSection):
         enable_ripe = BooleanParameter(default=True)
@@ -1213,6 +1226,21 @@ class Config(BaseConfig):
 
         dcs = get_dcs()
         return run_sync(partial(dcs.get_slot_limit, slot_name))
+
+    def iter_customized_bases(self, name: str, prefer_custom: bool = True) -> Iterable[str]:
+        """
+        Iterate module string names.
+
+        For use in loader.
+        """
+        if not name.startswith("noc."):
+            return
+        c_name = f"noc.custom.{name[4:]}"
+        if self.path.custom_path and prefer_custom:
+            yield c_name
+        yield name
+        if self.path.custom_path and not prefer_custom:
+            yield c_name
 
 
 config = Config()

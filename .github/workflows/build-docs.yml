@@ -1,0 +1,49 @@
+name: Build Docs
+env:
+  PYTHONPATH: src
+on:
+  pull_request:
+    paths: &on-paths
+      - ".github/workflows/build-docs.yml"
+      - "mkdocs.yml"
+      - "pypproject.toml"
+      - "macros.py"
+      - "docs/**"
+      - "**.md"
+  push:
+    branches: [master]
+    paths: *on-paths
+  release:
+    types: ["published"]
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  build-push:
+    name: "Build & Push Docs"
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v7
+
+      - name: Set Up Python 3.13
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v1
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: pip install -r .requirements/docs.txt
+
+      - name: Build Docs
+        run: mkdocs build
+
+      - name: Minify Docs
+        run: python3 scripts/docs/minify.py
+
+      - name: Build & Deploy Docs
+        run: mkdocs gh-deploy --force
+        if: "github.ref == 'refs/heads/master'"

@@ -213,9 +213,7 @@ def save_model_caps(
     self._reset_caches(self.id, credential=True)
 
 
-def get_caps(
-    self, scope: str | None = None, exposed_scope: str | None = None
-) -> dict[str, Any]:
+def get_caps(self, scope: str | None = None, exposed_scope: str | None = None) -> dict[str, Any]:
     """
     Returns a dict of effective object capabilities
     """
@@ -239,9 +237,7 @@ def get_caps_config(self) -> dict[str, CapsConfig]:
     return {}
 
 
-def set_caps(
-    self, key: str, value: Any, source: str = "manual", scope: str | None = None
-) -> None:
+def set_caps(self, key: str, value: Any, source: str = "manual", scope: str | None = None) -> None:
     """
     Set capability or update
     Args:

@@ -134,9 +134,7 @@ def parse_get_response(pdu: bytes, display_hints: _DisplayHints | None = None) -
     )
 
 
-def parse_get_response_raw(
-    pdu: bytes, display_hints: _DisplayHints | None = None
-) -> GetResponse:
+def parse_get_response_raw(pdu: bytes, display_hints: _DisplayHints | None = None) -> GetResponse:
     """
     Raw response parser for beef collector
 

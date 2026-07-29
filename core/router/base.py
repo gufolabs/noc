@@ -247,9 +247,7 @@ class Router:
             key=sharding_key,
         )
 
-    def get_msg_partition(
-        self, stream: str, key: int, msg_id: str | None = None
-    ) -> int | None:
+    def get_msg_partition(self, stream: str, key: int, msg_id: str | None = None) -> int | None:
         """Calculate out partition for message"""
         partitions = self.stream_partitions.get(stream)
         if partitions is None:

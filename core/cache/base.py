@@ -28,9 +28,7 @@ class BaseCache:
     def make_key(key: str, version: int | None = None) -> str:
         return "%s|%s" % (key, version or 0)
 
-    def get(
-        self, key: str, default: Any | None = None, version: int | None = None
-    ) -> Any | None:
+    def get(self, key: str, default: Any | None = None, version: int | None = None) -> Any | None:
         """
         Returns value or raise KeyError
         :param key:
@@ -40,9 +38,7 @@ class BaseCache:
         """
         return default
 
-    def set(
-        self, key: str, value: Any, ttl: int | None = None, version: int | None = None
-    ) -> None:
+    def set(self, key: str, value: Any, ttl: int | None = None, version: int | None = None) -> None:
         """
         Set key
         :param key:

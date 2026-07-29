@@ -358,9 +358,7 @@ class DiagnosticHub:
         if changed:
             self.sync_diagnostics()
 
-    def reset_diagnostics(
-        self, diagnostics: list[str], reason: str | None = "By Reset Diagnostic"
-    ):
+    def reset_diagnostics(self, diagnostics: list[str], reason: str | None = "By Reset Diagnostic"):
         """
         Reset diagnostic data.
         * update config for resetting diagnostic
