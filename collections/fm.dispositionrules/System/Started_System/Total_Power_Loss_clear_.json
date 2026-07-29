@@ -1,0 +1,13 @@
+{
+    "name": "System | Started (Environment | Total Power Loss,clear)",
+    "$collection": "fm.dispositionrules",
+    "uuid": "90fce3b8-a550-46f9-814a-55ebfb53fa7b",
+    "description": null,
+    "preference": 1000,
+    "alarm_disposition__name": "Environment | Total Power Loss",
+    "conditions": [{
+        "event_class_re": "System | Started"
+    }],
+    "default_action": "C",
+    "stop_processing": false
+}

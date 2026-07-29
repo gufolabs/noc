@@ -1,0 +1,13 @@
+{
+    "name": "Network | LLDP | Vlan Absent (Network | LLDP | Vlan Absent,dispose)",
+    "$collection": "fm.dispositionrules",
+    "uuid": "93cd68f6-bd79-49e9-81d1-c33e5bbbf96f",
+    "description": null,
+    "preference": 1000,
+    "alarm_disposition__name": "Network | LLDP | Vlan Absent",
+    "conditions": [{
+        "event_class_re": "Network | LLDP | Vlan Absent"
+    }],
+    "default_action": "R",
+    "stop_processing": false
+}
