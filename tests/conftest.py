@@ -37,7 +37,7 @@ _deprecations: defaultdict[str, int] = defaultdict(int)
 
 
 def _setup_config() -> None:
-    config.setup()
+    config.setup_logging()
 
 
 def pytest_configure(config: pytest.Config) -> None:
