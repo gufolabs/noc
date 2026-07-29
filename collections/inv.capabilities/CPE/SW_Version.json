@@ -1,0 +1,8 @@
+{
+    "name": "CPE | SW Version",
+    "$collection": "inv.capabilities",
+    "uuid": "737d8dc6-5245-4f03-b144-cd31d43316c6",
+    "description": "CPE software version",
+    "type": "str",
+    "card_template": null
+}
