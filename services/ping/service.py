@@ -139,9 +139,7 @@ class PingService(FastAPIService):
         for address in probes - processed:
             await self.delete_probe_address(p_id, address=address)
 
-    def find_probe_by_address(
-        self, p_id: str, address: str | None = None
-    ) -> ProbeSetting | None:
+    def find_probe_by_address(self, p_id: str, address: str | None = None) -> ProbeSetting | None:
         """Find probe by address"""
         if p_id not in self.probes:
             self.logger.warn("[%s] Probe id not in probes list", id)

@@ -274,9 +274,7 @@ class MapSettings(Document):
         return False
 
     @classmethod
-    def get_map(
-        cls, gen_type: str, gen_id: str | None = None, **kwargs
-    ) -> dict[str, Any] | None:
+    def get_map(cls, gen_type: str, gen_id: str | None = None, **kwargs) -> dict[str, Any] | None:
         """
         Return Map Data
         :param gen_id: Generator Id param

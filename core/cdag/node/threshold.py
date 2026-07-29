@@ -208,9 +208,7 @@ class ThresholdNode(BaseCDAGNode):
             return False
         return any(t.active for t in self.state.thresholds.values())
 
-    def set_state(
-        self, threshold: str, reference: str | None = None, pool: str | None = None
-    ):
+    def set_state(self, threshold: str, reference: str | None = None, pool: str | None = None):
         if threshold in self.state.thresholds:
             self.state.thresholds[threshold].active = True
             self.state.thresholds[threshold].last_raise = datetime.datetime.now().replace(

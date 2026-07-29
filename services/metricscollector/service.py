@@ -571,9 +571,7 @@ class MetricsCollectorService(FastAPIService):
         self.logger.info("%d Event Sources has been loaded", self.add_sources)
         # calculate size
 
-    def lookup_source_by_name(
-        self, name: str, collector: str | None = None
-    ) -> SourceConfig | None:
+    def lookup_source_by_name(self, name: str, collector: str | None = None) -> SourceConfig | None:
         """Lookup source by name"""
         # Clean domain part
         hostname = name.split(".", 1)[0]

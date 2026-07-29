@@ -387,9 +387,7 @@ class EscalationJob(SequenceJob):
             r.append(TTActionContext(action=action))
         return r
 
-    def get_tt_system_context(
-        self, tt_system: TTSystem, tt_id: str | None = None
-    ) -> TTSystemCtx:
+    def get_tt_system_context(self, tt_system: TTSystem, tt_id: str | None = None) -> TTSystemCtx:
         """
         Build TTSystem Context
         Args:
@@ -577,9 +575,7 @@ class EscalationJob(SequenceJob):
         self.logger.info(error)
         return r
 
-    def notify(
-        self, notification_group, subject: str, body: str | None = None
-    ) -> EscalationResult:
+    def notify(self, notification_group, subject: str, body: str | None = None) -> EscalationResult:
         """
         Send Notification
 

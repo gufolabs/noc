@@ -955,9 +955,7 @@ class DiscoveredObject(Document):
             ]
             self.set_dirty("Add New Data")
 
-    def get_data(
-        self, source: str, remote_system: RemoteSystem | None = None
-    ) -> DataItem | None:
+    def get_data(self, source: str, remote_system: RemoteSystem | None = None) -> DataItem | None:
         if source == ETL_SOURCE and not remote_system:
             raise AttributeError("")
         for item in self.data:

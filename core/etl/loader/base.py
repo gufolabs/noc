@@ -401,9 +401,7 @@ class BaseLoader:
                 r.append((rs, rid))
         return self.model.get_by_mappings(r)
 
-    def find_object(
-        self, v: dict[str, Any], mappings: dict[Any, str] | None = None
-    ) -> Any | None:
+    def find_object(self, v: dict[str, Any], mappings: dict[Any, str] | None = None) -> Any | None:
         """
         Find object by remote system/remote id
         Args:

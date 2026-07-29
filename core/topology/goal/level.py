@@ -26,9 +26,7 @@ class ManagedObjectLevelGoal(BaseGoal):
         super().__init__()
         self.level = level
 
-    def cost_estimate(
-        self, neighbor: ManagedObject, current: ManagedObject | None = None
-    ) -> int:
+    def cost_estimate(self, neighbor: ManagedObject, current: ManagedObject | None = None) -> int:
         if current:
             current_level = current.object_profile.level
             neighbor_level = neighbor.object_profile.level

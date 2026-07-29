@@ -25,9 +25,7 @@ class PercentileNode(WindowNode):
     config_cls = PercentileNodeConfig
     categories = [Category.WINDOW]
 
-    def get_window_value(
-        self, values: list[ValueType], timestamps: list[int]
-    ) -> ValueType | None:
+    def get_window_value(self, values: list[ValueType], timestamps: list[int]) -> ValueType | None:
         wl = sorted(values)
         i = len(wl) * self.config.percentile // 100
         return wl[i]

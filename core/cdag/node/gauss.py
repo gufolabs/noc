@@ -35,9 +35,7 @@ class GaussNode(WindowNode):
     def get_missed_value(self) -> ValueType | None:
         return self.config.true_level
 
-    def get_window_value(
-        self, values: list[ValueType], timestamps: list[int]
-    ) -> ValueType | None:
+    def get_window_value(self, values: list[ValueType], timestamps: list[int]) -> ValueType | None:
         if len(values) == 1:
             return self.config.true_level  # pragma: no cover
         v = np.array(self.state.values[:-1])

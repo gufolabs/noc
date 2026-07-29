@@ -61,8 +61,8 @@ class Check:
     script: str | None = None
     remote_system: str | None = None
     ttl: int | None = None
-    credential: SNMPCredential | SNMPv3Credential | CLICredential | HTTPCredential | None = (
-        field(default=None, compare=False, hash=False)
+    credential: SNMPCredential | SNMPv3Credential | CLICredential | HTTPCredential | None = field(
+        default=None, compare=False, hash=False
     )
 
     def __str__(self):

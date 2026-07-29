@@ -292,9 +292,7 @@ def model_set_state(self, state, state_changed: datetime.datetime = None, bulk=N
         )
 
 
-def model_touch(
-    self, bulk: list["UpdateOne"] | None = None, ts: datetime.datetime | None = None
-):
+def model_touch(self, bulk: list["UpdateOne"] | None = None, ts: datetime.datetime | None = None):
     if not self.state:
         logger.info("[%s] No default state. Skipping", self)
         return

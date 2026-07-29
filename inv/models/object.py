@@ -822,9 +822,7 @@ class Object(Document):
         """
         return self.model.has_connection(name)
 
-    def get_p2p_connection(
-        self, name: str
-    ) -> tuple[Any | None, Optional["Object"], str | None]:
+    def get_p2p_connection(self, name: str) -> tuple[Any | None, Optional["Object"], str | None]:
         """
         Get neighbor for p2p connection (s and mf types)
         Returns connection, remote object, remote connection or
