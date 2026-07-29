@@ -117,23 +117,21 @@ jobs:
         with:
           python-version: "${{ env.TEST_PYTHON_VERSION }}"
 
-      - name: Setup uv
-        uses: astral-sh/setup-uv@v1
-
       - name: Install Dependencies
-        run: pip install \
-          -r .requirements/node.txt \
-          -r .requirements/test.txt \
-          -r .requirements/bh.txt \
-          -r .requirements/activator.txt \
-          -r .requirements/cache-redis.txt \
-          -r .requirements/login-ldap.txt \
-          -r .requirements/login-pam.txt \
-          -r .requirements/login-radius.txt \
-          -r .requirements/prod-tools.txt \
-          -r .requirements/testing.txt \
-          -r .requirements/sender-kafka.txt \
-          -r .requirements/ping.txt
+        run: |
+          pip install \
+            -r .requirements/node.txt \
+            -r .requirements/test.txt \
+            -r .requirements/bh.txt \
+            -r .requirements/activator.txt \
+            -r .requirements/cache-redis.txt \
+            -r .requirements/login-ldap.txt \
+            -r .requirements/login-pam.txt \
+            -r .requirements/login-radius.txt \
+            -r .requirements/prod-tools.txt \
+            -r .requirements/testing.txt \
+            -r .requirements/sender-kafka.txt \
+            -r .requirements/ping.txt
 
       - name: Run Tests (with coverage)
         run: pytest --maxfail=10 --cov --cov-branch --cov-report=xml tests/
