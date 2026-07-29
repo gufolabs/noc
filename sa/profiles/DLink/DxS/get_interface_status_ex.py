@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # DLink.DxS.get_interface_status_ex
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -21,5 +21,8 @@ class Script(BaseScript):
         :param data: dict with
         :return:
         """
+        # Avoiding crashes on service interfaces
+        if "oper_status" not in data:
+            return False
         # Some devices reporting 1410065408 instead 4294967295
         return speed in [1410065408, 4294967295] and data["oper_status"]
