@@ -131,7 +131,8 @@ jobs:
             -r .requirements/prod-tools.txt \
             -r .requirements/testing.txt \
             -r .requirements/sender-kafka.txt \
-            -r .requirements/ping.txt
+            -r .requirements/ping.txt \
+            -r .requirements/docs.txt
 
       - name: Run Tests (with coverage)
         run: pytest --maxfail=10 --cov --cov-branch --cov-report=xml tests/
