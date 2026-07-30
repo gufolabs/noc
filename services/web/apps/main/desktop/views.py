@@ -306,10 +306,9 @@ class DesktopApplication(ExtApplication):
     @api.get("^about/", access=True)
     def api_about(self, request: HttpRequest):
         current_year = datetime.date.today().year
-        data = {
+        return {
             "brand": config.brand,
             "version": version.version,
             "installation": config.installation_name,
             "copyright": f"2007-{current_year}, {config.brand}",
         }
-        return data
