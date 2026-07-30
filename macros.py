@@ -154,13 +154,13 @@ def define_env(env):
         r = [
             fn.stem
             for fn in path.iterdir()
-            if not (
-                not fn.is_file()
-                or fn.suffix != ".md"
-                or "." in fn.stem
-                or fn.name.startswith(".")
-                or fn.name.startswith("index.")
-                or fn.name == "SUMMARY.md"
+            if (
+                fn.is_file()
+                and fn.suffix == ".md"
+                and "." not in fn.stem
+                and not fn.name.startswith(".")
+                and not fn.name.startswith("index.")
+                and fn.name != "SUMMARY.md"
             )
         ]
         if not r:
