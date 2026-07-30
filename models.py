@@ -345,8 +345,6 @@ _MODELS = {
     # Maintenance
     "maintenance.Maintenance": "noc.maintenance.models.maintenance.Maintenance",
     "maintenance.MaintenanceType": "noc.maintenance.models.maintenancetype.MaintenanceType",
-    # support models
-    "support.Crashinfo": "noc.support.models.crashinfo.Crashinfo",
     # crm models
     "crm.SubscriberProfile": "noc.crm.models.subscriberprofile.SubscriberProfile",
     "crm.SupplierProfile": "noc.crm.models.supplierprofile.SupplierProfile",
