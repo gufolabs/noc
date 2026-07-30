@@ -1,24 +1,22 @@
 # ----------------------------------------------------------------------
 # Documentation macroses
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-import os
 from collections import defaultdict
 import json
-import glob
 import logging
 import yaml
 from pathlib import Path
 
 
-ROOT = os.getcwd()
-PROFILES_ROOT = os.path.join(ROOT, "sa", "profiles")
-DOC_ROOT = os.path.join(ROOT, "docs")
-COLLECTIONS_ROOT = os.path.join(ROOT, "collections")
+ROOT = Path.cwd()
+PROFILES_ROOT = ROOT / "sa" / "profiles"
+DOC_ROOT = ROOT / "docs"
+COLLECTIONS_ROOT = ROOT / "collections"
 GITLAB_ROOT = "https://code.getnoc.com/noc/noc"
 
 logger = logging.getLogger("mkdocs")
@@ -39,9 +37,12 @@ def define_env(env):
             return
         # Load list of all scripts
         scripts = sorted(
-            x.split(".", 1)[0]
-            for x in os.listdir(os.path.join(DOC_ROOT, "scripts-reference"))
-            if x.endswith(".md") and not x.startswith(".") and not x.startswith("index.")
+            x.stem
+            for x in (DOC_ROOT / "scripts-reference").iterdir()
+            if x.is_file()
+            and x.suffix == ".md"
+            and not x.name.startswith(".")
+            and x.name != "index.md"
         )
 
     @env.macro
@@ -61,14 +62,14 @@ def define_env(env):
         load_scripts()
         # Get profile scripts
         vendor, name = profile.split(".")
-        path = os.path.join(PROFILES_ROOT, vendor, name)
+        path = PROFILES_ROOT / vendor / name
         check_exists(path)
-        supported = {f[:-3] for f in os.listdir(path) if f.endswith(".py")}
+        supported = {f.stem for f in path.iterdir() if f.is_file() and f.suffix == ".py"}
         # Render
         for script in scripts:
             mark = YES if script in supported else NO
-            r += [f"[{script}](../../scripts-reference/{script}.md) | {mark}"]
-        r += [""]
+            r.append(f"[{script}](../../scripts-reference/{script}.md) | {mark}")
+        r.append("")
         return "\n".join(r)
 
     @env.macro
@@ -77,25 +78,29 @@ def define_env(env):
 
         if not platforms:
             # Load platforms
-            for root, _, files in os.walk(os.path.join(COLLECTIONS_ROOT, "inv.platforms")):
-                for fn in files:
-                    if not fn.endswith(".json") or fn.startswith("."):
-                        continue
-                    with open(os.path.join(root, fn)) as f:
-                        data = json.loads(f.read())
-                    platforms[data["vendor__code"]].add(data["name"])
+            for path in (COLLECTIONS_ROOT / "inv.platforms").rglob("*.json"):
+                if path.name.startswith("."):
+                    continue
+
+                with path.open() as f:
+                    data = json.load(f)
+
+                platforms[data["vendor__code"]].add(data["name"])
+
         v_platforms = sorted(platforms[vendor])
-        r = []
+        r: list[str] = []
+
         if v_platforms:
-            r += ["| Platform |", "| --- |"]
-            r += [f"| {x} | " for x in v_platforms]
+            r = [*r, "| Platform |", "| --- |", *(f"| {x} | " for x in v_platforms)]
         else:
-            r += [
+            r = [
+                *r,
                 "!!! todo",
                 "    Platform collection is not populated still.",
                 "    You may be first to [contribute](../../sharing-collections-howto/index.md)",
                 "",
             ]
+
         return "\n".join(r)
 
     @env.macro
@@ -103,61 +108,76 @@ def define_env(env):
         nonlocal script_profiles, scripts
 
         load_scripts()
+
         if not script_profiles:
             s_set = set(scripts)
-            for m in glob.glob("sa/profiles/*/*/*.py"):
-                parts = m.split("/")
-                sn = parts[-1][:-3]
+
+            for path in PROFILES_ROOT.glob("*/*/*.py"):
+                sn = path.stem
                 if sn not in s_set:
                     continue
-                script_profiles[sn].add(f"{parts[2]}.{parts[3]}")
-        r = []
+
+                vendor = path.parent.parent.name
+                profile = path.parent.name
+                script_profiles[sn].add(f"{vendor}.{profile}")
+
         s_profiles = [
-            (profile.split(".")[0], profile) for profile in sorted(script_profiles[script])
+            (profile.split(".", 1)[0], profile) for profile in sorted(script_profiles[script])
         ]
+        r = []
         if s_profiles:
-            r += [
+            r = [
+                *r,
                 "| Profile |",
                 "| --- |",
+                *(
+                    f"| [{profile}](../profiles-reference/{vendor}/{profile.split('.', 1)[1]}.md) |"
+                    for vendor, profile in s_profiles
+                ),
+                "",
             ]
-            r += [
-                f"| [{profile}](../profiles-reference/{vendor}/{profile.split('.', 1)[1]}.md) |"
-                for vendor, profile in s_profiles
-            ]
-            r += [""]
         else:
-            r += [
+            r = [
+                *r,
                 "!!! todo",
                 "    Script is not supported yet",
                 "",
             ]
+
         return "\n".join(r)
 
     @env.macro
     def vendor_profiles(vendor: str) -> str:
         r = []
-        for fn in os.listdir(os.path.join("docs", "profiles-reference", vendor)):
-            if not fn.endswith(".md") or "." in fn[:-3]:
-                continue
-            if fn.startswith("."):
-                continue
-            if fn.startswith("index."):
-                continue
-            if fn == "SUMMARY.md":
-                continue
-            r += [fn[:-3]]
+
+        path = DOC_ROOT / "profiles-reference" / vendor
+        r = [
+            fn.stem
+            for fn in path.iterdir()
+            if (
+                fn.is_file()
+                and fn.suffix == ".md"
+                and "." not in fn.stem
+                and not fn.name.startswith(".")
+                and not fn.name.startswith("index.")
+                and fn.name != "SUMMARY.md"
+            )
+        ]
         if not r:
             msg = f"Invalid vendor: {vendor}"
             raise ValueError(msg)
         return "\n".join(f"- [{vendor}.{x}]({x}.md)" for x in sorted(r)) + "\n"
 
-    def check_exists(path: str):
-        if os.path.exists(path):
+    def check_exists(path: Path) -> None:
+        if path.exists():
             return
-        cwd = os.getcwd()
+        cwd = Path.cwd()
         logger.error("[NOC] Path doesn't exists: %s", path)
         logger.error("[NOC] Current directory: %s", cwd)
-        logger.error("[NOC] Current directory list: %s", ", ".join(os.listdir(cwd)))
+        logger.error(
+            "[NOC] Current directory list: %s",
+            ", ".join(x.name for x in cwd.iterdir()),
+        )
         raise FileNotFoundError(path)
 
     @env.macro
