@@ -18,6 +18,7 @@ PROFILES_ROOT = ROOT / "sa" / "profiles"
 DOC_ROOT = ROOT / "docs"
 COLLECTIONS_ROOT = ROOT / "collections"
 GITLAB_ROOT = "https://code.getnoc.com/noc/noc"
+GITHUB_ROOT = "https://github.com/gufolabs/noc"
 
 logger = logging.getLogger("mkdocs")
 logger.info("[NOC] - Initializing NOC macroses")
@@ -54,6 +55,37 @@ def define_env(env):
         :return:
         """
         return f"[MR{iid}]({GITLAB_ROOT}/merge_requests/{iid})"
+
+    @env.macro
+    def gh(iid: str | int) -> str:
+        """
+        Create a link to a GitHub commit or pull request.
+
+        The argument can be:
+        - a short commit SHA (usually the first 6 characters);
+        - a pull request number.
+
+        Args:
+            iid: GitHub commit short SHA or pull request number.
+
+        Returns:
+            Markdown link to the corresponding GitHub commit or pull request.
+
+        Usage:
+
+        Commit:
+        ```text
+        {{ gh("123456") }}
+        ```
+
+        Pull request:
+        ```text
+        {{ gh(123) }}
+        ```
+        """
+        if isinstance(iid, int):
+            return f"[#{iid}]({GITHUB_ROOT}/pull/{iid})"
+        return f"[{iid}]({GITHUB_ROOT}/commit/{iid})"
 
     @env.macro
     def supported_scripts(profile: str) -> str:
