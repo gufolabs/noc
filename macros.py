@@ -84,8 +84,8 @@ def define_env(env):
         ```
         """
         if isinstance(iid, int):
-            return f"{GITHUB_ROOT}/pull/{iid}"
-        return f"{GITHUB_ROOT}/commit/{iid}"
+            return f"[#{iid}]({GITHUB_ROOT}/pull/{iid})"
+        return f"[{iid}]({GITHUB_ROOT}/commit/{iid})"
 
     @env.macro
     def supported_scripts(profile: str) -> str:
