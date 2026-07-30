@@ -1,15 +1,13 @@
 # ----------------------------------------------------------------------
 # Documentation macroses
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-import os
 from collections import defaultdict
 import json
-import glob
 import logging
 import yaml
 from pathlib import Path
