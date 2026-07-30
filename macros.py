@@ -18,7 +18,6 @@ PROFILES_ROOT = ROOT / "sa" / "profiles"
 DOC_ROOT = ROOT / "docs"
 COLLECTIONS_ROOT = ROOT / "collections"
 GITLAB_ROOT = "https://code.getnoc.com/noc/noc"
-GITHUB_ROOT = "https://github.con/gufolabs/noc"
 
 logger = logging.getLogger("mkdocs")
 logger.info("[NOC] - Initializing NOC macroses")
