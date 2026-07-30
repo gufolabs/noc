@@ -299,10 +299,8 @@ class Config(BaseConfig):
 
     class features(ConfigSection):
         use_uvloop = BooleanParameter(default=False)
-        cp = BooleanParameter(default=True)
         sentry = BooleanParameter(default=False)
         traefik = BooleanParameter(default=False)
-        cpclient = BooleanParameter(default=False)
         telemetry = BooleanParameter(
             default=False, help="Enable internal telemetry export to Clickhouse"
         )
@@ -551,7 +549,6 @@ class Config(BaseConfig):
         backup_dir = StringParameter(default="/var/backup")
         etl_import = StringParameter(default="/var/lib/noc/import")
         ssh_key_prefix = StringParameter(default="etc/noc_ssh")
-        cp_new = StringParameter(default="/var/lib/noc/cp/crashinfo/new")
         bi_data_prefix = StringParameter(default="/var/lib/noc/bi")
         collection_fm_mibs = StringParameter(default="collections/fm.mibs/")
         supervisor_cfg = StringParameter(default="etc/noc_services.conf")

@@ -348,9 +348,6 @@ params:
     default: gzip
   features.consul_healthchecks:
     default: 'True'
-  features.cp:
-    default: 'True'
-  features.cpclient: {}
   features.forensic: {}
   features.gate: {}
   features.sentry: {}
@@ -768,8 +765,6 @@ params:
   path.cdn_url: {}
   path.collection_fm_mibs:
     default: collections/fm.mibs/
-  path.cp_new:
-    default: /var/lib/noc/cp/crashinfo/new
   path.custom_path: {}
   path.dig: {}
   path.etl_import:

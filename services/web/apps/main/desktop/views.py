@@ -22,7 +22,6 @@ from noc.main.models.userstate import UserState
 from noc.main.models.favorites import Favorites
 from noc.main.models.style import Style
 from noc.aaa.models.permission import Permission
-from noc.support.cp import CPClient
 from noc.core.feature import active_features
 
 
@@ -75,14 +74,13 @@ class DesktopApplication(ExtApplication):
 
     @api.get("^settings/$", access=True)
     def api_settings(self, request: HttpRequest):
-        cp = CPClient()
         if request.user.is_authenticated():
             enable_search = Permission.has_perm(request.user, "main:search:launch")
         else:
             enable_search = False
         language = self.get_language(request)
         return {
-            "system_uuid": cp.system_uuid or None,
+            "system_uuid": None,
             "brand": version.brand,
             "features": [f.value for f in active_features()],
             "installation_name": config.installation_name,
@@ -314,7 +312,4 @@ class DesktopApplication(ExtApplication):
             "installation": config.installation_name,
             "copyright": f"2007-{current_year}, {config.brand}",
         }
-        if config.features.cpclient:
-            cp = CPClient()
-            data["system_id"] = cp.system_uuid
         return data

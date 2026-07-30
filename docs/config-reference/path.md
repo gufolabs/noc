@@ -34,10 +34,6 @@ Path service configuration
 
 {{ config_param("path.ssh_key_prefix") }}
 
-## cp_new
-
-{{ config_param("path.cp_new") }}
-
 ## bi_data_prefix
 
 {{ config_param("path.bi_data_prefix") }}

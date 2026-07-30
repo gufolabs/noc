@@ -6,10 +6,6 @@ Features service configuration
 
 {{ config_param("features.use_uvloop") }}
 
-## cp
-
-{{ config_param("features.cp") }}
-
 ## sentry
 
 {{ config_param("features.sentry") }}
@@ -17,10 +13,6 @@ Features service configuration
 ## traefik
 
 {{ config_param("features.traefik") }}
-
-## cpclient
-
-{{ config_param("features.cpclient") }}
 
 ## telemetry
 

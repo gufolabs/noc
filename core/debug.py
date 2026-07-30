@@ -16,13 +16,10 @@ import traceback
 import uuid
 from typing import Any
 
-# Third-party modules
-import orjson
 
 # NOC modules
 from noc.config import config
 from noc.core.version import version
-from noc.core.fileutils import safe_rewrite
 from noc.core.perf import metrics
 from noc.core.comp import smart_bytes, smart_text
 
@@ -30,11 +27,6 @@ logger = logging.getLogger(__name__)
 if not logger.handlers:
     logging.basicConfig()
 
-
-# CP error reporting
-ENABLE_CP = config.features.cp
-CP_NEW = config.path.cp_new
-CP_SET_UID = None
 
 SERVICE_NAME = os.path.relpath(sys.argv[0] or sys.executable)
 sentry_sdk = None
@@ -299,34 +291,6 @@ def error_report(reverse=config.traceback.reverse, logger=logger, suppress_log=F
             sentry_sdk.capture_exception()
         except Exception as e:
             logger.error("Failed to sent problem report to Sentry: %s", e)
-    if ENABLE_CP:
-        fp = error_fingerprint()
-        path = os.path.join(CP_NEW, fp + ".json")
-        if os.path.exists(path):
-            # Touch file
-            os.utime(path, None)
-        else:
-            metrics["unique_errors"] += 1
-            # @todo: TZ
-            # @todo: Installation ID
-            c = {
-                "ts": datetime.datetime.now().isoformat(),
-                "uuid": fp,
-                # "installation": None,
-                "process": SERVICE_NAME,
-                "version": version.version,
-                "branch": version.branch,
-                "tip": version.changeset,
-                "changeset": version.changeset,
-                "traceback": r,
-            }
-            try:
-                safe_rewrite(path, orjson.dumps(c))
-                if CP_SET_UID:
-                    os.chown(path, CP_SET_UID, -1)
-                logger.error("Writing CP report to %s", path)
-            except OSError as e:
-                logger.error("Unable to write CP report: %s", e)
     return r
 
 
