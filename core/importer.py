@@ -1,184 +1,349 @@
 # ----------------------------------------------------------------------
 # Custom python module importer
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
+"""
+Custom module importer for NOC dynamic modules.
+
+The importer provides support for:
+- noc.custom.* modules loaded from filesystem
+- noc.pyrules.* modules loaded from MongoDB
+
+The implementation uses PEP 451 import protocol and requires Python 3.11+.
+"""
+
 # Python modules
-import sys
-import os
 import importlib
-from contextlib import contextmanager
+import importlib.abc
+import importlib.util
+import os
+import sys
+from importlib.machinery import ModuleSpec
+from pathlib import Path
+from types import ModuleType
+from typing import Any, Sequence
 
 # NOC modules
 from noc.config import config
 
 
-class ImportRouter:
+class NOCLoader(importlib.abc.Loader):
     """
-    Module importer that maps module prefixes to loader classes
-    """
+    Base loader for NOC-specific module namespaces.
 
-    def __init__(self, mappings):
-        self.mappings = mappings
+    Subclasses must implement :meth:`get_source`.
 
-    def find_module(self, fullname, path=None):
-        for prefix in self.mappings:
-            if fullname.startswith(prefix):
-                return self.mappings[prefix](path[0])
-        return None
-
-
-class NOCLoader:
-    """
-    Abstract class for prefixed loader
+    The loader follows PEP 451 import protocol and uses ``exec_module()``
+    for module initialization.
     """
 
-    PREFIX = None
+    PREFIX: str
     INIT_SOURCE = ""
-    packages = set()
 
-    def __init__(self, path_entry):
-        self.path_entry = path_entry
-        self.packages.add(self.PREFIX)
+    def __init__(self, path_entry: str | None = None) -> None:
+        """
+        Initialize loader.
 
-    def get_source(self, fullname):
+        Args:
+            path_entry: Import search path entry.
+        """
+        self.base_path = Path(path_entry or "")
+        self.packages: set[str] = {self.PREFIX}
+
+    def get_source(self, fullname: str) -> str | None:
+        """
+        Return source code for module.
+
+        Args:
+            fullname: Full module name.
+
+        Returns:
+            Module source code.
+
+        Raises:
+            ModuleNotFoundError: If module does not exist.
+        """
         raise NotImplementedError()
 
-    def get_code(self, fullname):
-        source = self.get_source(fullname)
-        return compile(source, self._get_filename(fullname), "exec", dont_inherit=True)
+    def is_package(self, fullname: str) -> bool:
+        """
+        Check if module is a package.
 
-    def get_data(self, path):
-        raise NotImplementedError()
+        Args:
+            fullname: Full module name.
 
-    def _get_filename(self, fullname):
-        name = os.path.join(self.path_entry, fullname.replace(".", os.sep))
-        if fullname in self.packages:
-            return name + os.sep + "__init__.py"
-        return name + ".py"
-
-    def is_package(self, fullname):
+        Returns:
+            True if module is a package.
+        """
         return fullname in self.packages
 
-    def load_module(self, fullname):
+    def get_filename(self, fullname: str) -> str:
+        """
+        Get synthetic filename for module.
+
+        Args:
+            fullname: Full module name.
+
+        Returns:
+            Module filename.
+        """
+        base = self.base_path / Path(*fullname.split("."))
+
+        if self.is_package(fullname):
+            return str(base / "__init__.py")
+
+        return str(base.with_suffix(".py"))
+
+    def create_module(self, spec: ModuleSpec) -> ModuleType | None:
+        """
+        Create module instance.
+
+        Returning None delegates creation to Python import machinery.
+
+        Args:
+            spec: Module specification.
+
+        Returns:
+            Custom module instance or None.
+        """
+        return None
+
+    def exec_module(self, module: ModuleType) -> None:
+        """
+        Execute module code.
+
+        Args:
+            module: Module object to initialize.
+
+        Raises:
+            ModuleNotFoundError: If module source is unavailable.
+        """
+        fullname = module.__name__
+
         source = self.get_source(fullname)
         if source is None:
-            return None
+            raise ModuleNotFoundError(
+                f"No module named '{fullname}'",
+                name=fullname,
+            )
 
-        mod = sys.modules.get(fullname)
-        if mod is None:
-            spec = importlib.util.spec_from_loader(fullname, loader=None)
-            mod = sys.modules.setdefault(fullname, importlib.util.module_from_spec(spec))
-        # Set a few properties required by PEP 302
-        mod.__file__ = self._get_filename(fullname)
-        mod.__name__ = fullname
-        mod.__path__ = self.path_entry
-        mod.__loader__ = self
-        # PEP-366 specifies that package"s set __package__ to
-        # their name, and modules have it set to their parent
-        # package (if any).
-        if self.is_package(fullname):
-            mod.__package__ = fullname
-            # Set __path__ for packages
-            # so we can find the sub-modules.
-            # Strip __init__.py
-            mod.__path__ = [mod.__file__[:-12]]
-        else:
-            mod.__package__ = ".".join(fullname.split(".")[:-1])
+        filename = self.get_filename(fullname)
 
-        if isinstance(source, str):
-            # Convert to UTF-8 to prevent
-            # SyntaxError: encoding declaration in Unicode string
-            source = source.encode()
-        exec(source, mod.__dict__)
-        return mod
+        code = compile(
+            source,
+            filename,
+            "exec",
+            dont_inherit=True,
+        )
+
+        exec(code, module.__dict__)
+
+    @classmethod
+    def is_match(cls, fullname: str) -> bool:
+        """
+        Check whether loader handles module name.
+
+        Args:
+            fullname: Full module name.
+
+        Returns:
+            True if module belongs to loader namespace.
+        """
+        return fullname == cls.PREFIX or fullname.startswith(f"{cls.PREFIX}.")
 
 
 class NOCPyruleLoader(NOCLoader):
+    """
+    Loader for dynamic Python rules stored in MongoDB.
+    """
+
     PREFIX = "noc.pyrules"
     COLLECTION_NAME = "pyrules"
-    collection = None
 
-    def _get_collection(self):
-        if not self.collection:
+    def __init__(self, path_entry: str | None = None) -> None:
+        """
+        Initialize pyrule loader.
+
+        Args:
+            path_entry: Import search path entry.
+        """
+        super().__init__(path_entry)
+        self._collection: Any | None = None
+
+    def _get_collection(self) -> Any:
+        """
+        Get MongoDB collection.
+
+        Returns:
+            MongoDB collection instance.
+        """
+        if self._collection is None:
             from noc.core.mongo.connection import get_db
 
-            self.collection = get_db()[self.COLLECTION_NAME]
-        return self.collection
+            self._collection = get_db()[self.COLLECTION_NAME]
 
-    def get_source(self, fullname):
+        return self._collection
+
+    def get_source(self, fullname: str) -> str:
+        """
+        Load module source from MongoDB.
+
+        Args:
+            fullname: Full module name.
+
+        Returns:
+            Python source code.
+
+        Raises:
+            ModuleNotFoundError: If module is absent.
+        """
         key = fullname[len(self.PREFIX) + 1 :]
+
         if not key:
-            return self.INIT_SOURCE  # Importing noc.pyrules
-        try:
-            coll = self._get_collection()
-            # Try to load module
-            d = coll.find_one({"name": key}, {"_id": 0, "source": 1})
-            if d:
-                return d.get("source", "")  # Found
-            # Not found, try to resolve as package name
-            d = coll.find_one({"name": {"$regex": r"^{}\.".format(key.replace(".", "\\."))}})
-            if d:
-                self.packages.add(fullname)
-                return self.INIT_SOURCE
-            # Invalid modules
-            return None
-        except Exception as e:
-            raise ImportError(str(e))
+            return self.INIT_SOURCE
+
+        collection = self._get_collection()
+
+        document = collection.find_one(
+            {"name": key},
+            {"_id": 0, "source": 1},
+        )
+
+        if document:
+            source = document.get("source")
+            if source is not None:
+                return source
+
+        escaped = key.replace(".", r"\.")
+
+        package = collection.find_one(
+            {"name": {"$regex": rf"^{escaped}\."}},
+        )
+
+        if package:
+            self.packages.add(fullname)
+            return self.INIT_SOURCE
+
+        raise ModuleNotFoundError(
+            f"No module named '{fullname}'",
+            name=fullname,
+        )
 
 
 class NOCCustomLoader(NOCLoader):
+    """
+    Loader for custom filesystem modules.
+    """
+
     PREFIX = "noc.custom"
 
-    def get_source(self, fullname):
-        key = fullname[len(self.PREFIX) + 1 :]
-        if not key:
-            return self.INIT_SOURCE  # Importing noc.custom
-        path = os.path.join(config.path.custom_path, key.replace(".", os.sep))
-        f_path = path + ".py"
-        # File exists
-        if os.path.exists(f_path):
-            with open(f_path) as f:
-                return f.read()
-        # Not found, resolve as package name
-        if os.path.exists(path):
+    def get_source(self, fullname: str) -> str:
+        """
+        Load module source from custom directory.
+
+        Args:
+            fullname: Full module name.
+
+        Returns:
+            Python source code.
+
+        Raises:
+            ModuleNotFoundError: If module is absent.
+        """
+        key = fullname[len(self.PREFIX) + 1 :].split(".")
+
+        path = Path(config.path.custom_path) / Path(*key)
+
+        if self.is_package(fullname):
+            path /= "__init__.py"
+        else:
+            path = path.with_suffix(".py")
+
+        if path.exists():
+            return path.read_text(encoding="utf-8")
+
+        raise ModuleNotFoundError(
+            f"No module named '{fullname}'",
+            name=fullname,
+        )
+
+    def is_package(self, fullname: str) -> bool:
+        """
+        Check whether filesystem object is a package.
+
+        Args:
+            fullname: Full module name.
+
+        Returns:
+            True if module is a package.
+        """
+        if super().is_package(fullname):
+            return True
+
+        key = fullname[len(self.PREFIX) + 1 :].split(".")
+
+        path = Path(config.path.custom_path) / Path(*key)
+
+        if path.is_dir() and (path / "__init__.py").exists():
             self.packages.add(fullname)
-            return self.INIT_SOURCE
+            return True
+
+        return False
+
+
+class NOCImportRouter(importlib.abc.MetaPathFinder):
+    """
+    Meta path finder routing NOC module namespaces to custom loaders.
+    """
+
+    def __init__(self) -> None:
+        """
+        Initialize importer router.
+        """
+        custom_path = config.path.custom_path
+
+        self._check_custom = bool(custom_path and os.path.exists(custom_path))
+
+    def find_spec(
+        self,
+        fullname: str,
+        path: Sequence[str] | None = None,
+        target: Any | None = None,
+    ) -> ModuleSpec | None:
+        """
+        Find module specification.
+
+        Args:
+            fullname: Requested module name.
+            path: Parent package search path.
+            target: Import target.
+
+        Returns:
+            Module specification or None.
+        """
+
+        def get_spec(loader_cls: type[NOCLoader]) -> ModuleSpec:
+            loader = loader_cls(
+                path_entry=path[0] if path else None,
+            )
+
+            return importlib.util.spec_from_loader(
+                fullname,
+                loader,
+                is_package=loader.is_package(fullname),
+            )
+
+        if self._check_custom and NOCCustomLoader.is_match(fullname):
+            return get_spec(NOCCustomLoader)
+
+        if NOCPyruleLoader.is_match(fullname):
+            return get_spec(NOCPyruleLoader)
+
         return None
 
 
-def _get_loader():
-    # Pyrules
-    loader_map = {NOCPyruleLoader.PREFIX: NOCPyruleLoader}
-    # Custom
-    if config.path.custom_path and os.path.exists(config.path.custom_path):
-        loader_map[NOCCustomLoader.PREFIX] = NOCCustomLoader
-    parts = __file__.split(os.sep)
-    root = os.path.join(*parts[:-3])
-    if not parts[0]:
-        root = os.sep + root
-    root = os.path.abspath(root)
-    return ImportRouter(loader_map)
-
-
-@contextmanager
-def prefer_site_packages():
-    """
-    Temporary remove script directory from import path to avoid naming clashes.
-    Usage
-
-    ```
-    with prefer_site_packages():
-        import dns
-    ```
-    """
-    prev = sys.path
-    sys.path = [x for x in sys.path if x]
-    yield
-    sys.path = prev
-
-
-# Install loader
-sys.meta_path += [_get_loader()]
+# Install importer
+sys.meta_path.append(NOCImportRouter())
