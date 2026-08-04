@@ -502,3 +502,7 @@ class JSONObject:
 
     def get_controller_credentials(self):
         return None
+
+
+if __name__ == "__main__":
+    Command().run()
