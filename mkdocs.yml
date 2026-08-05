@@ -224,4 +224,4 @@ extra:
   "yes": ":material-check:"
   "no": ":material-close:"
   wbr: "<wbr>"
-  version: "25.1.1"
+  version: "25.1.2"
