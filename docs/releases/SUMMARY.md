@@ -2,6 +2,7 @@
 * NOC 25.1 Generation
     * [NOC 25.1](25_1.md)
     * [NOC 25.1.1](25_1_1.md)
+    * [NOC 25.1.2](25_1_2.md)
 * NOC 24.1 Generation:
     * [NOC 24.1](24_1.md)
     * [NOC 24.1.1](24_1_1.md)
