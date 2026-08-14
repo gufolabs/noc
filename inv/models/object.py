@@ -1151,8 +1151,8 @@ class Object(Document):
         if self.parent and self.parent_connection:
             return [*self.parent.get_name_path(), self.parent_connection]
         if self.parent:
-            return [*self.parent.get_name_path(), self.name]
-        return [self.name]
+            return [*self.parent.get_name_path(), self.name or ""]
+        return [self.name or ""]
 
     def log(self, message, user=None, system=None, managed_object=None, op=None) -> None:
         if not user:
