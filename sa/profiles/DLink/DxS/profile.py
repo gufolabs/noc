@@ -145,7 +145,7 @@ class Profile(BaseProfile):
             if "/" not in name:
                 r += [name.replace(":", "/")]
         else:
-            r += ["1/%s" % name, "1:%s" % name]
+            r += [f"1/{name}", f"1:{name}"]
         return r
 
     @classmethod
@@ -180,9 +180,9 @@ class Profile(BaseProfile):
                     match.group("re_platform").startswith(p) for p in platforms_with_stacked_ports
                 )
             ):
-                return "%s:%s" % (match.group("re_slot"), match.group("re_port"))
+                return "{}:{}".format(match.group("re_slot"), match.group("re_port"))
             if match.group("re_port"):
-                return "%s" % match.group("re_port")
+                return "{}".format(match.group("re_port"))
         elif s.startswith("Slot0/"):
             return s[6:]
         else:
@@ -240,8 +240,8 @@ class Profile(BaseProfile):
                     self.cluster_member = p[8:].strip()
         # Switch to cluster member, if necessary
         if self.cluster_member:
-            script.logger.debug("Switching to SIM member %s" % script.cluster_member)
-            script.cli("reconfig member_id %s" % script.cluster_member)
+            script.logger.debug(f"Switching to SIM member {script.cluster_member}")
+            script.cli(f"reconfig member_id {script.cluster_member}")
 
     def shutdown_session(self, script):
         if self.cluster_member:
@@ -308,7 +308,7 @@ class Profile(BaseProfile):
                 "trap_state": match.group("trap_state"),
                 "desc": descr,
             }
-            key = "%s-%s" % (port, media_type)
+            key = f"{port}-{media_type}"
             return key, obj, s[match.end() :]
         return None
 
@@ -328,7 +328,7 @@ class Profile(BaseProfile):
         ) and not script.match_version(DES3200, platform="DES-3200-28F"):
             objects = []
             if interface is not None:
-                c = script.cli(("show ports %s description" % interface))
+                c = script.cli(f"show ports {interface} description")
             else:
                 c = script.cli("show ports description")
             for match in self.rx_port.finditer(c):
@@ -382,7 +382,7 @@ class Profile(BaseProfile):
             try:
                 if interface is not None:
                     objects = script.cli(
-                        "show ports %s description" % interface,
+                        f"show ports {interface} description",
                         obj_parser=self.parse_interface,
                         cmd_next="n",
                         cmd_stop="q",
@@ -498,7 +498,6 @@ class Profile(BaseProfile):
 def DES1210(v):
     """
     DES-1210-series
-    :param v:
     :return:
     """
     return v["platform"].startswith("DES-1210")
@@ -507,7 +506,6 @@ def DES1210(v):
 def DES30xx(v):
     """
     DES-30xx-series
-    :param v:
     :return:
     """
     return (
@@ -521,7 +519,6 @@ def DES30xx(v):
 def DES3028(v):
     """
     DES-3028-series
-    :param v:
     :return:
     """
     return v["platform"].startswith("DES-3028")
@@ -530,7 +527,6 @@ def DES3028(v):
 def DES3x2x(v):
     """
     DES-3x2x-series
-    :param v:
     :return:
     """
     return (
@@ -544,7 +540,6 @@ def DES3x2x(v):
 def DES3500(v):
     """
     DES-3500-series
-    :param v:
     :return:
     """
     return v["platform"].startswith("DES-35")
@@ -553,7 +548,6 @@ def DES3500(v):
 def DES3200(v):
     """
     DES-3200-series
-    :param v:
     :return:
     """
     return v["platform"].startswith("DES-3200")
@@ -562,7 +556,6 @@ def DES3200(v):
 def DGS3120(v):
     """
     DGS-3120-series
-    :param v:
     :return:
     """
     return v["platform"].startswith("DGS-3120")
@@ -571,7 +564,6 @@ def DGS3120(v):
 def DGS3400(v):
     """
     DGS-3400-series
-    :param v:
     :return:
     """
     return "DGS-3420" not in v["platform"] and v["platform"].startswith("DGS-34")
@@ -580,7 +572,6 @@ def DGS3400(v):
 def DGS3420(v):
     """
     DGS-3420-series
-    :param v:
     :return:
     """
     return v["platform"].startswith("DGS-3420")
@@ -589,7 +580,6 @@ def DGS3420(v):
 def DGS3600(v):
     """
     DGS-3600-series
-    :param v:
     :return:
     """
     return (
@@ -602,7 +592,6 @@ def DGS3600(v):
 def DGS3620(v):
     """
     DGS-3620-series
-    :param v:
     :return:
     """
     return v["platform"].startswith("DGS-3620")
@@ -637,9 +626,9 @@ def get_platform(platform, hw_revision):
         or platform.startswith("DGS-3620-")
     ):
         if hw_revision is not None:
-            if platform.endswith("/%s" % hw_revision):
+            if platform.endswith(f"/{hw_revision}"):
                 return platform
         elif platform.startswith("DES-1210-"):
             hw_revision = "A1"
-        return "%s/%s" % (platform, hw_revision)
+        return f"{platform}/{hw_revision}"
     return platform
