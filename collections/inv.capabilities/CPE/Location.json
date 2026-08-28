@@ -1,0 +1,8 @@
+{
+    "name": "CPE | Location",
+    "$collection": "inv.capabilities",
+    "uuid": "feddd55c-467c-45f8-ab42-40813c4b067f",
+    "description": "CPE location",
+    "type": "str",
+    "card_template": null
+}
