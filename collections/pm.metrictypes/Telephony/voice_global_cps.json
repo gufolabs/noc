@@ -1,0 +1,12 @@
+{
+    "name": "Telephony | Voice | GlobalCPS",
+    "$collection": "pm.metrictypes",
+    "uuid": "3ca11157-8ade-4bb6-b219-8f604e7d74d1",
+    "scope__name": "Object",
+    "field_name": "global_cps",
+    "field_type": "Int32",
+    "description": "OmegaTelecom omSysGlobalCPS",
+    "measure": null,
+    "units__code": "1",
+    "scale__code": "1"
+}

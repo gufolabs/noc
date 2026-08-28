@@ -1,11 +1,11 @@
 {
-  "title": "Telephony | SIP | Sessions | Active",
+  "title": "Object | Health",
   "aliasColors": {},
   "bars": false,
   "datasource": null,
   "fill": 1,
   "grid": {},
-  "id": 8836324228329,
+  "id": 8564488098429,
     "legend": {
     "alignAsTable": true,
     "avg": false,
@@ -41,7 +41,7 @@
       "dateColDataType": "date",
       "table": "object",
       "intervalFactor": 1,
-      "query": "SELECT $timeSeries as t, avg(sip_sessions_active) as `Active SIP Session` FROM $table WHERE managed_object=$bi_id and $timeFilter and has(labels,'noc::telephony::SIP::Sessions::Active') GROUP BY t ORDER BY t",
+      "query": "SELECT $timeSeries as t, avg(health) as `Health` FROM $table WHERE managed_object=$bi_id and $timeFilter and has(labels,'noc::object::Health') GROUP BY t ORDER BY t",
       "refId": "A",
       "resultFormat": "time_series"
     }
@@ -62,10 +62,10 @@
   "y-axis": false,
   "yaxes": [
     {
-      "format": "none",
+      "format": "percent",
       "label": null,
       "logBase": 1,
-      "max": null,
+      "max": 100,
       "min": 0,
       "show": true,
       "decimals": 0
@@ -77,5 +77,27 @@
       "min": null,
       "show": false
     }
-  ]
+  ],
+  "fieldConfig": {
+    "defaults": {
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "value": null,
+            "color": "red"
+          },
+          {
+            "value": 74,
+            "color": "yellow"
+          },
+          {
+            "value": 89,
+            "color": "green"
+          }
+        ]
+      }
+    },
+    "overrides": []
+  }
 }
