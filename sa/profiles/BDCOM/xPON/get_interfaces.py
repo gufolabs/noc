@@ -26,7 +26,7 @@ class Script(BaseScript):
         r"(^\s+protocolstatus.+\n)?"
         r"^\s+Ifindex is (?P<snmp_ifindex>\d+)(, unique port number is \d+)?\s*\n"
         r"(^\s+Description: (?P<descr>.+)\n)?"
-        r"^\s+Hardware is (?P<hw>\S+)(, [Aa]ddress is (?P<mac>\S+)\s*\(.+\))?\s*\n"
+        r"(^\s+Hardware is (?P<hw>\S+)(, [Aa]ddress is (?P<mac>\S+)\s*\(.+\))?\s*\n)?"
         r"(^\s+Interface address is (?P<ip>\S+)\s*\n)?"
         r"^\s+MTU (?P<mtu>\d+) bytes",
         re.MULTILINE,
@@ -55,17 +55,22 @@ class Script(BaseScript):
         "EtherSVI": "SVI",
         "PortAggregator": "aggregated",
         "Null": "null",
+        "management": "management",
     }
 
     def execute_cli(self):
         ifaces = []
         v = self.cli("show interface")
         for match in self.rx_int.finditer(v):
-            ifname = self.profile.convert_interface_name(match.group("ifname"))
-            hw = match.group("hw")
+            ifname = match.group("ifname")
+            if match.group("hw"):
+                hw = match.group("hw")
+            else:
+                hw = "management"
             if hw in ["GPON-ONUID", "Giga-LLID", "GigaEthernet-LLID"] and ":" in ifname:
                 continue
             iftype = self.types[hw]
+            ifname = self.profile.convert_interface_name(ifname)
             i = {
                 "name": ifname,
                 "type": iftype,
@@ -104,17 +109,17 @@ class Script(BaseScript):
                         tagged = [item for item in tagged if int(item) != untagged]
                         if tagged:
                             sub["tagged_vlans"] = tagged
+                if ifname.startswith("GigaEth") or ifname.startswith("TGigaEth"):
+                    time.sleep(1)  # Do not remove this!
+                    c = self.cli(f"show lldp interface {ifname}")
+                    for match1 in self.rx_lldp.finditer(c):
+                        if (
+                            match1.group("lldp_rx") == "enabled"
+                            or match1.groups("lldp_tx") == "enabled"
+                        ):
+                            i["enabled_protocols"] = ["LLDP"]
             if i["type"] == "SVI":
                 sub["vlan_ids"] = ifname[4:]
-            if ifname.startswith("GigaEthernet") or ifname.startswith("TGigaEthernet"):
-                time.sleep(1)  # Do not remove this!
-                c = self.cli(f"show lldp interface {ifname}")
-                for match1 in self.rx_lldp.finditer(c):
-                    if (
-                        match1.group("lldp_rx") == "enabled"
-                        or match1.groups("lldp_tx") == "enabled"
-                    ):
-                        i["enabled_protocols"] = ["LLDP"]
             i["subinterfaces"] = [sub]
             ifaces += [i]
         return [{"interfaces": ifaces}]
