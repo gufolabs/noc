@@ -252,7 +252,7 @@ class Profile(BaseProfile):
     rx_port = re.compile(
         r"^\s*(?P<port>\d+(/|:)?\d*)\s*"
         r"(\((?P<media_type>(C|F))\))?\s+(?P<admin_state>Enabled|Disabled)\s+"
-        r"(?P<admin_speed>Auto|10M|100M|1000M|1G|10G)/"
+        r"(?P<admin_speed>Auto|10M|100M|1000M|1G|10G|Disabled)/"
         r"((?P<admin_duplex>Half|Full)/)?"
         r"(?P<admin_flowctrl>Enabled|Disabled)\s+"
         r"(?P<status>LinkDown|Link\sDown|(?:Err|Loop)\-Disabled|Empty)?"
