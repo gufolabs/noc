@@ -10,7 +10,10 @@ consul_template_version: "0.25.1"
 
 tower_ip: 127.0.0.1
 tower_path: /opt/tower
-tower_dist_dir: "{{ tower_path }}/var/tower/data/src_dist"
+tower_home: "{{ lookup('env', 'TOWER_HOME') | default(tower_path, true) }}"
+tower_cache: "{{ lookup('env', 'TOWER_CACHE') | default(tower_home + '/var/tower/data', true) }}"
+tower_src_dist: "{{ tower_cache }}/src_dist"
+tower_dist_dir: "{{ tower_src_dist }}"
 tower_version: "{{ lookup('env','TOWER_VERSION') }}"
 tower_show_secrets: "{{ not lookup('env','TOWER_SHOW_SECRETS') or False | bool }}"
 tower_run_checks: "{{ lookup('env','TOWER_RUN_CHECKS') or False | bool }}"
