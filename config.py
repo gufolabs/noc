@@ -132,8 +132,6 @@ class Config(BaseConfig):
     class biosegmentation(ConfigSection):
         processed_trials_ttl = SecondsParameter(default="1w")
 
-    brand = StringParameter(default="NOC")
-
     class cache(ConfigSection):
         vcinterfacescount = SecondsParameter(default="1h")
         vcprefixes = SecondsParameter(default="1h")
