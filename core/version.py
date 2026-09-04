@@ -130,7 +130,7 @@ class Version:
 
     @cached_property
     def package_versions(self) -> dict[str, str]:
-        return {"Python": self.python_version}
+        return {"Python": sys.version.split()[0]}
 
 
 # Singleton instance
