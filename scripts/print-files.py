@@ -10,13 +10,30 @@
 
 # Python modules
 import argparse
+import sys
 from pathlib import Path
 from typing import Iterable
-import sys
 
 HEADER_LEN = 72
 NO_NEWLINE_MARKER = r"\ No newline at end of file"  # backslash is to match git output
-SAFE_SUFFIXES = {".py", ".js", ".ts", ".yml", ".yaml", ".json", ".md", ".css", ".html", ".txt"}
+SAFE_SUFFIXES = {
+    ".py",
+    ".sql",
+    ".ts",
+    ".json",
+    ".yaml",
+    ".js",
+    ".conf",
+    ".yml",
+    ".css",
+    ".sh",
+    ".toml",
+    ".md",
+    ".html",
+    ".xml",
+    ".txt",
+    ".j2",
+}
 
 
 def iter_files(paths: Iterable[str], exclude: Iterable[str]) -> Iterable[Path]:
@@ -26,7 +43,7 @@ def iter_files(paths: Iterable[str], exclude: Iterable[str]) -> Iterable[Path]:
     def is_excluded(path: Path) -> bool:
         return any(path == exclude or exclude in path.parents for exclude in excludes)
 
-    excludes = [Path(p) for p in exclude]
+    excludes = tuple(Path(p) for p in exclude if p)
     for arg in paths:
         path = Path(arg)
         if is_excluded(path):
@@ -54,11 +71,11 @@ def main(*args: str) -> None:
         "--exclude",
         action="append",
         default=[],
-        help="file or directory name to exclude; may be specified multiple times",
+        help="relative file or directory path to exclude; may be specified multiple times",
     )
     options = parser.parse_args(args)
 
-    paths = options.paths or (str(Path.cwd()),)
+    paths = options.paths or (".",)
     for path in iter_files(paths, exclude=options.exclude):
         header = f"===[ File: {path} ]"
         if len(header) < HEADER_LEN:
