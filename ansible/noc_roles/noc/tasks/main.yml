@@ -43,5 +43,3 @@
 - name: Include noc hacks
   import_tasks: "hacks.yml"
 
-- name: Include post install
-  import_tasks: "post_install.yml"
