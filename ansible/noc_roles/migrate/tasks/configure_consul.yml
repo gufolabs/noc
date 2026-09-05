@@ -37,7 +37,7 @@
     consul_service_internal_key: "Limit"
     consul_service_value: '{{ hostvars | json_query("*.noc_services[] | [?name==''discovery''].{n:pool,num:config.power} | [?n==''"+item+"''] | sum([].num)") }}' # noqa 204
     consul_service_token: None
-  with_items: "{{ hostvars |json_query('*.noc_services[] | [].pool') |unique }}"
+  loop: "{{ hostvars |json_query('*.noc_services[] | [].pool') |unique }}"
   tags:
     - discovery
 
@@ -51,7 +51,7 @@
     consul_service_internal_key: "Limit"
     consul_service_value: '{{ hostvars |json_query("*.noc_services[] | [?name==''ping''].{n:pool,num:config.power} | [?n==''"+item+"''] | sum([].num)") }}' # noqa 204
     consul_service_token: None
-  with_items: "{{ hostvars |json_query('*.noc_services[] | [].pool') |unique }}"
+  loop: "{{ hostvars |json_query('*.noc_services[] | [].pool') |unique }}"
   tags:
     - ping
 
@@ -65,7 +65,7 @@
     consul_service_internal_key: "Limit"
     consul_service_value: '{{ hostvars |json_query("*.noc_services[] | [?name==''classifier''].{n:pool,num:config.power} | [?n==''"+item+"''] | sum([].num)") }}' # noqa 204
     consul_service_token: None
-  with_items: "{{ hostvars |json_query('*.noc_services[] | [].pool') |unique }}"
+  loop: "{{ hostvars |json_query('*.noc_services[] | [].pool') |unique }}"
   tags:
     - classifier
 
@@ -79,7 +79,7 @@
     consul_service_internal_key: "Limit"
     consul_service_value: '{{ hostvars |json_query("*.noc_services[] | [?name==''correlator''].{n:pool,num:config.power} | [?n==''"+item+"''] | sum([].num)") }}' # noqa 204
     consul_service_token: None
-  with_items: "{{ hostvars |json_query('*.noc_services[] | [].pool') |unique }}"
+  loop: "{{ hostvars |json_query('*.noc_services[] | [].pool') |unique }}"
   tags:
     - correlator
 

@@ -24,7 +24,7 @@
   file:
     state: absent
     path: "{{ item }}"
-  with_items:
+  loop:
     - "{{ noc_root }}"
     - /var/lib/noc/var/pkg
   when: noc_root not in host_mount_points
@@ -47,7 +47,7 @@
         perms: true
         owner: true
       delegate_to: "{{ inventory_hostname }}"
-      with_items:
+      loop:
         - /var/lib/noc/var/pkg
         - "{{ noc_root }}/"
 

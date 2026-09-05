@@ -15,7 +15,7 @@
     permanent: "True"
     state: enabled
     immediate: "True"
-  with_items: "{{ groups['all'] }}"
+  loop: "{{ groups['all'] }}"
   become: "True"
   when: "firewalld_state.status.ActiveState == 'active'"
   tags:
