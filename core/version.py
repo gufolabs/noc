@@ -93,10 +93,6 @@ class Version:
         return config.version_format % kw
 
     @cached_property
-    def brand(self) -> str:
-        return "NOC"
-
-    @cached_property
     def os_version(self) -> str:
         return " ".join(os.uname())
 
