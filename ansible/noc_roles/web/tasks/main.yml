@@ -9,7 +9,7 @@
     chdir: "{{ noc_root }}"
   register: s
   changed_when: "'CHANGED' in s.stdout"
-  with_items: "{{ required_assets }}"
+  loop: "{{ required_assets }}"
   retries: 5
   delay: 2
   until: s is succeeded

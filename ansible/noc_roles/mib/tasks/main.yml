@@ -8,7 +8,7 @@
     path: "{{ item }}"
     owner: root
     mode: 0777
-  with_items:
+  loop:
     - "{{ mib_path }}"
 
 - name: Install mibs for working MIB-import

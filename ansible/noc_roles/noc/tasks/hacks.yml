@@ -5,7 +5,7 @@
     value: "{{ item.value }}"
     state: present
     reload: "True"
-  with_items:
+  loop:
     - { name: 'net.ipv4.ip_local_port_range', value: '20024 65000'}
   tags:
     - config
