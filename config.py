@@ -1110,7 +1110,7 @@ class Config(BaseConfig):
 
             Unauthorized modification or circumvention, distribution of
             software or services incorporating such changes, or use of such
-            derivative products may constitute violations of paragraphs 3–6
+            derivative products may constitute violations of paragraphs 3-6
             of the License and may give rise to legal consequences under
             applicable international and national law.
 
