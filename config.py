@@ -117,8 +117,6 @@ class Config(BaseConfig):
     class biosegmentation(ConfigSection):
         processed_trials_ttl = SecondsParameter(default="1w")
 
-    brand = StringParameter(default="NOC")
-
     class cache(ConfigSection):
         vcinterfacescount = SecondsParameter(default="1h")
         vcprefixes = SecondsParameter(default="1h")
@@ -1076,6 +1074,32 @@ class Config(BaseConfig):
     # pylint: disable=super-init-not-called
     def __init__(self):
         self.setup_logging()
+
+    @property
+    def brand(self) -> str:
+        """
+        System branding name.
+
+        !!! warning
+
+            LICENSE RESTRICTION: This property is protected by the NOC
+            branding and licensing terms.
+
+            Without prior written authorization from the copyright holder,
+            do not modify, override, replace, patch, bypass, circumvent, or
+            redirect the execution path around this property. This includes
+            changing its call sites to obtain branding information from another
+            source.
+
+            Unauthorized modification or circumvention, distribution of
+            software or services incorporating such changes, or use of such
+            derivative products may constitute violations of paragraphs 3-6
+            of the License and may give rise to legal consequences under
+            applicable international and national law.
+
+            See LICENSE.md for details.
+        """
+        return "NOC"
 
     @property
     def pg_connection_args(self):

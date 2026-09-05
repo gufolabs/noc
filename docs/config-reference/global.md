@@ -22,15 +22,6 @@ Key-Value Path
 Environment
 : NOC_LOGLEVEL
 
-## brand
-
-|                |             |
-| -------------- | ----------- |
-| Default value  | `NOC`       |
-| YAML Path      | `brand`     |
-| Key-Value Path | `brand`     |
-| Environment    | `NOC_BRAND` |
-
 ## global_n_instances
 
 |                |                          |

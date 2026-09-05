@@ -69,7 +69,7 @@ class DesktopApplication(ExtApplication):
             "desktop.html",
             language=self.get_language(request),
             theme=config.web.theme,
-            brand=version.brand,
+            brand=config.brand,
         )
 
     @view(method=["GET"], url="^settings/$", access=True, api=True)
@@ -90,7 +90,7 @@ class DesktopApplication(ExtApplication):
         language = self.get_language(request)
         return {
             "system_uuid": cp.system_uuid or None,
-            "brand": version.brand,
+            "brand": config.brand,
             "features": [f.value for f in active_features()],
             "installation_name": config.installation_name,
             "preview_theme": config.customization.preview_theme,
