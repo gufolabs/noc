@@ -15,7 +15,7 @@
     owner: "{{ noc_user }}"
     group: "{{ noc_group }}"
     mode: 0755
-  with_items:
+  loop:
     - "{{ noc_etc }}"             # /opt/noc/etc
     - "{{ noc_root }}/var"        # /opt/noc/var
     - "{{ noc_logs }}"            # /var/log/noc

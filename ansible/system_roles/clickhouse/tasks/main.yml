@@ -14,7 +14,7 @@
     state: "directory"
     group: clickhouse
     owner: clickhouse
-  with_items:
+  loop:
     - "{{ ch_log_dir }}"
 
 - name: "Include OS-specific tasks"

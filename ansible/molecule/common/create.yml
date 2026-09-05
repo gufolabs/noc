@@ -23,7 +23,7 @@
         wait_for_ip_address: "yes"
         state: poweredon
       register: server
-      with_items: "{{ molecule_yml.platforms }}"
+      loop: "{{ molecule_yml.platforms }}"
 
     - name: Populate instance config dict
       set_fact:
@@ -34,7 +34,7 @@
           'port': "{{ molecule_yml.driver.ssh_port }}",
           'identity_file': "{{ molecule_yml.driver.ssh_identity_file }}"
         }
-      with_items: "{{ server.results }}"
+      loop: "{{ server.results }}"
       register: instance_config_dict
       when: server is changed
 

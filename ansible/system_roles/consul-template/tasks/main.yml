@@ -3,7 +3,7 @@
   file:
     state: directory
     path: "{{ item }}"
-  with_items:
+  loop:
     - "{{ consul_template_config_dir }}"
     - "{{ consul_template_templates_dir }}"
 

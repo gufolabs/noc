@@ -9,13 +9,13 @@
       file:
         path: "../yc/{{ item.distr }}"
         state: directory
-      with_items: "{{ molecule_yml.platforms }}"
+      loop: "{{ molecule_yml.platforms }}"
 
     - name: Generate terraform file
       template:
         src: templates/template.tf
         dest: "../yc/{{ item.distr }}/{{ item.distr }}.tf"
-      with_items: "{{ molecule_yml.platforms }}"
+      loop: "{{ molecule_yml.platforms }}"
 
     - name: Create molecule instance(s)
       terraform:
@@ -23,7 +23,7 @@
         state: present
         force_init: true
       register: server
-      with_items: "{{ molecule_yml.platforms }}"
+      loop: "{{ molecule_yml.platforms }}"
 
     - name: Populate instance config dict
       set_fact:
@@ -34,7 +34,7 @@
           'user': "{{ item.item.ssh_user }}"
           'port': "22"
           'identity_file': "{{ molecule_yml.driver.ssh_identity_file }}"
-      with_items: "{{ server.results }}"
+      loop: "{{ server.results }}"
 
     - name: Create instance config
       set_fact:

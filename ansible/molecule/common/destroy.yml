@@ -18,7 +18,7 @@
         state: absent
         force: "yes"
       register: server
-      with_items: "{{ molecule_yml.platforms }}"
+      loop: "{{ molecule_yml.platforms }}"
 
     - name: Populate instance config
       set_fact:
