@@ -14,10 +14,6 @@ Hostname.
 
 {{ config_param("loglevel") }}
 
-## brand
-
-{{ config_param("brand") }}
-
 ## global_n_instances
 
 {{ config_param("global_n_instances") }}
