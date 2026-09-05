@@ -42,7 +42,7 @@
     - (noc_services)
   vars:
     pool_name: "{{ item.name }}"
-  with_items:
+  loop:
     - "{{ noc_all_pools }}"
 
 - name: Build pools config

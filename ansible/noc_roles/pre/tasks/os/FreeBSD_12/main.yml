@@ -54,6 +54,6 @@
     owner: root
     group: wheel
     mode: 0755
-  with_items:
+  loop:
     - "{{ etc_prefix }}/newsyslog.conf.d"
     - "{{ etc_prefix }}/rc.d"

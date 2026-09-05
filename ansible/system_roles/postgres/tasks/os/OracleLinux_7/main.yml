@@ -6,7 +6,7 @@
     value: "{{ item.value }}"
     state: present
     reload: "True"
-  with_items:
+  loop:
     - { name: kernel.shmmax, value: "{{ kernel_shmmax }}" }
     - { name: kernel.shmall, value: "{{ kernel_shmall }}" }
     - { name: kernel.sem, value: '250 256000 400 4096' }
