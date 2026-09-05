@@ -8,7 +8,7 @@
     chdir: "{{ noc_root }}"
   register: s
   changed_when: "'CHANGED' in s.stdout"
-  with_items: "{{ required_assets }}"
+  loop: "{{ required_assets }}"
   environment:
     http_proxy: "{{ http_proxy }}"
     https_proxy: "{{ http_proxy }}"

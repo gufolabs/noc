@@ -39,7 +39,7 @@
     state: enabled
     immediate: "True"
   when: "firewalld_state.status.ActiveState == 'active'"
-  with_items:
+  loop:
     - 8300/tcp
     - 8301/tcp
     - 8301/udp
