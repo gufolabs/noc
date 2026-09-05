@@ -9,36 +9,18 @@
 import os
 import sys
 import subprocess
-import platform
+from pathlib import Path
+from functools import cached_property
 
 # NOC modules
 from noc.config import config
 
 CHANGESET_LEN = 8
-BRAND_PATH = config.get_customized_paths("BRAND", prefer_custom=True)
 WHICH = "which"
-if os.name == "nt":
-    WHICH = "where"
-
-
-class cachedproperty:
-    def __init__(self, f):
-        self.f = f
-        self.n = "_%s" % f.__name__
-        self.__doc__ = f.__doc__
-
-    def __get__(self, instance, owner):
-        if instance is None:
-            return self
-        v = getattr(instance, self.n, None)
-        if v is None:
-            v = self.f(instance)
-            setattr(instance, self.n, v)
-        return v
 
 
 class Version:
-    @cachedproperty
+    @cached_property
     def has_git(self) -> bool:
         """
         Check .git directory is exists and git executable is in $PATH
@@ -49,7 +31,7 @@ class Version:
                 return subprocess.call([WHICH, "git"], stdout=null) == 0
         return False
 
-    @cachedproperty
+    @cached_property
     def branch(self) -> str:
         """
         Returns current branch
@@ -67,7 +49,7 @@ class Version:
                 )
         return ""
 
-    @cachedproperty
+    @cached_property
     def changeset(self) -> str:
         """
         Returns current changeset
@@ -85,7 +67,7 @@ class Version:
                 )
         return ""
 
-    @cachedproperty
+    @cached_property
     def version(self) -> str:
         def static_version() -> str:
             """
@@ -116,60 +98,30 @@ class Version:
         }
         return config.version_format % kw
 
-    @cachedproperty
-    def brand(self) -> str:
-        for p in BRAND_PATH:
-            if os.path.exists(p):
-                with open(p) as f:
-                    return f.read().strip()
-        return config.brand
-
-    @cachedproperty
+    @cached_property
     def os_version(self) -> str:
         return " ".join(os.uname())
 
-    @cachedproperty
+    @cached_property
     def os_brand(self) -> str | None:
-        o = os.uname()[0].lower()
-        if o == "linux":
-            # os-release
-            if os.path.exists("/etc/os-release"):
-                vdata = {}
-                with open("/etc/os-release") as f:
-                    for line in f:
-                        if "=" not in line:
-                            continue
-                        line = line.strip()
+        uname = os.uname()
+        match uname.sysname.lower():
+            case "linux":
+                os_release = Path("/etc/os-release")
+                if not os_release.exists():
+                    return "Unknown Linux"
+                data: dict[str, str] = {}
+                for line in os_release.read_text().splitlines():
+                    if "=" in line:
                         k, v = line.split("=", 1)
-                        if v.startswith('"') and v.endswith('"'):
-                            v = v[1:-1]
-                        vdata[k] = v
-                return "%s %s" % (vdata["NAME"], vdata["VERSION_ID"])
-            # Old SuSE?
-            if os.path.exists("/etc/SuSE-release"):
-                # SuSE
-                with open("/etc/SuSE-release") as f:
-                    return f.readline().strip()
-            # try lsb_release -d
-            try:
-                b = subprocess.check_output(["lsb_release", "-d"], encoding="utf-8")
-                return b.split(":", 1)[1].strip()
-            except OSError:
-                pass
-            return "Unknown Linux"
-        if o == "freebsd":
-            u = os.uname()
-            return "%s %s" % (u[0], u[2])
-        if o == "darwin":
-            # OS X
-            return "Mac OS X %s" % platform.mac_ver()[0]
-        return None
+                        data[k] = v.strip('"')
+                return f"{data['NAME']} {data['VERSION_ID']}"
+            case "freebsd":
+                return f"{uname.sysname} {uname.release}"
+            case _:
+                return None
 
-    @cachedproperty
-    def python_version(self) -> str:
-        return sys.version.split()[0]
-
-    @cachedproperty
+    @cached_property
     def process(self) -> str:
         argv = [v for v in sys.argv if v]
         if not argv:
@@ -178,9 +130,9 @@ class Version:
             return argv[1]
         return argv[0]
 
-    @cachedproperty
+    @cached_property
     def package_versions(self) -> dict[str, str]:
-        return {"Python": self.python_version}
+        return {"Python": sys.version.split()[0]}
 
 
 # Singleton instance
