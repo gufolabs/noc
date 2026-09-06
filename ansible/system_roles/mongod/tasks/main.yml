@@ -44,13 +44,16 @@
   tags:
     - config
 
-- name: Generating mongo key file
-  copy:
-    content: "{{ mongo_key }}"
-    dest: "{{ mongo_dir }}/mongo.key"
+- name: Generate MongoDB keyfile
+  ansible.builtin.shell:
+    cmd: "openssl rand -base64 756 > {{ mongo_dir }}/mongo.key"
+    creates: "{{ mongo_dir }}/mongo.key"
+
+- name: Set MongoDB keyfile permissions
+  file:
+    path: "{{ mongo_dir }}/mongo.key"
     owner: "{{ mongo_user }}"
     mode: "0400"
-  no_log: "{{ tower_show_secrets }}"
 
 - name: "Include OS-specific tasks"
   include_tasks: "os/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/main.yml"
