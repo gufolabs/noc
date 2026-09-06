@@ -12,7 +12,8 @@
   pre_tasks:
     - name: Run pre installation checks
       include_tasks: "{{ item }}"
-      with_myglob: ["./*_roles/*/tasks/checks.yml"]
+      with_fileglob:
+        - "./*_roles/*/tasks/checks.yml"
       when: (tower_run_checks)
       tags:
         - checks
