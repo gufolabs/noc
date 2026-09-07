@@ -14,6 +14,10 @@
         {
             "message": "INFO(6) mitya: execute command \"disable command logging\".",
             "raw_vars": []
+        },
+        {
+            "message": "INFO: mitya: execute command \"enable command logging\".",
+            "raw_vars": []
         }
     ]
 }

@@ -1,0 +1,19 @@
+{
+    "name": "DLink | DxS | Network | IP | Route Limit Warning (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "69f576b2-767b-4db6-9bae-b0603359a4c8",
+    "description": "INFO(6) Unit 1,Collision happens on inserting IP: 10.0.4.145 in  bucket 7 on L3 Host Table.",
+    "event_class__name": "Network | IP | Route Limit Warning",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "Collision happens on inserting IP: \\S+ in\\s+bucket \\d+ on L3 Host Table\\.",
+    "profiles": ["DLink.DxS"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "INFO(6) Unit 1,Collision happens on inserting IP: 10.0.4.145 in  bucket 7 on L3 Host Table.",
+            "raw_vars": []
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "name": "DLink | DxS | Network | NTP | System Clock Synchronized",
+    "$collection": "fm.eventclasses",
+    "uuid": "b9df5a6d-b9ce-4deb-9039-abd3ff5efab4",
+    "description": "SNTP-6: New Time: 22 Dec 2025 15:18:11(GMT +02:00), ServerIpAddress: 10.118.0.2",
+    "event_class__name": "Network | NTP | System Clock Synchronized",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "New Time: .+, ServerIpAddress: (?P<server_address>\\S+)$",
+    "profiles": ["DLink.DxS"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "SNTP-6: New Time: 22 Dec 2025 15:18:11(GMT +02:00), ServerIpAddress: 10.118.0.2",
+            "raw_vars": []
+        }
+    ]
+}

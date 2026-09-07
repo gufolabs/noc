@@ -1,0 +1,19 @@
+{
+    "name": "DLink | DxS | Chassis | Hardware | Module | Module Error #1 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "37513b0e-1437-4e63-a02b-109b4ff6f41b",
+    "description": "Port 1:11 GBIC module is abnormal",
+    "event_class__name": "Chassis | Hardware | Module | Module Error",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "Port (?P<interface>\\d+\\S*) (?P<module>GBIC) (?P<reason>module is abnormal)",
+    "profiles": ["DLink.DxS"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "Port 1:11 GBIC module is abnormal",
+            "raw_vars": []
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "name": "DLink | DxS | Chassis | Hardware | Module | Module Error #2 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "690e847c-3d03-4690-8532-74572a595380",
+    "description": "SFP Port 1:12 I2C componet or bus is abnormal",
+    "event_class__name": "Chassis | Hardware | Module | Module Error",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "(?P<module>SFP) Port (?P<interface>\\d+\\S*) (?P<reason>I2C componet or bus is abnormal)",
+    "profiles": ["DLink.DxS"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "SFP Port 1:12 I2C componet or bus is abnormal",
+            "raw_vars": []
+        }
+    ]
+}
