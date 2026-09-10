@@ -35,10 +35,6 @@ forms:
       default: default
       label: "Default interface profile"
       type: str
-    lookup_solution:
-      default: "noc.services.classifier.rulelookup.RuleLookup"
-      label: "Lookup solution"
-      type: str
 
 services:
   classifier:
