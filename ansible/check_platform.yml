@@ -3,12 +3,12 @@
     file: "{{ playbook_dir }}/vars/platforms.yml"
 
 - name: Check platform support
-  ansible.builtin.fail:
+  fail:
     msg: "Platform {{ platform }} is not supported"
   when: platform not in platforms
 
 - name: Check platform licence level
-  ansible.builtin.fail:
+  fail:
     msg: >-
       Platform {{ platform }} requires NOC licence level
       {{ platforms[platform].required_level }}, but {{ noc_level }} is used.

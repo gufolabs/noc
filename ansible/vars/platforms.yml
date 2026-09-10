@@ -25,3 +25,5 @@ platforms:
     required_level: pro
   OracleLinux_7:
     required_level: pro
+# Full platform name
+platform: "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}"
