@@ -1,0 +1,29 @@
+# Supported NOC platforms.
+#
+# `required_level` defines the minimum NOC licence level required to use
+# the platform:
+#   `ce`  - Community Edition
+#   `pro` - Subscription / whitelabel / derived product
+#
+# A platform not listed here is not supported.
+platforms:
+  # CE level platforms
+  Debian_11:
+    required_level: ce
+  Ubuntu_22:
+    required_level: ce
+  FreeBSD_12:
+    required_level: ce
+  # Pro level platforms
+  Debian_10:
+    required_level: pro
+  Ubuntu_20:
+    required_level: pro
+  CentOS_7:
+    required_level: pro
+  RedHat_7:
+    required_level: pro
+  OracleLinux_7:
+    required_level: pro
+# Full platform name
+platform: "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}"

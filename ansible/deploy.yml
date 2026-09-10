@@ -1,4 +1,12 @@
 ---
+- name: Check platform
+  hosts: all
+  gather_facts: "True"
+  vars_files:
+    - "vars/main.yml"
+  tasks:
+    - include_tasks: "check_platform.yml"
+
 - import_playbook: pre.yml
   vars:
     tower_run_checks: "False"
@@ -57,7 +65,6 @@
     - role: ui
     - role: mx
     - role: kafkasender
-
 
 - import_playbook: additional_roles/custom/service.yml
 
