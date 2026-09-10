@@ -4,21 +4,9 @@
   lineinfile:
     dest: /etc/rc.conf
     regexp: "^hostname="
-    line: "hostname=\"{{ ansible_nodename }}\""
+    line: 'hostname="{{ ansible_nodename }}"'
   tags:
     - config
-
-- name: Force upgrade catalog
-  become: "True"
-  command: pkg update -f
-  environment:
-    IGNORE_OSVERSION: "yes"
-  when:
-    - molecule_yml is defined
-  register: freebsd_pkg_result
-  retries: 4
-  delay: 2
-  until: freebsd_pkg_result is succeeded
 
 - name: Install FreeBSD system packages
   pkgng:
