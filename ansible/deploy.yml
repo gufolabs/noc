@@ -2,6 +2,8 @@
 - name: Check platform
   hosts: all
   gather_facts: "True"
+  vars_files:
+    - "vars/main.yml"
   tasks:
     - include_tasks: "check_platform.yml"
 
