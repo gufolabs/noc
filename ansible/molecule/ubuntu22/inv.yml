@@ -26,7 +26,6 @@ all:
           chwriter_records_buffer: 1000000
           classifier_default_interface_profile: default
           classifier_loglevel: info
-          classifier_lookup_solution: noc.services.classifier.rulelookup.RuleLookup
           classifier_power: 2
           classifier_backup_power: 2
           clickhouse_db: noc
@@ -387,7 +386,6 @@ all:
             - config:
                 default_interface_profile: default
                 loglevel: info
-                lookup_solution: noc.services.classifier.rulelookup.RuleLookup
                 power: 2
               config_order: yaml:///opt/noc/etc/tower.yml,yaml:///opt/noc/etc/settings.yml,yaml:///opt/noc/etc/pool-default.yml,env:///NOC
               environment:
