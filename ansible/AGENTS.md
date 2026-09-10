@@ -56,20 +56,6 @@ noc_roles/
 - Role defaults go in each role's `defaults/main.yml` — these can be overridden at any level
 - Group vars (by infrastructure class: switches, routers, servers) live under `noc_roles/` or `system_roles/` groups
 
-## Testing with Molecule
-
-Roles must have corresponding Molecule test suites to verify they work correctly. Test suites live in the role's directory under `molecule/`:
-```
-ansible/noc_roles/<role_name>/
-  molecule/
-    default/
-      molecule.yml   # test environment configuration  
-      converge.yml   # main test playbook (runs the role)
-      verify.yml     # post-run verification steps
-```
-
-Run Molecule tests: `molecule test -s default`
-
 ## Playbook Patterns
 
 - **deploy.yml**: main deployment entry point — orchestrates all roles in sequence
