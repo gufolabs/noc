@@ -11,7 +11,6 @@ noc_etc: "{{ noc_root }}/etc"
 noc_reports_dir: "{{ noc_var_lib }}/reports"
 noc_crashinfo_dir: "{{ noc_var_lib }}/var/cp/crashinfo/new"
 noc_services_file: "{{ noc_etc }}/noc_services.conf"
-noc_python_interpreter: python3
 noc_py3_ver: "3.11"
 bi_export_dir: "{{ noc_var_lib }}/bi"
 supervisorctl_key: "{{ lookup('supervisorctl_key', tower_data + '/noc/supervisorctl.key') }}"
