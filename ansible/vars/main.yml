@@ -1,5 +1,15 @@
 ---
 # General settings
+
+# NOC level. Set by tower:
+#
+# `ce` - Community Edition
+# `pro` - Subscribtion/subbrands
+#
+# Do not change manually. Manual changes may result in undefined or
+# unsupported behavior.
+noc_level: "{{ noc_licence_level | default('ce') }}"
+
 # for os specific see pre role
 etc_prefix: /etc
 ansible_python_interpreter: auto
