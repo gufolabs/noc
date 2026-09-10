@@ -1,7 +1,4 @@
 ---
-- name: Check platform
-  include_tasks: "check_platform.yml"
-
 - name: pre tasks
   hosts: all
   become: "False"
@@ -13,6 +10,8 @@
     - "vars/main.yml"
     - "vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
   pre_tasks:
+    - name: Check platform
+      include_tasks: "check_platform.yml"
     - name: Run pre installation checks
       include_tasks: "{{ item }}"
       with_fileglob:
