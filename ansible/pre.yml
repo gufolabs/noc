@@ -1,6 +1,6 @@
 ---
 - name: Check platform
-  include_tasks: "tasks/check_platform.yml"
+  include_tasks: "check_platform.yml"
 
 - name: pre tasks
   hosts: all
