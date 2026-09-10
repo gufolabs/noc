@@ -20,13 +20,14 @@
     comment: "NOC user"
     state: present
 
-- name: Include {{ install_method }} install method
-  include_tasks: "{{ install_method }}.yml"
+- name: Include Git install method
+  ansible.builtin.include_tasks: git.yml
+  when: install_method == "git"
   tags:
     - get_source
 
-- name: Include venv init for {{ noc_python_interpreter }}
-  include_tasks: "init_venv_{{ noc_python_interpreter }}.yml"
+- name: Include venv init for Python 3
+  include_tasks: "init_venv_python3.yml"
   tags:
     - requirements
     - config
@@ -42,4 +43,3 @@
 
 - name: Include noc hacks
   import_tasks: "hacks.yml"
-
