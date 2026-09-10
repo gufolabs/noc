@@ -1,13 +1,4 @@
 ---
-- name: Create required directories on py3  #hack. have to be fixed
-  file:
-    path: "{{ noc_root }}/lib/python{{ noc_py3_ver }}/site-packages/__pycache__"
-    state: "directory"
-    owner: "{{ noc_user }}"
-    mode: 0755
-  when:
-    - noc_python_interpreter == "python3"
-
 - name: Create required directories
   file:
     path: "{{ item }}"
@@ -16,10 +7,10 @@
     group: "{{ noc_group }}"
     mode: 0755
   loop:
-    - "{{ noc_etc }}"             # /opt/noc/etc
-    - "{{ noc_root }}/var"        # /opt/noc/var
-    - "{{ noc_logs }}"            # /var/log/noc
-    - "{{ noc_var_lib }}"         # /var/lib/noc
-    - "{{ noc_reports_dir }}"     # /var/lib/noc/reports
-    - "{{ noc_crashinfo_dir }}"   # /var/lib/noc/var/cp/crashinfo/new
-    - "{{ bi_export_dir }}"       # /var/lib/noc/bi
+    - "{{ noc_etc }}" # /opt/noc/etc
+    - "{{ noc_root }}/var" # /opt/noc/var
+    - "{{ noc_logs }}" # /var/log/noc
+    - "{{ noc_var_lib }}" # /var/lib/noc
+    - "{{ noc_reports_dir }}" # /var/lib/noc/reports
+    - "{{ noc_crashinfo_dir }}" # /var/lib/noc/var/cp/crashinfo/new
+    - "{{ bi_export_dir }}" # /var/lib/noc/bi
