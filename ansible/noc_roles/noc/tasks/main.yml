@@ -26,8 +26,8 @@
   tags:
     - get_source
 
-- name: Include venv init for Python 3
-  include_tasks: "init_venv_python3.yml"
+- name: Include venv init
+  include_tasks: "init_venv.yml"
   tags:
     - requirements
     - config

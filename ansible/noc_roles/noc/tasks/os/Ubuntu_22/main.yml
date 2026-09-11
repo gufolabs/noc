@@ -6,20 +6,10 @@
     cache_valid_time: "{{ apt_cache_valid_time | default (3600) }}"
   vars:
     packages:
-      - python3-dev
       - python3-venv
-      - python3-virtualenv
       - git
-      - libjemalloc2
-      - gcc
-      - libpq-dev
-      - libffi7
-      - libffi-dev
       - patch
       - bzip2
-      - zlib1g-dev
-      - cmake
-      - libssl-dev
   environment:
     https_proxy: "{{ http_proxy }}"
     http_proxy: "{{ http_proxy }}"

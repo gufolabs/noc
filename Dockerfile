@@ -11,7 +11,6 @@ RUN \
     curl \
     ca-certificates \
     libjemalloc2 \
-    libpq-dev \
     iproute2 \
     && (curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=/usr/local/bin sh)
 
@@ -46,7 +45,7 @@ COPY --from=build-ui /opt/noc/ui/dist/ /www/
 WORKDIR /opt/noc/
 RUN \
     set -x \
-    && uv pip install --system -e .[bh,activator,cache-redis,node,login-ldap,login-pam,login-radius,prod-tools,testing,sender-kafka,ping] \
+    && uv pip install --system -e . \
     && (curl -L https://raw.githubusercontent.com/static-web-server/static-web-server/refs/tags/v2.40.1/scripts/installer.sh | sed 's/sudo //g' | sh) \
     && find /opt/noc/ -type f -name "*.py" -print0 | xargs -0 python3 -m py_compile \
     && uv cache clean \
@@ -71,7 +70,7 @@ RUN \
     && apt-get install -y --no-install-recommends \
     snmp \
     git \
-    && uv pip install --system -e .[bh,activator,cache-redis,dev,docs,lint,node,test,login-ldap,login-pam,login-radius,prod-tools,testing,sender-kafka,ping] \
+    && uv pip install --system -e .[dev,docs,lint,test,testing] \
     && uv cache clean \
     && (curl -fsSL https://deb.nodesource.com/setup_24.x | bash -)\
     && apt-get install -y --no-install-recommends nodejs \
