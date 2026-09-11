@@ -1,0 +1,23 @@
+{
+    "name": "BDCOM | xPON | Chassis | Hardware | Module | Module Present #1 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "47eab96c-c833-47ff-a3a9-1165adc3d8f5",
+    "description": "%OPTICAL-TRANSCEIVER: Transceiver is present on port epon0/4",
+    "event_class__name": "Chassis | Hardware | Module | Module Present",
+    "preference": 1000,
+    "vars": [{
+        "name": "module",
+        "value": "PON-Transceiver"
+    }],
+    "patterns": [],
+    "labels": [],
+    "message_rx": "%OPTICAL-TRANSCEIVER: Transceiver is present on port (?P<interface>\\S+)",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "%OPTICAL-TRANSCEIVER: Transceiver is present on port epon0/4",
+            "raw_vars": []
+        }
+    ]
+}
