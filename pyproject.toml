@@ -43,6 +43,7 @@ dependencies = [
   "gufo-traceroute==0.2.0",
   "hiredis==3.1.0",
   "Jinja2==3.1.6",
+  "ldap3==2.10.2.rc2",
   "manhole==1.8.1",
   "markerlib==0.6.0",
   "mongoengine==0.29.0",
@@ -74,7 +75,6 @@ dependencies = [
   "uvicorn==0.40.0",
   "XlsxWriter==3.2.2",
   "yappi==1.7.3",
-  "ldap3==2.10.2.rc2",
 ]
 description = "NOC is an Operation Support System (OSS) for telecom companies, service providers, and enterprise Network Operation Centers"
 dynamic = ["version"]
