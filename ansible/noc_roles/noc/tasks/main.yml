@@ -27,7 +27,7 @@
     - get_source
 
 - name: Include venv init
-  include_tasks: "init_venvyml"
+  include_tasks: "init_venv.yml"
   tags:
     - requirements
     - config

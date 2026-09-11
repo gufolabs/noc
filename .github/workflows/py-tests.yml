@@ -124,7 +124,7 @@ jobs:
         uses: astral-sh/setup-uv@v1
 
       - name: Install Dependencies
-        run: uv pip install --system -e .[test,bh,testing]
+        run: uv pip install --system -e .[test,testing]
 
       - name: Run Tests (with coverage)
         run: pytest --maxfail=10 --cov --cov-branch --cov-report=xml tests/

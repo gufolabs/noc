@@ -63,7 +63,7 @@ dependencies = [
   "pyrad==2.4",
   "python-creole==1.4.10",
   "python-dateutil==2.9.0",
-  "python-multipart==0.0.32", # Used by FastAPI to process form data  
+  "python-multipart==0.0.32", # Used by FastAPI to process form data
   "python-pam==1.8.4",
   "PyYAML==6.0.2",
   "redis==4.6.0",
