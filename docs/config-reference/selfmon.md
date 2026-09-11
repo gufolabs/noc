@@ -34,14 +34,6 @@ Selfmon service configuration
 
 {{ config_param("selfmon.fm_ttl") }}
 
-## enable_liftbridge
-
-{{ config_param("selfmon.enable_liftbridge") }}
-
-## liftbridge_ttl
-
-{{ config_param("selfmon.liftbridge_ttl") }}
-
 ## enable_kafka
 
 {{ config_param("selfmon.enable_kafka") }}
