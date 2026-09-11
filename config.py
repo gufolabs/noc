@@ -664,8 +664,6 @@ class Config(BaseConfig):
         inventory_ttl = IntParameter(default=30)
         enable_fm = BooleanParameter(default=False)
         fm_ttl = IntParameter(default=30)
-        enable_liftbridge = BooleanParameter(default=False)
-        liftbridge_ttl = IntParameter(default=30)
         enable_kafka = BooleanParameter(default=False)
         kafka_ttl = IntParameter(default=30)
 
@@ -686,7 +684,7 @@ class Config(BaseConfig):
     class msgstream(ConfigSection):
         metrics_send_delay = FloatParameter(default=0.25)
         max_message_size = IntParameter(default=921600, help="Max message size for GRPC client")
-        client_class = StringParameter(default="noc.core.msgstream.liftbridge.LiftBridgeClient")
+        client_class = StringParameter(default="noc.core.msgstream.kafka.KafkaClient")
 
         class events(ConfigSection):
             retention_max_age = SecondsParameter(

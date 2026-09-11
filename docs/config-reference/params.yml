@@ -83,8 +83,6 @@ params:
     default: '60'
   biosegmentation.processed_trials_ttl:
     default: '604800'
-  brand:
-    default: NOC
   cache.cache_class:
     default: noc.core.cache.mongo.MongoCache
   cache.default_ttl:
@@ -694,7 +692,7 @@ params:
   msgstream.ch.segment_max_bytes:
     default: '52428800'
   msgstream.client_class:
-    default: noc.core.msgstream.liftbridge.LiftBridgeClient
+    default: noc.core.msgstream.kafka.KafkaClient
   msgstream.dispose.auto_pause_disable_if_subscribers: {}
   msgstream.dispose.auto_pause_time: {}
   msgstream.dispose.retention_max_age:
@@ -898,7 +896,6 @@ params:
   selfmon.enable_fm: {}
   selfmon.enable_inventory: {}
   selfmon.enable_kafka: {}
-  selfmon.enable_liftbridge: {}
   selfmon.enable_managedobject:
     default: 'True'
   selfmon.enable_task: {}
@@ -907,8 +904,6 @@ params:
   selfmon.inventory_ttl:
     default: '30'
   selfmon.kafka_ttl:
-    default: '30'
-  selfmon.liftbridge_ttl:
     default: '30'
   selfmon.managedobject_ttl:
     default: '30'
