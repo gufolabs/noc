@@ -88,28 +88,25 @@ name = "noc"
 requires-python = ">=3.9"
 
 [project.optional-dependencies]
-dev=[
+dev = [
   "Babel==2.13.1",
   "ipython==7.29.0",
-  "pojson==0.7"",
+  "pojson==0.7",
 ]
-docs=[
+docs = [
   # WARNING: Do not bump this version
   # as 1.6.0 brokes blog plugin of material 9.2.5
-  "mkdocs==1.5.3",
-  # WARNING: Do not bump this version
+  "mkdocs==1.5.3", # WARNING: Do not bump this version
   # as any other are incompatible with mkdocs-static-i18n
   "mkdocs-material==9.2.5",
   "mkdocstrings[python]==0.22.0",
-  "mkdocs-macros-plugin==1.0.5",
-  # WARNING: Do not bump this version
+  "mkdocs-macros-plugin==1.0.5", # WARNING: Do not bump this version
   # as others are incompatible with material blog + static-i18n
   # mkdocs-static-i18n==1.1.1
   "git+https://github.com/dvolodin7/mkdocs-static-i18n.git@patch-1#egg=mkdocs-static-i18n",
   "mkdocs-gen-files==0.5.0",
   "mkdocs-literate-nav==0.6.1",
-  "minify_html==0.11.1",
-  # For {{ config_param() }}
+  "minify_html==0.11.1", # For {{ config_param() }}
   "cachetools==5.5.2",
 ]
 lint = [
