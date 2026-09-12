@@ -1,8 +1,10 @@
+import {GLYPHS} from "@gufo-labs/font";
 import * as esbuild from "esbuild";
 import type {CallExpression, Expression} from "estree";
 import * as fs from "fs-extra";
 import * as path from "path";
 import {afterEach, beforeEach, describe, expect, it} from "vitest";
+import {GlyphTransformer} from "../plugins/GlyphTransformer.ts";
 import {ReplaceMethodsPlugin} from "../plugins/ReplaceMethodsPlugin.ts";
 
 describe("ReplaceMethodsPlugin", () => {
@@ -98,6 +100,7 @@ describe("ReplaceMethodsPlugin", () => {
         ecmaVersion: 2020,
         sourceType: "module",
       },
+      glyphTransformer: new GlyphTransformer({semanticDtsPath: "types/noc-glyph.d.ts", glyphCodes: GLYPHS, useSemantic: false, debug: false}),
     });
 
     const result = await esbuild.build({
@@ -158,6 +161,7 @@ describe("ReplaceMethodsPlugin", () => {
         ecmaVersion: 2020,
         sourceType: "module",
       },
+      glyphTransformer: new GlyphTransformer({semanticDtsPath: "types/noc-glyph.d.ts", glyphCodes: GLYPHS, useSemantic: false, debug: false}),
     });
 
     const result = await esbuild.build({
@@ -228,6 +232,7 @@ describe("ReplaceMethodsPlugin", () => {
         ecmaVersion: 2020,
         sourceType: "module",
       },
+      glyphTransformer: new GlyphTransformer({semanticDtsPath: "types/noc-glyph.d.ts", glyphCodes: GLYPHS, useSemantic: false, debug: false}),
     });
 
     const result = await esbuild.build({
@@ -269,6 +274,7 @@ describe("ReplaceMethodsPlugin", () => {
         ecmaVersion: 2020,
         sourceType: "module",
       },
+      glyphTransformer: new GlyphTransformer({semanticDtsPath: "types/noc-glyph.d.ts", glyphCodes: GLYPHS, useSemantic: false, debug: false}),
     });
 
     const result = await esbuild.build({
@@ -281,5 +287,184 @@ describe("ReplaceMethodsPlugin", () => {
     const outputCode = result.outputFiles[0].text;
     expect(outputCode).toContain("const x = 1");
     expect(outputCode).toContain("const y = 2");
+  });
+
+  it("should validate 'semantic' keyword in NOC.glyph references", async() => {
+    const inputCode = `
+      const icon1 = NOC.glyph.semantic.VALID;
+      const icon2 = NOC.glyph.wrong.ICON;
+    `;
+
+    const inputFile = path.join(testDir, "input.js");
+    await fs.writeFile(inputFile, inputCode);
+
+    const glyphCodes = {
+      "test_icon": 0xf001,
+    };
+
+    const plugin = new ReplaceMethodsPlugin({
+      isDev: true,
+      toReplaceMethods: [],
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: "module",
+      },
+      glyphTransformer: new GlyphTransformer({
+        semanticDtsPath: path.join(__dirname, "fixtures", "semantic.d.ts"),
+        glyphCodes: glyphCodes,
+        debug: true,
+        useSemantic: true,
+      }),
+    });
+
+    await expect(async() => {
+      await esbuild.build({
+        entryPoints: [inputFile],
+        bundle: false,
+        write: false,
+        plugins: [plugin.getPlugin()],
+      });
+    }).rejects.toThrow("Invalid glyph accessor: NOC.glyph.wrong");
+  });
+
+  it("should throw error for unknown semantic names", async() => {
+    const inputCode = `
+      const icon1 = NOC.glyph.semantic.UNKNOWN_NAME;
+    `;
+
+    const inputFile = path.join(testDir, "input.js");
+    await fs.writeFile(inputFile, inputCode);
+
+    const semanticDtsPath = path.join(testDir, "semantic.d.ts");
+    await fs.writeFile(semanticDtsPath, `
+      export declare namespace semantic {
+        /** @glyphName test_icon */
+        readonly KNOWN_NAME: string;
+      }
+    `);
+
+    const glyphCodes = {
+      "test_icon": 0xf001,
+    };
+
+    const plugin = new ReplaceMethodsPlugin({
+      isDev: true,
+      toReplaceMethods: [],
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: "module",
+      },
+      glyphTransformer: new GlyphTransformer({
+        semanticDtsPath: semanticDtsPath,
+        glyphCodes: glyphCodes,
+        debug: true,
+        useSemantic: true,
+      }),
+    });
+
+    await expect(async() => {
+      await esbuild.build({
+        entryPoints: [inputFile],
+        bundle: false,
+        write: false,
+        plugins: [plugin.getPlugin()],
+      });
+    }).rejects.toThrow("Unknown semantic constant: UNKNOWN_NAME");
+  });
+
+  it("should transform valid semantic glyph references", async() => {
+    const inputCode = `
+      const icon1 = NOC.glyph.semantic.TEST_ICON;
+    `;
+
+    const inputFile = path.join(testDir, "input.js");
+    await fs.writeFile(inputFile, inputCode);
+
+    const semanticDtsPath = path.join(testDir, "semantic.d.ts");
+    await fs.writeFile(semanticDtsPath, `
+      export declare namespace semantic {
+        /** @glyphName test_icon */
+        readonly TEST_ICON: string;
+      }
+    `);
+
+    const glyphCodes = {
+      "test_icon": 0xf001,
+    };
+
+    const plugin = new ReplaceMethodsPlugin({
+      isDev: true,
+      toReplaceMethods: [],
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: "module",
+      },
+      glyphTransformer: new GlyphTransformer({
+        semanticDtsPath: semanticDtsPath,
+        glyphCodes: glyphCodes,
+        debug: true,
+        useSemantic: true,
+      }),
+    });
+
+    const result = await esbuild.build({
+      entryPoints: [inputFile],
+      bundle: false,
+      write: false,
+      plugins: [plugin.getPlugin()],
+    });
+
+    const outputCode = result.outputFiles[0].text;
+    // Should replace with unicode code
+    expect(outputCode).toContain("61441"); // 0xf001 in decimal
+    expect(outputCode).not.toContain("NOC.glyph.semantic.TEST_ICON");
+  });
+
+  it("should ignore non-semantic glyphs when useSemantic is false", async() => {
+    const inputCode = `
+      const icon1 = NOC.glyph.semantic.TEST_ICON;
+      const icon2 = NOC.glyph.other.ICON;
+    `;
+
+    const inputFile = path.join(testDir, "input.js");
+    await fs.writeFile(inputFile, inputCode);
+
+    const semanticDtsPath = path.join(testDir, "semantic.d.ts");
+    await fs.writeFile(semanticDtsPath, `
+      export declare namespace semantic {
+        /** @glyphName test_icon */
+        readonly TEST_ICON: string;
+      }
+    `);
+
+    const glyphCodes = {
+      "test_icon": 0xf001,
+    };
+
+    const plugin = new ReplaceMethodsPlugin({
+      isDev: true,
+      toReplaceMethods: [],
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: "module",
+      },
+      glyphTransformer: new GlyphTransformer({
+        semanticDtsPath: semanticDtsPath,
+        glyphCodes: glyphCodes,
+        debug: true,
+        useSemantic: false,
+      }),
+    });
+
+    const result = await esbuild.build({
+      entryPoints: [inputFile],
+      bundle: false,
+      write: false,
+      plugins: [plugin.getPlugin()],
+    });
+
+    const outputCode = result.outputFiles[0].text;
+    expect(outputCode).toContain("61441");
+    expect(outputCode).toContain("NOC.glyph.other.ICON");
   });
 });
