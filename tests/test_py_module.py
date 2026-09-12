@@ -6,28 +6,21 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-import subprocess
+import importlib
 import os
 import ast
+from typing import Iterable
+from pathlib import Path
 
 # Third-party modules
 import pytest
 import cachetools
 
 
-ALLOW_XFAIL = {
+_ALLOW_XFAIL = {
     "noc.services.login.backends.pam",
     "noc.services.web.apps.kb.parsers.mediawiki",
-    "noc.services.classifier.xrulelookup",
     "noc.commands.translation",
-    "noc.scripts.build-collections",
-    "noc.scripts.build-pop-links",
-    "noc.scripts.build-models",
-    "noc.scripts.build.compile-handlebars",
-    "noc.scripts.check-db",
-    "noc.scripts.check-labels",
-    "noc.scripts.paste",
-    "noc.scripts.migrate-ignored-interfaces",
     "noc.gis.tile",
     "noc.core.etl.extractor.vcenter",
     "noc.core.etl.extractor.zabbix",
@@ -42,55 +35,45 @@ def _allow_xfail(module: str) -> bool:
     :param module: Module name
     :return:
     """
-    return (
-        module in ALLOW_XFAIL
-        or module.startswith("noc.ansible.")
-        or module.startswith("noc.sa.profiles.VMWare")
-    )
+    return module in _ALLOW_XFAIL or module.startswith("noc.sa.profiles.VMWare")
 
 
 @cachetools.cached(cache={})
-def get_files():
-    def _get_files():
-        try:
-            data = subprocess.check_output(["git", "ls-tree", "HEAD", "-r", "--name-only"]).decode()
-            return data.splitlines()
-        except (OSError, subprocess.CalledProcessError):
-            # No git, emulate
-            data = subprocess.check_output(["find", ".", "-type", "f", "-print"]).decode()
-            return [p[2:] for p in data.splitlines()]
-
-    return [x for x in _get_files() if not x.startswith("docs") and not x.startswith("src")]
+def get_files() -> list[Path]:
+    """Get list of all python files in src/noc."""
+    r: list[Path] = []
+    for root, _, files in os.walk(Path("src", "noc"), followlinks=True):
+        for f in files:
+            if not f.startswith(".") and f.endswith(".py"):
+                r.append(Path(root) / f)
+    return r
 
 
-@cachetools.cached(cache={})
-def get_py_modules_list():
-    result = []
+INIT_PY = "__init__.py"
+
+
+def iter_py_modules() -> Iterable[str]:
+    """Iterate over module names."""
+    root = Path("src")
     for path in get_files():
-        if path.startswith(".") or not path.endswith(".py"):
-            continue
-        parts = path.split(os.sep)
-        if parts[0] == "tests" or path == "setup.py" or "tests" in parts or parts[0] == "ansible":
-            continue
-        fn = parts[-1]
-        if fn.startswith("."):
-            continue
-        # if parts == ["core", "http", "client.py"]:
-        #     continue
-        if fn == "__init__.py":
-            # Strip __init__.py
-            parts = parts[:-1]
+        rel = path.relative_to(root)
+        if path.name == INIT_PY:
+            yield ".".join(rel.parts[:-1])
         else:
-            # Strip .py
-            parts[-1] = fn[:-3]
-        result += [".".join(["noc", *parts])]
-    return result
+            yield ".".join(rel.with_suffix("").parts)
 
 
-@pytest.mark.parametrize("module", get_py_modules_list())
-def test_import(module):
+def iter_init() -> Iterable[Path]:
+    """Iterate __init__.py paths."""
+    for path in get_files():
+        if path.name == INIT_PY:
+            yield path
+
+
+@pytest.mark.parametrize("module", iter_py_modules())
+def test_import(module: str) -> None:
     try:
-        m = __import__(module, {}, {}, "*")
+        m = importlib.import_module(module)
         assert m
     except (ImportError, ModuleNotFoundError, NotImplementedError) as e:
         if _allow_xfail(module):
@@ -99,24 +82,10 @@ def test_import(module):
             pytest.fail(str(e))
 
 
-@pytest.mark.parametrize("module", get_py_modules_list())
-def test_module_empty_docstrings(module):
-    try:
-        m = __import__(module, {}, {}, "*")
-        if m.__doc__ is not None and not m.__doc__.strip():
-            pytest.xfail("Module-level docstring must not be empty")
-    except (ImportError, ModuleNotFoundError, NotImplementedError) as e:
-        if _allow_xfail(module):
-            pytest.xfail(str(e))
-        else:
-            pytest.fail(str(e))
-
-
-@pytest.mark.parametrize("path", [fn for fn in get_files() if fn.endswith("__init__.py")])
-def test_init(path):
-    with open(path) as f:
-        data = f.read()
+@pytest.mark.parametrize("path", iter_init())
+def test_init(path: Path) -> None:
+    data = path.read_text()
     if "TESTS: ALLOW_NON_EMPTY_INIT" in data:
-        return  # exclusion
+        pytest.skip("allowed to be non-empty")
     n = compile(data, path, "exec", ast.PyCF_ONLY_AST)
-    assert bool(n.body) or not bool(data), "__init__.py must be empty"
+    assert bool(n.body) or not bool(data), f"{path} must be empty"
