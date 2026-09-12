@@ -7,7 +7,7 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "(Unit \\d+, )?Configuration (and log )?saved to flash( by (telnet|ssh))? \\(Username: (?P<user>.+), IP: \\S+.+\\)$",
+    "message_rx": "(Unit \\d+, )?Configuration (and log )?saved to flash( by (telnet|ssh))? \\(Username: (?P<user>\\S+), IP:",
     "profiles": ["DLink.DxS"],
     "sources": ["syslog"],
     "test_cases": [
@@ -17,6 +17,10 @@
         },
         {
             "message": "SYSTEM-6: Configuration saved to flash by telnet (Username: admin, IP: 10.118.0.2)",
+            "raw_vars": []
+        },
+        {
+            "message": "SYSTEM-6:Configuration saved to flash by telnet (Username: admin, IP: 10.100.100.101",
             "raw_vars": []
         }
     ]

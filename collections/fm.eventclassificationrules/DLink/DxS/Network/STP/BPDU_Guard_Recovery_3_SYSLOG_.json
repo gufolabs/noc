@@ -1,0 +1,19 @@
+{
+    "name": "DLink | DxS | Network | STP | BPDU Guard Recovery 3 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "bad2933e-3013-45f1-acce-40430fe6ffb5",
+    "description": "ATTACK-6:Copper Port 25 BPDU Attack Protection port recovered.",
+    "event_class__name": "Network | STP | BPDU Guard Recovery",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "ATTACK-6:\\S+ Port (?P<interface>\\d+\\S*) BPDU Attack Protection port recovered\\.",
+    "profiles": ["DLink.DxS"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "ATTACK-6:Copper Port 25 BPDU Attack Protection port recovered.",
+            "raw_vars": []
+        }
+    ]
+}

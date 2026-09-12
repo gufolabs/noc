@@ -1,0 +1,19 @@
+{
+    "name": "DLink | DxS | Network | STP | BPDU Guard Recovery #2 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "69959b26-ea24-4770-86e3-bdbcd5732c60",
+    "description": "ATTACK-6:BPDU Attacked Cleared on port 24!",
+    "event_class__name": "Network | STP | BPDU Guard Recovery",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "ATTACK-6:BPDU Attacked Cleared on port (?P<interface>\\d+)",
+    "profiles": ["DLink.DxS"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "ATTACK-6:BPDU Attacked Cleared on port 24!",
+            "raw_vars": []
+        }
+    ]
+}

@@ -11,7 +11,7 @@
     }],
     "patterns": [],
     "labels": [],
-    "message_rx": "Port <?(?P<interface>\\S+)>? (?:optic module|SFP) (?P<sensor>.+) back to normal",
+    "message_rx": "Port <?(?P<interface>\\d+(?:[\\/\\:]\\d+)?)>? (?:optic module|SFP) (?P<sensor>.+) back to normal",
     "profiles": ["DLink.DxS"],
     "sources": ["syslog"],
     "test_cases": [
