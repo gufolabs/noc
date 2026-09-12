@@ -1,0 +1,19 @@
+{
+    "name": "BDCOM | xPON | Network | xPON | ONU | Laser Always On #1 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "68ec37ca-2b11-4aa6-b290-93167d8feeb6",
+    "description": "%ONU-LAO-DETECT: ONU EPON0/1:6 may be laser always on.",
+    "event_class__name": "Network | xPON | ONU | Laser Always On",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "%ONU-LAO-DETECT: ONU (?P<interface>\\S+) may be laser always on.",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "%ONU-LAO-DETECT: ONU EPON0/1:6 may be laser always on.",
+            "raw_vars": []
+        }
+    ]
+}
