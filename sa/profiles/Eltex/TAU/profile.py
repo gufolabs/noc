@@ -16,7 +16,7 @@ from noc.core.profile.base import BaseProfile
 class Profile(BaseProfile):
     name = "Eltex.TAU"
 
-    pattern_username = rb"^\S+ [Ll]ogin:"
+    pattern_username = rb"^((?!Last)\S+ login|[Ll]ogin):"
     pattern_password = rb"^[Pp]assword:"
     pattern_unprivileged_prompt = rb"^(?P<hostname>\S+)>\s*"
     pattern_prompt = rb"^(\S+# |> |config> |\[\S+\]\s*|root@\S+:(~|/\S+)\$)"
@@ -68,4 +68,6 @@ class Profile(BaseProfile):
 
     @classmethod
     def get_interface_type(cls, name):
+        if name.startswith(("ge", "reserved", "cpu", "sfp")):
+            return "physical"
         return cls.INTERFACE_TYPES.get(name[:1])
