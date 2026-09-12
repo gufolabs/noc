@@ -1,0 +1,59 @@
+{
+    "name": "EAST | EA900Pro",
+    "$collection": "inv.objectmodels",
+    "uuid": "97e12e48-4d41-49c0-915a-fdce0583cebe",
+    "vendor__code": "EAST",
+    "description": "EAST UPS EA900Pro",
+    "connection_rule__name": "APC | SmartUPS",
+    "container_type": "chassis",
+    "cr_context": "CHASSIS",
+    "connections": [
+        {
+            "name": "in",
+            "description": "APC Smart Slot",
+            "direction": "o",
+            "gender": "m",
+            "type__name": "APC | UPS | SS"
+        },
+        {
+            "name": "eth",
+            "description": "Outband Management",
+            "direction": "s",
+            "gender": "f",
+            "protocols": [
+                {
+                    "direction": "*",
+                    "protocol__code": "10BASET"
+                },
+                {
+                    "direction": "*",
+                    "protocol__code": "100BASETX"
+                }
+            ],
+            "type__name": "Electrical | RJ45"
+        },
+        {
+            "name": "console",
+            "description": "Management Console",
+            "direction": "s",
+            "gender": "f",
+            "protocols": [{
+                "direction": ">",
+                "protocol__code": "RS232"
+            }],
+            "type__name": "Electrical | 2.5mm-jack"
+        }
+    ],
+    "data": [
+        {
+            "attr": "part_no",
+            "interface": "asset",
+            "value": ["EA900Pro"]
+        },
+        {
+            "attr": "managed",
+            "interface": "management",
+            "value": true
+        }
+    ]
+}
