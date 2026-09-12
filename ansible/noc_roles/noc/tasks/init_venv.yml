@@ -1,0 +1,39 @@
+---
+- name: Check uv
+  command: uv --version
+  register: uv_version
+  changed_when: false
+  failed_when: false
+
+- name: Install uv
+  pip:
+    name: uv
+    state: present
+  environment:
+    https_proxy: "{{ http_proxy }}"
+    http_proxy: "{{ http_proxy }}"
+  when: uv_version.rc != 0
+
+- name: Update uv
+  command: uv self update
+  register: uv_update
+  changed_when: "'Upgraded uv from' in uv_update.stdout"
+  environment:
+    https_proxy: "{{ http_proxy }}"
+    http_proxy: "{{ http_proxy }}"
+  when: uv_version.rc == 0
+
+- name: Create NOC virtualenv
+  command:
+    cmd: "uv venv {{ noc_root }} --python {{ noc_py3_ver }}"
+  environment:
+    https_proxy: "{{ http_proxy }}"
+    http_proxy: "{{ http_proxy }}"
+
+- name: Install NOC
+  command:
+    cmd: "uv pip install -e '.[supervisor]'"
+    chdir: "{{ noc_root }}"
+  environment:
+    https_proxy: "{{ http_proxy }}"
+    http_proxy: "{{ http_proxy }}"

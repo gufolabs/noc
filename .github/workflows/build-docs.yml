@@ -26,17 +26,17 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v7
 
-      - name: Set Up Python 3.13
+      - name: Set Up Python 3.11
         uses: actions/setup-python@v6
         with:
-          python-version: "3.13"
+          python-version: "3.11"
 
       - name: Setup uv
         uses: astral-sh/setup-uv@v1
 
       # Install dependencies
       - name: Install Dependencies
-        run: pip install -r .requirements/docs.txt
+        run: uv pip install --system -e .[docs]
 
       - name: Build Docs
         run: mkdocs build
