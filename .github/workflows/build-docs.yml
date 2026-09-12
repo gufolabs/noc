@@ -36,7 +36,7 @@ jobs:
 
       # Install dependencies
       - name: Install Dependencies
-        run: pip install -r .requirements/docs.txt
+        run: uv pip install --system -e .[docs]
 
       - name: Build Docs
         run: mkdocs build

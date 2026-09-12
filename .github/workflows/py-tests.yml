@@ -31,8 +31,11 @@ jobs:
         with:
           python-version: ${{ env.TEST_PYTHON_VERSION }}
 
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v1
+
       - name: Install Dependencies
-        run: pip install -r .requirements/lint.txt
+        run: uv pip install --system -e .[lint]
 
       - name: Check Formatting
         run: ruff format --check --diff .
@@ -117,22 +120,11 @@ jobs:
         with:
           python-version: "${{ env.TEST_PYTHON_VERSION }}"
 
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v1
+
       - name: Install Dependencies
-        run: |
-          pip install \
-            -r .requirements/node.txt \
-            -r .requirements/test.txt \
-            -r .requirements/bh.txt \
-            -r .requirements/activator.txt \
-            -r .requirements/cache-redis.txt \
-            -r .requirements/login-ldap.txt \
-            -r .requirements/login-pam.txt \
-            -r .requirements/login-radius.txt \
-            -r .requirements/prod-tools.txt \
-            -r .requirements/testing.txt \
-            -r .requirements/sender-kafka.txt \
-            -r .requirements/ping.txt \
-            -r .requirements/docs.txt
+        run: uv pip install --system -e .[test,testing]
 
       - name: Run Tests (with coverage)
         run: pytest --maxfail=10 --cov --cov-branch --cov-report=xml tests/
