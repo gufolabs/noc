@@ -1,0 +1,12 @@
+{
+    "name": "Object | HAState",
+    "$collection": "pm.metrictypes",
+    "uuid": "b12b7b42-407b-45c8-8e3e-02ba663a456e",
+    "scope__name": "Object",
+    "field_name": "hastate",
+    "field_type": "Int32",
+    "description": "OmegaTelecom omSysRedundancy",
+    "measure": null,
+    "units__code": "1",
+    "scale__code": "1"
+}

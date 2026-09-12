@@ -1,0 +1,10 @@
+{
+    "name": "Network | SBC",
+    "$collection": "inv.capabilities",
+    "uuid": "b3a70906-f125-418c-9be1-5aa3d6c593a6",
+    "description": "OmegaTelecom SBC",
+    "type": "bool",
+    "card_template": null,
+    "allow_manual": false,
+    "multi": false
+}
