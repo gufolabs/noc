@@ -16,13 +16,6 @@
           Deploy will continue in 1 minute
       when:
         - tgsender_token is not defined or not tgsender_token
-
-    - name: timeout for 1 min
-      pause:
-        minutes: 1
-      when:
-        - tgsender_token is not defined or not tgsender_token
-
   when:
     - has_svc_tgsender is defined
   tags:
