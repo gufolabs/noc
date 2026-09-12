@@ -1,0 +1,8 @@
+{
+    "name": "CPE | IP Address",
+    "$collection": "inv.capabilities",
+    "uuid": "0ed0c985-95d9-4359-8f51-8b1ba01e1e44",
+    "description": "CPE IP Address",
+    "type": "ip_address",
+    "card_template": null
+}
