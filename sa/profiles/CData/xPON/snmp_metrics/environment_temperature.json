@@ -1,0 +1,9 @@
+{
+    "": "Environment | Temperature",
+    "": "oid",
+    "oid": "1.3.6.1.4.1.34592.1.3.100.1.8.6.0",
+    "labels": ["noc::sensor::Temperature Sensor"],
+    "scale": "scale(0.1)",
+    "units": "C"
+}
+
