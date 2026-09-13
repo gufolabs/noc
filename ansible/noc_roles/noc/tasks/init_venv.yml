@@ -25,7 +25,7 @@
 
 - name: Create NOC virtualenv
   command:
-    cmd: "uv venv {{ noc_root }} --python {{ noc_py3_ver }}"
+    cmd: "uv venv {{ noc_root }} --python {{ noc_py3_ver }} --allow-existing"
   environment:
     https_proxy: "{{ http_proxy }}"
     http_proxy: "{{ http_proxy }}"
