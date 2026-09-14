@@ -32,8 +32,6 @@ tower_stop_noc: "{{ (lookup('env','TOWER_STOP_NOC') or True) | bool }}"
 tower_serial_restart_noc: "{{ lookup('env','TOWER_SERIAL_RESTART_NOC') | bool }}"
 tower_minimum_version: "1.0.9"
 
-noc_root: /opt/noc
-noc_venv_python: "{{ noc_root }}/bin/python3"
 noc_system_service: noc
 mongo_dir: "{{ etc_prefix }}/mongod"
 grafana_ini: "{{ etc_prefix }}/grafana/grafana.ini"
