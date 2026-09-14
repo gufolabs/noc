@@ -84,7 +84,7 @@ dynamic = ["version"]
 keywords = ["monitoring", "inventory", "fault management", "performance management", "ipam"]
 license = {file = "LICENSE.md"}
 name = "noc"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 
 [project.optional-dependencies]
 dev = [
