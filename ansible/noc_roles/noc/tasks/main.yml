@@ -37,6 +37,7 @@
     cmd: "git restore .gitignore"
     chdir: "{{ noc_root }}"
   when: install_method == "git"
+  changed_when: false
 
 - name: Create dirs
   import_tasks: "dirs.yml"
