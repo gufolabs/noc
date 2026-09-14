@@ -1,5 +1,5 @@
 {
-    "name": "DLink | DxS | Network | STP | BPDU Guard Recovery 3 (SYSLOG)",
+    "name": "DLink | DxS | Network | STP | BPDU Guard Recovery #3 (SYSLOG)",
     "$collection": "fm.eventclassificationrules",
     "uuid": "bad2933e-3013-45f1-acce-40430fe6ffb5",
     "description": "ATTACK-6:Copper Port 25 BPDU Attack Protection port recovered.",
