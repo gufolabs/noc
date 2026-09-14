@@ -2,8 +2,9 @@
 - name: Install Ubuntu system packages
   apt:
     name: "{{ packages }}"
-    update_cache: "True"
+    update_cache: true
     cache_valid_time: "{{ apt_cache_valid_time | default (3600) }}"
+    install_recommends: false
   vars:
     packages:
       - python3-pip
