@@ -10,7 +10,7 @@
     - "vars/main.yml"
   roles:
     - role: post
-      become: "True"
+      become: true
 
   post_tasks:
     - name:
