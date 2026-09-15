@@ -8,16 +8,6 @@
   tags:
     - checks
 
-
-- name: fail if Kafka or Liftbridge is not selected
-  fail:
-    msg: "Kafkasender works only with Liftbridge or Kafka services. Please install at least one"
-  when:
-    - has_svc_kafkasender is defined
-    - "'svc-liftbridge' not in groups and 'svc-kafka' not in groups"
-  tags:
-    - checks
-
 - name: fail if "mx" is not selected
   fail:
     msg: "kafkasender service works with 'mx' service. Please setup at least one somewhere."
