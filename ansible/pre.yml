@@ -1,9 +1,9 @@
 ---
 - name: pre tasks
   hosts: all
-  become: "False"
+  become: false
   any_errors_fatal: "{{ tower_run_checks }}"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - pre
   vars_files:

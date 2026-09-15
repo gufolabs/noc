@@ -1,7 +1,7 @@
 ---
 - name: Install and configure Kafka
   hosts: svc-kafka-exec
-  become: "True"
+  become: true
   serial: 30%
   any_errors_fatal: "True"
   tags:

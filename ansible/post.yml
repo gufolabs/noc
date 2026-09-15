@@ -1,8 +1,8 @@
 ---
 - name: Finally
   hosts: svc-noc-exec
-  become: "False"
-  gather_facts: "False"
+  become: false
+  gather_facts: false
   any_errors_fatal: "True"
   tags:
     - post
@@ -10,7 +10,7 @@
     - "vars/main.yml"
   roles:
     - role: post
-      become: "True"
+      become: true
 
   post_tasks:
     - name:
