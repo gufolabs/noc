@@ -31,7 +31,7 @@
     name: "{{ packages }}"
     state: present
     update_cache: "True"
-  become: true
+  become: "True"
   vars:
     packages:
       - epel-release
