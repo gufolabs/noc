@@ -15,7 +15,7 @@ forms:
       type: str
       common: environment
     repo:
-      default: https://github.com/nocproject/noc.git
+      default: https://github.com/gufolabs/noc.git
       label: Repo
       description: Perhaps you do not want to change it
       type: str

@@ -35,7 +35,7 @@ services:
     level: global
     category: internal
     supervisord:
-      command: "./services/scheduler/service.py"
+      command: "{{ noc_venv_python}} ./services/scheduler/service.py"
       process_name: "%(program_name)s"
       oom_score_adj: 100
       priority: 50

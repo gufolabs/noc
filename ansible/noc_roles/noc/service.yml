@@ -9,6 +9,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: noc
     - role: goss
@@ -27,6 +28,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: login
     - role: goss
@@ -45,6 +47,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: mib
     - role: goss
@@ -63,6 +66,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: nbi
     - role: goss
@@ -81,6 +85,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: mrt
     - role: goss
@@ -99,6 +104,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: datastream
     - role: goss
@@ -117,6 +123,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: escalator
     - role: goss
@@ -135,6 +142,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: web
     - role: goss
@@ -153,6 +161,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: card
     - role: goss
@@ -171,6 +180,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: activator
     - role: goss
@@ -189,6 +199,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: grafanads
     - role: goss
@@ -207,6 +218,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: selfmon
     - role: goss
@@ -225,6 +237,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: mailsender
     - role: goss
@@ -243,6 +256,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: tgsender
     - role: goss
@@ -261,6 +275,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: chwriter
     - role: goss
@@ -279,6 +294,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: classifier
     - role: goss
@@ -297,6 +313,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: correlator
     - role: goss
@@ -315,6 +332,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: syslogcollector
     - role: goss
@@ -333,6 +351,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: trapcollector
     - role: goss
@@ -351,6 +370,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: ping
     - role: goss
@@ -369,6 +389,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: sae
     - role: goss
@@ -387,6 +408,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: scheduler
     - role: goss
@@ -405,6 +427,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: discovery
     - role: goss
@@ -423,6 +446,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: bi
     - role: goss
@@ -441,6 +465,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: worker
     - role: goss
@@ -459,6 +484,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: metrics
     - role: goss
@@ -477,6 +503,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: ui
     - role: goss
@@ -495,6 +522,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: mx
     - role: goss
@@ -513,6 +541,7 @@
   vars_files:
     - "../../vars/main.yml"
     - "../../vars/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+    - "../vars/main.yml"
   roles:
     - role: kafkasender
     - role: goss

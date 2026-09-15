@@ -1,0 +1,23 @@
+---
+- name: Upgrade uv
+  pip:
+    name: uv
+    state: latest
+  environment:
+    https_proxy: "{{ http_proxy }}"
+    http_proxy: "{{ http_proxy }}"
+
+- name: Create NOC virtualenv
+  command:
+    cmd: "uv venv {{ noc_root }} --python {{ noc_py3_ver }} --allow-existing --no-progress"
+  environment:
+    https_proxy: "{{ http_proxy }}"
+    http_proxy: "{{ http_proxy }}"
+
+- name: Install NOC
+  command:
+    cmd: "uv pip install -e '.[supervisor]'"
+    chdir: "{{ noc_root }}"
+  environment:
+    https_proxy: "{{ http_proxy }}"
+    http_proxy: "{{ http_proxy }}"

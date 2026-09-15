@@ -25,7 +25,7 @@
   roles:
     - role: noc
 
-- name: Install NOC microservices
+- name: Install NOC services
   hosts: svc-noc-exec
   become: "True"
   strategy: "{% if groups['svc-noc-exec'] | length > 2 %}free{%else%}linear{%endif%}"
@@ -64,6 +64,7 @@
     - role: ui
     - role: mx
     - role: kafkasender
+    - role: mib
 
 - import_playbook: additional_roles/custom/service.yml
 
