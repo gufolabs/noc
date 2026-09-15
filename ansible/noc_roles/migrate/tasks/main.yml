@@ -21,7 +21,7 @@
   args:
     chdir: "{{ noc_root }}"
   become_user: "{{ noc_user }}"
-  become: "True"
+  become: true
   register: migrate_out
   changed_when: "'Nothing to migrate' not in migrate_out.stdout"
 
@@ -29,7 +29,7 @@
   command: ./noc ensure-indexes
   args:
     chdir: "{{ noc_root }}"
-  become: "True"
+  become: true
   become_user: "{{ noc_user }}"
   changed_when: false
 
@@ -38,7 +38,7 @@
   args:
     chdir: "{{ noc_root }}"
   become_user: "{{ noc_user }}"
-  become: "True"
+  become: true
   register: migrate_lb_out
   changed_when: "'CHANGED' in migrate_lb_out.stdout"
 
@@ -49,7 +49,7 @@
   environment:
     PYTHONPATH: "{{ noc_root | dirname }}"
   become_user: "{{ noc_user }}"
-  become: "True"
+  become: true
   tags:
     - coll_sync
 
@@ -58,7 +58,7 @@
   args:
     chdir: "{{ noc_root }}"
   become_user: "{{ noc_user }}"
-  become: "True"
+  become: true
   register: migrate_lb_out
   changed_when: "'CHANGED' in migrate_lb_out.stdout"
 
@@ -78,7 +78,7 @@
   args:
     chdir: "{{ noc_root }}"
   become_user: "{{ noc_user }}"
-  become: "True"
+  become: true
   tags:
     - perms
     - skip_ansible_lint
@@ -88,7 +88,7 @@
   args:
     chdir: "{{ noc_root }}"
   become_user: "{{ noc_user }}"
-  become: "True"
+  become: true
   register: mibs_out
   changed_when: mibs_out.stdout | length > 7
 
@@ -100,6 +100,6 @@
     PYTHONPATH: "{{ noc_root | dirname }}"
     DJANGO_SETTINGS_MODULE: "noc.settings"
   become_user: "{{ noc_user }}"
-  become: "True"
+  become: true
   register: result
   changed_when: "'CHANGED' in result.stdout"
