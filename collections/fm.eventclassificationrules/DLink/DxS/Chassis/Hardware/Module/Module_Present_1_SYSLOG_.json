@@ -1,0 +1,19 @@
+{
+    "name": "DLink | DxS | Chassis | Hardware | Module | Module Present #1 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "fdfd278a-b377-4509-a6a8-3192d692f904",
+    "description": "Port 9 1000 GBIC module detected.",
+    "event_class__name": "Chassis | Hardware | Module | Module Present",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "Port (?P<interface>\\d+\\S*) \\d+ (?P<module>GBIC) module detected\\.",
+    "profiles": ["DLink.DxS"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "Port 9 1000 GBIC module detected.",
+            "raw_vars": []
+        }
+    ]
+}

@@ -7,11 +7,17 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "( Unit (?P<unit>\\d+), )?System started up$",
+    "message_rx": "( Unit (?P<unit>\\d+), )?System started up( critical)?$",
     "profiles": ["DLink.DxS"],
     "sources": ["syslog"],
-    "test_cases": [{
-        "message": "CRIT: System started up",
-        "raw_vars": []
-    }]
+    "test_cases": [
+        {
+            "message": "CRIT: System started up",
+            "raw_vars": []
+        },
+        {
+            "message": "System started up critical",
+            "raw_vars": []
+        }
+    ]
 }

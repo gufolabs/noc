@@ -1,0 +1,19 @@
+{
+    "name": "DLink | DxS | Network | STP | BPDU Guard Violation #2 (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "f4cc0d54-cdb1-43e5-80c8-84079cb8082e",
+    "description": "ATTACK-6:BPDU Attacked Detected on port 24! Port Drop BPDU",
+    "event_class__name": "Network | STP | BPDU Guard Violation",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "ATTACK-6:BPDU Attacked Detected on port (?P<interface>\\d+)",
+    "profiles": ["DLink.DxS"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "ATTACK-6:BPDU Attacked Detected on port 24! Port Drop BPDU",
+            "raw_vars": []
+        }
+    ]
+}
