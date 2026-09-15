@@ -1,6 +1,6 @@
 ---
 - name: Setting hostname in rc.conf
-  become: "True"
+  become: true
   lineinfile:
     dest: /etc/rc.conf
     regexp: "^hostname="
@@ -12,7 +12,7 @@
   pkgng:
     name: "{{ packages }}"
     state: present
-  become: "True"
+  become: true
   vars:
     packages:
       - ca_root_nss
@@ -28,14 +28,14 @@
   until: freebsd_pkg_result is succeeded
 
 - name: Update hostname
-  become: "True"
+  become: true
   hostname:
     name: "{{ inventory_hostname }}"
   tags:
     - config
 
 - name: create dirs
-  become: "True"
+  become: true
   file:
     state: directory
     path: "{{ item }}"

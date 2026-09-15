@@ -1,10 +1,10 @@
 ---
 - name: Liftbridge tasks
   hosts: svc-liftbridge-exec
-  become: "True"
+  become: true
   any_errors_fatal: "False"
   serial: 50%
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - liftbridge
   vars_files:

@@ -1,7 +1,7 @@
 ---
 - name: Check platform
   hosts: all
-  gather_facts: "True"
+  gather_facts: true
   vars_files:
     - "vars/main.yml"
   tasks:
@@ -14,8 +14,8 @@
 
 - name: Install NOC
   hosts: svc-noc-exec
-  become: "True"
-  gather_facts: "True"
+  become: true
+  gather_facts: true
   tags:
     - node
     - noc
@@ -27,9 +27,9 @@
 
 - name: Install NOC microservices
   hosts: svc-noc-exec
-  become: "True"
+  become: true
   strategy: "{% if groups['svc-noc-exec'] | length > 2 %}free{%else%}linear{%endif%}"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - node
     - noc

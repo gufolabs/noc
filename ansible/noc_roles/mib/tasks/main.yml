@@ -2,7 +2,7 @@
 - include_tasks: "os/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/main.yml"
 
 - name: Create directory for imported mibs
-  become: "True"
+  become: true
   file:
     state: directory
     path: "{{ item }}"
