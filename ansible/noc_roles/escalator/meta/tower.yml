@@ -35,7 +35,7 @@ services:
     level: global
     category: internal
     supervisord:
-      command: "./services/escalator/service.py"
+      command: "{{ noc_venv_python}} ./services/escalator/service.py"
       process_name: "%(program_name)s"
       oom_score_adj: 5
       priority: 50
