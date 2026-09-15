@@ -1,6 +1,6 @@
 ---
 - name: reload clickhouse-server
-  become: "False"
+  become: false
   debug:
     msg: Clickhouse configuration was changed. hope it will reload it automaticaly
 

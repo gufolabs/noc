@@ -3,7 +3,7 @@
   hosts: svc-goss-exec
   become: true
   any_errors_fatal: "False"
-  gather_facts: "False"
+  gather_facts: false
   tags:
     - goss
     - external
