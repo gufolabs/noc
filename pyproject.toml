@@ -110,7 +110,7 @@ lint = [
   "types-cachetools==5.5.0.20240820",
 ]
 supervisor = [
-  "supervisor==4.2.5",
+  "supervisor==4.3.0",
   "supervisor-serialrestart==0.1.1",
   "supervisor-wildcards==0.1.3",
 ]
