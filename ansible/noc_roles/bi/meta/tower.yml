@@ -45,7 +45,7 @@ services:
     level: global
     category: internal
     supervisord:
-      command: "./services/bi/service.py"
+      command: "{{ noc_venv_python}} ./services/bi/service.py"
       process_name: "%(program_name)s-%(process_num)02d"
       oom_score_adj: 50
       startretries: 999
