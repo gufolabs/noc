@@ -21,7 +21,7 @@
     state: present
 
 - name: Include Git install method
-  ansible.builtin.include_tasks: git.yml
+  include_tasks: git.yml
   when: install_method == "git"
   tags:
     - get_source
@@ -31,6 +31,13 @@
   tags:
     - requirements
     - config
+
+- name: Restore Git .gitignore
+  command:
+    cmd: "git restore .gitignore"
+    chdir: "{{ noc_root }}"
+  when: install_method == "git"
+  changed_when: false
 
 - name: Create dirs
   import_tasks: "dirs.yml"

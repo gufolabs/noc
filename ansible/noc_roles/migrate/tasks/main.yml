@@ -46,8 +46,6 @@
   command: ./noc collection sync
   args:
     chdir: "{{ noc_root }}"
-  environment:
-    PYTHONPATH: "{{ noc_root | dirname }}"
   become_user: "{{ noc_user }}"
   become: "True"
   tags:
@@ -93,11 +91,10 @@
   changed_when: mibs_out.stdout | length > 7
 
 - name: Apply pools
-  command: "{{ noc_root }}/scripts/deploy/apply-pools"
+  command: "{{ noc_venv_python}} ./scripts/deploy/apply-pools"
   args:
     chdir: "{{ noc_root }}"
   environment:
-    PYTHONPATH: "{{ noc_root | dirname }}"
     DJANGO_SETTINGS_MODULE: "noc.settings"
   become_user: "{{ noc_user }}"
   become: "True"
