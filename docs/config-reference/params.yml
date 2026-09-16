@@ -785,6 +785,8 @@ params:
     max: '255'
     min: '0'
   pool: {}
+  process.cpu_affinity:
+    default: none
   proxy.ftp_proxy: {}
   proxy.http_proxy: {}
   proxy.https_proxy: {}
