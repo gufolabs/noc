@@ -1,24 +1,24 @@
 ---
 - name: reload systemd
-  become: "True"
+  become: true
   systemd:
     name: liftbridge
     daemon_reload: "True"
 
 - name: restart liftbridge
-  become: "True"
+  become: true
   service:
     name: liftbridge
     state: restarted
 
 - name: reload liftbridge
-  become: "True"
+  become: true
   service:
     name: liftbridge
     state: reloaded
 
 - name: start liftbridge
-  become: "True"
+  become: true
   service:
     name: liftbridge
     enabled: "True"

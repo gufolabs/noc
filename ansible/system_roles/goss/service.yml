@@ -1,9 +1,9 @@
 ---
 - name: Goss tasks
   hosts: svc-goss-exec
-  become: "True"
+  become: true
   any_errors_fatal: "False"
-  gather_facts: "False"
+  gather_facts: false
   tags:
     - goss
     - external

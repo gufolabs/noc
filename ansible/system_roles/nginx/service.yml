@@ -2,7 +2,7 @@
 - name: Install and configure nginx
   hosts: svc-nginx-exec
   serial: 50%
-  become: "True"
+  become: true
   tags:
     - nginx
     - web
