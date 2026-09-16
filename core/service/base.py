@@ -237,8 +237,11 @@ class BaseService:
         if expected is AFF_NONE:
             return
         if not AffinityController.supports_set:
-            self.logger.info("CPU affinity set is requested, but not supported. Skipping")
-        self.logger.info("Setting CPU affinity to %s", ", ".join(str(x) for x in expected))
+            self.logger.info(
+                "CPU affinity is configured, but setting CPU affinity is not supported. Skipping"
+            )
+            return
+        self.logger.info("Setting CPU affinity to %s", ", ".join(str(x) for x in sorted(expected)))
         AffinityController.set_affinity(expected)
 
     def start(self) -> None:
