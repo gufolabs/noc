@@ -33,6 +33,7 @@ import setproctitle
 
 # NOC modules
 from noc.config import config
+from noc.core.affinity import AffinityController, AFF_NONE
 from noc.core.debug import excepthook, error_report
 from noc.core.perf import apply_metrics
 from noc.core.hist.monitor import apply_hists
@@ -230,6 +231,16 @@ class BaseService:
         self.logger.debug("Setting process title to: %s", title)
         setproctitle.setproctitle(title)
 
+    def set_cpu_affinity(self) -> None:
+        """Apply CPU affinity settings."""
+        expected = AffinityController.effective_affinity(config.process.cpu_affinity)
+        if expected is AFF_NONE:
+            return
+        if not AffinityController.supports_set:
+            self.logger.info("CPU affinity set is requested, but not supported. Skipping")
+        self.logger.info("Setting CPU affinity to %s", ", ".join(str(x) for x in expected))
+        AffinityController.set_affinity(expected)
+
     def start(self) -> None:
         """Run main server loop"""
         self.startup_ts = perf_counter()
@@ -250,6 +261,8 @@ class BaseService:
         self.set_proc_title()
         # Setup signal handlers
         self.setup_signal_handlers()
+        # Setup CPU affinity
+        self.set_cpu_affinity()
         self.on_start()
         # Starting IOLoop
         self.is_active = True

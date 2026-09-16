@@ -564,6 +564,9 @@ class Config(BaseConfig):
             default="https://standards-oui.ieee.org/oui28/mam.txt"
         )
 
+    class process(ConfigSection):
+        cpu_affinity = StringParameter(default="none")
+
     class pg(ConfigSection):
         addresses = ServiceParameter(service="postgres", wait=True, near=True, full_result=False)
         db = StringParameter(default="noc")
