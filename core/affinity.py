@@ -59,11 +59,12 @@ class BaseController:
             _Auto: Automatic CPU affinity detection requested.
             _None: CPU affinity disabled.
         """
+        aff = aff.strip()
         if not aff or aff == "none":
             return AFF_NONE
         if aff == "auto":
             return AFF_AUTO
-        return {int(item) for item in aff.split(",")}
+        return {int(item.strip()) for item in aff.split(",")}
 
     @classmethod
     def effective_affinity(cls, aff: str) -> set[int] | _None:

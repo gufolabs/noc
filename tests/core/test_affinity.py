@@ -29,6 +29,8 @@ def affinity_controller(affinity: set[int]) -> type[BaseController]:
         ("", AFF_NONE),
         ("none", AFF_NONE),
         ("auto", AFF_AUTO),
+        ("  none ", AFF_NONE),
+        ("auto    ", AFF_AUTO),
     ],
 )
 def test_parse_affinity_sentinel(aff: str, expected: object) -> None:
@@ -42,6 +44,12 @@ def test_parse_affinity_sentinel(aff: str, expected: object) -> None:
         ("0,1", {0, 1}),
         ("0,2,4", {0, 2, 4}),
         ("1,3,5,7", {1, 3, 5, 7}),
+        # With spaces
+        (" 0", {0}),
+        (" 0  ", {0}),
+        ("0, 1", {0, 1}),
+        ("0,2, 4", {0, 2, 4}),
+        ("1,3    ,5,   7    ", {1, 3, 5, 7}),
     ],
 )
 def test_parse_affinity_mask(aff: str, expected: set[int]) -> None:
