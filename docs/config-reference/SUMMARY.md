@@ -47,6 +47,7 @@
 * [[performance] section](performance.md)
 * [[pg] section](pg.md)
 * [[ping] section](ping.md)
+* [[process] section](process.md)
 * [[proxy] section](proxy.md)
 * [[redis] section](redis.md)
 * [[redpanda] section](redpanda.md)
