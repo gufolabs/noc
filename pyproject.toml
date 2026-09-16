@@ -22,7 +22,7 @@ classifiers = [
 ]
 # Keep this list in alphabet order
 dependencies = [
-  "aiokafka[lz4,snappy,zstd]==0.13.0",
+  "aiokafka[lz4,snappy,zstd]==0.14.0",
   "atomicl==0.1.1",
   "blinker==1.9.0",
   "bsdiff4==1.2.6",
