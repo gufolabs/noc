@@ -1,9 +1,9 @@
 ---
 - name: Install NOC
   hosts: svc-noc-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
   vars_files:
@@ -19,9 +19,9 @@
 
 - name: Install NOC login
   hosts: svc-login-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - login
@@ -38,9 +38,9 @@
 
 - name: Install NOC mib
   hosts: svc-mib-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - mib
@@ -57,9 +57,9 @@
 
 - name: Install NOC nbi
   hosts: svc-nbi-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - nbi
@@ -76,9 +76,9 @@
 
 - name: Install NOC mrt
   hosts: svc-mrt-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - mrt
@@ -95,9 +95,9 @@
 
 - name: Install NOC datastream
   hosts: svc-datastream-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - datastream
@@ -114,9 +114,9 @@
 
 - name: Install NOC escalator
   hosts: svc-escalator-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - escalator
@@ -133,9 +133,9 @@
 
 - name: Install NOC web
   hosts: svc-web-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - web
@@ -152,9 +152,9 @@
 
 - name: Install NOC card
   hosts: svc-card-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - card
@@ -171,9 +171,9 @@
 
 - name: Install NOC activator
   hosts: svc-activator-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - activator
@@ -190,9 +190,9 @@
 
 - name: Install NOC grafanads
   hosts: svc-grafanads-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - grafanads
@@ -209,9 +209,9 @@
 
 - name: Install NOC selfmon
   hosts: svc-selfmon-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - selfmon
@@ -228,9 +228,9 @@
 
 - name: Install NOC mailsender
   hosts: svc-mailsender-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - mailsender
@@ -247,9 +247,9 @@
 
 - name: Install NOC tgsender
   hosts: svc-tgsender-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - tgsender
@@ -266,9 +266,9 @@
 
 - name: Install NOC chwriter
   hosts: svc-chwriter-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - chwriter
@@ -285,9 +285,9 @@
 
 - name: Install NOC classifier
   hosts: svc-classifier-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - classifier
@@ -304,9 +304,9 @@
 
 - name: Install NOC correlator
   hosts: svc-correlator-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - correlator
@@ -323,9 +323,9 @@
 
 - name: Install NOC syslogcollector
   hosts: svc-syslogcollector-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - syslogcollector
@@ -342,9 +342,9 @@
 
 - name: Install NOC trapcollector
   hosts: svc-trapcollector-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - trapcollector
@@ -361,9 +361,9 @@
 
 - name: Install NOC ping
   hosts: svc-ping-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - ping
@@ -380,9 +380,9 @@
 
 - name: Install NOC sae
   hosts: svc-sae-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - sae
@@ -399,9 +399,9 @@
 
 - name: Install NOC scheduler
   hosts: svc-scheduler-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - scheduler
@@ -418,9 +418,9 @@
 
 - name: Install NOC discovery
   hosts: svc-discovery-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - discovery
@@ -437,9 +437,9 @@
 
 - name: Install NOC bi
   hosts: svc-bi-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - bi
@@ -456,9 +456,9 @@
 
 - name: Install NOC worker
   hosts: svc-worker-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - worker
@@ -475,9 +475,9 @@
 
 - name: Install NOC metrics
   hosts: svc-metrics-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - metrics
@@ -494,9 +494,9 @@
 
 - name: Install NOC ui
   hosts: svc-ui-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - ui
@@ -513,9 +513,9 @@
 
 - name: Install NOC mx
   hosts: svc-mx-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - mx
@@ -532,9 +532,9 @@
 
 - name: Install NOC kafkasender
   hosts: svc-kafkasender-exec
-  become: "True"
+  become: true
   strategy: "free"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - noc
     - kafkasender

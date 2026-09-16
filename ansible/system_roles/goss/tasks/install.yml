@@ -5,7 +5,7 @@
     dest: "{{ goss_temp_file }}"
     validate_certs: "True"
   delegate_to: 127.0.0.1
-  become: "False"
+  become: false
   run_once: "True"
   environment:
     http_proxy: "{{ http_proxy }}"

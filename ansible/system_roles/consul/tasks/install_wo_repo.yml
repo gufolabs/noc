@@ -5,7 +5,7 @@
     dest: "{{ consul_temp_file_checksum }}"
     validate_certs: "True"
   delegate_to: 127.0.0.1
-  become: "False"
+  become: false
   run_once: "True"
   environment:
     https_proxy: "{{ http_proxy }}"
@@ -15,7 +15,7 @@
   register: consul_sha256
   check_mode: "False"
   delegate_to: 127.0.0.1
-  become: "False"
+  become: false
   run_once: "True"
   changed_when: false
 
@@ -27,7 +27,7 @@
     timeout: 42
     validate_certs: "True"
   delegate_to: 127.0.0.1
-  become: "False"
+  become: false
   run_once: "True"
   environment:
     https_proxy: "{{ http_proxy }}"

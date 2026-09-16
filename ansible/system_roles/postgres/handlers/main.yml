@@ -1,18 +1,18 @@
 ---
 - name: reload systemd
-  become: "True"
+  become: true
   systemd:
     name: "{{ postgres_system_service }}"
     daemon_reload: "True"
 
 - name: reload postgres
-  become: "True"
+  become: true
   service:
     name: "{{ postgres_system_service }}"
     state: reloaded
 
 - name: restart postgres
-  become: "True"
+  become: true
   service:
     name: "{{ postgres_system_service }}"
     state: restarted
