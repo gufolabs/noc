@@ -1,0 +1,3 @@
+---
+noc_root: /opt/noc
+noc_venv_python: "{{ noc_root }}/bin/python3"
