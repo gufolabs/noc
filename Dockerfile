@@ -19,7 +19,6 @@ RUN \
     && apt-get install -y --no-install-recommends \
     bzip2 \
     curl \
-    libjemalloc2 \
     libpq-dev \
     && pip3 install --upgrade pip \
     && pip3 install\
