@@ -7,12 +7,20 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "Login failed through (?:Web|Telnet|SSH)\\s*\\(User(name)?: (?P<user>.+?), IP: (?P<ip>\\S+)(?:, MAC: \\S+)?\\)$",
+    "message_rx": "Login failed throughh? (?:Web|Telnet|SSH)\\s*\\((?:User(name)?: (?P<user>.+?),)? IP: (?P<ip>\\S+)(?:, MAC: \\S+)?\\s*\\)$",
     "profiles": ["DLink.DxS"],
     "sources": ["syslog"],
     "test_cases": [
         {
-            "message": "INFO: Login failed through Telnet (Username: Anonymous, IP: 10.116.0.2, MAC: 00-05-74-97-49-00)",
+            "message": "INFO: Login failed throughh Telnet (Username: Anonymous, IP: 10.116.0.2, MAC: 00-05-74-97-49-00)",
+            "raw_vars": []
+        },
+        {
+            "message": "Login failed through Telnet( IP: 10.100.100.101 )",
+            "raw_vars": []
+        },
+        {
+            "message": "CLI-6:Login failed throughh Telnet( IP: 192.168.1.3 )",
             "raw_vars": []
         }
     ]

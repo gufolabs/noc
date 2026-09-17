@@ -7,12 +7,16 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "\\[BGP(\\(3\\))?:\\] BGP connection is closed due to error \\(.+ Peer:<(?P<peer>\\S+)>\\)\\.",
+    "message_rx": "\\[BGP(?:\\(\\d+\\))?:\\] BGP connection is closed due to (?P<reason>.+?):? .*\\(.*\\s*Peer:<(?P<peer>\\S+)>\\)\\.",
     "profiles": ["DLink.DxS"],
     "sources": ["syslog"],
     "test_cases": [
         {
             "message": "WARN(4) [BGP(3):] BGP connection is closed due to error (Code:<2> Subcode:<7> Field:<Open Opt: Strict, Err-Data present> Peer:<192.168.1.1>).",
+            "raw_vars": []
+        },
+        {
+            "message": "WARN(4) [BGP(7):] BGP connection is closed due to Notify: Code <4> Subcode <0> (Peer:<10.110.0.110>).",
             "raw_vars": []
         }
     ]

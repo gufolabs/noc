@@ -7,7 +7,7 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "Unauthenticated IP-MAC address and discarded by IMPB\\(IP:<(?P<ip>\\S+)>, MAC:<(?P<mac>\\S+)>, [pP]ort<(?P<interface>\\S+)>\\)$",
+    "message_rx": "Unauthenticated IP-MAC address and discarded by (?:IMPB|ip mac port binding)\\(IP:<(?P<ip>\\S+)>, MAC:<(?P<mac>\\S+)>, [pP]ort<(?P<interface>\\S+)>\\)$",
     "profiles": ["DLink.DxS"],
     "sources": ["syslog"],
     "test_cases": [
@@ -17,6 +17,10 @@
         },
         {
             "message": "WARN(4) Unauthenticated IP-MAC address and discarded by IMPB(IP:<0.0.0.0>, MAC:<48-A9-8A-05-4A-E3>, Port<13>)",
+            "raw_vars": []
+        },
+        {
+            "message": "WARN: Unauthenticated IP-MAC address and discarded by ip mac port binding(IP:<172.16.4.2>, MAC:<20-C9-D0-99-C0-24>, Port<1>)",
             "raw_vars": []
         }
     ]

@@ -7,7 +7,7 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "[Pp]ort (?P<interface>.+) link down$",
+    "message_rx": "[Pp]ort (?P<interface>.+) link down(?: info)?$",
     "profiles": ["DLink.DxS"],
     "sources": ["syslog"],
     "test_cases": [
@@ -17,6 +17,10 @@
         },
         {
             "message": "LinkStatus-6: port 10 link down",
+            "raw_vars": []
+        },
+        {
+            "message": "port 46 link down info",
             "raw_vars": []
         }
     ]

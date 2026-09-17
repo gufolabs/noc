@@ -7,12 +7,16 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "\\[BGP(\\(1\\))?:\\] BGP connection is successfully established Peer:<(?P<peer>\\S+)>\\.",
+    "message_rx": "\\[BGP(?:\\(1\\))?:\\] BGP connection is successfully established (?:\\()?Peer:<(?P<peer>\\S+\\d+)>(?:\\.|\\))",
     "profiles": ["DLink.DxS"],
     "sources": ["syslog"],
     "test_cases": [
         {
             "message": "INFO(6) [BGP(1):] BGP connection is successfully established Peer:<10.110.0.110>.",
+            "raw_vars": []
+        },
+        {
+            "message": "[BGP(1):] BGP connection is successfully established (Peer:<10.110.0.110>)",
             "raw_vars": []
         }
     ]

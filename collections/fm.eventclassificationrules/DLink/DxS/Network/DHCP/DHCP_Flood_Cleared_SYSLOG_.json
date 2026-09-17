@@ -1,0 +1,19 @@
+{
+    "name": "DLink | DxS | Network | DHCP | DHCP Flood Cleared (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "bb669b8d-b768-459f-87bb-99ed673e89bf",
+    "description": "INFO(6) Port 1 is currently recovery due to the DHCP auto-recovery timer is timeout.",
+    "event_class__name": "Network | DHCP | DHCP Flood Cleared",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "[Pp]ort (?P<interface>.+) is currently recovery due to the DHCP auto-recovery timer is timeout",
+    "profiles": ["DLink.DxS"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "INFO(6) Port 1 is currently recovery due to the DHCP auto-recovery timer is timeout.",
+            "raw_vars": []
+        }
+    ]
+}

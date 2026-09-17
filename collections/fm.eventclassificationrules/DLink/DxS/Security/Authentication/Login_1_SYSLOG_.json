@@ -7,7 +7,7 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "Successful login through (?:Web|Telnet|SSH)\\s*\\(\\s*User(name)?: (?P<user>.+?),\\s*IP: (?P<ip>\\S+)(?:,\\s*MAC: \\S+)?\\s*\\)$",
+    "message_rx": "Successful login through (?:Web|Telnet|SSH)\\s*\\(\\s*(?:User(name)?: (?P<user>.+?),\\s*)?IP: (?P<ip>\\S+)(?:,\\s*MAC: \\S+)?\\s*\\)$",
     "profiles": ["DLink.DxS"],
     "sources": ["syslog"],
     "test_cases": [
@@ -17,6 +17,10 @@
         },
         {
             "message": "CLI-6: Successful login through Telnet( User: admin, IP: 10.118.0.10 )",
+            "raw_vars": []
+        },
+        {
+            "message": "CLI-6:Successful login through Telnet( IP: 192.168.1.3 )",
             "raw_vars": []
         }
     ]
