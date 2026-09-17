@@ -21,7 +21,3 @@ class NBIService(FastAPIService):
     def __init__(self):
         super().__init__()
         self.collect_req_api_metric = True
-
-
-if __name__ == "__main__":
-    NBIService().start()

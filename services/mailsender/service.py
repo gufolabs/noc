@@ -163,7 +163,3 @@ class MailSenderService(FastAPIService):
         except smtplib.SMTPException as e:
             self.logger.error("[%s] Failed to quit properly: %s", message_id, e)
         return True
-
-
-if __name__ == "__main__":
-    MailSenderService().start()

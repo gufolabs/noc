@@ -53,7 +53,3 @@ class MXService(FastAPIService):
         self.logger.debug("[%d] Receiving message %s", msg.offset, msg.headers)
         await self.router.route_message(msg, msg_id=msg.offset)
         self.logger.debug("[%s] Finish processing", msg.offset)
-
-
-if __name__ == "__main__":
-    MXService().start()

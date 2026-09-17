@@ -14,7 +14,3 @@ class ZeroConfService(FastAPIService):
     name = "zeroconf"
     use_mongo = True
     traefik_routes_rule = "PathPrefix(`/api/zeroconf`)"
-
-
-if __name__ == "__main__":
-    ZeroConfService().start()

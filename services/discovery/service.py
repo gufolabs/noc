@@ -67,7 +67,3 @@ class DiscoveryService(FastAPIService):
         if self.scheduler:
             self.scheduler.apply_metrics(r)
         return r
-
-
-if __name__ == "__main__":
-    DiscoveryService().start()

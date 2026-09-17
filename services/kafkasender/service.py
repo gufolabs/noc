@@ -160,7 +160,3 @@ class KafkaSenderService(FastAPIService):
             return partitions[0].encode("utf-8")
         cls.number_message[topic] += 1
         return partitions[cls.number_message[topic].value % len(partitions)].encode("utf-8")
-
-
-if __name__ == "__main__":
-    KafkaSenderService().start()

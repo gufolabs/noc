@@ -19,7 +19,3 @@ class MRTService(FastAPIService):
 
     async def on_activate(self):
         self.sae = self.open_rpc("sae")
-
-
-if __name__ == "__main__":
-    MRTService().start()

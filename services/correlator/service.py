@@ -1960,7 +1960,3 @@ class CorrelatorService(FastAPIService):
                 ManagedObjectStatus.update_status_bulk(r, update_jobs=True)
             except Exception:
                 error_report()
-
-
-if __name__ == "__main__":
-    CorrelatorService().start()

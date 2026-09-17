@@ -331,7 +331,3 @@ class SyslogCollectorService(FastAPIService):
             del self.address_configs[addr]
         del self.source_configs[id]
         metrics["sources_deleted"] += 1
-
-
-if __name__ == "__main__":
-    SyslogCollectorService().start()

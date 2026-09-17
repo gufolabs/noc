@@ -399,7 +399,3 @@ class PingService(FastAPIService):
             if not ps.is_fatal:
                 data["labels"] = [f"noc::address::{address}"]
             self.register_metrics("ping", [data], key=ps.bi_id)
-
-
-if __name__ == "__main__":
-    PingService().start()
