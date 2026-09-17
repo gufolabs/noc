@@ -10,7 +10,6 @@ RUN \
     bzip2 \
     curl \
     ca-certificates \
-    libjemalloc2 \
     iproute2 \
     && (curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=/usr/local/bin sh)
 
