@@ -68,7 +68,3 @@ class SelfMonService(FastAPIService):
             if delta > 0:
                 self.logger.info("Sleeping %ss", delta)
                 time.sleep(delta)
-
-
-if __name__ == "__main__":
-    SelfMonService().start()

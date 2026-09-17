@@ -53,7 +53,3 @@ class WebService(FastAPIService):
 
     def get_backend_limit(self):
         return config.web.max_threads
-
-
-if __name__ == "__main__":
-    WebService().start()

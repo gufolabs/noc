@@ -88,7 +88,3 @@ class SchedulerService(FastAPIService):
             jcls=cls.UPDATE_CHECKERS_JOB,
             ts=datetime.datetime.now() + datetime.timedelta(seconds=120),
         )
-
-
-if __name__ == "__main__":
-    SchedulerService().start()

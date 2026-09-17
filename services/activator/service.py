@@ -17,7 +17,3 @@ class ActivatorService(FastAPIService):
     process_name = "noc-%(name).10s-%(pool).5s"
     use_telemetry = True
     use_watchdog = config.watchdog.enable_watchdog
-
-
-if __name__ == "__main__":
-    ActivatorService().start()

@@ -40,7 +40,7 @@ services:
     level: pool
     category: internal
     supervisord:
-      command: "{{ noc_venv_python}} ./services/syslogcollector/service.py"
+      command: "{{ noc_venv_python }} -m noc.services.syslogcollector"
       process_name: "%(program_name)s"
       oom_score_adj: 50
       priority: 200

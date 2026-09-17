@@ -61,7 +61,3 @@ class EscalatorService(FastAPIService):
                 sample=config.escalator.sample,
             )
             self.shards[sn].run()
-
-
-if __name__ == "__main__":
-    EscalatorService().start()

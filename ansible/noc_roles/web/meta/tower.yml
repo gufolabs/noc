@@ -50,7 +50,7 @@ services:
     level: global
     category: internal
     supervisord:
-      command: "{{ noc_venv_python}} ./services/web/service.py"
+      command: "{{ noc_venv_python }} -m noc.services.web"
       process_name: "%(program_name)s-%(process_num)02d"
       oom_score_adj: 300
       priority: 50
