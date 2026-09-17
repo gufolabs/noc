@@ -75,7 +75,3 @@ class WorkerService(FastAPIService):
             self.logger.debug("[%s|%s] Done", msg.partition, msg.offset)
         metrics["jobs_done"] += 1
         self.logger.debug("[%s|%s] Complete", msg.partition, msg.offset)
-
-
-if __name__ == "__main__":
-    WorkerService().start()

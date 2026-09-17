@@ -229,7 +229,3 @@ class TgSenderService(FastAPIService):
         self.logger.info("[%s] Send Data: %s", "webhook", data)
         code, headers, data = client.post(api_url, data, headers=headers or None)
         self.logger.info("Send: %s, %s", code, data)
-
-
-if __name__ == "__main__":
-    TgSenderService().start()

@@ -703,7 +703,3 @@ class MetricsService(FastAPIService):
         """
         self.rules_ready_event.set()
         self.logger.info("%d Metric Rules has been loaded", len(self.rules))
-
-
-if __name__ == "__main__":
-    MetricsService().start()

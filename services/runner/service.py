@@ -179,7 +179,3 @@ class RunnerService(FastAPIService):
             self.runner.add_job(job)
         dt = perf_counter_ns() - t0
         self.logger.info("%d jobs restored in %.2fms", len(jobs), float(dt) / 1_000_000.0)
-
-
-if __name__ == "__main__":
-    RunnerService().start()

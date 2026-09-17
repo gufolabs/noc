@@ -13,7 +13,3 @@ from noc.core.service.fastapi import FastAPIService
 class GrafanaDSService(FastAPIService):
     name = "grafanads"
     use_mongo = True
-
-
-if __name__ == "__main__":
-    GrafanaDSService().start()

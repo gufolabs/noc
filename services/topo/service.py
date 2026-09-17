@@ -130,7 +130,3 @@ class TopoService(FastAPIService):
         """
         async with self.topo_lock:
             self.topo.remove_object(obj_id)
-
-
-if __name__ == "__main__":
-    TopoService().start()

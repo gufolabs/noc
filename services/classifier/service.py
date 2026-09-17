@@ -946,7 +946,3 @@ class ClassifierService(FastAPIService):
         self.event_source_ready.set()
         self.logger.info("%d Event Sources has been loaded", self.add_sources)
         # calculate size
-
-
-if __name__ == "__main__":
-    ClassifierService().start()
