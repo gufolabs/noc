@@ -43,7 +43,8 @@ class Command(BaseCommand):
     @staticmethod
     def iter_streams() -> Iterable[str]:
         connect()
-
+        # Get all pools
+        all_pools = list(Pool.objects.all())
         # Configured streams
         for stream in STREAMS:
             if stream.name == "ch":
@@ -52,7 +53,7 @@ class Command(BaseCommand):
                 yield stream.name
                 continue
             # Pooled streams
-            for pool in Pool.objects.all():
+            for pool in all_pools:
                 yield f"{stream.name}.{pool.name}"
         # Metric scopes
         for scope in MetricScope.objects.all():
