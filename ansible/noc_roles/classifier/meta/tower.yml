@@ -41,7 +41,7 @@ services:
     level: pool
     category: internal
     supervisord:
-      command: "{{ noc_venv_python}} ./services/classifier/service.py"
+      command: "{{ noc_venv_python }} -m noc.service.classifier"
       process_name: "%(program_name)s-%(process_num)02d"
       oom_score_adj: 50
       priority: 300
