@@ -1,11 +1,11 @@
 {
-  "title": "Telephony | SIP | Sessions | Active",
+  "title": "Object | HAState",
   "aliasColors": {},
   "bars": false,
   "datasource": null,
   "fill": 1,
   "grid": {},
-  "id": 8836324228329,
+  "id": 6356988758793,
     "legend": {
     "alignAsTable": true,
     "avg": false,
@@ -41,7 +41,8 @@
       "dateColDataType": "date",
       "table": "object",
       "intervalFactor": 1,
-      "query": "SELECT $timeSeries as t, avg(sip_sessions_active) as `Active SIP Session` FROM $table WHERE managed_object=$bi_id and $timeFilter and has(labels,'noc::telephony::SIP::Sessions::Active') GROUP BY t ORDER BY t",
+      "query": "SELECT $timeSeries as t, avg(hastate) as `HAState` FROM $table WHERE managed_object=$bi_id and $timeFilter and has(labels,'noc::object::HAState') GROUP BY t ORDER BY t",
+
       "refId": "A",
       "resultFormat": "time_series"
     }
@@ -54,7 +55,7 @@
     "sort": 0,
     "value_type": "cumulative"
   },
-  "type": "graph",
+  "type": "stat",
   "x-axis": true,
   "xaxis": {
     "show": true
@@ -77,5 +78,35 @@
       "min": null,
       "show": false
     }
-  ]
+  ],
+  "fieldConfig": {
+    "defaults": {
+      "mappings": [
+        {
+          "type": "value",
+          "options": {
+            "1": {
+              "text": "initial",
+              "index": 0
+            },
+            "2": {
+              "text": "active/standalone",
+              "index": 1
+            },
+            "3": {
+              "text": "active standby",
+              "color": "yellow",
+              "index": 2
+            },
+            "4": {
+              "text": "outOfService",
+              "color": "red",
+              "index": 3
+            }
+          }
+        }
+      ]
+    },
+    "overrides": []
+  }
 }

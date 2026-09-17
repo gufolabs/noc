@@ -1,11 +1,11 @@
 {
-  "title": "Telephony | SIP | Sessions | Active",
+  "title": "PeerNodes | Value",
   "aliasColors": {},
   "bars": false,
   "datasource": null,
   "fill": 1,
   "grid": {},
-  "id": 8836324228329,
+  "id": 1291374460318,
     "legend": {
     "alignAsTable": true,
     "avg": false,
@@ -41,7 +41,7 @@
       "dateColDataType": "date",
       "table": "object",
       "intervalFactor": 1,
-      "query": "SELECT $timeSeries as t, avg(sip_sessions_active) as `Active SIP Session` FROM $table WHERE managed_object=$bi_id and $timeFilter and has(labels,'noc::telephony::SIP::Sessions::Active') GROUP BY t ORDER BY t",
+      "query": "SELECT t, groupArray((name, value)) AS groupArr FROM (SELECT $timeSeries as t, avg(peer_nodes_value) as value, labels[1] as name FROM $table WHERE managed_object=$bi_id and $timeFilter and startsWith(labels[1], 'noc::peer_node') GROUP BY labels[1], t ORDER BY labels[1], t) GROUP BY t ORDER BY t ASC",
       "refId": "A",
       "resultFormat": "time_series"
     }
