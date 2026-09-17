@@ -56,7 +56,7 @@ services:
     level: global
     category: internal
     supervisord:
-      command: "{{ noc_venv_python }} -m noc.service.mailsender"
+      command: "{{ noc_venv_python }} -m noc.services.mailsender"
       process_name: "%(program_name)s-%(process_num)02d"
       oom_score_adj: 100
       priority: 600

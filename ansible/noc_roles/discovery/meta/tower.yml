@@ -41,7 +41,7 @@ services:
     level: pool
     category: internal
     supervisord:
-      command: "{{ noc_venv_python }} -m noc.service.discovery"
+      command: "{{ noc_venv_python }} -m noc.services.discovery"
       process_name: "%(program_name)s-%(process_num)02d"
       oom_score_adj: 500
       priority: 100

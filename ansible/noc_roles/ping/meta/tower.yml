@@ -49,7 +49,7 @@ services:
     level: pool
     category: internal
     supervisord:
-      command: "{{ noc_venv_python }} -m noc.service.ping"
+      command: "{{ noc_venv_python }} -m noc.services.ping"
       process_name: "%(program_name)s-%(process_num)02d"
       oom_score_adj: 200
       priority: 90
