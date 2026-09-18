@@ -34,7 +34,7 @@ forms:
         - "ru"
         - "pt_BR"
     theme:
-      default: "gray"
+      default: "noc"
       label: "NOC web theme"
       type: list
       options:
