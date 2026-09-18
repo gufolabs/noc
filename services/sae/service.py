@@ -59,7 +59,3 @@ class SAEService(FastAPIService):
             yield connect
         finally:
             self.pg_pool.putconn(connect)
-
-
-if __name__ == "__main__":
-    SAEService().start()

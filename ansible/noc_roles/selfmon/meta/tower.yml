@@ -51,7 +51,7 @@ services:
     level: global
     category: internal
     supervisord:
-      command: "{{ noc_venv_python}} ./services/selfmon/service.py"
+      command: "{{ noc_venv_python }} -m noc.services.selfmon"
       process_name: "%(program_name)s-%(process_num)02d"
       oom_score_adj: 100
       priority: 50

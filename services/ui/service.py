@@ -16,7 +16,3 @@ class UIService(FastAPIService):
     traefik_routes_rule = "PathPrefix(`/api/ui`)"
     use_mongo = True
     use_watchdog = config.watchdog.enable_watchdog
-
-
-if __name__ == "__main__":
-    UIService().start()

@@ -681,7 +681,3 @@ class MetricsCollectorService(FastAPIService):
         # Not Mapped metric
         self.logger.debug("[%s] Not mapped value: %s. Skipping", collector, name)
         return None
-
-
-if __name__ == "__main__":
-    MetricsCollectorService().start()

@@ -16,7 +16,3 @@ class DataStreamService(FastAPIService):
     use_mongo = True
     use_watchdog = config.watchdog.enable_watchdog
     traefik_routes_rule = "PathPrefix(`/api/datastream`)"
-
-
-if __name__ == "__main__":
-    DataStreamService().start()

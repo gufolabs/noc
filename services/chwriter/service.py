@@ -225,7 +225,3 @@ class CHWriterService(FastAPIService):
         self.stopping = True
         # .stop() will wait until queued data will be really published
         super().stop()
-
-
-if __name__ == "__main__":
-    CHWriterService().start()
