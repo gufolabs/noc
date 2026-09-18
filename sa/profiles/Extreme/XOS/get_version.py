@@ -29,7 +29,7 @@ class Script(BaseScript):
             v = self.cli("debug hal show stacking active", ignore_errors=True)
             match = self.rx_active_slot.search(v)
             slot = match.group(1) if match else 1
-            v = self.cli("debug hal show version slot %s" % slot)
+            v = self.cli(f"debug hal show version slot {slot}")
         platform = self.rx_platform.search(v).group("platform")
         version = self.rx_version.search(v).group("version")
         return {"vendor": "Extreme", "platform": platform, "version": version}

@@ -29,7 +29,7 @@ class DatabaseStorage(Storage):
       mtime_field
     """
 
-    def __init__(self, option):
+    def __init__(self, option) -> None:
         self.db_table = option["db_table"]
         self.name_field = option["name_field"]
         self.data_field = option["data_field"]
@@ -99,7 +99,6 @@ class DatabaseStorage(Storage):
         Returns full filesystem path as specified in Storage API.
         Raises NotImplementedError because Storage is not related to filesystem
 
-        :param name:
         :return:
         """
         raise NotImplementedError
@@ -134,8 +133,6 @@ class DatabaseStorage(Storage):
     def get_available_name(self, name, max_length=None):
         """
         Returns converted file name (Required by Storage API)
-        :param name:
-        :param max_length:
         :return:
         """
         return name
@@ -165,7 +162,6 @@ class DatabaseStorage(Storage):
         * name - full path
         * size - file size
         * mtime - last modification time
-        :param name:
         :return:
         """
         cursor = self.get_cursor()
@@ -182,8 +178,6 @@ class DatabaseStorage(Storage):
     def set_mtime(self, name, mtime):
         """
         Set file's mtime
-        :param name:
-        :param mtime:
         :return:
         """
         cursor = self.get_cursor()

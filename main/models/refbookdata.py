@@ -29,7 +29,7 @@ class RefBookData(NOCModel):
     Ref. Book Data
     """
 
-    class Meta(object):
+    class Meta:
         app_label = "main"
         verbose_name = "Ref Book Data"
         verbose_name_plural = "Ref Book Data"
@@ -40,7 +40,7 @@ class RefBookData(NOCModel):
     objects = RBDManader()
 
     def __str__(self):
-        return "%s: %s" % (self.ref_book, self.value)
+        return f"{self.ref_book}: {self.value}"
 
     @property
     def items(self):

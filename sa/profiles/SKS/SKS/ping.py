@@ -31,9 +31,9 @@ class Script(BaseScript):
 
     def execute_cli(self, address, count=None, source_address=None, size=None):
         if is_ipv4(address):
-            cmd = "ping ip %s" % address
+            cmd = f"ping ip {address}"
         elif is_ipv6(address):
-            cmd = "ping ipv6 %s" % address
+            cmd = f"ping ipv6 {address}"
         if count:
             cmd += " count %d" % int(count)
         if size:
@@ -49,7 +49,7 @@ class Script(BaseScript):
                 cmd += " -n %d" % int(count)
             if size:
                 cmd += " -l %d" % int(size)
-            cmd = "%s %s" % (cmd, address)
+            cmd = f"{cmd} {address}"
             s = self.cli(cmd)
         match = self.rx_result1.search(s)
         if match:

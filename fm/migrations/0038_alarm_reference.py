@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         def process_event(event_id, alarm_id):
             e = None
             for c in (active_events, archived_events):

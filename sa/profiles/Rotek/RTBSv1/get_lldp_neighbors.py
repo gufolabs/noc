@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Tuple, List
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -18,7 +17,7 @@ class Script(BaseScript):
     name = "Rotek.RTBSv1.get_lldp_neighbors"
     interface = IGetLLDPNeighbors
 
-    def get_remote_ports_data(self, ports: dict = None) -> List[str]:
+    def get_remote_ports_data(self, ports: dict = None) -> list[str]:
         """
         Get port description: Tx-packets, Rx-packets, signal and noise levels
 
@@ -61,7 +60,7 @@ class Script(BaseScript):
 
         return ports_description
 
-    def get_remote_devices_info(self) -> Tuple[List[str]]:
+    def get_remote_devices_info(self) -> tuple[list[str]]:
         """
         Get remote devices information: MAC-addresses and ports
 

@@ -25,14 +25,14 @@ class Script(BaseScript):
         req = "%;".join(["%;".join((param[p], 'echo"')) for p in param])
 
         urlpath = baseURL + req + ";"
-        self.logger.debug("URL path is: %s" % urlpath)
+        self.logger.debug(f"URL path is: {urlpath}")
         try:
             rr = self.http.get(urlpath)
         except HTTPError:
             return {"vendor": "DLink", "version": "", "platform": ""}
         rr = rr.splitlines()
 
-        self.logger.debug("Result: %s " % rr)
+        self.logger.debug(f"Result: {rr} ")
         if rr:
             r = {
                 "vendor": "DLink",

@@ -1,12 +1,13 @@
 # ----------------------------------------------------------------------
 # Login debugging utility
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import getpass
+import argparse
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -15,7 +16,7 @@ from noc.services.login.backends.base import BaseAuthBackend
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "--backend",
             action="store",
@@ -35,9 +36,5 @@ class Command(BaseCommand):
         try:
             auth.authenticate(user=user, password=password)
         except backend.LoginError as e:
-            self.die("Failed to login: %s" % e)
+            self.die(f"Failed to login: {e}")
         self.print("Login successful")
-
-
-if __name__ == "__main__":
-    Command().run()

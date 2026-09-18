@@ -35,7 +35,7 @@ class Script(BaseScript):
         # Fallback to CLI
         r = []
         if interface:
-            cmd = "bridge port summary %s" % interface
+            cmd = f"bridge port summary {interface}"
         else:
             cmd = "bridge port summary all"
         for match in self.rx_line.finditer(self.cli(cmd)):

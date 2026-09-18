@@ -6,23 +6,22 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 from time import perf_counter_ns
 
 
 NS = 1_000_000_000.0
 
 
-class BaseRateLimit(object):
+class BaseRateLimit:
     """
     Limit calls to `wait*` methods to `rate` requests per second.
     """
 
-    def __init__(self, rate: float):
+    def __init__(self, rate: float) -> None:
         self.min_delta: int = int(NS / rate)
-        self.next: Optional[int] = None
+        self.next: int | None = None
 
-    def get_sleep_timeout(self) -> Optional[float]:
+    def get_sleep_timeout(self) -> float | None:
         """
         Get timeout for next sleep
         :return:

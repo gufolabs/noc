@@ -30,7 +30,7 @@ class Migration(BaseMigration):
                 r.append(p)
         return r, source, profile, message_rx
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Update mongodb collections
         profile_map = {}
         for p in self.mongo_db["noc.profiles"].find():

@@ -5,7 +5,7 @@
     version: "{{ item.version }}"
     state: present
     grafana_plugins_dir: "{{ grafana_plugins_dir }}"
-  with_items:
+  loop:
     - name: simpod-json-datasource
       version: "{{ grafana_version_simpod_json_datasource }}"
     - name: vertamedia-clickhouse-datasource

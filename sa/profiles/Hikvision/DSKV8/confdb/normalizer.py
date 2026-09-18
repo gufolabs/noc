@@ -33,7 +33,7 @@ class HikvisionNormalizer(BaseNormalizer):
 
     @match("Users", "user", ANY, "userLevel", ANY)
     def normalize_username_access_level(self, tokens):
-        yield self.make_user_class(username=tokens[2], class_name="level-%s" % tokens[4].lower())
+        yield self.make_user_class(username=tokens[2], class_name=f"level-{tokens[4].lower()}")
 
     @match("Users", "user", ANY, "id", ANY)
     def normalize_username_uid(self, tokens):
@@ -69,7 +69,7 @@ class HikvisionNormalizer(BaseNormalizer):
 
     @match("StreamingChannel", ANY, "enabled", ANY)
     def normalize_stream_enable(self, tokens):
-        yield self.make_stream_rtsp_path(name=tokens[1], path="/Streaming/Channels/%s" % tokens[1])
+        yield self.make_stream_rtsp_path(name=tokens[1], path=f"/Streaming/Channels/{tokens[1]}")
         yield self.make_media_streams_video_admin_status(
             name=tokens[1], admin_status=tokens[3] == "true"
         )
@@ -146,5 +146,5 @@ class HikvisionNormalizer(BaseNormalizer):
     @match("Overlay", "TextOverlay", "TextOverlay", ANY, ANY)
     def normalize_overlay_text_text(self, tokens):
         yield self.make_media_streams_overlay_text(
-            overlay_name="custom_%s" % tokens[3], text=tokens[4]
+            overlay_name=f"custom_{tokens[3]}", text=tokens[4]
         )

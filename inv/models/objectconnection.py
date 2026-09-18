@@ -1,12 +1,12 @@
 # ---------------------------------------------------------------------
 # ObjectConnection model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Union
+from typing import Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -25,7 +25,6 @@ import geojson
 from noc.inv.models.object import Object
 from noc.core.mongo.fields import PlainReferenceField
 from noc.gis.models.layer import Layer
-from noc.core.comp import smart_text
 from noc.core.change.decorator import change
 from noc.core.model.decorator import on_save, on_delete
 from noc.config import config
@@ -39,7 +38,7 @@ class ObjectConnectionItem(EmbeddedDocument):
     name = StringField()
 
     def __str__(self):
-        return "%s: %s" % (smart_text(self.object), self.name)
+        return f"{self.object}: {self.name}"
 
 
 @change
@@ -65,18 +64,18 @@ class ObjectConnection(Document):
     layer = ReferenceField(Layer)
     line = LineStringField(auto_index=True)
 
-    def __str__(self):
-        return "<%s>" % ", ".join(smart_text(c) for c in self.connection)
+    def __str__(self) -> str:
+        conns = ", ".join(str(c) for c in self.connection)
+        return f"<{conns}>"
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ObjectConnection"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ObjectConnection"]:
         return ObjectConnection.objects.filter(id=oid).first()
 
     def iter_changed_datastream(self, changed_fields=None):
         if config.datastream.enable_managedobject:
             for c in self.connection:
-                for _, mo_id in c.object.iter_changed_datastream():
-                    yield _, mo_id
+                yield from c.object.iter_changed_datastream()
 
     def on_save(self) -> None:
         for c in self.connection:

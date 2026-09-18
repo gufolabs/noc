@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # main.desktop application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,9 +9,12 @@
 import datetime
 import os
 
+# Third-party modules
+from django.http import HttpRequest
+
 # NOC modules
 from noc.config import config
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.services.web.base.access import PermitLogged
 from noc.core.version import version
 from noc.aaa.models.group import Group
@@ -28,7 +31,7 @@ class DesktopApplication(ExtApplication):
     main.desktop application
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         ExtApplication.__init__(self, *args, **kwargs)
         # Login restrictions
         self.restrict_to_group = self.get_group(config.login.restrict_to_group)
@@ -46,10 +49,10 @@ class DesktopApplication(ExtApplication):
         try:
             return Group.objects.get(name=name)
         except Group.DoesNotExist:
-            self.error("Group '%s' is not found" % name)
+            self.logger.error(f"Group '{name}' is not found")
             return None
 
-    def get_language(self, request):
+    def get_language(self, request: HttpRequest):
         """
         Get language for request
         """
@@ -57,8 +60,8 @@ class DesktopApplication(ExtApplication):
             return config.language
         return request.user.preferred_language or config.language
 
-    @view(method=["GET"], url="/index.html", url_name="desktop", access=True)
-    def view_desktop(self, request):
+    @api.get("/index.html", url_name="desktop", access=True)
+    def view_desktop(self, request: HttpRequest):
         """
         Render application root template
         """
@@ -67,11 +70,11 @@ class DesktopApplication(ExtApplication):
             "desktop.html",
             language=self.get_language(request),
             theme=config.web.theme,
-            brand=version.brand,
+            brand=config.brand,
         )
 
-    @view(method=["GET"], url="^settings/$", access=True, api=True)
-    def api_settings(self, request):
+    @api.get("^settings/$", access=True)
+    def api_settings(self, request: HttpRequest):
         cp = CPClient()
         if request.user.is_authenticated():
             enable_search = Permission.has_perm(request.user, "main:search:launch")
@@ -80,7 +83,7 @@ class DesktopApplication(ExtApplication):
         language = self.get_language(request)
         return {
             "system_uuid": cp.system_uuid or None,
-            "brand": version.brand,
+            "brand": config.brand,
             "features": [f.value for f in active_features()],
             "installation_name": config.installation_name,
             "preview_theme": config.customization.preview_theme,
@@ -139,28 +142,26 @@ class DesktopApplication(ExtApplication):
             "color_scheme": Style.get_scheme(),
         }
 
-    @view(method=["GET"], url="^version/$", access=True, api=True)
-    def api_version(self, request):
+    @api.get("^version/$", access=True)
+    def api_version(self, request: HttpRequest):
         """
         Return current NOC version
 
         :returns: version string
-        :rtype: Str
         """
         return version.version
 
-    @view(method=["GET"], url="^is_logged/$", access=True, api=True)
-    def api_is_logged(self, request):
+    @api.get("^is_logged/$", access=True)
+    def api_is_logged(self, request: HttpRequest):
         """
         Check wrether the session is authenticated.
 
         :returns: True if session authenticated, False otherwise
-        :rtype: Bool
         """
         return request.user.is_authenticated()
 
-    @view(method=["GET"], url="^user_settings/$", access=PermitLogged(), api=True)
-    def api_user_settings(self, request):
+    @api.get("^user_settings/$", access=PermitLogged())
+    def api_user_settings(self, request: HttpRequest):
         """
         Get user settings
         """
@@ -182,11 +183,10 @@ class DesktopApplication(ExtApplication):
             },
         }
 
-    def get_navigation(self, request):
+    def get_navigation(self, request: HttpRequest):
         """
         Return user's navigation menu tree
 
-        :param node:
         :returns:
         """
 
@@ -223,8 +223,8 @@ class DesktopApplication(ExtApplication):
                 return self.response_not_found()
         return get_children(root, request.user)
 
-    @view(method=["GET"], url="^launch_info/$", access=PermitLogged(), api=True)
-    def api_launch_info(self, request):
+    @api.get("^launch_info/$", access=PermitLogged())
+    def api_launch_info(self, request: HttpRequest):
         """
         Get application launch information
         :param node: Menu node id
@@ -238,44 +238,38 @@ class DesktopApplication(ExtApplication):
             return self.response_not_found()
         return menu["app"].get_launch_info(request)
 
-    @view(method=["GET"], url="^state/", access=PermitLogged(), api=True)
-    def api_get_state(self, request):
+    @api.get("^state/", access=PermitLogged())
+    def api_get_state(self, request: HttpRequest):
         """
         Get user state
-        :param request:
         :return:
         """
         uid = request.user.id
         return {r.key: r.value for r in UserState.objects.filter(user_id=uid)}
 
-    @view(method=["GET"], url="^state/(?P<name>.+)/$", access=PermitLogged(), api=True)
-    def api_get_state_by_name(self, request, name):
+    @api.get("^state/(?P<name>.+)/$", access=PermitLogged())
+    def api_get_state_by_name(self, request: HttpRequest, name):
         """
         Get user state
-        :param request:
         :return:
         """
         uid = request.user.id
         return {r.key: r.value for r in UserState.objects.filter(user_id=uid, key=name)}
 
-    @view(method=["DELETE"], url="^state/(?P<name>.+)/$", access=PermitLogged(), api=True)
-    def api_clear_state(self, request, name):
+    @api.delete("^state/(?P<name>.+)/$", access=PermitLogged())
+    def api_clear_state(self, request: HttpRequest, name):
         """
         Clear user state
-        :param request:
-        :param name:
         :return:
         """
         uid = request.user.id
         UserState.objects.filter(user_id=uid, key=name).delete()
         return True
 
-    @view(method=["POST"], url="^state/(?P<name>.+)/$", access=PermitLogged(), api=True)
-    def api_set_state(self, request, name):
+    @api.post("^state/(?P<name>.+)/$", access=PermitLogged())
+    def api_set_state(self, request: HttpRequest, name):
         """
         Clear user state
-        :param request:
-        :param name:
         :return:
         """
         uid = request.user.id
@@ -296,8 +290,8 @@ class DesktopApplication(ExtApplication):
             UserState.objects.filter(user_id=uid, key=name).delete()
         return True
 
-    @view(url="^favapps/$", method=["GET"], access=PermitLogged(), api=True)
-    def api_favapps(self, request):
+    @api.get("^favapps/$", access=PermitLogged())
+    def api_favapps(self, request: HttpRequest):
         favapps = [
             f.app
             for f in Favorites.objects.filter(user=request.user.id, favorite_app=True).only("app")
@@ -311,8 +305,8 @@ class DesktopApplication(ExtApplication):
             for fa in favapps
         ]
 
-    @view(url="^about/", method=["GET"], access=True, api=True)
-    def api_about(self, request):
+    @api.get("^about/", access=True)
+    def api_about(self, request: HttpRequest):
         current_year = datetime.date.today().year
         data = {
             "brand": config.brand,

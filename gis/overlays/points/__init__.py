@@ -21,7 +21,7 @@ class PointsOverlay(OverlayHandler):
         text: text label property name
     """
 
-    def __init__(self, collection, position, text):
+    def __init__(self, collection, position, text) -> None:
         super().__init__()
         self.collection = collection
         self.position = position

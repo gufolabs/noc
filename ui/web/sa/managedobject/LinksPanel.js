@@ -94,7 +94,7 @@ Ext.define("NOC.sa.managedobject.LinksPanel", {
   preview: function(record){
     var me = this;
     me.callParent(arguments);
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + record.get("id") + "/links/",
       method: "GET",
       scope: me,

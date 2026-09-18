@@ -30,7 +30,7 @@ forms:
       label: "Listen SNMP Traps"
       type: str
     permit_firewall:
-      default: True  # yamllint disable-line rule:truthy
+      default: True # yamllint disable-line rule:truthy
       label: "Permit trap port in firewall"
       type: bool
       description: "Open traps port in firewall. Works on Centos/Rhel only."
@@ -39,7 +39,7 @@ services:
     level: pool
     category: internal
     supervisord:
-      command: "./services/trapcollector/service.py"
+      command: "{{ noc_venv_python }} -m noc.services.trapcollector"
       process_name: "%(program_name)s"
       oom_score_adj: 50
       priority: 200

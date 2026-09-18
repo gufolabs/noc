@@ -18,7 +18,7 @@ GEOCODERS = {"google", "yandex"}
 def test_loader_iter_classes():
     seen = set(loader.iter_classes())
     missed = GEOCODERS - seen
-    assert not missed, "Missed geocoders: %s" % ", ".join(missed)
+    assert not missed, "Missed geocoders: {}".format(", ".join(missed))
 
 
 @pytest.mark.parametrize("name", list(GEOCODERS))

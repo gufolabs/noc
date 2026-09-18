@@ -7,7 +7,6 @@
 
 # Python modules
 import random
-from typing import Optional
 import datetime
 import asyncio
 
@@ -21,15 +20,15 @@ from noc.core.mongo.connection import get_db
 from noc.core.perf import metrics
 
 
-class RCALock(object):
+class RCALock:
     """
     Lock set of items
     """
 
     COLL_NAME = "rcalocks"
-    _coll: Optional[pymongo.collection.Collection] = None
+    _coll: pymongo.collection.Collection | None = None
 
-    def __init__(self, items):
+    def __init__(self, items) -> None:
         self.items = items
         self.lock_id = None
 

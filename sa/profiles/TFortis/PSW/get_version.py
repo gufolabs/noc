@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -10,7 +10,6 @@ import re
 from noc.core.script.base import BaseScript
 from noc.sa.interfaces.igetversion import IGetVersion
 from noc.core.text import strip_html_tags
-from noc.core.comp import smart_text
 
 
 class Script(BaseScript):
@@ -35,7 +34,7 @@ class Script(BaseScript):
         match = self.rx_html_ver.search(v)
         return {
             "vendor": "TFortis",
-            "platform": platform.group("platform").strip(smart_text("\x00")),
+            "platform": platform.group("platform").strip("\x00"),
             "version": match.group("version"),
             "attributes": {"Bootloader": match.group("bootloader")},
         }

@@ -12,7 +12,7 @@ import codecs
 
 # NOC modules
 from noc.core.script.http.middleware.base import BaseMiddleware
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 from noc.core.comp import smart_bytes
 
 
@@ -23,7 +23,7 @@ class DahuaAuthMiddeware(BaseMiddleware):
 
     name = "dahuaauth"
 
-    def __init__(self, http):
+    def __init__(self, http) -> None:
         super().__init__(http)
         self.user = self.http.script.credentials.get("user")
         self.password = self.http.script.credentials.get("password")
@@ -43,18 +43,19 @@ class DahuaAuthMiddeware(BaseMiddleware):
         :param params: response params dictionary
         :type params: dict
         :return: Password string
-        :rtype: str
         """
         if params["encryption"] == "Basic":
-            return codecs.encode("%s:%s" % (self.user, self.password), "base64")
+            return codecs.encode(f"{self.user}:{self.password}", "base64")
         if params["encryption"] == "Default":
             A1 = (
-                hashlib.md5(smart_bytes("%s:%s:%s" % (self.user, params["realm"], self.password)))
+                hashlib.md5(
+                    smart_bytes("{}:{}:{}".format(self.user, params["realm"], self.password))
+                )
                 .hexdigest()
                 .upper()
             )
             return (
-                hashlib.md5(smart_bytes("%s:%s:%s" % (self.user, params["random"], A1)))
+                hashlib.md5(smart_bytes("{}:{}:{}".format(self.user, params["random"], A1)))
                 .hexdigest()
                 .upper()
             )
@@ -63,9 +64,6 @@ class DahuaAuthMiddeware(BaseMiddleware):
     def process_post(self, url, body, headers):
         """
         Dahua Web auth procedure
-        :param url:
-        :param body:
-        :param headers:
         :return:
         """
         if self.http.session_id:

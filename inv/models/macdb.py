@@ -48,19 +48,15 @@ class MACDB(Document):
         try:
             super().save(*args, **kwargs)
         except Exception as e:
-            raise ValueError("%s: %s" % (e.__doc__, e.message))
+            raise ValueError(f"{e.__doc__}: {e.message}")
 
     @classmethod
     def submit(cls, mac, vc_domain, vlan, interface, timestamp=None):
         """
         Submit mac to database
         Returns True if database been changed
-        :param cls:
-        :param mac:
         :param vc_domain
         :param vlan
-        :param interface:
-        :param timestamp:
         :return:
         """
         if not timestamp:

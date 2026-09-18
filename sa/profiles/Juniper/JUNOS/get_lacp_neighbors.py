@@ -42,7 +42,7 @@ class Script(BaseScript):
         r = []
         ifaces = self.rx_ifname.findall(v)
         for i in ifaces:
-            v = self.cli('show interfaces %s extensive | find "LACP info"' % i)
+            v = self.cli(f'show interfaces {i} extensive | find "LACP info"')
             if "Pattern not found" in v:
                 continue
             bundle = []

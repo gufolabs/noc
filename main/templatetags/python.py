@@ -17,8 +17,6 @@ def do_var(parser, token):
     {% var <name> <type> %}
     where type is one of:
         * internal or hidden
-    :param parser:
-    :param token:
     :return:
     """
     try:
@@ -27,12 +25,12 @@ def do_var(parser, token):
             raise ValueError
     except ValueError:
         raise template.TemplateSyntaxError(
-            "%s tag requires at least 3 arguments" % (token.contents.split()[0])
+            f"{token.contents.split()[0]} tag requires at least 3 arguments"
         )
     tag, name, vartype = t[:3]
     if vartype not in VARTYPES:
         raise template.TemplateSyntaxError(
-            "Invalid var type '%s'. Acceptable types are: %s" % (vartype, ", ".join(VARTYPES))
+            "Invalid var type '{}'. Acceptable types are: {}".format(vartype, ", ".join(VARTYPES))
         )
     return VarNode(name, vartype)
 
@@ -42,8 +40,6 @@ def do_python(parser, token):
     {% python %}
     ...
     {% endpython %}
-    :param parser:
-    :param token:
     :return:
     """
     nodelist = parser.parse(("endpython",))
@@ -51,14 +47,14 @@ def do_python(parser, token):
     try:
         return PythonNode(nodelist)
     except SyntaxError as e:
-        raise template.TemplateSyntaxError("Python syntax error: %s" % e)
+        raise template.TemplateSyntaxError(f"Python syntax error: {e}")
 
 
 #
 # Renderers
 #
 class VarNode(template.Node):
-    def __init__(self, name, vartype):
+    def __init__(self, name, vartype) -> None:
         self.name = name
         self.vartype = vartype
 
@@ -67,7 +63,7 @@ class VarNode(template.Node):
 
 
 class PythonNode(template.Node):
-    def __init__(self, nodelist):
+    def __init__(self, nodelist) -> None:
         py_code = nodelist.render({}).replace("\r", "")
         self.code = compile(py_code, "string", "exec")
 

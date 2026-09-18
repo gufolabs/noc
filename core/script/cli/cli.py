@@ -10,7 +10,7 @@ import re
 import functools
 from functools import reduce
 import asyncio
-from typing import Optional, Any, Type, Callable, Dict, Set, Union, List
+from typing import Any, Callable
 
 # NOC modules
 from noc.core.text import replace_re_group
@@ -51,7 +51,7 @@ class CLI(BaseCLI):
     class InvalidPagerCommand(Exception):
         pass
 
-    def __init__(self, script, tos=None):
+    def __init__(self, script, tos=None) -> None:
         super().__init__(script, tos)
         self.motd = ""
         self.command = None
@@ -80,12 +80,12 @@ class CLI(BaseCLI):
     def execute(
         self,
         cmd: str,
-        obj_parser: Optional[Callable] = None,
-        cmd_next: Optional[bytes] = None,
-        cmd_stop: Optional[bytes] = None,
+        obj_parser: Callable | None = None,
+        cmd_next: bytes | None = None,
+        cmd_stop: bytes | None = None,
         ignore_errors: bool = False,
         allow_empty_response: bool = True,
-        labels: Optional[Union[str, Set[str]]] = None,
+        labels: str | set[str] | None = None,
     ) -> str:
         self.buffer = b""
         self.command = cmd
@@ -163,8 +163,7 @@ class CLI(BaseCLI):
         return False
 
     def cleaned_input(self, s: bytes) -> bytes:
-        """
-        Clean up received input and wipe out control sequences
+        """Clean up received input and wipe out control sequences
         and rogue chars
         """
         # Wipe out rogue chars
@@ -179,7 +178,7 @@ class CLI(BaseCLI):
         await self.stream.write(cmd)
 
     async def read_until_prompt(self):
-        cleaned_chunks: List[bytes] = []  # Already processed chunks
+        cleaned_chunks: list[bytes] = []  # Already processed chunks
         active_chunk = self.buffer  # Active window
         while True:
             try:
@@ -247,14 +246,13 @@ class CLI(BaseCLI):
 
     async def parse_object_stream(self, parser=None, cmd_next=None, cmd_stop=None):
         """
-        :param parser: callable accepting buffer and returning
-                       (key, data, rest) or None.
-                       key - string with object distinguisher
-                       data - dict containing attributes
-                       rest -- unparsed rest of string
-        :param cmd_next: Sequence to go to the next page
-        :param cmd_stop: Sequence to stop
-        :return:
+        Args:
+            parser: callable accepting buffer and returning (key, data,
+                rest) or None. key - string with object distinguisher
+                data - dict containing attributes rest -- unparsed rest
+                of string
+            cmd_next: Sequence to go to the next page
+            cmd_stop: Sequence to stop
         """
         self.logger.debug("Parsing object stream")
         objects = []
@@ -306,13 +304,13 @@ class CLI(BaseCLI):
                         if repeats >= 3 and cmd_stop and not stop_sent:
                             # Stop loop at final page
                             # After 3 repeats
-                            self.logger.debug("Stopping stream. Sending %r" % cmd_stop)
+                            self.logger.debug(f"Stopping stream. Sending {cmd_stop!r}")
                             await self.send(cmd_stop)
                             stop_sent = True
                 else:
                     r_key = key
                     if cmd_next:
-                        self.logger.debug("Next screen. Sending %r" % cmd_next)
+                        self.logger.debug(f"Next screen. Sending {cmd_next!r}")
                         await self.send(cmd_next)
             # Check for prompt
             for rx, handler in self.pattern_table.items():
@@ -330,9 +328,7 @@ class CLI(BaseCLI):
         return objects
 
     async def send_pager_reply(self, data, match):
-        """
-        Send proper pager reply
-        """
+        """Send proper pager reply"""
         pg = match.group(0)
         for p, c in self.patterns["more_patterns_commands"]:
             if p.search(pg):
@@ -358,13 +354,11 @@ class CLI(BaseCLI):
 
     def expect(
         self,
-        patterns: Dict[str, Any],
-        timeout: Optional[float] = None,
-        error: Optional[Type[Exception]] = None,
+        patterns: dict[str, Any],
+        timeout: float | None = None,
+        error: type[Exception] | None = None,
     ):
-        """
-        Send command if not none and set reply patterns
-        """
+        """Send command if not none and set reply patterns"""
         self.pattern_table = {}
         for pattern_name in patterns:
             rx = self.patterns.get(pattern_name)
@@ -572,9 +566,7 @@ class CLI(BaseCLI):
         await self.on_start(data, match)
 
     def resolve_pattern_prompt(self, match):
-        """
-        Resolve adaptive pattern prompt
-        """
+        """Resolve adaptive pattern prompt"""
         old_pattern_prompt = self.patterns["prompt"].pattern
         pattern_prompt = old_pattern_prompt
         sl = self.profile.can_strip_hostname_to
@@ -599,27 +591,21 @@ class CLI(BaseCLI):
         self.patterns["prompt"] = re.compile(pattern_prompt, re.DOTALL | re.MULTILINE)
 
     def push_prompt_pattern(self, pattern):
-        """
-        Override prompt pattern
-        """
+        """Override prompt pattern"""
         self.logger.debug("New prompt pattern: %s", pattern)
         self.prompt_stack += [self.patterns["prompt"]]
         self.patterns["prompt"] = re.compile(pattern, re.DOTALL | re.MULTILINE)
         self.pattern_table[self.patterns["prompt"]] = self.on_prompt
 
     def pop_prompt_pattern(self):
-        """
-        Restore prompt pattern
-        """
+        """Restore prompt pattern"""
         self.logger.debug("Restore prompt pattern")
         pattern = self.prompt_stack.pop(-1)
         self.patterns["prompt"] = pattern
         self.pattern_table[self.patterns["prompt"]] = self.on_prompt
 
     def get_motd(self):
-        """
-        Return collected message of the day
-        """
+        """Return collected message of the day"""
         return self.motd
 
     def set_script(self, script):
@@ -638,12 +624,12 @@ class CLI(BaseCLI):
             self.profile.shutdown_session(self.script)
 
     async def on_error_sequence(self, seq, command, error_text):
-        """
-        Process error sequence
-        :param seq:
-        :param command:
-        :param error_text:
-        :return:
+        """Process error sequence
+
+        Args:
+            seq
+            command
+            error_text
         """
         if isinstance(seq, str):
             self.logger.debug("Recovering sequece must byte type")

@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # SSH CLI
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -11,7 +11,6 @@ import threading
 import operator
 import logging
 import codecs
-from typing import Tuple, Optional, List
 
 # Third-party modules modules
 import cachetools
@@ -22,7 +21,7 @@ from ssh2.error_codes import LIBSSH2_ERROR_EAGAIN
 # NOC modules
 from noc.config import config
 from noc.core.perf import metrics
-from noc.core.comp import smart_bytes, smart_text
+from noc.core.comp import smart_bytes
 from .cli import CLI
 from .base import BaseStream
 from .error import CLIAuthFailed, CLISSHProtocolError
@@ -37,23 +36,24 @@ class SSHStream(BaseStream):
 
     _key_cache = cachetools.TTLCache(100, ttl=60)
 
-    def __init__(self, cli: CLI):
+    def __init__(self, cli: CLI) -> None:
         super().__init__(cli)
         self.script = cli.script  # @todo: Remove
         self.session = None
         self.channel = None
         self.credentials = cli.script.credentials
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.channel = None
         self.session = None
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_key_cache"), lock=lambda _: key_lock)
-    def get_publickey(cls, pool: str) -> Tuple[Optional[bytes], Optional[bytes]]:
-        """
-        Return public, private key pair
-        :return: bytes, bytes or None, None
+    def get_publickey(cls, pool: str) -> tuple[bytes | None, bytes | None]:
+        """Return public, private key pair
+
+        Returns:
+            bytes, bytes or None, None
         """
         logger.debug("Getting keys for pool %s", pool)
         pub_path = os.path.join(config.path.ssh_key_prefix, pool, "id_rsa.pub")
@@ -68,9 +68,7 @@ class SSHStream(BaseStream):
             return fpub.read(), fpriv.read()
 
     async def startup(self):
-        """
-        SSH session startup
-        """
+        """SSH session startup"""
         user = self.credentials["user"]
         if user is None:
             user = ""
@@ -79,7 +77,7 @@ class SSHStream(BaseStream):
         try:
             self.session.handshake(self.socket)
             host_hash = smart_bytes(self.session.hostkey_hash(LIBSSH2_HOSTKEY_HASH_SHA1))
-            hex_hash = smart_text(codecs.encode(host_hash, "hex"))
+            hex_hash = codecs.encode(host_hash, "hex").decode()
             self.logger.debug("Connected. Host fingerprint is %s", hex_hash)
             # libssh2's userauth_list implementation tries to authenticate
             # using `none` method internally. So calling `userauth_list`
@@ -106,7 +104,7 @@ class SSHStream(BaseStream):
             self.session.set_blocking(False)
         except SSH2Error as e:
             self.logger.info("SSH Error: %s", e)
-            raise CLISSHProtocolError("SSH Error: %s" % e)
+            raise CLISSHProtocolError(f"SSH Error: {e}")
 
     async def read(self, n: int) -> bytes:
         while True:
@@ -130,9 +128,9 @@ class SSHStream(BaseStream):
                     return data
 
                 metrics["ssh_errors", ("code", code)] += 1
-                raise CLISSHProtocolError("SSH Error code %s" % code)
+                raise CLISSHProtocolError(f"SSH Error code {code}")
             except SSH2Error as e:
-                raise CLISSHProtocolError("SSH Error: %s" % e)
+                raise CLISSHProtocolError(f"SSH Error: {e}")
 
     async def write(self, data: bytes):
         metrics["ssh_writes"] += 1
@@ -143,7 +141,7 @@ class SSHStream(BaseStream):
                 metrics["ssh_write_bytes"] += sent
                 data = data[sent:]
             except SSH2Error as e:
-                raise CLISSHProtocolError("SSH Error: %s" % e)
+                raise CLISSHProtocolError(f"SSH Error: {e}")
 
     def close(self, exc_info=False):
         if self.channel:
@@ -160,27 +158,23 @@ class SSHStream(BaseStream):
         super().close()
 
     def get_user(self) -> str:
-        """
-        Get current user
-        """
+        """Get current user"""
         return self.script.credentials["user"] or ""
 
     def get_password(self) -> str:
-        """
-        Get current user's password
-        """
+        """Get current user's password"""
         return self.script.credentials["password"] or ""
 
-    def authenticate(self, user: str, methods: List[str]) -> bool:
-        """
-        Try to authenticate. Return True on success
-        :param user: Username
-        :param methods: List of available authentication methods
-        :return:
+    def authenticate(self, user: str, methods: list[str]) -> bool:
+        """Try to authenticate. Return True on success
+
+        Args:
+            user: Username
+            methods: List of available authentication methods
         """
         self.logger.debug("Supported authentication methods: %s", ", ".join(methods))
         for method in methods:
-            auth_handler = getattr(self, "auth_%s" % method.replace("-", ""), None)
+            auth_handler = getattr(self, "auth_{}".format(method.replace("-", "")), None)
             if not auth_handler:
                 self.logger.debug("'%s' method is not supported, skipping", method)
                 continue
@@ -193,9 +187,7 @@ class SSHStream(BaseStream):
         return False
 
     def auth_publickey(self) -> bool:
-        """
-        Public key authentication
-        """
+        """Public key authentication"""
         self.logger.debug("Trying publickey authentication")
         pub_key, priv_key = self.get_publickey(self.script.pool)
         if not pub_key or not priv_key:
@@ -211,9 +203,7 @@ class SSHStream(BaseStream):
             return False
 
     def auth_keyboardinteractive(self):
-        """
-        Keyboard-interactive authentication. Send username and password
-        """
+        """Keyboard-interactive authentication. Send username and password"""
         self.logger.debug("Trying keyboard-interactive")
         if not hasattr(self.session, "userauth_keyboardinteractive"):
             self.logger.debug("keyboard-interactive is not supported by ssh library. Skipping")
@@ -228,9 +218,7 @@ class SSHStream(BaseStream):
             return False
 
     def auth_password(self):
-        """
-        Password authentication. Send username and password
-        """
+        """Password authentication. Send username and password"""
         self.logger.debug("Trying password authentication")
         try:
             self.session.userauth_password(self.get_user(), self.get_password())

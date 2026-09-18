@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Network Segment
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,7 +9,7 @@
 import operator
 import cachetools
 from threading import Lock
-from typing import Optional, Union
+from typing import Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -29,7 +29,7 @@ from pymongo.errors import OperationFailure
 
 # NOC modules
 from noc.core.mongo.fields import PlainReferenceField
-from noc.core.topology.types import TopologyNode
+from noc.core.topology.types import TopologyNode, TopologyNodeType
 from noc.main.models.remotesystem import RemoteSystem
 from noc.sa.models.servicesummary import ServiceSummary, SummaryItem, ObjectSummaryItem
 from noc.core.model.decorator import on_delete_check, on_save, tree
@@ -174,7 +174,7 @@ class NetworkSegment(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["NetworkSegment"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["NetworkSegment"]:
         return NetworkSegment.objects.filter(id=oid).first()
 
     @classmethod
@@ -275,7 +275,6 @@ class NetworkSegment(Document):
     def set_redundancy(self, status):
         """
         Change interface redundancy status
-        :param status:
         :return:
         """
         siblings = list(self.get_siblings())
@@ -477,7 +476,6 @@ class NetworkSegment(Document):
     def iter_vlan_domain_segments(cls, segment):
         """
         Get all segments related to same VLAN domains
-        :param segment:
         :return:
         """
 
@@ -500,7 +498,6 @@ class NetworkSegment(Document):
     def get_vlan_domain_segments(cls, segment):
         """
         Get list of all segments related to same VLAN domains
-        :param segment:
         :return:
         """
         return list(cls.iter_vlan_domain_segments(segment))
@@ -511,7 +508,6 @@ class NetworkSegment(Document):
         """
         Get list of all managed object ids belonging to
         same VLAN domain
-        :param segment:
         :return:
         """
         from noc.sa.models.managedobject import ManagedObject
@@ -617,10 +613,10 @@ class NetworkSegment(Document):
     def get_topology_node(self) -> TopologyNode:
         return TopologyNode(
             id=str(self.id),
-            type="objectsegment",
+            type=TopologyNodeType.OBJECTSEGMENT,
             resource_id=str(self.id),
             title=self.name,
         )
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.profile.get_css_class() if self.profile else None

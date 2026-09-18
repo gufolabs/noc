@@ -3,7 +3,7 @@
 # USAGE:
 # python manage.py convert-moin [--encoding=charset] [--language=lang] [--tags=<taglist>] <path to moin data/ >
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ from noc.main.models.language import Language
 from noc.main.models.databasestorage import database_storage
 from noc.kb.models.kbentry import KBEntry
 from noc.kb.models.kbentryattachment import KBEntryAttachment
-from noc.core.comp import smart_text, smart_bytes
+from noc.core.comp import smart_text
 
 rx_hexseq = re.compile(r"\(((?:[0-9a-f][0-9a-f])+)\)")
 
@@ -31,7 +31,7 @@ rx_hexseq = re.compile(r"\(((?:[0-9a-f][0-9a-f])+)\)")
 class Command(BaseCommand):
     help = "Import MoinMoin wiki into NOC KB"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         (
             parser.add_argument(
                 "-e", "--encoding", dest="encoding", default="utf-8", help="Encoding"
@@ -68,7 +68,7 @@ class Command(BaseCommand):
         if isinstance(s, str):
             sys.stdout.write(s.encode("utf-8"))
         else:
-            sys.stdout.write(smart_bytes(smart_text(s, encoding=self.encoding)))
+            sys.stdout.write(smart_text(s, encoding=self.encoding).encode())
         sys.stdout.flush()
 
     #
@@ -89,7 +89,7 @@ class Command(BaseCommand):
 
         root = os.path.join(self.pages, page)
         name = rx_hexseq.sub(convert_hexseq, page)
-        self.out("Converting %s (%s)..." % (page, name))
+        self.out(f"Converting {page} ({name})...")
         # Find current revisions
         current_path = os.path.join(root, "current")
         if not os.path.exists(current_path):
@@ -128,7 +128,7 @@ class Command(BaseCommand):
         attachments_root = os.path.join(root, "attachments")
         if os.path.isdir(attachments_root):
             for a in os.listdir(attachments_root):
-                self.out("     %s..." % a)
+                self.out(f"     {a}...")
                 a_path = os.path.join(attachments_root, a)
                 mtime = datetime.datetime.fromtimestamp(
                     os.stat(a_path)[stat.ST_MTIME]
@@ -147,7 +147,3 @@ class Command(BaseCommand):
 
     def convert_body(self, body):
         return body
-
-
-if __name__ == "__main__":
-    Command().run()

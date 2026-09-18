@@ -32,7 +32,7 @@ class Script(BaseScript):
         v = self.scripts.get_version()
         r = [{"type": "CHASSIS", "vendor": "ZHONE", "part_no": v["platform"]}]
         for i in ["SHELFME", "BACKPLANE", "FANTRAY"]:
-            v = self.cli("eeshow %s 0" % i)
+            v = self.cli(f"eeshow {i} 0")
             match = self.rx_card.search(v)
             r += [
                 {
@@ -48,7 +48,7 @@ class Script(BaseScript):
         for match in self.rx_slot.finditer(v):
             slot_no = match.group("slot_no")
             descr = match.group("descr")
-            c = self.cli("eeshow card %s" % slot_no, cached=True)
+            c = self.cli(f"eeshow card {slot_no}", cached=True)
             match1 = self.rx_card.search(c)
             r += [
                 {

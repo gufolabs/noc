@@ -10,6 +10,6 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         for c in ["generator_name", "location", "provisioning", "autozones_path"]:
             self.db.delete_column("dns_dnsserver", c)

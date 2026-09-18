@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel, Field
@@ -24,7 +23,7 @@ class MeResponse(BaseModel):
     id: str
     username: str
     language: str
-    groups: List[GroupItem]
+    groups: list[GroupItem]
     avatar_label: str = Field(
         title="Avatar Label", description="Letters to be used when avatar is missed or empty"
     )
@@ -36,7 +35,7 @@ class MeResponse(BaseModel):
         title="Avatar Label Background",
         description="CSS background to be used along with avatar_label",
     )
-    avatar_url: Optional[str] = None
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
-    email: Optional[str] = None
+    avatar_url: str | None = None
+    first_name: str | None = None
+    last_name: str | None = None
+    email: str | None = None

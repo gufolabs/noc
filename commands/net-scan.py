@@ -9,7 +9,7 @@
 import argparse
 import asyncio
 import socket
-from typing import Optional, Iterable, List, Tuple, Union, Dict, Any
+from typing import Iterable, Any
 
 # Third-party modules
 import progressbar
@@ -41,7 +41,7 @@ ICMP_DIAG = "ICMP"
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("--in", action="append", dest="input", help="File with addresses")
         parser.add_argument(
             "--pool",
@@ -69,34 +69,26 @@ class Command(BaseCommand):
         parser.add_argument(
             "--jobs", action="store", type=int, default=100, dest="jobs", help="Concurrent jobs"
         )
-        (
-            parser.add_argument(
-                "--dry-run",
-                dest="dry_run",
-                action="store_true",
-                help="Test only. Do not save records",
-            ),
+        parser.add_argument(
+            "--dry-run",
+            dest="dry_run",
+            action="store_true",
+            help="Test only. Do not save records",
         )
-        (
-            parser.add_argument(
-                "--print-out",
-                dest="print_out",
-                action="store_true",
-                help="Printing result to output",
-            ),
+        parser.add_argument(
+            "--print-out",
+            dest="print_out",
+            action="store_true",
+            help="Printing result to output",
         )
-        (
-            parser.add_argument(
-                "--print-file", dest="print_file", help="Printing result to file output"
-            ),
+        parser.add_argument(
+            "--print-file", dest="print_file", help="Printing result to file output"
         )
-        (
-            parser.add_argument(
-                "--ip-scan",
-                dest="ip_scan",
-                action="store_true",
-                help="Address wit prefixes enabled IP Scan",
-            ),
+        parser.add_argument(
+            "--ip-scan",
+            dest="ip_scan",
+            action="store_true",
+            help="Address wit prefixes enabled IP Scan",
         )
         parser.add_argument("--ports", action="store", type=str, help="Check TCP ports")
         parser.add_argument("--rule", action="store", type=str, help="Check Rule. Set rule name")
@@ -125,16 +117,16 @@ class Command(BaseCommand):
         jobs,
         checks,
         pool: str,
-        adm_domain: Optional[str] = None,
-        labels: Optional[str] = None,
-        ports: Optional[str] = None,
-        community: Optional[str] = None,
-        snmp_user: Optional[str] = None,
+        adm_domain: str | None = None,
+        labels: str | None = None,
+        ports: str | None = None,
+        community: str | None = None,
+        snmp_user: str | None = None,
         dry_run: bool = False,
         print_out: bool = False,
-        print_file: Optional[str] = None,
+        print_file: str | None = None,
         ip_scan: bool = False,
-        rule: Optional[str] = None,
+        rule: str | None = None,
         *args,
         **options,
     ):
@@ -164,7 +156,7 @@ class Command(BaseCommand):
                 queue.put_nowait(None)
 
         addr_list = self.get_addresses(addresses, input, rule, ip_scan)
-        lock: Optional[asyncio.Lock] = None
+        lock: asyncio.Lock | None = None
         socket.setdefaulttimeout(SOCKET_DEFAULT_TIMEOUT)
         pool = self.get_pool(pool=pool)
         # SNMP Checker
@@ -183,9 +175,9 @@ class Command(BaseCommand):
 
     async def check_worker(
         self,
-        queue: Optional[asyncio.Queue],
+        queue: asyncio.Queue | None,
         lock: asyncio.Lock,
-        addr_list: List[str],
+        addr_list: list[str],
         checks: str,
         ports: str,
         bar: progressbar.ProgressBar,
@@ -298,11 +290,11 @@ class Command(BaseCommand):
 
         p = Pool.get_by_name(pool)
         if not p:
-            raise ValueError("Unknown pool: %s" % pool)
+            raise ValueError(f"Unknown pool: {pool}")
         return p.bi_id
 
     @staticmethod
-    def get_checker(name: str, **kwargs) -> Optional[BaseChecker]:
+    def get_checker(name: str, **kwargs) -> BaseChecker | None:
         """
         Return checker function by name
         """
@@ -323,9 +315,9 @@ class Command(BaseCommand):
         self,
         addresses: Iterable[str],
         input: Iterable[str],
-        rule: Optional[Any] = None,
+        rule: Any | None = None,
         ip_scan: bool = False,
-    ) -> List[str]:
+    ) -> list[str]:
         """Getting addresses for net-scan"""
         r = set()
         for a in addresses:
@@ -368,8 +360,7 @@ class Command(BaseCommand):
             if a.size == 1:
                 yield a
                 continue
-            for x in a.iter_address(count=a.size):
-                yield x
+            yield from a.iter_address(count=a.size)
 
     @classmethod
     def iter_address_scan(cls) -> Iterable[IP]:
@@ -387,13 +378,12 @@ class Command(BaseCommand):
                 if p.size == 1:
                     yield p
                     continue
-                for x in p.iter_address(count=p.size):
-                    yield x
+                yield from p.iter_address(count=p.size)
 
     @staticmethod
     def parse_credentials(
         community, snmp_user
-    ) -> List[Tuple[Protocol, Union[SNMPCredential, SNMPv3Credential]]]:
+    ) -> list[tuple[Protocol, SNMPCredential | SNMPv3Credential]]:
         """
         Parse SNMP Credentials arguments
         Args:
@@ -423,10 +413,10 @@ class Command(BaseCommand):
     @staticmethod
     def parse_checks(
         address: str,
-        checks: Optional[str] = None,
-        ports: Optional[str] = None,
-        snmp_cred: Optional[SNMPCredential] = None,
-        rule: Optional[Any] = None,
+        checks: str | None = None,
+        ports: str | None = None,
+        snmp_cred: SNMPCredential | None = None,
+        rule: Any | None = None,
     ) -> Iterable[Check]:
         """
         Parse required checks
@@ -460,7 +450,7 @@ class Command(BaseCommand):
             )
 
     @staticmethod
-    def parse_data(data: List[DataItem], params: Dict[str, Any]) -> Dict[str, str]:
+    def parse_data(data: list[DataItem], params: dict[str, Any]) -> dict[str, str]:
         """Parse collected data"""
         r = {}
         if not data:
@@ -477,7 +467,7 @@ class Command(BaseCommand):
             params["chassis_id"] = r[CHASSIS_OID]
         return r
 
-    def print_out(self, address: str, rtt: float, checks: List[ProtocolCheckResult]):
+    def print_out(self, address: str, rtt: float, checks: list[ProtocolCheckResult]):
         """
         Format out result
         """
@@ -485,9 +475,5 @@ class Command(BaseCommand):
         # for c in checks:
         #     r.append(f"{c.check}:{c.port} {'OK' if c.status else 'FAIL'}")
         self.stdout.write(
-            f"{address} {rtt * 1_000:.2f}ms| {';'.join('%s:%s %s' % (c.check, c.port or '', 'OK' if c.status else 'FAIL') for c in checks)}\n"
+            f"{address} {rtt * 1_000:.2f}ms| {';'.join('{}:{} {}'.format(c.check, c.port or '', 'OK' if c.status else 'FAIL') for c in checks)}\n"
         )
-
-
-if __name__ == "__main__":
-    Command().run()

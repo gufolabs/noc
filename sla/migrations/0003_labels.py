@@ -18,7 +18,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     TAG_COLLETIONS = [("noc.sla_probes", "slaprobe")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         labels = defaultdict(set)  # label: settings
         # Mongo models
         for collection, setting in self.TAG_COLLETIONS:

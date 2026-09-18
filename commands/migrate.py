@@ -1,8 +1,8 @@
 # ----------------------------------------------------------------------
 # Pretty command
 # ----------------------------------------------------------------------
-#  Copyright (C) 2007-2019 The NOC Project
-#  See LICENSE for details
+# Copyright (C) 2007-2019 The NOC Project
+# See LICENSE for details
 # ----------------------------------------------------------------------
 
 # NOC modules
@@ -22,7 +22,3 @@ class Command(BaseCommand):
         connect()
         runner = MigrationRunner()
         runner.migrate()
-
-
-if __name__ == "__main__":
-    Command().run()

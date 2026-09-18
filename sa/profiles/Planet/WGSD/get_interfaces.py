@@ -73,7 +73,7 @@ class Script(BaseScript):
                     sifindex = s[0][len("1.3.6.1.2.1.31.1.1.1.1") + 1 :]
                     if int(sifindex) < 1000:
                         sm = str(self.snmp.get(mib["IF-MIB::ifPhysAddress", int(sifindex)]))
-                        mtu = self.snmp.get("1.3.6.1.2.1.2.2.1.4.%s" % sifindex)
+                        mtu = self.snmp.get(f"1.3.6.1.2.1.2.2.1.4.{sifindex}")
                         smac = MACAddressParameter().clean(sm)
                     else:
                         continue
@@ -178,7 +178,7 @@ class Script(BaseScript):
                     iface["enabled_protocols"] += ["LACP"]
             iface["subinterfaces"][0]["enabled_afi"] += ["BRIDGE"]
             # Vlans
-            cmd = self.cli("show interfaces switchport ethernet %s" % name)
+            cmd = self.cli(f"show interfaces switchport ethernet {name}")
             rcmd = cmd.split("\n\n")
             tvlan = []
             utvlan = None
@@ -192,7 +192,7 @@ class Script(BaseScript):
             iface["subinterfaces"][0]["tagged_vlans"] = tvlan
             if utvlan:
                 iface["subinterfaces"][0]["untagged_vlan"] = utvlan
-            cmd = self.cli("show ip interface %s" % name)
+            cmd = self.cli(f"show ip interface {name}")
             for match in self.rx_sh_ip_int.finditer(cmd):
                 if not match:
                     continue

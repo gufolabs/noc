@@ -7,7 +7,6 @@
 
 # Python modules
 import re
-from typing import List
 from collections import defaultdict
 
 # NOC modules
@@ -154,7 +153,7 @@ class Script(GetMetricsScript):
         ),
     }
 
-    def get_cpe_metrics(self, metrics: List[MetricCollectorConfig]):
+    def get_cpe_metrics(self, metrics: list[MetricCollectorConfig]):
         ont_ifaces = defaultdict(list)
         ts = self.get_ts()
         # Group metric by port
@@ -166,7 +165,7 @@ class Script(GetMetricsScript):
             return
         self.cli("config")
         for iface, ont_ids in ont_ifaces.items():
-            self.cli("interface gpon %s/%s" % iface)  # Fix from cpes
+            self.cli("interface gpon {}/{}".format(*iface))  # Fix from cpes
             for probe, frame, slot, port, ont_id in ont_ids:
                 v = self.cli(f"display ont optical-info {port} {ont_id}")
                 results = parse_kv(self.kv_map, v)
@@ -208,7 +207,7 @@ class Script(GetMetricsScript):
         self.cli("quit")
         self.cli("quit")
 
-    def collect_cpe_metrics(self, metrics: List[MetricCollectorConfig]):
+    def collect_cpe_metrics(self, metrics: list[MetricCollectorConfig]):
         if self.get_access_preference().startswith("C"):
             return self.get_cpe_metrics(metrics)
         oids = {}

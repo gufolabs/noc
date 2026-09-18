@@ -61,7 +61,7 @@ class Script(BaseScript):
                     if ii["name"] == ifname:
                         ii["subinterfaces"] += [
                             {
-                                "name": "%s:%s_%s" % (ifname, vpi, vci),
+                                "name": f"{ifname}:{vpi}_{vci}",
                                 "admin_status": match.group("admin_status") == "Yes",
                                 "oper_status": match.group("oper_status") == "Yes",
                                 "enabled_afi": ["BRIDGE", "ATM"],
@@ -69,14 +69,14 @@ class Script(BaseScript):
                                 "vci": vci,
                             }
                         ]
-                        sub_map["%s:%s_%s" % (ifname, vpi, vci)] = ii["subinterfaces"][-1]
+                        sub_map[f"{ifname}:{vpi}_{vci}"] = ii["subinterfaces"][-1]
                 continue
             if match.group("vpi") and match.group("vci"):
                 vpi = match.group("vpi")
                 vci = match.group("vci")
                 i["subinterfaces"] += [
                     {
-                        "name": "%s:%s_%s" % (ifname, vpi, vci),
+                        "name": f"{ifname}:{vpi}_{vci}",
                         "admin_status": match.group("admin_status") == "Yes",
                         "oper_status": match.group("oper_status") == "Yes",
                         "enabled_afi": ["BRIDGE", "ATM"],
@@ -84,7 +84,7 @@ class Script(BaseScript):
                         "vci": vci,
                     }
                 ]
-                sub_map["%s:%s_%s" % (ifname, vpi, vci)] = i["subinterfaces"][-1]
+                sub_map[f"{ifname}:{vpi}_{vci}"] = i["subinterfaces"][-1]
             else:
                 i["subinterfaces"] += [
                     {
@@ -103,7 +103,7 @@ class Script(BaseScript):
                 if i["name"] == ifname:
                     addr = match.group("ip")
                     mask = match.group("mask")
-                    ip_address = "%s/%s" % (addr, IPv4.netmask_to_len(mask))
+                    ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
                     i["type"] = "SVI"
                     i["mac"] = match.group("mac")
                     i["subinterfaces"][0]["mac"] = match.group("mac")

@@ -66,7 +66,7 @@ class Script(BaseScript):
         match = self.rx_ver.search(v)
         r = {
             "vendor": "Angtel",
-            "platform": "Topaz-%s" % platform,
+            "platform": f"Topaz-{platform}",
             "version": match.group("version"),
             "attributes": {"Boot PROM": match.group("bootprom")},
         }

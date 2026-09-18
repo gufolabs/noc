@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.rename_column("dns_dnszonerecord", "left", "name")
         self.db.rename_column("dns_dnszonerecord", "right", "content")
         self.db.execute(

@@ -32,7 +32,7 @@ Ext.define("NOC.core.MRT", {
       data.map_params = me.mapParams;
     me.mask();
     if(me.fireEvent("beforetask", me) !== false){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: me.url,
         method: "POST",
         scope: me,
@@ -53,7 +53,7 @@ Ext.define("NOC.core.MRT", {
   checkMRT: function(){
     var me = this;
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.url + me.taskId + "/",
       method: "GET",
       scope: me,

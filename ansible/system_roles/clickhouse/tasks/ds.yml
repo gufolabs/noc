@@ -18,4 +18,4 @@
       basicAuthUser: "readonly"
       secureJsonData:
         basicAuthPassword: "{{ clickhouse_ro_password }}"
-  with_items: '{{ groups["svc-grafana-exec"] }}'
+  loop: '{{ groups["svc-grafana-exec"] }}'

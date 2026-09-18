@@ -12,7 +12,7 @@ from noc.fm.models.eventclass import EventClass as EventClassModel
 
 
 class EventClass(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "eventclass"
         layout = "hashed"
         source_model = "fm.EventClass"

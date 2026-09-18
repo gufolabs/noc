@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Optional, List, Iterable, Dict, DefaultDict
+from typing import Any, Iterable
 from collections import defaultdict
 from dataclasses import dataclass
 
@@ -41,32 +41,29 @@ class ConfigMapping(BaseModel):
 class SubgraphConfig(BaseModel):
     # Yaml-serialized subgraph
     cdag: str
-    inputs: Optional[List[InputMapping]]
-    output: Optional[str]
-    config: Optional[List[ConfigMapping]]
+    inputs: list[InputMapping] | None
+    output: str | None
+    config: list[ConfigMapping] | None
 
 
 class SubgraphState(BaseModel):
-    state: Optional[Dict[str, Any]] = None
+    state: dict[str, Any] | None = None
 
 
 class SubgraphCDAGFactory(ConfigCDAGFactory):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         # node -> [(param, value)]
-        self.node_cfg: DefaultDict[str, Dict[str, Any]] = defaultdict(dict)
+        self.node_cfg: defaultdict[str, dict[str, Any]] = defaultdict(dict)
         super().__init__(*args, **kwargs)
 
     def set_node_config(self, node: str, param: str, value: Any) -> None:
         """
         Set additional node config
-        :param node:
-        :param param:
-        :param value:
         :return:
         """
         self.node_cfg[node][param] = value
 
-    def clean_node_config(self, node_id: str, config: Optional[Dict[str, Any]]) -> Any:
+    def clean_node_config(self, node_id: str, config: dict[str, Any] | None) -> Any:
         override = self.node_cfg[node_id]
         if override:
             config = config or {}
@@ -75,7 +72,7 @@ class SubgraphCDAGFactory(ConfigCDAGFactory):
 
 
 @dataclass
-class InputItem(object):
+class InputItem:
     __slots__ = "input", "node"
     node: BaseCDAGNode
     input: str
@@ -95,10 +92,10 @@ class SubgraphNode(BaseCDAGNode):
     def __init__(
         self,
         node_id: str,
-        prefix: Optional[str] = None,
-        state: Optional[Dict[str, Any]] = None,
+        prefix: str | None = None,
+        state: dict[str, Any] | None = None,
         description: str = None,
-        config: Optional[Dict[str, Any]] = None,
+        config: dict[str, Any] | None = None,
         sticky: bool = False,
     ):
         # Clean up config
@@ -114,7 +111,7 @@ class SubgraphNode(BaseCDAGNode):
                 factory.set_node_config(m.node, m.param, config.get(m.name))
         factory.construct()
         # Build input mappings
-        self.input_mappings: Dict[str, InputItem] = {}
+        self.input_mappings: dict[str, InputItem] = {}
         if cfg.inputs:
             for m in cfg.inputs:
                 node = self.cdag.get_node(m.node)
@@ -144,7 +141,7 @@ class SubgraphNode(BaseCDAGNode):
             return IN_REQUIRED
         return IN_INVALID
 
-    def get_value(self, *args, **kwargs) -> Optional[ValueType]:
+    def get_value(self, *args, **kwargs) -> ValueType | None:
         # Start sub-transaction
         tx = self.cdag.begin()
         for p, v in kwargs.items():

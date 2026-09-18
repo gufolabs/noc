@@ -133,7 +133,7 @@ Ext.define("NOC.fm.mib.Application", {
   //
   loadMIB: function(){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/fm/mib/" + me.currentRecord.get("id") + "/data/",
       method: "GET",
       scope: me,

@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import Optional, List, Union, Callable, Dict, Any
+from typing import Optional, Callable, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -36,6 +36,7 @@ from noc.main.models.label import Label
 from noc.main.models.notificationgroup import NotificationGroup
 from noc.main.models.handler import Handler
 from noc.main.models.template import Template
+from noc.main.models.remotesystem import RemoteSystem
 from noc.aaa.models.user import User
 from noc.sa.models.action import Action as ObjectAction
 from .alarmseverity import AlarmSeverity
@@ -52,6 +53,7 @@ class Match(EmbeddedDocument):
     resource_groups = ListField(ObjectIdField())
     alarm_class: AlarmClass = ReferenceField(AlarmClass)
     severity: AlarmSeverity = ReferenceField(AlarmSeverity, required=False)
+    remote_system: RemoteSystem = ReferenceField(RemoteSystem)
     reference_rx = StringField()
 
     def __str__(self):
@@ -60,7 +62,7 @@ class Match(EmbeddedDocument):
     def get_labels(self):
         return list(Label.objects.filter(name__in=self.labels))
 
-    def get_match_expr(self) -> Dict[str, Any]:
+    def get_match_expr(self) -> dict[str, Any]:
         r = {}
         if self.labels:
             r["labels"] = {"$all": list(self.labels)}
@@ -68,6 +70,8 @@ class Match(EmbeddedDocument):
             r["service_groups"] = {"$all": [str(x) for x in self.resource_groups]}
         if self.alarm_class:
             r["alarm_class"] = {"$in": [str(self.alarm_class.id)]}
+        if self.remote_system:
+            r["remote_system"] = {"$in": [str(self.remote_system.id)]}
         if self.severity:
             r["severity"] = {"$gte": self.severity.severity}
         if self.reference_rx:
@@ -94,7 +98,7 @@ class Group(EmbeddedDocument):
     def __str__(self):
         return f"{self.alarm_class or ''}/{self.title_template or ''}: {self.reference_template}"
 
-    def get_config(self) -> Dict[str, Any]:
+    def get_config(self) -> dict[str, Any]:
         """"""
         return {
             "reference_template": self.reference_template,
@@ -139,10 +143,10 @@ class Action(EmbeddedDocument):
         if self.user:
             r.append(f"U::{self.user.username}")
         if self.object_action:
-            r.append(f"OA::{self.user.username}")
+            r.append(f"OA::{self.object_action}")
         return f"{self.when}: {';'.join(r)}"
 
-    def get_config(self) -> List["ActionConfig"]:
+    def get_config(self) -> list["ActionConfig"]:
         """Get AlarmAction Config"""
         r = []
         when = {"raise": "on_start", "clear": "on_end", "update": "any"}[self.when]
@@ -192,10 +196,10 @@ class AlarmRule(Document):
     name = StringField(unique=True)
     description = StringField()
     is_active = BooleanField(default=True)
-    match: List[Match] = EmbeddedDocumentListField(Match)
-    groups: List[Group] = EmbeddedDocumentListField(Group)
-    actions: List[Action] = EmbeddedDocumentListField(Action)
-    escalation_profile: Optional[EscalationProfile] = ReferenceField(EscalationProfile)
+    match: list[Match] = EmbeddedDocumentListField(Match)
+    groups: list[Group] = EmbeddedDocumentListField(Group)
+    actions: list[Action] = EmbeddedDocumentListField(Action)
+    escalation_profile: EscalationProfile | None = ReferenceField(EscalationProfile)
     severity_policy = StringField(
         choices=[
             ("B", "Base"),
@@ -205,8 +209,8 @@ class AlarmRule(Document):
         ],
         default="AL",
     )
-    min_severity: Optional[AlarmSeverity] = ReferenceField(AlarmSeverity, required=False)
-    max_severity: Optional[AlarmSeverity] = ReferenceField(AlarmSeverity, required=False)
+    min_severity: AlarmSeverity | None = ReferenceField(AlarmSeverity, required=False)
+    max_severity: AlarmSeverity | None = ReferenceField(AlarmSeverity, required=False)
     # Set, Match, Increase, Severity
     # severity_policy = StringField(
     #     choices=["match", "set", "inc", "dec"], default="set"
@@ -246,7 +250,7 @@ class AlarmRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["AlarmRule"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["AlarmRule"]:
         return AlarmRule.objects.filter(id=oid).first()
 
     @classmethod
@@ -275,7 +279,7 @@ class AlarmRule(Document):
         return matcher(ctx)
 
     @classmethod
-    def get_by_alarm(cls, alarm) -> List["AlarmRule"]:
+    def get_by_alarm(cls, alarm) -> list["AlarmRule"]:
         r = []
         for ar in AlarmRule.objects.filter(is_active=True):
             if ar.is_match(alarm):
@@ -285,7 +289,7 @@ class AlarmRule(Document):
     @classmethod
     def get_config(cls, rule: "AlarmRule"):
         """Generate Rule config"""
-        r = {
+        r: dict[str, Any] = {
             "id": str(rule.id),
             "name": rule.name,
             "is_active": rule.is_active,

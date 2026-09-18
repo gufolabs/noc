@@ -138,7 +138,7 @@ class BoxDiscoveryJob(MODiscoveryJob):
             check = self.TOPOLOGY_METHODS.get(m)
             if not check:
                 continue
-            if getattr(self.object.object_profile, "enable_box_discovery_%s" % check.name):
+            if getattr(self.object.object_profile, f"enable_box_discovery_{check.name}"):
                 check(self).run()
         if self.object.object_profile.enable_box_discovery_sla:
             SLACheck(self).run()

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Dict
+from typing import Any
 
 # NOC modules
 from noc.core.datastream.base import DataStream
@@ -17,7 +17,7 @@ class CfgEventDataStream(DataStream):
     name = "cfgevent"
 
     @classmethod
-    def get_object(cls, oid: str) -> Dict[str, Any]:
+    def get_object(cls, oid: str) -> dict[str, Any]:
         oid = str(oid)
         if oid.startswith("ec:"):
             event_class = EventClass.get_by_id(oid[3:])

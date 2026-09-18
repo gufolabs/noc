@@ -14,7 +14,7 @@ import datetime
 import itertools
 from time import perf_counter
 from dataclasses import dataclass
-from typing import Any, Optional, Tuple, List, Dict, Set, Iterable, DefaultDict, FrozenSet
+from typing import Any, Optional, Iterable
 from collections import defaultdict
 
 # Third-party modules
@@ -29,8 +29,9 @@ from noc.core.service.fastapi import FastAPIService
 from noc.core.jsonutils import iter_chunks
 from noc.core.ioloop.timers import PeriodicCallback
 from noc.core.service.nodatachecker import NoDataChecker
-from noc.core.mx import MessageType, MX_FROM_COLLECTOR, MX_REMOTE_SYSTEM, MX_ETL_LOADER
+from noc.core.mx import MessageType, MX_FROM_COLLECTOR, MX_REMOTE_SYSTEMS, MX_ETL_LOADER
 from noc.core.fm.event import Event
+from noc.core.checkers.base import register_checks
 from noc.services.metricscollector.datastream import MetricsDataStreamClient, SourceStreamClient
 from noc.services.metricscollector.sourceconfig import (
     SourceConfig,
@@ -44,18 +45,19 @@ from noc.services.metricscollector.models.channel import (
 
 NS = 1_000_000_000
 MAX_UNKNOWN_METRICS = 200
+TARGET_CHECK_SEND_INTERVAL = 3600
 
 
 @dataclass(frozen=True)
-class CfgItem(object):
+class CfgItem:
     id: str
     ch_table: str
     ch_field: str
     collector: str
     coll_field: str
     allow_partial_match: bool
-    labels: FrozenSet[str]
-    aliases: List[str]
+    labels: frozenset[str]
+    aliases: list[str]
     unit: str
     preference: int
 
@@ -83,14 +85,14 @@ class MetricsCollectorService(FastAPIService):
     _rx_name_cache = cachetools.LRUCache(1000)
     _rs_key_cache = cachetools.TTLCache(10, ttl=120)
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
-        self.mappings: DefaultDict[Tuple[str, str], List[CfgItem]] = defaultdict(list)
-        self.rx_mappings: DefaultDict[Tuple[str, re.Pattern], List[CfgItem]] = defaultdict(list)
-        self.id_mappings: Dict[str, List[CfgItem]] = {}
+        self.mappings: defaultdict[tuple[str, str], list[CfgItem]] = defaultdict(list)
+        self.rx_mappings: defaultdict[tuple[str, re.Pattern], list[CfgItem]] = defaultdict(list)
+        self.id_mappings: dict[str, list[CfgItem]] = {}
         self.n_parts: int = 0
         self.add_sources = 0
-        self.ready_event: Optional[asyncio.Event] = asyncio.Event()
+        self.ready_event: asyncio.Event | None = asyncio.Event()
         self.event_source_ready = asyncio.Event()
         self.no_data_checker = NoDataChecker(
             nodata_record_ttl=config.metricscollector.nodata_record_ttl,
@@ -98,17 +100,19 @@ class MetricsCollectorService(FastAPIService):
             collector="metricscollector",
         )
         # Source Configs: ManagedObject & Agent
-        self.source_configs: Dict[str, SourceConfig] = {}  # id -> SourceConfig
-        self.source_map: Dict[str, str] = {}
-        self.channels: Dict[str, RemoteSystemChannel] = {}
-        self.event_channels: Dict[str, RemoteSystemEventChannel] = {}
+        self.source_configs: dict[str, SourceConfig] = {}  # id -> SourceConfig
+        self.source_map: dict[str, str] = {}
+        self.channels: dict[str, RemoteSystemChannel] = {}
+        self.event_channels: dict[str, RemoteSystemEventChannel] = {}
         # Remote Systems Config
         self.banned_rs = set()
-        self.remote_system_config: Dict[str, RemoteSystemConfig] = {}
-        self.remote_system_map: Dict[str, str] = {}
+        self.remote_system_config: dict[str, RemoteSystemConfig] = {}
+        self.remote_system_map: dict[str, str] = {}
         # Sensors
-        self.sensor_configs: Dict[str, SensorConfig] = {}
+        self.sensor_configs: dict[str, SensorConfig] = {}
         self.stopping = False
+        self.updated: set[str] = set()
+        self.received: dict[str, int] = {}
         # Queue of channels to flush
         self.flush_queue: asyncio.Queue[RemoteSystemChannel] = asyncio.Queue()
         if config.metricscollector.listen:
@@ -121,7 +125,7 @@ class MetricsCollectorService(FastAPIService):
         self,
         remote_system: RemoteSystemConfig,
         collector: str,
-        batch_delay: Optional[int] = None,
+        batch_delay: int | None = None,
     ) -> Optional["RemoteSystemChannel"]:
         """
         Create channel for received data
@@ -145,8 +149,8 @@ class MetricsCollectorService(FastAPIService):
         self,
         remote_system: RemoteSystemConfig,
         collector: str,
-        batch_delay: Optional[int] = None,
-    ) -> Optional[RemoteSystemEventChannel]:
+        batch_delay: int | None = None,
+    ) -> RemoteSystemEventChannel | None:
         """"""
         if remote_system.name not in self.event_channels:
             self.event_channels[remote_system.name] = RemoteSystemEventChannel(
@@ -166,18 +170,18 @@ class MetricsCollectorService(FastAPIService):
             if isinstance(ch, RemoteSystemEventChannel):
                 await self.send_events(ch.events)
                 # Register ETL
-                if ch.fm_events:
+                if ch.received_events:
                     await self.send_message(
                         orjson.dumps(
                             {
                                 "remote_system": ch.remote_system.name,
-                                "events": [c.model_dump() for c in ch.fm_events.values()],
+                                "events": [c.model_dump() for c in ch.received_events.values()],
                                 "deferred": ch.deferred,
                             }
                         ),
                         MessageType.ETL_PUSH,
                         headers={
-                            MX_REMOTE_SYSTEM: ch.remote_system.name.encode(),
+                            MX_REMOTE_SYSTEMS: ch.remote_system.name.encode(),
                             MX_ETL_LOADER: b"fmevent",
                         },
                     )
@@ -185,7 +189,7 @@ class MetricsCollectorService(FastAPIService):
                         "[%s] Flush Events Records: %s. Etl: %s/Deferred: %s",
                         ch.remote_system.name,
                         n_records,
-                        len(ch.fm_events),
+                        len(ch.received_events),
                         len(ch.deferred),
                     )
                 ch.flush_complete()
@@ -231,7 +235,11 @@ class MetricsCollectorService(FastAPIService):
                 except KeyError:
                     continue
                 ts = datetime.datetime.fromtimestamp(clock)
-                parts[cfg.bi_id % self.n_parts].append(
+                if cfg.managed_object:
+                    part = cfg.managed_object % self.n_parts
+                else:
+                    part = cfg.bi_id % self.n_parts
+                parts[part].append(
                     {
                         "ts": (ts.timestamp() + config.tz_utc_offset) * NS,
                         "scope": "sensor",
@@ -252,12 +260,12 @@ class MetricsCollectorService(FastAPIService):
             del parts
             ch.flush_complete()
 
-    async def send_events(self, events: List[Event], partition: Optional[int] = None):
+    async def send_events(self, events: list[Event], partition: int | None = None):
         """Send data to"""
         for event in events:
             self.publish(orjson.dumps(event.model_dump()), f"events.{event.target.pool}")
 
-    async def send_records(self, data: List[Any], partition: Optional[int] = None):
+    async def send_records(self, data: list[Any], partition: int | None = None):
         """Send data to"""
         for d in iter_chunks(
             data,
@@ -311,6 +319,23 @@ class MetricsCollectorService(FastAPIService):
                     len(ch.unknown_metrics),
                     ";".join(itertools.islice(ch.unknown_metrics, MAX_UNKNOWN_METRICS)),
                 )
+        if not self.updated:
+            return
+        self.logger.info("Sending %s messages with updated checks", len(self.updated))
+        updated = list(self.updated)
+        self.updated = set()
+        for cfg_id in updated:
+            cfg = self.source_configs.get(cfg_id)
+            if not cfg or not cfg.bi_id:
+                continue
+            checks = cfg.get_checks()
+            if not checks:
+                continue
+            if cfg.services:
+                for bi_id in cfg.services:
+                    register_checks(checks, managed_object=cfg.bi_id, service=bi_id)
+            else:
+                register_checks(checks, managed_object=cfg.bi_id)
 
     async def init_api(self):
         # Postpone initialization process until config datastream is fully processed
@@ -331,7 +356,7 @@ class MetricsCollectorService(FastAPIService):
         # Process as usual
         await super().init_api()
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         check_callback = PeriodicCallback(
             self.check_channels, config.metricscollector.batch_delay_s
         )
@@ -389,7 +414,7 @@ class MetricsCollectorService(FastAPIService):
         # Pass further initialization
         self.ready_event.set()
 
-    async def update_metric_type(self, data: Dict[str, Any]) -> None:
+    async def update_metric_type(self, data: dict[str, Any]) -> None:
         if data["id"] in self.id_mappings:
             self.update_data(data)
         else:
@@ -400,13 +425,13 @@ class MetricsCollectorService(FastAPIService):
     async def delete_metric_type(self, mt_id: str) -> None:
         self.delete_data(mt_id)
 
-    def insert_data(self, data: Dict[str, Any]) -> None:
+    def insert_data(self, data: dict[str, Any]) -> None:
         """
         Insert new data into tables
         """
         items = self.expand_rules(data)
         self.id_mappings[data["id"]] = items
-        affected: Set[Tuple[str, str]] = {(i.collector, i.coll_field) for i in items}
+        affected: set[tuple[str, str]] = {(i.collector, i.coll_field) for i in items}
         for i in items:
             if i.allow_partial_match:
                 self.rx_mappings[i.collector, re.compile(i.coll_field)].append(i)
@@ -418,7 +443,7 @@ class MetricsCollectorService(FastAPIService):
         for k in affected:
             self.mappings[k] = sorted(self.mappings[k], key=operator.attrgetter("preference"))
 
-    def update_data(self, data: Dict[str, Any]) -> None:
+    def update_data(self, data: dict[str, Any]) -> None:
         """
         Update data into tables
         """
@@ -432,7 +457,7 @@ class MetricsCollectorService(FastAPIService):
         items = self.id_mappings.get(mt_id) or []
         if not items:
             return
-        affected: Set[Tuple[str, str]] = {(i.collector, i.coll_field) for i in items}
+        affected: set[tuple[str, str]] = {(i.collector, i.coll_field) for i in items}
         for k in affected:
             self.mappings[k] = sorted(
                 (i for i in self.mappings[k] if i.id != mt_id),
@@ -442,7 +467,7 @@ class MetricsCollectorService(FastAPIService):
                 del self.mappings[k]
         del self.id_mappings[mt_id]
 
-    async def update_sensors(self, cfg: SourceConfig, sensors: List[Dict[str, Any]]):
+    async def update_sensors(self, cfg: SourceConfig, sensors: list[dict[str, Any]]):
         """Update sensors Config"""
         processed = set()
         for data in sensors:
@@ -501,7 +526,7 @@ class MetricsCollectorService(FastAPIService):
         for ch in self.channels.values():
             ch.flush_unknown_hosts |= True
 
-    def update_mappings(self, sid, new: Iterable[str], old: Optional[Iterable[str]] = None):
+    def update_mappings(self, sid, new: Iterable[str], old: Iterable[str] | None = None):
         """"""
         # Delete Old Mappings
         for m in set(old or []) - set(new):
@@ -546,17 +571,17 @@ class MetricsCollectorService(FastAPIService):
         self.logger.info("%d Event Sources has been loaded", self.add_sources)
         # calculate size
 
-    def lookup_source_by_name(
-        self, name: str, collector: Optional[str] = None
-    ) -> Optional[SourceConfig]:
+    def lookup_source_by_name(self, name: str, collector: str | None = None) -> SourceConfig | None:
         """Lookup source by name"""
         # Clean domain part
         hostname = name.split(".", 1)[0]
         # Lowe
         hostname = f"name:{hostname.lower()}"
         if hostname in self.source_map:
+            self.register_source(self.source_map[hostname])
             return self.source_configs[self.source_map[hostname]]
         if f"name:{name.lower()}" in self.source_map:
+            self.register_source(self.source_map[f"name:{name.lower()}"])
             return self.source_configs[self.source_map[f"name:{name.lower()}"]]
         # Register invalid event source
         if self.source_configs and collector:
@@ -565,7 +590,14 @@ class MetricsCollectorService(FastAPIService):
             metrics["error", ("type", "object_not_found")] += 1
         return None
 
-    def lookup_remote_sensor(self, sid: str, remote_system: str) -> Optional[SensorConfig]:
+    def register_source(self, sid: str):
+        if sid not in self.received:
+            self.received[sid] = int(perf_counter())
+        elif int(perf_counter()) - self.received[sid] > TARGET_CHECK_SEND_INTERVAL:
+            del self.received[sid]
+            self.updated.add(sid)
+
+    def lookup_remote_sensor(self, sid: str, remote_system: str) -> SensorConfig | None:
         """Lookup remote_sensor"""
         if not self.sensor_configs:
             return None
@@ -573,7 +605,7 @@ class MetricsCollectorService(FastAPIService):
         if sid in self.source_map:
             return self.sensor_configs[self.source_map[sid]]
 
-    def lookup_agent_by_noc_key(self, key: str) -> Optional[SourceConfig]:
+    def lookup_agent_by_noc_key(self, key: str) -> SourceConfig | None:
         """Lookup Agent by key"""
         if key in self.source_map:
             return self.source_configs[self.source_map[key]]
@@ -583,7 +615,7 @@ class MetricsCollectorService(FastAPIService):
     def get_remote_system_by_code(
         self,
         code: str,
-    ) -> Optional[RemoteSystemConfig]:
+    ) -> RemoteSystemConfig | None:
         """Check Remote System"""
         sid = self.remote_system_map.get(code.lower())
         if not sid or sid not in self.remote_system_config:
@@ -594,7 +626,7 @@ class MetricsCollectorService(FastAPIService):
     def get_remote_system_by_key(
         self,
         key: str,
-    ) -> Optional[RemoteSystemConfig]:
+    ) -> RemoteSystemConfig | None:
         """Check Remote System"""
         for rs in self.remote_system_config.values():
             if rs.api_key == key:
@@ -602,7 +634,7 @@ class MetricsCollectorService(FastAPIService):
         return None
 
     @staticmethod
-    def expand_rules(data: Dict[str, Any]) -> List[CfgItem]:
+    def expand_rules(data: dict[str, Any]) -> list[CfgItem]:
         return [
             CfgItem.from_data(
                 rid=data["id"],
@@ -613,7 +645,7 @@ class MetricsCollectorService(FastAPIService):
             for item in data["rules"]
         ]
 
-    def find_metrics_by_name(self, collector: str, name: str) -> List[CfgItem]:
+    def find_metrics_by_name(self, collector: str, name: str) -> list[CfgItem]:
         """Find by name (rx)"""
         if (collector, name) in self.mappings:
             return self.mappings[(collector, name)]
@@ -623,7 +655,7 @@ class MetricsCollectorService(FastAPIService):
         return []
 
     @cachetools.cachedmethod(operator.attrgetter("_rx_name_cache"))
-    def find_metrics_by_rx(self, collector: str, name: str) -> List[CfgItem]:
+    def find_metrics_by_rx(self, collector: str, name: str) -> list[CfgItem]:
         """Find metric by Alias rx"""
         r = []
         for (c, rx), cfgs in self.rx_mappings.items():
@@ -636,8 +668,8 @@ class MetricsCollectorService(FastAPIService):
         self,
         collector,
         name,
-        labels: Optional[List[str]] = None,
-    ) -> Optional[CfgItem]:
+        labels: list[str] | None = None,
+    ) -> CfgItem | None:
         """Get Metric config"""
         if labels:
             labels = frozenset(labels)
@@ -649,7 +681,3 @@ class MetricsCollectorService(FastAPIService):
         # Not Mapped metric
         self.logger.debug("[%s] Not mapped value: %s. Skipping", collector, name)
         return None
-
-
-if __name__ == "__main__":
-    MetricsCollectorService().start()

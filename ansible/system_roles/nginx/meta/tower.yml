@@ -34,11 +34,11 @@ forms:
     external_cert_management:
       default: "False"
       label: "Use external certificate management"
-      description: "Certificate under <a href=https://kb.nocproject.org/x/KYHJAQ target=_blank>letsencrypt management </a>"
+      description: "Certificate under external ACME management."
       type: bool
       common: environment
     permit_firewall:
-      default: True  # yamllint disable-line rule:truthy
+      default: True # yamllint disable-line rule:truthy
       label: "Permit https in firewall"
       type: bool
       description: "Open https in firewall. Works on Centos/Rhel only."

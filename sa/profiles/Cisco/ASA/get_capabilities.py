@@ -24,5 +24,5 @@ class Script(BaseScript):
         if "Invalid input detected at" not in v:
             match = self.re_search(self.sec_mode, v)
             sec_mode = match.group("mode")
-            self.logger.debug("Mode {0}".format(sec_mode))
+            self.logger.debug(f"Mode {sec_mode}")
             caps["Cisco | ASA | Security | Context | Mode"] = sec_mode

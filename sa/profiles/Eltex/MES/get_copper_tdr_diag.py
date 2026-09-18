@@ -53,9 +53,11 @@ class Script(BaseScript):
             diag = ""
             for s in self.scripts.get_interface_status():
                 interface_status[s["interface"]] = s["status"]
-                diag = diag + self.cli("test cable-diagnostics tdr interface %s" % s["interface"])
+                diag = diag + self.cli(
+                    "test cable-diagnostics tdr interface {}".format(s["interface"])
+                )
         else:
-            diag = self.cli("test cable-diagnostics tdr interface %s" % interface)
+            diag = self.cli(f"test cable-diagnostics tdr interface {interface}")
 
         for l in diag.split("\n"):
             match = self.rx_diag.search(l)

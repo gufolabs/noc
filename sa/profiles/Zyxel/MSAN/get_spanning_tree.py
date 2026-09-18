@@ -72,7 +72,7 @@ class Script(BaseScript):
             vlans = ""
         inst = {"id": inst_id, "vlans": vlans, "interfaces": []}
         try:
-            v = self.cli("show mstp %s" % inst_id)
+            v = self.cli(f"show mstp {inst_id}")
         except self.CLISyntaxError:
             v = self.cli("statistics rstp")
         match = self.rx_root.search(v)

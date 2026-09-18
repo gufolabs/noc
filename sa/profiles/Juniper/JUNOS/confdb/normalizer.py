@@ -33,7 +33,7 @@ class JunOSNormalizer(BaseNormalizer):
 
     @match("system", "login", "user", ANY, "class", ANY)
     def normalize_username_access_level(self, tokens):
-        yield self.make_user_class(username=tokens[3], class_name="level-%s" % tokens[5])
+        yield self.make_user_class(username=tokens[3], class_name=f"level-{tokens[5]}")
 
     @match("vlans", ANY, "vlan-id", ANY)
     def normalize_vlan_name(self, tokens):
@@ -61,9 +61,9 @@ class JunOSNormalizer(BaseNormalizer):
 
     @match("interfaces", ANY, "unit", ANY, "description", REST)
     def normalize_sub_interface_description(self, tokens):
-        if_name = "%s.%s" % (self.interface_name(tokens[1]), tokens[3])
+        if_name = f"{self.interface_name(tokens[1])}.{tokens[3]}"
         yield self.defer(
-            "fi.iface.%s" % self.interface_name(if_name),
+            f"fi.iface.{self.interface_name(if_name)}",
             self.make_unit_description,
             instance=deferable("instance"),
             interface=self.interface_name(if_name),
@@ -73,9 +73,9 @@ class JunOSNormalizer(BaseNormalizer):
 
     @match("interfaces", ANY, "unit", ANY, "family", "inet", "address", ANY)
     def normalize_sub_interface_ip(self, tokens):
-        if_name = "%s.%s" % (self.interface_name(tokens[1]), tokens[3])
+        if_name = f"{self.interface_name(tokens[1])}.{tokens[3]}"
         yield self.defer(
-            "fi.iface.%s" % self.interface_name(if_name),
+            f"fi.iface.{self.interface_name(if_name)}",
             self.make_unit_inet_address,
             instance=deferable("instance"),
             interface=self.interface_name(if_name),
@@ -85,7 +85,7 @@ class JunOSNormalizer(BaseNormalizer):
 
     @match("routing-instances", ANY, "bridge-domains", ANY, "interface", ANY)
     def normalize_ri_bridge_interface(self, tokens):
-        yield self.defer("fi.iface.%s" % self.interface_name(tokens[5]), instance=tokens[1])
+        yield self.defer(f"fi.iface.{self.interface_name(tokens[5])}", instance=tokens[1])
         self.rebase(
             (
                 "virtual-router",
@@ -107,7 +107,7 @@ class JunOSNormalizer(BaseNormalizer):
 
     @match("routing-instances", ANY, "interface", ANY)
     def normalize_interface_routing_instances(self, tokens):
-        yield self.defer("fi.iface.%s" % self.interface_name(tokens[3]), instance=tokens[1])
+        yield self.defer(f"fi.iface.{self.interface_name(tokens[3])}", instance=tokens[1])
 
     @match("routing-instances", ANY, "route-distinguisher", ANY)
     def normalize_routing_instances_rd(self, tokens):

@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel
@@ -16,8 +15,8 @@ class DNSZoneRecord(BaseModel):
     name: str
     type: str
     rdata: str
-    ttl: Optional[int]
-    priority: Optional[int]
+    ttl: int | None
+    priority: int | None
 
 
 class DNSZoneDataStreamItem(BaseModel):
@@ -25,6 +24,6 @@ class DNSZoneDataStreamItem(BaseModel):
     change_id: str
     name: str
     serial: str
-    masters: List[str]
-    slaves: List[str]
-    records: List[DNSZoneRecord]
+    masters: list[str]
+    slaves: list[str]
+    records: list[DNSZoneRecord]

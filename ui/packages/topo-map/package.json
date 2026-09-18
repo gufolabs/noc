@@ -1,0 +1,35 @@
+{
+  "name": "topo-map",
+  "version": "3.4.9",
+  "description": "Interactive JointJS topology map module",
+  "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:convert": "vitest run ./scripts/convertMapData.test.ts",
+    "build:lib": "vite build",
+    "build:types": "tsc -p tsconfig.types.json",
+    "build": "pnpm run clean && pnpm run build:lib && pnpm run build:types",
+    "demo": "vite --config vite.demo.config.mjs",
+    "demo:build": "vite build --config vite.demo.config.mjs",
+    "prepare": "pnpm run build",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@gufo-labs/font": "^0.0.9",
+    "@joint/core": "4.2.4",
+    "@joint/layout-directed-graph": "^4.2.3",
+    "rbush": "4.0.1"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "vite": "^8.0.12",
+    "vitest": "^4.1.4"
+  }
+}

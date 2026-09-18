@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Optional, List, Iterable, Any, Tuple
+from typing import Iterable, Any
 from collections import defaultdict
 import logging
 
@@ -23,7 +23,6 @@ from noc.crm.models.subscriber import Subscriber
 from noc.crm.models.subscriberprofile import SubscriberProfile
 from noc.sa.models.managedobjectprofile import ManagedObjectProfile
 from noc.inv.models.interfaceprofile import InterfaceProfile
-from noc.main.models.label import Label
 from .serviceprofile import ServiceProfile
 
 logger = logging.getLogger(__name__)
@@ -84,8 +83,8 @@ class ServiceSummary(Document):
     def get_service_for_object(
         cls,
         managed_object,
-        states: Optional[List[str]] = None,
-    ) -> Iterable[Tuple[str, List[Dict[str, Any]], str, Optional[str], Optional[str]]]:
+        states: list[str] | None = None,
+    ) -> Iterable[tuple[str, list[dict[str, Any]], str, str | None, str | None]]:
         """Build service from ServiceInstance"""
         from noc.sa.models.serviceinstance import ServiceInstance
 
@@ -287,8 +286,6 @@ class ServiceSummary(Document):
                 logger.error("Bulk write error: '%s'", e.details)
                 logger.error("Stopping check")
         mo = ManagedObject.get_by_id(managed_object)
-        # Refresh labels for ServiceInstancesUpdate
-        Label._refresh_object_labels(mo)
         NetworkSegment.update_summary(mo.segment)
 
     @classmethod
@@ -354,7 +351,7 @@ class ServiceSummary(Document):
         return kk
 
     @classmethod
-    def get_weight(cls, summary: Dict[str, Dict[str, int]]) -> int:
+    def get_weight(cls, summary: dict[str, dict[str, int]]) -> int:
         """
         Convert result of *get_object_summary* to alarm weight
         """

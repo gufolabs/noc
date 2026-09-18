@@ -41,9 +41,9 @@ def iter_ports(port_list):
 
         for port_num in range(first, last + 1):
             if slot_num:
-                yield "%s:%s" % (slot_num, port_num)
+                yield f"{slot_num}:{port_num}"
             else:
-                yield "%s" % port_num
+                yield f"{port_num}"
 
 
 def get_medium_type(tokens):

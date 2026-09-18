@@ -13,7 +13,7 @@ from noc.core.prefixlist import optimize_prefix_list, optimize_prefix_list_maxle
 from noc.core.mongo.connection import get_db
 
 
-class WhoisCache(object):
+class WhoisCache:
     """
     Whois cache interface
     """
@@ -42,7 +42,6 @@ class WhoisCache(object):
     def has_asset(cls, as_set):
         """
         Returns true if as-set has members in cache
-        :param as_set:
         :return:
         """
         if is_asn(as_set[2:]):

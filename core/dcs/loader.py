@@ -11,7 +11,7 @@ import asyncio
 import logging
 
 # Third-party modules
-from typing import Optional, Dict, Awaitable, Any
+from typing import Awaitable, Any
 
 # NOC modules
 from noc.core.handler import get_handler
@@ -19,17 +19,17 @@ from noc.core.ioloop.util import setup_asyncio
 from noc.config import config
 from .base import DCSBase
 
-DEFAULT_DCS = "consul://%s:%s/%s" % (config.consul.host, config.consul.port, config.consul.base)
+DEFAULT_DCS = f"consul://{config.consul.host}:{config.consul.port}/{config.consul.base}"
 
 
-class DCSRunner(object):
+class DCSRunner:
     HANDLERS = {"consul": "noc.core.dcs.consul.ConsulDCS"}
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.lock = Lock()
-        self.thread: Optional[Thread] = None
-        self.loop: Optional[asyncio.BaseEventLoop] = None
-        self.instances: Dict[str, DCSBase] = {}
+        self.thread: Thread | None = None
+        self.loop: asyncio.BaseEventLoop | None = None
+        self.instances: dict[str, DCSBase] = {}
         self.ready_event = Event()
         self.logger = logging.getLogger()
 
@@ -37,13 +37,13 @@ class DCSRunner(object):
     def get_dcs_class(cls, url: str):
         scheme = url.split(":", 1)[0]
         if scheme not in cls.HANDLERS:
-            raise ValueError("Unknown DCS handler: %s" % scheme)
+            raise ValueError(f"Unknown DCS handler: {scheme}")
         handler = get_handler(cls.HANDLERS[scheme])
         if not handler:
             raise ValueError("Cannot initialize DCS handler: %s", scheme)
         return handler
 
-    def get_dcs(self, url: Optional[str] = None) -> DCSBase:
+    def get_dcs(self, url: str | None = None) -> DCSBase:
         url = url or DEFAULT_DCS
         with self.lock:
             dcs = self.instances.get(url)
@@ -55,7 +55,7 @@ class DCSRunner(object):
                     self.thread.start()
                     self.ready_event.wait()
                     self.logger.debug("DCS runner thread is ready")
-                self.logger.debug("Starting DCS %s" % url)
+                self.logger.debug(f"Starting DCS {url}")
                 dcs_cls = self.get_dcs_class(url)
                 dcs = dcs_cls(self, url)
                 self.instances[url] = dcs
@@ -73,7 +73,6 @@ class DCSRunner(object):
     async def trampoline(self, aw: Awaitable) -> Any:
         """
         Trampoline awaitable to dedicated loop
-        :param aw:
         :return:
         """
 

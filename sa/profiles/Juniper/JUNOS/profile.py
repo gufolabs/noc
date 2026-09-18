@@ -1,14 +1,13 @@
 # ---------------------------------------------------------------------
 # Juniper.JUNOS profile
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import re
 import orjson
-from typing import Optional
 
 # NOC modules
 from noc.core.profile.base import BaseProfile
@@ -19,7 +18,7 @@ class Profile(BaseProfile):
     # Ignore this line: 'Last login: Tue Sep 18 09:17:21 2018 from 10.10.0.1'
     pattern_username = rb"((?!Last)\S+ login|[Ll]ogin): (?!Sun|Mon|Tue|Wed|Thu|Fri|Sat)"
     pattern_prompt = (
-        rb"^(({master(?::\d+)}\n)?(?P<hostname>\S+)>)\s*$|(({master(?::\d+)})?"
+        rb"^(({(primary|master)(?::(node)?\d+)}\n)?(?P<hostname>\S+)>)\s*$|(({master(?::\d+)})?"
         rb"\[edit.*?\]\n\S+#)|(\[Type \^D at a new line to end input\])"
     )
     pattern_more = [(rb"^---\(more.*?\)---", b" "), (rb"\? \[yes,no\] .*?", b"y\n")]
@@ -53,7 +52,7 @@ class Profile(BaseProfile):
         "is_has_lldp": {"platform": {"$regex": r"ex|mx|qfx|acx|srx"}},
         "is_switch": {"platform": {"$regex": r"ex|qfx"}},
         "is_olive": {"platform": {"$regex": "olive"}},
-        "is_work_em": {"platform": {"$regex": "vrr|csrx|qfx"}},
+        "is_work_em": {"platform": {"$regex": r"vrr|csrx"}},
         "is_gte_16": {"version": {"$gte": "16"}},
         "is_srx_6xx": {"platform": {"$regex": r"srx6.\d+"}},
         "is_cli_help_supported": {"caps": {"$in": ["Juniper | CLI | Help"]}},
@@ -108,7 +107,7 @@ class Profile(BaseProfile):
         rf = []
         for prefix, min_len, max_len in pl:
             if min_len == max_len:
-                rf += ["    route-filter %s exact;" % prefix]
+                rf += [f"    route-filter {prefix} exact;"]
             else:
                 rf += ["    route-filter %s upto /%d" % (prefix, max_len)]
         r = ["term pass {", "    from {"]
@@ -164,7 +163,7 @@ class Profile(BaseProfile):
                 return False
         return True
 
-    def command_exist(self, script, cmd) -> Optional[bool]:
+    def command_exist(self, script, cmd) -> bool | None:
         if not script.is_cli_help_supported:
             return None
         c = script.cli(

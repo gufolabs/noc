@@ -7,7 +7,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any, Optional
+from typing import Any
 import orjson
 import datetime
 import smtplib
@@ -24,7 +24,6 @@ from noc.core.msgstream.message import Message
 from noc.core.mx import MX_TO
 from noc.core.perf import metrics
 from noc.config import config
-from noc.core.comp import DEFAULT_ENCODING
 
 MAILSENDER_STREAM = "mailsender"
 
@@ -33,7 +32,7 @@ class MailSenderService(FastAPIService):
     name = "mailsender"
     use_telemetry = True
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         self.slot_number, self.total_slots = await self.acquire_slot()
         await self.subscribe_stream(MAILSENDER_STREAM, self.slot_number, self.on_message)
 
@@ -42,7 +41,6 @@ class MailSenderService(FastAPIService):
         Process incoming message. Usually forwarded by `mx` service.
         Message MUST have `To` header, containing target Mail topic.
 
-        :param msg:
         :return:
         """
         metrics["messages"] += 1
@@ -53,12 +51,10 @@ class MailSenderService(FastAPIService):
             metrics["messages_drops"] += 1
             return None
         metrics["messages_processed"] += 1
-        return self.send_mail(
-            msg.offset, orjson.loads(msg.value), dst.decode(encoding=DEFAULT_ENCODING)
-        )
+        return self.send_mail(msg.offset, orjson.loads(msg.value), dst.decode())
 
     def send_mail(
-        self, message_id: int, data: Dict[str, Any], address_to: Optional[str] = None
+        self, message_id: int, data: dict[str, Any], address_to: str | None = None
     ) -> None:
         attachments = data.get("attachments", [])
         now = datetime.datetime.now(config.timezone)
@@ -163,7 +159,3 @@ class MailSenderService(FastAPIService):
         except smtplib.SMTPException as e:
             self.logger.error("[%s] Failed to quit properly: %s", message_id, e)
         return True
-
-
-if __name__ == "__main__":
-    MailSenderService().start()

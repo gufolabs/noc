@@ -16,7 +16,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Elder installations has auth_user and auth_group tables
         # created by django"s auth application.
         # Skip if tables exists

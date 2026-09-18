@@ -8,7 +8,6 @@
 # Python modules
 import re
 from collections import defaultdict
-from typing import List
 
 # NOC Modules
 from noc.sa.profiles.Generic.get_metrics import (
@@ -522,7 +521,7 @@ class Script(GetMetricsScript):
                 multi=True,
             )
 
-    def collect_cpe_metrics(self, metrics: List[MetricCollectorConfig]):
+    def collect_cpe_metrics(self, metrics: list[MetricCollectorConfig]):
         """
         Collect metrics on client side(ONT).
         """

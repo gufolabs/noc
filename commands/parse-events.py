@@ -29,7 +29,7 @@ from noc.sa.models.profile import Profile
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("paths", nargs="+", help="List of input file paths")
         parser.add_argument("--profile", default="Generic.Host", help="Object profile")
         parser.add_argument("--format", default="syslog", help="Input format")
@@ -53,7 +53,7 @@ class Command(BaseCommand):
         self, paths, profile, format, report=None, reject=None, progress=False, *args, **options
     ):
         connect()
-        assert profile_loader.has_profile(profile), "Invalid profile: %s" % profile
+        assert profile_loader.has_profile(profile), f"Invalid profile: {profile}"
         if report:
             report_writer = csv.writer(
                 report, delimiter=",", quotechar='"', quoting=csv.QUOTE_MINIMAL
@@ -63,8 +63,8 @@ class Command(BaseCommand):
         ruleset = RuleSet()
         ruleset.load()
         self.print("Ruleset load in %.2fms" % ((time.time() - t0) * 1000))
-        reader = getattr(self, "read_%s" % format, None)
-        assert reader, "Invalid format %s" % format
+        reader = getattr(self, f"read_{format}", None)
+        assert reader, f"Invalid format {format}"
         self.managed_object = ManagedObject(
             id=1, name="test", address="127.0.0.1", profile=Profile.get_by_name(profile)
         )
@@ -107,7 +107,7 @@ class Command(BaseCommand):
             data += [["", "%3.2f%%" % (float(s_total * 100) / total), "Classification Quality"]]
             # Ruleset hit rate
             rs_rate = float(metrics["rules_checked"].value) / float(total)
-            data += [["", "%.2f" % rs_rate, "Rule checks per event"]]
+            data += [["", f"{rs_rate:.2f}", "Rule checks per event"]]
             # Dump table
             self.print("Event classes summary:")
             self.print(format_table([4, 6, 10], data))
@@ -127,7 +127,3 @@ class Command(BaseCommand):
                 raw_vars={"collector": "default", "message": line[:-1]},
                 repeats=1,
             )
-
-
-if __name__ == "__main__":
-    Command().run()

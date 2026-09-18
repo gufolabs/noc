@@ -1,24 +1,26 @@
 # ---------------------------------------------------------------------
 # inv.inv application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
+import importlib
 import inspect
 import operator
 import os
 import threading
-from typing import Optional, Dict, List, Any, Tuple, Iterable
+from typing import Any, Iterable
 from collections import defaultdict
 
 # Third-party modules
 import cachetools
 from mongoengine import ValidationError
+from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.inv.models.object import Object
 from noc.inv.models.error import ConnectionError
 from noc.inv.models.objectmodel import ObjectModel
@@ -79,7 +81,7 @@ class InvApplication(ExtApplication):
     }
     _id_cache = cachetools.TTLCache(1000, ttl=60)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         ExtApplication.__init__(self, *args, **kwargs)
         # Load plugins
         from .plugins.base import InvPlugin
@@ -88,16 +90,16 @@ class InvApplication(ExtApplication):
         for f in os.listdir("services/web/apps/inv/inv/plugins/"):
             if not f.endswith(".py") or f == "base.py" or f.startswith("_"):
                 continue
-            mn = "noc.services.web.apps.inv.inv.plugins.%s" % f[:-3]
-            m = __import__(mn, {}, {}, "*")
+            mn = f"noc.services.web.apps.inv.inv.plugins.{f[:-3]}"
+            m = importlib.import_module(mn)
             for on in dir(m):
                 o = getattr(m, on)
                 if inspect.isclass(o) and issubclass(o, InvPlugin) and o.__module__.startswith(mn):
                     if not o.required_feature or o.required_feature.is_active():
                         self.plugins[o.name] = o(self)
 
-    @view("^node/$", method=["GET"], access="read", api=True)
-    def api_node(self, request):
+    @api.get("^node/$", access="read")
+    def api_node(self, request: HttpRequest):
         children = []
         if request.GET and "node" in request.GET:
             parent = request.GET["node"]
@@ -131,7 +133,7 @@ class InvApplication(ExtApplication):
                         {"_id": 1},
                     )
                 ]
-                children: List[Tuple[str, "Object"]] = [
+                children: list[tuple[str, "Object"]] = [
                     (o.name, o)
                     for o in Object.objects.filter(
                         __raw__={"parent": None, "model": {"$in": cmodels}}
@@ -210,18 +212,18 @@ class InvApplication(ExtApplication):
                 item["is_alarm"] = resource_statuses[f"o:{item['id']}"]
         return r
 
-    @view(
+    @api.post(
         "^attach/$",
-        method=["POST"],
         access="create_group",
-        api=True,
         validate={
             "container": ObjectIdParameter(),
             "item": ObjectIdParameter(),
             "choice": StringParameter(required=False),
         },
     )
-    def api_attach(self, request, container: str, item: str, choice: Optional[str] = None):
+    def api_attach(
+        self, request: HttpRequest, container: str, item: str, choice: str | None = None
+    ):
         # Resolve items
         c_obj = self.get_object_or_404(Object, id=container)
         i_obj = self.get_object_or_404(Object, id=item)
@@ -274,7 +276,7 @@ class InvApplication(ExtApplication):
             )
         return {"choices": {"children": children, "expanded": True}}
 
-    def _attach_inner(self, container: Object, item: Object, choice: Optional[str] = None):
+    def _attach_inner(self, container: Object, item: Object, choice: str | None = None):
         """Insert item into chassis/module."""
 
         def to_tree(iter: Iterable[ModulePosition]) -> dict[str, Any] | None:
@@ -328,11 +330,9 @@ class InvApplication(ExtApplication):
             return {"choices": {"children": [r], "expanded": True}}
         return Result(status=False, message="Cannot connect").as_response()
 
-    @view(
+    @api.post(
         "^add_group/$",
-        method=["POST"],
         access="create_group",
-        api=True,
         validate={
             "container": ObjectIdParameter(required=False),
             "type": ObjectIdParameter(),
@@ -340,7 +340,7 @@ class InvApplication(ExtApplication):
             "serial": UnicodeParameter(required=False),
         },
     )
-    def api_add_group(self, request, type, name, container=None, serial=None):
+    def api_add_group(self, request: HttpRequest, type, name, container=None, serial=None):
         if is_objectid(container):
             c = Object.get_by_id(container)
             if not c:
@@ -360,11 +360,9 @@ class InvApplication(ExtApplication):
         o.log("Created", user=request.user.username, system="WEB", op="CREATE")
         return str(o.id)
 
-    @view(
+    @api.post(
         "^add/$",
-        method=["POST"],
         access="create_group",
-        api=True,
         validate={
             "container": ObjectIdParameter(required=False),
             "items": DictListParameter(
@@ -376,7 +374,9 @@ class InvApplication(ExtApplication):
             ),
         },
     )
-    def api_add(self, request, items: List[Dict[str, str]], container: Optional[str] = None):
+    def api_add(
+        self, request: HttpRequest, items: list[dict[str, str]], container: str | None = None
+    ):
         if container:
             parent = self.get_object_or_404(Object, id=container)
         else:
@@ -391,11 +391,9 @@ class InvApplication(ExtApplication):
             obj.log("Created", user=request.user.username, system="WEB", op="CREATE")
         return {"status": True}
 
-    @view(
+    @api.delete(
         "^remove_group/$",
-        method=["DELETE"],
         access="remove_group",
-        api=True,
         validate={
             "container": ObjectIdParameter(required=True),
             "action": StringParameter(choices=["p", "l", "r"]),
@@ -417,34 +415,29 @@ class InvApplication(ExtApplication):
                 raise NotImplementedError
         return {"status": True, "message": f"{n} objects deleted"}
 
-    @view(
+    @api.delete(
         "^remove_connections/$",
-        method=["DELETE"],
         access="remove_group",
-        api=True,
         validate={
             "container": ObjectIdParameter(required=True),
         },
     )
-    def api_remove_connections(self, request, container: str):
+    def api_remove_connections(self, request: HttpRequest, container: str):
         obj = self.get_object_or_404(Object, id=container)
         remove_connections(obj)
         return {"status": True, "message": "Conections cleared"}
 
-    @view(
+    @api.post(
         "^insert/$",
-        method=["POST"],
         access="reorder",
-        api=True,
         validate={
             "container": ObjectIdParameter(required=False),
             "objects": ListOfParameter(element=ObjectIdParameter()),
             "position": StringParameter(),
         },
     )
-    def api_insert(self, request, container, objects, position):
+    def api_insert(self, request: HttpRequest, container, objects, position):
         """
-        :param request:
         :param container: ObjectID after/in that insert
         :param objects: List ObjectID for insert
         :param position: 'append', 'before', 'after'
@@ -463,8 +456,8 @@ class InvApplication(ExtApplication):
                 x.put_into(cc)
         return True
 
-    @view("^(?P<id>[0-9a-f]{24})/path/$", method=["GET"], access="read", api=True)
-    def api_get_path(self, request, id):
+    @api.get(r"^(?P<id>[0-9a-f]{24})/path/$", access="read")
+    def api_get_path(self, request: HttpRequest, id):
         o = self.get_object_or_404(Object, id=id)
         path = [{"id": str(o.id), "name": o.name}]
         while o.parent:
@@ -474,11 +467,9 @@ class InvApplication(ExtApplication):
             )
         return path
 
-    @view(
+    @api.get(
         "^crossing_proposals/$",
-        method=["GET"],
         access="read",
-        api=True,
         validate={
             "o1": ObjectIdParameter(required=True),
             "o2": ObjectIdParameter(required=False),
@@ -493,9 +484,9 @@ class InvApplication(ExtApplication):
         request,
         o1: str,
         o2: str | None = None,
-        left_filter: Optional[str] = None,
-        right_filter: Optional[str] = None,
-        cable_filter: Optional[str] = None,
+        left_filter: str | None = None,
+        right_filter: str | None = None,
+        cable_filter: str | None = None,
         internal: bool = False,
     ):
         """
@@ -504,7 +495,6 @@ class InvApplication(ExtApplication):
         Denied connections:
            * internal and external pin
            * Same pin
-        :param request:
         :param o1: From object
         :param o2: To Object
         :param left_filter: From object connection pin
@@ -536,11 +526,9 @@ class InvApplication(ExtApplication):
         )
         return builder.build()
 
-    @view(
+    @api.post(
         "^connect/$",
-        method=["POST"],
         access="connect",
-        api=True,
         validate=DictListParameter(
             attrs={
                 "object": ObjectIdParameter(required=True),
@@ -564,12 +552,12 @@ class InvApplication(ExtApplication):
         request,
         **kwargs,
     ):
-        def register_error(link: Dict[str, Any], err: str) -> None:
+        def register_error(link: dict[str, Any], err: str) -> None:
             self.logger.warning("Connection Error: %s", err)
             link["error"] = err
             errors.append(link)
 
-        def create_internal_connection(link: Dict[str, Any]) -> None:
+        def create_internal_connection(link: dict[str, Any]) -> None:
             name, remote_name = link["name"], link["remote_name"]
             try:
                 discriminator = link.get("discriminator") or {}
@@ -586,7 +574,7 @@ class InvApplication(ExtApplication):
             except (ConnectionError, ValidationError) as e:
                 register_error(link, str(e))
 
-        def create_cable_connection(link: Dict[str, Any], lo: Object, ro: Object) -> None:
+        def create_cable_connection(link: dict[str, Any], lo: Object, ro: Object) -> None:
             cable_model = ObjectModel.get_by_name(link["cable"])
             if not cable_model:
                 register_error(link, f"Invalid cable model: {link['cable']}")
@@ -611,15 +599,15 @@ class InvApplication(ExtApplication):
             except ConnectionError as e:
                 register_error(link, str(e))
 
-        def create_p2p_connection(link: Dict[str, Any], lo: Object, ro: Object) -> None:
+        def create_p2p_connection(link: dict[str, Any], lo: Object, ro: Object) -> None:
             name, remote_name = link["name"], link["remote_name"]
             try:
                 lo.connect_p2p(name, ro, remote_name, {}, reconnect=link.get("reconnect"))
             except ConnectionError as e:
                 register_error(link, str(e))
 
-        data: List[Dict[str, Any]] = self.deserialize(request.body)
-        errors: List[Dict[str, Any]] = []
+        data: list[dict[str, Any]] = self.deserialize(request.body)
+        errors: list[dict[str, Any]] = []
         for link in data:
             lo = self.get_object_or_404(Object, id=link["object"])
             remote_object = link.get("remote_object")
@@ -646,11 +634,9 @@ class InvApplication(ExtApplication):
             )
         return self.render_json({"status": True, "text": ""})
 
-    @view(
+    @api.post(
         "^disconnect/$",
-        method=["POST"],
         access="connect",
-        api=True,
         validate={
             "object": ObjectIdParameter(required=True),
             "name": StringParameter(required=True),
@@ -665,7 +651,7 @@ class InvApplication(ExtApplication):
         object,
         name,
         remote_name,
-        remote_object: Optional[str] = None,
+        remote_object: str | None = None,
         is_internal: bool = False,
     ):
         lo: Object = self.get_object_or_404(Object, id=object)
@@ -705,8 +691,8 @@ class InvApplication(ExtApplication):
             o = o.parent
         return False
 
-    @view(url=r"^(?P<oid>[0-9a-f]{24})/map_lookup/$", method=["GET"], access="read", api=True)
-    def api_map_lookup(self, request, oid):
+    @api.get(r"^(?P<oid>[0-9a-f]{24})/map_lookup/$", access="read")
+    def api_map_lookup(self, request: HttpRequest, oid):
         o: Object = self.get_object_or_404(Object, id=oid)
         if not o.is_container:
             return []
@@ -729,11 +715,9 @@ class InvApplication(ExtApplication):
             ]
         return r
 
-    @view(
+    @api.post(
         "^clone/$",
-        method=["POST"],
         access="create_group",
-        api=True,
         validate=DictParameter(
             attrs={
                 "container": ObjectIdParameter(required=True),
@@ -751,14 +735,12 @@ class InvApplication(ExtApplication):
         cloned = clone(obj, clone_connections=clone_connections)
         return {"status": True, "object": str(cloned.id), "message": "Object cloned successfully"}
 
-    @view(
+    @api.post(
         "^baloon/",
-        method=["POST"],
         access="read",
-        api=True,
         validate=DictParameter(attrs={"resource": StringParameter(required=True)}),
     )
-    def api_baloon(self, request, resource: str):
+    def api_baloon(self, request: HttpRequest, resource: str):
         try:
             i = info(resource)
         except ValueError:
@@ -784,15 +766,9 @@ class InvApplication(ExtApplication):
         ).values_list("id")
         return list(ids)
 
-    @view(
-        "^search/$",
-        method=["GET"],
-        access="read",
-        api=True,
-        validate={"q": UnicodeParameter(required=True)},
-    )
-    def api_search(self, request, q: str, **kwargs):
-        def path(o: Object) -> List[Dict]:
+    @api.get("^search/$", access="read", validate={"q": UnicodeParameter(required=True)})
+    def api_search(self, request: HttpRequest, q: str, **kwargs):
+        def path(o: Object) -> list[dict]:
             result = []
             for oid in o.get_path():
                 obj = Object.get_by_id(oid)
@@ -857,14 +833,8 @@ class InvApplication(ExtApplication):
         objs = list(objs)[start : start + limit]
         return {"status": True, "items": [{"path": path(Object.get_by_id(o["_id"]))} for o in objs]}
 
-    @view(
-        "^resource_status/$",
-        method=["POST"],
-        access="read",
-        api=True,
-        validate={"resources": StringListParameter()},
-    )
-    def api_resource_status(self, request, resources: List[str]):
+    @api.post("^resource_status/$", access="read", validate={"resources": StringListParameter()})
+    def api_resource_status(self, request: HttpRequest, resources: list[str]):
         # @todo: Limit access
         alarmed = ActiveAlarm.get_resource_statuses(resources)
         return self.render_json(

@@ -6,22 +6,19 @@
 # ----------------------------------------------------------------------
 
 # Third-party modules
-from typing import Optional
 
 # NOC modules
 from noc.sa.models.managedobject import ManagedObject
 
 
-class BaseGoal(object):
+class BaseGoal:
     DEFAULT_COST = 1
     DROP_COST = 0xFFFFFF
 
     def __init__(self) -> None:
         pass
 
-    def cost_estimate(
-        self, neighbor: ManagedObject, current: Optional[ManagedObject] = None
-    ) -> int:
+    def cost_estimate(self, neighbor: ManagedObject, current: ManagedObject | None = None) -> int:
         """
         Heuristic cost estimate for A* algorithm.
         Cost of going to the goal across this path from `current` to `neighbor` node
@@ -57,9 +54,7 @@ class AndGoal(BaseGoal):
         self.left = left
         self.right = right
 
-    def cost_estimate(
-        self, neighbor: ManagedObject, current: Optional[ManagedObject] = None
-    ) -> int:
+    def cost_estimate(self, neighbor: ManagedObject, current: ManagedObject | None = None) -> int:
         return max(
             self.left.cost_estimate(neighbor, current), self.right.cost_estimate(neighbor, current)
         )
@@ -74,9 +69,7 @@ class OrGoal(BaseGoal):
         self.left = left
         self.right = right
 
-    def cost_estimate(
-        self, neighbor: ManagedObject, current: Optional[ManagedObject] = None
-    ) -> int:
+    def cost_estimate(self, neighbor: ManagedObject, current: ManagedObject | None = None) -> int:
         return max(
             self.left.cost_estimate(neighbor, current), self.right.cost_estimate(neighbor, current)
         )

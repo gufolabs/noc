@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # inv.inv pconf plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -13,6 +13,7 @@ import uuid
 from collections import defaultdict
 
 # Third-party modules
+from django.http import HttpRequest
 import orjson
 
 # NOC modules
@@ -37,7 +38,7 @@ class Status(Enum):
 
 
 @dataclass
-class Threshold(object):
+class Threshold:
     c_min: str | None = None
     w_min: str | None = None
     w_max: str | None = None
@@ -95,7 +96,7 @@ class Type(Enum):
 
 
 @dataclass
-class Item(object):
+class Item:
     """
     Configuration item
     """
@@ -156,7 +157,7 @@ class Item(object):
 
 
 @dataclass
-class ParsedData(object):
+class ParsedData:
     groups: list[str]
     conf: list[Item]
     mgmt_url: str | None = None
@@ -195,7 +196,7 @@ class PConfPlugin(InvPlugin):
             validate={"name": StringParameter(), "value": StringParameter()},
         )
 
-    def get_data(self, request, o: Object):
+    def get_data(self, request: HttpRequest, o: Object):
         def q_table(t: Table) -> dict[str, str | int]:
             r = {"id": t.value, "label": t.name.capitalize()}
             if t == Table.STATUS:
@@ -216,7 +217,7 @@ class PConfPlugin(InvPlugin):
             r["mgmt_url"] = data.mgmt_url
         return r
 
-    def api_data(self, request, id: str, t: str, g: str) -> dict[str, Any]:
+    def api_data(self, request: HttpRequest, id: str, t: str, g: str) -> dict[str, Any]:
         obj = self.app.get_object_or_404(Object, id=id)
         try:
             tbl = Table(int(t))
@@ -385,7 +386,7 @@ class PConfPlugin(InvPlugin):
             options=dict(ADM200_VMAP.items()),
         )
 
-    def api_set(self, request, id: str, name: str, value: str):
+    def api_set(self, request: HttpRequest, id: str, name: str, value: str):
         obj = self.app.get_object_or_404(Object, id=id)
         mo = self.get_managed_object(obj)
         if mo is None:
@@ -490,18 +491,14 @@ class PConfPlugin(InvPlugin):
 
     def get_pconf_beef(self, obj: Object) -> None:
         box = obj.get_box()
-        d = box.get_data("debug", "beef_path", scope="get_params")
-        if not d:
+        ref = box.get_data("debug", "beef_path", scope="get_params")
+        if not ref:
             return None
-        storage_name, path = d.split(":", 1)
-        self.logger.info("Trying to get beef fron %s", d)
-        storage = ExtStorage.get_by_name(storage_name)
-        if not storage:
-            self.logger.info("Storage %s is not found, skipping", storage_name)
+        try:
+            return orjson.loads(ExtStorage.read_bytes_from_ref(ref))
+        except ExtStorage.StorageErrors as e:
+            self.logger.error("Failed to download: %s", e)
             return None
-        fs = storage.open_fs()
-        with fs.open(path) as fp:
-            return orjson.loads(fp.read())
 
     @classmethod
     def get_model_name(cls, obj: Object) -> str:

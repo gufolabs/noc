@@ -361,7 +361,7 @@ Ext.define("NOC.fm.classificationrule.Application", {
         remote_id: record.get("remote_id"),
         remote_system: record.get("remote_system"),
       };
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/fm/classificationrule/from_event/" + record.id + "/",
       method: "POST",
       jsonData: body,

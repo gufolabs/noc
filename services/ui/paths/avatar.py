@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # /api/ui/avatar endpoint
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -13,7 +13,6 @@ from noc.config import config
 from noc.aaa.models.user import User
 from noc.core.service.deps.user import get_current_user
 from noc.main.models.avatar import Avatar
-from noc.core.comp import smart_bytes
 from noc.core.ioloop.util import run_sync
 from noc.core.mime import ContentType
 from ..models.status import StatusResponse
@@ -35,7 +34,7 @@ def get_avatar(user_id: str, _: User = Depends(get_current_user)):
 @router.post("/api/ui/avatar", response_model=StatusResponse, tags=["ui", "avatar"])
 def save_avatar(user: User = Depends(get_current_user), image: UploadFile = File(...)):
     async def read_file() -> bytes:
-        return smart_bytes(await image.read(config.ui.max_avatar_size + 1))
+        return await image.read(config.ui.max_avatar_size + 1)
 
     data = run_sync(read_file)
     if len(data) > config.ui.max_avatar_size:

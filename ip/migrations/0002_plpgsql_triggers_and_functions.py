@@ -12,7 +12,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("sa", "0002_trigger")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         if not self.has_column("ip_ipv4block", "prefix_cidr"):
             self.db.execute("ALTER TABLE ip_ipv4block ADD prefix_cidr CIDR")
             self.db.execute("UPDATE ip_ipv4block SET prefix_cidr=prefix::cidr")
@@ -30,21 +30,19 @@ class Migration(BaseMigration):
 
     def has_column(self, table, name):
         return self.db.execute(
-            """SELECT COUNT(*)>0
+            f"""SELECT COUNT(*)>0
             FROM pg_attribute a JOIN pg_class p ON (p.oid=a.attrelid)
-            WHERE p.relname='%s'
-              AND a.attname='%s'
+            WHERE p.relname='{table}'
+              AND a.attname='{name}'
             """
-            % (table, name)
         )[0][0]
 
     def has_trigger(self, table, name):
         return self.db.execute(
-            """SELECT COUNT(*)>0
+            f"""SELECT COUNT(*)>0
             FROM pg_trigger t JOIN pg_class p ON (p.oid=t.tgrelid)
-            WHERE p.relname='%s'
-              AND t.tgname='%s'"""
-            % (table, name)
+            WHERE p.relname='{table}'
+              AND t.tgname='{name}'"""
         )[0][0]
 
 

@@ -1,11 +1,12 @@
 # ----------------------------------------------------------------------
 # forensic
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
+import argparse
 import sys
 import re
 from collections import namedtuple
@@ -32,14 +33,14 @@ class Command(BaseCommand):
 
     REFRESH_INTERVAL = 1
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", help="sub-commands help", required=True)
         # sync
         incomplete_parser = subparsers.add_parser("incomplete", help="Show incomplete operations")
         incomplete_parser.add_argument("--watch", action="store_true", help="Watch mode")
 
     def handle(self, cmd, *args, **options):
-        getattr(self, "handle_%s" % cmd)(*args, **options)
+        getattr(self, f"handle_{cmd}")(*args, **options)
 
     def handle_incomplete(self, watch=False, *args, **kwargs):
         def show():
@@ -115,7 +116,3 @@ class Command(BaseCommand):
             show_watch()
         else:
             show()
-
-
-if __name__ == "__main__":
-    Command().run()

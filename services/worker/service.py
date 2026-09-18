@@ -22,12 +22,12 @@ class WorkerService(FastAPIService):
     use_mongo = True
     use_router = True
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.slot_number = 0
         self.total_slots = 0
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         self.slot_number, self.total_slots = await self.acquire_slot()
         await self.subscribe_stream("jobs", self.slot_number, self.on_job, async_cursor=True)
 
@@ -75,7 +75,3 @@ class WorkerService(FastAPIService):
             self.logger.debug("[%s|%s] Done", msg.partition, msg.offset)
         metrics["jobs_done"] += 1
         self.logger.debug("[%s|%s] Complete", msg.partition, msg.offset)
-
-
-if __name__ == "__main__":
-    WorkerService().start()

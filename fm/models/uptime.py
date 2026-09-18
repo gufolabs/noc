@@ -10,7 +10,6 @@ import datetime
 import logging
 import socket
 import struct
-from typing import Optional
 
 # Third-party modules
 from mongoengine.document import Document
@@ -47,7 +46,7 @@ class Uptime(Document):
         return "%d" % self.object
 
     @classmethod
-    def register(cls, managed_object: ManagedObject, uptime: int) -> Optional[datetime.datetime]:
+    def register(cls, managed_object: ManagedObject, uptime: int) -> datetime.datetime | None:
         """
         Register uptime
         :param managed_object: Managed object reference
@@ -64,7 +63,7 @@ class Uptime(Document):
         c = cls._get_collection()
         d = c.find_one({"object": oid, "stop": None})
         is_rebooted = False
-        ts: Optional[datetime.datetime] = None
+        ts: datetime.datetime | None = None
         if d:
             # Check for reboot
             if d["last_value"] > uptime:

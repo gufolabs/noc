@@ -79,7 +79,7 @@ class Script(BaseScript):
             return r
         for local_iface in il:
             neighbors = []
-            ne = self.cli("display lldp neighbor port %s" % local_iface)
+            ne = self.cli(f"display lldp neighbor port {local_iface}")
             n = parse_kv(
                 {
                     "chassisid subtype": "remote_chassis_id_subtype",

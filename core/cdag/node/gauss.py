@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 import numpy as np
@@ -33,12 +32,10 @@ class GaussNode(WindowNode):
     config_cls = GaussNodeConfig
     categories = [Category.ML]
 
-    def get_missed_value(self) -> Optional[ValueType]:
+    def get_missed_value(self) -> ValueType | None:
         return self.config.true_level
 
-    def get_window_value(
-        self, values: List[ValueType], timestamps: List[int]
-    ) -> Optional[ValueType]:
+    def get_window_value(self, values: list[ValueType], timestamps: list[int]) -> ValueType | None:
         if len(values) == 1:
             return self.config.true_level  # pragma: no cover
         v = np.array(self.state.values[:-1])

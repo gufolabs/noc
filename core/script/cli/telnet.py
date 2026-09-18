@@ -10,7 +10,6 @@ import logging
 import codecs
 
 # Third-party modules
-from typing import List, Optional
 
 # NOC modules
 from noc.core.perf import metrics
@@ -105,12 +104,12 @@ OPTS = {B_OPT_TTYPE_IS: "TTYPE IS", B_OPT_WS: "WS"}
 class TelnetStream(BaseStream):
     default_port = 23
 
-    def __init__(self, cli: CLI):
+    def __init__(self, cli: CLI) -> None:
         super().__init__(cli)
         self.send_on_connect = cli.profile.telnet_send_on_connect
         self.naws = cli.profile.get_telnet_naws()
         self.iac_seq: bytes = b""
-        self.out_iac_seq: List[bytes] = []
+        self.out_iac_seq: list[bytes] = []
 
     async def startup(self):
         if self.send_on_connect:
@@ -139,17 +138,19 @@ class TelnetStream(BaseStream):
         return data.replace(B_IAC, B_IAC2)
 
     async def feed(self, chunk: bytes) -> bytes:
-        """
-        Feed chunk of data to parser
+        """Feed chunk of data to parser
 
-        :param chunk: String
-        :return: Parsed data
+        Args:
+            chunk: String
+
+        Returns:
+            Parsed data
         """
         if self.iac_seq and chunk:
             # Restore incomplete IAC context
             chunk = self.iac_seq + chunk
             self.iac_seq = b""
-        r: List[bytes] = []
+        r: list[bytes] = []
         while chunk:
             left, seq, right = chunk.partition(B_IAC)
             # Pass clear part
@@ -193,27 +194,23 @@ class TelnetStream(BaseStream):
         return b"".join(r)
 
     def send_iac(self, cmd: int, opt: int) -> None:
-        """
-        Send IAC response
-        """
+        """Send IAC response"""
         self.logger.debug("Send %s", self.iac_repr(cmd, opt))
         self.out_iac_seq += [bytes((IAC, cmd, opt))]
 
-    def send_iac_sb(self, opt: bytes, data: Optional[bytes] = None) -> None:
-        sb: List[bytes] = [B_IAC_SB, opt]
+    def send_iac_sb(self, opt: bytes, data: bytes | None = None) -> None:
+        sb: list[bytes] = [B_IAC_SB, opt]
         if data:
             sb += [data]
         sb += [B_IAC_SE]
         s_opt = OPTS.get(opt)
         if not s_opt:
-            s_opt = "%r" % opt
+            s_opt = f"{opt!r}"
         self.logger.debug("Send IAC SB %s %r IAC SE", s_opt, data)
         self.out_iac_seq += sb
 
     def process_iac(self, cmd: int, opt: int) -> None:
-        """
-        Process IAC command.
-        """
+        """Process IAC command."""
         self.logger.debug("Received %s", self.iac_repr(cmd, opt))
         if cmd == DO:
             r = WILL if opt in ACCEPTED_TELNET_OPTIONS else WONT
@@ -239,13 +236,13 @@ class TelnetStream(BaseStream):
 
     @staticmethod
     def iac_repr(cmd: int, opt: int) -> str:
+        """Human-readable IAC sequence
+
+        Args:
+            cmd
+            opt
         """
-        Human-readable IAC sequence
-        :param cmd:
-        :param opt:
-        :return:
-        """
-        return "%s %s" % (IAC_CMD.get(cmd, cmd), TELNET_OPTIONS.get(opt, opt))
+        return f"{IAC_CMD.get(cmd, cmd)} {TELNET_OPTIONS.get(opt, opt)}"
 
 
 class TelnetCLI(CLI):

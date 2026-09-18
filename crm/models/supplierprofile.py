@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import Optional, Union
+from typing import Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -55,12 +55,12 @@ class SupplierProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["SupplierProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["SupplierProfile"]:
         return SupplierProfile.objects.filter(id=oid).first()
 
     @classmethod
     def can_set_label(cls, label):
         return Label.get_effective_setting(label, setting="enable_supplier")
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

@@ -258,7 +258,7 @@ class Script(BaseScript):
                         for interface in p["members"]:
                             if interface_status.get(interface):
                                 status = True
-                        cmd = "show description interface %s" % name
+                        cmd = f"show description interface {name}"
                         desc = self.cli(cmd)
                         match = self.rx_channel_description.search(desc)
                         if match:

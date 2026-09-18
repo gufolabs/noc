@@ -24,7 +24,7 @@ Ext.define("NOC.inv.map.inspectors.Inspector", {
   preview: function(segmentId, objectId){
     var me = this;
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.getDataURL(segmentId, objectId),
       method: "GET",
       scope: me,

@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         if (
             self.db.execute("SELECT COUNT(*) FROM vc_vcdomain WHERE name=%s", ["default"])[0][0]
             == 0

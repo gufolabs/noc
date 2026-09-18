@@ -21,7 +21,7 @@ class Migration(BaseMigration):
         LIMIT 1
     """
 
-    def migrate(self):
+    def migrate(self) -> None:
         # VRF Group
         self.db.execute("UPDATE ip_vrfgroup SET address_constraint='G' WHERE unique_addresses=TRUE")
         # IPv4 Block

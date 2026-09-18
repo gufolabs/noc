@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any, Optional
+from typing import Any
 
 # NOC modules
 from noc.inv.models.capability import Capability
@@ -15,7 +15,7 @@ from noc.sa.models.service import Service as ServiceModel
 from noc.sa.models.serviceprofile import ServiceProfile
 from noc.core.models.inputsources import InputSource
 from .base import BaseLoader
-from ..models.service import Service, Instance, InstanceType
+from ..models.service import Service, Instance
 
 
 class ServiceLoader(BaseLoader):
@@ -33,7 +33,7 @@ class ServiceLoader(BaseLoader):
 
     post_save_fields = {"capabilities", "instances"}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.available_caps = {x.name for x in Capability.objects.filter()}
         self.clean_map["static_service_groups"] = lambda x: [
@@ -51,7 +51,7 @@ class ServiceLoader(BaseLoader):
             )
         ]
 
-    def post_save(self, o: ServiceModel, fields: Dict[str, Any]):
+    def post_save(self, o: ServiceModel, fields: dict[str, Any]):
         if not fields:
             capabilities, instances = [], []
         else:
@@ -67,21 +67,15 @@ class ServiceLoader(BaseLoader):
         si = []
         for i in instances or []:
             i = Instance.model_validate(i)
-            cfg = i.config
-            if i.type == InstanceType.SERVICE_CLIENT:
-                svc = self.clean_remote_reference(o.remote_system.name, self.name, i.remote_id)
-                if not svc:
-                    raise self.Deferred()
-                cfg.services = [svc]
-            si.append(cfg)
+            si.append(i.config)
         o.update_instances(
             source=InputSource.ETL,
             instances=si,
         )
 
     def find_object(
-        self, v: Dict[str, Any], mappings: Optional[Dict[Any, str]] = None, **kwargs
-    ) -> Optional[Any]:
+        self, v: dict[str, Any], mappings: dict[Any, str] | None = None, **kwargs
+    ) -> Any | None:
         """
         Find object by remote system/remote id
 

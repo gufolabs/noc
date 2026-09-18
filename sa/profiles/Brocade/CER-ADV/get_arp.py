@@ -22,7 +22,7 @@ class Script(BaseScript):
 
     def execute(self, vrf=None):
         if vrf:
-            s = self.cli("show arp vrf %s" % vrf)
+            s = self.cli(f"show arp vrf {vrf}")
         else:
             s = self.cli("show arp")
         r = []

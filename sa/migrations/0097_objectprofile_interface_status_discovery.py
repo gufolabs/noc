@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column(
             "sa_managedobjectprofile",
             "enable_interface_status_discovery",

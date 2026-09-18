@@ -1,8 +1,8 @@
 # ----------------------------------------------------------------------
 #  Interface event handlers
 # ----------------------------------------------------------------------
-#  Copyright (C) 2007-2021 The NOC Project
-#  See LICENSE for details
+# Copyright (C) 2007-2021 The NOC Project
+# See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
@@ -50,7 +50,7 @@ def handler(mo, event):
         event["ts_from_date"] = grafana_date()
         if "Duplex" in event["metric"]:
             if event["value"] != 2:
-                logger.debug("Value %s is not True" % event["value"])
+                logger.debug("Value {} is not True".format(event["value"]))
                 return None
         if "Status" in event["metric"]:
             if "Admin" in event["metric"]:

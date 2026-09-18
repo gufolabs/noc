@@ -77,7 +77,7 @@ class Script(BaseScript):
             }
             addr = match.group("ip")
             mask = match.group("mask")
-            ip_address = "%s/%s" % (addr, IPv4.netmask_to_len(mask))
+            ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
             i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
             interfaces += [i]
 

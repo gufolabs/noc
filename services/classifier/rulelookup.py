@@ -9,8 +9,8 @@
 import operator
 
 
-class RuleLookup(object):
-    def __init__(self, rules):
+class RuleLookup:
+    def __init__(self, rules) -> None:
         self.rules = rules
 
     def lookup_rules(self, msg, vars):

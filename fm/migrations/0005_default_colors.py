@@ -21,7 +21,7 @@ COLORS = {
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         for p, colors in COLORS.items():
             font, bg = colors
             r = self.db.execute(

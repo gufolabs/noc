@@ -35,11 +35,11 @@ class Script(BaseScript):
     def execute_cli(self, interface=None, vlan=None, mac=None):
         cmd = "show mac-addr-table"
         if interface is not None:
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
         if mac is not None:
-            cmd += " %s" % mac
+            cmd += f" {mac}"
         macs = self.cli(cmd)
         r = []
         for match in self.rx_line.finditer(macs):
@@ -92,7 +92,7 @@ class Script(BaseScript):
             else:
                 vlans = [{"vlan_id": vlan}]
             for v in vlans:
-                macs = self.cli("show mac-addr-table vlan %s" % v["vlan_id"])
+                macs = self.cli("show mac-addr-table vlan {}".format(v["vlan_id"]))
                 for match in self.rx_line4.finditer(macs):
                     if match.group("type") == "Learned":
                         mtype = "D"

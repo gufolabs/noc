@@ -124,7 +124,7 @@ class Script(BaseScript):
             if port_type not in ["GPON"]:
                 continue
             for port in range(1, int(port_count)):
-                c = self.cli("showlinestatus %s %s" % (slot_no, port))
+                c = self.cli(f"showlinestatus {slot_no} {port}")
                 if port_type == "GPON":
                     for match1 in self.rx_olt_status.finditer(c):
                         ifname = self.rx_ifbase1.search(match1.group("ifname")).group(1)

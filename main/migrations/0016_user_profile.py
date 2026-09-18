@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         TimePattern = self.db.mock_model(model_name="TimePattern", db_table="main_timepattern")
         Language = self.db.mock_model(model_name="Language", db_table="main_language")
         User = self.db.mock_model(model_name="User", db_table="auth_user")

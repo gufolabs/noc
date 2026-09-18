@@ -15,14 +15,14 @@ import types
 import operator
 from io import StringIO
 from time import perf_counter
+from typing import Any
 
 # Third-party modules
 import bson
 import cachetools
 import orjson
 from pymongo import UpdateOne
-from typing import List, Dict, Any, Optional, Tuple
-from builtins import str, object
+from gufo.loader import ImportPathResolver
 
 # NOC modules
 from noc.core.scheduler.periodicjob import PeriodicJob
@@ -67,12 +67,12 @@ class MODiscoveryJob(PeriodicJob):
     # Get diagnostics with enabled discovery (Box/Periodic filtered)
     discovery_diagnostics = set()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.out_buffer = StringIO()
         self.logger = PrefixLoggerAdapter(self.logger, "", target=self.out_buffer)
         self.check_timings = []
-        self.problems: List[ProblemItem] = []
+        self.problems: list[ProblemItem] = []
         self.caps = None
         self.has_fatal_error = False
         self.service = self.scheduler.service
@@ -83,7 +83,7 @@ class MODiscoveryJob(PeriodicJob):
         if self.check_timings:
             self.logger.info(
                 "Timings: %s",
-                ", ".join("%s = %.2fms" % (n, t * 1000) for n, t in self.check_timings),
+                ", ".join(f"{n} = {t * 1000:.2f}ms" for n, t in self.check_timings),
             )
         super().schedule_next(status)
         # Update alarm statuses
@@ -93,7 +93,7 @@ class MODiscoveryJob(PeriodicJob):
         # Update diagnostics statuses
         self.update_diagnostics(self.problems)
         # Write job log
-        key = "discovery-%s-%s" % (self.attrs[self.ATTR_CLASS], self.attrs[self.ATTR_KEY])
+        key = f"discovery-{self.attrs[self.ATTR_CLASS]}-{self.attrs[self.ATTR_KEY]}"
         problems = {}
         for p in list(self.problems):
             if not p.check:
@@ -140,12 +140,12 @@ class MODiscoveryJob(PeriodicJob):
 
     def set_problem(
         self,
-        check: Optional[str] = None,
-        alarm_class: Optional[str] = None,
-        path: Optional[List[str]] = None,
-        message: Optional[str] = None,
+        check: str | None = None,
+        alarm_class: str | None = None,
+        path: list[str] | None = None,
+        message: str | None = None,
         fatal: bool = False,
-        diagnostic: Optional[str] = None,
+        diagnostic: str | None = None,
         **kwargs,
     ):
         """
@@ -200,7 +200,7 @@ class MODiscoveryJob(PeriodicJob):
             self.caps = self.object.get_caps()
         return self.caps
 
-    def update_caps(self, caps, source, scope: Optional[str] = None):
+    def update_caps(self, caps, source, scope: str | None = None):
         self.caps = self.object.update_caps(caps, source=source, scope=scope, logger=self.logger)
 
     def allow_sessions(self):
@@ -224,10 +224,9 @@ class MODiscoveryJob(PeriodicJob):
             r.add(dc.diagnostic)
         return r
 
-    def update_diagnostics(self, problems: List[ProblemItem]):
+    def update_diagnostics(self, problems: list[ProblemItem]):
         """
         Syn problems to object diagnostic statuses
-        :param problems:
         :return:
         """
         self.logger.debug("Updating diagnostics statuses: %s", problems)
@@ -254,7 +253,7 @@ class MODiscoveryJob(PeriodicJob):
         #         self.object.sync_diagnostic_alarm([d.diagnostic for d in bulk])
 
     def update_alarms(
-        self, problems: List[ProblemItem], group_cls: str = None, group_reference: str = None
+        self, problems: list[ProblemItem], group_cls: str = None, group_reference: str = None
     ):
         """
         Sync problems to alarm and use active_problems context variable
@@ -272,17 +271,17 @@ class MODiscoveryJob(PeriodicJob):
         from noc.fm.models.alarmclass import AlarmClass
 
         self.logger.info("Updating alarm statuses")
-        group_cls: Optional["AlarmClass"] = AlarmClass.get_by_name(group_cls or "Group")
+        group_cls: "AlarmClass" | None = AlarmClass.get_by_name(group_cls or "Group")
         if not group_cls:
             self.logger.info("No umbrella alarm class. Alarm statuses not updated")
             return
 
         group_reference = group_reference or f"g:d:{self.object.id}:{group_cls.name}"
-        active_problems: Dict[str, List[str]] = self.context.get("active_problems", {})
+        active_problems: dict[str, list[str]] = self.context.get("active_problems", {})
         if not problems and group_reference not in active_problems:
             # No money, no honey
             return
-        details: List[Dict[str, Any]] = []
+        details: list[dict[str, Any]] = []
         now = datetime.datetime.now()
         for p in problems:
             if not p.alarm_class:
@@ -331,7 +330,6 @@ class MODiscoveryJob(PeriodicJob):
     def get_umbrella_settings(self) -> bool:
         """
         Check enable Alarm for Discovery
-        :param self:
         :return:
         """
         prev_status = self.context.get("umbrella_settings", False)
@@ -380,7 +378,7 @@ class MODiscoveryJob(PeriodicJob):
         return name in self.artefacts
 
 
-class DiscoveryCheck(object):
+class DiscoveryCheck:
     name = None
     # If not none, check required script is available
     # before running check
@@ -408,11 +406,11 @@ class DiscoveryCheck(object):
         ERR_CLI_SSH_PROTOCOL_ERROR: "Discovery | Error | SSH Protocol",
     }
 
-    def __init__(self, job):
+    def __init__(self, job) -> None:
         self.service = job.service
         self.job = job
         self.object: ManagedObject = self.job.object
-        self.logger = self.job.logger.get_logger("[%s" % self.name)
+        self.logger = self.job.logger.get_logger(f"[{self.name}")
         self.if_name_cache = {}  # mo, name -> Interface
         self.if_mac_cache = {}  # mo, mac -> Interface
         self.if_ip_cache = {}
@@ -434,7 +432,7 @@ class DiscoveryCheck(object):
     def get_caps(self):
         return self.job.get_caps()
 
-    def update_caps(self, caps, source, scope: Optional[str] = None):
+    def update_caps(self, caps, source, scope: str | None = None):
         self.job.update_caps(caps, source, scope=scope)
 
     def has_capability(self, cap):
@@ -515,10 +513,9 @@ class DiscoveryCheck(object):
         pass
 
     @staticmethod
-    def build_effective_labels(obj) -> List[str]:
+    def build_effective_labels(obj) -> list[str]:
         """
         Build object effective labels
-        :param obj:
         :return:
         """
         return [
@@ -530,11 +527,11 @@ class DiscoveryCheck(object):
     def update_if_changed(
         self,
         obj,
-        values: Dict[str, Any],
-        caps: Optional[Dict[str, str]] = None,
-        ignore_empty: List[str] = None,
+        values: dict[str, Any],
+        caps: dict[str, str] | None = None,
+        ignore_empty: list[str] = None,
         wait: bool = True,
-        bulk: Optional[List[str]] = None,
+        bulk: list[str] | None = None,
         update_effective_labels: bool = False,
     ):
         """
@@ -588,14 +585,14 @@ class DiscoveryCheck(object):
             obj.update_caps(caps, source="discovery", bulk=bulk)  # scope Discovery Scope
         return changes
 
-    def log_changes(self, msg: str, changes: List[Tuple[str, Any]]):
+    def log_changes(self, msg: str, changes: list[tuple[str, Any]]):
         """
         Log changes
         :param msg: Message
         :type msg: str
         """
         if changes:
-            self.logger.info("%s: %s" % (msg, ", ".join("%s = %s" % (k, v) for k, v in changes)))
+            self.logger.info("{}: {}".format(msg, ", ".join(f"{k} = {v}" for k, v in changes)))
 
     def get_interface_by_name(self, name, mo=None):
         """
@@ -641,7 +638,7 @@ class DiscoveryCheck(object):
             li = list(
                 Interface.objects.filter(
                     managed_object=self.object.id,
-                    ipv4_addresses__startswith="%s/" % ip,
+                    ipv4_addresses__startswith=f"{ip}/",
                     type="physical",
                 )
             )
@@ -693,11 +690,11 @@ class DiscoveryCheck(object):
 
     def set_problem(
         self,
-        alarm_class: Optional[str] = None,
-        path: Optional[List[str]] = None,
-        message: Optional[str] = None,
+        alarm_class: str | None = None,
+        path: list[str] | None = None,
+        message: str | None = None,
         fatal: bool = False,
-        diagnostic: Optional[str] = None,
+        diagnostic: str | None = None,
         **kwargs,
     ):
         """
@@ -731,7 +728,7 @@ class DiscoveryCheck(object):
         """
         self.job.set_artefact(name, value)
 
-    def get_artefact(self, name: str) -> Optional[Any]:
+    def get_artefact(self, name: str) -> Any | None:
         """
         Get artefact by name
         :param name: artefact name
@@ -759,11 +756,9 @@ class DiscoveryCheck(object):
         if not obj.object_profile.neighbor_cache_ttl:
             # Disabled cache
             return
-        keys = [
-            "mo-neighbors-%s-%s" % (x, obj.id) for x in obj.segment.profile.get_topology_methods()
-        ]
+        keys = [f"mo-neighbors-{x}-{obj.id}" for x in obj.segment.profile.get_topology_methods()]
         if keys:
-            self.logger.info("Invalidating neighor cache: %s" % ", ".join(keys))
+            self.logger.info("Invalidating neighor cache: {}".format(", ".join(keys)))
             cache.delete_many(keys, TopologyDiscoveryCheck.NEIGHBOR_CACHE_VERSION)
 
     def get_confdb(self):
@@ -786,7 +781,7 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
     # clean_interface settings
     aliased_names_only = False
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.neighbor_hostname_cache = {}  # (method, id) -> managed object
         self.neighbor_ip_cache = {}  # (method, ip) -> managed object
@@ -806,20 +801,19 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
         loops = {}  # first interface, second interface
         problems = {}
         # Check local side
-        ln_key = "mo-neighbors-%s-%s" % (self.name, self.object.id)
+        ln_key = f"mo-neighbors-{self.name}-{self.object.id}"
         for li, ro, ri in self.cached_neighbors(self.object, ln_key, self.iter_neighbors):
             # Resolve remote object
             remote_object = self.get_neighbor(ro)
             if not remote_object:
-                problems[li] = "Remote object '%s' is not found" % str(ro)
+                problems[li] = f"Remote object '{ro!s}' is not found"
                 self.logger.info("Remote object '%s' is not found. Skipping", str(ro))
                 continue
             # Resolve remote interface name
             remote_interface = self.get_remote_interface(remote_object, ri)
             if not remote_interface:
-                problems[li] = "Cannot resolve remote interface %s:%r. Skipping" % (
-                    remote_object.name,
-                    ri,
+                problems[li] = (
+                    f"Cannot resolve remote interface {remote_object.name}:{ri!r}. Skipping"
                 )
                 self.logger.info(
                     "Cannot resolve remote interface %s:%r. Skipping", remote_object.name, ri
@@ -866,7 +860,7 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
                 continue
             else:
                 try:
-                    rn_key = "mo-neighbors-%s-%s" % (self.name, remote_object.id)
+                    rn_key = f"mo-neighbors-{self.name}-{remote_object.id}"
                     remote_neighbors = self.cached_neighbors(
                         remote_object, rn_key, self.iter_neighbors
                     )
@@ -876,15 +870,14 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
                     )
                     self.set_problem(
                         path=next(iter(candidates[remote_object]))[0],
-                        message="Cannot get neighbors from candidate %s: %s"
-                        % (remote_object.name, e),
+                        message=f"Cannot get neighbors from candidate {remote_object.name}: {e}",
                     )
                     continue
                 confirmed = set()
             for li, ro_id, ri in remote_neighbors:
                 ro = self.get_neighbor(ro_id)
                 if not ro or ro.id != self.object.id:
-                    self.logger.debug("Candidates check %s %s %s %s" % (li, ro_id, ro, ri))
+                    self.logger.debug(f"Candidates check {li} {ro_id} {ro} {ri}")
                     continue  # To other objects
                 remote_interface = self.get_remote_interface(self.object, ri)
                 if remote_interface:
@@ -894,7 +887,7 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
                     "Candidates: %s, Confirmed: %s", candidates[remote_object], confirmed
                 )
             for ll, rr in candidates[remote_object] - confirmed:
-                problems[ll] = "Pending link: %s - %s:%s" % (ll, remote_object, rr)
+                problems[ll] = f"Pending link: {ll} - {remote_object}:{rr}"
                 li = self.clean_interface(self.object, ll)
                 if not li:
                     self.logger.info("Cannot clean interface %s:%s. Skipping", self.object, ll)
@@ -921,9 +914,6 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
     def cached_neighbors(self, mo, key, iter_neighbors):
         """
         Cache iter_neighbors results according to profile settings
-        :param mo:
-        :param key:
-        :param iter_neighbors:
         :return:
         """
         ttl = mo.object_profile.neighbor_cache_ttl
@@ -949,12 +939,12 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
                     if (mo.id, n[0]) in self.interface_aliases
                 }
                 cache.set(
-                    "%s-aliases" % key, alias_cache, ttl=ttl, version=self.NEIGHBOR_CACHE_VERSION
+                    f"{key}-aliases", alias_cache, ttl=ttl, version=self.NEIGHBOR_CACHE_VERSION
                 )
             metrics["neighbor_cache_misses"] += 1
         else:
             self.logger.info("Use neighbors cache")
-            alias_cache = cache.get("%s-aliases" % key, version=self.NEIGHBOR_CACHE_VERSION)
+            alias_cache = cache.get(f"{key}-aliases", version=self.NEIGHBOR_CACHE_VERSION)
             self.logger.debug("Alias cache is %s", alias_cache)
             if alias_cache:
                 self.interface_aliases.update(alias_cache)
@@ -1269,13 +1259,13 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
                 try:
                     li.unlink()
                 except ValueError as e:
-                    self.logger.info("Failed to unlink %s: %s" % (llink, e))
+                    self.logger.info(f"Failed to unlink {llink}: {e}")
                     return
             if rlink:
                 try:
                     ri.unlink()
                 except ValueError as e:
-                    self.logger.info("Failed to unlink %s: %s" % (llink, e))
+                    self.logger.info(f"Failed to unlink {llink}: {e}")
                     return
             self.logger.info(
                 "Linking: %s:%s -- %s:%s",
@@ -1439,7 +1429,7 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
                 remote_interface,
             )
 
-    def confirm_cloud(self, root_interface: Interface, interfaces: List[Interface]) -> None:
+    def confirm_cloud(self, root_interface: Interface, interfaces: list[Interface]) -> None:
         """
         Ensure `root_interface` and `interfaces` are connected to same cloud link
 
@@ -1449,7 +1439,7 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
         if not interfaces:
             return
         # get existing links
-        links: Dict[Interface, Link] = {}
+        links: dict[Interface, Link] = {}
         for link in Link.objects.filter(
             interfaces__in=[root_interface.id] + [i.id for i in interfaces]
         ):
@@ -1547,9 +1537,6 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
         """
         Set interface alias
         Aliases will be finally resolved by clean_interface
-        :param object:
-        :param interface_name:
-        :param alias:
         :return:
         """
         self.interface_aliases[object.id, alias] = interface_name
@@ -1584,10 +1571,10 @@ class PolicyDiscoveryCheck(DiscoveryCheck):
         :return:
         """
         for method in self.policy_map[self.get_policy()]:
-            check = getattr(self, "can_get_data_from_%s" % method)
+            check = getattr(self, f"can_get_data_from_{method}")
             if not check():
                 continue
-            getter = getattr(self, "request_data_from_%s" % method)
+            getter = getattr(self, f"request_data_from_{method}")
             data = getter()
             if data is not None:
                 return data
@@ -1638,3 +1625,6 @@ class PolicyDiscoveryCheck(DiscoveryCheck):
 
     def has_required_script(self):
         return super().has_required_script() or self.get_policy() != ["script"]
+
+
+get_discovery_job = ImportPathResolver[type[MODiscoveryJob]]()

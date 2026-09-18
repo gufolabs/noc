@@ -12,7 +12,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("sa", "0008_copy_objects")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # self.db.execute("DROP INDEX cm_config_managed_object_id")
         # self.db.execute("CREATE UNIQUE INDEX cm_config_managed_object_id ON cm_config(managed_object_id)")
         self.db.delete_column("cm_objectnotify", "category_id")
@@ -33,7 +33,7 @@ class Migration(BaseMigration):
             self.db.delete_column("cm_config", column)
         for table in ["cm_config", "cm_rpsl", "cm_dns", "cm_prefixlist"]:
             self.db.delete_column(table, "location_id")
-            self.db.delete_table("%s_categories" % table)
+            self.db.delete_table(f"{table}_categories")
         self.db.delete_table("cm_object_categories")
         self.db.delete_table("cm_objectaccess")
         self.db.execute("DELETE FROM cm_objectcategory")

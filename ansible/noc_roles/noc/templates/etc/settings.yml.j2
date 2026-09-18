@@ -1,0 +1,8 @@
+#jinja2: lstrip_blocks: True
+{% if 'consul://' not in config_order and 'svc-kafka-exec' in groups %}
+msgstream:
+  client_class: noc.core.msgstream.kafka.KafkaClient
+
+kafka:
+  addresses: kafka
+{% endif %}

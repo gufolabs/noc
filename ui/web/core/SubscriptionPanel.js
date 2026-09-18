@@ -138,14 +138,14 @@ Ext.define("NOC.core.SubscriptionPanel", {
   //
   makeUrl: function(appId, recordId, suffix){ 
     var prefix = appId.replace(/\./g, "/");
-    return Ext.String.format("/{0}/{1}/{2}/", prefix, recordId, suffix);
+    return `/${prefix}/${recordId}/${suffix}/`;
   },
   //
   request: function(url, method, successCallback){
     if(this.rendered && !this.destroyed){
       this.mask(__("Updating ..."));
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: method,
       scope: this,
@@ -176,7 +176,7 @@ Ext.define("NOC.core.SubscriptionPanel", {
   onClose: function(){
     var app = this.up("[appId]");
     app.showItem(app[this.showOnClose]);
-    Ext.History.setHash(app.appId);
+    NOC.navigation.navigate(app.appId);
     app.reloadStore();
   },
   //

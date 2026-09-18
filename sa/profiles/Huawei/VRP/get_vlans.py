@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Huawei.VRP.get_vlans
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2017 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -12,7 +12,6 @@ import re
 from noc.core.script.base import BaseScript
 from noc.sa.interfaces.igetvlans import IGetVlans
 from noc.core.mib import mib
-from noc.core.comp import smart_text
 
 
 class Script(BaseScript):
@@ -31,7 +30,7 @@ class Script(BaseScript):
             # dot1qVlanStaticName
             for oid, v in self.snmp.getnext(mib["Q-BRIDGE-MIB::dot1qVlanStaticName"]):
                 o = oid.split(".")[-1]
-                result += [{"vlan_id": int(oids[o]), "name": v.strip().rstrip(smart_text("\x00"))}]
+                result += [{"vlan_id": int(oids[o]), "name": v.strip().rstrip("\x00")}]
         else:
             tmp_vlan = []
             # dot1qVlanStaticName
@@ -39,7 +38,7 @@ class Script(BaseScript):
                 vlan_id = int(oid.split(".")[-1])
                 if vlan_id in tmp_vlan:
                     break
-                result += [{"vlan_id": vlan_id, "name": v.strip().rstrip(smart_text("\x00"))}]
+                result += [{"vlan_id": vlan_id, "name": v.strip().rstrip("\x00")}]
                 tmp_vlan += [vlan_id]
         if result:
             return sorted(result, key=lambda x: x["vlan_id"])

@@ -37,7 +37,7 @@ class Script(BaseScript):
 
     def execute(self, interface):
         r = []
-        s = self.cli("cable-diagnostics %s" % interface)
+        s = self.cli(f"cable-diagnostics {interface}")
         for match in self.rx_link.finditer(s):
             r += [
                 {

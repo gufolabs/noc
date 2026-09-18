@@ -6,148 +6,60 @@
 
 Language BI interface
 
-|                |                   |
-| -------------- | ----------------- |
-| Default value  | `en`              |
-| YAML Path      | `bi.language`     |
-| Key-Value Path | `bi/language`     |
-| Environment    | `NOC_BI_LANGUAGE` |
+{{ config_param("bi.language") }}
 
 ## query_threads
 
-|                |                        |
-| -------------- | ---------------------- |
-| Default value  | `10`                   |
-| YAML Path      | `bi.query_threads`     |
-| Key-Value Path | `bi/query_threads`     |
-| Environment    | `NOC_BI_QUERY_THREADS` |
+{{ config_param("bi.query_threads") }}
 
 ## extract_delay_alarms
 
-|                |                               |
-| -------------- | ----------------------------- |
-| Default value  | `1h`                          |
-| YAML Path      | `bi.extract_delay_alarms`     |
-| Key-Value Path | `bi/extract_delay_alarms`     |
-| Environment    | `NOC_BI_EXTRACT_DELAY_ALARMS` |
+{{ config_param("bi.extract_delay_alarms") }}
 
 ## clean_delay_alarms
 
-|                |                             |
-| -------------- | --------------------------- |
-| Default value  | `1d`                        |
-| YAML Path      | `bi.clean_delay_alarms`     |
-| Key-Value Path | `bi/clean_delay_alarms`     |
-| Environment    | `NOC_BI_CLEAN_DELAY_ALARMS` |
+{{ config_param("bi.clean_delay_alarms") }}
 
 ## reboot_interval
 
-|                |                          |
-| -------------- | ------------------------ |
-| Default value  | `1M`                     |
-| YAML Path      | `bi.reboot_interval`     |
-| Key-Value Path | `bi/reboot_interval`     |
-| Environment    | `NOC_BI_REBOOT_INTERVAL` |
+{{ config_param("bi.reboot_interval") }}
 
 ## extract_delay_reboots
 
-|                |                                |
-| -------------- | ------------------------------ |
-| Default value  | `1h`                           |
-| YAML Path      | `bi.extract_delay_reboots`     |
-| Key-Value Path | `bi/extract_delay_reboots`     |
-| Environment    | `NOC_BI_EXTRACT_DELAY_REBOOTS` |
+{{ config_param("bi.extract_delay_reboots") }}
 
 ## clean_delay_reboots
 
-|                |                              |
-| -------------- | ---------------------------- |
-| Default value  | `1d`                         |
-| YAML Path      | `bi.clean_delay_reboots`     |
-| Key-Value Path | `bi/clean_delay_reboots`     |
-| Environment    | `NOC_BI_CLEAN_DELAY_REBOOTS` |
+{{ config_param("bi.clean_delay_reboots") }}
 
 ## chunk_size
 
-|                |                     |
-| -------------- | ------------------- |
-| Default value  | `500`               |
-| YAML Path      | `bi.chunk_size`     |
-| Key-Value Path | `bi/chunk_size`     |
-| Environment    | `NOC_BI_CHUNK_SIZE` |
+{{ config_param("bi.chunk_size") }}
 
 ## extract_window
 
-|                |                         |
-| -------------- | ----------------------- |
-| Default value  | `1d`                    |
-| YAML Path      | `bi.extract_window`     |
-| Key-Value Path | `bi/extract_window`     |
-| Environment    | `NOC_BI_EXTRACT_WINDOW` |
+{{ config_param("bi.extract_window") }}
 
 ## enable_alarms
 
-|                |                        |
-| -------------- | ---------------------- |
-| Default value  | `False`                |
-| YAML Path      | `bi.enable_alarms`     |
-| Key-Value Path | `bi/enable_alarms`     |
-| Environment    | `NOC_BI_ENABLE_ALARMS` |
+{{ config_param("bi.enable_alarms") }}
 
 ## enable_reboots
 
-|                |                         |
-| -------------- | ----------------------- |
-| Default value  | `False`                 |
-| YAML Path      | `bi.enable_reboots`     |
-| Key-Value Path | `bi/enable_reboots`     |
-| Environment    | `NOC_BI_ENABLE_REBOOTS` |
+{{ config_param("bi.enable_reboots") }}
 
 ## enable_managedobjects
 
-|                |                                |
-| -------------- | ------------------------------ |
-| Default value  | `False`                        |
-| YAML Path      | `bi.enable_managedobjects`     |
-| Key-Value Path | `bi/enable_managedobjects`     |
-| Environment    | `NOC_BI_ENABLE_MANAGEDOBJECTS` |
+{{ config_param("bi.enable_managedobjects") }}
 
 ## enable_alarms_archive
 
-|                |                                |
-| -------------- | ------------------------------ |
-| Default value  | `False`                        |
-| YAML Path      | `bi.enable_alarms_archive`     |
-| Key-Value Path | `bi/enable_alarms_archive`     |
-| Environment    | `NOC_BI_ENABLE_ALARMS_ARCHIVE` |
+{{ config_param("bi.enable_alarms_archive") }}
 
 ## alarms_archive_policy
 
-Default value
-: weekly
-
-Possible values
-:
-
-- weekly
-- monthly
-- quarterly
-- yearly
-
-YAML Path
-: bi.alarms_archive_policy
-
-Key-Value Path
-: bi/alarms_archive_policy
-
-Environment
-: NOC_BI_ALARMS_ARCHIVE_POLICY
+{{ config_param("bi.alarms_archive_policy") }}
 
 ## alarms_archive_batch_limit
 
-|                |                                     |
-| -------------- | ----------------------------------- |
-| Default value  | `10000`                             |
-| YAML Path      | `bi.alarms_archive_batch_limit`     |
-| Key-Value Path | `bi/alarms_archive_batch_limit`     |
-| Environment    | `NOC_BI_ALARMS_ARCHIVE_BATCH_LIMIT` |
+{{ config_param("bi.alarms_archive_batch_limit") }}

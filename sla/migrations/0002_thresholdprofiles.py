@@ -23,7 +23,7 @@ SAVE_FIELDS = {"_id", "metric_type", "enable_periodic", "enable_box", "is_stored
 class Migration(BaseMigration):
     _ac_cache = cachetools.TTLCache(maxsize=5, ttl=60)
 
-    def migrate(self):
+    def migrate(self) -> None:
         current = itertools.count()
         db = self.mongo_db
         # Migrate profiles
@@ -49,7 +49,7 @@ class Migration(BaseMigration):
                     tp = {"_id": tp_id}
                 # Fill profile
                 tp["name"] = "sp-%05d-%03d" % (next(current), n)
-                tp["description"] = "Migrated for SLA profile '%s' metric '%s'" % (
+                tp["description"] = "Migrated for SLA profile '{}' metric '{}'".format(
                     doc["name"],
                     metric["metric_type"],
                 )

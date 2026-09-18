@@ -17,7 +17,7 @@ from .base import BaseExtractor
 class AlarmLogsExtractor(BaseExtractor):
     name = "alarmlogs"
 
-    def __init__(self, prefix, start, stop):
+    def __init__(self, prefix, start, stop) -> None:
         super().__init__(prefix, start, stop)
         self.alarmlogs_stream = Stream(AlarmLogs, prefix)
 

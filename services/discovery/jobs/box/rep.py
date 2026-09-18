@@ -29,7 +29,7 @@ class REPCheck(TopologyDiscoveryCheck):
                 continue  # Not found
             elif len(o) != 2:
                 # Something strange. REP Topology is ring, more 2 neighbors is strange...
-                self.logger.error("Invalid REP discovery result: %r" % topology)
+                self.logger.error(f"Invalid REP discovery result: {topology!r}")
                 continue
             elif len(o) == 2:
                 # Left and right ports

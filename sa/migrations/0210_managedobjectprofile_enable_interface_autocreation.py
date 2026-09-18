@@ -11,7 +11,7 @@ from django.db import models
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column(
             "sa_managedobjectprofile",
             "enable_interface_autocreation",

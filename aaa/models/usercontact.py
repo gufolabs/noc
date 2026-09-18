@@ -16,7 +16,7 @@ from .user import User
 
 
 class UserContact(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "User Profile Contact"
         verbose_name_plural = "User Profile Contacts"
         unique_together = [("user", "time_pattern", "notification_method", "params")]

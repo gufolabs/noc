@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ./noc confdb
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -15,13 +15,12 @@ from noc.config import config
 from noc.core.mongo.connection import connect
 from noc.core.profile.loader import loader
 from noc.core.text import format_table
-from noc.core.comp import smart_text
 
 
 class Command(BaseCommand):
     PREFIX = config.path.cp_new
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # syntax command
         syntax_parser = subparsers.add_parser("syntax")
@@ -29,18 +28,18 @@ class Command(BaseCommand):
         syntax_parser.add_argument("path", nargs=argparse.REMAINDER)
         # tokenizer command
         tokenizer_parser = subparsers.add_parser("tokenizer")
-        tokenizer_parser.add_argument("--object", type=smart_text, help="Managed Object ID")
+        tokenizer_parser.add_argument("--object", help="Managed Object ID")
         tokenizer_parser.add_argument("--profile", help="Profile Name")
         tokenizer_parser.add_argument("--config", help="Config Path")
         # config command
         normalizer_parser = subparsers.add_parser("normalizer")
-        normalizer_parser.add_argument("--object", type=smart_text, help="Managed Object ID")
+        normalizer_parser.add_argument("--object", help="Managed Object ID")
         normalizer_parser.add_argument("--profile", help="Profile Name")
         normalizer_parser.add_argument("--config", help="Config Path")
         normalizer_parser.add_argument("--errors-policy", help="Errors Policy")
         # query command
         query_parser = subparsers.add_parser("query")
-        query_parser.add_argument("--object", type=smart_text, help="Managed Object ID")
+        query_parser.add_argument("--object", help="Managed Object ID")
         query_parser.add_argument("--profile", help="Profile Name")
         query_parser.add_argument("--config", help="Config Path")
         query_parser.add_argument("query", help="Query request")
@@ -49,23 +48,23 @@ class Command(BaseCommand):
         dump_parser.add_argument(
             "--show-hints", action="store_true", help="Disable cleanup hints section"
         )
-        dump_parser.add_argument("--object", type=smart_text, help="Managed Object ID")
+        dump_parser.add_argument("--object", help="Managed Object ID")
 
     def handle(self, cmd, *args, **options):
-        return getattr(self, "handle_%s" % cmd)(*args, **options)
+        return getattr(self, f"handle_{cmd}")(*args, **options)
 
     def handle_syntax(self, path=None, profile=None, *args, **kwargs):
         def dump_node(node, level=0, recursive=True):
             indent = "  " * level
             if node.name:
-                label = "<%s>" % node.name
+                label = f"<{node.name}>"
             elif node.token is None:
                 label = "ANY"
             else:
                 label = node.token
             if node.multi:
-                label = "*%s" % label
-            self.print("%s%s" % (indent, label))
+                label = f"*{label}"
+            self.print(f"{indent}{label}")
             if recursive and node.children:
                 for nc in node.children:
                     dump_node(nc, level + 1)
@@ -89,9 +88,9 @@ class Command(BaseCommand):
         if profile:
             p = loader.get_profile(profile)
             if not p:
-                self.die("Invalid profile: %s" % profile)
+                self.die(f"Invalid profile: {profile}")
             n_handler, n_config = p.get_config_normalizer(self)
-            n_cls = get_handler("noc.sa.profiles.%s.confdb.normalizer.%s" % (p.name, n_handler))
+            n_cls = get_handler(f"noc.sa.profiles.{p.name}.confdb.normalizer.{n_handler}")
             s = n_cls.SYNTAX
         root = find_root(s, path)
         if not root:
@@ -103,7 +102,7 @@ class Command(BaseCommand):
         cfg = None
         if config:
             if not os.path.exists(config):
-                self.die("File not found: %s" % config)
+                self.die(f"File not found: {config}")
             with open(config) as f:
                 cfg = f.read()
         if object:
@@ -116,7 +115,7 @@ class Command(BaseCommand):
         elif profile:
             p = loader.get_profile(profile)
             if not p:
-                self.die("Invalid profile: %s" % profile)
+                self.die(f"Invalid profile: {profile}")
             if not cfg:
                 self.die("Specify config file with --config option")
             # Mock up tokenizer
@@ -136,7 +135,7 @@ class Command(BaseCommand):
         cfg = None
         if config:
             if not os.path.exists(config):
-                self.die("File not found: %s" % config)
+                self.die(f"File not found: {config}")
             with open(config) as f:
                 cfg = f.read()
         if object:
@@ -149,7 +148,7 @@ class Command(BaseCommand):
         elif profile:
             p = loader.get_profile(profile)
             if not p:
-                self.die("Invalid profile: %s" % profile)
+                self.die(f"Invalid profile: {profile}")
             if not cfg:
                 self.die("Specify config file with --config option")
             # Mock up tokenizer
@@ -170,7 +169,7 @@ class Command(BaseCommand):
         cfg = None
         if config:
             if not os.path.exists(config):
-                self.die("File not found: %s" % config)
+                self.die(f"File not found: {config}")
             with open(config) as f:
                 cfg = f.read()
         if object:
@@ -183,7 +182,7 @@ class Command(BaseCommand):
         elif profile:
             p = loader.get_profile(profile)
             if not p:
-                self.die("Invalid profile: %s" % profile)
+                self.die(f"Invalid profile: {profile}")
             if not cfg:
                 self.die("Specify config file with --config option")
             # Mock up tokenizer
@@ -220,7 +219,3 @@ class Command(BaseCommand):
                 self.die("Managed Object not found")
         confdb = mo.get_confdb(cleanup=not show_hints)
         self.print(confdb.dump())
-
-
-if __name__ == "__main__":
-    Command().run()

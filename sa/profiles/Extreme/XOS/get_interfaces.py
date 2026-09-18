@@ -90,7 +90,7 @@ class Script(BaseScript):
         for match in self.rx_sh_ipcfg.finditer(ip_int):
             enabled_afi = []
             sviintrf = match.group("interface")
-            svicfg = self.cli("show vlan %s" % sviintrf)
+            svicfg = self.cli(f"show vlan {sviintrf}")
             ip_list = []
             description = ""
             for sv in svicfg.strip().split("\n"):
@@ -150,7 +150,7 @@ class Script(BaseScript):
                 ifname = match.group("interface")
                 a_stat = match.group("admin_status").upper() == "E"
                 o_stat = match.group("oper_status").upper() == "A"
-                ifnaggr = "T%s" % ifname
+                ifnaggr = f"T{ifname}"
                 if ifnaggr in portchan_masters:  # Portchannel interface
                     iftype = "aggregated"
                     aggriface = {

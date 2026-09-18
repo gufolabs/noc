@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # Third-party modules
 from pydantic import BaseModel
@@ -16,7 +15,7 @@ from .base import BaseCDAGNode, ValueType, Category
 
 
 class StateNodeState(BaseModel):
-    value: Optional[ValueType] = None
+    value: ValueType | None = None
 
 
 class StateNode(BaseCDAGNode):
@@ -29,6 +28,6 @@ class StateNode(BaseCDAGNode):
     dot_shape = "doubleoctagon"
     categories = [Category.DEBUG]
 
-    def get_value(self, x: ValueType) -> Optional[ValueType]:
+    def get_value(self, x: ValueType) -> ValueType | None:
         self.state.value = x
         return x

@@ -1,14 +1,13 @@
 # ----------------------------------------------------------------------
 # Pretty command
 # ----------------------------------------------------------------------
-#  Copyright (C) 2007-2025 The NOC Project
-#  See LICENSE for details
+# Copyright (C) 2007-2025 The NOC Project
+# See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import os
 import asyncio
-from typing import Dict
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -36,7 +35,7 @@ class Command(BaseCommand):
                     changed = True
             return changed
 
-        slots: Dict[str, int] = {}
+        slots: dict[str, int] = {}
         for name, value in os.environ.items():
             if not name.startswith("NOC_MIGRATE_SLOTS_"):
                 continue
@@ -49,7 +48,3 @@ class Command(BaseCommand):
         dcs = get_dcs()
         changed = asyncio.run(inner())
         self.print("CHANGED" if changed else "OK")
-
-
-if __name__ == "__main__":
-    Command().run()

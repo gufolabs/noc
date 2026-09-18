@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # Third-party modules
 from fastapi import APIRouter
@@ -20,7 +19,7 @@ router = APIRouter()
 
 @router.get("/health", tags=["internal"])
 @router.get("/health/", tags=["internal"])
-async def health(service: Optional[str] = None):
+async def health(service: str | None = None):
     svc = get_service()
     if service and not svc.is_valid_health_check(service):
         return PlainTextResponse(content="Invalid service id", status_code=400)

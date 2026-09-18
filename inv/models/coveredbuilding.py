@@ -34,4 +34,4 @@ class CoveredBuilding(Document):
     homes = IntField()
 
     def __str__(self):
-        return "%s %s" % (self.coverage.name, self.building.primary_address.display_ru())
+        return f"{self.coverage.name} {self.building.primary_address.display_ru()}"

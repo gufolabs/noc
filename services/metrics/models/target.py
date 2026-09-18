@@ -8,12 +8,12 @@
 # Python modules
 import sys
 from dataclasses import dataclass
-from typing import Any, Tuple, Optional, Dict, FrozenSet, Union, ClassVar, List
+from typing import Any, Union, ClassVar
 
-MetricKey = Tuple[str, Tuple[Tuple[str, Any], ...], Tuple[str, ...]]
+MetricKey = tuple[str, tuple[tuple[str, int], ...], tuple[str, ...]]
 
 
-def convert_rules(rules: List[Tuple[str, str]]) -> Tuple[Tuple[str, str], ...]:
+def convert_rules(rules: list[tuple[str, str]]) -> tuple[tuple[str, str], ...]:
     """"""
     r = []
     for rule_id, action_id in rules:
@@ -23,10 +23,10 @@ def convert_rules(rules: List[Tuple[str, str]]) -> Tuple[Tuple[str, str], ...]:
 
 @dataclass(frozen=True, slots=True)
 class ComponentTarget:
-    key_labels: Tuple[str, ...]  # noc::interface::*, noc::interface::Fa 0/24
-    rules: Optional[Tuple[Tuple[str, str], ...]]
-    composed_metrics: Tuple[str, ...]  # Metric Field for compose metrics
-    exposed_labels: Optional[Tuple[str, ...]]
+    key_labels: tuple[str, ...]  # noc::interface::*, noc::interface::Fa 0/24
+    rules: tuple[tuple[str, str], ...] | None
+    composed_metrics: tuple[str, ...]  # Metric Field for compose metrics
+    exposed_labels: tuple[str, ...] | None
 
     @classmethod
     def from_data(cls, data):
@@ -45,17 +45,17 @@ class MetricTarget:
 
     id: str
     bi_id: int
-    managed_object: Optional[int]
-    fm_pool: Optional[str]
-    rules: Optional[Tuple[Tuple[str, str], ...]]
-    exposed_labels: Optional[Tuple[str, ...]]
-    composed_metrics: Optional[Tuple[str, ...]]
+    managed_object: int | None
+    fm_pool: str | None
+    rules: tuple[tuple[str, str], ...] | None
+    exposed_labels: tuple[str, ...] | None
+    composed_metrics: tuple[str, ...] | None
     # not_save_metrics
 
     @classmethod
     def from_config(
-        cls, data: Dict[str, Any], r_type: str
-    ) -> Optional[Union["ManagedObjectTarget", "SensorTarget", "SLAProbeTarget"]]:
+        cls, data: dict[str, Any], r_type: str
+    ) -> Union["ManagedObjectTarget", "SLAProbeTarget"] | None:
         """Return classes"""
         if "$deleted" in data or r_type == "remote_system":
             return None
@@ -84,9 +84,6 @@ class MetricTarget:
                 return ManagedObjectTarget(**params)
             case "sla":
                 return SLAProbeTarget(**params)
-            case "sensor":
-                params["units"] = data["units"]
-                return SensorTarget(**params)
             case _:
                 return None
 
@@ -95,11 +92,11 @@ class MetricTarget:
 class ManagedObjectTarget(MetricTarget):
     type = "managed_object"
 
-    opaque_data: Optional[Dict[str, Any]]
-    components: Optional[Tuple[ComponentTarget, ...]]
+    opaque_data: dict[str, Any] | None
+    components: tuple[ComponentTarget, ...] | None
     # For changes
     # Exclude compare
-    sensors: Optional[FrozenSet[int]]
+    sensors: frozenset[int] | None
 
     @property
     def meta(self):
@@ -107,19 +104,52 @@ class ManagedObjectTarget(MetricTarget):
 
 
 @dataclass(frozen=True, slots=True)
-class SensorTarget(MetricTarget):
-    type = "sensor"
-
-    units: str
-
-
-@dataclass(frozen=True, slots=True)
 class SLAProbeTarget(MetricTarget):
     type = "sla_probe"
 
-    opaque: Optional[Dict[str, Any]]
-    service: Optional[int] = None
+    opaque: dict[str, Any] | None
+    service: int | None = None
 
     @property
     def meta(self):
         return self.opaque
+
+
+@dataclass(frozen=True, slots=True)
+class SensorComponentTarget:
+    id: str
+    bi_id: int
+    name: str | None
+    units: str | None
+    mx_alias: str | None
+    target: MetricTarget | None
+    managed_object: int | None
+    agent: int | None
+    rules: tuple[tuple[str, str], ...] | None
+    exposed_labels: tuple[str, ...] | None
+
+    @classmethod
+    def from_config(cls, data, target: MetricTarget | None = None):
+        """Create Instance from data"""
+        return SensorComponentTarget(
+            id=str(data["id"]),
+            bi_id=int(data["bi_id"]),
+            name=data.get("name"),
+            managed_object=int(data["managed_object"]) if "managed_object" in data else None,
+            agent=int(data["agent"]) if "agent" in data else None,
+            rules=convert_rules(data.get("rules", [])),
+            exposed_labels=None,
+            units=data.get("units", "1"),
+            mx_alias=data.get("mx_alias"),
+            target=target,
+        )
+
+    @property
+    def meta(self):
+        if self.target:
+            return self.target.meta
+        return None
+
+    @property
+    def composed_metrics(self):
+        return None

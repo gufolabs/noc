@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Dict
 from threading import Lock
 from dataclasses import dataclass
 import asyncio
@@ -18,19 +17,19 @@ from .cli.base import BaseCLI
 
 
 @dataclass
-class Session(object):
+class Session:
     session: str
     stream: BaseCLI
-    timer_task: Optional[asyncio.Handle] = None
+    timer_task: asyncio.Handle | None = None
 
 
-class SessionStore(object):
-    def __init__(self):
+class SessionStore:
+    def __init__(self) -> None:
         self._lock = Lock()
-        self._sessions: Dict[str, Session] = {}
-        self._loop: Optional[asyncio.BaseEventLoop] = None
+        self._sessions: dict[str, Session] = {}
+        self._loop: asyncio.BaseEventLoop | None = None
 
-    def get(self, session: str) -> Optional[BaseCLI]:
+    def get(self, session: str) -> BaseCLI | None:
         with self._lock:
             item = self._sessions.get(session)
             if item is None:
@@ -59,7 +58,7 @@ class SessionStore(object):
                 del self._sessions[session]
             item.stream.close()
 
-    def put(self, session: str, stream: BaseCLI, timeout: Optional[int] = None):
+    def put(self, session: str, stream: BaseCLI, timeout: int | None = None):
         with self._lock:
             item = self._sessions.get(session)
             if item:
@@ -83,8 +82,8 @@ class SessionStore(object):
         if not item.stream.is_closed():
             item.stream.close()
 
-    def _set_timer(self, item: Session, timer: Optional[int] = None):
-        def _run_timer(session: str, t: Optional[int]):
+    def _set_timer(self, item: Session, timer: int | None = None):
+        def _run_timer(session: str, t: int | None):
             # Running on main service's event loop
             with self._lock:
                 i = self._sessions.get(session)

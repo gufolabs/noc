@@ -26,7 +26,7 @@ from noc.core.mongo.fields import PlainReferenceField, ForeignKeyField
 from noc.core.comp import smart_text
 
 
-class DocInline(object):
+class DocInline:
     # HTTP Result Codes
     OK = 200
     CREATED = 201
@@ -59,7 +59,7 @@ class DocInline(object):
     field_labels = {}  # field_name -> callable(field_value) -> result
     render_fields = {}  # field_name -> callable(field_value) -> result
 
-    def __init__(self, model):
+    def __init__(self, model) -> None:
         self.model = model
         self.app = None
         self.pk_field_name = "id"
@@ -74,7 +74,7 @@ class DocInline(object):
                 self.clean_fields[name] = DocumentParameter(f.document_type)
         if not self.query_fields:
             self.query_fields = [
-                "%s__%s" % (n, self.query_condition)
+                f"{n}__{self.query_condition}"
                 for n, f in self.model._fields.items()
                 if f.unique and isinstance(f, StringField)
             ]
@@ -88,46 +88,46 @@ class DocInline(object):
     def contribute_to_class(self, app, name):
         # Add List handler
         app.add_view(
-            "api_%s_list" % name,
+            f"api_{name}_list",
             self.api_list,
             method=["GET"],
-            url="^(?P<parent>[^/]+)/%s/$" % name,
+            url=f"^(?P<parent>[^/]+)/{name}/$",
             access="read",
             api=True,
         )
         # Add Create handler
         app.add_view(
-            "api_%s_create" % name,
+            f"api_{name}_create",
             self.api_create,
             method=["POST"],
-            url="^(?P<parent>[^/]+)/%s/$" % name,
+            url=f"^(?P<parent>[^/]+)/{name}/$",
             access="create",
             api=True,
         )
         # Add Read Handler
         app.add_view(
-            "api_%s_read" % name,
+            f"api_{name}_read",
             self.api_read,
             method=["GET"],
-            url="^(?P<parent>[^/]+)/%s/(?P<id>[^/]+)/?$" % name,
+            url=f"^(?P<parent>[^/]+)/{name}/(?P<id>[^/]+)/?$",
             access="read",
             api=True,
         )
         # Add Update Handler
         app.add_view(
-            "api_%s_update" % name,
+            f"api_{name}_update",
             self.api_update,
             method=["PUT"],
-            url="^(?P<parent>[^/]+)/%s/(?P<id>[^/]+)/?$" % name,
+            url=f"^(?P<parent>[^/]+)/{name}/(?P<id>[^/]+)/?$",
             access="update",
             api=True,
         )
         # Add Delete Handler
         app.add_view(
-            "api_%s_delete" % name,
+            f"api_{name}_delete",
             self.api_delete,
             method=["DELETE"],
-            url="^(?P<parent>[^/]+)/%s/(?P<id>[^/]+)/?$" % name,
+            url=f"^(?P<parent>[^/]+)/{name}/(?P<id>[^/]+)/?$",
             access="delete",
             api=True,
         )
@@ -157,7 +157,7 @@ class DocInline(object):
 
         def get_q(f):
             if "__" not in f:
-                return "%s__%s" % (f, self.query_condition)
+                return f"{f}__{self.query_condition}"
             return f
 
         q = reduce(
@@ -185,7 +185,6 @@ class DocInline(object):
         :param data: dict of parameters
         :type data: dict
         :return: dict of cleaned parameters of raised InterfaceTypeError
-        :rtype: dict
         """
         # Delete id
         if "id" in data:
@@ -228,20 +227,15 @@ class DocInline(object):
                 # Unroll __referred
                 app, fn = v.split("__", 1)
                 model = self.app.site.apps[app].model
-                extra_where = '%s."%s" IN (SELECT "%s" FROM %s)' % (
-                    self.model._meta.db_table,
-                    self.model._meta.pk.name,
-                    model._meta.get_field(fn).attname,
-                    model._meta.db_table,
-                )
+                extra_where = f'{self.model._meta.db_table}."{self.model._meta.pk.name}" IN (SELECT "{model._meta.get_field(fn).attname}" FROM {model._meta.db_table})'
                 if None in nq:
                     nq[None] += [extra_where]
                 else:
                     nq[None] = [extra_where]
                 continue
-            if lt and hasattr(self, "lookup_%s" % lt):
+            if lt and hasattr(self, f"lookup_{lt}"):
                 # Custom lookup
-                getattr(self, "lookup_%s" % lt)(nq, np, v)
+                getattr(self, f"lookup_{lt}")(nq, np, v)
                 continue
             if np in self.fk_fields and lt:
                 # dereference
@@ -271,10 +265,10 @@ class DocInline(object):
                 if isinstance(f, GeoPointField):
                     pass
                 elif isinstance(f, ForeignKeyField):
-                    r["%s__label" % f.name] = smart_text(v)
+                    r[f"{f.name}__label"] = smart_text(v)
                     v = v.id
                 elif isinstance(f, PlainReferenceField):
-                    r["%s__label" % f.name] = smart_text(v)
+                    r[f"{f.name}__label"] = smart_text(v)
                     if hasattr(v, "id"):
                         v = str(v.id)
                     else:
@@ -315,7 +309,7 @@ class DocInline(object):
         if format == "ext" and self.sort_param in q:
             for r in self.app.deserialize(q[self.sort_param]):
                 if r["direction"] == "DESC":
-                    ordering += ["-%s" % r["property"]]
+                    ordering += ["-{}".format(r["property"])]
                 else:
                     ordering += [r["property"]]
         q = self.cleaned_query(q)

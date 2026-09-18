@@ -6,16 +6,16 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Optional, Any
+from typing import Any
 
 # NOC modules
 from noc.core.profile.base import BaseProfile
 from .typing import PortItem
 
 
-class BaseCollator(object):
-    def __init__(self, profile: Optional[BaseProfile]):
+class BaseCollator:
+    def __init__(self, profile: BaseProfile | None) -> None:
         self.profile = profile
 
-    def collate(self, physical_port: PortItem, interfaces: Dict[str, Any]) -> Optional[str]:
+    def collate(self, physical_port: PortItem, interfaces: dict[str, Any]) -> str | None:
         raise NotImplementedError

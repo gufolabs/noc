@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import List, Dict
 
 # Third-party modules
 import orjson
@@ -32,7 +31,7 @@ SQL = """
 class ReportEventSummary(ReportSource):
     name = "reporteventsummary"
 
-    def get_formats(self) -> Dict[str, BandFormat]:
+    def get_formats(self) -> dict[str, BandFormat]:
         return {
             "header": BandFormat(title_template="Event Summary"),
             "row": BandFormat(
@@ -49,8 +48,7 @@ class ReportEventSummary(ReportSource):
             ),
         }
 
-    def get_data(self, request=None, **kwargs) -> List[Band]:
-        """ """
+    def get_data(self, request=None, **kwargs) -> list[Band]:
         report_type = kwargs.get("report_type") or []
         if "class" in report_type:
             obj_field = "dictGetString('noc_dict.eventclass','name', event_class)"
@@ -59,7 +57,7 @@ class ReportEventSummary(ReportSource):
         elif "profile" in report_type:
             obj_field = "dictGetString('noc_dict.managedobject','profile', managed_object)"
         else:
-            raise Exception("Invalid report type: %s" % report_type)
+            raise Exception(f"Invalid report type: {report_type}")
         ch = connection()
         data = []
         r = ch.execute(SQL % obj_field, return_raw=True)

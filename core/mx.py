@@ -7,14 +7,13 @@
 
 # Python modules
 import enum
-from typing import Any, Optional, Dict
+from typing import Any
 from threading import Lock
 from dataclasses import dataclass
 from functools import partial
 
 # NOC services
 from noc.core.service.loader import get_service
-from noc.core.comp import DEFAULT_ENCODING
 from noc.core.ioloop.util import run_sync
 from noc.models import get_model_id
 from noc.core.timepattern import TimePatternList
@@ -22,9 +21,9 @@ from noc.settings import LANGUAGE_CODE
 
 
 @dataclass
-class Message(object):
+class Message:
     value: bytes
-    headers: Dict[str, bytes]
+    headers: dict[str, bytes]
     timestamp: int
     key: int
 
@@ -38,15 +37,19 @@ class NotificationContact:
         method: delivery method
         title_tag: Additional title string
         time_pattern: Active contact time
+        headers: Additional message headers. Channel settings?
+        route: Forward to current route
     """
 
     contact: str
     language: str = LANGUAGE_CODE
     method: str = "mail"
-    title_tag: Optional[str] = None
-    time_pattern: Optional[TimePatternList] = None
+    title_tag: str | None = None
+    time_pattern: TimePatternList | None = None
+    headers: dict[str, Any] | None = None
+    route: str | None = None
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(f"{self.method}_{self.contact}")
 
 
@@ -56,6 +59,7 @@ MX_METRICS_TYPE = "metrics"
 MX_METRICS_SCOPE = "Metric-Scope"
 MX_SPAN_CTX = "NOC-Span-Ctx"
 MX_SPAN_ID = "Span-Id"
+MX_FWD_ROUTER = "Fwd-Roter-Id"
 # Headers
 MX_MESSAGE_TYPE = "Message-Type"
 MX_SHARDING_KEY = "Sharding-Key"
@@ -71,7 +75,7 @@ MX_TO_STAGE_NAME = "Resource-To-Stage-Name"
 MX_LABELS = "Labels"
 MX_RESOURCE_GROUPS = "Resource-Group-Ids"
 MX_WATCH_FOR_ID = "Watch-For-Id"
-MX_REMOTE_SYSTEM = "Remote-System-Id"
+MX_REMOTE_SYSTEMS = "Remote-System-Ids"
 MX_ETL_LOADER = "ETL-Loader"
 # Notification headers
 MX_TO = "To"
@@ -86,7 +90,7 @@ MX_WH_API_URL = "WebHook-API-URL"
 MX_WH_API_METHOD = "WebHook-API-Method"
 MX_WH_API_AUTHORIZATION = "WebHook-API-Authorization"
 MX_WH_TO_PARAM_NAME = "WebHook-To-Param-Name"
-MX_WH_MESSAGE_PARAM_NAME = "WebHook-To-Param-Name"
+MX_WH_MESSAGE_PARAM_NAME = "WebHook-Message-Param-Name"
 MX_WH_CONTENT_TYPE = "WebHook-API-Content-Type"
 MX_WH_SENDER_METHOD = "WebHook-Sender-Method"
 MX_WH_NOTIFICATION_PARAM_NAME = "WebHook-Notification-Param-Name"
@@ -121,11 +125,12 @@ class MessageType(enum.Enum):
     JOB = "job"
     MAINTENANCE_PROCESSED = "maintenance_processed"
     ETL_PUSH = "etl_push"
+    ESCALATE = "escalate"
     OTHER = "other"
 
 
 @dataclass(frozen=True)
-class MetaConfig(object):
+class MetaConfig:
     header: str
     is_list: bool = False
 
@@ -137,7 +142,7 @@ CONFIGS = {
     "administrative_domain": MetaConfig(MX_ADMINISTRATIVE_DOMAIN_ID),
     "from": MetaConfig(MX_DATA_ID),
     "labels": MetaConfig(MX_LABELS, is_list=True),
-    "remote_system": MetaConfig(MX_REMOTE_SYSTEM),
+    "remote_systems": MetaConfig(MX_REMOTE_SYSTEMS, is_list=True),
 }
 
 
@@ -152,14 +157,14 @@ class MessageMeta(enum.Enum):
     ADM_DOMAIN = "administrative_domain"
     FROM = "from"
     LABELS = "labels"
-    REMOTE_SYSTEM = "remote_system"
+    REMOTE_SYSTEMS = "remote_systems"
 
     def clean_header_value(self, value: Any) -> bytes:
         if self.config.is_list:
             if not isinstance(value, list):
                 value = [value]
-            return MX_H_VALUE_SPLITTER.join([str(x) for x in value]).encode(DEFAULT_ENCODING)
-        return str(value).encode(DEFAULT_ENCODING)
+            return MX_H_VALUE_SPLITTER.join([str(x) for x in value]).encode()
+        return str(value).encode()
 
 
 MESSAGE_HEADERS = {
@@ -180,7 +185,9 @@ MESSAGE_HEADERS = {
     MX_WH_TO_PARAM_NAME,
     MX_WH_CONTENT_TYPE,
     MX_WH_NOTIFICATION_PARAM_NAME,
+    MX_WH_MESSAGE_PARAM_NAME,
     MX_FROM_COLLECTOR,
+    MX_FWD_ROUTER,
 }
 # Method -> Sender stream map, ?autoregister
 NOTIFICATION_METHODS = {
@@ -189,15 +196,16 @@ NOTIFICATION_METHODS = {
     "webhook": b"tgsender",
 }
 
-_mx_partitions: Optional[int] = None
+_mx_partitions: int | None = None
 _mx_lock = Lock()
 
 
 def send_message(
     data: Any,
     message_type: MessageType,
-    headers: Optional[Dict[str, bytes]],
+    headers: dict[str, bytes] | None,
     sharding_key: int = 0,
+    fwd_to: str | None = None,
 ):
     """
     Build message and schedule to send to mx service
@@ -210,10 +218,12 @@ def send_message(
     """
     msg_headers = {
         MX_MESSAGE_TYPE: message_type.value,
-        MX_SHARDING_KEY: str(sharding_key).encode(DEFAULT_ENCODING),
+        MX_SHARDING_KEY: str(sharding_key).encode(),
     }
     if headers:
         msg_headers.update(headers)
+    if fwd_to:
+        msg_headers[MX_FWD_ROUTER] = fwd_to.encode()
     svc = get_service()
     run_sync(partial(svc.send_message, data, message_type, headers, sharding_key))
     # n_partitions = get_mx_partitions()
@@ -230,6 +240,7 @@ def send_notification(
     body: str,
     to: str,  # ? method::/address
     notification_method: str = "mail",
+    fwd_to: str | None = None,
     **kwargs,
 ):
     """
@@ -241,12 +252,14 @@ def send_notification(
         notification_method: Notification method (for to param)
     """
     if notification_method not in NOTIFICATION_METHODS:
-        raise ValueError("Unknown notification method: %s" % notification_method)
+        raise ValueError(f"Unknown notification method: {notification_method}")
     msg_headers = {
         MX_MESSAGE_TYPE: MessageType.NOTIFICATION.value.encode(),
         MX_NOTIFICATION_METHOD: notification_method.encode(),
-        MX_TO: to.encode(DEFAULT_ENCODING),
+        MX_TO: to.encode(),
     }
+    if fwd_to:
+        msg_headers[MX_FWD_ROUTER] = fwd_to.encode()
     svc = get_service()
     data = {"body": body, "subject": subject, "address": to}
     if kwargs:

@@ -14,14 +14,14 @@ from configparser import RawConfigParser
 import orjson
 
 # Python modules
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 from noc.core.version import version
 from noc.core.comp import smart_text
 
 logger = logging.getLogger(__name__)
 
 
-class CPClient(object):
+class CPClient:
     CONFIG = "etc/support.conf"
     CP_URL = "https://cp.nocproject.org"
     PRODUCT = "NOC"
@@ -34,7 +34,7 @@ class CPClient(object):
     CRASHINFO_SERVICE = "/api/v1.0/CrashinfoService/"
     PASTE_SERVICE = "/api/v1.0/PasteService/"
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.cp_url = self.CP_URL
         self.account_uuid = None
         self.account_name = None
@@ -92,19 +92,19 @@ class CPClient(object):
         if self.cp_url or self.account_uuid:
             cfg += ["[account]"]
             if self.cp_url and self.cp_url != self.CP_URL:
-                cfg += ["cp_url = %s" % self.cp_url]
+                cfg += [f"cp_url = {self.cp_url}"]
             if self.account_uuid:
                 cfg += [
-                    "uuid = %s" % self.account_uuid,
-                    "name = %s" % self.account_name,
-                    "password = %s" % self.account_password,
+                    f"uuid = {self.account_uuid}",
+                    f"name = {self.account_name}",
+                    f"password = {self.account_password}",
                 ]
         if self.system_uuid:
             cfg += [
                 "[system]",
-                "uuid = %s" % self.system_uuid,
-                "name = %s" % self.system_name,
-                "type = %s" % self.system_type,
+                f"uuid = {self.system_uuid}",
+                f"name = {self.system_name}",
+                f"type = {self.system_type}",
             ]
         cfg += [""]
         logger.info("Saving %s", self.CONFIG)

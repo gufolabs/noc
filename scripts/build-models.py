@@ -25,8 +25,8 @@ def build():
         if mp[0] != "noc":
             return
         module = mp[1]
-        alias = "%s.%s" % (module, c.__name__)
-        path = "%s.%s" % (c.__module__, c.__name__)
+        alias = f"{module}.{c.__name__}"
+        path = f"{c.__module__}.{c.__name__}"
         models[module] += [(alias, path)]
 
     # Load all applications and models
@@ -48,9 +48,9 @@ def build():
         module = app[4:]
         if not models[module]:
             continue
-        out += ["    # %s models" % module]
+        out += [f"    # {module} models"]
         for alias, path in sorted(models[module], key=lambda x: x[0]):
-            out += ['    "%s": "%s",' % (alias, path)]
+            out += [f'    "{alias}": "{path}",']
     out[-1] = out[-1][:-1]  # Remove last comma
     out += ["}"]
     print("\n".join(out))

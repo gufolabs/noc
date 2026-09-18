@@ -85,7 +85,7 @@ class Script(BaseScript):
 
         v = self.cli("show ip interface")
         match = self.rx_ip.search(v)
-        ip_address = "%s/%s" % (match.group("ip"), IPv4.netmask_to_len(match.group("mask")))
+        ip_address = "{}/{}".format(match.group("ip"), IPv4.netmask_to_len(match.group("mask")))
 
         i = {
             "name": "mgmt",

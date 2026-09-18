@@ -23,11 +23,11 @@ class Script(BaseScript):
     def execute(self, interface=None, vlan=None, mac=None):
         cmd = "show switch fdb"
         if mac is not None:
-            cmd += " address=%s" % mac
+            cmd += f" address={mac}"
         if interface is not None:
-            cmd += " port(s)=%s" % interface
+            cmd += f" port(s)={interface}"
         if vlan is not None:
-            cmd += " vlan=%s" % vlan
+            cmd += f" vlan={vlan}"
         self.cli("terminal datadump")
         vlans = self.cli(cmd)
         vlans = self.strip_first_lines(vlans, 4)

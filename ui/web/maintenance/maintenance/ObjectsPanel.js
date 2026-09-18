@@ -21,7 +21,6 @@ Ext.define("NOC.maintenance.maintenance.ObjectsPanel", {
   stateful: true,
   autoDestroy: true,
   stateId: "sa.managedobjectselector-objects",
-  loadMask: true,
   defaultListenerScope: true,
   store: {
     type: "maintenance.objects",

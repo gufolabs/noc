@@ -49,12 +49,12 @@ class Script(BaseScript):
         with self.configure():
             if a:
                 self.cli("vlan %d" % vlan_id)
-                self.cli("name %s" % name)
-                self.cli("description %s" % name)
+                self.cli(f"name {name}")
+                self.cli(f"description {name}")
                 self.cli("quit")
             if tagged_ports:
                 for iface in tagged_ports:
-                    self.cli("interface %s" % iface)
+                    self.cli(f"interface {iface}")
                     self.cli("port trunk permit vlan %d" % vlan_id)
                 self.cli("quit")
         self.save_config()

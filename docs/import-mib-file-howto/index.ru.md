@@ -46,7 +46,7 @@ path:
 3. В случае вашей системы пути могут отличаться
 4. Складываем необходимые для импорта файлы с зависимостями в папку из `mib_path`,
    например `/usr/share/mibs/site/`
-5. Устанавливаем MIB файлы для НОКа: `./scripts/deploy/install-packages requirements/mib.json`
+5. Устанавливаем MIB файлы для НОКа: `./scripts/deploy/install-packages npkg/mib.json`
 
 ### Импорт MIB файла
 

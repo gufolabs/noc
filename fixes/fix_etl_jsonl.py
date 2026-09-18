@@ -64,7 +64,7 @@ def ensure_format(path):
     else:
         name = parts[-1]
     model = model_loader[name]
-    new_path = comp.get_path("%s.jsonl" % s_path[:-4])
+    new_path = comp.get_path(f"{s_path[:-4]}.jsonl")
     with comp(path).open() as f:
         reader = csv.reader(iter_cleaned(f))
         next(reader)  # Skip headers
@@ -72,7 +72,7 @@ def ensure_format(path):
             for n, row in enumerate(reader):
                 data = model.from_iter(row)
                 if n:
-                    ff.write("\n%s" % data.json(exclude_defaults=True, exclude_unset=True))
+                    ff.write(f"\n{data.json(exclude_defaults=True, exclude_unset=True)}")
                 else:
                     ff.write(data.json(exclude_defaults=True, exclude_unset=True))
     os.unlink(path)

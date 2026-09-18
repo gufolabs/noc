@@ -1,8 +1,8 @@
 ---
 - name: migrate
   hosts: svc-noc-exec
-  become: "True"
-  gather_facts: "True"
+  become: true
+  gather_facts: true
   tags:
     - migrate
   vars_files:

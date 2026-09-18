@@ -214,7 +214,7 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
     } else{
       data["id"] = r.get("id");
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + me.app.currentRecord.get("id") + "/interface/",
       method: "POST",
       jsonData: data,
@@ -298,7 +298,7 @@ Ext.define("NOC.sa.managedobject.L1Panel", {
 
   removeInterface: function(objectId, interfaceId){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + objectId + "/interface/" + interfaceId + "/",
       method: "DELETE",
       success: function(){

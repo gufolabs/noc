@@ -9,7 +9,7 @@
 from collections import defaultdict
 import operator
 from threading import Lock
-from typing import List, Optional, Iterable, Dict, Any
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 from django.db import models, connection
@@ -48,10 +48,10 @@ id_lock = Lock()
 
 class PoolItem(BaseModel):
     pool: Any
-    ip_filter: Optional[str] = None
+    ip_filter: str | None = None
 
 
-PoolItems = RootModel[List[PoolItem]]
+PoolItems = RootModel[list[PoolItem]]
 
 
 @Label.model
@@ -72,7 +72,7 @@ class Prefix(NOCModel):
     Allocated prefix
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = _("Prefix")
         verbose_name_plural = _("Prefixes")
         db_table = "ip_prefix"
@@ -114,7 +114,7 @@ class Prefix(NOCModel):
     vlan: "VLAN" = DocumentReferenceField(VLAN, null=True, blank=True)
     description: str = models.TextField(_("Description"), blank=True, null=True)
     # Pools
-    pools: Optional[List[PoolItem]] = PydanticField(
+    pools: list[PoolItem] | None = PydanticField(
         "Remote System Mapping Items",
         schema=PoolItems,
         blank=True,
@@ -202,7 +202,7 @@ class Prefix(NOCModel):
         return Prefix.objects.filter(id=oid).first()
 
     @classmethod
-    def get_by_resource_pool(cls, pool: ResourcePool) -> List["Prefix"]:
+    def get_by_resource_pool(cls, pool: ResourcePool) -> list["Prefix"]:
         """Getting Prefixes for resource pool"""
         # Include VRF
         q = Q(pools__contains=[{"pool": str(pool.id)}])
@@ -224,7 +224,7 @@ class Prefix(NOCModel):
                 continue
             yield p
 
-    def get_pool_hints(self, pool) -> Optional[Dict[str, Any]]:
+    def get_pool_hints(self, pool) -> dict[str, Any] | None:
         """Getting pool setting for L2Domain"""
         return {}
 
@@ -311,28 +311,26 @@ class Prefix(NOCModel):
         # Reconnect children children prefixes
         c = connection.cursor()
         c.execute(
-            """
-            UPDATE %s
-            SET    parent_id=%%s
+            f"""
+            UPDATE {Prefix._meta.db_table}
+            SET    parent_id=%s
             WHERE
-                    vrf_id=%%s
-                AND afi=%%s
-                AND prefix << %%s
-                AND parent_id=%%s
-            """
-            % Prefix._meta.db_table,
+                    vrf_id=%s
+                AND afi=%s
+                AND prefix << %s
+                AND parent_id=%s
+            """,
             [self.id, self.vrf.id, self.afi, self.prefix, self.parent.id if self.parent else None],
         )
         # Reconnect children addresses
         c.execute(
-            """
-            UPDATE %s
-            SET prefix_id=%%s
+            f"""
+            UPDATE {Address._meta.db_table}
+            SET prefix_id=%s
             WHERE
-                    prefix_id=%%s
-                AND address << %%s
-            """
-            % Address._meta.db_table,
+                    prefix_id=%s
+                AND address << %s
+            """,
             [self.id, self.parent.id if self.parent else None, self.prefix],
         )
 
@@ -383,26 +381,25 @@ class Prefix(NOCModel):
         @todo: PostgreSQL-independent implementation
         """
         return User.objects.raw(
-            """
+            f"""
             SELECT id,username,first_name,last_name
-            FROM %s u
+            FROM {User._meta.db_table} u
             WHERE
                 is_active=TRUE
                 AND
                     (is_superuser=TRUE
                     OR
                     EXISTS(SELECT id
-                           FROM %s a
+                           FROM {PrefixAccess._meta.db_table} a
                            WHERE
                                     user_id=u.id
-                                AND vrf_id=%%s
-                                AND afi=%%s
-                                AND prefix>>=%%s
+                                AND vrf_id=%s
+                                AND afi=%s
+                                AND prefix>>=%s
                                 AND can_change=TRUE
                            ))
             ORDER BY username
-            """
-            % (User._meta.db_table, PrefixAccess._meta.db_table),
+            """,
             [self.vrf.id, self.afi, self.prefix],
         )
 
@@ -417,7 +414,7 @@ class Prefix(NOCModel):
         return ""
 
     @property
-    def netmask(self) -> Optional[str]:
+    def netmask(self) -> str | None:
         """
         returns Netmask for IPv4
         :return:
@@ -427,7 +424,7 @@ class Prefix(NOCModel):
         return None
 
     @property
-    def broadcast(self) -> Optional[str]:
+    def broadcast(self) -> str | None:
         """
         Returns Broadcast for IPv4
         :return:
@@ -437,7 +434,7 @@ class Prefix(NOCModel):
         return None
 
     @property
-    def wildcard(self) -> Optional[str]:
+    def wildcard(self) -> str | None:
         """
         Returns Cisco wildcard for IPv4
         :return:
@@ -447,7 +444,7 @@ class Prefix(NOCModel):
         return ""
 
     @property
-    def size(self) -> Optional[int]:
+    def size(self) -> int | None:
         """
         Returns IPv4 prefix size
         :return:
@@ -459,7 +456,6 @@ class Prefix(NOCModel):
     def can_view(self, user) -> bool:
         """
         Returns True if user has view access
-        :param user:
         :return:
         """
         return PrefixAccess.user_can_view(user, self.vrf, self.afi, self.prefix)
@@ -467,7 +463,6 @@ class Prefix(NOCModel):
     def can_change(self, user) -> bool:
         """
         Returns True if user has change access
-        :param user:
         :return:
         """
         return PrefixAccess.user_can_change(user, self.vrf, self.afi, self.prefix)
@@ -475,7 +470,6 @@ class Prefix(NOCModel):
     def has_bookmark(self, user) -> bool:
         """
         Check the user has bookmark on prefix
-        :param user:
         :return:
         """
         from .prefixbookmark import PrefixBookmark  # noqa
@@ -485,7 +479,6 @@ class Prefix(NOCModel):
     def toggle_bookmark(self, user) -> bool:
         """
         Toggle user bookmark. Returns new bookmark state
-        :param user:
         :return:
         """
         from .prefixbookmark import PrefixBookmark  # noqa
@@ -501,12 +494,12 @@ class Prefix(NOCModel):
         Full-text search
         """
         content = [self.prefix]
-        card = "Prefix %s" % self.prefix
+        card = f"Prefix {self.prefix}"
         if self.description:
             content += [self.description]
-            card += " (%s)" % self.description
+            card += f" ({self.description})"
         r = {
-            "id": "ip.prefix:%s" % self.id,
+            "id": f"ip.prefix:{self.id}",
             "title": self.prefix,
             "content": "\n".join(content),
             "card": card,
@@ -528,7 +521,7 @@ class Prefix(NOCModel):
         )
 
     @property
-    def address_ranges(self) -> List["AddressRange"]:
+    def address_ranges(self) -> list["AddressRange"]:
         """
         All prefix-related address ranges
         :return:
@@ -557,8 +550,6 @@ class Prefix(NOCModel):
     def rebase(self, vrf, new_prefix) -> Optional["Prefix"]:
         """
         Rebase prefix to a new location
-        :param vrf:
-        :param new_prefix:
         :return:
         """
         b = IP.prefix(self.prefix)
@@ -657,7 +648,7 @@ class Prefix(NOCModel):
         return self.profile.prefix_special_address_policy
 
     @property
-    def usage(self) -> Optional[float]:
+    def usage(self) -> float | None:
         if self.is_ipv4:
             usage = getattr(self, "_usage_cache", None)
             if usage is not None:
@@ -684,7 +675,7 @@ class Prefix(NOCModel):
         u = self.usage
         if u is None:
             return ""
-        return "%.2f%%" % u
+        return f"{u:.2f}%"
 
     @staticmethod
     def update_prefixes_usage(prefixes):
@@ -725,7 +716,7 @@ class Prefix(NOCModel):
             p._usage_cache = float(usage[p.id]) * 100.0 / float(size)
 
     @property
-    def address_usage(self) -> Optional[float]:
+    def address_usage(self) -> float | None:
         if not self.is_ipv4:
             # Fix for ipv6
             return None
@@ -757,7 +748,7 @@ class Prefix(NOCModel):
         u = self.address_usage
         if u is None:
             return "-"
-        return "%.2f%%" % u
+        return f"{u:.2f}%"
 
     def is_empty(self) -> bool:
         """
@@ -810,17 +801,17 @@ class Prefix(NOCModel):
     @classmethod
     def get_resource_pool_usage(
         cls,
-        pools: List[ResourcePool],
-        domains: Optional[List["Prefix"]] = None,
+        pools: list[ResourcePool],
+        domains: list["Prefix"] | None = None,
     ):
         """"""
         return 0.0
 
     @property
-    def resource_usage(self) -> Optional[float]:
+    def resource_usage(self) -> float | None:
         return self.address_usage
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.profile.get_css_class() if self.profile else None
 
 

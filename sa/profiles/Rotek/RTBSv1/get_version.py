@@ -21,7 +21,7 @@ class Script(BaseScript):
 
     def execute_snmp(self, **kwargs):
         oid = self.snmp.get(mib["SNMPv2-MIB::sysDescr", 0], cached=True)
-        platform = "%s.%s" % (oid.split(" ")[0].strip(), oid.split(" ")[1].strip())
+        platform = "{}.{}".format(oid.split(" ")[0].strip(), oid.split(" ")[1].strip())
         version = oid.split(" ")[2].strip()
 
         return {
@@ -39,7 +39,7 @@ class Script(BaseScript):
             c = self.cli("show software-version")
         line = c.split(":")
         res = line[1].strip().split(".", 2)
-        hwversion = "%s.%s" % (res[0], res[1])
+        hwversion = f"{res[0]}.{res[1]}"
         sw = res[2].strip()
         result = {"vendor": "Rotek", "version": sw, "attributes": {"HW version": hwversion}}
         with self.profile.shell(self):

@@ -23,17 +23,17 @@ rx_link = re.compile(r"^(.*)\|(https?://.+)$")
 def unroll_link(s):
     match = rx_link.match(s)
     if match:
-        return "<a href='%s'>%s</a>" % (
+        return "<a href='{}'>{}</a>".format(
             match.group(2),
             escape(match.group(1)).replace(r"\n", "<br/>"),
         )
     return s
 
 
-class RackSet(object):
+class RackSet:
     """RackSet representation"""
 
-    def __init__(self, id, label):
+    def __init__(self, id, label) -> None:
         self.id = id
         self.racks = []
         if label is None:
@@ -121,14 +121,14 @@ class RackSet(object):
         rack_labels = ["<tr>"]
         for r in self.racks:
             if r.id:
-                rack_labels += ["<td colspan='2' class='racklabel'>%s</td>" % escape(r.id)]
+                rack_labels += [f"<td colspan='2' class='racklabel'>{escape(r.id)}</td>"]
             else:
                 rack_labels += ["<td colspan='2' class='racklabel'></td>"]
         rack_labels += ["</tr>"]
         # Render the matrix
         out = ["<table class='rackset'>"]
         if self.id:
-            out += ["<caption>%s</caption>" % escape(self.id)]
+            out += [f"<caption>{escape(self.id)}</caption>"]
         if self.label in ["both", "top"]:
             out += rack_labels
         for i in range(self.height, 0, -1):
@@ -139,7 +139,7 @@ class RackSet(object):
                     td = "<td "
                     for attr in ["colspan", "rowspan", "class"]:
                         if attr in v:
-                            td += "%s='%s' " % (attr, v[attr])
+                            td += f"{attr}='{v[attr]}' "
                     td += ">"
                     # Render allocation
                     if v.get("text"):
@@ -156,8 +156,8 @@ class RackSet(object):
 #
 # Rack Representation
 #
-class Rack(object):
-    def __init__(self, rackset, id, height):
+class Rack:
+    def __init__(self, rackset, id, height) -> None:
         self.rackset = rackset
         self.id = id
         self.height = height
@@ -169,7 +169,7 @@ class Rack(object):
 # Allocation representation
 # Rendered to HTML by Rack.render_html
 #
-class Allocation(object):
+class Allocation:
     def __init__(
         self,
         rack,
@@ -199,7 +199,7 @@ class Allocation(object):
         self.slots = []
 
     def __repr__(self):
-        return "Allocation: id=%s position=%s height=%s" % (self.id, self.position, self.height)
+        return f"Allocation: id={self.id} position={self.position} height={self.height}"
 
     def to_html(self):
         """
@@ -208,31 +208,31 @@ class Allocation(object):
         """
         r = []
         if self.id:
-            r += ["<b>%s</b>" % unroll_link(self.id)]
+            r += [f"<b>{unroll_link(self.id)}</b>"]
         if self.hostname:
-            r += ["<u>%s</u>" % unroll_link(self.hostname)]
+            r += [f"<u>{unroll_link(self.hostname)}</u>"]
         if self.model:
             r += [unroll_link(self.model)]
         if self.serial:
-            r += ["S/N: %s" % unroll_link(self.serial)]
+            r += [f"S/N: {unroll_link(self.serial)}"]
         if self.asset_no:
-            r += ["#%s" % unroll_link(self.asset_no)]
+            r += [f"#{unroll_link(self.asset_no)}"]
         if self.description:
-            r += ["<i>%s</i>" % unroll_link(self.description)]
+            r += [f"<i>{unroll_link(self.description)}</i>"]
         if self.href:
-            r += ["<a href='%s'>Link...</a>" % self.href]
+            r += [f"<a href='{self.href}'>Link...</a>"]
         if self.slots:
             rr = ["<table border='1'>"]
             for s in self.slots:
-                rr += ["<tr><td><b>%s</b></td>" % s.id]
+                rr += [f"<tr><td><b>{s.id}</b></td>"]
                 a = " class='reserved'" if s.reserved else ""
-                rr += ["<td%s>%s</td></tr>" % (a, s.to_html())]
+                rr += [f"<td{a}>{s.to_html()}</td></tr>"]
             rr += ["</table>"]
             r += ["".join(rr)]
         return "<br/>".join(r)
 
 
-class Slot(object):
+class Slot:
     def __init__(
         self,
         allocation,
@@ -259,17 +259,17 @@ class Slot(object):
     def to_html(self):
         r = []
         if self.hostname:
-            r += ["<u>%s</u>" % unroll_link(self.hostname)]
+            r += [f"<u>{unroll_link(self.hostname)}</u>"]
         if self.model:
             r += [unroll_link(self.model)]
         if self.serial:
-            r += ["S/N: %s" % unroll_link(self.serial)]
+            r += [f"S/N: {unroll_link(self.serial)}"]
         if self.asset_no:
-            r += ["#%s" % unroll_link(self.asset_no)]
+            r += [f"#{unroll_link(self.asset_no)}"]
         if self.description:
-            r += ["<i>%s</i>" % unroll_link(self.description)]
+            r += [f"<i>{unroll_link(self.description)}</i>"]
         if self.href:
-            r += ["<a href='%s'>Link...</a>" % self.href]
+            r += [f"<a href='{self.href}'>Link...</a>"]
         return "<br/>".join(r)
 
 
@@ -281,8 +281,8 @@ class Slot(object):
 #              `-> allocation attrs: id, position, height, reserved, model, hostname, description, assetno, href, serial
 #                    `-> slot attrs: id, model, hostname, description, reserved, assetno, href, serial
 #
-class XMLParser(object):
-    def __init__(self, text):
+class XMLParser:
+    def __init__(self, text) -> None:
         self.parser = xml.parsers.expat.ParserCreate()
         self.parser.StartElementHandler = self.start_element
         self.parser.EndElementHandler = self.end_element

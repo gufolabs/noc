@@ -23,7 +23,7 @@ class NOCHtmlFormatter(HtmlFormatter):
 
     name = "NOC HTML"
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         kwargs["linenos"] = "table"
         super().__init__(**kwargs)
 

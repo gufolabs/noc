@@ -10,15 +10,14 @@ from .oid import OIDRule
 
 
 class CapabilityIndexRule(OIDRule):
-    """
-    Expand {{index}} to range given in capability
+    """Expand {{index}} to range given in capability
     capability: Integer capability containing number of iterations
     start: starting index
     """
 
     name = "capindex"
 
-    def __init__(self, oid, type=None, scale=1, units="1", start=0, capability=None):
+    def __init__(self, oid, type=None, scale=1, units="1", start=0, capability=None) -> None:
         super().__init__(oid, type=type, scale=scale, units=units)
         self.start = start
         self.capability = capability

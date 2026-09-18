@@ -1,13 +1,12 @@
 # ---------------------------------------------------------------------
 # ExtApplication implementation
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
-from builtins import str
-from typing import Optional, List, Dict, Any
+from typing import Any
 import os
 import re
 
@@ -23,8 +22,11 @@ from noc.main.models.slowop import SlowOp
 from noc.config import config
 from noc.models import is_document
 from noc.aaa.models.user import User
-from .application import Application, view
+from .api import api, view
+from .application import Application
 from .access import HasPerm, PermitLogged
+
+__all__ = ["ExtApplication", "api", "view"]
 
 
 class ExtApplication(Application):
@@ -57,11 +59,11 @@ class ExtApplication(Application):
     fav_status = "fav_status"
     wf_state = False
     default_ordering = []
-    exclude_fields: Optional[List[str]] = []
+    exclude_fields: list[str] | None = []
 
     rx_oper_splitter = re.compile(r"^(?P<field>\S+?)(?P<f_num>\d+)__in")
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.document_root = os.path.join("services", "web", "apps", self.module, self.app)
         self.row_limit = config.web.api_row_limit
@@ -96,12 +98,12 @@ class ExtApplication(Application):
     @property
     def js_app_class(self):
         m, a = self.get_app_id().split(".")
-        return "NOC.%s.%s.Application" % (m, a)
+        return f"NOC.{m}.{a}.Application"
 
     @property
     def launch_access(self):
         m, a = self.get_app_id().split(".")
-        return HasPerm("%s:%s:launch" % (m, a))
+        return HasPerm(f"{m}:{a}:launch")
 
     def deserialize(self, data):
         return orjson.loads(data)
@@ -172,10 +174,9 @@ class ExtApplication(Application):
     def instance_to_dict_list(self, o, fields=None):
         raise NotImplementedError
 
-    def parse_request_query(self, request) -> Dict[str, Any]:
+    def parse_request_query(self, request) -> dict[str, Any]:
         """
 
-        :param request:
         :return:
         """
         if request.method != "POST":
@@ -197,18 +198,18 @@ class ExtApplication(Application):
             try:
                 limit = max(int(limit), 0)
             except ValueError:
-                return HttpResponse(400, "Invalid %s param" % self.limit_param)
+                return HttpResponse(400, f"Invalid {self.limit_param} param")
         if limit and limit < 0:
-            return HttpResponse(400, "Invalid %s param" % self.limit_param)
+            return HttpResponse(400, f"Invalid {self.limit_param} param")
         # page = q.get(self.page_param)
         start = q.get(self.start_param) or 0
         if start:
             try:
                 start = max(int(start), 0)
             except ValueError:
-                return HttpResponse(400, "Invalid %s param" % self.start_param)
+                return HttpResponse(400, f"Invalid {self.start_param} param")
         elif start and start < 0:
-            return HttpResponse(400, "Invalid %s param" % self.start_param)
+            return HttpResponse(400, f"Invalid {self.start_param} param")
         query = q.get(self.query_param)
         only = q.get(self.only_param)
         if only:
@@ -217,14 +218,14 @@ class ExtApplication(Application):
         if request.is_extjs and self.sort_param in q:
             for r in self.deserialize(q[self.sort_param]):
                 if r["direction"] == "DESC":
-                    ordering += ["-%s" % r["property"]]
+                    ordering += ["-{}".format(r["property"])]
                 else:
                     ordering += [r["property"]]
         grouping = None
         if request.is_extjs and self.group_param in q:
             r = self.deserialize(q[self.group_param])
             if r["direction"] == "DESC":
-                grouping = "-%s" % r["property"]
+                grouping = "-{}".format(r["property"])
             else:
                 grouping = r["property"]
         fs = None
@@ -313,17 +314,11 @@ class ExtApplication(Application):
         """
         Finally process list_data result. Override to enrich with
         additional fields
-        :param data:
         :return:
         """
         return self.apply_bulk_fields(data)
 
-    @view(
-        url=r"^favorites/app/(?P<action>set|reset)/$",
-        method=["POST"],
-        access=PermitLogged(),
-        api=True,
-    )
+    @api.post(r"^favorites/app/(?P<action>set|reset)/$", access=PermitLogged())
     def api_favorites_app(self, request, action):
         """
         Set/reset favorite app status
@@ -338,12 +333,7 @@ class ExtApplication(Application):
             Favorites(user=request.user, app=self.app_id, favorite_app=v).save()
         return True
 
-    @view(
-        url=r"^favorites/item/(?P<item>[0-9a-f]+)/(?P<action>set|reset)/$",
-        method=["POST"],
-        access=PermitLogged(),
-        api=True,
-    )
+    @api.post(r"^favorites/item/(?P<item>[0-9a-f]+)/(?P<action>set|reset)/$", access=PermitLogged())
     def api_favorites_items(self, request, item, action):
         """
         Set/reset favorite items
@@ -355,7 +345,7 @@ class ExtApplication(Application):
             Favorites.remove_item(request.user, self.app_id, item)
         return True
 
-    @view(url=r"^futures/(?P<f_id>[0-9a-f]{24})/$", method=["GET"], access="launch", api=True)
+    @api.get(r"^futures/(?P<f_id>[0-9a-f]{24})/$", access="launch")
     def api_future_status(self, request, f_id):
         op = self.get_object_or_404(
             SlowOp, id=f_id, app_id=self.get_app_id(), user=request.user.username
@@ -375,4 +365,4 @@ class ExtApplication(Application):
         f = SlowOp.submit(fn, self.get_app_id(), request.user.username, *args, **kwargs)
         if f.done():
             return f.result()
-        return self.response_accepted(location="%sfutures/%s/" % (self.base_url, f.slow_op.id))
+        return self.response_accepted(location=f"{self.base_url}futures/{f.slow_op.id}/")

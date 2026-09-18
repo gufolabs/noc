@@ -25,8 +25,6 @@ _tpl_cache = {}  # name -> template instance
 def render_template(name, context=None):
     """
     Render template
-    :param name:
-    :param context:
     :return:
     """
 
@@ -57,8 +55,6 @@ def render_message(name, context=None):
     """
     Render template. Treat first Subject: line as a subject.
     Returns subject, body tuple
-    :param name:
-    :param context:
     :return: subject, body tuple
     """
 
@@ -80,7 +76,7 @@ def render_message(name, context=None):
 
 
 class ObjectNotification(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = _("Managed Object Notification")
         db_table = "sa_objectnotification"
         app_label = "sa"
@@ -109,11 +105,8 @@ class ObjectNotification(NOCModel):
     def render_message(cls, event_id, context):
         """
         Render template for event
-        :param cls:
-        :param event_id:
-        :param context:
         :return: subject, body tuple
         """
         # Render template
-        template = "object/%s.html" % event_id
+        template = f"object/{event_id}.html"
         return render_message(template, context)

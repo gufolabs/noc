@@ -12,7 +12,6 @@ import gzip
 import time
 import random
 import argparse
-from typing import List, Optional
 from functools import partial
 from gc import collect
 
@@ -43,7 +42,7 @@ class Command(BaseCommand):
     EXTRACT_WINDOW = config.bi.extract_window
     MIN_WINDOW = datetime.timedelta(seconds=2)
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # Args
         parser.add_argument(
@@ -74,7 +73,7 @@ class Command(BaseCommand):
     def handle(self, cmd, data_prefix, *args, **options):
         self.data_prefix = data_prefix
         connect()
-        return getattr(self, "handle_%s" % cmd.replace("-", "_"))(*args, **options)
+        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
 
     def get_last_extract(self, name):
         coll = get_db()["noc.bi_timestamps"]
@@ -92,13 +91,13 @@ class Command(BaseCommand):
         window = datetime.timedelta(seconds=self.EXTRACT_WINDOW)
         for ecls in self.EXTRACTORS:
             if not ecls.is_enabled():
-                self.print("[%s] Not enabled, skipping" % ecls.name)
+                self.print(f"[{ecls.name}] Not enabled, skipping")
                 continue
             start = self.get_last_extract(ecls.name)
             if not start or ecls.is_snapshot:
                 start = ecls.get_start()
                 if not start:
-                    self.print("[%s] No data, skipping" % ecls.name)
+                    self.print(f"[{ecls.name}] No data, skipping")
                     continue
             stop = now - datetime.timedelta(seconds=ecls.extract_delay)
             extracted_record = 0
@@ -121,14 +120,10 @@ class Command(BaseCommand):
                             f"[{e.name}] Window less than {self.MIN_WINDOW.total_seconds()} seconds. Too many element in interval. Fix it manually"
                         )
                         self.die("Too many elements per interval")
-                    self.print(
-                        "[%s] Mongo Exception: %s, switch window to: %s" % (e.name, ex, window)
-                    )
+                    self.print(f"[{e.name}] Mongo Exception: {ex}, switch window to: {window}")
                     is_exception = True
                     continue
-                self.print(
-                    "[%s] Extracting %s - %s ... " % (e.name, start, end), end="", flush=True
-                )
+                self.print(f"[{e.name}] Extracting {start} - {end} ... ", end="", flush=True)
                 dt = time.time() - t0
                 if dt > 0.0:
                     self.print("%d records in %.3fs (%.2frec/s)" % (nr, dt, float(nr) / dt))
@@ -144,23 +139,23 @@ class Command(BaseCommand):
                     window != datetime.timedelta(seconds=self.EXTRACT_WINDOW)
                     and nr < extracted_record * 0.75
                 ):
-                    self.print("[%s] Restore Window to: %s" % (e.name, window * 2))
+                    self.print(f"[{e.name}] Restore Window to: {window * 2}")
                     window = min(window * 2, datetime.timedelta(seconds=self.EXTRACT_WINDOW))
 
     def handle_dictionaries(self, *args, **options):
         # Extract dictionaries
         for dcls_name in loader:
-            dcls: Optional["DictionaryModel"] = loader[dcls_name]
+            dcls: "DictionaryModel" | None = loader[dcls_name]
             if not dcls:
                 continue
             # Temporary XML
-            xpath = os.path.join(self.DICT_XML_PREFIX, "%s.xml.tml" % dcls._meta.name)
-            self.stdout.write("Extracting dictionary XML to %s\n" % xpath)
+            xpath = os.path.join(self.DICT_XML_PREFIX, f"{dcls._meta.name}.xml.tml")
+            self.stdout.write(f"Extracting dictionary XML to {xpath}\n")
             with open(xpath, "w") as f:
                 f.write(dcls.get_config())
             # Move temporary XML
             xf = xpath[:-4]
-            self.stdout.write("Rename dictionary XML to %s\n" % xf)
+            self.stdout.write(f"Rename dictionary XML to {xf}\n")
             os.rename(xpath, xf)
 
     def iter_id(self, model):
@@ -185,11 +180,10 @@ class Command(BaseCommand):
                         break
                     match = {"_id": {"$gt": d["_id"]}}
             else:
-                for id in m.objects.values_list("id", flat=True).order_by("id"):
-                    yield id
+                yield from m.objects.values_list("id", flat=True).order_by("id")
 
     def handle_rebuild_dictionary(self, dictionaries=None, *args, **options):
-        async def upload(table: str, data: List[bytes]):
+        async def upload(table: str, data: list[bytes]):
             CHUNK = 500
             n_parts = len(config.clickhouse.cluster_topology.split(","))
             async with MessageStreamClient() as client:
@@ -210,7 +204,7 @@ class Command(BaseCommand):
             if dictionaries and dcls_name not in dictionaries:
                 continue
             self.print(f"Rebuild Dictionary: {dcls_name}")
-            bi_dict_model: Optional["DictionaryModel"] = loader[dcls_name]
+            bi_dict_model: "DictionaryModel" | None = loader[dcls_name]
             if not bi_dict_model:
                 continue
             model = get_model(bi_dict_model._meta.source_model)
@@ -235,7 +229,7 @@ class Command(BaseCommand):
     def handle_clean(self, *args, **options):
         for ecls in self.EXTRACTORS:
             if not ecls.is_enabled():
-                self.print("[%s] Not enabled, skipping" % ecls.name)
+                self.print(f"[{ecls.name}] Not enabled, skipping")
                 continue
             stop = self.get_last_extract(ecls.name)
             if not stop:
@@ -243,23 +237,21 @@ class Command(BaseCommand):
             force = options.get("force")
             e = ecls(start=stop, stop=stop, prefix=self.data_prefix)
             self.print(
-                "[%s] Cleaned before %s ... \n"
-                % (e.name, stop - datetime.timedelta(seconds=ecls.clean_delay)),
+                f"[{e.name}] Cleaned before {stop - datetime.timedelta(seconds=ecls.clean_delay)} ... \n",
                 end="",
                 flush=True,
             )
             if force:
                 self.print(
-                    "All data before %s from collection %s will be Remove..\n"
-                    % (e.name, stop - datetime.timedelta(seconds=ecls.clean_delay))
+                    f"All data before {e.name} from collection {stop - datetime.timedelta(seconds=ecls.clean_delay)} will be Remove..\n"
                 )
                 for i in reversed(range(1, 10)):
-                    self.print("%d\n" % i)
+                    self.print(f"{i}\n")
                     time.sleep(1)
             e.clean(force=force)
 
     def handle_load(self):
-        async def upload(table: str, data: List[bytes]):
+        async def upload(table: str, data: list[bytes]):
             CHUNK = 500
             n_parts = len(config.clickhouse.cluster_topology.split(","))
             async with MessageStreamClient() as client:
@@ -281,7 +273,3 @@ class Command(BaseCommand):
             table = fn.split("-", 1)[0]
             run_sync(partial(upload, table, data))
             os.unlink(path)
-
-
-if __name__ == "__main__":
-    Command().run()

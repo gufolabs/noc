@@ -24,7 +24,7 @@ class Script(BaseScript):
         r = []
         cmd = "protocol ip arp"
         if interface is not None:
-            cmd += " find %s" % interface
+            cmd += f" find {interface}"
         else:
             cmd += " detail all"
         for match in self.rx_line.finditer(self.cli(cmd)):

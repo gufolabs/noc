@@ -12,7 +12,7 @@ from noc.fm.models.alarmclass import AlarmClass as AlarmClassModel
 
 
 class AlarmClass(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "alarmclass"
         layout = "hashed"
         source_model = "fm.AlarmClass"

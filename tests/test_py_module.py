@@ -1,14 +1,15 @@
 # ---------------------------------------------------------------------
 # Test python module loading
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
+import importlib
 import os
 import ast
-from typing import Iterable, List
+from typing import Iterable
 from pathlib import Path
 
 # Third-party modules
@@ -38,9 +39,9 @@ def _allow_xfail(module: str) -> bool:
 
 
 @cachetools.cached(cache={})
-def get_files() -> List[Path]:
+def get_files() -> list[Path]:
     """Get list of all python files in src/noc."""
-    r: List[Path] = []
+    r: list[Path] = []
     for root, _, files in os.walk(Path("src", "noc"), followlinks=True):
         for f in files:
             if not f.startswith(".") and f.endswith(".py"):
@@ -72,7 +73,7 @@ def iter_init() -> Iterable[Path]:
 @pytest.mark.parametrize("module", iter_py_modules())
 def test_import(module: str) -> None:
     try:
-        m = __import__(module, {}, {}, "*")
+        m = importlib.import_module(module)
         assert m
     except (ImportError, ModuleNotFoundError, NotImplementedError) as e:
         if _allow_xfail(module):
@@ -83,9 +84,8 @@ def test_import(module: str) -> None:
 
 @pytest.mark.parametrize("path", iter_init())
 def test_init(path: Path) -> None:
-    with open(path) as f:
-        data = f.read()
+    data = path.read_text()
     if "TESTS: ALLOW_NON_EMPTY_INIT" in data:
-        return  # exclusion
+        pytest.skip("allowed to be non-empty")
     n = compile(data, path, "exec", ast.PyCF_ONLY_AST)
-    assert bool(n.body) or not bool(data), "__init__.py must be empty"
+    assert bool(n.body) or not bool(data), f"{path} must be empty"

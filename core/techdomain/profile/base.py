@@ -12,7 +12,7 @@ import logging
 from noc.core.log import PrefixLoggerAdapter
 
 
-class BaseProfileController(object):
+class BaseProfileController:
     """
     Base class for profile controller.
 
@@ -26,5 +26,5 @@ class BaseProfileController(object):
 
     name: str
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = PrefixLoggerAdapter(logging.getLogger("controller"), self.name)

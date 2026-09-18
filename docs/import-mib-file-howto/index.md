@@ -56,7 +56,7 @@ For example, `/usr/share/mibs/site`.
 Install NOC-supplied MIB files:
 
 ```
-./scripts/deploy/install-packages requirements/mib.json
+./scripts/deploy/install-packages npkg/mib.json
 ```
 
 ## Import MIB file via Web Interface

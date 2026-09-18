@@ -4,38 +4,18 @@
 
 ## listen
 
-|                |                              |
-| -------------- | ---------------------------- |
-| Default value  | `0.0.0.0:514`                |
-| YAML Path      | `syslogcollector.listen`     |
-| Key-Value Path | `syslogcollector/listen`     |
-| Environment    | `NOC_SYSLOGCOLLECTOR_LISTEN` |
+{{ config_param("syslogcollector.listen") }}
 
 ## enable_reuseport
 
-|                |                                        |
-| -------------- | -------------------------------------- |
-| Default value  | `True`                                 |
-| YAML Path      | `syslogcollector.enable_reuseport`     |
-| Key-Value Path | `syslogcollector/enable_reuseport`     |
-| Environment    | `NOC_SYSLOGCOLLECTOR_ENABLE_REUSEPORT` |
+{{ config_param("syslogcollector.enable_reuseport") }}
 
 ## enable_freebind
 
-|                |                                       |
-| -------------- | ------------------------------------- |
-| Default value  | `False`                               |
-| YAML Path      | `syslogcollector.enable_freebind`     |
-| Key-Value Path | `syslogcollector/enable_freebind`     |
-| Environment    | `NOC_SYSLOGCOLLECTOR_ENABLE_FREEBIND` |
+{{ config_param("syslogcollector.enable_freebind") }}
 
 ## ds_limit
 
 DataStream request limit
 
-|                |                                |
-| -------------- | ------------------------------ |
-| Default value  | `1000`                         |
-| YAML Path      | `syslogcollector.ds_limit`     |
-| Key-Value Path | `syslogcollector/ds_limit`     |
-| Environment    | `NOC_SYSLOGCOLLECTOR_DS_LIMIT` |
+{{ config_param("syslogcollector.ds_limit") }}

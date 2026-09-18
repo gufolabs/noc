@@ -135,7 +135,7 @@ Ext.define("NOC.inv.macdb.Application", {
   initComponent: function(){
     this.callParent();
     var favFilter = this.down("[name=fav_status]"),
-      query = Ext.util.History.getToken().split("?")[1] || "",
+      query = NOC.navigation.getToken().split("?")[1] || "",
       queryObj = Ext.Object.fromQueryString(query);
     this.searchField.onChange = Ext.emptyFn;
     this.searchField.setTriggers({

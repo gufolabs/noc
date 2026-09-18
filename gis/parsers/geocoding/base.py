@@ -9,17 +9,17 @@
 import itertools
 
 
-class GeocodingParser(object):
+class GeocodingParser:
     ID_ADDR = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def parse(self, f):
         pass
 
     def feed_building(self, b_id, addr, coords):
-        print("BUILDING(%s=%s)" % (self.ID_ADDR, b_id), addr, coords)
+        print(f"BUILDING({self.ID_ADDR}={b_id})", addr, coords)
 
     def get_centroid(self, points):
         """

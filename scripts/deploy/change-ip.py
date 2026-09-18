@@ -121,7 +121,7 @@ def change_ip_address(path, old_ip, new_ip):
                 line = line.replace(old_ip, new_ip)
                 sys.stdout.write(line)
             print("OK")
-    except IOError:
+    except OSError:
         pass
 
 
@@ -129,12 +129,12 @@ def get_old_ip():
     """Read old ip from file from /etc/hosts"""
     try:
         ipfilepath = "/etc/hosts"
-        with open(ipfilepath, "r") as file:
+        with open(ipfilepath) as file:
             hostname = socket.gethostname()
             for line in file.readlines():
                 if line.strip().endswith(hostname):
                     return line.split()[0]
-    except EnvironmentError:
+    except OSError:
         print("No file with old IP")
 
 
@@ -150,7 +150,7 @@ def set_hosts_address(address):
                         line = address + " " + hostname + "\n"
                     sys.stdout.write(line)
             return
-        except IOError:
+        except OSError:
             pass
     print("You haven't /etc/hosts")
 
@@ -171,7 +171,7 @@ def change_inside_tower(old_ip, new_ip):
             os.system(
                 f"sqlite3 {TOWER_DB_PATH} \"UPDATE environment SET web_host = '{new_ip}' where web_host = '{old_ip}';\""
             )
-    except IOError:
+    except OSError:
         pass
 
 

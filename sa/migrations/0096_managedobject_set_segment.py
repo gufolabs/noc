@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Get first segment
         ns = self.mongo_db.noc.networksegments.find_one({}, sort=[("name", 1)])
         self.db.execute(

@@ -16,7 +16,7 @@ from noc.core.translation import ugettext as _
 
 
 class Changes(Model):
-    class Meta(object):
+    class Meta:
         db_table = "changes"
         engine = MergeTree("timestamp", ("user", "model_name"))
 

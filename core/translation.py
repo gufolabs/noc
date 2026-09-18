@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Translation utilities
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ def set_translation(service, lang):
 
     if lang != "en":
         # Check .mo file
-        mo_path = "services/%s/translations/%s/LC_MESSAGES/messages.mo" % (service, lang)
+        mo_path = f"services/{service}/translations/{lang}/LC_MESSAGES/messages.mo"
         if os.path.exists(mo_path):
             logger.info("Setting '%s' translation", mo_path)
             with open(mo_path, mode="rb") as f:
@@ -33,9 +33,9 @@ def set_translation(service, lang):
             logger.info("No translation for language '%s'. Using 'en' instead", lang)
 
 
-def _ugettext(x):
+def _ugettext(x: str) -> str:
     return x
 
 
-def ugettext(x):
+def ugettext(x: str) -> str:
     return smart_text(_ugettext(x))

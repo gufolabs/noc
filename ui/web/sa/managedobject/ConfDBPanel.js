@@ -152,7 +152,7 @@ Ext.define("NOC.sa.managedobject.ConfDBPanel", {
         scope: me,
         change: function(field, value){
           if(Ext.isEmpty(value)) return
-          Ext.Ajax.request({
+          NOC.api.requestLegacy({
             url: "/cm/confdbquery/" + value + "/",
             scope: me,
             success: function(response){
@@ -242,7 +242,7 @@ Ext.define("NOC.sa.managedobject.ConfDBPanel", {
     me.setTitle(record.get("name") + " ConfDB");
     me.confDBTree.mask();
     me.url = "/sa/managedobject/" + record.get("id") + "/confdb/";
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.url + "?cleanup=" + me.cleanupButton.value,
       method: "GET",
       scope: me,
@@ -355,7 +355,7 @@ Ext.define("NOC.sa.managedobject.ConfDBPanel", {
     query["query"] = Ext.String.trim(
       me.queryField.getValue(),
     );
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.url,
       method: "POST",
       scope: me,

@@ -83,10 +83,8 @@ class Profile(BaseProfile):
         """
         Some equal devices but different platform name:
          ALS-24100LVT, ALS24100LVT, ALS24110LVT, ALS-24110LVT
-        :param name:
         :type name: str
         :return:
-        :rtype: str
 
         >>> Profile().normalize_platform("ALS24100LVT")
         'ALS-24100LVT'
@@ -96,5 +94,5 @@ class Profile(BaseProfile):
         'ALS-24110LVT'
         """
         if self.rx_bad_platform.match(name):
-            name = "%s-%s" % self.rx_bad_platform.match(name).groups()
+            name = "{}-{}".format(*self.rx_bad_platform.match(name).groups())
         return name

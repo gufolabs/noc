@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 from math import sqrt
 
 # NOC modules
@@ -21,7 +20,7 @@ class SqrtNode(BaseCDAGNode):
     name = "sqrt"
     categories = [Category.MATH]
 
-    def get_value(self, x: ValueType) -> Optional[ValueType]:
+    def get_value(self, x: ValueType) -> ValueType | None:
         if x < 0:
             return None
         return sqrt(x)

@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import importlib
 import logging
 import inspect
 import threading
@@ -18,13 +19,13 @@ from noc.core.log import PrefixLoggerAdapter
 logger = logging.getLogger(__name__)
 
 
-class BaseLoader(object):
+class BaseLoader:
     name = None
     base_cls = None  # Base class to be loaded
     base_path = None  # Tuple of path components
     ignored_names = set()
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = PrefixLoggerAdapter(logger, self.name)
         self.classes = {}
         self.lock = threading.Lock()
@@ -40,7 +41,7 @@ class BaseLoader(object):
         :return: class reference or None
         """
         try:
-            sm = __import__(module_name, {}, {}, "*")
+            sm = importlib.import_module(module_name)
             for n in dir(sm):
                 o = getattr(sm, n)
                 if (
@@ -73,7 +74,7 @@ class BaseLoader(object):
         :param name: class name
         :return:
         """
-        p = (base, *self.base_path, "%s.py" % name)
+        p = (base, *self.base_path, f"{name}.py")
         return os.path.join(*p)
 
     def get_module_name(self, base, name):
@@ -83,7 +84,7 @@ class BaseLoader(object):
         :param name: module name
         :return:
         """
-        return "%s.%s.%s" % (base, ".".join(self.base_path), name)
+        return "{}.{}.{}".format(base, ".".join(self.base_path), name)
 
     def get_class(self, name):
         with self.lock:

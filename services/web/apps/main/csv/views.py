@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # CSV Export/Import application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -12,7 +12,7 @@ from io import StringIO
 # Third-party modules
 from django import forms
 from django.apps import apps as d_apps
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from noc.core.translation import ugettext as _
 
 # NOC modules
@@ -25,7 +25,7 @@ class CSVApplication(Application):
     title = _("CSV Export/Import")
 
     @view(url="^$", url_name="index", menu=[_("Setup"), _("CSV Export/Import")], access="import")
-    def view_index(self, request):
+    def view_index(self, request: HttpRequest):
         load_models()
 
         class ModelForm(forms.Form):
@@ -48,7 +48,9 @@ class CSVApplication(Application):
                     return self.render_plain_text(
                         csv_export(model), content_type="text/csv; encoding=utf-8"
                     )
-                return self.response_redirect("/main/csv/import/%s/" % form.cleaned_data["model"])
+                return self.response_redirect(
+                    "/main/csv/import/{}/".format(form.cleaned_data["model"])
+                )
         else:
             form = ModelForm()
         return self.render(request, "index.html", form=form)
@@ -66,20 +68,18 @@ class CSVApplication(Application):
 
     def address_in_network(self, ip, net):
         """Is an address in a network"""
-        ipaddr = int("".join(["%02x" % int(x) for x in ip.split(".")]), 16)
+        ipaddr = int("".join([f"{int(x):02x}" for x in ip.split(".")]), 16)
         netstr, bits = net.split("/")
-        netaddr = int("".join(["%02x" % int(x) for x in netstr.split(".")]), 16)
+        netaddr = int("".join([f"{int(x):02x}" for x in netstr.split(".")]), 16)
         mask = (0xFFFFFFFF << (32 - int(bits))) & 0xFFFFFFFF
         return (ipaddr & mask) == (netaddr & mask)
 
     @view(
         url=r"^import/(?P<model>[a-zA-Z1-9]+\.[a-zA-Z1-9]+)/$", url_name="import", access="import"
     )
-    def view_import(self, request, model):
+    def view_import(self, request: HttpRequest, model):
         """
         Import from CSV file
-        :param request:
-        :param model:
         :return:
         """
         app, model = model.split(".", 1)
@@ -134,15 +134,13 @@ class CSVApplication(Application):
                     resp_msg = ""
                 else:
                     csv_file, resp_msg = import_check_perms()
-                count, error = csv_import(m, csv_file, resolution=form.cleaned_data["resolve"])
+                count, _error = csv_import(m, csv_file, resolution=form.cleaned_data["resolve"])
                 if count is None:
-                    self.message_user(request, "Error importing data: %s" % error)
-                else:
-                    return HttpResponse(
-                        "%d records are imported/updated" % count + resp_msg,
-                        content_type="text/plain",
-                    )
-                return self.response_redirect(form.cleaned_data["referer"])
+                    return self.response_redirect(form.cleaned_data["referer"])
+                return HttpResponse(
+                    f"{count} records are imported/updated{resp_msg}",
+                    content_type="text/plain",
+                )
         else:
             form = self.ImportForm({"referer": request.META.get("HTTP_REFERER", "/")})
         # Prepare fields description
@@ -150,12 +148,12 @@ class CSVApplication(Application):
         for name, required, rel, rname in get_model_fields(m):
             if rel:
                 if isinstance(rel._meta, dict):
-                    r = ["%s.%s" % (rel._meta["collection"], rname)]
+                    r = ["{}.{}".format(rel._meta["collection"], rname)]
                 else:
                     db_table = rel._meta.db_table
-                    r = ['%s."id"' % db_table]
+                    r = [f'{db_table}."id"']
                     if rname != "id":
-                        r = ['%s."%s"' % (db_table, rname), *r]
+                        r = [f'{db_table}."{rname}"', *r]
             else:
                 r = []
             fields += [(name, required, " or ".join(r))]

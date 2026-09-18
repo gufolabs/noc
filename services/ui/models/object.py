@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel
@@ -26,17 +25,17 @@ class DefaultObjectItem(BaseModel):
     name: str
     model: Reference
     bi_id: str
-    labels: List[LabelItem]
-    effective_labels: List[LabelItem]
-    container: Optional[Reference] = None
-    layer: Optional[Reference] = None
-    point: Optional[PointItem] = None
-    remote_system: Optional[Reference] = None
-    remote_id: Optional[str] = None
+    labels: list[LabelItem]
+    effective_labels: list[LabelItem]
+    container: Reference | None = None
+    layer: Reference | None = None
+    point: PointItem | None = None
+    remote_system: Reference | None = None
+    remote_id: str | None = None
 
 
 class FormObjectItem(BaseModel):
     name: str
     model: Reference
-    labels: List[LabelItem]
-    container: Optional[Reference] = None
+    labels: list[LabelItem]
+    container: Reference | None = None

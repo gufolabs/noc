@@ -7,7 +7,6 @@
 
 # Python modules
 from urllib.parse import quote as urllib_quote
-from typing import Optional
 
 # Third-party modules
 import orjson
@@ -21,30 +20,30 @@ from .errors import GeoCoderError
 class GoogleGeocoder(BaseGeocoder):
     name = "google"
 
-    def __init__(self, key=None, language=None, *args, **kwargs):
+    def __init__(self, key=None, language=None, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.key = key or config.geocoding.google_key
         self.language = language or config.geocoding.google_language
 
-    def forward(self, query: str, bounds=None, region=None) -> Optional[GeoCoderResult]:
+    def forward(self, query: str, bounds=None, region=None) -> GeoCoderResult | None:
         query = query.lower().strip()
         if not query:
             return None
         url = ["http://maps.googleapis.com/maps/api/geocode/json?"]
         if region:
-            url += ["&region=%s" % region]
+            url += [f"&region={region}"]
         if bounds:
             # &bounds=34.172684,-118.604794|34.236144,-118.500938
             # bounds = ("34.172684,-118.604794", "34.236144,-118.500938")
-            url += ["&bounds=%s|%s" % bounds]
-        url += ["&address=%s" % urllib_quote(query)]
+            url += ["&bounds={}|{}".format(*bounds)]
+        url += [f"&address={urllib_quote(query)}"]
         if self.key:
-            url += ["&key=%s" % urllib_quote(self.key)]
+            url += [f"&key={urllib_quote(self.key)}"]
         if self.language:
-            url += ["&language=%s" % urllib_quote(self.language)]
+            url += [f"&language={urllib_quote(self.language)}"]
         code, response = self.get("".join(url))
         if code != 200:
-            raise GeoCoderError("%s: %s" % (code, response))
+            raise GeoCoderError(f"{code}: {response}")
         try:
             r = orjson.loads(response)
         except ValueError:

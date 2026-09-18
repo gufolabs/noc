@@ -36,7 +36,7 @@ class KBEntry(NOCModel):
     KB Entry
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "KB Entry"
         verbose_name_plural = "KB Entries"
         app_label = "kb"
@@ -62,7 +62,7 @@ class KBEntry(NOCModel):
     def __str__(self):
         if self.id:
             return "KB%d: %s" % (self.id, self.subject)
-        return "New: %s" % self.subject
+        return f"New: {self.subject}"
 
     def save(self, *args, **kwargs):
         """

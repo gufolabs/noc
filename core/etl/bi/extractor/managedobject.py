@@ -61,7 +61,7 @@ class ManagedObjectsExtractor(BaseExtractor):
         "xmac": "xmac_links",
     }
 
-    def __init__(self, prefix, start, stop):
+    def __init__(self, prefix, start, stop) -> None:
         super().__init__(prefix, start, stop)
         self.mo_stream = Stream(ManagedObjectBI, prefix)
 
@@ -250,9 +250,7 @@ class ManagedObjectsExtractor(BaseExtractor):
     def get_object_metrics(start, stop):
         """
 
-        :param start:
         :type stop: datetime.datetime
-        :param stop:
         :type stop: datetime.datetime
         :return:
         """
@@ -263,8 +261,7 @@ class ManagedObjectsExtractor(BaseExtractor):
         ch = connection()
         res = ch.execute(
             "SELECT managed_object, sum(stp_topology_changes_delta) as changes "
-            "FROM routing WHERE ts > '%s' and ts < '%s' GROUP BY managed_object FORMAT JSONEachRow"
-            % (
+            "FROM routing WHERE ts > '{}' and ts < '{}' GROUP BY managed_object FORMAT JSONEachRow".format(
                 start.replace(microsecond=0).isoformat(sep=" "),
                 stop.replace(microsecond=0).isoformat(sep=" "),
             ),

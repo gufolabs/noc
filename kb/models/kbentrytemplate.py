@@ -23,7 +23,7 @@ class KBEntryTemplate(NOCModel):
     KB Entry Template
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "KB Entry Template"
         verbose_name_plural = "KB Entry Templates"
         app_label = "kb"

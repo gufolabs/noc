@@ -9,7 +9,7 @@
 import asyncio
 import logging
 from functools import partial
-from typing import Optional, Dict, AsyncIterable, Any, Union
+from typing import AsyncIterable, Any
 
 # Third-party modules
 import orjson
@@ -26,7 +26,7 @@ from noc.config import config
 logger = logging.getLogger(__name__)
 
 
-class MessageStreamClient(object):
+class MessageStreamClient:
     """
     Client for Message Stream application (like Kafka)
     1. Access Messages
@@ -43,7 +43,7 @@ class MessageStreamClient(object):
     ? MessageQueueBuffer (SaveHeaders)
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.client = self.get_client()
 
     @classmethod
@@ -69,12 +69,12 @@ class MessageStreamClient(object):
     async def subscribe(
         self,
         stream: str,
-        partition: Optional[int] = None,
-        start_offset: Optional[int] = None,
-        start_timestamp: Optional[float] = None,
+        partition: int | None = None,
+        start_offset: int | None = None,
+        start_timestamp: float | None = None,
         resume: bool = False,
-        cursor_id: Optional[str] = None,
-        timeout: Optional[int] = None,
+        cursor_id: str | None = None,
+        timeout: int | None = None,
         allow_isr: bool = False,
     ) -> AsyncIterable[Message]:
         async for msg in self.client.subscribe(
@@ -91,10 +91,10 @@ class MessageStreamClient(object):
     async def publish(
         self,
         value: bytes,
-        stream: Optional[str] = None,
-        key: Optional[bytes] = None,
-        partition: Optional[int] = None,
-        headers: Optional[Dict[str, bytes]] = None,
+        stream: str | None = None,
+        key: bytes | None = None,
+        partition: int | None = None,
+        headers: dict[str, bytes] | None = None,
         wait_for_stream: bool = False,
     ) -> None:
         # Build message
@@ -120,7 +120,6 @@ class MessageStreamClient(object):
     def publish_sync(self, req: PublishRequest, wait_for_stream: bool = False) -> None:
         """
         Send publish request and wait for acknowledge
-        :param req:
         :param wait_for_stream: Wait for stream being created.
         :return:
         """
@@ -137,7 +136,7 @@ class MessageStreamClient(object):
         )
 
     async def fetch_metadata(
-        self, stream: Optional[str] = None, wait_for_stream: bool = False
+        self, stream: str | None = None, wait_for_stream: bool = False
     ) -> Metadata:
         return await self.client.fetch_metadata(stream, wait_for_stream=wait_for_stream)
 
@@ -149,16 +148,12 @@ class MessageStreamClient(object):
     async def create_stream(
         self,
         name: str,
-        group: Optional[str] = None,
+        group: str | None = None,
         partitions: int = 0,
         replication_factor: int = 0,
     ) -> None:
         """
         Create Stream by settings
-        :param name:
-        :param group:
-        :param partitions:
-        :param replication_factor:
         :return:
         """
         await self.client.create_stream(
@@ -175,11 +170,9 @@ class MessageStreamClient(object):
     def get_replication_factor(cls, meta) -> int:
         return min(len(meta.brokers), 2)
 
-    async def ensure_stream(self, name: str, partitions: Optional[int] = None) -> bool:
+    async def ensure_stream(self, name: str, partitions: int | None = None) -> bool:
         """
         Ensure stream settings
-        :param name:
-        :param partitions:
         :return:
         """
         # Get stream config
@@ -215,9 +208,6 @@ class MessageStreamClient(object):
     async def fetch_cursor(self, stream: str, partition: int, cursor_id: str) -> int:
         """
         Getting stream cursor value
-        :param stream:
-        :param partition:
-        :param cursor_id:
         :return:
         """
         return await self.client.fetch_cursor(stream, partition, cursor_id)
@@ -225,10 +215,6 @@ class MessageStreamClient(object):
     async def set_cursor(self, stream: str, partition: int, cursor_id: str, offset: int) -> None:
         """
         Set stream cursor value
-        :param stream:
-        :param partition:
-        :param cursor_id:
-        :param offset:
         :return:
         """
         await self.client.set_cursor(stream, partition, cursor_id, offset=offset)
@@ -237,8 +223,8 @@ class MessageStreamClient(object):
     def get_publish_request(
         data: Any,
         stream: str,
-        partition: Optional[int] = None,
-        headers: Optional[Dict[str, bytes]] = None,
+        partition: int | None = None,
+        headers: dict[str, bytes] | None = None,
         sharding_key: int = 0,
     ) -> PublishRequest:
         """
@@ -264,9 +250,9 @@ class MessageStreamClient(object):
     async def alter_stream(
         self,
         name: str,
-        current_meta: Dict[int, PartitionMetadata],
-        new_partitions: Optional[int] = None,
-        replication_factor: Optional[int] = None,
+        current_meta: dict[int, PartitionMetadata],
+        new_partitions: int | None = None,
+        replication_factor: int | None = None,
     ) -> bool:
         tmp_stream = f"{TEMPORARY_STREAM_PREFIX}-{name}"
         old_partitions = len(current_meta)
@@ -318,8 +304,8 @@ class MessageStreamClient(object):
         self,
         from_topic,
         to_topic,
-        partitions: Optional[Union[Dict[int, int], int]] = None,
-    ) -> Dict[int, int]:
+        partitions: dict[int, int] | int | None = None,
+    ) -> dict[int, int]:
         """
         Copy message from one topic to another
         :param from_topic: From topic

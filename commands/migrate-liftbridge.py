@@ -1,13 +1,14 @@
 # ----------------------------------------------------------------------
 # Liftbridge streams synchronization tool
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 from functools import partial
-from typing import Iterable, Optional
+from typing import Iterable
+import argparse
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -23,7 +24,7 @@ from noc.main.models.pool import Pool
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "--slots",
             dest="slots",
@@ -43,7 +44,8 @@ class Command(BaseCommand):
     @staticmethod
     def iter_streams() -> Iterable[str]:
         connect()
-
+        # Get all pools
+        all_pools = list(Pool.objects.all())
         # Configured streams
         for stream in STREAMS:
             if stream.name == "ch":
@@ -52,7 +54,7 @@ class Command(BaseCommand):
                 yield stream.name
                 continue
             # Pooled streams
-            for pool in Pool.objects.all():
+            for pool in all_pools:
                 yield f"{stream.name}.{pool.name}"
         # Metric scopes
         for scope in MetricScope.objects.all():
@@ -74,14 +76,10 @@ class Command(BaseCommand):
             if ds_report_model and ds_report_model.clickhouse_mirror():
                 yield f"ch.{ds_report_model._get_db_table()}"
 
-    async def apply_stream_settings(self, slots: Optional[int] = None) -> bool:
+    async def apply_stream_settings(self, slots: int | None = None) -> bool:
         changed = False
         async with MessageStreamClient() as client:
             for stream in self.iter_streams():
-                self.print("Ensuring stream %s" % stream)
+                self.print(f"Ensuring stream {stream}")
                 changed |= await client.ensure_stream(stream, partitions=slots)
         return changed
-
-
-if __name__ == "__main__":
-    Command().run()

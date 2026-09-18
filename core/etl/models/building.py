@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 from datetime import date
 
 # NOC modules
@@ -18,8 +17,8 @@ from .admdiv import AdmDiv
 class Building(BaseModel):
     id: str
     adm_division: Reference["AdmDiv"]
-    postal_code: Optional[str] = None
-    start_date: Optional[date] = None
-    end_date: Optional[date] = None
+    postal_code: str | None = None
+    start_date: date | None = None
+    end_date: date | None = None
 
     _csv_fields = ["id", "adm_division", "postal_code", "short_name", "start_date", "end_date"]

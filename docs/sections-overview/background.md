@@ -2,6 +2,10 @@
 
 This section contains clarification and discussion of key topics.
 
+## Clarifications on Project
+
+- [NOC Governance](../governance/index.md)
+
 ## Clarification for Administrators
 
 - [Fault Management](../fault-management/index.md)

@@ -43,10 +43,16 @@ Ext.define("NOC.core.InlineGrid", {
     var me = this;
     this.columns = me.columns;
     this.store = me.store;
+    // scope: me pins these string handlers to this grid. Without it ExtJS
+    // resolves them (with skipThis) up to the nearest ancestor view controller
+    // (e.g. sa.managedobject.form.FormController), which has no onDisable /
+    // onEnable — throwing "No method named onDisable on ...Controller" whenever
+    // the grid fires a disable/enable event.
     me.on({
       afterrender: "setupDisabledTooltip",
       disable: "onDisable",
       enable: "onEnable",
+      scope: me,
     });
     this.callParent();
     if(this.readOnly){

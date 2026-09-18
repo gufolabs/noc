@@ -13,7 +13,7 @@ from noc.core.model.fields import DocumentReferenceField
 class Migration(BaseMigration):
     depends_on = [("main", "0055_default_pool")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column(
             "sa_managedobjectselector",
             "filter_pool",

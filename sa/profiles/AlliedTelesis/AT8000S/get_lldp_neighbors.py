@@ -61,7 +61,7 @@ class Script(BaseScript):
             }
             if i[3]:
                 neighbor["remote_system_name"] = i[3]
-            s = self.cli("show lldp neighbors ethernet %s" % i[0])
+            s = self.cli(f"show lldp neighbors ethernet {i[0]}")
             match = self.rx_sysdescr.search(s)
             if match:
                 neighbor["remote_system_description"] = match.group("descr").strip()

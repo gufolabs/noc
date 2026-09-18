@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         l_coll = self.mongo_db["labels"]
         current_labels = {ll["name"]: ll["_id"] for ll in l_coll.find()}
         bulk = []

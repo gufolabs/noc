@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # Third-party modules
 import yaml
@@ -21,8 +20,8 @@ class YAMLCDAGFactory(ConfigCDAGFactory):
         self,
         graph: CDAG,
         config: str,
-        ctx: Optional[FactoryCtx] = None,
-        namespace: Optional[str] = None,
+        ctx: FactoryCtx | None = None,
+        namespace: str | None = None,
     ):
         cfg = GraphConfig(**yaml.safe_load(config))
         super().__init__(graph, cfg, ctx, namespace)

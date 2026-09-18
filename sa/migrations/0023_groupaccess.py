@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Adding model 'GroupAccess'
         Group = self.db.mock_model(model_name="Group", db_table="auth_group")
         ManagedObjectSelector = self.db.mock_model(

@@ -10,6 +10,6 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Moved to 0009 for fixed bad typo
         pass

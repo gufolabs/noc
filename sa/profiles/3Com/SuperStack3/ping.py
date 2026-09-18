@@ -15,7 +15,7 @@ class Script(BaseScript):
     interface = IPing
 
     def execute(self, address):
-        v = self.cli("protocol ip ping %s" % address)
+        v = self.cli(f"protocol ip ping {address}")
         if "No answer from" in v:
             return {"success": 0, "count": 1}
         return {"success": 1, "count": 1}

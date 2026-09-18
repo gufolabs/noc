@@ -9,7 +9,6 @@
 import datetime
 import logging
 import enum
-from typing import Set
 
 # NOC modules
 from noc.services.discovery.jobs.base import TopologyDiscoveryCheck
@@ -33,7 +32,7 @@ class MACDiscoveryCheck(TopologyDiscoveryCheck):
 
     MAC_WINDOW = 2 * 86400
 
-    def __init__(self, job):
+    def __init__(self, job) -> None:
         super().__init__(job)
 
     def handler(self):
@@ -54,11 +53,11 @@ class MACDiscoveryCheck(TopologyDiscoveryCheck):
         SQL = """SELECT managed_object, mac, argMax(ts, ts), argMax(interface, ts)
         FROM mac
         WHERE
-          date >= toDate('%s')
-          AND ts >= toDateTime('%s')
-          AND managed_object IN (%s)
+          date >= toDate('{}')
+          AND ts >= toDateTime('{}')
+          AND managed_object IN ({})
         GROUP BY ts, managed_object, mac
-        """ % (
+        """.format(
             t0.date().isoformat(),
             t0.isoformat(sep=" "),
             ", ".join(bi_map),
@@ -158,7 +157,7 @@ class MACDiscoveryCheck(TopologyDiscoveryCheck):
                         )
 
     def get_uplink_weight(
-        self, mo: ManagedObject, if_fib: Set[ManagedObject], segments: Set[NetworkSegment]
+        self, mo: ManagedObject, if_fib: set[ManagedObject], segments: set[NetworkSegment]
     ) -> int:
         """
         Check if if_fib belongs to uplink interface and return weght by method

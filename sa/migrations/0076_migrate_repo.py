@@ -17,6 +17,6 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     SCRIPT = "scripts/migrate-repo"
 
-    def migrate(self):
+    def migrate(self) -> None:
         if os.path.isfile(self.SCRIPT) and os.access(self.SCRIPT, os.X_OK):
             subprocess.check_call([sys.executable, self.SCRIPT, "config"])

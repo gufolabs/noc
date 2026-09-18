@@ -1,13 +1,13 @@
 # ----------------------------------------------------------------------
 # Configured Map class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import itertools
-from typing import Dict, List, Optional, Iterable, Any
+from typing import Iterable, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -32,12 +32,12 @@ class ConfiguredTopology(TopologyBase):
     NORMALIZE_POSITION = False
     ISOLATED_WIDTH = 600
 
-    def __init__(self, gen_id, **settings):
+    def __init__(self, gen_id, **settings) -> None:
         self.cfgmap: ConfiguredMap = ConfiguredMap.get_by_id(gen_id)
         super().__init__(**settings)
 
     @property
-    def gen_id(self) -> Optional[str]:
+    def gen_id(self) -> str | None:
         return str(self.cfgmap.id)
 
     @property
@@ -65,10 +65,9 @@ class ConfiguredTopology(TopologyBase):
     def iter_maps(
         cls,
         parent: str | None = None,
-        query: Optional[str] = None,
-        limit: Optional[int] = None,
-        start: Optional[int] = None,
-        page: Optional[int] = None,
+        query: str | None = None,
+        limit: int | None = None,
+        start: int | None = None,
     ) -> Iterable[MapItem]:
         data = ConfiguredMap.objects.filter().order_by("name")
         if query:
@@ -85,24 +84,23 @@ class ConfiguredTopology(TopologyBase):
             )
 
     @classmethod
-    def iter_path(cls, gen_id) -> Iterable[PathItem]:
+    def iter_path(cls, gen_id: str) -> Iterable[PathItem]:
         cfg = ConfiguredMap.get_by_id(gen_id)
         yield PathItem(title=str(cfg.name), id=str(cfg.id), level=1)
 
-    def add_objects_links(self, object_ids: List[int]):
+    def add_objects_links(self, object_ids: list[int]):
         """
         Add ManagedObject Links to topology
-        :param object_ids:
         :return:
         """
         # Get all links, belonging to object list
-        links: List[Link] = list(Link.objects.filter(linked_objects__in=object_ids))
+        links: list[Link] = list(Link.objects.filter(linked_objects__in=object_ids))
         # All linked interfaces from map
-        all_ifaces: List["ObjectId"] = list(
+        all_ifaces: list["ObjectId"] = list(
             itertools.chain.from_iterable(link.interface_ids for link in links)
         )
         # Bulk fetch all interfaces data
-        self._interface_cache: Dict["ObjectId", "Interface"] = {
+        self._interface_cache: dict["ObjectId", "Interface"] = {
             i["_id"]: i
             for i in Interface._get_collection().find(
                 {"_id": {"$in": all_ifaces}},
@@ -139,7 +137,7 @@ class ConfiguredTopology(TopologyBase):
         parent_links = []
         object_mos = set()
         object_cpes = set()
-        nodes: Dict[str, Any] = {}
+        nodes: dict[str, Any] = {}
         # Extract Nodes
         for nc in self.cfgmap.nodes:
             ni = nc.get_topology_node()
@@ -212,7 +210,6 @@ class ConfiguredTopology(TopologyBase):
     def q_node(node):
         """
         Format graph node
-        :param node:
         :return:
         """
         x = node.copy()

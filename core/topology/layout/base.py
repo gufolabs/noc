@@ -6,10 +6,10 @@
 # ----------------------------------------------------------------------
 
 
-class LayoutBase(object):
+class LayoutBase:
     DEFAULT_LEVEL = 10
 
-    def __init__(self, topology):
+    def __init__(self, topology) -> None:
         self.topology = topology
 
     def get_layout(self):

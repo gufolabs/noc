@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 from math import asin
 
 # NOC modules
@@ -21,5 +20,5 @@ class ASinNode(BaseCDAGNode):
     name = "asin"
     categories = [Category.MATH]
 
-    def get_value(self, x: ValueType) -> Optional[ValueType]:
+    def get_value(self, x: ValueType) -> ValueType | None:
         return asin(x)

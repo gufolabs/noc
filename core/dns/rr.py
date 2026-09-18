@@ -15,7 +15,7 @@ TYPE_PREF = {"NS": 0, "MX": 10}
 DEFAULT_PREF = 100
 
 
-class RR(object):
+class RR:
     __slots__ = [
         "_content",
         "_idna",
@@ -29,7 +29,7 @@ class RR(object):
         "zone",
     ]
 
-    def __init__(self, zone, name, ttl, type, rdata, priority=None):
+    def __init__(self, zone, name, ttl, type, rdata, priority=None) -> None:
         self.zone = zone
         self.name = name
         self.ttl = ttl
@@ -39,9 +39,9 @@ class RR(object):
         if name.endswith("."):
             self._idna = to_idna(name)
         elif name:
-            self._idna = to_idna("%s.%s." % (name, zone))
+            self._idna = to_idna(f"{name}.{zone}.")
         else:
-            self._idna = to_idna("%s." % zone)
+            self._idna = to_idna(f"{zone}.")
         if type in ("NS", "MX", "CNAME"):
             self._content = to_idna(rdata)
         else:
@@ -51,8 +51,8 @@ class RR(object):
         l_suffix = len(to_idna(zone)) + 1
         self._sorder = self._idna[:-l_suffix]
 
-    def __repr__(self):
-        return "<RR %s %s %s>" % (self.name, self.type, self.rdata)
+    def __repr__(self) -> str:
+        return f"<RR {self.name} {self.type} {self.rdata}>"
 
     def __lt__(self, other):
         # Check type preferences

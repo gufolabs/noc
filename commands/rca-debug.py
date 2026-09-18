@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ./noc rca-debug
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -9,6 +9,7 @@
 import datetime
 from collections import namedtuple
 import operator
+import argparse
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -34,7 +35,7 @@ Record = namedtuple(
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("--delta", type=int, default=60, help="Alarm delta")
         parser.add_argument(
             "--trace", action="store_true", default=False, help="Trace RCA decision"
@@ -91,11 +92,11 @@ class Command(BaseCommand):
         for x in sorted(r, key=operator.attrgetter("timestamp")):
             self.print(MASK % x)
         if trace:
-            self.print("Time range: %s -- %s" % (t0, t1))
+            self.print(f"Time range: {t0} -- {t1}")
             self.print(
                 "Topology RCA Window: %s"
                 % (
-                    "%ss" % config.correlator.topology_rca_window
+                    f"{config.correlator.topology_rca_window}s"
                     if config.correlator.topology_rca_window
                     else "Disabled"
                 )
@@ -104,19 +105,17 @@ class Command(BaseCommand):
             for x in sorted(r, key=operator.attrgetter("timestamp")):
                 if not x.alarm_id:
                     continue
-                self.print("@@@ %s %s %s" % (x.timestamp, x.alarm_id, x.managed_object))
+                self.print(f"@@@ {x.timestamp} {x.alarm_id} {x.managed_object}")
                 self.topology_rca(amap[x.alarm_id], alarms)
             # Dump
             for a in amap:
                 if hasattr(amap[a], "_trace_root"):
-                    self.print("%s -> %s" % (a, amap[a]._trace_root))
+                    self.print(f"{a} -> {amap[a]._trace_root}")
 
     def topology_rca(self, alarm, alarms, ts=None):
         def can_correlate(a1, a2):
             """
             Check if alarms can be correlated together (within corellation window)
-            :param a1:
-            :param a2:
             :return:
             """
             return (
@@ -128,7 +127,6 @@ class Command(BaseCommand):
         def all_uplinks_failed(a1):
             """
             Check if all uplinks for alarm is failed
-            :param a1:
             :return:
             """
             if not a1.uplinks:
@@ -142,7 +140,6 @@ class Command(BaseCommand):
             Uplinks are ordered according to path length.
             Return first applicable
 
-            :param a1:
             :return:
             """
             for u in a1.uplinks:
@@ -154,7 +151,6 @@ class Command(BaseCommand):
         def iter_downlink_alarms(a1):
             """
             Yield all downlink alarms
-            :param a1:
             :return:
             """
             imo = a1.managed_object.id
@@ -165,18 +161,17 @@ class Command(BaseCommand):
         def correlate(a1):
             """
             Correlate with uplink alarms if all uplinks are faulty.
-            :param a1:
             :return:
             """
             if not all_uplinks_failed(a1):
                 return
             a2 = get_root(a1)
             if a2:
-                self.print("+++ SET ROOT %s -> %s" % (a1.id, a2.id))
+                self.print(f"+++ SET ROOT {a1.id} -> {a2.id}")
                 a1._trace_root = a2.id
 
         ts = ts or alarm.timestamp
-        self.print(">>> topology_rca(%s)" % alarm.id)
+        self.print(f">>> topology_rca({alarm.id})")
         if hasattr(alarm, "_trace_root"):
             self.print("<<< already correlated")
             return
@@ -190,20 +185,21 @@ class Command(BaseCommand):
                 na[n] = a
                 uplinks |= set(a.uplinks)
         self.print(
-            "    Neighbor alarms: %s"
-            % ", ".join(
-                "%s%s (%s)" % ("U:" if x in uplinks else "", na[x], ManagedObject.get_by_id(x).name)
-                for x in na
+            "    Neighbor alarms: {}".format(
+                ", ".join(
+                    "{}{} ({})".format(
+                        "U:" if x in uplinks else "", na[x], ManagedObject.get_by_id(x).name
+                    )
+                    for x in na
+                )
             )
         )
-        self.print("    Uplinks: %s" % ", ".join(ManagedObject.get_by_id(u).name for u in uplinks))
+        self.print(
+            "    Uplinks: {}".format(", ".join(ManagedObject.get_by_id(u).name for u in uplinks))
+        )
         # Correlate current alarm
         correlate(alarm)
         # Correlate all downlink alarms
         for a in iter_downlink_alarms(alarm):
             correlate(a)
         self.print("<<< done")
-
-
-if __name__ == "__main__":
-    Command().run()

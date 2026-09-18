@@ -1,13 +1,12 @@
 # ----------------------------------------------------------------------
 # DiagnosticItem
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import datetime
-from typing import Dict, List, Optional
 
 # Third-party modules
 from mongoengine.document import EmbeddedDocument
@@ -22,6 +21,7 @@ from mongoengine.fields import (
 
 # NOC modules
 from noc.core.diagnostic.types import DiagnosticState, DiagnosticValue, CheckStatus
+from noc.core.models.inputsources import InputSource
 
 
 class CheckItem(EmbeddedDocument):
@@ -29,9 +29,11 @@ class CheckItem(EmbeddedDocument):
 
     name: str = StringField(required=True)
     status: bool = BooleanField(required=True)
-    args: Dict[str, str] = DictField(required=False)
+    args: dict[str, str] = DictField(required=False)
     skipped: bool = BooleanField(default=False)
-    error: Optional[str] = StringField(required=False)
+    expired: datetime.datetime | None = DateTimeField(required=False)
+    source: InputSource = EnumField(InputSource, required=True, default=InputSource.UNKNOWN)
+    error: str | None = StringField(required=False)
 
     def __str__(self):
         if not self.args:
@@ -45,6 +47,8 @@ class CheckItem(EmbeddedDocument):
             status=self.status,
             skipped=self.skipped,
             error=self.error or None,
+            expired=self.expired or None,
+            source=self.source,
         )
 
     @classmethod
@@ -55,6 +59,8 @@ class CheckItem(EmbeddedDocument):
             status=value.status,
             skipped=value.skipped,
             error=value.error or None,
+            expired=value.expired,
+            source=value.source,
         )
 
 
@@ -63,12 +69,12 @@ class DiagnosticItem(EmbeddedDocument):
 
     diagnostic = StringField(required=True)
     state: DiagnosticState = EnumField(DiagnosticState, default=DiagnosticState("unknown"))
-    checks: Optional[List[CheckItem]] = EmbeddedDocumentListField(CheckItem)
-    reason: Optional[str] = StringField(required=False)
-    changed: Optional[datetime.datetime] = DateTimeField(required=False)
+    checks: list[CheckItem] | None = EmbeddedDocumentListField(CheckItem)
+    reason: str | None = StringField(required=False)
+    changed: datetime.datetime | None = DateTimeField(required=False)
 
     def __str__(self):
-        return f"{self.diagnostic}: {','.join(c for c in self.checks)}; C: {self.changed}"
+        return f"{self.diagnostic}: {','.join(c.name for c in self.checks)}; C: {self.changed}"
 
     def get_value(self) -> DiagnosticValue:
         """Convert to Value"""

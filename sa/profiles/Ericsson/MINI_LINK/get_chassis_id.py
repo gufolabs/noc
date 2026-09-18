@@ -23,7 +23,7 @@ class Script(BaseScript):
     def execute(self):
         r = []
         for i in [0, 1, 2, 3]:  # XXX: need more examples
-            c = self.cli_clean("show board 1/%s" % i)
+            c = self.cli_clean(f"show board 1/{i}")
             if "No board in slot" in c:
                 continue
             match1 = self.re_search(self.rx_mac_begin, c)

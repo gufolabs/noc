@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import Optional, List
 from urllib.parse import urlparse
 
 
@@ -25,20 +24,20 @@ from noc.core.tt.types import (
     TTChange,
 )
 from noc.core.span import Span
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 
 
 class TGBotTTSystem(BaseTTSystem):
     TU_REQUEST_TIMEOUT = 30
     actions = [TTAction.ACK, TTAction.UN_ACK]
 
-    def __init__(self, name, connection):
+    def __init__(self, name, connection) -> None:
         """
         Connection is WSDL path
         """
-        super(TGBotTTSystem, self).__init__(name, connection)
+        super().__init__(name, connection)
         p = urlparse(connection)
-        self.url = "https://%s%s" % (p.netloc, p.path)
+        self.url = f"https://{p.netloc}{p.path}"
         self.http_client = HttpClient(
             connect_timeout=10,
             timeout=self.TU_REQUEST_TIMEOUT,
@@ -73,7 +72,7 @@ class TGBotTTSystem(BaseTTSystem):
             )
 
     @staticmethod
-    def get_inline_keyboard(actions: List[TTActionContext]):
+    def get_inline_keyboard(actions: list[TTActionContext]):
         r = []
         if not actions:
             return {}
@@ -129,10 +128,10 @@ class TGBotTTSystem(BaseTTSystem):
 
     def get_updates(
         self,
-        last_run: Optional[datetime] = None,
-        last_update: Optional[str] = None,
-        tt_ids: Optional[List[str]] = None,
-    ) -> List[TTChange]:
+        last_run: datetime.datetime | None = None,
+        last_update: str | None = None,
+        tt_ids: list[str] | None = None,
+    ) -> list[TTChange]:
         status, _, body = self.http_client.get(f"{self.url}/getUpdates")
         r = []
         if status != 200:
@@ -173,9 +172,8 @@ class TGBotTTSystem(BaseTTSystem):
                 )
         return r
 
-    def get_tt(self, tt_id: str) -> Optional[TTInfo]:
+    def get_tt(self, tt_id: str) -> TTInfo | None:
         """
         getUpdates
-        :param tt_id:
         :return:
         """

@@ -15,7 +15,7 @@ BULK = 5000
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         mdb = self.mongo_db
         si_db = mdb["serviceinstances"]
         bulk = []

@@ -32,7 +32,7 @@ class AddressDataStream(DataStream):
             "id": str(address.id),
             "name": qs(address.name),
             "address": str(address.address),
-            "afi": "ipv%s" % address.afi,
+            "afi": f"ipv{address.afi}",
             "source": address.source,
         }
         if address.description:

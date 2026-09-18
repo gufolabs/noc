@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 from collections import defaultdict
-from typing import Dict, Any
+from typing import Any
 
 # NOC modules
 from noc.config import config
@@ -55,7 +55,7 @@ class MAC(Model):
       AND uni = 1;
     """
 
-    class Meta(object):
+    class Meta:
         db_table = "mac"
         engine = MergeTree(
             "date", ("date", "managed_object"), primary_keys=("date", "managed_object")
@@ -73,7 +73,7 @@ class MAC(Model):
     from_event = UInt8Field(description=_("Row deployed from event"))
 
     def mac_filter(
-        self, query: Dict[str, Any], offset: int = 0, limit: int = 400, convert_mac: bool = False
+        self, query: dict[str, Any], offset: int = 0, limit: int = 400, convert_mac: bool = False
     ):
         """
         Filter interface to MACDB
@@ -110,12 +110,12 @@ class MAC(Model):
                 field = "MACNumToString(mac)"
             # @todo convert mac all
             if isinstance(query[k], list) and len(query[k]) == 1:
-                arg = query[k][0].strip()
-            elif isinstance(query[k], str):
-                arg = query[k].strip()
+                arg = query[k][0]
             else:
                 arg = query[k]
-            f_filter["$and"] += [{"$%s" % q: [{"$field": field}, arg]}]
+            if isinstance(arg, str):
+                arg = arg.strip()
+            f_filter["$and"] += [{f"${q}": [{"$field": field}, arg]}]
         if not f_filter:
             return
         fields = [

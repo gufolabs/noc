@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # BaseReportDatasource
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -9,7 +9,7 @@
 import datetime
 from dataclasses import dataclass, field
 from io import BytesIO, StringIO
-from typing import List, Optional, Dict, Iterable, Any, Tuple, Callable, Union
+from typing import Optional, Iterable, Any, Callable
 import time
 import re
 import heapq
@@ -22,7 +22,6 @@ from django.db.models import Q as d_Q
 
 # NOC modules
 from noc.aaa.models.user import User
-from noc.core.comp import smart_bytes
 from noc.sa.models.managedobject import ManagedObject
 from .report_objectstat import (
     AttributeIsolator,
@@ -60,7 +59,7 @@ def merge(iterators):
             yield val
 
 
-class BaseReportColumn(object):
+class BaseReportColumn:
     """
     Base report column class.
     Column is dataseries: ((id1: value1), (id2: value2)) - id - index sorted by asc
@@ -74,11 +73,7 @@ class BaseReportColumn(object):
     multiple_series = False  # Extract return dict columns dataseries
     # {"Series1_name": dataseries1, "Series2_name": dataseries2}
 
-    def __init__(self, sync_ids=None):
-        """
-
-        :param sync_ids:
-        """
+    def __init__(self, sync_ids=None) -> None:
         self.sync_ids = sync_ids  # Sorted Index list
         self.sync_ids_i = iter(self.sync_ids)
         self._current_id = self.next_id()
@@ -189,7 +184,7 @@ class BaseReportColumn(object):
         # raise NotImplementedError
 
 
-class LongestIter(object):
+class LongestIter:
     """
     c_did = DiscoveryID._get_collection()
     did = c_did.find({"hostname": {"$exists": 1}},
@@ -199,7 +194,7 @@ class LongestIter(object):
     hostname = LongestIter(did)
     """
 
-    def __init__(self, it):
+    def __init__(self, it) -> None:
         self._iterator = it
         self._end_iterator = False
         self._id = 0
@@ -233,7 +228,7 @@ class LongestIter(object):
         self._end_iterator = True
 
 
-class ReportModelFilter(object):
+class ReportModelFilter:
     """
     Getting statictics info for ManagedObject
     """
@@ -242,7 +237,7 @@ class ReportModelFilter(object):
 
     model = ManagedObject  # Set on base class
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.formulas = """2is1.3hs0, 2is1.3hs0.5is1, 2is1.3hs0.5is2,
                 2is1.3hs0.5is2.4hs0, 2is1.3hs0.5is2.4hs1, 2is1.3hs0.5is2.4hs1.5hs1"""
         self.f_map = {
@@ -256,14 +251,13 @@ class ReportModelFilter(object):
     def decode(self, formula):
         """
         Decode stat formula and return isolated set
-        :param formula:
         :return: moss: Result Query for Object
         :return: ids: Result id list for object
         """
         ids = []
         moss = self.model.objects.filter()
         for f in formula.split("."):
-            self.logger.debug("Decoding: %s" % f)
+            self.logger.debug(f"Decoding: {f}")
             f_num, f_type, f_val = self.decode_re.findall(f.lower())[0]
             func_stat = self.f_map[f_type]
             func_stat = getattr(func_stat, "get_stat")(f_num, f_val)
@@ -297,11 +291,11 @@ class ReportModelFilter(object):
 class ReportField:
     name: str
     label: str
-    description: Optional[str] = ""
-    unit: Optional[str] = None
-    summary: Optional[bool] = False
-    default: Optional[str] = None
-    metric_name: Optional[str] = None  # Field name on clickhouse
+    description: str | None = ""
+    unit: str | None = None
+    summary: bool | None = False
+    default: str | None = None
+    metric_name: str | None = None  # Field name on clickhouse
     group: bool = False
     hidden: bool = False
 
@@ -317,7 +311,7 @@ class ReportFilter:
     name: str
     type: str
     description: str
-    values: Optional[FilterValues]
+    values: FilterValues | None
     required: bool
 
 
@@ -327,52 +321,52 @@ class ReportConfig:
     description: str
     timebased: bool
     enabled: bool
-    fields: List[ReportField]
-    columns: List[ReportField] = field(init=False)
-    groupby: List[str]
-    intervals: List[str]
-    filters: List[ReportFilter]
+    fields: list[ReportField]
+    columns: list[ReportField] = field(init=False)
+    groupby: list[str]
+    intervals: list[str]
+    filters: list[ReportFilter]
     dataretentiondays: int
 
     def __post_init__(self):
         self.columns = list(self.fields)
 
 
-class ReportDataSource(object):
+class ReportDataSource:
     name = None
     description = None
     object_model = None
 
     # (List#, Name, Alias): TypeNormalizer or (TypeNormalizer, DefaultValue)
-    FIELDS: List[ReportField] = []
-    INTERVALS: List[str] = ["HOUR"]
+    FIELDS: list[ReportField] = []
+    INTERVALS: list[str] = ["HOUR"]
     TIMEBASED: bool = False
     SORTED: bool = True
 
     def __init__(
         self,
-        fields: List[str],
-        objectids: List[str] = None,
+        fields: list[str],
+        objectids: list[str] = None,
         allobjectids: bool = False,
-        start: Optional[datetime.datetime] = None,
-        end: Optional[datetime.datetime] = None,
-        interval: Optional[str] = None,
-        max_intervals: Optional[int] = None,
-        filters: Optional[List[Dict[str, Union[List[str], str]]]] = None,
-        rows: Optional[int] = None,
-        groups: Optional[List[str]] = None,
+        start: datetime.datetime | None = None,
+        end: datetime.datetime | None = None,
+        interval: str | None = None,
+        max_intervals: int | None = None,
+        filters: list[dict[str, list[str] | str]] | None = None,
+        rows: int | None = None,
+        groups: list[str] | None = None,
         user: Optional["User"] = None,
     ):
-        self.query_fields: List[str] = fields
-        self.fields: Dict[str, ReportField] = self.get_fields(fields)  # OrderedDict
+        self.query_fields: list[str] = fields
+        self.fields: dict[str, ReportField] = self.get_fields(fields)  # OrderedDict
         self.fields_summary = self.get_summary_fields(fields)
         self.objectids = objectids
         self.allobjectids: bool = allobjectids
-        self.filters: List[Dict[str, Union[List[str], str]]] = filters or []
+        self.filters: list[dict[str, list[str] | str]] = filters or []
         self.interval: str = interval
         self.max_intervals: int = max_intervals
         self.rows: int = rows
-        self.groups: List[str] = groups or []
+        self.groups: list[str] = groups or []
         if self.TIMEBASED and not start:
             raise ValueError("Timebased Report required start param")
         self.end: datetime.datetime = end or datetime.datetime.now()
@@ -419,26 +413,26 @@ class ReportDataSource(object):
                     r[query_f] = f
         return r
 
-    def get_summary_statistics(self) -> Dict[str, Any]:
+    def get_summary_statistics(self) -> dict[str, Any]:
         # Return summary
         return {}
 
     def iter_data(self):
         pass
 
-    def extract(self) -> Iterable[Dict[str, int]]:
+    def extract(self) -> Iterable[dict[str, int]]:
         """
         Generate list of rows. Each row is a list of fields. First value - is id
         :return:
         """
         raise NotImplementedError
 
-    def report_json(self, fmt: Optional[Callable] = None):
+    def report_json(self, fmt: Callable | None = None):
         import orjson
 
         return orjson.dumps(list(self.extract()))
 
-    def report_csv(self, fmt: Optional[Callable] = None) -> bytes:
+    def report_csv(self, fmt: Callable | None = None) -> bytes:
         import csv
 
         response = StringIO()
@@ -446,20 +440,20 @@ class ReportDataSource(object):
             response, dialect="excel", delimiter=";", quotechar='"', quoting=csv.QUOTE_NONNUMERIC
         )
         # Header
-        writer.writerow((self.fields[f].label for f in self.fields if not self.fields[f].hidden))
+        writer.writerow(self.fields[f].label for f in self.fields if not self.fields[f].hidden)
         for row in self.extract():
-            writer.writerow((row[f] for f in self.fields if not self.fields[f].hidden))
+            writer.writerow(row[f] for f in self.fields if not self.fields[f].hidden)
 
-        return smart_bytes(response.getvalue())
+        return response.getvalue().encode()
 
-    def report_xlsx(self, fmt: Optional[Callable] = None) -> bytes:
+    def report_xlsx(self, fmt: Callable | None = None) -> bytes:
         import xlsxwriter
 
         response = BytesIO()
         wb = xlsxwriter.Workbook(response)
         cf1 = wb.add_format({"bottom": 1, "left": 1, "right": 1, "top": 1})
         ws = wb.add_worksheet("Data")
-        max_column_data_length: Dict[str, int] = {}
+        max_column_data_length: dict[str, int] = {}
         # Header
         for cn, c in enumerate(self.fields):
             if self.fields[c].hidden:
@@ -522,7 +516,7 @@ class CHTableReportDataSource(ReportDataSource):
         "MONTH": "toMonth(toDateTime(ts))",
     }
 
-    def get_group(self) -> Tuple[List[str], List[str]]:
+    def get_group(self) -> tuple[list[str], list[str]]:
         """
         If set max_intervals - use variants interval
         :return:
@@ -540,7 +534,7 @@ class CHTableReportDataSource(ReportDataSource):
 
         return select, group
 
-    def get_custom_conditions(self) -> Dict[str, List[str]]:
+    def get_custom_conditions(self) -> dict[str, list[str]]:
         if not self.filters:
             return {}
         where, having = [], []
@@ -630,5 +624,4 @@ class CHTableReportDataSource(ReportDataSource):
                     yield orjson.loads(row)
 
     def extract(self):
-        for row in self.do_query():
-            yield row
+        yield from self.do_query()

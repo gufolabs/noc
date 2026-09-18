@@ -9,7 +9,6 @@
 from collections import defaultdict
 from dataclasses import dataclass
 import logging
-from typing import Dict
 
 # NOC modules
 from noc.core.ioloop.timers import PeriodicCallback
@@ -30,7 +29,7 @@ class StormRecord:
     storm_threshold: int
 
 
-class StormProtection(object):
+class StormProtection:
     """Message Storm Protection class
 
     An instance of the `Storm Protection` class is installed at the message receiving point to
@@ -81,7 +80,7 @@ class StormProtection(object):
         self.storm_record_ttl = storm_record_ttl
         self.alarm_class = alarm_class
         self.service = get_service()
-        self.storm_table: Dict[str, StormRecord] = defaultdict(
+        self.storm_table: dict[str, StormRecord] = defaultdict(
             lambda: StormRecord(
                 messages_count=0,
                 verbose=False,
@@ -158,8 +157,6 @@ class StormProtection(object):
         Performs necessary actions with message according to storm policy of the device,
         i.e. raise alarm.
         Return True if message must be blocked in service and False otherwise.
-        :param ip_address:
-        :param address_config:
         :return:
         """
         self.register_message(ip_address, address_config.storm_threshold)

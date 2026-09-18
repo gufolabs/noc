@@ -1,19 +1,19 @@
 # ---------------------------------------------------------------------
 # fm.event application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import datetime
-from typing import Optional, List
 
 # Third-party modules
 import orjson
+from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.fm.models.eventclass import EventClass
 from noc.sa.models.managedobject import ManagedObject
 from noc.sa.models.useraccess import UserAccess
@@ -40,8 +40,8 @@ class EventApplication(ExtApplication):
     icon = "icon_find"
     ignored_params = ["status", "_dc"]
 
-    @view(method=["GET", "POST"], url="^$", access="read", api=True)
-    def api_list(self, request):
+    @api.get("^$", access="read")
+    def api_list(self, request: HttpRequest):
         q = self.parse_request_query(request)
         start = q.get("__start") or 0
         limit = q.get("__limit") or 50
@@ -87,14 +87,14 @@ class EventApplication(ExtApplication):
     @classmethod
     def get_filter(
         cls,
-        managed_object: Optional[int] = None,
-        segment: Optional[str] = None,
-        from_query: Optional[str] = None,
-        to_query: Optional[str] = None,
-        groups: Optional[List[str]] = None,
-        administrative_domains: Optional[List[int]] = None,
-        event_class: Optional[str] = None,
-    ) -> List[str]:
+        managed_object: int | None = None,
+        segment: str | None = None,
+        from_query: str | None = None,
+        to_query: str | None = None,
+        groups: list[str] | None = None,
+        administrative_domains: list[int] | None = None,
+        event_class: str | None = None,
+    ) -> list[str]:
         """"""
         r = []
         if managed_object:
@@ -127,17 +127,16 @@ class EventApplication(ExtApplication):
     @classmethod
     def event_query(
         cls,
-        managed_object: Optional[int] = None,
-        segment: Optional[str] = None,
-        from_query: Optional[datetime.date] = None,
-        to_query: Optional[datetime.date] = None,
-        groups: Optional[List[str]] = None,
-        event_class: Optional[str] = None,
-        administrative_domains: Optional[List[int]] = None,
-        offset: Optional[int] = None,
-        limit: Optional[int] = None,
+        managed_object: int | None = None,
+        segment: str | None = None,
+        from_query: datetime.date | None = None,
+        to_query: datetime.date | None = None,
+        groups: list[str] | None = None,
+        event_class: str | None = None,
+        administrative_domains: list[int] | None = None,
+        offset: int | None = None,
+        limit: int | None = None,
     ):
-        """ """
         sql = [
             f"SELECT  e.event_id as id, e.ts as timestamp, nullIf(e.event_class, 0) as event_class_bi_id,"
             f" nullIf(e.managed_object, 0) as managed_object_bi_id, e.target as target, e.target_name as target_name,"
@@ -160,7 +159,7 @@ class EventApplication(ExtApplication):
             event_class,
         )
         if filter_x:
-            sql += ["WHERE %s" % " AND ".join(filter_x)]
+            sql += ["WHERE {}".format(" AND ".join(filter_x))]
         sql += ["ORDER BY ts DESC"]
         if limit and offset:
             sql += [f"LIMIT {offset}, {limit}"]
@@ -233,8 +232,8 @@ class EventApplication(ExtApplication):
             out += [r]
         return out, rows_count
 
-    @view(url=r"^(?P<id>[a-z0-9]{24})/reclassify/$", method=["POST"], api=True, access="reclassify")
-    def api_reclassify(self, request, id):
+    @api.post(r"^(?P<id>[a-z0-9]{24})/reclassify/$", access="reclassify")
+    def api_reclassify(self, request: HttpRequest, id):
         q = self.parse_request_query(request)
         if q.get("managed_object_id"):
             mo = ManagedObject.get_by_id(q["managed_object_id"])
@@ -278,7 +277,7 @@ class EventApplication(ExtApplication):
         svc.publish(orjson.dumps(data), stream=s, partition=p)
         return {"status": True}
 
-    @view(url=r"^(?P<id>[a-z0-9]{24})/json/$", method=["GET"], api=True, access="launch")
-    def api_json(self, request, id):
+    @api.get(r"^(?P<id>[a-z0-9]{24})/json/$", access="launch")
+    def api_json(self, request: HttpRequest, id):
         e = Event.get_by_id(id)
         return orjson.dumps(e.model_dump(), option=orjson.OPT_INDENT_2).decode()

@@ -268,9 +268,9 @@ Ext.define("NOC.sa.service.InstancesPanel", {
   onClose: function(){
     var app = this.up("[appId=sa.service]"),
       showOnClose = this.getViewModel().get("showOnClose");
-    if(showOnClose === "ITEM_GRID") Ext.History.setHash("sa.service");
+    if(showOnClose === "ITEM_GRID") NOC.navigation.navigate("sa.service");
     app.showItem(app[showOnClose]);
-    Ext.History.setHash(app.appId);
+    NOC.navigation.navigate(app.appId);
     app.reloadStore();
   },
   load: function(appId, recordId, showOnClose){
@@ -280,7 +280,7 @@ Ext.define("NOC.sa.service.InstancesPanel", {
     vm.set("enableRegisterBtn", this.up().hasPermission("register_instance"));
     vm.set("enableUnregisterBtn", this.up().hasPermission("unregister_instance"));
     // this.mask(__("Loading instances..."));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/service/" + recordId + "/instance/",
       method: "GET",
       scope: this,
@@ -400,7 +400,7 @@ Ext.define("NOC.sa.service.InstancesPanel", {
     this.request(url, params, context.record);
   },
   request: function(url, params, record){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "PUT",
       scope: this,
@@ -428,7 +428,7 @@ Ext.define("NOC.sa.service.InstancesPanel", {
       instanceId = vm.get("selectedInstance").id,
       url = "/sa/service/" + serviceId + "/unregister_instance/" + instanceId + "/";
     
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "POST",
       scope: this,
@@ -448,7 +448,7 @@ Ext.define("NOC.sa.service.InstancesPanel", {
     });
   },
   reloadInstanceStore: function(serviceId){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/service/" + serviceId + "/instance/",
       method: "GET",
       scope: this,

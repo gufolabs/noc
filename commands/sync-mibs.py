@@ -27,7 +27,7 @@ from noc.core.comp import smart_text
 class Command(BaseCommand):
     help = "Upload bundled MIBs"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         (
             parser.add_argument(
                 "-f",
@@ -69,7 +69,7 @@ class Command(BaseCommand):
             if path.endswith(".gz"):
                 f = gzip.GzipFile(path, "r")
             else:
-                f = open(path, "r")
+                f = open(path)
             if mib:
                 data = smart_text(f.read(4096))
                 match = self.rx_last_updated.search(data)
@@ -79,7 +79,7 @@ class Command(BaseCommand):
                     match = self.rx_last_updated.search(data)
                 last_updated = self.decode_date(match.group(1))
                 if (last_updated > mib.last_updated) or force:
-                    self.print("    updating %s" % mib_name)
+                    self.print(f"    updating {mib_name}")
                     self.update_mib(mib, data + smart_text(f.read()), version=0)
                 elif last_updated == mib.last_updated:
                     # Check internal version
@@ -95,10 +95,10 @@ class Command(BaseCommand):
                         else:
                             version = 0
                     if version > mib.version:
-                        self.print("    updating %s" % mib_name)
+                        self.print(f"    updating {mib_name}")
                         self.update_mib(mib, data + smart_text(f.read()), version=version)
             else:
-                self.print("    creating %s" % mib_name)
+                self.print(f"    creating {mib_name}")
                 self.create_mib(f.read())
             f.close()
 
@@ -138,7 +138,3 @@ class Command(BaseCommand):
         # Upload
         if d["data"]:
             mib.load_data(d["data"])
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -53,12 +53,11 @@ class Script(BaseScript):
         WaveLength: 1570nm, Transmission Distance: 140km
         Rx Power: -31.54dBm, Warning range: [-33.979,  -9.003]dBm
         Tx Power:   3.03dBm, Warning range: [1.999,  6.999]dBm
-        :param interface:
         :return:
         """
         cmd = "display interface phy-option"
         if interface is not None:
-            cmd += " %s" % interface
+            cmd += f" {interface}"
         try:
             c = self.cli(cmd)
         except self.CLISyntaxError:
@@ -116,12 +115,11 @@ class Script(BaseScript):
           User Set Tx Power High Threshold(dBM)    :6.99
           User Set Tx Power Low Threshold(dBM)     :2.00
         -------------------------------------------------------------
-        :param interface:
         :return:
         """
         cmd = "dis transceiver verbose"
         if interface is not None:
-            cmd = "dis transceiver interface %s verbose" % interface
+            cmd = f"dis transceiver interface {interface} verbose"
         try:
             c = self.cli(cmd)
         except self.CLISyntaxError:
@@ -163,7 +161,7 @@ class Script(BaseScript):
             return self.execute_ar(interface=interface)
         cmd = "display transceiver diagnosis interface"
         if interface is not None:
-            cmd += " %s" % interface
+            cmd += f" {interface}"
         try:
             c = self.cli(cmd)
         except self.CLISyntaxError:

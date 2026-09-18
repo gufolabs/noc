@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # inv.map application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,16 +9,17 @@
 import itertools
 import threading
 from collections import defaultdict
-from typing import List, Set, Dict, Any
+from typing import Any
 
 # Third-party modules
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from django.http import HttpRequest
 from jinja2.environment import Environment
 from jinja2.exceptions import TemplateError
 from bson import ObjectId
 
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.inv.models.networksegment import NetworkSegment
 from noc.inv.models.interface import Interface
 from noc.inv.models.discoveryid import DiscoveryID
@@ -41,7 +42,7 @@ from noc.core.validators import is_objectid
 from noc.core.pm.utils import get_interface_metrics, MetricProxy
 from noc.core.translation import ugettext as _
 from noc.core.cache.decorator import cachedmethod
-from noc.core.topology.loader import loader
+from noc.core.topology.base import loader
 
 tags_lock = threading.RLock()
 
@@ -69,18 +70,10 @@ class MapApplication(ExtApplication):
     ST_DOWN = 4  # Object is down
     ST_MAINTENANCE = 32  # Maintenance bit
 
-    @view(
-        r"^(?P<gen_type>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/data/$",
-        method=["GET"],
-        access="read",
-        api=True,
-    )
-    def api_data(self, request, gen_type, gen_id):
+    @api.get(r"^(?P<gen_type>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/data/$", access="read")
+    def api_data(self, request: HttpRequest, gen_type, gen_id):
         """
         Return data for render map
-        :param request:
-        :param gen_type:
-        :param gen_id:
         :return:
         """
         try:
@@ -90,18 +83,10 @@ class MapApplication(ExtApplication):
         except ValueError as e:
             return {"id": gen_id, "name": f"{gen_type}: {gen_id}", "error": str(e)}
 
-    @view(
-        r"^(?P<gen_type>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/data/$",
-        method=["POST"],
-        access="write",
-        api=True,
-    )
-    def api_save(self, request, gen_type, gen_id):
+    @api.post(r"^(?P<gen_type>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/data/$", access="write")
+    def api_save(self, request: HttpRequest, gen_type, gen_id):
         """
         Save Manual layout
-        :param request:
-        :param gen_type:
-        :param gen_id:
         :return:
         """
         data = self.deserialize(request.body)
@@ -110,13 +95,8 @@ class MapApplication(ExtApplication):
         MapSettings.load_json(data, request.user.username)
         return {"status": True}
 
-    @view(
-        r"^(?P<gen_type>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/data/$",
-        method=["DELETE"],
-        access="write",
-        api=True,
-    )
-    def api_reset(self, request, gen_type, gen_id):
+    @api.delete(r"^(?P<gen_type>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/data/$", access="write")
+    def api_reset(self, request: HttpRequest, gen_type, gen_id):
         # MapSettings.objects.filter(gen_type=gen_type, gen_id=gen_id).delete()
         settings = MapSettings.objects.filter(gen_type=gen_type, gen_id=gen_id).first()
         if settings:
@@ -127,7 +107,7 @@ class MapApplication(ExtApplication):
 
     # Inspectors
 
-    def inspector_managedobject(self, request, id, mo_id):
+    def inspector_managedobject(self, request: HttpRequest, id, mo_id):
         # segment = self.get_object_or_404(NetworkSegment, id=id)
         if is_objectid(id):
             segment = NetworkSegment.get_by_id(str(id))
@@ -149,10 +129,10 @@ class MapApplication(ExtApplication):
             # "external": object.segment.id != segment.id,
             # "external_segment": {"id": str(object.segment.id), "name": object.segment.name},
             "caps": object.get_caps(),
-            "console_url": "%s://%s/" % (s, object.address),
+            "console_url": f"{s}://{object.address}/",
         }
 
-    def inspector_objectgroup(self, request, id, rg_id):
+    def inspector_objectgroup(self, request: HttpRequest, id, rg_id):
         object = self.get_object_or_404(ResourceGroup, id=rg_id)
         return {
             "id": str(object.id),
@@ -162,7 +142,7 @@ class MapApplication(ExtApplication):
             "external_segment": {},
         }
 
-    def inspector_objectsegment(self, request, id, rg_id):
+    def inspector_objectsegment(self, request: HttpRequest, id, rg_id):
         object = self.get_object_or_404(NetworkSegment, id=rg_id)
         return {
             "id": str(object.id),
@@ -172,12 +152,9 @@ class MapApplication(ExtApplication):
             "external_segment": {},
         }
 
-    def inspector_link(self, request, id, link_id):
+    def inspector_link(self, request: HttpRequest, id, link_id):
         """
         Link inpector
-        :param request:
-        :param id:
-        :param link_id:
         :return:
         """
         link = self.get_object_or_404(Link, id=link_id)
@@ -229,7 +206,7 @@ class MapApplication(ExtApplication):
                 r["utilisation"] = 0
         return r
 
-    def inspector_cloud(self, request, id, link_id):
+    def inspector_cloud(self, request: HttpRequest, id, link_id):
         self.get_object_or_404(NetworkSegment, id=id)
         link = self.get_object_or_404(Link, id=link_id)
         r = {
@@ -255,7 +232,7 @@ class MapApplication(ExtApplication):
             ]
         return r
 
-    def inspector_cpe(self, request, id, cpe_id):
+    def inspector_cpe(self, request: HttpRequest, id, cpe_id):
         cpe: "CPE" = self.get_object_or_404(CPE, id=cpe_id)
         caps = cpe.get_caps()
         return {
@@ -269,16 +246,13 @@ class MapApplication(ExtApplication):
             "caps": caps,
         }
 
-    @view(
-        url=r"^info/(?P<inspector>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/(?P<r_id>([0-9a-f]{24}|\d+))/$",
-        method=["GET"],
+    @api.get(
+        r"^info/(?P<inspector>\w+)/(?P<gen_id>[0-9a-f]{24}|\d+)/(?P<r_id>([0-9a-f]{24}|\d+))/$",
         access="read",
-        api=True,
     )
-    def inspector(self, request, inspector, gen_id, r_id):
+    def inspector(self, request: HttpRequest, inspector, gen_id, r_id):
         """
         API for map inspectors
-        :param request:
         :param inspector: Inspector name (node type)
         :param gen_id: Generator Id
         :param r_id: node_id
@@ -290,8 +264,8 @@ class MapApplication(ExtApplication):
         hi = getattr(self, f"inspector_{inspector}")
         return hi(request, gen_id, r_id)
 
-    @view(url=r"^info/segment/(?P<id>[0-9a-f]{24})/$", method=["GET"], access="read", api=True)
-    def api_info_segment(self, request, id):
+    @api.get(r"^info/segment/(?P<id>[0-9a-f]{24})/$", access="read")
+    def api_info_segment(self, request: HttpRequest, id):
         segment = self.get_object_or_404(NetworkSegment, id=id)
         return {
             "name": segment.name,
@@ -299,8 +273,8 @@ class MapApplication(ExtApplication):
             "objects": segment.managed_objects.count(),
         }
 
-    @view(method=["GET"], url=r"^lookup/$", access="lookup", api=True)
-    def api_lookup(self, request):
+    @api.get(r"^lookup/$", access="lookup")
+    def api_lookup(self, request: HttpRequest):
         """
         Lookup available map by generator.
         """
@@ -338,36 +312,28 @@ class MapApplication(ExtApplication):
                 status=self.NOT_FOUND,
             )
         # Search for maps
-        r = []
-        for mi in gen.iter_maps(
-            parent=parent if gen.name != parent else None,
-            query=g.get(self.query_param, ""),
-            limit=int(g.get(self.limit_param, 500)),
-            start=int(g.get(self.start_param, 0)),
-            page=int(g.get(self.page_param, 1)),
-        ):
-            r.append(
-                {
-                    "label": mi.title,
-                    "generator": mi.generator,
-                    "id": str(mi.id),
-                    "has_children": mi.has_children,
-                    "only_container": mi.only_container,
-                    "code": mi.code,
-                }
-            )
-        return r
+        r: list[dict[str, Any]] = []
+        with request.user.with_user():
+            for mi in gen.iter_maps(
+                parent=parent if parent not in ("0", gen.name) else None,
+                query=g.get(self.query_param, ""),
+                limit=int(g.get(self.limit_param, 500)),
+                start=int(g.get(self.start_param, 0)),
+            ):
+                r.append(
+                    {
+                        "label": mi.title,
+                        "generator": mi.generator,
+                        "id": str(mi.id),
+                        "has_children": mi.has_children,
+                        "only_container": mi.only_container,
+                        "code": mi.code,
+                    }
+                )
+            return r
 
-    @view(
-        method=["GET"], url=r"^(?P<gen_id>[0-9a-f]{24}|\d+)/get_path/$", access="lookup", api=True
-    )
-    def api_lookup_maps_get_path(self, request, gen_id):
-        """
-
-        :param request:
-        :param gen_id:
-        :return:
-        """
+    @api.get(r"^(?P<gen_id>[0-9a-f]{24}|\d+)/get_path/$", access="lookup")
+    def api_lookup_maps_get_path(self, request: HttpRequest, gen_id):
         # Parse params
         q = {str(k): v[0] if len(v) == 1 else v for k, v in request.GET.lists()}
         if self.gen_param not in q:
@@ -386,11 +352,9 @@ class MapApplication(ExtApplication):
             ]
         }
 
-    @view(
-        url=r"^objects_statuses/$",
-        method=["POST"],
+    @api.post(
+        r"^objects_statuses/$",
         access="read",
-        api=True,
         validate={
             "nodes": DictListParameter(
                 attrs={
@@ -403,12 +367,12 @@ class MapApplication(ExtApplication):
             )
         },
     )
-    def api_objects_statuses(self, request, nodes: List[Dict[str, str]]):
-        def get_alarms(objects: List[int]) -> Set[int]:
+    def api_objects_statuses(self, request: HttpRequest, nodes: list[dict[str, str]]):
+        def get_alarms(objects: list[int]) -> set[int]:
             """
             Returns a set of objects with alarms
             """
-            alarms: Set[int] = set()
+            alarms: set[int] = set()
             coll = ActiveAlarm._get_collection()
             while objects:
                 chunk, objects = objects[:500], objects[500:]
@@ -421,7 +385,7 @@ class MapApplication(ExtApplication):
                 alarms.update(d["_id"] for d in a)
             return alarms
 
-        def get_alarms_segment(segments: List[str]) -> Set[str]:
+        def get_alarms_segment(segments: list[str]) -> set[str]:
             if not segments:
                 return set()
             coll = ActiveAlarm._get_collection()
@@ -437,7 +401,7 @@ class MapApplication(ExtApplication):
             }
 
         nid = {}
-        metrics_template: Dict[str, str] = {}
+        metrics_template: dict[str, str] = {}
         group_nodes = {}  # (segment, group)
         cpes = set()
         # Build id -> object_id mapping
@@ -563,7 +527,17 @@ class MapApplication(ExtApplication):
 
     @classmethod
     @cachedmethod(key="managedobject-name-to-id-%s", lock=lambda _: tags_lock)
-    def managedobject_name_to_id(cls, name):
+    def managedobject_name_to_id(cls, name: str) -> int | None:
+        """
+        Get managed object's id by name.
+
+        Args:
+            name: Managed Object's name.
+
+        Returns:
+            ManagedObject id: if found.
+            None: otherwise.
+        """
         r = ManagedObject.objects.filter(name=name).values_list("id")
         if r:
             return r[0][0]
@@ -571,18 +545,29 @@ class MapApplication(ExtApplication):
 
     @classmethod
     @cachedmethod(key="interface-tags-to-id-%s-%s", lock=lambda _: tags_lock)
-    def interface_tags_to_id(cls, object_name, interface_name):
+    def interface_tags_to_id(cls, object_name: str, interface_name: str) -> ObjectId | None:
+        """
+        Get interface id.
+
+        Args:
+            object_name: Managed object name.
+            interface_name: Interface name.
+
+        Returns:
+            Interface id: if found.
+            None: if interface is not found.
+        """
         mo = cls.managedobject_name_to_id(object_name)
-        i = Interface._get_collection().find_one({"managed_object": mo, "name": interface_name})
+        i = Interface._get_collection().find_one(
+            {"managed_object": mo, "name": interface_name}, {"_id": 1}
+        )
         if i:
             return i["_id"]
         return None
 
-    @view(
-        url=r"^metrics/$",
-        method=["POST"],
+    @api.post(
+        r"^metrics/$",
         access="read",
-        api=True,
         validate={
             "metrics": DictListParameter(
                 attrs={
@@ -593,35 +578,40 @@ class MapApplication(ExtApplication):
             )
         },
     )
-    def api_metrics(self, request, metrics):
+    def api_metrics(self, request: HttpRequest, metrics):
         def q(s):
             if isinstance(s, str):
                 s = s.encode("utf-8")
             return s
 
         def qt(t):
-            return "|".join(["%s=%s" % (v, t[v]) for v in sorted(t)])
+            return "|".join([f"{v}={t[v]}" for v in sorted(t)])
 
+        # Filter misformated metrics
+        filtered_metrics = [
+            m
+            for m in metrics
+            if "tags" in m and m["tags"].get("object") and "interface" in m["tags"]
+        ]
+        if not filtered_metrics:
+            return {}
+        # Bulk resolve managed objects by name
+        # @todo: May break if mo name became non-unique
+        mo_names = [m["tags"]["object"] for m in filtered_metrics]
+        mo_map = {mo.name: mo for mo in ManagedObject.objects.filter(name__in=mo_names)}
+        if not mo_map:
+            return {}
         # Build query
         tag_id = {}  # object, interface -> id
         if_ids = {}  # id -> port id
         mlst = []  # (metric, object, interface)
-        for m in metrics:
-            if "object" in m["tags"] and "interface" in m["tags"]:
-                if not m["tags"]["object"]:
-                    continue
-                try:
-                    if_ids[
-                        self.interface_tags_to_id(m["tags"]["object"], m["tags"]["interface"])
-                    ] = m["id"]
-                    object = ManagedObject.objects.get(name=m["tags"]["object"])
-                    tag_id[object, m["tags"]["interface"]] = m["id"]
-                    mlst += [(m["metric"], object, m["tags"]["interface"])]
-                except KeyError:
-                    pass
-                # @todo: Get last values from cache
-        if not mlst:
-            return {}
+        for m in filtered_metrics:
+            object = mo_map.get(m["tags"]["object"])
+            if not object:
+                continue
+            if_ids[self.interface_tags_to_id(m["tags"]["object"], m["tags"]["interface"])] = m["id"]
+            tag_id[object, m["tags"]["interface"]] = m["id"]
+            mlst.append((m["metric"], object, m["tags"]["interface"]))
 
         r = {}
         # Apply interface statuses
@@ -632,7 +622,7 @@ class MapApplication(ExtApplication):
                 "admin_status": d.get("admin_status", True),
                 "oper_status": d.get("oper_status", True),
             }
-        metric_map, last_ts = get_interface_metrics([m[1] for m in mlst])
+        metric_map, _last_ts = get_interface_metrics([m[1] for m in mlst])
         # Apply metrics
         for rq_mo, rq_iface in tag_id:
             pid = tag_id.get((rq_mo, rq_iface))
@@ -648,44 +638,37 @@ class MapApplication(ExtApplication):
             r[pid]["Interface | Load | Out"] = int(metric_map[rq_mo][rq_iface]["load_out"])
         return r
 
-    @view(
-        url=r"^stp/status/$",
-        method=["POST"],
-        access="read",
-        api=True,
-        validate={"objects": ListOfParameter(IntParameter())},
+    @api.post(
+        r"^stp/status/$", access="read", validate={"objects": ListOfParameter(IntParameter())}
     )
-    def api_objects_stp_status(self, request, objects):
-        def get_stp_status(object_id):
-            roots = set()
-            blocked = set()
+    def api_objects_stp_status(self, request: HttpRequest, objects):
+        def get_stp_status(object_id: int) -> tuple[set[int], set[str]]:
+            roots: set[int] = set()
+            blocked: set[str] = set()
             object = ManagedObject.get_by_id(object_id)
             sr = object.scripts.get_spanning_tree()
             for instance in sr["instances"]:
                 ro = DiscoveryID.find_object_by_mac(instance["root_id"])
                 if ro:
-                    roots.add(ro)
-                for i in instance["interfaces"]:
-                    if i["state"] == "discarding" and i["role"] == "alternate":
-                        iface = object.get_interface(i["interface"])
+                    roots.add(ro.id)
+                for iface in instance["interfaces"]:
+                    if iface["state"] == "discarding" and iface["role"] == "alternate":
+                        iface = object.get_interface(iface["interface"])
                         if iface:
                             link = iface.link
                             if link:
                                 blocked.add(str(link.id))
-            return object_id, roots, blocked
+            return roots, blocked
 
-        r = {"roots": [], "blocked": []}
-        futures = []
+        roots: set[int] = set()
+        blocked: set[str] = set()
         with ThreadPoolExecutor(max_workers=10) as executor:
-            for o in objects:
-                futures += [executor.submit(get_stp_status, o)]
+            futures = [executor.submit(get_stp_status, o) for o in objects]
             for future in as_completed(futures):
                 try:
-                    obj, roots, blocked = future.result()
-                    for ro in roots:
-                        if ro.id not in r["roots"]:
-                            r["roots"] += [ro.id]
-                    r["blocked"] += blocked
+                    o_roots, o_blocked = future.result()
+                    roots |= o_roots
+                    blocked |= o_blocked
                 except Exception as e:
                     self.logger.error("[stp] Exception: %s", e)
-        return r
+        return {"roots": list(roots), "blocked": list(blocked)}

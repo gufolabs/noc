@@ -73,26 +73,24 @@ class Script(BaseScript):
                 i["description"] = descr
                 sub["description"] = descr
             if i["type"] == "physical":
-                if_range = "%s-%s" % (ifname[3:], ifname.split("/")[2])
+                if_range = "{}-{}".format(ifname[3:], ifname.split("/")[2])
                 if not has_if_range:
                     try:
-                        v1 = self.cli("show lldp interface %s | include Admin Status" % ifname)
+                        v1 = self.cli(f"show lldp interface {ifname} | include Admin Status")
                     except self.CLISyntaxError:
                         v1 = self.cli(
-                            "show lldp interface ethernet %s | include Admin Status" % if_range
+                            f"show lldp interface ethernet {if_range} | include Admin Status"
                         )
                         has_if_range = True
                 else:
-                    v1 = self.cli(
-                        "show lldp interface ethernet %s | include Admin Status" % if_range
-                    )
+                    v1 = self.cli(f"show lldp interface ethernet {if_range} | include Admin Status")
                 if "TX and RX" in v1:
                     i["enabled_protocols"] += ["LLDP"]
             match = self.rx_mtu.search(line)
             sub["mtu"] = match.group("mtu")
             if i["type"] == "aggregated" and ifname.startswith("Port-channel"):
                 portgroup = ifname[12:]
-                v1 = self.cli("show channel-group channel %s detail" % portgroup)
+                v1 = self.cli(f"show channel-group channel {portgroup} detail")
                 for match1 in self.rx_portgroup_port.finditer(v1):
                     port = self.profile.convert_interface_name(match1.group("port"))
                     for iface in interfaces:
@@ -146,7 +144,7 @@ class Script(BaseScript):
                 match1 = self.rx_ip_with_prefix.search(ip)
                 if match1:
                     ip_address, ip_subnet = ip.split("/")
-                    ip = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+                    ip = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                 sub["enabled_afi"] = ["IPv4"]
                 sub["ipv4_addresses"] = [ip]
             ip = match.group("ip2")
@@ -154,7 +152,7 @@ class Script(BaseScript):
                 match1 = self.rx_ip_with_prefix.search(ip)
                 if match1:
                     ip_address, ip_subnet = ip.split("/")
-                    ip = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+                    ip = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                 sub["ipv4_addresses"] += [ip]
             if i["type"] == "SVI":
                 sub["vlan_ids"] = (ifname[4:],)
@@ -162,21 +160,21 @@ class Script(BaseScript):
             if match1:
                 i["mtu"] = match1.group("mtu")
             if ifname.startswith("vlan"):
-                ifname_with_space = "vlan %s" % ifname[4:]
+                ifname_with_space = f"vlan {ifname[4:]}"
             elif ifname.startswith("mgmt_ipif"):
-                ifname_with_space = "mgmt %s" % ifname[9:]
+                ifname_with_space = f"mgmt {ifname[9:]}"
             elif ifname.startswith("lopback"):
-                ifname_with_space = "loopback %s" % ifname[8:]
+                ifname_with_space = f"loopback {ifname[8:]}"
             elif ifname.startswith("Null"):
-                ifname_with_space = "Null %s" % ifname[4:]
+                ifname_with_space = f"Null {ifname[4:]}"
             if not has_space:
                 try:
-                    v1 = self.cli("show interface %s" % ifname)
+                    v1 = self.cli(f"show interface {ifname}")
                 except self.CLISyntaxError:
-                    v1 = self.cli("show interface %s" % ifname_with_space)
+                    v1 = self.cli(f"show interface {ifname_with_space}")
                     has_space = True
                 else:
-                    v1 = self.cli("show interface %s" % ifname_with_space)
+                    v1 = self.cli(f"show interface {ifname_with_space}")
             match1 = self.rx_iface.search(v1)
             descr = match1.group("descr").strip()
             if descr:

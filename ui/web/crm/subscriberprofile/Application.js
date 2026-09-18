@@ -12,7 +12,7 @@ Ext.define("NOC.crm.subscriberprofile.Application", {
     "NOC.core.label.LabelField",
     "NOC.crm.subscriberprofile.Model",
     "NOC.main.style.LookupField",
-    "NOC.main.ref.glyph.LookupField",
+    "NOC.main.glyph.LookupField",
     "NOC.wf.workflow.LookupField",
     "NOC.main.remotesystem.LookupField",
     "NOC.core.IntegrationField",
@@ -87,7 +87,7 @@ Ext.define("NOC.crm.subscriberprofile.Application", {
         },
         {
           name: "glyph",
-          xtype: "main.ref.glyph.LookupField",
+          xtype: "main.glyph.LookupField",
           fieldLabel: __("Icon"),
           allowBlank: true,
           uiStyle: "large",

@@ -1,19 +1,18 @@
 # ----------------------------------------------------------------------
 # Beef test
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import re
 import bz2
-import os
 
 # Third-party modules
 import pytest
 import orjson
-import fsspec
+from gufo.blob.sync import open_blob
 
 # NOC modules
 from noc.config import config
@@ -23,44 +22,32 @@ from noc.core.ioloop.util import setup_asyncio
 rx_tc = re.compile(r"^.+/\d\d\d\d\.\S+\.json\.bz2")
 
 
-class ServiceStub(object):
-    class ServiceConfig(object):
-        def __init__(self, pool, tos=None):
+class ServiceStub:
+    class ServiceConfig:
+        def __init__(self, pool, tos=None) -> None:
             self.pool = pool
             self.tos = tos
 
-    def __init__(self, pool):
+    def __init__(self, pool) -> None:
         self.config = self.ServiceConfig(pool=pool)
         setup_asyncio()
 
 
-def get_beef_tests():
-    r = []
+def get_beef_tests() -> list[tuple[str, str]]:
+    r: list[tuple[str, str]] = []
     paths = config.tests.beef_paths or []
     for url in paths:
-        fs, url_path = fsspec.url_to_fs(url)
-        for path, _, files in fs.walk(url_path):
-            for name in files:
-                path = os.path.join(path, name)
-                if rx_tc.match(path):
-                    r += [(fs, path)]
+        with open_blob(url) as blob:
+            for key in blob.scan(""):
+                if rx_tc.match(key):
+                    r.append((url, key))
     return r
 
 
-def beef_test_name(v):
-    if isinstance(v, tuple):
-        return v[1]
-    return None
-
-
-@pytest.fixture(params=get_beef_tests(), ids=beef_test_name)
-def beef_test(request):
-    return request.param
-
-
-def test_beef(beef_test):
-    fs, path = beef_test
-    test = orjson.loads(bz2.decompress(fs.readbytes(path)))
+@pytest.mark.parametrize(("url", "path"), get_beef_tests())
+def test_beef(url: str, path: str):
+    with open_blob(url) as blob:
+        test = orjson.loads(bz2.decompress(blob[path]))
     service = ServiceStub(pool="default")
     # Load script
     script = test["script"]

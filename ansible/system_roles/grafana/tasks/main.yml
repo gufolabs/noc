@@ -34,7 +34,7 @@
     state: directory
     group: grafana
     owner: grafana
-  with_items:
+  loop:
     - "{{ grafana_dashboard_dir }}"
     - "{{ grafana_plugins_dir }}"
     - "{{ grafana_provisioning_dir }}"

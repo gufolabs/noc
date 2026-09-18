@@ -37,7 +37,7 @@ class Script(BaseScript):
             members = []
             i = pc["interface"]
             if i:
-                cli_ag = self.cli("show vlan port %s" % i)
+                cli_ag = self.cli(f"show vlan port {i}")
                 tagget = []
                 untagged = None
                 for match_ag in self.rx_line_vlan_ag.finditer(cli_ag):
@@ -53,7 +53,7 @@ class Script(BaseScript):
                         members = p["members"]
                 r += [
                     {
-                        "interface": "Ag %s" % i,
+                        "interface": f"Ag {i}",
                         "status": "enabled",
                         "description": "",
                         "802.1Q Enabled": "True",

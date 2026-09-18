@@ -14,7 +14,7 @@ from noc.core.model.fields import DocumentReferenceField
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column(
             "sa_managedobjectprofile",
             "enable_box_discovery_ifdesc",

@@ -74,7 +74,7 @@ class Script(BaseScript):
             # Add locally assigned port id, if exists
             if local_interface in local_port_ids:
                 i["local_interface_id"] = local_port_ids[local_interface]
-            v = self.cli("show lldp info remote-device %s" % local_interface)
+            v = self.cli(f"show lldp info remote-device {local_interface}")
             # Get chassis id
             match = self.rx_chassis_id.search(v)
             if not match:

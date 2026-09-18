@@ -51,7 +51,7 @@ class FieldAccess(EmbeddedDocument):
     permission = IntField(choices=[(x, FIELD_PERMISSIONS[x]) for x in FIELD_PERMISSIONS])
 
     def __str__(self):
-        return "%s:%s" % (self.name, self.permission)
+        return f"{self.name}:{self.permission}"
 
 
 class ModelProtectionProfile(Document):

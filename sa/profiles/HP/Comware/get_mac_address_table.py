@@ -26,11 +26,11 @@ class Script(BaseScript):
     def execute_cli(self, interface=None, vlan=None, mac=None):
         cmd = "display mac-address"
         if mac is not None:
-            cmd += " %s" % self.profile.convert_mac(mac)
+            cmd += f" {self.profile.convert_mac(mac)}"
         if interface is not None:
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
         try:
             macs = self.cli(cmd)
         except self.CLISyntaxError:

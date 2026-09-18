@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.execute("DELETE FROM sa_useraccess")
         for id, name in self.db.execute(
             "SELECT id,name FROM sa_managedobjectselector WHERE name LIKE 'NOC_UA_%%'"

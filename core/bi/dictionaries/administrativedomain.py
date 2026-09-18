@@ -12,7 +12,7 @@ from noc.sa.models.administrativedomain import AdministrativeDomain as Administr
 
 
 class AdministrativeDomain(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "administrativedomain"
         layout = "hashed"
         source_model = "sa.AdministrativeDomain"

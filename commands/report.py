@@ -9,7 +9,7 @@
 import argparse
 import os
 import re
-from typing import Optional, Dict, Any
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -27,7 +27,7 @@ from noc.main.models.report import Report
 class Command(BaseCommand):
     DEFAULT_LIMIT = 20
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         run_parser = subparsers.add_parser("run")
         run_parser.add_argument("--report", "-r", help="Report to run", required=True)
@@ -49,13 +49,13 @@ class Command(BaseCommand):
 
     def handle(self, cmd, *args, **options):
         connect()
-        return getattr(self, "handle_%s" % cmd.replace("-", "_"))(*args, **options)
+        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
 
     def handle_run(
         self,
         report: str,
         arguments,
-        user: Optional[str] = None,
+        user: str | None = None,
         lang="en",
         out_type="csv",
         **kwargs,
@@ -94,7 +94,7 @@ class Command(BaseCommand):
         for ds in loader:
             self.print(f"Datasource: {ds}")
 
-    def handle_query_ds(self, datasource, query, arguments, export: Optional[str] = None, **kwargs):
+    def handle_query_ds(self, datasource, query, arguments, export: str | None = None, **kwargs):
         args = self.get_report_args(arguments)
         ds = loader[datasource]
         self.print(f"Running DataSource with arguments: {args}")
@@ -105,14 +105,14 @@ class Command(BaseCommand):
 
     rx_arg = re.compile(r"^(?P<name>[a-zA-Z][a-zA-Z0-9_]*)(?P<op>:?=@?)(?P<value>.*)$")
 
-    def get_report_args(self, arguments) -> Dict[str, Any]:
+    def get_report_args(self, arguments) -> dict[str, Any]:
         """
         Parse arguments and return script's
         """
 
         def read_file(path):
             if not os.path.exists(path):
-                self.die("Cannot open file '%s'" % path)
+                self.die(f"Cannot open file '{path}'")
             with open(path) as f:
                 return f.read()
 
@@ -120,13 +120,13 @@ class Command(BaseCommand):
             try:
                 return orjson.loads(j)
             except ValueError as e:
-                self.die("Failed to parse JSON: %s" % e)
+                self.die(f"Failed to parse JSON: {e}")
 
         args = {}
         for a in arguments:
             match = self.rx_arg.match(a)
             if not match:
-                self.die("Malformed parameter: '%s'" % a)
+                self.die(f"Malformed parameter: '{a}'")
             name, op, value = match.groups()
             if op == "=":
                 # Set parameter
@@ -141,7 +141,3 @@ class Command(BaseCommand):
                 # Set to JSON value from a file
                 args[name] = parse_json(read_file(value))
         return args
-
-
-if __name__ == "__main__":
-    Command().run()

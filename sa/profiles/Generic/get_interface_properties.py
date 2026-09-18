@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Optional, Union, Iterable, Tuple, Callable
+from typing import Iterable, Callable
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -93,13 +93,10 @@ class Script(BaseScript):
             result += [item]
         return result
 
-    def merge_tables(
-        self, *args: Optional[Iterable]
-    ) -> Dict[int, Dict[str, Union[int, bool, str]]]:
+    def merge_tables(self, *args: Iterable | None) -> dict[int, dict[str, int | bool | str]]:
         """
         Merge iterables into single table
 
-        :param args:
         :return:
         """
         r = {}
@@ -122,8 +119,8 @@ class Script(BaseScript):
         return self.profile.convert_interface_name(v)
 
     def iter_iftable(
-        self, key: str, oid: str, ifindex: Optional[int] = None, clean: Callable = None
-    ) -> Iterable[Tuple[str, Union[str, int]]]:
+        self, key: str, oid: str, ifindex: int | None = None, clean: Callable = None
+    ) -> Iterable[tuple[str, str | int]]:
         """
         Collect part of IF-MIB table.
 
@@ -137,7 +134,7 @@ class Script(BaseScript):
             oid = mib[oid]
         if ifindex:
             # Single interface
-            v = self.snmp.get("%s.%s" % (oid, ifindex))
+            v = self.snmp.get(f"{oid}.{ifindex}")
             try:
                 yield key, ifindex, clean(v)
             except ValueError:
@@ -163,7 +160,6 @@ class Script(BaseScript):
     def get_interface_ifindex(self, name: str) -> int:
         """
         Get ifindex for given interface
-        :param name:
         :return:
         """
         for r_oid, v in self.snmp.getnext(

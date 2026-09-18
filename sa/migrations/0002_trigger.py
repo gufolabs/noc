@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         if self.db.execute("SELECT COUNT(*) FROM pg_language WHERE lanname='plpgsql'")[0][0] == 0:
             self.db.execute("CREATE LANGUAGE plpgsql")
         self.db.execute(CREATE_F)

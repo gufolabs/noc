@@ -12,7 +12,7 @@ from noc.sa.models.profile import Profile as ProfileModel
 
 
 class Profile(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "profile"
         layout = "hashed"
         source_model = "sa.Profile"

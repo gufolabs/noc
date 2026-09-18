@@ -1,8 +1,8 @@
 # ----------------------------------------------------------------------
 #  Color scheme generator
 # ----------------------------------------------------------------------
-#  Copyright (C) 2007-2019 The NOC Project
-#  See LICENSE for details
+# Copyright (C) 2007-2019 The NOC Project
+# See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
@@ -12,9 +12,6 @@ import math
 def hsv_to_rgb(h, s, v):
     """
     HSV -> RGB convertor, for Python 2.5 compatibility
-    :param h:
-    :param s:
-    :param v:
     :return:
     """
     h = float(h)
@@ -50,7 +47,7 @@ def get_colors(N):
             hs = [i * d for i in range(p)]
         H = hs.pop(len(hs) // 2 if N % 2 else 0)
         # Yield current color
-        yield "#%02x%02x%02x" % (hsv_to_rgb(H, S, V))
+        yield "#{:02x}{:02x}{:02x}".format(*hsv_to_rgb(H, S, V))
         N = N - 1
         if not hs:
             # Reduce value for next round

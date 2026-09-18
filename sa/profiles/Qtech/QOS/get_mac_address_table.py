@@ -27,9 +27,9 @@ class Script(BaseScript):
         # if mac is not None:
         #    cmd += "address %s" % mac
         if interface is not None:
-            cmd += " port %s" % interface
+            cmd += f" port {interface}"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
         for match in self.rx_line.finditer(self.cli(cmd)):
             r += [
                 {

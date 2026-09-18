@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import logging
-from typing import Optional, List, Dict, Callable
+from typing import Callable
 
 # Third-party modules
 from pydantic import BaseModel
@@ -18,14 +18,14 @@ from .base import BaseCDAGNode, Category, IN_OPTIONAL, IN_REQUIRED
 
 
 class DumpNodeConfig(BaseModel):
-    out_format: Optional[str] = None
-    output: Optional[str] = "console"
+    out_format: str | None = None
+    output: str | None = "console"
 
 
 NS = 1_000_000_000
 
 # scope -> name -> cleaner
-scope_cleaners: Dict[str, Dict[str, Callable]] = {}
+scope_cleaners: dict[str, dict[str, Callable]] = {}
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +40,7 @@ class DumpNode(BaseCDAGNode):
     config_cls = DumpNodeConfig
     dot_shape = "folder"
 
-    def get_value(self, ts: int, labels: List[str], **kwargs) -> None:
+    def get_value(self, ts: int, labels: list[str], **kwargs) -> None:
         r = []
         for k, v in kwargs.items():
             if v is None:

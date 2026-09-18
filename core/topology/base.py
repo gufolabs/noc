@@ -7,14 +7,16 @@
 
 # Python modules
 import operator
-from typing import Optional, List, Set, Dict, Any, Iterable, Tuple
+from typing import Any, Iterable
 from collections import defaultdict
 from dataclasses import asdict
+from abc import ABC, abstractmethod
 
 # Third-Party modules
 import networkx as nx
 import numpy as np
 import cachetools
+from gufo.loader import Loader
 from bson import ObjectId
 
 # NOC modules
@@ -25,17 +27,17 @@ from .layout.tree import TreeLayout
 from .types import TopologyNode, MapMeta, MapItem, PathItem
 
 
-class TopologyBase(object):
+class TopologyBase(ABC):
     """
     Base Class for Map generators. Loaded by name
     """
 
     name: str  # Map Generator Name
     version: int = 0  # Generator version
-    header: Optional[str] = None
+    header: str | None = None
 
-    PARAMS: Set[str] = set()  # Allowed generator params
-    CAPS: Set[str] = set()
+    PARAMS: set[str] = set()  # Allowed generator params
+    CAPS: set[str] = set()
 
     DEFAULT_LEVEL = 10
     # Allow to normalize position when displayed
@@ -56,22 +58,22 @@ class TopologyBase(object):
     DEFAULT_GLYPH = 0xF22C
     CLOUD_GLYPH = 0xF004
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         # Hints
-        self.node_hints: Optional[Dict[str, Any]] = kwargs.get("node_hints") or {}
-        self.link_hints: Optional[Dict[str, Any]] = kwargs.get("link_hints") or {}
+        self.node_hints: dict[str, Any] | None = kwargs.get("node_hints") or {}
+        self.link_hints: dict[str, Any] | None = kwargs.get("link_hints") or {}
         self.pn = 0
         # Caches
         self._rings_cache = {}
         self._isolated_cache = {}
-        self._interface_cache: Dict["ObjectId", Any] = {}
+        self._interface_cache: dict["ObjectId", Any] = {}
         # Graph
         self.G = nx.Graph()
-        self.caps: Set[str] = set()
+        self.caps: set[str] = set()
         self.settings = kwargs or {}
         self.load()  # Load nodes
 
-    def __len__(self):
+    def __len__(self) -> int:
         """Map nodes count."""
         return len(self.G)
 
@@ -79,7 +81,7 @@ class TopologyBase(object):
         return item.id in self.G
 
     @property
-    def gen_id(self) -> Optional[str]:
+    def gen_id(self) -> str | None:
         raise NotImplementedError
 
     @property
@@ -92,11 +94,11 @@ class TopologyBase(object):
         """Get Map settings."""
         return MapMeta(title=self.title)
 
-    def get_uplinks(self) -> List[str]:
+    def get_uplinks(self) -> list[str]:
         """Return uplink node for map. Use on tree layout."""
         return []
 
-    def add_node(self, n: TopologyNode, attrs: Optional[Dict[str, Any]] = None) -> None:
+    def add_node(self, n: TopologyNode, attrs: dict[str, Any] | None = None) -> None:
         """
         Add node to map.
 
@@ -113,8 +115,8 @@ class TopologyBase(object):
             return
         # Get capabilities
         oc = set()
-        if n.get_caps():
-            oc = set(n.get_caps()) & self.CAPS
+        if cv := n.get_caps():
+            oc = set(cv) & self.CAPS
             self.caps |= oc
         if n.portal:
             attrs["portal"] = asdict(n.portal)
@@ -141,7 +143,7 @@ class TopologyBase(object):
         self.G.add_node(o_id, **attrs)
 
     def add_edge(
-        self, o1: str, o2: str, attrs: Optional[Dict[str, Any]] = None, edge_type: str = "link"
+        self, o1: str, o2: str, attrs: dict[str, Any] | None = None, edge_type: str = "link"
     ):
         """Add link between interfaces to topology."""
         a = {"connector": "normal"}
@@ -227,7 +229,7 @@ class TopologyBase(object):
             out_bw = bandwidth(t_out_bw, d_in_bw) * 1000
             # Add link
             if is_pmp:
-                link_id = "%s-%s-%s" % (link.id, self.pn, self.pn + 1)
+                link_id = f"{link.id}-{self.pn}-{self.pn + 1}"
             else:
                 link_id = str(link.id)
             self.add_edge(
@@ -307,8 +309,8 @@ class TopologyBase(object):
         return self.G.subgraph([o for o in self.G.nodes if o not in isolated])
 
     def normalize_pos(
-        self, pos: Dict[str, Tuple[int, int]]
-    ) -> Tuple[int, int, Dict[str, Tuple[int, int]]]:
+        self, pos: dict[str, tuple[int, int]]
+    ) -> tuple[int, int, dict[str, tuple[int, int]]]:
         """
         Normalize positions, shift to (0, 0).
 
@@ -324,9 +326,10 @@ class TopologyBase(object):
         s = maxv - minv
         # Shift positions according to offset and node size
         for p in pos:
-            so = np.array(
-                [self.G.nodes[p]["shape_width"] / 2.0, self.G.nodes[p]["shape_height"] / 2.0]
-            )
+            # so = np.array(
+            #     [self.G.nodes[p]["shape_width"] / 2.0, self.G.nodes[p]["shape_height"] / 2.0]
+            # )
+            so = np.array([32.0, 32.0])
             pos[p] -= minv + so - self.MAP_OFFSET
         return s[0], s[1], pos
 
@@ -354,7 +357,7 @@ class TopologyBase(object):
             pos.update(dpos)
         else:
             pos = dpos
-        pos: Dict[str, Tuple[int, int]] = {o: pos[o] for o in pos if o in self.G.nodes}
+        pos: dict[str, tuple[int, int]] = {o: pos[o] for o in pos if o in self.G.nodes}
         width, height, pos = self.normalize_pos(pos)
         # Place isolated nodes
         isolated = sorted(
@@ -388,6 +391,7 @@ class TopologyBase(object):
         x = node.copy()
         if "mo" in x:
             del x["mo"]
+        x["type"] = x["type"].value
         if x["type"] == "managedobject":
             x["external"] = x.get("role") != "segment"
         elif node["type"] == "cloud":
@@ -410,16 +414,20 @@ class TopologyBase(object):
         return False
 
     @classmethod
+    @abstractmethod
     def iter_maps(
         cls,
-        parent: str = None,
-        query: Optional[str] = None,
-        limit: Optional[int] = None,
-        start: Optional[int] = None,
-        page: Optional[int] = None,
+        parent: str | None = None,
+        query: str | None = None,
+        limit: int | None = None,
+        start: int | None = None,
     ) -> Iterable[MapItem]:
         """Iterate over available maps."""
 
     @classmethod
-    def iter_path(cls, gen_id) -> Iterable[PathItem]:
+    @abstractmethod
+    def iter_path(cls, gen_id: str) -> Iterable[PathItem]:
         """Return map by hierarchy path."""
+
+
+loader = Loader[type[TopologyBase]](base="noc.core.topology.map")

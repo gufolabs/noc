@@ -28,7 +28,7 @@ class Script(BaseScript):
         r = []
         self.cli("SELGRP Status")
         for etherswitch in ["1", "2"]:
-            c = self.cli("GET ethernet%s/switchCache[]/" % etherswitch)
+            c = self.cli(f"GET ethernet{etherswitch}/switchCache[]/")
             for match in self.rx_line.finditer(c):
                 if match.group("type") == "dynamic":
                     mtype = "D"

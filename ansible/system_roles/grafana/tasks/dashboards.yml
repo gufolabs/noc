@@ -5,7 +5,7 @@
     dest: "{{ item.dest }}"
   no_log: "{{ tower_show_secrets }}"
   diff: "False"
-  with_items:
+  loop:
     - src: noc.js.j2
       dest: "{{ grafana_home }}/public/dashboards/noc.js"
     - src: report.js.j2

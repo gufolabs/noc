@@ -55,16 +55,16 @@ class Script(BaseScript):
             if iface["type"] == "physical":
                 sub["enabled_afi"] = ["BRIDGE"]
                 if ifname.lower().startswith("gi"):
-                    sw_ifname = "gigabitethernet %s" % ifname[2:]
+                    sw_ifname = f"gigabitethernet {ifname[2:]}"
                 elif ifname.lower().startswith("fa"):
-                    sw_ifname = "fastethernet %s" % ifname[2:]
+                    sw_ifname = f"fastethernet {ifname[2:]}"
                 elif ifname.lower().startswith("ex"):
-                    sw_ifname = "extreme-ethernet %s" % ifname[2:]
+                    sw_ifname = f"extreme-ethernet {ifname[2:]}"
                 elif ifname.lower().startswith("te"):
-                    sw_ifname = "tengigabitethernet %s" % ifname[2:]
+                    sw_ifname = f"tengigabitethernet {ifname[2:]}"
                 elif ifname.lower().startswith("po"):
-                    sw_ifname = "port-channel %s" % ifname[2:]
-                c = self.cli("show interfaces switchport %s" % sw_ifname)
+                    sw_ifname = f"port-channel {ifname[2:]}"
+                c = self.cli(f"show interfaces switchport {sw_ifname}")
                 for i in parse_table(c, footer="^Forbidden VLANs:"):
                     vlan_id = i[0]
                     if not is_vlan(vlan_id):

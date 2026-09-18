@@ -83,7 +83,7 @@ Ext.define("NOC.inv.inv.plugins.log.LogPanel", {
   //
   onReload: function(){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + me.currentId + "/plugin/log/",
       method: "GET",
       scope: me,

@@ -25,8 +25,8 @@ class Script(BaseScript):
     def execute(self, interface=None):
         r = []
         if interface is not None:
-            cmd = "display transceiver diagnosis interface %s" % interface.replace(
-                "Ge ", "GigabitEthernet "
+            cmd = "display transceiver diagnosis interface {}".format(
+                interface.replace("Ge ", "GigabitEthernet ")
             )
         else:
             cmd = "display transceiver diagnosis interface"

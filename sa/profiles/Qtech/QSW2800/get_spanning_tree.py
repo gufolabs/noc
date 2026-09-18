@@ -58,7 +58,7 @@ class Script(BaseScript):
         else:
             instances = ["0"]
         for i in instances:
-            inst = self.cli("show spanning-tree mst %s" % i)
+            inst = self.cli(f"show spanning-tree mst {i}")
             if "does not exist!" in inst:
                 continue
             for l in inst.splitlines():
@@ -98,7 +98,7 @@ class Script(BaseScript):
                     dsg_port = q_port(match.group("dsg_port"))
                     iface = match.group("ifname")
                     # get interface details
-                    if_details = self.cli("show spanning-tree interface %s detail" % iface)
+                    if_details = self.cli(f"show spanning-tree interface {iface} detail")
                     e_match = self.rx_edge.search(if_details)
                     if e_match:
                         edge = e_match.group("edge") == "Yes"

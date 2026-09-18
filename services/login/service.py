@@ -2,7 +2,7 @@
 # ---------------------------------------------------------------------
 # Login service
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ class LoginService(FastAPIService):
         "ext-ui": "Legacy ExtJS UI services. To be removed with decline of legacy UI",
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.revoked_tokens = set()
         self.revoked_expiry = []
@@ -44,8 +44,6 @@ class LoginService(FastAPIService):
     async def revoke_token(self, token: str, audience: str) -> None:
         """
         Mark token as revoked. Any futher use will be prohibited
-        :param token:
-        :param audience:
         :return: str
         """
         ts = datetime.datetime.utcnow()
@@ -94,9 +92,15 @@ class LoginService(FastAPIService):
         async with self.revoked_cond:
             self.revoked_cond.notify_all()
 
-    async def subscribe_lift(self):
+    async def subscribe_streams(self):
         # revokedtokens is optional, so mark liftbridge as non-critical service.
-        config.find_parameter("liftbridge.addresses").set_critical(False)
+        match config.msgstream.client_class:
+            case "noc.core.msgstream.liftbridge.LiftBridgeClient":
+                config.find_parameter("liftbridge.addresses").set_critical(False)
+            case "noc.core.msgstream.kafka.KafkaClient":
+                config.find_parameter("kafka.addresses").set_critical(False)
+            case _:
+                pass
         # expire = config.login.session_ttl
         # start_timestamp = time.time() - expire
         await self.subscribe_stream(
@@ -109,9 +113,5 @@ class LoginService(FastAPIService):
             auto_set_cursor=False,
         )
 
-    async def on_activate(self):
-        self.loop.create_task(self.subscribe_lift())
-
-
-if __name__ == "__main__":
-    LoginService().start()
+    async def on_activate(self) -> None:
+        self.loop.create_task(self.subscribe_streams())

@@ -34,7 +34,7 @@ def get_seconds(section, option):
     try:
         v = int(v)
     except ValueError:
-        raise "Invalid expiration option in %s:%s" % (section, option)
+        raise f"Invalid expiration option in {section}:{option}"
     return v * m
 
 

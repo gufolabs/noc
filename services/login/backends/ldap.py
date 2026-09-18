@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # Third-party modules
 import ldap3
@@ -160,8 +159,8 @@ class LdapBackend(BaseAuthBackend):
         self,
         ldap_domain: "AuthLDAPDomain",
         server_pool: "ldap3.ServerPool",
-        user: Optional[str] = None,
-        password: Optional[str] = None,
+        user: str | None = None,
+        password: str | None = None,
     ) -> "ldap3.Connection":
         # Connect and bind
         if not user and not ldap_domain.bind_user:
@@ -181,21 +180,18 @@ class LdapBackend(BaseAuthBackend):
             if not connect.bind():
                 raise self.LoginError(f"Failed to bind to LDAP: {connect.result}")
         except (LDAPCommunicationError, LDAPServerPoolExhaustedError) as e:
-            self.logger.error("Failed to bind to LDAP: connect failed by %s" % e)
+            self.logger.error(f"Failed to bind to LDAP: connect failed by {e}")
             raise self.LoginError(f"Failed to bind to LDAP: connect failed by {e}")
         return connect
 
     def get_connection_kwargs(self, ldap_domain: "AuthLDAPDomain", user: str, password: str):
         """
         Return LDAP connection instance
-        :param ldap_domain:
-        :param user:
-        :param password:
         :return:
         """
         if ldap_domain.type == "ad":
             if "\\" not in user and "@" not in user:
-                user = r"%s\%s" % (ldap_domain.name, user)
+                user = rf"{ldap_domain.name}\{user}"
             kwargs = {"user": user, "authentication": ldap3.NTLM}
         else:
             # For Open LDAP userDN getting used bind_user, because it used for bind operation

@@ -83,7 +83,7 @@ class Script(BaseScript):
         match = self.rx_ipif.search(self.cli("show ip interface"))
         ip = match.group("ip")
         mask = match.group("mask")
-        ip_address = "%s/%s" % (ip, IPv4.netmask_to_len(mask))
+        ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
         iface = {
             "name": "mgmt",
             "type": "SVI",

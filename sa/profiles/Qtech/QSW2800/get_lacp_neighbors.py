@@ -44,16 +44,16 @@ class Script(BaseScript):
                 pc_name = block
                 continue
             # pc_name = block
-            self.logger.debug("Block is: %s\n\n" % block)
+            self.logger.debug(f"Block is: {block}\n\n")
             out = self.profile.parse_table(block.lstrip(), part_name="lacp")
-            self.logger.debug("Out, %s\n\n" % out)
+            self.logger.debug(f"Out, {out}\n\n")
             bundle = []
             if not out.get("Remote", None):
                 first = True
                 continue
             for bun in out["Local"]["table"]:
                 # PortID LACP = ifindex
-                index = self.port_id.findall(self.cli("show interface %s | i index" % bun[0]))
+                index = self.port_id.findall(self.cli(f"show interface {bun[0]} | i index"))
                 # Find in partner table by interface
                 partner = [
                     (i[4].split(",")[1], i[1]) for i in out["Remote"]["table"] if bun[0] in i
@@ -61,7 +61,7 @@ class Script(BaseScript):
                 if partner:
                     r_id, r_p_id = partner[0]
                 else:
-                    self.logger.info("Partner for interface %s not find, skip" % bun[0])
+                    self.logger.info(f"Partner for interface {bun[0]} not find, skip")
                     # Partner not find, skip
                     continue
 

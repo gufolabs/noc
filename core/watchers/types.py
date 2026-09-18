@@ -9,7 +9,6 @@
 import enum
 import datetime
 from dataclasses import dataclass
-from typing import Optional, Dict, Any
 
 # NOC Modules
 from noc.core.models.cfgactions import ActionType
@@ -51,19 +50,21 @@ class WatchItem:
 
     effect: ObjectEffect
     # Match, Array
-    key: Optional[str] = None
-    after: Optional[datetime.datetime] = None
+    key: str | None = None
+    after: datetime.datetime | None = None
     once: bool = True
     wait_avail: bool = False
-    remote_system: Optional[Any] = None
+    remote_system: str | None = None
     # deadline
     # Reaction ? User ?, Reason
-    args: Optional[Dict[str, str]] = None
+    args: dict[str, str] | None = None
 
-    def get_action(self) -> Optional[ActionType]:
+    def get_action(self) -> ActionType | None:
         """Return Object Action"""
         if self.effect == ObjectEffect.WF_EVENT:
             return ActionType.FIRE_WF_EVENT
         if self.effect == ObjectEffect.MX_EVENT:
             return ActionType.FIRE_OBJ_EVENT
+        if self.effect == ObjectEffect.DIAGNOSTIC_CHECK:
+            return ActionType.REFRESH_DIAGNOSTICS
         return None

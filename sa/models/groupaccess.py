@@ -16,7 +16,7 @@ from .administrativedomain import AdministrativeDomain
 
 
 class GroupAccess(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = _("Group Access")
         verbose_name_plural = _("Group Access")
         db_table = "sa_groupaccess"
@@ -29,7 +29,7 @@ class GroupAccess(NOCModel):
     )
 
     def __str__(self):
-        r = ["group=%s" % self.group.name]
+        r = [f"group={self.group.name}"]
         if self.administrative_domain:
-            r += ["domain=%s" % self.administrative_domain.name]
-        return "(%s)" % ", ".join(r)
+            r += [f"domain={self.administrative_domain.name}"]
+        return "({})".format(", ".join(r))

@@ -7,7 +7,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Union
+from typing import Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -40,7 +40,7 @@ class IgnorePattern(Document):
         return f"{self.source}: {self.pattern}"
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["IgnorePattern"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["IgnorePattern"]:
         return IgnorePattern.objects.filter(id=oid).first()
 
     def iter_changed_datastream(self, changed_fields=None):

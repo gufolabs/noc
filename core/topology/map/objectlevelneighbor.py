@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # ObjectGroupTopology class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ class ObjectLevelNeighborTopology(TopologyBase):
 
     PARAMS = {"mo_id"}
 
-    def __init__(self, mo_id, **settings):
+    def __init__(self, mo_id, **settings) -> None:
         self.mo = ManagedObject.get_by_id(mo_id)
         self.logger = PrefixLoggerAdapter(logger, self.mo.name)
         super().__init__(**settings)
@@ -110,11 +110,10 @@ class ObjectLevelNeighborTopology(TopologyBase):
     @classmethod
     def iter_maps(
         cls,
-        parent: str = None,
+        parent: str | None = None,
         query: str | None = None,
         limit: int | None = None,
         start: int | None = None,
-        page: int | None = None,
     ) -> Iterable[MapItem]:
         data = ManagedObject.objects.filter().order_by("name")
         if query:
@@ -131,7 +130,7 @@ class ObjectLevelNeighborTopology(TopologyBase):
             )
 
     @classmethod
-    def iter_path(cls, gen_id) -> Iterable[PathItem]:
+    def iter_path(cls, gen_id: str) -> Iterable[PathItem]:
         o = ManagedObject.get_by_id(gen_id)
         if not o:
             return

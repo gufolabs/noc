@@ -30,7 +30,7 @@ DIAGNOSTICS = ["Access", PROFILE_DIAG, SNMP_DIAG, CLI_DIAG, SNMPTRAP_DIAG, SYSLO
 class Migration(BaseMigration):
     depends_on = [("sa", "0233_managedobject_diagnostics")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         labels, remove_labels = [], []
         states = [s.value for s in DiagnosticState]
         # Reset unknown state
@@ -66,7 +66,7 @@ class Migration(BaseMigration):
                  UPDATE sa_managedobject
                  SET diagnostics = diagnostics  #- %s  #- %s
                  """,
-            ["{%s}" % SNMPTRAP_DIAG, "{%s}" % SYSLOG_DIAG],
+            [f"{{{SNMPTRAP_DIAG}}}", f"{{{SYSLOG_DIAG}}}"],
         )
 
     def sync_labels(self, labels):

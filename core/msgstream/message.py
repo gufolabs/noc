@@ -7,27 +7,26 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Dict, Optional
 
 
 @dataclass
-class Message(object):
+class Message:
     value: bytes
     subject: str
     offset: int
     timestamp: int
     key: bytes
     partition: int
-    headers: Dict[str, bytes]
+    headers: dict[str, bytes]
 
 
 @dataclass
-class PublishRequest(object):
+class PublishRequest:
     __slots__ = ("data", "headers", "key", "partition", "stream")
 
     stream: str
     data: bytes
-    partition: Optional[int]
-    headers: Optional[Dict[str, bytes]]
+    partition: int | None
+    headers: dict[str, bytes] | None
     # Meta
-    key: Optional[bytes]
+    key: bytes | None

@@ -10,6 +10,6 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.delete_column("peer_peeringpoint", "lg_rcmd")
         self.db.delete_column("peer_peeringpoint", "provision_rcmd")

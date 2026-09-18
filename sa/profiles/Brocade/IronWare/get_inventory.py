@@ -185,7 +185,7 @@ class Script(BaseScript):
                         "vendor": "BROCADE",
                     }
                 ]
-                media = self.cli("show media slot %s" % match1[0])
+                media = self.cli(f"show media slot {match1[0]}")
                 self.logger.debug(media)
                 for match2 in media.splitlines():
                     if "Port" in match2:

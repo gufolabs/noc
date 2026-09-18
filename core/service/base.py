@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Base service
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -19,32 +19,28 @@ import asyncio
 import cachetools
 from functools import partial
 from typing import (
-    Optional,
-    Dict,
-    List,
-    Tuple,
     Callable,
     Any,
     TypeVar,
-    NoReturn,
+    Never,
     Awaitable,
     Iterable,
 )
+import socket
 
 # Third-party modules
 import setproctitle
 
 # NOC modules
 from noc.config import config
+from noc.core.affinity import AffinityController, AFF_NONE
 from noc.core.debug import excepthook, error_report
-from noc.core.log import ErrorFormatter
 from noc.core.perf import apply_metrics
 from noc.core.hist.monitor import apply_hists
 from noc.core.quantile.monitor import apply_quantiles
 from noc.core.dcs.loader import get_dcs, DEFAULT_DCS
 from noc.core.threadpool import ThreadPoolExecutor
 from noc.core.span import get_spans, span_to_dict
-from noc.core.tz import setup_timezone
 from noc.core.msgstream.client import MessageStreamClient
 from noc.core.msgstream.queue import MessageStreamQueue
 from noc.core.msgstream.queuebuffer import QBuffer
@@ -57,6 +53,7 @@ from noc.core.ioloop.timers import PeriodicCallback
 from noc.core.error import NOCError
 from noc.core.mx import MX_STREAM, MX_SPAN_CTX, MX_SPAN_ID, MessageType
 from noc.core.span import Span
+from noc.core.validators import is_ipv4
 from .rpc import RPCProxy
 from .loader import set_service
 from ..router.datastream import RouteDataStreamClient
@@ -66,15 +63,11 @@ DCS_SLOTS_CACHE = {}  # PROCESS -> object cache
 dcs_slot_lock = threading.Lock()
 
 
-class BaseService(object):
-    """
-    Basic service implementation.
-
-    * on_change_<var> - subscribed to changes of config variable <var>
-    """
+class BaseService:
+    """Basic service implementation."""
 
     # Service name
-    name = None
+    name: str
     # Leader lock name
     # Only one active instance per leader lock can be active
     # at given moment
@@ -96,7 +89,7 @@ class BaseService(object):
     use_telemetry = False
     # Traefik routing rule
     # Requires config.features.traefik option
-    traefik_routes_rule: Optional[str] = None
+    traefik_routes_rule: str | None = None
     # Require DCS health status to be considered healthy
     # Usually means resolution error to required services
     # temporary leads service to unhealthy state
@@ -104,30 +97,23 @@ class BaseService(object):
     # Use embedded router for messages
     use_router = False
     # Use service based consul check timeout
-    dcs_check_interval: Optional[int] = None
-    dcs_check_timeout: Optional[int] = None
+    dcs_check_interval: int | None = None
+    dcs_check_timeout: int | None = None
     # Use watchdog for check Service register in consul
     use_watchdog = False
 
     LOG_FORMAT = config.log_format
 
-    LOG_LEVELS = {
-        "critical": logging.CRITICAL,
-        "error": logging.ERROR,
-        "warning": logging.WARNING,
-        "info": logging.INFO,
-        "debug": logging.DEBUG,
-    }
     DEFAULT_SHARDING_KEY = "managed_object"
     SHARDING_KEYS = {"span": "ctx"}
 
     class RegistrationError(Exception):
         pass
 
-    def __init__(self):
+    def __init__(self) -> None:
         set_service(self)
         sys.excepthook = excepthook
-        self.loop: Optional[asyncio.BaseEventLoop] = None
+        self.loop: asyncio.BaseEventLoop | None = None
         self.logger = logging.getLogger()
         self.service_id = str(uuid.uuid4())
         self.executors = {}
@@ -137,7 +123,7 @@ class BaseService(object):
         self.telemetry_callback = None
         self.dcs = None
         # Message routed
-        self.router: Optional[Router] = None
+        self.router: Router | None = None
         # Effective address and port
         self.address = None
         self.port = None
@@ -145,40 +131,35 @@ class BaseService(object):
         # Can be initialized in subclasses
         self.scheduler = None
         # Liftbridge publisher
-        self.publish_queue: Optional[MessageStreamQueue] = None
+        self.publish_queue: MessageStreamQueue | None = None
         self.publisher_start_lock = threading.Lock()
         # Metrics publisher buffer
-        self.metrics_queue: Optional[QBuffer] = None
+        self.metrics_queue: QBuffer | None = None
         # MX metrics publisher buffer
         self.mx_partitions: int = 0
-        self.mx_queue: Optional[MBuffer] = None
+        self.mx_queue: MBuffer | None = None
         self.active_subscribers = 0
-        self.subscriber_shutdown_waiter: Optional[asyncio.Event] = None
-        self.watchdog_waiter: Optional[asyncio.Event] = None
+        self.subscriber_shutdown_waiter: asyncio.Event | None = None
+        self.watchdog_waiter: asyncio.Event | None = None
         # Metrics partitions
         self.n_metrics_partitions = len(config.clickhouse.cluster_topology.split(","))
         self.metrics_key_lock = threading.Lock()
         self.metrics_key_seq: int = 0
 
     def create_parser(self) -> argparse.ArgumentParser:
-        """
-        Return argument parser
-        """
+        """Return argument parser"""
         return argparse.ArgumentParser()
 
     def add_arguments(self, parser: argparse.ArgumentParser) -> None:
-        """
-        Apply additional parser arguments
-        """
+        """Apply additional parser arguments"""
         parser.add_argument(
             "--node", action="store", dest="node", default=config.node, help="NOC node name"
         )
         parser.add_argument(
             "--loglevel",
             action="store",
-            choices=list(self.LOG_LEVELS),
+            choices=["critical", "error", "warning", "info", "debug"],
             dest="loglevel",
-            default=config.loglevel,
             help="Logging level",
         )
         parser.add_argument(
@@ -209,40 +190,16 @@ class BaseService(object):
             )
 
     @classmethod
-    def die(cls, msg: str = "") -> NoReturn:
-        """
-        Dump message to stdout and terminate process with error code
-        """
+    def die(cls, msg: str = "") -> Never:
+        """Dump message to stdout and terminate process with error code"""
         sys.stdout.write(str(msg) + "\n")
         sys.stdout.flush()
         os._exit(1)
 
-    def setup_logging(self, loglevel=None):
-        """
-        Create new or setup existing logger
-        """
-        # @todo: Duplicates config.setup_logging
-        if not loglevel:
-            loglevel = config.loglevel
-        logger = logging.getLogger()
-        if len(logger.handlers):
-            # Logger is already initialized
-            fmt = ErrorFormatter(self.LOG_FORMAT, None)
-            for h in logging.root.handlers:
-                if isinstance(h, logging.StreamHandler):
-                    h.stream = sys.stdout
-                h.setFormatter(fmt)
-            logging.root.setLevel(loglevel)
-        else:
-            # Initialize logger
-            logging.basicConfig(stream=sys.stdout, format=self.LOG_FORMAT, level=loglevel)
-        self.logger = logging.getLogger(self.name)
-        logging.captureWarnings(True)
-
-    def setup_test_logging(self):
+    def setup_test_logging(self) -> None:
         self.logger = logging.getLogger(self.name)
 
-    def setup_translation(self):
+    def setup_translation(self) -> None:
         from noc.core.translation import set_translation, ugettext
 
         set_translation(self.name, config.language)
@@ -252,25 +209,14 @@ class BaseService(object):
             if "_" not in DEFAULT_NAMESPACE:
                 DEFAULT_NAMESPACE["_"] = ugettext
 
-    def on_change_loglevel(self, old_value, new_value):
-        if new_value not in self.LOG_LEVELS:
-            self.logger.error("Invalid loglevel '%s'. Ignoring", new_value)
-            return
-        self.logger.warning("Changing loglevel to %s", new_value)
-        logging.getLogger().setLevel(self.LOG_LEVELS[new_value])
-
-    def log_separator(self, symbol="*", length=72):
-        """
-        Log a separator string to visually split log
-        """
+    def log_separator(self, symbol: str = "*", length: int = 72) -> None:
+        """Log a separator string to visually split log"""
         self.logger.warning(symbol * length)
         if config.features.forensic:
             self.logger.warning("[noc.core.forensic] [=Process restarted]")
 
-    def setup_signal_handlers(self):
-        """
-        Set up signal handlers
-        """
+    def setup_signal_handlers(self) -> None:
+        """Set up signal handlers"""
         signal.signal(signal.SIGTERM, self.on_SIGTERM)
         if os.name == "nt":
             # Ctrl+C. For cancel traced Ctrl + Break
@@ -278,19 +224,28 @@ class BaseService(object):
         else:
             signal.signal(signal.SIGHUP, self.on_SIGHUP)
 
-    def set_proc_title(self):
-        """
-        Set process title
-        """
+    def set_proc_title(self) -> None:
+        """Set process title"""
         v = {"name": self.name, "instance": config.instance or "", "pool": config.pool or ""}
         title = self.process_name % v
         self.logger.debug("Setting process title to: %s", title)
         setproctitle.setproctitle(title)
 
-    def start(self):
-        """
-        Run main server loop
-        """
+    def set_cpu_affinity(self) -> None:
+        """Apply CPU affinity settings."""
+        expected = AffinityController.effective_affinity(config.process.cpu_affinity)
+        if expected is AFF_NONE:
+            return
+        if not AffinityController.supports_set:
+            self.logger.info(
+                "CPU affinity is configured, but setting CPU affinity is not supported. Skipping"
+            )
+            return
+        self.logger.info("Setting CPU affinity to %s", ", ".join(str(x) for x in sorted(expected)))
+        AffinityController.set_affinity(expected)
+
+    def start(self) -> None:
+        """Run main server loop"""
         self.startup_ts = perf_counter()
         parser = self.create_parser()
         self.add_arguments(parser)
@@ -298,18 +253,19 @@ class BaseService(object):
         cmd_options = vars(options)
         cmd_options.pop("args", ())
         # Bootstrap logging with --loglevel
-        self.setup_logging(cmd_options["loglevel"])
+        # Apply --loglevel when necessary
+        loglevel = cmd_options.get("loglevel")
+        if loglevel:
+            config.loglevel = loglevel
+        # Apply configuration setup
+        config.setup()
         self.log_separator()
-        # Setup timezone
-        try:
-            self.logger.info("Setting timezone to %s", config.timezone)
-            setup_timezone()
-        except ValueError as e:
-            self.die(str(e))
         # Setup title
         self.set_proc_title()
         # Setup signal handlers
         self.setup_signal_handlers()
+        # Setup CPU affinity
+        self.set_cpu_affinity()
         self.on_start()
         # Starting IOLoop
         self.is_active = True
@@ -340,31 +296,27 @@ class BaseService(object):
     def get_event_loop(self) -> asyncio.BaseEventLoop:
         return self.loop
 
-    def on_start(self):
-        """
-        Reload config
-        """
+    def on_start(self) -> None:
+        """Reload config"""
         if self.use_translation:
             self.setup_translation()
 
-    def stop(self):
+    def stop(self) -> None:
         self.logger.warning("Stopping")
         self.loop.create_task(self.deactivate())
 
-    def on_SIGHUP(self, signo, frame):
+    def on_SIGHUP(self, signo, frame) -> None:
         # self.logger.warning("SIGHUP caught, rereading config")
         pass
 
-    def on_SIGTERM(self, signo, frame):
+    def on_SIGTERM(self, signo, frame) -> None:
         self.logger.warning("SIGTERM caught, Stopping")
         self.stop()
 
-    def get_service_address(self) -> Tuple[str, int]:
-        """
-        Returns an (address, port) for HTTP service listener
-        """
+    def get_service_address(self) -> tuple[str, int]:
+        """Returns an (address, port) for HTTP service listener"""
         if self.address and self.port:
-            return self.address, self.port
+            return self.address, self.port  # Already resolved
         if config.listen:
             addr, port = config.listen.split(":")
             port_tracker = config.instance
@@ -373,29 +325,46 @@ class BaseService(object):
             port_tracker = 0
         if addr == "auto":
             addr = config.node
-            self.logger.info("Autodetecting address: auto -> %s", addr)
-        addr = config.node
+            self.logger.info("Autodetecting address to %s", addr)
+        elif not is_ipv4(addr):
+            addr = self.resolve_addr(addr)
+            self.logger.info("Resolving address to %s", addr)
         port = int(port) + port_tracker
         return addr, port
 
-    async def init_api(self):
+    def resolve_addr(self, addr: str) -> str:
+        """Resolve symbolic name to address.
+
+        Tries to:
+
+        1. Resolve to interface name.
+        2. Or leave untouched.
+
+        Args:
+            addr: Symbolic name.
+
+        Returns:
+            Resolved address.
         """
-        Initialize API routers and handlers
-        :return:
-        """
+        import psutil
+
+        if_addrs = psutil.net_if_addrs()
+        if if_addrs.get(addr):
+            r = [a.address for a in if_addrs[addr] if a.family == socket.AddressFamily.AF_INET]
+            if r:
+                return r[0]
+        return addr  # Leave untouched
+
+    async def init_api(self) -> None:
+        """Initialize API routers and handlers"""
         raise NotImplementedError
 
-    async def shutdown_api(self):
-        """
-        Stop API services
-        :return:
-        """
+    async def shutdown_api(self) -> None:
+        """Stop API services"""
         raise NotImplementedError
 
-    async def activate(self):
-        """
-        Initialize services before run
-        """
+    async def activate(self) -> None:
+        """Initialize services before run"""
         self.logger.warning("Activating service")
         if self.use_mongo:
             from noc.core.mongo.connection import connect
@@ -413,7 +382,7 @@ class BaseService(object):
             self.start_telemetry_callback()
         self.loop.create_task(self.on_register())
 
-    async def deactivate(self):
+    async def deactivate(self) -> None:
         if not self.is_active:
             self.logger.info("Not Active")
             return
@@ -452,7 +421,7 @@ class BaseService(object):
         self.logger.info("Post-mortem metrics: %s", m)
         self.die("")
 
-    def get_register_tags(self):
+    def get_register_tags(self) -> list[str]:
         tags = ["noc"]
         if config.features.traefik and self.traefik_routes_rule and self.name:
             tags += [
@@ -475,7 +444,7 @@ class BaseService(object):
             #     tags += [f"traefik.backend.maxconn.amount={limit}"]
         return tags
 
-    async def on_register(self):
+    async def on_register(self) -> None:
         addr, port = self.get_service_address()
         r = await self.dcs.register(
             self.name,
@@ -499,18 +468,15 @@ class BaseService(object):
         else:
             raise self.RegistrationError()
 
-    async def on_activate(self):
-        """
-        Called when service activated
-        """
-        return
+    async def on_activate(self) -> None:
+        """Called when service activated"""
 
-    async def acquire_lock(self):
-        await self.dcs.acquire_lock("lock-%s" % self.name)
+    async def acquire_lock(self) -> None:
+        await self.dcs.acquire_lock(f"lock-{self.name}")
 
-    async def acquire_slot(self):
+    async def acquire_slot(self) -> None:
         if self.pooled:
-            name = "%s-%s" % (self.name, config.pool)
+            name = f"{self.name}-{config.pool}"
         else:
             name = self.name
         slot_number, total_slots = await self.dcs.acquire_slot(name, config.global_n_instances)
@@ -518,26 +484,18 @@ class BaseService(object):
             self.die("Service misconfiguration detected: Invalid total_slots")
         return slot_number, total_slots
 
-    async def on_deactivate(self):
-        return
+    async def on_deactivate(self) -> None:
+        return None
 
-    def open_rpc(self, name, pool=None, sync=False, hints=None):
-        """
-        Returns RPC proxy object.
-        """
-        if pool:
-            svc = "%s-%s" % (name, pool)
-        else:
-            svc = name
-        return RPCProxy(self, svc, sync=sync, hints=hints)
+    def open_rpc(self, name: str, pool: str | None = None, sync: bool = False, hints=None):
+        """Returns RPC proxy object."""
+        return RPCProxy(self, f"{name}-{pool}" if pool else name, sync=sync, hints=hints)
 
-    def get_mon_status(self):
+    def get_mon_status(self) -> bool:
         return True
 
-    def get_mon_data(self):
-        """
-        Returns monitoring data
-        """
+    def get_mon_data(self) -> dict[str, Any]:
+        """Returns monitoring data"""
         r = {
             "status": self.get_mon_status(),
             "service": self.name,
@@ -560,9 +518,7 @@ class BaseService(object):
         return r
 
     def iter_rpc_retry_timeout(self) -> Iterable[float]:
-        """
-        Yield timeout to wait after unsuccessful RPC connection
-        """
+        """Yield timeout to wait after unsuccessful RPC connection"""
         for t in config.rpc.retry_timeout.split(","):
             yield float(t)
 
@@ -574,19 +530,16 @@ class BaseService(object):
             [Message],
             Awaitable[None],
         ],
-        start_timestamp: Optional[float] = None,
-        cursor_id: Optional[str] = None,
+        start_timestamp: float | None = None,
+        cursor_id: str | None = None,
         auto_set_cursor: bool = True,
         async_cursor: bool = False,
-        async_cursor_condition: asyncio.Condition = None,
+        async_cursor_condition: asyncio.Condition | None = None,
     ) -> None:
         # @todo: Restart on failure
         async def set_cursor_sync(offset: int) -> None:
-            """
-            Synchronous version of cursor setter.
+            """Synchronous version of cursor setter.
             Blocks until the cursor is really set.
-            :param offset:
-            :return:
             """
             await client.set_cursor(
                 stream=stream,
@@ -596,11 +549,8 @@ class BaseService(object):
             )
 
         async def set_cursor_async(offset: int) -> None:
-            """
-            Asynchronous version of cursor setter. Doesn't block subscriber loop,
+            """Asynchronous version of cursor setter. Doesn't block subscriber loop,
             though committed cursor position may lag behind the really processed one.
-            :param offset:
-            :return:
             """
             nonlocal cursor_cond, cursor_offset
             async with cursor_cond:
@@ -675,11 +625,8 @@ class BaseService(object):
         if self.subscriber_shutdown_waiter and not self.active_subscribers:
             self.subscriber_shutdown_waiter.set()
 
-    def _init_publisher(self):
-        """
-        Spin-up publisher and queue
-        :return:
-        """
+    def _init_publisher(self) -> None:
+        """Spin-up publisher and queue"""
         with self.publisher_start_lock:
             if self.publish_queue:
                 return  # Created in concurrent thread
@@ -694,19 +641,11 @@ class BaseService(object):
         self,
         value: bytes,
         stream: str,
-        partition: Optional[int] = None,
-        key: Optional[bytes] = None,
-        headers: Optional[Dict[str, bytes]] = None,
-    ):
-        """
-        Schedule publish request
-        :param value:
-        :param stream:
-        :param partition:
-        :param key:
-        :param headers:
-        :return:
-        """
+        partition: int | None = None,
+        key: bytes | None = None,
+        headers: dict[str, bytes] | None = None,
+    ) -> None:
+        """Schedule publish request"""
         if not self.publish_queue:
             self._init_publisher()
         req = MessageStreamClient.get_publish_request(
@@ -714,7 +653,7 @@ class BaseService(object):
         )
         self.publish_queue.put(req)
 
-    async def publisher(self):
+    async def publisher(self) -> None:
         async with MessageStreamClient() as client:
             while not self.publish_queue.to_shutdown:
                 req = await self.publish_queue.get(timeout=1)
@@ -728,7 +667,7 @@ class BaseService(object):
                     await asyncio.sleep(1)
                     self.publish_queue.put(req, fifo=False)
 
-    async def shutdown_executors(self):
+    async def shutdown_executors(self) -> None:
         if self.executors:
             self.logger.info("Shutting down executors")
             for x in self.executors:
@@ -738,7 +677,7 @@ class BaseService(object):
                 except asyncio.TimeoutError:
                     self.logger.info("Timed out when shutting down %s", x)
 
-    async def shutdown_subscriptions(self):
+    async def shutdown_subscriptions(self) -> None:
         self.logger.info("Shutting down subscriptions")
         self.subscriber_shutdown_waiter = asyncio.Event()
         try:
@@ -748,7 +687,7 @@ class BaseService(object):
                 "Timed out when shutting down subscriptions. Some message may be still processing"
             )
 
-    async def shutdown_publisher(self):
+    async def shutdown_publisher(self) -> None:
         if self.publish_queue:
             r = await self.publish_queue.drain(5.0)
             if not r:
@@ -759,12 +698,10 @@ class BaseService(object):
             self.publish_queue.shutdown()
 
     def get_executor(self, name: str) -> ThreadPoolExecutor:
-        """
-        Return or start named executor
-        """
+        """Return or start named executor"""
         executor = self.executors.get(name)
         if not executor:
-            xt = "%s.%s_threads" % (self.name, name)
+            xt = f"{self.name}.{name}_threads"
             max_threads = config.get_parameter(xt)
             self.logger.info(
                 "Starting threadpool executor %s (up to %d threads)", name, max_threads
@@ -779,11 +716,8 @@ class BaseService(object):
         executor = self.get_executor(name)
         return executor.submit(fn, *args, **kwargs)
 
-    async def message_route(self):
-        """
-        Route messages from mx_queue
-        :return:
-        """
+    async def message_route(self) -> None:
+        """Route messages from mx_queue"""
         self.logger.info("Starting Message Routing")
         while not (self.publish_queue.to_shutdown and self.mx_queue.is_empty()):
             t0 = perf_counter()
@@ -796,13 +730,13 @@ class BaseService(object):
                     await asyncio.sleep(to_sleep)
 
     async def publish_metrics(
-        self, queue: QBuffer, headers: Optional[Dict[str, bytes]] = None
+        self, queue: QBuffer, headers: dict[str, bytes] | None = None
     ) -> None:
-        """
-        Schedule metrics to send stream
+        """Schedule metrics to send stream
 
-        :param queue: Metrics Queue
-        :param headers: Message Headers
+        Args:
+            queue: Metrics Queue
+            headers: Message Headers
         """
         while not (self.publish_queue.to_shutdown and queue.is_empty()):
             t0 = perf_counter()
@@ -813,16 +747,13 @@ class BaseService(object):
                 if to_sleep > 0:
                     await asyncio.sleep(to_sleep)
 
-    def register_metrics(
-        self, table: str, metrics: List[Dict[str, Any]], key: Optional[int] = None
-    ):
-        """
-        Schedule metrics to be sent to the `table`.
+    def register_metrics(self, table: str, metrics: list[dict[str, Any]], key: int | None = None):
+        """Schedule metrics to be sent to the `table`.
 
-        :param table: Table name
-        :param metrics: List of dicts containing metrics records
-        :param key: Sharding key, None for round-robin distribution
-        :return:
+        Args:
+            table: Table name
+            metrics: List of dicts containing metrics records
+            key: Sharding key, None for round-robin distribution
         """
         if key is None:
             with self.metrics_key_lock:
@@ -835,27 +766,18 @@ class BaseService(object):
         )
 
     def start_telemetry_callback(self) -> None:
-        """
-        Run telemetry callback
-        :return:
-        """
+        """Run telemetry callback"""
         self.telemetry_callback = PeriodicCallback(self.send_telemetry, 250)
         self.telemetry_callback.start()
 
-    async def send_telemetry(self):
-        """
-        Publish telemetry data
-
-        :return:
-        """
+    async def send_telemetry(self) -> None:
+        """Publish telemetry data"""
         spans = get_spans()
         if spans:
             self.register_metrics("span", [span_to_dict(s) for s in spans])
 
-    async def get_mx_routes_config(self):
-        """
-        Subscribe and track datastream changes
-        """
+    async def get_mx_routes_config(self) -> None:
+        """Subscribe and track datastream changes"""
         client = RouteDataStreamClient("cfgmxroute", service=self)
         # Track stream changes
         while True:
@@ -866,7 +788,7 @@ class BaseService(object):
                 self.logger.info("Failed to get MX route settings: %s", e)
                 await asyncio.sleep(1)
 
-    async def update_route(self, data: Dict[str, Any]) -> None:
+    async def update_route(self, data: dict[str, Any]) -> None:
         self.router.change_route(data)
 
     async def delete_route(self, r_id: str) -> None:
@@ -876,19 +798,18 @@ class BaseService(object):
         self,
         data: Any,
         message_type: MessageType,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: dict[str, bytes] | None = None,
         sharding_key: int = 0,
         store: bool = False,
-    ):
-        """
-        Build message and schedule to send to mx service
+    ) -> None:
+        """Build message and schedule to send to mx service
 
-        :param data: Data for transmit
-        :param message_type: Message type
-        :param headers: additional message headers
-        :param sharding_key: Key for sharding over MX services
-        :param store: Append message to buffer for deliver
-        :return:
+        Args:
+            data: Data for transmit
+            message_type: Message type
+            headers: additional message headers
+            sharding_key: Key for sharding over MX services
+            store: Append message to buffer for deliver
         """
         msg = Router.get_message(data, message_type.value, headers, sharding_key)
         self.logger.debug("Send message: %s", msg)
@@ -912,18 +833,17 @@ class BaseService(object):
         self,
         data: Any,
         message_type: MessageType,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: dict[str, bytes] | None = None,
         sharding_key: int = 0,
-        group_key: Optional[str] = None,
-    ):
-        """
-        Register message for deliver
-        :param data: Data for transmit
-        :param message_type: Message type
-        :param headers: additional message headers
-        :param sharding_key: Key for sharding over MX services
-        :param group_key:
-        :return:
+        group_key: str | None = None,
+    ) -> None:
+        """Register message for deliver
+
+        Args:
+            data: Data for transmit
+            message_type: Message type
+            headers: additional message headers
+            sharding_key: Key for sharding over MX services
         """
         msg = Router.get_message(
             data,
@@ -934,62 +854,50 @@ class BaseService(object):
         )
         self.mx_queue.put(msg, group_key)
 
-    def get_leader_lock_name(self):
+    def get_leader_lock_name(self) -> str | None:
         if self.leader_lock_name:
             return self.leader_lock_name % {"pool": config.pool}
         return None
 
-    def get_backend_weight(self):
-        """
-        Return backend weight for weighted load balancers
+    def get_backend_weight(self) -> int | None:
+        """Return backend weight for weighted load balancers
         (i.e. traefik).
         Return None for default weight
-        :return:
         """
-        return
+        return None
 
-    def get_backend_limit(self):
-        """
-        Return backend connection limit for load balancers
+    def get_backend_limit(self) -> int | None:
+        """Return backend connection limit for load balancers
         (i.e. traefik)
         Return None for no limits
-        :return:
         """
-        return
+        return None
 
-    def is_valid_health_check(self, service_id):
-        """
-        Check received service id matches own service id
-        :param service_id:
-        :return:
-        """
+    def is_valid_health_check(self, service_id: str) -> bool:
+        """Check received service id matches own service id"""
         return not (
             self.dcs
             and self.dcs.health_check_service_id
             and self.dcs.health_check_service_id != service_id
         )
 
-    def get_health_status(self):
-        """
-        Check service health to be reported to service registry
-        :return: (http code, message)
+    def get_health_status(self) -> tuple[int, str]:
+        """Check service health to be reported to service registry
+
+        Returns:
+            (http code, message)
         """
         if self.dcs and self.require_dcs_health:
             # DCS is initialized
             return self.dcs.get_status()
         return 200, "OK"
 
-    def uptime(self):
+    def uptime(self) -> float:
         if not self.startup_ts:
             return 0
         return perf_counter() - self.startup_ts
 
     async def get_stream_partitions(self, stream: str) -> int:
-        """
-
-        :param stream:
-        :return:
-        """
         async with MessageStreamClient() as client:
             while True:
                 meta = await client.fetch_metadata()
@@ -999,14 +907,13 @@ class BaseService(object):
                             return len(meta.metadata[stream])
                         break
                 # Cluster election in progress or cluster is misconfigured
-                self.logger.info("Stream '%s' has no active partitions. Waiting" % stream)
+                self.logger.info(f"Stream '{stream}' has no active partitions. Waiting")
                 await asyncio.sleep(1)
 
     @staticmethod
     @cachetools.cached(cachetools.TTLCache(maxsize=128, ttl=60), lock=dcs_slot_lock)
-    def get_slot_limits(slot_name):
-        """
-        Get slot count
+    def get_slot_limits(slot_name) -> int | None:
+        """Get slot count
         Args:
             slot_name:
         """
@@ -1017,16 +924,12 @@ class BaseService(object):
         return run_sync(partial(dcs.get_slot_limit, slot_name))
 
     async def on_route_rules_ready(self) -> None:
-        """
-        Called when all Router rules are ready.
-        """
+        """Called when all Router rules are ready."""
         return
 
-    async def watchdog(self):
-        """
-        WatchDog task. View watchdog_waiter event, by setting /health API.
+    async def watchdog(self) -> None:
+        """WatchDog task. View watchdog_waiter event, by setting /health API.
         If not set event - force reboot process
-        :return:
         """
         failed, delay, deviation = 0, config.watchdog.check_interval, 0.5
         while True:

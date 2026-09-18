@@ -198,7 +198,7 @@ Ext.define("NOC.support.account.AccountPanel", {
     }
     values = me.form.getValues();
     delete values["password2"];
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/support/account/account/",
       method: "POST",
       jsonData: values,

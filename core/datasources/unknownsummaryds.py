@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Any, Optional, Iterable, Tuple, AsyncIterable
+from typing import Any, Iterable, AsyncIterable
 
 # NOC modules
 from .base import FieldInfo, FieldType, BaseDataSource
@@ -26,10 +26,10 @@ class UnknownSummaryDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
+        fields: Iterable[str] | None = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[int, str, Any]]:
+    ) -> AsyncIterable[tuple[int, str, Any]]:
         data = {}  # vendor, part_no -> description, count
         for c in UnknownModel._get_collection().find():
             vendor = c["vendor"]

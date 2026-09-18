@@ -18,7 +18,7 @@ from noc.inv.models.resourcegroup import ResourceGroup
 
 
 class AlarmTrigger(NOCModel):
-    class Meta(object):
+    class Meta:
         db_table = "fm_alarmtrigger"
         app_label = "fm"
         verbose_name = "Alarm Trigger"
@@ -46,4 +46,4 @@ class AlarmTrigger(NOCModel):
     handler = models.CharField("Handler", max_length=128, null=True, blank=True)
 
     def __str__(self):
-        return "%s <<<%s>>>" % (self.alarm_class_re, self.condition)
+        return f"{self.alarm_class_re} <<<{self.condition}>>>"

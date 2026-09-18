@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from .base import BaseCDAGNode, Category, ValueType
@@ -20,5 +19,5 @@ class OneNode(BaseCDAGNode):
     name = "one"
     categories = [Category.UTIL]
 
-    def get_value(self, x: ValueType) -> Optional[ValueType]:
+    def get_value(self, x: ValueType) -> ValueType | None:
         return x

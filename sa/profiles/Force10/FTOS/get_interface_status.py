@@ -35,7 +35,7 @@ class Script(BaseScript):
         # Fallback to CLI
         r = []
         if interface:
-            cmd = 'show interface %s | grep "line protocol is"' % interface
+            cmd = f'show interface {interface} | grep "line protocol is"'
         else:
             cmd = 'show interface | grep "line protocol is"'
 

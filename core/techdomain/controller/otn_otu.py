@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Iterable, Any, Optional
+from typing import Iterable, Any
 
 # NOC modules
 from noc.inv.models.object import Object
@@ -201,7 +201,7 @@ class OTNOTUController(BaseController):
             e.used_by += [UsageItem(channel=ch)]
             e.save()
 
-        def otu_discriminator(start: Endpoint, end: Endpoint) -> Optional[str]:
+        def otu_discriminator(start: Endpoint, end: Endpoint) -> str | None:
             """Calculate OTU type"""
             # Get from crossing
             s_otu = get_crossing_otu(start)
@@ -220,7 +220,7 @@ class OTNOTUController(BaseController):
             r = sorted(common, key=otu_rank, reverse=True)[0]
             return f"otu::{r}"
 
-        def get_crossing_otu(ep: Endpoint) -> Optional[str]:
+        def get_crossing_otu(ep: Endpoint) -> str | None:
             """Get OTU from crossing."""
             for cc in ep.object.iter_effective_crossing():
                 if cc.output == ep.name and cc.output_discriminator:

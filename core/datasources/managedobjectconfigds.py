@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Optional, Iterable, Tuple, AsyncIterable
+from typing import Iterable, AsyncIterable
 
 # Third-party modules
 from pymongo.read_preferences import ReadPreference
@@ -28,8 +28,8 @@ class ManagedObjectConfigDS(BaseDataSource):
 
     @classmethod
     async def iter_query(
-        cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
-    ) -> AsyncIterable[Tuple[str, str]]:
+        cls, fields: Iterable[str] | None = None, *args, **kwargs
+    ) -> AsyncIterable[tuple[str, str]]:
         pipeline = [
             {"$group": {"_id": "$object", "last_ts": {"$max": "$ts"}}},
             {"$sort": {"_id": 1}},

@@ -10,8 +10,7 @@ from .oid import OIDRule
 
 
 class CapabilityListRule(OIDRule):
-    """
-    Expand {{item}} from capability
+    """Expand {{item}} from capability
     capability: String capability, separated by *separator*
     separator: String separator, comma by default
     strip: Strip resulting item, remove spaces from both sides

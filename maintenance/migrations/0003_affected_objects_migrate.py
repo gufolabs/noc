@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         ao_coll = self.mongo_db["noc.affectedobjects"]
         db = self.mongo_db
         for ao in db.noc.maintenance.find({"affected_objects": {"$exists": True}}):

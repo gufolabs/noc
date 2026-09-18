@@ -73,7 +73,7 @@ Ext.define("NOC.vc.vlan.AddVLANForm", {
     if(r.name){
       params.name = r.name;
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       method: "GET",
       url: "/vc/vlan/allocate/",
       params: params,

@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Type
 from asyncio.exceptions import TimeoutError
 
 # NOC module
@@ -17,14 +16,14 @@ from noc.core.comp import smart_bytes
 from .error import CLIConnectionReset
 
 
-class BaseCLI(object):
+class BaseCLI:
     name = "base"
 
-    def __init__(self, script, tos: Optional[int] = None):
+    def __init__(self, script, tos: int | None = None) -> None:
         self.script = script
         self.profile = script.profile
         self.logger = PrefixLoggerAdapter(self.script.logger, self.name)
-        self.stream: Optional[BaseStream] = None
+        self.stream: BaseStream | None = None
         self.tos = tos
         self.is_started = False
         # Current error to raise on TimeoutError
@@ -54,7 +53,7 @@ class BaseCLI(object):
         raise NotImplementedError
 
     def set_timeout(
-        self, timeout: Optional[float] = None, error: Optional[Type[Exception]] = None
+        self, timeout: float | None = None, error: type[Exception] | None = None
     ) -> None:
         if timeout:
             error = error or CLIConnectionReset
@@ -67,10 +66,7 @@ class BaseCLI(object):
             self.stream.set_timeout(None)
 
     def get_stream(self) -> "BaseStream":
-        """
-        Stream factory. Must be overriden in subclasses.
-        :return:
-        """
+        """Stream factory. Must be overriden in subclasses."""
         raise NotImplementedError
 
     async def start_stream(self):

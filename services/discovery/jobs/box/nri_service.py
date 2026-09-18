@@ -9,7 +9,7 @@
 from collections import defaultdict
 
 # Third-party modules
-from typing import Dict, List, Any, DefaultDict
+from typing import Any
 
 # NOC modules
 from noc.services.discovery.jobs.base import DiscoveryCheck
@@ -35,7 +35,8 @@ class NRIServiceCheck(DiscoveryCheck):
         self.logger.info("NRI Service Mapper")
         processed_instances = {}
         profiles = {}
-        resources: DefaultDict[ServiceInstance, List[Any]] = defaultdict(list)
+        exposed_caps = {}
+        resources: defaultdict[ServiceInstance, list[Any]] = defaultdict(list)
         # Managed Object Binding
         for si in ServiceInstance.iter_object_instances(self.object):
             if si.service.profile.instance_policy == "D":
@@ -45,19 +46,26 @@ class NRIServiceCheck(DiscoveryCheck):
                 self.logger.info("Bind object to Service Instance: %s", si)
                 si.refresh_managed_object(self.object)
             processed_instances[si.id] = si
+            exposed_caps |= si.service.get_caps(exposed_scope="sa.ManagedObject")
         # For ManagedObject not in SI - Reset
         for si in ServiceInstance.objects.filter(
             managed_object=self.object,
             id__nin=list(processed_instances),
-            sources__in=[InputSource.ETL, InputSource.CONFIG],
+            sources__in=[InputSource.ETL, InputSource.CONFIG, InputSource.MANUAL],
         ):
+            if InputSource.MANUAL in si.sources:
+                self.logger.info("Manual binded Object. Continue: %s", si.service.label)
+                exposed_caps |= si.service.get_caps(exposed_scope="sa.ManagedObject")
+                continue
             si.reset_object()
             self.logger.info("UnBind object to Service Instance: %s", si)
+        self.logger.info("Update exposed Capabilities: %s", exposed_caps)
+        self.object.update_caps(exposed_caps, source=InputSource.DATABASE, scope="sa.Service")
         bulk = []
         # Extract ResourceKey
         # resource_key -> ServiceInstance
-        nri_map_instances: Dict[str, ServiceInstance] = {}
-        address_map_instance: Dict[str, ServiceInstance] = {}
+        nri_map_instances: dict[str, ServiceInstance] = {}
+        address_map_instance: dict[str, ServiceInstance] = {}
         for si in ServiceInstance.objects.filter(
             managed_object=self.object,
             sources__in=[InputSource.ETL, InputSource.CONFIG],
@@ -72,8 +80,8 @@ class NRIServiceCheck(DiscoveryCheck):
             if si.config.allow_resources:
                 for addr in si.addresses:
                     p = IP.prefix(addr.address)
-                    if p.address != self.object.address:
-                        continue
+                    # if p.address != self.object.address:
+                    #     continue
                     address_map_instance[p.address] = si
         # Resolve resources by key
         if nri_map_instances:
@@ -93,6 +101,7 @@ class NRIServiceCheck(DiscoveryCheck):
                 self.logger.info("[%s] Set profile from service: %s", iface, profile)
                 iface.profile = profile
                 iface.save()
+        # Update Caps
         if bulk:
             si_col = ServiceInstance._get_collection()
             self.logger.info("Sending %d updates", len(bulk))
@@ -103,9 +112,9 @@ class NRIServiceCheck(DiscoveryCheck):
 
     def map_nri_ports(
         self,
-        instances: Dict[str, ServiceInstance],
-        resources: Dict[ServiceInstance, List[Any]],
-        profiles: Dict[Any, Interface],
+        instances: dict[str, ServiceInstance],
+        resources: dict[ServiceInstance, list[Any]],
+        profiles: dict[Any, Interface],
     ):
         """Resolve Resource by nri_name"""
         # Check object has interfaces
@@ -121,9 +130,9 @@ class NRIServiceCheck(DiscoveryCheck):
 
     def map_address_port(
         self,
-        addresses: Dict[str, ServiceInstance],
-        resources: Dict[ServiceInstance, List[Any]],
-        profiles: Dict[Any, Interface],
+        addresses: dict[str, ServiceInstance],
+        resources: dict[ServiceInstance, list[Any]],
+        profiles: dict[Any, Interface],
     ):
         """Resolve Resource by IP Address"""
         if not self.has_capability("DB | Interfaces"):

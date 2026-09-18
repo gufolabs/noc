@@ -8,35 +8,34 @@
 # Python modules
 import os
 import hashlib
-from typing import List, Optional
+from pathlib import Path
 
 # Third-party modules
 from fastapi import APIRouter, Request
-from fastapi.responses import ORJSONResponse, HTMLResponse
+from fastapi.responses import JSONResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 # NOC modules
 from noc.config import config
-from noc.core.comp import smart_bytes
 from noc.core.service.loader import get_service
 
 FORBIDDEN_MESSAGE = "<html><title>403: Forbidden</title><body>403: Forbidden</body></html>"
 
 
-class BaseAPI(object):
+class BaseAPI:
     """
     Base API Class
     """
 
     # API name
-    api_name: Optional[str] = None
+    api_name: str | None = None
     # Tags for OpenAPI documentation
-    openapi_tags: List[str] = []
+    openapi_tags: list[str] = []
 
     hash = None
     PREFIX = os.getcwd()
 
-    def __init__(self, router: APIRouter):
+    def __init__(self, router: APIRouter) -> None:
         self.service = get_service()
         self.logger = self.service.logger
         self.router = router
@@ -57,7 +56,7 @@ class BaseAPI(object):
                 path=route["path"],
                 methods=[route["method"]],  # ["POST"]
                 endpoint=route["endpoint"],
-                response_class=route.get("response_class", ORJSONResponse),
+                response_class=route.get("response_class", JSONResponse),
                 response_model=route["response_model"],
                 name=route["name"],
                 description=route["description"],
@@ -109,18 +108,11 @@ class BaseAPI(object):
         result.headers["Expires"] = "0"
         return result
 
-    def hashed(self, url):
-        """
-        Convert path to path?hash version
-        :param path:
-        :return:
-        """
-        u = url
-        if u.startswith("/"):
-            u = url[1:]
-        path = os.path.join(self.PREFIX, u)
-        if not os.path.exists(path):
-            return "%s?%s" % (url, "00000000")
-        with open(path) as f:
-            hash = hashlib.sha256(smart_bytes(f.read())).hexdigest()[:8]
-        return "%s?%s" % (url, hash)
+    def hashed(self, url: str) -> str:
+        """Convert path to path?hash version."""
+        u = url.lstrip("/")
+        file_path = Path(self.PREFIX, u)
+        hash_hex = "00000000"
+        if file_path.is_file():
+            hash_hex = hashlib.sha256(file_path.read_bytes()).hexdigest()[:8]
+        return f"{url}?{hash_hex}"

@@ -20,7 +20,7 @@ ignorable_redis_errors = (redis.exceptions.ConnectionError, redis.exceptions.Tim
 
 
 class RedisCache(BaseCache):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.redis = redis.StrictRedis(
             host=config.redis.addresses[0].host,
@@ -43,9 +43,6 @@ class RedisCache(BaseCache):
     def get(self, key, default=None, version=None):
         """
         Returns value or raise KeyError
-        :param key:
-        :param default:
-        :param version:
         :return: value
         """
         k = self.make_key(key, version)
@@ -61,10 +58,6 @@ class RedisCache(BaseCache):
     def set(self, key, value, ttl=None, version=None):
         """
         Set key
-        :param key:
-        :param value:
-        :param ttl:
-        :param version:
         :return:
         """
         k = self.make_key(key, version)

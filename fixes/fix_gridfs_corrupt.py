@@ -35,7 +35,7 @@ def fix_repo(repo):
 
 
 def fix_object(vcs, object, corrupt):
-    print("@@@ %s" % object)
+    print(f"@@@ {object}")
     revs = list(vcs.iter_revisions(object))
     show_revs(revs, corrupt)
     while True:
@@ -64,9 +64,6 @@ def find_corrupt(vcs, revs, corrupt):
 def cut_corrupt(vcs, revs, cidx):
     """
     Cut corrupted part of the history
-    :param vcs:
-    :param revs:
-    :param cidx:
     :return:
     """
     # Start of slice
@@ -85,4 +82,4 @@ def cut_corrupt(vcs, revs, cidx):
 
 def show_revs(revs, corrupt):
     for r in revs:
-        print("    %s %s %s" % (r.ts, r.ft, "*" if r.id in corrupt else " "))
+        print("    {} {} {}".format(r.ts, r.ft, "*" if r.id in corrupt else " "))

@@ -20,12 +20,12 @@ class Script(BaseScript):
         if vlan:
             cmd += " vlan %d" % vlan
         if mac:
-            cmd += " address %s" % mac
+            cmd += f" address {mac}"
         if interface:
             if interface.lower().startswith("po"):
-                cmd += " port-channel %s" % interface
+                cmd += f" port-channel {interface}"
             else:
-                cmd += " ethernet %s" % interface
+                cmd += f" ethernet {interface}"
         r = []
         for v, m, port, type in parse_table(self.cli(cmd)):
             r += [

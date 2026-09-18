@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column(
             "ip_prefix", "name", models.CharField("Name", max_length=255, null=True, blank=True)
         )

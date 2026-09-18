@@ -78,12 +78,12 @@ class Profile(BaseProfile):
         """
         s = s.strip()
         if s.startswith("Port"):
-            return "Eth 1/%s" % s[4:].strip()
+            return f"Eth 1/{s[4:].strip()}"
         if s.startswith("ethernet "):
-            return "Eth %s" % s[9:].strip()
+            return f"Eth {s[9:].strip()}"
         match = self.rx_if_snmp_eth.match(s)
         if match:
-            return "Eth %s/%s" % (match.group("unit"), match.group("port"))
+            return "Eth {}/{}".format(match.group("unit"), match.group("port"))
         s = s.replace("  ", " ")
         return s.replace("/ ", "/")
 

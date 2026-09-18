@@ -7,7 +7,7 @@
 
 # Python modules
 import operator
-from typing import Optional, List
+from typing import Optional
 from threading import Lock
 
 # Third-party modules
@@ -34,8 +34,8 @@ id_lock = Lock()
 
 class MatchRule(BaseModel):
     dynamic_order: int = 0
-    labels: List[str] = []
-    handler: Optional[str]
+    labels: list[str] = []
+    handler: str | None
 
     @field_validator("handler")
     def handler_must_handler(cls, v):  # pylint: disable=no-self-argument
@@ -49,7 +49,7 @@ class MatchRule(BaseModel):
         return str(h.id)
 
 
-MatchRules = RootModel[List[Optional[MatchRule]]]
+MatchRules = RootModel[list[MatchRule | None]]
 
 
 @Label.model
@@ -57,7 +57,7 @@ MatchRules = RootModel[List[Optional[MatchRule]]]
 @bi_sync
 @on_delete_check(check=[("sa.ManagedObject", "auth_profile")])
 class AuthProfile(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Auth Profile"
         verbose_name_plural = "Auth Profiles"
         db_table = "sa_authprofile"
@@ -157,7 +157,7 @@ class AuthProfile(NOCModel):
         from .managedobject import CREDENTIAL_CACHE_VERSION
 
         cache.delete_many(
-            ["cred-%s" % x for x in self.managedobject_set.values_list("id", flat=True)],
+            [f"cred-{x}" for x in self.managedobject_set.values_list("id", flat=True)],
             version=CREDENTIAL_CACHE_VERSION,
         )
 

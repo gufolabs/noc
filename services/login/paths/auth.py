@@ -7,18 +7,18 @@
 
 # Python modules
 import logging
-from typing import Optional, Tuple
 import codecs
+from urllib.parse import quote
 
 # Third-party modules
 from fastapi import APIRouter, Request, Cookie, Header, Depends
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import JSONResponse
 import cachetools
 
 # NOC modules
 from noc.config import config
 from noc.aaa.models.apikey import APIKey
-from noc.core.comp import smart_text, smart_bytes
+from noc.core.comp import smart_bytes
 from ..auth import (
     authenticate,
     register_last_login,
@@ -41,6 +41,19 @@ PINHOLE_PATHS = {
 }
 
 
+def encode_user(user: str) -> str:
+    """
+    Encode username to be passed via Remote-User.
+
+    Args:
+        user: User name.
+
+    Returns:
+        encoded user name.
+    """
+    return quote(user)
+
+
 @router.get("/api/auth/auth/", tags=["auth"])
 @router.post("/api/auth/auth/", tags=["auth"])
 @router.put("/api/auth/auth/", tags=["auth"])
@@ -51,11 +64,11 @@ PINHOLE_PATHS = {
 @router.trace("/api/auth/auth/", tags=["auth"])
 async def auth(
     request: Request,
-    jwt_cookie: Optional[str] = Cookie(None, alias=config.login.jwt_cookie_name),
-    private_token: Optional[str] = Header(None, alias="Private-Token"),
-    authorization: Optional[str] = Header(None, alias="Authorization"),
-    original_uri: Optional[str] = Header(None, alias="X-Original-URI"),
-    remote_cert_subj: Optional[str] = Header(None, alias="X-Remote-Cert-Subject"),
+    jwt_cookie: str | None = Cookie(None, alias=config.login.jwt_cookie_name),
+    private_token: str | None = Header(None, alias="Private-Token"),
+    authorization: str | None = Header(None, alias="Authorization"),
+    original_uri: str | None = Header(None, alias="X-Original-URI"),
+    remote_cert_subj: str | None = Header(None, alias="X-Remote-Cert-Subject"),
     svc: LoginService = Depends(get_service),
 ):
     """
@@ -63,7 +76,7 @@ async def auth(
     """
     if original_uri and is_pinhole(original_uri):
         # Pinholes to endpoints without authorization
-        return ORJSONResponse({"status": True}, status_code=200)
+        return JSONResponse({"status": True}, status_code=200)
     if remote_cert_subj:
         cert_user = get_user_from_cert_subject(remote_cert_subj)
         logger.info("Remote party certificate subject: %s", remote_cert_subj)
@@ -81,12 +94,12 @@ async def auth(
             request=request, authorization=authorization, svc=svc, pinned_user=cert_user
         )
     logger.error("[%s] Denied: Unsupported authentication method", request.client.host)
-    return ORJSONResponse({"status": False}, status_code=401)
+    return JSONResponse({"status": False}, status_code=401)
 
 
 async def auth_cookie(
-    request: Request, jwt_cookie: str, *, pinned_user: Optional[str] = None
-) -> ORJSONResponse:
+    request: Request, jwt_cookie: str, *, pinned_user: str | None = None
+) -> JSONResponse:
     """
     Authorize against JWT token contained in cookie
     """
@@ -94,15 +107,17 @@ async def auth_cookie(
         user = get_user_from_jwt(jwt_cookie, audience="auth")
         if pinned_user and user != pinned_user:
             raise ValueError("User doesn't match certificate")
-        return ORJSONResponse({"status": True}, status_code=200, headers={"Remote-User": user})
+        return JSONResponse(
+            {"status": True}, status_code=200, headers={"Remote-User": encode_user(user)}
+        )
     except ValueError as e:
         logger.error("[Cookie][%s] Denied: %s", request.client.host, str(e) or "Unspecified reason")
-        return ORJSONResponse({"status": False}, status_code=401)
+        return JSONResponse({"status": False}, status_code=401)
 
 
 async def auth_private_token(
-    request: Request, private_token: str, *, pinned_user: Optional[str] = None
-) -> ORJSONResponse:
+    request: Request, private_token: str, *, pinned_user: str | None = None
+) -> JSONResponse:
     """
     Authenticate against Private-Token header
     """
@@ -110,10 +125,10 @@ async def auth_private_token(
     remote_ip = request.client.host
     user, access = get_api_access(private_token, remote_ip)
     if user and access and (not pinned_user or user == pinned_user):
-        return ORJSONResponse(
+        return JSONResponse(
             {"status": True},
             status_code=200,
-            headers={"Remote-User": user, "X-NOC-API-Access": access},
+            headers={"Remote-User": encode_user(user), "X-NOC-API-Access": access},
         )
     if not user:
         reason = "API Key not found"
@@ -127,14 +142,14 @@ async def auth_private_token(
         remote_ip,
         reason or "Unspecified reason",
     )
-    return ORJSONResponse({"status": False}, status_code=401)
+    return JSONResponse({"status": False}, status_code=401)
 
 
 api_key_cache = cachetools.TTLCache(100, ttl=3)
 
 
 @cachetools.cached(api_key_cache)
-def get_api_access(key: str, ip: str) -> Tuple[str, str]:
+def get_api_access(key: str, ip: str) -> tuple[str, str]:
     """
     Cached API key data
 
@@ -146,8 +161,8 @@ def get_api_access(key: str, ip: str) -> Tuple[str, str]:
 
 
 async def auth_authorization(
-    request: Request, authorization: str, svc: LoginService, *, pinned_user: Optional[str] = None
-) -> ORJSONResponse:
+    request: Request, authorization: str, svc: LoginService, *, pinned_user: str | None = None
+) -> JSONResponse:
     """
     Authenticate against Authorization header
     """
@@ -175,44 +190,46 @@ async def auth_authorization(
             "[Authorization][%s] Denied: Unsupported authorization header",
             request.client.host,
         )
-    return ORJSONResponse({"status": False}, status_code=401)
+    return JSONResponse({"status": False}, status_code=401)
 
 
 async def auth_authorization_basic(
-    request: Request, data: str, *, pinned_user: Optional[str] = None
-) -> ORJSONResponse:
+    request: Request, data: str, *, pinned_user: str | None = None
+) -> JSONResponse:
     """
     HTTP Basic authorization handler
     """
     remote_ip = request.client.host
-    auth_data = smart_text(codecs.decode(smart_bytes(data), "base64"))
+    auth_data = codecs.decode(smart_bytes(data), "base64").decode()
     if ":" not in auth_data:
         logger.error("[Authorization|Basic][%s] Denied: Malformed data", remote_ip)
-        return ORJSONResponse({"status": False}, status_code=401)
+        return JSONResponse({"status": False}, status_code=401)
     user, password = auth_data.split(":", 1)
     credentials = {"user": user, "password": password, "ip": remote_ip}
     user = authenticate(credentials)
     if user:
         if pinned_user and user != pinned_user:
             logger.error("[Authorization|Basic][%s] user doesn't match certificate", user)
-            return ORJSONResponse({"status": False}, status_code=401)
+            return JSONResponse({"status": False}, status_code=401)
         register_last_login(user)
-        response = ORJSONResponse({"status": True}, status_code=200, headers={"Remote-User": user})
+        response = JSONResponse(
+            {"status": True}, status_code=200, headers={"Remote-User": encode_user(user)}
+        )
         set_jwt_cookie(response, user)
         return response
     logger.error("[Authorization|Basic][%s|%s] Denied: Authentication failed", user, remote_ip)
-    return ORJSONResponse({"status": False}, status_code=401)
+    return JSONResponse({"status": False}, status_code=401)
 
 
 async def auth_authorization_bearer(
-    request: Request, data: str, svc: LoginService, pinned_user: Optional[str] = None
-) -> ORJSONResponse:
+    request: Request, data: str, svc: LoginService, pinned_user: str | None = None
+) -> JSONResponse:
     """
     HTTP Bearer autorization handler
     :return:
     """
     if svc.is_revoked(data):
-        return ORJSONResponse({"status": False}, status_code=401)
+        return JSONResponse({"status": False}, status_code=401)
     try:
         user = get_user_from_jwt(data, audience="auth")
         if pinned_user and user != pinned_user:
@@ -221,14 +238,15 @@ async def auth_authorization_bearer(
         logger.error(
             "[Authorization|Bearer][%s] Denied: Authentication failed", request.client.host
         )
-        return ORJSONResponse({"status": False}, status_code=401)
-    return ORJSONResponse({"status": True}, status_code=200, headers={"Remote-User": user})
+        return JSONResponse({"status": False}, status_code=401)
+    return JSONResponse(
+        {"status": True}, status_code=200, headers={"Remote-User": encode_user(user)}
+    )
 
 
 def is_pinhole(path: str) -> bool:
     """
     Check if path should be pinholed (allowed unconditionaly)
-    :param path:
     :return:
     """
     idx = path.find("?")

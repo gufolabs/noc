@@ -80,12 +80,12 @@ class Script(BaseScript):
         match = self.rx_master_unit.search(v)
         if match:
             master_unit = match.group("unit")
-            plat = self.cli("show system unit %s" % master_unit, cached=True)
+            plat = self.cli(f"show system unit {master_unit}", cached=True)
             try:
-                ver = self.cli("show version unit %s" % master_unit, cached=True)
+                ver = self.cli(f"show version unit {master_unit}", cached=True)
             except self.CLISyntaxError:
                 ver = self.cli("show version", cached=True)
-            ser = self.cli("show system id unit %s" % master_unit, cached=True)
+            ser = self.cli(f"show system id unit {master_unit}", cached=True)
         else:
             plat = self.cli("show system", cached=True)
             ver = self.cli("show version", cached=True)

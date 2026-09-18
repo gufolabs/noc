@@ -8,14 +8,14 @@
 # Python modules
 import datetime
 import bisect
-from typing import Iterable, Optional, Union, Tuple, Any
+from typing import Iterable, Any
 from urllib.parse import urlparse
 
 # Third-party modules
 import orjson
 
 # NOC modules
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 from noc.core.etl.extractor.base import BaseExtractor, RemovedItem
 from noc.core.etl.models.base import BaseModel
 from noc.core.etl.remotesystem.base import BaseRemoteSystem
@@ -55,7 +55,7 @@ class NetBoxExtractor(BaseExtractor):
 
     LIMIT = 300
 
-    def __init__(self, system):
+    def __init__(self, system) -> None:
         super().__init__(system)
         self.url = self.config.get("API_URL", None)
         self.token = self.config.get("API_TOKEN", None)
@@ -74,8 +74,7 @@ class NetBoxExtractor(BaseExtractor):
             if status != 200:
                 print(f"[{status}] Error when requested data: {body}")
                 raise Exception(body)
-            for r in body["results"]:
-                yield r
+            yield from body["results"]
             if not body["next"]:
                 break
             p = urlparse(body["next"])
@@ -115,7 +114,7 @@ class NetBoxObjectExtractor(NetBoxExtractor):
 
     device_mode_mapping = {"Generic | Access | Switch"}
 
-    def __init__(self, system):
+    def __init__(self, system) -> None:
         super().__init__(system)
         self.racks = set()
         self.object_model_map = self.load_model_map()
@@ -324,8 +323,8 @@ class NetBoxIPPrefixExtractor(NetBoxExtractor):
     model = IPPrefix
 
     def iter_data(
-        self, *, checkpoint: Optional[str] = None, **kwargs
-    ) -> Iterable[Union[BaseModel, RemovedItem, Tuple[Any, ...]]]:
+        self, *, checkpoint: str | None = None, **kwargs
+    ) -> Iterable[BaseModel | RemovedItem | tuple[Any, ...]]:
         duplicate = set()
         roles = set()
         for r in self.iter_records("/api/ipam/prefixes/"):
@@ -361,8 +360,8 @@ class NetBoxIPAddressExtractor(NetBoxExtractor):
     model = IPAddress
 
     def iter_data(
-        self, *, checkpoint: Optional[str] = None, **kwargs
-    ) -> Iterable[Union[BaseModel, RemovedItem, Tuple[Any, ...]]]:
+        self, *, checkpoint: str | None = None, **kwargs
+    ) -> Iterable[BaseModel | RemovedItem | tuple[Any, ...]]:
         duplicate = set()
         for r in self.iter_records("/api/ipam/ip-addresses/"):
             address = r["address"].split("/")[0]
@@ -396,7 +395,7 @@ class NetBoxHostExtractor(NetBoxExtractor):
     name = "managedobject"
     model = ManagedObject
 
-    def __init__(self, system):
+    def __init__(self, system) -> None:
         super().__init__(system)
         self.pool: str = self.config.get("POOL") or "default"
         self.fm_pool: str = self.config.get("FM_POOL")

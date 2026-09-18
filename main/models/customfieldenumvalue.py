@@ -18,7 +18,7 @@ class CustomFieldEnumValue(NOCModel):
     Enumeration groups values
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Enum Group Value"
         verbose_name_plural = "Enum Group Values"
         db_table = "main_customfieldenumvalue"
@@ -36,4 +36,4 @@ class CustomFieldEnumValue(NOCModel):
     value = models.CharField("Value", max_length=256)
 
     def __str__(self):
-        return "%s@%s:%s" % (self.enum_group.name, self.key, self.value)
+        return f"{self.enum_group.name}@{self.key}:{self.value}"

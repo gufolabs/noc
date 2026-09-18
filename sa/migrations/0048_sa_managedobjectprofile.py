@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0027_style")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         Style = self.db.mock_model(model_name="Style", db_table="main_style")
         self.db.create_table(
             "sa_managedobjectprofile",

@@ -44,7 +44,7 @@ Ext.define("NOC.core.InactivityLogout", {
     this.logout(); },
   //
   logout: function(){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/api/login/logout/",
       method: "GET",
       scope: this,

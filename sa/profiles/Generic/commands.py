@@ -8,7 +8,6 @@
 # Python modules
 import re
 from threading import Lock
-from typing import List
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -30,7 +29,7 @@ class Script(BaseScript):
 
     def execute(
         self,
-        commands: List[str],
+        commands: list[str],
         ignore_cli_errors: bool = False,
         include_commands: bool = False,
         config_mode: bool = False,
@@ -58,7 +57,7 @@ class Script(BaseScript):
 
     def execute_commands(
         self,
-        commands: List[str],
+        commands: list[str],
         ignore_cli_errors=False,
         include_commands=False,
         dry_run: bool = False,
@@ -75,14 +74,14 @@ class Script(BaseScript):
             try:
                 out = self.cli(cmd)
             except self.CLISyntaxError as e:
-                out = "%s%s" % (self.ERROR_PREFIX, str(e).strip())
+                out = f"{self.ERROR_PREFIX}{str(e).strip()}"
                 d["error"] = str(e).strip()
                 d["code"] = getattr(e, "code", None)
                 if not ignore_cli_errors:
                     r["errors"] = True
                     break
             if include_commands:
-                out = "%s%s%s" % (cmd, self.CMD_SEP, out)
+                out = f"{cmd}{self.CMD_SEP}{out}"
             r["output"] += [out]
             r["details"] += [d]
         return r
@@ -141,8 +140,6 @@ class Script(BaseScript):
     def find_match(self, patterns, s):
         """
         Return match object for list of patterns against string
-        :param patterns:
-        :param s:
         :return:
         """
         for rx in patterns:

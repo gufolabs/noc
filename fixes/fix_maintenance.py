@@ -18,4 +18,4 @@ def fix():
         try:
             m.save()
         except Exception as e:
-            print("[%s] %s" % (m.id, e))
+            print(f"[{m.id}] {e}")

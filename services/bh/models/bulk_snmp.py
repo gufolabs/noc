@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Tuple
 
 # Third-party modules
 from gufo.snmp import ValueType
@@ -19,18 +18,18 @@ class SNMPAddress(BaseModel):
 
 
 class SNMPRequest(BaseModel):
-    addresses: List[SNMPAddress]
+    addresses: list[SNMPAddress]
     oid_filter: str
-    timeout: Optional[int]
-    tos: Optional[int]
+    timeout: int | None
+    tos: int | None
     max_repetitions: int = 1
 
 
 class SNMPItem(BaseModel):
     address: str
-    objects: List[Tuple[str, ValueType]]
-    error_code: Optional[str]
+    objects: list[tuple[str, ValueType]]
+    error_code: str | None
 
 
 class SNMPResponse(BaseModel):
-    items: List[SNMPItem]
+    items: list[SNMPItem]

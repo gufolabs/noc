@@ -68,15 +68,15 @@ class Script(BaseScript):
             if "(c)" in ifname:
                 continue
             iface = {"local_interface": ifname, "neighbors": []}
-            if_range = "%s-%s" % (ifname[3:], ifname.split("/")[2])
+            if_range = "{}-{}".format(ifname[3:], ifname.split("/")[2])
             if not has_if_range:
                 try:
-                    v = self.cli("show lldp neighbors interface %s" % ifname)
+                    v = self.cli(f"show lldp neighbors interface {ifname}")
                 except self.CLISyntaxError:
-                    v = self.cli("show lldp neighbors interface ethernet %s" % if_range)
+                    v = self.cli(f"show lldp neighbors interface ethernet {if_range}")
                     has_if_range = True
             else:
-                v = self.cli("show lldp neighbors interface ethernet %s" % if_range)
+                v = self.cli(f"show lldp neighbors interface ethernet {if_range}")
             for m in self.rx_entity.finditer(v):
                 n = {}
                 n["remote_chassis_id_subtype"] = {

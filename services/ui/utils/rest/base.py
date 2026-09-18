@@ -9,16 +9,10 @@
 import typing
 from typing import (
     Any,
-    Optional,
     Callable,
-    Dict,
-    DefaultDict,
     TypeVar,
     Generic,
-    List,
     Iterable,
-    Tuple,
-    Union,
 )
 import inspect
 from http import HTTPStatus
@@ -64,11 +58,11 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
 
     prefix: str
     model: T
-    list_ops: List[ListOp] = []
-    sort_fields: List[Union[str, Tuple[str, str]]] = []
+    list_ops: list[ListOp] = []
+    sort_fields: list[str | tuple[str, str]] = []
 
-    def __init__(self, router: APIRouter):
-        def split_sort(x: Union[str, Tuple[str, str]]) -> Tuple[str, str]:
+    def __init__(self, router: APIRouter) -> None:
+        def split_sort(x: str | tuple[str, str]) -> tuple[str, str]:
             if isinstance(x, str):
                 return x, x
             return x[0], x[1]
@@ -80,8 +74,8 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
         self.router = router
         self.api_name = self.prefix.split("/")[-1]
         self.openapi_tags = ["ui", self.api_name]
-        self.cleaners: DefaultDict[str, List[Callable[[Any], Any]]] = defaultdict(list)
-        self.sort_ops: Dict[str, str] = dict(split_sort(x) for x in self.sort_fields)
+        self.cleaners: defaultdict[str, list[Callable[[Any], Any]]] = defaultdict(list)
+        self.sort_ops: dict[str, str] = dict(split_sort(x) for x in self.sort_fields)
         if self.sort_fields:
             self.default_sort_op = split_sort(self.sort_fields[0])[1]
         else:
@@ -99,7 +93,6 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
     def item_to_default(cls, item: T) -> BaseModel:
         """
         Convert model item to response model for view `default`
-        :param item:
         :return:
         """
 
@@ -107,7 +100,6 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
     def item_to_label(cls, item: T) -> LabelItem:
         """
         Convert model item to response model for view `label`
-        :param item:
         :return:
         """
         return LabelItem(id=str(item.id), label=str(item))
@@ -134,7 +126,6 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
     def get_scope_read(self, view: str) -> str:
         """
         Get read scope for view
-        :param view:
         :return:
         """
         return getattr(self, f"get_scope_read_{view}", self.get_scope_read_default)()
@@ -142,7 +133,6 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
     def get_scope_write(self) -> str:
         """
         Get write scope
-        :param view:
         :return:
         """
         return f"{self.api_name}:write"
@@ -150,7 +140,6 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
     def get_scope_delete(self) -> str:
         """
         Get delete scope
-        :param view:
         :return:
         """
         return f"{self.api_name}:delete"
@@ -169,22 +158,18 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
         return form_model
 
     @abstractmethod
-    def get_total_items(self, user: User, transforms: Optional[List[Callable]] = None) -> int:
+    def get_total_items(self, user: User, transforms: list[Callable] | None = None) -> int:
         """
         Calculate total amount of items, satisfying criteria
-        :param user:
         :return:
         """
 
     @abstractmethod
     def get_summary_items(
-        self, user: User, field: str, transforms: Optional[List[Callable]] = None
+        self, user: User, field: str, transforms: list[Callable] | None = None
     ) -> int:
         """
         Calculate total amount of items, satisfying criteria
-        :param user:
-        :param field:
-        :param transforms:
         :return:
         """
 
@@ -192,27 +177,20 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
     def get_items(
         self,
         user: User,
-        sort: List[str],
+        sort: list[str],
         limit: int = config.ui.max_rest_limit,
         offset: int = 0,
-        transforms: Optional[List[Callable]] = None,
-    ) -> List[T]:
+        transforms: list[Callable] | None = None,
+    ) -> list[T]:
         """
         Get list of items, satisfying criteria
-        :param user:
-        :param sort:
-        :param limit:
-        :param offset:
-        :param transforms:
         :return:
         """
 
     @abstractmethod
-    def get_item(self, id: str, user: User) -> Optional[T]:
+    def get_item(self, id: str, user: User) -> T | None:
         """
         Get item by id, if accessible to user
-        :param id:
-        :param user:
         :return:
         """
 
@@ -220,8 +198,6 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
     def delete_item(self, id: str, user: User) -> bool:
         """
         Delete item if accessible by user. Returns True if item is deleted.
-        :param id:
-        :param user:
         :return:
         """
 
@@ -229,8 +205,6 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
     def create_item(self, user: User, **kwargs) -> None:
         """
         Create item from given parameters
-        :param user:
-        :param kwargs:
         :return:
         """
 
@@ -238,13 +212,10 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
     def update_item(self, id: str, user: User, **kwargs) -> None:
         """
         Update item with given parameters
-        :param id:
-        :param user:
-        :param kwargs:
         :return:
         """
 
-    def clean(self, data: BaseModel, id: Optional[str] = None) -> Dict[str, Any]:
+    def clean(self, data: BaseModel, id: str | None = None) -> dict[str, Any]:
         """
         Process data to be stored, perform additional checks
         :param data: Pydantic model with store request
@@ -299,7 +270,7 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
                     f'        r["{list_op.name}"] = {list_op.name}',
                 ]
             code = [f"def inner({', '.join(args)}) -> dict:", *body, "    return r"]
-            r = {"Optional": typing.Optional, "List": typing.List, "Query": Query}
+            r = {"Optional": typing.Optional, "List": list, "Query": Query}
             exec("\n".join(code), {}, r)
             return r["inner"]
 
@@ -307,7 +278,7 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
             response: Response,
             limit: int = config.ui.max_rest_limit,
             offset: int = 0,
-            sort: Optional[str] = None,
+            sort: str | None = None,
             ops: dict = Depends(get_list_dep()),
             user: User = Security(get_user_scope, scopes=[self.get_scope_read(view)]),
         ):
@@ -369,7 +340,7 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
         if sig.return_annotation is BaseModel:
             raise ValueError(f"item_to_{view} has incorrect return type annotation")
         # Additional operations mappings
-        list_ops_map: Dict[str, ListOp] = {x.name: x for x in self.list_ops}
+        list_ops_map: dict[str, ListOp] = {x.name: x for x in self.list_ops}
         # List
         for path in iter_list_paths():
             # List
@@ -377,7 +348,7 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
                 path=path,
                 endpoint=inner_list,
                 methods=GET,
-                response_model=List[sig.return_annotation],
+                response_model=list[sig.return_annotation],
                 tags=self.openapi_tags,
                 name=f"{self.api_name}_list_{view}",
                 description=f"List items with {view} view",
@@ -399,7 +370,7 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
                 path=f"{self.prefix}/v/summary",
                 endpoint=inner_summary,
                 methods=GET,
-                response_model=List[SummaryItem],
+                response_model=list[SummaryItem],
                 tags=self.openapi_tags,
                 name=f"{self.api_name}_list_summary",
                 description="Get summary items by field",
@@ -480,7 +451,6 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
         Parse sort expression and convert to the iterable
         of order_by items
 
-        :param expr:
         :return:
         """
 

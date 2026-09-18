@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Mock Models
         AdministrativeDomain = self.db.mock_model(
             model_name="AdministrativeDomain", db_table="sa_administrativedomain"

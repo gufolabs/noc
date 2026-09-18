@@ -17,7 +17,7 @@ from noc.core.management.base import BaseCommand
 class Command(BaseCommand):
     help = "Dump crashinfo file"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("args", nargs=argparse.REMAINDER, help="List traceback files")
 
     def handle(self, *args, **options):
@@ -33,7 +33,3 @@ class Command(BaseCommand):
         print("TIME      : %04d-%02d-%02d %02d:%02d:%02d" % ts[:6])
         print("-" * 72)
         print(data.get("traceback"))
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -13,7 +13,7 @@ from noc.core.text import ch_escape
 
 
 class SLAProbe(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "slaprobe"
         layout = "hashed"
         source_model = "sla.SLAProbe"

@@ -38,7 +38,7 @@ class Script(BaseScript):
             """
             if interface == "0/0":
                 return []
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
             rx_line = self.rx_iface
         r = []
         v = self.cli(cmd)

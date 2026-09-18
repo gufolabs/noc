@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import importlib
 import logging
 import inspect
 import threading
@@ -17,8 +18,8 @@ from noc.config import config
 logger = logging.getLogger(__name__)
 
 
-class LoaderLoader(object):
-    def __init__(self):
+class LoaderLoader:
+    def __init__(self) -> None:
         self.loaders = {}  # Load loaders
         self.lock = threading.Lock()
         self.all_loaders = set()
@@ -34,9 +35,9 @@ class LoaderLoader(object):
                 logger.info("Loading loader %s", name)
                 for p in config.get_customized_paths("", prefer_custom=True):
                     base = "noc.custom" if p else "noc.core"
-                    module_name = "%s.etl.loader.%s" % (base, name)
+                    module_name = f"{base}.etl.loader.{name}"
                     try:
-                        sm = __import__(module_name, {}, {}, "*")
+                        sm = importlib.import_module(module_name)
                         for n in dir(sm):
                             o = getattr(sm, n)
                             if (

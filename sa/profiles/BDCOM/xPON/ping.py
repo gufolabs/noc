@@ -32,13 +32,13 @@ class Script(BaseScript):
     def execute_cli(
         self, address, count=None, source_address=None, size=None, df=None, *args, **kwargs
     ):
-        cmd = "ping %s" % address
+        cmd = f"ping {address}"
         if count is not None:
             cmd += " -n %d" % int(count)
         if source_address is not None:
-            cmd += " -i %s" % source_address
+            cmd += f" -i {source_address}"
         if size is not None:
-            cmd += " -l %s" % int(size)
+            cmd += f" -l {int(size)}"
         if df is not None:
             cmd += " -f"
         c = self.cli(cmd)

@@ -86,7 +86,7 @@ class Script(BaseScript):
             ip = cfg["ip-addr"]
             if "static" in ip:
                 ip = ip.replace("static", "").strip()
-            ip_addr = "%s/%s" % (ip, cfg["prefix-len"])
+            ip_addr = "{}/{}".format(ip, cfg["prefix-len"])
             i = {
                 "name": name,
                 "type": "SVI",

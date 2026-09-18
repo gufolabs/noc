@@ -13,7 +13,7 @@ from noc.core.text import ch_escape
 
 
 class Version(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "version"
         layout = "hashed"
         source_model = "inv.Firmware"

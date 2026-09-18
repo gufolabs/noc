@@ -40,7 +40,7 @@ class Script(BaseScript):
             cmd+=" df-bit"
         """
 
-        cmd += " %s" % address
+        cmd += f" {address}"
         ping = self.cli(cmd)
         result = self.rx_result.search(ping)
         r = {"success": result.group("success"), "count": result.group("count")}

@@ -21,7 +21,7 @@ class ESNormalizer(BaseNormalizer):
 
     @match("username", ANY, "access-level", ANY)
     def normalize_username_access_level(self, tokens):
-        yield self.make_user_class(username=tokens[1], class_name="level-%s" % tokens[3])
+        yield self.make_user_class(username=tokens[1], class_name=f"level-{tokens[3]}")
 
     @match("username", ANY, "password", REST)
     def normalize_username_password(self, tokens):

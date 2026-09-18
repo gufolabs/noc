@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # discovery commands
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -14,7 +14,6 @@ from functools import partial
 # NOC modules
 from noc.core.management.base import BaseCommand
 from noc.core.mongo.connection import connect
-from noc.core.handler import get_handler
 from noc.inv.models.resourcegroup import ResourceGroup
 from noc.inv.models.networksegment import NetworkSegment
 from noc.core.scheduler.scheduler import Scheduler
@@ -23,6 +22,7 @@ from noc.core.cache.base import cache
 from noc.core.span import Span, get_spans
 from noc.core.service.pub import publish
 from noc.core.comp import smart_bytes
+from noc.services.discovery.jobs.base import get_discovery_job
 
 
 class Command(BaseCommand):
@@ -83,7 +83,7 @@ class Command(BaseCommand):
         "segment": ["mac"],
     }
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         run_parser = subparsers.add_parser("run")
         run_parser.add_argument(
@@ -98,7 +98,7 @@ class Command(BaseCommand):
 
     def handle(self, cmd, *args, **options):
         connect()
-        return getattr(self, "handle_%s" % cmd)(*args, **options)
+        return getattr(self, f"handle_{cmd}")(*args, **options)
 
     def handle_run(
         self, job, managed_objects, check=None, trace=False, dump_buffer=False, *args, **options
@@ -119,8 +119,9 @@ class Command(BaseCommand):
         for c in checks:
             if c not in self.checks[job]:
                 self.die(
-                    "Unknown check '%s' for job '%s'. Available checks are: %s\n"
-                    % (c, job, ", ".join(self.checks[job]))
+                    "Unknown check '{}' for job '{}'. Available checks are: {}\n".format(
+                        c, job, ", ".join(self.checks[job])
+                    )
                 )
         for mo in mos:
             self.run_job(job, mo, checks, dump_buffer=dump_buffer)
@@ -134,14 +135,14 @@ class Command(BaseCommand):
         # Try to dereference job
         job_args = scheduler.get_collection().find_one({Job.ATTR_CLASS: jcls, Job.ATTR_KEY: mo.id})
         if job_args:
-            self.print("Job ID: %s" % job_args["_id"])
+            self.print("Job ID: {}".format(job_args["_id"]))
         else:
             job_args = {Job.ATTR_ID: "fakeid", Job.ATTR_KEY: mo.id}
         job_args["_checks"] = checks
-        job = get_handler(jcls)(scheduler, job_args)
+        job = get_discovery_job(jcls)(scheduler, job_args)
         if job.context_version:
             ctx_key = job.get_context_cache_key()
-            self.print("Loading job context from %s" % ctx_key)
+            self.print(f"Loading job context from {ctx_key}")
             ctx = cache.get(ctx_key, version=job.context_version)
             if not ctx:
                 self.print("Job context is empty")
@@ -157,11 +158,11 @@ class Command(BaseCommand):
         if scheduler.service.metrics:
             self.print("Collected CH data:")
             for t in scheduler.service.metrics:
-                self.print("Table: %s" % t)
+                self.print(f"Table: {t}")
                 self.print("\n".join(str(x) for x in scheduler.service.metrics[t]))
         # job.update_alarms()
         if job.context_version and job.context:
-            self.print("Saving job context to %s" % ctx_key)
+            self.print(f"Saving job context to {ctx_key}")
             scheduler.cache_set(key=ctx_key, value=job.context, version=job.context_version)
             scheduler.apply_cache_ops()
             time.sleep(3)
@@ -170,8 +171,8 @@ class Command(BaseCommand):
             print(smart_bytes(job.out_buffer.getvalue()))
 
 
-class ServiceStub(object):
-    def __init__(self):
+class ServiceStub:
+    def __init__(self) -> None:
         self.metrics = defaultdict(list)
         self.service_id = "stub"
         self.address = "127.0.0.1"
@@ -185,7 +186,6 @@ class ServiceStub(object):
     def get_slot_limits(slot_name):
         """
         Get slot count
-        :param slot_name:
         :return:
         """
         from noc.core.dcs.loader import get_dcs, DEFAULT_DCS
@@ -193,7 +193,3 @@ class ServiceStub(object):
 
         dcs = get_dcs(DEFAULT_DCS)
         return run_sync(partial(dcs.get_slot_limit, slot_name))
-
-
-if __name__ == "__main__":
-    Command().run()

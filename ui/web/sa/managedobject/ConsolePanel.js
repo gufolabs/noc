@@ -133,7 +133,7 @@ Ext.define("NOC.sa.managedobject.ConsolePanel", {
     me.cmdIndex = me.cmdHistory.length;
     // Display
     me.consoleOut(me.prompt + cmd);
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + me.currentRecord.get("id") + "/console/",
       method: "POST",
       scope: me,

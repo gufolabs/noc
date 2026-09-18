@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         AdministrativeDomain = self.db.mock_model(
             model_name="AdministrativeDomain", db_table="sa_administrativedomain"
         )
@@ -25,4 +25,4 @@ class Migration(BaseMigration):
                     AdministrativeDomain, null=True, blank=True, on_delete=models.CASCADE
                 ),
             )
-            self.db.execute("ALTER TABLE %s ALTER selector_id DROP NOT NULL" % t)
+            self.db.execute(f"ALTER TABLE {t} ALTER selector_id DROP NOT NULL")

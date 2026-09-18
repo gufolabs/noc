@@ -2,17 +2,17 @@
 - include_tasks: "os/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/main.yml"
 
 - name: Create directory for imported mibs
-  become: "True"
+  become: true
   file:
     state: directory
     path: "{{ item }}"
     owner: root
     mode: 0777
-  with_items:
+  loop:
     - "{{ mib_path }}"
 
 - name: Install mibs for working MIB-import
-  command: "{{ noc_root }}/scripts/deploy/install-packages requirements/mib.json"
+  command: "{{ noc_venv_python }} ./scripts/deploy/install-packages npkg/mib.json"
   args:
     chdir: "{{ noc_root }}"
   register: s
@@ -20,6 +20,5 @@
   environment:
     http_proxy: "{{ http_proxy }}"
     https_proxy: "{{ http_proxy }}"
-    PYTHONPATH: "{{ noc_root | dirname }}"
   tags:
     - requirements

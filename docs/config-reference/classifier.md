@@ -4,18 +4,8 @@
 
 ## default_interface_profile
 
-|                |                                            |
-| -------------- | ------------------------------------------ |
-| Default value  | `default`                                  |
-| YAML Path      | `classifier.default_interface_profile`     |
-| Key-Value Path | `classifier/default_interface_profile`     |
-| Environment    | `NOC_CLASSIFIER_DEFAULT_INTERFACE_PROFILE` |
+{{ config_param("classifier.default_interface_profile") }}
 
 ## default_rule
 
-|                |                               |
-| -------------- | ----------------------------- |
-| Default value  | `Unknown                      | Default` |
-| YAML Path      | `classifier.default_rule`     |
-| Key-Value Path | `classifier/default_rule`     |
-| Environment    | `NOC_CLASSIFIER_DEFAULT_RULE` |
+{{ config_param("classifier.default_rule") }}

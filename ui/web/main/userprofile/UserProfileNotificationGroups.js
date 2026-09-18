@@ -21,7 +21,7 @@ Ext.define("NOC.main.userprofile.UserProfileNotificationGroups", {
     listeners: {
       edit: function(editor, context){
         var record = context.record;
-        Ext.Ajax.request({
+        NOC.api.requestLegacy({
           url: "/main/notificationgroup/" + record.get("notification_group") + "/change_user_subscription/",
           method: "POST",
           jsonData: {

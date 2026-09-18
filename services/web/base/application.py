@@ -1,21 +1,23 @@
 # ---------------------------------------------------------------------
 # Application class
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
+import importlib
 import logging
 import os
 import datetime
 import functools
 from collections import OrderedDict
-from typing import TypeVar, Type, Optional, Dict, Any
+from typing import TypeVar, Any, cast
 from http import HTTPStatus
 
 # Third-party modules
 from django.http import (
+    HttpRequest,
     HttpResponse,
     HttpResponseRedirect,
     HttpResponseForbidden,
@@ -24,11 +26,9 @@ from django.http import (
 from django.shortcuts import render
 from django.db import connection
 from django.shortcuts import get_object_or_404
-from django.utils.html import escape
 from django.template import loader
 from django import forms
 from django.utils.timezone import get_current_timezone
-from django.views.static import serve as serve_static
 from django.http import Http404
 import orjson
 import jinja2
@@ -36,49 +36,43 @@ import jinja2
 # NOC modules
 from noc.core.forms import NOCForm
 from noc import settings
-from noc.sa.interfaces.base import DictParameter
 from noc.core.feature import Feature
-from noc.core.cache.base import cache
-from noc.core.comp import smart_text
 from noc.models import is_document
-from .access import HasPerm, Permit, Deny
+from .access import HasPerm
+from .api import view, api
 from .site import site
+
+__all__ = ["Application", "api", "view"]
 
 T = TypeVar("T")
 
 
-def view(url, access, url_name=None, menu=None, method=None, validate=None, api=False):
+class BoundView:
     """
-    @view decorator
-    :param url: URL relative to application root
-    :param access:
-    :param url_name:
-    :param menu:
-    :param method:
-    :param validate: Form class or callable to check input
-    :param api: Does the view exposed as API function
+    Callable wrapper for a bound method that prevents descriptor binding.
+
+    Views are stored as attributes on application classes. A regular function
+    assigned to a class becomes a descriptor and receives the application
+    instance as the first argument when called. This is not desired for views
+    backed by already bound methods, because the method instance is already
+    captured by the bound method itself.
+
+    This wrapper keeps the callable object semantics of ``functools.partial``
+    used previously: calls are forwarded directly to the original bound method
+    without adding an extra ``self`` argument.
+
+    Attributes:
+        func: Original bound method.
+        __self__: Instance the original method is bound to.
     """
 
-    def decorate(f):
-        f.url = url
-        f.url_name = url_name
-        # Process access
-        if isinstance(access, bool):
-            f.access = Permit() if access else Deny()
-        elif isinstance(access, str):
-            f.access = HasPerm(access)
-        else:
-            f.access = access
-        f.menu = menu
-        f.method = method
-        f.api = api
-        if isinstance(validate, dict):
-            f.validate = DictParameter(attrs=validate)
-        else:
-            f.validate = validate
-        return f
+    def __init__(self, func) -> None:
+        self.func = func
+        self.__self__ = func.__self__
+        functools.update_wrapper(self, func)
 
-    return decorate
+    def __call__(self, *args, **kwargs):
+        return self.func(*args, **kwargs)
 
 
 class ApplicationBase(type):
@@ -86,8 +80,10 @@ class ApplicationBase(type):
     Application metaclass. Registers application class to site
     """
 
-    def __new__(mcs: "Type[Application]", name: str, bases, attrs):
-        m = type.__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[Application]", name: str, bases: tuple[type[Any], ...], attrs: dict[str, Any]
+    ) -> type["Application"]:
+        m = cast(type["Application"], type.__new__(mcs, name, bases, attrs))
         for name in attrs:
             m.add_to_class(name, attrs[name])
         if "apps" in m.__module__:
@@ -96,7 +92,7 @@ class ApplicationBase(type):
         return m
 
 
-class Application(object, metaclass=ApplicationBase):
+class Application(metaclass=ApplicationBase):
     """
     Basic application class.
 
@@ -104,7 +100,7 @@ class Application(object, metaclass=ApplicationBase):
     Each method accepts requests and returns reply
     """
 
-    title = "APPLICATION TITLE"
+    title: str
     icon = "icon_application"
     glyph = "file"
     extra_permissions = []  # List of additional permissions, not related with views
@@ -119,11 +115,11 @@ class Application(object, metaclass=ApplicationBase):
     config = settings.config  # @fixme remove
 
     app_alias = None  # Django 1.5 application aliases
-    require_feature: Optional[Feature] = None  # Feature required for application
+    require_feature: Feature | None = None  # Feature required for application
 
     TZ = get_current_timezone()
 
-    def __init__(self, site):
+    def __init__(self, site) -> None:
         self.site = site
         self.service = None  # Set by web
         parts = self.__class__.__module__.split(".")
@@ -133,10 +129,10 @@ class Application(object, metaclass=ApplicationBase):
         else:
             self.module = parts[4]
             self.app = parts[5]
-        self.module_title = __import__(
-            "noc.services.web.apps.%s" % self.module, {}, {}, ["MODULE_NAME"]
+        self.module_title = importlib.import_module(
+            f"noc.services.web.apps.{self.module}"
         ).MODULE_NAME
-        self.app_id = "%s.%s" % (self.module, self.app)
+        self.app_id = f"{self.module}.{self.app}"
         self.menu_url = None  # Set by site.autodiscover()
         self.logger = logging.getLogger(self.app_id)
         self.j2_env = None
@@ -162,12 +158,10 @@ class Application(object, metaclass=ApplicationBase):
         menu=None,
         method=None,
         validate=None,
-        api=False,
+        api=False,  # noqa: F811 @todo: Remove
     ):
-        # Decorate function to clear attributes
-        f = functools.partial(func)
-        f.__self__ = func.__self__
-        f.__name__ = func.__name__
+        # wrap view
+        f = BoundView(func)
         # Add to class
         cls.add_to_class(
             name,
@@ -184,7 +178,7 @@ class Application(object, metaclass=ApplicationBase):
         site.add_contributor(cls, func.__self__)
 
     @property
-    def js_app_class(self):
+    def js_app_class(self) -> str:
         return "NOC.main.desktop.IFramePanel"
 
     def get_launch_info(self, request):
@@ -203,7 +197,7 @@ class Application(object, metaclass=ApplicationBase):
         app_perms = [p[lps:] for p in user_perms & self.get_permissions()]
         return {
             "class": self.js_app_class,
-            "title": smart_text(self.title),
+            "title": self.title,
             "params": {
                 "url": self.menu_url,
                 "permissions": app_perms,
@@ -219,30 +213,21 @@ class Application(object, metaclass=ApplicationBase):
         """
         parts = cls.__module__.split(".")
         if parts[1] == "custom":
-            return "%s.%s" % (parts[5], parts[6])
-        return "%s.%s" % (parts[4], parts[5])
+            return f"{parts[5]}.{parts[6]}"
+        return f"{parts[4]}.{parts[5]}"
 
     @property
     def base_url(self):
         """
         Application's base URL
         """
-        return "/%s/%s/" % (self.module, self.app)
+        return f"/{self.module}/{self.app}/"
 
     def reverse(self, url, *args, **kwargs):
         """
         Reverse URL name to URL
         """
         return self.site.reverse(url, *args, **kwargs)
-
-    def message_user(self, request, message):
-        """
-        Send a message to user
-        """
-        if "noc_user" in request.COOKIES:
-            session_id = request.COOKIES["noc_user"].rsplit("|", 1)[-1]
-            key = "msg-%s" % session_id
-            cache.set(key, smart_text(orjson.dumps([message])), ttl=30, version=1)
 
     def get_template_path(self, template):
         """
@@ -260,7 +245,7 @@ class Application(object, metaclass=ApplicationBase):
         return r
 
     @staticmethod
-    def get_object_or_404(model: Type[T], *args, **kwargs) -> T:
+    def get_object_or_404(model: type[T], *args, **kwargs) -> T:
         """
         Shortcut to get_object_or_404
         """
@@ -290,7 +275,9 @@ class Application(object, metaclass=ApplicationBase):
             )
         return self.j2_env
 
-    def render(self, request, template, dict=None, **kwargs):
+    def render(
+        self, request: HttpRequest, template: str, dict: dict[str, Any] | None = None, **kwargs
+    ) -> HttpResponse:
         """
         Render template within context
         """
@@ -305,7 +292,7 @@ class Application(object, metaclass=ApplicationBase):
             ctx.update(kwargs)
         return render(request, self.get_template_path(template), ctx)
 
-    def render_template(self, template, dict=None, **kwargs):
+    def render_template(self, template, dict=None, **kwargs) -> HttpResponse:
         """
         Render template to string
         """
@@ -314,7 +301,7 @@ class Application(object, metaclass=ApplicationBase):
         return loader.render_to_string(tp, dict or kwargs)
 
     @staticmethod
-    def render_response(data, content_type="text/plain"):
+    def render_response(data: Any, content_type="text/plain") -> HttpResponse:
         """
         Render arbitrary Content-Type response
         """
@@ -329,7 +316,7 @@ class Application(object, metaclass=ApplicationBase):
 
     @classmethod
     def _set_headers(
-        cls, resp: HttpResponse, headers: Optional[Dict[str, Any]] = None
+        cls, resp: HttpResponse, headers: dict[str, Any] | None = None
     ) -> HttpResponse:
         if headers:
             for k, v in headers.items():
@@ -338,7 +325,11 @@ class Application(object, metaclass=ApplicationBase):
 
     @classmethod
     def render_json(
-        cls, obj, *, status: int = HTTPStatus.OK.value, headers: Optional[Dict[str, Any]] = None
+        cls,
+        obj: object,
+        *,
+        status: int = HTTPStatus.OK.value,
+        headers: dict[str, Any] | None = None,
     ) -> HttpResponse:
         """
         Create serialized JSON-encoded response
@@ -350,30 +341,6 @@ class Application(object, metaclass=ApplicationBase):
         )
         cls._set_headers(resp, headers)
         return resp
-
-    def render_success(self, request, subject=None, text=None):
-        """
-        Render "success" page
-        """
-        return self.site.views.main.message.success(request, subject=subject, text=text)
-
-    def render_failure(self, request, subject=None, text=None):
-        """
-        Render "failure" page
-        """
-        return self.site.views.main.message.failure(request, subject=subject, text=text)
-
-    def render_wait(self, request, subject=None, text=None, url=None, timeout=5, progress=None):
-        """
-        Render wait page
-        """
-        return self.site.views.main.message.wait(
-            request, subject=subject, text=text, timeout=timeout, url=url, progress=progress
-        )
-
-    def render_static(self, request, path, document_root=None):
-        document_root = document_root or self.document_root
-        return serve_static(request, path, document_root=document_root)
 
     def response_redirect(self, url, *args, **kwargs):
         """
@@ -391,12 +358,6 @@ class Application(object, metaclass=ApplicationBase):
             back_url = self.base_url
         return self.response_redirect(request.META.get("HTTP_REFERER", back_url))
 
-    def response_redirect_to_object(self, object):
-        """
-        Redirect to object: {{base.url}}/{{object.id}}/
-        """
-        return self.response_redirect("%s%d/" % (self.base_url, object.id))
-
     def response_forbidden(self, text=None):
         """
         Render Forbidden response
@@ -412,7 +373,6 @@ class Application(object, metaclass=ApplicationBase):
     def response_bad_request(self, text=None):
         """
         Render 400 Bad Request
-        :param text:
         :return:
         """
         return HttpResponse(text, status=400)
@@ -420,31 +380,12 @@ class Application(object, metaclass=ApplicationBase):
     def response_accepted(self, location=None):
         """
         Render 202 Accepted
-        :param location:
         :return:
         """
         r = HttpResponse("", status=202)
         if location:
             r["Location"] = location
         return r
-
-    def close_popup(self, request):
-        """
-        Render javascript closing popup window
-        """
-        return self.render(request, "close_popup.html")
-
-    def html_escape(self, s):
-        """
-        Escape HTML
-        """
-        return escape(s)
-
-    def debug(self, message):
-        self.logger.debug(message)
-
-    def error(self, message):
-        self.logger.error(message)
 
     def cursor(self):
         """
@@ -460,29 +401,6 @@ class Application(object, metaclass=ApplicationBase):
         cursor.execute(sql, args)
         return cursor.fetchall()
 
-    def lookup(self, request, func):
-        """
-        AJAX lookup wrapper
-        @todo: Remove
-        """
-        result = []
-        if request.GET and "q" in request.GET:
-            q = request.GET["q"]
-            if len(q) > 2:  # Ignore requests shorter than 3 letters
-                result = list(func(q))
-        return self.render_plain_text("\n".join(result))
-
-    def lookup_json(self, request, func, id_field="id", name_field="name"):
-        """
-        Ajax lookup wrapper, returns JSON list of hashes
-        """
-        result = []
-        if request.GET and "q" in request.GET:
-            q = request.GET["q"]
-            for r in func(q):
-                result += [{id_field: r, name_field: r}]
-        return self.render_json(result)
-
     def iter_views(self):
         """
         Iterator returning application views
@@ -495,11 +413,11 @@ class Application(object, metaclass=ApplicationBase):
         Return a set of permissions, used by application
         """
         prefix = self.get_app_id().replace(".", ":")
-        p = {"%s:launch" % prefix}
+        p = {f"{prefix}:launch"}
         # View permissions from HasPerm
-        for view in self.iter_views():
-            if isinstance(view.access, HasPerm):
-                p.add(view.access.get_permission(self))
+        for app_view in self.iter_views():
+            if isinstance(app_view.access, HasPerm):
+                p.add(app_view.access.get_permission(self))
         # mrt_config permissions
         for mrt in self.mrt_config:
             c = self.mrt_config[mrt]
@@ -507,7 +425,7 @@ class Application(object, metaclass=ApplicationBase):
                 if isinstance(c["access"], HasPerm):
                     p.add(c["access"].get_permission(self))
                 elif isinstance(c["access"], str):
-                    p.add("%s:%s" % (prefix, c["access"]))
+                    p.add("{}:{}".format(prefix, c["access"]))
         # extra_permissions
         if callable(self.extra_permissions):
             extra = self.extra_permissions()
@@ -516,30 +434,6 @@ class Application(object, metaclass=ApplicationBase):
         for e in extra:
             p.add(HasPerm(e).get_permission(self))
         return p
-
-    def user_access_list(self, user):
-        """
-        Return a list of user access entries
-        """
-        return []
-
-    def group_access_list(self, group):
-        """
-        Return a list of group access entries
-        """
-        return []
-
-    def user_access_change_url(self, user):
-        """
-        Return an URL to change user access
-        """
-        return
-
-    def group_access_change_url(self, group):
-        """
-        Return an URL to change group access
-        """
-        return
 
     def customize_form(self, form, table, search=False):
         """
@@ -572,7 +466,7 @@ class Application(object, metaclass=ApplicationBase):
             elif f.type == "datetime":
                 ff = forms.DateTimeField(required=False, label=f.label)
             else:
-                raise ValueError("Invalid field type: '%s'" % f.type)
+                raise ValueError(f"Invalid field type: '{f.type}'")
             fields += [(str(f.name), ff)]
         form.base_fields.update(OrderedDict(fields))
         return form
@@ -614,7 +508,6 @@ class Application(object, metaclass=ApplicationBase):
     def to_json(self, v):
         """
         Convert custom types to json string
-        :param v:
         :return:
         """
         if v is None:
@@ -623,7 +516,7 @@ class Application(object, metaclass=ApplicationBase):
             return v.astimezone(self.TZ).isoformat()
         raise Exception("Invalid to_json type")
 
-    @view(url="^launch_info/$", method=["GET"], access="launch", api=True)
+    @api.get("^launch_info/$", access="launch")
     def api_launch_info(self, request):
         return self.get_launch_info(request)
 

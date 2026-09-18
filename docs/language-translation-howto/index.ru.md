@@ -38,7 +38,7 @@ tags:
 
 Также, для перевода потребуется установить пакеты для разработки:
 ```shell
-pip install -r requirements/dev.txt
+pip install .[dev]
 ```
 
 ## Этапы локализации
@@ -171,5 +171,5 @@ ImportError: No module named babel.util
 Установите зависимости для разработки:
 
 ``` bash
-pip install -r requirements/dev.txt
+pip install .[dev]
 ```

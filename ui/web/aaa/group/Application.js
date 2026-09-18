@@ -55,7 +55,7 @@ Ext.define("NOC.aaa.group.Application", {
   },
   onNewRecord: function(){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/aaa/group/new_permissions/",
       method: "GET",
       scope: me,

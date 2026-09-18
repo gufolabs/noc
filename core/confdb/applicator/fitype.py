@@ -10,9 +10,7 @@ from .query import QueryApplicator
 
 
 class DefaultForwardingInstanceTypeApplicator(QueryApplicator):
-    """
-    Set forwarding instance type if not set
-    """
+    """Set forwarding instance type if not set"""
 
     QUERY = [
         "Match('virtual-router', vr, 'forwarding-instance', fi) and "

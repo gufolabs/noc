@@ -29,7 +29,7 @@ class PlainReferenceField(BaseField):
     dereferenced on access (lazily). Maps to plain ObjectId
     """
 
-    def __init__(self, document_type, *args, **kwargs):
+    def __init__(self, document_type, *args, **kwargs) -> None:
         if not isinstance(document_type, str):
             if not issubclass(document_type, (Document, str)):
                 raise ValidationError(
@@ -80,7 +80,7 @@ class PlainReferenceField(BaseField):
             if v is not None:
                 instance._data[self.name] = v
                 return v
-            raise ValidationError("Unable to dereference %s:%s" % (self.document_type, value))
+            raise ValidationError(f"Unable to dereference {self.document_type}:{value}")
         return value
 
     def to_mongo(self, document):
@@ -120,7 +120,7 @@ class PlainReferenceListField(PlainReferenceField):
                     return self.document_type.get_by_id(ObjectId(value))
                 v = self.document_type.objects(id=value).first()
                 if v is None:
-                    raise ValidationError("Unable to dereference %s:%s" % (self.document_type, v))
+                    raise ValidationError(f"Unable to dereference {self.document_type}:{v}")
                 return v
             return value
 
@@ -165,7 +165,7 @@ class ForeignKeyField(BaseField):
     dereferenced on access (lazily). Maps to integer
     """
 
-    def __init__(self, model, **kwargs):
+    def __init__(self, model, **kwargs) -> None:
         if not issubclass(model, Model):
             raise ValidationError("Argument to ForeignKeyField constructor must be a Model class")
         self.document_type = model
@@ -201,7 +201,7 @@ class ForeignKeyField(BaseField):
             if v is not None:
                 instance._data[self.name] = v
                 return v
-            raise ValidationError("Unable to dereference %s:%s" % (self.document_type, value))
+            raise ValidationError(f"Unable to dereference {self.document_type}:{value}")
         return value
 
     def __set__(self, instance, value):
@@ -242,7 +242,7 @@ class ForeignKeyListField(ForeignKeyField):
                 if v is not None:
                     instance._data[self.name] = v
                     return v
-                raise ValidationError("Unable to dereference %s:%s" % (self.document_type, value))
+                raise ValidationError(f"Unable to dereference {self.document_type}:{value}")
             return value
 
         if instance is None:

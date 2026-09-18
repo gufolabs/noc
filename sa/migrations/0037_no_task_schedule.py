@@ -12,5 +12,5 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0032_schedule_migrate")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.delete_table("sa_taskschedule")

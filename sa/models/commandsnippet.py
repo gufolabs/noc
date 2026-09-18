@@ -29,7 +29,7 @@ class CommandSnippet(NOCModel):
     Command snippet
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = _("Command Snippet")
         verbose_name_plural = _("Command Snippets")
         db_table = "sa_commandsnippet"

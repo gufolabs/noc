@@ -15,7 +15,9 @@ Ext.define("NOC.inv.inv.Application", {
     "NOC.inv.inv.NavModel",
     "NOC.inv.inv.NavSearch",
   ],
-  pollingTaskId: undefined,
+  mixins: [
+    "NOC.core.mixins.Polling",
+  ],
   pollingInterval: 2000,
   //
   viewModel: {
@@ -269,7 +271,7 @@ Ext.define("NOC.inv.inv.Application", {
                 me.menu.hide();
                 return;
               }
-              Ext.Ajax.request({
+              NOC.api.requestLegacy({
                 url: "/inv/inv/" + objectId + "/map_lookup/",
                 method: "GET",
                 success: function(response){
@@ -444,7 +446,7 @@ Ext.define("NOC.inv.inv.Application", {
         me.restoreHistory(me.noc.cmd.args);
         break;
     }
-    this.subscribeToEvents();
+    this.startPolling();
   },
   //
   onReloadNav: function(){
@@ -512,8 +514,24 @@ Ext.define("NOC.inv.inv.Application", {
         } else{
           this.tabPanel.setActiveTab(0);
         }
+        // Programmatic setActiveTab on the already-active first tab does not
+        // fire beforetabchange, so reflect the settled active plugin in the
+        // URL explicitly (covers object select and deep-link restore).
+        this.reflectPluginInUrl();
       }
     }, this);
+  },
+  // Push inv.inv/<objectId>/<plugin> for the currently active plugin tab.
+  // dedup avoids a duplicate history entry when the URL already matches.
+  reflectPluginInUrl: function(){
+    var me = this,
+      objectId = me.selectedObjectId,
+      activeTab = me.tabPanel.getActiveTab(),
+      pluginName = activeTab && activeTab.pluginName;
+    if(objectId && pluginName){
+      me.currentHistoryHash = [me.appId, objectId, pluginName].join("/");
+      NOC.navigation.navigate(me.currentHistoryHash, {dedup: true});
+    }
   },
   //
   addAppForm: function(parent, app, objectId){
@@ -521,7 +539,7 @@ Ext.define("NOC.inv.inv.Application", {
       url = "/" + app.replace(".", "/") + "/launch_info/",
       messageId = me.maskComponent.show("processing", [app]),
       c;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "GET",
       scope: me,
@@ -553,6 +571,16 @@ Ext.define("NOC.inv.inv.Application", {
       objectId = me.selectedObjectId,
       pluginName = currentPanel.pluginName,
       messageId = me.maskComponent.show("fetching", [pluginName]);
+    // Reflect the active plugin tab in the URL as inv.inv/<id>/<plugin>.
+    // Restored on reload via restoreHistory() (sets currentPlugin). dedup
+    // avoids a duplicate history entry while restoring from the URL.
+    // NB: do NOT assign me.currentPlugin here — that would clobber the
+    // restore target while plugins auto-activate during load. currentPlugin
+    // is captured by onBeforeSelect on object switch.
+    if(objectId && pluginName){
+      me.currentHistoryHash = [me.appId, objectId, pluginName].join("/");
+      NOC.navigation.navigate(me.currentHistoryHash, {dedup: true});
+    }
     if(oldPanel && !Ext.isEmpty(oldPanel.messageId)){
       me.maskComponent.hide(me.messageId);
     }
@@ -560,7 +588,7 @@ Ext.define("NOC.inv.inv.Application", {
       Ext.TaskManager.stop(oldPanel.timer);
       oldPanel.timer = null;
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + objectId + "/plugin/" + pluginName + "/",
       method: "GET",
       scope: me,
@@ -601,11 +629,15 @@ Ext.define("NOC.inv.inv.Application", {
     me.selectedObjectId = objectId;
     me.invPlugins = {};
     me.clearTabPanel();
+    // Set the object URL BEFORE loading plugins. When plugin classes are
+    // already cached, runPlugin() runs synchronously inside the loop below and
+    // reflectPluginInUrl() appends the active plugin; doing setHistoryHash here
+    // afterwards would clobber that back to inv.inv/<id> without the plugin.
+    me.setHistoryHash(objectId);
     Ext.each(plugins, function(p, index){
       me.runPlugin(objectId, p, index);
     });
     me.isMenuShow = false;
-    me.setHistoryHash(objectId);
     if(me.currentPlugin && me.invPlugins[me.currentPlugin]){
       me.tabPanel.setActiveTab(me.invPlugins[me.currentPlugin]);
       return;
@@ -633,7 +665,7 @@ Ext.define("NOC.inv.inv.Application", {
     if(reload){
       me.onReloadNav();
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + objectId + "/path/",
       method: "GET",
       scope: me,
@@ -684,7 +716,7 @@ Ext.define("NOC.inv.inv.Application", {
     if(!Ext.isEmpty(data.records)){
       itemId = data.records[0].get("id");
       dropHandlers.wait = true;
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/inv/inv/attach/",
         method: "POST",
         jsonData: {
@@ -746,7 +778,7 @@ Ext.define("NOC.inv.inv.Application", {
                         var tree = this.up("form").down("treepanel"),
                           sel = tree.getSelectionModel().getSelection();
                         if(sel.length > 0){
-                          Ext.Ajax.request({
+                          NOC.api.requestLegacy({
                             url: "/inv/inv/attach/",
                             method: "POST",
                             jsonData: {
@@ -917,7 +949,7 @@ Ext.define("NOC.inv.inv.Application", {
         if(btn === "yes"){
           var selectedObject = this.getSelectedObject();
           if(selectedObject){
-            Ext.Ajax.request({
+            NOC.api.requestLegacy({
               url: "/inv/inv/remove_connections/",
               method: "DELETE",
               jsonData: {container: selectedObject.id},
@@ -941,7 +973,34 @@ Ext.define("NOC.inv.inv.Application", {
   //
   restoreHistory: function(args){
     var me = this;
+    if(!args || Ext.isEmpty(args[0])){
+      // Bare inv.inv (e.g. back/forward to the empty state): nothing to open.
+      return;
+    }
+    // args[1], when present, is the plugin name to restore as the active tab.
+    if(args[1]){
+      me.currentPlugin = args[1];
+    }
     me.showObject(args[0]);
+  },
+  // Apply a history token (back/forward). If the object is already selected,
+  // just switch the plugin tab — re-selecting the same tree node would not
+  // fire the select event, so showObject() would be a no-op. Otherwise fall
+  // back to the full object restore.
+  applyHistory: function(args){
+    var me = this;
+    if(!args || Ext.isEmpty(args[0])){
+      return;
+    }
+    var objectId = args[0],
+      plugin = args[1];
+    if(String(me.selectedObjectId) === String(objectId)){
+      if(plugin && me.invPlugins[plugin]){
+        me.tabPanel.setActiveTab(me.invPlugins[plugin]);
+      }
+      return;
+    }
+    me.restoreHistory(args);
   },
   //
   onCreateConnection: function(){
@@ -1000,7 +1059,7 @@ Ext.define("NOC.inv.inv.Application", {
               if(!Ext.isEmpty(sel)){
                 container = sel[0];
               }
-              Ext.Ajax.request({
+              NOC.api.requestLegacy({
                 url: "/inv/inv/clone/",
                 method: "POST",
                 jsonData: {
@@ -1050,7 +1109,7 @@ Ext.define("NOC.inv.inv.Application", {
   },
   //
   removeGroup: function(container, dialog, data, me){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/remove_group/",
       method: "DELETE",
       jsonData: data,
@@ -1119,74 +1178,10 @@ Ext.define("NOC.inv.inv.Application", {
     this.getViewModel().set("autoReloadText", __("Auto reload : ") + (isReloading ? __("ON") : __("OFF")));
   },
   //
-  generateIcon: function(isUpdatable, icon, color, msg){
-    if(isUpdatable){
-      return `<i class='fa fa-${icon}' style='color:${color};width:16px;' data-qtip='${msg}'></i>`;
-    }
-    return "<i class='fa fa-fw' style='width:16px;'></i>";
-  },
-  //
-  startPolling: function(){
-    var me = this;
-    
-    if(this.observer){
-      this.stopPolling();
-    }
-    
-    this.observer = new IntersectionObserver(function(entries){
-      if(me.destroyed) return;
-      me.isIntersecting = entries[0].isIntersecting;
-      me.disableHandler(!entries[0].isIntersecting);
-    }, {
-      threshold: 0.1,
-    });
-    
-    if(this.getEl() && this.getEl().dom){
-      this.observer.observe(this.getEl().dom);
-    }
-    
-    if(Ext.isEmpty(this.pollingTaskId)){
-      this.pollingTaskId = Ext.TaskManager.start({
-        run: this.pollingTask,
-        interval: this.pollingInterval,
-        scope: this,
-      });
-    } else{
-      this.pollingTask();
-    }
-  },
-  //
-  stopPolling: function(){
-    if(this.pollingTaskId){
-      Ext.TaskManager.stop(this.pollingTaskId);
-      this.pollingTaskId = undefined;
-    }
-    if(this.observer && this.getEl() && this.getEl().dom){
-      this.observer.unobserve(this.getEl().dom);
-      this.observer.disconnect();
-      this.observer = null;
-    }
-  },
-  //
   pollingTask: function(){
     if(this.destroyed) return;
-    
-    let isVisible = !document.hidden, // check is user has switched to another tab browser
-      isFocused = document.hasFocus(), // check is user has minimized browser window
-      isIntersecting = this.isIntersecting; // switch to other application tab
-    if(isIntersecting && isVisible && isFocused){ // check is user has switched to another tab or minimized browser window
+    if(!document.hidden && this.isFocused() && this.isIntersecting){
       this.statusUpdate();
-    }
-  },
-  //
-  disableHandler: function(state){
-    if(this.destroyed) return;
-    
-    var isVisible = !document.hidden, // check is user has switched to another tab browser
-      isIntersecting = this.isIntersecting; // switch to other application tab
-    if(this.pollingTaskId && isIntersecting && isVisible){
-      this.setContainerDisabled(state);
-      this.pollingTask();
     }
   },
   //
@@ -1204,26 +1199,9 @@ Ext.define("NOC.inv.inv.Application", {
       this.getViewModel().set("icon", icon);
     }
   },
-  subscribeToEvents: function(){
-    this.handleWindowFocus = this.handleWindowFocus.bind(this);
-    this.handleWindowBlur = this.handleWindowBlur.bind(this);
-    window.addEventListener("focus", this.handleWindowFocus);
-    window.addEventListener("blur", this.handleWindowBlur);
-  },
-  
-  unsubscribeFromEvents: function(){
-    if(this.handleWindowFocus){
-      window.removeEventListener("focus", this.handleWindowFocus);
-    }
-    if(this.handleWindowBlur){
-      window.removeEventListener("blur", this.handleWindowBlur);
-    }
-  },
-  //
   destroy: function(){
     this.destroyed = true;
     
-    this.unsubscribeFromEvents();
     this.stopPolling();
     this.setContainerDisabled(false);
     
@@ -1233,26 +1211,11 @@ Ext.define("NOC.inv.inv.Application", {
     this.callParent();
   },
   //
-  handleWindowFocus: function(){
-    if(this.destroyed) return;
-    var me = this;
-    setTimeout(function(){
-      if(!me.destroyed){
-        me.disableHandler(false);
-      }
-    }, 100);
-  },
-  //
-  handleWindowBlur: function(){
-    if(this.destroyed) return;
-    this.disableHandler(true);
-  },
-  //
   statusUpdate: function(){
     if(this.destroyed || this.isUpdating) return;
     this.isUpdating = true;
     this.getViewModel().set("icon", this.generateIcon(true, "spinner", "grey", __("loading")));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/resource_status/",
       method: "POST",
       jsonData: {

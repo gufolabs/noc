@@ -65,7 +65,7 @@ class Script(BaseScript):
             if descr and descr.startswith("MES"):
                 platform = descr.split()[0]  # MES-3124F
                 if not descr.startswith("MES-"):  # MES2208P
-                    platform = "MES-%s" % platform[3:]
+                    platform = f"MES-{platform[3:]}"
 
         hardware = self.rx_hardware.search(ver)
 
@@ -119,7 +119,7 @@ class Script(BaseScript):
             elif pwr_type == "N/A":
                 part_no = "PM160-220/12"
             else:
-                raise self.NotSupportedError("Unknown PS type: %s" % pwr_type)
+                raise self.NotSupportedError(f"Unknown PS type: {pwr_type}")
         elif platform in ["MES-5148", "MES-5248", "MES-5448", "MES-7048"]:
             if pwr_type == "AC":
                 part_no = "PM350-220/12"
@@ -128,32 +128,32 @@ class Script(BaseScript):
             elif pwr_type == "N/A":
                 part_no = "PM350-220/12"
             else:
-                raise self.NotSupportedError("Unknown PS type: %s" % pwr_type)
+                raise self.NotSupportedError(f"Unknown PS type: {pwr_type}")
         elif platform in ["MES-2348P"]:
             part_no = "PM950"
         else:
-            raise self.NotSupportedError("PS on unknown platform: %s" % platform)
+            raise self.NotSupportedError(f"PS on unknown platform: {platform}")
         if type not in ["Main", "Redundant"]:
-            raise self.NotSupportedError("Unknown PS type: %s" % type)
+            raise self.NotSupportedError(f"Unknown PS type: {type}")
         return {"type": "PWR", "vendor": "ELTEX", "part_no": part_no, "number": type}
 
     def get_trans(self, ifname):
         v = ""
         if self.has_detail:
             try:
-                v = self.cli("show fiber-ports optical-transceiver detailed interface %s" % ifname)
+                v = self.cli(f"show fiber-ports optical-transceiver detailed interface {ifname}")
             except self.CLISyntaxError:
                 self.has_detail = False
         if not self.has_detail:
-            v = self.cli("show fiber-ports optical-transceiver interface %s" % ifname)
+            v = self.cli(f"show fiber-ports optical-transceiver interface {ifname}")
         match = self.rx_trans.search(v)
         if not match:  # in some rare cases switch do not show any transceiver information
             r = {"type": "XCVR", "vendor": "OEM"}
             if ifname.startswith("gi"):
-                r["number"] = "gi%s" % ifname.split("/")[-1]
+                r["number"] = "gi{}".format(ifname.split("/")[-1])
                 r["part_no"] = "NoName | Transceiver | 1G | SFP"
             if ifname.startswith("te"):
-                r["number"] = "te%s" % ifname.split("/")[-1]
+                r["number"] = "te{}".format(ifname.split("/")[-1])
                 r["part_no"] = "NoName | Transceiver | Unknown SFP"  # impossible ?
             return r
         r = {"type": "XCVR", "vendor": match.group("vendor")}
@@ -162,9 +162,9 @@ class Script(BaseScript):
         if match.group("revision"):
             r["revision"] = match.group("revision")
         if ifname.startswith("gi"):
-            r["number"] = "gi%s" % ifname.split("/")[-1]
+            r["number"] = "gi{}".format(ifname.split("/")[-1])
         if ifname.startswith("te"):
-            r["number"] = "te%s" % ifname.split("/")[-1]
+            r["number"] = "te{}".format(ifname.split("/")[-1])
         if match.group("part_no"):
             part_no = match.group("part_no")
         else:
@@ -194,7 +194,7 @@ class Script(BaseScript):
             elif code == "unknown":
                 part_no = "NoName | Transceiver | 1G | SFP"
             else:
-                raise self.NotSupportedError("Unknown Compliance code: %s" % code)
+                raise self.NotSupportedError(f"Unknown Compliance code: {code}")
         r["part_no"] = part_no
         return r
 
@@ -318,7 +318,7 @@ class Script(BaseScript):
             has_unit_command = True
             for unit in self.capabilities["Stack | Member Ids"].split(" | "):
                 try:
-                    plat = self.cli("show system unit %s" % unit, cached=True)
+                    plat = self.cli(f"show system unit {unit}", cached=True)
                 except self.CLISyntaxError:
                     # Found on MES1124M SW version 1.1.46
                     # Left for compatibility with other models

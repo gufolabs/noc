@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from .base import BaseModel
@@ -15,8 +14,8 @@ from .base import BaseModel
 class TTSystem(BaseModel):
     id: str
     name: str
-    handler: Optional[str] = None
-    connection: Optional[str] = None
-    description: Optional[str] = None
+    handler: str | None = None
+    connection: str | None = None
+    description: str | None = None
 
     _csv_fields = ["id", "name", "handler", "connection", "description"]

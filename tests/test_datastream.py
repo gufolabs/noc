@@ -27,7 +27,7 @@ class ExampleDataStream(DataStream):
 
     @classmethod
     def get_object(cls, id):
-        return {"id": id, "name": "Item #%s" % id}
+        return {"id": id, "name": f"Item #{id}"}
 
 
 class NoEvenDatastream(DataStream):
@@ -38,7 +38,7 @@ class NoEvenDatastream(DataStream):
     def get_object(cls, id):
         if id % 2 == 0:
             raise KeyError
-        return {"id": id, "name": "Item #%s" % id}
+        return {"id": id, "name": f"Item #{id}"}
 
     @classmethod
     def get_meta(cls, data):
@@ -92,7 +92,7 @@ def test_datastream_update(ds_index):
     data = orjson.loads(doc["data"])
     assert "id" in data
     assert "name" in data
-    assert data["name"] == "Item #%s" % ds_index
+    assert data["name"] == f"Item #{ds_index}"
     assert "change_id" in data
     assert data["change_id"] == str(doc["change_id"])
     change_id = doc["change_id"]

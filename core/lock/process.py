@@ -1,12 +1,11 @@
 # ----------------------------------------------------------------------
 #  Distributed Lock
 # ----------------------------------------------------------------------
-#  Copyright (C) 2007-2021 The NOC Project
-#  See LICENSE for details
+# Copyright (C) 2007-2021 The NOC Project
+# See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Dict, Set
 from logging import getLogger
 import itertools
 from threading import Condition
@@ -33,7 +32,7 @@ class ProcessLock(BaseLock):
     ```
     """
 
-    def __init__(self, category: str, owner: str, ttl: Optional[float] = None):
+    def __init__(self, category: str, owner: str, ttl: float | None = None) -> None:
         """
         :param category: Lock category name
         :param owner: Lock owner id
@@ -41,10 +40,10 @@ class ProcessLock(BaseLock):
         """
         super().__init__(category, owner, ttl=ttl)
         self.lock_id_seq = itertools.count()
-        self.items: Dict[str, Set[str]] = {}
+        self.items: dict[str, set[str]] = {}
         self.items_condition = Condition()
 
-    def acquire_by_items(self, items: List[str], ttl: Optional[float] = None) -> str:
+    def acquire_by_items(self, items: list[str], ttl: float | None = None) -> str:
         """
         Acquire lock by list of items
         """

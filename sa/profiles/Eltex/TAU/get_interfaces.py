@@ -45,7 +45,7 @@ class Script(BaseScript):
                 if match.group("ip"):
                     ip_address = match.group("ip")
                     ip_subnet = match.group("mask")
-                    ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+                    ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                     sub["enabled_afi"] += ["IPv4"]
                     sub["ipv4_addresses"] = [ip_address]
                 if match.group("ip6"):

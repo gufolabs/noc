@@ -24,7 +24,7 @@ from noc.core.translation import ugettext as _
 
 
 class MACDB(ViewModel):
-    class Meta(object):
+    class Meta:
         db_table = "macdb"
         view_table_source = "raw_mac"
         engine = AggregatingMergeTree(

@@ -7,7 +7,6 @@
 
 # Python modules
 import datetime
-from typing import Optional, List
 
 # NOC modules
 from .base import BaseModel
@@ -21,14 +20,14 @@ class IPVRF(BaseModel):
     profile: str
     vpn_id: str
     # Workflow state
-    state: Optional[str] = None
+    state: str | None = None
     # Last state change
-    state_changed: Optional[datetime.datetime] = None
+    state_changed: datetime.datetime | None = None
     # Workflow event
-    event: Optional[str] = None
-    rd: Optional[str] = "0:0"
-    description: Optional[str] = None
+    event: str | None = None
+    rd: str | None = "0:0"
+    description: str | None = None
     afi_ipv4: bool = True
     afi_ipv6: bool = False
-    project: Optional[Reference["Project"]] = None
-    labels: Optional[List[str]] = None
+    project: Reference["Project"] | None = None
+    labels: list[str] | None = None

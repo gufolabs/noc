@@ -24,8 +24,8 @@ class Script(BaseScript):
             raise self.NotSupportedError()
         r = []
         for match in self.rx_lag.finditer(v):
-            i = {"interface": "lag-%s" % match.group("number"), "members": [], "type": "L"}
-            c = self.cli("show lag %s port" % match.group("number"))
+            i = {"interface": "lag-{}".format(match.group("number")), "members": [], "type": "L"}
+            c = self.cli("show lag {} port".format(match.group("number")))
             for match1 in self.rx_port.finditer(c):
                 i["members"] += [match1.group("port")]
             r += [i]

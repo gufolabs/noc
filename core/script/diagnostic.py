@@ -1,39 +1,38 @@
 # ----------------------------------------------------------------------
 # Script credential diagnostic
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import logging
-from typing import List, Iterable, Optional, Tuple, Dict, Any
+from typing import Iterable
 
 # NOC modules
 from noc.core.script.scheme import Protocol, SNMPCredential, SNMPv3Credential, CLICredential
-from noc.core.checkers.base import Check, CheckResult
-from noc.core.diagnostic.types import DiagnosticConfig, CheckStatus
+from noc.core.checkers.base import Check, CheckResult, DataItem
+from noc.core.diagnostic.types import DiagnosticConfig, CheckStatus, DiagnosticState
+from noc.core.profile.loader import GENERIC_PROFILE
+from noc.core.models.inputsources import InputSource
 from noc.sa.models.credentialcheckrule import CredentialCheckRule
-from noc.sa.models.profile import GENERIC_PROFILE
 
 
 class SNMPSuggestsDiagnostic:
-    """
-    Run diagnostic by config and check status
-    """
+    """Run diagnostic by config and check status"""
 
-    def __init__(self, config: DiagnosticConfig, logger=None):
+    def __init__(self, config: DiagnosticConfig, logger=None) -> None:
         self.config = config
         self.logger = logger or logging.getLogger("snmpsuggestsdiagnostic")
 
     def iter_checks(
         self,
         address: str,
-        labels: Optional[List[str]] = None,
-        groups: Optional[List[str]] = None,
+        labels: list[str] | None = None,
+        groups: list[str] | None = None,
         suggests_snmp: bool = True,
         **kwargs,
-    ) -> Iterable[Tuple[Check, ...]]:
+    ) -> Iterable[tuple[Check, ...]]:
         r = []
         labels = set(labels or [])
         if self.config.checks:
@@ -56,47 +55,59 @@ class SNMPSuggestsDiagnostic:
                     )
         yield tuple(r)
 
-    def get_result(
-        self, checks: List[CheckResult]
-    ) -> Optional[
-        Tuple[Optional[bool], Optional[str], Optional[Dict[str, Any]], List[CheckStatus]]
-    ]:
+    def get_check_status(
+        self,
+        checks: list[CheckStatus] | None,
+        **kwargs,
+    ) -> tuple[DiagnosticState | None, str | None]:
         """Getting Diagnostic result: State and reason"""
+        if checks is None:
+            return DiagnosticState.unknown, None
         error = ""
         for c in checks:
             if c.skipped:
                 continue
-            if c.error and c.error.message:
-                error = c.error.message
             if c.status:
-                return True, None, {}, []
-        return False, error, None, []
+                return DiagnosticState.enabled, None
+            if c.error:
+                error = c.error
+        return DiagnosticState.failed, error
+
+    def process_result(
+        self,
+        checks: list[CheckResult],
+        source: InputSource | None = InputSource.UNKNOWN,
+    ) -> tuple[list[CheckStatus], list[DataItem]]:
+        """Processed checks result and Return Status"""
+        return [CheckStatus.from_result(c, source=source) for c in checks], []
 
 
 class CLISuggestsDiagnostic:
-    """
-    Run diagnostic by config and check status
-    """
+    """Run diagnostic by config and check status"""
 
-    def __init__(self, config: DiagnosticConfig, logger=None):
+    def __init__(self, config: DiagnosticConfig, logger=None) -> None:
         self.config = config
         self.logger = logger or logging.getLogger("clisuggestsdiagnostic")
 
     def iter_checks(
         self,
         address: str,
-        labels: Optional[List[str]] = None,
-        groups: Optional[List[str]] = None,
-        profile: Optional[str] = None,
+        labels: list[str] | None = None,
+        groups: list[str] | None = None,
+        profile: str | None = None,
         suggests_cli: bool = True,
         **kwargs,
-    ) -> Iterable[Tuple[Check, ...]]:
+    ) -> Iterable[tuple[Check, ...]]:
         r = []
         labels = set(labels or [])
         if not profile or profile == GENERIC_PROFILE:
             self.logger.info("Generic profile not checked for CLI")
             return
-        for c in self.config.checks:
+        raise_privilege, port = False, None
+        for c in self.config.checks or []:
+            if c.credential:
+                raise_privilege |= c.credential.raise_privilege
+            port = c.port
             r.append(
                 Check(
                     name=c.name,
@@ -106,43 +117,55 @@ class CLISuggestsDiagnostic:
                     credential=c.credential,
                 )
             )
-            if not suggests_cli:
+        if not suggests_cli:
+            yield r
+        for s in CredentialCheckRule.get_suggest_rules():
+            if not s.is_match(labels):
                 continue
-            for s in CredentialCheckRule.get_suggest_rules():
-                if not s.is_match(labels):
+            for cr in s.credentials:
+                if not isinstance(cr, CLICredential):
                     continue
-                for cr in s.credentials:
-                    if isinstance(cr, CLICredential):
-                        r.append(
-                            Check(
-                                name=c.name,
-                                address=c.address,
-                                port=c.port,
-                                args={"arg0": profile},
-                                credential=cr,
-                            )
+                for p in cr.enable_protocols:
+                    p = Protocol(p)
+                    r.append(
+                        Check(
+                            name=p.config.check,
+                            address=address,
+                            port=port,
+                            args={"arg0": profile},
+                            credential=CLICredential(
+                                username=cr.username,
+                                password=cr.password,
+                                super_password=cr.super_password,
+                                raise_privilege=raise_privilege,
+                                enable_protocols=(p,),
+                            ),
                         )
+                    )
         yield r
 
-    def get_result(
-        self, checks: List[CheckResult]
-    ) -> Optional[
-        Tuple[Optional[bool], Optional[str], Optional[Dict[str, Any]], List[CheckStatus]]
-    ]:
+    def get_check_status(
+        self,
+        checks: list[CheckStatus] | None,
+        **kwargs,
+    ) -> tuple[DiagnosticState | None, str | None]:
         """Getting Diagnostic result: State and reason"""
+        if checks is None:
+            return DiagnosticState.unknown, None
         error = ""
-        r = {}
-        status = False
         for c in checks:
             if c.skipped:
                 continue
-            if c.error and c.error.message:
-                error = c.error.message
-            if c.key not in r or not r[c.key].status:
-                r[c.key] = CheckStatus.from_result(c)
-            if c.status and not status:
-                status = True
-                # return True, None, {}, []
-        if status:
-            return True, None, {}, list(r.values())
-        return False, error, None, list(r.values())
+            if c.error:
+                error = c.error
+            if c.status:
+                return DiagnosticState.enabled, None
+        return DiagnosticState.failed, error
+
+    def process_result(
+        self,
+        checks: list[CheckResult],
+        source: InputSource | None = InputSource.UNKNOWN,
+    ) -> tuple[list[CheckStatus], list[DataItem]]:
+        """Processed checks result and Return Status"""
+        return [CheckStatus.from_result(c, source=source) for c in checks], []

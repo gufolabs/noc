@@ -39,7 +39,7 @@ class Script(BaseScript):
         for i in parse_table(self.cli("show lldp remote-device all")):
             if not i[1]:
                 continue
-            c = self.cli("show lldp remote-device detail %s" % i[0])
+            c = self.cli(f"show lldp remote-device detail {i[0]}")
             iface = {"local_interface": i[0], "neighbors": []}
             for match in self.rx_detail.finditer(c):
                 cap = 0

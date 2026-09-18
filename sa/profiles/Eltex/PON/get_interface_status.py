@@ -51,19 +51,19 @@ class Script(BaseScript):
         # Fallback to CLI
         with self.profile.switch(self):
             if interface:
-                cmd = "show interfaces status %s\r" % interface
+                cmd = f"show interfaces status {interface}\r"
                 match = self.rx_status.search(self.cli(cmd))
                 r.append({"interface": interface, "status": match.group("status") == "up"})
             else:
                 cmd = "show uplink interfaces\r"
                 for match in self.rx_uplink.finditer(self.cli(cmd)):
                     interface = match.group("interface")
-                    cmd = "show interfaces status %s\r" % interface
+                    cmd = f"show interfaces status {interface}\r"
                     match = self.rx_status.search(self.cli(cmd))
                     r.append({"interface": interface, "status": match.group("status") == "up"})
                 for port in range(8):
                     interface = "pon-port " + str(port)
-                    cmd = "show interfaces status %s\r" % interface
+                    cmd = f"show interfaces status {interface}\r"
                     match = self.rx_status.search(self.cli(cmd))
                     r.append({"interface": interface, "status": match.group("status") == "up"})
         return r

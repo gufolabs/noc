@@ -1,6 +1,5 @@
 # FreeBSD settings
 ---
-activator_command: "/bin/sh -c 'exec cpuset -l $((%(process_num)d %% $(sysctl -n hw.ncpu))) ./services/activator/service.py'"
 ansible_shell_type: csh
 
 noc_py3_ver: "3.8"
@@ -42,7 +41,6 @@ nginx_ssl_cert_path: /usr/local/etc/nginx/ssl/noc.crt
 nginx_ssl_key_path: /usr/local/etc/nginx/ssl/noc.key
 nginx_reload_command: "service nginx reload"
 nginx_user: www
-
 
 pgbouncer_user: pgbouncer
 pgbouncer_path_pid: /var/run/pgbouncer

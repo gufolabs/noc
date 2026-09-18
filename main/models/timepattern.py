@@ -39,7 +39,7 @@ class TimePattern(NOCModel):
     Time Patterns
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Time Pattern"
         verbose_name_plural = "Time Patterns"
         db_table = "main_timepattern"

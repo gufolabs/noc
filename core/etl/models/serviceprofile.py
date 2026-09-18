@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from .base import BaseModel
@@ -15,8 +14,8 @@ from .base import BaseModel
 class ServiceProfile(BaseModel):
     id: str
     name: str
-    description: Optional[str] = None
-    workflow: Optional[str] = None
-    card_title_template: Optional[str] = None
+    description: str | None = None
+    workflow: str | None = None
+    card_title_template: str | None = None
 
     _csv_fields = ["id", "name", "description", "card_title_template"]

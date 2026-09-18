@@ -62,9 +62,9 @@ class Script(BaseScript):
             if not self.profile.valid_interface_name(l_iface):
                 continue
             if vrf == "default":
-                v = self.cli("show ip interface %s" % l_iface)
+                v = self.cli(f"show ip interface {l_iface}")
             else:
-                v = self.cli("show ip interface vrf %s %s" % (vrf, l_iface))
+                v = self.cli(f"show ip interface vrf {vrf} {l_iface}")
             match = self.rx_ipif.search(v)
             if match:
                 ifname = match.group("interface")
@@ -103,14 +103,14 @@ class Script(BaseScript):
                 if match.group("ip") and match.group("mask"):
                     ip_address = match.group("ip")
                     ip_subnet = match.group("mask")
-                    ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+                    ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                     sub["ipv4_addresses"] = [ip_address]
                 if match.group("ip_secondary"):
                     ip_secondary = match.group("ip_secondary")
                     for match1 in self.rx_secondary.finditer(ip_secondary):
                         ip_address = match1.group("ip")
                         ip_subnet = match1.group("mask")
-                        ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+                        ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                         sub["ipv4_addresses"] += [ip_address]
                 if ", " in match.group("n_proto"):
                     # Need more examples
@@ -157,7 +157,7 @@ class Script(BaseScript):
                 ifaces += [iface]
                 changed = True
             elif "." in l_iface:
-                v = self.cli("show interface %s" % l_iface)
+                v = self.cli(f"show interface {l_iface}")
                 match = self.rx_iface1.search(v)
                 if match:
                     ifname = match.group("interface")
@@ -195,7 +195,7 @@ class Script(BaseScript):
                 if iface not in self.logical_interfaces:
                     self.logical_interfaces += [iface]
         for v in self.profile.get_interfaces_list(self):
-            cmd = "show interface %s" % v
+            cmd = f"show interface {v}"
             c = self.cli(cmd)
             match = self.rx_iface.search(c)
             iface = {

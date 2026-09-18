@@ -25,7 +25,7 @@ class Migration(BaseMigration):
         ("noc.supplierprofiles", "supplierprofile"),
     ]
 
-    def migrate(self):
+    def migrate(self) -> None:
         labels = defaultdict(set)  # label: settings
         # Mongo models
         for collection, setting in self.TAG_COLLETIONS:

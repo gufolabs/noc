@@ -24,7 +24,7 @@ from noc.core.comp import smart_bytes
 class Migration(BaseMigration):
     _ac_cache = cachetools.TTLCache(maxsize=5, ttl=60)
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Convert pickled field ty BYTEA
         self.db.execute(
             "ALTER TABLE sa_managedobjectprofile ALTER metrics TYPE BYTEA USING metrics::bytea"
@@ -52,7 +52,7 @@ class Migration(BaseMigration):
                     tp = {"_id": tp_id}
                 # Fill profile
                 tp["name"] = "op14-%05d-%03d" % (next(current), n)
-                tp["description"] = "Migrated for interface profile '%s' metric '%s'" % (
+                tp["description"] = "Migrated for interface profile '{}' metric '{}'".format(
                     name,
                     metric["metric_type"],
                 )

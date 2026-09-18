@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Union, Set, List, Tuple, Iterable
+from typing import Any, Union, Iterable
 
 # NOC modules
 from noc.core.text import ranges_to_list
@@ -15,7 +15,7 @@ from noc.core.text import ranges_to_list
 SCOPE_SEPARATOR = "::"
 
 
-class LambdaDiscriminator(object):
+class LambdaDiscriminator:
     """
     Optical wavelength.
 
@@ -82,12 +82,12 @@ class LambdaDiscriminator(object):
         return LambdaDiscriminator(f"{ch_freq}-{ch_width}")
 
 
-class VlanDiscriminator(object):
+class VlanDiscriminator:
     scope: str = "vlan"
 
-    def __init__(self, value: str):
+    def __init__(self, value: str) -> None:
         try:
-            self.vlan: Set[int] = set(ranges_to_list(value))
+            self.vlan: set[int] = set(ranges_to_list(value))
         except SyntaxError as e:
             msg = f"Invalid VLAN: {value}"
             raise ValueError(msg) from e
@@ -153,11 +153,11 @@ ODU_LIMITS = {
 }
 
 
-class OduDiscriminator(object):
+class OduDiscriminator:
     scope: str = "odu"
 
-    def __init__(self, value: str):
-        self.odu: List[Tuple[str, int]] = list(self._iter_parse(value))
+    def __init__(self, value: str) -> None:
+        self.odu: list[tuple[str, int]] = list(self._iter_parse(value))
         # Check odu
         prev_odu = None
         for n, idx in self.odu:
@@ -178,8 +178,8 @@ class OduDiscriminator(object):
             prev_odu = n
 
     @staticmethod
-    def _iter_parse(value: str) -> Iterable[Tuple[str, int]]:
-        def q(x: str) -> Tuple[str, int]:
+    def _iter_parse(value: str) -> Iterable[tuple[str, int]]:
+        def q(x: str) -> tuple[str, int]:
             if "-" in x:
                 n, y = x.split("-", 1)
                 return n, int(y)
@@ -222,7 +222,7 @@ class OduDiscriminator(object):
             return 0
         return ODU_LIMITS[c][p]
 
-    def get_crossing_proposals(self, d: Union[str, "OduDiscriminator"]) -> List[str]:
+    def get_crossing_proposals(self, d: Union[str, "OduDiscriminator"]) -> list[str]:
         """
         Same discriminator - container
         :param d: Payload
@@ -241,7 +241,7 @@ class OduDiscriminator(object):
         return r
 
 
-class OscDiscriminator(object):
+class OscDiscriminator:
     scope = "osc"
     OUTBAND = "outband"
 

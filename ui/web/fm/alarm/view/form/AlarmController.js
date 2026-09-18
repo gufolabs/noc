@@ -53,7 +53,7 @@ Ext.define("NOC.fm.alarm.view.form.AlarmController", {
     this.fireViewEvent("fmAlarmRefreshForm");
   },
   onEscalateObject: function(){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/fm/alarm/escalate/",
       method: "POST",
       jsonData: {
@@ -90,7 +90,7 @@ Ext.define("NOC.fm.alarm.view.form.AlarmController", {
       __("Please confirm the alarm is closed and must be cleared?"),
       function(btn, text){
         if(btn === "ok"){
-          Ext.Ajax.request({
+          NOC.api.requestLegacy({
             url: "/fm/alarm/" + this.getViewModel().get("selected.id") + "/clear/",
             method: "POST",
             jsonData: {
@@ -111,7 +111,7 @@ Ext.define("NOC.fm.alarm.view.form.AlarmController", {
   },
   onWatch: function(self){
     var cmd = self.pressed ? "/subscribe/" : "/unsubscribe/";
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: this.getViewModel().get("alarmUrl") + cmd,
       method: "POST",
       scope: this,
@@ -141,7 +141,7 @@ Ext.define("NOC.fm.alarm.view.form.AlarmController", {
       function(btn, text){
         if(btn === "ok"){
           // @todo: Check alarm id
-          Ext.Ajax.request({
+          NOC.api.requestLegacy({
             url: this.getViewModel().get("alarmUrl") + "/set_root/",
             method: "POST",
             scope: this,
@@ -181,7 +181,7 @@ Ext.define("NOC.fm.alarm.view.form.AlarmController", {
   submitMessage: function(field){
     if(!field.getValue())
       return;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: this.getViewModel().get("alarmUrl") + "/post/",
       method: "POST",
       scope: this,
@@ -212,7 +212,7 @@ Ext.define("NOC.fm.alarm.view.form.AlarmController", {
       fav_status = this.getViewModel().get("selected.fav_status"),
       action = fav_status ? "reset" : "set",
       url = "/fm/alarm/favorites/item/" + currentId + "/" + action + "/";
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "POST",
       scope: this,

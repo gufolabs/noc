@@ -8,7 +8,7 @@
 # Python modules
 import re
 import threading
-from typing import Optional, List, Dict, Union
+from typing import Optional
 import operator
 
 # Third-party modules
@@ -60,7 +60,7 @@ class MIB(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["MIB"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["MIB"]:
         return MIB.objects.filter(id=oid).first()
 
     @classmethod
@@ -137,7 +137,6 @@ class MIB(Document):
     def load_data(self, data):
         """
         Load mib data from list of {oid:, name:, description:, syntax:}
-        :param data:
         :return:
         """
         # Get MIB preference
@@ -168,13 +167,13 @@ class MIB(Document):
                 # Try to resolve collision
                 if not mib_preference:
                     # No preference for target MIB
-                    raise OIDCollision(oid, oid_name, o.name, "No preference for %s" % self.name)
+                    raise OIDCollision(oid, oid_name, o.name, f"No preference for {self.name}")
                 o_mib = o.name.split("::")[0]
                 if o_mib not in prefs:
                     mp = MIBPreference.objects.filter(mib=o_mib).first()
                     if not mp and mib_preference == DEFAULT_PREFERENCE:
                         # No preference for destination MIB
-                        raise OIDCollision(oid, oid_name, o.name, "No preference for %s" % o_mib)
+                        raise OIDCollision(oid, oid_name, o.name, f"No preference for {o_mib}")
                     if not mp:
                         prefs[o_mib] = DEFAULT_PREFERENCE
                     else:
@@ -305,7 +304,7 @@ class MIB(Document):
                     if am not in prefs:
                         p = MIBPreference(mib=am).first()
                         if p is None:
-                            raise Exception("No preference for %s" % am)
+                            raise Exception(f"No preference for {am}")
                         prefs[am] = p.preference
                     p = prefs[am]
                     if lp is None or p < lp:
@@ -318,13 +317,10 @@ class MIB(Document):
             o.save()
 
     @classmethod
-    def resolve_vars(cls, vars: Dict[str, bytes], include_raw: bool = False):
+    def resolve_vars(cls, vars: dict[str, bytes], include_raw: bool = False):
         """
         Resolve FM key -> value dict according to MIBs
 
-        :param cls:
-        :param vars:
-        :param include_raw:
         :return:
         """
         r = {}
@@ -367,7 +363,7 @@ class MIB(Document):
                                 b = ["%X" % (1 << n)]
                         n += 1
                         xv >>= 1
-                    rv = "(%s)" % ",".join(b)
+                    rv = "({})".format(",".join(b))
                 elif syntax["base_type"] == "ObjectIdentifier":
                     rv = smart_text(v)
                 else:
@@ -396,11 +392,9 @@ class MIB(Document):
         return r
 
     @classmethod
-    def guess_encoding(cls, s: bytes, encodings: Optional[List[str]] = None) -> str:
+    def guess_encoding(cls, s: bytes, encodings: list[str] | None = None) -> str:
         """
         Try to guess encoding
-        :param s:
-        :param encodings:
         :return:
         """
         encodings = encodings or TRY_ENCODINGS

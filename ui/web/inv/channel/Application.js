@@ -377,7 +377,7 @@ Ext.define("NOC.inv.channel.Application", {
     var me = this,
       currentId = me.currentRecord.id,
       url = `/inv/channel/${currentId}/viz/`;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "GET",
       success: function(response){

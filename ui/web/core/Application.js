@@ -84,7 +84,25 @@ Ext.define("NOC.core.Application", {
       back = me.getLayout().getActiveItem(),
       item = me.showItem(index);
     item.preview(record, back);
+    me.reflectItemInUrl(item, record);
     return item;
+  },
+  // Reflect a card-layout sub-view (a registered item that declares a
+  // urlSuffix) in the URL as "<appId>/<id>/<urlSuffix>". No-op for items
+  // without a urlSuffix, so it is safe to call generically. Uses dedup so it
+  // does not push a duplicate history entry while restoring from the URL.
+  reflectItemInUrl: function(item, record){
+    var me = this;
+    if(!item || !item.urlSuffix || !record || !me.appId){
+      return;
+    }
+    var idField = me.idField || "id",
+      id = Ext.isFunction(record.get) ? record.get(idField) : record[idField];
+    if(id === undefined || id === null){
+      return;
+    }
+    me.currentHistoryHash = [me.appId, id, item.urlSuffix].join("/");
+    NOC.navigation.navigate(me.currentHistoryHash, {dedup: true});
   },
   //
   getRegisteredItems: function(){
@@ -138,9 +156,37 @@ Ext.define("NOC.core.Application", {
   //
   setHistoryHash: function(){
     this.currentHistoryHash = [this.appId].concat([].slice.call(arguments, 0)).join("/");
-    Ext.History.setHash(this.currentHistoryHash);
+    // dedup: never push a duplicate entry for the URL we are already on. This
+    // also keeps back/forward clean when restore handlers re-assert the same
+    // token asynchronously.
+    NOC.navigation.navigate(this.currentHistoryHash, {dedup: true});
     if(arguments.length === 0){
       this.setQueryParam();
+    }
+  },
+  // Apply a history token to this app (back/forward or deep-link). args are the
+  // path segments after the appId. Default routing for core.Application apps;
+  // subclasses override for app-specific restore.
+  applyHistory: function(args){
+    var me = this;
+    if(Ext.isFunction(me.restoreHistory)){
+      me.restoreHistory(args || []);
+    } else if(Ext.isFunction(me.onCmd_history)){
+      me.onCmd_history({args: args || []});
+    } else{
+      // Filter-only apps (e.g. sa.monitor, sa.getnow): re-apply the filter
+      // carried in the URL query.
+      me.restoreFilterFromUrl();
+    }
+  },
+  // Re-apply the filter encoded in the URL query to the app's filter panel
+  // (reference "filterPanel" with a controller exposing restoreFilter()).
+  // No-op for apps without such a panel.
+  restoreFilterFromUrl: function(){
+    var fp = Ext.isFunction(this.lookup) ? this.lookup("filterPanel") : null,
+      ctrl = fp && Ext.isFunction(fp.getController) ? fp.getController() : null;
+    if(ctrl && Ext.isFunction(ctrl.restoreFilter)){
+      ctrl.restoreFilter();
     }
   },
   //

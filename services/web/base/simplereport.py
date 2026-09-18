@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # SimpleReport implementation
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ from .reportapplication import ReportApplication
 INDENT = "    "
 
 
-class ReportNode(object):
+class ReportNode:
     """
     Abstract Report Node
     """
@@ -53,10 +53,10 @@ class ReportNode(object):
         """
         Return opening XML tag
         """
-        s = "<%s" % self.tag
+        s = f"<{self.tag}"
         for k, v in kwargs.items():
             if v:
-                s += " %s='%s'" % (k, self.quote(v))
+                s += f" {k}='{self.quote(v)}'"
         s += ">"
         return s
 
@@ -64,7 +64,7 @@ class ReportNode(object):
         """
         Return closing XML tag
         """
-        return "</%s>" % self.tag
+        return f"</{self.tag}>"
 
     def indent(self, s, n=1):
         """
@@ -72,12 +72,6 @@ class ReportNode(object):
         """
         i = INDENT * n
         return i + s.replace("\n", "\n" + i)
-
-    def to_xml(self):
-        """
-        Return XML presentation of Node
-        """
-        return ""
 
     def to_html(self, **kwargs):
         """
@@ -105,18 +99,6 @@ class Report(ReportNode):
 
     def append_section(self, s):
         self.sections += [s]
-
-    def to_xml(self):
-        """
-        Return XML code for report
-        :return:
-        """
-        s = [self.format_opening_xml_tag(name=self.name)]
-        s += [self.indent("<sections>")]
-        s += [self.indent(x.to_xml(), 2) for x in self.sections]
-        s += [self.indent("</sections>")]
-        s += [self.format_closing_xml_tag()]
-        return "\n".join(s)
 
     def to_html(self, include_buttons=True, **kwargs):
         """
@@ -164,23 +146,14 @@ class TextSection(ReportSection):
             return [self.text]
         return self.text
 
-    def to_xml(self):
-        """
-        Return XML presentation of text section
-        """
-        s = [self.format_opening_xml_tag(name=self.name, title=self.title)]
-        s += [self.indent("<par>%s</par>" % self.quote(p)) for p in self.paragraphs]
-        s += [self.format_closing_xml_tag()]
-        return "\n".join(s)
-
     def to_html(self, include_buttons=True):
         """
         Return HTML presentation of text section
         """
         s = []
         if self.title:
-            s += ["<h2>%s</h2>" % self.quote(self.title)]
-        s += ["<p>%s</p>" % self.quote(p) for p in self.paragraphs]
+            s += [f"<h2>{self.quote(self.title)}</h2>"]
+        s += [f"<p>{self.quote(p)}</p>" for p in self.paragraphs]
         return "\n".join(s)
 
 
@@ -229,8 +202,8 @@ class TableColumn(ReportNode):
             if align
             else None
         )
-        self.format = getattr(self, "f_%s" % format) if isinstance(format, str) else format
-        self.total = getattr(self, "ft_%s" % total) if isinstance(total, str) else total
+        self.format = getattr(self, f"f_{format}") if isinstance(format, str) else format
+        self.total = getattr(self, f"ft_{total}") if isinstance(total, str) else total
         self.total_label = total_label
         self.total_data = []
         self.subtotal_data = []
@@ -243,17 +216,9 @@ class TableColumn(ReportNode):
         """
         return self.total
 
-    def start_section(self):
-        """
-        Reset sub-totals
-        :return:
-        """
-        self.subtotal_data = []
-
     def contribute_data(self, s):
         """
         Contribute data to totals
-        :param s:
         :return:
         """
         if self.total:
@@ -262,7 +227,6 @@ class TableColumn(ReportNode):
     def format_data(self, s):
         """
         Return formatted cell
-        :param s:
         :return:
         """
         if s is None or s == "":
@@ -270,17 +234,6 @@ class TableColumn(ReportNode):
         if not self.format:
             return s
         return self.format(s)
-
-    def to_xml(self):
-        """
-        Return XML representation of column
-        :return:
-        """
-        return (
-            self.format_opening_xml_tag(name=self.name, align=self.align)
-            + self.quote(self.title)
-            + self.format_closing_xml_tag()
-        )
 
     def html_td_attrs(self):
         """
@@ -295,18 +248,17 @@ class TableColumn(ReportNode):
                 attrs["align"] = "right"
             elif self.align & self.H_ALIGN_MASK == self.ALIGN_CENTER:
                 attrs["align"] = "center"
-        return " " + " ".join(["%s='%s'" % (k, self.quote(v)) for k, v in attrs.items()])
+        return " " + " ".join([f"{k}='{self.quote(v)}'" for k, v in attrs.items()])
 
     def format_html(self, s):
         """
         Render single cell
-        :param s:
         :return:
         """
         d = self.format_data(s)
         if not isinstance(d, SafeString):
             d = self.quote(d)
-        return "<td%s>%s</td>" % (self.html_td_attrs(), d)
+        return f"<td{self.html_td_attrs()}>{d}</td>"
 
     def format_html_total(self):
         """
@@ -319,12 +271,11 @@ class TableColumn(ReportNode):
             total = self.total_label
         else:
             total = ""
-        return "<td%s><b>%s</b></td>" % (self.html_td_attrs(), total)
+        return f"<td{self.html_td_attrs()}><b>{total}</b></td>"
 
     def format_html_subtotal(self, d):
         """
         Render subtotals
-        :param d:
         :return:
         """
         if self.total:
@@ -333,12 +284,11 @@ class TableColumn(ReportNode):
             total = self.total_label
         else:
             total = ""
-        return "<td%s><b>%s</b></td>" % (self.html_td_attrs(), total)
+        return f"<td{self.html_td_attrs()}><b>{total}</b></td>"
 
     def f_date(self, f):
         """
         Display date according to settings
-        :param f:
         :return:
         """
         return DateFormat(f).format(config.date_time_formats.date_format)
@@ -346,7 +296,6 @@ class TableColumn(ReportNode):
     def f_time(self, f):
         """
         Display time according to settings
-        :param f:
         :return:
         """
         return DateFormat(f).format(config.date_time_formats.time_format)
@@ -354,7 +303,6 @@ class TableColumn(ReportNode):
     def f_datetime(self, f):
         """
         Display date and time according to settings
-        :param f:
         :return:
         """
         return DateFormat(f).format(config.date_time_formats.datetime_format)
@@ -362,20 +310,18 @@ class TableColumn(ReportNode):
     def f_size(self, f):
         """
         Display pretty size
-        :param f:
         :return:
         """
         f = decimal.Decimal(f)
         for limit, divider, suffix in SIZE_DATA:
             if f < limit:
-                return ("%8.2f%s" % (f / divider, suffix)).strip()
+                return (f"{f / divider:8.2f}{suffix}").strip()
         limit, divider, suffix = SIZE_DATA[-1]
-        return ("%8.2f%s" % (f / divider, suffix)).strip()
+        return (f"{f / divider:8.2f}{suffix}").strip()
 
     def f_numeric(self, f):
         """
         Display pretty numeric
-        :param f:
         :return:
         """
         if not f:
@@ -414,7 +360,7 @@ class TableColumn(ReportNode):
         """
         Display url field
         """
-        return SafeString('<a href="%s", target="_blank">Link</a>' % url)
+        return SafeString(f'<a href="{url}", target="_blank">Link</a>')
 
     def f_integer(self, f):
         """
@@ -432,7 +378,7 @@ class TableColumn(ReportNode):
         """
         Returns a pretty-printed object
         """
-        return SafeString("<pre>%s</pre>" % pprint.pformat(f))
+        return SafeString(f"<pre>{pprint.pformat(f)}</pre>")
 
     def f_string(self, f):
         """
@@ -462,7 +408,7 @@ class TableColumn(ReportNode):
         return len([x for x in f if x])
 
 
-class SectionRow(object):
+class SectionRow:
     """
     Delimiter row
     """
@@ -493,7 +439,7 @@ class TableSection(ReportSection):
         self.columns = []
         for c in columns or []:
             if isinstance(c, str) or hasattr(c, "__unicode__"):
-                self.columns += [TableColumn(smart_text(c))]
+                self.columns += [TableColumn(c)]
             else:
                 self.columns += [c]
         self.data = data or []
@@ -501,17 +447,6 @@ class TableSection(ReportSection):
         self.has_total = reduce(
             lambda x, y: x or y, [c.has_total for c in self.columns], False
         )  # Check werether table has totals
-
-    def to_xml(self):
-        """
-        Return XML representation of table
-        """
-        s = [self.format_opening_xml_tag(name=self.name)]
-        s += [self.indent("<columns>")]
-        s += [self.indent(c.to_xml(), 2) for c in self.columns]
-        s += [self.indent("</columns>")]
-        s += [self.format_closing_xml_tag()]
-        return "\n".join(s)
 
     def to_html(self, include_buttons=True):
         """
@@ -571,16 +506,16 @@ class TableSection(ReportSection):
                 "   var buttons = $('.button').prop('disabled', false);",
                 "});",
                 "</script>",
-                "<table class='report-table' summary='%s'>" % self.quote(self.name),
+                f"<table class='report-table' summary='{self.quote(self.name)}'>",
             ]
         else:
-            s = ["<table class='report-table' summary='%s'>" % self.quote(self.name)]
+            s = [f"<table class='report-table' summary='{self.quote(self.name)}'>"]
         # Render header
         s += ["<thead>"]
         s += ["<tr>"]
         if self.enumerate:
             s += ["<th>#</th>"]
-        s += ["<th>%s</th>" % self.quote(c.title) for c in self.columns]
+        s += [f"<th>{self.quote(c.title)}</th>" for c in self.columns]
         s += ["</tr>"]
         s += ["</thead>"]
         s += ["<tbody>"]
@@ -666,91 +601,6 @@ class TableSection(ReportSection):
                     writer.writerow(row)
         return f.getvalue()
 
-    def to_ssv2(self, delimiter=";", mrf="center", date=None):
-        """
-        Return CSV representation of table
-        :return:
-        """
-        f = StringIO()
-        writer = csv.writer(f, delimiter=delimiter)
-        section = "default"
-        prefix = [mrf, section]
-        prefix_c = ["mrf", "pool"]
-        if date:
-            prefix_c += ["date"]
-            prefix += [date]
-        if self.enumerate:
-            writer.writerow(["#"] + prefix_c + [c.title for c in self.columns])
-        else:
-            writer.writerow(prefix_c + [c.title for c in self.columns])
-        if self.data:
-            if self.enumerate:
-                n = 1
-                for row in self.data:
-                    if isinstance(row, SectionRow):
-                        # writer.writerow([row.name])
-                        prefix = [mrf, row.name]
-                        if date:
-                            prefix += [date]
-                        continue
-                    writer.writerow([n, *prefix, *list(row)])
-                    n += 1
-            else:
-                for row in self.data:
-                    if isinstance(row, SectionRow):
-                        # writer.writerow([row.name])
-                        prefix = [mrf, row.name]
-                        if date:
-                            prefix += [date]
-                        continue
-                    writer.writerow(prefix + list(row))
-        return f.getvalue()
-
-
-class MatrixSection(ReportSection):
-    """
-    Data is a list of (row, column, data)
-    """
-
-    def __init__(self, name, data=None, enumerate=False):
-        super().__init__(name=name)
-        self.data = data or []
-        self.enumerate = enumerate
-
-    def to_html(self, **kwargs):
-        # Build rows and columns
-        data = {}
-        cl = set()
-        rl = set()
-        for r, c, d in self.data:
-            rl.add(r)
-            cl.add(c)
-            data[r, c] = d
-        cl = sorted(cl)
-        rl = sorted(rl)
-        # Render
-        s = ["<table summary='%s' border='1'>" % self.quote(self.name)]
-        # Header row
-        s += ["<tr><th></th>"]
-        if self.enumerate:
-            s += ["<th></th>"]
-        s += ["<th><div class='vtext'>%s</div></th>" % c for c in cl]
-        # Data rows
-        n = 0
-        for r in rl:
-            s += ["<tr class='row%d'>" % (n % 2 + 1)]
-            if self.enumerate:
-                s += ["<td align='right'>%d</td>" % (n + 1)]
-            s += ["<td><b>%s</b></td>" % self.quote(r)]
-            for c in cl:
-                try:
-                    s += ["<td>%s</td>" % self.quote(data[r, c])]
-                except KeyError:
-                    s += ["<td></td>"]
-            n += 1
-            s += ["</tr>"]
-        return "\n".join(s)
-
 
 class SimpleReport(ReportApplication):
     # List of PredefinedReport instances
@@ -795,7 +645,7 @@ class SimpleReport(ReportApplication):
         return self.predefined_reports[variant].args
 
 
-class PredefinedReport(object):
+class PredefinedReport:
     def __init__(self, title=None, args=None):
         self.title = title
         self.args = args or {}

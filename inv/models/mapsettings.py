@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any, Optional
+from typing import Any
 import datetime
 import logging
 
@@ -20,14 +20,15 @@ from mongoengine.fields import (
     EmbeddedDocumentField,
     IntField,
     DictField,
+    EnumField,
 )
 from mongoengine.queryset.visitor import Q
 from mongoengine.errors import NotUniqueError
 
 # NOC modules
-from noc.core.topology.loader import loader as t_loader
+from noc.core.topology.base import loader as t_loader
 from noc.core.topology.base import TopologyBase
-from noc.core.topology.types import Layout
+from noc.core.topology.types import Layout, TopologyNodeType
 from noc.config import config
 
 logger = logging.getLogger(__name__)
@@ -38,13 +39,13 @@ LC_ROUNDED = "rounded"
 
 
 class NodeSettings(EmbeddedDocument):
-    type = StringField()
+    type = EnumField(TopologyNodeType, required=True)
     id = StringField()
     x = FloatField()
     y = FloatField()
 
     def __str__(self):
-        return "%s:%s" % (self.type, self.id)
+        return f"{self.type.value}:{self.id}"
 
 
 class VertexPosition(EmbeddedDocument):
@@ -52,7 +53,7 @@ class VertexPosition(EmbeddedDocument):
     y = FloatField()
 
     def __str__(self):
-        return "(%s, %s)" % (self.x, self.y)
+        return f"({self.x}, {self.y})"
 
 
 class LinkSettings(EmbeddedDocument):
@@ -65,7 +66,7 @@ class LinkSettings(EmbeddedDocument):
     vertices = ListField(EmbeddedDocumentField(VertexPosition))
 
     def __str__(self):
-        return "%s:%s" % (self.type, self.id)
+        return f"{self.type}:{self.id}"
 
 
 class MapSettings(Document):
@@ -107,7 +108,7 @@ class MapSettings(Document):
             nodes[n.node] = n
         return nodes
 
-    def get_generator_hints(self, **kwargs) -> Dict[str, str]:
+    def get_generator_hints(self, **kwargs) -> dict[str, str]:
         """
         Return Hints settings for generator
         :param kwargs: Additional hints
@@ -157,18 +158,19 @@ class MapSettings(Document):
         self,
         nodes,
         links,
-        user: Optional[str] = None,
-        width: Optional[float] = None,
-        height: Optional[float] = None,
+        user: str | None = None,
+        width: float | None = None,
+        height: float | None = None,
     ):
         """
-        Update settings
-        :param nodes:
-        :param links:
-        :param user:
-        :param width:
-        :param height:
-        :return:
+        Update settings.
+
+        Args:
+            nodes:
+            links:
+            user:
+            width:
+            height:
         """
         self.current_change_id = datetime.datetime.now().replace(microsecond=0)
         if user:
@@ -235,9 +237,6 @@ class MapSettings(Document):
     def ensure_settings(cls, gen_type: str, gen_id, **kwargs) -> "MapSettings":
         """
         Ensure MapSettings Exists and create it if not
-        :param gen_type:
-        :param gen_id:
-        :param kwargs:
         :return:
         """
         gen_id = str(gen_id)
@@ -257,7 +256,6 @@ class MapSettings(Document):
     def is_change_layout(self, topology: TopologyBase) -> bool:
         """
         Check rebuild layout needed
-        :param topology:
         :return:
         """
         if topology.meta.layout == Layout("FA"):
@@ -272,15 +270,14 @@ class MapSettings(Document):
         )
 
     @classmethod
-    def get_map(
-        cls, gen_type: str, gen_id: Optional[str] = None, **kwargs
-    ) -> Optional[Dict[str, Any]]:
+    def get_map(cls, gen_type: str, gen_id: str | None = None, **kwargs) -> dict[str, Any] | None:
         """
-        Return Map Data
-        :param gen_id: Generator Id param
-        :param gen_type: Generator Type
-        :param kwargs: generator Hints
-        :return:
+        Return Map Data.
+
+        Args:
+            gen_id: Generator Id param
+            gen_type: Generator Type
+            kwargs: generator Hints
         """
         gen: TopologyBase = t_loader[gen_type]
         if not gen:

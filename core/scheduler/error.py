@@ -12,6 +12,6 @@ class RetryAfter(Exception):
     execution after delay seconds
     """
 
-    def __init__(self, msg, delay):
+    def __init__(self, msg, delay) -> None:
         super().__init__(msg)
         self.delay = delay

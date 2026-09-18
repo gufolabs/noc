@@ -12,7 +12,7 @@ NAMES = ["Other Normal", "Other Extended"]
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         for n in NAMES:
             if (
                 self.db.execute("SELECT COUNT(*) FROM peer_communitytype WHERE name=%s", [n])[0][0]

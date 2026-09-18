@@ -63,7 +63,7 @@ class Script(BaseScript):
         for line in vlans.splitlines():
             for vlan_pack in line.split()[0]:
                 # for is_v in bin(int(vlan_pack, 16)):
-                for is_v in "{0:04b}".format(vlan_pack):
+                for is_v in f"{vlan_pack:04b}":
                     yield int(is_v)
 
     def execute_snmp(self, **kwargs):
@@ -214,7 +214,7 @@ class Script(BaseScript):
                 #
                 elif "more" in vlans:
                     try:
-                        c = self.cli("show interface %s trunk" % interface)
+                        c = self.cli(f"show interface {interface} trunk")
                         match1 = self.rx_tagged.search(c)
                         if match1:  # If not `none` in returned list
                             tagged = self.expand_rangelist(match1.group(1))

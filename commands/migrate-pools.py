@@ -1,12 +1,11 @@
 # ----------------------------------------------------------------------
 # Create pools
 # ----------------------------------------------------------------------
-#  Copyright (C) 2007-2025 The NOC Project
-#  See LICENSE for details
+# Copyright (C) 2007-2025 The NOC Project
+# See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Dict
 import os
 from dataclasses import dataclass
 
@@ -17,7 +16,7 @@ from noc.main.models.pool import Pool
 
 
 @dataclass
-class PoolConfig(object):
+class PoolConfig:
     name: str
     description: str | None = None
     discovery_reschedule_limit: int | None = None
@@ -35,7 +34,7 @@ class Command(BaseCommand):
         if not pools:
             return
         connect()
-        old_pools: Dict[str, Pool] = {pool.name: pool for pool in Pool.objects.all()}
+        old_pools: dict[str, Pool] = {pool.name: pool for pool in Pool.objects.all()}
         changed = False
         for pool in pools:
             if pool.name in old_pools:
@@ -64,9 +63,9 @@ class Command(BaseCommand):
                 changed = True
         print("CHANGED" if changed else "OK")
 
-    def get_pools(self) -> List[PoolConfig]:
+    def get_pools(self) -> list[PoolConfig]:
         """Get pools from environment."""
-        pools: Dict[str, PoolConfig] = {}
+        pools: dict[str, PoolConfig] = {}
         for name, value in os.environ.items():
             if name.startswith("NOC_MIGRATE_POOL_"):
                 pool_name = name[17:]
@@ -81,7 +80,3 @@ class Command(BaseCommand):
                         name=pool_name, description=pool_name, discovery_reschedule_limit=int(value)
                     )
         return list(pools.values())
-
-
-if __name__ == "__main__":
-    Command().run()

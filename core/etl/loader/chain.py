@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, List
 
 # Third-party modules
 import cachetools
@@ -16,11 +15,11 @@ from .loader import loader as loader_loader
 from noc.core.etl.loader.base import BaseLoader
 
 
-class LoaderChain(object):
-    def __init__(self, system):
+class LoaderChain:
+    def __init__(self, system) -> None:
         self.system = system
-        self.loaders: Dict[str, BaseLoader] = {}  # name -> loader
-        self.lseq: List[BaseLoader] = []
+        self.loaders: dict[str, BaseLoader] = {}  # name -> loader
+        self.lseq: list[BaseLoader] = []
         self.cache = cachetools.LRUCache(maxsize=1000)
         self.cache.__missing__ = self.get_cached
 

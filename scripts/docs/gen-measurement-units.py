@@ -40,7 +40,7 @@ rx_table = re.compile(r"<!-- table start -->.*<!-- table end -->", re.MULTILINE 
 
 
 @dataclass(order=True)
-class Data(object):
+class Data:
     """
     Collections data.
 

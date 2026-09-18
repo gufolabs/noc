@@ -13,13 +13,13 @@ import os
 import platform
 import socket
 import sys
-from typing import Iterable, List, Tuple, Optional, Any
+from typing import Iterable, Any
 
 logger = logging.getLogger(__name__)
 
 
 class UDPServerProtocol(asyncio.DatagramProtocol):
-    def __init__(self, server):
+    def __init__(self, server) -> None:
         super().__init__()
         self._server = server
 
@@ -30,22 +30,21 @@ class UDPServerProtocol(asyncio.DatagramProtocol):
         self._server.on_read(data, addr)
 
     def error_received(self, exc):
-        logger.error("UDP server received error %s" % exc)
+        logger.error(f"UDP server received error {exc}")
 
 
-class UDPServer(object):
-    def __init__(self):
-        self._transports: List[asyncio.BaseTransport] = []
-        self._sockaddr: List[Tuple[str, int]] = []
+class UDPServer:
+    def __init__(self) -> None:
+        self._transports: list[asyncio.BaseTransport] = []
+        self._sockaddr: list[tuple[str, int]] = []
 
-    def iter_listen(self, cfg: str) -> Iterable[Tuple[str, int]]:
+    def iter_listen(self, cfg: str) -> Iterable[tuple[str, int]]:
         """
         Parses listen configuration and yield (address, port) tuples.
         Listen configuration is comma-separated string with items:
         * address:port
         * port
 
-        :param cfg:
         :return:
         """
         for listen in cfg.split(","):
@@ -67,7 +66,7 @@ class UDPServer(object):
         for transport in self._transports:
             transport.close()
 
-    def on_read(self, data: bytes, address: Tuple[str, int]):
+    def on_read(self, data: bytes, address: tuple[str, int]):
         """
         To be overriden
         """
@@ -83,7 +82,7 @@ class UDPServer(object):
     def bind_udp_sockets(
         self,
         port: int,
-        address: Optional[str] = None,
+        address: str | None = None,
         family: int = socket.AF_UNSPEC,
         flags: Any = None,
     ):
@@ -205,7 +204,7 @@ class UDPServer(object):
         if self.has_frebind and self.enable_freebind():
             sock.setsockopt(socket.SOL_IP, self.get_ip_freebind(), 1)
 
-    def get_ip_freebind(self) -> Optional[int]:
+    def get_ip_freebind(self) -> int | None:
         """
         Many python distributions does not include IP_FREEBIND to socket module
         :return: IP_FREEBIND value or None

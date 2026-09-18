@@ -1,5 +1,15 @@
 ---
 # General settings
+
+# NOC level. Set by tower:
+#
+# `ce` - Community Edition
+# `pro` - Subscribtion/subbrands
+#
+# Do not change manually. Manual changes may result in undefined or
+# unsupported behavior.
+noc_level: "{{ noc_license_level | default('ce') }}"
+
 # for os specific see pre role
 etc_prefix: /etc
 ansible_python_interpreter: auto
@@ -10,13 +20,16 @@ consul_template_version: "0.25.1"
 
 tower_ip: 127.0.0.1
 tower_path: /opt/tower
-tower_dist_dir: "{{ tower_path }}/var/tower/data/src_dist"
+tower_home: "{{ lookup('env', 'TOWER_HOME') | default(tower_path, true) }}"
+tower_cache: "{{ lookup('env', 'TOWER_CACHE') | default(tower_home + '/var/tower/data', true) }}"
+tower_src_dist: "{{ tower_cache }}/src_dist"
+tower_dist_dir: "{{ tower_src_dist }}"
 tower_version: "{{ lookup('env','TOWER_VERSION') }}"
-tower_show_secrets: "{{ not lookup('env','TOWER_SHOW_SECRETS') or False | bool }}"
-tower_run_checks: "{{ lookup('env','TOWER_RUN_CHECKS') or False | bool }}"
-tower_run_tests: "{{ lookup('env','TOWER_RUN_TESTS') or False | bool }}"
-tower_stop_noc: "{{ lookup('env','TOWER_STOP_NOC') or True | bool }}"
-tower_serial_restart_noc: "{{ lookup('env','TOWER_SERIAL_RESTART_NOC') or False | bool }}"
+tower_show_secrets: "{{ (not lookup('env','TOWER_SHOW_SECRETS')) | bool }}"
+tower_run_checks: "{{ lookup('env','TOWER_RUN_CHECKS') | bool }}"
+tower_run_tests: "{{ lookup('env','TOWER_RUN_TESTS') | bool }}"
+tower_stop_noc: "{{ (lookup('env','TOWER_STOP_NOC') or True) | bool }}"
+tower_serial_restart_noc: "{{ lookup('env','TOWER_SERIAL_RESTART_NOC') | bool }}"
 tower_minimum_version: "1.0.9"
 
 noc_system_service: noc

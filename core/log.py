@@ -1,8 +1,8 @@
 # ----------------------------------------------------------------------
 #  Various logging utilities
 # ----------------------------------------------------------------------
-#  Copyright (C) 2007-2020 The NOC Project
-#  See LICENSE for details
+# Copyright (C) 2007-2020 The NOC Project
+# See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
@@ -14,12 +14,12 @@ from noc.core.debug import get_traceback, error_fingerprint
 from noc.core.comp import smart_text
 
 
-class PrefixLoggerAdapter(object):
+class PrefixLoggerAdapter:
     """
     Add [prefix] to log message
     """
 
-    def __init__(self, logger, prefix, target=None):
+    def __init__(self, logger, prefix, target=None) -> None:
         """
         :param logger: Parent logger
         :param prefix: Prefix to add in front of every message
@@ -32,7 +32,7 @@ class PrefixLoggerAdapter(object):
 
     def set_prefix(self, prefix):
         if prefix:
-            self.prefix = "[%s] " % str(prefix).replace("][", "|").replace("] [", "|")
+            self.prefix = "[{}] ".format(str(prefix).replace("][", "|").replace("] [", "|"))
         else:
             self.prefix = ""
 
@@ -41,7 +41,7 @@ class PrefixLoggerAdapter(object):
         if self.target:
             if args:
                 msg = msg % args
-            msg = "%s %s %s\n" % (
+            msg = "{} {} {}\n".format(
                 datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"),
                 self.prefix,
                 msg,
@@ -98,7 +98,7 @@ class ColorFormatter(logging.Formatter):
         logging.ERROR: 1,  # Red
     }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         self._colors = {}
         self._end_color = ""
         self.setup_colors()
@@ -116,7 +116,7 @@ class ColorFormatter(logging.Formatter):
             assert isinstance(message, str)
             record.message = safe_text(message)
         except Exception as e:
-            record.message = "Bad message (%r): %r" % (e, record.__dict__)
+            record.message = f"Bad message ({e!r}): {record.__dict__!r}"
         record.asctime = self.formatTime(record, self.datefmt)
         record.color = ""
         if record.levelno in self._colors:

@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Tuple
 
 # Third-party modules
 from pyproj import Transformer
@@ -19,16 +18,16 @@ from noc.inv.models.objectconnection import ObjectConnection
 from noc.core.geo import distance, get_bbox
 
 
-class Map(object):
+class Map:
     CONDUITS_LAYERS = ["manholes", "cableentries"]
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.layers = {}
         self.srid_map = {}
         # Database projection
         self.db_srid = "EPSG:4326"
         # Cache for transformers
-        self.transformers: Dict[Tuple[str, str], Transformer] = {}
+        self.transformers: dict[tuple[str, str], Transformer] = {}
 
     def get_transformer(self, src_srid, dst_srid):
         srids = src_srid, dst_srid
@@ -41,9 +40,6 @@ class Map(object):
     def get_db_point(self, x, y, srid=None):
         """
         Return GeoJSON Point translated to database projection
-        :param x:
-        :param y:
-        :param srid:
         :return:
         """
         srid = srid or self.db_srid
@@ -57,7 +53,7 @@ class Map(object):
         if layer:
             self.layers[name] = layer.id
             return self.layers[name]
-        raise Exception("Layer not found: %s" % name)
+        raise Exception(f"Layer not found: {name}")
 
     @staticmethod
     def get_default_zoom(layer: str, object=None):

@@ -42,7 +42,7 @@ class Script(BaseScript):
             if "Fan Module" in descr:
                 if pid == "" and descr.startswith("MDS 9"):
                     s = descr.split()
-                    pid = ("%s-%s-%s" % (s[0], s[1], s[2])).upper()
+                    pid = (f"{s[0]}-{s[1]}-{s[2]}").upper()
                 return "FAN", name[5:], pid
             return None, None, None
         return None, None, None

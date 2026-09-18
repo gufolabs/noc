@@ -37,10 +37,10 @@ class Script(BaseScript):
         if count is not None:
             cmd += " -n %d" % int(count)
         if source_address is not None:
-            cmd += " -source %s" % source_address
+            cmd += f" -source {source_address}"
         if size is not None:
-            cmd += " -l %s" % int(size)
-        cmd += " %s" % address
+            cmd += f" -l {int(size)}"
+        cmd += f" {address}"
         c = self.cli(cmd)
         match = self.rx_result.search(c)
         if match:

@@ -33,8 +33,8 @@ class Script(BaseScript):
                     iface = self.snmp.get(
                         "1.3.6.1.2.1.31.1.1.1.1." + str(v[1]), cached=True
                     )  # IF-MIB
-                    mac = ":".join(["%02x" % ord(c) for c in v[2]])
-                    ip = ["%02x" % ord(c) for c in v[3]]
+                    mac = ":".join([f"{ord(c):02x}" for c in v[2]])
+                    ip = [f"{ord(c):02x}" for c in v[3]]
                     ip = ".".join(str(int(c, 16)) for c in ip)
                     r.append({"ip": ip, "mac": mac, "interface": iface})
                 return r

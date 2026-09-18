@@ -16,10 +16,9 @@ class IndentMarshaller(BaseMarshaller):
     def marshall(cls, node):
         def iter_line(n, level):
             if n.token:
-                yield "%s%s" % ("    " * level, n.token)
+                yield "{}{}".format("    " * level, n.token)
             if n.children:
                 for cn in n.iter_nodes():
-                    for line in iter_line(cn, level + 1):
-                        yield line
+                    yield from iter_line(cn, level + 1)
 
         return "\n".join(iter_line(node, -1))

@@ -1,8 +1,8 @@
 # ----------------------------------------------------------------------
 #  GridVCS object revision
 # ----------------------------------------------------------------------
-#  Copyright (C) 2007-2018 The NOC Project
-#  See LICENSE for details
+# Copyright (C) 2007-2018 The NOC Project
+# See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules

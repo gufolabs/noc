@@ -21,9 +21,9 @@ class Script(BaseScript):
             cmd += "/vlan %d" % vlan
             svlan = str(vlan)
         elif mac:
-            cmd += "/find %s" % mac
+            cmd += f"/find {mac}"
         elif interface:
-            cmd += "/port %s" % interface
+            cmd += f"/port {interface}"
         else:
             cmd += "/dump"
         r = []

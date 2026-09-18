@@ -20,7 +20,7 @@ class Migration(BaseMigration):
     }
     WF_FREE = "5a17f61b1bb6270001bd0328"
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Make legacy Address.state_id field nullable
         self.db.execute("ALTER TABLE ip_prefix ALTER state_id DROP NOT NULL")
         # Create new Address.state

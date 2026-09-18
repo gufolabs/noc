@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 from math import exp
 
 # NOC modules
@@ -21,5 +20,5 @@ class ExpNode(BaseCDAGNode):
     name = "exp"
     categories = [Category.MATH]
 
-    def get_value(self, x: ValueType) -> Optional[ValueType]:
+    def get_value(self, x: ValueType) -> ValueType | None:
         return exp(x)

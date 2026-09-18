@@ -20,7 +20,7 @@ class TPLinkT2600GNormalizer(BaseNormalizer):
     @match("user", "name", ANY, "privilege", ANY, "password", "7", ANY)
     def normalize_username_access_level(self, tokens):
         yield self.make_user_encrypted_password(username=tokens[2], password=" ".join(tokens[7:]))
-        yield self.make_user_class(username=tokens[2], class_name="level-%s" % tokens[4])
+        yield self.make_user_class(username=tokens[2], class_name=f"level-{tokens[4]}")
 
     @match("hostname", ANY)
     def normalize_hostname(self, tokens):

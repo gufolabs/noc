@@ -35,7 +35,7 @@ class AddressLoader(BaseLoader):
         "street": "street",
     }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         building_dict = {}
         street_dict = {}

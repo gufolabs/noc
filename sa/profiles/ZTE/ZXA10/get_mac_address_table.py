@@ -28,9 +28,9 @@ class Script(BaseScript):
         # if interface is not None:
         #    cmd += " interface %s" % interface
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
         if mac is not None:
-            cmd += " %s" % MAC(mac).to_cisco()
+            cmd += f" {MAC(mac).to_cisco()}"
         r = []
         for match in self.rx_mac.finditer(self.cli(cmd)):
             if match.group("type") == "N/A":

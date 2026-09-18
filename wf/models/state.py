@@ -9,7 +9,7 @@
 import operator
 import logging
 from threading import Lock
-from typing import Optional, Union, Iterable, Dict, Any
+from typing import Optional, Iterable, Any
 from pathlib import Path
 
 # Third-party modules
@@ -58,7 +58,7 @@ class InteractionSetting(EmbeddedDocument):
     enable = BooleanField(default=True)
     # raise_alarm = BooleanField(default=True)
 
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"enable": self.enable}
 
 
@@ -155,7 +155,7 @@ class State(Document):
         return f"{self.workflow.name}: {self.name}"
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "workflow__name": self.workflow.name,
             "name": self.name,
@@ -219,7 +219,7 @@ class State(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["State"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["State"]:
         return State.objects.filter(id=oid).first()
 
     @classmethod
@@ -261,7 +261,6 @@ class State(Document):
     def on_enter_state(self, obj):
         """
         Called when object enters state
-        :param obj:
         :return:
         """
         # Process on enter handlers
@@ -271,7 +270,7 @@ class State(Document):
                 try:
                     h = get_handler(str(hn))
                 except ImportError as e:
-                    logger.error("Error import on_enter handler: %s" % e)
+                    logger.error(f"Error import on_enter handler: {e}")
                     h = None
                 if h:
                     logger.debug("[%s|%s] Running %s", obj, self.name, hn)
@@ -284,7 +283,7 @@ class State(Document):
             try:
                 h = get_handler(self.job_handler)
             except ImportError as e:
-                logger.error("Error import state job handler: %s" % e)
+                logger.error(f"Error import state job handler: {e}")
                 h = None
             if h:
                 defer(
@@ -302,7 +301,6 @@ class State(Document):
     def on_leave_state(self, obj):
         """
         Called when object leaves state
-        :param obj:
         :return:
         """
         if self.on_leave_handlers:
@@ -311,7 +309,7 @@ class State(Document):
                 try:
                     h = get_handler(str(hn))
                 except ImportError as e:
-                    logger.error("Error import on_leave_state handler: %s" % e)
+                    logger.error(f"Error import on_leave_state handler: {e}")
                     h = None
                 if h:
                     logger.debug("[%s|%s] Running %s", obj, self.name, hn)
@@ -322,9 +320,6 @@ class State(Document):
     def fire_transition(self, transition, obj, bulk=None):
         """
         Process transition from state
-        :param transition:
-        :param obj:
-        :param bulk:
         :return:
         """
         assert obj.state == self
@@ -340,9 +335,6 @@ class State(Document):
     def fire_event(self, event, obj, bulk=None):
         """
         Fire transition by event name
-        :param event:
-        :param obj:
-        :param bulk:
         :return:
         """
         from .transition import Transition
@@ -382,10 +374,9 @@ class State(Document):
                         f"Interaction {ia} not allowed for models: {self.workflow.allowed_models}"
                     )
 
-    def is_enabled_interaction(self, interaction: Union[str, Interaction]) -> bool:
+    def is_enabled_interaction(self, interaction: str | Interaction) -> bool:
         """
         Check diagnostic state: on/off
-        :param interaction:
         :return:
         """
         if self.is_wiping or self.disable_all_interaction:

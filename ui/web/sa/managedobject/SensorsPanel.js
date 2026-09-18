@@ -139,8 +139,8 @@ Ext.define("NOC.sa.managedobject.SensorsPanel", {
   preview: function(record){
     var me = this;
     me.callParent(arguments);
-    me.setTitle(Ext.String.format("{0} {1}", record.get("name"), __("Sensors")));
-    Ext.Ajax.request({
+    me.setTitle(`${record.get("name")} ${__("Sensors")}`);
+    NOC.api.requestLegacy({
       url: "/inv/sensor/?managed_object=" + record.get("id"),
       method: "GET",
       scope: me,
@@ -182,7 +182,7 @@ Ext.define("NOC.sa.managedobject.SensorsPanel", {
         profile: r.get("profile"),
         labels: r.get("labels"),
       };
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/sensor/" + r.get("id") + "/",
       method: "PUT",
       jsonData: data,

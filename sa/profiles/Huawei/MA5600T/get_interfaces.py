@@ -195,8 +195,6 @@ class Script(BaseScript):
              2  Activating           5       1   Normal        Normal
              3  Activating           5       1   Normal        Normal
 
-        :param v:
-        :param slot_n:
         :return:
         """
         ports = {}
@@ -235,8 +233,6 @@ class Script(BaseScript):
     def get_svc(self, interfaces, slot_n):
         """
         service-port board command. Use on GPON board
-        :param interfaces:
-        :param slot_n:
         :return:
         """
         try:
@@ -266,13 +262,12 @@ class Script(BaseScript):
     def get_l3_interfaces(self, interfaces):
         """
         Getting L3 interfaces by "display interface" command
-        :param interfaces:
         :return:
         """
         v = self.cli("display interface")
         rx = self.find_re([self.rx_if1, self.rx_if2], v)
         for match in rx.finditer(v):
-            ifname = "%s%s" % (match.group("ifname"), match.group("ifnum"))
+            ifname = "{}{}".format(match.group("ifname"), match.group("ifnum"))
             iftype = self.profile.get_interface_type(ifname)
             interfaces[ifname] = {"name": ifname, "type": iftype, "subinterfaces": []}
             sub = {"name": ifname, "mtu": int(match.group("mtu"))}
@@ -304,7 +299,7 @@ class Script(BaseScript):
 
     def get_port_vlans(self, ifname):
         untagged, tagged = 0, []
-        v = self.cli("display port vlan %s" % ifname)
+        v = self.cli(f"display port vlan {ifname}")
         m = self.rx_vlan.search(v)
         if m:
             if m.group("untagged") and m.group("untagged") != "-":

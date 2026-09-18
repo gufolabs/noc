@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column(
             "peer_as", "as_name", models.CharField("AS Name", max_length=64, null=True, blank=True)
         )

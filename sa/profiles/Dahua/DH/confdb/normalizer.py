@@ -47,12 +47,12 @@ class DHNormalizer(BaseNormalizer):
 
     @match("users", ANY, "Name", ANY)
     def normalize_user_name(self, tokens):
-        yield self.defer("user.%s" % tokens[1], username=tokens[3])
+        yield self.defer(f"user.{tokens[1]}", username=tokens[3])
 
     @match("users", ANY, "Memo", REST)
     def normalize_user_full_name(self, tokens):
         yield self.defer(
-            "user.%s" % tokens[1],
+            f"user.{tokens[1]}",
             self.make_user_full_name,
             username=deferable("username"),
             full_name=" ".join(tokens[3:]),
@@ -61,7 +61,7 @@ class DHNormalizer(BaseNormalizer):
     @match("users", ANY, "Id", ANY)
     def normalize_user_uid(self, tokens):
         yield self.defer(
-            "user.%s" % tokens[1], self.make_user_uid, username=deferable("username"), uid=tokens[3]
+            f"user.{tokens[1]}", self.make_user_uid, username=deferable("username"), uid=tokens[3]
         )
 
     @match("table", "VideoColor", ANY, "0", "Brightness", ANY)
@@ -111,8 +111,7 @@ class DHNormalizer(BaseNormalizer):
             )
             yield self.make_stream_rtsp_path(
                 name=name,
-                path="/cgi-bin/realmonitor.cgi?action=getStream&channel=%s&subtype=%s"
-                % (channel, subtype),
+                path=f"/cgi-bin/realmonitor.cgi?action=getStream&channel={channel}&subtype={subtype}",
             )
 
     @match("table", "Encode", "0", ANY, ANY, "Video", "resolution", ANY)
@@ -126,7 +125,7 @@ class DHNormalizer(BaseNormalizer):
     @match("table", "Encode", "0", ANY, ANY, "Video", "BitRateControl", ANY)
     def normalize_video_control_mode(self, tokens):
         name = self.get_channel_name(tokens[3], tokens[4])
-        bitrate = self.get_context("%s_bitrate" % name)
+        bitrate = self.get_context(f"{name}_bitrate")
         if name and tokens[7].upper() == "VBR":
             yield self.make_media_streams_video_rate_control_vbr_max_bitrate(
                 name=name, max_bitrate=bitrate
@@ -141,7 +140,7 @@ class DHNormalizer(BaseNormalizer):
     def normalize_bitrate(self, tokens):
         name = self.get_channel_name(tokens[3], tokens[4])
         if name:
-            self.set_context("%s_bitrate" % name, tokens[7])
+            self.set_context(f"{name}_bitrate", tokens[7])
         yield
 
     @match("table", "Encode", "0", ANY, ANY, "Video", "FPS", ANY)

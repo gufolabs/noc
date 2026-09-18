@@ -28,7 +28,7 @@ ALARM_CLASSES_NAME = [
 class Command(BaseCommand):
     help = "Show Links"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # show command
         show_parser = subparsers.add_parser("show", help="Show link")
@@ -64,11 +64,11 @@ class Command(BaseCommand):
         if not action:
             action = "show"
         connect()
-        getattr(self, "handle_%s" % action.replace("-", "_"))(*args, **options)
+        getattr(self, "handle_{}".format(action.replace("-", "_")))(*args, **options)
 
     def show_link(self, link, show_method=False):
         def format_interface(i):
-            return "%s@%s" % (i.managed_object.name, i.name)
+            return f"{i.managed_object.name}@{i.name}"
 
         i = defaultdict(list)
         for li in link.interfaces:
@@ -100,18 +100,16 @@ class Command(BaseCommand):
     def handle_add(self, *args, **options):
         """
         Add link
-        :param args:
-        :param options:
         :return:
         """
         if len(args) != 2:
             raise CommandError("Usage: ./noc link --add <iface1> <iface2>")
         i1 = Interface.get_interface(args[0])
         if not i1:
-            raise CommandError("Invalid interface: %s" % args[0])
+            raise CommandError(f"Invalid interface: {args[0]}")
         i2 = Interface.get_interface(args[1])
         if not i2:
-            raise CommandError("Invalid interface: %s" % args[1])
+            raise CommandError(f"Invalid interface: {args[1]}")
         try:
             i1.link_ptp(i2)
         except ValueError as why:
@@ -120,8 +118,6 @@ class Command(BaseCommand):
     def handle_remove(self, *args, **options):
         """
         Remove link
-        :param args:
-        :param options:
         :return:
         """
         for i in args:
@@ -189,7 +185,3 @@ class Command(BaseCommand):
                     iface = link.interfaces[0]
                     iface.unlink()
             self.print("# Done.")
-
-
-if __name__ == "__main__":
-    Command().run()

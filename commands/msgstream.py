@@ -10,7 +10,6 @@ import datetime
 import argparse
 import functools
 from dateutil.parser import parse
-from typing import Optional
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -34,10 +33,10 @@ class Command(BaseCommand):
         try:
             return int(parse(s).timestamp())
         except ValueError:
-            msg = "Not a valid date: '{0}'.".format(s)
+            msg = f"Not a valid date: '{s}'."
             raise argparse.ArgumentTypeError(msg)
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # show-metadata
         sm = subparsers.add_parser("show-metadata")
@@ -88,7 +87,7 @@ class Command(BaseCommand):
     def handle(self, cmd, *args, **options):
         return getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
-    def handle_show_metadata(self, name: Optional[str] = None, *args, **options):
+    def handle_show_metadata(self, name: str | None = None, *args, **options):
         async def get_meta() -> Metadata:
             async with MessageStreamClient() as client:
                 return await client.fetch_metadata()
@@ -118,20 +117,22 @@ class Command(BaseCommand):
                         functools.partial(get_partition_meta, stream, p)
                     )
                 except Exception as e:
-                    print("[%s|%s] Failed getting data for partition: %s" % (stream, p, e))
+                    print(f"[{stream}|{p}] Failed getting data for partition: {e}")
                     error_report()
                     continue
-                print("    Leader        : %s" % b_map[p_meta.leader])
+                print(f"    Leader        : {b_map[p_meta.leader]}")
                 print(
-                    "    Replicas      : %s"
-                    % ", ".join([str(b_map[x]) for x in sorted(p_meta.replicas)])
+                    "    Replicas      : {}".format(
+                        ", ".join([str(b_map[x]) for x in sorted(p_meta.replicas)])
+                    )
                 )
                 print(
-                    "    ISR           : %s"
-                    % ", ".join([str(b_map[x]) for x in sorted(p_meta.isr)])
+                    "    ISR           : {}".format(
+                        ", ".join([str(b_map[x]) for x in sorted(p_meta.isr)])
+                    )
                 )
-                print("    HighWatermark : %s" % p_meta.high_watermark)
-                print("    NewestOffset  : %s" % p_meta.newest_offset)
+                print(f"    HighWatermark : {p_meta.high_watermark}")
+                print(f"    NewestOffset  : {p_meta.newest_offset}")
 
     def handle_create_stream(
         self,
@@ -184,8 +185,8 @@ class Command(BaseCommand):
         name: str,
         partition: int = 0,
         cursor: str = "",
-        start_offset: Optional[int] = None,
-        start_ts: Optional[int] = None,
+        start_offset: int | None = None,
+        start_ts: int | None = None,
         *args,
         **kwargs,
     ):
@@ -233,7 +234,3 @@ class Command(BaseCommand):
                 print(cursor)
 
         run_sync(fetch_cursor)
-
-
-if __name__ == "__main__":
-    Command().run()

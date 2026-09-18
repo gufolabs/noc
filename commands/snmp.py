@@ -9,10 +9,10 @@
 import argparse
 import asyncio
 from time import perf_counter
-from typing import Tuple, Iterable
+from typing import Iterable
 
 # Third-party modules
-from gufo.snmp import SnmpSession, SnmpVersion, SnmpError as GSNMPError
+from gufo.snmp import SnmpSession, SnmpVersion, SnmpError as GSNMPError, SnmpAuthError
 from gufo.snmp.user import User, Aes128Key, DesKey, Md5Key, Sha1Key, KeyType
 
 # NOC modules
@@ -38,7 +38,7 @@ class Command(BaseCommand):
     DEFAULT_COMMUNITY = "public"
     VERSION_MAP = {"v1": SNMP_v1, "v2c": SNMP_v2c, "v3": SNMP_v3}
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         get = subparsers.add_parser("get")
         get.add_argument("--community", help="SNMP community")
@@ -105,7 +105,6 @@ class Command(BaseCommand):
         return User(name=str(user), auth_key=auth, priv_key=priv)
 
     def handle_get(self, address, community, timeout, oids, username, *args, **options):
-        """ """
 
         async def main():
             async with SnmpSession(
@@ -119,11 +118,13 @@ class Command(BaseCommand):
 
         if username:
             username = self.parse_credentials(username)
-        x = run_sync(main)
-        self.print(f"Result {x}")
+        try:
+            x = run_sync(main)
+            self.print(f"Result {x}")
+        except SnmpAuthError:
+            self.die("Authentication failed")
 
     def handle_getnext(self, address, community, timeout, oid, username, *args, **options):
-        """ """
 
         async def main():
             r = []
@@ -140,11 +141,13 @@ class Command(BaseCommand):
 
         if username:
             username = self.parse_credentials(username)
-        x = run_sync(main)
-        self.print(f"Result {x}")
+        try:
+            x = run_sync(main)
+            self.print(f"Result {x}")
+        except SnmpAuthError:
+            self.die("Authentication failed")
 
     def handle_getbulk(self, address, community, timeout, oid, username, *args, **options):
-        """ """
 
         async def main():
             r = []
@@ -161,8 +164,11 @@ class Command(BaseCommand):
 
         if username:
             username = self.parse_credentials(username)
-        x = run_sync(main)
-        self.print(f"Result {x}")
+        try:
+            x = run_sync(main)
+            self.print(f"Result {x}")
+        except SnmpAuthError:
+            self.die("Authentication failed")
 
     def handle_poll(
         self,
@@ -205,7 +211,7 @@ class Command(BaseCommand):
                             if is_ipv4(line):
                                 self.addresses.add(line)
                 except OSError as e:
-                    self.die("Cannot read file %s: %s\n" % (fn, e))
+                    self.die(f"Cannot read file {fn}: {e}\n")
         # @todo: Add community oid check
         if not community:
             community = [self.DEFAULT_COMMUNITY]
@@ -225,7 +231,7 @@ class Command(BaseCommand):
     @classmethod
     def iter_credentials(
         cls, community, username, version
-    ) -> Iterable[Tuple[str, User, SnmpVersion]]:
+    ) -> Iterable[tuple[str, User, SnmpVersion]]:
         if version != SNMP_v3:
             for c in community:
                 yield c, None, SnmpVersion.v2c if not version else SnmpVersion.v1
@@ -273,7 +279,3 @@ class Command(BaseCommand):
             queue.task_done()
             if not a:
                 break
-
-
-if __name__ == "__main__":
-    Command().run()

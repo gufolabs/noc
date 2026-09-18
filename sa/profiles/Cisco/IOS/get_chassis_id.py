@@ -120,7 +120,7 @@ class Script(BaseScript):
         7200, 7301
         :return:
         """
-        v = self.cli("show c%s00 | i MAC" % self.version["platform"][:2])
+        v = self.cli("show c{}00 | i MAC".format(self.version["platform"][:2]))
         macs = []
         for f, t in [
             (mac, MAC(mac).shift(int(count) - 1)) for count, mac in self.rx_7200.findall(v)

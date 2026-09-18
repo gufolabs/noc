@@ -12,7 +12,7 @@ import gzip
 from io import StringIO
 
 # NOC modules
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 from noc.core.comp import smart_text
 from .base import BaseDownloader
 
@@ -38,7 +38,7 @@ class CsvUrlDownloader(BaseDownloader):
         ) as client:
             code, headers, body = client.get(url)
             if code != 200:
-                raise IOError("Invalid HTTP response: %s" % code)
+                raise OSError(f"Invalid HTTP response: {code}")
 
             data = StringIO(body)
             # Wrap GzipFile for gzipped content

@@ -24,7 +24,7 @@ class Script(BaseScript):
     def execute(self, interface=None):
         cmd = "show interfaces transceiver | i /"
         if interface is not None:
-            cmd = "show interfaces %s transceiver | i /" % interface
+            cmd = f"show interfaces {interface} transceiver | i /"
         try:
             v = self.cli(cmd)
         except self.CLISyntaxError:

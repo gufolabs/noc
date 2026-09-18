@@ -36,9 +36,9 @@ class Script(BaseScript):
         # Read dynamic MACs
         cmd = "show mac-address-table"
         if mac is not None:
-            cmd += " address %s" % mac
+            cmd += f" address {mac}"
         elif interface is not None:
-            cmd += " port %s" % interface
+            cmd += f" port {interface}"
         v = self.cli(cmd)
         for l in v.split("\n"):
             match = self.rx_dynamic.match(l.strip())

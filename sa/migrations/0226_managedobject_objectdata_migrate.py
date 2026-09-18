@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Create uplinks fields
         coll = self.mongo_db["noc.objectdata"]
         for data in coll.find({}):

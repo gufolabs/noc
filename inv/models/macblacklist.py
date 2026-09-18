@@ -9,7 +9,6 @@
 import operator
 from threading import Lock
 from collections import namedtuple
-from typing import List
 from pathlib import Path
 
 # Third-party modules
@@ -41,7 +40,7 @@ class MACBlacklistAffected(EmbeddedDocument):
 
     def __str__(self):
         if self.platform:
-            return "%s:%s" % (self.vendor.name, self.platform.name)
+            return f"{self.vendor.name}:{self.platform.name}"
         return self.vendor.name
 
     def to_json(self) -> str:
@@ -115,7 +114,7 @@ class MACBlacklist(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_list_cache"), lock=lambda _: _list_lock)
-    def _get_blacklist(cls) -> List[ListItem]:
+    def _get_blacklist(cls) -> list[ListItem]:
         return [
             ListItem(
                 from_mac=MAC(d.from_mac),

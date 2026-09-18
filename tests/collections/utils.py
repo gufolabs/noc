@@ -17,7 +17,7 @@ import pytest
 class CollectionTestHelper(object):
     COLLECTIONS = "collections"
 
-    def __init__(self, model):
+    def __init__(self, model) -> None:
         self.model = model
         self.collection = model._meta["json_collection"]
         self.cache = None

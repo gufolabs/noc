@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel
@@ -34,8 +33,8 @@ class VRFGroupDataStreamItem(BaseModel):
     source: str
     state: StateItem
     profile: VRFProfileItem
-    description: Optional[str]
-    rd: Optional[str]
-    labels: Optional[List[str]]
-    tags: Optional[List[str]]
-    project: Optional[ProjectItem]
+    description: str | None
+    rd: str | None
+    labels: list[str] | None
+    tags: list[str] | None
+    project: ProjectItem | None

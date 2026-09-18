@@ -12,7 +12,3 @@ from noc.core.service.fastapi import FastAPIService
 
 class BHService(FastAPIService):
     name = "bh"
-
-
-if __name__ == "__main__":
-    BHService().start()

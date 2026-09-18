@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Dict, List
 
 # Pytest modules
 import pytest
@@ -15,7 +14,7 @@ import pytest
 from noc.core.runner.env import Environment
 
 
-def env(*e: Dict[str, str]) -> Environment:
+def env(*e: dict[str, str]) -> Environment:
     """
     Create nested environment.
 
@@ -42,7 +41,7 @@ def env(*e: Dict[str, str]) -> Environment:
         (env({"a": "1", "b": "2"}, {"a": "3"}), "a", "3"),
     ],
 )
-def test_get(env: Environment, key: str, expected: Optional[str]):
+def test_get(env: Environment, key: str, expected: str | None):
     r = env.get(key)
     assert r == expected
 
@@ -56,7 +55,7 @@ def test_get(env: Environment, key: str, expected: Optional[str]):
         (env({"a": "1", "b": "2"}, {"a": "3"}), "a", "3"),
     ],
 )
-def test_getitem(env: Environment, key: str, expected: Optional[str]) -> None:
+def test_getitem(env: Environment, key: str, expected: str | None) -> None:
     r = env[key]
     assert r == expected
 
@@ -100,7 +99,7 @@ def test_contains(env: Environment, key: str, expected: bool) -> None:
         ),
     ],
 )
-def test_keys(env: Environment, expected: List[str]) -> None:
+def test_keys(env: Environment, expected: list[str]) -> None:
     r = sorted(env.keys())
     assert r == expected
 
@@ -117,7 +116,7 @@ def test_keys(env: Environment, expected: List[str]) -> None:
         ),
     ],
 )
-def test_iter(env: Environment, expected: List[str]) -> None:
+def test_iter(env: Environment, expected: list[str]) -> None:
     r = sorted(env)
     assert r == expected
 
@@ -134,7 +133,7 @@ def test_iter(env: Environment, expected: List[str]) -> None:
         ),
     ],
 )
-def test_values(env: Environment, expected: List[str]) -> None:
+def test_values(env: Environment, expected: list[str]) -> None:
     r = sorted(env.values())
     assert r == expected
 
@@ -151,6 +150,6 @@ def test_values(env: Environment, expected: List[str]) -> None:
         ),
     ],
 )
-def test_items(env: Environment, expected: List[str]) -> None:
+def test_items(env: Environment, expected: list[str]) -> None:
     r = sorted(env.items())
     assert r == expected

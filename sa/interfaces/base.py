@@ -26,7 +26,7 @@ class NoneParameter(Parameter):
     Checks value is None
     """
 
-    def __init__(self, required=True):
+    def __init__(self, required=True) -> None:
         super().__init__(required=required)
 
     def clean(self, value):
@@ -40,7 +40,9 @@ class StringParameter(Parameter):
     Check value is string
     """
 
-    def __init__(self, required=True, default=None, choices=None, aliases=None, strip_value=False):
+    def __init__(
+        self, required=True, default=None, choices=None, aliases=None, strip_value=False
+    ) -> None:
         self.choices = set(choices) if choices else None
         self.aliases = aliases
         self.strip_value = strip_value
@@ -85,7 +87,7 @@ class REStringParameter(StringParameter):
     Check value is string matching regular expression
     """
 
-    def __init__(self, regexp, required=True, default=None):
+    def __init__(self, regexp, required=True, default=None) -> None:
         self.rx = re.compile(regexp)  # Compile before calling the constructor
         super().__init__(required=required, default=default)
 
@@ -149,7 +151,7 @@ class IntParameter(Parameter):
     Check value is integer
     """
 
-    def __init__(self, required=True, default=None, min_value=None, max_value=None):
+    def __init__(self, required=True, default=None, min_value=None, max_value=None) -> None:
         self.min_value = min_value
         self.max_value = max_value
         super().__init__(required=required, default=default)
@@ -173,7 +175,7 @@ class FloatParameter(Parameter):
     Check value is float
     """
 
-    def __init__(self, required=True, default=None, min_value=None, max_value=None):
+    def __init__(self, required=True, default=None, min_value=None, max_value=None) -> None:
         self.min_value = min_value
         self.max_value = max_value
         super().__init__(required=required, default=default)
@@ -218,7 +220,7 @@ class InstanceOfParameter(Parameter):
     Check value is an instance of class
     """
 
-    def __init__(self, cls, required=True, default=None):
+    def __init__(self, cls, required=True, default=None) -> None:
         super().__init__(required=required, default=default)
         self.cls = cls
         if isinstance(cls, str):
@@ -251,7 +253,7 @@ class SubclassOfParameter(Parameter):
     Check value is subclass of given class
     """
 
-    def __init__(self, cls, required=True, default=None):
+    def __init__(self, cls, required=True, default=None) -> None:
         super().__init__(required=required, default=default)
         self.cls = cls
         if isinstance(cls, str):
@@ -291,7 +293,7 @@ class ListOfParameter(ListParameter):
     Check value is a list of given parameter type
     """
 
-    def __init__(self, element, required=True, default=None, convert=False):
+    def __init__(self, element, required=True, default=None, convert=False) -> None:
         self.element = element
         self.is_list = isinstance(element, (list, tuple))
         self.convert = convert
@@ -335,7 +337,9 @@ class StringListParameter(ListOfParameter):
     Check value is list of strings
     """
 
-    def __init__(self, required=True, default=None, convert=False, choices=None, strict=False):
+    def __init__(
+        self, required=True, default=None, convert=False, choices=None, strict=False
+    ) -> None:
         self.strict = strict
         super().__init__(
             element=StringParameter(choices=choices),
@@ -393,8 +397,6 @@ class LabelParameter(Parameter):
 
 
 class LabelListParameter(ListOfParameter):
-    """ """
-
     def __init__(
         self,
         required=True,
@@ -419,7 +421,7 @@ class DictParameter(Parameter):
     Check value is a dict
     """
 
-    def __init__(self, required=True, default=None, attrs=None, truncate=False):
+    def __init__(self, required=True, default=None, attrs=None, truncate=False) -> None:
         super().__init__(required=required, default=default)
         self.attrs = attrs or {}
         self.truncate = truncate
@@ -445,12 +447,12 @@ class DictParameter(Parameter):
                 try:
                     out[k] = param.clean(v)
                 except InterfaceTypeError as e:
-                    self.raise_error("Invalid value for '%s': %s" % (k, e))
+                    self.raise_error(f"Invalid value for '{k}': {e}")
             elif not self.truncate:
                 out[k] = value[k]
         missed = self._required_input - set(out)
         if missed:
-            raise InterfaceTypeError("Parameter '%s' required" % missed.pop())
+            raise InterfaceTypeError(f"Parameter '{missed.pop()}' required")
         return out
 
     def script_clean_input(self, profile, value):
@@ -464,12 +466,12 @@ class DictParameter(Parameter):
         out_value = {}
         for a_name, attr in self.attrs.items():
             if a_name not in in_value and attr.required:
-                self.raise_error(value, "Attribute '%s' required" % a_name)
+                self.raise_error(value, f"Attribute '{a_name}' required")
             if a_name in in_value:
                 try:
                     out_value[a_name] = attr.script_clean_input(profile, in_value[a_name])
                 except InterfaceTypeError:
-                    self.raise_error(value, "Invalid value for '%s'" % a_name)
+                    self.raise_error(value, f"Invalid value for '{a_name}'")
                 del in_value[a_name]
         for k, v in in_value.items():
             out_value[k] = v
@@ -486,12 +488,12 @@ class DictParameter(Parameter):
         out_value = {}
         for a_name, attr in self.attrs.items():
             if a_name not in in_value and attr.required:
-                self.raise_error(value, "Attribute '%s' required" % a_name)
+                self.raise_error(value, f"Attribute '{a_name}' required")
             if a_name in in_value:
                 try:
                     out_value[a_name] = attr.script_clean_result(profile, in_value[a_name])
                 except InterfaceTypeError:
-                    self.raise_error(value, "Invalid value for '%s'" % a_name)
+                    self.raise_error(value, f"Invalid value for '{a_name}'")
                 del in_value[a_name]
         for k, v in in_value.items():
             out_value[k] = v
@@ -503,7 +505,7 @@ class DictListParameter(ListOfParameter):
     Check value is a list of dicts of given structure
     """
 
-    def __init__(self, required=True, default=None, attrs=None, convert=False):
+    def __init__(self, required=True, default=None, attrs=None, convert=False) -> None:
         super().__init__(
             element=DictParameter(attrs=attrs), required=required, default=default, convert=convert
         )
@@ -574,7 +576,7 @@ class IPv4Parameter(StringParameter):
     Check value is IPv4 address
     """
 
-    def __init__(self, required=True, default=None, accept_bin=True):
+    def __init__(self, required=True, default=None, accept_bin=True) -> None:
         self.accept_bin = accept_bin
         super().__init__(required=required, default=default)
 
@@ -591,7 +593,7 @@ class IPv4Parameter(StringParameter):
                 value = ".".join(str(c) for c in value)
             elif len(value) == 4:
                 # IP address in binary form
-                value = ".".join("%02X" % ord(c) for c in value)
+                value = ".".join(f"{ord(c):02X}" for c in value)
         v = super().clean(value)
         parts = v.split(".")
         if len(parts) != 4:
@@ -643,7 +645,7 @@ class IPv6Parameter(StringParameter):
         if value is None and self.default is not None:
             return self.default
         if len(value) == 16 and isinstance(value, bytes):
-            value = ":".join("%02X%02X" % (x, y) for x, y in zip(value[0::2], value[1::2]))
+            value = ":".join(f"{x:02X}{y:02X}" for x, y in zip(value[0::2], value[1::2]))
         v = super().clean(value)
         if not is_ipv6(v):
             self.raise_error(value)
@@ -704,7 +706,7 @@ class VLANIDParameter(IntParameter):
     Check value is VLAN ID
     """
 
-    def __init__(self, required=True, default=None):
+    def __init__(self, required=True, default=None) -> None:
         super().__init__(required=required, default=default, min_value=1, max_value=4095)
 
 
@@ -713,7 +715,7 @@ class VLANStackParameter(ListOfParameter):
     Check value is a stack of of VLAN ID
     """
 
-    def __init__(self, required=True, default=None):
+    def __init__(self, required=True, default=None) -> None:
         super().__init__(element=IntParameter(), required=required, default=default, convert=True)
 
     def clean(self, value):
@@ -728,7 +730,7 @@ class VLANStackParameter(ListOfParameter):
 class IntEnumParameter(IntParameter):
     """Check Parameter on Enum class"""
 
-    def __init__(self, enum, required=True, default=None):
+    def __init__(self, enum, required=True, default=None) -> None:
         self.enum = enum
         super().__init__(required=required, default=default)
 
@@ -744,7 +746,7 @@ class VLANIDListParameter(ListOfParameter):
     Check value is a list of arbitrary vlans
     """
 
-    def __init__(self, required=True, default=None):
+    def __init__(self, required=True, default=None) -> None:
         super().__init__(element=VLANIDParameter(), required=required, default=default)
 
 
@@ -768,7 +770,7 @@ class MACAddressParameter(StringParameter):
     Check value is MAC address
     """
 
-    def __init__(self, required=True, default=None, accept_bin=True):
+    def __init__(self, required=True, default=None, accept_bin=True) -> None:
         self.accept_bin = accept_bin
         super().__init__(required=required, default=default)
 
@@ -795,7 +797,7 @@ class DiscriminatorParameter(StringParameter):
             discriminator(value)
             return value
         except ValueError as e:
-            self.raise_error("Bad discriminator: %s" % str(e))
+            self.raise_error(f"Bad discriminator: {e!s}")
 
 
 class InterfaceNameParameter(StringParameter):
@@ -884,11 +886,11 @@ class RDParameter(Parameter):
                     self.raise_error(value)
             elif right > 0xFFFFFFFF:  # 2-byte ASN
                 self.raise_error(value)
-        return "%s:%s" % (left, right)
+        return f"{left}:{right}"
 
 
 class ObjectIdParameter(REStringParameter):
-    def __init__(self, required=True, default=None):
+    def __init__(self, required=True, default=None) -> None:
         super().__init__("^[0-9a-f]{24}$", required=required, default=default)
 
 
@@ -932,7 +934,7 @@ class ModelParameter(Parameter):
     Model reference parameter
     """
 
-    def __init__(self, model, required=True):
+    def __init__(self, model, required=True) -> None:
         super().__init__(required=required)
         self.model = model
 
@@ -960,7 +962,7 @@ class DocumentParameter(Parameter):
     Document reference parameter
     """
 
-    def __init__(self, document, required=True):
+    def __init__(self, document, required=True) -> None:
         super().__init__(required=required)
         self.document = document
         self.has_get_by_id = bool(getattr(self.document, "get_by_id", None))
@@ -981,7 +983,7 @@ class DocumentParameter(Parameter):
 
 
 class EmbeddedDocumentParameter(Parameter):
-    def __init__(self, document, required=True):
+    def __init__(self, document, required=True) -> None:
         super().__init__(required=required)
         self.document = document
 
@@ -1018,9 +1020,9 @@ class TagsParameter(Parameter):
             v = [smart_text(v).strip() for v in value]
             return [x for x in v if x]
         if isinstance(value, str):
-            v = [smart_text(x.strip()) for x in value.split(",")]
+            v = [x.strip() for x in value.split(",")]
             return [x for x in v if x]
-        self.raise_error("Invalid tags: %s" % value)
+        self.raise_error(f"Invalid tags: {value}")
 
 
 class ColorParameter(Parameter):
@@ -1047,7 +1049,7 @@ class ColorParameter(Parameter):
 class ASNParameter(IntParameter):
     """Check Value is ASN Number"""
 
-    def __init__(self, required=True, default=None):
+    def __init__(self, required=True, default=None) -> None:
         super().__init__(required=required, default=default, min_value=1, max_value=4_294_967_295)
 
     def clean(self, value):

@@ -8,7 +8,7 @@
 # Python modules
 import logging
 import time
-from typing import Any, Tuple, Iterable
+from typing import Any, Iterable
 
 # Third-party modules
 from django.db import connection
@@ -20,15 +20,15 @@ from noc.core.log import PrefixLoggerAdapter
 
 logger = logging.getLogger(__name__)
 
-Metric = Tuple[Tuple[Any], int]
+Metric = tuple[tuple[Any], int]
 
 
-class BaseCollector(object):
+class BaseCollector:
     name = None
 
-    def __init__(self, service):
+    def __init__(self, service) -> None:
         self.service = service
-        self.ttl = getattr(config.selfmon, "%s_ttl" % self.name, 30)
+        self.ttl = getattr(config.selfmon, f"{self.name}_ttl", 30)
         self.last_metrics = {}
         self.logger = PrefixLoggerAdapter(logger, self.name)
         self.t0 = int(time.time())
@@ -36,7 +36,7 @@ class BaseCollector(object):
 
     @classmethod
     def is_enabled(cls):
-        return getattr(config.selfmon, "enable_%s" % cls.name)
+        return getattr(config.selfmon, f"enable_{cls.name}")
 
     def can_run_at(self, t):
         """
@@ -81,5 +81,5 @@ class BaseCollector(object):
         return cursor.fetchall()
 
     @staticmethod
-    def metric(metric: str, *, value: int, **kwargs: Any) -> Tuple[Tuple[Any], int]:
+    def metric(metric: str, *, value: int, **kwargs: Any) -> tuple[tuple[Any], int]:
         return ((metric, *tuple((k, v) for k, v in kwargs.items() if v is not None)), value)

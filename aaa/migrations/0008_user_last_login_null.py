@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         is_nullable = self.db.execute(
             """
             SELECT is_nullable = 'YES'

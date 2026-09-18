@@ -38,7 +38,7 @@ class Script(BaseScript):
             count = 5
         if size:
             cmd += " -s %d" % int(size)
-        cmd += " %s" % address
+        cmd += f" {address}"
         s = self.cli(cmd)
         match = self.rx_result1.search(s)
         if match:

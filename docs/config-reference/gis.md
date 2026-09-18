@@ -4,82 +4,42 @@ Gis service configuration
 
 ## ellipsoid
 
-|                |                     |
-| -------------- | ------------------- |
-| Default value  | `PZ-90`             |
-| YAML Path      | `gis.ellipsoid`     |
-| Key-Value Path | `gis/ellipsoid`     |
-| Environment    | `NOC_GIS_ELLIPSOID` |
+{{ config_param("gis.ellipsoid") }}
 
 ## enable_osm
 
 Enable blank layer on maps.
-|                |                        |
-| -------------- | ---------------------- |
-| Default value  | `False`                |
-| YAML Path      | `gis.enable_blank`     |
-| Key-Value Path | `gis/enable_blank`     |
-| Environment    | `NOC_GIS_ENABLE_BLANK` |
+{{ config_param("gis.enable_blank") }}
 
 ## enable_osm
 
 Enable OpenStreetMap layer on maps.
-|                |                      |
-| -------------- | -------------------- |
-| Default value  | `True`               |
-| YAML Path      | `gis.enable_osm`     |
-| Key-Value Path | `gis/enable_osm`     |
-| Environment    | `NOC_GIS_ENABLE_OSM` |
+{{ config_param("gis.enable_osm") }}
 
 ## enable_google_sat
 
-|                |                             |
-| -------------- | --------------------------- |
-| Default value  | `False`                     |
-| YAML Path      | `gis.enable_google_sat`     |
-| Key-Value Path | `gis/enable_google_sat`     |
-| Environment    | `NOC_GIS_ENABLE_GOOGLE_SAT` |
+{{ config_param("gis.enable_google_sat") }}
 
 ## enable_google_roadmap
 
-|                |                                 |
-| -------------- | ------------------------------- |
-| Default value  | `False`                         |
-| YAML Path      | `gis.enable_google_roadmap`     |
-| Key-Value Path | `gis/enable_google_roadmap`     |
-| Environment    | `NOC_GIS_ENABLE_GOOGLE_ROADMAP` |
+{{ config_param("gis.enable_google_roadmap") }}
 
 ## enable_tile1
 
 Enable custom layer `tile1`.
 
-|                |                        |
-| -------------- | ---------------------- |
-| Default value  | `False`                |
-| YAML Path      | `gis.enable_tile1`     |
-| Key-Value Path | `gis/enable_tile1`     |
-| Environment    | `NOC_GIS_ENABLE_TILE1` |
+{{ config_param("gis.enable_tile1") }}
 
 ## tile1_name
 
 Set name for layer `tile1`.
-|                |                      |
-| -------------- | -------------------- |
-| Default value  | `Custom 1`           |
-| YAML Path      | `gis.tile1_name`     |
-| Key-Value Path | `gis/tile1_name`     |
-| Environment    | `NOC_GIS_TILE1_NAME` |
+{{ config_param("gis.tile1_name") }}
 
 ## tile1_url
 
 Set tile url for layer `tile`.
 
-|                |                                                      |
-| -------------- | ---------------------------------------------------- |
-| Default value  | `https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png` |
-| YAML Path      | `gis.tile1_url`                                      |
-| Key-Value Path | `gis/tile1_url`                                      |
-| Environment    | `NOC_GIS_TILE1_URL`                                  |
+{{ config_param("gis.tile1_url") }}
 
 The following macroses may be used in url:
 
@@ -91,12 +51,7 @@ The following macroses may be used in url:
 | `{y}` | Y coordinates                                                                                                                |
 | `{r}` | can be used to add "@2x" to the URL to load retina tiles                                                                     |
  
-|                |                            |
-| -------------- | -------------------------- |
-| Default value  | `[]`                       |
-| YAML Path      | `gis.tile1_subdomains`     |
-| Key-Value Path | `gis/tile1_subdomains`     |
-| Environment    | `NOC_GIS_TILE1_SUBDOMAINS` |
+{{ config_param("gis.tile1_subdomains") }}
 
 ## tile1_subdomains
 
@@ -107,33 +62,18 @@ Expands `{s}` option in `tile1_url`.
 
 Enable custom layer `tile2`.
 
-|                |                        |
-| -------------- | ---------------------- |
-| Default value  | `False`                |
-| YAML Path      | `gis.enable_tile2`     |
-| Key-Value Path | `gis/enable_tile2`     |
-| Environment    | `NOC_GIS_ENABLE_TILE2` |
+{{ config_param("gis.enable_tile2") }}
 
 ## tile2_name
 
 Set name for layer `tile2`.
-|                |                      |
-| -------------- | -------------------- |
-| Default value  | `Custom 2`           |
-| YAML Path      | `gis.tile2_name`     |
-| Key-Value Path | `gis/tile2_name`     |
-| Environment    | `NOC_GIS_TILE2_NAME` |
+{{ config_param("gis.tile2_name") }}
 
 ## tile2_url
 
 Set tile url for layer `tile`.
 
-|                |                                                      |
-| -------------- | ---------------------------------------------------- |
-| Default value  | `https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png` |
-| YAML Path      | `gis.tile2_url`                                      |
-| Key-Value Path | `gis/tile2_url`                                      |
-| Environment    | `NOC_GIS_TILE2_URL`                                  |
+{{ config_param("gis.tile2_url") }}
 
 The following macroses may be used in url:
 
@@ -145,12 +85,7 @@ The following macroses may be used in url:
 | `{y}` | Y coordinates                                                                                                                |
 | `{r}` | can be used to add "@2x" to the URL to load retina tiles                                                                     |
  
-|                |                            |
-| -------------- | -------------------------- |
-| Default value  | `[]`                       |
-| YAML Path      | `gis.tile2_subdomains`     |
-| Key-Value Path | `gis/tile2_subdomains`     |
-| Environment    | `NOC_GIS_TILE2_SUBDOMAINS` |
+{{ config_param("gis.tile2_subdomains") }}
 
 ## tile2_subdomains
 
@@ -161,33 +96,18 @@ Expands `{s}` option in `tile2_url`.
 
 Enable custom layer `tile3`.
 
-|                |                        |
-| -------------- | ---------------------- |
-| Default value  | `False`                |
-| YAML Path      | `gis.enable_tile3`     |
-| Key-Value Path | `gis/enable_tile3`     |
-| Environment    | `NOC_GIS_ENABLE_TILE3` |
+{{ config_param("gis.enable_tile3") }}
 
 ## tile3_name
 
 Set name for layer `tile3`.
-|                |                      |
-| -------------- | -------------------- |
-| Default value  | `Custom 3`           |
-| YAML Path      | `gis.tile3_name`     |
-| Key-Value Path | `gis/tile3_name`     |
-| Environment    | `NOC_GIS_TILE3_NAME` |
+{{ config_param("gis.tile3_name") }}
 
 ## tile3_url
 
 Set tile url for layer `tile`.
 
-|                |                                                      |
-| -------------- | ---------------------------------------------------- |
-| Default value  | `https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png` |
-| YAML Path      | `gis.tile3_url`                                      |
-| Key-Value Path | `gis/tile3_url`                                      |
-| Environment    | `NOC_GIS_TILE3_URL`                                  |
+{{ config_param("gis.tile3_url") }}
 
 The following macroses may be used in url:
 
@@ -199,12 +119,7 @@ The following macroses may be used in url:
 | `{y}` | Y coordinates                                                                                                                |
 | `{r}` | can be used to add "@2x" to the URL to load retina tiles                                                                     |
  
-|                |                            |
-| -------------- | -------------------------- |
-| Default value  | `[]`                       |
-| YAML Path      | `gis.tile3_subdomains`     |
-| Key-Value Path | `gis/tile3_subdomains`     |
-| Environment    | `NOC_GIS_TILE3_SUBDOMAINS` |
+{{ config_param("gis.tile3_subdomains") }}
 
 ## tile3_subdomains
 
@@ -215,9 +130,4 @@ Expands `{s}` option in `tile3_url`.
 
 Tile size 256x256
 
-|                |                     |
-| -------------- | ------------------- |
-| Default value  | `256`               |
-| YAML Path      | `gis.tile_size`     |
-| Key-Value Path | `gis/tile_size`     |
-| Environment    | `NOC_GIS_TILE_SIZE` |
+{{ config_param("gis.tile_size") }}

@@ -12,7 +12,7 @@ from noc.project.models.project import Project as ProjectModel
 
 
 class Project(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "project"
         layout = "hashed"
         source_model = "project.Project"

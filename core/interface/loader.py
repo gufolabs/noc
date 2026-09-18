@@ -22,10 +22,10 @@ from noc.config import config
 logger = logging.getLogger(__name__)
 
 
-class InterfaceLoader(object):
+class InterfaceLoader:
     rx_class = re.compile(r"^class\s+(?P<name>\S+)\(", re.MULTILINE)
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.interfaces = {}  # Load interfaces
         self.lock = threading.Lock()
         self.all_interfaces = set()
@@ -45,21 +45,21 @@ class InterfaceLoader(object):
                 return None
             imname = name.lower()
             for p in config.get_customized_paths("", prefer_custom=True):
-                if os.path.exists(os.path.join(p, "sa", "interfaces", "%s.py" % imname)):
+                if os.path.exists(os.path.join(p, "sa", "interfaces", f"{imname}.py")):
                     if p:
                         # Custom script
                         base_name = os.path.basename(os.path.dirname(config.path.custom_path))
                     else:
                         # Common script
                         base_name = "noc"
-                    module_name = "%s.sa.interfaces.%s" % (base_name, imname)
+                    module_name = f"{base_name}.sa.interfaces.{imname}"
                     break
             else:
                 logger.error("Interface not found: %s", name)
                 self.interfaces[name] = None
                 return None
             try:
-                sm = __import__(module_name, {}, {}, "*")
+                sm = importlib.import_module(module_name)
                 for n in dir(sm):
                     o = getattr(sm, n)
                     if (

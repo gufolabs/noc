@@ -18,7 +18,7 @@ MONGO_CHUNK = 500
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Update mongodb collections
         coll = self.mongo_db["noc.remotesystem"]
         updates = []

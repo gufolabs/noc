@@ -68,7 +68,7 @@ class Script(BaseScript):
         if interface is None:
             interface = "all"
         try:
-            s = self.cli("cable_diag ports %s" % interface)
+            s = self.cli(f"cable_diag ports {interface}")
         except self.CLISyntaxError:
             raise self.NotSupportedError()
         test = s.splitlines()

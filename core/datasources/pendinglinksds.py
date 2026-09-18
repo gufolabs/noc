@@ -9,7 +9,7 @@
 import ast
 from collections import defaultdict
 import re
-from typing import Any, Optional, Iterable, List, Tuple, AsyncIterable
+from typing import Any, Iterable, AsyncIterable
 
 # Third-party modules
 from pymongo import ReadPreference
@@ -156,20 +156,20 @@ class PendingLinksDS(BaseDataSource):
                         result[mo.id][iface] = {
                             "problem": "Not found iface on remote",
                             "detail": detail,
-                            "remote_id": "%s::: %s" % (rmo.name, rmo.profile.name),
+                            "remote_id": f"{rmo.name}::: {rmo.profile.name}",
                             "remote_iface": pend_str.group("remote_iface"),
                         }
                         result[rmo.id][pend_str.group("remote_iface")] = {
                             "problem": "Not found local iface on remote",
                             "detail": detail,
-                            "remote_id": "%s::: %s" % (mo.name, mo.profile.name),
+                            "remote_id": f"{mo.name}::: {mo.profile.name}",
                             "remote_iface": iface,
                         }
             n += JOBS_LIMIT
         return result
 
     @staticmethod
-    def clean_description(value: Optional[str]):
+    def clean_description(value: str | None):
         """Replace LF, CR and some other symbols in System Description to space
         for proper data in .csv and .xlsx formats"""
         if value:
@@ -179,14 +179,14 @@ class PendingLinksDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
-        pool: Optional[Pool] = None,
-        mo_profile: Optional[ManagedObjectProfile] = None,
+        fields: Iterable[str] | None = None,
+        pool: Pool | None = None,
+        mo_profile: ManagedObjectProfile | None = None,
         show_already_linked=False,
-        admin_domain_ads: Optional[List[int]] = None,
+        admin_domain_ads: list[int] | None = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[int, str, Any]]:
+    ) -> AsyncIterable[tuple[int, str, Any]]:
         direction_map = {
             "Not found iface on remote": "->",
             "Not found local iface on remote": "<-",

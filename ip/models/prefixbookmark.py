@@ -24,7 +24,7 @@ class PrefixBookmark(NOCModel):
     User Bookmarks
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = _("Prefix Bookmark")
         verbose_name_plural = _("Prefix Bookmarks")
         db_table = "ip_prefixbookmark"
@@ -35,16 +35,12 @@ class PrefixBookmark(NOCModel):
     prefix = models.ForeignKey(Prefix, verbose_name="Prefix", on_delete=models.CASCADE)
 
     def __str__(self):
-        return "Bookmark at %s for %s" % (self.prefix, self.user.username)
+        return f"Bookmark at {self.prefix} for {self.user.username}"
 
     @classmethod
     def user_bookmarks(cls, user, vrf=None, afi=None):
         """
         Returns a prefixes bookmarked by user
-        :param cls:
-        :param user:
-        :param vrf:
-        :param afi:
         :return:
         """
         q = Q(user=user)

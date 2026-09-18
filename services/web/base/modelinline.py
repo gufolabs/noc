@@ -28,7 +28,7 @@ from noc.core.model.fields import TextArrayField
 from noc.core.comp import smart_text
 
 
-class ModelInline(object):
+class ModelInline:
     # HTTP Result Codes
     OK = 200
     CREATED = 201
@@ -58,7 +58,7 @@ class ModelInline(object):
     clean_fields = {}  # field name -> Parameter instance
     custom_fields = {}  # name -> handler, populated automatically
 
-    def __init__(self, model):
+    def __init__(self, model) -> None:
         self.model = model
         self.app = None
         self.pk_field_name = self.model._meta.pk.name
@@ -82,60 +82,58 @@ class ModelInline(object):
         if not self.query_fields:
             # By default - search in unique text fields
             self.query_fields = [
-                "%s__%s" % (f.name, self.query_condition)
+                f"{f.name}__{self.query_condition}"
                 for f in self.model._meta.fields
                 if f.unique and isinstance(f, CharField)
             ]
         # Add searchable custom fields
         self.query_fields += [
-            "%s__%s" % (f.name, self.query_condition)
-            for f in self.get_custom_fields()
-            if f.is_searchable
+            f"{f.name}__{self.query_condition}" for f in self.get_custom_fields() if f.is_searchable
         ]
 
     def contribute_to_class(self, app, name):
         # Add List handler
         app.add_view(
-            "api_%s_list" % name,
+            f"api_{name}_list",
             self.api_list,
             method=["GET"],
-            url=r"^(?P<parent>[^/]+)/%s/$" % name,
+            url=rf"^(?P<parent>[^/]+)/{name}/$",
             access="read",
             api=True,
         )
         # Add Create handler
         app.add_view(
-            "api_%s_create" % name,
+            f"api_{name}_create",
             self.api_create,
             method=["POST"],
-            url=r"^(?P<parent>[^/]+)/%s/$" % name,
+            url=rf"^(?P<parent>[^/]+)/{name}/$",
             access="create",
             api=True,
         )
         # Add Read Handler
         app.add_view(
-            "api_%s_read" % name,
+            f"api_{name}_read",
             self.api_read,
             method=["GET"],
-            url=r"^(?P<parent>[^/]+)/%s/(?P<id>\d+)/?$" % name,
+            url=rf"^(?P<parent>[^/]+)/{name}/(?P<id>\d+)/?$",
             access="read",
             api=True,
         )
         # Add Update Handler
         app.add_view(
-            "api_%s_update" % name,
+            f"api_{name}_update",
             self.api_update,
             method=["PUT"],
-            url=r"^(?P<parent>[^/]+)/%s/(?P<id>\d+)/?$" % name,
+            url=rf"^(?P<parent>[^/]+)/{name}/(?P<id>\d+)/?$",
             access="update",
             api=True,
         )
         # Add Delete Handler
         app.add_view(
-            "api_%s_delete" % name,
+            f"api_{name}_delete",
             self.api_delete,
             method=["DELETE"],
-            url=r"^(?P<parent>[^/]+)/%s/(?P<id>\d+)/?$" % name,
+            url=rf"^(?P<parent>[^/]+)/{name}/(?P<id>\d+)/?$",
             access="delete",
             api=True,
         )
@@ -165,7 +163,6 @@ class ModelInline(object):
     def get_validator(self, field):
         """
         Returns Parameter instance or None to clean up field
-        :param field:
         :type field: Field
         :return:
         """
@@ -193,7 +190,7 @@ class ModelInline(object):
 
         def get_q(f):
             if "__" not in f:
-                return "%s__%s" % (f, self.query_condition)
+                return f"{f}__{self.query_condition}"
             return f
 
         q = reduce(
@@ -221,7 +218,6 @@ class ModelInline(object):
         :param data: dict of parameters
         :type data: dict
         :return: dict of cleaned parameters of raised InterfaceTypeError
-        :rtype: dict
         """
         # Delete id
         if "id" in data:
@@ -272,20 +268,15 @@ class ModelInline(object):
                 # Unroll __referred
                 app, fn = v.split("__", 1)
                 model = self.app.site.apps[app].model
-                extra_where = '%s."%s" IN (SELECT "%s" FROM %s)' % (
-                    self.model._meta.db_table,
-                    self.model._meta.pk.name,
-                    model._meta.get_field(fn).attname,
-                    model._meta.db_table,
-                )
+                extra_where = f'{self.model._meta.db_table}."{self.model._meta.pk.name}" IN (SELECT "{model._meta.get_field(fn).attname}" FROM {model._meta.db_table})'
                 if None in nq:
                     nq[None] += [extra_where]
                 else:
                     nq[None] = [extra_where]
                 continue
-            if lt and hasattr(self, "lookup_%s" % lt):
+            if lt and hasattr(self, f"lookup_{lt}"):
                 # Custom lookup
-                getattr(self, "lookup_%s" % lt)(nq, np, v)
+                getattr(self, f"lookup_{lt}")(nq, np, v)
                 continue
             if np in self.fk_fields and lt:
                 # dereference
@@ -322,10 +313,10 @@ class ModelInline(object):
                 v = getattr(o, f.name)
                 if v:
                     r[f.name] = v._get_pk_val()
-                    r["%s__label" % f.name] = smart_text(v)
+                    r[f"{f.name}__label"] = smart_text(v)
                 else:
                     r[f.name] = None
-                    r["%s__label" % f.name] = ""
+                    r[f"{f.name}__label"] = ""
         # Add custom fields
         for f in self.custom_fields:
             if fields and f not in fields:
@@ -351,12 +342,12 @@ class ModelInline(object):
         if format == "ext" and self.sort_param in q:
             for r in self.app.deserialize(q[self.sort_param]):
                 if r["direction"] == "DESC":
-                    ordering += ["-%s" % r["property"]]
+                    ordering += ["-{}".format(r["property"])]
                 else:
                     ordering += [r["property"]]
         q = self.cleaned_query(q)
         if parent:
-            q["%s__id" % self.parent_rel] = parent
+            q[f"{self.parent_rel}__id"] = parent
         if None in q:
             ew = q.pop(None)
             data = self.queryset(request, query).filter(**q).extra(where=ew)
@@ -457,7 +448,7 @@ class ModelInline(object):
 
     def api_delete(self, request, parent, id):
         try:
-            q = {"id": int(id), "%s__id" % self.parent_rel: int(parent)}
+            q = {"id": int(id), f"{self.parent_rel}__id": int(parent)}
             o = self.queryset(request).get(**q)
         except self.model.DoesNotExist:
             return self.app.render_json(

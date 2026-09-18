@@ -7,7 +7,7 @@
 
 # Python modules
 import datetime
-from typing import Optional, Iterable, List, Tuple, Any
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 from django.db import models
@@ -48,7 +48,7 @@ FREE_ADDRESS_STATE = "Free"
 @workflow
 @on_delete_check(check=[("ip.Address", "ipv6_transition")])
 class Address(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = _("Address")
         verbose_name_plural = _("Addresses")
         db_table = "ip_address"
@@ -197,10 +197,7 @@ class Address(NOCModel):
     def get_collision(cls, vrf: "VRF", address: str) -> Optional["Address"]:
         """
         Check VRFGroup restrictions
-        :param vrf:
-        :param address:
         :return: VRF already containing address or None
-        :rtype: VRF or None
         """
         if not vrf.vrf_group or vrf.vrf_group.address_constraint != "G":
             return None
@@ -216,7 +213,6 @@ class Address(NOCModel):
         """
         Override default save() method to set AFI,
         parent prefix, and check VRF group restrictions
-        :param kwargs:
         :return:
         """
         self.clean()
@@ -306,10 +302,10 @@ class Address(NOCModel):
 
     def reserve(
         self,
-        allocated_till: Optional[datetime.datetime] = None,
-        user: Optional[Any] = None,
+        allocated_till: datetime.datetime | None = None,
+        user: Any | None = None,
         confirm: bool = True,
-        reservation_id: Optional[str] = None,
+        reservation_id: str | None = None,
     ):
         """
         Set record As reserve
@@ -330,13 +326,13 @@ class Address(NOCModel):
     def get_resource_keys(
         cls,
         prefix,
-        keys: Optional[List[int]] = None,
+        keys: list[int] | None = None,
         strategy: str = "L",
-        exclude_keys: Optional[Iterable[int]] = None,
+        exclude_keys: Iterable[int] | None = None,
         limit: int = 1,
-        address_ranges: Optional[str] = None,
+        address_ranges: str | None = None,
         **kwargs,
-    ) -> List[IP]:
+    ) -> list[IP]:
         """
         Args:
             prefix:
@@ -376,7 +372,7 @@ class Address(NOCModel):
         keys: Iterable[str],
         domain,
         allow_create: bool = False,
-    ) -> Iterable[Tuple[str, Optional["Address"], Optional[str]]]:
+    ) -> Iterable[tuple[str, Optional["Address"], str | None]]:
         processed = set()
         for addr in Address.objects.filter(prefix=domain, address__in=keys):
             yield addr.address, addr, None
@@ -402,7 +398,7 @@ class Address(NOCModel):
         cls,
         address: str,
         prefix,
-        name: Optional[str] = None,
+        name: str | None = None,
     ) -> "Address":
         """Create Address from Template"""
         addr = Address(
@@ -416,7 +412,7 @@ class Address(NOCModel):
             addr.name = name
         return addr
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.profile.get_css_class() if self.profile else None
 
 

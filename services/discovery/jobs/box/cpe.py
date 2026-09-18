@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Dict, Any
+from typing import Any
 
 # Third-party modules
 from mongoengine.queryset.visitor import Q as m_Q
@@ -118,7 +118,6 @@ class CPECheck(DiscoveryCheck):
     def submit_managed_object(self, cpe: CPE):
         """
         Create ManagedObject for CPE instance
-        :param cpe:
         :return:
         """
         from django.db.models.query_utils import Q
@@ -177,7 +176,7 @@ class CPECheck(DiscoveryCheck):
         local_id: str,
         global_id: str,
         c_type: str,
-        interface: Optional[str] = None,
+        interface: str | None = None,
     ) -> CPE:
         """
         Ensure CPE exists and create it if not
@@ -209,7 +208,7 @@ class CPECheck(DiscoveryCheck):
         cpe.save()
         return cpe
 
-    def cleanup_caps(self, result: Dict[str, Any]) -> Dict[str, str]:
+    def cleanup_caps(self, result: dict[str, Any]) -> dict[str, str]:
         r = {}
         for attr_name, caps in self.caps_map.items():
             if result.get(attr_name):

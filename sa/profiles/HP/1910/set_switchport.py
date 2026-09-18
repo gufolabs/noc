@@ -26,9 +26,9 @@ class Script(BaseScript):
         for c in configs:
             iface = c["interface"]
             if protect_switchport and iface not in ports:
-                errors += ["Interface '%s' is not switchport" % iface]
+                errors += [f"Interface '{iface}' is not switchport"]
             if protect_type and is_access(c) != is_access(ports[iface]):
-                errors += ["Invalid port type for interface '%s'" % iface]
+                errors += [f"Invalid port type for interface '{iface}'"]
         if errors:
             return {"status": False, "message": ".\n".join(errors)}
         # Prepare scenario
@@ -43,7 +43,7 @@ class Script(BaseScript):
                 and c["description"]
                 and ("description" not in p or c["description"] != p["description"])
             ):
-                ic += [" description %s" % c["description"]]
+                ic += [" description {}".format(c["description"])]
             # Check status
             if c["status"] and not p["status"]:
                 ic += [" no shutdown"]
@@ -81,18 +81,18 @@ class Script(BaseScript):
                 pv = list_to_ranges(p["tagged"])
                 if cv != pv:
                     # Change untagged vlans
-                    ic += [" switchport trunk allowed vlan add %s" % cv]
+                    ic += [f" switchport trunk allowed vlan add {cv}"]
             # Configure edge-port
             ept = {True: "spanning-tree portfast", False: "spanning-tree portfast trunk"}
             if is_access(c) != is_access(p):
                 # access <-> trunk. Remove old edgeport settings
-                ic += [" no %s" % ept[not is_access(c)]]
+                ic += [f" no {ept[not is_access(c)]}"]
             if c["edge_port"]:
-                ic += [" %s" % ept[is_access(c)]]
+                ic += [f" {ept[is_access(c)]}"]
             else:
-                ic += [" no %s" % ept[is_access(c)]]
+                ic += [f" no {ept[is_access(c)]}"]
             if ic:
-                commands += ["interface %s" % iface, *ic, " exit"]
+                commands += [f"interface {iface}", *ic, " exit"]
         # Apply commands
         if not debug and commands:
             with self.configure():

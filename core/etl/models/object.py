@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Any
+from typing import Any
 
 # NOC modules
 from .base import BaseModel, Reference, _BaseModel
@@ -17,13 +17,13 @@ class ObjectData(_BaseModel):
     interface: str
     attr: str
     value: Any
-    scope: Optional[str] = None
+    scope: str | None = None
 
 
 class Object(BaseModel):
     id: str
     name: str
     model: str
-    data: List[ObjectData] = []
-    parent: Optional[Reference["Object"]] = Field(None, serialization_alias="container")
-    checkpoint: Optional[str] = None
+    data: list[ObjectData] = []
+    parent: Reference["Object"] | None = Field(None, serialization_alias="container")
+    checkpoint: str | None = None

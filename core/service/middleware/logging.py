@@ -17,7 +17,7 @@ from noc.core.perf import metrics
 from noc.core.comp import smart_text
 
 
-class LoggingMiddleware(object):
+class LoggingMiddleware:
     def __init__(
         self, app, logger=None, is_wsgi_app: bool = False, collect_req_api_metric: bool = False
     ):
@@ -54,7 +54,7 @@ class LoggingMiddleware(object):
                 metrics["mon_requests"] += 1
             else:
                 if scope["query_string"]:
-                    path = "%s?%s" % (path, smart_text(scope["query_string"]))
+                    path = "{}?{}".format(path, smart_text(scope["query_string"]))
                 remote_ip = scope["client"][0]
                 status = 200
                 if self.is_wsgi_app:

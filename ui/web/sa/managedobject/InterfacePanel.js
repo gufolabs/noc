@@ -100,8 +100,8 @@ Ext.define("NOC.sa.managedobject.InterfacePanel", {
   preview: function(record){
     var me = this;
     me.callParent(arguments);
-    me.setTitle(Ext.String.format("{0} {1}", record.get("name"), __("Interfaces")));
-    Ext.Ajax.request({
+    me.setTitle(`${record.get("name")} ${__("Interfaces")}`);
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + record.get("id") + "/interface/",
       method: "GET",
       scope: me,

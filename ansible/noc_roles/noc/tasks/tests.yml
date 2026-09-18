@@ -16,7 +16,7 @@
 
     - name: check if noc services are down
       shell: /opt/noc/noc ctl status | grep -v RUNNING
-      become: "True"
+      become: true
       changed_when: false
       register: noc_status
       failed_when: "False"

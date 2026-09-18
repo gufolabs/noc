@@ -11,7 +11,7 @@ import struct
 import codecs
 
 # Third-party modules
-from typing import Tuple, Any, List, Optional
+from typing import Any
 
 # NOC modules
 from noc.core.comp import smart_bytes, smart_text
@@ -22,9 +22,6 @@ from noc.core.mib import mib
 def did(tag_class: int, is_constructed: int, tag_id: int) -> int:
     """
     Calculate decoder_id as <tag id > | tag_class | constructed
-    :param tag_class:
-    :param is_constructed:
-    :param tag_id:
     :return:
     """
     did = tag_class >> 5
@@ -33,23 +30,23 @@ def did(tag_class: int, is_constructed: int, tag_id: int) -> int:
     return did | (tag_id << 3)
 
 
-class BERDecoder(object):
-    def __init__(self, display_hints=None, include_raw=False):
-        self.last_oid: Optional[str] = None
-        self.oid_msg: Optional[bytes] = None
-        self.raw_pdu: Optional[bytes] = None
-        self.raw_varbinds: List[Tuple[str, Any, bytes]] = []
+class BERDecoder:
+    def __init__(self, display_hints=None, include_raw=False) -> None:
+        self.last_oid: str | None = None
+        self.oid_msg: bytes | None = None
+        self.raw_pdu: bytes | None = None
+        self.raw_varbinds: list[tuple[str, Any, bytes]] = []
         self.display_hints = display_hints
         self.include_raw = include_raw
 
     @staticmethod
-    def split_tlv(msg: bytes) -> Tuple[bytes, bytes]:
+    def split_tlv(msg: bytes) -> tuple[bytes, bytes]:
         decoder_id, tag_class, tag, is_constructed, is_implicit, offset, length = parse_tlv_header(
             msg
         )
         return msg[offset : offset + length], msg[offset + length :]
 
-    def parse_tlv(self, msg: bytes) -> Tuple[Any, bytes]:
+    def parse_tlv(self, msg: bytes) -> tuple[Any, bytes]:
         decoder_id, tag_class, tag, is_constructed, is_implicit, offset, length = parse_tlv_header(
             msg
         )
@@ -107,7 +104,6 @@ class BERDecoder(object):
         >>> BERDecoder().parse_int('\\xff\\x7f')
         -129
 
-        :param msg:
         :return: integer
         """
         if not msg:
@@ -148,11 +144,11 @@ class BERDecoder(object):
                 if f & 0x3F == 0x03:  # ISO 6093 NR3 form
                     return float(msg[1:])  # 0123e456
             except ValueError:
-                raise ValueError("Invalid REAL representation: %s" % msg[1:])
+                raise ValueError(f"Invalid REAL representation: {msg[1:]}")
         elif f & 0x40:  # infinitive, 8.5.8
             return float("-inf" if f & 0x01 else "inf")
         else:
-            raise ValueError("Unknown REAL encoding: %s" % f)
+            raise ValueError(f"Unknown REAL encoding: {f}")
 
     def parse_p_bitstring(self, msg: bytes) -> bytes:
         unused = msg[0]
@@ -169,7 +165,7 @@ class BERDecoder(object):
     def parse_p_t61_string(self, msg: bytes) -> str:
         return smart_text(msg, errors="ignore")
 
-    def parse_c_octetstring(self, msg: bytes) -> List[str]:
+    def parse_c_octetstring(self, msg: bytes) -> list[str]:
         r = []
         while msg:
             v, msg = self.parse_tlv(msg)
@@ -188,7 +184,7 @@ class BERDecoder(object):
 
     def parse_a_ipaddress(self, msg: bytes) -> str:
         if not msg:
-            raise ValueError("Invalid IP Address: '%s'" % msg.encode("hex"))
+            raise ValueError("Invalid IP Address: '{}'".format(msg.encode("hex")))
         return "%d.%d.%d.%d" % (msg[0], msg[1], msg[2], msg[3])
 
     def parse_p_oid(self, msg: bytes) -> str:
@@ -201,7 +197,6 @@ class BERDecoder(object):
 
     def parse_compressed_oid(self, msg: bytes) -> str:
         """
-        :param msg:
         :return:
         """
         pos = msg[0] - 1
@@ -244,7 +239,6 @@ class BERDecoder(object):
     def parse_float(self, msg):
         """
         ANSI/IEEE Std 754-1985 binary floating point
-        :param msg:
         :return:
         """
         return struct.unpack("!f", msg)[0]
@@ -252,7 +246,6 @@ class BERDecoder(object):
     def parse_double(self, msg):
         """
         ANSI/IEEE Std 754-1985 binary floating point
-        :param msg:
         :return:
         """
         return struct.unpack("!d", msg)[0]
@@ -334,7 +327,7 @@ class BERDecoder(object):
     }
 
 
-class BEREncoder(object):
+class BEREncoder:
     INF = float("inf")
     NINF = float("-inf")
     NAN = float("nan")
@@ -368,7 +361,6 @@ class BEREncoder(object):
         >>> BEREncoder().encode_octet_string("")
         '\\x04\\x00'
 
-        :param data:
         :return:
         """
         return self.encode_tlv(4, True, data)
@@ -432,7 +424,6 @@ class BEREncoder(object):
         >>> BEREncoder().encode_real(float("1.5"))
         '\\t\\t0x0315E-1'
 
-        :param data:
         :return:
         """
         if data == self.INF:
@@ -467,7 +458,6 @@ class BEREncoder(object):
         >>> BEREncoder().encode_oid("1.3.6.1.2.1.1.5.0")
         '\\x06\\x08+\\x06\\x01\\x02\\x01\\x01\\x05\\x00'
 
-        :param data:
         :return:
         """
         return encode_oid(smart_bytes(data))
@@ -481,7 +471,7 @@ encoder = BEREncoder()
 
 def decode(
     msg: bytes, include_raw: bool = False
-) -> Tuple[Tuple[int, bytes, List[Any]], Optional[bytes], List[Tuple[str, Any, bytes]]]:
+) -> tuple[tuple[int, bytes, list[Any]], bytes | None, list[tuple[str, Any, bytes]]]:
     decoder = BERDecoder(include_raw=include_raw)
     data, _ = decoder.parse_tlv(msg)
     return data, decoder.raw_pdu, decoder.raw_varbinds

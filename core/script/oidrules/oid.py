@@ -15,10 +15,8 @@ from noc.core.mib import mib
 rx_rule_var = re.compile(r"{{\s*([^}]+?)\s*}}")
 
 
-class OIDRule(object):
-    """
-    SNMP OID generator for SNMP_OIDS
-    """
+class OIDRule:
+    """SNMP OID generator for SNMP_OIDS"""
 
     name = "oid"
     default_type = "gauge"
@@ -26,7 +24,7 @@ class OIDRule(object):
 
     _scale_locals = {}
 
-    def __init__(self, oid, type=None, scale=1, units=None, labels=None):
+    def __init__(self, oid, type=None, scale=1, units=None, labels=None) -> None:
         self.oid = oid
         self.is_complex = not isinstance(oid, str)
         self.type = type or self.default_type
@@ -35,21 +33,21 @@ class OIDRule(object):
         self.labels = labels or []
 
     def _convert_scale(self, scale):
-        """
-        Convert scale expression to callable or constant
-        :param scale:
-        :return:
+        """Convert scale expression to callable or constant
+
+        Args:
+            scale
         """
         if isinstance(scale, str):
             return eval(scale, self._scale_locals)
         return scale
 
     def iter_oids(self, script, metric):
-        """
-        Generator yielding oid, type, scale, path
-        :param script:
-        :param metric:
-        :return:
+        """Generator yielding oid, type, scale, path
+
+        Args:
+            script
+            metric
         """
         if self.is_complex:
             yield tuple(self.oid), self.type, self.scale, self.units, self.labels
@@ -66,19 +64,19 @@ class OIDRule(object):
 
     @classmethod
     def expand(cls, template, context):
-        """
-        Expand {{ var }} expressions in template with given context
-        :param template:
-        :param context:
-        :return:
+        """Expand {{ var }} expressions in template with given context
+
+        Args:
+            template
+            context
         """
         return rx_rule_var.sub(lambda x: str(context[x.group(1)]), template)
 
     def expand_oid(self, **kwargs):
-        """
-        Apply kwargs to template and return resulting oid
-        :param kwargs:
-        :return:
+        """Apply kwargs to template and return resulting oid
+
+        Args:
+            **kwargs
         """
         if self.is_complex:
             oids = tuple(mib[self.expand(o, kwargs)] for o in self.oid)
@@ -89,10 +87,7 @@ class OIDRule(object):
 
     @classmethod
     def _build_scale_locals(cls):
-        """
-        Build locals for scale evaluation
-        :return:
-        """
+        """Build locals for scale evaluation"""
         import noc.core.script.metrics  # noqa
 
         m = sys.modules["noc.core.script.metrics"]

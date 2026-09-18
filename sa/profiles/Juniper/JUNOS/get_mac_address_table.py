@@ -38,11 +38,11 @@ class Script(BaseScript):
             vlans[v["name"]] = v["vlan_id"]
         cmd = "show ethernet-switching table"
         if mac is not None:
-            cmd += " | match %s" % mac
+            cmd += f" | match {mac}"
         if interface is not None:
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
         for ll in self.cli(cmd).splitlines():
             match = self.rx_line.match(ll.strip())
             if match:

@@ -9,7 +9,7 @@
 import datetime
 import threading
 from collections import defaultdict
-from typing import Optional, List, Tuple, Dict
+from typing import Optional
 
 # NOC modules
 from noc.core.scheduler.job import Job
@@ -61,7 +61,7 @@ class CheckTTJob(Job):
             u = User.get_by_username(username)
         return u
 
-    def get_waited_tt_ids(self) -> Dict[str, str]:
+    def get_waited_tt_ids(self) -> dict[str, str]:
         """Getting waited TTS"""
         r = {}
         oid = str(self.object.id)
@@ -81,7 +81,7 @@ class CheckTTJob(Job):
         tts = self.object.get_system()
         waited_ids = self.get_waited_tt_ids()
         last_ts: datetime.datetime = datetime.datetime.now()
-        last_id: Optional[str] = self.object.last_update_id
+        last_id: str | None = self.object.last_update_id
         changes = defaultdict(list)
         for c in tts.get_updates(
             self.object.login,
@@ -157,7 +157,7 @@ class CheckTTJob(Job):
             case TTAction.LOG:
                 return ActionConfig(action=AlarmAction.LOG, subject=change.message)
 
-    def processed_changes(self, job: AlarmJob, changes: List[Tuple[User, TTChange]]):
+    def processed_changes(self, job: AlarmJob, changes: list[tuple[User, TTChange]]):
         """
         Processed Alarm Action
         Args:

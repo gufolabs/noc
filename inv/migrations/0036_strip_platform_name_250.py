@@ -18,7 +18,7 @@ MAX_PLATFORM_LENGTH = 200
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         platform_coll = self.mongo_db["noc.platforms"]
         bulk = []
         duplicates = defaultdict(int)

@@ -1,13 +1,12 @@
 # ----------------------------------------------------------------------
 # FastAPIService
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import os
-from typing import Optional, Tuple, Dict
 
 # Third-party modules
 import uvicorn
@@ -34,9 +33,9 @@ class FastAPIService(BaseService):
         "JSON-RPC API": "Implemented by JSON-RPC specification 1.0",
     }
     # Additional OpenAPI tags docs, tag -> description
-    OPENAPI_TAGS_DOCS: Dict[str, str] = {}
+    OPENAPI_TAGS_DOCS: dict[str, str] = {}
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.app = None
         # WSGI application of any third-party framework that will be attached to the main
@@ -77,8 +76,6 @@ class FastAPIService(BaseService):
     async def request_validation_error_handler(self, request: "Request", exc) -> Response:
         """
         Handle request validation and customize response
-        :param request:
-        :param exc:
         :return:
         """
         return JSONResponse(
@@ -120,7 +117,7 @@ class FastAPIService(BaseService):
             collect_req_api_metric=self.collect_req_api_metric,
         )
         self.app.add_middleware(SpanMiddleware, service_name=self.name)
-        self.server: Optional[uvicorn.Server] = None
+        self.server: uvicorn.Server | None = None
         # Initialize routers
         for path in loader.iter_classes():
             self.app.include_router(loader.get_class(path))
@@ -143,7 +140,7 @@ class FastAPIService(BaseService):
             self.app, host=addr, port=port, lifespan="on", access_log=False, loop="none"
         )
         self.server = uvicorn.Server(config=uvi_config)
-        uvi_config.setup_event_loop()
+        uvi_config.get_loop_factory()
         uvi_config.load()
         self.server.lifespan = uvi_config.lifespan_class(uvi_config)
         await self.server.startup()
@@ -161,7 +158,7 @@ class FastAPIService(BaseService):
             self.server.force_exit = True
         await self.server.shutdown()
 
-    def get_effective_address(self) -> Tuple[str, int]:
+    def get_effective_address(self) -> tuple[str, int]:
         for srv in self.server.servers:
             for sock in srv.sockets:
                 return sock.getsockname()

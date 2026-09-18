@@ -21,7 +21,7 @@ class Script(BaseScript):
             bundle = []
             for port in lag["members"]:
                 try:
-                    v = self.cli("show linkagg port %s" % port)
+                    v = self.cli(f"show linkagg port {port}")
                 except self.CLISyntaxError:
                     raise self.NotSupportedError()
                 d = {

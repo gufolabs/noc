@@ -7,7 +7,7 @@
 
 # Python modules
 import threading
-from typing import Optional, Union
+from typing import Optional
 import operator
 import uuid
 import datetime
@@ -95,7 +95,7 @@ class Platform(Document):
         return self.full_name
 
     def clean(self):
-        self.full_name = "%s %s" % (self.vendor.name, self.name)
+        self.full_name = f"{self.vendor.name} {self.name}"
         if self.aliases:
             self.aliases = sorted(a for a in self.aliases if a != self.name)
         super().clean()
@@ -111,7 +111,7 @@ class Platform(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Platform"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Platform"]:
         return Platform.objects.filter(id=oid).first()
 
     @classmethod
@@ -169,8 +169,6 @@ class Platform(Document):
     def ensure_platform(cls, vendor, name, strict=False, labels=None):
         """
         Get or create platform by vendor and code
-        :param vendor:
-        :param name:
         :param strict: Return None if platform is not found
         :param labels: List of platform labels
         :return:
@@ -190,7 +188,7 @@ class Platform(Document):
             {
                 "$setOnInsert": {
                     "uuid": pu,
-                    "full_name": "%s %s" % (vendor.name, name),
+                    "full_name": f"{vendor.name} {name}",
                     "bi_id": Int64(new_bi_id()),
                     "aliases": [],
                     "labels": labels,

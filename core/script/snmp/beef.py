@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Tuple
 
 # NOC modules
 from noc.core.snmp.consts import (
@@ -30,8 +29,8 @@ class BeefSNMP(SNMP):
         return self.socket
 
 
-class BeefSNMPSocket(object):
-    def __init__(self, snmp):
+class BeefSNMPSocket:
+    def __init__(self, snmp) -> None:
         self.script = snmp.script
         self.logger = snmp.logger
         if not self.script.request_beef():
@@ -42,8 +41,8 @@ class BeefSNMPSocket(object):
         self.logger = None
 
     async def send_and_receive(
-        self, data: bytes, address: Tuple[str, int]
-    ) -> Tuple[bytes, Tuple[str, int]]:
+        self, data: bytes, address: tuple[str, int]
+    ) -> tuple[bytes, tuple[str, int]]:
         from noc.core.snmp.ber import BERDecoder, BEREncoder
 
         pdu = BERDecoder().parse_sequence(data)[0]
@@ -88,10 +87,13 @@ class BeefSNMPSocket(object):
         return response, address
 
     def snmp_get_response(self, pdu):
-        """
-        Process SNMP GET request
-        :param pdu: Parsed request PDU
-        :return: error_status, error_index, varbinds
+        """Process SNMP GET request
+
+        Args:
+            pdu: Parsed request PDU
+
+        Returns:
+            error_status, error_index, varbinds
         """
         beef = self.script.request_beef()
         r = []
@@ -109,10 +111,13 @@ class BeefSNMPSocket(object):
         return err_status, err_index, r
 
     def snmp_getnext_response(self, pdu):
-        """
-        Process SNMP GETNEXT request
-        :param pdu: Parsed request PDU
-        :return: error_status, error_index, varbinds
+        """Process SNMP GETNEXT request
+
+        Args:
+            pdu: Parsed request PDU
+
+        Returns:
+            error_status, error_index, varbinds
         """
         beef = self.script.request_beef()
         err_status = NO_ERROR
@@ -130,10 +135,13 @@ class BeefSNMPSocket(object):
         return err_status, err_index, r
 
     def snmp_getbulk_response(self, pdu):
-        """
-        Process SNMP GETBULK request
-        :param pdu: Parsed request PDU
-        :return: error_status, error_index, varbinds
+        """Process SNMP GETBULK request
+
+        Args:
+            pdu: Parsed request PDU
+
+        Returns:
+            error_status, error_index, varbinds
         """
         beef = self.script.request_beef()
         r = []

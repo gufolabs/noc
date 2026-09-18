@@ -38,7 +38,7 @@ Ext.define("NOC.inv.inv.plugins.cross.CrossPanel", {
   //
   onReload: function(){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + me.currentId + "/plugin/cross/",
       method: "GET",
       scope: me,

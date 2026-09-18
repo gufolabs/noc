@@ -26,7 +26,7 @@ class TimePatternTerm(NOCModel):
     Time pattern terms
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = "Time Pattern Term"
         verbose_name_plural = "Time Pattern Terms"
         db_table = "main_timepatternterm"
@@ -39,7 +39,7 @@ class TimePatternTerm(NOCModel):
     term = models.CharField("Term", max_length=256)
 
     def __str__(self):
-        return "%s: %s" % (self.time_pattern.name, self.term)
+        return f"{self.time_pattern.name}: {self.term}"
 
     @classmethod
     def get_by_id(cls, oid: int) -> Optional["TimePatternTerm"]:

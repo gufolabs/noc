@@ -32,7 +32,7 @@ class Script(BaseScript):
 
         r = []
         if interface:
-            cmd = "show interface brief | include ^%s" % interface
+            cmd = f"show interface brief | include ^{interface}"
         else:
             cmd = "show interface brief | excl Port"
         for ln in self.cli(cmd).splitlines():

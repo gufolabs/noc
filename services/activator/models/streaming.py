@@ -7,19 +7,19 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Optional, Dict, Any
+from typing import Any
 
 
 @dataclass
-class StreamingConfig(object):
+class StreamingConfig:
     # Liftbridge stream name
     stream: str
     # Liftbridge partition
     partition: int = 0
     # TimeZone offset in seconds
-    utc_offset: Optional[int] = 0
+    utc_offset: int | None = 0
     # Optional data
-    data: Optional[Dict[str, Any]] = None
+    data: dict[str, Any] | None = None
 
     def get_data(self):
         """

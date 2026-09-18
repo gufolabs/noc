@@ -11,7 +11,7 @@ from noc.sa.models.managedobjectprofile import ManagedObjectProfile
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Check ManagedObjectProfile in DB
         mop_req = self.db.execute(
             "SELECT count(*) FROM sa_managedobjectprofile where length(metrics) > 6"

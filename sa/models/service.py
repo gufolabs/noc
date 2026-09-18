@@ -11,10 +11,11 @@ import logging
 import operator
 from collections import defaultdict
 from threading import Lock
-from typing import Any, Dict, Optional, Iterable, List, Union, Tuple
+from typing import Any, Optional, Iterable
 
 # Third-party modules
 import orjson
+from hashlib import sha512
 from bson import ObjectId
 from mongoengine.document import Document, EmbeddedDocument
 from mongoengine.fields import (
@@ -30,6 +31,7 @@ from mongoengine.fields import (
     BooleanField,
 )
 from mongoengine.queryset.visitor import Q as m_q
+from jinja2 import Template
 import cachetools
 
 # NOC modules
@@ -40,8 +42,9 @@ from noc.core.model.decorator import on_save, on_delete_check, on_init, tree
 from noc.core.resourcegroup.decorator import resourcegroup
 from noc.core.wf.decorator import workflow
 from noc.core.change.decorator import change
+from noc.core.change.policy import change_tracker
 from noc.core.service.loader import get_service
-from noc.core.models.servicestatus import Status
+from noc.core.models.servicestatus import Status, AffectedItem
 from noc.core.models.serviceinstanceconfig import InstanceType, ServiceInstanceConfig
 from noc.core.models.inputsources import InputSource
 from noc.core.mx import MessageType, send_message, MessageMeta, get_subscription_id
@@ -50,9 +53,11 @@ from noc.core.etl.remotemappings import mappings
 from noc.core.diagnostic.types import DiagnosticConfig, DiagnosticState
 from noc.core.diagnostic.decorator import diagnostic
 from noc.core.validators import is_objectid
-from noc.core.watchers.types import ObjectEffect, WatchItem
-from noc.core.watchers.decorator import watchers, WATCHER_JCLS, get_next_ts
-from noc.core.scheduler.scheduler import Scheduler
+from noc.core.watchers.types import ObjectEffect
+from noc.core.watchers.decorator import watchers
+from noc.core.defer import call_later, defer
+from noc.core.hash import hash_int
+from noc.core.checkers.base import CheckResult, Check, CAPS_PROFILE_CHECK
 from noc.crm.models.subscriber import Subscriber
 from noc.crm.models.supplier import Supplier
 from noc.main.models.remotesystem import RemoteSystem
@@ -66,6 +71,7 @@ from noc.inv.models.resourcegroup import ResourceGroup
 from noc.sa.models.diagnosticitem import DiagnosticItem
 from noc.sa.models.serviceinstance import ServiceInstance
 from noc.sa.models.objectwatchersitem import WatchDocumentItem
+from noc.sa.models.objectdiagnosticconfig import ObjectDiagnosticConfig
 from noc.pm.models.agent import Agent
 from noc.config import config
 
@@ -76,6 +82,59 @@ _path_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 SVC_REF_PREFIX = "svc"
 SCHEDULER = "scheduler"
 SVC_AC = "Service | Status | Change"
+
+
+class StatusAffectedItem(EmbeddedDocument):
+    """
+    Factors affected to service oper status
+    Attributes:
+        * id: Factors instance id
+        * reason: Text reason that factors applied
+        * service_status: Set oper status/ for service factors
+        * label: Optional factor description
+        * weight: Factors weight
+        * inactive: Factors not affected
+        * source: Factor source
+    """
+
+    meta = {"strict": False, "auto_create_index": False}
+
+    id = StringField(required=True)
+    service_status: Status = EnumField(Status, default=Status.UNKNOWN)
+    reason = StringField(required=True)
+    label = StringField(required=False)
+    weight = IntField(default=1)
+    inactive = BooleanField(default=False)
+    source = StringField(required=True, default="other")
+
+    def __str__(self) -> str:
+        if self.inactive:
+            return f"{self.source} ({self.service_status}) INACTIVE"
+        return f"{self.source} ({self.service_status})"
+
+    @property
+    def item(self) -> "AffectedItem":
+        """Return Affected"""
+        return AffectedItem(
+            id=self.id,
+            reason=self.reason,
+            service_status=self.service_status,
+            label=self.label or "",
+            weight=self.weight,
+            source=self.source,
+        )
+
+    @classmethod
+    def from_item(cls, data: AffectedItem) -> "StatusAffectedItem":
+        """Build item from data"""
+        return StatusAffectedItem(
+            id=str(data.id),
+            service_status=data.service_status,
+            reason=data.reason,
+            label=data.label,
+            weight=data.weight,
+            source=data.source,
+        )
 
 
 class ServiceDependency(EmbeddedDocument):
@@ -146,12 +205,27 @@ class ServiceDependency(EmbeddedDocument):
     # propagate_status = BooleanField(default=False)
     # ignore = BooleanField(default=False)
 
-    def is_match(self) -> bool:
-        if not self.service:
+    def is_match_status(self, status: Status) -> bool:
+        # port ?
+        if self.min_status and status < self.min_status:
             return False
-        if self.min_status and self.service.oper_status < self.min_status:
-            return False
-        return not (self.max_status and self.service.oper_status > self.max_status)
+        return not (self.max_status and status > self.max_status)
+
+    def get_names(self, me: "Service", connected: "Service") -> list[str]:
+        """Gen Connected instance name"""
+        r = {""}
+        if not self.name_template:
+            return list(r)
+        tmpl: Template = Template(self.name_template)
+        for num in range(self.active_instances):
+            r.add(tmpl.render(num=num, me=me, connected=connected))
+        return sorted(r)
+
+    def is_match_service(self, svc: "Service") -> bool:
+        """port ?"""
+        if self.service and self.service.id == svc.id:
+            return True
+        return self.group and self.group.id in svc.effective_service_groups
 
     # def is_match(
     #     self,
@@ -199,6 +273,7 @@ class Service(Document):
             "profile",
             "parent",
             "state",
+            "dependency_services.service",
             ("caps.capability", "caps.value"),
             ("mappings.remote_system", "mappings.remote_id"),
             "sla_probe",
@@ -221,9 +296,14 @@ class Service(Document):
     # Parent service
     parent: "Service" = PlainReferenceField("self", required=False)
     # Subscriber information
-    subscriber: Optional[Subscriber] = ReferenceField(Subscriber, required=False)
+    subscriber: Subscriber | None = ReferenceField(Subscriber, required=False)
+    # Oper Status Info
     oper_status: Status = EnumField(Status, default=Status.UNKNOWN)
+    # oper_status_factors: List[StatusAffectedItem] = EmbeddedDocumentListField()
     oper_status_change = DateTimeField(required=False, default=datetime.datetime.now)
+    # affect_oper_status: Status = EnumField(Status, default=Status.UNKNOWN)
+    # direct_oper_status: Status = EnumField(Status, default=Status.UNKNOWN)
+    oper_status_factors = EmbeddedDocumentListField(StatusAffectedItem)
     # Service oper status settings
     status_transfer_policy = StringField(
         choices=[
@@ -234,7 +314,7 @@ class Service(Document):
         ],
         default="P",
     )
-    dependency_services: List["ServiceDependency"] = EmbeddedDocumentListField(ServiceDependency)
+    dependency_services: list["ServiceDependency"] = EmbeddedDocumentListField(ServiceDependency)
     calculate_status_function = StringField(
         choices=[
             ("D", "Disable"),
@@ -246,7 +326,7 @@ class Service(Document):
         ],
         default="P",
     )
-    calculate_status_rules: List["CalculatedStatusRule"] = EmbeddedDocumentListField(
+    calculate_status_rules: list["CalculatedStatusRule"] = EmbeddedDocumentListField(
         CalculatedStatusRule
     )
     #
@@ -273,8 +353,8 @@ class Service(Document):
     cpe_model = StringField()
     cpe_group = StringField()
     # Capabilities
-    caps: List[CapsItem] = EmbeddedDocumentListField(CapsItem)
-    diagnostics: List[DiagnosticItem] = EmbeddedDocumentListField(DiagnosticItem)
+    caps: list[CapsItem] = EmbeddedDocumentListField(CapsItem)
+    diagnostics: list[DiagnosticItem] = EmbeddedDocumentListField(DiagnosticItem)
     # Link to agent
     agent = PlainReferenceField(Agent)
     # Integration with external NRI and TT systems
@@ -293,11 +373,20 @@ class Service(Document):
     static_client_groups = ListField(ObjectIdField())
     effective_client_groups = ListField(ObjectIdField())
     # Remote Mappings
-    mappings: List[RemoteMappingItem] = EmbeddedDocumentListField(RemoteMappingItem)
+    mappings: list[RemoteMappingItem] = EmbeddedDocumentListField(RemoteMappingItem)
     # Watchers
-    watchers: List[WatchDocumentItem] = EmbeddedDocumentListField(WatchDocumentItem)
-    watcher_wait_ts: Optional[datetime.datetime] = DateTimeField(required=False)
+    watchers: list[WatchDocumentItem] = EmbeddedDocumentListField(WatchDocumentItem)
+    watcher_wait_ts: datetime.datetime | None = DateTimeField(required=False)
     # maintenances
+
+    SUPPORTED_EFFECTS = frozenset(
+        [
+            ObjectEffect.MAINTENANCE,
+            ObjectEffect.WIPING,
+            ObjectEffect.WF_EVENT,
+            ObjectEffect.DIAGNOSTIC_CHECK,
+        ],
+    )
 
     _id_cache = cachetools.TTLCache(maxsize=500, ttl=60)
     _bi_id_cache = cachetools.TTLCache(maxsize=500, ttl=60)
@@ -307,7 +396,7 @@ class Service(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Service"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Service"]:
         return Service.objects.filter(id=oid).first()
 
     @classmethod
@@ -322,7 +411,7 @@ class Service(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_instance_cache"))
-    def get_by_instance(cls, address, port: Optional[str] = None) -> Optional["Service"]:
+    def get_by_instance(cls, address, port: str | None = None) -> Optional["Service"]:
         if port:
             # Service.objects.filter(static_instances__match={"address": address, "port": port})
             si = ServiceInstance.objects.filter(addresses__address=address, port=port).first()
@@ -341,7 +430,7 @@ class Service(Document):
         ).first()
 
     @classmethod
-    def get_by_managed_object_id(cls, mo_id: int) -> List["Service"]:
+    def get_by_managed_object_id(cls, mo_id: int) -> list["Service"]:
         """"""
         return list(
             ServiceInstance.objects.filter(
@@ -354,7 +443,7 @@ class Service(Document):
         )
 
     @classmethod
-    def get_by_remote_ids(cls, remote_system: RemoteSystem, ids: List[str]) -> List[str]:
+    def get_by_remote_ids(cls, remote_system: RemoteSystem, ids: list[str]) -> list[str]:
         """Return object IDS by remote_ids"""
         return Service.objects.filter(
             m_q(remote_system=str(remote_system.id), remote_id__in=ids)
@@ -362,7 +451,7 @@ class Service(Document):
         ).scalar("id")
 
     @classmethod
-    def get_exposed_labels_for_object(cls, mo_id: int) -> List[str]:
+    def get_exposed_labels_for_object(cls, mo_id: int) -> Iterable[list[str]]:
         """Return exposed labels for Managed Object"""
         from noc.sa.models.serviceinstance import ServiceInstance
 
@@ -392,7 +481,7 @@ class Service(Document):
             yield Label.build_expose_labels(svc["effective_labels"], "expose_sa_object")
 
     @classmethod
-    def get_min_wait_ts(cls) -> Optional[datetime.datetime]:
+    def get_min_wait_ts(cls) -> datetime.datetime | None:
         """"""
         return (
             Service.objects()
@@ -408,9 +497,11 @@ class Service(Document):
     def iter_changed_datastream(self, changed_fields=None):
         if config.datastream.enable_service:
             yield "service", self.id
+            if self.parent:
+                yield "service", self.parent.id
 
     @property
-    def service_instances(self) -> List["ServiceInstance"]:
+    def service_instances(self) -> list["ServiceInstance"]:
         return list(ServiceInstance.objects.filter(service=self.id))
 
     @property
@@ -451,7 +542,12 @@ class Service(Document):
                 return True
         return False
 
-    def check_deployed(self) -> Optional[str]:
+    @property
+    def is_productive(self) -> bool:
+        """Apply calculate oper status"""
+        return self.state.is_productive
+
+    def check_deployed(self) -> str | None:
         """Generate Workflow signal"""
         statuses = {si.is_deployed for si in self.service_instances}
         if True not in statuses:
@@ -460,14 +556,14 @@ class Service(Document):
             return "partial"
         return "full"
 
-    def get_nested(self) -> List["Service"]:
+    def get_nested(self) -> list["Service"]:
         """Returns list of nested services"""
         r = [self]
         for d in Service.objects.filter(parent=self):
             r += d.get_nested()
         return r
 
-    def get_effective_managed_object(self) -> Optional[Any]:
+    def get_effective_managed_object(self) -> Any | None:
         """Return ManagedObject to upper level"""
         path = self.get_path()
         for mo in ServiceInstance.objects.filter(
@@ -493,9 +589,17 @@ class Service(Document):
             or "caps" in self._changed_fields
             or "effective_labels" in self._changed_fields
         ):
-            self.diagnostic.refresh_diagnostics()
+            self.diagnostic.reload_diagnostics()
             self.refresh_status()
             self._refresh_managed_object()
+        if (not hasattr(self, "_changed_fields") and self.dependency_services) or (
+            hasattr(self, "_changed_fields") and "dependency_services" in self._changed_fields
+        ):
+            call_later(
+                "noc.sa.models.service.refresh_connected_services",
+                delay=20,
+                svc_ids=[self.id],
+            )
 
     def _refresh_managed_object(self):
         from noc.sa.models.servicesummary import ServiceSummary
@@ -510,7 +614,7 @@ class Service(Document):
             return self.profile.status_transfer_policy
         return self.status_transfer_policy
 
-    def get_nested_ids(self) -> List[ObjectId]:
+    def get_nested_ids(self) -> list[ObjectId]:
         """Return id of this and all nested services"""
         # $graphLookup hits 100Mb memory limit. Do not use it
         seen = {self.id}
@@ -526,25 +630,32 @@ class Service(Document):
         seen -= {self.id}
         return list(seen)
 
-    def iter_dependent_services(self) -> Iterable[Tuple["Service", str]]:
+    def get_dependency_config(
+        self, dependency: "Service", link_type: str | None = None
+    ) -> ServiceDependency | None:
+        """Return Dependency config as rule"""
+        link_cfg = None
+        for sd in self.dependency_services:
+            if sd.is_match_service(dependency):
+                return sd
+            if link_type and not link_cfg and sd.type == link_type:
+                link_cfg = sd
+        if link_cfg:
+            return link_cfg
+        for sd in self.profile.calculate_status_rules:
+            if link_type and not link_cfg and sd.type == link_type:
+                link_cfg = sd
+        return link_cfg
+
+    def iter_dependent_services(self) -> Iterable[tuple["Service", str]]:
         """
         Iterable over dependent service, that affected self changed: status_change
         """
         # Children
-        nested = self.get_nested_ids()
-        # Services
-        services = []
-        for deps in ServiceInstance.objects.filter(
-            service=self,
-            dependencies__exists=True,
-            dependencies__ne=[],
-        ).scalar("dependencies"):
-            services += deps
-        for svc in Service.objects.filter(id__in=nested + services):
-            if svc.id in nested:
-                yield svc, "D"
-            else:
-                yield svc, "S"
+        for svc in Service.objects.filter(parent=self):
+            yield svc, "D"
+        for svc in self.get_connected_my():
+            yield svc, "S"
 
     def iter_dependencies_services(self, filter_match_status: bool = False) -> Iterable["Service"]:
         """Iterate over service topology, with affected statuses"""
@@ -554,37 +665,64 @@ class Service(Document):
             if item.service:
                 yield item.service
             if item.group and item.group.technology.service_model == "sa.Service":
-                for svc in Service.objects.filter(effective_service_groups=item.group):
-                    yield svc
+                yield from Service.objects.filter(effective_service_groups=item.group)
 
-    def iter_dependency_status(self) -> Iterable[Tuple[Status, int]]:
+    def iter_dependency_status(self) -> Iterable[tuple[Status, "Service"]]:
         """Iterate over dependency services status"""
-        for svc in Service.objects.filter(parent=self):
-            p = svc.get_status_transfer_policy()
-            if p == "S":
-                yield svc.oper_status, svc.profile.weight
-            elif p == "T":
-                # Transparent
-                # yield from svc.iter_dependency_status("self_only")
-                ...
-
-        for item in self.dependency_services:
-            if not item.is_match():
+        for svc, link_type in self.iter_dependent_services():
+            cfg = self.get_dependency_config(svc, link_type=link_type)
+            if not cfg or not cfg.is_match_status(svc.oper_status):
                 continue
-            yield item.service, item.service.profile.weight
+            if cfg.set_status:
+                yield cfg.set_status, svc
+            else:
+                yield svc.oper_status, svc
+            # Transparent
 
-    def set_oper_status(self, status: Status, timestamp: Optional[datetime.datetime] = None):
+    @property
+    def oper_status_root_factor(self) -> AffectedItem | None:
+        """Calculate root factor affected to OperStatus"""
+        root = None
+        for item in self.oper_status_factors:
+            if item.inactive or item.service_status < self.oper_status:
+                continue
+            # Direct - priority
+            if item.source == "alarm":
+                return item.item
+            root = item.item
+        return root
+
+    def get_alarm_root_factor(self) -> str | None:
+        """"""
+        o = self.oper_status_root_factor
+        if not o or o.source == "alarm":
+            return o
+        if o.source == "dependency":
+            svc = Service.get_by_id(o.id)
+            if svc:
+                return svc.get_alarm_root_factor()
+        return None
+
+    def set_oper_status(
+        self,
+        status: Status,
+        timestamp: datetime.datetime | None = None,
+        affected: list[AffectedItem] | None = None,
+    ):
         """
         Set Operational Status for Service
         Args:
             status: New status
             timestamp: Time when status changed
+            affected: List factors affected to alarm Status
         """
         # Check state on is_productive
         # if not self.state.is_productive:
         #    return
         if isinstance(status, str):
             status = Status[status]
+        if status == Status.UNKNOWN:
+            status = self.get_default_oper_status()
         if self.oper_status == status:
             logger.debug("[%s] Status is same. Skipping", self.id)
             return
@@ -608,8 +746,22 @@ class Service(Document):
 
         self.oper_status = status
         self.oper_status_change = timestamp
+        if affected and not self.oper_status_factors:
+            self.oper_status_factors = [StatusAffectedItem.from_item(f) for f in affected or []]
+        else:
+            factors = {f.id: StatusAffectedItem.from_item(f) for f in affected or []}
+            for sf in self.oper_status_factors:
+                if sf.id in factors:
+                    del factors[sf.id]
+                else:
+                    sf.inactive = True
+            if factors:
+                self.oper_status_factors += list(factors.values())
         Service.objects.filter(id=self.id).update(
-            oper_status=self.oper_status, oper_status_change=self.oper_status_change
+            oper_status=self.oper_status,
+            oper_status_change=self.oper_status_change,
+            # For register message
+            oper_status_factors=self.oper_status_factors[:10] if status.value > 1 else [],
         )
         # Register outage
         svcs = get_service()
@@ -627,12 +779,14 @@ class Service(Document):
                     "from_status": os.value,
                     "to_status": self.oper_status.value,
                     "in_maintenance": int(self.in_maintenance),
+                    "affected": orjson.dumps([s.item for s in self.oper_status_factors]).decode(),
+                    # Affected
                 }
             ],
         )
         if self.profile.is_enabled_notification:
             headers = self.get_mx_message_headers(self.effective_labels)
-            logger.debug("Sending status change notification: H(%s)", headers)
+            logger.info("Sending status change notification: H(%s)", headers)
             msg = self.get_message_context()
             # msg["managed_object"] = self.managed_object.get_message_context()
             msg["from_status"] = {"id": os, "name": os.name}
@@ -651,7 +805,10 @@ class Service(Document):
             return
         self.register_alarm(os)
 
-    def get_message_context(self) -> Dict[str, Any]:
+    def get_message_context(
+        self,
+        affected: list[AffectedItem] | None = None,
+    ) -> dict[str, Any]:
         """Service Message Ctx"""
         r = {
             "id": str(self.id),
@@ -662,35 +819,50 @@ class Service(Document):
             "in_maintenance": self.in_maintenance,
             "agreement_id": self.agreement_id,
             "caps": self.get_caps(),
+            "affected": [],
         }
         if self.remote_system:
-            r["remote_system"] = {
-                "id": str(self.remote_system.id),
-                "name": self.remote_system.name,
+            r |= {
+                "remote_system": {
+                    "id": str(self.remote_system.id),
+                    "name": self.remote_system.name,
+                },
+                "remote_id": self.remote_id,
             }
-            r["remote_id"] = self.remote_id
         if self.profile.remote_system:
-            r["profile"]["remote_system"] = {
-                "id": str(self.profile.remote_system.id),
-                "name": self.profile.remote_system.name,
+            r["profile"] |= {
+                "remote_system": {
+                    "id": str(self.profile.remote_system.id),
+                    "name": self.profile.remote_system.name,
+                },
+                "remote_id": self.profile.remote_id,
             }
-            r["profile"]["remote_id"] = self.profile.remote_id
+        for ai in self.oper_status_factors:
+            r["affected"].append(
+                {
+                    "id": ai.id,
+                    "status": {"id": ai.service_status.value, "name": ai.service_status.name},
+                    "source": ai.source,
+                    "inactive": ai.inactive,
+                    "summary": ai.reason,
+                }
+            )
         return r
 
-    def get_mx_message_headers(self, labels: Optional[List[str]] = None) -> Dict[str, bytes]:
+    def get_mx_message_headers(self, labels: list[str] | None = None) -> dict[str, bytes]:
         return {
             key.config.header: key.clean_header_value(value)
             for key, value in self.message_meta.items()
         }
 
     @property
-    def alarms_stream_and_partition(self) -> Tuple[str, int]:
+    def alarms_stream_and_partition(self) -> tuple[str, int]:
         fm_pool = Pool.get_default_fm_pool()
         slots = config.get_slot_limits(f"correlator-{fm_pool}") or 1
         return f"dispose.{fm_pool.name}", self.bi_id % slots
 
     @property
-    def message_meta(self) -> Dict[MessageMeta, Any]:
+    def message_meta(self) -> dict[MessageMeta, Any]:
         """Message Meta for instance"""
         return {
             MessageMeta.WATCH_FOR: get_subscription_id(self),
@@ -698,6 +870,9 @@ class Service(Document):
             MessageMeta.PROFILE: get_subscription_id(self.profile),
             MessageMeta.GROUPS: list(self.effective_service_groups),
             MessageMeta.LABELS: list(self.effective_labels),
+            MessageMeta.REMOTE_SYSTEMS: [
+                str(m.remote_system.id) for m in self.iter_remote_mappings()
+            ],
         }
 
     def get_alarm_severity(self) -> int:
@@ -707,17 +882,26 @@ class Service(Document):
             return default_map[self.oper_status.value]
         return 0
 
+    @classmethod
+    def get_alarm_reference(cls, sid: ObjectId, return_hash: bool = False) -> str:
+        """Generate Service Alarm Reference"""
+        reference = f"{SVC_REF_PREFIX}:{sid}"
+        if return_hash:
+            return sha512(reference.encode("utf-8")).digest()[:10]
+        return reference
+
     def get_alarm_msg(self, old_status):
         """"""
         iface = self.interface
-        if self.profile.raise_status_alarm_policy == "R":
+        if self.profile.raise_status_alarm_policy in {"G", "R"}:
             # Group
             msg = {
                 "$op": "ensure_group",
-                "reference": f"{SVC_REF_PREFIX}:{self.id}",
+                "reference": self.get_alarm_reference(self.id),
                 "g_type": 3,
                 "name": self.label,
                 "alarm_class": SVC_AC,
+                "severity": self.get_alarm_severity(),
                 "labels": self.labels,
                 "vars": {
                     "description": self.description,
@@ -735,9 +919,10 @@ class Service(Document):
             # Disposition
             msg = {
                 "$op": "disposition",
-                "reference": f"{SVC_REF_PREFIX}:{self.id}",
+                "reference": self.get_alarm_reference(self.id),
                 "name": self.label,
                 "alarm_class": self.profile.raise_alarm_class.name,
+                "severity": self.get_alarm_severity(),
                 "labels": self.labels,
                 "vars": {
                     "description": self.description,
@@ -746,7 +931,7 @@ class Service(Document):
                     "from_status": old_status.name,
                     "to_status": self.oper_status.name,
                 },
-                "groups": [{"reference": f"{SVC_REF_PREFIX}:{self.id}"}],
+                "groups": [{"reference": self.get_alarm_reference(self.id)}],
             }
             if iface:
                 msg["vars"]["interface"] = str(iface.name)
@@ -760,7 +945,7 @@ class Service(Document):
         old_status: Previous status
         """
         # Raise alarm
-        if self.oper_status > Status.UP >= old_status:
+        if self.oper_status > Status.UP:
             msg = self.get_alarm_msg(old_status)
             if not msg:
                 return
@@ -778,13 +963,85 @@ class Service(Document):
         logger.info("[%s] Send alarm message: %s", self.id, msg)
         svc.publish(orjson.dumps(msg), stream=stream, partition=partition)
 
-    def refresh_status(self):
-        """Calculate Operative Status, maximum over Directed and Affected Status"""
-        status = self.get_direct_status()
-        status = max(status, self.get_affected_status())
-        self.set_oper_status(status)
+    def get_default_oper_status(self) -> Status:
+        """
+        Default Service Oper Status
+        UNKNOWN - disable calculate satus (if not set status_function)
+        UP - default
+        """
+        if self.calculate_status_function == "D" or (
+            self.calculate_status_function == "P" and self.profile.calculate_status_function == "D"
+        ):
+            return Status.UNKNOWN
+        return Status.UP
 
-    def get_alarm_status(self) -> Status:
+    def get_connected_me(self) -> Iterable["Service"]:
+        """Get connected services to me"""
+        # Any config ?
+        # From Config
+        for svc in Service.objects.filter(dependency_services__service=self):
+            yield svc
+        # Groups
+        groups = []
+        for cfg in self.dependency_services:
+            if cfg.group and cfg.type == "S":
+                groups.append(cfg.group)
+        if groups:
+            for svc in Service.objects.filter(effective_client_groups__in=groups):
+                yield svc
+        # ETL Service Instance
+        for svc in ServiceInstance.objects.filter(
+            type=InstanceType.SERVICE_CLIENT,
+            remote_id=self.remote_id,  # source-etl
+        ).scalar("service"):
+            yield svc
+        # InstanceConfig
+
+    def get_connected_services(self) -> dict[str, set[str]]:
+        """"""
+        r = defaultdict(set)
+        for svc in self.get_connected_me():
+            cfg_deps = svc.get_dependency_config(self)
+            if not cfg_deps:
+                continue
+            for i_name in cfg_deps.get_names(svc, self):
+                r[i_name or None].add(svc.id)
+        return r
+
+    def get_connected_my(self):
+        """Get connected my services, Required for refresh service status"""
+        # From Config
+        from noc.sa.models.serviceinstance import ServiceInstance
+
+        for cfg in self.dependency_services:
+            if cfg.service:
+                yield cfg.service
+        # Group
+        if self.effective_client_groups:
+            for svc in Service.objects.filter(
+                effective_service_groups__in=self.effective_client_groups,
+            ):
+                yield svc
+        # ETL Service Instance
+        for svc in ServiceInstance.objects.filter(
+            type=InstanceType.SERVICE_CLIENT,
+            service=self.id,
+        ).scalar("service"):
+            yield svc
+
+    def refresh_status(self, update_direct: bool = True, update_affected: bool = True):
+        """Calculate Operative Status, maximum over Directed and Affected Status"""
+        affected = []
+        if self.is_productive:
+            status = max(
+                self.get_direct_status(affected=affected),
+                self.get_affected_status(affected=affected),
+            )
+        else:
+            status = Status.UNKNOWN
+        self.set_oper_status(status, affected=affected)
+
+    def get_alarm_status(self, affected: list[AffectedItem] | None = None) -> Status:
         """
         Calculate alarm status for service
         1. If alarm affected policy is Disabled. Return UNKNOWN
@@ -804,12 +1061,14 @@ class Service(Document):
         instance_status = defaultdict(lambda: Status.UP)
         effective_clients = frozenset(str(x) for x in self.effective_client_groups)
         # Matcher ?
-        instances: Optional[List["ServiceInstance"]] = None
+        instances: list["ServiceInstance"] | None = None
         max_weight = 0
         # Calculate Alarm status
         for aa in ActiveAlarm.objects.filter(affected_services=self.id):
             # Match Rule
-            rule = self.profile.get_rule_by_alarm(aa)
+            rule = self.profile.get_rule_by_alarm(
+                aa, is_reference=aa.vars.get("service") == str(self.id)
+            )
             if not rule:
                 continue
             # Calculate Status
@@ -823,6 +1082,8 @@ class Service(Document):
             )
             if status == Status.UNKNOWN:
                 continue
+            if affected is not None:
+                affected.append(AffectedItem.from_alarm(aa, status))
             if not rule.affected_instance:
                 alarm_status = max(status, alarm_status)
                 continue
@@ -874,7 +1135,7 @@ class Service(Document):
         # Calculate affected status
         return self.calculate_status(r)
 
-    def get_diagnostics_status(self) -> Status:
+    def get_diagnostics_status(self, affected: list[AffectedItem] | None = None) -> Status:
         if not self.profile.diagnostic_status:
             return Status.UNKNOWN
         values = self.get_diagnostic_values()
@@ -884,12 +1145,19 @@ class Service(Document):
                 and d.diagnostic in values
                 and values[d.diagnostic].state == DiagnosticState.failed
             ):
+                if affected is not None:
+                    affected.append(
+                        AffectedItem.from_diagnostic(values[d.diagnostic], d.failed_status)
+                    )
                 return d.failed_status
         return Status.UNKNOWN
 
-    def get_direct_status(self) -> Status:
+    def get_direct_status(self, affected: list[AffectedItem] | None = None) -> Status:
         """Getting oper_status from Alarm and Diagnostics"""
-        return max(self.get_alarm_status(), self.get_diagnostics_status())
+        return max(
+            self.get_alarm_status(affected=affected),
+            self.get_diagnostics_status(affected=affected),
+        )
 
     def get_calculate_status_function(self) -> str:
         """"""
@@ -897,12 +1165,12 @@ class Service(Document):
             return self.profile.calculate_status_function
         return self.calculate_status_function
 
-    def get_effective_calculate_rules(self) -> List["CalculatedStatusRule"]:
+    def get_effective_calculate_rules(self) -> list["CalculatedStatusRule"]:
         if self.calculate_status_function == "P":
             return self.profile.calculate_status_rules
         return self.calculate_status_rules
 
-    def calculate_status(self, statuses: Dict[Status, int]) -> Status:
+    def calculate_status(self, statuses: dict[Status, int]) -> Status:
         """Calculate status by Policy"""
         if not statuses:
             return Status.UNKNOWN
@@ -919,44 +1187,46 @@ class Service(Document):
                 return status
         return Status.UNKNOWN
 
-    def get_affected_status(self) -> Status:
+    def get_affected_status(self, affected: list[AffectedItem] | None = None) -> Status:
         """Getting operational status from dependencies services"""
         r = {}
         if self.profile.calculate_status_function == "D":
             return Status.UNKNOWN
-        for status, weight in self.iter_dependency_status():
+        for status, svc in self.iter_dependency_status():
             if status == Status.UNKNOWN:
                 continue
+            weight = svc.profile.weight
             if status not in r:
                 r[status] = weight
             else:
                 r[status] += weight
+            if status.value > 1 and affected is not None:
+                affected.append(AffectedItem.from_dependency(svc, status))
         if not r:
             return Status.UNKNOWN
         return self.calculate_status(r)
 
     @classmethod
-    def find_alarm_affected_services(cls, alarm) -> List[str]:
+    def find_alarm_affected_services(cls, alarm) -> list[str]:
         """Find affected services on topology"""
         r = []
         if "service" in alarm.vars and is_objectid(alarm.vars["service"]):
-            svc_id = alarm.vars["service"]
-        elif "service" in alarm.components and getattr(alarm.components, "service", None):
-            svc_id = alarm.components.service.id
-        else:
-            return r
-        for svc in Service.objects.filter(service_path=svc_id):
-            if svc.profile.get_rule_by_alarm(alarm):
-                r.append(svc.id)
-        if not r:
-            r.append(ObjectId(svc_id))
+            return [ObjectId(alarm.vars["service"])]
+        if "service" in alarm.components and getattr(alarm.components, "service", None):
+            return [alarm.components.service.id]
+        # for svc in Service.objects.filter(id=svc_id):
+        #    if svc.profile.get_rule_by_alarm(alarm, is_reference=True):
+        #        r.append(svc.id)
+        # if not r:
+        #    r.append(ObjectId(svc_id))
         return r
 
     @classmethod
-    def get_services_by_alarm(cls, alarm) -> List[str]:
+    def get_services_by_alarm(cls, alarm) -> list[str]:
         """Return service Ids for requested alarm"""
         if alarm.alarm_class.name == SVC_AC:
             return []
+        services = set()
         if "service" in alarm.components or "service" in alarm.vars:
             return cls.find_alarm_affected_services(alarm)
         q = m_q()
@@ -966,7 +1236,7 @@ class Service(Document):
         if not q and not filters:
             return []
         logger.info("Match Profiles: %s", filters)
-        services, profile_rules = set(), []
+        profile_rules = []
         # Iter Alarm filters
         for instance_q, profiles in filters:
             if instance_q is None:
@@ -1018,14 +1288,14 @@ class Service(Document):
         return Label.get_effective_setting(label, "enable_service")
 
     @classmethod
-    def iter_effective_labels(cls, instance: "Service") -> Iterable[List[str]]:
+    def iter_effective_labels(cls, instance: "Service") -> Iterable[list[str]]:
         yield list(instance.labels or [])
         yield list(ServiceProfile.iter_lazy_labels(instance.profile))
         for c in instance.iter_caps():
             if c.config.set_label:
                 yield Label.ensure_labels(c.get_labels(), ["sa.Service"])
 
-    def get_effective_agent(self) -> Optional[Agent]:
+    def get_effective_agent(self) -> Agent | None:
         """Find effective agent for service"""
         svc = self
         while svc:
@@ -1034,67 +1304,61 @@ class Service(Document):
             svc = svc.parent
         return None
 
-    def update_object_watchers(
-        self,
-        to_watchers: List[WatchItem],
-        to_remove: Optional[List[Tuple[ObjectEffect, str, Optional[str]]]],
-        dry_run: bool = False,
-        bulk=None,
-    ):
-        """"""
-        updates = []
-        up_w = {(w.effect, w.key, w.remote_system): w for w in to_watchers}
-        for w in self.watchers:
-            rs = w.remote_system.name if w.remote_system else None
-            if to_remove and (w.effect, w.key, rs) in to_remove:
-                continue
-            update = up_w.pop((w.effect, w.key, rs), None)
-            if update:
-                w = WatchDocumentItem.from_item(update)
-            updates.append(w)
-        for w in up_w.values():
-            rs = RemoteSystem.get_by_name(w.remote_system) if w.remote_system else None
-            updates.append(WatchDocumentItem.from_item(w, remote_system=rs))
-        self.watchers = updates
-        wait_ts = self.get_wait_ts()
-        if self.watcher_wait_ts != wait_ts:
-            self.watcher_wait_ts = wait_ts
-        if dry_run or self._created:
+    def iter_instance_checks(self) -> Iterable[CheckResult]:
+        """Return instance supported checks"""
+        if not self.profile.caps_profile or self.profile.caps_profile.error_caps_policy != "C":
+            yield CheckResult(check=CAPS_PROFILE_CHECK, status=True, skipped=True, args={})
             return
-        m_ts = self.get_min_wait_ts()
-        if wait_ts and (not m_ts or wait_ts < m_ts):
-            scheduler = Scheduler(SCHEDULER)
-            scheduler.submit(jcls=WATCHER_JCLS, key="sa.Service", ts=get_next_ts(wait_ts))
-        set_op = {"watchers": self.watchers, "watcher_wait_ts": self.watcher_wait_ts}
-        self.update(**set_op)
+        status = True
+        for c in self.iter_caps(include_default=True):
+            if c.config.required and not c.value:
+                status = False
+                break
+        yield CheckResult(check=CAPS_PROFILE_CHECK, status=status, args={})
 
     def on_save_caps(self, changed_fields=None, dry_run: bool = False, **kwargs):
         """"""
         self.sync_instances()
         self.diagnostic.refresh_diagnostics()
-        self.refresh_status()
-        self._refresh_managed_object()
+        self.refresh_status(update_affected=False)
+        if self.profile.caps_exposed:
+            defer(
+                "noc.sa.models.service.refresh_exposed_caps",
+                key=hash_int(self.id),
+                svc_ids=[str(self.id)],
+            )
 
     def sync_instances(self):
         """Synchronize Config-base instance"""
         if self.profile.instance_policy != "C":
             return
-        instances: List[ServiceInstanceConfig] = []
+        instances: list[ServiceInstanceConfig] = []
+        # Dependencies, nanme, Instance Config, port ?, service list
+        connected_services = self.get_connected_services()
         for settings in self.profile.instance_settings:
             i_type = settings.get_instance_type()
             cfgs = i_type.from_settings(settings.get_config(), self, settings.name)
             if not cfgs:
                 continue
-            instances += cfgs
+            for cfg in cfgs:
+                if cfg.type == InstanceType.SERVICE_ENDPOINT and cfg.name in connected_services:
+                    cfg.services = list(connected_services.pop(cfg.name))
+                instances += [cfg]
         # Deps
+        for name in connected_services:
+            i_type = ServiceInstanceConfig.get_type(InstanceType.SERVICE_ENDPOINT)
+            cfg = i_type.from_config(name, services=list(connected_services[name]))
+            if not cfg:
+                continue
+            instances += [cfg]
         logger.debug("[%s] Synced instances from config: %s", self, instances)
         self.update_instances(InputSource.CONFIG, instances)
 
     def update_instances(
         self,
-        source: Union[str, InputSource],
-        instances: List[ServiceInstanceConfig],
-        last_update: Optional[datetime.datetime] = None,
+        source: str | InputSource,
+        instances: list[ServiceInstanceConfig],
+        last_update: datetime.datetime | None = None,
     ):
         """Synchronize instances for source"""
         if isinstance(source, str):
@@ -1108,8 +1372,11 @@ class Service(Document):
             instance = ServiceInstance.ensure_instance(self, cfg, settings)
             # Update Data, Run sync
             instance.update_config(cfg)
+            # replace to get_dependencies(service, port)
+            # config instances
             instance.register_endpoint(source, cfg.addresses)
-            instance.dependencies = cfg.services or None
+            if set(instance.dependencies) != set(cfg.services or []):
+                instance.dependencies = cfg.services
             # Add Source
             instance.seen(source, last_update, dry_run=True)
             instance.save()
@@ -1124,9 +1391,9 @@ class Service(Document):
         self,
         type: InstanceType,
         source: InputSource = InputSource.MANUAL,
-        name: Optional[str] = None,
-        fqdn: Optional[str] = None,
-        managed_object: Optional[Any] = None,
+        name: str | None = None,
+        fqdn: str | None = None,
+        managed_object: Any | None = None,
         # addresses
         # port
         # session_id ? register_session
@@ -1156,6 +1423,11 @@ class Service(Document):
         settings = self.profile.get_instance_config(type, name)
         si = ServiceInstance.ensure_instance(self, cfg, settings)
         changed = False
+        # si.dependencies = cfg.services
+        deps = [x.id for x in self.get_connected_me()]
+        if set(deps) != set(si.dependencies):
+            si.dependencies = deps
+            changed |= True
         # Update data
         si.seen(source)
         if si.fqdn != fqdn:
@@ -1172,9 +1444,9 @@ class Service(Document):
     @classmethod
     def get_component(
         cls,
-        managed_object: Optional[str] = None,
-        service: Optional[str] = None,
-        remote_ref: Optional[str] = None,
+        managed_object: str | None = None,
+        service: str | None = None,
+        remote_ref: str | None = None,
         **kwargs,
     ) -> Optional["Service"]:
         logger.debug("Getting service by component: %s", kwargs)
@@ -1189,17 +1461,28 @@ class Service(Document):
 
     def iter_diagnostic_configs(self) -> Iterable[DiagnosticConfig]:
         """Iterable diagnostic Config"""
-        yield from self.profile.iter_diagnostic_configs(self)
+        yield DiagnosticConfig(
+            # Reset if change IP/Policy change
+            "CAPS_REQ",
+            display_description="Capabilities check",
+            blocked=not self.profile.caps_profile
+            or self.profile.caps_profile.error_caps_policy != "C",
+            hide_enable=True,
+            run_policy="D",
+            checks=[Check(name=CAPS_PROFILE_CHECK, address="*")],
+        )
+        yield from ObjectDiagnosticConfig.iter_object_diagnostics(self)
+        # yield from self.profile.iter_diagnostic_configs(self)
 
     @classmethod
     def update_maintenance(
         cls,
         maintenance_id: str,
-        services: List["Service"],
+        services: list["Service"],
         start: datetime.datetime,
         affected_topology: bool = False,
-        remote_system: Optional[RemoteSystem] = None,
-        remote_ids: Optional[List[str]] = None,
+        remote_system: RemoteSystem | None = None,
+        remote_ids: list[str] | None = None,
     ):
         """Update Maintenance"""
         svcs = [s.id for s in services]
@@ -1215,7 +1498,7 @@ class Service(Document):
         for svc in Service.objects.filter(watchers__key=str(maintenance_id)):
             svc.stop_watch(ObjectEffect.MAINTENANCE, str(maintenance_id))
 
-    def get_check_ctx(self, include_credentials=False, **kwargs) -> Dict[str, Any]:
+    def get_check_ctx(self, include_credentials=False, **kwargs) -> dict[str, Any]:
         """"""
         return {
             "name": self.label,
@@ -1243,10 +1526,10 @@ class Service(Document):
         }
 
 
-def refresh_service_status(svc_ids: List[str]):
+def refresh_service_status(svc_ids: list[str]):
     logger.info("Refresh service status: %s", svc_ids)
     affected_paths = set()
-    for svc in Service.objects.filter(id__in=svc_ids):
+    for svc in Service.objects.filter(id__in=svc_ids).order_by("-parent"):
         os = svc.oper_status
         svc.refresh_status()
         if svc.parent and svc.oper_status != os:
@@ -1256,5 +1539,76 @@ def refresh_service_status(svc_ids: List[str]):
         return
     # Check changed
     # Update linked
-    for svc in Service.objects.filter(id__in=list(affected_paths)):
+    for svc in Service.objects.filter(id__in=list(affected_paths)).order_by("-parent"):
         svc.refresh_status()
+
+
+def refresh_connected_services(svc_ids: list[str]):
+    logger.info("Refresh connected services: %s", svc_ids)
+    from noc.sa.models.serviceinstance import ServiceInstance
+
+    affected = set()
+    for svc in Service.objects.filter(id__in=svc_ids):
+        connected = set(svc.get_connected_my())
+        if connected:
+            affected |= connected
+    for svc in ServiceInstance.objects.filter(
+        type=InstanceType.SERVICE_ENDPOINT,
+        dependencies__in=svc_ids,
+    ).scalar("service"):
+        affected.add(svc)
+    if not affected:
+        return
+    logger.info("Affected: %s", affected)
+    with change_tracker.bulk_changes():
+        for svc in affected:
+            svc.sync_instances()
+
+
+def refresh_exposed_caps(
+    object_ids: list[str] | None = None,
+    svc_profile_ids: list[str] | None = None,
+    svc_ids: list[str] | None = None,
+    user: str | None = None,
+):
+    """Syncronize exposed caps"""
+    from .serviceinstance import ServiceInstance
+    from noc.sa.models.managedobject import ManagedObject
+
+    if svc_profile_ids and not svc_ids:
+        for x in svc_profile_ids:
+            # Reset Profile Cache
+            ServiceProfile._reset_caches(ObjectId(x))
+        svc_ids = list(Service.objects.filter(profile__in=svc_profile_ids).values_list("id"))
+    match = {}
+    if object_ids:
+        match = {"managed_object": {"$in": [int(x) for x in object_ids]}}
+    elif svc_ids:
+        match = {
+            "managed_object": {"$exists": True},
+            "type": "asset",
+            "service": {"$in": [ObjectId(x) for x in svc_ids]},
+        }
+    else:
+        raise ValueError("Nothing update")
+
+    coll = ServiceInstance._get_collection()
+    r = defaultdict(set)
+    for row in coll.aggregate(
+        [
+            {"$match": match},
+            {"$project": {"managed_object": 1, "service": 1}},
+            {"$group": {"_id": "$managed_object", "services": {"$push": "$service"}}},
+        ]
+    ):
+        for svc_id in row["services"]:
+            r[svc_id].add(row["_id"])
+    if not r:
+        logger.info("Notfing to sync for exposed caps")
+        return
+    exposed_caps = defaultdict(dict)
+    for svc in Service.objects.filter(id__in=list(r.keys())):
+        for mo_id in r[svc.id]:
+            exposed_caps[mo_id] |= svc.get_caps(exposed_scope="sa.ManagedObject")
+    for mo in ManagedObject.objects.filter(id__in=list(exposed_caps.keys())):
+        mo.update_caps(exposed_caps.get(mo.id, {}), source=InputSource.DATABASE, scope="sa.Service")

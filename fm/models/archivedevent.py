@@ -45,7 +45,7 @@ class ArchivedEvent(Document):
     alarms = ListField(ObjectIdField())
 
     def __str__(self):
-        return "%s" % self.id
+        return f"{self.id}"
 
     @property
     def duration(self):

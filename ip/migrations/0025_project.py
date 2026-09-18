@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("project", "0001_initial")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Create .state
         Project = self.db.mock_model(model_name="Project", db_table="project_project")
         for t in ["ip_vrf", "ip_prefix", "ip_address"]:

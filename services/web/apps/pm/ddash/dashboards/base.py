@@ -16,17 +16,17 @@ import orjson
 BAD_CHARS = "!\"%'()+,:;<>?@^`{|}~\\\n\r"
 
 
-class BaseDashboard(object):
+class BaseDashboard:
     name = None
 
     class NotFound(Exception):
         pass
 
-    def __init__(self, object, extra_template=None, extra_vars=None):
+    def __init__(self, object, extra_template=None, extra_vars=None) -> None:
         self.object = self.resolve_object(object)
         self.extra_template = extra_template
         self.extra_vars = extra_vars
-        self.logger = logging.getLogger("dashboard.%s" % self.name)
+        self.logger = logging.getLogger(f"dashboard.{self.name}")
         self.object_data = self.resolve_object_data(object)
         self.templates_path = ""
         self.templates = self.load_templates()

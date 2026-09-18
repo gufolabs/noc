@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # Get sample devices for each platform
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2017 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Python modules
+import argparse
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -14,7 +17,7 @@ from noc.sa.models.managedobject import ManagedObject
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "-s", "--sample", type=int, default=5, help="Amount of samples for each platform"
         )
@@ -35,12 +38,12 @@ class Command(BaseCommand):
         if platform:
             p = Platform.objects.filter(name=platform).first()
             if not p:
-                self.die("Invalid platform %s" % platform)
+                self.die(f"Invalid platform {platform}")
             pqs["name"] = platform
         if profile:
             p = Profile.objects.filter(name=profile).first()
             if not p:
-                self.die("Invalid profile %s" % profile)
+                self.die(f"Invalid profile {profile}")
             mqs["profile"] = str(p.id)
         for platform in Platform.objects.filter(**pqs):
             qs = mqs.copy()
@@ -63,7 +66,3 @@ class Command(BaseCommand):
                 x += 1
                 if x >= sample:
                     break
-
-
-if __name__ == "__main__":
-    Command().run()

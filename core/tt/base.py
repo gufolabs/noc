@@ -8,7 +8,6 @@
 # Python modules
 import logging
 from datetime import datetime
-from typing import Optional, List
 
 # NOC modules
 from .types import (
@@ -18,7 +17,6 @@ from .types import (
     TTInfo,
     TTCommentRequest,
     EscalationItem,
-    EscalationServiceItem,
     EscalationStatus,
     EscalationResult,
     TTChange,
@@ -29,7 +27,7 @@ from .error import TTError, TemporaryTTError
 from noc.core.debug import error_report
 
 
-class BaseTTSystem(object):
+class BaseTTSystem:
     """
     Base class for TT integration adapter.
 
@@ -51,9 +49,9 @@ class BaseTTSystem(object):
     TemporaryTTError = TemporaryTTError
     promote_group_tt = True
     processed_items = False
-    actions: List[TTAction] = []
+    actions: list[TTAction] = []
 
-    def __init__(self, name: str, connection: str):
+    def __init__(self, name: str, connection: str) -> None:
         self.connection = connection
         self.name = name
         self.logger = logging.getLogger(f"tt.{self.name}")
@@ -105,7 +103,7 @@ class BaseTTSystem(object):
         """
         raise NotImplementedError()
 
-    def get_tt(self, tt_id: str) -> Optional[TTInfo]:
+    def get_tt(self, tt_id: str) -> TTInfo | None:
         """
         Get TT information.
 
@@ -120,7 +118,7 @@ class BaseTTSystem(object):
         """
         raise NotImplementedError()
 
-    def get_object_tts(self, obj: str) -> List[str]:
+    def get_object_tts(self, obj: str) -> list[str]:
         """
         Get list of TTs, open for object obj
 
@@ -159,10 +157,10 @@ class BaseTTSystem(object):
     def get_updates(
         self,
         login: str,
-        last_run: Optional[datetime] = None,
-        last_update: Optional[str] = None,
-        tt_ids: Optional[List[str]] = None,
-    ) -> List[TTChange]:
+        last_run: datetime | None = None,
+        last_update: str | None = None,
+        tt_ids: list[str] | None = None,
+    ) -> list[TTChange]:
         """
         Getting updates from TT system
 
@@ -176,7 +174,7 @@ class BaseTTSystem(object):
         raise NotImplementedError()
 
 
-class TTSystemCtx(object):
+class TTSystemCtx:
     """
     Escalation context data class.
 
@@ -202,25 +200,23 @@ class TTSystemCtx(object):
         login=None,
         actions=None,
         items=None,
-        services=None,
         assigned=None,
         suppress_tt_trace: bool = True,
         is_unavailable: bool = False,
     ):
         self.tt_system: BaseTTSystem = tt_system
-        self.id: Optional[str] = id
-        self.timestamp: Optional[datetime] = timestamp
-        self.queue: Optional[str] = queue
-        self.reason: Optional[str] = reason
-        self.login: Optional[str] = login
-        self.items: List[EscalationItem] = items or []
-        self.services: List[EscalationServiceItem] = services or []
-        self.actions: List[TTActionContext] = actions or []
-        self.error_code: Optional[str] = None
-        self.error_text: Optional[str] = ""
+        self.id: str | None = id
+        self.timestamp: datetime | None = timestamp
+        self.queue: str | None = queue
+        self.reason: str | None = reason
+        self.login: str | None = login
+        self.items: list[EscalationItem] = items or []
+        self.actions: list[TTActionContext] = actions or []
+        self.error_code: str | None = None
+        self.error_text: str | None = ""
         self.suppress_tt_trace: bool = suppress_tt_trace
         self.is_unavailable = is_unavailable
-        self.assigned: Optional[TTUser] = assigned
+        self.assigned: TTUser | None = assigned
 
     def get_result(self) -> EscalationResult:
         if self.error_code:
@@ -238,7 +234,11 @@ class TTSystemCtx(object):
         """
         return self.items[0]
 
-    def add_items(self, items: List[EscalationItem]):
+    @property
+    def services(self):
+        return [i for i in self.items if i.item == "service"]
+
+    def add_items(self, items: list[EscalationItem]):
         self.items += items
 
     def get_config(self):
@@ -250,9 +250,9 @@ class TTSystemCtx(object):
     def create(
         self,
         subject: str,
-        body: Optional[str] = None,
-        severity: Optional[str] = None,
-    ) -> Optional[str]:
+        body: str | None = None,
+        severity: str | None = None,
+    ) -> str | None:
         """
         Create Document on TT System
 
@@ -266,7 +266,6 @@ class TTSystemCtx(object):
             EscalationContext(
                 id=self.id,
                 queue=self.queue,
-                services=self.services,
                 reason=self.reason,
                 login=self.login,
                 timestamp=self.timestamp,
@@ -296,7 +295,7 @@ class TTSystemCtx(object):
             )
         )
 
-    def close(self, subject: Optional[str] = None, body: Optional[str] = None):
+    def close(self, subject: str | None = None, body: str | None = None):
         """
         Close document in TT System
         :return:
@@ -312,8 +311,8 @@ class TTSystemCtx(object):
         )
 
     def get_updates(
-        self, last_run: Optional[datetime] = None, last_number: Optional[str] = None
-    ) -> List[TTChange]:
+        self, last_run: datetime | None = None, last_number: str | None = None
+    ) -> list[TTChange]:
         """
         Getting updates from TT system
 
@@ -345,7 +344,7 @@ class TTSystemCtx(object):
                 error_report()
         return True
 
-    def set_error(self, code: Optional[str] = None, text: Optional[str] = None) -> None:
+    def set_error(self, code: str | None = None, text: str | None = None) -> None:
         """
         Set error result and code for current span
         :param code: Optional error code

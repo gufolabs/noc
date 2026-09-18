@@ -8,83 +8,77 @@
 # Python modules
 import asyncio
 import logging
-from typing import Optional
 
 # Third-party modules
 import orjson
 
 # NOC modules
-from noc.core.http.async_client import HttpClient, ERR_TIMEOUT, ERR_READ_TIMEOUT
+from noc.core.http.aio import HttpClient, ERR_TIMEOUT, ERR_READ_TIMEOUT
 from noc.core.error import NOCError, ERR_DS_BAD_CODE, ERR_DS_PARSE_ERROR
 from noc.core.dcs.error import ResolutionError
-from noc.core.comp import DEFAULT_ENCODING
 from noc.core.timeout import retry_timeout
 
 logger = logging.getLogger(__name__)
 
 
-class DataStreamClient(object):
+class DataStreamClient:
     RETRY_TIMEOUT = 1.0
     NEXT_GET_DELAY = 2.0
 
-    def __init__(self, name, service=None):
+    def __init__(self, name, service=None) -> None:
         self.name = name
         self.service = service
         self._is_ready = False
         self.client = HttpClient(
-            headers={"X-NOC-API-Access": f"datastream:{self.name}".encode(DEFAULT_ENCODING)},
+            headers={"X-NOC-API-Access": f"datastream:{self.name}".encode()},
             resolver=self.resolve,
         )
 
     async def on_change(self, data):
-        """
-        Called on each item received through datastream
-        :param data:
-        :return:
+        """Called on each item received through datastream
+
+        Args:
+            data
         """
 
     async def on_move(self, data):
-        """
-        Called on each moved item received through datastream
-        :param data:
-        :return:
+        """Called on each moved item received through datastream
+
+        Args:
+            data
         """
 
     async def on_delete(self, data):
-        """
-        Called on each deleted item received through datastream
-        :param data:
-        :return:
+        """Called on each deleted item received through datastream
+
+        Args:
+            data
         """
 
     async def on_ready(self):
-        """
-        Called when initial data is ready and processed.
-        :return:
-        """
+        """Called when initial data is ready and processed."""
 
     async def query(
         self,
-        change_id: Optional[str] = None,
+        change_id: str | None = None,
         filters=None,
         block: bool = False,
-        limit: Optional[int] = None,
-        ds_format: Optional[str] = None,
-        filter_policy: Optional[str] = None,
+        limit: int | None = None,
+        ds_format: str | None = None,
+        filter_policy: str | None = None,
     ):
-        """
-        Query datastream
-        :param change_id: Staring change id
-        :param filters: List of strings with filter expression
-        :param block:
-        :param limit: Records limit
-        :param ds_format: DataStream Format
-        :param filter_policy: Metadata changed policy. Behavior if metadata change out of filter scope
-                   * default - no changes
-                   * delete - return $delete message
-                   * keep - ignore filter, return full record
-                   * move - return $moved message
-        :return:
+        """Query datastream
+
+        Args:
+            change_id: Starting change id
+            filters: List of strings with filter expression
+            block
+            limit: Records limit
+            ds_format: DataStream Format
+            filter_policy: Metadata changed policy. Behavior if metadata
+                change out of filter scope * default - no changes *
+                delete - return $delete message * keep - ignore filter,
+                return full record * move - return $moved message
         """
         # Basic URL and query
         base_url = f"http://datastream/api/datastream/{self.name}"
@@ -145,7 +139,7 @@ class DataStreamClient(object):
                 self._is_ready = True
             # Continue from last change
             if "X-NOC-DataStream-Last-Change" in headers:
-                change_id = headers["X-NOC-DataStream-Last-Change"].decode(DEFAULT_ENCODING)
+                change_id = headers["X-NOC-DataStream-Last-Change"].decode()
                 continue
             if block and self._is_ready:
                 # Do not set block=1 before is_ready, otherwise

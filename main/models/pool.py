@@ -9,7 +9,7 @@
 import threading
 import time
 import operator
-from typing import Optional, Union
+from typing import Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -61,7 +61,7 @@ class Pool(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Pool"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Pool"]:
         return Pool.objects.filter(id=oid).first()
 
     @classmethod

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Dict, List
+from typing import Any
 
 # NOC modules
 from noc.inv.models.link import Link
@@ -44,7 +44,7 @@ class CalcifyBioSegPolicy(BaseBioSegPolicy):
         if not self.calcified_profile.is_persistent:
             self.logger.info("Calcified profile must be persistent")
             raise ValueError("Calcified profile must be persistent")
-        self.logger.info("Calcified with profile '%s'" % self.calcified_profile)
+        self.logger.info(f"Calcified with profile '{self.calcified_profile}'")
         # Change segment profile to calcified one
         self.attacker.profile = self.calcified_profile
         # Change segment name when necessary
@@ -62,9 +62,9 @@ class CalcifyBioSegPolicy(BaseBioSegPolicy):
         self.refresh_topology(self.attacker)
         return "calcify"
 
-    def get_template_context(self) -> Dict[str, Any]:
-        local_interfaces: List[Interface] = []
-        remote_interfaces: List[Interface] = []
+    def get_template_context(self) -> dict[str, Any]:
+        local_interfaces: list[Interface] = []
+        remote_interfaces: list[Interface] = []
         for link in Link.objects.filter(linked_segments=self.attacker.id):
             for iface in link.interfaces:
                 if iface.managed_object.segment.id == self.attacker.id:

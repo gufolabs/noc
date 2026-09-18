@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Topology Map Demos</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(15, 118, 110, 0.14), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(190, 24, 93, 0.12), transparent 28%),
+        #f5f7fb;
+      color: #0f172a;
+    }
+
+    main {
+      width: min(920px, calc(100vw - 48px));
+      padding: 32px;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1;
+    }
+
+    p {
+      margin: 0 0 28px;
+      max-width: 60ch;
+      color: #334155;
+      font-size: 16px;
+    }
+
+    .cards {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    a {
+      display: block;
+      padding: 22px;
+      border-radius: 18px;
+      border: 1px solid #dbe4f0;
+      text-decoration: none;
+      color: inherit;
+      background: linear-gradient(180deg, #ffffff, #f8fafc);
+      transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+    }
+
+    a:hover {
+      transform: translateY(-2px);
+      border-color: #94a3b8;
+      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+    }
+
+    strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 18px;
+    }
+
+    span {
+      color: #475569;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>Demo Hub</h1>
+    <p>Two standalone demos are available: the existing topology map example and the new workflow editor with JSON import/export and local file loading.</p>
+    <div class="cards">
+      <a href="/vanilla-index.html">
+        <strong>Topology Demo</strong>
+        <span>Pan, zoom, edit nodes, search, and minimap for the existing topology module.</span>
+      </a>
+      <a href="/workflow-index.html">
+        <strong>Workflow Editor Demo</strong>
+        <span>Load the provided workflow JSON, import a file from disk, edit states and transitions, and export the current document.</span>
+      </a>
+    </div>
+  </main>
+</body>
+
+</html>

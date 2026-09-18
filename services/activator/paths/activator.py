@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Dict, Any, List
+from typing import Any
 from collections import defaultdict
 
 # Third-party modules
@@ -18,8 +18,8 @@ from noc.core.script.loader import loader
 from noc.core.script.base import BaseScript
 from noc.core.ioloop.snmp import snmp_get, SNMPError
 from noc.core.snmp.version import SNMP_v1, SNMP_v2c
-from noc.core.http.async_client import HttpClient
-from noc.core.comp import DEFAULT_ENCODING, smart_text
+from noc.core.http.aio import HttpClient
+from noc.core.comp import smart_text
 from noc.core.perf import metrics
 from noc.core.debug import error_report
 from noc.core.checkers.loader import loader as checker_loader
@@ -56,13 +56,13 @@ class ActivatorAPI(JSONRPCAPI):
         credentials,
         capabilities=None,
         version=None,
-        args: Optional[Dict[str, Any]] = None,
-        timeout: Optional[int] = None,
-        session: Optional[str] = None,
-        session_idle_timeout: Optional[int] = None,
-        streaming: Optional[StreamingConfig] = None,
+        args: dict[str, Any] | None = None,
+        timeout: int | None = None,
+        session: str | None = None,
+        session_idle_timeout: int | None = None,
+        streaming: StreamingConfig | None = None,
         return_metrics: bool = False,
-        controller: Optional[ControllerConfig] = None,
+        controller: ControllerConfig | None = None,
     ):
         """
         Execute SA script
@@ -115,7 +115,7 @@ class ActivatorAPI(JSONRPCAPI):
             result = script.run()
         except script.ScriptError as e:
             metrics["error", ("type", "script_error")] += 1
-            raise APIError("Script error: %s" % e.__doc__)
+            raise APIError(f"Script error: {e.__doc__}")
         if not streaming or not result:
             if return_metrics:
                 return {"metrics": script.apply_metrics({}), "result": result}
@@ -140,7 +140,7 @@ class ActivatorAPI(JSONRPCAPI):
         address: str,
         community: str,
         oid: str,
-        timeout: Optional[int] = 10,
+        timeout: int | None = 10,
         return_error: bool = False,
     ):
         """
@@ -188,7 +188,7 @@ class ActivatorAPI(JSONRPCAPI):
         address: str,
         community: str,
         oid: str,
-        timeout: Optional[int] = 10,
+        timeout: int | None = 10,
         return_error: bool = False,
     ):
         """
@@ -236,11 +236,11 @@ class ActivatorAPI(JSONRPCAPI):
         address: str,
         username: str,
         oid: str,
-        auth_proto: Optional[str] = None,
-        auth_key: Optional[str] = None,
-        priv_proto: Optional[str] = None,
-        priv_key: Optional[str] = None,
-        timeout: Optional[int] = 10,
+        auth_proto: str | None = None,
+        auth_key: str | None = None,
+        priv_proto: str | None = None,
+        priv_key: str | None = None,
+        timeout: int | None = 10,
         return_error: bool = False,
     ):
         """
@@ -323,13 +323,13 @@ class ActivatorAPI(JSONRPCAPI):
         ) as client:
             code, headers, body = await client.get(url)
             if 200 <= code <= 299:
-                return body.decode(DEFAULT_ENCODING, errors="replace")
+                return body.decode(errors="replace")
             if ignore_errors:
                 metrics["error", ("type", f"http_error_{code}")] += 1
                 self.logger.debug("HTTP GET %s failed: %s %s", url, code, body)
                 return str(
-                    {k: v.decode(DEFAULT_ENCODING, errors="replace") for k, v in headers.items()}
-                ) + body.decode(DEFAULT_ENCODING, errors="replace")
+                    {k: v.decode(errors="replace") for k, v in headers.items()}
+                ) + body.decode(errors="replace")
             metrics["error", ("type", f"http_error_{code}")] += 1
             self.logger.debug("HTTP GET %s failed: %s %s", url, code, body)
             return None
@@ -344,8 +344,8 @@ class ActivatorAPI(JSONRPCAPI):
             kwargs: Checker param
         """
         checks = [Check.from_dict(c) for c in checks]
-        r: List[CheckResult] = []
-        do_checks: Dict[str, List[Check]] = defaultdict(list)
+        r: list[CheckResult] = []
+        do_checks: dict[str, list[Check]] = defaultdict(list)
         for check in checks:
             checker = checker_loader[check.name]
             if not checker:

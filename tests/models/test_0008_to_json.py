@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict
 from uuid import UUID
 from pathlib import Path
 
@@ -28,7 +27,7 @@ def test_to_json_protocol(model) -> None:
 
 @pytest.mark.parametrize("model", SELECTED_MODELS)
 def test_get_json_path(model) -> None:
-    seen: Dict[Path, UUID] = {}
+    seen: dict[Path, UUID] = {}
     for o in model.objects.all():
         path = o.get_json_path()
         assert path

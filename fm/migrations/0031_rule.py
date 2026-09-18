@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0022_pyrule_is_builtin")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         PyRule = self.db.mock_model(model_name="PyRule", db_table="main_pyrule")
         self.db.add_column(
             "fm_eventclass",

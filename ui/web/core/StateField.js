@@ -176,8 +176,8 @@ Ext.define("NOC.core.StateField", {
 
   doTransition: function(record){
     var me = this,
-      url = Ext.String.format("{0}{1}/transitions/{2}/", me.restUrl, me.stateId, record.get("id"));
-    Ext.Ajax.request({
+      url = `${me.restUrl}${me.stateId}/transitions/${record.get("id")}/`;
+    NOC.api.requestLegacy({
       url: url,
       method: "POST",
       success: function(response){

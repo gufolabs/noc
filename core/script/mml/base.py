@@ -25,7 +25,7 @@ class MMLBase(BaseCLI):
     MATCH_TAIL = 256
     SYNTAX_ERROR_CODE = b"+@@@NOC:SYNTAXERROR@@@+"
 
-    def __init__(self, script, tos=None):
+    def __init__(self, script, tos=None) -> None:
         super().__init__(script, tos)
         self.command = None
         self.buffer = ""
@@ -81,7 +81,7 @@ class MMLBase(BaseCLI):
             if code:
                 # MML Error
                 self.result = ""
-                self.error = MMLError("%s (code=%s)" % (msg, code))
+                self.error = MMLError(f"{msg} (code={code})")
                 return None
             # Process continuation
             if self.rx_mml_continue:
@@ -98,11 +98,11 @@ class MMLBase(BaseCLI):
         return self.result
 
     def execute(self, cmd, **kwargs):
-        """
-        Perform command and return result
-        :param cmd:
-        :param kwargs:
-        :return:
+        """Perform command and return result
+
+        Args:
+            cmd
+            **kwargs
         """
         self.buffer = b""
         self.command = self.profile.get_mml_command(cmd, **kwargs)

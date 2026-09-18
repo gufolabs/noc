@@ -17,7 +17,7 @@ from noc.core.error import NOCError
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "devices",
             nargs=argparse.REMAINDER,
@@ -33,7 +33,7 @@ class Command(BaseCommand):
                     ResourceGroup.get_objects_from_expression(d, model_id="sa.ManagedObject")
                 )
             except ResourceGroup.DoesNotExist:
-                self.die("Invalid object '%s'" % d)
+                self.die(f"Invalid object '{d}'")
         self.stdout.write("profile,platform,oid,value\n")
         for o in sorted(devs, key=lambda x: x.name):
             if "get_snmp_get" not in o.scripts:
@@ -52,9 +52,5 @@ class Command(BaseCommand):
             except NOCError:
                 continue
             self.stdout.write(
-                "%s,%s,%s,%s\n" % (o.profile.name, platform, "SNMPv2-MIB::sysObjectID.0", v)
+                "{},{},{},{}\n".format(o.profile.name, platform, "SNMPv2-MIB::sysObjectID.0", v)
             )
-
-
-if __name__ == "__main__":
-    Command().run()

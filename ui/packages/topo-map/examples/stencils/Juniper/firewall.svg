@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" width="47.1975000000" height="37.0230000000" xmlns="http://www.w3.org/2000/svg">
+  <title>Firewall</title>
+  <g transform=" scale(1.000000) ">
+    <path xmlns="http://www.w3.org/2000/svg" d="  M0.0233,7.5105 L15.7762,7.5105 L15.7762,0.0000 L0.0233,0.0000 L0.0233,7.5105 Z" style="fill-rule: evenodd; fill: #808285; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M0.0233,7.5105 L15.7762,7.5105 L15.7762,0.0000 L0.0233,0.0000 L0.0233,7.5105 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M15.7080,7.5105 L31.4625,7.5105 L31.4625,0.0000 L15.7080,0.0000 L15.7080,7.5105 Z" style="fill-rule: evenodd; fill: #808285; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M15.7080,7.5105 L31.4625,7.5105 L31.4625,0.0000 L15.7080,0.0000 L15.7080,7.5105 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M31.3920,7.5105 L47.1465,7.5105 L47.1465,0.0000 L31.3920,0.0000 L31.3920,7.5105 Z" style="fill-rule: evenodd; fill: #808285; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M31.3920,7.5105 L47.1465,7.5105 L47.1465,0.0000 L31.3920,0.0000 L31.3920,7.5105 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M7.8165,14.5582 L23.6790,14.5582 L23.6790,7.0447 L7.8165,7.0447 L7.8165,14.5582 Z" style="fill-rule: evenodd; fill: #4d4d4f; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M7.8165,14.5582 L23.6790,14.5582 L23.6790,7.0447 L7.8165,7.0447 L7.8165,14.5582 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M23.6085,14.5582 L39.4725,14.5582 L39.4725,7.0447 L23.6085,7.0447 L23.6085,14.5582 Z" style="fill-rule: evenodd; fill: #808285; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M23.6085,14.5582 L39.4725,14.5582 L39.4725,7.0447 L23.6085,7.0447 L23.6085,14.5582 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M39.4028,14.5582 L47.1975,14.5582 L47.1975,7.0447 L39.4028,7.0447 L39.4028,14.5582 Z" style="fill-rule: evenodd; fill: #808285; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M39.4028,14.5582 L47.1975,14.5582 L47.1975,7.0447 L39.4028,7.0447 L39.4028,14.5582 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M0.0000,14.5582 L7.7948,14.5582 L7.7948,7.0447 L0.0000,7.0447 L0.0000,14.5582 Z" style="fill-rule: evenodd; fill: #808285; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M0.0000,14.5582 L7.7948,14.5582 L7.7948,7.0447 L0.0000,7.0447 L0.0000,14.5582 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M0.0233,22.0627 L15.7762,22.0627 L15.7762,14.5492 L0.0233,14.5492 L0.0233,22.0627 Z" style="fill-rule: evenodd; fill: #808285; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M0.0233,22.0627 L15.7762,22.0627 L15.7762,14.5492 L0.0233,14.5492 L0.0233,22.0627 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M15.7080,22.0627 L31.4625,22.0627 L31.4625,14.5492 L15.7080,14.5492 L15.7080,22.0627 Z" style="fill-rule: evenodd; fill: #808285; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M15.7080,22.0627 L31.4625,22.0627 L31.4625,14.5492 L15.7080,14.5492 L15.7080,22.0627 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M31.3920,22.0627 L47.1465,22.0627 L47.1465,14.5492 L31.3920,14.5492 L31.3920,22.0627 Z" style="fill-rule: evenodd; fill: #4d4d4f; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M31.3920,22.0627 L47.1465,22.0627 L47.1465,14.5492 L31.3920,14.5492 L31.3920,22.0627 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M7.8165,29.5170 L23.6790,29.5170 L23.6790,22.0057 L7.8165,22.0057 L7.8165,29.5170 Z" style="fill-rule: evenodd; fill: #808285; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M7.8165,29.5170 L23.6790,29.5170 L23.6790,22.0057 L7.8165,22.0057 L7.8165,29.5170 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M23.6085,29.5170 L39.4725,29.5170 L39.4725,22.0057 L23.6085,22.0057 L23.6085,29.5170 Z" style="fill-rule: evenodd; fill: #808285; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M23.6085,29.5170 L39.4725,29.5170 L39.4725,22.0057 L23.6085,22.0057 L23.6085,29.5170 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M39.4028,29.5170 L47.1975,29.5170 L47.1975,22.0057 L39.4028,22.0057 L39.4028,29.5170 Z" style="fill-rule: evenodd; fill: #808285; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M39.4028,29.5170 L47.1975,29.5170 L47.1975,22.0057 L39.4028,22.0057 L39.4028,29.5170 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M0.0000,29.5170 L7.7948,29.5170 L7.7948,22.0057 L0.0000,22.0057 L0.0000,29.5170 Z" style="fill-rule: evenodd; fill: #808285; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M0.0000,29.5170 L7.7948,29.5170 L7.7948,22.0057 L0.0000,22.0057 L0.0000,29.5170 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M0.0233,37.0230 L15.7762,37.0230 L15.7762,29.5095 L0.0233,29.5095 L0.0233,37.0230 Z" style="fill-rule: evenodd; fill: #4d4d4f; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M0.0233,37.0230 L15.7762,37.0230 L15.7762,29.5095 L0.0233,29.5095 L0.0233,37.0230 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M15.7080,37.0230 L31.4625,37.0230 L31.4625,29.5095 L15.7080,29.5095 L15.7080,37.0230 Z" style="fill-rule: evenodd; fill: #808285; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M15.7080,37.0230 L31.4625,37.0230 L31.4625,29.5095 L15.7080,29.5095 L15.7080,37.0230 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M31.3920,37.0230 L47.1465,37.0230 L47.1465,29.5095 L31.3920,29.5095 L31.3920,37.0230 Z" style="fill-rule: evenodd; fill: #808285; "/>
+    <path xmlns="http://www.w3.org/2000/svg" d="  M31.3920,37.0230 L47.1465,37.0230 L47.1465,29.5095 L31.3920,29.5095 L31.3920,37.0230 Z" style="stroke-width: 1.1250; stroke: #bcbec0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; fill: none; "/>
+  </g>
+</svg>

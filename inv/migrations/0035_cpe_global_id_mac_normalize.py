@@ -14,7 +14,7 @@ from noc.sa.interfaces.base import MACAddressParameter
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         cpe_coll = self.mongo_db["cpes"]
         bulk = []
         # DropIndex

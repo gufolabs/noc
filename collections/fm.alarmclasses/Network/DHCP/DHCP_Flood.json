@@ -19,5 +19,6 @@
     "symptoms": "",
     "probable_causes": "",
     "recommended_actions": "",
+    "recover_time": 300,
     "labels": ["noc::severity::info"]
 }

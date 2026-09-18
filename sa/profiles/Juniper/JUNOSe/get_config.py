@@ -34,6 +34,6 @@ class Script(BaseScript):
         r = self.cli("show service-management service-definition brief | include True")
         for s in self.rx_service.findall(r):
             configs += [
-                {"name": "service %s" % s, "config": self.cleaned_config(self.cli("more %s" % s))}
+                {"name": f"service {s}", "config": self.cleaned_config(self.cli(f"more {s}"))}
             ]
         return configs

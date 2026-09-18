@@ -44,7 +44,7 @@ class Migration(BaseMigration):
             }
         ).decode("utf-8")
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Create new ManagedObject.state
         self.db.add_column(
             "sa_managedobject", "state", DocumentReferenceField("wf.State", null=True, blank=True)

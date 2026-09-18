@@ -269,7 +269,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
   save: function(data){
     var me = this;
     me.mask(__("Saving ..."));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.restUrl + (me.currentPrefixId ? me.currentPrefixId + "/" : ""),
       method: me.currentPrefixId ? "PUT" : "POST",
       scope: me,
@@ -309,7 +309,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
   loadPrefix: function(id){
     var me = this;
     me.currentPrefixId = id;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.restUrl + id + "/",
       method: "GET",
       scope: me,
@@ -332,7 +332,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
       prefixField = me.getField("prefix");
     me.currentPrefixId = null;
     // Load data
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.restUrl + parentId + "/",
       method: "GET",
       scope: me,
@@ -357,7 +357,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.PrefixPanel", {
       },
     });
     // Set suggestions
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.restUrl + parentId + "/suggest_free/",
       method: "GET",
       scope: me,

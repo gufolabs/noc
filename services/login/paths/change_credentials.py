@@ -7,7 +7,7 @@
 
 # Third-party modules
 from fastapi import APIRouter
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import JSONResponse
 
 
 # NOC modules
@@ -33,6 +33,6 @@ async def change_credentials(req: ChangeCredentialsRequest) -> StatusResponse:
     except ChangeCredentialsError as e:
         return StatusResponse(status=False, message=str(e))
     # Update login cookie
-    response = ORJSONResponse({"status": True})
+    response = JSONResponse({"status": True})
     set_jwt_cookie(response, req.user, expire=config.login.session_ttl)
     return response

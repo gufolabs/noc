@@ -10,9 +10,7 @@ from .query import QueryApplicator
 
 
 class DefaultSTPStatusApplicator(QueryApplicator):
-    """
-    Apply STP on interfaces
-    """
+    """Apply STP on interfaces"""
 
     CHECK_QUERY = "Match('hints', 'protocols', 'spanning-tree', 'status')"
     QUERY = [

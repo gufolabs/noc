@@ -24,9 +24,9 @@ class Script(BaseScript):
     def execute_cli(self, interface=None, vlan=None, mac=None):
         cmd = "show mac address-table"
         if interface is not None:
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
         r = []
         v = self.cli(cmd)
         for match in self.rx_line.finditer(v):

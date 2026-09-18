@@ -27,15 +27,15 @@ class Script(BaseScript):
         r = []
         cmd = "bridge addressDatabase"
         if interface is not None:
-            cmd += " summary %s" % interface
+            cmd += f" summary {interface}"
         else:
             cmd += " summary all"
         if mac is not None:
-            cmd = " find %s" % self.profile.convert_mac(mac)
+            cmd = f" find {self.profile.convert_mac(mac)}"
         for match in self.rx_line.finditer(self.cli(cmd)):
             vid = int(match.group("vlan_id"))
             if vlan is None or vid == vlan:
-                interface = "%s:%s" % (match.group("unit"), match.group("port"))
+                interface = "{}:{}".format(match.group("unit"), match.group("port"))
                 r += [
                     {
                         "vlan_id": vid,

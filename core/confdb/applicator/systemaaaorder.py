@@ -10,9 +10,7 @@ from .query import QueryApplicator
 
 
 class DefaultSystemAAAOrderApplicator(QueryApplicator):
-    """
-    Set forwarding instance type if not set
-    """
+    """Set forwarding instance type if not set"""
 
     QUERY = [
         "Match('system', 'aaa', 'service', 'local') and "

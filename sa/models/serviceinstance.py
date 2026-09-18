@@ -8,9 +8,10 @@
 # Python modules
 import datetime
 import logging
-from typing import Optional, List, Iterable, Any, Dict, Tuple
+from typing import Optional, Iterable, Any
 
 # Third-party modules
+from bson import ObjectId
 from pymongo import UpdateOne, ReadPreference
 from mongoengine.document import Document, EmbeddedDocument
 from mongoengine.fields import (
@@ -41,11 +42,13 @@ from noc.core.models.valuetype import ValueType
 from noc.core.validators import is_ipv4, is_fqdn
 from noc.core.model.decorator import on_save
 from noc.core.checkers.base import Check
+from noc.core.change.decorator import change
 from noc.models import get_model_id
 from noc.fm.models.activealarm import ActiveAlarm
 from noc.sa.models.managedobject import ManagedObject
 from noc.sa.models.servicesummary import ServiceSummary
 from noc.main.models.pool import Pool
+from noc.config import config
 
 DISCOVERY_SOURCE = InputSource.DISCOVERY
 CLIENT_INSTANCE_NAME = "client"
@@ -58,13 +61,14 @@ class AddressItem(EmbeddedDocument):
     address: str = StringField(required=True)
     address_bin = IntField()
     is_active = BooleanField(default=True)
-    sources: List[InputSource] = ListField(EnumField(InputSource))
+    sources: list[InputSource] = ListField(EnumField(InputSource))
     # session
 
     def clean(self):
         self.address_bin = IP.prefix(self.address).d
 
 
+@change(audit=False)
 @on_save
 class ServiceInstance(Document):
     """
@@ -106,7 +110,7 @@ class ServiceInstance(Document):
     type: InstanceType = EnumField(InstanceType, required=True, default=InstanceType.OTHER)
     name: str = StringField(required=False)
     # Sources that approved data
-    sources: List[InputSource] = ListField(EnumField(InputSource))
+    sources: list[InputSource] = ListField(EnumField(InputSource))
     # Object
     managed_object: Optional["ManagedObject"] = ForeignKeyField(ManagedObject, required=False)
     # For ETL services, Object id in remote system
@@ -117,14 +121,14 @@ class ServiceInstance(Document):
     reference = BinaryField(required=False)
     # Endpoint Data
     fqdn: str = StringField()
-    addresses: List[AddressItem] = EmbeddedDocumentListField(AddressItem)
+    addresses: list[AddressItem] = EmbeddedDocumentListField(AddressItem)
     port = IntField(min_value=0, max_value=65536, default=0)
     # Asset Data
-    asset_refs: List[str] = ListField(StringField(required=True))
+    asset_refs: list[str] = ListField(StringField(required=True))
     # Used Resources
-    resources: List[str] = ListField(StringField(required=True))
+    resources: list[str] = ListField(StringField(required=True))
     # Service Dependencies
-    dependencies: List[str] = ListField(ObjectIdField(required=True))
+    dependencies: list[str] = ListField(ObjectIdField(required=True))
     # Operation Attributes
     oper_status: bool = BooleanField()
     oper_status_change = DateTimeField()
@@ -150,7 +154,7 @@ class ServiceInstance(Document):
         return None
 
     @property
-    def address(self) -> Optional[str]:
+    def address(self) -> str | None:
         """Return first active Address"""
         for a in self.addresses or []:
             if a.is_active:
@@ -184,18 +188,25 @@ class ServiceInstance(Document):
             return f"[{self.type}|{self.remote_id}] {name}"
         return f"[{self.type}] {name}"
 
+    @classmethod
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ServiceInstance"]:
+        return ServiceInstance.objects.filter(id=oid).first()
+
     def on_save(self):
         if not hasattr(self, "_changed_fields") or "asset_refs" in self._changed_fields:
             ServiceInstance.refresh_local_network_instances([self])
+
+    def iter_changed_datastream(self, changed_fields=None):
+        if config.datastream.enable_service:
+            yield "service", self.service.id
 
     @classmethod
     def ensure_instance(
         cls,
         service,
         cfg: ServiceInstanceConfig,
-        settings: Optional[ServiceInstanceTypeConfig] = None,
-    ) -> Optional["ServiceInstance"]:
-        """ """
+        settings: ServiceInstanceTypeConfig | None = None,
+    ) -> "ServiceInstance":
         settings = settings or ServiceInstanceTypeConfig()
         qs = cfg.get_queryset(service, settings)
         instance = ServiceInstance.objects.filter(qs).first()
@@ -231,11 +242,13 @@ class ServiceInstance(Document):
             self.asset_refs = cfg.asset_refs
         if self.fqdn != cfg.fqdn:
             self.fqdn = cfg.fqdn
+        if set(self.dependencies) != set(cfg.services or []):
+            self.dependencies = cfg.services or []
 
     def seen(
         self,
         source: InputSource,
-        last_seen: Optional[datetime.datetime] = None,
+        last_seen: datetime.datetime | None = None,
         dry_run: bool = False,
     ):
         """Update source"""
@@ -335,7 +348,15 @@ class ServiceInstance(Document):
         if addrs:
             q |= Q(addresses__address__in=addrs)
         # get_full_fqdn
-        q |= Q(fqdn=managed_object.name.lower().strip())
+        fqdn = managed_object.get_full_fqdn()
+        if fqdn:
+            q |= Q(fqdn=fqdn.lower().strip())
+        else:
+            hostname = managed_object.name.lower().strip()
+            q |= Q(fqdn=hostname)
+            hostname, *suffix = hostname.split(".", 1)
+            if suffix:
+                q |= Q(fqdn=hostname)
         # Capability Reference
         refs = []
         for c in managed_object.iter_caps():
@@ -371,7 +392,7 @@ class ServiceInstance(Document):
         return True
 
     @classmethod
-    def get_alarm_reference(cls, alarm: "ActiveAlarm") -> List[str]:
+    def get_alarm_reference(cls, alarm: "ActiveAlarm") -> list[str]:
         """"""
         r = []
         if "mac" in alarm.vars:
@@ -381,7 +402,7 @@ class ServiceInstance(Document):
         return r
 
     @classmethod
-    def get_alarm_addresses(cls, alarm: "ActiveAlarm") -> List[str]:
+    def get_alarm_addresses(cls, alarm: "ActiveAlarm") -> list[str]:
         """Convert Active Alarm to addresses"""
         r = []
         # Alarm Class Vars ?
@@ -393,7 +414,7 @@ class ServiceInstance(Document):
     @classmethod
     def get_instance_filter_by_alarm(
         cls, alarm: ActiveAlarm, include_object: bool = False
-    ) -> Optional[Q]:
+    ) -> Q | None:
         """Build Alarm filter for query affected instances"""
         # Instance | Save include managed object Global | Local reference
         if include_object and alarm.managed_object:
@@ -434,11 +455,11 @@ class ServiceInstance(Document):
     def register_endpoint(
         self,
         source: InputSource,
-        addresses: Optional[List[str]] = None,
-        port: Optional[str] = None,
-        session: Optional[str] = None,
-        pool: Optional[Pool] = None,
-        ts: Optional[datetime.datetime] = None,
+        addresses: list[str] | None = None,
+        port: str | None = None,
+        session: str | None = None,
+        pool: Pool | None = None,
+        ts: datetime.datetime | None = None,
     ):
         """
         Add endpoint address to instance
@@ -475,15 +496,15 @@ class ServiceInstance(Document):
             changed |= True
             self.port = port
         # Update instance
-        if InputSource == InputSource.DISCOVERY:
+        if source == InputSource.DISCOVERY:
             self.seen(source, last_seen=ts)
         return changed
 
     def deregister_endpoint(
         self,
         source: InputSource,
-        session: Optional[str] = None,
-        addresses: Optional[List[str]] = None,
+        session: str | None = None,
+        addresses: list[str] | None = None,
     ):
         """Remove endpoint address from instance"""
         address = []
@@ -498,7 +519,7 @@ class ServiceInstance(Document):
     def bind_resource(self, o):
         """Add Resource to ServiceInstance"""
         if not hasattr(o, "as_resource"):
-            raise AttributeError("Model %s not Supported Resource Method" % get_model_id(o))
+            raise AttributeError(f"Model {get_model_id(o)} not Supported Resource Method")
         rid = o.as_resource()
         if rid in self.resources:
             return
@@ -525,9 +546,9 @@ class ServiceInstance(Document):
 
     def update_resources(
         self,
-        res: List[Any],
+        res: list[Any],
         source: InputSource,
-        update_ts: Optional[datetime.datetime] = None,
+        update_ts: datetime.datetime | None = None,
         bulk=None,
     ):
         """
@@ -544,7 +565,7 @@ class ServiceInstance(Document):
                 # Bad resource value.
                 continue
             if not hasattr(o, "as_resource"):
-                raise AttributeError("Model %s not Supported Resource Method" % get_model_id(o))
+                raise AttributeError(f"Model {get_model_id(o)} not Supported Resource Method")
             if hasattr(o, "state") and cfg.send_approve:
                 o.fire_event("approved")
             rid = o.as_resource()
@@ -591,7 +612,7 @@ class ServiceInstance(Document):
                 ServiceSummary.refresh_object(self.managed_object)
 
     @classmethod
-    def get_object_resources(cls, oid: int) -> Dict[str, Tuple[str, int, str]]:
+    def get_object_resources(cls, oid: int) -> dict[str, tuple[str, int, str]]:
         """Return all resources used by object"""
         r = {}
         # Secondary Preferred
@@ -624,11 +645,11 @@ class ServiceInstance(Document):
         return r
 
     @classmethod
-    def refresh_local_network_instances(cls, instances: Optional[List] = None):
+    def refresh_local_network_instances(cls, instances=None):
         """"""
         from noc.inv.models.interface import Interface
 
-        ref_mac_instance: Dict[str, ServiceInstance] = {}
+        ref_mac_instance: dict[str, ServiceInstance] = {}
         bulk = []
         for si in ServiceInstance.objects.filter(
             type=InstanceType.NETWORK_CHANNEL,
@@ -652,7 +673,7 @@ class ServiceInstance(Document):
         if bulk:
             coll.bulk_write(bulk)
 
-    def get_checks(self) -> List[Check]:
+    def get_checks(self) -> list[Check]:
         """Getting check for instance. For multiple - applied Any? policy"""
         # Update instance status
         if not self.config.checks:

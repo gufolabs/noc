@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Tools
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -13,10 +13,10 @@ from io import StringIO
 
 # Third-party modules
 from django import forms
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 
 # NOC Modules
-from noc.services.web.base.application import Application, HasPerm, view
+from noc.services.web.base.application import Application, HasPerm, api
 from noc.core.ip import IP, IPv4, IPv6
 from noc.core.validators import is_ipv4, is_ipv6
 from noc.ip.models.address import Address
@@ -35,18 +35,14 @@ from noc.core.translation import ugettext as _
 class ToolsAppplication(Application):
     title = _("Tools")
 
-    @view(
-        url=r"^(?P<vrf_id>\d+)/(?P<afi>[46])/(?P<prefix>\S+?/\d+)/$",
+    @api.get(
+        r"^(?P<vrf_id>\d+)/(?P<afi>[46])/(?P<prefix>\S+?/\d+)/$",
         url_name="index",
         access=HasPerm("view"),
     )
-    def view_index(self, request, vrf_id, afi, prefix):
+    def api_index(self, request: HttpRequest, vrf_id, afi, prefix):
         """
         An index of tools available for block
-        :param request:
-        :param vrf_id:
-        :param afi:
-        :param prefix:
         :return:
         """
         vrf = self.get_object_or_404(VRF, id=int(vrf_id))
@@ -62,19 +58,15 @@ class ToolsAppplication(Application):
             upload_ips_axfr_form=self.AXFRForm(),
         )
 
-    @view(
-        url=r"^(?P<vrf_id>\d+)/(?P<afi>[46])/(?P<prefix>\S+)/download_ip/$",
+    @api.post(
+        r"^(?P<vrf_id>\d+)/(?P<afi>[46])/(?P<prefix>\S+)/download_ip/$",
         url_name="download_ip",
         access=HasPerm("view"),
     )
-    def view_download_ip(self, request, vrf_id, afi, prefix):
+    def api_download_ip(self, request: HttpRequest, vrf_id, afi, prefix):
         """
         Download block's allocated IPs in CSV format
         Columns are: ip,fqdn,description,tt
-        :param request:
-        :param vrf_id:
-        :param afi:
-        :param prefix:
         :return:
         """
 
@@ -107,18 +99,14 @@ class ToolsAppplication(Application):
         )
         zone = forms.CharField(label=_("Zone"), help_text=_("DNS Zone name to transfer"))
 
-    @view(
-        url=r"^(?P<vrf_id>\d+)/(?P<afi>[46])/(?P<prefix>\S+)/upload_axfr/$",
+    @api.post(
+        r"^(?P<vrf_id>\d+)/(?P<afi>[46])/(?P<prefix>\S+)/upload_axfr/$",
         url_name="upload_axfr",
         access=HasPerm("view"),
     )
-    def view_upload_axfr(self, request, vrf_id, afi, prefix):
+    def api_upload_axfr(self, request: HttpRequest, vrf_id, afi, prefix):
         """
         Import via zone transfer
-        :param request:
-        :param vrf_id:
-        :param afi:
-        :param prefix:
         :return:
         """
 
@@ -168,7 +156,7 @@ class ToolsAppplication(Application):
                         profile=ap,
                         fqdn=fqdn,
                         name=fqdn,
-                        description="Imported from %s zone" % zone,
+                        description=f"Imported from {zone} zone",
                     )
                     a.save()
                     create += 1
@@ -184,7 +172,7 @@ class ToolsAppplication(Application):
                 answer = dns.resolver.resolve(qname=body["ns"], rdtype="A", lifetime=5.0)
                 ip = answer[0].address
             except dns.exception.DNSException as e:
-                self.error(f"Resolv Error: {e}")
+                self.logger.error(f"Resolv Error: {e}")
                 return HttpResponse(e, status=500)
         else:
             ip = body["ns"]
@@ -202,10 +190,10 @@ class ToolsAppplication(Application):
                 if "@" not in _zone[z_node].to_text(z_node)
             )
         except dns.exception.DNSException as e:
-            self.error(f"DNS Error: {e}")
+            self.logger.error(f"DNS Error: {e}")
             return HttpResponse(e, status=400)
         except Exception as e:
-            self.error(f"Other Error: {e}")
+            self.logger.error(f"Other Error: {e}")
             return HttpResponse(e, status=500)
 
         if data:

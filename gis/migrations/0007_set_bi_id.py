@@ -17,7 +17,7 @@ MONGO_CHUNK = 500
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Update mongodb collections
         for coll_name in ["noc.addresses", "noc.divisions", "noc.streets"]:
             coll = self.mongo_db[coll_name]

@@ -22,7 +22,7 @@ from noc.core.translation import ugettext as _
 
 
 class ServiceOutages(Model):
-    class Meta(object):
+    class Meta:
         db_table = "serviceoutages"
         engine = MergeTree("date", ("date", "service"))
 
@@ -38,6 +38,7 @@ class ServiceOutages(Model):
 
     from_status = UInt8Field(description="Oper Status on start interval")
     to_status = UInt8Field(description="Oper Status on end interval")
+    affected = StringField(description="Factors Affected to Service Status")
     in_maintenance = UInt8Field(description="Service In Maintenance State")
 
     final_register = BooleanField(

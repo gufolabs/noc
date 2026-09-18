@@ -22,7 +22,7 @@ from ..models.address import Address
 from ..models.building import Building
 from ..models.admdiv import AdmDiv
 from noc.core.etl.remotesystem.base import BaseRemoteSystem
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 
 logger = logging.getLogger(__name__)
 
@@ -86,8 +86,8 @@ class AdmDivExtractor(BaseExtractor):
         "х",
     )
 
-    def __init__(self, system, *args, **kwargs):
-        super(AdmDivExtractor, self).__init__(system)
+    def __init__(self, system, *args, **kwargs) -> None:
+        super().__init__(system)
         self.oktmo_url = str(self.config.get("OKTMO_URL"))
         self.cache_path = str(self.config.get("CACHE_PATH"))
         self.region = str(self.config.get("OKTMO_REGION"))
@@ -115,10 +115,6 @@ class AdmDivExtractor(BaseExtractor):
         """
         Checking duble oktmo code
 
-        :param ter:
-        :param kod1:
-        :param kod2:
-        :param kod3:
         :return:
         """
         if kod3 == "000":
@@ -132,10 +128,6 @@ class AdmDivExtractor(BaseExtractor):
         """
         Creating parent code
 
-        :param ter:
-        :param kod1:
-        :param kod2:
-        :param kod3:
         :return:
         """
         if self.region != "0" and kod1[1:3] == "00" and kod2 == "000" and kod3 == "000":
@@ -182,8 +174,8 @@ class StreetExtractor(BaseExtractor):
     name = "street"
     model = Street
 
-    def __init__(self, system, *args, **kwargs):
-        super(StreetExtractor, self).__init__(system)
+    def __init__(self, system, *args, **kwargs) -> None:
+        super().__init__(system)
         self.fias_url = str(self.config.get("FIAS_URL"))
         self.cache_path = str(self.config.get("CACHE_PATH"))
         self.region = str(self.config.get("FIAS_REGION"))
@@ -306,8 +298,8 @@ class AddressExtractor(BaseExtractor):
     name = "address"
     model = Address
 
-    def __init__(self, system, *args, **kwargs):
-        super(AddressExtractor, self).__init__(system)
+    def __init__(self, system, *args, **kwargs) -> None:
+        super().__init__(system)
         self.fias_url = str(self.config.get("FIAS_URL"))
         self.cache_path = str(self.config.get("CACHE_PATH"))
         self.region = str(self.config.get("FIAS_REGION"))
@@ -401,8 +393,8 @@ class BuildingExtractor(BaseExtractor):
     name = "building"
     model = Building
 
-    def __init__(self, system, *args, **kwargs):
-        super(BuildingExtractor, self).__init__(system)
+    def __init__(self, system, *args, **kwargs) -> None:
+        super().__init__(system)
         self.fias_url = str(self.config.get("FIAS_URL"))
         self.cache_path = str(self.config.get("CACHE_PATH"))
         self.region = str(self.config.get("FIAS_REGION"))

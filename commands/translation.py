@@ -57,7 +57,7 @@ class Command(BaseCommand):
     PROJECT = "The NOC Project"
     COPYRIGHT = "The NOC Project"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         extract_parser = subparsers.add_parser("extract")
         extract_parser.add_argument(
@@ -185,7 +185,3 @@ class Command(BaseCommand):
 def ls() -> list[str]:
     f = subprocess.Popen(["git", "ls-files"], stdout=subprocess.PIPE).stdout
     return f.read().splitlines()
-
-
-if __name__ == "__main__":
-    Command().run()

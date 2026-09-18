@@ -1,12 +1,15 @@
 # ---------------------------------------------------------------------
 # inv.inv param data plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, List, Any
+from typing import Any
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.inv.models.object import Object
@@ -22,7 +25,7 @@ class ParamPlugin(InvPlugin):
     def init_plugin(self):
         super().init_plugin()
         self.add_view(
-            "api_plugin_%s_save_data" % self.name,
+            f"api_plugin_{self.name}_save_data",
             self.api_save_data,
             url="^(?P<id>[0-9a-f]{24})/plugin/param/$",
             method=["PUT"],
@@ -35,7 +38,7 @@ class ParamPlugin(InvPlugin):
             ),
         )
         self.add_view(
-            "api_plugin_%s_schema" % self.name,
+            f"api_plugin_{self.name}_schema",
             self.api_save_data,
             url="^(?P<id>[0-9a-f]{24})/plugin/param/schema/$",
             method=["GET"],
@@ -45,13 +48,13 @@ class ParamPlugin(InvPlugin):
             },
         )
         self.add_view(
-            "api_plugin_%s_scopes" % self.name,
+            f"api_plugin_{self.name}_scopes",
             self.api_scopes,
             url="^(?P<id>[0-9a-f]{24})/plugin/param/scopes/$",
             method=["GET"],
         )
 
-    def get_data(self, request, o: Object):
+    def get_data(self, request: HttpRequest, o: Object):
         data = []
         q = self.app.parse_request_query(request)
         scopes = set()
@@ -77,9 +80,9 @@ class ParamPlugin(InvPlugin):
             data[-1].update(cd.schema.json_schema)
         return {"id": str(o.id), "name": o.name, "model": o.model.name, "data": data}
 
-    def api_save_data(self, request, id, **kwargs):
+    def api_save_data(self, request: HttpRequest, id, **kwargs):
         o: "Object" = self.app.get_object_or_404(Object, id=id)
-        data: List[Dict[str, Any]] = self.app.deserialize(request.body)
+        data: list[dict[str, Any]] = self.app.deserialize(request.body)
         for d in data:
             p = self.app.get_object_or_404(ConfigurationParam, id=d["param"])
             if not d.get("scopes"):
@@ -95,7 +98,7 @@ class ParamPlugin(InvPlugin):
             return {"status": False, "message": str(e), "traceback": str(e)}
         return {"status": True}
 
-    def api_scopes(self, request, id, **kwargs):
+    def api_scopes(self, request: HttpRequest, id, **kwargs):
         """"""
         o = self.app.get_object_or_404(Object, id=id)
         scopes = set()
@@ -105,7 +108,7 @@ class ParamPlugin(InvPlugin):
             scopes |= {s.code for s in p.scopes}
         return [{"id": f"@{s}", "label": s} for s in scopes]
 
-    # def api_get_schema(self, request, id, param=None, scope: Optional[str] = None):
+    # def api_get_schema(self, request:HttpRequest, id, param=None, scope: Optional[str] = None):
     #     """
     #     Getting Param Schema
     #     """

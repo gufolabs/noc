@@ -19,10 +19,10 @@ from noc.config import config
 from noc.core.fileutils import make_persistent
 
 
-class Stream(object):
+class Stream:
     CHUNK_SIZE = config.bi.chunk_size
 
-    def __init__(self, model, prefix, date=None):
+    def __init__(self, model, prefix, date=None) -> None:
         self.prefix = prefix
         self.model = model
         self.date = date or datetime.date.today()
@@ -30,11 +30,11 @@ class Stream(object):
         self.out = None
         self.out_path = None
         now = datetime.datetime.now()
-        self.fs = "%s-%s" % (self.model._meta.db_table, now.strftime("%Y-%m-%d-%H-%M-%S-%f"))
+        self.fs = "{}-{}".format(self.model._meta.db_table, now.strftime("%Y-%m-%d-%H-%M-%S-%f"))
         self.chunk_size = 0
         self.ts_field = self.model._meta.ordered_fields[1].name
 
-    def __del__(self):
+    def __del__(self) -> None:
         if self.out:
             os.unlink(self.out_path)
 

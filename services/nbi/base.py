@@ -6,11 +6,10 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Optional
 
 # Third-party modules
 from fastapi import APIRouter
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import JSONResponse
 
 # NOC modules
 from noc.core.service.loader import get_service
@@ -21,17 +20,17 @@ API_ACCESS_HEADER = "X-NOC-API-Access"
 FORBIDDEN_MESSAGE = "<html><title>403: Forbidden</title><body>403: Forbidden</body></html>"
 
 
-class NBIAPI(object):
+class NBIAPI:
     """
     NBI API Base Class
     """
 
     # API name
-    api_name: Optional[str] = None
+    api_name: str | None = None
     # Tags for OpenAPI documentation
-    openapi_tags: List[str] = []
+    openapi_tags: list[str] = []
 
-    def __init__(self, router: APIRouter):
+    def __init__(self, router: APIRouter) -> None:
         self.service = get_service()
         self.logger = self.service.logger
         self.router = router
@@ -64,7 +63,7 @@ class NBIAPI(object):
                 path=route["path"],
                 methods=[route["method"]],  # ["POST"]
                 endpoint=route["endpoint"],
-                response_class=route.get("response_class", ORJSONResponse),
+                response_class=route.get("response_class", JSONResponse),
                 response_model=route["response_model"],
                 name=route["name"],
                 description=route["description"],

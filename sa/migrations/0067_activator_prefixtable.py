@@ -16,7 +16,7 @@ from noc.core.ip import IPv4
 class Migration(BaseMigration):
     depends_on = [("main", "0035_prefix_table")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         PrefixTable = self.db.mock_model(model_name="PrefixTable", db_table="main_prefixtable")
         self.db.add_column(
             "sa_activator",
@@ -31,7 +31,7 @@ class Migration(BaseMigration):
         )
         # Migrate data
         for id, name, ip, to_ip in self.db.execute("SELECT id, name, ip, to_ip FROM sa_activator"):
-            pt_name = "Activator::%s" % name
+            pt_name = f"Activator::{name}"
             self.db.execute(
                 """
                 INSERT INTO main_prefixtable(name)

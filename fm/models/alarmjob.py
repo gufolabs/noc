@@ -7,7 +7,7 @@
 
 # Python modules
 from enum import Enum
-from typing import Iterable, List, Optional
+from typing import Iterable
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
@@ -28,6 +28,7 @@ from mongoengine.fields import (
 
 # NOC models
 from noc.core.fm.enum import AlarmAction, ActionStatus, ItemStatus
+from noc.core.models.servicestatus import Status
 from noc.sa.models.servicesummary import SummaryItem, ObjectSummaryItem
 from noc.fm.models.alarmwatch import Effect
 
@@ -59,7 +60,7 @@ class JobStatus(Enum):
 
 class GroupItem(EmbeddedDocument):
     reference = StringField()
-    id: StringField(required=True)
+    id = StringField(required=True)
 
 
 class AlarmItem(EmbeddedDocument):
@@ -79,6 +80,23 @@ class AlarmItem(EmbeddedDocument):
     # Already escalated doc
 
 
+class ServiceItem(EmbeddedDocument):
+    """
+    Escalation affected items. First item it escalation leader
+    Attributes:
+        alarm: Alarm Id item
+        status: Item status
+    """
+
+    meta = {"strict": False}
+
+    service = ObjectIdField()
+    service_status: Status = EnumField(Status)
+    # managed_object_id: Int
+    status = EnumField(ItemStatus, default=ItemStatus.NEW)
+    # Already escalated doc
+
+
 class ActionLog(EmbeddedDocument):
     """
     Attributes:
@@ -93,11 +111,11 @@ class ActionLog(EmbeddedDocument):
     action: AlarmAction = EnumField(AlarmAction, required=True)
     key: str = StringField()
     # Message
-    template: Optional[str] = StringField(required=False)
+    template: str | None = StringField(required=False)
     subject: str = StringField()
     # Status
     status: ActionStatus = EnumField(ActionStatus, default=ActionStatus.NEW)
-    error: Optional[str] = StringField()
+    error: str | None = StringField()
     document_id = StringField()
     # Condition
     min_severity: int = IntField(default=0)
@@ -105,6 +123,7 @@ class ActionLog(EmbeddedDocument):
     alarm_ack = StringField()
     when = StringField(default="any")
     has_effect = EnumField(Effect, required=False)
+    ex_effect = EnumField(Effect, required=False)
     stop_processing: bool = BooleanField(default=False)
     allow_fail: bool = BooleanField(default=False)
     repeat_num: int = IntField(default=0)
@@ -112,8 +131,8 @@ class ActionLog(EmbeddedDocument):
     # Approve flag (is user Approved Received Message)
     # Notification adapter for sender
     # User Actions
-    user: Optional[int] = IntField()
-    tt_system: Optional[str] = StringField()
+    user: int | None = IntField()
+    tt_system: str | None = StringField()
     ctx = DictField()
 
 
@@ -155,22 +174,22 @@ class AlarmJob(Document):
     end_condition: str = StringField()
     maintenance_policy: str = StringField()
     # Document options
-    items: List[AlarmItem] = EmbeddedDocumentListField(AlarmItem)
-    actions: List[ActionLog] = EmbeddedDocumentListField(ActionLog)
+    items: list[AlarmItem] = EmbeddedDocumentListField(AlarmItem)
+    actions: list[ActionLog] = EmbeddedDocumentListField(ActionLog)
     # List of group references, if any
     tt_docs = DictField()
     is_dirty = BooleanField(default=True)
     groups = ListField(BinaryField())
     max_repeats: int = IntField(default=0)
     repeat_delay: int = IntField(default=60)
-    affected_services = ListField(ObjectIdField())
+    affected_services = EmbeddedDocumentListField(ServiceItem)
     affected_maintenances = ListField(ObjectIdField())
     # Escalation summary
     severity: int = IntField(min_value=0)
     # subject: Optional[str] = StringField(required=False)
-    total_objects: List[ObjectSummaryItem] = EmbeddedDocumentListField(ObjectSummaryItem)
-    total_services: List[SummaryItem] = EmbeddedDocumentListField(SummaryItem)
-    total_subscribers: List[SummaryItem] = EmbeddedDocumentListField(SummaryItem)
+    total_objects: list[ObjectSummaryItem] = EmbeddedDocumentListField(ObjectSummaryItem)
+    total_services: list[SummaryItem] = EmbeddedDocumentListField(SummaryItem)
+    total_subscribers: list[SummaryItem] = EmbeddedDocumentListField(SummaryItem)
     expires = DateTimeField(required=False)
 
     def __str__(self) -> str:

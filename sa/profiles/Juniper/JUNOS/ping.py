@@ -33,14 +33,14 @@ class Script(BaseScript):
         else:
             cmd += " count 5"
         if source_address:
-            cmd += " source %s" % source_address
+            cmd += f" source {source_address}"
         if size:
             cmd += " size %d" % int(size)
         if df:
             cmd += " do-not-fragment"
         if vrf:
-            cmd += " routing-instance %s" % vrf
-        cmd += " %s" % address
+            cmd += f" routing-instance {vrf}"
+        cmd += f" {address}"
         s = self.cli(cmd)
         match = self.rx_result.search(s)
         if match:

@@ -76,7 +76,7 @@ class Script(BaseScript):
                     "number": i[0],
                     "vendor": "HP",
                     "part_no": i[1],
-                    "description": "%s / %s Watt" % (i[3], i[4]),
+                    "description": f"{i[3]} / {i[4]} Watt",
                 }
             ]
         return r

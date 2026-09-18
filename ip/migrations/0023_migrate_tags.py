@@ -15,17 +15,16 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     TAG_MODELS = ["ip_vrfgroup", "ip_vrf", "ip_prefix", "ip_address", "ip_addressrange"]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Create temporary tags fields
         for m in self.TAG_MODELS:
             self.db.add_column(m, "tmp_tags", TagsField("Tags", null=True, blank=True))
         # Migrate data
         for m in self.TAG_MODELS:
             self.db.execute(
-                """
-            UPDATE %s
+                f"""
+            UPDATE {m}
             SET tmp_tags = string_to_array(regexp_replace(tags, ',$', ''), ',')
             WHERE tags != ''
             """
-                % m
             )

@@ -14,6 +14,8 @@ from noc.core.middleware.tls import get_user
 from .application import Application, view
 from .access import Permission
 
+__all__ = ["ReportApplication", "view"]
+
 
 class ReportApplication(Application):
     # django.forms.Form class for report queries
@@ -29,7 +31,7 @@ class ReportApplication(Application):
     inline_styles = ""
     ISO_DATE_MASK = "%Y-%m-%d"
 
-    def __init__(self, site):
+    def __init__(self, site) -> None:
         super().__init__(site)
         site.reports += [self]
 
@@ -47,7 +49,6 @@ class ReportApplication(Application):
         """
         Return report results to render
         Overriden in subclasses
-        :param kwargs:
         :return:
         """
 
@@ -55,8 +56,6 @@ class ReportApplication(Application):
         """
         Returns render report as HTML
         :param request: HTTP Request
-        :param result:
-        :param query:
         :return:
         """
 
@@ -67,14 +66,12 @@ class ReportApplication(Application):
     def view_report(self, request, format="html"):
         """
         Render report
-        :param request:
-        :param format:
         :return:
         """
         query = {}
         # Check format is valid for application
         if format not in self.supported_formats():
-            return self.response_not_found("Unsupported format '%s'" % format)
+            return self.response_not_found(f"Unsupported format '{format}'")
             # Display and check form if necessary
         form_class = self.get_form()
         if form_class:
@@ -97,7 +94,7 @@ class ReportApplication(Application):
                     inline_styles=self.inline_styles,
                 )
                 # Build result
-        rdata = getattr(self, "report_%s" % format)(request=request, **query)
+        rdata = getattr(self, f"report_{format}")(request=request, **query)
         # Render result
         if format == "html":
             return self.render(request, "report.html", data=rdata, app=self, is_report=True)
@@ -114,7 +111,7 @@ class ReportByConfigApplication(Application):
     report_id: str = None
     report_config = None
 
-    def __init__(self, site):
+    def __init__(self, site) -> None:
         self.site = site
         self.service = None  # Set by web
         self.module = self.get_module()

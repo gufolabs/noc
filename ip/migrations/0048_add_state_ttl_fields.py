@@ -20,7 +20,7 @@ class Migration(BaseMigration):
             models.DateTimeField(column_title, blank=True, null=True),
         )
 
-    def migrate(self):
+    def migrate(self) -> None:
         tables = ("ip_address", "ip_prefix", "ip_vrf")
         columns = {
             "state_changed": "State Changed",

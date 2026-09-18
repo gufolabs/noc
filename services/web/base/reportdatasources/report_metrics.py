@@ -24,7 +24,7 @@ class ReportMetrics(BaseReportColumn):
     CUSTOM_FILTER = {"having": [], "where": []}
     KEY_FIELDS = None
 
-    def __init__(self, mos_ids, f_date, to_date, columns=None):
+    def __init__(self, mos_ids, f_date, to_date, columns=None) -> None:
         super().__init__(mos_ids)
         self.from_date = f_date
         self.to_date = to_date
@@ -40,7 +40,7 @@ class ReportMetrics(BaseReportColumn):
 
     @staticmethod
     def get_mo_filter(ids, use_dictionary=False):
-        return "managed_object IN (%s)" % ", ".join([str(c) for c in ids])
+        return "managed_object IN ({})".format(", ".join([str(c) for c in ids]))
 
     def get_custom_conditions(self):
         return self.CUSTOM_FILTER
@@ -62,16 +62,18 @@ class ReportMetrics(BaseReportColumn):
             "q_order_by": self.KEY_FIELDS,
         }
         for num, field, alias in sorted(self.SELECT_QUERY_MAP, key=lambda x: x[0]):
-            func = self.SELECT_QUERY_MAP[(num, field, alias)] or "avg(%s)" % field
-            def_map["q_select"] += ["%s AS %s" % (func, alias or "a_" + field)]
+            func = self.SELECT_QUERY_MAP[(num, field, alias)] or f"avg({field})"
+            def_map["q_select"] += ["{} AS {}".format(func, alias or "a_" + field)]
         return " ".join(
             [
-                "SELECT %s" % ",".join(def_map["q_select"]),
-                "FROM %s" % self.TABLE_NAME,
-                "WHERE %s" % " AND ".join(def_map["q_where"]),
-                "GROUP BY %s" % ",".join(def_map["q_group"]),
-                "HAVING %s" % " AND ".join(def_map["q_having"]) if def_map["q_having"] else "",
-                "ORDER BY %s" % ",".join(def_map["q_order_by"]),
+                "SELECT {}".format(",".join(def_map["q_select"])),
+                f"FROM {self.TABLE_NAME}",
+                "WHERE {}".format(" AND ".join(def_map["q_where"])),
+                "GROUP BY {}".format(",".join(def_map["q_group"])),
+                "HAVING {}".format(" AND ".join(def_map["q_having"]))
+                if def_map["q_having"]
+                else "",
+                "ORDER BY {}".format(",".join(def_map["q_order_by"])),
             ]
         )
 
@@ -81,8 +83,7 @@ class ReportMetrics(BaseReportColumn):
         query = self.get_query_ch(f_date, to_date)
         while mo_ids:
             chunk, mo_ids = mo_ids[: self.CHUNK_SIZE], mo_ids[self.CHUNK_SIZE :]
-            for row in self.ch_client.execute(query % self.get_mo_filter(chunk)):
-                yield row
+            yield from self.ch_client.execute(query % self.get_mo_filter(chunk))
 
     def extract(self):
         # do_query_ch(self, moss, query_map, f_date, to_date)

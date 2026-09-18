@@ -48,14 +48,14 @@ class Script(BaseScript):
         """
         # Fallback to CLI
         if interface:
-            cmd = "display interface %s" % interface
+            cmd = f"display interface {interface}"
         else:
             cmd = "display interface"
         for match in self.rx_interface_status.finditer(self.cli(cmd)):
             r += [{"interface": match.group("interface"), "status": match.group("status") == "UP"}]
         if not r:
             if interface:
-                cmd = "display brief interface %s" % interface
+                cmd = f"display brief interface {interface}"
             else:
                 cmd = "display brief interface"
             for match in self.rx_interface_status.finditer(self.cli(cmd)):

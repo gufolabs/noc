@@ -173,7 +173,7 @@ Ext.define("NOC.core.RemoteMappingForm", {
     this.center();
   },
   request: function(url, params){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "POST",
       jsonData: params,

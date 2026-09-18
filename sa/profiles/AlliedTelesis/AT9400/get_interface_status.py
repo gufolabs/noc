@@ -38,7 +38,7 @@ class Script(BaseScript):
         if interface is None:
             interface = "ALL"
         try:
-            v = self.cli("show interface %s" % interface)
+            v = self.cli(f"show interface {interface}")
         except self.CLISyntaxError:
             raise self.NotSupportedError()
 

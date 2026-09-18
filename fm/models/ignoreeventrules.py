@@ -13,7 +13,7 @@ from noc.core.model.base import NOCModel
 
 
 class IgnoreEventRules(NOCModel):
-    class Meta(object):
+    class Meta:
         app_label = "fm"
         db_table = "fm_ignoreeventrules"
         verbose_name = "Ignore Event Rule"
@@ -27,4 +27,4 @@ class IgnoreEventRules(NOCModel):
     description = models.TextField("Description", null=True, blank=True)
 
     def __str__(self):
-        return "%s (%s, %s)" % (self.name, self.left_re, self.right_re)
+        return f"{self.name} ({self.left_re}, {self.right_re})"

@@ -8,7 +8,7 @@
 # Python modules
 import logging
 from dataclasses import dataclass
-from typing import Optional, List, Tuple, Union, Iterator, Iterable
+from typing import Iterator, Iterable
 
 # Third-party modules
 from pymongo import ReadPreference
@@ -30,41 +30,41 @@ CHECK_OIDS = [mib["SNMPv2-MIB::sysObjectID.0"]]
 
 
 @dataclass(frozen=True)
-class SNMPCredential(object):
+class SNMPCredential:
     snmp_ro: str = None
-    snmp_rw: Optional[str] = None
-    oids: Optional[List[str]] = None
+    snmp_rw: str | None = None
+    oids: list[str] | None = None
 
 
 @dataclass(frozen=True)
-class CLICredential(object):
-    user: Optional[str] = None
-    password: Optional[str] = None
-    super_password: Optional[str] = None
+class CLICredential:
+    user: str | None = None
+    password: str | None = None
+    super_password: str | None = None
     raise_privilege: bool = True
 
 
 @dataclass(frozen=True)
-class SuggestSNMPConfig(object):
-    protocols: Tuple[Protocol, ...]
+class SuggestSNMPConfig:
+    protocols: tuple[Protocol, ...]
     check_method: str = "snmp_check"
-    snmp_ro: Optional[str] = None
-    snmp_rw: Optional[str] = None
-    check_oids: Optional[Tuple[str, ...]] = None
+    snmp_ro: str | None = None
+    snmp_rw: str | None = None
+    check_oids: tuple[str, ...] | None = None
 
     def get_credential(self) -> SNMPCredential:
         return SNMPCredential(self.snmp_ro, self.snmp_rw, oids=self.check_oids)
 
 
 @dataclass(frozen=True)
-class SuggestCLIConfig(object):
-    protocols: Tuple[Protocol, ...]
+class SuggestCLIConfig:
+    protocols: tuple[Protocol, ...]
     check_method: str = "cli_check"
-    user: Optional[str] = None
-    password: Optional[str] = None
-    super_password: Optional[str] = None
+    user: str | None = None
+    password: str | None = None
+    super_password: str | None = None
     raise_privileges: bool = True
-    access_preference: Optional[str] = "C"
+    access_preference: str | None = "C"
 
     def get_credential(self) -> CLICredential:
         return CLICredential(
@@ -76,23 +76,21 @@ class SuggestCLIConfig(object):
 
 
 @dataclass(frozen=True)
-class ProtocolResult(object):
+class ProtocolResult:
     protocol: Protocol
     status: bool
     skipped: bool = False
-    error: Optional[str] = None
-    credential: Optional[Union[CLICredential, SNMPCredential]] = None
+    error: str | None = None
+    credential: CLICredential | SNMPCredential | None = None
 
 
-SUGGEST_SNMP: Tuple[Protocol, ...] = (Protocol(7), Protocol(6))
-SUGGEST_CLI: Tuple[Protocol, ...] = (Protocol(1), Protocol(2))
-SUGGEST_PROTOCOLS: Tuple[Protocol, ...] = SUGGEST_SNMP + SUGGEST_CLI
+SUGGEST_SNMP: tuple[Protocol, ...] = (Protocol(7), Protocol(6))
+SUGGEST_CLI: tuple[Protocol, ...] = (Protocol(1), Protocol(2))
+SUGGEST_PROTOCOLS: tuple[Protocol, ...] = SUGGEST_SNMP + SUGGEST_CLI
 
 
-class CredentialChecker(object):
-    """
-    Credential checker for CLI/SNMP credential. Allow suggests credential
-    """
+class CredentialChecker:
+    """Credential checker for CLI/SNMP credential. Allow suggests credential"""
 
     base_logger = logging.getLogger("credentialchecker")
 
@@ -100,39 +98,39 @@ class CredentialChecker(object):
         self,
         address,
         pool,
-        labels: List[str] = None,
-        port: Optional[str] = None,
+        labels: list[str] = None,
+        port: str | None = None,
         logger=None,
-        profile: Optional[str] = None,
+        profile: str | None = None,
         raise_privilege: bool = True,
         calling_service: str = "credentialchecker",
-        credentials: Optional[List[Union[SuggestCLIConfig, SuggestSNMPConfig]]] = None,
+        credentials: list[SuggestCLIConfig | SuggestSNMPConfig] | None = None,
         ignoring_rule: bool = False,
     ):
         """
-
-        :param address: Device IP address
-        :param pool: Activator pool for request
-        :param labels: List labels for filter CredentialCheck Rules
-        :param logger: logging instance
-        :param profile: SA Profile
-        :param raise_privilege: Try raise privilege for check
-        :param calling_service: Service name
-        :param credentials: Custom credential for check
-        :param ignoring_rule: Do not use rule for suggest credential
+        Args:
+            address: Device IP address
+            pool: Activator pool for request
+            labels: List labels for filter CredentialCheck Rules
+            logger: logging instance
+            profile: SA Profile
+            raise_privilege: Try raise privilege for check
+            calling_service: Service name
+            credentials: Custom credential for check
+            ignoring_rule: Do not use rule for suggest credential
         """
         self.address = address
         self.pool = pool
         self.port = port
         self.labels = labels
         self.logger = PrefixLoggerAdapter(
-            logger or self.base_logger, "%s][%s" % (self.pool or "", self.address or "")
+            logger or self.base_logger, "{}][{}".format(self.pool or "", self.address or "")
         )
         self.calling_service = calling_service
-        self.profile: Optional["Profile"] = profile
+        self.profile: "Profile" | None = profile
         if isinstance(self.profile, str):
             self.profile = Profile.get_by_name(profile) if profile else None
-        self.credentials: List[Union[CLICredential, SNMPCredential]] = credentials or []
+        self.credentials: list[CLICredential | SNMPCredential] = credentials or []
         self.ignoring_rule = ignoring_rule
         self.ignoring_cli = False
         self.raise_privilege = raise_privilege
@@ -141,25 +139,23 @@ class CredentialChecker(object):
             self.ignoring_cli = True
 
     @staticmethod
-    def iter_protocols(*args, order: Tuple[Protocol, ...] = None) -> Iterable[Protocol]:
+    def iter_protocols(*args, order: tuple[Protocol, ...] = None) -> Iterable[Protocol]:
         """
-
-        :param args:
-        :param order:
-        :return:
+        Args:
+            *args
+            order
         """
-        for p in sorted(
+        yield from sorted(
             set(args[0]).intersection(*[set(s) for s in args[1:] if s]),
             key=lambda x: order.index(x),
-        ):
-            yield p
+        )
 
     @staticmethod
     def is_unsupported_error(message) -> bool:
-        """
-        Todo replace to error_code
-        :param message:
-        :return:
+        """Todo replace to error_code
+
+        Args:
+            message
         """
         if "Exception: TimeoutError()" in message:
             return True
@@ -170,35 +166,38 @@ class CredentialChecker(object):
         return "No supported authentication methods" in message
 
     def iter_suggests(
-        self, protocols: Tuple[Protocol, ...] = None
-    ) -> Iterator[Union[SuggestCLIConfig, SuggestSNMPConfig]]:
-        """
-        Load ProfileCheckRules and return a list, grouped by preferences
+        self, protocols: tuple[Protocol, ...] = None
+    ) -> Iterator[SuggestCLIConfig | SuggestSNMPConfig]:
+        """Load ProfileCheckRules and return a list, grouped by preferences
 
-        :param protocols:
-        :return:
+        Args:
+            protocols
         """
         # Try custom credential first
+        ordered_cli, ordered_snmp = [], []
+        for p in protocols:
+            if p in SUGGEST_CLI:
+                ordered_cli.append(p)
+            elif p in SUGGEST_SNMP:
+                ordered_snmp.append(p)
         for c in self.credentials:
             if isinstance(c, CLICredential):
-                cli = tuple(set(SUGGEST_CLI).intersection(set(protocols)))
                 yield SuggestCLIConfig(
-                    protocols=cli,
+                    protocols=tuple(ordered_cli),
                     user=c.user,
                     password=c.password or None,
                     super_password=c.super_password or None,
                     raise_privileges=self.raise_privilege,
                 )
             elif isinstance(c, SNMPCredential):
-                snmp = tuple(set(SUGGEST_SNMP).intersection(set(protocols)))
                 yield SuggestSNMPConfig(
-                    protocols=snmp,
+                    protocols=tuple(ordered_snmp),
                     snmp_ro=c.snmp_ro,
                     snmp_rw=c.snmp_rw,
                 )
         if self.ignoring_rule:
             return
-        ccr: List[CredentialCheckRule] = CredentialCheckRule.objects.filter(is_active=True)
+        ccr: list[CredentialCheckRule] = CredentialCheckRule.objects.filter(is_active=True)
         if self.labels:
             ccr = ccr.filter(
                 (m_q(match__labels__in=self.labels, match__exclude_labels__nin=self.labels))
@@ -246,11 +245,11 @@ class CredentialChecker(object):
                         check_oids=tuple(cc.suggest_snmp_oids or []) or None,
                     )
 
-    def iter_result(self, protocols: Optional[Iterable[Protocol]] = None) -> List[ProtocolResult]:
-        """
-        Iterate over suggest result
-        :param protocols: List protocols for check
-        :return:
+    def iter_result(self, protocols: Iterable[Protocol] | None = None) -> list[ProtocolResult]:
+        """Iterate over suggest result
+
+        Args:
+            protocols: List protocols for check
         """
         unsupported_proto = set()
         processed = set()
@@ -277,10 +276,9 @@ class CredentialChecker(object):
 
     def do_snmp_check(self, protocol: Protocol, cred: SNMPCredential) -> ProtocolResult:
         """
-
-        :param protocol:
-        :param cred:
-        :return:
+        Args:
+            protocol
+            cred
         """
         for oid in cred.oids or CHECK_OIDS:
             status, message = self.check_oid(oid, cred.snmp_ro, f"{protocol.config.alias}_get")
@@ -301,11 +299,11 @@ class CredentialChecker(object):
         )
 
     def do_cli_check(self, protocol: Protocol, cred: CLICredential) -> ProtocolResult:
-        """
-        Check suggest CLIT config
-        :param protocol:
-        :param cred: Credential for Check
-        :return:
+        """Check suggest CLIT config
+
+        Args:
+            protocol
+            cred: Credential for Check
         """
         if self.ignoring_cli:
             # Skipped
@@ -324,14 +322,14 @@ class CredentialChecker(object):
             credential=cred,
         )
 
-    def check_oid(self, oid: str, community: str, version="snmp_v2c_get") -> Tuple[bool, str]:
-        """
-        Perform SNMP GET. Param is OID or symbolic name, version is activator method
+    def check_oid(self, oid: str, community: str, version="snmp_v2c_get") -> tuple[bool, str]:
+        """Perform SNMP GET. Param is OID or symbolic name, version is activator method
         todo mass check
-        :param oid:
-        :param community:
-        :param version:
-        :return:
+
+        Args:
+            oid
+            community
+            version
         """
         self.logger.info(
             "Trying community '%s': %s, version: %s", safe_shadow(community), oid, version
@@ -356,15 +354,15 @@ class CredentialChecker(object):
         super_password: str,
         protocol: Protocol,
         raise_privilege: bool = True,
-    ) -> Tuple[bool, str]:
-        """
-        Check user, password for cli proto
-        :param user:
-        :param password:
-        :param super_password:
-        :param protocol:
-        :param raise_privilege:
-        :return:
+    ) -> tuple[bool, str]:
+        """Check user, password for cli proto
+
+        Args:
+            user
+            password
+            super_password
+            protocol
+            raise_privilege
         """
         self.logger.debug("Checking %s: %s/%s/%s", protocol, user, password, super_password)
         self.logger.info(
@@ -397,11 +395,11 @@ class CredentialChecker(object):
             self.logger.debug("RPC Error: %s", e)
             return False, ""
 
-    def get_first(self, protocols: Iterable[Protocol]) -> List[ProtocolResult]:
-        """
-        Get first result
-        :param protocols:
-        :return:
+    def get_first(self, protocols: Iterable[Protocol]) -> list[ProtocolResult]:
+        """Get first result
+
+        Args:
+            protocols
         """
         processed_proto = set()
         result = []

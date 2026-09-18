@@ -8,7 +8,7 @@
 # Python modules
 from threading import Lock
 import operator
-from typing import Optional, List, Dict, Any, Union
+from typing import Optional, Any
 from pathlib import Path
 
 # Third-party modules
@@ -74,7 +74,7 @@ class ModelInterfaceAttr(EmbeddedDocument):
         )
 
     def _clean(self, value):
-        return getattr(self, "clean_%s" % self.type)(value)
+        return getattr(self, f"clean_{self.type}")(value)
 
     def clean_str(self, value):
         return value
@@ -124,7 +124,7 @@ class ModelInterface(Document):
 
     name = StringField(unique=True)
     description = StringField()
-    attrs: List[ModelInterfaceAttr] = ListField(EmbeddedDocumentField(ModelInterfaceAttr))
+    attrs: list[ModelInterfaceAttr] = ListField(EmbeddedDocumentField(ModelInterfaceAttr))
     uuid = UUIDField(binary=True)
 
     _id_cache = cachetools.TTLCache(100, 10)
@@ -136,7 +136,7 @@ class ModelInterface(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ModelInterface"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ModelInterface"]:
         return ModelInterface.objects.filter(id=oid).first()
 
     @classmethod
@@ -144,7 +144,7 @@ class ModelInterface(Document):
     def get_by_name(cls, name: str) -> Optional["ModelInterface"]:
         return ModelInterface.objects.filter(name=name).first()
 
-    def get_attr(self, name: str) -> Optional[ModelInterfaceAttr]:
+    def get_attr(self, name: str) -> ModelInterfaceAttr | None:
         for a in self.attrs:
             if a.name == name:
                 return a
@@ -154,19 +154,19 @@ class ModelInterface(Document):
         ar = []
         for a in self.attrs:
             r = ["        {"]
-            r += ['            "name": "%s",' % q(a.name)]
-            r += ['            "type": "%s",' % q(a.type)]
-            r += ['            "description": "%s",' % q(a.description)]
-            r += ['            "required": %s,' % q(a.required)]
-            r += ['            "is_const": %s' % q(a.is_const)]
+            r += [f'            "name": "{q(a.name)}",']
+            r += [f'            "type": "{q(a.type)}",']
+            r += [f'            "description": "{q(a.description)}",']
+            r += [f'            "required": {q(a.required)},']
+            r += [f'            "is_const": {q(a.is_const)}']
             r += ["        }"]
             ar += ["\n".join(r)]
         r = [
             "{",
-            '    "name": "%s",' % q(self.name),
-            '    "$collection": "%s",' % self._meta["json_collection"],
-            '    "uuid": "%s",' % str(self.uuid),
-            '    "description": "%s",' % q(self.description),
+            f'    "name": "{q(self.name)}",',
+            '    "$collection": "{}",'.format(self._meta["json_collection"]),
+            f'    "uuid": "{self.uuid!s}",',
+            f'    "description": "{q(self.description)}",',
             '    "attrs": [',
             ",\n".join(ar),
             "    ]",
@@ -178,7 +178,7 @@ class ModelInterface(Document):
         return safe_json_path(self.name)
 
     @classmethod
-    def clean_data(cls, data: List[Dict[str, str]]) -> List[Dict[str, Any]]:
+    def clean_data(cls, data: list[dict[str, str]]) -> list[dict[str, Any]]:
         """
         Convert types according to interface
         """

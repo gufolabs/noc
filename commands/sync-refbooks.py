@@ -6,6 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
+import importlib
 import os
 
 # NOC modules
@@ -33,7 +34,7 @@ class Command(BaseCommand):
                 for f in filenames
                 if f.endswith(".py") and f != "__init__.py" and not f.startswith(".")
             ]:
-                m = __import__(mb + f[:-3], {}, {}, "*")
+                m = importlib.import_module(mb + f[:-3])
                 for ec_name in dir(m):
                     ec = getattr(m, ec_name)
                     try:
@@ -56,9 +57,5 @@ class Command(BaseCommand):
                 del loaded_refbooks[name]
         # Delete stale refbooks
         for rb in loaded_refbooks.values():
-            self.print("DELETE REFBOOK: %s" % rb.name)
+            self.print(f"DELETE REFBOOK: {rb.name}")
             rb.delete()
-
-
-if __name__ == "__main__":
-    Command().run()

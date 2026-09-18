@@ -29,9 +29,9 @@ class Script(BaseScript):
         # Fallback to CLI
         cmd = "show mac address-table"
         if mac is not None:
-            cmd += " address %s" % self.profile.convert_mac(mac)
+            cmd += f" address {self.profile.convert_mac(mac)}"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
         for match in self.rx_line.finditer(self.cli(cmd, cached=True)):
             interfaces = match.group("interfaces")
             if interfaces == "0":

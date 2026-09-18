@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # mib API
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ from noc.config import config
 from noc.core.fileutils import temporary_file, safe_rewrite
 from noc.fm.models.mib import MIB
 from noc.core.error import ERR_MIB_NOT_FOUND, ERR_MIB_MISSED, ERR_MIB_TOOL_MISSED
-from noc.core.comp import smart_text, smart_bytes
+from noc.core.comp import smart_text
 from noc.core.service.jsonrpcapi import JSONRPCAPI, api
 
 router = APIRouter()
@@ -52,7 +52,7 @@ class MIBAPI(JSONRPCAPI):
         :param name: MIB name
         :return: path
         """
-        return os.path.join(config.path.mib_path, "%s.mib" % name)
+        return os.path.join(config.path.mib_path, f"{name}.mib")
 
     @api
     def get_text(self, name):
@@ -104,7 +104,7 @@ class MIBAPI(JSONRPCAPI):
                     self.logger.error("Required MIB missed: %s", smart_text(match.group(1)))
                     return {
                         "status": False,
-                        "msg": "Required MIB missed: %s" % smart_text(match.group(1)),
+                        "msg": f"Required MIB missed: {smart_text(match.group(1))}",
                         "code": ERR_MIB_MISSED,
                     }
                 match = self.rx_macro_not_imported.search(line.strip())
@@ -124,14 +124,12 @@ class MIBAPI(JSONRPCAPI):
                 if match:
                     return {
                         "status": False,
-                        "msg": "Illegal subtype: %s" % smart_text(match.group(1)),
+                        "msg": f"Illegal subtype: {smart_text(match.group(1))}",
                         "code": ERR_MIB_MISSED,
                     }
                 match = self.rx_object_identifier_unknown.search(line.strip())
                 if match:
-                    self.logger.warning(
-                        "Object Identifier unknown: %s" % smart_text(match.group(1))
-                    )
+                    self.logger.warning(f"Object Identifier unknown: {smart_text(match.group(1))}")
                     # return {
                     #     "status": False,
                     #     "msg": "Object Identifier unknown: %s" % smart_text(match.group(1)),
@@ -145,7 +143,7 @@ class MIBAPI(JSONRPCAPI):
                     env=self.SMI_ENV,
                 )
                 with open(py_path) as f:
-                    p_data = smart_bytes(smart_text(f.read(), encoding="ascii", errors="ignore"))
+                    p_data = smart_text(f.read(), encoding="ascii", errors="ignore").encode()
                 with open(py_path, "wb") as f:
                     f.write(p_data)
                 m = SourceFileLoader("mib", py_path).load_module()
@@ -165,7 +163,7 @@ class MIBAPI(JSONRPCAPI):
                     if md is None:
                         return {
                             "status": False,
-                            "msg": "Required MIB missed: %s" % rm,
+                            "msg": f"Required MIB missed: {rm}",
                             "code": ERR_MIB_MISSED,
                         }
                     depends_on[rm] = md
@@ -210,7 +208,7 @@ class MIBAPI(JSONRPCAPI):
                 if i in m.MIB:
                     cdata += [
                         {
-                            "name": "%s::%s" % (mib_name, node),
+                            "name": f"{mib_name}::{node}",
                             "oid": v["oid"],
                             "description": v.get("description"),
                             "syntax": (
@@ -230,7 +228,6 @@ class MIBAPI(JSONRPCAPI):
     def lookup(self, oid):
         """
         Convert oid to symbolic name and vise versa
-        :param oid:
         :return:
         """
         if self.rx_oid.match(oid):

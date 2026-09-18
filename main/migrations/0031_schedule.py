@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("sa", "0003_task_schedule")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # TimePattern
         TimePattern = self.db.mock_model(model_name="TimePattern", db_table="main_timepattern")
         # Model "TaskSchedule"

@@ -11,7 +11,7 @@ import bisect
 import datetime
 from operator import itemgetter
 import re
-from typing import Any, AsyncIterable, Dict, List, Optional, Iterable, Tuple
+from typing import Any, AsyncIterable, Iterable
 
 # NOC modules
 from noc.config import config
@@ -55,12 +55,12 @@ FROM (
      groupArray(interface) as migrate_ifaces,
      uniq(interface) as iface_count
      FROM mac
-     WHERE %%s and %s and date >= '%%s' and date < '%%s'
+     WHERE %s and {} and date >= '%s' and date < '%s'
      GROUP BY mac, managed_object, vlan
      HAVING iface_count > 1
 )
-    """ % " AND ".join(
-    "(mac < %s or mac > %s)" % (int(MAC(x[0])), int(MAC(x[1]))) for x in MULTICAST_MACS
+    """.format(
+    " AND ".join(f"(mac < {int(MAC(x[0]))} or mac > {int(MAC(x[1]))})" for x in MULTICAST_MACS)
 )
 
 rx_port_num = re.compile(r"\d+$")
@@ -103,7 +103,7 @@ class MovedMACsDS(BaseDataSource):
     ]
 
     @staticmethod
-    def get_filter(filters: Dict[str, Any]) -> Dict[str, Any]:
+    def get_filter(filters: dict[str, Any]) -> dict[str, Any]:
         r = {}
         if "resource_group" in filters:
             r["effective_service_groups__overlap"] = ResourceGroup.get_nested_ids(
@@ -117,15 +117,15 @@ class MovedMACsDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
-        admin_domain_ads: Optional[List[int]] = None,
+        fields: Iterable[str] | None = None,
+        admin_domain_ads: list[int] | None = None,
         start: datetime.datetime = None,
         end: datetime.datetime = None,
-        interface_profile: Optional[InterfaceProfile] = None,
+        interface_profile: InterfaceProfile | None = None,
         exclude_serial_change: bool = False,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         end = end + datetime.timedelta(days=1)
         if interface_profile:
             iface_filter = (

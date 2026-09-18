@@ -90,7 +90,7 @@ class Script(BaseScript):
         # For each interface
         for interface in interfaces:
             try:
-                v = self.cli("show interfaces switchport %s" % interface)
+                v = self.cli(f"show interfaces switchport {interface}")
                 sleep(0.7)
             except self.CLISyntaxError:
                 continue

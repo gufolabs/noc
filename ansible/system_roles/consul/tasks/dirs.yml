@@ -7,7 +7,7 @@
     state: directory
     owner: "{{ consul_user }}"
     group: "{{ consul_group }}"
-  with_items:
+  loop:
     - /var/consul
     - /var/run/consul
     - "{{ consul_configd_path }}"

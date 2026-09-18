@@ -14,7 +14,7 @@ from noc.core.model.fields import PickledField
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Model 'ReduceTask'
         self.db.create_table(
             "sa_reducetask",

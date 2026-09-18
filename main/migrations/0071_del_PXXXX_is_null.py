@@ -10,7 +10,7 @@ import re
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         coll = self.mongo_db["noc.pools"]
         pattern = re.compile(r"^P\d{4}$")
 

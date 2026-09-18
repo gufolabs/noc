@@ -25,7 +25,7 @@ from .vrf import VRF
 
 
 class PrefixAccess(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = _("Prefix Access")
         verbose_name_plural = _("Prefix Access")
         db_table = "ip_prefixaccess"
@@ -46,7 +46,7 @@ class PrefixAccess(NOCModel):
             perms += ["View"]
         if self.can_change:
             perms += ["Change"]
-        return "%s: %s(%s): %s: %s" % (
+        return "{}: {}({}): {}: {}".format(
             self.user.username,
             self.vrf.name,
             self.afi,
@@ -70,10 +70,6 @@ class PrefixAccess(NOCModel):
     def user_can_view(cls, user, vrf, afi, prefix):
         """
         Check user has read access to prefix
-        :param user:
-        :param vrf:
-        :param afi:
-        :param prefix:
         :return:
         """
         if user.is_superuser:
@@ -97,11 +93,6 @@ class PrefixAccess(NOCModel):
     def user_can_change(cls, user, vrf, afi, prefix):
         """
         Check user has write access to prefix
-        :param cls:
-        :param user:
-        :param vrf:
-        :param afi:
-        :param prefix:
         :return:
         """
         if user.is_superuser:
@@ -126,9 +117,6 @@ class PrefixAccess(NOCModel):
         """
         Returns django Q with read restrictions.
         Q can be applied to prefix
-        :param user:
-        :param field:
-        :param table:
         :return:
         """
         if user.is_superuser:
@@ -144,15 +132,15 @@ class PrefixAccess(NOCModel):
                 stmt += [
                     "(%s = %d AND %s = '%s' AND %s <<= '%s')"
                     % (
-                        "%s.vrf_id" % table if table else "vrf_id",
+                        f"{table}.vrf_id" if table else "vrf_id",
                         vrf,
-                        "%s.afi" % table if table else "afi",
+                        f"{table}.afi" if table else "afi",
                         afi,
-                        "%s.%s" % (table, field) if table else field,
+                        f"{table}.{field}" if table else field,
                         p,
                     )
                 ]
-        return SQL(reduce(lambda x, y: "%s OR %s" % (x, y), stmt))
+        return SQL(reduce(lambda x, y: f"{x} OR {y}", stmt))
 
 
 # Avoid circular references

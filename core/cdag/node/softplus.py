@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 from math import log1p, exp
 
 # Third-party modules
@@ -29,7 +28,7 @@ class SoftPlusNode(BaseCDAGNode):
     config_cls = SoftPlusConfig
     categories = [Category.MATH, Category.ACTIVATION]
 
-    def get_value(self, x: ValueType) -> Optional[ValueType]:
+    def get_value(self, x: ValueType) -> ValueType | None:
         if not self.config.k:
             return None
         return log1p(exp(float(x) * self.config.k)) / self.config.k

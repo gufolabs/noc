@@ -8,11 +8,10 @@
 # Python modules
 import asyncio
 from collections import namedtuple
-from typing import Optional, Set
 
 # Third-party modules
 from fastapi import APIRouter, Header, Depends
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import JSONResponse
 
 # NOC modules
 from noc.aaa.models.user import User
@@ -28,7 +27,7 @@ from noc.core.span import Span
 Redirect = namedtuple("Redirect", ["location", "method", "params"])
 
 
-class JSONRPCAPI(object):
+class JSONRPCAPI:
     """
     JSON-RPC (specification 2.0) API implementation for FastAPI service
     https://www.jsonrpc.org/specification
@@ -47,16 +46,16 @@ class JSONRPCAPI(object):
     # Indicates whether the REMOTE-HTTP header is required in the request
     auth_required = False
 
-    def __init__(self, router: APIRouter):
+    def __init__(self, router: APIRouter) -> None:
         self.service = get_service()
         self.logger = self.service.logger
-        self.current_user: Optional[User] = None
+        self.current_user: User | None = None
         self.router = router
-        self.methods: Set[str] = self.get_methods()
+        self.methods: set[str] = self.get_methods()
         self.setup_routes()
 
     @classmethod
-    def get_methods(cls) -> Set[str]:
+    def get_methods(cls) -> set[str]:
         """
         Returns a list of available API methods
         """
@@ -65,7 +64,7 @@ class JSONRPCAPI(object):
     async def api_endpoint(
         self,
         req: JSONRemoteProcedureCall,
-        remote_user: Optional[User] = Depends(get_current_user),
+        remote_user: User | None = Depends(get_current_user),
         span_ctx: int = Header(0, alias="X-NOC-Span-Ctx"),
         span_id: int = Header(0, alias="X-NOC-Span"),
         calling_service: str = Header("unknown", alias=CALLING_SERVICE_HEADER),
@@ -77,7 +76,7 @@ class JSONRPCAPI(object):
 
         self.current_user = remote_user
         if req.method not in self.methods:
-            return ORJSONResponse(
+            return JSONResponse(
                 content={
                     "error": {"message": f"Method not found: '{req.method}'", "code": -32601},
                     "id": req.id,
@@ -112,21 +111,21 @@ class JSONRPCAPI(object):
                     result = await result
                 if isinstance(result, Redirect):
                     # Redirect protocol extension
-                    return ORJSONResponse(
+                    return JSONResponse(
                         content={"method": result.method, "params": result.params, "id": req.id},
                         status_code=307,
                         headers={"location": result.location},
                     )
-                return ORJSONResponse(content={"result": result, "id": req.id})
+                return JSONResponse(content={"result": result, "id": req.id})
             except NOCError as e:
                 span.set_error_from_exc(e, e.code)
-                return ORJSONResponse(
+                return JSONResponse(
                     content={"error": {"message": f"Failed: {e}", "code": e.code}, "id": req.id}
                 )
             except Exception as e:
                 error_report()
                 span.set_error_from_exc(e)
-                return ORJSONResponse(
+                return JSONResponse(
                     content={"error": {"message": f"Failed: {e}", "code": -32000}, "id": req.id}
                 )
 

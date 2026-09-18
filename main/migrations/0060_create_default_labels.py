@@ -25,7 +25,7 @@ class Migration(BaseMigration):
 
     TAG_COLLETIONS = [("noc.pools", "pool"), ("noc.ttsystem", "ttsystem")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Create wildcard labels
         l_coll = self.mongo_db["labels"]
         current_labels = {ll["name"]: ll["_id"] for ll in l_coll.find()}
@@ -84,11 +84,10 @@ class Migration(BaseMigration):
                 ]
             # Fill labels
             for (name,) in self.db.execute(
-                """
+                f"""
                 SELECT DISTINCT name
-                FROM %s
+                FROM {table}
                 """
-                % table
             ):
                 label = f"noc::{scope}::{name}::="
                 if label not in current_labels:

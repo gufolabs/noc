@@ -38,7 +38,7 @@ class Profile(BaseProfile):
     def convert_interface_name(self, s, board=0):
         if board and self.rx_iface_match.match(s):
             # appen boarn number to ifName
-            return "%s%s/%s" % (
+            return "{}{}/{}".format(
                 self.rx_iface_match.match(s).group(1),
                 board if board else "",
                 self.rx_iface_match.match(s).group(2),
@@ -74,7 +74,6 @@ class Profile(BaseProfile):
         6     ADSL2+(SGN)   UTA6044AD   UTA6044AD09N  Z08092012G      In Service
         --------------------------------------------------------------------------------
 
-        :param script:
         :return:
         """
         c = self.rx_board.findall(script.cli("show board", cached=True))

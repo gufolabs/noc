@@ -11,7 +11,6 @@ import glob
 import os
 import threading
 import importlib
-from typing import Optional, Type
 
 # NOC modules
 from noc.core.loader.base import BaseLoader
@@ -24,13 +23,13 @@ GENERIC_PROFILE = "Generic.Host"
 class ProfileLoader(BaseLoader):
     name = "profile"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.profiles = {}  # Load profiles
         self.lock = threading.Lock()
         self.all_profiles = set()
 
-    def get_profile(self, name) -> Optional[Type[BaseProfile]]:
+    def get_profile(self, name) -> type[BaseProfile] | None:
         """
         Load profile and return BaseProfile instance.
         Returns None when no profile found or loading error occured
@@ -51,11 +50,11 @@ class ProfileLoader(BaseLoader):
                     if p:
                         # Custom script
                         base_name = os.path.basename(os.path.dirname(p))
-                        module_name = "%s.sa.profiles.%s" % (base_name, name)
+                        module_name = f"{base_name}.sa.profiles.{name}"
                     else:
                         # Common script
-                        module_name = "noc.sa.profiles.%s" % name
-                    profile = self.find_class("%s.profile" % module_name, BaseProfile, name)
+                        module_name = f"noc.sa.profiles.{name}"
+                    profile = self.find_class(f"{module_name}.profile", BaseProfile, name)
                     if profile:
                         profile.initialize()
                         break
@@ -86,7 +85,7 @@ class ProfileLoader(BaseLoader):
             px = os.path.join(px, "*", "*", "__init__.py")
             for path in glob.glob(px):
                 vendor, system = path.split(os.sep)[-3:-1]
-                ns.add("%s.%s" % (vendor, system))
+                ns.add(f"{vendor}.{system}")
         with self.lock:
             self.all_profiles = ns
 

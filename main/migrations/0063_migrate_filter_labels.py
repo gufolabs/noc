@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("vc", "0030_migrate_vc_vlan_filter")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Prefix Filter Labels
         # Create wildcard labels
         l_coll = self.mongo_db["labels"]

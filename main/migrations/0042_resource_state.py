@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # ResourceState
         ResourceState = self.db.mock_model(
             model_name="ResourceState", db_table="main_resourcestate"

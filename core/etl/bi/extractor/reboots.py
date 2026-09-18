@@ -19,7 +19,7 @@ class RebootsExtractor(BaseExtractor):
     extract_delay = config.bi.extract_delay_reboots
     clean_delay = config.bi.clean_delay_reboots
 
-    def __init__(self, prefix, start, stop):
+    def __init__(self, prefix, start, stop) -> None:
         super().__init__(prefix, start, stop)
         self.reboot_stream = Stream(Reboots, prefix)
 
@@ -56,7 +56,7 @@ class RebootsExtractor(BaseExtractor):
 
     def clean(self, force=False):
         if force:
-            print("Clean Reboots collection before %s" % self.clean_ts)
+            print(f"Clean Reboots collection before {self.clean_ts}")
             Reboot._get_collection().remove({"ts": {"$lte": self.clean_ts}})
 
     @classmethod

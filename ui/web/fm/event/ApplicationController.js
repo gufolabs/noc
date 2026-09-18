@@ -123,10 +123,17 @@ Ext.define("NOC.fm.event.ApplicationController", {
     var inspectorPanel = this.getView().inspectorPanel;
     this.togglePanel(inspectorPanel, true);
     inspectorPanel.setRecord(record);
+    // Reflect the selected event in the URL as fm.event/<id> (restored on
+    // reload via Application.onCmd_history).
+    if(record && Ext.isFunction(record.get)){
+      this.getView().setHistoryHash(record.get("id"));
+    }
   },
 
   collapseInspector: function(){
     this.togglePanel(null, false);
+    // Back to the bare grid: fm.event
+    this.getView().setHistoryHash();
   },
 
   toggleInspector: function(collapse){

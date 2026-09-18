@@ -31,5 +31,5 @@ class Profile(BaseProfile):
             return s.split()[1]
         if s.startswith("Dynamic Aggregate Number "):
             # Dynamic Aggregate Number 1 ref 40000001 size 4
-            return "Agg %s" % s.split()[3]
+            return f"Agg {s.split()[3]}"
         return s

@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # Maintain users
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2013 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import random
+import argparse
 
 # NOC modules
 from noc.core.management.base import BaseCommand, CommandError
@@ -17,7 +18,7 @@ from noc.aaa.models.permission import Permission
 class Command(BaseCommand):
     help = "Manage users"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # extract command
         user_create = subparsers.add_parser("add")
@@ -45,7 +46,7 @@ class Command(BaseCommand):
         print(msg)
 
     def handle(self, cmd, *args, **options):
-        return getattr(self, "handle_%s" % cmd)(*args, **options)
+        return getattr(self, f"handle_{cmd}")(*args, **options)
 
     def handle_add(self, *args, **options):
         if "username" not in options:
@@ -63,7 +64,7 @@ class Command(BaseCommand):
             raise CommandError("template permission not set")
         for t in options["template"]:
             if t not in self.TEMPLATES:
-                raise CommandError("Invalid template '%s'" % t)
+                raise CommandError(f"Invalid template '{t}'")
             permissions.update(self.TEMPLATES[t])
         if not permissions:
             raise CommandError("No permissions set")
@@ -82,7 +83,3 @@ class Command(BaseCommand):
                 perm.save()
             perm.users.add(u)
         print(passwd)
-
-
-if __name__ == "__main__":
-    Command().run()

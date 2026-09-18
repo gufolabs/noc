@@ -9,7 +9,7 @@
 from pathlib import Path
 import operator
 from threading import Lock
-from typing import Any, Dict, Callable, Optional, Union, List
+from typing import Any, Callable, Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -38,6 +38,8 @@ from noc.core.model.decorator import on_save, on_delete_check
 from noc.core.bi.decorator import bi_sync
 from noc.core.change.decorator import change
 from noc.core.expr import get_vars
+from noc.core.cdag.node.probe import ProbeNodeConfig
+from noc.core.cdag.node.composeprobe import ComposeProbeNodeConfig
 from noc.main.models.doccategory import category
 from noc.inv.models.capability import Capability
 from .metricscope import MetricScope
@@ -62,7 +64,7 @@ class CollectorMappingItem(EmbeddedDocument):
     def __str__(self):
         return f"{self.collector}.{self.field}"
 
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "sender": self.sender,
             "collector": self.collector,
@@ -155,7 +157,7 @@ class MetricType(Document):
     compose_inputs = ListField(ReferenceField("self", reverse_delete_rule=NULLIFY))
     compose_expression = StringField()
     # Remote Mappings
-    collector_mappings: List[CollectorMappingItem] = EmbeddedDocumentListField(CollectorMappingItem)
+    collector_mappings: list[CollectorMappingItem] = EmbeddedDocumentListField(CollectorMappingItem)
     # Optional required capability
     required_capability = PlainReferenceField(Capability)
     # Object id in BI, used for counter context hashing
@@ -175,7 +177,7 @@ class MetricType(Document):
         return bool(self.compose_expression)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -241,7 +243,7 @@ class MetricType(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["MetricType"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["MetricType"]:
         return MetricType.objects.filter(id=oid).first()
 
     @classmethod
@@ -251,7 +253,7 @@ class MetricType(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_field_cache"), lock=lambda _: id_lock)
-    def get_by_field_name(cls, fname, scope: Optional[str] = None) -> Optional["MetricType"]:
+    def get_by_field_name(cls, fname, scope: str | None = None) -> Optional["MetricType"]:
         if scope:
             scope = MetricScope.get_by_table_name(scope)
             return MetricType.objects.filter(field_name=fname, scope=scope).first()
@@ -261,6 +263,26 @@ class MetricType(Document):
     @cachetools.cachedmethod(operator.attrgetter("_bi_id_cache"), lock=lambda _: id_lock)
     def get_by_bi_id(cls, bi_id: int) -> Optional["MetricType"]:
         return MetricType.objects.filter(bi_id=bi_id).first()
+
+    @property
+    def probe_config(self) -> ProbeNodeConfig:
+        if self.is_compose:
+            return ComposeProbeNodeConfig(
+                unit=(self.units.code or "1") if self.units else "1",
+                is_delta=self.is_delta,
+                expression=self.compose_expression,
+            )
+        if self.units:
+            return ProbeNodeConfig(
+                unit=self.units.code,
+                scale=self.scale.code if self.scale else "1",
+                is_delta=self.is_delta,
+            )
+        return ProbeNodeConfig(
+            unit="1",
+            scale=self.scale.code if self.scale else "1",
+            is_delta=self.is_delta,
+        )
 
     def on_save(self):
         call_later(

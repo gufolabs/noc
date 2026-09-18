@@ -29,7 +29,7 @@ class ReportObjectCaps(BaseReportColumn):
     builtin_sorted = True
 
     ATTRS = {
-        "c_%s" % str(key): value
+        f"c_{key!s}": value
         for key, value in Capability.objects.filter().order_by("name").scalar("id", "name")
     }
     unknown_value = ([""] * len(ATTRS),)

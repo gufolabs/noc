@@ -27,7 +27,7 @@ class Script(BaseScript):
     )
 
     def execute(self, address, count=None, source_address=None, size=None, df=None):
-        cmd = "ping %s" % address
+        cmd = f"ping {address}"
         """
         # Don't implemented, may be in future firmware revisions ?
         if count:

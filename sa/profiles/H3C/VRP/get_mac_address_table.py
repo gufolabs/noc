@@ -30,7 +30,7 @@ class Script(BaseScript):
     def execute(self, interface=None, vlan=None, mac=None):
         cmd = "display mac-address"
         if mac is not None:
-            cmd += " %s" % self.profile.convert_mac(mac)
+            cmd += f" {self.profile.convert_mac(mac)}"
         rx_line = self.rx_vrp3line
         r = []
         for l in self.cli(cmd).splitlines():

@@ -9,7 +9,7 @@
 import operator
 from threading import Lock, RLock
 from functools import partial
-from typing import Optional, Dict, List, Any
+from typing import Optional, Any
 
 # Third-party modules
 import cachetools
@@ -36,14 +36,14 @@ class ModelDataItem(BaseModel):
         return f"{self.name}: {self.value}"
 
 
-DataItems = RootModel[List[ModelDataItem]]
+DataItems = RootModel[list[ModelDataItem]]
 
 
 @on_init
 @change
 @on_delete_check(check=[("peer.Peer", "profile"), ("sa.ManagedObjectProfile", "bgppeer_profile")])
 class PeerProfile(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Peer Profile"
         verbose_name_plural = "Peer Profiles"
         db_table = "peer_peerprofile"
@@ -59,7 +59,7 @@ class PeerProfile(NOCModel):
         default=partial(Workflow.get_default_workflow, "peer.Peer"),
     )
     max_prefixes = IntegerField("Max. Prefixes", default=100)
-    data: List[Dict[str, str]] = PydanticField(
+    data: list[dict[str, str]] = PydanticField(
         "Data Items",
         schema=DataItems,
         blank=True,
@@ -112,8 +112,8 @@ class PeerProfile(NOCModel):
     def get_default_profile(cls) -> "PeerProfile":
         pp = PeerProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
         if not pp:
-            sp = PeerProfile(name=cls.DEFAULT_PROFILE_NAME)
-            sp.save()
+            pp = PeerProfile(name=cls.DEFAULT_PROFILE_NAME)
+            pp.save()
         return pp
 
     @classmethod
@@ -130,13 +130,13 @@ class PeerProfile(NOCModel):
     def is_enabled_notification(self) -> bool:
         return self.status_change_notification != "d"
 
-    def get_effective_data(self) -> Dict[str, Any]:
+    def get_effective_data(self) -> dict[str, Any]:
         r = {}
         for d in self.data:
             r[d["name"]] = d["value"]
         return r
 
-    def get_data(self, name: str) -> Optional[Any]:
+    def get_data(self, name: str) -> Any | None:
         for d in self.data:
             if d["name"] == name:
                 return d["value"]

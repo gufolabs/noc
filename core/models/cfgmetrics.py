@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Literal, Tuple, Dict, Union
+from typing import Literal
 from dataclasses import dataclass, field
 
 # NOC modules
@@ -14,7 +14,7 @@ from noc.core.bi.decorator import bi_hash
 
 
 @dataclass(frozen=True)
-class MetricItem(object):
+class MetricItem:
     name: str
     field_name: str = field(compare=False)
     scope_name: str = field(compare=False)
@@ -34,7 +34,6 @@ class MetricItem(object):
     def is_run(self, collected_interval, source_code: int, buckets: int = 1, run: int = 0) -> bool:
         """
 
-        :param source_code:
         :return:
         """
         # Effective collected interval
@@ -48,20 +47,20 @@ class MetricItem(object):
 
 
 @dataclass(frozen=True)
-class MetricCollectorConfig(object):
+class MetricCollectorConfig:
     collector: Literal["sla", "sensor", "managed_object", "cpe"]
-    metrics: Tuple[MetricItem, ...]  # Metric Type List
+    metrics: tuple[MetricItem, ...]  # Metric Type List
     # Key labels
-    labels: Optional[Tuple[str, ...]] = None
+    labels: tuple[str, ...] | None = None
     # Like settings: ifindex::<ifindex>, oid::<oid>, ac::<SC/CS/S/C>
-    hints: Optional[List[str]] = None
-    service: Optional[int] = None  # Service BI_Id
+    hints: list[str] | None = None
+    service: int | None = None  # Service BI_Id
     # Collectors
-    sensor: Optional[int] = None  # Sensor BI_Id
-    sla_probe: Optional[int] = None  # SLA Probe BI_Id
-    cpe: Optional[int] = None
+    sensor: int | None = None  # Sensor BI_Id
+    sla_probe: int | None = None  # SLA Probe BI_Id
+    cpe: int | None = None
 
-    def get_hints(self) -> Dict[str, Union[str, int]]:
+    def get_hints(self) -> dict[str, str | int]:
         if not self.hints:
             return {}
         return dict(v.split("::", 1) for v in self.hints)

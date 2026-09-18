@@ -59,7 +59,7 @@ class Script(BaseScript):
             match = self.rx_ge.search(l)
             if match:
                 ifname = self.profile.convert_interface_name(match.group("ifname"))
-                v = self.cli("show interface gigabit %s" % ifname[-1])
+                v = self.cli(f"show interface gigabit {ifname[-1]}")
                 match1 = self.rx_status.search(v)
                 oper_status = bool(match1.group("oper_status") == "On")
                 admin_status = bool(match1.group("admin_status") == "On")
@@ -96,12 +96,12 @@ class Script(BaseScript):
                 interfaces += [i]
             match = self.rx_xdsl.search(l)
             if match:
-                ifname = "%s/%s/%s" % (
+                ifname = "{}/{}/{}".format(
                     match.group("slot"),
                     match.group("port"),
                     match.group("bridge"),
                 )
-                v = self.cli("show interface xdsl %s" % ifname[:-2])
+                v = self.cli(f"show interface xdsl {ifname[:-2]}")
                 if "Not found any xDSL card in slot" in v:
                     oper_status = False
                     admin_status = False
@@ -148,7 +148,7 @@ class Script(BaseScript):
             if match:
                 ip_address = match.group("ip")
                 ip_subnet = match.group("mask")
-                ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+                ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                 i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
             match = self.rx_mgmt_vlan.search(l)
             if match:
@@ -169,7 +169,7 @@ class Script(BaseScript):
             if match:
                 ip_address = match.group("ip")
                 ip_subnet = match.group("mask")
-                ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+                ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                 i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
         interfaces += [i]
         return [{"interfaces": interfaces}]

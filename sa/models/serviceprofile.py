@@ -10,7 +10,7 @@ import operator
 import re
 from collections import defaultdict
 from threading import Lock
-from typing import Optional, Union, Tuple, List, Dict, Type, Iterable
+from typing import Optional, Iterable
 from functools import partial
 
 # Third-party modules
@@ -130,7 +130,7 @@ class InstanceSettings(EmbeddedDocument):
     instance_type: InstanceType = EnumField(InstanceType, default=InstanceType.OTHER, required=True)
     allow_manual: bool = BooleanField(default=False)
     only_one_instance = BooleanField(default=True)  # Allow bind multiple resources
-    allow_resources: List[str] = ListField(
+    allow_resources: list[str] = ListField(
         StringField(choices=[("si", "SubInterface"), ("if", "Interface")])
     )
     send_approve: bool = BooleanField(default=False)
@@ -148,7 +148,7 @@ class InstanceSettings(EmbeddedDocument):
     name: str = StringField(required=False)
     # Weight for calculate Alarm
     weight: int = IntField(default=0)
-    checks: List[str] = ListField(StringField())
+    checks: list[str] = ListField(StringField())
     # Update Instance Status from resource
     # update_status = BooleanField(default=False)
 
@@ -168,7 +168,7 @@ class InstanceSettings(EmbeddedDocument):
             refs_caps=self.refs_caps,
         )
 
-    def get_instance_type(self) -> Type["ServiceInstanceConfig"]:
+    def get_instance_type(self) -> type["ServiceInstanceConfig"]:
         return ServiceInstanceConfig.get_type(self.instance_type)
 
 
@@ -185,6 +185,17 @@ class CalculatedStatusRule(EmbeddedDocument):
 
     meta = {"strict": False, "auto_create_index": False}
 
+    group: Optional["ResourceGroup"] = ReferenceField(ResourceGroup, required=False)
+    type = StringField(
+        choices=[
+            ("S", "Service (Using)"),
+            ("C", "Client (Using)"),
+            # ("G", "Service Group (Using)"),
+            ("U", "Parent (UP)"),
+            ("D", "Children (Down)"),
+        ],
+        default="S",
+    )
     weight_function = StringField(
         choices=[
             ("C", "Count"),
@@ -211,7 +222,7 @@ class CalculatedStatusRule(EmbeddedDocument):
             return f"({self.min_status} <> {self.max_status}) {s}"
         return s
 
-    def get_status(self, statuses: Dict[Status, int]) -> Optional[Status]:
+    def get_status(self, statuses: dict[Status, int]) -> Status | None:
         weights = tuple(w for s, w in statuses.items() if self.is_match_status(s))
         if not weights:
             return None
@@ -238,7 +249,7 @@ class CalculatedStatusRule(EmbeddedDocument):
             return condition_map[self.op](weight, self.weight)
         return True
 
-    def calculate_weight(self, weights: Tuple[int, ...], max_weight=1) -> float:
+    def calculate_weight(self, weights: tuple[int, ...], max_weight=1) -> float:
         if self.weight_function == "C":
             return len(weights)
         if self.weight_function == "MIN":
@@ -286,21 +297,24 @@ class AlarmStatusRule(EmbeddedDocument):
         status: Set Service Status
     """
 
-    alarm_class_template: Optional[str] = StringField(required=False)
+    alarm_class_template: str | None = StringField(required=False)
     allow_partial: bool = BooleanField(default=False)
     include_labels = ListField(StringField())
     exclude_labels = ListField(StringField())
     affected_instance = BooleanField(default=False)  # Include ServiceInstance to
+    required_reference = BooleanField(default=False)  # Required service component on Alarm
     min_severity: Optional["AlarmSeverity"] = PlainReferenceField(AlarmSeverity)  # Min Severity
     max_severity: Optional["AlarmSeverity"] = PlainReferenceField(AlarmSeverity)  # Max Severity
     # set_weight
     status = EnumField(Status, required=False)  # Default status by Severity
 
     def __str__(self):
-        return f"{self.alarm_class_template or 'ANY'} (AF:{self.affected_instance})"
+        return f"{self.alarm_class_template or 'ANY'} (AF:{self.affected_instance}, RR:{self.required_reference})"
 
-    def is_match(self, alarm) -> bool:
+    def is_match(self, alarm, is_reference: bool = False) -> bool:
         """"""
+        if self.required_reference and not is_reference:
+            return False
         if self.min_severity and alarm.severity < self.min_severity.severity:
             return False
         if self.max_severity and alarm.severity > self.max_severity.severity:
@@ -382,29 +396,30 @@ class ServiceProfile(Document):
         ],
         default="MX",
     )
-    calculate_status_rules: List["CalculatedStatusRule"] = EmbeddedDocumentListField(
+    calculate_status_rules: list["CalculatedStatusRule"] = EmbeddedDocumentListField(
         CalculatedStatusRule
     )
     # Alarm Binding
     alarm_affected_policy = StringField(
         choices=[
             ("D", "Disable"),
-            ("B", "By Object"),
+            ("B", "By Reference"),
             ("A", "By Instance"),
-            ("O", "By Filter"),
+            ("O", "Only Filter"),
         ],
         default="D",
     )
-    alarm_status_rules: List["AlarmStatusRule"] = EmbeddedDocumentListField(AlarmStatusRule)
+    alarm_status_rules: list["AlarmStatusRule"] = EmbeddedDocumentListField(AlarmStatusRule)
     raise_status_alarm_policy = StringField(
         choices=[
             ("D", "Disable"),
-            ("R", "Group"),
+            ("G", "Group"),
+            ("R", "Root Group"),
             ("A", "Direct"),
         ],
         default="R",
     )
-    alarm_subject_template: Optional[str] = StringField(required=False)
+    alarm_subject_template: str | None = StringField(required=False)
     raise_alarm_class = ReferenceField(AlarmClass)
     include_root_group = BooleanField(default=False)
     # Instance Resources
@@ -420,7 +435,7 @@ class ServiceProfile(Document):
         ],
         default="A",
     )
-    instance_settings: List["InstanceSettings"] = EmbeddedDocumentListField(
+    instance_settings: list["InstanceSettings"] = EmbeddedDocumentListField(
         InstanceSettings, required=False
     )
     # Send up/down notifications
@@ -432,9 +447,10 @@ class ServiceProfile(Document):
         default="d",
     )
     # Diagnostics status
-    diagnostic_status: List[DiagnosticSettings] = EmbeddedDocumentListField(DiagnosticSettings)
+    diagnostic_status: list[DiagnosticSettings] = EmbeddedDocumentListField(DiagnosticSettings)
     # Capabilities
-    caps_profile: Optional[CapsProfile] = ReferenceField(CapsProfile, required=False)
+    caps_profile: CapsProfile | None = ReferenceField(CapsProfile, required=False)
+    caps_exposed: bool = BooleanField(default=False)
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from
     remote_system = ReferenceField(RemoteSystem)
@@ -457,7 +473,7 @@ class ServiceProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ServiceProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ServiceProfile"]:
         return ServiceProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -466,12 +482,21 @@ class ServiceProfile(Document):
         return ServiceProfile.objects.filter(code=code).first()
 
     def on_save(self):
+        cf = frozenset(getattr(self, "_changed_fields", []))
         if not hasattr(self, "_changed_fields") or "interface_profile" in self._changed_fields:
             defer(
                 "noc.sa.models.serviceprofile.refresh_interface_profiles",
                 key=hash_int(self.id),
                 sp_id=str(self.id),
                 ip_id=str(self.interface_profile.id) if self.interface_profile else None,
+            )
+        if (not hasattr(self, "_changed_fields") and self.caps_exposed) or cf.intersection(
+            {"caps_profile", "caps_exposed"}
+        ):
+            defer(
+                "noc.sa.models.service.refresh_exposed_caps",
+                key=hash_int(self.id),
+                svc_profile_ids=[str(self.id)],
             )
 
     @classmethod
@@ -493,17 +518,21 @@ class ServiceProfile(Document):
                 return status
         return Status.UNKNOWN
 
-    def get_caps_config(self) -> Dict[str, CapsConfig]:
+    def get_caps_config(self) -> dict[str, CapsConfig]:
         """Local Capabilities Config (from Profile)"""
         r = {}
         if not self.caps_profile:
             return r
+        if self.caps_exposed:
+            exposed_models = ["sa.ManagedObject"]
+        else:
+            exposed_models = None
         for c in self.caps_profile.caps:
-            r[str(c.capability.id)] = c.get_config()
+            r[str(c.capability.id)] = c.get_config(exposed_models=exposed_models)
         return r
 
     def get_instance_config(
-        self, i_type: InstanceType, name: Optional[str] = None
+        self, i_type: InstanceType, name: str | None = None
     ) -> Optional["ServiceInstanceTypeConfig"]:
         """Getting instance Config"""
         if self.instance_policy == "A":
@@ -535,9 +564,13 @@ class ServiceProfile(Document):
             type: service, client
         """
 
-    def get_rule_by_alarm(self, aa) -> Optional["AlarmStatusRule"]:
+    def get_rule_by_alarm(self, aa, is_reference: bool = False) -> Optional["AlarmStatusRule"]:
+        if self.alarm_affected_policy in {"D"}:
+            return None
+        if self.alarm_affected_policy == "B" and not self.alarm_status_rules:
+            return AlarmStatusRule(affected_instance=False)
         for r in self.alarm_status_rules:
-            if r.is_match(aa):
+            if r.is_match(aa, is_reference=is_reference):
                 return r
         # if self.alarm_affected_policy == "B" or self.alarm_affected_policy == "I":
         #    return AlarmStatusRule(affected_instance=True)
@@ -561,32 +594,42 @@ class ServiceProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_alarm_rule_cache"), lock=lambda _: id_lock)
-    def get_alarm_rules(cls) -> List[Tuple[str, Optional[Tuple[AlarmStatusRule, ...]], str]]:
-        """"""
+    def get_alarm_rules(cls) -> list[tuple[str, tuple[AlarmStatusRule, ...] | None, str]]:
+        """
+        Getting rules by policy
+          * D - Not processed
+          * B - For alarms on service component
+          * A - Match Service Instance
+          * O - Only Rules
+        """
         r = []
         for p in ServiceProfile.objects.filter(alarm_affected_policy__ne="D"):
-            if p.alarm_affected_policy != "O":
+            if p.alarm_affected_policy == "O" and not p.alarm_status_rules:
+                # Not settings
+                continue
+            if not p.alarm_status_rules:
                 r.append((p.id, None, p.alarm_affected_policy))
             else:
                 r.append((p.id, tuple(p.alarm_status_rules), p.alarm_affected_policy))
         return r
 
     @classmethod
-    def get_alarm_service_filter(cls, alarm) -> List[Tuple[m_q, List[str]]]:
+    def get_alarm_service_filter(cls, alarm) -> list[tuple[m_q | None, list[str]]]:
         """Getting alarm filter by ServiceProfile rules"""
         from noc.sa.models.serviceinstance import ServiceInstance
 
         r = defaultdict(list)
-        queries = {}
+        queries: dict[str, m_q | None] = {}
         for pid, rules, policy in ServiceProfile.get_alarm_rules():
-            if rules is None:
+            if rules is None and policy == "A":
                 q = ServiceInstance.get_instance_filter_by_alarm(
-                    alarm, include_object=policy == "B"
+                    alarm,
+                    include_object=True,
                 )
                 if q:
                     queries[str(q)] = q
                     r[str(q)] += [pid]
-            if not rules:
+            if not rules or policy == "B":
                 continue
             q = m_q()
             for rule in rules:
@@ -602,7 +645,14 @@ class ServiceProfile(Document):
                 r[str(q)] += [pid]
         return [(queries[x] if x else x, r[x]) for x in r]
 
-    def iter_configured_instances(self) -> List["ServiceInstanceConfig"]:
+    @classmethod
+    def _reset_caches(cls, id):
+        try:
+            del cls._id_cache[id,]  # Tuple
+        except KeyError:
+            pass
+
+    def iter_configured_instances(self) -> Iterable["ServiceInstanceConfig"]:
         """Get configuration"""
         for settings in self.instance_settings:
             yield settings.get_instance_type()

@@ -61,9 +61,9 @@ class Script(BaseScript):
             pass
         cmd = "show fdb"
         if mac is not None:
-            cmd += " mac_address %s" % mac
+            cmd += f" mac_address {mac}"
         if interface is not None:
-            cmd += " port %s" % interface
+            cmd += f" port {interface}"
         if vlan is not None:
             cmd += " vlanid %d" % vlan
         s = self.cli(cmd)

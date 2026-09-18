@@ -14,7 +14,7 @@ from noc.core.model.fields import DocumentReferenceField
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.execute(
             """
           ALTER TABLE sa_managedobjectprofile

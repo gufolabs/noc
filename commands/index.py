@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # Full-Text search manipulation
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2015 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Python modules
+import argparse
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -13,7 +16,7 @@ from noc.models import FTS_MODELS, get_model
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", help="sub-commands help", required=True)
         # Search parameters
         search_parser = subparsers.add_parser("search", help="Full-text search")
@@ -38,7 +41,7 @@ class Command(BaseCommand):
         for qr in TextIndex.search(query[0]):
             r += [
                 {
-                    "id": str("%s:%s" % (qr.model, qr.object)),
+                    "id": str(f"{qr.model}:{qr.object}"),
                     "title": str(qr.title),
                     "card": str(qr.card),
                 }
@@ -56,14 +59,10 @@ class Command(BaseCommand):
 
     def handle_rebuild(self, *args, **options):
         for model_id in FTS_MODELS:
-            self.stdout.write("Indexing %s: " % model_id)
+            self.stdout.write(f"Indexing {model_id}: ")
             model = get_model(model_id)
             n = 0
             for o in model.objects.all():
                 TextIndex.update_index(model, o)
                 n += 1
             self.stdout.write("%d records indexed\n" % n)
-
-
-if __name__ == "__main__":
-    Command().run()

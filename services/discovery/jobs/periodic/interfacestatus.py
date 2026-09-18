@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 import datetime
 import orjson
 
@@ -41,10 +40,6 @@ class InterfaceStatusCheck(DiscoveryCheck):
         * c - Send `clear` message for 'Link Down' message if Oper -> Up
         * ca - Send `clear` message for 'Link Down' message if Oper -> Up or Admin -> Down
         * rc - Send `raise` message if Oper -> Down and `clear` if Oper -> Up or Admin -> Down
-        :param o_status:
-        :param a_status:
-        :param iface:
-        :param timestamp:
         :return:
         """
         alarm_class = self.get_ac_link_down()
@@ -78,7 +73,7 @@ class InterfaceStatusCheck(DiscoveryCheck):
             )
 
     def handler(self):
-        def get_interface(name) -> Optional[Interface]:
+        def get_interface(name) -> Interface | None:
             if_name = interfaces.get(name)
             if if_name:
                 return if_name
@@ -127,11 +122,9 @@ class InterfaceStatusCheck(DiscoveryCheck):
             }
             changes = self.update_if_changed(iface, kwargs, ignore_empty=list(kwargs), bulk=bulk)
             self.log_changes(f"Interface {i['interface']} status has been changed", changes)
-            if iface.type == "aggregated":
-                continue
             ostatus = i.get("oper_status")
             astatus = i.get("admin_status")
-            if iface.oper_status != ostatus and ostatus is not None:
+            if ostatus is not None and iface.oper_status != ostatus:
                 self.logger.info("[%s] set oper_status to %s", i["interface"], ostatus)
                 if (
                     iface.profile.status_discovery in {"c", "rc", "ca"}
@@ -139,7 +132,7 @@ class InterfaceStatusCheck(DiscoveryCheck):
                 ):
                     self.iface_alarm(ostatus, astatus, iface, timestamp=now)
                 iface.set_oper_status(ostatus)
-            if old_adm_status != astatus and astatus is not None:
+            if astatus is not None and old_adm_status != astatus:
                 if iface.profile.status_discovery in {"ca", "rc"} and old_adm_status is not None:
                     self.iface_alarm(ostatus, astatus, iface, timestamp=now)
                 if astatus is False:

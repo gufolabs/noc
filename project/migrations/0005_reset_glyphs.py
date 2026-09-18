@@ -11,5 +11,5 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.execute("UPDATE project_project SET shape_overlay_glyph = NULL")

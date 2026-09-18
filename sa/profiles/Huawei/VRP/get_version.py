@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -105,7 +105,6 @@ class Script(BaseScript):
     def fix_platform_name(self, platform):
         """
         Extended detect platfrom name for old releases
-        :param platform:
         :return:
         """
         try:
@@ -130,7 +129,7 @@ class Script(BaseScript):
                 for oid, x in self.snmp.getnext(mib["ENTITY-MIB::entPhysicalSerialNum"]):
                     if not x:
                         continue
-                    r += [x.strip(smart_text(" \x00"))]
+                    r += [x.strip(" \x00")]
                 if r:
                     return r
             except (self.snmp.TimeOutError, self.snmp.SNMPError):
@@ -158,7 +157,7 @@ class Script(BaseScript):
                 for oid, x in self.snmp.getnext(mib["HUAWEI-SYS-MAN-MIB::hwPatchVersion", 0]):
                     if not x:
                         continue
-                    r += [x.strip(smart_text(" \x00"))]
+                    r += [x.strip(" \x00")]
                 if r:
                     return r
             except (self.snmp.TimeOutError, self.snmp.SNMPError):
@@ -204,10 +203,10 @@ class Script(BaseScript):
         # Convert NetEngine to NE
         if platform.lower().startswith("netengine"):
             n, p = platform.split(" ", 1)
-            platform = "NE%s" % p.strip().upper()
+            platform = f"NE{p.strip().upper()}"
         elif platform.lower().startswith("multiserviceengine"):
             n, p = platform.split(" ", 1)
-            platform = "ME%s" % p.strip().upper()
+            platform = f"ME{p.strip().upper()}"
         # Found in AR1220 and AR1220E
         elif platform.upper().startswith("HUAWEI"):
             n, p = platform.upper().split("HUAWEI", 1)
@@ -236,19 +235,19 @@ class Script(BaseScript):
             version2 = self.snmp.get(
                 mib["ENTITY-MIB::entPhysicalSoftwareRev", 7]
             )  # "V200R001B02D015SP02"
-            version = "%s (%s)" % (version1.split()[0], version2)
+            version = f"{version1.split()[0]} ({version2})"
         serial = []
         for oid, x in self.snmp.getnext(mib["ENTITY-MIB::entPhysicalSerialNum"]):
             if not x:
                 continue
-            serial += [smart_text(x, errors="replace").strip(smart_text(" \x00"))]
+            serial += [smart_text(x, errors="replace").strip(" \x00")]
         if platform in self.hw_series:
             # series name, fix
             platform = self.fix_platform_name(platform)
         r = {"vendor": "Huawei", "platform": platform, "version": version}
         attributes = {}
         if image:
-            r["version"] = "%s (%s)" % (version, image)
+            r["version"] = f"{version} ({image})"
             r["image"] = image
         if serial:
             attributes["Serial Number"] = serial[0]
@@ -271,7 +270,7 @@ class Script(BaseScript):
         r = {"vendor": "Huawei", "platform": platform, "version": version}
         attributes = {}
         if image:
-            r["version"] = "%s (%s)" % (version, image)
+            r["version"] = f"{version} ({image})"
             r["image"] = image
         serial = self.parse_serial()
         if serial:

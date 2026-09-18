@@ -16,7 +16,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("inv", "0021_labels")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         bulk = []
         labels = []
         labels_bulk = [

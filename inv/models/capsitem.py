@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 # Third-party modules
 from mongoengine.document import EmbeddedDocument
@@ -32,17 +32,16 @@ class CapsItem(EmbeddedDocument):
         return f"{self.capability.name} = {self.value}"
 
     @classmethod
-    def get_caps(cls, *args: List["CapsItem"], scope: Optional[str] = None) -> Dict[str, Any]:
+    def get_caps(cls, *args: list["CapsItem"], scope: str | None = None) -> dict[str, Any]:
         """
         Consolidate capabilities list and return resulting dict of
         caps name -> caps value. First appearance of capability
         overrides later ones.
 
-        :param args:
         :param scope: Scope Name
         :return:
         """
-        r: Dict[str, Any] = {}
+        r: dict[str, Any] = {}
         for caps in args:
             for ci in caps:
                 cn = ci.capability.name
@@ -61,22 +60,21 @@ class ModelCapsItem(BaseModel):
     value: Any
     # Source name like "caps", "interface", "manual"
     source: str = "manual"
-    scope: Optional[str] = ""
+    scope: str | None = ""
 
     def __str__(self):
         return self.capability.name
 
     @classmethod
-    def get_caps(cls, *args: List["CapsItem"]) -> Dict[str, Any]:
+    def get_caps(cls, *args: list["CapsItem"]) -> dict[str, Any]:
         """
         Consolidate capabilities list and return resulting dict of
         caps name -> caps value. First appearance of capability
         overrides later ones.
 
-        :param args:
         :return:
         """
-        r: Dict[str, Any] = {}
+        r: dict[str, Any] = {}
         for caps in args:
             for ci in caps:
                 cn = ci.capability.name

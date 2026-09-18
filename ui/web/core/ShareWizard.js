@@ -468,7 +468,7 @@ Ext.define("NOC.core.ShareWizard", {
     var url = this.apiTokenEndpoint,
       failureCb = this.failureCb;
     return new Promise(function(resolve, reject){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: url, 
         method: "GET",
         scope: this,
@@ -489,7 +489,7 @@ Ext.define("NOC.core.ShareWizard", {
     var url = this.apiTokenEndpoint,
       failureCb = this.failureCb;
     return new Promise(function(resolve, reject){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: url,
         method: "POST",
         jsonData: {
@@ -508,7 +508,7 @@ Ext.define("NOC.core.ShareWizard", {
     var url = this.restUrl,
       failureCb = this.failureCb;
     return new Promise(function(resolve, reject){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: url,
         method: "GET",
         success: function(response){
@@ -533,7 +533,7 @@ Ext.define("NOC.core.ShareWizard", {
     var url = this.getnocAPIContribURL,
       failureCb = this.failureCb;
     return new Promise(function(resolve, reject){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: url,
         method: "POST",
         headers: {

@@ -10,7 +10,7 @@ import logging
 from dataclasses import dataclass
 from collections import defaultdict
 from functools import partial
-from typing import Dict, Tuple, Optional, Callable, List, Any, Iterable
+from typing import Callable, Any, Iterable
 
 # Third-party modules
 from pydantic import ValidationError
@@ -35,39 +35,36 @@ action_logger = logging.getLogger(__name__)
 class Action:
     name: str
     stop_processing: bool = False
-    match: Optional[Callable] = None
-    event_match: Optional[Callable] = None
-    event: Tuple[Callable, ...] = None
-    target: Tuple[Callable, ...] = None
-    resource: Dict[str, Tuple[Callable, ...]] = None
+    match: Callable | None = None
+    event_match: Callable | None = None
+    event: tuple[Callable, ...] = None
+    target: tuple[Callable, ...] = None
+    resource: dict[str, tuple[Callable, ...]] = None
     action: EventAction = EventAction.LOG
 
     def iter_event_actions(self) -> Iterable[Callable]:
         """Iter event action"""
         # First Event Handler
-        for h in self.event:
-            yield h
+        yield from self.event
 
     def iter_target_actions(self) -> Iterable[Callable]:
         """Iter Target action"""
-        for h in self.target:
-            yield h
+        yield from self.target
 
     def iter_resource_actions(self, resource: Any) -> Iterable[Callable]:
         """Iterate over resource action"""
         if not self.resource:
             return
         mid = get_model_id(resource)
-        for h in self.resource.get(mid, []):
-            yield h
+        yield from self.resource.get(mid, [])
 
 
-class ActionSet(object):
-    def __init__(self, logger=None):
+class ActionSet:
+    def __init__(self, logger=None) -> None:
         # EventClass
         # Abduct Detector
         self.logger = logger or action_logger
-        self.actions: Dict[str, List[Action]] = {}
+        self.actions: dict[str, list[Action]] = {}
         self.add_handlers: int = 0
         self.add_event_actions: int = 0
         self.add_target_actions: int = 0
@@ -76,8 +73,8 @@ class ActionSet(object):
     def iter_actions(
         self,
         event_class: str,
-        ctx: Dict[str, Any],
-        e_vars: Dict[str, Any],
+        ctx: dict[str, Any],
+        e_vars: dict[str, Any],
     ) -> Iterable[Action]:
         """"""
         if event_class not in self.actions:
@@ -110,7 +107,7 @@ class ActionSet(object):
         if rid in self.actions:
             del self.actions[rid]
 
-    def from_config(self, data: Dict[str, Any]) -> List[Action]:
+    def from_config(self, data: dict[str, Any]) -> list[Action]:
         """Create actions"""
         try:
             rule = Rule.model_validate(data)
@@ -174,9 +171,9 @@ class ActionSet(object):
         self,
         event: Event,
         target: ManagedObject,
-        resources: List[Any],
+        resources: list[Any],
         config: EventConfig,
-    ) -> Tuple[EventAction, int]:
+    ) -> tuple[EventAction, int]:
         """
         Processed actions on Event
         Args:
@@ -190,7 +187,7 @@ class ActionSet(object):
             "service_groups": frozenset(target.effective_service_groups or []) if target else [],
             "remote_system": event.remote_system,
         }
-        drop_action: Optional[EventAction] = None
+        drop_action: EventAction | None = None
         to_dispose = False
         resource_action = None
         num = 0
@@ -280,7 +277,7 @@ class ActionSet(object):
     def send_notification(
         managed_object: ManagedObject,
         event: Event,
-        notification_group: Optional[str] = None,
+        notification_group: str | None = None,
         **kwargs,
     ):
         """Send Event Notification"""

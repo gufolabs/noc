@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ES2020",
+    "moduleResolution": "Bundler",
+    "lib": [
+      "ES2020",
+      "DOM"
+    ],
+    "strict": true,
+    "noImplicitAny": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "dist"
+  },
+  "watchOptions": {
+    "excludeDirectories": [
+      "dist",
+      "node_modules"
+    ]
+  },
+  "include": [
+    "src/**/*",
+    "scripts/**/*"
+  ]
+}

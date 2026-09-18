@@ -1,21 +1,22 @@
 # ----------------------------------------------------------------------
 # Card API
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2025 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
+import importlib
 import os
 import inspect
 from threading import Lock
 import operator
-from typing import Optional
+from urllib.parse import unquote
 
 # Third-party modules
 import cachetools
 from fastapi import APIRouter, Header, HTTPException, Request, Response
-from fastapi.responses import HTMLResponse, RedirectResponse, ORJSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from jinja2 import Template
 import orjson
 
@@ -34,8 +35,8 @@ router = APIRouter()
 MIN_SEARCH = 2
 
 
-class HandlerStub(object):
-    def __init__(self, user, arguments):
+class HandlerStub:
+    def __init__(self, user, arguments) -> None:
         self.user: "User" = user
         self.arguments = {}
         for key in arguments:
@@ -46,7 +47,7 @@ class HandlerStub(object):
     def current_user(self):
         return self.user
 
-    def get_argument(self, name: str, default: Optional[str] = None, strict: bool = True):
+    def get_argument(self, name: str, default: str | None = None, strict: bool = True):
         """
 
         :param name: Argument Name
@@ -70,7 +71,7 @@ class CardAPI(BaseAPI):
 
     _user_cache = cachetools.TTLCache(maxsize=1000, ttl=60)
 
-    def __init__(self, router: APIRouter):
+    def __init__(self, router: APIRouter) -> None:
         if not self.CARD_TEMPLATE:
             with open(self.CARD_TEMPLATE_PATH) as f:
                 self.CARD_TEMPLATE = Template(f.read())
@@ -113,8 +114,8 @@ class CardAPI(BaseAPI):
             for f in os.listdir(p):
                 if not f.endswith(".py"):
                     continue
-                mn = "%s.%s.%s" % (basename, cls.CARDS_PREFIX.replace(os.path.sep, "."), f[:-3])
-                m = __import__(mn, {}, {}, "*")
+                mn = "{}.{}.{}".format(basename, cls.CARDS_PREFIX.replace(os.path.sep, "."), f[:-3])
+                m = importlib.import_module(mn)
                 for d in dir(m):
                     c = getattr(m, d)
                     if (
@@ -143,7 +144,7 @@ class CardAPI(BaseAPI):
             "path": "/api/card/search/",
             "method": "GET",
             "endpoint": self.handler_card_search,
-            "response_class": ORJSONResponse,
+            "response_class": JSONResponse,
             "response_model": None,
             "name": "card-search",
             "description": "",
@@ -155,7 +156,7 @@ class CardAPI(BaseAPI):
                     "path": f"/api/card/resourcepool/{a}/",
                     "method": "POST",
                     "endpoint": endpoint,
-                    "response_class": ORJSONResponse,
+                    "response_class": JSONResponse,
                     "response_model": None,
                     "name": f"card-{a}",
                     "description": "",
@@ -168,9 +169,9 @@ class CardAPI(BaseAPI):
         card_type: str,
         card_id: str,
         request: Request,
-        remote_user: Optional[str] = Header(None, alias="Remote-User"),
+        remote_user: str | None = Header(None, alias="Remote-User"),
     ):
-        current_user = self.get_current_user(remote_user)
+        current_user = self.get_current_user(unquote(remote_user))
         if not current_user:
             raise HTTPException(404, "Not found")
         is_ajax = card_id == "ajax"
@@ -213,7 +214,7 @@ class CardAPI(BaseAPI):
         return Response(content=content, media_type="text/html", headers=headers)
 
     def handler_card_search(
-        self, scope: str, query: str, remote_user: Optional[str] = Header(None, alias="Remote-User")
+        self, scope: str, query: str, remote_user: str | None = Header(None, alias="Remote-User")
     ):
         query = query.strip()
         if not query or len(query) < MIN_SEARCH:

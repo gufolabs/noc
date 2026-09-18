@@ -96,4 +96,4 @@ class CfgPingDataStream(DataStream):
 
     @classmethod
     def filter_pool(cls, name):
-        return {"%s.pool" % cls.F_META: name}
+        return {f"{cls.F_META}.pool": name}

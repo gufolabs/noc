@@ -85,7 +85,7 @@ class Script(BaseScript):
             iface["description"] = match.group("name").strip()
         for match in self.rx_dsl_vpi_vci.finditer(p):
             sub = match.groupdict()
-            sub["name"] = "%s/%s" % (iface["name"], sub["name"])
+            sub["name"] = "{}/{}".format(iface["name"], sub["name"])
             sub["admin_status"] = iface["admin_status"]
             sub["enabled_afi"] = ["BRIDGE", "ATM"]
             if sub["vlan_ids"]:
@@ -123,7 +123,7 @@ class Script(BaseScript):
                 if "DSL" in l[0]:
                     slot_no = self.rx_slot.search(l[0]).group(1)
                     for i in range(1, 64):
-                        c = self.cli("show interface dsl %s/%s configuration" % (slot_no, i))
+                        c = self.cli(f"show interface dsl {slot_no}/{i} configuration")
                         if "You need to enter a valid DSL port ID." not in c:
                             iface = self.get_dsl(c)
                             if iface:
@@ -149,7 +149,7 @@ class Script(BaseScript):
             if match.group("ip") != "0.0.0.0":
                 ip = match.group("ip")
                 mask = match.group("mask")
-                ip_address = "%s/%s" % (ip, IPv4.netmask_to_len(mask))
+                ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
                 iface["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
                 iface["subinterfaces"][0]["enabled_afi"] = ["IPv4"]
             if match.group("vlan_id") != "0":
@@ -167,7 +167,7 @@ class Script(BaseScript):
             if match.group("ip") != "0.0.0.0":
                 ip = match.group("ip")
                 mask = match.group("mask")
-                ip_address = "%s/%s" % (ip, IPv4.netmask_to_len(mask))
+                ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
                 iface["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
                 iface["subinterfaces"][0]["enabled_afi"] = ["IPv4"]
             interfaces += [iface]
@@ -186,7 +186,7 @@ class Script(BaseScript):
         if match.group("ip") != "0.0.0.0":
             ip = match.group("ip")
             mask = match.group("mask")
-            ip_address = "%s/%s" % (ip, IPv4.netmask_to_len(mask))
+            ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
             iface["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
             iface["subinterfaces"][0]["enabled_afi"] = ["IPv4"]
         interfaces += [iface]

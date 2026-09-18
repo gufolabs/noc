@@ -34,20 +34,9 @@ class DNSZoneProfile(NOCModel):
     """
     DNS Zone profile is a set of common parameters, shared between zones.
 
-    :param name:
-    :param masters:
-    :param slaves:
-    :param zone_soa:
-    :param zone_contact:
-    :param zone_refresh:
-    :param zone_retry:
-    :param zone_expire:
-    :param zone_ttl:
-    :param notification_group:
-    :param description:
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = _("DNS Zone Profile")
         verbose_name_plural = _("DNS Zone Profiles")
         db_table = "dns_dnszoneprofile"
@@ -96,8 +85,7 @@ class DNSZoneProfile(NOCModel):
         if not config.datastream.enable_dnszone:
             return
         for z in self.dnszone_set.all():
-            for ds, id in z.iter_changed_datastream(changed_fields=changed_fields):
-                yield ds, id
+            yield from z.iter_changed_datastream(changed_fields=changed_fields)
 
     @property
     def authoritative_servers(self):

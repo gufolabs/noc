@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import Optional, Union
+from typing import Optional
 
 # Third-party modules
 import bson
@@ -46,7 +46,7 @@ class MaintenanceType(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["MaintenanceType"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["MaintenanceType"]:
         return MaintenanceType.objects.filter(id=oid).first()
 
     @classmethod

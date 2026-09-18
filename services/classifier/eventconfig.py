@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Dict, Callable, List, Optional
+from typing import Callable
 
 # NOC modules
 from noc.core.models.valuetype import ValueType
@@ -18,13 +18,13 @@ class VarItem:
     name: str
     type: ValueType
     required: bool = False
-    resource_model: Optional[str] = None
+    resource_model: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
 class FilterConfig:
     window: int
-    vars: Optional[List[str]] = None
+    vars: list[str] | None = None
 
 
 @dataclass(slots=True)
@@ -34,14 +34,14 @@ class EventConfig:
     event_class: str
     event_class_id: str
     # categories: List[str]
-    vars: List[VarItem]
+    vars: list[VarItem]
     managed_object_required: bool = True
-    filters: Optional[Dict[str, FilterConfig]] = None
-    resources: Optional[Dict[str, Callable]] = None
+    filters: dict[str, FilterConfig] | None = None
+    resources: dict[str, Callable] | None = None
     # EventActions
     # TargetActions
     # Resources
-    actions: Optional[List[Callable]] = None
+    actions: list[Callable] | None = None
     link_event: bool = False
 
     @property

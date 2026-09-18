@@ -18,7 +18,7 @@
     postgres_listen_port: "{{ postgres_listen_port }}"
   delegate_to: "{{ item }}"
   delegate_facts: "True"
-  with_items: "{{ groups['all'] }}"
+  loop: "{{ groups['all'] }}"
   tags:
     - config
 

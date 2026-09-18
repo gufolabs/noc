@@ -11,7 +11,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         coll = self.mongo_db["noc.interface_profiles"]
         coll.update_many(
             {"allow_subinterface_metrics": True}, {"$set": {"subinterface_apply_policy": "I"}}

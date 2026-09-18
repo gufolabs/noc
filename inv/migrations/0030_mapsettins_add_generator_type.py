@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.mongo_db["noc.mapsettings"].drop_index("segment_1")
         self.mongo_db["noc.mapsettings"].aggregate(
             [

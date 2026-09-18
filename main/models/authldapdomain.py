@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import Optional, Union
+from typing import Optional
 
 # Third-party modules
 import cachetools
@@ -130,7 +130,7 @@ class AuthLDAPDomain(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["AuthLDAPDomain"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["AuthLDAPDomain"]:
         return AuthLDAPDomain.objects.filter(id=oid).first()
 
     @classmethod

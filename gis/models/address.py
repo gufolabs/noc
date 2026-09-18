@@ -119,7 +119,7 @@ class Address(Document):
                 n = str(self.num)
             if self.num_letter:
                 n += self.num_letter
-            a += ["д. %s" % n]
+            a += [f"д. {n}"]
         if self.estate:
             if self.estate2:
                 n = "%d/%d" % (self.estate, self.estate2)
@@ -127,12 +127,12 @@ class Address(Document):
                 n = str(self.estate)
             if self.estate_letter:
                 n += self.estate_letter
-            a += ["вл. %s" % n]
+            a += [f"вл. {n}"]
         if self.build:
             n = str(self.build)
             if self.build_letter:
                 n += self.build_letter
-            a += ["к. %s" % n]
+            a += [f"к. {n}"]
         if self.struct:
             if self.struct2:
                 n = "%d/%d" % (self.struct, self.struct2)
@@ -140,18 +140,18 @@ class Address(Document):
                 n = str(self.struct)
             if self.struct_letter:
                 n += self.struct_letter
-            a += ["стр. %s" % n]
+            a += [f"стр. {n}"]
         # Add street
         n = []
         if self.street:
             if self.street.short_name:
                 if self.street.short_name in RU_SHORT_AFTER:
-                    st = "%s %s" % (self.street.name, self.street.short_name)
+                    st = f"{self.street.name} {self.street.short_name}"
                 else:
-                    st = "%s %s" % (self.street.short_name, self.street.name)
+                    st = f"{self.street.short_name} {self.street.name}"
             else:
                 st = self.street.name
-            n += ["%s %s" % (st, " ".join(a))]
+            n += ["{} {}".format(st, " ".join(a))]
         else:
             n += [" ".join(a)]
         if levels or to_level is not None:
@@ -162,7 +162,7 @@ class Address(Document):
                 if to_level is not None and p.level == to_level:
                     break
                 if p.short_name:
-                    n = ["%s %s" % (p.short_name, p.name), *n]
+                    n = [f"{p.short_name} {p.name}", *n]
                 else:
                     n = [p.name, *n]
                 p = p.parent

@@ -64,4 +64,4 @@ class Profile(BaseProfile):
             number = "/".join(match.group("number").split())
         else:
             number = match.group("number")
-        return "%s:%s" % ({"ADL": "ADSL", "HDL": "HDSL"}[match.group("type")], number)
+        return "{}:{}".format({"ADL": "ADSL", "HDL": "HDSL"}[match.group("type")], number)

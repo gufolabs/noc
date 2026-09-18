@@ -12,7 +12,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     TAG_MODELS = ["sa_activator", "sa_managedobject", "sa_commandsnippet"]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Drop old tags
         for m in self.TAG_MODELS:
             self.db.delete_column(m, "tags")
@@ -21,4 +21,4 @@ class Migration(BaseMigration):
             self.db.rename_column(m, "tmp_tags", "tags")
         # Create indexes
         for m in self.TAG_MODELS:
-            self.db.execute('CREATE INDEX x_%s_tags ON "%s" USING GIN("tags")' % (m, m))
+            self.db.execute(f'CREATE INDEX x_{m}_tags ON "{m}" USING GIN("tags")')

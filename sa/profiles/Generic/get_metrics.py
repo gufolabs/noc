@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Generic.get_metrics
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ import os
 import re
 import itertools
 import operator
-from typing import Union, Optional, List, Tuple, Callable, Dict, Any
+from typing import Callable, Any, cast
 from collections import defaultdict
 from dataclasses import dataclass
 
@@ -42,7 +42,7 @@ SNMP_OVERLOAD_VALUE = 0xFFFFFFFFFFFFFFFF  # 18446744073709551615 for 64-bit coun
 PROFILES_PATH = os.path.join("sa", "profiles")
 
 
-class MetricConfig(object):
+class MetricConfig:
     __slots__ = (
         "id",
         "ifindex",
@@ -63,7 +63,7 @@ class MetricConfig(object):
     ):
         self.id: int = id
         self.metric: str = metric
-        self.labels: List[str] = labels
+        self.labels: list[str] = labels
         self.oid: str = oid
         self.ifindex: int = ifindex
         self.service: int = service
@@ -73,7 +73,7 @@ class MetricConfig(object):
 
 
 @dataclass(frozen=True)
-class ProfileMetricConfig(object):
+class ProfileMetricConfig:
     """
     Config for SNMP Collected metrics, supported on profile.
     """
@@ -81,18 +81,18 @@ class ProfileMetricConfig(object):
     __slots__ = ("metric", "oid", "scale", "sla_types", "units")
     metric: str
     oid: str
-    sla_types: List[str]
+    sla_types: list[str]
     scale: int
     units: str
 
 
-class BatchConfig(object):
+class BatchConfig:
     __slots__ = ("id", "labels", "metric", "scale", "service", "type", "units")
 
-    def __init__(self, id, metric, labels, type, scale, units, service=None):
+    def __init__(self, id, metric, labels, type, scale, units, service=None) -> None:
         self.id: int = id
         self.metric: str = metric
-        self.labels: List[str] = labels
+        self.labels: list[str] = labels
         self.type: str = type
         self.scale = scale
         self.units = units
@@ -156,8 +156,13 @@ class MetricScriptBase(BaseScriptMetaclass):
     get_metrics metaclass. Performs @metrics decorator processing
     """
 
-    def __new__(mcs, name, bases, attrs):
-        m = super(MetricScriptBase, mcs).__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[MetricScriptBase]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["Script"]:  # type: ignore[return-value]
+        m = cast(type["Script"], super().__new__(mcs, name, bases, attrs))
         # Inject metric_type -> [handler] mappings
         m._mt_map = defaultdict(list)
         # Get @metrics handlers
@@ -197,7 +202,6 @@ class MetricScriptBase(BaseScriptMetaclass):
             -+-+-
             M|3|1
             C|2|0
-            :param s:
             :return:
             """
             if s.startswith(PROFILES_PATH):
@@ -236,9 +240,9 @@ class MetricScriptBase(BaseScriptMetaclass):
         try:
             data = orjson.loads(data)
         except ValueError as e:
-            raise ValueError("Failed to parse file '%s': %s" % (path, e))
+            raise ValueError(f"Failed to parse file '{path}': {e}")
         if not isinstance(data, dict):
-            raise ValueError("Error in file '%s': Must be defined as object" % path)
+            raise ValueError(f"Error in file '{path}': Must be defined as object")
         if "$metric" not in data:
             raise ValueError("$metric key is required")
         script._mt_map[data["$metric"]] += [
@@ -263,7 +267,7 @@ class MetricScriptBase(BaseScriptMetaclass):
         setattr(script, fn, f)
         ff = getattr(script, fn)
         ff.__name__ = fn
-        ff.__qualname__ = "%s.%s" % (script.__name__, fn)
+        ff.__qualname__ = f"{script.__name__}.{fn}"
         return ff
 
     rx_mt_name = re.compile("[^a-z0-9]+")
@@ -272,10 +276,9 @@ class MetricScriptBase(BaseScriptMetaclass):
     def get_snmp_handler_name(mcs, metric):
         """
         Generate python function name
-        :param metric:
         :return:
         """
-        return "get_snmp_json_%s" % mcs.rx_mt_name.sub("_", str(metric.lower()))
+        return "get_snmp_json_{}".format(mcs.rx_mt_name.sub("_", str(metric.lower())))
 
 
 class Script(BaseScript, metaclass=MetricScriptBase):
@@ -304,21 +307,21 @@ class Script(BaseScript, metaclass=MetricScriptBase):
         OIDsRule,
     ]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.metrics = []
-        self.ts: Optional[int] = None
+        self.ts: int | None = None
         # SNMP batch to be collected by collect_snmp_metrics
         # oid -> BatchConfig
-        self.snmp_batch: Dict[str, List[BatchConfig]] = defaultdict(list)
+        self.snmp_batch: dict[str, list[BatchConfig]] = defaultdict(list)
         # Collected metric ids
         self.seen_ids = set()
         # get_labels_hash(metric type, labels) -> metric config
-        self.metric_labels: Dict[str, List[MetricConfig]] = {}
-        self.sla_metrics: Dict[Tuple[str, str], int] = {}
-        self.cpe_metrics: Dict[Tuple[str, str], int] = {}
+        self.metric_labels: dict[str, list[MetricConfig]] = {}
+        self.sla_metrics: dict[tuple[str, str], int] = {}
+        self.cpe_metrics: dict[tuple[str, str], int] = {}
         # metric type -> [metric config]
-        self.metric_configs: Dict[str, List[MetricConfig]] = defaultdict(list)
+        self.metric_configs: dict[str, list[MetricConfig]] = defaultdict(list)
 
     def get_snmp_metrics_get_timeout(self) -> int:
         """
@@ -336,13 +339,13 @@ class Script(BaseScript, metaclass=MetricScriptBase):
         return self.profile.snmp_metrics_get_chunk
 
     @staticmethod
-    def get_labels_hash(metric: str, labels: List[str]):
+    def get_labels_hash(metric: str, labels: list[str]):
         if labels:
             return "\x00".join([metric, *labels])
         return metric
 
     def execute(
-        self, metrics: Optional[List[Dict[str, Any]]] = None, collected: List[Dict[str, Any]] = None
+        self, metrics: list[dict[str, Any]] | None = None, collected: list[dict[str, Any]] = None
     ):
         """
         Metrics is a list of:
@@ -354,10 +357,10 @@ class Script(BaseScript, metaclass=MetricScriptBase):
         * sla_test - optional sla test inventory
         """
         # Generate list of MetricConfig from input parameters
-        sla_metrics: List[MetricCollectorConfig] = []
-        cpe_metrics: List[MetricCollectorConfig] = []
-        sensor_metrics: List[MetricCollectorConfig] = []
-        object_metrics: List[MetricConfig] = []
+        sla_metrics: list[MetricCollectorConfig] = []
+        cpe_metrics: list[MetricCollectorConfig] = []
+        sensor_metrics: list[MetricCollectorConfig] = []
+        object_metrics: list[MetricConfig] = []
         if collected:
             seq_id = 1
             for coll in collected:
@@ -466,7 +469,6 @@ class Script(BaseScript, metaclass=MetricScriptBase):
             "_units": {mt.field_name: units},
             "managed_object": mo.bi_id,
         }
-        :param result:
         :return:
         """
         data = {}
@@ -652,23 +654,22 @@ class Script(BaseScript, metaclass=MetricScriptBase):
 
     def set_metric(
         self,
-        id: Union[int, Tuple[str, Optional[List[str]]]],
+        id: int | tuple[str, list[str] | None],
         metric: str = None,
-        value: Union[int, float] = 0,
-        ts: Optional[int] = None,
-        labels: Optional[Union[List[str], Tuple[str]]] = None,
+        value: int | float = 0,
+        ts: int | None = None,
+        labels: list[str] | tuple[str] | None = None,
         type: str = "gauge",
-        scale: Union[float, int, Callable] = 1,
+        scale: float | int | Callable[..., float] = 1,
         units: str = "1",
         multi: bool = False,
-        sensor: Optional[int] = None,
-        sla_probe: Optional[int] = None,
-        cpe: Optional[int] = None,
-        service: Optional[int] = None,
+        sensor: int | None = None,
+        sla_probe: int | None = None,
+        cpe: int | None = None,
+        service: int | None = None,
     ):
         """
         Append metric to output
-        :param id:
             Opaque id, as in request.
             May be tuple of (metric, labels), then it will be resolved automatically
             and *metric* and *labels* parameters may be ommited
@@ -678,7 +679,6 @@ class Script(BaseScript, metaclass=MetricScriptBase):
         :param ts: Timestamp (nanoseconds precision)
         :param labels: labels. Either as requested, or refined.
             When None, try to get from id tuple
-        :param type:
             Measure type. Possible values:
             "gauge"
             "counter"
@@ -780,12 +780,11 @@ class Script(BaseScript, metaclass=MetricScriptBase):
                 labels=mc.labels,
             )
 
-    SENSOR_OID_SCALE: Dict[str, Union[int, Callable]] = {}  # oid -> scale
+    SENSOR_OID_SCALE: dict[str, int | Callable[..., float]] = {}  # oid -> scale
 
-    def collect_sensor_metrics(self, metrics: List[MetricCollectorConfig]):
+    def collect_sensor_metrics(self, metrics: list[MetricCollectorConfig]):
         """
         Collect sensor metrics method. Configured by profile
-        :param metrics:
         :return:
         """
         for sensor in metrics:
@@ -802,21 +801,20 @@ class Script(BaseScript, metaclass=MetricScriptBase):
                     value=float(value),
                     scale=self.SENSOR_OID_SCALE.get(hints["oid"], 1),
                     sensor=sensor.sensor,
+                    units=hints.get("units", "1"),
                 )
             except Exception:
                 continue
 
-    def collect_sla_metrics(self, metrics: List[MetricCollectorConfig]):
+    def collect_sla_metrics(self, metrics: list[MetricCollectorConfig]):
         """
         Collect for SLA metrics method. Replaced by profile
-        :param metrics:
         :return:
         """
 
-    def collect_cpe_metrics(self, metrics: List[MetricCollectorConfig]):
+    def collect_cpe_metrics(self, metrics: list[MetricCollectorConfig]):
         """
         Collect for CPE metrics method. Replaced by profile
-        :param metrics:
         :return:
         """
 

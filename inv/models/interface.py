@@ -10,7 +10,7 @@ import datetime
 import logging
 import operator
 import re
-from typing import Optional, Iterable, List, Union, Dict, Any
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 import cachetools
@@ -145,16 +145,16 @@ class Interface(Document):
     effective_labels = ListField(StringField())
     extra_labels = DictField()
     # Capabilities
-    caps: List[CapsItem] = EmbeddedDocumentListField(CapsItem)
+    caps: list[CapsItem] = EmbeddedDocumentListField(CapsItem)
 
     PROFILE_LINK = "profile"
     _component_cache = cachetools.TTLCache(maxsize=2000, ttl=60)
 
     def __str__(self):
-        return "%s: %s" % (self.managed_object.name, self.name)
+        return f"{self.managed_object.name}: {self.name}"
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Interface"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Interface"]:
         return Interface.objects.filter(id=oid).first()
 
     @classmethod
@@ -205,7 +205,7 @@ class Interface(Document):
         if si:
             return si.interface
 
-    def as_resource(self, path: Optional[str] = None) -> str:
+    def as_resource(self, path: str | None = None) -> str:
         """
         Convert instance or connection to the resource reference.
 
@@ -340,8 +340,6 @@ class Interface(Document):
         def link_mismatched_lag(agg, phy):
             """
             Try to link LAG to physical interface
-            :param agg:
-            :param phy:
             :return:
             """
             l_members = [i for i in agg.lag_members if i.oper_status]
@@ -374,7 +372,7 @@ class Interface(Document):
                 return link
             if other.type == "aggregated" and other.profile.allow_lag_mismatch:
                 return link_mismatched_lag(other, self)
-            raise ValueError("Cannot connect %s interface to %s" % (self.type, other.type))
+            raise ValueError(f"Cannot connect {self.type} interface to {other.type}")
         if self.type == "aggregated":
             # LAG
             if other.type == "aggregated":
@@ -392,7 +390,7 @@ class Interface(Document):
                 return None
             if self.profile.allow_lag_mismatch:
                 return link_mismatched_lag(self, other)
-            raise ValueError("Cannot connect %s interface to %s" % (self.type, other.type))
+            raise ValueError(f"Cannot connect {self.type} interface to {other.type}")
         raise ValueError("Cannot link")
 
     @classmethod
@@ -402,13 +400,13 @@ class Interface(Document):
         and return interface instance or None
         """
         if "@" not in s:
-            raise ValueError("Invalid interface: %s" % s)
+            raise ValueError(f"Invalid interface: {s}")
         o, i = s.rsplit("@", 1)
         # Get managed object
         try:
             mo = ManagedObject.objects.get(name=o)
         except ManagedObject.DoesNotExist:
-            raise ValueError("Invalid manged object: %s" % o)
+            raise ValueError(f"Invalid manged object: {o}")
         # Normalize interface name
         i = mo.get_profile().convert_interface_name(i)
         # Look for interface
@@ -440,7 +438,7 @@ class Interface(Document):
                 if speed >= t:
                     if speed // t * t == speed:
                         return "%d%s" % (speed // t, n)
-                    return "%.2f%s" % (float(speed) / t, n)
+                    return f"{float(speed) / t:.2f}{n}"
             return str(speed)
 
         s = [{True: "Up", False: "Down", None: "-"}[self.oper_status]]
@@ -455,7 +453,7 @@ class Interface(Document):
             s += ["-", "-"]
         return "/".join(s)
 
-    def set_oper_status(self, status: bool, timestamp: Optional[datetime.datetime] = None):
+    def set_oper_status(self, status: bool, timestamp: datetime.datetime | None = None):
         """
         Set current oper status
         """
@@ -483,7 +481,7 @@ class Interface(Document):
                     headers=headers,
                 )
 
-    def get_message_context(self) -> Dict[str, Any]:
+    def get_message_context(self) -> dict[str, Any]:
         """Interface Message Ctx"""
         return {
             "name": self.name,
@@ -544,7 +542,7 @@ class Interface(Document):
         return Label.get_effective_setting(label, setting="enable_interface")
 
     @classmethod
-    def iter_effective_labels(cls, instance: "Interface") -> Iterable[List[str]]:
+    def iter_effective_labels(cls, instance: "Interface") -> Iterable[list[str]]:
         from noc.inv.models.subinterface import SubInterface
 
         yield list(instance.labels or [])
@@ -574,14 +572,13 @@ class Interface(Document):
             # When create id is None
             # Do not use SECONDARY_PREFERRED, when update labels right after
             # create or update SubInterface changes not keep up on Secondary
-            for el in SubInterface.objects.filter(
+            yield from SubInterface.objects.filter(
                 enabled_afi__in=["BRIDGE", "IPv4"], interface=instance.parent.id
-            ).scalar("effective_labels"):
-                yield el
+            ).scalar("effective_labels")
 
     @classmethod
     def iter_collected_metrics(
-        cls, mo: "ManagedObject", run: int = 0, d_interval: Optional[int] = None
+        cls, mo: "ManagedObject", run: int = 0, d_interval: int | None = None
     ) -> Iterable[MetricCollectorConfig]:
         """
         Return metric settings
@@ -624,7 +621,7 @@ class Interface(Document):
                 continue  # No metrics configured
             elif i["type"] == "SVI" and i_profile.is_default and i["name"] not in s_map:
                 continue  # Not allowed apply default profile to SVI
-            metrics: List[MetricItem] = []
+            metrics: list[MetricItem] = []
             for mc in i_profile.metrics:
                 # Check metric collected policy
                 if not i_profile.allow_collected_metric(
@@ -731,7 +728,7 @@ class Interface(Document):
         r = next(r, {})
         return r.get("interval", 0)
 
-    def get_matcher_ctx(self) -> Dict[str, Any]:
+    def get_matcher_ctx(self) -> dict[str, Any]:
         """"""
         if not self.state:
             state = self.profile.workflow.get_default_state()

@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Facade utilities
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ def name_to_title(name: str) -> str:
     """
     Use last part of name as title.
     """
-    return name.split("|")[-1].strip()
+    return name.rsplit("|", maxsplit=1)[-1].strip()
 
 
 def slot_to_id(name: str) -> str:

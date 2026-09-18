@@ -14,7 +14,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Adding model 'PrefixListCache'
         PeeringPoint = self.db.mock_model(model_name="PeeringPoint", db_table="peer_peeringpoint")
         self.db.create_table(

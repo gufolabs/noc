@@ -38,7 +38,7 @@ class Script(BaseScript):
                     "1110",
                     "1111",
                 ]
-                ports = ["%02x" % ord(c) for c in ports]
+                ports = [f"{ord(c):02x}" for c in ports]
                 p = ""
                 for c in ports:
                     for i in range(len(c)):

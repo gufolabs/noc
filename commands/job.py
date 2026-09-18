@@ -9,7 +9,6 @@
 import argparse
 from datetime import datetime, timedelta
 from collections import defaultdict
-from typing import Optional, List
 from functools import partial
 import math
 import csv
@@ -47,7 +46,7 @@ class Command(BaseCommand):
         try:
             return datetime.strptime(s, "%Y-%m-%d %H:%M")
         except ValueError:
-            msg = "Not a valid date: '{0}'.".format(s)
+            msg = f"Not a valid date: '{s}'."
             raise argparse.ArgumentTypeError(msg)
 
     @staticmethod
@@ -60,7 +59,7 @@ class Command(BaseCommand):
             return Scheduler(scheduler, pool=pool)
         return Scheduler(scheduler)
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         (
             parser.add_argument(
                 "--scheduler",
@@ -182,7 +181,7 @@ class Command(BaseCommand):
         if "infile" in options and not sys.stdin.isatty():
             for line in options["infile"]:
                 options["key"] += [int(line)]
-        return getattr(self, "handle_%s" % cmd.replace("-", "_"))(*args, **options)
+        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
 
     def handle_list(self, scheduler: Scheduler, *args, **options):
         q = {}
@@ -191,18 +190,18 @@ class Command(BaseCommand):
         if options.get("key"):
             q["key"] = {"$in": [int(x) for x in options["key"]]}
         fname = options.get("format", "csv")
-        format = getattr(self, "format_%s" % fname)
+        format = getattr(self, f"format_{fname}")
         # Print header
-        getattr(self, "init_%s" % fname)()
+        getattr(self, f"init_{fname}")()
         # Print jobs
         for j in scheduler.get_collection().find(q).sort("ts").limit(50):
             format(j)
 
     def handle_get(self, scheduler, *args, **options):
         fname = options.get("format", "csv")
-        format = getattr(self, "format_%s" % fname)
+        format = getattr(self, f"format_{fname}")
         # Print header
-        getattr(self, "init_%s" % fname)()
+        getattr(self, f"init_{fname}")()
         # Print jobs
         for j in scheduler.find().sort("ts"):
             format(j)
@@ -214,8 +213,6 @@ class Command(BaseCommand):
     def get_next_timestamp(interval, offset=0.0, ts=None):
         """
         Calculate next timestamp
-        :param interval:
-        :param offset:
         :param ts: current timestamp
         :return: datetime object
         """
@@ -320,12 +317,12 @@ class Command(BaseCommand):
                 r[p][c[1]] = c[2]
                 if "sum_task_per_seconds" not in r[p]:
                     r[p]["sum_task_per_seconds"] = 0.0
-                if "%s_task_per_seconds" % s not in r[p]:
-                    r[p]["%s_task_per_seconds" % s] = 0.0
+                if f"{s}_task_per_seconds" not in r[p]:
+                    r[p][f"{s}_task_per_seconds"] = 0.0
                 r[p]["sum_task_per_seconds"] += float(c[2]) / float(c[1])
-                r[p]["%s_task_per_seconds" % s] += float(c[2]) / float(c[1])
+                r[p][f"{s}_task_per_seconds"] += float(c[2]) / float(c[1])
                 r["all"]["sum_task_per_seconds"] += float(c[2]) / float(c[1])
-                r["all"]["%s_task_per_seconds" % s] += float(c[2]) / float(c[1])
+                r["all"][f"{s}_task_per_seconds"] += float(c[2]) / float(c[1])
         return r
 
     @staticmethod
@@ -400,8 +397,8 @@ class Command(BaseCommand):
     def handle_stats(
         self,
         scheduler: Scheduler,
-        mos: Optional[List[int]] = None,
-        slots: Optional[List[int]] = None,
+        mos: list[int] | None = None,
+        slots: list[int] | None = None,
         **options,
     ):
         from noc.sa.models.profile import Profile
@@ -445,7 +442,7 @@ class Command(BaseCommand):
         scheduler: Scheduler,
         min_duration=5,
         buckets=5,
-        slots: Optional[List[int]] = None,
+        slots: list[int] | None = None,
         detail: bool = False,
         *args,
         **options,
@@ -482,7 +479,7 @@ class Command(BaseCommand):
         scheduler: Scheduler,
         min_duration=5,
         buckets=5,
-        slots: Optional[List[int]] = None,
+        slots: list[int] | None = None,
         detail: bool = False,
         *args,
         **options,
@@ -584,7 +581,3 @@ class Command(BaseCommand):
             },
         ]
         return scheduler.aggregate(pipeline)
-
-
-if __name__ == "__main__":
-    Command().run()

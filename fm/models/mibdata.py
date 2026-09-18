@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Dict, Tuple, Any
+from typing import Any
 
 # Third-party modules
 from mongoengine.document import Document
@@ -31,7 +31,7 @@ class MIBData(Document):
     syntax = DictField(required=False)
     aliases = ListField(StringField(), default=[])
 
-    _name_syntax_cache: Dict[str, Tuple[str, Dict[str, Any]]] = {}
+    _name_syntax_cache: dict[str, tuple[str, dict[str, Any]]] = {}
 
     def __str__(self):
         return self.name
@@ -49,18 +49,14 @@ class MIBData(Document):
         cls.get_name_and_syntax = cls._get_name_and_syntax_cached
 
     @classmethod
-    def _get_name_and_syntax_uncached(
-        cls, oid: str
-    ) -> Tuple[Optional[str], Optional[Dict[str, Any]]]:
+    def _get_name_and_syntax_uncached(cls, oid: str) -> tuple[str | None, dict[str, Any] | None]:
         d = cls._get_collection().find_one({"oid": oid}, {"_id": 0, "name": 1, "syntax": 1})
         if d:
             return d["name"], d["syntax"] or {}
         return None, None
 
     @classmethod
-    def _get_name_and_syntax_cached(
-        cls, oid: str
-    ) -> Tuple[Optional[str], Optional[Dict[str, Any]]]:
+    def _get_name_and_syntax_cached(cls, oid: str) -> tuple[str | None, dict[str, Any] | None]:
         r = cls._name_syntax_cache.get(oid)
         if r:
             return r

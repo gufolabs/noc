@@ -11,7 +11,7 @@ from noc.core.validators import is_int
 BASE_PATH = "/api/card/view/kb"
 
 
-class BaseParser(object):
+class BaseParser:
     """
     Abstract parser class
     """
@@ -43,15 +43,12 @@ class BaseParser(object):
         TT<n> - Link to Trouble Ticket <n>
         attach:<name> - Link to attachment <name>
 
-        :param kb_entry:
-        :param link:
-        :param text:
         :return:
         """
         if text is None:
             text = link
         if link.startswith("KB") and is_int(link[2:]):
-            return "<a href='%s/%s/'>%s</a>" % (BASE_PATH, link[2:], text)
+            return f"<a href='{BASE_PATH}/{link[2:]}/'>{text}</a>"
         if link.startswith("TT"):
             return link[2:]
         if link.startswith("attach:"):
@@ -66,9 +63,9 @@ class BaseParser(object):
             return "<a href='/kb/kbentry/%d/attachment/%s/'>%s</a>" % (kb_entry.id, link, text)
         try:
             le = kb_entry.__class__.objects.get(subject=link)
-            return "<a href='%s/%s/'>%s</a>" % (BASE_PATH, le.id, text)
+            return f"<a href='{BASE_PATH}/{le.id}/'>{text}</a>"
         except kb_entry.__class__.DoesNotExist:
-            return "<a href='%s'>%s</a>" % (link, text)
+            return f"<a href='{link}'>{text}</a>"
 
     @classmethod
     def convert_attach(cls, kb_entry, href):

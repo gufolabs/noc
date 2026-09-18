@@ -27,7 +27,7 @@ class Script(BaseScript):
     def execute_cli(self, interface=None):
         r = []
         if interface:
-            cmd = "show interface %s" % interface
+            cmd = f"show interface {interface}"
         else:
             cmd = "show interface | include line"
         for match in self.rx_interface_status.finditer(self.cli(cmd)):

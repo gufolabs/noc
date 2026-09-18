@@ -113,7 +113,7 @@ class Script(BaseScript):
                     ]
             except self.CLISyntaxError:
                 for vlan in self.scripts.get_vlans():
-                    v = self.cli("lcman svlan show %s" % vlan["vlan_id"])
+                    v = self.cli("lcman svlan show {}".format(vlan["vlan_id"]))
                     match = self.rx_vlan1.search(v)
                     vlans += [
                         {
@@ -134,7 +134,7 @@ class Script(BaseScript):
                 ifname = self.profile.convert_interface_name(match.group("ifname"))
                 if has_enet:
                     try:
-                        e = self.cli("show enet %s" % ifname)
+                        e = self.cli(f"show enet {ifname}")
                         match1 = self.rx_enet_o.search(e)
                         if match1:
                             oper_status = match1.group("oper_status") != "down"
@@ -178,27 +178,27 @@ class Script(BaseScript):
             for i in range(1, slots + 1):
                 if port_show:
                     try:
-                        v = self.cli("port show %s" % i)
+                        v = self.cli(f"port show {i}")
                         rx_sub = self.rx_sub_o
                     except self.CLISyntaxError:
                         port_show = False
-                        v = self.cli("lcman port show %s" % i)
+                        v = self.cli(f"lcman port show {i}")
                         rx_sub = self.rx_sub_o1
                     if "must not be empty" in v:
                         continue
                     descrs = []
                 else:
-                    v = self.cli("lcman port show %s" % i)
+                    v = self.cli(f"lcman port show {i}")
                     if "must not be empty" in v:
                         continue
-                    d = self.cli("lcman port description show %s" % i)
+                    d = self.cli(f"lcman port description show {i}")
                     descrs = self.rx_descr.findall(d)
                 for match in rx_sub.finditer(v):
                     admin_status = match.group("admin_status") == "V"
                     sub = match.group("sub")
                     ifname = sub.replace(" ", "")
                     if not port_show:
-                        ifname = "%s/%s" % (i, ifname)
+                        ifname = f"{i}/{ifname}"
                     if "pvid" in match.groupdict() and match.group("pvid"):
                         if_pvid[ifname] = match.group("pvid")
                     iface = {
@@ -213,16 +213,16 @@ class Script(BaseScript):
                             break
                     interfaces += [iface]
                 if port_show:
-                    v = self.cli("port show %s pvc" % i)
+                    v = self.cli(f"port show {i} pvc")
                     rx_pvc = self.rx_sub_pvc
                 else:
-                    v = self.cli("lcman port pvc show %s" % i)
+                    v = self.cli(f"lcman port pvc show {i}")
                     rx_pvc = self.rx_sub_pvc1
                 for match in rx_pvc.finditer(v):
                     if port_show:
                         ifname = match.group("sub")
                     else:
-                        ifname = "%s/%s" % (i, match.group("sub"))
+                        ifname = "{}/{}".format(i, match.group("sub"))
                     for iface in interfaces:
                         if iface["name"] == ifname:
                             if match.group("pvid") == "-":
@@ -231,7 +231,7 @@ class Script(BaseScript):
                                 pvid = int(match.group("pvid"))
                             iface["subinterfaces"] += [
                                 {
-                                    "name": "%s.%s" % (ifname, match.group("pvid")),
+                                    "name": "{}.{}".format(ifname, match.group("pvid")),
                                     "admin_status": iface["admin_status"],
                                     "enabled_afi": ["BRIDGE", "ATM"],
                                     "vlan_ids": pvid,
@@ -240,7 +240,7 @@ class Script(BaseScript):
                                 }
                             ]
                             break
-                v = self.cli("lcman show %s" % i)
+                v = self.cli(f"lcman show {i}")
                 for match in self.rx_ipif_mac.finditer(v):
                     iface_mac += [match.groupdict()]
         else:
@@ -258,8 +258,8 @@ class Script(BaseScript):
                     vlans += [
                         {
                             "vid": int(match.group("vlan_id")),
-                            "ports": "%s%s" % (match.group("ports"), match.group("eports")),
-                            "mode": "%s%s" % (match.group("mode"), match.group("emode")),
+                            "ports": "{}{}".format(match.group("ports"), match.group("eports")),
+                            "mode": "{}{}".format(match.group("mode"), match.group("emode")),
                         }
                     ]
                 port_num = 0
@@ -335,7 +335,7 @@ class Script(BaseScript):
                             if match.group("sub") == ifname[4:]:
                                 iface["admin_status"] = match.group("admin_status") == "Up"
                                 break
-                        v = self.cli("adsl show pvc %s" % ifname[4:])
+                        v = self.cli(f"adsl show pvc {ifname[4:]}")
                         for match in self.rx_sub_pvc2.finditer(v):
                             iface["subinterfaces"] += [
                                 {
@@ -364,7 +364,7 @@ class Script(BaseScript):
                             if match.group("port") == ifname[6:]:
                                 vid = int(match.group("vlan_id"))
                                 break
-                        v = self.cli("gshdsl show pvc %s" % ifname[6:])
+                        v = self.cli(f"gshdsl show pvc {ifname[6:]}")
                         match = self.rx_sub_pvc2.search(v)
                         sub = {
                             "name": match.group("sub"),
@@ -386,7 +386,7 @@ class Script(BaseScript):
                     ifname = match.group("ifname")
                     addr = match.group("ip")
                     mask = match.group("mask")
-                    ip_address = "%s/%s" % (addr, IPv4.netmask_to_len(mask))
+                    ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
                     iface = {
                         "name": ifname,
                         "type": "SVI",
@@ -422,7 +422,7 @@ class Script(BaseScript):
             ifname = match.group("ifname")
             addr = match.group("ip")
             mask = match.group("mask")
-            ip_address = "%s/%s" % (addr, IPv4.netmask_to_len(mask))
+            ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
             iface = {
                 "name": ifname,
                 "type": "SVI",
@@ -453,7 +453,7 @@ class Script(BaseScript):
             ifname = match.group("ifname")
             addr = match.group("ip")
             mask = match.group("mask")
-            ip_address = "%s/%s" % (addr, IPv4.netmask_to_len(mask))
+            ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
             iface = {
                 "name": ifname,
                 "type": "SVI",

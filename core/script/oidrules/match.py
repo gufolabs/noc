@@ -10,14 +10,12 @@ from noc.core.matcher import match
 from .loader import load_rule
 
 
-class MatcherRule(object):
-    """
-    Multiple items for single metric
-    """
+class MatcherRule:
+    """Multiple items for single metric"""
 
     name = "match"
 
-    def __init__(self, oids, matchers):
+    def __init__(self, oids, matchers) -> None:
         self.oids = oids
         self.matchers = matchers
 

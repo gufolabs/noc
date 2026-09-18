@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from .base import BaseModel
@@ -17,8 +16,8 @@ from .networksegmentprofile import NetworkSegmentProfile
 class NetworkSegment(BaseModel):
     id: str
     name: str
-    parent: Optional[Reference["NetworkSegment"]] = None
-    sibling: Optional[Reference["NetworkSegment"]] = None
+    parent: Reference["NetworkSegment"] | None = None
+    sibling: Reference["NetworkSegment"] | None = None
     profile: Reference["NetworkSegmentProfile"] = None
 
     _csv_fields = ["id", "parent", "name", "sibling", "profile"]

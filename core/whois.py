@@ -28,7 +28,7 @@ IGNORED_LINES = {" " * 16}  # 16 - default tab, Add after find:
 # '                299 Broadway',
 
 
-class WhoisCacheLoader(object):
+class WhoisCacheLoader:
     RIPE_AS_SET_MEMBERS = "https://ftp.ripe.net/ripe/dbase/split/ripe.db.as-set.gz"
     RIPE_ROUTE_ORIGIN = "https://ftp.ripe.net/ripe/dbase/split/ripe.db.route.gz"
     ARIN = "https://ftp.arin.net/pub/rr/arin.db.gz"
@@ -128,7 +128,6 @@ class WhoisCacheLoader(object):
         :param key_field: key field
         :param values_field: falue field
         :param forward: True for forward lookup, False otherwise
-        :param parser:
         :return: Number of parsed items
         """
         if forward:
@@ -146,11 +145,11 @@ class WhoisCacheLoader(object):
         try:
             f = self.urlopen(url)
         except URLError as e:
-            logger.error("Failed to download %s: %s" % (url, e))
-            raise self.DownloadError("Failed to download %s: %s" % (url, e))
+            logger.error(f"Failed to download {url}: {e}")
+            raise self.DownloadError(f"Failed to download {url}: {e}")
         except OSError as e:
-            logger.error("Failed to download %s: %s" % (url, e))
-            raise self.DownloadError("Failed to download %s: %s" % (url, e))
+            logger.error(f"Failed to download {url}: {e}")
+            raise self.DownloadError(f"Failed to download {url}: {e}")
         logger.info("Parsing")
         for o in parser(f, [key_field, values_field]):
             if key_field in o and values_field in o:
@@ -195,7 +194,7 @@ class WhoisCacheLoader(object):
         """
         # Get AS with discovered routes
         discoverable_as = {
-            "AS%s" % a.asn
+            f"AS{a.asn}"
             for a in AS.objects.all()
             if a.profile.enable_discovery_prefix_whois_route and a.profile
         }

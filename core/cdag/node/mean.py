@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 
 # Third-party modules
 from pydantic import BaseModel
@@ -17,7 +16,7 @@ from .base import BaseCDAGNode, ValueType, Category
 
 
 class MeanNodeState(BaseModel):
-    values: List[float] = []
+    values: list[float] = []
 
 
 class MeanNodeConfig(BaseModel):
@@ -38,7 +37,7 @@ class MeanNode(BaseCDAGNode):
     def get_stats(self, values: np.array) -> float:
         return np.mean(values)
 
-    def get_value(self, x: ValueType) -> Optional[ValueType]:
+    def get_value(self, x: ValueType) -> ValueType | None:
         self.state.values.insert(0, float(x))
         # Trim
         if len(self.state.values) >= self.config.max_window:

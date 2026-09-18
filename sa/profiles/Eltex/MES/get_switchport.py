@@ -176,7 +176,7 @@ class Script(BaseScript):
                         break
             if interface not in port_vlans:
                 port_vlans.update({interface: {"tagged": [], "untagged": ""}})
-            cmd = self.cli("show interfaces switchport %s" % interface)
+            cmd = self.cli(f"show interfaces switchport {interface}")
             for vlan in parse_table(cmd, allow_wrap=True):
                 vlan_id = vlan[0]
                 rule = vlan[2]
@@ -208,7 +208,7 @@ class Script(BaseScript):
                         for interface in p["members"]:
                             if interface_status.get(interface):
                                 status = True
-                        cmd = "show interfaces description %s" % name
+                        cmd = f"show interfaces description {name}"
                         desc = self.cli(cmd)
                         match = self.rx_channel_description.search(desc)
                         if match:

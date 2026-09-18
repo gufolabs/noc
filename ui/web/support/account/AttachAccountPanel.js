@@ -105,7 +105,7 @@ Ext.define("NOC.support.account.AttachAccountPanel", {
   //
   attachAccount: function(values){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       method: "POST",
       url: "/support/account/account/attach/",
       params: values,

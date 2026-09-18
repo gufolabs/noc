@@ -16,7 +16,7 @@ from noc.core.model.fields import DocumentReferenceField
 class Migration(BaseMigration):
     depends_on = [("ip", "0038_address_name"), ("main", "0037_template")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column(
             "sa_managedobjectprofile",
             "enable_box_discovery_address_management",

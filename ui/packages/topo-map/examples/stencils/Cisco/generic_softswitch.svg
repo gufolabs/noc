@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" width="30.424999" height="45.587502" id="svg2" xmlns="http://www.w3.org/2000/svg">
+  <title>Generic Softswitch</title>
+  <g transform="matrix(1.25,0,0,-1.25,0,45.5875)" id="g10">
+    <g transform="scale(0.1,0.1)" id="g12">
+      <path d="m 6.46875,5.16797 185.25,0 0,317.297 -185.25,0 0,-317.297 z" id="path14" style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"/>
+      <path d="m 6.46875,5.16797 185.25,0 0,317.297 -185.25,0 0,-317.297 z" id="path16" style="fill:none;stroke:#ffffff;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"/>
+      <path d="m 62.0469,360.465 -55.57815,-38 185.25025,0 46.074,38 -175.7461,0" id="path18" style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"/>
+      <path d="m 62.0469,360.465 -55.57815,-38 185.25025,0 46.074,38 -175.7461,0 z" id="path20" style="fill:none;stroke:#ffffff;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"/>
+      <path d="m 237.793,55.7148 0,304.7502 -46.074,-38 0,-317.29703 46.074,50.54683" id="path22" style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"/>
+      <path d="m 237.793,55.7148 0,304.7502 -46.074,-38 0,-317.29703 46.074,50.54683 z" id="path24" style="fill:none;stroke:#ffffff;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"/>
+      <path d="m 78.4375,266.16 83.5745,0.055 0,-10.574 -83.5745,-0.039 -0.0234,-16.508 -37.9414,21.801 37.9414,21.804 0.0234,-16.539" id="path26" style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"/>
+      <path d="m 131.938,179.016 -83.5747,-0.055 0,10.574 83.5747,0.039 0.027,16.512 37.937,-21.805 -37.937,-21.808 -0.027,16.543" id="path28" style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"/>
+    </g>
+  </g>
+</svg>

@@ -12,9 +12,9 @@
       - sudo
       - curl
       - apt-transport-https
-      - dbus  # to setup hostname
-      - build-essential  #for ujson-x compiling
-  become: "True"
+      - dbus # to setup hostname
+      - build-essential #for ujson-x compiling
+  become: true
   environment:
     https_proxy: "{{ http_proxy }}"
     http_proxy: "{{ http_proxy }}"

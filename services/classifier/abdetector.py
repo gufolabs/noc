@@ -6,22 +6,20 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Tuple, List, Dict
 
 # NOC modules
 from noc.inv.models.interface import Interface
 
 
-class AbductDetector(object):
-    def __init__(self):
-        self.active: Dict[int, List[Tuple[int, str]]] = {}
+class AbductDetector:
+    def __init__(self) -> None:
+        self.active: dict[int, list[tuple[int, str]]] = {}
 
     def register_up(self, ts: int, interface: Interface):
         """
         Register link up
 
         :param ts: Event timestamp
-        :param interface:
         :return:
         """
         mo = interface.managed_object
@@ -41,7 +39,6 @@ class AbductDetector(object):
         Register link down
 
         :param ts: Event timestamp
-        :param interface:
         :return: True, if massive outage detected
         """
         mo = interface.managed_object

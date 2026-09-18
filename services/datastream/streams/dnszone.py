@@ -57,7 +57,6 @@ class DNSZoneDataStream(DataStream):
     def get_records(cls, zone: DNSZone):
         """
         Get zone records
-        :param zone:
         :return:
         """
         zone_iters = [cls.iter_soa(zone)]
@@ -102,7 +101,6 @@ class DNSZoneDataStream(DataStream):
     def iter_ns(cls, zone: DNSZone) -> Iterable[RR]:
         """
         Yield NS records
-        :param zone:
         :return:
         """
         for ns in zone.ns_list:
@@ -112,7 +110,6 @@ class DNSZoneDataStream(DataStream):
     def iter_forward(cls, zone: DNSZone) -> Iterable[RR]:
         """
         Yield forward zone records
-        :param zone:
         :return:
         """
         return chain(
@@ -127,7 +124,6 @@ class DNSZoneDataStream(DataStream):
     def iter_reverse_ipv4(cls, zone):
         """
         Yield IPv4 reverse zone
-        :param zone:
         :return:
         """
         return chain(
@@ -141,7 +137,6 @@ class DNSZoneDataStream(DataStream):
     def iter_reverse_ipv6(cls, zone):
         """
         Yield IPv6 reverse zone
-        :param zone:
         :return:
         """
         return chain(cls.iter_ns(zone), cls.iter_rr(zone), cls.iter_ipam_ptr6(zone))
@@ -150,10 +145,9 @@ class DNSZoneDataStream(DataStream):
     def iter_nested_ns(cls, zone: DNSZone) -> Iterable[RR]:
         """
         Yield NS/A records for nested zones
-        :param zone:
         :return:
         """
-        suffix = ".%s." % zone.name
+        suffix = f".{zone.name}."
         length = len(zone.name)
         for z in zone.children:
             nested_nses = set()
@@ -205,11 +199,11 @@ class DNSZoneDataStream(DataStream):
         # @todo: Get ttl from profile
         # Build query
         length = len(zone.name) + 1
-        q = Q(fqdn__iexact=zone.name) | Q(fqdn__iendswith=".%s" % zone.name)
-        for z in DNSZone.objects.filter(name__iendswith=".%s" % zone.name).values_list(
+        q = Q(fqdn__iexact=zone.name) | Q(fqdn__iendswith=f".{zone.name}")
+        for z in DNSZone.objects.filter(name__iendswith=f".{zone.name}").values_list(
             "name", flat=True
         ):
-            q &= ~(Q(fqdn__iexact=z) | Q(fqdn__iendswith=".%s" % z))
+            q &= ~(Q(fqdn__iexact=z) | Q(fqdn__iendswith=f".{z}"))
         for afi, fqdn, address in Address.objects.filter(q).values_list("afi", "fqdn", "address"):
             yield RR(
                 zone=zone.name,
@@ -223,7 +217,6 @@ class DNSZoneDataStream(DataStream):
     def iter_ipam_ptr4(cls, zone: DNSZone) -> Iterable[RR]:
         """
         Yield IPv4 PTR records from IPAM
-        :param zone:
         :return:
         """
 
@@ -233,7 +226,7 @@ class DNSZoneDataStream(DataStream):
             """
             x = a.split(".")
             x.reverse()
-            return "%s.in-addr.arpa" % (".".join(x))
+            return "{}.in-addr.arpa".format(".".join(x))
 
         length = len(zone.name) + 1
         for a in Address.objects.filter(afi="4").extra(
@@ -272,10 +265,9 @@ class DNSZoneDataStream(DataStream):
     def iter_missed_ns_a(cls, zone: DNSZone) -> Iterable[RR]:
         """
         Yield missed A record for NS'es
-        :param zone:
         :return:
         """
-        suffix = ".%s." % zone.name
+        suffix = f".{zone.name}."
         # Create missed A records for NSses from zone
         # Find in-zone NSes
         in_zone_nses = {}
@@ -315,14 +307,14 @@ class DNSZoneDataStream(DataStream):
                     name=n,
                     ttl=zone.profile.zone_ttl,
                     type="CNAME",
-                    rdata="%s.%s/32" % (n, n),
+                    rdata=f"{n}.{n}/32",
                 )
                 for ns in nses:
                     if not ns.endswith("."):
                         ns += "."
                     yield RR(
                         zone=zone.name,
-                        name="%s/32" % n,
+                        name=f"{n}/32",
                         ttl=zone.profile.zone_ttl,
                         type="NS",
                         rdata=ns,
@@ -360,7 +352,6 @@ class DNSZoneDataStream(DataStream):
         """
         DNS Zone changed, increase serial
 
-        :param data:
         :return:
         """
         zone = DNSZone.objects.filter(id=data["id"])[:1]

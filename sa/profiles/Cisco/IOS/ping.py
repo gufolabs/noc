@@ -20,17 +20,17 @@ class Script(BaseScript):
     )
 
     def execute(self, address, count=None, source_address=None, size=None, df=None, vrf=None):
-        cmd = "ping ip %s" % address
+        cmd = f"ping ip {address}"
         if count:
             cmd += " count %d" % int(count)
         if source_address:
-            cmd += " source %s" % source_address
+            cmd += f" source {source_address}"
         if size:
             cmd += " size %d" % int(size)
         if df:
             cmd += " df-bit"
         if vrf:
-            cmd += " vrf %s" % vrf
+            cmd += f" vrf {vrf}"
         pr = self.cli(cmd)
         match = self.rx_result.search(pr)
         return {

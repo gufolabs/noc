@@ -37,9 +37,9 @@ class Script(BaseScript):
                     state = i[3].lower()
                     vlan = match.group("vlan_id")
                     interface = i[0]
-                    pos = detail.find("VLAN %s" % vlan)
+                    pos = detail.find(f"VLAN {vlan}")
                     v = detail[pos:].split(dsep)[1]
-                    p = v.find("Port %s" % interface)
+                    p = v.find(f"Port {interface}")
                     if dpi_rx.search(v[p:]):
                         dpi = dpi_rx.search(v[p:]).group("dpi")
                     else:
@@ -52,7 +52,7 @@ class Script(BaseScript):
                             "priority": i[1],
                             "designated_bridge_id": i[7][4:],
                             "designated_bridge_priority": i[7][:4],
-                            "designated_port_id": "%s.%s" % (i[1], dpi),
+                            "designated_port_id": f"{i[1]}.{dpi}",
                             "point_to_point": 0,
                             "edge": 0,
                             "role": "unknown",

@@ -7,7 +7,7 @@
 
 # Python modules
 from threading import Lock
-from typing import Optional, Union
+from typing import Optional
 import operator
 import logging
 
@@ -85,7 +85,7 @@ class PhoneRange(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["PhoneRange"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["PhoneRange"]:
         return PhoneRange.objects.filter(id=oid).first()
 
     @cachetools.cached(_path_cache, key=lambda x: str(x.id), lock=id_lock)
@@ -102,10 +102,6 @@ class PhoneRange(Document):
     def get_closest_range(cls, dialplan, from_number, to_number=None, exclude_range=None):
         """
         Find closest range enclosing given range
-        :param dialplan:
-        :param from_number:
-        :param to_number:
-        :param exclude_range:
         :return: Phone range or None
         """
         to_number = to_number or from_number
@@ -145,7 +141,7 @@ class PhoneRange(Document):
         rr = PhoneRange.objects.filter(q).first()
         if rr:
             raise ValidationError(
-                "Overlapped ranges: %s - %s (%s)" % (rr.from_number, rr.to_number, rr.name)
+                f"Overlapped ranges: {rr.from_number} - {rr.to_number} ({rr.name})"
             )
         q = {
             "dialplan": self.dialplan,
@@ -222,7 +218,7 @@ class PhoneRange(Document):
         # Nested ranges
         nrxc = []
         for r in PhoneRange.objects.filter(parent=self.id):
-            nrxc += ["(x >= '%s' and x <= '%s')" % (r.from_number, r.to_number)]
+            nrxc += [f"(x >= '{r.from_number}' and x <= '{r.to_number}')"]
         if nrxc:
             nrx = compile(" or ".join(nrxc), "<string>", "eval")
         else:
@@ -248,7 +244,7 @@ class PhoneRange(Document):
             )
             n.save()
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.profile.get_css_class() if self.profile else None
 
 

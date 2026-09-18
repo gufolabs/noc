@@ -7,19 +7,19 @@
 
 # Python modules
 import itertools
-from typing import Optional, Any, Dict, List
+from typing import Any
 
 # NOC modules
-from .node.base import BaseCDAGNode
+from .node.base import BaseCDAGNode, ConfigProxy
 from .node.loader import loader
 from .tx import Transaction
 
 
-class CDAG(object):
-    def __init__(self, graph_id: str, state: Optional[Dict[str, Any]] = None):
+class CDAG:
+    def __init__(self, graph_id: str, state: dict[str, Any] | None = None) -> None:
         self.graph_id = graph_id
-        self.state: Dict[str, Any] = state or {}
-        self.nodes: Dict[str, BaseCDAGNode] = {}
+        self.state: dict[str, Any] = state or {}
+        self.nodes: dict[str, BaseCDAGNode] = {}
 
     def __getitem__(self, item: str) -> BaseCDAGNode:
         return self.nodes[item]
@@ -31,16 +31,19 @@ class CDAG(object):
         self,
         node_id: str,
         node_type: str,
-        description: Optional[str] = None,
-        config: Optional[Dict[str, Any]] = None,
+        description: str | None = None,
+        config: dict[str, Any] | None = None,
+        override_config: dict[str, Any] | None = None,
         sticky: bool = False,
     ) -> BaseCDAGNode:
         if node_id in self.nodes:
-            raise ValueError("Node %s is already configured" % node_id)
+            raise ValueError(f"Node {node_id} is already configured")
         node_cls = loader.get_class(node_type)
         if not node_cls:
-            raise ValueError("Invalid node type: %s" % node_type)
+            raise ValueError(f"Invalid node type: {node_type}")
         config = config or {}
+        if override_config:
+            config = ConfigProxy(node_cls.config_cls(**config), override_config)
         node = node_cls.construct(
             node_id,
             description=description,
@@ -58,10 +61,10 @@ class CDAG(object):
         """
         return Transaction(self)
 
-    def get_node(self, name: str) -> Optional[BaseCDAGNode]:
+    def get_node(self, name: str) -> BaseCDAGNode | None:
         return self.nodes.get(name)
 
-    def get_state(self) -> Dict[str, Any]:
+    def get_state(self) -> dict[str, Any]:
         """
         Construct current state
         :return:
@@ -76,15 +79,14 @@ class CDAG(object):
             r[node_id] = ns.model_dump()
         return r
 
-    def merge(self, other: "CDAG", prefix: Optional[str] = "") -> "CDAG":
+    def merge(self, other: "CDAG", prefix: str | None = "") -> "CDAG":
         """
         Merge other graph into this one
-        :param other:
         :param prefix: Optional merged node's prefix
         :return:
         """
         # Merge nodes
-        nodes: Dict[str, BaseCDAGNode] = {}
+        nodes: dict[str, BaseCDAGNode] = {}
         for node_id, node in other.nodes.items():
             # Normalize name
             if node.sticky or not prefix:
@@ -112,10 +114,10 @@ class CDAG(object):
 
         :return:
         """
-        n_map: Dict[str, str] = {}
+        n_map: dict[str, str] = {}
         r = ["digraph {", '  rankdir="LR";']
-        tb: List[str] = []
-        tb_conn: List[str] = []
+        tb: list[str] = []
+        tb_conn: list[str] = []
         tb_count = itertools.count()
         # Nodes
         for n, node_id in enumerate(sorted(self.nodes)):

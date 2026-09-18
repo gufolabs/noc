@@ -28,11 +28,11 @@ class Script(BaseScript):
             cmd = "show mac-table"
             reset = ""
             if mac is not None:
-                reset += " address %s" % self.profile.convert_mac(mac)
+                reset += f" address {self.profile.convert_mac(mac)}"
             if interface is not None:
-                reset += " port %s" % interface
+                reset += f" port {interface}"
             if vlan is not None:
-                reset += " vlan %s" % vlan
+                reset += f" vlan {vlan}"
             if not reset:
                 reset = " all"
             cmd = cmd + reset

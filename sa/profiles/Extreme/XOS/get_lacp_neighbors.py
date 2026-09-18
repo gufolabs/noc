@@ -23,7 +23,7 @@ class Script(BaseScript):
     def get_local_id(port_name):
         # Local id for stack: 1:49 -> 1049, for non-stack ?
         if ":" in port_name:
-            return int("%s0%s" % tuple(port_name.split(":")))
+            return int("{}0{}".format(*tuple(port_name.split(":"))))
         return int(port_name)
 
     def execute(self):
@@ -44,7 +44,7 @@ class Script(BaseScript):
         for lag in lags_table:
             if not lag["Lag "]:
                 continue
-            v = self.cli("show lacp lag %s" % lag["Lag "][0])
+            v = self.cli("show lacp lag {}".format(lag["Lag "][0]))
             info = self.profile.parse_table_struct(
                 v.split("Port list:")[0],
                 header_start="Lag",

@@ -12,7 +12,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("sa", "0006_default_activator")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         a_id = self.db.execute("SELECT id FROM sa_activator LIMIT 1")[0][0]
         for (
             handler_class_name,
@@ -53,4 +53,4 @@ class Migration(BaseMigration):
             elif handler_class_name == "prefix-list":
                 self.db.execute("INSERT INTO cm_prefixlist(repo_path) VALUES(%s)", [repo_path])
             else:
-                raise Exception("Unsupported handler_class_name='%s'" % handler_class_name)
+                raise Exception(f"Unsupported handler_class_name='{handler_class_name}'")

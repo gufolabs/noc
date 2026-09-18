@@ -114,7 +114,9 @@ class Script(BaseScript):
             ]:
                 try:
                     c = self.cli(
-                        "show fiber-ports optical-transceiver interface %s" % match.group("port")
+                        "show fiber-ports optical-transceiver interface {}".format(
+                            match.group("port")
+                        )
                     )
                 except self.CLISyntaxError:
                     break

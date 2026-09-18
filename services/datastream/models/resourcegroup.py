@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # Third-party modules
 from pydantic import BaseModel
@@ -25,6 +24,6 @@ class ResourceGroupDataStreamItem(BaseModel):
     name: str
     change_id: str
     technology: TechnologyItem
-    parent: Optional[str]
-    remote_system: Optional[RemoteSystemItem]
-    remote_id: Optional[str]
+    parent: str | None
+    remote_system: RemoteSystemItem | None
+    remote_id: str | None

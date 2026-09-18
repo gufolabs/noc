@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # DCN.DCWL.get_metrics
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -12,7 +12,6 @@ import codecs
 # NOC modules
 from noc.sa.profiles.Generic.get_metrics import Script as GetMetricsScript, metrics
 from noc.core.validators import is_ipv4
-from noc.core.comp import smart_text
 
 
 class Script(GetMetricsScript):
@@ -88,13 +87,12 @@ class Script(GetMetricsScript):
     def get_beacon_iface(self, ifaces):
         """
         Beacon iface. Add Status and mapping for SSID <-> Radio interface
-        :param ifaces:
         :return:
         """
         for s in ifaces:
             if "bss" not in s:
                 continue
-            v = self.cli("get bss %s detail" % s["bss"])
+            v = self.cli("get bss {} detail".format(s["bss"]))
             for block in v.split("\n\n"):
                 data = dict(
                     line.split(None, 1)
@@ -158,7 +156,7 @@ class Script(GetMetricsScript):
                 ssid = data["ssid"].strip().replace(" ", "").replace("Managed", "")
                 if ssid.startswith("2a2d"):
                     # 2a2d - hex string
-                    ssid = smart_text(codecs.decode(ssid, "hex"))
+                    ssid = codecs.decode(ssid, "hex").decode()
                 iface = f"{data['name']}.{ssid}"
             else:
                 iface = data["name"]

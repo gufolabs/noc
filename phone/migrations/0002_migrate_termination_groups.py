@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("sa", "0184_managedobject_migrate_termination_groups")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Get migrated termination groups, created by 0184 migration
         db = self.mongo_db
         rg_map = {

@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         backup = {}  # backup_id->(primary_id,local_backup_ip,remote_backup_ip)
         peers = self.db.execute(
             """SELECT id,peering_point_id,peer_group_id,local_asn_id,remote_asn,local_pref,import_filter,export_filter

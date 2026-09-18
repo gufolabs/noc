@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         mdb = self.mongo_db
         for d in mdb.noc.pools.find():
             mdb[f"noc.schedules.discovery.{d['name']}"].delete_many(

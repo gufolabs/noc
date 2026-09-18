@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # inv.inv sensor plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from .base import InvPlugin
@@ -17,7 +20,7 @@ class SensorPlugin(InvPlugin):
     name = "sensor"
     js = "NOC.inv.inv.plugins.sensor.SensorPanel"
 
-    def get_data(self, request, o):
+    def get_data(self, request: HttpRequest, o):
         return [
             {
                 "profile__label": s.profile.name,
@@ -44,9 +47,9 @@ class SensorPlugin(InvPlugin):
     def init_plugin(self):
         super().init_plugin()
         self.add_view(
-            "api_plugin_%s_set_sensor" % self.name,
+            f"api_plugin_{self.name}_set_sensor",
             self.api_set_sensor,
-            url="^(?P<id>[0-9a-f]{24})/plugin/%s/$" % self.name,
+            url=f"^(?P<id>[0-9a-f]{{24}})/plugin/{self.name}/$",
             method=["POST"],
             validate={
                 "profile": ObjectIdParameter(required=False),
@@ -54,7 +57,7 @@ class SensorPlugin(InvPlugin):
             },
         )
 
-    def api_set_sensor(self, request, id, profile=None, units=None):
+    def api_set_sensor(self, request: HttpRequest, id, profile=None, units=None):
         s = self.app.get_object_or_404(Sensor, id=id)
         if profile:
             sp = SensorProfile.get_by_id(profile)

@@ -78,7 +78,6 @@ class Profile(BaseProfile):
         tengigabitethernet1/1/2 - TenGigabitEthernet1/1/2
         Port-Channel1 - Po1
         1 - Vlan1
-        :param interface:
         :return:
         """
         if not self.rx_iface_format.match(interface):
@@ -86,9 +85,9 @@ class Profile(BaseProfile):
         iftype, ifnum = self.rx_iface_format.match(interface).groups()
         if not iftype:
             # VLAN on SNMP
-            ifname = "Vlan%s" % ifnum
+            ifname = f"Vlan{ifnum}"
         elif iftype.lower() in self.iface_type_map:
-            ifname = "%s%s" % (self.iface_type_map[iftype.lower()], ifnum)
+            ifname = f"{self.iface_type_map[iftype.lower()]}{ifnum}"
         else:
             ifname = interface
         return ifname
@@ -97,10 +96,10 @@ class Profile(BaseProfile):
         # additional command to `terminal datadump`
         script.cli("terminal length 0", ignore_errors=True)
 
-    class e1(object):
+    class e1:
         """E1 context manager to use with "with" statement"""
 
-        def __init__(self, script):
+        def __init__(self, script) -> None:
             self.script = script
 
         def __enter__(self):

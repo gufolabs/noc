@@ -7,7 +7,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Dict
+from typing import Any
 import orjson
 import logging
 import asyncio
@@ -31,19 +31,19 @@ SQL_STATE = """
 STATE_RETRY = 3.0
 
 
-class ChangeLog(object):
+class ChangeLog:
     LOCK_CATEGORY = "metrics"
     COLL_NAME = "metricslog"
     MAX_DATA = 15_000_000
 
-    def __init__(self, slot: int):
+    def __init__(self, slot: int) -> None:
         self.slot = slot
-        self.state: Dict[str, Dict[str, Any]] = {}
+        self.state: dict[str, dict[str, Any]] = {}
         self.logger = logging.getLogger(__name__)
         self.lock = asyncio.Lock()
         self.service = get_service()
 
-    async def get_state(self) -> Dict[str, Dict[str, Any]]:
+    async def get_state(self) -> dict[str, dict[str, Any]]:
         """
         Retrieve current state snapshot.
         Restart on failure.
@@ -55,7 +55,7 @@ class ChangeLog(object):
                 self.logger.error("Failed to fetch state: %s", e)
                 await asyncio.sleep(random.random() * STATE_RETRY)
 
-    async def _get_state(self) -> Dict[str, Dict[str, Any]]:
+    async def _get_state(self) -> dict[str, dict[str, Any]]:
         """
         Retrieve current state snapshot
         """
@@ -101,7 +101,7 @@ class ChangeLog(object):
             self.state = {}  # Reset
         self.logger.debug("Flush State Record: %d", states_count)
 
-    async def feed(self, state: Dict[str, Dict[str, Any]]) -> None:
+    async def feed(self, state: dict[str, dict[str, Any]]) -> None:
         """
         Feed change to log
         """

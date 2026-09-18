@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         r = self.db.execute("SELECT id FROM sa_managedobjectprofile WHERE name='default'")
         p_id = r[0][0]
         self.db.execute("UPDATE sa_managedobject SET object_profile_id = %s", [p_id])

@@ -1,17 +1,18 @@
 # ---------------------------------------------------------------------
 # Display system and dependencies information
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
-# Using:
-# ./noc tech-report system
-# ./noc tech-report dependencies
-# ./noc tech-report
-# ./noc tech-report --ansi-symbols system
-# and so on
+"""
+./noc tech-report system
+./noc tech-report dependencies
+./noc tech-report
+./noc tech-report --ansi-symbols system
+"""
 
 # Python modules
+import argparse
 from importlib import metadata
 import os
 from pathlib import Path
@@ -21,7 +22,6 @@ import sys
 from dataclasses import dataclass
 from enum import IntEnum, auto
 from collections import defaultdict
-from typing import Dict, DefaultDict
 
 # NOC modules
 from noc.config import config
@@ -55,7 +55,7 @@ class LibStatus(IntEnum):
 
 
 @dataclass
-class Library(object):
+class Library:
     original_name: str
     req_version: str
     inst_version: str = ""
@@ -96,7 +96,7 @@ class Command(BaseCommand):
     help = "Display system and dependencies information"
     is_ansi = False
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd")
         parser.add_argument(
             "-a", "--ansi-symbols", action="store_true", help="Use ANSI instead of Unicode symbols"
@@ -116,7 +116,7 @@ class Command(BaseCommand):
         self.handle_dependencies(*args, **options)
 
     @property
-    def flags(self) -> Dict[LibStatus, str]:
+    def flags(self) -> dict[LibStatus, str]:
         if self.is_ansi:
             return _ANSI_FLAGS
         return _UNICODE_FLAGS
@@ -170,7 +170,7 @@ class Command(BaseCommand):
         for fp in root_path.glob("*.txt"):
             if not fp.is_file:
                 continue
-            with open(fp, "r") as f:
+            with open(fp) as f:
                 btext = f.read()
                 lines = btext.split("\n")
             for line in lines:
@@ -187,7 +187,7 @@ class Command(BaseCommand):
                 libraries[lib_name].inst_version = distribution.version
         # Display information
         col_lib_name, col_required, col_installed = 25, 25, 25
-        summary: DefaultDict[LibStatus, int] = defaultdict(int)
+        summary: defaultdict[LibStatus, int] = defaultdict(int)
         self.print(
             "   | "
             f"{'Library':{col_lib_name}} | {'Required':{col_required}} | "
@@ -213,7 +213,3 @@ class Command(BaseCommand):
         )
         self.print(f"{self.flags[LibStatus.SKIPPED]} Library is optional and missing")
         self.print("")
-
-
-if __name__ == "__main__":
-    Command().run()

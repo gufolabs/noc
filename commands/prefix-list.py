@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # ./noc prefix-list
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Python modules
+import argparse
 
 # NOC modules
 from noc.core.management.base import BaseCommand, CommandError
@@ -15,7 +18,7 @@ from noc.sa.models.profile import Profile
 class Command(BaseCommand):
     help = "CLI Prefix-list builder"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         (
             parser.add_argument(
                 "--output",
@@ -47,11 +50,11 @@ class Command(BaseCommand):
         if options["profile"]:
             profile = Profile.get_by_name(options["profile"])
             if not profile:
-                raise CommandError("Invalid profile: %s" % options["profile"])
+                raise CommandError("Invalid profile: {}".format(options["profile"]))
         # Create output
         try:
             out = open(options["output"], "w")
-        except IOError as e:
+        except OSError as e:
             raise CommandError(str(e))
         # Build
         self.build_prefix_list(out, expression, options["name"], profile)
@@ -73,7 +76,3 @@ class Command(BaseCommand):
         if not ll.endswith("\n"):
             ll += "\n"
         out.write(ll)
-
-
-if __name__ == "__main__":
-    Command().run()

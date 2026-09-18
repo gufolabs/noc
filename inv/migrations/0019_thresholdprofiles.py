@@ -21,7 +21,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     _ac_cache = cachetools.TTLCache(maxsize=5, ttl=60)
 
-    def migrate(self):
+    def migrate(self) -> None:
         current = itertools.count()
         db = self.mongo_db
         # Migrate profiles
@@ -43,7 +43,7 @@ class Migration(BaseMigration):
                     tp = {"_id": tp_id}
                 # Fill profile
                 tp["name"] = "ip-%05d-%03d" % (next(current), n)
-                tp["description"] = "Migrated for interface profile '%s' metric '%s'" % (
+                tp["description"] = "Migrated for interface profile '{}' metric '{}'".format(
                     doc["name"],
                     metric["metric_type"],
                 )

@@ -165,7 +165,7 @@ def is_ipv6(v):
         if not is_ipv4(parts[-1]):
             return False
         p = [int(x) for x in parts[-1].split(".")]
-        parts = [*parts[:-1], "%02x%02x" % (p[0], p[1]), "%02x%02x" % (p[2], p[3])]
+        parts = [*parts[:-1], f"{p[0]:02x}{p[1]:02x}", f"{p[2]:02x}{p[3]:02x}"]
     if len(parts) > 8:
         return False
     if len(parts) == 8:
@@ -492,7 +492,6 @@ def is_mimetype(v):
 def is_uuid(v):
     """
     Check value is UUID
-    :param v:
     :return:
     """
     try:
@@ -506,7 +505,6 @@ def is_objectid(v):
     """
     Check value is mongodb's ObjectId
 
-    :param v:
     :return:
     """
     return v and rx_objectid.match(v) is not None

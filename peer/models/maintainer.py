@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Peer module models
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ from .person import Person
 @on_delete_check(check=[("peer.Organisation", "mnt_ref")])
 @on_save
 class Maintainer(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Maintainer"
         verbose_name_plural = "Maintainers"
         db_table = "peer_maintainer"
@@ -41,12 +41,12 @@ class Maintainer(NOCModel):
 
     def get_rpsl(self):
         s = []
-        s += ["mntner: %s" % self.maintainer]
-        s += ["descr: %s" % self.description]
+        s += [f"mntner: {self.maintainer}"]
+        s += [f"descr: {self.description}"]
         if self.password:
-            s += ["auth: MD5-PW %s" % md5crypt(self.password)]
-        s += ["admins: %s" % x.nic_hdl for x in self.admins.all()]
-        s += ["mnt-by: %s" % self.maintainer]
+            s += [f"auth: MD5-PW {md5crypt(self.password.encode())}"]
+        s += [f"admins: {x.nic_hdl}" for x in self.admins.all()]
+        s += [f"mnt-by: {self.maintainer}"]
         if self.extra:
             s += [self.extra]
         return rpsl_format("\n".join(s))

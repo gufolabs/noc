@@ -99,7 +99,7 @@ class Script(BaseScript):
             mask = match.group("mask")
             if ip == "0.0.0.0":
                 continue
-            ip_address = "%s/%s" % (ip, IPv4.netmask_to_len(mask))
+            ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
             for i in interfaces:
                 if i["name"] == ifname:
                     i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]

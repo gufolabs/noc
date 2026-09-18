@@ -29,7 +29,7 @@ id_lock = Lock()
     ]
 )
 class Group(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Group"
         verbose_name_plural = "Groups"
         app_label = "aaa"

@@ -1,0 +1,13 @@
+{
+    "name": "Network | Link | Link Up (Network | Storm Control | Unicast Storm Detected,clear)",
+    "$collection": "fm.dispositionrules",
+    "uuid": "4cfd3143-5212-4da1-9108-fb62eb77bd25",
+    "description": null,
+    "preference": 1000,
+    "alarm_disposition__name": "Network | Storm Control | Unicast Storm Detected",
+    "conditions": [{
+        "event_class_re": "Network | Link | Link Up"
+    }],
+    "default_action": "C",
+    "stop_processing": false
+}

@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0043_default_resourcestates")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Create .state
         ResourceState = self.db.mock_model(
             model_name="ResourceState", db_table="main_resourcestate"

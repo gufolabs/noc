@@ -11,7 +11,7 @@ from noc.inv.models.interface import Interface
 from noc.inv.models.link import Link
 
 
-class BaseConstraint(object):
+class BaseConstraint:
     def __init__(self) -> None:
         pass
 
@@ -37,7 +37,6 @@ class BaseConstraint(object):
         """
         Check if interface is valid interface on the path
 
-        :param interface:
         :return:
         """
         return True

@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Any, Optional, Dict, Callable, List
+from typing import Any, Callable
 from enum import Enum
 
 # Python modules
@@ -20,7 +20,7 @@ from noc.core.glyph import Glyph
 
 
 @dataclass
-class PathItem(object):
+class PathItem:
     label: str
     id: str | None = None
 
@@ -49,7 +49,7 @@ class PathItem(object):
         return list(reversed(r)) if r else None
 
     @classmethod
-    def from_channel(cls, ch: Channel) -> "Optional[List[PathItem]]":
+    def from_channel(cls, ch: Channel) -> "list[PathItem] | None":
         """Get path for channel."""
         return [PathItem(label=ch.name, id=str(id))]
 
@@ -66,13 +66,13 @@ class GoScope(Enum):
 
 
 @dataclass
-class Button(object):
+class Button:
     label: str | None = None
     glyph: Glyph | None = None
     hint: str | None = None
     action: ButtonAction | None = None
     args: str | None = None
-    scope: Optional[GoScope] = None
+    scope: GoScope | None = None
 
     def to_json(self) -> dict[str, str | int]:
         """Convert Button to JSON-serializable dict."""
@@ -93,12 +93,12 @@ class Button(object):
 
 
 @dataclass
-class Info(object):
+class Info:
     title: str | None = None
     description: str | None = None
     path: list[PathItem] | None = None
     buttons: list[Button] | None = None
-    n_alarms: Optional[int] = None
+    n_alarms: int | None = None
 
     def to_json(self) -> dict[str, Any]:
         """Convert Info to JSON-serializable dict."""
@@ -116,7 +116,7 @@ class Info(object):
         return r
 
 
-def info(resource: str) -> Optional[Info]:
+def info(resource: str) -> Info | None:
     """
     Collect info for resource.
 
@@ -136,7 +136,7 @@ def info(resource: str) -> Optional[Info]:
     return handler(resource)
 
 
-def _info_for_object(resource: str) -> Optional[Info]:
+def _info_for_object(resource: str) -> Info | None:
     """
     Build info for object.
     """
@@ -184,7 +184,7 @@ def _info_for_object(resource: str) -> Optional[Info]:
     )
 
 
-def _info_for_channel(resource: str) -> Optional[Info]:
+def _info_for_channel(resource: str) -> Info | None:
     """Build info for channel."""
     try:
         ch, _unused = Channel.from_resource(resource)
@@ -214,7 +214,7 @@ def _info_for_channel(resource: str) -> Optional[Info]:
     )
 
 
-INFO_HANDLERS: Dict[str, Callable[[str], Optional[Info]]] = {
+INFO_HANDLERS: dict[str, Callable[[str], Info | None]] = {
     "o": _info_for_object,
     "c": _info_for_channel,
 }

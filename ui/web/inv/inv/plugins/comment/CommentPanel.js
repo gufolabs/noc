@@ -79,7 +79,7 @@ Ext.define("NOC.inv.inv.plugins.comment.CommentPanel", {
   onSave: function(){
     var value = this.editField.getValue();
     this.mask(__("Saving..."));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + this.currentId + "/plugin/comment/",
       method: "POST",
       jsonData: {

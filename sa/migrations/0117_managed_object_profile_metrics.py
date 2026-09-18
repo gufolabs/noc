@@ -11,7 +11,7 @@ from noc.core.model.fields import PickledField
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column(
             "sa_managedobjectprofile", "metrics", PickledField(null=True, blank=True)
         )

@@ -55,7 +55,7 @@ Ext.define("NOC.main.desktop.Favorites", {
   // Load data to store
   loadStore: function(){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/main/desktop/favapps/",
       scope: me,
       success: function(result){

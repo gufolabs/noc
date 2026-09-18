@@ -7,7 +7,6 @@
 
 # Python modules
 import re
-from typing import List
 
 # NOC modules
 from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
@@ -37,7 +36,7 @@ class Script(BaseScript):
     rx_ipv4_address = re.compile(r"IPv4 address\s+(?P<ip_address>\S+)")
     rx_vlans = re.compile(r"^(?P<vlan>\d+)\s+", re.MULTILINE)
 
-    def get_vlans(self) -> List[int]:
+    def get_vlans(self) -> list[int]:
         v = self.cli("show vlan", cached=True)
         return [int(x) for x in self.rx_vlans.findall(v)]
 

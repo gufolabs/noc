@@ -35,12 +35,12 @@ class Script(BaseScript):
         else:
             cmd += " -c 5"
         if source_address:
-            cmd += " -S %s" % source_address
+            cmd += f" -S {source_address}"
         if size:
             cmd += " -s %d" % int(size)
         if df:
             cmd += " -D"
-        cmd += " %s" % address
+        cmd += f" {address}"
         s = self.cli(cmd)
         match = self.rx_result.search(s)
         if match:

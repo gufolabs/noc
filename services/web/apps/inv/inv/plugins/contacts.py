@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # inv.inv contacts plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from noc.inv.models.object import Object
@@ -18,9 +21,9 @@ class ContactsPlugin(InvPlugin):
     def init_plugin(self):
         super().init_plugin()
         self.add_view(
-            "api_plugin_%s_set_contacts" % self.name,
+            f"api_plugin_{self.name}_set_contacts",
             self.api_set_contacts,
-            url="^(?P<id>[0-9a-f]{24})/plugin/%s/$" % self.name,
+            url=f"^(?P<id>[0-9a-f]{{24}})/plugin/{self.name}/$",
             method=["POST"],
             validate={
                 "administrative": UnicodeParameter(),
@@ -29,7 +32,7 @@ class ContactsPlugin(InvPlugin):
             },
         )
 
-    def get_data(self, request, o):
+    def get_data(self, request: HttpRequest, o):
         return {
             "id": str(o.id),
             "contacts_administrative": o.get_data("contacts", "administrative") or "",
@@ -37,7 +40,7 @@ class ContactsPlugin(InvPlugin):
             "contacts_technical": o.get_data("contacts", "technical") or "",
         }
 
-    def api_set_contacts(self, request, id, administrative, billing, technical):
+    def api_set_contacts(self, request: HttpRequest, id, administrative, billing, technical):
         o = self.app.get_object_or_404(Object, id=id)
         administrative = (administrative or "").strip()
         billing = (billing or "").strip()

@@ -13,13 +13,11 @@ from .base import BaseMiddleware
 
 
 class BasicAuthMiddeware(BaseMiddleware):
-    """
-    Append HTTP Basic authorisation headers
-    """
+    """Append HTTP Basic authorisation headers"""
 
     name = "basicauth"
 
-    def __init__(self, http, user=None, password=None):
+    def __init__(self, http, user=None, password=None) -> None:
         super().__init__(http)
         self.user = user
         self.password = password
@@ -28,6 +26,6 @@ class BasicAuthMiddeware(BaseMiddleware):
         user = self.user or self.http.script.credentials.get("user")
         password = self.password or self.http.script.credentials.get("password")
         if user and password:
-            uh = f"{user}:{password}".encode("utf-8")
+            uh = f"{user}:{password}".encode()
             headers["Authorization"] = b"Basic %s" % codecs.encode(uh, "base64").strip()
         return url, body, headers

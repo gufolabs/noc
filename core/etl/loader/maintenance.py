@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any
+from typing import Any
 
 # NOC modules
 from .base import BaseLoader
@@ -31,11 +31,11 @@ class MaintenanceLoader(BaseLoader):
         "managed_object": "sa.ManagedObject",
     }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.clean_map["type"] = MaintenanceType.get_by_name
 
-    def post_save(self, o: MaintenanceModel, fields: Dict[str, Any]):
+    def post_save(self, o: MaintenanceModel, fields: dict[str, Any]):
         """Processed maintenance object"""
         r = []
         for oo in fields.get("objects", []):

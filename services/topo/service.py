@@ -26,7 +26,7 @@ class TopoService(FastAPIService):
     name = "topo"
     use_mongo = True
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.topo = Topo(check=config.topo.check)
         self.topo_lock = asyncio.Lock()
@@ -130,7 +130,3 @@ class TopoService(FastAPIService):
         """
         async with self.topo_lock:
             self.topo.remove_object(obj_id)
-
-
-if __name__ == "__main__":
-    TopoService().start()

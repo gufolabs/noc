@@ -22,7 +22,6 @@ from noc.core.model.fields import ObjectIDArrayField
 def is_document(klass):
     """
     Check klass is Document instance
-    :param klass:
     :return:
     """
     return isinstance(klass._meta, dict)
@@ -41,7 +40,10 @@ def _get_field_snapshot(sender, instance):
         nv = instance._data.get(field)
         if nv:
             # Resolve references when necessary
-            return getattr(instance, field)
+            v = getattr(instance, field)
+            if v and isinstance(v, dict):
+                return v.copy()
+            return v
         return nv
 
     if is_document(sender):
@@ -237,8 +239,6 @@ def on_delete_check(
     def is_list(model, field) -> bool:
         """
         Detect field is array
-        :param model:
-        :param field:
         :return:
         """
         if "__" in field:
@@ -258,15 +258,11 @@ def on_delete_check(
         category = cfg.get("clean_lazy_labels")
         if not (hasattr(instance, "iter_lazy_labels") or category):
             return
-        for ll in model.objects.filter(name__startswith=f"noc::{category}::{instance.name}::"):
-            yield ll
+        yield from model.objects.filter(name__startswith=f"noc::{category}::{instance.name}::")
 
     def get_related_query(o, model, field):
         """
         Prepare query for request related objects
-        :param o:
-        :param model:
-        :param field:
         :return:
         """
         if setup["is_label"] and is_document(model) and field == "labels":
@@ -295,23 +291,19 @@ def on_delete_check(
             qs = {f"{field}__contains": object.name}
         else:
             qs = {f"{field}__contains": [object.name]}
-        for ro in model.objects.filter(**qs):
-            yield ro
+        yield from model.objects.filter(**qs)
 
     def iter_related(object, model, field):
         qs = get_related_query(object, model, field)
-        print("Related ts", model, qs)
-        for ro in model.objects.filter(**qs):
-            yield ro
+        yield from model.objects.filter(**qs)
 
     def iter_models(name):
-        nn = "_%s" % name
+        nn = f"_{name}"
         c = cfg.get(nn)
         if c is None:
             c = [(get_model(x[0]), x[0], x[1]) for x in cfg[name]]
             cfg[nn] = c
-        for model, model_id, field in c:
-            yield model, model_id, field
+        yield from c
 
     def decorator(cls):
         if (

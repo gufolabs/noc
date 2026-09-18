@@ -50,7 +50,7 @@ class Script(BaseScript):
                     {"name": p["name"], "oper_status": p["status"], "enabled_afi": ["BRIDGE"]}
                 ],
             }
-            v = self.cli("bridge port detail %s" % p["name"])
+            v = self.cli("bridge port detail {}".format(p["name"]))
             if gstp and self.rx_stp.search(v):
                 i["enabled_protocols"] += ["STP"]
             if not self.rx_lacp.search(v):
@@ -94,7 +94,7 @@ class Script(BaseScript):
                 i["tunnel"]["local_address"] = match.group("ip")
             addr = match.group("ip")
             mask = match.group("mask")
-            ip_address = "%s/%s" % (addr, IPv4.netmask_to_len(mask))
+            ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
             i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
             interfaces += [i]
         return [{"interfaces": interfaces}]

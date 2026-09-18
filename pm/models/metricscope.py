@@ -9,7 +9,7 @@
 import operator
 from threading import Lock
 from dataclasses import dataclass
-from typing import Any, Dict, Optional, List, Callable, Union
+from typing import Any, Optional, Callable
 from pathlib import Path
 
 # Third-party modules
@@ -44,8 +44,8 @@ OLD_PM_SCHEMA_TABLE = "noc_old"
 class ExistingColumn:
     name: str
     type: str
-    default_kind: Optional[str] = None  # DEFAULT, MATERIALIZED
-    default_expression: Optional[str] = None
+    default_kind: str | None = None  # DEFAULT, MATERIALIZED
+    default_expression: str | None = None
 
 
 class KeyField(EmbeddedDocument):
@@ -144,7 +144,7 @@ class MetricScope(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["MetricScope"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["MetricScope"]:
         return MetricScope.objects.filter(id=oid).first()
 
     @classmethod
@@ -163,7 +163,7 @@ class MetricScope(Document):
             )
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -239,9 +239,9 @@ class MetricScope(Document):
             if label.is_primary_key:
                 pk += [f"arrayFirst(x -> startsWith(x, '{label.label_prefix}'), labels)"]
         r = [
-            "CREATE TABLE IF NOT EXISTS %s (" % self._get_raw_db_table(),
+            f"CREATE TABLE IF NOT EXISTS {self._get_raw_db_table()} (",
             ",\n".join(
-                f"  {n} {t} {me} {'DEFAULT %s' % de if de else ''}"
+                f"  {n} {t} {me} {f'DEFAULT {de}' if de else ''}"
                 for n, t, me, de in self.iter_fields()
             ),
             f") ENGINE = MergeTree() ORDER BY ({', '.join(ok)})\n",
@@ -254,13 +254,7 @@ class MetricScope(Document):
         Get CREATE TABLE for Distributed engine
         :return:
         """
-        return "CREATE TABLE IF NOT EXISTS %s AS %s ENGINE = Distributed(%s, %s, %s)" % (
-            self._get_distributed_db_table(),
-            self._get_raw_db_table(),
-            config.clickhouse.cluster,
-            config.clickhouse.db,
-            self._get_raw_db_table(),
-        )
+        return f"CREATE TABLE IF NOT EXISTS {self._get_distributed_db_table()} AS {self._get_raw_db_table()} ENGINE = Distributed({config.clickhouse.cluster}, {config.clickhouse.db}, {self._get_raw_db_table()})"
 
     def get_create_view_sql(self):
         view = self._get_db_table()
@@ -328,7 +322,6 @@ class MetricScope(Document):
         def ensure_column(table_name, column):
             """
             If path not exists on column - new schema
-            :param table_name:
             :return:
             """
             return bool(
@@ -359,7 +352,7 @@ class MetricScope(Document):
                 """,
                 [config.clickhouse.db, table_name],
             ):
-                existing[name]: Dict[str, ExistingColumn] = ExistingColumn(
+                existing[name]: dict[str, ExistingColumn] = ExistingColumn(
                     name,
                     c_type,
                     default_kind,
@@ -471,7 +464,7 @@ class MetricScope(Document):
         ]
         return "\n".join(r)
 
-    def _get_to_path(self) -> Callable[[List[str]], List[str]]:
+    def _get_to_path(self) -> Callable[[list[str]], list[str]]:
         """
         Generate label -> path function for scope
         :return:
@@ -489,5 +482,5 @@ class MetricScope(Document):
                 to_path_code[self.name] = fn
         return fn
 
-    def to_path(self, labels: List[str]) -> List[str]:
+    def to_path(self, labels: list[str]) -> list[str]:
         return self._get_to_path()(labels)

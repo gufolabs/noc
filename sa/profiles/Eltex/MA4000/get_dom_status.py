@@ -19,7 +19,7 @@ class Script(BaseScript):
         r = []
         if interface is None:
             interface = "all"
-        c = self.cli("show sfp front-port %s" % interface)
+        c = self.cli(f"show sfp front-port {interface}")
         t = parse_table(c, allow_wrap=True)
         for i in t:
             port = " ".join(i[0].split())

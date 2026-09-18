@@ -28,7 +28,7 @@ class Script(BaseScript):
     def execute(self, interface=None, vlan=None, mac=None):
         cmd = "show service fdb-mac"
         if mac is not None:
-            cmd += " %s" % mac
+            cmd += f" {mac}"
         cmd += " | match invert-match ["
         r = []
         for match in self.rx_line.finditer(self.cli(cmd)):
@@ -59,7 +59,7 @@ class Script(BaseScript):
         ies = self.rx_ies.findall(v)
         v = ""
         for vrf_id in ies:
-            v += self.cli("show service id %s arp" % vrf_id)
+            v += self.cli(f"show service id {vrf_id} arp")
         for l in v.split("\n"):
             match = self.rx_line1.match(l.strip())
             if not match:

@@ -12,7 +12,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column(
             "main_userprofile", "heatmap_lon", models.FloatField("Longitude", blank=True, null=True)
         )

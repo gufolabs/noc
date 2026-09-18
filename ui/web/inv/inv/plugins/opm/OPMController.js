@@ -30,7 +30,7 @@ Ext.define("NOC.inv.inv.plugins.opm.OPMController", {
       currentId = vm.get("currentId");
     if(Ext.isEmpty(currentId)) return;
     vm.set("icon", this.generateIcon(true, "spinner", "grey", __("loading")));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + currentId + "/plugin/opm/data/",
       method: "GET",
       scope: this,

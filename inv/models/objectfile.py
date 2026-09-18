@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # ObjectModel model
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -11,7 +11,6 @@ from mongoengine.fields import StringField, ObjectIdField, FileField, DateTimeFi
 from mongoengine import signals
 
 # NOC modules
-from noc.core.comp import smart_text
 from .object import Object
 
 
@@ -35,8 +34,8 @@ class ObjectFile(Document):
     size = IntField()
     mime_type = StringField()
 
-    def __str__(self):
-        return smart_text(self.name or self.id)
+    def __str__(self) -> str:
+        return self.name or str(self.id)
 
     def delete_file(self):
         if self.file:

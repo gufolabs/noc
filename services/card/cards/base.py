@@ -12,7 +12,7 @@ import operator
 
 # Third-party modules
 from jinja2 import Template, Environment
-from typing import Dict, Any
+from typing import Any
 
 # NOC modules
 from noc.core.translation import ugettext as _
@@ -21,7 +21,7 @@ from noc.config import config
 from noc.core.perf import metrics
 
 
-class BaseCard(object):
+class BaseCard:
     name = None
     default_template_name = "default"
     template_cache = {}  # name -> Template instance
@@ -45,7 +45,7 @@ class BaseCard(object):
     class NotFoundError(Exception):
         pass
 
-    def __init__(self, handler, id):
+    def __init__(self, handler, id) -> None:
         self.handler = handler
         self.id = id
         self.object = self.dereference(id)
@@ -67,7 +67,6 @@ class BaseCard(object):
         """
         Redirect to another card.
         Can only be called within dereference method
-        :param url:
         :return:
         """
         raise cls.RedirectError(url)
@@ -76,7 +75,6 @@ class BaseCard(object):
         """
         Resolve object by id.
         When redirect method called within, card will be redirected
-        :param id:
         :return:
         """
         if self.model and id != "ajax":
@@ -87,7 +85,7 @@ class BaseCard(object):
                 raise self.NotFoundError()
         return None
 
-    def get_data(self) -> Dict[str, Any]:
+    def get_data(self) -> dict[str, Any]:
         """
         Returns template data
         """
@@ -128,7 +126,7 @@ class BaseCard(object):
                     )
                     with open(tp) as f:
                         self.template_cache[name] = env.from_string(f.read())
-
+                    break
         return self.template_cache[name]
 
     def render(self):
@@ -198,12 +196,12 @@ class BaseCard(object):
                     if collapse and c < 2:
                         badge = ""
                     else:
-                        badge = ' <span class="badge">%s</span>' % c
+                        badge = f' <span class="badge">{c}</span>'
                     order = getattr(pv, "display_order", 100)
                     v += [
                         (
                             (order, -c),
-                            '<i class="%s" title="%s"></i>%s' % (pv.glyph, pv.name, badge),
+                            f'<i class="{pv.glyph}" title="{pv.name}"></i>{badge}',
                         )
                     ]
             return " ".join(i[1] for i in sorted(v, key=operator.itemgetter(0)))
@@ -221,8 +219,9 @@ class BaseCard(object):
             r += [get_summary(s["service"], ServiceProfile)]
         if s.get("fresh_alarms"):
             r += [
-                '<i class="fa fa-exclamation-triangle"></i><span class="badge">%s</span>'
-                % s["fresh_alarms"]["FreshAlarm"]
+                '<i class="fa fa-exclamation-triangle"></i><span class="badge">{}</span>'.format(
+                    s["fresh_alarms"]["FreshAlarm"]
+                )
             ]
         r = [x for x in r if x]
         return "&nbsp;".join(r)
@@ -261,11 +260,7 @@ class BaseCard(object):
     @classmethod
     def f_object_console(cls, object):
         s = {1: "telnet", 2: "ssh", 3: "http", 4: "https"}[object.scheme]
-        return "<a href='%s://%s/'><i class='fa fa-terminal'></i> %s</a>" % (
-            s,
-            object.address,
-            s.upper(),
-        )
+        return f"<a href='{s}://{object.address}/'><i class='fa fa-terminal'></i> {s.upper()}</a>"
 
     @staticmethod
     def update_dict(s, d):

@@ -1,19 +1,20 @@
 # ----------------------------------------------------------------------
 # noc.core.fileutils tests
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import time
 import os
+from pathlib import Path
 
 # Third-party modules
 import pytest
 
 # NOC modules
-from noc.core.fileutils import safe_rewrite, safe_append, read_file, write_tempfile, temporary_file
+from noc.core.fileutils import safe_rewrite, write_tempfile, temporary_file
 
 
 @pytest.mark.parametrize(
@@ -26,8 +27,9 @@ from noc.core.fileutils import safe_rewrite, safe_append, read_file, write_tempf
 def test_read_write(start, tail, expected):
     fn = os.path.join("/tmp", "noc-test-fu-%d" % time.time())
     safe_rewrite(fn, start)
-    safe_append(fn, tail)
-    data = read_file(fn)
+    with open(fn, "a") as f:
+        f.write(tail)
+    data = Path(fn).read_text()
     os.unlink(fn)
     assert data == expected
 
@@ -36,7 +38,7 @@ def test_read_write(start, tail, expected):
 def test_write_tempfile(text):
     fn = write_tempfile(text)
     assert os.path.exists(fn)
-    data = read_file(fn)
+    data = Path(fn).read_text()
     os.unlink(fn)
     assert data == text
 
@@ -45,6 +47,6 @@ def test_write_tempfile(text):
 def test_temporary_file(text):
     with temporary_file(text) as fn:
         assert os.path.exists(fn)
-        data = read_file(fn)
+        data = Path(fn).read_text()
     assert not os.path.exists(fn)
     assert data == text

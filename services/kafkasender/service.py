@@ -7,7 +7,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Union, List
 from collections import defaultdict
 
 # Third-party modules
@@ -39,11 +38,11 @@ class KafkaSenderService(FastAPIService):
     use_telemetry = True
     number_message = defaultdict(lambda: AtomicLong(-1))
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
-        self.producer: Optional[AIOKafkaProducer] = None
+        self.producer: AIOKafkaProducer | None = None
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         self.slot_number, self.total_slots = await self.acquire_slot()
         await self.subscribe_stream(
             KAFKASENDER_STREAM, self.slot_number, self.on_message, async_cursor=True
@@ -55,7 +54,6 @@ class KafkaSenderService(FastAPIService):
         Message MUST have `To` header, containing target Kafka topic.
         Optional parameter 'Kafka_partition' can be specified.
 
-        :param msg:
         :return:
         """
         metrics["messages"] += 1
@@ -74,15 +72,11 @@ class KafkaSenderService(FastAPIService):
         metrics["messages_processed"] += 1
 
     async def send_to_kafka(
-        self, topic: str, data: bytes, key: Optional[bytes] = None, partition: Optional[int] = None
+        self, topic: str, data: bytes, key: bytes | None = None, partition: int | None = None
     ) -> None:
         """
         Send data to kafka topic
 
-        :param topic:
-        :param data:
-        :param key:
-        :param partition:
         :return:
         """
         self.logger.debug("Sending to topic %s, partition: %s", topic, partition)
@@ -144,7 +138,7 @@ class KafkaSenderService(FastAPIService):
         return self.producer
 
     @classmethod
-    def get_partition(cls, partitions: Union[bytes, List], topic: bytes) -> Union[bytes, None]:
+    def get_partition(cls, partitions: bytes | list, topic: bytes) -> bytes | None:
         """
         Get partitions from headers kafka.
 
@@ -161,7 +155,3 @@ class KafkaSenderService(FastAPIService):
             return partitions[0].encode("utf-8")
         cls.number_message[topic] += 1
         return partitions[cls.number_message[topic].value % len(partitions)].encode("utf-8")
-
-
-if __name__ == "__main__":
-    KafkaSenderService().start()

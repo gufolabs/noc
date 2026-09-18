@@ -6,21 +6,20 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Dict
 
 # Python Modules
 from noc.core.reporter.band import Band
 from noc.core.reporter.types import BandFormat
 
 
-class ReportSource(object):
+class ReportSource:
     """
     Class for old-compatible report format when Data and Format union in one source
     """
 
     name = None
 
-    def get_formats(self) -> Dict[str, BandFormat]:
+    def get_formats(self) -> dict[str, BandFormat]:
         """
         Report Format describe
         :return:
@@ -32,10 +31,8 @@ class ReportSource(object):
         :return:
         """
 
-    def get_data(self, request, **kwargs) -> List[Band]:
+    def get_data(self, request, **kwargs) -> list[Band]:
         """
         Return Report Data
-        :param request:
-        :param kwargs:
         :return:
         """

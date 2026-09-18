@@ -18,14 +18,14 @@ from noc.core.ip import IP, IPv4
 __all__ = ["optimize_prefix_list", "optimize_prefix_list_maxlen"]
 
 
-class Node(object):
+class Node:
     """
     Optimizing prefix tree.
     """
 
     __slots__ = ["children", "is_final", "n", "parent", "prefix"]
 
-    def __init__(self, parent=None, prefix=None, prefixes=None):
+    def __init__(self, parent=None, prefix=None, prefixes=None) -> None:
         self.parent = parent
         self.prefix = prefix or []
         self.children = [None, None]

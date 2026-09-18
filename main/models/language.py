@@ -25,7 +25,7 @@ class Language(NOCModel):
     Language
     """
 
-    class Meta(object):
+    class Meta:
         app_label = "main"
         db_table = "main_language"
         verbose_name = "Language"

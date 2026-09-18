@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         if self.db.execute("SELECT COUNT(*) FROM peer_maintainer")[0][0] == 0:
             rir_id = self.db.execute("SELECT id FROM peer_rir LIMIT 1")[0][0]
             self.db.execute(

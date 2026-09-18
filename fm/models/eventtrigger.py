@@ -18,7 +18,7 @@ from noc.inv.models.resourcegroup import ResourceGroup
 
 
 class EventTrigger(NOCModel):
-    class Meta(object):
+    class Meta:
         db_table = "fm_eventtrigger"
         app_label = "fm"
         verbose_name = "Event Trigger"
@@ -46,4 +46,4 @@ class EventTrigger(NOCModel):
     handler = models.CharField("Handler", max_length=128, null=True, blank=True)
 
     def __str__(self):
-        return "%s <<<%s>>>" % (self.event_class_re, self.condition)
+        return f"{self.event_class_re} <<<{self.condition}>>>"

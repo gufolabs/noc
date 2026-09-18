@@ -7,7 +7,7 @@
 
 # Python modules
 from threading import Lock
-from typing import Optional, Union
+from typing import Optional
 import itertools
 import operator
 
@@ -107,7 +107,7 @@ class L2DomainProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["L2DomainProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["L2DomainProfile"]:
         return L2DomainProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -145,5 +145,5 @@ class L2DomainProfile(Document):
         if vlan_filters and len(vlan_filters) != len(set(vlan_filters)):
             raise ValidationError("VLAN Filter overlapped")
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

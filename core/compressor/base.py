@@ -7,18 +7,17 @@
 
 # Python modules
 import io
-from typing import Optional
 
 
-class BaseCompressor(object):
+class BaseCompressor:
     name = None
     # Default file extension
     ext = None
 
-    def __init__(self, path: str, mode: str = "r"):
+    def __init__(self, path: str, mode: str = "r") -> None:
         self.path = path
         self.mode = mode
-        self.f: Optional[io.TextIOBase] = None
+        self.f: io.TextIOBase | None = None
 
     def __enter__(self):
         self.f = self.open()
@@ -39,7 +38,6 @@ class BaseCompressor(object):
     def get_path(cls, path: str) -> str:
         """
         Convert path and add extension when needed
-        :param path:
         :return:
         """
         if cls.ext:

@@ -19,7 +19,7 @@ Ext.define("NOC.main.home.Application", {
   listeners: {
     render: function(panel){
       panel.up().mask(__("Loading..."));
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         method: "GET",
         url: "/main/home/dashboard/",
         scope: this,

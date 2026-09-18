@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # SA Profile Base
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -12,7 +12,7 @@ import warnings
 from itertools import product
 
 # Third-party modules
-from typing import Dict, Callable, Union, Optional, List, Tuple
+from typing import Any, cast, Callable
 
 # NOC modules
 from noc.core.ip import IPv4
@@ -40,18 +40,23 @@ class BaseProfileMetaclass(type):
         "command_super",
     )
 
-    def __new__(mcs, name, bases, attrs):
-        n = type.__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[BaseProfileMetaclass]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["BaseProfile"]:
+        n = cast(type["BaseProfile"], type.__new__(mcs, name, bases, attrs))
         n.rogue_char_cleaners = n._get_rogue_chars_cleaners()
         if n.command_more:
             warnings.warn(
-                "%s: 'command_more' is deprecated and will be removed in NOC 20.3" % n.name,
+                f"{n.name}: 'command_more' is deprecated and will be removed in NOC 20.3",
                 RemovedInNOC2003Warning,
             )
         if isinstance(n.pattern_more, (str, bytes)):
             warnings.warn(
-                "%s: 'pattern_more' must be a list of (pattern, command). "
-                "Support for textual 'command_more' will be removed in NOC 20.3" % n.name,
+                f"{n.name}: 'pattern_more' must be a list of (pattern, command). "
+                "Support for textual 'command_more' will be removed in NOC 20.3",
                 RemovedInNOC2003Warning,
             )
             n.pattern_more = [(n.pattern_more, n.command_more)]
@@ -61,8 +66,7 @@ class BaseProfileMetaclass(type):
             v = getattr(n, attr, None)
             if v is not None and isinstance(v, str):
                 warnings.warn(
-                    "%s: '%s' must be of binary type. Support for text values will be removed in NOC 20.3"
-                    % (n.name, attr),
+                    f"{n.name}: '{attr}' must be of binary type. Support for text values will be removed in NOC 20.3",
                     RemovedInNOC2003Warning,
                 )
                 setattr(n, attr, smart_bytes(v))
@@ -71,14 +75,14 @@ class BaseProfileMetaclass(type):
         for pattern, cmd in n.pattern_more:
             if not isinstance(pattern, bytes):
                 warnings.warn(
-                    "%s: 'pattern_more' %r pattern must be of binary type. "
-                    "Support for text values will be removed in NOC 20.2" % (n.name, pattern)
+                    f"{n.name}: 'pattern_more' {pattern!r} pattern must be of binary type. "
+                    "Support for text values will be removed in NOC 20.2"
                 )
                 pattern = smart_bytes(pattern)
             if isinstance(cmd, str):
                 warnings.warn(
-                    "%s: 'pattern_more' %r command must be of binary type. "
-                    "Support for text values will be removed in NOC 20.2" % (n.name, cmd)
+                    f"{n.name}: 'pattern_more' {cmd!r} command must be of binary type. "
+                    "Support for text values will be removed in NOC 20.2"
                 )
                 cmd = smart_bytes(cmd)
             pattern_more += [(pattern, cmd)]
@@ -98,7 +102,7 @@ class BaseProfileMetaclass(type):
         return n
 
 
-class BaseProfile(object, metaclass=BaseProfileMetaclass):
+class BaseProfile(metaclass=BaseProfileMetaclass):
     """
     Equipment profile. Contains all equipment personality and specific
     """
@@ -401,7 +405,7 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
     Increase if box send unprivileged prompt twice
     """
 
-    snmp_display_hints: Dict[str, Optional[Callable[[str, bytes], Union[str, bytes]]]] = {}
+    snmp_display_hints: dict[str, Callable[[str, bytes], str | bytes] | None] = {}
     """
     Additional hints for snmp binary OctetString data processing
     Contains mapping of
@@ -436,13 +440,13 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
     Timeout for snmp GET request for get_interface_status_ex
     """
 
-    snmp_response_parser: Optional[Callable] = None
+    snmp_response_parser: Callable | None = None
     """
     _ResponseParser for customized SNMP response processing.
     Broken SNMP implementations are urged to use `parse_get_response_strict`
     """
 
-    snmp_rate_limit: Dict[str, Optional[float]] = {}
+    snmp_rate_limit: dict[str, float | None] = {}
     """
     matcher_name -> snmp rate limit
     for default get_snmp_rate_limit() implementation
@@ -565,11 +569,10 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
         ```
         :param str prefix: IP Prefix
         :return: IP MASK notation
-        :rtype: str
         """
         if "/" in prefix and self.requires_netmask_conversion:
             prefix = IPv4(prefix)
-            return "%s %s" % (prefix.address, prefix.netmask.address)
+            return f"{prefix.address} {prefix.netmask.address}"
         return prefix
 
     def convert_mac_to_colon(self, mac):
@@ -585,7 +588,6 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
         ```
         :param str mac:
         :return: MAC-address HH:HH:HH:HH:HH:HH
-        :rtype: str
         """
         return mac
 
@@ -600,10 +602,9 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
         :param str mac: HH:HH:HH:HH:HH:HH
 
         :return: MAC-address HHHH.HHHH.HHHH
-        :rtype: str
         """
         v = mac.replace(":", "").lower()
-        return "%s.%s.%s" % (v[:4], v[4:8], v[8:])
+        return f"{v[:4]}.{v[4:8]}.{v[8:]}"
 
     def convert_mac_to_huawei(self, mac):
         """
@@ -614,10 +615,9 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
         '0011-2233-4455'
         ```
         :return: MAC-address HHHH-HHHH-HHHH
-        :rtype: str
         """
         v = mac.replace(":", "").lower()
-        return "%s-%s-%s" % (v[:4], v[4:8], v[8:])
+        return f"{v[:4]}-{v[4:8]}-{v[8:]}"
 
     def convert_mac_to_dashed(self, mac):
         """
@@ -629,10 +629,9 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
         ```
         :param str mac: MAC-address HH:HH:HH:HH:HH:HH
         :return: MAC-address HH-HH-HH-HH-HH-HH
-        :rtype: str
         """
         v = mac.replace(":", "").lower()
-        return "%s-%s-%s-%s-%s-%s" % (v[:2], v[2:4], v[4:6], v[6:8], v[8:10], v[10:])
+        return f"{v[:2]}-{v[2:4]}-{v[4:6]}-{v[6:8]}-{v[8:10]}-{v[10:]}"
 
     convert_mac = convert_mac_to_colon
     """
@@ -647,7 +646,6 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
         :param str s: Interface Name
 
         :return: Normalize interface name
-        :rtype: str
         """
         return s
 
@@ -683,8 +681,8 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
         """
         match = self.rx_cisco_interface_name.match(s)
         if not match:
-            raise InterfaceTypeError("Invalid interface '%s'" % s)
-        return "%s %s" % (match.group("type").capitalize(), match.group("number"))
+            raise InterfaceTypeError(f"Invalid interface '{s}'")
+        return "{} {}".format(match.group("type").capitalize(), match.group("number"))
 
     def root_interface(self, name):
         """
@@ -709,7 +707,6 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
         :param str name: Interface Name
 
         :return: List Alternative interface names
-        :rtype: list
         """
         return []
 
@@ -818,7 +815,7 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
 
     port_splitter = " "
 
-    def get_protocol_prefixes(self, protocols: List[str]) -> List[str]:
+    def get_protocol_prefixes(self, protocols: list[str]) -> list[str]:
         """
         Return interface prefix by Protocol
         :param protocols: Protocols code list
@@ -830,19 +827,18 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
                     return self.proto_prefixes[pp]
         return []
 
-    def get_interfaces_by_port(self, port: PortItem) -> List[str]:
+    def get_interfaces_by_port(self, port: PortItem) -> list[str]:
         """
         1. If device is not stackable and not module (len path) - return slot num
         2. Append num from last path element
         3. If device supported stack - add first stack_member or 0
         4. Reverse path
         5. Product all variants with protocol prefix
-        :param port:
         :return:
         """
         if len(port.path) <= 1 and port.stack_num is None:
             return [port.name]
-        r: List[str] = []
+        r: list[str] = []
         x = []
         for p in reversed(port.path):
             x.insert(0, self.get_connection_path(p.c_name))
@@ -915,7 +911,6 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
         :param str cfg: Configuration
 
         :return: Clean up configuration
-        :rtype: str
         """
         if self.config_volatile:
             # Wipe out volatile strings before returning result
@@ -937,7 +932,7 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
         """
         return neighbor
 
-    def get_lacp_port_by_id(self, port_id: int) -> Optional[str]:
+    def get_lacp_port_by_id(self, port_id: int) -> str | None:
         """
         Return possible port aliases by LACP Port id,
         i.e. for LACP discovery method without script support
@@ -953,7 +948,7 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
         setattr(script, name, f)
 
     @classmethod
-    def cmp_version(cls, v1, v2) -> Optional[int]:
+    def cmp_version(cls, v1, v2) -> int | None:
         """
         Compare two versions.
         Must return:
@@ -1033,28 +1028,26 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
     def get_mml_command(self, cmd, **kwargs):
         """
         Generate MML command
-        :param cmd:
-        :param kwargs:
         :return:
         """
 
         def qi(s):
-            return '"%s"' % s
+            return f'"{s}"'
 
         def nqi(s):
             if isinstance(s, str):
-                return '"%s"' % s
+                return f'"{s}"'
             return str(s)
 
         if ";" in cmd:
-            return "%s\r\n" % cmd
+            return f"{cmd}\r\n"
         r = [cmd, ":"]
         if kwargs:
             if self.mml_always_quote:
                 q = qi
             else:
                 q = nqi
-            r += [", ".join("%s=%s" % (k, q(kwargs[k])) for k in kwargs)]
+            r += [", ".join(f"{k}={q(kwargs[k])}" for k in kwargs)]
         r += [";", "\r\n"]
         return "".join(r)
 
@@ -1089,7 +1082,6 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
     def get_confdb_defaults(cls, object):
         """
         Returns a list of confdb defaults to be inserted on every ConfDB creation
-        :param object:
         :return:
         """
         return cls.confdb_defaults
@@ -1109,9 +1101,9 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
             else:
                 a_handler, a_cfg = cfg
             if not a_handler.startswith("noc."):
-                a_handler = "noc.sa.profiles.%s.confdb.applicator.%s" % (profile_name, a_handler)
+                a_handler = f"noc.sa.profiles.{profile_name}.confdb.applicator.{a_handler}"
             a_cls = get_handler(a_handler)
-            assert a_cls, "Invalid applicator %s" % a_handler
+            assert a_cls, f"Invalid applicator {a_handler}"
             applicator = a_cls(object, confdb, **a_cfg)
             if applicator.can_apply():
                 return applicator
@@ -1141,7 +1133,7 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
             if not c_handler.startswith("noc."):
                 c_handler = f"noc.sa.profiles.{profile_name}.confdb.collator.{c_handler}"
             c_cls = get_handler(c_handler)
-            assert c_cls, "Invalid collator %s" % c_handler
+            assert c_cls, f"Invalid collator {c_handler}"
             return c_cls(**c_cfg)
 
         profile_name = obj.get_profile().name
@@ -1172,7 +1164,7 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
         return cls.snmp_display_hints
 
     @classmethod
-    def get_snmp_response_parser(cls, script) -> Optional[Callable]:
+    def get_snmp_response_parser(cls, script) -> Callable | None:
         return cls.snmp_response_parser
 
     @classmethod
@@ -1189,7 +1181,7 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
         Return dict of compiled regular expressions
         """
 
-        def get_commands(pattern_more) -> List[Union[bytes, Dict[Tuple[str, ...], str]]]:
+        def get_commands(pattern_more) -> list[bytes | dict[tuple[str, ...], str]]:
             commands = []
             for x in pattern_more:
                 c = x[1]
@@ -1254,8 +1246,8 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
             for rc in cls.rogue_chars:
                 if isinstance(rc, str):
                     warnings.warn(
-                        "%s: 'rogue_char' %r pattern must be of binary type. "
-                        "Support for text values will be removed in NOC 20.2" % (cls.name, rc)
+                        f"{cls.name}: 'rogue_char' {rc!r} pattern must be of binary type. "
+                        "Support for text values will be removed in NOC 20.2"
                     )
                     chain += [get_bytes_cleaner(smart_bytes(rc))]
                 elif isinstance(rc, bytes):
@@ -1264,25 +1256,23 @@ class BaseProfile(object, metaclass=BaseProfileMetaclass):
                     if not isinstance(rc.pattern, bytes):
                         # Recompile as binary re
                         warnings.warn(
-                            "%s: 'rogue_char' %r pattern must be of binary type. "
+                            f"{cls.name}: 'rogue_char' {rc.pattern!r} pattern must be of binary type. "
                             "Support for text values will be removed in NOC 20.2"
-                            % (cls.name, rc.pattern)
                         )
                         # Remove re.UNICODE flag
                         flags = rc.flags
                         if flags & re.UNICODE:
                             warnings.warn(
-                                "%s: 'rogue_char' %r pattern cannot be compiled with re.UNICODE flag."
-                                % (cls.name, rc.pattern)
+                                f"{cls.name}: 'rogue_char' {rc.pattern!r} pattern cannot be compiled with re.UNICODE flag."
                             )
                             flags &= ~re.UNICODE
                         rc = re.compile(smart_bytes(rc.pattern), flags)
                     chain += [get_re_cleaner(rc)]
                 else:
-                    raise ValueError("Invalid rogue char expression: %r" % rc)
+                    raise ValueError(f"Invalid rogue char expression: {rc!r}")
         return chain
 
-    def get_snmp_rate_limit(self, script) -> Optional[float]:
+    def get_snmp_rate_limit(self, script) -> float | None:
         if not self.snmp_rate_limit:
             return None
         limits = [

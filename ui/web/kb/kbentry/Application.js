@@ -180,7 +180,7 @@ Ext.define("NOC.kb.kbentry.Application", {
         data.append("is_hidden" + indx, form.down("[name=is_hidden]").getValue());
       }
     });
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       method: "POST",
       url: me.base_url + (me.currentRecord ? me.currentRecord.get([me.idField]) + "/" : ""),
       rawData: data,
@@ -205,7 +205,7 @@ Ext.define("NOC.kb.kbentry.Application", {
     var me = this,
       app = me.up("[itemId=kbentryApp]"),
       filename = me.panel.getComponent(me.currentSelection).down("[name=name]").getValue();
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       method: "DELETE",
       url: app.base_url + app.currentRecord.id + "/attachment/" + filename + "/",
       success: function(){

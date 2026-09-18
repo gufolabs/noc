@@ -7,7 +7,7 @@
 
 # Python modules
 from enum import Enum
-from typing import Optional, Iterable, List, Tuple
+from typing import Optional, Iterable
 
 
 class EscalationPolicy(Enum):
@@ -22,6 +22,10 @@ class EscalationPolicy(Enum):
     ALWAYS_FIRST = 3
     # Always escalate
     ALWAYS = 4
+
+    @property
+    def allowed_group(self) -> bool:
+        return self.value != 2
 
     @classmethod
     def try_from_label(cls, label: str) -> Optional["EscalationPolicy"]:
@@ -45,11 +49,11 @@ class EscalationPolicy(Enum):
         return EscalationPolicy.ROOT
 
     @classmethod
-    def get_effective_policy(cls, labels: Iterable[List[str]]) -> "EscalationPolicy":
+    def get_effective_policy(cls, labels: Iterable[list[str]]) -> "EscalationPolicy":
         """
         Calculate effective policy from a sequence of labels
         """
-        r: Optional[EscalationPolicy] = None
+        r: EscalationPolicy | None = None
         for l_set in labels:
             for label in l_set:
                 if label.startswith("noc::escalation::"):
@@ -61,7 +65,7 @@ class EscalationPolicy(Enum):
         return r
 
     @classmethod
-    def get_choices(cls) -> List[Tuple[str, str]]:
+    def get_choices(cls) -> list[tuple[str, str]]:
         """
         Get `choices` for mongo/django models
         """

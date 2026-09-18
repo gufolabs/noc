@@ -24,7 +24,7 @@ class Script(BaseScript):
 
     def execute_cli(self, address):
         if self.is_has_cli:
-            cmd = "ping %s" % address
+            cmd = f"ping {address}"
             match = self.rx_result.search(self.cli(cmd))
             if not match:
                 raise self.NotSupportedError()

@@ -22,12 +22,12 @@ class SelfMonService(FastAPIService):
     name = "selfmon"
     use_mongo = True
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.collectors = []
         self.runner_thread = None
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         self.collectors = [loader[c](self) for c in loader if loader[c].is_enabled()]
         if not self.collectors:
             self.die("No collectors enabled")
@@ -68,7 +68,3 @@ class SelfMonService(FastAPIService):
             if delta > 0:
                 self.logger.info("Sleeping %ss", delta)
                 time.sleep(delta)
-
-
-if __name__ == "__main__":
-    SelfMonService().start()

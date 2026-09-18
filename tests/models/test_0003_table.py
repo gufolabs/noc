@@ -22,7 +22,7 @@ def test_db_table(model, database):
 
     cursor = connection.cursor()
     cursor.execute("SELECT COUNT(*) FROM pg_class WHERE relname=%s", [model._meta.db_table])
-    assert cursor.fetchall()[0][0] == 1, "Database table '%s' is not exists" % model._meta.db_table
+    assert cursor.fetchall()[0][0] == 1, f"Database table '{model._meta.db_table}' is not exists"
 
 
 @pytest.mark.parametrize("model", get_models())

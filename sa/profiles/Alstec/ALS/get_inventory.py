@@ -38,7 +38,9 @@ class Script(BaseScript):
         v = self.cli("show interfaces status", cached=True)
         for match in self.rx_port.finditer(v):
             if match.group("type") in ["1G-Combo-C", "1G-Combo-F", "10G-Combo-C", "10G-Combo-F"]:
-                c = self.cli("show fiber-ports optical-transceiver %s detail" % match.group("port"))
+                c = self.cli(
+                    "show fiber-ports optical-transceiver {} detail".format(match.group("port"))
+                )
                 match1 = self.rx_sfp_serial.search(c)
                 if match1:
                     r += [

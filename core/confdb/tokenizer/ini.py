@@ -13,13 +13,11 @@ from .base import BaseTokenizer
 
 
 class INITokenizer(BaseTokenizer):
-    """
-    .ini file parser. Yields (section, key, value)
-    """
+    """.ini file parser. Yields (section, key, value)"""
 
     name = "ini"
 
-    def __init__(self, data):
+    def __init__(self, data) -> None:
         super().__init__(data)
         self.config = RawConfigParser()
         self.config.read_string(data)

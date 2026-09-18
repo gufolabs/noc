@@ -34,7 +34,7 @@ Ext.define("NOC.fm.alarm.view.grids.GridController", {
     var action = record.get("fav_status") ? "reset" : "set",
       url = "/fm/alarm/favorites/item/" + record.id + "/" + action + "/";
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "POST",
       success: function(){

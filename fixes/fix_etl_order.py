@@ -14,15 +14,15 @@ import csv
 from noc.config import config
 
 PATTERNS = [
-    "%s/*/*/import.csv.gz" % config.path.etl_import,
-    "%s/*/*/archive/*.csv.gz" % config.path.etl_import,
+    f"{config.path.etl_import}/*/*/import.csv.gz",
+    f"{config.path.etl_import}/*/*/archive/*.csv.gz",
 ]
 
 
 def fix():
     for pattern in PATTERNS:
         for path in glob.glob(pattern):
-            print("Fixing order in %s:" % path)
+            print(f"Fixing order in {path}:")
             tmp_path = path + "~"
             with gzip.open(path, "r") as f_in:
                 reader = csv.reader(f_in)

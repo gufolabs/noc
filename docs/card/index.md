@@ -90,7 +90,7 @@ class PathCard(BaseCard):
 
     def get_data(self):
         ...
-        return {"mo1": mo1, "mo2": mo2, "path": smart_text(orjson.dumps(path))}
+        return {"mo1": mo1, "mo2": mo2, "path": orjson.dumps(path).decode()}
 ```
 
 In the example, you can see the use of the `leaflet` library for rendering a geographic map in addition to the `path` module that implements functionality in JavaScript.

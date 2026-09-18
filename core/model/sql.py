@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class SQLNode(Q):
-    def __init__(self, sql):
+    def __init__(self, sql) -> None:
         super().__init__(id__rawsql=sql)
 
 
@@ -36,4 +36,4 @@ class SQLLookup(Lookup):
     prepare_rhs = False
 
     def as_sql(self, compiler, connection):
-        return "(%s)" % self.rhs, []
+        return f"({self.rhs})", []

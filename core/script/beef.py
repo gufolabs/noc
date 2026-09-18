@@ -1,12 +1,11 @@
 # ----------------------------------------------------------------------
 # Beef API
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-import os
 from collections import namedtuple
 import bisect
 import itertools
@@ -15,10 +14,11 @@ from io import StringIO
 
 # Third-party modules
 import orjson
-from typing import Optional, List, NamedTuple, Tuple, Dict
+from typing import NamedTuple
 
 # NOC modules
 from noc.core.comp import smart_text, smart_bytes
+from noc.main.models.extstorage import ExtStorage
 
 Box = namedtuple("Box", ["profile", "vendor", "platform", "version"])
 CLIFSM = namedtuple("CLIFSM", ["state", "reply"])
@@ -35,13 +35,13 @@ class BoxData(NamedTuple):
 
 class CLIFSMData(NamedTuple):
     state: str
-    reply: List[bytes]
+    reply: list[bytes]
 
 
 class CLIData(NamedTuple):
-    names: List[str]
+    names: list[str]
     request: bytes
-    reply: List[bytes]
+    reply: list[bytes]
 
 
 class MIBData(NamedTuple):
@@ -49,37 +49,37 @@ class MIBData(NamedTuple):
     value: bytes
 
 
-class Beef(object):
-    def __init__(self):
-        self.version: Optional[str] = None
+class Beef:
+    def __init__(self) -> None:
+        self.version: str | None = None
         self.uuid = None
         self.spec = None
-        self.box: Optional[BoxData] = None
+        self.box: BoxData | None = None
         self.changed = None
-        self.description: Optional[str] = None
-        self.cli_fsm: Optional[List[CLIFSMData]] = None
-        self.cli: Optional[List[CLIData]] = None
-        self.mib: Optional[List[MIBData]] = None
-        self.mib_encoding: Optional[str] = None
-        self.mib_oid_values: Optional[Dict[str, bytes]] = None
-        self.mib_oids: Optional[List[Tuple[int]]] = None
+        self.description: str | None = None
+        self.cli_fsm: list[CLIFSMData] | None = None
+        self.cli: list[CLIData] | None = None
+        self.mib: list[MIBData] | None = None
+        self.mib_encoding: str | None = None
+        self.mib_oid_values: dict[str, bytes] | None = None
+        self.mib_oids: list[tuple[int]] | None = None
 
     @classmethod
     def from_json(cls, data):
         if isinstance(data, str):
             data = orjson.loads(data)
         version = data.get("version", "1")
-        decoder = "decode_v%s" % version
+        decoder = f"decode_v{version}"
         beef = Beef()
         if not hasattr(cls, decoder):
-            raise ValueError("Unknown beef version '%s'" % version)
+            raise ValueError(f"Unknown beef version '{version}'")
         getattr(beef, decoder)(data)
         return beef
 
     @staticmethod
     def get_or_die(d, k):
         if k not in d:
-            raise ValueError("Missed '%s' key" % k)
+            raise ValueError(f"Missed '{k}' key")
         return d[k]
 
     def decode_v1(self, data):
@@ -115,9 +115,9 @@ class Beef(object):
             MIB(oid=self.get_or_die(d, "oid"), value=smart_bytes(self.get_or_die(d, "value")))
             for d in self.get_or_die(data, "mib")
         ]
-        self._mib_decoder = getattr(self, "mib_decode_%s" % self.mib_encoding)
+        self._mib_decoder = getattr(self, f"mib_decode_{self.mib_encoding}")
         self.cli_encoding = self.get_or_die(data, "cli_encoding")
-        self._cli_decoder = getattr(self, "cli_decode_%s" % self.cli_encoding)
+        self._cli_decoder = getattr(self, f"cli_decode_{self.cli_encoding}")
 
     def get_data(self, decode=False):
         return {
@@ -167,7 +167,7 @@ class Beef(object):
         }
 
     @staticmethod
-    def compress_gzip(data):
+    def compress_gzip(data: bytes) -> bytes:
         import gzip
 
         f = StringIO()
@@ -176,13 +176,13 @@ class Beef(object):
         return f.getvalue()
 
     @staticmethod
-    def compress_bz2(data):
+    def compress_bz2(data: bytes) -> bytes:
         import bz2
 
         return bz2.compress(data)
 
     @staticmethod
-    def decompress_gzip(data):
+    def decompress_gzip(data: bytes) -> bytes:
         import gzip
 
         f = StringIO(data)
@@ -190,65 +190,59 @@ class Beef(object):
             return z.read()
 
     @staticmethod
-    def decompress_bz2(data):
+    def decompress_bz2(data: bytes) -> bytes:
         import bz2
 
         return bz2.decompress(data)
 
-    def save(self, storage, path):
-        """
-        Write beef to external storage. Compression depends on extension.
+    def save(self, storage: ExtStorage, path: str) -> tuple[int, int]:
+        """Write beef to external storage. Compression depends on extension.
         Following extensions are supported:
         * .json - JSON without compression
         * .json.gz - JSON with gzip compression
         * .json.bz2 - JSON with bzip2 compression
 
-        :param storage: ExtStorage instance
-        :param path: Beef path
-        :return: Compressed, Uncompressed sizes
+        Args:
+            storage: ExtStorage instance
+            path: Beef path
+
+        Returns:
+            Compressed, Uncompressed sizes
         """
         data = orjson.dumps(self.get_data())
         usize = len(data)
-        dir_path = os.path.dirname(path)
         if path.endswith(".gz"):
             data = self.compress_gzip(data)
         elif path.endswith(".bz2"):
             data = self.compress_bz2(data)
         csize = len(data)
         try:
-            with storage.open_fs() as fs:
-                if dir_path and dir_path != "/":
-                    fs.makedirs(dir_path, recreate=True)
-                fs.writebytes(path, data)
-        except storage.Error as e:
-            raise IOError(str(e))
+            storage.write_bytes(path, data)
+        except storage.StorageErrors as e:
+            raise OSError(str(e)) from e
         return csize, usize
 
     @classmethod
     def load(cls, storage, path):
-        """
-        Load beef from storage
-        :param storage:
-        :param path:
-        :return:
+        """Load beef from storage
+
+        Args:
+            storage
+            path
         """
         if isinstance(storage, str):
             # Load from URL
-            from fs import open_fs
-            from fs.errors import FSError
-
             try:
-                with open_fs(storage) as fs:
-                    data = fs.readbytes(smart_text(path))
-            except FSError as e:
-                raise IOError(str(e))
+                with ExtStorage.from_url(storage) as blob:
+                    data = blob[smart_text(path)]
+            except ExtStorage.StorageErrors as e:
+                raise OSError(str(e)) from e
         else:
             # Load from external storage
             try:
-                with storage.open_fs() as fs:
-                    data = fs.readbytes(smart_text(path))
-            except storage.Error as e:
-                raise IOError(str(e))
+                data = storage.read_bytes(path)
+            except ExtStorage.StorageErrors as e:
+                raise OSError(str(e)) from e
         if path.endswith(".gz"):
             data = cls.decompress_gzip(data)
         elif path.endswith(".json.bz2"):
@@ -256,10 +250,10 @@ class Beef(object):
         return Beef.from_json(smart_text(data))
 
     def iter_fsm_state_reply(self, state: str) -> bytes:
-        """
-        Iterate fsm states
-        :param state:
-        :return:
+        """Iterate fsm states
+
+        Args:
+            state
         """
         for fsm in self.cli_fsm:
             if fsm.state == state:
@@ -268,10 +262,10 @@ class Beef(object):
                 break
 
     def iter_cli_reply(self, command: bytes) -> bytes:
-        """
-        Iterate fsm states
-        :param command:
-        :return:
+        """Iterate fsm states
+
+        Args:
+            command
         """
         # typo
         # cmd = smart_bytes(command)
@@ -288,28 +282,28 @@ class Beef(object):
 
     @staticmethod
     def mib_decode_base64(value: bytes) -> bytes:
-        """
-        Decode base64
-        :param value:
-        :return:
+        """Decode base64
+
+        Args:
+            value
         """
         return codecs.decode(value, "base64")
 
     @staticmethod
     def mib_decode_hex(value):
-        """
-        Decode base64
-        :param value:
-        :return:
+        """Decode base64
+
+        Args:
+            value
         """
         return value.decode("hex")
 
     @staticmethod
     def cli_decode_quopri(value: bytes) -> bytes:
-        """
-        Decode quoted-printable
-        :param value:
-        :return:
+        """Decode quoted-printable
+
+        Args:
+            value
         """
         return codecs.decode(value, "quopri")
 
@@ -318,11 +312,14 @@ class Beef(object):
             self.mib_oid_values = {m.oid: m.value for m in self.mib}
         return self.mib_oid_values
 
-    def get_mib_value(self, oid: str) -> Optional[bytes]:
-        """
-        Lookup mib and return oid value
-        :param oid:
-        :return: Binary OID data or None
+    def get_mib_value(self, oid: str) -> bytes | None:
+        """Lookup mib and return oid value
+
+        Args:
+            oid
+
+        Returns:
+            Binary OID data or None
         """
         v = self.get_mib_oid_values().get(oid)
         if v is None:
@@ -330,19 +327,16 @@ class Beef(object):
         return self._mib_decoder(v)
 
     def get_mib_oids(self):
-        """
-        Return sorted list of MIB oids
-        :return:
-        """
+        """Return sorted list of MIB oids"""
         if self.mib_oids is None:
-            self.mib_oids = sorted((tuple(int(c) for c in m.oid.split(".")) for m in self.mib))
+            self.mib_oids = sorted(tuple(int(c) for c in m.oid.split(".")) for m in self.mib)
         return self.mib_oids
 
     def iter_mib_oids(self, oid):
-        """
-        Generator yielding all consequentive oids
-        :param oid:
-        :return:
+        """Generator yielding all consequentive oids
+
+        Args:
+            oid
         """
         start = tuple(int(c) for c in oid.split("."))
         oids = self.get_mib_oids()

@@ -27,7 +27,7 @@ class TaskObjectCollector(BaseCollector):
         ("discovery", Pool.objects.all().order_by("name").values_list("name")),
     ]  # Schedulers (name, shards)
 
-    def __init__(self, service):
+    def __init__(self, service) -> None:
         self.schedulers_list = self.load_discovery()
         super().__init__(service)
 
@@ -36,9 +36,9 @@ class TaskObjectCollector(BaseCollector):
         for name, shard in self.schedulers:
             if shard:
                 for s in shard:
-                    r["noc.schedules.%s.%s" % (name, s)] = {"name": name, "shard": s}
+                    r[f"noc.schedules.{name}.{s}"] = {"name": name, "shard": s}
             else:
-                r["noc.schedules.%s" % name] = {"name": name}
+                r[f"noc.schedules.{name}"] = {"name": name}
         return r
 
     def iter_metrics(self):

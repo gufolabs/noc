@@ -24,7 +24,7 @@ class PMDashboardLoader(BaseLoader):
     ignored_names = {"base", "loader", "jinja"}
     caps_map = {}
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         for name in self.find_classes():
             r = self[name]

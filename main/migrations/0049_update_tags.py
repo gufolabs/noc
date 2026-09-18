@@ -18,7 +18,7 @@ class Migration(BaseMigration):
         ("vc", "0022_finish_tag_migration"),
     ]
 
-    def migrate(self):
+    def migrate(self) -> None:
         c = self.mongo_db.noc.tags
         for m in [
             "sa_activator",
@@ -37,12 +37,11 @@ class Migration(BaseMigration):
             "peer_peer",
         ]:
             for tag, count in self.db.execute(
-                """
+                f"""
                     SELECT unnest(tags), COUNT(*)
-                    FROM %s
+                    FROM {m}
                     GROUP BY 1
                     """
-                % m
             ):
                 c.update_many(
                     {"tag": tag},

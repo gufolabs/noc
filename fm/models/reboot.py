@@ -8,7 +8,6 @@
 # Python modules
 import datetime
 import logging
-from typing import Optional
 
 # Third-party modules
 from mongoengine.document import Document
@@ -39,8 +38,8 @@ class Reboot(Document):
     def register(
         cls,
         managed_object: ManagedObject,
-        ts: Optional[datetime.datetime] = None,
-        last: Optional[datetime.datetime] = None,
+        ts: datetime.datetime | None = None,
+        last: datetime.datetime | None = None,
     ):
         """
         Register reboot.

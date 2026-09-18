@@ -192,7 +192,7 @@ class Script(BaseScript):
             if not match:
                 # Secondary ip?
                 continue
-            ip = "%s/%s" % (match.group("address"), match.group("mask"))
+            ip = "{}/{}".format(match.group("address"), match.group("mask"))
             ipv6_interfaces[c_iface] += [ip]
 
         interfaces = []

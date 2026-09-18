@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("wf", "0001_default_wf")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         s_map = {
             "N": bson.ObjectId("5a17f61b1bb6270001bd0328"),
             "F": bson.ObjectId("5a17f61b1bb6270001bd0328"),

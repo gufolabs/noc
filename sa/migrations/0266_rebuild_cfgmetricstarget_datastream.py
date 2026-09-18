@@ -15,7 +15,7 @@ MODEL_IDS = ["sa.ManagedObject", "pm.Agent", "sla.SLAProbe", "inv.Sensor", "inv.
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.mongo_db["ds_cfgmetricstarget"].delete_many({})
         for mid in MODEL_IDS:
             self.mongo_db["noc.schedules.scheduler"].insert_one(

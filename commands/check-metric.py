@@ -1,11 +1,12 @@
 # ----------------------------------------------------------------------
 # ./noc script
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
+import argparse
 
 # Third-party modules
 import orjson
@@ -17,7 +18,7 @@ from noc.core.profile.loader import loader as profile_loader
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "--json",
             action="store_true",
@@ -32,7 +33,7 @@ class Command(BaseCommand):
         try:
             return orjson.loads(j)
         except ValueError as e:
-            self.die("Failed to parse JSON: %s" % e)
+            self.die(f"Failed to parse JSON: {e}")
 
     def print_csv(self, profile_list, metric_list):
         self.stdout.write(f";{';'.join(m for m in metric_list)};\n")
@@ -56,7 +57,7 @@ class Command(BaseCommand):
                 continue
             p_name = p["name"]
             metrics = p["metrics"]
-            self.stdout.write("%s\n" % orjson.dumps({"name": p_name, **metrics}).decode())
+            self.stdout.write("{}\n".format(orjson.dumps({"name": p_name, **metrics}).decode()))
 
     def get_metric_source(self, func_list):
         res = ""
@@ -89,7 +90,7 @@ class Command(BaseCommand):
             script_name = f"{p}.get_metrics"
             script_class = script_loader.get_script(script_name)
             if not script_class:
-                self.die("Failed to load script %s" % script_class)
+                self.die(f"Failed to load script {script_class}")
 
             service = ServiceStub(pool="")
             # TODO dirty hack
@@ -131,15 +132,11 @@ class Command(BaseCommand):
             self.print_csv(profile_list, metric_list)
 
 
-class ServiceStub(object):
-    class ServiceConfig(object):
-        def __init__(self, pool, tos=None):
+class ServiceStub:
+    class ServiceConfig:
+        def __init__(self, pool, tos=None) -> None:
             self.pool = pool
             self.tos = tos
 
-    def __init__(self, pool):
+    def __init__(self, pool) -> None:
         self.config = self.ServiceConfig(pool=pool)
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -29,13 +29,13 @@ class WebService(FastAPIService):
     use_watchdog = config.watchdog.enable_watchdog
     traefik_routes_rule = "!PathPrefix(`/api/`) && !PathPrefix(`/ui/`) && PathPrefix(`/`)"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "noc.settings")
         self.wsgi_app = get_wsgi_application()
         self.extended_logging = True
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         # Initialize audit trail
         from noc.main.models.audittrail import AuditTrail
 
@@ -53,7 +53,3 @@ class WebService(FastAPIService):
 
     def get_backend_limit(self):
         return config.web.max_threads
-
-
-if __name__ == "__main__":
-    WebService().start()

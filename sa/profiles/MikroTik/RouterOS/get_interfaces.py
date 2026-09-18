@@ -1,14 +1,13 @@
 # ---------------------------------------------------------------------
 # MikroTik.RouterOS.get_interfaces
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import re
 import time
-from typing import Optional
 
 # NOC modules
 from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
@@ -66,7 +65,7 @@ class Script(BaseScript):
                 tun["remote_address"] = ipif["network"]
                 return
         iftype = tun_type.lower()
-        ifname = self.cli_detail("/interface %s print detail without-paging" % iftype, cached=True)
+        ifname = self.cli_detail(f"/interface {iftype} print detail without-paging", cached=True)
         for n1, f1, r1 in ifname:
             if self.si["name"] == r1["name"]:
                 # in eoip-tunnel on routerboard: 411AH firmware: 2.20, local-address is not exist
@@ -92,7 +91,7 @@ class Script(BaseScript):
         v_ifindex = {}
         time.sleep(1)
         # Fill interfaces
-        a = self.cli_detail("/interface print detail without-paging")
+        a = self.cli_detail("/interface print detail without-paging terse")
         for n, f, r in a:
             if r["type"] in self.ignored_types or r["type"] not in self.type_map:
                 continue
@@ -109,6 +108,8 @@ class Script(BaseScript):
                     ifaces[r["name"]]["mac"] = r["mac-address"]
                 if "mac" in r:
                     ifaces[r["name"]]["mac"] = r["mac"]
+                if "comment" in r:
+                    ifaces[r["name"]]["description"] = r["comment"]
                 misc[r["name"]] = {"type": r["type"]}
                 if n in n_ifindex:
                     ifaces[r["name"]]["snmp_ifindex"] = n_ifindex[n]
@@ -143,7 +144,7 @@ class Script(BaseScript):
                 v_ifindex[r["name"]] = r["id"]
         time.sleep(1)
         # Attach `vlan` subinterfaces to parent
-        for n, f, r in self.cli_detail("/interface vlan print detail without-paging"):
+        for n, f, r in self.cli_detail("/interface vlan print detail without-paging terse"):
             if r["interface"] in ifaces:
                 i = ifaces[r["interface"]]
                 self.si = {
@@ -155,6 +156,8 @@ class Script(BaseScript):
                     "vlan_ids": [int(r["vlan-id"])],
                     "enabled_protocols": [],
                 }
+                if "comment" in r:
+                    self.si["description"] = r["comment"]
                 if self.get_mtu(r) is not None:
                     self.si["mtu"] = self.get_mtu(r)
                 if r["name"] in v_ifindex:
@@ -310,7 +313,7 @@ class Script(BaseScript):
                     for sub in i["subinterfaces"]:
                         if sub["name"] == r["interface"]:
                             self.logger.debug(
-                                "\nError: subinterfaces already exists in interface \n%s\n" % i
+                                f"\nError: subinterfaces already exists in interface \n{i}\n"
                             )
                             break
                     else:
@@ -353,20 +356,30 @@ class Script(BaseScript):
             # Tunnel types
             # XXX /ip address print detail do not print tunnels !!!
             # Need reworks !!!
-            if t["type"].startswith("ppp-"):
-                self.get_tunnel("PPP", f, afi, r)
-            if t["type"].startswith("pppoe-"):
-                self.get_tunnel("PPPOE", f, afi, r)
             if t["type"].startswith("ovpn-"):
-                self.si["tunnel"] = {}
-            if t["type"].startswith("l2tp-"):
-                self.get_tunnel("L2TP", f, afi, r)
-            if t["type"].startswith("pptp-"):
-                self.get_tunnel("PPTP", f, afi, r)
-            if t["type"].startswith("ovpn-"):
-                self.get_tunnel("PPP", f, afi, r)
-            if t["type"].startswith("sstp-"):
-                self.get_tunnel("SSTP", f, afi, r)
+                self.logger.debug(t["type"])
+            #
+            # Temporary disable tunnel processing
+            #
+            # /interface ppp print detail without-paging
+            # bad command name ppp (line 1 column 12)
+            #
+            # Need reworks !!!
+            # if t["type"].startswith("ppp-"):
+            #     self.get_tunnel("PPP", f, afi, r)
+            # if t["type"].startswith("pppoe-"):
+            #     self.get_tunnel("PPPOE", f, afi, r)
+            # if t["type"].startswith("ovpn-"):
+            #     self.si["tunnel"] = {}
+            # if t["type"].startswith("l2tp-"):
+            #     self.get_tunnel("L2TP", f, afi, r)
+            # if t["type"].startswith("pptp-"):
+            #     self.get_tunnel("PPTP", f, afi, r)
+            # if t["type"].startswith("ovpn-"):
+            #     self.get_tunnel("PPP", f, afi, r)
+            # if t["type"].startswith("sstp-"):
+            #     self.get_tunnel("SSTP", f, afi, r)
+            #
         # bridge
         for n, f, r in self.cli_detail("/interface bridge print detail without-paging"):
             self.si = {}
@@ -525,7 +538,7 @@ class Script(BaseScript):
         54: "physical",  # propMultiplexor
     }
 
-    def clean_iftype(self, ifname: str, ifindex: Optional[int] = None) -> str:
+    def clean_iftype(self, ifname: str, ifindex: int | None = None) -> str:
         """SNMP Type detect"""
         if not getattr(self, "_iftype_map", None):
             self._iftype_map = {

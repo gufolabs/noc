@@ -19,8 +19,7 @@ def get_nodes():
         yield path
         if path[-1].children:
             for c in path[-1].children:
-                for p in iter_children((*path, c)):
-                    yield p
+                yield from iter_children((*path, c))
 
     def iter_nodes():
         for node in SYNTAX:
@@ -34,7 +33,7 @@ def get_path(path):
         if not isinstance(n.token, type):
             return n.token
         if n.name:
-            return "<%s>" % n.name
+            return f"<{n.name}>"
         return "ANY"
 
     return " ".join(q(p) for p in path)

@@ -20,7 +20,7 @@ Ext.define("NOC.inv.inv.plugins.FileSchemeController", {
       maskComponent = me.getView().up("[appId=inv.inv]").maskComponent,
       messageId = maskComponent.show("reloading", ["scheme"]),
       name = view.itemId.replace("Panel", "").toLowerCase();
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + vm.get("currentId") + "/plugin/" + name + "/",
       method: "GET",
       scope: me,

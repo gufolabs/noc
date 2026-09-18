@@ -7,7 +7,6 @@
 
 # Python modules
 import asyncio
-from typing import Optional
 
 # NOC modules
 from .cli import CLI
@@ -16,7 +15,7 @@ from .telnet import TelnetStream
 
 
 class BeefStream(TelnetStream):
-    def __init__(self, cli: CLI):
+    def __init__(self, cli: CLI) -> None:
         super().__init__(cli)
         self.cli = cli
         self.beef = None
@@ -26,7 +25,7 @@ class BeefStream(TelnetStream):
     def close(self):
         self.cli = None
 
-    async def connect(self, address: str, port: Optional[int] = None):
+    async def connect(self, address: str, port: int | None = None):
         self.beef = self.cli.script.request_beef()
         if not self.beef:
             # Connection refused
@@ -63,7 +62,7 @@ class BeefStream(TelnetStream):
 class BeefCLI(CLI):
     name = "beef_cli"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.state = "notconnected"
 
@@ -93,7 +92,5 @@ class BeefCLI(CLI):
         return True
 
     async def send_pager_reply(self, data, match):
-        """
-        Beef need no pagers
-        """
+        """Beef need no pagers"""
         self.collected_data += [data]

@@ -49,7 +49,7 @@ class Script(BaseScript):
         ):
             if ap_admin_status == "2":
                 continue
-            mac = ":".join(["%02X" % int(o) for o in mac.split(".")])
+            mac = ":".join([f"{int(o):02X}" for o in mac.split(".")])
             r.append(
                 {
                     "vendor": "Cisco",

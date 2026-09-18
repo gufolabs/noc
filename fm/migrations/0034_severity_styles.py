@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Create styles for alarm severities
         for name, font, background, description in [
             ("FM INFO", 12255232, 14480371, "Alarm severity INFO"),

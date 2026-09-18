@@ -1,14 +1,14 @@
 # ----------------------------------------------------------------------
 # Action
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import datetime
 import logging
-from typing import Type, Tuple, Dict, Iterator, Literal, Optional, List, Any
+from typing import Iterator, Literal, Any, ClassVar, cast
 from dataclasses import dataclass
 
 # Third-party modules
@@ -16,7 +16,6 @@ import orjson
 
 # NOC modules
 from noc.core.msgstream.message import Message
-from noc.core.comp import DEFAULT_ENCODING
 from noc.core.defer import JOBS_STREAM
 from noc.core.mx import (
     MessageType,
@@ -27,6 +26,7 @@ from noc.core.mx import (
     MX_NOTIFICATION_GROUP_ID,
     MX_WATCH_FOR_ID,
     MX_TO,
+    MX_FWD_ROUTER,
 )
 from noc.config import config
 from noc.main.models.handler import Handler
@@ -37,41 +37,42 @@ logger = logging.getLogger(__name__)
 DROP = ""
 PASS = "<pass>"
 DUMP = "<dump>"
-ACTION_TYPES: Dict[str, Type["Action"]] = {}
+FWD = "<fwd>"
+ACTION_TYPES: dict[str, type["Action"]] = {}
 
 
 @dataclass
-class HeaderItem(object):
+class HeaderItem:
     header: str
     value: str
 
 
 @dataclass
-class ActionCfg(object):
+class ActionCfg:
     type: Literal["stream", "notification_group", "drop", "job"]
-    stream: Optional[str] = None
-    notification_group: Optional[str] = None
-    render_template: Optional[str] = None
-    headers: Optional[List[HeaderItem]] = None
+    stream: str | None = None
+    notification_group: str | None = None
+    render_template: str | None = None
+    headers: list[HeaderItem] | None = None
 
 
 class ActionBase(type):
-    def __new__(mcs, name, bases, attrs):
+    def __new__(
+        mcs: "type[ActionBase]", name: str, bases: tuple[type[Any], ...], attrs: dict[str, Any]
+    ) -> type["Action"]:
         global ACTION_TYPES
-        cls = type.__new__(mcs, name, bases, attrs)
+        cls = cast(type["Action"], type.__new__(mcs, name, bases, attrs))
         name = getattr(cls, "name", None)
         if name:
             ACTION_TYPES[name] = cls
         return cls
 
 
-class Action(object, metaclass=ActionBase):
-    name: str
+class Action(metaclass=ActionBase):
+    name: ClassVar[str]
 
-    def __init__(self, cfg: ActionCfg):
-        self.headers: Dict[str, bytes] = {
-            h.header: h.value.encode(encoding=DEFAULT_ENCODING) for h in cfg.headers or []
-        }
+    def __init__(self, cfg: ActionCfg) -> None:
+        self.headers: dict[str, bytes] = {h.header: h.value.encode() for h in cfg.headers or []}
 
     @classmethod
     def from_data(cls, data):
@@ -91,12 +92,12 @@ class Action(object, metaclass=ActionBase):
         )
 
     @classmethod
-    def get_headers(cls, data) -> List[HeaderItem]:
+    def get_headers(cls, data) -> list[HeaderItem]:
         """Parse internal headers"""
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], bytes]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], bytes]]:
         raise NotImplementedError
 
 
@@ -105,7 +106,7 @@ class DropAction(Action):
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], bytes]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], bytes]]:
         yield DROP, {}, msg.value
 
 
@@ -114,32 +115,32 @@ class DumpAction(Action):
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], bytes]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], bytes]]:
         yield DUMP, {}, msg.value
 
 
 class StreamAction(Action):
     name = "stream"
 
-    def __init__(self, cfg: ActionCfg):
+    def __init__(self, cfg: ActionCfg) -> None:
         super().__init__(cfg)
         self.stream: str = cfg.stream
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], bytes]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], bytes]]:
         yield self.stream, self.headers, msg.value
 
 
 class NotificationAction(Action):
     name = "notification"
 
-    def __init__(self, cfg: ActionCfg):
+    def __init__(self, cfg: ActionCfg) -> None:
         super().__init__(cfg)
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], bytes]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], bytes]]:
         if MX_NOTIFICATION_METHOD not in msg.headers:
             # Processed send notification
             logger.error("Notification without Method set. Skipping...")
@@ -154,7 +155,7 @@ class NotificationAction(Action):
 class MetricAction(Action):
     name = "metrics"
 
-    def __init__(self, cfg: ActionCfg):
+    def __init__(self, cfg: ActionCfg) -> None:
         super().__init__(cfg)
         self.stream: str = cfg.stream
         self.mx_metrics_scopes = {}
@@ -165,11 +166,11 @@ class MetricAction(Action):
 
         for mss in MetricStream.objects.filter():
             if mss.is_active and mss.scope.table_name in set(config.message.enable_metric_scopes):
-                self.mx_metrics_scopes[mss.scope.table_name.encode(DEFAULT_ENCODING)] = mss.to_mx
+                self.mx_metrics_scopes[mss.scope.table_name.encode()] = mss.to_mx
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], bytes]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], bytes]]:
         yield self.stream, self.headers, msg.value
 
 
@@ -188,7 +189,7 @@ class JobAction(Action):
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], bytes]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], bytes]]:
         if MX_JOB_HANDLER in self.headers:
             handler = self.headers[MX_JOB_HANDLER]
         elif MX_JOB_HANDLER in msg.headers:
@@ -210,12 +211,12 @@ class JobAction(Action):
 class MessageAction(Action):
     name = "message"
 
-    def __init__(self, cfg: ActionCfg):
+    def __init__(self, cfg: ActionCfg) -> None:
         super().__init__(cfg)
-        self.ng: Optional[str] = cfg.notification_group
-        self.rt: Optional[int] = cfg.render_template
+        self.ng: str | None = cfg.notification_group
+        self.rt: int | None = cfg.render_template
 
-    def get_notification_group(self, ng: Optional[bytes]):
+    def get_notification_group(self, ng: bytes | None):
         from noc.main.models.notificationgroup import NotificationGroup
 
         if ng:
@@ -231,9 +232,9 @@ class MessageAction(Action):
         self,
         message_type: MessageType,
         msg: Message,
-        language: Optional[str] = None,
-        notification_group: Optional[Any] = None,
-    ) -> Optional[Dict[str, str]]:
+        language: str | None = None,
+        notification_group: Any | None = None,
+    ) -> dict[str, str] | None:
         """
         Render Body from template
         Args:
@@ -262,7 +263,7 @@ class MessageAction(Action):
 
     def iter_action(
         self, msg: Message, message_type: bytes
-    ) -> Iterator[Tuple[str, Dict[str, bytes], bytes]]:
+    ) -> Iterator[tuple[str, dict[str, bytes], bytes]]:
         """"""
         ng = self.get_notification_group(msg.headers.get(MX_NOTIFICATION_GROUP_ID))
         if not ng:
@@ -272,23 +273,26 @@ class MessageAction(Action):
         if MX_WATCH_FOR_ID in msg.headers:
             obj = msg.headers[MX_WATCH_FOR_ID].decode()[2:]
         ts = datetime.datetime.now()
-        body, message_type = None, MessageType(message_type.decode())
+        message_type = MessageType(message_type.decode())
+        body: dict[str, Any] | None = None
         for c in ng.get_active_contacts(obj, ts=ts):
             body = body or self.render_template(
                 message_type, msg, c.language, notification_group=ng
             )
             if not body:
+                logger.warning("Uknown template for message type: %s", message_type)
                 break
             if c.title_tag:
                 body = {
                     "subject": f"{c.title_tag} {body['subject']}",
                     "body": body["body"],
                 }
-            yield (
-                NOTIFICATION_METHODS[c.method].decode(),
-                {
-                    MX_TO: c.contact.encode(encoding=DEFAULT_ENCODING),
-                    MX_NOTIFICATION_METHOD: c.method.encode(),
-                },
-                body,
-            )
+            headers = {
+                MX_TO: c.contact.encode(),
+                MX_NOTIFICATION_METHOD: c.method.encode(),
+            }
+            if c.route:
+                headers[MX_FWD_ROUTER] = str(c.route).encode()
+                yield FWD, headers, body
+            else:
+                yield NOTIFICATION_METHODS[c.method].decode(), headers, body

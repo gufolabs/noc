@@ -24,6 +24,24 @@ Ext.define("NOC.core.MarkdownEditor", {
 
   initMonaco: function(){
     var me = this;
+
+    // Monaco is loaded on demand; create the editor once the bundle is ready.
+    if(window.monaco){
+      me.createMonaco();
+      return;
+    }
+    window.loadMonaco().then(function(){
+      if(me.destroyed || !me.getEl()){
+        return;
+      }
+      me.createMonaco();
+    }).catch(function(error){
+      console.error("Monaco Editor is not loaded", error);
+    });
+  },
+
+  createMonaco: function(){
+    var me = this;
     var editorContainer = me.getEl().dom;
     me.editor = window.monaco.editor.create(editorContainer, {
       value: me.getValue(),

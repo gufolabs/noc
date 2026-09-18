@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Maintenance
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ import operator
 import re
 import logging
 from threading import Lock
-from typing import Optional, List, Set, Union, Tuple, Dict, Any
+from typing import Optional, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -34,8 +34,8 @@ from noc.core.mongo.fields import ForeignKeyField, PlainReferenceField
 from noc.core.model.decorator import on_save, on_delete
 from noc.core.defer import call_later
 from noc.core.change.decorator import change
-from noc.core.watchers.types import ObjectEffect, WatchItem
-from noc.core.watchers.decorator import watchers, WATCHER_JCLS, get_next_ts
+from noc.core.watchers.types import ObjectEffect
+from noc.core.watchers.decorator import watchers
 from noc.core.mx import MessageType, send_message, MX_TO_STAGE_NAME
 from noc.main.models.timepattern import TimePattern
 from noc.main.models.template import Template
@@ -131,13 +131,13 @@ class Maintenance(Document):
     escalate_managed_object = ForeignKeyField(ManagedObject)
     # Time pattern when maintenance is active
     # None - active all the time
-    time_pattern: Optional[TimePattern] = ForeignKeyField(TimePattern)
+    time_pattern: TimePattern | None = ForeignKeyField(TimePattern)
     # Objects declared to be affected by maintenance
-    direct_objects: List["MaintenanceObject"] = EmbeddedDocumentListField(MaintenanceObject)
+    direct_objects: list["MaintenanceObject"] = EmbeddedDocumentListField(MaintenanceObject)
     # Segments declared to be affected by maintenance
-    direct_segments: List["MaintenanceSegment"] = EmbeddedDocumentListField(MaintenanceSegment)
+    direct_segments: list["MaintenanceSegment"] = EmbeddedDocumentListField(MaintenanceSegment)
     #  Service declared to be affected by maintenance
-    direct_services: List["MaintenanceService"] = EmbeddedDocumentListField(MaintenanceService)
+    direct_services: list["MaintenanceService"] = EmbeddedDocumentListField(MaintenanceService)
     # direct_group =
     # All Administrative Domain for all affected objects
     administrative_domain = ListField(ForeignKeyField(AdministrativeDomain))
@@ -155,10 +155,10 @@ class Maintenance(Document):
     # Object id in remote system
     remote_id = StringField()
     # Array remote objects and service ids
-    remote_objects: List["RemoteObject"] = EmbeddedDocumentListField(RemoteObject)
+    remote_objects: list["RemoteObject"] = EmbeddedDocumentListField(RemoteObject)
     # Watchers
-    watchers: List[WatchDocumentItem] = EmbeddedDocumentListField(WatchDocumentItem)
-    watcher_wait_ts: Optional[datetime.datetime] = DateTimeField(required=False)
+    watchers: list[WatchDocumentItem] = EmbeddedDocumentListField(WatchDocumentItem)
+    watcher_wait_ts: datetime.datetime | None = DateTimeField(required=False)
     # Object id in BI
     # bi_id = LongField(unique=True)
 
@@ -173,11 +173,11 @@ class Maintenance(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Maintenance"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Maintenance"]:
         return Maintenance.objects.filter(id=oid).first()
 
     @classmethod
-    def get_min_wait_ts(cls) -> Optional[datetime.datetime]:
+    def get_min_wait_ts(cls) -> datetime.datetime | None:
         """"""
         return (
             Maintenance.objects()
@@ -203,7 +203,7 @@ class Maintenance(Document):
         return self.start <= now
 
     @property
-    def active_interval(self) -> Tuple[datetime.datetime, datetime.datetime]:
+    def active_interval(self) -> tuple[datetime.datetime, datetime.datetime]:
         """For old fixes, String to datetime fields"""
         m_start, m_stop = self.start, self.stop
         if isinstance(m_start, str):
@@ -212,7 +212,7 @@ class Maintenance(Document):
             m_stop = datetime.datetime.fromisoformat(m_stop)
         return m_start, m_stop
 
-    def event(self, stage: str, data: Optional[Dict[str, Any]] = None):
+    def event(self, stage: str, data: dict[str, Any] | None = None):
         """
         Process object-related event
         Args:
@@ -229,7 +229,7 @@ class Maintenance(Document):
             headers={MX_TO_STAGE_NAME: stage.encode()},
         )
 
-    def get_message_context(self) -> Dict[str, Any]:
+    def get_message_context(self) -> dict[str, Any]:
         """Service Message Ctx"""
         # Direct maintenance
         r = {
@@ -249,7 +249,7 @@ class Maintenance(Document):
         # Affected ?
         return r
 
-    def update_remote_objects(self, objects: List[Dict[str, Any]]):
+    def update_remote_objects(self, objects: list[dict[str, Any]]):
         """Update remote Object"""
         r = []
         for o in objects:
@@ -296,47 +296,6 @@ class Maintenance(Document):
             )
         elif self.direct_objects or self.remote_objects:
             ManagedObject.reset_maintenance(self.id)
-
-    def update_object_watchers(
-        self,
-        to_watchers: List[WatchItem],
-        to_remove: Optional[List[Tuple[ObjectEffect, str, Optional[str]]]],
-        dry_run: bool = False,
-        bulk=None,
-    ):
-        """"""
-        from noc.core.scheduler.scheduler import Scheduler
-
-        updates = []
-        up_w = {(w.effect, w.key, w.remote_system): w for w in to_watchers}
-        for w in self.watchers:
-            rs = w.remote_system.name if w.remote_system else None
-            if to_remove and (w.effect, w.key, rs) in to_remove:
-                continue
-            update = up_w.pop((w.effect, w.key, rs), None)
-            if update:
-                w = WatchDocumentItem.from_item(update)
-            updates.append(w)
-        for w in up_w.values():
-            rs = RemoteSystem.get_by_name(w.remote_system) if w.remote_system else None
-            updates.append(WatchDocumentItem.from_item(w, remote_system=rs))
-        self.watchers = updates
-        if not updates:
-            wait_ts = None
-        else:
-            wait_ts, _ = self.active_interval
-        if self.watcher_wait_ts != wait_ts:
-            self.watcher_wait_ts = wait_ts
-        m_ts = self.get_min_wait_ts()
-        if wait_ts and (not m_ts or wait_ts <= m_ts):
-            scheduler = Scheduler(SCHEDULER)
-            scheduler.submit(
-                jcls=WATCHER_JCLS, key="maintenance.Maintenance", ts=get_next_ts(wait_ts)
-            )
-        if dry_run or self._created:
-            return
-        set_op = {"watchers": self.watchers, "watcher_wait_ts": self.watcher_wait_ts}
-        self.update(**set_op)
 
     def ensure_jobs(self):
         """Ensure maintenance Job"""
@@ -405,8 +364,15 @@ class Maintenance(Document):
             not changed_fields or "is_completed" in changed_fields or "start" in changed_fields
         ) and not self.is_completed:
             # Gen MX Event
-            m_start, _ = self.active_interval
-            self.add_watch(ObjectEffect.MX_EVENT, after=m_start, once=True, stage="start")
+            m_start, m_stop = self.active_interval
+            self.add_watch(
+                ObjectEffect.MX_EVENT, key="start", after=m_start, once=True, stage="start"
+            )
+            if m_stop:
+                self.add_watch(
+                    ObjectEffect.MX_EVENT, key="stop", after=m_stop, once=True, stage="stop"
+                )
+                # Complete? flag - add when complete condition
         self.sync_affected()
         self.ensure_escalated_jobs()
         self.ensure_jobs()
@@ -419,7 +385,7 @@ class Maintenance(Document):
         ManagedObject.reset_maintenance(self.id)
 
     @classmethod
-    def currently_affected(cls, objects: Optional[List[int]] = None) -> List[int]:
+    def currently_affected(cls, objects: list[int] | None = None) -> list[int]:
         """
         Returns a list of currently affected object ids
         """
@@ -446,20 +412,20 @@ class Maintenance(Document):
 
 
 def update_affected_objects(
-    maintenance_id, start: datetime.datetime, stop: Optional[datetime.datetime] = None
+    maintenance_id, start: datetime.datetime, stop: datetime.datetime | None = None
 ):
     """
     Calculate and fill affected objects
     """
 
     # All affected maintenance objects
-    mai_objects: List[int] = list(
+    mai_objects: list[int] = list(
         ManagedObject.objects.filter(
             is_managed=True, affected_maintenances__has_key=str(maintenance_id)
         ).values_list("id", flat=True)
     )
 
-    def get_downlinks(objects: Set[int]):
+    def get_downlinks(objects: set[int]):
         # Get all additional objects which may be affected
         r = {
             mo_id
@@ -492,9 +458,12 @@ def update_affected_objects(
         return so
 
     data = Maintenance.get_by_id(maintenance_id)
+    if not data:
+        logger.warning("Update maintenance with Unknown Id: %s", maintenance_id)
+        return
     logger.info("[%s] Processed update Maintenance affected", data.id)
     # Calculate affected objects
-    affected: Set[int] = {o.object.id for o in data.direct_objects if o.object}
+    affected: set[int] = {o.object.id for o in data.direct_objects if o.object}
     for o in data.direct_segments:
         if o.segment:
             affected |= get_segment_objects(o.segment.id)
@@ -597,7 +566,7 @@ def stop(maintenance_id):
     Maintenance._get_collection().update_many(
         {"_id": maintenance_id}, {"$set": {"is_completed": True}}
     )
-    mai_objects: List[int] = list(
+    mai_objects: list[int] = list(
         ManagedObject.objects.filter(
             is_managed=True, affected_maintenances__has_key=str(maintenance_id)
         ).values_list("id", flat=True)

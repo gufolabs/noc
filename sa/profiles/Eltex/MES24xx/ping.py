@@ -25,15 +25,15 @@ class Script(BaseScript):
 
     def execute(self, address, count=None, source_address=None, size=None, df=None):
         if is_ipv4(address):
-            cmd = "ping ip %s" % address
+            cmd = f"ping ip {address}"
         elif is_ipv6(address):
-            cmd = "ping ipv6 %s" % address
+            cmd = f"ping ipv6 {address}"
         if count:
             cmd += " count %d" % int(count)
         if size:
             cmd += " size %d" % int(size)
         if source_address:
-            cmd += " source %s" % source_address
+            cmd += f" source {source_address}"
         if df:
             cmd += " df-bit"
         ping = self.cli(cmd)

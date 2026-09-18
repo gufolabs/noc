@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # Third-party modules
 import orjson
@@ -21,8 +20,8 @@ class JSONCDAGFactory(ConfigCDAGFactory):
         self,
         graph: CDAG,
         config: str,
-        cfx: Optional[FactoryCtx] = None,
-        namespace: Optional[str] = None,
+        cfx: FactoryCtx | None = None,
+        namespace: str | None = None,
     ):
         cfg = GraphConfig(**orjson.loads(config))
         super().__init__(graph, cfg, cfx, namespace)

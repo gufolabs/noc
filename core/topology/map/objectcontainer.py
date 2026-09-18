@@ -1,14 +1,14 @@
 # ----------------------------------------------------------------------
 # PoP Access Map class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import logging
 import itertools
-from typing import Dict, List, Optional, Iterable
+from typing import Iterable
 
 # Third-party modules
 from bson import ObjectId
@@ -35,22 +35,21 @@ class ObjectContainerTopology(TopologyBase):
     PARAMS = {"container"}
     CONTAINER_MODELS = None
 
-    def __init__(self, container, **settings):
+    def __init__(self, container, **settings) -> None:
         self.container = Object.get_by_id(container)
         self.logger = PrefixLoggerAdapter(logger, self.container.name)
         super().__init__(**settings)
 
-    def gen_id(self) -> Optional[str]:
+    def gen_id(self) -> str | None:
         return str(self.container.id)
 
     @classmethod
     def iter_maps(
         cls,
-        parent: str = None,
-        query: Optional[str] = None,
-        limit: Optional[int] = None,
-        start: Optional[int] = None,
-        page: Optional[int] = None,
+        parent: str | None = None,
+        query: str | None = None,
+        limit: int | None = None,
+        start: int | None = None,
     ) -> Iterable[MapItem]:
         if parent == cls.name:
             parent = None
@@ -78,7 +77,7 @@ class ObjectContainerTopology(TopologyBase):
             )
 
     @classmethod
-    def iter_path(cls, gen_id) -> Iterable[PathItem]:
+    def iter_path(cls, gen_id: str) -> Iterable[PathItem]:
         o = Object.get_by_id(gen_id)
         if not o:
             return
@@ -91,19 +90,19 @@ class ObjectContainerTopology(TopologyBase):
         Load all managed objects from Object Group
         """
         # Group objects
-        object_mos: List[int] = list(
+        object_mos: list[int] = list(
             ManagedObject.objects.filter(container__in=self.container.get_nested_ids()).values_list(
                 "id", flat=True
             )
         )
         # Get all links, belonging to segment
-        links: List[Link] = list(Link.objects.filter(linked_objects__in=object_mos))
+        links: list[Link] = list(Link.objects.filter(linked_objects__in=object_mos))
         # All linked interfaces from map
-        all_ifaces: List["ObjectId"] = list(
+        all_ifaces: list["ObjectId"] = list(
             itertools.chain.from_iterable(link.interface_ids for link in links)
         )
         # Bulk fetch all interfaces data
-        self._interface_cache: Dict["ObjectId", "Interface"] = {
+        self._interface_cache: dict["ObjectId", "Interface"] = {
             i["_id"]: i
             for i in Interface._get_collection().find(
                 {"_id": {"$in": all_ifaces}},
@@ -118,11 +117,11 @@ class ObjectContainerTopology(TopologyBase):
             )
         }
         # Bulk fetch all managed objects
-        all_mos: List[int] = list(
+        all_mos: list[int] = list(
             {i["managed_object"] for i in self._interface_cache.values() if "managed_object" in i}
             | set(object_mos)
         )
-        mos: Dict[int, "ManagedObject"] = {
+        mos: dict[int, "ManagedObject"] = {
             mo.id: mo for mo in ManagedObject.objects.filter(id__in=all_mos)
         }
         for mo in mos.values():

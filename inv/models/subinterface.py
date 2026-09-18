@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Iterable, List, Union, Dict, Any
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -112,7 +112,7 @@ class SubInterface(Document):
         return f"{self.managed_object.name} {self.name}"
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["SubInterface"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["SubInterface"]:
         return SubInterface.objects.filter(id=oid).first()
 
     @property
@@ -150,7 +150,7 @@ class SubInterface(Document):
         return Label.get_effective_setting(label, setting="enable_interface")
 
     @classmethod
-    def iter_effective_labels(cls, instance: "SubInterface") -> Iterable[List[str]]:
+    def iter_effective_labels(cls, instance: "SubInterface") -> Iterable[list[str]]:
         if instance.tagged_vlans:
             yield Label.get_effective_vlanfilter_labels(
                 "subinterface_tagged_vlans", instance.tagged_vlans
@@ -179,7 +179,7 @@ class SubInterface(Document):
             return si.service
         return None
 
-    def as_resource(self, path: Optional[str] = None) -> str:
+    def as_resource(self, path: str | None = None) -> str:
         """
         Convert instance or connection to the resource reference.
 
@@ -192,7 +192,7 @@ class SubInterface(Document):
         # return f"if:{self.interface.id}:{self.id}"
         return f"si:{self.id}"
 
-    def get_matcher_ctx(self) -> Dict[str, Any]:
+    def get_matcher_ctx(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "description": self.description,

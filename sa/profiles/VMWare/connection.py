@@ -92,9 +92,9 @@ def connect(host=None, alias=DEFAULT_CONNECTION_NAME, **kwargs):
 
         if new_conn_settings != prev_conn_setting:
             err_msg = (
-                "A different connection with alias `{}` was already "
+                f"A different connection with alias `{alias}` was already "
                 "registered. Use disconnect() first"
-            ).format(alias)
+            )
             raise ConnectionFailure(err_msg)
     else:
         register_connection(alias, host, **kwargs)
@@ -117,7 +117,7 @@ def get_connection(alias=DEFAULT_CONNECTION_NAME, reconnect=False):
         if alias == DEFAULT_CONNECTION_NAME:
             msg = "You have not defined a default connection"
         else:
-            msg = 'Connection with alias "%s" has not been defined' % alias
+            msg = f'Connection with alias "{alias}" has not been defined'
         raise ConnectionFailure(msg)
 
     conn_settings = _vim_connection_settings[alias].copy()

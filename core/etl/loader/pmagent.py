@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any
+from typing import Any
 
 # NOC modules
 from .base import BaseLoader
@@ -36,11 +36,11 @@ class PMAgentLoader(BaseLoader):
 
     post_save_fields = {"capabilities", "addresses"}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.available_caps = {x.name for x in Capability.objects.filter()}
 
-    def post_save(self, o: AgentModel, fields: Dict[str, Any]):
+    def post_save(self, o: AgentModel, fields: dict[str, Any]):
         if not fields:
             capabilities, addresses = [], []
         else:

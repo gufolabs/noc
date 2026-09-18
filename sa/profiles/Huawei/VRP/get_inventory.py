@@ -61,7 +61,6 @@ class Script(BaseScript):
         :param out: 'display elabel output'
         :type out: str
         :return:
-        :rtype: inventory_item
         """
         r = []
         parent = None
@@ -107,8 +106,6 @@ class Script(BaseScript):
     def part_parse_s8500(self):
         """
         Parse S85XX inventory
-        :param items:
-        :param slot_num:
         :return:
         """
         self.logger.info("Use S85XX parse function")
@@ -159,14 +156,7 @@ class Script(BaseScript):
     def get_type(self, slot, sub=None, name=None, part_no=None, descr="", slot_hints=None):
         """
         Resolve inventory type
-        :param slot:
-        :param sub:
-        :param name:
-        :param part_no:
-        :param descr:
-        :param slot_hints:
         :return: type, number, part_no
-        :rtype: list
         """
         self.logger.debug(
             "Getting type. Slot: %s, Sub: %s, name: %s, part_no: %s, hints: %s",
@@ -189,7 +179,7 @@ class Script(BaseScript):
                 pass
             elif self.is_cloud_engine and self.sfp_number.match(name):
                 # Port_10GE1/0/48, Port_10GE2/0/48
-                num = "%s%s" % self.sfp_number.match(name).groups()
+                num = "{}{}".format(*self.sfp_number.match(name).groups())
             elif self.sfp_number.match(name):
                 # Port_GigabitEthernet2/0/19 format
                 num = self.sfp_number.match(name).group("num")
@@ -323,7 +313,6 @@ class Script(BaseScript):
         """
         Get inventory table from "display device" command.
          Detect Slot and Subcard number and inventory type
-        :rtype: List(Dict)
         """
         inv = []
         unit = False

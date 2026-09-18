@@ -172,7 +172,7 @@ class Script(BaseScript):
                     ifname = match.group("ifname")
                     ip_address = match.group("ip")
                     ip_mask = match.group("mask")
-                    ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_mask))
+                    ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_mask)}"
                     vlan_id = self.rx_vlanid.search(ifname).group("vlan_id")
                     iface = {
                         "name": ifname,
@@ -224,7 +224,7 @@ class Script(BaseScript):
                 if match:
                     ip_address = match.group("ip")
                     ip_mask = match.group("mask")
-                    ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_mask))
+                    ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_mask)}"
                     iface = {
                         "name": "mgmt",
                         "type": "management",

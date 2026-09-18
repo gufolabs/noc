@@ -19,7 +19,3 @@ class CardService(FastAPIService):
     use_mongo = True
     use_watchdog = config.watchdog.enable_watchdog
     traefik_routes_rule = "PathPrefix(`/api/card`)"
-
-
-if __name__ == "__main__":
-    CardService().start()

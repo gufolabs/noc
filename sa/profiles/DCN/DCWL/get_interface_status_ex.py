@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # DCN.DCWL.get_interface_status_ex
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -11,7 +11,6 @@ import codecs
 # NOC modules
 from noc.core.script.base import BaseScript
 from noc.sa.interfaces.igetinterfacestatusex import IGetInterfaceStatusEx
-from noc.core.comp import smart_text
 
 
 class Script(BaseScript):
@@ -51,7 +50,7 @@ class Script(BaseScript):
         return r
 
     def get_bss_status(self, bss):
-        v = self.cli("get bss %s detail" % bss)
+        v = self.cli(f"get bss {bss} detail")
         value = self.profile.table_parser(v)
         if value.get("beacon-interface"):
             return {
@@ -75,11 +74,11 @@ class Script(BaseScript):
                 ssid = value["ssid"].replace(" ", "").replace("Managed", "")
                 if ssid.startswith("2a2d"):
                     # 2a2d - hex string
-                    ssid = smart_text(codecs.decode(ssid, "hex"))
+                    ssid = codecs.decode(ssid, "hex").decode()
                 bss = self.get_bss_status(value["bss"])
                 if not bss:
                     continue
-                if_ssid = "%s.%s" % (ifname, ssid)
+                if_ssid = f"{ifname}.{ssid}"
                 r[ifname] = {
                     "interface": ifname,
                     "admin_status": bss["admin_status"],

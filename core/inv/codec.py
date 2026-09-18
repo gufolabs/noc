@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Iterable, Optional, Union
+from typing import Iterable
 import uuid
 
 # Third-party modules
@@ -25,20 +25,20 @@ LC_LC_SMF_UID = uuid.UUID("217ba845-5309-4c4b-8543-d26dea35f11a")
 
 @dataclass
 class EncodeResultInfo:
-    found_objects: Optional[int] = None
-    found_connections_direct: Optional[int] = None
-    found_connections_cable: Optional[int] = None
+    found_objects: int | None = None
+    found_connections_direct: int | None = None
+    found_connections_cable: int | None = None
 
 
 @dataclass
 class DecodeResultInfo:
-    found_objects: Optional[int] = None
-    found_connections_direct: Optional[int] = None
-    found_connections_cable: Optional[int] = None
-    created_objects: Optional[int] = None
-    created_connections_direct: Optional[int] = None
-    created_cable: Optional[int] = None
-    created_connections_cable: Optional[int] = None
+    found_objects: int | None = None
+    found_connections_direct: int | None = None
+    found_connections_cable: int | None = None
+    created_objects: int | None = None
+    created_connections_direct: int | None = None
+    created_cable: int | None = None
+    created_connections_cable: int | None = None
 
 
 class ModelItem(BaseModel):
@@ -54,29 +54,29 @@ class ObjectConnectionItem_(BaseModel):
 class ObjectDataItem(BaseModel):
     interface: str
     attr: str
-    scope: Optional[str] = None
-    value: Union[int, float, str, list]
+    scope: str | None = None
+    value: int | float | str | list
 
 
 class CrossItem(BaseModel):
     input: str
-    input_discriminator: Optional[str] = None
+    input_discriminator: str | None = None
     output: str
-    output_discriminator: Optional[str] = None
-    gain_db: Optional[float] = None
+    output_discriminator: str | None = None
+    gain_db: float | None = None
 
 
 class ObjectItem(BaseModel):
     id: str
-    name: Optional[str] = None
+    name: str | None = None
     model: ModelItem
-    parent: Optional[str] = None
-    parent_connection: Optional[str] = None
-    mode: Optional[str] = None
+    parent: str | None = None
+    parent_connection: str | None = None
+    mode: str | None = None
     data: list[ObjectDataItem]
-    connections: Optional[list[ObjectConnectionItem_]] = None
-    additional_connections: Optional[list[str]] = None
-    cross: Optional[list[CrossItem]] = None
+    connections: list[ObjectConnectionItem_] | None = None
+    additional_connections: list[str] | None = None
+    cross: list[CrossItem] | None = None
 
 
 class PointItem(BaseModel):
@@ -85,7 +85,7 @@ class PointItem(BaseModel):
 
 
 class ConnectionItem(BaseModel):
-    id: Optional[str] = None
+    id: str | None = None
     connection: list[PointItem]
 
 
@@ -229,7 +229,7 @@ def encode(iter: Iterable[Object]) -> (InvData, EncodeResultInfo):
     )
 
 
-def decode(container: Optional[Object], data: InvData) -> (Result, DecodeResultInfo):
+def decode(container: Object | None, data: InvData) -> (Result, DecodeResultInfo):
     """
     Decode Inventory Objects from pydatic-structure InvData and write it to database.
     Uses in import Inventory Objects from file.

@@ -12,7 +12,7 @@ TIME_PATTERNS = [("Any", "Always match", []), ("Workdays", "Match workdays", ["m
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         for name, desc, tpd in TIME_PATTERNS:
             if (
                 self.db.execute("SELECT COUNT(*) FROM main_timepattern WHERE name=%s", [name])[0][0]

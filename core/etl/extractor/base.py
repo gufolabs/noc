@@ -16,7 +16,7 @@ import dataclasses
 import operator
 import re
 from time import perf_counter
-from typing import Any, List, Iterable, Type, Union, Tuple, Set, Optional
+from typing import Any, Iterable
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter
@@ -30,20 +30,20 @@ logger = logging.getLogger(__name__)
 
 
 @dataclasses.dataclass
-class Problem(object):
+class Problem:
     line: int
     is_rej: bool
     p_class: str
     message: str
-    row: List[Any]
+    row: list[Any]
 
 
 @dataclasses.dataclass
-class RemovedItem(object):
+class RemovedItem:
     id: str
 
 
-class BaseExtractor(object):
+class BaseExtractor:
     """
     Data extractor interface. Subclasses must provide
     *iter_data* method
@@ -54,35 +54,35 @@ class BaseExtractor(object):
     REPORT_INTERVAL = 1000
     DISABLE_INCREMENTAL_MERGE = False
     # Type of model
-    model: Type[BaseModel]
+    model: type[BaseModel]
     # List of rows to be used as constant data
-    data: List[BaseModel] = []
+    data: list[BaseModel] = []
     # Suppress deduplication message
     suppress_deduplication_log: bool = False
 
     rx_archive = re.compile(
-        r"^import-\d{4}(?:-\d{2}){5}.jsonl%s$" % compressor.ext.replace(".", r"\.")
+        r"^import-\d{{4}}(?:-\d{{2}}){{5}}.jsonl{}$".format(compressor.ext.replace(".", r"\."))
     )
 
-    def __init__(self, system: "BaseRemoteSystem"):
+    def __init__(self, system: "BaseRemoteSystem") -> None:
         self.system = system
         self.config = system.config
-        self.logger = PrefixLoggerAdapter(logger, "%s][%s" % (system.name, self.name))
+        self.logger = PrefixLoggerAdapter(logger, f"{system.name}][{self.name}")
         self.import_dir = os.path.join(self.PREFIX, system.name, self.name)
-        self.fatal_problems: List[Problem] = []
-        self.quality_problems: List[Problem] = []
+        self.fatal_problems: list[Problem] = []
+        self.quality_problems: list[Problem] = []
         self.extracted = 0
         # Checkpoint
-        self._force_checkpoint: Optional[str] = None
+        self._force_checkpoint: str | None = None
 
     def register_quality_problem(
-        self, line: int, p_class: str, message: str, row: List[Any]
+        self, line: int, p_class: str, message: str, row: list[Any]
     ) -> None:
         self.quality_problems += [
             Problem(line=line + 1, is_rej=False, p_class=p_class, message=message, row=row)
         ]
 
-    def register_fatal_problem(self, line: int, p_class: str, message: str, row: List[Any]) -> None:
+    def register_fatal_problem(self, line: int, p_class: str, message: str, row: list[Any]) -> None:
         self.fatal_problems += [
             Problem(line=line + 1, is_rej=True, p_class=p_class, message=message, row=row)
         ]
@@ -142,8 +142,8 @@ class BaseExtractor(object):
             f.close()
 
     def iter_data(
-        self, *, checkpoint: Optional[str] = None, **kwargs
-    ) -> Iterable[Union[BaseModel, RemovedItem, Tuple[Any, ...]]]:
+        self, *, checkpoint: str | None = None, **kwargs
+    ) -> Iterable[BaseModel | RemovedItem | tuple[Any, ...]]:
         """
         Iterator to extract data.
 
@@ -163,7 +163,7 @@ class BaseExtractor(object):
     def clean(self, row):
         return row
 
-    def read_current_state(self) -> Optional[List[BaseModel]]:
+    def read_current_state(self) -> list[BaseModel] | None:
         """
         Read current state.
 
@@ -193,7 +193,7 @@ class BaseExtractor(object):
                 data.append(self.model.model_validate_json(line))
         return data
 
-    def get_checkpoint(self, data: List[BaseModel]) -> Optional[str]:
+    def get_checkpoint(self, data: list[BaseModel]) -> str | None:
         """
         Get latest checkpoint from the state.
 
@@ -215,7 +215,7 @@ class BaseExtractor(object):
         return cp
 
     def iter_merge_data(
-        self, current: Optional[List[BaseModel]], delta: Optional[List[BaseModel]]
+        self, current: list[BaseModel] | None, delta: list[BaseModel] | None
     ) -> Iterable[BaseModel]:
         """
         Merge current state with delta.
@@ -269,7 +269,7 @@ class BaseExtractor(object):
                 return s
             return str(s)
 
-        def get_model(raw: Union[BaseModel, Tuple[Any, ...]]) -> BaseModel:
+        def get_model(raw: BaseModel | tuple[Any, ...]) -> BaseModel:
             if isinstance(raw, BaseModel):
                 return raw
             return self.model.from_iter(q(x) for x in row)
@@ -282,8 +282,8 @@ class BaseExtractor(object):
             "Incremental" if incremental else "Full",
         )
         # Prepare iterator
-        current: Optional[List[BaseModel]] = None
-        checkpoint: Optional[str] = None
+        current: list[BaseModel] | None = None
+        checkpoint: str | None = None
         if incremental:
             # Incremental extract
             current = self.read_current_state()
@@ -299,10 +299,10 @@ class BaseExtractor(object):
                 self.logger.info("No current state. Falling back to full extract")
         # Extract
         t0 = perf_counter()
-        data: List[BaseModel] = []
+        data: list[BaseModel] = []
         n = 0
-        seen: Set[str] = set()
-        removed: Set[str] = set()
+        seen: set[str] = set()
+        removed: set[str] = set()
         for row in self.iter_data(checkpoint=checkpoint):
             if not self.filter(row):
                 continue
@@ -361,11 +361,11 @@ class BaseExtractor(object):
             self.logger.warning("Line num\tType\tProblem string")
             for p in self.fatal_problems:
                 self.logger.warning(
-                    "Fatal problem, line was rejected: %s\t%s\t%s" % (p.line, p.p_class, p.message)
+                    f"Fatal problem, line was rejected: {p.line}\t{p.p_class}\t{p.message}"
                 )
             for p in self.quality_problems:
                 self.logger.warning(
-                    "Data quality problem in line:  %s\t%s\t%s" % (p.line, p.p_class, p.message)
+                    f"Data quality problem in line:  {p.line}\t{p.p_class}\t{p.message}"
                 )
             # Dump problem to file
             try:
@@ -383,7 +383,7 @@ class BaseExtractor(object):
                             ]
                             + [p.message.encode("utf-8")]
                         )
-            except IOError as e:
+            except OSError as e:
                 self.logger.error("Error when saved problems %s", e)
         else:
             self.logger.info("No problems detected")

@@ -41,7 +41,7 @@ class Script(BaseScript):
             c = self.cli("show software-version")
         line = c.split(":")
         res = line[1].strip().split(".", 2)
-        hwversion = "%s.%s" % (res[0], res[1])
+        hwversion = f"{res[0]}.{res[1]}"
         version = res[2].strip()
         result = {"vendor": "Rotek", "version": version, "attributes": {"HW version": hwversion}}
         with self.profile.shell(self):

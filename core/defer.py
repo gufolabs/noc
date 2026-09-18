@@ -8,7 +8,6 @@
 # Python modules
 import datetime
 import logging
-from typing import Optional
 import warnings
 import orjson
 from threading import Lock
@@ -29,12 +28,12 @@ DEFAULT_JOB_CLASS = "noc.core.scheduler.calljob.CallJob"
 
 def call_later(
     name: str,
-    delay: Optional[float] = None,
+    delay: float | None = None,
     scheduler: str = "scheduler",
-    pool: Optional[str] = None,
+    pool: str | None = None,
     job_class: str = DEFAULT_JOB_CLASS,
-    shard: Optional[int] = None,
-    max_runs: Optional[int] = None,
+    shard: int | None = None,
+    max_runs: int | None = None,
     **kwargs,
 ):
     """
@@ -88,7 +87,7 @@ def call_later(
             # Hidden attribute JobClass, remove it from data
             q[k] = data[k]
             continue
-        q["%s.%s" % (Job.ATTR_DATA, k)] = data[k]
+        q[f"{Job.ATTR_DATA}.{k}"] = data[k]
     op = {"$set": set_op, "$setOnInsert": iset_op}
     logger.info("Delayed call to %s(%s) in %ss", name, data, delay or "0")
     logger.debug("update(%s, %s, upsert=True)", q, op)
@@ -96,11 +95,11 @@ def call_later(
 
 
 JOBS_STREAM = "jobs"
-JOBS_PARTITIONS: Optional[int] = None
+JOBS_PARTITIONS: int | None = None
 jp_lock = Lock()
 
 
-def defer(handler: str, key: Optional[int] = None, **kwargs) -> None:
+def defer(handler: str, key: int | None = None, **kwargs) -> None:
     """
     Offload job to worker
     :param handler: Full path to callable

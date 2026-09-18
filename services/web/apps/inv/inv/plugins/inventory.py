@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # inv.inv inventory plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Third-party modules
+from django.http import HttpRequest
 
 # NOC modules
 from .base import InvPlugin
@@ -70,7 +73,7 @@ class InventoryPlugin(InvPlugin):
             r["leaf"] = True
         return r
 
-    def get_data(self, request, object):
+    def get_data(self, request: HttpRequest, object):
         c = self.get_nested_inventory(object)
         c["name"] = object.model.description
         return {"expanded": True, "children": [c]}

@@ -10,7 +10,7 @@ import contextlib
 import time
 from contextvars import ContextVar
 from collections import defaultdict
-from typing import Optional, Tuple, List, Dict, Literal, Set
+from typing import Optional, Literal
 from abc import ABCMeta, abstractmethod
 
 # NOC modules
@@ -27,13 +27,13 @@ AUDIT_CHANGE = "noc.core.change.change.audit_change"
 REACTION_HANDLER = "noc.core.change.change.apply_reactions"
 
 cv_policy: ContextVar[Optional["BaseChangeTrackerPolicy"]] = ContextVar("cv_policy", default=None)
-cv_policy_stack: ContextVar[Optional[List["BaseChangeTrackerPolicy"]]] = ContextVar(
+cv_policy_stack: ContextVar[list["BaseChangeTrackerPolicy"] | None] = ContextVar(
     "cv_policy_stack", default=None
 )
-c_user: ContextVar[Optional[str]] = ContextVar("c_user", default=None)
+c_user: ContextVar[str | None] = ContextVar("c_user", default=None)
 c_reaction_suppress: ContextVar[bool] = ContextVar("c_reaction_suppress", default=False)
 
-CHANGE_HANDLERS: Dict[str, Set[str]] = defaultdict(set)
+CHANGE_HANDLERS: dict[str, set[str]] = defaultdict(set)
 REACTION_MODELS = frozenset(
     [
         "sa.ManagedObject",
@@ -53,7 +53,7 @@ REACTION_MODELS = frozenset(
 CHUNK_SIZE = 1000
 
 
-class ChangeTracker(object):
+class ChangeTracker:
     """
     Thread-local change tracker.
     """
@@ -82,7 +82,7 @@ class ChangeTracker(object):
             cv_policy.set(policy)
         return policy
 
-    def get_user(self) -> Optional[str]:
+    def get_user(self) -> str | None:
         """Getting user for changes"""
         from noc.core.middleware.tls import get_user
 
@@ -96,12 +96,12 @@ class ChangeTracker(object):
         op: Literal["create", "update", "delete"],
         model: str,
         id: str,
-        fields: Optional[List[ChangeField]] = None,
-        datastreams: Optional[List[Tuple[str, str]]] = None,
-        domains: Optional[List[Tuple[str, str]]] = None,
+        fields: list[ChangeField] | None = None,
+        datastreams: list[tuple[str, str]] | None = None,
+        domains: list[tuple[str, str]] | None = None,
         audit: bool = False,
-        caps: Optional[List[str]] = None,
-        reactions_rules: Optional[List[str]] = None,
+        caps: list[str] | None = None,
+        reactions_rules: list[str] | None = None,
     ) -> None:
         """
         Register datastream change
@@ -141,7 +141,6 @@ class ChangeTracker(object):
         """
         Push new effective policy for the current thread,
         store current one in the stack
-        :param policy:
         :return:
         """
         # Store previous policy
@@ -172,7 +171,7 @@ class ChangeTracker(object):
         return policy
 
     @contextlib.contextmanager
-    def bulk_changes(self, user: Optional[str] = None, suppress_reaction: bool = False):
+    def bulk_changes(self, user: str | None = None, suppress_reaction: bool = False):
         """
         Apply all changes at once
         """
@@ -193,18 +192,18 @@ class ChangeTracker(object):
 change_tracker = ChangeTracker()
 
 
-class BaseChangeTrackerPolicy(object, metaclass=ABCMeta):
+class BaseChangeTrackerPolicy(metaclass=ABCMeta):
     """
     Base class for change tracker policies
     """
 
-    def __init__(self): ...
+    def __init__(self) -> None: ...
 
     @abstractmethod
     def register(self, item: ChangeItem, audit: bool = False) -> None: ...
 
     @abstractmethod
-    def register_ds(self, items: List[Tuple[str, str]]) -> None: ...
+    def register_ds(self, items: list[tuple[str, str]]) -> None: ...
 
 
 class DropChangeTrackerPolicy(BaseChangeTrackerPolicy):
@@ -215,7 +214,7 @@ class DropChangeTrackerPolicy(BaseChangeTrackerPolicy):
     def register(self, item: ChangeItem, audit: bool = False) -> None:
         pass
 
-    def register_ds(self, items: List[Tuple[str, str]]) -> None:
+    def register_ds(self, items: list[tuple[str, str]]) -> None:
         pass
 
 
@@ -232,8 +231,8 @@ class SimpleChangeTrackerPolicy(BaseChangeTrackerPolicy):
         if not c_reaction_suppress.get() and item.model_id in REACTION_MODELS:
             defer(REACTION_HANDLER, key=item.key, changes=[item])
 
-    def register_ds(self, items: Optional[List[Tuple[str, str]]]):
-        defers: Dict[int, Dict[str, Set[str]]] = {}
+    def register_ds(self, items: list[tuple[str, str]] | None):
+        defers: dict[int, dict[str, set[str]]] = {}
         for ds_name, item_id in items:
             key = hash_int(item_id)
             if key not in defers:
@@ -248,10 +247,10 @@ class SimpleChangeTrackerPolicy(BaseChangeTrackerPolicy):
 
 
 class BulkChangeTrackerPolicy(BaseChangeTrackerPolicy):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
-        self.changes: Dict[str, Dict[int, ChangeItem]] = defaultdict(dict)
-        self.ds_changes: Dict[str, Set[str]] = defaultdict(set)
+        self.changes: dict[str, dict[int, ChangeItem]] = defaultdict(dict)
+        self.ds_changes: dict[str, set[str]] = defaultdict(set)
 
     def register(self, item: ChangeItem, audit: bool = False) -> None:
         key = item.key
@@ -271,7 +270,7 @@ class BulkChangeTrackerPolicy(BaseChangeTrackerPolicy):
         if not c_reaction_suppress.get() and item.model_id in REACTION_MODELS:
             self.changes[REACTION_HANDLER][key] = item
 
-    def register_ds(self, items: List[Tuple[str, str]]) -> None:
+    def register_ds(self, items: list[tuple[str, str]]) -> None:
         # Changed datastreams
         for ds_name, item_id in items or []:
             self.ds_changes[ds_name].add(str(item_id))

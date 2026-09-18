@@ -14,8 +14,8 @@ from atomicl import AtomicLong
 DEFAULT_HIST_SCALE = 1000000
 
 
-class Histogram(object):
-    def __init__(self, config=None, scale=DEFAULT_HIST_SCALE):
+class Histogram:
+    def __init__(self, config=None, scale=DEFAULT_HIST_SCALE) -> None:
         self.scale = DEFAULT_HIST_SCALE
         self.labels = [str(x) for x in config] + ["+Inf"]
         self.thresholds = [int(x * scale) for x in config]
@@ -35,22 +35,22 @@ class Histogram(object):
 
     def iter_prom_metrics(self, name, labels):
         # Prepare labels
-        ext_labels = ['%s="%s"' % (i.lower(), labels[i]) for i in labels]
+        ext_labels = [f'{i.lower()}="{labels[i]}"' for i in labels]
         # Yield _bucket
-        bucket_name = "%s_bucket" % name
+        bucket_name = f"{name}_bucket"
         for label, metric in zip(self.labels, self.metrics):
-            yield "# TYPE %s untyped" % bucket_name
-            all_labels = [*ext_labels, 'le="%s"' % label]
-            yield "%s{%s} %s" % (bucket_name, ",".join(all_labels), metric.value)
+            yield f"# TYPE {bucket_name} untyped"
+            all_labels = [*ext_labels, f'le="{label}"']
+            yield "{}{{{}}} {}".format(bucket_name, ",".join(all_labels), metric.value)
         # Yield _sum
-        sum_name = "%s_sum" % name
-        yield "# TYPE %s untyped" % sum_name
-        yield "%s{%s} %s" % (
+        sum_name = f"{name}_sum"
+        yield f"# TYPE {sum_name} untyped"
+        yield "{}{{{}}} {}".format(
             sum_name,
             ",".join(ext_labels),
             float(self.total_sum.value) / self.scale,
         )
         # Yield _count
-        count_name = "%s_count" % name
-        yield "# TYPE %s untyped" % count_name
-        yield "%s{%s} %s" % (count_name, ",".join(ext_labels), self.total_count.value)
+        count_name = f"{name}_count"
+        yield f"# TYPE {count_name} untyped"
+        yield "{}{{{}}} {}".format(count_name, ",".join(ext_labels), self.total_count.value)

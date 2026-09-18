@@ -26,7 +26,7 @@ class SAEService(FastAPIService):
     require_dcs_health = False
     use_mongo = True
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.pool_cache = {}
         self.activators = {}
@@ -38,7 +38,7 @@ class SAEService(FastAPIService):
         for p in Pool.objects.all():
             self.pool_cache[str(p.id)] = p.name
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         self.load_pools()
         self.pg_pool = ThreadedConnectionPool(1, config.sae.db_threads, **config.pg_connection_args)
         self.pg_pool_ready.set()
@@ -59,7 +59,3 @@ class SAEService(FastAPIService):
             yield connect
         finally:
             self.pg_pool.putconn(connect)
-
-
-if __name__ == "__main__":
-    SAEService().start()

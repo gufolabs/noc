@@ -14,7 +14,7 @@ from django.db.models import CharField
 class Migration(BaseMigration):
     depends_on = [("sa", "0213_labels")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Create labels fields
         self.db.add_column(
             "sa_managedobjectselector",

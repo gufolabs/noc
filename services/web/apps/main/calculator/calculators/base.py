@@ -1,22 +1,25 @@
 # ---------------------------------------------------------------------
 # Calculators framework
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
+# Third-party modules
+from django.http import HttpRequest
 
-class BaseCalculator(object):
+
+class BaseCalculator:
     name = None
     title = None
     description = None
     form_class = None
     template = "calculator.html"
 
-    def __init__(self, app):
+    def __init__(self, app) -> None:
         self.app = app
 
-    def render(self, request):
+    def render(self, request: HttpRequest):
         result = None
         if request.POST:
             form = self.form_class(request.POST)
@@ -36,7 +39,6 @@ class BaseCalculator(object):
     def calculate(**kwargs):
         """
         Returns a list of pairs or None
-        :param kwargs:
         :return:
         """
         return

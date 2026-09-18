@@ -8,7 +8,7 @@
     value: "{{ item.value }}"
     state: present
     reload: "True"
-  with_items:
+  loop:
     - { name: 'net.ipv4.tcp_keepalive_time', value: 60 }
     - { name: 'net.ipv4.tcp_keepalive_intvl', value: 10 }
     - { name: 'net.ipv4.tcp_keepalive_probes', value: 3 }

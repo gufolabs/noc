@@ -1,8 +1,7 @@
 # ---------------------------------------------------------------------
-# Vendor: Eltex
-# OS:     MES
+# Eltex.MES profile
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -111,7 +110,9 @@ class Profile(BaseProfile):
         "142": "MES-3348F",  # rev.B
         "190": "MES-3324F",  # rev.B
         "192": "MES-2324FB",
+        "216": "MES-5324",  # rev.B
         "235": "MES-2348P",
+        "239": "MES-3324",  # rev.C
     }
 
     def setup_session(self, script):
@@ -179,9 +180,9 @@ class Profile(BaseProfile):
         """
         match = self.rx_eltex_interface_name.match(str(s))
         if is_int(s):
-            return "Vl %s" % s
+            return f"Vl {s}"
         if s in ["oob", "stack-port"]:
             return s
         if match:
-            return "%s %s" % (match.group("type").capitalize(), match.group("number"))
-        raise InterfaceTypeError("Invalid interface '%s'" % s)
+            return "{} {}".format(match.group("type").capitalize(), match.group("number"))
+        raise InterfaceTypeError(f"Invalid interface '{s}'")

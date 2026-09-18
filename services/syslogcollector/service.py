@@ -12,7 +12,7 @@ import asyncio
 import uuid
 from collections import defaultdict
 from dataclasses import asdict
-from typing import Optional, Dict, Any
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -34,10 +34,10 @@ from noc.core.mx import (
 from noc.core.ioloop.timers import PeriodicCallback
 from noc.core.fm.enum import EventSource, SyslogSeverity
 from noc.core.service.stormprotection import StormProtection
+from noc.core.checkers.base import register_checks
 from noc.services.syslogcollector.syslogserver import SyslogServer
 from noc.services.syslogcollector.datastream import SysologDataStreamClient
 from noc.services.syslogcollector.sourceconfig import SourceConfig, ManagedObjectData
-from noc.core.comp import DEFAULT_ENCODING
 
 SYSLOGCOLLECTOR_STORM_ALARM_CLASS = "NOC | Managed Object | Storm Control"
 
@@ -47,17 +47,18 @@ class SyslogCollectorService(FastAPIService):
     pooled = True
     process_name = "noc-%(name).10s-%(pool).5s"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.mappings_callback = None
         self.report_invalid_callback = None
         self.source_configs = {}  # id -> SourceConfig
         self.address_configs = {}  # address -> SourceConfig
         self.invalid_sources = defaultdict(int)  # ip -> count
-        self.pool_partitions: Dict[str, int] = {}
-        self.storm_protection: Optional[StormProtection] = None
+        self.pool_partitions: dict[str, int] = {}
+        self.storm_protection: StormProtection | None = None
+        self.updated: set[str] = set()
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         # Listen sockets
         server = SyslogServer(service=self)
         for addr, port in server.iter_listen(config.syslogcollector.listen):
@@ -99,7 +100,7 @@ class SyslogCollectorService(FastAPIService):
         msg = {"$op": "clear"}
         self._publish_message(cfg, msg)
 
-    def _publish_message(self, cfg, msg: Dict[str, Any]):
+    def _publish_message(self, cfg, msg: dict[str, Any]):
         msg["timestamp"] = datetime.datetime.now().isoformat()
         msg["reference"] = f"{SYSLOGCOLLECTOR_STORM_ALARM_CLASS}{cfg.id}"
         self.publish(orjson.dumps(msg), stream=f"dispose.{config.pool}", partition=cfg.partition)
@@ -107,11 +108,11 @@ class SyslogCollectorService(FastAPIService):
     async def get_pool_partitions(self, pool: str) -> int:
         parts = self.pool_partitions.get(pool)
         if not parts:
-            parts = await self.get_stream_partitions("events.%s" % pool)
+            parts = await self.get_stream_partitions(f"events.{pool}")
             self.pool_partitions[pool] = parts
         return parts
 
-    def lookup_config(self, address: str) -> Optional[SourceConfig]:
+    def lookup_config(self, address: str) -> SourceConfig | None:
         """
         Returns object id for given address or None when
         unknown source
@@ -174,6 +175,9 @@ class SyslogCollectorService(FastAPIService):
                 stream=cfg.stream,
                 partition=cfg.partition,
             )
+        changed = cfg.update_rcvd(timestamp, source_address)
+        if changed:
+            self.updated.add(cfg.id)
         now = datetime.datetime.now().replace(microsecond=0)
         if cfg.archive_events and cfg.bi_id:
             # Archive message
@@ -193,8 +197,7 @@ class SyslogCollectorService(FastAPIService):
             )
         if config.message.enable_syslog and not cfg.managed_object:
             self.logger.warning(
-                "[%s] Cfg source not ManagedObject Meta."
-                " Please Reboot cfgtarget datastream and reboot collector. Skipping..",
+                "[%s] Cfg source not ManagedObject Meta. Please Reboot cfgtarget datastream and reboot collector. Skipping..",
                 source_address,
             )
             return
@@ -223,10 +226,8 @@ class SyslogCollectorService(FastAPIService):
                 partition=int(cfg.id) % n_partitions,
                 headers={
                     MX_MESSAGE_TYPE: MessageType.SYSLOG.value.encode(),
-                    MX_LABELS: MX_H_VALUE_SPLITTER.join(cfg.effective_labels).encode(
-                        DEFAULT_ENCODING
-                    ),
-                    MX_SHARDING_KEY: str(cfg.id).encode(DEFAULT_ENCODING),
+                    MX_LABELS: MX_H_VALUE_SPLITTER.join(cfg.effective_labels).encode(),
+                    MX_SHARDING_KEY: str(cfg.id).encode(),
                 },
             )
 
@@ -254,15 +255,26 @@ class SyslogCollectorService(FastAPIService):
         """
         Report invalid event sources
         """
-        if not self.invalid_sources:
+        if self.invalid_sources:
+            total = sum(self.invalid_sources[s] for s in self.invalid_sources)
+            self.logger.info(
+                "Dropping %d messages with invalid sources: %s",
+                total,
+                ", ".join(f"{s}: {self.invalid_sources[s]}" for s in self.invalid_sources),
+            )
+            self.invalid_sources = defaultdict(int)
+        if not self.updated:
             return
-        total = sum(self.invalid_sources[s] for s in self.invalid_sources)
-        self.logger.info(
-            "Dropping %d messages with invalid sources: %s",
-            total,
-            ", ".join("%s: %s" % (s, self.invalid_sources[s]) for s in self.invalid_sources),
-        )
-        self.invalid_sources = defaultdict(int)
+        self.logger.info("Sending %s messages with updated checks", len(self.updated))
+        updated = list(self.updated)
+        self.updated = set()
+        for cfg_id in updated:
+            cfg = self.source_configs.get(cfg_id)
+            if not cfg or not cfg.bi_id:
+                continue
+            checks = cfg.get_checks()
+            if checks:
+                register_checks(checks, managed_object=cfg.bi_id)
 
     async def update_source(self, data):
         # Get old config
@@ -316,7 +328,3 @@ class SyslogCollectorService(FastAPIService):
             del self.address_configs[addr]
         del self.source_configs[id]
         metrics["sources_deleted"] += 1
-
-
-if __name__ == "__main__":
-    SyslogCollectorService().start()

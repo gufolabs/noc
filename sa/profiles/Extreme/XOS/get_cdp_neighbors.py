@@ -28,7 +28,7 @@ class Script(BaseScript):
     def normalize_port(self, port):
         if self.rx_ex_stack_port1.match(port):
             # Format Extreme stack: Slot:  1, Port: 24
-            return "%s:%s" % self.rx_ex_stack_port1.match(port).groups()
+            return "{}:{}".format(*self.rx_ex_stack_port1.match(port).groups())
         return port.strip()
 
     def execute(self):

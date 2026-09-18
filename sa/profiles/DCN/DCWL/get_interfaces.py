@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # DCN.DCWL.get_interfaces
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -12,7 +12,6 @@ import codecs
 from noc.core.script.base import BaseScript
 from noc.sa.interfaces.igetinterfaces import IGetInterfaces
 from noc.core.ip import IPv4
-from noc.core.comp import smart_text
 
 
 class Script(BaseScript):
@@ -59,7 +58,7 @@ class Script(BaseScript):
         return r
 
     def get_bss_detail(self, bss):
-        v = self.cli("get bss %s detail" % bss)
+        v = self.cli(f"get bss {bss} detail")
         value = self.profile.table_parser(v)
         if value.get("radio"):
             return value
@@ -93,12 +92,12 @@ class Script(BaseScript):
                 ]
             # static-ip or "ip" field may use
             if value.get("static-ip"):
-                ip_address = "%s/%s" % (
+                ip_address = "{}/{}".format(
                     value["static-ip"],
                     IPv4.netmask_to_len(value.get("static-mask") or "255.255.255.255"),
                 )
             elif value.get("ip") in value:
-                ip_address = "%s/%s" % (
+                ip_address = "{}/{}".format(
                     value["ip"],
                     IPv4.netmask_to_len(value.get("mask") or "255.255.255.255"),
                 )
@@ -118,9 +117,9 @@ class Script(BaseScript):
                 ssid = value["ssid"].replace(" ", "").replace("Managed", "")
                 if ssid.startswith("2a2d"):
                     # 2a2d - hex string
-                    ssid = smart_text(codecs.decode(ssid, "hex"))
+                    ssid = codecs.decode(ssid, "hex").decode()
                 r = self.get_bss_detail(value["bss"])
-                bss_ifname = "%s.%s" % (ifname, ssid)
+                bss_ifname = f"{ifname}.{ssid}"
                 if r:
                     radio = wres[r["radio"]]
                     interfaces[bss_ifname] = {
@@ -136,7 +135,7 @@ class Script(BaseScript):
                         ),
                         "subinterfaces": [
                             {
-                                "name": "%s.%s" % (ifname, ssid),
+                                "name": f"{ifname}.{ssid}",
                                 "mac": value["mac"],
                                 "enabled_afi": ["BRIDGE"],
                             }

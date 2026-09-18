@@ -11,7 +11,7 @@ import logging
 
 # Third-party modules
 from fastapi import APIRouter, Request
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import JSONResponse
 
 # NOC modules
 from noc.aaa.models.user import User
@@ -80,10 +80,10 @@ async def login(request: Request, creds: LoginRequest):
         now = datetime.datetime.now()
         ttl = int((user.change_at - now).total_seconds())
         if ttl < EXPIRATION_GUARD_TIME:
-            return ORJSONResponse({"status": True, "must_change": True})
+            return JSONResponse({"status": True, "must_change": True})
     else:
         ttl = config.login.session_ttl
     # Generate JWT cookie
-    response = ORJSONResponse({"status": True, "must_change": False})
+    response = JSONResponse({"status": True, "must_change": False})
     set_jwt_cookie(response, user_name, expire=ttl)
     return response

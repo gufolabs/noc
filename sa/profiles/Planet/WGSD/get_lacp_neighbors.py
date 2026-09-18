@@ -83,13 +83,13 @@ class Script(BaseScript):
         for pc in d.items():
             # Get lacp port-channel
             chan_num = str(pc[0]).replace("Po", "")
-            v = self.cli("show lacp %s" % pc[0])
+            v = self.cli(f"show lacp {pc[0]}")
             for p in self.rx_pc.finditer(v):
                 if int(p.group("pok")) == 1:
                     sys_id = p.group("mac")
             # Get bundle
             for i in pc[1]:
-                line = self.cli("show lacp %s" % i)
+                line = self.cli(f"show lacp {i}")
                 for match in self.rx_iface.finditer(line):
                     if match:
                         sys_id = match.group("mac")

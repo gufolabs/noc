@@ -14,7 +14,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         coll = self.mongo_db["workflows"]
         bulk = []
         for wid, model_ids in [

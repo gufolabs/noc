@@ -6,14 +6,14 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Iterator, Tuple
+from typing import Iterator
 
 
-class BaseTokenizer(object):
+class BaseTokenizer:
     name = None
 
-    def __init__(self, data: str):
+    def __init__(self, data: str) -> None:
         self.data = data
 
-    def __iter__(self) -> Iterator[Tuple[str]]:
+    def __iter__(self) -> Iterator[tuple[str]]:
         return iter(())

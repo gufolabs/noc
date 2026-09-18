@@ -1,9 +1,10 @@
 # ----------------------------------------------------------------------
 # NRI Port mapper
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+from typing import Any, cast
 
 
 class PortMapperBase(type):
@@ -11,8 +12,13 @@ class PortMapperBase(type):
     Process @match decorators
     """
 
-    def __new__(mcs, name, bases, attrs):
-        n = type.__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[PortMapperBase]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["BasePortMapper"]:
+        n = cast(type["BasePortMapper"], type.__new__(mcs, name, bases, attrs))
         for m in dir(n):
             mm = getattr(n, m)
             if hasattr(mm, "_match"):
@@ -28,7 +34,7 @@ class PortMapperBase(type):
         return n
 
 
-class BasePortMapper(object, metaclass=PortMapperBase):
+class BasePortMapper(metaclass=PortMapperBase):
     """
     Basic class to convert port notation from external NRI and back.
     External NRI system is defined in managed object's
@@ -46,7 +52,7 @@ class BasePortMapper(object, metaclass=PortMapperBase):
     _profile_to_remote = {}
     _platform_to_remote = {}
 
-    def __init__(self, managed_object):
+    def __init__(self, managed_object) -> None:
         self.managed_object = managed_object
         self.profile = self.managed_object.profile.name
         self.platform = self.managed_object.platform.name if self.managed_object.platform else None

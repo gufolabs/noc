@@ -8,7 +8,7 @@
 
 # Python modules
 import orjson
-from typing import Dict, Any, Optional, Iterable, Tuple
+from typing import Any, Iterable
 from urllib.parse import urlencode
 
 # Third-party modules
@@ -20,8 +20,7 @@ from noc.core.msgstream.message import Message
 from noc.core.mx import MX_TO, MX_WH_API_URL, MX_NOTIFICATION_METHOD
 from noc.core.perf import metrics
 from noc.config import config
-from noc.core.http.sync_client import HttpClient, ERR_TIMEOUT
-from noc.core.comp import DEFAULT_ENCODING
+from noc.core.http.sync import HttpClient, ERR_TIMEOUT
 from noc.core.text import split_text
 
 TG_API = "https://api.telegram.org/bot"
@@ -35,7 +34,7 @@ class TgSenderService(FastAPIService):
     name = "tgsender"
     use_telemetry = True
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         if not config.tgsender.token:
             self.logger.info("No Telegram Bot token defined")
             self.url = None
@@ -45,7 +44,7 @@ class TgSenderService(FastAPIService):
             await self.subscribe_stream(TGSENDER_STREAM, self.slot_number, self.on_message)
 
     @staticmethod
-    def parse_address(data, address_to) -> Optional[str]:
+    def parse_address(data, address_to) -> str | None:
         """Parse send address"""
         if address_to:
             return address_to
@@ -68,7 +67,7 @@ class TgSenderService(FastAPIService):
             metrics["messages_drops"] += 1
             return
         metrics["messages_processed"] += 1
-        data, dst = orjson.loads(msg.value), dst.decode(encoding=DEFAULT_ENCODING)
+        data, dst = orjson.loads(msg.value), dst.decode()
         address = self.parse_address(data, dst)
         if not address:
             self.logger.warning("[%s] Message without address", msg.offset)
@@ -88,9 +87,9 @@ class TgSenderService(FastAPIService):
     @classmethod
     def iter_tb_messages(
         cls,
-        data: Dict[str, Any],
+        data: dict[str, Any],
         address_to: str,
-    ) -> Iterable[Tuple[bytes, Optional[Dict[str, bytes]]]]:
+    ) -> Iterable[tuple[bytes, dict[str, bytes] | None]]:
         """
         Render TG message
                 # HTML Style
@@ -135,7 +134,7 @@ class TgSenderService(FastAPIService):
         self,
         message_id: int,
         address: str,
-        data: Dict[str, Any],
+        data: dict[str, Any],
     ):
         """Send Telegram Bot message"""
         if not self.url:
@@ -179,7 +178,7 @@ class TgSenderService(FastAPIService):
             break
 
     @staticmethod
-    def parse_webhook_headers(headers: Dict[str, bytes]) -> Dict[str, str]:
+    def parse_webhook_headers(headers: dict[str, bytes]) -> dict[str, str]:
         """Parse webhooks headers to params"""
         r = {"api_url": headers[MX_WH_API_URL].decode()}
         for h in headers:
@@ -193,13 +192,13 @@ class TgSenderService(FastAPIService):
         self,
         message_id: int,
         address: str,
-        data: Dict[str, Any],
+        data: dict[str, Any],
         api_url: str,
         api_method: str = "POST",
-        api_authorization: Optional[str] = None,
-        to_param_name: Optional[str] = None,
-        message_param_name: Optional[str] = None,
-        content_type: Optional[str] = None,
+        api_authorization: str | None = None,
+        to_param_name: str | None = None,
+        message_param_name: str | None = None,
+        content_type: str | None = None,
         **kwargs,
     ):
         """Send WebHook"""
@@ -230,7 +229,3 @@ class TgSenderService(FastAPIService):
         self.logger.info("[%s] Send Data: %s", "webhook", data)
         code, headers, data = client.post(api_url, data, headers=headers or None)
         self.logger.info("Send: %s, %s", code, data)
-
-
-if __name__ == "__main__":
-    TgSenderService().start()

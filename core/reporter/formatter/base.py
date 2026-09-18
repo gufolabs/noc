@@ -7,7 +7,6 @@
 
 # Python modules
 import logging
-from typing import Optional
 from io import BytesIO
 
 # NOC modules
@@ -18,13 +17,13 @@ from noc.config import config
 logger = logging.getLogger(__name__)
 
 
-class DataFormatter(object):
+class DataFormatter:
     """
     Base class for Report Formatter
     Create result document by setted format
     """
 
-    label: Optional[str] = None
+    label: str | None = None
 
     def __init__(
         self,
@@ -32,18 +31,20 @@ class DataFormatter(object):
         template: Template,
         output_type: OutputType,
         output_stream: BytesIO,
+        selected_fields: list[str] | None = None,
     ):
         self.root_band = root_band
         self.report_template = template
         self.output_type = output_type
         self.output_stream: BytesIO = output_stream or BytesIO()
+        self.selected_fields = selected_fields
         self.csv_delimiter = config.web.report_csv_delimiter
         self.logger = logger
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"DataFormatter/{self.__class__.__name__}"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             f"DataFormatter/{self.__class__.__name__} ("
             f"root_band: {self.root_band}, "
@@ -51,7 +52,7 @@ class DataFormatter(object):
             f"output_type: {self.output_type})"
         )
 
-    def get_band_format(self, band: str) -> Optional[BandFormat]:
+    def get_band_format(self, band: str) -> BandFormat | None:
         if self.report_template.bands_format and band in self.report_template.bands_format:
             return self.report_template.bands_format[band]
 

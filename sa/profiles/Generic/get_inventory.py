@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python Modules
-from typing import Dict, List
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -17,7 +16,7 @@ class Script(BaseScript):
     name = "Generic.get_inventory"
     interface = IGetInventory
 
-    def get_sensor_labels(self) -> Dict[str, List[str]]:
+    def get_sensor_labels(self) -> dict[str, list[str]]:
         """
         For customizing. Return map sensor_name -> label.
         For sensor classification

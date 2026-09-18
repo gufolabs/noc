@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Callable, Union, TypeVar, List
+from typing import Callable, TypeVar
 from http import HTTPStatus
 
 # Third-party modules
@@ -22,8 +22,8 @@ TModel = TypeVar("TModel", bound=Model)
 TDoc = TypeVar("TDoc", bound=Document)
 
 
-class ListOp(object):
-    def __init__(self, name: str):
+class ListOp:
+    def __init__(self, name: str) -> None:
         self.name = name
 
     def __str__(self):
@@ -37,7 +37,7 @@ class ListOp(object):
 
 
 class FilterExact(ListOp):
-    def get_transform(self, values: List):
+    def get_transform(self, values: list):
         value = values[0]
 
         def inner(qs):
@@ -47,11 +47,11 @@ class FilterExact(ListOp):
 
 
 class RefFilter(ListOp):
-    def __init__(self, name: str, model: Union[TModel, TDoc]):
+    def __init__(self, name: str, model: TModel | TDoc) -> None:
         super().__init__(name)
         self.model = model
 
-    def get_transform(self, values: List):
+    def get_transform(self, values: list):
         def inner_document(qs):
             value = values[0]
             if value and not is_objectid(value):
@@ -86,11 +86,11 @@ class RefFilter(ListOp):
 
 
 class FuncFilter(ListOp):
-    def __init__(self, name: str, function: Callable):
+    def __init__(self, name: str, function: Callable) -> None:
         super().__init__(name)
         self.function = function
 
-    def get_transform(self, values: List):
+    def get_transform(self, values: list):
         def inner(qs):
             r = self.function(qs, values)
             if r is not None:
@@ -101,7 +101,7 @@ class FuncFilter(ListOp):
 
 
 class FilterBool(ListOp):
-    def get_transform(self, values: List):
+    def get_transform(self, values: list):
         value = values[0] != "false"
 
         def inner(qs):
@@ -111,7 +111,7 @@ class FilterBool(ListOp):
 
 
 class FilterIn(ListOp):
-    def get_transform(self, values: List):
+    def get_transform(self, values: list):
         def inner(qs):
             return qs.filter(**{f"{self.name}__in": values})
 

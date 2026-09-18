@@ -9,15 +9,14 @@
 from .loader import load_rule
 
 
-class HiresRule(object):
-    """
-    Select *hires* chain if SNMP | IF-MIB HC capability set,
+class HiresRule:
+    """Select *hires* chain if SNMP | IF-MIB HC capability set,
     Select *normal* capability otherwise
     """
 
     name = "hires"
 
-    def __init__(self, hires, normal):
+    def __init__(self, hires, normal) -> None:
         self.hires = hires
         self.normal = normal
 

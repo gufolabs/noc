@@ -10,9 +10,7 @@ from .base import BaseApplicator
 
 
 class RebaseApplicator(BaseApplicator):
-    """
-    Rebase all scheduled tree locations
-    """
+    """Rebase all scheduled tree locations"""
 
     def apply(self):
         root = self.confdb.find("hints", "rebase")
@@ -31,10 +29,10 @@ class RebaseApplicator(BaseApplicator):
         self.confdb.rebase(src_path, dst_path)
 
     def get_path(self, node):
-        """
-        Get single path to the end
-        :param node:
-        :return:
+        """Get single path to the end
+
+        Args:
+            node
         """
         if node.children:
             assert len(node.children) == 1

@@ -6,11 +6,12 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import importlib
 import logging
 from threading import Lock
 
 # Third-party modules
-from typing import Union, Tuple, Dict, Optional, Any, Callable
+from typing import Any, Callable
 
 # NOC modules
 from noc.config import config
@@ -19,16 +20,16 @@ from noc.core.snmp.util import render_tc
 logger = logging.getLogger(__name__)
 
 
-class MIBRegistry(object):
+class MIBRegistry:
     PATHS = config.get_customized_paths("cmibs")
     load_lock = Lock()
 
-    def __init__(self):
-        self.mib: Dict[str, str] = {}
+    def __init__(self) -> None:
+        self.mib: dict[str, str] = {}
         self.hints = {}
         self.loaded_mibs = set()
 
-    def __getitem__(self, item: Union[str, Tuple[str, int]]) -> str:
+    def __getitem__(self, item: str | tuple[str, int]) -> str:
         def maybe_get(k: str) -> str:
             v = self.mib.get(k)
             if v is not None:
@@ -83,9 +84,9 @@ class MIBRegistry(object):
                 # Common script
                 base_name = "noc"
             logger.debug("Loading MIB: %s", name)
-            mn = "%s.cmibs.%s" % (base_name, mod_name)
+            mn = f"{base_name}.cmibs.{mod_name}"
             try:
-                m = __import__(mn, {}, {}, ["MIB"])
+                m = importlib.import_module(mn)
             except ModuleNotFoundError:
                 continue
             self.mib.update(getattr(m, "MIB"))
@@ -98,7 +99,6 @@ class MIBRegistry(object):
     def is_loaded(self, name: str) -> bool:
         """
         Check MIB is loaded
-        :param name:
         :return:
         """
         return name in self.loaded_mibs
@@ -114,11 +114,9 @@ class MIBRegistry(object):
             self.loaded_mibs = set()
 
     @staticmethod
-    def longest_match(d: Dict[str, Any], k: str) -> Optional[Any]:
+    def longest_match(d: dict[str, Any], k: str) -> Any | None:
         """
         Returns longest match of key `k` in dict `d`
-        :param d:
-        :param k:
         :return:
         """
         for prefix in d:
@@ -130,7 +128,7 @@ class MIBRegistry(object):
         self,
         oid: str,
         value: bytes,
-        display_hints: Dict[str, Callable[[str, bytes], Union[str, bytes]]] = None,
+        display_hints: dict[str, Callable[[str, bytes], str | bytes]] = None,
     ) -> str:
         """Apply display-hint"""
         if display_hints:

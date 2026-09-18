@@ -8,7 +8,7 @@
 # Python modules
 import threading
 import operator
-from typing import Optional, Union, List
+from typing import Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -24,7 +24,7 @@ import cachetools
 
 # NOC modules
 from noc.core.caps.types import CapsConfig
-from noc.core.model.decorator import on_delete_check
+from noc.core.model.decorator import on_delete_check, on_save
 from noc.core.change.decorator import change
 from noc.inv.models.capability import Capability
 from noc.main.models.label import Label
@@ -44,6 +44,8 @@ class CapsSettings(EmbeddedDocument):
     # Wildcard
     set_label: Optional["Label"] = ReferenceField(Label, required=False)
     # ref_remote_system
+    exposed = BooleanField(default=False)
+    required = BooleanField(default=False)
 
     def __str__(self):
         return f"{self.capability.name}: D:{self.default_value}; M: {self.allow_manual}"
@@ -58,17 +60,20 @@ class CapsSettings(EmbeddedDocument):
             if self.capability.type.is_logical and self.set_label.is_scoped:
                 raise ValueError("On boolean type only not-scoped Set")
 
-    def get_config(self) -> CapsConfig:
+    def get_config(self, exposed_models: list[str] | None = None) -> CapsConfig:
         """"""
         return CapsConfig(
             default_value=self.default_value or None,
             allow_manual=self.allow_manual,
             ref_scope=self.ref_scope,
             set_label=self.set_label.name if self.set_label else None,
+            required=self.required,
+            expose_models=exposed_models if self.exposed else None,
         )
 
 
 @change
+@on_save
 @on_delete_check(
     check=[("sa.ManagedObjectProfile", "caps_profile"), ("sa.ServiceProfile", "caps_profile")]
 )
@@ -238,7 +243,10 @@ class CapsProfile(Document):
         default="T",
     )
     # Capabilities
-    caps: List[CapsSettings] = EmbeddedDocumentListField(CapsSettings)
+    error_caps_policy = StringField(
+        choices=[("I", "Ignore"), ("C", "Check"), ("S", "Strict")], default="I"
+    )
+    caps: list[CapsSettings] = EmbeddedDocumentListField(CapsSettings)
 
     L2_SECTIONS = ["bfd", "cdp", "fdp", "huawei_ndp", "lacp", "lldp", "oam", "rep", "stp", "udld"]
     L3_SECTIONS = ["hsrp", "vrrp", "vrrpv3", "bgp", "ospf", "ospfv3", "isis", "ldp", "rsvp"]
@@ -253,7 +261,7 @@ class CapsProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["CapsProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["CapsProfile"]:
         return CapsProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -261,7 +269,9 @@ class CapsProfile(Document):
     def get_default_profile(cls):
         return CapsProfile.objects.filter(name=cls.DEFAULT_PROFILE_NAME).first()
 
-    def get_sections(self, mop, nsp) -> List[str]:
+    # ensure_profile
+
+    def get_sections(self, mop, nsp) -> list[str]:
         """
         Returns a list of enabled sections
         Args:
@@ -270,19 +280,19 @@ class CapsProfile(Document):
         """
 
         def l2_is_enabled(method):
-            cp = getattr(self, "%s_policy" % method)
+            cp = getattr(self, f"{method}_policy")
             if cp == "E":
                 return True
             if cp == "D":
                 return False
-            mopp = getattr(mop, "enable_box_discovery_%s" % method)
+            mopp = getattr(mop, f"enable_box_discovery_{method}")
             if not mopp:
                 return False
             tm = nsp.get_topology_methods()
             return method in tm
 
         def l3_is_enabled(method):
-            cp = getattr(self, "%s_policy" % method)
+            cp = getattr(self, f"{method}_policy")
             # Treat `T` policy as `E` temporarily
             return cp != "D"
 
@@ -298,3 +308,6 @@ class CapsProfile(Document):
         if self.enable_l3:
             r += [m for m in self.L3_SECTIONS if l3_is_enabled(m)]
         return r
+
+    def on_save(self):
+        """"""

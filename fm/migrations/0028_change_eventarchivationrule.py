@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.create_index("fm_eventarchivationrule", ["event_class_id", "action"], unique=True)
         try:
             self.db.create_index("fm_eventarchivationrule", ["event_class_id"], unique=True)

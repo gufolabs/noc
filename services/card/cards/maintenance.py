@@ -44,9 +44,9 @@ class MaintenanceCard(BaseCard):
         affected = []
         summary = {"service": {}, "subscriber": {}}
         # Maintenance
-        SQL = """SELECT id, name, platform, address
+        SQL = f"""SELECT id, name, platform, address
             FROM sa_managedobject
-            WHERE affected_maintenances @> '{"%s": {}}' ORDER BY address;""" % str(self.object.id)
+            WHERE affected_maintenances @> '{{"{self.object.id!s}": {{}}}}' ORDER BY address;"""
         for mo in ManagedObject.objects.raw(SQL):
             ss = ServiceSummary.get_object_summary(mo.id)
             update_dict(summary["service"], ss.get("service", {}))

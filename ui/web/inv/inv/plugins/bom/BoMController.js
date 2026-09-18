@@ -25,7 +25,7 @@ Ext.define("NOC.inv.inv.plugins.bom.BoMController", {
       currentId = me.getViewModel().get("currentId"),
       maskComponent = me.getView().up("[appId=inv.inv]").maskComponent,
       messageId = maskComponent.show("reloading", ["bom"]);
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + currentId + "/plugin/bom/",
       method: "GET",
       success: function(response){

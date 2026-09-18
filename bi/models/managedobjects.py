@@ -38,7 +38,7 @@ from noc.sa.models.administrativedomain import AdministrativeDomain as Administr
 
 
 class ManagedObject(Model):
-    class Meta(object):
+    class Meta:
         db_table = "managedobjects"
         engine = MergeTree("date", ("date", "managed_object"), primary_keys=("date",))
 

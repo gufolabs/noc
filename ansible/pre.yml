@@ -1,9 +1,9 @@
 ---
 - name: pre tasks
   hosts: all
-  become: "False"
+  become: false
   any_errors_fatal: "{{ tower_run_checks }}"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - pre
   vars_files:
@@ -12,7 +12,8 @@
   pre_tasks:
     - name: Run pre installation checks
       include_tasks: "{{ item }}"
-      with_myglob: ["./*_roles/*/tasks/checks.yml"]
+      with_fileglob:
+        - "./*_roles/*/tasks/checks.yml"
       when: (tower_run_checks)
       tags:
         - checks

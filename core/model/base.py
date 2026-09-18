@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # Django tuck-up panting for models
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Python modules
+from typing import Any, cast
 
 # Third-party modules
 from django.apps import apps
@@ -12,7 +15,12 @@ from django.db.models.base import Model, ModelBase
 
 
 class NOCModelBase(ModelBase):
-    def __new__(mcs, name, bases, attrs):
+    def __new__(
+        mcs: "type[NOCModelBase]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["NOCModel"]:  # type: ignore[return-value]
         is_base = name == "NOCModel"
         # Initialize app registry to avoid calling django.setup()
         mcs.make_smoothie()
@@ -23,7 +31,10 @@ class NOCModelBase(ModelBase):
         else:
             # NOCModel base class must be replaced to django's Model
             bases = tuple(base if base != NOCModel else Model for base in bases)
-        m = super(NOCModelBase, mcs).__new__(mcs, name, bases, attrs)
+        m = cast(
+            type["NOCModel"],  # type: ignore[return-value]
+            super().__new__(mcs, name, bases, attrs),
+        )
         # Perform pants tucking: Fake up django's app registry population
         # to shut up their stupid checks.
         # NB: Every hipster may be misused
@@ -50,11 +61,10 @@ class NOCModelBase(ModelBase):
     def tuck_up_pants(mcs, kls):
         """
         implicit initialization of django models registry.
-        :param kls:
         :return:
         """
         label = kls._meta.app_label
-        app_name = "noc.%s" % label
+        app_name = f"noc.{label}"
         # Fake up apps.populate
         app_config = apps.app_configs.get(label)
         if not app_config:

@@ -4,7 +4,7 @@ forms:
     description: >
       <strong>Service type</strong>: Internal <br/>
       <strong>Short description</strong>: Clickhouse writer <br/>
-      <strong>Long description</strong>: That one is for writing data from Liftbridge to Clickhouse<br/>
+      <strong>Long description</strong>: That one is for writing data from Kafka to Clickhouse<br/>
       <strong>Scale Recommendations</strong>: At least one per installation.<br/>
       <strong>docs</strong>: <a href=https://docs.getnoc.com/services-reference/chwriter/ target=_blank>Chwriter</a><br/>
       <strong>Placement constraint</strong>: On node with Clickhouse<br/>
@@ -47,7 +47,7 @@ services:
     level: global
     category: internal
     supervisord:
-      command: "./services/chwriter/service.py"
+      command: "{{ noc_venv_python }} -m noc.services.chwriter"
       process_name: "%(program_name)s-%(process_num)02d"
       oom_score_adj: 10
       priority: 300

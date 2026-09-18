@@ -81,7 +81,7 @@ class Migration(BaseMigration):
         "asset_discovery_max_interval",
     ]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Rename columns
         for o, n in self.RENAME_COLUMNS:
             self.db.rename_column("sa_managedobjectprofile", n, o)

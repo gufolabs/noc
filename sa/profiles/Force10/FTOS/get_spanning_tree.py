@@ -48,7 +48,7 @@ class Script(BaseScript):
         for instance_id in ["0", *self.rx_mstp_instance_list.findall(v)]:
             # Get instance data
             ri = {"id": int(instance_id), "interfaces": []}
-            v = self.cli("show spanning-tree msti %s brief" % instance_id)
+            v = self.cli(f"show spanning-tree msti {instance_id} brief")
             # Get VLAN mapping
             match = self.rx_mstp_vlans.search(v)
             ri["vlans"] = match.group(1)

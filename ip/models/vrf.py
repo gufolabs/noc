@@ -61,7 +61,7 @@ class VRF(NOCModel):
     VRF
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = _("VRF")
         verbose_name_plural = _("VRFs")
         db_table = "ip_vrf"
@@ -232,12 +232,12 @@ class VRF(NOCModel):
         Full-text search
         """
         content = [self.name, str(self.rd)]
-        card = "VRF %s. RD %s" % (self.name, self.rd)
+        card = f"VRF {self.name}. RD {self.rd}"
         if self.description:
             content += [self.description]
-            card += " (%s)" % self.description
+            card += f" ({self.description})"
         r = {
-            "id": "ip.vrf:%s" % self.id,
+            "id": f"ip.vrf:{self.id}",
             "title": self.name,
             "content": "\n".join(content),
             "card": card,
@@ -248,7 +248,7 @@ class VRF(NOCModel):
 
     @classmethod
     def get_search_result_url(cls, obj_id):
-        return "/api/card/view/vrf/%s/" % obj_id
+        return f"/api/card/view/vrf/{obj_id}/"
 
     def delete(self, *args, **kwargs):
         # Cleanup prefixes
@@ -270,5 +270,5 @@ class VRF(NOCModel):
     def iter_lazy_labels(cls, vrf: "VRF"):
         yield f"noc::ipvrf::{vrf.name}::="
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.profile.get_css_class() if self.profile else None

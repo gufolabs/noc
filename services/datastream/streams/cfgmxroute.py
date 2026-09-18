@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Dict
+from typing import Any
 
 # Third-party modules
 from bson import ObjectId
@@ -21,7 +21,7 @@ class CfgMetricsCollectorDataStream(DataStream):
     name = "cfgmxroute"
 
     @classmethod
-    def get_object(cls, oid: str) -> Dict[str, Any]:
+    def get_object(cls, oid: str) -> dict[str, Any]:
         if isinstance(oid, (ObjectId, int)):
             oid = str(oid)
         if oid.isdigit():

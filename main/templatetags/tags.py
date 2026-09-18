@@ -12,7 +12,7 @@ register = template.Library()
 
 
 class TagsNode(template.Node):
-    def __init__(self, object):
+    def __init__(self, object) -> None:
         self.object = template.Variable(object)
 
     def render(self, context):
@@ -23,7 +23,7 @@ def do_tags(parser, token):
     try:
         tag_name, object = token.split_contents()
     except ValueError:
-        raise template.SyntaxError("%r tag requires a single argument" % token.contents.split()[0])
+        raise template.SyntaxError(f"{token.contents.split()[0]!r} tag requires a single argument")
     return TagsNode(object)
 
 

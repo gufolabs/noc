@@ -31,7 +31,7 @@ class AlarmsExtractor(ArchivingExtractor):
     archive_batch_limit = config.bi.alarms_archive_batch_limit
     archive_collection_template = config.bi.alarms_archive_policy
 
-    def __init__(self, prefix, start, stop, use_archive=False):
+    def __init__(self, prefix, start, stop, use_archive=False) -> None:
         self.use_archive = use_archive
         super().__init__(prefix, start, stop)
         self.alarm_stream = Stream(Alarms, prefix)
@@ -45,10 +45,9 @@ class AlarmsExtractor(ArchivingExtractor):
         else:
             coll = [ArchivedAlarm._get_collection()]
         for c in coll:
-            for d in c.find(
+            yield from c.find(
                 {"clear_timestamp": {"$gt": self.start, "$lte": self.stop}}, no_cursor_timeout=True
-            ).sort("clear_timestamp"):
-                yield d
+            ).sort("clear_timestamp")
 
     def extract(self, *args, **options):
         nr = 0
@@ -105,14 +104,22 @@ class AlarmsExtractor(ArchivingExtractor):
                 reboots=n_reboots,
                 services=[
                     {
-                        "profile": ServiceProfile.get_by_id(ss["profile"]).bi_id,
+                        "profile": (
+                            ServiceProfile.get_by_id(ss["profile"]).bi_id
+                            if ServiceProfile.get_by_id(ss["profile"])
+                            else 0
+                        ),
                         "summary": ss["summary"],
                     }
                     for ss in d.get("direct_services", [])
                 ],
                 subscribers=[
                     {
-                        "profile": SubscriberProfile.get_by_id(ss["profile"]).bi_id,
+                        "profile": (
+                            SubscriberProfile.get_by_id(ss["profile"]).bi_id
+                            if SubscriberProfile.get_by_id(ss["profile"])
+                            else 0
+                        ),
                         "summary": ss["summary"],
                     }
                     for ss in d.get("direct_subscribers", [])
@@ -131,7 +138,7 @@ class AlarmsExtractor(ArchivingExtractor):
         super().clean()
         # Clean
         if force:
-            print("Clean ArchivedAlarm collection before %s" % self.clean_ts)
+            print(f"Clean ArchivedAlarm collection before {self.clean_ts}")
             ArchivedAlarm._get_collection().remove({"clear_timestamp": {"$lte": self.clean_ts}})
 
     @classmethod
@@ -144,7 +151,6 @@ class AlarmsExtractor(ArchivingExtractor):
         return d.get("timestamp")
 
     def iter_archived_items(self):
-        for d in ArchivedAlarm._get_collection().find(
+        yield from ArchivedAlarm._get_collection().find(
             {"clear_timestamp": {"$lte": self.clean_ts}}, no_cursor_timeout=True
-        ):
-            yield d
+        )

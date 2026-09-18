@@ -12,16 +12,16 @@ from .line import LineTokenizer
 class ContextTokenizer(LineTokenizer):
     name = "context"
 
-    def __init__(self, data, end_of_context=None, contexts=None, **kwargs):
+    def __init__(self, data, end_of_context=None, contexts=None, **kwargs) -> None:
         super().__init__(data, **kwargs)
         self.end_of_context = end_of_context
         self.contexts = contexts or []
 
     def is_matched(self, tokens):
-        """
-        Check tokens exactly matched context
-        :param tokens:
-        :return:
+        """Check tokens exactly matched context
+
+        Args:
+            tokens
         """
         lt = len(tokens)
         for ctx in self.contexts:

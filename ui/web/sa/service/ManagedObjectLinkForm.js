@@ -82,7 +82,7 @@ Ext.define("NOC.sa.service.ManagedObjectLinkForm", {
     this.request(url, params, method);
   },
   request: function(url, params, method){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "PUT",
       jsonData: params,

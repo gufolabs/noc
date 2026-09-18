@@ -50,7 +50,7 @@ class Subscribers(NestedModel):
 
 
 class Alarms(Model):
-    class Meta(object):
+    class Meta:
         db_table = "alarms"
         engine = MergeTree(
             "date", ("ts", "managed_object", "alarm_class"), primary_keys=("ts", "managed_object")

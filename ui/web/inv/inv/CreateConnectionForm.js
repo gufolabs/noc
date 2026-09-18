@@ -400,7 +400,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
 
   },
   disconnectConnection: function(params, callBack){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/disconnect/",
       method: "POST",
       jsonData: params,
@@ -423,7 +423,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
       parent = container.up("panel").body,
       width = parent.getWidth(),
       height = parent.getHeight(),
-      font = Ext.String.format("normal {0}px arial", fontSize),
+      font = `normal ${fontSize}px arial`,
       squareSprite = {
         type: "rect",
         x: offset,
@@ -728,7 +728,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
         params = "o1=" + leftObjectId + (rightObjectId ? "&o2=" + rightObjectId : "");
         params += cable ? "&cable_filter=" + cable : "";
         me.mask(__("Loading..."));
-        Ext.Ajax.request({
+        NOC.api.requestLegacy({
           url: "/inv/inv/crossing_proposals/?" + params,
           method: "GET",
           scope: me,
@@ -923,8 +923,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
           betweenLine = sprite.fromSide === "left" ? -1 : 1;
 
         sprite.trace = index + me.firstTrace;
-        sprite.path = Ext.String.format("M{0},{1} L{2},{3} L{4},{5} L{6},{7}",
-                                        f[0], f[1], f[0] + betweenLine * me.gap * sprite.trace, f[1], f[0] + betweenLine * me.gap * sprite.trace, t[1], t[0], t[1]);
+        sprite.path = `M${f[0]},${f[1]} L${f[0] + betweenLine * me.gap * sprite.trace},${f[1]} L${f[0] + betweenLine * me.gap * sprite.trace},${t[1]} L${t[0]},${t[1]}`;
         return sprite;
       },
     );
@@ -1161,7 +1160,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
       }
       return param;
     });
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/connect/",
       method: "POST",
       jsonData: params,
@@ -1283,7 +1282,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
           offset += 2 * me.boxWidth * (side === "left" ? 1 : -1); // add offset for external arrow connection
         }
         if(!pointer){
-          pointer = surface.add({
+          surface.add({
             type: "pointer",
             id: "pointer",
             fromX: pointerX,
@@ -1584,7 +1583,7 @@ Ext.define("NOC.inv.inv.CreateConnectionForm", {
     params += cable ? "&cable_filter=" + cable : "";
     params += filter ? "&" + filter : "";
     me.mask(__("Loading..."));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/crossing_proposals/?" + params,
       method: "GET",
       success: function(response){

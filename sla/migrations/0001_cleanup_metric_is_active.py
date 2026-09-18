@@ -14,7 +14,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         collections = [SLAProfile._get_collection()]
         for collection in collections:
             bulk = []

@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Tuple, List
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -20,7 +19,7 @@ class Script(BaseScript):
 
     def get_remote_devices_info(
         self, base_oid: str = "1.3.6.1.4.1.41752.3.5.1.3.2.1"
-    ) -> Tuple[List[str]]:
+    ) -> tuple[list[str]]:
         """
         Get remote devices information: MAC-addresses and ports
 

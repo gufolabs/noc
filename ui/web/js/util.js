@@ -109,11 +109,7 @@ Ext.apply(NOC.render, {
     var tpl = new Ext.XTemplate(fmt);
     return function(value, meta, record){
       var tooltip = tpl.apply(record.getData());
-      return Ext.String.format(
-        '<span title="{0}">{1}</span>',
-        Ext.htmlEncode(tooltip),
-        Ext.htmlEncode(value),
-      );
+      return `<span title="${Ext.htmlEncode(tooltip)}">${Ext.htmlEncode(value)}</span>`;
     }
   },
 
@@ -271,6 +267,9 @@ Ext.apply(NOC.render, {
   Size: function(v){
     if(v === null || v === undefined){
       return "";
+    }
+    if(v >= 10000000000){
+      return Math.round(v / 1000000000) + "G";
     }
     if(v >= 10000000){
       return Math.round(v / 1000000) + "M";
@@ -621,7 +620,7 @@ NOC.is_ipv4 = function(value){
 };
 //
 NOC.is_ipv4_prefix = function(value){
-  var arrayX = arrayX = value.split("/");
+  var arrayX = value.split("/");
   if(arrayX.length != 2)
     return false;
   if(!NOC.is_ipv4(arrayX[0]))
@@ -858,13 +857,7 @@ NOC.uiStyles = function(style, theme){
 //
 NOC.openHelp = function(topic){
   var url, win;
-  url = Ext.String.format(
-    "{0}/{1}/{2}/go.html#{3}",
-    NOC.settings.helpUrl,
-    NOC.settings.helpBranch,
-    NOC.settings.helpLanguage,
-    topic,
-  );
+  url = `${NOC.settings.helpUrl}/${NOC.settings.helpBranch}/${NOC.settings.helpLanguage}/go.html#${topic}`;
   win = window.open(url, "_blank");
   win.focus();
 };

@@ -123,7 +123,6 @@ class Profile(BaseProfile):
     def get_slots_n(self, script):
         """
         If slots 7 - MA5603, 14 - MA5600
-        :param script:
         :return:
         """
         i = -1
@@ -262,10 +261,10 @@ class Profile(BaseProfile):
             index += intNum << 6
         return index
 
-    class diagnose(object):
+    class diagnose:
         """Switch context manager to use with "with" statement"""
 
-        def __init__(self, script):
+        def __init__(self, script) -> None:
             self.script = script
 
         def __enter__(self):

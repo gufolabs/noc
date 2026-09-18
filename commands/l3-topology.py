@@ -1,11 +1,12 @@
 # ---------------------------------------------------------------------
 # L3 topology
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2019 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
+import argparse
 import os
 import tempfile
 import subprocess
@@ -26,7 +27,7 @@ class Command(BaseCommand):
     help = "Show L3 topology"
     LAYOUT = ["neato", "cicro", "sfdp", "dot", "twopi"]
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         (
             parser.add_argument(
                 "--afi", dest="afi", action="store", default="4", help="AFI (ipv4/ipv6)"
@@ -49,7 +50,7 @@ class Command(BaseCommand):
                 dest="layout",
                 action="store",
                 default="sfdp",
-                help="Use layout engine: %s" % ", ".join(self.LAYOUT),
+                help="Use layout engine: {}".format(", ".join(self.LAYOUT)),
             ),
         )
         (
@@ -83,7 +84,7 @@ class Command(BaseCommand):
             elif ext not in ".dot":
                 raise CommandError("Unknown output format")
         if options["layout"] not in self.LAYOUT:
-            raise CommandError("Invalid layout: %s" % options["layout"])
+            raise CommandError("Invalid layout: {}".format(options["layout"]))
         connect()
         exclude = options["exclude"] or []
         # Check VRF
@@ -96,7 +97,7 @@ class Command(BaseCommand):
                 if is_rd(options["vrf"]):
                     rd = options["vrf"]
                 else:
-                    raise CommandError("Invalid VRF: %s" % options["vrf"])
+                    raise CommandError("Invalid VRF: {}".format(options["vrf"]))
         self.mo_cache = {}
         self.fi_cache = {}
         self.rd_cache = {}
@@ -112,18 +113,18 @@ class Command(BaseCommand):
         if options["core"]:
             interfaces = [si for si in interfaces if self.p_power[si.prefix] > 1]
         for si in interfaces:
-            o_id = "o_%s" % si.object
-            p_id = "p_%s" % si.prefix.replace(".", "_").replace(":", "__").replace("/", "___")
+            o_id = f"o_{si.object}"
+            p_id = "p_{}".format(si.prefix.replace(".", "_").replace(":", "__").replace("/", "___"))
             if si.object not in objects:
                 objects.add(si.object)
                 o = self.get_object(si.object)
                 if not o:
                     continue
-                out += ['    %s [shape=box;style=filled;label="%s"];' % (o_id, o.name)]
+                out += [f'    {o_id} [shape=box;style=filled;label="{o.name}"];']
             if si.prefix not in prefixes:
                 prefixes.add(si.prefix)
-                out += ['    %s [shape=ellipse;label="%s"];' % (p_id, si.prefix)]
-            out += ['    %s -- %s [label="%s"];' % (o_id, p_id, si.interface)]
+                out += [f'    {p_id} [shape=ellipse;label="{si.prefix}"];']
+            out += [f'    {o_id} -- {p_id} [label="{si.interface}"];']
         out += ["}"]
         data = "\n".join(out)
         if ext is None:
@@ -139,8 +140,8 @@ class Command(BaseCommand):
                 subprocess.check_call(
                     [
                         options["layout"],
-                        "-T%s" % self.GV_FORMAT[ext],
-                        "-o%s" % options["output"],
+                        f"-T{self.GV_FORMAT[ext]}",
+                        "-o{}".format(options["output"]),
                         f.name,
                     ]
                 )
@@ -228,7 +229,3 @@ class Command(BaseCommand):
                     rd = None  # Missed data
             self.rd_cache[object, fi] = rd
         return rd
-
-
-if __name__ == "__main__":
-    Command().run()

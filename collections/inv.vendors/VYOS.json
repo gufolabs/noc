@@ -1,0 +1,8 @@
+{
+    "name": "VyOS",
+    "uuid": "8a15cbb7-5b03-4a71-8879-b8d2f7a2fec1",
+    "full_name": "VyOS",
+    "code": ["VYOS"],
+    "site": "https://vyos.io/",
+    "$collection": "inv.vendors"
+}

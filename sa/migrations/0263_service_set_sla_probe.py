@@ -15,7 +15,7 @@ BULK = 1000
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         svc = self.mongo_db["noc.services"]
         bulk = []
         # SLA Probes

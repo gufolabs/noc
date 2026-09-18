@@ -9,13 +9,12 @@
 import logging
 import asyncio
 import enum
-from typing import Optional
 from http import HTTPStatus
 
 # Third-party modules
 import orjson
 from fastapi import APIRouter, Header, HTTPException, Body
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import JSONResponse
 
 # NOC modules
 from noc.core.perf import metrics
@@ -41,8 +40,8 @@ class ValueType(enum.Enum):
     BINARY = 5
 
 
-class ZabbixAPI(object):
-    def __init__(self, router: APIRouter):
+class ZabbixAPI:
+    def __init__(self, router: APIRouter) -> None:
         self.router = router
         self.openapi_tags = ["api", "metricscollector"]
         self.api_name = "metricscollector"
@@ -55,9 +54,9 @@ class ZabbixAPI(object):
     async def send(
         self,
         req: bytes = Body(...),
-        remote_system_code: Optional[str] = None,
-        authorization: Optional[str] = Header(None, alias="Authorization"),
-    ) -> ORJSONResponse:
+        remote_system_code: str | None = None,
+        authorization: str | None = Header(None, alias="Authorization"),
+    ) -> JSONResponse:
         if not authorization:
             raise HTTPException(status_code=HTTPStatus.FORBIDDEN)
         _, key = authorization.split(" ")
@@ -65,14 +64,14 @@ class ZabbixAPI(object):
         rs_cfg = self.service.get_remote_system_by_key(key.strip())
         if not rs_cfg:
             # IP Address
-            return ORJSONResponse(
+            return JSONResponse(
                 {
                     "error": f"Unknown Remote System {remote_system_code}",
                 },
                 status_code=HTTPStatus.NOT_FOUND,
             )
         if rs_cfg.api_key != key:
-            return ORJSONResponse(
+            return JSONResponse(
                 {
                     "error": f"Remote System API Key not Authorization {remote_system_code}",
                 },
@@ -85,7 +84,7 @@ class ZabbixAPI(object):
         channel = self.service.get_channel(rs_cfg, ZABBIX_COLLECTOR)
         if not channel or channel.is_banned:
             # IP Address
-            return ORJSONResponse(
+            return JSONResponse(
                 {
                     "error": f"Not Found Remote System by key {remote_system_code}",
                 },
@@ -117,14 +116,14 @@ class ZabbixAPI(object):
         if sensors:
             logger.debug("Received sensors: %s", len(sensors))
             self.service.send_sensors(sensors)
-        return ORJSONResponse({}, status_code=200)
+        return JSONResponse({}, status_code=200)
 
     async def events(
         self,
         req: bytes = Body(...),
-        remote_system_code: Optional[str] = None,
-        authorization: Optional[str] = Header(None, alias="Authorization"),
-    ) -> ORJSONResponse:
+        remote_system_code: str | None = None,
+        authorization: str | None = Header(None, alias="Authorization"),
+    ) -> JSONResponse:
         if not authorization:
             raise HTTPException(status_code=HTTPStatus.FORBIDDEN)
         logger.debug("REQUEST: %r", req)
@@ -133,14 +132,14 @@ class ZabbixAPI(object):
         rs_cfg = self.service.get_remote_system_by_key(key.strip())
         if not rs_cfg or rs_cfg.is_banned:
             # IP Address
-            return ORJSONResponse(
+            return JSONResponse(
                 {
                     "error": f"Unknown Remote System {remote_system_code}",
                 },
                 status_code=HTTPStatus.NOT_FOUND,
             )
         if rs_cfg.api_key != key.strip():
-            return ORJSONResponse(
+            return JSONResponse(
                 {
                     "error": f"Remote System API Key not Authorization {remote_system_code}",
                 },
@@ -153,16 +152,22 @@ class ZabbixAPI(object):
             item = orjson.loads(line)
             metrics["zabbix_events_in"] += 1
             if "p_eventid" in item:
-                await channel.feed_resolved_event(item["eventid"], r_event_id=item["p_eventid"])
+                await channel.feed_resolved_event(
+                    str(item["eventid"]),
+                    r_event_id=str(item["p_eventid"]),
+                    ts=item["clock"],
+                )
                 continue
             host_name = item["hosts"][0]["name"]
             cfg = self.service.lookup_source_by_name(host_name)
-            if not cfg:
-                continue
+            if cfg:
+                obj = RemoteObject(id=str(cfg.managed_object), name=host_name, address=cfg.address)
+            else:
+                obj = RemoteObject(name=host_name)
             fm_event = FMEventObject(
                 id=str(item["eventid"]),
                 ts=item["clock"],
-                object=RemoteObject(id=cfg.id, name=host_name, address=cfg.address),
+                object=obj,
                 severity=str(item["severity"]),
                 data=[],
                 message=item["name"],
@@ -170,7 +175,7 @@ class ZabbixAPI(object):
             )
             logger.info("Received %s event", fm_event)
             await channel.feed_etl(fm_event)
-        return ORJSONResponse({}, status_code=200)
+        return JSONResponse({}, status_code=200)
 
     def setup_endpoints(self):
         # Items

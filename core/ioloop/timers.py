@@ -11,11 +11,11 @@ import asyncio
 import math
 
 # Third-party modules
-from typing import Optional, Coroutine
+from typing import Coroutine
 
 
-class PeriodicCallback(object):
-    def __init__(self, cb: Coroutine, interval: int, delay: int = 0):
+class PeriodicCallback:
+    def __init__(self, cb: Coroutine, interval: int, delay: int = 0) -> None:
         """
         This function sets up a timer that will run the coroutine every
         interval miliseconds, starting after delay seconds
@@ -31,8 +31,8 @@ class PeriodicCallback(object):
         self.interval = float(interval) / 1000.0
         self.delay = float(delay) / 1000.0
         self._running = False
-        self._timer: Optional[asyncio.TimerHandle] = None
-        self._start_time: Optional[float] = None
+        self._timer: asyncio.TimerHandle | None = None
+        self._start_time: float | None = None
 
     def start(self):
         self._running = True
@@ -74,5 +74,5 @@ class PeriodicCallback(object):
 
 
 class PeriodicOffsetCallback(PeriodicCallback):
-    def __init__(self, cb: Coroutine, interval: int):
+    def __init__(self, cb: Coroutine, interval: int) -> None:
         super().__init__(cb, interval, random.random() * interval)

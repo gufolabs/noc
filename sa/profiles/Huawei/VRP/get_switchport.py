@@ -59,7 +59,7 @@ class Script(BaseScript):
         """
         for line in vlans.splitlines():
             for vlan_pack in line.split()[0]:
-                for is_v in "{0:08b}".format(vlan_pack):
+                for is_v in f"{vlan_pack:08b}":
                     yield int(is_v)
 
     def execute_snmp(self, **kwargs):
@@ -152,7 +152,7 @@ class Script(BaseScript):
             try:
                 v = self.cli("display port vlan")
             except self.CLISyntaxError:
-                v = "%s\n%s" % (self.cli("display port trunk"), self.cli("display port hybrid"))
+                v = "{}\n{}".format(self.cli("display port trunk"), self.cli("display port hybrid"))
 
         for match in rx_line.finditer(v):
             # port = {}

@@ -38,8 +38,8 @@ class Profile(BaseProfile):
         """
         me = "    seq %d permit %s"
         mne = "    seq %d permit %s le %d"
-        r = ["no ip prefix-list %s" % name]
-        r += ["ip prefix-list %s" % name]
+        r = [f"no ip prefix-list {name}"]
+        r += [f"ip prefix-list {name}"]
         seq = 5
         for prefix, min_len, max_len in pl:
             if min_len == max_len:

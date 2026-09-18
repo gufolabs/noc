@@ -10,7 +10,7 @@ import time
 import re
 import json
 from dataclasses import dataclass
-from typing import Iterable, Dict, Any, List
+from typing import Iterable, Any
 import logging
 from pathlib import Path
 import os
@@ -42,7 +42,7 @@ rx_table = re.compile(r"<!-- table start -->.*<!-- table end -->", re.MULTILINE 
 
 
 @dataclass(order=True)
-class Item(object):
+class Item:
     name: str
     type: str
     description: str
@@ -50,7 +50,7 @@ class Item(object):
     is_const: bool
 
     @classmethod
-    def from_json(cls, data: Dict[str, Any]) -> "Item":
+    def from_json(cls, data: dict[str, Any]) -> "Item":
         """
         Read from JSON.
 
@@ -78,7 +78,7 @@ class Item(object):
 
 
 @dataclass(order=True)
-class Data(object):
+class Data:
     """
     Collections data.
 
@@ -89,7 +89,7 @@ class Data(object):
     """
 
     name: str
-    items: List[Item]
+    items: list[Item]
 
     @classmethod
     def read(cls, path: Path) -> "Data":

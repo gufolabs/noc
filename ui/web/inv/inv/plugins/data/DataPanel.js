@@ -182,7 +182,7 @@ Ext.define("NOC.inv.inv.plugins.data.DataPanel", {
   //
   onReload: function(){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + me.currentId + "/plugin/data/",
       method: "GET",
       scope: me,
@@ -200,7 +200,7 @@ Ext.define("NOC.inv.inv.plugins.data.DataPanel", {
       maskComponent = me.up("[appId=inv.inv]").maskComponent,
       messageId = maskComponent.show("Saving data ..."),
       toReload = e.record.get("interface") === "Common" && e.record.get("name") === "Name";
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + me.currentId + "/plugin/data/",
       method: "PUT",
       jsonData: {

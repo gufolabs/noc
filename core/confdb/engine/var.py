@@ -6,15 +6,15 @@
 # ----------------------------------------------------------------------
 
 
-class Var(object):
-    def __init__(self, name):
+class Var:
+    def __init__(self, name) -> None:
         self.name = name
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def __repr__(self):
-        return "<Var '%s' at %s>" % (self.name, id(self))
+    def __repr__(self) -> str:
+        return f"<Var '{self.name}' at {id(self)}>"
 
     def get(self, ctx):
         return ctx.get(self.name)

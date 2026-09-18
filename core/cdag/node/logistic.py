@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 from math import exp
 
 # Third-party modules
@@ -30,7 +29,7 @@ class LogisticNode(BaseCDAGNode):
     config_cls = LogisticConfig
     categories = [Category.MATH, Category.ACTIVATION]
 
-    def get_value(self, x: ValueType) -> Optional[ValueType]:
+    def get_value(self, x: ValueType) -> ValueType | None:
         if not self.config.k:
             return None
         return self.config.L / (1.0 + exp(-self.config.k * x))

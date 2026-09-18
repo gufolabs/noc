@@ -45,7 +45,7 @@ class Script(GetMetricsScript):
 
     def collect_profile_metrics(self, metrics):
         if self.has_capability("OneAccess | IP | SLA | Probes"):
-            self.logger.debug("Merics %s" % metrics)
+            self.logger.debug(f"Merics {metrics}")
             if self.ALL_SLA_METRICS.intersection({m.metric for m in metrics}):
                 self.collect_ip_sla_metrics(metrics)
 

@@ -33,7 +33,7 @@ Ext.define("NOC.inv.inv.plugins.rack.RackController", {
       context.record.set("position_front", 0);
     }
     // Submit
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + viewModel.get("currentId") + "/plugin/rack/rackload/",
       method: "POST",
       scope: me,

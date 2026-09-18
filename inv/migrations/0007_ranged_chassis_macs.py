@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         db = self.mongo_db
         c = db.noc.inv.discovery_id
         for r in c.find(

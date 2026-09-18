@@ -1,0 +1,15 @@
+{
+    "name": "Network | xPON | ONU | Config Failed (Network | xPON | ONU | Config Failed,dispose)",
+    "$collection": "fm.dispositionrules",
+    "uuid": "3e9aace2-83cc-4b15-8588-83255f8943b5",
+    "description": null,
+    "preference": 1000,
+    "alarm_disposition__name": "Network | xPON | ONU | Config Failed",
+    "conditions": [
+        {
+            "event_class_re": "Network | xPON | ONU | Config Failed"
+        }
+    ],
+    "default_action": "R",
+    "stop_processing": false
+}

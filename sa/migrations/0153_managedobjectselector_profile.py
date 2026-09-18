@@ -11,7 +11,7 @@ from noc.core.model.fields import DocumentReferenceField
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Get profile record mappings
         pcoll = self.mongo_db["noc.profiles"]
         pmap = {}  # name -> id

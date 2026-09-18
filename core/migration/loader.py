@@ -6,8 +6,9 @@
 # ----------------------------------------------------------------------
 
 # Python modules
+import importlib
 import operator
-from typing import Iterable, Tuple
+from typing import Iterable
 from pathlib import Path
 
 # Third-party modules
@@ -19,11 +20,11 @@ from noc.settings import INSTALLED_APPS
 from .base import BaseMigration
 
 
-class MigrationLoader(object):
+class MigrationLoader:
     _migration_cache = {}
 
     @staticmethod
-    def _iter_app_migration_files(app: str) -> Iterable[Tuple[str, bool]]:
+    def _iter_app_migration_files(app: str) -> Iterable[tuple[str, bool]]:
         """
         Iterate over migration files.
 
@@ -64,7 +65,7 @@ class MigrationLoader(object):
             mn = f"noc.custom.{app}.migrations.{mname}"
         else:
             mn = f"noc.{app}.migrations.{mname}"
-        m = __import__(mn, {}, {}, "Migration")
+        m = importlib.import_module(mn)
         return m.Migration()
 
     @classmethod

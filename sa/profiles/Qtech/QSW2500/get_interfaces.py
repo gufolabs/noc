@@ -92,15 +92,15 @@ class Script(BaseScript):
             ifname = str(int(match.group("iface")) - 1)
             addr = match.group("ip")
             mask = match.group("mask")
-            ip_address = "%s/%s" % (addr, IPv4.netmask_to_len(mask))
+            ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
             i = {
-                "name": "IP%s" % ifname,
+                "name": f"IP{ifname}",
                 "type": "SVI",
                 "mac": mac,
                 "enabled_protocols": [],
                 "subinterfaces": [
                     {
-                        "name": "ip%s" % ifname,
+                        "name": f"ip{ifname}",
                         "mac": mac,
                         "enabled_afi": ["IPv4"],
                         "ipv4_addresses": [ip_address],

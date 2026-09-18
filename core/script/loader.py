@@ -27,15 +27,14 @@ class ScriptLoader(BaseLoader):
 
     protected_names = {"profile", "__init__"}
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.scripts = {}  # Load scripts
         self.lock = threading.Lock()
         self.all_scripts = set()
 
     def get_script(self, name):
-        """
-        Load script and return BaseScript instance.
+        """Load script and return BaseScript instance.
         Returns None when no script found or loading error occured
         """
         if name in self.protected_names:
@@ -55,7 +54,7 @@ class ScriptLoader(BaseLoader):
                 is_generic = False
                 for p in config.get_customized_paths("", prefer_custom=True):
                     if os.path.exists(
-                        os.path.join(p, "sa", "profiles", vendor, system, "%s.py" % sn)
+                        os.path.join(p, "sa", "profiles", vendor, system, f"{sn}.py")
                     ):
                         if p:
                             # Custom script
@@ -63,11 +62,11 @@ class ScriptLoader(BaseLoader):
                         else:
                             # Common script
                             base_name = "noc"
-                        module_name = "%s.sa.profiles.%s" % (base_name, name)
+                        module_name = f"{base_name}.sa.profiles.{name}"
                         break
                 else:
                     # Generic script
-                    module_name = "noc.sa.profiles.Generic.%s" % sn
+                    module_name = f"noc.sa.profiles.Generic.{sn}"
                     is_generic = True
                 # Load script
                 script = self.find_class(module_name, BaseScript, name)
@@ -75,14 +74,12 @@ class ScriptLoader(BaseLoader):
                 if script and is_generic:
                     # Create subclass with proper name
                     script = type("Script", (script,), {"name": name})
-                    script.__module__ = "noc.sa.profiles.%s" % name
+                    script.__module__ = f"noc.sa.profiles.{name}"
                 self.scripts[name] = script
             return script
 
     def reload(self):
-        """
-        Reset script cache and release all modules
-        """
+        """Reset script cache and release all modules"""
         with self.lock:
             self.logger.info("Reloading scripts")
             for s in self.scripts:
@@ -95,9 +92,7 @@ class ScriptLoader(BaseLoader):
         return ".." not in name
 
     def find_scripts(self):
-        """
-        Scan all available scripts
-        """
+        """Scan all available scripts"""
         ns = set()
         # Load generic scripts
         generics = {}  # Name -> dependencies
@@ -111,7 +106,7 @@ class ScriptLoader(BaseLoader):
                 match = self.rx_requires.search(data)
                 if match:
                     generics[gn] = [s.strip()[1:-1] for s in match.group(1).split(",") if s.strip()]
-                    ns.add("%s.%s" % (GENERIC_PROFILE, gn))
+                    ns.add(f"{GENERIC_PROFILE}.{gn}")
         # Load custom scripts, Load common scripts
         profiles = set()
         for gx in config.get_customized_paths(os.path.join("sa", "profiles"), prefer_custom=True):
@@ -121,16 +116,16 @@ class ScriptLoader(BaseLoader):
                 name = name[:-3]
                 if name in self.protected_names:
                     continue
-                ns.add("%s.%s.%s" % (vendor, system, name))
-                profiles.add("%s.%s" % (vendor, system))
+                ns.add(f"{vendor}.{system}.{name}")
+                profiles.add(f"{vendor}.{system}")
         # Apply generic scripts
         for p in profiles:
             for g in generics:
-                fgn = "%s.%s" % (p, g)
+                fgn = f"{p}.{g}"
                 if fgn in ns:
                     # Generic overriden with common script
                     continue
-                if any(1 for r in generics[g] if "%s.%s" % (p, r) not in ns):
+                if any(1 for r in generics[g] if f"{p}.{r}" not in ns):
                     continue  # Unsatisfied dependency
                 # Add generic script
                 ns.add(fgn)
@@ -138,17 +133,13 @@ class ScriptLoader(BaseLoader):
             self.all_scripts = ns
 
     def iter_scripts(self):
-        """
-        Returns all available script names
-        """
+        """Returns all available script names"""
         if not self.all_scripts:
             self.find_scripts()
         yield from sorted(self.all_scripts)
 
     def has_script(self, name):
-        """
-        Check script is exists
-        """
+        """Check script is exists"""
         if not self.all_scripts:
             self.find_scripts()
         return name in self.all_scripts

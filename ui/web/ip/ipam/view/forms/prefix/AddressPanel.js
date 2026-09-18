@@ -281,7 +281,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
   save: function(data){
     var me = this;
     me.mask(__("Saving ..."));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.restUrl + (me.currentAddressId ? me.currentAddressId + "/" : ""),
       method: me.currentAddressId ? "PUT" : "POST",
       scope: me,
@@ -320,7 +320,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
   loadAddress: function(id){
     var me = this;
     me.currentAddressId = id;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.restUrl + id + "/",
       method: "GET",
       scope: me,
@@ -342,7 +342,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
   newAddress: function(prefixId, address){
     var me = this;
     me.currentAddressId = null;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.prefixRestUrl + prefixId + "/",
       method: "GET",
       scope: me,
@@ -401,7 +401,7 @@ Ext.define("NOC.ip.ipam.view.forms.prefix.AddressPanel", {
   //
   deleteAddress: function(){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.restUrl + me.currentAddressId + "/",
       method: "DELETE",
       scope: me,

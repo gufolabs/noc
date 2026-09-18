@@ -6,19 +6,16 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict
 from http.cookies import SimpleCookie
 
 # Third-party modules
 import orjson
-from typing import Optional
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 from noc.core.error import NOCError, ERR_HTTP_UNKNOWN
 from noc.core.handler import get_handler
-from noc.core.comp import DEFAULT_ENCODING
 from .middleware.base import BaseMiddleware
 from .middleware.loader import loader
 
@@ -27,15 +24,15 @@ class HTTPError(NOCError):
     default_code = ERR_HTTP_UNKNOWN
 
 
-class HTTP(object):
+class HTTP:
     HTTPError = HTTPError
 
-    def __init__(self, script):
+    def __init__(self, script) -> None:
         self.script = script
         if script:  # For testing purposes
             self.logger = PrefixLoggerAdapter(script.logger, "http")
-        self.headers: Dict[str, bytes] = {}
-        self.cookies: Optional[SimpleCookie] = None
+        self.headers: dict[str, bytes] = {}
+        self.cookies: SimpleCookie | None = None
         self.session_started = False
         self.request_id = 1
         self.session_id = None
@@ -47,9 +44,9 @@ class HTTP(object):
         address = self.script.credentials["address"]
         port = self.script.credentials.get("http_port")
         if port:
-            address += ":%s" % port
+            address += f":{port}"
         proto = self.script.credentials.get("http_protocol", "http")
-        return "%s://%s%s" % (proto, address, path)
+        return f"{proto}://{address}{path}"
 
     def get(
         self,
@@ -57,25 +54,27 @@ class HTTP(object):
         headers=None,
         cached=False,
         json=False,
-        eof_mark: Optional[bytes] = None,
+        eof_mark: bytes | None = None,
         use_basic=False,
         raw_result=False,
     ):
-        """
-        Perform HTTP GET request
-        :param path: URI
-        :param headers: Dict of additional headers
-        :param cached: Cache result
-        :param json: Decode json if set to True
-        :param eof_mark: Waiting eof_mark in stream for end session (perhaps device return length 0)
-        :param use_basic: Use basic authentication
-        :param raw_result: Return raw result
+        """Perform HTTP GET request
+
+        Args:
+            path: URI
+            headers: Dict of additional headers
+            cached: Cache result
+            json: Decode json if set to True
+            eof_mark: Waiting eof_mark in stream for end session
+                (perhaps device return length 0)
+            use_basic: Use basic authentication
+            raw_result: Return raw result
         """
         self.ensure_session()
         self.request_id += 1
         self.logger.debug("GET %s", path)
         if cached:
-            cache_key = "get_%s" % path
+            cache_key = f"get_{path}"
             r = self.script.root.http_cache.get(cache_key)
             if r is not None:
                 self.logger.debug("Use cached result")
@@ -101,15 +100,15 @@ class HTTP(object):
         ) as client:
             code, headers, result = client.get(url, headers=hdr)
             if not 200 <= code <= 299:
-                raise HTTPError(msg="HTTP Error (%s)" % result[:256], code=code)
+                raise HTTPError(msg=f"HTTP Error ({result[:256]})", code=code)
             self._process_cookies(headers)
             if json:
                 try:
                     result = orjson.loads(result)
                 except ValueError as e:
-                    raise HTTPError("Failed to decode JSON: %s" % e)
+                    raise HTTPError(f"Failed to decode JSON: {e}")
             elif not raw_result:
-                result = result.decode(DEFAULT_ENCODING, errors="ignore")
+                result = result.decode(errors="ignore")
             self.logger.debug("Result: %r", result)
             if cached:
                 self.script.root.http_cache[cache_key] = result
@@ -126,21 +125,23 @@ class HTTP(object):
         use_basic=False,
         raw_result=False,
     ):
-        """
-        Perform HTTP GET request
-        :param path: URI
-        :param headers: Dict of additional headers
-        :param cached: Cache result
-        :param json: Decode json if set to True
-        :param eof_mark: Waiting eof_mark in stream for end session (perhaps device return length 0)
-        :param use_basic: Use basic authentication
-        :param raw_result: Return raw result
+        """Perform HTTP GET request
+
+        Args:
+            path: URI
+            headers: Dict of additional headers
+            cached: Cache result
+            json: Decode json if set to True
+            eof_mark: Waiting eof_mark in stream for end session
+                (perhaps device return length 0)
+            use_basic: Use basic authentication
+            raw_result: Return raw result
         """
         self.ensure_session()
         self.request_id += 1
         self.logger.debug("POST %s %s", path, data)
         if cached:
-            cache_key = "post_%s" % path
+            cache_key = f"post_{path}"
             r = self.script.root.http_cache.get(cache_key)
             if r is not None:
                 self.logger.debug("Use cached result")
@@ -165,15 +166,15 @@ class HTTP(object):
         ) as client:
             code, headers, result = client.post(url, data, headers=hdr)
             if not 200 <= code <= 299:
-                raise HTTPError(msg="HTTP Error (%s)" % result[:256], code=code)
+                raise HTTPError(msg=f"HTTP Error ({result[:256]})", code=code)
             self._process_cookies(headers)
             if json:
                 try:
                     return orjson.loads(result)
                 except ValueError as e:
-                    raise HTTPError(msg="Failed to decode JSON: %s" % e)
+                    raise HTTPError(msg=f"Failed to decode JSON: {e}")
             elif not raw_result:
-                result = result.decode(DEFAULT_ENCODING, errors="ignore")
+                result = result.decode(errors="ignore")
             self.logger.debug("Result: %r", result)
             if cached:
                 self.script.root.http_cache[cache_key] = result
@@ -183,11 +184,11 @@ class HTTP(object):
         if self.session_started:
             self.shutdown_session()
 
-    def _process_cookies(self, headers: Dict[str, bytes], allow_multiple_header: bool = False):
-        """
-        Process and store cookies from response headers
-        :param headers:
-        :return:
+    def _process_cookies(self, headers: dict[str, bytes], allow_multiple_header: bool = False):
+        """Process and store cookies from response headers
+
+        Args:
+            headers
         """
         cdata = headers.get("Set-Cookie")
         if not cdata:
@@ -209,20 +210,23 @@ class HTTP(object):
             self.cookies.load(c.strip())
 
     def get_cookie(self, name):
-        """
-        Get cookie name by value
-        :param name:
-        :return: Morsel object or None
+        """Get cookie name by value
+
+        Args:
+            name
+
+        Returns:
+            Morsel object or None
         """
         if not self.cookies:
             return None
         return self.cookies.get(name)
 
-    def _get_effective_headers(self, headers: Dict[str, bytes]):
-        """
-        Append session headers when necessary. Apply effective cookies
-        :param headers:
-        :return:
+    def _get_effective_headers(self, headers: dict[str, bytes]):
+        """Append session headers when necessary. Apply effective cookies
+
+        Args:
+            headers
         """
         if self.headers:
             if headers:
@@ -234,27 +238,28 @@ class HTTP(object):
             headers = {}
         if self.cookies:
             headers["Cookie"] = (
-                self.cookies.output(header="", sep=";", attrs="value")
-                .lstrip()
-                .encode(DEFAULT_ENCODING)
+                self.cookies.output(header="", sep=";", attrs="value").lstrip().encode()
             )
         return headers
 
     def set_header(self, name: str, value: str):
-        """
-        Set HTTP header to be set with all following requests
-        :param name:
-        :param value:
-        :return:
+        """Set HTTP header to be set with all following requests
+
+        Args:
+            name
+            value
         """
         self.logger.debug("Set header: %s = %s", name, value)
-        self.headers[name] = str(value).encode(DEFAULT_ENCODING)
+        self.headers[name] = str(value).encode()
 
     def set_session_id(self, session_id):
-        """
-        Set session_id to be reused by middleware
-        :param session_id:
-        :return: None
+        """Set session_id to be reused by middleware
+
+        Args:
+            session_id
+
+        Returns:
+            None
         """
         if session_id is not None:
             self.session_id = session_id

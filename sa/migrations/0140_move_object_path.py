@@ -14,7 +14,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         uc = self.mongo_db["noc.cache.objectpaths"]
         dc = self.mongo_db["noc.objectdata"]
         bulk = []

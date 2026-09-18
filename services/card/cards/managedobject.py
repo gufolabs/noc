@@ -411,7 +411,7 @@ class ManagedObjectCard(BaseCard):
                 {
                     "scope": "managedobject",
                     "id": mo.id,
-                    "label": "%s (%s) [%s]" % (mo.name, mo.address, mo.platform),
+                    "label": f"{mo.name} ({mo.address}) [{mo.platform}]",
                 }
             ]
         return r

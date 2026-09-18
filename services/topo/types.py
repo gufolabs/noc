@@ -7,11 +7,10 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Optional, List
 
 
 @dataclass
-class ObjectSnapshot(object):
+class ObjectSnapshot:
     """
     Managed object snapshot for topology service.
 
@@ -27,5 +26,5 @@ class ObjectSnapshot(object):
 
     id: int
     level: int
-    links: Optional[List[int]] = None
-    uplinks: Optional[List[int]] = None
+    links: list[int] | None = None
+    uplinks: list[int] | None = None

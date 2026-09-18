@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from .base import BaseModel
@@ -16,7 +15,7 @@ from .typing import Reference
 class AdmDiv(BaseModel):
     id: str
     name: str
-    parent: Optional[Reference["AdmDiv"]] = None
-    short_name: Optional[str] = None
+    parent: Reference["AdmDiv"] | None = None
+    short_name: str | None = None
 
     _csv_fields = ["id", "parent", "name", "short_name"]

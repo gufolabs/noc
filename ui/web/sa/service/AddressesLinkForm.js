@@ -180,7 +180,7 @@ Ext.define("NOC.sa.service.AddressesLinkForm", {
     };
   },
   request: function(url, params, method){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "PUT",
       jsonData: params,

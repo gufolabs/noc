@@ -9,7 +9,7 @@
 from collections import namedtuple, defaultdict
 
 # Third-party modules
-from typing import Dict, Tuple, List, DefaultDict, Optional
+from typing import Optional
 
 # NOC modules
 from noc.services.discovery.jobs.base import DiscoveryCheck
@@ -45,26 +45,25 @@ class PrefixCheck(DiscoveryCheck):
         prefixes = self.get_prefixes()
         self.sync_prefixes(prefixes)
 
-    def get_prefixes(self) -> Dict[Tuple[str, str], DiscoveredPrefix]:
+    def get_prefixes(self) -> dict[tuple[str, str], DiscoveredPrefix]:
         """
         Discover prefixes
         :return: dict of (vpn_id, prefix) => DiscoveredPrefix
         """
         # vpn_id, prefix => DiscoveredPrefix
-        prefixes: Dict[Tuple[str, str], DiscoveredPrefix] = {}
+        prefixes: dict[tuple[str, str], DiscoveredPrefix] = {}
         # Apply interface prefixes
         if self.object.object_profile.enable_box_discovery_prefix_interface:
             prefixes = self.apply_prefixes(prefixes, self.get_interface_prefixes())
         return prefixes
 
-    def sync_prefixes(self, prefixes: Dict[Tuple[str, str], DiscoveredPrefix]):
+    def sync_prefixes(self, prefixes: dict[tuple[str, str], DiscoveredPrefix]):
         """
         Apply prefixes to database
-        :param prefixes:
         :return:
         """
         # vpn_id -> [prefix, ]
-        vrf_prefixes: DefaultDict[str, List[str]] = defaultdict(list)
+        vrf_prefixes: defaultdict[str, list[str]] = defaultdict(list)
         for vpn_id, p in prefixes:
             vrf_prefixes[vpn_id] += [p]
         # build vpn_id -> VRF mapping
@@ -95,8 +94,8 @@ class PrefixCheck(DiscoveryCheck):
 
     @staticmethod
     def apply_prefixes(
-        prefixes: Dict[Tuple[str, str], DiscoveredPrefix],
-        discovered_prefixes: List[DiscoveredPrefix],
+        prefixes: dict[tuple[str, str], DiscoveredPrefix],
+        discovered_prefixes: list[DiscoveredPrefix],
     ):
         """
         Apply list of discovered prefixes to prefix dict
@@ -122,7 +121,7 @@ class PrefixCheck(DiscoveryCheck):
             return False
         return self.is_enabled_for_object(self.object)
 
-    def get_interface_prefixes(self) -> List["DiscoveredPrefix"]:
+    def get_interface_prefixes(self) -> list["DiscoveredPrefix"]:
         """
         Get prefixes from interface discovery artifact
         :return:
@@ -177,8 +176,6 @@ class PrefixCheck(DiscoveryCheck):
         Check which method is preferable
 
         Preference order: interface, management, neighbor
-        :param old_method:
-        :param new_method:
         :return:
         """
         return PREF_VALUE[old_method] <= PREF_VALUE[new_method]
@@ -236,30 +233,22 @@ class PrefixCheck(DiscoveryCheck):
         if self.is_preferred(prefix.source, discovered_prefix.source):
             changes = []
             if prefix.source != discovered_prefix.source:
-                changes += ["source: %s -> %s" % (prefix.source, discovered_prefix.source)]
+                changes += [f"source: {prefix.source} -> {discovered_prefix.source}"]
                 prefix.source = discovered_prefix.source
             if discovered_prefix.source in LOCAL_SRC:
                 # Check name
                 name = self.get_prefix_name(discovered_prefix)
                 if name and name != prefix.name:
-                    changes += ["name: %s -> %s" % (prefix.name, name)]
+                    changes += [f"name: {prefix.name} -> {name}"]
                     prefix.name = name
             if discovered_prefix.asn and prefix.asn != discovered_prefix.asn:
                 changes += [
-                    "asn: %s -> %s"
-                    % (
-                        prefix.asn.asn if prefix.asn else None,
-                        discovered_prefix.asn.asn if discovered_prefix.asn else None,
-                    )
+                    f"asn: {prefix.asn.asn if prefix.asn else None} -> {discovered_prefix.asn.asn if discovered_prefix.asn else None}"
                 ]
                 prefix.asn = discovered_prefix.asn
             if discovered_prefix.vlan and prefix.vlan != discovered_prefix.vlan:
                 changes += [
-                    "vlan: %s -> %s"
-                    % (
-                        str(prefix.vlan) if prefix.vlan else None,
-                        str(discovered_prefix.vlan) if discovered_prefix.vlan else None,
-                    )
+                    f"vlan: {str(prefix.vlan) if prefix.vlan else None} -> {str(discovered_prefix.vlan) if discovered_prefix.vlan else None}"
                 ]
                 prefix.vlan = discovered_prefix.vlan
             if changes:
@@ -292,7 +281,7 @@ class PrefixCheck(DiscoveryCheck):
             return parent.effective_prefix_discovery == "E"
         return False
 
-    def get_prefix_name(self, prefix) -> Optional[str]:
+    def get_prefix_name(self, prefix) -> str | None:
         """
         Render address name
         :param prefix: DiscoveredAddress instance
@@ -347,7 +336,6 @@ class PrefixCheck(DiscoveryCheck):
     def fire_seen(self, prefix):
         """
         Fire `seen` event and process `seen_propagation_policy`
-        :param prefix:
         :return:
         """
         if prefix.id in self.propagated_prefixes:

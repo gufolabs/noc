@@ -52,7 +52,7 @@ class Script(BaseScript):
         """
         Returns admin status of the interface
         """
-        s = self.cli("show interface config %s" % iface)
+        s = self.cli(f"show interface config {iface}")
         match = self.rx_admin_status.search(s)
         return match.group("admin").lower() == "yes"
 
@@ -60,7 +60,6 @@ class Script(BaseScript):
         """
         Returns set of IP addresses of OSPF interfaces
         :return: set of ip addresses
-        :rtype: set
         """
         try:
             v = self.cli("show ip ospf interface", cached=True)
@@ -72,7 +71,6 @@ class Script(BaseScript):
         """
         Returns set of IP addresses of RIP interfaces
         :return: set of ip addresses
-        :rtype: set
         """
         try:
             v = self.cli("show router rip", cached=True)

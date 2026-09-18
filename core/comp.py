@@ -1,14 +1,18 @@
 # ----------------------------------------------------------------------
 # Compatibility routines
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+
+# NOC modules
+from noc.core.typing import SupportsStr
 
 DEFAULT_ENCODING = "utf-8"
 
 
-def smart_bytes(s, encoding=DEFAULT_ENCODING):
+def smart_bytes(s: bytes | str | SupportsStr, encoding: str = DEFAULT_ENCODING) -> bytes:
     """
     Convert strings to bytes when necessary
     """
@@ -19,7 +23,9 @@ def smart_bytes(s, encoding=DEFAULT_ENCODING):
     return str(s).encode(encoding)
 
 
-def smart_text(s, errors="strict", encoding=DEFAULT_ENCODING):
+def smart_text(
+    s: str | bytes | SupportsStr, errors: str = "strict", encoding: str = DEFAULT_ENCODING
+) -> str:
     """
     Convert bytes to string when necessary
     """
@@ -28,15 +34,3 @@ def smart_text(s, errors="strict", encoding=DEFAULT_ENCODING):
     if isinstance(s, bytes):
         return s.decode(encoding, errors=errors)
     return str(s)
-
-
-def reraise(tp, value, tb=None):
-    try:
-        if value is None:
-            value = tp()
-        if value.__traceback__ is not tb:
-            raise value.with_traceback(tb)
-        raise value
-    finally:
-        value = None
-        tb = None

@@ -60,7 +60,7 @@ class Profile(BaseProfile):
         match = self.rx_interface_name.match(s)
         if not match:
             return s
-        return "%s%s" % (
+        return "{}{}".format(
             {
                 "GE": "GigabitEthernet",
                 "XGE": "Ten-GigabitEthernet",

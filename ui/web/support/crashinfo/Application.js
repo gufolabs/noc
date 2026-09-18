@@ -184,7 +184,7 @@ Ext.define("NOC.support.crashinfo.Application", {
     var me = this;
     me.callParent();
     me.buttonReport.setDisabled(me.currentRecord.get("status") != "N");
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       method: "GET",
       url: "/support/crashinfo/" + me.currentRecord.get("uuid") + "/traceback/",
       scope: me,

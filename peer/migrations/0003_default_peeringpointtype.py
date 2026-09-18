@@ -18,7 +18,7 @@ TYPES = ["Cisco.IOS", "Juniper.JUNOS"]
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         for f, t in LEGACY:
             self.db.execute("UPDATE peer_peeringpointtype SET name=%s WHERE name=%s", [t, f])
         for t in TYPES:

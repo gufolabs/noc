@@ -72,7 +72,7 @@
     value: "{{ item.value }}"
     state: present
     reload: "True"
-  with_items:
+  loop:
     - { name: 'net.ipv4.tcp_tw_reuse', value: 1}
     - { name: 'net.ipv4.tcp_rfc1337', value: 1}
   tags:

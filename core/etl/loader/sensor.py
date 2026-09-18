@@ -23,7 +23,8 @@ class SensorLoader(BaseLoader):
 
     discard_deferred = True
     workflow_event_model = True
+    workflow_seen_supported = True
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.clean_map["units"] = lambda x: MeasurementUnits.get_by_name(x) if x else None

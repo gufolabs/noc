@@ -7,7 +7,7 @@
 
 # Python modules
 import struct
-from typing import Any, Dict
+from typing import Any
 
 # Third-party modules
 from siphash24 import siphash24
@@ -19,7 +19,7 @@ SIPHASH_SEED = b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x0
 T_MAP = {"vrf": "VRF", "vpls": "VPLS"}
 
 
-def get_vpn_id(vpn: Dict[str, Any]) -> str:
+def get_vpn_id(vpn: dict[str, Any]) -> str:
     """
     Calculate RFC2685-compatible VPN ID
     :param vpn: Dict containing following keys
@@ -46,10 +46,10 @@ def get_vpn_id(vpn: Dict[str, Any]) -> str:
         identity = vpn["name"]
     else:
         raise ValueError("Cannot calculate VPN id")
-    identity = "%s:%s" % (T_MAP.get(vpn["type"], vpn["type"]), identity)
+    identity = "{}:{}".format(T_MAP.get(vpn["type"], vpn["type"]), identity)
     # RFC2685 declares VPN ID as <IEEE OUI (3 octets)>:<VPN number (4 octets)
     # Use reserved OUI range 00 00 00 - 00 00 FF to generate
     # So we have 5 octets to fill vpn id
     # Use last 5 octets of siphash 2-4
     i_hash = siphash24(smart_bytes(identity), key=SIPHASH_SEED).digest()
-    return "%x:%x" % struct.unpack("!BI", i_hash[3:])
+    return "{:x}:{:x}".format(*struct.unpack("!BI", i_hash[3:]))

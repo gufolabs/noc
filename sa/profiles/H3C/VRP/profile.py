@@ -33,10 +33,10 @@ class Profile(BaseProfile):
     }
 
     def generate_prefix_list(self, name, pl, strict=True):
-        p = "ip ip-prefix %s permit %%s" % name
+        p = f"ip ip-prefix {name} permit %s"
         if not strict:
             p += " le 32"
-        return "undo ip ip-prefix %s\n" % name + "\n".join([p % x.replace("/", " ") for x in pl])
+        return f"undo ip ip-prefix {name}\n" + "\n".join([p % x.replace("/", " ") for x in pl])
 
     rx_interface_name = re.compile(r"^(?P<type>Eth|[A-Z]+E|Vlan)(?P<number>[\d/]+)$")
 
@@ -48,7 +48,7 @@ class Profile(BaseProfile):
         match = self.rx_interface_name.match(s)
         if not match:
             return s
-        return "%s%s" % (
+        return "{}{}".format(
             {"GE": "GigabitEthernet", "Eth": "Ethernet", "Vlan": "Vlan-interface"}[
                 match.group("type")
             ],

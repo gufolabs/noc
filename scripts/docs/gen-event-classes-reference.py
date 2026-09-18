@@ -11,7 +11,7 @@ import os
 import re
 import json
 from dataclasses import dataclass
-from typing import List, Iterable, DefaultDict, Tuple, Dict, Any
+from typing import Iterable, Any
 import logging
 from collections import defaultdict
 from pathlib import Path
@@ -75,14 +75,14 @@ rx_md_anchor = re.compile(r"[ _\|\(\)/]+")
 
 
 @dataclass(order=True)
-class Var(object):
+class Var:
     name: str
     description: str
     type: str
     required: bool
 
     @classmethod
-    def from_json(cls, d: Dict[str, Any]) -> "Var":
+    def from_json(cls, d: dict[str, Any]) -> "Var":
         """
         Create from dict
         """
@@ -121,13 +121,13 @@ class Action(Enum):
 
 
 @dataclass(order=True)
-class Disposition(object):
+class Disposition:
     alarm_class: str
     name: str
     action: Action
 
     @classmethod
-    def from_json(cls, d: Dict[str, Any]) -> "Disposition":
+    def from_json(cls, d: dict[str, Any]) -> "Disposition":
         """
         Create from dict
         """
@@ -158,7 +158,7 @@ class Disposition(object):
 
 
 @dataclass(order=True)
-class Data(object):
+class Data:
     """
     Collections data.
 
@@ -174,8 +174,8 @@ class Data(object):
     symptoms: str
     probable_causes: str
     recommended_actions: str
-    vars: List[Var]
-    disposition: List[Disposition]
+    vars: list[Var]
+    disposition: list[Disposition]
 
     @classmethod
     def read(cls, path: Path) -> "Data":
@@ -212,7 +212,7 @@ class Data(object):
         return rx_md_anchor.sub("-", self.name.lower())
 
     @property
-    def bucket(self) -> Tuple[str, ...]:
+    def bucket(self) -> tuple[str, ...]:
         return tuple(islice((x.strip() for x in self.name.split("|", 1)), 0, BUCKET_DEPTH))
 
     def link_from(self, src: "Data") -> str:
@@ -260,8 +260,8 @@ def iter_data() -> Iterable[Data]:
     logger.info("%d items read in %.3fs", n, dt)
 
 
-def get_buckets() -> DefaultDict[Tuple[str, ...], List[Data]]:
-    buckets: DefaultDict[Tuple[str, ...], List[Data]] = defaultdict(list)
+def get_buckets() -> defaultdict[tuple[str, ...], list[Data]]:
+    buckets: defaultdict[tuple[str, ...], list[Data]] = defaultdict(list)
     for data in iter_data():
         buckets[data.bucket].append(data)
     return buckets
@@ -274,7 +274,7 @@ def canonical_name(s: str) -> str:
     return s.replace(" | ", "-").replace(" ", "-").lower()
 
 
-def bucket_path(s: Tuple[str, ...]) -> Path:
+def bucket_path(s: tuple[str, ...]) -> Path:
     """
     Convert bucket tuple to .md path
     """
@@ -288,7 +288,6 @@ def _iter_split_alnum(s: str) -> Iterable[str]:
     """
     Iterator yielding alphabetic and numeric sections if string
 
-    :param s:
     :return:
     """
     for match in rx_split_alnum.finditer(s):

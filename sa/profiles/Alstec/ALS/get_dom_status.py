@@ -35,7 +35,7 @@ class Script(BaseScript):
     def execute_cli(self, interface=None):
         cmd = "show fiber-ports optical-transceiver detailed"
         if interface is not None:
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
         r = []
         try:
             v = self.cli(cmd)

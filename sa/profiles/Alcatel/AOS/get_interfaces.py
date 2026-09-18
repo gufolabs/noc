@@ -242,7 +242,7 @@ class Script(BaseScript):
             for m in pc["members"]:
                 portchannel_members[m] = (i, t)
             n = {}
-            iface = "Ag %s" % i
+            iface = f"Ag {i}"
             n["name"] = iface
             n["admin_status"] = True
             n["oper_status"] = True
@@ -310,7 +310,7 @@ class Script(BaseScript):
                 r += [n]
             if iface in portchannel_members:
                 ai, is_lacp = portchannel_members[iface]
-                ai = "Ag %s" % ai
+                ai = f"Ag {ai}"
                 n["aggregated_interface"] = ai
                 n["enabled_protocols"] = ["LACP"]
                 match = self.rx_mac_local.search(s)

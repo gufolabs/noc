@@ -54,7 +54,7 @@ class Script(BaseScript):
         if interface is None:
             raise self.NotSupportedError()
         try:
-            s = self.cli("test cable-diagnostics tdr interface %s" % interface)
+            s = self.cli(f"test cable-diagnostics tdr interface {interface}")
         except self.CLISyntaxError:
             raise self.NotSupportedError()
         if s.startswith("% TDR test is not supported"):
@@ -62,7 +62,7 @@ class Script(BaseScript):
 
         time.sleep(5)
         try:
-            s = self.cli("show cable-diagnostics tdr interface %s" % interface)
+            s = self.cli(f"show cable-diagnostics tdr interface {interface}")
         except self.CLISyntaxError:
             raise self.NotSupportedError()
 

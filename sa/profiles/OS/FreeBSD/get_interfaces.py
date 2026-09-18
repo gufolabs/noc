@@ -101,7 +101,7 @@ class Script(BaseScript):
                 netmask = match.group("netmask")
                 mask = IPv4._to_prefix(int(netmask, 16), 32).address
                 mask = IPv4.netmask_to_len(mask)
-                ipv4_addr = "%s/%s" % (ip, mask)
+                ipv4_addr = f"{ip}/{mask}"
                 if "ipv4_addresses" in self.subiface:
                     self.subiface["ipv4_addresses"] += [ipv4_addr]
                 else:
@@ -114,7 +114,7 @@ class Script(BaseScript):
                 if ipv6.find("%") >= 0:
                     continue
                 prefixlen = match.group("prefixlen")
-                ipv6_addr = "%s/%s" % (ipv6, prefixlen)
+                ipv6_addr = f"{ipv6}/{prefixlen}"
                 if "ipv6_addresses" in self.subiface:
                     self.subiface["ipv6_addresses"] += [ipv6_addr]
                 else:

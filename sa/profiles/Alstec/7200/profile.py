@@ -36,7 +36,7 @@ class Profile(BaseProfile):
 
     def shutdown_session(self, script):
         if self.terminal_length_changed:
-            script.cli("terminal length %s" % self.terminal_length)
+            script.cli(f"terminal length {self.terminal_length}")
 
     rx_cards = re.compile(r"^0/(?P<slot>\d+)\s*(?P<state>Working)?", re.MULTILINE)
 

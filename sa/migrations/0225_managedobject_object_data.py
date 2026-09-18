@@ -15,7 +15,7 @@ from noc.core.model.fields import ObjectIDArrayField
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Create uplinks fields
         self.db.add_column(
             "sa_managedobject",

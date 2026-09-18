@@ -30,7 +30,7 @@ class Script(BaseScript):
         for match in self.rx_trunk.finditer(t):
             r += [
                 {
-                    "interface": "T%s" % match.group("trunk"),
+                    "interface": "T{}".format(match.group("trunk")),
                     "members": self.expand_interface_range(match.group("members")),
                     "type": "L" if match.group("type").lower() == "lacp" else "S",
                 }

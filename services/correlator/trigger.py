@@ -15,8 +15,8 @@ from noc.core.handler import get_handler
 logger = logging.getLogger(__name__)
 
 
-class Trigger(object):
-    def __init__(self, t):
+class Trigger:
+    def __init__(self, t) -> None:
         self.name = t.name
         # Condition
         self.condition = compile(t.condition, "<string>", "eval")
@@ -45,7 +45,7 @@ class Trigger(object):
         if not self.match(alarm):
             return
         print(self.resource_group)
-        logger.info("Calling trigger '%s'" % self.name)
+        logger.info(f"Calling trigger '{self.name}'")
         # Notify if necessary
         if self.notification_group and self.template:
             self.notification_group.notify(

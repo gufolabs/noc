@@ -32,9 +32,9 @@ class Profile(BaseProfile):
         """
         Generate prefix list _name_. pl is a list of (prefix, min_len, max_len)
         """
-        me = "ip prefix-list %s permit %%s" % name
-        mne = "ip prefix-list %s permit %%s le %%d" % name
-        r = ["no ip prefix-list %s" % name]
+        me = f"ip prefix-list {name} permit %s"
+        mne = f"ip prefix-list {name} permit %s le %d"
+        r = [f"no ip prefix-list {name}"]
         for prefix, min_len, max_len in pl:
             if min_len == max_len:
                 r += [me % prefix]

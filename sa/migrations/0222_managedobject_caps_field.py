@@ -28,7 +28,7 @@ def default(obj):
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column(
             "sa_managedobject",
             "caps",

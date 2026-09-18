@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # BDCOM_xPON.get_interfaces
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ class Script(BaseScript):
         r"(^\s+protocolstatus.+\n)?"
         r"^\s+Ifindex is (?P<snmp_ifindex>\d+)(, unique port number is \d+)?\s*\n"
         r"(^\s+Description: (?P<descr>.+)\n)?"
-        r"^\s+Hardware is (?P<type>\S+)(, [Aa]ddress is (?P<mac>\S+)\s*\(.+\))?\s*\n"
+        r"(^\s+Hardware is (?P<hw>\S+)(, [Aa]ddress is (?P<mac>\S+)\s*\(.+\))?\s*\n)?"
         r"(^\s+Interface address is (?P<ip>\S+)\s*\n)?"
         r"^\s+MTU (?P<mtu>\d+) bytes",
         re.MULTILINE,
@@ -55,19 +55,22 @@ class Script(BaseScript):
         "EtherSVI": "SVI",
         "PortAggregator": "aggregated",
         "Null": "null",
+        "management": "management",
     }
-
-    # @todo: snmp
-    # @todo: cdp
-    # @todo: gvrp
 
     def execute_cli(self):
         ifaces = []
         v = self.cli("show interface")
         for match in self.rx_int.finditer(v):
-            ifname = self.profile.convert_interface_name(match.group("ifname"))
-            typ = match.group("type")
-            iftype = self.types[typ]
+            ifname = match.group("ifname")
+            if match.group("hw"):
+                hw = match.group("hw")
+            else:
+                hw = "management"
+            if hw in ["GPON-ONUID", "Giga-LLID", "GigaEthernet-LLID"] and ":" in ifname:
+                continue
+            iftype = self.types[hw]
+            ifname = self.profile.convert_interface_name(ifname)
             i = {
                 "name": ifname,
                 "type": iftype,
@@ -91,18 +94,11 @@ class Script(BaseScript):
             if match.group("ip"):
                 sub["enabled_afi"] = ["IPv4"]
                 sub["ipv4_addresses"] = [match.group("ip")]
-            if typ in ["GPON-ONUID", "Giga-LLID", "GigaEthernet-LLID"] and ":" in ifname:
-                parent_iface = ifname.split(":")[0]
-                for iface in ifaces:
-                    if iface["name"] == parent_iface:
-                        iface["subinterfaces"] += [sub]
-                        break
-                continue
 
             if i["type"] == "physical":
                 sub["enabled_afi"] = ["BRIDGE"]
                 time.sleep(2)  # Do not remove this!
-                c = self.cli("show vlan interface %s" % ifname)
+                c = self.cli(f"show vlan interface {ifname}")
                 for r in parse_table(c, allow_wrap=True, n_row_delim=","):
                     if not is_int(r[2]):
                         continue
@@ -113,17 +109,17 @@ class Script(BaseScript):
                         tagged = [item for item in tagged if int(item) != untagged]
                         if tagged:
                             sub["tagged_vlans"] = tagged
+                if ifname.startswith("GigaEth") or ifname.startswith("TGigaEth"):
+                    time.sleep(1)  # Do not remove this!
+                    c = self.cli(f"show lldp interface {ifname}")
+                    for match1 in self.rx_lldp.finditer(c):
+                        if (
+                            match1.group("lldp_rx") == "enabled"
+                            or match1.groups("lldp_tx") == "enabled"
+                        ):
+                            i["enabled_protocols"] = ["LLDP"]
             if i["type"] == "SVI":
                 sub["vlan_ids"] = ifname[4:]
-            if ifname.startswith("GigaEthernet") or ifname.startswith("TGigaEthernet"):
-                time.sleep(1)  # Do not remove this!
-                c = self.cli("show lldp interface %s" % ifname)
-                for match1 in self.rx_lldp.finditer(c):
-                    if (
-                        match1.group("lldp_rx") == "enabled"
-                        or match1.groups("lldp_tx") == "enabled"
-                    ):
-                        i["enabled_protocols"] = ["LLDP"]
             i["subinterfaces"] = [sub]
             ifaces += [i]
         return [{"interfaces": ifaces}]

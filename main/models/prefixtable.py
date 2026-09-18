@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Third-party modules
-from typing import Union, List, Tuple, Iterable
+from typing import Iterable
 from django.db import models
 
 # NOC Modules
@@ -22,7 +22,7 @@ from noc.core.translation import ugettext as _
     clean_lazy_labels="prefixfilter",
 )
 class PrefixTable(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = _("Prefix Table")
         verbose_name_plural = _("Prefix Tables")
         db_table = "main_prefixtable"
@@ -41,7 +41,6 @@ class PrefixTable(NOCModel):
 
         :param prefix: Prefix
         :type prefix: str
-        :rtype: bool
         """
         p = IP.prefix(prefix)
         return (
@@ -58,9 +57,7 @@ class PrefixTable(NOCModel):
         return self.match(other)
 
     @classmethod
-    def iter_match_prefix(
-        cls, prefixes: Union[str, List[str]]
-    ) -> Iterable[Tuple["PrefixTable", str]]:
+    def iter_match_prefix(cls, prefixes: str | list[str]) -> Iterable[tuple["PrefixTable", str]]:
         if isinstance(prefixes, str):
             prefixes = [prefixes]
         pp = [IP.prefix(prefix) for prefix in prefixes]
@@ -71,13 +68,13 @@ class PrefixTable(NOCModel):
             yield pt.table, "<"
 
     @classmethod
-    def iter_lazy_labels(cls, prefixes: Union[str, List[str]]):
+    def iter_lazy_labels(cls, prefixes: str | list[str]):
         for pt, condition in cls.iter_match_prefix(prefixes):
             yield f"noc::prefixfilter::{pt.name}::{condition}"
 
 
 class PrefixTablePrefix(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = _("Prefix")
         verbose_name_plural = _("Prefixes")
         app_label = "main"
@@ -92,7 +89,7 @@ class PrefixTablePrefix(NOCModel):
     prefix = CIDRField(_("Prefix"))
 
     def __str__(self):
-        return "%s %s" % (self.table.name, self.prefix)
+        return f"{self.table.name} {self.prefix}"
 
     def save(self, *args, **kwargs):
         # Set AFI

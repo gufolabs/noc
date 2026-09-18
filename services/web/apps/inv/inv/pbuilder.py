@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Dict, Any, Iterable, Tuple, Set, List
+from typing import Any, Iterable
 
 # NOC modules
 from noc.inv.models.objectmodel import ObjectModel, ObjectModelConnection
@@ -16,14 +16,14 @@ from noc.core.inv.path import find_path, PathItem
 translation_map = str.maketrans("<>", "><")
 
 
-class CrossingProposalsBuilder(object):
+class CrossingProposalsBuilder:
     def __init__(
         self,
         lo: Object,
-        ro: Optional[Object] = None,
-        left_filter: Optional[str] = None,
-        right_filter: Optional[str] = None,
-        cable_filter: Optional[str] = None,
+        ro: Object | None = None,
+        left_filter: str | None = None,
+        right_filter: str | None = None,
+        cable_filter: str | None = None,
         internal: bool = False,
     ):
         self.lo = lo
@@ -33,7 +33,7 @@ class CrossingProposalsBuilder(object):
         self.internal = internal
         self.cable = ObjectModel.get_by_name(cable_filter) if cable_filter else None
 
-    def _iter_cables(self, types: set[str] | None = None) -> Iterable[Dict[str, Any]]:
+    def _iter_cables(self, types: set[str] | None = None) -> Iterable[dict[str, Any]]:
         """
         Iterate over cable models.
         """
@@ -65,7 +65,7 @@ class CrossingProposalsBuilder(object):
             "model": obj.model.get_short_label(),
         }
 
-    def build(self) -> Dict[str, Any]:
+    def build(self) -> dict[str, Any]:
         """
         Build connection proposals
         """
@@ -109,18 +109,18 @@ class CrossingProposalsBuilder(object):
         return result
 
 
-class _SideBuilder(object):
+class _SideBuilder:
     key: str
     has_wires: bool = False
 
     def __init__(
         self,
         o_from: Object,
-        left_filter: Optional[str] = None,
-        o_to: Optional[Object] = None,
-        right_filter: Optional[str] = None,
+        left_filter: str | None = None,
+        o_to: Object | None = None,
+        right_filter: str | None = None,
         internal: bool = False,
-        cable: Optional[Object] = None,
+        cable: Object | None = None,
     ):
         self.o_from = o_from
         self.left_filter = left_filter
@@ -128,13 +128,13 @@ class _SideBuilder(object):
         self.right_filter = right_filter
         self.internal = internal
         self.wires = []
-        self.children: Optional[Dict[str, Object]] = None
+        self.children: dict[str, Object] | None = None
         self.internal_connections = None
         self.internal_used = None
         self.cable = cable
         self.loops: set[str] = set()
 
-    def get_children(self, name: str) -> Optional[Object]:
+    def get_children(self, name: str) -> Object | None:
         """
         Get children connected to slot name.
         """
@@ -159,7 +159,7 @@ class _SideBuilder(object):
         name = " > ".join(obj.get_local_name_path(True))
         return f"{name} [{obj.model.get_short_label()}]"
 
-    def iter_connections(self) -> Iterable[Dict[str, Any]]:
+    def iter_connections(self) -> Iterable[dict[str, Any]]:
         """
         Iterate over connections and yield connections structure
         """
@@ -195,7 +195,7 @@ class _SideBuilder(object):
         """
         return obj == self.o_to
 
-    def _get_inner(self, c: ObjectModelConnection) -> Dict[str, Any]:
+    def _get_inner(self, c: ObjectModelConnection) -> dict[str, Any]:
         r = {"valid": True, "free": True}
         # Apply filter
         if self.right_filter:
@@ -234,7 +234,7 @@ class _SideBuilder(object):
                 }
         return r
 
-    def _get_outer(self, c: ObjectModelConnection) -> Dict[str, Any]:
+    def _get_outer(self, c: ObjectModelConnection) -> dict[str, Any]:
         r = {"valid": True, "free": True}
         # Apply filter
         if self.right_filter:
@@ -271,7 +271,7 @@ class _SideBuilder(object):
             }
         return r
 
-    def _get_horizontal(self, c: ObjectModelConnection, protocols) -> Dict[str, Any]:
+    def _get_horizontal(self, c: ObjectModelConnection, protocols) -> dict[str, Any]:
         r = {"valid": True, "free": True}
         oc, _, _ = self.o_from.get_p2p_connection(c.name)
         # Deny same and internal <-> external
@@ -391,7 +391,7 @@ class _SideBuilder(object):
                 return wire, path
         return None, None
 
-    def get_cross(self, o: Object) -> Tuple[Set[str], List[Dict[str, Any]]]:
+    def get_cross(self, o: Object) -> tuple[set[str], list[dict[str, Any]]]:
         r, used = [], set()
         for s, ss in [("model", o.model), ("object", o)]:
             for c in ss.cross:

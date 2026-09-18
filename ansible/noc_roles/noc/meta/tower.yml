@@ -57,4 +57,4 @@ services:
       - mongod
       - nginx
       - clickhouse
-      - liftbridge
+      - kafka

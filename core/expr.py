@@ -7,7 +7,7 @@
 
 # Python modules
 import ast
-from typing import List, Set, Any, Callable
+from typing import Any, Callable
 
 # NOC modules
 from noc.core.convert.dbm import dbm2mw, mw2dbm
@@ -26,10 +26,10 @@ class _VarVisitor(ast.NodeVisitor):
     Collect all variable names from expression
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
-        self.vars: Set[str] = set()
-        self.skip: Set[str] = set()
+        self.vars: set[str] = set()
+        self.skip: set[str] = set()
 
     def visit_Name(self, node: ast.Name) -> Any:
         if node.id not in self.skip:
@@ -39,14 +39,13 @@ class _VarVisitor(ast.NodeVisitor):
         self.skip.add(node.func.id)
         self.generic_visit(node)
 
-    def get_vars(self) -> List[str]:
+    def get_vars(self) -> list[str]:
         return sorted(self.vars)
 
 
-def get_vars(expr: str) -> List[str]:
+def get_vars(expr: str) -> list[str]:
     """
     Parse expression and get the list of variables
-    :param expr:
     :return:
     """
     tree = ast.parse(expr, mode="eval")
@@ -58,7 +57,6 @@ def get_vars(expr: str) -> List[str]:
 def get_fn(expr: str) -> Callable:
     """
     Compile expression to function
-    :param expr:
     :return:
     """
     x_vars = get_vars(expr)

@@ -52,7 +52,7 @@ class Script(BaseScript):
         platform = self.snmp.get(mib["ENTITY-MIB::entPhysicalModelName", 680000])
         return {
             "vendor": "Eltex",
-            "platform": "ESR-%s" % platform,
+            "platform": f"ESR-{platform}",
             "version": match.group("version"),
             "attributes": {
                 "HW version": hw,

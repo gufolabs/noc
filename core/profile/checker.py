@@ -11,7 +11,7 @@ import operator
 import re
 from collections import defaultdict
 from threading import Lock
-from typing import Optional, List, Dict, Tuple, Iterable
+from typing import Iterable
 
 # Third-party modules
 import cachetools
@@ -31,28 +31,28 @@ from noc.core.snmp.version import SNMP_v1, SNMP_v2c
 rules_lock = Lock()
 
 
-class ProfileChecker(object):
+class ProfileChecker:
     base_logger = logging.getLogger("profilechecker")
     _rules_cache = cachetools.TTLCache(10, ttl=60)
     _re_cache = {}
 
     def __init__(
         self,
-        address: Optional[str] = None,
-        pool: Optional[str] = None,
+        address: str | None = None,
+        pool: str | None = None,
         logger=None,
-        snmp_community: Optional[str] = None,
+        snmp_community: str | None = None,
         calling_service: str = "profilechecker",
-        snmp_version: Optional[List[int]] = None,
+        snmp_version: list[int] | None = None,
     ):
         self.address = address
         self.pool = pool
         self.logger = PrefixLoggerAdapter(
-            logger or self.base_logger, "%s][%s" % (self.pool or "", self.address or "")
+            logger or self.base_logger, "{}][{}".format(self.pool or "", self.address or "")
         )
-        self.result_cache: Dict[Tuple[str, str], str] = {}  # (method, param) -> result
-        self.error: Optional[str] = None
-        self.snmp_check: Optional[bool] = None
+        self.result_cache: dict[tuple[str, str], str] = {}  # (method, param) -> result
+        self.error: str | None = None
+        self.snmp_check: bool | None = None
         self.snmp_community = snmp_community
         self.calling_service = calling_service
         self.snmp_version = snmp_version or [SNMP_v2c]
@@ -64,7 +64,7 @@ class ProfileChecker(object):
             self.logger.error("No SNMP credentials. Ignoring")
             self.ignoring_snmp = True
 
-    def find_profile(self, method: str, param: str, result: str) -> Optional[Profile]:
+    def find_profile(self, method: str, param: str, result: str) -> Profile | None:
         """
         Find profile by method
         :param method: Fingerprint getting method
@@ -86,7 +86,7 @@ class ProfileChecker(object):
                 # @todo: process MAYBE rule
                 return profile
 
-    def get_profile(self) -> Optional[Profile]:
+    def get_profile(self) -> Profile | None:
         """
         Returns profile for object, or None when not known
         """
@@ -120,7 +120,7 @@ class ProfileChecker(object):
         self.logger.info("Cannot detect profile: %s", self.error)
         return None
 
-    def get_error(self) -> Optional[str]:
+    def get_error(self) -> str | None:
         """
         Get error message
         :return:
@@ -136,7 +136,7 @@ class ProfileChecker(object):
             .order_by("preference")
         )
 
-    def get_rules(self) -> Dict[int, Dict[Tuple[str, str], List[Tuple[str, str, str, str, str]]]]:
+    def get_rules(self) -> dict[int, dict[tuple[str, str], list[tuple[str, str, str, str, str]]]]:
         """
         Load ProfileCheckRules and return a list, grouped by preferences
         [{
@@ -165,7 +165,7 @@ class ProfileChecker(object):
 
     def iter_rules(
         self,
-    ) -> Iterable[List[Tuple[Tuple[str, str], List[Tuple[str, str, str, str, str]]]]]:
+    ) -> Iterable[list[tuple[tuple[str, str], list[tuple[str, str, str, str, str]]]]]:
         d = self.get_rules()
         for p in sorted(d):
             yield list(d[p].items())
@@ -175,7 +175,7 @@ class ProfileChecker(object):
     def get_re(cls, regexp):
         return re.compile(regexp)
 
-    def do_check(self, method: str, param: str) -> Optional[str]:
+    def do_check(self, method: str, param: str) -> str | None:
         """
         Perform check
         """
@@ -245,7 +245,6 @@ class ProfileChecker(object):
     def snmp_v1_get(self, param):
         """
         Perform SNMP v1 request. May be overridden for testing
-        :param param:
         :return:
         """
         self.logger.info("SNMP v1 GET: %s", param)
@@ -260,7 +259,6 @@ class ProfileChecker(object):
     def snmp_v2c_get(self, param):
         """
         Perform SNMP v2c request. May be overridden for testing
-        :param param:
         :return:
         """
         self.logger.info("SNMP v2c GET: %s", param)

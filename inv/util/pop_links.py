@@ -7,7 +7,6 @@
 
 # Python modules
 import logging
-from typing import Set
 
 # NOC modules
 from noc.inv.models.object import Object
@@ -19,8 +18,8 @@ from noc.inv.models.link import Link
 logger = logging.getLogger(__name__)
 
 
-class LinkedPoP(object):
-    def __init__(self, pop_id):
+class LinkedPoP:
+    def __init__(self, pop_id) -> None:
         self.pop = Object.get_by_id(pop_id)
 
     def iter_db_links(self, level):
@@ -83,7 +82,7 @@ class LinkedPoP(object):
         linked |= self.get_linked_pops_by_cables()
         return linked
 
-    def get_linked_pops_by_cables(self) -> Set[Object]:
+    def get_linked_pops_by_cables(self) -> set[Object]:
         """
         Get PoP's tracing ObjectConnection
         """

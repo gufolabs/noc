@@ -22,7 +22,7 @@ class Script(BaseScript):
     )
 
     def execute(self, address, size=None, count=None, timeout=None):
-        cmd = "ping %s" % address
+        cmd = f"ping {address}"
         pr = self.cli(cmd).replace("\n\n", "\n")
         r = []
         n = 0

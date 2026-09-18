@@ -9,7 +9,6 @@
 import re
 from collections import defaultdict
 from itertools import chain
-from typing import Tuple
 
 # NOC modules
 from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
@@ -281,7 +280,7 @@ class Script(BaseScript):
         for match in self.rx_ip.finditer(v):
             ip_address = match.group("ip")
             ip_subnet = match.group("mask")
-            ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+            ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
             interfaces[match.group("iface")] = {
                 "name": match.group("iface"),
                 "admin_status": match.group("admin_status") == "up",
@@ -397,7 +396,7 @@ class Script(BaseScript):
                 continue
             ifname = "%d/%d/%d/%d" % port_id
             if "prefix" in self.PROCCESSED_TYPE[iftype]:
-                ifname = "%s:%s" % (self.PROCCESSED_TYPE[iftype]["prefix"], ifname)
+                ifname = "{}:{}".format(self.PROCCESSED_TYPE[iftype]["prefix"], ifname)
             if iftype in {6, 24}:
                 # Ethernet ifaces
                 hints = []
@@ -495,7 +494,7 @@ class Script(BaseScript):
             interfaces[iface["name"]] = iface
         return [{"interfaces": list(interfaces.values())}]
 
-    def get_port_id(self, ifindex: int) -> Tuple[int, int, int, int]:
+    def get_port_id(self, ifindex: int) -> tuple[int, int, int, int]:
         # Convert ifindex to rack, shelf, slot, port
         slot_id = ifindex >> 16
         rack, shelf, slot = self.profile.get_slot(slot_id)

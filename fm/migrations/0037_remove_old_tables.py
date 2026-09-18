@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.delete_table("fm_eventrepeat")
         self.db.delete_table("fm_eventlog")
         self.db.delete_table("fm_eventdata")

@@ -4,27 +4,12 @@ Help service configuration
 
 ## base_url
 
-|                |                           |
-| -------------- | ------------------------- |
-| Default value  | `https://docs.getnoc.com` |
-| YAML Path      | `help.base_url`           |
-| Key-Value Path | `help/base_url`           |
-| Environment    | `NOC_HELP_BASE_URL`       |
+{{ config_param("help.base_url") }}
 
 ## branch
 
-|                |                   |
-| -------------- | ----------------- |
-| Default value  | `microservices`   |
-| YAML Path      | `help.branch`     |
-| Key-Value Path | `help/branch`     |
-| Environment    | `NOC_HELP_BRANCH` |
+{{ config_param("help.branch") }}
 
 ## language
 
-|                |                     |
-| -------------- | ------------------- |
-| Default value  | `en`                |
-| YAML Path      | `help.language`     |
-| Key-Value Path | `help/language`     |
-| Environment    | `NOC_HELP_LANGUAGE` |
+{{ config_param("help.language") }}

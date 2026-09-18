@@ -29,8 +29,7 @@ def iter_ids_batch():
         d = [d["_id"] for d in cursor]
         if not d:
             break
-        for link in Link.objects.filter(id__in=d).timeout(False):
-            yield link
+        yield from Link.objects.filter(id__in=d).timeout(False)
         # if match and match["_id"]["$gt"] == d[-1]:
         #     break
         match = {"_id": {"$gt": d[-1]}}
@@ -46,6 +45,6 @@ def fix():
             link.update_topology()
             ManagedObject.update_links(link.linked_objects)
         except AssertionError:
-            print("Assertion Error, check link with id: %s" % link.id)
+            print(f"Assertion Error, check link with id: {link.id}")
         except Exception as e:
-            print("Exception : |%s|%s|" % (e, link.id))
+            print(f"Exception : |{e}|{link.id}|")

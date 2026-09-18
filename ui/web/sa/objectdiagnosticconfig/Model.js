@@ -32,6 +32,10 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Model", {
       type: "boolean",
     },
     {
+      name: "hide_enable",
+      type: "boolean",
+    },
+    {
       name: "display_order",
       type: "int",
       defaultValue: 1000,
@@ -65,6 +69,11 @@ Ext.define("NOC.sa.objectdiagnosticconfig.Model", {
       name: "state_policy",
       type: "string",
       defaultValue: "ANY",
+    },
+    {
+      name: "default_state",
+      type: "string",
+      defaultValue: "unknown",
     },
     {
       name: "checks",

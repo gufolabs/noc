@@ -13,22 +13,23 @@ import threading
 import time
 import asyncio
 from time import perf_counter
-from typing import List, Optional
 
 # Third-party modules
 import pymongo.errors
 from pymongo import DeleteOne, UpdateOne
+from gufo.loader import ImportPathResolver
 
 # NOC modules
 from noc.core.mongo.connection import get_db
-from noc.core.handler import get_handler
 from noc.core.threadpool import ThreadPoolExecutor
 from noc.core.perf import metrics
 from noc.config import config
 from .job import Job
 
+get_job_handler = ImportPathResolver[type[Job]]()
 
-class Scheduler(object):
+
+class Scheduler:
     COLLECTION_BASE = "noc.schedules."
 
     SUBMIT_THRESHOLD_FACTOR = config.scheduler.submit_threshold_factor
@@ -71,19 +72,19 @@ class Scheduler(object):
            N > 1 - sample very Nth job
         :param ignore_import_error: Do not remove job if caused import error.
         """
-        self.logger = logging.getLogger("scheduler.%s" % name)
+        self.logger = logging.getLogger(f"scheduler.{name}")
         self.name = name
         self.collection_name = self.COLLECTION_BASE + self.name
         self.pool = pool
         if pool:
-            self.collection_name += ".%s" % pool
+            self.collection_name += f".{pool}"
         self.to_reset_running = reset_running
         self.running_groups = set()
         self.collection = None
         self.bulk = []
         self.bulk_lock = threading.Lock()
         self.max_threads = max_threads
-        self.executor: Optional[ThreadPoolExecutor] = None
+        self.executor: ThreadPoolExecutor | None = None
         self.run_callback = None
         self.check_time = check_time
         self.read_ahead_interval = datetime.timedelta(milliseconds=check_time)
@@ -104,10 +105,8 @@ class Scheduler(object):
         self.cache_set_ops = {}
         self.service = service
         if self.service:
-            self.scheduler_id = "%s[%s:%s]" % (
-                self.service.service_id,
-                self.service.address,
-                self.service.port,
+            self.scheduler_id = (
+                f"{self.service.service_id}[{self.service.address}:{self.service.port}]"
             )
         else:
             self.scheduler_id = "standalone scheduler"
@@ -158,7 +157,7 @@ class Scheduler(object):
             self.executor = ThreadPoolExecutor(self.max_threads, name=self.name)
         return self.executor
 
-    def reset_to_waiting(self, statuses: List[str]) -> None:
+    def reset_to_waiting(self, statuses: list[str]) -> None:
         """
         Reset all running jobs to waiting status
         """
@@ -175,7 +174,7 @@ class Scheduler(object):
         else:
             self.logger.info("Failed to reset jobs")
 
-    def suspend_keys(self, keys: List[int], suspend: bool = True):
+    def suspend_keys(self, keys: list[int], suspend: bool = True):
         self.logger.debug("Suspend jobs")
         r = self.get_collection().update_many(
             self.get_query({Job.ATTR_KEY: {"$in": keys}}),
@@ -270,7 +269,7 @@ class Scheduler(object):
             for job in qs:
                 job[Job.ATTR_SAMPLE] = self.sample
                 try:
-                    jcls = get_handler(job[Job.ATTR_CLASS])
+                    jcls = get_job_handler(job[Job.ATTR_CLASS])
                     yield jcls(self, job)
                 except ImportError as e:
                     self.logger.error("Invalid job class %s", job[Job.ATTR_CLASS])
@@ -350,12 +349,12 @@ class Scheduler(object):
                             cjobs[v][k].load_context(ctx.get(k, {}))
                 for job in rjobs:
                     if job.is_retries_exceeded():
-                        metrics["%s_jobs_retries_exceeded" % self.name] += 1
+                        metrics[f"{self.name}_jobs_retries_exceeded"] += 1
                     in_label = None
                     if config.features.forensic:
-                        in_label = "%s:%s" % (job.attrs[Job.ATTR_CLASS], job.attrs[Job.ATTR_KEY])
+                        in_label = f"{job.attrs[Job.ATTR_CLASS]}:{job.attrs[Job.ATTR_KEY]}"
                     executor.submit(job.run, _in_label=in_label)
-                    metrics["%s_jobs_started" % self.name] += 1
+                    metrics[f"{self.name}_jobs_started"] += 1
                     n += 1
             if jobs:
                 # Wait for next job within check_interval
@@ -386,11 +385,11 @@ class Scheduler(object):
                 )
             except pymongo.errors.BulkWriteError as e:
                 self.logger.error("Cannot apply bulk operations: %s [%s]", e.details, e.code)
-                metrics["%s_bulk_failed" % self.name] += 1
+                metrics[f"{self.name}_bulk_failed"] += 1
                 return
             except Exception as e:
                 self.logger.error("Cannot apply bulk operations: %s", e)
-                metrics["%s_bulk_failed" % self.name] += 1
+                metrics[f"{self.name}_bulk_failed"] += 1
                 return
             finally:
                 self.bulk = []
@@ -544,12 +543,12 @@ class Scheduler(object):
             return
         cache = self.get_cache()
         for version in cache_set_ops:
-            metrics["%s_cache_set_requests" % self.name] += 1
+            metrics[f"{self.name}_cache_set_requests"] += 1
             try:
                 cache.set_many(cache_set_ops[version], version=version, ttl=self.CACHE_DEFAULT_TTL)
             except Exception as e:
                 self.logger.error("Error writing cache: %s", e)
-                metrics["%s_cache_set_errors" % self.name] += 1
+                metrics[f"{self.name}_cache_set_errors"] += 1
 
     def cache_set(self, key, value, version):
         with self.cache_lock:
@@ -560,12 +559,11 @@ class Scheduler(object):
     def apply_metrics(self, d):
         """
         Append scheduler metrics to dictionary d
-        :param d:
         :return:
         """
         if self.executor:
             self.executor.apply_metrics(d)
-        d.update({"%s_jobs_burst" % self.name: len(self.jobs_burst)})
+        d.update({f"{self.name}_jobs_burst": len(self.jobs_burst)})
 
     def shutdown(self, sync=False):
         self.to_shutdown = True

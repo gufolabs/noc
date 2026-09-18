@@ -14,7 +14,7 @@ from noc.sa.models.objectdiagnosticconfig import (
 
 
 class ObjectDiagnosticConfig(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "objectdiagnosticconfig"
         layout = "hashed"
         source_model = "sa.ObjectDiagnosticConfig"

@@ -4,18 +4,8 @@ Dcs service configuration
 
 ## resolution_timeout
 
-|                |                              |
-| -------------- | ---------------------------- |
-| Default value  | `5M`                         |
-| YAML Path      | `dcs.resolution_timeout`     |
-| Key-Value Path | `dcs/resolution_timeout`     |
-| Environment    | `NOC_DCS_RESOLUTION_TIMEOUT` |
+{{ config_param("dcs.resolution_timeout") }}
 
 ## resolver_expiration_timeout
 
-|                |                                       |
-| -------------- | ------------------------------------- |
-| Default value  | `10M`                                 |
-| YAML Path      | `dcs.resolver_expiration_timeout`     |
-| Key-Value Path | `dcs/resolver_expiration_timeout`     |
-| Environment    | `NOC_DCS_RESOLVER_EXPIRATION_TIMEOUT` |
+{{ config_param("dcs.resolver_expiration_timeout") }}

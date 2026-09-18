@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Literal
+from typing import Literal
 
 # Third-party modules
 from pydantic import BaseModel, Field
@@ -15,6 +15,6 @@ from pydantic import BaseModel, Field
 class ClearIdRequest(BaseModel):
     op: Literal["clearid"] = Field(None, alias="$op")
     id: str
-    timestamp: Optional[str] = None
-    message: Optional[str] = None
-    source: Optional[str] = None
+    timestamp: str | None = None
+    message: str | None = None
+    source: str | None = None

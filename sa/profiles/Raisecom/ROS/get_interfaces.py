@@ -209,7 +209,7 @@ class Script(BaseScript):
         for iface in v.split("\n\n"):
             if not iface:
                 continue
-            match = self.rx_iface_iscom2624g.search("%s\n" % iface)
+            match = self.rx_iface_iscom2624g.search(f"{iface}\n")
             ifname = match.group("ifname")
             if match.group("hw_type"):
                 hw_type = match.group("hw_type")
@@ -250,7 +250,7 @@ class Script(BaseScript):
                 match = self.rx_ifunit.search(ifname)
                 ifunit = match.group("ifunit")
                 try:
-                    v = self.cli("show switchport interface %s %s" % (hw_type, ifunit))
+                    v = self.cli(f"show switchport interface {hw_type} {ifunit}")
                     vlans = self.parse_vlans(v)
                     if vlans["op_mode"] != "trunk":
                         sub["untagged_vlan"] = int(vlans["untagged_vlan"])
@@ -325,15 +325,13 @@ class Script(BaseScript):
             for line in v.splitlines()[2:]:
                 ifname, addr, mask, *_ = line.split()
                 i = {
-                    "name": "ip%s" % ifname,
+                    "name": f"ip{ifname}",
                     "type": "SVI",
                     "mac": mac,
                     "enabled_protocols": [],
-                    "subinterfaces": [
-                        {"name": "ip%s" % ifname, "mac": mac, "enabled_afi": ["IPv4"]}
-                    ],
+                    "subinterfaces": [{"name": f"ip{ifname}", "mac": mac, "enabled_afi": ["IPv4"]}],
                 }
-                ip_address = "%s/%s" % (addr, IPv4.netmask_to_len(mask))
+                ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
                 i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
                 interfaces[i["name"]] = i
 
@@ -412,7 +410,7 @@ class Script(BaseScript):
                 else:
                     untagged = []
                 for p in ports:
-                    p_name = "port%s" % p
+                    p_name = f"port{p}"
                     if p_name in interfaces:
                         if p not in untagged:
                             if "tagged_vlans" in interfaces[p_name]["subinterfaces"][0]:
@@ -441,7 +439,7 @@ class Script(BaseScript):
             for match in self.rx_iface.finditer(v):
                 ifname = match.group("iface")
                 i = {
-                    "name": "ip%s" % ifname,
+                    "name": f"ip{ifname}",
                     "type": "SVI",
                     "oper_status": match.group("oper_status") == "active",
                     "admin_status": match.group("oper_status") == "active",
@@ -449,7 +447,7 @@ class Script(BaseScript):
                     "enabled_protocols": [],
                     "subinterfaces": [
                         {
-                            "name": "ip%s" % ifname,
+                            "name": f"ip{ifname}",
                             "oper_status": match.group("oper_status") == "active",
                             "admin_status": match.group("oper_status") == "active",
                             "mac": mac,
@@ -460,7 +458,7 @@ class Script(BaseScript):
                 }
                 addr = match.group("ip")
                 mask = match.group("mask")
-                ip_address = "%s/%s" % (addr, IPv4.netmask_to_len(mask))
+                ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
                 i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
                 if ifname in ifdescr:
                     i["description"] = ifdescr[ifname]["description"]
@@ -473,15 +471,15 @@ class Script(BaseScript):
         for match in self.rx_iface2.finditer(v):
             ifname = match.group("iface")
             i = {
-                "name": "ip%s" % ifname,
+                "name": f"ip{ifname}",
                 "type": "SVI",
                 "mac": mac,
                 "enabled_protocols": [],
-                "subinterfaces": [{"name": "ip%s" % ifname, "mac": mac, "enabled_afi": ["IPv4"]}],
+                "subinterfaces": [{"name": f"ip{ifname}", "mac": mac, "enabled_afi": ["IPv4"]}],
             }
             addr = match.group("ip")
             mask = match.group("mask")
-            ip_address = "%s/%s" % (addr, IPv4.netmask_to_len(mask))
+            ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
             i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
             interfaces[i["name"]] = i
         if not self.is_rotek:
@@ -490,7 +488,7 @@ class Script(BaseScript):
                 vlan_id = match.group("vlan_id")
                 if vlan_id == "none":
                     continue
-                ifname = "ip%s" % match.group("iface")
+                ifname = "ip{}".format(match.group("iface"))
                 for iname in interfaces:
                     if iname == ifname:
                         interfaces[ifname]["subinterfaces"][0]["vlan_ids"] = vlan_id

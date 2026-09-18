@@ -9,7 +9,6 @@
 import argparse
 import sys
 from contextlib import contextmanager
-from typing import List
 
 # NOC modules
 from noc.core.management.base import BaseCommand, CommandError
@@ -17,6 +16,8 @@ from noc.core.mongo.connection import connect
 from noc.core.validators import is_int
 from noc.core.change.policy import change_tracker
 from noc.models import get_model
+from noc.sa.models.managedobject import ManagedObject
+from noc.aaa.models.user import User
 
 
 class Command(BaseCommand):
@@ -25,7 +26,7 @@ class Command(BaseCommand):
 
     models = {"managed_object": "sa.ManagedObject", "user": "aaa.User"}
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("model", nargs=1, help="List of extractor names")
         parser.add_argument("--state", help="Filter by state (if model supported")
         parser.add_argument(
@@ -37,7 +38,7 @@ class Command(BaseCommand):
         parser.add_argument("ids", nargs=argparse.REMAINDER, help="List of extractor names")
 
     def handle(
-        self, model, state=None, dry_run: bool = False, ids: List[str] = None, *args, **options
+        self, model, state=None, dry_run: bool = False, ids: list[str] = None, *args, **options
     ):
         """"""
         print(model, state, args, ids)
@@ -67,7 +68,7 @@ class Command(BaseCommand):
                     except Exception:
                         error_report()
 
-    def iter_objects(self, mid, ids: List[str], state=None):
+    def iter_objects(self, mid, ids: list[str], state=None):
         if state:
             self.print("Iter objects with state")
         model = get_model(mid)
@@ -83,27 +84,27 @@ class Command(BaseCommand):
         for o_id in ids:
             o = g(o_id)
             if not o:  # Not found
-                raise CommandError("Object '%s' is not found" % o_id)
+                raise CommandError(f"Object '{o_id}' is not found")
             yield o
 
     def handle_1(self, *args, **options):
         if len(args) < 1:
-            print("USAGE: %s <model> <object id> [.. <object id>]" % sys.argv[0])
+            print(f"USAGE: {sys.argv[0]} <model> <object id> [.. <object id>]")
             sys.exit(1)
         m = args[0].replace("-", "_")
         connect()
         if m not in self.models:
             raise CommandError(
-                "Invalid model '%s'. Valid models are: %s" % (m, ", ".join(self.models))
+                "Invalid model '{}'. Valid models are: {}".format(m, ", ".join(self.models))
             )
         objects = []
-        getter = getattr(self, "get_%s" % m)
-        wiper = getattr(self, "wipe_%s" % m)
+        getter = getattr(self, f"get_{m}")
+        wiper = getattr(self, f"wipe_{m}")
         # Get objects
         for o_id in args[1:]:
             o = getter(o_id)
             if not o:  # Not found
-                raise CommandError("Object '%s' is not found" % o_id)
+                raise CommandError(f"Object '{o_id}' is not found")
             objects += [o]
         # Wipe objects
         from noc.core.debug import error_report
@@ -125,7 +126,6 @@ class Command(BaseCommand):
         with self.log(message):
             do something
 
-        :param message:
         :param newline: Add newline
         :return:
         """
@@ -139,14 +139,12 @@ class Command(BaseCommand):
         sys.stdout.write("done\n")
         sys.stdout.flush()
 
-    def get_managed_object(self, o_id):
+    def get_managed_object(self, o_id: str | int) -> ManagedObject | None:
         """
         Get ManagedObject by id or name
         :param o_id: Object's id or name
         :return: ManagedObject
-        :rtype: ManagedObject
         """
-        from noc.sa.models.managedobject import ManagedObject
 
         # Try to get object by id
         if is_int(o_id):
@@ -174,14 +172,12 @@ class Command(BaseCommand):
 
         wipe(o)
 
-    def get_user(self, u_id):
+    def get_user(self, u_id: str | int) -> User | None:
         """
         Get User by id or name
         :param u_id: Object's id or name
-        :return: ManagedObject
-        :rtype: ManagedObject
+        :return: User
         """
-        from noc.aaa.models.user import User
 
         # Try to get object by id
         if is_int(u_id):
@@ -273,7 +269,3 @@ class Command(BaseCommand):
         # Finally delete user
         with self.log("Deleting user"):
             o.delete()
-
-
-if __name__ == "__main__":
-    Command().run()

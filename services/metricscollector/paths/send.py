@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 from http import HTTPStatus
 
 # Third-party modules
@@ -20,7 +19,7 @@ router = APIRouter()
 
 
 @router.post("/api/metricscollector/send")
-async def send(req: SendRequest, x_noc_agent_key: Optional[str] = Header(None)) -> None:
+async def send(req: SendRequest, x_noc_agent_key: str | None = Header(None)) -> None:
     if not x_noc_agent_key:
         raise HTTPException(status_code=HTTPStatus.FORBIDDEN)
     svc = get_service()

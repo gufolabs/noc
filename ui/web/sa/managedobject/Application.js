@@ -101,6 +101,12 @@ const defaultColumns = [
     flex: 1,
   },
   {
+    text: __("FQDN"),
+    dataIndex: "fqdn",
+    width: 200,
+    hidden: true,
+  },
+  {
     text: __("Interfaces"),
     dataIndex: "interface_count",
     width: 50,
@@ -209,6 +215,7 @@ Ext.define("NOC.sa.managedobject.Application", {
               selModel: {
                 mode: "MULTI",
                 selType: "checkboxmodel",
+                showHeaderCheckbox: false,
               },
               listeners: {
                 selectionchange: "onSelectionChange",
@@ -330,6 +337,7 @@ Ext.define("NOC.sa.managedobject.Application", {
               stateful: true,
               stateId: "sa.managedobject-selected1-grid",
               reference: "saManagedobjectSelectedGrid1",
+              bufferedRenderer: false,
               region: "east",
               width: "50%",
               collapsed: true,
@@ -819,5 +827,33 @@ Ext.define("NOC.sa.managedobject.Application", {
   loadById: function(id){
     var me = this;
     me.getController().editManagedObject(undefined, id, undefined, true);
+  },
+  // Apply a history token (back/forward or deep-link):
+  //   []            -> selection grid
+  //   [id]          -> object form
+  //   [id, suffix]  -> object form sub-view (config, console, ...)
+  applyHistory: function(args){
+    var me = this;
+    if(!args || args.length === 0){
+      me.setActiveItem(0);
+      me.restoreFilterFromUrl();
+      return;
+    }
+    var id = args[0],
+      suffix = args[1],
+      formPanel = me.down("[itemId=managedobject-form-panel]");
+    // If this object is already loaded, just switch the sub-view instead of a
+    // full reload (back/forward between sub-views of the same object).
+    if(formPanel && String(formPanel.recordId) === String(id)){
+      var formView = formPanel.up();
+      me.setActiveItem("managedobject-form");
+      if(suffix){
+        formView.getController().itemPreview("sa-" + suffix);
+      } else{
+        formView.setActiveItem("managedobject-form-panel");
+      }
+      return;
+    }
+    me.getController().editManagedObject(undefined, id, suffix);
   },
 });

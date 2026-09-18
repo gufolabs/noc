@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from .base import BaseModel
@@ -15,13 +14,13 @@ from .base import BaseModel
 class AuthProfile(BaseModel):
     id: str
     name: str
-    description: Optional[str] = None
+    description: str | None = None
     type: str = "S"
-    user: Optional[str] = None
-    password: Optional[str] = None
-    super_password: Optional[str] = None
-    snmp_ro: Optional[str] = None
-    snmp_rw: Optional[str] = None
+    user: str | None = None
+    password: str | None = None
+    super_password: str | None = None
+    snmp_ro: str | None = None
+    snmp_rw: str | None = None
 
     _csv_fields = [
         "id",

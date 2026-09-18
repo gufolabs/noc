@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, List
+from typing import Any
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
@@ -137,7 +137,7 @@ class Endpoint(Document):
         """Resource path."""
         return resource_path(self.resource)
 
-    def as_resource_path(self) -> List[str]:
+    def as_resource_path(self) -> list[str]:
         """Convert to resource path."""
         return [self.channel.as_resource(), self.resource]
 

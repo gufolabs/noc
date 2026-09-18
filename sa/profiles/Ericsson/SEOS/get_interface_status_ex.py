@@ -33,11 +33,9 @@ class Script(BaseScript):
             for ifindex, name in self.get_iftable("IF-MIB::ifName"):
                 descr = self.snmp.get(mib["IF-MIB::ifDescr", ifindex])
                 try:
-                    v = self.profile.convert_interface_name("%s/%s" % (name, descr))
+                    v = self.profile.convert_interface_name(f"{name}/{descr}")
                 except InterfaceTypeError as e:
-                    self.logger.debug(
-                        "Ignoring unknown interface %s: %s", "%s/%s" % (name, descr), e
-                    )
+                    self.logger.debug("Ignoring unknown interface %s: %s", f"{name}/{descr}", e)
                     unknown_interfaces += [name]
                     continue
                 if "." in v:

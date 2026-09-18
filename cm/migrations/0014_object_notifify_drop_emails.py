@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.delete_column("cm_objectnotify", "emails")
         self.db.execute(
             "ALTER TABLE cm_objectnotify ALTER COLUMN notification_group_id SET NOT NULL"

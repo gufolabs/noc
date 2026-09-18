@@ -217,7 +217,6 @@ class BIAPI(JSONRPCAPI):
             * name
             * description
             * type
-        :param name:
         :return:
         """
         for ds in self.get_datasources():
@@ -257,7 +256,6 @@ class BIAPI(JSONRPCAPI):
         * owner
         * created
         * changed
-        :param query:
         :return:
         """
         user = self.current_user
@@ -288,7 +286,6 @@ class BIAPI(JSONRPCAPI):
     def _get_dashboard(self, id, access_level=DAL_RO):
         """
         Returns dashboard or None
-        :param id:
         :return:
         """
         user = self.current_user
@@ -313,7 +310,6 @@ class BIAPI(JSONRPCAPI):
     def get_dashboard(self, id):
         """
         Returns dashboard config by id
-        :param id:
         :return:
         """
         d = self._get_dashboard(id)
@@ -332,7 +328,6 @@ class BIAPI(JSONRPCAPI):
     def set_dashboard(self, config):
         """
         Save dashboard config.
-        :param config:
         :return: datshboard id
         """
         if "id" in config:
@@ -363,7 +358,6 @@ class BIAPI(JSONRPCAPI):
     def remove_dashboard(self, id):
         """
         Remove user dashboard
-        :param id:
         :return:
         """
         d = self._get_dashboard(id, access_level=2)
@@ -378,7 +372,6 @@ class BIAPI(JSONRPCAPI):
     def get_hierarchy(self, params):
         """
         Get Hierarchy data for field
-        :param params:
         :return:
         """
 
@@ -469,7 +462,7 @@ class BIAPI(JSONRPCAPI):
                 {
                     "id": u.id,
                     "username": u.username,
-                    "full_name": "%s %s" % (u.last_name, u.first_name),
+                    "full_name": f"{u.last_name} {u.first_name}",
                 }
                 for u in qs
             ),
@@ -498,7 +491,7 @@ class BIAPI(JSONRPCAPI):
             if ar.user:
                 i["user"] = {
                     "id": ar.user.id,
-                    "name": "%s %s" % (ar.user.last_name, ar.user.first_name),
+                    "name": f"{ar.user.last_name} {ar.user.first_name}",
                 }
             if ar.group:
                 i["group"] = {"id": ar.group.id, "name": ar.group.name}
@@ -546,7 +539,7 @@ class BIAPI(JSONRPCAPI):
         except ValueError as e:
             self.logger.error("Validation items with rights: %s", e)
             metrics["error", ("type", "validation")] += 1
-            raise APIError("Validation error %s" % e)
+            raise APIError(f"Validation error {e}")
         for i in items:
             da = DashboardAccess(level=i.get("level", -1))
             if i.get("user"):
@@ -563,8 +556,6 @@ class BIAPI(JSONRPCAPI):
     def set_dashboard_access(self, id, items):
         """
 
-        :param id:
-        :param items:
         :return:
         """
         if not id.get("id"):
@@ -577,8 +568,6 @@ class BIAPI(JSONRPCAPI):
     def set_dashboard_access_user(self, id, items):
         """
 
-        :param id:
-        :param items:
         :return:
         """
         if not id.get("id"):
@@ -590,8 +579,6 @@ class BIAPI(JSONRPCAPI):
     def set_dashboard_access_group(self, id, items):
         """
 
-        :param id:
-        :param items:
         :return:
         """
         if not id.get("id"):

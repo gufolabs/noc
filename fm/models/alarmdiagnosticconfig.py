@@ -88,7 +88,6 @@ class AlarmDiagnosticConfig(Document):
     def on_raise(cls, alarm):
         """
         Submit raise and periodic jobs
-        :param alarm:
         :return:
         """
         r_cfg = defaultdict(list)
@@ -157,7 +156,6 @@ class AlarmDiagnosticConfig(Document):
     def on_clear(cls, alarm):
         """
         Submit clear jobs
-        :param alarm:
         :return:
         """
         cfg = defaultdict(list)
@@ -241,7 +239,7 @@ class AlarmDiagnosticConfig(Document):
                         error_report()
                         result += [str(e)]
                 except ImportError:
-                    result += ["Invalid handler: %s" % c["handler"]]
+                    result += ["Invalid handler: {}".format(c["handler"])]
         if result:
             AlarmDiagnostic.save_diagnostics(alarm, result, state)
 

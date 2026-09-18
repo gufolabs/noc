@@ -25,14 +25,13 @@ Sample = namedtuple("Sample", ["value", "width", "delta"])
 MAX_FLOAT = sys.float_info.max
 
 
-class Stream(object):
+class Stream:
     """
     Base class for approximate quantiles compulation
 
-    :param n:
     """
 
-    def __init__(self, buff_size):
+    def __init__(self, buff_size) -> None:
         self.buff_size = buff_size
         self.sorted = False
         self.samples = []
@@ -54,7 +53,6 @@ class Stream(object):
     def insert(self, v):
         """
         Submit value to stream
-        :param v:
         :return:
         """
         # Fast unsorted insert untill buffer limit is reached or first query
@@ -174,7 +172,6 @@ class Stream(object):
     def query(self, q):
         """
         Query returns computed q-th percentile value.
-        :param q:
         :return:
         """
         assert 0.0 <= q <= 1.0
@@ -221,11 +218,9 @@ class BiasedStream(Stream):
     where needed quantiles are not known a priori, but
     error guarantees can still be given
 
-    :param n:
-    :param epsilon:
     """
 
-    def __init__(self, n, epsilon):
+    def __init__(self, n, epsilon) -> None:
         super().__init__(n)
         self.epsilon = epsilon
 
@@ -266,11 +261,10 @@ class TargetedStream(Stream):
     their absolute errors, i.e. the true quantile of a value returned by a query
     is guaranteed to be within (Quantile±Epsilon).
 
-    :param n:
     :param targets: List of (quantile, epsilon)
     """
 
-    def __init__(self, n, targets):
+    def __init__(self, n, targets) -> None:
         super().__init__(n)
         self.targets = targets
 
@@ -285,7 +279,7 @@ class TargetedStream(Stream):
         return m
 
 
-class Summary(object):
+class Summary:
     """
     Group of time-expiring quantiles. Collects up to `n` time slots.
     `Summary` collects quantiles for ttl, 2 * ttl, .. , n * ttl intervals.
@@ -298,7 +292,7 @@ class Summary(object):
     :param *args: `Stream` constructor parameters
     """
 
-    def __init__(self, ttl, n, kls, *args):
+    def __init__(self, ttl, n, kls, *args) -> None:
         self.ttl = ttl
         self.slots = deque()
         for _ in range(n + 1):

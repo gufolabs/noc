@@ -150,15 +150,13 @@ class Script(GetMetricsScript):
                 int(str(metric.ifindex)[: len(group_num)]),
                 int(str(metric.ifindex)[len(group_num) :]),
             )
-            mname = self.snmp.get(
-                "1.3.6.1.4.1.32285.2.2.10.3008.5.6.1.5.1.1.%s.%s" % (channel, index)
-            )
+            mname = self.snmp.get(f"1.3.6.1.4.1.32285.2.2.10.3008.5.6.1.5.1.1.{channel}.{index}")
             m_astatus = self.snmp.get(
-                "1.3.6.1.4.1.32285.2.2.10.3008.5.6.1.7.1.1.%s.%s" % (channel, index)
+                f"1.3.6.1.4.1.32285.2.2.10.3008.5.6.1.7.1.1.{channel}.{index}"
             )
             try:
                 minname = self.snmp.get(
-                    "1.3.6.1.4.1.32285.2.2.10.3008.4.6.1.8.1.1.%s.%s" % (channel, index)
+                    f"1.3.6.1.4.1.32285.2.2.10.3008.4.6.1.8.1.1.{channel}.{index}"
                 )
                 if minname and mname == minname and m_astatus:
                     m_ostatus = 1
@@ -193,12 +191,10 @@ class Script(GetMetricsScript):
                 int(str(metric.ifindex)[: len(group_num)]),
                 int(str(metric.ifindex)[len(group_num) :]),
             )
-            mname = self.snmp.get(
-                "1.3.6.1.4.1.32285.2.2.10.3008.5.6.1.5.1.1.%s.%s" % (channel, index)
-            )
+            mname = self.snmp.get(f"1.3.6.1.4.1.32285.2.2.10.3008.5.6.1.5.1.1.{channel}.{index}")
             try:
                 input = self.snmp.get(
-                    "1.3.6.1.4.1.32285.2.2.10.3008.4.6.1.18.1.1.%s.%s" % (channel, index)
+                    f"1.3.6.1.4.1.32285.2.2.10.3008.4.6.1.18.1.1.{channel}.{index}"
                 )
                 input = float(input.rstrip("Mbps"))
             except self.snmp.SNMPError:

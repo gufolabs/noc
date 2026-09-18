@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         db = self.mongo_db
         now = datetime.datetime.now()
         db.noc.maintenance.update_many(

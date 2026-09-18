@@ -7,7 +7,6 @@
 
 # Python modules
 from contextvars import ContextVar
-from typing import Dict, Optional
 import uuid
 
 # NOC modules
@@ -21,8 +20,8 @@ CALLING_SERVICE = config.script.calling_service
 DEFAULT_IDLE_TIMEOUT = config.script.caller_timeout
 
 
-class ScriptCaller(object):
-    def __init__(self, obj, name):
+class ScriptCaller:
+    def __init__(self, obj, name) -> None:
         if "." in name:
             self.name = name.split(".")[-1]
         else:
@@ -47,8 +46,8 @@ class ScriptCaller(object):
         )
 
 
-class Session(object):
-    def __init__(self, object_id, idle_timeout=None):
+class Session:
+    def __init__(self, object_id, idle_timeout=None) -> None:
         self._object_id = object_id
         self._idle_timeout = idle_timeout or config.script.caller_timeout
         self._id = str(uuid.uuid4())
@@ -56,16 +55,16 @@ class Session(object):
         self._pool = None
 
     def _get_hints(self):
-        """
-        Get activator address
-        :param pool:
-        :return:
+        """Get activator address
+
+        Args:
+            pool
         """
         try:
-            svc = get_dcs().resolve_sync("activator-%s" % self._pool, hint=self._hints[0])
+            svc = get_dcs().resolve_sync(f"activator-{self._pool}", hint=self._hints[0])
             self._hints[0] = svc
         except ResolutionError:
-            raise RPCNoService("activator-%s" % self._pool)
+            raise RPCNoService(f"activator-{self._pool}")
 
     def __call__(self, name, args, timeout=None, streaming=None, return_metrics=False):
         # Call SAE for credentials
@@ -104,13 +103,13 @@ class Session(object):
             return
 
 
-class SessionContext(object):
+class SessionContext:
     # Thread-local storage holding session context for threads
-    cv_sessions_smap: ContextVar[Optional[Dict[int, Session]]] = ContextVar(
+    cv_sessions_smap: ContextVar[dict[int, Session] | None] = ContextVar(
         "cv_sessions_smap", default=None
     )
 
-    def __init__(self, object, idle_timeout=None):
+    def __init__(self, object, idle_timeout=None) -> None:
         self._object_id = object.id
         self._idle_timeout = idle_timeout
 

@@ -10,15 +10,14 @@ from .base import BaseMiddleware
 
 
 class JSONRequestIdMiddleware(BaseMiddleware):
-    """
-    Append request_id:XXXXX to requests.
+    """Append request_id:XXXXX to requests.
     Request id is automatically increased with each next request.
     `request_id` name may be changed via `request_id_param`
     """
 
     name = "jsonrequestid"
 
-    def __init__(self, http, request_id_param="request_id"):
+    def __init__(self, http, request_id_param="request_id") -> None:
         super().__init__(http)
         self.request_id_param = request_id_param
 

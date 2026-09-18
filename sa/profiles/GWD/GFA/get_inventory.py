@@ -36,7 +36,7 @@ class Script(BaseScript):
     def execute_cli(self):
         p = self.cli("show sfp-online pon")
         u = self.cli("show sfp-online uplink")
-        sfp = "%s%s" % (u, p)
+        sfp = f"{u}{p}"
         v = self.cli("show version", cached=True)
         match = self.rx_chassis.search(v)
         r = [

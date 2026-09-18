@@ -16,7 +16,7 @@ from time import perf_counter
 import asyncio
 
 # Third-party modules
-from typing import Optional, Dict, Any, Set, List, Callable, TypeVar
+from typing import Any, Callable, TypeVar
 
 # NOC modules
 from noc.config import config
@@ -31,16 +31,16 @@ DEFAULT_IDLE_TIMEOUT = config.threadpool.idle_timeout
 DEFAULT_SHUTDOWN_TIMEOUT = config.threadpool.shutdown_timeout
 
 
-class ThreadPoolExecutor(object):
+class ThreadPoolExecutor:
     def __init__(
         self,
         max_workers: int,
         idle_timeout: int = DEFAULT_IDLE_TIMEOUT,
         shutdown_timeout: int = DEFAULT_SHUTDOWN_TIMEOUT,
-        name: Optional[str] = None,
+        name: str | None = None,
     ) -> None:
         self.max_workers = max_workers
-        self.threads: Set[threading.Thread] = set()
+        self.threads: set[threading.Thread] = set()
         self.mutex = threading.Lock()
         self.queue: deque = deque()
         self.to_shutdown = False
@@ -52,7 +52,7 @@ class ThreadPoolExecutor(object):
         self.done_event = None
         self.done_future = None
         self.started = perf_counter()
-        self.waiters: List[_thread.LockType] = []
+        self.waiters: list[_thread.LockType] = []
         if config.thread_stack_size:
             threading.stack_size(config.thread_stack_size)
 
@@ -72,7 +72,7 @@ class ThreadPoolExecutor(object):
         with self.mutex:
             if not len(self.waiters) and len(self.threads) < self.max_workers:
                 # Start new thread
-                name = "worker-%s" % next(self.worker_id)
+                name = f"worker-{next(self.worker_id)}"
                 t = threading.Thread(target=self.worker, name=name)
                 t.daemon = True
                 self.threads.add(t)
@@ -249,10 +249,9 @@ class ThreadPoolExecutor(object):
                 (self.max_workers - len(self.threads) - self._qsize() + len(self.waiters)), 0
             )
 
-    def apply_metrics(self, d: Dict[str, Any]) -> None:
+    def apply_metrics(self, d: dict[str, Any]) -> None:
         """
         Append threadpool metrics to dictionary d
-        :param d:
         :return:
         """
         with self.mutex:
@@ -260,13 +259,13 @@ class ThreadPoolExecutor(object):
             idle = len(self.waiters)
             d.update(
                 {
-                    "%s_max_workers" % self.name: self.max_workers,
-                    "%s_workers" % self.name: workers,
-                    "%s_idle_workers" % self.name: idle,
-                    "%s_running_workers" % self.name: workers - idle,
-                    "%s_submitted_tasks" % self.name: self.submitted_tasks,
-                    "%s_queued_jobs" % self.name: len(self.queue),
-                    "%s_uptime" % self.name: perf_counter() - self.started,
+                    f"{self.name}_max_workers": self.max_workers,
+                    f"{self.name}_workers": workers,
+                    f"{self.name}_idle_workers": idle,
+                    f"{self.name}_running_workers": workers - idle,
+                    f"{self.name}_submitted_tasks": self.submitted_tasks,
+                    f"{self.name}_queued_jobs": len(self.queue),
+                    f"{self.name}_uptime": perf_counter() - self.started,
                 }
             )
 

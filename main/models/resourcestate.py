@@ -15,7 +15,7 @@ from noc.core.model.decorator import on_delete_check
 
 @on_delete_check(check=[("main.ResourceState", "step_to")])
 class ResourceState(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Resource State"
         verbose_name_plural = "Resource States"
         ordering = ["name"]

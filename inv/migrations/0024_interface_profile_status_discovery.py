@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         db = self.mongo_db
         # Migrate profiles
         p_coll = db["noc.interface_profiles"]

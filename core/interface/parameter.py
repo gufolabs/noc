@@ -9,12 +9,12 @@
 from .error import InterfaceTypeError
 
 
-class BaseParameter(object):
+class BaseParameter:
     """
     Abstract parameter
     """
 
-    def __init__(self, required=True, default=None):
+    def __init__(self, required=True, default=None) -> None:
         self.required = required
         self.default = default
         if default is not None:
@@ -33,7 +33,7 @@ class BaseParameter(object):
         :type msg: String
         :raises InterfaceTypeError
         """
-        raise InterfaceTypeError("%s: %s. %s" % (self.__class__.__name__, repr(value), msg))
+        raise InterfaceTypeError(f"{self.__class__.__name__}: {value!r}. {msg}")
 
     def clean(self, value):
         """
@@ -129,7 +129,7 @@ class ORParameter(BaseParameter):
     InterfaceTypeError: IPv4Parameter: None.
     """
 
-    def __init__(self, left, right):
+    def __init__(self, left, right) -> None:
         super().__init__()
         self.left = left
         self.right = right

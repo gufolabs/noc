@@ -10,7 +10,7 @@ import operator
 import re
 from itertools import filterfalse
 from functools import partial
-from typing import List, Dict, Optional, Tuple, Set, Any, Union, FrozenSet
+from typing import Optional, Any
 from threading import Lock
 
 # Third-party modules
@@ -52,7 +52,7 @@ class NetworkRange(EmbeddedDocument):
     exclude = BooleanField(default=False)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"network": self.network}
 
 
@@ -69,7 +69,7 @@ class CheckItem(EmbeddedDocument):
         return f"{self.check}:{self.port}"
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {"check": self.check}
         if self.port:
             r["port"] = self.port
@@ -103,7 +103,7 @@ class MatchData(EmbeddedDocument):
         return value == self.value
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"field": self.field, "op": self.op, "value": self.value}
 
 
@@ -119,7 +119,7 @@ class MatchCheck(EmbeddedDocument):
             return f"{self.check}:{self.port} {self.match_state}"
         return f"{self.check} {self.match_state}"
 
-    def is_match(self, checks: Dict[Tuple[str, int], Optional[bool]]):
+    def is_match(self, checks: dict[tuple[str, int], bool | None]):
         if (self.check, self.port or 0) not in checks:
             return False
         value = checks[(self.check, self.port or 0)]
@@ -128,7 +128,7 @@ class MatchCheck(EmbeddedDocument):
         return not (self.match_state == "fail" and value)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {"check": self.check, "match_state": self.match_state}
         if self.port:
             r["port"] = self.port
@@ -157,10 +157,10 @@ class MatchItem(EmbeddedDocument):
 
     def is_match(
         self,
-        labels: List[str],
-        data: Dict[str, Any],
-        checks: Dict[Tuple[str, int], Any],
-        groups: List[str],
+        labels: list[str],
+        data: dict[str, Any],
+        checks: dict[tuple[str, int], Any],
+        groups: list[str],
     ) -> bool:
         if self.match_labels and set(self.match_labels) - set(labels):
             return False
@@ -177,7 +177,7 @@ class MatchItem(EmbeddedDocument):
         return True
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {}
         if self.match_labels:
             r["match_labels"] = self.match_labels
@@ -192,7 +192,7 @@ class SourceItem(EmbeddedDocument):
     meta = {"strict": False, "auto_create_index": False}
 
     source = StringField(choices=list(SOURCES), required=True)
-    remote_system: Optional[RemoteSystem] = PlainReferenceField(RemoteSystem, required=False)
+    remote_system: RemoteSystem | None = PlainReferenceField(RemoteSystem, required=False)
     update_last_seen = BooleanField(default=False)
     sync_policy = StringField(choices=[("A", "All"), ("M", "Mappings Only")], default="A")
     remove_policy = StringField(
@@ -207,7 +207,7 @@ class SourceItem(EmbeddedDocument):
         return f"{self.source}: ULS: {self.update_last_seen};P: {self.sync_policy};R:{self.is_required}"
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {"source": self.source, "is_required": self.is_required}
 
 
@@ -229,18 +229,18 @@ class ObjectDiscoveryRule(Document):
     uuid = UUIDField(binary=True)
     # Rule preference, processed from lesser to greater
     preference = IntField(required=True, default=100)
-    network_ranges: List["NetworkRange"] = EmbeddedDocumentListField(NetworkRange)
+    network_ranges: list["NetworkRange"] = EmbeddedDocumentListField(NetworkRange)
     workflow: "Workflow" = PlainReferenceField(
         Workflow, default=partial(Workflow.get_default_workflow, "sa.DiscoveredObject")
     )
-    sources: List[SourceItem] = EmbeddedDocumentListField(SourceItem)  # Source match and priority
+    sources: list[SourceItem] = EmbeddedDocumentListField(SourceItem)  # Source match and priority
     # deduplicate_fields =
-    conditions: List[MatchItem] = EmbeddedDocumentListField(MatchItem)
+    conditions: list[MatchItem] = EmbeddedDocumentListField(MatchItem)
     update_interval = IntField(default=0)
     expired_ttl = IntField(default=0)  # Time for expired source
     enable_ip_scan_discovery = BooleanField(default=False)
     ip_scan_discovery_interval = IntField(default=3600)
-    checks: List["CheckItem"] = EmbeddedDocumentListField(CheckItem)
+    checks: list["CheckItem"] = EmbeddedDocumentListField(CheckItem)
     #
     # actions: List["MetricActionItem"] = EmbeddedDocumentListField(MetricActionItem)
     # log - add record as new
@@ -263,7 +263,7 @@ class ObjectDiscoveryRule(Document):
     )
     # stop_processed = BooleanField(default=False)
     sync_approved = BooleanField(default=False)  # sync record on
-    default_template: Optional[ModelTemplate] = PlainReferenceField(ModelTemplate)
+    default_template: ModelTemplate | None = PlainReferenceField(ModelTemplate)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _prefix_cache = cachetools.TTLCache(maxsize=10, ttl=600)
@@ -274,16 +274,16 @@ class ObjectDiscoveryRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ObjectDiscoveryRule"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ObjectDiscoveryRule"]:
         return ObjectDiscoveryRule.objects.filter(id=oid).first()
 
     @property
-    def required_sources(self) -> FrozenSet[str]:
+    def required_sources(self) -> frozenset[str]:
         """Return required sources for rule"""
         return frozenset(s.source for s in self.sources if s.is_required)
 
     @property
-    def required_systems(self) -> FrozenSet[str]:
+    def required_systems(self) -> frozenset[str]:
         """Return required RemoteSystems for rule"""
         return frozenset(
             str(s.remote_system.id) for s in self.sources if s.is_required and s.remote_system
@@ -291,7 +291,7 @@ class ObjectDiscoveryRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_rules_cache"), lock=lambda _: rules_lock)
-    def get_rules_by_source(cls, sources: Optional[FrozenSet[str]] = None):
+    def get_rules_by_source(cls, sources: frozenset[str] | None = None):
         """
         Return list rules match Instance for sources
         Args:
@@ -308,8 +308,8 @@ class ObjectDiscoveryRule(Document):
 
     @classmethod
     def get_effective_data(
-        cls, sources: List[str], data: List[Any]
-    ) -> Tuple[Dict[str, str], Set[str], Set[str]]:
+        cls, sources: list[str], data: list[Any]
+    ) -> tuple[dict[str, str], set[str], set[str]]:
         """
         Merge data by Source Priority
         Args:
@@ -332,7 +332,7 @@ class ObjectDiscoveryRule(Document):
                 groups |= set(di.service_groups)
         return r, labels, groups
 
-    def merge_sources(self, sources: List[str]) -> List[str]:
+    def merge_sources(self, sources: list[str]) -> list[str]:
         """Merge based source and Rules source ->"""
         if not self.sources:
             return sources
@@ -346,9 +346,9 @@ class ObjectDiscoveryRule(Document):
         cls,
         address,
         pool: Pool,
-        checks: List[Any],
-        data: Optional[List[Any]] = None,
-        sources: Optional[List[str]] = None,
+        checks: list[Any],
+        data: list[Any] | None = None,
+        sources: list[str] | None = None,
     ) -> Optional["ObjectDiscoveryRule"]:
         """
         Return Effective rule by discovered data
@@ -387,7 +387,7 @@ class ObjectDiscoveryRule(Document):
             DiscoveredObject.objects.filter(rule=self.id).update(is_dirty=True)
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "name": self.name,
             "$collection": self._meta["json_collection"],
@@ -417,7 +417,7 @@ class ObjectDiscoveryRule(Document):
         )
 
     @staticmethod
-    def parse_check(checks: List[Any]) -> Dict[Tuple[str, int], bool]:
+    def parse_check(checks: list[Any]) -> dict[tuple[str, int], bool]:
         """
         Parse Check Result list to Dict
 
@@ -425,8 +425,8 @@ class ObjectDiscoveryRule(Document):
             checks: - List of Check Result
 
         """
-        all_checks: Set[str] = set()
-        check_r: Dict[Tuple[str, int], bool] = {}
+        all_checks: set[str] = set()
+        check_r: dict[tuple[str, int], bool] = {}
         for c in checks:
             if not c.skipped:
                 all_checks.add(c.name)
@@ -438,10 +438,10 @@ class ObjectDiscoveryRule(Document):
         self,
         address: str,
         pool: Pool,
-        checks: List[Any],
-        labels: List[str],
-        data: Dict[str, Any],
-        groups: List[str],
+        checks: list[Any],
+        labels: list[str],
+        data: dict[str, Any],
+        groups: list[str],
     ) -> bool:
         """
         Check discovered record for match rule
@@ -464,7 +464,7 @@ class ObjectDiscoveryRule(Document):
         return any(c.is_match(labels, data, checks, groups) for c in self.conditions)
 
     @cachetools.cachedmethod(operator.attrgetter("_prefix_cache"), lock=lambda _: id_lock)
-    def get_prefixes(self, pool: Optional[Pool] = None) -> List["IPv4"]:
+    def get_prefixes(self, pool: Pool | None = None) -> list["IPv4"]:
         """Return configured prefixes"""
         r = []
         for net in self.network_ranges:
@@ -480,7 +480,7 @@ class ObjectDiscoveryRule(Document):
                 continue
         return r
 
-    def get_pool(self, address: str) -> Optional[Pool]:
+    def get_pool(self, address: str) -> Pool | None:
         """
         Return pool for address
         Args:
@@ -495,10 +495,10 @@ class ObjectDiscoveryRule(Document):
 
     def get_action(
         self,
-        checks: List[Any],
-        labels: Optional[List[str]] = None,
-        data: Optional[Dict[str, Any]] = None,
-        groups: Optional[List[str]] = None,
+        checks: list[Any],
+        labels: list[str] | None = None,
+        data: dict[str, Any] | None = None,
+        groups: list[str] | None = None,
     ) -> str:
         """
         Return Discovered object action
@@ -518,8 +518,8 @@ class ObjectDiscoveryRule(Document):
     def get_sync_settings(
         self,
         source,
-        remote_system: Optional[RemoteSystem] = None,
-    ) -> Optional[SourceItem]:
+        remote_system: RemoteSystem | None = None,
+    ) -> SourceItem | None:
         """Get synced Setting for source"""
         r = None
         for s in self.sources:

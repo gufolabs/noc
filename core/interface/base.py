@@ -1,12 +1,12 @@
 # ----------------------------------------------------------------------
 # Interface base class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any
+from typing import Any, cast
 
 # NOC modules
 from .error import InterfaceTypeError
@@ -17,8 +17,13 @@ RESERVED_NAMES = {"returns", "template", "form", "preview", "check"}
 
 
 class BaseInterfaceMetaclass(type):
-    def __new__(mcs, name, bases, attrs):
-        n = type.__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[BaseInterfaceMetaclass]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["BaseInterface"]:
+        n = cast(type["BaseInterface"], type.__new__(mcs, name, bases, attrs))
         n._INPUT_PARAMS = []  # Populated by metaclass
         n._INPUT_MAP = {}  # name -> parameter, Populated by metaclass
         n._INPUT_DEFAULTS = {}  # name -> default, populated by metaclass
@@ -37,7 +42,7 @@ class BaseInterfaceMetaclass(type):
         return n
 
 
-class BaseInterface(object, metaclass=BaseInterfaceMetaclass):
+class BaseInterface(metaclass=BaseInterfaceMetaclass):
     template = None  # Relative template path in sa/templates/
     form = None
     preview = None
@@ -77,14 +82,14 @@ class BaseInterface(object, metaclass=BaseInterfaceMetaclass):
                     else:
                         out[k] = param.clean(value)
                 except InterfaceTypeError as e:
-                    raise InterfaceTypeError("Invalid value for '%s': %s" % (k, e))
+                    raise InterfaceTypeError(f"Invalid value for '{k}': {e}")
             elif k != "__profile":
                 # Not found, pass as-is
                 out[k] = kwargs[k]
         # Check all required parameters present
         missed = self._REQUIRED_INPUT - set(out)
         if missed:
-            raise InterfaceTypeError("Parameter '%s' required" % missed.pop())
+            raise InterfaceTypeError(f"Parameter '{missed.pop()}' required")
         return out
 
     def clean_result(self, result):
@@ -121,7 +126,7 @@ class BaseInterface(object, metaclass=BaseInterfaceMetaclass):
             r += [p.get_form_field(n)]
         return r
 
-    def get_check_params(self, check) -> Dict[str, Any]:
+    def get_check_params(self, check) -> dict[str, Any]:
         """Convert check args to script param"""
         return {}
 

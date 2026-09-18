@@ -18,7 +18,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         bulk = [
             UpdateOne(
                 {"_id": bson.ObjectId("5b6d6819d706360001a0b716")},

@@ -7,7 +7,7 @@
 
 # Python modules
 import re
-from typing import Iterator, Tuple
+from typing import Iterator
 
 # NOC modules
 from noc.core.validators import is_int
@@ -19,7 +19,7 @@ class RouterOSTokenizer(LineTokenizer):
     rx_param = re.compile(r'([^= ]+="[^"]+"|[^= ]+=\S+|\S+)')
     rx_line_delimiter = re.compile(r"\\\n\s+")
 
-    def iter_lines(self) -> Iterator[Tuple[str]]:
+    def iter_lines(self) -> Iterator[tuple[str]]:
         # self.data = self.data.replace("\\\n", "")
         self.data = self.rx_line_delimiter.sub("", self.data)
         dl = len(self.data)
@@ -36,8 +36,7 @@ class RouterOSTokenizer(LineTokenizer):
     def iter_context(self, context, tokens):
         if tokens:
             if "=" not in tokens[0]:
-                for ct in self.iter_context((*context, tokens[0]), tokens[1:]):
-                    yield ct
+                yield from self.iter_context((*context, tokens[0]), tokens[1:])
             else:
                 for token in tokens:
                     if "=" not in token:
@@ -48,10 +47,10 @@ class RouterOSTokenizer(LineTokenizer):
                     yield (*context, k, v)
 
     def iter_line_tokens(self, line):
-        """
-        Iterate line tokens
-        :param line:
-        :return:
+        """Iterate line tokens
+
+        Args:
+            line
         """
         for match in self.rx_param.finditer(line):
             yield match.group(0)

@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Tuple, Dict, List
 import xml.etree.ElementTree as ET
 import tempfile
 
@@ -315,7 +314,7 @@ def test_defs_same() -> None:
         ({"style": "transform-origin: 5 10"}, (5.0, 10.0)),
     ],
 )
-def test_transform_origin(attrs: Dict[str, str], expected: Optional[Tuple[float, float]]) -> None:
+def test_transform_origin(attrs: dict[str, str], expected: tuple[float, float] | None) -> None:
     el = ET.Element("rect", attrs)
     transform_origin = SVG.get_transform_origin(el)
     assert transform_origin == expected
@@ -341,7 +340,7 @@ def test_transform_origin(attrs: Dict[str, str], expected: Optional[Tuple[float,
         ),
     ],
 )
-def test_translate(attrs: Dict[str, str], expected: Optional[Tuple[float, float]]) -> None:
+def test_translate(attrs: dict[str, str], expected: tuple[float, float] | None) -> None:
     el = ET.Element("rect", attrs)
     translate = SVG.get_transform(el)
     assert translate == expected
@@ -389,7 +388,7 @@ def test_height(s, expected) -> None:
 @pytest.mark.parametrize(
     ("s", "expected"), [(G1, ["1", "2", "3", "4"]), (G2, ["1", "2", "3", "4", "5"])]
 )
-def test_iter_id(s: str, expected: List[str]) -> None:
+def test_iter_id(s: str, expected: list[str]) -> None:
     svg = SVG.from_string(s)
     ids = list(svg.iter_id())
     assert ids == expected

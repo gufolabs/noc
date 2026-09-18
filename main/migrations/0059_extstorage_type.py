@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         db = self.mongo_db
         coll = db["extstorages"]
         coll.update_many({"enable_config_mirror": True}, {"$set": {"type": "config_mirror"}})

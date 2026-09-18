@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.execute("DELETE FROM sa_maptask")
         self.db.execute("DELETE FROM sa_reducetask")
         self.db.execute("COMMIT")

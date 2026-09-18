@@ -1,16 +1,17 @@
 # ---------------------------------------------------------------------
 # inv.inv metric plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 import datetime
 
 # Python modules
 import operator
-from typing import List, Dict, Any, Tuple, Optional
+from typing import Any
 
 # Third-party modules
+from django.http import HttpRequest
 import orjson
 
 # NOC modules
@@ -27,7 +28,7 @@ class MetricPlugin(InvPlugin):
     name = "metric"
     js = "NOC.inv.inv.plugins.metric.MetricPanel"
 
-    def get_sensor_values(self) -> Dict[int, float]:
+    def get_sensor_values(self) -> dict[int, float]:
         r = {}
         ch = connection()
         now = datetime.datetime.now().replace(microsecond=0)
@@ -84,7 +85,7 @@ class MetricPlugin(InvPlugin):
 
     def get_threshold_ranges(
         self, thresholds, value
-    ) -> Tuple[Optional[int], Optional[int], float, List[Dict[str, Any]]]:
+    ) -> tuple[int | None, int | None, float, list[dict[str, Any]]]:
         """
         Getting Thresholds Value Ranges, Caclculate if value has settings thresholds
         "left": 50,
@@ -198,7 +199,7 @@ class MetricPlugin(InvPlugin):
             r,
         )
 
-    def get_data(self, request, o):
+    def get_data(self, request: HttpRequest, o):
         """
         Getting Object sensors
         """
@@ -240,9 +241,9 @@ class MetricPlugin(InvPlugin):
     def init_plugin(self):
         super().init_plugin()
         self.add_view(
-            "api_plugin_%s_set_metric_threshold" % self.name,
+            f"api_plugin_{self.name}_set_metric_threshold",
             self.api_set_metric_threshold,
-            url="^(?P<id>[0-9a-f]{24})/plugin/%s/(?P<sid>[0-9a-f]{24})/set_threshold/$" % self.name,
+            url=f"^(?P<id>[0-9a-f]{{24}})/plugin/{self.name}/(?P<sid>[0-9a-f]{{24}})/set_threshold/$",
             method=["POST"],
             validate={
                 "thresholds": DictListParameter(
@@ -256,7 +257,7 @@ class MetricPlugin(InvPlugin):
             },
         )
 
-    def api_set_metric_threshold(self, request, id, sid, thresholds):
+    def api_set_metric_threshold(self, request: HttpRequest, id, sid, thresholds):
         s = self.app.get_object_or_404(Sensor, id=sid)
         for t in thresholds:
             param, scope = t["name"].split("@", 1)

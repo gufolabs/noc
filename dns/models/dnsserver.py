@@ -31,7 +31,7 @@ class DNSServer(NOCModel):
     :param description: Optional description
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = _("DNS Server")
         verbose_name_plural = _("DNS Servers")
         db_table = "dns_dnsserver"

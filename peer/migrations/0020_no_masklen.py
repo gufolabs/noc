@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         for peer_id, local_ip, remote_ip, masklen in self.db.execute(
             "SELECT id,local_ip,remote_ip,masklen FROM peer_peer"
         ):

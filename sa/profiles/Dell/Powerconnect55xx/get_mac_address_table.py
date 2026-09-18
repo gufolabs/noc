@@ -24,7 +24,7 @@ class Script(BaseScript):
     def execute(self, interface=None, vlan=None, mac=None):
         cmd = "show mac address-table"
         if interface is not None:
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
         if vlan is not None:
             cmd += " vlan %d" % vlan
         if mac is not None:

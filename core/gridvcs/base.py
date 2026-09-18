@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # GridVCS
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ import gridfs
 import gridfs.errors
 import bsdiff4
 from bson import ObjectId
-from typing import Tuple, Optional, Iterable
+from typing import Iterable
 
 # NOC modules
 from noc.core.mongo.connection import get_db
@@ -25,18 +25,18 @@ from noc.core.comp import smart_bytes, smart_text
 from .revision import Revision
 
 
-class GridVCS(object):
+class GridVCS:
     T_FILE = "F"
     T_BDIFF = "b"
     T_BSDIFF4 = "B"
     ENCODING = "utf-8"
     DEFAULT_COMPRESS = "z"
 
-    def __init__(self, repo):
-        self.fs = gridfs.GridFS(get_db(), collection="noc.gridvcs.%s" % repo)
+    def __init__(self, repo) -> None:
+        self.fs = gridfs.GridFS(get_db(), collection=f"noc.gridvcs.{repo}")
         self.files = self.fs._GridFS__files
 
-    def get_delta(self, src: str, dst: str) -> Tuple[str, bytes]:
+    def get_delta(self, src: str, dst: str) -> tuple[str, bytes]:
         """
         Calculate strings delta
         :param src: Source string
@@ -57,36 +57,32 @@ class GridVCS(object):
         :param delta: Delta
         :return: Patched string
         """
-        return getattr(cls, "apply_delta_%s" % type)(src, delta)
+        return getattr(cls, f"apply_delta_{type}")(src, delta)
 
     @staticmethod
     def apply_delta_F(src: str, delta: bytes) -> str:
         """
         Raw string
-        :param src:
-        :param delta:
         :return:
         """
-        return smart_text(delta)
+        return delta.decode()
 
     @staticmethod
     def apply_delta_b(src: str, delta: bytes) -> str:
         """
         Mercurial mdiff. Slow python implementation ported from Mercurial 0.4.
         For legacy installations support only
-        :param src:
-        :param delta:
         :return:
         """
         last = pos = 0
-        r = []
+        r: list[str] = []
         d_len = len(delta)
 
         while pos < d_len:
             p1, p2, p_len = struct.unpack(">lll", delta[pos : pos + 12])
             pos += 12
             r.append(src[last:p1])
-            r.append(smart_text(delta[pos : pos + p_len]))
+            r.append(delta[pos : pos + p_len].decode())
             pos += p_len
             last = p2
         r.append(src[last:])
@@ -96,33 +92,31 @@ class GridVCS(object):
     def apply_delta_B(src: str, delta: bytes) -> str:
         """
         BSDIFF4 diff
-        :param src:
-        :param delta:
         :return:
         """
-        return smart_text(bsdiff4.patch(src, delta))
+        return bsdiff4.patch(src, delta).decode()
 
     @classmethod
-    def compress(cls, data: bytes, method: Optional[str] = None) -> bytes:
+    def compress(cls, data: bytes, method: str | None = None) -> bytes:
         if method:
-            return getattr(cls, "compress_%s" % method)(data)
+            return getattr(cls, f"compress_{method}")(data)
         return data
 
     @classmethod
-    def decompress(cls, data: bytes, method: Optional[str] = None) -> bytes:
+    def decompress(cls, data: bytes, method: str | None = None) -> bytes:
         if method:
-            return getattr(cls, "decompress_%s" % method)(data)
+            return getattr(cls, f"decompress_{method}")(data)
         return data
 
     @staticmethod
     def compress_z(data: bytes) -> bytes:
-        return zlib.compress(smart_bytes(data))
+        return zlib.compress(data)
 
     @staticmethod
     def decompress_z(data: bytes) -> bytes:
-        return zlib.decompress(smart_bytes(data))
+        return zlib.decompress(data)
 
-    def put(self, object: int, data: str, ts: Optional[datetime.datetime] = None) -> bool:
+    def put(self, object: int, data: str, ts: datetime.datetime | None = None) -> bool:
         """
         Save data
         :param object: Object id
@@ -167,7 +161,7 @@ class GridVCS(object):
         )
         return True
 
-    def get(self, object: int, revision: Optional[Revision] = None) -> Optional[str]:
+    def get(self, object: int, revision: Revision | None = None) -> str | None:
         """
         Get data
         :param object: Object id
@@ -180,7 +174,7 @@ class GridVCS(object):
                     return smart_text(self.decompress(f.read(), f._file.get("c")))
             except gridfs.errors.NoFile:
                 return None
-        data = str()
+        data = ""
         for r in self.iter_revisions(object, reverse=True):
             with self.fs.get(r.id) as f:
                 delta = self.decompress(f.read(), f._file.get("c"))
@@ -192,26 +186,23 @@ class GridVCS(object):
     def delete(self, object: int) -> None:
         """
         Delete object's data and history
-        :param object:
         :return:
         """
         for r in self.iter_revisions(object):
             self.fs.delete(r.id)
 
-    def iter_revisions(self, object: int, reverse: Optional[bool] = False) -> Iterable[Revision]:
+    def iter_revisions(self, object: int, reverse: bool | None = False) -> Iterable[Revision]:
         """
         Get object's revision
-        :param object:
         :return: List of Revisions
         """
         d = pymongo.DESCENDING if reverse else pymongo.ASCENDING
         for r in self.files.find({"object": object}).sort("ts", d):
             yield Revision(r["_id"], r["ts"], r["ft"], r.get("c"), r["length"])
 
-    def find_last_revision(self, object: int) -> Optional[Revision]:
+    def find_last_revision(self, object: int) -> Revision | None:
         """
         Find last revision or return None
-        :param object:
         :return:
         """
         r = self.files.find_one({"object": object}, sort=[("ts", pymongo.DESCENDING)])
@@ -219,9 +210,8 @@ class GridVCS(object):
             return Revision(r["_id"], r["ts"], r["ft"], r.get("c"), r["length"])
         return None
 
-    def find_revision(self, object: int, revision: str) -> Optional[Revision]:
+    def find_revision(self, object: int, revision: str) -> Revision | None:
         """
-        :param object:
         :param revision: Revision id
         :return:
         """
@@ -244,9 +234,6 @@ class GridVCS(object):
     def diff(self, object: int, rev1: str, rev2: str) -> str:
         """
         Get unified diff between revisions
-        :param object:
-        :param rev1:
-        :param rev2:
         :return:
         """
         src = self.get(object, rev1) or ""
@@ -257,10 +244,6 @@ class GridVCS(object):
         """
         Get unified diff between multiple object's revisions
 
-        :param obj1:
-        :param rev1:
-        :param obj2:
-        :param rev2:
         :return:
         """
         src = self.get(obj1, rev1) or ""

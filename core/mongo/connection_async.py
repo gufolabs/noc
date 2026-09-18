@@ -41,7 +41,7 @@ def connect_async():
 
     ca = config.mongo_connection_args.copy()
     if ca.get("password"):
-        ca["host"] = ca["host"].replace(":%s@" % ca["password"], ":********@")
+        ca["host"] = ca["host"].replace(":{}@".format(ca["password"]), ":********@")
         ca["password"] = "********"
     for i in range(retries):
         try:
@@ -75,22 +75,12 @@ def is_connected():
 
 
 def get_connection():
-    """
-
-    :return:
-    :rtype: pymongo.collection.Connection
-    """
     global _async_connections
     if DEFAULT_CONNECTION_NAME in _async_connections:
         return _async_connections[DEFAULT_CONNECTION_NAME]
 
 
 def get_db():
-    """
-
-    :return:
-    :rtype: pymongo.database.Database
-    """
     global _dbs
     if DEFAULT_CONNECTION_NAME not in _dbs:
         conn = get_connection()

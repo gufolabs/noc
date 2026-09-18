@@ -8,7 +8,7 @@
 # Python Modules
 import datetime
 import time
-from typing import Optional, Iterable, Tuple, AsyncIterable, Union
+from typing import Iterable, AsyncIterable
 
 # NOC modules
 from .base import FieldInfo, FieldType, BaseDataSource
@@ -69,10 +69,10 @@ class TTSystemStatDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
+        fields: Iterable[str] | None = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[int, str, Union[str, int]]]:
+    ) -> AsyncIterable[tuple[int, str, str | int]]:
         start: datetime.datetime = kwargs.get("start")
         end: datetime.datetime = kwargs.get("end")
         ts_start = time.mktime(start.timetuple())

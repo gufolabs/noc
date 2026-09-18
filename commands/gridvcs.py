@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Full-text search index management
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -9,7 +9,6 @@
 import argparse
 import datetime
 import os
-from typing import List
 
 # Third-party modules
 import bson
@@ -44,7 +43,7 @@ class Command(BaseCommand):
         "object_comment",
     }
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         parser.add_argument(
             "--repo",
@@ -85,7 +84,7 @@ class Command(BaseCommand):
             "--before-days", type=int, help="Revision or Date", required=True
         )
         forget_parser.add_argument(
-            "--approve", action="store_true", default=False, help="Do not modify data"
+            "--approve", action="store_true", default=False, help="Approve changes"
         )
         forget_parser.add_argument("--include-labels", help="Labels for additional filter")
         forget_parser.add_argument("--exclude-labels", help="Labels for exclude additional filter")
@@ -110,7 +109,7 @@ class Command(BaseCommand):
         for o_id in args:
             data = self.vcs.get(self.clean_id(o_id))
             if data:
-                self.print("@@@ %s" % o_id)
+                self.print(f"@@@ {o_id}")
                 self.print(data)
 
     def handle_compress(self, *args, **options):
@@ -206,7 +205,7 @@ class Command(BaseCommand):
         from noc.main.models.pool import Pool
 
         mirror = os.path.realpath(path)
-        self.print("Mirroring to %s" % path)
+        self.print(f"Mirroring to {path}")
         if self.repo == "config":
             for o_id, address, pool in self.progress(
                 ManagedObject.objects.filter().values_list("id", "address", "pool")
@@ -221,7 +220,7 @@ class Command(BaseCommand):
                     if mpath.startswith(mirror):
                         safe_rewrite(mpath, data)
                     else:
-                        self.print("    !!! mirror path violation for" % address)
+                        self.print(f"    !!! mirror path violation for {address}")
         self.print("Done")
 
     def _forget(self, mo, revision: str, dry_run=False):
@@ -260,7 +259,7 @@ class Command(BaseCommand):
 
     def handle_forget_history(
         self,
-        objects: List[str],
+        objects: list[str],
         before_days: int = None,
         before_revision: str = None,
         approve=False,
@@ -305,7 +304,3 @@ class Command(BaseCommand):
                     self.print(f"[{mo.name}] Not found revision. Continue")
                     continue
                 self._forget(mo, r["_id"], dry_run=not approve)
-
-
-if __name__ == "__main__":
-    Command().run()

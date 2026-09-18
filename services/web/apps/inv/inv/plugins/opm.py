@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # inv.inv opm plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 # Third-party modules
+from django.http import HttpRequest
 import orjson
 
 # NOC modules
@@ -35,7 +36,7 @@ class Band(Enum):
 
 
 @dataclass
-class CardConfig(object):
+class CardConfig:
     """
     Card configuration.
 
@@ -49,7 +50,7 @@ class CardConfig(object):
 
 
 @dataclass
-class BaseToken(object):
+class BaseToken:
     pass
 
 
@@ -73,7 +74,7 @@ class DirToken(BaseToken):
     direction: str
 
 
-class BaseCard(object):
+class BaseCard:
     """Base card handler."""
 
     groups: list[str]
@@ -168,7 +169,7 @@ class OPMPlugin(InvPlugin):
             },
         )
 
-    def get_data(self, request, o: Object):
+    def get_data(self, request: HttpRequest, o: Object):
         cfg = self.CARDS.get(o.model.uuid)
         if not cfg:
             return {"status": False, "msg": "Unsupported card"}
@@ -178,7 +179,7 @@ class OPMPlugin(InvPlugin):
             "bands": [x.value for x in cfg.bands],
         }
 
-    def api_data(self, request, id: str, g: str, b: str):
+    def api_data(self, request: HttpRequest, id: str, g: str, b: str):
         obj = self.app.get_object_or_404(Object, id=id)
         card = self.CARDS.get(obj.model.uuid)
         if not card:
@@ -245,19 +246,15 @@ class OPMPlugin(InvPlugin):
 
     def get_beef(self, obj: Object) -> dict[str, Any]:
         box = obj.get_box()
-        d = box.get_data("debug", "beef_path", scope="get_params")
-        if not d:
+        ref = box.get_data("debug", "beef_path", scope="get_params")
+        if not ref:
             self.logger.info("beef_path is not configured")
             return {}
-        storage_name, path = d.split(":", 1)
-        self.logger.info("Trying to get beef fron %s", d)
-        storage = ExtStorage.get_by_name(storage_name)
-        if not storage:
-            self.logger.info("Storage %s is not found, skipping", storage_name)
+        try:
+            return orjson.loads(ExtStorage.read_bytes_from_ref(ref))
+        except ExtStorage.StorageErrors as e:
+            self.logger.error("Failed to download: %s", e)
             return {}
-        fs = storage.open_fs()
-        with fs.open(path) as fp:
-            return orjson.loads(fp.read())
 
     @staticmethod
     def _get_card(obj: Object) -> int:

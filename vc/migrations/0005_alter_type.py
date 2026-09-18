@@ -10,6 +10,6 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.delete_column("vc_vc", "type_id")
         self.db.execute("ALTER TABLE vc_vcdomain ALTER COLUMN type_id SET NOT NULL")

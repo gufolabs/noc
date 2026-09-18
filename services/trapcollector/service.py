@@ -11,7 +11,7 @@ import datetime
 import asyncio
 from collections import defaultdict
 from dataclasses import asdict
-from typing import Optional, Any, Dict, List, Tuple
+from typing import Any
 import base64
 
 # Third-party modules
@@ -34,6 +34,7 @@ from noc.core.mx import (
 )
 from noc.core.service.stormprotection import StormProtection
 from noc.core.escape import fm_escape
+from noc.core.checkers.base import register_checks
 from noc.services.trapcollector.trapserver import TrapServer
 from noc.services.trapcollector.datastream import TrapDataStreamClient
 from noc.services.trapcollector.sourceconfig import SourceConfig, ManagedObjectData
@@ -49,17 +50,18 @@ class TrapCollectorService(FastAPIService):
     pooled = True
     process_name = "noc-%(name).10s-%(pool).5s"
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.mappings_callback = None
         self.report_invalid_callback = None
-        self.source_configs: Dict[str, SourceConfig] = {}  # id -> SourceConfig
+        self.source_configs: dict[str, SourceConfig] = {}  # id -> SourceConfig
         self.address_configs = {}  # address -> SourceConfig
         self.invalid_sources = defaultdict(int)  # ip -> count
-        self.pool_partitions: Dict[str, int] = {}
-        self.storm_protection: Optional[StormProtection] = None
+        self.pool_partitions: dict[str, int] = {}
+        self.storm_protection: StormProtection | None = None
+        self.updated: set[str] = set()
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         # Listen sockets
         server = TrapServer(service=self)
         for addr, port in server.iter_listen(config.trapcollector.listen):
@@ -101,7 +103,7 @@ class TrapCollectorService(FastAPIService):
         msg = {"$op": "clear"}
         self._publish_message(cfg, msg)
 
-    def _publish_message(self, cfg, msg: Dict[str, Any]):
+    def _publish_message(self, cfg, msg: dict[str, Any]):
         msg["timestamp"] = datetime.datetime.now().isoformat()
         msg["reference"] = f"{TRAPCOLLECTOR_STORM_ALARM_CLASS}{cfg.id}"
         self.publish(orjson.dumps(msg), stream=f"dispose.{config.pool}", partition=cfg.partition)
@@ -109,11 +111,11 @@ class TrapCollectorService(FastAPIService):
     async def get_pool_partitions(self, pool: str) -> int:
         parts = self.pool_partitions.get(pool)
         if not parts:
-            parts = await self.get_stream_partitions("events.%s" % pool)
+            parts = await self.get_stream_partitions(f"events.{pool}")
             self.pool_partitions[pool] = parts
         return parts
 
-    def lookup_config(self, address: str) -> Optional[SourceConfig]:
+    def lookup_config(self, address: str) -> SourceConfig | None:
         """
         Returns object config for given address or None when
         unknown source
@@ -131,9 +133,9 @@ class TrapCollectorService(FastAPIService):
         self,
         cfg: SourceConfig,
         timestamp: int,
-        body: Dict[str, Any],
+        body: dict[str, Any],
         address: str = None,
-        message_id: Optional[str] = None,
+        message_id: str | None = None,
     ):
         """
         Spool message to be sent
@@ -166,21 +168,23 @@ class TrapCollectorService(FastAPIService):
             stream=cfg.stream,
             partition=cfg.partition,
         )
+        changed = cfg.update_rcvd(timestamp, address)
+        if changed:
+            self.updated.add(cfg.id)
 
     def register_mx_message(
         self,
         cfg: SourceConfig,
         timestamp: int,
-        source_address: Optional[str] = None,
-        message_id: Optional[str] = None,
-        raw_pdu: Optional[bytes] = None,
-        raw_varbinds: List[Tuple[str, Any, bytes]] = None,
+        source_address: str | None = None,
+        message_id: str | None = None,
+        raw_pdu: bytes | None = None,
+        raw_varbinds: list[tuple[str, Any, bytes]] = None,
     ):
         metrics["events_mx_message"] += 1
         if not cfg.managed_object:
             self.logger.warning(
-                "[%s] Cfg source not ManagedObject Meta."
-                " Please Reboot cfgtrap datastream and reboot collector. Skipping..",
+                "[%s] Cfg source not ManagedObject Meta. Please Reboot cfgtrap datastream and reboot collector. Skipping..",
                 source_address,
             )
             return
@@ -239,15 +243,26 @@ class TrapCollectorService(FastAPIService):
         """
         Report invalid event sources
         """
-        if not self.invalid_sources:
+        if self.invalid_sources:
+            total = sum(self.invalid_sources[s] for s in self.invalid_sources)
+            self.logger.info(
+                "Dropping %d messages with invalid sources: %s",
+                total,
+                ", ".join(f"{s}: {self.invalid_sources[s]}" for s in self.invalid_sources),
+            )
+            self.invalid_sources = defaultdict(int)
+        if not self.updated:
             return
-        total = sum(self.invalid_sources[s] for s in self.invalid_sources)
-        self.logger.info(
-            "Dropping %d messages with invalid sources: %s",
-            total,
-            ", ".join("%s: %s" % (s, self.invalid_sources[s]) for s in self.invalid_sources),
-        )
-        self.invalid_sources = defaultdict(int)
+        self.logger.info("Sending %s messages with updated checks", len(self.updated))
+        updated = list(self.updated)
+        self.updated = set()
+        for cfg_id in updated:
+            cfg = self.source_configs.get(cfg_id)
+            if not cfg or not cfg.bi_id:
+                continue
+            checks = cfg.get_checks()
+            if checks:
+                register_checks(checks, managed_object=cfg.bi_id)
 
     async def update_source(self, data):
         # Get old config
@@ -300,7 +315,3 @@ class TrapCollectorService(FastAPIService):
             del self.address_configs[addr]
         del self.source_configs[id]
         metrics["sources_deleted"] += 1
-
-
-if __name__ == "__main__":
-    TrapCollectorService().start()

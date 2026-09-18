@@ -4,61 +4,20 @@ Sentry service configuration
 
 ## url
 
-|                |                  |
-| -------------- | ---------------- |
-| Default value  | ``               |
-| YAML Path      | `sentry.url`     |
-| Key-Value Path | `sentry/url`     |
-| Environment    | `NOC_SENTRY_URL` |
+{{ config_param("sentry.url") }}
 
 ## shutdown_timeout
 
-Default value
-: 2
-
-Possible values
-: 1..10
-
-YAML Path
-: sentry.shutdown_timeout
-
-Key-Value Path
-: sentry/shutdown_timeout
-
-Environment
-: NOC_SENTRY_SHUTDOWN_TIMEOUT
+{{ config_param("sentry.shutdown_timeout") }}
 
 ## default_integrations
 
-|                |                                   |
-| -------------- | --------------------------------- |
-| Default value  | `False`                           |
-| YAML Path      | `sentry.default_integrations`     |
-| Key-Value Path | `sentry/default_integrations`     |
-| Environment    | `NOC_SENTRY_DEFAULT_INTEGRATIONS` |
+{{ config_param("sentry.default_integrations") }}
 
 ## debug
 
-|                |                    |
-| -------------- | ------------------ |
-| Default value  | `False`            |
-| YAML Path      | `sentry.debug`     |
-| Key-Value Path | `sentry/debug`     |
-| Environment    | `NOC_SENTRY_DEBUG` |
+{{ config_param("sentry.debug") }}
 
 ## max_breadcrumbs
 
-Default value
-: 10
-
-Possible values
-: 1..100
-
-YAML Path
-: sentry.max_breadcrumbs
-
-Key-Value Path
-: sentry/max_breadcrumbs
-
-Environment
-: NOC_SENTRY_MAX_BREADCRUMBS
+{{ config_param("sentry.max_breadcrumbs") }}

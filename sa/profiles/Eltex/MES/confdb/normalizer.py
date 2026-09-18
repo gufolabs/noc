@@ -33,7 +33,7 @@ class MESNormalizer(BaseNormalizer):
     @match("username", ANY, "password", "encrypted", ANY, "privilege", ANY)
     def normalize_username_access_level(self, tokens):
         yield self.make_user_encrypted_password(username=tokens[1], password=" ".join(tokens[4]))
-        yield self.make_user_class(username=tokens[1], class_name="level-%s" % tokens[6])
+        yield self.make_user_class(username=tokens[1], class_name=f"level-{tokens[6]}")
 
     @match("vlan", "database", "vlan", REST)
     def normalize_vlan_id_batch(self, tokens):

@@ -86,7 +86,7 @@ Ext.define("NOC.main.imagestore.Application", {
     if(file.getValue()){
       data.append("file", file.fileInputEl.dom.files[0]);
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       method: "POST",
       url: me.base_url + (me.currentRecord ? me.currentRecord.get([me.idField]) + "/" : ""),
       rawData: data,

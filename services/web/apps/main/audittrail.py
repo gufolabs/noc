@@ -1,0 +1,115 @@
+# ---------------------------------------------------------------------
+# main.audittrail application
+# ---------------------------------------------------------------------
+# Copyright (C) 2007-2026 The NOC Project
+# See LICENSE for details
+# ---------------------------------------------------------------------
+
+# Python modules
+import logging
+
+# Third-party modules
+from django.http import HttpRequest
+import orjson
+
+# NOC modules
+from noc.services.web.base.extapplication import ExtApplication, api
+from noc.core.translation import ugettext as _
+from noc.core.clickhouse.connect import connection
+from noc.models import get_object, get_model
+from noc.core.comp import smart_text
+
+logger = logging.getLogger(__name__)
+
+
+class AuditTrailApplication(ExtApplication):
+    """
+    AuditTrails application
+    """
+
+    title = _("Audit Trail")
+    menu = _("Audit Trail")
+
+    def g_model(self, model_id):
+        try:
+            md = get_model(model_id)
+            if md and hasattr(md, "name"):
+                return md
+        except Exception as e:
+            logger.info("No model: Error %s", e)
+            return None
+
+    def field_object_name(self, o):
+        try:
+            return smart_text(get_object(o.model_id, o.object))
+        except AssertionError:
+            return smart_text(o.object)
+
+    def instance_to_dict(self, o):
+        return {
+            "timestamp": o["timestamp"],
+            "user": o["user"],
+            "model_id": o["model_name"],
+            "fav_status": False,
+            "object": o["object_id"],
+            "op": o["op"],
+            "changes": orjson.loads(o["changes"]),
+            "expires": o["timestamp"],
+            "id": o["change_id"],
+            "object_name": o["object_name"],
+        }
+
+    def list_data(self, request: HttpRequest, formatter):
+        """
+        Returns a list of requested object objects
+        """
+        q = self.parse_request_query(request)
+        # QUERY {'_dc': '1727112212246', '__format': 'ext', '__page': '1', '__start': '0', '__limit': '50', '__query': 'fieldname', 'op': 'C'}
+        ch = connection(read_only=True)
+        _query = q.get("__query")
+        _op = q.get("op")
+
+        # __sort=[{"property":"timestamp","direction":"ASC"}]
+        _sort = q.get("__sort", "[{}]")
+        _sort = orjson.loads(_sort)
+        sort_column = _sort[0].get("property", "timestamp")
+        if sort_column not in ("timestamp", "user", "object_name"):
+            sort_column = "timestamp"
+        sort_direction = _sort[0].get("direction", "DESC")
+
+        ch_query = ""
+
+        queries = []
+        if _query:
+            queries.append(f"object_name = '{_query}'\n")
+        if _op:
+            queries.append(f"op = '{_op}'\n")
+
+        if queries:
+            ch_query += "WHERE\n" + " AND ".join(queries)
+
+        cnt_query = "SELECT count(*) as count FROM noc.changes\n" + ch_query
+
+        cnt_data = ch.execute(cnt_query, return_raw=True)
+        cnt_data = orjson.loads(cnt_data)
+
+        ch_query = "SELECT * FROM noc.changes\n" + ch_query
+        ch_query += f"ORDER BY {sort_column} {sort_direction} LIMIT %s OFFSET %s FORMAT JSON"
+
+        data = ch.execute(
+            ch_query,
+            args=[int(q["__limit"]), int(q["__start"])],
+            return_raw=True,
+        )
+        data = orjson.loads(data)
+        out = []
+        for d in data["data"]:
+            out.append(self.instance_to_dict(d))
+        return self.response(
+            {"total": cnt_data, "success": True, "data": out},
+            status=self.OK,
+        )
+
+    @api.get(r"^$", access="read")
+    def api_list(self, request: HttpRequest):
+        return self.list_data(request, None)

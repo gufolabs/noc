@@ -1,17 +1,18 @@
 # ---------------------------------------------------------------------
 # inv.inv data plugin
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Tuple, List, Optional, Iterable, Any
+from typing import Iterable, Any
 from collections import defaultdict
 import math
 
 # Third-party modules
 from bson import ObjectId
+from django.http import HttpRequest
 
 # NOC modules
 from noc.inv.models.object import Object
@@ -52,7 +53,7 @@ class DataPlugin(InvPlugin):
             },
         )
 
-    def get_data(self, request, o: Object):
+    def get_data(self, request: HttpRequest, o: Object):
         data = []
         data.extend(self.iter_common(o))
         if self.app.can_show_topo(o):
@@ -69,10 +70,10 @@ class DataPlugin(InvPlugin):
         description: str,
         required: bool = True,
         is_const: bool = False,
-        type: Optional[str] = None,
-        scope: Optional[str] = None,
-        choices: Optional[List[Tuple[str, str]]] = None,
-        item_id: Optional[str] = None,
+        type: str | None = None,
+        scope: str | None = None,
+        choices: list[tuple[str, str]] | None = None,
+        item_id: str | None = None,
     ) -> dict[str, Any]:
         """
         Generate item.
@@ -276,7 +277,7 @@ class DataPlugin(InvPlugin):
 
     def iter_effective_data(self, o: Object) -> Iterable[dict[str, Any]]:
         # Group by model interfaces
-        mi_values: dict[str, dict[str, List[Tuple[Optional[str], str]]]] = {}
+        mi_values: dict[str, dict[str, list[tuple[str | None, str]]]] = {}
         for item in o.get_effective_data():
             if item.interface not in mi_values:
                 mi_values[item.interface] = defaultdict(list)
@@ -327,7 +328,7 @@ class DataPlugin(InvPlugin):
                             m = self.app.get_object_or_404(ObjectModel, id=value)
                             o.model = m
                             o.log(
-                                message="Changing model to %s" % m.name,
+                                message=f"Changing model to {m.name}",
                                 user=request.user,
                                 system="WEB",
                             )

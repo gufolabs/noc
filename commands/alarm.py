@@ -10,7 +10,7 @@ import time
 import datetime
 import argparse
 import yaml
-from typing import Optional, Dict, Any, List
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -27,6 +27,7 @@ from noc.fm.models.alarmrule import AlarmRule
 from noc.fm.models.escalationprofile import EscalationProfile
 from noc.fm.models.utils import get_alarm
 from noc.sa.models.managedobject import ManagedObject
+from noc.main.models.pool import Pool
 from noc.services.correlator.alarmjob import AlarmJob
 from noc.core.service.loader import get_service
 from noc.core.validators import is_ipv4
@@ -37,27 +38,26 @@ CLEAN_WINDOW = datetime.timedelta(weeks=1)
 
 class AlarmItem(BaseModel):
     op: str = "raise"  # raise, clear, set_status
-    managed_object: str
+    managed_object: str | None = None
     alarm_class: str = "NOC | Managed Object | Ping Failed"
-    reference: Optional[str] = None
-    vars: Optional[Dict[str, Any]] = None
-    severity: Optional[int] = None
+    reference: str | None = None
+    vars: dict[str, Any] | None = None
+    severity: int | None = None
     delay: int = 1
-    labels: Optional[List[str]] = None
+    labels: list[str] | None = None
     status: bool = False
+    remote_system: str | None = None
+    remote_id: str | None = None
 
     def get_message(self):
         r = {
             "$op": self.op,
-            "managed_object": self.managed_object,
             "reference": self.reference,
         }
+        if self.managed_object:
+            r["managed_object"] = self.managed_object
         if self.op == "clear":
             return r
-        if self.op == "raise" and self.alarm_class:
-            r["alarm_class"] = self.alarm_class
-        if self.op == "raise" and self.severity:
-            r["severity"] = int(self.severity)
         if self.op == "set_status":
             return {
                 "$op": "set_status",
@@ -70,23 +70,29 @@ class AlarmItem(BaseModel):
                     }
                 ],
             }
+        if self.alarm_class:
+            r["alarm_class"] = self.alarm_class
+        if self.severity:
+            r["severity"] = int(self.severity)
         if self.vars:
             r["vars"] = self.vars
         if self.labels:
             r["labels"] = self.labels
+        if self.remote_system and self.remote_id:
+            r |= {"remote_system": self.remote_system, "remote_id": self.remote_id}
         return r
 
 
 class AlarmConfig(BaseModel):
-    repeat: Optional[int] = None  # repeat Alarm Item
+    repeat: int | None = None  # repeat Alarm Item
     delay: int = 1  # wait interval
-    alarms: List[AlarmItem]
+    alarms: list[AlarmItem]
 
 
 class Command(BaseCommand):
     help = "Manage alarms"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         test_rule = subparsers.add_parser("test-rule", help="Test Alarm Rule")
         test_rule.add_argument("--rule", help="Alarm Rule", required=False)
@@ -123,10 +129,9 @@ class Command(BaseCommand):
         cmd = options.pop("cmd")
         return getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
-    def resolve_object(self, managed_object: str) -> Optional[ManagedObject]:
+    def resolve_object(self, managed_object: str) -> ManagedObject | None:
         """
         Resolve managed_object
-        :param managed_object:
         :return:
         """
         if managed_object.isdigit():
@@ -140,9 +145,9 @@ class Command(BaseCommand):
     def handle_close(
         self,
         managed_object,
-        alarm_class: Optional[str] = None,
-        reference: Optional[str] = None,
-        message: Optional[str] = None,
+        alarm_class: str | None = None,
+        reference: str | None = None,
+        message: str | None = None,
     ):
         mo = self.resolve_object(managed_object)
         if not mo:
@@ -165,9 +170,9 @@ class Command(BaseCommand):
         self,
         managed_object: str,
         alarm_class: str,
-        reference: Optional[str] = None,
-        a_vars: Optional[str] = None,
-        labels: Optional[str] = None,
+        reference: str | None = None,
+        a_vars: str | None = None,
+        labels: str | None = None,
     ):
         mo = self.resolve_object(managed_object)
         if not mo:
@@ -195,21 +200,23 @@ class Command(BaseCommand):
         time.sleep(config.delay)
         for rr in range(config.repeat or 1):
             for r in config.alarms:
-                mo = self.resolve_object(r.managed_object)
-                if not mo:
+                if not r.managed_object and r.op == "raise":
                     self.die(f"Unknown ManagedObject {r.managed_object}")
-                r.managed_object = str(mo.id)
+                mo = None
+                if r.managed_object:
+                    mo = self.resolve_object(r.managed_object)
+                    if not mo:
+                        self.die(f"Unknown ManagedObject {r.managed_object}")
+                    r.managed_object = str(mo.id)
                 r.reference = r.reference or self.get_default_reference(
                     managed_object=mo,
                     alarm_class=AlarmClass.get_by_name(r.alarm_class),
                     vars=r.vars,
                 )
-                if not mo:
-                    continue
                 self.publish(managed_object=mo, msg=r.get_message())
                 time.sleep(r.delay)
 
-    def handle_run_test(self, *args, name: Optional[str] = None, **options):
+    def handle_run_test(self, *args, name: str | None = None, **options):
         name = name or "default"
         for path in args:
             with open(path) as f:
@@ -226,7 +233,7 @@ class Command(BaseCommand):
                     except ValueError as e:
                         self.die(f'Failed to decode JSON file "{path}": {e!s}')
 
-    def handle_test_rule(self, alarms, rule: Optional[str] = None, *args, **options):
+    def handle_test_rule(self, alarms, rule: str | None = None, *args, **options):
         alarm = get_alarm(alarms[0])
         if rule:
             rule = AlarmRule.get_by_id(rule)
@@ -260,14 +267,14 @@ class Command(BaseCommand):
         # job.dry_run = True
         req = ep.from_alarm(alarm)
         job = AlarmJob.from_request(req, dry_run=False)
-        job.run(to_save_state=False)
+        job.run(save_state=True)
         # job.save_state()
 
     @staticmethod
     def get_default_reference(
         managed_object: ManagedObject,
         alarm_class: AlarmClass,
-        vars: Optional[Dict[str, Any]] = None,
+        vars: dict[str, Any] | None = None,
     ) -> str:
         """
         Generate default reference for event-based alarms.
@@ -290,9 +297,13 @@ class Command(BaseCommand):
         )
         return f"e:{managed_object.id}:{alarm_class.id}:{var_suffix}"
 
-    def publish(self, managed_object: ManagedObject, msg):
+    def publish(self, managed_object: ManagedObject | None, msg):
         svc = get_service()
-        stream, partition = managed_object.alarms_stream_and_partition
+        if managed_object:
+            stream, partition = managed_object.alarms_stream_and_partition
+        else:
+            fm_pool = Pool.get_default_fm_pool()
+            stream, partition = f"dispose.{fm_pool.name}", 0
         self.print(f"Send message: {msg}")
         svc.publish(orjson.dumps(msg), stream=stream, partition=partition)
 
@@ -334,7 +345,3 @@ class Command(BaseCommand):
                 aa.clear_alarm("By manual")
         else:
             self.print("For Really remove data run commands with --force argument")
-
-
-if __name__ == "__main__":
-    Command().run()

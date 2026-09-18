@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Collections manipulation
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -9,13 +9,14 @@
 import argparse
 from noc.config import config
 from pathlib import Path
+from contextlib import suppress
 
 # NOC modules
 from noc.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         dump_parser = subparsers.add_parser("dump")
         dump_parser.add_argument(
@@ -29,8 +30,24 @@ class Command(BaseCommand):
     def handle(self, cmd, *args, **options):
         getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
-    def handle_dump(self, section=None, *args, **options):
-        config.dump(url="yaml://", section=section)
+    def handle_dump(self, section: list[str] | None = None, *args, **options) -> None:
+        import yaml
+
+        data = {}
+        start = f"{'.'.join(section)}." if section else None
+        for name in config:
+            if start and not name.startswith(start):
+                continue
+            current = data
+            parts = name.split(".")
+            while len(parts) > 1:
+                key = parts.pop(0)
+                if key not in current:
+                    current[key] = {}
+                current = current[key]
+            with suppress(KeyError):
+                current[parts[0]] = config.get_parameter(name)
+        self.print(yaml.dump(data, default_flow_style=False))
 
     def handle_compile_docs(self, *args, **options) -> None:
         import yaml
@@ -51,7 +68,7 @@ class Command(BaseCommand):
             # choices
             choices = getattr(param, "choices", [])
             if choices:
-                p["choices"] = list(choices)
+                p["choices"] = sorted(choices)
             # min
             p_min = getattr(param, "min", None)
             if p_min is not None:
@@ -66,7 +83,3 @@ class Command(BaseCommand):
         self.print(f"Writing {path}")
         with open(path, "w") as fp:
             fp.write("\n".join(r))
-
-
-if __name__ == "__main__":
-    Command().run()

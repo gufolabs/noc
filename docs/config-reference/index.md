@@ -20,18 +20,15 @@ parts according to desired policy.
 Default value for `NOC_CONFIG`
 
 ```
-NOC_CONFIG=legacy:///,yaml:///opt/noc/etc/settings.yml,env:///NOC
+NOC_CONFIG=yaml:///opt/noc/etc/settings.yml,env:///NOC
 ```
 
 Which means:
 
-1. Load legacy config "noc.yml" if exist (See [legacy](#legacy) for details)
-2. Load new YAML config from "settings.yml", provisioned by `Tower` (See [yaml](#yaml) for details)
-3. Apply NOC_xxx environment variables passed to process (See [env](#env) for details)
+1. Load new YAML config from "settings.yml", provisioned by `Tower` (See [yaml](#yaml) for details)
+2. Apply NOC_xxx environment variables passed to process (See [env](#env) for details)
 
-Proposed approach allows to start with legacy config, if exists, override
-it with _Tower_ config and, finally, apply per-process tweaks via
-environment variables.
+Proposed approach allows to start with deployed config, if exists, then apply per-process tweaks via environment variables.
 
 You can set own `NOC_CONFIG` environment variable passed to process
 to apply custom configuration processing order.
@@ -182,39 +179,6 @@ Dump all consul config:
 
 ```
 $ NOC_CONFIG=consul://consul:8500/noc ./noc config dump
-```
-
-### legacy
-
-Legacy YAML format. Used for transitional purposes only.
-
-URL format:
-
-```
-legacy://<path>
-```
-
-where `<path>` is YAML file absolute path.
-
-Examples:
-
-```
-legacy:///
-legacy:///opt/noc/etc/noc.yml
-```
-
-<!-- prettier-ignore -->
-!!! note
-First two slashes after colon belongs to schema delimiter, while
-third slash is a root directory
-
-"noc.yml" file usually deployed by older versions of `Tower`.
-`legacy` source yield empty config if file is not found or not accessible.
-
-`legacy` config may be converted to `yaml`:
-
-```
-$ NOC_CONFIG=legacy:/// ./noc config dump > etc/settings.yml
 ```
 
 ## Tools

@@ -37,7 +37,7 @@ class MIBAlias(Document):
     cache = None
 
     def __str__(self):
-        return "%s -> %s" % (self.rewrite_mib, self.to_mib)
+        return f"{self.rewrite_mib} -> {self.to_mib}"
 
     @classmethod
     def rewrite(cls, name):
@@ -50,7 +50,7 @@ class MIBAlias(Document):
         # Lookup
         if "::" in name:
             mib, rest = name.split("::", 1)
-            return "%s::%s" % (cls.cache.get(mib, mib), rest)
+            return f"{cls.cache.get(mib, mib)}::{rest}"
         return cls.cache.get(name, name)
 
     def get_json_path(self) -> Path:

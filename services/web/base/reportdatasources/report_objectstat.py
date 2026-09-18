@@ -25,7 +25,7 @@ from noc.inv.models.interface import Interface
 from noc.inv.models.link import Link
 
 
-class IsolatorClass(object):
+class IsolatorClass:
     """
     BaseClass for isolated set.
     Every Isolated Class split objects set by facets function.
@@ -37,16 +37,14 @@ class IsolatorClass(object):
     @cachetools.cached(cachetools.TTLCache(maxsize=20, ttl=600))
     def get_stat(self, num, value):
         # print("%s a %s, %s" % (self.name, num, value))
-        if hasattr(self, "_%s_%s" % (num, self.name)):
-            a = getattr(self, "_%s_%s" % (num, self.name))
+        if hasattr(self, f"_{num}_{self.name}"):
+            a = getattr(self, f"_{num}_{self.name}")
             return a(value)
         return self.default(num, value)
 
     def default(self, num, index):
         """
         Last metthod
-        :param num:
-        :param index:
         :return:
         """
         raise NotImplementedError()
@@ -85,7 +83,7 @@ class AttributeIsolator(IsolatorClass):
             # Cross link
             num1, num2 = num.split("0", 1)
             ff2 = [n.name for n in self.OP_ATTR_MAP[num]["model"]._meta.fields][int(num2)]
-            field = "%s__%s" % (self.fields[int(num1)], ff2)
+            field = f"{self.fields[int(num1)]}__{ff2}"
         else:
             field = self.fields[int(num)]
 
@@ -154,8 +152,6 @@ class CapabilitiesIsolator(IsolatorClass):
     def f_has(self, num, value):
         """
         Caps
-        :param num:
-        :param value:
         :return:
         """
         # print("Has a %s, %s" % (num, value))
@@ -270,8 +266,6 @@ class StatusIsolator(IsolatorClass):
     def f_is(self, num, value):
         """
 
-        :param num:
-        :param value:
         :return:
         """
         # print "Is a %s, %s" % (num, value)

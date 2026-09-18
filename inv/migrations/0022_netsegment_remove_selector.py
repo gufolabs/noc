@@ -17,7 +17,7 @@ class Migration(BaseMigration):
         ("sa", "0218_command_snippet_obj_notification_resource_group"),
     ]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # NetworkSegment
         ns_coll = self.mongo_db["noc.networksegments"]
         ns_coll.bulk_write(

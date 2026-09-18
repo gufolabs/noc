@@ -75,5 +75,5 @@ def notify():
     SystemNotification.notify(
         "dns.domain_expired",
         subject="%d domains are expiring" % len(expired),
-        body="Following domains are expired:\n%s\n" % get_table(expired),
+        body=f"Following domains are expired:\n{get_table(expired)}\n",
     )

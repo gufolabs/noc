@@ -14,8 +14,8 @@ from noc.core.debug import error_report
 from noc.core.handler import get_handler
 
 
-class Trigger(object):
-    def __init__(self, t, handler=None):
+class Trigger:
+    def __init__(self, t, handler=None) -> None:
         self.name = t.name
         # Condition
         self.condition = compile(t.condition, "<string>", "eval")
@@ -43,7 +43,7 @@ class Trigger(object):
     def call(self, event):
         if not self.match(event):
             return
-        logging.debug("Calling trigger '%s'" % self.name)
+        logging.debug(f"Calling trigger '{self.name}'")
         # Notify if necessary
         if self.notification_group and self.template:
             subject = {}

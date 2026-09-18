@@ -10,7 +10,7 @@ import operator
 import re
 from collections import defaultdict
 from threading import Lock
-from typing import Optional, Union, Dict, Any, Tuple, List, Callable
+from typing import Optional, Any, Callable
 from functools import partial
 
 # Third-party modules
@@ -60,7 +60,7 @@ class MatchRule(EmbeddedDocument):
     def __str__(self):
         return ", ".join(self.labels)
 
-    def get_match_expr(self) -> Dict[str, Any]:
+    def get_match_expr(self) -> dict[str, Any]:
         r = {}
         if self.labels:
             r["labels"] = {"$all": list(self.labels)}
@@ -108,15 +108,20 @@ class SensorProfile(Document):
 
     name = StringField(unique=True)
     description = StringField()
-    workflow = PlainReferenceField(
+    workflow: "Workflow" = PlainReferenceField(
         Workflow, default=partial(Workflow.get_default_workflow, "inv.Sensor")
     )
     style = ForeignKeyField(Style)
     enable_collect = BooleanField(default=False)
     collect_interval = IntField(default=60)
     # PM Integration
-    units = PlainReferenceField(MeasurementUnits)
-    metric_type: "MetricType" = PlainReferenceField(MetricType)
+    units: MeasurementUnits | None = PlainReferenceField(MeasurementUnits)
+    metric_type: Optional["MetricType"] = PlainReferenceField(MetricType)
+    mx_policy = StringField(
+        choices=[("D", "Disable"), ("L", "Sensor Label"), ("A", "By Alias")], defaul="D"
+    )
+    alias_template = StringField()
+    wiping_ttl = IntField(min_value=0, default=0)
     # Dynamic Profile Classification
     dynamic_classification_policy = StringField(
         choices=[("R", "By Rule"), ("D", "Disable")],
@@ -142,7 +147,7 @@ class SensorProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["SensorProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["SensorProfile"]:
         return SensorProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -212,7 +217,7 @@ class SensorProfile(Document):
         key=lambda x: "ruleset",
         lock=lambda _: rule_lock,
     )
-    def get_profiles_matcher(cls) -> Tuple[Tuple[str, Tuple[Callable, ...]], ...]:
+    def get_profiles_matcher(cls) -> tuple[tuple[str, tuple[Callable, ...]], ...]:
         """Build matcher based on Profile Match Rules"""
         r = defaultdict(list)
         for mop_id, rules in SensorProfile.objects.filter(
@@ -237,7 +242,7 @@ class SensorProfile(Document):
 
     def get_instance_affected_query(
         self,
-        changes: Optional[List[ChangeField]] = None,
+        changes: list[ChangeField] | None = None,
         include_match: bool = False,
     ) -> m_q:
         """Return queryset for instance"""
@@ -247,5 +252,5 @@ class SensorProfile(Document):
                 q |= mr.get_q()
         return q
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

@@ -50,7 +50,7 @@ class ReportObjectsHostname2(BaseReportColumn):
 # class ReportObjectsHostname(BaseReportDataSource):
 #     """MO hostname"""
 #
-#     def __init__(self, mo_ids=(), use_facts=False):
+#     def __init__(self, mo_ids=(), use_facts=False) -> None:
 #         self.load = self.load_discovery
 #         super(ReportObjectsHostname).__init__(mo_ids)
 #         if use_facts:

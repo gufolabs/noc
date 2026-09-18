@@ -16,7 +16,7 @@ class Migration(BaseMigration):
     depends_on = [("wf", "0007_managedobject_default")]
     WF_DEFAULT = "641b35e6fa01fd032a1f61ef"
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column(
             "sa_managedobjectprofile",
             "workflow",

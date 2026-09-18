@@ -8,7 +8,7 @@
 # Python modules
 import asyncio
 import logging
-from typing import Optional, Any, List, Tuple
+from typing import Any
 from http import HTTPStatus
 
 # Third-party modules
@@ -16,7 +16,7 @@ import snappy
 import zstd
 from google.protobuf.message import DecodeError
 from fastapi import APIRouter, Header, HTTPException, Body, Request
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import JSONResponse
 
 # NOC modules
 from noc.core.service.loader import get_service
@@ -29,7 +29,7 @@ VMAGENT_COLLECTOR = "vmagent"
 METRIC_LABEL_NAME = "__name__"
 INSTANCE_LABEL_NAME = "instance"
 JOB_LABEL_NAME = "job"
-NODE_LABEL_NAMES = frozenset(["node", "host"])
+NODE_LABEL_NAMES = frozenset(["node", "host", "netbox_name"])
 MS = 1000
 
 router = APIRouter()
@@ -37,14 +37,14 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 
 
-class VMAgentAPI(object):
+class VMAgentAPI:
     """
     # https://github.com/prometheus/prometheus/blob/v2.24.0/prompb/remote.proto
     # https://prometheus.io/docs/specs/prw/remote_write_spec/
     # https://github.com/leegin/remote_pb2
     """
 
-    def __init__(self, router: APIRouter):
+    def __init__(self, router: APIRouter) -> None:
         self.router = router
         self.openapi_tags = ["api", "metricscollector"]
         self.api_name = "metricscollector"
@@ -56,8 +56,8 @@ class VMAgentAPI(object):
 
     @staticmethod
     def parse_labels(
-        labels: List[Any],
-    ) -> Tuple[Optional[str], Optional[str], Optional[str], Tuple[str, ...]]:
+        labels: list[Any],
+    ) -> tuple[str | None, str | None, str | None, tuple[str, ...]]:
         """Parse input labels"""
         name, instance, host, r = None, None, None, []
         for ll in labels:
@@ -81,13 +81,13 @@ class VMAgentAPI(object):
         self,
         request: Request,
         req: bytes = Body(...),
-        remote_system_code: Optional[str] = None,
-        authorization: Optional[str] = Header(None, alias="Authorization"),
-        content_encoding: Optional[str] = Header(None, alias="content-encoding"),
-        remote_write_version: Optional[str] = Header(
+        remote_system_code: str | None = None,
+        authorization: str | None = Header(None, alias="Authorization"),
+        content_encoding: str | None = Header(None, alias="content-encoding"),
+        remote_write_version: str | None = Header(
             None, alias="x-victoriametrics-remote-write-version"
         ),
-    ) -> ORJSONResponse:
+    ) -> JSONResponse:
         if not authorization:
             raise HTTPException(status_code=HTTPStatus.FORBIDDEN)
         _, key = authorization.split(" ")
@@ -98,14 +98,14 @@ class VMAgentAPI(object):
                 "error", ("type", "unknown_remote_system"), ("collector", VMAGENT_COLLECTOR)
             ] += 1
             # IP Address
-            return ORJSONResponse(
+            return JSONResponse(
                 {
                     "error": f"Unknown Remote System {remote_system_code}",
                 },
                 status_code=HTTPStatus.NOT_FOUND,
             )
         if rs_cfg.api_key != key:
-            return ORJSONResponse(
+            return JSONResponse(
                 {
                     "error": f"Remote System API Key not Authorization {remote_system_code}",
                 },
@@ -115,14 +115,14 @@ class VMAgentAPI(object):
             "remote_msg_in", ("collector", VMAGENT_COLLECTOR), ("remote_system", rs_cfg.name)
         ] += 1
         # Lock ?
-        channel: Optional[RemoteSystemChannel] = self.service.get_channel(
+        channel: RemoteSystemChannel | None = self.service.get_channel(
             rs_cfg,
             VMAGENT_COLLECTOR,
             batch_delay=30,
         )
         if not channel or channel.is_banned:
             # IP Address
-            return ORJSONResponse(
+            return JSONResponse(
                 {
                     "error": f"Not Found Remote System by key {remote_system_code}",
                 },
@@ -138,7 +138,7 @@ class VMAgentAPI(object):
             parser.ParseFromString(req)
         except DecodeError as e:
             logger.error("Error when parsed: %s", str(e))
-            return ORJSONResponse({}, status_code=200)
+            return JSONResponse({}, status_code=200)
         logger.debug("VMAgent, Parsed %s", parser)
         for ts in parser.timeseries:
             metric_name, instance, host, labels = self.parse_labels(ts.labels)
@@ -157,7 +157,7 @@ class VMAgentAPI(object):
             logger.info(
                 "[%s|%s] Received series: %s", self.api_name, channel.remote_system.name, received
             )
-        return ORJSONResponse({}, status_code=200)
+        return JSONResponse({}, status_code=200)
 
     def setup_endpoints(self):
         self.router.add_api_route(

@@ -5,6 +5,9 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
+# Python modules
+import importlib
+
 # Third-party modules
 from fastapi import APIRouter
 
@@ -27,7 +30,7 @@ class PathLoader(BaseLoader):
         :return: class reference or None
         """
         try:
-            sm = __import__(module_name, {}, {}, "router")
+            sm = importlib.import_module(module_name)
             if hasattr(sm, "router") and isinstance(sm.router, APIRouter):
                 return sm.router
         except ImportError as e:

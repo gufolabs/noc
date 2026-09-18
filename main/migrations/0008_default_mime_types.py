@@ -83,7 +83,7 @@ MIME_TYPES = [
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         for ext, mime_type in MIME_TYPES:
             self.db.execute(
                 "INSERT INTO main_mimetype(extension,mime_type) VALUES(%s,%s)", [ext, mime_type]

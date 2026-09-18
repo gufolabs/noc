@@ -83,9 +83,7 @@ class Script(BaseScript):
             try:
                 ift = self.types[ifname.lower()[:2]]
             except KeyError:
-                raise self.UnexpectedResultError(
-                    "Cannot determine interface type for: '%s'" % ifname
-                )
+                raise self.UnexpectedResultError(f"Cannot determine interface type for: '{ifname}'")
             admin_status = match.group("admin_status").lower() == "up"
             oper_status = match.group("oper_status").lower() in ("up", "not present")
             iface = {

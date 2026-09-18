@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import time
-from typing import Iterable, Dict, Optional, Any, List
+from typing import Iterable, Any
 
 # Third-party modules
 from bson import ObjectId
@@ -21,7 +21,6 @@ from noc.core.lock.process import ProcessLock
 from noc.core.change.policy import change_tracker
 from noc.core.tt.types import (
     EscalationItem as ECtxItem,
-    EscalationServiceItem,
     EscalationStatus,
     EscalationResult,
     EscalationMember,
@@ -31,7 +30,6 @@ from noc.core.tt.types import (
 from noc.core.tt.base import TTSystemCtx
 from noc.core.perf import metrics
 from noc.sa.models.action import Action
-from noc.sa.models.service import Service
 from noc.main.models.notificationgroup import NotificationGroup
 from noc.fm.models.escalation import Escalation
 from noc.fm.models.escalationprofile import EscalationItem
@@ -43,7 +41,7 @@ class EscalationJob(SequenceJob):
     model = Escalation
     lock = ProcessLock(category="escalator", owner="escalator")
 
-    def __init__(self, job, attrs, dry_run: bool = False):
+    def __init__(self, job, attrs, dry_run: bool = False) -> None:
         super().__init__(job, attrs)
         # self.object: Escalation
         self.dry_run = dry_run
@@ -83,7 +81,7 @@ class EscalationJob(SequenceJob):
             return
         self.remove_job()
 
-    def end_escalation(self, timestamp: Optional[datetime.datetime] = None):
+    def end_escalation(self, timestamp: datetime.datetime | None = None):
         """
         Processed end escalation handlers
         """
@@ -284,7 +282,7 @@ class EscalationJob(SequenceJob):
                     self.logger.info("Nothing waited")
                     return
 
-    def check_closed(self, reason: Optional[str] = None):
+    def check_closed(self, reason: str | None = None):
         """
         Close escalations
         """
@@ -321,7 +319,7 @@ class EscalationJob(SequenceJob):
             if r.status == EscalationStatus.TEMP:
                 self.set_temp_error(r.error)
 
-    def get_span_sample(self, tt_system: Optional[TTSystem] = None) -> int:
+    def get_span_sample(self, tt_system: TTSystem | None = None) -> int:
         """
         Calculate effective sample for escalation span
 
@@ -348,7 +346,7 @@ class EscalationJob(SequenceJob):
         else:
             self.object.alarm.log_message(msg, bulk=self.alarm_log)
 
-    def get_escalation_items(self, tt_system: TTSystem) -> List[ECtxItem]:
+    def get_escalation_items(self, tt_system: TTSystem) -> list[ECtxItem]:
         """
         Build escalation items for Escalation Doc
         Args:
@@ -373,21 +371,7 @@ class EscalationJob(SequenceJob):
             r.append(ei)
         return r
 
-    def get_affected_services_items(self) -> List[EscalationServiceItem]:
-        """Return Affected Service item for escalation doc"""
-        if not self.object.affected_services:
-            return []
-        r = []
-        for svc in Service.objects.filter(id__in=self.object.affected_services):
-            r.append(
-                EscalationServiceItem(
-                    id=str(svc.id),
-                    tt_id=svc.remote_id or "",
-                )
-            )
-        return r
-
-    def get_action_context(self) -> List[TTActionContext]:
+    def get_action_context(self) -> list[TTActionContext]:
         """Return Available Action Context for escalation"""
         r = []
         for action in self.object.profile.get_actions():
@@ -403,9 +387,7 @@ class EscalationJob(SequenceJob):
             r.append(TTActionContext(action=action))
         return r
 
-    def get_tt_system_context(
-        self, tt_system: TTSystem, tt_id: Optional[str] = None
-    ) -> TTSystemCtx:
+    def get_tt_system_context(self, tt_system: TTSystem, tt_id: str | None = None) -> TTSystemCtx:
         """
         Build TTSystem Context
         Args:
@@ -424,7 +406,7 @@ class EscalationJob(SequenceJob):
             timestamp=self.object.timestamp,
             actions=actions,
             items=self.get_escalation_items(tt_system) if cfg.promote_item else [],
-            services=self.get_affected_services_items() or None,
+            # services=self.get_affected_services_items() or None,
         )
 
     def check_escalated(self):
@@ -433,8 +415,8 @@ class EscalationJob(SequenceJob):
         Note: Must be called under the lock
         """
         alarms = [item.alarm for item in self.object.items]
-        esc_status: Dict[ObjectId, ObjectId] = {}
-        esc_tt: Dict[ObjectId, str] = {}
+        esc_status: dict[ObjectId, ObjectId] = {}
+        esc_tt: dict[ObjectId, str] = {}
         for doc in Escalation._get_collection().aggregate(
             [
                 {
@@ -465,8 +447,8 @@ class EscalationJob(SequenceJob):
         tt_system: TTSystem,
         subject: str,
         body: str,
-        context: Optional[Dict[str, Any]] = None,
-        tt_id: Optional[str] = None,
+        context: dict[str, Any] | None = None,
+        tt_id: str | None = None,
     ) -> EscalationResult:
         """
         Create Trouble Ticket on TT System
@@ -531,7 +513,7 @@ class EscalationJob(SequenceJob):
         return r
 
     def close_tt(
-        self, tt_system: TTSystem, tt_id: str, reason: Optional[str] = None
+        self, tt_system: TTSystem, tt_id: str, reason: str | None = None
     ) -> EscalationResult:
         """
         Close Trouble Ticket on TT System
@@ -593,9 +575,7 @@ class EscalationJob(SequenceJob):
         self.logger.info(error)
         return r
 
-    def notify(
-        self, notification_group, subject: str, body: Optional[str] = None
-    ) -> EscalationResult:
+    def notify(self, notification_group, subject: str, body: str | None = None) -> EscalationResult:
         """
         Send Notification
 
@@ -638,7 +618,7 @@ class EscalationJob(SequenceJob):
             tt_id: Number of document on TT System
         """
 
-    def alarm_ack(self, tt_system: Optional[TTSystem]):
+    def alarm_ack(self, tt_system: TTSystem | None):
         """
         Acknowledge alarm by tt_system or settings
 

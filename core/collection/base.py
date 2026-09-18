@@ -16,7 +16,7 @@ import threading
 import operator
 from base64 import b85decode
 from pathlib import Path
-from typing import Iterable, Dict, Any, Set, Union, Tuple
+from typing import Iterable, Any
 from dataclasses import dataclass
 
 # Third-party modules
@@ -47,7 +47,7 @@ state_lock = threading.Lock()
 
 
 @dataclass
-class Item(object):
+class Item:
     """
     Object in collection.
 
@@ -61,10 +61,10 @@ class Item(object):
     uuid: str
     path: Path
     hash: str
-    data: Dict[str, Any]
+    data: dict[str, Any]
 
 
-class Collection(object):
+class Collection:
     PREFIX = "collections"
     CUSTOM_PREFIX = config.get_customized_paths(PREFIX, prefer_custom=True)
     STATE_COLLECTION = "noc.collectionstates"
@@ -74,11 +74,11 @@ class Collection(object):
 
     _state_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 
-    def __init__(self, name, stdout=None):
+    def __init__(self, name, stdout=None) -> None:
         self.name = name
         self._model = None
         self._api_version = self.DEFAULT_API_VERSION
-        self.ref_cache: Dict[Tuple[Document, str, str], Document] = {}
+        self.ref_cache: dict[tuple[Document, str, str], Document] = {}
         self._name_field = None
         self.stdout = stdout or sys.stdout
         self.partial_errors = {}
@@ -139,7 +139,7 @@ class Collection(object):
         """
         return get_db()[self.STATE_COLLECTION]
 
-    def get_state(self) -> Dict[str, str]:
+    def get_state(self) -> dict[str, str]:
         """
         Returns collection state as a dict of UUID -> hash
         :return:
@@ -151,7 +151,7 @@ class Collection(object):
             return orjson.loads(zlib.decompress(smart_bytes(cs["state"])))
         return self.get_legacy_state()
 
-    def get_legacy_state(self) -> Dict[str, str]:
+    def get_legacy_state(self) -> dict[str, str]:
         # Fallback to legacy local
         path = self.get_legacy_state_path()
         state = {}
@@ -163,10 +163,9 @@ class Collection(object):
                     state[r_uuid] = r_hash
         return state
 
-    def save_state(self, state: Dict[str, str]) -> None:
+    def save_state(self, state: dict[str, str]) -> None:
         """
         Save collection state
-        :param state:
         :return:
         """
         coll = self.get_state_collection()
@@ -183,10 +182,9 @@ class Collection(object):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_state_cache"), lock=lambda _: state_lock)
-    def get_builtins(cls, name: str) -> Set[str]:
+    def get_builtins(cls, name: str) -> set[str]:
         """
         Returns set of UUIDs for collection
-        :param name:
         :return:
         """
         return set(Collection(name).get_state())
@@ -205,7 +203,7 @@ class Collection(object):
         """
         return self.get_legacy_state_path().exists()
 
-    def item_hash(self, data: Dict[str, Any]) -> str:
+    def item_hash(self, data: dict[str, Any]) -> str:
         """
         Calculate item hash.
 
@@ -220,7 +218,7 @@ class Collection(object):
             return h
         return f"{self._api_version}:{h}"
 
-    def get_items(self) -> Dict[str, Item]:
+    def get_items(self) -> dict[str, Item]:
         """
         Returns dict of UUID -> Item containing new state.
         """
@@ -239,14 +237,14 @@ class Collection(object):
         Iterate all items from file.
         """
 
-        def get_single(data: Dict[str, Any]) -> Item:
+        def get_single(data: dict[str, Any]) -> Item:
             """Return single item."""
             if "uuid" not in data:
                 msg = f"Invalid JSON {path}: No UUID"
                 raise ValueError(msg)
             return Item(uuid=data["uuid"], path=path, hash=self.item_hash(data), data=data)
 
-        def iter_bundle(data: Dict[str, Any]) -> Iterable[Item]:
+        def iter_bundle(data: dict[str, Any]) -> Iterable[Item]:
             items = data.get("items")
             if not items:
                 return
@@ -268,7 +266,7 @@ class Collection(object):
         else:
             yield get_single(data)
 
-    def get_fields(self, model: Union[Document, NOCModelBase]):
+    def get_fields(self, model: Document | NOCModelBase):
         model = model or self.model
         if not isinstance(model, NOCModelBase):
             # Check Django Model
@@ -290,7 +288,7 @@ class Collection(object):
                 # Lookup
                 k, f = k.split("__")
                 if k not in self.get_fields(model):
-                    raise ValueError("Invalid lookup field: %s" % k)
+                    raise ValueError(f"Invalid lookup field: {k}")
                 ref = self.get_fields(model)[k].document_type
                 v = self.lookup(ref, f, v)
             # Get field
@@ -320,7 +318,7 @@ class Collection(object):
                     v = [self.lookup(edoc, "name", x) for x in d[k]]
                 except ValueError as e:
                     self.partial_errors[d["uuid"]] = str(e)
-                    raise ValueError("Invalid lookup field: %s" % k)
+                    raise ValueError(f"Invalid lookup field: {k}")
             # Dereference binary field
             if isinstance(field, BinaryField):
                 v = b85decode(v)
@@ -355,13 +353,13 @@ class Collection(object):
         o = self.model.objects.filter(uuid=data["uuid"]).first()
         if o:
             self.stdout.write(
-                "[%s|%s] Updating %s\n" % (self.name, data["uuid"], getattr(o, self.name_field))
+                "[{}|{}] Updating {}\n".format(self.name, data["uuid"], getattr(o, self.name_field))
             )
             set_attrs(o, d)
             o.save()
             return True
         self.stdout.write(
-            "[%s|%s] Creating %s\n" % (self.name, data["uuid"], data.get(self.name_field))
+            "[{}|{}] Creating {}\n".format(self.name, data["uuid"], data.get(self.name_field))
         )
         o = self.model()
         set_attrs(o, d)
@@ -384,14 +382,15 @@ class Collection(object):
                 qs = {}
                 for fk in k:
                     if isinstance(d[fk], list):
-                        qs["%s__in" % fk] = d[fk]
+                        qs[f"{fk}__in"] = d[fk]
                     else:
                         qs[fk] = d[fk]
                 o = self.model.objects.filter(**qs).first()
                 if o:
                     self.stdout.write(
-                        "[%s|%s] Changing local uuid %s (%s)\n"
-                        % (self.name, data["uuid"], o.uuid, getattr(o, self.name_field))
+                        "[{}|{}] Changing local uuid {} ({})\n".format(
+                            self.name, data["uuid"], o.uuid, getattr(o, self.name_field)
+                        )
                     )
                     o.uuid = data["uuid"]
                     if is_document(self.model):
@@ -400,23 +399,23 @@ class Collection(object):
                         o.save()
                     # Try again
                     return self.update_item(data)
-                self.stdout.write("Not find object by query: %s\n" % qs)
+                self.stdout.write(f"Not find object by query: {qs}\n")
             raise
 
     def delete_item(self, uuid):
         o = self.model.objects.filter(uuid=uuid).first()
         if not o:
             return
-        self.stdout.write("[%s|%s] Deleting %s\n" % (self.name, uuid, getattr(o, self.name_field)))
+        self.stdout.write(f"[{self.name}|{uuid}] Deleting {getattr(o, self.name_field)}\n")
         o.delete()
 
     def sync(self):
         # Read collection from JSON files
         cdata = self.get_items()
         if not cdata:
-            self.stdout.write("[%s] Ignoring empty collection\n" % self.name)
+            self.stdout.write(f"[{self.name}] Ignoring empty collection\n")
             return
-        self.stdout.write("[%s] Synchronizing\n" % self.name)
+        self.stdout.write(f"[{self.name}] Synchronizing\n")
         # Get previous state
         cs = self.get_state()
         current_uuids = set(cs)
@@ -440,12 +439,11 @@ class Collection(object):
             if len(self.partial_errors) == pl:
                 # Cannot resolve partials
                 for u in self.partial_errors:
-                    self.stdout.write(
-                        "[%s|%s] Error: %s\n" % (self.name, u, self.partial_errors[u])
-                    )
+                    self.stdout.write(f"[{self.name}|{u}] Error: {self.partial_errors[u]}\n")
                 raise ValueError(
-                    "[%s] Cannot resolve references for %s"
-                    % (self.name, ", ".join(self.partial_errors))
+                    "[{}] Cannot resolve references for {}".format(
+                        self.name, ", ".join(self.partial_errors)
+                    )
                 )
         # Deleted items
         for u in current_uuids - new_uuids:
@@ -467,8 +465,6 @@ class Collection(object):
     def fix_uuids(self):
         """
         Convert string UUIDs to binary
-        :param name:
-        :param model:
         :return:
         """
         bulk = []
@@ -484,7 +480,6 @@ class Collection(object):
     def install(cls, data):
         """
         Write data to the proper path
-        :param data:
         :return:
         """
         c = Collection(data["$collection"])
@@ -496,7 +491,7 @@ class Collection(object):
         path = Path(cls.PREFIX, c.name) / o.get_json_path()
         if "uuid" not in data:
             raise ValueError("Invalid JSON: No UUID")
-        c.stdout.write("[%s|%s] Installing %s\n" % (c.name, data["uuid"], path))
+        c.stdout.write("[{}|{}] Installing {}\n".format(c.name, data["uuid"], path))
         safe_rewrite(path, json_data, mode=0o644)
 
     @classmethod

@@ -7,7 +7,6 @@
 
 # Python modules
 import itertools
-from typing import Tuple
 
 # Material 2014 color scheme from
 # https://material.io/design/color/the-color-system.html#tools-for-picking-colors
@@ -374,10 +373,9 @@ def get_avatar_bg_color(n: int) -> str:
     return AVATAR_COLORS[i]
 
 
-def split_rgb(color: str) -> Tuple[int, int, int]:
+def split_rgb(color: str) -> tuple[int, int, int]:
     """
     Split color #RRGGBB to a tuple of (R, G, B)
-    :param color:
     :return:
     """
     return int(color[1:3], 16), int(color[3:5], 16), int(color[5:], 16)
@@ -386,11 +384,10 @@ def split_rgb(color: str) -> Tuple[int, int, int]:
 def get_fg_color(color: str) -> str:
     """
     Return contrast foreground color
-    :param color:
     :return:
     """
 
-    def distance(c1: Tuple[int, int, int], c2: Tuple[int, int, int]):
+    def distance(c1: tuple[int, int, int], c2: tuple[int, int, int]):
         return abs(c1[0] - c2[0]) + abs(c1[1] - c2[1]) + abs(c1[2] - c2[2])
 
     bg_rgb = split_rgb(color)

@@ -7,7 +7,6 @@
 
 # Python modules
 import re
-from typing import Tuple, Optional
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -23,7 +22,7 @@ class Script(BaseScript):
         re.IGNORECASE,
     )
 
-    def normalize_param(self, oid: str) -> Tuple[str, Optional[str], Optional[dict]]:
+    def normalize_param(self, oid: str) -> tuple[str, str | None, dict | None]:
         """
         Normalize platform name from OID String
 
@@ -33,7 +32,6 @@ class Script(BaseScript):
         attributes:
             kernel: 5.4.238
 
-        :param oid:
         :return: platform, version, attributes
         """
         platform, version, attributes = None, None, {}

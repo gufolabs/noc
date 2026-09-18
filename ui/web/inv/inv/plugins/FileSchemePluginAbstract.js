@@ -92,7 +92,7 @@ Ext.define("NOC.inv.inv.plugins.FileSchemePluginAbstract", {
     vm.set("currentId", data.id);
     //
     viewPanel.filenamePrefix = `${name}-${side}`;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: svgUrl,
       method: "GET",
       success: function(response){

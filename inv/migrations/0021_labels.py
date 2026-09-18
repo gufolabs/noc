@@ -40,7 +40,7 @@ class Migration(BaseMigration):
         ("sensorprofiles", "sensorprofile"),
     ]
 
-    def migrate(self):
+    def migrate(self) -> None:
         labels = defaultdict(set)  # label: settings
 
         coll = self.mongo_db["noc.objectmodels"]

@@ -67,14 +67,14 @@ class Script(BaseScript):
                 self.cli("vlan %d" % vlan_id)
                 self.cli("exit")
                 self.cli("interface vlan %d" % vlan_id)
-                self.cli("name %s" % name)
+                self.cli(f"name {name}")
                 self.cli("exit")
             if ports:
-                self.cli("interface range ethernet %s" % ports)
+                self.cli(f"interface range ethernet {ports}")
                 self.cli("switchport trunk allowed vlan add %d" % vlan_id)
                 self.cli("exit")
             if channels:
-                self.cli("interface range port-channel %s" % channels)
+                self.cli(f"interface range port-channel {channels}")
                 self.cli("switchport trunk allowed vlan add %d" % vlan_id)
         self.save_config()
         return True

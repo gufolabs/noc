@@ -26,7 +26,7 @@ ZONE_CHANGE_BODY = """Zone has been changed: {{ name }}
 class Migration(BaseMigration):
     depends_on = [("main", "0037_template")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         for tn, description, subject, body in [
             ("dns.zone.new", "New DNS zone", NEW_ZONE_SUBJECT, NEW_ZONE_BODY),
             ("dns.zone.change", "DNS zone change", ZONE_CHANGE_SUBJECT, ZONE_CHANGE_BODY),

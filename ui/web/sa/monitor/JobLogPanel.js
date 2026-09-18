@@ -31,7 +31,7 @@ Ext.define("NOC.sa.monitor.JobLogPanel", {
       id = record ? record.id : panel.objectId;
     if(id){
       panel.objectId = id;
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/sa/monitor/" + id + "/discovery_job_log/",
         method: "GET",
         success: function(response){

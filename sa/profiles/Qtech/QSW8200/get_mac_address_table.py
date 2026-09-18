@@ -26,7 +26,7 @@ class Script(BaseScript):
         r = []
         cmd = "show mac-address "
         if mac is not None:
-            cmd += "%s" % mac
+            cmd += f"{mac}"
         else:
             cmd += "all"
         for match in self.rx_line.finditer(self.cli(cmd)):

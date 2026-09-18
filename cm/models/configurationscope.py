@@ -7,7 +7,7 @@
 
 # Python modules
 import threading
-from typing import Optional, Union
+from typing import Optional
 import operator
 from pathlib import Path
 
@@ -55,7 +55,7 @@ class ConfigurationScope(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ConfigurationScope"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ConfigurationScope"]:
         return ConfigurationScope.objects.filter(id=oid).first()
 
     @classmethod

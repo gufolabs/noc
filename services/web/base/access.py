@@ -14,14 +14,14 @@ class PermissionDenied(Exception):
     """
 
 
-class Permission(object):
+class Permission:
     """
     Basic Permission class.
     Each permission must implement ``check`` method
     and optional queryset method
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.app = None
 
     def queryset(self, request):
@@ -64,7 +64,7 @@ class LogicPermision(Permission):
     using logic condition
     """
 
-    def __init__(self, left, right):
+    def __init__(self, left, right) -> None:
         super().__init__()
         self.left = left
         self.right = right
@@ -137,19 +137,19 @@ class HasPerm(Permission):
     Permit if the user has permission _perm_
     """
 
-    def __init__(self, perm):
+    def __init__(self, perm) -> None:
         super().__init__()
         self.perm = perm
 
     def __repr__(self):
         if hasattr(self, "perm_id"):
-            return "<HasPerm '%s' object at 0x%x>" % (self.perm_id, id(self))
-        return "<HasPerm object at 0x%x>" % id(self)
+            return f"<HasPerm '{self.perm_id}' object at 0x{id(self):x}>"
+        return f"<HasPerm object at 0x{id(self):x}>"
 
     def get_permission(self, app):
         if ":" in self.perm:
             return self.perm
-        return "%s:%s:%s" % (app.module, app.app, self.perm)
+        return f"{app.module}:{app.app}:{self.perm}"
 
     def check(self, app, user, obj=None):
         return DBPermission.has_perm(user, self.get_permission(app))

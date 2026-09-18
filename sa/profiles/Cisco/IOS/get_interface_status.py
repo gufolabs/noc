@@ -46,7 +46,7 @@ class Script(BaseScript):
         # Fallback to CLI
         r = []
         if interface:
-            cmd = "show interface %s | include line protocol is" % interface
+            cmd = f"show interface {interface} | include line protocol is"
         else:
             cmd = "show interface | include line protocol is"
 

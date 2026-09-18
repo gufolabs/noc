@@ -69,7 +69,7 @@ class Script(BaseScript):
                 match = self.rx_ip.search(v)
                 ip_address = match.group("ip_address")
                 ip_subnet = match.group("ip_subnet")
-                ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+                ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                 iface["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
                 iface["subinterfaces"][0]["vlan_ids"] = [match.group("vlan_id")]
                 iface["mac"] = match.group("mac")
@@ -77,7 +77,7 @@ class Script(BaseScript):
                 interfaces += [iface]
             else:
                 column = items1[0].index(i)
-                ifname = "s%s" % i if i.startswith("p") else i
+                ifname = f"s{i}" if i.startswith("p") else i
                 iface = {"name": ifname, "type": "physical", "oper_status": oper_status}
                 sub = {"name": ifname, "oper_status": oper_status, "enabled_afi": ["BRIDGE"]}
                 for ii in range(1, len(items1)):
@@ -99,18 +99,18 @@ class Script(BaseScript):
             iface = {"name": ifname, "type": "physical", "subinterfaces": []}
             if has_show_entry:
                 try:
-                    v = self.cli("enpu show entry %s" % ifname)
+                    v = self.cli(f"enpu show entry {ifname}")
                     rx_adsl_sub = self.rx_adsl_sub1
                 except self.CLISyntaxError:
                     has_show_entry = False
             if not has_show_entry:
-                v = self.cli("enpu show upstream entry %s" % ifname)
+                v = self.cli(f"enpu show upstream entry {ifname}")
                 rx_adsl_sub = self.rx_adsl_sub2
                 ifnumber = 0
                 for match1 in rx_adsl_sub.finditer(v):
                     ifnumber += 1
                     sub = {
-                        "name": "%s.%s" % (ifname, ifnumber),
+                        "name": f"{ifname}.{ifnumber}",
                         "enabled_afi": ["BRIDGE", "ATM"],
                         "vpi": match1.group("vpi"),
                         "vci": match1.group("vci"),

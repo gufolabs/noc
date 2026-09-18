@@ -11,7 +11,7 @@ import uuid
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         for coll_name in ["workflows", "states", "transitions", "wfmigrations"]:
             coll = self.mongo_db[coll_name]
             for p in coll.find({}):

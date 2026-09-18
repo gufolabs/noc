@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0035_prefix_table")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column(
             "sa_commandsnippet",
             "require_confirmation",

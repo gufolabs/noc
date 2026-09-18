@@ -31,7 +31,7 @@ class Command(BaseCommand):
     # Time multipliers
     TIMES = {"s": 1, "m": 60, "h": 3600, "d": 86400, "w": 604800}
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd")
         import_parser = subparsers.add_parser("import")
         (
@@ -93,7 +93,7 @@ class Command(BaseCommand):
             action="store",
             help="DNS Zone name to transfer",
         )
-        self.print((import_parser.print_help()))
+        self.print(import_parser.print_help())
 
     RR_TYPES = [
         "A",
@@ -133,7 +133,7 @@ class Command(BaseCommand):
 
     def handle(self, cmd, *args, **options):
         connect()
-        return getattr(self, "handle_%s" % cmd)(*args, **options)
+        return getattr(self, f"handle_{cmd}")(*args, **options)
 
     def handle_import(
         self,
@@ -153,10 +153,10 @@ class Command(BaseCommand):
             self.die("--address-profile is not set")
         zp = DNSZoneProfile.get_by_name(zone_profile)
         if not axfr and not zp:
-            self.die("Invalid zone profile '%s'" % zone_profile)
+            self.die(f"Invalid zone profile '{zone_profile}'")
         ap = AddressProfile.get_by_name(address_profile)
         if not ap:
-            self.die("Invalid address profile '%s'" % address_profile)
+            self.die(f"Invalid address profile '{address_profile}'")
         if paths:
             for path in paths:
                 self.import_zone(
@@ -201,13 +201,13 @@ class Command(BaseCommand):
     def dns_zone(self, zone, zone_profile, dry_run=False, clean=False):
         z = DNSZone.get_by_name(zone)
         if z:
-            self.print("Using existing zone '%s'" % zone)
+            self.print(f"Using existing zone '{zone}'")
         else:
-            self.print("Creating zone '%s'" % zone)
+            self.print(f"Creating zone '{zone}'")
             z = DNSZone(name=zone, profile=zone_profile)
             clean = False  # Nothing to clean
         if z.profile.id != zone_profile.id:
-            self.print("Setting profile to '%s'" % zone_profile.name)
+            self.print(f"Setting profile to '{zone_profile.name}'")
             z.profile = zone_profile
         # Apply changes
         if dry_run:
@@ -218,7 +218,7 @@ class Command(BaseCommand):
         if clean:
             self.print("Cleaning zone")
             for rr in DNSZoneRecord.objects.filter(zone=z):
-                self.print("Removing %s %s" % (rr.type, rr.name))
+                self.print(f"Removing {rr.type} {rr.name}")
                 if not dry_run:
                     rr.delete()
         return z
@@ -236,14 +236,14 @@ class Command(BaseCommand):
         clean=False,
     ):
         if path:
-            self.print("Loading zone file '%s'" % path)
+            self.print(f"Loading zone file '{path}'")
             self.print("Parsing zone file using BIND parser")
             with open(path) as f:
                 rrs = self.iter_bind_zone_rr(f)
                 try:
                     soa = next(rrs)
                 except StopIteration:
-                    raise CommandError("Unable to parse zone file from %s" % path)
+                    raise CommandError(f"Unable to parse zone file from {path}")
                 zone = self.from_idna(soa.zone)
                 z = self.dns_zone(zone, zone_profile, dry_run, clean)
                 # Populate zone
@@ -274,7 +274,7 @@ class Command(BaseCommand):
                             zone,
                             vrf,
                             rr.rdata,
-                            "%s.%s" % (name, zone) if name else zone,
+                            f"{name}.{zone}" if name else zone,
                             address_profile,
                             dry_run=dry_run,
                             force=force,
@@ -302,11 +302,11 @@ class Command(BaseCommand):
                             priority=rr.priority,
                             content=rr.rdata,
                         )
-                        self.print("Creating %s %s" % (rr.type, rr.name))
+                        self.print(f"Creating {rr.type} {rr.name}")
                         if not dry_run:
                             zrr.save()
         if axfr:
-            self.print("Loading zone: %s by AXFR from server: %s" % (transfer_zone, nameserver))
+            self.print(f"Loading zone: {transfer_zone} by AXFR from server: {nameserver}")
             if not is_ipv4(nameserver) and not is_ipv6(nameserver):
                 try:
                     answer = dns.resolver.resolve(qname=nameserver, rdtype="A", lifetime=5.0)
@@ -365,15 +365,13 @@ class Command(BaseCommand):
         if a:
             if force:
                 if a.fqdn != fqdn:
-                    self.print("Updating FQDN %s (%s)" % (a.address, a.fqdn))
+                    self.print(f"Updating FQDN {a.address} ({a.fqdn})")
                     a.fqdn = fqdn
                     a.name = fqdn
                     if not dry_run:
                         a.save()
             else:
-                self.print(
-                    "Address %s (%s) is already exists in IPAM, ignoring" % (a.address, a.fqdn)
-                )
+                self.print(f"Address {a.address} ({a.fqdn}) is already exists in IPAM, ignoring")
         else:
             # Not found
             a = Address(
@@ -383,9 +381,9 @@ class Command(BaseCommand):
                 profile=address_profile,
                 fqdn=fqdn,
                 name=fqdn,
-                description="Imported from %s zone" % zone,
+                description=f"Imported from {zone} zone",
             )
-            self.print("Creating address %s (%s)" % (a.address, a.fqdn))
+            self.print(f"Creating address {a.address} ({a.fqdn})")
             if not dry_run:
                 a.save()
 
@@ -406,7 +404,6 @@ class Command(BaseCommand):
     def iter_tabify(cls, iter):
         """
         Replace tabs to spaces in non-quoted parts
-        :param iter:
         :return:
         """
         for item in iter:
@@ -419,7 +416,6 @@ class Command(BaseCommand):
     def iter_strip_comments(cls, iter):
         """
         Cut comments to end of line
-        :param iter:
         :return:
         """
         for item in iter:
@@ -513,7 +509,7 @@ class Command(BaseCommand):
                         if z.endswith("."):
                             zone = z
                         else:
-                            zone = "%s.%s" % (z, zone)
+                            zone = f"{z}.{zone}"
                     yield RR(
                         zone=zone.strip("."),
                         name="",
@@ -577,7 +573,6 @@ class Command(BaseCommand):
     def parse_ttl(cls, line):
         """
         Parse RFC2308 TTL
-        :param line:
         :return:
         """
         parts = split_alnum(line.strip())
@@ -591,7 +586,3 @@ class Command(BaseCommand):
                 raise ValueError("Invalid TTL")
             v += t * m
         return v
-
-
-if __name__ == "__main__":
-    Command().run()

@@ -7,11 +7,11 @@ console.debug("Defining NOC.sa.monitor.Controller");
 Ext.define("NOC.sa.monitor.Controller", {
   extend: "Ext.app.ViewController",
   alias: "controller.monitor",
-  pollingTaskId: null,
   pollingInterval: 300000, // msec
 
   mixins: [
     "NOC.core.mixins.Export",
+    "NOC.core.mixins.Polling",
   ],
 
   onShowFilter: function(){
@@ -62,12 +62,37 @@ Ext.define("NOC.sa.monitor.Controller", {
   onReload: function(btn){
     if(btn.pressed){
       this.startPolling();
+      this.getViewModel().set("icon",
+                              this.generateIcon(true, "circle", NOC.colors.yes, __("online")));
     } else{
       this.stopPolling();
+      this.getViewModel().set("icon", this.generateIcon(false));
     }
   },
 
+  getEl: function(){
+    return this.getView().getEl();
+  },
+
+  setContainerDisabled: function(state){
+    if(this.destroyed) return;
+    var grid = this.lookupReference("grid");
+    if(grid){
+      grid.getView().setDisabled(state);
+    }
+    this.getViewModel().set("icon", state ?
+      this.generateIcon(true, "stop-circle-o", "grey", __("suspend")) :
+      this.generateIcon(true, "circle", NOC.colors.yes, __("online")));
+  },
+
   pollingTask: function(){
+    if(this.destroyed) return;
+    if(!document.hidden && this.isFocused() && this.isIntersecting){
+      this.objectsReload();
+    }
+  },
+
+  objectsReload: function(){
     var logPanel = this.getView().lookupReference("logPanel"),
       grid = this.getView().lookupReference("grid");
     grid.mask(__("Loading..."));
@@ -78,25 +103,6 @@ Ext.define("NOC.sa.monitor.Controller", {
     );
     if(!logPanel.collapsed){
       logPanel.load();
-    }
-  },
-
-  startPolling: function(){
-    if(this.pollingTaskId){
-      this.pollingTask();
-    } else{
-      this.pollingTaskId = Ext.TaskManager.start({
-        run: this.pollingTask,
-        interval: this.pollingInterval,
-        scope: this,
-      });
-    }
-  },
-
-  stopPolling: function(){
-    if(this.pollingTaskId){
-      Ext.TaskManager.stop(this.pollingTaskId);
-      this.pollingTaskId = null;
     }
   },
 });

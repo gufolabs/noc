@@ -146,7 +146,7 @@ class Script(BaseScript):
                         if not found:
                             if ifname.startswith("port-channel"):
                                 iftype = "aggregated"
-                                c = self.cli("show channel-group hw %s" % ifname)
+                                c = self.cli(f"show channel-group hw {ifname}")
                                 match = self.rx_portchannel.search(c)
                                 portchannel_members += [
                                     {
@@ -193,7 +193,7 @@ class Script(BaseScript):
                             }
                             interfaces += [iface]
             for i in interfaces:
-                c = self.cli("show interfaces mac-address %s" % i["name"])
+                c = self.cli("show interfaces mac-address {}".format(i["name"]))
                 match = self.rx_mac.search(c)
                 if match:
                     i["mac"] = match.group("mac")
@@ -205,7 +205,7 @@ class Script(BaseScript):
                             i["enabled_protocols"] = ["LACP"]
                             break
                 try:
-                    c = self.cli("show interfaces status %s" % i["name"])
+                    c = self.cli("show interfaces status {}".format(i["name"]))
                     match = self.rx_status.search(c)
                     i["oper_status"] = match.group("oper_status") == "up"
                     i["subinterfaces"][0]["oper_status"] = match.group("oper_status") == "up"

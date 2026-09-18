@@ -28,7 +28,7 @@ class Profile(BaseProfile):
         if name.startswith("1:"):
             r += [name[2:]]
         elif is_int(name):
-            r += ["1:%s" % name]
+            r += [f"1:{name}"]
         return r
 
     def convert_interface_name(self, name):

@@ -31,7 +31,7 @@ def handle_upgrade(status, log, quiet=False):
     try:
         cp.upgrade(status, log)
     except CPClient.Error as e:
-        die("RPC Error: %s" % e, quiet)
+        die(f"RPC Error: {e}", quiet)
 
 
 def parse_ttl(ttl):

@@ -23,10 +23,10 @@ class Script(BaseScript):
 
     def execute(self, interface=None, vlan=None, mac=None):
         if interface is not None:
-            cmd = "sys sw mac list %s" % interface
+            cmd = f"sys sw mac list {interface}"
         elif mac and vlan is not None:
             mac = mac.lower().replace(":", "")
-            cmd = "sys sw mac search %s %s" % (mac, vlan)
+            cmd = f"sys sw mac search {mac} {vlan}"
         else:
             cmd = "sys sw mac list all"
 

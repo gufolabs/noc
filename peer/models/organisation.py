@@ -19,7 +19,7 @@ ORG_TYPE_CHOICES = [(x, x) for x in ("IANA", "RIR", "NIR", "LIR", "OTHER")]
 
 @on_delete_check(check=[("peer.AS", "organisation")])
 class Organisation(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "Organisation"
         verbose_name_plural = "Organisations"
         db_table = "peer_organisation"
@@ -37,4 +37,4 @@ class Organisation(NOCModel):
     mnt_ref = models.ForeignKey(Maintainer, verbose_name="Mnt. Ref", on_delete=models.CASCADE)
 
     def __str__(self):
-        return " %s (%s)" % (self.organisation, self.org_name)
+        return f" {self.organisation} ({self.org_name})"

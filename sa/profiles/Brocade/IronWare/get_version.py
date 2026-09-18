@@ -21,12 +21,12 @@ class Script(BaseScript):
     rx_sw_ver = re.compile(r"SW:\sVersion\s(?P<version>\S+)", re.MULTILINE | re.DOTALL)
     rx_hw_ver = re.compile(r"HW:\s+(?P<version>\S+\s+\S+\s+\S+),", re.MULTILINE | re.DOTALL)
     rx_snmp_ver = re.compile(
-        r"ProCurve\s+\S+\s+\S+\s(?P<platform>\S+)\,\s+\S+\s+Version\s+(?P<version>\S+).+$"
+        r"Brocade\s+\S+\s+\S+\s+\S+\s+(?P<platform>\S+)\,\s+\S+\s+Version\s+(?P<version>\S+).+$"
     )
 
     def execute_snmp(self):
         v = self.snmp.get("1.3.6.1.2.1.1.1.0")  # sysDescr.0
-        match = self.self.rx_snmp_ver.search(v)
+        match = self.rx_snmp_ver.search(v)
         return {
             "vendor": "Brocade",
             "platform": match.group("platform"),

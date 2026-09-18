@@ -11,7 +11,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.delete_column("ip_ipv4block", "prefix")
         self.db.add_column("ip_ipv4block", "prefix", CIDRField("prefix", null=True))
         self.db.execute("UPDATE ip_ipv4block SET prefix=prefix_cidr")

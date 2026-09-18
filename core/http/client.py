@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # HTTP Client
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ import asyncio
 
 # Third-party modules
 import orjson
-from typing import Optional, List, Tuple, Any, Dict
+from typing import Any
 
 # NOC modules
 from noc.core.perf import metrics
@@ -53,7 +53,7 @@ async def fetch(
     url: str,
     method: str = "GET",
     headers=None,
-    body: Optional[bytes] = None,
+    body: bytes | None = None,
     connect_timeout=DEFAULT_CONNECT_TIMEOUT,
     request_timeout=DEFAULT_REQUEST_TIMEOUT,
     resolver=resolve_async,
@@ -63,29 +63,17 @@ async def fetch(
     validate_cert=config.http_client.validate_certs,
     allow_proxy: bool = False,
     proxies=None,
-    user: Optional[str] = None,
-    password: Optional[str] = None,
-    content_encoding: Optional[str] = None,
-    eof_mark: Optional[bytes] = None,
-) -> Tuple[int, Dict[str, Any], bytes]:
+    user: str | None = None,
+    password: str | None = None,
+    content_encoding: str | None = None,
+    eof_mark: bytes | None = None,
+) -> tuple[int, dict[str, Any], bytes]:
     """
 
     :param url: Fetch URL
     :param method: request method "GET", "POST", "PUT" etc
     :param headers: Dict of additional headers
     :param body: Request body for POST and PUT request
-    :param connect_timeout:
-    :param request_timeout:
-    :param resolver:
-    :param follow_redirects:
-    :param max_redirects:
-    :param validate_cert:
-    :param allow_proxy:
-    :param proxies:
-    :param user:
-    :param password:
-    :param max_buffer_size:
-    :param content_encoding:
     :param eof_mark: Do not consider connection reset as error if
       eof_mark received (string or list)
     :return: code, headers, body
@@ -127,7 +115,7 @@ async def fetch(
     else:
         addr = await resolver(host)
     if not addr:
-        return ERR_TIMEOUT, {}, "Cannot resolve host: %s" % host
+        return ERR_TIMEOUT, {}, f"Cannot resolve host: {host}"
     # Detect proxy server
     if allow_proxy:
         proxy = (proxies or SYSTEM_PROXIES).get(u.scheme)
@@ -190,12 +178,12 @@ async def fetch(
             code = parser.get_status_code()
             logger.debug("Proxy response: %s", code)
             if not 200 <= code <= 299:
-                return code, parser.get_headers(), "Proxy error: %s" % code
+                return code, parser.get_headers(), f"Proxy error: {code}"
         # Process request
         body = body or ""
         content_type = "application/binary"
         if not isinstance(body, (str, bytes)):
-            body = smart_text(orjson.dumps(body))
+            body = orjson.dumps(body).decode()
             content_type = "application/json"
         body = smart_bytes(body)  # Here and below body is binary
         h = {"Host": str(u.netloc), "Connection": "close", "User-Agent": DEFAULT_USER_AGENT}
@@ -230,13 +218,13 @@ async def fetch(
             h["Content-Type"] = content_type
         if user and password:
             # Include basic auth header
-            uh = smart_text("%s:%s" % (user, password))
+            uh = smart_text(f"{user}:{password}")
             h["Authorization"] = b"Basic %s" % codecs.encode(uh.encode("utf-8"), "base64").strip()
         if headers:
             h.update(headers)
         path = u.path
         if u.query:
-            path += "?%s" % u.query
+            path += f"?{u.query}"
         req = b"%s %s HTTP/1.1\r\n%s\r\n\r\n%s" % (
             smart_bytes(method),
             smart_bytes(path),
@@ -253,7 +241,7 @@ async def fetch(
             metrics["httpclient_timeouts"] += 1
             return ERR_TIMEOUT, {}, b"Timed out while sending request"
         parser = HttpParser()
-        response_body: List[bytes] = []
+        response_body: list[bytes] = []
         while not parser.is_message_complete():
             try:
                 data = await asyncio.wait_for(reader.read(max_buffer_size), request_timeout)
@@ -326,7 +314,7 @@ def fetch_sync(
     url: str,
     method: str = "GET",
     headers=None,
-    body: Optional[bytes] = None,
+    body: bytes | None = None,
     connect_timeout=DEFAULT_CONNECT_TIMEOUT,
     request_timeout=DEFAULT_REQUEST_TIMEOUT,
     resolver=resolve_async,
@@ -336,10 +324,10 @@ def fetch_sync(
     validate_cert=config.http_client.validate_certs,
     allow_proxy: bool = False,
     proxies=None,
-    user: Optional[str] = None,
-    password: Optional[str] = None,
-    content_encoding: Optional[str] = None,
-    eof_mark: Optional[bytes] = None,
+    user: str | None = None,
+    password: str | None = None,
+    content_encoding: str | None = None,
+    eof_mark: bytes | None = None,
 ):
     async def _fetch():
         return await fetch(

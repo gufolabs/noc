@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Juniper.JUNOS.get_capabilities
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -10,7 +10,6 @@ from noc.sa.profiles.Generic.get_capabilities import Script as BaseScript
 from noc.sa.profiles.Generic.get_capabilities import false_on_cli_error, false_on_snmp_error
 from noc.core.mib import mib
 from noc.core.validators import is_int
-from noc.core.comp import smart_text
 
 
 class Script(BaseScript):
@@ -45,7 +44,7 @@ class Script(BaseScript):
         Check box has lldp enabled
         """
         for v, r in self.snmp.getnext(mib["LLDP-MIB::lldpPortConfigTLVsTxEnable"], bulk=False):
-            if r != smart_text("\x00"):
+            if r != "\x00":
                 return True
         return False
 

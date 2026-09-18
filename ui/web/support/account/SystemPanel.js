@@ -116,7 +116,7 @@ Ext.define("NOC.support.account.SystemPanel", {
       return;
     }
     values = me.form.getValues();
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/support/account/system/",
       method: "POST",
       jsonData: values,

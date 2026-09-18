@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # DataStream
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -18,12 +18,12 @@ import bson
 import bson.errors
 import pymongo
 import dateutil.parser
-from typing import Optional, Dict, Any, List, Union, Iterable, Tuple, Callable
+from typing import Any, Iterable, Callable
 
 # NOC modules
 from noc.core.perf import metrics
 from noc.core.mongo.connection import get_db
-from noc.core.comp import smart_text, DEFAULT_ENCODING
+from noc.core.comp import smart_text
 from noc.models import get_model
 from noc.core.hash import hash_int
 from noc.core.mx import send_message, MessageType, MX_CHANGE_ID, MX_DATA_ID
@@ -31,9 +31,8 @@ from noc.core.mx import send_message, MessageType, MX_CHANGE_ID, MX_DATA_ID
 logger = logging.getLogger(__name__)
 
 
-class DataStream(object):
-    """
-    Datastream stored in collection named ds_<name>.
+class DataStream:
+    """Datastream stored in collection named ds_<name>.
     Fields:
     _id: Object id
     changeid: Change ID
@@ -67,21 +66,18 @@ class DataStream(object):
 
     DIAGNOSTIC: str = None
 
-    _collections: Dict[str, pymongo.collection.Collection] = {}
-    _collections_async: Dict[str, pymongo.collection.Collection] = {}
+    _collections: dict[str, pymongo.collection.Collection] = {}
+    _collections_async: dict[str, pymongo.collection.Collection] = {}
 
     @classmethod
-    def get_collection_name(cls, format: Optional[str] = None) -> str:
+    def get_collection_name(cls, format: str | None = None) -> str:
         if format:
-            return "ds_%s_%s" % (cls.name, format)
-        return "ds_%s" % cls.name
+            return f"ds_{cls.name}_{format}"
+        return f"ds_{cls.name}"
 
     @classmethod
-    def get_collection(cls, fmt: Optional[str] = None) -> pymongo.collection.Collection:
-        """
-        Get pymongo Collection object
-        :return:
-        """
+    def get_collection(cls, fmt: str | None = None) -> pymongo.collection.Collection:
+        """Get pymongo Collection object"""
         c_name = cls.get_collection_name(fmt)
         coll = cls._collections.get(c_name)
         if coll is None:
@@ -90,11 +86,8 @@ class DataStream(object):
         return coll
 
     @classmethod
-    def get_collection_async(cls, fmt: Optional[str] = None) -> pymongo.collection.Collection:
-        """
-        Get pymongo Collection object
-        :return:
-        """
+    def get_collection_async(cls, fmt: str | None = None) -> pymongo.collection.Collection:
+        """Get pymongo Collection object"""
         c_name = cls.get_collection_name(fmt)
         if c_name not in cls._collections_async:
             from noc.core.mongo.connection_async import connect_async, get_db
@@ -106,52 +99,55 @@ class DataStream(object):
 
     @classmethod
     def ensure_collection(cls):
-        """
-        Ensure collection is created and properly indexed
-        :return:
-        """
+        """Ensure collection is created and properly indexed"""
         coll = cls.get_collection()
         coll.create_index(cls.F_CHANGEID, unique=True)
         meta = cls.get_meta({})
         if meta:
             for m in meta:
-                coll.create_index("%s.%s" % (cls.F_META, m))
+                coll.create_index(f"{cls.F_META}.{m}")
 
     @classmethod
     def get_object(cls, id):
-        """
-        Generate datastream object for given id.
+        """Generate datastream object for given id.
         Raise KeyError if object is not found
         Must be overriden
-        :param id: Object id
-        :return: dict containing object data
+
+        Args:
+            id: Object id
+
+        Returns:
+            dict containing object data
         """
         raise NotImplementedError()
 
     @classmethod
-    def get_meta(cls, data: Dict[str, Any]) -> Optional[Dict]:
-        """
-        Extract additional metadata from .get_object() result for additional indexing
-        :param data: .get_object() result
-        :return: dict or None
+    def get_meta(cls, data: dict[str, Any]) -> dict | None:
+        """Extract additional metadata from .get_object() result for additional indexing
+
+        Args:
+            data: .get_object() result
+
+        Returns:
+            dict or None
         """
         return None
 
     @classmethod
     def get_deleted_object(cls, id):
-        """
-        Generate item for deleted object
-        :param id:
-        :return:
+        """Generate item for deleted object
+
+        Args:
+            id
         """
         return {"id": str(id), cls.F_DELETED: True}
 
     @classmethod
-    def get_moved_object(cls, id: Union[str, int]) -> Dict[str, Any]:
-        """
-        Generate item for deleted object
-        :param id:
-        :return:
+    def get_moved_object(cls, id: str | int) -> dict[str, Any]:
+        """Generate item for deleted object
+
+        Args:
+            id
         """
         return {"id": str(id), "$moved": True}
 
@@ -160,11 +156,11 @@ class DataStream(object):
         return hashlib.sha256(orjson.dumps(data)).hexdigest()[: DataStream.HASH_LEN]
 
     @classmethod
-    def bulk_update(cls, objects: List[Union[id, str, bson.ObjectId]]) -> None:
+    def bulk_update(cls, objects: list[str | bson.ObjectId]) -> None:
         coll = cls.get_collection()
         # Get possible formats
-        fmt_coll: Dict[str, pymongo.collection.Collection] = {}
-        fmt_handler: Dict[str, Callable] = {}
+        fmt_coll: dict[str, pymongo.collection.Collection] = {}
+        fmt_handler: dict[str, Callable] = {}
         for fmt, handler in cls.iter_formats():
             fmt_coll[fmt] = cls.get_collection(fmt)
             fmt_handler[fmt] = handler
@@ -212,13 +208,12 @@ class DataStream(object):
                     fmt_coll[fmt].bulk_write(bulk, ordered=True)
 
     @classmethod
-    def clean_meta(cls, meta: Dict[str, List[Any]], current_meta: Dict[str, Any]):
-        """
-        Calculate actual meta from calculate and current records
+    def clean_meta(cls, meta: dict[str, list[Any]], current_meta: dict[str, Any]):
+        """Calculate actual meta from calculate and current records
 
-        :param meta: Calculated meta
-        :param current_meta: Meta value for current record
-        :return:
+        Args:
+            meta: Calculated meta
+            current_meta: Meta value for current record
         """
         r = {}  # current meta
         # Compare meta
@@ -249,20 +244,20 @@ class DataStream(object):
         cls,
         data,
         meta=None,
-        fmt: Optional[str] = None,
+        fmt: str | None = None,
         state=None,
         meta_headers=None,
-        bulk: Optional[List[Any]] = None,
+        bulk: list[Any] | None = None,
     ) -> bool:
-        """
-        Check calculate data changed and save it to collection
-        :param data: Object Data
-        :param meta: Filter metadata
-        :param fmt: Format
-        :param state: Current saved data state
-        :param meta_headers: Headers for changed message
-        :param bulk: Bulk accumulator
-        :return:
+        """Check calculate data changed and save it to collection
+
+        Args:
+            data: Object Data
+            meta: Filter metadata
+            fmt: Format
+            state: Current saved data state
+            meta_headers: Headers for changed message
+            bulk: Bulk accumulator
         """
 
         def is_changed(d, h):
@@ -298,7 +293,7 @@ class DataStream(object):
             "$set": {
                 cls.F_CHANGEID: change_id,
                 cls.F_HASH: hash,
-                cls.F_DATA: orjson.dumps(data).decode(DEFAULT_ENCODING),
+                cls.F_DATA: orjson.dumps(data).decode(),
             }
         }
         if meta:
@@ -323,7 +318,7 @@ class DataStream(object):
     @classmethod
     def _get_current_data(
         cls, obj_id, delete=False
-    ) -> Tuple[Dict[str, Any], Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
+    ) -> tuple[dict[str, Any], dict[str, Any] | None, dict[str, Any] | None]:
         if delete:
             return cls.get_deleted_object(obj_id), None, None
         try:
@@ -339,11 +334,14 @@ class DataStream(object):
 
     @classmethod
     def update_object(cls, id, delete=False) -> bool:
-        """
-        Generate and update object in stream
-        :param id: Object id
-        :param delete: Object must be marked as deleted
-        :return: True if object has been updated
+        """Generate and update object in stream
+
+        Args:
+            id: Object id
+            delete: Object must be marked as deleted
+
+        Returns:
+            True if object has been updated
         """
         data, meta, meta_h = cls._get_current_data(id, delete=delete)
         r = cls._update_object(data=data, meta=meta, meta_headers=meta_h)
@@ -354,17 +352,17 @@ class DataStream(object):
 
     @classmethod
     def delete_object(cls, id):
-        """
-        Mark object as deleted
-        :param id:
-        :return:
+        """Mark object as deleted
+
+        Args:
+            id
         """
         cls.update_object(id, delete=True)
 
     @classmethod
     def iter_formats(
         cls,
-    ) -> Iterable[Tuple[str, Callable[[Dict[str, Any]], Iterable[Dict[str, Any]]]]]:
+    ) -> Iterable[tuple[str, Callable[[dict[str, Any]], Iterable[dict[str, Any]]]]]:
         # Do not load in datastream service
         DataStreamConfig = getattr(cls, "_DataStreamConfig", None)
         if not DataStreamConfig:
@@ -377,23 +375,20 @@ class DataStream(object):
 
     @classmethod
     def get_total(cls, fmt=None):
-        """
-        Return total amount of items in datastream
-        :return:
-        """
+        """Return total amount of items in datastream"""
         return cls.get_collection(fmt).estimated_document_count()
 
     @classmethod
     def clean_change_id(cls, change_id):
-        """
-        Convert change_id to ObjectId. Following formats are possible:
+        """Convert change_id to ObjectId. Following formats are possible:
         * ObjectId
         * string containing ObjectId
         * ISO 8601 timestamp either in form
           * YYYY-DD-MM
           * YYYY-DD-MMThh:mm:ss
-        :param change_id: Cleaned change_id
-        :return:
+
+        Args:
+            change_id: Cleaned change_id
         """
         # ObjectId
         if isinstance(change_id, bson.ObjectId):
@@ -415,12 +410,12 @@ class DataStream(object):
             raise ValueError(str(e))
 
     @classmethod
-    def is_moved(cls, meta: Dict[str, List[Any]], meta_filters: Dict[str, Any]) -> bool:
-        """
-        Check record is out of filter scope. Check filter diff on meta and record value
-        :param meta:
-        :param meta_filters:
-        :return:
+    def is_moved(cls, meta: dict[str, list[Any]], meta_filters: dict[str, Any]) -> bool:
+        """Check record is out of filter scope. Check filter diff on meta and record value
+
+        Args:
+            meta
+            meta_filters
         """
         for field, field_value in meta_filters.items():
             if not field.startswith("meta."):
@@ -445,24 +440,26 @@ class DataStream(object):
         cls,
         change_id: str = None,
         limit: int = None,
-        filters: List[str] = None,
+        filters: list[str] = None,
         fmt=None,
-        filter_policy: Optional[str] = None,
+        filter_policy: str | None = None,
     ):
-        """
-        Iterate over data items beginning from change id
+        """Iterate over data items beginning from change id
 
         Raises ValueError if filters has incorrect input parameters
-        :param change_id: Staring change id
-        :param limit: Records limit
-        :param filters: List of strings with filter expression
-        :param fmt: Format
-        :param filter_policy: Metadata changed policy. Behavior if metadata change out of filter scope
-                   * default - no changes
-                   * delete - return $delete message
-                   * keep - ignore filter, return full record
-                   * move - return $moved message
-        :return: (id, change_id, data)
+
+        Args:
+            change_id: Starting change id
+            limit: Records limit
+            filters: List of strings with filter expression
+            fmt: Format
+            filter_policy: Metadata changed policy. Behavior if metadata
+                change out of filter scope * default - no changes *
+                delete - return $delete message * keep - ignore filter,
+                return full record * move - return $moved message
+
+        Returns:
+            (id, change_id, data)
         """
         q, meta_filters = {}, {}
         if filters:
@@ -490,7 +487,7 @@ class DataStream(object):
                 data = {cls.F_CHANGEID: str(doc[cls.F_CHANGEID])}
                 h = {"delete": cls.get_deleted_object, "move": cls.get_moved_object}[filter_policy]
                 data.update(h(doc[cls.F_ID]))
-                data = smart_text(orjson.dumps(data))
+                data = orjson.dumps(data).decode()
             yield doc[cls.F_ID], doc[cls.F_CHANGEID], data
 
     @classmethod
@@ -498,24 +495,26 @@ class DataStream(object):
         cls,
         change_id: str = None,
         limit: int = None,
-        filters: List[str] = None,
+        filters: list[str] = None,
         fmt=None,
-        filter_policy: Optional[str] = None,
+        filter_policy: str | None = None,
     ):
-        """
-        Iterate over data items beginning from change id
+        """Iterate over data items beginning from change id
 
         Raises ValueError if filters has incorrect input parameters
-        :param change_id: Staring change id
-        :param limit: Records limit
-        :param filters: List of strings with filter expression
-        :param fmt: Format
-        :param filter_policy: Metadata changed policy. Behavior if metadata change out of filter scope
-                   * default - no changes
-                   * delete - return $delete message
-                   * keep - ignore filter, return full record
-                   * move - return $moved message
-        :return: (id, change_id, data)
+
+        Args:
+            change_id: Starting change id
+            limit: Records limit
+            filters: List of strings with filter expression
+            fmt: Format
+            filter_policy: Metadata changed policy. Behavior if metadata
+                change out of filter scope * default - no changes *
+                delete - return $delete message * keep - ignore filter,
+                return full record * move - return $moved message
+
+        Returns:
+            (id, change_id, data)
         """
         q, meta_filters = {}, {}
         if filters:
@@ -543,52 +542,52 @@ class DataStream(object):
                 data = {cls.F_CHANGEID: str(doc[cls.F_CHANGEID])}
                 h = {"delete": cls.get_deleted_object, "move": cls.get_moved_object}[filter_policy]
                 data.update(h(doc[cls.F_ID]))
-                data = smart_text(orjson.dumps(data))
+                data = orjson.dumps(data).decode()
             yield doc[cls.F_ID], doc[cls.F_CHANGEID], data
 
     @classmethod
     def on_change(cls, data):
-        """
-        Called when datastream changed. May alter data
-        :param data:
-        :return: True, if data is altered and hash must be recalculated
+        """Called when datastream changed. May alter data
+
+        Args:
+            data
+
+        Returns:
+            True, if data is altered and hash must be recalculated
         """
         return False
 
     @classmethod
     def clean_id(cls, id):
-        """
-        Convert arbitrary string to id data type
+        """Convert arbitrary string to id data type
         Raise ValueError if invalid type given
-        :param id:
-        :return:
+
+        Args:
+            id
         """
         return id
 
     @classmethod
     def clean_id_int(cls, id):
-        """
-        Convert arbitrary string id to int
-        :param id:
-        :return:
+        """Convert arbitrary string id to int
+
+        Args:
+            id
         """
         return int(id)
 
     @classmethod
     def clean_id_bson(cls, id):
-        """
-        Convert arbitrary string id to bson int
-        :param id:
-        :return:
+        """Convert arbitrary string id to bson int
+
+        Args:
+            id
         """
         return bson.ObjectId(id)
 
     @classmethod
     def wait(cls):
-        """
-        Block until datastream receives changes
-        :return:
-        """
+        """Block until datastream receives changes"""
         coll = cls.get_collection()
         with coll.watch() as stream:
             next(stream)
@@ -596,10 +595,10 @@ class DataStream(object):
 
     @staticmethod
     def qs(s):
-        """
-        Encode string to utf-8
-        :param s:
-        :return:
+        """Encode string to utf-8
+
+        Args:
+            s
         """
         if not s:
             return ""
@@ -609,10 +608,13 @@ class DataStream(object):
 
     @classmethod
     def _parse_filter(cls, expr):
-        """
-        Convert single filter expression to a S-expression
-        :param expr: filter expression in form name(arg1, .., argN)
-        :return: (name, arg1, argN)
+        """Convert single filter expression to a S-expression
+
+        Args:
+            expr: filter expression in form name(arg1, .., argN)
+
+        Returns:
+            (name, arg1, argN)
         """
         if not isinstance(expr, str):
             raise ValueError("Expression must be string")
@@ -625,31 +627,34 @@ class DataStream(object):
 
     @classmethod
     def compile_filters(cls, exprs):
-        """
-        Compile list of filter expressions to MongoDB query
-        :param exprs: List of strings with expressions
-        :return: dict with query
+        """Compile list of filter expressions to MongoDB query
+
+        Args:
+            exprs: List of strings with expressions
+
+        Returns:
+            dict with query
         """
         if not isinstance(exprs, list):
             raise ValueError("expressions must be list of string")
         q = {}
         for fx in exprs:
             pv = cls._parse_filter(fx)
-            h = getattr(cls, "filter_%s" % pv[0], None)
+            h = getattr(cls, f"filter_{pv[0]}", None)
             if not h:
-                raise ValueError("Invalid filter %s" % pv[0])
+                raise ValueError(f"Invalid filter {pv[0]}")
             q.update(h(*pv[1:]))
         return q
 
     @classmethod
     def filter_id(cls, id1, *args):
-        """
-        Filter by id. Usage:
+        """Filter by id. Usage:
 
         id(id1, .., idN)
-        :param id1:
-        :param args:
-        :return:
+
+        Args:
+            id1
+            *args
         """
         ids = [cls.clean_id(id1)] + [cls.clean_id(x) for x in args]
         if len(ids) == 1:
@@ -658,11 +663,11 @@ class DataStream(object):
 
     @classmethod
     def filter_shard(cls, instance, n_instances):
-        """
-        Sharding by id
-        :param instance:
-        :param n_instances:
-        :return:
+        """Sharding by id
+
+        Args:
+            instance
+            n_instances
         """
         # Raise ValueError if not integer
         instance = int(instance)
@@ -676,11 +681,11 @@ class DataStream(object):
         return {"_id": {"$mod": [n_instances, instance]}}
 
     @classmethod
-    def get_format_role(cls, fmt: str) -> Optional[str]:
-        """
-        Returns format role, if any
-        :param fmt:
-        :return:
+    def get_format_role(cls, fmt: str) -> str | None:
+        """Returns format role, if any
+
+        Args:
+            fmt
         """
         doc = get_db()["datastreamconfigs"].find_one({"name": cls.name})
         if not doc:
@@ -691,36 +696,35 @@ class DataStream(object):
         return None
 
     @classmethod
-    def get_meta_headers(cls, data: Dict[str, Any]) -> Optional[Dict[str, bytes]]:
-        """
-        Return MetaData for message headers
-        :param data:
-        :return:
+    def get_meta_headers(cls, data: dict[str, Any]) -> dict[str, bytes] | None:
+        """Return MetaData for message headers
+
+        Args:
+            data
         """
         return None
 
     @classmethod
     def send_message(
         cls,
-        data: Dict[str, Any],
+        data: dict[str, Any],
         change_id: bson.ObjectId,
-        mtype: Optional[str] = None,
-        additional_headers: Optional[Dict[str, bytes]] = None,
+        mtype: str | None = None,
+        additional_headers: dict[str, bytes] | None = None,
     ) -> None:
-        """
-        Send MX message
+        """Send MX message
 
-        :param data:
-        :param change_id:
-        :param mtype: Message Type
-        :param additional_headers:
-        :return:
+        Args:
+            data
+            change_id
+            mtype: Message Type
+            additional_headers
         """
         data["$changeid"] = str(change_id)
         # Build headers
         headers = {
-            MX_CHANGE_ID: str(change_id).encode(DEFAULT_ENCODING),
-            MX_DATA_ID: str(data["id"]).encode(DEFAULT_ENCODING),
+            MX_CHANGE_ID: str(change_id).encode(),
+            MX_DATA_ID: str(data["id"]).encode(),
         }
         if additional_headers:
             headers.update(additional_headers)
@@ -739,7 +743,7 @@ class DataStream(object):
         del data["$changeid"]
 
     @classmethod
-    def clean_meta_fields(cls, data: Dict[str, Any]):
+    def clean_meta_fields(cls, data: dict[str, Any]):
         if cls.F_LABELS_META in data:
             del data[cls.F_LABELS_META]
         if cls.F_ADM_DOMAIN_META in data:
@@ -749,9 +753,7 @@ class DataStream(object):
         return data
 
     @classmethod
-    def update_diagnostic_state(
-        cls, obj_id, is_blocked: bool = False, reason: Optional[str] = None
-    ):
+    def update_diagnostic_state(cls, obj_id, is_blocked: bool = False, reason: str | None = None):
         if not cls.DIAGNOSTIC:
             return
         from noc.sa.models.managedobject import ManagedObject

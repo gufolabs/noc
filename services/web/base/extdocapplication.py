@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # ExtDocApplication implementation
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -57,7 +57,10 @@ from noc.main.models.label import Label
 from noc.core.collection.base import Collection
 from noc.core.comp import smart_text
 from noc.models import get_model_id
-from .extapplication import ExtApplication, view
+from .api import api, view
+from .extapplication import ExtApplication
+
+__all__ = ["ExtDocApplication", "api", "view"]
 
 
 class ExtDocApplication(ExtApplication):
@@ -77,7 +80,7 @@ class ExtDocApplication(ExtApplication):
     # Add `__label` items
     field_labels = {}  # field_name -> callable(field_value) -> result
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.pk = "id"  # @todo: detect properly
         self.has_uuid = False
@@ -123,7 +126,7 @@ class ExtDocApplication(ExtApplication):
                 self.has_uuid = True
         if not self.query_fields:
             self.query_fields = [
-                "%s__%s" % (n, self.query_condition)
+                f"{n}__{self.query_condition}"
                 for n, f in self.model._fields.items()
                 if f.unique and isinstance(f, StringField)
             ]
@@ -178,7 +181,7 @@ class ExtDocApplication(ExtApplication):
     def get_permissions(self):
         p = super().get_permissions()
         if self.secret_fields:
-            p.add("%s:secret" % self.get_app_id().replace(".", ":"))
+            p.add("{}:secret".format(self.get_app_id().replace(".", ":")))
         return p
 
     def get_custom_fields(self):
@@ -216,7 +219,7 @@ class ExtDocApplication(ExtApplication):
                     return f
                 return None
             if "__" not in f:
-                return "%s__%s" % (f, self.query_condition)
+                return f"{f}__{self.query_condition}"
             return f
 
         qfx = [get_q(f) for f in self.query_fields]
@@ -242,7 +245,6 @@ class ExtDocApplication(ExtApplication):
         :param data: dict of parameters
         :type data: dict
         :return: dict of cleaned parameters of raised InterfaceTypeError
-        :rtype: dict
         """
         # Strip ignored fields and convert empty strings to None
         data = {
@@ -313,15 +315,12 @@ class ExtDocApplication(ExtApplication):
         Check current user has *secret* permission on given app
         :return:
         """
-        perm_name = "%s:secret" % (self.get_app_id().replace(".", ":"))
+        perm_name = "{}:secret".format(self.get_app_id().replace(".", ":"))
         return perm_name in Permission.get_effective_permissions(get_user())
 
     def set_file(self, files, o, file_attrs=None):
         """
         Proccessed uploaded file
-        :param files:
-        :param o:
-        :param file_attrs:
         :return:
         """
         return True
@@ -350,23 +349,23 @@ class ExtDocApplication(ExtApplication):
                 elif isinstance(f, GeoPointField):
                     pass
                 elif isinstance(f, EnumField):
-                    r["%s__label" % f.name] = v.name
+                    r[f"{f.name}__label"] = v.name
                     v = v.value
                 elif isinstance(f, ForeignKeyListField):
                     v = [{"label": str(vv.name), "id": vv.id} for vv in v]
                 elif isinstance(f, PlainReferenceListField):
                     v = [{"label": str(vv.name), "id": str(vv.id)} for vv in v]
                 elif isinstance(f, ForeignKeyField):
-                    r["%s__label" % f.name] = smart_text(v)
+                    r[f"{f.name}__label"] = smart_text(v)
                     v = v.id
                 elif isinstance(f, PlainReferenceField):
-                    r["%s__label" % f.name] = smart_text(v)
+                    r[f"{f.name}__label"] = smart_text(v)
                     if hasattr(v, "id"):
                         v = str(v.id)
                     else:
                         v = str(v)
                 elif isinstance(f, ReferenceField):
-                    r["%s__label" % f.name] = smart_text(v)
+                    r[f"{f.name}__label"] = smart_text(v)
                     if hasattr(v, "id"):
                         v = str(v.id)
                     else:
@@ -423,18 +422,18 @@ class ExtDocApplication(ExtApplication):
             r["row_class"] = o.get_css_class() or ""
         return r
 
-    @view(method=["GET"], url=r"^$", access="read", api=True)
+    @api.get(r"^$", access="read")
     def api_list(self, request):
         return self.list_data(request, self.instance_to_dict_list)
 
-    @view(method=["GET"], url=r"^lookup/$", access="lookup", api=True)
+    @api.get(r"^lookup/$", access="lookup")
     def api_lookup(self, request):
         try:
             return self.list_data(request, self.instance_to_lookup)
         except ValueError:
             return self.response(self.lookup_default, status=self.OK)
 
-    @view(method=["GET"], url=r"^tree_lookup/$", access="lookup", api=True)
+    @api.get(r"^tree_lookup/$", access="lookup")
     def api_lookup_tree(self, request):
         def trim(s):
             return smart_text(s).rsplit(" | ")[-1]
@@ -445,9 +444,9 @@ class ExtDocApplication(ExtApplication):
         model = self.parent_model or self.model
         parent = q.get("parent")
         if not parent:
-            qs = {"%s__exists" % self.parent_field: False}
+            qs = {f"{self.parent_field}__exists": False}
         else:
-            qs = {"%s" % self.parent_field: parent}
+            qs = {f"{self.parent_field}": parent}
         if model == DocCategory:
             qs["type"] = DocCategory._senders[self.model]
         data = model.objects.filter(**qs)
@@ -458,7 +457,7 @@ class ExtDocApplication(ExtApplication):
         data = [{"id": str(o.id), "label": trim(o)} for o in data]
         return {"total": count, "status": True, "data": data}
 
-    @view(method=["POST"], url="^$", access="create", api=True)
+    @api.post("^$", access="create")
     def api_create(self, request):
         is_json = self.site.is_json(request.META.get("CONTENT_TYPE"))
         try:
@@ -507,11 +506,9 @@ class ExtDocApplication(ExtApplication):
             r = self.instance_to_dict(o)
         return self.response(r, status=self.CREATED)
 
-    @view(
-        method=["GET"],
-        url=r"^(?P<id>[0-9a-f]{24}|\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$",
+    @api.get(
+        r"^(?P<id>[0-9a-f]{24}|\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$",
         access="read",
-        api=True,
     )
     def api_read(self, request, id):
         """
@@ -528,11 +525,9 @@ class ExtDocApplication(ExtApplication):
             only = only.split(",")
         return self.response(self.instance_to_dict(o, fields=only), status=self.OK)
 
-    @view(
-        method=["PUT"],
-        url=r"^(?P<id>[0-9a-f]{24}|\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$",
+    @api.put(
+        r"^(?P<id>[0-9a-f]{24}|\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$",
         access="update",
-        api=True,
     )
     def api_update(self, request, id):
         try:
@@ -569,11 +564,9 @@ class ExtDocApplication(ExtApplication):
             r = self.instance_to_dict(o)
         return self.response(r, status=self.OK)
 
-    @view(
-        method=["DELETE"],
-        url=r"^(?P<id>[0-9a-f]{24}|\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$",
+    @api.delete(
+        r"^(?P<id>[0-9a-f]{24}|\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/?$",
         access="delete",
-        api=True,
     )
     def api_delete(self, request, id):
         try:
@@ -584,7 +577,7 @@ class ExtDocApplication(ExtApplication):
             o.delete()
         except ValueError as e:
             return self.render_json(
-                {"status": False, "message": "ERROR: %s" % e}, status=self.CONFLICT
+                {"status": False, "message": f"ERROR: {e}"}, status=self.CONFLICT
             )
         return HttpResponse(status=self.DELETED)
 
@@ -611,8 +604,6 @@ class ExtDocApplication(ExtApplication):
     def _api_share_info(self, request, id):
         """
         Additional information for JSON sharing process
-        :param request:
-        :param id:
         :return:
         """
         o = self.get_object_or_404(self.model, id=id)
@@ -628,7 +619,6 @@ class ExtDocApplication(ExtApplication):
     def _bulk_field_is_builtin(self, data):
         """
         Apply is_builtin field
-        :param data:
         :return:
         """
         builtins = Collection.get_builtins(self.json_collection)
@@ -637,7 +627,7 @@ class ExtDocApplication(ExtApplication):
             x["is_builtin"] = u and u in builtins
         return data
 
-    @view(url=r"^actions/group_edit/$", method=["POST"], access="update", api=True)
+    @api.post(r"^actions/group_edit/$", access="update")
     def api_action_group_edit(self, request):
         validator = DictParameter(
             attrs={"ids": ListOfParameter(element=DocumentParameter(self.model), convert=True)}

@@ -296,7 +296,7 @@ Ext.define("NOC.inv.inv.plugins.param.ParamPanel", {
   },
   save: function(){
     var me = this.up("[itemId=paramPanel]");
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + me.currentId + "/plugin/param/",
       method: "PUT",
       jsonData: me.saveBuffer,
@@ -313,7 +313,7 @@ Ext.define("NOC.inv.inv.plugins.param.ParamPanel", {
     var me = this;
     me.saveBuffer = [];
     me.dynamicField.setHtml(Ext.String.format(me.bufferSizeText, me.saveBuffer.length));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/inv/" + me.currentId + "/plugin/param/",
       method: "GET",
       scope: me,

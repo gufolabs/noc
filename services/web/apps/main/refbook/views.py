@@ -1,16 +1,17 @@
 # ---------------------------------------------------------------------
 # main.refbook application
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Third-party modules
 from django.views.generic.list import ListView
 from django.shortcuts import get_object_or_404
+from django.http import HttpRequest
 
 # NOC modules
-from noc.services.web.base.application import Application, view
+from noc.services.web.base.application import Application, view, api
 from noc.aaa.models.permission import Permission
 from noc.main.models.refbook import RefBook
 from noc.main.models.refbookdata import RefBookData
@@ -20,7 +21,7 @@ from noc.core.translation import ugettext as _
 class RefBookList(ListView):
     paginate_by = 100
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request: HttpRequest, *args, **kwargs):
         self._queryset = request._gv_queryset
         self._ctx = request._gv_ctx
         return super().get(request, *args, **kwargs)
@@ -39,22 +40,19 @@ class RefBookList(ListView):
 class RefBookAppplication(Application):
     title = _("Reference Books")
 
-    @view(url=r"^$", url_name="index", menu=[_("Setup"), _("Reference Books")], access="view")
-    def view_index(self, request):
+    @api.get(r"^$", url_name="index", menu=[_("Setup"), _("Reference Books")], access="view")
+    def api_index(self, request: HttpRequest):
         """
         Render list of refbooks
-        :param request:
         :return:
         """
         ref_books = RefBook.objects.filter(is_enabled=True).order_by("name")
         return self.render(request, "index.html", ref_books=ref_books)
 
-    @view(url=r"^(?P<refbook_id>\d+)/$", url_name="view", access="view")
-    def view_view(self, request, refbook_id):
+    @api.get(r"^(?P<refbook_id>\d+)/$", url_name="view", access="view")
+    def api_view(self, request: HttpRequest, refbook_id):
         """
         Refbook preview
-        :param request:
-        :param refbook_id:
         :return:
         """
         rb = get_object_or_404(RefBook, id=int(refbook_id))
@@ -74,8 +72,8 @@ class RefBookAppplication(Application):
                     continue
                 w += x["where"]
                 p += x["params"]
-            w = " OR ".join(["(%s)" % xx for xx in w])
-            queryset = queryset.extra(where=["(%s)" % w], params=p)
+            w = " OR ".join([f"({xx})" for xx in w])
+            queryset = queryset.extra(where=[f"({w})"], params=p)
         else:
             query = ""
         # Use generic view for final result
@@ -83,13 +81,10 @@ class RefBookAppplication(Application):
         request._gv_ctx = {"rb": rb, "can_edit": can_edit, "query": query, "app": self}
         return RefBookList().get(request)
 
-    @view(url=r"^(?P<refbook_id>\d+)/(?P<record_id>\d+)/$", url_name="item", access="view")
-    def view_item(self, request, refbook_id, record_id):
+    @api.get(r"^(?P<refbook_id>\d+)/(?P<record_id>\d+)/$", url_name="item", access="view")
+    def api_item(self, request: HttpRequest, refbook_id, record_id):
         """
         Item preview
-        :param request:
-        :param refbook_id:
-        :param record_id:
         :return:
         """
         rb = get_object_or_404(RefBook, id=int(refbook_id))
@@ -100,12 +95,9 @@ class RefBookAppplication(Application):
         return self.render(request, "item.html", {"rb": rb, "record": rbr, "can_edit": can_edit})
 
     @view(url=r"^(?P<refbook_id>\d+)/(?P<record_id>\d+)/edit/$", url_name="edit", access="change")
-    def view_edit(self, request, refbook_id, record_id=0):
+    def view_edit(self, request: HttpRequest, refbook_id, record_id=0):
         """
         Edit item
-        :param request:
-        :param refbook_id:
-        :param record_id:
         :return:
         """
         rb = get_object_or_404(RefBook, id=int(refbook_id))
@@ -125,19 +117,15 @@ class RefBookAppplication(Application):
                 data[i] = request.POST["field_%d" % i]
             rbr.value = data
             rbr.save()
-            self.message_user(request, "Record updated successfully")
             return self.response_redirect("main:refbook:item", rb.id, rbr.id)
         return self.render(request, "edit.html", {"rb": rb, "record": rbr})
 
     @view(
         url=r"^(?P<refbook_id>\d+)/(?P<record_id>\d+)/delete/$", url_name="delete", access="delete"
     )
-    def view_delete(self, request, refbook_id, record_id):
+    def view_delete(self, request: HttpRequest, refbook_id, record_id):
         """
         Delete refbook record
-        :param request:
-        :param refbook_id:
-        :param record_id:
         :return:
         """
         rb = get_object_or_404(RefBook, id=int(refbook_id))
@@ -148,15 +136,12 @@ class RefBookAppplication(Application):
             return self.response_forbidden()
         rbd = get_object_or_404(RefBookData, ref_book=rb, id=int(record_id))
         rbd.delete()
-        self.message_user(request, "Record deleted")
         return self.response_redirect("main:refbook:view", rb.id)
 
     @view(url=r"^(?P<refbook_id>\d+)/new/$", url_name="new", access="add")
-    def view_new(self, request, refbook_id):
+    def view_new(self, request: HttpRequest, refbook_id):
         """
         Create refbook record
-        :param request:
-        :param refbook_id:
         :return:
         """
         rb = get_object_or_404(RefBook, id=int(refbook_id))
@@ -175,6 +160,5 @@ class RefBookAppplication(Application):
                 data[i] = request.POST["field_%d" % i]
             rbr = RefBookData(ref_book=rb, value=data)
             rbr.save()
-            self.message_user(request, "Record added")
             return self.response_redirect("main:refbook:item", rb.id, rbr.id)
         return self.render(request, "new.html", {"rb": rb})

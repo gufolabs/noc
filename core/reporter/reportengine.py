@@ -10,7 +10,7 @@ import logging
 import datetime
 from io import BytesIO
 from collections import defaultdict
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Any
 
 # Third-party modules
 import orjson
@@ -40,19 +40,21 @@ from noc.core.reporter.types import (
 logger = logging.getLogger(__name__)
 
 
-class ReportEngine(object):
+class ReportEngine:
     """
     Reporting Engine implementation. Report Pipeline:
     RunParams -> ReportEngine -> load_data -> Band -> Formatter -> DocumentFile
     """
 
-    def __init__(self, report_execution_history: bool = False, report_print_error: bool = False):
+    def __init__(
+        self, report_execution_history: bool = False, report_print_error: bool = False
+    ) -> None:
         self.logger = logger
         self.report_execution_history = report_execution_history
         self.report_print_error = report_print_error
         self.suppress_error_log = True
 
-    def run_report(self, r_params: RunParams, user: Optional[Any] = None):
+    def run_report(self, r_params: RunParams, user: Any | None = None):
         """
         Run report withs params
         :param r_params: Report params
@@ -68,11 +70,12 @@ class ReportEngine(object):
         cleaned_param = self.clean_param(rc, r_params.get_params())
         if user:
             cleaned_param["user"] = user
+        selected_fields = cleaned_param.get("fields")
         error, start = None, datetime.datetime.now()
         self.logger.info("[%s] Running report with parameter: %s", rc.name, cleaned_param)
         try:
             band = self.load_bands(rc, cleaned_param, template)
-            self.generate_report(template, out_type, out, band)
+            self.generate_report(template, out_type, out, band, selected_fields)
         except Exception as e:
             error = str(e)
             if self.report_print_error:
@@ -102,22 +105,14 @@ class ReportEngine(object):
         cls,
         rc: ReportConfig,
         start: datetime.datetime,
-        params: Dict[str, Any],
-        end: Optional[datetime.datetime] = None,
+        params: dict[str, Any],
+        end: datetime.datetime | None = None,
         successfully: bool = False,
         canceled: bool = False,
-        error_text: Optional[str] = None,
-        user: Optional[str] = None,
+        error_text: str | None = None,
+        user: str | None = None,
     ):
         """
-        :param rc:
-        :param start:
-        :param end:
-        :param params:
-        :param successfully:
-        :param canceled:
-        :param error_text:
-        :param user:
         :return:
         """
         from noc.core.service.loader import get_service
@@ -147,11 +142,15 @@ class ReportEngine(object):
 
     @staticmethod
     def generate_report(
-        template: Template, output_type: OutputType, output_stream: bytes, band: Band
+        template: Template,
+        output_type: OutputType,
+        output_stream: bytes,
+        band: Band,
+        selected_fields: list[str] | None,
     ):
         """Render document"""
         formatter = df_loader[template.formatter]
-        fmt = formatter(band, template, output_type, output_stream)
+        fmt = formatter(band, template, output_type, output_stream, selected_fields)
         fmt.render_document()
 
     @staticmethod
@@ -159,7 +158,7 @@ class ReportEngine(object):
         """Align end date parameter"""
         return (date + datetime.timedelta(days=1)).replace(hour=0, minute=0, second=0)
 
-    def clean_param(self, rc: ReportConfig, params: Dict[str, Any]):
+    def clean_param(self, rc: ReportConfig, params: dict[str, Any]):
         """Clean and validata input params"""
         # clean_params = params.copy()
         clean_params = {}
@@ -178,9 +177,7 @@ class ReportEngine(object):
         return clean_params
 
     @staticmethod
-    def parse_fields(
-        template: Template, fields: Optional[List[str]] = None
-    ) -> Dict[str, List[str]]:
+    def parse_fields(template: Template, fields: list[str] | None = None) -> dict[str, list[str]]:
         """Parse requested fields for apply to datasource query"""
         logger.info("Request datasource fields for template '%s'", template.code)
         if not template.bands_format and not fields:
@@ -204,7 +201,7 @@ class ReportEngine(object):
                 r[f].append(ds[0])
         return r
 
-    def load_bands(self, rc: ReportConfig, params: Dict[str, Any], template: Template) -> Band:
+    def load_bands(self, rc: ReportConfig, params: dict[str, Any], template: Template) -> Band:
         """
         Generate Report Bands from Config
         Attrs:
@@ -256,14 +253,14 @@ class ReportEngine(object):
 
     @classmethod
     def get_datasets(
-        cls, queries: List[ReportQuery], ctx: Dict[str, Any], fields_map: Dict[str, List[str]]
-    ) -> List[DataSet]:
+        cls, queries: list[ReportQuery], ctx: dict[str, Any], fields_map: dict[str, list[str]]
+    ) -> list[DataSet]:
         """
         Attrs:
             queries: Configuration dataset
             ctx: Report params
         """
-        result: List[DataSet] = []
+        result: list[DataSet] = []
         if not queries:
             return []
         joined_fields_map = {}
@@ -303,8 +300,8 @@ class ReportEngine(object):
 
     @classmethod
     def query_datasource(
-        cls, query: ReportQuery, ctx: Dict[str, Any], fields: Optional[List[str]] = None
-    ) -> Tuple[Optional[pl.DataFrame], List[str]]:
+        cls, query: ReportQuery, ctx: dict[str, Any], fields: list[str] | None = None
+    ) -> tuple[pl.DataFrame | None, list[str]]:
         """
         Resolve Datasource for Query
         Attrs:

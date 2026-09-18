@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Literal
+from typing import Literal
 
 # Third-party modules
 from pydantic import BaseModel, Field
@@ -15,5 +15,5 @@ from pydantic import BaseModel, Field
 class ClearRequest(BaseModel):
     op: Literal["clear"] = Field(None, alias="$op")
     reference: str
-    timestamp: Optional[str] = None
-    message: Optional[str] = None
+    timestamp: str | None = None
+    message: str | None = None

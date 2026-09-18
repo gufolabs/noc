@@ -31,7 +31,7 @@ class Profile(BaseProfile):
             return "CPU"
         if interface.isdigit():
             # Vlan
-            interface = "Vlan %s" % interface
+            interface = f"Vlan {interface}"
         return self.convert_interface_name_cisco(interface)
 
     def setup_session(self, script):

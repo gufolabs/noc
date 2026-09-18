@@ -7,7 +7,6 @@
 
 # Python modules
 import operator
-from typing import Optional, List, Union
 
 # Third-party modules
 from fastapi import APIRouter, Header, HTTPException, Query
@@ -22,10 +21,10 @@ router = APIRouter()
 
 
 class GetMappingsRequest(BaseModel):
-    scope: Optional[str] = None
-    id: Optional[Union[str, List[str]]] = None
-    remote_system: Optional[str] = None
-    remote_id: Optional[Union[str, List[str]]] = None
+    scope: str | None = None
+    id: str | list[str] | None = None
+    remote_system: str | None = None
+    remote_id: str | list[str] | None = None
 
 
 class Mapping(BaseModel):
@@ -36,7 +35,7 @@ class Mapping(BaseModel):
 class GetMappingsResponseItem(BaseModel):
     scope: str
     id: str
-    mappings: List[Mapping]
+    mappings: list[Mapping]
 
 
 class GetMappingsAPI(NBIAPI):
@@ -73,7 +72,7 @@ class GetMappingsAPI(NBIAPI):
             "path": "/api/nbi/getmappings",
             "method": "GET",
             "endpoint": self.handler_get,
-            "response_model": List[GetMappingsResponseItem],
+            "response_model": list[GetMappingsResponseItem],
             "name": "getmappings",
             "description": "Allows remote system to query mappings between NOC's local identifiers (ID) and the remote system's one.",
         }
@@ -81,7 +80,7 @@ class GetMappingsAPI(NBIAPI):
             "path": "/api/nbi/getmappings",
             "method": "POST",
             "endpoint": self.handler_post,
-            "response_model": List[GetMappingsResponseItem],
+            "response_model": list[GetMappingsResponseItem],
             "name": "getmappings",
             "description": "Allows remote system to query mappings between NOC's local identifiers (ID) and the remote system's one.",
         }
@@ -89,10 +88,10 @@ class GetMappingsAPI(NBIAPI):
 
     async def handler_get(
         self,
-        scope: Optional[str] = None,
-        id: Optional[List[str]] = Query(None),
-        remote_system: Optional[str] = None,
-        remote_id: Optional[List[str]] = Query(None),
+        scope: str | None = None,
+        id: list[str] | None = Query(None),
+        remote_system: str | None = None,
+        remote_id: list[str] | None = Query(None),
         access_header: str = Header(..., alias=API_ACCESS_HEADER),
     ):
         if not self.access_granted(access_header):

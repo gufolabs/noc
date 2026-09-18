@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 from datetime import datetime
 
 # Third-party modules
@@ -23,13 +22,13 @@ from noc.core.models.serviceinstanceconfig import InstanceType, ServiceInstanceC
 
 class Instance(_BaseModel):
     type: InstanceType = InstanceType.NETWORK_CHANNEL
-    name: Optional[str] = None
+    name: str | None = None
     # addresses: Optional[List[str]] = None
-    fqdn: Optional[str] = None
+    fqdn: str | None = None
     # port: Optional[int] = None
-    remote_id: Optional[str] = None
-    nri_port: Optional[str] = None
-    last_update: Optional[datetime] = None
+    remote_id: str | None = None
+    nri_port: str | None = None
+    last_update: datetime | None = None
 
     @property
     def config(self) -> ServiceInstanceConfig:
@@ -46,37 +45,37 @@ class Instance(_BaseModel):
 class Service(BaseModel):
     id: str
     profile: Reference["ServiceProfile"]
-    name_template: Optional[str] = None
-    parent: Optional[Reference["Service"]] = None
-    subscriber: Optional[Reference["Subscriber"]] = None
-    ts: Optional[datetime] = None
+    name_template: str | None = None
+    parent: Reference["Service"] | None = None
+    subscriber: Reference["Subscriber"] | None = None
+    ts: datetime | None = None
     # Workflow state
-    state: Optional[str] = None
+    state: str | None = None
     # Last state change
-    state_changed: Optional[datetime] = None
+    state_changed: datetime | None = None
     # Workflow event
-    event: Optional[str] = None
-    agreement_id: Optional[str] = None
-    order_id: Optional[str] = None
-    stage_id: Optional[str] = None
-    stage_name: Optional[str] = None
-    stage_start: Optional[datetime] = None
-    account_id: Optional[str] = None
-    address: Optional[str] = None
-    cpe_serial: Optional[str] = None
-    cpe_mac: Optional[str] = None
-    cpe_model: Optional[str] = None
-    cpe_group: Optional[str] = None
-    labels: Optional[List[str]] = None
-    description: Optional[str] = None
+    event: str | None = None
+    agreement_id: str | None = None
+    order_id: str | None = None
+    stage_id: str | None = None
+    stage_name: str | None = None
+    stage_start: datetime | None = None
+    account_id: str | None = None
+    address: str | None = None
+    cpe_serial: str | None = None
+    cpe_mac: str | None = None
+    cpe_model: str | None = None
+    cpe_group: str | None = None
+    labels: list[str] | None = None
+    description: str | None = None
     # Groups
-    static_client_groups: Optional[List[Reference["ResourceGroup"]]] = None
-    static_service_groups: Optional[List[Reference["ResourceGroup"]]] = None
+    static_client_groups: list[Reference["ResourceGroup"]] | None = None
+    static_service_groups: list[Reference["ResourceGroup"]] | None = None
     # Custom
-    capabilities: Optional[List[CapsItem]] = None
-    instances: Optional[List[Instance]] = None
-    mappings: Optional[List[MappingItem]] = None
-    checkpoint: Optional[str] = None
+    capabilities: list[CapsItem] | None = None
+    instances: list[Instance] | None = None
+    mappings: list[MappingItem] | None = None
+    checkpoint: str | None = None
 
     model_config = ConfigDict(populate_by_name=True)
 

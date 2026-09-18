@@ -79,6 +79,30 @@
                 {
                     "name": "trouble_detail",
                     "title": "Error Detail"
+                },
+                {
+                    "name": "status",
+                    "title": "Status"
+                },
+                {
+                    "name": "enable_ping",
+                    "title": "Ping enable"
+                },
+                {
+                    "name": "enable_box",
+                    "title": "Box enable"
+                },
+                {
+                    "name": "trouble_snmp",
+                    "title": "SNMP Trouble"
+                },
+                {
+                    "name": "trouble_profile",
+                    "title": "Profile Trouble"
+                },
+                {
+                    "name": "trouble_cli",
+                    "title": "CLI Trouble"
                 }
             ],
             "title_template": "Not Availability"
@@ -117,6 +141,30 @@
                 {
                     "name": "trouble_detail",
                     "title": "Error Detail"
+                },
+                {
+                    "name": "status",
+                    "title": "Status"
+                },
+                {
+                    "name": "enable_ping",
+                    "title": "Ping enable"
+                },
+                {
+                    "name": "enable_box",
+                    "title": "Box enable"
+                },
+                {
+                    "name": "trouble_snmp",
+                    "title": "SNMP Trouble"
+                },
+                {
+                    "name": "trouble_profile",
+                    "title": "Profile Trouble"
+                },
+                {
+                    "name": "trouble_cli",
+                    "title": "CLI Trouble"
                 }
             ],
             "title_template": "CLI Errors"
@@ -155,6 +203,30 @@
                 {
                     "name": "trouble_detail",
                     "title": "Error Detail"
+                },
+                {
+                    "name": "status",
+                    "title": "Status"
+                },
+                {
+                    "name": "enable_ping",
+                    "title": "Ping enable"
+                },
+                {
+                    "name": "enable_box",
+                    "title": "Box enable"
+                },
+                {
+                    "name": "trouble_snmp",
+                    "title": "SNMP Trouble"
+                },
+                {
+                    "name": "trouble_profile",
+                    "title": "Profile Trouble"
+                },
+                {
+                    "name": "trouble_cli",
+                    "title": "CLI Trouble"
                 }
             ],
             "title_template": "SNMP Errors"

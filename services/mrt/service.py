@@ -17,9 +17,5 @@ class MRTService(FastAPIService):
     use_mongo = True
     traefik_routes_rule = "PathPrefix(`/api/mrt`)"
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         self.sae = self.open_rpc("sae")
-
-
-if __name__ == "__main__":
-    MRTService().start()

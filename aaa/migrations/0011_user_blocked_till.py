@@ -14,7 +14,7 @@ from django.contrib.postgres.fields import ArrayField
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column("auth_user", "blocked_till", DateTimeField(blank=True, null=True))
         self.db.add_column(
             "auth_user", "failed_history", ArrayField(DateTimeField(), blank=True, null=True)

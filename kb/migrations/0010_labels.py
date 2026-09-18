@@ -22,7 +22,7 @@ class Migration(BaseMigration):
 
     TAG_MODELS = [("kb_kbentry", "kbentry")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         labels = defaultdict(set)  # label: settings
         # Create labels fields
         for table, setting in self.TAG_MODELS:
@@ -39,21 +39,19 @@ class Migration(BaseMigration):
         # Migrate data
         for table, setting in self.TAG_MODELS:
             self.db.execute(
-                """
-                UPDATE %s
+                f"""
+                UPDATE {table}
                 SET labels = tags
-                WHERE tags is not NULL and tags <> '{}'
+                WHERE tags is not NULL and tags <> '{{}}'
                 """
-                % table
             )
             # Fill labels
             for (ll,) in self.db.execute(
-                """
+                f"""
                 SELECT DISTINCT labels
-                FROM %s
-                WHERE labels <> '{}'
+                FROM {table}
+                WHERE labels <> '{{}}'
                 """
-                % table
             ):
                 for name in ll:
                     labels[name].add(f"enable_{setting}")

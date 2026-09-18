@@ -28,7 +28,7 @@ class Script(BaseScript):
         r = []
         cmd = "show interface"
         if interface is not None:
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
         for match in self.rx_port.finditer(self.cli(cmd)):
             r += [{"interface": match.group("port"), "status": match.group("oper_status") != "No"}]
         return r

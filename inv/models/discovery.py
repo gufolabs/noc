@@ -44,4 +44,4 @@ class Discovery(Document):
     log = ListField()
 
     def __str__(self):
-        return "%s: %s" % (self.managed_object, self.job_class)
+        return f"{self.managed_object}: {self.job_class}"

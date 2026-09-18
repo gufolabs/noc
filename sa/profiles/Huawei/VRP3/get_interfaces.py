@@ -151,7 +151,7 @@ class Script(BaseScript):
         match = self.re_search(self.rx_ip, self.cli("show atmlan ip-address"))
         addr = match.group("ip")
         mask = match.group("mask")
-        ip_address = "%s/%s" % (addr, IPv4.netmask_to_len(mask))
+        ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
         with self.configure():
             c = self.cli("show nms")
             match = self.rx_vlan.search(c)

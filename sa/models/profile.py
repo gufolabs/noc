@@ -8,7 +8,7 @@
 # Python modules
 import uuid
 import threading
-from typing import Optional, Union
+from typing import Optional
 import operator
 from pathlib import Path
 
@@ -67,7 +67,7 @@ class Profile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Profile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Profile"]:
         return Profile.objects.filter(id=oid).first()
 
     @classmethod

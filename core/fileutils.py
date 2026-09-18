@@ -1,12 +1,11 @@
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import os
 import tempfile
-import hashlib
 import tarfile
 import gzip
 import shutil
@@ -14,7 +13,7 @@ from io import BytesIO
 
 # NOC modules
 from noc.core.version import version
-from noc.core.comp import smart_text, smart_bytes
+from noc.core.comp import smart_text
 
 
 def safe_rewrite(path, text, mode=None):
@@ -39,62 +38,6 @@ def safe_rewrite(path, text, mode=None):
         os.chmod(path, mode)
 
 
-def safe_append(path, text):
-    """
-    Append the text to the end of the file
-    """
-    text = smart_text(text)
-    d = os.path.dirname(path)
-    if d and not os.path.exists(d):
-        os.makedirs(d)
-    with open(path, "a") as f:
-        f.write(text)
-
-
-def is_differ(path, content):
-    """
-    Check file content is differ from string
-    """
-    if os.path.isfile(path):
-        with open(path) as f:
-            cs1 = hashlib.sha1(smart_bytes(f.read())).digest()
-        cs2 = hashlib.sha1(smart_bytes(content)).digest()
-        return cs1 != cs2
-    return True
-
-
-def rewrite_when_differ(path, content):
-    """
-    Rewrites file when content is differ
-    Returns boolean signalling wherher file was rewritten
-    """
-    d = is_differ(path, content)
-    if d:
-        safe_rewrite(path, content)
-    return d
-
-
-def read_file(path):
-    """
-    Read file and return file's content.
-    Return None when file does not exists
-    """
-    if os.path.isfile(path) and os.access(path, os.R_OK):
-        with open(path, "r") as f:
-            return f.read()
-    return None
-
-
-def copy_file(f, t, mode=None):
-    """
-    Copy File
-    """
-    d = read_file(f)
-    if d is None:
-        d = ""
-    safe_rewrite(t, d, mode=mode)
-
-
 def write_tempfile(text):
     """
     Create temporary file, write content and return path
@@ -106,7 +49,7 @@ def write_tempfile(text):
     return p
 
 
-class temporary_file(object):
+class temporary_file:
     """
     Temporary file context manager.
     Writes data to temporary file an returns path.
@@ -116,7 +59,7 @@ class temporary_file(object):
              subprocess.Popen(["wc","-l",p])
     """
 
-    def __init__(self, text=""):
+    def __init__(self, text="") -> None:
         self.text = text
 
     def __enter__(self):
@@ -125,13 +68,6 @@ class temporary_file(object):
 
     def __exit__(self, type, value, tb):
         os.unlink(self.p)
-
-
-def in_dir(file, dir):
-    """
-    Check file is inside dir
-    """
-    return os.path.commonprefix([dir, os.path.normpath(file)]) == dir
 
 
 def urlopen(url, auto_deflate=False):
@@ -144,7 +80,7 @@ def urlopen(url, auto_deflate=False):
     setup_urllib_proxies()
 
     if url.startswith("http://") or url.startswith("https://"):
-        r = Request(url, headers={"User-Agent": "NOC/%s" % version.version.strip()})
+        r = Request(url, headers={"User-Agent": f"NOC/{version.version.strip()}"})
     else:
         r = url
     if auto_deflate and url.endswith(".gz"):
@@ -154,46 +90,9 @@ def urlopen(url, auto_deflate=False):
     return urlopen(r)
 
 
-def search_path(file):
-    """
-    Search for executable file in $PATH
-    :param file: File name
-    :return: path or None
-    :rtype: str or None
-    """
-    if os.path.exists(file):
-        return file  # Found
-    for d in os.environ["PATH"].split(os.pathsep):
-        f = os.path.join(d, file)
-        if os.path.exists(f):
-            return f
-    return None
-
-
-def tail(path, lines):
-    """
-    Return string containing last lines of file
-    :param lines:
-    :return:
-    """
-    with open(path) as f:
-        avg = 74
-        while True:
-            try:
-                f.seek(-avg * lines, 2)
-            except IOError:
-                f.seek(0)
-            pos = f.tell()
-            ln = f.read().splitlines()
-            if len(ln) >= lines or not pos:
-                return ln[-lines:]
-            avg *= 1.61
-
-
 def iter_open(path):
     """
     Generator yielding file-like objects from path
-    :param path:
     :return:
     """
     if path.endswith("tar.gz") or path.endswith("tgz"):
@@ -211,7 +110,7 @@ def iter_open(path):
         yield f
         f.close()
     else:
-        f = open(path, "r")
+        f = open(path)
         yield f
         f.close()
 

@@ -1,9 +1,9 @@
 ---
 - name: clickhouse tasks
   hosts: svc-clickhouse-exec
-  become: "True"
+  become: true
   any_errors_fatal: "False"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - clickhouse
     - external

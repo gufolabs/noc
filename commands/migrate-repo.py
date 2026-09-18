@@ -52,9 +52,9 @@ def get_hg_files():
 
 
 def import_file(repo, id, path):
-    print("Imporing %s:" % path)
+    print(f"Imporing {path}:")
     for rev, date in get_hg_revisions(path):
-        print("r%s " % rev)
+        print(f"r{rev} ")
         data = get_hg_revision(path, rev)
         GRIDVCS.put(id, data, ts=date)
     print()

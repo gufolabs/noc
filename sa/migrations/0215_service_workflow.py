@@ -17,7 +17,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("wf", "0004_service_default")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         coll = self.mongo_db["noc.services"]
         coll.bulk_write(
             [

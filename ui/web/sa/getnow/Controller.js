@@ -53,7 +53,7 @@ Ext.define("NOC.sa.getnow.Controller", {
       params.push("ids=" + device.get("id"));
     });
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/actions/run_discovery/",
       method: "POST",
       params: params.join("&"),
@@ -62,7 +62,7 @@ Ext.define("NOC.sa.getnow.Controller", {
         var task = {
           run: function(){
             if(pollingDevices.length){
-              Ext.Ajax.request({
+              NOC.api.requestLegacy({
                 url: "/sa/getnow/",
                 method: "POST",
                 jsonData: {ids: pollingDevices},

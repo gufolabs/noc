@@ -21,7 +21,7 @@ from noc.core.model.decorator import on_save
 @Label.model
 @on_save
 class ASSet(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = "ASSet"
         verbose_name_plural = "ASSets"
         db_table = "peer_asset"
@@ -60,11 +60,11 @@ class ASSet(NOCModel):
     def get_rpsl(self):
         sep = "remark: %s" % ("-" * 72)
         s = []
-        s += ["as-set: %s" % self.name]
+        s += [f"as-set: {self.name}"]
         if self.rpsl_header:
             s += self.rpsl_header.split("\n")
         for m in self.member_list:
-            s += ["members: %s" % m]
+            s += [f"members: {m}"]
         if self.rpsl_footer:
             s += [sep]
             s += self.rpsl_footer.split("\n")

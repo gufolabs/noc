@@ -21,7 +21,7 @@ CHINK = 500
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         db = self.mongo_db
         lc = [n for n in db.list_collection_names() if n.startswith("noc.schedules.discovery.")]
         now = datetime.datetime.now()

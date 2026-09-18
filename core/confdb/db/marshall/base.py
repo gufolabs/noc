@@ -6,23 +6,29 @@
 # ----------------------------------------------------------------------
 
 
-class BaseMarshaller(object):
+class BaseMarshaller:
     name = None
 
     @classmethod
     def marshall(cls, node):
-        """
-        Serialize Node
-        :param node: Node instance
-        :return: Raw data
+        """Serialize Node
+
+        Args:
+            node: Node instance
+
+        Returns:
+            Raw data
         """
         raise NotImplementedError()
 
     @classmethod
     def unmarshall(cls, data):
-        """
-        Deserialize raw data to Node
-        :param data: Raw data
-        :return: Node
+        """Deserialize raw data to Node
+
+        Args:
+            data: Raw data
+
+        Returns:
+            Node
         """
         raise NotImplementedError()

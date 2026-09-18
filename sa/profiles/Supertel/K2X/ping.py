@@ -28,9 +28,9 @@ class Script(BaseScript):
 
     def execute(self, address, count=None, source_address=None, size=None, df=None):
         if ":" in address:
-            cmd = "ping ipv6 %s" % address
+            cmd = f"ping ipv6 {address}"
         else:
-            cmd = "ping %s" % address
+            cmd = f"ping {address}"
         if size:
             cmd += " size %d" % int(size)
         if count:

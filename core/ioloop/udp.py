@@ -7,7 +7,6 @@
 
 # Python modules
 import socket
-from typing import Tuple, Optional
 import asyncio
 import errno
 
@@ -15,7 +14,7 @@ import errno
 _ERRNO_WOULDBLOCK = (errno.EWOULDBLOCK, errno.EAGAIN)
 
 
-class UDPSocket(object):
+class UDPSocket:
     """
     UDP socket abstraction
 
@@ -29,13 +28,13 @@ class UDPSocket(object):
         sock.close()
     """
 
-    def __init__(self, tos: Optional[int] = None):
+    def __init__(self, tos: int | None = None) -> None:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         if tos:
             self.socket.setsockopt(socket.IPPROTO_IP, socket.IP_TOS, tos)
         self.socket.setblocking(False)
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.close()
 
     def close(self):
@@ -44,8 +43,8 @@ class UDPSocket(object):
             self.socket = None
 
     async def send_and_receive(
-        self, data: bytes, address: Tuple[str, int]
-    ) -> Tuple[bytes, Tuple[str, int]]:
+        self, data: bytes, address: tuple[str, int]
+    ) -> tuple[bytes, tuple[str, int]]:
         loop = asyncio.get_running_loop()
         fileno = self.socket.fileno()
         write_ev = asyncio.Event()
@@ -70,8 +69,8 @@ class UDPSocket(object):
                 raise e
 
 
-class UDPSocketContext(object):
-    def __init__(self, sock: Optional[UDPSocket] = None, tos: Optional[int] = None):
+class UDPSocketContext:
+    def __init__(self, sock: UDPSocket | None = None, tos: int | None = None) -> None:
         if sock:
             self.sock = sock
             self.to_close = False

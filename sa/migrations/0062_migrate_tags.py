@@ -13,17 +13,16 @@ from noc.core.model.fields import TagsField
 class Migration(BaseMigration):
     TAG_MODELS = ["sa_activator", "sa_managedobject", "sa_commandsnippet"]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Create temporary tags fields
         for m in self.TAG_MODELS:
             self.db.add_column(m, "tmp_tags", TagsField("Tags", null=True, blank=True))
         # Migrate data
         for m in self.TAG_MODELS:
             self.db.execute(
-                """
-            UPDATE %s
+                f"""
+            UPDATE {m}
             SET tmp_tags = string_to_array(regexp_replace(tags, ',$', ''), ',')
             WHERE tags != ''
             """
-                % m
             )

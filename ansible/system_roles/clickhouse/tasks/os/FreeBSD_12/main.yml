@@ -31,5 +31,5 @@
     group: clickhouse
     owner: clickhouse
     recurse: "True"
-  with_items:
+  loop:
     - "{{ ch_run_dir }}"

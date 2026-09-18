@@ -7,7 +7,7 @@
 
 # Python modules
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional
 from threading import Lock
 import operator
 
@@ -44,10 +44,10 @@ class ConnectionMatcher(EmbeddedDocument):
     protocol = StringField()
 
     def __str__(self):
-        return "<ConnectionMatcher %s:%s>" % (self.scope, self.protocol)
+        return f"<ConnectionMatcher {self.scope}:{self.protocol}>"
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "scope": self.scope,
             "protocol": self.protocol,
@@ -61,10 +61,10 @@ class ModelAttr(EmbeddedDocument):
     value = DynamicField()
 
     def __str__(self) -> str:
-        return "%s.%s = %s" % (self.interface, self.attr, self.value)
+        return f"{self.interface}.{self.attr} = {self.value}"
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         return {
             "interface": self.interface,
             "attr": self.attr,
@@ -107,7 +107,7 @@ class ConnectionType(Document):
         default="mf",
     )
     # ModelData
-    data: List["ModelAttr"] = EmbeddedDocumentListField(ModelAttr)
+    data: list["ModelAttr"] = EmbeddedDocumentListField(ModelAttr)
     # Compatible group
     # Connection compatible with opposite gender of same type
     # and all types having any c_group
@@ -130,7 +130,7 @@ class ConnectionType(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ConnectionType"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ConnectionType"]:
         return ConnectionType.objects.filter(id=oid).first()
 
     @classmethod
@@ -139,7 +139,7 @@ class ConnectionType(Document):
         return ConnectionType.objects.filter(name=name).first()
 
     @property
-    def json_data(self) -> Dict[str, Any]:
+    def json_data(self) -> dict[str, Any]:
         r = {"name": self.name, "$collection": self._meta["json_collection"], "uuid": self.uuid}
         if self.description:
             r["description"] = self.description
@@ -259,7 +259,6 @@ class ConnectionType(Document):
     def get_matched_scopes(self, protocols):
         """
         Returns set of matched scopes against the list of protocols
-        :param protocols:
         :return:
         """
         return {m.scope for m in self.matchers if m.protocol in protocols}
@@ -267,8 +266,6 @@ class ConnectionType(Document):
     def is_matched_scope(self, scope, protocols):
         """
         Check if connection type matches scope against list of protocols
-        :param scope:
-        :param protocols:
         :return:
         """
         return any(True for m in self.matchers if m.scope == scope and m.protocol in protocols)

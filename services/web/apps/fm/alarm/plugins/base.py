@@ -6,10 +6,10 @@
 # ---------------------------------------------------------------------
 
 
-class AlarmPlugin(object):
+class AlarmPlugin:
     name = None
 
-    def __init__(self, app):
+    def __init__(self, app) -> None:
         self.app = app
 
     def get_data(self, alarm, config):

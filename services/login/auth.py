@@ -1,18 +1,19 @@
 # ---------------------------------------------------------------------
 # Authentication handler
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
 import logging
-from typing import Optional, Any
+from typing import Any
 import datetime
 import re
 
 # Third-party modules
-from jose import jwt, jwk
+import jwt
+from jwt import ExpiredSignatureError, InvalidTokenError
 from fastapi.responses import Response
 
 # NOC modules
@@ -26,9 +27,6 @@ logger = logging.getLogger(__name__)
 
 # Fields excluded from logging
 HIDDEN_FIELDS = {"password", "new_password", "old_password", "retype_password"}
-
-# Build JWK for sign/verify
-jwt_key = jwk.construct(config.secret_key, algorithm=config.login.jwt_algorithm).to_dict()
 
 
 class ChangeCredentialsError(NOCError):
@@ -88,7 +86,7 @@ def register_last_login(user: str) -> None:
             u.register_login()
 
 
-def get_jwt_token(user: str, expire: Optional[int] = None, audience: Optional[str] = None) -> str:
+def get_jwt_token(user: str, expire: int | None = None, audience: str | None = None) -> str:
     """
     Build JWT token for given user.
 
@@ -108,10 +106,14 @@ def get_jwt_token(user: str, expire: Optional[int] = None, audience: Optional[st
     }
     if audience:
         payload["aud"] = audience
-    return jwt.encode(payload, jwt_key, algorithm=config.login.jwt_algorithm)
+    return jwt.encode(
+        payload,
+        config.secret_key,
+        algorithm=config.login.jwt_algorithm,
+    )
 
 
-def get_user_from_jwt(token: str, audience: Optional[str] = None) -> str:
+def get_user_from_jwt(token: str, audience: str | None = None) -> str:
     """
     Check JWT token and return user.
 
@@ -127,7 +129,10 @@ def get_user_from_jwt(token: str, audience: Optional[str] = None) -> str:
     """
     try:
         token = jwt.decode(
-            token, jwt_key, algorithms=[config.login.jwt_algorithm], audience=audience
+            token,
+            config.secret_key,
+            algorithms=[config.login.jwt_algorithm],
+            audience=audience,
         )
         user = None
         if isinstance(token, dict):
@@ -137,13 +142,13 @@ def get_user_from_jwt(token: str, audience: Optional[str] = None) -> str:
         if not user:
             raise ValueError("Malformed token")
         return user
-    except jwt.ExpiredSignatureError:
+    except ExpiredSignatureError:
         raise ValueError("Expired token")
-    except jwt.JWTError as e:
+    except InvalidTokenError as e:
         raise ValueError(str(e))
 
 
-def get_exp_from_jwt(token: str, audience: Optional[str] = None) -> int:
+def get_exp_from_jwt(token: str, audience: str | None = None) -> int:
     """
     Check JWT token and return expiration timestamp.
 
@@ -159,7 +164,10 @@ def get_exp_from_jwt(token: str, audience: Optional[str] = None) -> int:
     """
     try:
         token = jwt.decode(
-            token, jwt_key, algorithms=[config.login.jwt_algorithm], audience=audience
+            token,
+            config.secret_key,
+            algorithms=[config.login.jwt_algorithm],
+            audience=audience,
         )
         exp = None
         if isinstance(token, dict):
@@ -167,9 +175,9 @@ def get_exp_from_jwt(token: str, audience: Optional[str] = None) -> int:
         if not exp:
             raise ValueError("Malformed token")
         return exp
-    except jwt.ExpiredSignatureError:
+    except ExpiredSignatureError:
         raise ValueError("Expired token")
-    except jwt.JWTError as e:
+    except InvalidTokenError as e:
         raise ValueError(str(e))
 
 

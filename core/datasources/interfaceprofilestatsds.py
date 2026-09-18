@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Optional, Iterable, Tuple, AsyncIterable
+from typing import Iterable, AsyncIterable
 
 # Third-party modules
 from noc.inv.models.interface import Interface
@@ -27,8 +27,8 @@ class InterfaceProfileStatsDS(BaseDataSource):
 
     @classmethod
     async def iter_query(
-        cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
-    ) -> AsyncIterable[Tuple[str, str]]:
+        cls, fields: Iterable[str] | None = None, *args, **kwargs
+    ) -> AsyncIterable[tuple[str, str]]:
         d_count = Interface.objects.count()
         num = 0
         for num, p in enumerate(InterfaceProfile.objects.all()):

@@ -118,7 +118,7 @@ class Script(BaseScript):
                 iface["aggregated_interface"] = ai
                 if is_lacp:
                     iface["enabled_protocols"] += ["LACP"]
-            c = self.cli("show port description %s" % ifname)
+            c = self.cli(f"show port description {ifname}")
             match = self.rx_ifdescr.search(c)
             if match:
                 iface["snmp_ifindex"] = match.group("snmp_ifindex")
@@ -165,7 +165,7 @@ class Script(BaseScript):
                     iface["mac"] = mac
                     iface["subinterfaces"][0]["vlan_ids"] = [i[0]]
                     iface["subinterfaces"][0]["ip_addresses"] = [
-                        "%s/%s" % (i[2], IPv4.netmask_to_len(i[3]))
+                        f"{i[2]}/{IPv4.netmask_to_len(i[3])}"
                     ]
                     iface["subinterfaces"][0]["enabled_afi"] = ["IPv4"]
                     break

@@ -7,7 +7,6 @@
 
 # Python modules
 from logging import getLogger
-from typing import Optional, List, Tuple
 from functools import partial
 
 # NOC modules
@@ -19,19 +18,19 @@ from .model import ChangeField
 logger = getLogger(__name__)
 
 
-def get_datastreams(instance, changed_fields=None) -> Optional[List[Tuple[str, str]]]:
+def get_datastreams(instance, changed_fields=None) -> list[tuple[str, str]] | None:
     if not hasattr(instance, "iter_changed_datastream"):
         return None
     return list(instance.iter_changed_datastream(changed_fields=changed_fields or {}))
 
 
-def get_domains(instance, changed_fields=None) -> Optional[List[Tuple[str, str]]]:
+def get_domains(instance, changed_fields=None) -> list[tuple[str, str]] | None:
     if not hasattr(instance, "iter_changed_domains"):
         return None
     return list(instance.iter_changed_domains(changed_fields=changed_fields or {}))
 
 
-def get_applied_rules(instance, op: str, changed_fields=None) -> Optional[List[str]]:
+def get_applied_rules(instance, op: str, changed_fields=None) -> list[str] | None:
     """Build reaction rules"""
     from noc.sa.models.reactionrule import ReactionRule
 
@@ -45,15 +44,13 @@ def get_applied_rules(instance, op: str, changed_fields=None) -> Optional[List[s
 def change(model=None, *, audit=True):
     """
     @change decorator to enable generalized change tracking on the model.
-    :param model:
-    :param audit:
     :return:
     """
     if model is None:
         return partial(change, audit=audit)
 
     if not hasattr(model, "get_by_id"):
-        raise ValueError("[%s] Missed .get_by_id" % get_model_id(model))
+        raise ValueError(f"[{get_model_id(model)}] Missed .get_by_id")
     if audit and not hasattr(model, "_flag_audit"):
         model._flag_audit = audit
     if is_document(model):
@@ -88,29 +85,31 @@ def _track_model(model):
 
 
 def _on_document_change(sender, document, created=False, *args, **kwargs):
-    def get_changed(field_name: str) -> Optional[ChangeField]:
+    def get_changed(field_name: str) -> ChangeField | None:
         """
         Return changed field with new and old value
         """
         ov, key, ov_label = None, None, None
-        if hasattr(document, "initial_data"):
+        if hasattr(document, "initial_data") and field_name in document.initial_data:
             ov = document.initial_data[field_name]
         if hasattr(ov, "pk"):
             ov = str(ov.pk)
             ov_label = repr(ov)
-        elif hasattr(ov, "_instance"):
+        elif hasattr(ov, "_instance") and not isinstance(ov, dict):
             # Embedded field
             ov = [str(x) for x in ov]
         elif "." in field_name:
             # Dict Field for key - extra_labels["sa"] = labels
             field_name, key = field_name.split(".", 1)
+            if hasattr(document, "initial_data") and field_name in document.initial_data:
+                ov = document.initial_data[field_name][key]
         elif ov:
             ov = str(ov)
         nv, nv_label = getattr(document, field_name), None
         if hasattr(nv, "pk"):
             nv = str(nv.pk)
             nv_label = repr(nv)
-        elif hasattr(nv, "_instance"):
+        elif hasattr(nv, "_instance") and not isinstance(nv, dict):
             # Embedded field
             nv = [str(x) for x in nv]
         elif key:
@@ -130,7 +129,7 @@ def _on_document_change(sender, document, created=False, *args, **kwargs):
 
     model_id = get_model_id(document)
     op = "create" if created else "update"
-    changed_fields: List[ChangeField] = []
+    changed_fields: list[ChangeField] = []
     for f_name in document._changed_fields if not created else []:
         cf = get_changed(f_name)
         if cf:
@@ -178,7 +177,7 @@ def _on_document_delete(sender, document, *args, **kwargs):
 
 
 def _on_model_change(sender, instance, created=False, *args, **kwargs):
-    def get_changed(field_name: str) -> Optional[ChangeField]:
+    def get_changed(field_name: str) -> ChangeField | None:
         """
         Return changed field with new and old value
         """
@@ -202,7 +201,7 @@ def _on_model_change(sender, instance, created=False, *args, **kwargs):
             new_label=nv_label,
         )
 
-    changed_fields: List[ChangeField] = []
+    changed_fields: list[ChangeField] = []
     # Check for instance proxying
     if hasattr(instance, "get_changed_instance"):
         instance = instance.get_changed_instance()

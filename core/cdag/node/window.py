@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List
 from enum import Enum
 from time import time_ns
 
@@ -26,8 +25,8 @@ class WindowType(str, Enum):
 
 
 class WindowNodeState(BaseModel):
-    timestamps: List[int] = []
-    values: List[StrictValueType] = []
+    timestamps: list[int] = []
+    values: list[StrictValueType] = []
 
 
 class WindowConfig(BaseModel):
@@ -43,8 +42,8 @@ class WindowNode(BaseCDAGNode):
     categories = [Category.WINDOW]
 
     def get_window_value(
-        self, values: List[ValueType], timestamps: List[int]
-    ) -> Optional[ValueType]:  # pragma: no cover
+        self, values: list[ValueType], timestamps: list[int]
+    ) -> ValueType | None:  # pragma: no cover
         raise NotImplementedError
 
     def is_filled_ticks(self) -> bool:
@@ -83,7 +82,7 @@ class WindowNode(BaseCDAGNode):
         self.state.values.append(value)
         self.state.timestamps.append(ts)
 
-    def get_value(self, x: ValueType) -> Optional[ValueType]:
+    def get_value(self, x: ValueType) -> ValueType | None:
         # Fill the window
         ts = time_ns()
         self.push(ts, x)
@@ -102,5 +101,5 @@ class WindowNode(BaseCDAGNode):
         # Calculate value
         return self.get_window_value(self.state.values, self.state.timestamps)
 
-    def get_missed_value(self) -> Optional[ValueType]:
+    def get_missed_value(self) -> ValueType | None:
         return None

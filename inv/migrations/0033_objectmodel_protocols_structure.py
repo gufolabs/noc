@@ -102,7 +102,7 @@ class Migration(BaseMigration):
         for p in coll.find():
             self.protocol_code_map[p["code"]] = p["_id"]
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.load_protocols()
         coll = self.mongo_db["noc.objectmodels"]
         bulk = []

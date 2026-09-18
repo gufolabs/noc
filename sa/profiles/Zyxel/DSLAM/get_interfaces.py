@@ -44,8 +44,8 @@ class Script(BaseScript):
             vlans += [
                 {
                     "vid": int(match.group("vlan_id")),
-                    "ports": "%s%s" % (match.group("ports"), match.group("eports")),
-                    "mode": "%s%s" % (match.group("mode"), match.group("emode")),
+                    "ports": "{}{}".format(match.group("ports"), match.group("eports")),
+                    "mode": "{}{}".format(match.group("mode"), match.group("emode")),
                 }
             ]
         port_num = 0
@@ -91,7 +91,7 @@ class Script(BaseScript):
             ifname = match.group("ifname")
             addr = match.group("ip")
             mask = match.group("mask")
-            ip_address = "%s/%s" % (addr, IPv4.netmask_to_len(mask))
+            ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
             iface = {
                 "name": ifname,
                 "type": "SVI",

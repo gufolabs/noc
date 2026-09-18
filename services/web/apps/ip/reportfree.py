@@ -1,0 +1,55 @@
+# ---------------------------------------------------------------------
+# Free Blocks Report
+# ---------------------------------------------------------------------
+# Copyright (C) 2007-2019 The NOC Project
+# See LICENSE for details
+# ---------------------------------------------------------------------
+
+# Third-party modules
+from noc.core.translation import ugettext as _
+from django import forms
+
+# NOC Modules
+from noc.services.web.base.simplereport import SimpleReport
+from noc.ip.models.vrf import VRF
+from noc.ip.models.prefix import Prefix
+from noc.core.validators import check_ipv4_prefix, check_ipv6_prefix, ValidationError
+from noc.core.ip import IP
+from noc.core.comp import smart_text
+
+
+class ReportForm(forms.Form):
+    vrf = forms.ModelChoiceField(label=_("VRF"), queryset=VRF.objects.all().order_by("name"))
+    afi = forms.ChoiceField(label=_("Address Family"), choices=[("4", _("IPv4")), ("6", _("IPv6"))])
+    prefix = forms.CharField(label=_("Prefix"))
+
+    def clean_prefix(self):
+        vrf = self.cleaned_data.get("vrf")
+        if not vrf:
+            raise ValidationError(_("VRF Required"))
+        afi = self.cleaned_data["afi"]
+        prefix = self.cleaned_data.get("prefix", "").strip()
+        if afi == "4":
+            check_ipv4_prefix(prefix)
+        elif afi == "6":
+            check_ipv6_prefix(prefix)
+        try:
+            return Prefix.objects.get(vrf=vrf, afi=afi, prefix=prefix)
+        except Prefix.DoesNotExist:
+            raise ValidationError(_("Prefix not found"))
+
+
+class FreeBlocksReport(SimpleReport):
+    title = _("Free Blocks")
+    form = ReportForm
+
+    def get_data(self, vrf, afi, prefix, **kwargs):
+        p = IP.prefix(prefix.prefix)
+        return self.from_dataset(
+            title=_(f"Free blocks in VRF {vrf.name} (IPv{afi}), {prefix.prefix}"),
+            columns=["Free Blocks"],
+            data=[
+                [smart_text(f)]
+                for f in p.iter_free([IP.prefix(c.prefix) for c in prefix.children_set.all()])
+            ],
+        )

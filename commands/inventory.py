@@ -7,7 +7,6 @@
 
 # Python modules
 import argparse
-from typing import Optional
 
 # NOC modules
 from noc.core.inv.codec import decode, encode, InvData
@@ -27,7 +26,7 @@ class Command(BaseCommand):
     def printbox_border(self):
         self.print("=" * (self.PB_LENGTH + 4))
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # find-serial command
         find_serial_parser = subparsers.add_parser("find-serial")
@@ -53,7 +52,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, cmd, *args, **options):
-        getattr(self, "handle_%s" % cmd.replace("-", "_"))(*args, **options)
+        getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
 
     def handle_find_serial(self, serials):
         connect()
@@ -61,20 +60,20 @@ class Command(BaseCommand):
             for obj in Object.objects.filter(
                 data__match={"interface": "asset", "attr": "serial", "value": serial}
             ):
-                self.print("@@@ Serial %s" % serial)
+                self.print(f"@@@ Serial {serial}")
                 self.dump_object(obj)
 
     def dump_object(self, obj):
         def obj_str(o, conn_name=None):
             r = []
             if conn_name:
-                r += ["%s:" % conn_name]
+                r += [f"{conn_name}:"]
             if o.name:
                 r += [str(o.name)]
-            r += ["(%s)" % o.model.name]
+            r += [f"({o.model.name})"]
             sn = o.get_data("asset", "serial")
             if sn:
-                r += ["Serial=%s" % sn]
+                r += [f"Serial={sn}"]
             return " ".join(r)
 
         def iter_obj(o):
@@ -90,9 +89,9 @@ class Command(BaseCommand):
                     yield from iter_obj(o.parent)
 
         for n, sr in enumerate(reversed(list(iter_obj(obj)))):
-            self.print("%s * %s" % ("  " * n, sr))
+            self.print("{} * {}".format("  " * n, sr))
 
-    def handle_export(self, objects: list[str], output: Optional[str] = None):
+    def handle_export(self, objects: list[str], output: str | None = None):
         connect()
         inv_data, result_info = encode(Object.objects.filter(id__in=objects))
         json_data = inv_data.model_dump_json(indent=2, by_alias=True, exclude_none=True)
@@ -114,10 +113,10 @@ class Command(BaseCommand):
         self.printbox(f"  - cable connections: {result_info.found_connections_cable}")
         self.printbox_border()
 
-    def handle_import(self, input: str, container_id: Optional[str] = None):
+    def handle_import(self, input: str, container_id: str | None = None):
         connect()
         container = Object.get_by_id(container_id) if container_id else None
-        with open(input, "r") as f:
+        with open(input) as f:
             json_data = f.read()
         inv_data = InvData.model_validate_json(json_data)
         result, result_info = decode(container, inv_data)
@@ -135,7 +134,3 @@ class Command(BaseCommand):
         self.printbox(f"  - cables: {result_info.created_cable}")
         self.printbox(f"  - cable connections: {result_info.created_connections_cable}")
         self.printbox_border()
-
-
-if __name__ == "__main__":
-    Command().run()

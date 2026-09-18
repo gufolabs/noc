@@ -33,6 +33,6 @@ class Script(BaseScript):
             raise NotImplementedError("Not support getting information by CLI")
         match = self.rx_iface.search(c)
         ifname = match.group("ifname")
-        c = self.cli("show interface %s mac" % ifname)
+        c = self.cli(f"show interface {ifname} mac")
         match = self.rx_mac.search(c)
         return [{"first_chassis_mac": match.group("mac"), "last_chassis_mac": match.group("mac")}]

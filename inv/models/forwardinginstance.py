@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Union
+from typing import Optional
 
 # Third-party modules
 from bson import ObjectId
@@ -48,10 +48,10 @@ class ForwardingInstance(Document):
     rt_import = ListField(StringField(required=False))
 
     def __str__(self):
-        return "%s: %s" % (self.managed_object.name, self.name if self.name else "default")
+        return "{}: {}".format(self.managed_object.name, self.name if self.name else "default")
 
     @classmethod
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ForwardingInstance"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ForwardingInstance"]:
         return ForwardingInstance.objects.filter(id=oid).first()
 
     def iter_changed_datastream(self, changed_fields=None):

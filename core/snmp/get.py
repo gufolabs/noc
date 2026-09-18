@@ -8,7 +8,7 @@
 # Python modules
 import random
 from collections import namedtuple
-from typing import Optional, Callable, Dict, Union
+from typing import Callable
 
 # NOC modules
 from .ber import parse_p_oid, BERDecoder, encoder
@@ -20,9 +20,6 @@ from noc.core.perf import metrics
 def _build_pdu(community: str, pdu_type: int, oids, request_id, version: int = SNMP_v2c) -> bytes:
     """
     Generate SNMP v2c GET/GETNEXT
-    :param version:
-    :param community:
-    :param oids:
     :return:
     """
     if version not in (SNMP_v1, SNMP_v2c):
@@ -55,9 +52,6 @@ def _build_pdu(community: str, pdu_type: int, oids, request_id, version: int = S
 def get_pdu(community, oids, request_id=None, version=SNMP_v2c):
     """
     Generate SNMP v2c GET PDU
-    :param version:
-    :param community:
-    :param oids:
     :return:
     """
     return _build_pdu(community, PDU_GET_REQUEST, oids, request_id, version)
@@ -66,9 +60,6 @@ def get_pdu(community, oids, request_id=None, version=SNMP_v2c):
 def getnext_pdu(community, oid, request_id=None, version=SNMP_v2c):
     """
     Generate SNMP v2c GETNEXT PDU
-    :param version:
-    :param community:
-    :param oids:
     :return:
     """
     return _build_pdu(community, PDU_GETNEXT_REQUEST, [oid], request_id, version)
@@ -109,22 +100,20 @@ GetResponse = namedtuple(
     "GetResponse", ["community", "request_id", "error_status", "error_index", "varbinds"]
 )
 
-_DisplayHints = Dict[str, Callable[[str, bytes], Union[str, bytes]]]
-_ResponseParser = Callable[[bytes, Optional[_DisplayHints]], GetResponse]
+_DisplayHints = dict[str, Callable[[str, bytes], str | bytes]]
+_ResponseParser = Callable[[bytes, _DisplayHints | None], GetResponse]
 
 
-def parse_get_response(pdu: bytes, display_hints: Optional[_DisplayHints] = None) -> GetResponse:
+def parse_get_response(pdu: bytes, display_hints: _DisplayHints | None = None) -> GetResponse:
     """
     Common response parser
-    :param pdu:
-    :param display_hints:
     :return:
     """
     decoder = BERDecoder(display_hints=display_hints)
     data = decoder.parse_sequence(pdu)[0]
     pdu = data[2]
     if pdu[0] != PDU_RESPONSE:
-        raise ValueError("Invalid response PDU type: %s" % pdu[0])
+        raise ValueError(f"Invalid response PDU type: {pdu[0]}")
     return GetResponse(
         community=data[1],
         request_id=pdu[1],
@@ -134,14 +123,10 @@ def parse_get_response(pdu: bytes, display_hints: Optional[_DisplayHints] = None
     )
 
 
-def parse_get_response_raw(
-    pdu: bytes, display_hints: Optional[_DisplayHints] = None
-) -> GetResponse:
+def parse_get_response_raw(pdu: bytes, display_hints: _DisplayHints | None = None) -> GetResponse:
     """
     Raw response parser for beef collector
 
-    :param pdu:
-    :param display_hints:
     :return:
     """
     decoder = BERDecoder()
@@ -170,7 +155,7 @@ def parse_get_response_raw(
     data = decoder.parse_sequence(pdu)[0]
     pdu = data[2]
     if pdu[0] != PDU_RESPONSE:
-        raise ValueError("Invalid response PDU type: %s" % pdu[0])
+        raise ValueError(f"Invalid response PDU type: {pdu[0]}")
     return GetResponse(
         community=data[1],
         request_id=pdu[1],
@@ -181,7 +166,7 @@ def parse_get_response_raw(
 
 
 def parse_get_response_strict(
-    pdu: bytes, display_hints: Optional[_DisplayHints] = None
+    pdu: bytes, display_hints: _DisplayHints | None = None
 ) -> GetResponse:
     """
     Strict response parser suspects that VarBind part of response
@@ -189,15 +174,13 @@ def parse_get_response_strict(
     reasonal values, rather than blowing out processing pipeline.
     May have performance impact over `parse_get_response`
 
-    :param pdu:
-    :param display_hints:
     :return:
     """
     decoder = BERDecoder(display_hints=display_hints)
     data = decoder.parse_sequence(pdu)[0]
     pdu = data[2]
     if pdu[0] != PDU_RESPONSE:
-        raise ValueError("Invalid response PDU type: %s" % pdu[0])
+        raise ValueError(f"Invalid response PDU type: {pdu[0]}")
     _, request_id, err_status, err_index, varbinds = pdu
     cleaned_varbinds = []
     for n, item in enumerate(varbinds):

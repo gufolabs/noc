@@ -7,7 +7,7 @@
 
 # Python modules
 from threading import Lock
-from typing import Optional, Union, Dict, Any, Tuple, Callable
+from typing import Optional, Any, Callable
 import operator
 
 # Third-party modules
@@ -38,7 +38,7 @@ class MatchRule(EmbeddedDocument):
     labels = ListField(StringField())
     include_expression = StringField()
 
-    def get_match_expr(self) -> Dict[str, Any]:
+    def get_match_expr(self) -> dict[str, Any]:
         r = {}
         if self.labels:
             r["labels"] = {"$all": list(self.labels)}
@@ -93,7 +93,7 @@ class ASProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ASProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ASProfile"]:
         return ASProfile.objects.filter(id=oid).first()
 
     @classmethod
@@ -126,7 +126,7 @@ class ASProfile(Document):
         return matcher(ctx)
 
     @classmethod
-    def get_profiles_matcher(cls) -> Tuple[Tuple[str, Callable], ...]:
+    def get_profiles_matcher(cls) -> tuple[tuple[str, Callable], ...]:
         """Build matcher based on Profile Match Rules"""
         r = {}
         profiles = ASProfile.objects.filter(dynamic_classification_policy__ne="D")
@@ -135,5 +135,5 @@ class ASProfile(Document):
                 r[(str(pp.id), mr.dynamic_order)] = build_matcher(mr.get_match_expr())
         return tuple((x[0], r[x]) for x in sorted(r, key=lambda i: i[1]))
 
-    def get_css_class(self) -> Optional[str]:
+    def get_css_class(self) -> str | None:
         return self.style.get_css_class() if self.style else None

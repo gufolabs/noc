@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Literal
+from typing import Literal
 
 # Third-party modules
 from pydantic import BaseModel, Field
@@ -34,12 +34,12 @@ class ClassificationRule(BaseModel):
     id: str
     name: str
     rule: Literal["classification", "ignore_pattern"] = Field(None, alias="$type")
-    event_class: Optional[EventClass] = None
-    source: Optional[List[EventSource]] = None
-    profiles: Optional[List[str]] = None
+    event_class: EventClass | None = None
+    source: list[EventSource] | None = None
+    profiles: list[str] | None = None
     preference: int = 1000
-    message_rx: Optional[str] = None
-    patterns: Optional[List[ClassificationPattern]] = None
-    vars: Optional[List[RuleVar]] = None
-    labels: Optional[List[str]]
+    message_rx: str | None = None
+    patterns: list[ClassificationPattern] | None = None
+    vars: list[RuleVar] | None = None
+    labels: list[str] | None
     to_dispose: bool = False

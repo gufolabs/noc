@@ -35,7 +35,7 @@ class Script(BaseScript):
         ):
             ifindex = int(oid.split(".")[-1])
             if ifname in ifaces:
-                ifname = "%s-%s" % (ifname, d[ifindex])
+                ifname = f"{ifname}-{d[ifindex]}"
             ifaces.add(ifname)
             try:
                 v = self.profile.convert_interface_name(ifname.strip())

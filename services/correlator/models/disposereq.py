@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Union
 
 # NOC modules
 from .clearreq import ClearRequest
@@ -17,12 +16,12 @@ from .ensuregroupreq import EnsureGroupRequest
 from .setstatusreq import SetStatusRequest
 from .dispositionreq import DispositionRequest
 
-DisposeRequest = Union[
-    ClearRequest,
-    ClearIdRequest,
-    EventRequest,
-    RaiseRequest,
-    EnsureGroupRequest,
-    SetStatusRequest,
-    DispositionRequest,
-]
+DisposeRequest = (
+    ClearRequest
+    | ClearIdRequest
+    | EventRequest
+    | RaiseRequest
+    | EnsureGroupRequest
+    | SetStatusRequest
+    | DispositionRequest
+)

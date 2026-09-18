@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import Optional, Union
+from typing import Optional
 from pathlib import Path
 
 # Third-party modules
@@ -58,12 +58,11 @@ class ThresholdConfig(EmbeddedDocument):
     template = ForeignKeyField(Template)
 
     def __str__(self):
-        return "%s %s %s %s" % (self.op, self.value, self.clear_op, self.clear_value)
+        return f"{self.op} {self.value} {self.clear_op} {self.clear_value}"
 
     def is_open_match(self, value):
         """
         Check if threshold profile is matched for open condition
-        :param value:
         :return:
         """
         return (
@@ -76,7 +75,6 @@ class ThresholdConfig(EmbeddedDocument):
     def is_clear_match(self, value):
         """
         Check if threshold profile is matched for clear condition
-        :param value:
         :return:
         """
         return (
@@ -88,7 +86,7 @@ class ThresholdConfig(EmbeddedDocument):
 
     @property
     def name(self):
-        return "%s %s %s %s" % (self.op, self.value, self.clear_op, self.clear_value)
+        return f"{self.op} {self.value} {self.clear_op} {self.clear_value}"
 
     def to_json(self):
         v = {
@@ -159,7 +157,7 @@ class ThresholdProfile(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["ThresholdProfile"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["ThresholdProfile"]:
         return ThresholdProfile.objects.filter(id=oid).first()
 
     def get_window_function(self):

@@ -21,11 +21,11 @@ class Script(BaseScript):
     def execute_cli(self, interface=None, vlan=None, mac=None):
         cmd = "show mac-address-table"
         if mac is not None:
-            cmd += " address %s" % self.profile.convert_mac(mac)
+            cmd += f" address {self.profile.convert_mac(mac)}"
         if interface is not None:
-            cmd += " interface port %s" % interface
+            cmd += f" interface port {interface}"
         if vlan is not None:
-            cmd += " vlan %s" % vlan
+            cmd += f" vlan {vlan}"
         try:
             v = self.cli(cmd)
         except self.CLISyntaxError:

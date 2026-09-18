@@ -11,7 +11,7 @@ import re
 import json
 import operator
 from dataclasses import dataclass
-from typing import List, Iterable, Dict, Any
+from typing import Iterable, Any
 import logging
 from pathlib import Path
 
@@ -69,7 +69,7 @@ rx_md_anchor = re.compile(r"[ _\|\(\)/]+")
 
 
 @dataclass(order=True)
-class Metric(object):
+class Metric:
     scope: str
     name: str
     field_name: str
@@ -107,23 +107,23 @@ class Metric(object):
 
 
 @dataclass
-class KeyField(object):
+class KeyField:
     field_name: str
     model: str
 
     @classmethod
-    def from_json(cls, data: Dict[str, Any]) -> "KeyField":
+    def from_json(cls, data: dict[str, Any]) -> "KeyField":
         return KeyField(field_name=data["field_name"], model=data["model"])
 
 
 @dataclass
-class Label(object):
+class Label:
     label: str
     view_column: str
     store_column: str
 
     @classmethod
-    def from_json(cls, data: Dict[str, Any]) -> "Label":
+    def from_json(cls, data: dict[str, Any]) -> "Label":
         return Label(
             label=data["label"],
             view_column=data.get("view_column", ""),
@@ -132,7 +132,7 @@ class Label(object):
 
 
 @dataclass(order=True)
-class Data(object):
+class Data:
     """
     Collections data.
 
@@ -146,9 +146,9 @@ class Data(object):
     name: str
     description: str
     table_name: str
-    key_fields: List[KeyField]
-    labels: List[Label]
-    metrics: List[Metric]
+    key_fields: list[KeyField]
+    labels: list[Label]
+    metrics: list[Metric]
 
     @classmethod
     def read(cls, path: Path) -> "Data":

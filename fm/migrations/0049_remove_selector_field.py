@@ -19,7 +19,7 @@ class Migration(BaseMigration):
         ("fm", "0048_resource_group"),
     ]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # MAP Resource Group to Selector by name
         rg_coll = self.mongo_db["resourcegroups"]
         rg_name = {}

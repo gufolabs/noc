@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # Third-party modules
 from pydantic import BaseModel
@@ -14,9 +13,9 @@ from pydantic import BaseModel
 
 class StatusResponse(BaseModel):
     status: bool
-    message: Optional[str] = None
+    message: str | None = None
 
 
 class StatusResponseError(BaseModel):
-    error: Optional[str] = None
-    error_description: Optional[str] = None
+    error: str | None = None
+    error_description: str | None = None

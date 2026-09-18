@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.delete_column("sa_activator", "ip")
         self.db.delete_column("sa_activator", "to_ip")
         self.db.execute("ALTER TABLE sa_activator ALTER prefix_table_id SET NOT NULL")

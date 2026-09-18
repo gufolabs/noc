@@ -34,7 +34,7 @@ class Script(BaseScript):
         if out and len(out.split()) == 3:
             val, mea, he = out.split()
         else:
-            self.logger.warning("Unknown output format value: %s, skipping" % out)
+            self.logger.warning(f"Unknown output format value: {out}, skipping")
             return None
         if mea == "uW":
             if float(val) == 0.0:
@@ -60,9 +60,9 @@ class Script(BaseScript):
         for slot, port in ifaces:
             cmd = "debug hal show optic-info ddmi "
             if port is not None:
-                cmd += "slot %s, port %s" % (slot, port)
+                cmd += f"slot {slot}, port {port}"
             elif slot is not None:
-                cmd += "slot %s" % slot
+                cmd += f"slot {slot}"
             try:
                 v = self.cli(cmd)
             except self.CLISyntaxError:
@@ -75,7 +75,7 @@ class Script(BaseScript):
                     continue
                 d = parse_kv(self.k_map, block)
                 if slot is not None:
-                    port = "%s:%s" % (slot, port)
+                    port = f"{slot}:{port}"
                 if not d:
                     continue
                 r += [

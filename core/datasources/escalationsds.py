@@ -8,7 +8,7 @@
 # Python Modules
 from collections import namedtuple
 import datetime
-from typing import Optional, Iterable, Tuple, AsyncIterable
+from typing import Iterable, AsyncIterable
 
 # NOC modules
 from .base import FieldInfo, FieldType, ParamInfo, BaseDataSource
@@ -42,10 +42,10 @@ class EscalationsDS(BaseDataSource):
     @classmethod
     async def iter_query(
         cls,
-        fields: Optional[Iterable[str]] = None,
+        fields: Iterable[str] | None = None,
         *args,
         **kwargs,
-    ) -> AsyncIterable[Tuple[str, str]]:
+    ) -> AsyncIterable[tuple[str, str]]:
         start: datetime.datetime = kwargs.get("start")
         end: datetime.datetime = kwargs.get("end")
         q = {

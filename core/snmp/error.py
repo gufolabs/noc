@@ -94,12 +94,12 @@ class SNMPErrorCode(enum.Enum):
 
 
 class SNMPError(Exception):
-    def __init__(self, code, oid=None):
+    def __init__(self, code, oid=None) -> None:
         super().__init__()
         self.code = code
         self.oid = oid
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         try:
             name = SNMPErrorCode(self.code).name
         except ValueError:

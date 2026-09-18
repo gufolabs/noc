@@ -86,7 +86,7 @@ class Script(BaseScript):
                                 memb += ["g" + iface]
                     else:
                         memb += [members]
-            lacp = self.cli("show lacp port-channel %s" % port[2:])
+            lacp = self.cli(f"show lacp port-channel {port[2:]}")
             match_ = self.rx_lacp.search(lacp)
             if match_:
                 l_type = "L"

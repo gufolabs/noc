@@ -1,0 +1,32 @@
+#!/bin/sh
+# -------------------------------------------------------------
+# Cherrypick commit to target branch
+# -------------------------------------------------------------
+# Copyright (C) 2007-2026, Gufo Labs
+# -------------------------------------------------------------
+
+set -eux
+
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <target-branch> <commit-hash>" >&2
+    exit 1
+fi
+
+TARGET_BRANCH="$1"
+COMMIT_HASH="$2"
+
+SHORT_HASH=$(printf "%s" "$COMMIT_HASH" | cut -c1-6)
+BACKPORT_BRANCH="backport/${TARGET_BRANCH}/${SHORT_HASH}"
+
+echo "Target branch: ${TARGET_BRANCH}"
+echo "Commit:        ${COMMIT_HASH}"
+echo "New branch:    ${BACKPORT_BRANCH}"
+echo
+
+git fetch origin
+git switch -c "$BACKPORT_BRANCH" "origin/${TARGET_BRANCH}"
+git cherry-pick -x "$COMMIT_HASH"
+git push -u origin "$BACKPORT_BRANCH"
+
+echo
+echo "Done: ${BACKPORT_BRANCH}"

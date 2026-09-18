@@ -882,7 +882,7 @@ Ext.define("NOC.sa.service.Application", {
       if(cellName === "allow_subscribe"){
         var subscriptionPanel = this.getRegisteredItem(this.ITEM_SUBSCRIPTION),
           subscriptionUrl = `sa.service/${record.id}/${subscriptionPanel.urlSuffix}/`;
-        Ext.History.setHash(subscriptionUrl);
+        NOC.navigation.navigate(subscriptionUrl);
         subscriptionPanel.load(this.appId, record.get("id"), "ITEM_GRID");
         this.showItem(this.ITEM_SUBSCRIPTION);
         return false;
@@ -890,7 +890,7 @@ Ext.define("NOC.sa.service.Application", {
       if(cellName === "instance_count"){
         var instancesPanel = this.getRegisteredItem(this.ITEM_INSTANCES),
           instancesUrl = `sa.service/${record.id}/${instancesPanel.urlSuffix}/`;
-        Ext.History.setHash(instancesUrl);
+        NOC.navigation.navigate(instancesUrl);
         instancesPanel.load(this.appId, record.get("id"), "ITEM_GRID");
         this.showItem(this.ITEM_INSTANCES);
         return false;

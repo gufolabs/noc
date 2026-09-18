@@ -158,7 +158,7 @@ Ext.define("NOC.cm.objectvalidationpolicy.Application", {
   //
   onSelectQuery: function(field, record){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/cm/confdbquery/" + record.get("id") + "/",
       scope: me,
       success: function(response){

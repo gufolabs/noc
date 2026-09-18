@@ -29,13 +29,13 @@ BROKEN_USER = TEST_USER + "X"
 BROKEN_PW = TEST_PW + "X"
 
 
-class ServiceStub(object):
-    class ServiceConfig(object):
-        def __init__(self, pool, tos=None):
+class ServiceStub:
+    class ServiceConfig:
+        def __init__(self, pool, tos=None) -> None:
             self.pool = pool
             self.tos = tos
 
-    def __init__(self, pool="default"):
+    def __init__(self, pool="default") -> None:
         self.config = self.ServiceConfig(pool=pool)
 
 

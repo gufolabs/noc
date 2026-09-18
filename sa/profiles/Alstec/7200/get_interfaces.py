@@ -66,7 +66,7 @@ class Script(BaseScript):
         for match in self.rx_port.finditer(self.cli("show port all")):
             ifname = match.group("port")
             try:
-                v = self.cli("show port description %s" % ifname)
+                v = self.cli(f"show port description {ifname}")
                 match1 = self.rx_descr.search(v)
                 snmp_ifindex = int(match1.group("ifindex"))
                 mac = match1.group("mac")
@@ -112,7 +112,7 @@ class Script(BaseScript):
         match = self.rx_ip.search(self.cli("show network"))
         ip_address = match.group("ip_address")
         ip_subnet = match.group("ip_subnet")
-        ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+        ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
         iface = {
             "name": "0/0",
             "type": "SVI",
@@ -136,7 +136,7 @@ class Script(BaseScript):
         if match.group("ip_address1") and match.group("ip_address1") != "0.0.0.0":
             ip_address = match.group("ip_address1")
             ip_subnet = match.group("ip_subnet1")
-            ip_address = "%s/%s" % (ip_address, IPv4.netmask_to_len(ip_subnet))
+            ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
             iface["subinterfaces"][0]["ipv4_addresses"] += [ip_address]
         if match.group("vlan_id1"):
             iface["subinterfaces"][0]["vlan_ids"] += [int(match.group("vlan_id1"))]

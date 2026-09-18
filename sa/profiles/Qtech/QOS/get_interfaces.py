@@ -44,10 +44,10 @@ class Script(BaseScript):
         v = self.cli("show lldp local config")
         for port in self.rx_port.finditer(v):
             port_no = port.group("port")
-            c = self.cli("show interface port-list %s switchport" % port_no)
+            c = self.cli(f"show interface port-list {port_no} switchport")
             match = self.rx_vlan.search(c)
-            iface = {"name": "port%s" % port_no, "type": "physical"}
-            sub = {"name": "port%s" % port_no, "enabled_afi": ["BRIDGE"]}
+            iface = {"name": f"port{port_no}", "type": "physical"}
+            sub = {"name": f"port{port_no}", "enabled_afi": ["BRIDGE"]}
             if match.group("op_mode") in ["trunk", "hybrid"]:
                 sub["untagged_vlan"] = int(match.group("trunk_native_vlan"))
                 sub["tagged_vlans"] = ranges_to_list(match.group("op_vlans"))
@@ -63,15 +63,15 @@ class Script(BaseScript):
         for match in self.rx_ip_iface.finditer(v):
             ifname = match.group("iface")
             i = {
-                "name": "ip%s" % ifname,
+                "name": f"ip{ifname}",
                 "type": "SVI",
                 "mac": mac,
                 "enabled_protocols": [],
-                "subinterfaces": [{"name": "ip%s" % ifname, "mac": mac, "enabled_afi": ["IPv4"]}],
+                "subinterfaces": [{"name": f"ip{ifname}", "mac": mac, "enabled_afi": ["IPv4"]}],
             }
             addr = match.group("ip")
             mask = match.group("mask")
-            ip_address = "%s/%s" % (addr, IPv4.netmask_to_len(mask))
+            ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
             i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
             interfaces += [i]
         v = self.cli("show interface ip vlan")
@@ -79,7 +79,7 @@ class Script(BaseScript):
             vlan_id = match.group("vlan_id")
             if vlan_id == "none":
                 continue
-            ifname = "ip%s" % match.group("iface")
+            ifname = "ip{}".format(match.group("iface"))
             for i in interfaces:
                 if i["name"] == ifname:
                     i["subinterfaces"][0]["vlan_ids"] = vlan_id

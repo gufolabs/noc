@@ -81,7 +81,7 @@ class Script(BaseScript):
         for match in self.rx_ip.finditer(v):
             ip = match.group("ip")
             mask = match.group("mask")
-            ip_address = "%s/%s" % (ip, IPv4.netmask_to_len(mask))
+            ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
             if "." in match.group("interface"):
                 ifname, vlan_id = match.group("interface").split(".")
             else:

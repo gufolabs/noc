@@ -28,7 +28,7 @@ class Script(BaseScript):
     )
 
     def execute(self, address, count=None):
-        cmd = "ping %s" % address
+        cmd = f"ping {address}"
         if count:
             cmd += " times %d" % int(count)
         else:

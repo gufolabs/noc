@@ -13,7 +13,7 @@ from time import perf_counter
 import asyncio
 
 # Third-party modules
-from typing import Dict, Any
+from typing import Any
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter
@@ -25,7 +25,7 @@ from noc.core.comp import smart_text
 logger = logging.getLogger(__name__)
 
 
-class Job(object):
+class Job:
     # Unique job name
     name = None
     # Set to False when job is disabled
@@ -96,7 +96,7 @@ class Job(object):
     # List of exceptions to be considered failed jobs
     failed_exceptions = (JobFailed,)
 
-    def __init__(self, scheduler, attrs):
+    def __init__(self, scheduler, attrs) -> None:
         """
         :param scheduler: Scheduler instance
         :param attrs: dict containing record from scheduler's collection
@@ -107,7 +107,7 @@ class Job(object):
         self.start_time = None
         self.duration = None
         self.logger = PrefixLoggerAdapter(scheduler.logger, self.get_display_key())
-        self.context: Dict[str, Any] = {}
+        self.context: dict[str, Any] = {}
 
     def load_context(self, data):
         self.context = data or {}
@@ -242,9 +242,7 @@ class Job(object):
             except self.model.DoesNotExist:
                 return False
         # Adjust logging
-        self.logger.set_prefix(
-            "%s][%s][%s" % (self.scheduler.name, self.name, self.get_display_key())
-        )
+        self.logger.set_prefix(f"{self.scheduler.name}][{self.name}][{self.get_display_key()}")
         return True
 
     def get_display_key(self):
@@ -302,7 +300,6 @@ class Job(object):
         :param delta: Run after *delta* seconds
         :param keep_ts: Do not touch timestamp of existing jobs,
             set timestamp only for created jobs
-        :param shard:
         """
         from .scheduler import Scheduler
 
@@ -356,8 +353,6 @@ class Job(object):
     def get_next_timestamp(interval, offset=0.0, ts=None):
         """
         Calculate next timestamp
-        :param interval:
-        :param offset:
         :param ts: current timestamp
         :return: datetime object
         """

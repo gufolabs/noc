@@ -25,7 +25,3 @@ class Command(BaseCommand):
             Permission.sync()
         except ValueError as e:
             self.die(str(e))
-
-
-if __name__ == "__main__":
-    Command().run()

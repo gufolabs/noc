@@ -37,5 +37,5 @@ def test_snmp_metrics_json(path):
         with open(path) as f:
             data = orjson.loads(f.read())
     except ValueError as e:
-        pytest.fail("Invalid JSON: %s" % e)
+        pytest.fail(f"Invalid JSON: {e}")
     assert isinstance(data, dict), "Must be dict"

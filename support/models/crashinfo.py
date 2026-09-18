@@ -19,7 +19,6 @@ import orjson
 
 # NOC modules
 from noc.support.cp import CPClient
-from noc.core.comp import smart_text
 
 logger = logging.getLogger(__name__)
 
@@ -56,8 +55,8 @@ class Crashinfo(Document):
 
     NEW_ROOT = "local/cp/crashinfo/new"
 
-    def __str__(self):
-        return smart_text(self.uuid)
+    def __str__(self) -> str:
+        return str(self.uuid)
 
     @classmethod
     def scan(cls):
@@ -92,7 +91,7 @@ class Crashinfo(Document):
 
     @property
     def json_path(self):
-        return os.path.join(self.NEW_ROOT, "%s.json" % self.uuid)
+        return os.path.join(self.NEW_ROOT, f"{self.uuid}.json")
 
     @property
     def json(self):

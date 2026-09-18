@@ -1,13 +1,12 @@
 # ----------------------------------------------------------------------
 # /api/login/token handler
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 from http import HTTPStatus
-from typing import Optional, Dict
 import codecs
 
 # Third-party modules
@@ -17,7 +16,7 @@ from pydantic import ValidationError, TypeAdapter
 
 # NOC modules
 from noc.config import config
-from noc.core.comp import smart_text, smart_bytes
+from noc.core.comp import smart_bytes
 from noc.core.service.deps.service import get_service
 from ..models.token import TokenRequest, TokenResponse
 from ..auth import authenticate, register_last_login, get_jwt_token, get_user_from_jwt
@@ -32,7 +31,7 @@ async def token(
     request: Request,
     # @todo: Find the way to pass req to openapi schema
     # req: TokenRequest,
-    authorization: Optional[str] = Header(None, alias="Authorization"),
+    authorization: str | None = Header(None, alias="Authorization"),
     svc: LoginService = Depends(get_service),
 ):
     # NB: Some testing tools are dumb enough to support only application/x-www-form-urlencoded
@@ -62,7 +61,7 @@ async def token(
     except ValidationError as e:
         return await svc.request_validation_error_handler(request, e)
     # <-- MADNESS ABOVE
-    auth_req: Optional[Dict[str, str]]
+    auth_req: dict[str, str] | None
     if req.grant_type == "refresh_token":
         # Refresh token
         if svc.is_revoked(req.refresh_token):
@@ -76,7 +75,7 @@ async def token(
             return JSONResponse(
                 content={
                     "error": "unauthorized_client",
-                    "error_description": "Access denied (%s)" % e,
+                    "error_description": f"Access denied ({e})",
                 },
                 status_code=HTTPStatus.FORBIDDEN,
             )
@@ -96,7 +95,7 @@ async def token(
                 },
                 status_code=HTTPStatus.BAD_REQUEST,
             )
-        auth_data = smart_text(codecs.decode(smart_bytes(data), "base64"))
+        auth_data = codecs.decode(smart_bytes(data), "base64").decode()
         if ":" not in auth_data:
             return JSONResponse(
                 content={

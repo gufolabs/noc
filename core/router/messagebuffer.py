@@ -7,7 +7,7 @@
 
 # Python modules
 from collections import deque
-from typing import Dict, Any, Optional, Iterable
+from typing import Any, Iterable
 from threading import Lock
 import math
 
@@ -19,27 +19,25 @@ from noc.core.mx import Message
 from noc.config import config
 
 
-class MBuffer(object):
+class MBuffer:
     """
     Buffered writes to queue, merge outgoing messages to a larger block
     """
 
     def __init__(
         self,
-        max_size: Optional[int] = None,
+        max_size: int | None = None,
     ):
         self.queue: deque = deque()
-        self.buf: Dict[str, Any] = {}
+        self.buf: dict[str, Any] = {}
         self.lock = Lock()
         self.req_puts: int = 0
         self.req_gets: int = 0
         self.max_size = max_size or config.msgstream.max_message_size
 
-    def put(self, msg: Message, group_key: Optional[str] = None):
+    def put(self, msg: Message, group_key: str | None = None):
         """
         Put block of data to buffer
-        :param msg:
-        :param group_key:
         :return:
         """
         if not msg.value:

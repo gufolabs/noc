@@ -9,7 +9,7 @@
 import logging
 import asyncio
 import random
-from typing import Optional, Dict, AsyncIterable, List, Union
+from typing import AsyncIterable
 from collections import defaultdict
 
 # Third-party modules
@@ -42,17 +42,17 @@ logger = logging.getLogger(__name__)
 CLIENT_ID = "NOC"
 
 
-class KafkaClient(object):
+class KafkaClient:
     TIMESTAMP_MULTIPLIER = 1_000
     SUBSCRIBE_BULK = True
     RESOLVE_RETRY = 1.0
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.bootstrap = None
-        self.producer: Optional[AIOKafkaProducer] = None
-        self.consumer: Optional[AIOKafkaConsumer] = None
-        self.client: Optional[AIOKafkaClient] = None
-        self.admin_client: Optional[AIOKafkaAdminClient] = None
+        self.producer: AIOKafkaProducer | None = None
+        self.consumer: AIOKafkaConsumer | None = None
+        self.client: AIOKafkaClient | None = None
+        self.admin_client: AIOKafkaAdminClient | None = None
         self.loop = asyncio.get_running_loop()
         self.stub = None
         kafka_logger = logging.getLogger("kafka")
@@ -111,7 +111,7 @@ class KafkaClient(object):
         return min(len(meta.brokers), 3) or 1
 
     async def fetch_metadata(
-        self, stream: Optional[str] = None, wait_for_stream: bool = False
+        self, stream: str | None = None, wait_for_stream: bool = False
     ) -> Metadata:
         """
         Fetch cluster metadata
@@ -121,7 +121,7 @@ class KafkaClient(object):
         """
         client = self.get_kafka_client()
         await client.bootstrap()
-        s_meta: Dict[str, Dict[int, PartitionMetadata]] = defaultdict(dict)
+        s_meta: dict[str, dict[int, PartitionMetadata]] = defaultdict(dict)
         req_parts = []
         r = await client.fetch_all_metadata()
         for stream_n, stream_m in r._partitions.items():
@@ -238,10 +238,9 @@ class KafkaClient(object):
         return self.admin_client
 
     @staticmethod
-    def get_topic_config(name, replication_factor: int = 1) -> Dict[str, str]:
+    def get_topic_config(name, replication_factor: int = 1) -> dict[str, str]:
         """
         Return topic retention settings
-        :param name:
         :param replication_factor: Cluster replicator factor
         :return:
         """
@@ -266,16 +265,12 @@ class KafkaClient(object):
     async def create_stream(
         self,
         name: str,
-        group: Optional[str] = None,
+        group: str | None = None,
         partitions: int = 0,
         replication_factor: int = 0,
     ) -> None:
         """
         Create Stream by settings
-        :param name:
-        :param group:
-        :param partitions:
-        :param replication_factor:
         :return:
         """
         admin_client = await self.get_kafka_admin_client()
@@ -305,14 +300,14 @@ class KafkaClient(object):
 
     async def _subscribe(
         self,
-        streams: List[str],
+        streams: list[str],
         group_id: str,
-        partition: Optional[int] = None,
-        start_offset: Optional[int] = None,
-        start_timestamp: Optional[float] = None,
+        partition: int | None = None,
+        start_offset: int | None = None,
+        start_timestamp: float | None = None,
         resume: bool = True,
-        cursor_id: Optional[str] = None,
-        timeout: Optional[int] = None,
+        cursor_id: str | None = None,
+        timeout: int | None = None,
     ) -> None:
         """
 
@@ -337,10 +332,6 @@ class KafkaClient(object):
         :param partition: Partition num (for manual assign)
         :param start_offset: Offset for staring read
         :param start_timestamp: Timestamp for staring read
-        :param resume:
-        :param cursor_id:
-        :param timeout:
-        :param allow_isr:
         :return:
         """
         consumer = await self.get_consumer(group_id=group_id)
@@ -356,7 +347,7 @@ class KafkaClient(object):
             if start_offset is not None:
                 consumer.seek(tp, start_offset)
             elif start_timestamp is not None:
-                offset: Dict[TopicPartition, OffsetAndTimestamp] = await consumer.offsets_for_times(
+                offset: dict[TopicPartition, OffsetAndTimestamp] = await consumer.offsets_for_times(
                     {tp: start_timestamp}
                 )
                 consumer.seek(tp, offset[tp].offset)
@@ -387,24 +378,16 @@ class KafkaClient(object):
     async def subscribe(
         self,
         stream: str,
-        partition: Optional[int] = None,
-        start_offset: Optional[int] = None,
-        start_timestamp: Optional[float] = None,
+        partition: int | None = None,
+        start_offset: int | None = None,
+        start_timestamp: float | None = None,
         resume: bool = False,
-        cursor_id: Optional[str] = None,
-        timeout: Optional[int] = None,
+        cursor_id: str | None = None,
+        timeout: int | None = None,
         allow_isr: bool = False,
     ) -> AsyncIterable[Message]:
         """
         For compatible NOC Client method
-        :param stream:
-        :param partition:
-        :param start_offset:
-        :param start_timestamp:
-        :param resume:
-        :param cursor_id:
-        :param timeout:
-        :param allow_isr:
         :return:
         """
         # async with consumer as c:
@@ -424,20 +407,14 @@ class KafkaClient(object):
     async def publish(
         self,
         value: bytes,
-        stream: Optional[str] = None,
-        key: Optional[bytes] = None,
-        partition: Optional[int] = None,
-        headers: Optional[Dict[str, bytes]] = None,
+        stream: str | None = None,
+        key: bytes | None = None,
+        partition: int | None = None,
+        headers: dict[str, bytes] | None = None,
         **kwargs,
     ) -> None:
         """
         Publish message to stream
-        :param value:
-        :param stream:
-        :param key:
-        :param partition:
-        :param headers:
-        :param kwargs:
         :return:
         """
         logger.debug("Sending to topic %s", stream)
@@ -477,7 +454,6 @@ class KafkaClient(object):
         Fetch cursor offset for stream
         :param stream: Topic name
         :param partition: Partition number
-        :param cursor_id:
         :return:
         """
         consumer = await self.get_consumer(group_id=stream)
@@ -488,22 +464,22 @@ class KafkaClient(object):
         Setting cursor offset for stream
         :param stream: Topic name
         :param partition: Partition number
-        :param cursor_id:
-        :param offset:
         :return:
         """
         logger.debug("[%s|%s] Set cursor to1: %s", stream, partition, offset)
         consumer = await self.get_consumer(group_id=stream)
         if TopicPartition(topic=stream, partition=partition) not in consumer.assignment():
             consumer.assign([TopicPartition(topic=stream, partition=partition)])
-        await consumer.commit({TopicPartition(topic=stream, partition=partition): offset})
+        # The committed offset should be the offset of the next message to process, not the last message processed.
+        # So commit offset + 1.
+        await consumer.commit({TopicPartition(topic=stream, partition=partition): offset + 1})
 
     async def copy_topic_messages(
         self,
         from_topic,
         to_topic,
-        partitions: Optional[Union[Dict[int, int], int]] = None,
-    ) -> Dict[int, int]:
+        partitions: dict[int, int] | int | None = None,
+    ) -> dict[int, int]:
         """
         Copy message from one topic to another
         :param from_topic: From topic
@@ -511,7 +487,7 @@ class KafkaClient(object):
         :param partitions: Number of from partition
         :return:
         """
-        n_msg: Dict[int, int] = {}  # partition -> copied messages
+        n_msg: dict[int, int] = {}  # partition -> copied messages
         if not partitions:
             partitions = {0: 0}
         elif isinstance(partitions, int):

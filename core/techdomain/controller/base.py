@@ -25,9 +25,7 @@ from noc.core.constraint.wave import LambdaConstraint
 
 
 @dataclass
-class Endpoint(object):
-    """ """
-
+class Endpoint:
     object: Object
     name: str
     channel: Channel | None = None
@@ -63,7 +61,7 @@ class ParamType(Enum):
 
 
 @dataclass
-class Choice(object):
+class Choice:
     id: str
     label: str
 
@@ -75,7 +73,7 @@ class Choice(object):
 
 
 @dataclass
-class Param(object):
+class Param:
     name: str
     type: ParamType
     value: str | None
@@ -99,7 +97,7 @@ class Param(object):
 
 
 @dataclass
-class PathItem(object):
+class PathItem:
     object: Object
     input: str | None
     output: str | None
@@ -108,7 +106,7 @@ class PathItem(object):
     output_object: Object | None = None
 
 
-class BaseController(object):
+class BaseController:
     name: str = "base"
     label: str = "base"
     tech_domain: str
@@ -119,7 +117,7 @@ class BaseController(object):
     # False - return whole object
     adhoc_endpoints: bool = False
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = PrefixLoggerAdapter(logging.getLogger("controller"), self.name)
         self.constraints = ConstraintSet()
 

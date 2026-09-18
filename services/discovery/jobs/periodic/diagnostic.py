@@ -7,7 +7,7 @@
 
 # Python modules
 import datetime
-from typing import List, Optional, Literal, Union, Tuple
+from typing import Literal
 
 # NOC modules
 from noc.services.discovery.jobs.base import DiscoveryCheck
@@ -17,6 +17,7 @@ from noc.core.service.error import RPCError
 from noc.core.diagnostic.types import DiagnosticState
 from noc.core.diagnostic.hub import DiagnosticHub
 from noc.core.script.scheme import SNMPCredential, CLICredential, SNMPv3Credential
+from noc.core.models.inputsources import InputSource
 from noc.sa.models.credentialcheckrule import CredentialCheckRule
 from noc.pm.models.metrictype import MetricType
 from noc.core.checkers.loader import loader
@@ -30,7 +31,7 @@ class DiagnosticCheck(DiscoveryCheck):
 
     name = "diagnostic"
 
-    def __init__(self, job, run_order: Optional[Literal["S", "E"]] = None):
+    def __init__(self, job, run_order: Literal["S", "E"] | None = None) -> None:
         super().__init__(job)
         self.run_order = run_order
         self.suggest_rules = CredentialCheckRule.get_suggests(self.object)
@@ -69,10 +70,10 @@ class DiagnosticCheck(DiscoveryCheck):
                     continue
                 self.logger.info("[%s] Run diagnostic checks", di.diagnostic)
                 # Get checker
-                credential: Union[SNMPCredential, CLICredential, SNMPv3Credential] = None
+                credential: SNMPCredential | CLICredential | SNMPv3Credential = None
                 for do_checks in d_hub.iter_checks(di.diagnostic):
                     # Do nothing check ?
-                    checks: List[CheckResult] = []
+                    checks: list[CheckResult] = []
                     for cr in self.run_checks(do_checks):
                         if (
                             di.config.allow_set_credentials
@@ -84,7 +85,7 @@ class DiagnosticCheck(DiscoveryCheck):
                             credential = cr.credential
                         checks.append(cr)
                     # Update diagnostics
-                    d_hub.update_checks(checks)
+                    d_hub.update_checks(checks, source=InputSource.DISCOVERY)
                     self.logger.debug("[%s] Collected check Result: %s", di.diagnostic, checks)
                 # Apply credentials
                 if credential and (
@@ -98,7 +99,7 @@ class DiagnosticCheck(DiscoveryCheck):
         self.logger.debug("Object Diagnostics: %s", self.object.diagnostics)
         # Fire workflow event diagnostic ?
 
-    def run_checks(self, checks: Tuple[Check, ...]) -> List[CheckResult]:
+    def run_checks(self, checks: tuple[Check, ...]) -> list[CheckResult]:
         self.logger.debug("Call checks on activator: %s", checks)
         script_checks, do_checks = [], []
         r = []
@@ -121,13 +122,12 @@ class DiagnosticCheck(DiscoveryCheck):
                 self.logger.error("RPC Error: %s", e)
         return [CheckResult.from_dict(c) for c in r]
 
-    def register_diagnostic_metrics(self, metrics: List[MetricValue]):
+    def register_diagnostic_metrics(self, metrics: list[MetricValue]):
         """
         Metrics Labels:
           noc::diagnostic::<name>
           noc::check::<name>
           arg0
-        :param metrics:
         :return:
         """
         r = {}

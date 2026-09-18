@@ -4,27 +4,12 @@ Redis service configuration
 
 ## addresses
 
-|                |                                                |
-| -------------- | ---------------------------------------------- |
-| Default value  | `service="redis", wait=True, full_result=True` |
-| YAML Path      | `redis.addresses`                              |
-| Key-Value Path | `redis/addresses`                              |
-| Environment    | `NOC_REDIS_ADDRESSES`                          |
+{{ config_param("redis.addresses") }}
 
 ## db
 
-|                |                |
-| -------------- | -------------- |
-| Default value  | `0`            |
-| YAML Path      | `redis.db`     |
-| Key-Value Path | `redis/db`     |
-| Environment    | `NOC_REDIS_DB` |
+{{ config_param("redis.db") }}
 
 ## default_ttl
 
-|                |                         |
-| -------------- | ----------------------- |
-| Default value  | `1d`                    |
-| YAML Path      | `redis.default_ttl`     |
-| Key-Value Path | `redis/default_ttl`     |
-| Environment    | `NOC_REDIS_DEFAULT_TTL` |
+{{ config_param("redis.default_ttl") }}

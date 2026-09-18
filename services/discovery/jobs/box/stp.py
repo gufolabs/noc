@@ -25,7 +25,7 @@ class STPCheck(TopologyDiscoveryCheck):
     def handler(self):
         self.logger.info("Checking %s topology", self.name)
         roots = self.cached_neighbors(
-            self.object, "mo-neighbors-stp-root-%s" % self.object.id, self.get_root_ports
+            self.object, f"mo-neighbors-stp-root-{self.object.id}", self.get_root_ports
         )
         for ro in roots:
             remote_object = self.get_neighbor(ro)
@@ -34,7 +34,7 @@ class STPCheck(TopologyDiscoveryCheck):
                 continue
             rdmap = self.cached_neighbors(
                 remote_object,
-                "mo-neighbors-stp-desg-%s" % remote_object.id,
+                f"mo-neighbors-stp-desg-{remote_object.id}",
                 self.get_designated_ports,
             )
             for li, rpid in roots[ro]:
@@ -57,7 +57,7 @@ class STPCheck(TopologyDiscoveryCheck):
                         (iface["interface"], self.convert_port_id(iface["designated_port_id"]))
                     )
         roots = {ro: list(roots[ro]) for ro in roots}
-        self.logger.debug("Roots ports: %s" % roots)
+        self.logger.debug(f"Roots ports: {roots}")
         return roots
 
     def get_designated_ports(self, ro):
@@ -78,7 +78,7 @@ class STPCheck(TopologyDiscoveryCheck):
             self.logger.error("Cannot get neighbors from candidate %s: %s", ro.name, e)
             self.set_problem(
                 # path=list(candidates[remote_object])[0][0],
-                message="Cannot get neighbors from candidate %s: %s" % (ro.name, e)
+                message=f"Cannot get neighbors from candidate {ro.name}: {e}"
             )
             return dmap
         for i in result["instances"]:
@@ -86,7 +86,7 @@ class STPCheck(TopologyDiscoveryCheck):
                 if iface["role"] == "designated":
                     pi = self.convert_port_id(iface["port_id"])
                     dmap[pi] = iface["interface"]
-        self.logger.debug("Designate port map %s" % dmap)
+        self.logger.debug(f"Designate port map {dmap}")
         return dmap
 
     get_neighbor = TopologyDiscoveryCheck.get_neighbor_by_mac

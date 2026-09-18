@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Dict, Tuple, Optional
 from collections import namedtuple, defaultdict
 
 # NOC modules
@@ -78,7 +77,6 @@ class AddressCheck(DiscoveryCheck):
     def sync_addresses(self, addresses):
         """
         Apply addresses to database
-        :param addresses:
         :return:
         """
         # vpn_id -> [address, ]
@@ -124,9 +122,9 @@ class AddressCheck(DiscoveryCheck):
 
     @staticmethod
     def apply_addresses(
-        addresses: Dict[Tuple[str, IP], DiscoveredAddress],
-        discovered_addresses: List[DiscoveredAddress],
-    ) -> Dict[Tuple[str, IP], DiscoveredAddress]:
+        addresses: dict[tuple[str, IP], DiscoveredAddress],
+        discovered_addresses: list[DiscoveredAddress],
+    ) -> dict[tuple[str, IP], DiscoveredAddress]:
         """
         Apply list of discovered addresses to addresses dict
         :param addresses: dict of (vpn_id, address) => DiscoveredAddress
@@ -151,7 +149,7 @@ class AddressCheck(DiscoveryCheck):
             return False
         return self.is_enabled_for_object(self.object)
 
-    def get_interface_addresses(self) -> List[DiscoveredAddress]:
+    def get_interface_addresses(self) -> list[DiscoveredAddress]:
         """
         Get addresses from interface discovery artifact
         :return:
@@ -188,7 +186,7 @@ class AddressCheck(DiscoveryCheck):
             for a in addresses
         ]
 
-    def get_management_addresses(self) -> List[DiscoveredAddress]:
+    def get_management_addresses(self) -> list[DiscoveredAddress]:
         """
         Get addresses from ManagedObject management
         :return:
@@ -215,7 +213,7 @@ class AddressCheck(DiscoveryCheck):
             ]
         return addresses
 
-    def get_dhcp_addresses(self) -> List["DiscoveredAddress"]:
+    def get_dhcp_addresses(self) -> list["DiscoveredAddress"]:
         """
         Return addresses from DHCP leases
         :return:
@@ -263,7 +261,7 @@ class AddressCheck(DiscoveryCheck):
             for a in leases
         ]
 
-    def get_neighbor_addresses(self) -> List[DiscoveredAddress]:
+    def get_neighbor_addresses(self) -> list[DiscoveredAddress]:
         """Return addresses from ARP/IPv6 ND"""
 
         def get_vpn_id(vpn_id):
@@ -306,8 +304,6 @@ class AddressCheck(DiscoveryCheck):
         Check which method is preferable
 
         Preference order: interface, management, neighbor
-        :param old_method:
-        :param new_method:
         :return:
         """
         return PREF_VALUE[old_method] <= PREF_VALUE[new_method]
@@ -369,24 +365,24 @@ class AddressCheck(DiscoveryCheck):
         if self.is_preferred(address.source, discovered_address.source):
             changes = []
             if address.source != discovered_address.source:
-                changes += ["source: %s -> %s" % (address.source, discovered_address.source)]
+                changes += [f"source: {address.source} -> {discovered_address.source}"]
                 address.source = discovered_address.source
             if discovered_address.source in LOCAL_SRC:
                 # Check name
                 name = self.get_address_name(discovered_address)
                 if name and name != address.name:
-                    changes += ["name: %s -> %s" % (address.name, name)]
+                    changes += [f"name: {address.name} -> {name}"]
                     address.name = name
                 # Check fqdn
                 if discovered_address.fqdn != address.fqdn and discovered_address.fqdn:
-                    changes += ["fqdn: %s -> %s" % (address.fqdn, discovered_address.fqdn)]
+                    changes += [f"fqdn: {address.fqdn} -> {discovered_address.fqdn}"]
                     address.fqdn = discovered_address.fqdn
                 # @todo: Change profile
                 # Change managed object
                 if discovered_address.source in LOCAL_SRC and (
                     not address.managed_object or address.managed_object.id != self.object.id
                 ):
-                    changes += ["object: %s -> %s" % (address.managed_object, self.object)]
+                    changes += [f"object: {address.managed_object} -> {self.object}"]
                     address.managed_object = self.object
                 # Change subinterface
                 if (
@@ -394,12 +390,11 @@ class AddressCheck(DiscoveryCheck):
                     and address.subinterface != discovered_address.subinterface
                 ):
                     changes += [
-                        "subinterface: %s -> %s"
-                        % (address.subinterface, discovered_address.subinterface)
+                        f"subinterface: {address.subinterface} -> {discovered_address.subinterface}"
                     ]
                     address.subinterface = discovered_address.subinterface
             if discovered_address.mac and address.mac != discovered_address.mac:
-                changes += ["mac: %s -> %s" % (address.mac, discovered_address.mac)]
+                changes += [f"mac: {address.mac} -> {discovered_address.mac}"]
                 address.mac = discovered_address.mac
             if changes:
                 self.logger.info(
@@ -431,7 +426,7 @@ class AddressCheck(DiscoveryCheck):
             return parent.effective_address_discovery == "E"
         return False
 
-    def get_address_name(self, address: DiscoveredAddress) -> Optional[str]:
+    def get_address_name(self, address: DiscoveredAddress) -> str | None:
         """
         Render address name
         :param address: DiscoveredAddress instance
@@ -444,7 +439,7 @@ class AddressCheck(DiscoveryCheck):
             return self.strip(name)
         return None
 
-    def get_address_fqdn(self, address: DiscoveredAddress) -> Optional[str]:
+    def get_address_fqdn(self, address: DiscoveredAddress) -> str | None:
         """
         Render address name
         :param address: DiscoveredAddress instance
@@ -510,10 +505,9 @@ class AddressCheck(DiscoveryCheck):
             or address.address.startswith("fe80:")
         )
 
-    def fire_seen(self, address):
+    def fire_seen(self, address: Address):
         """
         Fire `seen` event and process `seen_propagation_policy`
-        :param address:
         :return:
         """
         address.fire_event("seen")
@@ -524,7 +518,6 @@ class AddressCheck(DiscoveryCheck):
     def propagate_seen(self, prefix):
         """
         Propagate `seen` through prefix hierarchy
-        :param prefix:
         :return:
         """
         if prefix.id in self.propagated_prefixes:

@@ -12,8 +12,8 @@ import datetime
 from bson import ObjectId
 
 
-class RCACondition(object):
-    def __init__(self, alarm_class, condition):
+class RCACondition:
+    def __init__(self, alarm_class, condition) -> None:
         self.name = f"{alarm_class.name}::{condition.name}"
         self.window = condition.window
         self.root = condition.root
@@ -32,7 +32,7 @@ class RCACondition(object):
             if k == "managed_object" and v == "alarm.managed_object.id":
                 self.same_object = True
             x += [f"'{k}': {v}"]
-        self.match_condition = compile("{%s}" % ", ".join(x), "<string>", "eval")
+        self.match_condition = compile("{{{}}}".format(", ".join(x)), "<string>", "eval")
         # Build reverse match condition expression
         x = [
             f"'alarm_class': ObjectId('{alarm_class.id}')",
@@ -44,7 +44,7 @@ class RCACondition(object):
             x += ["'id__ne': alarm.id"]
         if self.same_object:
             x += ["'managed_object': alarm.managed_object"]
-        self.reverse_match_condition = compile("{%s}" % ", ".join(x), "<string>", "eval")
+        self.reverse_match_condition = compile("{{{}}}".format(", ".join(x)), "<string>", "eval")
 
     def __str__(self):
         return self.name

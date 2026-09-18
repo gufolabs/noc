@@ -27,7 +27,7 @@ from noc.core.translation import ugettext as _
 
 
 class Purgatorium(Model):
-    class Meta(object):
+    class Meta:
         db_table = "purgatorium"
         engine = ReplacingMergeTree(
             "date",

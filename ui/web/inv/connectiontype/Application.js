@@ -208,7 +208,7 @@ Ext.define("NOC.inv.connectiontype.Application", {
   //
   onTest: function(){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/inv/connectiontype/" + me.currentRecord.get("id") + "/compatible/",
       method: "GET",
       scope: me,

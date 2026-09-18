@@ -17,7 +17,7 @@ class Script(BaseScript):
     def execute(self, interface=None):
         cmd = "/interface wireless registration-table print stats without-paging"
         if interface is not None:
-            cmd += " where interface=%s" % interface
+            cmd += f" where interface={interface}"
         try:
             v = self.cli_detail(cmd)
         except self.CLISyntaxError:

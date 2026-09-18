@@ -19,7 +19,7 @@ from noc.gis.models.division import Division
 class Command(BaseCommand):
     help = "Dump address database"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         # parser.add_argument("-c", "--country",
         #                     dest="countries",
         #                     action="append")
@@ -33,7 +33,7 @@ class Command(BaseCommand):
 
     def dump_division(self, writer, d, ctr, level):
         if d.short_name:
-            level = [*level, "%s %s" % (d.short_name, d.name)]
+            level = [*level, f"{d.short_name} {d.name}"]
         else:
             level = [*level, d.name]
         # Dump buildings
@@ -71,7 +71,7 @@ class Command(BaseCommand):
         # Check countries
         for c in ctr:
             if c not in self.HEADERS or c not in self.DATA:
-                raise CommandError("Unsupported country: %s" % c)
+                raise CommandError(f"Unsupported country: {c}")
         header = ["LEVEL%d" % d for d in range(self.LEVELS)]
         header += [
             "STREET",
@@ -92,7 +92,3 @@ class Command(BaseCommand):
         writer.writerow(header)
         for d in Division.get_top():
             self.dump_division(writer, d, ctr, [])
-
-
-if __name__ == "__main__":
-    Command().run()

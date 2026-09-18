@@ -15,7 +15,7 @@ Ext.define("NOC.ip.ipam.view.GridController", {
       action = record.get("fav_status") ? "reset" : "set",
       url = store.getProxy().url + "favorites/item/" + id + "/" + action + "/";
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "POST",
       success: function(){

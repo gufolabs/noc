@@ -1,8 +1,8 @@
 # ----------------------------------------------------------------------
 #  RPC cli
 # ----------------------------------------------------------------------
-#  Copyright (C) 2007-2019 The NOC Project
-#  See LICENSE for details
+# Copyright (C) 2007-2019 The NOC Project
+# See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
@@ -16,7 +16,7 @@ from noc.core.service.error import RPCError
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "--pretty",
             action="store_true",
@@ -39,12 +39,8 @@ class Command(BaseCommand):
             method = getattr(client, method)
             result = method(*arguments)
         except RPCError as e:
-            self.die("RPC Error: %s" % e)
+            self.die(f"RPC Error: {e}")
         if pretty:
             self.stdout.write(pprint.pformat(result) + "\n")
         else:
             self.stdout.write(str(result) + "\n")
-
-
-if __name__ == "__main__":
-    Command().run()

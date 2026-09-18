@@ -13,7 +13,7 @@ from noc.core.text import ch_escape
 
 
 class ManagedObject(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "managedobject"
         layout = "hashed"
         source_model = "sa.ManagedObject"

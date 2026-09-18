@@ -13,7 +13,7 @@ from noc.core.text import ch_escape
 
 
 class Container(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "container"
         layout = "hashed"
         source_model = "inv.Object"

@@ -15,7 +15,7 @@ from .template import Template
 
 
 class SystemTemplate(NOCModel):
-    class Meta(object):
+    class Meta:
         app_label = "main"
         db_table = "main_systemtemplate"
         verbose_name = "System template"

@@ -6,7 +6,6 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from builtins import range
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -45,7 +44,7 @@ class Script(BaseScript):
                 "1110",
                 "1111",
             ]
-            ports = ["%02x" % c for c in ports]
+            ports = [f"{c:02x}" for c in ports]
             p = ""
             for c in ports:
                 for i in range(len(c)):

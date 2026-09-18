@@ -22,9 +22,9 @@ class Script(BaseScript):
     def execute(self, interface=None, vlan=None, mac=None):
         cmd = "show mac-address-table"
         if mac is not None:
-            cmd += " address %s" % self.profile.convert_mac(mac)
+            cmd += f" address {self.profile.convert_mac(mac)}"
         elif interface is not None:
-            cmd += " interface %s" % interface
+            cmd += f" interface {interface}"
         vlans = self.cli(cmd)
         r = []
         running_config = self.cli("show running-config")

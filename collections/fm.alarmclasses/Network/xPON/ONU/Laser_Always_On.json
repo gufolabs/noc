@@ -1,0 +1,25 @@
+{
+    "name": "Network | xPON | ONU | Laser Always On",
+    "$collection": "fm.alarmclasses",
+    "uuid": "62fb6620-1d9b-4599-88f9-b58a82c4f2d6",
+    "is_unique": true,
+    "reference": ["interface"],
+    "is_ephemeral": false,
+    "user_clearable": true,
+    "components": [
+    ],
+    "vars": [
+        {
+            "name": "interface",
+            "description": "interface name"
+        }
+    ],
+    "subject_template": "ONU \"Laser always on\" error on {{interface}}",
+    "body_template": "ONU \"Laser always on\" error on {{interface}}",
+    "symptoms": "Connection lost, ONU are not registered",
+    "probable_causes": "The optical splitter is not connected correctly, ONU laser is damaged, third-party active optical equipment in the network",
+    "recommended_actions": "Check optical links and hardware",
+    "recover_time": 300,
+    "affected_service": true,
+    "labels": ["noc::severity::warning"]
+}

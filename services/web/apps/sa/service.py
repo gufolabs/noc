@@ -1,0 +1,401 @@
+# ----------------------------------------------------------------------
+# sa.service application
+# ----------------------------------------------------------------------
+# Copyright (C) 2007-2026 The NOC Project
+# See LICENSE for details
+# ----------------------------------------------------------------------
+
+# Python modules
+from typing import Any
+
+# Third-party modules
+from mongoengine.queryset import Q
+from django.http import HttpRequest
+
+# NOC modules
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
+from noc.services.web.base.decorators.state import state_handler
+from noc.services.web.base.decorators.caps import capabilities_handler
+from noc.services.web.base.decorators.watch import watch_handler
+from noc.sa.interfaces.base import (
+    UnicodeParameter,
+    ModelParameter,
+    DictListParameter,
+    StringListParameter,
+    IntParameter,
+    IPv4Parameter,
+    DictParameter,
+)
+from noc.sa.models.service import Service
+from noc.sa.models.serviceinstance import ServiceInstance
+from noc.sa.models.managedobject import ManagedObject
+from noc.inv.models.resourcegroup import ResourceGroup
+from noc.inv.models.interface import Interface
+from noc.inv.models.subinterface import SubInterface
+from noc.main.models.notificationgroup import NotificationGroup
+from noc.core.middleware.tls import get_user
+from noc.core.translation import ugettext as _
+from noc.core.validators import is_objectid, is_ipv4, is_mac
+from noc.core.models.serviceinstanceconfig import InstanceType
+from noc.core.models.inputsources import InputSource
+from noc.core.resource import from_resource
+from noc.core.comp import smart_text
+
+
+@watch_handler
+@capabilities_handler
+@state_handler
+class ServiceApplication(ExtDocApplication):
+    """
+    Service application
+    """
+
+    title = "Services"
+    menu = [_("Services")]
+    model = Service
+    parent_model = Service
+    parent_field = "parent"
+    query_fields = [
+        "address__contains",
+        "description__icontains",
+        "name_template__icontains",
+        "remote_id",
+    ]
+
+    ignored_fields = ExtDocApplication.ignored_fields | {
+        "global_cpe_id",
+        "local_cpe_id",
+        "remote_system",
+        "remote_id",
+    }
+
+    resource_group_fields = [
+        "static_service_groups",
+        "effective_service_groups",
+        "static_client_groups",
+        "effective_client_groups",
+    ]
+
+    @staticmethod
+    def get_resource_label(o) -> str:
+        if not o:
+            return "Unknown"
+        return f"{o} ({o.description})"
+
+    def field_label(self, o):
+        return o.label
+
+    def bulk_field_instance_count(self, data):
+        svc_ids = [x["id"] for x in data]
+        if not svc_ids:
+            return data
+        instances = ServiceInstance.objects.filter(service__in=svc_ids).item_frequencies("service")
+        instances = {str(k): v for k, v in instances.items()}
+        # Apply service instance
+        for x in data:
+            x["instance_count"] = instances.get(x["id"]) or 0
+        return data
+
+    def bulk_field_allow_subscribe(self, data):
+        svc_ids = [x["id"] for x in data]
+        if not svc_ids:
+            return data
+        # Check allowed subscription
+        us = NotificationGroup.get_groups_by_user(get_user())
+        watchers = NotificationGroup.get_user_subscriptions(get_user(), "sa.Service")
+        # Apply service instance, and message Type
+        for x in data:
+            if us and x["id"] in watchers:
+                x["allow_subscribe"] = "me"
+            elif us:
+                x["allow_subscribe"] = "group"
+            else:
+                x["allow_subscribe"] = "no"
+        return data
+
+    def cleaned_query(self, q):
+        r = super().cleaned_query(q)
+        if "effective_service_groups" in r:
+            r["effective_service_groups__in"] = ResourceGroup.get_nested_ids(
+                r.pop("effective_service_groups")
+            )
+        return r
+
+    def get_Q(self, request: HttpRequest, query):
+        if is_objectid(query):
+            q = Q(id=query)
+        elif is_ipv4(query.strip()):
+            svcs = [
+                s.id
+                for s in ServiceInstance.objects.filter(addresses__address=query.strip()).scalar(
+                    "service"
+                )
+            ]
+            q = Q(id__in=svcs)
+        elif is_mac(query.strip()):
+            svcs = [
+                s.id for s in ServiceInstance.objects.filter(macs=[query.strip()]).scalar("service")
+            ]
+            q = Q(id__in=svcs)
+        else:
+            q = super().get_Q(request, query)
+        return q
+
+    def instance_to_dict(self, o, fields=None, nocustom=False):
+        def sg_to_list(items):
+            return [
+                {"group": str(x), "group__label": smart_text(ResourceGroup.get_by_id(x))}
+                for x in items
+            ]
+
+        data = super().instance_to_dict(o, fields, nocustom)
+        # Expand resource groups fields
+        for fn in self.resource_group_fields:
+            data[fn] = sg_to_list(data.get(fn) or [])
+        if isinstance(o, Service):
+            data["in_maintenance"] = o.in_maintenance
+            data["service_path"] = [str(sp) for sp in data["service_path"]]
+            data["diagnostics"] = [d.get_object_form() for d in o.iter_diagnostics(to_display=True)]
+            data["mappings"] = [m.get_object_form(o) for m in o.iter_remote_mappings()]
+        return data
+
+    @staticmethod
+    def service_instance_to_dict(o: "ServiceInstance"):
+        r = {
+            "name": o.name,
+            "address": ";".join(a.address for a in o.addresses),
+            "port": o.port,
+            "fqdn": o.fqdn,
+            "remote_id": o.remote_id,
+        }
+        if o.managed_object:
+            r["managed_object"] = o.managed_object.id
+            r["managed_object__label"] = str(o.managed_object.name)
+        return r
+
+    def clean(self, data):
+        # Clean resource groups
+        for fn in self.resource_group_fields:
+            if fn.startswith("effective_") and fn in data:
+                del data[fn]
+                continue
+            data[fn] = [x["group"] for x in (data.get(fn) or [])]
+        # Clean other
+        return super().clean(data)
+
+    @api.get("^(?P<id>[0-9a-f]{24})/get_path/$", access="read")
+    def api_get_path(self, request: HttpRequest, id):
+        o = self.get_object_or_404(Service, id=id)
+        path = [Service.get_by_id(ns) for ns in o.get_path()]
+        return {
+            "data": [
+                {"level": level + 1, "id": str(p.id), "label": smart_text(p)}
+                for level, p in enumerate(path)
+            ]
+        }
+
+    def instance_to_dict_si(self, o: ServiceInstance) -> dict[str, Any]:
+        r = {
+            "id": str(o.id),
+            "sources": [ss.code.upper() for ss in o.sources],
+            "type": o.type,
+            "fqdn": o.fqdn,
+            "port": o.port,
+            "managed_object": None,
+            "addresses": [],
+            "name": o.name,
+            "remote_id": o.remote_id,
+            "resources": [],
+            "allow_update": o.type != InstanceType.OTHER,
+        }
+        if o.managed_object:
+            r |= {
+                "managed_object": o.managed_object.id,
+                "managed_object__label": o.managed_object.name,
+            }
+        for a in o.addresses:
+            if a.pool:
+                r["addresses"] += [
+                    {"address": a.address, "pool": str(a.pool.id), "pool__label": a.pool.name}
+                ]
+            else:
+                r["addresses"] += [{"address": a.address, "pool": None}]
+        for rr in o.resources:
+            x, _ = from_resource(rr)
+            r["resources"] += [
+                {
+                    "resource": rr,
+                    # "resource__label": str(x),
+                    "resource__label": self.get_resource_label(x),
+                    "managed_object": x.managed_object.id,
+                    "managed_object__label": str(x.managed_object.name),
+                }
+            ]
+        return r
+
+    @api.get(r"^(?P<sid>[0-9a-f]{24})/resource/(?P<r_type>\S+)/", access="read")
+    def api_get_instance_resources(self, request: HttpRequest, sid: str, r_type: str):
+        # o = self.get_object_or_404(Service, id=sid)
+        q = self.parse_request_query(request)
+        if "managed_object" not in q:
+            return []
+        query: str = q.get("__query")
+        if r_type == "interface":
+            r_model = Interface.objects.filter(
+                managed_object=int(q["managed_object"]), type="physical"
+            )
+        elif r_type == "subinterface":
+            r_model = SubInterface.objects.filter(managed_object=int(q["managed_object"]))
+        else:
+            return self.response_not_found(f"{r_type} not found")
+        r = []
+        for res in r_model:
+            label = self.get_resource_label(res)
+            if query and query.strip().lower() not in label.lower():
+                continue
+            r.append(
+                {
+                    "resource": res.as_resource(),
+                    "resource__label": label,
+                }
+            )
+        return r
+
+    @api.get("^(?P<sid>[0-9a-f]{24})/instance/$", access="read")
+    def api_get_instance(self, request: HttpRequest, sid: str):
+        o = self.get_object_or_404(Service, id=sid)
+        r = []
+        for si in ServiceInstance.objects.filter(service=o):
+            r.append(self.instance_to_dict_si(si))
+        return r
+
+    @api.put(
+        r"^(?P<sid>[0-9a-f]{24})/instance/(?P<iid>[0-9a-f]{24})/$",
+        access="update",
+        validate={
+            "name": UnicodeParameter(required=False),
+            "fqdn": UnicodeParameter(required=False),
+            "port": IntParameter(required=False, min_value=0, max_value=65536),
+        },
+    )
+    def api_update_instance(
+        self,
+        request,
+        sid: str,
+        iid: str,
+        name: str | None = None,
+        fqdn: str | None = None,
+        port: int | None = None,
+    ):
+        si = self.get_object_or_404(ServiceInstance, id=iid)
+        if si.name != name:
+            si.name = name
+        if si.fqdn != fqdn:
+            si.fqdn = fqdn
+        if si.port != port:
+            si.port = port
+        si.save()
+        return {"success": True, "data": self.instance_to_dict_si(si)}
+
+    @api.post(
+        r"^(?P<sid>[0-9a-f]{24})/register_instance/(?P<i_type>\S+)/$",
+        access="register_instance",
+        validate={
+            "name": UnicodeParameter(required=False),
+            "fqdn": UnicodeParameter(required=False),
+        },
+    )
+    def api_register_instance(
+        self,
+        request,
+        sid: str,
+        i_type: str,
+        name: str | None = None,
+        fqdn: str | None = None,
+    ):
+        o = self.get_object_or_404(Service, id=sid)
+        try:
+            i_type = InstanceType(i_type)
+        except ValueError:
+            return {"success": True, "message": f"Not supported type: {i_type}"}
+        si = o.register_instance(i_type, name=name, fqdn=fqdn)
+        return {"success": True, "data": self.instance_to_dict_si(si)}
+
+    @api.post(
+        r"^(?P<sid>[0-9a-f]{24})/unregister_instance/(?P<iid>[0-9a-f]{24})/$",
+        access="unregister_instance",
+    )
+    def api_unregister_instance(
+        self,
+        request,
+        sid: str,
+        iid: str,
+    ):
+        # o = self.get_object_or_404(Service, id=sid)
+        si = self.get_object_or_404(ServiceInstance, id=iid)
+        si.unseen(InputSource.MANUAL)
+        return {"success": True}
+
+    # Resource Working
+    @api.put(
+        r"^(?P<sid>[0-9a-f]{24})/instance/(?P<iid>[0-9a-f]{24})/bind/$",
+        access="update",
+        validate=DictParameter(
+            attrs={
+                "managed_object": ModelParameter(model=ManagedObject, required=False),
+                "addresses": DictListParameter(
+                    required=False,
+                    attrs={
+                        "address": IPv4Parameter(required=True),
+                        "pool": UnicodeParameter(required=False),
+                    },
+                ),
+                "resources": StringListParameter(required=False),
+            },
+        ),
+    )
+    def api_instance_bind(
+        self,
+        request,
+        sid: str,
+        iid: str,
+        managed_object: ManagedObject | None = None,
+        resources: list[str] = None,
+        addresses: list[dict[str, str]] = None,
+    ):
+        si = self.get_object_or_404(ServiceInstance, id=iid)
+        if addresses:
+            si.register_endpoint(InputSource.MANUAL, addresses=[a["address"] for a in addresses])
+            si.save()
+        if managed_object:
+            si.refresh_managed_object(managed_object)
+            si.seen(source=InputSource.MANUAL)
+        if resources:
+            r = []
+            for x in resources:
+                x, _ = from_resource(x)
+                r.append(x)
+            si.update_resources(r, source=InputSource.MANUAL)
+        return {"success": True, "data": self.instance_to_dict_si(si)}
+
+    @api.put(
+        r"^(?P<sid>[0-9a-f]{24})/instance/(?P<iid>[0-9a-f]{24})/unbind/(?P<r_type>\S+)/",
+        access="update",
+    )
+    def api_instance_unbind(
+        self,
+        request,
+        sid: str,
+        iid: str,
+        r_type: str,
+    ):
+        # Check Permission
+        si = self.get_object_or_404(ServiceInstance, id=iid)
+        if r_type == "managed_object":
+            si.reset_object()
+        elif r_type == "addresses":
+            si.deregister_endpoint(InputSource.MANUAL)
+            si.save()
+        elif r_type == "resources":
+            si.update_resources([], InputSource.MANUAL)
+        return {"success": True, "data": self.instance_to_dict_si(si)}

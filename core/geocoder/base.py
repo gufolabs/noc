@@ -7,29 +7,29 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Any, Optional, List, Iterator, Tuple
+from typing import Any, Iterator
 
 # NOC modules
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 from .errors import GeoCoderError
 
 
 @dataclass
-class GeoCoderResult(object):
+class GeoCoderResult:
     exact: bool
     query: str
-    path: List[str]
-    lon: Optional[float] = None
-    lat: Optional[float] = None
-    id: Optional[str] = None
-    address: Optional[str] = None
-    scope: Optional[str] = None
+    path: list[str]
+    lon: float | None = None
+    lat: float | None = None
+    id: str | None = None
+    address: str | None = None
+    scope: str | None = None
 
 
-class BaseGeocoder(object):
+class BaseGeocoder:
     name = None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         pass
 
     def forward(self, query: str, bounds=None) -> GeoCoderResult:
@@ -47,8 +47,6 @@ class BaseGeocoder(object):
     def iter_query(self, query: str, bounds=None) -> Iterator[GeoCoderResult]:
         """
         Get list of probable address candidates
-        :param query:
-        :param bounds:
         :return:
         """
         raise NotImplementedError()
@@ -56,16 +54,13 @@ class BaseGeocoder(object):
     def iter_recursive_query(self, query: str, bounds=None) -> Iterator[GeoCoderResult]:
         """
         Get list of all addresses within the query
-        :param query:
-        :param bounds:
         :return:
         """
         yield from self.iter_query(query, bounds)
 
-    def get(self, url: str) -> Tuple[int, bytes]:
+    def get(self, url: str) -> tuple[int, bytes]:
         """
         Perform get request
-        :param url:
         :type url: str
         :return:
         """
@@ -77,14 +72,12 @@ class BaseGeocoder(object):
             code, headers, body = client.get(url)
             if 200 <= code <= 299:
                 return code, body
-            raise GeoCoderError("HTTP Error %s" % code)
+            raise GeoCoderError(f"HTTP Error {code}")
 
     @staticmethod
     def get_path(data, path):
         """
         Returns nested object referred by dot-separated path, or None
-        :param data:
-        :param path:
         :return:
         """
         o = data
@@ -96,7 +89,7 @@ class BaseGeocoder(object):
         return o
 
     @staticmethod
-    def maybe_float(f: Any) -> Optional[float]:
+    def maybe_float(f: Any) -> float | None:
         if isinstance(f, float):
             return f
         if f:

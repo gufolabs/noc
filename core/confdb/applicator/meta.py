@@ -23,10 +23,7 @@ class MetaApplicator(BaseApplicator):
         self.confdb.insert_bulk(self.chassis_mac_meta())
 
     def iter_object_meta(self):
-        """
-        Yields `meta` node
-        :return:
-        """
+        """Yields `meta` node"""
         # meta id
         yield "meta", "id", str(self.object.id)
         # meta name

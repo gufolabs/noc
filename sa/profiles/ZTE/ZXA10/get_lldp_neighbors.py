@@ -65,7 +65,7 @@ class Script(BaseScript):
         v = self.cli("show lldp neighbor")
         for match in self.rx_neighbor.finditer(v):
             local_interface = match.group("local_interface")
-            v1 = self.cli("show lldp entry interface %s" % local_interface)
+            v1 = self.cli(f"show lldp entry interface {local_interface}")
             match1 = self.rx_detail.search(v1)
             if not match1:
                 match1 = self.rx_detail1.search(v1)

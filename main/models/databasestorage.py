@@ -19,7 +19,7 @@ class DatabaseStorage(NOCModel):
     Database Storage
     """
 
-    class Meta(object):
+    class Meta:
         app_label = "main"
         db_table = "main_databasestorage"
         verbose_name = "Database Storage"

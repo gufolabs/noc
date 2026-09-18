@@ -12,12 +12,13 @@ import pprint
 import datetime
 import re
 from collections import namedtuple
-
-# Third-party modules
-import orjson
 import yaml
 import codecs
 import uuid
+from pathlib import Path
+
+# Third-party modules
+import orjson
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -48,7 +49,7 @@ Credentials = namedtuple(
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         # Output options
         out_group = parser.add_mutually_exclusive_group()
         out_group.add_argument(
@@ -75,9 +76,7 @@ class Command(BaseCommand):
             help="Set SNMP Rate-limit setting",
         )
         parser.add_argument("--update-spec", help="Append all issued commands to spec")
-        parser.add_argument(
-            "-o", dest="beef_output", type=smart_text, help="Save script output to beef"
-        )
+        parser.add_argument("-o", dest="beef_output", help="Save script output to beef")
         parser.add_argument("script", nargs=1, help="Script name")
         parser.add_argument("object_name", nargs=1, help="Object name")
         parser.add_argument(
@@ -108,10 +107,10 @@ class Command(BaseCommand):
         # Load script
         script = script[0]
         if "." not in script:
-            script = "%s.%s" % (obj.profile.name, script)
+            script = f"{obj.profile.name}.{script}"
         script_class = loader.get_script(script)
         if not script_class:
-            self.die("Failed to load script %s" % script_class)
+            self.die(f"Failed to load script {script_class}")
         # Get capabilities
         caps = obj.get_caps()
         if not use_snmp:
@@ -164,16 +163,13 @@ class Command(BaseCommand):
 
             yaml.dump(result, sys.stdout)
         else:
-            self.stdout.write("%s\n" % result)
+            self.stdout.write(f"{result}\n")
         if update_spec:
             self.update_spec(update_spec, scr)
         if beef_output:
             bdata = self.get_beef(scr, obj)
             beef = Beef.from_json(bdata)
-            storage = StorageStub("osfs:///")
-            sdata = beef.get_data(decode=True)
-            with storage.open_fs() as fs:
-                fs.writebytes(beef_output, smart_bytes(yaml.safe_dump(sdata)))
+            Path(beef_output).write_text(yaml.safe_dump(beef.get_data(decode=True)))
 
     def get_object(self, object_name):
         """
@@ -193,7 +189,7 @@ class Command(BaseCommand):
         try:
             return ManagedObject.objects.get(q)
         except ManagedObject.DoesNotExist:
-            self.die("Object is not found: %s" % object_name)
+            self.die(f"Object is not found: {object_name}")
 
     def get_credentials(self, obj):
         """
@@ -255,7 +251,7 @@ class Command(BaseCommand):
 
         def read_file(path):
             if not os.path.exists(path):
-                self.die("Cannot open file '%s'" % path)
+                self.die(f"Cannot open file '{path}'")
             with open(path) as f:
                 return f.read()
 
@@ -263,13 +259,13 @@ class Command(BaseCommand):
             try:
                 return orjson.loads(j)
             except ValueError as e:
-                self.die("Failed to parse JSON: %s" % e)
+                self.die(f"Failed to parse JSON: {e}")
 
         args = {}
         for a in arguments:
             match = self.rx_arg.match(a)
             if not match:
-                self.die("Malformed parameter: '%s'" % a)
+                self.die(f"Malformed parameter: '{a}'")
             name, op, value = match.groups()
             if op == "=":
                 # Set parameter
@@ -290,7 +286,6 @@ class Command(BaseCommand):
         Update named spec
         :param name: Spec name
         :param script: BaseScript instance
-        :param save:
         :return:
         """
         from noc.dev.models.quiz import Quiz
@@ -298,7 +293,7 @@ class Command(BaseCommand):
         from noc.sa.models.profile import Profile
 
         connect()
-        self.print("Updating spec: %s" % name)
+        self.print(f"Updating spec: {name}")
         spec = Spec.get_by_name(name)
         changed = False
         if not spec:
@@ -311,7 +306,7 @@ class Command(BaseCommand):
             # Create Ad-Hoc spec for profile
             spec = Spec(
                 name,
-                description="Auto-generated Ad-Hoc spec for %s profile" % script.profile.name,
+                description=f"Auto-generated Ad-Hoc spec for {script.profile.name} profile",
                 revision=1,
                 quiz=quiz,
                 author="NOC",
@@ -329,7 +324,7 @@ class Command(BaseCommand):
             # Delete last \\n symbol and add command
             commands.add(span.in_label[:-1].decode("string_escape").strip())
         # Update specs
-        s_name = "cli_%s" % script.name.rsplit(".", 1)[-1]
+        s_name = "cli_{}".format(script.name.rsplit(".", 1)[-1])
         names = set()
         for ans in spec.answers:
             if (ans.name == s_name or ans.name.startswith(s_name + ".")) and ans.type == "cli":
@@ -344,7 +339,7 @@ class Command(BaseCommand):
                 if "." in n:
                     nn = int(n.rsplit(".", 1)[-1])
                     max_n = max(nn, max_n)
-            ntpl = "%s.%%d" % s_name
+            ntpl = f"{s_name}.%d"
             for nn, cmd in enumerate(sorted(commands)):
                 spec.answers += [SpecAnswer(name=ntpl % (nn + 1), type="cli", value=cmd)]
             changed = True
@@ -413,43 +408,43 @@ class Command(BaseCommand):
         return codecs.encode(smart_bytes(s), CLI_ENCODING)
 
 
-class ServiceStub(object):
-    class ServiceConfig(object):
-        def __init__(self, pool, tos=None):
+class ServiceStub:
+    class ServiceConfig:
+        def __init__(self, pool, tos=None) -> None:
             self.pool = pool
             self.tos = tos
 
-    def __init__(self, pool):
+    def __init__(self, pool) -> None:
         self.config = self.ServiceConfig(pool=pool)
 
 
-class PoolStub(object):
-    def __init__(self, name):
+class PoolStub:
+    def __init__(self, name) -> None:
         self.name = name
 
 
-class ProfileStub(object):
-    def __init__(self, name):
+class ProfileStub:
+    def __init__(self, name) -> None:
         self.name = name
 
 
-class VendorStub(object):
-    def __init__(self, name):
+class VendorStub:
+    def __init__(self, name) -> None:
         self.name = name
 
 
-class PlatformStub(object):
-    def __init__(self, name):
+class PlatformStub:
+    def __init__(self, name) -> None:
         self.name = name
 
 
-class VersionStub(object):
-    def __init__(self, version):
+class VersionStub:
+    def __init__(self, version) -> None:
         self.version = version
 
 
-class JSONObject(object):
-    def __init__(self, path):
+class JSONObject:
+    def __init__(self, path) -> None:
         with open(path) as f:
             data = orjson.loads(f.read())
         self.scheme = {"telnet": TELNET, "ssh": SSH, "http": HTTP, "https": HTTPS}.get(
@@ -504,20 +499,3 @@ class JSONObject(object):
 
     def get_controller_credentials(self):
         return None
-
-
-class StorageStub(object):
-    def __init__(self, url):
-        self.url = url
-
-    def open_fs(self):
-        from fs import open_fs
-
-        return open_fs(self.url)
-
-    class Error(Exception):
-        pass
-
-
-if __name__ == "__main__":
-    Command().run()

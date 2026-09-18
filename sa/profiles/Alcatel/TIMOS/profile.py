@@ -36,7 +36,7 @@ class Profile(BaseProfile):
         'port0/1/1'
         """
         if self.rx_port_name.match(s):
-            return "port%s" % s
+            return f"port{s}"
         if "," in s:
             s = s.split(",", 1)[0].strip()
         return s

@@ -41,8 +41,15 @@ class CiscoIOSNormalizer(BaseNormalizer):
 
     @match("snmp-server", "community", ANY, ANY, ANY)
     def normalize_snmp_protocol(self, tokens):
+        if tokens[2] == "7":
+            community = tokens[3]
+            level = tokens[4]
+        else:
+            community = tokens[2]
+            level = tokens[3]
         yield self.make_snmp_community_level(
-            community=tokens[2], level={"RO": "read-only", "RW": "read-write"}[tokens[3]]
+            community=community,
+            level={"RO": "read-only", "RW": "read-write"}[level],
         )
 
     @match("vlan", "database", "vlan", REST)
@@ -95,7 +102,7 @@ class CiscoIOSNormalizer(BaseNormalizer):
             # )
             if_name = self.interface_name(tokens[1])
             yield self.defer(
-                "fi.iface.%s" % if_name,
+                f"fi.iface.{if_name}",
                 self.make_unit_description,
                 instance=deferable("instance"),
                 interface=if_name,
@@ -177,7 +184,7 @@ class CiscoIOSNormalizer(BaseNormalizer):
         #    ifname, unit = tokens[1].split(".")
         if_name = self.interface_name(tokens[1])
         yield self.defer(
-            "fi.iface.%s" % if_name,
+            f"fi.iface.{if_name}",
             self.make_unit_inet_address,
             instance=deferable("instance"),
             interface=if_name,
@@ -241,7 +248,7 @@ class CiscoIOSNormalizer(BaseNormalizer):
 
     @match("interface", ANY, "ip", "vrf", "forwarding", ANY)
     def normalize_interface_fi(self, tokens):
-        yield self.defer("fi.iface.%s" % self.interface_name(tokens[1]), instance=tokens[5])
+        yield self.defer(f"fi.iface.{self.interface_name(tokens[1])}", instance=tokens[5])
 
     @match("interface", ANY, "xconnect", ANY, ANY, "encapsulation", "mpls")
     def normalize_interface_xconnect(self, tokens):
@@ -250,7 +257,7 @@ class CiscoIOSNormalizer(BaseNormalizer):
         # yield self.make_mpls_lsp_to_address(
         #     instance=tokens[4], address=tokens[3]
         # )
-        yield self.defer("fi.iface.%s" % self.interface_name(tokens[1]), instance=tokens[4])
+        yield self.defer(f"fi.iface.{self.interface_name(tokens[1])}", instance=tokens[4])
 
     @match("interface", ANY, "vrrp", ANY, "description", ANY)
     def normalize_vrrp_group(self, tokens):

@@ -35,10 +35,10 @@ class Script(BaseScript):
     def execute(self):
         r = []
         for cg in range(1, 9):
-            c = self.cli("show channel-group lacp %s" % cg)
+            c = self.cli(f"show channel-group lacp {cg}")
             match = self.rx_cg.search(c)
             if match:
-                i = {"lag_id": cg, "interface": "port-channel %s" % cg, "bundle": []}
+                i = {"lag_id": cg, "interface": f"port-channel {cg}", "bundle": []}
                 for match1 in self.rx_members.finditer(c):
                     if match1.group("remote_sys_id") == "00:00:00:00:00:00":
                         continue

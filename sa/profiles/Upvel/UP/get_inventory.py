@@ -37,7 +37,7 @@ class Script(BaseScript):
                     "part_no": part_no,
                     "number": ifname.split("/")[1],
                     "serial": i[4],
-                    "description": ("%s %s" % (i[3], i[5])).strip(),
+                    "description": (f"{i[3]} {i[5]}").strip(),
                 }
             ]
         return r

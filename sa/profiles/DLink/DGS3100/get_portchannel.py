@@ -36,7 +36,7 @@ class Script(BaseScript):
             if match.group("status").lower() == "enable" and match.group("members") is not None:
                 r += [
                     {
-                        "interface": "ch%s" % match.group("trunk"),
+                        "interface": "ch{}".format(match.group("trunk")),
                         "members": self.expand_interface_range(
                             self.profile.open_brackets(match.group("members"))
                         ),

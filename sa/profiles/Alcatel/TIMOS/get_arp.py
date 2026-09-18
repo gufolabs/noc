@@ -18,13 +18,13 @@ class Script(BaseScript):
 
     def execute(self, vrf=None):
         if vrf:
-            s = self.cli("show router %s arp" % vrf)
+            s = self.cli(f"show router {vrf} arp")
         else:
             s = self.cli("show service service-using vprn")
             vrfs = self.rx_vrfs.findall(s)
             s = self.cli("show router arp")
             for vrf in vrfs:
-                s += self.cli("show router %s arp" % vrf)
+                s += self.cli(f"show router {vrf} arp")
         r = []
         for l in s.split("\n"):
             match = self.rx_line.match(l.strip())

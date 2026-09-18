@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from .base import BaseModel
@@ -18,10 +17,10 @@ class Subscriber(BaseModel):
     id: str
     name: str
     profile: Reference["SubscriberProfile"]
-    description: Optional[str] = None
-    address: Optional[str] = None
-    tech_contact_person: Optional[str] = None
-    tech_contact_phone: Optional[str] = None
+    description: str | None = None
+    address: str | None = None
+    tech_contact_person: str | None = None
+    tech_contact_phone: str | None = None
 
     _csv_fields = [
         "id",

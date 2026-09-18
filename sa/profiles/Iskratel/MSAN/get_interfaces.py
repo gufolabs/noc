@@ -68,7 +68,7 @@ class Script(BaseScript):
     def get_switchport_cli(self):
         result = defaultdict(lambda: {"tagged_vlans": [], "untagged_vlan": None})
         for v in self.scripts.get_vlans():
-            c = self.cli("show vlan %s" % v["vlan_id"])
+            c = self.cli("show vlan {}".format(v["vlan_id"]))
             for match in self.rx_vlan1.finditer(c):
                 ifname = match.group("port")
                 if match.group("type") == "Untagged":
@@ -127,7 +127,7 @@ class Script(BaseScript):
             if descr and not descr.startswith("Short ") and not descr.startswith("Long "):
                 i["description"] = descr
             try:
-                c = self.cli("show port description %s" % ifname)
+                c = self.cli(f"show port description {ifname}")
                 match1 = self.rx_port2.search(c)
                 if match1:
                     i["snmp_ifindex"] = match1.group("ifindex")
@@ -166,7 +166,7 @@ class Script(BaseScript):
                 match1 = self.rx_port1.search(p["port"])
                 if p["port"] == ifname or (match1 and match1.group("port") == ifname):
                     s = {
-                        "name": "%s-%s.%s" % (p["port"], p["vpi"], p["vci"]),
+                        "name": "{}-{}.{}".format(p["port"], p["vpi"], p["vci"]),
                         "admin_status": match.group("admin_status") == "Enable",
                         "oper_status": match.group("oper_status") == "Enable",
                         "vpi": p["vpi"],
@@ -198,7 +198,7 @@ class Script(BaseScript):
             }
             addr = match.group("ip")
             mask = match.group("mask")
-            ip_address = "%s/%s" % (addr, IPv4.netmask_to_len(mask))
+            ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
             i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
             interfaces += [i]
         return [{"interfaces": interfaces}]

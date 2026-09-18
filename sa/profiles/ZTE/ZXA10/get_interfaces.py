@@ -125,18 +125,18 @@ class Script(BaseScript):
             if prefix in ["gpon-onu_", ""]:
                 continue
             for i in range(int(p["port"])):
-                port_num = "%s/%s/%s" % (p["shelf"], p["slot"], str(i + 1))
-                ifname = "%s%s" % (prefix, port_num)
+                port_num = "{}/{}/{}".format(p["shelf"], p["slot"], str(i + 1))
+                ifname = f"{prefix}{port_num}"
                 try:
-                    v = self.cli("show interface %s" % ifname)
+                    v = self.cli(f"show interface {ifname}")
                 except self.CLISyntaxError:
                     # In some card we has both gei_ and xgei_ interfaces
                     if prefix == "gei_":
-                        ifname = "xgei_%s" % port_num
-                        v = self.cli("show interface %s" % ifname)
+                        ifname = f"xgei_{port_num}"
+                        v = self.cli(f"show interface {ifname}")
                     elif prefix == "gei-":
-                        ifname = "xgei-%s" % port_num
-                        v = self.cli("show interface %s" % ifname)
+                        ifname = f"xgei-{port_num}"
+                        v = self.cli(f"show interface {ifname}")
                     # In some card we have only `gpon_onu_` interfaces
                     elif prefix == "gpon-olt_" and p["realtype"] == "GTGOG":
                         continue
@@ -155,7 +155,7 @@ class Script(BaseScript):
                     if descr not in ["none", "none.", "null"]:
                         iface["description"] = descr
                 if prefix in ["gei_", "gpon-olt_", "epon-olt_", "gei-", "xgei-"]:
-                    v = self.cli("show vlan port %s" % ifname)
+                    v = self.cli(f"show vlan port {ifname}")
                     match = self.rx_vlan.search(v)
                     sub = {
                         "name": ifname,
@@ -173,21 +173,19 @@ class Script(BaseScript):
                         iface["aggregated_interface"] = ai
                         iface["enabled_protocols"] = ["LACP"]
                 if prefix in ["gpon_olt-", "epon_olt-"] and admin_status is True:
-                    v = self.cli("show vlan port vport-%s.?" % port_num, command_submit=b"")
+                    v = self.cli(f"show vlan port vport-{port_num}.?", command_submit=b"")
                     match1 = self.rx_range.search(v)
                     for dim1 in self.expand_rangelist(match1.group("range")):
                         v = self.cli(
-                            "\x01\x0bshow vlan port vport-%s.%s:?" % (port_num, dim1),
+                            f"\x01\x0bshow vlan port vport-{port_num}.{dim1}:?",
                             command_submit=b"",
                         )
                         match2 = self.rx_range.search(v)
                         for dim2 in self.expand_rangelist(match2.group("range")):
-                            v = self.cli(
-                                "\x01\x0bshow vlan port vport-%s.%s:%s" % (port_num, dim1, dim2)
-                            )
+                            v = self.cli(f"\x01\x0bshow vlan port vport-{port_num}.{dim1}:{dim2}")
                             match3 = self.rx_vlan.search(v)
                             sub = {
-                                "name": "vport-%s.%s:%s" % (port_num, dim1, dim2),
+                                "name": f"vport-{port_num}.{dim1}:{dim2}",
                                 "admin_status": admin_status,
                                 "oper_status": oper_status,
                                 "enabled_afi": ["BRIDGE"],
@@ -200,7 +198,7 @@ class Script(BaseScript):
                 if prefix == "vdsl_":
                     for match in self.rx_pvc.finditer(v):
                         sub = {
-                            "name": "%s.%s" % (ifname, match.group("pvc_no")),
+                            "name": "{}.{}".format(ifname, match.group("pvc_no")),
                             "admin_status": match.group("admin_status") == "enable",
                             # "oper_status": oper_status  # need more examples
                             "enabled_afi": ["BRIDGE", "ATM"],
@@ -231,13 +229,13 @@ class Script(BaseScript):
                 ],
             }
             try:
-                c = self.cli("show interface %s" % ifname)
+                c = self.cli(f"show interface {ifname}")
                 match1 = self.rx_mac.search(c)
                 iface["mac"] = match1.group("mac")
                 iface["subinterfaces"][0]["mac"] = match1.group("mac")
             except self.CLISyntaxError:
                 try:
-                    c = self.cli("show ipv6 interface %s" % ifname)
+                    c = self.cli(f"show ipv6 interface {ifname}")
                     match1 = self.rx_mac2.search(c)
                     iface["mac"] = match1.group("mac")
                     iface["subinterfaces"][0]["mac"] = match1.group("mac")

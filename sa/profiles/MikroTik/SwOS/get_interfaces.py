@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # MikroTik.SwOS.get_interfaces
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -13,7 +13,6 @@ from noc.core.script.base import BaseScript
 from noc.sa.interfaces.igetinterfaces import IGetInterfaces
 from noc.core.ip import IPv4
 from noc.core.script.http.base import HTTPError
-from noc.core.comp import smart_text
 
 
 class Script(BaseScript):
@@ -54,9 +53,9 @@ class Script(BaseScript):
             else:
                 ifname = "SFP"
             if links.get("nm"):
-                descr = smart_text(codecs.decode(links["nm"][port - 1], "hex"))
+                descr = codecs.decode(links["nm"][port - 1], "hex").decode()
             elif links.get("nm%d" % (port - 1)):
-                descr = smart_text(codecs.decode(links["nm%d" % (port - 1)], "hex"))
+                descr = codecs.decode(links["nm%d" % (port - 1)], "hex").decode()
             else:
                 descr = None
             iface = {

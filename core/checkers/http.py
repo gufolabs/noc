@@ -7,11 +7,11 @@
 
 # Python modules
 from urllib.parse import urlparse
-from typing import List, AsyncIterable
+from typing import AsyncIterable
 
 # NOC modules
 from .base import BaseChecker, CheckResult, Check, CheckError
-from noc.core.http.async_client import HttpClient
+from noc.core.http.aio import HttpClient
 
 HTTP_CHECK = "HTTP"
 HTTPS_CHECK = "HTTPS"
@@ -23,7 +23,7 @@ class HTTPChecker(BaseChecker):
     """
 
     name = "http"
-    CHECKS: List[str] = [HTTP_CHECK, HTTPS_CHECK]
+    CHECKS = [HTTP_CHECK, HTTPS_CHECK]
     CONNECT_TIMEOUT = 2
     REQUEST_TIMEOUT = 3
 
@@ -36,7 +36,7 @@ class HTTPChecker(BaseChecker):
             url = url._replace(netloc=address)
         return url.geturl()
 
-    async def iter_result(self, checks: List[Check]) -> AsyncIterable[CheckResult]:
+    async def iter_result(self, checks: list[Check]) -> AsyncIterable[CheckResult]:
         client = HttpClient(
             max_redirects=None,
             headers={"X-NOC-Calling-Service": b"noc-check"},

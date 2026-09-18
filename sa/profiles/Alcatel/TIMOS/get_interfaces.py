@@ -1,13 +1,14 @@
 # ----------------------------------------------------------------------
 #  Alcatel.TIMOS.get_interfaces
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 
 # Python modules
 import re
+from typing import Any
 
 # NOC modules
 from noc.sa.profiles.Generic.get_interfaces import Script as BaseScript
@@ -201,10 +202,7 @@ class Script(BaseScript):
     )
 
     @staticmethod
-    def fix_protocols(protocols):
-        """
-        :rtype : list
-        """
+    def fix_protocols(protocols) -> list[str]:
         proto = []
         if "None" in protocols:
             return []
@@ -224,10 +222,7 @@ class Script(BaseScript):
     def fix_status(status):
         return "up" in status.lower()
 
-    def fix_ip_addr(self, ipaddr_section):
-        """
-        :rtype : dict
-        """
+    def fix_ip_addr(self, ipaddr_section) -> dict[str, Any]:
         result = {"ipv4_addresses": [], "ipv6_addresses": [], "enabled_afi": []}
         if not ipaddr_section:
             return result
@@ -438,7 +433,7 @@ class Script(BaseScript):
 
     def get_vpls(self, vpls_id):
         result = {"forwarding_instance": vpls_id, "type": "VPLS"}
-        vpls = self.cli("show service id %s base" % vpls_id)
+        vpls = self.cli(f"show service id {vpls_id} base")
         match_obj = self.re_vpls.search(vpls)
         if match_obj:
             result = match_obj.groupdict()
@@ -470,14 +465,17 @@ class Script(BaseScript):
 
                 if fi["type"] == "ip" or fi["type"] == "VRF":
                     r = self.cli(
-                        'show service id %s base | match invert-match "sap:"'
-                        % fi["forwarding_instance"]
+                        'show service id {} base | match invert-match "sap:"'.format(
+                            fi["forwarding_instance"]
+                        )
                     )
                     mo2 = self.re_rd.search(r)
                     fi["rd"] = mo2.group("rd")
                     if fi["rd"] == "None":
                         fi.pop("rd")
-                    intf = self.cli("show router %s interface detail" % fi["forwarding_instance"])
+                    intf = self.cli(
+                        "show router {} interface detail".format(fi["forwarding_instance"])
+                    )
                     fi["interfaces"] = self.parse_interfaces(intf, "")
                 elif fi["type"] == "bridge":
                     fi.update(self.get_vpls(fi["forwarding_instance"]))
@@ -516,7 +514,7 @@ class Script(BaseScript):
         for line in port_info.splitlines():
             match = self.re_port_info.search(line)
             if match:
-                port_detail = self.cli("show port %s detail" % match.group("name"))
+                port_detail = self.cli("show port {} detail".format(match.group("name")))
                 match_detail = self.re_port_detail_info.search(port_detail)
                 my_dict = match.groupdict()
                 my_dict.update(match_detail.groupdict())
@@ -545,7 +543,7 @@ class Script(BaseScript):
                     my_dict["name"] = "-".join(["lag", my_dict["name"]])
                 my_dict["subinterfaces"] = []
                 saps = self.cli(
-                    "show service sap-using sap %s | match invert-match [" % my_dict["name"]
+                    "show service sap-using sap {} | match invert-match [".format(my_dict["name"])
                 )
                 for sapline in saps.splitlines():
                     sap = self.re_lag_subs.match(sapline)

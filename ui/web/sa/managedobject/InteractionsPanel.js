@@ -128,7 +128,7 @@ Ext.define("NOC.sa.managedobject.InteractionsPanel", {
         me.historyHashPrefix,
       );
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + record.get("id") + "/interactions/",
       method: "GET",
       scope: me,

@@ -35,17 +35,13 @@ forms:
       default: default
       label: "Default interface profile"
       type: str
-    lookup_solution:
-      default: "noc.services.classifier.rulelookup.RuleLookup"
-      label: "Lookup solution"
-      type: str
 
 services:
   classifier:
     level: pool
     category: internal
     supervisord:
-      command: "./services/classifier/service.py"
+      command: "{{ noc_venv_python }} -m noc.services.classifier"
       process_name: "%(program_name)s-%(process_num)02d"
       oom_score_adj: 50
       priority: 300

@@ -13,7 +13,6 @@ import types
 from collections import defaultdict
 import operator
 from urllib.parse import urlencode
-from typing import List, Dict, Set, Optional
 from threading import Lock
 import pkgutil
 import importlib
@@ -38,7 +37,7 @@ from noc.core.service.base import BaseService
 logger = logging.getLogger(__name__)
 
 
-class ProxyNode(object):
+class ProxyNode:
     pass
 
 
@@ -46,12 +45,12 @@ HTTP_METHODS = {"GET", "POST", "PUT", "DELETE"}
 RX_SANITIZE_METHOD = re.compile("[^A-Z]+")
 
 
-class URL(object):
+class URL:
     """
     URL Data wrapper
     """
 
-    def __init__(self, url, name=None, method=None):
+    def __init__(self, url, name=None, method=None) -> None:
         self.url = url
         self.name = name
         if method is None:
@@ -63,21 +62,21 @@ class URL(object):
                 raise TypeError("Invalid type for 'method'")
             for m in method:
                 if m not in HTTP_METHODS:
-                    raise ValueError("Invalid method '%s'" % m)
+                    raise ValueError(f"Invalid method '{m}'")
             self.method = set(method)
 
     def __repr__(self):
-        return "<URL %s>" % smart_text(self)
+        return f"<URL {smart_text(self)}>"
 
     def __str__(self):
         s = self.url
         if self.name:
-            s += ", name='%s'" % self.name
+            s += f", name='{self.name}'"
         return s
 
 
 @dataclass
-class AppPermission(object):
+class AppPermission:
     """
     Application permission.
 
@@ -91,7 +90,7 @@ class AppPermission(object):
     title: str
     name: str
 
-    def to_dict(self) -> Dict[str, str]:
+    def to_dict(self) -> dict[str, str]:
         return {
             "module": self.module,
             "title": self.title,
@@ -102,7 +101,7 @@ class AppPermission(object):
 _perms_lock = Lock()
 
 
-class Site(object):
+class Site:
     """
     Application site. Registers applications, builds menu and
     handling views
@@ -112,9 +111,9 @@ class Site(object):
     JSON_CONTENT_TYPES = {"text/json", "application/json"}
     _perms_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.apps = {}  # app_id -> app instance
-        self.urlpatterns: List[URLPattern] = []
+        self.urlpatterns: list[URLPattern] = []
         self.menu = []
         self.menu_roots = {}  # app -> menu
         self.reports = []  # app_id -> title
@@ -124,7 +123,7 @@ class Site(object):
         self.app_contributors = defaultdict(set)
         self.app_count = 0
         self.pending_applications = []
-        self.service: Optional[BaseService] = None
+        self.service: BaseService | None = None
 
     def set_service(self, service: BaseService) -> None:
         """
@@ -136,7 +135,7 @@ class Site(object):
         self.service = service
 
     @property
-    def urls(self) -> List[URLPattern]:
+    def urls(self) -> list[URLPattern]:
         """
         Returns URLConf
         """
@@ -215,7 +214,7 @@ class Site(object):
                                 g = orjson.loads(request.body)
                             except ValueError as e:
                                 logger.error("Unable to decode JSON: %s", e)
-                                errors = "Unable to decode JSON: %s" % e
+                                errors = f"Unable to decode JSON: {e}"
                         else:
                             g = {k: v[0] if len(v) == 1 else v for k, v in request.POST.lists()}
                         if not errors:
@@ -258,10 +257,10 @@ class Site(object):
                             stmt = q["sql"].strip().split(" ", 1)[0].upper()
                             sc[stmt] += 1
                             tsc += 1
-                            app_logger.debug("SQL %(sql)s %(time)ss" % q)
+                            app_logger.debug("SQL {sql} {time}s".format(**q))
                     x = ", ".join("%s: %d" % (k, cv) for k, cv in sc.items())
                     if x:
-                        x = " (%s)" % x
+                        x = f" ({x})"
                     app_logger.debug("SQL statements: %d%s" % (tsc, x))
             except PermissionDenied as e:
                 return HttpResponseForbidden(e)
@@ -324,7 +323,7 @@ class Site(object):
             else:
                 r = {"id": self.get_menu_id(path), "title": p, "children": []}
                 if p in self.folder_glyps:
-                    r["iconCls"] = "fa fa-%s" % self.folder_glyps[p]
+                    r["iconCls"] = f"fa fa-{self.folder_glyps[p]}"
                 root["children"] += [r]
                 root = r
         path += parts
@@ -333,11 +332,11 @@ class Site(object):
             "id": self.get_menu_id(path),
             "title": parts[0],
             "app": app,
-            "iconCls": "fa fa-%s noc-edit" % app.glyph,
+            "iconCls": f"fa fa-{app.glyph} noc-edit",
         }
         if view:
             r["access"] = self.site_access(app, view)
-            app.menu_url = ("/%s/%s/%s" % (app.module, app.app, view.url[1:])).replace("$", "")
+            app.menu_url = (f"/{app.module}/{app.app}/{view.url[1:]}").replace("$", "")
         else:
             r["access"] = lambda user: app.launch_access.check(app, user)
         root["children"] += [r]
@@ -374,7 +373,7 @@ class Site(object):
                 elif isinstance(view.url, URL):
                     view_url = view.url
                 else:
-                    raise ValueError("Invalid URL object: %s" % view.url)
+                    raise ValueError(f"Invalid URL object: {view.url}")
                 app_url_map[view_url.url] += [(view_url, view)]
             # Install URLs
             for url in app_url_map:
@@ -397,9 +396,9 @@ class Site(object):
             # Collect nested application routes
             mod_includes = []
             for app in sorted(patterns[module]):
-                mod_includes += [path("%s/" % app, include((patterns[module][app], app)))]
+                mod_includes += [path(f"{app}/", include((patterns[module][app], app)))]
             # Install module routes
-            self.urlpatterns += [path("%s/" % module, include((mod_includes, module)))]
+            self.urlpatterns += [path(f"{module}/", include((mod_includes, module)))]
         # Django JS Translation
         # @todo: Remove?
         self.urlpatterns.append(
@@ -414,25 +413,23 @@ class Site(object):
         Schedule application class to be installed to the router.
         Scheduling is necessary to allow the class decorators to add custom views
 
-        :param app_class:
         :return:
         """
         app_id = app_class.get_app_id()
         if app_id in self.apps:
-            raise Exception("Application %s is already registered" % app_id)
+            raise Exception(f"Application {app_id} is already registered")
         self.pending_applications += [app_class]
 
     def do_register(self, app_class):
         """
         Actually register class
 
-        :param app_class:
         :return:
         """
         # Register application
         app_id = app_class.get_app_id()
         if app_id in self.apps:
-            raise Exception("Application %s is already registered" % app_id)
+            raise Exception(f"Application {app_id} is already registered")
         # Initialize application
         app = app_class(self)
         self.apps[app_id] = app
@@ -445,8 +442,8 @@ class Site(object):
         self.app_count += 1
 
     def add_module_menu(self, m):
-        mn = "noc.services.web.apps.%s" % m[4:]  # Strip noc.
-        mod_name = __import__(mn, {}, {}, ["MODULE_NAME"]).MODULE_NAME
+        mn = f"noc.services.web.apps.{m[4:]}"  # Strip noc.
+        mod_name = importlib.import_module(mn).MODULE_NAME
         r = {"id": self.get_menu_id([m]), "title": mod_name, "children": []}
         self.menu += [r]
         return r
@@ -490,7 +487,7 @@ class Site(object):
         if self.is_initialized:
             return
         apps_root = "noc.services.web.apps"
-        seen_apps: Set[str] = set()
+        seen_apps: set[str] = set()
         # Type custom and repo roots
         logger.info("Loading web applications")
         for root in config.iter_customized_modules(apps_root, prefer_custom=True):
@@ -512,7 +509,7 @@ class Site(object):
                 # mark as loaded
                 seen_apps.add(app_id)
         # Initialize menu roots
-        app_order: Dict[str, int] = {
+        app_order: dict[str, int] = {
             app: n
             for n, app in enumerate(x[4:] for x in settings.INSTALLED_APPS if x.startswith("noc."))
         }
@@ -546,7 +543,7 @@ class Site(object):
             kw = kwargs.copy()
             query = ""
             if "QUERY" in kw:
-                query = "?%s" % urlencode(kw["QUERY"])
+                query = "?{}".format(urlencode(kw["QUERY"]))
                 del kw["QUERY"]
             return reverse(url, args=args, kwargs=kw) + query
         return url
@@ -578,13 +575,12 @@ class Site(object):
             pr = getattr(self.apps[app], "predefined_reports", None)
             if pr:
                 for pr in self.apps[app].predefined_reports:
-                    yield "%s:%s" % (app, pr), self.apps[app].predefined_reports[pr]
+                    yield f"{app}:{pr}", self.apps[app].predefined_reports[pr]
 
     @classmethod
     def is_json(cls, content_type: str) -> bool:
         """
         Check if content-type is JSON
-        :param content_type:
         :return:
         """
         if content_type in cls.JSON_CONTENT_TYPES:
@@ -596,7 +592,7 @@ class Site(object):
         return False
 
     @cachetools.cachedmethod(operator.attrgetter("_perms_cache"), lock=lambda _: _perms_lock)
-    def get_app_permissions_list(self) -> List[AppPermission]:
+    def get_app_permissions_list(self) -> list[AppPermission]:
         """
         Get AppPermission for all installed apps.
         """
@@ -607,7 +603,7 @@ class Site(object):
         apps = list(self.apps)
         for module in [m for m in settings.INSTALLED_APPS if m.startswith("noc.")]:
             mod = module[4:]
-            m = __import__(f"noc.services.web.apps.{mod}", {}, {}, "MODULE_NAME")
+            m = importlib.import_module(f"noc.services.web.apps.{mod}")
             module_name = m.MODULE_NAME
             for app in [app for app in apps if app.startswith(mod + ".")]:
                 app_perms = sorted([p for p in perms if p.startswith(app.replace(".", ":") + ":")])

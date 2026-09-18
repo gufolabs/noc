@@ -14,7 +14,7 @@ from noc.core.model.fields import DocumentReferenceField
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         Template = self.db.mock_model(model_name="Template", db_table="main_template")
 
         self.db.add_column(

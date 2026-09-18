@@ -4,99 +4,44 @@ Tests service configuration
 
 ## fixtures_paths
 
-|                |                            |
-| -------------- | -------------------------- |
-| Default value  | `['tests/data']`           |
-| YAML Path      | `tests.fixtures_paths`     |
-| Key-Value Path | `tests/fixtures_paths`     |
-| Environment    | `NOC_TESTS_FIXTURES_PATHS` |
+{{ config_param("tests.fixtures_paths") }}
 
 ## events_paths
 
-|                |                          |
-| -------------- | ------------------------ |
-| Default value  | `None`                   |
-| YAML Path      | `tests.events_paths`     |
-| Key-Value Path | `tests/events_paths`     |
-| Environment    | `NOC_TESTS_EVENTS_PATHS` |
+{{ config_param("tests.events_paths") }}
 
 ## beef_paths
 
-|                |                        |
-| -------------- | ---------------------- |
-| Default value  | `None`                 |
-| YAML Path      | `tests.beef_paths`     |
-| Key-Value Path | `tests/beef_paths`     |
-| Environment    | `NOC_TESTS_BEEF_PATHS` |
+{{ config_param("tests.beef_paths") }}
 
 ## sshd_host
 
-|                |                       |
-| -------------- | --------------------- |
-| Default value  | `None`                |
-| YAML Path      | `tests.sshd_host`     |
-| Key-Value Path | `tests/sshd_host`     |
-| Environment    | `NOC_TESTS_SSHD_HOST` |
+{{ config_param("tests.sshd_host") }}
 
 ## sshd_port
 
-|                |                       |
-| -------------- | --------------------- |
-| Default value  | `None`                |
-| YAML Path      | `tests.sshd_port`     |
-| Key-Value Path | `tests/sshd_port`     |
-| Environment    | `NOC_TESTS_SSHD_PORT` |
+{{ config_param("tests.sshd_port") }}
 
 ## dropbear_host
 
-|                |                           |
-| -------------- | ------------------------- |
-| Default value  | `None`                    |
-| YAML Path      | `tests.dropbear_host`     |
-| Key-Value Path | `tests/dropbear_host`     |
-| Environment    | `NOC_TESTS_DROPBEAR_HOST` |
+{{ config_param("tests.dropbear_host") }}
 
 ## dropbear_port
 
-|                |                           |
-| -------------- | ------------------------- |
-| Default value  | `None`                    |
-| YAML Path      | `tests.dropbear_port`     |
-| Key-Value Path | `tests/dropbear_port`     |
-| Environment    | `NOC_TESTS_DROPBEAR_PORT` |
+{{ config_param("tests.dropbear_port") }}
 
 ## telnetd_host
 
-|                |                          |
-| -------------- | ------------------------ |
-| Default value  | `None`                   |
-| YAML Path      | `tests.telnetd_host`     |
-| Key-Value Path | `tests/telnetd_host`     |
-| Environment    | `NOC_TESTS_TELNETD_HOST` |
+{{ config_param("tests.telnetd_host") }}
 
 ## telnetd_port
 
-|                |                          |
-| -------------- | ------------------------ |
-| Default value  | `None`                   |
-| YAML Path      | `tests.telnetd_port`     |
-| Key-Value Path | `tests/telnetd_port`     |
-| Environment    | `NOC_TESTS_TELNETD_PORT` |
+{{ config_param("tests.telnetd_port") }}
 
 ## snmpd_host
 
-|                |                        |
-| -------------- | ---------------------- |
-| Default value  | `None`                 |
-| YAML Path      | `tests.snmpd_host`     |
-| Key-Value Path | `tests/snmpd_host`     |
-| Environment    | `NOC_TESTS_SNMPD_HOST` |
+{{ config_param("tests.snmpd_host") }}
 
 ## snmpd_port
 
-|                |                        |
-| -------------- | ---------------------- |
-| Default value  | `None`                 |
-| YAML Path      | `tests.snmpd_port`     |
-| Key-Value Path | `tests/snmpd_port`     |
-| Environment    | `NOC_TESTS_SNMPD_PORT` |
+{{ config_param("tests.snmpd_port") }}

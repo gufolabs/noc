@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     MAX_BULK_SIZE = 500
 
-    def migrate(self):
+    def migrate(self) -> None:
         coll = self.mongo_db["noc.objects"]
         bulk = []
         for doc in coll.find({}, no_cursor_timeout=True):

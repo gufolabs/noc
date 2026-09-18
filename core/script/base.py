@@ -1,11 +1,12 @@
 # ----------------------------------------------------------------------
 # SA Script base
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
+from typing import Any, cast
 import re
 import logging
 import itertools
@@ -13,7 +14,6 @@ import operator
 from functools import reduce
 from collections import defaultdict
 from time import perf_counter
-from typing import Any, Optional, Set, Union
 
 # Third-party modules
 from atomicl import AtomicLong
@@ -47,22 +47,23 @@ from .sessionstore import SessionStore
 
 
 class BaseScriptMetaclass(type):
-    """
-    Process @match decorators
-    """
+    """Process @match decorators"""
 
-    def __new__(mcs, name, bases, attrs):
-        n = type.__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[BaseScriptMetaclass]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["BaseScript"]:
+        n = cast(type["BaseScript"], type.__new__(mcs, name, bases, attrs))
         n._execute_chain = sorted(
             (v for v in attrs.values() if hasattr(v, "_seq")), key=operator.attrgetter("_seq")
         )
         return n
 
 
-class BaseScript(object, metaclass=BaseScriptMetaclass):
-    """
-    Service Activation script base class
-    """
+class BaseScript(metaclass=BaseScriptMetaclass):
+    """Service Activation script base class"""
 
     # Script name in form of <vendor>.<system>.<name>
     name = None
@@ -160,7 +161,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         session_idle_timeout=None,
         streaming=None,
         controller=None,
-        labels: Optional[Set[str]] = None,
+        labels: set[str] | None = None,
     ):
         self.service = service
         self.tos = config.activator.tos
@@ -169,7 +170,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         self._motd = None
         name = name or self.name
         self.logger = PrefixLoggerAdapter(
-            self.base_logger, "%s] [%s" % (self.name, credentials.get("address", "-"))
+            self.base_logger, "{}] [{}".format(self.name, credentials.get("address", "-"))
         )
         if self.parent:
             self.profile = self.parent.profile
@@ -187,8 +188,8 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         self.cli_stream = None
         self.mml_stream = None
         self.rtsp_stream = None
-        self._snmp: Optional[SNMP] = None
-        self._http: Optional[HTTP] = None
+        self._snmp: SNMP | None = None
+        self._http: HTTP | None = None
         self.to_disable_pager = not self.parent and self.profile.command_disable_pager
         self.scripts = ScriptsHub(self)
         # Store session id
@@ -221,7 +222,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         if not parent and version and not name.endswith(".get_version"):
             self.logger.debug("Filling get_version cache with %s", version)
             s = name.split(".")
-            self.set_cache("%s.%s.get_version" % (s[0], s[1]), {}, version)
+            self.set_cache(f"{s[0]}.{s[1]}.get_version", {}, version)
         if (
             self.is_beefed
             and not parent
@@ -266,10 +267,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         return self._http
 
     def apply_matchers(self):
-        """
-        Process matchers and apply is_XXX properties
-        :return:
-        """
+        """Process matchers and apply is_XXX properties"""
 
         def get_matchers(c, matchers):
             return {m: match(c, matchers[m]) for m in matchers}
@@ -286,21 +284,17 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
             setattr(self, k, v[k])
 
     def clean_input(self, args):
-        """
-        Cleanup input parameters against interface
-        """
+        """Cleanup input parameters against interface"""
         return self._interface.script_clean_input(self.profile, **args)
 
     def clean_output(self, result):
-        """
-        Clean script result against interface
-        """
+        """Clean script result against interface"""
         return self._interface.script_clean_result(self.profile, result)
 
     def clean_streaming_result(self, result):
         """
-        :param result:
-        :return:
+        Args:
+            result
         """
         if self.streaming.data and isinstance(result, dict):
             result.update(self.streaming.get_data())
@@ -311,9 +305,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         return result
 
     def run(self):
-        """
-        Run script
-        """
+        """Run script"""
         with Span(server="activator", service=self.name, in_label=self.credentials.get("address")):
             self.start_time = perf_counter()
             self.logger.debug("Running. Input arguments: %s, timeout %s", self.args, self.timeout)
@@ -359,8 +351,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
     @classmethod
     def compile_match_filter(cls, *args, **kwargs):
         # pylint: disable=undefined-variable
-        """
-        Compile arguments into version check function
+        """Compile arguments into version check function
         Returns callable accepting self and version hash arguments
         """
         c = [lambda self, x, g=f: g(x) for f in args]
@@ -373,7 +364,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
                 o = "exact"
                 # Check field name
             if f not in ("vendor", "platform", "version", "image"):
-                raise Exception("Invalid field '%s'" % f)
+                raise Exception(f"Invalid field '{f}'")
                 # Compile lookup functions
             if o == "exact":
                 c += [lambda self, x, f=f, v=v: x[f] == v]
@@ -411,30 +402,28 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
                 elif o == "gte":  # >=
                     c += [lambda self, x, v=v: self.profile.cmp_version(x["version"], v) >= 0]
                 else:
-                    raise Exception("Invalid lookup operation: %s" % o)
+                    raise Exception(f"Invalid lookup operation: {o}")
             else:
-                raise Exception("Invalid lookup operation: %s" % o)
+                raise Exception(f"Invalid lookup operation: {o}")
         # Combine expressions into single lambda
         return reduce(
-            lambda x, y: lambda self, v, x=x, y=y: (x(self, v) and y(self, v)),  # pylint: disable=undefined-variable
+            lambda x, y: lambda self, v, x=x, y=y: x(self, v) and y(self, v),  # pylint: disable=undefined-variable
             c,
             lambda self, x: True,
         )
 
     @classmethod
     def match(cls, *args, **kwargs):
-        """
-        execute method decorator
-        """
+        """execute method decorator"""
 
         def wrap(f):
             # Append to the execute chain
             if hasattr(f, "_match"):
                 old_filter = f._match
                 # pylint: disable=undefined-variable
-                f._match = lambda self, v, old_filter=old_filter, new_filter=new_filter: new_filter(
-                    self, v
-                ) or old_filter(self, v)
+                f._match = lambda self, v, old_filter=old_filter, new_filter=new_filter: (
+                    new_filter(self, v) or old_filter(self, v)
+                )
             else:
                 f._match = new_filter
             f._seq = next(cls._x_seq)
@@ -446,16 +435,13 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         return wrap
 
     def match_version(self, *args, **kwargs):
-        """
-        inline version for BaseScript.match
-        """
+        """inline version for BaseScript.match"""
         if not self.version:
             self.version = self.scripts.get_version()
         return self.compile_match_filter(*args, **kwargs)(self, self.version)
 
     def execute(self, **kwargs):
-        """
-        Default script behavior:
+        """Default script behavior:
         Pass through _execute_chain and call appropriate handler
         """
         if self._execute_chain and not self.name.endswith(".get_version"):
@@ -479,13 +465,15 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         )
 
     def call_method(self, cli_handler=None, snmp_handler=None, fallback_handler=None, **kwargs):
-        """
-        Call function depending on access_preference
-        :param cli_handler: String or callable to call on CLI access method
-        :param snmp_handler: String or callable to call on SNMP access method
-        :param fallback_handler: String or callable to call if no access method matched
-        :param kwargs:
-        :return:
+        """Call function depending on access_preference
+
+        Args:
+            cli_handler: String or callable to call on CLI access method
+            snmp_handler: String or callable to call on SNMP access
+                method
+            fallback_handler: String or callable to call if no access
+                method matched
+            **kwargs
         """
         # Select proper handler
         access_preference = self.get_access_preference() + "*"
@@ -502,12 +490,12 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
             elif m == "*":
                 handler = fallback_handler
             else:
-                raise self.NotSupportedError("Invalid access method '%s'" % m)
+                raise self.NotSupportedError(f"Invalid access method '{m}'")
             # Resolve handler when necessary
             if isinstance(handler, str):
                 handler = getattr(self, handler, None)
             if handler is None:
-                self.logger.debug("No '%s' handler. Passing to next method" % m)
+                self.logger.debug(f"No '{m}' handler. Passing to next method")
                 continue
             # Call handler
             try:
@@ -532,44 +520,38 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
                     "Access method '%s' is not implemented. Passing to next method", m
                 )
         raise self.NotSupportedError(
-            "Access preference '%s' is not supported" % access_preference[:-1]
+            f"Access preference '{access_preference[:-1]}' is not supported"
         )
 
     def execute_cli(self, **kwargs):
-        """
-        Process script using CLI
-        :param kwargs:
-        :return:
+        """Process script using CLI
+
+        Args:
+            **kwargs
         """
         raise NotImplementedError("execute_cli() is not implemented")
 
     def execute_snmp(self, **kwargs):
-        """
-        Process script using SNMP
-        :param kwargs:
-        :return:
+        """Process script using SNMP
+
+        Args:
+            **kwargs
         """
         raise NotImplementedError("execute_snmp() is not implemented")
 
     def cleaned_config(self, config):
-        """
-        Clean up config from all unnecessary trash
-        """
+        """Clean up config from all unnecessary trash"""
         return self.profile.cleaned_config(config)
 
     def strip_first_lines(self, text, lines=1):
-        """
-        Strip first *lines*
-        """
+        """Strip first *lines*"""
         t = text.split("\n")
         if len(t) <= lines:
             return ""
         return "\n".join(t[lines:])
 
     def expand_rangelist(self, s):
-        """
-        Expand expressions like "1,2,5-7" to [1, 2, 5, 6, 7]
-        """
+        """Expand expressions like "1,2,5-7" to [1, 2, 5, 6, 7]"""
         result = {}
         for x in s.split(","):
             x = x.strip()
@@ -590,14 +572,14 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
     rx_detect_sep = re.compile(r"^(.*?)\d+$")
 
     def expand_interface_range(self, s):
-        """
-        Convert interface range expression to a list
+        """Convert interface range expression to a list
         of interfaces
         "Gi 1/1-3,Gi 1/7" -> ["Gi 1/1", "Gi 1/2", "Gi 1/3", "Gi 1/7"]
         "1:1-3" -> ["1:1", "1:2", "1:3"]
         "1:1-1:3" -> ["1:1", "1:2", "1:3"]
-        :param s: Comma-separated list
-        :return:
+
+        Args:
+            s: Comma-separated list
         """
         r = set()
         for x in s.split(","):
@@ -629,10 +611,13 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         return sorted(r)
 
     def macs_to_ranges(self, macs):
-        """
-        Converts list of macs to rangea
-        :param macs: Iterable yielding mac addresses
-        :returns: [(from, to), ..]
+        """Converts list of macs to rangea
+
+        Args:
+            macs: Iterable yielding mac addresses
+
+        Returns:
+            [(from, to), ..]
         """
         r = []
         for m in sorted(MAC(x) for x in macs):
@@ -648,7 +633,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
 
     def hexstring_to_mac(self, s):
         """Convert a 6-octet string to MAC address"""
-        return ":".join(["%02X" % ord(x) for x in s])
+        return ":".join([f"{ord(x):02X}" for x in s])
 
     @property
     def root(self):
@@ -676,8 +661,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         return ConfigurationContextManager(self)
 
     def cached(self):
-        """
-        Return cached context managed. All nested CLI and SNMP GET/GETNEXT
+        """Return cached context managed. All nested CLI and SNMP GET/GETNEXT
         calls will be cached.
 
         Usage:
@@ -717,16 +701,13 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
 
     @property
     def motd(self):
-        """
-        Return message of the day
-        """
+        """Return message of the day"""
         if self._motd:
             return self._motd
         return self.get_cli_stream().get_motd()
 
     def re_search(self, rx, s, flags=0):
-        """
-        Match s against regular expression rx using re.search
+        """Match s against regular expression rx using re.search
         Raise UnexpectedResultError if regular expression is not matched.
         Returns match object.
         rx can be string or compiled regular expression
@@ -739,8 +720,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         return match
 
     def re_match(self, rx, s, flags=0):
-        """
-        Match s against regular expression rx using re.match
+        """Match s against regular expression rx using re.match
         Raise UnexpectedResultError if regular expression is not matched.
         Returns match object.
         rx can be string or compiled regular expression
@@ -777,8 +757,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         return None
 
     def find_re(self, iter, s):
-        """
-        Find first matching regular expression
+        """Find first matching regular expression
         or raise Unexpected result error
         """
         for r in iter:
@@ -787,14 +766,16 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         raise UnexpectedResultError()
 
     def hex_to_bin(self, s):
-        """
-        Convert hexadecimal string to boolean string.
+        """Convert hexadecimal string to boolean string.
         All non-hexadecimal characters are ignored
-        :param s: Input string
-        :return: Boolean string
-        :rtype: str
+
+        Args:
+            s: Input string
+
+        Returns:
+            str: Boolean string
         """
-        return "".join(self.hexbin[c] for c in "".join("%02x" % ord(d) for d in s))
+        return "".join(self.hexbin[c] for c in "".join(f"{ord(d):02x}" for d in s))
 
     def push_prompt_pattern(self, pattern):
         self.get_cli_stream().push_prompt_pattern(pattern)
@@ -803,9 +784,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         self.get_cli_stream().pop_prompt_pattern()
 
     def has_oid(self, oid):
-        """
-        Check object responses to oid
-        """
+        """Check object responses to oid"""
         try:
             return bool(self.snmp.get(oid))
         except self.snmp.TimeOutError:
@@ -817,37 +796,39 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
     def cli(
         self,
         cmd: str,
-        command_submit: Optional[bytes] = None,
+        command_submit: bytes | None = None,
         bulk_lines: Any = None,
         list_re: Any = None,
         cached: bool = False,
-        file: Optional[str] = None,
+        file: str | None = None,
         ignore_errors: Any = False,
         allow_empty_response: Any = True,
         nowait: Any = False,
         obj_parser: Any = None,
         cmd_next: Any = None,
         cmd_stop: Any = None,
-        labels: Optional[Union[str, Set[str]]] = None,
+        labels: str | set[str] | None = None,
     ) -> str:
-        """
-        Execute CLI command and return result. Initiate cli session
+        """Execute CLI command and return result. Initiate cli session
         when necessary.
 
         if list_re is None, return a string
         if list_re is regular expression object, return a list of dicts (group name -> value),
             one dict per matched line
 
-        :param cmd: CLI command to execute
-        :param command_submit: Optional suffix to submit command. Profile's one used by default
-        :param bulk_lines:
-        :param list_re:
-        :param cached: True if result of execution may be cached
-        :param file: Path to the file containing debugging result
-        :param ignore_errors:
-        :param allow_empty_response: Allow empty output. If False - ignore prompt and wait output
-        :param nowait:
-        :param labels:
+        Args:
+            cmd: CLI command to execute
+            command_submit: Optional suffix to submit command. Profile's
+                one used by default
+            bulk_lines
+            list_re
+            cached: True if result of execution may be cached
+            file: Path to the file containing debugging result
+            ignore_errors
+            allow_empty_response: Allow empty output. If False - ignore
+                prompt and wait output
+            nowait
+            labels
         """
 
         def format_result(result):
@@ -907,12 +888,11 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         return format_result(r)
 
     def echo_cancelation(self, r: str, cmd: str) -> str:
-        """
-        Adaptive echo cancelation
+        """Adaptive echo cancelation
 
-        :param r:
-        :param cmd:
-        :return:
+        Args:
+            r
+            cmd
         """
         if r[:4096].lstrip().startswith(cmd):
             r = r.lstrip()
@@ -979,11 +959,11 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
             self._snmp = None
 
     def mml(self, cmd, **kwargs):
-        """
-        Execute MML command and return result. Initiate MML session when necessary
-        :param cmd:
-        :param kwargs:
-        :return:
+        """Execute MML command and return result. Initiate MML session when necessary
+
+        Args:
+            cmd
+            **kwargs
         """
         stream = self.get_mml_stream()
         return stream.execute(cmd, **kwargs)
@@ -1021,12 +1001,12 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
             self.cli_stream = None
 
     def rtsp(self, method, path, **kwargs):
-        """
-        Execute RTSP command and return result. Initiate RTSP session when necessary
-        :param method:
-        :param path:
-        :param kwargs:
-        :return:
+        """Execute RTSP command and return result. Initiate RTSP session when necessary
+
+        Args:
+            method
+            path
+            **kwargs
         """
         stream = self.get_rtsp_stream()
         return stream.execute(path, method, **kwargs)
@@ -1071,10 +1051,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
 
     @classmethod
     def close_session(cls, session_id):
-        """
-        Explicit session closing
-        :return:
-        """
+        """Explicit session closing"""
         cls.cli_session_store.remove(session_id, shutdown=True)
         cls.mml_session_store.remove(session_id, shutdown=True)
         cls.rtsp_session_store.remove(session_id, shutdown=True)
@@ -1087,10 +1064,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         return r
 
     def get_always_preferred(self):
-        """
-        Return always preferred access method
-        :return:
-        """
+        """Return always preferred access method"""
         return self.always_prefer
 
     def has_cli_access(self):
@@ -1106,9 +1080,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         return not self.has_cli_access() and self.has_snmp_access()
 
     def has_snmp(self) -> bool:
-        """
-        Check whether equipment has SNMP enabled
-        """
+        """Check whether equipment has SNMP enabled"""
         # Check Credential
         snmp_version = self.credentials.get("snmp_version") or "v2c"
         if snmp_version != "v3" and not self.credentials.get("snmp_ro"):
@@ -1133,9 +1105,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         return self.has_capability("SNMP | v3")
 
     def has_snmp_bulk(self):
-        """
-        Check whether equipment supports SNMP BULK
-        """
+        """Check whether equipment supports SNMP BULK"""
         return self.has_capability("SNMP | Bulk")
 
     def get_snmp_bulk_repetition(self):
@@ -1144,27 +1114,23 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         return self.capabilities.get("SNMP | Bulk | Max Repetition")
 
     def has_capability(self, capability, allow_zero=False):
-        """
-        Check whether equipment supports capability
-        """
+        """Check whether equipment supports capability"""
         if allow_zero:
             return self.capabilities.get(capability) is not None
         return bool(self.capabilities.get(capability))
 
     def ignored_exceptions(self, iterable):
-        """
-        Context manager to silently ignore specified exceptions
-        """
+        """Context manager to silently ignore specified exceptions"""
         return IgnoredExceptionsContextManager(iterable)
 
     def iter_pairs(self, g, offset=0):
-        """
-        Convert iterable g to a pairs
+        """Convert iterable g to a pairs
         i.e.
         [1, 2, 3, 4] -> [(1, 2), (3, 4)]
-        :param g: Iterable
-        :param offset: Skip first recirds
-        :return:
+
+        Args:
+            g: Iterable
+            offset: Skip first recirds
         """
         g = iter(g)
         if offset:
@@ -1202,10 +1168,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         self.logger.debug("PUSH SNMP %s: %r", oid, tlv)
 
     def iter_cli_tracking(self):
-        """
-        Yields command, packets for collected data
-        :return:
-        """
+        """Yields command, packets for collected data"""
         for cmd in self.cli_tracked_data:
             self.logger.debug("Collecting %d tracked CLI items", len(self.cli_tracked_data[cmd]))
             yield cmd, self.cli_tracked_data[cmd]
@@ -1216,10 +1179,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
             yield state, self.cli_fsm_tracked_data[state]
 
     def request_beef(self):
-        """
-        Download and return beef
-        :return:
-        """
+        """Download and return beef"""
         if not hasattr(self, "_beef"):
             self.logger.debug("Requesting beef")
             beef_storage_url = self.credentials.get("beef_storage_url")
@@ -1236,7 +1196,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
 
             try:
                 beef = Beef.load(beef_storage_url, beef_path)
-            except IOError as e:
+            except OSError as e:
                 self.logger.error("Beef load error: %s", e)
                 return None
             self._beef = beef
@@ -1246,7 +1206,7 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
     def is_beefed(self):
         return self.credentials.get("cli_protocol") == "beef"
 
-    def get_labels(self) -> Set[str]:
+    def get_labels(self) -> set[str]:
         return self.labels
 
     def add_label(self, label: str) -> None:
@@ -1259,10 +1219,10 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
             self.logger.warning("Can't remove a label '%s' from labels", label)
 
     def apply_metrics(self, d):
-        """
-        Apply metrics value to dictionary d
-        :param d: Dictionary
-        :return:
+        """Apply metrics value to dictionary d
+
+        Args:
+            d: Dictionary
         """
         for k, v in self.script_metrics.items():
             if isinstance(v, AtomicLong):
@@ -1271,14 +1231,13 @@ class BaseScript(object, metaclass=BaseScriptMetaclass):
         return d
 
 
-class ScriptsHub(object):
-    """
-    Object representing Script.scripts structure.
+class ScriptsHub:
+    """Object representing Script.scripts structure.
     Returns initialized child script which can be used ans callable
     """
 
-    class _CallWrapper(object):
-        def __init__(self, script_class, parent):
+    class _CallWrapper:
+        def __init__(self, script_class, parent) -> None:
             self.parent = parent
             self.script_class = script_class
 
@@ -1293,7 +1252,7 @@ class ScriptsHub(object):
                 timeout=self.parent.timeout,
             ).run()
 
-    def __init__(self, script):
+    def __init__(self, script) -> None:
         self._script = script
 
     def __getattr__(self, item):
@@ -1301,24 +1260,22 @@ class ScriptsHub(object):
             return self.__dict__[item]
         from .loader import loader as script_loader
 
-        sc = script_loader.get_script("%s.%s" % (self._script.profile.name, item))
+        sc = script_loader.get_script(f"{self._script.profile.name}.{item}")
         if sc:
             return self._CallWrapper(sc, self._script)
         raise AttributeError(item)
 
     def __contains__(self, item):
-        """
-        Check object has script name
-        """
+        """Check object has script name"""
         from .loader import loader as script_loader
 
         if "." not in item:
             # Normalize to full name
-            item = "%s.%s" % (self._script.profile.name, item)
+            item = f"{self._script.profile.name}.{item}"
         return script_loader.has_script(item)
 
 
-class PartialResult(object):
+class PartialResult:
     __slots__ = ["result"]
 
     def __int__(self, **kwargs):

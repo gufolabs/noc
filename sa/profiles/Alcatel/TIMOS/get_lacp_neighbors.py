@@ -23,7 +23,7 @@ class Script(BaseScript):
         r = []
         for lag in self.scripts.get_portchannel():
             try:
-                v = self.cli("show %s lacp-partner" % lag["interface"].replace("-", " "))
+                v = self.cli("show {} lacp-partner".format(lag["interface"].replace("-", " ")))
             except self.CLISyntaxError:
                 raise self.NotSupportedError()
 

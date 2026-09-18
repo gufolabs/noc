@@ -7,7 +7,6 @@
 
 # Python modules
 import logging
-from typing import Optional, Tuple, Type
 
 # NOC modules
 from noc.inv.models.biosegtrial import BioSegTrial
@@ -33,7 +32,6 @@ def moderate_trial(trial: BioSegTrial) -> None:
     """
     Moderate single trial
 
-    :param trial:
     :return:
     """
     # Get objects when necessary
@@ -55,7 +53,7 @@ def moderate_trial(trial: BioSegTrial) -> None:
     attacker = NetworkSegment.get_by_id(trial.attacker_id)
     if attacker_object and (not attacker or attacker.id != attacker_object.segment.id):
         attacker = attacker_object.segment
-        logger.info("Attacker has been changed to %s" % attacker.name)
+        logger.info(f"Attacker has been changed to {attacker.name}")
     if not attacker:
         logger.info("Attacker is not found")
         trial.set_error("Attacker is not found", fatal=True)
@@ -63,7 +61,7 @@ def moderate_trial(trial: BioSegTrial) -> None:
     target = NetworkSegment.get_by_id(trial.target_id)
     if target_object and (not target or target.id != target_object.segment.id):
         target = target_object.segment
-        logger.info("Target has been changed to %s" % target.name)
+        logger.info(f"Target has been changed to {target.name}")
     if not target:
         logger.info("Target is not found")
         trial.set_error("Target is not found", fatal=True)
@@ -106,16 +104,12 @@ def moderate_trial(trial: BioSegTrial) -> None:
 def moderate(
     attacker: NetworkSegment,
     target: NetworkSegment,
-    attacker_object: Optional[ManagedObject] = None,
-    target_object: Optional[ManagedObject] = None,
-) -> Tuple[Optional[str], Optional[str], bool]:
+    attacker_object: ManagedObject | None = None,
+    target_object: ManagedObject | None = None,
+) -> tuple[str | None, str | None, bool]:
     """
     Perform trial moderation
 
-    :param attacker:
-    :param target:
-    :param attacker_object:
-    :param target_object:
     :return: outcome, error, fatal
     """
     attacker_c_policy = get_collision_policy(
@@ -129,7 +123,7 @@ def moderate(
     attacker_policy = loader.get_class(attacker_c_policy.policy)
     if not attacker_policy:
         return None, "Cannot determine attacker policy", True
-    logger.info("Attacker policy is %s" % attacker_policy.name)
+    logger.info(f"Attacker policy is {attacker_policy.name}")
     target_c_policy = get_collision_policy(
         target,
         attacker.profile.is_persistent,
@@ -141,13 +135,13 @@ def moderate(
     target_policy = loader.get_class(target_c_policy.policy)
     if not target_policy:
         return None, "Cannot determine target policy", False
-    logger.info("Target policy is %s" % target_policy.name)
+    logger.info(f"Target policy is {target_policy.name}")
     # Calculate effective policy
     effective_policy_name = target_policy.get_effective_policy_name(target, attacker_policy.name)
     effective_policy = loader.get_class(effective_policy_name)
     if not effective_policy:
-        return None, "Unknown policy '%s'" % effective_policy_name, False
-    logger.info("Effective policy is %s" % effective_policy.name)
+        return None, f"Unknown policy '{effective_policy_name}'", False
+    logger.info(f"Effective policy is {effective_policy.name}")
     # Get settings
     if effective_policy_name == attacker_c_policy.policy:
         cp, power_funcs = attacker_c_policy.calcified_profile, attacker_c_policy.power_function
@@ -168,9 +162,9 @@ def moderate(
 def get_collision_policy(
     seg: NetworkSegment,
     is_persistent: bool,
-    attacker_object: Optional[ManagedObject] = None,
-    target_object: Optional[ManagedObject] = None,
-) -> Optional[Type[BioCollisionPolicy]]:
+    attacker_object: ManagedObject | None = None,
+    target_object: ManagedObject | None = None,
+) -> type[BioCollisionPolicy] | None:
     attacker_level = attacker_object.object_profile.level if attacker_object else None
     target_level = target_object.object_profile.level if target_object else None
     for cp in seg.profile.bio_collision_policy:

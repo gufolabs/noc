@@ -9,14 +9,13 @@
 # Python modules
 from time import perf_counter
 import asyncio
-from typing import AsyncIterable, List
+from typing import AsyncIterable
 
 # Third-party modules
-from typing import Dict
 
 # NOC modules
 from noc.core.service.fastapi import FastAPIService
-from noc.core.http.async_client import HttpClient, DEFLATE, GZIP
+from noc.core.http.aio import HttpClient, DEFLATE, GZIP
 from noc.config import config
 from noc.core.perf import metrics
 from noc.services.chwriter.channel import Channel
@@ -29,9 +28,9 @@ class CHWriterService(FastAPIService):
 
     CH_SUSPEND_ERRORS = {598, 599}
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
-        self.channels: Dict[str, Channel] = {}
+        self.channels: dict[str, Channel] = {}
         self.last_ts = None
         self.last_metrics = 0
         self.table_fields = {}  # table name -> fields
@@ -49,7 +48,7 @@ class CHWriterService(FastAPIService):
         # Queue of channels to flush
         self.flush_queue = asyncio.Queue()
 
-    async def on_activate(self):
+    async def on_activate(self) -> None:
         report_callback = PeriodicCallback(self.report, 10000)
         report_callback.start()
         check_callback = PeriodicCallback(self.check_channels, config.chwriter.batch_delay_ms)
@@ -106,7 +105,7 @@ class CHWriterService(FastAPIService):
             ):
                 await channel.feed(msg)
 
-    async def process_stream_bulk(self, streams: List[str]) -> None:
+    async def process_stream_bulk(self, streams: list[str]) -> None:
         self.logger.info("[%s] Subscribing", streams)
         for stream in streams:
             table = stream[3:]
@@ -226,7 +225,3 @@ class CHWriterService(FastAPIService):
         self.stopping = True
         # .stop() will wait until queued data will be really published
         super().stop()
-
-
-if __name__ == "__main__":
-    CHWriterService().start()

@@ -12,7 +12,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("sa", "0005_activator")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         mdb = self.mongo_db
         mdb.noc.pools.insert_one({"name": "default", "description": "default"})
         for a_id, name in self.db.execute("SELECT id, name FROM sa_activator"):

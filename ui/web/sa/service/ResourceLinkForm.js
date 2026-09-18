@@ -135,7 +135,7 @@ Ext.define("NOC.sa.service.ResourceLinkForm", {
     this.request(url, params, method);
   },
   request: function(url, params, method){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "PUT",
       jsonData: params,

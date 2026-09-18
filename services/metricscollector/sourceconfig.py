@@ -7,26 +7,27 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Tuple, Optional, Iterable, List
+from typing import Iterable
 
 # NOC Modules
+from noc.core.checkers.base import CheckResult, NODATA
 from noc.config import config
 
 
 @dataclass
-class RemoteSystemConfig(object):
+class RemoteSystemConfig:
     id: str
     name: str
     bi_id: int
-    api_key: Optional[str] = None
-    code: Optional[str] = None
+    api_key: str | None = None
+    code: str | None = None
     is_banned: bool = False
     enable_event: bool = True
     enable_metrics: bool = True
     policy: str = "E"
     batch_signal: str = "A"
-    batch_size: Optional[int] = 50000
-    batch_delay_s: Optional[int] = 10
+    batch_size: int | None = 50000
+    batch_delay_s: int | None = 10
 
     @classmethod
     def from_data(cls, data) -> "RemoteSystemConfig":
@@ -46,15 +47,15 @@ class RemoteSystemConfig(object):
 
 
 @dataclass(eq=True, frozen=True)
-class SensorConfig(object):
+class SensorConfig:
     name: str
     bi_id: int
     units: str = "1"
-    managed_object: Optional[int] = None
-    hints: Optional[Tuple[str, ...]] = None
+    managed_object: int | None = None
+    hints: tuple[str, ...] | None = None
 
     @classmethod
-    def from_data(cls, data, managed_object: Optional[int] = None) -> "SensorConfig":
+    def from_data(cls, data, managed_object: int | None = None) -> "SensorConfig":
         return SensorConfig(
             name=data["name"],
             bi_id=data["bi_id"],
@@ -67,24 +68,25 @@ class SensorConfig(object):
     def id(self):
         return str(self.bi_id)
 
-    def get_mappings(self) -> List[str]:
+    def get_mappings(self) -> list[str]:
         return self.hints or []
 
 
 @dataclass(eq=True, frozen=True)
-class SourceConfig(object):
+class SourceConfig:
     id: str
     name: str
     bi_id: int
     address: str
     fm_pool: str
     api_key: str
-    managed_object: Optional[int] = None
+    managed_object: int | None = None
     enable_metrics: bool = False
     enable_fmevent: bool = False
     no_data_check: bool = False
-    mapping_refs: Optional[Tuple[str, ...]] = None
-    sensors: Optional[Tuple[str, ...]] = None
+    mapping_refs: tuple[str, ...] | None = None
+    sensors: tuple[str, ...] | None = None
+    services: tuple[int, ...] | None = None
 
     @classmethod
     def from_data(cls, data) -> "SourceConfig":
@@ -111,6 +113,7 @@ class SourceConfig(object):
             managed_object=mo,
             mapping_refs=tuple(mappings),
             sensors=tuple(sensors),
+            services=tuple(int(svc) for svc in data.get("services", [])),
         )
 
     def is_diff(self, cfg: "SourceConfig") -> bool:
@@ -122,3 +125,14 @@ class SourceConfig(object):
         if not self.mapping_refs:
             return []
         return self.mapping_refs
+
+    def get_checks(self):
+        """Getting checks"""
+        return [
+            CheckResult(
+                check=NODATA,
+                status=True,
+                ttl=config.metricscollector.target_check_ttl,
+                args={"arg0": "metricscollector", "collector": "metricscollector"},
+            )
+        ]

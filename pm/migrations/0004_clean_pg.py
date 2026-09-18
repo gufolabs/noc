@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.execute(SP_DROP)
         # Deleting ManyToMany field
         self.db.delete_table("pm_chart_time_series")

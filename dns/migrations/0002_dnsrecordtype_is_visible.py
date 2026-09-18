@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         self.db.add_column(
             "dns_dnszonerecordtype", "is_visible", models.BooleanField("Is Visible?", default=True)
         )

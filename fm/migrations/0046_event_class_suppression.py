@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Set
 
 # Third-party modules
 from pymongo import UpdateOne
@@ -16,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         batch = []
         coll = self.mongo_db["noc.eventclasses"]
         coll.update_many({}, {"$set": {"suppression_window": 0}})
@@ -28,7 +27,7 @@ class Migration(BaseMigration):
             if not rs:
                 continue
             # Get suppress vars key
-            suppress_vars: Set[str] = set()
+            suppress_vars: set[str] = set()
             for k in rs[0]["match_condition"]:
                 if k.startswith("vars__"):
                     suppress_vars.add(k[6:])

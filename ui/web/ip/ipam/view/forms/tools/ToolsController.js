@@ -17,7 +17,7 @@ Ext.define("NOC.ip.ipam.view.forms.tools.ToolsController", {
   onDownload: function(){
     var prefix = this.getViewModel().get("prefix");
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/ip/tools/" + prefix.vrf + "/" + prefix.afi + "/" + prefix.name + "/download_ip/",
       method: "POST",
       success: function(response){
@@ -41,7 +41,7 @@ Ext.define("NOC.ip.ipam.view.forms.tools.ToolsController", {
     Ext.apply(data);
 
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/ip/tools/" + prefix.vrf + "/" + prefix.afi + "/" + prefix.name + "/upload_axfr/",
       method: "POST",
       jsonData: data,

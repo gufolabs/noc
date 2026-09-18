@@ -88,7 +88,7 @@ class Calculator(BaseCalculator):
 
     def escape(self, s):
         """Escape result"""
-        return mark_safe("<pre>%s</pre>" % s)
+        return mark_safe(f"<pre>{s}</pre>")
 
     def calculate_ios_policy(self, value, v):
         """Calculate IOS policy"""
@@ -125,4 +125,4 @@ class Calculator(BaseCalculator):
     def calculate(self, value, Tc, calculation):
         """Calculator"""
         v = int(value * Tc / 8)
-        return getattr(self, "calculate_%s" % calculation)(value, v)
+        return getattr(self, f"calculate_{calculation}")(value, v)

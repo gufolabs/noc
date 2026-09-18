@@ -11,13 +11,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class BaseAuthBackend(object):
+class BaseAuthBackend:
     class LoginError(Exception):
         pass
 
     _methods = {}
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = logger
 
     def authenticate(self, **kwargs) -> str:

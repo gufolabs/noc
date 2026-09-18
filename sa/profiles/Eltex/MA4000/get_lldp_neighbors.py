@@ -51,7 +51,7 @@ class Script(BaseScript):
         r = []
         t = parse_table(self.cli("show lldp neighbor"), allow_wrap=True)
         for i in t:
-            c = self.cli("show lldp neighbor %s" % i[0])
+            c = self.cli(f"show lldp neighbor {i[0]}")
             match = self.rx_neighbor.search(c)
             chassis_id = match.group("chassis_id")
             if is_ipv4(chassis_id) or is_ipv6(chassis_id):

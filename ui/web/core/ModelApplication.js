@@ -406,6 +406,11 @@ Ext.define("NOC.core.ModelApplication", {
         xtype: "Ext.panel.Panel",
       };
       Ext.apply(config, me.preview);
+      // urlSuffix lets the preview state be reflected in / restored from the
+      // URL as "<appId>/<id>/preview" (apps may override via me.preview).
+      if(!config.urlSuffix){
+        config.urlSuffix = "preview";
+      }
       me.ITEM_PREVIEW = me.registerItem(
         Ext.create(config.xtype, config),
       );
@@ -626,6 +631,7 @@ Ext.define("NOC.core.ModelApplication", {
       for(const inline of me.inlines){
         var istore = Ext.create("NOC.core.InlineModelStore", {
             model: inline.model,
+            pageSize: 0,
           }),
           gp = {
             xtype: "inlinegrid",
@@ -769,6 +775,7 @@ Ext.define("NOC.core.ModelApplication", {
       item = me.showItem(me.ITEM_PREVIEW);
     if(item !== undefined){
       item.preview(record, me.ITEM_GRID);
+      me.reflectItemInUrl(item, record);
     }
   },
   // Save changed data
@@ -809,7 +816,7 @@ Ext.define("NOC.core.ModelApplication", {
             });
     me.mask("Saving ...");
     // Save data
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.base_url + (me.currentRecord ? result[me.idField] + "/" : ""),
       method: me.currentRecord ? "PUT" : "POST",
       scope: me,
@@ -883,7 +890,7 @@ Ext.define("NOC.core.ModelApplication", {
     if(!me.hasPermission("read") && !me.hasPermission("update"))
       return;
     if(me.recordReload){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: me.base_url + record.get(me.idField) + "/",
         method: "GET",
         scope: me,
@@ -997,7 +1004,7 @@ Ext.define("NOC.core.ModelApplication", {
   deleteRecord: function(){
     var me = this,
       pollProgress = function(url){
-        Ext.Ajax.request({
+        NOC.api.requestLegacy({
           url: url,
           method: "GET",
           scope: me,
@@ -1037,7 +1044,7 @@ Ext.define("NOC.core.ModelApplication", {
       };
     if(me.currentRecord){
       me.mask("Deleting ...");
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: me.base_url + me.currentRecord.get(me.idField) + "/",
         method: "DELETE",
         scope: me,
@@ -1068,7 +1075,7 @@ Ext.define("NOC.core.ModelApplication", {
   },
   saveFilterToUrl: function(filter){
     var params = Ext.Object.toQueryString(filter, true)
-      , currentHash = Ext.History.getHash()
+      , currentHash = NOC.navigation.getToken()
       , index = currentHash.indexOf("?")
       , app;
     if(index === -1){
@@ -1077,9 +1084,9 @@ Ext.define("NOC.core.ModelApplication", {
       app = currentHash.substr(0, index);
     }
     if(params){
-      Ext.History.add(app + "?" + params);
+      NOC.navigation.navigate(app + "?" + params);
     } else{
-      Ext.History.add(app);
+      NOC.navigation.navigate(app);
     }
   },
   // Filter
@@ -1255,14 +1262,13 @@ Ext.define("NOC.core.ModelApplication", {
   },
   //
   showOpError: function(action, op, status){
-    var text = Ext.String.format("Failed to {0}", action);
+    var text = `Failed to ${action}`;
     if(status){
       var m = status.message;
       if(status.status === 400){
         m = status.traceback;
       }
-      text = Ext.String.format("Failed to {0}!<br>{1}",
-                               action, m);
+      text = `Failed to ${action}!<br>${m}`;
     }
     NOC.error(text);
   },
@@ -1326,7 +1332,7 @@ Ext.define("NOC.core.ModelApplication", {
       action = r.get("fav_status") ? "reset" : "set",
       url = me.base_url + "favorites/item/" + id + "/" + action + "/";
 
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "POST",
       scope: me,
@@ -1390,7 +1396,7 @@ Ext.define("NOC.core.ModelApplication", {
   //
   runAction: function(action, params){
     var me = this;
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: me.base_url + "actions/" + action.itemId + "/",
       method: "POST",
       scope: me,
@@ -1406,7 +1412,7 @@ Ext.define("NOC.core.ModelApplication", {
             autoScroll: true,
             layout: "fit",
             maximizable: true,
-            title: Ext.String.format("Result: {0}", action.text),
+            title: `Result: ${action.text}`,
           }).show();
         } else{
           NOC.info(r);
@@ -1429,9 +1435,7 @@ Ext.define("NOC.core.ModelApplication", {
           xtype: "form",
           items: action.form,
         }],
-        title: Ext.String.format("{0} on {1} records",
-                                 action.text,
-                                 records.length),
+        title: `${action.text} on ${records.length} records`,
         buttons: [{
           text: __("Run"),
           glyph: NOC.glyph.play,
@@ -1480,6 +1484,27 @@ Ext.define("NOC.core.ModelApplication", {
     });
   },
   //
+  // Apply a history token (back/forward or deep-link). Empty token => grid
+  // (re-applying the filter from the URL query, if any).
+  applyHistory: function(args){
+    var me = this;
+    if(!args || args.length === 0){
+      me.showGrid();
+      var token = NOC.navigation.getToken();
+      if(token.indexOf("?") !== -1){
+        // Filter state in the URL: restore it. Covers both ModelApplication's
+        // native filter (filterSetters) and an optional NOC.Filter panel.
+        me.restoreFilter(token);
+        me.restoreFilterFromUrl();
+        if(Ext.isFunction(me.reloadStore)){
+          me.reloadStore();
+        }
+      }
+      return;
+    }
+    me.restoreHistory(args);
+  },
+  //
   restoreHistory: function(args){
     var me = this;
     if(args.length === 1){
@@ -1491,9 +1516,21 @@ Ext.define("NOC.core.ModelApplication", {
       var panelIndex = this.getRegisteredItemByUrl(args[1]);
       if(panelIndex !== -1){
         var panel = this.getRegisteredItem(panelIndex);
-        this.currentHistoryHash = Ext.History.getHash();
-        this.showItem(panelIndex);
-        panel.load(this.appId, args[0], "ITEM_GRID");
+        this.currentHistoryHash = NOC.navigation.getToken();
+        if(Ext.isFunction(panel.load)){
+          // Panels that load themselves by id (e.g. sa.service subscription /
+          // instances panels).
+          this.showItem(panelIndex);
+          panel.load(this.appId, args[0], "ITEM_GRID");
+        } else if(Ext.isFunction(panel.preview)){
+          // Generic preview-style panels: fetch the record, then preview it.
+          this.loadById(args[0], function(record){
+            me.showItem(panelIndex);
+            panel.preview(record, me.ITEM_GRID);
+          });
+        } else{
+          this.showItem(panelIndex);
+        }
       }
     }
   },
@@ -1918,7 +1955,7 @@ Ext.define("NOC.core.ModelApplication", {
     });
     if(!Ext.Object.isEmpty(values)){
       values.ids = me.groupEditItems;
-      var message = Ext.String.format("Do you wish to change {0} record(s): <br/><br/>{1}<br/>This operation cannot be undone!", values.ids.length, valuesTxt);
+      var message = `Do you wish to change ${values.ids.length} record(s): <br/><br/>${valuesTxt}<br/>This operation cannot be undone!`;
       Ext.Msg.show({
         title: __("Change records?"),
         msg: message,
@@ -1927,7 +1964,7 @@ Ext.define("NOC.core.ModelApplication", {
         modal: true,
         fn: function(button){
           if(button === "yes"){
-            Ext.Ajax.request({
+            NOC.api.requestLegacy({
               url: me.base_url + "actions/group_edit/",
               method: "POST",
               scope: me,
@@ -1990,7 +2027,7 @@ Ext.define("NOC.core.ModelApplication", {
       currentFilter = me.currentQuery[me.levelFilter.filter];
 
     if(currentFilter){
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         method: "GET",
         url: filter.tree.restUrl + "/" + currentFilter + "/get_path/",
         scope: me,

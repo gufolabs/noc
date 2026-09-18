@@ -1,9 +1,12 @@
 # ---------------------------------------------------------------------
 # Link management CLI interface
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
+
+# Python modules
+import argparse
 
 # NOC modules
 from noc.core.management.base import BaseCommand
@@ -15,7 +18,7 @@ from noc.inv.models.protocol import ProtocolVariant
 class Command(BaseCommand):
     help = "Verify models"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "-r",
             "--rebuild",
@@ -62,19 +65,18 @@ class Command(BaseCommand):
                 if check:
                     check(c)
             if self.errors:
-                self.stdout.write("%s errors:\n" % m.name)
+                self.stdout.write(f"{m.name} errors:\n")
                 for e in self.errors:
-                    self.stdout.write("    %s\n" % e)
+                    self.stdout.write(f"    {e}\n")
 
     def e(self, connection, msg):
-        self.errors += ["%s: %s" % (connection.name, msg)]
+        self.errors += [f"{connection.name}: {msg}"]
 
     def common_check(self, c):
         if c.gender not in c.type.genders:
             self.e(
                 c,
-                "Invalid gender '%s' for connection type '%s' (Must me one of '%s')"
-                % (c.gender, c.type.name, c.type.genders),
+                f"Invalid gender '{c.gender}' for connection type '{c.type.name}' (Must me one of '{c.type.genders}')",
             )
 
     def check_protocols(self, c, protocols):
@@ -84,14 +86,15 @@ class Command(BaseCommand):
                     return
         self.e(
             c,
-            'Has "%s", but must have one of protocols: %s'
-            % (", ".join(str(p) for p in c.protocols), ", ".join(str(p) for p in protocols)),
+            'Has "{}", but must have one of protocols: {}'.format(
+                ", ".join(str(p) for p in c.protocols), ", ".join(str(p) for p in protocols)
+            ),
         )
 
     def check_direction(self, c, directions):
         if (c.direction) and (c.direction in directions):
             return
-        self.e(c, "'%s' must have direction %s (has '%s')" % (c.type.name, directions, c.direction))
+        self.e(c, f"'{c.type.name}' must have direction {directions} (has '{c.direction}')")
 
     def check_ct_db9(self, c):
         self.check_direction(c, ["s"])
@@ -304,7 +307,3 @@ class Command(BaseCommand):
     def check_ct_cfp(self, c):
         self.check_direction(c, ["i", "o"])
         self.check_protocols(c, ["TransEth40G", "TransEth100G"])
-
-
-if __name__ == "__main__":
-    Command().run()

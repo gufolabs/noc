@@ -1,12 +1,13 @@
 # ---------------------------------------------------------------------
 # Action Base Class
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import TypeVar, Optional, Callable, Any
+from typing import TypeVar, Callable, Any, cast
+import enum
 from logging import Logger
 from inspect import signature
 
@@ -18,13 +19,25 @@ REQ = TypeVar("REQ")
 RESP = TypeVar("RESP")
 
 
+class ActionResultCode(enum.Enum):
+    OK = "OK"
+    PARTIAL = "PARTIAL"
+    FAIL = "FAIL"
+    UNEXPECTED = "UNEXPECTED"
+
+
 class ActionError(NOCError):
     pass
 
 
 class ActionMetaclass(type):
-    def __new__(mcs, name, bases, attrs):
-        m = type.__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[ActionMetaclass]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["BaseAction"]:
+        m = cast(type["BaseAction"], type.__new__(mcs, name, bases, attrs))
         # Get inputs
         m.inputs = {}
         m.clean = {}
@@ -34,7 +47,7 @@ class ActionMetaclass(type):
                 continue
             m.inputs[param.name] = (
                 not (param.default is param.empty)
-                or param.annotation == Optional[str]
+                or param.annotation == str | None
                 or param.annotation == str | None
             )
             if param.annotation == int:
@@ -44,7 +57,7 @@ class ActionMetaclass(type):
         return m
 
 
-class BaseAction(object, metaclass=ActionMetaclass):
+class BaseAction(metaclass=ActionMetaclass):
     """
     Base class for actions.
 
@@ -58,7 +71,7 @@ class BaseAction(object, metaclass=ActionMetaclass):
     inputs: dict[str, bool]  # Set by metaclass
     clean: dict[str, Callable[[Any], Any]]  # Set by metaclass
 
-    def __init__(self, env: Environment, logger: Logger):
+    def __init__(self, env: Environment, logger: Logger) -> None:
         self.env = env
         self.logger = logger
 

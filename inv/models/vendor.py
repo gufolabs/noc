@@ -7,7 +7,7 @@
 
 # Python modules
 import threading
-from typing import Optional, Union
+from typing import Optional
 import operator
 import uuid
 from pathlib import Path
@@ -76,7 +76,7 @@ class Vendor(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["Vendor"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["Vendor"]:
         return Vendor.objects.filter(id=oid).first()
 
     @classmethod
@@ -88,7 +88,6 @@ class Vendor(Document):
     def _get_by_code(cls, code):
         """
         Uncached version of get_by_code
-        :param code:
         :return:
         """
         code = code.upper()
@@ -138,7 +137,6 @@ class Vendor(Document):
     def ensure_vendor(cls, code):
         """
         Get or create vendor by code
-        :param code:
         :return:
         """
         # Try to get cached version

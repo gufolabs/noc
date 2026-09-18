@@ -44,7 +44,7 @@ Ext.define("NOC.kb.kbentry.HistoryPanel", {
     var me = this;
     me.callParent(arguments);
     me.setTitle(record.get("subject") + " - " + __("history"));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/kb/kbentry/" + record.get("id") + "/history/",
       method: "GET",
       scope: me,

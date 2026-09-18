@@ -15,20 +15,20 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     d_types = ["vlan"]
 
-    def migrate(self):
+    def migrate(self) -> None:
         for d in self.d_types:
             self.db.add_column(
                 "sa_managedobjectprofile",
-                "enable_%s_discovery" % d,
+                f"enable_{d}_discovery",
                 models.BooleanField("", default=False),
             )
             self.db.add_column(
                 "sa_managedobjectprofile",
-                "%s_discovery_min_interval" % d,
+                f"{d}_discovery_min_interval",
                 models.IntegerField("", default=600),
             )
             self.db.add_column(
                 "sa_managedobjectprofile",
-                "%s_discovery_max_interval" % d,
+                f"{d}_discovery_max_interval",
                 models.IntegerField("", default=86400),
             )

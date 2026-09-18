@@ -7,7 +7,6 @@
 
 # Python modules
 import logging
-from typing import Optional, List, Dict
 from django.db import connection
 
 # NOC modules
@@ -18,7 +17,7 @@ from noc.sa.models.managedobject import ManagedObject
 from noc.core.topology.uplink import update_uplinks
 
 
-class BaseBioSegPolicy(object):
+class BaseBioSegPolicy:
     name: str = None
 
     # Persistent target. Effective attacker's policy map
@@ -30,16 +29,16 @@ class BaseBioSegPolicy(object):
         self,
         attacker: NetworkSegment,
         target: NetworkSegment,
-        logger: Optional[logging.Logger] = None,
-        calcified_profile: Optional[NetworkSegmentProfile] = None,
-        segment_power_function: Optional[str] = None,
+        logger: logging.Logger | None = None,
+        calcified_profile: NetworkSegmentProfile | None = None,
+        segment_power_function: str | None = None,
     ):
         self.attacker = attacker
         self.target = target
         self.logger = logger or logging.getLogger(__name__)
         self.calcified_profile = calcified_profile
         self.segment_power_function = segment_power_function or "SUM"
-        self._powers: Dict[NetworkSegment, int] = {}
+        self._powers: dict[NetworkSegment, int] = {}
 
     def trial(self) -> str:
         """
@@ -51,7 +50,6 @@ class BaseBioSegPolicy(object):
     def get_power(self, seg: NetworkSegment) -> int:
         """
         Calculate network segment's power
-        :param seg:
         :return:
         """
         pwr = self._powers.get(seg)
@@ -61,14 +59,11 @@ class BaseBioSegPolicy(object):
             self.logger.debug(
                 "Used '%s' function for calculate segment power", self.segment_power_function
             )
-            query = (
-                """
-                SELECT %s(p.level)
+            query = f"""
+                SELECT {self.segment_power_function}(p.level)
                 FROM sa_managedobject mo JOIN sa_managedobjectprofile p ON mo.object_profile_id = p.id
-                WHERE segment = %%s
+                WHERE segment = %s
             """
-                % self.segment_power_function
-            )
             cursor.execute(query, [str(seg.id)])
             pwr = cursor.fetchall()[0][0] or 0
         self.set_power(seg, pwr)
@@ -77,18 +72,16 @@ class BaseBioSegPolicy(object):
     def set_power(self, seg: NetworkSegment, power: int) -> None:
         self._powers[seg] = power
 
-    def get_objects(self, seg: NetworkSegment) -> List[ManagedObject]:
+    def get_objects(self, seg: NetworkSegment) -> list[ManagedObject]:
         return list(ManagedObject.objects.filter(segment=seg.id))
 
     def consume_objects(self, src: NetworkSegment, dst: NetworkSegment) -> None:
         """
         Move all objects from src to dst
-        :param src:
-        :param dst:
         :return:
         """
         self.logger.info("%s consumes objects from %s", dst.name, src.name)
-        objects: List[ManagedObject] = self.get_objects(src)
+        objects: list[ManagedObject] = self.get_objects(src)
         if not objects:
             self.logger.info("Nothing to consume. Giving up.")
             return
@@ -134,10 +127,9 @@ class BaseBioSegPolicy(object):
         """
         Try to destroy empty network segment
 
-        :param seg:
         :return:
         """
-        self.logger.info("Try to destroy segment %s" % seg.name)
+        self.logger.info(f"Try to destroy segment {seg.name}")
         if seg.profile.is_persistent:
             self.logger.info("Cannot destroy persistent segment. Giving up.")
             return
@@ -150,7 +142,7 @@ class BaseBioSegPolicy(object):
             c_seg.parent = seg.parent
             c_seg.save()
         # Finally destroy segment
-        self.logger.info("Deleting segment %s" % seg.name)
+        self.logger.info(f"Deleting segment {seg.name}")
         seg.delete()
         # Invalidate TTL cache
         NetworkSegment._reset_caches(seg.id)

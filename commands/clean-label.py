@@ -1,9 +1,12 @@
 # ----------------------------------------------------------------------
 # cleaning label commands
 # ----------------------------------------------------------------------
-# Copyright (C) 2021 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
+
+# Python modules
+import argparse
 
 # Third-party modules
 from django.db import connection
@@ -27,7 +30,7 @@ models = [
 class Command(BaseCommand):
     help = "Cleaning label"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         (
             parser.add_argument(
                 "label",
@@ -38,7 +41,6 @@ class Command(BaseCommand):
     def is_document(self, klass):
         """
         Check klass is Document instance
-        :param cls:
         :return:
         """
         return isinstance(klass._meta, dict)
@@ -57,7 +59,7 @@ class Command(BaseCommand):
                 ]
             )
         else:
-            label = '{"%s"}' % label_name
+            label = f'{{"{label_name}"}}'
             sql = f"""
             UPDATE {model_ins._meta.db_table}
             SET {field}=array_remove({field}, '{label_name}')
@@ -80,7 +82,3 @@ class Command(BaseCommand):
             self.print("Done")
         else:
             self.print(f"{label} doesn't exist")
-
-
-if __name__ == "__main__":
-    Command().run()

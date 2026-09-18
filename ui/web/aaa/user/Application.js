@@ -227,7 +227,7 @@ Ext.define("NOC.aaa.user.Application", {
       passwd1Field = me.form.findField("password1");
     if(passwdField.getValue() === passwd1Field.getValue() && passwdField.getValue().length){
       passwordFieldset.unsetActiveError();
-      Ext.Ajax.request({
+      NOC.api.requestLegacy({
         url: "/aaa/user/" + me.currentRecord.id + "/password/",
         method: "POST",
         jsonData: {password: passwdField.getValue()},
@@ -282,7 +282,7 @@ Ext.define("NOC.aaa.user.Application", {
   onNewRecord: function(){
     var me = this;
     me.down("[name=groups]").getStore().removeAll();
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/aaa/group/new_permissions/",
       method: "GET",
       scope: me,

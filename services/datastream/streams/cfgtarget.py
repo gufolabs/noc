@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Optional, Any, Iterable, Tuple
+from typing import Any, Iterable
 from collections import namedtuple
 
 # NOC modules
@@ -111,15 +111,11 @@ class Target(
                 "name": rs.name,
             }
             r["administrative_domain"]["remote_id"] = self.adm_domain_remote_id
-        svcs = Service.get_by_managed_object_id(self.mo_id)
-        if svcs:
-            r["services"] = [{"id": str(svc.id), "bi_id": str(svc.bi_id)} for svc in svcs]
         return r
 
     def enable_syslog_source(self, source: str) -> bool:
         """
         Check syslog source is enabled
-        :param source:
         :return:
         """
         if source == "s" and not self.syslog_source_ip:
@@ -131,7 +127,6 @@ class Target(
     def enable_snmptrap_source(self, source: str) -> bool:
         """
         Check SNMP Trap source is enabled
-        :param source:
         :return:
         """
         if source == "s" and not self.trap_source_ip:
@@ -159,7 +154,7 @@ class Target(
     def is_enable_ping(self) -> bool:
         return self.enable_ping and self.ping_interval and self.ping_interval > 0
 
-    def get_ping_settings(self) -> Optional[Dict[str, Any]]:
+    def get_ping_settings(self) -> dict[str, Any] | None:
         if not self.is_enable_ping:
             return None
         return {
@@ -173,7 +168,7 @@ class Target(
             "report_attempts": self.report_ping_attempts,
         }
 
-    def get_syslog_settings(self) -> Optional[Dict[str, Any]]:
+    def get_syslog_settings(self) -> dict[str, Any] | None:
         """Get effective event archiving policy"""
         if self.syslog_source_type == "d" or not self.is_process_event:
             return None
@@ -183,7 +178,7 @@ class Target(
             "storm_threshold": self.mop_trapcollector_storm_threshold,
         }
 
-    def get_snmptrap_settings(self) -> Optional[Dict[str, Any]]:
+    def get_snmptrap_settings(self) -> dict[str, Any] | None:
         if self.trap_source_type == "d" or not self.is_process_event:
             return None
         return {
@@ -372,10 +367,13 @@ class CfgTrapDataStream(DataStream):
         }
         for m in r["opaque_data"]["mappings"]:
             r["mapping_refs"].append(f"rs:{m['remote_system']['name']}:{m['remote_id']}")
+        svcs = Service.get_by_managed_object_id(mo_id)
+        if svcs:
+            r["services"] = [{"id": str(svc.id), "bi_id": str(svc.bi_id)} for svc in svcs]
         return r
 
     @classmethod
-    def _iter_addresses(cls, mo_id) -> Iterable[Tuple[str, Optional[str], str]]:
+    def _iter_addresses(cls, mo_id) -> Iterable[tuple[str, str | None, str]]:
         """
         Iterate over ManagedObject available addresses
         :return:

@@ -12,24 +12,23 @@ from time import perf_counter
 from urllib.parse import quote as urllib_quote
 
 # Third-party modules
-from typing import Optional, List
 
 # NOC modules
 from noc.config import config
 from noc.core.msgstream.message import Message
 
 
-class Channel(object):
-    def __init__(self, service, table: str):
+class Channel:
+    def __init__(self, service, table: str) -> None:
         self.service = service
         self.table = table
         self.stream = f"ch.{table}"
         self.last_offset: int = 0
-        self.data: List[bytes] = []
+        self.data: list[bytes] = []
         self.size: int = 0
         self.records: int = 0
-        self.expired: Optional[float] = None
-        self.q_sql = urllib_quote(f"INSERT INTO raw_{table} FORMAT JSONEachRow".encode("utf-8"))
+        self.expired: float | None = None
+        self.q_sql = urllib_quote(f"INSERT INTO raw_{table} FORMAT JSONEachRow".encode())
         self.feed_ready = asyncio.Event()
         self.feed_ready.set()
         self.ttl = float(config.chwriter.batch_delay_ms) / 1_000.0
@@ -37,7 +36,6 @@ class Channel(object):
     async def feed(self, msg: Message):
         """
         Feed the message. Returns optional offset of last saved message.
-        :param msg:
         :return:
         """
         # Wait until feed became possible
@@ -56,7 +54,6 @@ class Channel(object):
     def is_expired(self, ts: float) -> bool:
         """
         Check if channel is expired to given timestamp
-        :param ts:
         :return:
         """
         return self.expired and self.expired < ts

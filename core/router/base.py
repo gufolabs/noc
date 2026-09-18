@@ -11,39 +11,45 @@ import operator
 import itertools
 from time import time_ns
 from collections import defaultdict
-from typing import List, DefaultDict, Iterator, Dict, Iterable, Optional, Any
+from typing import Iterator, Iterable, Any
 from functools import partial
 
 # Third-party modules
 import orjson
 
 # NOC modules
-from noc.core.mx import MX_MESSAGE_TYPE, MX_SHARDING_KEY, Message, MX_SPAN_ID, MX_SPAN_CTX
+from noc.core.mx import (
+    MX_MESSAGE_TYPE,
+    MX_SHARDING_KEY,
+    Message,
+    MX_SPAN_ID,
+    MX_SPAN_CTX,
+    MX_FWD_ROUTER,
+)
 from noc.core.service.loader import get_service
-from noc.core.comp import DEFAULT_ENCODING
 from noc.core.perf import metrics
 from noc.core.ioloop.util import run_sync
 from noc.core.msgstream.config import get_stream
 from noc.core.span import Span
 from .route import Route, DefaultNotificationRoute, DefaultJobRoute, DefaultETLEventRoute
-from .action import DROP, DUMP
+from .action import DROP, DUMP, FWD
 
 logger = logging.getLogger(__name__)
 
 
-class Router(object):
+class Router:
     DEFAULT_N_CHAIN = "default"
     DEFAULT_JOB_CHAIN = "default_job"
     DEFAULT_ETL_EVENT_PUSH_JOB_CHAIN = "default_etl_event_push"
 
-    def __init__(self):
-        self.chains: DefaultDict[bytes, List[Route]] = defaultdict(list)
-        self.routes: Dict[str, Route] = {
+    def __init__(self) -> None:
+        self.chains: defaultdict[bytes, list[Route]] = defaultdict(list)
+        self.routes: dict[str, Route] = {
             self.DEFAULT_N_CHAIN: DefaultNotificationRoute(),  # Add default route for notification
             self.DEFAULT_JOB_CHAIN: DefaultJobRoute(),  # Add default rout for send to job
             self.DEFAULT_ETL_EVENT_PUSH_JOB_CHAIN: DefaultETLEventRoute(),
         }
-        self.stream_partitions: Dict[str, int] = {}
+        self.stream_partitions: dict[str, int] = {}
         self.svc = get_service()
         # Add default
         self.rebuild_chains([b"*", b"job"])
@@ -69,6 +75,19 @@ class Router(object):
             route_id: Router identifier
         """
         return route_id in self.routes
+
+    @classmethod
+    def build_message(
+        cls, msg: Message, body: dict[str, Any], headers: dict[str, bytes]
+    ) -> Message:
+        if not isinstance(body, bytes):
+            body = orjson.dumps(body)
+        return Message(
+            value=body,
+            timestamp=msg.timestamp,
+            key=msg.key,
+            headers=headers,
+        )
 
     def change_route(self, data):
         """
@@ -130,7 +149,7 @@ class Router(object):
         if r_type:
             self.rebuild_chains(r_type, deleted=True)
 
-    def rebuild_chains(self, r_types: Optional[Iterable[bytes]] = None, deleted: bool = False):
+    def rebuild_chains(self, r_types: Iterable[bytes] | None = None, deleted: bool = False):
         """
         Rebuild Router Chains
         Need lock ?
@@ -179,9 +198,9 @@ class Router(object):
         self,
         value: bytes,
         stream: str,
-        partition: Optional[int] = None,
-        key: Optional[bytes] = None,
-        headers: Optional[Dict[str, bytes]] = None,
+        partition: int | None = None,
+        key: bytes | None = None,
+        headers: dict[str, bytes] | None = None,
     ):
         # if self.out_queue:
         #    self.out_queue.put(stream, partition, data=value)
@@ -199,7 +218,7 @@ class Router(object):
     def get_message(
         data: Any,
         message_type: str,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: dict[str, bytes] | None = None,
         sharding_key: int = 0,
         raw_value: bool = False,
     ) -> Message:
@@ -213,8 +232,8 @@ class Router(object):
             raw_value:
         """
         msg_headers = {
-            MX_MESSAGE_TYPE: message_type.encode(DEFAULT_ENCODING),
-            MX_SHARDING_KEY: str(sharding_key).encode(DEFAULT_ENCODING),
+            MX_MESSAGE_TYPE: message_type.encode(),
+            MX_SHARDING_KEY: str(sharding_key).encode(),
         }
         if headers:
             msg_headers.update(headers)
@@ -227,96 +246,121 @@ class Router(object):
             key=sharding_key,
         )
 
-    async def route_message(self, msg: Message, msg_id: Optional[str] = None):
+    def get_msg_partition(self, stream: str, key: int, msg_id: str | None = None) -> int | None:
+        """Calculate out partition for message"""
+        partitions = self.stream_partitions.get(stream)
+        if partitions is None:
+            # Request amount of partitions
+            try:
+                sc = get_stream(stream)
+                partitions = sc.get_partitions()
+            except ValueError:
+                partitions = 1
+            self.stream_partitions[stream] = partitions
+        if not partitions:
+            logger.info("[%s] No partition for stream: %s. Skipping...", msg_id, stream)
+            return None
+        return key % partitions
+
+    async def route_message(self, msg: Message, msg_id: str | None = None):
         """
         Route message by rule
         Attrs:
             msg: Received Message
             msg_id: Message sequence number
         """
-        mt = msg.headers.get(MX_MESSAGE_TYPE)
-        if not mt:
+        msg_type = msg.headers.get(MX_MESSAGE_TYPE)
+        if not msg_type:
             return
+        routed = False
         # Apply routes
-        for route in self.iter_route(msg, mt):
+        for route in self.iter_route(msg, msg_type):
             metrics["route_hits", ("type", route.type)] += 1
             logger.debug("[%s] Applying route %s", msg_id, route.name)
             # Apply actions
-            routed: bool = False
-            with Span(
-                sample=int(route.telemetry_sample),
-                server=self.svc.name,
-                service=route.name,
-                in_label=msg.key,
-            ) as span:
-                for stream, action_headers, body in route.iter_action(msg, mt):
-                    metrics["action_hits", ("stream", stream)] += 1
-                    # Fameless drop
-                    if stream == DROP:
-                        metrics["action_drops", ("stream", stream)] += 1
-                        logger.debug("[%s] Dropped. Stopping processing", msg_id)
-                        return
-                    if stream == DUMP:
-                        logger.info(
-                            "[%s] Dump. Message headers: %s;\n-----\n Body: %s \n----\n ",
-                            msg_id,
-                            msg.headers,
-                            msg.value,
-                        )
-                        continue
-                    # Build resulting headers
-                    headers = {}
-                    headers.update(msg.headers)
-                    if action_headers:
-                        headers.update(action_headers)
-                    # Determine sharding channel
-                    sharding_key = int(headers.get(MX_SHARDING_KEY, b"0"))
-                    partitions = self.stream_partitions.get(stream)
-                    if partitions is None:
-                        # Request amount of partitions
-                        try:
-                            sc = get_stream(stream)
-                            partitions = sc.get_partitions()
-                        except ValueError:
-                            partitions = 1
-                        self.stream_partitions[stream] = partitions
-                    if not partitions:
-                        logger.info("[%s] No partition for stream: %s. Skipping...", msg, stream)
-                        continue
-                    partition = sharding_key % partitions
-                    # Single message may be transmuted in zero or more messages
-                    try:
-                        body = route.transmute(headers, body)
-                    except Exception as e:
-                        logger.error(
-                            "[%s] Error when transmute message %s: %s",
-                            msg.timestamp,
-                            body[:500],
-                            str(e),
-                        )
-                        continue
-                    if body is None:
-                        logger.debug("[%s] Skip empty message", msg.timestamp)
-                        continue
-                    # for body in route.iter_transmute(headers, msg.value):
-                    if not isinstance(body, bytes):
-                        # Transmute converts message to an arbitrary structure,
-                        # so convert back to the json
-                        body = orjson.dumps(body)
-                    metrics[("forwards", ("stream", stream))] += 1
-                    logger.debug("[%s] Routing to %s:%s", msg_id, stream, partition)
-                    if route.telemetry_sample:
-                        headers[MX_SPAN_ID] = str(span.span_id).encode(DEFAULT_ENCODING)
-                        headers[MX_SPAN_CTX] = str(span.span_context).encode(DEFAULT_ENCODING)
-                        span.headers = headers
-                    await self.publish(
-                        value=body, stream=stream, partition=partition, headers=headers
+            routed = await self.to_route(route, msg, msg_type, msg_id=msg_id)
+            if routed is None:
+                break
+            if not routed:
+                logger.debug("[%s] Not routed", msg_id)
+                metrics["route_misses", ("message_type", msg_type.decode())] += 1
+
+    async def to_route(
+        self,
+        route: Route,
+        msg: Message,
+        msg_type: str,
+        msg_id: str | None = None,
+    ) -> bool | None:
+        """Forward message to route"""
+        routed: bool = False
+        with Span(
+            sample=int(route.telemetry_sample),
+            server=self.svc.name,
+            service=route.name,
+            in_label=msg.key,
+        ) as span:
+            for stream, action_headers, body in route.iter_action(msg, msg_type):
+                metrics["action_hits", ("stream", stream)] += 1
+                # Fameless drop
+                if stream == DROP:
+                    metrics["action_drops", ("stream", stream)] += 1
+                    logger.debug("[%s] Dropped. Stopping processing", msg_id)
+                    return None
+                if stream == DUMP:
+                    logger.info(
+                        "[%s] Dump. Message headers: %s;\n-----\n Body: %s \n----\n ",
+                        msg_id,
+                        msg.headers,
+                        msg.value,
                     )
-                    routed = True
-                if not routed:
-                    logger.debug("[%s] Not routed", msg_id)
-                    metrics[
-                        "route_misses",
-                        ("message_type", msg.headers.get(MX_MESSAGE_TYPE).decode(DEFAULT_ENCODING)),
-                    ] += 1
-        # logger.debug("[%s] Finish processing", msg_id)
+                    continue
+                if stream == FWD and MX_FWD_ROUTER in action_headers:
+                    router_id = action_headers[MX_FWD_ROUTER].decode()
+                    if not self.has_route(router_id):
+                        continue
+                    logger.info(logger.debug("[%s] Fofward to: %s", msg_id, self.routes[router_id]))
+                    await self.to_route(
+                        self.routes[router_id],
+                        self.build_message(msg, body, action_headers),
+                        msg_type,
+                        msg_id=msg_id,
+                    )
+                    continue
+                # Build resulting headers
+                headers = {}
+                headers.update(msg.headers)
+                if action_headers:
+                    headers.update(action_headers)
+                # Determine sharding channel
+                sharding_key = int(headers.get(MX_SHARDING_KEY, b"0"))
+                partition = self.get_msg_partition(stream, sharding_key)
+                if partition is None:
+                    continue
+                # Single message may be transmuted in zero or more messages
+                try:
+                    body = route.transmute(headers, body)
+                except Exception as e:
+                    logger.error(
+                        "[%s] Error when transmute message %s: %s",
+                        msg.timestamp,
+                        body[:500],
+                        str(e),
+                    )
+                    continue
+                if body is None:
+                    logger.debug("[%s] Skip empty message", msg.timestamp)
+                    continue
+                if not isinstance(body, bytes):
+                    # Transmute converts message to an arbitrary structure,
+                    # so convert back to the json
+                    body = orjson.dumps(body)
+                metrics[("forwards", ("stream", stream))] += 1
+                logger.debug("[%s] Routing to %s:%s", msg_id, stream, partition)
+                if route.telemetry_sample:
+                    headers[MX_SPAN_ID] = str(span.span_id).encode()
+                    headers[MX_SPAN_CTX] = str(span.span_context).encode()
+                    span.headers = headers
+                await self.publish(value=body, stream=stream, partition=partition, headers=headers)
+                routed |= True
+        return routed

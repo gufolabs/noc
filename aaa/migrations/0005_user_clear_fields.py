@@ -10,6 +10,6 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         if self.db.has_column("auth_user", "is_staff"):
             self.db.delete_column("auth_user", "is_staff")

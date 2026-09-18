@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # Configuration class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -9,14 +9,13 @@
 import inspect
 import re
 import os
-from typing import Dict, Iterable, Tuple, Optional, Any, Type, Set, List
+from typing import Iterable, Any, cast
 import warnings
 
 # NOC modules
+from noc.core.typing import SENTINEL
 from .params import BaseParameter
-
-DEFAULT_CONFIG = "yaml:///opt/noc/etc/tower.yml,yaml:///opt/noc/etc/settings.yml,env:///NOC"
-DEFAULT_DUMP_URL = "yaml://"
+from .backends.base import from_url, BaseConfigBackend
 
 
 class ConfigurationError(Exception):
@@ -24,8 +23,25 @@ class ConfigurationError(Exception):
 
 
 class ConfigSectionBase(type):
-    def __new__(mcs, name, bases, attrs):
-        cls = type.__new__(mcs, name, bases, attrs)
+    """Metaclass for collecting configuration section parameters."""
+
+    def __new__(
+        mcs: "type[ConfigSectionBase]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["ConfigSection"]:
+        """Create configuration section class and collect parameters.
+
+        Args:
+            name: Class name.
+            bases: Base classes.
+            attrs: Class attributes.
+
+        Returns:
+            Created configuration section class.
+        """
+        cls = cast(type["ConfigSection"], type.__new__(mcs, name, bases, attrs))
         cls._params = {}
         for k in attrs:
             if isinstance(attrs[k], BaseParameter):
@@ -38,17 +54,17 @@ class ConfigSectionBase(type):
         return cls
 
 
-class ConfigSection(object, metaclass=ConfigSectionBase):
-    pass
+class ConfigSection(metaclass=ConfigSectionBase):
+    """Base class for nested configuration sections."""
 
 
-class BaseRewrite(object):
+class BaseRewrite:
     """Rewrite configuration parameter."""
 
-    def __init__(self, /, deprecation: Optional[Type[Warning]] = None) -> None:
+    def __init__(self, /, deprecation: type[Warning] | None = None) -> None:
         self.deprecation = deprecation
 
-    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+    def rewrite(self, key: str, value: Any) -> tuple[str, Any] | None:
         """
         Rewrite configuration parameter.
 
@@ -62,7 +78,7 @@ class BaseRewrite(object):
         """
         raise NotImplementedError
 
-    def reverse_rewrite(self, key: str) -> Optional[str]:
+    def reverse_rewrite(self, key: str) -> str | None:
         """
         Rewrite name back.
 
@@ -83,13 +99,13 @@ class PrefixRewrite(BaseRewrite):
     """Rewrite parameter's prefix."""
 
     def __init__(
-        self, prefix: str, rewrite_to: str, /, deprecation: Optional[Type[Warning]] = None
+        self, prefix: str, rewrite_to: str, /, deprecation: type[Warning] | None = None
     ) -> None:
         super().__init__(deprecation=deprecation)
         self.prefix = f"{prefix}."
         self.rewrite_to = f"{rewrite_to}."
 
-    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+    def rewrite(self, key: str, value: Any) -> tuple[str, Any] | None:
         if not key.startswith(self.prefix):
             return key, value
         new_key = f"{self.rewrite_to}{key[len(self.prefix) :]}"
@@ -98,7 +114,7 @@ class PrefixRewrite(BaseRewrite):
             warnings.warn(msg, self.deprecation)
         return new_key, value
 
-    def reverse_rewrite(self, key: str) -> Optional[str]:
+    def reverse_rewrite(self, key: str) -> str | None:
         if key.startswith(self.rewrite_to):
             return f"{self.prefix}{key[len(self.rewrite_to) :]}"
         return None
@@ -110,14 +126,14 @@ class ValueRewrite(BaseRewrite):
     """
 
     def __init__(
-        self, key: str, value: str, new_value: str, /, deprecation: Optional[Type[Warning]] = None
+        self, key: str, value: str, new_value: str, /, deprecation: type[Warning] | None = None
     ) -> None:
         super().__init__(deprecation=deprecation)
         self.key = key
         self.value = value
         self.new_value = new_value
 
-    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+    def rewrite(self, key: str, value: Any) -> tuple[str, Any] | None:
         if key != self.key or self.value != str(value):
             return key, value
         if self.deprecation:
@@ -127,14 +143,12 @@ class ValueRewrite(BaseRewrite):
 
 
 class DeprecatedValue(BaseRewrite):
-    def __init__(
-        self, key: str, value: str, /, deprecation: Optional[Type[Warning]] = None
-    ) -> None:
+    def __init__(self, key: str, value: str, /, deprecation: type[Warning] | None = None) -> None:
         super().__init__(deprecation=deprecation)
         self.key = key
         self.value = value
 
-    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+    def rewrite(self, key: str, value: Any) -> tuple[str, Any] | None:
         if key == self.key and self.value == str(value) and self.deprecation:
             msg = f"{key} = {value} is deprecated and will be removed"
             warnings.warn(msg, self.deprecation)
@@ -142,8 +156,25 @@ class DeprecatedValue(BaseRewrite):
 
 
 class ConfigBase(type):
-    def __new__(mcs, name, bases, attrs):
-        cls = type.__new__(mcs, name, bases, attrs)
+    """Metaclass for collecting configuration parameters."""
+
+    def __new__(
+        mcs: "type[ConfigBase]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["BaseConfig"]:
+        """Create configuration class and collect parameters.
+
+        Args:
+            name: Class name.
+            bases: Base classes.
+            attrs: Class attributes.
+
+        Returns:
+            Created configuration class.
+        """
+        cls = cast(type["BaseConfig"], type.__new__(mcs, name, bases, attrs))
         cls._params = {}
         for k in attrs:
             if isinstance(attrs[k], BaseParameter):
@@ -155,32 +186,44 @@ class ConfigBase(type):
         return cls
 
 
-class BaseConfig(object, metaclass=ConfigBase):
-    PROTOCOLS = {
-        "consul": "noc.core.config.proto.consul.ConsulProtocol",
-        "env": "noc.core.config.proto.env.EnvProtocol",
-        "yaml": "noc.core.config.proto.yaml.YAMLProtocol",
-        "legacy": "noc.core.config.proto.legacy.LegacyProtocol",
-    }
+class BaseConfig(metaclass=ConfigBase):
+    """Base configuration class.
+
+    Provides parameter discovery, loading from configuration backends,
+    parameter rewriting and serialization support.
+
+    Args:
+        rewrites: Optional parameter rewrite rules.
+    """
 
     _rx_env_sh = re.compile(r"\${([^:}]+)(:-[^}]+)?}")
-    _params: Dict[str, BaseParameter]
+    _params: dict[str, BaseParameter]
 
-    def __init__(self, rewrites: Optional[Iterable[BaseRewrite]] = None) -> None:
+    def __init__(self, rewrites: Iterable[BaseRewrite] | None = None) -> None:
         self._rewrites = list(rewrites) if rewrites else None
         self._params_order = sorted(self._params, key=lambda x: self._params[x].param_number)
         self._rewritten_params = self._get_rewritten_params()
 
     def __iter__(self):
+        """Iterate over known configuration parameter names.
+
+        Yields:
+            Configuration parameter names.
+        """
         yield from self._params_order
         if self._rewritten_params:
             yield from self._rewritten_params
 
-    def _get_rewritten_params(self) -> Optional[List[str]]:
-        """Find rewritten params, if any."""
+    def _get_rewritten_params(self) -> list[str] | None:
+        """Find parameter names available through rewrite rules.
+
+        Returns:
+            List of rewritten parameter names or None when no rewrite rules
+            are configured.
+        """
         if not self._rewrites:
             return None
-        r: Set[str] = set()
+        r: set[str] = set()
         for rule in self._rewrites:
             for p in self._params_order:
                 old = rule.reverse_rewrite(p)
@@ -190,6 +233,25 @@ class BaseConfig(object, metaclass=ConfigBase):
 
     @classmethod
     def expand(cls, value):
+        """Expand environment variables in configuration value.
+
+        Supports shell-style expansion::
+
+            ${VAR}
+            ${VAR:-default}
+
+        and registry-style expansion::
+
+            _env:VAR
+            _env:VAR:default
+
+        Args:
+            value: Value to expand.
+
+        Returns:
+            Expanded value.
+        """
+
         def env_repl(match):
             name, default = match.groups()
             if default is None:
@@ -215,6 +277,17 @@ class BaseConfig(object, metaclass=ConfigBase):
         return cls._rx_env_sh.sub(env_repl, value)
 
     def set_parameter(self, path, value):
+        """Set configuration parameter value.
+
+        The value is expanded, rewritten and validated before being assigned.
+
+        Args:
+            path: Dot-separated parameter name.
+            value: Parameter value.
+
+        Raises:
+            ConfigurationError: If parameter is unknown.
+        """
         if value is None:
             return
         if isinstance(value, str):
@@ -229,7 +302,7 @@ class BaseConfig(object, metaclass=ConfigBase):
             raise ConfigurationError(msg)
         p.set_value(value)
 
-    def rewrite(self, key: str, value: Any) -> Optional[Tuple[str, Any]]:
+    def rewrite(self, key: str, value: Any) -> tuple[str, Any] | None:
         """
         Rewrite parameters.
 
@@ -249,7 +322,7 @@ class BaseConfig(object, metaclass=ConfigBase):
                 key, value = r
         return key, value
 
-    def find_parameter(self, path) -> BaseParameter:
+    def find_parameter(self, path: str) -> BaseParameter:
         """
         Get parameter instance by name.
 
@@ -261,46 +334,72 @@ class BaseConfig(object, metaclass=ConfigBase):
         """
         return self._params[path]
 
-    def get_parameter(self, path):
+    def get_parameter(self, path: str):
+        """Get current parameter value.
+
+        Args:
+            path: Parameter name.
+
+        Returns:
+            Current parameter value.
+        """
         return self._params[path].value
 
-    def dump_parameter(self, path):
+    def dump_parameter(self, path: str):
+        """Serialize parameter value.
+
+        Rewritten aliases are not dumped to avoid duplicate output.
+
+        Args:
+            path: Parameter name.
+
+        Returns:
+            Serialized parameter value or None when parameter is hidden.
+        """
         if self._rewritten_params and path in self._rewritten_params:
             return None
         return self._params[path].dump_value()
 
     @classmethod
-    def get_protocol(cls, url):
-        p = url.split(":", 1)[0]
-        h = cls.PROTOCOLS.get(p)
-        if h:
-            # NB: We cannot use get_handler, so use naive implementation
-            module_name, handler_class = h.rsplit(".", 1)
-            module = __import__(module_name, {}, {}, [handler_class])
-            return getattr(module, handler_class)
-        msg = f"Invalid protocol: {p}"
-        raise ValueError(msg)
+    def get_backend(cls, url: str) -> BaseConfigBackend:
+        """Create configuration backend from URL.
 
-    def load(self):
+        Args:
+            url: Backend URL.
+
+        Returns:
+            Initialized configuration backend.
+        """
+        return from_url(url)
+
+    def load(self, cfg: str) -> None:
+        """Load configuration values from backends.
+
+        Multiple backends can be specified as comma-separated URLs.
+        Values from later backends override values from earlier backends.
+
+        Args:
+            cfg: Comma-separated backend URLs.
+        """
         with warnings.catch_warnings():
             warnings.simplefilter("always")
-            paths = os.environ.get("NOC_CONFIG", DEFAULT_CONFIG)
-            for p in paths.split(","):
-                p = p.strip()
-                pcls = self.get_protocol(p)
-                proto = pcls(self, p)
-                proto.load()
+            backends = [self.get_backend(p) for p in cfg.split(",")]
+            for name in self:
+                v = SENTINEL
+                for backend in backends:
+                    nv = backend.get(name, SENTINEL)
+                    if nv is not SENTINEL:
+                        v = nv
+                if v is not SENTINEL:
+                    self.set_parameter(name, v)
 
-    def dump(self, url=DEFAULT_DUMP_URL, section=None):
-        pcls = self.get_protocol(url)
-        proto = pcls(self, url)
-        proto.dump(section=section)
+    def update(self, cfg) -> None:
+        """Update configuration from dictionary.
 
-    def update(self, cfg):
-        """
-        Update config from dictionary
-        :param cfg:
-        :return:
+        Nested dictionaries are resolved using dot-separated parameter names.
+
+        Args:
+            cfg: Configuration mapping.
         """
         assert isinstance(cfg, dict)
         for name in self:
@@ -315,11 +414,10 @@ class BaseConfig(object, metaclass=ConfigBase):
             if c and parts[-1] in c:
                 self.set_parameter(name, c[parts[-1]])
 
-    def iter_params(self) -> Iterable[Tuple[str, BaseParameter]]:
-        """
-        Iterate over all known parameters.
+    def iter_params(self) -> Iterable[tuple[str, BaseParameter]]:
+        """Iterate over registered parameters.
 
         Returns:
-            Yields of tuples of (parameter name, `BaseParameter instance)
+            Iterator yielding parameter name and parameter instance pairs.
         """
         yield from self._params.items()

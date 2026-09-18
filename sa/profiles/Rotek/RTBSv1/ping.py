@@ -36,7 +36,7 @@ class Script(BaseScript):
             cmd += address
             ping = self.cli(cmd)
         except self.CLISyntaxError:
-            cmd = "ping %s" % address
+            cmd = f"ping {address}"
             ping = self.cli(cmd)
         # Not works
         # if count:

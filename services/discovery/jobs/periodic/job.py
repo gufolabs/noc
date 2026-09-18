@@ -7,7 +7,6 @@
 
 # Python modules
 import random
-from typing import Optional
 
 # NOC modules
 from noc.services.discovery.jobs.base import MODiscoveryJob
@@ -48,7 +47,7 @@ class PeriodicDiscoveryJob(MODiscoveryJob):
             else:
                 self.run_checks()
 
-    def is_run_interval(self, interval: int, run: int, name: Optional[str] = None) -> bool:
+    def is_run_interval(self, interval: int, run: int, name: str | None = None) -> bool:
         """
 
         Attrs:
@@ -58,7 +57,7 @@ class PeriodicDiscoveryJob(MODiscoveryJob):
         """
         d_interval = self.get_interval()
         if run and interval != d_interval:
-            p_sc = interval / d_interval
+            p_sc = interval // d_interval
             if run % p_sc:  # runs
                 self.logger.info(
                     "[%s] Skip due to schedule, next run in %s sec",
@@ -128,7 +127,6 @@ class PeriodicDiscoveryJob(MODiscoveryJob):
     def get_discovery_interval(self, name) -> int:
         """
         Getting discovery interval by check name
-        :param name:
         :return:
         """
         if not getattr(self.object.object_profile, f"enable_periodic_discovery_{name}"):

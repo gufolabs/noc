@@ -9,7 +9,7 @@
 import os
 from urllib.request import parse_http_list, parse_keqv_list
 import asyncio
-from typing import Tuple, Dict, Any
+from typing import Any
 
 # Third-party modules
 import hashlib
@@ -35,12 +35,12 @@ class RTSPBase(BaseCLI):
     MATCH_TAIL = 256
     SYNTAX_ERROR_CODE = b"+@@@NOC:SYNTAXERROR@@@+"
 
-    def __init__(self, script, tos=None):
+    def __init__(self, script, tos=None) -> None:
         super().__init__(script, tos)
         self.path = None
         self.cseq = 1
         self.method = None
-        self.headers: Dict[str, Any] = None
+        self.headers: dict[str, Any] = None
         self.auth = None
         self.buffer: bytes = b""
         self.is_started = False
@@ -58,8 +58,8 @@ class RTSPBase(BaseCLI):
         if not port:
             port = RTSPStream.default_port
         if port:
-            address += ":%s" % port
-        return "rtsp://%s%s" % (address, self.path)
+            address += f":{port}"
+        return f"rtsp://{address}{self.path}"
 
     async def send(self, method: str = None, body: str = None):
         # @todo: Apply encoding
@@ -129,12 +129,12 @@ class RTSPBase(BaseCLI):
             )
             if code == 401:
                 self.result = ""
-                self.error = RTSPAuthFailed("%s (code=%s)" % (msg, code), code=int(code))
+                self.error = RTSPAuthFailed(f"{msg} (code={code})", code=int(code))
                 return None
             if not 200 <= code <= 299:
                 # RTSP Error
                 self.result = ""
-                self.error = RTSPError("%s (code=%s)" % (msg, code), code=int(code))
+                self.error = RTSPError(f"{msg} (code={code})", code=int(code))
                 return None
             result += [r]
             break
@@ -142,7 +142,7 @@ class RTSPBase(BaseCLI):
         return self.result
 
     @staticmethod
-    def parse_rtsp_header(data: bytes) -> Tuple[int, Dict[str, Any], bytes]:
+    def parse_rtsp_header(data: bytes) -> tuple[int, dict[str, Any], bytes]:
         code, headers, msg = 200, {}, b""
         for line in data.splitlines():
             if line.startswith(b"RTSP/1.0"):
@@ -161,12 +161,12 @@ class RTSPBase(BaseCLI):
         return int(code), headers, msg
 
     def execute(self, path, method, **kwargs):
-        """
-        Perform request and return result
-        :param path:
-        :param method:
-        :param kwargs:
-        :return:
+        """Perform request and return result
+
+        Args:
+            path
+            method
+            **kwargs
         """
         self.buffer = b""
         self.path = path
@@ -210,14 +210,12 @@ class RTSPBase(BaseCLI):
             self.profile.shutdown_session(self.script)
 
 
-class DigestAuth(object):
-    """
-    Append HTTP Digest authorisation headers
-    """
+class DigestAuth:
+    """Append HTTP Digest authorisation headers"""
 
     name = "digestauth"
 
-    def __init__(self, user=None, password=None):
+    def __init__(self, user=None, password=None) -> None:
         self.user = user
         self.password = password
         self.last_nonce = None
@@ -227,15 +225,14 @@ class DigestAuth(object):
 
     def get_digest(self, uri, realm, method):
         """
-
-        :param uri:
-        :param realm:
-        :param method: GET/POST
-        :return:
+        Args:
+            uri
+            realm
+            method: GET/POST
         """
         # print("Get Digest", uri, realm, method, self.user, self.password)
-        A1 = "%s:%s:%s" % (self.user, realm, self.password)
-        A2 = "%s:%s" % (method, uri)
+        A1 = f"{self.user}:{realm}:{self.password}"
+        A2 = f"{method}:{uri}"
 
         HA1 = hashlib.md5(smart_bytes(A1)).hexdigest()
         HA2 = hashlib.md5(smart_bytes(A2)).hexdigest()
@@ -244,12 +241,10 @@ class DigestAuth(object):
 
     def build_digest_header(self, url, method, digest_response):
         """
-
-        :param url: query URL
-        :param method: GET/POST method
-        :param digest_response:  dict response header
-        :type digest_response: dict
-        :return:
+        Args:
+            url: query URL
+            method: GET/POST method
+            digest_response (dict): dict response header
         """
         # p_parsed = urlparse(url)
         # uri = p_parsed.path or "/"
@@ -266,7 +261,7 @@ class DigestAuth(object):
             self.request_id += 1
         else:
             self.request_id = 1
-        ncvalue = "%08x" % self.request_id
+        ncvalue = f"{self.request_id:08x}"
 
         s = nonce.encode("utf-8")
         # s += time.ctime().encode('utf-8')
@@ -274,34 +269,28 @@ class DigestAuth(object):
         cnonce = hashlib.sha1(smart_bytes(s)).hexdigest()[:16]
 
         if not qop:
-            respdig = hashlib.md5(smart_bytes("%s:%s:%s" % (HA1, nonce, HA2))).hexdigest()
+            respdig = hashlib.md5(smart_bytes(f"{HA1}:{nonce}:{HA2}")).hexdigest()
         elif qop == "auth" or "auth" in qop.split(","):
-            noncebit = "%s:%s:%s:%s:%s" % (nonce, ncvalue, cnonce, "auth", HA2)
-            respdig = hashlib.md5(smart_bytes("%s:%s" % (HA1, noncebit))).hexdigest()
+            noncebit = "{}:{}:{}:{}:{}".format(nonce, ncvalue, cnonce, "auth", HA2)
+            respdig = hashlib.md5(smart_bytes(f"{HA1}:{noncebit}")).hexdigest()
         else:
             respdig = None
 
-        base = 'username="%s", realm="%s", nonce="%s", uri="%s", response="%s"' % (
-            self.user,
-            realm,
-            nonce,
-            uri,
-            respdig,
-        )
+        base = f'username="{self.user}", realm="{realm}", nonce="{nonce}", uri="{uri}", response="{respdig}"'
 
         if opaque:
-            base += ', opaque="%s"' % opaque
+            base += f', opaque="{opaque}"'
         if algorithm:
-            base += ', algorithm="%s"' % algorithm
+            base += f', algorithm="{algorithm}"'
         # if entdig:
         #     base += ', digest="%s"' % entdig
         if qop:
-            base += ', qop="auth", nc=%s, cnonce="%s"' % ("%08x" % self.request_id, cnonce)
+            base += ', qop="auth", nc={}, cnonce="{}"'.format(f"{self.request_id:08x}", cnonce)
         self.last_nonce = nonce
         self.last_realm = realm
         self.last_opaque = opaque
 
-        return "Digest %s" % (str(base))
+        return f"Digest {base!s}"
 
 
 class RTSPStream(BaseStream):

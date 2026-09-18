@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Dict, Any, List
+from typing import Any
 
 # NOC modules
 from .base import BaseLoader
@@ -40,13 +40,13 @@ class ObjectLoader(BaseLoader):
         "container",
     ]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         # @todo check None model
         self.clean_map["model"] = clean_model
         self.l_f_m = ObjectModel.objects.get(uuid=LOST_AND_FOUND_UUID)
 
-    def merge_data(self, o: ObjectM, data: List[Dict[str, Any]]):
+    def merge_data(self, o: ObjectM, data: list[dict[str, Any]]):
         # @todo add test to merge_data
         r = {(attr.interface, attr.attr, attr.scope): attr.value for attr in o.data if attr.scope}
         self.logger.debug("Merge data object: %s, Data: %s", o.data, data)
@@ -79,8 +79,8 @@ class ObjectLoader(BaseLoader):
     def change_object(
         self,
         object_id: str,
-        v: Dict[str, Any],
-        inc_changes: Dict[str, Dict[str, List]] = None,
+        v: dict[str, Any],
+        inc_changes: dict[str, dict[str, list]] = None,
         **kwargs,
     ):
         self.logger.debug("Changed object: %s", v)

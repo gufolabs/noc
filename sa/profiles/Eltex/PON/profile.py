@@ -25,10 +25,10 @@ class Profile(BaseProfile):
     pattern_prompt = rb"^\S+#"
     #    convert_interface_name = BaseProfile.convert_interface_name_cisco
 
-    class switch(object):
+    class switch:
         """Switch context manager to use with "with" statement"""
 
-        def __init__(self, script):
+        def __init__(self, script) -> None:
             self.script = script
 
         def __enter__(self):

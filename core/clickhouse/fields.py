@@ -8,14 +8,13 @@
 # Python modules
 from ast import literal_eval
 from datetime import datetime
-from typing import Optional
 import itertools
 import socket
 import struct
 from collections import defaultdict
 
 
-class BaseField(object):
+class BaseField:
     """
     BaseField class for ClickHouse structure
     """
@@ -25,8 +24,8 @@ class BaseField(object):
     default_value = ""
 
     def __init__(
-        self, default=None, description: Optional[str] = None, low_cardinality: bool = False
-    ):
+        self, default=None, description: str | None = None, low_cardinality: bool = False
+    ) -> None:
         """
 
         :param default: Default field value (if value not set)
@@ -99,7 +98,6 @@ class BaseField(object):
     def to_python(self, value):
         """
         Use method when field convert to python object
-        :param value:
         :return:
         """
         return value
@@ -229,7 +227,7 @@ class BooleanField(UInt8Field):
 
 
 class ArrayField(BaseField):
-    def __init__(self, field_type, description=None):
+    def __init__(self, field_type, description=None) -> None:
         super().__init__(description=description)
         self.field_type = field_type
 
@@ -240,7 +238,7 @@ class ArrayField(BaseField):
         return f"Array({self.field_type.get_db_type()})"
 
     def get_displayed_type(self):
-        return "Array(%s)" % self.field_type.get_db_type()
+        return f"Array({self.field_type.get_db_type()})"
 
     def to_python(self, value):
         if not value or value == "[]":
@@ -249,7 +247,7 @@ class ArrayField(BaseField):
 
 
 class MaterializedField(BaseField):
-    def __init__(self, field_type, expression, description=None, low_cardinality=True):
+    def __init__(self, field_type, expression, description=None, low_cardinality=True) -> None:
         super().__init__(description=description, low_cardinality=low_cardinality)
         self.field_type = field_type
         self.expression = expression
@@ -266,7 +264,7 @@ class ReferenceField(BaseField):
     default_value = 0
     SELF_REFERENCE = "self"
 
-    def __init__(self, dict_type, description=None, model=None, low_cardinality=False):
+    def __init__(self, dict_type, description=None, model=None, low_cardinality=False) -> None:
         super().__init__(description=description, low_cardinality=low_cardinality)
         self.is_self_reference = dict_type == self.SELF_REFERENCE
         self.dict_type = dict_type
@@ -289,7 +287,6 @@ class IPv4Field(BaseField):
         """
         Convert IPv4 as integer
 
-        :param value:
         :return:
         """
         if value is None:
@@ -312,7 +309,6 @@ class IPv6Field(BaseField):
         """
         Convert IPv6 as integer
 
-        :param value:
         :return:
         """
         if value is None:
@@ -329,7 +325,7 @@ class IPv6Field(BaseField):
 
 
 class AggregatedField(BaseField):
-    def __init__(self, expression, field_type, agg_function, params=None, description=None):
+    def __init__(self, expression, field_type, agg_function, params=None, description=None) -> None:
         super().__init__(description=description)
         self.field_type = field_type
         self.agg_function = agg_function
@@ -349,7 +345,7 @@ class AggregatedField(BaseField):
 
 
 class MapField(BaseField):
-    def __init__(self, field_type, description=None):
+    def __init__(self, field_type, description=None) -> None:
         super().__init__(description=description)
         self.field_type = field_type
 
@@ -379,17 +375,17 @@ class NestedField(ArrayField):
             for f in item:
                 self.field_type._meta.fields[f].apply_json(row, item[f])
             for nested_name in row:
-                full_name = "%s.%s" % (self.name, nested_name)
+                full_name = f"{self.name}.{nested_name}"
                 arrays[full_name] += [row[nested_name]]
         row_json.update(arrays)
 
     def get_db_type(self, name=None):
         if name is None:
-            return "Nested (\n%s \n)" % self.field_type.get_create_sql()
-        return "Array(%s)" % self.field_type._meta.fields[name].get_db_type()
+            return f"Nested (\n{self.field_type.get_create_sql()} \n)"
+        return f"Array({self.field_type._meta.fields[name].get_db_type()})"
 
     def get_displayed_type(self):
-        return "Nested (\n%s \n)" % self.field_type.get_create_sql()
+        return f"Nested (\n{self.field_type.get_create_sql()} \n)"
 
     def to_python(self, value):
         if not value or value == "[]":
@@ -404,11 +400,10 @@ class NestedField(ArrayField):
         ]
 
     def get_select_sql(self):
-        m = [
-            "toString(%s.%s[x])" % (self.name, f.name) for f in self.field_type._meta.ordered_fields
-        ]
+        m = [f"toString({self.name}.{f.name}[x])" for f in self.field_type._meta.ordered_fields]
         r = [
-            "arrayMap(x -> [%s], arrayEnumerate(%s.%s))"
-            % (",".join(m), self.name, self.field_type.get_pk_name())
+            "arrayMap(x -> [{}], arrayEnumerate({}.{}))".format(
+                ",".join(m), self.name, self.field_type.get_pk_name()
+            )
         ]
         return "".join(r)

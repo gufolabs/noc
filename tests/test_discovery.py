@@ -1,19 +1,18 @@
 # ----------------------------------------------------------------------
 # Discovery test
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-import os.path
 from collections import defaultdict
 
 # Third-party modules
 import pytest
-import fsspec
 import yaml
 import cachetools
+from gufo.blob.sync import open_blob
 
 # NOC modules
 from noc.config import config
@@ -44,8 +43,8 @@ _service_cache = {}
 _configs = {}  # mo -> config
 
 
-class ServiceStub(object):
-    def __init__(self, pool):
+class ServiceStub:
+    def __init__(self, pool) -> None:
         self.pool = pool
         self.metrics = defaultdict(list)
         self.service_id = "stub"
@@ -56,13 +55,13 @@ class ServiceStub(object):
         self.metrics[table] += data
 
 
-class BeefCallWrapper(object):
-    def __init__(self, obj, name):
+class BeefCallWrapper:
+    def __init__(self, obj, name) -> None:
         self.name = name
         self.object = obj
 
     def __call__(self, **kwargs):
-        script_name = "%s.%s" % (self.object.profile.name, self.name)
+        script_name = f"{self.object.profile.name}.{self.name}"
         scls = loader.get_script(script_name)
         # Build credentials
         credentials = {
@@ -101,20 +100,16 @@ def get_discovery_configs():
     paths = config.tests.beef_paths or []
     for n, url in enumerate(paths):
         pool_name = "DP%04d" % (n + 1)
-        fs, url_path = fsspec.url_to_fs(url)
-        num = 0
-        for path, _, files in fs.walk(url_path):
-            for name in files:
-                if name != "test-discovery.yml":
+        with open_blob(url) as blob:
+            num = 0
+            for key in blob.scan(""):
+                if key != "test-discovery.yml":
                     continue
-                file_path = os.path.join(path, name)
-                with fs.open(file_path, mode="rb") as f:
-                    data = yaml.safe_load(f.read())
-                    # name = os.path.basename(os.path.dirname(path))
-                    m = num + 1
-                    address = "10.%d.%d.%d" % ((m >> 16) & 0xFF, (m >> 8) & 0xFF, m & 0xFF)
-                    beef_path = os.path.join(os.path.dirname(file_path), "beef.json.bz2")
-                    r += [(name, address, pool_name, url, beef_path, data)]
+                data = yaml.safe_load(blob[key])
+                # name = os.path.basename(os.path.dirname(path))
+                m = num + 1
+                address = "10.%d.%d.%d" % ((m >> 16) & 0xFF, (m >> 8) & 0xFF, m & 0xFF)
+                r += [(key, address, pool_name, url, key, data)]
                 num += 1
     return r
 
@@ -205,7 +200,7 @@ def get_by_path(mo, path):
 
 def get_discovery_object_name(x):
     if isinstance(x, tuple):
-        return "%s:%s" % (x[2], x[0])
+        return f"{x[2]}:{x[0]}"
     return None
 
 

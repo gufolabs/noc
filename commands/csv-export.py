@@ -23,7 +23,7 @@ from noc.core.mongo.connection import connect
 class Command(BaseCommand):
     help = "Export model to CSV"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         (
             parser.add_argument(
                 "-t",
@@ -38,13 +38,13 @@ class Command(BaseCommand):
 
     def _usage(self):
         print("Usage:")
-        print("%s csv-export [-t] <model>" % (sys.argv[0]))
+        print(f"{sys.argv[0]} csv-export [-t] <model>")
         print("Where <model> is one of:")
         load_models()
         for m in apps.get_models():
             t = m._meta.db_table
             app, model = t.split("_", 1)
-            print("%s.%s" % (app, model))
+            print(f"{app}.{model}")
         sys.exit(1)
 
     def get_queryset(self, model, args):
@@ -74,7 +74,3 @@ class Command(BaseCommand):
                 m, queryset=self.get_queryset(m, args[1:]), first_row_only=options.get("template")
             )
         )
-
-
-if __name__ == "__main__":
-    Command().run()

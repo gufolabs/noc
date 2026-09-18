@@ -10,7 +10,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         mdb = self.mongo_db
         a_id = self.db.execute("SELECT id FROM sa_activator LIMIT 1")[0][0]
         for d in mdb.noc.pools.find():

@@ -16,12 +16,10 @@ import logging
 import uuid
 from collections import namedtuple
 from contextvars import ContextVar
-from typing import Optional, Dict
 
 # NOC modules
 from noc.core.error import NO_ERROR, ERR_UNKNOWN
 from noc.core.perf import metrics
-from noc.core.comp import DEFAULT_ENCODING
 from noc.config import config
 
 forensic_logger = logging.getLogger("noc.core.forensic")
@@ -46,8 +44,8 @@ SpanItemFields = [
 SpanItem = namedtuple("SpanItem", SpanItemFields)
 # Collected spans, protected by lock
 span_lock = threading.Lock()
-cv_span_context: ContextVar[Optional[int]] = ContextVar("cv_span_context", default=None)
-cv_span_parent: ContextVar[Optional[int]] = ContextVar("cv_span_parent", default=None)
+cv_span_context: ContextVar[int | None] = ContextVar("cv_span_context", default=None)
+cv_span_parent: ContextVar[int | None] = ContextVar("cv_span_parent", default=None)
 spans = []
 
 DEFAULT_CLIENT = "NOC"
@@ -61,7 +59,7 @@ DEFAULT_ID = 0
 US = 1000000.0
 
 
-class Span(object):
+class Span:
     def __init__(
         self,
         client=DEFAULT_CLIENT,
@@ -73,7 +71,7 @@ class Span(object):
         context=DEFAULT_ID,
         hist=None,
         quantile=None,
-        headers: Optional[Dict[str, bytes]] = None,
+        headers: dict[str, bytes] | None = None,
         suppress_trace=False,
     ):
         self.client = client
@@ -165,7 +163,7 @@ class Span(object):
             sample=self.sample,
             in_label=str(self.in_label or ""),
             out_label=str(self.out_label or ""),
-            in_headers={k: v.decode(DEFAULT_ENCODING) for k, v in self.headers.items()},
+            in_headers={k: v.decode() for k, v in self.headers.items()},
         )
         with span_lock:
             spans += [span]
@@ -178,7 +176,7 @@ class Span(object):
         if self.suppress_trace:
             return True
 
-    def set_error(self, code: Optional[int] = None, text: Optional[str] = None) -> None:
+    def set_error(self, code: int | None = None, text: str | None = None) -> None:
         """
         Set error result and code for current span
         :param code: Optional error code
@@ -190,7 +188,7 @@ class Span(object):
         if text is not None:
             self.error_text = text
 
-    def set_error_from_exc(self, exc: Exception, code: Optional[int] = ERR_UNKNOWN) -> None:
+    def set_error_from_exc(self, exc: Exception, code: int | None = ERR_UNKNOWN) -> None:
         """
         Set error result and code for current span from exception
         :param exc: Raised exception
@@ -216,7 +214,6 @@ def get_spans():
 def span_to_dict(span):
     """
     Convert span to object
-    :param span:
     :return:
     """
     return dict(zip(SpanItemFields, span))

@@ -24,11 +24,10 @@ def test_iter_model_id():
 def test_model_loading(model_id):
     """
     Check model referred by id can be loaded
-    :param model_id:
     :return:
     """
     model = get_model(model_id)
-    assert model is not None, "Cannot load model %s" % model_id
+    assert model is not None, f"Cannot load model {model_id}"
 
 
 @pytest.mark.parametrize("model_id", iter_model_id())

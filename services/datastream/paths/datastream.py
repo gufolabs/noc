@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Callable, Set
+from typing import Callable
 from http import HTTPStatus
 import time
 import cachetools
@@ -38,7 +38,7 @@ def get_format_role(ds, fmt):
     return ds.get_format_role(fmt)
 
 
-def get_access_tokens_set(datastream, fmt: Optional[str] = None) -> Set[str]:
+def get_access_tokens_set(datastream, fmt: str | None = None) -> set[str]:
     tokens = {"datastream:*", f"datastream:{datastream.name}"}
     if fmt:
         role = get_format_role(datastream, fmt)
@@ -47,8 +47,8 @@ def get_access_tokens_set(datastream, fmt: Optional[str] = None) -> Set[str]:
     return tokens
 
 
-class DatastreamAPI(object):
-    def __init__(self, router: APIRouter):
+class DatastreamAPI:
+    def __init__(self, router: APIRouter) -> None:
         self.router = router
         self.openapi_tags = ["api", "datastream"]
         self.api_name = "datastream"
@@ -59,7 +59,7 @@ class DatastreamAPI(object):
         self.setup_datastream()
 
     @staticmethod
-    def get_datastreams() -> List["DataStream"]:
+    def get_datastreams() -> list["DataStream"]:
         r = []
         for name in loader:
             if not getattr(config.datastream, f"enable_{name}", False):
@@ -135,7 +135,6 @@ class DatastreamAPI(object):
     def _run_callbacks(self, queue):
         """
         Execute callbacks from queue
-        :param queue:
         :return:
         """
         while True:
@@ -148,8 +147,6 @@ class DatastreamAPI(object):
     def watch_waiter(self, coll, queue):
         """
         Waiter thread tracking mongo's ChangeStream
-        :param coll:
-        :param queue:
         :return:
         """
         while True:
@@ -168,8 +165,6 @@ class DatastreamAPI(object):
     def sleep_waiter(self, coll, queue):
         """
         Simple timeout waiter
-        :param coll:
-        :param queue:
         :return:
         """
         TIMEOUT = 60
@@ -181,15 +176,15 @@ class DatastreamAPI(object):
 
     def get_datastream_handler(self, datastream: "DataStream") -> Callable:
         async def inner_datastream(
-            limit: Optional[int] = datastream.DEFAULT_LIMIT,
-            ds_filter: Optional[List[str]] = Query(None, alias="filter"),
-            ds_id: Optional[List[str]] = Query(None, alias="id"),
-            ds_format: Optional[str] = Query(None, alias="format"),
-            ds_from: Optional[str] = Query(None, alias="from"),
-            ds_filter_policy: Optional[str] = Query(
+            limit: int | None = datastream.DEFAULT_LIMIT,
+            ds_filter: list[str] | None = Query(None, alias="filter"),
+            ds_id: list[str] | None = Query(None, alias="id"),
+            ds_format: str | None = Query(None, alias="format"),
+            ds_from: str | None = Query(None, alias="from"),
+            ds_filter_policy: str | None = Query(
                 None, alias="filter_policy", pattern=r"^(default|delete|keep|move)$"
             ),
-            block: Optional[int] = None,
+            block: int | None = None,
         ):
             # Increase limit by 1 to detect datastream has more data
             limit = min(limit, datastream.DEFAULT_LIMIT) + 1
@@ -197,7 +192,7 @@ class DatastreamAPI(object):
             filters = ds_filter or []
             ids = ds_id or None
             if ids:
-                filters += ["id(%s)" % ",".join(ids)]
+                filters += ["id({})".format(",".join(ids))]
             # Start from change
             if ds_from:
                 change_id = ds_from
@@ -256,9 +251,9 @@ class DatastreamAPI(object):
 
     def get_verify_token_hander(self, datastream: "DataStream") -> Callable:
         async def verify_token(
-            ds_format: Optional[str] = Query(None, alias="format"),
-            x_noc_api_access: Optional[str] = Header(None),
-            host: Optional[str] = Header(None),
+            ds_format: str | None = Query(None, alias="format"),
+            x_noc_api_access: str | None = Header(None),
+            host: str | None = Header(None),
         ):
             if not x_noc_api_access:
                 raise HTTPException(status_code=400, detail="X-NOC-API-Access header invalid")

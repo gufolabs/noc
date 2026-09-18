@@ -18,7 +18,7 @@ class SystemNotification(NOCModel):
     System Notifications
     """
 
-    class Meta(object):
+    class Meta:
         app_label = "main"
         db_table = "main_systemnotification"
         verbose_name = "System Notification"

@@ -14,7 +14,6 @@ import os
 from urllib.parse import urlparse
 from time import perf_counter
 import asyncio
-from typing import Optional
 
 # NOC modules
 from noc.config import config
@@ -24,7 +23,7 @@ from noc.core.ioloop.timers import PeriodicCallback
 from .error import ResolutionError
 
 
-class DCSBase(object):
+class DCSBase:
     # Resolver class
     resolver_cls = None
     # HTTP code to be returned by /health endpoint when service is healthy
@@ -33,7 +32,7 @@ class DCSBase(object):
     # and must be temporary removed from resolver
     HEALTH_FAILED_HTTP_CODE = 429
 
-    def __init__(self, runner, url):
+    def __init__(self, runner, url) -> None:
         self.runner = runner
         self.logger = logging.getLogger(__name__)
         self.url = url
@@ -83,16 +82,11 @@ class DCSBase(object):
         pool=None,
         lock=None,
         tags=None,
-        check_interval: Optional[int] = None,
-        check_timeout: Optional[int] = None,
+        check_interval: int | None = None,
+        check_timeout: int | None = None,
     ):
         """
         Register service
-        :param name:
-        :param address:
-        :param port:
-        :param pool:
-        :param lock:
         :param tags: List of extra tags
         :param check_interval: DCS Check Interval
         :param check_timeout: DCS Check Timeout
@@ -104,10 +98,9 @@ class DCSBase(object):
         self.logger.info("Shooting self with SIGTERM")
         os.kill(os.getpid(), signal.SIGTERM)
 
-    async def get_slot_limit(self, name: str) -> Optional[int]:
+    async def get_slot_limit(self, name: str) -> int | None:
         """
         Return the current limit for given slot
-        :param name:
         :return:
         """
         raise NotImplementedError()
@@ -184,9 +177,6 @@ class DCSBase(object):
         """
         Returns *hint* when service is active or new service
         instance,
-        :param name:
-        :param hint:
-        :param full_result:
         :return:
         """
 
@@ -226,8 +216,8 @@ class DCSBase(object):
             self.status_message = ""
 
 
-class ResolverBase(object):
-    def __init__(self, dcs, name, critical=False, near=False, track=True):
+class ResolverBase:
+    def __init__(self, dcs, name, critical=False, near=False, track=True) -> None:
         self.dcs = dcs
         self.name = name
         self.to_shutdown = False
@@ -267,7 +257,7 @@ class ResolverBase(object):
                 if services:
                     self.dcs.clear_faulty_status()
                 else:
-                    self.dcs.set_faulty_status("No active services %s" % self.name)
+                    self.dcs.set_faulty_status(f"No active services {self.name}")
             self.services = services
             self.service_ids = sorted(services.keys())
             self.service_addresses = set(services.values())
@@ -275,7 +265,7 @@ class ResolverBase(object):
                 self.logger.info(
                     "[%s] Set active services to: %s",
                     self.name,
-                    ", ".join("%s: %s" % (i, self.services[i]) for i in self.services),
+                    ", ".join(f"{i}: {self.services[i]}" for i in self.services),
                 )
                 self.set_ready()
             else:
@@ -304,14 +294,14 @@ class ResolverBase(object):
         except asyncio.TimeoutError:
             metrics["errors", ("type", "dcs_resolver_timeout")] += 1
             if self.critical:
-                self.dcs.set_faulty_status("Failed to resolve %s: Timeout" % self.name)
+                self.dcs.set_faulty_status(f"Failed to resolve {self.name}: Timeout")
             raise ResolutionError()
 
     def _wait_for_services_sync(self, timeout):
         if not self.ready_event_sync.wait(timeout):
             metrics["errors", ("type", "dcs_resolver_timeout")] += 1
             if self.critical:
-                self.dcs.set_faulty_status("Failed to resolve %s: Timeout" % self.name)
+                self.dcs.set_faulty_status(f"Failed to resolve {self.name}: Timeout")
             raise ResolutionError()
 
     async def _wait_for_services(self, timeout=None):
@@ -328,7 +318,7 @@ class ResolverBase(object):
             await self._wait_for_services(timeout)
         if not wait and not self.is_ready:
             if self.critical:
-                self.dcs.set_faulty_status("Failed to resolve %s: No active services" % self.name)
+                self.dcs.set_faulty_status(f"Failed to resolve {self.name}: No active services")
             raise ResolutionError()
         with self.lock:
             if hint and hint in self.service_addresses:

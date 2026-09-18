@@ -7,7 +7,6 @@
 
 # Python modules
 import math
-from typing import Union, List, Tuple, Dict
 
 # Third-party modules
 import geojson
@@ -25,7 +24,7 @@ ELLIPSOIDS["PZ-90"] = (6378.1365, 6356.751758, 1 / 298.2564151)
 ELLIPSOID = config.gis.ellipsoid
 
 
-def _get_point(p: Union[GPoint, List[float], Tuple[float, float], geojson.Point, Dict]) -> GPoint:
+def _get_point(p: GPoint | list[float] | tuple[float, float] | geojson.Point | dict) -> GPoint:
     """
     Convert to geopy Point
     """
@@ -83,10 +82,6 @@ def bearing_sym(p1, p2):
 def get_bbox(x0: float, x1: float, y0: float, y1: float) -> geojson.Polygon:
     """
     Get normalized bounding box
-    :param x0:
-    :param x1:
-    :param y0:
-    :param y1:
     :return:
     """
 

@@ -9,7 +9,6 @@
 import logging
 import re
 from collections import defaultdict
-from typing import Dict, List, Tuple
 
 # NOC modules
 from noc.core.validators import is_oid
@@ -21,10 +20,10 @@ from noc.fm.models.ignorepattern import IgnorePattern
 logger = logging.getLogger(__name__)
 
 
-class PatternSet(object):
-    def __init__(self):
-        self.i_patterns: Dict[
-            str, List[Tuple[str, str]]
+class PatternSet:
+    def __init__(self) -> None:
+        self.i_patterns: dict[
+            str, list[tuple[str, str]]
         ] = {}  # (profile, chain) -> [rule, ..., rule]
         self.add_patterns = 0
 
@@ -40,7 +39,7 @@ class PatternSet(object):
             try:
                 re.compile(p.pattern)
             except re.error as e:
-                logger.error("Invalid ignore pattern '%s' (%s)" % (p.pattern, e))
+                logger.error(f"Invalid ignore pattern '{p.pattern}' ({e})")
                 continue
             i_patterns[p.source.value] += [str(p.id), p.pattern]
             n += 1
@@ -54,7 +53,7 @@ class PatternSet(object):
         try:
             re.compile(data["message_rx"])
         except re.error as e:
-            logger.error("Invalid ignore pattern '%s' (%s)" % (data["message_rx"], e))
+            logger.error("Invalid ignore pattern '{}' ({})".format(data["message_rx"], e))
             return
         update = False
         for p in self.i_patterns.get(source) or []:

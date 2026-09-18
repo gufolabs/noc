@@ -9,7 +9,7 @@
 # Python modules
 import datetime
 from dataclasses import dataclass
-from typing import Optional, Dict, Any, List, Set
+from typing import Any
 
 # NOC modules
 from noc.core.fm.request import ActionConfig, WhenCondition
@@ -23,7 +23,7 @@ from noc.fm.models.activealarm import ActiveAlarm, WatchItem, Effect
 
 
 @dataclass(frozen=True)
-class ActionResult(object):
+class ActionResult:
     """
     Action result class
     Attributes:
@@ -34,13 +34,13 @@ class ActionResult(object):
     """
 
     status: ActionStatus
-    error: Optional[str] = None
-    document_id: Optional[str] = None
-    ctx: Optional[Dict[str, str]] = None
-    actions: Optional[List[ActionConfig]] = None
+    error: str | None = None
+    document_id: str | None = None
+    ctx: dict[str, str] | None = None
+    actions: list[ActionConfig] | None = None
 
 
-class ActionLog(object):
+class ActionLog:
     """
     Action Part of log with Run"""
 
@@ -49,41 +49,43 @@ class ActionLog(object):
         action: AlarmAction,
         key,
         # Match
-        time_pattern: Optional[TimePattern] = None,
-        min_severity: Optional[int] = None,
+        time_pattern: TimePattern | None = None,
+        min_severity: int | None = None,
         alarm_ack: str = "any",
         when: WhenCondition = WhenCondition.ANY,
-        has_effect: Optional[Effect] = None,
+        has_effect: Effect | None = None,
+        ex_effect: Effect | None = None,
         # Time ?
-        subject: Optional[str] = None,
-        timestamp: Optional[datetime.datetime] = None,
+        subject: str | None = None,
+        timestamp: datetime.datetime | None = None,
         status: ActionStatus = ActionStatus.NEW,
-        error: Optional[str] = None,
-        repeat_num: Optional[int] = None,
+        error: str | None = None,
+        repeat_num: int | None = None,
         # Stop processed after action
         stop_processing: bool = False,
         allow_fail: bool = True,
         # Source Task
-        user: Optional[User] = None,
-        tt_system: Optional[TTSystem] = None,
-        document_id: Optional[str] = None,
-        template: Optional[Template] = None,
+        user: User | None = None,
+        tt_system: TTSystem | None = None,
+        document_id: str | None = None,
+        template: Template | None = None,
         **kwargs,
     ):
         self.action = action
         self.key = key
         # To ctx ?
-        self.template: Optional[Template] = template
+        self.template: Template | None = template
         self.subject = subject
         self.timestamp = timestamp  # run_at
         self.status = status
         self.error = error
         self.document_id = document_id
         self.min_severity = min_severity or 0
-        self.time_pattern: Optional[TimePattern] = time_pattern
+        self.time_pattern: TimePattern | None = time_pattern
         self.alarm_ack: str = alarm_ack or "any"
         self.when: WhenCondition = when or WhenCondition.ANY
-        self.has_effect: Optional[Effect] = has_effect
+        self.has_effect: Effect | None = has_effect
+        self.ex_effect: Effect | None = ex_effect
         self.stop_processing = stop_processing
         self.allow_fail = allow_fail
         self.repeat_num = repeat_num or 0
@@ -111,7 +113,7 @@ class ActionLog(object):
         severity: int,
         timestamp: datetime.datetime,
         ack_user: Any,
-        effects: Optional[Set[Effect]] = None,
+        effects: set[Effect] | None = None,
     ):
         """Check job condition"""
         effects = effects or set()
@@ -123,21 +125,23 @@ class ActionLog(object):
             return False
         if self.has_effect and self.has_effect not in effects:
             return False
+        if self.ex_effect and self.ex_effect in effects:
+            return False
         return not (self.alarm_ack == "unack" and ack_user)
 
     def get_ctx(
         self,
-        document_id: Optional[str] = None,
-        alarm_ctx: Optional[Dict[str, Any]] = None,
+        document_id: str | None = None,
+        alarm_ctx: dict[str, Any] | None = None,
         wait_tt: bool = False,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Build action Context
         Args:
             document_id: External document on tt_system
             alarm_ctx: Alarm context
         """
-        r: Dict[str, Any] = {"timestamp": self.timestamp}
+        r: dict[str, Any] = {"timestamp": self.timestamp}
         if (self.action in (AlarmAction.CREATE_TT, AlarmAction.CLOSE_TT)) and self.key == "stub":
             r["tt_system"] = self.tt_system
             r["tt_id"] = self.document_id or document_id
@@ -148,6 +152,8 @@ class ActionLog(object):
             AlarmAction.COMMENT_ALARM_STATE,
         ):
             r["tt_system"] = TTSystem.get_by_id(self.key)
+            r["tt_id"] = self.document_id or document_id
+        elif self.action == AlarmAction.REGISTER_MESSAGE:
             r["tt_id"] = self.document_id or document_id
         elif self.action == AlarmAction.NOTIFY:
             r["notification_group"] = NotificationGroup.get_by_id(int(self.key))
@@ -185,6 +191,7 @@ class ActionLog(object):
             alarm_ack=self.alarm_ack,
             when=self.when,
             has_effect=self.has_effect,
+            ex_effect=self.ex_effect,
             min_severity=self.min_severity,
             allow_fail=self.allow_fail,
             stop_processing=self.stop_processing,
@@ -200,10 +207,10 @@ class ActionLog(object):
         action: ActionConfig,
         started_at: datetime.datetime,
         one_time: bool = False,
-        user: Optional[int] = None,
-        tt_system: Optional[str] = None,
-        document_id: Optional[str] = None,
-        stub_tt_system: Optional[TTSystem] = None,
+        user: int | None = None,
+        tt_system: str | None = None,
+        document_id: str | None = None,
+        stub_tt_system: TTSystem | None = None,
     ) -> "ActionLog":
         """
         Create Action from Request
@@ -239,6 +246,7 @@ class ActionLog(object):
             when=action.when,
             min_severity=action.min_severity or 0,
             has_effect=action.has_effect or None,
+            ex_effect=action.ex_effect or None,
             allow_fail=action.allow_fail,
             stop_processing=action.stop_processing,
             # Ctx
@@ -253,7 +261,7 @@ class ActionLog(object):
         )
 
     @classmethod
-    def from_state(cls, data: Dict[str, Any]) -> "ActionLog":
+    def from_state(cls, data: dict[str, Any]) -> "ActionLog":
         """Restore Action Context from State Document"""
         user, tt_system, template = None, None, None
         if data.get("user"):
@@ -270,6 +278,7 @@ class ActionLog(object):
             alarm_ack=data["alarm_ack"],
             when=WhenCondition(data["when"]),
             has_effect=Effect(data["has_effect"]) if data.get("has_effect") else None,
+            ex_effect=Effect(data["ex_effect"]) if data.get("ex_effect") else None,
             timestamp=data["timestamp"],
             repeat_num=int(data["repeat_num"]),
             status=ActionStatus(data["status"]),
@@ -284,7 +293,7 @@ class ActionLog(object):
             **data.get("ctx", {}),
         )
 
-    def get_state(self) -> Dict[str, Any]:
+    def get_state(self) -> dict[str, Any]:
         """Getting Dict for action current state"""
         r = {
             "action": self.action.value,
@@ -294,6 +303,7 @@ class ActionLog(object):
             "alarm_ack": self.alarm_ack,
             "when": self.when.value,
             "has_effect": self.has_effect.value if self.has_effect else None,
+            "ex_effect": self.ex_effect.value if self.ex_effect else None,
             "timestamp": self.timestamp.replace(microsecond=0),
             "status": self.status.value,
             "error": self.error,
@@ -318,7 +328,7 @@ class ActionLog(object):
     @classmethod
     def from_watch(
         cls, watch: WatchItem, alarm: ActiveAlarm, is_clear: bool = False
-    ) -> List["ActionLog"]:
+    ) -> list["ActionLog"]:
         """Restore Action Log from Watch"""
         # Restore documentID, From WATCH, From LOG ?
         r = []
@@ -361,7 +371,7 @@ class ActionLog(object):
         return r
 
     @classmethod
-    def from_alarm(cls, alarm: ActiveAlarm, is_clear: bool = False) -> List["ActionLog"]:
+    def from_alarm(cls, alarm: ActiveAlarm, is_clear: bool = False) -> list["ActionLog"]:
         """"""
         r = []
         for w in alarm.watchers:

@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # Eltex.MES.get_interfaces
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ from noc.sa.interfaces.igetinterfaces import IGetInterfaces
 from noc.sa.interfaces.base import MACAddressParameter
 from noc.core.text import parse_table
 from noc.core.mib import mib
-from noc.core.comp import smart_text, smart_bytes
+from noc.core.comp import smart_text
 
 
 class Script(BaseScript):
@@ -104,7 +104,7 @@ class Script(BaseScript):
     # if ascii or rus text in description
     def convert_description(self, desc):
         if desc:
-            return smart_bytes(smart_text(desc, errors="replace"))
+            return smart_text(desc, errors="replace").encode()
         return desc
 
     def get_ip_ifindex(self):
@@ -229,9 +229,9 @@ class Script(BaseScript):
 
         # Get ifname and description
         c = self.cli("show interfaces description").split("\n\n")
-        i = self.rx_sh_int_des.findall("".join(["%s\n\n%s" % (c[0], c[1])]))
+        i = self.rx_sh_int_des.findall("".join([f"{c[0]}\n\n{c[1]}"]))
         if not i:
-            i = self.rx_sh_int_des2.findall("".join(["%s\n\n%s" % (c[0], c[1])]))
+            i = self.rx_sh_int_des2.findall("".join([f"{c[0]}\n\n{c[1]}"]))
         # Get stack interfaces
         if self.has_capability("Stack | Members"):
             for iface in parse_table(self.cli("show stack links details"), allow_wrap=True):
@@ -243,7 +243,7 @@ class Script(BaseScript):
             ifindex = 0
             name = res[0].strip()
             if self.is_has_chgroup:
-                v = self.cli("show interface %s" % name)
+                v = self.cli(f"show interface {name}")
                 time.sleep(0.5)
                 for match in self.rx_sh_int.finditer(v):
                     # ifname = match.group("interface")
@@ -322,7 +322,7 @@ class Script(BaseScript):
                     iface["enabled_protocols"] += ["LACP"]
             iface["subinterfaces"][0]["enabled_afi"] += ["BRIDGE"]
             # Vlans
-            cmd = self.cli("show interfaces switchport %s" % name)
+            cmd = self.cli(f"show interfaces switchport {name}")
             time.sleep(0.5)
             rcmd = cmd.split("\n\n")
             tvlan = []
@@ -338,7 +338,7 @@ class Script(BaseScript):
             if utvlan:
                 iface["subinterfaces"][0]["untagged_vlan"] = utvlan
 
-            cmd = self.cli("show ip interface %s" % name)
+            cmd = self.cli(f"show ip interface {name}")
             time.sleep(0.5)
             for match in self.rx_sh_ip_int.finditer(cmd):
                 if not match:

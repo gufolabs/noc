@@ -41,7 +41,7 @@ services:
     level: pool
     category: internal
     supervisord:
-      command: "./services/correlator/service.py"
+      command: "{{ noc_venv_python }} -m noc.services.correlator"
       process_name: "%(program_name)s-%(process_num)02d"
       oom_score_adj: 20
       priority: 150
@@ -51,4 +51,4 @@ services:
       stdout_logfile_backups: 3
     depends:
       - noc
-      - liftbridge
+      - kafka

@@ -17,7 +17,7 @@ class Script(BaseScript):
     def execute(self, vlan_id, name, tagged_ports):
         with self.configure():
             self.cli("vlan %d" % vlan_id)
-            self.cli("description %s" % name)
+            self.cli(f"description {name}")
             self.cli("quit")
         self.save_config()
         return True

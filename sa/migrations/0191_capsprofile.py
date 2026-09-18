@@ -14,7 +14,7 @@ from noc.core.model.fields import DocumentReferenceField
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         p_id = bson.ObjectId()
         self.mongo_db["capsprofiles"].insert_one(
             {

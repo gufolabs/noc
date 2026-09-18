@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # BaseNormalizer
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -9,9 +9,9 @@
 import itertools
 from collections import defaultdict
 from functools import partial
-from typing import List
 
 # NOC modules
+from typing import Any, cast
 from noc.core.ip import IP, IPv4, IPv6
 from noc.core.validators import ValidationError
 from ..syntax.patterns import ANY, REST, BOOL, Token, BasePattern
@@ -24,22 +24,22 @@ ANY = ANY
 REST = REST
 
 
-class Node(object):
+class Node:
     __slots__ = ["children", "handler", "matcher", "token"]
 
-    def __init__(self, token):
+    def __init__(self, token) -> None:
         if isinstance(token, str):
             self.token = Token(token)
         else:
             self.token = token
         self.handler = None
-        self.children: List[Node] = []
+        self.children: list[Node] = []
         self.matcher = None
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         if self.handler:
-            return "<Node %s (%s)>" % (repr(self.token), self.handler.__name__)
-        return "<Node %s>" % repr(self.token)
+            return f"<Node {self.token!r} ({self.handler.__name__})>"
+        return f"<Node {self.token!r}>"
 
     def clone(self) -> "Node":
         node = self.__class__(self.token)
@@ -51,7 +51,7 @@ class Node(object):
     def dump(self) -> str:
         def _dump(node, indent=0):
             prefix = "  " * indent
-            r = ["%s%s" % (prefix, repr(node))]
+            r = [f"{prefix}{node!r}"]
             for c in node.children:
                 r += _dump(c, indent + 1)
             return r
@@ -59,10 +59,13 @@ class Node(object):
         return "\n".join(_dump(self))
 
     def get_children(self, token):
-        """
-        Find children by token
-        :param token:
-        :return: Node instance or None
+        """Find children by token
+
+        Args:
+            token
+
+        Returns:
+            Node instance or None
         """
         for n in self.children:
             if n.match(token):
@@ -97,10 +100,10 @@ class Node(object):
 class RootNode(Node):
     __slots__ = ["children", "handler", "matcher", "token"]
 
-    def __init__(self, token=None):
+    def __init__(self, token=None) -> None:
         super().__init__(token)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "<RootNode>"
 
     def match(self, token):
@@ -115,8 +118,13 @@ class RootNode(Node):
 
 
 class BaseNormalizerMetaclass(type):
-    def __new__(mcs, name, bases, attrs):
-        n = type.__new__(mcs, name, bases, attrs)
+    def __new__(
+        mcs: "type[BaseNormalizerMetaclass]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["BaseNormalizer"]:
+        n = cast(type["BaseNormalizer"], type.__new__(mcs, name, bases, attrs))
         # Initialize matching tree
         n.mtree = RootNode()
         for base in bases:
@@ -133,7 +141,7 @@ class BaseNormalizerMetaclass(type):
             del f._seq
             del f._matcher
         # Process syntax
-        if bases[0] == object:
+        if not bases:
             mcs.parse_syntax(n, SYNTAX)
         elif n.SYNTAX:
             # Apply custom syntax
@@ -160,7 +168,7 @@ class BaseNormalizerMetaclass(type):
     def contribute_gen(mcs, ncls, path, replace=False):
         sdef = path[-1]
         # Check function name is not duplicated
-        assert not hasattr(ncls, sdef.gen), "Duplicated generator name: %s" % sdef.gen
+        assert not hasattr(ncls, sdef.gen), f"Duplicated generator name: {sdef.gen}"
         # Generate function
         args = []
         kw = {}
@@ -174,22 +182,22 @@ class BaseNormalizerMetaclass(type):
                     args += [p.token.compile_gen_kwarg(p.name, p.default)]
                     r += [p.token.compile_value(p.name)]
             else:
-                r += ["'%s'" % p.token]
+                r += [f"'{p.token}'"]
         if replace:
             kw["replace"] = True
         if kw:
             r += [str(kw)]
-        body = "def %s(self, %s):\n    return %s" % (sdef.gen, ", ".join(args), ", ".join(r))
+        body = "def {}(self, {}):\n    return {}".format(sdef.gen, ", ".join(args), ", ".join(r))
         ctx = {}
         exec(body, {"BOOL": BOOL, "IPv4": IPv4, "IPv6": IPv6, "IP": IP}, ctx)
         setattr(ncls, sdef.gen, ctx[sdef.gen])
 
 
-class BaseNormalizer(object, metaclass=BaseNormalizerMetaclass):
+class BaseNormalizer(metaclass=BaseNormalizerMetaclass):
     # Custom syntax to enrich ConfDB
     SYNTAX = []
 
-    def __init__(self, object, tokenizer, errors_policy: str = "strict"):
+    def __init__(self, object, tokenizer, errors_policy: str = "strict") -> None:
         self.object = object
         self.tokenizer = tokenizer
         self.deferable_contexts = defaultdict(dict)  # Name -> Context
@@ -210,11 +218,11 @@ class BaseNormalizer(object, metaclass=BaseNormalizerMetaclass):
         return self.object.profile.get_profile().convert_interface_name(" ".join(args))
 
     def to_prefix(self, address, netmask):
-        """
-        Convert address and netmask to prefix form
-        :param address:
-        :param netmask:
-        :return:
+        """Convert address and netmask to prefix form
+
+        Args:
+            address
+            netmask
         """
         return IPv4(address, netmask=netmask).prefix
 
@@ -284,11 +292,14 @@ class BaseNormalizer(object, metaclass=BaseNormalizerMetaclass):
         return None
 
     def _resolve_vars(self, ctx, d_map):
-        """
-        Resolve deferable variables mapping
-        :param ctx: Context
-        :param d_map: name -> context name mapping
-        :return: Dict if fully resolved, None otherwise
+        """Resolve deferable variables mapping
+
+        Args:
+            ctx: Context
+            d_map: name -> context name mapping
+
+        Returns:
+            Dict if fully resolved, None otherwise
         """
         r = {}
         for k in d_map:
@@ -300,15 +311,14 @@ class BaseNormalizer(object, metaclass=BaseNormalizerMetaclass):
         return r
 
     def rebase(self, src, dst):
-        """
-        Mark the part of tree to be rebased to new location
+        """Mark the part of tree to be rebased to new location
 
         Usage:
         yield self.rebase(src, dst)
 
-        :param src: Source path
-        :param dst: Destination path
-        :return:
+        Args:
+            src: Source path
+            dst: Destination path
         """
 
         def wrap():
@@ -332,9 +342,9 @@ def match(*args, **kwargs):
 
 
 def deferable(name):
-    """
-    Denote deferable (i.e. restorable from context, may be later) variable
-    :param name: Variable name
-    :return:
+    """Denote deferable (i.e. restorable from context, may be later) variable
+
+    Args:
+        name: Variable name
     """
     return (name,)

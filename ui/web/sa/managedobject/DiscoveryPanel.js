@@ -214,7 +214,7 @@ Ext.define("NOC.sa.managedobject.DiscoveryPanel", {
         me.historyHashPrefix,
       );
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + record.get("id") + "/discovery/",
       method: "GET",
       scope: me,
@@ -252,7 +252,7 @@ Ext.define("NOC.sa.managedobject.DiscoveryPanel", {
       names = records.map(function(r){
         return r.get("name");
       });
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + me.currentRecord.get("id") + "/discovery/run/",
       method: "POST",
       scope: me,
@@ -275,7 +275,7 @@ Ext.define("NOC.sa.managedobject.DiscoveryPanel", {
       names = records.map(function(r){
         return r.get("name");
       });
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/sa/managedobject/" + me.currentRecord.get("id") + "/discovery/stop/",
       method: "POST",
       scope: me,
@@ -317,7 +317,7 @@ Ext.define("NOC.sa.managedobject.DiscoveryPanel", {
   showLog: function(jcls){
     var me = this,
       url = "/sa/managedobject/" + me.currentRecord.get("id") + "/job_log/" + jcls + "/";
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "GET",
       scope: me,

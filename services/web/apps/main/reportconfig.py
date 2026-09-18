@@ -1,0 +1,304 @@
+# ----------------------------------------------------------------------
+# main.report application
+# ----------------------------------------------------------------------
+# Copyright (C) 2007-2026 The NOC Project
+# See LICENSE for details
+# ----------------------------------------------------------------------
+
+# Python modules
+from urllib.parse import quote
+from collections import defaultdict
+
+# Third-party modules
+from pydantic import ValidationError
+from django.http import HttpResponse, HttpResponseBadRequest, HttpRequest
+
+# NOC modules
+from noc.services.web.base.extdocapplication import ExtDocApplication, api
+from noc.main.models.report import Report
+from noc.core.reporter.reportengine import ReportEngine
+from noc.core.reporter.types import RunParams, OutputType
+from noc.core.translation import ugettext as _
+from noc.models import get_model
+from noc.config import config
+
+
+class ReportConfigApplication(ExtDocApplication):
+    """
+    Report application
+    """
+
+    title = "Report Configs"
+    menu = _("Report Config")
+    model = Report
+
+    def instance_to_dict(self, o, fields=None, nocustom=False):
+        r = super().instance_to_dict(o, fields, nocustom)
+        if isinstance(o, Report):
+            bands = []
+            for b in r["bands"]:
+                queries = []
+                for q in b.get("queries") or []:
+                    if q["datasource"]:
+                        q["datasource__label"] = q["datasource"]
+                    queries += [q]
+                b["queries"] = queries
+                if b["name"] == "Root":
+                    r["root_orientation"] = b.get("orientation")
+                    r["root_queries"] = b.get("queries") or []
+                    continue
+                if b["parent"] == "Root":
+                    b.pop("parent")
+                bands += [b]
+            r["bands"] = bands
+            r["localization"] = []
+            for field, items in o.localization.items():
+                for lang, value in items.items():
+                    r["localization"] += [
+                        {"field": field, "language": lang, "language__label": lang, "value": value}
+                    ]
+            if r.get("report_source"):
+                r["report_source__label"] = r["report_source"]
+        for x in r.get("parameters", []):
+            if x.get("model_id"):
+                x["model_id__label"] = x["model_id"]
+        return r
+
+    def clean(self, data):
+        bands = [
+            {
+                "name": "Root",
+                "orientation": data.pop("root_orientation", None) or "H",
+                "queries": data.pop("root_queries", None) or [],
+            }
+        ]
+        for b in data.get("bands") or []:
+            if not b.get("parent"):
+                b["parent"] = "Root"
+            bands += [b]
+        data["bands"] = bands
+        localization = defaultdict(dict)
+        for row in data.get("localization"):
+            localization[row["field"]][row["language"]] = row["value"]
+        data["localization"] = localization
+        return super().clean(data)
+
+    @staticmethod
+    def get_columns_filter(
+        report: Report,
+        checked: set[str] | None = None,
+        pref_lang: str | None = None,
+        condition_value: str | None = None,
+    ) -> list:
+        """
+        Get columns filter
+        :return:
+        """
+        r = []
+        checked = checked or {}
+        band_fmt = report.get_bandformat(condition_value)
+        if not band_fmt.column_format:
+            return r
+        columns = report.get_root_band_ds_columns()
+        for field in band_fmt.column_format:
+            field_name = field["name"]
+            if "." in field_name:
+                q_name, fn = field_name.split(".")
+            else:
+                q_name, fn = "", field_name
+            if q_name not in columns:
+                continue
+            if fn not in columns[q_name] and fn not in {"all", "*"}:
+                continue
+            title = (
+                report.get_localization(f"columns.{fn}", lang=pref_lang) or field.get("title") or fn
+            )
+            if condition_value:
+                id = f"{condition_value}__{field_name}"
+                row = (id, field_name, title, field_name in checked, condition_value)
+            else:
+                id = field_name
+                row = (id, field_name, title, field_name in checked)
+            r.append(row)
+        return r
+
+    @api.get(r"^(?P<report_id>\S+)/form/$", access="run")
+    def api_form_report(self, request: HttpRequest, report_id):
+        def update_choice_widget(result: dict, cond_param: str, target_name: str):
+            for cfg in result["params"]:
+                if cfg["name"] == cond_param:
+                    cfg["reportMeta"] = {}
+                    dep = {
+                        "targetWidget": f"[name={target_name}]",
+                        "filter": "type",
+                    }
+                    cfg["reportMeta"]["dependencies"] = [dep]
+                    return
+
+        report: Report = self.get_object_or_404(Report, id=report_id)
+        pref_lang = request.user.preferred_language
+        outputs = set()
+        r = {
+            "title": report.get_localization(field="title", lang=pref_lang),
+            "description": report.description,
+            "params": [],
+            "preview": False,
+            "dockedItems": [
+                # {"text": "csv", "param": {"output_type": "csv"}},
+                # {"text": "ssv", "param": {"output_type": "xlsx"}},
+            ],
+        }
+        tpl = report.templates[0] if report.templates else None
+        if tpl and tpl.output_type:
+            outputs.add(tpl.output_type.lower())
+        if report.report_source or (tpl and tpl.has_preview):
+            r["preview"] = True
+            r["dockedItems"] += [{"text": "Preview", "param": {"output_type": "html"}}]
+            outputs.discard("html")
+        if report.report_source or (tpl and tpl.is_alterable_output):
+            outputs.update({"csv", "csv+zip", "xlsx"})
+        if outputs:
+            r["dockedItems"] += [
+                {"text": out.upper(), "param": {"output_type": out}} for out in outputs
+            ]
+        widget_dependency = None
+        for param in report.parameters:
+            if param.hide:
+                continue
+            cfg = {
+                "name": param.name,
+                "fieldLabel": report.get_localization(
+                    f"parameters.{param.name}",
+                    lang=pref_lang,
+                )
+                or param.label,
+                "allowBlank": not param.required,
+                "uiStyle": "medium",
+            }
+            if param.type == "model":
+                model = get_model(param.model_id)
+                if hasattr(model, "get_path"):
+                    cfg["xtype"] = "noc.core.combotree"
+                    cfg["restUrl"] = f"/{'/'.join(param.model_id.lower().split('.'))}/"
+                    cfg["uiStyle"] = "large"
+                else:
+                    cfg["xtype"] = "core.combo"
+                    cfg["restUrl"] = f"/{'/'.join(param.model_id.lower().split('.'))}/lookup/"
+                    cfg["uiStyle"] = "medium-combo"
+                    if param.default:
+                        cfg["value"] = param.default
+            elif param.type == "model_multi":
+                model = get_model(param.model_id)
+                cfg["xtype"] = "core.tagfield"
+                cfg["url"] = f"/{'/'.join(param.model_id.lower().split('.'))}/"
+                cfg["displayField"] = "name"
+                cfg["uiStyle"] = "large"
+            elif param.type == "integer":
+                cfg["xtype"] = "numberfield"
+                cfg["uiStyle"] = "small"
+                if param.default:
+                    cfg["value"] = int(param.default)
+            elif param.type == "date":
+                cfg["xtype"] = "datefield"
+                cfg["format"] = "d.m.Y"
+                cfg["submitFormat"] = "d.m.Y"
+            elif param.type == "choice":
+                cfg["xtype"] = "radiogroup"
+                cfg["items"] = [
+                    {"boxLabel": x, "inputValue": x, "checked": x == param.default}
+                    for x in param.choices
+                ]
+            elif param.type == "combo-choice":
+                cfg["xtype"] = "combobox"
+                cfg["store"] = [[x, x] for x in param.choices]
+            elif param.type == "bool":
+                cfg["xtype"] = "checkbox"
+                cfg["uiStyle"] = "small"
+                if param.default and param.default == "1":
+                    cfg["checked"] = "true"
+            elif param.type == "fields_selector":
+                cfg["xtype"] = "reportcolumnselect"
+                if param.condition_param:
+                    widget_dependency = {
+                        "cond_param": param.condition_param,
+                        "target_name": param.name,
+                    }
+                    cfg["conditionParam"] = param.condition_param
+                    cfs = []
+                    for cv in param.condition_values:
+                        cf = self.get_columns_filter(
+                            report,
+                            checked={p.strip() for p in cv.default_value.split(",")},
+                            pref_lang=pref_lang,
+                            condition_value=cv.value,
+                        )
+                        cfs.extend(cf)
+                    cfg["store"] = {
+                        "fields": [
+                            "id",
+                            "field_name",
+                            "label",
+                            {
+                                "name": "is_active",
+                                "type": "boolean",
+                            },
+                            "type",
+                        ],
+                        "data": cfs,
+                    }
+                else:
+                    cf = self.get_columns_filter(
+                        report,
+                        checked={p.strip() for p in param.default.split(",")},
+                        pref_lang=pref_lang,
+                    )
+                    cfg["store"] = {
+                        "fields": [
+                            "id",
+                            "field_name",
+                            "label",
+                            {
+                                "name": "is_active",
+                                "type": "boolean",
+                            },
+                        ],
+                        "data": cf,
+                    }
+            else:
+                cfg["xtype"] = "textfield"
+            r["params"] += [cfg]
+        if widget_dependency:
+            update_choice_widget(
+                r, widget_dependency["cond_param"], widget_dependency["target_name"]
+            )
+        # formats
+        return r
+
+    @api.get(r"^(?P<report_id>\S+)/run/$", access="run")
+    def api_report_run(self, request: HttpRequest, report_id: str):
+        """
+
+        :return:
+        """
+        q = {str(k): v[0] if len(v) == 1 else v for k, v in request.GET.lists()}
+        pref_lang = request.user.preferred_language
+        report: Report = self.get_object_or_404(Report, id=report_id)
+        report_engine = ReportEngine(
+            report_execution_history=config.web.enable_report_history,
+        )
+        try:
+            rp = RunParams(
+                report_config=report.get_config(pref_lang),
+                output_type=OutputType(q.get("output_type")),
+                params=q,
+            )
+        except ValidationError as e:
+            return HttpResponseBadRequest(e)
+        try:
+            out_doc = report_engine.run_report(r_params=rp)
+        except ValueError as e:
+            return HttpResponseBadRequest(e)
+        content = out_doc.get_content()
+        response = HttpResponse(content, content_type=out_doc.content_type)
+        response["Content-Disposition"] = f'attachment; filename="{quote(out_doc.document_name)}"'
+        return response

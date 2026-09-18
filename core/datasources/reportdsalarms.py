@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import operator
-from typing import List, Iterable, Dict, Any, Optional, Tuple, AsyncIterable
+from typing import Iterable, Any, AsyncIterable
 
 # Third-party modules
 import bson
@@ -56,7 +56,7 @@ class ReportDsAlarms(BaseDataSource):
         ParamInfo(name="min_subscribers", type="int"),
     ]
 
-    fields: List[FieldInfo] = [
+    fields: list[FieldInfo] = [
         FieldInfo(
             name="alarm_id",
             # label="Alarm Id",
@@ -218,10 +218,10 @@ class ReportDsAlarms(BaseDataSource):
     def iter_data(
         cls,
         start: datetime.datetime,
-        end: Optional[datetime.datetime],
-        admin_domain_ads: Optional[List[int]] = None,
-        **filters: Optional[Dict[str, Any]],
-    ) -> Iterable[Dict[str, Any]]:
+        end: datetime.datetime | None,
+        admin_domain_ads: list[int] | None = None,
+        **filters: dict[str, Any] | None,
+    ) -> Iterable[dict[str, Any]]:
         if "objectids" in filters:
             match = {"_id": {"$in": [bson.ObjectId(x) for x in filters["objectids"]]}}
         elif not end:
@@ -347,17 +347,16 @@ class ReportDsAlarms(BaseDataSource):
                 pipeline += [{"$match": match_middle}]
 
             # print(pipeline, alarm_collections)
-            for row in (
+            yield from (
                 coll._get_collection()
                 .with_options(read_preference=ReadPreference.SECONDARY_PREFERRED)
                 .aggregate(pipeline)
-            ):
-                yield row
+            )
 
     @classmethod
     async def iter_query(
-        cls, fields: Optional[Iterable[str]] = None, *args, **kwargs
-    ) -> AsyncIterable[Tuple[str, str]]:
+        cls, fields: Iterable[str] | None = None, *args, **kwargs
+    ) -> AsyncIterable[tuple[str, str]]:
         if "start" not in kwargs:
             raise ValueError("Start filter is required")
         moss = {

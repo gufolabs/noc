@@ -10,7 +10,6 @@ import re
 import datetime
 import argparse
 import time
-from typing import Optional, List
 from html.entities import name2codepoint
 
 # Third-party modules
@@ -35,7 +34,7 @@ DEFAULT_CLEAN = datetime.timedelta(weeks=4)
 CLEAN_WINDOW = datetime.timedelta(weeks=1)
 
 name2codepoint["#39"] = 39
-rx_cp = re.compile("&(%s);" % "|".join(name2codepoint))
+rx_cp = re.compile("&({});".format("|".join(name2codepoint)))
 
 
 def unescape(s):
@@ -48,7 +47,7 @@ def unescape(s):
 class Command(BaseCommand):
     help = "Manage events"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         # parser.add_argument("-s", "--selector", dest="selector", help="Selector name"),
         # parser.add_argument("-s", "--resource-group", dest="resource_group", help="Group"),
         # parser.add_argument("-o", "--object", dest="object", help="Managed Object's name"),
@@ -93,7 +92,7 @@ class Command(BaseCommand):
 
     def handle(self, cmd, *args, **options):
         connect()
-        return getattr(self, "handle_%s" % cmd.replace("-", "_"))(*args, **options)
+        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
 
     def handle_json(self, option, events):
         return self.handle_show(option, events, show_json=True)
@@ -112,10 +111,10 @@ class Command(BaseCommand):
     def handle_inject_event(
         self,
         *args,
-        syslog: Optional[str] = None,
-        object: Optional[str] = None,
-        remote_system: Optional[str] = None,
-        paths: Optional[List[str]] = None,
+        syslog: str | None = None,
+        object: str | None = None,
+        remote_system: str | None = None,
+        paths: list[str] | None = None,
         **options,
     ):
         # Inject syslog messages
@@ -229,7 +228,3 @@ class Command(BaseCommand):
                 except Exception as e:
                     self.print(e)
                     self.print("End variables: ", var_ctx)
-
-
-if __name__ == "__main__":
-    Command().run()

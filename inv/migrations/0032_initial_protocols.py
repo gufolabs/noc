@@ -677,7 +677,7 @@ class Migration(BaseMigration):
         },
     ]
 
-    def migrate(self):
+    def migrate(self) -> None:
         # Insert Technologies
         bulk = [
             UpdateOne(

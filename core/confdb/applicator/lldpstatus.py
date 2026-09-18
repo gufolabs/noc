@@ -10,9 +10,7 @@ from .query import QueryApplicator
 
 
 class DefaultLLDPStatusApplicator(QueryApplicator):
-    """
-    Apply non-disabled LLDP interfaces
-    """
+    """Apply non-disabled LLDP interfaces"""
 
     CHECK_QUERY = "Match('hints', 'protocols', 'lldp', 'status')"
     QUERY = [

@@ -1,0 +1,31 @@
+{
+    "name": "Network | xPON | ONU | Laser Always On",
+    "$collection": "fm.eventclasses",
+    "uuid": "25c11284-4e1a-4877-8497-055e5cf7e376",
+    "description": "ONU Laser always on",
+    "action": "A",
+    "vars": [
+        {
+            "name": "interface",
+            "description": "xPON interface",
+            "type": "str",
+            "required": true
+        }
+    ],
+    "deduplication_window": 3,
+    "suppression_window": 120,
+    "ttl": 86400,
+    "subject_template": "ONU \"Laser always on\" error on {{interface}}",
+    "body_template": "ONU \"Laser always on\" error on {{interface}}",
+    "symptoms": "",
+    "probable_causes": "",
+    "recommended_actions": "",
+    "disposition": [
+        {
+            "name": "dispose",
+            "condition": "True",
+            "action": "raise",
+            "alarm_class__name": "Network | xPON | ONU | Laser Always On"
+        }
+    ]
+}

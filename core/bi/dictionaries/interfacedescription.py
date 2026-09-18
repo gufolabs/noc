@@ -13,7 +13,7 @@ from noc.core.text import ch_escape
 
 
 class InterfaceDescription(DictionaryModel):
-    class Meta(object):
+    class Meta:
         name = "interfacedescription"
         layout = "complex_key_hashed"
         source_model = "inv.SubInterface"

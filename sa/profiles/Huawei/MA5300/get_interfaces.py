@@ -144,7 +144,7 @@ class Script(BaseScript):
             if not match:
                 continue
             ifname = match.group("iface")
-            c = self.cli("show interface %s" % ifname, ignore_errors=True)
+            c = self.cli(f"show interface {ifname}", ignore_errors=True)
             match1 = self.rx_mac.search(c)
             if match1:
                 mac = match1.group("mac")

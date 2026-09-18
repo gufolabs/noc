@@ -1,12 +1,15 @@
 # ---------------------------------------------------------------------
 # Interactive prefix list builder
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2018 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
+# Third-party modules
+from django.http import HttpRequest
+
 # NOC modules
-from noc.services.web.base.extapplication import ExtApplication, view
+from noc.services.web.base.extapplication import ExtApplication, api
 from noc.peer.models.peeringpoint import PeeringPoint
 from noc.peer.models.whoiscache import WhoisCache
 from noc.sa.interfaces.base import UnicodeParameter, ModelParameter
@@ -23,18 +26,16 @@ class PrefixListBuilderApplication(ExtApplication):
     title = _("Prefix List Builder")
     menu = _("Prefix List Builder")
 
-    @view(
-        method=["GET"],
-        url=r"^$",
+    @api.get(
+        r"^$",
         access="read",
-        api=True,
         validate={
             "peering_point": ModelParameter(PeeringPoint),
             "name": UnicodeParameter(required=False),
             "as_set": UnicodeParameter(),
         },
     )
-    def api_list(self, request, peering_point, name, as_set):
+    def api_list(self, request: HttpRequest, peering_point, name, as_set):
         if not WhoisCache.has_asset_members():
             return {
                 "name": name,

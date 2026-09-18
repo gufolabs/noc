@@ -38,7 +38,7 @@ class Script(BaseScript):
         r = []
         v = self.profile.get_interfaces_list(self)
         if interface:
-            cmd = "show interface %s | include Administrative status" % interface
+            cmd = f"show interface {interface} | include Administrative status"
             s = self.cli(cmd)
             match = self.rx_interface_status.search(s)
             if match:
@@ -47,7 +47,7 @@ class Script(BaseScript):
                 ]
         else:
             for interface in v:
-                cmd = "show interface %s | include Administrative status" % interface
+                cmd = f"show interface {interface} | include Administrative status"
                 s = self.cli(cmd)
                 match = self.rx_interface_status.search(s)
                 if match:

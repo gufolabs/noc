@@ -3,16 +3,15 @@
   include_tasks: "os/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/main.yml"
 
 - name: Install assets
-  command: "{{ noc_root }}/scripts/deploy/install-packages requirements/{{ item }}.json"
+  command: "{{ noc_venv_python }} ./scripts/deploy/install-packages requirements/{{ item }}.json"
   args:
     chdir: "{{ noc_root }}"
   register: s
   changed_when: "'CHANGED' in s.stdout"
-  with_items: "{{ required_assets }}"
+  loop: "{{ required_assets }}"
   environment:
     http_proxy: "{{ http_proxy }}"
     https_proxy: "{{ http_proxy }}"
     NOC_CONFIG: "{{ config_order }}"
-    PYTHONPATH: "{{ noc_root | dirname }}"
   tags:
     - requirements

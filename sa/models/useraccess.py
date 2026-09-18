@@ -21,7 +21,7 @@ from .administrativedomain import AdministrativeDomain
 
 
 class UserAccess(NOCModel):
-    class Meta(object):
+    class Meta:
         verbose_name = _("User Access")
         verbose_name_plural = _("User Access")
         db_table = "sa_useraccess"
@@ -34,17 +34,15 @@ class UserAccess(NOCModel):
     )
 
     def __str__(self):
-        r = ["user=%s" % self.user.username]
+        r = [f"user={self.user.username}"]
         if self.administrative_domain:
-            r += ["domain=%s" % self.administrative_domain.name]
-        return "(%s)" % ", ".join(r)
+            r += [f"domain={self.administrative_domain.name}"]
+        return "({})".format(", ".join(r))
 
     @classmethod
     def Q(cls, user):
         """
         Returns Q object for user access
-        :param cls:
-        :param user:
         :return:
         """
         if user.is_superuser:

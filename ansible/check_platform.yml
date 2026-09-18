@@ -1,0 +1,17 @@
+- name: Load supported platforms
+  include_vars:
+    file: "{{ playbook_dir }}/vars/platforms.yml"
+
+- name: Check platform support
+  fail:
+    msg: "Platform {{ platform }} is not supported"
+  when: platform not in platforms
+
+- name: Check platform licence level
+  fail:
+    msg: >-
+      Platform {{ platform }} requires NOC licence level
+      {{ platforms[platform].required_level }}, but {{ noc_level }} is used.
+  when:
+    - platforms[platform].required_level == "pro"
+    - noc_level != "pro"

@@ -4,36 +4,16 @@
 
 ## listen
 
-|                |                            |
-| -------------- | -------------------------- |
-| Default value  | `0.0.0.0:162`              |
-| YAML Path      | `trapcollector.listen`     |
-| Key-Value Path | `trapcollector/listen`     |
-| Environment    | `NOC_TRAPCOLLECTOR_LISTEN` |
+{{ config_param("trapcollector.listen") }}
 
 ## enable_reuseport
 
-|                |                                      |
-| -------------- | ------------------------------------ |
-| Default value  | `True`                               |
-| YAML Path      | `trapcollector.enable_reuseport`     |
-| Key-Value Path | `trapcollector/enable_reuseport`     |
-| Environment    | `NOC_TRAPCOLLECTOR_ENABLE_REUSEPORT` |
+{{ config_param("trapcollector.enable_reuseport") }}
 
 ## enable_freebind
 
-|                |                                     |
-| -------------- | ----------------------------------- |
-| Default value  | `False`                             |
-| YAML Path      | `trapcollector.enable_freebind`     |
-| Key-Value Path | `trapcollector/enable_freebind`     |
-| Environment    | `NOC_TRAPCOLLECTOR_ENABLE_FREEBIND` |
+{{ config_param("trapcollector.enable_freebind") }}
 
 ## ds_limit
 
-|                |                              |
-| -------------- | ---------------------------- |
-| Default value  | `1000`                       |
-| YAML Path      | `trapcollector.ds_limit`     |
-| Key-Value Path | `trapcollector/ds_limit`     |
-| Environment    | `NOC_TRAPCOLLECTOR_DS_LIMIT` |
+{{ config_param("trapcollector.ds_limit") }}

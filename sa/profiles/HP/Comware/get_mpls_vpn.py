@@ -30,7 +30,7 @@ class Script(BaseScript):
             match = self.rx_line.match(ll)
             if match:
                 vrf = match.group("vrf")
-                v1 = self.cli("display ip vpn-instance instance-name %s" % vrf)
+                v1 = self.cli(f"display ip vpn-instance instance-name {vrf}")
                 match1 = self.rx_if.search(v1)
                 if match1:
                     interfaces = match1.group("ifaces").replace("\n", "")

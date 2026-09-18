@@ -44,30 +44,30 @@ class Script(BaseScript):
             value = v["DeviceInfo"][key]
             if key == "_text" or isinstance(value, str):
                 continue
-            c += "    %s %s\n" % (key, value[0]["_text"] if value[0] else "")
+            c += "    {} {}\n".format(key, value[0]["_text"] if value[0] else "")
         v = self.http.get("/ISAPI/Streaming/channels", use_basic=True)
         v = v.replace("\n", "")
         root = ElementTree.fromstring(v)
         v = self.xml_2_dict(root)
         channels = v["StreamingChannelList"]["StreamingChannel"]
         for o in channels:
-            c += "StreamingChannel %s\n" % o["id"][0]["_text"].strip("'")
-            c += "  id %s\n" % o["id"][0]["_text"]
-            c += '  channelName "%s"\n' % o["channelName"][0].get("_text", "")
-            c += "  enabled %s\n" % o["enabled"][0]["_text"]
+            c += "StreamingChannel {}\n".format(o["id"][0]["_text"].strip("'"))
+            c += "  id {}\n".format(o["id"][0]["_text"])
+            c += '  channelName "{}"\n'.format(o["channelName"][0].get("_text", ""))
+            c += "  enabled {}\n".format(o["enabled"][0]["_text"])
             video = o["Video"][0]
             c += "  Video\n"
             for key, value in sorted(video.items()):
                 if key == "_text" or isinstance(value, str):
                     continue
-                c += "    %s %s\n" % (key, value[0]["_text"])
+                c += "    {} {}\n".format(key, value[0]["_text"])
             if "Audio" in o:
                 audio = o["Audio"][0]
                 c += "  Audio\n"
                 for key, value in sorted(audio.items()):
                     if key == "_text" or isinstance(value, str):
                         continue
-                    c += "    %s %s\n" % (key, value[0]["_text"])
+                    c += "    {} {}\n".format(key, value[0]["_text"])
         v = self.http.get("/ISAPI/Image/channels/1", use_basic=True)
         v = v.replace("\n", "")
         root = ElementTree.fromstring(v)
@@ -79,21 +79,21 @@ class Script(BaseScript):
         for key, value in sorted(color.items()):
             if key == "_text" or isinstance(value, str):
                 continue
-            c += "    %s %s\n" % (key, value[0]["_text"])
+            c += "    {} {}\n".format(key, value[0]["_text"])
         if "WDR" in o:
             wdr = o["WDR"][0]
             c += "WDR\n"
             for key, value in sorted(wdr.items()):
                 if key == "_text" or isinstance(value, str):
                     continue
-                c += "    %s %s\n" % (key, value[0]["_text"])
+                c += "    {} {}\n".format(key, value[0]["_text"])
         blc = o["BLC"][0]
         c += "BLC\n"
         for key, value in sorted(blc.items()):
             if key == "_text" or isinstance(value, str):
                 continue
             try:
-                c += "    %s %s\n" % (key, value[0]["_text"])
+                c += "    {} {}\n".format(key, value[0]["_text"])
             except KeyError:
                 continue
         try:
@@ -130,13 +130,13 @@ class Script(BaseScript):
                                 c += '    TextOverlay %d ""\n' % i
                             i = i + 1
                 else:
-                    c += "  %s\n" % o
+                    c += f"  {o}\n"
                     for key, value in sorted(v["VideoOverlay"][o][0].items()):
                         if key == "_text" or isinstance(value, str):
                             continue
-                        c += "    %s %s\n" % (key, value[0]["_text"])
+                        c += "    {} {}\n".format(key, value[0]["_text"])
                 if o == "channelNameOverlay":
-                    c += "    %s %s\n" % ("channelName", vname)
+                    c += "    {} {}\n".format("channelName", vname)
         except HTTPError:
             pass
         try:
@@ -148,7 +148,7 @@ class Script(BaseScript):
             for key, value in sorted(v["Time"].items()):
                 if key == "_text" or isinstance(value, str) or key == "localTime":
                     continue
-                c += "  %s %s\n" % (key, value[0]["_text"])
+                c += "  {} {}\n".format(key, value[0]["_text"])
         except HTTPError:
             pass
         try:
@@ -172,11 +172,11 @@ class Script(BaseScript):
             v = self.xml_2_dict(root)
             c += "Users\n"
             for u in v["UserList"]["User"]:
-                c += " user %s\n" % u["userName"][0]["_text"]
+                c += " user {}\n".format(u["userName"][0]["_text"])
                 for key, value in sorted(u.items()):
                     if key == "_text" or isinstance(value, str):
                         continue
-                    c += "    %s %s\n" % (key, value[0]["_text"])
+                    c += "    {} {}\n".format(key, value[0]["_text"])
         except ElementTree.ParseError:
             pass
         return c

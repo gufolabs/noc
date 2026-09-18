@@ -19,7 +19,7 @@ class QueryApplicator(BaseApplicator):
     # List of
     CONFIG = {}
 
-    def __init__(self, object, confdb, **kwargs):
+    def __init__(self, object, confdb, **kwargs) -> None:
         super().__init__(object, confdb)
         for k in self.CONFIG:
             self.config[k] = kwargs.get(k, self.CONFIG[k])

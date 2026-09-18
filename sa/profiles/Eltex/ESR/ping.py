@@ -26,7 +26,7 @@ class Script(BaseScript):
     )
 
     def execute(self, address, count=None, source_address=None, size=None, df=None):
-        cmd = "ping ip %s" % address
+        cmd = f"ping ip {address}"
         if count:
             cmd += " packets %d" % int(count)
         else:
@@ -34,7 +34,7 @@ class Script(BaseScript):
         if size:
             cmd += " size %d" % int(size)
         if source_address:
-            cmd += " source %s" % source_address
+            cmd += f" source {source_address}"
         # if df:
         #    cmd+=" df-bit"
         ping = self.cli(cmd)

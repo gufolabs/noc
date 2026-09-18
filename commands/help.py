@@ -17,7 +17,7 @@ from noc.config import config
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         parser.add_argument("command", nargs=argparse.REMAINDER, help="Show command's help")
 
     def handle(self, command=None, *args, **options):
@@ -27,7 +27,7 @@ class Command(BaseCommand):
 
     def list_commands(self):
         def get_help_from_command(path: str) -> str:
-            with open(path, "r") as f:
+            with open(path) as f:
                 tree = ast.parse(f.read())
             for node in ast.walk(tree):
                 if isinstance(node, ast.ClassDef) and node.name == "Command":
@@ -54,18 +54,14 @@ class Command(BaseCommand):
     def help_command(self, cmd):
         for root in config.get_customized_paths("commands"):
             # Python, call help
-            path = os.path.join(root, "%s.py" % cmd)
+            path = os.path.join(root, f"{cmd}.py")
             if os.path.exists(path):
                 return subprocess.call([os.environ.get("NOC_CMD", "./noc"), cmd, "--help"])
             # Shell, no help
-            path = os.path.join(root, "%s.sh" % cmd)
+            path = os.path.join(root, f"{cmd}.sh")
             if os.path.exists(path):
-                self.print("Help is not available for '%s'" % cmd)
+                self.print(f"Help is not available for '{cmd}'")
                 return 1
         # Command not found
-        self.print("Unknown command '%s'" % cmd)
+        self.print(f"Unknown command '{cmd}'")
         return 1
-
-
-if __name__ == "__main__":
-    Command().run()

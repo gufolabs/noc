@@ -12,5 +12,5 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("main", "0063_migrate_filter_labels")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         self.mongo_db["labels"].update_many({"is_regex": True}, {"$set": {"is_matching": True}})

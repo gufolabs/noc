@@ -53,7 +53,7 @@ class DNSZone(NOCModel):
     DNS Zone
     """
 
-    class Meta(object):
+    class Meta:
         verbose_name = _("DNS Zone")
         verbose_name_plural = _("DNS Zones")
         ordering = ["name"]
@@ -143,7 +143,6 @@ class DNSZone(NOCModel):
         * F - forward zone
 
         :return: Zone type
-        :rtype: String
         """
         nl = name.lower()
         if nl.endswith(".in-addr.arpa"):
@@ -160,7 +159,6 @@ class DNSZone(NOCModel):
         Appropriative prefix for reverse zone
 
         :return: IPv4 or IPv6 prefix
-        :rtype: String
         """
         if self.type == ZONE_REVERSE_IPV4:
             # Get IPv4 prefix covering reverse zone
@@ -216,7 +214,7 @@ class DNSZone(NOCModel):
         """
         parts = list(reversed(address.split(".")))[1:]
         while parts:
-            name = "%s.in-addr.arpa" % ".".join(parts)
+            name = "{}.in-addr.arpa".format(".".join(parts))
             zone = DNSZone.get_by_name(name)
             if zone:
                 return zone
@@ -234,7 +232,7 @@ class DNSZone(NOCModel):
         parts = [str(x) for x in reversed(IPv6(address).iter_bits())][1:]
         while parts:
             for suffix in (".ip6.int", ".ip6.arpa"):
-                name = "%s.%s" % (".".join(parts), suffix)
+                name = "{}.{}".format(".".join(parts), suffix)
                 zone = DNSZone.get_by_name(name)
                 if zone:
                     return zone
@@ -248,7 +246,6 @@ class DNSZone(NOCModel):
         to follow common practive.
 
         :return: Zone serial number
-        :rtype: int
         """
         T = time.gmtime()
         base = T[0] * 10000 + T[1] * 100 + T[2]
@@ -268,7 +265,7 @@ class DNSZone(NOCModel):
     def children(self):
         """List of next-level nested zones"""
         length = len(self.name)
-        s = ".%s" % self.name
+        s = f".{self.name}"
         return [
             z for z in DNSZone.objects.filter(name__iendswith=s) if "." not in z.name[: -length - 1]
         ]
@@ -288,7 +285,6 @@ class DNSZone(NOCModel):
         at the end.
 
         :return: List of zone NSes
-        :rtype: List of string
         """
         return sorted(self.get_ns_name(ns) for ns in self.profile.authoritative_servers)
 
@@ -299,8 +295,6 @@ class DNSZone(NOCModel):
         at the end.
 
         :return: List of zone master NSes
-        :rtype: List of string
-        :return:
         """
         return sorted(self.get_ns_name(ns) for ns in self.profile.masters.all())
 
@@ -311,8 +305,6 @@ class DNSZone(NOCModel):
         at the end.
 
         :return: List of zone slave NSes
-        :rtype: List of string
-        :return:
         """
         return sorted(self.get_ns_name(ns) for ns in self.profile.slaves.all())
 
@@ -323,7 +315,6 @@ class DNSZone(NOCModel):
         attributes
 
         :return: RPSL
-        :rtype: String
         """
         if self.type == ZONE_FORWARD:
             return ""
@@ -336,7 +327,7 @@ class DNSZone(NOCModel):
         n1, n = self.name.lower().split(".", 1)
         if n == "168.192.in-addr.arpa":
             return ""
-        s = ["domain: %s" % self.name] + ["nserver: %s" % ns for ns in self.ns_list]
+        s = [f"domain: {self.name}"] + [f"nserver: {ns}" for ns in self.ns_list]
         return rpsl_format("\n".join(s))
 
     @classmethod
@@ -364,13 +355,13 @@ class DNSZone(NOCModel):
             # IPv4 zone
             n = name.split(".")
             n.reverse()
-            return get_closest("%s.in-addr.arpa" % (".".join(n[1:])))
+            return get_closest("{}.in-addr.arpa".format(".".join(n[1:])))
         if is_ipv6(name):
             # IPv6 zone
             d = IPv6(name).digits
             d.reverse()
             c = ".".join(d)
-            return get_closest("%s.ip6.arpa" % c) or get_closest("%s.ip6.int" % c)
+            return get_closest(f"{c}.ip6.arpa") or get_closest(f"{c}.ip6.int")
         return get_closest(name)
 
     def get_notification_groups(self):

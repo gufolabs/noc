@@ -46,12 +46,27 @@ Ext.define("NOC.core.CodeViewer", {
     
   initEditor: function(){
     var me = this;
-        
-    if(!window.monaco){
-      console.error("Monaco Editor is not loaded");
+
+    // Monaco is loaded on demand. Once available, window.monaco is set and the
+    // editor is created synchronously, so callers that touch me.editor right
+    // after the first load behave as before.
+    if(window.monaco){
+      me.createEditor();
       return;
     }
-        
+    window.loadMonaco().then(function(){
+      if(me.destroyed || !me.el || !me.el.dom){
+        return;
+      }
+      me.createEditor();
+    }).catch(function(error){
+      console.error("Monaco Editor is not loaded", error);
+    });
+  },
+
+  createEditor: function(){
+    var me = this;
+
     me.editor = window.monaco.editor.create(me.el.dom, {
       value: me.value,
       language: me.language,
@@ -82,7 +97,7 @@ Ext.define("NOC.core.CodeViewer", {
       }
     });
   },
-  
+
   onContentChange: function(fn, scope){
     var me = this;
     

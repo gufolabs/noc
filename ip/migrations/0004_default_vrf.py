@@ -12,7 +12,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("peer", "0017_default_maintainer")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         if self.db.execute("SELECT COUNT(*) FROM ip_vrfgroup")[0][0] == 0:
             self.db.execute("INSERT INTO ip_vrfgroup(name) VALUES(%s)", ["default"])
         if self.db.execute("SELECT COUNT(*) FROM peer_as WHERE asn=%s", [0])[0][0] == 0:

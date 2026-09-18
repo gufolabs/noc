@@ -8,18 +8,16 @@
 # NOC modules
 
 
-class OverlayHandler(object):
-    def __init__(self, **config):
+class OverlayHandler:
+    def __init__(self, **config) -> None:
         """
         Overlay configuration will be passed
-        :param config:
         :return:
         """
 
     def handle(self, bbox=None, **kwargs):
         """
         Re
-        :param kwargs:
         :return: GeoJSON data
         """
         return []

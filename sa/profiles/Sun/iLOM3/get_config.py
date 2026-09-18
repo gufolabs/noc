@@ -18,7 +18,7 @@ class Script(BaseScript):
         self.cli("cd /SP/config")
         with self.servers.ftp() as ftp:
             url = ftp.get_url(self.access_profile.address)
-            self.cli("dump -destination %s" % url)
+            self.cli(f"dump -destination {url}")
             config = ftp.get_data()
         self.cli("cd /")
         return self.cleaned_config(config)

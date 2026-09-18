@@ -15,7 +15,7 @@ import time
 from dateutil.parser import parse
 from functools import partial
 from collections import defaultdict
-from typing import List, Optional, Iterable, Dict, Union, Any, Tuple
+from typing import Iterable, Any
 
 # Third-party modules
 import orjson
@@ -40,7 +40,7 @@ NS = 1_000_000_000
 class Command(BaseCommand):
     TOPIC = "chwriter"
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
         subparsers = parser.add_subparsers(dest="cmd", required=True)
         # load command
         load_parser = subparsers.add_parser("load", help="Load metrics to clickhouse")
@@ -90,13 +90,12 @@ class Command(BaseCommand):
     def handle(self, cmd, *args, **options):
         return getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
-    def get_source(self, source: str) -> Tuple[str, Any]:
+    def get_source(self, source: str) -> tuple[str, Any]:
         """
         Get source by input
         iface:<MONAME>::<IFACE_NAME>,
         mo:<MONAME>
         sla:<SLAPROBE_ID>
-        :param source:
         :return:
         """
         from noc.core.mongo.connection import connect
@@ -123,7 +122,7 @@ class Command(BaseCommand):
             self.die(f"Source {source}:{sid} is not found")
         return source, o
 
-    def handle_cdag_dot(self, config, output: Optional[str] = None, *args, **kwargs):
+    def handle_cdag_dot(self, config, output: str | None = None, *args, **kwargs):
         cdag = self.from_config_paths(config)
         if not output:
             self.print(cdag.get_dot())
@@ -132,7 +131,7 @@ class Command(BaseCommand):
             f.write(cdag.get_dot())
 
     def handle_load(self, fields, input, chunk, rm, *args, **kwargs):
-        async def upload(table: str, data: List[bytes]):
+        async def upload(table: str, data: list[bytes]):
             CHUNK = 1000
             n_parts = len(config.clickhouse.cluster_topology.split(","))
             async with MessageStreamClient() as client:
@@ -146,7 +145,7 @@ class Command(BaseCommand):
 
         for fn in input:
             # Read data
-            self.print("Reading file %s" % fn)
+            self.print(f"Reading file {fn}")
             if fn.endswith(".gz"):
                 with gzip.GzipFile(fn) as f:
                     records = f.read().replace("\r", "").splitlines()
@@ -161,18 +160,13 @@ class Command(BaseCommand):
     def input_from_device(
         self,
         source: str,
-        metrics: List[str],
-        start: Optional[datetime.datetime] = None,
-        end: Optional[datetime.datetime] = None,
+        metrics: list[str],
+        start: datetime.datetime | None = None,
+        end: datetime.datetime | None = None,
         register_metric: bool = False,
     ):
         """
 
-        :param source:
-        :param metrics:
-        :param start:
-        :param end:
-        :param register_metric:
         :return:
         """
         from noc.core.clickhouse.connect import connection
@@ -233,12 +227,12 @@ class Command(BaseCommand):
 
     def iter_metrics(
         self,
-        f_input: Optional[str],
-        metrics: Optional[List[str]] = None,
-        start: Optional[datetime.datetime] = None,
-        end: Optional[datetime.datetime] = None,
+        f_input: str | None,
+        metrics: list[str] | None = None,
+        start: datetime.datetime | None = None,
+        end: datetime.datetime | None = None,
         register_metric: bool = False,
-    ) -> Iterable[Dict[str, Union[float, str]]]:
+    ) -> Iterable[dict[str, float | str]]:
         if ":" in f_input:
             yield from self.input_from_device(
                 f_input, metrics, start=start, end=end, register_metric=register_metric
@@ -249,22 +243,15 @@ class Command(BaseCommand):
     def handle_test_action(
         self,
         config,
-        f_input: Optional[str] = None,
-        f_output: Optional[str] = None,
-        start: Optional[str] = None,
-        end: Optional[str] = None,
+        f_input: str | None = None,
+        f_output: str | None = None,
+        start: str | None = None,
+        end: str | None = None,
         *args,
         **kwargs,
     ):
         """
         Test configured action
-        :param config:
-        :param f_input:
-        :param f_output:
-        :param start:
-        :param end:
-        :param args:
-        :param kwargs:
         :return:
         """
         if end:
@@ -325,10 +312,10 @@ class Command(BaseCommand):
     def handle_test_service(
         self,
         config,
-        f_input: Optional[str] = None,
-        f_output: Optional[str] = None,
-        start: Optional[str] = None,
-        end: Optional[str] = None,
+        f_input: str | None = None,
+        f_output: str | None = None,
+        start: str | None = None,
+        end: str | None = None,
         *args,
         **kwargs,
     ):
@@ -352,7 +339,7 @@ class Command(BaseCommand):
             time.sleep(5)
             self.print("Register Metric", data)
 
-    def from_config_paths(self, paths: List[str]) -> CDAG:
+    def from_config_paths(self, paths: list[str]) -> CDAG:
         from noc.core.mongo.connection import connect
 
         connect()
@@ -392,7 +379,7 @@ class Command(BaseCommand):
         return cdag
 
     @staticmethod
-    def input_from_file(f_input: str) -> Iterable[Dict[str, Union[float, str]]]:
+    def input_from_file(f_input: str) -> Iterable[dict[str, float | str]]:
         with open(f_input) as f:
             for line in f:
                 line = line.strip()
@@ -439,7 +426,3 @@ class Command(BaseCommand):
         factory = MetricScopeCDAGFactory(cdag, scope=ms, spool=False, sticky=True)
         factory.construct()
         return cdag
-
-
-if __name__ == "__main__":
-    Command().run()

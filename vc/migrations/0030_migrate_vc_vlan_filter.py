@@ -14,7 +14,7 @@ from noc.core.text import ranges_to_list
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         bulk = []
         vf_coll = self.mongo_db["vlanfilters"]
         vf_names = {vf["name"] for vf in vf_coll.find()}

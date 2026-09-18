@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import List, Iterable
+from typing import Iterable
 
 # NOC modules
 from .base import BaseDiscriminatorSource, DiscriminatorDataItem
@@ -35,14 +35,14 @@ class ProtocolDiscriminatorSource(BaseDiscriminatorSource):
         self.load_data()
         return item in self.codes
 
-    def get_data(self, code: str) -> List[DiscriminatorDataItem]:
+    def get_data(self, code: str) -> list[DiscriminatorDataItem]:
         """
         Get Discriminator Data by code
         """
         self.load_data()
         return self.codes.get(code) or []
 
-    def get_code(self, data: List[DiscriminatorDataItem]) -> str:
+    def get_code(self, data: list[DiscriminatorDataItem]) -> str:
         """
         Get Discriminator Code by data
         """

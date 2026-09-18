@@ -6,75 +6,40 @@ Home screen configuration
 
 Enable "Welcome to NOC" widget.
 
-|                |                           |
-| -------------- | ------------------------- |
-| Default value  | `True`                    |
-| YAML Path      | `home.enable_welcome`     |
-| Key-Value Path | `home/enable_welcome`     |
-| Environment    | `NOC_HOME_ENABLE_WELCOME` |
+{{ config_param("home.enable_welcome") }}
 
 ## enable_community
 
 Enable "Community" widget.
 
-|                |                             |
-| -------------- | --------------------------- |
-| Default value  | `True`                      |
-| YAML Path      | `home.enable_community`     |
-| Key-Value Path | `home/enable_community`     |
-| Environment    | `NOC_HOME_ENABLE_COMMUNITY` |
+{{ config_param("home.enable_community") }}
 
 ## enable_favorites
 
 Enable "Favorites" widget.
 
-|                |                             |
-| -------------- | --------------------------- |
-| Default value  | `True`                      |
-| YAML Path      | `home.enable_favorites`     |
-| Key-Value Path | `home/enable_favorites`     |
-| Environment    | `NOC_HOME_ENABLE_FAVORITES` |
+{{ config_param("home.enable_favorites") }}
 
 ## enable_channels
 
 Enable "Channels" widget.
 
-|                |                            |
-| -------------- | -------------------------- |
-| Default value  | `True`                     |
-| YAML Path      | `home.enable_channels`     |
-| Key-Value Path | `home/enable_channels`     |
-| Environment    | `NOC_HOME_ENABLE_CHANNELS` |
+{{ config_param("home.enable_channels") }}
 
 ## enable_inventory_summary
 
 Enable "Inventory summary" widget.
 
-|                |                                     |
-| -------------- | ----------------------------------- |
-| Default value  | `True`                              |
-| YAML Path      | `home.enable_inventory_summary`     |
-| Key-Value Path | `home/enable_inventory_summary`     |
-| Environment    | `NOC_HOME_ENABLE_INVENTORY_SUMMARY` |
+{{ config_param("home.enable_inventory_summary") }}
 
 ## enable_mo_summary
 
 Enable "Managed Object Summary" widget.
 
-|                |                              |
-| -------------- | ---------------------------- |
-| Default value  | `True`                       |
-| YAML Path      | `home.enable_mo_summary`     |
-| Key-Value Path | `home/enable_mo_summary`     |
-| Environment    | `NOC_HOME_ENABLE_MO_SUMMARY` |
+{{ config_param("home.enable_mo_summary") }}
 
 ## enable_alarms
 
 Enable "Total Alarms" widget.
 
-|                |                          |
-| -------------- | ------------------------ |
-| Default value  | `True`                   |
-| YAML Path      | `home.enable_alarms`     |
-| Key-Value Path | `home/enable_alarms`     |
-| Environment    | `NOC_HOME_ENABLE_ALARMS` |
+{{ config_param("home.enable_alarms") }}

@@ -45,7 +45,7 @@ Ext.define("NOC.main.desktop.Report", {
         me.form,
       ],
     });
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/main/reportconfig/" + me.noc.report_id + "/form/",
       method: "GET",
       scope: me,
@@ -111,7 +111,7 @@ Ext.define("NOC.main.desktop.Report", {
       window.open(url);
       return 0;
     }
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "GET",
       scope: this,

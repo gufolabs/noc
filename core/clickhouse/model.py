@@ -1,15 +1,15 @@
 # ----------------------------------------------------------------------
 # Clickhouse models
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
+from typing import Any, cast
 import operator
 import string
 from random import choices
-from typing import List
 from time import perf_counter
 
 # NOC modules
@@ -27,9 +27,14 @@ OLD_PM_SCHEMA_TABLE = "noc_old"
 
 
 class ModelBase(type):
-    def __new__(mcs, name, bases, attrs):
+    def __new__(
+        mcs: "type[ModelBase]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["Model"]:
         # Initialize class
-        cls = type.__new__(mcs, name, bases, attrs)
+        cls = cast(type["Model"], type.__new__(mcs, name, bases, attrs))
         # Append _meta
         cls._meta = ModelMeta(
             engine=getattr(cls.Meta, "engine", None),
@@ -53,7 +58,7 @@ class ModelBase(type):
         return cls
 
 
-class ModelMeta(object):
+class ModelMeta:
     def __init__(
         self,
         engine=None,
@@ -92,15 +97,15 @@ class ModelMeta(object):
         self.ordered_fields = sorted(self.fields.values(), key=operator.attrgetter("field_number"))
 
 
-class Model(object, metaclass=ModelBase):
-    class Meta(object):
+class Model(metaclass=ModelBase):
+    class Meta:
         engine = None
         db_table = None
         description = None
         sample = False
         tags = None
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         self.values = kwargs
 
     @classmethod
@@ -118,7 +123,7 @@ class Model(object, metaclass=ModelBase):
     @classmethod
     def wrap_table(cls, table_name):
         class WrapClass(Model):
-            class Meta(object):
+            class Meta:
                 db_table = table_name
 
         return WrapClass
@@ -128,11 +133,10 @@ class Model(object, metaclass=ModelBase):
         """
         Clickhouse-safe field names
 
-        :param name:
         :return:
         """
         if "." in name:
-            return "`%s`" % name
+            return f"`{name}`"
         return name
 
     @classmethod
@@ -142,11 +146,10 @@ class Model(object, metaclass=ModelBase):
         :return:
         """
         for field in cls._meta.ordered_fields:
-            for fn, db_type in field.iter_create_sql():
-                yield fn, db_type
+            yield from field.iter_create_sql()
 
     @classmethod
-    def get_materialized_columns(cls) -> List[str]:
+    def get_materialized_columns(cls) -> list[str]:
         r = []
         for field in cls._meta.ordered_fields:
             if isinstance(field, MaterializedField):
@@ -200,7 +203,6 @@ class Model(object, metaclass=ModelBase):
         """
         Convert dict of kwargs to JSON-serializable dict
 
-        :param kwargs:
         :return:
         """
         r = {}
@@ -288,8 +290,6 @@ class Model(object, metaclass=ModelBase):
     def check_old_schema(cls, connect: "ClickhouseClient", table_name: str) -> bool:
         """
         Ensure create table Syntax. False for old Syntax, True for New
-        :param connect:
-        :param table_name:
         :return:
         """
         r = connect.execute(
@@ -378,8 +378,6 @@ class Model(object, metaclass=ModelBase):
     def transform_query(cls, query, user):
         """
         Transform query, possibly applying access restrictions
-        :param query:
-        :param user:
         :return: query dict or None if access denied
         """
         if not user or user.is_superuser:
@@ -451,19 +449,19 @@ class Model(object, metaclass=ModelBase):
             alias = f.get("alias", default_alias)
             if not f.get("hide"):
                 aliases += [alias]
-                fields_x += ["%s AS %s" % (to_sql(f["expr"], cls), escape_field(alias))]
+                fields_x += ["{} AS {}".format(to_sql(f["expr"], cls), escape_field(alias))]
             if "group" in f:
                 group_by[int(f["group"])] = alias
             if "order" in f:
                 if f.get("desc"):
-                    order_by[int(f["order"])] = "%s DESC" % alias
+                    order_by[int(f["order"])] = f"{alias} DESC"
                 else:
                     order_by[int(f["order"])] = alias
         if transformed_query is None:
             # Access denied
             r = []
             dt = 0.0
-            sql = ["SELECT %s FROM %s WHERE 0 = 1" % (", ".join(fields_x), cls._get_db_table())]
+            sql = ["SELECT {} FROM {} WHERE 0 = 1".format(", ".join(fields_x), cls._get_db_table())]
         else:
             # Get where expressions
             filter_x = to_sql(transformed_query.get("filter", {}))
@@ -471,21 +469,21 @@ class Model(object, metaclass=ModelBase):
             # Generate SQL
             sql = ["SELECT "]
             sql += [", ".join(fields_x)]
-            sql += ["FROM %s" % cls._get_db_table()]
+            sql += [f"FROM {cls._get_db_table()}"]
             sample = query.get("sample")
             if sample:
-                sql += ["SAMPLE %s" % float(sample)]
+                sql += [f"SAMPLE {float(sample)}"]
             if filter_x:
-                sql += ["WHERE %s" % filter_x]
+                sql += [f"WHERE {filter_x}"]
             # GROUP BY
             if group_by:
-                sql += ["GROUP BY %s" % ", ".join(group_by[v] for v in sorted(group_by))]
+                sql += ["GROUP BY {}".format(", ".join(group_by[v] for v in sorted(group_by)))]
             # HAVING
             if filter_h:
-                sql += ["HAVING %s" % filter_h]
+                sql += [f"HAVING {filter_h}"]
             # ORDER BY
             if order_by:
-                sql += ["ORDER BY %s" % ", ".join(order_by[v] for v in sorted(order_by))]
+                sql += ["ORDER BY {}".format(", ".join(order_by[v] for v in sorted(order_by)))]
             # LIMIT
             if "limit" in query:
                 if "offset" in query:
@@ -523,11 +521,16 @@ class NestedModel(Model):
 
 
 class DictionaryBase(ModelBase):
-    def __new__(mcs, name, bases, attrs):
+    def __new__(
+        mcs: "type[DictionaryBase]",
+        name: str,
+        bases: tuple[type[Any], ...],
+        attrs: dict[str, Any],
+    ) -> type["DictionaryModel"]:
         from .fields import DateTimeField, UInt64Field
 
         # Initialize class
-        cls = type.__new__(mcs, name, bases, attrs)
+        cls = cast(type["DictionaryModel"], type.__new__(mcs, name, bases, attrs))
         # Append _meta
         cls._meta = DictionaryMeta(
             name=getattr(cls.Meta, "name"),
@@ -560,7 +563,7 @@ class DictionaryBase(ModelBase):
         return cls
 
 
-class DictionaryMeta(object):
+class DictionaryMeta:
     def __init__(
         self,
         name=None,
@@ -609,7 +612,7 @@ class DictionaryMeta(object):
 
 
 class DictionaryModel(Model, metaclass=DictionaryBase):
-    class Meta(object):
+    class Meta:
         name = None
         engine = None
         source_model = None
@@ -636,18 +639,17 @@ class DictionaryModel(Model, metaclass=DictionaryBase):
             "<dictionaries>",
             "    <comment>Generated by NOC, do not change manually</comment>",
             "    <dictionary>",
-            "        <name>%s</name>" % cls._meta.name,
+            f"        <name>{cls._meta.name}</name>",
             "        <lifetime>",
-            "            <min>%s</min>" % cls._meta.lifetime_min,
-            "            <max>%s</max>" % cls._meta.lifetime_max,
+            f"            <min>{cls._meta.lifetime_min}</min>",
+            f"            <max>{cls._meta.lifetime_max}</max>",
             "        </lifetime>",
             "        <layout>",
-            "            <%s />" % cls._meta.layout,
+            f"            <{cls._meta.layout} />",
             "        </layout>",
             "        <source>",
             "            <http>",
-            '                <url>http://{{ range $index, $element := service "datasource~_agent"}}{{if eq $index 0}}{{.Address}}:{{.Port}}{{end}}{{else}}127.0.0.1:65535{{ end }}/api_datasource/ch_%s.tsv</url>'
-            % cls._meta.name,
+            f'                <url>http://{{{{ range $index, $element := service "datasource~_agent"}}}}{{{{if eq $index 0}}}}{{{{.Address}}}}:{{{{.Port}}}}{{{{end}}}}{{{{else}}}}127.0.0.1:65535{{{{ end }}}}/api_datasource/ch_{cls._meta.name}.tsv</url>',
             "                <format>TabSeparated</format>",
             "            </http>",
             "        </source>",
@@ -662,8 +664,8 @@ class DictionaryModel(Model, metaclass=DictionaryBase):
             hier = getattr(field, "is_self_reference", False)
             x += [
                 "             <attribute>",
-                "                 <name>%s</name>" % field.name,
-                "                 <type>%s</type>" % field.get_db_type(),
+                f"                 <name>{field.name}</name>",
+                f"                 <type>{field.get_db_type()}</type>",
                 "                 <null_value>Unknown</null_value>",
                 "                 <hierarchical>%s</hierarchical>" % ("true" if hier else "false"),
                 "             </attribute>",
@@ -676,7 +678,6 @@ class DictionaryModel(Model, metaclass=DictionaryBase):
         """
         Returns field type
 
-        :param name:
         :return:
         """
         return cls._meta.fields[name].get_db_type()
@@ -773,7 +774,6 @@ class DictionaryModel(Model, metaclass=DictionaryBase):
     def ensure_dictionary(cls, connect=None) -> bool:
         """
         Check dictionary is exists
-        :param connect:
         :return: True, if table has been altered, False otherwise
         """
         # changed = False
@@ -810,7 +810,6 @@ class ViewModel(Model, metaclass=ModelBase):
         7. rename table MVX_store to MVX
         8. create materialized view MVX_mv to MVX as select ....
         9. start ingestion
-        :param connect:
         :return:
         """
         if not cls.is_aggregate():

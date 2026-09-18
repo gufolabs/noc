@@ -39,7 +39,7 @@ from noc.sa.models.administrativedomain import AdministrativeDomain as Administr
 
 
 class Events(Model):
-    class Meta(object):
+    class Meta:
         db_table = "events"
         engine = MergeTree(
             "date",
@@ -113,8 +113,6 @@ class Events(Model):
     def check_old_schema(cls, connect: "ClickhouseClient", table_name: str) -> bool:
         """
         Check syntax
-        :param connect:
-        :param table_name:
         :return:
         """
         c1 = super().check_old_schema(connect=connect, table_name=table_name)

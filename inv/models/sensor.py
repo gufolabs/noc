@@ -11,7 +11,7 @@ import operator
 import datetime
 from collections import defaultdict
 from threading import Lock
-from typing import Dict, Optional, Iterable, List, Union, Any, DefaultDict
+from typing import Optional, Iterable, Any
 
 # Third-party modules
 import bson
@@ -26,6 +26,7 @@ from mongoengine.fields import (
     DateTimeField,
     DictField,
     EnumField,
+    EmbeddedDocumentListField,
 )
 from pymongo import ReadPreference
 
@@ -38,10 +39,14 @@ from noc.core.models.cfgmetrics import MetricCollectorConfig, MetricItem
 from noc.core.models.sensorprotos import SensorProtocol
 from noc.core.model.dynamicprofile import dynamic_profile
 from noc.core.service.loader import get_service
+from noc.core.watchers.types import ObjectEffect, WatchItem
+from noc.core.watchers.decorator import watchers, WATCHER_JCLS, get_next_ts
+from noc.core.scheduler.scheduler import Scheduler
 from noc.main.models.label import Label
 from noc.main.models.remotesystem import RemoteSystem
 from noc.inv.models.object import Object
 from noc.sa.models.managedobject import ManagedObject
+from noc.sa.models.objectwatchersitem import WatchDocumentItem
 from noc.pm.models.measurementunits import MeasurementUnits
 from noc.pm.models.agent import Agent
 from noc.pm.models.metrictype import MetricType
@@ -51,6 +56,7 @@ from .sensorprofile import SensorProfile
 from noc.config import config
 
 SOURCES = {"objectmodel", "asset", "etl", "manual"}
+SCHEDULER = "scheduler"
 
 id_lock = Lock()
 logger = logging.getLogger(__name__)
@@ -66,6 +72,7 @@ NS = 1_000_000_000
 @dynamic_profile(profile_model_id="inv.SensorProfile", sync_profile=True)
 @Label.model
 @change(audit=False)
+@watchers
 @bi_sync
 @workflow
 class Sensor(Document):
@@ -79,6 +86,7 @@ class Sensor(Document):
             "object",
             "remote_system",
             "effective_labels",
+            "watcher_wait_ts",
             ("managed_object", "object"),
             ("remote_system", "remote_host"),
             ("remote_system", "remote_id"),
@@ -117,6 +125,9 @@ class Sensor(Document):
     modbus_format = StringField(choices=MODBUS_FORMAT)
     snmp_oid = StringField()
     ipmi_id = StringField()
+    # Watchers
+    watchers: list[WatchDocumentItem] = EmbeddedDocumentListField(WatchDocumentItem)
+    watcher_wait_ts: datetime.datetime | None = DateTimeField(required=False)
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from
     remote_system = PlainReferenceField(RemoteSystem)
@@ -133,6 +144,8 @@ class Sensor(Document):
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _bi_id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 
+    SUPPORTED_EFFECTS = frozenset([ObjectEffect.WF_EVENT, ObjectEffect.WIPING])
+
     def __str__(self):
         if self.object:
             return f"{self.object}: {self.local_id}"
@@ -142,7 +155,7 @@ class Sensor(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, bson.ObjectId]) -> Optional["Sensor"]:
+    def get_by_id(cls, oid: str | bson.ObjectId) -> Optional["Sensor"]:
         return Sensor.objects.filter(id=oid).first()
 
     @classmethod
@@ -154,6 +167,14 @@ class Sensor(Document):
         if config.datastream.enable_cfgmetricstarget:
             if self.managed_object:
                 yield "cfgmetricstarget", f"sa.ManagedObject::{self.managed_object.bi_id}"
+            elif changed_fields and changed_fields.get("managed_object"):
+                mo = (
+                    ManagedObject.objects.filter(id=changed_fields["managed_object"])
+                    .values_list("bi_id")
+                    .first()
+                )
+                if mo:
+                    yield "cfgmetricstarget", f"sa.ManagedObject::{mo[0]}"
             if self.agent:
                 yield "cfgmetricstarget", f"pm.Agent::{self.agent.bi_id}"
             if self.object and self.object.get_data("management", "managed_object"):
@@ -184,7 +205,15 @@ class Sensor(Document):
         """
         return self.profile.units or self.units
 
-    def seen(self, source: Optional[str] = None):
+    @property
+    def mx_alias(self) -> str:
+        if self.profile.mx_policy == "L":
+            return self.label
+        if self.profile.mx_policy == "A":
+            return self.profile.alias_template
+        return None
+
+    def seen(self, source: str | None = None):
         """
         Seen sensor
         """
@@ -194,7 +223,7 @@ class Sensor(Document):
         self.fire_event("seen")
         self.touch()  # Worflow expired
 
-    def unseen(self, source: Optional[str] = None):
+    def unseen(self, source: str | None = None):
         """
         Unseen sensor
         """
@@ -226,7 +255,7 @@ class Sensor(Document):
         return Label.get_effective_setting(label, setting="enable_sensor")
 
     @classmethod
-    def iter_effective_labels(cls, instance: "Sensor") -> Iterable[List[str]]:
+    def iter_effective_labels(cls, instance: "Sensor") -> Iterable[list[str]]:
         yield list(instance.labels or [])
         if instance.profile.labels:
             yield list(instance.profile.labels)
@@ -243,7 +272,7 @@ class Sensor(Document):
 
     @classmethod
     def iter_collected_metrics(
-        cls, mo: "ManagedObject", run: int = 0, d_interval: Optional[int] = None
+        cls, mo: "ManagedObject", run: int = 0, d_interval: int | None = None
     ) -> Iterable[MetricCollectorConfig]:
         """
         Return metrics setting for collected by box or periodic
@@ -259,7 +288,7 @@ class Sensor(Document):
                 or sensor.protocol in {"snmp", "other"}
             ):
                 continue
-            metrics: List[MetricItem] = []
+            metrics: list[MetricItem] = []
             for mt_name in ["Sensor | Value", "Sensor | Status"]:
                 mt = MetricType.get_by_name(mt_name)
                 mi = MetricItem(
@@ -278,6 +307,8 @@ class Sensor(Document):
                 hints.append(f"oid::{sensor.snmp_oid}")
             if sensor.object and sensor.object.get_data("hw_path", "slot"):
                 hints.append(f"slot::{sensor.object.get_data('hw_path', 'slot')}")
+            if sensor.munits != "1":
+                hints.append(f"units::{sensor.munits.code}")
             yield MetricCollectorConfig(
                 collector="sensor",
                 metrics=tuple(metrics),
@@ -289,15 +320,16 @@ class Sensor(Document):
     def set_value(
         self,
         value: float,
-        ts: Optional[datetime.datetime] = None,
-        units: Optional[MeasurementUnits] = None,
-        bulk: Optional[DefaultDict[int, List[Dict[str, Any]]]] = None,
-        shards: Optional[int] = None,
+        ts: datetime.datetime | None = None,
+        units: MeasurementUnits | None = None,
+        bulk: defaultdict[int, list[dict[str, Any]]] | None = None,
+        shards: int | None = None,
     ):
         """Set Sensor value to PM Database"""
         ts = ts or datetime.datetime.now().replace(microsecond=0)
         units = units or self.munits
         shards = shards or 1
+        shard_key = self.bi_id
         if bulk is None:
             parts = defaultdict(list)
         else:
@@ -314,6 +346,7 @@ class Sensor(Document):
         if self.remote_system:
             r["remote_system"] = self.remote_system.bi_id
         if self.managed_object:
+            shard_key = self.managed_object.bi_id
             r["managed_object"] = self.managed_object.bi_id
             # Register ManagedObject Metrics
             if self.profile.metric_type:
@@ -333,7 +366,7 @@ class Sensor(Document):
                         mt.field_name: value,
                     }
                 )
-        parts[self.bi_id % shards].append(r)
+        parts[shard_key % shards].append(r)
         if bulk is not None:
             return
         svc = get_service()
@@ -347,7 +380,7 @@ class Sensor(Document):
             )
 
     @classmethod
-    def get_metric_config(cls, sensor: "Sensor"):
+    def get_metric_config(cls, sensor: "Sensor") -> dict[str, Any]:
         """Return MetricConfig for Metrics service"""
         if not sensor.state.is_productive or not sensor.profile.enable_collect:
             return {}
@@ -356,6 +389,7 @@ class Sensor(Document):
             "bi_id": sensor.bi_id,
             "name": sensor.label,
             "units": sensor.munits.code,
+            "mx_alias": sensor.mx_alias,
             "protocol": sensor.protocol,
             "exposed_labels": Label.build_expose_labels(
                 sensor.effective_labels,
@@ -395,7 +429,7 @@ class Sensor(Document):
         """Check configured collected metrics"""
         return self.profile.enable_collect
 
-    def get_matcher_ctx(self) -> Dict[str, Any]:
+    def get_matcher_ctx(self) -> dict[str, Any]:
         r = {
             "name": self.label,
             "labels": list(self.effective_labels),
@@ -408,14 +442,62 @@ class Sensor(Document):
             r["remote_system"] = self.remote_system.id
         return r
 
-    def get_css_class(self) -> Optional[str]:
+    def get_wiping_ttl(self):
+        return self.profile.wiping_ttl
+
+    @classmethod
+    def get_min_wait_ts(cls) -> datetime.datetime | None:
+        """"""
+        return (
+            Sensor.objects()
+            .aggregate([{"$group": {"_id": None, "wait_ts": {"$min": "$watcher_wait_ts"}}}])
+            .next()["wait_ts"]
+        )
+
+    def update_object_watchers(
+        self,
+        to_watchers: list[WatchItem],
+        to_remove: list[tuple[ObjectEffect, str, str | None]] | None,
+        dry_run: bool = False,
+        bulk=None,
+    ):
+        """Update watchers"""
+
+        updates = []
+        up_w = {(w.effect, w.key, w.remote_system): w for w in to_watchers}
+        for w in self.watchers:
+            rs = w.remote_system.name if w.remote_system else None
+            key = w.key or None
+            if to_remove and (w.effect, key, rs) in to_remove:
+                continue
+            update = up_w.pop((w.effect, key, rs), None)
+            if update:
+                w = WatchDocumentItem.from_item(update)
+            updates.append(w)
+        for w in up_w.values():
+            rs = RemoteSystem.get_by_name(w.remote_system) if w.remote_system else None
+            updates.append(WatchDocumentItem.from_item(w, remote_system=rs))
+        self.watchers = updates
+        wait_ts = self.get_wait_ts()
+        if self.watcher_wait_ts != wait_ts:
+            self.watcher_wait_ts = wait_ts
+        if dry_run or self._created:
+            return
+        m_ts = self.get_min_wait_ts()
+        if wait_ts and (not m_ts or wait_ts < m_ts):
+            scheduler = Scheduler(SCHEDULER)
+            scheduler.submit(jcls=WATCHER_JCLS, key="inv.Sensor", ts=get_next_ts(wait_ts))
+        set_op = {"watchers": self.watchers, "watcher_wait_ts": self.watcher_wait_ts}
+        self.update(**set_op)
+
+    def get_css_class(self) -> str | None:
         return self.profile.get_css_class() if self.profile else None
 
 
 def sync_object(obj: "Object") -> None:
     """Synchronize sensors with object model"""
     # Get existing sensors
-    obj_sensors: Dict[str, Sensor] = {s.local_id: s for s in Sensor.objects.filter(object=obj.id)}
+    obj_sensors: dict[str, Sensor] = {s.local_id: s for s in Sensor.objects.filter(object=obj.id)}
     logger.info("[%s] Sync sensor for object", obj)
     m_proto = [
         d.value for d in obj.get_effective_data() if d.interface == "modbus" and d.attr == "type"
@@ -449,7 +531,7 @@ def sync_object(obj: "Object") -> None:
         if sensor.modbus_register:
             if not m_proto:
                 continue
-            s.protocol = "modbus_%s" % m_proto[0].lower()
+            s.protocol = f"modbus_{m_proto[0].lower()}"
             s.modbus_register = sensor.modbus_register
             s.modbus_format = sensor.modbus_format or "u16_be"
         elif sensor.snmp_oid:

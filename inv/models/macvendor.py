@@ -9,7 +9,6 @@
 import operator
 import threading
 import logging
-from typing import Optional, Dict
 
 # Third-party modules
 import cachetools
@@ -20,7 +19,7 @@ from mongoengine.document import Document
 from mongoengine.fields import StringField
 
 # NOC Modules
-from noc.core.http.sync_client import HttpClient
+from noc.core.http.sync import HttpClient
 from noc.config import config
 
 logger = logging.getLogger(__name__)
@@ -47,7 +46,7 @@ class MACVendor(Document):
         return self.oui
 
     @classmethod
-    def get_vendor(cls, mac: str) -> Optional[str]:
+    def get_vendor(cls, mac: str) -> str | None:
         """
         Returns vendor for MAC or None
         """
@@ -56,13 +55,13 @@ class MACVendor(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_oui_cache"), lock=lambda _: id_lock)
-    def get_vendor_by_oiu(cls, oui: str) -> Optional[str]:
+    def get_vendor_by_oiu(cls, oui: str) -> str | None:
         d = MACVendor._get_collection().find_one({"_id": oui}, {"_id": 0, "vendor": 1})
         if d:
             return d.get("vendor")
 
     @classmethod
-    def parse_txt_content(cls, content) -> Dict[str, str]:
+    def parse_txt_content(cls, content) -> dict[str, str]:
         r = {}
         for ll in content.decode().splitlines():
             if "(hex)" in ll:

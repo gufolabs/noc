@@ -1,13 +1,13 @@
 # ----------------------------------------------------------------------
 # EscalationContext
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2024, The NOC Project
+# Copyright (C) 2007-2026, The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import enum
-from typing import List, Optional
+from typing import Any
 from datetime import datetime
 
 # Third-party modules
@@ -55,7 +55,7 @@ class TTAction(enum.Enum):
 
 class TTActionContext(BaseModel):
     action: TTAction
-    label: Optional[str] = None
+    label: str | None = None
 
 
 class Attachment(BaseModel):
@@ -63,7 +63,7 @@ class Attachment(BaseModel):
     body: bytes
     mime_type: str = "text/plain"
     # application/vnd.ms-excel
-    url: Optional[str] = None
+    url: str | None = None
 
     @property
     def size(self):
@@ -73,7 +73,7 @@ class Attachment(BaseModel):
 class TTUser(BaseModel):
     id: str
     username: str
-    remote_id: Optional[str] = None
+    remote_id: str | None = None
 
 
 class TTSystemConfig(BaseModel):
@@ -89,11 +89,11 @@ class TTSystemConfig(BaseModel):
     """
 
     login: str
-    pre_reason: Optional[str] = None
+    pre_reason: str | None = None
     telemetry_sample: int = 0
     max_escalation_retries: int = 30
-    global_limit: Optional[int] = None
-    actions: Optional[List[TTAction]] = None
+    global_limit: int | None = None
+    actions: list[TTAction] | None = None
     promote_item: str = "D"
     promote_group_tt: bool = False
 
@@ -109,8 +109,8 @@ class EscalationResult(BaseModel):
     """
 
     status: EscalationStatus = EscalationStatus.OK
-    error: Optional[str] = None
-    document: Optional[str] = None
+    error: str | None = None
+    document: str | None = None
 
     @property
     def is_ok(self) -> bool:
@@ -130,28 +130,15 @@ class TTChange(BaseModel):
     document_id: str
     action: TTAction  # ack, n_ack, log, close, subscribe
     user: str
-    change_id: Optional[str] = None  # Update Sequence Number
-    timestamp: Optional[datetime] = None
-    message: Optional[str] = None
+    change_id: str | None = None  # Update Sequence Number
+    timestamp: datetime | None = None
+    message: str | None = None
 
 
 class EscalationMember(enum.Enum):
     TT_SYSTEM = "tt_system"
     NOTIFICATION_GROUP = "notification_group"
     HANDLER = "handler"
-
-
-class EscalationServiceItem(BaseModel):
-    """
-    Service Object Item
-    Attributes:
-        id: Service Id
-        tt_id: ID on Escalation System
-        oper_status ?
-    """
-
-    id: str
-    tt_id: str
 
 
 class EscalationItem(BaseModel):
@@ -163,10 +150,14 @@ class EscalationItem(BaseModel):
         tt_id: Managed Object's id in TT system.
     """
 
-    id: int
+    id: str
     tt_id: str
-    _status: Optional[EscalationStatus] = PrivateAttr()
-    _message: Optional[str] = PrivateAttr()
+    ctx: dict[str, Any] | None = None
+    label: str | None = None
+    item_status: str = "new"  # changed/removed
+    item: str = "other"  # service, managed_object, container
+    _status: EscalationStatus | None = PrivateAttr()
+    _message: str | None = PrivateAttr()
 
     def set_ok(self) -> None:
         """Mark item as processed successfully."""
@@ -211,18 +202,17 @@ class EscalationContext(BaseModel):
     """
 
     subject: str
-    items: List[EscalationItem]
-    services: Optional[List[EscalationServiceItem]] = None
-    id: Optional[str] = None
-    body: Optional[str] = None
-    timestamp: Optional[datetime] = None
-    queue: Optional[str] = None
-    reason: Optional[str] = None
-    login: Optional[str] = None
-    actions: Optional[List[TTActionContext]] = None
+    items: list[EscalationItem]
+    id: str | None = None
+    body: str | None = None
+    timestamp: datetime | None = None
+    queue: str | None = None
+    reason: str | None = None
+    login: str | None = None
+    actions: list[TTActionContext] | None = None
     is_unavailable: bool = False
-    assigned: Optional[TTUser] = None
-    attachments: Optional[List[Attachment]] = None
+    assigned: TTUser | None = None
+    attachments: list[Attachment] | None = None
 
     @property
     def leader(self) -> EscalationItem:
@@ -232,9 +222,23 @@ class EscalationContext(BaseModel):
         return self.items[0]
 
     @property
-    def service(self) -> Optional[EscalationServiceItem]:
-        if self.services:
-            return self.services[0]
+    def service(self) -> EscalationItem | None:
+        for i in self.items:
+            if i.item == "service":
+                return i
+
+    @property
+    def managed_object(self) -> EscalationItem | None:
+        for i in self.items:
+            if i.item == "managed_object":
+                return i
+
+    @property
+    def container(self) -> EscalationItem | None:
+        """"""
+        for i in self.items:
+            if i.item == "container":
+                return i
 
 
 class DeescalationContext(BaseModel):
@@ -252,11 +256,11 @@ class DeescalationContext(BaseModel):
     """
 
     id: str
-    queue: Optional[str] = None
-    login: Optional[str] = None
-    timestamp: Optional[datetime] = None
-    subject: Optional[str] = None
-    body: Optional[str] = None
+    queue: str | None = None
+    login: str | None = None
+    timestamp: datetime | None = None
+    subject: str | None = None
+    body: str | None = None
     is_unavailable: bool = False
 
 
@@ -279,10 +283,10 @@ class TTCommentInfo(BaseModel):
     """
 
     body: str
-    ts: Optional[datetime] = None
-    login: Optional[str] = None
-    subject: Optional[str] = None
-    reply_to: Optional[str] = None
+    ts: datetime | None = None
+    login: str | None = None
+    subject: str | None = None
+    reply_to: str | None = None
 
 
 class TTInfo(BaseModel):
@@ -291,26 +295,27 @@ class TTInfo(BaseModel):
     """
 
     id: str
-    queue: Optional[str] = None
-    subject: Optional[str] = None
-    body: Optional[str] = None
+    queue: str | None = None
+    subject: str | None = None
+    body: str | None = None
     is_resolved: bool = False
     stage: TTRef
     timestamp: datetime
-    close_timestamp: Optional[datetime] = None
-    owner: Optional[TTRef] = None
+    close_timestamp: datetime | None = None
+    owner: TTRef | None = None
     pre_reason: TTRef
-    final_reason: Optional[TTRef] = None
-    dept: Optional[TTRef] = None
-    close_dept: Optional[TTRef] = None
-    comments: Optional[List[TTCommentInfo]] = None
+    final_reason: TTRef | None = None
+    dept: TTRef | None = None
+    close_dept: TTRef | None = None
+    comments: list[TTCommentInfo] | None = None
 
 
 class TTCommentRequest(BaseModel):
     id: str
     body: str
-    ts: Optional[datetime] = None
-    login: Optional[str] = None
-    subject: Optional[str] = None
-    reply_to: Optional[str] = None
-    user: Optional[TTUser] = None
+    queue: str | None = None
+    ts: datetime | None = None
+    login: str | None = None
+    subject: str | None = None
+    reply_to: str | None = None
+    user: TTUser | None = None

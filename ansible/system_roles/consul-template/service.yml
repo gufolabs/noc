@@ -1,9 +1,9 @@
 ---
 - name: Consul tasks
   hosts: svc-consul-template-exec
-  become: "True"
+  become: true
   any_errors_fatal: "False"
-  gather_facts: "True"
+  gather_facts: true
   tags:
     - consul-template
     - external

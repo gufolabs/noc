@@ -4,7 +4,7 @@ env:
   TEST_PYTHON_VERSION: "3.13"
 on:
   push:
-    branches: [master]
+    branches: [master, release-25.1]
     paths: &changed-paths
       - ".github/workflows/py-tests.yml"
       - "pyproject.toml"
@@ -24,10 +24,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set Up Python ${{ env.TEST_PYTHON_VERSION }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ env.TEST_PYTHON_VERSION }}
 
@@ -113,10 +113,10 @@ jobs:
           - 10004:22
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set Up Python ${{ env.TEST_PYTHON_VERSION }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "${{ env.TEST_PYTHON_VERSION }}"
 
@@ -124,7 +124,7 @@ jobs:
         uses: astral-sh/setup-uv@v1
 
       - name: Install Dependencies
-        run: uv pip install --system -e .[node,test,bh,activator,classifier,cache-redis,node,login-ldap,login-pam,login-radius,prod-tools,testing,sender-kafka,ping]
+        run: uv pip install --system -e .[test,testing]
 
       - name: Run Tests (with coverage)
         run: pytest --maxfail=10 --cov --cov-branch --cov-report=xml tests/

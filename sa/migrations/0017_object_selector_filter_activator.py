@@ -13,7 +13,7 @@ from noc.core.migration.base import BaseMigration
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         Activator = self.db.mock_model(model_name="Activator", db_table="sa_activator")
         self.db.add_column(
             "sa_managedobjectselector",

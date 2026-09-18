@@ -7,12 +7,3 @@
     - has_svc_noc is not defined
   tags:
     - checks
-
-- name: fail if Kafka or Liftbridge is not selected
-  fail:
-    msg: "MX service works only with Liftbridge or Kafka services. Please install at least one"
-  when:
-    - has_svc_mx is defined
-    - "'svc-liftbridge' not in groups and 'svc-kafka' not in groups"
-  tags:
-    - checks

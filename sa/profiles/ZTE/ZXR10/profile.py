@@ -50,7 +50,7 @@ class Profile(BaseProfile):
             return "SVI"
         if name.startswith("null"):
             return "null"
-        raise Exception("Cannot detect interface type for %s" % name)
+        raise Exception(f"Cannot detect interface type for {name}")
 
         return "other"
 

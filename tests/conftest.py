@@ -1,48 +1,56 @@
 # ----------------------------------------------------------------------
 # pytest configuration
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 from collections import defaultdict
-from typing import DefaultDict, Dict, List, Any
+from typing import Any
 from time import perf_counter_ns
 import functools
 import os
 import sys
+import warnings
 
 # Third-party modules
 import pytest
-import fsspec
 import orjson
 from django.db import models
+from gufo.blob.sync import open_blob
 
 # NOC modules
 from noc.config import config
 from noc.models import get_model, is_document
 from noc.core.model.fields import DocumentReferenceField, CachedForeignKey
+from noc.core.management.base import command_loader
 
 IN_GITHUB_ACTIONS = bool(os.getenv("GITHUB_ACTIONS", ""))
 IS_COLLECT_ONLY = any("--collect-only" in arg for arg in sys.argv)
 
 _stats = None
-_durations: DefaultDict[str, int] = defaultdict(int)
-_counts: DefaultDict[str, int] = defaultdict(int)
-_start_times: Dict[str, int] = {}
+_durations: defaultdict[str, int] = defaultdict(int)
+_counts: defaultdict[str, int] = defaultdict(int)
+_start_times: dict[str, int] = {}
+_deprecations: defaultdict[str, int] = defaultdict(int)
+
+
+def _setup_config() -> None:
+    config.setup()
 
 
 def pytest_configure(config: pytest.Config) -> None:
     """Register marters."""
+    _setup_config()
     config.addinivalue_line("markers", "run_on_setup")
     config.addinivalue_line("markers", "fatal")
 
 
 def pytest_collection_modifyitems(
-    session: pytest.Session, config: pytest.Config, items: List[pytest.Item]
+    session: pytest.Session, config: pytest.Config, items: list[pytest.Item]
 ):
-    """Process @pytest.mark.run_on_startup"""
+    """Process @pytest.mark.run_on_setup"""
 
     def is_run_on_setup(item: pytest.Item) -> bool:
         return any(m.name == "run_on_setup" for m in item.own_markers)
@@ -66,6 +74,13 @@ def pytest_runtest_teardown(item: pytest.Item, nextitem: pytest.Item):
     func_name: str = item.originalname or item.name.split("[")[0]
     _durations[func_name] += duration
     _counts[func_name] += 1
+
+
+def pytest_warning_recorded(
+    warning_message: warnings.WarningMessage, when: str, nodeid: str, location: Any
+) -> None:
+    msg = f"{warning_message.category.__name__}[{warning_message.message}]"
+    _deprecations[msg] += 1
 
 
 def with_timing(name: str):
@@ -121,6 +136,12 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
             label = f"{label} (x{other_count})"
         terminalreporter.write_line(f"{label:<40} {other_time:.3f}s ({percent:.3f}%)")
     terminalreporter.write_line(f"Total: {total:.3f}s")
+    if _deprecations:
+        terminalreporter.write_sep("=", "Deprecations summary")
+        total = sum(_deprecations.values())
+        for dep_msg, count in sorted(_deprecations.items(), key=lambda x: x[1], reverse=True):
+            terminalreporter.write_line(f"{dep_msg:<40}: {count}")
+        terminalreporter.write_line(f"Total: {total}")
     _stats = terminalreporter.stats
 
 
@@ -208,32 +229,28 @@ def _create_mongo_db():
 
 @with_timing("migrate_db")
 def _migrate_db():
-    m = __import__("noc.commands.migrate", {}, {}, "Command")
-    r = m.Command().run_from_argv([])
+    r = command_loader["migrate"]().run_from_argv([])
     if r:
         raise RuntimeError("Failed to migrate database")
 
 
 @with_timing("migrate_kafka")
 def _migrate_kafka():
-    m = __import__("noc.commands.migrate-liftbridge", {}, {}, "Command")
-    r = m.Command().run_from_argv(["--slots", "1"])
+    r = command_loader["migrate-liftbridge"]().run_from_argv(["--slots", "1"])
     if r:
         raise RuntimeError("Failed to create Kafka topics")
 
 
 @with_timing("migrate_clickhouse")
 def _migrate_clickhouse():
-    m = __import__("noc.commands.migrate-ch", {}, {}, "Command")
-    r = m.Command().run_from_argv([])
+    r = command_loader["migrate-ch"]().run_from_argv([])
     if r:
         raise RuntimeError("Failed to migrate ClickHouse database")
 
 
 @with_timing("ensure_indexes")
 def _ensure_indexes():
-    m = __import__("noc.commands.ensure-indexes", {}, {}, "Command")
-    r = m.Command().run_from_argv([])
+    r = command_loader["ensure-indexes"]().run_from_argv([])
     if r:
         raise RuntimeError("Failed to create indexes")
 
@@ -247,8 +264,7 @@ def _load_collections():
 
 @with_timing("load_mibs")
 def _load_mibs():
-    m = __import__("noc.commands.sync-mibs", {}, {}, "Command")
-    r = m.Command().run_from_argv([])
+    r = command_loader["sync-mibs"]().run_from_argv([])
     if r:
         raise RuntimeError("Failed to load MIBs")
 
@@ -256,13 +272,11 @@ def _load_mibs():
 @with_timing("load_fixtures")
 def _load_fixtures():
     for url in config.tests.fixtures_paths:
-        fs, fs_path = fsspec.url_to_fs(url)
-        for path, _, files in fs.walk(fs_path):
-            for name in files:
-                if not name.endswith(".json"):
+        with open_blob(url) as blob:
+            for key in blob.scan(""):
+                if not key.endswith(".json"):
                     continue
-                with fs.open(os.path.join(path, name), mode="rb") as f:
-                    data = orjson.loads(f.read())
+                data = orjson.loads(blob[key])
                 if not isinstance(data, list):
                     data = [data]
                 for i in data:
@@ -273,7 +287,7 @@ model_refs = {}  # model -> name -> model
 m2m_refs = {}  # model -> name -> model
 
 
-def _load_data(data: List[Dict[str, Any]]) -> None:
+def _load_data(data: list[dict[str, Any]]) -> None:
     def _dereference(model, id):
         if hasattr(model, "get_by_id"):
             return model.get_by_id(id)

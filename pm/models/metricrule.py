@@ -8,7 +8,7 @@
 # Python modules
 import operator
 from collections import defaultdict
-from typing import List, Dict, Any, Optional, Tuple, Set, Union, Callable, FrozenSet
+from typing import Any, Optional, Callable, Iterable
 from threading import Lock
 
 # Third-party modules
@@ -63,7 +63,7 @@ class Match(EmbeddedDocument):
     def get_labels(self):
         return list(Label.objects.filter(name__in=self.labels))
 
-    def get_match_expr(self) -> Dict[str, Any]:
+    def get_match_expr(self) -> dict[str, Any]:
         r = {}
         if self.labels:
             r["labels"] = {"$all": list(self.labels)}
@@ -119,8 +119,8 @@ class MetricActionItem(EmbeddedDocument):
     is_active = BooleanField(default=True)
     metric_type: "MetricType" = PlainReferenceField(MetricType)
     metric_action: "MetricAction" = PlainReferenceField(MetricAction)
-    metric_action_params: Dict[str, Any] = DictField()
-    thresholds: List["ThresholdConfig"] = EmbeddedDocumentListField(ThresholdConfig)
+    metric_action_params: dict[str, Any] = DictField()
+    thresholds: list["ThresholdConfig"] = EmbeddedDocumentListField(ThresholdConfig)
 
     def __str__(self) -> str:
         if self.metric_action:
@@ -182,8 +182,8 @@ class MetricRule(Document):
     name = StringField(unique=True)
     description = StringField()
     is_active = BooleanField(default=True)
-    match: List["Match"] = EmbeddedDocumentListField(Match)
-    actions: List["MetricActionItem"] = EmbeddedDocumentListField(MetricActionItem)
+    match: list["Match"] = EmbeddedDocumentListField(Match)
+    actions: list["MetricActionItem"] = EmbeddedDocumentListField(MetricActionItem)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _rule_cache = cachetools.TTLCache(100, ttl=30)
@@ -194,12 +194,12 @@ class MetricRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
-    def get_by_id(cls, oid: Union[str, ObjectId]) -> Optional["MetricRule"]:
+    def get_by_id(cls, oid: str | ObjectId) -> Optional["MetricRule"]:
         return MetricRule.objects.filter(id=oid).first()
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_rule_cache"), lock=lambda _: rule_lock)
-    def get_rules_matcher(cls) -> Tuple[Tuple[Tuple[str, str], FrozenSet[str], Callable], ...]:
+    def get_rules_matcher(cls) -> tuple[tuple[tuple[str, str], frozenset[str], Callable], ...]:
         """Build matcher based on Profile Match Rules"""
         r = {}
         for rule in MetricRule.objects.filter(is_active=True):
@@ -212,10 +212,17 @@ class MetricRule(Document):
                 )
         return tuple((x, r[x][0], r[x][1]) for x in r)
 
-    def get_matcher(self) -> Optional[Callable]:
+    def iter_conditions(self) -> Iterable["Match"]:
+        """"""
+        for match in self.match or []:
+            if not match.labels and not match.exclude_labels:
+                continue
+            yield match
+
+    def get_matcher(self) -> Callable | None:
         """Build matcher structure"""
         expr = []
-        for mr in self.match or []:
+        for mr in self.iter_conditions():
             expr.append(mr.get_match_expr())
         if not expr:
             return None
@@ -223,7 +230,7 @@ class MetricRule(Document):
             return build_matcher(expr[0])
         return build_matcher({"$or": expr})
 
-    def get_scopes(self) -> Set[str]:
+    def get_scopes(self) -> set[str]:
         """Return used scopes on actions"""
         scopes = set()
         for a in self.actions:
@@ -284,8 +291,8 @@ class MetricRule(Document):
 
     @classmethod
     def get_affected_rules(
-        cls, ctx: Dict[str, Any], scope: Optional[str] = None
-    ) -> List[Tuple[str, str]]:
+        cls, ctx: dict[str, Any], scope: str | None = None
+    ) -> list[tuple[str, str]]:
         """Getting rules for ctx"""
         r = []
         for rule_id, scopes, matcher in cls.get_rules_matcher():
@@ -297,7 +304,7 @@ class MetricRule(Document):
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_rules_cache"), lock=lambda _: rules_lock)
-    def get_rules(cls) -> Dict[Set[str], List["MetricActionItem"]]:
+    def get_rules(cls) -> dict[set[str], list["MetricActionItem"]]:
         r = defaultdict(list)
         for rid, match, actions in MetricRule.objects.filter(is_active=True).scalar(
             "id", "match", "actions"
@@ -310,7 +317,7 @@ class MetricRule(Document):
         return r
 
     @classmethod
-    def iter_rules_actions(cls, labels) -> Tuple[str, str]:
+    def iter_rules_actions(cls, labels) -> Iterable[tuple[str, str]]:
         """Iter Rules for labels"""
         labels = set(labels)
         rules = cls.get_rules()
@@ -322,3 +329,53 @@ class MetricRule(Document):
                     yield str(rid), str(a.metric_action.id)
                 elif a.metric_type:
                     yield str(rid), str(a.metric_type.id)
+
+    @classmethod
+    def get_config(cls, rule: "MetricRule") -> dict[str, Any]:
+        """Datastream rule config"""
+        actions = []
+        for num, action in enumerate(rule.actions):
+            if not action.is_active:
+                continue
+            if action.metric_type and action.thresholds:
+                a_config = action.get_config(rule_id=rule.id)
+                actions += [
+                    {
+                        "id": str(action.metric_type.id),
+                        "name": str(f"Threshold_{action.metric_type.name}"),
+                        "graph_config": a_config.model_dump(),
+                        "inputs": [
+                            {
+                                "input_name": "in",
+                                "probe_id": action.metric_type.field_name,
+                                "sender_id": action.metric_type.scope.table_name,
+                            }
+                        ],
+                    }
+                ]
+                continue
+            if not action.metric_action:
+                continue
+            a_config = action.metric_action.get_config(
+                **action.metric_action_params,
+                rule_id=rule.id,
+                thresholds=[t.get_config() for t in action.thresholds],
+            )
+            if not a_config:
+                continue
+            r_action = {
+                "id": str(action.metric_action.id),
+                "name": str(action.metric_action),
+                "graph_config": a_config.model_dump(),
+                "inputs": [input.config for input in action.metric_action.compose_inputs],
+            }
+            actions += [r_action]
+        return {
+            "id": str(rule.id),
+            "name": rule.name,
+            "actions": actions,
+            "match": [
+                {"labels": m.labels or [], "exclude_labels": m.exclude_labels or []}
+                for m in rule.iter_conditions()
+            ],
+        }

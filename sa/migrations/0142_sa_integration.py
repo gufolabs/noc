@@ -14,7 +14,7 @@ from noc.core.model.fields import DocumentReferenceField, TagsField
 
 
 class Migration(BaseMigration):
-    def migrate(self):
+    def migrate(self) -> None:
         # Administrative Domain
         self.db.add_column(
             "sa_administrativedomain",

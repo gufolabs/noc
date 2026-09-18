@@ -32,7 +32,7 @@ class Profile(BaseProfile):
     def convert_interface_name(self, s):
         match = self.rx_interface_name.match(s)
         if match:
-            return "port%s" % s
+            return f"port{s}"
         return s
 
     INTERFACE_TYPES = {

@@ -72,7 +72,7 @@ Ext.define("NOC.sa.service.RegisterForm", {
     this.request(url, params);
   },
   request: function(url, params){
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: url,
       method: "POST",
       jsonData: params,

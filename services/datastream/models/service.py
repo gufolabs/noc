@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, List, Dict, Literal
+from typing import Literal
 
 # Third-party modules
 from pydantic import BaseModel
@@ -36,26 +36,26 @@ class ResourceGroupItem(BaseModel):
 class ServiceItem(BaseModel):
     id: str
     label: str
-    remote_system: Optional[RemoteSystemItem]
-    remote_id: Optional[str]
+    remote_system: RemoteSystemItem | None
+    remote_id: str | None
 
 
 class Dependency(BaseModel):
     service: ServiceItem
     method: Literal["parent", "used_by"] = "parent"
     status_affected: bool = False
-    status_direction: Optional[Literal["in", "out", "both"]] = None
+    status_direction: Literal["in", "out", "both"] | None = None
     # direction: Optional[Literal["in", "out", "top", "down", "used"]]
 
 
 class ServiceInstanceItem(BaseModel):
     id: str
     type: InstanceType
-    name: Optional[str]
-    fqdn: Optional[str]
-    managed_object: Optional[str]
-    remote_system: Optional[RemoteSystemItem]
-    remote_id: Optional[str]
+    name: str | None
+    fqdn: str | None
+    managed_object: str | None
+    remote_system: RemoteSystemItem | None
+    remote_id: str | None
 
 
 class ServiceDataStreamItem(BaseModel):
@@ -64,18 +64,18 @@ class ServiceDataStreamItem(BaseModel):
     label: str
     bi_id: int
     state: StateItem
-    parent: Optional[str]
+    parent: str | None
     profile: ServiceProfileItem
-    description: Optional[str]
-    labels: Optional[List[str]]
-    agreement_id: Optional[str]
-    address: Optional[str]
-    capabilities: Optional[List[CapabilitiesItem]]
-    project: Optional[ProjectItem]
-    remote_system: Optional[RemoteSystemItem]
-    service_groups: Optional[List[ResourceGroupItem]]
-    client_groups: Optional[List[ResourceGroupItem]]
-    remote_mappings: Optional[List[RemoteMapItem]]
-    effective_remote_map: Optional[Dict[str, str]]
-    instances: Optional[List[ServiceInstanceItem]]
-    dependencies: Optional[List[Dependency]]
+    description: str | None
+    labels: list[str] | None
+    agreement_id: str | None
+    address: str | None
+    capabilities: list[CapabilitiesItem] | None
+    project: ProjectItem | None
+    remote_system: RemoteSystemItem | None
+    service_groups: list[ResourceGroupItem] | None
+    client_groups: list[ResourceGroupItem] | None
+    remote_mappings: list[RemoteMapItem] | None
+    effective_remote_map: dict[str, str] | None
+    instances: list[ServiceInstanceItem] | None
+    dependencies: list[Dependency] | None

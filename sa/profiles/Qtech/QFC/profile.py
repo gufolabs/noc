@@ -18,15 +18,13 @@ from noc.core.snmp.get import GetResponse, BERDecoder, PDU_RESPONSE
 def parse_get_response(pdu: bytes, display_hints=None) -> GetResponse:
     """
     Common response parser
-    :param pdu:
-    :param display_hints:
     :return:
     """
     decoder = BERDecoder(display_hints=display_hints)
     data = decoder.parse_sequence(pdu)[0]
     pdu = data[2]
     if pdu[0] != PDU_RESPONSE:
-        raise ValueError("Invalid response PDU type: %s" % pdu[0])
+        raise ValueError(f"Invalid response PDU type: {pdu[0]}")
     error_index = pdu[3]
     if pdu[2]:
         # Always get 1 OID on query. If error return bad value

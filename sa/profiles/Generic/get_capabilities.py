@@ -8,7 +8,6 @@
 # Python modules
 import functools
 import itertools
-from typing import List
 
 # NOC modules
 from noc.core.script.base import BaseScript
@@ -323,7 +322,6 @@ class Script(BaseScript):
     def get_enterprise_id(self, version=None):
         """
         Returns EnterpriseID number from sysObjectID
-        :param version:
         :return:
         """
         if self.has_snmp():
@@ -370,7 +368,7 @@ class Script(BaseScript):
         return None
 
     @false_on_snmp_error
-    def get_snmp_table_idx(self, oid) -> List[int]:
+    def get_snmp_table_idx(self, oid) -> list[int]:
         r = []
         for oid, value in self.snmp.getnext(oid):
             _, idx = oid.rsplit(".", 1)
@@ -398,7 +396,6 @@ class Script(BaseScript):
     def is_requested(self, section):
         """
         Check if section is requested
-        :param section:
         :return:
         """
         if self.requested:
@@ -544,8 +541,6 @@ class Script(BaseScript):
     def apply_capability(self, name, value):
         """
         Apply capability to capabilities immediately
-        :param name:
-        :param value:
         :return:
         """
         self.capabilities[name] = value

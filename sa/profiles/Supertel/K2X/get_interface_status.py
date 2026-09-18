@@ -41,7 +41,7 @@ class Script(BaseScript):
 
         # Fallback to CLI
         if interface:
-            cmd = "show interfaces status ethernet %s" % interface
+            cmd = f"show interfaces status ethernet {interface}"
         else:
             cmd = "show interfaces status"
         for match in self.rx_interface_status.finditer(self.cli(cmd)):

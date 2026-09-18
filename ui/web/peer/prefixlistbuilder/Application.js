@@ -116,7 +116,7 @@ Ext.define("NOC.peer.prefixlistbuilder.Application", {
       return;
     }
     me.mask(__("Building..."));
-    Ext.Ajax.request({
+    NOC.api.requestLegacy({
       url: "/peer/prefixlistbuilder/",
       method: "GET",
       params: form.getValues(),

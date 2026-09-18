@@ -13,8 +13,8 @@ from starlette.datastructures import Headers
 from noc.core.span import Span
 
 
-class SpanMiddleware(object):
-    def __init__(self, app, service_name="service"):
+class SpanMiddleware:
+    def __init__(self, app, service_name="service") -> None:
         self.app = app
         self.service_name = service_name
 

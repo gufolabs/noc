@@ -7,7 +7,7 @@
 
 # Python modules
 import enum
-from typing import Dict, Any
+from typing import Any
 
 # Third-party module
 from mongoengine.document import Document
@@ -51,7 +51,7 @@ class ManagedObjectLoader(BaseLoader):
         "vrf": VRF,
     }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.clean_map["pool"] = Pool.get_by_name
         self.clean_map["fm_pool"] = lambda x: Pool.get_by_name(x) if x else None
@@ -177,7 +177,7 @@ class ManagedObjectLoader(BaseLoader):
                 pass
         self.pending_deletes = []
 
-    def post_save(self, o: ManagedObjectModel, fields: Dict[str, Any]):
+    def post_save(self, o: ManagedObjectModel, fields: dict[str, Any]):
         if not fields or "capabilities" not in fields:
             return
         caps = {}

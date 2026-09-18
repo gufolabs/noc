@@ -12,7 +12,7 @@ RC = re.compile
 # Day of weeks declarations
 DoW = ["mon", "tue", "wen", "thu", "fri", "sat", "sun"]
 
-DoWRE = "(%s)" % ("|".join(DoW))
+DoWRE = "({})".format("|".join(DoW))
 # Day part patterns
 DAY_PATTERNS = [
     (RC(r"^(\d{2})$"), lambda day: "(T.day == %d)" % int(day)),
@@ -26,35 +26,31 @@ DAY_PATTERNS = [
     ),
     (
         RC(r"^(\d{2})\.(\d{2})-(\d{2})\.(\d{2})$"),
-        lambda from_day,
-        from_month,
-        to_day,
-        to_month: "('%s%s' <= ('%%02d%%02d' %% (T.month, T.day)) <= '%s%s')"
-        % (from_month, from_day, to_month, to_day),
+        lambda from_day, from_month, to_day, to_month: (
+            f"('{from_month}{from_day}' <= ('%02d%02d' % (T.month, T.day)) <= '{to_month}{to_day}')"
+        ),
     ),
     (
         RC(r"^(\d{2})\.(\d{2})\.(\d{4})$"),
-        lambda day, month, year: "(T.day == %d and T.month == %d and T.year == %d)"
-        % (int(day), int(month), int(year)),
+        lambda day, month, year: (
+            "(T.day == %d and T.month == %d and T.year == %d)" % (int(day), int(month), int(year))
+        ),
     ),
     (
         RC(r"^(\d{2})\.(\d{2})\.(\d{4})-(\d{2})\.(\d{2})\.(\d{4})$"),
-        lambda from_day,
-        from_month,
-        from_year,
-        to_day,
-        to_month,
-        to_year: "('%s%s%s' <= ('%%04d%%02d%%02d' %% (T.year, T.month, T.day)) <= '%s%s%s')"
-        % (from_year, from_month, from_day, to_year, to_month, to_day),
+        lambda from_day, from_month, from_year, to_day, to_month, to_year: (
+            f"('{from_year}{from_month}{from_day}' <= ('%04d%02d%02d' % (T.year, T.month, T.day)) <= '{to_year}{to_month}{to_day}')"
+        ),
     ),
     (
-        RC(r"^%s$" % DoWRE, re.IGNORECASE),
+        RC(rf"^{DoWRE}$", re.IGNORECASE),
         lambda dow: "(T.weekday() == %d)" % DoW.index(dow.lower()),
     ),
     (
-        RC(r"^%s-%s$" % (DoWRE, DoWRE), re.IGNORECASE),
-        lambda from_dow, to_dow: "(%d <= T.weekday() <= %d)"
-        % (DoW.index(from_dow.lower()), DoW.index(to_dow)),
+        RC(rf"^{DoWRE}-{DoWRE}$", re.IGNORECASE),
+        lambda from_dow, to_dow: (
+            "(%d <= T.weekday() <= %d)" % (DoW.index(from_dow.lower()), DoW.index(to_dow))
+        ),
     ),
 ]
 
@@ -66,13 +62,15 @@ TIME_PATTERNS = [
     ),
     (
         RC(r"^(\d{2}):(\d{2})-(\d{2}):(\d{2})$"),
-        lambda from_hour, from_minute, to_hour, to_minute: "(%d <= (T.hour * 60 + T.minute) <= %d)"
-        % (int(from_hour) * 60 + int(from_minute), int(to_hour) * 60 + int(to_minute)),
+        lambda from_hour, from_minute, to_hour, to_minute: (
+            "(%d <= (T.hour * 60 + T.minute) <= %d)"
+            % (int(from_hour) * 60 + int(from_minute), int(to_hour) * 60 + int(to_minute))
+        ),
     ),
 ]
 
 
-class TimePattern(object):
+class TimePattern:
     """
     >>> import datetime
     >>> TimePattern("13").match(datetime.datetime(year=2005,month=3,day=13))
@@ -105,13 +103,12 @@ class TimePattern(object):
     True
     """
 
-    def __init__(self, pattern):
+    def __init__(self, pattern) -> None:
         self.code = compile(self.compile_to_python(pattern), "<string>", "eval")
 
     def match(self, d):
         """
         Check datetime object matches time pattern
-        :param d:
         :return: Boolean result
         """
         return eval(self.code, {"T": d})
@@ -121,7 +118,6 @@ class TimePattern(object):
         """
         Convert a string of a list of time pattern declarations
         to the python expression
-        :param tp:
         :return:
         """
 
@@ -130,14 +126,14 @@ class TimePattern(object):
                 match = l.match(p)
                 if match:
                     return r(*match.groups())
-            raise SyntaxError("Invalid expression '%s'" % p)
+            raise SyntaxError(f"Invalid expression '{p}'")
 
         if tp is None:
             return "True"
         if isinstance(tp, (list, tuple)):
             if not tp:
                 return "True"
-            return "(%s)" % (" or ".join([cls.compile_to_python(p) for p in tp]))
+            return "({})".format(" or ".join([cls.compile_to_python(p) for p in tp]))
         tp = tp.strip()
         if "|" in tp:
             day_pattern, time_pattern = tp.split("|")
@@ -150,18 +146,18 @@ class TimePattern(object):
         tpl = " or ".join(
             [compile_pattern(TIME_PATTERNS, x.strip()) for x in time_pattern.split(",") if x]
         )
-        x = " and ".join(["(%s)" % x for x in [dpl, tpl] if x])
+        x = " and ".join([f"({x})" for x in [dpl, tpl] if x])
         if not x:
             return "True"
         return x
 
 
-class TimePatternList(object):
+class TimePatternList:
     """
     Enclosure for a list of time patterns
     """
 
-    def __init__(self, patterns):
+    def __init__(self, patterns) -> None:
         self.patterns = patterns
 
     def match(self, d):

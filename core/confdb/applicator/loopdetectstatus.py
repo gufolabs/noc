@@ -10,9 +10,7 @@ from .query import QueryApplicator
 
 
 class DefaultLoopDetectStatusApplicator(QueryApplicator):
-    """
-    Apply loop-detect status
-    """
+    """Apply loop-detect status"""
 
     CHECK_QUERY = "Match('hints', 'protocols', 'loop-detect', 'status')"
     QUERY = [

@@ -18,7 +18,7 @@ class Script(BaseScript):
 
     def execute(self, interface):
         try:
-            c = self.cli("show snmp mib ifmib ifindex %s" % interface)
+            c = self.cli(f"show snmp mib ifmib ifindex {interface}")
         except self.CLISyntaxError:
             return None
 

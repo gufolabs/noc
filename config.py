@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # NOC config
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -10,10 +10,12 @@ import logging
 import os
 import socket
 import sys
-from functools import partial
+import datetime
+import time
+from functools import partial, cached_property
 from urllib.parse import quote as urllib_quote
 from pathlib import Path
-from typing import Dict, Union, Optional, Iterable
+from typing import Iterable
 from types import ModuleType
 import importlib
 
@@ -29,7 +31,7 @@ from noc.core.config.base import (
     ValueRewrite,
     DeprecatedValue,
 )
-from noc.core.deprecations import RemovedInNOC2601Warning
+from noc.core.deprecations import RemovedInNOC26Warning
 from noc.core.config.params import (
     StringParameter,
     MapParameter,
@@ -44,6 +46,7 @@ from noc.core.config.params import (
     UUIDParameter,
     TimeZoneParameter,
 )
+
 
 SECRETS_BASE = Path("/", "run", "secrets")
 
@@ -128,8 +131,6 @@ class Config(BaseConfig):
 
     class biosegmentation(ConfigSection):
         processed_trials_ttl = SecondsParameter(default="1w")
-
-    brand = StringParameter(default="NOC")
 
     class cache(ConfigSection):
         vcinterfacescount = SecondsParameter(default="1h")
@@ -277,6 +278,7 @@ class Config(BaseConfig):
             default=True,
             help="Add service field to metric request",
         )
+        max_id_mac_range = IntParameter(default=0, min=0)
 
     class dns(ConfigSection):
         warn_before_expired = SecondsParameter(default="30d")
@@ -492,11 +494,9 @@ class Config(BaseConfig):
         batch_max_message_size = IntParameter(default=307200, help="Max message size for Send")
         nodata_record_ttl = SecondsParameter(default="1h")
         nodata_round_duration = SecondsParameter(default="1M")
-
-    class memcached(ConfigSection):
-        addresses = ServiceParameter(service="memcached", wait=True, full_result=True)
-        pool_size = IntParameter(default=8)
-        default_ttl = SecondsParameter(default="1d")
+        target_check_ttl = SecondsParameter(
+            default="2h", help="TTL between received tartget metrics"
+        )
 
     class message(ConfigSection):
         enable_alarm = BooleanParameter(default=False)
@@ -553,7 +553,6 @@ class Config(BaseConfig):
         bi_data_prefix = StringParameter(default="/var/lib/noc/bi")
         collection_fm_mibs = StringParameter(default="collections/fm.mibs/")
         supervisor_cfg = StringParameter(default="etc/noc_services.conf")
-        legacy_config = StringParameter(default="etc/noc.yml")
         npkg_root = StringParameter(default="/var/lib/noc/var/pkg")
         card_template_path = StringParameter(default="services/card/templates/card.html.j2")
         pm_templates = StringParameter(default="templates/ddash/")
@@ -564,6 +563,9 @@ class Config(BaseConfig):
         mac_vendor_medium_url = StringParameter(
             default="https://standards-oui.ieee.org/oui28/mam.txt"
         )
+
+    class process(ConfigSection):
+        cpu_affinity = StringParameter(default="none")
 
     class pg(ConfigSection):
         addresses = ServiceParameter(service="postgres", wait=True, near=True, full_result=False)
@@ -646,6 +648,7 @@ class Config(BaseConfig):
         cache_default_ttl = SecondsParameter(default="1d")
         autointervaljob_interval = SecondsParameter(default="1d")
         autointervaljob_initial_submit_interval = SecondsParameter(default="1d")
+        diagnostic_check_depth_interval = SecondsParameter(default="1w")
 
     class script(ConfigSection):
         timeout = SecondsParameter(default="2M", help="default sa script script timeout")
@@ -664,8 +667,6 @@ class Config(BaseConfig):
         inventory_ttl = IntParameter(default=30)
         enable_fm = BooleanParameter(default=False)
         fm_ttl = IntParameter(default=30)
-        enable_liftbridge = BooleanParameter(default=False)
-        liftbridge_ttl = IntParameter(default=30)
         enable_kafka = BooleanParameter(default=False)
         kafka_ttl = IntParameter(default=30)
 
@@ -686,7 +687,7 @@ class Config(BaseConfig):
     class msgstream(ConfigSection):
         metrics_send_delay = FloatParameter(default=0.25)
         max_message_size = IntParameter(default=921600, help="Max message size for GRPC client")
-        client_class = StringParameter(default="noc.core.msgstream.liftbridge.LiftBridgeClient")
+        client_class = StringParameter(default="noc.core.msgstream.kafka.KafkaClient")
 
         class events(ConfigSection):
             retention_max_age = SecondsParameter(
@@ -807,6 +808,7 @@ class Config(BaseConfig):
             },
             help="Maximum severity level for received messages. More than will be dropped",
         )
+        target_check_ttl = SecondsParameter(default="1w", help="TTL between received tartget trap")
 
     class tgsender(ConfigSection):
         token = SecretParameter(path=SECRETS_BASE / "tgsender-token")
@@ -839,6 +841,7 @@ class Config(BaseConfig):
         storm_threshold_reduction = FloatParameter(default=0.9)
         # time to live (rounds quantity) of records in storm protection addresses dictionary
         storm_record_ttl = IntParameter(default=10)
+        target_check_ttl = SecondsParameter(default="1w", help="TTL between received tartget trap")
 
     class watchdog(ConfigSection):
         enable_watchdog = BooleanParameter(default=True)
@@ -1087,12 +1090,37 @@ class Config(BaseConfig):
         ds_limit = IntParameter(default=1000)
 
     # pylint: disable=super-init-not-called
-    def __init__(self, rewrites: Optional[Iterable[BaseRewrite]] = None):
+    def __init__(self, rewrites: Iterable[BaseRewrite] | None = None) -> None:
         super().__init__(rewrites=rewrites)
-        self.setup_logging()
 
     @property
-    def pg_connection_args(self) -> Dict[str, Union[str, int]]:
+    def brand(self) -> str:
+        """
+        System branding name.
+
+        !!! warning
+
+            LICENSE RESTRICTION: This property is protected by the NOC
+            branding and licensing terms.
+
+            Without prior written authorization from the copyright holder,
+            do not modify, override, replace, patch, bypass, circumvent, or
+            redirect the execution path around this property. This includes
+            changing its call sites to obtain branding information from another
+            source.
+
+            Unauthorized modification or circumvention, distribution of
+            software or services incorporating such changes, or use of such
+            derivative products may constitute violations of paragraphs 3-6
+            of the License and may give rise to legal consequences under
+            applicable international and national law.
+
+            See LICENSE.md for details.
+        """
+        return "NOC"
+
+    @property
+    def pg_connection_args(self) -> dict[str, str | int]:
         """
         PostgreSQL database connection arguments
         suitable to pass to psycopg2.connect
@@ -1136,11 +1164,9 @@ class Config(BaseConfig):
                 self._mongo_connection_args["maxIdleTimeMS"] = self.mongo.max_idle_time * 1000
             url = ["mongodb://"]
             if has_credentials:
-                url += [
-                    "%s:%s@" % (urllib_quote(self.mongo.user), urllib_quote(self.mongo.password))
-                ]
+                url += [f"{urllib_quote(self.mongo.user)}:{urllib_quote(self.mongo.password)}@"]
             url += [",".join(str(h) for h in hosts)]
-            url += ["/%s" % self.mongo.db]
+            url += [f"/{self.mongo.db}"]
             self._mongo_connection_args["host"] = "".join(url)
             if self.perfomance.enable_mongo_hist:
                 from noc.core.mongo.monitor import MongoCommandSpan
@@ -1149,25 +1175,45 @@ class Config(BaseConfig):
             self._mongo_connection_args["uuidRepresentation"] = "pythonLegacy"
         return self._mongo_connection_args
 
-    def setup_logging(self, loglevel=None):
+    def setup(self) -> None:
+        """
+        Apply settings according to config.
+
+        Must be called explicitly to apply configured system settings.
+
+        Set up:
+        * logging
+        """
+        if hasattr(self, "_applied"):
+            return
+        self._setup_logging()
+        self._setup_timezone()
+        setattr(self, "_applied", True)
+
+    def _setup_logging(self) -> None:
         """
         Create new or setup existing logger
         """
-        if not loglevel:
-            loglevel = self.loglevel
         logger = logging.getLogger()
         if len(logger.handlers):
+            from noc.core.log import ErrorFormatter
+
             # Logger is already initialized
-            fmt = logging.Formatter(self.log_format, None)
+            fmt = ErrorFormatter(self.log_format, None)
             for h in logging.root.handlers:
                 if isinstance(h, logging.StreamHandler):
                     h.stream = sys.stdout
                 h.setFormatter(fmt)
-            logging.root.setLevel(loglevel)
+            logging.root.setLevel(self.loglevel)
         else:
             # Initialize logger
-            logging.basicConfig(stream=sys.stdout, format=self.log_format, level=loglevel)
+            logging.basicConfig(stream=sys.stdout, format=self.log_format, level=self.loglevel)
         logging.captureWarnings(True)
+
+    def _setup_timezone(self) -> None:
+        """Perform timezone setup."""
+        os.environ["TZ"] = self.timezone.key
+        time.tzset()
 
     def get_customized_paths(self, *args, **kwargs):
         """
@@ -1201,7 +1247,24 @@ class Config(BaseConfig):
             return [rpath, cpath]
         return [rpath]
 
-    def iter_customized_modules(self, name: str, prefer_custom=True) -> Iterable[ModuleType]:
+    def iter_customized_bases(self, name: str, prefer_custom: bool = True) -> Iterable[str]:
+        """
+        Iterate module string names.
+
+        For use in loader.
+        """
+        if not name.startswith("noc."):
+            return
+        c_name = f"noc.custom.{name[4:]}"
+        if self.path.custom_path and prefer_custom:
+            yield c_name
+        yield name
+        if self.path.custom_path and not prefer_custom:
+            yield c_name
+
+    def iter_customized_modules(
+        self, name: str, prefer_custom: bool = True
+    ) -> Iterable[ModuleType]:
         """
         Iterate module instances.
 
@@ -1215,14 +1278,14 @@ class Config(BaseConfig):
             Yields appropriate instances.
         """
 
-        def get_module(mod_name: str) -> Optional[ModuleType]:
+        def get_module(mod_name: str) -> ModuleType | None:
             """Load module or return None."""
             try:
                 return importlib.import_module(mod_name)
             except ModuleNotFoundError:
                 return None
 
-        def check_and_yield(*args: Optional[ModuleType]) -> Iterable[ModuleType]:
+        def check_and_yield(*args: ModuleType | None) -> Iterable[ModuleType]:
             """Yield only not None modules."""
             for m in args:
                 if m:
@@ -1262,26 +1325,20 @@ class Config(BaseConfig):
         # Check quantiles is enabled
         return getattr(self.perfomance, f"enable_{name}_quantiles", False)
 
-    @property
+    @cached_property
     def tz_utc_offset(self) -> int:
         """
-        Return UTC offset for configured timezone
-        :return:
+        UTC offset for configured timezone.
         """
-        import pytz
-        import datetime
-
-        if not hasattr(self, "_utcoffset"):
-            dt = datetime.datetime.now(tz=pytz.utc)
-            self._utcoffset = dt.astimezone(self.timezone).utcoffset()
-        return int(self._utcoffset.total_seconds())
+        dt = datetime.datetime.now(datetime.timezone.utc)
+        offset = dt.astimezone(self.timezone).utcoffset()
+        return int(offset.total_seconds())
 
     @staticmethod
     @cachetools.cached(cachetools.TTLCache(maxsize=128, ttl=60))
     def get_slot_limits(slot_name):
         """
         Get slot count
-        :param slot_name:
         :return:
         """
         from noc.core.dcs.loader import get_dcs
@@ -1293,19 +1350,20 @@ class Config(BaseConfig):
 
 config = Config(
     rewrites=[
-        PrefixRewrite("redpanda", "kafka", deprecation=RemovedInNOC2601Warning),
+        PrefixRewrite("redpanda", "kafka", deprecation=RemovedInNOC26Warning),
         ValueRewrite(
             "msgstream.client_class",
             "noc.core.msgstream.redpanda.RedPandaClient",
             "noc.core.msgstream.kafka.KafkaClient",
-            deprecation=RemovedInNOC2601Warning,
+            deprecation=RemovedInNOC26Warning,
         ),
         DeprecatedValue(
             "msgstream.client_class",
             "noc.core.msgstream.liftbridge.LiftBridgeClient",
-            deprecation=RemovedInNOC2601Warning,
+            deprecation=RemovedInNOC26Warning,
         ),
     ]
 )
-config.load()
-config.setup_logging()
+
+DEFAULT_CONFIG = "yaml:///opt/noc/etc/tower.yml,yaml:///opt/noc/etc/settings.yml,env:///NOC"
+config.load(os.environ.get("NOC_CONFIG", DEFAULT_CONFIG))

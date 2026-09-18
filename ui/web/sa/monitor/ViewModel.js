@@ -16,6 +16,7 @@ Ext.define("NOC.sa.monitor.ViewModel", {
     total: {
       selection: 0,
     },
+    icon: "<i class='fa fa-fw' style='width:16px;'></i>",
     polling: {
       devices: [],
       leave: 0,

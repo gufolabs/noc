@@ -6,7 +6,6 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional
 
 # NOC modules
 from .base import BaseCDAGNode, ValueType, Category
@@ -20,7 +19,7 @@ class DivNode(BaseCDAGNode):
     name = "div"
     categories = [Category.OPERATION]
 
-    def get_value(self, x: ValueType, y: ValueType) -> Optional[ValueType]:
+    def get_value(self, x: ValueType, y: ValueType) -> ValueType | None:
         if not y:
             return None
         return x / y

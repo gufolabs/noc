@@ -15,7 +15,7 @@ from noc.core.migration.base import BaseMigration
 class Migration(BaseMigration):
     depends_on = [("ip", "0001_initial")]
 
-    def migrate(self):
+    def migrate(self) -> None:
         VRF = self.db.mock_model(model_name="VRF", db_table="ip_vrf")
         self.db.add_column(
             "sa_managedobject",
