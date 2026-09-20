@@ -1,4 +1,4 @@
-{% macro sensors(sensor, lindex, span=4, legend={"show": "true", "alignAsTable": "true"}) -%}
+{% macro sensors(sensor, lindex, span=4, legend_show="true", legend_alignAsTable="true", graph_type="graph", thresholds=None) -%}
 {
   "title": "{{ sensor.dashboard_label or sensor.label}}",
   "aliasColors": {},
@@ -13,12 +13,12 @@
   },
   "id": {{sensor.id + lindex + 31300}},
   "legend": {
-    "alignAsTable": {{ legend.alignAsTable }},
+    "alignAsTable": {{ legend_alignAsTable }},
     "avg": false,
     "current": true,
     "max": true,
     "min": true,
-    "show": {{ legend.show }},
+    "show": {{ legend_show }},
     "sortDesc": true,
     "total": false,
     "values": true
@@ -52,6 +52,22 @@
   "stack": false,
   "steppedLine": false,
   "targets": [
+    {% set comma = joiner(",") -%}
+    {% for series in sensor.series %}
+    {{ comma() }}
+    {
+      "intervalFactor": 1,
+      "query": "SELECT t,  groupArray((name, Value)) AS groupArr FROM ( SELECT $timeSeries as t, argMax(value, t) as Value, any(name) as name FROM $table WHERE (sensor = {{series.bi_id}} or service = {{series.bi_id}}) and $timeFilter GROUP BY t ORDER BY t) GROUP BY t  ORDER BY t ASC",
+      "resultFormat": "time_series",
+      "database": "{{ noc_db_metrics }}",
+      "tableLoading": false,
+      "table": "sensor",
+      "dateLoading": false,
+      "datetimeLoading": false,
+      "dateColDataType": "date",
+      "dateTimeColDataType": "ts"
+    }
+    {% else %}
     {
       "intervalFactor": 1,
       "query": "SELECT t,  groupArray((name, Value)) AS groupArr FROM ( SELECT $timeSeries as t, argMax(value, t) as Value, any(name) as name FROM $table WHERE (sensor = {{sensor.bi_id}} or service = {{sensor.bi_id}}) and $timeFilter GROUP BY t ORDER BY t) GROUP BY t  ORDER BY t ASC",
@@ -65,6 +81,7 @@
       "dateColDataType": "date",
       "dateTimeColDataType": "ts"
     }
+    {% endfor %}
   ],
   "timeFrom": null,
   "timeShift": null,
@@ -74,8 +91,7 @@
     "sort": 0,
     "value_type": "cumulative"
   },
-  {% if sensor.units.dashboard_label != "null" %}
-  "type": "graph",
+  "type": "{{ graph_type }}",
   "xaxis": {
     "show": true,
     "mode": "time",
@@ -102,9 +118,28 @@
       "min": null,
       "label": null
     }
-  ]
-  {% else %}
-  "type": "stat"
-  {% endif %}
+  ],
+  "fieldConfig": {
+    "defaults": {
+      "mappings": [],
+      {% if thresholds %}
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "value": {{ thresholds.th1 }},
+            "color": "red"
+          },
+          {
+            "value": {{ thresholds.th2 }},
+            "color": "green"
+          }
+        ]
+      },
+      {% endif %}
+      "unit": {% if sensor.units.dashboard_label == "null" %} "" {% else %} "{{sensor.units.dashboard_label}}" {% endif %}
+    },
+    "overrides": []
+  },
 }
 {%- endmacro %}
