@@ -1,0 +1,12 @@
+{
+    "name": "Telephony | SIP | Users | Active",
+    "$collection": "pm.metrictypes",
+    "uuid": "d0dded9a-d230-498d-8770-bc19821e10e8",
+    "scope__name": "Object",
+    "field_name": "sip_users_active",
+    "field_type": "Int32",
+    "description": "The number of active users",
+    "measure": null,
+    "units__code": "1",
+    "scale__code": "1"
+}
