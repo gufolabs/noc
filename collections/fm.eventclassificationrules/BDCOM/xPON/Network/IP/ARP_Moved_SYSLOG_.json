@@ -1,0 +1,19 @@
+{
+    "name": "BDCOM | xPON | Network | IP | ARP Moved (SYSLOG)",
+    "$collection": "fm.eventclassificationrules",
+    "uuid": "f0572725-ba22-4935-8379-24d34bd52c8e",
+    "description": "IP ARP: 172.20.21.250 moved from bc:24:11:fe:5b:f6 to bc:24:11:7f:31:d7",
+    "event_class__name": "Network | IP | ARP Moved",
+    "preference": 1000,
+    "patterns": [],
+    "labels": [],
+    "message_rx": "IP ARP: (?P<ip>\\S+) moved from (?P<from_mac>\\S+) to (?P<to_mac>\\S+)",
+    "profiles": ["BDCOM.xPON"],
+    "sources": ["syslog"],
+    "test_cases": [
+        {
+            "message": "IP ARP: 172.20.21.250 moved from bc:24:11:fe:5b:f6 to bc:24:11:7f:31:d7",
+            "raw_vars": []
+        }
+    ]
+}
