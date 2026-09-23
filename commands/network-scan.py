@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # network-scan command
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -51,7 +51,7 @@ class Command(BaseCommand):
     CHECK_VERSION = {SNMP_v1: "snmp_v2c_get", SNMP_v2c: "snmp_v1_get"}
     SNMP_VERSION = {0: "SNMP_v1", 1: "SNMP_v2c"}
 
-    def add_arguments(self, parser: argparse.ArgumentParser) -> None:
+    def add_arguments(self, parser):
         parser.add_argument("--in", action="append", dest="inputs", help="File with addresses")
         parser.add_argument(
             "--import", action="append", dest="imports", help="File to import into NOC"
@@ -139,7 +139,7 @@ class Command(BaseCommand):
                                     else:
                                         self.hosts_exclude.add(line)
                     except OSError as e:
-                        self.die(f"Cannot read file {fn}: {e}\n")
+                        self.die(f"Cannot read file {fn}: {e}")
             # Direct addresses 10.0.0.1 or 10.0.0.0/24
             for a in addresses:
                 self.addresses = set()
@@ -186,7 +186,7 @@ class Command(BaseCommand):
                                         await queue.put(line)
 
                     except OSError as e:
-                        self.die(f"Cannot read file {fn}: {e}\n")
+                        self.die(f"Cannot read file {fn}: {e}")
             await queue.join()
 
         async def snmp_task():
@@ -216,7 +216,7 @@ class Command(BaseCommand):
         # administrative_domain = "default"
         profile = "Generic.Host"
         # object_profile = "default"
-        description = "create object {}".format(datetime.datetime.now().strftime("%Y%m%d"))
+        description = "create object %s" % (datetime.datetime.now().strftime("%Y%m%d"))
         # segment = "ALL"
         # scheme = "1"
         # address = ""
@@ -276,16 +276,16 @@ class Command(BaseCommand):
             try:
                 self.adm_domain = AdministrativeDomain.objects.get(name=adm_domain)
             except AdministrativeDomain.DoesNotExist:
-                self.die("Invalid adm profile-%s")
+                self.die(f"Invalid adm profile-{adm_domain}")
             self.profile = Profile.objects.get(name=profile)
             try:
                 self.segment = NetworkSegment.objects.get(name=segment)
             except NetworkSegment.DoesNotExist:
-                self.die("Invalid network segment-%s")
+                self.die(f"Invalid network segment-{segment}")
             try:
                 self.object_profile = ManagedObjectProfile.objects.get(name=obj_profile)
             except ManagedObjectProfile.DoesNotExist:
-                self.die("Invalid object profile-%s")
+                self.die(f"Invalid object profile-{obj_profile}")
 
         # creating a list of presence mo in noc
         moall = ManagedObject.objects.filter(is_managed=True)
@@ -421,7 +421,7 @@ class Command(BaseCommand):
             bodymessage = "Report in attachment.\n\nscan network:\n"
             for adr in self.nets:
                 bodymessage += adr + "\n"
-            filename = "found_ip_{}".format(datetime.datetime.now().strftime("%Y%m%d"))
+            filename = "found_ip_%s" % (datetime.datetime.now().strftime("%Y%m%d"))
             if formats == "csv":
                 f = f"{filename}.csv"
                 attach = [{"filename": f, "data": data}]
@@ -535,3 +535,7 @@ class Command(BaseCommand):
         except Exception:
             return None
         return next(iter(result))
+
+
+if __name__ == "__main__":
+    Command().run()
