@@ -139,7 +139,7 @@ class Command(BaseCommand):
                                     else:
                                         self.hosts_exclude.add(line)
                     except OSError as e:
-                        self.die(f"Cannot read file {fn}: {e}")
+                        self.die(f"Cannot read file {fn}: {e}\n")
             # Direct addresses 10.0.0.1 or 10.0.0.0/24
             for a in addresses:
                 self.addresses = set()
@@ -186,7 +186,7 @@ class Command(BaseCommand):
                                         await queue.put(line)
 
                     except OSError as e:
-                        self.die(f"Cannot read file {fn}: {e}")
+                        self.die(f"Cannot read file {fn}: {e}\n")
             await queue.join()
 
         async def snmp_task():
