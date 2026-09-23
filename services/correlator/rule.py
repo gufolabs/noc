@@ -137,9 +137,7 @@ class EventAlarmRule:
         ]
         if alarm_class:
             vars_transform.extend(
-                VarTransformRule(name=v.name)
-                for v in alarm_class.vars
-                if v.name not in mapped_vars
+                VarTransformRule(name=v.name) for v in alarm_class.vars if v.name not in mapped_vars
             )
         return cls(
             name=f"{event_class.name}: {source.name}",

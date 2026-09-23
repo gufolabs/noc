@@ -1076,8 +1076,12 @@ class CorrelatorService(FastAPIService):
                     r_vars,
                 )
                 continue
-            if rule.condition and event and not self.eval_expression(
-                rule.condition, event=event, managed_object=managed_object
+            if (
+                rule.condition
+                and event
+                and not self.eval_expression(
+                    rule.condition, event=event, managed_object=managed_object
+                )
             ):
                 continue
             if not rule.is_match(ctx):
