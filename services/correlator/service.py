@@ -100,7 +100,7 @@ class CorrelatorService(FastAPIService):
         self.triggers: dict[ObjectId, list[Trigger]] = {}
         self.rca_forward = {}  # alarm_class -> [RCA condition, ..., RCA condititon]
         self.rca_reverse = defaultdict(set)  # alarm_class -> set([alarm_class])
-        self.de: dict[bytes, list[tuple[int, Event]]] = {}  # Delayed Event
+        self.de: dict[bytes, list[tuple[datetime.datetime, Event]]] = {}  # Delayed Event
         self.alarm_rule_set = AlarmRuleSet()
         self.alarm_class_vars = defaultdict(dict)
         self.status_changes = deque()  # Save status changes
@@ -223,6 +223,19 @@ class CorrelatorService(FastAPIService):
                     rca_reverse[rc.root.id] = []
                 rca_reverse[rc.root.id] += [rc]
                 rca_count += 1
+        # Disposition rules remain embedded in EventClass.
+        for ec in EventClass.objects.filter():
+            if not ec.disposition:
+                continue
+            for source in ec.disposition:
+                ac = source.alarm_class
+                rule = EventAlarmRule.from_event_class_rule(source, ac, ec)
+                d_rules[ec.id].append(rule)
+                n_rule += 1
+                if rule.combo_condition and rule.combo_window:
+                    for combo_event_class in source.combo_event_classes:
+                        back_rules[combo_event_class.id].append(rule)
+                        n_br += 1
         self.rca_forward = {k: tuple(v) for k, v in rca_forward.items()}
         self.rca_reverse = {k: tuple(v) for k, v in rca_reverse.items()}
         self.logger.info("%d RCA Rules have been loaded", rca_count)
@@ -872,10 +885,12 @@ class CorrelatorService(FastAPIService):
         )
         ref_hash = self.get_reference_hash(reference)
         ws = event.timestamp - datetime.timedelta(seconds=rule.combo_window)
+        history = self.de.get(ref_hash, [])
         de = tuple(
-            de
-            for ts, de in self.de[ref_hash]
-            if ts > ws and de.type.event_class == rule.event_class.name
+            delayed_event
+            for ts, delayed_event in history
+            if ws < ts <= event.timestamp
+            and delayed_event.type.event_class == rule.event_class.name
         )
         if not de:
             # No starting event
@@ -883,9 +898,10 @@ class CorrelatorService(FastAPIService):
         de = de[0]
         # Probable starting event found, get all interesting following event classes
         fe = tuple(
-            e
-            for ts, e in self.de[ref_hash]
-            if ts > ws and de.type.event_class in rule.combo_event_classes
+            delayed_event.type.event_class
+            for ts, delayed_event in history
+            if ws < ts <= event.timestamp
+            and delayed_event.type.event_class in rule.combo_event_classes
         )
         # Order by ts
         if rule.combo_condition == "sequence":
@@ -1015,6 +1031,8 @@ class CorrelatorService(FastAPIService):
         object_avail: bool | None = None,
         labels: list[str] | None = None,
         remote_system: RemoteSystem | None = None,
+        event: Event | None = None,
+        managed_object: ManagedObject | None = None,
     ):
         """
         Iterate over disposition rule
@@ -1058,6 +1076,10 @@ class CorrelatorService(FastAPIService):
                     r_vars,
                 )
                 continue
+            if rule.condition and event and not self.eval_expression(
+                rule.condition, event=event, managed_object=managed_object
+            ):
+                continue
             if not rule.is_match(ctx):
                 # Rule is not applicable
                 self.logger.info(
@@ -1073,7 +1095,7 @@ class CorrelatorService(FastAPIService):
             elif rule.action == "ignore":
                 self.logger.info("[%s] Ignored by action", reference)
                 # save_to_disposelog("ignore")
-                continue
+                return
             self.logger.info("[%s] Processed rule: %s;%s", reference, rule.name, ctx)
             yield rule
             if rule.stop_disposition:
@@ -1126,6 +1148,8 @@ class CorrelatorService(FastAPIService):
             r_vars=r_vars,
             labels=req.labels,
             remote_system=remote_system,
+            event=req.event,
+            managed_object=managed_object,
         ):
             a_vars = rule.get_vars(r_vars)
             if not req.reference:
@@ -1516,10 +1540,17 @@ class CorrelatorService(FastAPIService):
         processed = 0
         # Apply disposition rules
         for processed, rule in enumerate(
-            self.iter_disposition_rules(event_id, e.vars, event_class=event_class, labels=e.labels),
+            self.iter_disposition_rules(
+                event_id,
+                e.vars,
+                event_class=event_class,
+                labels=e.labels,
+                event=e,
+                managed_object=managed_object,
+            ),
             start=1,
         ):
-            if not managed_object and not rule.alarm_class.by_reference:
+            if rule.alarm_class and not managed_object and not rule.alarm_class.by_reference:
                 continue  # Alarm Class is not applicable
             if rule.action == "raise" and rule.combo_condition == "none":
                 alarm = await self.raise_alarm_from_rule(rule, e, managed_object)
@@ -1535,34 +1566,40 @@ class CorrelatorService(FastAPIService):
                 save_to_disposelog("clear", alarm)
             # Write reference if can trigger delayed event
             # Save reference and event_class
-            if rule.unique and rule.event_class.id in self.back_rules:
+            if rule.unique and rule.combo_condition and rule.combo_window:
                 a_vars = rule.get_vars(e.vars)
                 reference = self.get_default_reference(
                     managed_object=managed_object, alarm_class=rule.alarm_class, vars=a_vars
                 )
                 reference = self.get_reference_hash(reference)
-                if reference not in self.de:
-                    self.de[reference] = []
-                # e.save()
-            # Process delayed combo conditions
-            if event_class.id in self.back_rules:
-                for br in self.back_rules[event_class.id]:
-                    de = self.get_delayed_event(br, e, managed_object)
-                    if de:
-                        if br.action == "raise":
-                            alarm = await self.raise_alarm_from_rule(br, de, managed_object)
-                            save_to_disposelog("raise", alarm)
-                        elif br.action == "clear":
-                            alarm = await self.clear_alarm_from_rule(
-                                br,
-                                managed_object,
-                                de.vars,
-                                timestamp=de.timestamp,
-                                event=de,
-                            )
-                            save_to_disposelog("clear", alarm)
+                self.de.setdefault(reference, []).append((e.timestamp, e))
             if rule.stop_disposition:
                 break
+        # Process delayed combo conditions on the event which completes the combo.
+        for rule in self.back_rules.get(event_class.id, []):
+            if not managed_object:
+                continue
+            a_vars = rule.get_vars(e.vars)
+            reference = self.get_default_reference(
+                managed_object=managed_object, alarm_class=rule.alarm_class, vars=a_vars
+            )
+            reference = self.get_reference_hash(reference)
+            self.de.setdefault(reference, []).append((e.timestamp, e))
+            delayed_event = self.get_delayed_event(rule, e, managed_object)
+            if not delayed_event:
+                continue
+            if rule.action == "raise":
+                alarm = await self.raise_alarm_from_rule(rule, delayed_event, managed_object)
+                save_to_disposelog("raise", alarm)
+            elif rule.action == "clear":
+                alarm = await self.clear_alarm_from_rule(
+                    rule,
+                    managed_object,
+                    delayed_event.vars,
+                    timestamp=delayed_event.timestamp,
+                    event=delayed_event,
+                )
+                save_to_disposelog("clear", alarm)
         if not processed:
             self.logger.info(
                 "[%s] No disposition rules for class %s, skipping", event_id, event_class.name
