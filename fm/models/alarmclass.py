@@ -134,7 +134,6 @@ class AlarmClassVar(EmbeddedDocument):
         ("fm.AlarmRule", "groups.alarm_class"),
         ("fm.AlarmRule", "match.alarm_class"),
         ("fm.AlarmRule", "alarm_class"),
-        ("fm.DispositionRule", "alarm_disposition"),
     ]
 )
 class AlarmClass(Document):
@@ -451,7 +450,6 @@ class AlarmClass(Document):
     @classmethod
     def get_config(cls, alarm_class: "AlarmClass") -> dict[str, Any]:
         """Alarm Class configuration"""
-        from noc.fm.models.dispositionrule import DispositionRule
         from noc.fm.models.alarmrule import AlarmRule
 
         r = {
@@ -468,9 +466,6 @@ class AlarmClass(Document):
             "rules": [],
             "vars": [av.get_config() for av in alarm_class.vars],
         }
-        for rule in DispositionRule.objects.filter(alarm_disposition=alarm_class, is_active=True):
-            cfg = DispositionRule.get_event_alarm_rule_config(rule)
-            r["dispositions"].append(cfg)
         for rule in AlarmRule.objects.filter(match__alarm_class=alarm_class):
             r["rules"].append(AlarmRule.get_config(rule))
         if alarm_class.clear_handlers:

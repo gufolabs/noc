@@ -58,8 +58,8 @@ class VarTransformRule:
 @dataclass
 class EventAlarmRule:
     name: str
-    alarm_class: AlarmClass
-    event_class: EventClass
+    alarm_class: AlarmClass | None
+    event_class: EventClass | None
     action: str
     unique: bool
     vars_transform: list[VarTransformRule]
@@ -75,6 +75,7 @@ class EventAlarmRule:
     preference: int = 999
     reference_lookup: bool = False
     stop_disposition: bool = False
+    condition: str | None = None
 
     @property
     def has_avail_condition(self) -> bool:
@@ -122,6 +123,37 @@ class EventAlarmRule:
         if rule.object_avail_condition is not None:
             r.object_avail_condition = rule.object_avail_condition
         return r
+
+    @classmethod
+    def from_event_class_rule(
+        cls, source, alarm_class: AlarmClass | None, event_class: EventClass
+    ) -> "EventAlarmRule":
+        """Restore disposition rules embedded in EventClass."""
+        var_mapping = source.var_mapping or {}
+        mapped_vars = set(var_mapping.values())
+        vars_transform = [
+            VarTransformRule(name=target, alias=source_name)
+            for source_name, target in var_mapping.items()
+        ]
+        if alarm_class:
+            vars_transform.extend(
+                VarTransformRule(name=v.name) for v in alarm_class.vars if v.name not in mapped_vars
+            )
+        return cls(
+            name=f"{event_class.name}: {source.name}",
+            alarm_class=alarm_class,
+            event_class=event_class,
+            action=source.action,
+            unique=alarm_class.is_unique if alarm_class else False,
+            vars_transform=vars_transform,
+            managed_object=source.managed_object or "managed_object",
+            combo_condition=source.combo_condition,
+            combo_window=source.combo_window,
+            combo_count=source.combo_count,
+            combo_event_classes=[ec.name for ec in source.combo_event_classes],
+            stop_disposition=source.stop_disposition,
+            condition=source.condition,
+        )
 
     def is_match(self, ctx: dict[str, Any]) -> bool:
         return not (self.match and not self.match(ctx))
