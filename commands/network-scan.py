@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------
 # network-scan command
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
@@ -276,16 +276,16 @@ class Command(BaseCommand):
             try:
                 self.adm_domain = AdministrativeDomain.objects.get(name=adm_domain)
             except AdministrativeDomain.DoesNotExist:
-                self.die("Invalid adm profile-%s")
+                self.die(f"Invalid adm profile-{adm_domain}")
             self.profile = Profile.objects.get(name=profile)
             try:
                 self.segment = NetworkSegment.objects.get(name=segment)
             except NetworkSegment.DoesNotExist:
-                self.die("Invalid network segment-%s")
+                self.die(f"Invalid network segment-{segment}")
             try:
                 self.object_profile = ManagedObjectProfile.objects.get(name=obj_profile)
             except ManagedObjectProfile.DoesNotExist:
-                self.die("Invalid object profile-%s")
+                self.die(f"Invalid object profile-{obj_profile}")
 
         # creating a list of presence mo in noc
         moall = ManagedObject.objects.filter(is_managed=True)
@@ -535,3 +535,7 @@ class Command(BaseCommand):
         except Exception:
             return None
         return next(iter(result))
+
+
+if __name__ == "__main__":
+    Command().run()
