@@ -7,12 +7,16 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "(Unit \\d+, )?(?P<name>\\S+\\s+Fan\\s*\\d*) recovered$",
+    "message_rx": "(?:INFO|CRIT)\\S+ (Unit \\d+, )?(?P<name>.+\\s+Fan(?:\\s+\\d+)?) recovered$",
     "profiles": ["DLink.DxS"],
     "sources": ["syslog"],
     "test_cases": [
         {
             "message": "INFO: Unit 1, Back Fan recovered",
+            "raw_vars": []
+        },
+        {
+            "message": "CRIT(2) Back Fan 1 recovered",
             "raw_vars": []
         }
     ]

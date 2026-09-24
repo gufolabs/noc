@@ -1,5 +1,5 @@
 {
-    "name": "DLink | DxS | Network | STP | BPDU Guard Recovery (SYSLOG)",
+    "name": "DLink | DxS | Network | STP | BPDU Guard Recovery #1 (SYSLOG)",
     "$collection": "fm.eventclassificationrules",
     "uuid": "1de72d95-8b82-469c-a3f5-bcf6e9ea15eb",
     "description": "INFO(6) Port <2>  recover from BPDU under attacking state automatically",

@@ -7,12 +7,16 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "Possible spoofing attack from \\(IP (?P<src_ip>\\S+) MAC (?P<src_mac>\\S+) port (?P<interface>\\S+)\\)$",
+    "message_rx": "Possible spoofing attack from (?:\\()?IP(?:\\s*|\\:)\\s*(?P<src_ip>[0-9\\.]+),? MAC(?:\\s*|\\:)\\s*(?P<src_mac>[0-9A-F\\-]+),? port(?:\\s*|\\:)\\s*(?P<interface>\\d+\\S*?)(?:\\))?$",
     "profiles": ["DLink.DxS"],
     "sources": ["syslog"],
     "test_cases": [
         {
             "message": "CRIT(2) Possible spoofing attack from (IP 10.109.36.1 MAC 00-1C-F0-21-59-03 port 19)",
+            "raw_vars": []
+        },
+        {
+            "message": "CRIT(2) Possible spoofing attack from IP:192.168.2.1, MAC: 94-44-52-2F-DE-4D, port:1:9",
             "raw_vars": []
         }
     ]

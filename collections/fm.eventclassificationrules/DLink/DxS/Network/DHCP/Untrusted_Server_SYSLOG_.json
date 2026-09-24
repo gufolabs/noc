@@ -7,12 +7,16 @@
     "preference": 1000,
     "patterns": [],
     "labels": [],
-    "message_rx": "Detected untrusted DHCP server\\s*\\(IP: (?P<ip>\\S+), Port: (?P<interface>\\S+)\\)",
+    "message_rx": "(?:Detected untrusted DHCP server|Dhcp Server Screen detected)\\s*\\(IP\\s*:\\s*(?P<ip>\\S+), Port\\s*:\\s*(?P<interface>\\S+)\\)",
     "profiles": ["DLink.DxS"],
     "sources": ["syslog"],
     "test_cases": [
         {
             "message": "INFO: Detected untrusted DHCP server(IP: 192.168.1.1, Port: 4)",
+            "raw_vars": []
+        },
+        {
+            "message": "Dhcp Server Screen detected (IP : 192.168.137.1, Port : 8)",
             "raw_vars": []
         }
     ]
