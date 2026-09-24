@@ -139,7 +139,6 @@ class ActionParameter(EmbeddedDocument):
         ("sa.ActionCommands", "action"),
         ("sa.Action", "action_set.action"),
         ("sa.ReactionRule", "action_command_set.action"),
-        ("fm.DispositionRule", "object_actions.action"),
         ("fm.AlarmDiagnosticConfig", "on_clear_action"),
         ("fm.AlarmDiagnosticConfig", "periodic_action"),
         ("fm.AlarmDiagnosticConfig", "on_raise_action"),

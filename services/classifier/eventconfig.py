@@ -36,6 +36,7 @@ class EventConfig:
     # categories: List[str]
     vars: list[VarItem]
     managed_object_required: bool = True
+    to_dispose: bool = False
     filters: dict[str, FilterConfig] | None = None
     resources: dict[str, Callable] | None = None
     # EventActions
@@ -60,6 +61,7 @@ class EventConfig:
             event_class=data["event_class"]["name"],
             event_class_id=data["event_class"]["id"],
             managed_object_required=data["managed_object_required"],
+            to_dispose=data.get("to_dispose", False),
             vars=[],
             filters={},
         )

@@ -22,7 +22,6 @@ from noc.core.debug import error_report
 from noc.core.mx import send_message, MessageType, MX_NOTIFICATION_GROUP_ID
 from noc.core.matcher import build_matcher
 from noc.core.handler import get_handler
-from noc.fm.models.dispositionrule import DispositionRule
 from noc.sa.models.managedobject import ManagedObject
 from noc.services.classifier.eventconfig import EventConfig
 from noc.services.datastream.models.cfgevent import Rule
@@ -157,14 +156,9 @@ class ActionSet:
 
     def load(self, skip_load_rules: bool = False):
         """
-        Load rules from database
+        Clear rules; classifier actions are loaded from the EventClass datastream.
         """
-        actions = defaultdict(list)
-        self.logger.info("Load Disposition Rule")
-        for rule in DispositionRule.objects.filter(is_active=True).order_by("preference"):
-            for ec in rule.get_event_classes():
-                actions[str(ec.id)] += self.from_config(DispositionRule.get_event_rule_config(rule))
-        self.actions = actions
+        self.actions = {}
         self.logger.info("Handlers are loaded: %s", self.add_handlers)
 
     def run_actions(
