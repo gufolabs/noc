@@ -19,7 +19,6 @@ Ext.define("NOC.sa.reactionrule.Application", {
     "NOC.core.combotree.ComboTree",
     "NOC.fm.eventclass.LookupField",
     "NOC.fm.alarmclass.LookupField",
-    "NOC.fm.dispositionrule.LookupField",
     "NOC.main.handler.LookupField",
     "NOC.main.remotesystem.LookupField",
     "NOC.main.notificationgroup.LookupField",
@@ -146,8 +145,8 @@ Ext.define("NOC.sa.reactionrule.Application", {
           items: [
             {
               name: "replace_rule",
-              xtype: "fm.dispositionrule.LookupField",
-              fieldLabel: __("Dispose Rule"),
+              xtype: "sa.reactionrule.LookupField",
+              fieldLabel: __("Replace Rule"),
               uiStyle: "medium",
               allowBlank: true,
             },

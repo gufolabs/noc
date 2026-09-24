@@ -414,8 +414,6 @@ class EventClass(Document):
     @classmethod
     def get_event_config(cls, event_class: "EventClass"):
         """Build Category Rules"""
-        from noc.fm.models.dispositionrule import DispositionRule
-
         r = {
             "id": str(event_class.id),
             "name": event_class.name,
@@ -432,6 +430,7 @@ class EventClass(Document):
             "filters": [],
             "handlers": [],
             "rules": [],
+            "to_dispose": bool(event_class.disposition),
         }
         if event_class.deduplication_window:
             r["filters"].append(
@@ -441,8 +440,6 @@ class EventClass(Document):
             r["filters"].append(
                 {"name": "suppress", "window": event_class.suppression_window},
             )
-        for rule in DispositionRule.get_event_actions(event_class=event_class):
-            r["rules"].append(rule)
         for vv in event_class.vars:
             r["vars"].append(
                 {
