@@ -242,6 +242,7 @@ class CorrelatorService(FastAPIService):
         self.rules = {k: tuple(v) for k, v in d_rules.items()}
         self.object_avail_rules = {k: tuple(v) for k, v in oa_rules.items()}
         self.disposition_rules = {k: tuple(v) for k, v in ac_rules.items()}
+        self.back_rules = {k: tuple(v) for k, v in back_rules.items()}
         self.logger.info(
             "%d rules are loaded. %d combos. %d alarms. %d avail",
             n_rule,
@@ -1099,7 +1100,7 @@ class CorrelatorService(FastAPIService):
             elif rule.action == "ignore":
                 self.logger.info("[%s] Ignored by action", reference)
                 # save_to_disposelog("ignore")
-                return
+                continue
             self.logger.info("[%s] Processed rule: %s;%s", reference, rule.name, ctx)
             yield rule
             if rule.stop_disposition:
