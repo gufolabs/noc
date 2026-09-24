@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # OS.Linux.get_interfaces
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -32,12 +32,12 @@ class Script(BaseScript):
     def execute_cli(self, interface=None):
         interfaces = []
         # Ethernet ports
-        ifaces = list(
-            filter(None, self.cli("ls -A /sys/class/net", cached=True).strip().split(" "))
-        )
-        for i in ifaces:
+        ifaces = self.cli("ls -A1 /sys/class/net", cached=True)
+        for i in ifaces.splitlines():
             ipdev = self.cli(f"ip addr show dev {i}", cached=True)
-            print(ipdev)
+            # In a very rare situation
+            if "does not exist" in ipdev:
+                continue
             match = self.rx_iface.search(ipdev)
             ipmatch = self.rx_ip.search(ipdev)
             admin_status = True

@@ -2,7 +2,7 @@
 # Vendor: OS
 # OS:     Linux
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2022 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -40,15 +40,19 @@ class Profile(BaseProfile):
     command_exit = "exit"
 
     INTERFACE_TYPES = {
-        "et": "physical",  # No comment
+        "et": "physical",  # eth
         "bo": "physical",
-        "en": "physical",
+        "en": "physical",  # eno, enp, ens, enx
+        "wl": "physical",  # wlan, wlp
+        "fw": "virtual",  # fwpr, fwbr, fwls - PVE firewall interface
+        "ta": "virtual",  # tap
+        "vm": "virtual",  # vmbr - PVE bridge
         "lo": "loopback",  # No comment
     }
 
     @classmethod
     def get_interface_type(cls, name):
-        return cls.INTERFACE_TYPES.get(name[:2].lower())
+        return cls.INTERFACE_TYPES.get(name[:2].lower(), "unknown")
 
     rx_data = re.compile(
         r"^(?P<metric>[a-zA-Z0-9_]+)\{(?P<data>.*)\}\s+(?P<value>\S+)$", re.MULTILINE
