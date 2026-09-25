@@ -1,4 +1,11 @@
 ---
+- name: Remove HashiCorp apt repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
+    state: absent
+  tags:
+    - repo
+
 - name: Install Debian consul depends
   apt:
     name: python3-virtualenv
@@ -7,6 +14,86 @@
   environment:
     https_proxy: "{{ http_proxy }}"
     http_proxy: "{{ http_proxy }}"
+  tags:
+    - requirements
+
+- name: Check Consul version
+  command: consul version
+  register: consul_version_check
+  changed_when: false
+  failed_when: false
+
+- name: Parse Consul version
+  set_fact:
+    installed_consul_version: >-
+      {{ consul_version_check.stdout
+         | regex_search('^Consul v([0-9]+\.[0-9]+\.[0-9]+)', '\1', multiline=true)
+         | first
+         | default('') }}
+
+- name: Download Consul checksum file
+  get_url:
+    url: "{{ consul_checksum_file_url }}"
+    dest: "{{ consul_temp_file_checksum }}"
+    mode: "0644"
+  environment:
+    https_proxy: "{{ http_proxy }}"
+    http_proxy: "{{ http_proxy }}"
+  when:
+    - not consul_own_install
+    - installed_consul_version != consul_version
+  tags:
+    - requirements
+
+- name: Download Consul
+  get_url:
+    url: "{{ consul_zip_url }}"
+    dest: "{{ consul_temp_unarchive }}/{{ consul_pkg }}"
+    mode: "0644"
+  environment:
+    https_proxy: "{{ http_proxy }}"
+    http_proxy: "{{ http_proxy }}"
+  when:
+    - not consul_own_install
+    - installed_consul_version != consul_version
+  tags:
+    - requirements
+
+- name: Verify Consul checksum
+  shell:
+    cmd: "grep ' {{ consul_pkg }}$' {{ consul_temp_file_checksum }} | sha256sum -c -"
+    chdir: "{{ consul_temp_unarchive }}"
+  changed_when: false
+  when:
+    - not consul_own_install
+    - installed_consul_version != consul_version
+  tags:
+    - requirements
+
+- name: Unarchive Consul
+  unarchive:
+    src: "{{ consul_temp_unarchive }}/{{ consul_pkg }}"
+    dest: "{{ consul_temp_unarchive }}"
+    remote_src: true
+  when:
+    - not consul_own_install
+    - installed_consul_version != consul_version
+  tags:
+    - requirements
+
+- name: Install Consul binary
+  copy:
+    src: "{{ consul_temp_unarchive }}/consul"
+    dest: /usr/bin/consul
+    owner: root
+    group: root
+    mode: "0755"
+    remote_src: true
+  when:
+    - not consul_own_install
+    - installed_consul_version != consul_version
+  notify:
+    - restart consul
   tags:
     - requirements
 
@@ -31,42 +118,3 @@
     - consul_address!='node_ip'
   tags:
     - config
-
-- name: Add Consul apt repository key
-  get_url:
-    url: "https://apt.releases.hashicorp.com/gpg"
-    dest: /etc/apt/trusted.gpg.d/consul.asc
-    mode: '0644'
-    force: true
-  environment:
-    https_proxy: "{{ http_proxy }}"
-    http_proxy: "{{ http_proxy }}"
-  when: not consul_own_install
-  tags:
-    - repo
-
-- name: Add Consul repo
-  apt_repository:
-    repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
-    state: present
-    update_cache: "True"
-  environment:
-    https_proxy: "{{ http_proxy }}"
-    http_proxy: "{{ http_proxy }}"
-  when: not consul_own_install
-  tags:
-    - repo
-
-- name: Install Debian packages
-  apt:
-    name: consul{{ '='+consul_version if not consul_own_install else '' }}
-    state: present
-    update_cache: "True"
-    cache_valid_time: "{{ apt_cache_valid_time | default (3600) }}"
-  environment:
-    https_proxy: "{{ http_proxy }}"
-    http_proxy: "{{ http_proxy }}"
-  notify:
-    - restart consul
-  tags:
-    - requirements
