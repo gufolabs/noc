@@ -7,14 +7,10 @@ kernel_shmall: "{{ ansible_memtotal_mb * 128 }}"
 kernel_shmmax: "{{ kernel_shmall|int() * 4096 }}"
 postgres_listen_port: 5432
 
-
-postgres_path: /usr/bin/postgres
 postgres_system_service: postgresql
 postgres_user: postgres
 postgres_superuser: postgres
 postgres_version: 14
-postgres_replicator_password: noc
-postgres_superuser_password: noc
 postgres_noc_db: noc
 postgres_noc_user: noc
 postgres_noc_password:
