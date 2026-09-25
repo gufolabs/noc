@@ -3,7 +3,6 @@ grafana_dashboard_dir: /var/lib/grafana/provisioning/dashboards
 grafana_plugins_dir: /var/lib/grafana/provisioning/plugins
 grafana_provisioning_dir: /var/lib/grafana/provisioning
 grafana_http_port: 8002
-grafana_group: grafana
 grafana_home: /usr/share/grafana
 grafana_system_service: grafana-server
 grafana_user: grafana
@@ -16,7 +15,5 @@ grafana_version_simpod_json_datasource: 0.6.3
 grafana_version_clickhouse_datasource: 2.5.3
 grafana_version_natel_discrete_panel: 0.1.1
 
-grafana_rpm_repo: "https://packages.grafana.com/oss/rpm"
-grafana_rpm_gpgkey: "https://packages.grafana.com/gpg.key"
 grafana_deb_repo: "deb https://packages.grafana.com/oss/deb stable main"
 grafana_deb_gpgkey: "https://packages.grafana.com/gpg.key"

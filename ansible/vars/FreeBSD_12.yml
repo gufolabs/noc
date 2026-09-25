@@ -36,17 +36,11 @@ mongod_path: /usr/local/bin/mongod
 nginx_conf_path: /usr/local/etc/nginx/nginx.conf
 nginx_conf_upstream_path: /usr/local/etc/nginx/upstream.conf
 nginx_log_dir: /var/log/nginx
-nginx_path: /usr/local/sbin/nginx
 nginx_ssl_cert_path: /usr/local/etc/nginx/ssl/noc.crt
 nginx_ssl_key_path: /usr/local/etc/nginx/ssl/noc.key
-nginx_reload_command: "service nginx reload"
 nginx_user: www
 
-pgbouncer_user: pgbouncer
-pgbouncer_path_pid: /var/run/pgbouncer
-
 postgres_bin_dir: /usr/local/bin
-postgres_path: /usr/local/bin/postgres
 postgres_home: /var/db/postgres
 postgres_version: "12"
 postgres_data_dir: '{{ postgres_home }}/data{{ postgres_version|replace(".","") }}'
@@ -55,8 +49,4 @@ postgres_superuser: postgres
 postgres_proccess: postgres
 
 tower_path: /usr/local/tower
-
-pip_cflags: "-O2 -pipe -fno-strict-aliasing -fstack-protector -Wno-return-type -I/usr/local/include"
-pip_ldflags: "-L/usr/local/lib"
-
 fake_shell: /sbin/nologin

@@ -11,7 +11,6 @@ clickhouse_expose_metrics: "True"
 clickhouse_service_name: clickhouse-server
 
 ch_etc_path: "{{ etc_prefix }}/clickhouse-server"
-ch_dictionaries_path: "{{ ch_etc_path }}/dictionaries"
 
 ch_host: "{{ hostvars[groups['svc-clickhouse-exec'][0]].ansible_host }}"
 ch_port: 8123
@@ -22,5 +21,4 @@ clickhouse_ro_password: noc
 clickhouse_ro_grafana_password: noc
 clickhouse_user: noc
 
-clickhouse_yum_repo: "https://packages.clickhouse.com/rpm/stable/"
 clickhouse_deb_repo: "deb https://packages.clickhouse.com/deb stable main"

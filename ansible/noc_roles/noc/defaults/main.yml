@@ -14,18 +14,3 @@ noc_py3_ver: "3.11"
 bi_export_dir: "{{ noc_var_lib }}/bi"
 supervisorctl_key: "{{ lookup('supervisorctl_key', tower_data + '/noc/supervisorctl.key') }}"
 supervisor_sock_path: /var/run/supervisor_noc.sock
-noc_py3_force_updates: false
-host_mount_points: "{{ ansible_mounts|json_query('[].mount') }}"
-
-py_version:
-  py3.8: "3.8.13"
-  py3.9: "3.9.15"
-  py3.10: "3.10.13"
-  py3.11: "3.11.5"
-
-py_rel_name: "{{ py_version['py' ~ noc_py3_ver] }}"
-noc_python_url: "https://cdn.getnoc.com/noc/repo/{{ ansible_os_family }}/{{ ansible_distribution_major_version }}/python{{ py_rel_name }}.tar.gz"
-noc_python_openssl_url: "https://cdn.getnoc.com/noc/repo/RedHat/7/openssl.tar.gz"
-
-noc_sclo_yum_repo: "http://mirror.centos.org/centos/7/sclo/x86_64/rh/"
-noc_sclo_yum_repo_gpgkey: "https://www.centos.org/keys/RPM-GPG-KEY-CentOS-SIG-SCLo"
