@@ -21,7 +21,6 @@ python_consul_version: 1.1.0
 ### Paths
 consul_bin_path: "/usr/bin"
 consul_data_path: "/var/consul"
-consul_log_path: "/var/log/consul"
 consul_pid_path: "/var/run/consul/consul.pid"
 consul_configd_path: "{{ etc_prefix }}/consul.d"
 consul_scripts_path: "{{ consul_configd_path }}/scripts"
@@ -35,7 +34,6 @@ consul_datacenter: "{{ noc_env | lower }}"
 consul_domain: "consul"
 consul_log_level: "INFO"
 consul_syslog_enable: "True"
-consul_iface: "{{ ansible_default_ipv4.interface }}"
 consul_node_name: "{{ inventory_hostname_short }}"
 consul_recursors: ["{{ tower_ip }}"]
 consul_raw_key: "{{ lookup('consul_key', tower_data + '/consul/secret.key') }}"
@@ -44,7 +42,6 @@ consul_raw_key: "{{ lookup('consul_key', tower_data + '/consul/secret.key') }}"
 consul_dns_bind_address: "0.0.0.0"
 consul_http_bind_address: "0.0.0.0"
 consul_https_bind_address: "0.0.0.0"
-consul_vault_address: "{{ vault_address | default('0.0.0.0', true) }}"
 consul_bind_address: "{{ ansible_host }}"
 
 ### Ports
@@ -63,8 +60,6 @@ consul_acl_enable: "True"
 consul_acl_datacenter: "{{ noc_env }}"
 consul_acl_default_policy: "allow"
 consul_acl_down_policy: "allow"
-consul_acl_master_token_display: "False"
-consul_acl_replication_token_display: "False"
 
 consul_replication_token: ""
 consul_token: ""
