@@ -12,8 +12,8 @@ from mongoengine.fields import (
     IntField,
     DictField,
     ListField,
-    EmbeddedDocumentField,
     ObjectIdField,
+    EmbeddedDocumentListField,
 )
 from jinja2 import Template as Jinja2Template
 
@@ -41,7 +41,7 @@ class ArchivedEvent(Document):
     raw_vars = RawDictField()
     resolved_vars = RawDictField()
     vars = DictField()
-    log = ListField(EmbeddedDocumentField(EventLog))
+    log = EmbeddedDocumentListField(EventLog)
     alarms = ListField(ObjectIdField())
 
     def __str__(self):

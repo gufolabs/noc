@@ -15,13 +15,7 @@ from typing import Optional
 import bson
 import cachetools
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import (
-    StringField,
-    BooleanField,
-    DateTimeField,
-    ListField,
-    EmbeddedDocumentField,
-)
+from mongoengine.fields import StringField, BooleanField, DateTimeField, EmbeddedDocumentListField
 
 # NOC modules
 from noc.core.acl import match
@@ -62,9 +56,9 @@ class APIKey(Document):
     # Secret API key
     key = StringField(unique=True)
     # Access settings
-    access = ListField(EmbeddedDocumentField(APIAccess))
+    access = EmbeddedDocumentListField(APIAccess)
     # Address restrictions
-    acl = ListField(EmbeddedDocumentField(APIAccessACL))
+    acl = EmbeddedDocumentListField(APIAccessACL)
 
     _api_key_cache = cachetools.TTLCache(maxsize=20, ttl=60)
 

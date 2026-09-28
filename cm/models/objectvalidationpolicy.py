@@ -13,13 +13,7 @@ import operator
 # Third-party modules
 from bson import ObjectId
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import (
-    StringField,
-    BooleanField,
-    ListField,
-    EmbeddedDocumentField,
-    DictField,
-)
+from mongoengine.fields import StringField, BooleanField, DictField, EmbeddedDocumentListField
 from jinja2 import Template
 import cachetools
 
@@ -54,7 +48,7 @@ class ObjectValidationPolicy(Document):
     name = StringField(unique=True)
     description = StringField()
     filter_query = PlainReferenceField(ConfDBQuery)
-    rules = ListField(EmbeddedDocumentField(ObjectValidationRule))
+    rules = EmbeddedDocumentListField(ObjectValidationRule)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 

@@ -13,13 +13,7 @@ from pathlib import Path
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import (
-    StringField,
-    BooleanField,
-    UUIDField,
-    ListField,
-    EmbeddedDocumentField,
-)
+from mongoengine.fields import StringField, BooleanField, UUIDField, EmbeddedDocumentListField
 import cachetools
 
 # NOC modules
@@ -65,7 +59,7 @@ class MACBlacklist(Document):
     from_mac = StringField()
     to_mac = StringField()
     description = StringField()
-    affected = ListField(EmbeddedDocumentField(MACBlacklistAffected))
+    affected = EmbeddedDocumentListField(MACBlacklistAffected)
     is_duplicated = BooleanField(default=False)
     is_ignored = BooleanField(default=False)
 

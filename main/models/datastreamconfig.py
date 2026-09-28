@@ -11,7 +11,7 @@ import operator
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import StringField, BooleanField, ListField, EmbeddedDocumentField
+from mongoengine.fields import StringField, BooleanField, EmbeddedDocumentListField
 from typing import Optional, Iterable, Any, Callable
 from bson import ObjectId
 import cachetools
@@ -37,7 +37,7 @@ class DataStreamConfig(Document):
     meta = {"collection": "datastreamconfigs", "strict": False, "auto_create_index": False}
 
     name = StringField(unique=True)
-    formats = ListField(EmbeddedDocumentField(DSFormat))
+    formats = EmbeddedDocumentListField(DSFormat)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _name_cache = cachetools.TTLCache(maxsize=100, ttl=60)

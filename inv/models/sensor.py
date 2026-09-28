@@ -126,7 +126,7 @@ class Sensor(Document):
     snmp_oid = StringField()
     ipmi_id = StringField()
     # Watchers
-    watchers: list[WatchDocumentItem] = EmbeddedDocumentListField(WatchDocumentItem)
+    watchers = EmbeddedDocumentListField(WatchDocumentItem)
     watcher_wait_ts: datetime.datetime | None = DateTimeField(required=False)
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from

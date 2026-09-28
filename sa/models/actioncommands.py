@@ -112,8 +112,8 @@ class ActionCommands(Document):
         ],
         default="N",
     )
-    scopes: list["Scope"] = EmbeddedDocumentListField(Scope)
-    match: list[PlatformMatch] = EmbeddedDocumentListField(PlatformMatch)
+    scopes = EmbeddedDocumentListField(Scope)
+    match = EmbeddedDocumentListField(PlatformMatch)
     exit_scope_commands = StringField()
     commands = StringField()
     # cancel commands
@@ -121,7 +121,7 @@ class ActionCommands(Document):
     # cancel_prefix
     preference = IntField(default=1000)
     timeout = IntField(default=60)
-    test_cases: list[ActionCommandsTestCase] = EmbeddedDocumentListField(ActionCommandsTestCase)
+    test_cases = EmbeddedDocumentListField(ActionCommandsTestCase)
 
     def __str__(self):
         return self.name

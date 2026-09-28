@@ -14,7 +14,7 @@ import operator
 # Third-party modules
 from bson import ObjectId
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import StringField, BooleanField, IntField, ListField, EmbeddedDocumentField
+from mongoengine.fields import StringField, BooleanField, IntField, EmbeddedDocumentListField
 import cachetools
 
 # NOC modules
@@ -40,7 +40,7 @@ class NumberCategory(Document):
     is_active = BooleanField()
     description = StringField()
     order = IntField(default=1000)
-    rules = ListField(EmbeddedDocumentField(NumberCategoryRule))
+    rules = EmbeddedDocumentListField(NumberCategoryRule)
 
     _id_cache = cachetools.TTLCache(100, ttl=60)
     _rule_cache = cachetools.TTLCache(100, ttl=60)

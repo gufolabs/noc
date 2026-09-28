@@ -88,7 +88,7 @@ class L2Domain(Document):
     description = StringField()
     # L2Domain workflow
     state: State = PlainReferenceField(State)
-    pools: list[PoolItem] = EmbeddedDocumentListField(PoolItem)
+    pools = EmbeddedDocumentListField(PoolItem)
     vlan_template = ReferenceField(VLANTemplate)
     default_vlan_profile: "VLANProfile" = ReferenceField(VLANProfile, required=False)
     # Discovery settings

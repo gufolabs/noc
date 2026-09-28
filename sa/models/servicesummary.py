@@ -15,7 +15,7 @@ import bson
 from pymongo.errors import BulkWriteError, OperationFailure
 from pymongo import UpdateOne, DeleteOne, InsertOne, ReadPreference
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import IntField, ObjectIdField, EmbeddedDocumentField, ListField
+from mongoengine.fields import IntField, ObjectIdField, EmbeddedDocumentListField
 
 # NOC modules
 from noc.core.defer import call_later
@@ -76,8 +76,8 @@ class ServiceSummary(Document):
     managed_object = IntField()
     interface = ObjectIdField()
     subinterface = ObjectIdField()
-    service = ListField(EmbeddedDocumentField(SummaryItem))
-    subscriber = ListField(EmbeddedDocumentField(SummaryItem))
+    service = EmbeddedDocumentListField(SummaryItem)
+    subscriber = EmbeddedDocumentListField(SummaryItem)
 
     @classmethod
     def get_service_for_object(

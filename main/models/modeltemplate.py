@@ -269,11 +269,11 @@ class ModelTemplate(Document):
             ("vc.Vlan", "Vlan"),
         ],
     )
-    params: list[Param] = EmbeddedDocumentListField(Param)
-    params_form: list[ParamFormItem] = EmbeddedDocumentListField(ParamFormItem)
+    params = EmbeddedDocumentListField(Param)
+    params_form = EmbeddedDocumentListField(ParamFormItem)
     allow_manual = BooleanField(default=False)  # Allow set by User
     sticky: bool = BooleanField(default=False)  # If used, set to resource as template
-    groups: list[GroupItem] = EmbeddedDocumentListField(GroupItem)
+    groups = EmbeddedDocumentListField(GroupItem)
     labels: list[str] = ListField(StringField())  # Manual Set
     # instances
     default_state: "State" = PlainReferenceField(State)

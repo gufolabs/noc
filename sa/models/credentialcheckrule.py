@@ -92,13 +92,13 @@ class CredentialCheckRule(Document):
 
     name = StringField(required=True, unique=True)
     is_active = BooleanField(default=True)
-    match: list["Match"] = EmbeddedDocumentListField(Match)
+    match = EmbeddedDocumentListField(Match)
     description = StringField()
     # Rule preference, processed from lesser to greater
     preference = IntField(required=True, default=100)
-    suggest_snmp: list["SuggestSNMP"] = EmbeddedDocumentListField(SuggestSNMP)
-    suggest_credential: list["SuggestCLI"] = EmbeddedDocumentListField(SuggestCLI)
-    suggest_auth_profile: list["SuggestAuthProfile"] = EmbeddedDocumentListField(SuggestAuthProfile)
+    suggest_snmp = EmbeddedDocumentListField(SuggestSNMP)
+    suggest_credential = EmbeddedDocumentListField(SuggestCLI)
+    suggest_auth_profile = EmbeddedDocumentListField(SuggestAuthProfile)
     # TELNET/SSH/SNMP/HTTP
     suggest_protocols = ListField(
         StringField(choices=[p.name for p in Protocol if p.config.enable_suggest])

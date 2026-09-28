@@ -15,7 +15,7 @@ from typing import Optional, Iterable
 import bson
 import cachetools
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import StringField, ListField, LongField, EmbeddedDocumentField
+from mongoengine.fields import StringField, ListField, LongField, EmbeddedDocumentListField
 from pymongo import ReadPreference, ReturnDocument
 
 # NOC modules
@@ -82,7 +82,7 @@ class DiscoveryID(Document):
         "indexes": ["object", "hostname", "hostname_id", "udld_id", "router_id", "macs"],
     }
     object = ForeignKeyField(ManagedObject, unique=True)
-    chassis_mac = ListField(EmbeddedDocumentField(MACRange))
+    chassis_mac = EmbeddedDocumentListField(MACRange)
     hostname = StringField()
     hostname_id = StringField()
     router_id = StringField()

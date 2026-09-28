@@ -121,7 +121,7 @@ class ServiceInstance(Document):
     reference = BinaryField(required=False)
     # Endpoint Data
     fqdn: str = StringField()
-    addresses: list[AddressItem] = EmbeddedDocumentListField(AddressItem)
+    addresses = EmbeddedDocumentListField(AddressItem)
     port = IntField(min_value=0, max_value=65536, default=0)
     # Asset Data
     asset_refs: list[str] = ListField(StringField(required=True))

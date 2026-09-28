@@ -15,12 +15,11 @@ from mongoengine.document import Document, EmbeddedDocument
 from mongoengine.fields import (
     StringField,
     DateTimeField,
-    ListField,
     FloatField,
-    EmbeddedDocumentField,
     IntField,
     DictField,
     EnumField,
+    EmbeddedDocumentListField,
 )
 from mongoengine.queryset.visitor import Q
 from mongoengine.errors import NotUniqueError
@@ -63,7 +62,7 @@ class LinkSettings(EmbeddedDocument):
         choices=[(LC_NORMAL, "Normal"), (LC_SMOOTH, "Smooth"), (LC_ROUNDED, "Rounded")],
         default=LC_NORMAL,
     )
-    vertices = ListField(EmbeddedDocumentField(VertexPosition))
+    vertices = EmbeddedDocumentListField(VertexPosition)
 
     def __str__(self):
         return f"{self.type}:{self.id}"
@@ -93,8 +92,8 @@ class MapSettings(Document):
     # Paper size
     width = FloatField()
     height = FloatField()
-    nodes = ListField(EmbeddedDocumentField(NodeSettings))
-    links = ListField(EmbeddedDocumentField(LinkSettings))
+    nodes = EmbeddedDocumentListField(NodeSettings)
+    links = EmbeddedDocumentListField(LinkSettings)
 
     def __str__(self):
         return f"{self.gen_type}: {self.gen_id} ({self.gen_version})"

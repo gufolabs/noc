@@ -238,14 +238,12 @@ class ConfigurationParam(Document):
     code = StringField(unique=True, required=True)
     description = StringField()
     uuid = UUIDField(binary=True)
-    scopes: list["ScopeItem"] = EmbeddedDocumentListField(ScopeItem)
+    scopes = EmbeddedDocumentListField(ScopeItem)
     # Int
     type: str = StringField(choices=["string", "number", "bool"], default="string")
     # Limitation
-    schema: list["ParamSchemaItem"] = EmbeddedDocumentListField(ParamSchemaItem)
-    choices: list["ConfigurationParamChoiceItem"] = EmbeddedDocumentListField(
-        ConfigurationParamChoiceItem
-    )
+    schema = EmbeddedDocumentListField(ParamSchemaItem)
+    choices = EmbeddedDocumentListField(ConfigurationParamChoiceItem)
     choices_scope: Optional["ConfigurationScope"] = PlainReferenceField(
         ConfigurationScope, required=False
     )

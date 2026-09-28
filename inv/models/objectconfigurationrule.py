@@ -112,8 +112,8 @@ class ObjectConfigurationRule(Document):
     name = StringField(unique=True)
     description = StringField()
     uuid = UUIDField(binary=True)
-    connection_rules: list["ConnectionRule"] = EmbeddedDocumentListField(ConnectionRule)
-    param_rules: list["ParamRule"] = EmbeddedDocumentListField(ParamRule)
+    connection_rules = EmbeddedDocumentListField(ConnectionRule)
+    param_rules = EmbeddedDocumentListField(ParamRule)
 
     def __str__(self):
         return self.name

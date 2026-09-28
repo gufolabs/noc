@@ -18,8 +18,8 @@ from mongoengine.fields import (
     ListField,
     IntField,
     BinaryField,
-    EmbeddedDocumentField,
     UUIDField,
+    EmbeddedDocumentListField,
 )
 
 # NOC modules
@@ -62,7 +62,7 @@ class Dashboard(Document):
     config = BinaryField()
     created = DateTimeField(default=datetime.datetime.now)
     changed = DateTimeField(default=datetime.datetime.now)
-    access = ListField(EmbeddedDocumentField(DashboardAccess))
+    access = EmbeddedDocumentListField(DashboardAccess)
     # Global ID
     uuid = UUIDField(binary=True, unique=True)
 

@@ -11,13 +11,7 @@ from threading import Lock
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import (
-    StringField,
-    BooleanField,
-    ReferenceField,
-    ListField,
-    EmbeddedDocumentField,
-)
+from mongoengine.fields import StringField, BooleanField, ReferenceField, EmbeddedDocumentListField
 
 # NOC Modules
 from noc.core.mongo.fields import PlainReferenceField
@@ -46,7 +40,7 @@ class MetricStream(Document):
     scope = PlainReferenceField(MetricScope, unique=True)
     is_active = BooleanField(default=True)
     # Metric scope reference
-    fields = ListField(EmbeddedDocumentField(StreamField))
+    fields = EmbeddedDocumentListField(StreamField)
 
     def __str__(self):
         return f"{self.scope.name or ''}"

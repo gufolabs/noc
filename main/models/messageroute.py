@@ -66,7 +66,7 @@ class MRMatch(EmbeddedDocument):
     exclude_labels = ListField(StringField())
     resource_groups = PlainReferenceListField(ResourceGroup)
     administrative_domain = ForeignKeyField(AdministrativeDomain)
-    headers_match: list[HeaderMatch] = EmbeddedDocumentListField(HeaderMatch)
+    headers_match = EmbeddedDocumentListField(HeaderMatch)
     remote_system = PlainReferenceField(RemoteSystem)
 
     def __str__(self):
@@ -115,7 +115,7 @@ class MessageRoute(Document):
     # Message-Type header value
     type: MessageType = EnumField(MessageType, required=True)
     # Match message headers
-    match: list[MRMatch] = EmbeddedDocumentListField(MRMatch)
+    match = EmbeddedDocumentListField(MRMatch)
     telemetry_sample = IntField()
     # Message transmuting handler
     transmute_handler = PlainReferenceField(Handler)
@@ -135,7 +135,7 @@ class MessageRoute(Document):
     stream = StringField()
     notification_group = ForeignKeyField(NotificationGroup)
     render_template = ForeignKeyField(Template)
-    headers: list[MRAHeader] = EmbeddedDocumentListField(MRAHeader)
+    headers = EmbeddedDocumentListField(MRAHeader)
 
     _id_cache = cachetools.TTLCache(100, ttl=60)
 

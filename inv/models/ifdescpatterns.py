@@ -13,7 +13,7 @@ import re
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import StringField, BooleanField, ListField, EmbeddedDocumentField
+from mongoengine.fields import StringField, BooleanField, EmbeddedDocumentListField
 from mongoengine.errors import ValidationError
 import bson
 import cachetools
@@ -49,7 +49,7 @@ class IfDescPatterns(Document):
     name = StringField(unique=True)
     description = StringField()
     resolve_remote_port_by_object = BooleanField(default=False)
-    patterns = ListField(EmbeddedDocumentField(IfDescPatternRule))
+    patterns = EmbeddedDocumentListField(IfDescPatternRule)
 
     _id_cache = cachetools.TTLCache(100, ttl=60)
     _re_cache = {}

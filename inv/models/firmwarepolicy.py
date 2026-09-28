@@ -13,7 +13,7 @@ from typing import Optional, Any
 # Third-party modules
 import bson
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import StringField, ListField, EmbeddedDocumentField, IntField
+from mongoengine.fields import StringField, ListField, IntField, EmbeddedDocumentListField
 from mongoengine.queryset.visitor import Q
 import cachetools
 
@@ -89,7 +89,7 @@ class FirmwarePolicy(Document):
         required=False,
     )
     snmp_rate_limit = IntField(default=0)
-    management = ListField(EmbeddedDocumentField(ManagementPolicy))
+    management = EmbeddedDocumentListField(ManagementPolicy)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _effective_policy_cache = cachetools.TTLCache(maxsize=100, ttl=600)

@@ -83,7 +83,7 @@ class PrefixProfile(Document):
         Workflow, default=partial(Workflow.get_default_workflow, "ip.PrefixProfile")
     )
     style = ForeignKeyField(Style)
-    pools: list["PoolItem"] = EmbeddedDocumentListField(PoolItem)
+    pools = EmbeddedDocumentListField(PoolItem)
     # Template.subject to render Prefix.name
     name_template = ForeignKeyField(Template)
     default_address_profile: Optional["AddressProfile"] = ReferenceField(

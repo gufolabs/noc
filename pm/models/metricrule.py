@@ -120,7 +120,7 @@ class MetricActionItem(EmbeddedDocument):
     metric_type: "MetricType" = PlainReferenceField(MetricType)
     metric_action: "MetricAction" = PlainReferenceField(MetricAction)
     metric_action_params: dict[str, Any] = DictField()
-    thresholds: list["ThresholdConfig"] = EmbeddedDocumentListField(ThresholdConfig)
+    thresholds = EmbeddedDocumentListField(ThresholdConfig)
 
     def __str__(self) -> str:
         if self.metric_action:
@@ -182,8 +182,8 @@ class MetricRule(Document):
     name = StringField(unique=True)
     description = StringField()
     is_active = BooleanField(default=True)
-    match: list["Match"] = EmbeddedDocumentListField(Match)
-    actions: list["MetricActionItem"] = EmbeddedDocumentListField(MetricActionItem)
+    match = EmbeddedDocumentListField(Match)
+    actions = EmbeddedDocumentListField(MetricActionItem)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _rule_cache = cachetools.TTLCache(100, ttl=30)

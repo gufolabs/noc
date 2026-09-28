@@ -27,7 +27,7 @@ from mongoengine.fields import (
     UUIDField,
     BooleanField,
     ListField,
-    EmbeddedDocumentField,
+    EmbeddedDocumentListField,
 )
 from django.db import connection as pg_connection
 import cachetools
@@ -204,11 +204,11 @@ class Label(Document):
     # Match Condition
     # match_condition = ALL,ANY
     # Regex
-    match_regex = ListField(EmbeddedDocumentField(RegexItem))
+    match_regex = EmbeddedDocumentListField(RegexItem)
     # VLAN Filter
-    match_vlanfilter = ListField(EmbeddedDocumentField(VLANFilterItem))
+    match_vlanfilter = EmbeddedDocumentListField(VLANFilterItem)
     # Prefix Filter
-    match_prefixfilter = ListField(EmbeddedDocumentField(PrefixFilterItem))
+    match_prefixfilter = EmbeddedDocumentListField(PrefixFilterItem)
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from
     remote_system = PlainReferenceField(RemoteSystem)

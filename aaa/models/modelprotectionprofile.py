@@ -12,7 +12,7 @@ from collections import defaultdict
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import StringField, IntField, ListField, EmbeddedDocumentField
+from mongoengine.fields import StringField, IntField, EmbeddedDocumentListField
 from mongoengine.errors import ValidationError
 from mongoengine.queryset.visitor import Q
 import cachetools
@@ -64,7 +64,7 @@ class ModelProtectionProfile(Document):
     name = StringField(required=True)
     description = StringField()
     model = StringField(validation=check_model, required=True)
-    field_access = ListField(EmbeddedDocumentField(FieldAccess))
+    field_access = EmbeddedDocumentListField(FieldAccess)
     groups = ForeignKeyListField(Group)
 
     _effective_perm_cache = cachetools.TTLCache(maxsize=100, ttl=3)

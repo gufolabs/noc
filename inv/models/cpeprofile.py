@@ -24,9 +24,9 @@ from mongoengine.fields import (
     LongField,
     BooleanField,
     ReferenceField,
-    EmbeddedDocumentField,
     ObjectIdField,
     IntField,
+    EmbeddedDocumentListField,
 )
 from mongoengine.queryset.visitor import Q as m_q
 
@@ -152,13 +152,13 @@ class CPEProfile(Document):
     # Number interval buckets
     metrics_interval_buckets = IntField(default=1, min_value=0)
     # Interface profile metrics
-    metrics = ListField(EmbeddedDocumentField(CPEProfileMetrics))
+    metrics = EmbeddedDocumentListField(CPEProfileMetrics)
     # Dynamic Profile Classification
     dynamic_classification_policy = StringField(
         choices=[("R", "By Rule"), ("D", "Disable")],
         default="R",
     )
-    match_rules = ListField(EmbeddedDocumentField(MatchRule))
+    match_rules = EmbeddedDocumentListField(MatchRule)
     # Labels
     labels = ListField(StringField())
     # BI ID

@@ -200,7 +200,7 @@ class InterfaceProfile(Document):
     default_notification_group = ForeignKeyField(NotificationGroup, required=False)
     metrics_default_interval = IntField(default=0, min_value=0)
     # Interface profile metrics
-    metrics: list[InterfaceProfileMetrics] = EmbeddedDocumentListField(InterfaceProfileMetrics)
+    metrics = EmbeddedDocumentListField(InterfaceProfileMetrics)
     # Alarm weight
     weight = IntField(default=0)
     # User network interface
@@ -224,7 +224,7 @@ class InterfaceProfile(Document):
         default="D",
     )
     # Capabilities
-    caps: list[CapsSettings] = EmbeddedDocumentListField(CapsSettings)
+    caps = EmbeddedDocumentListField(CapsSettings)
     # Dynamic Profile Classification
     dynamic_classification_policy = StringField(
         choices=[("R", "By Rule"), ("D", "Disable")],

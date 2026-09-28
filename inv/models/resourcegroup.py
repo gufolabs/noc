@@ -18,7 +18,7 @@ import cachetools
 import orjson
 from django.db import connection as pg_connection
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import StringField, LongField, ListField, EmbeddedDocumentField
+from mongoengine.fields import StringField, LongField, ListField, EmbeddedDocumentListField
 from mongoengine.errors import ValidationError
 from pymongo import UpdateMany
 
@@ -128,8 +128,8 @@ class ResourceGroup(Document):
     technology: Technology = PlainReferenceField(Technology)
     parent = PlainReferenceField("inv.ResourceGroup", validation=check_rg_parent)
     description = StringField()
-    dynamic_service_labels = ListField(EmbeddedDocumentField(MatchLabels))
-    dynamic_client_labels = ListField(EmbeddedDocumentField(MatchLabels))
+    dynamic_service_labels = EmbeddedDocumentListField(MatchLabels)
+    dynamic_client_labels = EmbeddedDocumentListField(MatchLabels)
     # @todo: FM integration
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from

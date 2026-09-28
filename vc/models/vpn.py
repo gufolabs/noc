@@ -13,7 +13,7 @@ import operator
 # Third-party modules
 from bson import ObjectId
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import StringField, LongField, ListField, EmbeddedDocumentField
+from mongoengine.fields import StringField, LongField, ListField, EmbeddedDocumentListField
 from mongoengine.errors import ValidationError
 import cachetools
 
@@ -63,7 +63,7 @@ class VPN(Document):
     # Link to parent overlay
     parent = PlainReferenceField("self")
     project = ForeignKeyField(Project)
-    route_target = ListField(EmbeddedDocumentField(RouteTargetItem))
+    route_target = EmbeddedDocumentListField(RouteTargetItem)
     # Labels
     labels = ListField(StringField())
     effective_labels = ListField(StringField())
