@@ -12,7 +12,7 @@ import datetime
 # Third-party modules
 from django.db.models import signals as django_signals
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import StringField, DateTimeField, ListField, EmbeddedDocumentField
+from mongoengine.fields import StringField, DateTimeField, EmbeddedDocumentListField
 
 # NOC modules
 from noc.config import config
@@ -50,7 +50,7 @@ class AuditTrail(Document):
     model_id = StringField()
     object = StringField()
     op = StringField(choices=[("C", "Create"), ("M", "Modify"), ("D", "Delete")])
-    changes = ListField(EmbeddedDocumentField(FieldChange))
+    changes = EmbeddedDocumentListField(FieldChange)
     expires = DateTimeField()
 
     EXCLUDE = {

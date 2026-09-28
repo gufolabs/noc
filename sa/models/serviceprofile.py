@@ -396,9 +396,7 @@ class ServiceProfile(Document):
         ],
         default="MX",
     )
-    calculate_status_rules: list["CalculatedStatusRule"] = EmbeddedDocumentListField(
-        CalculatedStatusRule
-    )
+    calculate_status_rules = EmbeddedDocumentListField(CalculatedStatusRule)
     # Alarm Binding
     alarm_affected_policy = StringField(
         choices=[
@@ -409,7 +407,7 @@ class ServiceProfile(Document):
         ],
         default="D",
     )
-    alarm_status_rules: list["AlarmStatusRule"] = EmbeddedDocumentListField(AlarmStatusRule)
+    alarm_status_rules = EmbeddedDocumentListField(AlarmStatusRule)
     raise_status_alarm_policy = StringField(
         choices=[
             ("D", "Disable"),
@@ -435,9 +433,7 @@ class ServiceProfile(Document):
         ],
         default="A",
     )
-    instance_settings: list["InstanceSettings"] = EmbeddedDocumentListField(
-        InstanceSettings, required=False
-    )
+    instance_settings = EmbeddedDocumentListField(InstanceSettings, required=False)
     # Send up/down notifications
     status_change_notification = StringField(
         choices=[
@@ -447,7 +443,7 @@ class ServiceProfile(Document):
         default="d",
     )
     # Diagnostics status
-    diagnostic_status: list[DiagnosticSettings] = EmbeddedDocumentListField(DiagnosticSettings)
+    diagnostic_status = EmbeddedDocumentListField(DiagnosticSettings)
     # Capabilities
     caps_profile: CapsProfile | None = ReferenceField(CapsProfile, required=False)
     caps_exposed: bool = BooleanField(default=False)

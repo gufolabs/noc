@@ -19,10 +19,10 @@ from mongoengine.fields import (
     DateTimeField,
     IntField,
     ListField,
-    EmbeddedDocumentField,
     DictField,
     ObjectIdField,
     BinaryField,
+    EmbeddedDocumentListField,
 )
 from bson import ObjectId
 
@@ -64,7 +64,7 @@ class ActiveEvent(Document):
     raw_vars = RawDictField()
     resolved_vars = RawDictField()
     vars = DictField()
-    log = ListField(EmbeddedDocumentField(EventLog))
+    log = EmbeddedDocumentListField(EventLog)
     reference = BinaryField(required=False)
     alarms = ListField(ObjectIdField())
     expires = DateTimeField(required=False)

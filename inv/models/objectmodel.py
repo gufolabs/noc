@@ -187,7 +187,7 @@ class ProtocolVariantItem(EmbeddedDocument):
     protocol: "Protocol" = PlainReferenceField(Protocol, required=True)
     discriminator = StringField(required=False)
     direction = StringField(choices=[">", "<", "*"], default="*")
-    data: list["ModelAttr"] = EmbeddedDocumentListField(ModelAttr)
+    data = EmbeddedDocumentListField(ModelAttr)
     modes: list[str] | None = ListField(StringField(), required=False)
 
     def __str__(self):
@@ -341,12 +341,12 @@ class ObjectModelConnection(EmbeddedDocument):
     cross_direction: str | None = StringField(
         choices=["i", "o", "s"], required=False
     )  # Inner  # Outer  # Any
-    protocols: list["ProtocolVariantItem"] = EmbeddedDocumentListField(ProtocolVariantItem)
+    protocols = EmbeddedDocumentListField(ProtocolVariantItem)
     cfg_context: str = StringField()
     internal_name = StringField(required=False)
     composite = StringField(required=False)
     composite_pins = StringField(required=False)
-    data: list["ModelAttr"] = EmbeddedDocumentListField(ModelAttr)
+    data = EmbeddedDocumentListField(ModelAttr)
 
     def __str__(self):
         return self.name
@@ -505,11 +505,11 @@ class ObjectModel(Document):
     modes = EmbeddedDocumentListField(ModeItem, required=False)
     # Configuration Context Param
     # cfg_context_param = PlainReferenceField(ConfigurationParam, required=False)
-    data: list["ModelAttr"] = EmbeddedDocumentListField(ModelAttr)
-    connections: list["ObjectModelConnection"] = EmbeddedDocumentListField(ObjectModelConnection)
+    data = EmbeddedDocumentListField(ModelAttr)
+    connections = EmbeddedDocumentListField(ObjectModelConnection)
     # Static crossings
-    cross: list[Crossing] = EmbeddedDocumentListField(Crossing)
-    sensors: list["ObjectModelSensor"] = EmbeddedDocumentListField(ObjectModelSensor)
+    cross = EmbeddedDocumentListField(Crossing)
+    sensors = EmbeddedDocumentListField(ObjectModelSensor)
     plugins = ListField(StringField(), required=False)
     # Facades
     front_facade = PlainReferenceField(Facade, required=False)

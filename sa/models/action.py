@@ -162,10 +162,10 @@ class Action(Document):
     handler: "Handler" = ReferenceField(Handler, required=False)
     action_job: str = StringField(default="action_commands")
     # Job, Action cfg job, test SLA/ SLA by separate task
-    action_set: list[ActionSetItem] = EmbeddedDocumentListField(ActionSetItem)
+    action_set = EmbeddedDocumentListField(ActionSetItem)
     # rollback_policy - disable, cancel, action
     #
-    params: list[ActionParameter] = EmbeddedDocumentListField(ActionParameter)
+    params = EmbeddedDocumentListField(ActionParameter)
 
     _id_cache = cachetools.TTLCache(1000, ttl=60)
     _name_cache = cachetools.TTLCache(1000, ttl=60)

@@ -18,9 +18,8 @@ from mongoengine.fields import (
     StringField,
     BooleanField,
     IntField,
-    ListField,
-    EmbeddedDocumentField,
     LongField,
+    EmbeddedDocumentListField,
 )
 
 # NOC modules
@@ -205,9 +204,9 @@ class NetworkSegmentProfile(Document):
     autocreated_profile = PlainReferenceField("self")
     # List of enabled topology method
     # in order of preference (most preferable first)
-    topology_methods = ListField(EmbeddedDocumentField(SegmentTopologySettings))
+    topology_methods = EmbeddedDocumentListField(SegmentTopologySettings)
     # List of uplink policies (most preferable first)
-    uplink_policy = ListField(EmbeddedDocumentField(UplinkPolicySettings))
+    uplink_policy = EmbeddedDocumentListField(UplinkPolicySettings)
     # Enable VLAN discovery for appropriative management objects
     enable_vlan = BooleanField(default=False)
     # Default VLAN profile for discovered VLANs
@@ -215,7 +214,7 @@ class NetworkSegmentProfile(Document):
     # Biosegmentation persistence
     is_persistent = BooleanField(default=True)
     # Biosegmentation collision policy
-    bio_collision_policy = ListField(EmbeddedDocumentField(BioCollisionPolicy))
+    bio_collision_policy = EmbeddedDocumentListField(BioCollisionPolicy)
     # Target segment name template on calcification
     # Applied to calcified profile
     calcified_name_template = ForeignKeyField(Template)

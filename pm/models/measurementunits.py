@@ -14,7 +14,7 @@ from pathlib import Path
 # Third-party modules
 from bson import ObjectId
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import StringField, IntField, UUIDField, ListField, EmbeddedDocumentField
+from mongoengine.fields import StringField, IntField, UUIDField, EmbeddedDocumentListField
 from mongoengine.errors import ValidationError
 import cachetools
 
@@ -101,9 +101,9 @@ class MeasurementUnits(Document):
     dashboard_label = StringField(required=False)
     dashboard_sr_color = IntField(default=0x000000, required=False, null=True)
     # Conversion rules
-    convert_from = ListField(EmbeddedDocumentField(ConvertFrom))
+    convert_from = EmbeddedDocumentListField(ConvertFrom)
     # Enumerations
-    enum = ListField(EmbeddedDocumentField(EnumValue))
+    enum = EmbeddedDocumentListField(EnumValue)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _name_cache = cachetools.TTLCache(maxsize=100, ttl=60)

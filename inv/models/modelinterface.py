@@ -14,13 +14,7 @@ from pathlib import Path
 # Third-party modules
 from bson import ObjectId
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import (
-    StringField,
-    BooleanField,
-    ListField,
-    EmbeddedDocumentField,
-    UUIDField,
-)
+from mongoengine.fields import StringField, BooleanField, UUIDField, EmbeddedDocumentListField
 import cachetools
 
 # NOC modules
@@ -124,7 +118,7 @@ class ModelInterface(Document):
 
     name = StringField(unique=True)
     description = StringField()
-    attrs: list[ModelInterfaceAttr] = ListField(EmbeddedDocumentField(ModelInterfaceAttr))
+    attrs = EmbeddedDocumentListField(ModelInterfaceAttr)
     uuid = UUIDField(binary=True)
 
     _id_cache = cachetools.TTLCache(100, 10)

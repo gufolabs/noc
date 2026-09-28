@@ -145,7 +145,7 @@ class Interface(Document):
     effective_labels = ListField(StringField())
     extra_labels = DictField()
     # Capabilities
-    caps: list[CapsItem] = EmbeddedDocumentListField(CapsItem)
+    caps = EmbeddedDocumentListField(CapsItem)
 
     PROFILE_LINK = "profile"
     _component_cache = cachetools.TTLCache(maxsize=2000, ttl=60)

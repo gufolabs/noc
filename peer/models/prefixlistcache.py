@@ -7,13 +7,7 @@
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import (
-    StringField,
-    IntField,
-    ListField,
-    EmbeddedDocumentField,
-    DateTimeField,
-)
+from mongoengine.fields import StringField, IntField, DateTimeField, EmbeddedDocumentListField
 
 # NOC modules
 from noc.core.mongo.fields import ForeignKeyField
@@ -41,7 +35,7 @@ class PrefixListCache(Document):
 
     peering_point = ForeignKeyField(PeeringPoint)
     name = StringField()
-    prefixes = ListField(EmbeddedDocumentField(PrefixListCachePrefix))
+    prefixes = EmbeddedDocumentListField(PrefixListCachePrefix)
     changed = DateTimeField()
     pushed = DateTimeField()
 

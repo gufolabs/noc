@@ -14,7 +14,7 @@ from typing import Optional
 import cachetools
 from bson import ObjectId
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import StringField, BooleanField, IntField, ListField, EmbeddedDocumentField
+from mongoengine.fields import StringField, BooleanField, IntField, EmbeddedDocumentListField
 
 # NOC modules
 from noc.aaa.models.group import Group
@@ -65,7 +65,7 @@ class AuthLDAPDomain(Document):
     # Use DEFAULT_GROUP_SEARCH_FILTER when empty
     group_search_filter = StringField()
     # LDAP servers
-    servers = ListField(EmbeddedDocumentField(AuthLDAPServer))
+    servers = EmbeddedDocumentListField(AuthLDAPServer)
     # user and password to search groups
     # Use user dn and password when empty
     bind_user = StringField()
@@ -79,7 +79,7 @@ class AuthLDAPDomain(Document):
     # Ignore if empty
     deny_group = StringField()
     # Group mappings
-    groups = ListField(EmbeddedDocumentField(AuthLDAPGroup))
+    groups = EmbeddedDocumentListField(AuthLDAPGroup)
     # Convert username
     convert_username = StringField(
         choices=[("0", "As-is"), ("l", "Lowercase"), ("u", "Uppercase")], default="l"

@@ -14,13 +14,7 @@ from pathlib import Path
 # Third-party modules
 from bson import ObjectId
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import (
-    StringField,
-    UUIDField,
-    BooleanField,
-    ListField,
-    EmbeddedDocumentField,
-)
+from mongoengine.fields import StringField, UUIDField, BooleanField, EmbeddedDocumentListField
 import cachetools
 
 # NOC modules
@@ -90,7 +84,7 @@ class ConfDBQuery(Document):
     uuid = UUIDField(binary=True)
     description = StringField()
     source = StringField()
-    params = ListField(EmbeddedDocumentField(ConfDBQueryParam))
+    params = EmbeddedDocumentListField(ConfDBQueryParam)
     allow_object_filter = BooleanField(default=False)
     allow_interface_filter = BooleanField(default=False)
     allow_object_validation = BooleanField(default=False)

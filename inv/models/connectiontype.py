@@ -22,7 +22,6 @@ from mongoengine.fields import (
     ListField,
     UUIDField,
     ObjectIdField,
-    EmbeddedDocumentField,
     DynamicField,
 )
 
@@ -107,14 +106,14 @@ class ConnectionType(Document):
         default="mf",
     )
     # ModelData
-    data: list["ModelAttr"] = EmbeddedDocumentListField(ModelAttr)
+    data = EmbeddedDocumentListField(ModelAttr)
     # Compatible group
     # Connection compatible with opposite gender of same type
     # and all types having any c_group
     c_group = ListField(StringField())
     uuid = UUIDField(binary=True)
     # Connection matchers
-    matchers = ListField(EmbeddedDocumentField(ConnectionMatcher))
+    matchers = EmbeddedDocumentListField(ConnectionMatcher)
     # Facade
     male_facade = PlainReferenceField(Facade, required=False)
     female_facade = PlainReferenceField(Facade, required=False)

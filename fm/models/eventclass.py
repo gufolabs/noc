@@ -24,7 +24,6 @@ from mongoengine.fields import (
     ObjectIdField,
     EnumField,
     EmbeddedDocumentListField,
-    EmbeddedDocumentField,
     UUIDField,
 )
 from mongoengine.errors import ValidationError
@@ -217,7 +216,7 @@ class EventClass(Document):
     action = StringField(
         required=True, choices=[("D", "Drop"), ("L", "Log"), ("A", "Log & Archive")]
     )
-    vars: list[EventClassVar] = EmbeddedDocumentListField(EventClassVar)
+    vars = EmbeddedDocumentListField(EventClassVar)
     # Text messages
     subject_template = StringField()
     body_template = StringField()
@@ -225,7 +224,7 @@ class EventClass(Document):
     probable_causes = StringField()
     recommended_actions = StringField()
 
-    disposition = ListField(EmbeddedDocumentField(EventDispositionRule))
+    disposition = EmbeddedDocumentListField(EventDispositionRule)
     # Window to suppress duplicated events (in seconds)
     # 0 means no deduplication
     deduplication_window = IntField(default=3)
@@ -240,7 +239,7 @@ class EventClass(Document):
     link_event = BooleanField(default=False)
     handlers = ListField(StringField())
     # Plugin settings
-    plugins = ListField(EmbeddedDocumentField(EventPlugin))
+    plugins = EmbeddedDocumentListField(EventPlugin)
     bi_id = LongField(unique=True)
     category = ObjectIdField()
 

@@ -251,8 +251,8 @@ class EscalationProfile(Document):
     escalation_policy = EnumField(EscalationPolicy, default=EscalationPolicy.ROOT)
     #     choices=["never", "rootfirst", "root", "alwaysfirst", "always"], default="root"
     # )
-    tt_system_config: list[TTSystemItem] = EmbeddedDocumentListField(TTSystemItem)
-    actions: list[EscalationAction] = EmbeddedDocumentListField(EscalationAction)
+    tt_system_config = EmbeddedDocumentListField(TTSystemItem)
+    actions = EmbeddedDocumentListField(EscalationAction)
     maintenance_policy = StringField(choices=["w", "i", "e"], default="end")
     alarm_consequence_policy = StringField(
         required=True,
@@ -276,7 +276,7 @@ class EscalationProfile(Document):
     )
     # Close alarm after End
     close_alarm = BooleanField(default=False)
-    escalations: list[EscalationItem] = EmbeddedDocumentListField(EscalationItem)  # Chain
+    escalations = EmbeddedDocumentListField(EscalationItem)  # Chain
     repeat_escalations = StringField(
         choices=[
             ("N", "Newer"),

@@ -15,9 +15,8 @@ from mongoengine.fields import (
     StringField,
     BooleanField,
     ReferenceField,
-    ListField,
-    EmbeddedDocumentField,
     UUIDField,
+    EmbeddedDocumentListField,
 )
 
 # NOC modules
@@ -53,7 +52,7 @@ class WFMigration(Document):
     name = StringField(unique=True)
     uuid = UUIDField(binary=True)
     description = StringField()
-    migrations = ListField(EmbeddedDocumentField(MigrationItem))
+    migrations = EmbeddedDocumentListField(MigrationItem)
 
     def __str__(self):
         return self.name

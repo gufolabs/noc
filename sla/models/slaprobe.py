@@ -91,7 +91,7 @@ class SLAProbe(Document):
     type = StringField(choices=[(x, x) for x in PROBE_TYPES])
     tos = IntField(min=0, max=64)
     # Capabilities
-    caps: list[CapsItem] = EmbeddedDocumentListField(CapsItem)
+    caps = EmbeddedDocumentListField(CapsItem)
     # IP address or URL, depending on type
     target = StringField()
     # Hardware timestamps

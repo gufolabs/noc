@@ -299,7 +299,7 @@ class Service(Document):
     subscriber: Subscriber | None = ReferenceField(Subscriber, required=False)
     # Oper Status Info
     oper_status: Status = EnumField(Status, default=Status.UNKNOWN)
-    # oper_status_factors: List[StatusAffectedItem] = EmbeddedDocumentListField()
+    # oper_status_factors= EmbeddedDocumentListField()
     oper_status_change = DateTimeField(required=False, default=datetime.datetime.now)
     # affect_oper_status: Status = EnumField(Status, default=Status.UNKNOWN)
     # direct_oper_status: Status = EnumField(Status, default=Status.UNKNOWN)
@@ -314,7 +314,7 @@ class Service(Document):
         ],
         default="P",
     )
-    dependency_services: list["ServiceDependency"] = EmbeddedDocumentListField(ServiceDependency)
+    dependency_services = EmbeddedDocumentListField(ServiceDependency)
     calculate_status_function = StringField(
         choices=[
             ("D", "Disable"),
@@ -326,9 +326,7 @@ class Service(Document):
         ],
         default="P",
     )
-    calculate_status_rules: list["CalculatedStatusRule"] = EmbeddedDocumentListField(
-        CalculatedStatusRule
-    )
+    calculate_status_rules = EmbeddedDocumentListField(CalculatedStatusRule)
     #
     # maintenance
     service_path = ListField(ObjectIdField())
@@ -353,8 +351,8 @@ class Service(Document):
     cpe_model = StringField()
     cpe_group = StringField()
     # Capabilities
-    caps: list[CapsItem] = EmbeddedDocumentListField(CapsItem)
-    diagnostics: list[DiagnosticItem] = EmbeddedDocumentListField(DiagnosticItem)
+    caps = EmbeddedDocumentListField(CapsItem)
+    diagnostics = EmbeddedDocumentListField(DiagnosticItem)
     # Link to agent
     agent = PlainReferenceField(Agent)
     # Integration with external NRI and TT systems
@@ -373,9 +371,9 @@ class Service(Document):
     static_client_groups = ListField(ObjectIdField())
     effective_client_groups = ListField(ObjectIdField())
     # Remote Mappings
-    mappings: list[RemoteMappingItem] = EmbeddedDocumentListField(RemoteMappingItem)
+    mappings = EmbeddedDocumentListField(RemoteMappingItem)
     # Watchers
-    watchers: list[WatchDocumentItem] = EmbeddedDocumentListField(WatchDocumentItem)
+    watchers = EmbeddedDocumentListField(WatchDocumentItem)
     watcher_wait_ts: datetime.datetime | None = DateTimeField(required=False)
     # maintenances
 

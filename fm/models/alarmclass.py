@@ -19,13 +19,13 @@ from mongoengine.document import EmbeddedDocument
 from mongoengine.fields import (
     StringField,
     UUIDField,
-    EmbeddedDocumentField,
     BooleanField,
     ListField,
     IntField,
     FloatField,
     LongField,
     ObjectIdField,
+    EmbeddedDocumentListField,
 )
 from mongoengine.errors import ValidationError
 import cachetools
@@ -60,7 +60,7 @@ class Component(EmbeddedDocument):
 
     name = StringField(required=True)
     model = StringField(required=True)
-    args = ListField(EmbeddedDocumentField(ComponentArgs))
+    args = EmbeddedDocumentListField(ComponentArgs)
 
     def __str__(self):
         return self.name
@@ -164,9 +164,9 @@ class AlarmClass(Document):
     reference = ListField(StringField())
     # Can alarm status be cleared by user
     user_clearable = BooleanField(default=True)
-    datasources = ListField(EmbeddedDocumentField(DataSource))
-    components: list[Component] = ListField(EmbeddedDocumentField(Component))
-    vars: list[AlarmClassVar] = ListField(EmbeddedDocumentField(AlarmClassVar))
+    datasources = EmbeddedDocumentListField(DataSource)
+    components = EmbeddedDocumentListField(Component)
+    vars = EmbeddedDocumentListField(AlarmClassVar)
     # Text messages
     subject_template = StringField()
     body_template = StringField()
@@ -181,7 +181,7 @@ class AlarmClass(Document):
     flap_window = IntField(required=False, default=0)
     flap_threshold = FloatField(required=False, default=0)
     # RCA
-    root_cause = ListField(EmbeddedDocumentField(AlarmRootCauseCondition))
+    root_cause = EmbeddedDocumentListField(AlarmRootCauseCondition)
     topology_rca = BooleanField(default=False)
     affected_service = BooleanField(default=False)
     # List of handlers to be called on alarm raising
@@ -189,7 +189,7 @@ class AlarmClass(Document):
     # List of handlers to be called on alarm clear
     clear_handlers = ListField(StringField())
     # Plugin settings
-    plugins = ListField(EmbeddedDocumentField(AlarmPlugin))
+    plugins = EmbeddedDocumentListField(AlarmPlugin)
     # Time in seconds to delay alarm risen notification
     notification_delay = IntField(required=False)
     # Control time to reopen alarm instead of creating new

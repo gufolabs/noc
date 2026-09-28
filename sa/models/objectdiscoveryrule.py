@@ -229,20 +229,20 @@ class ObjectDiscoveryRule(Document):
     uuid = UUIDField(binary=True)
     # Rule preference, processed from lesser to greater
     preference = IntField(required=True, default=100)
-    network_ranges: list["NetworkRange"] = EmbeddedDocumentListField(NetworkRange)
+    network_ranges = EmbeddedDocumentListField(NetworkRange)
     workflow: "Workflow" = PlainReferenceField(
         Workflow, default=partial(Workflow.get_default_workflow, "sa.DiscoveredObject")
     )
-    sources: list[SourceItem] = EmbeddedDocumentListField(SourceItem)  # Source match and priority
+    sources = EmbeddedDocumentListField(SourceItem)  # Source match and priority
     # deduplicate_fields =
-    conditions: list[MatchItem] = EmbeddedDocumentListField(MatchItem)
+    conditions = EmbeddedDocumentListField(MatchItem)
     update_interval = IntField(default=0)
     expired_ttl = IntField(default=0)  # Time for expired source
     enable_ip_scan_discovery = BooleanField(default=False)
     ip_scan_discovery_interval = IntField(default=3600)
-    checks: list["CheckItem"] = EmbeddedDocumentListField(CheckItem)
+    checks = EmbeddedDocumentListField(CheckItem)
     #
-    # actions: List["MetricActionItem"] = EmbeddedDocumentListField(MetricActionItem)
+    # actions= EmbeddedDocumentListField(MetricActionItem)
     # log - add record as new
     # approve - send approve
     # ignore - ignore state

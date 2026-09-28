@@ -22,9 +22,9 @@ from mongoengine.fields import (
     ListField,
     LongField,
     BooleanField,
-    EmbeddedDocumentField,
     ObjectIdField,
     IntField,
+    EmbeddedDocumentListField,
 )
 from mongoengine.queryset.visitor import Q as m_q
 
@@ -127,7 +127,7 @@ class SensorProfile(Document):
         choices=[("R", "By Rule"), ("D", "Disable")],
         default="R",
     )
-    match_rules = ListField(EmbeddedDocumentField(MatchRule))
+    match_rules = EmbeddedDocumentListField(MatchRule)
     # Labels
     labels = ListField(StringField())
     # BI ID

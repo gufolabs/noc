@@ -21,8 +21,8 @@ from mongoengine.fields import (
     ListField,
     BooleanField,
     IntField,
-    EmbeddedDocumentField,
     LongField,
+    EmbeddedDocumentListField,
 )
 from django.db.models.aggregates import Count
 from pymongo.errors import OperationFailure
@@ -122,7 +122,7 @@ class NetworkSegment(Document):
     # (vlan_border=True)
     # Dynamically recalculated and placed to VLAN.translation_rule
     # and VLAN.parent
-    vlan_translation = ListField(EmbeddedDocumentField(VLANTranslation))
+    vlan_translation = EmbeddedDocumentListField(VLANTranslation)
     # Share allocation resources with another segments
     allocation_group = PlainReferenceField(AllocationGroup)
     # Provided L2 MTU
@@ -146,13 +146,13 @@ class NetworkSegment(Document):
     # Calculated automatically during topology research
     enable_horizontal_transit = BooleanField(default=False)
     # Objects, services and subscribers belonging to segment directly
-    direct_objects = ListField(EmbeddedDocumentField(ObjectSummaryItem))
-    direct_services = ListField(EmbeddedDocumentField(SummaryItem))
-    direct_subscribers = ListField(EmbeddedDocumentField(SummaryItem))
+    direct_objects = EmbeddedDocumentListField(ObjectSummaryItem)
+    direct_services = EmbeddedDocumentListField(SummaryItem)
+    direct_subscribers = EmbeddedDocumentListField(SummaryItem)
     # Objects, services and subscribers belonging to all nested segments
-    total_objects = ListField(EmbeddedDocumentField(ObjectSummaryItem))
-    total_services = ListField(EmbeddedDocumentField(SummaryItem))
-    total_subscribers = ListField(EmbeddedDocumentField(SummaryItem))
+    total_objects = EmbeddedDocumentListField(ObjectSummaryItem)
+    total_services = EmbeddedDocumentListField(SummaryItem)
+    total_subscribers = EmbeddedDocumentListField(SummaryItem)
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from
     remote_system = PlainReferenceField(RemoteSystem)

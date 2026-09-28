@@ -22,8 +22,8 @@ from mongoengine.fields import (
     ListField,
     BooleanField,
     IntField,
-    EmbeddedDocumentField,
     UUIDField,
+    EmbeddedDocumentListField,
 )
 import cachetools
 
@@ -112,9 +112,9 @@ class Transition(Document):
     # Handler to be called on starting transitions
     # Any exception aborts transition
     handlers = ListField(StringField())
-    required_rules: RequiredRule = ListField(EmbeddedDocumentField(RequiredRule))
+    required_rules = EmbeddedDocumentListField(RequiredRule)
     # Visual vertices
-    vertices = ListField(EmbeddedDocumentField(TransitionVertex))
+    vertices = EmbeddedDocumentListField(TransitionVertex)
     # Integration with external NRI and TT systems
     # Reference to remote system object has been imported from
     remote_system = ReferenceField(RemoteSystem)

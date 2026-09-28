@@ -157,7 +157,7 @@ class MetricType(Document):
     compose_inputs = ListField(ReferenceField("self", reverse_delete_rule=NULLIFY))
     compose_expression = StringField()
     # Remote Mappings
-    collector_mappings: list[CollectorMappingItem] = EmbeddedDocumentListField(CollectorMappingItem)
+    collector_mappings = EmbeddedDocumentListField(CollectorMappingItem)
     # Optional required capability
     required_capability = PlainReferenceField(Capability)
     # Object id in BI, used for counter context hashing

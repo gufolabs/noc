@@ -15,13 +15,7 @@ from pathlib import Path
 # Third-party modules
 from bson import ObjectId
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import (
-    StringField,
-    ListField,
-    EmbeddedDocumentField,
-    UUIDField,
-    BooleanField,
-)
+from mongoengine.fields import StringField, UUIDField, BooleanField, EmbeddedDocumentListField
 import cachetools
 
 # NOC Modules
@@ -132,8 +126,8 @@ class MetricScope(Document):
     # Database table name
     table_name = StringField()
     description = StringField(required=False)
-    key_fields = ListField(EmbeddedDocumentField(KeyField))
-    labels = ListField(EmbeddedDocumentField(LabelItem))
+    key_fields = EmbeddedDocumentListField(KeyField)
+    labels = EmbeddedDocumentListField(LabelItem)
     enable_timedelta = BooleanField(default=False)
 
     _id_cache = cachetools.TTLCache(maxsize=30, ttl=300)

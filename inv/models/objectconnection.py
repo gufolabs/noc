@@ -14,10 +14,9 @@ from mongoengine.document import Document, EmbeddedDocument
 from mongoengine.fields import (
     StringField,
     DictField,
-    ListField,
-    EmbeddedDocumentField,
     LineStringField,
     ReferenceField,
+    EmbeddedDocumentListField,
 )
 import geojson
 
@@ -57,7 +56,7 @@ class ObjectConnection(Document):
     }
 
     # 2 or more items
-    connection = ListField(EmbeddedDocumentField(ObjectConnectionItem))
+    connection = EmbeddedDocumentListField(ObjectConnectionItem)
     data = DictField()
     type = StringField(required=False)
     # Map

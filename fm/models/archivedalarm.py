@@ -17,12 +17,12 @@ from mongoengine.fields import (
     StringField,
     DateTimeField,
     ListField,
-    EmbeddedDocumentField,
     IntField,
     LongField,
     ObjectIdField,
     DictField,
     BinaryField,
+    EmbeddedDocumentListField,
 )
 
 # NOC modules
@@ -69,7 +69,7 @@ class ArchivedAlarm(Document):
     alarm_class = PlainReferenceField(AlarmClass)
     severity = IntField(required=True)
     vars = DictField()
-    log = ListField(EmbeddedDocumentField(AlarmLog))
+    log = EmbeddedDocumentListField(AlarmLog)
     opening_event = ObjectIdField(required=False)
     closing_event = ObjectIdField(required=False)
     # Number of reopens
@@ -99,14 +99,14 @@ class ArchivedAlarm(Document):
     escalation_close_ctx = LongField(required=False)
     # Directly affected services summary, grouped by profiles
     # (connected to the same managed object)
-    direct_objects = ListField(EmbeddedDocumentField(ObjectSummaryItem))
-    direct_services = ListField(EmbeddedDocumentField(SummaryItem))
-    direct_subscribers = ListField(EmbeddedDocumentField(SummaryItem))
+    direct_objects = EmbeddedDocumentListField(ObjectSummaryItem)
+    direct_services = EmbeddedDocumentListField(SummaryItem)
+    direct_subscribers = EmbeddedDocumentListField(SummaryItem)
     # Indirectly affected services summary, grouped by profiles
     # (covered by this and all inferred alarms)
-    total_objects = ListField(EmbeddedDocumentField(ObjectSummaryItem))
-    total_services = ListField(EmbeddedDocumentField(SummaryItem))
-    total_subscribers = ListField(EmbeddedDocumentField(SummaryItem))
+    total_objects = EmbeddedDocumentListField(ObjectSummaryItem)
+    total_services = EmbeddedDocumentListField(SummaryItem)
+    total_subscribers = EmbeddedDocumentListField(SummaryItem)
     affected_services = ListField(ObjectIdField())
     # Paths
     adm_path = ListField(IntField())
@@ -126,7 +126,7 @@ class ArchivedAlarm(Document):
     # Object id in remote system
     remote_id = StringField(required=False)
     if HAS_FGALARMS:
-        resource_path = ListField(EmbeddedDocumentField(PathItem))
+        resource_path = EmbeddedDocumentListField(PathItem)
 
     def __str__(self):
         return str(self.id)

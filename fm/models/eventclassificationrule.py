@@ -167,22 +167,16 @@ class EventClassificationRule(Document):
     description = StringField(required=False)
     event_class: EventClass = PlainReferenceField(EventClass, required=True)
     preference = IntField(required=True, default=1000)
-    patterns: list[EventClassificationPattern] = EmbeddedDocumentListField(
-        EventClassificationPattern
-    )
+    patterns = EmbeddedDocumentListField(EventClassificationPattern)
     sources: list[EventSource] = ListField(
         EnumField(EventSource), default=lambda: [EventSource.OTHER]
     )
     profiles: list[Profile] = ListField(ReferenceField(Profile))
     message_rx: str = StringField()
     # datasources = EmbeddedDocumentListField(DataSource)
-    vars: list[EventClassificationRuleVar] = EmbeddedDocumentListField(EventClassificationRuleVar)
-    labels: list[EventClassificationRuleLabel] = EmbeddedDocumentListField(
-        EventClassificationRuleLabel
-    )
-    test_cases: list[EventClassificationTestCase] = EmbeddedDocumentListField(
-        EventClassificationTestCase
-    )
+    vars = EmbeddedDocumentListField(EventClassificationRuleVar)
+    labels = EmbeddedDocumentListField(EventClassificationRuleLabel)
+    test_cases = EmbeddedDocumentListField(EventClassificationTestCase)
     category = ObjectIdField()
 
     def __str__(self):

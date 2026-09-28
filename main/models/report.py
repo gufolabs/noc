@@ -89,9 +89,7 @@ class ReportParam(EmbeddedDocument):
     required = BooleanField(default=False)
     default = StringField(required=False)
     condition_param = StringField(required=False)
-    condition_values: list[ParamConditionValue] = EmbeddedDocumentListField(
-        ParamConditionValue, required=False
-    )
+    condition_values = EmbeddedDocumentListField(ParamConditionValue, required=False)
     hide = BooleanField(default=False)
     localization = DictField()
 
@@ -258,10 +256,10 @@ class Report(Document):
         ],
         default="N",
     )
-    parameters: list["ReportParam"] = EmbeddedDocumentListField(ReportParam)
-    templates: list["Template"] = EmbeddedDocumentListField(Template)
-    bands: list["Band"] = EmbeddedDocumentListField(Band)
-    bands_format: list["BandFormat"] = EmbeddedDocumentListField(BandFormat)
+    parameters = EmbeddedDocumentListField(ReportParam)
+    templates = EmbeddedDocumentListField(Template)
+    bands = EmbeddedDocumentListField(Band)
+    bands_format = EmbeddedDocumentListField(BandFormat)
     permissions = EmbeddedDocumentListField(Permission)
     localization = MapField(DictField())
 

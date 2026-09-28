@@ -82,7 +82,7 @@ class NodeItem(EmbeddedDocument):
     height = IntField()
     # default options
     collapsed = BooleanField()
-    status_filter: list[AlarmFilter] = EmbeddedDocumentListField(AlarmFilter)
+    status_filter = EmbeddedDocumentListField(AlarmFilter)
     # Link to other map
     portal_generator = StringField()
     portal_id = StringField()
@@ -232,8 +232,8 @@ class ConfiguredMap(Document):
     add_topology_links = BooleanField(default=False)
     # Add portals to external nodes
     enable_node_portal = BooleanField(default=True)
-    nodes: list[NodeItem] = EmbeddedDocumentListField(NodeItem)
-    links: list[LinkItem] = EmbeddedDocumentListField(LinkItem)
+    nodes = EmbeddedDocumentListField(NodeItem)
+    links = EmbeddedDocumentListField(LinkItem)
     # lines
 
     def __str__(self):

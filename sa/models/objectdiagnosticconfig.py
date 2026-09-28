@@ -135,7 +135,7 @@ class ObjectDiagnosticConfig(Document):
     #
     default_state = EnumField(DiagnosticState, default=DiagnosticState.unknown)
     state_policy = StringField(choices=["ALL", "ANY"], default="ANY")
-    checks: list[DiagnosticCheck] = EmbeddedDocumentListField(DiagnosticCheck)
+    checks = EmbeddedDocumentListField(DiagnosticCheck)
     diagnostics = ListField(ReferenceField("self", reverse_delete_rule=NULLIFY))
     # Alarm Settings
     alarm_class = ReferenceField(AlarmClass)

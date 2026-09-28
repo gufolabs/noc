@@ -15,7 +15,6 @@ from bson import ObjectId
 from mongoengine.document import Document, EmbeddedDocument
 from mongoengine.fields import (
     StringField,
-    ListField,
     EmbeddedDocumentField,
     EmbeddedDocumentListField,
     UUIDField,
@@ -176,8 +175,8 @@ class MetricAction(Document):
     name = StringField(unique=True)
     uuid = UUIDField(binary=True)
     description = StringField()
-    params: list["MetricActionParam"] = EmbeddedDocumentListField(MetricActionParam)
-    compose_inputs: list["InputMapping"] = ListField(EmbeddedDocumentField(InputMapping))
+    params = EmbeddedDocumentListField(MetricActionParam)
+    compose_inputs = EmbeddedDocumentListField(InputMapping)
     compose_expression = StringField(default=None)
     compose_metric_type: "MetricType" = PlainReferenceField(MetricType)
     activation_config: ActivationConfig = EmbeddedDocumentField(ActivationConfig)

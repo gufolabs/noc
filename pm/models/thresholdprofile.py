@@ -18,9 +18,8 @@ from mongoengine.fields import (
     StringField,
     IntField,
     UUIDField,
-    ListField,
-    EmbeddedDocumentField,
     FloatField,
+    EmbeddedDocumentListField,
 )
 import cachetools
 
@@ -148,7 +147,7 @@ class ThresholdProfile(Document):
     # Window preprocessor
     value_handler = PlainReferenceField(Handler)
     # thresholds config
-    thresholds = ListField(EmbeddedDocumentField(ThresholdConfig))
+    thresholds = EmbeddedDocumentListField(ThresholdConfig)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 

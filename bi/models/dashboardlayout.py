@@ -10,7 +10,7 @@ from pathlib import Path
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import StringField, UUIDField, IntField, ListField, EmbeddedDocumentField
+from mongoengine.fields import StringField, UUIDField, IntField, EmbeddedDocumentListField
 
 # NOC modules
 from noc.core.prettyjson import to_json
@@ -59,7 +59,7 @@ class DashboardLayout(Document):
     uuid = UUIDField(binary=True)
     description = StringField()
     # @todo: Add preview
-    cells = ListField(EmbeddedDocumentField(DashboardCell))
+    cells = EmbeddedDocumentListField(DashboardCell)
 
     def __str__(self):
         return self.name

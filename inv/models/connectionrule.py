@@ -11,7 +11,7 @@ from typing import Any
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
-from mongoengine.fields import StringField, UUIDField, ListField, EmbeddedDocumentField
+from mongoengine.fields import StringField, UUIDField, ListField, EmbeddedDocumentListField
 
 # NOC modules
 from noc.core.prettyjson import to_json
@@ -91,8 +91,8 @@ class ConnectionRule(Document):
 
     name = StringField(unique=True)
     description = StringField()
-    context = ListField(EmbeddedDocumentField(Context))
-    rules = ListField(EmbeddedDocumentField(Rule))
+    context = EmbeddedDocumentListField(Context)
+    rules = EmbeddedDocumentListField(Rule)
     uuid = UUIDField(binary=True)
 
     def __str__(self):

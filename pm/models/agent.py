@@ -115,17 +115,17 @@ class Agent(Document):
     # Agent identification
     # Auto-updated if profile.update_addresses is set
     serial = StringField()
-    ip: list[AgentIp] = EmbeddedDocumentListField(AgentIp)
+    ip = EmbeddedDocumentListField(AgentIp)
     port: int | None = IntField(min_value=1000, max_value=65536, required=False)
     fqdn: str = StringField(required=False)
-    mac: list[AgentMAC] = EmbeddedDocumentListField(AgentMAC)
+    mac = EmbeddedDocumentListField(AgentMAC)
     # Workflow
     state = PlainReferenceField(State)
     # Last state change
     state_changed = DateTimeField()
     last_metric_update = DateTimeField()
     # Capabilities
-    caps: list[CapsItem] = EmbeddedDocumentListField(CapsItem)
+    caps = EmbeddedDocumentListField(CapsItem)
     # Unique secret authentication key
     key = StringField(unique=True, default=gen_key)
     bi_id = LongField(unique=True)
@@ -138,7 +138,7 @@ class Agent(Document):
     # Object id in remote system
     remote_id = StringField()
     # Remote Mappings
-    mappings: list[RemoteMappingItem] = EmbeddedDocumentListField(RemoteMappingItem)
+    mappings = EmbeddedDocumentListField(RemoteMappingItem)
 
     _id_cache = cachetools.TTLCache(maxsize=100, ttl=60)
     _bi_id_cache = cachetools.TTLCache(maxsize=100, ttl=60)

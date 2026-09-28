@@ -19,9 +19,8 @@ from mongoengine.fields import (
     StringField,
     IntField,
     ReferenceField,
-    ListField,
-    EmbeddedDocumentField,
     BooleanField,
+    EmbeddedDocumentListField,
 )
 import cachetools
 
@@ -81,9 +80,9 @@ class AlarmEscalation(Document):
 
     name = StringField(unique=True)
     description = StringField()
-    alarm_classes = ListField(EmbeddedDocumentField(AlarmClassItem))
-    pre_reasons = ListField(EmbeddedDocumentField(PreReasonItem))
-    escalations = ListField(EmbeddedDocumentField(EscalationItem))
+    alarm_classes = EmbeddedDocumentListField(AlarmClassItem)
+    pre_reasons = EmbeddedDocumentListField(PreReasonItem)
+    escalations = EmbeddedDocumentListField(EscalationItem)
     global_limit = IntField()
     max_escalation_retries = IntField(default=30)  # @fixme make it configurable
 

@@ -197,7 +197,7 @@ class Protocol(Document):
     description = StringField()
     uuid = UUIDField(binary=True)
     technology: "Technology" = PlainReferenceField(Technology)
-    data: list["ProtocolAttr"] = EmbeddedDocumentListField(ProtocolAttr)
+    data = EmbeddedDocumentListField(ProtocolAttr)
     connection_schema = StringField(
         choices=[
             ("U", "Unidirectional"),

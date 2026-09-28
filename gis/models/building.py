@@ -17,12 +17,11 @@ from mongoengine.fields import (
     StringField,
     IntField,
     BooleanField,
-    ListField,
-    EmbeddedDocumentField,
     DictField,
     DateTimeField,
     LongField,
     ReferenceField,
+    EmbeddedDocumentListField,
 )
 import cachetools
 
@@ -65,7 +64,7 @@ class Building(Document):
     homes = IntField()
     # Maximal amount of floors
     floors = IntField()
-    entrances = ListField(EmbeddedDocumentField(Entrance))
+    entrances = EmbeddedDocumentListField(Entrance)
     has_cellar = BooleanField()
     has_attic = BooleanField()
     postal_code = StringField()

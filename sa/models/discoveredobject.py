@@ -175,8 +175,8 @@ class DiscoveredObject(Document):
     # Timestamp of first discovery
     first_discovered = DateTimeField(default=datetime.datetime.now)
     # checks
-    checks: list[CheckStatus] = EmbeddedDocumentListField(CheckStatus)
-    data: list[DataItem] = EmbeddedDocumentListField(DataItem)
+    checks = EmbeddedDocumentListField(CheckStatus)
+    data = EmbeddedDocumentListField(DataItem)
     duplicate_keys = ListField(LongField())
     managed_object_id: int | None = IntField(required=False)
     # Link to agent

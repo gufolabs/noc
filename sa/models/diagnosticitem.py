@@ -69,7 +69,7 @@ class DiagnosticItem(EmbeddedDocument):
 
     diagnostic = StringField(required=True)
     state: DiagnosticState = EnumField(DiagnosticState, default=DiagnosticState("unknown"))
-    checks: list[CheckItem] | None = EmbeddedDocumentListField(CheckItem)
+    checks = EmbeddedDocumentListField(CheckItem)
     reason: str | None = StringField(required=False)
     changed: datetime.datetime | None = DateTimeField(required=False)
 

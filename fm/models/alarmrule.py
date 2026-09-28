@@ -196,9 +196,9 @@ class AlarmRule(Document):
     name = StringField(unique=True)
     description = StringField()
     is_active = BooleanField(default=True)
-    match: list[Match] = EmbeddedDocumentListField(Match)
-    groups: list[Group] = EmbeddedDocumentListField(Group)
-    actions: list[Action] = EmbeddedDocumentListField(Action)
+    match = EmbeddedDocumentListField(Match)
+    groups = EmbeddedDocumentListField(Group)
+    actions = EmbeddedDocumentListField(Action)
     escalation_profile: EscalationProfile | None = ReferenceField(EscalationProfile)
     severity_policy = StringField(
         choices=[

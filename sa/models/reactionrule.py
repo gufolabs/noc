@@ -289,7 +289,7 @@ class ReactionRule(Document):
         choices=list(REACTION_MODELS),
         required=True,
     )
-    conditions: list["Match"] = EmbeddedDocumentListField(Match)
+    conditions = EmbeddedDocumentListField(Match)
     execute_policy = StringField(
         choices=[
             ("J", "As Job"),
@@ -317,13 +317,13 @@ class ReactionRule(Document):
         ),
     )
     # Context
-    field_data: list["FieldData"] = EmbeddedDocumentListField(FieldData)
-    affected_rules: list["AffectedRule"] = EmbeddedDocumentListField(AffectedRule)
+    field_data = EmbeddedDocumentListField(FieldData)
+    affected_rules = EmbeddedDocumentListField(AffectedRule)
     # Controller, Scenario
     # Action Commands Set
-    # action_command_set: List["ActionCommands"] = EmbeddedDocumentListField(ActionCommands)
+    # action_command_set= EmbeddedDocumentListField(ActionCommands)
     # Actions
-    actions: list[ActionItem] = EmbeddedDocumentListField(ActionItem)
+    actions = EmbeddedDocumentListField(ActionItem)
     # Notification
     notification_policy = StringField(
         choices=[("D", "disable"), ("R", "register"), ("G", "To Group")],

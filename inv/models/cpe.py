@@ -101,7 +101,7 @@ class CPE(Document):
     }
 
     # (<managed object>, <local_id>) Must be unique
-    controllers: list[ControllerItem] = EmbeddedDocumentListField(ControllerItem)
+    controllers = EmbeddedDocumentListField(ControllerItem)
     global_id = StringField(unique=True)
     # Probe profile
     profile: CPEProfile = PlainReferenceField(CPEProfile, default=CPEProfile.get_default_profile)
@@ -124,7 +124,7 @@ class CPE(Document):
     address = StringField(validation=check_address)
     label = StringField(required=False)
     # Capabilities
-    caps: list[CapsItem] = EmbeddedDocumentListField(CapsItem)
+    caps = EmbeddedDocumentListField(CapsItem)
     # Object id in BI
     bi_id = LongField(unique=True)
     # Labels

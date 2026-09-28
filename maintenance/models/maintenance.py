@@ -133,11 +133,11 @@ class Maintenance(Document):
     # None - active all the time
     time_pattern: TimePattern | None = ForeignKeyField(TimePattern)
     # Objects declared to be affected by maintenance
-    direct_objects: list["MaintenanceObject"] = EmbeddedDocumentListField(MaintenanceObject)
+    direct_objects = EmbeddedDocumentListField(MaintenanceObject)
     # Segments declared to be affected by maintenance
-    direct_segments: list["MaintenanceSegment"] = EmbeddedDocumentListField(MaintenanceSegment)
+    direct_segments = EmbeddedDocumentListField(MaintenanceSegment)
     #  Service declared to be affected by maintenance
-    direct_services: list["MaintenanceService"] = EmbeddedDocumentListField(MaintenanceService)
+    direct_services = EmbeddedDocumentListField(MaintenanceService)
     # direct_group =
     # All Administrative Domain for all affected objects
     administrative_domain = ListField(ForeignKeyField(AdministrativeDomain))
@@ -155,9 +155,9 @@ class Maintenance(Document):
     # Object id in remote system
     remote_id = StringField()
     # Array remote objects and service ids
-    remote_objects: list["RemoteObject"] = EmbeddedDocumentListField(RemoteObject)
+    remote_objects = EmbeddedDocumentListField(RemoteObject)
     # Watchers
-    watchers: list[WatchDocumentItem] = EmbeddedDocumentListField(WatchDocumentItem)
+    watchers = EmbeddedDocumentListField(WatchDocumentItem)
     watcher_wait_ts: datetime.datetime | None = DateTimeField(required=False)
     # Object id in BI
     # bi_id = LongField(unique=True)

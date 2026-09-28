@@ -19,9 +19,9 @@ from mongoengine.fields import (
     BooleanField,
     ReferenceField,
     ListField,
-    EmbeddedDocumentField,
     LongField,
     IntField,
+    EmbeddedDocumentListField,
 )
 from bson import ObjectId
 import cachetools
@@ -91,7 +91,7 @@ class SLAProfile(Document):
     # Number interval buckets
     metrics_interval_buckets = IntField(default=1, min_value=0)
     # Interface profile metrics
-    metrics: list[SLAProfileMetrics] = ListField(EmbeddedDocumentField(SLAProfileMetrics))
+    metrics = EmbeddedDocumentListField(SLAProfileMetrics)
     # Labels
     labels = ListField(StringField())
 

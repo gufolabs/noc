@@ -22,7 +22,6 @@ from mongoengine.fields import (
     ListField,
     PointField,
     LongField,
-    EmbeddedDocumentField,
     EmbeddedDocumentListField,
     DynamicField,
     BooleanField,
@@ -142,9 +141,7 @@ class ObjectConfigurationData(EmbeddedDocument):
     conflicted_value = DynamicField(required=False)
     last_seen = DateTimeField()
     # Scope Code
-    contexts: list["ObjectConfigurationScope"] | None = EmbeddedDocumentListField(
-        ObjectConfigurationScope, required=False
-    )
+    contexts = EmbeddedDocumentListField(ObjectConfigurationScope, required=False)
 
     def __str__(self):
         if self.contexts:
@@ -207,26 +204,22 @@ class Object(Document):
 
     name = StringField()
     model: "ObjectModel" = PlainReferenceField(ObjectModel)
-    data: list["ObjectAttr"] = ListField(EmbeddedDocumentField(ObjectAttr))
+    data = EmbeddedDocumentListField(ObjectAttr)
     parent: Optional["Object"] = PlainReferenceField("self", required=False)
     parent_connection = StringField(required=False)
     additional_connections = ListField(StringField(), required=False)
     comment = GridVCSField("object_comment")
     # Configuration Param
-    cfg_data: list["ObjectConfigurationData"] = ListField(
-        EmbeddedDocumentField(ObjectConfigurationData)
-    )
+    cfg_data = EmbeddedDocumentListField(ObjectConfigurationData)
     # Map
     layer: Optional["Layer"] = PlainReferenceField(Layer)
     point = PointField(auto_index=True)
     # Current mode
     mode = StringField(required=False)
     # Additional connection data
-    connections: list["ObjectConnectionData"] = ListField(
-        EmbeddedDocumentField(ObjectConnectionData)
-    )
+    connections = EmbeddedDocumentListField(ObjectConnectionData)
     # Dynamic crossings
-    cross: list[Crossing] = ListField(EmbeddedDocumentField(Crossing))
+    cross = EmbeddedDocumentListField(Crossing)
     # Labels
     labels = ListField(StringField())
     effective_labels = ListField(StringField())

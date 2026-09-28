@@ -33,7 +33,6 @@ from mongoengine.fields import (
     StringField,
     DateTimeField,
     ListField,
-    EmbeddedDocumentField,
     EmbeddedDocumentListField,
     IntField,
     LongField,
@@ -134,7 +133,7 @@ class ActiveAlarm(Document):
     # Alarm reference is a hash of discriminator
     # for external systems
     reference = BinaryField(required=False)
-    log: list[AlarmLog] = EmbeddedDocumentListField(AlarmLog)
+    log = EmbeddedDocumentListField(AlarmLog)
     # Manual acknowledgement timestamp
     ack_ts = DateTimeField(required=False)
     # Manual acknowledgement user name
@@ -142,7 +141,7 @@ class ActiveAlarm(Document):
     opening_event = ObjectIdField(required=False)
     closing_event = ObjectIdField(required=False)
     # List of subscribers
-    watchers: list[WatchItem] = EmbeddedDocumentListField(WatchItem)
+    watchers = EmbeddedDocumentListField(WatchItem)
     custom_subject = StringField(required=False)
     custom_object = StringField(required=False)
     custom_style = ForeignKeyField(Style, required=False)
@@ -161,14 +160,14 @@ class ActiveAlarm(Document):
     wait_ts: datetime.datetime | None = DateTimeField(required=False)
     # Directly affected services summary, grouped by profiles
     # (connected to the same managed object)
-    direct_objects = ListField(EmbeddedDocumentField(ObjectSummaryItem))
-    direct_services = ListField(EmbeddedDocumentField(SummaryItem))
-    direct_subscribers = ListField(EmbeddedDocumentField(SummaryItem))
+    direct_objects = EmbeddedDocumentListField(ObjectSummaryItem)
+    direct_services = EmbeddedDocumentListField(SummaryItem)
+    direct_subscribers = EmbeddedDocumentListField(SummaryItem)
     # Indirectly affected services summary, grouped by profiles
     # (covered by this and all inferred alarms)
-    total_objects = ListField(EmbeddedDocumentField(ObjectSummaryItem))
-    total_services = ListField(EmbeddedDocumentField(SummaryItem))
-    total_subscribers = ListField(EmbeddedDocumentField(SummaryItem))
+    total_objects = EmbeddedDocumentListField(ObjectSummaryItem)
+    total_services = EmbeddedDocumentListField(SummaryItem)
+    total_subscribers = EmbeddedDocumentListField(SummaryItem)
     # Paths
     adm_path = ListField(IntField())
     segment_path = ListField(ObjectIdField())
@@ -191,7 +190,7 @@ class ActiveAlarm(Document):
     # Object id in remote system
     remote_id = StringField(required=False)
     if HAS_FGALARMS:
-        resource_path = ListField(EmbeddedDocumentField(PathItem))
+        resource_path = EmbeddedDocumentListField(PathItem)
 
     def __str__(self):
         return str(self.id)

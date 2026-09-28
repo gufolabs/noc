@@ -246,7 +246,7 @@ class CapsProfile(Document):
     error_caps_policy = StringField(
         choices=[("I", "Ignore"), ("C", "Check"), ("S", "Strict")], default="I"
     )
-    caps: list[CapsSettings] = EmbeddedDocumentListField(CapsSettings)
+    caps = EmbeddedDocumentListField(CapsSettings)
 
     L2_SECTIONS = ["bfd", "cdp", "fdp", "huawei_ndp", "lacp", "lldp", "oam", "rep", "stp", "udld"]
     L3_SECTIONS = ["hsrp", "vrrp", "vrrpv3", "bgp", "ospf", "ospfv3", "isis", "ldp", "rsvp"]

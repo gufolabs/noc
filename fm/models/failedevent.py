@@ -11,7 +11,7 @@ import time
 
 # Third-party modules
 from mongoengine.document import Document
-from mongoengine.fields import DateTimeField, StringField, EmbeddedDocumentField, ListField
+from mongoengine.fields import DateTimeField, StringField, EmbeddedDocumentListField
 import orjson
 
 # NOC modules
@@ -35,7 +35,7 @@ class FailedEvent(Document):
     # NOC version caused traceback
     version = StringField(required=True)
     traceback = StringField()
-    log = ListField(EmbeddedDocumentField(EventLog))
+    log = EmbeddedDocumentListField(EventLog)
 
     def __str__(self):
         return f"{self.id}"
