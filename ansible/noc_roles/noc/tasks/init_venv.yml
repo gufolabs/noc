@@ -13,6 +13,8 @@
   environment:
     https_proxy: "{{ http_proxy }}"
     http_proxy: "{{ http_proxy }}"
+    UV_CACHE_DIR: "{{ uv_root }}/cache"
+    UV_PYTHON_INSTALL_DIR: "{{ uv_root }}/python"
 
 - name: Install NOC
   command:
@@ -21,3 +23,5 @@
   environment:
     https_proxy: "{{ http_proxy }}"
     http_proxy: "{{ http_proxy }}"
+    UV_CACHE_DIR: "{{ uv_root }}/cache"
+    UV_PYTHON_INSTALL_DIR: "{{ uv_root }}/python"
