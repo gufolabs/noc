@@ -4,7 +4,7 @@
     name:
       - default-jre
     state: present
-    update_cache: "True"
+    update_cache: "False"
   tags:
     - requirements
   environment:
