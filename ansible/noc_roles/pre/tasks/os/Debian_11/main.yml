@@ -3,7 +3,7 @@
   apt:
     name: "{{ packages }}"
     state: present # install once, there will not be any updates
-    update_cache: "True"
+    update_cache: "False"
   vars:
     # Ignore repo expire
     ansible_apt_update_cache_extra_args: "-o Acquire::Check-Valid-Until=false"
