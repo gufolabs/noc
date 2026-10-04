@@ -1,11 +1,12 @@
----
+# Debian 11 is EOL platform
 - name: Install Debian system packages
   apt:
     name: "{{ packages }}"
-    state: latest
-    update_cache: "True"
-    cache_valid_time: "{{ apt_cache_valid_time | default (3600) }}"
+    state: present # install once, there will not be any updates
+    update_cache: "False"
   vars:
+    # Ignore repo expire
+    ansible_apt_update_cache_extra_args: "-o Acquire::Check-Valid-Until=false"
     packages:
       - ca-certificates
       - unzip
@@ -13,7 +14,6 @@
       - curl
       - apt-transport-https
       - dbus # to setup hostname
-      - build-essential #for ujson-x compiling
   become: true
   environment:
     https_proxy: "{{ http_proxy }}"
