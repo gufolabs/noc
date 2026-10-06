@@ -32,9 +32,29 @@ class GridVCS:
     ENCODING = "utf-8"
     DEFAULT_COMPRESS = "z"
 
-    def __init__(self, repo) -> None:
-        self.fs = gridfs.GridFS(get_db(), collection=f"noc.gridvcs.{repo}")
-        self.files = self.fs._GridFS__files
+    def __init__(self, repo: str) -> None:
+        self._bucket_name = f"noc.gridvcs.{repo}"
+        self.fs = gridfs.GridFS(get_db(), collection=self._bucket_name)
+
+    @property
+    def files(self) -> pymongo.collection.Collection:
+        """
+        Get GridFS files collection.
+
+        Returns:
+            MongoDB collection containing GridFS file metadata.
+        """
+        return get_db()[f"{self._bucket_name}.files"]
+
+    @property
+    def chunks(self) -> pymongo.collection.Collection:
+        """
+        Get GridFS chunks collection.
+
+        Returns:
+            MongoDB collection containing GridFS file chunks.
+        """
+        return get_db()[f"{self._bucket_name}.chunks"]
 
     def get_delta(self, src: str, dst: str) -> tuple[str, bytes]:
         """
