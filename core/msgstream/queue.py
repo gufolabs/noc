@@ -64,7 +64,7 @@ class MessageStreamQueue:
         if timeout:
             try:
                 await asyncio.wait_for(self.waiter.wait(), timeout)
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 return None
         else:
             await self.waiter.wait()
@@ -108,7 +108,7 @@ class MessageStreamQueue:
         if timeout:
             try:
                 await asyncio.wait_for(self.drain_waiter.wait(), timeout)
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 pass
         else:
             await self.drain_waiter.wait()

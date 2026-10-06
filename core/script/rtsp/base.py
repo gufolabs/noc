@@ -1,14 +1,13 @@
 # ----------------------------------------------------------------------
 # RTSP class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import os
 from urllib.request import parse_http_list, parse_keqv_list
-import asyncio
 from typing import Any
 
 # Third-party modules
@@ -194,12 +193,12 @@ class RTSPBase(BaseCLI):
                 metrics["cli_read_bytes", ("proto", self.name)] += len(r)
                 if self.script.to_track:
                     self.script.push_cli_tracking(r, self.state)
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 self.logger.info("Timeout error")
                 metrics["cli_timeouts", ("proto", self.name)] += 1
                 # IOStream must be closed to prevent hanging read callbacks
                 self.close_stream()
-                raise asyncio.TimeoutError("Timeout")  # @todo: Uncaught
+                raise TimeoutError("Timeout")  # @todo: Uncaught
             self.logger.debug("Received: %r", r)
             self.buffer += r
             return r

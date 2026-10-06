@@ -38,7 +38,7 @@ class TCPConnectChecker(BaseChecker):
                 )
                 writer.close()
                 await writer.wait_closed()
-            except (asyncio.TimeoutError, Exception):
+            except (TimeoutError, Exception):
                 # реагируем на ошибку соединения, пишем в лог или ещё что
                 avail = False
             else:

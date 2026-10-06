@@ -121,7 +121,7 @@ class BaseStream:
             return self.socket.recv(n)
         except ConnectionResetError:
             self.logger.debug("Connection reset")
-            raise asyncio.TimeoutError
+            raise TimeoutError
 
     async def write(self, data: bytes):
         """Write data to socket
@@ -135,7 +135,7 @@ class BaseStream:
                 sent = self.socket.send(data)
             except OSError as e:
                 self.logger.debug("Failed to write: %s", e)
-                raise asyncio.TimeoutError()
+                raise TimeoutError()
             data = data[sent:]
 
     def close(self):
