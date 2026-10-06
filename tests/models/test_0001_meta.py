@@ -20,7 +20,7 @@ def test_iter_model_id():
     assert any(iter_model_id()), "Empty model id"
 
 
-@pytest.mark.parametrize("model_id", iter_model_id())
+@pytest.mark.parametrize("model_id", list(iter_model_id()))
 def test_model_loading(model_id):
     """
     Check model referred by id can be loaded
@@ -30,7 +30,7 @@ def test_model_loading(model_id):
     assert model is not None, f"Cannot load model {model_id}"
 
 
-@pytest.mark.parametrize("model_id", iter_model_id())
+@pytest.mark.parametrize("model_id", list(iter_model_id()))
 def test_model_id(model_id):
     """
     Check model has same model_id as referred
