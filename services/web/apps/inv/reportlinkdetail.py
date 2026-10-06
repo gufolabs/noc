@@ -304,7 +304,7 @@ class ReportLinkDetailApplication(ExtApplication):
                     cmap,
                 )
             ]
-        filename = "links_detail_report_{}".format(datetime.datetime.now().strftime("%Y%m%d"))
+        filename = f"links_detail_report_{datetime.datetime.now().strftime('%Y%m%d')}"
         if o_format == "csv":
             response = HttpResponse(content_type="text/csv")
             response["Content-Disposition"] = f'attachment; filename="{filename}.csv"'

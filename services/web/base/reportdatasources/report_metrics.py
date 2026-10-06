@@ -40,7 +40,7 @@ class ReportMetrics(BaseReportColumn):
 
     @staticmethod
     def get_mo_filter(ids, use_dictionary=False):
-        return "managed_object IN ({})".format(", ".join([str(c) for c in ids]))
+        return f"managed_object IN ({', '.join([str(c) for c in ids])})"
 
     def get_custom_conditions(self):
         return self.CUSTOM_FILTER
@@ -63,17 +63,15 @@ class ReportMetrics(BaseReportColumn):
         }
         for num, field, alias in sorted(self.SELECT_QUERY_MAP, key=lambda x: x[0]):
             func = self.SELECT_QUERY_MAP[(num, field, alias)] or f"avg({field})"
-            def_map["q_select"] += ["{} AS {}".format(func, alias or "a_" + field)]
+            def_map["q_select"] += [f"{func} AS {alias or 'a_' + field}"]
         return " ".join(
             [
-                "SELECT {}".format(",".join(def_map["q_select"])),
+                f"SELECT {','.join(def_map['q_select'])}",
                 f"FROM {self.TABLE_NAME}",
-                "WHERE {}".format(" AND ".join(def_map["q_where"])),
-                "GROUP BY {}".format(",".join(def_map["q_group"])),
-                "HAVING {}".format(" AND ".join(def_map["q_having"]))
-                if def_map["q_having"]
-                else "",
-                "ORDER BY {}".format(",".join(def_map["q_order_by"])),
+                f"WHERE {' AND '.join(def_map['q_where'])}",
+                f"GROUP BY {','.join(def_map['q_group'])}",
+                f"HAVING {' AND '.join(def_map['q_having'])}" if def_map["q_having"] else "",
+                f"ORDER BY {','.join(def_map['q_order_by'])}",
             ]
         )
 

@@ -442,7 +442,7 @@ class Script(BaseScript):
             if not match:
                 # Secondary ip?
                 continue
-            ip = "{}/{}".format(match.group("address"), match.group("mask"))
+            ip = f"{match.group('address')}/{match.group('mask')}"
             ipv6_interfaces[c_iface] += [ip]
         interfaces = {}
         # Get OSPF interfaces

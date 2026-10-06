@@ -27,7 +27,7 @@ class Script(BaseScript):
         else:
             macs = ""
             for s in self.scripts.get_interface_status():
-                macs += self.cli(cmd + "{}".format(s["interface"]))
+                macs += self.cli(cmd + f"{s['interface']}")
         r = []
         for l in macs.split("\n"):
             match = self.rx_line.match(l.strip())

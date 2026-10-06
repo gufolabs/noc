@@ -45,7 +45,7 @@ class Script(BaseScript):
                 and c["description"]
                 and ("description" not in p or c["description"] != p["description"])
             ):
-                ic += [" description {}".format(c["description"])]
+                ic += [f" description {c['description']}"]
             # Check status
             if c["status"] and not p["status"]:
                 ic += [" no shutdown"]

@@ -94,12 +94,12 @@ class Command(BaseCommand):
 
     def handle(self, cmd, *args, **options):
         connect()
-        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
+        return getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
     def handle_load(self, *args, **options):
         remote_system = RemoteSystem.get_by_name(options["system"])
         if not remote_system:
-            self.die("Invalid remote system: {}".format(options["system"]))
+            self.die(f"Invalid remote system: {options['system']}")
         remote_system.load(options.get("loaders", []), quiet=options.get("quiet", False))
         if not remote_system.load_error:
             return 0
@@ -108,7 +108,7 @@ class Command(BaseCommand):
     def handle_extract(self, *args, **options):
         remote_system = RemoteSystem.get_by_name(options["system"])
         if not remote_system:
-            self.die("Invalid remote system: {}".format(options["system"]))
+            self.die(f"Invalid remote system: {options['system']}")
         remote_system.extract(
             options.get("extractors", []),
             quiet=options.get("quiet", False),
@@ -122,14 +122,14 @@ class Command(BaseCommand):
     def handle_check(self, *args, **options):
         remote_system = RemoteSystem.get_by_name(options["system"])
         if not remote_system:
-            self.die("Invalid remote system: {}".format(options["system"]))
+            self.die(f"Invalid remote system: {options['system']}")
         n_errors, _ = remote_system.check(out=self.stdout)
         return 1 if n_errors else 0
 
     def handle_diff(self, summary=False, *args, **options):
         remote_system = RemoteSystem.get_by_name(options["system"])
         if not remote_system:
-            self.die("Invalid remote system: {}".format(options["system"]))
+            self.die(f"Invalid remote system: {options['system']}")
 
         diffs = set(options.get("diffs", []))
         if summary:
@@ -139,9 +139,9 @@ class Command(BaseCommand):
             try:
                 control_dict = orjson.loads(options["control_dict"])
             except ValueError as e:
-                self.die("Failed to parse JSON: {} in {}".format(e, options["control_dict"]))
+                self.die(f"Failed to parse JSON: {e} in {options['control_dict']}")
             except TypeError as e:
-                self.die("Failed to parse JSON: {} in {}".format(e, options["control_dict"]))
+                self.die(f"Failed to parse JSON: {e} in {options['control_dict']}")
         chain = remote_system.get_loader_chain()
         for ldr in chain:
             if diffs and ldr.name not in diffs:
@@ -181,7 +181,7 @@ class Command(BaseCommand):
 
         remote_system = RemoteSystem.get_by_name(options["system"])
         if not remote_system:
-            self.die("Invalid remote system: {}".format(options["system"]))
+            self.die(f"Invalid remote system: {options['system']}")
         loader = options["extractor"]
         include_fields = None
         if options.get("fields"):
@@ -223,7 +223,7 @@ class Command(BaseCommand):
     def handle_clean(self, files=None, ttl=None, dry_run=True, *args, **options):
         remote_system = RemoteSystem.get_by_name(options["system"])
         if not remote_system:
-            self.die("Invalid remote system: {}".format(options["system"]))
+            self.die(f"Invalid remote system: {options['system']}")
         if files and files < CLEANUP_SAFE_FILES_COUNT:
             self.die("3 is minimal value to save file")
 

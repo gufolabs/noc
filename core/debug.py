@@ -189,8 +189,8 @@ def format_frames(frames, reverse=config.traceback.reverse):
     if reverse:
         fr.reverse()
     for f in fr:
-        r += ["File: {} (Line: {})".format(os.path.relpath(f["filename"]), f["lineno"])]
-        r += ["Function: {}".format(f["function"])]
+        r += [f"File: {os.path.relpath(f['filename'])} (Line: {f['lineno']})"]
+        r += [f"Function: {f['function']}"]
         if "pre_context_lineno" in f:
             r += [format_source(f["pre_context_lineno"], f["pre_context"])]
             r += ["%5d ==> %s" % (f["lineno"], f["context_line"])]

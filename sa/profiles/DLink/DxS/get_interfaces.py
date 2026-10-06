@@ -436,7 +436,7 @@ class Script(BaseScript):
         except self.CLISyntaxError:
             c = ""
         for match in self.rx_trunk.finditer(c):
-            ifname = "T{}".format(match.group("trunk"))
+            ifname = f"T{match.group('trunk')}"
             ifstatus = match.group("status").lower() == "enabled"
             i = {
                 "name": ifname,

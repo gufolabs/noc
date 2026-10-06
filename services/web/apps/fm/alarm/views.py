@@ -854,9 +854,7 @@ class AlarmApplication(ExtApplication):
                             f'<i class="{pv.glyph}" title="{pv.name}"></i>{badge}',
                         )
                     ]
-            return "<span class='x-summary'>{}</span>".format(
-                "".join(i[1] for i in sorted(v, key=operator.itemgetter(0)))
-            )
+            return f"<span class='x-summary'>{''.join(i[1] for i in sorted(v, key=operator.itemgetter(0)))}</span>"
 
         if not isinstance(s, dict):
             return ""

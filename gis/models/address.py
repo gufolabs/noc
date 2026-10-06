@@ -151,7 +151,7 @@ class Address(Document):
                     st = f"{self.street.short_name} {self.street.name}"
             else:
                 st = self.street.name
-            n += ["{} {}".format(st, " ".join(a))]
+            n += [f"{st} {' '.join(a)}"]
         else:
             n += [" ".join(a)]
         if levels or to_level is not None:

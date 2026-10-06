@@ -192,7 +192,7 @@ class DatastreamAPI:
             filters = ds_filter or []
             ids = ds_id or None
             if ids:
-                filters += ["id({})".format(",".join(ids))]
+                filters += [f"id({','.join(ids)})"]
             # Start from change
             if ds_from:
                 change_id = ds_from

@@ -191,7 +191,7 @@ class Script(BaseScript):
         return {
             "vendor": "Qtech",
             "platform": platform,
-            "version": "{} ({})".format(r["fw_ver"], r["fw_date"]),
+            "version": f"{r['fw_ver']} ({r['fw_date']})",
         }
 
     def execute_cli(self, **kwargs):

@@ -62,7 +62,7 @@ class SearchMacro(BaseMacro):
         # Render
         out = ["<table border='0'>"]
         if "title" in args:
-            out += ["<tr><th>{}</th></tr>".format(args["title"])]
+            out += [f"<tr><th>{args['title']}</th></tr>"]
         for a in q:
             link = "/api/card/view/kb/%d/" % a.id
             out += ["<tr>"]

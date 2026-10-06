@@ -86,9 +86,7 @@ class Command(BaseCommand):
                     return
         self.e(
             c,
-            'Has "{}", but must have one of protocols: {}'.format(
-                ", ".join(str(p) for p in c.protocols), ", ".join(str(p) for p in protocols)
-            ),
+            f'Has "{", ".join(str(p) for p in c.protocols)}", but must have one of protocols: {", ".join(str(p) for p in protocols)}',
         )
 
     def check_direction(self, c, directions):

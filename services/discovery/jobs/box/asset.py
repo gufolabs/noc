@@ -311,9 +311,7 @@ class AssetCheck(DiscoveryCheck):
             o.set_data("asset", "revision", revision)
             o.save()
             o.log(
-                "Object revision changed: {} -> {}".format(
-                    o.get_data("asset", "revision"), revision
-                ),
+                f"Object revision changed: {o.get_data('asset', 'revision')} -> {revision}",
                 system="DISCOVERY",
                 managed_object=self.object,
                 op="CHANGE",
@@ -331,9 +329,7 @@ class AssetCheck(DiscoveryCheck):
             o.set_data("asset", "mfg_date", mfg_date)
             o.save()
             o.log(
-                "Object manufacturing date: {} -> {}".format(
-                    o.get_data("asset", "mfg_date"), mfg_date
-                ),
+                f"Object manufacturing date: {o.get_data('asset', 'mfg_date')} -> {mfg_date}",
                 system="DISCOVERY",
                 managed_object=self.object,
                 op="CHANGE",

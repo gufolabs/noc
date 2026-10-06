@@ -49,7 +49,7 @@ class Script(BaseScript):
         if match:
             r = {
                 "vendor": "ZTE",
-                "platform": "ZXDSL {}".format(match.group("platform").upper()),
+                "platform": f"ZXDSL {match.group('platform').upper()}",
                 "version": match.group("version"),
             }
         v = self.cli("show system", cached=True)

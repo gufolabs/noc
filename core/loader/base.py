@@ -84,7 +84,7 @@ class BaseLoader:
         :param name: module name
         :return:
         """
-        return "{}.{}.{}".format(base, ".".join(self.base_path), name)
+        return f"{base}.{'.'.join(self.base_path)}.{name}"
 
     def get_class(self, name):
         with self.lock:

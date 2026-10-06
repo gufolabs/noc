@@ -148,7 +148,7 @@ class Command(BaseCommand):
             n = len(data)
             r = ["{"]
             for k, v in data:
-                r += ["    {}: {}{}".format(k, js_v(v), "," if n > 1 else "")]
+                r += [f"    {k}: {js_v(v)}{',' if n > 1 else ''}"]
                 n -= 1
             r += ["}"]
             return r
@@ -192,7 +192,7 @@ class Command(BaseCommand):
             tv["app"] = a
             # Initialize model if necessary
             if tv["model"]:
-                tv["requires"] = ["NOC.{}.{}.Model".format(m, tv["model"].lower())]
+                tv["requires"] = [f"NOC.{m}.{tv['model'].lower()}.Model"]
                 tv["modelimport"] = f"noc.{m}.models.{a}"
                 models = importlib.import_module(tv["modelimport"])
                 model = getattr(models, tv["model"])
@@ -210,7 +210,7 @@ class Command(BaseCommand):
                         if fc in ("ForeignKey", "OneToOneField"):
                             # Foreign key
                             fr = f.remote_field.model
-                            rc = "{}.{}".format(fr.__module__.split(".")[1], fr.__name__.lower())
+                            rc = f"{fr.__module__.split('.')[1]}.{fr.__name__.lower()}"
                             fd = {
                                 "type": "int",
                                 "name": f.name,

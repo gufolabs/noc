@@ -67,7 +67,7 @@ class ConnectionTypeApplication(ExtDocApplication):
                         fn(
                             ct,
                             "f",
-                            "Share common groups: {}".format(", ".join(so & set(ct.c_group))),
+                            f"Share common groups: {', '.join(so & set(ct.c_group))}",
                         )
                     ]
             r += [{"gender": "m", "records": rr}]
@@ -87,7 +87,7 @@ class ConnectionTypeApplication(ExtDocApplication):
                         fn(
                             ct,
                             "m",
-                            "Share common groups: {}".format(", ".join(so & set(ct.c_group))),
+                            f"Share common groups: {', '.join(so & set(ct.c_group))}",
                         )
                     ]
             r += [{"gender": "f", "records": rr}]
@@ -108,7 +108,7 @@ class ConnectionTypeApplication(ExtDocApplication):
                         fn(
                             ct,
                             "s",
-                            "Share common groups: {}".format(", ".join(so & set(ct.c_group))),
+                            f"Share common groups: {', '.join(so & set(ct.c_group))}",
                         )
                     ]
 

@@ -95,9 +95,7 @@ class Script(BaseScript):
                     xcvr["mfg_date"] = d["mfg_date"].strftime("%Y-%m-%d")
                 except ValueError:
                     self.logger.error(
-                        "Unconverted format manufactured date: {}, on port: {}".format(
-                            d["mfg_date"], port
-                        )
+                        f"Unconverted format manufactured date: {d['mfg_date']}, on port: {port}"
                     )
             r += [xcvr]
             port = None

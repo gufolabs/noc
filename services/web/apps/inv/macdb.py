@@ -102,7 +102,7 @@ class MACApplication(ExtApplication):
         ]
         filter_x = self.get_filter(mac_query, managed_object, segment, interface_profile, is_uni)
         if filter_x:
-            sql += ["WHERE {}".format(" AND ".join(filter_x))]
+            sql += [f"WHERE {' AND '.join(filter_x)}"]
         sql += ["ORDER BY mac"]
         if limit and offset:
             sql += [f"LIMIT {offset}, {limit}"]
@@ -240,7 +240,7 @@ class MACApplication(ExtApplication):
         ]
         filter_x = cls.get_filter(mac_query, managed_object, segment, interface_profile, is_uni)
         if filter_x:
-            sql += ["WHERE {}".format(" AND ".join(filter_x))]
+            sql += [f"WHERE {' AND '.join(filter_x)}"]
         sql += ["ORDER BY ts DESC"]
         if limit and offset:
             sql += [f"LIMIT {offset}, {limit}"]

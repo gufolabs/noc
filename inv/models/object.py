@@ -505,8 +505,8 @@ class Object(Document):
         # Return sorted result
         return sorted(
             r,
-            key=lambda oa: "{}.{}".format(
-                sorting_keys.get(f"{oa.interface}.{oa.attr}", "999999.999999"), oa.scope
+            key=lambda oa: (
+                f"{sorting_keys.get(f'{oa.interface}.{oa.attr}', '999999.999999')}.{oa.scope}"
             ),
         )
 

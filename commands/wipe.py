@@ -94,9 +94,7 @@ class Command(BaseCommand):
         m = args[0].replace("-", "_")
         connect()
         if m not in self.models:
-            raise CommandError(
-                "Invalid model '{}'. Valid models are: {}".format(m, ", ".join(self.models))
-            )
+            raise CommandError(f"Invalid model '{m}'. Valid models are: {', '.join(self.models)}")
         objects = []
         getter = getattr(self, f"get_{m}")
         wiper = getattr(self, f"wipe_{m}")

@@ -30,7 +30,7 @@ def do_var(parser, token):
     tag, name, vartype = t[:3]
     if vartype not in VARTYPES:
         raise template.TemplateSyntaxError(
-            "Invalid var type '{}'. Acceptable types are: {}".format(vartype, ", ".join(VARTYPES))
+            f"Invalid var type '{vartype}'. Acceptable types are: {', '.join(VARTYPES)}"
         )
     return VarNode(name, vartype)
 

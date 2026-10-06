@@ -68,7 +68,7 @@ class Script(BaseScript):
             if "(c)" in ifname:
                 continue
             iface = {"local_interface": ifname, "neighbors": []}
-            if_range = "{}-{}".format(ifname[3:], ifname.split("/")[2])
+            if_range = f"{ifname[3:]}-{ifname.split('/')[2]}"
             if not has_if_range:
                 try:
                     v = self.cli(f"show lldp neighbors interface {ifname}")

@@ -592,7 +592,7 @@ class DiscoveryCheck:
         :type msg: str
         """
         if changes:
-            self.logger.info("{}: {}".format(msg, ", ".join(f"{k} = {v}" for k, v in changes)))
+            self.logger.info(f"{msg}: {', '.join(f'{k} = {v}' for k, v in changes)}")
 
     def get_interface_by_name(self, name, mo=None):
         """
@@ -758,7 +758,7 @@ class DiscoveryCheck:
             return
         keys = [f"mo-neighbors-{x}-{obj.id}" for x in obj.segment.profile.get_topology_methods()]
         if keys:
-            self.logger.info("Invalidating neighor cache: {}".format(", ".join(keys)))
+            self.logger.info(f"Invalidating neighor cache: {', '.join(keys)}")
             cache.delete_many(keys, TopologyDiscoveryCheck.NEIGHBOR_CACHE_VERSION)
 
     def get_confdb(self):

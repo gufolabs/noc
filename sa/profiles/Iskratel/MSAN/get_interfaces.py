@@ -68,7 +68,7 @@ class Script(BaseScript):
     def get_switchport_cli(self):
         result = defaultdict(lambda: {"tagged_vlans": [], "untagged_vlan": None})
         for v in self.scripts.get_vlans():
-            c = self.cli("show vlan {}".format(v["vlan_id"]))
+            c = self.cli(f"show vlan {v['vlan_id']}")
             for match in self.rx_vlan1.finditer(c):
                 ifname = match.group("port")
                 if match.group("type") == "Untagged":
@@ -166,7 +166,7 @@ class Script(BaseScript):
                 match1 = self.rx_port1.search(p["port"])
                 if p["port"] == ifname or (match1 and match1.group("port") == ifname):
                     s = {
-                        "name": "{}-{}.{}".format(p["port"], p["vpi"], p["vci"]),
+                        "name": f"{p['port']}-{p['vpi']}.{p['vci']}",
                         "admin_status": match.group("admin_status") == "Enable",
                         "oper_status": match.group("oper_status") == "Enable",
                         "vpi": p["vpi"],

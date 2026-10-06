@@ -267,7 +267,7 @@ class Script(BaseScript):
         v = self.cli("display interface")
         rx = self.find_re([self.rx_if1, self.rx_if2], v)
         for match in rx.finditer(v):
-            ifname = "{}{}".format(match.group("ifname"), match.group("ifnum"))
+            ifname = f"{match.group('ifname')}{match.group('ifnum')}"
             iftype = self.profile.get_interface_type(ifname)
             interfaces[ifname] = {"name": ifname, "type": iftype, "subinterfaces": []}
             sub = {"name": ifname, "mtu": int(match.group("mtu"))}

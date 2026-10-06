@@ -176,9 +176,7 @@ class ReportTTSystemStatApplication(SimpleReport):
 
             r += [
                 SectionRow(
-                    name="Report from {} to {}".format(
-                        from_date.strftime("%d.%m.%Y %H:%M"), to_date.strftime("%d.%m.%Y %H:%M")
-                    )
+                    name=f"Report from {from_date.strftime('%d.%m.%Y %H:%M')} to {to_date.strftime('%d.%m.%Y %H:%M')}"
                 )
             ]
             for line in sorted(tt_s, key=lambda x: x[0]):

@@ -72,7 +72,7 @@ class Migration(BaseMigration):
                 o = {
                     "timestamp": timestamp,
                     "user": user_cache[user_id],
-                    "model_id": "{}.{}".format(db_table.split("_")[0], model),
+                    "model_id": f"{db_table.split('_')[0]}.{model}",
                     "op": op,
                     "expires": timestamp + delta,
                 }

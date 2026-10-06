@@ -149,9 +149,7 @@ class Command(BaseCommand):
             yield from range(len(bulk))
 
         if not datastream:
-            self.die(
-                "--datastream is not set. Set one from list: {}".format(", ".join(self.MODELS))
-            )
+            self.die(f"--datastream is not set. Set one from list: {', '.join(self.MODELS)}")
         if datastream in self.OLD_MAP:
             datastream = self.OLD_MAP[datastream]
         model = self.get_model(datastream)
@@ -193,9 +191,7 @@ class Command(BaseCommand):
 
     def handle_get(self, datastream, objects, filter, *args, **kwargs):
         if not datastream:
-            self.die(
-                "--datastream is not set. Set one from list: {}".format(", ".join(self.MODELS))
-            )
+            self.die(f"--datastream is not set. Set one from list: {', '.join(self.MODELS)}")
         connect()
         if datastream in self.OLD_MAP:
             datastream = self.OLD_MAP[datastream]
@@ -205,7 +201,7 @@ class Command(BaseCommand):
         filter = filter or []
         filters = filter[:]
         if objects:
-            filters += ["id({})".format(",".join(objects))]
+            filters += [f"id({','.join(objects)})"]
         for obj_id, change_id, data in ds.iter_data(filters=filters):
             gt = change_id.generation_time.strftime("%Y-%m-%d %H:%M:%S")
             self.print(f"===[id: {obj_id}, change id: {change_id}, time: {gt}]================")
@@ -214,9 +210,7 @@ class Command(BaseCommand):
 
     def handle_clean(self, datastream, *args, **options):
         if datastream not in self.MODELS:
-            self.die(
-                "--datastream is not set. Set one from list: {}".format(", ".join(self.MODELS))
-            )
+            self.die(f"--datastream is not set. Set one from list: {', '.join(self.MODELS)}")
         connect()
         ttl = getattr(config.datastream, f"{datastream}_ttl", 0)
         if ttl:

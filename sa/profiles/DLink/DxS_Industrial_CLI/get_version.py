@@ -36,7 +36,7 @@ class Script(BaseScript):
                 "HW version": match.group("hardware"),
             },
         }
-        v = self.cli("show unit {} | include ok".format(match.group("unit")), cached=True)
+        v = self.cli(f"show unit {match.group('unit')} | include ok", cached=True)
         match = self.rx_serial.search(v)
         if match:
             r["attributes"]["Serial Number"] = match.group("serial")

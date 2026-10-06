@@ -189,9 +189,8 @@ class Script(BaseScript):
                 iface["priority"] = match.group("priority")
                 match = self.rx_rstp_designated.search(p1)
                 iface.update(match.groupdict())
-                iface["designated_port_id"] = "{:004X}.{}".format(
-                    int(iface["designated_bridge_priority"]),
-                    iface["designated_bridge_id"][-4:],
+                iface["designated_port_id"] = (
+                    f"{int(iface['designated_bridge_priority']):004X}.{iface['designated_bridge_id'][-4:]}"
                 )
                 if "The port is a non-edge port" in p1:
                     iface["edge"] = False

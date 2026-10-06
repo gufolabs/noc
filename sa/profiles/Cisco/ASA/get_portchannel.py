@@ -57,7 +57,7 @@ class Script(BaseScript):
 
             r += [
                 {
-                    "interface": "Po {}".format(interface["Group"]),
+                    "interface": f"Po {interface['Group']}",
                     "members": members,
                     "type": "L",  # <!> TODO: port-channel type detection
                 }

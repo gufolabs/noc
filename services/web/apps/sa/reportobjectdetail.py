@@ -472,7 +472,7 @@ class ReportObjectDetailApplication(ExtApplication):
             icount += 1
             # r.append(x)
         self.logger.debug("[%s|reportobjectdetail] End mail loop", request.user)
-        filename = "mo_detail_report_{}".format(datetime.datetime.now().strftime("%Y%m%d"))
+        filename = f"mo_detail_report_{datetime.datetime.now().strftime('%Y%m%d')}"
         if o_format == "csv":
             response = HttpResponse(content_type="text/csv")
             response["Content-Disposition"] = f'attachment; filename="{filename}.csv"'

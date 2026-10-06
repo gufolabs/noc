@@ -41,16 +41,12 @@ class Histogram:
         for label, metric in zip(self.labels, self.metrics):
             yield f"# TYPE {bucket_name} untyped"
             all_labels = [*ext_labels, f'le="{label}"']
-            yield "{}{{{}}} {}".format(bucket_name, ",".join(all_labels), metric.value)
+            yield f"{bucket_name}{{{','.join(all_labels)}}} {metric.value}"
         # Yield _sum
         sum_name = f"{name}_sum"
         yield f"# TYPE {sum_name} untyped"
-        yield "{}{{{}}} {}".format(
-            sum_name,
-            ",".join(ext_labels),
-            float(self.total_sum.value) / self.scale,
-        )
+        yield f"{sum_name}{{{','.join(ext_labels)}}} {float(self.total_sum.value) / self.scale}"
         # Yield _count
         count_name = f"{name}_count"
         yield f"# TYPE {count_name} untyped"
-        yield "{}{{{}}} {}".format(count_name, ",".join(ext_labels), self.total_count.value)
+        yield f"{count_name}{{{','.join(ext_labels)}}} {self.total_count.value}"

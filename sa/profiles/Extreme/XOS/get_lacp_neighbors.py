@@ -44,7 +44,7 @@ class Script(BaseScript):
         for lag in lags_table:
             if not lag["Lag "]:
                 continue
-            v = self.cli("show lacp lag {}".format(lag["Lag "][0]))
+            v = self.cli(f"show lacp lag {lag['Lag '][0]}")
             info = self.profile.parse_table_struct(
                 v.split("Port list:")[0],
                 header_start="Lag",

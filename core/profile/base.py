@@ -682,7 +682,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         match = self.rx_cisco_interface_name.match(s)
         if not match:
             raise InterfaceTypeError(f"Invalid interface '{s}'")
-        return "{} {}".format(match.group("type").capitalize(), match.group("number"))
+        return f"{match.group('type').capitalize()} {match.group('number')}"
 
     def root_interface(self, name):
         """

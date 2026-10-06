@@ -449,7 +449,7 @@ class Model(metaclass=ModelBase):
             alias = f.get("alias", default_alias)
             if not f.get("hide"):
                 aliases += [alias]
-                fields_x += ["{} AS {}".format(to_sql(f["expr"], cls), escape_field(alias))]
+                fields_x += [f"{to_sql(f['expr'], cls)} AS {escape_field(alias)}"]
             if "group" in f:
                 group_by[int(f["group"])] = alias
             if "order" in f:
@@ -461,7 +461,7 @@ class Model(metaclass=ModelBase):
             # Access denied
             r = []
             dt = 0.0
-            sql = ["SELECT {} FROM {} WHERE 0 = 1".format(", ".join(fields_x), cls._get_db_table())]
+            sql = [f"SELECT {', '.join(fields_x)} FROM {cls._get_db_table()} WHERE 0 = 1"]
         else:
             # Get where expressions
             filter_x = to_sql(transformed_query.get("filter", {}))
@@ -477,13 +477,13 @@ class Model(metaclass=ModelBase):
                 sql += [f"WHERE {filter_x}"]
             # GROUP BY
             if group_by:
-                sql += ["GROUP BY {}".format(", ".join(group_by[v] for v in sorted(group_by)))]
+                sql += [f"GROUP BY {', '.join(group_by[v] for v in sorted(group_by))}"]
             # HAVING
             if filter_h:
                 sql += [f"HAVING {filter_h}"]
             # ORDER BY
             if order_by:
-                sql += ["ORDER BY {}".format(", ".join(order_by[v] for v in sorted(order_by)))]
+                sql += [f"ORDER BY {', '.join(order_by[v] for v in sorted(order_by))}"]
             # LIMIT
             if "limit" in query:
                 if "offset" in query:

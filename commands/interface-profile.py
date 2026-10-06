@@ -56,7 +56,7 @@ class Command(BaseCommand):
         connect()
         if "mos" not in options:
             options["mos"] = []
-        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
+        return getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
     @staticmethod
     def get_objects(exprs):

@@ -104,7 +104,7 @@ class Script(BaseScript):
             else:
                 desg_priority, desg_id = None, None
                 continue
-            port_id = "{}.{}".format(sv.get("PRIORITY"), sn.rsplit("/")[-1])
+            port_id = f"{sv.get('PRIORITY')}.{sn.rsplit('/')[-1]}"
             if sn.startswith("Trunk"):
                 # Trunk interface
                 port_id = sv.get("DESG_PORT")
@@ -144,7 +144,7 @@ class Script(BaseScript):
             for inst in self.rx_instance.finditer(v):
                 if int(inst["instance"]) == 0:
                     continue
-                r = self.cli("show spanning-tree mst {}".format(inst["instance"]))
+                r = self.cli(f"show spanning-tree mst {inst['instance']}")
                 g = self.iter_blocks(r)
                 _, cfg = next(g)
                 res["instances"] += [self.parse_instance(cfg, g)]

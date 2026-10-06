@@ -62,7 +62,7 @@ class Command(BaseCommand):
         subparsers.add_parser("show-floating")
 
     def handle(self, cmd, *args, **options):
-        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
+        return getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
     def handle_split_floating(self, profile, ids, *args, **options):
         connect()

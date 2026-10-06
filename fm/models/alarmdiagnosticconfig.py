@@ -239,7 +239,7 @@ class AlarmDiagnosticConfig(Document):
                         error_report()
                         result += [str(e)]
                 except ImportError:
-                    result += ["Invalid handler: {}".format(c["handler"])]
+                    result += [f"Invalid handler: {c['handler']}"]
         if result:
             AlarmDiagnostic.save_diagnostics(alarm, result, state)
 

@@ -543,7 +543,7 @@ class Site:
             kw = kwargs.copy()
             query = ""
             if "QUERY" in kw:
-                query = "?{}".format(urlencode(kw["QUERY"]))
+                query = f"?{urlencode(kw['QUERY'])}"
                 del kw["QUERY"]
             return reverse(url, args=args, kwargs=kw) + query
         return url

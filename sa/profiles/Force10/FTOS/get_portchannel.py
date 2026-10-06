@@ -33,7 +33,7 @@ class Script(BaseScript):
             if match:
                 r += [
                     {
-                        "interface": "Po {}".format(match.group("port")),
+                        "interface": f"Po {match.group('port')}",
                         "type": "L" if match.group("lacp") == "L" else "S",
                         "members": [match.group("interface")],
                     }

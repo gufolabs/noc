@@ -18,7 +18,7 @@ class Script(BaseScript):
         for v in self.scripts.get_vlans():
             if v["vlan_id"] == vlan_id:
                 with self.configure():
-                    self.cli("no vlan {}".format(v["vlan_id"]))
+                    self.cli(f"no vlan {v['vlan_id']}")
                 self.save_config()
                 return True
         return False

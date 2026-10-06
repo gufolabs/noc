@@ -88,9 +88,7 @@ class Script(BaseScript):
             for match in self.rx_item.finditer(v):
                 vendor, serial = "", ""
                 if match.group("name") in self.IGNORED_NAMES:
-                    self.logger.debug(
-                        "Part {} in ignored name. Skipping".format(match.group("name"))
-                    )
+                    self.logger.debug(f"Part {match.group('name')} in ignored name. Skipping")
                     continue
                 self.logger.debug(
                     "Get type: %s, %s, %s",
@@ -127,7 +125,7 @@ class Script(BaseScript):
                         if not part_no:
                             continue
                     elif type == "MOTHERBOARD":
-                        part_no = "CISCO{}-MB".format(match.group("descr")[1:5])
+                        part_no = f"CISCO{match.group('descr')[1:5]}-MB"
                     else:
                         continue
                 if serial in self.IGNORED_SERIAL:

@@ -85,7 +85,7 @@ class Script(GetMetricsScript):
         for s in ifaces:
             if "bss" not in s:
                 continue
-            v = self.cli("get bss {} detail".format(s["bss"]))
+            v = self.cli(f"get bss {s['bss']} detail")
             for block in v.split("\n\n"):
                 data = dict(
                     line.split(None, 1)
@@ -140,7 +140,7 @@ class Script(GetMetricsScript):
                 if ssid.startswith("2a2d"):
                     # 2a2d - hex string
                     ssid = codecs.decode(ssid, "hex").decode()
-                iface = "{}.{}".format(data["name"], ssid)
+                iface = f"{data['name']}.{ssid}"
             else:
                 iface = data["name"]
             # for field, metric in iface_metric_map.items():

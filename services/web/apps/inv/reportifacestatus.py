@@ -244,10 +244,7 @@ class ReportInterfaceStatusApplication(ExtApplication):
                         [
                             mo[i["managed_object"]]["name"],
                             mo[i["managed_object"]]["address"],
-                            "{} {}".format(
-                                smart_text(mo[i["managed_object"]]["vendor"]),
-                                smart_text(mo[i["managed_object"]]["platform"]),
-                            ),
+                            f"{smart_text(mo[i['managed_object']]['vendor'])} {smart_text(mo[i['managed_object']]['platform'])}",
                             smart_text(mo[i["managed_object"]]["version"]),
                             i["name"],
                             if_p[i["profile"]]["name"],
@@ -267,7 +264,7 @@ class ReportInterfaceStatusApplication(ExtApplication):
                 )
             ]
 
-        filename = "interface_status_report_{}".format(datetime.datetime.now().strftime("%Y%m%d"))
+        filename = f"interface_status_report_{datetime.datetime.now().strftime('%Y%m%d')}"
         if o_format == "csv":
             response = HttpResponse(content_type="text/csv")
             response["Content-Disposition"] = f'attachment; filename="{filename}.csv"'

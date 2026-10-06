@@ -100,21 +100,14 @@ class Script(BaseScript):
                         ssid_broadcast = "enable"
                     else:
                         ssid_broadcast = "disable"
-                    vname = "{}.{}".format(name, i[1]["ssid"])
+                    vname = f"{name}.{i[1]['ssid']}"
                     iface = {
                         "type": "physical",
                         "name": vname,
                         "admin_status": admin_status,
                         "oper_status": oper_status,
                         "snmp_ifindex": ifindex,
-                        "description": "ssid_broadcast={}, ieee_mode={}, channel={},"
-                        "freq={}GHz, channelbandwidth={}MHz".format(
-                            ssid_broadcast,
-                            i[1]["ieee_mode"],
-                            i[1]["channel"],
-                            i[1]["freq"],
-                            i[1]["channelbandwidth"],
-                        ),
+                        "description": f"ssid_broadcast={ssid_broadcast}, ieee_mode={i[1]['ieee_mode']}, channel={i[1]['channel']},freq={i[1]['freq']}GHz, channelbandwidth={i[1]['channelbandwidth']}MHz",
                         "subinterfaces": [
                             {
                                 "name": vname,
@@ -150,7 +143,7 @@ class Script(BaseScript):
                 res = s.split(":")[1].strip().replace('"', "")
                 resv = v.split(":")[1].strip().replace('"', "")
                 ssid_broadcast = a.split(":")[1].strip()
-                ieee_mode = "IEEE 802.{}".format(i.split(":")[1].strip())
+                ieee_mode = f"IEEE 802.{i.split(':')[1].strip()}"
                 channel = c.split(":")[1].strip()
                 freq = f.split(":")[1].strip()
                 ssid[ra] = {
@@ -214,17 +207,15 @@ class Script(BaseScript):
                         o_status = False  # Do not touch !!!
                     iface = {
                         "type": "physical",
-                        "name": "{}.{}".format(ifname, ri["ssid"]),
+                        "name": f"{ifname}.{ri['ssid']}",
                         "admin_status": a_status,
                         "oper_status": o_status,
                         "mac": MAC(mac),
                         "snmp_ifindex": match.group("ifindex"),
-                        "description": "ssid_broadcast={}, ieee_mode={}, channel={}, freq={}GHz".format(
-                            ssid_broadcast, ri["ieee_mode"], ri["channel"], ri["freq"]
-                        ),
+                        "description": f"ssid_broadcast={ssid_broadcast}, ieee_mode={ri['ieee_mode']}, channel={ri['channel']}, freq={ri['freq']}GHz",
                         "subinterfaces": [
                             {
-                                "name": "{}.{}".format(ifname, ri["ssid"]),
+                                "name": f"{ifname}.{ri['ssid']}",
                                 "enabled_afi": ["BRIDGE"],
                                 "admin_status": a_status,
                                 "oper_status": o_status,

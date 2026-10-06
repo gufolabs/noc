@@ -113,7 +113,7 @@ class Script(BaseScript):
                     ]
             except self.CLISyntaxError:
                 for vlan in self.scripts.get_vlans():
-                    v = self.cli("lcman svlan show {}".format(vlan["vlan_id"]))
+                    v = self.cli(f"lcman svlan show {vlan['vlan_id']}")
                     match = self.rx_vlan1.search(v)
                     vlans += [
                         {
@@ -222,7 +222,7 @@ class Script(BaseScript):
                     if port_show:
                         ifname = match.group("sub")
                     else:
-                        ifname = "{}/{}".format(i, match.group("sub"))
+                        ifname = f"{i}/{match.group('sub')}"
                     for iface in interfaces:
                         if iface["name"] == ifname:
                             if match.group("pvid") == "-":
@@ -231,7 +231,7 @@ class Script(BaseScript):
                                 pvid = int(match.group("pvid"))
                             iface["subinterfaces"] += [
                                 {
-                                    "name": "{}.{}".format(ifname, match.group("pvid")),
+                                    "name": f"{ifname}.{match.group('pvid')}",
                                     "admin_status": iface["admin_status"],
                                     "enabled_afi": ["BRIDGE", "ATM"],
                                     "vlan_ids": pvid,
@@ -258,8 +258,8 @@ class Script(BaseScript):
                     vlans += [
                         {
                             "vid": int(match.group("vlan_id")),
-                            "ports": "{}{}".format(match.group("ports"), match.group("eports")),
-                            "mode": "{}{}".format(match.group("mode"), match.group("emode")),
+                            "ports": f"{match.group('ports')}{match.group('eports')}",
+                            "mode": f"{match.group('mode')}{match.group('emode')}",
                         }
                     ]
                 port_num = 0

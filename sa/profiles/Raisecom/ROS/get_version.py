@@ -180,7 +180,7 @@ class Script(BaseScript):
             vendor = "Qtech"
         r = self.parse_version(v)
         if vendor == "Rotek" and "compiled" in r:
-            r["version"] = "{} ({})".format(r["version"], r["compiled"].strip())
+            r["version"] = f"{r['version']} ({r['compiled'].strip()})"
         return {
             "vendor": vendor,
             "platform": r["platform"],

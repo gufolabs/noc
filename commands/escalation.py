@@ -142,9 +142,7 @@ class Command(BaseCommand):
             c = c.parent
             adm_domains.insert(0, c)
         self.print(
-            "Adm. Dom.: {} ({})".format(
-                " | ".join(c.name for c in adm_domains), " | ".join(str(c.id) for c in adm_domains)
-            )
+            f"Adm. Dom.: {' | '.join(c.name for c in adm_domains)} ({' | '.join(str(c.id) for c in adm_domains)})"
         )
         escalations = list(
             AlarmEscalation.objects.filter(alarm_classes__alarm_class=alarm.alarm_class.id)

@@ -441,9 +441,7 @@ class Collection:
                 for u in self.partial_errors:
                     self.stdout.write(f"[{self.name}|{u}] Error: {self.partial_errors[u]}\n")
                 raise ValueError(
-                    "[{}] Cannot resolve references for {}".format(
-                        self.name, ", ".join(self.partial_errors)
-                    )
+                    f"[{self.name}] Cannot resolve references for {', '.join(self.partial_errors)}"
                 )
         # Deleted items
         for u in current_uuids - new_uuids:

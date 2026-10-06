@@ -53,7 +53,7 @@ class PatternSet:
         try:
             re.compile(data["message_rx"])
         except re.error as e:
-            logger.error("Invalid ignore pattern '{}' ({})".format(data["message_rx"], e))
+            logger.error(f"Invalid ignore pattern '{data['message_rx']}' ({e})")
             return
         update = False
         for p in self.i_patterns.get(source) or []:

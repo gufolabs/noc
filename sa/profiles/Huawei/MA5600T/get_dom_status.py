@@ -26,7 +26,7 @@ class Script(BaseScript):
             _, boards = self.profile.get_board(self)
             for board in boards:
                 if board["type"] == "GPON" and board["status"] == "Normal":
-                    interfaces += ["0/{}/0".format(board["num"])]
+                    interfaces += [f"0/{board['num']}/0"]
         r = []
         for iface in interfaces:
             self.cli("config")
@@ -43,7 +43,7 @@ class Script(BaseScript):
                 if not port:
                     continue
                 if port["Port state"] == "Offline":
-                    self.logger.info("Port {} is offline mode".format(port["Port state"]))
+                    self.logger.info(f"Port {port['Port state']} is offline mode")
                     continue
                 r += [
                     {

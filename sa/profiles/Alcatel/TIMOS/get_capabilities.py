@@ -54,7 +54,7 @@ class Script(BaseScript):
         Check box has oam enabled
         """
         for match in self.rx_port.finditer(self.cli("show port")):
-            cmd = self.cli("show port {} ethernet efm-oam".format(match.group("port")))
+            cmd = self.cli(f"show port {match.group('port')} ethernet efm-oam")
             match1 = self.rx_oam.search(cmd)
             if match1:
                 return True

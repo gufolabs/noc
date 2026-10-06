@@ -158,7 +158,7 @@ class ModelInterface(Document):
         r = [
             "{",
             f'    "name": "{q(self.name)}",',
-            '    "$collection": "{}",'.format(self._meta["json_collection"]),
+            f'    "$collection": "{self._meta["json_collection"]}",',
             f'    "uuid": "{self.uuid!s}",',
             f'    "description": "{q(self.description)}",',
             '    "attrs": [',

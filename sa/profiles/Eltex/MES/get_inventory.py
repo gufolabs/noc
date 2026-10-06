@@ -150,10 +150,10 @@ class Script(BaseScript):
         if not match:  # in some rare cases switch do not show any transceiver information
             r = {"type": "XCVR", "vendor": "OEM"}
             if ifname.startswith("gi"):
-                r["number"] = "gi{}".format(ifname.split("/")[-1])
+                r["number"] = f"gi{ifname.split('/')[-1]}"
                 r["part_no"] = "NoName | Transceiver | 1G | SFP"
             if ifname.startswith("te"):
-                r["number"] = "te{}".format(ifname.split("/")[-1])
+                r["number"] = f"te{ifname.split('/')[-1]}"
                 r["part_no"] = "NoName | Transceiver | Unknown SFP"  # impossible ?
             return r
         r = {"type": "XCVR", "vendor": match.group("vendor")}
@@ -162,9 +162,9 @@ class Script(BaseScript):
         if match.group("revision"):
             r["revision"] = match.group("revision")
         if ifname.startswith("gi"):
-            r["number"] = "gi{}".format(ifname.split("/")[-1])
+            r["number"] = f"gi{ifname.split('/')[-1]}"
         if ifname.startswith("te"):
-            r["number"] = "te{}".format(ifname.split("/")[-1])
+            r["number"] = f"te{ifname.split('/')[-1]}"
         if match.group("part_no"):
             part_no = match.group("part_no")
         else:

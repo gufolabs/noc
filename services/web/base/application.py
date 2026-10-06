@@ -425,7 +425,7 @@ class Application(metaclass=ApplicationBase):
                 if isinstance(c["access"], HasPerm):
                     p.add(c["access"].get_permission(self))
                 elif isinstance(c["access"], str):
-                    p.add("{}:{}".format(prefix, c["access"]))
+                    p.add(f"{prefix}:{c['access']}")
         # extra_permissions
         if callable(self.extra_permissions):
             extra = self.extra_permissions()

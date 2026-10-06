@@ -60,7 +60,7 @@ class EventClassificationRuleApplication(ExtDocApplication):
                     data["profile"] = event.managed_object.profile.name
                     data["source"] = event.source
                 else:
-                    errors += ["Event not found: {}".format(q["data"])]
+                    errors += [f"Event not found: {q['data']}"]
             else:
                 # Decode json
                 try:
@@ -97,17 +97,11 @@ class EventClassificationRuleApplication(ExtDocApplication):
                     try:
                         k = re.compile(p["key_re"])
                     except re.error as why:
-                        errors += [
-                            "Invalid key regular expression <<<{}>>>: {}".format(p["key_re"], why)
-                        ]
+                        errors += [f"Invalid key regular expression <<<{p['key_re']}>>>: {why}"]
                     try:
                         v = re.compile(p["value_re"])
                     except re.error as why:
-                        errors += [
-                            "Invalid value regular expression <<<{}>>>: {}".format(
-                                p["value_re"], why
-                            )
-                        ]
+                        errors += [f"Invalid value regular expression <<<{p['value_re']}>>>: {why}"]
                     if k and v:
                         patterns += [(k, v)]
         # Try to match rule
@@ -173,7 +167,7 @@ class EventClassificationRuleApplication(ExtDocApplication):
                     try:
                         vars[v["name"]] = eval(v["value"][1:], {}, vars)
                     except Exception as why:
-                        errors += ["Error when evaluating '{}': {}".format(v["name"], why)]
+                        errors += [f"Error when evaluating '{v['name']}': {why}"]
                 else:
                     vars[v["name"]] = v["value"]
         # Check required variables

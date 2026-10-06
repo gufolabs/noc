@@ -39,7 +39,7 @@ class OP:
         if self.join:
             r = self.join.join(r)
         elif self.function:
-            r = "{}({})".format(self.function, ", ".join(r))
+            r = f"{self.function}({', '.join(r)})"
         else:
             r = r[0]
         if self.prefix:
@@ -81,8 +81,8 @@ def in_lookup(seq, model=None):
             m += [int(item)]
             continue
     if len(seq[1]) == 1:
-        return "{}{} IN {}".format(seq[0]["$field"], s3, m[0])
-    return "{}{} IN {}".format(seq[0]["$field"], s3, tuple(m))
+        return f"{seq[0]['$field']}{s3} IN {m[0]}"
+    return f"{seq[0]['$field']}{s3} IN {tuple(m)}"
 
 
 def f_ternary_if(seq, model=None):
@@ -117,12 +117,7 @@ def f_duration(seq, model=None):
     $duration (dict, field)
     :return:
     """
-    return (
-        "SUM(arraySum(i -> ((i[2] > close_ts ? close_ts: i[2]) - (ts > i[1] ? ts: i[1]) < 0) ? 0 :"
-        " ((i[2] > close_ts ? close_ts: i[2]) - (ts > i[1] ? ts: i[1])), [{}]))".format(
-            ",".join(seq)
-        )
-    )
+    return f"SUM(arraySum(i -> ((i[2] > close_ts ? close_ts: i[2]) - (ts > i[1] ? ts: i[1]) < 0) ? 0 : ((i[2] > close_ts ? close_ts: i[2]) - (ts > i[1] ? ts: i[1])), [{','.join(seq)}]))"
 
 
 def f_selector(seq, model=None):
@@ -138,7 +133,7 @@ def f_selector(seq, model=None):
         raise ValueError("Non-selectable model")
     ids = model.get_bi_selector(query)
     if ids:
-        return "({} IN ({}))".format(to_sql(expr), ",".join(str(i) for i in ids))
+        return f"({to_sql(expr)} IN ({','.join(str(i) for i in ids)}))"
     return "(0 = 1)"
 
 
@@ -156,13 +151,13 @@ def resolve_format(seq, model=None):
 def f_any(seq, model=None):
     if not isinstance(seq[1], list):
         seq[1] = [seq[1]]
-    return "hasAny({}, {})".format(seq[0]["$field"], [str(x) for x in seq[1]])
+    return f"hasAny({seq[0]['$field']}, {[str(x) for x in seq[1]]})"
 
 
 def f_all(seq, model=None):
     if not isinstance(seq[1], list):
         seq[1] = [seq[1]]
-    return "hasAll({}, {})".format(seq[0]["$field"], [str(x) for x in seq[1]])
+    return f"hasAll({seq[0]['$field']}, {[str(x) for x in seq[1]]})"
 
 
 OP_MAP = {

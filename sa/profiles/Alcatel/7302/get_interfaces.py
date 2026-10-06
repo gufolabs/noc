@@ -396,7 +396,7 @@ class Script(BaseScript):
                 continue
             ifname = "%d/%d/%d/%d" % port_id
             if "prefix" in self.PROCCESSED_TYPE[iftype]:
-                ifname = "{}:{}".format(self.PROCCESSED_TYPE[iftype]["prefix"], ifname)
+                ifname = f"{self.PROCCESSED_TYPE[iftype]['prefix']}:{ifname}"
             if iftype in {6, 24}:
                 # Ethernet ifaces
                 hints = []

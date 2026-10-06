@@ -126,7 +126,7 @@ class Script(BaseScript):
                     "vendor": "ALU",
                     "part_no": [match.group("name")],
                 }
-                c = self.cli("show mda {}/{} detail".format(match.group("slot"), number))
+                c = self.cli(f"show mda {match.group('slot')}/{number} detail")
                 match1 = self.rx_hw.search(c)
                 if match1:
                     p["part_no"] = match1.group("part_no")

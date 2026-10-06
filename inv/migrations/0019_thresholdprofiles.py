@@ -43,9 +43,8 @@ class Migration(BaseMigration):
                     tp = {"_id": tp_id}
                 # Fill profile
                 tp["name"] = "ip-%05d-%03d" % (next(current), n)
-                tp["description"] = "Migrated for interface profile '{}' metric '{}'".format(
-                    doc["name"],
-                    metric["metric_type"],
+                tp["description"] = (
+                    f"Migrated for interface profile '{doc['name']}' metric '{metric['metric_type']}'"
                 )
                 tp["window_type"] = metric.get("window_type")
                 tp["window"] = metric.get("window")

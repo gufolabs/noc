@@ -46,12 +46,8 @@ class PrefixAccess(NOCModel):
             perms += ["View"]
         if self.can_change:
             perms += ["Change"]
-        return "{}: {}({}): {}: {}".format(
-            self.user.username,
-            self.vrf.name,
-            self.afi,
-            self.prefix,
-            ", ".join(perms),
+        return (
+            f"{self.user.username}: {self.vrf.name}({self.afi}): {self.prefix}: {', '.join(perms)}"
         )
 
     def clean(self):

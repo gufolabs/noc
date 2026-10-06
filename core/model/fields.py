@@ -112,7 +112,7 @@ class TextArrayField(models.Field):
             r = []
             for v in self.default:
                 r += ['"{}"'.format(v.replace("\\", "\\\\").replace('"', '""'))]
-            return "{{{}}}".format(",".join(r))
+            return f"{{{','.join(r)}}}"
         return ""
 
 
@@ -204,9 +204,7 @@ class TagsContainsLookup(models.Lookup):
             t = adapt(t.strip())
             t.encoding = "utf8"
             tags += [smart_text(t).strip()]
-        return "(ARRAY[{}] <@ {})".format(
-            ",".join(tags), self.lhs.as_sql(compiler, connection)[0]
-        ), []
+        return f"(ARRAY[{','.join(tags)}] <@ {self.lhs.as_sql(compiler, connection)[0]})", []
 
 
 class DocumentReferenceDescriptor:

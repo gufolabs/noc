@@ -32,7 +32,7 @@ class PrefixLoggerAdapter:
 
     def set_prefix(self, prefix):
         if prefix:
-            self.prefix = "[{}] ".format(str(prefix).replace("][", "|").replace("] [", "|"))
+            self.prefix = f"[{str(prefix).replace('][', '|').replace('] [', '|')}] "
         else:
             self.prefix = ""
 

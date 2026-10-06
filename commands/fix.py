@@ -35,11 +35,7 @@ class Command(BaseCommand):
             files = os.listdir(d)
             if "__init__.py" not in files:
                 print(
-                    "WARNING: {} is missed. "
-                    "Create empty file "
-                    "or all fixes from {} will be ignored".format(
-                        os.path.join(d, "__init__.py"), d
-                    ),
+                    f"WARNING: {os.path.join(d, '__init__.py')} is missed. Create empty file or all fixes from {d} will be ignored",
                     file=self.stdout,
                 )
                 continue
@@ -52,7 +48,7 @@ class Command(BaseCommand):
     def get_fix(self, name):
         for d in self.FIX_DIRS:
             if os.path.isfile(os.path.join(d, f"{name}.py")):
-                return get_handler("noc.{}.{}.fix".format(d.replace(os.sep, "."), name))
+                return get_handler(f"noc.{d.replace(os.sep, '.')}.{name}.fix")
         return None
 
     def handle_apply(self, fixes=None, *args, **options):

@@ -226,7 +226,7 @@ class DNSZoneDataStream(DataStream):
             """
             x = a.split(".")
             x.reverse()
-            return "{}.in-addr.arpa".format(".".join(x))
+            return f"{'.'.join(x)}.in-addr.arpa"
 
         length = len(zone.name) + 1
         for a in Address.objects.filter(afi="4").extra(

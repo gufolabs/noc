@@ -92,7 +92,7 @@ class Script(BaseScript):
             else:
                 vlans = [{"vlan_id": vlan}]
             for v in vlans:
-                macs = self.cli("show mac-addr-table vlan {}".format(v["vlan_id"]))
+                macs = self.cli(f"show mac-addr-table vlan {v['vlan_id']}")
                 for match in self.rx_line4.finditer(macs):
                     if match.group("type") == "Learned":
                         mtype = "D"

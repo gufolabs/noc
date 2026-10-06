@@ -324,7 +324,7 @@ class Command(BaseCommand):
             # Delete last \\n symbol and add command
             commands.add(span.in_label[:-1].decode("string_escape").strip())
         # Update specs
-        s_name = "cli_{}".format(script.name.rsplit(".", 1)[-1])
+        s_name = f"cli_{script.name.rsplit('.', 1)[-1]}"
         names = set()
         for ans in spec.answers:
             if (ans.name == s_name or ans.name.startswith(s_name + ".")) and ans.type == "cli":

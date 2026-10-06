@@ -135,7 +135,7 @@ class Command(BaseCommand):
         # Try to dereference job
         job_args = scheduler.get_collection().find_one({Job.ATTR_CLASS: jcls, Job.ATTR_KEY: mo.id})
         if job_args:
-            self.print("Job ID: {}".format(job_args["_id"]))
+            self.print(f"Job ID: {job_args['_id']}")
         else:
             job_args = {Job.ATTR_ID: "fakeid", Job.ATTR_KEY: mo.id}
         job_args["_checks"] = checks

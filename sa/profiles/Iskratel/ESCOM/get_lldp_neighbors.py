@@ -68,7 +68,7 @@ class Script(BaseScript):
             match = self.rx_search.search(line)
             if not match:
                 continue
-            iface = self.cli("show lldp neighbors interface {}".format(match.group("iface")))
+            iface = self.cli(f"show lldp neighbors interface {match.group('iface')}")
             iface_match = self.rx_port2.search(iface)
             chassis_id = iface_match.group("device_id")
             if is_ipv4(chassis_id) or is_ipv6(chassis_id):

@@ -475,5 +475,5 @@ class Command(BaseCommand):
         # for c in checks:
         #     r.append(f"{c.check}:{c.port} {'OK' if c.status else 'FAIL'}")
         self.stdout.write(
-            f"{address} {rtt * 1_000:.2f}ms| {';'.join('{}:{} {}'.format(c.check, c.port or '', 'OK' if c.status else 'FAIL') for c in checks)}\n"
+            f"{address} {rtt * 1_000:.2f}ms| {';'.join(f'{c.check}:{c.port or ""} {"OK" if c.status else "FAIL"}' for c in checks)}\n"
         )

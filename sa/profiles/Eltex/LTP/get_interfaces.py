@@ -117,13 +117,13 @@ class Script(BaseScript):
                             }
                             interfaces += [iface]
             for i in interfaces:
-                c = self.cli("show interfaces mac-address {}".format(i["name"]))
+                c = self.cli(f"show interfaces mac-address {i['name']}")
                 match = self.rx_mac.search(c)
                 if match:
                     i["mac"] = match.group("mac")
                     i["subinterfaces"][0]["mac"] = match.group("mac")
                 try:
-                    c = self.cli("show interfaces status {}".format(i["name"]))
+                    c = self.cli(f"show interfaces status {i['name']}")
                     match = self.rx_status.search(c)
                     i["oper_status"] = match.group("oper_status") == "up"
                     i["subinterfaces"][0]["oper_status"] = match.group("oper_status") == "up"
@@ -133,7 +133,7 @@ class Script(BaseScript):
                     pass
         c = self.cli("show management")
         match = self.rx_mgmt.search(c)
-        ip_address = "{}/{}".format(match.group("ip"), IPv4.netmask_to_len(match.group("mask")))
+        ip_address = f"{match.group('ip')}/{IPv4.netmask_to_len(match.group('mask'))}"
         iface = {
             "name": "management",
             "type": "SVI",

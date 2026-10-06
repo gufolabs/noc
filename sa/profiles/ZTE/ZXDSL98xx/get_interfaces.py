@@ -220,7 +220,7 @@ class Script(BaseScript):
                     match1 = self.rx_pvc.search(v)
                     i["subinterfaces"] = [
                         {
-                            "name": "{}/{}".format(ifname, "1"),
+                            "name": f"{ifname}/{'1'}",
                             "enabled_afi": ["BRIDGE", "ATM"],
                             "mtu": match.group("mtu"),
                             "vlan_ids": [match.group("pvid1")],
@@ -228,7 +228,7 @@ class Script(BaseScript):
                             "vci": match1.group("vci1"),
                         },
                         {
-                            "name": "{}/{}".format(ifname, "2"),
+                            "name": f"{ifname}/{'2'}",
                             "enabled_afi": ["BRIDGE", "ATM"],
                             "mtu": match.group("mtu"),
                             "vlan_ids": [match.group("pvid2")],
@@ -236,7 +236,7 @@ class Script(BaseScript):
                             "vci": match1.group("vci2"),
                         },
                         {
-                            "name": "{}/{}".format(ifname, "3"),
+                            "name": f"{ifname}/{'3'}",
                             "enabled_afi": ["BRIDGE", "ATM"],
                             "mtu": match.group("mtu"),
                             "vlan_ids": [match.group("pvid3")],
@@ -244,7 +244,7 @@ class Script(BaseScript):
                             "vci": match1.group("vci3"),
                         },
                         {
-                            "name": "{}/{}".format(ifname, "4"),
+                            "name": f"{ifname}/{'4'}",
                             "enabled_afi": ["BRIDGE", "ATM"],
                             "mtu": match.group("mtu"),
                             "vlan_ids": [match.group("pvid4")],
@@ -252,7 +252,7 @@ class Script(BaseScript):
                             "vci": match1.group("vci4"),
                         },
                         {
-                            "name": "{}/{}".format(ifname, "5"),
+                            "name": f"{ifname}/{'5'}",
                             "enabled_afi": ["BRIDGE", "ATM"],
                             "mtu": match.group("mtu"),
                             "vlan_ids": [match.group("pvid5")],
@@ -260,7 +260,7 @@ class Script(BaseScript):
                             "vci": match1.group("vci5"),
                         },
                         {
-                            "name": "{}/{}".format(ifname, "6"),
+                            "name": f"{ifname}/{'6'}",
                             "enabled_afi": ["BRIDGE", "ATM"],
                             "mtu": match.group("mtu"),
                             "vlan_ids": [match.group("pvid6")],
@@ -268,7 +268,7 @@ class Script(BaseScript):
                             "vci": match1.group("vci6"),
                         },
                         {
-                            "name": "{}/{}".format(ifname, "7"),
+                            "name": f"{ifname}/{'7'}",
                             "enabled_afi": ["BRIDGE", "ATM"],
                             "mtu": match.group("mtu"),
                             "vlan_ids": [match.group("pvid7")],
@@ -276,7 +276,7 @@ class Script(BaseScript):
                             "vci": match1.group("vci7"),
                         },
                         {
-                            "name": "{}/{}".format(ifname, "8"),
+                            "name": f"{ifname}/{'8'}",
                             "enabled_afi": ["BRIDGE", "ATM"],
                             "mtu": match.group("mtu"),
                             "vlan_ids": [match.group("pvid8")],
@@ -338,7 +338,7 @@ class Script(BaseScript):
                     v = self.cli(f"show atm vc {ifname}")
                     for match in self.rx_pvc_9806h.finditer(v):
                         sub = {
-                            "name": "{}/{}".format(ifname, match.group("pvcid")),
+                            "name": f"{ifname}/{match.group('pvcid')}",
                             "admin_status": True,
                             "oper_status": match.group("state") == "enable",
                             "enabled_afi": ["BRIDGE", "ATM"],

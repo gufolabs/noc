@@ -432,7 +432,7 @@ class ReportMaxMetricsmaxDetailApplication(ExtApplication):
                 if ss:
                     r += [translate_row(row2, cmap)]
 
-        filename = "metrics_detail_report_{}".format(datetime.datetime.now().strftime("%Y%m%d"))
+        filename = f"metrics_detail_report_{datetime.datetime.now().strftime('%Y%m%d')}"
         if o_format == "csv":
             response = HttpResponse(content_type="text/csv")
             response["Content-Disposition"] = f'attachment; filename="{filename}.csv"'

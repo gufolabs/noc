@@ -126,7 +126,7 @@ class Script(BaseScript):
         for match in self.rx_port.finditer(dev):
             iface += [
                 {
-                    "name": "Input {}".format(match.group("port")),
+                    "name": f"Input {match.group('port')}",
                     "admin_status": True,
                     "oper_status": True,
                     "type": "physical",

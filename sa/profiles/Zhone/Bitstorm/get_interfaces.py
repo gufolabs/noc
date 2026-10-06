@@ -85,7 +85,7 @@ class Script(BaseScript):
             iface["description"] = match.group("name").strip()
         for match in self.rx_dsl_vpi_vci.finditer(p):
             sub = match.groupdict()
-            sub["name"] = "{}/{}".format(iface["name"], sub["name"])
+            sub["name"] = f"{iface['name']}/{sub['name']}"
             sub["admin_status"] = iface["admin_status"]
             sub["enabled_afi"] = ["BRIDGE", "ATM"]
             if sub["vlan_ids"]:

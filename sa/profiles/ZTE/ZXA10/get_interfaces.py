@@ -125,7 +125,7 @@ class Script(BaseScript):
             if prefix in ["gpon-onu_", ""]:
                 continue
             for i in range(int(p["port"])):
-                port_num = "{}/{}/{}".format(p["shelf"], p["slot"], str(i + 1))
+                port_num = f"{p['shelf']}/{p['slot']}/{i + 1!s}"
                 ifname = f"{prefix}{port_num}"
                 try:
                     v = self.cli(f"show interface {ifname}")
@@ -198,7 +198,7 @@ class Script(BaseScript):
                 if prefix == "vdsl_":
                     for match in self.rx_pvc.finditer(v):
                         sub = {
-                            "name": "{}.{}".format(ifname, match.group("pvc_no")),
+                            "name": f"{ifname}.{match.group('pvc_no')}",
                             "admin_status": match.group("admin_status") == "enable",
                             # "oper_status": oper_status  # need more examples
                             "enabled_afi": ["BRIDGE", "ATM"],

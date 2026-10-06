@@ -266,7 +266,7 @@ class Script(BaseScript):
 
             for p in ports:
                 if iface["interface"] == ports[p]["interface"]:
-                    iface["port_id"] = "{}.{}".format(pri, ports[p]["port_id"])
+                    iface["port_id"] = f"{pri}.{ports[p]['port_id']}"
                     iface["edge"] = ports[p]["edge"]
                     iface["point_to_point"] = ports[p]["point_to_point"]
             try:

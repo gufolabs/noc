@@ -83,7 +83,7 @@ class Profile(BaseProfile):
             return f"Eth {s[9:].strip()}"
         match = self.rx_if_snmp_eth.match(s)
         if match:
-            return "Eth {}/{}".format(match.group("unit"), match.group("port"))
+            return f"Eth {match.group('unit')}/{match.group('port')}"
         s = s.replace("  ", " ")
         return s.replace("/ ", "/")
 

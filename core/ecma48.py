@@ -50,10 +50,10 @@ def compile_ecma_def(s: str) -> str:
                 x = [rf"\x{c1:02x}"]
             elif c1 < c2:
                 rr = [rf"\x{x:02x}" for x in range(c1, c2 + 1)]
-                x = ["[{}]".format("".join(rr))]
+                x = [f"[{''.join(rr)}]"]
             else:
                 rr = [rf"\x{x:02x}" for x in range(c2, c1 + 1)]
-                x = ["[{}]".format("".join(rr))]
+                x = [f"[{''.join(rr)}]"]
             if match.group(5):
                 x += ["*"]
             r += x

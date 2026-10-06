@@ -286,7 +286,7 @@ class Script(BaseScript):
                 interfaces += [iface]
             c = self.cli("show interface ip vlan")
             for match in self.rx_ip_beta_vlan.finditer(c):
-                ifname = "ip{}".format(match.group("ifname"))
+                ifname = f"ip{match.group('ifname')}"
                 vid = match.group("vlan_id")
                 for iface in interfaces:
                     if iface["name"] == ifname:
