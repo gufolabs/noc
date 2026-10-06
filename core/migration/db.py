@@ -40,9 +40,7 @@ class DB:
         assert len(table_name) <= self.MAX_NAME_LENGTH, "Too long table name"
         columns = [self.column_sql(table_name, field_name, field) for field_name, field in fields]
         self.execute(
-            "CREATE TABLE {} ({})".format(
-                self.quote_name(table_name), ", ".join(col for col in columns if col)
-            )
+            f"CREATE TABLE {self.quote_name(table_name)} ({', '.join(col for col in columns if col)})"
         )
         self.execute_deferred_sql()
 
@@ -109,7 +107,7 @@ class DB:
         index_unique_name = ""
 
         if len(column_names) > 1:
-            index_unique_name = "_{:x}".format(abs(hash((table_name, ",".join(column_names)))))
+            index_unique_name = f"_{abs(hash((table_name, ','.join(column_names)))):x}"
 
         # If the index name is too long, truncate it
         index_name = (
@@ -120,12 +118,7 @@ class DB:
         if len(index_name) > 63:
             part = f"_{column_names[0]}{index_unique_name}"
             index_name = f"{idx_table_name[: self.MAX_NAME_LENGTH - len(part)]}{part}"
-        sql = "CREATE {}INDEX {} ON {} ({});".format(
-            "UNIQUE " if unique else "",
-            self.quote_name(index_name),
-            self.quote_name(table_name),
-            ",".join(self.quote_name(field) for field in column_names),
-        )
+        sql = f"CREATE {'UNIQUE ' if unique else ''}INDEX {self.quote_name(index_name)} ON {self.quote_name(table_name)} ({','.join(self.quote_name(field) for field in column_names)});"
         self.execute(sql)
 
     def mock_model(

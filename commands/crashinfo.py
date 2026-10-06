@@ -69,7 +69,7 @@ class Command(BaseCommand):
                     if sl.startswith("EXCEPTION: "):
                         x = sl[11:]
                         break
-                x = self.rx_xtype.sub(lambda match: "{}: ".format(match.group("xtype")), x)
+                x = self.rx_xtype.sub(lambda match: f"{match.group('xtype')}: ", x)
                 x = smart_text(x)[:100].encode("utf-8")
                 fl += [
                     {

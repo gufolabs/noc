@@ -52,7 +52,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, cmd, *args, **options):
-        getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
+        getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
     def handle_find_serial(self, serials):
         connect()
@@ -89,7 +89,7 @@ class Command(BaseCommand):
                     yield from iter_obj(o.parent)
 
         for n, sr in enumerate(reversed(list(iter_obj(obj)))):
-            self.print("{} * {}".format("  " * n, sr))
+            self.print(f"{'  ' * n} * {sr}")
 
     def handle_export(self, objects: list[str], output: str | None = None):
         connect()

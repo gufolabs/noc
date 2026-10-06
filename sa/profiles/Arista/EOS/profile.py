@@ -32,4 +32,4 @@ class Profile(BaseProfile):
         match = self.rx_interface_name.match(s)
         if not match:
             raise InterfaceTypeError(f"Invalid interface '{s}'")
-        return "{}{}".format(match.group("type")[:2], match.group("number"))
+        return f"{match.group('type')[:2]}{match.group('number')}"

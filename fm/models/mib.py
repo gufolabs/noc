@@ -363,7 +363,7 @@ class MIB(Document):
                                 b = ["%X" % (1 << n)]
                         n += 1
                         xv >>= 1
-                    rv = "({})".format(",".join(b))
+                    rv = f"({','.join(b)})"
                 elif syntax["base_type"] == "ObjectIdentifier":
                     rv = smart_text(v)
                 else:

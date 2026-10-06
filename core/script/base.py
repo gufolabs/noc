@@ -170,7 +170,7 @@ class BaseScript(metaclass=BaseScriptMetaclass):
         self._motd = None
         name = name or self.name
         self.logger = PrefixLoggerAdapter(
-            self.base_logger, "{}] [{}".format(self.name, credentials.get("address", "-"))
+            self.base_logger, f"{self.name}] [{credentials.get('address', '-')}"
         )
         if self.parent:
             self.profile = self.parent.profile

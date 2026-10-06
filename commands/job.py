@@ -181,7 +181,7 @@ class Command(BaseCommand):
         if "infile" in options and not sys.stdin.isatty():
             for line in options["infile"]:
                 options["key"] += [int(line)]
-        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
+        return getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
     def handle_list(self, scheduler: Scheduler, *args, **options):
         q = {}

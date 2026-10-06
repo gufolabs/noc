@@ -27,6 +27,6 @@ class Script(BaseScript):
             fqdn = match.group("hostname")
             match = self.rx_domain_name.search(v)
             if match:
-                fqdn = "{}.{}".format(fqdn, match.group("domain"))
+                fqdn = f"{fqdn}.{match.group('domain')}"
             return fqdn
         return "None"

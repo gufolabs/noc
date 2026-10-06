@@ -80,4 +80,4 @@ def cut_corrupt(vcs, revs, cidx):
 
 def show_revs(revs, corrupt):
     for r in revs:
-        print("    {} {} {}".format(r.ts, r.ft, "*" if r.id in corrupt else " "))
+        print(f"    {r.ts} {r.ft} {'*' if r.id in corrupt else ' '}")

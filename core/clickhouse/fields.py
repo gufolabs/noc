@@ -402,8 +402,6 @@ class NestedField(ArrayField):
     def get_select_sql(self):
         m = [f"toString({self.name}.{f.name}[x])" for f in self.field_type._meta.ordered_fields]
         r = [
-            "arrayMap(x -> [{}], arrayEnumerate({}.{}))".format(
-                ",".join(m), self.name, self.field_type.get_pk_name()
-            )
+            f"arrayMap(x -> [{','.join(m)}], arrayEnumerate({self.name}.{self.field_type.get_pk_name()}))"
         ]
         return "".join(r)

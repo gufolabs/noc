@@ -194,9 +194,7 @@ class Script(BaseScript):
                     interfaces[instance_id] += [
                         {
                             "interface": interface,
-                            "port_id": "{}.{}".format(
-                                match.group("priority"), match.group("port_id")
-                            ),
+                            "port_id": f"{match.group('priority')}.{match.group('port_id')}",
                             "state": port_attrs["state"],
                             "role": port_attrs["role"],
                             "priority": match.group("priority"),

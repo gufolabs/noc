@@ -488,7 +488,7 @@ class Script(BaseScript):
                 vlan_id = match.group("vlan_id")
                 if vlan_id == "none":
                     continue
-                ifname = "ip{}".format(match.group("iface"))
+                ifname = f"ip{match.group('iface')}"
                 for iname in interfaces:
                     if iname == ifname:
                         interfaces[ifname]["subinterfaces"][0]["vlan_ids"] = vlan_id

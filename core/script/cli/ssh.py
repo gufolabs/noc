@@ -174,7 +174,7 @@ class SSHStream(BaseStream):
         """
         self.logger.debug("Supported authentication methods: %s", ", ".join(methods))
         for method in methods:
-            auth_handler = getattr(self, "auth_{}".format(method.replace("-", "")), None)
+            auth_handler = getattr(self, f"auth_{method.replace('-', '')}", None)
             if not auth_handler:
                 self.logger.debug("'%s' method is not supported, skipping", method)
                 continue

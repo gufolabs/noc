@@ -146,7 +146,7 @@ class VRFGroupNode(Node):
 
     def populate(self):
         if self.vrfs:
-            vid = "{{{}}}".format(",".join([str(v.id) for v in self.vrfs]))
+            vid = f"{{{','.join([str(v.id) for v in self.vrfs])}}}"
             root = Prefix.objects.get(vrf=self.vrfs[0], prefix="0.0.0.0/0")
             c = GPrefixNode(self.app, root, vid)
             self.children = c.children  # Relink

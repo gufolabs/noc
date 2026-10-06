@@ -50,7 +50,7 @@ class Command(BaseCommand):
         if options["profile"]:
             profile = Profile.get_by_name(options["profile"])
             if not profile:
-                raise CommandError("Invalid profile: {}".format(options["profile"]))
+                raise CommandError(f"Invalid profile: {options['profile']}")
         # Create output
         try:
             out = open(options["output"], "w")

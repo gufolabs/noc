@@ -47,9 +47,8 @@ class DNSZoneRecord(NOCModel):
     )
 
     def __str__(self):
-        return "{} {}".format(
-            self.zone.name,
-            " ".join([x for x in (self.name, self.type, self.content) if x]),
+        return (
+            f"{self.zone.name} {' '.join([x for x in (self.name, self.type, self.content) if x])}"
         )
 
     @classmethod

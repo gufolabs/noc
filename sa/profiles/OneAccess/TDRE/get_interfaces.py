@@ -80,7 +80,7 @@ class Script(BaseScript):
             c = self.cli(f"GET ethernet{etherswitch}/", command_submit=b"\x09")
             self.cli("")
             for i in self.rx_hw_port.finditer(c):
-                v = self.cli("GET ethernet{}/{}/".format(etherswitch, i.group("port")))
+                v = self.cli(f"GET ethernet{etherswitch}/{i.group('port')}/")
                 match = self.rx_eth_iface.search(v)
                 ifname = match.group("ifname").replace('"', "")
                 ifname = "port" + ifname[-1]

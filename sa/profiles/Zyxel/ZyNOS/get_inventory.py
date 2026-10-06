@@ -113,7 +113,7 @@ class Script(BaseScript):
                     part_no = part_no + "1G | SFP BXD"
                 else:
                     part_no = part_no + "Unknown SFP"
-            description = "{} ({})".format(match.group("type"), vendor)
+            description = f"{match.group('type')} ({vendor})"
             if part_no_orig:
                 description = f"{description} (p/n: {part_no_orig})"
             o = {

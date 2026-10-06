@@ -139,7 +139,7 @@ class Profile(BaseProfile):
         if il.startswith("cable"):
             match = self.rx_cable_if.search(interface)
             if match:
-                return "Ca {}/{}".format(match.group("pr_if"), match.group("sub_if"))
+                return f"Ca {match.group('pr_if')}/{match.group('sub_if')}"
         # StackSub, Stack
         if il.startswith("stack"):
             return il

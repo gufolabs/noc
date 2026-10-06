@@ -73,7 +73,7 @@ class Script(BaseScript):
                 i["description"] = descr
                 sub["description"] = descr
             if i["type"] == "physical":
-                if_range = "{}-{}".format(ifname[3:], ifname.split("/")[2])
+                if_range = f"{ifname[3:]}-{ifname.split('/')[2]}"
                 if not has_if_range:
                     try:
                         v1 = self.cli(f"show lldp interface {ifname} | include Admin Status")

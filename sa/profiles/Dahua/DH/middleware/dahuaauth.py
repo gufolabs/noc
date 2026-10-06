@@ -48,16 +48,12 @@ class DahuaAuthMiddeware(BaseMiddleware):
             return codecs.encode(f"{self.user}:{self.password}", "base64")
         if params["encryption"] == "Default":
             A1 = (
-                hashlib.md5(
-                    smart_bytes("{}:{}:{}".format(self.user, params["realm"], self.password))
-                )
+                hashlib.md5(smart_bytes(f"{self.user}:{params['realm']}:{self.password}"))
                 .hexdigest()
                 .upper()
             )
             return (
-                hashlib.md5(smart_bytes("{}:{}:{}".format(self.user, params["random"], A1)))
-                .hexdigest()
-                .upper()
+                hashlib.md5(smart_bytes(f"{self.user}:{params['random']}:{A1}")).hexdigest().upper()
             )
         return self.password
 

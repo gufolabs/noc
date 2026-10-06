@@ -83,7 +83,7 @@ class DigestAuthMiddeware(BaseMiddleware):
         if not qop:
             respdig = hashlib.md5(smart_bytes(f"{HA1}:{nonce}:{HA2}")).hexdigest()
         elif qop == "auth" or "auth" in qop.split(","):
-            noncebit = "{}:{}:{}:{}:{}".format(nonce, ncvalue, cnonce, "auth", HA2)
+            noncebit = f"{nonce}:{ncvalue}:{cnonce}:{'auth'}:{HA2}"
             respdig = hashlib.md5(smart_bytes(f"{HA1}:{noncebit}")).hexdigest()
         else:
             respdig = None
@@ -97,7 +97,7 @@ class DigestAuthMiddeware(BaseMiddleware):
         # if entdig:
         #     base += ', digest="%s"' % entdig
         if qop:
-            base += ', qop="auth", nc={}, cnonce="{}"'.format(f"{self.request_id:08x}", cnonce)
+            base += f', qop="auth", nc={f"{self.request_id:08x}"}, cnonce="{cnonce}"'
         self.last_nonce = nonce
         self.last_realm = realm
         self.last_opaque = opaque

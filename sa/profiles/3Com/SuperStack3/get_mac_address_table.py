@@ -35,7 +35,7 @@ class Script(BaseScript):
         for match in self.rx_line.finditer(self.cli(cmd)):
             vid = int(match.group("vlan_id"))
             if vlan is None or vid == vlan:
-                interface = "{}:{}".format(match.group("unit"), match.group("port"))
+                interface = f"{match.group('unit')}:{match.group('port')}"
                 r += [
                     {
                         "vlan_id": vid,

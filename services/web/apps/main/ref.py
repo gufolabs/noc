@@ -111,7 +111,7 @@ class RefAppplication(ExtApplication):
         r += [
             {
                 "id": c._get_collection_name(),
-                "label": "{}.{}".format(c.__module__.split(".")[1], n),
+                "label": f"{c.__module__.split('.')[1]}.{n}",
                 "collection": c._get_collection_name(),
             }
             for n, c in _document_registry.items()

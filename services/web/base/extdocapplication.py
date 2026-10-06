@@ -181,7 +181,7 @@ class ExtDocApplication(ExtApplication):
     def get_permissions(self):
         p = super().get_permissions()
         if self.secret_fields:
-            p.add("{}:secret".format(self.get_app_id().replace(".", ":")))
+            p.add(f"{self.get_app_id().replace('.', ':')}:secret")
         return p
 
     def get_custom_fields(self):
@@ -315,7 +315,7 @@ class ExtDocApplication(ExtApplication):
         Check current user has *secret* permission on given app
         :return:
         """
-        perm_name = "{}:secret".format(self.get_app_id().replace(".", ":"))
+        perm_name = f"{self.get_app_id().replace('.', ':')}:secret"
         return perm_name in Permission.get_effective_permissions(get_user())
 
     def set_file(self, files, o, file_attrs=None):

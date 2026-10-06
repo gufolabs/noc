@@ -108,7 +108,7 @@ class ManagedObjectApplication(ExtModelApplication):
         "profile": "CASE {} END".format(
             " ".join(
                 [
-                    "WHEN {}='{}' THEN {}".format("profile", pk, i)
+                    f"WHEN {'profile'}='{pk}' THEN {i}"
                     for i, pk in enumerate(
                         Profile.objects.filter().order_by("name").values_list("id")
                     )
@@ -118,7 +118,7 @@ class ManagedObjectApplication(ExtModelApplication):
         "-profile": "CASE {} END".format(
             " ".join(
                 [
-                    "WHEN {}='{}' THEN {}".format("profile", pk, i)
+                    f"WHEN {'profile'}='{pk}' THEN {i}"
                     for i, pk in enumerate(
                         Profile.objects.filter().order_by("-name").values_list("id")
                     )
@@ -128,7 +128,7 @@ class ManagedObjectApplication(ExtModelApplication):
         "platform": "CASE {} END".format(
             " ".join(
                 [
-                    "WHEN {}='{}' THEN {}".format("platform", pk, i)
+                    f"WHEN {'platform'}='{pk}' THEN {i}"
                     for i, pk in enumerate(
                         Platform.objects.filter().order_by("name").values_list("id")
                     )
@@ -138,7 +138,7 @@ class ManagedObjectApplication(ExtModelApplication):
         "-platform": "CASE {} END".format(
             " ".join(
                 [
-                    "WHEN {}='{}' THEN {}".format("platform", pk, i)
+                    f"WHEN {'platform'}='{pk}' THEN {i}"
                     for i, pk in enumerate(
                         Platform.objects.filter().order_by("-name").values_list("id")
                     )
@@ -148,7 +148,7 @@ class ManagedObjectApplication(ExtModelApplication):
         "version": "CASE {} END".format(
             " ".join(
                 [
-                    "WHEN {}='{}' THEN {}".format("version", pk, i)
+                    f"WHEN {'version'}='{pk}' THEN {i}"
                     for i, pk in enumerate(
                         Firmware.objects.filter().order_by("version").values_list("id")
                     )
@@ -158,7 +158,7 @@ class ManagedObjectApplication(ExtModelApplication):
         "-version": "CASE {} END".format(
             " ".join(
                 [
-                    "WHEN {}='{}' THEN {}".format("version", pk, i)
+                    f"WHEN {'version'}='{pk}' THEN {i}"
                     for i, pk in enumerate(
                         Firmware.objects.filter().order_by("-version").values_list("id")
                     )
@@ -689,9 +689,7 @@ class ManagedObjectApplication(ExtModelApplication):
             elif link.is_lag:
                 # unresolved LAG
                 o = [ii for ii in link.other(i) if ii.managed_object.id != i.managed_object.id]
-                label = "LAG {}: {}".format(
-                    o[0].managed_object.name, ", ".join(ii.name for ii in o)
-                )
+                label = f"LAG {o[0].managed_object.name}: {', '.join(ii.name for ii in o)}"
             else:
                 # Broadcast
                 label = ", ".join(f"{ii.managed_object.name}:{ii.name}" for ii in link.other(i))

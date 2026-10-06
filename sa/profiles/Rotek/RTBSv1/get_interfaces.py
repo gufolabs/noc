@@ -111,16 +111,14 @@ class Script(BaseScript):
             if self.is_platform_BS24:
                 for i in ss.items():
                     if int(i[0]) == ifindex:
-                        vname = "{}.{}".format(ifname, i[1]["ssid"])
+                        vname = f"{ifname}.{i[1]['ssid']}"
                         interfaces[vname] = {
                             "type": iftype,
                             "name": vname,
                             "admin_status": admin_status,
                             "oper_status": oper_status,
                             "snmp_ifindex": ifindex,
-                            "description": "ssid_broadcast={}, ieee_mode={}, channel={}, freq={}GHz".format(
-                                i[1]["broadcast"], i[1]["ieee_mode"], i[1]["channel"], i[1]["freq"]
-                            ),
+                            "description": f"ssid_broadcast={i[1]['broadcast']}, ieee_mode={i[1]['ieee_mode']}, channel={i[1]['channel']}, freq={i[1]['freq']}GHz",
                             "subinterfaces": [
                                 {
                                     "name": vname,
@@ -155,7 +153,7 @@ class Script(BaseScript):
                 res = s.split(":")[1].strip().replace('"', "")
                 resv = v.split(":")[2].strip()
                 ssid_broadcast = a.split(":")[1].strip()
-                ieee_mode = "IEEE 802.11{}".format(i.split(":")[1].strip())
+                ieee_mode = f"IEEE 802.11{i.split(':')[1].strip()}"
                 channel = c.strip().splitlines()[0].split(":")[1].strip()
                 freq = f.strip().splitlines()[0].split(":")[1].strip()
                 ssid[ath] = {
@@ -216,17 +214,15 @@ class Script(BaseScript):
                         o_status = False  # Do not touch !!!
                     iface = {
                         "type": "physical",
-                        "name": "{}.{}".format(ifname, ri["ssid"]),
+                        "name": f"{ifname}.{ri['ssid']}",
                         "admin_status": a_status,
                         "oper_status": o_status,
                         "mac": MAC(mac),
                         "snmp_ifindex": match.group("ifindex"),
-                        "description": "ssid_broadcast={}, ieee_mode={}, channel={}, freq={}GHz".format(
-                            ssid_broadcast, ri["ieee_mode"], ri["channel"], ri["freq"]
-                        ),
+                        "description": f"ssid_broadcast={ssid_broadcast}, ieee_mode={ri['ieee_mode']}, channel={ri['channel']}, freq={ri['freq']}GHz",
                         "subinterfaces": [
                             {
-                                "name": "{}.{}".format(ifname, ri["ssid"]),
+                                "name": f"{ifname}.{ri['ssid']}",
                                 "enabled_afi": ["BRIDGE"],
                                 "admin_status": a_status,
                                 "oper_status": o_status,

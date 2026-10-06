@@ -161,7 +161,7 @@ class Script(BaseScript):
             r[0]["serial"] = serial
         ports = self.profile.fill_ports(self)
         for p in ports:
-            v = self.cli("show card shelfno {} slotno {}".format(p["shelf"], p["slot"]))
+            v = self.cli(f"show card shelfno {p['shelf']} slotno {p['slot']}")
             match = self.rx_card.search(v)
             if not match:
                 match = self.rx_card2.search(v)
@@ -185,7 +185,7 @@ class Script(BaseScript):
             if prefix == "":
                 continue
             for i in range(int(p["port"])):
-                port_num = "{}/{}/{}".format(p["shelf"], p["slot"], str(i + 1))
+                port_num = f"{p['shelf']}/{p['slot']}/{i + 1!s}"
                 ifname = f"{prefix}{port_num}"
                 try:
                     v = self.cli(f"show interface optical-module-info {ifname}")

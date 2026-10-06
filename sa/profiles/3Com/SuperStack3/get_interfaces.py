@@ -50,7 +50,7 @@ class Script(BaseScript):
                     {"name": p["name"], "oper_status": p["status"], "enabled_afi": ["BRIDGE"]}
                 ],
             }
-            v = self.cli("bridge port detail {}".format(p["name"]))
+            v = self.cli(f"bridge port detail {p['name']}")
             if gstp and self.rx_stp.search(v):
                 i["enabled_protocols"] += ["STP"]
             if not self.rx_lacp.search(v):

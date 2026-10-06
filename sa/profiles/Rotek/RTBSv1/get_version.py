@@ -21,7 +21,7 @@ class Script(BaseScript):
 
     def execute_snmp(self, **kwargs):
         oid = self.snmp.get(mib["SNMPv2-MIB::sysDescr", 0], cached=True)
-        platform = "{}.{}".format(oid.split(" ")[0].strip(), oid.split(" ")[1].strip())
+        platform = f"{oid.split(' ')[0].strip()}.{oid.split(' ')[1].strip()}"
         version = oid.split(" ")[2].strip()
 
         return {

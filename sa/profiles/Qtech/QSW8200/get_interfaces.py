@@ -143,9 +143,7 @@ class Script(BaseScript):
             match = self.rx_ifname.search(i["name"])
             if match:
                 c = self.cli(
-                    "show switchport interface {} {}".format(
-                        match.group("ifname"), match.group("ifnum")
-                    )
+                    f"show switchport interface {match.group('ifname')} {match.group('ifnum')}"
                 )
                 match = self.rx_switch.search(c)
                 mode = match.group("oper_mode")

@@ -161,7 +161,7 @@ class Permission(NOCModel):
         def normalize(app, perm):
             if ":" in perm:
                 return perm
-            return "{}:{}".format(app.get_app_id().replace(".", ":"), perm)
+            return f"{app.get_app_id().replace('.', ':')}:{perm}"
 
         def get_implied(name):
             try:

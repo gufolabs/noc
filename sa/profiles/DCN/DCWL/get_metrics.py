@@ -92,7 +92,7 @@ class Script(GetMetricsScript):
         for s in ifaces:
             if "bss" not in s:
                 continue
-            v = self.cli("get bss {} detail".format(s["bss"]))
+            v = self.cli(f"get bss {s['bss']} detail")
             for block in v.split("\n\n"):
                 data = dict(
                     line.split(None, 1)

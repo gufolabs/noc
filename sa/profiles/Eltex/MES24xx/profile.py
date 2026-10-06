@@ -102,5 +102,5 @@ class Profile(BaseProfile):
         if s in ["oob", "stack-port"]:
             return s
         if match:
-            return "{} {}".format(match.group("type").capitalize(), match.group("number"))
+            return f"{match.group('type').capitalize()} {match.group('number')}"
         raise InterfaceTypeError(f"Invalid interface '{s}'")

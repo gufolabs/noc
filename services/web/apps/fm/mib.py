@@ -137,11 +137,11 @@ class MIBApplication(ExtDocApplication):
             s = []
             s += [syntax["base_type"]]
             if "display_hint" in syntax:
-                s += ["display-hint: {}".format(syntax["display_hint"])]
+                s += [f"display-hint: {syntax['display_hint']}"]
             if syntax["base_type"] in ("Enumeration", "Bits") and "enum_map" in syntax:
                 # Display enumeration
                 for k in sorted(syntax["enum_map"], key=lambda x: int(x)):
-                    s += ["{} -> {}".format(k, syntax["enum_map"][k])]
+                    s += [f"{k} -> {syntax['enum_map'][k]}"]
             return s
 
         s = []

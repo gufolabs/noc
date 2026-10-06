@@ -193,7 +193,7 @@ class Script(BaseScript):
                             }
                             interfaces += [iface]
             for i in interfaces:
-                c = self.cli("show interfaces mac-address {}".format(i["name"]))
+                c = self.cli(f"show interfaces mac-address {i['name']}")
                 match = self.rx_mac.search(c)
                 if match:
                     i["mac"] = match.group("mac")
@@ -205,7 +205,7 @@ class Script(BaseScript):
                             i["enabled_protocols"] = ["LACP"]
                             break
                 try:
-                    c = self.cli("show interfaces status {}".format(i["name"]))
+                    c = self.cli(f"show interfaces status {i['name']}")
                     match = self.rx_status.search(c)
                     i["oper_status"] = match.group("oper_status") == "up"
                     i["subinterfaces"][0]["oper_status"] = match.group("oper_status") == "up"

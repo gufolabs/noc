@@ -49,9 +49,8 @@ class Migration(BaseMigration):
                     tp = {"_id": tp_id}
                 # Fill profile
                 tp["name"] = "sp-%05d-%03d" % (next(current), n)
-                tp["description"] = "Migrated for SLA profile '{}' metric '{}'".format(
-                    doc["name"],
-                    metric["metric_type"],
+                tp["description"] = (
+                    f"Migrated for SLA profile '{doc['name']}' metric '{metric['metric_type']}'"
                 )
                 tp["window_type"] = metric.get("window_type")
                 tp["window"] = metric.get("window")

@@ -342,7 +342,7 @@ class ModelInline:
         if format == "ext" and self.sort_param in q:
             for r in self.app.deserialize(q[self.sort_param]):
                 if r["direction"] == "DESC":
-                    ordering += ["-{}".format(r["property"])]
+                    ordering += [f"-{r['property']}"]
                 else:
                     ordering += [r["property"]]
         q = self.cleaned_query(q)

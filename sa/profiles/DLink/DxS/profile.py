@@ -180,9 +180,9 @@ class Profile(BaseProfile):
                     match.group("re_platform").startswith(p) for p in platforms_with_stacked_ports
                 )
             ):
-                return "{}:{}".format(match.group("re_slot"), match.group("re_port"))
+                return f"{match.group('re_slot')}:{match.group('re_port')}"
             if match.group("re_port"):
-                return "{}".format(match.group("re_port"))
+                return f"{match.group('re_port')}"
         elif s.startswith("Slot0/"):
             return s[6:]
         else:

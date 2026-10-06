@@ -79,7 +79,7 @@ class Script(BaseScript):
         for i in interfaces:
             sub = i["subinterfaces"][0]
             v = self.cli(
-                "show port statistics interface {}".format(i["name"]),
+                f"show port statistics interface {i['name']}",
                 cached=True,  # used in get_mac_address_table
             )
             match = self.rx_port_stat.search(v)
@@ -154,7 +154,7 @@ class Script(BaseScript):
                     ifname = old_port
                 # Normalize ifname from "01/01" to "1/1"
                 ifname = "/".join([str(int(x)) for x in ifname.split("/")])
-                subname = "{}/{}".format(ifname, match.group("sub"))
+                subname = f"{ifname}/{match.group('sub')}"
                 for i in interfaces:
                     if i["name"] == ifname:
                         for sub in i["subinterfaces"]:

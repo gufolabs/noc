@@ -37,7 +37,7 @@ class UserAccess(NOCModel):
         r = [f"user={self.user.username}"]
         if self.administrative_domain:
             r += [f"domain={self.administrative_domain.name}"]
-        return "({})".format(", ".join(r))
+        return f"({', '.join(r)})"
 
     @classmethod
     def Q(cls, user):

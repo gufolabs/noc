@@ -44,8 +44,8 @@ class Script(BaseScript):
             vlans += [
                 {
                     "vid": int(match.group("vlan_id")),
-                    "ports": "{}{}".format(match.group("ports"), match.group("eports")),
-                    "mode": "{}{}".format(match.group("mode"), match.group("emode")),
+                    "ports": f"{match.group('ports')}{match.group('eports')}",
+                    "mode": f"{match.group('mode')}{match.group('emode')}",
                 }
             ]
         port_num = 0

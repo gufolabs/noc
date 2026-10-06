@@ -30,7 +30,7 @@ class Script(BaseScript):
         r = []
         if interface is None:
             for i in self.scripts.get_interface_status():
-                self.cli("test copper-port tdr {}".format(i["interface"]))
+                self.cli(f"test copper-port tdr {i['interface']}")
             cmd = "show copper-ports tdr"
         else:
             self.cli(f"test copper-port tdr {interface}")

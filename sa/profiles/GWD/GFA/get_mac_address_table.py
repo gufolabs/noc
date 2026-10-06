@@ -34,7 +34,7 @@ class Script(BaseScript):
         if vlan is not None:
             for i in v:
                 if i["vlan_id"] == vlan:
-                    c += " vlan {}".format(i["name"])
+                    c += f" vlan {i['name']}"
                     break
         v = self.cli(c, cached=True)
         for match in self.rx_mac.finditer(v):

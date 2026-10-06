@@ -96,11 +96,7 @@ class Script(BaseScript):
                 interfaces += [i]
             match = self.rx_xdsl.search(l)
             if match:
-                ifname = "{}/{}/{}".format(
-                    match.group("slot"),
-                    match.group("port"),
-                    match.group("bridge"),
-                )
+                ifname = f"{match.group('slot')}/{match.group('port')}/{match.group('bridge')}"
                 v = self.cli(f"show interface xdsl {ifname[:-2]}")
                 if "Not found any xDSL card in slot" in v:
                     oper_status = False

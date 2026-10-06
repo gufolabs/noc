@@ -168,10 +168,7 @@ class Script(BaseScript):
             if neigh["remote_capabilities"]:
                 neigh["remote_capabilities"] = int(
                     "".join(
-                        x
-                        for x in reversed(
-                            "{0:016b}".format(ord(neigh["remote_capabilities"]) << 8 + 0x0)
-                        )
+                        x for x in reversed(f"{ord(neigh['remote_capabilities']) << 8 + 0x0:016b}")
                     ),
                     2,
                 )

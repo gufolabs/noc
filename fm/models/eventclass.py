@@ -323,7 +323,7 @@ class EventClass(Document):
         c = self
         r = ["{"]
         r += [f'    "name": "{q(c.name)}",']
-        r += ['    "$collection": "{}",'.format(self._meta["json_collection"])]
+        r += [f'    "$collection": "{self._meta["json_collection"]}",']
         r += [f'    "uuid": "{c.uuid}",']
         if c.description:
             r += [f'    "description": "{q(c.description)}",']

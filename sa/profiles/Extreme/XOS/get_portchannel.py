@@ -53,7 +53,7 @@ class Script(BaseScript):
                     break
                 r += [
                     {
-                        "interface": "T{}".format(d["Config Master"][0]),
+                        "interface": f"T{d['Config Master'][0]}",
                         "members": d["Ld Share Group"],
                         "type": "L" if d["Agg Control"][0].lower() == "lacp" else "S",
                     }
@@ -64,9 +64,7 @@ class Script(BaseScript):
                 if match:
                     try:
                         mem = self.cli(
-                            "show port {} information detail | include Members".format(
-                                match.group("trunk")
-                            )
+                            f"show port {match.group('trunk')} information detail | include Members"
                         )
                     except self.CLISyntaxError:
                         raise self.NotSupportedError()
@@ -77,7 +75,7 @@ class Script(BaseScript):
                         tr_members = self.expand_interface_range(match.group("member"))
                     r += [
                         {
-                            "interface": "T{}".format(match.group("trunk")),
+                            "interface": f"T{match.group('trunk')}",
                             "members": tr_members,
                             "type": "L" if match.group("type").lower() == "lacp" else "S",
                         }

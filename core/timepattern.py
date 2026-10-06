@@ -12,7 +12,7 @@ RC = re.compile
 # Day of weeks declarations
 DoW = ["mon", "tue", "wen", "thu", "fri", "sat", "sun"]
 
-DoWRE = "({})".format("|".join(DoW))
+DoWRE = f"({'|'.join(DoW)})"
 # Day part patterns
 DAY_PATTERNS = [
     (RC(r"^(\d{2})$"), lambda day: "(T.day == %d)" % int(day)),
@@ -133,7 +133,7 @@ class TimePattern:
         if isinstance(tp, (list, tuple)):
             if not tp:
                 return "True"
-            return "({})".format(" or ".join([cls.compile_to_python(p) for p in tp]))
+            return f"({' or '.join([cls.compile_to_python(p) for p in tp])})"
         tp = tp.strip()
         if "|" in tp:
             day_pattern, time_pattern = tp.split("|")

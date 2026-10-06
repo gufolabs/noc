@@ -67,7 +67,7 @@ class Command(BaseCommand):
         if options.get("local"):
             self.svc = MIBAPI(APIRouter())
         connect()
-        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
+        return getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
     def handle_lookup(self, oids, *args, **kwargs):
         for oid in oids:
@@ -77,7 +77,7 @@ class Command(BaseCommand):
         try:
             r = self.svc.lookup(v)
             if r.get("status"):
-                self.print("{} = {}".format(r["name"], r["oid"]))
+                self.print(f"{r['name']} = {r['oid']}")
             else:
                 self.print(f"{v}: Not found")
         except RPCError as e:
@@ -203,7 +203,7 @@ class Command(BaseCommand):
             f'NAME = "{mib}"',
             "",
             "# Metadata",
-            'LAST_UPDATED = "{}"'.format(mib.last_updated.isoformat().split("T")[0]),
+            f'LAST_UPDATED = "{mib.last_updated.isoformat().split("T")[0]}"',
             f'COMPILED = "{datetime.date.today().isoformat()}"',
             "",
             "# MIB Data: name -> oid",
@@ -217,9 +217,7 @@ class Command(BaseCommand):
         r += ["}", "", "DISPLAY_HINTS = {"]
         r += [
             "\n".join(
-                '    "{}": ("{}", "{}"),  # {}'.format(
-                    md.oid, md.syntax["base_type"], md.syntax["display_hint"], md.name
-                )
+                f'    "{md.oid}": ("{md.syntax["base_type"]}", "{md.syntax["display_hint"]}"),  # {md.name}'
                 for md in mib_data
                 if has_worth_hint(md.syntax)
             )
@@ -250,7 +248,7 @@ class Command(BaseCommand):
                     done.add(p)
             if not done:
                 # Cannot load additional mibs
-                self.die("Cannot load MIBs: {}".format(", ".join(left_paths)))
+                self.die(f"Cannot load MIBs: {', '.join(left_paths)}")
             left_paths = [x for x in left_paths if x not in done]
 
     def upload_mib(self, path, local=False):
@@ -265,9 +263,9 @@ class Command(BaseCommand):
             if r.get("status"):
                 return True
             if r.get("code") == ERR_MIB_MISSED:
-                self.print("Cannot upload {}: MIB Missed - {}".format(path, r.get("msg")))
+                self.print(f"Cannot upload {path}: MIB Missed - {r.get('msg')}")
                 return False
-            self.die("Cannot upload {}: {}".format(path, r.get("msg")))
+            self.die(f"Cannot upload {path}: {r.get('msg')}")
         except OIDCollision as e:
             self.print(f"Cannot upload {path}: MIB OID Collision: {e}")
             return False

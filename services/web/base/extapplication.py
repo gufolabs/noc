@@ -218,14 +218,14 @@ class ExtApplication(Application):
         if request.is_extjs and self.sort_param in q:
             for r in self.deserialize(q[self.sort_param]):
                 if r["direction"] == "DESC":
-                    ordering += ["-{}".format(r["property"])]
+                    ordering += [f"-{r['property']}"]
                 else:
                     ordering += [r["property"]]
         grouping = None
         if request.is_extjs and self.group_param in q:
             r = self.deserialize(q[self.group_param])
             if r["direction"] == "DESC":
-                grouping = "-{}".format(r["property"])
+                grouping = f"-{r['property']}"
             else:
                 grouping = r["property"]
         fs = None

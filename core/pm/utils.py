@@ -285,7 +285,7 @@ class QuerySet:
             self.metric_proxy.scope.table_name,
             " AND ".join(c.get_expr() for c in self.metric_proxy.query_conditions),
             # " AND hasAny(labels, [%s]) " % ", ".join(labels) if labels else "",
-            "GROUP BY {}".format(", ".join(sorted(group_by))) if group_by else "",
+            f"GROUP BY {', '.join(sorted(group_by))}" if group_by else "",
         )
 
     def query_metrics(self):

@@ -29,15 +29,7 @@ class Script(BaseScript):
     }
 
     rx_session = re.compile(
-        r"^(?P<remote_address>\S+)\s+(?P<state>Up)\s+"
-        r"(?P<local_interface>\S+)\s+(?P<detect_time>\d+\.\d+)\s+"
-        r"(?P<transmit>\d+\.\d+)\s+(?P<multiplier>\d+)\s*\n"
-        r"^\s+Client\s+(?P<client>(?:{})(?:\s+(?:{}))*).+?\n"
-        r".+?"
-        r"^\s+Local discriminator (?P<local_discriminator>\d+), "
-        r"remote discriminator (?P<remote_discriminator>\d+)".format(
-            "|".join(client_map), "|".join(client_map)
-        ),
+        f"^(?P<remote_address>\\S+)\\s+(?P<state>Up)\\s+(?P<local_interface>\\S+)\\s+(?P<detect_time>\\d+\\.\\d+)\\s+(?P<transmit>\\d+\\.\\d+)\\s+(?P<multiplier>\\d+)\\s*\\n^\\s+Client\\s+(?P<client>(?:{'|'.join(client_map)})(?:\\s+(?:{'|'.join(client_map)}))*).+?\\n.+?^\\s+Local discriminator (?P<local_discriminator>\\d+), remote discriminator (?P<remote_discriminator>\\d+)",
         re.MULTILINE | re.DOTALL | re.IGNORECASE,
     )
 

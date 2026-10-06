@@ -93,12 +93,12 @@ class Profile(BaseProfile):
             match = self.rx_adapter.search(hardware)
             if match:
                 if match.group("name") == "10GE PR IOA":
-                    r += ["TenGigabitEthernet{}/0".format(match.group("slot"))]
+                    r += [f"TenGigabitEthernet{match.group('slot')}/0"]
                 elif match.group("name") == "GE-4 IOA":
                     for i in range(4):
-                        r += ["GigabitEthernet{}/{}".format(match.group("slot"), i)]
+                        r += [f"GigabitEthernet{match.group('slot')}/{i}"]
                 elif match.group("name") == "SRP IOA":
-                    r += ["FastEthernet{}/0".format(match.group("slot"))]
+                    r += [f"FastEthernet{match.group('slot')}/0"]
         return r
 
     def valid_interface_name(self, name):

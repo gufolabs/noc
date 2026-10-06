@@ -219,9 +219,7 @@ class BaseCard:
             r += [get_summary(s["service"], ServiceProfile)]
         if s.get("fresh_alarms"):
             r += [
-                '<i class="fa fa-exclamation-triangle"></i><span class="badge">{}</span>'.format(
-                    s["fresh_alarms"]["FreshAlarm"]
-                )
+                f'<i class="fa fa-exclamation-triangle"></i><span class="badge">{s["fresh_alarms"]["FreshAlarm"]}</span>'
             ]
         r = [x for x in r if x]
         return "&nbsp;".join(r)

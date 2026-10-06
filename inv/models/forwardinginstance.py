@@ -48,7 +48,7 @@ class ForwardingInstance(Document):
     rt_import = ListField(StringField(required=False))
 
     def __str__(self):
-        return "{}: {}".format(self.managed_object.name, self.name if self.name else "default")
+        return f"{self.managed_object.name}: {self.name if self.name else 'default'}"
 
     @classmethod
     def get_by_id(cls, oid: str | ObjectId) -> Optional["ForwardingInstance"]:

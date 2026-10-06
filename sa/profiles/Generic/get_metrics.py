@@ -278,7 +278,7 @@ class MetricScriptBase(BaseScriptMetaclass):
         Generate python function name
         :return:
         """
-        return "get_snmp_json_{}".format(mcs.rx_mt_name.sub("_", str(metric.lower())))
+        return f"get_snmp_json_{mcs.rx_mt_name.sub('_', str(metric.lower()))}"
 
 
 class Script(BaseScript, metaclass=MetricScriptBase):

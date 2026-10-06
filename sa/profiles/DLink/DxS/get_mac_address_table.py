@@ -110,7 +110,7 @@ class Script(BaseScript):
             else:
                 for v in self.scripts.get_vlans():
                     if v["vlan_id"] == vlan:
-                        cmd += " vlan {}".format(v["name"])
+                        cmd += f" vlan {v['name']}"
                         break
         r = []
         for match in self.rx_line.finditer(self.cli(cmd)):

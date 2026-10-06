@@ -159,11 +159,8 @@ class ObjectMetricsAPI(NBIAPI):
                         % (wx[0], ", ".join(f"'{x}'" for x in wx[1]))
                     ]
             fields = ["ts", "managed_object", "path", *sorted(scopes[table][0])]
-            query = "SELECT {} FROM {} WHERE {} AND ({})".format(
-                ", ".join(fields),
-                table,
-                date_q,
-                " OR ".join(qx),
+            query = (
+                f"SELECT {', '.join(fields)} FROM {table} WHERE {date_q} AND ({' OR '.join(qx)})"
             )
             # Execute
             self.logger.info("%s", query)

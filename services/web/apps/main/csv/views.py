@@ -48,9 +48,7 @@ class CSVApplication(Application):
                     return self.render_plain_text(
                         csv_export(model), content_type="text/csv; encoding=utf-8"
                     )
-                return self.response_redirect(
-                    "/main/csv/import/{}/".format(form.cleaned_data["model"])
-                )
+                return self.response_redirect(f"/main/csv/import/{form.cleaned_data['model']}/")
         else:
             form = ModelForm()
         return self.render(request, "index.html", form=form)
@@ -148,7 +146,7 @@ class CSVApplication(Application):
         for name, required, rel, rname in get_model_fields(m):
             if rel:
                 if isinstance(rel._meta, dict):
-                    r = ["{}.{}".format(rel._meta["collection"], rname)]
+                    r = [f"{rel._meta['collection']}.{rname}"]
                 else:
                     db_table = rel._meta.db_table
                     r = [f'{db_table}."id"']

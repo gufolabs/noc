@@ -34,7 +34,7 @@ class Script(BaseScript):
             members = match.group("members").split()
             r += [
                 {
-                    "interface": "port-channel{}".format(match.group("portgroup")),
+                    "interface": f"port-channel{match.group('portgroup')}",
                     "members": members,
                     "type": "L" if match.group("mode") == "Lacp" else "S",
                 }

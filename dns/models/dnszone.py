@@ -214,7 +214,7 @@ class DNSZone(NOCModel):
         """
         parts = list(reversed(address.split(".")))[1:]
         while parts:
-            name = "{}.in-addr.arpa".format(".".join(parts))
+            name = f"{'.'.join(parts)}.in-addr.arpa"
             zone = DNSZone.get_by_name(name)
             if zone:
                 return zone
@@ -232,7 +232,7 @@ class DNSZone(NOCModel):
         parts = [str(x) for x in reversed(IPv6(address).iter_bits())][1:]
         while parts:
             for suffix in (".ip6.int", ".ip6.arpa"):
-                name = "{}.{}".format(".".join(parts), suffix)
+                name = f"{'.'.join(parts)}.{suffix}"
                 zone = DNSZone.get_by_name(name)
                 if zone:
                     return zone
@@ -355,7 +355,7 @@ class DNSZone(NOCModel):
             # IPv4 zone
             n = name.split(".")
             n.reverse()
-            return get_closest("{}.in-addr.arpa".format(".".join(n[1:])))
+            return get_closest(f"{'.'.join(n[1:])}.in-addr.arpa")
         if is_ipv6(name):
             # IPv6 zone
             d = IPv6(name).digits

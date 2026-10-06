@@ -122,14 +122,10 @@ class Command(BaseCommand):
                     continue
                 print(f"    Leader        : {b_map[p_meta.leader]}")
                 print(
-                    "    Replicas      : {}".format(
-                        ", ".join([str(b_map[x]) for x in sorted(p_meta.replicas)])
-                    )
+                    f"    Replicas      : {', '.join([str(b_map[x]) for x in sorted(p_meta.replicas)])}"
                 )
                 print(
-                    "    ISR           : {}".format(
-                        ", ".join([str(b_map[x]) for x in sorted(p_meta.isr)])
-                    )
+                    f"    ISR           : {', '.join([str(b_map[x]) for x in sorted(p_meta.isr)])}"
                 )
                 print(f"    HighWatermark : {p_meta.high_watermark}")
                 print(f"    NewestOffset  : {p_meta.newest_offset}")

@@ -184,7 +184,7 @@ class BERDecoder:
 
     def parse_a_ipaddress(self, msg: bytes) -> str:
         if not msg:
-            raise ValueError("Invalid IP Address: '{}'".format(msg.encode("hex")))
+            raise ValueError(f"Invalid IP Address: '{msg.encode('hex')}'")
         return "%d.%d.%d.%d" % (msg[0], msg[1], msg[2], msg[3])
 
     def parse_p_oid(self, msg: bytes) -> str:

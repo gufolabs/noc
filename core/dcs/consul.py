@@ -58,10 +58,9 @@ class ConsulResolver(ResolverBase):
                     "[%s] Index changed %d -> %d. Applying changes", self.name, old_index, index
                 )
                 r = {
-                    str(svc["Service"]["ID"]): "{}:{}".format(
-                        str(svc["Service"]["Address"] or svc["Node"]["Address"]),
-                        str(svc["Service"]["Port"]),
-                    )
+                    str(
+                        svc["Service"]["ID"]
+                    ): f"{svc['Service']['Address'] or svc['Node']['Address']!s}:{svc['Service']['Port']!s}"
                     for svc in services
                 }
                 self.set_services(r)
@@ -505,10 +504,7 @@ class ConsulDCS(DCSBase):
             r = []
             for svc in services:
                 r += [
-                    "{}:{}".format(
-                        str(svc["Service"]["Address"] or svc["Node"]["Address"]),
-                        str(svc["Service"]["Port"]),
-                    )
+                    f"{svc['Service']['Address'] or svc['Node']['Address']!s}:{svc['Service']['Port']!s}"
                 ]
                 if not full_result:
                     break

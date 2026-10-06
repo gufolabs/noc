@@ -50,7 +50,7 @@ class Command(BaseCommand):
                 dest="layout",
                 action="store",
                 default="sfdp",
-                help="Use layout engine: {}".format(", ".join(self.LAYOUT)),
+                help=f"Use layout engine: {', '.join(self.LAYOUT)}",
             ),
         )
         (
@@ -84,7 +84,7 @@ class Command(BaseCommand):
             elif ext not in ".dot":
                 raise CommandError("Unknown output format")
         if options["layout"] not in self.LAYOUT:
-            raise CommandError("Invalid layout: {}".format(options["layout"]))
+            raise CommandError(f"Invalid layout: {options['layout']}")
         connect()
         exclude = options["exclude"] or []
         # Check VRF
@@ -97,7 +97,7 @@ class Command(BaseCommand):
                 if is_rd(options["vrf"]):
                     rd = options["vrf"]
                 else:
-                    raise CommandError("Invalid VRF: {}".format(options["vrf"]))
+                    raise CommandError(f"Invalid VRF: {options['vrf']}")
         self.mo_cache = {}
         self.fi_cache = {}
         self.rd_cache = {}
@@ -114,7 +114,7 @@ class Command(BaseCommand):
             interfaces = [si for si in interfaces if self.p_power[si.prefix] > 1]
         for si in interfaces:
             o_id = f"o_{si.object}"
-            p_id = "p_{}".format(si.prefix.replace(".", "_").replace(":", "__").replace("/", "___"))
+            p_id = f"p_{si.prefix.replace('.', '_').replace(':', '__').replace('/', '___')}"
             if si.object not in objects:
                 objects.add(si.object)
                 o = self.get_object(si.object)
@@ -141,7 +141,7 @@ class Command(BaseCommand):
                     [
                         options["layout"],
                         f"-T{self.GV_FORMAT[ext]}",
-                        "-o{}".format(options["output"]),
+                        f"-o{options['output']}",
                         f.name,
                     ]
                 )

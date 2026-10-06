@@ -164,7 +164,7 @@ class ExtModelApplication(ExtApplication):
     def get_permissions(self):
         p = super().get_permissions()
         if self.secret_fields:
-            p.add("{}:secret".format(self.get_app_id().replace(".", ":")))
+            p.add(f"{self.get_app_id().replace('.', ':')}:secret")
         return p
 
     def get_validator(self, field):
@@ -375,7 +375,7 @@ class ExtModelApplication(ExtApplication):
         Check current user has *secret* permission on given app
         :return:
         """
-        perm_name = "{}:secret".format(self.get_app_id().replace(".", ":"))
+        perm_name = f"{self.get_app_id().replace('.', ':')}:secret"
         return perm_name in Permission.get_effective_permissions(get_user())
 
     def has_field_editable(self, field):
@@ -639,9 +639,9 @@ class ExtModelApplication(ExtApplication):
             except ValidationError as e:
                 e_msg = []
                 for f in e.message_dict:
-                    e_msg += ["{}: {}".format(f, "; ".join(e.message_dict[f]))]
+                    e_msg += [f"{f}: {'; '.join(e.message_dict[f])}"]
                 return self.render_json(
-                    {"status": False, "message": "Validation error: {}".format(" | ".join(e_msg))},
+                    {"status": False, "message": f"Validation error: {' | '.join(e_msg)}"},
                     status=self.BAD_REQUEST,
                 )
             # Check permissions
@@ -727,9 +727,9 @@ class ExtModelApplication(ExtApplication):
         except ValidationError as e:
             e_msg = []
             for f in e.message_dict:
-                e_msg += ["{}: {}".format(f, "; ".join(e.message_dict[f]))]
+                e_msg += [f"{f}: {'; '.join(e.message_dict[f])}"]
             return self.render_json(
-                {"status": False, "message": "Validation error: {}".format(" | ".join(e_msg))},
+                {"status": False, "message": f"Validation error: {' | '.join(e_msg)}"},
                 status=self.BAD_REQUEST,
             )
         # Check permissions

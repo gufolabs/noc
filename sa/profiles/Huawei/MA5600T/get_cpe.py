@@ -82,7 +82,7 @@ class Script(BaseScript):
                         ):
                             continue
                         if "ONT-ID" in t:
-                            ont_id = "{}/{}".format(t["F/S/P"][0].replace(" ", ""), t["ONT-ID"][0])
+                            ont_id = f"{t['F/S/P'][0].replace(' ', '')}/{t['ONT-ID'][0]}"
                             if ont_id in r:
                                 r[ont_id]["description"] = t["Description"][0]
                             continue
@@ -117,7 +117,7 @@ class Script(BaseScript):
                         # else:
                         #    self.logger.warning("Unknown ID")
                         #    continue
-                        ont_id = "{}/{}".format(t["F/S/P"][0].replace(" ", ""), ont_id)
+                        ont_id = f"{t['F/S/P'][0].replace(' ', '')}/{ont_id}"
                         r[ont_id] = {
                             "interface": t["F/S/P"][0].replace(" ", ""),
                             "status": status,

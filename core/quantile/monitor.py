@@ -42,7 +42,7 @@ class Quantile(Summary):
                 f'window="{config.perfomance.default_quantiles_window}"',
             ]
             yield f"# TYPE {name} untyped"
-            yield "{}{{{}}} {}".format(name, ",".join(all_labels), float(value) / self.scale)
+            yield f"{name}{{{','.join(all_labels)}}} {float(value) / self.scale}"
 
 
 quantiles = {}

@@ -39,7 +39,7 @@ class Script(BaseScript):
         if mac is not None:
             cmd += f" address {self.profile.convert_mac(mac)}"
         if interface is not None:
-            cmd += " interface gi 1/0/{}".format(interface.split("/")[2])
+            cmd += f" interface gi 1/0/{interface.split('/')[2]}"
         if vlan is not None:
             cmd += f" vlan {vlan}"
         macs = self.cli(cmd)

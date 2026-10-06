@@ -187,16 +187,12 @@ class Command(BaseCommand):
         self.print(
             "    Neighbor alarms: {}".format(
                 ", ".join(
-                    "{}{} ({})".format(
-                        "U:" if x in uplinks else "", na[x], ManagedObject.get_by_id(x).name
-                    )
+                    f"{'U:' if x in uplinks else ''}{na[x]} ({ManagedObject.get_by_id(x).name})"
                     for x in na
                 )
             )
         )
-        self.print(
-            "    Uplinks: {}".format(", ".join(ManagedObject.get_by_id(u).name for u in uplinks))
-        )
+        self.print(f"    Uplinks: {', '.join(ManagedObject.get_by_id(u).name for u in uplinks)}")
         # Correlate current alarm
         correlate(alarm)
         # Correlate all downlink alarms

@@ -71,7 +71,7 @@ class Command(BaseCommand):
         try:
             resolve = {"fail": IR_FAIL, "skip": IR_SKIP, "update": IR_UPDATE}[options["resolve"]]
         except KeyError:
-            raise CommandError("Invalid resolve option: {}".format(options["resolve"]))
+            raise CommandError(f"Invalid resolve option: {options['resolve']}")
         # Begin import
         for f in args[1:]:
             print(f"Importing {f}")

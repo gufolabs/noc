@@ -73,7 +73,7 @@ class Command(BaseCommand):
     def handle(self, cmd, data_prefix, *args, **options):
         self.data_prefix = data_prefix
         connect()
-        return getattr(self, "handle_{}".format(cmd.replace("-", "_")))(*args, **options)
+        return getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
     def get_last_extract(self, name):
         coll = get_db()["noc.bi_timestamps"]

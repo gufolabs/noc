@@ -64,7 +64,7 @@ class Command(BaseCommand):
         if not action:
             action = "show"
         connect()
-        getattr(self, "handle_{}".format(action.replace("-", "_")))(*args, **options)
+        getattr(self, f"handle_{action.replace('-', '_')}")(*args, **options)
 
     def show_link(self, link, show_method=False):
         def format_interface(i):

@@ -465,17 +465,13 @@ class Script(BaseScript):
 
                 if fi["type"] == "ip" or fi["type"] == "VRF":
                     r = self.cli(
-                        'show service id {} base | match invert-match "sap:"'.format(
-                            fi["forwarding_instance"]
-                        )
+                        f'show service id {fi["forwarding_instance"]} base | match invert-match "sap:"'
                     )
                     mo2 = self.re_rd.search(r)
                     fi["rd"] = mo2.group("rd")
                     if fi["rd"] == "None":
                         fi.pop("rd")
-                    intf = self.cli(
-                        "show router {} interface detail".format(fi["forwarding_instance"])
-                    )
+                    intf = self.cli(f"show router {fi['forwarding_instance']} interface detail")
                     fi["interfaces"] = self.parse_interfaces(intf, "")
                 elif fi["type"] == "bridge":
                     fi.update(self.get_vpls(fi["forwarding_instance"]))
@@ -514,7 +510,7 @@ class Script(BaseScript):
         for line in port_info.splitlines():
             match = self.re_port_info.search(line)
             if match:
-                port_detail = self.cli("show port {} detail".format(match.group("name")))
+                port_detail = self.cli(f"show port {match.group('name')} detail")
                 match_detail = self.re_port_detail_info.search(port_detail)
                 my_dict = match.groupdict()
                 my_dict.update(match_detail.groupdict())
@@ -543,7 +539,7 @@ class Script(BaseScript):
                     my_dict["name"] = "-".join(["lag", my_dict["name"]])
                 my_dict["subinterfaces"] = []
                 saps = self.cli(
-                    "show service sap-using sap {} | match invert-match [".format(my_dict["name"])
+                    f"show service sap-using sap {my_dict['name']} | match invert-match ["
                 )
                 for sapline in saps.splitlines():
                     sap = self.re_lag_subs.match(sapline)

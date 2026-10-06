@@ -105,14 +105,10 @@ class Script(BaseScript):
                 ]
             # static-ip or "ip" field may use
             if value.get("static-ip"):
-                ip_address = "{}/{}".format(
-                    value["static-ip"],
-                    IPv4.netmask_to_len(value.get("static-mask") or "255.255.255.255"),
-                )
+                ip_address = f"{value['static-ip']}/{IPv4.netmask_to_len(value.get('static-mask') or '255.255.255.255')}"
             elif value.get("ip") in value:
-                ip_address = "{}/{}".format(
-                    value["ip"],
-                    IPv4.netmask_to_len(value.get("mask") or "255.255.255.255"),
+                ip_address = (
+                    f"{value['ip']}/{IPv4.netmask_to_len(value.get('mask') or '255.255.255.255')}"
                 )
             if ip_address:
                 interfaces[ifname]["subinterfaces"] += [
