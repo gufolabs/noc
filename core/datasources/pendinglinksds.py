@@ -9,7 +9,8 @@
 import ast
 from collections import defaultdict
 import re
-from typing import Any, Iterable, AsyncIterable
+from typing import Any
+from collections.abc import Iterable, AsyncIterable
 
 # Third-party modules
 from pymongo import ReadPreference

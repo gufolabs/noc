@@ -8,7 +8,7 @@
 # Python modules
 import argparse
 import asyncio
-from typing import Iterable
+from collections.abc import Iterable
 
 # Third-party modules
 from gufo.ping import Ping

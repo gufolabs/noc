@@ -10,7 +10,8 @@ import operator
 import re
 from collections import defaultdict
 from threading import Lock
-from typing import Optional, Iterable
+from typing import Optional
+from collections.abc import Iterable
 from functools import partial
 
 # Third-party modules

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Callable, Iterable
+from collections.abc import Callable, Iterable
 from threading import Lock
 import sys
 import inspect

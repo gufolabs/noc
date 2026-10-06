@@ -8,7 +8,7 @@
 # NOC modules
 from collections import defaultdict
 from itertools import chain
-from typing import Iterable
+from collections.abc import Iterable
 
 # Third-party modules
 from django.db.models import Q

@@ -10,7 +10,8 @@ import datetime
 import socket
 import struct
 from collections import defaultdict
-from typing import Literal, Iterable, Any
+from typing import Literal, Any
+from collections.abc import Iterable
 from dataclasses import dataclass
 
 # Third-party modules

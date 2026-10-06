@@ -7,7 +7,8 @@
 
 # Python modules
 import threading
-from typing import Iterable, Optional
+from typing import Optional
+from collections.abc import Iterable
 import operator
 
 # Third-party modules

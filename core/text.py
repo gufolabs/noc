@@ -9,7 +9,8 @@
 import re
 import string
 from itertools import zip_longest, pairwise
-from typing import Iterable, overload, Any, Sequence, Iterator
+from typing import overload, Any
+from collections.abc import Iterable, Sequence, Iterator
 
 
 rx_header_start = re.compile(r"^\s*[-=]+[\s\+]+[-=]+")

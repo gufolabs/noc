@@ -8,7 +8,7 @@
 # Python modules
 import logging
 import itertools
-from typing import Iterable
+from collections.abc import Iterable
 
 # Third-party modules
 from bson import ObjectId

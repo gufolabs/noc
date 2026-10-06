@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Iterable, Callable
+from collections.abc import Iterable, Callable
 
 # NOC modules
 from noc.core.script.base import BaseScript

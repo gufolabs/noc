@@ -6,7 +6,8 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import TypeVar, Callable, Any, cast
+from typing import TypeVar, Any, cast
+from collections.abc import Callable
 import enum
 from logging import Logger
 from inspect import signature

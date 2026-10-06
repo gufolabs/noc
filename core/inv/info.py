@@ -7,7 +7,8 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any
+from collections.abc import Callable
 from enum import Enum
 
 # Python modules

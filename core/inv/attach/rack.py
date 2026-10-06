@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Iterable
+from collections.abc import Iterable
 from dataclasses import dataclass
 from collections import defaultdict
 from enum import Enum

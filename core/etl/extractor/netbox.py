@@ -8,7 +8,8 @@
 # Python modules
 import datetime
 import bisect
-from typing import Iterable, Any
+from typing import Any
+from collections.abc import Iterable
 from urllib.parse import urlparse
 
 # Third-party modules

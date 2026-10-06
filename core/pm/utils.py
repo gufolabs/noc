@@ -10,7 +10,8 @@ import datetime
 import itertools
 from collections import defaultdict
 from dataclasses import dataclass
-from typing import Iterable, Optional, Any
+from typing import Optional, Any
+from collections.abc import Iterable
 
 # Third-party modules
 import orjson

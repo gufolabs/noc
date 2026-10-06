@@ -7,7 +7,8 @@
 
 # Python modules
 from collections import defaultdict
-from typing import AsyncIterable, Iterable, Any
+from typing import Any
+from collections.abc import AsyncIterable, Iterable
 
 # Third-party modules
 from gufo.snmp.async_client import SnmpSession

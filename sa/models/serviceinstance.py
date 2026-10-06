@@ -8,7 +8,8 @@
 # Python modules
 import datetime
 import logging
-from typing import Optional, Iterable, Any
+from typing import Optional, Any
+from collections.abc import Iterable
 
 # Third-party modules
 from bson import ObjectId

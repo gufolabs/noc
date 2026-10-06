@@ -11,7 +11,8 @@ import asyncio
 import logging
 
 # Third-party modules
-from typing import Awaitable, Any
+from typing import Any
+from collections.abc import Awaitable
 
 # NOC modules
 from noc.core.handler import get_handler

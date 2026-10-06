@@ -10,7 +10,8 @@ from threading import Lock
 import operator
 import re
 from uuid import UUID
-from typing import Any, Optional, Iterable
+from typing import Any, Optional
+from collections.abc import Iterable
 from pathlib import Path
 from enum import Enum
 

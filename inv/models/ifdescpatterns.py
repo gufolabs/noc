@@ -6,7 +6,8 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Optional, Iterable
+from typing import Optional
+from collections.abc import Iterable
 from threading import Lock
 import operator
 import re

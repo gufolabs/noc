@@ -8,7 +8,8 @@
 # Python modules
 from pathlib import Path
 import re
-from typing import Iterable, Any, Optional
+from typing import Any, Optional
+from collections.abc import Iterable
 
 # Third-party modules
 from mongoengine.fields import (

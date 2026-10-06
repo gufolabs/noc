@@ -7,7 +7,8 @@
 
 # Python modules
 from functools import partial
-from typing import Callable, Any
+from typing import Any
+from collections.abc import Callable
 import weakref
 
 # Third-party modules

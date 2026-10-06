@@ -8,12 +8,10 @@
 # Python modules
 import re
 from typing import (
-    Iterator,
-    Callable,
     Any,
     Literal,
-    Iterable,
 )
+from collections.abc import Iterator, Callable, Iterable
 from dataclasses import dataclass
 
 # Third-party modules

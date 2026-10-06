@@ -7,7 +7,7 @@
 
 # Python Modules
 import datetime
-from typing import Iterable, AsyncIterable
+from collections.abc import Iterable, AsyncIterable
 
 # Third-party modules
 from django.db import connection

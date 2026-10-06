@@ -8,7 +8,8 @@
 # Python modules
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Iterable, Any
+from typing import Any
+from collections.abc import Iterable
 
 
 @dataclass(frozen=True)

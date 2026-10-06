@@ -9,7 +9,8 @@
 import re
 from functools import partial
 from dataclasses import dataclass
-from typing import Callable, Any
+from typing import Any
+from collections.abc import Callable
 from types import CodeType
 
 # NOC modules

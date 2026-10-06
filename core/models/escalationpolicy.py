@@ -7,7 +7,8 @@
 
 # Python modules
 from enum import Enum
-from typing import Optional, Iterable
+from typing import Optional
+from collections.abc import Iterable
 
 
 class EscalationPolicy(Enum):

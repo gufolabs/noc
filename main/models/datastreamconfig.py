@@ -12,7 +12,8 @@ import operator
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument
 from mongoengine.fields import StringField, BooleanField, EmbeddedDocumentListField
-from typing import Optional, Iterable, Any, Callable
+from typing import Optional, Any
+from collections.abc import Iterable, Callable
 from bson import ObjectId
 import cachetools
 

@@ -7,7 +7,8 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Optional, Any, Iterable
+from typing import Optional, Any
+from collections.abc import Iterable
 
 # Third-party modules
 import polars as pl

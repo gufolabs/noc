@@ -15,7 +15,8 @@ import csv
 from contextlib import suppress
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, TextIO
+from typing import TextIO
+from collections.abc import Iterable
 
 
 @dataclass(slots=True)

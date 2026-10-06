@@ -9,7 +9,8 @@
 import datetime
 from dataclasses import dataclass, field
 from io import BytesIO, StringIO
-from typing import Optional, Iterable, Any, Callable
+from typing import Optional, Any
+from collections.abc import Iterable, Callable
 import time
 import re
 import heapq

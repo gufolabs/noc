@@ -8,7 +8,7 @@
 # Python Modules
 from collections import namedtuple
 import datetime
-from typing import Iterable, AsyncIterable
+from collections.abc import Iterable, AsyncIterable
 
 # NOC modules
 from .base import FieldInfo, FieldType, ParamInfo, BaseDataSource

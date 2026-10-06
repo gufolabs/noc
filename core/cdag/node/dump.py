@@ -8,7 +8,7 @@
 # Python modules
 import datetime
 import logging
-from typing import Callable
+from collections.abc import Callable
 
 # Third-party modules
 from pydantic import BaseModel

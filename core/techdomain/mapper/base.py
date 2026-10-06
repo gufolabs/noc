@@ -8,7 +8,8 @@
 # Python modules
 import logging
 from dataclasses import dataclass
-from typing import Iterable, Any
+from typing import Any
+from collections.abc import Iterable
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter

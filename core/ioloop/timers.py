@@ -11,7 +11,7 @@ import asyncio
 import math
 
 # Third-party modules
-from typing import Coroutine
+from collections.abc import Coroutine
 
 
 class PeriodicCallback:

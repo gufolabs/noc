@@ -7,7 +7,8 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Any, cast, Iterable
+from typing import Any, cast
+from collections.abc import Iterable
 from uuid import UUID
 
 # NOC modules

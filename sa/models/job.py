@@ -7,7 +7,7 @@
 
 # Python modules
 from enum import Enum
-from typing import Iterable
+from collections.abc import Iterable
 
 
 # Third-party modules

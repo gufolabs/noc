@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Callable
+from collections.abc import Callable
 
 # NOC modules
 from .base import BaseAction, ActionError

@@ -9,11 +9,10 @@
 import typing
 from typing import (
     Any,
-    Callable,
     TypeVar,
     Generic,
-    Iterable,
 )
+from collections.abc import Callable, Iterable
 import inspect
 from http import HTTPStatus
 from abc import ABCMeta, abstractmethod

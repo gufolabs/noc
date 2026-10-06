@@ -17,7 +17,7 @@ import gridfs
 import gridfs.errors
 import bsdiff4
 from bson import ObjectId
-from typing import Iterable
+from collections.abc import Iterable
 
 # NOC modules
 from noc.core.mongo.connection import get_db

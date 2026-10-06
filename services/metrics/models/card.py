@@ -11,8 +11,10 @@ import logging
 import hashlib
 import codecs
 from dataclasses import dataclass
-from typing import Iterable, Any, ClassVar
-from typing_extensions import TypedDict, NotRequired
+from typing import Any, ClassVar
+from collections.abc import Iterable
+from typing_extensions import TypedDict
+from typing import NotRequired
 
 # Third-party modules
 import cachetools

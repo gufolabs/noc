@@ -10,7 +10,8 @@ import itertools
 import logging
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from pathlib import Path
-from typing import TypeVar, Generic, Any, Iterable
+from typing import TypeVar, Generic, Any
+from collections.abc import Iterable
 
 # NOC modules
 from noc.core.validators import is_int, is_ipv4, is_uuid

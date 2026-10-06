@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import AsyncIterable, Iterable
+from collections.abc import AsyncIterable, Iterable
 
 # NOC modules
 from noc.core.profile.loader import GENERIC_PROFILE as GENERIC_PROFILE_NAME

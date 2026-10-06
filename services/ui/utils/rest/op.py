@@ -6,7 +6,8 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Callable, TypeVar
+from typing import TypeVar
+from collections.abc import Callable
 from http import HTTPStatus
 
 # Third-party modules

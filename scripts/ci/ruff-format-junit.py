@@ -11,7 +11,7 @@ import argparse
 import sys
 from dataclasses import dataclass
 import os
-from typing import Iterable
+from collections.abc import Iterable
 from xml.sax.saxutils import escape
 
 

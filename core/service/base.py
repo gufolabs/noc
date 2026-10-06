@@ -19,13 +19,11 @@ import asyncio
 import cachetools
 from functools import partial
 from typing import (
-    Callable,
     Any,
     TypeVar,
     Never,
-    Awaitable,
-    Iterable,
 )
+from collections.abc import Callable, Awaitable, Iterable
 import socket
 
 # Third-party modules

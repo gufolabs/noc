@@ -13,7 +13,8 @@ import os
 import platform
 import socket
 import sys
-from typing import Iterable, Any
+from typing import Any
+from collections.abc import Iterable
 
 logger = logging.getLogger(__name__)
 

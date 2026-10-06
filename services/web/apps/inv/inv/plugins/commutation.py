@@ -7,7 +7,8 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Iterable, Any
+from typing import Any
+from collections.abc import Iterable
 from collections import defaultdict
 
 # Third party modules

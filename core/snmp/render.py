@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Third-party modules
-from typing import Callable
+from collections.abc import Callable
 
 # NOC modules
 from noc.core.comp import smart_text

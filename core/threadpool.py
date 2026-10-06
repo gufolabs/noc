@@ -16,7 +16,8 @@ from time import perf_counter
 import asyncio
 
 # Third-party modules
-from typing import Any, Callable, TypeVar
+from typing import Any, TypeVar
+from collections.abc import Callable
 
 # NOC modules
 from noc.config import config

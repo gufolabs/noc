@@ -8,7 +8,8 @@
 # Python modules
 import logging
 from urllib.parse import urlparse
-from typing import Any, Callable
+from typing import Any
+from collections.abc import Callable
 
 # Third-party modules
 from gufo.http import BasicAuth, RequestMethod, DEFLATE, GZIP, BROTLI, Proxy, HttpError

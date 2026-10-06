@@ -10,7 +10,8 @@ import re
 import functools
 from functools import reduce
 import asyncio
-from typing import Any, Callable
+from typing import Any
+from collections.abc import Callable
 
 # NOC modules
 from noc.core.text import replace_re_group

@@ -10,7 +10,8 @@ import datetime
 import operator
 from dataclasses import dataclass
 from threading import Lock
-from typing import Optional, Any, Union, Iterator
+from typing import Optional, Any, Union
+from collections.abc import Iterator
 import warnings
 
 # Third-party modules
@@ -30,7 +31,7 @@ from mongoengine.fields import (
 from mongoengine import signals
 from mongoengine.queryset.queryset import QuerySet
 import cachetools
-from typing import Iterable
+from collections.abc import Iterable
 
 # NOC modules
 from noc.gis.models.layer import Layer, DEFAULT_ZOOM

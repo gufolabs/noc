@@ -9,7 +9,7 @@
 import importlib
 import os
 import ast
-from typing import Iterable
+from collections.abc import Iterable
 from pathlib import Path
 
 # Third-party modules

@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Callable
+from collections.abc import Callable
 
 # NOC modules
 from noc.core.models.valuetype import ValueType

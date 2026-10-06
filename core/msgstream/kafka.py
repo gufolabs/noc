@@ -9,7 +9,7 @@
 import logging
 import asyncio
 import random
-from typing import AsyncIterable
+from collections.abc import AsyncIterable
 from collections import defaultdict
 
 # Third-party modules

@@ -7,7 +7,8 @@
 
 # Python modules
 from collections import defaultdict
-from typing import Iterable, TypeVar
+from typing import TypeVar
+from collections.abc import Iterable
 
 # NOC modules
 from .base import BaseConstraint

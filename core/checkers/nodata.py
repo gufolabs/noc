@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import AsyncIterable
+from collections.abc import AsyncIterable
 
 # NOC modules
 from .base import BaseChecker, CheckResult, Check, NODATA

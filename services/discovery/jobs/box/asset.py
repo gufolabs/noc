@@ -12,7 +12,8 @@ import base64
 from threading import Lock
 import operator
 import re
-from typing import Optional, Iterable, Any
+from typing import Optional, Any
+from collections.abc import Iterable
 
 # Third-party modules
 import cachetools

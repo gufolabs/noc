@@ -9,7 +9,8 @@
 import inspect
 import re
 import os
-from typing import Iterable, Any, cast
+from typing import Any, cast
+from collections.abc import Iterable
 import warnings
 
 # NOC modules

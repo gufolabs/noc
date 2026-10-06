@@ -9,7 +9,8 @@
 import operator
 from threading import Lock
 from dataclasses import dataclass
-from typing import Any, Optional, Callable
+from typing import Any, Optional
+from collections.abc import Callable
 from pathlib import Path
 
 # Third-party modules

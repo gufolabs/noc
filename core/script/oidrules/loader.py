@@ -8,7 +8,7 @@
 # Python modules
 from contextlib import contextmanager
 from contextvars import ContextVar
-from typing import Callable
+from collections.abc import Callable
 
 cv_oid_rule_resolver: ContextVar[Callable | None] = ContextVar("cv_oid_rule_resolver", default=None)
 

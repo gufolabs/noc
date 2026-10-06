@@ -11,7 +11,8 @@ import re
 import json
 import operator
 from dataclasses import dataclass
-from typing import Iterable, Any
+from typing import Any
+from collections.abc import Iterable
 import logging
 from pathlib import Path
 

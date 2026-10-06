@@ -16,7 +16,8 @@ import dataclasses
 import operator
 import re
 from time import perf_counter
-from typing import Any, Iterable
+from typing import Any
+from collections.abc import Iterable
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter

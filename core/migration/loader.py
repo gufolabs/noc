@@ -8,7 +8,7 @@
 # Python modules
 import importlib
 import operator
-from typing import Iterable
+from collections.abc import Iterable
 from pathlib import Path
 
 # Third-party modules

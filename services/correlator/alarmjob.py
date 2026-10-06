@@ -11,7 +11,8 @@ import datetime
 import operator
 import time
 from dataclasses import dataclass
-from typing import Optional, Any, Iterable
+from typing import Optional, Any
+from collections.abc import Iterable
 
 # Third-party modules
 from bson import ObjectId

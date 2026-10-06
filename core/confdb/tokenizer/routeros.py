@@ -7,7 +7,7 @@
 
 # Python modules
 import re
-from typing import Iterator
+from collections.abc import Iterator
 
 # NOC modules
 from noc.core.validators import is_int

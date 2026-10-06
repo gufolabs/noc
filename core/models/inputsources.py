@@ -7,7 +7,7 @@
 
 # Python modules
 import enum
-from typing import Iterable
+from collections.abc import Iterable
 
 CODE_SOURCE_MAP = {
     "e": "etl",

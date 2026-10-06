@@ -10,7 +10,8 @@ import datetime
 import logging
 import itertools
 from functools import partial
-from typing import Any, Iterable, TypeVar
+from typing import Any, TypeVar
+from collections.abc import Iterable
 
 # Third-party modules
 import orjson

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Iterable, Iterator
+from collections.abc import Iterable, Iterator
 
 # NOC modules
 from .line import LineTokenizer

@@ -7,7 +7,8 @@
 
 # Python modules
 import xml.etree.ElementTree as ET
-from typing import Optional, TextIO, Iterable
+from typing import Optional, TextIO
+from collections.abc import Iterable
 from io import StringIO
 from copy import deepcopy
 from itertools import zip_longest

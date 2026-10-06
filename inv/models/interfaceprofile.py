@@ -10,7 +10,8 @@ import operator
 from threading import Lock, RLock
 from dataclasses import dataclass
 from functools import partial
-from typing import Optional, Callable, Any
+from typing import Optional, Any
+from collections.abc import Callable
 
 # Third-party modules
 from mongoengine.document import Document, EmbeddedDocument

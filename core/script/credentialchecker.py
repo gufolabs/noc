@@ -8,7 +8,7 @@
 # Python modules
 import logging
 from dataclasses import dataclass
-from typing import Iterator, Iterable
+from collections.abc import Iterator, Iterable
 
 # Third-party modules
 from pymongo import ReadPreference

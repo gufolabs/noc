@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Iterable
+from collections.abc import Iterable
 
 # NOC modules
 from noc.services.web.base.extdocapplication import ExtDocApplication

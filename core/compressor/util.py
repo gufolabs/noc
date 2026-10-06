@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Callable
+from collections.abc import Callable
 
 TCompressor = Callable[[bytes], bytes]
 TDecompressor = Callable[[bytes], bytes]

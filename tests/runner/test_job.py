@@ -6,7 +6,8 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Iterable, Any
+from typing import Any
+from collections.abc import Iterable
 import asyncio
 
 # Third-party modules

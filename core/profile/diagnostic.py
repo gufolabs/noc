@@ -8,7 +8,7 @@
 # Python modules
 import logging
 from collections import defaultdict
-from typing import Iterable
+from collections.abc import Iterable
 
 # NOC modules
 from noc.core.mib import mib

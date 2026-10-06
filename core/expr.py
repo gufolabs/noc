@@ -7,7 +7,8 @@
 
 # Python modules
 import ast
-from typing import Any, Callable
+from typing import Any
+from collections.abc import Callable
 
 # NOC modules
 from noc.core.convert.dbm import dbm2mw, mw2dbm

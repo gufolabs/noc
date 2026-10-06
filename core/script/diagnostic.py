@@ -7,7 +7,7 @@
 
 # Python modules
 import logging
-from typing import Iterable
+from collections.abc import Iterable
 
 # NOC modules
 from noc.core.script.scheme import Protocol, SNMPCredential, SNMPv3Credential, CLICredential

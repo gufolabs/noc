@@ -10,7 +10,8 @@ import logging
 import socket
 import errno
 import asyncio
-from typing import Callable, Any
+from typing import Any
+from collections.abc import Callable
 
 # NOC modules
 from noc.core.snmp.version import SNMP_v2c

@@ -11,7 +11,8 @@ import os
 import re
 import itertools
 import operator
-from typing import Callable, Any, cast
+from typing import Any, cast
+from collections.abc import Callable
 from collections import defaultdict
 from dataclasses import dataclass
 

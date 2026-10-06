@@ -13,7 +13,7 @@ from contextvars import ContextVar
 from contextlib import contextmanager
 import operator
 from threading import Lock
-from typing import Iterator
+from collections.abc import Iterator
 import logging
 
 # Third-party modules

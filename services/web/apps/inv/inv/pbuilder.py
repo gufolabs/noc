@@ -6,7 +6,8 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Iterable
+from typing import Any
+from collections.abc import Iterable
 
 # NOC modules
 from noc.inv.models.objectmodel import ObjectModel, ObjectModelConnection

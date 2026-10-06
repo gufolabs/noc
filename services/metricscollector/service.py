@@ -14,7 +14,8 @@ import datetime
 import itertools
 from time import perf_counter
 from dataclasses import dataclass
-from typing import Any, Optional, Iterable
+from typing import Any, Optional
+from collections.abc import Iterable
 from collections import defaultdict
 
 # Third-party modules

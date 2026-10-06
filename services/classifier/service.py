@@ -17,7 +17,8 @@ import struct
 import asyncio
 import datetime
 from time import perf_counter
-from typing import Optional, Callable, Any
+from typing import Optional, Any
+from collections.abc import Callable
 
 # Third-party modules
 import cachetools

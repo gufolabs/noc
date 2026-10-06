@@ -7,7 +7,8 @@
 
 # Python modules
 import logging
-from typing import Any, Iterable
+from typing import Any
+from collections.abc import Iterable
 
 # Third-party modules
 from mongoengine.document import Document

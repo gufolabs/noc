@@ -9,7 +9,8 @@
 import operator
 from collections import defaultdict
 from threading import Lock
-from typing import Optional, Any, Iterable, Callable
+from typing import Optional, Any
+from collections.abc import Iterable, Callable
 from pathlib import Path
 
 # Third-party modules

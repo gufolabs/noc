@@ -9,7 +9,8 @@
 import operator
 import logging
 from threading import Lock
-from typing import Optional, Any, Callable, Iterable
+from typing import Optional, Any
+from collections.abc import Callable, Iterable
 
 # from pathlib import Path
 

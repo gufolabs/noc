@@ -9,7 +9,8 @@
 from collections import defaultdict
 import datetime
 import time
-from typing import Any, AsyncIterable, Iterable
+from typing import Any
+from collections.abc import AsyncIterable, Iterable
 
 # Third-party modules
 from pymongo import ReadPreference
