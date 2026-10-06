@@ -8,7 +8,6 @@
 
 # Python modules
 from collections import defaultdict
-import asyncio
 
 # NOC modules
 from noc.config import config
@@ -37,7 +36,7 @@ class EscalatorService(FastAPIService):
             try:
                 await self.shards[s].shutdown()
                 self.logger.info("Shard %s is down", s)
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 self.logger.info("Cannot shutdown shard %s cleanly: Timeout", s)
 
     def apply_shards(self) -> None:

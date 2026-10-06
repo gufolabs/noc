@@ -87,7 +87,7 @@ async def snmp_get(
             data, addr = await asyncio.wait_for(
                 sock.send_and_receive(pdu, (address, port)), timeout
             )
-        except asyncio.TimeoutError:
+        except TimeoutError:
             raise SNMPError(code=TIMED_OUT, oid=oids[0])
         except socket.gaierror as e:
             logger.debug("[%s] Cannot resolve address: %s", address, e)
@@ -212,7 +212,7 @@ async def snmp_count(
                 data, addr = await asyncio.wait_for(
                     sock.send_and_receive(pdu, (address, port)), timeout
                 )
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 raise SNMPError(code=TIMED_OUT, oid=oid)
             except socket.gaierror as e:
                 logger.debug("[%s] Cannot resolve address: %s", address, e)
@@ -297,7 +297,7 @@ async def snmp_getnext(
                 data, addr = await asyncio.wait_for(
                     sock.send_and_receive(pdu, (address, port)), timeout
                 )
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 if not max_retries:
                     raise SNMPError(code=TIMED_OUT, oid=oid)
                 max_retries -= 1
@@ -378,7 +378,7 @@ async def snmp_set(
             data, addr = await asyncio.wait_for(
                 sock.send_and_receive(pdu, (address, port)), timeout
             )
-        except asyncio.TimeoutError:
+        except TimeoutError:
             raise SNMPError(code=TIMED_OUT, oid=varbinds[0][0])
         except socket.gaierror as e:
             logger.debug("[%s] Cannot resolve address: %s", address, e)

@@ -145,7 +145,7 @@ async def fetch(
         except OSError as e:
             metrics["httpclient_timeouts"] += 1
             return ERR_TIMEOUT, {}, b"Connection error: %s" % smart_bytes(e)
-        except asyncio.TimeoutError:
+        except TimeoutError:
             metrics["httpclient_timeouts"] += 1
             return ERR_TIMEOUT, {}, b"Connection timed out"
         # Proxy CONNECT
@@ -160,7 +160,7 @@ async def fetch(
             writer.write(smart_bytes(req))
             try:
                 await asyncio.wait_for(writer.drain(), request_timeout)
-            except (asyncio.TimeoutError, TimeoutError):
+            except TimeoutError:
                 metrics["httpclient_proxy_timeouts"] += 1
                 return ERR_TIMEOUT, {}, b"Timed out while sending request to proxy"
             # Wait for proxy response
@@ -168,7 +168,7 @@ async def fetch(
             while not parser.is_headers_complete():
                 try:
                     data = await asyncio.wait_for(reader.read(max_buffer_size), request_timeout)
-                except (asyncio.TimeoutError, TimeoutError):
+                except TimeoutError:
                     metrics["httpclient_proxy_timeouts"] += 1
                     return ERR_TIMEOUT, {}, b"Timed out while sending request to proxy"
                 received = len(data)
@@ -237,7 +237,7 @@ async def fetch(
         except ConnectionResetError:
             metrics["httpclient_timeouts"] += 1
             return ERR_TIMEOUT, {}, b"Connection reset while sending request"
-        except (asyncio.TimeoutError, TimeoutError):
+        except TimeoutError:
             metrics["httpclient_timeouts"] += 1
             return ERR_TIMEOUT, {}, b"Timed out while sending request"
         parser = HttpParser()
@@ -248,7 +248,7 @@ async def fetch(
                 is_eof = not data
             except (asyncio.IncompleteReadError, ConnectionResetError):
                 is_eof = True
-            except (asyncio.TimeoutError, TimeoutError):
+            except TimeoutError:
                 metrics["httpclient_timeouts"] += 1
                 return ERR_READ_TIMEOUT, {}, b"Request timed out"
             if is_eof:

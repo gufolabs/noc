@@ -401,7 +401,7 @@ class BaseService:
             try:
                 self.logger.info("Shutting down scheduler")
                 await self.scheduler.shutdown()
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 self.logger.info("Timed out when shutting down scheduler")
         # Shutdown executors
         await self.shutdown_executors()
@@ -674,7 +674,7 @@ class BaseService:
                 try:
                     self.logger.info("Shutting down %s", x)
                     await self.executors[x].shutdown()
-                except asyncio.TimeoutError:
+                except TimeoutError:
                     self.logger.info("Timed out when shutting down %s", x)
 
     async def shutdown_subscriptions(self) -> None:
@@ -682,7 +682,7 @@ class BaseService:
         self.subscriber_shutdown_waiter = asyncio.Event()
         try:
             await asyncio.wait_for(self.subscriber_shutdown_waiter.wait(), 10)
-        except asyncio.TimeoutError:
+        except TimeoutError:
             self.logger.info(
                 "Timed out when shutting down subscriptions. Some message may be still processing"
             )

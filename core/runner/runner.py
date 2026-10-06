@@ -169,7 +169,7 @@ class Runner:
                     logger.info("[%s|%s] All locks are aquired", job.id, job.name)
                 await job.run()
             status = JobStatus.SUCCESS
-        except asyncio.TimeoutError:
+        except TimeoutError:
             logger.error("[%s|%s] Timed out", job.id, job.name)
             status = JobStatus.WARNING if job.allow_fail else JobStatus.CANCELLED
         except asyncio.CancelledError:

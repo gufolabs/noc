@@ -1,13 +1,12 @@
 # ----------------------------------------------------------------------
 # MML class
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import re
-import asyncio
 
 # NOC modules
 from noc.config import config
@@ -129,12 +128,12 @@ class MMLBase(BaseCLI):
                 metrics["mml_read_bytes", ("proto", self.name)] += len(r)
                 if self.script.to_track:
                     self.script.push_cli_tracking(r, self.state)
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 self.logger.info("Timeout error")
                 metrics["mml_timeouts", ("proto", self.name)] += 1
                 # Stream must be closed to prevent hanging read callbacks
                 self.close_stream()
-                raise asyncio.TimeoutError("Timeout")  # @todo: Uncaught
+                raise TimeoutError("Timeout")  # @todo: Uncaught
             self.logger.debug("Received: %r", r)
             self.buffer += r
             offset = max(0, len(self.buffer) - self.MATCH_TAIL)

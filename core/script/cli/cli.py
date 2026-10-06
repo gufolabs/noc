@@ -184,7 +184,7 @@ class CLI(BaseCLI):
             try:
                 metrics["cli_reads", ("proto", self.name)] += 1
                 r = await self.stream.read(self.BUFFER_SIZE)
-            except (asyncio.TimeoutError, TimeoutError):
+            except TimeoutError:
                 self.logger.warning("Timeout error")
                 metrics["cli_timeouts", ("proto", self.name)] += 1
                 # Stream must be closed to prevent hanging read callbacks
