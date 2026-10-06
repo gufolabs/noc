@@ -32,57 +32,49 @@ def _convert(
     Returns:
         Pretty-printed JSON fragment.
     """
-    if value is None:
-        return indent("null", level)
+    match value:
+        case None:
+            return indent("null", level)
+        case str():
+            return indent(f'"{json_escape(value)}"', level)
+        case bool():
+            return indent("true" if value else "false", level)
+        case int() | float():
+            return indent(str(value), level)
+        case uuid.UUID():
+            return indent(f'"{value}"', level)
+        case list():
+            if not value:
+                return indent("[]", level)
 
-    if isinstance(value, str):
-        return indent(f'"{json_escape(value)}"', level)
+            items = [_convert(item, 0, order) for item in value]
+            line_length = sum(map(len, items)) + level + (len(items) - 1) * 2
 
-    if isinstance(value, bool):
-        return indent("true" if value else "false", level)
-
-    if isinstance(value, int):
-        return indent(str(value), level)
-
-    if isinstance(value, float):
-        return indent(str(value), level)
-
-    if isinstance(value, uuid.UUID):
-        return indent(f'"{value}"', level)
-
-    if isinstance(value, list):
-        if not value:
-            return indent("[]", level)
-
-        items = [_convert(item, 0, order) for item in value]
-        line_length = sum(map(len, items)) + level + (len(items) - 1) * 2
-
-        if line_length > 72:
-            body = ",\n".join(indent(item, level + 4) for item in items)
-            return "\n".join(
-                (
-                    indent("[", level),
-                    body,
-                    indent("]", level),
+            if line_length > 72:
+                body = ",\n".join(indent(item, level + 4) for item in items)
+                return "\n".join(
+                    (
+                        indent("[", level),
+                        body,
+                        indent("]", level),
+                    )
                 )
+
+            return indent(f"[{', '.join(items)}]", level)
+        case dict():
+            if not value:
+                return indent("{}", level)
+
+            keys = sorted(value)
+            if order:
+                keys = [k for k in order if k in value] + [k for k in keys if k not in order]
+
+            body = ",\n".join(
+                f"{_convert(key, 0, order)}: {_convert(value[key], 0, order)}" for key in keys
             )
-
-        return indent(f"[{', '.join(items)}]", level)
-
-    if isinstance(value, dict):
-        if not value:
-            return indent("{}", level)
-
-        keys = sorted(value)
-        if order:
-            keys = [k for k in order if k in value] + [k for k in keys if k not in order]
-
-        body = ",\n".join(
-            f"{_convert(key, 0, order)}: {_convert(value[key], 0, order)}" for key in keys
-        )
-        return indent(f"{{\n{indent(body, 4)}\n}}", level)
-
-    raise TypeError(f"Cannot encode {type(value).__name__}: {value!r}")
+            return indent(f"{{\n{indent(body, 4)}\n}}", level)
+        case _:
+            raise TypeError(f"Cannot encode {type(value).__name__}: {value!r}")
 
 
 def to_json(

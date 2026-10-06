@@ -239,20 +239,19 @@ def to_sql(expr, model=None):
     Convert query expression to sql
     :return:
     """
-    if isinstance(expr, dict):
-        for k in expr:
-            op = OP_MAP.get(k)
-            if not op:
-                raise ValueError(f"Invalid operator: {expr}")
-            v = expr[k]
-            if not isinstance(v, list):
-                v = [v]
-            return op.to_sql(v, model)
-    elif isinstance(expr, str):
-        if expr.isdigit():
-            return int(expr)
-        return f"'{escape_str(expr)}'"
-    elif isinstance(expr, int):
-        return str(expr)
-    elif isinstance(expr, float):
-        return str(expr)
+    match expr:
+        case dict():
+            for k in expr:
+                op = OP_MAP.get(k)
+                if not op:
+                    raise ValueError(f"Invalid operator: {expr}")
+                v = expr[k]
+                if not isinstance(v, list):
+                    v = [v]
+                return op.to_sql(v, model)
+        case str():
+            if expr.isdigit():
+                return int(expr)
+            return f"'{escape_str(expr)}'"
+        case int() | float():
+            return str(expr)

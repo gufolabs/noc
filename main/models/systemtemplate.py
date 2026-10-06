@@ -50,15 +50,16 @@ class SystemTemplate(NOCModel):
         # Fix users
         u_list = []
         for u in users:
-            if isinstance(u, int):
-                try:
-                    u_list += [User.objects.get(id=u)]
-                except User.DoesNotExist:
-                    continue
-            elif isinstance(u, str):
-                u_list += [User.objects.get(username=u)]
-            elif isinstance(u, User):
-                u_list += [u]
+            match u:
+                case int():
+                    try:
+                        u_list += [User.objects.get(id=u)]
+                    except User.DoesNotExist:
+                        continue
+                case str():
+                    u_list += [User.objects.get(username=u)]
+                case User():
+                    u_list += [u]
         # Left only active users
         u_list = [u for u in u_list if u.is_active]  # noqa
         # Send notifications

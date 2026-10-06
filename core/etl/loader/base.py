@@ -890,35 +890,36 @@ class BaseLoader:
         for fn, ft in self.model._fields.items():
             if fn not in self.data_model.model_fields:
                 continue
-            if isinstance(ft, BooleanField):
-                self.clean_map[fn] = self.clean_bool
-            elif isinstance(ft, (PlainReferenceField, ReferenceField)):
-                if fn in self.mapped_fields:
+            match ft:
+                case BooleanField():
+                    self.clean_map[fn] = self.clean_bool
+                case PlainReferenceField() | ReferenceField():
+                    if fn in self.mapped_fields:
+                        self.clean_map[fn] = functools.partial(
+                            self.clean_reference,
+                            self.chain.get_mappings(self.mapped_fields[fn]),
+                            ft.document_type,
+                            self.mapped_fields[fn],
+                        )
+                case ForeignKeyField():
+                    if fn in self.mapped_fields:
+                        self.clean_map[fn] = functools.partial(
+                            self.clean_int_reference,
+                            self.chain.get_mappings(self.mapped_fields[fn]),
+                            ft.document_type,
+                            self.mapped_fields[fn],
+                        )
+                case EmbeddedDocumentListField():
                     self.clean_map[fn] = functools.partial(
-                        self.clean_reference,
+                        self.clean_ed_list,
+                        ft.field.document_type,
+                    )
+                case _ if fn in self.mapped_fields:
+                    self.clean_map[fn] = functools.partial(
+                        self.clean_map_str,
                         self.chain.get_mappings(self.mapped_fields[fn]),
-                        ft.document_type,
                         self.mapped_fields[fn],
                     )
-            elif isinstance(ft, ForeignKeyField):
-                if fn in self.mapped_fields:
-                    self.clean_map[fn] = functools.partial(
-                        self.clean_int_reference,
-                        self.chain.get_mappings(self.mapped_fields[fn]),
-                        ft.document_type,
-                        self.mapped_fields[fn],
-                    )
-            elif isinstance(ft, EmbeddedDocumentListField):
-                self.clean_map[fn] = functools.partial(
-                    self.clean_ed_list,
-                    ft.field.document_type,
-                )
-            elif fn in self.mapped_fields:
-                self.clean_map[fn] = functools.partial(
-                    self.clean_map_str,
-                    self.chain.get_mappings(self.mapped_fields[fn]),
-                    self.mapped_fields[fn],
-                )
 
     def update_model_clean_map(self):
         from django.db.models import BooleanField, ForeignKey
@@ -928,30 +929,31 @@ class BaseLoader:
         for f in self.model._meta.fields:
             if f.name not in self.data_model.model_fields:
                 continue
-            if isinstance(f, BooleanField):
-                self.clean_map[f.name] = self.clean_bool
-            elif isinstance(f, DocumentReferenceField):
-                if f.name in self.mapped_fields:
+            match f:
+                case BooleanField():
+                    self.clean_map[f.name] = self.clean_bool
+                case DocumentReferenceField():
+                    if f.name in self.mapped_fields:
+                        self.clean_map[f.name] = functools.partial(
+                            self.clean_reference,
+                            self.chain.get_mappings(self.mapped_fields[f.name]),
+                            f.document,
+                            self.mapped_fields[f.name],
+                        )
+                case ForeignKey():
+                    if f.name in self.mapped_fields:
+                        self.clean_map[f.name] = functools.partial(
+                            self.clean_reference,
+                            self.chain.get_mappings(self.mapped_fields[f.name]),
+                            f.remote_field.model,
+                            self.mapped_fields[f.name],
+                        )
+                case _ if f.name in self.mapped_fields:
                     self.clean_map[f.name] = functools.partial(
-                        self.clean_reference,
+                        self.clean_map_str,
                         self.chain.get_mappings(self.mapped_fields[f.name]),
-                        f.document,
                         self.mapped_fields[f.name],
                     )
-            elif isinstance(f, ForeignKey):
-                if f.name in self.mapped_fields:
-                    self.clean_map[f.name] = functools.partial(
-                        self.clean_reference,
-                        self.chain.get_mappings(self.mapped_fields[f.name]),
-                        f.remote_field.model,
-                        self.mapped_fields[f.name],
-                    )
-            elif f.name in self.mapped_fields:
-                self.clean_map[f.name] = functools.partial(
-                    self.clean_map_str,
-                    self.chain.get_mappings(self.mapped_fields[f.name]),
-                    self.mapped_fields[f.name],
-                )
 
     def check(self, chain):
         self.logger.info("Checking")
