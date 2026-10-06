@@ -28,14 +28,14 @@ def test_base_close():
         BaseCompressor(path).close()
 
 
-@pytest.mark.parametrize("fmt", loader.iter_classes())
+@pytest.mark.parametrize("fmt", list(loader.iter_classes()))
 def test_file_instance(fmt):
     comp_cls = loader.get_class(fmt)
     with temporary_file() as path, comp_cls(path, mode="w") as f:
         assert isinstance(f, io.TextIOWrapper)
 
 
-@pytest.mark.parametrize("fmt", loader.iter_classes())
+@pytest.mark.parametrize("fmt", list(loader.iter_classes()))
 def test_ext(fmt):
     comp_cls = loader.get_class(fmt)
     assert comp_cls.ext is not None
@@ -43,7 +43,7 @@ def test_ext(fmt):
         assert comp_cls.ext.startswith(".")
 
 
-@pytest.mark.parametrize("fmt", loader.iter_classes())
+@pytest.mark.parametrize("fmt", list(loader.iter_classes()))
 def test_compressor(fmt):
     comp_cls = loader.get_class(fmt)
     with temporary_file() as path:

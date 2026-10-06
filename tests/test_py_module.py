@@ -70,7 +70,7 @@ def iter_init() -> Iterable[Path]:
             yield path
 
 
-@pytest.mark.parametrize("module", iter_py_modules())
+@pytest.mark.parametrize("module", list(iter_py_modules()))
 def test_import(module: str) -> None:
     try:
         m = importlib.import_module(module)
@@ -82,7 +82,7 @@ def test_import(module: str) -> None:
             pytest.fail(str(e))
 
 
-@pytest.mark.parametrize("path", iter_init())
+@pytest.mark.parametrize("path", list(iter_init()))
 def test_init(path: Path) -> None:
     data = path.read_text()
     if "TESTS: ALLOW_NON_EMPTY_INIT" in data:
