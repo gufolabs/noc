@@ -115,7 +115,7 @@ class Command(BaseCommand):
     def handle_compress(self, *args, **options):
         to_compress = [
             d["_id"]
-            for d in self.vcs.fs._GridFS__files.aggregate(
+            for d in self.vcs.files.aggregate(
                 [{"$match": {"c": {"$exists": False}}}, {"$group": {"_id": "$object"}}]
             )
         ]
@@ -134,8 +134,8 @@ class Command(BaseCommand):
                 self.vcs.put(obj, cfg, rev.ts)
 
     def handle_stats(self, *args, top=25, **options):
-        files = self.vcs.fs._GridFS__files
-        chunks = self.vcs.fs._GridFS__chunks
+        files = self.vcs.files
+        chunks = self.vcs.chunks
         db = files.database
         obj_count = len(files.distinct("object"))
         rev_count = files.estimated_document_count()
@@ -186,7 +186,7 @@ class Command(BaseCommand):
                 self.print("Ids: ", ",".join(str(x) for x in bucket["objects"]))
 
     def get_bucket(self, min_size=None, buckets=5):
-        return self.vcs.fs._GridFS__files.aggregate(
+        return self.vcs.files.aggregate(
             [
                 {"$group": {"_id": "$object", "size": {"$sum": "$length"}}},
                 {"$match": {"size": {"$gte": min_size}}},
