@@ -47,7 +47,7 @@ dependencies = [
   "manhole==1.8.1",
   "markerlib==0.6.0",
   "mongoengine==0.29.3",
-  "motor==3.5.1",
+  "motor==3.7.1",
   "networkx==3.5",
   "numpy==2.3.2",
   "orjson==3.11.7",
