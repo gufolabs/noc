@@ -511,48 +511,49 @@ class ModelTemplate(Document):
                 or f.name.startswith("tt")
             ):
                 continue
-            if isinstance(f, DocumentReferenceField):
-                d = f.document
-                if isinstance(d, str):
-                    d = get_model(f.document)
-                rest_url = get_model_id(d).lower().replace(".", "/")
-                r.append(
-                    TemplateField(
-                        id=f.name,
-                        label=f.verbose_name or f.name.capitalize(),
-                        is_tree=hasattr(d, "get_path"),
-                        model_id=get_model_id(d),
-                        type="lookup",
-                        rest_url=f"/{rest_url}/lookup",
+            match f:
+                case DocumentReferenceField():
+                    d = f.document
+                    if isinstance(d, str):
+                        d = get_model(f.document)
+                    rest_url = get_model_id(d).lower().replace(".", "/")
+                    r.append(
+                        TemplateField(
+                            id=f.name,
+                            label=f.verbose_name or f.name.capitalize(),
+                            is_tree=hasattr(d, "get_path"),
+                            model_id=get_model_id(d),
+                            type="lookup",
+                            rest_url=f"/{rest_url}/lookup",
+                        )
                     )
-                )
-            elif isinstance(f, CachedForeignKey):
-                rest_url = get_model_id(f.related_model).lower().replace(".", "/")
-                r.append(
-                    TemplateField(
-                        id=f.name,
-                        label=f.verbose_name or f.name.capitalize(),
-                        is_tree=hasattr(f.related_model, "get_path"),
-                        model_id=get_model_id(f.related_model),
-                        type="lookup",
-                        rest_url=f"/{rest_url}/lookup",
+                case CachedForeignKey():
+                    rest_url = get_model_id(f.related_model).lower().replace(".", "/")
+                    r.append(
+                        TemplateField(
+                            id=f.name,
+                            label=f.verbose_name or f.name.capitalize(),
+                            is_tree=hasattr(f.related_model, "get_path"),
+                            model_id=get_model_id(f.related_model),
+                            type="lookup",
+                            rest_url=f"/{rest_url}/lookup",
+                        )
                     )
-                )
-            elif isinstance(f, CharField):
-                r.append(
-                    TemplateField(
-                        id=f.name,
-                        label=f.verbose_name or f.name.capitalize(),
-                        choices=f.get_choices() if f.choices else [],
-                        type="string",
+                case CharField():
+                    r.append(
+                        TemplateField(
+                            id=f.name,
+                            label=f.verbose_name or f.name.capitalize(),
+                            choices=f.get_choices() if f.choices else [],
+                            type="string",
+                        )
                     )
-                )
-            elif isinstance(f, IntegerField):
-                r.append(
-                    TemplateField(
-                        id=f.name,
-                        label=f.verbose_name or f.name.capitalize(),
-                        type="number",
+                case IntegerField():
+                    r.append(
+                        TemplateField(
+                            id=f.name,
+                            label=f.verbose_name or f.name.capitalize(),
+                            type="number",
+                        )
                     )
-                )
         return r

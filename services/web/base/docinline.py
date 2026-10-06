@@ -66,12 +66,13 @@ class DocInline:
         # Prepare field converters
         self.clean_fields = self.clean_fields.copy()  # name -> Parameter
         for name, f in self.model._fields.items():
-            if isinstance(f, BooleanField):
-                self.clean_fields[name] = BooleanParameter()
-            elif isinstance(f, IntField):
-                self.clean_fields[name] = IntParameter()
-            elif isinstance(f, PlainReferenceField):
-                self.clean_fields[name] = DocumentParameter(f.document_type)
+            match f:
+                case BooleanField():
+                    self.clean_fields[name] = BooleanParameter()
+                case IntField():
+                    self.clean_fields[name] = IntParameter()
+                case PlainReferenceField():
+                    self.clean_fields[name] = DocumentParameter(f.document_type)
         if not self.query_fields:
             self.query_fields = [
                 f"{n}__{self.query_condition}"

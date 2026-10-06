@@ -144,9 +144,6 @@ class DocumentResourceAPI(BaseResourceAPI[T]):
             return remote
 
         for name, field in self.model._fields.items():
-            if isinstance(field, ForeignKeyField):
-                self.add_ref_cleaner(field.name, ensure_remote(field.document_type))
-            elif isinstance(field, ReferenceField):
-                self.add_ref_cleaner(field.name, ensure_remote(field.document_type))
-            elif isinstance(field, PlainReferenceField):
-                self.add_ref_cleaner(field.name, ensure_remote(field.document_type))
+            match field:
+                case ForeignKeyField() | ReferenceField() | PlainReferenceField():
+                    self.add_ref_cleaner(field.name, ensure_remote(field.document_type))

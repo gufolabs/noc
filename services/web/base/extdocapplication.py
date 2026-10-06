@@ -87,39 +87,41 @@ class ExtDocApplication(ExtApplication):
         # Prepare field converters
         self.clean_fields = self.clean_fields.copy()  # name -> Parameter
         for name, f in self.model._fields.items():
-            if isinstance(f, BooleanField):
-                self.clean_fields[name] = BooleanParameter()
-            elif isinstance(f, GeoPointField):
-                self.clean_fields[name] = GeoPointParameter()
-            elif isinstance(f, ForeignKeyListField):
-                self.clean_fields[f.name] = ListOfParameter(element=ModelParameter(f.document_type))
-            # elif isinstance(f, PlainReferenceListField):
-            #     self.clean_fields[f.name] = ListOfParameter(element=ModelParameter(f.document_type))
-            elif isinstance(f, ForeignKeyField):
-                self.clean_fields[f.name] = ModelParameter(f.document_type, required=f.required)
-            elif isinstance(f, EmbeddedDocumentListField):
-                self.clean_fields[f.name] = ListOfParameter(
-                    element=EmbeddedDocumentParameter(f.field.document_type)
-                )
-            elif isinstance(f, ListField):
-                if isinstance(f.field, EmbeddedDocumentField):
+            match f:
+                case BooleanField():
+                    self.clean_fields[name] = BooleanParameter()
+                case GeoPointField():
+                    self.clean_fields[name] = GeoPointParameter()
+                case ForeignKeyListField():
+                    self.clean_fields[f.name] = ListOfParameter(
+                        element=ModelParameter(f.document_type)
+                    )
+                case ForeignKeyField():
+                    self.clean_fields[f.name] = ModelParameter(f.document_type, required=f.required)
+                case EmbeddedDocumentListField():
                     self.clean_fields[f.name] = ListOfParameter(
                         element=EmbeddedDocumentParameter(f.field.document_type)
                     )
-                elif isinstance(f.field, ReferenceField):
-                    dt = f.field.document_type_obj
+                case ListField():
+                    match f.field:
+                        case EmbeddedDocumentField():
+                            self.clean_fields[f.name] = ListOfParameter(
+                                element=EmbeddedDocumentParameter(f.field.document_type)
+                            )
+                        case ReferenceField():
+                            dt = f.field.document_type_obj
+                            if dt == "self":
+                                dt = self.model
+                            self.clean_fields[f.name] = ListOfParameter(
+                                element=DocumentParameter(dt, required=f.required)
+                            )
+                case EmbeddedDocumentField():
+                    self.clean_fields[f.name] = EmbeddedDocumentParameter(f.document_type)
+                case ReferenceField():
+                    dt = f.document_type_obj
                     if dt == "self":
                         dt = self.model
-                    self.clean_fields[f.name] = ListOfParameter(
-                        element=DocumentParameter(dt, required=f.required)
-                    )
-            elif isinstance(f, EmbeddedDocumentField):
-                self.clean_fields[f.name] = EmbeddedDocumentParameter(f.document_type)
-            elif isinstance(f, ReferenceField):
-                dt = f.document_type_obj
-                if dt == "self":
-                    dt = self.model
-                self.clean_fields[f.name] = DocumentParameter(dt, required=f.required)
+                    self.clean_fields[f.name] = DocumentParameter(dt, required=f.required)
             if f.primary_key:
                 self.pk = name
             if name == "uuid":
