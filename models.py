@@ -8,7 +8,7 @@
 # Python modules
 import logging
 import importlib
-from typing import Iterable
+from collections.abc import Iterable
 
 # Third-party modules
 from django.db.models import Model as DjangoModel

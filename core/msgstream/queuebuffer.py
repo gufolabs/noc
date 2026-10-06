@@ -7,7 +7,8 @@
 
 # Python modules
 from collections import defaultdict
-from typing import Any, Iterable
+from typing import Any
+from collections.abc import Iterable
 from threading import Lock
 
 # Third-party modules

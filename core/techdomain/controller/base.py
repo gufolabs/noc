@@ -6,7 +6,8 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Iterable, Any
+from typing import Any
+from collections.abc import Iterable
 from dataclasses import dataclass
 import logging
 from enum import Enum

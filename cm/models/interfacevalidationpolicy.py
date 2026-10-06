@@ -16,7 +16,7 @@ from mongoengine.document import Document, EmbeddedDocument
 from mongoengine.fields import StringField, BooleanField, DictField, EmbeddedDocumentListField
 from jinja2 import Template
 import cachetools
-from typing import Iterable
+from collections.abc import Iterable
 
 # NOC modules
 from noc.core.mongo.fields import PlainReferenceField

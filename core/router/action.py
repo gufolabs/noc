@@ -8,7 +8,8 @@
 # Python modules
 import datetime
 import logging
-from typing import Iterator, Literal, Any, ClassVar, cast
+from typing import Literal, Any, ClassVar, cast
+from collections.abc import Iterator
 from dataclasses import dataclass
 
 # Third-party modules

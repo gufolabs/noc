@@ -6,7 +6,8 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Iterator, Any
+from typing import Any
+from collections.abc import Iterator
 from logging import getLogger
 import asyncio
 from time import perf_counter_ns

@@ -18,7 +18,8 @@ import bson
 import bson.errors
 import pymongo
 import dateutil.parser
-from typing import Any, Iterable, Callable
+from typing import Any
+from collections.abc import Iterable, Callable
 
 # NOC modules
 from noc.core.perf import metrics

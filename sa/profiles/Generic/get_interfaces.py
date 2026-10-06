@@ -8,11 +8,9 @@
 # Python modules
 import re
 from typing import (
-    Iterable,
-    Callable,
     Any,
-    Iterator,
 )
+from collections.abc import Iterable, Callable, Iterator
 from collections import defaultdict
 from itertools import chain
 

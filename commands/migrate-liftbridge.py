@@ -7,7 +7,7 @@
 
 # Python modules
 from functools import partial
-from typing import Iterable
+from collections.abc import Iterable
 import argparse
 
 # NOC modules

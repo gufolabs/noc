@@ -9,7 +9,7 @@
 # Python modules
 from time import perf_counter
 import asyncio
-from typing import AsyncIterable
+from collections.abc import AsyncIterable
 
 # Third-party modules
 

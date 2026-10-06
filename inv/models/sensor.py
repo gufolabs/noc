@@ -11,7 +11,8 @@ import operator
 import datetime
 from collections import defaultdict
 from threading import Lock
-from typing import Optional, Iterable, Any
+from typing import Optional, Any
+from collections.abc import Iterable
 
 # Third-party modules
 import bson

@@ -11,7 +11,8 @@ import operator
 import itertools
 from time import time_ns
 from collections import defaultdict
-from typing import Iterator, Iterable, Any
+from typing import Any
+from collections.abc import Iterator, Iterable
 from functools import partial
 
 # Third-party modules

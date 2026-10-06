@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Iterable
+from collections.abc import Iterable
 from abc import ABC, abstractmethod
 from contextvars import ContextVar
 

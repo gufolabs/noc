@@ -10,7 +10,8 @@ import logging
 import datetime
 import operator
 import threading
-from typing import Iterable, Any, NoReturn
+from typing import Any, NoReturn
+from collections.abc import Iterable
 from collections import defaultdict
 from abc import ABC, abstractmethod
 

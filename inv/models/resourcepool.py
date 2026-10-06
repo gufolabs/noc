@@ -12,7 +12,8 @@ import random
 import string
 import logging
 import datetime
-from typing import Optional, Callable, Any
+from typing import Optional, Any
+from collections.abc import Callable
 
 # Third-party modules
 from bson import ObjectId

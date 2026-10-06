@@ -8,7 +8,7 @@
 # Python modules
 import random
 from collections import namedtuple
-from typing import Callable
+from collections.abc import Callable
 
 # NOC modules
 from .ber import parse_p_oid, BERDecoder, encoder

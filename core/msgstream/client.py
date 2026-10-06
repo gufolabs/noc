@@ -9,7 +9,8 @@
 import asyncio
 import logging
 from functools import partial
-from typing import AsyncIterable, Any
+from typing import Any
+from collections.abc import AsyncIterable
 
 # Third-party modules
 import orjson

@@ -6,7 +6,8 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Iterable, AsyncIterable, Any
+from typing import Any
+from collections.abc import Iterable, AsyncIterable
 
 # Third-party modules
 from pymongo import ReadPreference

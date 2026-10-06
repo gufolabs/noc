@@ -9,7 +9,7 @@
 import enum
 import datetime
 from collections import defaultdict
-from typing import Iterable
+from collections.abc import Iterable
 
 # Third-party modules
 from pydantic import BaseModel, Field

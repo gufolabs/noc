@@ -9,7 +9,8 @@
 from pathlib import Path
 import operator
 from threading import Lock
-from typing import Any, Callable, Optional
+from typing import Any, Optional
+from collections.abc import Callable
 
 # Third-party modules
 from bson import ObjectId

@@ -10,7 +10,8 @@ from collections import defaultdict
 import operator
 
 # Third-party modules
-from typing import Iterable, NamedTuple
+from typing import NamedTuple
+from collections.abc import Iterable
 from bson import ObjectId
 
 # NOC modules

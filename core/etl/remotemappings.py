@@ -8,7 +8,8 @@
 # Python modules
 import logging
 from dataclasses import dataclass
-from typing import Any, Iterable
+from typing import Any
+from collections.abc import Iterable
 
 # Third-party modules
 from jinja2 import Template

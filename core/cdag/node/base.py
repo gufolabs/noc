@@ -6,7 +6,8 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Optional, Iterable, cast
+from typing import Any, Optional, cast
+from collections.abc import Iterable
 from enum import Enum
 import inspect
 from dataclasses import dataclass

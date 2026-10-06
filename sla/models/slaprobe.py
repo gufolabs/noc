@@ -9,7 +9,8 @@
 import re
 import operator
 import datetime
-from typing import Iterable, Optional, Any
+from typing import Optional, Any
+from collections.abc import Iterable
 from threading import Lock
 
 # Third-party modules

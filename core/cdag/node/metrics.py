@@ -7,7 +7,8 @@
 
 # Python modules
 import time
-from typing import Callable, Any
+from typing import Any
+from collections.abc import Callable
 
 # Third-party modules
 from pydantic import BaseModel

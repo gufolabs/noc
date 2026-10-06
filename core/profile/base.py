@@ -12,7 +12,8 @@ import warnings
 from itertools import product
 
 # Third-party modules
-from typing import Any, cast, Callable
+from typing import Any, cast
+from collections.abc import Callable
 
 # NOC modules
 from noc.core.ip import IPv4

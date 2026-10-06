@@ -11,7 +11,8 @@ import bisect
 import datetime
 from operator import itemgetter
 import re
-from typing import Any, AsyncIterable, Iterable
+from typing import Any
+from collections.abc import AsyncIterable, Iterable
 
 # NOC modules
 from noc.config import config

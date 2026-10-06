@@ -8,7 +8,8 @@
 
 # Python modules
 import orjson
-from typing import Any, Iterable
+from typing import Any
+from collections.abc import Iterable
 from urllib.parse import urlencode
 
 # Third-party modules

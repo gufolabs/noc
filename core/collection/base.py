@@ -16,7 +16,8 @@ import threading
 import operator
 from base64 import b85decode
 from pathlib import Path
-from typing import Iterable, Any
+from typing import Any
+from collections.abc import Iterable
 from dataclasses import dataclass
 
 # Third-party modules

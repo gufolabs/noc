@@ -9,7 +9,8 @@
 import datetime
 import logging
 import itertools
-from typing import Optional, Iterable
+from typing import Optional
+from collections.abc import Iterable
 
 # Third-party modules
 from bson import ObjectId

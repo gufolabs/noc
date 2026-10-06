@@ -8,7 +8,8 @@
 # Python modules
 from collections import defaultdict
 from time import perf_counter
-from typing import Iterable, Any
+from typing import Any
+from collections.abc import Iterable
 
 # Third-party modules
 from fastapi import APIRouter, Header, HTTPException

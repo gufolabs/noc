@@ -10,7 +10,8 @@ import threading
 import operator
 import re
 from collections import defaultdict
-from typing import Any, Optional, Iterable
+from typing import Any, Optional
+from collections.abc import Iterable
 from pathlib import Path
 
 # Third-party modules

@@ -7,7 +7,7 @@
 
 # Python modules
 import asyncio
-from typing import AsyncIterable
+from collections.abc import AsyncIterable
 
 # NOC modules
 from .base import BaseChecker, CheckResult, Check, TCP_CHECK

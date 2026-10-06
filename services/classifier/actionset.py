@@ -10,7 +10,8 @@ import logging
 from dataclasses import dataclass
 from collections import defaultdict
 from functools import partial
-from typing import Callable, Any, Iterable
+from typing import Any
+from collections.abc import Callable, Iterable
 
 # Third-party modules
 from pydantic import ValidationError

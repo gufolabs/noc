@@ -8,7 +8,8 @@
 # Python modules
 import re
 from functools import partial
-from typing import Callable, Any, Iterable
+from typing import Any
+from collections.abc import Callable, Iterable
 
 # NOC Modules
 from noc.core.text import alnum_key

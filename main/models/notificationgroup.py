@@ -10,7 +10,8 @@ import datetime
 import logging
 import operator
 from threading import Lock
-from typing import Iterable, Optional, Any
+from typing import Optional, Any
+from collections.abc import Iterable
 from pathlib import Path
 
 # Third-party modules

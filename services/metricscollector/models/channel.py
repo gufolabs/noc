@@ -10,7 +10,7 @@ import asyncio
 import logging
 from collections import defaultdict
 from time import perf_counter
-from typing import Iterable
+from collections.abc import Iterable
 
 # NOC modules
 from noc.services.metricscollector.sourceconfig import RemoteSystemConfig

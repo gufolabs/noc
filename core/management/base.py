@@ -8,7 +8,8 @@
 # Python modules
 import sys
 import argparse
-from typing import Sequence, Never, TextIO, Iterable, Iterator, TypeVar
+from typing import Never, TextIO, TypeVar
+from collections.abc import Sequence, Iterable, Iterator
 from pathlib import Path
 import resource
 

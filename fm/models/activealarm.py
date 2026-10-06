@@ -15,11 +15,11 @@ from itertools import chain
 from typing import (
     Optional,
     Any,
-    Iterable,
     Protocol,
     runtime_checkable,
     Generic,
 )
+from collections.abc import Iterable
 from threading import Lock
 import uuid
 

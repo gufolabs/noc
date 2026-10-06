@@ -7,7 +7,8 @@
 
 # Python modules
 from threading import Lock
-from typing import Optional, Any, Callable
+from typing import Optional, Any
+from collections.abc import Callable
 import operator
 
 # Third-party modules

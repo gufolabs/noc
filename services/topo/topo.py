@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Iterable
+from collections.abc import Iterable
 from logging import getLogger
 import time
 from collections import defaultdict

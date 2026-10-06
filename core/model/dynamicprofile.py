@@ -8,7 +8,7 @@
 # Python modules
 import logging
 from functools import partial
-from typing import Callable
+from collections.abc import Callable
 
 # NOC modules
 from noc.models import get_model, get_model_id, is_document

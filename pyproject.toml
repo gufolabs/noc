@@ -203,7 +203,6 @@ ignore = [
   "UP017", # Use `datetime.UTC` alias
   "UP030", # Use implicit references for positional format fields
   "UP031", # Use format specifiers instead of percent format
-  "UP035", # `typing.Dict` is deprecated, use `dict` instead
   "UP042", # Class Interaction inherits from both `str` and `enum.Enum`
   "UP046", # Generic class `BaseResourceAPI` uses `Generic` subclass instead of type parameters
   "UP037", # Remove quotes from type annotation

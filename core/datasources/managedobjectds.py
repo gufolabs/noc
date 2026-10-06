@@ -7,7 +7,8 @@
 
 # Python Modules
 from collections import defaultdict
-from typing import Iterable, Any, AsyncIterable
+from typing import Any
+from collections.abc import Iterable, AsyncIterable
 
 # Third-party modules
 import polars as pl

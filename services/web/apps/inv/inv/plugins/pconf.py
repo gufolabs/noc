@@ -6,7 +6,8 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Iterable
+from typing import Any
+from collections.abc import Iterable
 from enum import IntEnum, Enum
 from dataclasses import dataclass
 import uuid

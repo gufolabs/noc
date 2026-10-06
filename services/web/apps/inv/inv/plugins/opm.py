@@ -6,7 +6,8 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Iterable
+from typing import Any
+from collections.abc import Iterable
 import uuid
 from collections import defaultdict
 from dataclasses import dataclass

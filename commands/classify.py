@@ -9,7 +9,8 @@
 import argparse
 from pathlib import Path
 import time
-from typing import Iterable, Any
+from typing import Any
+from collections.abc import Iterable
 from dataclasses import dataclass
 
 # Third-party modules

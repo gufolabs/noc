@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Iterator
+from collections.abc import Iterator
 
 
 class BaseTokenizer:

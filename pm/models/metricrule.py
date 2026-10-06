@@ -8,7 +8,8 @@
 # Python modules
 import operator
 from collections import defaultdict
-from typing import Any, Optional, Callable, Iterable
+from typing import Any, Optional
+from collections.abc import Callable, Iterable
 from threading import Lock
 
 # Third-party modules

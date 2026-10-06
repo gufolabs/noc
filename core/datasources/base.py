@@ -15,7 +15,8 @@ from time import perf_counter
 from dataclasses import dataclass
 from functools import partial
 from collections import defaultdict
-from typing import Iterable, AsyncIterable, Any
+from typing import Any
+from collections.abc import Iterable, AsyncIterable
 
 # Third-party modules
 import polars as pl

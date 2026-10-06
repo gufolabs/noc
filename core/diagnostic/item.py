@@ -7,7 +7,8 @@
 
 # Python modules
 import datetime
-from typing import Iterable, Union, Any
+from typing import Union, Any
+from collections.abc import Iterable
 
 # Third-party modules
 from pydantic import BaseModel, PrivateAttr

@@ -24,7 +24,8 @@ import sys
 from importlib.machinery import ModuleSpec
 from pathlib import Path
 from types import ModuleType
-from typing import Any, Sequence
+from typing import Any
+from collections.abc import Sequence
 
 # NOC modules
 from noc.config import config

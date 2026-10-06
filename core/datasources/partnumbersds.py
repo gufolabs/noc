@@ -6,7 +6,8 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Any, Iterable, AsyncIterable
+from typing import Any
+from collections.abc import Iterable, AsyncIterable
 
 # NOC modules
 from .base import FieldInfo, BaseDataSource

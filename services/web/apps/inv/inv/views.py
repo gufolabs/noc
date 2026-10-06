@@ -11,7 +11,8 @@ import inspect
 import operator
 import os
 import threading
-from typing import Any, Iterable
+from typing import Any
+from collections.abc import Iterable
 from collections import defaultdict
 
 # Third-party modules

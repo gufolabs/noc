@@ -9,7 +9,8 @@
 import datetime
 import operator
 from dataclasses import dataclass
-from typing import Optional, Iterable, Any
+from typing import Optional, Any
+from collections.abc import Iterable
 from collections import defaultdict
 
 # Third-party modules

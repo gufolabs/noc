@@ -11,7 +11,8 @@ import logging
 from threading import Lock
 
 # Third-party modules
-from typing import Any, Callable
+from typing import Any
+from collections.abc import Callable
 
 # NOC modules
 from noc.config import config

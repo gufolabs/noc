@@ -8,7 +8,8 @@
 # Python modules
 import datetime
 import logging
-from typing import Literal, Iterable, Any
+from typing import Literal, Any
+from collections.abc import Iterable
 
 # Third-party modules
 import orjson

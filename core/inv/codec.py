@@ -7,7 +7,7 @@
 
 # Python modules
 from dataclasses import dataclass
-from typing import Iterable
+from collections.abc import Iterable
 import uuid
 
 # Third-party modules

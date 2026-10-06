@@ -7,7 +7,8 @@
 
 # Python modules
 from threading import Lock
-from typing import Iterable, Optional
+from typing import Optional
+from collections.abc import Iterable
 import operator
 import logging
 

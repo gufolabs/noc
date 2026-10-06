@@ -15,7 +15,7 @@ import time
 from functools import partial, cached_property
 from urllib.parse import quote as urllib_quote
 from pathlib import Path
-from typing import Iterable
+from collections.abc import Iterable
 from types import ModuleType
 import importlib
 

@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python Modules
-from typing import Iterable, AsyncIterable
+from collections.abc import Iterable, AsyncIterable
 
 # Third-party modules
 from pymongo.read_preferences import ReadPreference

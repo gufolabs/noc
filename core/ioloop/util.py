@@ -10,7 +10,8 @@ import asyncio
 import logging
 
 # Third-party modules
-from typing import Callable, TypeVar
+from typing import TypeVar
+from collections.abc import Callable
 
 # NOC modules
 from noc.config import config

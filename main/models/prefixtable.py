@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------------
 
 # Third-party modules
-from typing import Iterable
+from collections.abc import Iterable
 from django.db import models
 
 # NOC Modules

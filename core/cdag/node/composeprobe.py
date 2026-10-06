@@ -7,7 +7,7 @@
 
 # Python modules
 import logging
-from typing import Callable
+from collections.abc import Callable
 from time import time_ns
 
 # Third-party modules

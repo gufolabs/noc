@@ -12,7 +12,8 @@ import datetime
 import re
 from collections import defaultdict, deque
 import threading
-from typing import Any, Iterable, Optional
+from typing import Any, Optional
+from collections.abc import Iterable
 import operator
 from itertools import chain
 from hashlib import sha512

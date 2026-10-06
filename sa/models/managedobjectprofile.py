@@ -11,7 +11,8 @@ from collections import defaultdict
 from threading import Lock
 from functools import partial
 from dataclasses import dataclass
-from typing import Optional, Iterable, Any, Callable
+from typing import Optional, Any
+from collections.abc import Iterable, Callable
 
 # Third-party modules
 import cachetools

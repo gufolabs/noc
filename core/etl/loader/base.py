@@ -16,7 +16,8 @@ import shutil
 import functools
 from collections import defaultdict
 from io import StringIO, TextIOWrapper
-from typing import Any, Iterable
+from typing import Any
+from collections.abc import Iterable
 
 # NOC modules
 from noc.core.log import PrefixLoggerAdapter

@@ -6,7 +6,8 @@
 # ---------------------------------------------------------------------
 
 # Python modules
-from typing import Iterable, NoReturn
+from typing import NoReturn
+from collections.abc import Iterable
 from pathlib import Path
 import re
 import sys

@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import socket
 import struct
-from typing import Iterable, Callable
+from collections.abc import Iterable, Callable
 
 # NOC Modules
 from noc.core.validators import check_ipv4_prefix, check_ipv6_prefix

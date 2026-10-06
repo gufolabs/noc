@@ -12,7 +12,7 @@
 import argparse
 import sys
 from pathlib import Path
-from typing import Iterable
+from collections.abc import Iterable
 
 HEADER_LEN = 72
 NO_NEWLINE_MARKER = r"\ No newline at end of file"  # backslash is to match git output

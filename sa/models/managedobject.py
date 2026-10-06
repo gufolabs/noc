@@ -17,7 +17,8 @@ import warnings
 from collections import defaultdict
 from dataclasses import dataclass
 from itertools import chain
-from typing import Iterable, Any, Optional
+from typing import Any, Optional
+from collections.abc import Iterable
 
 # Third-party modules
 import cachetools

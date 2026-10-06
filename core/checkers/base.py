@@ -11,7 +11,8 @@ import datetime
 import socket
 import struct
 from dataclasses import dataclass, field
-from typing import Any, AsyncIterable, TypeVar, Callable, ClassVar
+from typing import Any, TypeVar, ClassVar
+from collections.abc import AsyncIterable, Callable
 import threading
 
 # Third-party modules

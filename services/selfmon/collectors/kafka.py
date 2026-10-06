@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Iterable
+from collections.abc import Iterable
 import struct
 from dataclasses import dataclass
 from collections import defaultdict

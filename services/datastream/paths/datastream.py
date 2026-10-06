@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Callable
+from collections.abc import Callable
 from http import HTTPStatus
 import time
 import cachetools

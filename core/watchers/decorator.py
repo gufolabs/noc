@@ -7,7 +7,7 @@
 
 # Python modules
 import datetime
-from typing import Iterable
+from collections.abc import Iterable
 
 # Python modules
 from noc.models import is_document, get_model_id

@@ -8,7 +8,8 @@
 # Python modules
 import operator
 from threading import Lock
-from typing import Optional, Callable, Any
+from typing import Optional, Any
+from collections.abc import Callable
 
 # Third-party modules
 from bson import ObjectId
