@@ -59,4 +59,5 @@ This section contains formal technical references.
 
 ## Product References
 
+- [Supported Python Versions](../supported-python-versions/index.md) - Python versions supported by each NOC release.
 - [Supported Standards](../supported-standards/index.md) - Standarts supported and followed by NOC.

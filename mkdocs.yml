@@ -50,6 +50,7 @@ nav:
       - Man Pages: man/
       - Feature Gates: feature-gates-reference/index.md
       - Operational Alerts: operational-alerts-reference/
+      - Supported Python Versions: supported-python-versions/index.md
       - Supported Standards: supported-standards/index.md
   - How-to:
       - Overview: sections-overview/howto.md
