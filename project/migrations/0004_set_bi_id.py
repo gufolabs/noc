@@ -16,7 +16,7 @@ class Migration(BaseMigration):
     def migrate(self) -> None:
         table = "project_project"
         rows = self.db.execute(f"SELECT id FROM {table} WHERE bi_id IS NULL")
-        values = ["(%d, %d)" % (r[0], bi_hash(r[0])) for r in rows]
+        values = [f"({int(r[0])}, {int(bi_hash(r[0]))})" for r in rows]
         while values:
             chunk, values = values[:PG_CHUNK], values[PG_CHUNK:]
             self.db.execute(

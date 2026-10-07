@@ -35,7 +35,7 @@ class Script(BaseScript):
     ):
         cmd = "ping"
         if count is not None:
-            cmd += " -n %d" % int(count)
+            cmd += f" -n {int(count)}"
         if source_address is not None:
             cmd += f" -source {source_address}"
         if size is not None:

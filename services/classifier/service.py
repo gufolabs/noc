@@ -783,8 +783,7 @@ class ClassifierService(FastAPIService):
             if total:
                 speed = total / dt
                 self.logger.info(
-                    "REPORT: %d events in %.2fms. %.2fev/s (%s)"
-                    % (total, dt * 1000, speed, ", ".join(r))
+                    f"REPORT: {total} events in {dt * 1000:.2f}ms. {speed:.2f}ev/s ({', '.join(r)})"
                 )
         self.last_ts = t
 

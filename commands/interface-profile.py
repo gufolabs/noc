@@ -78,7 +78,7 @@ class Command(BaseCommand):
     def get_interface_template(interfaces):
         il = max(len(i.name) for i in interfaces)
         il = max(il, 15)
-        return "    %%-%ds  %%-12s  %%-30s  %%s ;%%s\n" % il
+        return f"    %-{il}s  %-12s  %-30s  %s ;%s\n"
 
     def show_interface(self, tpl, i, status, effective_labels=None):
         if i.description:

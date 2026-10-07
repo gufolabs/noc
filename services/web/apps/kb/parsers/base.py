@@ -55,12 +55,12 @@ class BaseParser:
             if text == link:
                 text = link[7:]
             link = link[7:]
-            return "<a href='%s/%d/attachment/%s/'>%s</a>" % (BASE_PATH, kb_entry.id, link, text)
+            return f"<a href='{BASE_PATH}/{int(kb_entry.id)}/attachment/{link}/'>{text}</a>"
         if link.startswith("attachment:"):
             if text == link:
                 text = link[11:]
             link = link[11:]
-            return "<a href='/kb/kbentry/%d/attachment/%s/'>%s</a>" % (kb_entry.id, link, text)
+            return f"<a href='/kb/kbentry/{int(kb_entry.id)}/attachment/{link}/'>{text}</a>"
         try:
             le = kb_entry.__class__.objects.get(subject=link)
             return f"<a href='{BASE_PATH}/{le.id}/'>{text}</a>"
@@ -76,4 +76,4 @@ class BaseParser:
             href = href[7:]
         elif href.startswith("attachment:"):
             href = href[11:]
-        return "/kb/kbentry/%d/attachment/%s/" % (kb_entry.id, href)
+        return f"/kb/kbentry/{int(kb_entry.id)}/attachment/{href}/"

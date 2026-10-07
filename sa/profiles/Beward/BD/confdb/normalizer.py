@@ -103,7 +103,7 @@ class BDNormalizer(BaseNormalizer):
             elif index == 1:
                 stream_name = "h264"
             else:
-                stream_name = "h264_%d" % index
+                stream_name = f"h264_{int(index)}"
             res = RESOLUTION_ALIASES.get(resolution_name)
             if not res:
                 height, width = 0, 0

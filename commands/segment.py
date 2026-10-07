@@ -228,13 +228,13 @@ class Command(BaseCommand):
             objects = list(ManagedObject.objects.filter(segment=seg).order_by("name"))
             power = sum(mo.object_profile.level for mo in objects)
             self.print(
-                "@@@ %s (%d objects, power = %d, id = %s)" % (seg.name, len(objects), power, seg.id)
+                f"@@@ {seg.name} ({len(objects)} objects, power = {int(power)}, id = {seg.id})"
             )
             for mo in objects:
                 self.print(f"    {mo.name}")
                 n_mo += 1
             n_seg += 1
-        self.print("### %d objects are floating in %d segments" % (n_mo, n_seg))
+        self.print(f"### {int(n_mo)} objects are floating in {int(n_seg)} segments")
 
     def handle_reactivate_floating(
         self, ids, profile=None, allow_persistent=False, *args, **options

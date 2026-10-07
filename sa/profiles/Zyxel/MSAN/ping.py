@@ -21,7 +21,7 @@ class Script(BaseScript):
     def execute(self, address, count=None, source_address=None, size=None, df=None):
         cmd = f"ip ping {address}"
         if count:
-            cmd += " %d" % int(count)
+            cmd += f" {int(count)}"
         else:
             count = 3
         c = self.cli(cmd)

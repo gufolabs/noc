@@ -128,7 +128,7 @@ class Dictionary(metaclass=DictionaryBase):
                 f"                 <name>{field.name}</name>",
                 f"                 <type>{field.get_db_type()}</type>",
                 "                 <null_value>Unknown</null_value>",
-                "                 <hierarchical>%s</hierarchical>" % ("true" if hier else "false"),
+                f"                 <hierarchical>{'true' if hier else 'false'}</hierarchical>",
                 "             </attribute>",
             ]
         x += ["        </structure>", "    </dictionary>", "</dictionaries>"]

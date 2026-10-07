@@ -344,9 +344,9 @@ class EventClass(Document):
         r += ["    ],"]
         if self.link_event:
             r += ['    "link_event": true,']
-        r += ['    "deduplication_window": %d,' % self.deduplication_window]
-        r += ['    "suppression_window": %d,' % self.suppression_window]
-        r += ['    "ttl": %d,' % self.ttl]
+        r += [f'    "deduplication_window": {int(self.deduplication_window)},']
+        r += [f'    "suppression_window": {int(self.suppression_window)},']
+        r += [f'    "ttl": {int(self.ttl)},']
         # Handlers
         if self.handlers:
             hh = [f'        "{h}"' for h in self.handlers]

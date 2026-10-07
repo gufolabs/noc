@@ -90,7 +90,7 @@ class Script(BaseScript):
         # Get instance vlans
         vlans = {}  # instance -> vlans
         for i in [1, 2, 3, 4]:
-            v = self.mib_walk("hpicfBridgeMSTInstanceVlanMap%dk" % i)
+            v = self.mib_walk(f"hpicfBridgeMSTInstanceVlanMap{int(i)}k")
             for instance_id in v:
                 if instance_id in instances:
                     try:
@@ -183,14 +183,12 @@ class Script(BaseScript):
             x = v[instance_id, port_id]
             if " " in x:
                 pr, p = x.split(" ")
-                instance_ports[instance_id][port_id]["designated_port_id"] = "%d.%d" % (
-                    int(pr, 16),
-                    int(p, 16),
+                instance_ports[instance_id][port_id]["designated_port_id"] = (
+                    f"{int(pr, 16)}.{int(p, 16)}"
                 )
             else:
-                instance_ports[instance_id][port_id]["designated_port_id"] = "%d.%d" % (
-                    ord(x[0]),
-                    ord(x[1]),
+                instance_ports[instance_id][port_id]["designated_port_id"] = (
+                    f"{ord(x[0])}.{ord(x[1])}"
                 )
         # Fill missed designated bridge ids
         for instance_id in instance_ports:

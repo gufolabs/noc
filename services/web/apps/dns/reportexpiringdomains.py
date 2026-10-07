@@ -31,12 +31,11 @@ class Reportreportexpiringdomains(SimpleReport):
                 TableColumn(_("Expired"), format="bool"),
                 TableColumn(_("Paid Till"), format="date"),
             ],
-            query="""
+            query=f"""
                 SELECT name,paid_till<='now'::date,paid_till
                 FROM dns_dnszone
                 WHERE paid_till IS NOT NULL
-                    AND 'now'::date >= (paid_till-'%d days'::interval)
+                    AND 'now'::date >= (paid_till-'{int(days)} days'::interval)
                 ORDER BY paid_till
-            """
-            % days,
+            """,
         )

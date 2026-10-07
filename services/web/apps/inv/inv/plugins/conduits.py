@@ -144,7 +144,7 @@ class ConduitsPlugin(InvPlugin):
             r += [
                 {
                     "id": str(ro.id),
-                    "label": "%s (%s, %dm)" % (ro.name, sbr, d),
+                    "label": f"{ro.name} ({sbr}, {int(d)}m)",
                     "s_bearing": sbr,
                     "map_distance": d,
                     "name": ro.name,

@@ -133,7 +133,7 @@ class AddressRange(NOCModel):
                     vars["ip"] = i  # ip.0 .. ip.3
                     # ip1, ip2, ip3, ip4 for backward compatibility
                     for n, i in enumerate(i):
-                        vars["ip%d" % (n + 1)] = i
+                        vars[f"ip{int(n + 1)}"] = i
                 elif self.afi == "6":
                     vars["ip"] = ip.digits  # ip.0 .. ip.31
                 fqdn = t.render(Context(vars))

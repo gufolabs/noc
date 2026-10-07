@@ -18,5 +18,5 @@ class Script(BaseScript):
         if not self.scripts.has_vlan(vlan_id=vlan_id):
             return False
         with self.configure():
-            self.cli("no vlan %d" % vlan_id)
+            self.cli(f"no vlan {int(vlan_id)}")
         return True

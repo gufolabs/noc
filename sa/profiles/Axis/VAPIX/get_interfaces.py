@@ -43,7 +43,7 @@ class Script(BaseScript):
                     ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
                     sub["ipv4_addresses"] = [ip_address]
                     sub["enabled_afi"] += ["IPv4"]
-                ipv6 = c.get("root.Network.eth%d.IPv6.IPAddresses" % i)
+                ipv6 = c.get(f"root.Network.eth{int(i)}.IPv6.IPAddresses")
                 if ipv6:
                     sub["ipv6_addresses"] = [ipv6]
                     sub["enabled_afi"] += ["IPv6"]

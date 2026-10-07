@@ -30,9 +30,9 @@ class Script(BaseScript):
             # Linux mode
             cmd = "ping "
             if count:
-                cmd += "-c %d " % count
+                cmd += f"-c {int(count)} "
             if size:
-                cmd += "-s %d " % size
+                cmd += f"-s {int(size)} "
             cmd += address
             ping = self.cli(cmd)
         except self.CLISyntaxError:

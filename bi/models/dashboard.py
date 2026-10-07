@@ -110,9 +110,9 @@ class Dashboard(Document):
             for da in sorted(self.access, reverse=True, key=lambda x: x.level):
                 # Deduplicate rights
                 # @todo changing priority (reverse order)
-                if da.user and "u%d" % da.user.id in processed:
+                if da.user and f"u{int(da.user.id)}" in processed:
                     continue
-                if da.group and "g%d" % da.group.id in processed:
+                if da.group and f"g{int(da.group.id)}" in processed:
                     continue
                 if da.user and da.group:
                     # Split User and Group rights
@@ -120,13 +120,13 @@ class Dashboard(Document):
                         DashboardAccess(user=da.user.id, level=da.level),
                         DashboardAccess(group=da.group.id, level=da.level),
                     ]
-                    processed += ["u%d" % da.user.id, "g%d" % da.group.id]
+                    processed += [f"u{int(da.user.id)}", f"g{int(da.group.id)}"]
                     continue
                 access += [da]
                 if da.user:
-                    processed += ["u%d" % da.user.id]
+                    processed += [f"u{int(da.user.id)}"]
                 if da.group:
-                    processed += ["g%d" % da.group.id]
+                    processed += [f"g{int(da.group.id)}"]
             self.access = access
 
         super().save(

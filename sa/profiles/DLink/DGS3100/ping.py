@@ -30,7 +30,7 @@ class Script(BaseScript):
     def execute(self, address, count=None):
         cmd = f"ping {address}"
         if count:
-            cmd += " times %d" % int(count)
+            cmd += f" times {int(count)}"
         else:
             cmd += " times 5"
         dgs3100_no_reply = False

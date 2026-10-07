@@ -22,10 +22,10 @@ class Script(BaseScript):
     def execute(self, address, count=None, source_address=None, size=None, df=None, vrf=None):
         cmd = f"ping {address}"
         if count is not None:
-            cmd += " count %d" % int(count)
+            cmd += f" count {int(count)}"
         else:
             cmd += " count 5"
         if size is not None:
-            cmd += " size %d" % int(size)
+            cmd += f" size {int(size)}"
         match = self.rx_line.search(self.cli(cmd))
         return match.groupdict()

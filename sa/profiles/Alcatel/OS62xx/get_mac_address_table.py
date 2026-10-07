@@ -18,7 +18,7 @@ class Script(BaseScript):
     def execute(self, interface=None, vlan=None, mac=None):
         cmd = "show bridge address-table"
         if vlan:
-            cmd += " vlan %d" % vlan
+            cmd += f" vlan {int(vlan)}"
         if mac:
             cmd += f" address {mac}"
         if interface:

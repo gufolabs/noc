@@ -109,7 +109,7 @@ class Profile(BaseProfile):
             if min_len == max_len:
                 rf += [f"    route-filter {prefix} exact;"]
             else:
-                rf += ["    route-filter %s upto /%d" % (prefix, max_len)]
+                rf += [f"    route-filter {prefix} upto /{int(max_len)}"]
         r = ["term pass {", "    from {"]
         r += rf
         r += ["    }", "    then next policy;", "}", "term reject {", "    then reject;", "}"]

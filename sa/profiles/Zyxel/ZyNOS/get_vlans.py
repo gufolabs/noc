@@ -39,7 +39,7 @@ class Script(BaseScript):
         r = []
         for match in self.rx_vlan.finditer(vlans):
             vid = int(match.group("vlan_id"))
-            vn = self.cli("show vlan %d" % vid)
+            vn = self.cli(f"show vlan {int(vid)}")
             match_name = self.re_search(self.rx_vlan_name, vn)
             name = match_name.group("name")
             if name != "":

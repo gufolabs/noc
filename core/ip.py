@@ -153,7 +153,7 @@ class IP:
         if mask == self.mask:
             yield self
             return
-        s = IP.prefix(self.prefix.split("/")[0] + "/%d" % mask)
+        s = IP.prefix(self.prefix.split("/")[0] + f"/{int(mask)}")
         maxmask = 32 if self.afi == "4" else 128
         dist = 2 ** (maxmask - mask)
         for i in range(2 ** (mask - self.mask)):
@@ -309,7 +309,7 @@ class IPv4(IP):
         """
         if "/" not in prefix:
             if netmask:
-                prefix += "/%d" % self.netmask_to_len(netmask)
+                prefix += f"/{int(self.netmask_to_len(netmask))}"
             else:
                 prefix += "/32"
         check_ipv4_prefix(prefix)
@@ -355,7 +355,7 @@ class IPv4(IP):
             New IPv4 instance.
         """
         return IPv4(
-            "%d.%d.%d.%d/%d" % ((s >> 24) & 0xFF, (s >> 16) & 0xFF, (s >> 8) & 0xFF, s & 0xFF, mask)
+            f"{int(s >> 24 & 255)}.{int(s >> 16 & 255)}.{int(s >> 8 & 255)}.{int(s & 255)}/{int(mask)}"
         )
 
     def __hash__(self) -> int:
@@ -527,12 +527,12 @@ class IPv4(IP):
             n = 0
             m = 2
             while d % m == 0 and n < 32:
-                if IPv4("%s/%d" % (first.prefix.split("/")[0], 31 - n)).last < last:
+                if IPv4(f"{first.prefix.split('/')[0]}/{int(31 - n)}").last < last:
                     n += 1
                     m <<= 1
                 else:
                     break
-            pfx = IPv4("%s/%d" % (first.prefix.split("/")[0], 32 - n))
+            pfx = IPv4(f"{first.prefix.split('/')[0]}/{int(32 - n)}")
             r += [pfx]
             nfirst = pfx.last + 1
             if nfirst.d == first.d:
@@ -699,7 +699,7 @@ class IPv6(IP):
         # Format groups
         if r[:-3] == [0, 0, 0, 0, 0] and r[-3] == 0xFFFF:
             return IPv6(
-                "::ffff:%d.%d.%d.%d/%d" % (r[-2] >> 8, r[-2] & 0xFF, r[-1] >> 8, r[-1] & 0xFF, mask)
+                f"::ffff:{int(r[-2] >> 8)}.{int(r[-2] & 255)}.{int(r[-1] >> 8)}.{int(r[-1] & 255)}/{int(mask)}"
             )
         # Compact longest zeroes sequence
         lp = 0
@@ -722,10 +722,9 @@ class IPv6(IP):
             h = r[:lp]
             t = r[lp + ll :]
             return IPv6(
-                "%s::%s/%d"
-                % (":".join([f"{p:x}" for p in h]), ":".join([f"{p:x}" for p in t]), mask)
+                f"{':'.join([f'{p:x}' for p in h])}::{':'.join([f'{p:x}' for p in t])}/{int(mask)}"
             )
-        return IPv6(":".join([f"{p:x}" for p in r]) + "/%d" % mask)
+        return IPv6(":".join([f"{p:x}" for p in r]) + f"/{int(mask)}")
 
     def __hash__(self) -> int:
         """Hash the IPv6 instance (by prefix string)."""

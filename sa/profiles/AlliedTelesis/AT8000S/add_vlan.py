@@ -20,15 +20,15 @@ class Script(BaseScript):
         with self.configure():
             if not has_vlan:
                 self.cli("vlan database")
-                self.cli("vlan %d" % vlan_id)
+                self.cli(f"vlan {int(vlan_id)}")
                 self.cli("exit")
-                self.cli("interface vlan %d" % vlan_id)
+                self.cli(f"interface vlan {int(vlan_id)}")
                 self.cli(f"name {name}")
                 self.cli("exit")
             for p in tagged_ports:
                 self.cli(f"interface ethernet {p}")
                 self.cli("switchport mode general")
-                self.cli("switchport general allowed vlan add %d" % vlan_id)
+                self.cli(f"switchport general allowed vlan add {int(vlan_id)}")
                 self.cli("exit")
         self.save_config()
         return True

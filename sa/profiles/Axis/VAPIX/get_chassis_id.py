@@ -19,7 +19,7 @@ class Script(BaseScript):
         macs = []
         c = self.profile.get_dict(self)
         for i in range(4):  # for future models
-            mac = c.get("root.Network.eth%d.MACAddress" % i)
+            mac = c.get(f"root.Network.eth{int(i)}.MACAddress")
             if mac is not None:
                 macs += [mac]
         return [{"first_chassis_mac": m, "last_chassis_mac": m} for m in sorted(macs)]

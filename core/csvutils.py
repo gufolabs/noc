@@ -175,7 +175,7 @@ def csv_import(model, f, resolution=IR_FAIL, delimiter=","):
     for row in reader:
         count += 1
         if len(row) != l_header:
-            return None, "Invalid row size. line %d" % count
+            return None, f"Invalid row size. line {int(count)}"
         variables = dict(zip(header, row))
         for h in list(variables):
             v = variables[h]
@@ -183,7 +183,7 @@ def csv_import(model, f, resolution=IR_FAIL, delimiter=","):
                 v = None
             # Check required field is not none
             if not v and h in required_fields:
-                return None, "Required field '%s' is empty at line %d" % (h, count)
+                return None, f"Required field '{h}' is empty at line {int(count)}"
             # Delete empty values
             if not v:
                 del variables[h]
@@ -253,8 +253,7 @@ def csv_import(model, f, resolution=IR_FAIL, delimiter=","):
                 # Fail
                 return (
                     None,
-                    "Failed to save line %d: Object %s is already exists"
-                    % (count, repr(variables)),
+                    f"Failed to save line {int(count)}: Object {variables!r} is already exists",
                 )
             if resolution == IR_SKIP:
                 # Skip line
@@ -275,5 +274,5 @@ def csv_import(model, f, resolution=IR_FAIL, delimiter=","):
         try:
             o.save()
         except Exception as e:
-            return None, "Failed to save line %d: %s. %r" % (count, e, variables)
+            return None, f"Failed to save line {int(count)}: {e}. {variables!r}"
     return count, None

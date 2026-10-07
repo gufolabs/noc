@@ -61,7 +61,7 @@ class KBEntry(NOCModel):
 
     def __str__(self):
         if self.id:
-            return "KB%d: %s" % (self.id, self.subject)
+            return f"KB{int(self.id)}: {self.subject}"
         return f"New: {self.subject}"
 
     def save(self, *args, **kwargs):
@@ -121,13 +121,12 @@ class KBEntry(NOCModel):
 
         c = connection.cursor()
         c.execute(
-            """
+            f"""
             SELECT kb_entry_id,MAX(timestamp)
             FROM kb_kbentryhistory
             GROUP BY 1
             ORDER BY 2 DESC
-            LIMIT %d"""
-            % num
+            LIMIT {int(num)}"""
         )
         return [KBEntry.objects.get(id=r[0]) for r in c.fetchall()]
 
@@ -155,13 +154,12 @@ class KBEntry(NOCModel):
 
         c = connection.cursor()
         c.execute(
-            """
+            f"""
             SELECT kb_entry_id,COUNT(*)
             FROM kb_kbentrypreviewlog
             GROUP BY 1
             ORDER BY 2 DESC
-            LIMIT %d"""
-            % num
+            LIMIT {int(num)}"""
         )
         return [KBEntry.objects.get(id=r[0]) for r in c.fetchall()]
 
@@ -170,7 +168,7 @@ class KBEntry(NOCModel):
         """
         Callable for KBEntryAttachment.file.upload_to
         """
-        return "kb/%d/%s" % (instance.kb_entry.id, filename)
+        return f"kb/{int(instance.kb_entry.id)}/{filename}"
 
     @property
     def visible_attachments(self):

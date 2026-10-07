@@ -18,6 +18,6 @@ class Script(BaseScript):
         if not self.scripts.has_vlan(vlan_id=vlan_id):
             return False
         with self.configure():
-            self.cli("/c/l2/vlan %d/del\ny\n" % vlan_id)
+            self.cli(f"/c/l2/vlan {int(vlan_id)}/del\ny\n")
         self.save_config()
         return True

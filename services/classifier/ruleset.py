@@ -137,7 +137,7 @@ class RuleSet:
                     r[vv.lower()] = k
             self.enumerations[e.name] = r
             n += 1
-        logger.info("%d enumerations loaded" % n)
+        logger.info(f"{int(n)} enumerations loaded")
 
     def find_rule(
         self,

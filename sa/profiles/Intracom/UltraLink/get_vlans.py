@@ -26,6 +26,6 @@ class Script(BaseScript):
             vlan_id = int(match.group("vid"))
             name = match.group("name")
             if name == "":
-                name = "VLAN%d" % vlan_id
+                name = f"VLAN{int(vlan_id)}"
             vlans += [{"vlan_id": vlan_id, "name": name}]
         return vlans

@@ -19,11 +19,11 @@ class Script(BaseScript):
             return False
         with self.configure():
             self.cli("vlan database")
-            self.cli("no vlan %d" % vlan_id)
+            self.cli(f"no vlan {int(vlan_id)}")
             self.cli("end")
             if tagged_ports:
                 for port in tagged_ports:
-                    self.cli("interface eth %d" % port)
-                    self.cli("switchport allowed vlan remove %d" % vlan_id)
+                    self.cli(f"interface eth {int(port)}")
+                    self.cli(f"switchport allowed vlan remove {int(vlan_id)}")
                     self.cli("end")
         return True

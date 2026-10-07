@@ -45,7 +45,7 @@ class Stream:
                 date = datetime.date(year=ts.year, month=ts.month, day=ts.day)
         if not self.out:
             self.out_path = os.path.join(
-                self.prefix, "%s-%06d.jsonl.gz.tmp" % (self.fs, next(self.chunk_count))
+                self.prefix, f"{self.fs}-{int(next(self.chunk_count)):06}.jsonl.gz.tmp"
             )
             self.out = gzip.open(self.out_path, "wb")
             self.chunk_size = 0

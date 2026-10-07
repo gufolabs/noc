@@ -188,8 +188,8 @@ class ArchivedAlarm(Document):
         hours = (duration.seconds / 3600) % 24
         days = duration.days
         if days:
-            return "%dd %02d:%02d:%02d" % (days, hours, mins, secs)
-        return "%02d:%02d:%02d" % (hours, mins, secs)
+            return f"{int(days)}d {int(hours):02}:{int(mins):02}:{int(secs):02}"
+        return f"{int(hours):02}:{int(mins):02}:{int(secs):02}"
 
     @property
     def effective_style(self):

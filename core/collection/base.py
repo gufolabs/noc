@@ -472,7 +472,7 @@ class Collection:
         ):
             bulk += [UpdateOne({"_id": d["_id"]}, {"$set": {"uuid": UUID(d["uuid"])}})]
         if bulk:
-            self.stdout.write("[%s] Fixing %d UUID\n" % (self.name, len(bulk)))
+            self.stdout.write(f"[{self.name}] Fixing {len(bulk)} UUID\n")
             self.model._get_collection().bulk_write(bulk)
 
     @classmethod

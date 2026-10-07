@@ -360,7 +360,7 @@ class MIB(Document):
                             if x in b_map:
                                 b = [b_map[x], *b]
                             else:
-                                b = ["%X" % (1 << n)]
+                                b = [f"{1 << n:X}"]
                         n += 1
                         xv >>= 1
                     rv = f"({','.join(b)})"

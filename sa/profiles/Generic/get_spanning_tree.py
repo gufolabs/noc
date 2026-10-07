@@ -92,9 +92,9 @@ class Script(BaseScript):
             if not d_port:
                 continue
             if isinstance(d_port, int):
-                d_port = "%02d.%02d" % (32774 >> 8, 32774 & 0xFF)
+                d_port = f"{int(32774 >> 8):02}.{int(32774 & 255):02}"
             else:
-                d_port = "%02d.%02d" % tuple(d_port)
+                d_port = f"{int(d_port[0]):02d}.{int(d_port[1]):02d}"
             d_priority, d_bridge = d_bridge[:2], d_bridge[2:]
             role = "disabled"
             if int(stp_port) == root_port:
@@ -113,7 +113,7 @@ class Script(BaseScript):
                     # Interface name
                     "interface": interface,
                     # Local port id
-                    "port_id": "%d.%s" % (priority, stp_port),
+                    "port_id": f"{int(priority)}.{stp_port}",
                     # Interface state
                     "state": self.state_map[state],
                     # Interface role

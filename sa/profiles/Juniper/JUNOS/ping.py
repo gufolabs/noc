@@ -29,13 +29,13 @@ class Script(BaseScript):
     def execute(self, address, count=None, source_address=None, size=None, df=None, vrf=None):
         cmd = "ping no-resolve"
         if count:
-            cmd += " count %d" % int(count)
+            cmd += f" count {int(count)}"
         else:
             cmd += " count 5"
         if source_address:
             cmd += f" source {source_address}"
         if size:
-            cmd += " size %d" % int(size)
+            cmd += f" size {int(size)}"
         if df:
             cmd += " do-not-fragment"
         if vrf:

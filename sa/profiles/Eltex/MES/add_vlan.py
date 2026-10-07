@@ -57,9 +57,9 @@ class Script(BaseScript):
         with self.configure():
             if a:
                 self.cli("vlan database")
-                self.cli("vlan %d" % vlan_id)
+                self.cli(f"vlan {int(vlan_id)}")
                 self.cli("exit")
-                self.cli("interface vlan %d" % vlan_id)
+                self.cli(f"interface vlan {int(vlan_id)}")
                 self.cli(f"name {name}")
                 self.cli("exit")
             if tagged_ports:
@@ -68,6 +68,6 @@ class Script(BaseScript):
                 #                self.cli("switchport general allowed vlan add %d tagged"
                 #                    % vlan_id)
                 # trunk
-                self.cli("switchport trunk allowed vlan add  %d" % vlan_id)
+                self.cli(f"switchport trunk allowed vlan add  {int(vlan_id)}")
         self.save_config()
         return True

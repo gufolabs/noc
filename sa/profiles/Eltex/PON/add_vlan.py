@@ -47,7 +47,7 @@ class Script(BaseScript):
         with self.profile.switch(self):
             # with self.configure():  # Fix BUG...
             self.cli("configure\r")  # Fix BUG...
-            self.cli("vlan %d\r" % vlan_id)
+            self.cli(f"vlan {int(vlan_id)}\r")
             if name:
                 self.cli(f"name {name}\r")
             if tagged_ports:

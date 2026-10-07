@@ -234,7 +234,7 @@ def list_to_ranges(s: Iterable[int]) -> str:
     def f():
         if last_start == last_end:
             return str(last_start)
-        return "%d-%d" % (last_start, last_end)
+        return f"{int(last_start)}-{int(last_end)}"
 
     last_start = None
     last_end = None
@@ -681,7 +681,7 @@ def format_table(
     for row in data:
         widths = [max(x, len(str(y))) for x, y in zip(widths, row)]
     # Build print mask
-    mask = sep.join("%%-%ds" % w for w in widths)
+    mask = sep.join(f"%-{int(w)}s" for w in widths)
     out = [
         # Header line
         mask % tuple(data[0]),

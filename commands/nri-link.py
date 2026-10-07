@@ -174,11 +174,11 @@ class Command(BaseCommand):
         self.stdout.write(
             "\n".join(
                 [
-                    "NRI Links:Correct  : %d (%.2f%%)" % (n_correct, n_correct * 100.0 / n_total),
-                    "Warnings : %d (%.2f%%)" % (n_warn, n_warn * 100.0 / n_total),
-                    "Errors   : %d (%.2f%%)" % (n_error, n_error * 100.0 / n_total),
-                    "Ignored  : %d (%.2f%%)" % (n_ignored, n_ignored * 100.0 / n_total),
-                    "Total    : %d" % n_total,
+                    f"NRI Links:Correct  : {int(n_correct)} ({n_correct * 100.0 / n_total:.2f}%)",
+                    f"Warnings : {int(n_warn)} ({n_warn * 100.0 / n_total:.2f}%)",
+                    f"Errors   : {int(n_error)} ({n_error * 100.0 / n_total:.2f}%)",
+                    f"Ignored  : {int(n_ignored)} ({n_ignored * 100.0 / n_total:.2f}%)",
+                    f"Total    : {int(n_total)}",
                 ]
             )
         )

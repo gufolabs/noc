@@ -30,7 +30,7 @@ class SlotRule(OIDRule):
         for sn in juniSystemSlotNumber:
             for sl in juniSystemSlotLevel:
                 # r[i] = "%d.%d.%d" % (fi, si, cp)
-                r[str(i)] = "%d.%d" % (sn, sl)
+                r[str(i)] = f"{int(sn)}.{int(sl)}"
                 # r[str(i)] = {"juniSystemSlotNumber": sn, "juniSystemSlotLevel": sl}
                 i += 1
 

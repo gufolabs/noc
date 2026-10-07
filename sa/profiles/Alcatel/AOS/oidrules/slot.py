@@ -21,7 +21,7 @@ class SlotRule(OIDRule):
             health_module_slot = list(range(1, script.capabilities["Stack | Members"] + 1))
 
         for ms in health_module_slot:
-            r[str(i)] = "%d" % ms
+            r[str(i)] = f"{int(ms)}"
             # r[str(i)] = {"healthModuleSlot": ms}
             i += 1
 

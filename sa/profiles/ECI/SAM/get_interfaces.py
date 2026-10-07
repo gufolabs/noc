@@ -116,7 +116,7 @@ class Script(BaseScript):
                         nn = [int(n[2:][ii : ii + 2], 16) for ii in range(0, len(n[2:]), 2)]
                     except Exception:
                         print(f"{iface} {n} {mac}\n")
-                    netmask = "%d.%d.%d.%d" % (nn[0], nn[1], nn[2], nn[3])
+                    netmask = f"{int(nn[0])}.{int(nn[1])}.{int(nn[2])}.{int(nn[3])}"
                     mask = str(IPv4.netmask_to_len(netmask))
                     ip = ip + "/" + mask
                     ip_list = [ip]

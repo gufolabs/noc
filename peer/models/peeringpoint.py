@@ -75,7 +75,7 @@ class PeeringPoint(NOCModel):
                 peers[p.remote_backup_ip, p.remote_asn] = None
         s = []
         s += [f"inet-rtr: {self.hostname}"]
-        s += ["local-as: AS%d" % self.local_as.asn]
+        s += [f"local-as: AS{int(self.local_as.asn)}"]
         for ip in sorted(ifaddrs):
             if "/" in ip:
                 ip, masklen = ip.split("/")

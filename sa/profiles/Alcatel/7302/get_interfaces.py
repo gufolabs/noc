@@ -363,7 +363,10 @@ class Script(BaseScript):
             oid, ifindex, vpi, vci = oid.rsplit(".", 3)
             ifindex, vpi, vci = int(ifindex), int(vpi), int(vci)
             port_id = self.get_port_id(ifindex)
-            name = "%d/%d/%d/%d:%d:%d" % (*list(port_id), vpi, vci)
+            name = (
+                f"{int(port_id[0])}/{int(port_id[1])}/{int(port_id[2])}/"
+                f"{int(port_id[3])}:{vpi}:{vci}"
+            )
             sub = {
                 "name": name,
                 "vci": vci,
@@ -394,14 +397,14 @@ class Script(BaseScript):
             if port_id[:-1] in boards_status and not boards_status[port_id[:-1]]:
                 self.logger.debug("Board is not enabled. Skipping...")
                 continue
-            ifname = "%d/%d/%d/%d" % port_id
+            ifname = f"{int(port_id[0])}/{int(port_id[1])}/{int(port_id[2])}/{int(port_id[3])}"
             if "prefix" in self.PROCCESSED_TYPE[iftype]:
                 ifname = f"{self.PROCCESSED_TYPE[iftype]['prefix']}:{ifname}"
             if iftype in {6, 24}:
                 # Ethernet ifaces
                 hints = []
                 if iftype == 6:
-                    ifname = "ethernet:%s" % (port_id[-1] - 2)
+                    ifname = f"ethernet:{port_id[-1] - 2}"
                     hints = ["noc::topology::direction::nni"]
                 ethernet[ifindex] = {
                     "name": ifname,

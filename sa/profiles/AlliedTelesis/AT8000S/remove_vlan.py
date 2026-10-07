@@ -20,6 +20,6 @@ class Script(BaseScript):
             return False
         with self.configure():
             self.cli("vlan database")
-            self.cli("no vlan %d" % vlan_id)
+            self.cli(f"no vlan {int(vlan_id)}")
         self.save_config()
         return True

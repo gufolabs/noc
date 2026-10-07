@@ -49,8 +49,7 @@ def notify():
     def get_table(data):
         # Format table
         max_w = max(len(z) for z, x in data)
-        mask = "%%%d | %%s" % max_w
-        return "\n".join(mask % (z, str(x)) for z, x in data)
+        return "\n".join(f"{z:{max_w}} | {x}" for z, x in data)
 
     today = datetime.date.today()
     delta = datetime.timedelta(seconds=config.dns.warn_before_expired)
@@ -67,13 +66,13 @@ def notify():
     h_delta = humanize_timedelta(delta)
     SystemNotification.notify(
         "dns.domain_expiration_warning",
-        subject="%d domains to be expired in %d" % (len(expiring), h_delta),
-        body="Following domains are to be expired in %d:\n%s\n" % (h_delta, get_table(expiring)),
+        subject=f"{len(expiring)} domains to be expired in {int(h_delta)}",
+        body=f"Following domains are to be expired in {int(h_delta)}:\n{get_table(expiring)}\n",
     )
     # Get expired domains
     expired = [r for r in expiring if r[1] <= today]
     SystemNotification.notify(
         "dns.domain_expired",
-        subject="%d domains are expiring" % len(expired),
+        subject=f"{len(expired)} domains are expiring",
         body=f"Following domains are expired:\n{get_table(expired)}\n",
     )

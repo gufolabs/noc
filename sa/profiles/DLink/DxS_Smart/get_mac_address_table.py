@@ -65,7 +65,7 @@ class Script(BaseScript):
         if interface is not None:
             cmd += f" port {interface}"
         if vlan is not None:
-            cmd += " vlanid %d" % vlan
+            cmd += f" vlanid {int(vlan)}"
         s = self.cli(cmd)
         for match in self.rx_line1.finditer(s):
             m_interface = match.group("interface")

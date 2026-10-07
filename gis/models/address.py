@@ -74,7 +74,7 @@ class Address(Document):
         def nq(x):
             if not x:
                 x = 0
-            return "%06d" % int(x)
+            return f"{int(x):06}"
 
         if document.is_primary:
             # Reset other primary addresses
@@ -114,7 +114,7 @@ class Address(Document):
         a = []
         if self.num:
             if self.num2:
-                n = "%d/%d" % (self.num, self.num2)
+                n = f"{int(self.num)}/{int(self.num2)}"
             else:
                 n = str(self.num)
             if self.num_letter:
@@ -122,7 +122,7 @@ class Address(Document):
             a += [f"д. {n}"]
         if self.estate:
             if self.estate2:
-                n = "%d/%d" % (self.estate, self.estate2)
+                n = f"{int(self.estate)}/{int(self.estate2)}"
             else:
                 n = str(self.estate)
             if self.estate_letter:
@@ -135,7 +135,7 @@ class Address(Document):
             a += [f"к. {n}"]
         if self.struct:
             if self.struct2:
-                n = "%d/%d" % (self.struct, self.struct2)
+                n = f"{int(self.struct)}/{int(self.struct2)}"
             else:
                 n = str(self.struct)
             if self.struct_letter:

@@ -385,7 +385,7 @@ class Command(BaseCommand):
         for rcmd, packets in script.iter_cli_tracking():
             r += [
                 {
-                    "names": ["cli_%d" % cmd_num],
+                    "names": [f"cli_{int(cmd_num)}"],
                     "request": rcmd,
                     "reply": [self.encode_cli(v) for v in packets],
                 }

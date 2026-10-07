@@ -78,7 +78,7 @@ class PrefixApplication(ExtModelApplication):
                 if p.mask <= mask:
                     suggestions += [
                         {
-                            "prefix": "%s/%d" % (p.address, mask),
+                            "prefix": f"{p.address}/{int(mask)}",
                             "size": 2 ** (32 - mask) if prefix.is_ipv4 else None,
                         }
                     ]

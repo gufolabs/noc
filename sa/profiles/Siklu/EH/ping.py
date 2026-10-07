@@ -28,11 +28,11 @@ class Script(BaseScript):
     def execute(self, address, count=None, source_address=None, size=None, df=None):
         cmd = f"ping {address}"
         if count:
-            cmd += " -c %d" % int(count)
+            cmd += f" -c {int(count)}"
         else:
             cmd += " -c 5"
         if size:
-            cmd += " -l %d" % int(size)
+            cmd += f" -l {int(size)}"
         pr = self.cli(cmd)
         match = self.rx_result.search(pr)
         return {

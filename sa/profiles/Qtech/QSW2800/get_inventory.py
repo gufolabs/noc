@@ -116,7 +116,7 @@ class Script(BaseScript):
                             "part_no": r[0]["part_no"],
                         }
                         try:
-                            c = self.cli("show member %d slot 1" % member)
+                            c = self.cli(f"show member {int(member)} slot 1")
                             match = self.rx_member.search(c)
                             if match:
                                 ch["serial"] = match.group("serial")

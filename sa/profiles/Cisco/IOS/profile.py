@@ -85,17 +85,17 @@ class Profile(BaseProfile):
         interface = str(interface)
         if " efp_id " in interface:
             l, r = interface.split(" efp_id ", 1)
-            return "%s.SI.%d" % (self.convert_interface_name_cisco(l.strip()), int(r.strip()))
+            return f"{self.convert_interface_name_cisco(l.strip())}.SI.{int(r.strip())}"
         if "+Efp" in interface:
             l, r = interface.split("+Efp", 1)
-            return "%s.SI.%d" % (self.convert_interface_name_cisco(l.strip()), int(r.strip()))
+            return f"{self.convert_interface_name_cisco(l.strip())}.SI.{int(r.strip())}"
         if " point-to-point" in interface:
             interface = interface.replace(" point-to-point", "")
         if ".ServiceInstance." in interface:
             interface = interface.replace(".ServiceInstance.", ".SI.")
         if ".SI." in interface:
             l, r = interface.split(".SI.", 1)
-            return "%s.SI.%d" % (self.convert_interface_name_cisco(l.strip()), int(r.strip()))
+            return f"{self.convert_interface_name_cisco(l.strip())}.SI.{int(r.strip())}"
         if isinstance(interface, str):
             il = interface.lower()
         else:

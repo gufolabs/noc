@@ -158,7 +158,7 @@ class InterfacePathCard(BaseCard):
         for t, n in [(1000000000, "G"), (1000000, "M"), (1000, "k")]:
             if cv >= t:
                 if cv // t * t == cv:
-                    return "%d%s" % (cv // t, n)
+                    return f"{int(cv // t)}{n}"
                 return f"{float(cv) / t:.2f}{n}"
         return str(cv)
 
@@ -188,7 +188,7 @@ class InterfacePathCard(BaseCard):
             from_ts.date().isoformat(),
             from_ts.isoformat(sep=" "),
             " OR ".join(
-                "(managed_object=%d AND path[4]='%s')" % (q[1], q[2].replace("'", "''"))
+                f"(managed_object={q[1]} AND path[4]='{q[2].replace(chr(39), chr(39) * 2)}')"
                 for q in query
             ),
         )

@@ -54,11 +54,8 @@ class VarTransformRule:
     @staticmethod
     def int_to_ip(v: str) -> str:
         v = int(v)
-        return "%d.%d.%d.%d" % (
-            v & 0xFF000000 >> 24,
-            v & 0x00FF0000 >> 16,
-            v & 0x0000FF00 >> 8,
-            v & 0x000000FF,
+        return (
+            f"{v & 0xFF000000 >> 24}.{v & 0x00FF0000 >> 16}.{v & 0x0000FF00 >> 8}.{v & 0x000000FF}"
         )
 
     @staticmethod
@@ -68,7 +65,7 @@ class VarTransformRule:
         """
         if len(v) != 4:
             return v
-        return "%d.%d.%d.%d" % (ord(v[0]), ord(v[1]), ord(v[2]), ord(v[3]))
+        return f"{int(ord(v[0]))}.{int(ord(v[1]))}.{int(ord(v[2]))}.{int(ord(v[3]))}"
 
     @staticmethod
     def bin_to_mac(v):

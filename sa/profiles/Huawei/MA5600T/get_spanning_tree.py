@@ -139,7 +139,7 @@ class Script(BaseScript):
                 for p in self.rx_port.finditer(inst):
                     ifname = p.group("port").replace(" ", "")
                     p1 = self.cli(
-                        "display stp instance %d port %s" % (instance["id"], ifname),
+                        f"display stp instance {int(instance['id'])} port {ifname}",
                         allow_empty_response=False,
                     )
                     if "spanning tree protocol is disabled" in p1:

@@ -30,6 +30,8 @@ class Command(BaseCommand):
         print("=" * 72)
         print("PATH      :", path)
         print("COMPONENT :", data.get("component"))
-        print("TIME      : %04d-%02d-%02d %02d:%02d:%02d" % ts[:6])
+        print(
+            f"TIME      : {ts[0]:04d}-{ts[1]:02d}-{ts[2]:02d} {ts[3]:02d}:{ts[4]:02d}:{ts[5]:02d}"
+        )
         print("-" * 72)
         print(data.get("traceback"))

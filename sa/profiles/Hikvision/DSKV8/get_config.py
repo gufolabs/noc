@@ -118,16 +118,16 @@ class Script(BaseScript):
                         c += "  TextOverlay \n"
                     i = 1
                     if "_text" in overlay:
-                        c += '    TextOverlay %d "%s"\n' % (i, overlay["_text"].strip())
+                        c += f'    TextOverlay {int(i)} "{overlay["_text"].strip()}"\n'
                         continue
                     if "TextOverlay" in overlay:
                         overlay = overlay["TextOverlay"]
                         for oo in overlay:
                             text = oo["displayText"][0]
                             if text:
-                                c += '    TextOverlay %d "%s"\n' % (i, text["_text"])
+                                c += f'    TextOverlay {int(i)} "{text["_text"]}"\n'
                             else:
-                                c += '    TextOverlay %d ""\n' % i
+                                c += f'    TextOverlay {int(i)} ""\n'
                             i = i + 1
                 else:
                     c += f"  {o}\n"
@@ -163,7 +163,7 @@ class Script(BaseScript):
                     text = o["hostName"][0]["_text"]
                 else:
                     text = o["ipAddress"][0]["_text"]
-                c += "  NTPServer %d %s\n" % (i, text)
+                c += f"  NTPServer {int(i)} {text}\n"
         except HTTPError:
             pass
         v = self.http.get("/ISAPI/Security/users", json=False, cached=True, use_basic=True)

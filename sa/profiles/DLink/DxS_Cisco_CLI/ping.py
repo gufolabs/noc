@@ -27,19 +27,19 @@ class Script(BaseScript):
         if ":" in address:
             cmd = f"ping ipv6 {address}"
             if count:
-                cmd += " -n %d" % int(count)
+                cmd += f" -n {int(count)}"
             if source_address:
                 cmd += f" -s {source_address}"
             if size:
-                cmd += " -l %d" % int(size)
+                cmd += f" -l {int(size)}"
         else:
             cmd = f"ping ip {address}"
             if count:
-                cmd += " ntimes %d" % int(count)
+                cmd += f" ntimes {int(count)}"
             if source_address:
                 cmd += f" source {source_address}"
             if size:
-                cmd += " length %d" % int(size)
+                cmd += f" length {int(size)}"
         # Don't implemented, may be in future firmware revisions ?
         # if df:
         #    cmd+=" df-bit"

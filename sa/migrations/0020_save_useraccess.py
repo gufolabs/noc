@@ -15,7 +15,7 @@ class Migration(BaseMigration):
         for user_id, administrative_domain_id, group_id in self.db.execute(
             "SELECT user_id,administrative_domain_id,group_id FROM sa_useraccess"
         ):
-            name = "NOC_UA_%d_%d" % (user_id, i)
+            name = f"NOC_UA_{int(user_id)}_{int(i)}"
             self.db.execute(
                 """
                 INSERT INTO sa_managedobjectselector(name,description,filter_administrative_domain_id)

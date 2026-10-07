@@ -85,7 +85,7 @@ class Profile(BaseProfile):
         if "Uplink" in match.group("ifname") and int(match.group("number")) <= 7:
             return f"front-port {match.group('number')}"
         if "Uplink" in match.group("ifname") and int(match.group("number")) > 7:
-            return "10G-front-port %s" % (int(match.group("number")) - 8)
+            return f"10G-front-port {int(match.group('number')) - 8}"
         return s
 
     def get_count_pon_ports(self):

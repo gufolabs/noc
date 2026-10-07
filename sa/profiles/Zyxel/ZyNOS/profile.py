@@ -50,7 +50,7 @@ class Profile(BaseProfile):
         """
         match = self.rx_ifname.match(s)
         if match:
-            return "%d" % (int(match.group("number")) + 1)
+            return f"{int(int(match.group('number')) + 1)}"
         return s
 
     def zynos_mode(self, script):

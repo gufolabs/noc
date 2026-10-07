@@ -718,7 +718,9 @@ class BaseLoader:
         t = time.localtime()
         archive_path = os.path.join(
             self.archive_dir,
-            compressor.get_path("import-%04d-%02d-%02d-%02d-%02d-%02d.jsonl" % tuple(t[:6])),
+            compressor.get_path(
+                f"import-{t[0]:04d}-{t[1]:02d}-{t[2]:02d}-{t[3]:02d}-{t[4]:02d}-{t[5]:02d}.jsonl"
+            ),
         )
         self.logger.info("Moving %s to %s", self.new_state_path, archive_path)
         if self.new_state_path.endswith(compressor.ext):

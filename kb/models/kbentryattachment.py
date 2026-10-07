@@ -33,7 +33,7 @@ class KBEntryAttachment(NOCModel):
     file = models.FileField("File", upload_to=KBEntry.upload_to, storage=database_storage)
 
     def __str__(self):
-        return "%d: %s" % (self.kb_entry.id, self.name)
+        return f"{int(self.kb_entry.id)}: {self.name}"
 
     def delete(self):
         """

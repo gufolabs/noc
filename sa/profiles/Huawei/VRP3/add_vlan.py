@@ -18,12 +18,12 @@ class Script(BaseScript):
     def execute(self, vlan_id, name, tagged_ports):
         with self.configure():
             self.cli("interface lan 0/0 \n")
-            self.cli("vlan %d common\n" % (vlan_id))
+            self.cli(f"vlan {int(vlan_id)} common\n")
             self.cli("exit\n")
             if tagged_ports:
                 for port in tagged_ports:
                     self.cli(
-                        "pvc  adsl %s 0 35 lan 0/0 %d 1 disable 1483b off off 1 1" % (port, vlan_id)
+                        f"pvc  adsl {port} 0 35 lan 0/0 {int(vlan_id)} 1 disable 1483b off off 1 1"
                     )
         self.save_config()
         return True

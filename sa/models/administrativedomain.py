@@ -147,18 +147,17 @@ class AdministrativeDomain(NOCModel):
             administrative_domain = administrative_domain.id
         cursor = connection.cursor()
         cursor.execute(
-            """
+            f"""
             WITH RECURSIVE r AS (
                  SELECT id, parent_id
                  FROM sa_administrativedomain
-                 WHERE id = %d
+                 WHERE id = {int(administrative_domain)}
                  UNION
                  SELECT ad.id, ad.parent_id
                  FROM sa_administrativedomain ad JOIN r ON ad.parent_id = r.id
             )
             SELECT id FROM r
         """
-            % administrative_domain
         )
         return [r[0] for r in cursor]
 

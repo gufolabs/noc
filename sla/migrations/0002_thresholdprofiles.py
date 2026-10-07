@@ -48,7 +48,7 @@ class Migration(BaseMigration):
                 else:
                     tp = {"_id": tp_id}
                 # Fill profile
-                tp["name"] = "sp-%05d-%03d" % (next(current), n)
+                tp["name"] = f"sp-{int(next(current)):05}-{int(n):03}"
                 tp["description"] = (
                     f"Migrated for SLA profile '{doc['name']}' metric '{metric['metric_type']}'"
                 )

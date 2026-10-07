@@ -126,15 +126,9 @@ class PrefixAccess(NOCModel):
         for vrf, afi in vaccess:
             for p in vaccess[vrf, afi]:
                 stmt += [
-                    "(%s = %d AND %s = '%s' AND %s <<= '%s')"
-                    % (
-                        f"{table}.vrf_id" if table else "vrf_id",
-                        vrf,
-                        f"{table}.afi" if table else "afi",
-                        afi,
-                        f"{table}.{field}" if table else field,
-                        p,
-                    )
+                    f"({f'{table}.vrf_id' if table else 'vrf_id'} = {vrf} AND "
+                    f"{f'{table}.afi' if table else 'afi'} = '{afi}' AND "
+                    f"{f'{table}.{field}' if table else field} <<= '{p}')"
                 ]
         return SQL(reduce(lambda x, y: f"{x} OR {y}", stmt))
 

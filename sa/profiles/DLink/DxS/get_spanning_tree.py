@@ -148,14 +148,13 @@ class Script(BaseScript):
                 desg_priority, desg_id = 128, self.designated_bridge
             iface = {
                 "interface": match.group("iface"),
-                "port_id": "%d.%d" % (int(match.group("priority")), int(match.group("iface"))),
+                "port_id": f"{int(match.group('priority'))}.{int(match.group('iface'))}",
                 "state": self.PORT_STATE[match.group("status")],
                 "role": self.PORT_ROLE[match.group("role")],
                 "priority": match.group("priority"),
                 "designated_bridge_id": desg_id,
                 "designated_bridge_priority": desg_priority,
-                "designated_port_id": "%d.%d"
-                % (int(match.group("priority")), int(match.group("iface"))),
+                "designated_port_id": f"{int(match.group('priority'))}.{int(match.group('iface'))}",
                 "point_to_point": match.group("p2p") == "Yes",
                 "edge": match.group("edge") == "Yes",
             }
@@ -176,15 +175,13 @@ class Script(BaseScript):
                     p2p = self.iface_role[int(iface)]["type"] == "Point to point"
                 iface = {
                     "interface": match.group("iface"),
-                    "port_id": "%d.%d"
-                    % (int(match.group("p_priority")), int(match.group("iface"))),
+                    "port_id": f"{int(match.group('p_priority'))}.{int(match.group('iface'))}",
                     "state": self.PORT_STATE[match.group("status")],
                     "role": self.PORT_ROLE[match.group("role")],
                     "priority": match.group("p_priority"),
                     "designated_bridge_id": desg_id,
                     "designated_bridge_priority": desg_priority,
-                    "designated_port_id": "%d.%d"
-                    % (int(match.group("priority")), int(match.group("iface"))),
+                    "designated_port_id": f"{int(match.group('priority'))}.{int(match.group('iface'))}",
                     "point_to_point": p2p,
                     "edge": False,
                 }

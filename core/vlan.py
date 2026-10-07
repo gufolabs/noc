@@ -75,7 +75,7 @@ def optimize_filter(vlan_filter, sep=","):
         f, t = p
         if f == t:
             return str(f)
-        return "%d-%d" % p
+        return f"{int(p[0])}-{int(p[1])}"
 
     vlan_filter = vlan_filter.replace(" ", "")
     if not vlan_filter:

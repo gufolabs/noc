@@ -114,7 +114,7 @@ class RefBookAppplication(Application):
             fns = [int(k[6:]) for k in request.POST if k.startswith("field_")]
             data = ["" for i in range(max(fns) + 1)]
             for i in fns:
-                data[i] = request.POST["field_%d" % i]
+                data[i] = request.POST[f"field_{int(i)}"]
             rbr.value = data
             rbr.save()
             return self.response_redirect("main:refbook:item", rb.id, rbr.id)
@@ -157,7 +157,7 @@ class RefBookAppplication(Application):
             fns = [int(k[6:]) for k in request.POST if k.startswith("field_")]
             data = ["" for i in range(max(fns) + 1)]
             for i in fns:
-                data[i] = request.POST["field_%d" % i]
+                data[i] = request.POST[f"field_{int(i)}"]
             rbr = RefBookData(ref_book=rb, value=data)
             rbr.save()
             return self.response_redirect("main:refbook:item", rb.id, rbr.id)

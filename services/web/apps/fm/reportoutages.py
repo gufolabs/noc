@@ -100,9 +100,9 @@ class ReportOutagesApplication(SimpleReport):
             if not m:
                 continue  # Hanging Outage
             dt = min(td, otime[o])
-            downtime = "%02d:%02d:%02d" % ((dt // 3600) % 24, (dt // 60) % 60, dt % 60)
+            downtime = f"{int(dt // 3600 % 24):02}:{int(dt // 60 % 60):02}:{int(dt % 60):02}"
             if dt >= 86400:
-                downtime = "%dd %s" % (dt // 86400, downtime)
+                downtime = f"{int(dt // 86400)}d {downtime}"
             if td:
                 avail = float(td - dt) * 100 / td
             else:

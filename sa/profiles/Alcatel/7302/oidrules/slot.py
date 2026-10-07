@@ -41,7 +41,7 @@ class SlotRule(OIDRule):
                                 f"noc::module::{s_i}",
                                 f"noc::sensor::Temperature_nt-a_s{s_i}",
                             )
-                        ] = "%d.%d" % (i, s_i)
+                        ] = f"{int(i)}.{int(s_i)}"
                 else:
                     r[
                         (
@@ -63,10 +63,7 @@ class SlotRule(OIDRule):
                             f"noc::module::{s_i}",
                             f"noc::sensor::Temperature_lt_s{ms, s_i}",
                         )
-                    ] = "%d.%d" % (
-                        i + ms + 1,
-                        s_i,
-                    )
+                    ] = f"{int(i + ms + 1)}.{int(s_i)}"
             else:
                 r[
                     (

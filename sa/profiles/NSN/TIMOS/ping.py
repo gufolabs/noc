@@ -32,13 +32,13 @@ class Script(BaseScript):
     ):
         cmd = f"ping {address}"
         if count:
-            cmd += " times %d" % int(count)
+            cmd += f" times {int(count)}"
         else:
             count = 5
         if source_address:
             cmd += f" source {source_address}"
         if size:
-            cmd += " size %d" % int(size)
+            cmd += f" size {int(size)}"
         if df:
             cmd += " do-not-fragment"
         v = self.cli(cmd)

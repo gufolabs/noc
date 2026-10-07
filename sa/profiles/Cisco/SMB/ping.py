@@ -26,11 +26,11 @@ class Script(BaseScript):
     def execute_cli(self, address, count=None, source_address=None, size=None, df=None):
         cmd = f"ping ip {address}"
         if count:
-            cmd += " count %d" % int(count)
+            cmd += f" count {int(count)}"
         if source_address:
             cmd += f" source {source_address}"
         if size:
-            cmd += " size %d" % int(size)
+            cmd += f" size {int(size)}"
         if df:
             # no such option in CLI:
             raise self.NotSupportedError()

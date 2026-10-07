@@ -16,7 +16,7 @@ class Script(BaseScript):
 
     def execute(self, vlan_id, name, tagged_ports):
         with self.configure():
-            self.cli("vlan %d name %s" % (vlan_id, name))
+            self.cli(f"vlan {int(vlan_id)} name {name}")
             if tagged_ports:
                 self.cli("tagged " + " ".join(tagged_ports))
             self.cli("exit")

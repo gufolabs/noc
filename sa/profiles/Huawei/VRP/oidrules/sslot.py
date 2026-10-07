@@ -23,7 +23,7 @@ class SSlotRule(OIDRule):
 
         for si in hwSlotIndex:
             for cp in hwModIndex:
-                r[(int(si), cp)] = "%d.%d" % (int(si), cp)
+                r[(int(si), cp)] = f"{int(si)}.{int(cp)}"
 
         for si, cp in r:
             if self.is_complex:

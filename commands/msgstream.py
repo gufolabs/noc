@@ -98,10 +98,10 @@ class Command(BaseCommand):
 
         meta: Metadata = run_sync(get_meta)
         self.print(f"# Brokers ({len(meta.brokers)})")
-        self.print("%-20s | %s" % ("ID", "HOST:PORT"))
+        self.print(f"{'ID':20} | HOST:PORT")
         b_map = {}
         for broker in meta.brokers:
-            self.print("%-20s | %s:%s" % (broker.id, broker.host, broker.port))
+            self.print(f"{broker.id:20} | {broker.host}:{broker.port}")
             b_map[broker.id] = broker.host
         self.print("# Streams")
         for stream in meta.metadata:

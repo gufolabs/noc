@@ -32,7 +32,7 @@ class Script(BaseScript):
     ):
         if not count:
             count = 3
-        cmd = "ping -t %d %s " % (int(count), address)
+        cmd = f"ping -t {int(count)} {address} "
         c = self.cli(cmd)
         match = self.rx_result.search(c)
         if match:

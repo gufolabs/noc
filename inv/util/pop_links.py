@@ -31,7 +31,7 @@ class LinkedPoP:
             if not remote_level:
                 logger.error("[%s|%s] Object has not PoP level. Skipping", remote.id, remote)
                 continue
-            layer = "pop_links%d" % (min(level, remote_level) // 10)
+            layer = f"pop_links{int(min(level, remote_level) // 10)}"
             yield c, remote, layer
 
     def get_pop_managed_objects(self, root=None):
@@ -132,7 +132,7 @@ class LinkedPoP:
             r_level = min(level, pop.get_data("pop", "level")) // 10
             logger.info("%s - %s. Linking on layer pop_links%d", self.pop, pop, r_level)
             self.pop.connect_genderless(
-                "links", pop, "links", type="pop_link", layer="pop_links%d" % r_level
+                "links", pop, "links", type="pop_link", layer=f"pop_links{int(r_level)}"
             )
 
 

@@ -27,13 +27,13 @@ class Script(BaseScript):
             sfp = 1
             sfpo = 5
         if sfpo + sfp != prt:
-            raise self.UnexpectedResultError("prt=%d sfp=%d sfpo=%d" % (prt, sfp, sfpo))
+            raise self.UnexpectedResultError(f"prt={int(prt)} sfp={int(sfp)} sfpo={int(sfpo)}")
         ports = []
         for port in range(1, prt + 1):
             if port <= sfpo:
-                ports.append("Port%d" % int(port))
+                ports.append(f"Port{int(port)}")
             elif sfp > 1:
-                ports.append("SFP%d" % (int(port) - sfpo))
+                ports.append(f"SFP{int(int(port) - sfpo)}")
             else:
                 ports.append("SFP")
 

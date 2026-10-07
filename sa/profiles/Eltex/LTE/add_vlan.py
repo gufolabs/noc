@@ -17,7 +17,7 @@ class Script(BaseScript):
     def execute(self, vlan_id, name, tagged_ports):
         with self.profile.switch(self):
             self.cli("configure")
-            self.cli("vlan %d" % vlan_id)
+            self.cli(f"vlan {int(vlan_id)}")
             if name:
                 self.cli(f"name {name}")
             if tagged_ports:

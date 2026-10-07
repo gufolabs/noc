@@ -121,7 +121,7 @@ class MailSenderService(FastAPIService):
             esmtp_opts = []
             if smtp.does_esmtp:
                 if smtp.has_extn("size"):
-                    esmtp_opts.append("size=%d" % len(msg))
+                    esmtp_opts.append(f"size={len(msg)}")
             # MAIL FROM
             code, resp = smtp.mail(from_address, esmtp_opts)
             if code != 250:

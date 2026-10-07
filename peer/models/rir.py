@@ -64,7 +64,7 @@ class RIR(NOCModel):
             data += [f"password: {maintainer.password}"]
         admin = maintainer.admins.all()[0]
         T = time.gmtime()
-        data += ["changed: %s %04d%02d%02d" % (admin.email, T[0], T[1], T[2])]
+        data += [f"changed: {admin.email} {int(T[0]):04}{int(T[1]):02}{int(T[2]):02}"]
         data += ["source: RIPE"]
         data = "\n".join(data)
         try:

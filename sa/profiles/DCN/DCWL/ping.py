@@ -30,9 +30,9 @@ class Script(BaseScript):
     def execute(self, address, count=None, source_address=None, size=None, df=None):
         if count is None:
             count = 5
-        cmd = "ping %s -c %d" % (address, int(count))
+        cmd = f"ping {address} -c {int(count)}"
         if size:
-            cmd += " -s %d" % int(size)
+            cmd += f" -s {int(size)}"
         if source_address:
             cmd += f" -I {source_address}"
         result = None

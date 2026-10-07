@@ -212,14 +212,14 @@ class Script(BaseScript):
 
     def get_pvc(self, interfaces, slot_n):
         try:
-            v = self.cli("display pvc 0/%d" % slot_n)
+            v = self.cli(f"display pvc 0/{int(slot_n)}")
         except self.CLISyntaxError:
             return self.get_svc(interfaces, slot_n)
         for match in self.rx_pvc.finditer(v):
             port = int(match.group("port"))
-            ifname = "0/%d/%d" % (slot_n, port)
+            ifname = f"0/{int(slot_n)}/{int(port)}"
             sub = {
-                "name": "%s-%d.%d" % (ifname, int(match.group("vpi")), int(match.group("vci"))),
+                "name": f"{ifname}-{int(match.group('vpi'))}.{int(match.group('vci'))}",
                 "admin_status": match.group("admin_status") == "up",
                 "enabled_afi": ["BRIDGE", "ATM"],
                 "vpi": int(match.group("vpi")),
@@ -236,7 +236,7 @@ class Script(BaseScript):
         :return:
         """
         try:
-            v = self.cli("display service-port board 0/%d" % slot_n)
+            v = self.cli(f"display service-port board 0/{int(slot_n)}")
         except self.CLISyntaxError:
             self.logger.error("[Huawei.MA5600T] Not supported service-port board command")
             return
@@ -246,9 +246,9 @@ class Script(BaseScript):
         # @todo ES
         for match in self.rx_sp.finditer(v):
             port = int(match.group("port"))
-            ifname = "0/%d/%d" % (slot_n, port)
+            ifname = f"0/{int(slot_n)}/{int(port)}"
             sub = {
-                "name": "%s-%d.%d" % (ifname, int(match.group("vpi")), int(match.group("vci"))),
+                "name": f"{ifname}-{int(match.group('vpi'))}.{int(match.group('vci'))}",
                 "admin_status": match.group("admin_status") == "up",
                 "enabled_afi": ["BRIDGE"],
                 "vpi": int(match.group("vpi")),
@@ -340,7 +340,7 @@ class Script(BaseScript):
         for b in boards:
             slot = int(b["num"])
             try:
-                v = self.cli("display board 0/%d" % slot)
+                v = self.cli(f"display board 0/{int(slot)}")
             except self.CLISyntaxError:
                 self.logger.error("Unsupported display board command")
                 continue

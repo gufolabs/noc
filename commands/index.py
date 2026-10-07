@@ -65,4 +65,4 @@ class Command(BaseCommand):
             for o in model.objects.all():
                 TextIndex.update_index(model, o)
                 n += 1
-            self.stdout.write("%d records indexed\n" % n)
+            self.stdout.write(f"{int(n)} records indexed\n")

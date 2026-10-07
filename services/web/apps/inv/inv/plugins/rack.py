@@ -81,7 +81,7 @@ class RackPlugin(InvPlugin):
             co.set_data("rackmount", "side", "f")
             co.save()
             co.log(
-                "Set rack position to front #%d" % position_front,
+                f"Set rack position to front #{int(position_front)}",
                 user=request.user.username,
                 system="WEB",
                 op="CHANGE",
@@ -91,7 +91,7 @@ class RackPlugin(InvPlugin):
             co.set_data("rackmount", "side", "r")
             co.save()
             co.log(
-                "Set rack position to rear #%d" % position_rear,
+                f"Set rack position to rear #{int(position_rear)}",
                 user=request.user.username,
                 system="WEB",
                 op="CHANGE",
@@ -107,7 +107,7 @@ class RackPlugin(InvPlugin):
             co.set_data("rackmount", "shift", shift)
             co.save()
             co.log(
-                "Set position shift to %d holes" % shift,
+                f"Set position shift to {int(shift)} holes",
                 user=request.user.username,
                 system="WEB",
                 op="CHANGE",

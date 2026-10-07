@@ -117,9 +117,9 @@ class CSVApplication(Application):
                     dict_writer = csv.DictWriter(new_csv_file, keys)
                     dict_writer.writeheader()
                     dict_writer.writerows(accepted_row)
-                    check_msg = ", \n\nskipped because of PrefixAccess - %d IP: \n%s" % (
-                        len(forbidden_ip),
-                        "\n".join(forbidden_ip),
+                    check_msg = (
+                        f", \n\nskipped because of PrefixAccess - {len(forbidden_ip)} IP: \n"
+                        f"{'\n'.join(forbidden_ip)}"
                     )
                 else:
                     new_csv_file = StringIO(request.FILES["file"].read().decode())

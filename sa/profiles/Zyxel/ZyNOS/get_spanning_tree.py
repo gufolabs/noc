@@ -51,7 +51,7 @@ class Script(BaseScript):
         i = int(v, 16)
         prio = (i >> 12) * 16
         port = i & 0xFFF
-        return "%d.%d" % (prio, port)
+        return f"{int(prio)}.{int(port)}"
 
     def process_mstp(self):
         """

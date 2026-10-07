@@ -42,34 +42,34 @@ class Script(BaseScript):
                     continue
                 if ports[i]["t"] == "ADSL":
                     try:
-                        v = self.cli("display mac-address %s 0/%d/%s" % (adsl_port, i, p))
+                        v = self.cli(f"display mac-address {adsl_port} 0/{int(i)}/{p}")
                     except self.CLISyntaxError:
-                        v = self.cli("display mac-address port 0/%d/%s" % (i, p))
+                        v = self.cli(f"display mac-address port 0/{int(i)}/{p}")
                         adsl_port = "port"
                 if ports[i]["t"] == "VDSL":
                     try:
-                        v = self.cli("display mac-address %s 0/%d/%s" % (vdsl_port, i, p))
+                        v = self.cli(f"display mac-address {vdsl_port} 0/{int(i)}/{p}")
                     except self.CLISyntaxError:
-                        v = self.cli("display mac-address port 0/%d/%s" % (i, p))
+                        v = self.cli(f"display mac-address port 0/{int(i)}/{p}")
                         vdsl_port = "port"
                 if ports[i]["t"] == "GPON":
                     try:
-                        v = self.cli("display mac-address %s 0/%d/%s" % (gpon_port, i, p))
+                        v = self.cli(f"display mac-address {gpon_port} 0/{int(i)}/{p}")
                     except self.CLISyntaxError:
-                        v = self.cli("display mac-address port 0/%d/%s" % (i, p))
+                        v = self.cli(f"display mac-address port 0/{int(i)}/{p}")
                         gpon_port = "port"
                 if ports[i]["t"] in ["10GE", "GE", "FE", "GE-Optic", "GE-Elec", "FE-Elec"]:
                     try:
-                        v = self.cli("display mac-address %s 0/%d/%s" % (ethernet_port, i, p))
+                        v = self.cli(f"display mac-address {ethernet_port} 0/{int(i)}/{p}")
                     except self.CLISyntaxError:
-                        v = self.cli("display mac-address port 0/%d/%s" % (i, p))
+                        v = self.cli(f"display mac-address port 0/{int(i)}/{p}")
                         ethernet_port = "port"
                 for match in self.rx_line.finditer(v):
                     r += [
                         {
                             "vlan_id": match.group("vlan_id"),
                             "mac": match.group("mac"),
-                            "interfaces": [("0/%d/%s" % (i, p))],
+                            "interfaces": [f"0/{int(i)}/{p}"],
                             "type": {"dynamic": "D", "static": "S"}[match.group("type")],
                         }
                     ]

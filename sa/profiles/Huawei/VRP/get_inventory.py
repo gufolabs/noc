@@ -126,7 +126,7 @@ class Script(BaseScript):
             # @todo  6         LSB1XP4CA0      Normal       1              S8500-VRP310-R1648P02
             # https://www.manualslib.com/manual/1216852/Huawei-Quidway-S8500-Series.html?page=52
             item_type, slot_n, part_no = self.get_type(slot_n, sub=subslot_n, part_no=part_no)
-            v = self.cli("display device manuinfo slot %d" % slot["slot"])
+            v = self.cli(f"display device manuinfo slot {int(slot['slot'])}")
             r += [
                 {
                     "type": item_type,

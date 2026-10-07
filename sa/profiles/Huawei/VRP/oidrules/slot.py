@@ -26,7 +26,7 @@ class SlotRule(OIDRule):
         for fi in hwFrameIndex:
             for si in hwSlotIndex:
                 for cp in hwCpuDevIndex:
-                    r[str(i)] = "%d.%d.%d" % (fi, si, cp)
+                    r[str(i)] = f"{int(fi)}.{int(si)}.{int(cp)}"
                     # r[str(i)] = {"hwFrameIndex": fi, "hwSlotIndex": si, "hwCpuDevIndex": cp}
                     i += 1
         for i in r:

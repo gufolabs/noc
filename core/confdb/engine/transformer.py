@@ -35,7 +35,7 @@ class PredicateTransformer(ast.NodeTransformer):
         return ast.copy_location(new_node, node)
 
     def make_or_call(self, node):
-        l_name = "_input_%d" % next(self.input_counter)
+        l_name = f"_input_{int(next(self.input_counter))}"
         new_node = ast.Lambda(
             args=ast.arguments(
                 posonlyargs=[],

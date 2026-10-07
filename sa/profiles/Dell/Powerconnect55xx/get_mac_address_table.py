@@ -26,9 +26,9 @@ class Script(BaseScript):
         if interface is not None:
             cmd += f" interface {interface}"
         if vlan is not None:
-            cmd += " vlan %d" % vlan
+            cmd += f" vlan {int(vlan)}"
         if mac is not None:
-            cmd += " address %d" % vlan
+            cmd += f" address {int(vlan)}"
         r = []
         for match in self.rx_line.finditer(self.cli(cmd)):
             interface = match.group("interface")

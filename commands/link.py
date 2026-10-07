@@ -164,7 +164,7 @@ class Command(BaseCommand):
         if not dry_run:
             self.print("Claimed data will be Loss..\n")
             for i in reversed(range(1, 10)):
-                self.print("%d\n" % i)
+                self.print(f"{int(i)}\n")
                 time.sleep(1)
             for link in list(deadline_links):
                 self.print(f"Clean {link}")

@@ -184,7 +184,7 @@ class Command(BaseCommand):
 
         for _ in self.progress(iterable, max_value=total / BATCH):
             if self.no_progressbar and n == next_report:
-                self.print("[%02d%%]" % ((n * 100) // total))
+                self.print(f"[{int(n * 100 // total):02}%]")
                 next_report += report_interval
             n += 1
         self.print("Done")

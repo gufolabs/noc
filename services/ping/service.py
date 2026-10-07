@@ -98,7 +98,7 @@ class PingService(FastAPIService):
                     limit=config.ping.ds_limit,
                     filters=[
                         f"pool({config.pool})",
-                        "shard(%d,%d)" % (self.slot_number, self.total_slots),
+                        f"shard({int(self.slot_number)},{int(self.total_slots)})",
                     ],
                     block=True,
                     filter_policy="delete",

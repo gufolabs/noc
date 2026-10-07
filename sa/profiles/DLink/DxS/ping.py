@@ -31,7 +31,7 @@ class Script(BaseScript):
     ):
         cmd = f"ping {address}"
         if count:
-            cmd += " times %d" % int(count)
+            cmd += f" times {int(count)}"
         else:
             cmd += " times 5"
         if source_address:

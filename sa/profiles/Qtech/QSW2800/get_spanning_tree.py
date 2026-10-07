@@ -35,7 +35,7 @@ class Script(BaseScript):
         def q_port(s):
             if "." in s:
                 x, y = [int(k) for k in s.split(".")]
-                return "%d.%d" % (x, y)
+                return f"{int(x)}.{int(y)}"
             return s
 
         def port_priority(s):

@@ -43,7 +43,7 @@ class Uptime(Document):
     WPREC = 0.1  # Wrap precision
 
     def __str__(self):
-        return "%d" % self.object
+        return f"{int(self.object)}"
 
     @classmethod
     def register(cls, managed_object: ManagedObject, uptime: int) -> datetime.datetime | None:

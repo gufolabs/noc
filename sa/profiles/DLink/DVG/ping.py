@@ -29,11 +29,11 @@ class Script(BaseScript):
     def execute(self, address, count=None, source_address=None, size=None, df=None):
         cmd = f"ping {address}"
         if count:
-            cmd += " %d" % int(count)
+            cmd += f" {int(count)}"
         else:
             cmd += " 5"
         if size:
-            cmd += " %d" % int(size)
+            cmd += f" {int(size)}"
         else:
             cmd += " 64"
         ping = self.cli(cmd)

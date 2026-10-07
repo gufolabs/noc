@@ -286,7 +286,7 @@ class Command(BaseCommand):
         if options.get("force", False):
             self.print("Jobs will be reschedule")
             for i in reversed(range(1, 10)):
-                self.print("%d\n" % i)
+                self.print(f"{int(i)}\n")
                 time.sleep(1)
             coll.bulk_write(bulk)
             # Job.get_next_timestamp(64000)
@@ -384,8 +384,8 @@ class Command(BaseCommand):
             job_count = task_count[pool]["box_task_per_seconds"] * job_avg[pool].get(
                 "box", 0
             ) + task_count[pool]["periodic_task_per_seconds"] * job_avg[pool].get("periodic", 0)
-            self.print("%20s %s" % ("Pool", "Threads est."))
-            self.print("%40s %d" % (pool.name, math.ceil(job_count)))
+            self.print(f"{'Pool':>20} Threads est.")
+            self.print(f"{pool.name:>40} {int(math.ceil(job_count))}")
 
     @classmethod
     def get_max_slots(cls, scheduler: Scheduler) -> int:
@@ -416,7 +416,7 @@ class Command(BaseCommand):
         FROM sa_managedobject mo JOIN sa_managedobjectprofile mop ON (mo.object_profile_id = mop.id)
         WHERE mop.enable_periodic_discovery = true AND pool = %s {"AND mo.id=ANY(%s)" if mos else ""}
         GROUP BY profile, slot
-        {"HAVING mod(mo.id, %d)=ANY(%%s)" % max_slots if slots else ""}
+        {f"HAVING mod(mo.id, {max_slots})=ANY(%s)" if slots else ""}
         ORDER BY slot, number desc
         """
         params = [str(pool.id)]

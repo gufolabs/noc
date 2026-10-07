@@ -100,7 +100,7 @@ class ReportSubscription(Document):
         # Check file can be written
         today = datetime.date.today()
         dirname = os.path.join(
-            self.PREFIX, "%04d" % today.year, "%02d" % today.month, "%02d" % today.day
+            self.PREFIX, f"{int(today.year):04}", f"{int(today.month):02}", f"{int(today.day):02}"
         )
         if not os.path.exists(dirname):
             try:
