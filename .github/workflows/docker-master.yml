@@ -1,4 +1,4 @@
-name: Nightly Docker Build
+name: Docker Image Build
 on:
   schedule:
     - cron: "0 3 * * *"
@@ -9,9 +9,17 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include: # ref - git rep, tag - docker image tag
+          - ref: master
+            tag: 26-dev
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          ref: ${{ matrix.ref }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -29,11 +37,40 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push multi-platform image
+      - name: Check image
+        id: check
+        env:
+          IMAGE: ghcr.io/gufolabs/noc:${{ matrix.tag }}
+        run: |
+          COMMIT=$(git rev-parse HEAD)
+          echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
+
+          BUILT_COMMIT=$(
+            docker buildx imagetools inspect "$IMAGE" --raw 2>/dev/null |
+            jq -r '.annotations["org.opencontainers.image.revision"] // empty'
+          ) || true
+
+          echo "Commit:       $COMMIT"
+          echo "Built commit: ${BUILT_COMMIT:-<none>}"
+
+          if [ "$COMMIT" = "$BUILT_COMMIT" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Image is up to date"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "Image needs to be built"
+          fi
+
+      - name: Build and push image
+        if: steps.check.outputs.skip != 'true'
+        env:
+          IMAGE: ghcr.io/gufolabs/noc:${{ matrix.tag }}
+          COMMIT: ${{ steps.check.outputs.commit }}
         run: |
           docker buildx build \
             --platform linux/amd64,linux/arm64 \
             --push \
-            -t ghcr.io/gufolabs/noc:master \
+            --tag "$IMAGE" \
             --target code \
+            --annotation "index:org.opencontainers.image.revision=$COMMIT" \
             .
