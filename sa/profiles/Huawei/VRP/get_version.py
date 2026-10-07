@@ -202,10 +202,10 @@ class Script(BaseScript):
         platform = platform or match.group("platform")
         # Convert NetEngine to NE
         if platform.lower().startswith("netengine"):
-            n, p = platform.split(" ", 1)
+            _n, p = platform.split(" ", 1)
             platform = f"NE{p.strip().upper()}"
         elif platform.lower().startswith("multiserviceengine"):
-            n, p = platform.split(" ", 1)
+            _n, p = platform.split(" ", 1)
             platform = f"ME{p.strip().upper()}"
         # Found in AR1220 and AR1220E
         elif platform.upper().startswith("HUAWEI"):

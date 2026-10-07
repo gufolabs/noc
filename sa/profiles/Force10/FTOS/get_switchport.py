@@ -72,7 +72,7 @@ class Script(BaseScript):
                     continue
                 # Untagged
                 if ll.startswith("U"):
-                    x, y = ll.split()
+                    _x, y = ll.split()
                     p["untagged"] = y
                 elif ll.startswith("T"):
                     _x, y = ll.split()

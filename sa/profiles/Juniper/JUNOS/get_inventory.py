@@ -424,7 +424,7 @@ class Script(BaseScript):
         res = {}
         for oid, sens_type_num in self.snmp.getnext(mib["JUNIPER-MIB::jnxFruType"]):
             if sens_type_num in (13, 7):  # 13 - fan, 7 - power supply
-                slotid, chassis_id, env_status_oid, env_status_num, env_name = self.get_sens_date(
+                _slotid, chassis_id, env_status_oid, env_status_num, env_name = self.get_sens_date(
                     oid
                 )
                 if env_status_num == 2:  # empty

@@ -321,7 +321,7 @@ class DNSZone(NOCModel):
         # Do not generate RPSL for private reverse zones
         if self.name.lower().endswith(".10.in-addr.arpa"):
             return ""
-        n1, _n2, n = self.name.lower().split(".", 2)
+        _n1, _n2, n = self.name.lower().split(".", 2)
         if "16.172.in-addr.arpa" <= n <= "31.172.in-addr.arpa":
             return ""
         _n1, n = self.name.lower().split(".", 1)

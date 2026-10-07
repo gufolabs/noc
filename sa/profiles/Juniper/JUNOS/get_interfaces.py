@@ -201,7 +201,7 @@ class Script(BaseScript):
                         # Find connected networks
                         for match in self.rx_log_netaddress.finditer(p):
                             net, addr = match.groups()
-                            n, m = net.split("/")
+                            _n, m = net.split("/")
                             si["ipv4_addresses"] += [f"{addr}/{m}"]
                     elif proto == "inet6":
                         # Protocol IPv6

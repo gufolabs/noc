@@ -587,7 +587,7 @@ class Script(BaseScript):
             else:
                 # Append additional subinterface
                 if ":" in ifname:
-                    if_name, vlan_id = ifname.split(":", 1)
+                    if_name, _vlan_id = ifname.split(":", 1)
                 else:
                     if_name, _vlan_id = ifname.split(".", 1)
                 try:
