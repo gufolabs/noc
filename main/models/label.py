@@ -921,7 +921,11 @@ class Label(Document):
 
     @classmethod
     def match_labels(
-        cls, category, allowed_op: set | None = None, matched_scopes: set | None = None, parent_op: set | None = None
+        cls,
+        category,
+        allowed_op: set | None = None,
+        matched_scopes: set | None = None,
+        parent_op: set | None = None,
     ):
         """
         Decorator to denote models with labels.

@@ -431,7 +431,11 @@ class Script(BaseScript):
         return mtu
 
     def iter_iftable(
-        self, key: str, oid: str, ifindexes: Iterator[int] | None = None, clean: Callable | None = None
+        self,
+        key: str,
+        oid: str,
+        ifindexes: Iterator[int] | None = None,
+        clean: Callable | None = None,
     ) -> Iterable[tuple[str, str | int]]:
         """
         Collect part of IF-MIB table.

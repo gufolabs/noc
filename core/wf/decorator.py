@@ -176,7 +176,9 @@ def document_touch(
         self._get_collection().update_one({"_id": self.pk}, op)
 
 
-def model_set_state(self, state, state_changed: datetime.datetime | None = None, bulk=None, create=False):
+def model_set_state(
+    self, state, state_changed: datetime.datetime | None = None, bulk=None, create=False
+):
     """
     Set state
 
