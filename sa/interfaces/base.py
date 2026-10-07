@@ -562,7 +562,7 @@ class DateTimeShiftParameter(StringParameter):
                 dt, _, us = value.partition(".")
                 dt = datetime.datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S")
                 if "+" in us:
-                    us, offset = us.split("+")
+                    us, _offset = us.split("+")
                 us = int(us.rstrip("Z"), 10)
                 return dt + datetime.timedelta(microseconds=us)
             return datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")

@@ -389,7 +389,7 @@ class Script(BaseScript):
                     if ifname in stp_ports:
                         interfaces[ifname]["enabled_protocols"] += ["STP"]
                     if ifname in portchannel_members:
-                        ai, is_lacp = portchannel_members[ifname]
+                        ai, _is_lacp = portchannel_members[ifname]
                         interfaces[ifname]["aggregated_interface"] = ai
                         interfaces[ifname]["enabled_protocols"] += ["LACP"]
 

@@ -456,7 +456,7 @@ class Script(BaseScript):
         proccessed_serials = set()
         if self.is_s85xx:
             return self.part_parse_s8500()
-        slot_num, device_slots = self.get_device_inventory()
+        _slot_num, device_slots = self.get_device_inventory()
         self.logger.debug("'display device' slots hints: %s", device_slots)
         cmd = "display elabel"
         if self.is_cloud_engine:

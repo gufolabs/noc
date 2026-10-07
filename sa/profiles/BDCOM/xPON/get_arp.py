@@ -26,7 +26,7 @@ class Script(BaseScript):
         r = []
         for match in self.rx_line.finditer(self.cli("show arp")):
             if "(" in match.group("interface"):
-                svi, phys = match.group("interface").split("(")
+                svi, _phys = match.group("interface").split("(")
                 r += [
                     {
                         "ip": match.group("ip"),

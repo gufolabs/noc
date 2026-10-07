@@ -42,7 +42,7 @@ class TrapServer(UDPServer):
             if need_block:
                 return
         try:
-            community, varbinds, raw_pdu, raw_varbinds = decode_trap(
+            _community, varbinds, raw_pdu, raw_varbinds = decode_trap(
                 data, raw=config.message.enable_snmptrap
             )
         except Exception as e:

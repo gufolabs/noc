@@ -113,7 +113,7 @@ class Script(BaseScript):
                 mib["HUAWEI-ENTITY-EXTENT-MIB::hwEntityBomEnDesc"], only_first=True
             )
             if r:
-                oid, r = r[0]
+                _oid, r = r[0]
                 r = self.rx_hw_extended_platform.search(r)
                 return r.group("platform")
         except (self.snmp.TimeOutError, self.snmp.SNMPError):
@@ -209,7 +209,7 @@ class Script(BaseScript):
             platform = f"ME{p.strip().upper()}"
         # Found in AR1220 and AR1220E
         elif platform.upper().startswith("HUAWEI"):
-            n, p = platform.upper().split("HUAWEI", 1)
+            _n, p = platform.upper().split("HUAWEI", 1)
             platform = p.strip()
         if "image" in match.groupdict():
             image = match.group("image")

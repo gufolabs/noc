@@ -309,7 +309,7 @@ class Script(BaseScript):
                 n["type"] = "physical"
                 r += [n]
             if iface in portchannel_members:
-                ai, is_lacp = portchannel_members[iface]
+                ai, _is_lacp = portchannel_members[iface]
                 ai = f"Ag {ai}"
                 n["aggregated_interface"] = ai
                 n["enabled_protocols"] = ["LACP"]

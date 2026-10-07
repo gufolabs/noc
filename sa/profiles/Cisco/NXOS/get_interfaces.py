@@ -440,7 +440,7 @@ class Script(BaseScript):
                         iface["mac"] = sub["mac"]
                     # Portchannel member
                     if ifname in portchannel_members:
-                        ai, is_lacp = portchannel_members[ifname]
+                        ai, _is_lacp = portchannel_members[ifname]
                         iface["aggregated_interface"] = ai
                         iface["enabled_protocols"] += ["LACP"]
                     # Ifindex

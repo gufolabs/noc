@@ -151,7 +151,7 @@ class Script(BaseScript):
             if description:
                 description = smart_text(description, errors="ignore", encoding="ascii")
             if iface in portchannel_members:
-                ai, is_lacp = portchannel_members[iface]
+                ai, _is_lacp = portchannel_members[iface]
                 n["aggregated_interface"] = ai
                 n["enabled_protocols"] = ["LACP"]
             n["name"] = iface

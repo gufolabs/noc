@@ -150,7 +150,7 @@ class PolusParam:
         match = rx_param_match.match(self.name)
         if not match:
             return None
-        port, module, p_type, code = match.groups()
+        port, module, p_type, _code = match.groups()
         if port and port.lower().startswith("ln"):
             r.append({"scope": "OpticalLinePort", "value": f"LINE{port[3:]}"})
         elif port and port.lower().startswith("cl"):

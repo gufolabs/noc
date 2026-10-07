@@ -40,7 +40,7 @@ class HorizonAuthMiddeware(BaseMiddleware):
             allow_proxy=False,
             validate_cert=False,
         ) as client:
-            code, resp_headers, result = client.post(self.http.get_url("/auth"), b)
+            code, resp_headers, _result = client.post(self.http.get_url("/auth"), b)
             self.http._process_cookies(resp_headers)
             headers["Cookie"] = self.http.cookies.output(header="", attrs="value").lstrip().encode()
             self.http.logger.debug(

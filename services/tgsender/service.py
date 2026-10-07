@@ -163,7 +163,7 @@ class TgSenderService(FastAPIService):
                 url = f"{self.url}/sendMessage"
                 h = {"Content-Type": b"application/json"}
                 self.logger.info("Send Message")
-            code, headers, data = client.post(url, body, files=files, headers=h)
+            code, _headers, data = client.post(url, body, files=files, headers=h)
             if code == 200:
                 self.logger.info(f"Send: {data}\n")
                 metrics["telegram_send_ok"] += 1
@@ -185,7 +185,7 @@ class TgSenderService(FastAPIService):
         for h in headers:
             if not h.startswith("WebHook") or h == MX_WH_API_URL:
                 continue
-            code, name = h.split("-", 1)
+            _code, name = h.split("-", 1)
             r[name.replace("-", "_").lower()] = headers[h].decode()
         return r
 

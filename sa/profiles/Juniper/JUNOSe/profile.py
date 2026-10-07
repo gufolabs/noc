@@ -104,7 +104,7 @@ class Profile(BaseProfile):
     def valid_interface_name(self, name):
         if "." in name:
             try:
-                ifname, unit = name.split(".")
+                _ifname, unit = name.split(".")
             except ValueError:
                 return True
             # See `logical-interface-unit-range`

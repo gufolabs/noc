@@ -98,7 +98,7 @@ class Script(BaseScript):
         v = self.cli("show trunks")
         portchannels = set()
         for row in self.rx_trunk.finditer(v):
-            ifname, descr, _, agg, lacp = row.groups()
+            ifname, _descr, _, agg, lacp = row.groups()
             # ifname = self.profile.convert_interface_name(ifname)
             agg = self.profile.convert_interface_name(agg)
             if lacp == "LACP":
@@ -140,7 +140,7 @@ class Script(BaseScript):
             match = self.rx_iface.search(block)
             if not match:
                 continue
-            ifname, status, admin = match.groups()
+            ifname, status, _admin = match.groups()
             ifname = self.profile.convert_interface_name(ifname)
             for param, rx in [
                 ("mac", self.rx_mac),

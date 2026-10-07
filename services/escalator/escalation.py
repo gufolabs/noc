@@ -961,7 +961,7 @@ class DeescalationSequence(BaseSequence):
             metrics["escalation_already_deescalated"] += 1
             return
         with Span(client="escalator", sample=PARENT_SAMPLE):
-            c_tt_name, c_tt_id = self.tt_id.split(":")
+            c_tt_name, _c_tt_id = self.tt_id.split(":")
             cts = TTSystem.get_by_name(c_tt_name)
             if not cts:
                 self.logger.info("Failed to add comment to %s: Invalid TT system", self.tt_id)

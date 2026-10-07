@@ -42,7 +42,7 @@ class CfgMetricSourcesDataStream(DataStream):
         :return:
         """
         if "::" in sid:
-            source_type, sid = sid.split("::")
+            _source_type, sid = sid.split("::")
         return {"id": str(sid), "$deleted": True}
 
     @classmethod

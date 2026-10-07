@@ -1317,7 +1317,7 @@ class ActiveAlarm(Document):
         #     ArchivedAlarm._get_collection().update_one(q, op)
 
     def set_escalation_context(self):
-        current_context, current_span = get_current_span()
+        current_context, _current_span = get_current_span()
         if current_context or self.escalation_ctx:
             self.escalation_ctx = current_context
             self._get_collection().update_one(

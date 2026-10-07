@@ -107,7 +107,7 @@ class Profile(BaseProfile):
         r = []
         slots = 0
         v = script.cli("display board 0", cached=True)
-        _, header, body, _ = self.rx_splitter.split(v)
+        _, _header, body, _ = self.rx_splitter.split(v)
         for line in body.splitlines():
             try:
                 num, board = line.split(None, 1)

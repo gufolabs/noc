@@ -300,7 +300,7 @@ class Maintenance(Document):
     def ensure_jobs(self):
         """Ensure maintenance Job"""
         now = datetime.datetime.now()
-        m_start, m_stop = self.active_interval
+        _m_start, m_stop = self.active_interval
         # Auto completed
         if self.auto_confirm and m_stop > now:
             delay = (m_stop - now).total_seconds()

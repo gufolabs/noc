@@ -258,7 +258,7 @@ class ReportAlarmDetailApplication(ExtApplication):
                 worksheet.write(0, cn, self.HEADER_ROW.get(col, col), cf1)
             for cn, col in enumerate(out_columns):
                 worksheet.write_column(1, cn, data[col], cf1)
-            (max_row, max_col) = data.shape
+            (max_row, _max_col) = data.shape
             worksheet.autofilter(0, 0, max_row, len(out_columns))
             worksheet.freeze_panes(1, 0)
             if enable_autowidth:

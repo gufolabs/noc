@@ -119,7 +119,7 @@ class Command(BaseCommand):
         with open(input) as f:
             json_data = f.read()
         inv_data = InvData.model_validate_json(json_data)
-        result, result_info = decode(container, inv_data)
+        _result, result_info = decode(container, inv_data)
         self.printbox_border()
         self.printbox(f"Import from file: '{input}'")
         self.printbox("-" * self.PB_LENGTH)

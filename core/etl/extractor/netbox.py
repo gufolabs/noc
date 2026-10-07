@@ -70,7 +70,7 @@ class NetBoxExtractor(BaseExtractor):
     def iter_records(self, path: str):
         url = f"{self.url}{path}?limit={self.LIMIT}"
         while True:
-            status, headers, content = self.client.get(url)
+            status, _headers, content = self.client.get(url)
             body = orjson.loads(content)
             if status != 200:
                 print(f"[{status}] Error when requested data: {body}")

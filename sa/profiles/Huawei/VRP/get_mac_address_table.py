@@ -43,7 +43,7 @@ class Script(BaseScript):
         for oid, port in self.snmp.getnext(
             "1.3.6.1.4.1.2011.5.25.42.2.1.3.1.4", max_retries=1, max_repetitions=20, timeout=20
         ):
-            mac, vlan_id, vid1, vid2 = oid.rsplit(".", 3)
+            mac, vlan_id, _vid1, _vid2 = oid.rsplit(".", 3)
             mac = ":".join(f"{int(x):02X}" for x in mac.split(".")[-6:])
             if int(vlan_id) == 0:
                 self.logger.warning("[%s|%s] VLAN ids is 0", interface_mappings[port], mac)

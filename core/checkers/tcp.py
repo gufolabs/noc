@@ -33,7 +33,7 @@ class TCPConnectChecker(BaseChecker):
                 )
                 continue
             try:
-                reader, writer = await asyncio.wait_for(
+                _reader, writer = await asyncio.wait_for(
                     asyncio.open_connection(c.address, c.port), self.SOCKET_TIMEOUT
                 )
                 writer.close()

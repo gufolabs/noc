@@ -117,7 +117,7 @@ class Script(BaseScript):
                             int = match.group("name").split()[0]
                         else:
                             int = match.group("name")
-                        vendor, t_sn, t_rev, part_no = self.get_idprom(
+                        vendor, t_sn, _t_rev, part_no = self.get_idprom(
                             int, match.group("descr").upper()
                         )
                         if not serial:

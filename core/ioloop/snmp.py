@@ -85,7 +85,7 @@ async def snmp_get(
         await rate_limit.wait()
     with UDPSocketContext(udp_socket, tos=tos) as sock:
         try:
-            data, addr = await asyncio.wait_for(
+            data, _addr = await asyncio.wait_for(
                 sock.send_and_receive(pdu, (address, port)), timeout
             )
         except TimeoutError:
@@ -210,7 +210,7 @@ async def snmp_count(
                 pdu = getnext_pdu(community, oid, version=version)
             # Send request and wait for response
             try:
-                data, addr = await asyncio.wait_for(
+                data, _addr = await asyncio.wait_for(
                     sock.send_and_receive(pdu, (address, port)), timeout
                 )
             except TimeoutError:
@@ -295,7 +295,7 @@ async def snmp_getnext(
                 pdu = getnext_pdu(community, oid, version=version)
             # Send request and wait for response
             try:
-                data, addr = await asyncio.wait_for(
+                data, _addr = await asyncio.wait_for(
                     sock.send_and_receive(pdu, (address, port)), timeout
                 )
             except TimeoutError:
@@ -376,7 +376,7 @@ async def snmp_set(
     # Wait for result
     with UDPSocketContext(udp_socket, tos=tos) as sock:
         try:
-            data, addr = await asyncio.wait_for(
+            data, _addr = await asyncio.wait_for(
                 sock.send_and_receive(pdu, (address, port)), timeout
             )
         except TimeoutError:

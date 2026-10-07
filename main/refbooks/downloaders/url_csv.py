@@ -36,7 +36,7 @@ class CsvUrlDownloader(BaseDownloader):
             allow_proxy=True,
             validate_cert=False,
         ) as client:
-            code, headers, body = client.get(url)
+            code, _headers, body = client.get(url)
             if code != 200:
                 raise OSError(f"Invalid HTTP response: {code}")
 

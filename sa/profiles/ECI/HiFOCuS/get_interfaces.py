@@ -152,7 +152,7 @@ class Script(BaseScript):
             if row[0] == "SH":
                 # header
                 continue
-            shelf, slot, port, mani, _, sw_ver, boot_ver, hw_ver, serial, _, _ = row
+            shelf, slot, port, mani, _, _sw_ver, _boot_ver, _hw_ver, _serial, _, _ = row
             if int(port) == 0:
                 continue
             # detail = self.cli("ginv %s %s %s %s" % (shelf, slot, port, mani))

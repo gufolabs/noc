@@ -27,7 +27,7 @@ class Script(BaseScript):
         sections = self.rx_section.split(v)
         objects += self.parse_chassis(sections.pop(0))
         while sections:
-            cnt, type, data = sections[:3]
+            _cnt, type, data = sections[:3]
             sections = sections[3:]
             t = type.lower()
             if t.startswith("power supply"):

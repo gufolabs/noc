@@ -31,7 +31,7 @@ def check_mongo():
         sys.stderr.write(f"ERROR: {why}\n")
         sys.exit(1)
     version = db.connection.server_info()["version"]
-    major, minor, rest = version.split(".", 2)
+    major, minor, _rest = version.split(".", 2)
     major = int(major)
     minor = int(minor)
     if major < 2 or (major == 2 and minor < 4):

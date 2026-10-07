@@ -577,7 +577,7 @@ class Script(BaseScript):
                     sub["vlan_ids"] = [int(shotn[2:].strip())]
                 # Portchannel member
                 if ifname in portchannel_members:
-                    ai, is_lacp = portchannel_members[ifname]
+                    ai, _is_lacp = portchannel_members[ifname]
                     iface["aggregated_interface"] = ai
                     iface["enabled_protocols"] += ["LACP"]
                 # Ifindex
@@ -589,7 +589,7 @@ class Script(BaseScript):
                 if ":" in ifname:
                     if_name, vlan_id = ifname.split(":", 1)
                 else:
-                    if_name, vlan_id = ifname.split(".", 1)
+                    if_name, _vlan_id = ifname.split(".", 1)
                 try:
                     interfaces[if_name]["subinterfaces"] += [sub]
                 except KeyError:

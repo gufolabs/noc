@@ -111,6 +111,6 @@ class Script(BaseScript):
             [mib["CISCO-VTP-MIB::vtpVlanState"], mib["CISCO-VTP-MIB::vtpVlanName"]]
         ):
             # print port_num, ifindex, port_type, pvid
-            domain_id, vlan_id = vlan_index.split(".")
+            _domain_id, vlan_id = vlan_index.split(".")
             r += [{"vlan_id": vlan_id, "name": vlan_name}]
         return r

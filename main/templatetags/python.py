@@ -27,7 +27,7 @@ def do_var(parser, token):
         raise template.TemplateSyntaxError(
             f"{token.contents.split()[0]} tag requires at least 3 arguments"
         )
-    tag, name, vartype = t[:3]
+    _tag, name, vartype = t[:3]
     if vartype not in VARTYPES:
         raise template.TemplateSyntaxError(
             f"Invalid var type '{vartype}'. Acceptable types are: {', '.join(VARTYPES)}"

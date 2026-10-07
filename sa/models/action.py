@@ -524,7 +524,7 @@ class Action(Document):
         ):
             # Scope Ctx
             d_ctx |= kwargs
-            s_ctx, scopes = self.clean_args(mo.profile, **d_ctx)
+            _s_ctx, scopes = self.clean_args(mo.profile, **d_ctx)
             scopes += d_scopes
             for aa in self.action_set:
                 if aa.execute != "S":

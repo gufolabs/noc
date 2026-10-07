@@ -76,7 +76,7 @@ class Script(BaseScript):
         # Use shelf type as platform
         platform = self.shelf_type_map.get(int(shelf_type))
         r = self.snmp.getnext("1.3.6.1.4.1.1286.1.3.3.1.1.2", only_first=True)
-        oid, version = r[0]
+        _oid, version = r[0]
         return {
             "vendor": "ECI",
             "platform": platform,

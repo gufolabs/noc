@@ -89,7 +89,7 @@ class ResourceGroupApplication(ExtDocApplication):
         r = []
         for ml in o.dynamic_client_labels:
             for ll in ml.get_labels():
-                scope, value, badges = clean_label(ll.name)
+                scope, value, _badges = clean_label(ll.name)
                 r += [
                     {
                         "id": ll.name,

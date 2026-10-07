@@ -16,7 +16,7 @@ class Reportreportmissedreverse(SimpleReport):
 
     def get_data(self, **kwargs):
         def reverse_format(p):
-            n, m = p.split("/")
+            n, _m = p.split("/")
             n = n.split(".")[:-1]
             n.reverse()
             return f"{n[0]}.{n[1]}.{n[2]}.in-addr.arpa"

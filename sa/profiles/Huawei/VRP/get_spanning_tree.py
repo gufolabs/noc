@@ -139,7 +139,7 @@ class Script(BaseScript):
             # s = row[0:13]
             if self.check_d.match(row[0:13]):
                 if c_num == 3:
-                    instance, mode, vlans = row.split(None, 2)
+                    instance, _mode, vlans = row.split(None, 2)
                 else:
                     instance, vlans = row.split(None, 1)
                 instance = int(instance.strip())

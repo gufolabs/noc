@@ -51,7 +51,7 @@ class Script(BaseScript):
                 sub["ipv4_addresses"] = [ip_address]
             found = False
             if "." in ifname:
-                i1, i2 = ifname.split(".")
+                i1, _i2 = ifname.split(".")
                 for i in interfaces:
                     if i["name"] == i1:
                         i["subinterfaces"] += [sub]

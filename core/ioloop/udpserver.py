@@ -120,7 +120,7 @@ class UDPServer:
             flags = socket.AI_PASSIVE
         bound_port = None
         for res in set(socket.getaddrinfo(address, port, family, socket.SOCK_DGRAM, 0, flags)):
-            af, socktype, proto, canonname, sockaddr = res
+            af, socktype, proto, _canonname, sockaddr = res
             if (
                 platform.system() == "Darwin"
                 and address == "localhost"

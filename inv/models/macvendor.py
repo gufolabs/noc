@@ -84,7 +84,7 @@ class MACVendor(Document):
         new = cls.parse_txt_content(content)
         # Fetch Medium blocks
         if cls.DOWNLOAD_URL_MEDIUM:
-            status, h, content = client.get(cls.DOWNLOAD_URL_MEDIUM)
+            status, _h, content = client.get(cls.DOWNLOAD_URL_MEDIUM)
             assert status == 200
             new_m = cls.parse_txt_content(content)
         else:

@@ -169,7 +169,7 @@ class Script(BaseScript):
                         sub["tagged_vlans"] = self.expand_rangelist(match.group("tagged"))
                     iface["subinterfaces"] += [sub]
                     if ifname in portchannel_members:
-                        ai, is_lacp = portchannel_members[ifname]
+                        ai, _is_lacp = portchannel_members[ifname]
                         iface["aggregated_interface"] = ai
                         iface["enabled_protocols"] = ["LACP"]
                 if prefix in ["gpon_olt-", "epon_olt-"] and admin_status is True:

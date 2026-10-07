@@ -99,7 +99,7 @@ class Script(BaseScript):
             }
             # Portchannel member
             if iface in portchannel_members:
-                ai, is_lacp = portchannel_members[iface]
+                ai, _is_lacp = portchannel_members[iface]
                 interface["aggregated_interface"] = ai
                 """
                 if is_lacp:

@@ -93,7 +93,7 @@ class Script(BaseScript):
             mib["LLDP-MIB::lldpRemManAddrIfId"],
             max_retries=1,
         ):
-            time_mark, loc_port, index, subtype, afi, addr = oid[
+            _time_mark, loc_port, _index, _subtype, afi, addr = oid[
                 len(mib["LLDP-MIB::lldpRemManAddrIfId"]) + 2 :
             ].split(".", 5)
             if afi == "4":

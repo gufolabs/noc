@@ -75,7 +75,7 @@ class Script(BaseScript):
                     x, y = ll.split()
                     p["untagged"] = y
                 elif ll.startswith("T"):
-                    x, y = ll.split()
+                    _x, y = ll.split()
                     p["tagged"] = y
                 elif ll.startswith(" "):
                     p["tagged"] += ll.strip()

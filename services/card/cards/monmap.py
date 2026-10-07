@@ -198,7 +198,7 @@ class MonMapCard(BaseCard):
                     objects_status[r], summary_all=True
                 )
             else:
-                m_services, m_subscribers = ServiceSummary.get_direct_summary(objects_status[r])
+                m_services, _m_subscribers = ServiceSummary.get_direct_summary(objects_status[r])
             profiles |= set(m_services)
             sss[r] = m_services
         for r in sorted(sss, key=lambda k: ("error", "warning", "good", "maintenance").index(k)):

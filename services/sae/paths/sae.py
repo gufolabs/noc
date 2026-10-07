@@ -199,7 +199,7 @@ class SAEAPI(JSONRPCAPI):
             beef_storage_id,
             beef_path_template_id,
             caps,
-            diagnostics,
+            _diagnostics,
             state,
             controller,
             snmp_security_level,

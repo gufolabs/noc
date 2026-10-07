@@ -210,7 +210,7 @@ class Script(BaseScript):
                         # Find connected networks
                         for match in self.rx_log_netaddress6.finditer(p):
                             net, addr = match.groups()
-                            n, m = net.split("/")
+                            _n, m = net.split("/")
                             si["ipv6_addresses"] += [f"{addr}/{m}"]
                     elif proto == "aenet":
                         # Aggregated
@@ -232,7 +232,7 @@ class Script(BaseScript):
                                 if not l3_ids:
                                     # Found in ex4500, Junos: 15.1R7.8
                                     v = self.cli("show vlans extensive")
-                                    untagged1, tagged1, l3_ids = self.get_vlan_port_mapping(v)
+                                    _untagged1, _tagged1, l3_ids = self.get_vlan_port_mapping(v)
                             vlans_requested = True
                         if untagged.get(si["name"]):
                             si["untagged_vlan"] = untagged[si["name"]]
