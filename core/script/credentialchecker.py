@@ -31,7 +31,7 @@ CHECK_OIDS = [mib["SNMPv2-MIB::sysObjectID.0"]]
 
 @dataclass(frozen=True)
 class SNMPCredential:
-    snmp_ro: str = None
+    snmp_ro: str | None = None
     snmp_rw: str | None = None
     oids: list[str] | None = None
 
@@ -98,7 +98,7 @@ class CredentialChecker:
         self,
         address,
         pool,
-        labels: list[str] = None,
+        labels: list[str] | None = None,
         port: str | None = None,
         logger=None,
         profile: str | None = None,
@@ -139,7 +139,7 @@ class CredentialChecker:
             self.ignoring_cli = True
 
     @staticmethod
-    def iter_protocols(*args, order: tuple[Protocol, ...] = None) -> Iterable[Protocol]:
+    def iter_protocols(*args, order: tuple[Protocol, ...] | None = None) -> Iterable[Protocol]:
         """
         Args:
             *args
@@ -166,7 +166,7 @@ class CredentialChecker:
         return "No supported authentication methods" in message
 
     def iter_suggests(
-        self, protocols: tuple[Protocol, ...] = None
+        self, protocols: tuple[Protocol, ...] | None = None
     ) -> Iterator[SuggestCLIConfig | SuggestSNMPConfig]:
         """Load ProfileCheckRules and return a list, grouped by preferences
 

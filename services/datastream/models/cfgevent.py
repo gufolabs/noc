@@ -77,5 +77,5 @@ class CfgEvent(BaseModel):
     # vars
     vars: list[VarItem] | None = None
     # subject:
-    handlers: list[str] = None
+    handlers: list[str] | None = None
     rules: list[Rule] | None = None

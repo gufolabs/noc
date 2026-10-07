@@ -21,7 +21,7 @@ class Script(BaseScript):
 
     status_map = {1: True, 2: False}
 
-    def get_correct_result(self, mib: str, mapper: dict = None) -> dict:
+    def get_correct_result(self, mib: str, mapper: dict | None = None) -> dict:
         """
         Returns dict in the form {ifindex: value}
 

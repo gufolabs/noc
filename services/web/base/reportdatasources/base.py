@@ -347,7 +347,7 @@ class ReportDataSource:
     def __init__(
         self,
         fields: list[str],
-        objectids: list[str] = None,
+        objectids: list[str] | None = None,
         allobjectids: bool = False,
         start: datetime.datetime | None = None,
         end: datetime.datetime | None = None,
@@ -561,7 +561,7 @@ class CHTableReportDataSource(ReportDataSource):
         }
 
     def get_query_ch(
-        self, from_date: datetime.datetime, to_date: datetime.datetime, r_format: str = None
+        self, from_date: datetime.datetime, to_date: datetime.datetime, r_format: str | None = None
     ) -> str:
         ts_from_date = time.mktime(from_date.timetuple())
         ts_to_date = time.mktime(to_date.timetuple())

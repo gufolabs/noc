@@ -55,7 +55,7 @@ class SequenceJob(Job):
         """
         self.error = msg
 
-    def get_next_error_timestamp(self, delay: int = None) -> datetime.datetime:
+    def get_next_error_timestamp(self, delay: int | None = None) -> datetime.datetime:
         """
         Reschedule current job and stop escalation
 

@@ -38,7 +38,13 @@ class Command(BaseCommand):
         parser.add_argument("ids", nargs=argparse.REMAINDER, help="List of extractor names")
 
     def handle(
-        self, model, state=None, dry_run: bool = False, ids: list[str] = None, *args, **options
+        self,
+        model,
+        state=None,
+        dry_run: bool = False,
+        ids: list[str] | None = None,
+        *args,
+        **options,
     ):
         """"""
         print(model, state, args, ids)

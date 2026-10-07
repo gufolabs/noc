@@ -89,7 +89,7 @@ class VCenterLinkExtractor(BaseExtractor):
         self,
         system: "VCenterRemoteSystem",
         config=None,
-        links: list[Link] = None,
+        links: list[Link] | None = None,
     ):
         super().__init__(system)
         self.links = links or []

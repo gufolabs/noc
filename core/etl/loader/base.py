@@ -284,7 +284,7 @@ class BaseLoader:
         self,
         old: Iterable[BaseModel],
         new: Iterable[BaseModel],
-        include_fields: set = None,
+        include_fields: set | None = None,
         return_wo_changes: bool = False,
     ) -> Iterable[tuple[BaseModel | None, BaseModel | None]]:
         """
@@ -497,7 +497,7 @@ class BaseLoader:
         self,
         object_id: str,
         v: dict[str, Any],
-        inc_changes: dict[str, dict[str, list]] = None,
+        inc_changes: dict[str, dict[str, list]] | None = None,
         state: str | None = None,
         state_changed: datetime.datetime | None = None,
         mappings: dict[Any, str] | None = None,

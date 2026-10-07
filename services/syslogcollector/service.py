@@ -133,7 +133,7 @@ class SyslogCollectorService(FastAPIService):
         message: str,
         facility: int,
         severity: int,
-        source_address: str = None,
+        source_address: str | None = None,
     ) -> None:
         """
         Spool message to be sent

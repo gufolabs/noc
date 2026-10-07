@@ -260,8 +260,8 @@ class Command(BaseCommand):
     def handle_forget_history(
         self,
         objects: list[str],
-        before_days: int = None,
-        before_revision: str = None,
+        before_days: int | None = None,
+        before_revision: str | None = None,
         approve=False,
         include_labels=None,
         exclude_labels=None,

@@ -135,7 +135,7 @@ class AlarmJob:
         services: list[ServiceItem] | None = None,
         profile: str | None = None,
         allowed_actions: list[AllowedAction] | None = None,
-        maintenance_policy: str = None,
+        maintenance_policy: str | None = None,
         item_policy: EscalationPolicy = EscalationPolicy.ROOT,
         end_condition: str = "CR",
         severity: int = 0,

@@ -360,8 +360,8 @@ class ServiceApplication(ExtDocApplication):
         sid: str,
         iid: str,
         managed_object: ManagedObject | None = None,
-        resources: list[str] = None,
-        addresses: list[dict[str, str]] = None,
+        resources: list[str] | None = None,
+        addresses: list[dict[str, str]] | None = None,
     ):
         si = self.get_object_or_404(ServiceInstance, id=iid)
         if addresses:

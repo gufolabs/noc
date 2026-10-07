@@ -514,8 +514,8 @@ class ResourceGroup(Document):
         cls,
         s,
         model_id: str | None = None,
-        include_labels: list[str] = None,
-        exclude_labels: list[str] = None,
+        include_labels: list[str] | None = None,
+        exclude_labels: list[str] | None = None,
     ):
         """
         Get list of Managed Object matching selector expression

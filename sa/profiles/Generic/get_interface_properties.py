@@ -119,7 +119,7 @@ class Script(BaseScript):
         return self.profile.convert_interface_name(v)
 
     def iter_iftable(
-        self, key: str, oid: str, ifindex: int | None = None, clean: Callable = None
+        self, key: str, oid: str, ifindex: int | None = None, clean: Callable | None = None
     ) -> Iterable[tuple[str, str | int]]:
         """
         Collect part of IF-MIB table.

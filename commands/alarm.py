@@ -257,7 +257,7 @@ class Command(BaseCommand):
         job.run()
 
     def handle_test_escalation(
-        self, alarms, profile: str = None, is_end: bool = False, *args, **options
+        self, alarms, profile: str | None = None, is_end: bool = False, *args, **options
     ):
         alarm = get_alarm(alarms[0])
         ep = EscalationProfile.get_by_id(profile)

@@ -263,7 +263,7 @@ class MetricAction(Document):
 
     def get_config(
         self,
-        prefix: str = None,
+        prefix: str | None = None,
         enable_dump: bool = False,
         rule_id: str | None = None,
         thresholds: Any | None = None,

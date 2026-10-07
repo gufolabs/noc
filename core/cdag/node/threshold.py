@@ -23,7 +23,7 @@ from noc.core.service.loader import get_service
 
 class ThresholdState(BaseModel):
     active: bool = False
-    reference: str = None
+    reference: str | None = None
     pool: str | None = None
     last_raise: datetime.datetime = None
 
@@ -139,7 +139,9 @@ class ThresholdNode(BaseCDAGNode):
             }
         )
 
-    def raise_alarm(self, x: ValueType, target, th: ThresholdItem = None, tid: str = None) -> None:
+    def raise_alarm(
+        self, x: ValueType, target, th: ThresholdItem = None, tid: str | None = None
+    ) -> None:
         """
         Raise alarm
         """

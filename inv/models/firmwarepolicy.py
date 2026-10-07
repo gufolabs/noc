@@ -229,7 +229,7 @@ class FirmwarePolicy(Document):
             ManagedObject.objects.filter(version__in=firmwares).values_list("id", flat=True)
         )
 
-    def set_labels(self, labels: list[str] = None):
+    def set_labels(self, labels: list[str] | None = None):
         from django.db import connection
 
         fws = [str(fw.id) for fw in self.get_affected_firmwares()]

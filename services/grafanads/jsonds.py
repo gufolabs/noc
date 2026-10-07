@@ -352,7 +352,7 @@ class JsonDSAPI:
         return getattr(cls, f"format_{result_type}")(results)
 
     @staticmethod
-    def get_target_expression(table_name: str = None) -> tuple[str, str | None]:
+    def get_target_expression(table_name: str | None = None) -> tuple[str, str | None]:
         """
         Getting Target name format for table
         :return:

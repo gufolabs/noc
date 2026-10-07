@@ -51,8 +51,8 @@ class ParamSchema(BaseModel):
     recommended_max: float | None = None
     step: float | None = None
     decimal: int | None = None  # Choices 0, 0.1, 0.01, 0.001, 0.0001
-    recommended_choices: list[str] = None
-    choices: list[str] = None
+    recommended_choices: list[str] | None = None
+    choices: list[str] | None = None
 
     def clean(self, value: str) -> str | float | bool:
         if self.type == "bool":

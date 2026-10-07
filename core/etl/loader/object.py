@@ -80,7 +80,7 @@ class ObjectLoader(BaseLoader):
         self,
         object_id: str,
         v: dict[str, Any],
-        inc_changes: dict[str, dict[str, list]] = None,
+        inc_changes: dict[str, dict[str, list]] | None = None,
         **kwargs,
     ):
         self.logger.debug("Changed object: %s", v)

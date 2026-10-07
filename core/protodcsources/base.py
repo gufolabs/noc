@@ -24,7 +24,7 @@ class BaseDiscriminatorSource(ABC):
 
     name: str
 
-    def __init__(self, protocol, data: list[DiscriminatorDataItem] = None) -> None:
+    def __init__(self, protocol, data: list[DiscriminatorDataItem] | None = None) -> None:
         self.protocol = protocol
         self.data = data
 

@@ -338,7 +338,7 @@ class AggregatedField(BaseField):
     def get_db_type(self, name=None):
         return f"AggregateFunction({self.agg_function}, {self.agg_function.get_db_type(self.field_type)})"
 
-    def get_expression(self, combinator: str = None):
+    def get_expression(self, combinator: str | None = None):
         return self.agg_function.get_expression(self, combinator)
         # return self.f_expr.format(p={"field": self.name, "function": function, "f_param": f_param})
         # return "{p[function]}Merge({p[field]}_{p[function]})"

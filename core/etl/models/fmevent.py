@@ -18,7 +18,7 @@ class Var(_BaseModel):
 
 
 class RemoteObject(BaseModel):
-    id: str = None  # For ManagedObject or Agent message Send
+    id: str | None = None  # For ManagedObject or Agent message Send
     name: str  # Name message initiator
     address: str | None = None  # IP Address message initiator
     pool: str | None = None  # Pool message receiver

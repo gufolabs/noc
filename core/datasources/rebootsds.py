@@ -35,8 +35,8 @@ class RebootsDS(BaseDataSource):
     async def iter_query(
         cls,
         fields: Iterable[str] | None = None,
-        start: datetime.datetime = None,
-        end: datetime.datetime = None,
+        start: datetime.datetime | None = None,
+        end: datetime.datetime | None = None,
         *args,
         **kwargs,
     ) -> AsyncIterable[tuple[str, str]]:

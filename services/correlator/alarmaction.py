@@ -46,10 +46,10 @@ class AlarmActionRunner:
     def __init__(
         self,
         items: list[Any],
-        allowed_actions: list[AlarmAction] = None,
+        allowed_actions: list[AlarmAction] | None = None,
         logger: Logger | None = None,
         services: list[str] | None = None,
-        groups: list[int] = None,
+        groups: list[int] | None = None,
         dry_run: bool = False,
     ):
         self.items = items

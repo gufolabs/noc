@@ -129,7 +129,7 @@ class MIBRegistry:
         self,
         oid: str,
         value: bytes,
-        display_hints: dict[str, Callable[[str, bytes], str | bytes]] = None,
+        display_hints: dict[str, Callable[[str, bytes], str | bytes]] | None = None,
     ) -> str:
         """Apply display-hint"""
         if display_hints:

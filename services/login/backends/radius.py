@@ -20,7 +20,7 @@ from .base import BaseAuthBackend
 class RADIUSBackend(BaseAuthBackend):
     RADIUS_DICT = Dictionary("services/login/backends/radius.dict")
 
-    def authenticate(self, user: str = None, password: str = None, **kwargs) -> str:
+    def authenticate(self, user: str | None = None, password: str | None = None, **kwargs) -> str:
         radius_server = config.login.radius_server
         radius_secret = smart_bytes(config.login.radius_secret)
 

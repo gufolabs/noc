@@ -95,7 +95,7 @@ class SubgraphNode(BaseCDAGNode):
         node_id: str,
         prefix: str | None = None,
         state: dict[str, Any] | None = None,
-        description: str = None,
+        description: str | None = None,
         config: dict[str, Any] | None = None,
         sticky: bool = False,
     ):

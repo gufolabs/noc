@@ -134,7 +134,7 @@ class TrapCollectorService(FastAPIService):
         cfg: SourceConfig,
         timestamp: int,
         body: dict[str, Any],
-        address: str = None,
+        address: str | None = None,
         message_id: str | None = None,
     ):
         """
@@ -179,7 +179,7 @@ class TrapCollectorService(FastAPIService):
         source_address: str | None = None,
         message_id: str | None = None,
         raw_pdu: bytes | None = None,
-        raw_varbinds: list[tuple[str, Any, bytes]] = None,
+        raw_varbinds: list[tuple[str, Any, bytes]] | None = None,
     ):
         metrics["events_mx_message"] += 1
         if not cfg.managed_object:

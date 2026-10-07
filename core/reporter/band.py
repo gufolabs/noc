@@ -50,7 +50,7 @@ class Band:
         name: str,
         parent: Optional["Band"] = None,
         orientation: BandOrientation = BandOrientation.HORIZONTAL,
-        data: dict[str, Any] = None,
+        data: dict[str, Any] | None = None,
     ):
         self.name = name
         self.parent = parent
@@ -235,7 +235,7 @@ class Band:
         for r in self.get_rows():
             yield from r.to_dicts()
 
-    def iter_data_rows(self, fields: list[str] = None) -> Iterable[tuple[str, ...]]:
+    def iter_data_rows(self, fields: list[str] | None = None) -> Iterable[tuple[str, ...]]:
         """Convert rows to columns tuple"""
         for r in self.get_rows():
             for row in r.to_dicts():

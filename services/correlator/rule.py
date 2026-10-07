@@ -72,7 +72,7 @@ class EventAlarmRule:
     combo_condition: str | None = None
     combo_window: int = 0
     combo_count: int = 0
-    combo_event_classes: list[str] = None
+    combo_event_classes: list[str] | None = None
     preference: int = 999
     reference_lookup: bool = False
     stop_disposition: bool = False

@@ -65,7 +65,7 @@ class DataStream:
 
     META_MAX_DEPTH = 3
 
-    DIAGNOSTIC: str = None
+    DIAGNOSTIC: str | None = None
 
     _collections: dict[str, pymongo.collection.Collection] = {}
     _collections_async: dict[str, pymongo.collection.Collection] = {}
@@ -439,9 +439,9 @@ class DataStream:
     @classmethod
     async def iter_data_async(
         cls,
-        change_id: str = None,
-        limit: int = None,
-        filters: list[str] = None,
+        change_id: str | None = None,
+        limit: int | None = None,
+        filters: list[str] | None = None,
         fmt=None,
         filter_policy: str | None = None,
     ):
@@ -494,9 +494,9 @@ class DataStream:
     @classmethod
     def iter_data(
         cls,
-        change_id: str = None,
-        limit: int = None,
-        filters: list[str] = None,
+        change_id: str | None = None,
+        limit: int | None = None,
+        filters: list[str] | None = None,
         fmt=None,
         filter_policy: str | None = None,
     ):

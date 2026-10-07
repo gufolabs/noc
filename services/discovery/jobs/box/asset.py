@@ -674,7 +674,7 @@ class AssetCheck(DiscoveryCheck):
         label: str | None = None,
         snmp_oid: str | None = None,
         ipmi_id: str | None = None,
-        labels: list[str] = None,
+        labels: list[str] | None = None,
     ):
         self.logger.info("[%s|%s] Creating new sensor '%s'", obj.name if obj else "-", "-", name)
         s = Sensor(

@@ -274,7 +274,7 @@ class CPE(Document):
 
     @classmethod
     def get_component(
-        cls, managed_object, global_id: str = None, local_id: str = None, **kwargs
+        cls, managed_object, global_id: str | None = None, local_id: str | None = None, **kwargs
     ) -> Optional["CPE"]:
         if not global_id and not local_id:
             return None

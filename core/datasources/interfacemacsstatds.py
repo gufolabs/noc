@@ -59,8 +59,8 @@ class InterfaceMACsStatDS(BaseDataSource):
     async def iter_query(
         cls,
         fields: Iterable[str] | None = None,
-        start: "datetime.datetime" = None,
-        end: "datetime.datetime" = None,
+        start: "datetime.datetime | None" = None,
+        end: "datetime.datetime | None" = None,
         period_active: int | None = None,
         resolve_managedobject_id: bool = True,
         *args,
