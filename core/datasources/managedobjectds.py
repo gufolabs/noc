@@ -302,7 +302,7 @@ class ManagedObjectDS(BaseDataSource):
 
     @classmethod
     async def iter_caps(
-        cls, caps: list[dict[str, Any]], requested_caps: dict[str, Any] = None
+        cls, caps: list[dict[str, Any]], requested_caps: dict[str, Any] | None = None
     ) -> AsyncIterable[tuple[str, Any]]:
         """
         Consolidate capabilities list and return resulting dict of
@@ -320,7 +320,7 @@ class ManagedObjectDS(BaseDataSource):
 
     @classmethod
     async def iter_mappings(
-        cls, mappings: list[dict[str, Any]], requested_mappings: dict[str, str] = None
+        cls, mappings: list[dict[str, Any]], requested_mappings: dict[str, str] | None = None
     ) -> AsyncIterable[tuple[str, Any]]:
         mappings = {c["remote_system"]: c["remote_id"] for c in mappings}
         for rid, r_name in requested_mappings.items():

@@ -27,7 +27,7 @@ class Script(BaseScript):
         3: True,
     }
 
-    def get_res_by_oid(self, oid: str, mapper: dict = None) -> dict:
+    def get_res_by_oid(self, oid: str, mapper: dict | None = None) -> dict:
         "Возвращает {ifindex:name}"
 
         if mapper is None:

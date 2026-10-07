@@ -108,7 +108,7 @@ class ReportByConfigApplication(Application):
 
     CATEGORY_MAP = {"main", "fm", "sa", "inv", "sla"}
 
-    report_id: str = None
+    report_id: str | None = None
     report_config = None
 
     def __init__(self, site) -> None:

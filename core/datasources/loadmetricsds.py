@@ -176,9 +176,9 @@ class LoadMetricsDS(BaseDataSource):
     async def iter_query(
         cls,
         fields: Iterable[str] | None = None,
-        reporttype: str = None,
-        start: datetime.datetime = None,
-        end: datetime.datetime = None,
+        reporttype: str | None = None,
+        start: datetime.datetime | None = None,
+        end: datetime.datetime | None = None,
         interface_profile: InterfaceProfile | None = None,
         exclude_zero: bool = False,
         admin_domain_ads: list[int] | None = None,

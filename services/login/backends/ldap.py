@@ -24,7 +24,7 @@ class LdapBackend(BaseAuthBackend):
         "r": ldap3.RANDOM,
     }
 
-    def authenticate(self, user: str = None, password: str = None, **kwargs) -> str:
+    def authenticate(self, user: str | None = None, password: str | None = None, **kwargs) -> str:
         # Validate username
         if not self.check_user(user):
             self.logger.error("Invalid username: %s", user)

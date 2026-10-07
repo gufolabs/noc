@@ -192,7 +192,9 @@ class Sensor(Document):
             ]
 
     @classmethod
-    def get_component(cls, managed_object, sensor: str = None, **kwargs) -> Optional["Sensor"]:
+    def get_component(
+        cls, managed_object, sensor: str | None = None, **kwargs
+    ) -> Optional["Sensor"]:
         if not sensor:
             return None
         if sensor:

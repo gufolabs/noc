@@ -346,7 +346,7 @@ class Script(BaseScript, metaclass=MetricScriptBase):
         return metric
 
     def execute(
-        self, metrics: list[dict[str, Any]] | None = None, collected: list[dict[str, Any]] = None
+        self, metrics: list[dict[str, Any]] | None = None, collected: list[dict[str, Any]] | None = None
     ):
         """
         Metrics is a list of:
@@ -656,7 +656,7 @@ class Script(BaseScript, metaclass=MetricScriptBase):
     def set_metric(
         self,
         id: int | tuple[str, list[str] | None],
-        metric: str = None,
+        metric: str | None = None,
         value: int | float = 0,
         ts: int | None = None,
         labels: list[str] | tuple[str] | None = None,

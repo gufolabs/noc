@@ -17,7 +17,7 @@ class Script(BaseScript):
     name = "Rotek.RTBSv1.get_lldp_neighbors"
     interface = IGetLLDPNeighbors
 
-    def get_remote_ports_data(self, ports: dict = None) -> list[str]:
+    def get_remote_ports_data(self, ports: dict | None = None) -> list[str]:
         """
         Get port description: Tx-packets, Rx-packets, signal and noise levels
 

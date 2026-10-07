@@ -70,7 +70,7 @@ class BaseSequence(ABC):
         self.logger = PrefixLoggerAdapter(logger, str(alarm_id))
         self.login: str = login
 
-    def retry_job(self, msg: str, delay: int = None) -> NoReturn:
+    def retry_job(self, msg: str, delay: int | None = None) -> NoReturn:
         """
         Reschedule current job and stop escalation
         :param msg: Retry

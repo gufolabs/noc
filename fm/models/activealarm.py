@@ -1677,7 +1677,7 @@ class ComponentHub:
     """
 
     def __init__(
-        self, alarm_class: AlarmClass, managed_object: ManagedObject, vars: dict[str, Any] = None
+        self, alarm_class: AlarmClass, managed_object: ManagedObject, vars: dict[str, Any] | None = None
     ):
         self.logger = logging.getLogger(__name__)
         self.__alarm_class = alarm_class

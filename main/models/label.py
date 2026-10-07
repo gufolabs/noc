@@ -921,7 +921,7 @@ class Label(Document):
 
     @classmethod
     def match_labels(
-        cls, category, allowed_op: set = None, matched_scopes: set = None, parent_op: set = None
+        cls, category, allowed_op: set | None = None, matched_scopes: set | None = None, parent_op: set | None = None
     ):
         """
         Decorator to denote models with labels.
@@ -993,8 +993,8 @@ class Label(Document):
     def _change_model_labels(
         cls,
         model_id: str,
-        add_labels: list[str] = None,
-        remove_labels: list[str] = None,
+        add_labels: list[str] | None = None,
+        remove_labels: list[str] | None = None,
         instance_filters: list[tuple[str, Any]] | None = None,
         effective_only: bool = True,
     ):
@@ -1058,8 +1058,8 @@ class Label(Document):
     def _change_document_labels(
         cls,
         model_id: str,
-        add_labels: list[str] = None,
-        remove_labels: list[str] = None,
+        add_labels: list[str] | None = None,
+        remove_labels: list[str] | None = None,
         instance_filters: list[tuple[str, Any]] | None = None,
         effective_only: bool = True,
     ):

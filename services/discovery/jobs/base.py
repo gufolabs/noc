@@ -253,7 +253,10 @@ class MODiscoveryJob(PeriodicJob):
         #         self.object.sync_diagnostic_alarm([d.diagnostic for d in bulk])
 
     def update_alarms(
-        self, problems: list[ProblemItem], group_cls: str = None, group_reference: str = None
+        self,
+        problems: list[ProblemItem],
+        group_cls: str | None = None,
+        group_reference: str | None = None,
     ):
         """
         Sync problems to alarm and use active_problems context variable
@@ -529,7 +532,7 @@ class DiscoveryCheck:
         obj,
         values: dict[str, Any],
         caps: dict[str, str] | None = None,
-        ignore_empty: list[str] = None,
+        ignore_empty: list[str] | None = None,
         wait: bool = True,
         bulk: list[str] | None = None,
         update_effective_labels: bool = False,

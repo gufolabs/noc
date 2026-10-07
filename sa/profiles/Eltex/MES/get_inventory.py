@@ -47,7 +47,7 @@ class Script(BaseScript):
     )
     has_detail = True
 
-    def get_chassis(self, plat, ver, ser, unit: int = None):
+    def get_chassis(self, plat, ver, ser, unit: int | None = None):
         match = self.rx_descr.search(plat)
         if match and match.group("descr").startswith("MES"):
             descr = match.group("descr")

@@ -112,7 +112,7 @@ class ResourceItem(BaseModel):
     # Send workflow event
     event: str | None = None
 
-    def merge_data(self, ri: "ResourceItem", systems_priority: list[str] = None):
+    def merge_data(self, ri: "ResourceItem", systems_priority: list[str] | None = None):
         """Merge data over Multiple Resource Item"""
         if not self.mappings:
             self.mappings = {}
@@ -165,7 +165,7 @@ class Result(BaseModel):
     status: bool = True
     error: str | None = None
     error_code: str | None = None
-    error_fields: list[str] = None
+    error_fields: list[str] | None = None
 
 
 class GroupItem(EmbeddedDocument):

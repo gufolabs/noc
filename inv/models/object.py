@@ -991,7 +991,7 @@ class Object(Document):
         name: str,
         remote_object: "Object",
         remote_name: str,
-        data: dict[str, Any] = None,
+        data: dict[str, Any] | None = None,
         type: str | None = None,
         layer: Layer | None = None,
     ):
@@ -1426,7 +1426,9 @@ class Object(Document):
         Sensor.sync_object(self)
 
     @classmethod
-    def iter_by_address_id(cls, address: str | list[str], scope: str = None) -> Iterable["Object"]:
+    def iter_by_address_id(
+        cls, address: str | list[str], scope: str | None = None
+    ) -> Iterable["Object"]:
         """
         Get objects
         :return:
@@ -1541,7 +1543,7 @@ class Object(Document):
                 yield item
                 seen.add(item.output)
 
-    def set_internal_connection(self, input: str, output: str, data: dict[str, str] = None):
+    def set_internal_connection(self, input: str, output: str, data: dict[str, str] | None = None):
         input = self.model.get_model_connection(input)
         if not input:
             raise ValueError(f"Not found connection: {input}")

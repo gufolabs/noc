@@ -180,7 +180,7 @@ class Script(BaseScript):
         return self.MAX_REPETITIONS
 
     def iter_iftable(
-        self, key: str, oid: str, ifindexes: Iterable[int] | None = None, clean: Callable = None
+        self, key: str, oid: str, ifindexes: Iterable[int] | None = None, clean: Callable | None = None
     ) -> Iterable[tuple[str, str | int]]:
         if key == "mac" and self.is_bad_ifmib_snmp:
             oid = "LLDP-MIB::lldpLocPortId"

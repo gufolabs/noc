@@ -166,8 +166,8 @@ class LoadMetricsMaxDS(BaseDataSource):
     async def iter_query(
         cls,
         fields: Iterable[str] | None = None,
-        start: datetime.datetime = None,
-        end: datetime.datetime = None,
+        start: datetime.datetime | None = None,
+        end: datetime.datetime | None = None,
         mo_profile: ManagedObjectProfile | None = None,
         interface_profile: InterfaceProfile | None = None,
         description: str | None = None,

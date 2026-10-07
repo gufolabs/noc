@@ -277,10 +277,10 @@ class InterfaceCheck(PolicyDiscoveryCheck):
         mac: str | None = None,
         description: str | None = None,
         aggregated_interface=None,
-        enabled_protocols: list[str] = None,
+        enabled_protocols: list[str] | None = None,
         ifindex: int | None = None,
-        labels: list[str] = None,
-        caps: dict[str, str] = None,
+        labels: list[str] | None = None,
+        caps: dict[str, str] | None = None,
     ):
         enabled_protocols = enabled_protocols or []
         iface = self.get_interface_by_name(name)
@@ -345,16 +345,16 @@ class InterfaceCheck(PolicyDiscoveryCheck):
         name: str,
         description: str | None = None,
         mac: str | None = None,
-        vlan_ids: list[int] = None,
-        enabled_afi: list[str] = None,
-        ipv4_addresses: list[str] = None,
-        ipv6_addresses: list[str] = None,
-        iso_addresses: list[str] = None,
+        vlan_ids: list[int] | None = None,
+        enabled_afi: list[str] | None = None,
+        ipv4_addresses: list[str] | None = None,
+        ipv6_addresses: list[str] | None = None,
+        iso_addresses: list[str] | None = None,
         vpi: int | None = None,
         vci: int | None = None,
-        enabled_protocols: list[str] = None,
+        enabled_protocols: list[str] | None = None,
         untagged_vlan: int | None = None,
-        tagged_vlans: list[int] = None,
+        tagged_vlans: list[int] | None = None,
         ifindex: int | None = None,
     ):
         mac = mac or interface.mac

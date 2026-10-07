@@ -34,7 +34,7 @@ class ManagedObjectData:
     bi_id: int
     name: str
     administrative_domain: AdministrativeDomainData
-    labels: list[str] = None
+    labels: list[str] | None = None
     remote_system: RemoteSystemData | None = None
     remote_id: str | None = None
 
@@ -50,7 +50,7 @@ class SourceConfig:
     partition: int
     sa_profile: str | None = None
     name: str | None = None
-    effective_labels: list[str] = None
+    effective_labels: list[str] | None = None
     managed_object: ManagedObjectData | None = None
     storm_policy: str = "D"
     storm_threshold: int = 1000

@@ -165,7 +165,11 @@ class SLAProbe(Document):
 
     @classmethod
     def get_component(
-        cls, managed_object, sla_probe: str = None, target_address: str = None, **kwargs
+        cls,
+        managed_object,
+        sla_probe: str | None = None,
+        target_address: str | None = None,
+        **kwargs,
     ) -> Optional["SLAProbe"]:
         if not sla_probe or target_address:
             return None

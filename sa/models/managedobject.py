@@ -2471,7 +2471,9 @@ class ManagedObject(NOCModel):
             )
 
     @classmethod
-    def update_links(cls, linked_objects: list[int], exclude_link_ids: list[str] = None) -> None:
+    def update_links(
+        cls, linked_objects: list[int], exclude_link_ids: list[str] | None = None
+    ) -> None:
         """
 
         :param exclude_link_ids: Exclude link ID from update

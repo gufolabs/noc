@@ -52,7 +52,7 @@ class RTSPBase(BaseCLI):
     def get_stream(self) -> BaseStream:
         return RTSPStream(self)
 
-    def get_uri(self, port: int = None) -> str:
+    def get_uri(self, port: int | None = None) -> str:
         address = self.script.credentials.get("address")
         if not port:
             port = RTSPStream.default_port
@@ -60,7 +60,7 @@ class RTSPBase(BaseCLI):
             address += f":{port}"
         return f"rtsp://{address}{self.path}"
 
-    async def send(self, method: str = None, body: str = None):
+    async def send(self, method: str | None = None, body: str | None = None):
         # @todo: Apply encoding
         self.error = None
         body = body or ""

@@ -52,7 +52,7 @@ class ManagedObjectCapsDS(BaseDataSource):
     async def iter_caps(
         cls,
         caps: list[dict[str, Any]],
-        requested_caps: dict[str, Any] = None,
+        requested_caps: dict[str, Any] | None = None,
         include_all: bool = False,
     ) -> AsyncIterable[tuple[str, Any]]:
         """

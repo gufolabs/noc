@@ -469,7 +469,7 @@ class SNMP:
     def get_tables(
         self,
         oids: list[str],
-        community_suffix: str = None,
+        community_suffix: str | None = None,
         bulk: bool | None = None,
         min_index: int | None = None,
         max_index: int | None = None,

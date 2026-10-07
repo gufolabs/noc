@@ -65,10 +65,10 @@ class ServiceInstanceConfig:
     remote_id: str | None = None
     nri_port: str | None = None
     fqdn: str | None = None
-    addresses: list[str] = None
+    addresses: list[str] | None = None
     services: list[bson.ObjectId] = None
     port: int = 0
-    asset_refs: list[str] = None
+    asset_refs: list[str] | None = None
 
     @classmethod
     def get_type(cls, i_type: InstanceType) -> type["ServiceInstanceConfig"]:

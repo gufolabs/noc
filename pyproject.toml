@@ -192,7 +192,6 @@ ignore = [
   "RUF006", # Store a reference to the return value of `asyncio.create_task`
   "RUF009", # @todo: Manual work! Do not perform function call `Layout` in dataclass defaults
   "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
-  "RUF013", # PEP 484 prohibits implicit `Optional`
   "RUF051", # @todo: ruff#20700 reported! Use `pop` instead of `key in dict` followed by `del dict[key]`
   "RUF059", # Unpacked variable `epsilon` is never used
   "RUF100", # Unused blanket `noqa` directive
