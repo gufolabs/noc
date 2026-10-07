@@ -1,12 +1,12 @@
 # ----------------------------------------------------------------------
 # WindowNode base
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-from enum import Enum
+from enum import StrEnum
 from time import time_ns
 
 # Third-party modules
@@ -19,7 +19,7 @@ from .base import BaseCDAGNode, Category
 NS = 1_000_000_000
 
 
-class WindowType(str, Enum):
+class WindowType(StrEnum):
     TICKS = "t"
     SECONDS = "s"
 
