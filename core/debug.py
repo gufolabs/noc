@@ -342,7 +342,7 @@ def frame_report(frame, caption=None, logger=logger):
 
 
 def error_fingerprint():
-    t, v, tb = sys.exc_info()
+    t, _v, tb = sys.exc_info()
     noc_file = None
     noc_function = None
     noc_lineno = None

@@ -113,7 +113,7 @@ class DigestAuthMiddeware(BaseMiddleware):
             allow_proxy=False,
             validate_cert=False,
         ) as client:
-            code, resp_headers, result = client.get(url)
+            code, resp_headers, _result = client.get(url)
             self.logger.debug(
                 "[%s] Response code %s, headers %s on: %s, body: %s",
                 self.name,

@@ -29,7 +29,7 @@ class Script(BaseScript):
             except self.CLISyntaxError:
                 return []
             for l in s.splitlines():
-                pc, rest = l.split(" ", 1)
+                pc, _rest = l.split(" ", 1)
                 pc = pc[2:]
                 v = self.cli(f"show interface port-channel {pc} | i Member_[0-9]+")
                 out_if = {
@@ -44,13 +44,13 @@ class Script(BaseScript):
                 r += [out_if]
                 return r
         for ll in s.splitlines():
-            pc, rest = ll.split(" ", 1)
+            pc, _rest = ll.split(" ", 1)
             pc = pc[2:]
             v = self.cli(f'show interface port-channel {pc} | i "Members in this channel"').strip()
             if not v:
                 continue
             if v.startswith("Members in this channel"):
-                x, y = v.split(":", 1)
+                _x, y = v.split(":", 1)
                 r += [
                     {
                         "interface": f"Po {pc}",

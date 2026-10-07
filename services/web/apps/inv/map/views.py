@@ -183,7 +183,7 @@ class MapApplication(ExtApplication):
         mo_in = defaultdict(float)
         mo_out = defaultdict(float)
         mos = [ManagedObject.get_by_id(mo["id"]) for mo in r["objects"]]
-        metric_map, last_ts = get_interface_metrics(list(o))
+        metric_map, _last_ts = get_interface_metrics(list(o))
         for mo in o:
             if mo not in metric_map:
                 continue

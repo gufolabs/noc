@@ -85,7 +85,7 @@ class WhoisCacheLoader:
                     obj = {}
                 continue
             if "#" in line:
-                line, r = line.split("#", 1)
+                line, _r = line.split("#", 1)
             if ":" in line:
                 last = None
                 k, v = [q(x) for x in line.split(":", 1)]

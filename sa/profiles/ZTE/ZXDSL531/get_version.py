@@ -24,7 +24,7 @@ class Script(BaseScript):
     def execute(self):
         if self.access_profile.scheme == self.TELNET:
             v = self.cli("swversion show")
-            platform, version = v.split()
+            _platform, version = v.split()
         elif self.access_profile.scheme == self.HTTP:
             v = self.http.get("/info.html")
             v = strip_html_tags(v)

@@ -49,7 +49,7 @@ class ThresholdProfile:
     def get_function(self):
         if not self.window_func:
             return None
-        func, *param = function_map.get(self.window_func)
+        func, *_param = function_map.get(self.window_func)
         return func
 
     def get_activate(self) -> tuple[float, float | None, bool]:

@@ -34,7 +34,7 @@ class Script(BaseScript):
         for match in self.rx_line.finditer(self.cli(cmd)):
             vlans = match.group("vlans")
             if "." in vlans and "*" not in vlans:
-                up_tag, down_tag = vlans.split(".")
+                up_tag, _down_tag = vlans.split(".")
                 vlan_id = int(up_tag)
             elif "*" in vlans or vlans == "0":
                 vlan_id = 1
@@ -66,7 +66,7 @@ class Script(BaseScript):
                 continue
             vlans = match.group("vlans")
             if "." in vlans and "*" not in vlans:
-                up_tag, down_tag = vlans.split(".")
+                up_tag, _down_tag = vlans.split(".")
                 vlan_id = int(up_tag)
             elif "*" in vlans:
                 vlan_id = 1

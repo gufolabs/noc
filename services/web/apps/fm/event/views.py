@@ -211,7 +211,9 @@ class EventApplication(ExtApplication):
             # if d["administrative_domain"]:
             #    r |= {"administrative_domain": r["administrative_domain"]["name"]}
             if d["managed_object_bi_id"] and int(d["managed_object_bi_id"]) in mos:
-                mo_name, _, address, mo_id, pool, ad_name, seg = mos[int(d["managed_object_bi_id"])]
+                mo_name, _, address, mo_id, _pool, ad_name, seg = mos[
+                    int(d["managed_object_bi_id"])
+                ]
                 seg = NetworkSegment.get_by_id(seg)
                 r |= {
                     "target": mo_name,

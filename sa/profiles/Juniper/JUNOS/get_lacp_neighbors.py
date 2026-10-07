@@ -49,7 +49,7 @@ class Script(BaseScript):
             for match in self.rx_neighbor.finditer(v):
                 if match.group("role") == "Actor":
                     sys_id = match.group("sys_id")
-                    ifname, unit = match.group("ifname").split(".")
+                    ifname, _unit = match.group("ifname").split(".")
                     bundle += [{"interface": ifname, "local_port_id": match.group("port_num")}]
                 else:
                     bundle[-1].update(

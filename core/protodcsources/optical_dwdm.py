@@ -75,5 +75,5 @@ class OpticalDWDMDiscriminatorSource(BaseDiscriminatorSource):
         raise ValueError("Not found code for data")
 
     def get_discriminator_instance(self, code):
-        freq, wl = self.get_data(code)
+        freq, _wl = self.get_data(code)
         return LambdaDiscriminator(f"{freq.value * 1000}-50")

@@ -459,7 +459,7 @@ class JsonDSAPI:
         if not payload:
             return ""
         r = []
-        key_fields, required_columns, columns = self.get_metric_scope_fields(metric_type.scope)
+        key_fields, _required_columns, columns = self.get_metric_scope_fields(metric_type.scope)
         for query_field, values in payload.items():
             query_field, *query_function = query_field.split("__", 1)
             # Labels

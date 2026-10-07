@@ -70,7 +70,7 @@ class BaseGeocoder:
             allow_proxy=True,
             validate_cert=False,
         ) as client:
-            code, headers, body = client.get(url)
+            code, _headers, body = client.get(url)
             if 200 <= code <= 299:
                 return code, body
             raise GeoCoderError(f"HTTP Error {code}")

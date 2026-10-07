@@ -41,8 +41,8 @@ class BERDecoder:
 
     @staticmethod
     def split_tlv(msg: bytes) -> tuple[bytes, bytes]:
-        decoder_id, tag_class, tag, is_constructed, is_implicit, offset, length = parse_tlv_header(
-            msg
+        _decoder_id, _tag_class, _tag, _is_constructed, _is_implicit, offset, length = (
+            parse_tlv_header(msg)
         )
         return msg[offset : offset + length], msg[offset + length :]
 

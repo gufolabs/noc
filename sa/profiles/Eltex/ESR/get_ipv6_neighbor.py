@@ -29,7 +29,7 @@ class Script(BaseScript):
         c = self.cli("show ipv6 neighbors", cached=True)
         for ifname, ip, mac, state, age in parse_table(c):
             if "." in ifname:
-                ifname, vlan_id = ifname.split(".")
+                ifname, _vlan_id = ifname.split(".")
             found = False
             for i in r:
                 if (ifname == i["interface"]) and (ip == i["ip"]):

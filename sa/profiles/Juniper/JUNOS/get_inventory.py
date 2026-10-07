@@ -424,7 +424,7 @@ class Script(BaseScript):
         res = {}
         for oid, sens_type_num in self.snmp.getnext(mib["JUNIPER-MIB::jnxFruType"]):
             if sens_type_num in (13, 7):  # 13 - fan, 7 - power supply
-                slotid, chassis_id, env_status_oid, env_status_num, env_name = self.get_sens_date(
+                _slotid, chassis_id, env_status_oid, env_status_num, env_name = self.get_sens_date(
                     oid
                 )
                 if env_status_num == 2:  # empty
@@ -439,7 +439,7 @@ class Script(BaseScript):
                 res = self.update_sensors_dict(res, chassis_id, sensor_dict)
         for oid, cur_temp in self.snmp.getnext(mib["JUNIPER-MIB::jnxOperatingTemp"]):  # temperature
             if cur_temp:
-                slotid, chassis_id, env_status_oid, env_status_num, env_name = self.get_sens_date(
+                _slotid, chassis_id, env_status_oid, env_status_num, env_name = self.get_sens_date(
                     oid
                 )
                 env_name = f"Temperature {env_name}"

@@ -268,7 +268,7 @@ class MACApplication(ExtApplication):
         for d in r["data"]:
             if int(d["managed_object"]) not in mos:
                 continue
-            mo_name, _, mo_id, pool, op, op_name = mos[int(d["managed_object"])]
+            mo_name, _, _mo_id, pool, _op, op_name = mos[int(d["managed_object"])]
             pool = Pool.get_by_id(pool)
             out += [
                 {

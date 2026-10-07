@@ -155,7 +155,7 @@ class Profile(BaseProfile):
             return False
         if "." in name:
             try:
-                ifname, unit = name.split(".")
+                _ifname, unit = name.split(".")
             except ValueError:
                 return True
             # See `logical-interface-unit-range`

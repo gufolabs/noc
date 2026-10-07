@@ -24,7 +24,7 @@ class Script(BaseScript):
         about = self.snmp.get("1.3.6.1.2.1.1.52.1.0")
         match = self.re_about.match(about)
         if match:
-            mode, channel, frequency, bit_rate, rssi, width = match.groups()
+            mode, _channel, frequency, _bit_rate, _rssi, width = match.groups()
             if width is not None:
                 caps["Radio | Width"] = width
             if mode is not None:

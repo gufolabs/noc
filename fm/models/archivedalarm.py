@@ -292,7 +292,7 @@ class ArchivedAlarm(Document):
         self._get_collection().update_one({"_id": self.id}, {"$set": {"escalation_close_ts": now}})
 
     def set_escalation_close_ctx(self):
-        current_context, current_span = get_current_span()
+        current_context, _current_span = get_current_span()
         if current_context or self.escalation_close_ctx:
             self.escalation_close_ctx = current_context
             self._get_collection().update_one(

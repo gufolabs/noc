@@ -194,11 +194,11 @@ class MonMapCard(BaseCard):
             if not objects_status[r]:
                 continue
             if not object_root and r == "good":
-                m_services, m_subscribers = ServiceSummary.get_direct_summary(
+                m_services, _m_subscribers = ServiceSummary.get_direct_summary(
                     objects_status[r], summary_all=True
                 )
             else:
-                m_services, m_subscribers = ServiceSummary.get_direct_summary(objects_status[r])
+                m_services, _m_subscribers = ServiceSummary.get_direct_summary(objects_status[r])
             profiles |= set(m_services)
             sss[r] = m_services
         for r in sorted(sss, key=lambda k: ("error", "warning", "good", "maintenance").index(k)):

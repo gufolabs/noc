@@ -98,7 +98,7 @@ class Script(BaseScript):
                 or match.group("xc_mode") != "pri"
             ):
                 continue
-            remote_address, vc_id = match.group("segment2").split(":")
+            _remote_address, vc_id = match.group("segment2").split(":")
             iface = match.group("segment1").split(":")[0]
             r += [
                 {
@@ -317,7 +317,7 @@ class Script(BaseScript):
             ]
         ):
             # rt_type: import(1), export(2), both(3)
-            conf_id, rt_index, rt_type = conf_id.rsplit(".", 2)
+            conf_id, _rt_index, rt_type = conf_id.rsplit(".", 2)
             if rt_type in {"2", "3"}:
                 r[conf_id]["rt_export"] += [vrf_rt]
             if rt_type in {"1", "3"}:

@@ -27,7 +27,7 @@ class Migration(BaseMigration):
         now = datetime.datetime.now()
         for discovery in lc:
             coll = db[discovery]
-            _, pool = discovery.rsplit(".", 1)
+            _, _pool = discovery.rsplit(".", 1)
             bulk = []
             for row in coll.find(
                 {"jcls": "noc.services.discovery.jobs.periodic.job.PeriodicDiscoveryJob"}

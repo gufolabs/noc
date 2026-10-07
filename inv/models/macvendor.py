@@ -79,12 +79,12 @@ class MACVendor(Document):
         client = HttpClient(
             max_redirects=1, compression=DEFLATE | GZIP, connect_timeout=10, validate_cert=False
         )
-        status, h, content = client.get(cls.DOWNLOAD_URL)
+        status, _h, content = client.get(cls.DOWNLOAD_URL)
         assert status == 200
         new = cls.parse_txt_content(content)
         # Fetch Medium blocks
         if cls.DOWNLOAD_URL_MEDIUM:
-            status, h, content = client.get(cls.DOWNLOAD_URL_MEDIUM)
+            status, _h, content = client.get(cls.DOWNLOAD_URL_MEDIUM)
             assert status == 200
             new_m = cls.parse_txt_content(content)
         else:

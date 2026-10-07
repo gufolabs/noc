@@ -142,7 +142,7 @@ class Script(BaseScript):
                 i["enabled_protocols"] += ["LLDP"]
             # Portchannel member
             if ifname in portchannel_members:
-                ai, is_lacp = portchannel_members[ifname]
+                ai, _is_lacp = portchannel_members[ifname]
                 i["aggregated_interface"] = ai
                 i["enabled_protocols"] += ["LACP"]
                 i["subinterfaces"][0].update({"enabled_afi": []})

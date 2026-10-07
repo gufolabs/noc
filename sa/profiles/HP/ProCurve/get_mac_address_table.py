@@ -30,7 +30,7 @@ class Script(BaseScript):
         for row in v.split("\n\n")[0].splitlines()[1:]:
             if not row.strip():
                 continue
-            mac, vlan_id, state, port, _ = row.split(maxsplit=4)
+            mac, vlan_id, _state, port, _ = row.split(maxsplit=4)
             if mac == "000000-000008":
                 continue
             port = self.profile.convert_interface_name(port)

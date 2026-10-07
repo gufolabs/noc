@@ -308,7 +308,7 @@ class Script(BaseScript):
 
                 # Portchannel member
                 if current in portchannel_members:
-                    ai, is_lacp = portchannel_members[current]
+                    ai, _is_lacp = portchannel_members[current]
                     ifaces[current]["aggregated_interface"] = ai
                     ifaces[current]["enabled_protocols"] += ["LACP"]
 

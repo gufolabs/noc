@@ -78,7 +78,7 @@ class Script(BaseScript):
         ):
             # rt_type: import(1), export(2), both(3)
             vrf_rt = "".join(x for x in vrf_rt if x in string.printable)
-            conf_id, rt_index, rt_type = conf_id.rsplit(".", 2)
+            conf_id, _rt_index, rt_type = conf_id.rsplit(".", 2)
             if conf_id not in r:
                 continue
             if rt_type in self.VRF_TYPE_MAP["rt_export"]:

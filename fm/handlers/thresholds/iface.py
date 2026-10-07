@@ -62,7 +62,7 @@ def handler(mo, event):
                         event["linked_object_interface"] = linked_object[0].name
                         event["linked_object_status"] = linked_object[0].managed_object.get_status()
             else:
-                ifaces_metrics, last_ts = get_interface_metrics(mo.object)
+                ifaces_metrics, _last_ts = get_interface_metrics(mo.object)
                 im = ifaces_metrics[mo.object][iface_name]
                 error_in = im.get("Interface | Errors | In")
                 error_out = im.get("Interface | Errors | Out")
@@ -77,7 +77,7 @@ def handler(mo, event):
                         event["linked_object"] = linked_object[0].managed_object.name
                         event["linked_object_interface"] = linked_object[0].name
                         event["linked_object_status"] = linked_object[0].managed_object.get_status()
-                        linked_ifaces_metrics, linked_last_ts = get_interface_metrics(
+                        linked_ifaces_metrics, _linked_last_ts = get_interface_metrics(
                             linked_object[0].managed_object
                         )
                         if linked_ifaces_metrics:

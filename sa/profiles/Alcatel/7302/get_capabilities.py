@@ -52,7 +52,7 @@ class Script(BaseScript):
                 continue
             self.logger.info("OID: %s, status: %d", oid, v)
             slot_id = oid.rsplit(".", 1)[-1]
-            rack, shelf, slot = self.profile.get_slot(int(slot_id))
+            _rack, _shelf, slot = self.profile.get_slot(int(slot_id))
             if not 3 < slot < 18:
                 # NCU & ACU
                 continue

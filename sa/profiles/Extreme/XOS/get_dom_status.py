@@ -32,7 +32,7 @@ class Script(BaseScript):
 
     def normalize_output(self, out):
         if out and len(out.split()) == 3:
-            val, mea, he = out.split()
+            val, mea, _he = out.split()
         else:
             self.logger.warning(f"Unknown output format value: {out}, skipping")
             return None

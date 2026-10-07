@@ -216,9 +216,9 @@ class OduDiscriminator:
         if d not in self:
             return 0
         # Container
-        c, cn = self.odu[0]
+        c, _cn = self.odu[0]
         # Payload
-        p, pn = d.odu[0]
+        p, _pn = d.odu[0]
         if p not in ODU_LIMITS[c]:
             return 0
         return ODU_LIMITS[c][p]

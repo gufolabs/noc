@@ -724,9 +724,9 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
         ```
         """
         if " " in interface_name:
-            l, r = interface_name.split(" ")
+            _l, r = interface_name.split(" ")
         elif "-" in interface_name:
-            l, r = interface_name.split("-")
+            _l, r = interface_name.split("-")
         else:
             return None
         if "/" in r:

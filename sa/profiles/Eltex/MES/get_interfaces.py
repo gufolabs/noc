@@ -92,7 +92,7 @@ class Script(BaseScript):
             if name.startswith("Tu") and not oper_status:
                 return False
         if self._chassis_filter and self.rx_slot_splitter.match(name):
-            chassis, slot, port = self.rx_slot_splitter.match(name).groups()
+            chassis, _slot, _port = self.rx_slot_splitter.match(name).groups()
             if chassis not in self._chassis_filter:
                 return False
         return not (

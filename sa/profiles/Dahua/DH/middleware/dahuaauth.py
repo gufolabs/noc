@@ -77,7 +77,7 @@ class DahuaAuthMiddeware(BaseMiddleware):
             allow_proxy=False,
             validate_cert=False,
         ) as client:
-            code, resp_headers, result = client.post(
+            _code, _resp_headers, result = client.post(
                 auth_url,
                 orjson.dumps(
                     {

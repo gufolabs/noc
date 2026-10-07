@@ -41,7 +41,7 @@ class MIMEType(NOCModel):
         """
         Determine MIME type from filename
         """
-        r, ext = os.path.splitext(filename)
+        _r, ext = os.path.splitext(filename)
         try:
             m = MIMEType.objects.get(extension=ext.lower())
             return m.mime_type

@@ -89,7 +89,7 @@ class Command(BaseCommand):
             p = loader.get_profile(profile)
             if not p:
                 self.die(f"Invalid profile: {profile}")
-            n_handler, n_config = p.get_config_normalizer(self)
+            n_handler, _n_config = p.get_config_normalizer(self)
             n_cls = get_handler(f"noc.sa.profiles.{p.name}.confdb.normalizer.{n_handler}")
             s = n_cls.SYNTAX
         root = find_root(s, path)

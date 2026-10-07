@@ -74,7 +74,7 @@ class VMAgentAPI:
             else:
                 r.append(f"{ll.name}::{ll.value}")
         if not host and instance:
-            host, *port = instance.split(":", 1)
+            host, *_port = instance.split(":", 1)
         return name, instance, host, tuple(r)
 
     async def send(
@@ -141,7 +141,7 @@ class VMAgentAPI:
             return JSONResponse({}, status_code=200)
         logger.debug("VMAgent, Parsed %s", parser)
         for ts in parser.timeseries:
-            metric_name, instance, host, labels = self.parse_labels(ts.labels)
+            metric_name, _instance, host, labels = self.parse_labels(ts.labels)
             if not metric_name:
                 continue
             if not host:

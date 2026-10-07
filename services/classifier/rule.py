@@ -298,7 +298,7 @@ class Rule:
             name = match.group(1)
             if "__" not in name:
                 continue
-            v, fixup, *args = name.split("__")
+            v, fixup, *_args = name.split("__")
             if hasattr(cls, f"fixup_{fixup}"):
                 r[name] = (v, getattr(cls, f"fixup_{fixup}"))
             else:

@@ -24,7 +24,7 @@ class Script(BaseScript):
         for i in parse_table(self.cli("show lacp partner all")):
             if i[2] == "00:00:00:00:00:00":
                 continue
-            s1, s2, s3 = i[0].split("/")
+            _s1, _s2, s3 = i[0].split("/")
             bundle = {
                 "interface": i[0],
                 "local_port_id": s3,

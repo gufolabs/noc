@@ -399,7 +399,7 @@ class Script(BaseScript):
         ):
             _, slot_num = oid.rsplit(".", 1)
             serial[int(slot_num)] = phys_num
-        max_slot, boards = self.profile.get_board(self)
+        _max_slot, boards = self.profile.get_board(self)
         for board in boards:
             r += [
                 self.inventory_item(

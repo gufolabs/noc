@@ -154,7 +154,7 @@ class Script(BaseScript):
                 if "mac" in r:
                     interfaces[ifname]["mac"] = r["mac"]
                 if ifname in portchannel_members:
-                    ai, is_lacp = portchannel_members[ifname]
+                    ai, _is_lacp = portchannel_members[ifname]
                     interfaces[ifname]["aggregated_interface"] = ai
                     interfaces[ifname]["enabled_protocols"] += ["LACP"]
                 if self.rx_vlan_name.match(ifname):

@@ -83,7 +83,7 @@ class Script(BaseScript):
         for block in self.rx_vsi_split.split(v)[1:]:
             block = self.rx_vsi_pw_split.split(block)
             if len(block) == 2:
-                block, pw_info = block
+                block, _pw_info = block
             else:
                 block = block[0]
             p = {}

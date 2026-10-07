@@ -69,7 +69,7 @@ class Script(BaseScript):
             # Port Id               : 58:47:69:67:61:62:69:74:45:74:68:65:72:6E:65:74:30:2F:
             #                         30:2F:34:38
             #                       "XGigabitEthernet0/0/48"
-            remote_port_name1, remote_port__name2 = port.rsplit("\n", 1)
+            remote_port_name1, _remote_port__name2 = port.rsplit("\n", 1)
             remote_port_name1 = re.sub(r"\n|\s+", "", remote_port_name1)
             return codecs.decode(remote_port_name1.strip().replace(":", ""), "hex").decode()
         if port_type == "7":

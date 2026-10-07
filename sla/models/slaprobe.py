@@ -145,7 +145,7 @@ class SLAProbe(Document):
         address = self.target
         if ":" in address:
             # port
-            address, port = self.target.split(":")
+            address, _port = self.target.split(":")
         if not is_ipv4(address):
             return None
         mo = ManagedObject.objects.filter(SQL(f"address <<= '{address}/32'")).first()

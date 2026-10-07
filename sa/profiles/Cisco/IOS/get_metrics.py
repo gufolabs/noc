@@ -450,7 +450,7 @@ class Script(GetMetricsScript):
         ts = self.get_ts()
         for metric, m_oid in SLA_ICMP_METRIC_MAP.items():
             for oid, value in self.snmp.getnext(mib[m_oid]):
-                _, name, timestamp, path, hop, dist = oid.rsplit(".", 5)
+                _, name, _timestamp, _path, _hop, _dist = oid.rsplit(".", 5)
                 if (name, metric) not in metrics:
                     continue
                 probe = metrics[(name, metric)]

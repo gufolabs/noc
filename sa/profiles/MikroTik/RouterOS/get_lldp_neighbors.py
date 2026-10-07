@@ -44,7 +44,7 @@ class Script(BaseScript):
         self.logger.debug("Collected interfaces: %s", interfaces)
         for n, f, r in self.cli_detail("/ip neighbor print detail without-paging"):
             # For LACP based link
-            local_iface, *ifaces = r["interface"].split(",")
+            local_iface, *_ifaces = r["interface"].split(",")
             if local_iface not in interfaces:
                 self.logger.debug("[%s] Local iface not in interface table.", local_iface)
                 continue

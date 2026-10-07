@@ -125,7 +125,7 @@ class Script(BaseScript):
                     ifname2 = self.profile.convert_interface_name(ifname)
                     # Portchannel member
                     if ifname2 in portchannel_members:
-                        ai, is_lacp = portchannel_members[ifname2]
+                        ai, _is_lacp = portchannel_members[ifname2]
                         iface["aggregated_interface"] = ai
                         iface["enabled_protocols"] += ["LACP"]
 

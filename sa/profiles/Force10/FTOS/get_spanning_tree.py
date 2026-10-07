@@ -61,7 +61,7 @@ class Script(BaseScript):
             ri["bridge_id"] = match.group("bridge_id")
             ri["bridge_priority"] = match.group("bridge_priority")
             # Process interfaces
-            s1, s2, s3 = v.split("\n\nInterface")
+            _s1, s2, s3 = v.split("\n\nInterface")
             for interface, port_id, priority, _, state, _, desg_bridge, desg_port_id in parse_table(
                 s2
             ):
@@ -87,12 +87,12 @@ class Script(BaseScript):
                     role,
                     port_id,
                     priority,
-                    cost,
-                    status,
-                    cost2,
+                    _cost,
+                    _status,
+                    _cost2,
                     link_type,
                     edge,
-                    boundary,
+                    _boundary,
                 ) = s
                 i["role"] = {
                     "dis": "disabled",

@@ -268,7 +268,7 @@ class Script(GetMetricsScript):
                 mib["HUAWEI-CBQOS-MIB::hwCBQoSClassifierMatchedDropPackets"],
             ]
         ):
-            ifindex, direction, ifvlanid1, ifvlanid2, classifier = index.split(".")
+            ifindex, direction, _ifvlanid1, _ifvlanid2, classifier = index.split(".")
             if ifindex not in ifaces:
                 continue
             ts = self.get_ts()
@@ -388,7 +388,7 @@ class Script(GetMetricsScript):
         ts = self.get_ts()
         for oid, value in self.snmp.getnext(mib[status_oid]):
             if status_oid == "NQA-MIB::nqaResultsCompletions":
-                *key, resindex, addindex = oid.split(".")
+                *key, resindex, _addindex = oid.split(".")
             else:
                 *key, resindex = oid.split(".")
             key = key[14:]
@@ -458,7 +458,7 @@ class Script(GetMetricsScript):
         for index, value in self.snmp.getnext(mib["HUAWEI-CBQOS-MIB::hwCBQoSRemarkValue"]):
             if not index.endswith("2"):
                 continue
-            _, b_id, b_type = index.rsplit(".", 2)
+            _, b_id, _b_type = index.rsplit(".", 2)
             behavior_tos[int(b_id)] = value
 
         for index, classifier, behavior_index in self.snmp.get_tables(

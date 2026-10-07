@@ -193,7 +193,6 @@ ignore = [
   "RUF009", # @todo: Manual work! Do not perform function call `Layout` in dataclass defaults
   "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
   "RUF051", # @todo: ruff#20700 reported! Use `pop` instead of `key in dict` followed by `del dict[key]`
-  "RUF059", # Unpacked variable `epsilon` is never used
   "RUF100", # Unused blanket `noqa` directive
   "UP014", # Convert `PathInfo` from `NamedTuple` functional to class syntax
   "UP017", # Use `datetime.UTC` alias

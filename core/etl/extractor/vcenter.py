@@ -212,7 +212,7 @@ class VCenterManagedObjectExtractor(VCenterExtractor):
 
     def get_host_mgmt_address(self, obj: vim.HostSystem) -> str | None:
         """Parse Management Address"""
-        name, *domains = obj.summary.config.name.split(".", 1)
+        name, *_domains = obj.summary.config.name.split(".", 1)
         addrs = [vv.spec.ip.ipAddress for vv in obj.config.network.vnic]
         if len(addrs) > 1:
             self.logger.debug("[%s] Multiple Addresses on Host: %s", name, addrs)
@@ -251,7 +251,7 @@ class VCenterManagedObjectExtractor(VCenterExtractor):
             host_map[h._moId] = h.summary.hardware.uuid
             if h.runtime.powerState != "poweredOn":
                 continue
-            name, *domains = h.summary.config.name.split(".", 1)
+            name, *_domains = h.summary.config.name.split(".", 1)
             if not h.summary.hardware.uuid:
                 self.register_quality_problem(
                     int(h._moId[5:]),
