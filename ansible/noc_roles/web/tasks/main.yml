@@ -1,7 +1,4 @@
 ---
-- name: "Include OS-specific tasks"
-  include_tasks: "os/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/main.yml"
-
 - name: Install assets
   command: "{{ noc_venv_python }} ./scripts/deploy/install-packages npkg/{{ item }}.json"
   args:

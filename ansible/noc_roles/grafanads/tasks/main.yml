@@ -1,7 +1,4 @@
 ---
-- name: "Include OS-specific tasks"
-  include_tasks: "os/{{ ansible_distribution }}_{{ ansible_distribution_major_version }}/main.yml"
-
 - name: call grafana for AlertDS
   include_role:
     name: grafana
