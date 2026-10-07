@@ -8,7 +8,7 @@
 # Python modules
 from typing import Any, Optional, cast
 from collections.abc import Iterable
-from enum import Enum
+from enum import StrEnum
 import inspect
 from dataclasses import dataclass
 import sys
@@ -26,7 +26,7 @@ IN_REQUIRED = 1
 IN_OPTIONAL = 2
 
 
-class Category(str, Enum):
+class Category(StrEnum):
     MATH = "math"
     OPERATION = "operation"
     LOGICAL = "logical"

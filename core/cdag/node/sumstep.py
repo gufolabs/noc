@@ -1,12 +1,12 @@
 # ----------------------------------------------------------------------
 # SumStepNode
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2020 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
-from enum import Enum
+from enum import StrEnum
 
 # NOC modules
 from .base import ValueType, Category
@@ -14,7 +14,7 @@ from .window import WindowNode, WindowConfig
 import itertools
 
 
-class StepDirection(str, Enum):
+class StepDirection(StrEnum):
     INC = "inc"
     DEC = "dec"
     ABS = "abs"

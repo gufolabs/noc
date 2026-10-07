@@ -1,13 +1,13 @@
 # ----------------------------------------------------------------------
 # System interactions
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2023 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum
 
 
 @dataclass(frozen=True)
@@ -28,7 +28,7 @@ CONFIGS = {
 }
 
 
-class Interaction(str, Enum):
+class Interaction(StrEnum):
     @property
     def config(self):
         return CONFIGS[self.value]

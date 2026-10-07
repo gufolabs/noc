@@ -6,19 +6,19 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from enum import Enum
+from enum import Enum, StrEnum
 from dataclasses import dataclass
 from typing import Any
 
 
-class Layout(str, Enum):
+class Layout(StrEnum):
     Manual = "M"
     Force_Auto = "FA"  # Always rebuild layout hints
     Auto = "A"
     Force_Spring = "FS"
 
 
-class ShapeOverlayPosition(str, Enum):
+class ShapeOverlayPosition(StrEnum):
     NW = "NW"
     N = "N"
     NE = "NE"
@@ -29,7 +29,7 @@ class ShapeOverlayPosition(str, Enum):
     W = "W"
 
 
-class ShapeOverlayForm(str, Enum):
+class ShapeOverlayForm(StrEnum):
     Circle = "c"
     Square = "s"
 

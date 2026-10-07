@@ -1,13 +1,13 @@
 # ----------------------------------------------------------------------
 # ManagedObjectModel
 # ----------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
 # Python modules
 import datetime
-from enum import Enum
+from enum import StrEnum
 
 # Third-party modules
 from pydantic import ConfigDict, IPvAnyAddress, field_validator
@@ -27,7 +27,7 @@ from .ttsystem import TTSystem
 from .project import Project
 
 
-class SourceType(str, Enum):
+class SourceType(StrEnum):
     d = "d"  # Disable
     m = "m"  # Management Address
     s = "s"  # Specify address
