@@ -16,9 +16,9 @@ class Script(BaseScript):
 
     def execute(self, vlan_id, name, tagged_ports):
         with self.configure():
-            self.cli("vlan %d enable name %s" % (vlan_id, name))
+            self.cli(f"vlan {int(vlan_id)} enable name {name}")
             if tagged_ports:
                 for port in tagged_ports:
-                    self.cli("vlan %d 802.1q 1/%s" % (vlan_id, port))
+                    self.cli(f"vlan {int(vlan_id)} 802.1q 1/{port}")
         self.save_config()
         return True

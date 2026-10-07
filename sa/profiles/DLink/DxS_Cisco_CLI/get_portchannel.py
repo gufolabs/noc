@@ -27,8 +27,8 @@ class Script(BaseScript):
         for match in self.rx_line.finditer(data):
             port = int(match.group("port"))
             members = []
-            data1 = self.cli("show interfaces AggregatePort %i | i Link Status:" % port)
+            data1 = self.cli(f"show interfaces AggregatePort {int(port)} | i Link Status:")
             for match1 in self.rx_line1.finditer(data1):
                 members += [match1.group("interface")]
-            r += [{"interface": "Ag %i" % port, "members": members, "type": "L"}]
+            r += [{"interface": f"Ag {int(port)}", "members": members, "type": "L"}]
         return r

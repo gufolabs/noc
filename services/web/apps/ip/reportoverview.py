@@ -131,11 +131,11 @@ class Node:
     def get_bar(percent):
         return (
             "<div class='bar_wrap'>"
-            "<div class='bar' style='width:%d%%'>"
-            "<div class='bar_text'>%d%%</div>"
+            f"<div class='bar' style='width:{int(percent)}%'>"
+            f"<div class='bar_text'>{int(percent)}%</div>"
             "</div>"
             "</div>"
-        ) % (int(percent), int(percent))
+        )
 
 
 class VRFGroupNode(Node):

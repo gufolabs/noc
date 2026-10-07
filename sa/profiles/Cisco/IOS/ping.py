@@ -22,11 +22,11 @@ class Script(BaseScript):
     def execute(self, address, count=None, source_address=None, size=None, df=None, vrf=None):
         cmd = f"ping ip {address}"
         if count:
-            cmd += " count %d" % int(count)
+            cmd += f" count {int(count)}"
         if source_address:
             cmd += f" source {source_address}"
         if size:
-            cmd += " size %d" % int(size)
+            cmd += f" size {int(size)}"
         if df:
             cmd += " df-bit"
         if vrf:

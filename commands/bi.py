@@ -126,7 +126,7 @@ class Command(BaseCommand):
                 self.print(f"[{e.name}] Extracting {start} - {end} ... ", end="", flush=True)
                 dt = time.time() - t0
                 if dt > 0.0:
-                    self.print("%d records in %.3fs (%.2frec/s)" % (nr, dt, float(nr) / dt))
+                    self.print(f"{int(nr)} records in {dt:.3f}s ({float(nr) / dt:.2f}rec/s)")
                 else:
                     self.print("no records")
                 self.set_last_extract(ecls.name, e.last_ts or end)

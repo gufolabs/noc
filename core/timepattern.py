@@ -15,14 +15,14 @@ DoW = ["mon", "tue", "wen", "thu", "fri", "sat", "sun"]
 DoWRE = f"({'|'.join(DoW)})"
 # Day part patterns
 DAY_PATTERNS = [
-    (RC(r"^(\d{2})$"), lambda day: "(T.day == %d)" % int(day)),
+    (RC(r"^(\d{2})$"), lambda day: f"(T.day == {int(day)})"),
     (
         RC(r"^(\d{2})-(\d{2})$"),
-        lambda from_day, to_day: "(%d <= T.day <= %d)" % (int(from_day), int(to_day)),
+        lambda from_day, to_day: f"({int(from_day)} <= T.day <= {int(to_day)})",
     ),
     (
         RC(r"^(\d{2})\.(\d{2})$"),
-        lambda day, month: "(T.day == %d and T.month == %d)" % (int(day), int(month)),
+        lambda day, month: f"(T.day == {int(day)} and T.month == {int(month)})",
     ),
     (
         RC(r"^(\d{2})\.(\d{2})-(\d{2})\.(\d{2})$"),
@@ -33,7 +33,7 @@ DAY_PATTERNS = [
     (
         RC(r"^(\d{2})\.(\d{2})\.(\d{4})$"),
         lambda day, month, year: (
-            "(T.day == %d and T.month == %d and T.year == %d)" % (int(day), int(month), int(year))
+            f"(T.day == {int(day)} and T.month == {int(month)} and T.year == {int(year)})"
         ),
     ),
     (
@@ -44,12 +44,12 @@ DAY_PATTERNS = [
     ),
     (
         RC(rf"^{DoWRE}$", re.IGNORECASE),
-        lambda dow: "(T.weekday() == %d)" % DoW.index(dow.lower()),
+        lambda dow: f"(T.weekday() == {int(DoW.index(dow.lower()))})",
     ),
     (
         RC(rf"^{DoWRE}-{DoWRE}$", re.IGNORECASE),
         lambda from_dow, to_dow: (
-            "(%d <= T.weekday() <= %d)" % (DoW.index(from_dow.lower()), DoW.index(to_dow))
+            f"({int(DoW.index(from_dow.lower()))} <= T.weekday() <= {int(DoW.index(to_dow))})"
         ),
     ),
 ]
@@ -58,13 +58,13 @@ DAY_PATTERNS = [
 TIME_PATTERNS = [
     (
         RC(r"^(\d{2}):(\d{2})$"),
-        lambda hour, minute: "(T.hour == %d and T.minute == %d)" % (int(hour), int(minute)),
+        lambda hour, minute: f"(T.hour == {int(hour)} and T.minute == {int(minute)})",
     ),
     (
         RC(r"^(\d{2}):(\d{2})-(\d{2}):(\d{2})$"),
         lambda from_hour, from_minute, to_hour, to_minute: (
-            "(%d <= (T.hour * 60 + T.minute) <= %d)"
-            % (int(from_hour) * 60 + int(from_minute), int(to_hour) * 60 + int(to_minute))
+            f"({int(from_hour) * 60 + int(from_minute)} <= (T.hour * 60 + T.minute) "
+            f"<= {int(to_hour) * 60 + int(to_minute)})"
         ),
     ),
 ]

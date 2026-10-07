@@ -51,7 +51,7 @@ class ReportPendingLinks:
             re.IGNORECASE,
         )
         mos_job = [
-            "discovery-noc.services.discovery.jobs.box.job.BoxDiscoveryJob-%d" % mo_id
+            f"discovery-noc.services.discovery.jobs.box.job.BoxDiscoveryJob-{int(mo_id)}"
             for mo_id in ids
         ]
         n = 0

@@ -26,11 +26,11 @@ class Script(BaseScript):
     def execute(self, address, count=None, source_address=None, size=None, df=None):
         cmd = f"ping {address}"
         if count:
-            cmd += " count %d" % int(count)
+            cmd += f" count {int(count)}"
         else:
             cmd += " count 5"
         if size:
-            cmd += " size %d" % int(size)
+            cmd += f" size {int(size)}"
         pr = self.cli(cmd)
         if " is alive" in pr:
             return {"success": 1, "count": 1, "min": 0, "avg": 0, "max": 0}

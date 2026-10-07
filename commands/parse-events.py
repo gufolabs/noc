@@ -62,7 +62,7 @@ class Command(BaseCommand):
         t0 = time.time()
         ruleset = RuleSet()
         ruleset.load()
-        self.print("Ruleset load in %.2fms" % ((time.time() - t0) * 1000))
+        self.print(f"Ruleset load in {(time.time() - t0) * 1000:.2f}ms")
         reader = getattr(self, f"read_{format}", None)
         assert reader, f"Invalid format {format}"
         self.managed_object = ManagedObject(
@@ -89,10 +89,10 @@ class Command(BaseCommand):
                     stats[rule.event_class.name] += 1
                     total += 1
                     if progress and total % 1000 == 0:
-                        self.print("%d records processed" % total)
+                        self.print(f"{int(total)} records processed")
         dt = time.time() - t0
         self.print(
-            "%d events processed in %.2fms (%.fevents/sec)" % (total, dt * 1000, float(total) / dt)
+            f"{int(total)} events processed in {dt * 1000:.2f}ms ({float(total) / dt:.f}events/sec)"
         )
         if stats:
             # Prepare statistics
@@ -102,9 +102,9 @@ class Command(BaseCommand):
             s_total = sum(stats[k] for k in stats if not self.is_ignored(k))
             data = [["Events", "%", "Event class"]]
             for ecls, qty in s_data:
-                data += [[str(qty), "%3.2f%%" % (float(stats[ecls] * 100) / float(total)), ecls]]
+                data += [[str(qty), f"{float(stats[ecls] * 100) / float(total):3.2f}%", ecls]]
             # Calculate classification quality
-            data += [["", "%3.2f%%" % (float(s_total * 100) / total), "Classification Quality"]]
+            data += [["", f"{float(s_total * 100) / total:3.2f}%", "Classification Quality"]]
             # Ruleset hit rate
             rs_rate = float(metrics["rules_checked"].value) / float(total)
             data += [["", f"{rs_rate:.2f}", "Rule checks per event"]]

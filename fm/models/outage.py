@@ -26,7 +26,7 @@ class Outage(Document):
     stop = DateTimeField()  # None for active outages
 
     def __str__(self):
-        return "%d" % self.object
+        return f"{int(self.object)}"
 
     @property
     def is_active(self):

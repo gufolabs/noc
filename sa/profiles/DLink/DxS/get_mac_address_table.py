@@ -104,9 +104,9 @@ class Script(BaseScript):
                 or self.match_version(DGS3600, version__gte="2.52")
                 or self.match_version(DGS3620, version__gte="1.00.00")
             ):
-                cmd += " vlanid %d" % vlan
+                cmd += f" vlanid {int(vlan)}"
             elif self.match_version(DES3500, version__gte="6.00"):
-                cmd += " vid %d" % vlan
+                cmd += f" vid {int(vlan)}"
             else:
                 for v in self.scripts.get_vlans():
                     if v["vlan_id"] == vlan:

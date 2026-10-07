@@ -34,8 +34,8 @@ class Script(BaseScript):
                     ):
                         r.append({"interface": n, "status": int(s) == 1})  # ifOperStatus up(1)
                     return r
-                n = self.snmp.get("1.3.6.1.2.1.2.2.1.1.%d" % int(interface))
-                s = self.snmp.get("1.3.6.1.2.1.2.2.1.8.%d" % int(interface))
+                n = self.snmp.get(f"1.3.6.1.2.1.2.2.1.1.{int(interface)}")
+                s = self.snmp.get(f"1.3.6.1.2.1.2.2.1.8.{int(interface)}")
                 return [{"interface": n, "status": int(s) == 1}]
             except self.snmp.TimeOutError:
                 pass

@@ -102,7 +102,7 @@ class AS(NOCModel):
     _asn_cache = cachetools.TTLCache(maxsize=100, ttl=60)
 
     def __str__(self):
-        return "AS%d (%s)" % (self.asn, self.description)
+        return f"AS{int(self.asn)} ({self.description})"
 
     @classmethod
     @cachetools.cachedmethod(operator.attrgetter("_id_cache"), lock=lambda _: id_lock)
@@ -120,7 +120,7 @@ class AS(NOCModel):
         super().clean()
 
     def get_rpsl(self):
-        sep = "remarks: %s" % ("-" * 72)
+        sep = f"remarks: {'-' * 72}"
         s = []
         s += [f"aut-num: AS{self.asn}"]
         if self.as_name:
@@ -182,25 +182,25 @@ class AS(NOCModel):
                         if remark:
                             s += [f"remarks: # {remark}"]
                         # Build import statement
-                        i_s = "import: from AS%d" % asn
+                        i_s = f"import: from AS{int(asn)}"
                         if add_at:
                             i_s += f" at {pp.hostname}"
                         actions = []
                         if localpref:
                             pref = (65535 - localpref) if inverse_pref else localpref
-                            actions += ["pref=%d;" % pref]
+                            actions += [f"pref={int(pref)};"]
                         if import_med:
-                            actions += ["med=%d;" % import_med]
+                            actions += [f"med={int(import_med)};"]
                         if actions:
                             i_s += " action " + " ".join(actions)
                         i_s += f" accept {import_filter}"
                         s += [i_s]
                         # Build export statement
-                        e_s = "export: to AS%d" % asn
+                        e_s = f"export: to AS{int(asn)}"
                         if add_at:
                             e_s += f" at {pp.hostname}"
                         if export_med:
-                            e_s += " action med=%d;" % export_med
+                            e_s += f" action med={int(export_med)};"
                         e_s += f" announce {export_filter}"
                         s += [e_s]
         # Add contacts
@@ -245,7 +245,7 @@ class AS(NOCModel):
                 downlinks[p.remote_asn] = p
             else:
                 peers[p.remote_asn] = p
-        asn = "AS%d" % self.asn
+        asn = f"AS{int(self.asn)}"
         for subgraph, peers in [
             ("uplinks", list(uplinks.values())),
             ("peers", list(peers.values())),
@@ -258,7 +258,7 @@ class AS(NOCModel):
                     attrs += ["arrowtail=open"]
                 if p.export_filter == "ANY":
                     attrs += ["arrothead=open"]
-                s += ["    %s -- AS%d [%s];" % (asn, p.remote_asn, ",".join(attrs))]
+                s += [f"    {asn} -- AS{int(p.remote_asn)} [{','.join(attrs)}];"]
             s += ["}"]
         s += ["}"]
         return "\n".join(s)

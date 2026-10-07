@@ -79,14 +79,14 @@ class Script(BaseScript):
                         if r["version"] == "Unsupported":
                             # Get major and minor versions, model string
                             # and version control number
-                            fwmaj = self.snmp.get("1.3.6.1.4.1.890.1.5.8.%d.1.1.0" % oid)
-                            fwmin = self.snmp.get("1.3.6.1.4.1.890.1.5.8.%d.1.2.0" % oid)
-                            fwmod = self.snmp.get("1.3.6.1.4.1.890.1.5.8.%d.1.3.0" % oid)
-                            fwver = self.snmp.get("1.3.6.1.4.1.890.1.5.8.%d.1.4.0" % oid)
+                            fwmaj = self.snmp.get(f"1.3.6.1.4.1.890.1.5.8.{int(oid)}.1.1.0")
+                            fwmin = self.snmp.get(f"1.3.6.1.4.1.890.1.5.8.{int(oid)}.1.2.0")
+                            fwmod = self.snmp.get(f"1.3.6.1.4.1.890.1.5.8.{int(oid)}.1.3.0")
+                            fwver = self.snmp.get(f"1.3.6.1.4.1.890.1.5.8.{int(oid)}.1.4.0")
                             r["version"] = f"{fwmaj}.{fwmin}({fwmod}.{fwver})"
                         if "Serial Number" not in attributes:
                             # Get Serial Number
-                            fwser = self.snmp.get("1.3.6.1.4.1.890.1.5.8.%d.1.10.0" % oid)
+                            fwser = self.snmp.get(f"1.3.6.1.4.1.890.1.5.8.{int(oid)}.1.10.0")
                             attributes["Serial Number"] = fwser
                     else:
                         self.logger.error(f"Cannot find base OID for model '{platform}'")

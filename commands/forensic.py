@@ -44,9 +44,7 @@ class Command(BaseCommand):
 
     def handle_incomplete(self, watch=False, *args, **kwargs):
         def show():
-            self.print(
-                "\x1b[2J\x1b[1;1H%s Spans: %d/%d" % (time.strftime("%H:%M:%S"), n_closed, n_open)
-            )
+            self.print(f"\x1b[2J\x1b[1;1H{time.strftime('%H:%M:%S')} Spans: {n_closed}/{n_open}")
             self.print(self.show_mask % ("Timestamp", "ID", "Server", "Service", "Label"))
             for s in sorted(spans.values(), key=operator.attrgetter("ts")):
                 self.print(self.show_mask % (s.ts, s.id, s.server, s.service, s.label))
@@ -55,9 +53,7 @@ class Command(BaseCommand):
 
         def show_watch():
             now = time.time()
-            self.print(
-                "\x1b[2J\x1b[1;1H%s Spans: %d/%d" % (time.strftime("%H:%M:%S"), n_closed, n_open)
-            )
+            self.print(f"\x1b[2J\x1b[1;1H{time.strftime('%H:%M:%S')} Spans: {n_closed}/{n_open}")
             self.print(
                 self.show_watch_mask % ("Timestamp", "Dur", "ID", "Server", "Service", "Label")
             )

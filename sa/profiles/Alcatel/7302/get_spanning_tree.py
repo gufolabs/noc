@@ -57,21 +57,19 @@ class Script(BaseScript):
                 kv = dict(self.k_v_re.findall(e))
                 instance["interfaces"] += [
                     {
-                        "interface": "ethernet:%d" % (int(kv["port"]) + 1),
-                        "port_id": "%d.%s"
-                        % (
-                            int(kv["designated-port"].split(":")[0], 16),
-                            int(kv["designated-port"].split(":")[1], 16),
+                        "interface": f"ethernet:{int(int(kv['port']) + 1)}",
+                        "port_id": (
+                            f"{int(kv['designated-port'].split(':')[0], 16)}."
+                            f"{int(kv['designated-port'].split(':')[1], 16)}"
                         ),
                         "state": kv["state"],
                         "role": kv["role"],
                         "priority": int("".join(kv["designated-bridge"].split(":", 2)[:2]), 16),
                         "designated_bridge_id": kv["designated-bridge"].split(":", 2)[2],
                         "designated_bridge_priority": int(kv["designated-port"].split(":")[0], 16),
-                        "designated_port_id": "%d.%s"
-                        % (
-                            int(kv["designated-port"].split(":")[0], 16),
-                            int(kv["designated-port"].split(":")[1], 16),
+                        "designated_port_id": (
+                            f"{int(kv['designated-port'].split(':')[0], 16)}."
+                            f"{int(kv['designated-port'].split(':')[1], 16)}"
                         ),
                         "point_to_point": kv["oper-p2p"] == "p2p",
                         "edge": kv["oper-edge-port"] != "no-edge-port",

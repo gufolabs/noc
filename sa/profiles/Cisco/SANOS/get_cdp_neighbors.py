@@ -47,8 +47,7 @@ class Script(BaseScript):
                                 "remote_interface": self.profile.convert_interface_name(
                                     res[ii]["7"]
                                 ),
-                                "remote_ip": "%d.%d.%d.%d"
-                                % (ord(msg[0]), ord(msg[1]), ord(msg[2]), ord(msg[3])),
+                                "remote_ip": f"{ord(msg[0])}.{ord(msg[1])}.{ord(msg[2])}.{ord(msg[3])}",
                                 "platform": res[ii]["8"],
                             }
                         ]

@@ -25,11 +25,11 @@ class Script(BaseScript):
     def execute_cli(self, address, count=None, source_address=None, size=None, df=None, vrf=None):
         cmd = f"ping {address}"
         if count:
-            cmd += " count %d" % int(count)
+            cmd += f" count {int(count)}"
         else:
             count = 5
         if size:
-            cmd += " size %d" % int(size)
+            cmd += f" size {int(size)}"
         s = self.cli(cmd)
         match = self.rx_result.search(s)
         if match:

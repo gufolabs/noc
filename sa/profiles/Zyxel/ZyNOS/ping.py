@@ -27,7 +27,7 @@ class Script(BaseScript):
     def execute(self, address, size=None, *args, **kwargs):
         cmd = f"ping {address}"
         if size:
-            cmd += " size %d" % size
+            cmd += f" size {int(size)}"
         # some default values
         cnt = 6
         success = 0

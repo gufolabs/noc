@@ -125,7 +125,7 @@ class Script(BaseScript):
                 oper_status = False
             i += [
                 {
-                    "name": "enet%d" % (y + 1),
+                    "name": f"enet{int(y + 1)}",
                     "type": "physical",
                     "admin_status": admin_status,
                     "oper_status": oper_status,
@@ -136,7 +136,7 @@ class Script(BaseScript):
                             "admin_status": admin_status,
                             "enabled_afi": ["BRIDGE"],
                             "oper_status": oper_status,
-                            "name": "enet%d" % (y + 1),
+                            "name": f"enet{int(y + 1)}",
                             "mac": mac,
                             "tagged_vlans": tagged[y + 1],
                         }

@@ -45,7 +45,7 @@ class Migration(BaseMigration):
 
         for on_id, on_emails in self.db.execute("SELECT id,emails FROM cm_objectnotify"):
             emails = [x.strip() for x in on_emails.split()]
-            ng_id = self.create_notification_group("cm_autocreated_%d" % on_id, emails)
+            ng_id = self.create_notification_group(f"cm_autocreated_{int(on_id)}", emails)
             self.db.execute(
                 "UPDATE cm_objectnotify SET notification_group_id=%s WHERE id=%s", [ng_id, on_id]
             )

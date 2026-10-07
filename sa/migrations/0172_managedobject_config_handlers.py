@@ -77,10 +77,10 @@ class Migration(BaseMigration):
             return handler
         match = self.rx_fn.search(text)
         if not match:
-            raise ValueError("Cannot migrate pyrule %d" % pyrule_id)
+            raise ValueError(f"Cannot migrate pyrule {int(pyrule_id)}")
         new_text = self.rx_strip_decorator.sub("", text)
         fn = match.group(1)
-        new_name = "config.filter%d" % pyrule_id
+        new_name = f"config.filter{int(pyrule_id)}"
         handler = f"noc.pyrules.{new_name}.{fn}"
         coll.insert_one({"name": new_name, "source": new_text})
         return handler

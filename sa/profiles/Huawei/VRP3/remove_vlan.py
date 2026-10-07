@@ -20,7 +20,7 @@ class Script(BaseScript):
             if v["vlan_id"] == vlan_id:
                 with self.configure():
                     self.cli("interface lan 0/0 \n")
-                    self.cli("no vlan vlanId %d" % v["vlan_id"])
+                    self.cli(f"no vlan vlanId {int(v['vlan_id'])}")
                 self.save_config()
                 return True
         return False

@@ -170,20 +170,20 @@ class WhoisCacheLoader:
             v = self.update_from_rpsl(
                 self.RIPE_AS_SET_MEMBERS, r, "as-set", "members", True, self.parse_rpsl
             )
-            logger.info("Processed RIPE as-set -> members: %d records" % v)
+            logger.info(f"Processed RIPE as-set -> members: {int(v)} records")
         if self.use_arin:
             logger.info("Processing ARIN as-set -> members")
             v = self.update_from_rpsl(self.ARIN, r, "as-set", "members", True, self.parse_rpsl)
-            logger.info("Processed ARIN as-set -> members: %d records" % v)
+            logger.info(f"Processed ARIN as-set -> members: {int(v)} records")
         if self.use_radb:
             logger.info("Processing RADb as-set -> members")
             v = self.update_from_rpsl(self.RADB, r, "as-set", "members", True, self.parse_rpsl)
-            logger.info("Processed RADb as-set -> members: %d records" % v)
+            logger.info(f"Processed RADb as-set -> members: {int(v)} records")
         if r:
             # Upload to database
             logger.info("Updating noc.whois.asset.members collection")
             count = WhoisASSetMembers.upload(r)
-            logger.info("%d records written into noc.whois.asset.members collection" % count)
+            logger.info(f"{int(count)} records written into noc.whois.asset.members collection")
         else:
             logger.info("Nothing to update")
 
@@ -225,21 +225,21 @@ class WhoisCacheLoader:
         if self.use_ripe:
             logger.info("Processing RIPE origin -> route")
             v = self.update_from_rpsl(self.RIPE_ROUTE_ORIGIN, r, "route", "origin", False, parser)
-            logger.info("Processed RIPE origin -> route: %d records" % v)
+            logger.info(f"Processed RIPE origin -> route: {int(v)} records")
         if self.use_arin:
             logger.info("Processing ARIN origin -> route")
             v = self.update_from_rpsl(self.ARIN, r, "route", "origin", False, parser)
-            logger.info("Processed ARIN origin -> route: %d records" % v)
+            logger.info(f"Processed ARIN origin -> route: {int(v)} records")
         if self.use_radb:
             logger.info("Processing RADb origin -> route")
             v = self.update_from_rpsl(self.RADB, r, "route", "origin", False, parser)
-            logger.info("Processed RADb origin -> route: %d records" % v)
+            logger.info(f"Processed RADb origin -> route: {int(v)} records")
         if r:
             # Upload to database
             logger.info("Updating noc.whois.origin.route collection")
             self.require_db_connect()
             count = WhoisOriginRoute.upload(r)
-            logger.info("%d records written into noc.whois.origin.route collection" % count)
+            logger.info(f"{int(count)} records written into noc.whois.origin.route collection")
         if as_routes:
             self.require_db_connect()
             delay = 0

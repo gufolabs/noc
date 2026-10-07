@@ -51,7 +51,7 @@ class Profile(BaseProfile):
         if match:
             if "Te" in match.group("type") or "ten" in match.group("type"):
                 return f"Te1/0/{int(match.group('number'))}"
-            return "Gi1/0/%d" % int(match.group("number"))
+            return f"Gi1/0/{int(match.group('number'))}"
         return s
 
     INTERFACE_TYPES = {

@@ -29,7 +29,7 @@ class Script(BaseScript):
     def execute(self, address, count=None, source_address=None, size=None, df=None, vrf=None):
         cmd = f"ping {address}"
         if count:
-            cmd += " count %d" % int(count)
+            cmd += f" count {int(count)}"
         else:
             cmd += " count 5"
         match = self.rx_line.search(self.cli(cmd))

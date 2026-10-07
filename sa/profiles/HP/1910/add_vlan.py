@@ -48,14 +48,14 @@ class Script(BaseScript):
         # Fallback to CLI
         with self.configure():
             if a:
-                self.cli("vlan %d" % vlan_id)
+                self.cli(f"vlan {int(vlan_id)}")
                 self.cli(f"name {name}")
                 self.cli(f"description {name}")
                 self.cli("quit")
             if tagged_ports:
                 for iface in tagged_ports:
                     self.cli(f"interface {iface}")
-                    self.cli("port trunk permit vlan %d" % vlan_id)
+                    self.cli(f"port trunk permit vlan {int(vlan_id)}")
                 self.cli("quit")
         self.save_config()
         return True

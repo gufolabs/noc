@@ -63,7 +63,7 @@ class Script(BaseScript):
         i = int(v, 16)
         prio = (i >> 12) * 16
         port = i & 0xFFF
-        return "%d.%d" % (prio, port)
+        return f"{int(prio)}.{int(port)}"
 
     def get_inst(self, inst_id):
         if inst_id == 0:

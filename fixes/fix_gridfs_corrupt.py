@@ -40,7 +40,7 @@ def fix_object(vcs, object, corrupt):
         cidx = find_corrupt(vcs, revs, corrupt)
         if cidx is None:
             break
-        print("  -> CORRUPT %d" % cidx)
+        print(f"  -> CORRUPT {int(cidx)}")
         cut_corrupt(vcs, revs, cidx)
         show_revs(revs, corrupt)
 

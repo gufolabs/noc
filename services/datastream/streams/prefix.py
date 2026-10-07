@@ -86,7 +86,7 @@ class PrefixDataStream(DataStream):
         r["as"] = {
             "id": str(prefix.asn.id),
             "name": str(prefix.asn.as_name),
-            "as": "AS%d" % prefix.asn.asn,
+            "as": f"AS{int(prefix.asn.asn)}",
         }
 
     @classmethod

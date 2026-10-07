@@ -109,7 +109,7 @@ class ReportLatestChangesApplication(SimpleReport):
                     )
                 ]
         return self.from_dataset(
-            title="%s: %s in %d days" % (self.title, repo, days),
+            title=f"{self.title}: {repo} in {int(days)} days",
             columns=[
                 "ID",
                 "Name",

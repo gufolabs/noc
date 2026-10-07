@@ -33,12 +33,12 @@ class Script(BaseScript):
     def execute(self, address, count=None, source_address=None, size=None, df=None):
         cmd = f"ping {address}"
         if count:
-            cmd += " -c %d" % int(count)
+            cmd += f" -c {int(count)}"
         else:
             cmd += " -c 3"
             count = 3
         if size:
-            cmd += " -s %d" % int(size)
+            cmd += f" -s {int(size)}"
         else:
             cmd += " -s 56"
         cmd += " -t 1000"

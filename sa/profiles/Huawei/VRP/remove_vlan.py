@@ -18,6 +18,6 @@ class Script(BaseScript):
         if not self.scripts.has_vlan(vlan_id=vlan_id):
             return False
         with self.configure():
-            self.cli("undo vlan %d" % vlan_id)
+            self.cli(f"undo vlan {int(vlan_id)}")
         self.save_config()
         return True

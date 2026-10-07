@@ -91,7 +91,7 @@ class Profile(BaseProfile):
         Parse board table and return active
         :return: List boards
         """
-        v = script.cli("GETPOP %d" % shelf_num, cached=True)
+        v = script.cli(f"GETPOP {int(shelf_num)}", cached=True)
         r = []
         for row in self.parse_table(v):
             slot, card_type, ports, _, _, _, _ = row

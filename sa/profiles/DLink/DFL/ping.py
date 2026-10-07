@@ -22,7 +22,7 @@ class Script(BaseScript):
     def execute(self, address, count=None, source_address=None, size=None, df=None):
         cmd = f"ping {address}"
         if count:
-            cmd += " -count=%d" % int(count)
+            cmd += f" -count={int(count)}"
         else:
             cmd += " -count=5"
         if source_address:

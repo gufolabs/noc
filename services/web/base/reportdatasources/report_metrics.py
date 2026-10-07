@@ -53,8 +53,8 @@ class ReportMetrics(BaseReportColumn):
             "q_select": [],
             "q_where": [
                 "%s",
-                "(date >= toDate(%d)) AND (ts >= toDateTime(%d) AND ts <= toDateTime(%d))"
-                % (ts_from_date, ts_from_date, ts_to_date),
+                f"(date >= toDate({ts_from_date})) AND (ts >= toDateTime({ts_from_date}) "
+                f"AND ts <= toDateTime({ts_to_date}))",
                 *custom_conditions["where"][:],
             ],
             "q_group": self.KEY_FIELDS,

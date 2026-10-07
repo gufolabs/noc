@@ -126,8 +126,8 @@ class ReportTTSystemStatApplication(SimpleReport):
         q_where = ["server IN ('{}')".format("', '".join(tt_systems))]
         # q_where = ["managed_object IN (%s)" % ", ".join(mo_bi_dict.keys())]
         q_where += [
-            "(date >= toDate(%d)) AND (ts >= toDateTime(%d) AND ts <= toDateTime(%d))"
-            % (ts_from_date, ts_from_date, ts_to_date)
+            f"(date >= toDate({ts_from_date})) AND (ts >= toDateTime({ts_from_date}) "
+            f"AND ts <= toDateTime({ts_to_date}))"
         ]
         r = []
         ch = connection()

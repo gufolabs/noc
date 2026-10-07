@@ -12,7 +12,7 @@ from noc.gis.models.layer import Layer
 
 def fix():
     for d in ObjectConnection._get_collection().find({"data.level": {"$exists": True}}):
-        layer = Layer.get_by_code("pop_links%d" % (d["data"]["level"] // 10))
+        layer = Layer.get_by_code(f"pop_links{int(d['data']['level'] // 10)}")
         oc = ObjectConnection.objects.filter(id=d["_id"]).first()
         oc.layer = layer
         oc.save()

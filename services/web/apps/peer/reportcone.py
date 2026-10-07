@@ -61,7 +61,7 @@ class ReportLOC(SimpleReport):
             r += [
                 (
                     p.description,
-                    "AS%d" % p.remote_asn,
+                    f"AS{int(p.remote_asn)}",
                     p.import_filter,
                     cone_powers.get(peer_id, 0),
                     uniq_powers.get(peer_id, 0),

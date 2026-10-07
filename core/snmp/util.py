@@ -82,7 +82,7 @@ def render_tc_octetstring(value, format: bytes | str) -> str:
                     if fmt == "x":
                         rr += [f"{v:02x}"]
                     elif fmt == "d":
-                        rr += ["%d" % v]
+                        rr += [f"{int(v)}"]
                     elif fmt == "o":
                         rr += [f"{v:03o}"]
                     else:

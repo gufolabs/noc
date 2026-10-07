@@ -43,7 +43,7 @@ class Script(BaseScript):
             rmac = mac.replace(":", "").lower()
         r = []
         for v in vlans:
-            for m, port, type in self.parse_mac_table(self.cli("show mac-address vlan %d" % v)):
+            for m, port, type in self.parse_mac_table(self.cli(f"show mac-address vlan {int(v)}")):
                 rrmac = m.replace(".", "").lower()
                 if (not interface or port == interface) and (not mac or rmac == rrmac):
                     r += [{"vlan_id": v, "mac": m, "interfaces": [port], "type": type}]

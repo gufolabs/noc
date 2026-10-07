@@ -604,7 +604,7 @@ class AssetCheck(DiscoveryCheck):
         """
         free_connections = []
         # Resolve virtual name c1 to real connection
-        r_names = [o1.get_data("twinax", "connection%d" % i) for i in range(1, 3)]
+        r_names = [o1.get_data("twinax", f"connection{int(i)}") for i in range(1, 3)]
         # Check connection is already exists
         for n in r_names:
             cn, o, c = o1.get_p2p_connection(n)

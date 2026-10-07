@@ -178,7 +178,7 @@ def format_frames(frames, reverse=config.traceback.reverse):
     def format_source(lineno, lines):
         r = []
         for line in lines:
-            r += ["%5d     %s" % (lineno, line)]
+            r += [f"{int(lineno):5}     {line}"]
             lineno += 1
         return "\n".join(r)
 
@@ -193,7 +193,7 @@ def format_frames(frames, reverse=config.traceback.reverse):
         r += [f"Function: {f['function']}"]
         if "pre_context_lineno" in f:
             r += [format_source(f["pre_context_lineno"], f["pre_context"])]
-            r += ["%5d ==> %s" % (f["lineno"], f["context_line"])]
+            r += [f"{int(f['lineno']):5} ==> {f['context_line']}"]
             r += [format_source(f["lineno"] + 1, f["post_context"])]
             r += ["Variables:"]
             for n, v in f["vars"]:
@@ -203,7 +203,7 @@ def format_frames(frames, reverse=config.traceback.reverse):
                         pv = "\n" + pprint.pformat(v)
                 except:  # noqa
                     pv = "repr() failed"
-                r += ["%20s = %s" % (n, pv)]
+                r += [f"{n:>20} = {pv}"]
         else:
             r += ["???"]
         r += ["-" * 72]
@@ -389,7 +389,7 @@ def dump_stacks(thread_id=None):
             continue
         print(f"[THREAD #{tid}]")
         for filename, lineno, name, line in traceback.extract_stack(stack):
-            print("File: '%s', line %d, in %s" % (filename, lineno, name))
+            print(f"File: '{filename}', line {int(lineno)}, in {name}")
             if line:
                 print(f"    {line.strip()}")
 

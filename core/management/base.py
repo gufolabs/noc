@@ -165,7 +165,7 @@ class BaseCommand:
                 d = apply_metrics({})
                 self.print("Internal metrics:")
                 for k in d:
-                    self.print("%40s : %s" % (k, d[k]))
+                    self.print(f"{k:>40} : {d[k]}")
 
     def create_parser(self) -> argparse.ArgumentParser:
         """Create the command-line argument parser.

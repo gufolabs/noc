@@ -57,7 +57,7 @@ class Command(BaseCommand):
             self.convert_page(page)
             gc.collect()
             new_oc = len(gc.get_objects())
-            self.out("%d leaked objects\n" % (new_oc - oc))
+            self.out(f"{int(new_oc - oc)} leaked objects\n")
             oc = new_oc
 
     #
@@ -121,7 +121,7 @@ class Command(BaseCommand):
                 kbe.save(
                     user=self.user, timestamp=mtime
                 )  # Revision history will be populated automatically
-        self.out("... %d revisions\n" % len(revisions))
+        self.out(f"... {len(revisions)} revisions\n")
         if kbe is None:
             return  # Return when no revisions found
         # Write all attachments
@@ -134,7 +134,7 @@ class Command(BaseCommand):
                     os.stat(a_path)[stat.ST_MTIME]
                 )  # Attach modification time
                 with open(a_path) as f:
-                    dbs_path = "/kb/%d/%s" % (kbe.id, a)
+                    dbs_path = f"/kb/{int(kbe.id)}/{a}"
                     database_storage.save(dbs_path, f)
                     # Correct mtime
                     database_storage.set_mtime(dbs_path, mtime)

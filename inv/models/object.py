@@ -502,7 +502,7 @@ class Object(Document):
             if not mi:
                 continue
             for na, a in enumerate(mi.attrs):
-                sorting_keys[f"{i}.{a.name}"] = "%06d.%06d" % (ni, na)
+                sorting_keys[f"{i}.{a.name}"] = f"{int(ni):06}.{int(na):06}"
         # Return sorted result
         return sorted(
             r,

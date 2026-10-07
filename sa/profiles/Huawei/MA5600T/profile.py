@@ -135,7 +135,7 @@ class Profile(BaseProfile):
         i = -1
         t = ""
         s = {}
-        v = script.cli(("display board 0/%d" % slot_no), cached=True)
+        v = script.cli(f"display board 0/{int(slot_no)}", cached=True)
         for match in self.rx_ports.finditer(v):
             i += 1
             t = match.group("type")

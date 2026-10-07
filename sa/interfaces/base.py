@@ -604,7 +604,7 @@ class IPv4Parameter(StringParameter):
         except ValueError:
             self.raise_error(value)
         # Avoid output like 001.002.003.004
-        return ".".join("%d" % int(c) for c in parts)
+        return ".".join(f"{int(c)}" for c in parts)
 
 
 class IPv4PrefixParameter(StringParameter):
@@ -671,7 +671,7 @@ class IPv6PrefixParameter(StringParameter):
         if m < 0 or m > 128:
             self.raise_error(value)
         n = IPv6Parameter().clean(n)
-        return "%s/%d" % (n, m)
+        return f"{n}/{int(m)}"
 
 
 class IPParameter(StringParameter):
@@ -951,7 +951,7 @@ class ModelParameter(Parameter):
         try:
             return self.model.objects.get(pk=value)
         except self.model.DoesNotExist:
-            self.raise_error("Not found: %d" % value)
+            self.raise_error(f"Not found: {int(value)}")
 
 
 DocFieldMap = {"FloatField": FloatParameter(), "ReferenceField": ObjectIdParameter()}
@@ -978,7 +978,7 @@ class DocumentParameter(Parameter):
         else:
             v = self.document.objects.filter(id=value).first()
         if not v:
-            self.raise_error("Not found: %d" % value)
+            self.raise_error(f"Not found: {int(value)}")
         return v
 
 

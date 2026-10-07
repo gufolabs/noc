@@ -54,29 +54,15 @@ class ZoneFile:
         # SOA
         z = [
             HEADER % from_idna(self.zone),
-            """$ORIGIN %(domain)s.
-$TTL %(ttl)d
-@ IN SOA %(primary)s %(contact)s (
-    %(serial)d ; serial
-    %(refresh)d       ; refresh (%(pretty_refresh)s)
-    %(retry)d        ; retry (%(pretty_retry)s)
-    %(expire)d      ; expire (%(pretty_expire)s)
-    %(ttl)d       ; minimum (%(pretty_ttl)s)
-    )"""
-            % {
-                "domain": self.zone,
-                "primary": primary,
-                "contact": contact,
-                "serial": serial,
-                "ttl": ttl,
-                "pretty_ttl": self.pretty_time(ttl),
-                "refresh": refresh,
-                "pretty_refresh": self.pretty_time(refresh),
-                "retry": retry,
-                "pretty_retry": self.pretty_time(retry),
-                "expire": expire,
-                "pretty_expire": self.pretty_time(expire),
-            },
+            f"""$ORIGIN {self.zone}.
+$TTL {int(ttl)}
+@ IN SOA {primary} {contact} (
+    {int(serial)} ; serial
+    {int(refresh)}       ; refresh ({self.pretty_time(refresh)})
+    {int(retry)}        ; retry ({self.pretty_time(retry)})
+    {int(expire)}      ; expire ({self.pretty_time(expire)})
+    {int(ttl)}       ; minimum ({self.pretty_time(ttl)})
+    )""",
         ]
         # Add records
         rr = []
@@ -99,19 +85,17 @@ $TTL %(ttl)d
         else:
             l1 = self.TABSTOP
             l2 = self.TABSTOP
-        mask = "%%-%ds%%-%ds%%s" % (l1, l2)
-        txt_cmask = "%s%%s" % (" " * l1)
         # Add RRs
         for r in rr:
             if is_idna(r[0]):
                 z += [f"; {from_idna(r[0])}"]
             if r[1] == "TXT":
                 content = self.split_txt(r[2])
-                z += [mask % (r[0], r[1], content.pop(0))]
+                z += [f"{r[0]:<{l1}}{r[1]:<{l2}}{content.pop(0)}"]
                 for c in content:
-                    z += [txt_cmask % c]
+                    z += [f"{' ' * l1}{c}"]
             else:
-                z += [mask % tuple(r)]
+                z += [f"{r[0]:<{l1}}{r[1]:<{l2}}{r[2]}"]
         z += [FOOTER]
         return "\n".join(z)
 
@@ -133,9 +117,9 @@ $TTL %(ttl)d
         z = []
         for rr, t in zip(r, T):
             if rr > 1:
-                z += ["%d %ss" % (rr, t)]
+                z += [f"{int(rr)} {t}s"]
             elif rr > 0:
-                z += ["%d %s" % (rr, t)]
+                z += [f"{int(rr)} {t}"]
         return " ".join(z)
 
     @classmethod

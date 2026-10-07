@@ -63,11 +63,8 @@ class Script(BaseScript):
                 try:
                     if res[ii]["4"]:
                         msg = res[ii]["4"]
-                        neighbors[-1]["remote_ip"] = "%d.%d.%d.%d" % (
-                            ord(msg[0]),
-                            ord(msg[1]),
-                            ord(msg[2]),
-                            ord(msg[3]),
+                        neighbors[-1]["remote_ip"] = (
+                            f"{ord(msg[0])}.{ord(msg[1])}.{ord(msg[2])}.{ord(msg[3])}"
                         )
                 except (IndexError, ValueError):
                     pass

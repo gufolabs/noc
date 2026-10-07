@@ -445,7 +445,7 @@ class Model(metaclass=ModelBase):
                 default_alias = f["expr"]
                 f["expr"] = {"$field": f["expr"]}
             else:
-                default_alias = "f%04d" % i
+                default_alias = f"f{int(i):04}"
             alias = f.get("alias", default_alias)
             if not f.get("hide"):
                 aliases += [alias]
@@ -487,9 +487,9 @@ class Model(metaclass=ModelBase):
             # LIMIT
             if "limit" in query:
                 if "offset" in query:
-                    sql += ["LIMIT %d, %d" % (query["offset"], query["limit"])]
+                    sql += [f"LIMIT {int(query['offset'])}, {int(query['limit'])}"]
                 else:
-                    sql += ["LIMIT %d" % query["limit"]]
+                    sql += [f"LIMIT {int(query['limit'])}"]
             sql = " ".join(sql)
             # Execute query
             ch = connection()
@@ -667,7 +667,7 @@ class DictionaryModel(Model, metaclass=DictionaryBase):
                 f"                 <name>{field.name}</name>",
                 f"                 <type>{field.get_db_type()}</type>",
                 "                 <null_value>Unknown</null_value>",
-                "                 <hierarchical>%s</hierarchical>" % ("true" if hier else "false"),
+                f"                 <hierarchical>{'true' if hier else 'false'}</hierarchical>",
                 "             </attribute>",
             ]
         x += ["        </structure>", "    </dictionary>", "</dictionaries>"]

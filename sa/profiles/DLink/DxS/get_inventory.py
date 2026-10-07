@@ -105,7 +105,7 @@ class Script(BaseScript):
             "vendor": vendor,
             "part_no": part_no,
             "serial": match.group("serial"),
-            "description": "%s, %dMbd, %dnm" % (description, mbd, nm),
+            "description": f"{description}, {int(mbd)}Mbd, {int(nm)}nm",
         }
         if revision is not None:
             i["revision"] = revision

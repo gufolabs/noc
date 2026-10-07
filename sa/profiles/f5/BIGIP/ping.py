@@ -26,9 +26,9 @@ class Script(BaseScript):
 
     def execute(self, address, count=None, source_address=None, size=None, df=None):
         cmd = ["run /util ping"]
-        cmd += ["-c %d" % (count if count else 5)]
+        cmd += [f"-c {int(count if count else 5)}"]
         if size:
-            cmd += ["-s %d" % size]
+            cmd += [f"-s {int(size)}"]
         cmd += [address]
         cmd = " ".join(cmd)
         pr = self.cli(cmd)

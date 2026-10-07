@@ -197,7 +197,6 @@ ignore = [
   "UP014", # Convert `PathInfo` from `NamedTuple` functional to class syntax
   "UP017", # Use `datetime.UTC` alias
   "UP030", # Use implicit references for positional format fields
-  "UP031", # Use format specifiers instead of percent format
   "UP046", # Generic class `BaseResourceAPI` uses `Generic` subclass instead of type parameters
   "UP037", # Remove quotes from type annotation
   "UP047", # Generic function `get_reference` should use type parameters

@@ -15,6 +15,6 @@ class Script(BaseScript):
     interface = IRemoveVlan
 
     def execute(self, vlan_id):
-        self.cli("delete vlan tag %d" % vlan_id)
+        self.cli(f"delete vlan tag {int(vlan_id)}")
         self.save_config()
         return True

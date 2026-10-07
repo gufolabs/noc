@@ -62,7 +62,7 @@ class Script(BaseScript):
                     ic += [" no switchport trunk allowed vlan"]
                     ic += [" no switchport trunk native vlan"]
                 # @todo: set vlan only when necessary
-                ic += [" switchport access vlan %d" % c["untagged"]]
+                ic += [f" switchport access vlan {int(c['untagged'])}"]
             else:
                 # Configuring trunk port
                 if is_access(p):
@@ -74,7 +74,7 @@ class Script(BaseScript):
                     "untagged" in c and ("untagged" not in p or c["untagged"] != p["untagged"])
                 ) or is_access(p):
                     # Add native vlan
-                    ic += [" switchport trunk native vlan %d" % c["untagged"]]
+                    ic += [f" switchport trunk native vlan {int(c['untagged'])}"]
                 if "untagged" not in c and "untagged" in p:
                     # Remove native vlan
                     ic += [" no switchport trunk native vlan"]

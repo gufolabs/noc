@@ -94,7 +94,7 @@ class Script(BaseScript):
     def get_gvrp(self):
         try:
             if self.is_beta:
-                v = self.cli("show gvrp port-list 1-%d" % self.port_count)
+                v = self.cli(f"show gvrp port-list 1-{int(self.port_count)}")
             else:
                 v = self.cli("show gvrp configuration")
             if "GVRP Global Admin State: Disable" not in v:
@@ -137,7 +137,7 @@ class Script(BaseScript):
         try:
             # Need more examples
             if self.is_beta:
-                v = self.cli("show extended-oam status port-list 1-%d" % self.port_count)
+                v = self.cli(f"show extended-oam status port-list 1-{int(self.port_count)}")
             else:
                 v = self.cli("show extended-oam status")
             return self.rx_enabled.findall(v)
@@ -214,7 +214,7 @@ class Script(BaseScript):
         oam = self.get_oam()
 
         if self.is_beta:
-            c = self.cli(("show interface port-list 1-%d" % self.port_count), cached=True)
+            c = self.cli(f"show interface port-list 1-{int(self.port_count)}", cached=True)
             for match in self.rx_port_beta.finditer(c):
                 ifname = match.group("port")
                 iface = {
@@ -245,7 +245,7 @@ class Script(BaseScript):
                 if ifname in oam:
                     iface["enabled_protocols"] += ["OAM"]
                 interfaces += [iface]
-            c = self.cli("show interface port-list 1-%d switchport" % self.port_count)
+            c = self.cli(f"show interface port-list 1-{int(self.port_count)} switchport")
             for match in self.rx_switchport_beta.finditer(c):
                 ifname = match.group("port")
                 for iface in interfaces:

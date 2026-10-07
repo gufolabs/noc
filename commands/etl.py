@@ -268,11 +268,11 @@ class Command(BaseCommand):
                 self.print("Nothing to remove. Continue...")
             else:
                 clean_paths += [os.path.join(ldr.archive_dir, f) for f in clean_files]
-            self.print("Cleanup files (%d):\n %s " % (len(clean_files), "\n".join(clean_files)))
+            self.print(f"Cleanup files ({len(clean_files)}):\n {'\n'.join(clean_files)} ")
         if not dry_run:
             self.print("Claimed data will be Loss..\n")
             for i in reversed(range(1, 10)):
-                self.print("%d\n" % i)
+                self.print(f"{int(i)}\n")
                 time.sleep(1)
             for path in list(clean_paths):
                 self.print(f"Clean {path}")

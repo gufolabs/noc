@@ -23,9 +23,9 @@ class Script(BaseScript):
         elif is_ipv6(address):
             cmd = f"ping ipv6 {address}"
         if count:
-            cmd += " repeat %d" % int(count)
+            cmd += f" repeat {int(count)}"
         if size:
-            cmd += " size %d" % int(size)
+            cmd += f" size {int(size)}"
         s = self.cli(cmd)
         match = self.rx_result.search(s)
         return match.groupdict()

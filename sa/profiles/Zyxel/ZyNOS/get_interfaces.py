@@ -197,16 +197,16 @@ class Script(BaseScript):
                 ipifarr[vid].append(ip)
         for v in ipifarr:
             iface = {
-                "name": "vlan%d" % v if v else "Management",
+                "name": f"vlan{int(v)}" if v else "Management",
                 "mac": mac,  # @todo: get mgmt mac
                 # @todo: get vlan name to form better description
-                "description": "vlan%d" % v if v else "Outband management",
+                "description": f"vlan{int(v)}" if v else "Outband management",
                 "admin_status": True,  # always True, since inactive
                 "oper_status": True,  # SVIs aren't shown at all
                 "subinterfaces": [
                     {
-                        "name": "vlan%d" % v if v else "Management",
-                        "description": "vlan%d" % v if v else "Outband management",
+                        "name": f"vlan{int(v)}" if v else "Management",
+                        "description": f"vlan{int(v)}" if v else "Outband management",
                         "admin_status": True,
                         "oper_status": True,
                         "enabled_afi": ["IPv4"],

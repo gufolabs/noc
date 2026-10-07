@@ -535,7 +535,7 @@ class TableSection(ReportSection):
                     s += [
                         ";".join(
                             [
-                                "<tr><td colspan=%d style='margin: 0" % s_span,
+                                f"<tr><td colspan={int(s_span)} style='margin: 0",
                                 "padding: 2px 5px 3px 5px;font-size: 11px;text-align:left",
                                 "font-weight:bold",
                                 "background: #7CA0C7 url(/ui/pkg/django-media/admin/img/default-bg.gif) top left repeat-x",
@@ -547,9 +547,9 @@ class TableSection(ReportSection):
                     ]
                     current_section = row
                     continue
-                s += ["<tr class='row%d'>" % (n % 2 + 1)]
+                s += [f"<tr class='row{int(n % 2 + 1)}'>"]
                 if self.enumerate:
-                    s += ["<td align='right'>%d</td>" % n]
+                    s += [f"<td align='right'>{int(n)}</td>"]
                 n += 1
                 for c, d in zip(self.columns, row):
                     s += [c.format_html(d)]

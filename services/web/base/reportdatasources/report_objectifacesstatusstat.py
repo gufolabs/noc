@@ -41,7 +41,7 @@ class ReportObjectIfacesStatusStat(BaseReportColumn):
             for t, n in [(1000000, "G"), (1000, "M"), (1, "k")]:
                 if speed >= t:
                     if speed // t * t == speed:
-                        return "%d%s" % (speed // t, n)
+                        return f"{int(speed // t)}{n}"
                     return f"{float(speed) / t:.2f}{n}"
             return str(speed)
 

@@ -24,7 +24,7 @@ class Script(BaseScript):
         r = []
         if self.is_beta:
             port_count = self.profile.get_port_count(self)
-            c = self.cli(("show interface port-list 1-%d" % port_count), cached=True)
+            c = self.cli(f"show interface port-list 1-{int(port_count)}", cached=True)
             for match in self.rx_port.finditer(c):
                 if (interface is not None) and (interface == match.group("port")):
                     return [

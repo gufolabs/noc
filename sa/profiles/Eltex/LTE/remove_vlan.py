@@ -19,7 +19,7 @@ class Script(BaseScript):
             return False
         with self.profile.switch(self):
             self.cli("configure")
-            self.cli("no vlan %d" % vlan_id)
+            self.cli(f"no vlan {int(vlan_id)}")
             self.cli("exit")
         self.save_config()
         return True

@@ -32,11 +32,11 @@ class Script(BaseScript):
             cmd += f" vrf {vrf}"
         cmd += f" {address}"
         if count:
-            cmd += " %d" % int(count)
+            cmd += f" {int(count)}"
         if source_address:
             cmd += f" source address {source_address}"
         if size:
-            cmd += " data-size %d" % int(size)
+            cmd += f" data-size {int(size)}"
         s = self.cli(cmd)
         match = self.rx_result.search(s)
         if match:

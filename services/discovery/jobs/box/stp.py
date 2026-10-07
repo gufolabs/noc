@@ -95,4 +95,4 @@ class STPCheck(TopologyDiscoveryCheck):
     def convert_port_id(port_id):
         left, right = [int(x) for x in port_id.split(".")]
         left //= 16
-        return "%x" % ((left << 12) + right)
+        return f"{(left << 12) + right:x}"

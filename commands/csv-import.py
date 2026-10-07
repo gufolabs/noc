@@ -79,4 +79,4 @@ class Command(BaseCommand):
                 count, error = csv_import(m, f, resolution=resolve, delimiter=options["delimiter"])
                 if count is None:
                     raise CommandError(error)
-                print("... %d rows imported/updated" % count)
+                print(f"... {int(count)} rows imported/updated")

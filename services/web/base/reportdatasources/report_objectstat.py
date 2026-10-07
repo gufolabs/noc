@@ -155,8 +155,8 @@ class CapabilitiesIsolator(IsolatorClass):
         :return:
         """
         # print("Has a %s, %s" % (num, value))
-        if hasattr(self, "_%d_has" % num):
-            a = getattr(self, "_%d_has" % num)
+        if hasattr(self, f"_{int(num)}_has"):
+            a = getattr(self, f"_{int(num)}_has")
             return a(value)
         raise NotImplementedError()
 
@@ -269,8 +269,8 @@ class StatusIsolator(IsolatorClass):
         :return:
         """
         # print "Is a %s, %s" % (num, value)
-        if hasattr(self, "_%d_is" % num):
-            a = getattr(self, "_%d_is" % num)
+        if hasattr(self, f"_{int(num)}_is"):
+            a = getattr(self, f"_{int(num)}_is")
             return a(value)
         raise NotImplementedError()
 

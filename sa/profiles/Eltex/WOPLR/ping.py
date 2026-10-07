@@ -28,9 +28,9 @@ class Script(BaseScript):
     def execute(self, address, count=None, source_address=None, size=None, df=None):
         cmd = f"ping {address}"
         if count:
-            cmd += " repeat %d" % int(count)
+            cmd += f" repeat {int(count)}"
         if size:
-            cmd += " size %d" % int(size)
+            cmd += f" size {int(size)}"
         # Don't implemented, may be in future firmware revisions ?
         # if source_address:
         #    cmd+=" source %s" % source_address

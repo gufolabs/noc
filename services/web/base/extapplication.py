@@ -291,7 +291,8 @@ class ExtApplication(Application):
         out = [formatter(o, fields=only) for o in data]
         if self.row_limit and len(out) > self.row_limit + 1:
             return self.response(
-                "System records limit exceeded (%d records)" % self.row_limit, status=self.TOO_LARGE
+                f"System records limit exceeded ({int(self.row_limit)} records)",
+                status=self.TOO_LARGE,
             )
         # Set favorites
         if not only and formatter in (self.instance_to_dict, self.instance_to_dict_list):

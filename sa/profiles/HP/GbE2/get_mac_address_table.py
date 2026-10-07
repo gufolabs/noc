@@ -18,7 +18,7 @@ class Script(BaseScript):
     def execute(self, interface=None, vlan=None, mac=None):
         cmd = "/info/l2/fdb"
         if vlan:
-            cmd += "/vlan %d" % vlan
+            cmd += f"/vlan {int(vlan)}"
             svlan = str(vlan)
         elif mac:
             cmd += f"/find {mac}"

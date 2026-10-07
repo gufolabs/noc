@@ -165,7 +165,7 @@ class Command(BaseCommand):
                     from noc.sa.models.managedobject import ManagedObject
 
                     o = ManagedObject.objects.get(id=o)
-                self.print("Object '%s' : %d kbytes)" % (o, int(t["size"] / 1024)))
+                self.print(f"Object '{o}' : {int(t['size'] / 1024)} kbytes)")
 
     def handle_bucket(self, min_size=128000, buckets=5, detail=False, *args, **options):
         r = self.get_bucket(buckets=buckets, min_size=min_size)

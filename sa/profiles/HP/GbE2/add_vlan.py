@@ -16,9 +16,9 @@ class Script(BaseScript):
 
     def execute(self, vlan_id, name, tagged_ports):
         with self.configure():
-            self.cli("/c/l2/vlan %d/ena" % vlan_id)
-            self.cli("/c/l2/vlan %d/name %s" % (vlan_id, name))
+            self.cli(f"/c/l2/vlan {int(vlan_id)}/ena")
+            self.cli(f"/c/l2/vlan {int(vlan_id)}/name {name}")
             for tp in tagged_ports:
-                self.cli("/c/l2/vlan %d/add %s" % (vlan_id, tp))
+                self.cli(f"/c/l2/vlan {int(vlan_id)}/add {tp}")
         self.save_config()
         return True

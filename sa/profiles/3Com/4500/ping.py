@@ -26,9 +26,9 @@ class Script(BaseScript):
         if df:
             cmd += " -f"
         if count:
-            cmd += " -c %d" % int(count)
+            cmd += f" -c {int(count)}"
         if size:
-            cmd += " -s %d" % int(size)
+            cmd += f" -s {int(size)}"
         if source_address:
             cmd += f" -a {source_address}"
         cmd += f" {address}"

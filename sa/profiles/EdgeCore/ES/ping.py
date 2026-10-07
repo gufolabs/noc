@@ -24,9 +24,9 @@ class Script(BaseScript):
     def execute(self, address, count=None, source_address=None, size=None, df=None, vrf=None):
         cmd = f"ping {address}"
         if count:
-            cmd += " count %d" % int(count)
+            cmd += f" count {int(count)}"
         if size:
-            cmd += " size %d" % int(size)
+            cmd += f" size {int(size)}"
         pr = self.cli(cmd)
         m1 = self.re_search(self.rx_count, pr)
         m2 = self.re_search(self.rx_rtt, pr)

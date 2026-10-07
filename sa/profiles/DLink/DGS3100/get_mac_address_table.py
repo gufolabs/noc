@@ -35,7 +35,7 @@ class Script(BaseScript):
             cmd += f" port {interface}"
         if vlan is not None:
             if self.match_version(DGS3100, version__gte="3.60.30"):
-                cmd += " vlanid %d" % vlan
+                cmd += f" vlanid {int(vlan)}"
             else:
                 for v in self.scripts.get_vlans():
                     if v["vlan_id"] == vlan:

@@ -336,7 +336,7 @@ class Command(BaseCommand):
         if force:
             self.print(f"All data {count} from active alarms will be Remove..\n")
             for i in reversed(range(1, 10)):
-                self.print("%d\n" % i)
+                self.print(f"{int(i)}\n")
                 time.sleep(1)
             if fast:
                 aac.bulk_write([DeleteMany(conditions)])

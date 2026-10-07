@@ -39,7 +39,7 @@ class Script(BaseScript):
             }
         ]
         for i in [1, 2]:
-            v = self.cli("show system information %d" % i, cached=True)
+            v = self.cli(f"show system information {int(i)}", cached=True)
             match = self.rx_serial.search(v)
             if match:
                 r = {

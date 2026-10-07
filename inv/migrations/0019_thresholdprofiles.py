@@ -42,7 +42,7 @@ class Migration(BaseMigration):
                 else:
                     tp = {"_id": tp_id}
                 # Fill profile
-                tp["name"] = "ip-%05d-%03d" % (next(current), n)
+                tp["name"] = f"ip-{int(next(current)):05}-{int(n):03}"
                 tp["description"] = (
                     f"Migrated for interface profile '{doc['name']}' metric '{metric['metric_type']}'"
                 )

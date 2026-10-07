@@ -66,8 +66,8 @@ class BERDecoder:
             if tag_class:
                 pt += f" application {tag_class}"
             raise ValueError(
-                "Cannot find BER decoder for %s class %d (0x%X): %s"
-                % (pt, tag, tag, codecs.encode(value, "hex").decode("utf-8"))
+                f"Cannot find BER decoder for {pt} class {tag} (0x{tag:X}): "
+                f"{codecs.encode(value, 'hex').decode('utf-8')}"
             )
 
     def parse_eoc(self, msg):
@@ -185,7 +185,7 @@ class BERDecoder:
     def parse_a_ipaddress(self, msg: bytes) -> str:
         if not msg:
             raise ValueError(f"Invalid IP Address: '{msg.encode('hex')}'")
-        return "%d.%d.%d.%d" % (msg[0], msg[1], msg[2], msg[3])
+        return f"{int(msg[0])}.{int(msg[1])}.{int(msg[2])}.{int(msg[3])}"
 
     def parse_p_oid(self, msg: bytes) -> str:
         """
@@ -444,7 +444,7 @@ class BEREncoder:
         while m and m % 10 == 0:
             m /= 10
             e += 1
-        return self.encode_tlv(9, True, "0x03%dE%s%d" % (m, "" if e else "+", e))
+        return self.encode_tlv(9, True, f"0x03{int(m)}E{'' if e else '+'}{int(e)}")
 
     def encode_null(self) -> bytes:
         """

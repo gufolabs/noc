@@ -35,9 +35,9 @@ class Script(BaseScript):
         elif is_ipv6(address):
             cmd = f"ping ipv6 {address}"
         if count:
-            cmd += " count %d" % int(count)
+            cmd += f" count {int(count)}"
         if size:
-            cmd += " size %d" % int(size)
+            cmd += f" size {int(size)}"
         try:
             s = self.cli(cmd)
         except self.CLISyntaxError:
@@ -46,9 +46,9 @@ class Script(BaseScript):
             elif is_ipv6(address):
                 cmd = "ping6 %s"
             if count:
-                cmd += " -n %d" % int(count)
+                cmd += f" -n {int(count)}"
             if size:
-                cmd += " -l %d" % int(size)
+                cmd += f" -l {int(size)}"
             cmd = f"{cmd} {address}"
             s = self.cli(cmd)
         match = self.rx_result1.search(s)

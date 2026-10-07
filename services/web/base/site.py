@@ -258,10 +258,10 @@ class Site:
                             sc[stmt] += 1
                             tsc += 1
                             app_logger.debug("SQL {sql} {time}s".format(**q))
-                    x = ", ".join("%s: %d" % (k, cv) for k, cv in sc.items())
+                    x = ", ".join(f"{k}: {int(cv)}" for k, cv in sc.items())
                     if x:
                         x = f" ({x})"
-                    app_logger.debug("SQL statements: %d%s" % (tsc, x))
+                    app_logger.debug(f"SQL statements: {int(tsc)}{x}")
             except PermissionDenied as e:
                 return HttpResponseForbidden(e)
             except Http404 as e:

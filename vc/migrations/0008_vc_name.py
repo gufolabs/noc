@@ -32,7 +32,7 @@ class Migration(BaseMigration):
             name = rx_underline.sub("_", description)
             name = rx_empty.sub("", name)
             if name in names[vc_domain_id]:
-                name = "%s_%04d" % (name, l1)
+                name = f"{name}_{int(l1):04}"
             names[vc_domain_id][name] = None
             self.db.execute("UPDATE vc_vc SET name=%s WHERE id=%s", [name, vc_id])
         self.db.execute("COMMIT")

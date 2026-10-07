@@ -23,7 +23,7 @@ class Script(BaseScript):
         if interface is not None:
             cmd += f" ports={interface}"
         if vlan is not None:
-            cmd += " vlan-id=%d" % vlan
+            cmd += f" vlan-id={int(vlan)}"
         try:
             v = self.cli_detail(cmd)
         except self.CLISyntaxError:

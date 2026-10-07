@@ -829,9 +829,9 @@ class ActiveAlarm(Document):
         mins = (duration.seconds / 60) % 60
         hours = (duration.seconds / 3600) % 24
         days = duration.days
-        r = "%02d:%02d:%02d" % (hours, mins, secs)
+        r = f"{int(hours):02}:{int(mins):02}:{int(secs):02}"
         if days:
-            r = "%dd %s" % (days, r)
+            r = f"{int(days)}d {r}"
         return r
 
     @property
@@ -1224,7 +1224,7 @@ class ActiveAlarm(Document):
                             "timestamp": now,
                             "from_status": "A",
                             "to_status": "A",
-                            "message": "Severity changed to %d" % severity,
+                            "message": f"Severity changed to {int(severity)}",
                         }
                     }
                 bulk += [UpdateOne({"_id": root}, op)]

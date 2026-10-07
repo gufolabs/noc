@@ -46,7 +46,7 @@ class Script(BaseScript):
             "ge compliance": "ge_compliance",
         }
         if slot:
-            v = "debug hal show optic-info slot %d" % slot
+            v = f"debug hal show optic-info slot {int(slot)}"
         else:
             v = "debug hal show optic-info"
         try:

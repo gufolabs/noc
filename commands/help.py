@@ -48,7 +48,7 @@ class Command(BaseCommand):
                 elif f.endswith(".sh"):
                     commands.add((prefix, f[:-3], ""))
         for cmd in sorted(commands):
-            self.print("%-20s %s" % (cmd[0] + cmd[1], cmd[2]))
+            self.print(f"{cmd[0] + cmd[1]:20} {cmd[2]}")
         return 0
 
     def help_command(self, cmd):

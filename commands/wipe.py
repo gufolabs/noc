@@ -201,7 +201,7 @@ class Command(BaseCommand):
         from django.db import connection as pg_connect
 
         cursor = pg_connect.cursor()
-        query = "DELETE FROM django_admin_log WHERE user_id = %d" % user.id
+        query = f"DELETE FROM django_admin_log WHERE user_id = {int(user.id)}"
         cursor.execute(query)
 
     def wipe_user(self, o):

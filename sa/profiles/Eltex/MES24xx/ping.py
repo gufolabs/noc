@@ -29,9 +29,9 @@ class Script(BaseScript):
         elif is_ipv6(address):
             cmd = f"ping ipv6 {address}"
         if count:
-            cmd += " count %d" % int(count)
+            cmd += f" count {int(count)}"
         if size:
-            cmd += " size %d" % int(size)
+            cmd += f" size {int(size)}"
         if source_address:
             cmd += f" source {source_address}"
         if df:

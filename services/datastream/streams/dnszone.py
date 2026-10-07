@@ -85,15 +85,10 @@ class DNSZoneDataStream(DataStream):
             name=dotted(to_idna(zone.name)),
             ttl=zone.profile.zone_ttl,
             type="SOA",
-            rdata="%s %s %d %d %d %d %d"
-            % (
-                dotted(zone.profile.zone_soa),
-                dotted(zone.profile.zone_contact),
-                zone.serial,
-                zone.profile.zone_refresh,
-                zone.profile.zone_retry,
-                zone.profile.zone_expire,
-                zone.profile.zone_ttl,
+            rdata=(
+                f"{dotted(zone.profile.zone_soa)} {dotted(zone.profile.zone_contact)} "
+                f"{zone.serial} {zone.profile.zone_refresh} {zone.profile.zone_retry} "
+                f"{zone.profile.zone_expire} {zone.profile.zone_ttl}"
             ),
         )
 
@@ -344,7 +339,7 @@ class DNSZoneDataStream(DataStream):
                     name=str(i),
                     ttl=zone.profile.zone_ttl,
                     type="CNAME",
-                    rdata="%d.%s" % (i, d),
+                    rdata=f"{int(i)}.{d}",
                 )
 
     @classmethod

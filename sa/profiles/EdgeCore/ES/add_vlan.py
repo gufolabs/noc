@@ -17,7 +17,7 @@ class Script(BaseScript):
     def execute(self, vlan_id, name, tagged_ports):
         with self.configure():
             self.cli("vlan database")
-            self.cli("vlan %d name %s m e s a" % (vlan_id, name))
+            self.cli(f"vlan {int(vlan_id)} name {name} m e s a")
             self.cli("end")
             if tagged_ports:
                 for port in tagged_ports:

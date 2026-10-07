@@ -25,9 +25,9 @@ class Script(BaseScript):
     def execute(self, address, count=None, source_address=None, size=None, df=None, vrf=None):
         cmd = f"ping {address}"
         if count:
-            cmd += " repaat %d" % int(count)
+            cmd += f" repaat {int(count)}"
         if size:
-            cmd += " size %d" % int(size)
+            cmd += f" size {int(size)}"
         if source_address:
             cmd += f" source {source_address}"
         v = self.cli(cmd)

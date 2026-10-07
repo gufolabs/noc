@@ -61,19 +61,19 @@ class RefBookField(NOCModel):
         """
         string search method
         """
-        return {"where": ["value[%d] ILIKE %%s" % self.order], "params": [search]}
+        return {"where": [f"value[{self.order}] ILIKE %s"], "params": [search]}
 
     def search_substring(self, search):
         """
         substring search method
         """
-        return {"where": ["value[%d] ILIKE %%s" % self.order], "params": ["%" + search + "%"]}
+        return {"where": [f"value[{self.order}] ILIKE %s"], "params": ["%" + search + "%"]}
 
     def search_starting(self, search):
         """
         starting search method
         """
-        return {"where": ["value[%d] ILIKE %%s" % self.order], "params": [search + "%"]}
+        return {"where": [f"value[{self.order}] ILIKE %s"], "params": [search + "%"]}
 
     def search_mac_3_octets_upper(self, search):
         """
@@ -82,4 +82,4 @@ class RefBookField(NOCModel):
         mac = search.replace(":", "").replace("-", "").replace(".", "")
         if not self.rx_mac_3_octets.match(mac):
             return {}
-        return {"where": ["value[%d]=%%s" % self.order], "params": [mac]}
+        return {"where": [f"value[{self.order}]=%s"], "params": [mac]}

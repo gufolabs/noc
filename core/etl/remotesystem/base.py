@@ -168,7 +168,7 @@ class BaseRemoteSystem:
             t0 = perf_counter()
             n = ll.check(chain)
             if n:
-                ss = "%d errors" % n
+                ss = f"{int(n)} errors"
             else:
                 ss = "OK"
             summary += [f"{self.name}.{ll.name}: {ss}"]

@@ -108,7 +108,7 @@ class Script(BaseScript):
                 if i not in add_tagged[v]:
                     vc += [f" no tagged {i}"]
             if vc:
-                commands += ["interface Vlan %d" % v, *vc, " exit"]
+                commands += [f"interface Vlan {int(v)}", *vc, " exit"]
         # Add interfaces
         for v in vlans:
             vc = []
@@ -119,7 +119,7 @@ class Script(BaseScript):
                 if i not in remove_tagged[v]:
                     vc += [f" tagged {i}"]
             if vc:
-                commands += ["interface Vlan %d" % v, *vc, " exit"]
+                commands += [f"interface Vlan {int(v)}", *vc, " exit"]
         # Apply commands
         if not debug and commands:
             with self.configure():

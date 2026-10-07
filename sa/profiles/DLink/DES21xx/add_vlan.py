@@ -16,7 +16,7 @@ class Script(BaseScript):
 
     def execute(self, vlan_id, name, tagged_ports):
         v = self.scripts.get_version()
-        cmd = "create vlan tag %d" % vlan_id
+        cmd = f"create vlan tag {int(vlan_id)}"
         if v["version"][0] >= "5":  # sofrware version 5.0.0 or above
             cmd += f" desc {name}"
         with self.configure():
@@ -24,9 +24,9 @@ class Script(BaseScript):
             if tagged_ports:
                 for port in tagged_ports:
                     if v["version"][0] >= "5":
-                        cmd = "config vlan vid %d add tagged %s" % (vlan_id, port)
+                        cmd = f"config vlan vid {int(vlan_id)} add tagged {port}"
                     else:
-                        cmd = "config vlan tag %d add tagged %s" % (vlan_id, port)
+                        cmd = f"config vlan tag {int(vlan_id)} add tagged {port}"
                     self.cli(cmd)
         self.save_config()
         return True

@@ -32,9 +32,9 @@ class Script(BaseScript):
         else:
             cmd = f"ping {address}"
         if size:
-            cmd += " size %d" % int(size)
+            cmd += f" size {int(size)}"
         if count:
-            cmd += " count %d" % int(count)
+            cmd += f" count {int(count)}"
         """
         # Don't implemented, may be in future firmware revisions ?
         if source_address:

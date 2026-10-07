@@ -169,7 +169,7 @@ class DNSZone(NOCModel):
                 length = 4 - len(r)
                 r += ["0"] * length
                 ml = 32 - 8 * length
-                return ".".join(r) + "/%d" % ml
+                return ".".join(r) + f"/{int(ml)}"
         elif self.type == ZONE_REVERSE_IPV6:
             # Get IPv6 prefix covering reverse zone
             n = self.name.lower()
@@ -191,7 +191,7 @@ class DNSZone(NOCModel):
                 r += c
             if len(p) != 32:
                 r += "::"
-            prefix = r + "/%d" % (length * 4)
+            prefix = r + f"/{int(length * 4)}"
             return IPv6(prefix).normalized.prefix
 
     @classmethod

@@ -49,7 +49,7 @@ class Migration(BaseMigration):
                 i = 0
                 for (t,) in types:
                     # Create stub
-                    n = domain_name + " %d" % i
+                    n = domain_name + f" {int(i)}"
                     self.db.execute(
                         "INSERT INTO vc_vcdomain(name,type_id,description) VALUES(%s,%s,%s)",
                         [n, t, "Collision Resolved"],

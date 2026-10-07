@@ -28,11 +28,11 @@ class Script(BaseScript):
     def execute(self, address, count=None, source_address=None, size=None, df=None):
         cmd = f"ping ip {address}"
         if count:
-            cmd += " packets %d" % int(count)
+            cmd += f" packets {int(count)}"
         else:
             cmd += " packets 3"
         if size:
-            cmd += " size %d" % int(size)
+            cmd += f" size {int(size)}"
         if source_address:
             cmd += f" source {source_address}"
         # if df:

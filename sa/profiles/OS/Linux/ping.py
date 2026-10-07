@@ -29,13 +29,13 @@ class Script(BaseScript):
     def execute(self, address, count=None, source_address=None, size=None, df=None):
         cmd = "ping -q"
         if count:
-            cmd += " -c %d" % int(count)
+            cmd += f" -c {int(count)}"
         else:
             cmd += " -c 5"
         if source_address:
             cmd += f" -S {source_address}"
         if size:
-            cmd += " -s %d" % int(size)
+            cmd += f" -s {int(size)}"
         if df:
             cmd += " -D"
         cmd += f" {address}"

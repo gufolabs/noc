@@ -39,7 +39,7 @@ class Script(BaseScript):
             sfp = 1
             sfpo = 5
         if sfpo + sfp != prt:
-            raise self.UnexpectedResultError("prt=%d sfp=%d sfpo=%d" % (prt, sfp, sfpo))
+            raise self.UnexpectedResultError(f"prt={int(prt)} sfp={int(sfp)} sfpo={int(sfpo)}")
 
         BITS = {i: 2**i for i in range(self.PORT_RANGE)}
         oper_statuses = {i: bool(int(links["lnk"], 16) & BITS[i]) for i in range(self.PORT_RANGE)}
@@ -47,15 +47,15 @@ class Script(BaseScript):
 
         for port in range(1, prt + 1):
             if port <= sfpo:
-                ifname = "Port%d" % int(port)
+                ifname = f"Port{int(port)}"
             elif sfp > 1:
-                ifname = "SFP%d" % (int(port) - sfpo)
+                ifname = f"SFP{int(int(port) - sfpo)}"
             else:
                 ifname = "SFP"
             if links.get("nm"):
                 descr = codecs.decode(links["nm"][port - 1], "hex").decode()
-            elif links.get("nm%d" % (port - 1)):
-                descr = codecs.decode(links["nm%d" % (port - 1)], "hex").decode()
+            elif links.get(f"nm{int(port - 1)}"):
+                descr = codecs.decode(links[f"nm{int(port - 1)}"], "hex").decode()
             else:
                 descr = None
             iface = {

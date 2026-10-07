@@ -266,7 +266,7 @@ class WorkflowApplication(ExtDocApplication):
                 n = int(match.group(1))
                 m = max(n, m)
         # Generate name
-        name = "%s (Copy #%d)" % (wf.name, m + 1)
+        name = f"{wf.name} (Copy #{int(m + 1)})"
         # Clone workflow
         new_wf = deepcopy(wf)
         new_wf.name = name
