@@ -44,12 +44,12 @@ class Script(BaseScript):
             lldp = match.group("tail")
             if pre:
                 if i:
-                    i["neighbors"] += [parse_neighbor(pre)]
-                    r += [i]
+                    i["neighbors"].append(parse_neighbor(pre))
+                    r.append(i)
                 i = {"local_interface": match.group("local_if"), "neighbors": []}
         if lldp:
-            i["neighbors"] += [parse_neighbor(lldp)]
-            r += [i]
+            i["neighbors"].append(parse_neighbor(lldp))
+            r.append(i)
         return r
 
 

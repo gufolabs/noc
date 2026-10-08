@@ -36,7 +36,7 @@ class Script(BaseScript):
         try:
             v = self.cli("display isis interface")
             for match in self.rx_isis.finditer(v):
-                r += [match.group("iface")]
+                r.append(match.group("iface"))
         except self.CLISyntaxError:
             pass
         return r
@@ -156,7 +156,7 @@ class Script(BaseScript):
                 if ifname in portchannel_members:
                     ai, _is_lacp = portchannel_members[ifname]
                     interfaces[ifname]["aggregated_interface"] = ai
-                    interfaces[ifname]["enabled_protocols"] += ["LACP"]
+                    interfaces[ifname]["enabled_protocols"].append("LACP")
                 if self.rx_vlan_name.match(ifname):
                     vlan_ids = self.rx_vlan_name.match(name).group(1)
 
@@ -168,16 +168,16 @@ class Script(BaseScript):
                 "enabled_afi": [],
             }
             if ifname in isis:
-                sub["enabled_protocols"] += ["ISIS"]
+                sub["enabled_protocols"].append("ISIS")
             if "mac" in r:
                 sub["mac"] = r["mac"]
             if "ip" in r:
-                sub["enabled_afi"] += ["IPv4"]
+                sub["enabled_afi"].append("IPv4")
                 sub["ipv4_addresses"] = [r["ip"]]
             if vlan_ids:
                 sub["vlan_ids"] = [int(vlan_ids)]
             if "port_type" in r:
-                sub["enabled_afi"] += ["BRIDGE"]
+                sub["enabled_afi"].append("BRIDGE")
                 # Bridge interface
                 if (
                     r["port_type"].lower() in ["access", "hybrid"]
@@ -193,6 +193,6 @@ class Script(BaseScript):
                     sub["tagged_vlans"] = self.expand_rangelist(r["tagged_vlans"])
                 if r["port_type"].lower() == "trunk" and "vlan_permitted" in r:
                     sub["tagged_vlans"] = self.expand_rangelist(r["vlan_permitted"])
-            interfaces[ifname]["subinterfaces"] += [sub]
+            interfaces[ifname]["subinterfaces"].append(sub)
 
         return [{"interfaces": list(interfaces.values())}]

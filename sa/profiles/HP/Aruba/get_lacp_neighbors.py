@@ -47,12 +47,10 @@ class Script(BaseScript):
                 continue
             if lag not in m:
                 m[lag] = {"lag_id": lag[3:], "interface": lag, "system_id": sid, "bundle": []}
-            m[lag]["bundle"] += [
-                {
+            m[lag]["bundle"].append({
                     "interface": lport,
                     "local_port_id": p_map[lport]["local_port_id"],
                     "remote_system_id": system_id,
                     "remote_port_id": port_id,
-                }
-            ]
+                })
         return list(m.values())

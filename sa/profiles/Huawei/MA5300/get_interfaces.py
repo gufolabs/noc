@@ -57,15 +57,15 @@ class Script(BaseScript):
             vlan = {"vlan_id": match.group("vlan_id"), "tagged": [], "untagged": []}
             match = self.rx_tagged.search(vlan_entry)
             for v in self.rx_port.finditer(match.group("tagged")):
-                vlan["tagged"] += [v.group("port")]
+                vlan["tagged"].append(v.group("port"))
             match = self.rx_untagged.search(vlan_entry)
             for v in self.rx_port.finditer(match.group("untagged")):
                 if v != "none":
                     # Found on SmartAX MA5300 V100R006 VRP Version V3R000M03
                     # Tagged   Ports:
                     #             Ethernet7/2/0 Untagged Ports: none
-                    vlan["untagged"] += [v.group("port")]
-            vlan_table += [vlan]
+                    vlan["untagged"].append(v.group("port"))
+            vlan_table.append(vlan)
         # ADSL ports state
         adsl_state = {}
         v = self.cli("show adsl port state all")
@@ -82,7 +82,7 @@ class Script(BaseScript):
         adsl_line = []
         v = self.cli("show adsl line config all")
         for match in self.rx_adsl_line.finditer(v):
-            adsl_line += [match.groupdict()]
+            adsl_line.append(match.groupdict())
         v = self.cli("show interface")
         for match in self.rx_iface.finditer(v):
             name = match.group("port")
@@ -94,7 +94,7 @@ class Script(BaseScript):
                 "enabled_afi": ["BRIDGE"],
             }
             if "Adsl" in name:
-                sub["enabled_afi"] += ["ATM"]
+                sub["enabled_afi"].append("ATM")
                 if adsl_state.get(name):
                     sub["oper_status"] = adsl_state.get(name) == "up"
                 for line in adsl_line:
@@ -108,7 +108,7 @@ class Script(BaseScript):
                 if name in vlan["tagged"]:
                     if "tagged_vlans" not in sub:
                         sub["tagged_vlans"] = []
-                    sub["tagged_vlans"] += [vlan["vlan_id"]]
+                    sub["tagged_vlans"].append(vlan["vlan_id"])
                 if name in vlan["untagged"]:
                     sub["untagged_vlan"] = vlan["vlan_id"]
             iface = {
@@ -138,7 +138,7 @@ class Script(BaseScript):
                         503316993 + int(match.group("card")) * 65536 + int(match.group("port")) * 64
                     )
                 iface["snmp_ifindex"] = snmp_ifindex
-            interfaces += [iface]
+            interfaces.append(iface)
         for v in self.cli("show ip interface\n").split("\n\n"):
             match = self.rx_ip_iface.search(v)
             if not match:
@@ -175,5 +175,5 @@ class Script(BaseScript):
             if mac:
                 iface["mac"] = mac
                 iface["subinterfaces"][0]["mac"] = mac
-            interfaces += [iface]
+            interfaces.append(iface)
         return [{"interfaces": interfaces}]

@@ -108,8 +108,7 @@ class Script(BaseScript):
             else:
                 self.logger.warning("Unknown interface with stp_port: %s", stp_port)
                 continue
-            ifaces += [
-                {
+            ifaces.append({
                     # Interface name
                     "interface": interface,
                     # Local port id
@@ -132,8 +131,7 @@ class Script(BaseScript):
                     "point_to_point": False,
                     # MSTP EdgePort
                     "edge": False,
-                }
-            ]
+                })
         return {
             "mode": "RSTP",
             "instances": [

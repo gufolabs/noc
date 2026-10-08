@@ -150,23 +150,23 @@ class Script(BaseScript):
                     for str in shint.split("\r\n"):
                         match = self.rx_int_ipv4.search(str)
                         if match:
-                            enabled_afi += ["IPv4"]
+                            enabled_afi.append("IPv4")
                             sub["ipv4_addresses"] = [match.group("address")]
 
                 if ift == "physical":
-                    enabled_afi += ["BRIDGE"]
+                    enabled_afi.append("BRIDGE")
 
                 if ifname in ospfint:
-                    enabled_protocols += ["OSPF"]
+                    enabled_protocols.append("OSPF")
 
                 sub["enabled_afi"] = enabled_afi
                 sub["enabled_protocols"] = enabled_protocols
 
                 if len(enabled_afi) > 0:
-                    subinterfaces += [sub]
+                    subinterfaces.append(sub)
             # Append to interfaces
             iface["subinterfaces"] = subinterfaces
             if iface.get("subinterfaces") or iface.get("aggregated_interface"):
-                interfaces += [iface]
+                interfaces.append(iface)
         # Get interfaces
         return [{"interfaces": interfaces}]

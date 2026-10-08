@@ -32,7 +32,7 @@ class Script(BaseScript):
             # dot1qVlanStaticName
             for oid, v in self.snmp.getnext(mib["Q-BRIDGE-MIB::dot1qVlanStaticName"]):
                 o = oid.split(".")[-1]
-                result += [{"vlan_id": int(oids[o]), "name": v.strip().rstrip("\x00")}]
+                result.append({"vlan_id": int(oids[o]), "name": v.strip().rstrip("\x00")})
         else:
             tmp_vlan = []
             # dot1qVlanStaticName
@@ -40,8 +40,8 @@ class Script(BaseScript):
                 vlan_id = int(oid.split(".")[-1])
                 if vlan_id in tmp_vlan:
                     break
-                result += [{"vlan_id": vlan_id, "name": v.strip().rstrip("\x00")}]
-                tmp_vlan += [vlan_id]
+                result.append({"vlan_id": vlan_id, "name": v.strip().rstrip("\x00")})
+                tmp_vlan.append(vlan_id)
         if result:
             return sorted(result, key=operator.itemgetter("vlan_id"))
         raise NotImplementedError()

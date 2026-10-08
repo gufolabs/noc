@@ -30,7 +30,7 @@ class Script(BaseScript):
                 vlan_id = int(match.group("vlan_id"))
                 name = match.group("name")
                 if name == "[None]":
-                    r += [{"vlan_id": vlan_id}]
+                    r.append({"vlan_id": vlan_id})
                 else:
-                    r += [{"vlan_id": vlan_id, "name": name}]
+                    r.append({"vlan_id": vlan_id, "name": name})
         return r

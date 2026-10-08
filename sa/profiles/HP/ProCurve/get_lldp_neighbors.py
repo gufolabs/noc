@@ -145,6 +145,6 @@ class Script(BaseScript):
                     },
                 )
             n["remote_capabilities"] = caps
-            i["neighbors"] += [n]
-            r += [i]
+            i["neighbors"].append(n)
+            r.append(i)
         return r

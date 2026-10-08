@@ -60,7 +60,7 @@ class Script(BaseScript):
                 raw = data[i]
                 match = self.rx_iface.search(raw)
 
-            r += [{"interface": port, "type": "L" if typ == "Dynamic" else "S", "members": members}]
+            r.append({"interface": port, "type": "L" if typ == "Dynamic" else "S", "members": members})
 
         return r
 

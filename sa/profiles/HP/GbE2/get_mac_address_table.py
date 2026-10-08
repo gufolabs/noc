@@ -36,5 +36,5 @@ class Script(BaseScript):
                     continue
                 if v == "4095":  # Built-in vlans on port 19
                     continue
-                r += [{"vlan_id": v, "mac": m, "interfaces": [p], "type": "D"}]
+                r.append({"vlan_id": v, "mac": m, "interfaces": [p], "type": "D"})
         return r

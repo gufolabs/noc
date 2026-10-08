@@ -83,6 +83,6 @@ class Script(BaseScript):
                 iface["aggregated_interface"] = portchannel_members[name][0]
                 if portchannel_members[name][1]:
                     n["enabled_protocols"] = ["LACP"]
-            interfaces += [iface]
+            interfaces.append(iface)
 
         return [{"interfaces": interfaces}]

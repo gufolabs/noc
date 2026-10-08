@@ -32,14 +32,12 @@ class Script(BaseScript):
             if trunk not in trunks:
                 trunks[trunk] = []
                 trunk_types[trunk] = type
-            trunks[trunk] += [port]
+            trunks[trunk].append(port)
         # Build result
         for trunk in trunks:
-            r += [
-                {
+            r.append({
                     "interface": trunk,
                     "members": trunks[trunk],
                     "type": "L" if trunk_types[trunk].lower() == "lacp" else "S",
-                }
-            ]
+                })
         return r

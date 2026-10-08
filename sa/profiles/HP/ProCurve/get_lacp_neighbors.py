@@ -35,12 +35,10 @@ class Script(BaseScript):
             if r[6] != "Active":
                 continue
             lport = self.profile.convert_interface_name(r[0])
-            m[lag]["bundle"] += [
-                {
+            m[lag]["bundle"].append({
                     "interface": lport,
                     "local_port_id": r[5],
                     "remote_system_id": r[2],
                     "remote_port_id": r[3],
-                }
-            ]
+                })
         return list(m.values())

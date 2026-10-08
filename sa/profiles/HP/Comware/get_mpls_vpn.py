@@ -42,5 +42,5 @@ class Script(BaseScript):
                     "rd": match.group("rd"),
                     "interfaces": interfaces,
                 }
-                vpns += [vpn]
+                vpns.append(vpn)
         return vpns

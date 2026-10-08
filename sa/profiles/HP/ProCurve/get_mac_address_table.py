@@ -34,5 +34,5 @@ class Script(BaseScript):
             if mac == "000000-000008":
                 continue
             port = self.profile.convert_interface_name(port)
-            r += [{"vlan_id": vlan_id, "mac": mac, "interfaces": [port], "type": "D"}]
+            r.append({"vlan_id": vlan_id, "mac": mac, "interfaces": [port], "type": "D"})
         return r

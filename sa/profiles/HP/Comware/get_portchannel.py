@@ -34,15 +34,13 @@ class Script(BaseScript):
             found = False
             for i in r:
                 if i["interface"] == match.group("agg_interface"):
-                    i["members"] += [match.group("interface")]
+                    i["members"].append(match.group("interface"))
                     found = True
                     break
             if not found:
-                r += [
-                    {
+                r.append({
                         "interface": match.group("agg_interface"),
                         "type": "L",
                         "members": [match.group("interface")],
-                    }
-                ]
+                    })
         return r

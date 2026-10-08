@@ -38,7 +38,7 @@ class Script(BaseScript):
                 bit = 1
                 for p in range(8, 0, -1):
                     if dec & bit == bit:
-                        lmap[stat + type][int(vlan)] += [p + inc]
+                        lmap[stat + type][int(vlan)].append(p + inc)
                     bit <<= 1
                 inc = inc + 8
 
@@ -47,7 +47,7 @@ class Script(BaseScript):
                 if j not in untag[i]:
                     if i not in tag:
                         tag[i] = []
-                    tag[i] += [j]
+                    tag[i].append(j)
         return untag, tag
 
     def execute(self):
@@ -87,7 +87,7 @@ class Script(BaseScript):
                 if t == iface["untagged"]:
                     continue
                 if ifindex in tagged[t]:
-                    iface["tagged"] += [t]
+                    iface["tagged"].append(t)
 
             iface["members"] = portchannels.get(iface["interface"], [])
             if iface["tagged"]:
@@ -96,7 +96,7 @@ class Script(BaseScript):
                 iface["802.1Q Enabled"] = False
             iface["802.1ad Tunnel"] = False
 
-            sports += [iface]
+            sports.append(iface)
             iface = {}
 
             i = i + step

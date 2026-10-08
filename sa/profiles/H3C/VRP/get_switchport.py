@@ -129,5 +129,5 @@ class Script(BaseScript):
             if description:
                 port["description"] = description
 
-            r += [port]
+            r.append(port)
         return r
