@@ -60,10 +60,12 @@ class Script(BaseScript):
                                     "status": match_int.group("status").lower() == "up",
                                 }
                             ]
-                        r.append({
+                        r.append(
+                            {
                                 "interface": iface,
                                 "status": match_int.group("status").lower() == "up",
-                            })
+                            }
+                        )
         #
         # Other (VRP5 style)
         #
@@ -82,8 +84,10 @@ class Script(BaseScript):
                                     "status": match_int.group("status").lower() == "up",
                                 }
                             ]
-                        r.append({
+                        r.append(
+                            {
                                 "interface": iface,
                                 "status": match_int.group("status").lower() == "up",
-                            })
+                            }
+                        )
         return r

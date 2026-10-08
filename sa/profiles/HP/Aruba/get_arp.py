@@ -25,9 +25,11 @@ class Script(BaseScript):
         r = []
         v = self.cli("show arp")
         for ip, mac, vlan, port in self.rx_arp_table.findall(v):
-            r.append({
+            r.append(
+                {
                     "ip": ip,
                     "mac": mac,
                     "interface": port,
-                })
+                }
+            )
         return r

@@ -35,9 +35,11 @@ class Script(BaseScript):
             trunks[trunk].append(port)
         # Build result
         for trunk in trunks:
-            r.append({
+            r.append(
+                {
                     "interface": trunk,
                     "members": trunks[trunk],
                     "type": "L" if trunk_types[trunk].lower() == "lacp" else "S",
-                })
+                }
+            )
         return r

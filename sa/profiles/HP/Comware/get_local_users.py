@@ -38,11 +38,13 @@ class Script(BaseScript):
     def execute(self):
         r = []
         for match in self.rx_line.finditer(self.cli("display local-user")):
-            r.append({
+            r.append(
+                {
                     "username": match.group("username"),
                     "class": {"3": "superuser", "2": "operator", "1": "operator"}[
                         match.group("privilege")
                     ],
                     "is_active": (match.group("state") == "Active"),
-                })
+                }
+            )
         return r

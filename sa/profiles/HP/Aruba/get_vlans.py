@@ -23,8 +23,10 @@ class Script(BaseScript):
         r = []
         v = self.cli("show vlan", cached=True)
         for vlan, name in self.rx_vlan.findall(v):
-            r.append({
+            r.append(
+                {
                     "vlan_id": vlan,
                     "name": name,
-                })
+                }
+            )
         return r

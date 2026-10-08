@@ -38,9 +38,11 @@ class Script(BaseScript):
                     found = True
                     break
             if not found:
-                r.append({
+                r.append(
+                    {
                         "interface": match.group("agg_interface"),
                         "type": "L",
                         "members": [match.group("interface")],
-                    })
+                    }
+                )
         return r
