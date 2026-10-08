@@ -223,9 +223,9 @@ class Platform(Document):
         """
         deadline = []
         if self.end_of_support:
-            deadline += [self.end_of_support]
+            deadline.append(self.end_of_support)
         if self.end_of_xsupport:
-            deadline += [self.end_of_xsupport]
+            deadline.append(self.end_of_xsupport)
         if deadline:
             return datetime.date.today() > max(deadline)
         return False

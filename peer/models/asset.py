@@ -60,13 +60,13 @@ class ASSet(NOCModel):
     def get_rpsl(self):
         sep = f"remark: {'-' * 72}"
         s = []
-        s += [f"as-set: {self.name}"]
+        s.append(f"as-set: {self.name}")
         if self.rpsl_header:
             s += self.rpsl_header.split("\n")
         for m in self.member_list:
-            s += [f"members: {m}"]
+            s.append(f"members: {m}")
         if self.rpsl_footer:
-            s += [sep]
+            s.append(sep)
             s += self.rpsl_footer.split("\n")
         return rpsl_format("\n".join(s))
 

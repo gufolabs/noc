@@ -82,7 +82,7 @@ class Migration(BaseMigration):
                     for k, v in iteritems(body, " = "):
                         if k == "id":
                             continue
-                        changes += [{"field": k, "old": None, "new": q(v)}]
+                        changes.append({"field": k, "old": None, "new": q(v)})
                 elif op == "M":
                     # Parse modify operation
                     for k, v in iteritems(body, ": "):
@@ -94,18 +94,18 @@ class Migration(BaseMigration):
                             x, y = X[0], None
                         else:
                             x, y = X
-                        changes += [{"field": k, "old": q(x), "new": q(y)}]
+                        changes.append({"field": k, "old": q(x), "new": q(y)})
                 elif op == "D":
                     # Parse delete operation
                     for k, v in iteritems(body, " = "):
                         if k == "id":
                             o["id"] = q(v)
                             continue
-                        changes += [{"field": k, "old": None, "new": v}]
+                        changes.append({"field": k, "old": None, "new": v})
                 else:
                     raise ValueError(f"Invalid op '{op}'")
                 o["changes"] = changes
-                bulk += [InsertOne(o)]
+                bulk.append(InsertOne(o))
                 last_id = a_id
             left -= len(bulk)
             logger.info("   ... %d records left", left)

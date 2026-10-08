@@ -472,9 +472,9 @@ class ResourceGroup(Document):
         match_rg = []
         for rg in resource_groups:
             if isinstance(rg, str):
-                match_rg += [bson.ObjectId(rg)]
+                match_rg.append(bson.ObjectId(rg))
             else:
-                match_rg += [rg]
+                match_rg.append(rg)
         labels = []
         for rg in cls._get_collection().aggregate(
             [
@@ -492,7 +492,7 @@ class ResourceGroup(Document):
                 },
             ]
         ):
-            labels += [f"noc::resourcegroup::{rg['name']}::="]
+            labels.append(f"noc::resourcegroup::{rg['name']}::=")
             labels += [
                 f"noc::resourcegroup::{rg_path['name']}::<"
                 for rg_path in rg["_path"]

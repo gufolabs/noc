@@ -196,17 +196,17 @@ class Peer(NOCModel):
                 pref = 65535 - local_pref  # RPSL style
             else:
                 pref = local_pref
-            actions += [f"pref={int(pref)};"]
+            actions.append(f"pref={int(pref)};")
         import_med = self.effective_import_med
         if import_med:
-            actions += [f"med={int(import_med)};"]
+            actions.append(f"med={int(import_med)};")
         if actions:
             s += " action " + " ".join(actions)
         s += f" accept {self.import_filter}\n"
         actions = []
         export_med = self.effective_export_med
         if export_med:
-            actions += [f"med={int(export_med)};"]
+            actions.append(f"med={int(export_med)};")
         s += f"export: to AS{self.remote_asn} at {self.peering_point.hostname}"
         if actions:
             s += " action " + " ".join(actions)

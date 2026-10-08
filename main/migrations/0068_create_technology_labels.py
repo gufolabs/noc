@@ -19,8 +19,7 @@ class Migration(BaseMigration):
         current_labels = {ll["name"]: ll["_id"] for ll in l_coll.find()}
         bulk = []
         if "technology::*" not in current_labels:
-            bulk += [
-                InsertOne(
+            bulk.append(InsertOne(
                     {
                         "name": "technology::*",
                         "description": "Wildcard label for scope technology",
@@ -39,7 +38,6 @@ class Migration(BaseMigration):
                         "match_vlanfilter": [],
                         "match_prefixfilter": [],
                     }
-                )
-            ]
+                ))
         if bulk:
             l_coll.bulk_write(bulk, ordered=True)

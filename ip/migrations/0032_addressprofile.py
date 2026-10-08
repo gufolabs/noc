@@ -49,7 +49,7 @@ class Migration(BaseMigration):
                 "bi_id": bson.int64.Int64(bi_hash(p_id)),
             }
             style_profiles[style_id] = p_id
-            profiles += [p]
+            profiles.append(p)
         # Insert profiles to database
         coll.insert_many(profiles)
         # Create Prefix.profile field

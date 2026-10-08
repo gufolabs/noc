@@ -68,7 +68,7 @@ class PythonNode(template.Node):
         self.code = compile(py_code, "string", "exec")
 
     def t_render(self, s):
-        self.output += [s]
+        self.output.append(s)
 
     def t_rendernl(self, s):
         self.output += [s, "\n"]

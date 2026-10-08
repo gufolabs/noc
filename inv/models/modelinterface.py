@@ -148,13 +148,13 @@ class ModelInterface(Document):
         ar = []
         for a in self.attrs:
             r = ["        {"]
-            r += [f'            "name": "{q(a.name)}",']
-            r += [f'            "type": "{q(a.type)}",']
-            r += [f'            "description": "{q(a.description)}",']
-            r += [f'            "required": {q(a.required)},']
-            r += [f'            "is_const": {q(a.is_const)}']
-            r += ["        }"]
-            ar += ["\n".join(r)]
+            r.append(f'            "name": "{q(a.name)}",')
+            r.append(f'            "type": "{q(a.type)}",')
+            r.append(f'            "description": "{q(a.description)}",')
+            r.append(f'            "required": {q(a.required)},')
+            r.append(f'            "is_const": {q(a.is_const)}')
+            r.append("        }")
+            ar.append("\n".join(r))
         r = [
             "{",
             f'    "name": "{q(self.name)}",',
@@ -193,7 +193,7 @@ class ModelInterface(Document):
                     y.update(x.split(","))
                 vv = [x.strip() for x in sorted(y) if x.strip()]
             item["value"] = T_MAP[a.type].clean(vv)
-            r += [item]
+            r.append(item)
         return r
 
     @classmethod

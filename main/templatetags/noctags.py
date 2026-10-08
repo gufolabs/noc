@@ -131,15 +131,15 @@ class NOCTableNode(template.Node):
             else:
                 classes = [c.strip() for c in attrs["class"].split()]
                 if "tablesorter" not in classes:
-                    classes += ["tablesorter"]
+                    classes.append("tablesorter")
                     attrs["class"] = " ".join(classes)
             # Reconstruct table
             a = []
             for k, v in attrs.items():
                 if v is None:
-                    a += [k]
+                    a.append(k)
                 else:
-                    a += [f"{k}='{v}'"]
+                    a.append(f"{k}='{v}'")
             tt = f"<table {' '.join(a)}>"
             return NOCTableTemplate % attrs + output.replace(t, tt) + "</div>"
         # Return untouched

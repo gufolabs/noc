@@ -497,7 +497,7 @@ class Prefix(NOCModel):
         content = [self.prefix]
         card = f"Prefix {self.prefix}"
         if self.description:
-            content += [self.description]
+            content.append(self.description)
             card += f" ({self.description})"
         r = {
             "id": f"ip.prefix:{self.id}",

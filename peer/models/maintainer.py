@@ -41,14 +41,14 @@ class Maintainer(NOCModel):
 
     def get_rpsl(self):
         s = []
-        s += [f"mntner: {self.maintainer}"]
-        s += [f"descr: {self.description}"]
+        s.append(f"mntner: {self.maintainer}")
+        s.append(f"descr: {self.description}")
         if self.password:
-            s += [f"auth: MD5-PW {md5crypt(self.password.encode())}"]
+            s.append(f"auth: MD5-PW {md5crypt(self.password.encode())}")
         s += [f"admins: {x.nic_hdl}" for x in self.admins.all()]
-        s += [f"mnt-by: {self.maintainer}"]
+        s.append(f"mnt-by: {self.maintainer}")
         if self.extra:
-            s += [self.extra]
+            s.append(self.extra)
         return rpsl_format("\n".join(s))
 
     def touch_rpsl(self):

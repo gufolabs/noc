@@ -543,7 +543,7 @@ class NetworkSegment(Document):
         else:
             match["parent"] = parent_id or self.id
         if match:
-            pipeline += [{"$match": match}]
+            pipeline.append({"$match": match})
         # Mark service and profile with type field
         pipeline += [
             {

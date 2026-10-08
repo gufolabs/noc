@@ -19,7 +19,7 @@ class Migration(BaseMigration):
         updates = []
         for d in coll.find({"uuid": {"$exists": False}}, {"_id": 1}):
             u = uuid.uuid4()
-            updates += [UpdateOne({"_id": d["_id"]}, {"$set": {"uuid": u}})]
+            updates.append(UpdateOne({"_id": d["_id"]}, {"$set": {"uuid": u}}))
             if len(updates) >= MONGO_CHUNK:
                 coll.bulk_write(updates)
                 updates = []

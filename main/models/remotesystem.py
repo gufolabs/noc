@@ -311,7 +311,7 @@ class RemoteSystem(Document):
             if k.startswith("enable_") and getattr(self, k):
                 if exclude_fmevent and k == "enable_fmevent":
                     continue
-                extractors += [k[7:]]
+                extractors.append(k[7:])
         return extractors
 
     def extract(

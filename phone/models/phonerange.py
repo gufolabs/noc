@@ -218,7 +218,7 @@ class PhoneRange(Document):
         # Nested ranges
         nrxc = []
         for r in PhoneRange.objects.filter(parent=self.id):
-            nrxc += [f"(x >= '{r.from_number}' and x <= '{r.to_number}')"]
+            nrxc.append(f"(x >= '{r.from_number}' and x <= '{r.to_number}')")
         if nrxc:
             nrx = compile(" or ".join(nrxc), "<string>", "eval")
         else:

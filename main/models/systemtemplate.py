@@ -53,13 +53,13 @@ class SystemTemplate(NOCModel):
             match u:
                 case int():
                     try:
-                        u_list += [User.objects.get(id=u)]
+                        u_list.append(User.objects.get(id=u))
                     except User.DoesNotExist:
                         continue
                 case str():
-                    u_list += [User.objects.get(username=u)]
+                    u_list.append(User.objects.get(username=u))
                 case User():
-                    u_list += [u]
+                    u_list.append(u)
         # Left only active users
         u_list = [u for u in u_list if u.is_active]  # noqa
         # Send notifications

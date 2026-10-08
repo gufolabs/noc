@@ -79,7 +79,7 @@ class Migration(BaseMigration):
             if name in processed:
                 route_new["name"] = f"{name}_{num}"
                 route_new["_id"] = bson.ObjectId()
-            bulk += [InsertOne(route_new)]
+            bulk.append(InsertOne(route_new))
             processed.add(name)
         if bulk:
             mr_coll.delete_many({})
