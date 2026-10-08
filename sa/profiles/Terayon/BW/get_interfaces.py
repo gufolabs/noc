@@ -68,12 +68,14 @@ class Script(BaseScript):
                 if i["name"] == ifname:
                     if i["subinterfaces"][0]["name"] == ifname:
                         i["subinterfaces"] = []
-                    i["subinterfaces"].append({
+                    i["subinterfaces"].append(
+                        {
                             "name": match.group("interface"),
                             "mtu": match.group("mtu"),
                             "enabled_afi": ["BRIDGE"],
                             "vlan_ids": [match.group("vlan_id")],
-                        })
+                        }
+                    )
                     break
         v = self.cli("show interfaces ip-brief")
         for match in self.rx_ip.finditer(v):

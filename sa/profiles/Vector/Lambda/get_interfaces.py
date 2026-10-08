@@ -124,19 +124,23 @@ class Script(BaseScript):
 
         dev = self.cli("dev dump")
         for match in self.rx_port.finditer(dev):
-            iface.append({
+            iface.append(
+                {
                     "name": f"Input {match.group('port')}",
                     "admin_status": True,
                     "oper_status": True,
                     "type": "physical",
                     "subinterfaces": [],
-                })
-        iface.append({
+                }
+            )
+        iface.append(
+            {
                 "name": "Output",
                 "admin_status": True,
                 "oper_status": True,
                 "type": "physical",
                 "subinterfaces": [],
-            })
+            }
+        )
 
         return [{"interfaces": iface}]

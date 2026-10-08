@@ -52,7 +52,8 @@ class Script(VIMScript):
                     interfaces[name]["hints"] = [
                         f"noc::interface::port_group::{d.backing.port.portgroupKey}"
                     ]
-                    interfaces[name]["subinterfaces"].append({
+                    interfaces[name]["subinterfaces"].append(
+                        {
                             "name": name,
                             "admin_status": True,
                             "oper_status": True,
@@ -63,7 +64,8 @@ class Script(VIMScript):
                             "tagged_vlans": networks[d.backing.port.portgroupKey].get(
                                 "tagged_vlans"
                             ),
-                        })
+                        }
+                    )
         return [{"forwarding_instance": "default", "interfaces": list(interfaces.values())}]
 
     def execute(self, **kwargs):

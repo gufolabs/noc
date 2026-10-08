@@ -97,11 +97,13 @@ class Script(BaseScript):
         snmp_indexes = []
         v = self.cli("show snmp mib ifmib ifIndex")
         for row in parse_table(v, max_width=80):
-            snmp_indexes.append({
+            snmp_indexes.append(
+                {
                     "ifindex": int(row[0].strip()),
                     "ifdescr": row[1].strip(),
                     "ifname": row[2].strip(),
-                })
+                }
+            )
         v = self.cli("show interface * status").replace("\n\n", "\n")
         for row in parse_table(v, max_width=85):
             ifname = row[0]

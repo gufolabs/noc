@@ -101,13 +101,15 @@ class Script(BaseScript):
             iface["type"] = "physical"
             iface["oper_status"] = True
             iface["mac"] = match.group("mac")
-            iface["subinterfaces"].append({
+            iface["subinterfaces"].append(
+                {
                     "name": match.group("sub_name").replace("R", "radio"),
                     "admin_status": match.group("oper_status") == "On",
                     "oper_status": match.group("oper_status") == "On",
                     "mac": match.group("sub_mac"),
                     "enabled_afi": ["BRIDGE"],
                     "tagged_vlans": vlans,
-                })
+                }
+            )
         interfaces.append(iface)
         return [{"interfaces": interfaces}]
