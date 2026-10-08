@@ -150,9 +150,9 @@ class Profile(BaseProfile):
             if match:
                 # New item
                 if ";;;" in line:
-                    ns += [line.partition(";;;")[0].strip()]
+                    ns.append(line.partition(";;;")[0].strip())
                 else:
-                    ns += [line]
+                    ns.append(line)
             elif ns:
                 ns[-1] += f" {line.strip()}"
         # Parse
@@ -180,11 +180,11 @@ class Profile(BaseProfile):
                     m = self.rx_key.search(rest)
                     if not m:
                         if kvp:
-                            kvp[-1] += [rest]
+                            kvp[-1].append(rest)
                         break
                     if kvp:
-                        kvp[-1] += [rest[: m.start()]]
-                    kvp += [[m.group(1)]]
+                        kvp[-1].append(rest[: m.start()])
+                    kvp.append([m.group(1)])
                     rest = rest[m.end() :]
                 # Convert key-value-pairs to dict
                 d = {}
@@ -193,5 +193,5 @@ class Profile(BaseProfile):
                     if v.startswith('"') and v.endswith('"'):
                         v = v[1:-1]
                     d[k] = v
-                r += [(n, f, d)]
+                r.append((n, f, d))
         return r

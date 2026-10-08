@@ -90,7 +90,7 @@ class Script(BaseScript):
                 neighbor["remote_system_description"] = match.group("sys_descr").strip()
             if match.group("port_descr"):
                 neighbor["remote_port_description"] = match.group("port_descr").strip()
-            r += [{"local_interface": f"e{local_if}", "neighbors": [neighbor]}]
+            r.append({"local_interface": f"e{local_if}", "neighbors": [neighbor]})
         return r
 
     def execute_cli(self, **kwargs):
@@ -125,5 +125,5 @@ class Script(BaseScript):
                 # Get capability
                 cap = 0
                 n["remote_capabilities"] = cap
-                i["neighbors"] += [n]
-                r += [i]
+                i["neighbors"].append(n)
+                r.append(i)

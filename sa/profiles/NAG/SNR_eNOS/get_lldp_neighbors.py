@@ -59,6 +59,6 @@ class Script(BaseScript):
                 # Get capability
                 cap = 0
                 n["remote_capabilities"] = cap
-                i["neighbors"] += [n]
-                r += [i]
+                i["neighbors"].append(n)
+                r.append(i)
         return r

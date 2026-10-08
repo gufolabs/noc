@@ -237,15 +237,15 @@ class Script(BaseScript):
         if "None" in protocols:
             return []
         if "OSPFv2" in protocols:
-            proto += ["OSPF"]
+            proto.append("OSPF")
         if "OSPFv3" in protocols:
-            proto += ["OSPFv3"]
+            proto.append("OSPFv3")
         if "PIM" in protocols:
-            proto += ["PIM"]
+            proto.append("PIM")
         if "IGMP" in protocols:
-            proto += ["IGMP"]
+            proto.append("IGMP")
         if "RSVP" in protocols:
-            proto += ["RSVP"]
+            proto.append("RSVP")
         return proto
 
     @staticmethod
@@ -273,13 +273,13 @@ class Script(BaseScript):
                 afi = match_obj.group(1)
                 ip = match_obj.group(2)
                 if afi == "IP Addr/mask" and "Not" not in ip:
-                    result["ipv4_addresses"] += [ip]
+                    result["ipv4_addresses"].append(ip)
                 elif afi == "IPv6 Addr" and is_ipv6(ip):
-                    result["ipv6_addresses"] += [ip]
+                    result["ipv6_addresses"].append(ip)
         if result["ipv4_addresses"]:
-            result["enabled_afi"] += ["IPv4"]
+            result["enabled_afi"].append("IPv4")
         if result["ipv6_addresses"]:
-            result["enabled_afi"] += ["IPv6"]
+            result["enabled_afi"].append("IPv6")
         return result
 
     def parse_interfaces(self, data: str, c_interfaces=None):
@@ -366,7 +366,7 @@ class Script(BaseScript):
             proto = iface["protocols"]
             iface["protocols"] = self.fix_protocols(iface["protocols"])
             if "srrp" in iface:
-                iface["protocols"] += ["SRRP"]
+                iface["protocols"].append("SRRP")
                 iface.pop("srrp")
             iface["oper_status"] = self.fix_status(iface["oper_status"])
             iface["admin_status"] = self.fix_status(iface["admin_status"])
@@ -393,7 +393,7 @@ class Script(BaseScript):
                     if "vlan_ids" in iface:
                         sub["vlan_ids"] = iface.pop("vlan_ids")
                     if "MPLS" in proto:
-                        sub["enabled_afi"] += ["MPLS"]
+                        sub["enabled_afi"].append("MPLS")
                     if iface.get("mac"):
                         sub["mac"] = iface["mac"]
                     if "mtu" in iface:
@@ -549,9 +549,7 @@ class Script(BaseScript):
         # Mgmt Router Ifaces
         mgmt_ifaces = self.get_managment_router()
         if mgmt_ifaces:
-            result += [
-                {"forwarding_instance": "management", "type": "ip", "interfaces": mgmt_ifaces}
-            ]
+            result.append({"forwarding_instance": "management", "type": "ip", "interfaces": mgmt_ifaces})
         # Mgmt Router Ifaces
         base_ifaces = self.get_base_router()
         # Forwarding Instance
@@ -637,11 +635,9 @@ class Script(BaseScript):
                 continue
             result.append(fi)
         if base_ifaces:
-            result += [
-                {
+            result.append({
                     "forwarding_instance": "default",
                     "type": "ip",
                     "interfaces": list(base_ifaces.values()),
-                }
-            ]
+                })
         return result

@@ -40,8 +40,7 @@ class Script(BaseScript):
                 vlan_id = 1
             else:
                 vlan_id = int(vlans)
-            r += [
-                {
+            r.append({
                     "vlan_id": vlan_id,
                     "mac": match.group("mac"),
                     "interfaces": [match.group("port")],
@@ -53,8 +52,7 @@ class Script(BaseScript):
                         "C": "S",  # Conditional
                         "S": "S",  # Static
                     }[match.group("type")],
-                }
-            ]
+                })
         v = self.cli("show service service-using ies")
         ies = self.rx_ies.findall(v)
         v = ""
@@ -72,12 +70,10 @@ class Script(BaseScript):
                 vlan_id = 1
             else:
                 vlan_id = int(vlans)
-            r += [
-                {
+            r.append({
                     "vlan_id": vlan_id,
                     "mac": match.group("mac"),
                     "interfaces": [match.group("port")],
                     "type": {"Dynamic": "D", "Other": "S"}[match.group("type")],
-                }
-            ]
+                })
         return r

@@ -77,8 +77,7 @@ class Script(BaseScript):
         for slot_id, match in enumerate(self.rx_stack.finditer(slot), start=1):
             mfg_date = match.group("mfg_date")
             date = mfg_date.replace("/", "-")
-            r += [
-                {
+            r.append({
                     "type": "CHASSIS",
                     "number": slot_id,
                     "vendor": vendor,
@@ -87,8 +86,7 @@ class Script(BaseScript):
                     "revision": match.group("hardware"),
                     "serial": match.group("serial"),
                     "description": "",
-                }
-            ]
+                })
             r += self.get_transceivers(slot_id)
         # Some devices do not have `show slot` command
         if not r:
@@ -233,6 +231,6 @@ class Script(BaseScript):
                         "description": f"{description}, {int(mbd)}Mbd, {int(nm)}nm",
                         "data": data,
                     }
-                out += [i]
+                out.append(i)
 
         return out

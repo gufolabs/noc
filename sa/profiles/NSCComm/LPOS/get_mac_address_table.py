@@ -32,21 +32,17 @@ class Script(BaseScript):
             if match.group("type") in ["mcast", "bcast"]:
                 continue
             if match.group("port") != "cpu":
-                r += [
-                    {
+                r.append({
                         "vlan_id": 1,
                         "mac": match.group("mac"),
                         "interfaces": match.group("port"),
                         "type": self.types[match.group("type")],
-                    }
-                ]
+                    })
             else:
-                r += [
-                    {
+                r.append({
                         "vlan_id": 1,
                         "mac": match.group("mac"),
                         "interfaces": match.group("port"),
                         "type": "C",
-                    }
-                ]
+                    })
         return r

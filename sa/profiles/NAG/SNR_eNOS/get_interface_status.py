@@ -24,7 +24,7 @@ class Script(BaseScript):
                 continue
             if interface:
                 if n == interface:
-                    r += [{"interface": n, "status": int(s) == 1}]
+                    r.append({"interface": n, "status": int(s) == 1})
             else:
-                r += [{"interface": n, "status": int(s) == 1}]
+                r.append({"interface": n, "status": int(s) == 1})
         return r

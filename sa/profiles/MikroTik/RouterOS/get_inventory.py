@@ -40,14 +40,12 @@ class Script(BaseScript):
         platform = v["platform"].strip()
         if platform not in ["x86", "CHR"]:
             serial = self.capabilities.get("Chassis | Serial Number")
-            i += [
-                {
+            i.append({
                     "type": "CHASSIS",
                     "vendor": "MikroTik",
                     "part_no": [platform],
                     "serial": serial,
-                }
-            ]
+                })
             eth = {}
             for n, f, r in self.cli_detail("/interface ethernet print detail without-paging"):
                 iface = r["default-name"]
@@ -160,5 +158,5 @@ class Script(BaseScript):
                         parts = [year, dt[1], dt[2]]
                         mfd = "-".join(parts)
                         x["mfg_date"] = mfd
-                    i += [x]
+                    i.append(x)
         return i

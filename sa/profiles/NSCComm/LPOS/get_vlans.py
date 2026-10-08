@@ -27,5 +27,5 @@ class Script(BaseScript):
             vid = int(match.group("vlan_id"))
             if vid == 1:
                 continue
-            r += [{"vlan_id": vid}]
+            r.append({"vlan_id": vid})
         return r

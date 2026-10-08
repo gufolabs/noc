@@ -18,7 +18,7 @@ class Script(BaseScript):
         device_id = self.scripts.get_fqdn()
         interfaces = []
         for n, f, r in self.cli_detail('/interface print detail without-paging where type="ether"'):
-            interfaces += [r["name"]]
+            interfaces.append(r["name"])
         # Get neighbors
         neighbors = []
         for n, f, r in self.cli_detail("/ip neighbor print detail without-paging"):
@@ -31,13 +31,11 @@ class Script(BaseScript):
                 continue
             if r.get("interface-name") is None or r.get("address") is None:
                 continue
-            neighbors += [
-                {
+            neighbors.append({
                     "device_id": r["identity"],
                     "local_interface": r["interface"],
                     "remote_interface": r["interface-name"],
                     "remote_ip": r["address"],
                     "platform": platform,
-                }
-            ]
+                })
         return {"device_id": device_id, "neighbors": neighbors}

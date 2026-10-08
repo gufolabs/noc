@@ -27,6 +27,6 @@ class Script(BaseScript):
             i = {"interface": f"lag-{match.group('number')}", "members": [], "type": "L"}
             c = self.cli(f"show lag {match.group('number')} port")
             for match1 in self.rx_port.finditer(c):
-                i["members"] += [match1.group("port")]
-            r += [i]
+                i["members"].append(match1.group("port"))
+            r.append(i)
         return r

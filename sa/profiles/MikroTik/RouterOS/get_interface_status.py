@@ -21,5 +21,5 @@ class Script(BaseScript):
             iface = {"interface": r["name"], "status": "R" in f}
             if (interface is not None) and (interface == r["name"]):
                 return [iface]
-            ifaces += [iface]
+            ifaces.append(iface)
         return ifaces

@@ -146,16 +146,14 @@ class Script(BaseScript):
                 sub["untagged_vlan"] = match.group("pvid")
                 if tagged:
                     sub["tagged_vlans"] = self.expand_rangelist(tagged)
-            interfaces += [
-                {
+            interfaces.append({
                     "name": ifname,
                     "type": "physical",
                     "admin_status": match.group("admin_status") == "enabled",
                     "oper_status": match.group("oper_status") == "up",
                     "mac": match.group("mac"),
                     "subinterfaces": [sub],
-                }
-            ]
+                })
         if self.has_capability("Network | LLDP"):
             v = self.cli("show lldp interface", cached=True)
             for match in self.rx_lldp_foxgate.finditer(v):
@@ -170,8 +168,7 @@ class Script(BaseScript):
         if not match:
             match = self.rx_mgmt2.search(v)
         ip_address = f"{match.group('ip')}/{IPv4.netmask_to_len(match.group('mask'))}"
-        interfaces += [
-            {
+        interfaces.append({
                 "name": "system",
                 "type": "SVI",
                 "admin_status": True,
@@ -188,8 +185,7 @@ class Script(BaseScript):
                         "vlan_ids": match.group("vlan_id"),
                     }
                 ],
-            }
-        ]
+            })
         return [{"interfaces": interfaces}]
 
     def execute_cli(self, **kwargs):
@@ -215,7 +211,7 @@ class Script(BaseScript):
             # Switchport
             if ifname in switchports:
                 # Bridge
-                sub["enabled_afi"] += ["BRIDGE"]
+                sub["enabled_afi"].append("BRIDGE")
                 u, t = switchports[ifname]["untagged"], switchports[ifname].get("tagged")
                 if u:
                     sub["untagged_vlan"] = u

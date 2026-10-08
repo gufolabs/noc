@@ -85,13 +85,11 @@ class Script(BaseScript):
         c = self.cli("show vrf")
         for match in self.rx_vrf.finditer(c):
             if match.group("vrf") != "default":
-                vrfs += [
-                    {
+                vrfs.append({
                         "forwarding_instance": match.group("vrf"),
                         "type": "VRF",
                         "interfaces": [],
-                    }
-                ]
+                    })
         vrf_name = ""
         c = self.cli("show interfaces", cached=True)
         for item in c.split("\n\n"):
@@ -116,7 +114,7 @@ class Script(BaseScript):
                 }
                 if match.group("description").strip() != "N/A":
                     iface["description"] = match.group("description").strip()
-                vrfs[0]["interfaces"] += [iface]
+                vrfs[0]["interfaces"].append(iface)
             else:
                 match = self.rx_iface2.search(item)
                 if match:
@@ -144,7 +142,7 @@ class Script(BaseScript):
                         iface["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
                     if match.group("ipv6_enable") == "yes":
                         if "enabled_afi" in iface["subinterfaces"][0]:
-                            iface["subinterfaces"][0]["enabled_afi"] += ["IPv6"]
+                            iface["subinterfaces"][0]["enabled_afi"].append("IPv6")
                         else:
                             iface["subinterfaces"][0]["enabled_afi"] = ["IPv6"]
                     if match.group("vrf"):
@@ -156,7 +154,7 @@ class Script(BaseScript):
                     iface["subinterfaces"][0]["ipv6_addresses"] = []
                     for line in item.splitlines():
                         if is_ipv6_prefix(line.strip()):
-                            iface["subinterfaces"][0]["ipv6_addresses"] += [line.strip()]
+                            iface["subinterfaces"][0]["ipv6_addresses"].append(line.strip())
                 match = self.rx_iface4.search(item)
                 if match:
                     iface["subinterfaces"][0]["mtu"] = match.group("mtu")
@@ -166,10 +164,10 @@ class Script(BaseScript):
                     if vrf_name:
                         for vrf in vrfs:
                             if vrf["forwarding_instance"] == vrf_name:
-                                vrf["interfaces"] += [iface]
+                                vrf["interfaces"].append(iface)
                                 break
                     else:
-                        vrfs[0]["interfaces"] += [iface]
+                        vrfs[0]["interfaces"].append(iface)
         c = self.cli("show interfaces switchport")
         for line in c.splitlines():
             match = self.rx_switchport.search(line)
@@ -205,6 +203,6 @@ class Script(BaseScript):
                     }
                 ],
             }
-            vrfs[0]["interfaces"] += [iface]
+            vrfs[0]["interfaces"].append(iface)
 
         return vrfs

@@ -112,7 +112,7 @@ class Script(BaseScript):
                         p["number"] = num[-1]
                     if v[3].isdigit():
                         p["mfg_date"] = self.get_date(v[3])
-                    r += [p]
+                    r.append(p)
         except self.snmp.TimeOutError:
             pass
         return r
@@ -133,7 +133,7 @@ class Script(BaseScript):
         }
         match = self.rx_descr.search(v)
         p["description"] = match.group("type").strip()
-        r += [p]
+        r.append(p)
         v = self.cli("show card state")
         for ll in v.split("\n"):
             p = {}
@@ -153,7 +153,7 @@ class Script(BaseScript):
                     p["part_no"] = [match1.group("part_no")]
                     p["serial"] = match1.group("serial")
                     p["mfg_date"] = self.get_date(match1.group("mfg_date"))
-                r += [p]
+                r.append(p)
             match = self.rx_imm.search(ll)
             if match:
                 number = match.group("number")
@@ -170,7 +170,7 @@ class Script(BaseScript):
                     p["serial"] = match1.group("serial")
                     p["mfg_date"] = self.get_date(match1.group("mfg_date"))
                     p["description"] = match1.group("platform")
-                r += [p]
+                r.append(p)
             match = self.rx_mda.search(ll)
             if match:
                 number = match.group("number")
@@ -187,7 +187,7 @@ class Script(BaseScript):
                     p["serial"] = match1.group("serial")
                     p["mfg_date"] = self.get_date(match1.group("mfg_date"))
                     p["description"] = match1.group("platform")
-                r += [p]
+                r.append(p)
             match = self.rx_sfm.search(ll)
             if match:
                 number = match.group("number")
@@ -204,7 +204,7 @@ class Script(BaseScript):
                     p["serial"] = match1.group("serial")
                     p["mfg_date"] = self.get_date(match1.group("mfg_date"))
                     p["description"] = match1.group("platform")
-                r += [p]
+                r.append(p)
                 for match1 in self.rx_flash.finditer(c):
                     if "NSN" in match1.group("part_no"):
                         vendor = "NSN"
@@ -218,7 +218,7 @@ class Script(BaseScript):
                         "serial": match1.group("serial"),
                         "revision": match1.group("revision"),
                     }
-                    r += [p]
+                    r.append(p)
             match = self.rx_cpm.search(ll)
             if match:
                 number = match.group("number")
@@ -235,7 +235,7 @@ class Script(BaseScript):
                     p["serial"] = match1.group("serial")
                     p["mfg_date"] = self.get_date(match1.group("mfg_date"))
                     p["description"] = match1.group("platform")
-                r += [p]
+                r.append(p)
                 for match1 in self.rx_flash.finditer(c):
                     if "NSN" in match1.group("part_no"):
                         vendor = "NSN"
@@ -249,5 +249,5 @@ class Script(BaseScript):
                         "serial": match1.group("serial"),
                         "revision": match1.group("revision"),
                     }
-                    r += [p]
+                    r.append(p)
         return r

@@ -44,13 +44,11 @@ class Script(BaseScript):
             if "MASTER" in match.group("status"):
                 typeif = "aggregated"
 
-                interfaces += [
-                    {
+                interfaces.append({
                         "type": typeif,
                         "mac": match.group("mac"),
                         "subinterfaces": [{"name": match.group("name"), "enabled_afi": ["BRIDGE"]}],
-                    }
-                ]
+                    })
 
                 # Bridge: brX, vnetX, virbrX, vifX.X, vethX(XEN), xenbr0, tapX, xapiX, ovs-system
                 if match.group("name")[:4] in [
@@ -61,14 +59,12 @@ class Script(BaseScript):
                     "xapi",
                     "ovs-",
                 ] or match.group("name")[:2] in ["br", "vi", "ta"]:
-                    interfaces += [
-                        {
+                    interfaces.append({
                             "name": match.group("name"),
                             "type": typeif,
                             "mac": match.group("mac"),
                             "subinterfaces": [],
-                        }
-                    ]
+                        })
 
             # only:  eth0-N, enpXsX, emX,
             if match.group("name")[:2] in ["et", "en", "em", "pe"]:
@@ -79,23 +75,19 @@ class Script(BaseScript):
                     ifmaster = self.cli("ip link show " + match.group("name"), cached=True)
                     for slaveif in self.rx_master.finditer(ifmaster):
                         # print slaveif.group("master"), "ddddddddddddddddddd"
-                        interfaces += [
-                            {
+                        interfaces.append({
                                 "name": match.group("name"),
                                 "type": typeif,
                                 "mac": match.group("mac"),
                                 "subinterfaces": [],
                                 "aggregated_interface": slaveif.group("master"),
-                            }
-                        ]
+                            })
                 else:
-                    interfaces += [
-                        {
+                    interfaces.append({
                             "name": match.group("name"),
                             "type": typeif,
                             "mac": match.group("mac"),
                             "subinterfaces": [],
-                        }
-                    ]
+                        })
 
         return [{"interfaces": interfaces}]

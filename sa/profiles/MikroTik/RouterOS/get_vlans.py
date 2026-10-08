@@ -33,7 +33,7 @@ class Script(BaseScript):
                         if i["vlan_id"] == vlan:
                             break
                     else:
-                        r += [{"vlan_id": vlan}]
+                        r.append({"vlan_id": vlan})
         except self.CLISyntaxError:
             pass
         return r

@@ -58,7 +58,7 @@ class Script(BaseScript):
             return None
         for match in self.rx_stack.finditer(cmd):
             i = match.group("id")
-            s += [i]
+            s.append(i)
         return s
 
     def execute_platform_cli(self, caps):
