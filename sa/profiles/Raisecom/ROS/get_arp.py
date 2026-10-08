@@ -35,11 +35,13 @@ class Script(BaseScript):
         v = self.cli("show arp")
         if not self.is_iscom2624g:
             for match in self.rx_line.finditer(v):
-                r.append({
+                r.append(
+                    {
                         "ip": match.group("ip"),
                         "mac": match.group("mac"),
                         "interface": f"ip{match.group('interface')}",
-                    })
+                    }
+                )
         else:
             for match in self.rx_line1.finditer(v):
                 r.append(match.groupdict())

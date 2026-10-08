@@ -31,12 +31,14 @@ class Script(BaseScript):
             v = self.cli("show mac-address all")
         r = []
         for match in self.rx_line.finditer(v):
-            r.append({
+            r.append(
+                {
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
                     "interfaces": [match.group("interface")],
                     "type": {"hit": "D", "dynamic": "D", "static": "S"}[
                         match.group("type").lower()
                     ],
-                })
+                }
+            )
         return r

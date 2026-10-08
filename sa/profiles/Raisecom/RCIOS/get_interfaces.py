@@ -89,7 +89,9 @@ class Script(BaseScript):
                 cfg = conf_interfaces[ifname]
                 for match in self.rx_trunk.finditer(cfg):
                     if iface["subinterfaces"][0].get("tagged_vlans"):
-                        iface["subinterfaces"][0]["tagged_vlans"].append(int(match.group("vlan_id")))
+                        iface["subinterfaces"][0]["tagged_vlans"].append(
+                            int(match.group("vlan_id"))
+                        )
                     else:
                         iface["subinterfaces"][0]["tagged_vlans"] = [int(match.group("vlan_id"))]
             interfaces.append(iface)

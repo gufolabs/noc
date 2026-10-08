@@ -56,11 +56,13 @@ class Script(BaseScript):
         try:
             v = self.cli("show arp all", cached=True)
             for match in self.rx_line.finditer(v):
-                r.append({
+                r.append(
+                    {
                         "ip": match.group("ip"),
                         "mac": match.group("mac"),
                         "interface": match.group("interface"),
-                    })
+                    }
+                )
         except self.CLISyntaxError:
             v = self.cli("show arp", cached=True)
             for match in self.rx_line1.finditer(v):
@@ -68,9 +70,11 @@ class Script(BaseScript):
                 if mac.lower() == "incomplete":
                     r.append({"ip": match.group("ip"), "mac": None, "interface": None})
                 else:
-                    r.append({
+                    r.append(
+                        {
                             "ip": match.group("ip"),
                             "mac": match.group("mac"),
                             "interface": match.group("port"),
-                        })
+                        }
+                    )
         return r

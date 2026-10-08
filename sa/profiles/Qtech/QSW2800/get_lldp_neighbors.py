@@ -42,7 +42,8 @@ class Script(BaseScript):
         for match in self.rx_int.finditer(lldp):
             if match.group("count") == 0:
                 continue
-            result.append({
+            result.append(
+                {
                     "local_interface": match.group("interface"),
                     "neighbors": [
                         {
@@ -60,5 +61,6 @@ class Script(BaseScript):
                             "remote_port_description": match.group("port_descr") or None,
                         }
                     ],
-                })
+                }
+            )
         return result

@@ -32,9 +32,11 @@ class Script(BaseScript):
         cmd = self.cli("show port-channel", cached=True)
         for match in self.rx_item.finditer(cmd):
             members = match.group("members").split()
-            r.append({
+            r.append(
+                {
                     "interface": f"port-channel{match.group('portgroup')}",
                     "members": members,
                     "type": "L" if match.group("mode") == "Lacp" else "S",
-                })
+                }
+            )
         return r

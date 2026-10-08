@@ -124,7 +124,8 @@ class Script(BaseScript):
         check = self.snmp.get("1.3.6.1.4.1.41752.911.10.1.10.0")
         if check:
             # temp1
-            r.append({
+            r.append(
+                {
                     "name": "temp_out",
                     "status": True,
                     "description": "Температура в шкафу",
@@ -134,7 +135,8 @@ class Script(BaseScript):
                         "noc::sensor::mode::temperature",
                     ],
                     "snmp_oid": "1.3.6.1.4.1.41752.911.10.1.2.0",
-                })
+                }
+            )
         r += [
             {
                 "name": "current_load",
@@ -230,7 +232,8 @@ class Script(BaseScript):
                 for num in range(1, 5):
                     v = self.snmp.get(f"1.3.6.1.4.1.27514.102.0.{23 + 1}.0")
                     if v:
-                        r.append({
+                        r.append(
+                            {
                                 "name": f"elmeter_Tariff{num}",
                                 "status": bool(v),
                                 "description": f"Электросчётчик. Суммарное значение потреблённой мощности по тарифу {num}",
@@ -241,7 +244,8 @@ class Script(BaseScript):
                                     "noc::sensor::target::power_load",
                                 ],
                                 "snmp_oid": f"1.3.6.1.4.1.41752.911.10.1.13.{4 + num}.0",
-                            })
+                            }
+                        )
         return r
 
     def get_chassis_sensors(self):

@@ -78,11 +78,13 @@ class Script(BaseScript):
                 chassis_id_subtype = LLDP_CHASSIS_SUBTYPE_MAC
             else:
                 chassis_id_subtype = LLDP_CHASSIS_SUBTYPE_LOCAL
-            r_rem.append({
+            r_rem.append(
+                {
                     "local_interface": match.group("port"),
                     "remote_chassis_id": chassis_id,
                     "remote_chassis_id_subtype": chassis_id_subtype,
-                })
+                }
+            )
         v = self.cli("show lldp remote detail")
         # If detail command not contain ch id
         ext_ch_id = False

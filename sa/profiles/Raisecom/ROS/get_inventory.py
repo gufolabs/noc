@@ -120,12 +120,14 @@ class Script(BaseScript):
                 # Transfer Distance(meter): 2
                 # SFP register information CRC recalculate ERROR!
                 continue
-            r.append({
+            r.append(
+                {
                     "type": "XCVR",
                     "number": num,
                     "vendor": d["vendor name"].strip(),
                     "part_no": d["vendor part number"].strip(),
                     "serial": d["vendor serial number"].strip(),
                     "description": description,
-                })
+                }
+            )
         return r
