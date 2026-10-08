@@ -180,7 +180,7 @@ class Command(BaseCommand):
     def handle(self, cmd, *args, **options):
         if "infile" in options and not sys.stdin.isatty():
             for line in options["infile"]:
-                options["key"] += [int(line)]
+                options["key"].append(int(line))
         return getattr(self, f"handle_{cmd.replace('-', '_')}")(*args, **options)
 
     def handle_list(self, scheduler: Scheduler, *args, **options):
@@ -259,7 +259,7 @@ class Command(BaseCommand):
                         offset = random.random()
                         ts = self.get_next_timestamp(86400, offset=offset, ts=ts)
                         if tp.match(ts):
-                            bulk += [UpdateOne({"_id": job["_id"]}, {"$set": {"o": offset}})]
+                            bulk.append(UpdateOne({"_id": job["_id"]}, {"$set": {"o": offset}}))
                             break
                         i += 1
             if bulk:
@@ -282,7 +282,7 @@ class Command(BaseCommand):
         for j in coll.find(q).sort("ts"):
             start += shift_interval
             self.print("Change: ", j["ts"], "-->", start)
-            bulk += [UpdateOne({"_id": j["_id"]}, {"$set": {"ts": start}})]
+            bulk.append(UpdateOne({"_id": j["_id"]}, {"$set": {"ts": start}}))
         if options.get("force", False):
             self.print("Jobs will be reschedule")
             for i in reversed(range(1, 10)):
@@ -421,9 +421,9 @@ class Command(BaseCommand):
         """
         params = [str(pool.id)]
         if mos:
-            params += [mos]
+            params.append(mos)
         if slots:
-            params += [slots]
+            params.append(slots)
         cursor = pg_conn.cursor()
         cursor.execute(query, params)
         c_slot = None

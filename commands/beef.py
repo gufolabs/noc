@@ -204,16 +204,16 @@ class Command(BaseCommand):
             f"Spec     : {beef.spec}",
             f"Changed  : {beef.changed}",
         ]
-        r += ["Description:\n  {}\n".format(beef.description.replace("\n", "\n  "))]
-        r += ["--[CLI FSM]----------"]
+        r.append("Description:\n  {}\n".format(beef.description.replace("\n", "\n  ")))
+        r.append("--[CLI FSM]----------")
         for c in beef.cli_fsm:
-            r += [f"---- State: {c.state}"]
+            r.append(f"---- State: {c.state}")
             for n, reply in enumerate(c.reply):
                 r += [f"-------- Packet #{n}", f"{beef._cli_decoder(reply)!r}"]
-        r += ["--[CLI]----------"]
+        r.append("--[CLI]----------")
         for c in beef.cli:
-            r += [f"---- Names: {', '.join(c.names)}"]
-            r += [f"-------- Request: {c.request!r}"]
+            r.append(f"---- Names: {', '.join(c.names)}")
+            r.append(f"-------- Request: {c.request!r}")
             for n, reply in enumerate(c.reply):
                 r += [f"-------- Packet #{n}", f"{beef._cli_decoder(reply)!r}"]
         # Dump output

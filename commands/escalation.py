@@ -100,7 +100,7 @@ class Command(BaseCommand):
                 p = model.get_by_id(k.profile)
                 if not p or getattr(p, "show_in_summary", True) is False:
                     continue
-                r += [{"profile": p.name, "summary": k.summary}]
+                r.append({"profile": p.name, "summary": k.summary})
             return sorted(r, key=lambda x: -x["summary"])
 
         def iter_consequences(alarm):

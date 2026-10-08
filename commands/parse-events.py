@@ -102,12 +102,12 @@ class Command(BaseCommand):
             s_total = sum(stats[k] for k in stats if not self.is_ignored(k))
             data = [["Events", "%", "Event class"]]
             for ecls, qty in s_data:
-                data += [[str(qty), f"{float(stats[ecls] * 100) / float(total):3.2f}%", ecls]]
+                data.append([str(qty), f"{float(stats[ecls] * 100) / float(total):3.2f}%", ecls])
             # Calculate classification quality
-            data += [["", f"{float(s_total * 100) / total:3.2f}%", "Classification Quality"]]
+            data.append(["", f"{float(s_total * 100) / total:3.2f}%", "Classification Quality"])
             # Ruleset hit rate
             rs_rate = float(metrics["rules_checked"].value) / float(total)
-            data += [["", f"{rs_rate:.2f}", "Rule checks per event"]]
+            data.append(["", f"{rs_rate:.2f}", "Rule checks per event"])
             # Dump table
             self.print("Event classes summary:")
             self.print(format_table([4, 6, 10], data))

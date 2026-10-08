@@ -141,7 +141,7 @@ class Command(BaseCommand):
             op["$set"] = op_set
         if op_unset:
             op["$unset"] = op_unset
-        self.bulk += [UpdateOne({"_id": id}, op)]
+        self.bulk.append(UpdateOne({"_id": id}, op))
         if len(self.bulk) % self.BATCH_SIZE == 0:
             self.stdout.write("Commiting changes to database\n")
             try:

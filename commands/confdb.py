@@ -200,10 +200,10 @@ class Command(BaseCommand):
             row = []
             for key in r:
                 if key not in headers:
-                    headers += [key]
-                    width += [40]
+                    headers.append(key)
+                    width.append(40)
                 row.insert(headers.index(key), r[key])
-            table += [row]
+            table.append(row)
         if table:
             self.print("Result:\n", format_table(width, [headers, *table]))
         else:

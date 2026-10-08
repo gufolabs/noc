@@ -53,15 +53,15 @@ class Command(BaseCommand):
                 r = []
                 for f in fields:
                     if f == "name":
-                        r += [mo.name]
+                        r.append(mo.name)
                     elif f == "address":
-                        r += [mo.address]
+                        r.append(mo.address)
                     elif f == "platform":
-                        r += [mo.platform.full_name]
+                        r.append(mo.platform.full_name)
                     elif f == "profile":
-                        r += [mo.profile.name]
+                        r.append(mo.profile.name)
                     elif f == "version":
-                        r += [mo.version.version]
+                        r.append(mo.version.version)
                 self.print(",".join(r))
                 x += 1
                 if x >= sample:

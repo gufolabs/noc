@@ -1164,9 +1164,9 @@ class Config(BaseConfig):
                 self._mongo_connection_args["maxIdleTimeMS"] = self.mongo.max_idle_time * 1000
             url = ["mongodb://"]
             if has_credentials:
-                url += [f"{urllib_quote(self.mongo.user)}:{urllib_quote(self.mongo.password)}@"]
-            url += [",".join(str(h) for h in hosts)]
-            url += [f"/{self.mongo.db}"]
+                url.append(f"{urllib_quote(self.mongo.user)}:{urllib_quote(self.mongo.password)}@")
+            url.append(",".join(str(h) for h in hosts))
+            url.append(f"/{self.mongo.db}")
             self._mongo_connection_args["host"] = "".join(url)
             if self.perfomance.enable_mongo_hist:
                 from noc.core.mongo.monitor import MongoCommandSpan

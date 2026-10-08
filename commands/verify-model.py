@@ -58,7 +58,7 @@ class Command(BaseCommand):
         for m in ObjectModel.objects.all():
             self.errors = []
             if (m.connection_rule is not None) and (not m.cr_context):
-                self.errors += ["Missing 'cr_context' field"]
+                self.errors.append("Missing 'cr_context' field")
             for c in m.connections:
                 self.common_check(c)
                 check = CHECK_MAP.get(c.type.name)
@@ -70,7 +70,7 @@ class Command(BaseCommand):
                     self.stdout.write(f"    {e}\n")
 
     def e(self, connection, msg):
-        self.errors += [f"{connection.name}: {msg}"]
+        self.errors.append(f"{connection.name}: {msg}")
 
     def common_check(self, c):
         if c.gender not in c.type.genders:

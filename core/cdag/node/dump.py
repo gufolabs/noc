@@ -45,7 +45,7 @@ class DumpNode(BaseCDAGNode):
         for k, v in kwargs.items():
             if v is None:
                 continue
-            r += [f"{k}: {v}"]
+            r.append(f"{k}: {v}")
         ts = datetime.datetime.fromtimestamp(ts // NS)
         logger.info(f"[{ts}|{';'.join(labels)}] Inputs: {','.join(r)}")
 

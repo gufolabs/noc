@@ -402,20 +402,18 @@ class Command(BaseCommand):
                 self.save_json(self.__backup_dir, fp, o)
 
             if res.tx and not self.is_list_contain_attr(o["data"], "tx_wavelength"):
-                o["data"] += [{"interface": "optical", "attr": "tx_wavelength", "value": res.tx}]
+                o["data"].append({"interface": "optical", "attr": "tx_wavelength", "value": res.tx})
 
             if res.rx and not self.is_list_contain_attr(o["data"], "rx_wavelength"):
-                o["data"] += [{"interface": "optical", "attr": "rx_wavelength", "value": res.rx}]
+                o["data"].append({"interface": "optical", "attr": "rx_wavelength", "value": res.rx})
 
             if res.distance and not self.is_list_contain_attr(o["data"], "distance_max"):
-                o["data"] += [
-                    {"interface": "optical", "attr": "distance_max", "value": res.distance}
-                ]
+                o["data"].append({"interface": "optical", "attr": "distance_max", "value": res.distance})
 
             if not self.is_list_contain_attr(o["data"], "bidi"):
-                o["data"] += [{"interface": "optical", "attr": "bidi", "value": res.isbidi}]
+                o["data"].append({"interface": "optical", "attr": "bidi", "value": res.isbidi})
             if not self.is_list_contain_attr(o["data"], "xwdm"):
-                o["data"] += [{"interface": "optical", "attr": "xwdm", "value": res.isxwdm}]
+                o["data"].append({"interface": "optical", "attr": "xwdm", "value": res.isxwdm})
 
             if self.__output_dir:
                 self.save_json(self.__output_dir, fp, o)
@@ -439,19 +437,19 @@ class Command(BaseCommand):
             json_data = o.json_data.get("data")
 
             if res.tx and not self.is_list_contain_attr(json_data, "tx_wavelength"):
-                o.data += [ModelAttr(interface="optical", attr="tx_wavelength", value=res.tx)]
+                o.data.append(ModelAttr(interface="optical", attr="tx_wavelength", value=res.tx))
 
             if res.rx and not self.is_list_contain_attr(json_data, "rx_wavelength"):
-                o.data += [ModelAttr(interface="optical", attr="rx_wavelength", value=res.rx)]
+                o.data.append(ModelAttr(interface="optical", attr="rx_wavelength", value=res.rx))
 
             if res.distance and not self.is_list_contain_attr(json_data, "distance_max"):
-                o.data += [ModelAttr(interface="optical", attr="distance_max", value=res.distance)]
+                o.data.append(ModelAttr(interface="optical", attr="distance_max", value=res.distance))
 
             if not self.is_list_contain_attr(json_data, "bidi"):
-                o.data += [ModelAttr(interface="optical", attr="bidi", value=res.isbidi)]
+                o.data.append(ModelAttr(interface="optical", attr="bidi", value=res.isbidi))
 
             if not self.is_list_contain_attr(json_data, "xwdm"):
-                o.data += [ModelAttr(interface="optical", attr="xwdm", value=res.isxwdm)]
+                o.data.append(ModelAttr(interface="optical", attr="xwdm", value=res.isxwdm))
 
             if self.__output_dir:
                 self.save_obj_json(self.__output_dir, o)

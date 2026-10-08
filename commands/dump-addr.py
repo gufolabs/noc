@@ -57,7 +57,7 @@ class Command(BaseCommand):
             ]
             for c in ctr:
                 for cc in self.DATA[c]:
-                    row += [bld.data.get(cc, "") or ""]
+                    row.append(bld.data.get(cc, "") or "")
             writer.writerow(row)
         # Dump children
         for c in d.get_children().order_by("name"):

@@ -148,9 +148,9 @@ class Command(BaseCommand):
             n = len(data)
             r = ["{"]
             for k, v in data:
-                r += [f"    {k}: {js_v(v)}{',' if n > 1 else ''}"]
+                r.append(f"    {k}: {js_v(v)}{',' if n > 1 else ''}")
                 n -= 1
-            r += ["}"]
+            r.append("}")
             return r
 
         n = len(data)
@@ -218,10 +218,10 @@ class Command(BaseCommand):
                                 "blank": f.null,
                                 "widget": f"{rc}.LookupField",
                             }
-                            fields += [fd]
+                            fields.append(fd)
                             fd = {"type": "string", "name": f"{f.name}__label", "persist": False}
-                            fields += [fd]
-                            tv["requires"] += [f"NOC.{rc}.LookupField"]
+                            fields.append(fd)
+                            tv["requires"].append(f"NOC.{rc}.LookupField")
                         else:
                             fd = {
                                 "type": self.model_map[fc][0],
@@ -232,7 +232,7 @@ class Command(BaseCommand):
                             }
                             if f.default != NOT_PROVIDED and not callable(f.default):
                                 fd["default"] = f.default
-                            fields += [fd]
+                            fields.append(fd)
                     tv["base_class"] = "ExtModelApplication"
                 else:
                     # Document
@@ -253,7 +253,7 @@ class Command(BaseCommand):
                         }
                         if f.default:
                             fd["default"] = f.default
-                        fields += [fd]
+                        fields.append(fd)
                     tv["base_class"] = "ExtDocApplication"
                 tv["fields"] = fields
             # Format fields for models
@@ -263,21 +263,21 @@ class Command(BaseCommand):
                 for f in tv["fields"]:
                     ff = [("name", f["name"]), ("type", f["type"])]
                     if "default" in f and f["type"] != "auto":
-                        ff += [("defaultValue", f["default"])]
+                        ff.append(("defaultValue", f["default"]))
                     if "persist" in f:
-                        ff += [("persist", f["persist"])]
-                    fields += [ff]
+                        ff.append(("persist", f["persist"]))
+                    fields.append(ff)
                 tv["js_fields"] = self.to_js(fields, 1)
                 # Form fields
                 form_fields = []
                 for f in [x for x in tv["fields"] if "widget" in x]:
                     ff = [("name", f["name"]), ("xtype", f["widget"])]
                     if f["widget"] == "checkboxfield":
-                        ff += [("boxLabel", f["label"])]
+                        ff.append(("boxLabel", f["label"]))
                     else:
-                        ff += [("fieldLabel", f["label"])]
-                    ff += [("allowBlank", f["blank"])]
-                    form_fields += [ff]
+                        ff.append(("fieldLabel", f["label"]))
+                    ff.append(("allowBlank", f["blank"]))
+                    form_fields.append(ff)
                 tv["js_form_fields"] = self.to_js(form_fields, 1)
             # Check applications is not exists
             app_root = os.path.join("services", "web", "apps", m, a)

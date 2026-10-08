@@ -131,26 +131,24 @@ class CDAG:
                     v = getattr(node.config, fn)
                     if hasattr(v, "value"):
                         v = v.value
-                    attrs += [f"{fn}: {v}"]
+                    attrs.append(f"{fn}: {v}")
                 if attrs:
                     n_attrs = "\\n" + "\\n".join(attrs)
             if node.sticky:
                 style = ', style="bold"'
             else:
                 style = ""
-            r += [
-                f'  {dot_id} [label="{node_id}\\ntype: {node.name}{n_attrs}", shape="{node.dot_shape}"{style}];'
-            ]
+            r.append(f'  {dot_id} [label="{node_id}\\ntype: {node.name}{n_attrs}", shape="{node.dot_shape}"{style}];')
             unbound = list(node.iter_unbound_inputs())
             if unbound:
                 tbc = []
                 for n in unbound:
                     cnt = next(tb_count)
                     tb_name = f"p{cnt:05d}"
-                    tbc += [f"<{tb_name}> {n}"]
-                    tb_conn += [f'  TB:{tb_name} -> {dot_id} [label="{n}"];']
+                    tbc.append(f"<{tb_name}> {n}")
+                    tb_conn.append(f'  TB:{tb_name} -> {dot_id} [label="{n}"];')
                 tb_labels = " | ".join(tbc)
-                tb += [f"{{ {node_id} | {{ {tb_labels} }}}}"]
+                tb.append(f"{{ {node_id} | {{ {tb_labels} }}}}")
         # Render terminal block and its edges
         if tb:
             tb_label = " | ".join(tb)
@@ -159,6 +157,6 @@ class CDAG:
         # Edges
         for node in self.nodes.values():
             for rs in node.iter_subscribers():
-                r += [f'  {n_map[node.node_id]} -> {n_map[rs.node.node_id]} [label="{rs.input}"];']
-        r += ["}"]
+                r.append(f'  {n_map[node.node_id]} -> {n_map[rs.node.node_id]} [label="{rs.input}"];')
+        r.append("}")
         return "\n".join(r)

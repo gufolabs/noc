@@ -103,9 +103,9 @@ class Command(BaseCommand):
         self.rd_cache = {}
         self.p_power = defaultdict(int)
         out = ["graph {"]
-        out += ["    node [fontsize=12];"]
-        out += ["    edge [fontsize=8];"]
-        out += ["    overlap=scale;"]
+        out.append("    node [fontsize=12];")
+        out.append("    edge [fontsize=8];")
+        out.append("    overlap=scale;")
         # out += ["    splines=true;"]
         objects = set()
         prefixes = set()
@@ -120,12 +120,12 @@ class Command(BaseCommand):
                 o = self.get_object(si.object)
                 if not o:
                     continue
-                out += [f'    {o_id} [shape=box;style=filled;label="{o.name}"];']
+                out.append(f'    {o_id} [shape=box;style=filled;label="{o.name}"];')
             if si.prefix not in prefixes:
                 prefixes.add(si.prefix)
-                out += [f'    {p_id} [shape=ellipse;label="{si.prefix}"];']
-            out += [f'    {o_id} -- {p_id} [label="{si.interface}"];']
-        out += ["}"]
+                out.append(f'    {p_id} [shape=ellipse;label="{si.prefix}"];')
+            out.append(f'    {o_id} -- {p_id} [label="{si.interface}"];')
+        out.append("}")
         data = "\n".join(out)
         if ext is None:
             print(data)

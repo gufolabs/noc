@@ -201,7 +201,7 @@ class Command(BaseCommand):
         filter = filter or []
         filters = filter[:]
         if objects:
-            filters += [f"id({','.join(objects)})"]
+            filters.append(f"id({','.join(objects)})")
         for obj_id, change_id, data in ds.iter_data(filters=filters):
             gt = change_id.generation_time.strftime("%Y-%m-%d %H:%M:%S")
             self.print(f"===[id: {obj_id}, change id: {change_id}, time: {gt}]================")

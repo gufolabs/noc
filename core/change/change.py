@@ -148,7 +148,7 @@ def apply_ch_dictionary(changes: list[dict[str, Any]]) -> None:
                 r["bi_id"] = item.bi_id
             lt = time.localtime(ts or t0)
             r["ts"] = time.strftime("%Y-%m-%d %H:%M:%S", lt)
-            data += [orjson.dumps(r)]
+            data.append(orjson.dumps(r))
         for partition in range(n_parts):
             svc.publish(
                 value=b"\n".join(data),

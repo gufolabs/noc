@@ -137,7 +137,7 @@ class Command(BaseCommand):
                 elif last_ts > ts:
                     continue
                 m = str(MAC(int(mac)))
-                all_macs += [m]
+                all_macs.append(m)
                 mac_iface[m] = iface
             # Resolve MACs to known chassis-id
             mac_map = DiscoveryID.find_objects(all_macs)

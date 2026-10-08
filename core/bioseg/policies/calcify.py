@@ -68,9 +68,9 @@ class CalcifyBioSegPolicy(BaseBioSegPolicy):
         for link in Link.objects.filter(linked_segments=self.attacker.id):
             for iface in link.interfaces:
                 if iface.managed_object.segment.id == self.attacker.id:
-                    local_interfaces += [iface]
+                    local_interfaces.append(iface)
                 else:
-                    remote_interfaces += [iface]
+                    remote_interfaces.append(iface)
         return {
             "interfaces": sorted(local_interfaces, key=lambda x: alnum_key(x.name)),
             "parent_interfaces": sorted(remote_interfaces, key=lambda x: alnum_key(x.name)),

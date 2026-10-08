@@ -60,7 +60,7 @@ class Command(BaseCommand):
                     else:
                         self.print(ln, rn, i.get("nri_name"))
                         status = "Failed to convert to local name"
-                    r += [(i["name"], rn, i.get("nri_name", "--"), status)]
+                    r.append((i["name"], rn, i.get("nri_name", "--"), status))
                 r = [
                     ("Local", "Remote", "Interface NRI", "Status"),
                     *sorted(r, key=lambda x: alnum_key(x[0])),
