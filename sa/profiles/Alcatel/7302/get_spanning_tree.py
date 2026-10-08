@@ -35,7 +35,7 @@ class Script(BaseScript):
                 # MSTP
                 v = self.cli("show mstp port-instance detail")
             except self.CLISyntaxError:
-                r["instances"] += [instance]
+                r["instances"].append(instance)
                 return r
 
         for e in self.split_re.split(v):
@@ -55,8 +55,7 @@ class Script(BaseScript):
             elif "stp port parameters" in e:
                 # Port parameter block
                 kv = dict(self.k_v_re.findall(e))
-                instance["interfaces"] += [
-                    {
+                instance["interfaces"].append({
                         "interface": f"ethernet:{int(int(kv['port']) + 1)}",
                         "port_id": (
                             f"{int(kv['designated-port'].split(':')[0], 16)}."
@@ -73,7 +72,6 @@ class Script(BaseScript):
                         ),
                         "point_to_point": kv["oper-p2p"] == "p2p",
                         "edge": kv["oper-edge-port"] != "no-edge-port",
-                    }
-                ]
-        r["instances"] += [instance]
+                    })
+        r["instances"].append(instance)
         return r

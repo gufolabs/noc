@@ -56,7 +56,7 @@ class Script(BaseScript):
             if not 3 < slot < 18:
                 # NCU & ACU
                 continue
-            r += [str(slot)]
+            r.append(str(slot))
         return r
 
     def execute_platform_cli(self, caps):

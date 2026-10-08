@@ -46,13 +46,12 @@ class Script(BaseScript):
                     if vlan_type == "default":
                         untagged = vlan
                     if vlan_type == "qtagged":
-                        tagget += [vlan]
+                        tagget.append(vlan)
                 shortname = self.profile.convert_interface_name(i)
                 for p in self.scripts.get_portchannel():
                     if p["interface"] == shortname:
                         members = p["members"]
-                r += [
-                    {
+                r.append({
                         "interface": f"Ag {i}",
                         "status": "enabled",
                         "description": "",
@@ -60,8 +59,7 @@ class Script(BaseScript):
                         "802.1ad Tunnel": False,
                         "tagged": tagget,
                         "members": members,
-                    }
-                ]
+                    })
                 if untagged:
                     r[-1]["untagged"] = untagged
         if members:
@@ -76,7 +74,7 @@ class Script(BaseScript):
             if vlan_type == "default":
                 iface_vlans[interface]["untagged"] = match.group("vlan")
             if vlan_type == "qtagged":
-                iface_vlans[interface]["tagged"] += [match.group("vlan")]
+                iface_vlans[interface]["tagged"].append(match.group("vlan"))
         for match in self.rx_line.finditer(self.cli("show interfaces status")):
             interface = match.group("interface")
             if interface not in portchannel_members:
@@ -91,5 +89,5 @@ class Script(BaseScript):
                 }
                 if interface in iface_vlans and "untagged" in iface_vlans[interface]:
                     i["untagged"] = iface_vlans[interface]["untagged"]
-                r += [i]
+                r.append(i)
         return r

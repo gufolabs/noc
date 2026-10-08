@@ -28,9 +28,9 @@ class Profile(BaseProfile):
     def get_interface_names(self, name):
         r = []
         if name.startswith("1:"):
-            r += [name[2:]]
+            r.append(name[2:])
         elif is_int(name):
-            r += [f"1:{name}"]
+            r.append(f"1:{name}")
         return r
 
     def convert_interface_name(self, name):

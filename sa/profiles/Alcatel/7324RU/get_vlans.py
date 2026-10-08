@@ -31,5 +31,5 @@ class Script(BaseScript):
         r = []
         for match in self.rx_vlan.finditer(v):
             if match.group("vstatus") == "enabled":
-                r += [{"vlan_id": int(match.group("vid")), "name": match.group("vname")}]
+                r.append({"vlan_id": int(match.group("vid")), "name": match.group("vname")})
         return r

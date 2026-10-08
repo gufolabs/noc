@@ -31,8 +31,7 @@ class Script(BaseScript):
         p = self.scripts.get_version()
         serial = self.capabilities.get("Chassis | Serial Number")
         revision = self.capabilities.get("Chassis | HW Version")
-        objects += [
-            {
+        objects.append({
                 "type": "CHASSIS",
                 "number": None,
                 "vendor": "ALU",
@@ -41,8 +40,7 @@ class Script(BaseScript):
                 "part_no": p["platform"],
                 "revision": revision,
                 "builtin": False,
-            }
-        ]
+            })
         # Transiver Detected
         iface = self.cli("show ni")
         for match in self.rx_ni.finditer(iface):
@@ -64,8 +62,7 @@ class Script(BaseScript):
                 part = "Cisco | Transceiver | 1G | GLC-BX-D"
             else:
                 part = "NoName | Transceiver | 1G | SFP SX"
-            objects += [
-                {
+            objects.append({
                     "type": "XCVR",
                     "number": number,
                     "vendor": "NONAME",
@@ -74,6 +71,5 @@ class Script(BaseScript):
                     "part_no": [part],
                     "revision": hw_rev,
                     "builtin": False,
-                }
-            ]
+                })
         return objects

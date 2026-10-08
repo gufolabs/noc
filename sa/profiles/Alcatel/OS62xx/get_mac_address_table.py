@@ -28,12 +28,10 @@ class Script(BaseScript):
                 cmd += f" ethernet {interface}"
         r = []
         for v, m, port, type in parse_table(self.cli(cmd)):
-            r += [
-                {
+            r.append({
                     "vlan_id": v,
                     "mac": m,
                     "interfaces": [port],
                     "type": {"dynamic": "D", "static": "S"}[type.lower()],
-                }
-            ]
+                })
         return r

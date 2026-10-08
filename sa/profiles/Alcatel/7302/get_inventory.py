@@ -38,7 +38,7 @@ class Script(BaseScript):
     def execute_cli(self, **kwargs):
         r = []
         v = self.scripts.get_version()
-        r += [{"type": "CHASSIS", "vendor": "ALCATEL", "part_no": [v["platform"]]}]
+        r.append({"type": "CHASSIS", "vendor": "ALCATEL", "part_no": [v["platform"]]})
         v = self.cli("show equipment slot detail")
         for c in self.rx_split.finditer(v):
             data = c.group("data")
@@ -63,7 +63,7 @@ class Script(BaseScript):
             match = self.rx_serial.search(data)
             if match:
                 slot["serial"] = match.group("serial").replace('"', "")
-            r += [slot]
+            r.append(slot)
 
         return r
 
@@ -80,7 +80,7 @@ class Script(BaseScript):
             slots += 1
             if b_type == "EMPTY":
                 continue
-            r += [{"number": slots, "type": "LINECARD", "vendor": "Alcatel", "part_no": b_type}]
+            r.append({"number": slots, "type": "LINECARD", "vendor": "Alcatel", "part_no": b_type})
             if b_serial is not None:
                 sn = b_serial.strip().strip("\x00")
                 r[-1]["serial"] = sn

@@ -35,8 +35,7 @@ class Script(BaseScript):
             match = self.rx_line.match(line.strip())
             if match:
                 vlan_id = int(match.group("vlan_id"))
-                r += [
-                    {
+                r.append({
                         "vlan_id": vlan_id,
                         "mac": match.group("mac"),
                         "interfaces": [match.group("interfaces")],
@@ -46,6 +45,5 @@ class Script(BaseScript):
                             "Static (fixed,non-aging)": "S",
                             "Multicast": "M",
                         }[match.group("type")],
-                    }
-                ]
+                    })
         return r

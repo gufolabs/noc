@@ -29,19 +29,17 @@ class Script(BaseScript):
             if self.is_version_gte_6_3_4:
                 data1 = self.cli(f"show linkagg {int(port)} port")
                 for match1 in self.rx_line1.finditer(data1):
-                    members += [match1.group("interface")]
+                    members.append(match1.group("interface"))
             else:
                 if not data1:
                     data1 = self.cli("show linkagg port")
                 for match1 in self.rx_line2.finditer(data1):
                     if int(match1.group("port")) == port:
-                        members += [match1.group("interface")]
-            r += [
-                {
+                        members.append(match1.group("interface"))
+            r.append({
                     "interface": f"{int(port)}",
                     "members": members,
                     # <!> TODO: port-channel type detection
                     "type": "L",
-                }
-            ]
+                })
         return r

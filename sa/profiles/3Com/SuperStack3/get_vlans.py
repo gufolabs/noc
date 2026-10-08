@@ -26,7 +26,7 @@ class Script(BaseScript):
             if match.group("vlan_id") == "1":
                 continue
             if match.group("name"):
-                r += [{"vlan_id": int(match.group("vlan_id")), "name": match.group("name").strip()}]
+                r.append({"vlan_id": int(match.group("vlan_id")), "name": match.group("name").strip()})
             else:
-                r += [{"vlan_id": int(match.group("vlan_id"))}]
+                r.append({"vlan_id": int(match.group("vlan_id"))})
         return r

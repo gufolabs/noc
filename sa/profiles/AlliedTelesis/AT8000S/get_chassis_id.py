@@ -34,7 +34,7 @@ class Script(BaseScript):
                     if m == i[1]:
                         break
                 else:
-                    macs += [i[1]]
+                    macs.append(i[1])
         except self.CLISyntaxError:
             pass
 
