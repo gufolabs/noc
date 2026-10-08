@@ -62,15 +62,15 @@ class SearchMacro(BaseMacro):
         # Render
         out = ["<table border='0'>"]
         if "title" in args:
-            out += [f"<tr><th>{args['title']}</th></tr>"]
+            out.append(f"<tr><th>{args['title']}</th></tr>")
         for a in q:
             link = f"/api/card/view/kb/{int(a.id)}/"
-            out += ["<tr>"]
+            out.append("<tr>")
             for f in display_list:
                 if f == "id":
-                    out += [f"<td><a href='{link}'>KB{getattr(a, f)}</a></td>"]
+                    out.append(f"<td><a href='{link}'>KB{getattr(a, f)}</a></td>")
                 else:
-                    out += [f"<td><a href='{link}'>{getattr(a, f)}</a></td>"]
-            out += ["</tr>"]
-        out += ["</table>"]
+                    out.append(f"<td><a href='{link}'>{getattr(a, f)}</a></td>")
+            out.append("</tr>")
+        out.append("</table>")
         return "\n".join(out)

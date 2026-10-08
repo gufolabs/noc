@@ -24,7 +24,7 @@ class CSVParser(BaseParser):
         r += ["</thead>", "<tbody>"]
         for row in reader:
             r += ["<TR>"] + [f"<TD>{smart_text(c)}</TD>" for c in row] + ["</TR>"]
-        r += ["</tbody></TABLE>"]
+        r.append("</tbody></TABLE>")
         r += [
             "<script type='text/javascript'>",
             "$(document).ready(function() {$('#csvtable').tablesorter();});",

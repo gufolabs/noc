@@ -33,9 +33,9 @@ class JinjaDashboard(BaseDashboard):
         pm_template_path = []
         for p in config.get_customized_paths("", prefer_custom=True):
             if p:
-                pm_template_path += [os.path.join(p, "templates/ddash/")]
+                pm_template_path.append(os.path.join(p, "templates/ddash/"))
             else:
-                pm_template_path += [config.path.pm_templates]
+                pm_template_path.append(config.path.pm_templates)
         j2_env = Environment(loader=FileSystemLoader(pm_template_path))
         j2_env.globals["noc_db_metrics"] = config.clickhouse.db
         tmpl = j2_env.get_template(self.template)

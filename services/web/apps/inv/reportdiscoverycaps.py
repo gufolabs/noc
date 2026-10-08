@@ -59,9 +59,9 @@ class ReportDiscoveryCapsApplication(SimpleReport):
         columns = (_("Managed Object"), _("Address"), _("Object"), _("Capabilities"))
         for mo in mos:
             mo.get_caps()
-            data += [(mo.name, mo.address, _("Main"), ";".join(mo.get_caps()))]
+            data.append((mo.name, mo.address, _("Main"), ";".join(mo.get_caps())))
             for i in Interface.objects.filter(managed_object=mo):
                 if i.type == "SVI":
                     continue
-                data += [(mo.name, mo.address, i.name, ";".join(i.enabled_protocols))]
+                data.append((mo.name, mo.address, i.name, ";".join(i.enabled_protocols)))
         return self.from_dataset(title=self.title, columns=columns, data=data)

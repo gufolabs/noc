@@ -229,7 +229,7 @@ class ReportMaxMetricsmaxDetailApplication(ExtApplication):
             cmap = []
             for c in columns.split(","):
                 try:
-                    cmap += [cols.index(c)]
+                    cmap.append(cols.index(c))
                 except ValueError:
                     continue
         else:
@@ -358,7 +358,7 @@ class ReportMaxMetricsmaxDetailApplication(ExtApplication):
                 for uplink in uplinks[mo]:
                     if rld[mo]:
                         if mo in links:
-                            links[mo] += [rld[mo][uplink]]
+                            links[mo].append(rld[mo][uplink])
                         else:
                             links[mo] = [rld[mo][uplink]]
 
@@ -427,10 +427,10 @@ class ReportMaxMetricsmaxDetailApplication(ExtApplication):
                             row2[26] = ifaces_metrics[mo_bi][ifname_uplink]["avg_load_out"]
                             row2[27] = ifaces_metrics[mo_bi][ifname_uplink]["total_in"]
                             row2[28] = ifaces_metrics[mo_bi][ifname_uplink]["total_out"]
-                            r += [translate_row(row2, cmap)]
+                            r.append(translate_row(row2, cmap))
                             ss = False
                 if ss:
-                    r += [translate_row(row2, cmap)]
+                    r.append(translate_row(row2, cmap))
 
         filename = f"metrics_detail_report_{datetime.datetime.now().strftime('%Y%m%d')}"
         if o_format == "csv":

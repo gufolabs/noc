@@ -111,9 +111,9 @@ class Node:
 
     def update_report(self, r, current_level, max_level):
         if self.height > 1:
-            r += [f"<td rowspan='{self.height}' class='block'>"]
+            r.append(f"<td rowspan='{self.height}' class='block'>")
         else:
-            r += ["<td class='block'>"]
+            r.append("<td class='block'>")
         r += [self.get_html(), "</td>"]
         if self.children:
             for c in self.children:
@@ -122,7 +122,7 @@ class Node:
             if current_level < max_level:
                 # Fill empty cells to the end
                 r += ["<td></td>"] * (max_level - current_level)
-            r += ["</tr><tr>"]
+            r.append("</tr><tr>")
 
     def get_html(self):
         return ""
@@ -165,7 +165,7 @@ class VRFNode(Node):
     def populate(self):
         root = Prefix.objects.get(vrf=self.vrf, prefix="0.0.0.0/0")
         for p in root.children_set.order_by("prefix"):
-            self.children += [PrefixNode(self.app, p)]
+            self.children.append(PrefixNode(self.app, p))
 
     def get_html(self):
         return f"<b>VRF {self.vrf.name}</b><br/>RD: {self.vrf.rd}"
@@ -194,16 +194,16 @@ class PrefixNode(Node):
         if not self.app.prefix_children.get(self.prefix.id):
             return
         for p in self.prefix.children_set.order_by("prefix"):
-            self.children += [PrefixNode(self.app, p)]
+            self.children.append(PrefixNode(self.app, p))
 
     def get_html(self):
         r = [f"<b><u>{self.prefix.prefix}</u></b>"]
         if self.prefix.description:
-            r += [f"<br/>{self.prefix.description}"]
+            r.append(f"<br/>{self.prefix.description}")
         if self.show_vrf:
-            r += [f"<br/>VRF: {self.prefix.vrf.name}"]
+            r.append(f"<br/>VRF: {self.prefix.vrf.name}")
         if self.used is not None:
-            r += [f"<br/>{self.get_bar(self.used)}"]
+            r.append(f"<br/>{self.get_bar(self.used)}")
         # Show custom fields
         for f in prefix_fields:
             v = getattr(self.prefix, f.name)
@@ -212,9 +212,9 @@ class PrefixNode(Node):
             if f.type == "bool":
                 t = "check" if f else "times"
                 icon = f"<i class='fa fa-{t}'></i>"
-                r += [f"<br/>{f.label}: {icon}"]
+                r.append(f"<br/>{f.label}: {icon}")
             else:
-                r += [f"<br/>{f.label}: {v}"]
+                r.append(f"<br/>{f.label}: {v}")
         return "".join(r)
 
     def update_usage(self):
@@ -313,19 +313,19 @@ class ReportOverviewApplication(ReportApplication):
             if vrf_group.address_constraint == "G":
                 vrfs = list(vrf_group.vrf_set.all())
                 if len(vrfs) > 1:
-                    nodes += [VRFGroupNode(self, vrf_group)]
+                    nodes.append(VRFGroupNode(self, vrf_group))
                 else:
                     # Optimization
-                    nodes += [VRFNode(self, vrfs[0])]
+                    nodes.append(VRFNode(self, vrfs[0]))
             else:
                 for vrf in vrf_group.vrf_set.order_by("name"):
-                    nodes += [VRFNode(self, vrf)]
+                    nodes.append(VRFNode(self, vrf))
         # Render tree
         max_level = max(n.get_depth() for n in nodes)
         r = [CSS, "<table>"]
-        r += ["<tr>"]
+        r.append("<tr>")
         for n in nodes:
             n.update_report(r, 1, max_level)
-        r += ["</tr>"]
-        r += ["</table>"]
+        r.append("</tr>")
+        r.append("</table>")
         return "".join(r)

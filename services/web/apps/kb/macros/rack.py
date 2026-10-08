@@ -49,22 +49,22 @@ class RackSet:
         allocations = sorted(rack.allocations, key=operator.attrgetter("position"), reverse=True)
         sp = []
         if len(allocations) == 0:
-            sp += [(rack.height, rack.height, True, None)]
+            sp.append((rack.height, rack.height, True, None))
         else:
             a = allocations.pop(0)
             empty_top = rack.height - a.position - a.height + 1
             if empty_top:
-                sp += [(rack.height, empty_top, True, None)]
-            sp += [(a.position + a.height - 1, a.height, False, a)]
+                sp.append((rack.height, empty_top, True, None))
+            sp.append((a.position + a.height - 1, a.height, False, a))
             while allocations:
                 last_a = a
                 a = allocations.pop(0)
                 empty_top = last_a.position - a.height - a.position
                 if empty_top:
-                    sp += [(last_a.position - 1, empty_top, True, None)]
-                sp += [(a.height + a.position - 1, a.height, False, a)]
+                    sp.append((last_a.position - 1, empty_top, True, None))
+                sp.append((a.height + a.position - 1, a.height, False, a))
             if a.position > 1:
-                sp += [(a.position - 1, a.position - 1, True, None)]
+                sp.append((a.position - 1, a.position - 1, True, None))
         return sp
 
     #
@@ -121,18 +121,18 @@ class RackSet:
         rack_labels = ["<tr>"]
         for r in self.racks:
             if r.id:
-                rack_labels += [f"<td colspan='2' class='racklabel'>{escape(r.id)}</td>"]
+                rack_labels.append(f"<td colspan='2' class='racklabel'>{escape(r.id)}</td>")
             else:
-                rack_labels += ["<td colspan='2' class='racklabel'></td>"]
-        rack_labels += ["</tr>"]
+                rack_labels.append("<td colspan='2' class='racklabel'></td>")
+        rack_labels.append("</tr>")
         # Render the matrix
         out = ["<table class='rackset'>"]
         if self.id:
-            out += [f"<caption>{escape(self.id)}</caption>"]
+            out.append(f"<caption>{escape(self.id)}</caption>")
         if self.label in ["both", "top"]:
             out += rack_labels
         for i in range(self.height, 0, -1):
-            out += ["<tr>"]
+            out.append("<tr>")
             for j in range(len(self.racks) * 2):
                 v = rsm[i][j]
                 if v:
@@ -145,11 +145,11 @@ class RackSet:
                     if v.get("text"):
                         td += v["text"]
                     td += "</td>"
-                    out += [td]
-            out += ["</tr>"]
+                    out.append(td)
+            out.append("</tr>")
         if self.label in ["both", "bottom"]:
             out += rack_labels
-        out += ["</table>"]
+        out.append("</table>")
         return "\n".join(out)
 
 
@@ -208,27 +208,27 @@ class Allocation:
         """
         r = []
         if self.id:
-            r += [f"<b>{unroll_link(self.id)}</b>"]
+            r.append(f"<b>{unroll_link(self.id)}</b>")
         if self.hostname:
-            r += [f"<u>{unroll_link(self.hostname)}</u>"]
+            r.append(f"<u>{unroll_link(self.hostname)}</u>")
         if self.model:
-            r += [unroll_link(self.model)]
+            r.append(unroll_link(self.model))
         if self.serial:
-            r += [f"S/N: {unroll_link(self.serial)}"]
+            r.append(f"S/N: {unroll_link(self.serial)}")
         if self.asset_no:
-            r += [f"#{unroll_link(self.asset_no)}"]
+            r.append(f"#{unroll_link(self.asset_no)}")
         if self.description:
-            r += [f"<i>{unroll_link(self.description)}</i>"]
+            r.append(f"<i>{unroll_link(self.description)}</i>")
         if self.href:
-            r += [f"<a href='{self.href}'>Link...</a>"]
+            r.append(f"<a href='{self.href}'>Link...</a>")
         if self.slots:
             rr = ["<table border='1'>"]
             for s in self.slots:
-                rr += [f"<tr><td><b>{s.id}</b></td>"]
+                rr.append(f"<tr><td><b>{s.id}</b></td>")
                 a = " class='reserved'" if s.reserved else ""
-                rr += [f"<td{a}>{s.to_html()}</td></tr>"]
-            rr += ["</table>"]
-            r += ["".join(rr)]
+                rr.append(f"<td{a}>{s.to_html()}</td></tr>")
+            rr.append("</table>")
+            r.append("".join(rr))
         return "<br/>".join(r)
 
 
@@ -259,17 +259,17 @@ class Slot:
     def to_html(self):
         r = []
         if self.hostname:
-            r += [f"<u>{unroll_link(self.hostname)}</u>"]
+            r.append(f"<u>{unroll_link(self.hostname)}</u>")
         if self.model:
-            r += [unroll_link(self.model)]
+            r.append(unroll_link(self.model))
         if self.serial:
-            r += [f"S/N: {unroll_link(self.serial)}"]
+            r.append(f"S/N: {unroll_link(self.serial)}")
         if self.asset_no:
-            r += [f"#{unroll_link(self.asset_no)}"]
+            r.append(f"#{unroll_link(self.asset_no)}")
         if self.description:
-            r += [f"<i>{unroll_link(self.description)}</i>"]
+            r.append(f"<i>{unroll_link(self.description)}</i>")
         if self.href:
-            r += [f"<a href='{self.href}'>Link...</a>"]
+            r.append(f"<a href='{self.href}'>Link...</a>")
         return "<br/>".join(r)
 
 

@@ -41,7 +41,7 @@ class ReportConfigApplication(ExtDocApplication):
                 for q in b.get("queries") or []:
                     if q["datasource"]:
                         q["datasource__label"] = q["datasource"]
-                    queries += [q]
+                    queries.append(q)
                 b["queries"] = queries
                 if b["name"] == "Root":
                     r["root_orientation"] = b.get("orientation")
@@ -49,14 +49,12 @@ class ReportConfigApplication(ExtDocApplication):
                     continue
                 if b["parent"] == "Root":
                     b.pop("parent")
-                bands += [b]
+                bands.append(b)
             r["bands"] = bands
             r["localization"] = []
             for field, items in o.localization.items():
                 for lang, value in items.items():
-                    r["localization"] += [
-                        {"field": field, "language": lang, "language__label": lang, "value": value}
-                    ]
+                    r["localization"].append({"field": field, "language": lang, "language__label": lang, "value": value})
             if r.get("report_source"):
                 r["report_source__label"] = r["report_source"]
         for x in r.get("parameters", []):
@@ -75,7 +73,7 @@ class ReportConfigApplication(ExtDocApplication):
         for b in data.get("bands") or []:
             if not b.get("parent"):
                 b["parent"] = "Root"
-            bands += [b]
+            bands.append(b)
         data["bands"] = bands
         localization = defaultdict(dict)
         for row in data.get("localization"):
@@ -153,7 +151,7 @@ class ReportConfigApplication(ExtDocApplication):
             outputs.add(tpl.output_type.lower())
         if report.report_source or (tpl and tpl.has_preview):
             r["preview"] = True
-            r["dockedItems"] += [{"text": "Preview", "param": {"output_type": "html"}}]
+            r["dockedItems"].append({"text": "Preview", "param": {"output_type": "html"}})
             outputs.discard("html")
         if report.report_source or (tpl and tpl.is_alterable_output):
             outputs.update({"csv", "csv+zip", "xlsx"})
@@ -266,7 +264,7 @@ class ReportConfigApplication(ExtDocApplication):
                     }
             else:
                 cfg["xtype"] = "textfield"
-            r["params"] += [cfg]
+            r["params"].append(cfg)
         if widget_dependency:
             update_choice_widget(
                 r, widget_dependency["cond_param"], widget_dependency["target_name"]

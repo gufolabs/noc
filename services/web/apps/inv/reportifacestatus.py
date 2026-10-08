@@ -185,7 +185,7 @@ class ReportInterfaceStatusApplication(ExtApplication):
             cmap = []
             for c in columns.split(","):
                 try:
-                    cmap += [cols.index(c)]
+                    cmap.append(cols.index(c))
                 except ValueError:
                     continue
         else:
@@ -238,8 +238,7 @@ class ReportInterfaceStatusApplication(ExtApplication):
             if i["subs"]:
                 untag = i["subs"][0].get("untagged_vlan", "")
                 tagged = list_to_ranges(i["subs"][0].get("tagged_vlans", []))
-            r += [
-                translate_row(
+            r.append(translate_row(
                     row(
                         [
                             mo[i["managed_object"]]["name"],
@@ -261,8 +260,7 @@ class ReportInterfaceStatusApplication(ExtApplication):
                         ]
                     ),
                     cmap,
-                )
-            ]
+                ))
 
         filename = f"interface_status_report_{datetime.datetime.now().strftime('%Y%m%d')}"
         if o_format == "csv":

@@ -154,7 +154,7 @@ class CSVApplication(Application):
                         r = [f'{db_table}."{rname}"', *r]
             else:
                 r = []
-            fields += [(name, required, " or ".join(r))]
+            fields.append((name, required, " or ".join(r)))
         return self.render(
             request, "import.html", form=form, model=m._meta.verbose_name, fields=fields
         )

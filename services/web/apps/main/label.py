@@ -105,7 +105,7 @@ class LabelApplication(ExtDocApplication):
                 allow_models += v
                 continue
             if k.startswith("enable_") and k in enable_models_map:
-                allow_models += [enable_models_map[k]]
+                allow_models.append(enable_models_map[k])
             elif k == "allow_wildcard" and "true" in v:
                 allow_wildcard = True
             elif k == "allow_matched" and "true" in v:
@@ -131,8 +131,7 @@ class LabelApplication(ExtDocApplication):
                 continue
             if not allow_user and not ll.is_matched and not ll.is_wildcard and not ll.is_protected:
                 continue
-            labels += [
-                {
+            labels.append({
                     "id": ll.name,
                     "is_protected": ll.is_protected,
                     "scope": ll.scope,
@@ -143,8 +142,7 @@ class LabelApplication(ExtDocApplication):
                     "fg_color1": f"#{ll.fg_color1:06x}",
                     "bg_color2": f"#{ll.bg_color2:06x}",
                     "fg_color2": f"#{ll.fg_color2:06x}",
-                }
-            ]
+                })
         return {
             "data": labels,
             "total": len(labels),

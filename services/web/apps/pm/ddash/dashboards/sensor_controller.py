@@ -50,7 +50,7 @@ class SensorControllerDashboard(MODashboard):
                                 sensors_status.append(iface.name)
                                 continue
                             if iface.name in sensors:
-                                sensors[iface.name]["metrics"] += [metric.metric_type.field_name]
+                                sensors[iface.name]["metrics"].append(metric.metric_type.field_name)
                             else:
                                 sensors[iface.name] = {
                                     "metrics": [metric.metric_type.field_name],
@@ -71,41 +71,35 @@ class SensorControllerDashboard(MODashboard):
         sensors_status, sensors, ifaces = interface_profile_has_metrics(self.object.id)
         # Create charts for configured interface metrics
         for sensor in sorted(sensors.keys()):
-            sensor_types += [
-                {
+            sensor_types.append({
                     "name": sensor,
                     "metrics": sensors[sensor].get("metrics"),
                     "profile": sensors[sensor].get("profile"),
                     "descr": sensors[sensor].get("descr"),
                     "status": sensors[sensor].get("status"),
-                }
-            ]
+                })
         # Create charts for configured interface metrics
         for iface in sorted(ifaces.keys()):
-            ports += [
-                {
+            ports.append({
                     "name": iface,
                     "descr": ifaces[iface].get("descr"),
                     "status": ifaces[iface].get("status"),
-                }
-            ]
-            port_types += [
-                {
+                })
+            port_types.append({
                     "type": ifaces[iface].get("type"),
                     "name": ifaces[iface].get("name"),
                     "ports": ports,
-                }
-            ]
+                })
 
         if self.object.object_profile.report_ping_rtt:
-            object_metrics += ["rtt"]
+            object_metrics.append("rtt")
 
         om = []
         for metrics in self.object.object_profile.metrics or []:
             mt = MetricType.get_by_id(metrics["metric_type"])
             if not mt:
                 continue
-            om += [mt.name]
+            om.append(mt.name)
         object_metrics.extend(sorted(om))
 
         return {

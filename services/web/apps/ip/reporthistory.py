@@ -71,9 +71,9 @@ class ReportHistoryApplication(SimpleReport):
     ):
         scope = []
         if include_prefixes:
-            scope += ["ip.Prefix"]
+            scope.append("ip.Prefix")
         if include_addresses:
-            scope += ["ip.Address"]
+            scope.append("ip.Address")
         last = None
         r = []
         if date_from and date_to:
@@ -107,7 +107,7 @@ class ReportHistoryApplication(SimpleReport):
             d = ll.timestamp.date()
             if d != last:
                 last = d
-                r += [SectionRow(d.isoformat())]
+                r.append(SectionRow(d.isoformat()))
             model = self.MODELS[ll.model_id]
             if ll.object:
                 try:
@@ -120,16 +120,14 @@ class ReportHistoryApplication(SimpleReport):
             for c in ll.changes:
                 if c.old is None and c.new is None:
                     continue
-                chg += [f"{c.field}: {c.old} -> {c.new}"]
-            r += [
-                (
+                chg.append(f"{c.field}: {c.old} -> {c.new}")
+            r.append((
                     self.to_json(ll.timestamp),
                     ll.user,
                     {"C": "Create", "U": "Modify", "M": "Modify", "D": "Delete"}[ll.op],
                     obj,
                     self.format_detail("\n".join(chg)),
-                )
-            ]
+                ))
 
         return self.from_dataset(
             title=self.title, columns=["Time", "User", "Action", "Object", "Detail"], data=r

@@ -99,16 +99,14 @@ class ReportDiscoveryTopologyProblemApplication(SimpleReport):
             if mo_id not in mos:
                 continue
             name, address, profile, platform, segment = mos[mo_id]
-            data += [
-                [
+            data.append([
                     name,
                     address,
                     profile.name,
                     Platform.get_by_id(platform).name if platform else "",
                     NetworkSegment.get_by_id(segment).name if segment else "",
                     problems[mo_id],
-                ]
-            ]
+                ])
         data = sorted(data)
         return self.from_dataset(
             title=self.title,

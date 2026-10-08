@@ -76,12 +76,10 @@ class PrefixApplication(ExtModelApplication):
             # Find smallest free block possible
             for p in free:
                 if p.mask <= mask:
-                    suggestions += [
-                        {
+                    suggestions.append({
                             "prefix": f"{p.address}/{int(mask)}",
                             "size": 2 ** (32 - mask) if prefix.is_ipv4 else None,
-                        }
-                    ]
+                        })
                     break
         return suggestions
 

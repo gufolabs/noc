@@ -31,7 +31,7 @@ class Layout:
         if n1 == n2:
             return
         lp = (min(n1, n2), max(n1, n2))
-        self.link_ids[lp] += [lid]
+        self.link_ids[lp].append(lid)
         if len(self.link_ids[lp]) > 1:
             return
         self.G.add_edge(lp[0], lp[1])

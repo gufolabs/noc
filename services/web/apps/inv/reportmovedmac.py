@@ -222,7 +222,7 @@ class ReportMovedMacApplication(ExtApplication):
             cmap = []
             for c in columns.split(","):
                 try:
-                    cmap += [cols.index(c)]
+                    cmap.append(cols.index(c))
                 except ValueError:
                     continue
         else:
@@ -285,8 +285,7 @@ class ReportMovedMacApplication(ExtApplication):
                 and iface_from != iface_to
             ):
                 event_type = _("Migrate (Device Changed)")
-            r += [
-                translate_row(
+            r.append(translate_row(
                     [
                         mo_name,
                         mo_address,
@@ -302,8 +301,7 @@ class ReportMovedMacApplication(ExtApplication):
                         "--",
                     ],
                     cmap,
-                )
-            ]
+                ))
 
         filename = f"macs_move_report_{datetime.datetime.now().strftime('%Y%m%d')}"
         if o_format == "csv":

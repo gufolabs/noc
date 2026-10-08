@@ -134,7 +134,7 @@ class RefAppplication(ExtApplication):
         if os.path.isdir(self.NOC_SOUND_PATH):
             for f in sorted(os.listdir(self.NOC_SOUND_PATH)):
                 if f.endswith(".mp3"):
-                    r += [{"id": f[:-4], "label": f[:-4]}]
+                    r.append({"id": f[:-4], "label": f[:-4]})
         return r
 
     def build_unotificationmethod(self):
@@ -181,7 +181,7 @@ class RefAppplication(ExtApplication):
         r = []
         for name in topo_loader:
             topo_gen = topo_loader[name]
-            r += [{"id": name, "label": topo_gen.header or name}]
+            r.append({"id": name, "label": topo_gen.header or name})
         return r  # list(sorted(r))
 
     def build_datasource(self):
@@ -194,7 +194,7 @@ class RefAppplication(ExtApplication):
             ds = ds_loader[name]
             if not ds or not getattr(ds, "name", None):
                 continue
-            r += [{"id": name, "label": ds.name}]
+            r.append({"id": name, "label": ds.name})
         return r  # list(sorted(r))
 
     def build_reportsource(self):
@@ -207,7 +207,7 @@ class RefAppplication(ExtApplication):
             repo_source = rds_loader[name]
             if not repo_source:
                 continue
-            r += [{"id": name, "label": repo_source.name}]
+            r.append({"id": name, "label": repo_source.name})
         return r  # list(sorted(r))
 
     def build_reportformatter(self):
@@ -220,7 +220,7 @@ class RefAppplication(ExtApplication):
             repo_fmt = r_formatter_loader[name]
             if not repo_fmt:
                 continue
-            r += [{"id": name, "label": repo_fmt.label or name}]
+            r.append({"id": name, "label": repo_fmt.label or name})
         return r  # list(sorted(r))
 
     def build_protocoldiscriminatorsource(self):
@@ -233,7 +233,7 @@ class RefAppplication(ExtApplication):
             ds = pds_loader[name]
             if not ds:
                 continue
-            r += [{"id": name, "label": ds.name}]
+            r.append({"id": name, "label": ds.name})
         return r  # list(sorted(r))
 
     def build_vlanrole(self):

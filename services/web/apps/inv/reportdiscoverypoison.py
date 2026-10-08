@@ -69,9 +69,9 @@ class ReportDiscoveryIDPoisonApplication(SimpleReport):
             if reason == "Other" and MACBlacklist.is_banned_mac(f["macs"][0], is_duplicated=True):
                 if filter_dup_macs:
                     continue
-                data += [SectionRow(name=f"{MAC(f['macs'][0])} {reason} ({'On duplicated'})")]
+                data.append(SectionRow(name=f"{MAC(f['macs'][0])} {reason} ({'On duplicated'})"))
             else:
-                data += [SectionRow(name=f"{MAC(f['macs'][0])} {reason}")]
+                data.append(SectionRow(name=f"{MAC(f['macs'][0])} {reason}"))
             data += data_c
 
         return self.from_dataset(

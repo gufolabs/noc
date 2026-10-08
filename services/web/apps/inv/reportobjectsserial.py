@@ -100,8 +100,7 @@ class ReportFilterApplication(SimpleReport):
             sn, hw = ra[mo["id"]][:2] if mo["id"] in ra else (None, None)
             if mo["id"] in objects_serials:
                 sn = objects_serials[mo["id"]]
-            data += [
-                [
+            data.append([
                     mo["name"],
                     mo["address"],
                     vendor,
@@ -110,7 +109,6 @@ class ReportFilterApplication(SimpleReport):
                     version,
                     sn,
                     None,
-                ]
-            ]
+                ])
 
         return self.from_dataset(title=self.title, columns=columns, data=data, enumerate=True)

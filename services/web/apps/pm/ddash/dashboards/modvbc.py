@@ -61,25 +61,21 @@ class DVBCDashboard(MODashboard):
         ifaces, channels, groups = interface_profile_has_metrics(self.object.id)
         # Create charts for configured interface metrics
         for iface in sorted(ifaces.keys()):
-            ports += [
-                {
+            ports.append({
                     "name": iface,
                     "descr": ifaces[iface].get("descr"),
                     "status": ifaces[iface].get("status"),
-                }
-            ]
-        port_types += [
-            {"type": ifaces[iface].get("type"), "name": ifaces[iface].get("name"), "ports": ports}
-        ]
+                })
+        port_types.append({"type": ifaces[iface].get("type"), "name": ifaces[iface].get("name"), "ports": ports})
         if self.object.object_profile.report_ping_rtt:
-            object_metrics += ["rtt"]
+            object_metrics.append("rtt")
 
         om = []
         for metrics in self.object.object_profile.metrics or []:
             mt = MetricType.get_by_id(metrics["metric_type"])
             if not mt:
                 continue
-            om += [mt.name]
+            om.append(mt.name)
         object_metrics.extend(sorted(om))
         if self.extra_template and self.extra_vars:
             self.template = "dash_multicast.j2"

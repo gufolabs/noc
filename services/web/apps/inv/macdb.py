@@ -102,13 +102,13 @@ class MACApplication(ExtApplication):
         ]
         filter_x = self.get_filter(mac_query, managed_object, segment, interface_profile, is_uni)
         if filter_x:
-            sql += [f"WHERE {' AND '.join(filter_x)}"]
-        sql += ["ORDER BY mac"]
+            sql.append(f"WHERE {' AND '.join(filter_x)}")
+        sql.append("ORDER BY mac")
         if limit and offset:
-            sql += [f"LIMIT {offset}, {limit}"]
+            sql.append(f"LIMIT {offset}, {limit}")
         else:
-            sql += [f"LIMIT {limit}"]
-        sql += ["FORMAT JSON"]
+            sql.append(f"LIMIT {limit}")
+        sql.append("FORMAT JSON")
         sql = " ".join(sql)
         ch = connection()
         r = ch.execute(sql, return_raw=True)
@@ -240,13 +240,13 @@ class MACApplication(ExtApplication):
         ]
         filter_x = cls.get_filter(mac_query, managed_object, segment, interface_profile, is_uni)
         if filter_x:
-            sql += [f"WHERE {' AND '.join(filter_x)}"]
-        sql += ["ORDER BY ts DESC"]
+            sql.append(f"WHERE {' AND '.join(filter_x)}")
+        sql.append("ORDER BY ts DESC")
         if limit and offset:
-            sql += [f"LIMIT {offset}, {limit}"]
+            sql.append(f"LIMIT {offset}, {limit}")
         elif limit:
-            sql += [f"LIMIT {limit}"]
-        sql += ["FORMAT JSON"]
+            sql.append(f"LIMIT {limit}")
+        sql.append("FORMAT JSON")
         sql = " ".join(sql)
         ch = connection()
         r = ch.execute(sql, return_raw=True)
@@ -270,8 +270,7 @@ class MACApplication(ExtApplication):
                 continue
             mo_name, _, _mo_id, pool, _op, op_name = mos[int(d["managed_object"])]
             pool = Pool.get_by_id(pool)
-            out += [
-                {
+            out.append({
                     "timestamp": str(d["ts"]),
                     "mac": d["mac_s"],
                     "l2_domain": "",
@@ -281,6 +280,5 @@ class MACApplication(ExtApplication):
                     "description": d["description"],
                     "pool": pool.name,
                     "object_profile": op_name,
-                }
-            ]
+                })
         return self.response(out, status=self.OK)
