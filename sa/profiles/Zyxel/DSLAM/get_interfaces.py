@@ -41,13 +41,11 @@ class Script(BaseScript):
         iface_mac = []
         vlans = []
         for match in self.rx_vlan1.finditer(self.cli("switch vlan show *")):
-            vlans += [
-                {
+            vlans.append({
                     "vid": int(match.group("vlan_id")),
                     "ports": f"{match.group('ports')}{match.group('eports')}",
                     "mode": f"{match.group('mode')}{match.group('emode')}",
-                }
-            ]
+                })
         port_num = 0
         for match in self.rx_vlan2.finditer(self.cli("switch vlan portshow")):
             untagged = 0
@@ -57,15 +55,15 @@ class Script(BaseScript):
                 if v["ports"][port_num] == "F" and v["mode"][port_num] == "U":
                     untagged = v["vid"]
                 if v["ports"][port_num] == "F" and v["mode"][port_num] == "T":
-                    tagged += [v["vid"]]
+                    tagged.append(v["vid"])
             iface = {"name": ifname, "type": "physical", "subinterfaces": []}
             if ifname.startswith("Enet"):
-                iface["subinterfaces"] += [{"name": ifname, "enabled_afi": ["BRIDGE"]}]
+                iface["subinterfaces"].append({"name": ifname, "enabled_afi": ["BRIDGE"]})
                 if untagged:
                     iface["subinterfaces"][0]["untagged_vlan"] = untagged
                 if tagged:
                     iface["subinterfaces"][0]["tagged_vlans"] = tagged
-            interfaces += [iface]
+            interfaces.append(iface)
             port_num += 1
         try:
             pvc_show = self.cli("adsl pvc show")
@@ -83,9 +81,9 @@ class Script(BaseScript):
                     }
                     if match.group("pvid") != "*":
                         sub["vlan_ids"] = int(match.group("pvid"))
-                    i["subinterfaces"] += [sub]
+                    i["subinterfaces"].append(sub)
         match = self.rx_mac.search(self.cli("sys info show"))
-        iface_mac += [{"ifname": "Ethernet", "mac": match.group("mac")}]
+        iface_mac.append({"ifname": "Ethernet", "mac": match.group("mac")})
         c = self.cli("ip show")
         for match in self.rx_ipif.finditer(c):
             ifname = match.group("ifname")
@@ -116,5 +114,5 @@ class Script(BaseScript):
                 if ifname == m["ifname"]:
                     iface["mac"] = m["mac"]
                     iface["subinterfaces"][0]["mac"] = m["mac"]
-            interfaces += [iface]
+            interfaces.append(iface)
         return [{"interfaces": interfaces}]

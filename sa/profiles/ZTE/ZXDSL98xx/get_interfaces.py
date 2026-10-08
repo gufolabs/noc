@@ -122,8 +122,8 @@ class Script(BaseScript):
                     "vlan_ids": [match1.group("vlan_id")],
                 }
                 sub_number = sub_number + 1
-                i["subinterfaces"] += [sub]
-            interfaces += [i]
+                i["subinterfaces"].append(sub)
+            interfaces.append(i)
             ip = match.group("ip")
             mask = match.group("mask")
             ip_address = f"{ip}/{IPv4.netmask_to_len(mask)}"
@@ -153,7 +153,7 @@ class Script(BaseScript):
                         }
                     ],
                 }
-                interfaces += [i]
+                interfaces.append(i)
             else:
                 raise self.NotSupportedError()
         try:
@@ -169,7 +169,7 @@ class Script(BaseScript):
                     {"name": "host", "enabled_afi": ["IPv4"], "ipv4_addresses": [ip_address]}
                 ],
             }
-            interfaces += [i]
+            interfaces.append(i)
         except self.CLISyntaxError:
             pass
         rx_card = self.rx_card_9806h if self.is_9806h else self.rx_card
@@ -205,7 +205,7 @@ class Script(BaseScript):
                             }
                         ],
                     }
-                    interfaces += [i]
+                    interfaces.append(i)
                 match = self.rx_adsl.search(v)
                 if match:
                     i = {
@@ -284,7 +284,7 @@ class Script(BaseScript):
                             "vci": match1.group("vci8"),
                         },
                     ]
-                    interfaces += [i]
+                    interfaces.append(i)
                 match = self.rx_ether_type.search(v)
                 if match:
                     match = self.rx_if_admin_status.search(v)
@@ -320,7 +320,7 @@ class Script(BaseScript):
                             match.group("tagged").strip()
                         )
 
-                    interfaces += [i]
+                    interfaces.append(i)
                 match = self.rx_adsl_type.search(v)
                 if match:
                     match = self.rx_if_admin_status.search(v)
@@ -346,8 +346,8 @@ class Script(BaseScript):
                             "vpi": match.group("vpi"),
                             "vci": match.group("vci"),
                         }
-                        i["subinterfaces"] += [sub]
+                        i["subinterfaces"].append(sub)
 
-                    interfaces += [i]
+                    interfaces.append(i)
 
         return [{"interfaces": interfaces}]

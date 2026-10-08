@@ -37,7 +37,7 @@ class Script(BaseScript):
                             break
                         if n == "enet0":
                             continue  # Skip outbound management
-                        r += [{"interface": n, "status": s == 1}]
+                        r.append({"interface": n, "status": s == 1})
                     if r:
                         return r
                 else:
@@ -58,10 +58,8 @@ class Script(BaseScript):
 
         r = []
         for match in self.rx_link.finditer(s):
-            r += [
-                {
+            r.append({
                     "interface": match.group("interface"),
                     "status": match.group("status").lower() != "down",
-                }
-            ]
+                })
         return r

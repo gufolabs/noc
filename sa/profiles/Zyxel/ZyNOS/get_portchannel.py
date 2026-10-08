@@ -27,15 +27,13 @@ class Script(BaseScript):
     def execute_370(self):
         r = []
         for match in self.rx_trunk_370.finditer(self.cli("show trunk")):
-            r += [
-                {
+            r.append({
                     "interface": f"T{match.group('trunk')}",
                     "type": "L",  # @todo: type detection is not implemented yet
                     "members": self.expand_rangelist(
                         re.sub(r"\s+", ",", match.group("ports").strip())
                     ),
-                }
-            ]
+                })
         return r
 
     # other versions
@@ -51,13 +49,11 @@ class Script(BaseScript):
     def execute_other(self):
         r = []
         for match in self.rx_trunk.finditer(self.cli("show trunk")):
-            r += [
-                {
+            r.append({
                     "interface": f"T{match.group('trunk')}",
                     "type": "L" if match.group("lacp").lower() == "lacp" else "S",
                     "members": self.expand_rangelist(
                         re.sub(r"\s+", ",", match.group("ports").strip())
                     ),
-                }
-            ]
+                })
         return r

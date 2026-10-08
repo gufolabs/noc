@@ -35,12 +35,10 @@ class Script(BaseScript):
         for match in self.rx_mac.finditer(self.cli(cmd)):
             if match.group("type") == "N/A":
                 continue
-            r += [
-                {
+            r.append({
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
                     "interfaces": [match.group("interface")],
                     "type": {"Dynamic": "D", "Static": "S"}[match.group("type")],
-                }
-            ]
+                })
         return r

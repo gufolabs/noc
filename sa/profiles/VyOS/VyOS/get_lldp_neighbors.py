@@ -138,7 +138,7 @@ class Script(BaseScript):
             found = False
             for i in neighbors:
                 if i["local_interface"] == local_interface:
-                    i["neighbors"] += [n]
+                    i["neighbors"].append(n)
                     found = True
                     break
             if not found:

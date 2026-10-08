@@ -60,13 +60,11 @@ class Script(BaseScript):
         # Get ports in vlans
         vlan_ports = []
         for match in self.rx_vlan_ports.finditer(self.cli("show vlan")):
-            vlan_ports += [
-                {
+            vlan_ports.append({
                     "vid": match.group("vid"),
                     "tagged": self.expand_rangelist(match.group("tagged")),
                     "untagged": self.expand_rangelist(match.group("untagged")),
-                }
-            ]
+                })
 
         # Make a list of tags for each port
         port_tags = {}
@@ -75,7 +73,7 @@ class Script(BaseScript):
             untag = []
             for vlan in vlan_ports:
                 if int(port) in vlan["tagged"]:
-                    tags += [vlan["vid"]]
+                    tags.append(vlan["vid"])
                 elif int(port) in vlan["untagged"]:
                     untag = vlan["vid"]
             port_tags[port] = {"tags": tags, "untag": untag}
@@ -98,13 +96,13 @@ class Script(BaseScript):
             if name not in portchannel_members:
                 swp["interface"] = name
                 swp["members"] = []
-                r += [swp]
+                r.append(swp)
             else:
                 for p in portchannels:
                     if name in p["members"]:
                         swp["interface"] = p["interface"]
                         swp["members"] = p["members"]
-                        r += [swp]
+                        r.append(swp)
                         st = False
                         for m in p["members"]:
                             st = interface_status.get(name, False)

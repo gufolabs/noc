@@ -23,5 +23,5 @@ class Script(BaseScript):
         r = []
         v = self.cli("show arp")
         for match in self.rx_line.finditer(v):
-            r += [{"ip": match.group("ip"), "mac": match.group("mac")}]
+            r.append({"ip": match.group("ip"), "mac": match.group("mac")})
         return r

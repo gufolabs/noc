@@ -38,7 +38,7 @@ class Script(BaseScript):
             match = self.rx_int.search(l)
             if match:
                 last_if = match.group("name")
-                il += [last_if]  # preserve order
+                il.append(last_if)  # preserve order
                 ifaces[last_if] = {
                     "name": last_if,
                     "ipv4_addresses": [],
@@ -49,7 +49,7 @@ class Script(BaseScript):
                 }
                 if "@" in last_if:
                     name, base = last_if.split("@")
-                    subs[base] += [last_if]
+                    subs[base].append(last_if)
                     ifaces[last_if]["vlan_ids"] = [int(name.split(".")[-1])]
                     ifaces[last_if]["name"] = name
                 continue
@@ -66,12 +66,12 @@ class Script(BaseScript):
             # inet
             match = self.rx_inet.search(l)
             if match:
-                ifaces[last_if]["ipv4_addresses"] += [match.group("inet")]
+                ifaces[last_if]["ipv4_addresses"].append(match.group("inet"))
                 continue
             # inet6
             match = self.rx_inet6.search(l)
             if match:
-                ifaces[last_if]["ipv6_addresses"] += [match.group("inet6")]
+                ifaces[last_if]["ipv6_addresses"].append(match.group("inet6"))
                 continue
         # Process interfaces
         r = []
@@ -98,7 +98,7 @@ class Script(BaseScript):
                     i["description"] = ifaces[iface]["description"]
             else:
                 continue  # Already processed
-            r += [i]
+            r.append(i)
         # Set MAC addresses
         for i in r:
             macs = {si.get("mac") for si in i.get("subinterfaces", [])}
@@ -109,12 +109,12 @@ class Script(BaseScript):
     def get_si(self, si):
         if si["ipv4_addresses"]:
             si["ipv4_addresses"] = list(si["ipv4_addresses"])
-            si["enabled_afi"] += ["IPv4"]
+            si["enabled_afi"].append("IPv4")
         else:
             del si["ipv4_addresses"]
         if si["ipv6_addresses"]:
             si["ipv6_addresses"] = list(si["ipv6_addresses"])
-            si["enabled_afi"] += ["IPv6"]
+            si["enabled_afi"].append("IPv6")
         else:
             del si["ipv6_addresses"]
         return si

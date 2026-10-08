@@ -35,5 +35,5 @@ class Script(BaseScript):
             mac = match.group("mac")
             if mac == "incomplete":
                 continue
-            r += [{"ip": match.group("address"), "mac": mac, "interface": match.group("vlan")}]
+            r.append({"ip": match.group("address"), "mac": mac, "interface": match.group("vlan")})
         return r

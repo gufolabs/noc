@@ -25,7 +25,7 @@ class Script(BaseScript):
                 continue
             name = match.group("name")
             if name:
-                r += [{"vlan_id": vlan_id, "name": name}]
+                r.append({"vlan_id": vlan_id, "name": name})
             else:
-                r += [{"vlan_id": vlan_id}]
+                r.append({"vlan_id": vlan_id})
         return r

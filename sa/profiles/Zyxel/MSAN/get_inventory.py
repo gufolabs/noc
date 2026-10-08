@@ -63,8 +63,7 @@ class Script(BaseScript):
                 except:
                     status = False
 
-                r += [
-                    {
+                r.append({
                         "name": f"{slot_index}|{name}",
                         "status": status,
                         "description": f"Скорость вращения {name} устройства",
@@ -75,8 +74,7 @@ class Script(BaseScript):
                             "noc::sensor::target::fan",
                         ],
                         "snmp_oid": f"1.3.6.1.4.1.890.1.5.13.1.2.1.1.2.0.{sindex}",
-                    }
-                ]
+                    })
 
         # Voltage state
         for oid, name in self.snmp.getnext(f"1.3.6.1.4.1.890.1.5.13.1.2.2.1.7.0.{slot_index}"):
@@ -87,8 +85,7 @@ class Script(BaseScript):
                 status = bool(cur_value)
             except:
                 status = False
-            r += [
-                {
+            r.append({
                     "name": f"{slot_index}|{name}",
                     "status": status,
                     "description": "Напряжение питания устройства",
@@ -99,8 +96,7 @@ class Script(BaseScript):
                         "noc::sensor::target::supply",
                     ],
                     "snmp_oid": f"1.3.6.1.4.1.890.1.5.13.1.2.2.1.2.0.{slot_index}.{sindex}",
-                }
-            ]
+                })
         # Temperature state
         for oid, name in self.snmp.getnext(f"1.3.6.1.4.1.890.1.5.13.5.11.3.3.1.6.0.{slot_index}"):
             sindex = oid.split(".")[-1]
@@ -112,8 +108,7 @@ class Script(BaseScript):
                 status = bool(cur_value)
             except:
                 status = False
-            r += [
-                {
+            r.append({
                     "name": f"{slot_index}|{name}",
                     "status": status,
                     "description": "Значение температуры с внутреннего датчика",
@@ -123,8 +118,7 @@ class Script(BaseScript):
                         "noc::sensor::mode::temperature",
                     ],
                     "snmp_oid": f"1.3.6.1.4.1.890.1.5.13.5.11.3.3.1.2.0.{slot_index}.{sindex}",
-                }
-            ]
+                })
 
         return r
 
@@ -138,21 +132,19 @@ class Script(BaseScript):
                     match = self.rx_slot.search(self.cli(f"lcman show {i}"))
                     if match:
                         part_no = match.group("part_no")
-                        r += [
-                            {
+                        r.append({
                                 "type": "LINECARD",
                                 "number": match.group("number"),
                                 "vendor": "ZYXEL",
                                 "part_no": match.group("part_no"),
                                 "serial": match.group("serial"),
                                 "revision": match.group("revision"),
-                            }
-                        ]
+                            })
                         c = self.profile.get_platform(self, slots, part_no)
                         if c:
                             r.insert(0, {"type": "CHASSIS", "vendor": "ZYXEL", "part_no": c})
             else:
-                r += [{"type": "CHASSIS", "vendor": "ZYXEL", "part_no": version["platform"]}]
+                r.append({"type": "CHASSIS", "vendor": "ZYXEL", "part_no": version["platform"]})
                 t = parse_table(self.cli("lcman show", cached=True))
                 for i in t:
                     if i[1] == "-":
@@ -160,9 +152,7 @@ class Script(BaseScript):
                     part_no = i[2]
                     if part_no == "msc":
                         part_no = self.M_TYPE[version["platform"]]
-                    r += [
-                        {"type": "LINECARD", "number": i[0], "vendor": "ZYXEL", "part_no": part_no}
-                    ]
+                    r.append({"type": "LINECARD", "number": i[0], "vendor": "ZYXEL", "part_no": part_no})
             for i in r:
                 if i["type"] == "CHASSIS" and self.has_snmp():
                     i.update({"sensors": self.get_sensors(1)})
@@ -191,7 +181,7 @@ class Script(BaseScript):
                 r[0]["serial"] = match.group("serial")
                 r[0]["revision"] = match.group("revision")
             if module:
-                r += [{"type": "LINECARD", "number": 1, "vendor": "ZYXEL", "part_no": module}]
+                r.append({"type": "LINECARD", "number": 1, "vendor": "ZYXEL", "part_no": module})
             for i in r:
                 if i["type"] == "CHASSIS" and self.has_snmp():
                     i.update({"sensors": self.get_sensors(1)})

@@ -39,8 +39,7 @@ class Script(BaseScript):
         r = []
         s = self.cli(f"cable-diagnostics {interface}")
         for match in self.rx_link.finditer(s):
-            r += [
-                {
+            r.append({
                     "interface": interface,
                     "pairs": [
                         {
@@ -68,7 +67,6 @@ class Script(BaseScript):
                             "distance_fault_cm": self.convert_to_cm(match.group("len_fault_p4")),
                         },
                     ],
-                }
-            ]
+                })
 
         return r

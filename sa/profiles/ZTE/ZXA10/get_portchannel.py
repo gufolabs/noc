@@ -35,5 +35,5 @@ class Script(BaseScript):
             iface = "smartgroup" + self.rx_num.search(i)[0]
             iface = {"interface": iface, "type": "L", "members": []}
             iface["members"] = self.rx_iface.findall(i)
-            r += [iface]
+            r.append(iface)
         return r

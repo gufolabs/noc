@@ -34,9 +34,9 @@ class Script(BaseScript):
                     continue
                 name = match.group("name")
                 if name != "":
-                    r += [{"vlan_id": vid, "name": name}]
+                    r.append({"vlan_id": vid, "name": name})
                 else:
-                    r += [{"vlan_id": vid}]
+                    r.append({"vlan_id": vid})
             return r
         except self.CLISyntaxError:
             pass
@@ -54,9 +54,9 @@ class Script(BaseScript):
                     continue
                 name = match.group("name")
                 if not name.startswith("-"):
-                    r += [{"vlan_id": vid, "name": name}]
+                    r.append({"vlan_id": vid, "name": name})
                 else:
-                    r += [{"vlan_id": vid}]
+                    r.append({"vlan_id": vid})
             return r
         try:
             v = self.cli("lcman svlan show", cached=True)
@@ -66,5 +66,5 @@ class Script(BaseScript):
             vid = int(match.group("vlan_id"))
             if vid == 1:
                 continue
-            r += [{"vlan_id": vid}]
+            r.append({"vlan_id": vid})
         return r

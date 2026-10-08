@@ -28,19 +28,15 @@ class Script(BaseScript):
             try:
                 v = self.cli(f"lcman show {i}")
                 for match in self.rx_mac1.finditer(v):
-                    r += [
-                        {
+                    r.append({
                             "first_chassis_mac": match.group("mac"),
                             "last_chassis_mac": match.group("mac"),
-                        }
-                    ]
+                        })
                 for match in self.rx_mac2.finditer(v):
-                    r += [
-                        {
+                    r.append({
                             "first_chassis_mac": match.group("mac"),
                             "last_chassis_mac": match.group("mac"),
-                        }
-                    ]
+                        })
             except self.CLISyntaxError:
                 break
         if not r:

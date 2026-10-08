@@ -33,16 +33,14 @@ class Script(BaseScript):
             if k == "Interface":
                 name = v.split(",")[0].strip()
                 if i:
-                    r += [i]
+                    r.append(i)
                 i = {"local_interface": name, "neighbors": []}
             elif k == "ChassisID":
                 ct, cid = [x.strip() for x in v.split()[:2]]
-                i["neighbors"] += [
-                    {
+                i["neighbors"].append({
                         "remote_chassis_id_subtype": self.CHASSIS_SUBTYPE[ct],
                         "remote_chassis_id": cid,
-                    }
-                ]
+                    })
             elif k == "SysName":
                 i["neighbors"][-1]["remote_system_name"] = v
             elif k == "PortID":
@@ -50,5 +48,5 @@ class Script(BaseScript):
                 i["neighbors"][-1]["remote_port_subtype"] = self.PORT_SUBTYPE[pt]
                 i["neighbors"][-1]["remote_port"] = pid
         if i:
-            r += [i]
+            r.append(i)
         return r

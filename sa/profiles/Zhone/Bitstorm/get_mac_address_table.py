@@ -39,12 +39,10 @@ class Script(BaseScript):
             vlan_id = match.group("vlan_id")
             if vlan and vlan != vlan_id:
                 continue
-            r += [
-                {
+            r.append({
                     "vlan_id": vlan_id,
                     "mac": mac1,
                     "interfaces": [ifname],
                     "type": {"learned": "D", "static": "S", "self": "C"}[match.group("type")],
-                }
-            ]
+                })
         return r
