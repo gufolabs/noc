@@ -69,8 +69,7 @@ class ReportEscalationsApplication(SimpleReport):
                 mo = ManagedObject.get_by_id(d["managed_object"])
                 if not mo:
                     continue
-                data += [
-                    (
+                data.append((
                         d["timestamp"].strftime("%Y-%m-%d %H:%M:%S"),
                         d["escalation_ts"].strftime("%Y-%m-%d %H:%M:%S"),
                         mo.name.split("#", 1)[0],
@@ -80,8 +79,7 @@ class ReportEscalationsApplication(SimpleReport):
                         d["escalation_tt"],
                         sum(ss["summary"] for ss in d["total_objects"]),
                         sum(ss["summary"] for ss in d["total_subscribers"]),
-                    )
-                ]
+                    ))
         data = sorted(data, key=operator.itemgetter(0))
         return self.from_dataset(
             title=self.title,

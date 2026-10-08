@@ -76,16 +76,14 @@ class ConduitsPlugin(InvPlugin):
             conduit, _ = c.p2p_get_other(object)
             for cc, t, _ in conduit.get_genderless_connections("conduits"):
                 if t != object:
-                    conduits[t] += [
-                        {
+                    conduits[t].append({
                             "id": str(conduit.id),
                             "n": int(conduit.name),
                             "x": cc.data["plan"]["x"],
                             "y": cc.data["plan"]["y"],
                             "d": 100,  # remote.data.get("...."),
                             "status": True,  # remote.data....
-                        }
-                    ]
+                        })
         # Get neighbor ducts
         for c, remote, _ in object.get_genderless_connections("ducts"):
             map_distance = None
@@ -96,8 +94,7 @@ class ConduitsPlugin(InvPlugin):
                 br = bearing(object.point, remote.point)
                 sbr = bearing_sym(object.data, remote.data)
             cd = conduits[remote]
-            ducts += [
-                {
+            ducts.append({
                     "connection_id": str(c.id),
                     "target_id": str(remote.id),
                     "target_name": remote.name,
@@ -108,8 +105,7 @@ class ConduitsPlugin(InvPlugin):
                     "conduits": cd,
                     "bearing": br,
                     "s_bearing": sbr,
-                }
-            ]
+                })
         return {"id": str(object.id), "name": object.name, "ducts": ducts}
 
     def is_single_connection(self, o):
@@ -141,15 +137,13 @@ class ConduitsPlugin(InvPlugin):
             # Feed data
             d = distance(o.point, ro.point)
             sbr = bearing_sym(o.point, ro.point)
-            r += [
-                {
+            r.append({
                     "id": str(ro.id),
                     "label": f"{ro.name} ({sbr}, {int(d)}m)",
                     "s_bearing": sbr,
                     "map_distance": d,
                     "name": ro.name,
-                }
-            ]
+                })
         return r
 
     def api_create_ducts(self, request: HttpRequest, id, ducts=None):
@@ -161,7 +155,7 @@ class ConduitsPlugin(InvPlugin):
         for c, t, _ in o.get_genderless_connections("conduits"):
             for cc, tt, _ in t.get_genderless_connections("conduits"):
                 if tt.id != o.id:
-                    conduits[tt] += [t]
+                    conduits[tt].append(t)
         left = set(conns)
         for cd in ducts:
             target = cd["target"]

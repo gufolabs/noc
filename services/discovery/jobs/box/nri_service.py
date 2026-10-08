@@ -124,7 +124,7 @@ class NRIServiceCheck(DiscoveryCheck):
         for iface in Interface.objects.filter(managed_object=self.object.id, nri_name__exists=True):
             if not iface.nri_name or iface.nri_name not in instances:
                 continue
-            resources[instances[iface.nri_name]] += [iface]
+            resources[instances[iface.nri_name]].append(iface)
             if instances[iface.nri_name].service.profile.interface_profile:
                 profiles[iface] = instances[iface.nri_name].service.profile.interface_profile
 
@@ -149,9 +149,9 @@ class NRIServiceCheck(DiscoveryCheck):
                     si.name == si.interface.name
                     or si.name in self.object.get_profile().get_interface_names(si.name)
                 ):
-                    resources[addresses[addr.address]] += [si.interface]
+                    resources[addresses[addr.address]].append(si.interface)
                 else:
-                    resources[addresses[addr.address]] += [si]
+                    resources[addresses[addr.address]].append(si)
                 if addresses[addr.address].service.profile.interface_profile:
                     profiles[si.interface] = addresses[
                         addr.address

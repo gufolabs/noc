@@ -31,9 +31,9 @@ class AlarmsCheck(DiscoveryCheck):
         result = self.object.scripts.get_alarms()  # result get_alarms
         for r in result:
             if "path" in r:
-                mos += [self.find_cpe(r["path"][0], self.object.id)]
+                mos.append(self.find_cpe(r["path"][0], self.object.id))
             else:
-                mos += [self.object]
+                mos.append(self.object)
         mos_id = list({mo.id for mo in mos if mo})
         # Controller Alarm
         objcet_alarms = {str(cpe["id"]): cpe for cpe in result}

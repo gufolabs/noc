@@ -132,7 +132,7 @@ class ReportAlarmCommentsApplication(ExtApplication):
             cmap = []
             for c in columns.split(","):
                 try:
-                    cmap += [cols.index(c)]
+                    cmap.append(cols.index(c))
                 except ValueError:
                     continue
         else:
@@ -195,8 +195,7 @@ class ReportAlarmCommentsApplication(ExtApplication):
                 {"$sort": {"_id": 1, "log.timestamp": 1}},
             ]
         ):
-            r += [
-                translate_row(
+            r.append(translate_row(
                     row(
                         [
                             smart_text(aa["_id"]),
@@ -213,8 +212,7 @@ class ReportAlarmCommentsApplication(ExtApplication):
                         ]
                     ),
                     cmap,
-                )
-            ]
+                ))
         # Active Alarms
         coll = ArchivedAlarm._get_collection()
         for aa in coll.aggregate(
@@ -236,8 +234,7 @@ class ReportAlarmCommentsApplication(ExtApplication):
                 {"$sort": {"_id": 1, "log.timestamp": 1}},
             ]
         ):
-            r += [
-                translate_row(
+            r.append(translate_row(
                     row(
                         [
                             smart_text(aa["_id"]),
@@ -254,8 +251,7 @@ class ReportAlarmCommentsApplication(ExtApplication):
                         ]
                     ),
                     cmap,
-                )
-            ]
+                ))
         filename = "alarm_comments.csv"
         if o_format == "csv":
             response = HttpResponse(content_type="text/csv")

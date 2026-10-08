@@ -115,7 +115,7 @@ class XMACCheck(TopologyDiscoveryCheck):
                 )
                 return None
             self.logger.info("[%s][%s] Neighbor %s is found for %s", name, iface.name, ro.name, mac)
-            chain += [ro]
+            chain.append(ro)
         # Check all objects has different levels
         levels = {}  # type: Dict[int, ManagedObject]
         for ro in chain:
@@ -166,7 +166,7 @@ class XMACCheck(TopologyDiscoveryCheck):
                 )
                 return None
             uplink = ports[n][0][0]
-            links += [(downlink, uplink)]
+            links.append((downlink, uplink))
         # Link all ports
         for link in links:
             self.confirm_interface_link(*link)
@@ -206,7 +206,7 @@ class XMACCheck(TopologyDiscoveryCheck):
                     self.object.object_profile.level,
                 )
                 return
-            cloud += [ro]
+            cloud.append(ro)
         # Get all cloud uplinks
         ports = self.find_direct_uplinks_downlinks(cloud)
         # Connect all interfaces to cloud link
@@ -226,7 +226,7 @@ class XMACCheck(TopologyDiscoveryCheck):
                     len(uplinks),
                 )
                 continue
-            cloud_ifaces += [uplinks[0]]
+            cloud_ifaces.append(uplinks[0])
         # Refresh cloud
         if cloud_ifaces:
             self.confirm_cloud(iface, cloud_ifaces)
@@ -267,8 +267,8 @@ class XMACCheck(TopologyDiscoveryCheck):
             policy = iface.get_profile().mac_discovery_policy
             if policy == "u":
                 uplinks = r[mo][0]
-                uplinks += [iface]
+                uplinks.append(iface)
             elif policy == "i":
                 downlinks = r[mo][1]
-                downlinks += [iface]
+                downlinks.append(iface)
         return r

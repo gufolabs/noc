@@ -263,7 +263,7 @@ class BaseResourceAPI(Generic[T], metaclass=ABCMeta):
             body = ["    r = {}"]
             # Apply list ops as annotations
             for list_op in self.list_ops:
-                args += [f"{list_op.name}: Optional[List[str]] = Query(None)"]
+                args.append(f"{list_op.name}: Optional[List[str]] = Query(None)")
                 body += [
                     f"    if {list_op.name} is not None:",
                     f'        r["{list_op.name}"] = {list_op.name}',

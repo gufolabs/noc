@@ -21,7 +21,7 @@ def clean_label(label: str) -> tuple[str, str, list[str]]:
     if r[0] == "noc":
         r.pop(0)
     if r[-1] in MATCH_OPS:
-        badges += [MATCH_BADGES[r[-1]]]
+        badges.append(MATCH_BADGES[r[-1]])
         r.pop(-1)
     return "::".join(r[:-1]), r[-1], badges
 
@@ -42,8 +42,7 @@ class InterfaceProfileApplication(ExtDocApplication):
         r = []
         for num, ml in enumerate(o.match_rules):
             if num:
-                r += [
-                    {
+                r.append({
                         "id": "&&",
                         "is_protected": False,
                         "scope": "",
@@ -55,10 +54,8 @@ class InterfaceProfileApplication(ExtDocApplication):
                         "fg_color1": 16777215,
                         "bg_color2": 0,
                         "fg_color2": 16777215,
-                    }
-                ]
-            r += [
-                {
+                    })
+            r.append({
                     "id": "&&",
                     "is_protected": False,
                     "scope": "",
@@ -70,12 +67,10 @@ class InterfaceProfileApplication(ExtDocApplication):
                     "fg_color1": 16777215,
                     "bg_color2": 0,
                     "fg_color2": 16777215,
-                }
-            ]
+                })
             for ll in ml.get_labels():
                 scope, value, badges = clean_label(ll.name)
-                r += [
-                    {
+                r.append({
                         "id": ll.name,
                         "is_protected": ll.is_protected,
                         "scope": scope,
@@ -90,7 +85,6 @@ class InterfaceProfileApplication(ExtDocApplication):
                         "fg_color1": ll.fg_color1,
                         "bg_color2": ll.bg_color2,
                         "fg_color2": ll.fg_color2,
-                    }
-                ]
+                    })
 
         return r

@@ -177,7 +177,7 @@ class JsonDSAPI:
         # Append Query Configs
         for qc in cls.QUERY_CONFIGS or []:
             if qc.alias:
-                r += [{"label": qc.description or qc.alias, "value": qc.alias}]
+                r.append({"label": qc.description or qc.alias, "value": qc.alias})
         return r
 
     @classmethod
@@ -197,7 +197,7 @@ class JsonDSAPI:
         # Append Query Configs
         for qc in cls.QUERY_CONFIGS or []:
             if qc.alias:
-                r += [{"text": qc.description or qc.alias, "value": qc.alias}]
+                r.append({"text": qc.description or qc.alias, "value": qc.alias})
         return r
 
     @staticmethod
@@ -248,7 +248,7 @@ class JsonDSAPI:
             if target.payload and "metric_function" in target.payload:
                 # Alternative - target with function suffix, percentile ?
                 query_config.aggregate_function = target.payload["agg_func"]
-            targets[(metric_type.scope.table_name, query_mt_condition)] += [query_config]
+            targets[(metric_type.scope.table_name, query_mt_condition)].append(query_config)
         # Query
         for (table_name, query_condition), query_configs in targets.items():
             # Format query
@@ -259,7 +259,7 @@ class JsonDSAPI:
             except ClickhouseError as e:
                 self.logger.error("Clickhouse query error: %s", e)
                 raise HTTPException(status_code=500, detail=e)
-            r += [(query_configs, orjson.loads(result))]
+            r.append((query_configs, orjson.loads(result)))
         return self.format_result(r, result_type=req.result_type)
 
     def get_query(
@@ -296,13 +296,9 @@ class JsonDSAPI:
         for qc in query_configs:
             if qc.if_combinator_condition:
                 # groupArrayIf((t, li), traffic_class = '') AS lii,
-                s_fields += [
-                    f"groupArrayIf((`{qc.metric_type}`, t), {qc.if_combinator_condition}) AS `{qc.alias or qc.metric_type}`"
-                ]
+                s_fields.append(f"groupArrayIf((`{qc.metric_type}`, t), {qc.if_combinator_condition}) AS `{qc.alias or qc.metric_type}`")
             else:
-                s_fields += [
-                    f"groupArray((`{qc.metric_type}`, t)) AS `{qc.alias or qc.metric_type}`"
-                ]
+                s_fields.append(f"groupArray((`{qc.metric_type}`, t)) AS `{qc.alias or qc.metric_type}`")
         target_expr, group_by_expr = self.get_target_expression(table_name)
         timestamp_expr = "(intDiv(toUInt32(ts), 100) * 100) * 1000"
         if self.allow_interval_limit and req.interval.endswith("m"):
@@ -465,7 +461,7 @@ class JsonDSAPI:
             # Labels
             if query_field == "labels":
                 labels = [f"'{ll}'" for ll in payload["labels"]]
-                r += [f"labels IN ({','.join(labels)})"]
+                r.append(f"labels IN ({','.join(labels)})")
                 continue
             if isinstance(values, (int, str)):
                 values = [str(values)]
@@ -480,20 +476,20 @@ class JsonDSAPI:
                         if not value:
                             continue
                         value = value.bi_id
-                    q_values += [str(value)]
-                r += [f"{query_field} IN ({','.join(q_values)})"]
+                    q_values.append(str(value))
+                r.append(f"{query_field} IN ({','.join(q_values)})")
                 continue
             if query_field not in columns or not values:
                 continue
             values = [f"'{vv!s}'" for vv in values]
             if not query_function:
-                r += [f"{query_field} = {values[0]}"]
+                r.append(f"{query_field} = {values[0]}")
             elif query_function[0].upper() in {"IN", "NOT IN"}:
-                r += [f"{query_field} {query_function[0]} ({','.join(values)})"]
+                r.append(f"{query_field} {query_function[0]} ({','.join(values)})")
             elif query_function[0].upper() in {"MATCH", "REGEX"}:
-                r += [f"{query_function[0]}({query_field}, {values[0]})"]
+                r.append(f"{query_function[0]}({query_field}, {values[0]})")
             else:
-                r += [f"{query_field} {query_function[0]} {values[0]}"]
+                r.append(f"{query_field} {query_function[0]} {values[0]}")
         if not r:
             raise HTTPException(status_code=400, detail="One of Key field is required on query")
         # @todo dict request

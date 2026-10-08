@@ -69,7 +69,7 @@ class MACDiscoveryCheck(TopologyDiscoveryCheck):
         for mo_bi_id, mac, ts, iface in ch.execute(post=SQL):
             mo = bi_map.get(mo_bi_id)
             if mo:
-                mtable += [[mo, MAC(int(mac)), iface, ts]]
+                mtable.append([mo, MAC(int(mac)), iface, ts])
                 last_ts[mo] = max(ts, last_ts.get(mo, ts))
         # Filter out aged MACs
         mtable = [m for m in mtable if m[3] == last_ts[m[0]]]

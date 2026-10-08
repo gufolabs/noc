@@ -172,7 +172,7 @@ class MapPlugin(InvPlugin):
                 else:
                     # Item
                     item["objectTypeId"] = d[i]
-                r += [item]
+                r.append(item)
             return r
 
         d = {}

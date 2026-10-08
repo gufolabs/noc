@@ -65,7 +65,7 @@ class PrefixCheck(DiscoveryCheck):
         # vpn_id -> [prefix, ]
         vrf_prefixes: defaultdict[str, list[str]] = defaultdict(list)
         for vpn_id, p in prefixes:
-            vrf_prefixes[vpn_id] += [p]
+            vrf_prefixes[vpn_id].append(p)
         # build vpn_id -> VRF mapping
         self.logger.debug("Building VRF map")
         vrfs = {}
@@ -233,23 +233,19 @@ class PrefixCheck(DiscoveryCheck):
         if self.is_preferred(prefix.source, discovered_prefix.source):
             changes = []
             if prefix.source != discovered_prefix.source:
-                changes += [f"source: {prefix.source} -> {discovered_prefix.source}"]
+                changes.append(f"source: {prefix.source} -> {discovered_prefix.source}")
                 prefix.source = discovered_prefix.source
             if discovered_prefix.source in LOCAL_SRC:
                 # Check name
                 name = self.get_prefix_name(discovered_prefix)
                 if name and name != prefix.name:
-                    changes += [f"name: {prefix.name} -> {name}"]
+                    changes.append(f"name: {prefix.name} -> {name}")
                     prefix.name = name
             if discovered_prefix.asn and prefix.asn != discovered_prefix.asn:
-                changes += [
-                    f"asn: {prefix.asn.asn if prefix.asn else None} -> {discovered_prefix.asn.asn if discovered_prefix.asn else None}"
-                ]
+                changes.append(f"asn: {prefix.asn.asn if prefix.asn else None} -> {discovered_prefix.asn.asn if discovered_prefix.asn else None}")
                 prefix.asn = discovered_prefix.asn
             if discovered_prefix.vlan and prefix.vlan != discovered_prefix.vlan:
-                changes += [
-                    f"vlan: {str(prefix.vlan) if prefix.vlan else None} -> {str(discovered_prefix.vlan) if discovered_prefix.vlan else None}"
-                ]
+                changes.append(f"vlan: {str(prefix.vlan) if prefix.vlan else None} -> {str(discovered_prefix.vlan) if discovered_prefix.vlan else None}")
                 prefix.vlan = discovered_prefix.vlan
             if changes:
                 self.logger.info(

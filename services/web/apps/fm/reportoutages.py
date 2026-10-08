@@ -77,7 +77,7 @@ class ReportOutagesApplication(SimpleReport):
         for o in Outage.objects.filter(q):
             start = max(o.start, b)
             stop = o.stop if o.stop else now
-            outages[o.object] += [o]
+            outages[o.object].append(o)
             otime[o.object] += (stop - start).total_seconds()
         td = d.total_seconds()
         if not request.user.is_superuser:
@@ -107,8 +107,7 @@ class ReportOutagesApplication(SimpleReport):
                 avail = float(td - dt) * 100 / td
             else:
                 avail = 0
-            r += [
-                (
+            r.append((
                     m.name,
                     m.address,
                     m.profile.name,
@@ -118,8 +117,7 @@ class ReportOutagesApplication(SimpleReport):
                     downtime,
                     avail,
                     len(outages[o]),
-                )
-            ]
+                ))
 
         return self.from_dataset(
             title=self.title,

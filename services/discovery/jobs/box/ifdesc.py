@@ -44,7 +44,7 @@ class IfDescCheck(TopologyDiscoveryCheck):
                     ri.managed_object.name,
                     ri.name,
                 )
-                candidates += [(iface, ri)]
+                candidates.append((iface, ri))
         # Check other side
         if self.object.object_profile.ifdesc_symmetric:
             confirmed: list[tuple[Interface, Interface]] = []
@@ -79,7 +79,7 @@ class IfDescCheck(TopologyDiscoveryCheck):
                         riri.name,
                     )
                     continue
-                confirmed += [(li, ri)]
+                confirmed.append((li, ri))
             candidates = confirmed
         # Link remaining
         for li, ri in candidates:

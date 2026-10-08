@@ -90,10 +90,10 @@ class NRIPortmapperCheck(DiscoveryCheck):
             if not nri_name:
                 self.logger.info("[%s] Cannot map port name '%s'", nri, d["name"])
                 if d.get("nri_name"):
-                    bulk += [UpdateOne({"_id": d["_id"]}, {"$unset": {"nri_name": 1}})]
+                    bulk.append(UpdateOne({"_id": d["_id"]}, {"$unset": {"nri_name": 1}}))
             elif d.get("nri_name") != nri_name:
                 self.logger.info("[%s] Mapping '%s' to '%s'", nri, nri_name, d["name"])
-                bulk += [UpdateOne({"_id": d["_id"]}, {"$set": {"nri_name": nri_name}})]
+                bulk.append(UpdateOne({"_id": d["_id"]}, {"$set": {"nri_name": nri_name}}))
         if bulk:
             self.logger.info("Sending %d updates", len(bulk))
             icol.bulk_write(bulk)

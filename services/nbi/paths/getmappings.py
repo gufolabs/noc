@@ -140,9 +140,7 @@ class GetMappingsAPI(NBIAPI):
         def format_obj(o):
             r = {"scope": scope, "id": str(o.id), "mappings": []}
             if o.remote_system:
-                r["mappings"] += [
-                    {"remote_system": str(o.remote_system.id), "remote_id": str(o.remote_id)}
-                ]
+                r["mappings"].append({"remote_system": str(o.remote_system.id), "remote_id": str(o.remote_id)})
             return r
 
         # Get model to query

@@ -60,18 +60,18 @@ class EventClassificationRuleApplication(ExtDocApplication):
                     data["profile"] = event.managed_object.profile.name
                     data["source"] = event.source
                 else:
-                    errors += [f"Event not found: {q['data']}"]
+                    errors.append(f"Event not found: {q['data']}")
             else:
                 # Decode json
                 try:
                     e = self.deserialize(q["data"])
                 except Exception:
-                    errors += ["Cannot decode JSON"]
+                    errors.append("Cannot decode JSON")
                     e = None
                 if isinstance(e, list):
                     e = e[0]
                 if not isinstance(e, dict) or "raw_vars" not in e:
-                    errors += ["Invalid JSON data"]
+                    errors.append("Invalid JSON data")
                 else:
                     data = e["raw_vars"]
                     if "profile" in e:
@@ -97,13 +97,13 @@ class EventClassificationRuleApplication(ExtDocApplication):
                     try:
                         k = re.compile(p["key_re"])
                     except re.error as why:
-                        errors += [f"Invalid key regular expression <<<{p['key_re']}>>>: {why}"]
+                        errors.append(f"Invalid key regular expression <<<{p['key_re']}>>>: {why}")
                     try:
                         v = re.compile(p["value_re"])
                     except re.error as why:
-                        errors += [f"Invalid value regular expression <<<{p['value_re']}>>>: {why}"]
+                        errors.append(f"Invalid value regular expression <<<{p['value_re']}>>>: {why}")
                     if k and v:
-                        patterns += [(k, v)]
+                        patterns.append((k, v))
         # Try to match rule
         if patterns and not errors:
             s_patterns = []
@@ -122,40 +122,34 @@ class EventClassificationRuleApplication(ExtDocApplication):
                             v.update(v_match.groupdict())
                             vars.update(v)
                             # Save patterns
-                            s_patterns += [
-                                {
+                            s_patterns.append({
                                     "status": True,
                                     "key": k,
                                     "value": data[k],
                                     "key_re": pkey.pattern,
                                     "value_re": pvalue.pattern,
                                     "vars": [{"key": k, "value": v[k]} for k in v],
-                                }
-                            ]
+                                })
                         else:
-                            i_patterns += [
-                                {
+                            i_patterns.append({
                                     "status": False,
                                     "key": k,
                                     "value": data[k],
                                     "key_re": pkey.pattern,
                                     "value_re": pvalue.pattern,
                                     "vars": {},
-                                }
-                            ]
+                                })
                         matched = True
                         break
                 if not matched:
-                    i_patterns += [
-                        {
+                    i_patterns.append({
                             "status": False,
                             "key": None,
                             "value": None,
                             "key_re": pkey.pattern,
                             "value_re": pvalue.pattern,
                             "vars": {},
-                        }
-                    ]
+                        })
             if s_patterns and not i_patterns:
                 result = True
             r_patterns = s_patterns + i_patterns
@@ -167,13 +161,13 @@ class EventClassificationRuleApplication(ExtDocApplication):
                     try:
                         vars[v["name"]] = eval(v["value"][1:], {}, vars)
                     except Exception as why:
-                        errors += [f"Error when evaluating '{v['name']}': {why}"]
+                        errors.append(f"Error when evaluating '{v['name']}': {why}")
                 else:
                     vars[v["name"]] = v["value"]
         # Check required variables
         for rvars in required_vars:
             if rvars not in vars:
-                errors += [f"Missed required variable: {rvars}"]
+                errors.append(f"Missed required variable: {rvars}")
         # Fill event class template
         if event_class:
             # lang = "en"

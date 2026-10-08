@@ -102,7 +102,7 @@ class CheckTTJob(Job):
                 continue
             if c.change_id and last_id and alnum_key(c.change_id) <= alnum_key(last_id):
                 continue
-            changes[c.document_id] += [(user, c)]
+            changes[c.document_id].append((user, c))
             if c.timestamp:
                 last_ts = max(c.timestamp, last_ts)
             if c.change_id:

@@ -46,16 +46,14 @@ class FilePlugin(InvPlugin):
     def get_data(self, request: HttpRequest, o):
         files = []
         for f in ObjectFile.objects.filter(object=o.id).order_by("name"):
-            files += [
-                {
+            files.append({
                     "id": str(f.id),
                     "name": f.name,
                     "mime_type": f.mime_type,
                     "size": f.size,
                     "ts": f.ts.isoformat(),
                     "description": f.description,
-                }
-            ]
+                })
         return {"id": str(o.id), "files": files}
 
     def api_upload(self, request: HttpRequest, id):

@@ -94,7 +94,7 @@ class LdapBackend(BaseAuthBackend):
             if group_mappings[group] & user_groups:
                 self.logger.debug("%s: Ensure group %s", u.username, group.name)
                 self.ensure_group(u, group)
-                ug += [group.name]
+                ug.append(group.name)
             else:
                 self.logger.debug("%s: Deny group %s", u.username, group.name)
                 self.deny_group(u, group)
@@ -138,7 +138,7 @@ class LdapBackend(BaseAuthBackend):
                 kwargs["port"] = s.port
             if s.use_tls:
                 kwargs["use_ssl"] = True
-            servers += [ldap3.Server(**kwargs)]
+            servers.append(ldap3.Server(**kwargs))
         ldap3.set_config_parameter("POOLING_LOOP_TIMEOUT", 3)
         self.logger.debug(
             "Connect to Servers: %s, %s",

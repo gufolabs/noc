@@ -55,62 +55,56 @@ class ConnectionTypeApplication(ExtDocApplication):
             # Type m
             rr = []
             if "f" in o.genders:
-                rr += [fn(o, "f", "Same type")]
+                rr.append(fn(o, "f", "Same type"))
             # Superclassess
             for ct in o.get_superclasses():
-                rr += [fn(ct, "f", f"Superclass {cp(o, ct)}")]
+                rr.append(fn(ct, "f", f"Superclass {cp(o, ct)}"))
             # c_groups
             if o.c_group:
                 so = set(o.c_group)
                 for ct in o.get_by_c_group():
-                    rr += [
-                        fn(
+                    rr.append(fn(
                             ct,
                             "f",
                             f"Share common groups: {', '.join(so & set(ct.c_group))}",
-                        )
-                    ]
-            r += [{"gender": "m", "records": rr}]
+                        ))
+            r.append({"gender": "m", "records": rr})
         if "f" in o.genders:
             # Type f
             rr = []
             if "m" in o.genders:
-                rr += [fn(o, "m", "Same type")]
+                rr.append(fn(o, "m", "Same type"))
             # Superclassess
             for ct in o.get_subclasses():
-                rr += [fn(ct, "m", f"Subclass {cp(ct, o)}")]
+                rr.append(fn(ct, "m", f"Subclass {cp(ct, o)}"))
             # c_group
             if o.c_group:
                 so = set(o.c_group)
                 for ct in o.get_by_c_group():
-                    rr += [
-                        fn(
+                    rr.append(fn(
                             ct,
                             "m",
                             f"Share common groups: {', '.join(so & set(ct.c_group))}",
-                        )
-                    ]
-            r += [{"gender": "f", "records": rr}]
+                        ))
+            r.append({"gender": "f", "records": rr})
         if "s" in o.genders:
             # Type s
             rr = [fn(o, "s", "Same type")]
             # Superclassess
             for ct in o.get_superclasses():
-                rr += [fn(ct, "s", f"Superclass {cp(o, ct)}")]
+                rr.append(fn(ct, "s", f"Superclass {cp(o, ct)}"))
             # Subclasses
             for ct in o.get_subclasses():
-                rr += [fn(ct, "s", f"Subclass {cp(ct, o)}")]
+                rr.append(fn(ct, "s", f"Subclass {cp(ct, o)}"))
             # c_group
             if o.c_group:
                 so = set(o.c_group)
                 for ct in o.get_by_c_group():
-                    rr += [
-                        fn(
+                    rr.append(fn(
                             ct,
                             "s",
                             f"Share common groups: {', '.join(so & set(ct.c_group))}",
-                        )
-                    ]
+                        ))
 
-            r += [{"gender": "s", "records": rr}]
+            r.append({"gender": "s", "records": rr})
         return r

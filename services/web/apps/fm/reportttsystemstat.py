@@ -125,10 +125,8 @@ class ReportTTSystemStatApplication(SimpleReport):
 
         q_where = ["server IN ('{}')".format("', '".join(tt_systems))]
         # q_where = ["managed_object IN (%s)" % ", ".join(mo_bi_dict.keys())]
-        q_where += [
-            f"(date >= toDate({ts_from_date})) AND (ts >= toDateTime({ts_from_date}) "
-            f"AND ts <= toDateTime({ts_to_date}))"
-        ]
+        q_where.append(f"(date >= toDate({ts_from_date})) AND (ts >= toDateTime({ts_from_date}) "
+            f"AND ts <= toDateTime({ts_to_date}))")
         r = []
         ch = connection()
         if repo_format == "1":
@@ -160,7 +158,7 @@ class ReportTTSystemStatApplication(SimpleReport):
                     row[3] = aa[row[3]].managed_object if row[3] in aa else row[3]
                 else:
                     continue
-                r += [row]
+                r.append(row)
         else:
             query = q1 % " and ".join(q_where)
             # (server, service)
@@ -174,15 +172,13 @@ class ReportTTSystemStatApplication(SimpleReport):
                 else:
                     tt_s[(row[0], row[1])][2] += int(row[3])
 
-            r += [
-                SectionRow(
+            r.append(SectionRow(
                     name=f"Report from {from_date.strftime('%d.%m.%Y %H:%M')} to {to_date.strftime('%d.%m.%Y %H:%M')}"
-                )
-            ]
+                ))
             for line in sorted(tt_s, key=lambda x: x[0]):
                 data = list(line)
                 data += tt_s[line]
                 data[5] = round((float(data[3]) / float(data[2])) * 100.0, 2)
-                r += [data]
+                r.append(data)
 
         return self.from_dataset(title=self.title, columns=columns, data=r, enumerate=True)

@@ -56,7 +56,7 @@ class MACCheck(DiscoveryCheck):
             ifprofile = iface.get_profile()
             mac = MAC(v["mac"])
             if mac_downlink_policy and ifprofile.mac_discovery_policy in mac_downlink_policy:
-                mac_direct_downlink[ifname] += [mac]
+                mac_direct_downlink[ifname].append(mac)
             if self.object.enable_autosegmentation:
                 if_mac[iface].add(v["mac"])
             if self.object.object_profile.periodic_discovery_mac_filter_policy == "A":
@@ -72,8 +72,7 @@ class MACCheck(DiscoveryCheck):
                 # Filter by interface profile
                 self.logger.debug("[%s] Skip MAC collection on interface: %s", v["mac"], ifname)
                 continue
-            data += [
-                {
+            data.append({
                     "date": date,
                     "ts": ts,
                     "managed_object": self.object.bi_id,
@@ -83,8 +82,7 @@ class MACCheck(DiscoveryCheck):
                     "segment": self.object.segment.bi_id,
                     "vlan": v.get("vlan_id", 0),
                     "is_uni": 1 if ifprofile.is_uni else 0,
-                }
-            ]
+                })
         if unknown_interfaces:
             self.logger.info("Ignoring unknown interfaces: %s", ", ".join(unknown_interfaces))
         processed_macs = len(data)

@@ -81,6 +81,6 @@ class CapabilityApplication(ExtDocApplication):
                 children = [{"text": b.strip(), "children": context[b.strip()]}]
         kk = {k[0].strip() for (k, g) in itertools.groupby(caps_d, key=lambda x: x[:1]) if k}
         for k in kk:
-            root_c["children"] += [{"text": k, "children": context[k]}]
+            root_c["children"].append({"text": k, "children": context[k]})
 
         return self.render_json(root_c)

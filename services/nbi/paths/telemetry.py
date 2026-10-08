@@ -102,7 +102,7 @@ class TelemetryAPI(NBIAPI):
             data.update({"date": date, "ts": ts, "managed_object": bi_id})
             if labels:
                 data["labels"] = [str(x) for x in labels]
-            chains[table] += [data]
+            chains[table].append(data)
         # Spool metrics
         for f in chains:
             self.service.register_metrics(f, chains[f])

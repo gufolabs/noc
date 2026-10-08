@@ -93,7 +93,7 @@ class ReportAvailabilityApplication(SimpleReport):
             stop = o.stop if (o.stop and o.stop < d) else d
             if (stop - start).total_seconds() == td and skip_zero_avail:
                 continue
-            outages[o.object] += [(stop - start).total_seconds()]
+            outages[o.object].append((stop - start).total_seconds())
         # Normalize to percents
         return {
             o: ((td - sum(outages[o])) * 100.0 / td, int(sum(outages[o])), len(outages[o]))
@@ -203,7 +203,7 @@ class ReportAvailabilityApplication(SimpleReport):
             ]
             s.extend(a.get(mo_id, (100.0, 0, 0))[1:])
             s.append(rb.get(mo_id, 0))
-            r += [s]
+            r.append(s)
             """
             a1.get(o.id, 100),
             a7.get(o.id, 100),

@@ -37,15 +37,13 @@ class ObjectValidationPolicyApplication(ExtDocApplication):
         params = params or {}
         r = []
         for p in rule.query.params:
-            r += [
-                {
+            r.append({
                     "name": p.name,
                     "type": p.type,
                     "value": params.get(p.name) or "",
                     "default": p.default,
                     "description": p.description,
-                }
-            ]
+                })
         return r
 
     @staticmethod

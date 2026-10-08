@@ -21,7 +21,7 @@ def clean_label(label: str) -> tuple[str, str, list[str]]:
     if r[0] == "noc":
         r.pop(0)
     if r[-1] in MATCH_OPS:
-        badges += [MATCH_BADGES[r[-1]]]
+        badges.append(MATCH_BADGES[r[-1]])
         r.pop(-1)
     return "::".join(r[:-1]), r[-1], badges
 
