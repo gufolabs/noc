@@ -341,7 +341,7 @@ class Command(BaseCommand):
                     max_n = max(nn, max_n)
             ntpl = f"{s_name}.%d"
             for nn, cmd in enumerate(sorted(commands)):
-                spec.answers += [SpecAnswer(name=ntpl % (nn + 1), type="cli", value=cmd)]
+                spec.answers.append(SpecAnswer(name=ntpl % (nn + 1), type="cli", value=cmd))
             changed = True
         if not save:
             return spec
@@ -383,13 +383,13 @@ class Command(BaseCommand):
         r = []
         cmd_num = 1
         for rcmd, packets in script.iter_cli_tracking():
-            r += [
+            r.append(
                 {
                     "names": [f"cli_{int(cmd_num)}"],
                     "request": rcmd,
                     "reply": [self.encode_cli(v) for v in packets],
                 }
-            ]
+            )
             cmd_num += 1
         script.stop_tracking()
         return r
@@ -397,7 +397,7 @@ class Command(BaseCommand):
     def get_cli_fsm_results(self, script):
         r = []
         for state, reply in script.iter_cli_fsm_tracking():
-            r += [{"state": state, "reply": [self.encode_cli(v) for v in reply]}]
+            r.append({"state": state, "reply": [self.encode_cli(v) for v in reply]})
         return r
 
     @classmethod

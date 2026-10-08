@@ -36,7 +36,7 @@ def get_hg_revisions(path):
         rev, date = line.split()
         if "-" in date:
             date, _r = date.split("-", 1)
-        s += [(rev, datetime.datetime.fromtimestamp(float(date)))]
+        s.append((rev, datetime.datetime.fromtimestamp(float(date))))
     s.reverse()
     return s
 

@@ -108,11 +108,11 @@ class Command(BaseCommand):
         mos = []
         for x in managed_objects:
             if job == "segment":
-                mos += [NetworkSegment.objects.get(name=x)]
+                mos.append(NetworkSegment.objects.get(name=x))
             else:
                 for mo in ResourceGroup.get_objects_from_expression(x, model_id="sa.ManagedObject"):
                     if mo not in mos:
-                        mos += [mo]
+                        mos.append(mo)
         checks = set()
         for c in check:
             checks.update(c.split(","))

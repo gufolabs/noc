@@ -52,7 +52,7 @@ class Command(BaseCommand):
             g = NotificationGroup.get_by_name(ng)
             if not g:
                 self.die(f"Invalid notification group '{ng}'")
-            groups += [g]
+            groups.append(g)
         if subject and (body or body_file):
             # Get message from command line
             if body_file:

@@ -67,13 +67,13 @@ class Command(BaseCommand):
         def obj_str(o, conn_name=None):
             r = []
             if conn_name:
-                r += [f"{conn_name}:"]
+                r.append(f"{conn_name}:")
             if o.name:
-                r += [str(o.name)]
-            r += [f"({o.model.name})"]
+                r.append(str(o.name))
+            r.append(f"({o.model.name})")
             sn = o.get_data("asset", "serial")
             if sn:
-                r += [f"Serial={sn}"]
+                r.append(f"Serial={sn}")
             return " ".join(r)
 
         def iter_obj(o):

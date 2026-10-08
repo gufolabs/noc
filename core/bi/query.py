@@ -78,7 +78,7 @@ def in_lookup(seq, model=None):
     m = []
     for item in seq[1]:
         if isinstance(item, int) or item.isdigit():
-            m += [int(item)]
+            m.append(int(item))
             continue
     if len(seq[1]) == 1:
         return f"{seq[0]['$field']}{s3} IN {m[0]}"

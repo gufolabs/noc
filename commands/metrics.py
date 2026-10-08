@@ -179,26 +179,26 @@ class Command(BaseCommand):
         r = defaultdict(list)
         units = {}
         for mt in MetricType.objects.filter(field_name__in=metrics):
-            r[mt.scope.table_name] += [mt.field_name]
+            r[mt.scope.table_name].append(mt.field_name)
             units[mt.field_name] = f"{mt.scale.code},{mt.units.code}"
         q_args = []
         for scope in r:
             f_sql = [",".join(r[scope]), scope]
             if scope in ["Interface", "sla"]:
-                f_sql += [o.managed_object.bi_id]
+                f_sql.append(o.managed_object.bi_id)
             else:
-                f_sql += [o.bi_id]
+                f_sql.append(o.bi_id)
             f_sql += [
                 start.date().isoformat(),
                 start.replace(microsecond=0).isoformat(sep=" "),
                 end.replace(microsecond=0).isoformat(sep=" "),
             ]
             if scope == "interface":
-                f_sql += ["AND interface=%s"]
-                q_args += [o.name]
+                f_sql.append("AND interface=%s")
+                q_args.append(o.name)
             elif scope == "sla":
-                f_sql += ["AND sla_probe=%s"]
-                q_args += [o.bi_id]
+                f_sql.append("AND sla_probe=%s")
+                q_args.append(o.bi_id)
 
             query = SQL % tuple(f_sql)
             self.print("QUERY", query)

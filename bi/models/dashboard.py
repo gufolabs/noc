@@ -122,11 +122,11 @@ class Dashboard(Document):
                     ]
                     processed += [f"u{int(da.user.id)}", f"g{int(da.group.id)}"]
                     continue
-                access += [da]
+                access.append(da)
                 if da.user:
-                    processed += [f"u{int(da.user.id)}"]
+                    processed.append(f"u{int(da.user.id)}")
                 if da.group:
-                    processed += [f"g{int(da.group.id)}"]
+                    processed.append(f"g{int(da.group.id)}")
             self.access = access
 
         super().save(

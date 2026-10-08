@@ -84,7 +84,7 @@ class ObjectValidationPolicy(Document):
                     tpl = Template(rule.error_text_template)
                     path = []
                     if rule.error_code:
-                        path += [rule.error_code]
+                        path.append(rule.error_code)
                     yield ProblemItem(
                         alarm_class=rule.alarm_class.name if rule.alarm_class else None,
                         path=path,

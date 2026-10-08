@@ -222,7 +222,7 @@ class Command(BaseCommand):
                     if "bi_id" not in r:
                         r["bi_id"] = item.bi_id
                     r["ts"] = time.strftime("%Y-%m-%d %H:%M:%S", lt)
-                    data += [orjson.dumps(r)]
+                    data.append(orjson.dumps(r))
                 table = bi_dict_model._meta.db_table
                 run_sync(partial(upload, table, data))
 

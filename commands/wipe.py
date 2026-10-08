@@ -57,7 +57,7 @@ class Command(BaseCommand):
             wiper = self.wipe_default
             model = model[0]
         for o in self.iter_objects(model, ids, state):
-            objects += [o]
+            objects.append(o)
         if dry_run:
             self.print(f"Wiping {len(objects)} objects")
             return
@@ -109,7 +109,7 @@ class Command(BaseCommand):
             o = getter(o_id)
             if not o:  # Not found
                 raise CommandError(f"Object '{o_id}' is not found")
-            objects += [o]
+            objects.append(o)
         # Wipe objects
         from noc.core.debug import error_report
 

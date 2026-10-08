@@ -106,7 +106,7 @@ class APIKey(Document):
         access = doc.get("access", [])
         r = []
         for a in access:
-            r += [(a.get("api"), a.get("role", "*"))]
+            r.append((a.get("api"), a.get("role", "*")))
         return doc["name"], r
 
     @classmethod

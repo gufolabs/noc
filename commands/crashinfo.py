@@ -71,7 +71,7 @@ class Command(BaseCommand):
                         break
                 x = self.rx_xtype.sub(lambda match: f"{match.group('xtype')}: ", x)
                 x = smart_text(x)[:100].encode("utf-8")
-                fl += [
+                fl.append(
                     {
                         "uuid": fn[:-5],
                         "time": t,
@@ -79,7 +79,7 @@ class Command(BaseCommand):
                         "service": service,
                         "exception": x.decode(),
                     }
-                ]
+                )
         fs = "%s %36s  %19s  %-29s %-s\n"
         self.stdout.write(fs % ("N", "UUID", "Time", "Service", "Exception"))
         for line in sorted(fl, key=operator.itemgetter("time"), reverse=True):

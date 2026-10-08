@@ -115,7 +115,7 @@ class MAC(Model):
                 arg = query[k]
             if isinstance(arg, str):
                 arg = arg.strip()
-            f_filter["$and"] += [{f"${q}": [{"$field": field}, arg]}]
+            f_filter["$and"].append({f"${q}": [{"$field": field}, arg]})
         if not f_filter:
             return
         fields = [
@@ -154,7 +154,7 @@ class MAC(Model):
         for r in self.mac_filter(query):
             agg = int(r["managed_object"])
             if r["interface"] in neighbors[agg]:
-                neighbors[agg][r["interface"]] += [int(r["mac"])]
+                neighbors[agg][r["interface"]].append(int(r["mac"]))
             else:
                 neighbors[agg][r["interface"]] = [int(r["mac"])]
 

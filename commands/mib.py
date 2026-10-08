@@ -213,15 +213,15 @@ class Command(BaseCommand):
             MIBData.objects.filter(mib=mib.id),
             key=lambda x: [int(y) for y in x.oid.split(".")],
         )
-        r += ["\n".join(f'    "{md.name}": "{md.oid}",' for md in mib_data)]
+        r.append("\n".join(f'    "{md.name}": "{md.oid}",' for md in mib_data))
         r += ["}", "", "DISPLAY_HINTS = {"]
-        r += [
+        r.append(
             "\n".join(
                 f'    "{md.oid}": ("{md.syntax["base_type"]}", "{md.syntax["display_hint"]}"),  # {md.name}'
                 for md in mib_data
                 if has_worth_hint(md.syntax)
             )
-        ]
+        )
         r += ["}", ""]
         data = "\n".join(r)
         with self.open_output(kwargs.get("output")) as f:
@@ -238,9 +238,9 @@ class Command(BaseCommand):
         for p in paths:
             if os.path.isdir(p):
                 for file in os.listdir(p):
-                    left_paths += [os.path.join(p, file)]
+                    left_paths.append(os.path.join(p, file))
                 continue
-            left_paths += [p]
+            left_paths.append(p)
         while left_paths:
             done = set()
             for p in left_paths:

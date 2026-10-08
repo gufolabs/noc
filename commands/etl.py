@@ -262,7 +262,7 @@ class Command(BaseCommand):
                         > deadline
                     ):
                         continue
-                    clean_files += [f]
+                    clean_files.append(f)
                 clean_files = sorted(clean_files, reverse=True)[CLEANUP_SAFE_FILES_COUNT:]
             if not clean_files:
                 self.print("Nothing to remove. Continue...")

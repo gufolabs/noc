@@ -73,7 +73,7 @@ class Command(BaseCommand):
                 if uplinks:
                     uplink2 = nq(uplinks.pop(0).name)
             a = alarms.get(mo.id)
-            r += [
+            r.append(
                 Record(
                     timestamp=a.timestamp.strftime("%Y-%m-%d %H:%M:%S") if a else "",
                     alarm_id=a.id if a else "",
@@ -84,7 +84,7 @@ class Command(BaseCommand):
                     uplink1=uplink1,
                     uplink2=uplink2,
                 )
-            ]
+            )
         MASK = "%19s | %24s | %24s | %16s | %15s | %20s | %16s | %16s"
         self.print(
             MASK % ("ts", "alarm", "root", "object", "address", "platform", "uplink1", "uplink2")

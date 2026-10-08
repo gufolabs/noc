@@ -105,20 +105,20 @@ class BaseCDAGNodeMetaclass(type):
             # Generate dict-getter code
             dict_fn = ["def dict(self):"]
             if opt_state_fields:
-                dict_fn += ["    x = {"]
+                dict_fn.append("    x = {")
                 dict_fn += [f"        '{s}': self.{s}," for s in req_state_fields]
-                dict_fn += ["    }"]
+                dict_fn.append("    }")
                 for opt in opt_state_fields:
                     dict_fn += [
                         f"    if self.{opt} is not None:",
                         f"        x['{opt}'] = self.{opt}",
                     ]
-                dict_fn += ["    return x"]
+                dict_fn.append("    return x")
             else:
                 # No optional fields, streamlined implementation
-                dict_fn += ["    return {"]
+                dict_fn.append("    return {")
                 dict_fn += [f"        '{s}': self.{s}," for s in state_slots]
-                dict_fn += ["    }"]
+                dict_fn.append("    }")
             # Compile and execute dict-getter to get function
             co = compile("\n".join(dict_fn), "<string>", "exec")
             l_vars = {}

@@ -338,11 +338,11 @@ class User(NOCModel):
         """
         r = []
         if self.first_name:
-            r += [self.first_name[0].upper()]
+            r.append(self.first_name[0].upper())
         if self.last_name:
-            r += [self.last_name[0].upper()]
+            r.append(self.last_name[0].upper())
         if not r:
-            r += [self.username[:1].upper()]
+            r.append(self.username[:1].upper())
         return "".join(r)
 
     @classmethod

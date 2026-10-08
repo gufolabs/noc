@@ -370,5 +370,5 @@ def register_checks(
             rs = RemoteSystem.get_by_name(c.remote_system)
             if rs:
                 r["remote_system"] = rs.bi_id
-        data += [orjson.dumps(r)]
+        data.append(orjson.dumps(r))
     svc.publish(b"\n".join(data), f"ch.{CHECK_HISTORY_TABLE}")

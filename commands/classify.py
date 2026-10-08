@@ -219,7 +219,7 @@ class Command(BaseCommand):
                 "event_class": {"name": rule.event_class_name},
                 "vars": r_vars,
             }
-            out_data += [out_record]
+            out_data.append(out_record)
             msg_cnt += 1
         stats = Stats(
             path=filepath,

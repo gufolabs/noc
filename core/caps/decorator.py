@@ -275,9 +275,9 @@ def set_caps(self, key: str, value: Any, source: str = "manual", scope: str | No
                 # Register changes
                 changed_fields = [ChangeField(field=item.name, old=item.value, new=value)]
                 continue
-        new_caps += [item]
+        new_caps.append(item)
     if is_new:
-        new_caps += [
+        new_caps.append(
             CapsValue(
                 capability=caps,
                 value=value,
@@ -285,7 +285,7 @@ def set_caps(self, key: str, value: Any, source: str = "manual", scope: str | No
                 scope=scope or "",
                 config=configs.get(str(caps.id), CapsConfig()),
             )
-        ]
+        )
         changed |= True
         changed_fields = [ChangeField(field=caps.name, old=None, new=value)]
         caps_logger.info("Adding capability: %s", new_caps[-1])
@@ -315,12 +315,12 @@ def reset_caps(
         if scope and scope == item.scope:
             changed |= True
             caps_logger.info("Removing capability by scope: %s", scope)
-            changed_fields += [ChangeField(field=item.name, old=str(item.value), new=None)]
+            changed_fields.append(ChangeField(field=item.name, old=str(item.value), new=None))
             continue
         if caps and caps == item.name and (not source or source == item.source):
             changed |= True
             caps_logger.info("Removing capability by name: %s", caps)
-            changed_fields += [ChangeField(field=item.name, old=str(item.value), new=None)]
+            changed_fields.append(ChangeField(field=item.name, old=str(item.value), new=None))
             continue
         new_caps.append(item)
     if changed:
@@ -422,7 +422,7 @@ def update_caps(
                 )
             )
             continue
-        new_caps += [ci]
+        new_caps.append(ci)
     # Add new capabilities
     configs = self.get_caps_config()
     for cn in set(caps) - seen:

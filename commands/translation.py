@@ -105,7 +105,7 @@ class Command(BaseCommand):
                         args += ["-k", "__"]
                     for expr in self.SERVICES[svc][domain]:
                         if os.path.isfile(expr):
-                            args += [expr]
+                            args.append(expr)
                         else:
                             args += self.glob(expr)
                     self.babel(*tuple(args))

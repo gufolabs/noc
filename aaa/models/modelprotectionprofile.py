@@ -83,9 +83,7 @@ class ModelProtectionProfile(Document):
                     continue
                 if fa.name:
                     # Split User and Group rights
-                    access += [
-                        FieldAccess(name=fa.name, permission=fa.permission),
-                    ]
+                    access.append(FieldAccess(name=fa.name, permission=fa.permission))
                     processed.add(fa.name)
                     continue
             self.field_access = access
@@ -106,7 +104,7 @@ class ModelProtectionProfile(Document):
             model=model_id, groups__in=user.groups.all()
         ):
             for fa in mpp.field_access:
-                perms[fa.name] += [fa.permission]
+                perms[fa.name].append(fa.permission)
         return {p: max(perms[p]) for p in perms}
 
     @classmethod

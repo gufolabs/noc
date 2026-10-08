@@ -72,10 +72,10 @@ class Command(BaseCommand):
 
         i = defaultdict(list)
         for li in link.interfaces:
-            i[li.managed_object] += [li]
+            i[li.managed_object].append(li)
         r = []
         for mo in i:
-            r += [", ".join(format_interface(li) for li in i[mo])]
+            r.append(", ".join(format_interface(li) for li in i[mo]))
         rlink = " --- ".join(r)
         if show_method:
             rlink += f" [{link.discovery_method}]"
