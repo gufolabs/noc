@@ -103,10 +103,12 @@ class Migration(BaseMigration):
         current_labels = {ll["name"]: ll["_id"] for ll in l_coll.find()}
         for label in labels:
             if label in current_labels:
-                bulk.append(UpdateOne(
+                bulk.append(
+                    UpdateOne(
                         {"_id": current_labels[label]},
                         {"$set": dict.fromkeys(labels[label], True)},
-                    ))
+                    )
+                )
             else:
                 doc = {
                     # "_id": bson.ObjectId(),
@@ -181,7 +183,8 @@ class Migration(BaseMigration):
             )
         ]
         for label in self.OBJECTMODEL_TAGS:
-            bulk.append(InsertOne(
+            bulk.append(
+                InsertOne(
                     {
                         # "_id": bson.ObjectId(),
                         "name": label,
@@ -211,6 +214,7 @@ class Migration(BaseMigration):
                         "expose_metric": False,
                         "expose_datastream": False,
                     }
-                ))
+                )
+            )
         if bulk:
             l_coll.bulk_write(bulk, ordered=True)

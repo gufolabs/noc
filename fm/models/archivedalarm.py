@@ -145,13 +145,15 @@ class ArchivedAlarm(Document):
             yield "alarm", str(self.id)
 
     def log_message(self, message, source=None):
-        self.log.append(AlarmLog(
+        self.log.append(
+            AlarmLog(
                 timestamp=datetime.datetime.now(),
                 from_status=self.status,
                 to_status=self.status,
                 message=message,
                 source=source,
-            ))
+            )
+        )
         self.save()
 
     def get_template_vars(self):

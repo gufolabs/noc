@@ -172,12 +172,14 @@ class ActiveEvent(Document):
         return self.id is None
 
     def log_message(self, message):
-        self.log.append(EventLog(
+        self.log.append(
+            EventLog(
                 timestamp=datetime.datetime.now(),
                 from_status=self.status,
                 to_status=self.status,
                 message=message,
-            ))
+            )
+        )
         self.save()
 
     @classmethod

@@ -366,7 +366,8 @@ class ActiveAlarm(Document):
     ):
         timestamp = timestamp or datetime.datetime.now()
         if bulk is not None:
-            bulk.append(UpdateOne(
+            bulk.append(
+                UpdateOne(
                     {"_id": self.id},
                     {
                         "$push": {
@@ -381,8 +382,10 @@ class ActiveAlarm(Document):
                             }
                         }
                     },
-                ))
-        self.log.append(AlarmLog(
+                )
+            )
+        self.log.append(
+            AlarmLog(
                 timestamp=timestamp.replace(microsecond=0),
                 from_status=self.status,
                 to_status=self.status,
@@ -390,7 +393,8 @@ class ActiveAlarm(Document):
                 source=source,
                 tt_id=tt_id,
                 internal=is_internal,
-            ))
+            )
+        )
         if to_save and not bulk:
             self.safe_save()
         if not is_internal and not quiet:
@@ -1241,7 +1245,9 @@ class ActiveAlarm(Document):
             bulk = self._get_path_summary_bulk()
         except ValueError:
             return  # Loop detected
-        bulk.append(UpdateOne({"_id": self.id}, {"$set": {"root": root_alarm.id, "rca_type": rca_type}}))
+        bulk.append(
+            UpdateOne({"_id": self.id}, {"$set": {"root": root_alarm.id, "rca_type": rca_type}})
+        )
         self.log_message(f"Alarm {root_alarm.id} has been marked as root cause", bulk=bulk)
         # self.save()  Saved by log_message
         root_alarm.log_message(f"Alarm {self.id} has been marked as child", bulk=bulk)

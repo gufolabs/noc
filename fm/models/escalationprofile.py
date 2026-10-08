@@ -125,7 +125,8 @@ class EscalationItem(EmbeddedDocument):
         """"""
         r = []
         if self.notification_group:
-            r.append(ActionConfig(
+            r.append(
+                ActionConfig(
                     delay=self.delay,
                     action=AlarmAction.NOTIFY,
                     key=str(self.notification_group.id),
@@ -134,7 +135,8 @@ class EscalationItem(EmbeddedDocument):
                     min_severity=self.min_severity.severity if self.min_severity else None,
                     time_pattern=self.time_pattern.time_pattern if self.time_pattern else None,
                     allow_fail=True,
-                ))
+                )
+            )
         if self.create_tt and self.tt_system:
             r.append(
                 ActionConfig(

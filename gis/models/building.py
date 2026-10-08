@@ -113,12 +113,14 @@ class Building(Document):
     ):
         e_home = first_home
         for e in range(first_entrance, first_entrance + n_entrances):
-            self.entrances.append(Entrance(
+            self.entrances.append(
+                Entrance(
                     number=str(e),
                     first_floor=str(first_floor),
                     last_floor=str(last_floor),
                     first_home=str(e_home),
                     last_home=str(e_home + homes_per_entrance - 1),
-                ))
+                )
+            )
             e_home += homes_per_entrance
         self.save()

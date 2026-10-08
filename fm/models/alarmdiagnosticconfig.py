@@ -102,18 +102,30 @@ class AlarmDiagnosticConfig(Document):
                 continue
             if c.enable_on_raise:
                 if c.on_raise_script:
-                    r_cfg[c.on_raise_delay].append({"script": c.on_raise_script, "header": c.on_raise_header})
+                    r_cfg[c.on_raise_delay].append(
+                        {"script": c.on_raise_script, "header": c.on_raise_header}
+                    )
                 if c.on_raise_action:
-                    r_cfg[c.on_raise_delay].append({"action": c.on_raise_action.name, "header": c.on_raise_header})
+                    r_cfg[c.on_raise_delay].append(
+                        {"action": c.on_raise_action.name, "header": c.on_raise_header}
+                    )
                 if c.on_raise_handler:
-                    r_cfg[c.on_raise_delay].append({"handler": c.on_raise_handler, "header": c.on_raise_header})
+                    r_cfg[c.on_raise_delay].append(
+                        {"handler": c.on_raise_handler, "header": c.on_raise_header}
+                    )
             if c.enable_periodic:
                 if c.periodic_script:
-                    p_cfg[c.periodic_interval].append({"script": c.periodic_script, "header": c.periodic_header})
+                    p_cfg[c.periodic_interval].append(
+                        {"script": c.periodic_script, "header": c.periodic_header}
+                    )
                 if c.periodic_action:
-                    p_cfg[c.periodic_interval].append({"action": c.periodic_action.name, "header": c.periodic_header})
+                    p_cfg[c.periodic_interval].append(
+                        {"action": c.periodic_action.name, "header": c.periodic_header}
+                    )
                 if c.periodic_handler:
-                    p_cfg[c.periodic_interval].append({"handler": c.periodic_handler, "header": c.periodic_header})
+                    p_cfg[c.periodic_interval].append(
+                        {"handler": c.periodic_handler, "header": c.periodic_header}
+                    )
         # Submit on_raise job
         for delay in r_cfg:
             call_later(
@@ -157,11 +169,17 @@ class AlarmDiagnosticConfig(Document):
                 continue
             if c.enable_on_clear:
                 if c.on_clear_script:
-                    cfg[c.on_clear_delay].append({"script": c.on_clear_script, "header": c.on_clear_header})
+                    cfg[c.on_clear_delay].append(
+                        {"script": c.on_clear_script, "header": c.on_clear_header}
+                    )
                 if c.on_clear_action:
-                    cfg[c.on_clear_delay].append({"action": c.on_clear_action.id, "header": c.on_clear_header})
+                    cfg[c.on_clear_delay].append(
+                        {"action": c.on_clear_action.id, "header": c.on_clear_header}
+                    )
                 if c.on_clear_handler:
-                    cfg[c.on_clear_delay].append({"handler": c.on_clear_handler, "header": c.on_clear_header})
+                    cfg[c.on_clear_delay].append(
+                        {"handler": c.on_clear_handler, "header": c.on_clear_header}
+                    )
         # Submit on_clear job
         for delay in cfg:
             call_later(

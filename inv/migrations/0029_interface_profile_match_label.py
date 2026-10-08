@@ -34,12 +34,15 @@ class Migration(BaseMigration):
         ]
         for ip in self.mongo_db["noc.interface_profiles"].find({}, {"_id": 1, "name": 1}):
             labels.append(f"noc::interface_profile::{ip['name']}::=")
-            bulk.append(UpdateMany(
+            bulk.append(
+                UpdateMany(
                     {"profile": ip["_id"]},
                     {"$addToSet": {"effective_labels": f"noc::interface_profile::{ip['name']}::="}},
-                ))
+                )
+            )
         for ll in labels:
-            labels_bulk.append(InsertOne(
+            labels_bulk.append(
+                InsertOne(
                     {
                         "_id": bson.ObjectId(),
                         "name": ll,
@@ -67,7 +70,8 @@ class Migration(BaseMigration):
                         "expose_metric": False,
                         "expose_managedobject": False,
                     }
-                ))
+                )
+            )
         if bulk:
             self.mongo_db["noc.interfaces"].bulk_write(bulk)
         if labels_bulk:

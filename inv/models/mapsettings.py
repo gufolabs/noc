@@ -212,12 +212,14 @@ class MapSettings(Document):
             del new_links[(ll.type, ll.id)]
         for ll in new_links:
             nl = new_links[ll]
-            nn.append(LinkSettings(
+            nn.append(
+                LinkSettings(
                     type=nl["type"],
                     id=nl["id"],
                     vertices=[VertexPosition(x=v["x"], y=v["y"]) for v in nl.get("vertices", [])],
                     connector=nl.get("connector", "normal"),
-                ))
+                )
+            )
         self.links = [
             ll
             for ll in sorted(nn, key=lambda x: (x.type, x.id))

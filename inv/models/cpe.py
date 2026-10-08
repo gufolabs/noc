@@ -226,12 +226,14 @@ class CPE(Document):
                 changes["controllers.$.is_active"] = status
         if not seen:
             # New Controller
-            self.controllers.append(ControllerItem(
+            self.controllers.append(
+                ControllerItem(
                     managed_object=controller,
                     local_id=local_id,
                     interface=interface,
                     is_active=status,
-                ))
+                )
+            )
             self._get_collection().update_one(
                 {"_id": self.id},
                 {
@@ -405,10 +407,12 @@ class CPE(Document):
             if bulk is not None:
                 self.update(oper_status=status, oper_status_change=change_ts)
             else:
-                bulk.append(UpdateOne(
+                bulk.append(
+                    UpdateOne(
                         {"_id": self.id},
                         {"$set": {"oper_status": status, "oper_status_change": change_ts}},
-                    ))
+                    )
+                )
 
     def get_index(self):
         """

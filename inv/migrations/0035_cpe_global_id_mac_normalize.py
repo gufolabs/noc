@@ -25,14 +25,16 @@ class Migration(BaseMigration):
                 gid = MACAddressParameter().clean(cpe["global_id"])
             except ValueError:
                 continue
-            bulk.append(UpdateOne(
+            bulk.append(
+                UpdateOne(
                     {"_id": cpe["_id"]},
                     {
                         "$set": {
                             "global_id": gid,
                         }
                     },
-                ))
+                )
+            )
             if len(bulk) > 500:
                 cpe_coll.bulk_write(bulk)
                 bulk = []
