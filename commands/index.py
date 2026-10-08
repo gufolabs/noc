@@ -39,11 +39,13 @@ class Command(BaseCommand):
     def handle_search(self, query, format, *args, **options):
         r = []
         for qr in TextIndex.search(query[0]):
-            r.append({
+            r.append(
+                {
                     "id": str(f"{qr.model}:{qr.object}"),
                     "title": str(qr.title),
                     "card": str(qr.card),
-                })
+                }
+            )
             if qr.tags:
                 r[-1]["tags"] = [str(x) for x in qr.tags]
         if format == "yaml":

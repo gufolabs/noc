@@ -277,13 +277,15 @@ def set_caps(self, key: str, value: Any, source: str = "manual", scope: str | No
                 continue
         new_caps.append(item)
     if is_new:
-        new_caps.append(CapsValue(
+        new_caps.append(
+            CapsValue(
                 capability=caps,
                 value=value,
                 source=source,
                 scope=scope or "",
                 config=configs.get(str(caps.id), CapsConfig()),
-            ))
+            )
+        )
         changed |= True
         changed_fields = [ChangeField(field=caps.name, old=None, new=value)]
         caps_logger.info("Adding capability: %s", new_caps[-1])

@@ -383,11 +383,13 @@ class Command(BaseCommand):
         r = []
         cmd_num = 1
         for rcmd, packets in script.iter_cli_tracking():
-            r.append({
+            r.append(
+                {
                     "names": [f"cli_{int(cmd_num)}"],
                     "request": rcmd,
                     "reply": [self.encode_cli(v) for v in packets],
-                })
+                }
+            )
             cmd_num += 1
         script.stop_tracking()
         return r

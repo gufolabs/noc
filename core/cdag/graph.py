@@ -138,7 +138,9 @@ class CDAG:
                 style = ', style="bold"'
             else:
                 style = ""
-            r.append(f'  {dot_id} [label="{node_id}\\ntype: {node.name}{n_attrs}", shape="{node.dot_shape}"{style}];')
+            r.append(
+                f'  {dot_id} [label="{node_id}\\ntype: {node.name}{n_attrs}", shape="{node.dot_shape}"{style}];'
+            )
             unbound = list(node.iter_unbound_inputs())
             if unbound:
                 tbc = []
@@ -157,6 +159,8 @@ class CDAG:
         # Edges
         for node in self.nodes.values():
             for rs in node.iter_subscribers():
-                r.append(f'  {n_map[node.node_id]} -> {n_map[rs.node.node_id]} [label="{rs.input}"];')
+                r.append(
+                    f'  {n_map[node.node_id]} -> {n_map[rs.node.node_id]} [label="{rs.input}"];'
+                )
         r.append("}")
         return "\n".join(r)

@@ -215,11 +215,13 @@ class Command(BaseCommand):
         )
         r.append("\n".join(f'    "{md.name}": "{md.oid}",' for md in mib_data))
         r += ["}", "", "DISPLAY_HINTS = {"]
-        r.append("\n".join(
+        r.append(
+            "\n".join(
                 f'    "{md.oid}": ("{md.syntax["base_type"]}", "{md.syntax["display_hint"]}"),  # {md.name}'
                 for md in mib_data
                 if has_worth_hint(md.syntax)
-            ))
+            )
+        )
         r += ["}", ""]
         data = "\n".join(r)
         with self.open_output(kwargs.get("output")) as f:

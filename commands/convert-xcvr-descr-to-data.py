@@ -408,7 +408,9 @@ class Command(BaseCommand):
                 o["data"].append({"interface": "optical", "attr": "rx_wavelength", "value": res.rx})
 
             if res.distance and not self.is_list_contain_attr(o["data"], "distance_max"):
-                o["data"].append({"interface": "optical", "attr": "distance_max", "value": res.distance})
+                o["data"].append(
+                    {"interface": "optical", "attr": "distance_max", "value": res.distance}
+                )
 
             if not self.is_list_contain_attr(o["data"], "bidi"):
                 o["data"].append({"interface": "optical", "attr": "bidi", "value": res.isbidi})
@@ -443,7 +445,9 @@ class Command(BaseCommand):
                 o.data.append(ModelAttr(interface="optical", attr="rx_wavelength", value=res.rx))
 
             if res.distance and not self.is_list_contain_attr(json_data, "distance_max"):
-                o.data.append(ModelAttr(interface="optical", attr="distance_max", value=res.distance))
+                o.data.append(
+                    ModelAttr(interface="optical", attr="distance_max", value=res.distance)
+                )
 
             if not self.is_list_contain_attr(json_data, "bidi"):
                 o.data.append(ModelAttr(interface="optical", attr="bidi", value=res.isbidi))
