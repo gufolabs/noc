@@ -120,7 +120,8 @@ def get_traceback_frames(tb):
             filename, lineno, 7, loader, module_name
         )
         if pre_context_lineno is not None:
-            frames.append({
+            frames.append(
+                {
                     "tb": tb,
                     "filename": filename,
                     "function": function,
@@ -131,7 +132,8 @@ def get_traceback_frames(tb):
                     "context_line": context_line,
                     "post_context": post_context,
                     "pre_context_lineno": pre_context_lineno + 1,
-                })
+                }
+            )
         tb = tb.tb_next
     if not frames:
         frames = [{"filename": "unknown", "function": "?", "lineno": "?", "context_line": "???"}]
@@ -155,7 +157,8 @@ def get_execution_frames(frame):
             filename, lineno, 7, loader, module_name
         )
         if pre_context_lineno is not None:
-            frames.append({
+            frames.append(
+                {
                     "filename": filename,
                     "function": function,
                     "lineno": lineno + 1,
@@ -164,7 +167,8 @@ def get_execution_frames(frame):
                     "context_line": context_line,
                     "post_context": post_context,
                     "pre_context_lineno": pre_context_lineno + 1,
-                })
+                }
+            )
     if not frames:
         frames = [{"filename": "unknown", "function": "?", "lineno": "?", "context_line": "???"}]
     return frames

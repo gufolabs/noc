@@ -290,7 +290,8 @@ class ReportDsAlarms(BaseDataSource):
             pipeline = []
             if match:
                 pipeline.append({"$match": match})
-            pipeline.append({
+            pipeline.append(
+                {
                     "$addFields": {
                         "duration": {
                             "$divide": [
@@ -325,7 +326,8 @@ class ReportDsAlarms(BaseDataSource):
                         #     "$map": {"input": "$segment_path_l", "as": "ns", "in": "$$ns.name"}
                         # },
                     }
-                })
+                }
+            )
             if match_middle:
                 pipeline.append({"$match": match_middle})
 

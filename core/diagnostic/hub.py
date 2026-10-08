@@ -523,7 +523,9 @@ class DiagnosticHub:
                         continue
                     dd = diagnostics[d_name]
                     if dd and dd.is_failed and not alarm_disable:
-                        groups[dc.diagnostic].append({"diagnostic": d_name, "reason": dd.reason or ""})
+                        groups[dc.diagnostic].append(
+                            {"diagnostic": d_name, "reason": dd.reason or ""}
+                        )
                     processed.add(d_name)
             elif d and d.state == d.state.failed and not alarm_disable:
                 alarms[dc.diagnostic] = {
@@ -543,7 +545,8 @@ class DiagnosticHub:
                 }
         # Group Alarm
         for d in groups:
-            messages.append({
+            messages.append(
+                {
                     "$op": "ensure_group",
                     "reference": f"dc:{d}:{o.id}",
                     "alarm_class": alarm_config[d]["alarm_class"],
@@ -558,7 +561,8 @@ class DiagnosticHub:
                         }
                         for dd in groups[d]
                     ],
-                })
+                }
+            )
         # Other
         for d in alarms:
             if d in processed:

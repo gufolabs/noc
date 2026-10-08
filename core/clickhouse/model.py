@@ -838,7 +838,9 @@ class ViewModel(Model, metaclass=ModelBase):
         group_by = []
         for field in cls._meta.ordered_fields:
             if isinstance(field, AggregatedField):
-                r.append(f"{field.get_expression(combinator='Merge')} AS {cls.quote_name(field.name)}")
+                r.append(
+                    f"{field.get_expression(combinator='Merge')} AS {cls.quote_name(field.name)}"
+                )
             else:
                 r.append(f"{cls.quote_name(field.name)} ")
                 group_by.append(cls.quote_name(field.name))
@@ -858,7 +860,9 @@ class ViewModel(Model, metaclass=ModelBase):
             if isinstance(field, MaterializedField):
                 continue
             if isinstance(field, AggregatedField):
-                r.append(f"{field.get_expression(combinator='State')} AS {cls.quote_name(field.name)}")
+                r.append(
+                    f"{field.get_expression(combinator='State')} AS {cls.quote_name(field.name)}"
+                )
             else:
                 r.append(f"{cls.quote_name(field.name)} ")
                 group_by.append(cls.quote_name(field.name))

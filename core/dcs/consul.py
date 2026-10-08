@@ -503,7 +503,9 @@ class ConsulDCS(DCSBase):
                 continue
             r = []
             for svc in services:
-                r.append(f"{svc['Service']['Address'] or svc['Node']['Address']!s}:{svc['Service']['Port']!s}")
+                r.append(
+                    f"{svc['Service']['Address'] or svc['Node']['Address']!s}:{svc['Service']['Port']!s}"
+                )
                 if not full_result:
                     break
             self.logger.debug("Resolved near service %s to %s", name, r)

@@ -117,7 +117,9 @@ def find_path(
         neighbors: defaultdict[Object, list[AdjItem]] = defaultdict(list)
         for oc in ObjectConnection.objects.filter(connection__object__in=list(wave)):
             for c1, c2 in permutations(oc.connection, 2):
-                neighbors[c1.object].append(AdjItem(local_name=c1.name, remote_object=c2.object, remote_name=c2.name))
+                neighbors[c1.object].append(
+                    AdjItem(local_name=c1.name, remote_object=c2.object, remote_name=c2.name)
+                )
         # Process the wave
         for co in wave:
             # Find incoming

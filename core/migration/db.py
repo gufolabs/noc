@@ -210,12 +210,14 @@ class DB:
                     sql.append(" DEFAULT ''")
         # FOREIGN KEY
         if field.remote_field:
-            self.deferred_sql.append(self._foreign_key_sql(
+            self.deferred_sql.append(
+                self._foreign_key_sql(
                     table_name,
                     field.column,
                     field.remote_field.model._meta.db_table,
                     field.remote_field.model._meta.get_field(field.remote_field.field_name).column,
-                ))
+                )
+            )
         # Indexes
         model = self.mock_model("FakeModelForGISCreation", table_name)
         self.deferred_sql += self._sql_indexes_for_field(model, field)

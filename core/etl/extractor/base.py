@@ -79,10 +79,14 @@ class BaseExtractor:
     def register_quality_problem(
         self, line: int, p_class: str, message: str, row: list[Any]
     ) -> None:
-        self.quality_problems.append(Problem(line=line + 1, is_rej=False, p_class=p_class, message=message, row=row))
+        self.quality_problems.append(
+            Problem(line=line + 1, is_rej=False, p_class=p_class, message=message, row=row)
+        )
 
     def register_fatal_problem(self, line: int, p_class: str, message: str, row: list[Any]) -> None:
-        self.fatal_problems.append(Problem(line=line + 1, is_rej=True, p_class=p_class, message=message, row=row))
+        self.fatal_problems.append(
+            Problem(line=line + 1, is_rej=True, p_class=p_class, message=message, row=row)
+        )
 
     def ensure_import_dir(self) -> None:
         """
