@@ -97,9 +97,11 @@ class Profile(BaseProfile):
             slot, card_type, ports, _, _, _, _ = row
             if "EMPTY" in card_type:
                 continue
-            r.append({
+            r.append(
+                {
                     "slot": int(slot.strip()),
                     "card_type": card_type.strip(),
                     "ports": int(ports.strip()),
-                })
+                }
+            )
         return r

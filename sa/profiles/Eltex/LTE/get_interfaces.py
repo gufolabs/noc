@@ -148,11 +148,13 @@ class Script(BaseScript):
                                 iftype = "aggregated"
                                 c = self.cli(f"show channel-group hw {ifname}")
                                 match = self.rx_portchannel.search(c)
-                                portchannel_members.append({
+                                portchannel_members.append(
+                                    {
                                         "interface": ifname,
                                         "members": match.group("members").split(","),
                                         "type": "L",
-                                    })
+                                    }
+                                )
                             else:
                                 iftype = "physical"
                             iface = {

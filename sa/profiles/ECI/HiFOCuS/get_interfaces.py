@@ -165,13 +165,15 @@ class Script(BaseScript):
                 # "ifindex": None,
                 "subinterfaces": [],  # "enabled_afi": ["ATM"],
             }
-            interfaces[ifname]["subinterfaces"].append({
+            interfaces[ifname]["subinterfaces"].append(
+                {
                     "name": f"{ifname}.{0}:{0}",
                     "type": "physical",
                     "admin_status": True,
                     "oper_status": True,
                     "enabled_afi": ["ATM"],
                     # "ifindex": None,
-                })
+                }
+            )
         interfaces.update(self.get_l3_interfaces())
         return [{"interfaces": sorted(interfaces.values(), key=lambda x: x["name"])}]

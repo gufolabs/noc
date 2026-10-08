@@ -19,13 +19,15 @@ class Script(BaseScript):
     def execute_snmp(self, **kwargs):
         entity = self.scripts.get_version()
         res = []
-        res.append({
+        res.append(
+            {
                 "type": "CHASSIS",
                 "vendor": "Eltex",
                 "part_no": entity["platform"],
                 "serial": entity["caps"]["Chassis | Serial Number"],
                 "revision": entity["caps"]["Chassis | HW Version"],
-            })
+            }
+        )
         for r in res:
             if r["type"] == "CHASSIS" and self.has_snmp():
                 r.update({"sensors": self.get_chassis_sensors()})
@@ -34,13 +36,15 @@ class Script(BaseScript):
     def execute_cli(self, **kwargs):
         entity = self.scripts.get_version()
         res = []
-        res.append({
+        res.append(
+            {
                 "type": "CHASSIS",
                 "vendor": "Eltex",
                 "part_no": entity["platform"],
                 "serial": entity["caps"]["Chassis | Serial Number"],
                 "revision": entity["caps"]["Chassis | HW Version"],
-            })
+            }
+        )
         for r in res:
             if r["type"] == "CHASSIS" and self.has_snmp():
                 r.update({"sensors": self.get_chassis_sensors()})
@@ -53,7 +57,8 @@ class Script(BaseScript):
             for oid, v in self.snmp.getnext(f"1.3.6.1.4.1.89.53.15.1.{i + 3}"):
                 if v != 1:
                     v = 0
-                r.append({
+                r.append(
+                    {
                         "name": f"Fan-{i}",
                         "status": bool(v),
                         "description": f"State of Fan-{i}",
@@ -64,13 +69,15 @@ class Script(BaseScript):
                             "noc::sensor::targer::fan",
                         ],
                         "snmp_oid": f"1.3.6.1.4.1.89.53.15.1.{i + 3}",
-                    })
+                    }
+                )
         # Power Supply state
         for i in [1, 2]:
             for oid, v in self.snmp.getnext(f"1.3.6.1.4.1.89.53.15.1.{i + 1}"):
                 if v != 1:
                     v = 0
-                r.append({
+                r.append(
+                    {
                         "name": f"PS-{i}",
                         "status": bool(v),
                         "description": f"State of PS-{i}",
@@ -81,5 +88,6 @@ class Script(BaseScript):
                             "noc::sensor::target::supply",
                         ],
                         "snmp_oid": f"1.3.6.1.4.1.89.53.15.1.{i + 1}",
-                    })
+                    }
+                )
         return r

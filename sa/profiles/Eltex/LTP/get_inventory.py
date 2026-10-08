@@ -69,10 +69,12 @@ class Script(BaseScript):
         ]
 
         for match in self.rx_pwr.finditer(v):
-            r.append({
+            r.append(
+                {
                     "type": "PWR",
                     "vendor": "ELTEX",
                     "part_no": match.group("part_no"),
                     "number": match.group("num"),
-                })
+                }
+            )
         return r

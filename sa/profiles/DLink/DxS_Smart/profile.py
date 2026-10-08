@@ -143,7 +143,8 @@ class Profile(BaseProfile):
         except script.CLISyntaxError:
             raise script.NotSupportedError()
         for match in self.rx_port.finditer(c):
-            objects.append({
+            objects.append(
+                {
                     "port": match.group("port"),
                     "admin_state": match.group("admin_state") == "Enabled",
                     "admin_speed": match.group("admin_speed"),
@@ -154,7 +155,8 @@ class Profile(BaseProfile):
                     "duplex": match.group("duplex"),
                     "flowctrl": match.group("flowctrl"),
                     "mdix": match.group("mdix"),
-                })
+                }
+            )
         prev_port = None
         ports = []
         for i in objects:
@@ -200,13 +202,15 @@ class Profile(BaseProfile):
         for match in self.rx_vlan.finditer(c):
             tagged_ports = script.expand_interface_range(match.group("tagged_ports"))
             untagged_ports = script.expand_interface_range(match.group("untagged_ports"))
-            vlans.append({
+            vlans.append(
+                {
                     "vlan_id": int(match.group("vlan_id")),
                     "vlan_name": match.group("vlan_name"),
                     "vlan_type": match.group("vlan_type"),
                     "tagged_ports": tagged_ports,
                     "untagged_ports": untagged_ports,
-                })
+                }
+            )
         if vlans == []:
             for match in self.rx_vlan1.finditer(c):
                 tagged_ports = []
@@ -215,11 +219,13 @@ class Profile(BaseProfile):
                 for port in member_ports:
                     if port not in untagged_ports:
                         tagged_ports.append(port)
-                vlans.append({
+                vlans.append(
+                    {
                         "vlan_id": int(match.group("vlan_id")),
                         "vlan_name": match.group("vlan_name"),
                         "vlan_type": match.group("vlan_type"),
                         "tagged_ports": tagged_ports,
                         "untagged_ports": untagged_ports,
-                    })
+                    }
+                )
         return vlans

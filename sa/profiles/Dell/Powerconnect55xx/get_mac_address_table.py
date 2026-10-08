@@ -34,10 +34,12 @@ class Script(BaseScript):
             interface = match.group("interface")
             if interface == "0":
                 continue
-            r.append({
+            r.append(
+                {
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
                     "interfaces": [interface],
                     "type": {"dynamic": "D", "static": "S"}[match.group("type").lower()],
-                })
+                }
+            )
         return r
