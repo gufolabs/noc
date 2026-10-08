@@ -135,10 +135,12 @@ def parse_table(
                 else:
                     r.append(row)
             else:
-                r.append([
+                r.append(
+                    [
                         row_wrapper(line[f:t]).strip() if row_wrapper else line[f:t].strip()
                         for f, t in columns
-                    ])
+                    ]
+                )
     if allow_wrap:
         return [[x.strip() for x in rr] for rr in r]
     return r

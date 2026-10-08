@@ -90,7 +90,9 @@ def get_insert_query(metric_scope: "MetricScope", start, stop, remote=None):
     for fn, *_ in r:
         if fn == "path" and path_ex:
             insert_fields.append("labels")
-            select_fields.append(f"arrayFilter(x -> NOT endsWith(x, '::'), [{', '.join(path_ex)}]) as labels")
+            select_fields.append(
+                f"arrayFilter(x -> NOT endsWith(x, '::'), [{', '.join(path_ex)}]) as labels"
+            )
             continue
         if fn == "path":
             continue

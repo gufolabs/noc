@@ -94,10 +94,12 @@ class SimpleReportFormatter(DataFormatter):
                     )
                 )
             else:
-                columns.append(TableColumn(
+                columns.append(
+                    TableColumn(
                         c.name,
                         c.title,
-                    ))
+                    )
+                )
         return columns
 
     def get_report_columns(self) -> list[TableColumn]:

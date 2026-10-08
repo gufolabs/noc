@@ -211,10 +211,12 @@ class WhoisCacheLoader:
                     if obj and "route" in obj and "origin" in obj:
                         origin = obj["origin"][0]
                         if origin in discoverable_as:
-                            as_routes[origin].append((
+                            as_routes[origin].append(
+                                (
                                     obj["route"][0],
                                     "\n".join(obj["descr"]) if "descr" in obj else None,
-                                ))
+                                )
+                            )
                     yield obj
 
         else:

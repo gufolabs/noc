@@ -111,7 +111,8 @@ def document_set_state(
     if hasattr(self, "effective_labels") and prev_labels:
         c_bulk.append(UpdateOne({"_id": self.id}, {"$pullAll": {"effective_labels": prev_labels}}))
     if hasattr(self, "effective_labels") and state.labels:
-        c_bulk.append(UpdateOne(
+        c_bulk.append(
+            UpdateOne(
                 {"_id": self.id},
                 {
                     "$addToSet": {
@@ -120,7 +121,8 @@ def document_set_state(
                         }
                     }
                 },
-            ))
+            )
+        )
     # Write bulk
     if bulk is None:
         self._get_collection().bulk_write(c_bulk)

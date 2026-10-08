@@ -98,7 +98,8 @@ class MatchItem:
     def from_data(cls, data: list[dict[str, Any]]) -> list["MatchItem"]:
         r = []
         for match in data:
-            r.append(MatchItem(
+            r.append(
+                MatchItem(
                     labels=match.get(MessageMeta.LABELS.value),
                     exclude_labels=match.get("exclude_labels"),
                     administrative_domain=match.get(MessageMeta.ADM_DOMAIN.value),
@@ -108,7 +109,8 @@ class MatchItem:
                         HeaderMatchItem(header=h["header"], op=h["op"], value=h["value"])
                         for h in match["headers"]
                     ],
-                ))
+                )
+            )
         return r
 
     def get_match_expr(self):

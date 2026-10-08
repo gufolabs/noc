@@ -387,7 +387,9 @@ class BaseScript(metaclass=BaseScriptMetaclass):
             elif o == "regex":
                 c.append(lambda self, x, f=f, v=re.compile(v): v.search(x[f]) is not None)
             elif o == "iregex":
-                c.append(lambda self, x, f=f, v=re.compile(v, re.IGNORECASE): v.search(x[f]) is not None)
+                c.append(
+                    lambda self, x, f=f, v=re.compile(v, re.IGNORECASE): v.search(x[f]) is not None
+                )
             elif o == "isempty":  # Empty string or null
                 c.append(lambda self, x, f=f, v=v: not x[f] if v else x[f])
             elif f == "version":
