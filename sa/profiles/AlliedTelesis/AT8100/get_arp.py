@@ -26,9 +26,11 @@ class Script(BaseScript):
         v = self.cli("show arp")
         r = []
         for match in self.rx_line.finditer(v):
-            r.append({
+            r.append(
+                {
                     "ip": match.group("ip"),
                     "mac": match.group("mac"),
                     "interface": match.group("interface"),
-                })
+                }
+            )
         return r

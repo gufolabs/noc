@@ -103,9 +103,11 @@ class Script(BaseScript):
                     neighbor["remote_system_name"] = match.group("system_name")
                 """
             neighbor["remote_system_name"] = d[4]
-            r.append({
+            r.append(
+                {
                     # "local_interface": match.group("port"),
                     "local_interface": d[0],
                     "neighbors": [neighbor],
-                })
+                }
+            )
         return r

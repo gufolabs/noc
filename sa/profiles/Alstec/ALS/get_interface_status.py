@@ -30,5 +30,7 @@ class Script(BaseScript):
                 return [
                     {"interface": match.group("port"), "status": match.group("oper_status") == "Up"}
                 ]
-            r.append({"interface": match.group("port"), "status": match.group("oper_status") == "Up"})
+            r.append(
+                {"interface": match.group("port"), "status": match.group("oper_status") == "Up"}
+            )
         return r

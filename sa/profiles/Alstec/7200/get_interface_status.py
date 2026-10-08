@@ -28,5 +28,7 @@ class Script(BaseScript):
         else:
             cmd += " all"
         for match in self.rx_port.finditer(self.cli(cmd)):
-            r.append({"interface": match.group("port"), "status": match.group("oper_status") != "Down"})
+            r.append(
+                {"interface": match.group("port"), "status": match.group("oper_status") != "Down"}
+            )
         return r
