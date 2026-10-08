@@ -33,7 +33,7 @@ class ReportApplication(Application):
 
     def __init__(self, site) -> None:
         super().__init__(site)
-        site.reports += [self]
+        site.reports.append(self)
 
     def get_form(self):
         return self.form

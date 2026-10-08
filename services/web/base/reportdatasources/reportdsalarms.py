@@ -206,9 +206,9 @@ class ReportDsAlarms(ReportDataSource):
             name, values = ff["name"], ff["values"]
             if name == "source":
                 if "active" in values or "both" in values:
-                    alarm_collections += [ActiveAlarm]
+                    alarm_collections.append(ActiveAlarm)
                 if "archive" in values or "both" in values:
-                    alarm_collections += [ArchivedAlarm]
+                    alarm_collections.append(ArchivedAlarm)
             elif name == "min_subscribers":
                 match_duration["total_subscribers_sum.sum"] = {"$gte": int(values[0])}
             elif name == "min_objects":
@@ -248,9 +248,8 @@ class ReportDsAlarms(ReportDataSource):
             # if isinstance(coll, ActiveAlarm):
             pipeline = []
             if match:
-                pipeline += [{"$match": match}]
-            pipeline += [
-                {
+                pipeline.append({"$match": match})
+            pipeline.append({
                     "$addFields": {
                         "duration": {
                             "$divide": [
@@ -278,10 +277,9 @@ class ReportDsAlarms(ReportDataSource):
                             }
                         },
                     }
-                },
-            ]
+                })
             if match_duration:
-                pipeline += [{"$match": match_duration}]
+                pipeline.append({"$match": match_duration})
 
             # print(pipeline, alarm_collections)
             yield from (

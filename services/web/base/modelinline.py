@@ -270,7 +270,7 @@ class ModelInline:
                 model = self.app.site.apps[app].model
                 extra_where = f'{self.model._meta.db_table}."{self.model._meta.pk.name}" IN (SELECT "{model._meta.get_field(fn).attname}" FROM {model._meta.db_table})'
                 if None in nq:
-                    nq[None] += [extra_where]
+                    nq[None].append(extra_where)
                 else:
                     nq[None] = [extra_where]
                 continue
@@ -342,9 +342,9 @@ class ModelInline:
         if format == "ext" and self.sort_param in q:
             for r in self.app.deserialize(q[self.sort_param]):
                 if r["direction"] == "DESC":
-                    ordering += [f"-{r['property']}"]
+                    ordering.append(f"-{r['property']}")
                 else:
-                    ordering += [r["property"]]
+                    ordering.append(r["property"])
         q = self.cleaned_query(q)
         if parent:
             q[f"{self.parent_rel}__id"] = parent

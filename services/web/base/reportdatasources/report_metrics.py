@@ -63,7 +63,7 @@ class ReportMetrics(BaseReportColumn):
         }
         for num, field, alias in sorted(self.SELECT_QUERY_MAP, key=lambda x: x[0]):
             func = self.SELECT_QUERY_MAP[(num, field, alias)] or f"avg({field})"
-            def_map["q_select"] += [f"{func} AS {alias or 'a_' + field}"]
+            def_map["q_select"].append(f"{func} AS {alias or 'a_' + field}")
         return " ".join(
             [
                 f"SELECT {','.join(def_map['q_select'])}",
@@ -93,7 +93,7 @@ class ReportMetrics(BaseReportColumn):
             if current_mo and row[0] != current_mo:
                 yield int(row[0]), block
                 block = []
-            block += [Metrics(*row[1:])]
+            block.append(Metrics(*row[1:]))
             block = row[1:]
             current_mo = row[0]
             if current_mo and block:

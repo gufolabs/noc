@@ -59,45 +59,37 @@ class Migration(BaseMigration):
                 # Build thresholds
                 tp["thresholds"] = []
                 if metric.get("high_error", False):
-                    tp["thresholds"] += [
-                        {
+                    tp["thresholds"].append({
                             "op": ">=",
                             "value": metric["high_error"],
                             "clear_op": "<",
                             "clear_value": metric["high_error"],
                             "alarm_class": self.get_alarm_class_id("NOC | PM | High Error"),
-                        }
-                    ]
+                        })
                 if metric.get("low_error", False):
-                    tp["thresholds"] += [
-                        {
+                    tp["thresholds"].append({
                             "op": "<=",
                             "value": metric["low_error"],
                             "clear_op": ">",
                             "clear_value": metric["low_error"],
                             "alarm_class": self.get_alarm_class_id("NOC | PM | Low Error"),
-                        }
-                    ]
+                        })
                 if metric.get("low_warn", False):
-                    tp["thresholds"] += [
-                        {
+                    tp["thresholds"].append({
                             "op": "<=",
                             "value": metric["low_warn"],
                             "clear_op": ">",
                             "clear_value": metric["low_warn"],
                             "alarm_class": self.get_alarm_class_id("NOC | PM | Low Warning"),
-                        }
-                    ]
+                        })
                 if metric.get("high_warn", False):
-                    tp["thresholds"] += [
-                        {
+                    tp["thresholds"].append({
                             "op": ">=",
                             "value": metric["high_warn"],
                             "clear_op": "<",
                             "clear_value": metric["high_warn"],
                             "alarm_class": self.get_alarm_class_id("NOC | PM | High Warning"),
-                        }
-                    ]
+                        })
                 # Save profile
                 tp_coll.insert_one(tp)
                 metric["threshold_profile"] = tp_id

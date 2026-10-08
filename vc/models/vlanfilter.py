@@ -95,7 +95,7 @@ class VLANFilter(Document):
                 t = f
             if t < f:
                 raise SyntaxError
-            r += [(f, t)]
+            r.append((f, t))
         return r
 
     @classmethod
@@ -112,7 +112,7 @@ class VLANFilter(Document):
                         else set()
                     ),
                 )
-            ] += [vlan_filter]
+            ].append(vlan_filter)
         return r
 
     @classmethod

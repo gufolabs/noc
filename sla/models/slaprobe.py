@@ -230,8 +230,8 @@ class SLAProbe(Document):
                 ],
             )
             if sla.group:
-                labels += [f"noc::sla::group::{sla.group}"]
-                hints += [f"sla_group::{sla.group}"]
+                labels.append(f"noc::sla::group::{sla.group}")
+                hints.append(f"sla_group::{sla.group}")
             svc = sla.service
             yield MetricCollectorConfig(
                 collector="sla",

@@ -23,8 +23,7 @@ class Migration(BaseMigration):
         ):
             if name in vf_names:
                 continue
-            bulk += [
-                InsertOne(
+            bulk.append(InsertOne(
                     {
                         "_id": bson.ObjectId(),
                         "name": name,
@@ -32,7 +31,6 @@ class Migration(BaseMigration):
                         "include_expression": expression,
                         "include_vlans": ranges_to_list(expression),
                     }
-                )
-            ]
+                ))
         if bulk:
             vf_coll.bulk_write(bulk)

@@ -105,7 +105,7 @@ class MonitorApplication(ObjectListApplication):
             d = get_db()["noc.joblog"].find_one({"_id": key})
             if d and d["log"]:
                 r += [b"\n", smart_bytes(job), b"\n"]
-                r += [zlib.decompress(smart_bytes(d["log"]))]
+                r.append(zlib.decompress(smart_bytes(d["log"])))
         if r:
             return self.render_plain_text(b"".join(r))
         return self.render_plain_text("No data")
@@ -155,8 +155,8 @@ class JobF:
 
     def __getitem__(self, k):
         if isinstance(k, slice):
-            self.pipeline += [{"$skip": k.start}]
-            self.pipeline += [{"$limit": k.stop - k.start}]
+            self.pipeline.append({"$skip": k.start})
+            self.pipeline.append({"$limit": k.stop - k.start})
         return self
 
     def __iter__(self):

@@ -36,6 +36,6 @@ class Migration(BaseMigration):
                 ],
             ),
         ]:
-            bulk += [UpdateOne({"_id": wid}, {"$set": {"allowed_models": model_ids}})]
+            bulk.append(UpdateOne({"_id": wid}, {"$set": {"allowed_models": model_ids}}))
         if bulk:
             coll.bulk_write(bulk)

@@ -41,8 +41,7 @@ class ReportStaleDiscoveryJob(SimpleReport):
                         if tb["text"].endswith("END OF TRACEBACK"):
                             tb["text"] = "Job crashed"
                         msg = f"({tb['text']}) {tb['code']}"
-                data += [
-                    [
+                data.append([
                         mo.administrative_domain.name,
                         mo.name,
                         mo.profile.name,
@@ -53,8 +52,7 @@ class ReportStaleDiscoveryJob(SimpleReport):
                         r["jcls"],
                         humanize_distance(r["st"]),
                         msg,
-                    ]
-                ]
+                    ])
         return self.from_dataset(
             title=self.title,
             columns=[

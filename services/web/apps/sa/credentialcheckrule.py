@@ -22,7 +22,7 @@ def clean_label(label: str) -> tuple[str, str, list[str]]:
     if r[0] == "noc":
         r.pop(0)
     if r[-1] in MATCH_OPS:
-        badges += [MATCH_BADGES[r[-1]]]
+        badges.append(MATCH_BADGES[r[-1]])
         r.pop(-1)
     return "::".join(r[:-1]), r[-1], badges
 
@@ -43,8 +43,7 @@ class CredentialCheckRuleApplication(ExtDocApplication):
         r = []
         for num, ml in enumerate(o.match):
             if num:
-                r += [
-                    {
+                r.append({
                         "id": "&&",
                         "is_protected": False,
                         "scope": "",
@@ -56,12 +55,10 @@ class CredentialCheckRuleApplication(ExtDocApplication):
                         "fg_color1": 16777215,
                         "bg_color2": 0,
                         "fg_color2": 16777215,
-                    }
-                ]
+                    })
             for ll in ml.get_labels():
                 scope, value, badges = clean_label(ll.name)
-                r += [
-                    {
+                r.append({
                         "id": ll.name,
                         "is_protected": ll.is_protected,
                         "scope": scope,
@@ -76,8 +73,7 @@ class CredentialCheckRuleApplication(ExtDocApplication):
                         "fg_color1": ll.fg_color1,
                         "bg_color2": ll.bg_color2,
                         "fg_color2": ll.fg_color2,
-                    }
-                ]
+                    })
 
         return r
 
@@ -127,9 +123,9 @@ class CredentialCheckRuleApplication(ExtDocApplication):
     def clean(self, data):
         suggest_snmp_oids, suggest_protocols = [], []
         for f in data.get("suggest_snmp_oids", []):
-            suggest_snmp_oids += [f["oid"]]
+            suggest_snmp_oids.append(f["oid"])
         for f in data.get("suggest_protocols", []):
-            suggest_protocols += [f["protocol"]]
+            suggest_protocols.append(f["protocol"])
         data["suggest_snmp_oids"] = suggest_snmp_oids
         data["suggest_protocols"] = suggest_protocols
         return super().clean(data)

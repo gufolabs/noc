@@ -69,9 +69,9 @@ class ReportDiscoveryProblem:
         ]
         if self.match:
             # @todo check match
-            pipeline += [{"$match": self.match}]
+            pipeline.append({"$match": self.match})
         else:
-            pipeline += [{"$match": {"job.problems": {"$exists": True, "$ne": {}}}}]
+            pipeline.append({"$match": {"job.problems": {"$exists": True, "$ne": {}}}})
         return pipeline
 
     def __iter__(self):
@@ -151,7 +151,7 @@ class ReportFilterApplication(SimpleReport):
             pool = Pool.get_by_id(pool)
         else:
             pool = Pool.objects.filter()[0]
-        data += [SectionRow(name=f"Report by {pool.name}")]
+        data.append(SectionRow(name=f"Report by {pool.name}"))
         if resource_group:
             resource_group = ResourceGroup.get_by_id(resource_group)
             mos = ManagedObject.objects.filter(
@@ -203,8 +203,7 @@ class ReportFilterApplication(SimpleReport):
                     problem = code_map.get(problem.split(" ")[-1], problem)
                 if isinstance(problem, str):
                     problem = problem.replace("\n", " ").replace("\r", " ")
-                data += [
-                    (
+                data.append((
                         mo.name,
                         mo.address,
                         mo.profile.name,
@@ -213,8 +212,7 @@ class ReportFilterApplication(SimpleReport):
                         discovery["st"].strftime("%d.%m.%Y %H:%M") if "st" in discovery else "",
                         method,
                         problem,
-                    )
-                ]
+                    ))
         return self.from_dataset(
             title=self.title,
             columns=[

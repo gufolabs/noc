@@ -98,7 +98,7 @@ class Report(ReportNode):
         self.sections = []  # Must be ReportSection instances
 
     def append_section(self, s):
-        self.sections += [s]
+        self.sections.append(s)
 
     def to_html(self, include_buttons=True, **kwargs):
         """
@@ -152,7 +152,7 @@ class TextSection(ReportSection):
         """
         s = []
         if self.title:
-            s += [f"<h2>{self.quote(self.title)}</h2>"]
+            s.append(f"<h2>{self.quote(self.title)}</h2>")
         s += [f"<p>{self.quote(p)}</p>" for p in self.paragraphs]
         return "\n".join(s)
 
@@ -164,7 +164,7 @@ class TextSection(ReportSection):
 SIZE_DATA = []
 dec = decimal.Decimal(1024)
 for suffix in ["KB", "MB", "GB", "TB", "PB"]:
-    SIZE_DATA += [(dec * 1024, dec, suffix)]
+    SIZE_DATA.append((dec * 1024, dec, suffix))
     dec *= 1024
 
 
@@ -222,7 +222,7 @@ class TableColumn(ReportNode):
         :return:
         """
         if self.total:
-            self.total_data += [s]
+            self.total_data.append(s)
 
     def format_data(self, s):
         """
@@ -422,7 +422,7 @@ class SectionRow:
     def contribute_data(self, column, d):
         if self.subtotal:
             try:
-                self.data[column] += [d]
+                self.data[column].append(d)
             except KeyError:
                 self.data[column] = [d]
 
@@ -439,9 +439,9 @@ class TableSection(ReportSection):
         self.columns = []
         for c in columns or []:
             if isinstance(c, str) or hasattr(c, "__unicode__"):
-                self.columns += [TableColumn(c)]
+                self.columns.append(TableColumn(c))
             else:
-                self.columns += [c]
+                self.columns.append(c)
         self.data = data or []
         self.enumerate = enumerate
         self.has_total = reduce(
@@ -459,9 +459,9 @@ class TableSection(ReportSection):
                 return []
             s = ["<tr style='font-style:italic;background-color:#C0C0C0'>"]
             if self.enumerate:
-                s += ["<td></td>"]
+                s.append("<td></td>")
             s += [c.format_html_subtotal(current_section.data[c]) for c in self.columns]
-            s += ["</tr>"]
+            s.append("</tr>")
             return s
 
         if include_buttons:
@@ -511,14 +511,14 @@ class TableSection(ReportSection):
         else:
             s = [f"<table class='report-table' summary='{self.quote(self.name)}'>"]
         # Render header
-        s += ["<thead>"]
-        s += ["<tr>"]
+        s.append("<thead>")
+        s.append("<tr>")
         if self.enumerate:
-            s += ["<th>#</th>"]
+            s.append("<th>#</th>")
         s += [f"<th>{self.quote(c.title)}</th>" for c in self.columns]
-        s += ["</tr>"]
-        s += ["</thead>"]
-        s += ["<tbody>"]
+        s.append("</tr>")
+        s.append("</thead>")
+        s.append("<tbody>")
         # Render data
         s_span = len(self.columns)
         if self.enumerate:
@@ -547,30 +547,30 @@ class TableSection(ReportSection):
                     ]
                     current_section = row
                     continue
-                s += [f"<tr class='row{int(n % 2 + 1)}'>"]
+                s.append(f"<tr class='row{int(n % 2 + 1)}'>")
                 if self.enumerate:
-                    s += [f"<td align='right'>{int(n)}</td>"]
+                    s.append(f"<td align='right'>{int(n)}</td>")
                 n += 1
                 for c, d in zip(self.columns, row):
-                    s += [c.format_html(d)]
+                    s.append(c.format_html(d))
                     c.contribute_data(d)
                     if current_section:
                         current_section.contribute_data(c, d)
-                s += ["</tr>"]
+                s.append("</tr>")
                 # Render las subtotal
             if current_section and self.has_total and current_section.subtotal:
                 # Display totals from previous sections
                 s += render_subtotals()
             # Render totals
         if self.has_total:
-            s += ["<tr>"]
+            s.append("<tr>")
             if self.enumerate:
-                s += ["<td></td>"]
+                s.append("<td></td>")
             for c in self.columns:
-                s += [c.format_html_total()]
-            s += ["</tr>"]
-        s += ["</tbody>"]
-        s += ["</table>"]
+                s.append(c.format_html_total())
+            s.append("</tr>")
+        s.append("</tbody>")
+        s.append("</table>")
         return "\n".join(s)
 
     def to_csv(self, delimiter=","):

@@ -100,9 +100,9 @@ class ReportDiscoveryResult(BaseReportColumn):
         ]  # {"$sort": {"_id": 1}}] Not use...
         if match:
             # @todo check match
-            pipeline += [{"$match": match}]
+            pipeline.append({"$match": match})
         else:
-            pipeline += [{"$match": {"job.problems": {"$exists": True, "$ne": {}}}}]
+            pipeline.append({"$match": {"job.problems": {"$exists": True, "$ne": {}}}})
         return pipeline
 
     def extract(self):

@@ -53,7 +53,7 @@ class RunCommandsApplication(ExtApplication):
                 cfg["xtype"] = "numberfield"
             else:
                 cfg["xtype"] = "textfield"
-            r += [cfg]
+            r.append(cfg)
         return r
 
     @api.get(r"^form/action/(?P<action_id>[0-9a-f]{24})/$", access="launch")
@@ -70,7 +70,7 @@ class RunCommandsApplication(ExtApplication):
                 cfg["xtype"] = "numberfield"
             else:
                 cfg["xtype"] = "textfield"
-            r += [cfg]
+            r.append(cfg)
         return r
 
     @api.post(
