@@ -83,5 +83,5 @@ class Script(BaseScript):
             if port_descr and port_descr != "N/A":
                 r["neighbors"][0]["remote_port_description"] = re.sub(r"\n\s{10,}", "", port_descr)
 
-            result += [r]
+            result.append(r)
         return result

@@ -83,7 +83,7 @@ class Script(BaseScript):
             match = self.rx_ip_mask.search(ls)
             if match:
                 mask = match.group("mask")
-                ip_addr += [IPv4(ip, netmask=mask).prefix]
+                ip_addr.append(IPv4(ip, netmask=mask).prefix)
             match = self.rx_ip_mac.search(ls)
             if match:
                 mac_svi = MACAddressParameter().clean(match.group("mac"))
@@ -153,6 +153,6 @@ class Script(BaseScript):
                 rr["rd"] = rd
             # create ifaces
             rr["interfaces"] = list(ifaces.values())
-        r += [rr]
+        r.append(rr)
         # Return result
         return r

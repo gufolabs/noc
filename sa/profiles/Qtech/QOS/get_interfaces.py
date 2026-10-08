@@ -56,7 +56,7 @@ class Script(BaseScript):
                 sub["untagged_vlan"] = int(match.group("access_vlan"))
 
             iface["subinterfaces"] = [sub]
-            interfaces += [iface]
+            interfaces.append(iface)
 
         mac = self.scripts.get_chassis_id()[0]["first_chassis_mac"]
         v = self.cli("show interface ip")
@@ -73,7 +73,7 @@ class Script(BaseScript):
             mask = match.group("mask")
             ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
             i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
-            interfaces += [i]
+            interfaces.append(i)
         v = self.cli("show interface ip vlan")
         for match in self.rx_vlans_ip.finditer(v):
             vlan_id = match.group("vlan_id")

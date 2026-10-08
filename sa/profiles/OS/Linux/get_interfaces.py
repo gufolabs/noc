@@ -60,13 +60,12 @@ class Script(BaseScript):
                     if IPv4(ip.group("ip")):
                         for ii in iface["subinterfaces"]:
                             if ii["name"] == ip.group("iface"):
-                                ii["ipv4_addresses"] += [ip.group("ip")]
+                                ii["ipv4_addresses"].append(ip.group("ip"))
                                 add = True
                         if add:
                             add = False
                             continue
-                        iface["subinterfaces"] += [
-                            {
+                        iface["subinterfaces"].append({
                                 "name": ip.group("iface"),
                                 "mtu": match.group("mtu"),
                                 "mac": (
@@ -78,8 +77,7 @@ class Script(BaseScript):
                                 "oper_status": oper_status,
                                 "enabled_afi": ["BRIDGE", "IPv4"],
                                 "ipv4_addresses": [ip.group("ip")],
-                            }
-                        ]
+                            })
             else:
                 iface["subinterfaces"] = [
                     {
@@ -95,5 +93,5 @@ class Script(BaseScript):
                         "enabled_afi": ["BRIDGE"],
                     }
                 ]
-            interfaces += [iface]
+            interfaces.append(iface)
         return [{"interfaces": interfaces}]

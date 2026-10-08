@@ -38,18 +38,18 @@ class Script(BaseScript):
         if "type" in self.iface:
             if not self.parent:
                 self.iface["subinterfaces"] = []
-                self.iface["subinterfaces"] += [self.subiface]
-                self.interfaces += [self.iface]
+                self.iface["subinterfaces"].append(self.subiface)
+                self.interfaces.append(self.iface)
             elif self.parent == "IEEE 802.11":
                 for i in self.interfaces:
                     if "mac" in i:
                         if i["mac"] == self.subiface["mac"]:
-                            i["subinterfaces"] += [self.subiface]
+                            i["subinterfaces"].append(self.subiface)
                             break
             else:
                 for i in self.interfaces:
                     if i["name"] == self.parent:
-                        i["subinterfaces"] += [self.subiface]
+                        i["subinterfaces"].append(self.subiface)
                         break
         self.iface = {}
         self.subiface = {}
@@ -103,10 +103,10 @@ class Script(BaseScript):
                 mask = IPv4.netmask_to_len(mask)
                 ipv4_addr = f"{ip}/{mask}"
                 if "ipv4_addresses" in self.subiface:
-                    self.subiface["ipv4_addresses"] += [ipv4_addr]
+                    self.subiface["ipv4_addresses"].append(ipv4_addr)
                 else:
                     self.subiface["ipv4_addresses"] = [ipv4_addr]
-                    self.subiface["enabled_afi"] += ["IPv4"]
+                    self.subiface["enabled_afi"].append("IPv4")
                 continue
             match = self.rx_if_inet6.search(s)
             if match:
@@ -116,10 +116,10 @@ class Script(BaseScript):
                 prefixlen = match.group("prefixlen")
                 ipv6_addr = f"{ipv6}/{prefixlen}"
                 if "ipv6_addresses" in self.subiface:
-                    self.subiface["ipv6_addresses"] += [ipv6_addr]
+                    self.subiface["ipv6_addresses"].append(ipv6_addr)
                 else:
                     self.subiface["ipv6_addresses"] = [ipv6_addr]
-                    self.subiface["enabled_afi"] += ["IPv6"]
+                    self.subiface["enabled_afi"].append("IPv6")
                 continue
             match = self.rx_if_status.search(s)
             if match:
@@ -137,7 +137,7 @@ class Script(BaseScript):
                     # self.subiface["enabled_afi"] = ["BRIDGE"]
                 if self.iface["name"] in i["members"]:
                     if i["type"] == "L" and "LACP" not in self.iface["enabled_protocols"]:
-                        self.iface["enabled_protocols"] += ["LACP"]
+                        self.iface["enabled_protocols"].append("LACP")
                     self.iface["aggregated_interface"] = i["interface"]
             match = self.rx_if_wlan.search(s)
             if match:
@@ -147,7 +147,7 @@ class Script(BaseScript):
             if match:
                 self.iface["type"] = "SVI"
                 if "BRIDGE" not in self.subiface["enabled_afi"]:
-                    self.subiface["enabled_afi"] += ["BRIDGE"]
+                    self.subiface["enabled_afi"].append("BRIDGE")
                 continue
             match = self.rx_if_bridge_m.search(s)
             if match:
@@ -163,7 +163,7 @@ class Script(BaseScript):
                 match = self.rx_if_bridge_s.search(s)
                 if match:
                     caps["STP"] = True
-                self.if_stp += [caps]
+                self.if_stp.append(caps)
         self.add_iface()
         if len(self.if_stp) > 0:
             for i in self.interfaces:
@@ -173,5 +173,5 @@ class Script(BaseScript):
                         i["snmp_ifindex"] = int(s["ifindex"])
                         i["aggregated_interface"] = s["parent"]
                     if "STP" in s:
-                        i["enabled_protocols"] += ["STP"]
+                        i["enabled_protocols"].append("STP")
         return [{"interfaces": self.interfaces}]

@@ -43,16 +43,14 @@ class Script(BaseScript):
                 continue
             if s[1].startswith("-"):
                 if part_no:
-                    r += [
-                        {
+                    r.append({
                             "type": "LINECARD",
                             "vendor": "NSN",
                             "part_no": part_no,
                             "number": number,
                             "serial": serial,
                             "revision": revision,
-                        }
-                    ]
+                        })
                 part_no = ""
                 number = ""
                 serial = ""

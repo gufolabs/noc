@@ -76,7 +76,7 @@ class Script(BaseScript):
                     }
                 ],
             }
-            interfaces += [iface]
+            interfaces.append(iface)
             c = self.cli(f"GET ethernet{etherswitch}/", command_submit=b"\x09")
             self.cli("")
             for i in self.rx_hw_port.finditer(c):
@@ -100,7 +100,7 @@ class Script(BaseScript):
                         }
                     ],
                 }
-                interfaces += [iface]
+                interfaces.append(iface)
             c = self.cli(f"GET ethernet{etherswitch}/vtuTable[]/")
             for match in self.rx_vlan.finditer(c):
                 vlan_id = match.group("vlan_id")
@@ -114,7 +114,7 @@ class Script(BaseScript):
                             if vtype == "untag":
                                 i["subinterfaces"][0]["untagged_vlan"] = vlan_id
                             else:
-                                i["subinterfaces"][0]["tagged_vlans"] += [vlan_id]
+                                i["subinterfaces"][0]["tagged_vlans"].append(vlan_id)
                             break
         c = self.cli("GET ip/router/interfaces[]/")
         for match in self.rx_ip_iface.finditer(c):
@@ -146,7 +146,7 @@ class Script(BaseScript):
                 "type": self.IF_TYPES[match.group("iftype")],
                 "subinterfaces": [sub],
             }
-            interfaces += [iface]
+            interfaces.append(iface)
         c = self.cli("GET bridge/bridgeGroup/macAddress")
         match = self.rx_mac.search(c)
         mac = match.group("mac")

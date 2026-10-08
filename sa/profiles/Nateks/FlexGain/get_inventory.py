@@ -48,19 +48,16 @@ class Script(BaseScript):
         r = []
         v = self.cli("show system inventory")
         match = self.rx_chassis.search(v)
-        r += [
-            {
+        r.append({
                 "type": "CHASSIS",
                 "vendor": "Nateks",
                 "part_no": [match.group("part_no").strip(), match.group("part_no1").strip()],
                 "revision": match.group("revision").strip(),
                 "serial": match.group("serial").strip(),
                 "description": match.group("description").strip(),
-            }
-        ]
+            })
         for match in self.rx_slot.finditer(v):
-            r += [
-                {
+            r.append({
                     "number": match.group("number"),
                     "type": "LINECARD",
                     "vendor": "Nateks",
@@ -68,7 +65,6 @@ class Script(BaseScript):
                     "revision": match.group("revision").strip(),
                     "serial": match.group("serial").strip(),
                     "description": match.group("description").strip(),
-                }
-            ]
+                })
 
         return r

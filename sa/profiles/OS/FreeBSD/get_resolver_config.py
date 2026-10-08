@@ -35,5 +35,5 @@ class Script(BaseScript):
                 r.update({"search": match.group("search").split()})
             match = self.rx_nameserver.search(l.strip())
             if match:
-                r["nameservers"] += [match.group("server")]
+                r["nameservers"].append(match.group("server"))
         return r

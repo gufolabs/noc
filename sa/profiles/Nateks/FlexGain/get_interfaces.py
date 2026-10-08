@@ -47,13 +47,11 @@ class Script(BaseScript):
         for l in self.cli("show vlan").split("\n"):
             match = self.rx_vlan.search(l)
             if match:
-                vlans += [
-                    {
+                vlans.append({
                         "vlan_id": match.group("vlan_id"),
                         "ifname": match.group("ifname"),
                         "tagged": match.group("state") == "Tagged",
-                    }
-                ]
+                    })
         interfaces = []
         for l in self.cli("show interface counter").split("\n"):
             match = self.rx_ge.search(l)
@@ -88,12 +86,12 @@ class Script(BaseScript):
                             if v["vlan_id"] == "1":
                                 continue
                             if "tagged_vlans" in i["subinterfaces"][0]:
-                                i["subinterfaces"][0]["tagged_vlans"] += [int(v["vlan_id"])]
+                                i["subinterfaces"][0]["tagged_vlans"].append(int(v["vlan_id"]))
                             else:
                                 i["subinterfaces"][0]["tagged_vlans"] = [int(v["vlan_id"])]
                         else:
                             i["subinterfaces"][0]["untagged_vlan"] = int(v["vlan_id"])
-                interfaces += [i]
+                interfaces.append(i)
             match = self.rx_xdsl.search(l)
             if match:
                 ifname = f"{match.group('slot')}/{match.group('port')}/{match.group('bridge')}"
@@ -117,8 +115,7 @@ class Script(BaseScript):
                 for l1 in v.split("\n"):
                     match1 = self.rx_vpivci.search(l1)
                     if match1:
-                        i["subinterfaces"] += [
-                            {
+                        i["subinterfaces"].append({
                                 "name": ifname,
                                 "oper_status": oper_status,
                                 "admin_status": admin_status,
@@ -126,9 +123,8 @@ class Script(BaseScript):
                                 "vlan_ids": [int(match1.group("pvid"))],
                                 "vpi": int(match1.group("vpi")),
                                 "vci": int(match1.group("vci")),
-                            }
-                        ]
-                interfaces += [i]
+                            })
+                interfaces.append(i)
         v = self.cli("show management gbe")
         i = {
             "name": "gbe",
@@ -149,7 +145,7 @@ class Script(BaseScript):
             match = self.rx_mgmt_vlan.search(l)
             if match:
                 i["subinterfaces"][0]["vlan_ids"] = [int(match.group("vlan_id"))]
-        interfaces += [i]
+        interfaces.append(i)
         v = self.cli("show management mgmt")
         i = {
             "name": "mgmt",
@@ -167,5 +163,5 @@ class Script(BaseScript):
                 ip_subnet = match.group("mask")
                 ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                 i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
-        interfaces += [i]
+        interfaces.append(i)
         return [{"interfaces": interfaces}]

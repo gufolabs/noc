@@ -54,5 +54,5 @@ class Script(BaseScript):
                 "type": self.TEST_TYPES[probe_type],
                 "target": match.group("target"),
             }
-            r += [test]
+            r.append(test)
         return r

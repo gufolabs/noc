@@ -69,9 +69,9 @@ class Script(BaseScript):
                     mas = iface.split("/")
                     R = mas[2].split("-")
                     for i in range(int(R[0]), int(R[1]) + 1):
-                        memb += [mas[0] + "/" + mas[1] + "/" + str(i)]
+                        memb.append(mas[0] + "/" + mas[1] + "/" + str(i))
                 else:
-                    memb += [iface]
+                    memb.append(iface)
             members2 = match.group("interfaces2")
             if members2:
                 members2 = members2.split(",")
@@ -80,21 +80,19 @@ class Script(BaseScript):
                         mas = iface.split("/")
                         R = mas[2].split("-")
                         for i in range(int(R[0]), int(R[1]) + 1):
-                            memb += [mas[0] + "/" + mas[1] + "/" + str(i)]
+                            memb.append(mas[0] + "/" + mas[1] + "/" + str(i))
                     else:
-                        memb += [iface]
+                        memb.append(iface)
             lacp = self.cli("show lacp Port-Channel")
             match_ = self.rx_lacp.search(lacp)
             if match_:
                 l_type = "L"
             else:
                 l_type = "S"
-            r += [
-                {
+            r.append({
                     "interface": match.group("port").lower(),
                     # "interface": match.group("port"),
                     "type": l_type,
                     "members": memb,
-                }
-            ]
+                })
         return r

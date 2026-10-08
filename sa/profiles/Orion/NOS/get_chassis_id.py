@@ -20,5 +20,5 @@ class Script(BaseScript):
         v = self.profile.get_version(self)
         r = [{"first_chassis_mac": v["mac"], "last_chassis_mac": v["mac"]}]
         if v.get("mac2") is not None:
-            r += [{"first_chassis_mac": v["mac2"], "last_chassis_mac": v["mac2"]}]
+            r.append({"first_chassis_mac": v["mac2"], "last_chassis_mac": v["mac2"]})
         return r

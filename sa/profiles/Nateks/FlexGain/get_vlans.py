@@ -27,6 +27,6 @@ class Script(BaseScript):
             vlan_id = int(match.group("vlan_id"))
             if (vlan_id == 1) or (vlan_id in vlans):
                 continue
-            r += [{"vlan_id": int(match.group("vlan_id"))}]
-            vlans += [vlan_id]
+            r.append({"vlan_id": int(match.group("vlan_id"))})
+            vlans.append(vlan_id)
         return r

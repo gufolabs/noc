@@ -177,16 +177,16 @@ class Script(BaseScript):
                 if match.group("mac"):
                     iface["subinterfaces"][0]["untagged_vlan"] = match.group("pvid")
                 if iface["type"] == "physical":
-                    iface["subinterfaces"][0]["enabled_afi"] += ["BRIDGE"]
+                    iface["subinterfaces"][0]["enabled_afi"].append("BRIDGE")
                 if iface["type"] == "SVI":
                     iface["subinterfaces"][0]["vlan_ids"] = ifname[4:]
                 if match.group("address") and match.group("mask"):
                     ip_address = match.group("address")
                     ip_subnet = match.group("mask")
                     ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
-                    iface["subinterfaces"][0]["enabled_afi"] += ["IPv4"]
+                    iface["subinterfaces"][0]["enabled_afi"].append("IPv4")
                     iface["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
-                interfaces += [iface]
+                interfaces.append(iface)
             c = self.cli("show switchport interface")
             for match in self.rx_switchport_a26.finditer(c):
                 ifname = match.group("ifname")
@@ -235,16 +235,16 @@ class Script(BaseScript):
                     ],
                 }
                 if ifname in gvrp:
-                    iface["enabled_protocols"] += ["GVRP"]
+                    iface["enabled_protocols"].append("GVRP")
                 if ifname in stp:
-                    iface["enabled_protocols"] += ["STP"]
+                    iface["enabled_protocols"].append("STP")
                 if ifname in ctp:
-                    iface["enabled_protocols"] += ["CTP"]
+                    iface["enabled_protocols"].append("CTP")
                 if ifname in lldp:
-                    iface["enabled_protocols"] += ["LLDP"]
+                    iface["enabled_protocols"].append("LLDP")
                 if ifname in oam:
-                    iface["enabled_protocols"] += ["OAM"]
-                interfaces += [iface]
+                    iface["enabled_protocols"].append("OAM")
+                interfaces.append(iface)
             c = self.cli(f"show interface port-list 1-{int(self.port_count)} switchport")
             for match in self.rx_switchport_beta.finditer(c):
                 ifname = match.group("port")
@@ -283,7 +283,7 @@ class Script(BaseScript):
                         }
                     ],
                 }
-                interfaces += [iface]
+                interfaces.append(iface)
             c = self.cli("show interface ip vlan")
             for match in self.rx_ip_beta_vlan.finditer(c):
                 ifname = f"ip{match.group('ifname')}"
@@ -302,7 +302,7 @@ class Script(BaseScript):
             if match:
                 if match.group("port") == "Port":
                     continue
-                descr += [match.groupdict()]
+                descr.append(match.groupdict())
         for match in self.rx_port.finditer(self.cli("show interface port")):
             ifname = match.group("port")
             iface = {
@@ -315,15 +315,15 @@ class Script(BaseScript):
                 "subinterfaces": [],
             }
             if ifname in gvrp:
-                iface["enabled_protocols"] += ["GVRP"]
+                iface["enabled_protocols"].append("GVRP")
             if ifname in stp:
-                iface["enabled_protocols"] += ["STP"]
+                iface["enabled_protocols"].append("STP")
             if ifname in ctp:
-                iface["enabled_protocols"] += ["CTP"]
+                iface["enabled_protocols"].append("CTP")
             if ifname in lldp:
-                iface["enabled_protocols"] += ["LLDP"]
+                iface["enabled_protocols"].append("LLDP")
             if ifname in oam:
-                iface["enabled_protocols"] += ["OAM"]
+                iface["enabled_protocols"].append("OAM")
             sub = {
                 "name": ifname,
                 "admin_status": "enable" in match.group("admin_status"),
@@ -345,8 +345,8 @@ class Script(BaseScript):
                 sub["tagged_vlans"] = self.expand_rangelist(match1.group("vlans"))
             else:
                 raise self.NotSupportedError()
-            iface["subinterfaces"] += [sub]
-            interfaces += [iface]
+            iface["subinterfaces"].append(sub)
+            interfaces.append(iface)
         mac = self.profile.get_version(self)["mac"]
         descr = []
         for line in self.cli("show interface ip description").split("\n"):
@@ -354,7 +354,7 @@ class Script(BaseScript):
             if match:
                 if match.group("port") == "Port":
                     continue
-                descr += [match.groupdict()]
+                descr.append(match.groupdict())
 
         v = self.cli("show interface ip")
         for match in self.rx_ip.finditer(v):
@@ -385,7 +385,7 @@ class Script(BaseScript):
                     iface["description"] = i["descr"].strip()
                     iface["subinterfaces"][0]["description"] = i["descr"].strip()
                     break
-            interfaces += [iface]
+            interfaces.append(iface)
             # Not implemented
             # v = self.cli("show interface ipv6")
         return [{"interfaces": interfaces}]
