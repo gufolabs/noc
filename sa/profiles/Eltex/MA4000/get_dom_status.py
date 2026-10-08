@@ -40,12 +40,14 @@ class Script(BaseScript):
             optical_tx_dbm = i[5]
             if optical_tx_dbm in ["N/A", "N/S"]:
                 optical_tx_dbm = None
-            r.append({
+            r.append(
+                {
                     "interface": port,
                     "temp_c": temp_c,
                     "voltage_v": voltage_v,
                     "current_ma": current_ma,
                     "optical_rx_dbm": optical_rx_dbm,
                     "optical_tx_dbm": optical_tx_dbm,
-                })
+                }
+            )
         return r

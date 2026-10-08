@@ -74,10 +74,12 @@ class Script(BaseScript):
                 l_type = "L"
             else:
                 l_type = "S"
-            res.append({
+            res.append(
+                {
                     "interface": match.group("port").lower(),
                     # "interface": match.group("port"),
                     "type": l_type,
                     "members": memb,
-                })
+                }
+            )
         return res

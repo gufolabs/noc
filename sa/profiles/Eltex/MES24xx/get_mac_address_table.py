@@ -26,10 +26,12 @@ class Script(BaseScript):
             cmd += f" vlan {vlan}"
         v = self.cli(cmd)
         for i in parse_table(v, expand_columns=True, max_width=80):
-            r.append({
+            r.append(
+                {
                     "vlan_id": i[0],
                     "mac": i[1],
                     "interfaces": [i[4]],
                     "type": {"Learnt": "D", "Static": "C"}[i[2]],
-                })
+                }
+            )
         return r

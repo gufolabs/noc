@@ -267,7 +267,8 @@ class Script(BaseScript):
             if name is None:
                 continue
             chassis_id = self.get_chassis_id(sindex, entity)
-            r.append({
+            r.append(
+                {
                     "name": f"{chassis_id}|{name}",
                     "status": bool(v),
                     "description": f"State of {name} on Unit_{chassis_id}",
@@ -279,7 +280,8 @@ class Script(BaseScript):
                         f"noc::chassis::{chassis_id}",
                     ],
                     "snmp_oid": f"1.3.6.1.4.1.89.83.1.1.1.3.{sindex}",
-                })
+                }
+            )
         # Power Supply state
         for oid, v in self.snmp.getnext("1.3.6.1.4.1.89.83.1.2.1.3"):
             sindex = oid[len("1.3.6.1.4.1.89.83.1.1.1.3") + 1 :]
@@ -289,7 +291,8 @@ class Script(BaseScript):
             if name is None:
                 continue
             chassis_id = self.get_chassis_id(sindex, entity)
-            r.append({
+            r.append(
+                {
                     "name": f"{chassis_id}|{name}",
                     "status": bool(v),
                     "description": f"State of {name} on Unit_{chassis_id}",
@@ -301,7 +304,8 @@ class Script(BaseScript):
                         f"noc::chassis::{chassis_id}",
                     ],
                     "snmp_oid": f"1.3.6.1.4.1.89.83.1.2.1.3.{sindex}",
-                })
+                }
+            )
 
         return r
 

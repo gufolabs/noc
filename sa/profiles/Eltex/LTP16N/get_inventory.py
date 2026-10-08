@@ -57,13 +57,15 @@ class Script(BaseScript):
             part_no = self.snmp.get(f"1.3.6.1.4.1.35265.1.209.1.6.6.1.3.{id}")
             revision = self.snmp.get(f"1.3.6.1.4.1.35265.1.209.1.6.6.1.4.{id}")
             if part_no != "":
-                r.append({
+                r.append(
+                    {
                         "type": "XCVR",
                         "number": id,
                         "vendor": re.sub(r"\s+$", "", vendor),
                         "part_no": re.sub(r"\s+$", "", part_no),
                         "revision": re.sub(r"\s+$", "", revision),
-                    })
+                    }
+                )
 
         # SFP for 16 x PON-port
         for id in range(1, count_ports[0] + 1):
@@ -71,13 +73,15 @@ class Script(BaseScript):
             part_no = self.snmp.get(f"1.3.6.1.4.1.35265.1.209.4.3.1.1.6.1.{id}")
             revision = self.snmp.get(f"1.3.6.1.4.1.35265.1.209.4.3.1.1.7.1.{id}")
             if part_no != "":
-                r.append({
+                r.append(
+                    {
                         "type": "XCVR",
                         "number": str(id + count_ports[1]),
                         "vendor": re.sub(r"\s+$", "", vendor),
                         "part_no": re.sub(r"\s+$", "", part_no),
                         "revision": re.sub(r"\s+$", "", revision),
-                    })
+                    }
+                )
 
         for res in r:
             if res["type"] == "CHASSIS":
@@ -91,7 +95,8 @@ class Script(BaseScript):
             state = self.snmp.get(f"1.3.6.1.4.1.35265.1.209.1.2.{id + 6}.0")
             if state != 1:
                 state = 0
-            r.append({
+            r.append(
+                {
                     "name": f"Fan-{id + 1}",
                     "status": bool(state),
                     "description": f"State of Fan-{id + 1}",
@@ -102,7 +107,8 @@ class Script(BaseScript):
                         "noc::sensor::target::fan",
                     ],
                     "snmp_oid": f"1.3.6.1.4.1.35265.1.209.1.2.{id + 6}.0",
-                })
+                }
+            )
 
         # Power Supply State
         for oid, v in self.snmp.getnext("1.3.6.1.4.1.35265.1.209.1.4.1.2"):
@@ -113,7 +119,8 @@ class Script(BaseScript):
                 if state != 1:
                     state = 0
 
-                r.append({
+                r.append(
+                    {
                         "name": f"PS-{sindex}",
                         "status": bool(state),
                         "description": f"State of Power Supply {sindex}",
@@ -124,7 +131,8 @@ class Script(BaseScript):
                             "noc::sensor::target::supply",
                         ],
                         "snmp_oid": f"1.3.6.1.4.1.35265.1.209.1.4.1.5.{sindex}",
-                    })
+                    }
+                )
 
         # Temperature Sensor
         temp_sensor_map = {"16": "PON SFP 1", "17": "PON SFP 2", "18": "Front SFP", "19": "Switch"}
@@ -136,7 +144,8 @@ class Script(BaseScript):
             else:
                 state = 0
 
-            r.append({
+            r.append(
+                {
                     "name": f"Temperature Sensor {temp_sensor_map[str(id)]}",
                     "status": bool(state),
                     "description": f"Temperature sensor for {temp_sensor_map[str(id)]}",
@@ -146,7 +155,8 @@ class Script(BaseScript):
                         "noc::sensor::mode::temperature",
                     ],
                     "snmp_oid": f"1.3.6.1.4.1.35265.1.209.1.2.{id}.0",
-                })
+                }
+            )
 
         return r
 
@@ -175,24 +185,28 @@ class Script(BaseScript):
         ]
 
         for match in self.rx_pwr.finditer(v):
-            r.append({
+            r.append(
+                {
                     "type": "PSU",
                     "vendor": "ELTEX",
                     "part_no": match.group("part_no"),
                     "number": match.group("num"),
-                })
+                }
+            )
 
         # SFP for 8 x Fron-port (Uplinks)
         try:
             v = self.cli(f"show interface front-port 1-{count_ports[1]} sfp", cached=True)
             for i in parse_table(v, line_wrapper=None):
                 if i[2] != "-":
-                    r.append({
+                    r.append(
+                        {
                             "type": "XCVR",
                             "number": i[0],
                             "vendor": i[1],
                             "part_no": i[2],
-                        })
+                        }
+                    )
         except self.CLISyntaxError:
             raise NotImplementedError
 
@@ -201,12 +215,14 @@ class Script(BaseScript):
             v = self.cli(f"show interface pon-port 1-{count_ports[0]} state", cached=True)
             for i in parse_table(v, line_wrapper=None):
                 if i[5] != "-":
-                    r.append({
+                    r.append(
+                        {
                             "type": "XCVR",
                             "number": str(int(i[0]) + count_ports[1]),
                             "vendor": i[4],
                             "part_no": i[5],
-                        })
+                        }
+                    )
         except self.CLISyntaxError:
             raise NotImplementedError
 
