@@ -90,5 +90,5 @@ class Script(BaseScript):
                     else:
                         raise self.NotSupportedError()
                 r["part_no"] = part_no
-                res += [r]
+                res.append(r)
         return res

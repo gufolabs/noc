@@ -34,21 +34,19 @@ class Script(BaseScript):
             found = False
             for iface in r:
                 if iface["lag_id"] == i[3]:
-                    iface["bundle"] += [bundle]
+                    iface["bundle"].append(bundle)
                     found = True
                     break
             if not found:
                 for iface in p:
                     for member in iface["members"]:
                         if member == i[0]:
-                            r += [
-                                {
+                            r.append({
                                     "lag_id": i[3],  # XXX check this
                                     "interface": iface["interface"],
                                     "system_id": mac,
                                     "bundle": [bundle],
-                                }
-                            ]
+                                })
                             found = True
                             break
                     if found:

@@ -204,7 +204,7 @@ class Script(BaseScript):
             v = self.cli("show fiber-ports optical-transceiver")
             for i in parse_table(v, footer=r"Temp\s+- Internally measured transceiver temperature"):
                 if i[1] in ["OK", "N/S"] or is_int(i[1]):
-                    opt_ports += [i[0]]
+                    opt_ports.append(i[0])
         except self.CLISyntaxError:
             pass
         return opt_ports
@@ -267,8 +267,7 @@ class Script(BaseScript):
             if name is None:
                 continue
             chassis_id = self.get_chassis_id(sindex, entity)
-            r += [
-                {
+            r.append({
                     "name": f"{chassis_id}|{name}",
                     "status": bool(v),
                     "description": f"State of {name} on Unit_{chassis_id}",
@@ -280,8 +279,7 @@ class Script(BaseScript):
                         f"noc::chassis::{chassis_id}",
                     ],
                     "snmp_oid": f"1.3.6.1.4.1.89.83.1.1.1.3.{sindex}",
-                }
-            ]
+                })
         # Power Supply state
         for oid, v in self.snmp.getnext("1.3.6.1.4.1.89.83.1.2.1.3"):
             sindex = oid[len("1.3.6.1.4.1.89.83.1.1.1.3") + 1 :]
@@ -291,8 +289,7 @@ class Script(BaseScript):
             if name is None:
                 continue
             chassis_id = self.get_chassis_id(sindex, entity)
-            r += [
-                {
+            r.append({
                     "name": f"{chassis_id}|{name}",
                     "status": bool(v),
                     "description": f"State of {name} on Unit_{chassis_id}",
@@ -304,8 +301,7 @@ class Script(BaseScript):
                         f"noc::chassis::{chassis_id}",
                     ],
                     "snmp_oid": f"1.3.6.1.4.1.89.83.1.2.1.3.{sindex}",
-                }
-            ]
+                })
 
         return r
 
@@ -344,13 +340,13 @@ class Script(BaseScript):
                     ser = self.cli("show system", cached=True)
                 r = self.get_chassis(plat, ver, ser, unit=unit)
                 platform = r["part_no"][0]
-                res += [r]
+                res.append(r)
                 for match in self.rx_pwr.finditer(plat):
-                    res += [self.get_pwr(match.group("type"), match.group("pwr_type"), platform)]
+                    res.append(self.get_pwr(match.group("type"), match.group("pwr_type"), platform))
                 for p in ports:
                     if p.startswith("gi") or p.startswith("te"):
                         if unit == p[2]:
-                            res += [self.get_trans(p)]
+                            res.append(self.get_trans(p))
                 for r in res:
                     if r["type"] == "CHASSIS" and r["number"] == "1" and self.has_snmp():
                         r.update({"sensors": self.get_chassis_sensors()})
@@ -362,9 +358,9 @@ class Script(BaseScript):
             platform = r["part_no"][0]
             res = [r]
             for match in self.rx_pwr.finditer(plat):
-                res += [self.get_pwr(match.group("type"), match.group("pwr_type"), platform)]
+                res.append(self.get_pwr(match.group("type"), match.group("pwr_type"), platform))
             for p in ports:
-                res += [self.get_trans(p)]
+                res.append(self.get_trans(p))
             for r in res:
                 if r["type"] == "CHASSIS" and self.has_snmp():
                     r.update({"sensors": self.get_chassis_sensors()})

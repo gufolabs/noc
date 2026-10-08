@@ -68,9 +68,9 @@ class Script(BaseScript):
                     mas = iface.split("/")
                     R = mas[2].split("-")
                     for i in range(int(R[0]), int(R[1]) + 1):
-                        memb += [mas[0] + "/" + mas[1] + "/" + str(i)]
+                        memb.append(mas[0] + "/" + mas[1] + "/" + str(i))
                 else:
-                    memb += [iface]
+                    memb.append(iface)
             members2 = match.group("interfaces2")
             if members2:
                 members2 = members2.split(",")
@@ -79,9 +79,9 @@ class Script(BaseScript):
                         mas = iface.split("/")
                         R = mas[2].split("-")
                         for i in range(int(R[0]), int(R[1]) + 1):
-                            memb += [mas[0] + "/" + mas[1] + "/" + str(i)]
+                            memb.append(mas[0] + "/" + mas[1] + "/" + str(i))
                     else:
-                        memb += [iface]
+                        memb.append(iface)
             d[ifname] = memb
         for pc in d.items():
             sys_id = ""
@@ -100,21 +100,17 @@ class Script(BaseScript):
                         rsys_id = match.group("rmac")
                         lportid = match.group("lportid")
                         rportid = match.group("rportid")
-                        bundle += [
-                            {
+                        bundle.append({
                                 "interface": i,
                                 "local_port_id": lportid,
                                 "remote_system_id": rsys_id,
                                 "remote_port_id": int(rportid),
-                            }
-                        ]
+                            })
             if sys_id:
-                r += [
-                    {
+                r.append({
                         "lag_id": chan_num,
                         "interface": "Port-Channel" + pc[0],
                         "system_id": sys_id,
                         "bundle": bundle,
-                    }
-                ]
+                    })
         return r

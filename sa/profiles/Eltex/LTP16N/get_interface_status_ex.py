@@ -49,5 +49,5 @@ class Script(BaseScript):
                     "admin_status": i["status"],
                     "full_duplex": True,
                 }
-            interfaces_ex += [iface]
+            interfaces_ex.append(iface)
         return interfaces_ex

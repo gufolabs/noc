@@ -56,31 +56,31 @@ class Script(BaseScript):
         # Get list of aggreged  interfaces
         aggregated = []
         for i in parse_table(self.cli("show port-channel all"), allow_wrap=True):
-            aggregated += [i[0]]
+            aggregated.append(i[0])
 
         # Get LLDP interfaces
         lldp = []
         for i in parse_table(self.cli("show lldp interface all")):
             if i[2] == "Enabled" or i[3] == "Enabled":
-                lldp += [i[0]]
+                lldp.append(i[0])
 
         # Get GVRP interfaces
         gvrp = []
         for i in parse_table(self.cli("show gvrp configuration all")):
             if i[4] == "Enabled":
-                gvrp += [i[0]]
+                gvrp.append(i[0])
 
         # Get STP interfaces
         stp = []
         for i in parse_table(self.cli("show spanning-tree active")):
             if i[1] == "Enabled":
-                stp += [i[0]]
+                stp.append(i[0])
 
         # Get OSPF interfaces
         ospf = []
         for i in parse_table(self.cli("show ip ospf interface brief")):
             if i[1] == "Enabled":
-                ospf += [i[0]]
+                ospf.append(i[0])
 
         interfaces = []
         # Get ifname and description
@@ -102,22 +102,22 @@ class Script(BaseScript):
                 iface["type"] = "aggregated"
             # LLDP protocol
             if ifname in lldp:
-                iface["enabled_protocols"] += ["LLDP"]
+                iface["enabled_protocols"].append("LLDP")
             # GVRP protocol
             if ifname in gvrp:
-                iface["enabled_protocols"] += ["GVRP"]
+                iface["enabled_protocols"].append("GVRP")
             # STP protocol
             if ifname in stp:
-                iface["enabled_protocols"] += ["STP"]
+                iface["enabled_protocols"].append("STP")
             # OSPF protocol
             if ifname in ospf:
-                iface["subinterfaces"][0]["enabled_protocols"] += ["OSPF"]
+                iface["subinterfaces"][0]["enabled_protocols"].append("OSPF")
             # Portchannel member
             if ifname in portchannel_members:
                 ai, is_lacp = portchannel_members[ifname]
                 iface["aggregated_interface"] = ai
                 if is_lacp:
-                    iface["enabled_protocols"] += ["LACP"]
+                    iface["enabled_protocols"].append("LACP")
             c = self.cli(f"show port description {ifname}")
             match = self.rx_ifdescr.search(c)
             if match:
@@ -126,7 +126,7 @@ class Script(BaseScript):
                 if mac:
                     iface["mac"] = mac
                     iface["subinterfaces"][0]["mac"] = mac
-            interfaces += [iface]
+            interfaces.append(iface)
         c = self.cli("show interfaces switchport")
         for match in self.rx_port.finditer(c):
             ifname = match.group("ifname")

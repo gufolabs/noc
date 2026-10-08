@@ -30,5 +30,5 @@ class Script(BaseScript):
 
         # Fallback to CLI
         for i in parse_table(self.cli("show vlan")):
-            r += [{"vlan_id": int(i[0]), "name": i[1]}]
+            r.append({"vlan_id": int(i[0]), "name": i[1]})
         return r

@@ -103,5 +103,5 @@ class Script(BaseScript):
                 )
             neighbor["remote_capabilities"] = caps
 
-            r += [{"local_interface": i[0], "neighbors": [neighbor]}]
+            r.append({"local_interface": i[0], "neighbors": [neighbor]})
         return r

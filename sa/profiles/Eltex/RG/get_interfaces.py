@@ -41,7 +41,7 @@ class Script(BaseScript):
                         v = self.profile.convert_interface_name(name)
                     except InterfaceTypeError as why:
                         self.logger.debug("Ignoring unknown interface %s: %s", name, why)
-                        unknown_interfaces += [name]
+                        unknown_interfaces.append(name)
                         continue
                     ifindex = int(oid.split(".")[-1])
                     r[v] = ifindex
@@ -112,7 +112,7 @@ class Script(BaseScript):
                         s["vlan_ids"] = vlan_ids
                 if iface["mac_address"]:
                     s["mac"] = MAC(iface["mac_address"])
-                subs[iface_name] += [s.copy()]
+                subs[iface_name].append(s.copy())
                 # r[-1]["subinterfaces"] += [s]
                 continue
             i = {
@@ -126,7 +126,7 @@ class Script(BaseScript):
             if iface["mac_address"]:
                 i["mac"] = MAC(iface["mac_address"])
             # sub = {"subinterfaces": [i.copy()]}
-            r += [i]
+            r.append(i)
         for l in r:
             if l["name"] in subs:
                 l["subinterfaces"] = subs[l["name"]]

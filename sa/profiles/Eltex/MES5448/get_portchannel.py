@@ -23,10 +23,10 @@ class Script(BaseScript):
         for i in parse_table(self.cli("show port-channel all")):
             if i[3] == "Up":
                 if interface:
-                    r += [interface]
+                    r.append(interface)
                 interface = {"interface": i[0], "type": self.TYPES[i[5]], "members": [i[6]]}
             elif not i[1] and i[6] and interface:
-                interface["members"] += [i[6]]
+                interface["members"].append(i[6])
         if interface:
-            r += [interface]
+            r.append(interface)
         return r

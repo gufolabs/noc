@@ -20,5 +20,5 @@ class Script(BaseScript):
         for i in parse_table(self.cli("show ip arp"), expand_columns=True):
             if interface is not None and interface != i[3]:
                 continue
-            r += [{"ip": i[0], "mac": i[1], "interface": i[3]}]
+            r.append({"ip": i[0], "mac": i[1], "interface": i[3]})
         return r

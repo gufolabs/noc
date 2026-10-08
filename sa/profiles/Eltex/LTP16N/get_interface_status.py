@@ -41,5 +41,5 @@ class Script(BaseScript):
 
         for i in ifname:
             iface = {"interface": ifname[i], "status": ifstatus[i]}
-            interfaces += [iface]
+            interfaces.append(iface)
         return interfaces

@@ -49,7 +49,7 @@ class Script(BaseScript):
                     "serial": match.group("serial"),
                     "part_no": "PP4X",
                 }
-                res += [r]
+                res.append(r)
         v = self.cli("show shelf")
         for i in parse_table(v):
             if i[2] == "none":
@@ -73,7 +73,7 @@ class Script(BaseScript):
                     "part_no": match.group("part_no"),
                     "revision": match.group("revision"),
                 }
-            res += [r]
+            res.append(r)
             sfp = []
             c = self.cli(f"show interface gpon-port {i[0]}/all state")
             match = self.rx_gpon_port.search(c)
@@ -82,7 +82,7 @@ class Script(BaseScript):
             items = self.rx_sep.split(match.group(1))
             for i in range(64):  # Maximum value
                 try:
-                    sfp += [{"number": items[i].strip(), "type": "XCVR"}]
+                    sfp.append({"number": items[i].strip(), "type": "XCVR"})
                 except IndexError:
                     break
             sfp_count = i
@@ -99,5 +99,5 @@ class Script(BaseScript):
             for i in range(sfp_count):
                 sfp[i]["revision"] = items[i].strip()
             for i in range(sfp_count):
-                res += [sfp[i]]
+                res.append(sfp[i])
         return res

@@ -123,7 +123,7 @@ class Script(BaseScript):
             # In some rare cases, returned 0, if only one device in stack
             if stack_num == 0:
                 stack_num = 1
-            r += [str(stack_num)]
+            r.append(str(stack_num))
         return r
 
     @false_on_snmp_error

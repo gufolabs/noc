@@ -28,7 +28,7 @@ class Script(BaseScript):
                 vlan_id = match.group("vlan_id")
                 match = self.rx_vlan_name.search(vlan)
                 if match:
-                    r += [{"vlan_id": vlan_id, "name": match.group("name")}]
+                    r.append({"vlan_id": vlan_id, "name": match.group("name")})
                 else:
-                    r += [{"vlan_id": vlan_id}]
+                    r.append({"vlan_id": vlan_id})
         return r

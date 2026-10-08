@@ -57,7 +57,7 @@ class Script(BaseScript):
                         raise self.NotSupportedError()
                 if i[8]:
                     r["revision"] = i[8]
-                res += [r]
+                res.append(r)
         except self.CLISyntaxError:
             pass
 
