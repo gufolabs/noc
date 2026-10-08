@@ -35,10 +35,12 @@ class Script(BaseScript):
             if iface.startswith("0/"):
                 # LAG 0/1 -> Ag 1
                 iface = f"Ag {iface[2:]}"
-            r.append({
+            r.append(
+                {
                     "vlan_id": match.group("vlan_id"),
                     "mac": mac,
                     "interfaces": [iface],
                     "type": {"learned": "D", "permanent": "S"}[match.group("type").lower()],
-                })
+                }
+            )
         return r

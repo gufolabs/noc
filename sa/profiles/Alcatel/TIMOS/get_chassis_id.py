@@ -30,7 +30,9 @@ class Script(BaseScript):
         try:
             v = self.cli("show card detail")
             for match in self.rx_id.finditer(v):
-                r.append({"first_chassis_mac": match.group("id"), "last_chassis_mac": match.group("id")})
+                r.append(
+                    {"first_chassis_mac": match.group("id"), "last_chassis_mac": match.group("id")}
+                )
         except self.CLISyntaxError:
             pass
         return r

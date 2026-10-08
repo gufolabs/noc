@@ -82,7 +82,8 @@ class Script(BaseScript):
                     self.logger.info("Skipping star vlan")
                     continue
                 if s[0] == phy[0]:
-                    sub.append({
+                    sub.append(
+                        {
                             "name": s[0],
                             "admin_status": True,
                             "oper_status": True,
@@ -91,8 +92,10 @@ class Script(BaseScript):
                             "untagged_vlan": s[3],
                             "vpi": s[1],
                             "vci": s[2],
-                        })
-            i.append({
+                        }
+                    )
+            i.append(
+                {
                     "name": phy[0],
                     "type": "physical",
                     "admin_status": admin_status,
@@ -100,7 +103,8 @@ class Script(BaseScript):
                     "description": description,
                     "subinterfaces": sub,
                     "snmp_ifindex": phy[0],
-                })
+                }
+            )
         # Enet ports info
         enet_ports = self.cli("statistics enet")
         tagged = defaultdict(list)
@@ -119,7 +123,8 @@ class Script(BaseScript):
                 oper_status = False
             elif parse_table(enet_ports)[y][1] == "link down":
                 oper_status = False
-            i.append({
+            i.append(
+                {
                     "name": f"enet{int(y + 1)}",
                     "type": "physical",
                     "admin_status": admin_status,
@@ -136,5 +141,6 @@ class Script(BaseScript):
                             "tagged_vlans": tagged[y + 1],
                         }
                     ],
-                })
+                }
+            )
         return [{"interfaces": i}]

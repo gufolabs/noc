@@ -46,11 +46,13 @@ class Script(BaseScript):
                     # if i == "U":
                     # untagged[up]+=[match.group("vid")]
         for i in range(up):
-            r.append({
+            r.append(
+                {
                     "interface": "enet" + str(i + 1),
                     "802.1Q Enabled": True,
                     # "untagged": untagged[i+1],
                     "tagged": tagged[i + 1],
                     "members": [],
-                })
+                }
+            )
         return r

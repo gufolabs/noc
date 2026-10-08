@@ -26,9 +26,11 @@ class Script(BaseScript):
             match = self.rx_line.match(l.strip())
             if not match:
                 continue
-            r.append({
+            r.append(
+                {
                     "ip": match.group("ip"),
                     "mac": match.group("mac"),
                     "interface": match.group("interface"),
-                })
+                }
+            )
         return r

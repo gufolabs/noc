@@ -51,7 +51,8 @@ class Script(BaseScript):
                 for p in self.scripts.get_portchannel():
                     if p["interface"] == shortname:
                         members = p["members"]
-                r.append({
+                r.append(
+                    {
                         "interface": f"Ag {i}",
                         "status": "enabled",
                         "description": "",
@@ -59,7 +60,8 @@ class Script(BaseScript):
                         "802.1ad Tunnel": False,
                         "tagged": tagget,
                         "members": members,
-                    })
+                    }
+                )
                 if untagged:
                     r[-1]["untagged"] = untagged
         if members:

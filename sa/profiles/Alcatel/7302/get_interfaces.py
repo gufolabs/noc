@@ -117,14 +117,16 @@ class Script(BaseScript):
                 _, port_id, vpi, vci = ifname.split(":")
             else:
                 port_id, vpi, vci = ifname.split(":")
-            sub[port_id].append({
+            sub[port_id].append(
+                {
                     "name": f"{port_id}:{vpi}:{vci}",
                     "vci": vci,
                     "vpi": vpi,
                     # "snmp_ifindex": vciifindex,
                     "enabled_afi": ["ATM", "BRIDGE"],
                     "untagged_vlan": match.group("pvid"),
-                })
+                }
+            )
 
         if not sub:
             v = self.cli("info configure bridge port")
@@ -136,14 +138,16 @@ class Script(BaseScript):
                     _, port_id, vpi, vci = ifname.split(":")
                 else:
                     port_id, vpi, vci = ifname.split(":")
-                sub[port_id].append({
+                sub[port_id].append(
+                    {
                         "name": f"{port_id}:{vpi}:{vci}",
                         "vci": vci,
                         "vpi": vpi,
                         # "snmp_ifindex": vciifindex,
                         "enabled_afi": ["ATM", "BRIDGE"],
                         "untagged_vlan": match.group("pvid"),
-                    })
+                    }
+                )
         return sub
 
     def execute_cli(self, **kwargs):
@@ -421,27 +425,35 @@ class Script(BaseScript):
 
         # Fill interface info
         iter_tables = []
-        iter_tables.append(self.iter_iftable(
+        iter_tables.append(
+            self.iter_iftable(
                 "admin_status",
                 self.SNMP_ADMIN_STATUS_TABLE,
                 ifindexes=chain(ifaces, ethernet),
                 clean=self.clean_status,
-            ))
-        iter_tables.append(self.iter_iftable(
+            )
+        )
+        iter_tables.append(
+            self.iter_iftable(
                 "oper_status",
                 self.SNMP_OPER_STATUS_TABLE,
                 ifindexes=chain(ifaces, ethernet),
                 clean=self.clean_status,
-            ))
-        iter_tables.append(self.iter_iftable(
+            )
+        )
+        iter_tables.append(
+            self.iter_iftable(
                 "description",
                 self.SNMP_IF_DESCR_TABLE,
                 ifindexes=chain(ifaces, ethernet),
                 clean=self.clean_ifdescription,
-            ))
-        iter_tables.append(self.iter_iftable(
+            )
+        )
+        iter_tables.append(
+            self.iter_iftable(
                 "mac", "IF-MIB::ifPhysAddress", ifindexes=ethernet, clean=self.clean_mac
-            ))
+            )
+        )
         iter_tables.append(self.iter_iftable("mtu", "IF-MIB::ifMtu", ifindexes=ethernet))
         # Collect and merge results
         data = self.merge_tables(*tuple(iter_tables))
@@ -465,11 +477,13 @@ class Script(BaseScript):
             if port_id in subifaces:
                 iface["subinterfaces"] += subifaces[port_id]
             if ifindex in ips:
-                iface["subinterfaces"].append({
+                iface["subinterfaces"].append(
+                    {
                         "name": iface["name"],
                         "enabled_afi": ["IPv4"],
                         "ipv4_addresses": [IPv4(*i) for i in ips[ifindex]],
-                    })
+                    }
+                )
             if ifindex in switchports:
                 sub = {
                     "name": iface["name"],

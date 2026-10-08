@@ -35,8 +35,10 @@ class Script(BaseScript):
                 pass
         r = []
         for match in self.rx_line.finditer(self.cli("show interfaces port")):
-            r.append({
+            r.append(
+                {
                     "interface": match.group("interface"),
                     "status": match.group("status").lower() == "up",
-                })
+                }
+            )
         return r

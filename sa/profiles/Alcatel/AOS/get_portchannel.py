@@ -36,10 +36,12 @@ class Script(BaseScript):
                 for match1 in self.rx_line2.finditer(data1):
                     if int(match1.group("port")) == port:
                         members.append(match1.group("interface"))
-            r.append({
+            r.append(
+                {
                     "interface": f"{int(port)}",
                     "members": members,
                     # <!> TODO: port-channel type detection
                     "type": "L",
-                })
+                }
+            )
         return r

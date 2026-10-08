@@ -49,7 +49,8 @@ class Script(BaseScript):
             # Try normalize
             d["part_no"] = self.part_no_detect(d["model"])
         if d.get("part_no"):
-            r.append({
+            r.append(
+                {
                     "type": "CHASSIS",
                     "number": 1,
                     "vendor": "APC",
@@ -57,7 +58,8 @@ class Script(BaseScript):
                     "mfg_date": d.get("mfg_date", "00-00-00"),
                     "description": d["model"],
                     "part_no": d["part_no"],
-                })
+                }
+            )
         mgmt_card_map = {
             "model number": "part_no",
             "serial number": "serial",
@@ -81,7 +83,8 @@ class Script(BaseScript):
                 self.logger.warning("Unknown format manufacture date field")
                 d["mfg_date"] = None
         if "part_no" in d:
-            r.append({
+            r.append(
+                {
                     "type": "MGMT",
                     "number": 1,
                     "vendor": "APC",
@@ -90,6 +93,7 @@ class Script(BaseScript):
                     "mfg_date": d.get("mfg_date", "00-00-00"),
                     "revision": d["revision"],
                     "part_no": d["part_no"],
-                })
+                }
+            )
 
         return r
