@@ -24,23 +24,27 @@ class PhoneNumberCard(BaseCard):
         service_groups = []
         for rg_id in self.object.effective_service_groups:
             rg = ResourceGroup.get_by_id(rg_id)
-            service_groups.append({
+            service_groups.append(
+                {
                     "id": rg_id,
                     "name": rg.name,
                     "technology": rg.technology,
                     "is_static": rg_id in static_services,
-                })
+                }
+            )
         # Client groups (i.e. client)
         static_clients = set(self.object.static_client_groups)
         client_groups = []
         for rg_id in self.object.effective_client_groups:
             rg = ResourceGroup.get_by_id(rg_id)
-            client_groups.append({
+            client_groups.append(
+                {
                     "id": rg_id,
                     "name": rg.name,
                     "technology": rg.technology,
                     "is_static": rg_id in static_clients,
-                })
+                }
+            )
 
         return {
             "object": self.object,
@@ -53,9 +57,11 @@ class PhoneNumberCard(BaseCard):
     def search(cls, handler, query):
         r = []
         for p in PhoneNumber.objects.filter(number=query):
-            r.append({
+            r.append(
+                {
                     "scope": "phonenumber",
                     "id": str(p.id),
                     "label": f"{p.dialplan.name}: {p.number}",
-                })
+                }
+            )
         return r

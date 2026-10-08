@@ -123,10 +123,12 @@ class ActionSet:
             self.add_handlers += 1
         target_actions, resource_actions = [], defaultdict(list)
         if rule.notification_group:
-            target_actions.append(partial(
+            target_actions.append(
+                partial(
                     self.send_notification,
                     notification_group=str(rule.notification_group),
-                ))
+                )
+            )
             self.add_notifications += 1
         for a in rule.actions or []:
             args = a.args or {}

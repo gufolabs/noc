@@ -53,14 +53,16 @@ class ServiceCard(BaseCard):
                 is_completed=False,
                 start__lte=now + datetime.timedelta(hours=1),
             ):
-                maintenance.append({
+                maintenance.append(
+                    {
                         "maintenance": m,
                         "id": m.id,
                         "subject": m.subject,
                         "start": m.start,
                         "stop": m.stop,
                         "in_progress": m.start <= now,
-                    })
+                    }
+                )
 
         # Build warnings
         # Build result

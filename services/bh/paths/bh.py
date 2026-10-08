@@ -70,7 +70,9 @@ async def bulk_snmp(req: SNMPRequest):
                 error_code = None
             except TimeoutError:
                 error_code = "Timeout reached"
-            result.append({"address": addr.address, "objects": objects_list, "error_code": error_code})
+            result.append(
+                {"address": addr.address, "objects": objects_list, "error_code": error_code}
+            )
 
     timeout = req.timeout or config.bh.bulk_snmp_timeout
     tos = req.tos or 0

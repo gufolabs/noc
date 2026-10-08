@@ -208,7 +208,9 @@ class AssetCheck(DiscoveryCheck):
                         )
 
                         self.prepare_context(o_type, number)
-                        self.objects.append(("XCVR", part_no[0], self.ctx.copy(), serial, data, constant_data))
+                        self.objects.append(
+                            ("XCVR", part_no[0], self.ctx.copy(), serial, data, constant_data)
+                        )
                         return
                     self.logger.info(
                         "Unknown model: vendor=%s, part_no=%s (%s). Skipping...",
@@ -257,9 +259,13 @@ class AssetCheck(DiscoveryCheck):
                 ObjectAttr(scope="", interface="asset", attr="serial", value=serial),
             ]
             if revision:
-                o_data.append(ObjectAttr(scope="", interface="asset", attr="revision", value=revision))
+                o_data.append(
+                    ObjectAttr(scope="", interface="asset", attr="revision", value=revision)
+                )
             if mfg_date:
-                o_data.append(ObjectAttr(scope="", interface="asset", attr="mfg_date", value=mfg_date))
+                o_data.append(
+                    ObjectAttr(scope="", interface="asset", attr="mfg_date", value=mfg_date)
+                )
             o = Object(
                 model=m,
                 data=o_data,
@@ -397,9 +403,13 @@ class AssetCheck(DiscoveryCheck):
                 )
                 continue
             if attr.is_const:
-                c_data.append(ObjectAttr(scope="discovery", interface=interface, attr=attr.name, value=value))
+                c_data.append(
+                    ObjectAttr(scope="discovery", interface=interface, attr=attr.name, value=value)
+                )
             else:
-                o_data.append(ObjectAttr(scope="discovery", interface=interface, attr=attr.name, value=value))
+                o_data.append(
+                    ObjectAttr(scope="discovery", interface=interface, attr=attr.name, value=value)
+                )
         return o_data, c_data
 
     def sync_data(self, obj: Object, data: list[ObjectAttr]):

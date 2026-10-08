@@ -55,11 +55,13 @@ class VLANCard(BaseCard):
         # Find l3 interfaces
         si_objects = defaultdict(list)
         for si in SubInterface.objects.filter(managed_object__in=objects, vlan_ids=vlan.vlan):
-            si_objects[si.managed_object].append({
+            si_objects[si.managed_object].append(
+                {
                     "name": si.name,
                     "ipv4_addresses": si.ipv4_addresses,
                     "ipv6_addresses": si.ipv6_addresses,
-                })
+                }
+            )
         l3 = [
             {"managed_object": o, "interfaces": sorted(si_objects[o], key=lambda x: x["name"])}
             for o in si_objects

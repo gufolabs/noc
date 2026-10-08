@@ -121,13 +121,15 @@ class AlarmHeatCard(BaseCard):
                     t_data[mo["x"], mo["y"]].append((mo, w))
             else:
                 w = 0
-            alarms.append({
+            alarms.append(
+                {
                     "alarm_id": str(a.get("_id")),
                     "managed_object": mo["name"],
                     "x": mo["x"],
                     "y": mo["y"],
                     "w": max(w, 1),
-                })
+                }
+            )
             if s_service:
                 update_dict(services, s_service)
             if s_sub:
@@ -168,7 +170,8 @@ class AlarmHeatCard(BaseCard):
                 data: list[int] = sorted(data, key=lambda z: data[z], reverse=True)[
                     : self.TOOLTIP_LIMIT
                 ]
-                points.append(geojson.Feature(
+                points.append(
+                    geojson.Feature(
                         geometry=geojson.Point(coordinates=(x, y)),
                         properties={
                             "alarms": len(t_data[x, y]),
@@ -181,7 +184,8 @@ class AlarmHeatCard(BaseCard):
                                 for mo_id in data
                             ],
                         },
-                    ))
+                    )
+                )
             points = geojson.FeatureCollection(features=points)
         return {
             "alarms": alarms,

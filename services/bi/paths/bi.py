@@ -82,12 +82,14 @@ class BIAPI(JSONRPCAPI):
         # Collect fields
         scope_fields = defaultdict(list)
         for mt in MetricType.objects.all().order_by("field_name"):
-            scope_fields[mt.scope.table_name].append({
+            scope_fields[mt.scope.table_name].append(
+                {
                     "name": mt.field_name,
                     "description": mt.description,
                     "type": mt.field_type,
                     "dict": None,
-                })
+                }
+            )
         # Attach scopes as datasources
         for ms in MetricScope.objects.all().order_by("table_name"):
             r = {
@@ -101,7 +103,8 @@ class BIAPI(JSONRPCAPI):
                 ],
             }
             for k in ms.key_fields:
-                r["fields"].append({
+                r["fields"].append(
+                    {
                         "name": k.field_name,
                         "description": k.field_name,
                         "type": "UInt64",
@@ -111,12 +114,14 @@ class BIAPI(JSONRPCAPI):
                             else None
                         ),
                         "model": k.model,
-                    })
+                    }
+                )
                 if cls.ref_dict.get(k.model, None):
                     dcls = dict_loader[cls.ref_dict[k.model]]
                     if dcls:
                         for f in dcls._meta.ordered_fields:
-                            r["fields"].append({
+                            r["fields"].append(
+                                {
                                     "name": f.name,
                                     "description": f.description or f.name,
                                     "type": "UInt64",
@@ -124,14 +129,17 @@ class BIAPI(JSONRPCAPI):
                                     "dict": f"{config.clickhouse.db_dictionaries}.{cls.ref_dict[k.model]}",
                                     "dict_id": k.field_name,
                                     "model": k.model,
-                                })
+                                }
+                            )
             if ms.labels:
-                r["fields"].append({
+                r["fields"].append(
+                    {
                         "name": "labels",
                         "description": "Metric labels",
                         "type": "Array(String)",
                         "dict": None,
-                    })
+                    }
+                )
             r["fields"] += scope_fields[ms.table_name]
             result.append(r)
         return result
@@ -154,13 +162,15 @@ class BIAPI(JSONRPCAPI):
                 d = getattr(f, "dict_type", None)
                 if d:
                     d = f"{config.clickhouse.db_dictionaries}.{d._meta.name}"
-                r["fields"].append({
+                r["fields"].append(
+                    {
                         "name": f.name,
                         "description": _(f.description or ""),
                         "type": f.get_displayed_type(),
                         "is_agg": f.is_agg,
                         "dict": d,
-                    })
+                    }
+                )
                 if hasattr(f, "model"):
                     r["fields"][-1]["model"] = f.model
             result.append(r)

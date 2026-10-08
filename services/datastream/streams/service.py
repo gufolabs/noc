@@ -212,12 +212,14 @@ class ServiceDataStream(DataStream):
             rg = ResourceGroup.get_by_id(g)
             if not rg:
                 continue
-            r.append({
+            r.append(
+                {
                     "id": str(g),
                     "name": qs(rg.name),
                     "technology": qs(rg.technology.name),
                     "static": g in static_groups,
-                })
+                }
+            )
         return r
 
     @classmethod

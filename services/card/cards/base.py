@@ -198,10 +198,12 @@ class BaseCard:
                     else:
                         badge = f' <span class="badge">{c}</span>'
                     order = getattr(pv, "display_order", 100)
-                    v.append((
+                    v.append(
+                        (
                             (order, -c),
                             f'<i class="{pv.glyph}" title="{pv.name}"></i>{badge}',
-                        ))
+                        )
+                    )
             return " ".join(i[1] for i in sorted(v, key=operator.itemgetter(0)))
 
         if not isinstance(s, dict):
@@ -216,7 +218,9 @@ class BaseCard:
 
             r.append(get_summary(s["service"], ServiceProfile))
         if s.get("fresh_alarms"):
-            r.append(f'<i class="fa fa-exclamation-triangle"></i><span class="badge">{s["fresh_alarms"]["FreshAlarm"]}</span>')
+            r.append(
+                f'<i class="fa fa-exclamation-triangle"></i><span class="badge">{s["fresh_alarms"]["FreshAlarm"]}</span>'
+            )
         r = [x for x in r if x]
         return "&nbsp;".join(r)
 

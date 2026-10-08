@@ -56,7 +56,8 @@ class SegmentCard(BaseCard):
         # Calculate children
         children = []
         for ns in NetworkSegment.objects.filter(parent=self.object.id):
-            children.append({
+            children.append(
+                {
                     "id": ns.id,
                     "name": ns.name,
                     "object": ns,
@@ -64,7 +65,8 @@ class SegmentCard(BaseCard):
                         "service": SummaryItem.items_to_dict(ns.total_services),
                         "subscriber": SummaryItem.items_to_dict(ns.total_subscribers),
                     },
-                })
+                }
+            )
         # Calculate VLANs
         vlans = []
         return {

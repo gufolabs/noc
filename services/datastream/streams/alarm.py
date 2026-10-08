@@ -117,7 +117,9 @@ class AlarmDataStream(DataStream):
         for si in alarm.direct_services:
             p = ServiceProfile.get_by_id(si.profile)
             if p:
-                r["direct_services"].append({"profile": {"id": str(p.id), "name": cls.qs(p.name)}, "summary": si.summary})
+                r["direct_services"].append(
+                    {"profile": {"id": str(p.id), "name": cls.qs(p.name)}, "summary": si.summary}
+                )
 
     @classmethod
     def _apply_total_services(cls, alarm, r):
@@ -125,7 +127,9 @@ class AlarmDataStream(DataStream):
         for si in alarm.total_services:
             p = ServiceProfile.get_by_id(si.profile)
             if p:
-                r["total_services"].append({"profile": {"id": str(p.id), "name": cls.qs(p.name)}, "summary": si.summary})
+                r["total_services"].append(
+                    {"profile": {"id": str(p.id), "name": cls.qs(p.name)}, "summary": si.summary}
+                )
 
     @classmethod
     def _apply_direct_subscribers(cls, alarm, r):
@@ -133,7 +137,9 @@ class AlarmDataStream(DataStream):
         for si in alarm.direct_subscribers:
             p = SubscriberProfile.get_by_id(si.profile)
             if p:
-                r["direct_subscribers"].append({"profile": {"id": str(p.id), "name": cls.qs(p.name)}, "summary": si.summary})
+                r["direct_subscribers"].append(
+                    {"profile": {"id": str(p.id), "name": cls.qs(p.name)}, "summary": si.summary}
+                )
 
     @classmethod
     def _apply_total_subscribers(cls, alarm, r):
@@ -141,7 +147,9 @@ class AlarmDataStream(DataStream):
         for si in alarm.total_subscribers:
             p = SubscriberProfile.get_by_id(si.profile)
             if p:
-                r["total_subscribers"].append({"profile": {"id": str(p.id), "name": cls.qs(p.name)}, "summary": si.summary})
+                r["total_subscribers"].append(
+                    {"profile": {"id": str(p.id), "name": cls.qs(p.name)}, "summary": si.summary}
+                )
 
     @classmethod
     def get_meta(cls, data):

@@ -82,19 +82,22 @@ class ObjectCard(BaseCard):
             # Alarms detailed information
             alarm_list = []
             for alarm in alarms:
-                alarm_list.append({
+                alarm_list.append(
+                    {
                         "id": alarm.id,
                         "timestamp": alarm.timestamp,
                         "duration": now - alarm.timestamp,
                         "subject": alarm.subject,
-                    })
+                    }
+                )
             alarm_list = sorted(alarm_list, key=operator.itemgetter("timestamp"))
 
             # Metrics
             metric_map = self.get_metrics([o])
             metric_map = metric_map[o]
 
-            children.append({
+            children.append(
+                {
                     "id": o.id,
                     "name": o.name,
                     "address": o.address,
@@ -111,7 +114,8 @@ class ObjectCard(BaseCard):
                     "current_duration": duration,
                     "alarms": alarm_list,
                     "metrics": metric_map["object"],
-                })
+                }
+            )
 
         contacts_list = []
 

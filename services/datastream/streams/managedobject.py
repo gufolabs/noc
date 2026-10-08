@@ -340,12 +340,14 @@ class ManagedObjectDataStream(DataStream):
                 ro, rname = ifcache[i]
                 if ro == iface["managed_object"]:
                     continue
-                r.append({
+                r.append(
+                    {
                         "object": str(ro),
                         "interface": qs(rname),
                         "method": link.get("discovery_method") or "",
                         "is_uplink": ro in uplinks,
-                    })
+                    }
+                )
         return r
 
     @staticmethod
@@ -387,12 +389,14 @@ class ManagedObjectDataStream(DataStream):
             rg = ResourceGroup.get_by_id(g)
             if not rg:
                 continue
-            r.append({
+            r.append(
+                {
                     "id": str(g),
                     "name": qs(rg.name),
                     "technology": qs(rg.technology.name),
                     "static": g in static_groups,
-                })
+                }
+            )
         return r
 
     @staticmethod
@@ -437,20 +441,24 @@ class ManagedObjectDataStream(DataStream):
         children = {child.parent_connection: child for child in Object.objects.filter(parent=o.id)}
         for n in o.model.connections:
             if n.is_inner:
-                r["slots"].append({
+                r["slots"].append(
+                    {
                         "name": n.name,
                         "direction": n.direction,
                         "protocols": [str(p) for p in n.protocols],
-                    })
+                    }
+                )
                 r_object = children.get(n.name)
                 if r_object:
                     r["slots"][-1]["asset"] = ManagedObjectDataStream._get_asset(r_object)
             elif n.direction == "s":
-                r["slots"].append({
+                r["slots"].append(
+                    {
                         "name": n.name,
                         "direction": n.direction,
                         "protocols": [str(p) for p in n.protocols],
-                    })
+                    }
+                )
             if n.name in if_map:
                 r["slots"][-1]["interface"] = if_map[n.name]
         return r

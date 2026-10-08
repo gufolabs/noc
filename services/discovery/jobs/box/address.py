@@ -284,7 +284,8 @@ class AddressCheck(DiscoveryCheck):
         r = []
         for vpn in neighbors:
             for a in vpn["addresses"]:
-                r.append(DiscoveredAddress(
+                r.append(
+                    DiscoveredAddress(
                         vpn_id=get_vpn_id(vpn.get("vpn_id")),
                         address=a["ip"],
                         profile=self.object.object_profile.address_profile_neighbor,
@@ -293,7 +294,8 @@ class AddressCheck(DiscoveryCheck):
                         subinterface=None,
                         mac=a.get("mac"),
                         fqdn=None,
-                    ))
+                    )
+                )
         return r
 
     @staticmethod
@@ -387,7 +389,9 @@ class AddressCheck(DiscoveryCheck):
                     discovered_address.source == SRC_INTERFACE
                     and address.subinterface != discovered_address.subinterface
                 ):
-                    changes.append(f"subinterface: {address.subinterface} -> {discovered_address.subinterface}")
+                    changes.append(
+                        f"subinterface: {address.subinterface} -> {discovered_address.subinterface}"
+                    )
                     address.subinterface = discovered_address.subinterface
             if discovered_address.mac and address.mac != discovered_address.mac:
                 changes.append(f"mac: {address.mac} -> {discovered_address.mac}")

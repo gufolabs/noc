@@ -170,7 +170,8 @@ class MODiscoveryJob(PeriodicJob):
             fatal,
             kwargs,
         )
-        self.problems.append(ProblemItem(
+        self.problems.append(
+            ProblemItem(
                 **{
                     "check": check,
                     "alarm_class": alarm_class,
@@ -182,7 +183,8 @@ class MODiscoveryJob(PeriodicJob):
                     "fatal": fatal,
                     "vars": kwargs,
                 }
-            ))
+            )
+        )
         if fatal:
             self.has_fatal_error = True
 
@@ -297,14 +299,16 @@ class MODiscoveryJob(PeriodicJob):
             labels = p.labels
             if p.fatal:
                 labels.append("noc::is_fatal::=")
-            details.append({
+            details.append(
+                {
                     "reference": f"d:{p.alarm_class}:{self.object.id}:{' | '.join(p.path)}",
                     "alarm_class": p.alarm_class,
                     "managed_object": str(self.object.id),
                     "timestamp": now,
                     "labels": labels,
                     "vars": d_vars,
-                })
+                }
+            )
         msg = {
             "$op": "ensure_group",
             "reference": group_reference,

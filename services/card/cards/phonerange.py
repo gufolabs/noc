@@ -24,23 +24,27 @@ class PhoneRangeCard(BaseCard):
         service_groups = []
         for rg_id in self.object.effective_service_groups:
             rg = ResourceGroup.get_by_id(rg_id)
-            service_groups.append({
+            service_groups.append(
+                {
                     "id": rg_id,
                     "name": rg.name,
                     "technology": rg.technology,
                     "is_static": rg_id in static_services,
-                })
+                }
+            )
         # Client groups (i.e. client)
         static_clients = set(self.object.static_client_groups)
         client_groups = []
         for rg_id in self.object.effective_client_groups:
             rg = ResourceGroup.get_by_id(rg_id)
-            client_groups.append({
+            client_groups.append(
+                {
                     "id": rg_id,
                     "name": rg.name,
                     "technology": rg.technology,
                     "is_static": rg_id in static_clients,
-                })
+                }
+            )
         return {
             "object": self.object,
             "path": [PhoneRange.get_by_id(p) for p in PhoneRange.get_path(self.object)[:-1]],
@@ -60,9 +64,11 @@ class PhoneRangeCard(BaseCard):
         for p in PhoneRange.objects.filter(from_number__lte=query, to_number__gte=query).order_by(
             "-from_number", "to_number"
         ):
-            r.append({
+            r.append(
+                {
                     "scope": "phonerange",
                     "id": str(p.id),
                     "label": f"{p.name} ({p.from_number} - {p.to_number})",
-                })
+                }
+            )
         return r

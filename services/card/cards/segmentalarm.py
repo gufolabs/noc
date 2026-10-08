@@ -32,7 +32,8 @@ class SegmentAlarmCard(BaseCard):
             # Self alarms
             if segment.id in aseg:
                 for a in aseg[segment.id]:
-                    r["alarms"].append({
+                    r["alarms"].append(
+                        {
                             "alarm_id": a.id,
                             "object": a.managed_object,
                             "alarm": a,
@@ -44,7 +45,8 @@ class SegmentAlarmCard(BaseCard):
                                 "subscriber": SummaryItem.items_to_dict(a.direct_subscribers),
                                 "service": SummaryItem.items_to_dict(a.direct_services),
                             },
-                        })
+                        }
+                    )
             for ns in NetworkSegment.objects.filter(parent=segment.id):
                 if ns.id not in seen_seg:
                     continue
