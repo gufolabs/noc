@@ -58,7 +58,7 @@ class Profile(BaseProfile):
     def get_interface_names(self, name):
         r = []
         if name.startswith("1:"):
-            r += [name[2:]]
+            r.append(name[2:])
         return r
 
     def root_interface(self, name):

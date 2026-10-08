@@ -36,7 +36,7 @@ class Script(BaseScript):
             match2 = self.re_search(self.rx_ver, self.cli(c))
             m = match2.group("id")
             if m not in macs:
-                macs += [m]
+                macs.append(m)
         macs.sort()
         return [
             {"first_chassis_mac": f, "last_chassis_mac": t} for f, t in self.macs_to_ranges(macs)

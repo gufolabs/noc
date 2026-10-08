@@ -38,5 +38,5 @@ class Script(BaseScript):
                 iface_old = iface
             if (interface is not None) and (interface != iface):
                 continue
-            r += [{"interface": iface, "ip": match.group("ip"), "mac": mac}]
+            r.append({"interface": iface, "ip": match.group("ip"), "mac": mac})
         return r

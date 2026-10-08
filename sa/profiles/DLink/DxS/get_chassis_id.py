@@ -51,7 +51,7 @@ class Script(BaseScript):
                         found = True
                         break
                 if not found:
-                    macs += [mac]
+                    macs.append(mac)
         except self.CLISyntaxError:
             pass
         if self.is_stack:
@@ -66,7 +66,7 @@ class Script(BaseScript):
                             found = True
                             break
                     if not found:
-                        macs += [i[5]]
+                        macs.append(i[5])
             except self.CLISyntaxError:
                 pass
         if macs:

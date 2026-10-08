@@ -85,7 +85,7 @@ class Script(BaseScript):
                 else:
                     v1 = self.cli(f"show lldp interface ethernet {if_range} | include Admin Status")
                 if "TX and RX" in v1:
-                    i["enabled_protocols"] += ["LLDP"]
+                    i["enabled_protocols"].append("LLDP")
             match = self.rx_mtu.search(line)
             sub["mtu"] = match.group("mtu")
             if i["type"] == "aggregated" and ifname.startswith("Port-channel"):
@@ -98,9 +98,9 @@ class Script(BaseScript):
                             iface["aggregated_interface"] = ifname
                             break
                 if "Protocol: LACP" in v1:
-                    i["enabled_protocols"] += ["LACP"]
+                    i["enabled_protocols"].append("LACP")
             i["subinterfaces"] = [sub]
-            interfaces += [i]
+            interfaces.append(i)
 
         v = self.cli("show vlan", cached=True)
         for match in self.rx_vlan.finditer(v):
@@ -111,7 +111,7 @@ class Script(BaseScript):
                 sub = i["subinterfaces"][0]
                 if i["name"][3:] in tagged:
                     if "tagged_vlans" in sub:
-                        sub["tagged_vlans"] += [vlan_id]
+                        sub["tagged_vlans"].append(vlan_id)
                     else:
                         sub["tagged_vlans"] = [vlan_id]
                 if i["name"][3:] in untagged:
@@ -153,7 +153,7 @@ class Script(BaseScript):
                 if match1:
                     ip_address, ip_subnet = ip.split("/")
                     ip = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
-                sub["ipv4_addresses"] += [ip]
+                sub["ipv4_addresses"].append(ip)
             if i["type"] == "SVI":
                 sub["vlan_ids"] = (ifname[4:],)
             match1 = self.rx_ip_mtu.search(line)
@@ -184,7 +184,7 @@ class Script(BaseScript):
                 i["mac"] = match1.group("mac")
                 sub["mac"] = match1.group("mac")
             i["subinterfaces"] = [sub]
-            interfaces += [i]
+            interfaces.append(i)
 
         # TODO: show ipv6 interface
 

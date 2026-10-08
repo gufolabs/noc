@@ -174,12 +174,10 @@ class Script(BaseScript):
                 )
             else:
                 neigh["remote_capabilities"] = 0
-            r += [
-                {
+            r.append({
                     "local_interface": local_ports[v[0].split(".")[1]]["local_interface"],
                     "neighbors": [neigh],
-                }
-            ]
+                })
         return r
 
     def execute_cli(self):
@@ -260,7 +258,7 @@ class Script(BaseScript):
                         "Station Only": LLDP_CAP_STATION_ONLY,
                     }[c]
                 n["remote_capabilities"] = caps
-                i["neighbors"] += [n]
+                i["neighbors"].append(n)
             if i["neighbors"]:
-                r += [i]
+                r.append(i)
         return r

@@ -206,6 +206,6 @@ class Script(BaseScript):
             "show stp ports", obj_parser=self.parse_stp, cmd_next="n", cmd_stop="q", cached=True
         )
         for i in c:
-            inst[0]["interfaces"] += [i]
+            inst[0]["interfaces"].append(i)
         stp["instances"] += [inst][0]
         return stp

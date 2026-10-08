@@ -25,5 +25,5 @@ class Script(BaseScript):
         for i in t:
             if i[0].startswith("Total Entries"):
                 break
-            r += [{"ip": i[0], "mac": i[1], "interface": i[2]}]
+            r.append({"ip": i[0], "mac": i[1], "interface": i[2]})
         return r

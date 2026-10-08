@@ -39,5 +39,5 @@ class Script(BaseScript):
                 if interface == p["port"]:
                     return [{"interface": interface, "status": p["status"]}]
             else:
-                r += [{"interface": p["port"], "status": p["status"]}]
+                r.append({"interface": p["port"], "status": p["status"]})
         return r

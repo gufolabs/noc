@@ -29,6 +29,6 @@ class Script(BaseScript):
             members = []
             data1 = self.cli(f"show interfaces AggregatePort {int(port)} | i Link Status:")
             for match1 in self.rx_line1.finditer(data1):
-                members += [match1.group("interface")]
-            r += [{"interface": f"Ag {int(port)}", "members": members, "type": "L"}]
+                members.append(match1.group("interface"))
+            r.append({"interface": f"Ag {int(port)}", "members": members, "type": "L"})
         return r

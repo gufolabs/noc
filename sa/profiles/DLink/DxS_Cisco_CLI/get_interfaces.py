@@ -78,7 +78,7 @@ class Script(BaseScript):
             for match in self.rx_lldp.finditer(c):
                 port = match.group("port")
                 iface_lldp = self.profile.convert_interface_name(port)
-                lldp += [iface_lldp]
+                lldp.append(iface_lldp)
 
         ospf = []
         ospf_enable = self.rx_ospf_gs.search(c_proto) is not None
@@ -90,7 +90,7 @@ class Script(BaseScript):
             for match in self.rx_ospf.finditer(c):
                 if_ospf = match.group("if_ospf")
                 iface_ospf = self.profile.convert_interface_name(if_ospf)
-                ospf += [iface_ospf]
+                ospf.append(iface_ospf)
 
         igmp = []
         try:
@@ -100,7 +100,7 @@ class Script(BaseScript):
         for match in self.rx_igmp.finditer(c):
             if_igmp = match.group("if_igmp")
             iface_igmp = self.profile.convert_interface_name(if_igmp)
-            igmp += [iface_igmp]
+            igmp.append(iface_igmp)
 
         pim = []
         try:
@@ -110,7 +110,7 @@ class Script(BaseScript):
         for match in self.rx_pim.finditer(c):
             if_pim = match.group("if_pim")
             iface_pim = self.profile.convert_interface_name(if_pim)
-            pim += [iface_pim]
+            pim.append(iface_pim)
 
         r = []
         try:
@@ -170,7 +170,7 @@ class Script(BaseScript):
             if ifindex != 0:
                 n["snmp_ifindex"] = ifindex
             if lldp_enable and iface in lldp:
-                enabled_protocols += ["LLDP"]
+                enabled_protocols.append("LLDP")
             n["enabled_protocols"] = enabled_protocols
 
             if iface in switchports:
@@ -179,7 +179,7 @@ class Script(BaseScript):
                 if switchports[iface][0]:
                     n["subinterfaces"][0]["untagged_vlan"] = switchports[iface][0]
             n["type"] = self.types[iface[:2]]
-            r += [n]
+            r.append(n)
         for s in self.rx_line_vlan.split(v)[1:]:
             n = {}
             ifindex = 0
@@ -208,11 +208,11 @@ class Script(BaseScript):
 
             enabled_protocols = []
             if ospf_enable and iface in ospf:
-                enabled_protocols += ["OSPF"]
+                enabled_protocols.append("OSPF")
             if iface in igmp:
-                enabled_protocols += ["IGMP"]
+                enabled_protocols.append("IGMP")
             if iface in pim:
-                enabled_protocols += ["PIM"]
+                enabled_protocols.append("PIM")
 
             iface = {
                 "name": iface,
@@ -238,7 +238,7 @@ class Script(BaseScript):
             if description:
                 iface["description"] = description
                 iface["subinterfaces"][0]["description"] = description
-            r += [iface]
+            r.append(iface)
 
         # quit()
         return [{"interfaces": r}]

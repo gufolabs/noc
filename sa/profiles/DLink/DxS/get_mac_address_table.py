@@ -73,8 +73,7 @@ class Script(BaseScript):
             vlan_id = int(v[0].split(".")[0])
             if vlan is not None and vlan_id != vlan:
                 continue
-            r += [
-                {
+            r.append({
                     "interfaces": [iface],
                     "mac": m,
                     "type": {
@@ -85,8 +84,7 @@ class Script(BaseScript):
                         5: "S",  # mgmt
                     }[int(v[2])],
                     "vlan_id": vlan_id,
-                }
-            ]
+                })
         return r
 
     def execute_cli(self, interface=None, vlan=None, mac=None):
@@ -115,8 +113,7 @@ class Script(BaseScript):
         r = []
         for match in self.rx_line.finditer(self.cli(cmd)):
             mactype = match.group("type").lower()
-            r += [
-                {
+            r.append({
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
                     "interfaces": [match.group("interfaces")],
@@ -136,6 +133,5 @@ class Script(BaseScript):
                         "blockbyaddrbind": "D",
                         "unblockbyaddrbind": "D",
                     }[mactype],
-                }
-            ]
+                })
         return r

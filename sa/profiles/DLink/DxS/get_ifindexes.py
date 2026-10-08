@@ -41,7 +41,7 @@ class Script(BaseScript):
                     v = self.profile.convert_interface_name(name)
                 except InterfaceTypeError as why:
                     self.logger.debug("Ignoring unknown interface %s: %s", name, why)
-                    unknown_interfaces += [name]
+                    unknown_interfaces.append(name)
                     continue
                 r[v] = ifindex
             elif ifindex >= 1024 and ifindex < 5121:  # 802.1q vlans

@@ -27,5 +27,5 @@ class Script(BaseScript):
         for l in s.splitlines():
             match = self.rx_res.search(l.strip())
             if match:
-                r["nameservers"] += [match.group("server")]
+                r["nameservers"].append(match.group("server"))
         return r

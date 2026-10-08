@@ -174,6 +174,6 @@ class Script(BaseScript):
                 # 8-15 bits are reserved
                 n["remote_capabilities"] = caps
 
-                i["neighbors"] += [n]
-            r += [i]
+                i["neighbors"].append(n)
+            r.append(i)
         return r

@@ -48,14 +48,12 @@ class Script(BaseScript):
                     or (vlan is not None and vlan == m_vlan)
                     or (mac is not None and mac == m_mac)
                 ):
-                    r += [
-                        {
+                    r.append({
                             "vlan_id": m_vlan,
                             "mac": m_mac,
                             "interfaces": [m_interface],
                             "type": self.T_MAP[match.group("type")],
-                        }
-                    ]
+                        })
             return r
         except self.CLISyntaxError:
             pass
@@ -71,12 +69,10 @@ class Script(BaseScript):
             m_interface = match.group("interface")
             m_vlan = match.group("vlan_id")
             m_mac = match.group("mac")
-            r += [
-                {
+            r.append({
                     "vlan_id": m_vlan,
                     "mac": m_mac,
                     "interfaces": [m_interface],
                     "type": self.T_MAP[match.group("type")],
-                }
-            ]
+                })
         return r

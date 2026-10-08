@@ -72,12 +72,12 @@ class Script(BaseScript):
                 if match:
                     capsV = match.group("caps_V")
                 if "Supported" in capsR:
-                    caps += ["R"]
+                    caps.append("R")
                 if "Supported" in capsU:
-                    caps += ["U"]
+                    caps.append("U")
                 if "Support" in capsL:
-                    caps += ["L"]
+                    caps.append("L")
                 if "Supported" in capsV:
-                    caps += ["V"]
-                r += [{"interface": iface, "remote_mac": mac, "caps": caps}]
+                    caps.append("V")
+                r.append({"interface": iface, "remote_mac": mac, "caps": caps})
         return r
