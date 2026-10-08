@@ -53,7 +53,7 @@ class Script(BaseScript):
             else:
                 n["remote_port_subtype"] = LLDP_PORT_SUBTYPE_LOCAL
 
-            neighbors += [n]
+            neighbors.append(n)
             if neighbors:
-                r += [{"local_interface": loca_iface, "neighbors": neighbors}]
+                r.append({"local_interface": loca_iface, "neighbors": neighbors})
         return r

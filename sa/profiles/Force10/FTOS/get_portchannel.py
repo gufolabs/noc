@@ -31,16 +31,14 @@ class Script(BaseScript):
         for l in v.splitlines():
             match = self.rx_first.match(l)
             if match:
-                r += [
-                    {
+                r.append({
                         "interface": f"Po {match.group('port')}",
                         "type": "L" if match.group("lacp") == "L" else "S",
                         "members": [match.group("interface")],
-                    }
-                ]
+                    })
                 continue
             match = self.rx_next.match(l)
             if match:
-                r[-1]["members"] += [match.group("interface")]
+                r[-1]["members"].append(match.group("interface"))
                 continue
         return r

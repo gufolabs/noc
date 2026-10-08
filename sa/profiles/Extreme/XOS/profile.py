@@ -45,7 +45,7 @@ class Profile(BaseProfile):
         """
         names = []
         if ":" in name:
-            names += [name.split(":")[-1]]
+            names.append(name.split(":")[-1])
         return names
 
     @staticmethod
@@ -73,14 +73,14 @@ class Profile(BaseProfile):
         for num, lines in enumerate(zip_longest(*v, fillvalue="-")):
             if empty_header is None:
                 empty_header = (" ",) * len(lines)
-                head += [lines]
+                head.append(lines)
                 continue
             if set(head[-1]) == {" "} and lines != empty_header:
                 head = np.array(head)
                 # Transpone list header string
                 header[num] = " ".join(["".join(s).strip() for s in head.transpose().tolist()])
                 head = []
-            head += [lines]
+            head.append(lines)
         # last column
         head = np.array(head)
         header[num] = " ".join(["".join(s).strip(" -") for s in head.transpose().tolist()])
@@ -141,12 +141,12 @@ class Profile(BaseProfile):
                 if not field[ph[min(ph)]] and r:
                     self.update_dict(r[-1], field)
                 else:
-                    r += [field]
+                    r.append(field)
             if not is_header and not is_body:
                 # Check start header lines
                 if header_start in line:
                     is_header = True
                     is_body = False
             if is_header:
-                header += [line]
+                header.append(line)
         return r

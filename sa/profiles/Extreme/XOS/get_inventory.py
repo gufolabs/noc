@@ -97,7 +97,7 @@ class Script(BaseScript):
                     self.logger.error(
                         f"Unconverted format manufactured date: {d['mfg_date']}, on port: {port}"
                     )
-            r += [xcvr]
+            r.append(xcvr)
             port = None
         return r
 
@@ -121,16 +121,14 @@ class Script(BaseScript):
                 continue
             partinfo = d["partinfo"].split()
 
-            r[slot] += [
-                {
+            r[slot].append({
                     "type": "PSU",
                     "number": number,
                     "description": "".join(partinfo[:-2]),
                     "vendor": "EXTREME",
                     "part_no": partinfo[-1],
                     "serial": partinfo[-2],
-                }
-            ]
+                })
         return r
 
     def get_fan(self):
@@ -149,8 +147,7 @@ class Script(BaseScript):
             if d.get("state") in ["Empty", None] or "partinfo" not in d:
                 continue
             serial_no, part_no = d["partinfo"].split()
-            r[slot] += [
-                {
+            r[slot].append({
                     "type": "FAN",
                     "number": 1,
                     "description": "FanTray",
@@ -158,8 +155,7 @@ class Script(BaseScript):
                     "part_no": part_no,
                     "revision": d["rev"],
                     "serial": serial_no,
-                }
-            ]
+                })
         return r
 
     def get_slot(self):
@@ -212,8 +208,7 @@ class Script(BaseScript):
             slot = int(m_number)
             m_part_no, serial_no, rev = v.split(" ", 2)
             rev = rev.split(" ")[1]
-            r += [
-                {
+            r.append({
                     "type": self.get_type(m_type),
                     "number": m_number,
                     "description": ss["type"] if ss else "",
@@ -221,8 +216,7 @@ class Script(BaseScript):
                     "part_no": m_part_no,
                     "revision": rev,
                     "serial": serial_no,
-                }
-            ]
+                })
             if slot in psu:
                 r += psu[slot]
             if slot in fan:

@@ -67,9 +67,9 @@ class Script(BaseScript):
         for cmd in self.format_multiline(commands):
             d = {"command": cmd}
             if dry_run:
-                r["output"] += [cmd]
+                r["output"].append(cmd)
                 d["skipped"] = True
-                r["details"] += [d]
+                r["details"].append(d)
                 continue
             try:
                 out = self.cli(cmd)
@@ -82,8 +82,8 @@ class Script(BaseScript):
                     break
             if include_commands:
                 out = f"{cmd}{self.CMD_SEP}{out}"
-            r["output"] += [out]
-            r["details"] += [d]
+            r["output"].append(out)
+            r["details"].append(d)
         return r
 
     def format_multiline(self, commands):
@@ -120,7 +120,7 @@ class Script(BaseScript):
                 # multiple lines, so pass to next check
             else:
                 # No continuation, add new command
-                r += [cmd]
+                r.append(cmd)
             match = self.find_match(patterns, cmd)
             if match:
                 if match.groups():

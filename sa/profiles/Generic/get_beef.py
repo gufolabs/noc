@@ -69,7 +69,7 @@ class Script(BaseScript):
                 if ans["value"] not in cmd_answers:
                     cmd_answers[ans["value"]] = [ans["name"]]
                     continue
-                cmd_answers[ans["value"]] += [ans["name"]]
+                cmd_answers[ans["value"]].append(ans["name"])
         if not cmd_answers:
             return []
         self.logger.debug("Collecting CLI beef")
@@ -83,20 +83,18 @@ class Script(BaseScript):
                 pass
             # Append tracked data
             for rcmd, packets in self.iter_cli_tracking():
-                r += [
-                    {
+                r.append({
                         "names": cmd_answers.get(rcmd, ["setup.cli"]),
                         "request": smart_text(rcmd),
                         "reply": [self.encode_cli(v) for v in packets],
-                    }
-                ]
+                    })
         self.stop_tracking()
         return r
 
     def get_cli_fsm_results(self):
         r = []
         for state, reply in self.iter_cli_fsm_tracking():
-            r += [{"state": state, "reply": [self.encode_cli(v) for v in reply]}]
+            r.append({"state": state, "reply": [self.encode_cli(v) for v in reply]})
         return r
 
     def collect_snmp(self, spec):
@@ -125,7 +123,7 @@ class Script(BaseScript):
             if v["oid"] in oids:
                 continue  # Duplicate
             oids[v["oid"]] = tuple(int(x) for x in v["oid"].split("."))
-            r += [v]
+            r.append(v)
         # Sort
         return sorted(r, key=lambda x: oids[x["oid"]])
 

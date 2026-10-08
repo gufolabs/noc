@@ -35,8 +35,7 @@ class Script(BaseScript):
         v = self.cli(cmd)
         for match in self.rx_line.finditer(v):
             mactype = match.group("type")
-            r += [
-                {
+            r.append({
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
                     "interfaces": [match.group("interfaces")],
@@ -48,6 +47,5 @@ class Script(BaseScript):
                         "s m": "S",
                         "shm": "S",
                     }[mactype.strip()],
-                }
-            ]
+                })
         return r

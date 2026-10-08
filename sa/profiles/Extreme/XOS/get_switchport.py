@@ -48,7 +48,7 @@ class Script(BaseScript):
                     match = self.rx_snmp_name_eth.search(pr[1])
                     if match:
                         intf = match.group("port")
-                        r += [{"interface": intf, "description": pr[2]}]
+                        r.append({"interface": intf, "description": pr[2]})
                 return r
             except self.snmp.TimeOutError:
                 pass
@@ -59,12 +59,10 @@ class Script(BaseScript):
             match = self.rx_descr_if.match(l.strip())
             if not match:
                 continue
-            r += [
-                {
+            r.append({
                     "interface": self.profile.convert_interface_name(match.group("interface")),
                     "description": match.group("description"),
-                }
-            ]
+                })
         return r
 
     def execute(self):
@@ -115,5 +113,5 @@ class Script(BaseScript):
             if interface in descriptions:
                 iface["description"] = descriptions[interface]
 
-            r += [iface]
+            r.append(iface)
         return r

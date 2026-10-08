@@ -80,7 +80,7 @@ class Script(BaseScript):
                     "designated_bridge_priority": desg_bridge_priority,
                     "designated_port_id": desg_port_id,
                 }
-                ri["interfaces"] += [i]
+                ri["interfaces"].append(i)
             for i, s in zip(ri["interfaces"], parse_table(s3)):
                 (
                     interface,
@@ -107,7 +107,7 @@ class Script(BaseScript):
                 i["point_to_point"] = "P2P" in link_type.upper()
                 i["edge"] = bool(edge.lower().startswith("y"))
             # Append instance to result
-            r["instances"] += [ri]
+            r["instances"].append(ri)
         return r
 
     def execute(self):

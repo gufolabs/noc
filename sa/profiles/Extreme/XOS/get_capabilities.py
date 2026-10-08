@@ -62,7 +62,7 @@ class Script(BaseScript):
         for i in parse_table(cmd, footer="(Indicates this node|stacking-support:)"):
             if i[1] == "-":
                 continue
-            s += [i[1]]
+            s.append(i[1])
         return s
 
     def execute_platform_cli(self, caps):

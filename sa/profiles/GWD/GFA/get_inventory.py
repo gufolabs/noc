@@ -58,8 +58,7 @@ class Script(BaseScript):
                 type = "PWR"
             else:
                 type = "LINECARD"
-            r += [
-                {
+            r.append({
                     "type": type,
                     "vendor": "GWD",
                     "number": number,
@@ -67,19 +66,16 @@ class Script(BaseScript):
                     "part_no": [match.group("part_no")],
                     "revision": match.group("revision"),
                     "mfg_date": match.group("mfg_date"),
-                }
-            ]
+                })
             if type == "LINECARD":
                 for match1 in self.rx_sfp.finditer(sfp):
                     if match1.group("slot") != number:
                         continue
-                    r += [
-                        {
+                    r.append({
                             "type": "XCVR",
                             "vendor": match1.group("vendor"),
                             "number": match1.group("number"),
                             "serial": match1.group("serial"),
                             "part_no": [match1.group("part_no")],
-                        }
-                    ]
+                        })
         return r

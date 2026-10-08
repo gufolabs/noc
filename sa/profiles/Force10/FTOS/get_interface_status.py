@@ -28,7 +28,7 @@ class Script(BaseScript):
                 # IF-MIB::ifName, IF-MIB::ifOperStatus
                 for n, s in self.snmp.join_tables("1.3.6.1.2.1.31.1.1.1.1", "1.3.6.1.2.1.2.2.1.8"):
                     # ifOperStatus up(1)
-                    r += [{"interface": n, "status": int(s) == 1}]
+                    r.append({"interface": n, "status": int(s) == 1})
                 return r
             except self.snmp.TimeOutError:
                 pass
@@ -42,7 +42,5 @@ class Script(BaseScript):
         for l in self.cli(cmd).splitlines():
             match = rx_interface_status.match(l)
             if match:
-                r += [
-                    {"interface": match.group("interface"), "status": match.group("status") == "up"}
-                ]
+                r.append({"interface": match.group("interface"), "status": match.group("status") == "up"})
         return r

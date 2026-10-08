@@ -78,14 +78,12 @@ class Script(BaseScript):
                     port = f"{slot}:{port}"
                 if not d:
                     continue
-                r += [
-                    {
+                r.append({
                         "interface": port,
                         "temp_c": self.normalize_output(d.get("temp_c")),
                         "voltage_v": self.normalize_output(d.get("voltage_v")),
                         "current_ma": self.normalize_output(d.get("current_ma")),
                         "optical_rx_dbm": self.normalize_output(d.get("optical_rx_dbm")),
                         "optical_tx_dbm": self.normalize_output(d.get("optical_tx_dbm")),
-                    }
-                ]
+                    })
         return r

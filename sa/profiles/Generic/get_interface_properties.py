@@ -47,27 +47,23 @@ class Script(BaseScript):
     ):
         iter_tables = []
         ifindex = None
-        iter_tables += [self.iter_interface_ifindex(interface)]
+        iter_tables.append(self.iter_interface_ifindex(interface))
         if enable_interface_mac:
-            iter_tables += [self.iter_iftable("mac", mib[self.SNMP_MAC_TABLE], ifindex=ifindex)]
+            iter_tables.append(self.iter_iftable("mac", mib[self.SNMP_MAC_TABLE], ifindex=ifindex))
         if enable_admin_status:
-            iter_tables += [
-                self.iter_iftable(
+            iter_tables.append(self.iter_iftable(
                     "admin_status",
                     mib[self.SNMP_ADMIN_STATUS_TABLE],
                     ifindex=ifindex,
                     clean=self.clean_status,
-                )
-            ]
+                ))
         if enable_oper_status:
-            iter_tables += [
-                self.iter_iftable(
+            iter_tables.append(self.iter_iftable(
                     "oper_status",
                     mib[self.SNMP_OPER_STATUS_TABLE],
                     ifindex=ifindex,
                     clean=self.clean_status,
-                )
-            ]
+                ))
         # Collect and merge results
         data = self.merge_tables(*tuple(iter_tables))
         # Format result
@@ -90,7 +86,7 @@ class Script(BaseScript):
                 item["admin_status"] = v["admin_status"]
             if enable_oper_status and "oper_status" in v:
                 item["oper_status"] = v["oper_status"]
-            result += [item]
+            result.append(item)
         return result
 
     def merge_tables(self, *args: Iterable | None) -> dict[int, dict[str, int | bool | str]]:

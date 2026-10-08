@@ -65,7 +65,7 @@ class Script(BaseScript):
                 IF-MIB::ifIndex.4095 = INTEGER: 4095
                 IF-MIB::ifIndex.4096 = INTEGER: 4096
                 """
-                r[conf_id]["interfaces"] += [names[int(ifindex)]]
+                r[conf_id]["interfaces"].append(names[int(ifindex)])
             else:
                 self.logger.warning(
                     "Hidden from ifTable interface (w ifindex %s) will be skipped", ifindex
@@ -82,7 +82,7 @@ class Script(BaseScript):
             if conf_id not in r:
                 continue
             if rt_type in self.VRF_TYPE_MAP["rt_export"]:
-                r[conf_id]["rt_export"] += [vrf_rt]
+                r[conf_id]["rt_export"].append(vrf_rt)
             if rt_type in self.VRF_TYPE_MAP["rt_import"]:
-                r[conf_id]["rt_import"] += [vrf_rt]
+                r[conf_id]["rt_import"].append(vrf_rt)
         return list(r.values())

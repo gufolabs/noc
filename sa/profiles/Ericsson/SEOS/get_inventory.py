@@ -36,8 +36,7 @@ class Script(BaseScript):
             raise self.NotSupportedError("Not supported on")
         for l in v.splitlines():
             if "backplane" in l:
-                objects += [
-                    {
+                objects.append({
                         "builtin": False,
                         "description": "Chassis backplane",
                         "number": 0,
@@ -45,11 +44,9 @@ class Script(BaseScript):
                         "serial": l.split()[2].strip(),
                         "vendor": "Ericsson",
                         "type": "CHASSIS",
-                    }
-                ]
+                    })
             elif "fan tray" in l:
-                objects += [
-                    {
+                objects.append({
                         "builtin": False,
                         "description": "Fan Tray",
                         "number": 1,
@@ -57,11 +54,9 @@ class Script(BaseScript):
                         "serial": l.split()[3].strip(),
                         "vendor": "Ericsson",
                         "type": "FAN",
-                    }
-                ]
+                    })
             elif "alarm card" in l:
-                objects += [
-                    {
+                objects.append({
                         "builtin": False,
                         "description": "Alarm Card",
                         "number": 0,
@@ -69,11 +64,9 @@ class Script(BaseScript):
                         "serial": l.split()[3].strip(),
                         "vendor": "Ericsson",
                         "type": "ALRM",
-                    }
-                ]
+                    })
             elif "-port" in l:
-                objects += [
-                    {
+                objects.append({
                         "builtin": False,
                         "description": l.split()[1].strip(),
                         "number": l.split()[0].strip(),
@@ -81,12 +74,10 @@ class Script(BaseScript):
                         "serial": l.split()[2].strip(),
                         "vendor": "Ericsson",
                         "type": "CARD",
-                    }
-                ]
+                    })
                 for match in self.rx_trans.findall(media):
                     if l.split()[0].strip() == match[0].split("/")[0]:
-                        objects += [
-                            {
+                        objects.append({
                                 "builtin": False,
                                 "description": match[1].strip() + " " + match[4].strip(),
                                 "number": match[0][2:],
@@ -94,11 +85,9 @@ class Script(BaseScript):
                                 "serial": match[3],
                                 "vendor": "NoName",
                                 "type": "XCVR",
-                            }
-                        ]
+                            })
             elif "xcrp" in l:
-                objects += [
-                    {
+                objects.append({
                         "builtin": False,
                         "description": l.split()[1].strip(),
                         "number": l.split()[0].strip(),
@@ -106,6 +95,5 @@ class Script(BaseScript):
                         "serial": l.split()[2].strip(),
                         "vendor": "Ericsson",
                         "type": "MGMT",
-                    }
-                ]
+                    })
         return objects

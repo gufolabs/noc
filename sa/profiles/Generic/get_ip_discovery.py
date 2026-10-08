@@ -50,9 +50,7 @@ class Script(BaseScript):
                     if x["state"] != "reachable":
                         continue
                     vrf = vrf_iface_map.get(x["interface"], "default")
-                    vrfs[vrf]["addresses"] += [
-                        {"ip": x["ip"], "afi": "6", "mac": x["mac"], "interface": x["interface"]}
-                    ]
+                    vrfs[vrf]["addresses"].append({"ip": x["ip"], "afi": "6", "mac": x["mac"], "interface": x["interface"]})
         # Iterate through VRF
         data = []
         for v in vrfs:
@@ -67,10 +65,10 @@ class Script(BaseScript):
                     continue
                 if not vrf and x["interface"] in vrf_iface_map:
                     continue
-                a += [{"ip": x["ip"], "afi": "4", "mac": x["mac"], "interface": x["interface"]}]
+                a.append({"ip": x["ip"], "afi": "4", "mac": x["mac"], "interface": x["interface"]})
             # Process NBD
             vd = vrfs[v].copy()
             vd["addresses"] += a
-            data += [vd]
+            data.append(vd)
         # Return collected data
         return data

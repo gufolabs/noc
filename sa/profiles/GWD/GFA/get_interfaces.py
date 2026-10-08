@@ -75,7 +75,7 @@ class Script(BaseScript):
                     }
                 ],
             }
-            interfaces += [iface]
+            interfaces.append(iface)
         v = self.cli("show interface vlan")
         for match in self.rx_vlan.finditer(v):
             iface = {
@@ -98,7 +98,7 @@ class Script(BaseScript):
                 sub["enabled_afi"] = ["IPv4"]
                 sub["ipv4_addresses"] = [match.group("ip")]
             iface["subinterfaces"] = [sub]
-            interfaces += [iface]
+            interfaces.append(iface)
             for match1 in self.rx_port.finditer(match.group("ports")):
                 port = match1.group("port")
                 mode = match1.group("mode")
@@ -108,7 +108,7 @@ class Script(BaseScript):
                         if mode == "u":
                             sub["untagged_vlan"] = match.group("vlan_id")
                         elif "tagged_vlans" in sub:
-                            sub["tagged_vlans"] += [match.group("vlan_id")]
+                            sub["tagged_vlans"].append(match.group("vlan_id"))
                         else:
                             sub["tagged_vlans"] = [match.group("vlan_id")]
                         break
@@ -141,6 +141,6 @@ class Script(BaseScript):
                 sub["enabled_afi"] = ["IPv4"]
                 sub["ipv4_addresses"] = [match.group("ip")]
             iface["subinterfaces"] = [sub]
-            interfaces += [iface]
+            interfaces.append(iface)
 
         return [{"interfaces": interfaces}]

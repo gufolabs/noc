@@ -39,15 +39,15 @@ class Profile(BaseProfile):
         me = "    seq %d permit %s"
         mne = "    seq %d permit %s le %d"
         r = [f"no ip prefix-list {name}"]
-        r += [f"ip prefix-list {name}"]
+        r.append(f"ip prefix-list {name}")
         seq = 5
         for prefix, min_len, max_len in pl:
             if min_len == max_len:
-                r += [me % (seq, prefix)]
+                r.append(me % (seq, prefix))
             else:
-                r += [mne % (seq, prefix, max_len)]
+                r.append(mne % (seq, prefix, max_len))
             seq += 5
-        r += ["    exit"]
+        r.append("    exit")
         return "\n".join(r)
 
     @classmethod
