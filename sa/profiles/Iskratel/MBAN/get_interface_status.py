@@ -30,5 +30,5 @@ class Script(BaseScript):
         if interface is not None:
             cmd += f" interface {interface}"
         for match in self.rx_port.finditer(self.cli(cmd)):
-            r += [{"interface": match.group("port"), "status": match.group("oper_status") != "No"}]
+            r.append({"interface": match.group("port"), "status": match.group("oper_status") != "No"})
         return r

@@ -43,7 +43,7 @@ class Script(BaseScript):
             if macs and MAC(f).shift(-1) == macs[-1][1]:
                 macs[-1][1] = t
             else:
-                macs += [[f, t]]
+                macs.append([f, t])
         # Found in some oldest switches
         if not macs and self.rx_range2.search(v):
             match = self.rx_range2.search(v)
@@ -57,7 +57,7 @@ class Script(BaseScript):
             v = self.cli("show lldp local-information", cached=True)
             match = self.rx_lldp.search(v)
             if match:
-                macs += [[match.group("mac"), match.group("mac")]]
+                macs.append([match.group("mac"), match.group("mac")])
         except self.CLISyntaxError:
             # Found in m7i JUNOS 8.5R4.3
             pass

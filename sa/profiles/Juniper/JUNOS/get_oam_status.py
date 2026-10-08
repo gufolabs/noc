@@ -54,15 +54,15 @@ class Script(BaseScript):
             caps = []
             match = self.rx_capsR.search(s)
             if match and match.group("caps_R") == "supported":
-                caps += ["R"]
+                caps.append("R")
             match = self.rx_capsU.search(s)
             if match and match.group("caps_U") == "supported":
-                caps += ["U"]
+                caps.append("U")
             match = self.rx_capsL.search(s)
             if match and match.group("caps_L") == "supported":
-                caps += ["L"]
+                caps.append("L")
             match = self.rx_capsV.search(s)
             if match and match.group("caps_V") == "supported":
-                caps += ["V"]
-            r += [{"interface": iface, "remote_mac": mac, "caps": caps}]
+                caps.append("V")
+            r.append({"interface": iface, "remote_mac": mac, "caps": caps})
         return r

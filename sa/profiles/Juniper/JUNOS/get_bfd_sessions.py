@@ -39,8 +39,7 @@ class Script(BaseScript):
         for bs in find_indented(s):
             match = self.rx_session.search(bs)
             if match:
-                r += [
-                    {
+                r.append({
                         # "local_address": IPParameter(),
                         "remote_address": match.group("remote_address"),
                         "local_interface": match.group("local_interface"),
@@ -53,6 +52,5 @@ class Script(BaseScript):
                         "multiplier": int(match.group("multiplier")),
                         # Detection time, microseconds
                         "detect_time": float(match.group("detect_time")) * 1000000,
-                    }
-                ]
+                    })
         return r

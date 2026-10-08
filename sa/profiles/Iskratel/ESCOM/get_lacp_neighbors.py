@@ -88,20 +88,16 @@ class Script(BaseScript):
                 pi = dict(pi)
                 _, partner_id = pi["partner"].split("-")
                 actor_port = self.profile.convert_interface_name(pi["actor_port"])
-                bundle += [
-                    {
+                bundle.append({
                         "interface": actor_port,
                         "local_port_id": port_id_map[actor_port],  # ifIndex
                         "remote_system_id": partner_id,
                         "remote_port_id": pi["partner_port"],
-                    }
-                ]
-            r += [
-                {
+                    })
+            r.append({
                     "lag_id": int(number),
                     "interface": f"Po {number}",
                     "system_id": system_id,
                     "bundle": bundle,
-                }
-            ]
+                })
         return r

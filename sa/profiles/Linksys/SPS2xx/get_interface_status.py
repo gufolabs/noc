@@ -33,9 +33,9 @@ class Script(BaseScript):
                     if n[:1] == "e" or n[:1] == "g":
                         if interface:
                             if n == interface:
-                                r += [{"interface": n, "status": int(s) == 1}]
+                                r.append({"interface": n, "status": int(s) == 1})
                         else:
-                            r += [{"interface": n, "status": int(s) == 1}]
+                            r.append({"interface": n, "status": int(s) == 1})
                 return r
             except self.snmp.TimeOutError:
                 pass
@@ -46,10 +46,8 @@ class Script(BaseScript):
         else:
             cmd = "show interfaces status"
         for match in self.rx_interface_status.finditer(self.cli(cmd)):
-            r += [
-                {
+            r.append({
                     "interface": match.group("interface"),
                     "status": match.group("status").lower() == "up",
-                }
-            ]
+                })
         return r

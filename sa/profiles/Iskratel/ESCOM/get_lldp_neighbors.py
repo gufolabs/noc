@@ -104,7 +104,7 @@ class Script(BaseScript):
                 ).strip()
             if iface_match.group("port_description"):
                 neighbor["remote_port_description"] = iface_match.group("port_description").strip()
-            r += [{"local_interface": match.group("iface"), "neighbors": [neighbor]}]
+            r.append({"local_interface": match.group("iface"), "neighbors": [neighbor]})
         return r
 
     def execute_n(self, res):
@@ -147,7 +147,7 @@ class Script(BaseScript):
             if match:
                 neighbor["remote_system_description"] = match.group("system_description").strip()
                 neighbor["remote_port_description"] = match.group("port_description").strip()
-            r += [{"local_interface": i[0], "neighbors": [neighbor]}]
+            r.append({"local_interface": i[0], "neighbors": [neighbor]})
         return r
 
     def execute(self):

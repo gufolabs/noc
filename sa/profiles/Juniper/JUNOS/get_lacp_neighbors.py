@@ -50,7 +50,7 @@ class Script(BaseScript):
                 if match.group("role") == "Actor":
                     sys_id = match.group("sys_id")
                     ifname, _unit = match.group("ifname").split(".")
-                    bundle += [{"interface": ifname, "local_port_id": match.group("port_num")}]
+                    bundle.append({"interface": ifname, "local_port_id": match.group("port_num")})
                 else:
                     bundle[-1].update(
                         {
@@ -58,7 +58,7 @@ class Script(BaseScript):
                             "remote_port_id": match.group("port_num"),
                         }
                     )
-            r += [{"lag_id": i[2:], "interface": i, "system_id": sys_id, "bundle": bundle}]
+            r.append({"lag_id": i[2:], "interface": i, "system_id": sys_id, "bundle": bundle})
         return r
 
     def get_port_actor_admin_keys(self):
@@ -78,14 +78,12 @@ class Script(BaseScript):
                 bundle_data_dict, display_hints={bundle_data_dict["partner_sysid"]: render_mac}
             )
 
-            res += [
-                {
+            res.append({
                     "interface": bundle_data["p_ifname"],
                     "local_port_id": bundle_data["actor_port_num"],
                     "remote_system_id": bundle_data["partner_sysid"],
                     "remote_port_id": bundle_data["partner_port_num"],
-                }
-            ]
+                })
         return res
 
     def execute_snmp(self):
@@ -113,12 +111,10 @@ class Script(BaseScript):
                     )
                     bundle = self.get_bundle(port_actor_admin_keys, actor_admin_key)
 
-                    res += [
-                        {
+                    res.append({
                             "lag_id": lag_id,
                             "interface": ifname,
                             "system_id": sysid,
                             "bundle": bundle,
-                        }
-                    ]
+                        })
         return res

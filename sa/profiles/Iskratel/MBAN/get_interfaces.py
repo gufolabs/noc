@@ -59,44 +59,38 @@ class Script(BaseScript):
                 vci = match.group("vci")
                 for ii in interfaces:
                     if ii["name"] == ifname:
-                        ii["subinterfaces"] += [
-                            {
+                        ii["subinterfaces"].append({
                                 "name": f"{ifname}:{vpi}_{vci}",
                                 "admin_status": match.group("admin_status") == "Yes",
                                 "oper_status": match.group("oper_status") == "Yes",
                                 "enabled_afi": ["BRIDGE", "ATM"],
                                 "vpi": vpi,
                                 "vci": vci,
-                            }
-                        ]
+                            })
                         sub_map[f"{ifname}:{vpi}_{vci}"] = ii["subinterfaces"][-1]
                 continue
             if match.group("vpi") and match.group("vci"):
                 vpi = match.group("vpi")
                 vci = match.group("vci")
-                i["subinterfaces"] += [
-                    {
+                i["subinterfaces"].append({
                         "name": f"{ifname}:{vpi}_{vci}",
                         "admin_status": match.group("admin_status") == "Yes",
                         "oper_status": match.group("oper_status") == "Yes",
                         "enabled_afi": ["BRIDGE", "ATM"],
                         "vpi": vpi,
                         "vci": vci,
-                    }
-                ]
+                    })
                 sub_map[f"{ifname}:{vpi}_{vci}"] = i["subinterfaces"][-1]
             else:
-                i["subinterfaces"] += [
-                    {
+                i["subinterfaces"].append({
                         "name": ifname,
                         "admin_status": match.group("admin_status") == "Yes",
                         "oper_status": match.group("oper_status") == "Yes",
                         "enabled_afi": ["BRIDGE"],
-                    }
-                ]
+                    })
                 sub_map[ifname] = i["subinterfaces"][-1]
 
-            interfaces += [i]
+            interfaces.append(i)
         for match in self.rx_ip.finditer(v):
             ifname = match.group("port")
             for i in interfaces:
@@ -116,7 +110,7 @@ class Script(BaseScript):
             #    if i['subinterfaces'][0]["name"] == ifname:
             if ifname in sub_map:
                 if "tagged" in sub_map[ifname]:
-                    sub_map[ifname]["tagged"] += [match.group("vlan_id")]
+                    sub_map[ifname]["tagged"].append(match.group("vlan_id"))
                 else:
                     sub_map[ifname]["tagged"] = [match.group("vlan_id")]
         for match in self.rx_vlan1.finditer(v):

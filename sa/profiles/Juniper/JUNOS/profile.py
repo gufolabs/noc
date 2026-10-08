@@ -107,9 +107,9 @@ class Profile(BaseProfile):
         rf = []
         for prefix, min_len, max_len in pl:
             if min_len == max_len:
-                rf += [f"    route-filter {prefix} exact;"]
+                rf.append(f"    route-filter {prefix} exact;")
             else:
-                rf += [f"    route-filter {prefix} upto /{int(max_len)}"]
+                rf.append(f"    route-filter {prefix} upto /{int(max_len)}")
         r = ["term pass {", "    from {"]
         r += rf
         r += ["    }", "    then next policy;", "}", "term reject {", "    then reject;", "}"]
@@ -125,7 +125,7 @@ class Profile(BaseProfile):
         names = []
         n = self.convert_interface_name(name)
         if n.endswith(".0"):
-            names += [n[:-2]]
+            names.append(n[:-2])
         return names
 
     internal_interfaces = re.compile(

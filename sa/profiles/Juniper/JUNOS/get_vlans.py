@@ -27,5 +27,5 @@ class Script(BaseScript):
         r = []
         v = self.cli("show vlans brief")
         for match in self.rx_vlan_line.finditer(v):
-            r += [match.groupdict()]
+            r.append(match.groupdict())
         return r

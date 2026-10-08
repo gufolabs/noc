@@ -50,19 +50,16 @@ class Script(BaseScript):
         for l in v.split("\n"):
             match = self.rx_chassis.search(l)
             if match:
-                r += [
-                    {
+                r.append({
                         "type": "CHASSIS",
                         "vendor": "JUNIPER",
                         "part_no": match.group("part_no"),
                         "serial": match.group("serial"),
                         "revision": match.group("revision"),
-                    }
-                ]
+                    })
             match = self.rx_module.search(l)
             if match:
-                r += [
-                    {
+                r.append({
                         "type": "MODULE",
                         "number": match.group("slot"),
                         "vendor": "JUNIPER",
@@ -70,12 +67,10 @@ class Script(BaseScript):
                         "serial": match.group("serial"),
                         "revision": match.group("revision"),
                         "description": match.group("name"),
-                    }
-                ]
+                    })
             match = self.rx_fan.search(l)
             if match:
-                r += [
-                    {
+                r.append({
                         "type": "FAN",
                         "number": match.group("slot"),
                         "vendor": "JUNIPER",
@@ -83,8 +78,7 @@ class Script(BaseScript):
                         "serial": match.group("serial"),
                         "revision": match.group("revision"),
                         "description": match.group("name"),
-                    }
-                ]
+                    })
         for l in v.split("\n"):
             match = self.rx_adapter.search(l)
             if match:

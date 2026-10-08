@@ -33,7 +33,5 @@ class Script(BaseScript):
         self.cli("terminal width 200")
         r = self.cli("show service-management service-definition brief | include True")
         for s in self.rx_service.findall(r):
-            configs += [
-                {"name": f"service {s}", "config": self.cleaned_config(self.cli(f"more {s}"))}
-            ]
+            configs.append({"name": f"service {s}", "config": self.cleaned_config(self.cli(f"more {s}"))})
         return configs

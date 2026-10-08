@@ -27,7 +27,7 @@ class Script(BaseScript):
         for l in changed_prefix_lists:
             name = l["name"]
             if len(l["prefix_list"]) == 0:
-                result += [{"name": name, "status": False}]
+                result.append({"name": name, "status": False})
                 self.logger.error(f"Refusing to apply empty policy-option {name}")
                 continue
             suffix = "exact" if l["strict"] else "orlonger"
@@ -52,7 +52,7 @@ class Script(BaseScript):
                 f"set policy-options policy-statement {name} term pass from route-filter {x}"
                 for x in new_pl.difference(applied_pl)
             ]
-            result += [{"name": name, "status": True}]
+            result.append({"name": name, "status": True})
         # Apply changeset
         if actions:
             with self.configure():

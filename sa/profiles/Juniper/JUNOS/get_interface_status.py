@@ -30,7 +30,7 @@ class Script(BaseScript):
                 return [{"interface": n, "status": int(s) == 1}]
             if not self.profile.valid_interface_name(self, n):
                 continue
-            r += [{"interface": n, "status": int(s) == 1}]
+            r.append({"interface": n, "status": int(s) == 1})
         # XXX: Sometime snmpwalk return only loX interfaces
         if len(r) > 10:
             return r
@@ -46,5 +46,5 @@ class Script(BaseScript):
                 if not self.profile.valid_interface_name(self, iface):
                     continue
                 if not interface or iface == interface:
-                    r += [{"interface": iface, "status": match.group("oper") == "Up"}]
+                    r.append({"interface": iface, "status": match.group("oper") == "Up"})
         return r
