@@ -136,7 +136,7 @@ class MODiscoveryJob(PeriodicJob):
     def check_timer(self, name):
         t = perf_counter()
         yield
-        self.check_timings += [(name, perf_counter() - t)]
+        self.check_timings.append((name, perf_counter() - t))
 
     def set_problem(
         self,
@@ -170,8 +170,7 @@ class MODiscoveryJob(PeriodicJob):
             fatal,
             kwargs,
         )
-        self.problems += [
-            ProblemItem(
+        self.problems.append(ProblemItem(
                 **{
                     "check": check,
                     "alarm_class": alarm_class,
@@ -183,8 +182,7 @@ class MODiscoveryJob(PeriodicJob):
                     "fatal": fatal,
                     "vars": kwargs,
                 }
-            )
-        ]
+            ))
         if fatal:
             self.has_fatal_error = True
 
@@ -298,17 +296,15 @@ class MODiscoveryJob(PeriodicJob):
                 d_vars.update(p.vars)
             labels = p.labels
             if p.fatal:
-                labels += ["noc::is_fatal::="]
-            details += [
-                {
+                labels.append("noc::is_fatal::=")
+            details.append({
                     "reference": f"d:{p.alarm_class}:{self.object.id}:{' | '.join(p.path)}",
                     "alarm_class": p.alarm_class,
                     "managed_object": str(self.object.id),
                     "timestamp": now,
                     "labels": labels,
                     "vars": d_vars,
-                }
-            ]
+                })
         msg = {
             "$op": "ensure_group",
             "reference": group_reference,
@@ -560,25 +556,25 @@ class DiscoveryCheck:
                     remove_labels = set(sa_labels).difference(v)
                     if remove_labels:
                         obj.labels = [ll for ll in obj.labels if ll not in remove_labels]
-                        changes += [("labels", obj.labels)]
+                        changes.append(("labels", obj.labels))
                     obj.extra_labels.update({"sa": v})
-                    changes += [("extra_labels", {"sa": v})]
+                    changes.append(("extra_labels", {"sa": v}))
                 continue
             if v != vv:
                 if not isinstance(v, int) or not hasattr(vv, "id") or v != vv.id:
                     if k in ignore_empty and (v is None or v == ""):
                         continue
                     setattr(obj, k, v)
-                    changes += [(k, v)]
+                    changes.append((k, v))
         if update_effective_labels and hasattr(obj, "effective_labels"):
             el = self.build_effective_labels(obj)
             if set(el) != set(getattr(obj, "effective_labels", [])):
-                changes += [("effective_labels", el)]
+                changes.append(("effective_labels", el))
         if changes:
             if bulk is not None:
                 op = {"$set": dict(changes)}
                 id_field = obj._fields[Interface._meta["id_field"]].db_field
-                bulk += [UpdateOne({id_field: obj.pk}, op)]
+                bulk.append(UpdateOne({id_field: obj.pk}, op))
             else:
                 kwargs = {}
                 if not wait:
@@ -1510,7 +1506,7 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
                     root_interface.name,
                 )
                 iface.unlink()
-                root_link.interfaces += [iface]
+                root_link.interfaces.append(iface)
             else:
                 self.logger.info(
                     "Linking %s:%s to cloud %s:%s",
@@ -1519,7 +1515,7 @@ class TopologyDiscoveryCheck(DiscoveryCheck):
                     root_interface.managed_object.name,
                     root_interface.name,
                 )
-                root_link.interfaces += [iface]
+                root_link.interfaces.append(iface)
         root_link.save()
 
     def is_preferable_over(self, mo1, mo2, link):

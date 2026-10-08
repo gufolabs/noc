@@ -38,7 +38,7 @@ class Script(BaseScript):
         for data in self.rx_self.split(v):
             match = self.rx_self_a.search(data)
             if match:
-                addresses[match.group("vlan")] += [match.group("address")]
+                addresses[match.group("vlan")].append(match.group("address"))
         # Get VLAN mappings
         vlans = {}  # tag -> data
         trunks = {}  # name -> [members]
@@ -69,9 +69,9 @@ class Script(BaseScript):
                 d = self.parse_kv(data)
                 tagged = d.get("Tagged") == "yes"
                 if tagged:
-                    current_vlan["tagged"] += [name]
+                    current_vlan["tagged"].append(name)
                 else:
-                    current_vlan["untagged"] += [name]
+                    current_vlan["untagged"].append(name)
                 interfaces.add(name)
             elif h.startswith("Net::Trunk"):
                 name = data.splitlines()[0].split(" ", 1)[0]
@@ -82,7 +82,7 @@ class Script(BaseScript):
                 if current_trunk:
                     for l in data.splitlines():
                         i = l.split(" ", 1)[0]
-                        current_trunk["members"] += [i]
+                        current_trunk["members"].append(i)
                         interfaces.add(i)
                         aggregated[i] = current_trunk["name"]
             elif h.startswith("Net::LACP Status (interface: "):
@@ -98,9 +98,9 @@ class Script(BaseScript):
             enabled_afi = []
             tag = int(v["tag"])
             if v["ipv4_addresses"]:
-                enabled_afi += ["IPv4"]
+                enabled_afi.append("IPv4")
             if v["ipv6_addresses"]:
-                enabled_afi += ["IPv6"]
+                enabled_afi.append("IPv6")
             if enabled_afi:
                 iface = {
                     "name": v["name"],
@@ -121,9 +121,9 @@ class Script(BaseScript):
                         }
                     ],
                 }
-                ifaces += [iface]
+                ifaces.append(iface)
             for i in v["tagged"]:
-                tagged[i] += [tag]
+                tagged[i].append(tag)
             for i in v["untagged"]:
                 untagged[i] = tag
         for i in interfaces:
@@ -151,8 +151,8 @@ class Script(BaseScript):
                     si["untagged_vlan"] = untagged[i]
                 iface["subinterfaces"] = [si]
             if i in lacp_interfaces:
-                iface["enabled_protocols"] += ["LACP"]
+                iface["enabled_protocols"].append("LACP")
             if i in aggregated:
                 iface["aggregated_interface"] = aggregated[i]
-            ifaces += [iface]
+            ifaces.append(iface)
         return [{"interfaces": sorted(ifaces, key=lambda x: x["name"])}]

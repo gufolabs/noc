@@ -27,11 +27,11 @@ class RCACondition:
             f"'timestamp__lte': alarm.timestamp + datetime.timedelta(seconds={self.window})",
         ]
         if self.root.id == alarm_class.id:
-            x += ["'id__ne': alarm.id"]
+            x.append("'id__ne': alarm.id")
         for k, v in condition.match_condition.items():
             if k == "managed_object" and v == "alarm.managed_object.id":
                 self.same_object = True
-            x += [f"'{k}': {v}"]
+            x.append(f"'{k}': {v}")
         self.match_condition = compile(f"{{{', '.join(x)}}}", "<string>", "eval")
         # Build reverse match condition expression
         x = [
@@ -41,9 +41,9 @@ class RCACondition:
             f"'timestamp__lte': alarm.timestamp + datetime.timedelta(seconds={self.window})",
         ]
         if self.root.id == alarm_class.id:
-            x += ["'id__ne': alarm.id"]
+            x.append("'id__ne': alarm.id")
         if self.same_object:
-            x += ["'managed_object': alarm.managed_object"]
+            x.append("'managed_object': alarm.managed_object")
         self.reverse_match_condition = compile(f"{{{', '.join(x)}}}", "<string>", "eval")
 
     def __str__(self):

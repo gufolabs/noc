@@ -187,7 +187,7 @@ class ManagedObjectDataStream(DataStream):
             return
         caps = []
         for cname in sorted(cdata):
-            caps += [{"name": cname, "value": str(cdata[cname])}]
+            caps.append({"name": cname, "value": str(cdata[cname])})
         r["capabilities"] = caps
 
     @staticmethod
@@ -204,7 +204,7 @@ class ManagedObjectDataStream(DataStream):
         ):
             fi = doc.get("forwarding_instance")
             if fi:
-                si_map[fi] += [doc["name"]]
+                si_map[fi].append(doc["name"])
         result = []
         for fi in instances:
             item = {"name": fi["name"], "type": fi["type"], "subinterfaces": si_map[fi["_id"]]}
@@ -220,7 +220,7 @@ class ManagedObjectDataStream(DataStream):
             rt_import = fi.get("rt_import")
             if rt_import:
                 item["rt_import"] = rt_import
-            result += [item]
+            result.append(item)
         r["forwarding_instances"] = result
 
     @staticmethod
@@ -238,12 +238,12 @@ class ManagedObjectDataStream(DataStream):
         # Get subs
         subs = defaultdict(list)
         for s in SubInterface._get_collection().find({"managed_object": mo.id}):
-            subs[s["interface"]] += [s]
+            subs[s["interface"]].append(s)
         # Get links
         links = defaultdict(list)
         for link in Link._get_collection().find({"linked_objects": mo.id}):
             for li in link.get("interfaces", []):
-                links[li] += [link]
+                links[li].append(link)
         # Populate cache with linked interfaces
         if links:
             for i in Interface._get_collection().find(
@@ -340,14 +340,12 @@ class ManagedObjectDataStream(DataStream):
                 ro, rname = ifcache[i]
                 if ro == iface["managed_object"]:
                     continue
-                r += [
-                    {
+                r.append({
                         "object": str(ro),
                         "interface": qs(rname),
                         "method": link.get("discovery_method") or "",
                         "is_uplink": ro in uplinks,
-                    }
-                ]
+                    })
         return r
 
     @staticmethod
@@ -389,14 +387,12 @@ class ManagedObjectDataStream(DataStream):
             rg = ResourceGroup.get_by_id(g)
             if not rg:
                 continue
-            r += [
-                {
+            r.append({
                     "id": str(g),
                     "name": qs(rg.name),
                     "technology": qs(rg.technology.name),
                     "static": g in static_groups,
-                }
-            ]
+                })
         return r
 
     @staticmethod
@@ -441,24 +437,20 @@ class ManagedObjectDataStream(DataStream):
         children = {child.parent_connection: child for child in Object.objects.filter(parent=o.id)}
         for n in o.model.connections:
             if n.is_inner:
-                r["slots"] += [
-                    {
+                r["slots"].append({
                         "name": n.name,
                         "direction": n.direction,
                         "protocols": [str(p) for p in n.protocols],
-                    }
-                ]
+                    })
                 r_object = children.get(n.name)
                 if r_object:
                     r["slots"][-1]["asset"] = ManagedObjectDataStream._get_asset(r_object)
             elif n.direction == "s":
-                r["slots"] += [
-                    {
+                r["slots"].append({
                         "name": n.name,
                         "direction": n.direction,
                         "protocols": [str(p) for p in n.protocols],
-                    }
-                ]
+                    })
             if n.name in if_map:
                 r["slots"][-1]["interface"] = if_map[n.name]
         return r

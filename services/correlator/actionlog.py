@@ -342,8 +342,7 @@ class ActionLog:
                 # For TT System update Action
                 if args.get("clear_template"):
                     args["template"] = Template.get_by_id(int(watch.args["clear_template"]))
-                r += [
-                    ActionLog(
+                r.append(ActionLog(
                         action=AlarmAction.CREATE_TT,
                         key=str(tt_s.id),
                         document_id=tt_id,
@@ -351,14 +350,12 @@ class ActionLog:
                         # Set valid status
                         status=ActionStatus.PENDING,
                         **args,
-                    )
-                ]
+                    ))
             if is_clear:
                 # For TT System clear_action
                 if args.get("template"):
                     args["template"] = Template.get_by_id(int(watch.args["template"]))
-                r += [
-                    ActionLog(
+                r.append(ActionLog(
                         action=AlarmAction.CLOSE_TT,
                         key=str(tt_s.id),
                         document_id=tt_id,
@@ -366,8 +363,7 @@ class ActionLog:
                         status=ActionStatus.NEW,
                         when=WhenCondition.ON_END,
                         **args,
-                    )
-                ]
+                    ))
         return r
 
     @classmethod

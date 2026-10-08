@@ -119,7 +119,7 @@ class CfgTrapDataStream(DataStream):
             }
             r["managed_object"]["administrative_domain"]["remote_id"] = adm_domain_remote_id
         if str(trap_source_type) == "m" and address:
-            r["addresses"] += [str(address)]
+            r["addresses"].append(str(address))
         elif str(trap_source_type) == "s" and trap_source_ip:
             r["addresses"] = [str(trap_source_ip)]
         elif trap_source_type == "l":
@@ -146,7 +146,7 @@ class CfgTrapDataStream(DataStream):
         for d in Interface._get_collection().find(
             {"managed_object": int(mo_id), "type": "loopback"}, {"_id": 1}
         ):
-            if_ids += [d["_id"]]
+            if_ids.append(d["_id"])
         if not if_ids:
             return []
         # Get loopback's addresses
@@ -160,7 +160,7 @@ class CfgTrapDataStream(DataStream):
             {"_id": 0, "ipv4_addresses": 1},
         ):
             for a in d.get("ipv4_addresses", []):
-                r += [str(a).split("/")[0]]
+                r.append(str(a).split("/")[0])
         return r
 
     @classmethod
@@ -172,7 +172,7 @@ class CfgTrapDataStream(DataStream):
             {"managed_object": int(mo_id), "ipv4_addresses": {"$exists": True}}, {"ipv4_addresses"}
         ):
             for a in d.get("ipv4_addresses", []):
-                r += [str(a).split("/")[0]]
+                r.append(str(a).split("/")[0])
         return r
 
     @classmethod

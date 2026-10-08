@@ -67,7 +67,7 @@ class DatastreamAPI:
             ds = loader[name]
             if ds:
                 logger.info("[%s] Initializing datastream", name)
-                r += [ds]
+                r.append(ds)
             else:
                 logger.info("[%s] Failed to initialize datastream", name)
         return r
@@ -192,7 +192,7 @@ class DatastreamAPI:
             filters = ds_filter or []
             ids = ds_id or None
             if ids:
-                filters += [f"id({','.join(ids)})"]
+                filters.append(f"id({','.join(ids)})")
             # Start from change
             if ds_from:
                 change_id = ds_from
@@ -222,7 +222,7 @@ class DatastreamAPI:
                         if not first_change:
                             first_change = change_id
                         last_change = change_id
-                        r += [data]
+                        r.append(data)
                         nr += 1
                         if nr == limit:
                             break  # Skip last additional item

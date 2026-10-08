@@ -42,10 +42,10 @@ class ServiceCard(BaseCard):
                     managed_obect_status = "up"
             else:
                 managed_obect_status = "down"
-                errors += ["Object is down"]
+                errors.append("Object is down")
             interface.speed = max([interface.in_speed or 0, interface.out_speed or 0]) / 1000
             if not interface.full_duplex:
-                errors += ["Half-Duplex"]
+                errors.append("Half-Duplex")
             # Maintenance
             m_id = managed_object.get_active_maintenances()
             for m in Maintenance.objects.filter(
@@ -53,16 +53,14 @@ class ServiceCard(BaseCard):
                 is_completed=False,
                 start__lte=now + datetime.timedelta(hours=1),
             ):
-                maintenance += [
-                    {
+                maintenance.append({
                         "maintenance": m,
                         "id": m.id,
                         "subject": m.subject,
                         "start": m.start,
                         "stop": m.stop,
                         "in_progress": m.start <= now,
-                    }
-                ]
+                    })
 
         # Build warnings
         # Build result
@@ -94,12 +92,12 @@ class ServiceCard(BaseCard):
         def get_children(ca):
             ca._children = []
             for a in Service.objects.filter(parent=ca):
-                ca._children += [a]
+                ca._children.append(a)
                 get_children(a)
 
         def flatten(ca, r, level):
             ca._level = level
-            r += [ca]
+            r.append(ca)
             if hasattr(ca, "_children"):
                 for c in sorted(ca._children, key=operator.attrgetter("ts")):
                     flatten(c, r, level + 1)

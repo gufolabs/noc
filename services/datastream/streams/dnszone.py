@@ -61,11 +61,11 @@ class DNSZoneDataStream(DataStream):
         """
         zone_iters = [cls.iter_soa(zone)]
         if zone.type == ZONE_FORWARD:
-            zone_iters += [sorted(cls.iter_forward(zone))]
+            zone_iters.append(sorted(cls.iter_forward(zone)))
         elif zone.type == ZONE_REVERSE_IPV4:
-            zone_iters += [sorted(cls.iter_reverse_ipv4(zone))]
+            zone_iters.append(sorted(cls.iter_reverse_ipv4(zone)))
         elif zone.type == ZONE_REVERSE_IPV6:
-            zone_iters += [sorted(cls.iter_reverse_ipv6(zone))]
+            zone_iters.append(sorted(cls.iter_reverse_ipv6(zone)))
         return [x.to_json() for x in chain(*tuple(zone_iters))]
 
     @classmethod
@@ -317,7 +317,7 @@ class DNSZoneDataStream(DataStream):
         # Subnet delegation macro
         delegations = defaultdict(list)
         for zr in DNSZoneRecord.objects.filter(zone=zone, type="NS", name__contains="/"):
-            delegations[zr.name] += [zr.content]
+            delegations[zr.name].append(zr.content)
         # Perform classless reverse zone delegation
         for d in delegations:
             nses = delegations[d]

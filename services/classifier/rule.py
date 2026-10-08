@@ -135,7 +135,7 @@ class Rule:
                 if rxs:
                     patterns += rxs
         if message_rx:
-            patterns += [message_rx]
+            patterns.append(message_rx)
             message_rx = re.compile(message_rx)
         # Transform
         for pattern in patterns:

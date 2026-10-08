@@ -198,12 +198,10 @@ class BaseCard:
                     else:
                         badge = f' <span class="badge">{c}</span>'
                     order = getattr(pv, "display_order", 100)
-                    v += [
-                        (
+                    v.append((
                             (order, -c),
                             f'<i class="{pv.glyph}" title="{pv.name}"></i>{badge}',
-                        )
-                    ]
+                        ))
             return " ".join(i[1] for i in sorted(v, key=operator.itemgetter(0)))
 
         if not isinstance(s, dict):
@@ -212,15 +210,13 @@ class BaseCard:
         if "subscriber" in s:
             from noc.crm.models.subscriberprofile import SubscriberProfile
 
-            r += [get_summary(s["subscriber"], SubscriberProfile)]
+            r.append(get_summary(s["subscriber"], SubscriberProfile))
         if "service" in s:
             from noc.sa.models.serviceprofile import ServiceProfile
 
-            r += [get_summary(s["service"], ServiceProfile)]
+            r.append(get_summary(s["service"], ServiceProfile))
         if s.get("fresh_alarms"):
-            r += [
-                f'<i class="fa fa-exclamation-triangle"></i><span class="badge">{s["fresh_alarms"]["FreshAlarm"]}</span>'
-            ]
+            r.append(f'<i class="fa fa-exclamation-triangle"></i><span class="badge">{s["fresh_alarms"]["FreshAlarm"]}</span>')
         r = [x for x in r if x]
         return "&nbsp;".join(r)
 
@@ -243,10 +239,10 @@ class BaseCard:
         while c:
             if "address" in c.data:
                 if c.data["address"]["text"]:
-                    path += [c.data["address"]["text"]]
+                    path.append(c.data["address"]["text"])
                     break
             if c.name:
-                path += [c.name]
+                path.append(c.name)
             c = c.container
             if c:
                 c = Object.get_by_id(c.id)

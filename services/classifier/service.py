@@ -773,7 +773,7 @@ class ClassifierService(FastAPIService):
             for m in EventMetrics:
                 ov = self.stats.get(m, 0)
                 nv = metrics[m].value
-                r += [f"{m.name}: {nv - ov}"]
+                r.append(f"{m.name}: {nv - ov}")
                 self.stats[m] = nv
             nt = metrics[EventMetrics.CR_PROCESSED].value
             ot = self.stats.get(EventMetrics.CR_PROCESSED, 0)

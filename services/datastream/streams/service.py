@@ -87,7 +87,7 @@ class ServiceDataStream(DataStream):
             return
         caps = []
         for cname in sorted(cdata):
-            caps += [{"name": cname, "value": cdata[cname]}]
+            caps.append({"name": cname, "value": cdata[cname]})
         r["capabilities"] = caps
 
     @staticmethod
@@ -212,14 +212,12 @@ class ServiceDataStream(DataStream):
             rg = ResourceGroup.get_by_id(g)
             if not rg:
                 continue
-            r += [
-                {
+            r.append({
                     "id": str(g),
                     "name": qs(rg.name),
                     "technology": qs(rg.technology.name),
                     "static": g in static_groups,
-                }
-            ]
+                })
         return r
 
     @classmethod

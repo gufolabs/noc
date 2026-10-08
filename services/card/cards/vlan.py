@@ -37,7 +37,7 @@ class VLANCard(BaseCard):
         for si in SubInterface.objects.filter(
             managed_object__in=objects, untagged_vlan=vlan.vlan, enabled_afi="BRIDGE"
         ):
-            si_objects[si.managed_object] += [{"name": si.name}]
+            si_objects[si.managed_object].append({"name": si.name})
         untagged = [
             {"managed_object": o, "interfaces": sorted(si_objects[o], key=lambda x: x["name"])}
             for o in si_objects
@@ -47,7 +47,7 @@ class VLANCard(BaseCard):
         for si in SubInterface.objects.filter(
             managed_object__in=objects, tagged_vlans=vlan.vlan, enabled_afi="BRIDGE"
         ):
-            si_objects[si.managed_object] += [{"name": si.name}]
+            si_objects[si.managed_object].append({"name": si.name})
         tagged = [
             {"managed_object": o, "interfaces": sorted(si_objects[o], key=lambda x: x["name"])}
             for o in si_objects
@@ -55,13 +55,11 @@ class VLANCard(BaseCard):
         # Find l3 interfaces
         si_objects = defaultdict(list)
         for si in SubInterface.objects.filter(managed_object__in=objects, vlan_ids=vlan.vlan):
-            si_objects[si.managed_object] += [
-                {
+            si_objects[si.managed_object].append({
                     "name": si.name,
                     "ipv4_addresses": si.ipv4_addresses,
                     "ipv6_addresses": si.ipv6_addresses,
-                }
-            ]
+                })
         l3 = [
             {"managed_object": o, "interfaces": sorted(si_objects[o], key=lambda x: x["name"])}
             for o in si_objects

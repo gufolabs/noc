@@ -113,7 +113,7 @@ class AlarmRule:
             g.alarm_class = g.alarm_class or cls.get_default_alarm_class()
             rule.groups.append(g)
         for a in config["actions"]:
-            rule.actions += [ActionConfig.model_validate(a)]
+            rule.actions.append(ActionConfig.model_validate(a))
         if config.get("job"):
             rule.job_config = JobConfig(
                 name=config["job"]["name"],

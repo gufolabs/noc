@@ -101,16 +101,16 @@ class BGPPeerCheck(PolicyDiscoveryCheck):
         """Apply BGP Peer changes and send signals"""
         changes = []
         if peer.remote_asn != discovered_peer.remote_as:
-            changes += [f"remote_asn: {peer.remote_asn} -> {discovered_peer.remote_as}"]
+            changes.append(f"remote_asn: {peer.remote_asn} -> {discovered_peer.remote_as}")
             peer.remote_asn = discovered_peer.remote_as
         if peer.local_ip != discovered_peer.local_address:
-            changes += [f"local_address: {peer.local_ip} -> {discovered_peer.local_address}"]
+            changes.append(f"local_address: {peer.local_ip} -> {discovered_peer.local_address}")
             peer.local_ip = discovered_peer.local_address
         if peer.description != discovered_peer.description:
-            changes += [f"description: {peer.description} -> {discovered_peer.description}"]
+            changes.append(f"description: {peer.description} -> {discovered_peer.description}")
         if peer.managed_object != self.object:
             peer.managed_object = self.object
-            changes += [f"managed_object: {peer.managed_object} -> {self.object}"]
+            changes.append(f"managed_object: {peer.managed_object} -> {self.object}")
         if changes:
             self.logger.info(
                 "Changing %s (AS%s): %s",

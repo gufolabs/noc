@@ -527,8 +527,7 @@ class AlarmActionRunner:
                 )
             ]
             if wait_tt:
-                actions += [
-                    ActionConfig(
+                actions.append(ActionConfig(
                         when=WhenCondition.ANY,
                         action=AlarmAction.COMMENT_ALARM_STATE,
                         key=str(tt_system.id),
@@ -538,8 +537,7 @@ class AlarmActionRunner:
                         allow_fail=True,
                         login=login,
                         queue=queue,
-                    )
-                ]
+                    ))
             return ActionResult(
                 status=ActionStatus.SUCCESS,
                 document_id=r.document,

@@ -162,19 +162,16 @@ class MonMapCard(BaseCard):
                     status = "warning"
                 elif alarms.get(mo_id, 0) > 2000:
                     status = "error"
-                objects_status[status] += [mo_id]
+                objects_status[status].append(mo_id)
                 ss[status] += 1
                 ss["total"] += 1
                 services_ss = [
                     f"{sm}-{status}" for sm in services_map.get(mo_id, [self.fake_service])
                 ]
-                ss["objects"] += [
-                    {"id": mo_id, "name": mo_name, "status": status, "services": services_ss}
-                ]
+                ss["objects"].append({"id": mo_id, "name": mo_name, "status": status, "services": services_ss})
             if not x or not y:
                 continue
-            objects += [
-                {
+            objects.append({
                     "name": address or name,
                     "id": str(container),
                     "x": x if x > -168 else x + 360,  # For Chukotskiy AO
@@ -185,8 +182,7 @@ class MonMapCard(BaseCard):
                     "warning": 0,
                     "good": 0,
                     "maintenance": 0,
-                }
-            ]
+                })
             objects[-1].update(ss)
 
         profiles = set()
@@ -203,7 +199,7 @@ class MonMapCard(BaseCard):
             sss[r] = m_services
         for r in sorted(sss, key=lambda k: ("error", "warning", "good", "maintenance").index(k)):
             for p in profiles:
-                services[p] += [(r, sss[r].get(p, None))]
+                services[p].append((r, sss[r].get(p, None)))
         return {
             "objects": objects,
             "summary": self.f_glyph_summary({"service": services}),
@@ -276,7 +272,7 @@ class MonMapCard(BaseCard):
                         badge = []
                         for color, count in c:
                             if count is None:
-                                badge += ["<td style='padding-right: 15px;'>&nbsp;</td>"]
+                                badge.append("<td style='padding-right: 15px;'>&nbsp;</td>")
                             else:
                                 html1 = "".join(
                                     [
@@ -286,15 +282,13 @@ class MonMapCard(BaseCard):
                                         " id='%s-%s'>%s</span></td>",
                                     ]
                                 )
-                                badge += [
-                                    html1
+                                badge.append(html1
                                     % (  # noqa
                                         self.color_map.get(color, self.color_map["default"]),
                                         pv.id,
                                         color,
                                         count,
-                                    )
-                                ]
+                                    ))
                         badge = "".join(badge)
                     elif collapse and c < 2:
                         badge = "</div>"
@@ -318,15 +312,13 @@ class MonMapCard(BaseCard):
         if "subscriber" in s:
             from noc.crm.models.subscriberprofile import SubscriberProfile
 
-            r += [get_summary(s["subscriber"], SubscriberProfile)]
+            r.append(get_summary(s["subscriber"], SubscriberProfile))
         if "service" in s:
             from noc.sa.models.serviceprofile import ServiceProfile
 
-            r += [get_summary(s["service"], ServiceProfile)]
+            r.append(get_summary(s["service"], ServiceProfile))
         if s.get("fresh_alarms"):
-            r += [
-                f'<i class="fa fa-exclamation-triangle"></i><span class="badge">{s["fresh_alarms"]["FreshAlarm"]}</span>'
-            ]
+            r.append(f'<i class="fa fa-exclamation-triangle"></i><span class="badge">{s["fresh_alarms"]["FreshAlarm"]}</span>')
         r = [x for x in r if x]
         return "&nbsp;".join(r)
 
@@ -336,7 +328,7 @@ class MonMapCard(BaseCard):
         pipeline = []
         name = "service"
         if not info_all:
-            pipeline += [{"$match": {"managed_object": {"$in": mos_ids}}}]
+            pipeline.append({"$match": {"managed_object": {"$in": mos_ids}}})
 
         group = {"_id": {"mo": "$managed_object"}, "count": {"$push": f"${name}.profile"}}
         pipeline += [{"$unwind": f"${name}"}, {"$group": group}]

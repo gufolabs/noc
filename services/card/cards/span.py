@@ -75,7 +75,7 @@ class SpanCard(BaseCard):
         root = None
         for s in data:
             if s.parent:
-                smap[s.parent].children += [s]
+                smap[s.parent].children.append(s)
             else:
                 root = s
         # Set width
