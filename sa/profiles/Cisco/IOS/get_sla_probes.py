@@ -94,7 +94,9 @@ class Script(BaseScript):
             self.logger.debug("[%s:%s] Status: %s", type, name, match)
             if match:
                 status = match.group("status").strip() == "Active"
-            r.append({"name": name, "group": group, "type": type, "target": target, "status": status})
+            r.append(
+                {"name": name, "group": group, "type": type, "target": target, "status": status}
+            )
             match = self.rx_tos.search(config)
             if match:
                 r[-1]["tos"] = int(match.group("tos").strip(), 16) >> 2

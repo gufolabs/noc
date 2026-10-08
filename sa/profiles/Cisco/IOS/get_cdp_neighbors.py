@@ -52,12 +52,14 @@ class Script(BaseScript):
                 name, *sub = ifname.rsplit(":", 1)
                 if sub:
                     ifname = name
-                neighbors.append({
+                neighbors.append(
+                    {
                         "device_id": r_device_id,
                         "local_interface": ifname,
                         "remote_interface": res[ii]["7"],
                         "platform": res[ii]["8"],
-                    })
+                    }
+                )
                 try:
                     if res[ii]["4"]:
                         msg = res[ii]["4"]
@@ -75,10 +77,12 @@ class Script(BaseScript):
         # Get neighbors
         neighbors = []
         for match in self.rx_entry.finditer(self.cli("show cdp neighbors detail")):
-            neighbors.append({
+            neighbors.append(
+                {
                     "device_id": match.group("device_id"),
                     "local_interface": match.group("local_interface"),
                     "remote_interface": match.group("remote_interface"),
                     "remote_ip": match.group("remote_ip"),
-                })
+                }
+            )
         return {"device_id": device_id, "neighbors": neighbors}

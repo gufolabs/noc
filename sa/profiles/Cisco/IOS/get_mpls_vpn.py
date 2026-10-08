@@ -70,7 +70,8 @@ class Script(BaseScript):
             match = self.rx_vfi.match(vfi)
             if not match:
                 continue
-            r.append({
+            r.append(
+                {
                     "type": "VPLS",
                     "status": match.group("state") == "up",
                     "name": match.group("name"),
@@ -83,7 +84,8 @@ class Script(BaseScript):
                         if match.group("ifaces")
                         else []
                     ),
-                })
+                }
+            )
         # VPWS
         try:
             v = self.cli("show xconnect all")
@@ -98,13 +100,15 @@ class Script(BaseScript):
                 continue
             _remote_address, vc_id = match.group("segment2").split(":")
             iface = match.group("segment1").split(":")[0]
-            r.append({
+            r.append(
+                {
                     "type": "VLL",
                     "status": match.group("xc_state") == "up",
                     "name": vc_id,
                     "vpn_id": vc_id,
                     "interfaces": [self.profile.convert_interface_name(iface)],
-                })
+                }
+            )
         return r
 
     def execute_cli(self, **kwargs):
@@ -124,13 +128,15 @@ class Script(BaseScript):
             # VRF VPN_VRF1; default RD 65501:4579033191; default VPNID <not set>
             if self.rx_vrf.match(line):
                 if vrf and rd:
-                    vpns.append({
+                    vpns.append(
+                        {
                             "type": "VRF",
                             "vpn_id": "",
                             "status": True,
                             "name": vrf.strip(),
                             "interfaces": [],
-                        })
+                        }
+                    )
                     if rd and rd.strip() != "<not set>":
                         vpns[-1]["rd"] = rd.strip()
                     if vrf_block["interfaces:"]:
@@ -174,13 +180,15 @@ class Script(BaseScript):
                 tab = 100
                 block = None
         if vrf:
-            vpns.append({
+            vpns.append(
+                {
                     "type": "VRF",
                     "vpn_id": "",
                     "status": True,
                     "name": vrf.strip(),
                     "interfaces": [],
-                })
+                }
+            )
             if rd and rd.strip() != "<not set>":
                 vpns[-1]["rd"] = rd.strip()
             if vrf_block["interfaces:"]:

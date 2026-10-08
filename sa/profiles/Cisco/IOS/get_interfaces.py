@@ -608,12 +608,14 @@ class Script(BaseScript):
                 vrfs["default"]["interfaces"].append(interfaces[i])
             for s in subs:
                 if s["name"] in vrf_if_map and vrf_if_map[s["name"]] != iface_vrf:
-                    vrfs[vrf_if_map[s["name"]]]["interfaces"].append({
+                    vrfs[vrf_if_map[s["name"]]]["interfaces"].append(
+                        {
                             "name": s["name"],
                             "type": "other",
                             "enabled_protocols": [],
                             "subinterfaces": [s],
-                        })
+                        }
+                    )
                 else:
                     interfaces[i]["subinterfaces"].append(s)
         return list(vrfs.values())

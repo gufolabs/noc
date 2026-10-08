@@ -93,11 +93,13 @@ class Script(BaseScript):
                     vlan_id = match.group("vlan_id")
                     tagged = match.group("tagged").split()
                     untagged = match.group("untagged").split()
-                    vlans.append({
+                    vlans.append(
+                        {
                             "vlan_id": vlan_id,
                             "untagged": untagged,
                             "tagged": tagged,
-                        })
+                        }
+                    )
             v = self.cli("show lacp system port")
             for match in self.rx_port.finditer(v):
                 ifname = match.group("ifname")

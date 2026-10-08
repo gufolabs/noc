@@ -58,14 +58,16 @@ class Script(BaseScript):
             subs[iface_name].append(s.copy())
 
             # sub = {"subinterfaces": [i.copy()]}
-            r.append({
+            r.append(
+                {
                     "name": iface_name,
                     "admin_status": "LOWER_UP" in match.group("status"),
                     "oper_status": "UP" in match.group("status"),
                     "type": i_type,
                     "mac": match.group("mac"),
                     "enabled_protocols": [],
-                })
+                }
+            )
 
         for l in r:
             if l["name"] in subs:

@@ -45,7 +45,8 @@ class Script(BaseScript):
                         dpi = dpi_rx.search(v[p:]).group("dpi")
                     else:
                         dpi = 0
-                    interfaces.append({
+                    interfaces.append(
+                        {
                             "interface": interface,
                             "port_id": 0,
                             # Interface state
@@ -58,8 +59,10 @@ class Script(BaseScript):
                             "point_to_point": 0,
                             "edge": 0,
                             "role": "unknown",
-                        })
-            r["instances"].append({
+                        }
+                    )
+            r["instances"].append(
+                {
                     "id": vlan,
                     "vlans": vlan,
                     "root_id": match.group("root_id")[4:],
@@ -67,7 +70,8 @@ class Script(BaseScript):
                     "bridge_id": match.group("bridge_address"),
                     "bridge_priority": match.group("priority"),
                     "interfaces": interfaces,
-                })
+                }
+            )
         return r
 
     def execute_cli(self):

@@ -109,7 +109,8 @@ class Script(BaseScript):
         for I in self.cli("show spanning-tree detail").split("\n VLAN")[1:]:
             instance_id, _ = I.split(" ", 1)
             match = self.rx_pvst_bridge.search(I)
-            r["instances"].append({
+            r["instances"].append(
+                {
                     "id": int(instance_id),
                     "vlans": str(int(instance_id)),
                     "root_id": (
@@ -124,7 +125,8 @@ class Script(BaseScript):
                     ),
                     "bridge_id": match.group("bridge_id"),
                     "bridge_priority": match.group("bridge_priority"),
-                })
+                }
+            )
             for match in self.rx_pvst_interfaces.finditer(I):
                 instance_id = int(match.group("instance_id"))
                 if instance_id not in interfaces:
@@ -132,7 +134,8 @@ class Script(BaseScript):
                 interface = self.profile.convert_interface_name(match.group("interface"))
                 try:
                     port_attrs = ports[instance_id][interface]
-                    interfaces[instance_id].append({
+                    interfaces[instance_id].append(
+                        {
                             "interface": interface,
                             "port_id": match.group("port_id"),
                             "state": port_attrs["state"],
@@ -143,7 +146,8 @@ class Script(BaseScript):
                             "designated_port_id": match.group("designated_port_id"),
                             "point_to_point": port_attrs["point_to_point"],
                             "edge": port_attrs["edge"],
-                        })
+                        }
+                    )
                 except KeyError:
                     pass
         for I in r["instances"]:
@@ -192,21 +196,24 @@ class Script(BaseScript):
         for I in self.cli("show spanning-tree mst detail").split("\n##### MST")[1:]:
             instance_id, _ = I.split(" ", 1)
             match = self.rx_mstp_bridge.search(I)
-            r["instances"].append({
+            r["instances"].append(
+                {
                     "id": int(instance_id),
                     "vlans": iv[instance_id],
                     "root_id": match.group("root_id"),
                     "root_priority": match.group("root_priority"),
                     "bridge_id": match.group("bridge_id"),
                     "bridge_priority": match.group("bridge_priority"),
-                })
+                }
+            )
             for match in self.rx_mstp_interfaces.finditer(I):
                 instance_id = int(match.group("instance_id"))
                 if instance_id not in interfaces:
                     interfaces[instance_id] = []
                 interface = self.profile.convert_interface_name(match.group("interface"))
                 port_attrs = ports[instance_id][interface]
-                interfaces[instance_id].append({
+                interfaces[instance_id].append(
+                    {
                         "interface": interface,
                         "port_id": match.group("port_id"),
                         "state": port_attrs["state"],
@@ -217,7 +224,8 @@ class Script(BaseScript):
                         "designated_port_id": match.group("designated_port_id"),
                         "point_to_point": port_attrs["point_to_point"],
                         "edge": port_attrs["edge"],
-                    })
+                    }
+                )
         for I in r["instances"]:
             I["interfaces"] = interfaces[I["id"]]
         return r

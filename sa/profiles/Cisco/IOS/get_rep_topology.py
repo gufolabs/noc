@@ -52,7 +52,8 @@ class Script(BaseScript):
                 else:
                     edge = None
                 no_neighbor = "no-neighbor" in role
-                rs["topology"].append({
+                rs["topology"].append(
+                    {
                         "name": match.group("host"),
                         "mac": match.group("mac"),
                         "port": match.group("port"),
@@ -60,7 +61,8 @@ class Script(BaseScript):
                         "edge_no_neighbor": no_neighbor,
                         "neighbor_number": int(match.group("fwd")),
                         "rev_neighbor_number": int(match.group("rev")),
-                    })
+                    }
+                )
                 if edge:
                     rs["topology"][-1]["edge"] = edge
             r.append(rs)

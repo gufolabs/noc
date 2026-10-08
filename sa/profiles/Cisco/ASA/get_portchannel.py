@@ -55,9 +55,11 @@ class Script(BaseScript):
                 consist only Interfaces"""
                 nextinterface = True
 
-            r.append({
+            r.append(
+                {
                     "interface": f"Po {interface['Group']}",
                     "members": members,
                     "type": "L",  # <!> TODO: port-channel type detection
-                })
+                }
+            )
         return r
