@@ -31,11 +31,13 @@ class Script(BaseScript):
                 continue
             if r.get("interface-name") is None or r.get("address") is None:
                 continue
-            neighbors.append({
+            neighbors.append(
+                {
                     "device_id": r["identity"],
                     "local_interface": r["interface"],
                     "remote_interface": r["interface-name"],
                     "remote_ip": r["address"],
                     "platform": platform,
-                })
+                }
+            )
         return {"device_id": device_id, "neighbors": neighbors}

@@ -21,10 +21,12 @@ class Script(BaseScript):
         r = []
         now = datetime.datetime.now()
         for n, f, v in self.cli_detail("/ip dhcp-server lease print detail without-paging"):
-            r.append({
+            r.append(
+                {
                     "ip": v["address"],
                     "mac": v["mac-address"],
                     "type": "A",
                     "expiration": now,  # @todo: Calculate expiration
-                })
+                }
+            )
         return r

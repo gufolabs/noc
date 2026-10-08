@@ -32,13 +32,17 @@ class Script(BaseScript):
         if interface:
             cmd += f" {interface}"
         for match in self.rx_port.finditer(self.cli(cmd)):
-            r.append({
+            r.append(
+                {
                     "interface": match.group("interface"),
                     "status": match.group("oper_status") == "Yes",
-                })
+                }
+            )
         for match in self.rx_lag.finditer(self.cli("show lag")):
-            r.append({
+            r.append(
+                {
                     "interface": "lag-" + match.group("number"),
                     "status": match.group("oper_status") == "up",
-                })
+                }
+            )
         return r

@@ -549,7 +549,9 @@ class Script(BaseScript):
         # Mgmt Router Ifaces
         mgmt_ifaces = self.get_managment_router()
         if mgmt_ifaces:
-            result.append({"forwarding_instance": "management", "type": "ip", "interfaces": mgmt_ifaces})
+            result.append(
+                {"forwarding_instance": "management", "type": "ip", "interfaces": mgmt_ifaces}
+            )
         # Mgmt Router Ifaces
         base_ifaces = self.get_base_router()
         # Forwarding Instance
@@ -635,9 +637,11 @@ class Script(BaseScript):
                 continue
             result.append(fi)
         if base_ifaces:
-            result.append({
+            result.append(
+                {
                     "forwarding_instance": "default",
                     "type": "ip",
                     "interfaces": list(base_ifaces.values()),
-                })
+                }
+            )
         return result

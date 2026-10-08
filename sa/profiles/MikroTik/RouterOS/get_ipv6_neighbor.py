@@ -33,16 +33,20 @@ class Script(BaseScript):
             if not r.get("status") or r["status"] == "failed":
                 continue
             if r.get("mac-address"):
-                nb.append({
+                nb.append(
+                    {
                         "ip": r["address"],
                         "mac": r["mac-address"],
                         "interface": r["interface"],
                         "state": self.s_map[r["status"]],
-                    })
+                    }
+                )
             else:
-                nb.append({
+                nb.append(
+                    {
                         "ip": r["address"],
                         "interface": r["interface"],
                         "state": self.s_map[r["status"]],
-                    })
+                    }
+                )
         return nb

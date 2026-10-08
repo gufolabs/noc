@@ -85,11 +85,13 @@ class Script(BaseScript):
         c = self.cli("show vrf")
         for match in self.rx_vrf.finditer(c):
             if match.group("vrf") != "default":
-                vrfs.append({
+                vrfs.append(
+                    {
                         "forwarding_instance": match.group("vrf"),
                         "type": "VRF",
                         "interfaces": [],
-                    })
+                    }
+                )
         vrf_name = ""
         c = self.cli("show interfaces", cached=True)
         for item in c.split("\n\n"):

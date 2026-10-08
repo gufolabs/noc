@@ -38,7 +38,8 @@ class Script(BaseScript):
             if temp_c == 2147483647:
                 continue
             iface_index = index.rsplit(".", 1)[-1]
-            r.append({
+            r.append(
+                {
                     "interface": names[int(iface_index)],
                     "temp_c": float(temp_c) / 256,
                     "voltage_v": float(voltage_v) / 1000,
@@ -47,5 +48,6 @@ class Script(BaseScript):
                     "optical_rx_dbm": (
                         float(optical_rx_dbm) / 100.0 if optical_rx_dbm != 2147483647 else 0
                     ),
-                })
+                }
+            )
         return r

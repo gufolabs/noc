@@ -47,10 +47,12 @@ class Script(BaseScript):
             vlan_id = int(record["vid"], 16)
             if vlan_id == 0:  # MikroTik specific
                 vlan_id = 1
-            r.append({
+            r.append(
+                {
                     "vlan_id": vlan_id,
                     "mac": record["adr"],
                     "interfaces": [ports[iface_num]],
                     "type": "D",
-                })
+                }
+            )
         return r

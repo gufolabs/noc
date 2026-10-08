@@ -63,11 +63,13 @@ class Script(BaseScript):
         ]
         v = self.cli("net show vrf")
         for match in self.rx_vrf.finditer(v):
-            vrfs.append({
+            vrfs.append(
+                {
                     "forwarding_instance": match.group("vrf"),
                     "type": "VRF",
                     "interfaces": [],
-                })
+                }
+            )
         bridge_name = "bridge"  # default value
         v = self.cli("net show interface all")
         for line in parse_table(v):
