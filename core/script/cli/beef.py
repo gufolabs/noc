@@ -45,7 +45,7 @@ class BeefStream(TelnetStream):
         try:
             self.read_buffer += list(self.beef.iter_cli_reply(data))
         except KeyError:
-            self.read_buffer += [self.cli.SYNTAX_ERROR_CODE]
+            self.read_buffer.append(self.cli.SYNTAX_ERROR_CODE)
         self.read_event.set()
 
     async def wait_for_read(self):
@@ -93,4 +93,4 @@ class BeefCLI(CLI):
 
     async def send_pager_reply(self, data, match):
         """Beef need no pagers"""
-        self.collected_data += [data]
+        self.collected_data.append(data)

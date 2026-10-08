@@ -413,7 +413,7 @@ class SNMP:
                             continue
                         if isinstance(v, bytes):
                             v = mib.render(oid_, v, display_hints)
-                        result += [(oid_, v)]
+                        result.append((oid_, v))
                         if only_first:
                             break
                         if max_records and len(result) >= max_records:

@@ -133,12 +133,12 @@ class WhoisCacheLoader:
         if forward:
 
             def u(k, v):
-                r[k] += [v]
+                r[k].append(v)
 
         else:
 
             def u(k, v):
-                r[v] += [k]
+                r[v].append(k)
 
         n = 0
         logger.info("Loading %s", url)
@@ -211,12 +211,10 @@ class WhoisCacheLoader:
                     if obj and "route" in obj and "origin" in obj:
                         origin = obj["origin"][0]
                         if origin in discoverable_as:
-                            as_routes[origin] += [
-                                (
+                            as_routes[origin].append((
                                     obj["route"][0],
                                     "\n".join(obj["descr"]) if "descr" in obj else None,
-                                )
-                            ]
+                                ))
                     yield obj
 
         else:

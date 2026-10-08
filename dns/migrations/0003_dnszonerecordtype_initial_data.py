@@ -56,7 +56,7 @@ class Migration(BaseMigration):
                 > 0
             ):
                 continue
-            rt += [(rtype, is_visible)]
+            rt.append((rtype, is_visible))
         if rt:
             print(f"Creating DNS Zone record types: {', '.join(sorted([x[0] for x in rt]))}")
             for rtype, is_visible in rt:

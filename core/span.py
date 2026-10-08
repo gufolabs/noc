@@ -166,7 +166,7 @@ class Span:
             in_headers={k: v.decode() for k, v in self.headers.items()},
         )
         with span_lock:
-            spans += [span]
+            spans.append(span)
         if self.span_parent == DEFAULT_ID:
             cv_span_parent.set(None)
             cv_span_context.set(None)

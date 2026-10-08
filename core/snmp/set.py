@@ -36,7 +36,7 @@ def set_pdu(community, varbinds, request_id=None, version=SNMP_v2c):
             v = e.encode_int(value)
         else:
             raise ValueError("Unknown varbind type")
-        vbs += [e.encode_sequence([e.encode_oid(oid), v])]
+        vbs.append(e.encode_sequence([e.encode_oid(oid), v]))
     varbinds = e.encode_sequence(vbs)
     # Encode RFC-1905 SNMP SET PDU
     pdu = e.encode_choice(

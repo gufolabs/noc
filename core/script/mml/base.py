@@ -89,9 +89,9 @@ class MMLBase(BaseCLI):
                 match = self.rx_mml_continue.search(r, offset)
                 if match:
                     self.logger.debug("Continuing in the next block")
-                    result += [r[: match.start()]]
+                    result.append(r[: match.start()])
                     continue
-            result += [r]
+            result.append(r)
             break
         self.result = "".join(result)
         return self.result

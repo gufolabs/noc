@@ -135,7 +135,7 @@ class RTSPBase(BaseCLI):
                 self.result = ""
                 self.error = RTSPError(f"{msg} (code={code})", code=int(code))
                 return None
-            result += [r]
+            result.append(r)
             break
         self.result = smart_text(b"".join(result))
         return self.result

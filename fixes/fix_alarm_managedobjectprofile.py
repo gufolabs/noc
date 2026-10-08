@@ -34,13 +34,11 @@ def fix():
             if not mo:
                 continue
             mop = mo.object_profile.id
-            ins[mop] += [doc["_id"]]
+            ins[mop].append(doc["_id"])
             if len(ins[mop]) >= IN_SIZE:
-                bulk += [
-                    UpdateMany(
+                bulk.append(UpdateMany(
                         {"_id": {"$in": ins[mop]}}, {"$set": {"managed_object_profile": mop}}
-                    )
-                ]
+                    ))
                 ins[mop] = []
                 if len(bulk) >= BULK_SIZE:
                     coll.bulk_write(bulk)

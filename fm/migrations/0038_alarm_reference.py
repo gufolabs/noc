@@ -22,7 +22,7 @@ class Migration(BaseMigration):
             assert e["_id"] == event_id
             alarms = e.get("alarms", [])
             if alarm_id not in alarms:
-                alarms += [alarm_id]
+                alarms.append(alarm_id)
                 e["alarms"] = alarms
                 c.save(e)
 

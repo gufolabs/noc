@@ -109,10 +109,9 @@ def document_set_state(
     c_bulk = [UpdateOne({"_id": self.id}, {"$set": set_op})]
     # Update effective labels
     if hasattr(self, "effective_labels") and prev_labels:
-        c_bulk += [UpdateOne({"_id": self.id}, {"$pullAll": {"effective_labels": prev_labels}})]
+        c_bulk.append(UpdateOne({"_id": self.id}, {"$pullAll": {"effective_labels": prev_labels}}))
     if hasattr(self, "effective_labels") and state.labels:
-        c_bulk += [
-            UpdateOne(
+        c_bulk.append(UpdateOne(
                 {"_id": self.id},
                 {
                     "$addToSet": {
@@ -121,8 +120,7 @@ def document_set_state(
                         }
                     }
                 },
-            )
-        ]
+            ))
     # Write bulk
     if bulk is None:
         self._get_collection().bulk_write(c_bulk)
@@ -170,7 +168,7 @@ def document_touch(
     op = {"$set": opset}
     if bulk:
         # Queue to bulk operation
-        bulk += [UpdateOne({"_id": self.pk}, op)]
+        bulk.append(UpdateOne({"_id": self.pk}, op))
     else:
         # Direct update
         self._get_collection().update_one({"_id": self.pk}, op)
@@ -317,7 +315,7 @@ def model_touch(self, bulk: list["UpdateOne"] | None = None, ts: datetime.dateti
         r = self.__class__.objects.get(id=self.pk)
         for k, v in opset.items():
             setattr(r, k, v)
-        bulk += [r]
+        bulk.append(r)
     else:
         # Direct update
         self.__class__.objects.filter(id=self.pk).update(**opset)

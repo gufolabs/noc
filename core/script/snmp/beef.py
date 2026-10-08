@@ -107,7 +107,7 @@ class BeefSNMPSocket:
                     err_index = n + 1
                     err_status = NO_SUCH_NAME
                     v = "\x80"  # Missed instance
-            r += [(oid[0], v)]
+            r.append((oid[0], v))
         return err_status, err_index, r
 
     def snmp_getnext_response(self, pdu):
@@ -152,7 +152,7 @@ class BeefSNMPSocket:
         for oid in beef.iter_mib_oids(start_oid):
             if oid == start_oid:
                 continue  # To next value
-            r += [(oid, beef.get_mib_value(oid))]
+            r.append((oid, beef.get_mib_value(oid)))
             if len(r) >= max_repetitions:
                 break
         if not r:

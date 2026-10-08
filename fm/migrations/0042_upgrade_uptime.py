@@ -18,12 +18,10 @@ class Migration(BaseMigration):
         db = self.mongo_db
         bulk = []
         for d in db.noc.fm.uptimes.find({}):
-            bulk += [
-                UpdateOne(
+            bulk.append(UpdateOne(
                     {"_id": d["_id"]},
                     {"$set": {"last_value": float((d["last"] - d["start"]).total_seconds())}},
-                )
-            ]
+                ))
         if bulk:
             print("Commiting changes to database")
             try:

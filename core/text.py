@@ -99,7 +99,7 @@ def parse_table(
                     break
                 spaces = len(match.group(1))
                 dashes = len(match.group(2))
-                columns += [(x + spaces, x + spaces + dashes)]
+                columns.append((x + spaces, x + spaces + dashes))
                 x += match.end()
                 line = line[match.end() :]
             if max_width and columns[-1][-1] < max_width:
@@ -133,14 +133,12 @@ def parse_table(
                         else:
                             r[-1][i] += row_wrapper(x) if row_wrapper else x
                 else:
-                    r += [row]
+                    r.append(row)
             else:
-                r += [
-                    [
+                r.append([
                         row_wrapper(line[f:t]).strip() if row_wrapper else line[f:t].strip()
                         for f, t in columns
-                    ]
-                ]
+                    ])
     if allow_wrap:
         return [[x.strip() for x in rr] for rr in r]
     return r
@@ -352,7 +350,7 @@ def _replace_re_group_text(expr: str, group: str, pattern: str) -> str:
         idx = expr.find(group)
         if idx == -1:
             break
-        r += [expr[:idx]]
+        r.append(expr[:idx])
         expr = expr[idx + lg :]
         level = 1  # Level of parenthesis nesting
         while expr:
@@ -371,9 +369,9 @@ def _replace_re_group_text(expr: str, group: str, pattern: str) -> str:
                 level -= 1
                 if level == 0:
                     # Replace with pattern and search for next
-                    r += [pattern]
+                    r.append(pattern)
                     break
-    r += [expr]
+    r.append(expr)
     return "".join(r)
 
 
@@ -403,7 +401,7 @@ def _replace_re_group_binary(expr: bytes, group: bytes, pattern: bytes) -> bytes
         idx = expr.find(group)
         if idx == -1:
             break
-        r += [expr[:idx]]
+        r.append(expr[:idx])
         expr = expr[idx + lg :]
         level = 1  # Level of parenthesis nesting
         while expr:
@@ -422,9 +420,9 @@ def _replace_re_group_binary(expr: bytes, group: bytes, pattern: bytes) -> bytes
                 level -= 1
                 if level == 0:
                     # Replace with pattern and search for next
-                    r += [pattern]
+                    r.append(pattern)
                     break
-    r += [expr]
+    r.append(expr)
     return b"".join(r)
 
 
@@ -563,13 +561,13 @@ def find_indented(s: str) -> list[str]:
     for line in s.splitlines():
         if rx_notspace.match(line):
             if len(cr) > 1:
-                r += ["\n".join(cr)]
+                r.append("\n".join(cr))
             cr = [line]
             continue
         if line:
-            cr += [line]
+            cr.append(line)
     if len(cr) > 1:
-        r += ["\n".join(cr)]
+        r.append("\n".join(cr))
     return r
 
 
@@ -813,7 +811,7 @@ def parse_table_header(v: Sequence[str]) -> dict[int, str]:
     for num, lines in enumerate(zip_longest(*v, fillvalue="-")):
         if empty_header is None:
             empty_header = (" ",) * len(lines)
-            head += [lines]
+            head.append(lines)
             continue
         if set(head[-1]) == {" "} and lines != empty_header:
             head = array(head)
@@ -821,7 +819,7 @@ def parse_table_header(v: Sequence[str]) -> dict[int, str]:
             header[num] = " ".join(["".join(s).strip() for s in head.transpose().tolist()])
             header[num] = header[num].strip()
             head = []
-        head += [lines]
+        head.append(lines)
     # last column
     head = array(head)
     header[num] = " ".join(["".join(s).strip(" -") for s in head.transpose().tolist()])

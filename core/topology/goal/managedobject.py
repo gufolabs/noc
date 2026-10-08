@@ -102,12 +102,12 @@ class ManagedObjectGoal(BaseGoal):
                 return merge_path(p1, p2, c)
             # Up mo1 path
             if can_up1:
-                p1 += [p1[-1].parent]
+                p1.append(p1[-1].parent)
                 c = set(p1) & set(p2)
                 if c:
                     return merge_path(p1, p2, c)
             # Up mo2 path
             if can_up2:
-                p2 += [p2[-1].parent]
+                p2.append(p2[-1].parent)
             elif not can_up2:
                 raise ValueError("Cannot find path")

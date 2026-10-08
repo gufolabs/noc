@@ -20,7 +20,7 @@ def fix():
     for d in PhoneRange._get_collection().find({}, {"_id": 1, "parent": 1}):
         range_id.add(d["_id"])
         if d.get("parent"):
-            parents[d["parent"]] += [d["_id"]]
+            parents[d["parent"]].append(d["_id"])
     pset = set(parents)
     for p in pset - range_id:
         for pr in parents[p]:
@@ -31,7 +31,7 @@ def fix():
     for d in PhoneNumber._get_collection().find({}, {"_id": 1, "phone_range": 1}):
         if not d.get("phone_range"):
             continue
-        nparents[d["phone_range"]] += [d["_id"]]
+        nparents[d["phone_range"]].append(d["_id"])
     pset = set(nparents)
     for p in pset - range_id:
         for pn in nparents[p]:

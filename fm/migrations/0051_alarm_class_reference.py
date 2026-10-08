@@ -24,12 +24,10 @@ class Migration(BaseMigration):
         for ac in db["noc.alarmclasses"].find({}, {"name": 1, "discriminator": 1}):
             ac_map[ac["_id"]] = ac.get("discriminator", [])
             if "discriminator" in ac and tuple(ac["discriminator"]) not in processed:
-                ac_bulk += [
-                    UpdateMany(
+                ac_bulk.append(UpdateMany(
                         {"discriminator": ac["discriminator"]},
                         {"$set": {"reference": ac["discriminator"]}},
-                    )
-                ]
+                    ))
                 processed.add(tuple(ac["discriminator"]))
 
         bulk = []
@@ -50,7 +48,7 @@ class Migration(BaseMigration):
                     ac_map.get(doc["alarm_class"], []),
                 )
                 r_hash = self.get_reference_hash(reference)
-                bulk += [UpdateOne({"_id": doc["_id"]}, {"$set": {"reference": r_hash}})]
+                bulk.append(UpdateOne({"_id": doc["_id"]}, {"$set": {"reference": r_hash}}))
                 if len(bulk) > 500:
                     aa.bulk_write(bulk)
                     bulk = []

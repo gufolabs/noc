@@ -91,10 +91,10 @@ class FastAPIService(BaseService):
         # Build tags docs
         openapi_tags = []
         for tag in self.BASE_OPENAPI_TAGS_DOCS:
-            openapi_tags += [{"name": tag, "description": self.BASE_OPENAPI_TAGS_DOCS[tag]}]
+            openapi_tags.append({"name": tag, "description": self.BASE_OPENAPI_TAGS_DOCS[tag]})
         if self.OPENAPI_TAGS_DOCS:
             for tag in self.OPENAPI_TAGS_DOCS:
-                openapi_tags += [{"name": tag, "description": self.OPENAPI_TAGS_DOCS[tag]}]
+                openapi_tags.append({"name": tag, "description": self.OPENAPI_TAGS_DOCS[tag]})
         # Build FastAPI app
         self.app = FastAPI(
             title=f"NOC '{self.name or 'unknown'}' Service API",

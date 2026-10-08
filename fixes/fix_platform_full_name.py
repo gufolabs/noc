@@ -17,7 +17,7 @@ def fix():
     coll = get_db()["noc.platforms"]
     bulk = []
     for d in coll.find({"full_name": {"$exists": False}}, {"_id": 1}):
-        bulk += [UpdateOne({"_id": d["_id"]}, {"$set": {"full_name": str(d["_id"])}})]
+        bulk.append(UpdateOne({"_id": d["_id"]}, {"$set": {"full_name": str(d["_id"])}}))
     if bulk:
         coll.bulk_write(bulk)
     fix_full_name()

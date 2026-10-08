@@ -318,8 +318,8 @@ class OutputDocument(BaseModel):
             '<link rel="stylesheet" type="text/css" href="/ui/web/css/colors.css"/></head><body>',
             '<div id="container"><div id="content" class="colM">"',
         ]
-        r += [self.content.decode("utf8")]
-        r += ["</div></body></html>"]
+        r.append(self.content.decode("utf8"))
+        r.append("</div></body></html>")
         return "\n".join(r)
 
     def get_content(self, raw: bool = False):

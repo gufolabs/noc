@@ -199,7 +199,7 @@ class OTNOTUController(BaseController):
             e = DBEndpoint.objects.filter(resource=ep.as_resource()).first()
             if not e:
                 return
-            e.used_by += [UsageItem(channel=ch)]
+            e.used_by.append(UsageItem(channel=ch))
             e.save()
 
         def otu_discriminator(start: Endpoint, end: Endpoint) -> str | None:

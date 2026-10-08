@@ -34,11 +34,9 @@ class TreeLayout(LayoutBase):
             # For all connected clusters
             for cc in nx.connected_components(G):
                 # Detect fattest node
-                top += [
-                    sorted(
+                top.append(sorted(
                         cc, key=lambda x: G.nodes[x].get("level", self.DEFAULT_LEVEL), reverse=True
-                    )[0]
-                ]
+                    )[0])
         # Calculate tree width
         w = sum(self.get_tree_width(G, n) for n in top)
         # Assign positions

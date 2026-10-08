@@ -199,7 +199,7 @@ class OTNODUController(BaseController):
             e = DBEndpoint.objects.filter(resource=ep.as_resource()).first()
             if not e:
                 return
-            e.used_by += [UsageItem(channel=ch, discriminator=discriminator)]
+            e.used_by.append(UsageItem(channel=ch, discriminator=discriminator))
             e.save()
 
         def get_channel_odu(s: str) -> str:

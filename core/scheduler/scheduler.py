@@ -533,7 +533,7 @@ class Scheduler:
             q = {Job.ATTR_ID: jid, Job.ATTR_STATUS: {"$ne": Job.S_SUSPEND}}
             self.logger.debug("update(%s, %s)", q, op)
             with self.bulk_lock:
-                self.bulk += [UpdateOne(q, op)]
+                self.bulk.append(UpdateOne(q, op))
 
     def apply_cache_ops(self):
         with self.cache_lock:
