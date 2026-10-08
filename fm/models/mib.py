@@ -256,7 +256,7 @@ class MIB(Document):
                 if rest:
                     name += "." + ".".join(reversed(rest))
                 return MIBAlias.rewrite(name), SyntaxAlias.rewrite(name, syntax)
-            rest += [l_oid.pop()]
+            rest.append(l_oid.pop())
         return oid, None
 
     @classmethod

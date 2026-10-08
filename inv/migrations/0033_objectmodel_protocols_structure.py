@@ -113,14 +113,14 @@ class Migration(BaseMigration):
                 new_proto = []
                 for v_code in c.get("protocols") or []:
                     if isinstance(v_code, dict):
-                        new_proto += [v_code]
+                        new_proto.append(v_code)
                         continue
                     v_code = self.parse_variant(v_code)
                     if v_code:
-                        new_proto += [v_code]
+                        new_proto.append(v_code)
                 c["protocols"] = new_proto
-                new_connections += [c]
-            bulk += [UpdateOne({"_id": doc["_id"]}, {"$set": {"connections": new_connections}})]
+                new_connections.append(c)
+            bulk.append(UpdateOne({"_id": doc["_id"]}, {"$set": {"connections": new_connections}}))
             if len(bulk) >= self.MAX_BULK_SIZE:
                 coll.bulk_write(bulk)
                 # print(bulk[:3])

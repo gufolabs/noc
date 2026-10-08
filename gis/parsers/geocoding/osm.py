@@ -30,7 +30,7 @@ class OSMXMLParser(GeocodingParser):
         elif name == "tag":
             self.current["tags"][attrs["k"]] = attrs["v"]
         elif name == "nd":
-            self.current["nodes"] += [attrs["ref"]]
+            self.current["nodes"].append(attrs["ref"])
 
     def xml_stop_element(self, name):
         if name == "node":

@@ -27,8 +27,7 @@ class Migration(BaseMigration):
             r = []
             log = None
             if aa.get("escalation_tt"):
-                r += [
-                    {
+                r.append({
                         "effect": "tt_system",
                         "key": aa["escalation_tt"],
                         "once": True,
@@ -39,8 +38,7 @@ class Migration(BaseMigration):
                             if aa.get("clear_template")
                             else {}
                         ),
-                    }
-                ]
+                    })
                 log = {
                     "timestamp": aa["escalation_ts"],
                     "from_status": "A",
@@ -49,8 +47,7 @@ class Migration(BaseMigration):
                     "tt_id": aa["escalation_tt"],
                 }
             if aa.get("clear_notification_group"):
-                r += [
-                    {
+                r.append({
                         "effect": "notification_group",
                         "key": str(aa["clear_notification_group"]),
                         "once": True,
@@ -61,14 +58,11 @@ class Migration(BaseMigration):
                             if aa.get("clear_template")
                             else {}
                         ),
-                    }
-                ]
+                    })
             if r and log:
-                bulk += [
-                    UpdateOne({"_id": aa["_id"]}, {"$set": {"watchers": r}, "$push": {"log": log}})
-                ]
+                bulk.append(UpdateOne({"_id": aa["_id"]}, {"$set": {"watchers": r}, "$push": {"log": log}}))
             elif r:
-                bulk += [UpdateOne({"_id": aa["_id"]}, {"$set": {"watchers": r}})]
+                bulk.append(UpdateOne({"_id": aa["_id"]}, {"$set": {"watchers": r}}))
         if bulk:
             coll.bulk_write(bulk)
         coll.update_many(

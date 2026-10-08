@@ -64,12 +64,10 @@ class FailedEvent(Document):
         self.delete()
 
     def log_message(self, message):
-        self.log += [
-            EventLog(
+        self.log.append(EventLog(
                 timestamp=datetime.datetime.now(),
                 from_status=self.status,
                 to_status=self.status,
                 message=message,
-            )
-        ]
+            ))
         self.save()

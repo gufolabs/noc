@@ -121,7 +121,7 @@ class AlarmSeverity(Document):
         dw = [float(w1 - w0) for w0, w1 in itertools.pairwise(weights)]
         ds = [float(s1 - s0) for s0, s1 in itertools.pairwise(severities)]
         alpha = [(s / w if w else 0) for s, w in zip(ds, dw)]
-        alpha += [alpha[-1]]
+        alpha.append(alpha[-1])
         return severities, weights, alpha
 
     @classmethod

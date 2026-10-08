@@ -891,12 +891,10 @@ class Migration(BaseMigration):
         bulk = []
         for p in self.protocols:
             p["uuid"] = UUID(bytes=base64.b64decode(p["uuid"]))
-            bulk += [
-                UpdateOne(
+            bulk.append(UpdateOne(
                     {"code": p["code"]},
                     {"$set": p},
                     upsert=True,
-                )
-            ]
+                ))
         if bulk:
             self.mongo_db.protocols.bulk_write(bulk)

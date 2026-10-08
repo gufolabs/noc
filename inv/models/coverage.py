@@ -54,7 +54,7 @@ class Coverage(Document):
         r = []
         for co in CoveredObject.objects.filter(object=object):
             if co.preference:
-                r += [(co.coverage, co.preference)]
+                r.append((co.coverage, co.preference))
         if r:
             return [x[0] for x in sorted(r, key=lambda y: -y[1]) if x[1]]
         if object.container:

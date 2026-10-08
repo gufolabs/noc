@@ -195,7 +195,7 @@ class ConnectionType(Document):
         while c:
             c = c.extend
             if c:
-                s += [c]
+                s.append(c)
         return s
 
     def get_subclasses(self):
@@ -230,7 +230,7 @@ class ConnectionType(Document):
         r = []
         for ct in ConnectionType.objects.filter(c_group__in=c_group):
             if ct.id != self.id:
-                r += [ct]
+                r.append(ct)
         return r
 
     def get_compatible_types(self, gender):
@@ -238,21 +238,21 @@ class ConnectionType(Document):
         og = self.OPPOSITE_GENDER[gender]
         # Add self type if opposige gender allowed
         if og in self.genders:
-            r += [self.id]
+            r.append(self.id)
         if gender in ["m", "s"]:
             # Add superclasses
             for c in self.get_superclasses():
                 if og in c.genders:
-                    r += [c.id]
+                    r.append(c.id)
         if gender in ["f", "s"]:
             # Add subclasses
             for c in self.get_subclasses():
                 if og in c.genders:
-                    r += [c.id]
+                    r.append(c.id)
         if self.c_group:
             for c in self.get_by_c_group():
                 if og in c.genders:
-                    r += [c.id]
+                    r.append(c.id)
         return r
 
     def get_matched_scopes(self, protocols):

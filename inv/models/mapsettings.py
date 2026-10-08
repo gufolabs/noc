@@ -185,13 +185,13 @@ class MapSettings(Document):
                 continue  # Not found
             n.x = nd["x"]
             n.y = nd["y"]
-            nn += [n]
+            nn.append(n)
             del new_nodes[(n.type, n.id)]
         mx = 0.0
         my = 0.0
         for n in new_nodes:
             nd = new_nodes[n]
-            nn += [NodeSettings(type=nd["type"], id=nd["id"], x=nd["x"], y=nd["y"])]
+            nn.append(NodeSettings(type=nd["type"], id=nd["id"], x=nd["x"], y=nd["y"]))
             mx = max(mx, nd["x"])
             my = max(my, nd["y"])
         self.width = float(width or mx)  # If not convert float - Validation error as None
@@ -208,18 +208,16 @@ class MapSettings(Document):
                 continue  # Not found
             ll.vertices = [VertexPosition(x=v["x"], y=v["y"]) for v in nl.get("vertices", [])]
             ll.connector = nl.get("connector", LC_NORMAL)
-            nn += [ll]
+            nn.append(ll)
             del new_links[(ll.type, ll.id)]
         for ll in new_links:
             nl = new_links[ll]
-            nn += [
-                LinkSettings(
+            nn.append(LinkSettings(
                     type=nl["type"],
                     id=nl["id"],
                     vertices=[VertexPosition(x=v["x"], y=v["y"]) for v in nl.get("vertices", [])],
                     connector=nl.get("connector", "normal"),
-                )
-            ]
+                ))
         self.links = [
             ll
             for ll in sorted(nn, key=lambda x: (x.type, x.id))

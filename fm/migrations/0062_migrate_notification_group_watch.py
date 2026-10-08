@@ -22,6 +22,6 @@ class Migration(BaseMigration):
                 w["key"] = str(w["key"])
                 watchers.append(w)
             if watchers:
-                bulk += [UpdateOne({"_id": aa["_id"]}, {"$set": {"watchers": watchers}})]
+                bulk.append(UpdateOne({"_id": aa["_id"]}, {"$set": {"watchers": watchers}}))
         if bulk:
             coll.bulk_write(bulk)

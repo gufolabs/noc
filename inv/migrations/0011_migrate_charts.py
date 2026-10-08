@@ -51,7 +51,7 @@ class Migration(BaseMigration):
                 y = float(s["state"]["y"])
                 mx = max(mx, x)
                 my = max(my, y)
-                nodes += [{"type": "managedobject", "id": str(s["object"]), "x": x, "y": y}]
+                nodes.append({"type": "managedobject", "id": str(s["object"]), "x": x, "y": y})
             if nodes:
                 msettings.insert(
                     {

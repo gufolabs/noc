@@ -25,9 +25,7 @@ class Migration(BaseMigration):
         for row in s_coll.find():
             severity_weight_map[row["name"].lower()] = row["_id"]
             l_name = f"noc::severity::{row['name'].lower()}"
-            ac_bulk += [
-                UpdateMany({"default_severity": row["_id"]}, {"$set": {"labels": [l_name]}})
-            ]
+            ac_bulk.append(UpdateMany({"default_severity": row["_id"]}, {"$set": {"labels": [l_name]}}))
             if l_name in current_labels:
                 continue
             l_bulk.append(
@@ -56,8 +54,7 @@ class Migration(BaseMigration):
         # Create AlarmRules
         for s_name, s_id in severity_weight_map.items():
             ar_id = ObjectId()
-            bulk += [
-                InsertOne(
+            bulk.append(InsertOne(
                     {
                         "_id": ar_id,
                         "name": f"{s_name.upper()} Alarms",
@@ -80,7 +77,6 @@ class Migration(BaseMigration):
                         ],
                         "bi_id": Int64(bi_hash(ar_id)),
                     }
-                )
-            ]
+                ))
         if bulk:
             self.mongo_db["alarmrules"].bulk_write(bulk)

@@ -49,13 +49,11 @@ class AlarmDiagnostic(Document):
             alarm = alarm.id
         r = []
         for d in AlarmDiagnostic.objects.filter(alarm=alarm).order_by("timestamp"):
-            r += [
-                {
+            r.append({
                     "timestamp": d.timestamp,
                     "state": d.state,
                     "data": zlib.decompress(smart_bytes(d.data)).decode(),
-                }
-            ]
+                })
         return r
 
     @classmethod

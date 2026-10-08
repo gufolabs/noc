@@ -32,8 +32,7 @@ class Migration(BaseMigration):
                 "escalation_error": 1,
             },
         ):
-            bulk += [
-                InsertOne(
+            bulk.append(InsertOne(
                     {
                         "timestamp": doc["escalation_ts"],
                         "tt_id": doc["escalation_tt"],
@@ -47,7 +46,6 @@ class Migration(BaseMigration):
                         ],
                         "groups": [],
                     }
-                )
-            ]
+                ))
         if bulk:
             db["escalations"].bulk_write(bulk)

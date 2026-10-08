@@ -286,7 +286,7 @@ class EventClass(Document):
                 except ImportError:
                     h = None
                 if h:
-                    handlers += [h]
+                    handlers.append(h)
             return handlers
 
         return _get_handlers(self)
@@ -322,62 +322,62 @@ class EventClass(Document):
     def to_json(self) -> str:
         c = self
         r = ["{"]
-        r += [f'    "name": "{q(c.name)}",']
-        r += [f'    "$collection": "{self._meta["json_collection"]}",']
-        r += [f'    "uuid": "{c.uuid}",']
+        r.append(f'    "name": "{q(c.name)}",')
+        r.append(f'    "$collection": "{self._meta["json_collection"]}",')
+        r.append(f'    "uuid": "{c.uuid}",')
         if c.description:
-            r += [f'    "description": "{q(c.description)}",']
-        r += [f'    "action": "{q(c.action)}",']
+            r.append(f'    "description": "{q(c.description)}",')
+        r.append(f'    "action": "{q(c.action)}",')
         # vars
         vars = []
         for v in c.vars:
             vd = ["        {"]
-            vd += [f'            "name": "{q(v.name)}",']
-            vd += [f'            "description": "{q(v.description)}",']
-            vd += [f'            "type": "{q(v.type.value)}",']
-            vd += [f'            "required": {q(v.required)},']
-            vd += [f'            "match_suppress": {q(v.match_suppress)}']
-            vd += ["        }"]
-            vars += ["\n".join(vd)]
-        r += ['    "vars": [']
-        r += [",\n".join(vars)]
-        r += ["    ],"]
+            vd.append(f'            "name": "{q(v.name)}",')
+            vd.append(f'            "description": "{q(v.description)}",')
+            vd.append(f'            "type": "{q(v.type.value)}",')
+            vd.append(f'            "required": {q(v.required)},')
+            vd.append(f'            "match_suppress": {q(v.match_suppress)}')
+            vd.append("        }")
+            vars.append("\n".join(vd))
+        r.append('    "vars": [')
+        r.append(",\n".join(vars))
+        r.append("    ],")
         if self.link_event:
-            r += ['    "link_event": true,']
-        r += [f'    "deduplication_window": {int(self.deduplication_window)},']
-        r += [f'    "suppression_window": {int(self.suppression_window)},']
-        r += [f'    "ttl": {int(self.ttl)},']
+            r.append('    "link_event": true,')
+        r.append(f'    "deduplication_window": {int(self.deduplication_window)},')
+        r.append(f'    "suppression_window": {int(self.suppression_window)},')
+        r.append(f'    "ttl": {int(self.ttl)},')
         # Handlers
         if self.handlers:
             hh = [f'        "{h}"' for h in self.handlers]
-            r += ['    "handlers": [']
-            r += [",\n\n".join(hh)]
-            r += ["    ],"]
+            r.append('    "handlers": [')
+            r.append(",\n\n".join(hh))
+            r.append("    ],")
         # Text
-        r += [f'    "subject_template": "{q(c.subject_template)}",']
-        r += [f'    "body_template": "{q(c.body_template)}",']
-        r += [f'    "symptoms": "{q(c.symptoms)}",']
-        r += [f'    "probable_causes": "{q(c.probable_causes)}",']
-        r += [f'    "recommended_actions": "{q(c.recommended_actions)}",']
+        r.append(f'    "subject_template": "{q(c.subject_template)}",')
+        r.append(f'    "body_template": "{q(c.body_template)}",')
+        r.append(f'    "symptoms": "{q(c.symptoms)}",')
+        r.append(f'    "probable_causes": "{q(c.probable_causes)}",')
+        r.append(f'    "recommended_actions": "{q(c.recommended_actions)}",')
         # Disposition rules
         if c.disposition:
-            r += ['    "disposition": [']
+            r.append('    "disposition": [')
             disp = []
             for d in c.disposition:
                 ll = ["        {"]
                 lll = [f'            "name": "{q(d.name)}"']
-                lll += [f'            "condition": "{q(d.condition)}"']
-                lll += [f'            "action": "{q(d.action)}"']
+                lll.append(f'            "condition": "{q(d.condition)}"')
+                lll.append(f'            "action": "{q(d.action)}"')
                 if d.alarm_class:
-                    lll += [f'            "alarm_class__name": "{q(d.alarm_class.name)}"']
-                lll += [f'            "stop_disposition": "{q(d.stop_disposition)}"']
+                    lll.append(f'            "alarm_class__name": "{q(d.alarm_class.name)}"')
+                lll.append(f'            "stop_disposition": "{q(d.stop_disposition)}"')
                 if d.managed_object:
-                    lll += [f'            "managed_object": "{q(d.managed_object)}"']
-                ll += [",\n".join(lll)]
-                ll += ["        }"]
-                disp += ["\n".join(ll)]
-            r += [",\n".join(disp)]
-            r += ["    ]"]
+                    lll.append(f'            "managed_object": "{q(d.managed_object)}"')
+                ll.append(",\n".join(lll))
+                ll.append("        }")
+                disp.append("\n".join(ll))
+            r.append(",\n".join(disp))
+            r.append("    ]")
             if not r[-1].endswith(","):
                 r[-1] += ","
         # Plugins
@@ -387,20 +387,20 @@ class EventClass(Document):
             plugins = []
             for p in self.plugins:
                 pd = ["        {"]
-                pd += [f'            "name": "{p.name}"']
+                pd.append(f'            "name": "{p.name}"')
                 if p.config:
                     pd[-1] += ","
                     pc = []
                     for v in p.config:
-                        pc += [f'                "{v}": "{p.config.vars[v]}"']
-                    pd += ['            "config": {']
-                    pd += [",\n".join(pc)]
-                    pd += ["            }"]
-                pd += ["        }"]
-                plugins += ["\n".join(pd)]
-            r += ['    "plugins": [']
-            r += [",\n".join(plugins)]
-            r += ["    ]"]
+                        pc.append(f'                "{v}": "{p.config.vars[v]}"')
+                    pd.append('            "config": {')
+                    pd.append(",\n".join(pc))
+                    pd.append("            }")
+                pd.append("        }")
+                plugins.append("\n".join(pd))
+            r.append('    "plugins": [')
+            r.append(",\n".join(plugins))
+            r.append("    ]")
         # Close
         if r[-1].endswith(","):
             r[-1] = r[-1][:-1]

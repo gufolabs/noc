@@ -102,30 +102,18 @@ class AlarmDiagnosticConfig(Document):
                 continue
             if c.enable_on_raise:
                 if c.on_raise_script:
-                    r_cfg[c.on_raise_delay] += [
-                        {"script": c.on_raise_script, "header": c.on_raise_header}
-                    ]
+                    r_cfg[c.on_raise_delay].append({"script": c.on_raise_script, "header": c.on_raise_header})
                 if c.on_raise_action:
-                    r_cfg[c.on_raise_delay] += [
-                        {"action": c.on_raise_action.name, "header": c.on_raise_header}
-                    ]
+                    r_cfg[c.on_raise_delay].append({"action": c.on_raise_action.name, "header": c.on_raise_header})
                 if c.on_raise_handler:
-                    r_cfg[c.on_raise_delay] += [
-                        {"handler": c.on_raise_handler, "header": c.on_raise_header}
-                    ]
+                    r_cfg[c.on_raise_delay].append({"handler": c.on_raise_handler, "header": c.on_raise_header})
             if c.enable_periodic:
                 if c.periodic_script:
-                    p_cfg[c.periodic_interval] += [
-                        {"script": c.periodic_script, "header": c.periodic_header}
-                    ]
+                    p_cfg[c.periodic_interval].append({"script": c.periodic_script, "header": c.periodic_header})
                 if c.periodic_action:
-                    p_cfg[c.periodic_interval] += [
-                        {"action": c.periodic_action.name, "header": c.periodic_header}
-                    ]
+                    p_cfg[c.periodic_interval].append({"action": c.periodic_action.name, "header": c.periodic_header})
                 if c.periodic_handler:
-                    p_cfg[c.periodic_interval] += [
-                        {"handler": c.periodic_handler, "header": c.periodic_header}
-                    ]
+                    p_cfg[c.periodic_interval].append({"handler": c.periodic_handler, "header": c.periodic_header})
         # Submit on_raise job
         for delay in r_cfg:
             call_later(
@@ -169,17 +157,11 @@ class AlarmDiagnosticConfig(Document):
                 continue
             if c.enable_on_clear:
                 if c.on_clear_script:
-                    cfg[c.on_clear_delay] += [
-                        {"script": c.on_clear_script, "header": c.on_clear_header}
-                    ]
+                    cfg[c.on_clear_delay].append({"script": c.on_clear_script, "header": c.on_clear_header})
                 if c.on_clear_action:
-                    cfg[c.on_clear_delay] += [
-                        {"action": c.on_clear_action.id, "header": c.on_clear_header}
-                    ]
+                    cfg[c.on_clear_delay].append({"action": c.on_clear_action.id, "header": c.on_clear_header})
                 if c.on_clear_handler:
-                    cfg[c.on_clear_delay] += [
-                        {"handler": c.on_clear_handler, "header": c.on_clear_header}
-                    ]
+                    cfg[c.on_clear_delay].append({"handler": c.on_clear_handler, "header": c.on_clear_header})
         # Submit on_clear job
         for delay in cfg:
             call_later(
@@ -201,45 +183,45 @@ class AlarmDiagnosticConfig(Document):
         result = []
         for c in cfg:
             if c.get("header"):
-                result += [c["header"].strip()]
+                result.append(c["header"].strip())
             if "script" in c and Interaction.ServiceActivation in mo.interactions:
                 logger.info("[%s] Running script %s", alarm.id, c["script"])
                 try:
                     g = getattr(mo.scripts, c["script"])
-                    result += [g()]
+                    result.append(g())
                 except AttributeError as e:
                     logger.error("Invalid script %s", c["script"])
-                    result += [str(e)]
+                    result.append(str(e))
                 except Exception as e:
                     error_report()
-                    result += [str(e)]
+                    result.append(str(e))
             elif Interaction.ServiceActivation not in mo.interactions:
                 logger.info(
                     "[%s] Object is not managed, running script %s disabled.", alarm.id, c["script"]
                 )
-                result += [f"Object is not managed, running script {c['script']} disabled."]
+                result.append(f"Object is not managed, running script {c['script']} disabled.")
             if "action" in c:
                 logger.info("[%s] Running action %s", alarm.id, c["action"])
                 try:
                     g = getattr(mo.actions, c["action"])
-                    result += [g()]
+                    result.append(g())
                 except AttributeError as e:
                     logger.error("Invalid action %s", c["action"])
-                    result += [str(e)]
+                    result.append(str(e))
                 except Exception as e:
                     error_report()
-                    result += [str(e)]
+                    result.append(str(e))
             if "handler" in c:
                 logger.info("[%s] Running handler %s", alarm.id, c["handler"])
                 try:
                     h = get_handler(c["handler"])
                     try:
-                        result += [h(alarm)]
+                        result.append(h(alarm))
                     except Exception as e:
                         error_report()
-                        result += [str(e)]
+                        result.append(str(e))
                 except ImportError:
-                    result += [f"Invalid handler: {c['handler']}"]
+                    result.append(f"Invalid handler: {c['handler']}")
         if result:
             AlarmDiagnostic.save_diagnostics(alarm, result, state)
 

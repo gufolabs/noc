@@ -145,15 +145,13 @@ class ArchivedAlarm(Document):
             yield "alarm", str(self.id)
 
     def log_message(self, message, source=None):
-        self.log += [
-            AlarmLog(
+        self.log.append(AlarmLog(
                 timestamp=datetime.datetime.now(),
                 from_status=self.status,
                 to_status=self.status,
                 message=message,
                 source=source,
-            )
-        ]
+            ))
         self.save()
 
     def get_template_vars(self):
@@ -310,7 +308,7 @@ class ArchivedAlarm(Document):
                 p = model.get_by_id(k.profile)
                 if not p or getattr(p, "show_in_summary", True) is False:
                     continue
-                r += [{"profile": p.name, "summary": k.summary}]
+                r.append({"profile": p.name, "summary": k.summary})
             return sorted(r, key=lambda x: -x["summary"])
 
         from noc.sa.models.managedobjectprofile import ManagedObjectProfile

@@ -226,14 +226,12 @@ class CPE(Document):
                 changes["controllers.$.is_active"] = status
         if not seen:
             # New Controller
-            self.controllers += [
-                ControllerItem(
+            self.controllers.append(ControllerItem(
                     managed_object=controller,
                     local_id=local_id,
                     interface=interface,
                     is_active=status,
-                )
-            ]
+                ))
             self._get_collection().update_one(
                 {"_id": self.id},
                 {
@@ -339,7 +337,7 @@ class CPE(Document):
             if cpe.controller.interface:
                 iface = cpe.get_cpe_interface()
                 if iface and iface.ifindex:
-                    hints += [f"ifindex::{iface.ifindex}"]
+                    hints.append(f"ifindex::{iface.ifindex}")
             yield MetricCollectorConfig(
                 collector="cpe",
                 metrics=tuple(metrics),
@@ -407,12 +405,10 @@ class CPE(Document):
             if bulk is not None:
                 self.update(oper_status=status, oper_status_change=change_ts)
             else:
-                bulk += [
-                    UpdateOne(
+                bulk.append(UpdateOne(
                         {"_id": self.id},
                         {"$set": {"oper_status": status, "oper_status_change": change_ts}},
-                    )
-                ]
+                    ))
 
     def get_index(self):
         """
@@ -421,7 +417,7 @@ class CPE(Document):
         card = f"CPE object {self.global_id} ({self.address})"
         content: list[str] = [self.global_id, self.address]
         if self.description:
-            content += [self.description]
+            content.append(self.description)
         return {
             "title": f"{self.global_id} {self.controller}",
             "content": "\n".join(content),
