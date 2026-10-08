@@ -120,7 +120,7 @@ class Script(BaseScript):
                 "edge": sv.get("EDGE_PORT", "disabled") == "enabled",
                 "point_to_point": sv.get("LINK_TYPE", None) == "point-to-point",
             }
-            instance["interfaces"] += [iface]
+            instance["interfaces"].append(iface)
         return instance
 
     def execute_cli(self, **kwargs):
@@ -132,7 +132,7 @@ class Script(BaseScript):
             return {"mode": "None", "instances": []}
 
         res = {"mode": cfg["STP_MODE"].upper(), "instances": []}
-        res["instances"] += [self.parse_instance(cfg, g)]
+        res["instances"].append(self.parse_instance(cfg, g))
 
         if cfg["STP_MODE"].upper() == "MSTP":
             v = self.cli("show spanning-tree mst configuration")
@@ -147,6 +147,6 @@ class Script(BaseScript):
                 r = self.cli(f"show spanning-tree mst {inst['instance']}")
                 g = self.iter_blocks(r)
                 _, cfg = next(g)
-                res["instances"] += [self.parse_instance(cfg, g)]
+                res["instances"].append(self.parse_instance(cfg, g))
 
         return res

@@ -38,6 +38,6 @@ class Script(BaseScript):
                 "remote_port": match.group("port_id"),
                 "remote_system_name": match.group("system_name"),
             }
-            i["neighbors"] += [neighbor]
-            r += [i]
+            i["neighbors"].append(neighbor)
+            r.append(i)
         return r

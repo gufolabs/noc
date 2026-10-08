@@ -51,7 +51,7 @@ class Script(BaseScript):
                     mtype = "D"
                 else:
                     mtype = "S"
-                r += [{"vlan_id": int(i[0]), "mac": i[1], "interfaces": [i[2]], "type": mtype}]
+                r.append({"vlan_id": int(i[0]), "mac": i[1], "interfaces": [i[2]], "type": mtype})
 
         # GPON ports
         cmd = "show mac interface gpon-port "
@@ -64,13 +64,11 @@ class Script(BaseScript):
             # 0      00:00:00:00:00:00   (invalid port 00:20:00)
             if match.group("mac") == "00:00:00:00:00:00":
                 continue
-            r += [
-                {
+            r.append({
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
                     "interfaces": [interfaces],
                     "type": "D",
-                }
-            ]
+                })
 
         return r

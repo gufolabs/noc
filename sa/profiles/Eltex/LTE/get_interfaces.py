@@ -122,7 +122,7 @@ class Script(BaseScript):
                 u = untagged_vlans.get(i["interface"])
                 if u:
                     iface["subinterfaces"][0]["untagged_vlan"] = u
-                interfaces += [iface]
+                interfaces.append(iface)
         except self.CLISyntaxError:
             portchannel_members = []
             # We are already in `switch` context
@@ -138,7 +138,7 @@ class Script(BaseScript):
                         for iface in interfaces:
                             if iface["name"] == ifname:
                                 if "tagged_vlans" in iface["subinterfaces"][0]:
-                                    iface["subinterfaces"][0]["tagged_vlans"] += [vlan_id]
+                                    iface["subinterfaces"][0]["tagged_vlans"].append(vlan_id)
                                 else:
                                     iface["subinterfaces"][0]["tagged_vlans"] = [vlan_id]
                                 found = True
@@ -148,13 +148,11 @@ class Script(BaseScript):
                                 iftype = "aggregated"
                                 c = self.cli(f"show channel-group hw {ifname}")
                                 match = self.rx_portchannel.search(c)
-                                portchannel_members += [
-                                    {
+                                portchannel_members.append({
                                         "interface": ifname,
                                         "members": match.group("members").split(","),
                                         "type": "L",
-                                    }
-                                ]
+                                    })
                             else:
                                 iftype = "physical"
                             iface = {
@@ -168,7 +166,7 @@ class Script(BaseScript):
                                     }
                                 ],
                             }
-                            interfaces += [iface]
+                            interfaces.append(iface)
                 if i[3] != "none":
                     untagged = i[3].split(", ")
                     for port in untagged:
@@ -191,7 +189,7 @@ class Script(BaseScript):
                                     }
                                 ],
                             }
-                            interfaces += [iface]
+                            interfaces.append(iface)
             for i in interfaces:
                 c = self.cli(f"show interfaces mac-address {i['name']}")
                 match = self.rx_mac.search(c)
@@ -227,7 +225,7 @@ class Script(BaseScript):
             if ip_mac:
                 iface["mac"] = ip_mac
                 iface["subinterfaces"][0]["mac"] = ip_mac
-            interfaces += [iface]
+            interfaces.append(iface)
         match = self.rx_mgmt_ip.search(cmd)
         if match:
             iface = {
@@ -247,5 +245,5 @@ class Script(BaseScript):
             }
             if match.group("vlan_id") != "none":
                 iface["subinterfaces"][0]["vlan_id"] = [match.group("vlan_id")]
-            interfaces += [iface]
+            interfaces.append(iface)
         return [{"interfaces": interfaces}]

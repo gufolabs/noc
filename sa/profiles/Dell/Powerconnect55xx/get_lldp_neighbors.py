@@ -45,6 +45,6 @@ class Script(BaseScript):
                 "remote_system_name": match.group("system_name"),
                 "remote_capabilities": cap,
             }
-            i["neighbors"] += [neighbor]
-            r += [i]
+            i["neighbors"].append(neighbor)
+            r.append(i)
         return r

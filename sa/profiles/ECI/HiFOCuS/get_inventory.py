@@ -58,8 +58,7 @@ class Script(BaseScript):
             serial = smart_text(serial, errors="ignore").strip("\x00")
             if not serial:
                 continue
-            r += [
-                {
+            r.append({
                     "type": "LINECARD",
                     "number": "0",
                     "vendor": "ECI",
@@ -67,8 +66,7 @@ class Script(BaseScript):
                     "serial": serial.split("\x00")[0],
                     "revision": rev,
                     "description": "",
-                }
-            ]
+                })
         return r
 
     def execute_cli(self, **kwargs):
@@ -93,8 +91,7 @@ class Script(BaseScript):
             if not detail:
                 continue
             x = parse_kv(self.slot_detail_map, detail)
-            r += [
-                {
+            r.append({
                     "type": "LINECARD",
                     "number": slot,
                     "vendor": "ECI",
@@ -104,6 +101,5 @@ class Script(BaseScript):
                     "serial": serial,
                     "revision": smart_text(smart_bytes(x["rev"]), errors="ignore"),
                     "description": "",
-                }
-            ]
+                })
         return r

@@ -38,14 +38,12 @@ class Script(BaseScript):
         for i in range(1, 6):
             # Trap settings
             # mode = self.snmp.get(f"1.3.6.1.4.1.35419.20.1.{110 + i}.0")
-            r += [
-                {
+            r.append({
                     "name": f"in{i}",
                     "status": True,
                     "description": f"Цифровой вход номер {i}",
                     "measurement": "Scalar",
                     "labels": ["noc::sensor::placement::external"],
                     "snmp_oid": f"1.3.6.1.4.1.35419.20.1.{100 + i}.0",
-                }
-            ]
+                })
         return r

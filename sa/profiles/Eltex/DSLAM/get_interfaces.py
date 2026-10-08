@@ -74,7 +74,7 @@ class Script(BaseScript):
                 iface["subinterfaces"][0]["vlan_ids"] = [match.group("vlan_id")]
                 iface["mac"] = match.group("mac")
                 iface["subinterfaces"][0]["mac"] = match.group("mac")
-                interfaces += [iface]
+                interfaces.append(iface)
             else:
                 column = items1[0].index(i)
                 ifname = f"s{i}" if i.startswith("p") else i
@@ -86,11 +86,11 @@ class Script(BaseScript):
                     if vlan_type == "DISC":
                         sub["untagged_vlan"] = vlan_id
                     elif "tagged_vlans" in sub:
-                        sub["tagged_vlans"] += [vlan_id]
+                        sub["tagged_vlans"].append(vlan_id)
                     else:
                         sub["tagged_vlans"] = [vlan_id]
                 iface["subinterfaces"] = [sub]
-                interfaces += [iface]
+                interfaces.append(iface)
         cmd = self.cli("adsl show port oper status")
         has_show_entry = True
         for match in self.rx_adsl_port.finditer(cmd):
@@ -117,6 +117,6 @@ class Script(BaseScript):
                     }
                     if is_int(match1.group("vlan_id")):
                         sub["vlan_ids"] = [match1.group("vlan_id")]
-                    iface["subinterfaces"] += [sub]
-            interfaces += [iface]
+                    iface["subinterfaces"].append(sub)
+            interfaces.append(iface)
         return [{"interfaces": interfaces}]

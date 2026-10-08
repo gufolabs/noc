@@ -38,7 +38,7 @@ class Script(BaseScript):
             if found:
                 continue
             if mac == "--":
-                r += [{"ip": ip, "interface": ifname, "state": self.s_map[state]}]
+                r.append({"ip": ip, "interface": ifname, "state": self.s_map[state]})
             else:
-                r += [{"ip": ip, "mac": mac, "interface": ifname, "state": self.s_map[state]}]
+                r.append({"ip": ip, "mac": mac, "interface": ifname, "state": self.s_map[state]})
         return r

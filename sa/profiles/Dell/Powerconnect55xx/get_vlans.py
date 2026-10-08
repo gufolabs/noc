@@ -20,5 +20,5 @@ class Script(BaseScript):
     def execute(self):
         r = []
         for match in self.rx_vlan.finditer(self.cli("show vlan")):
-            r += [{"vlan_id": match.group("vlan_id"), "name": match.group("vlan_name")}]
+            r.append({"vlan_id": match.group("vlan_id"), "name": match.group("vlan_name")})
         return r

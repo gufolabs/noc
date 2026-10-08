@@ -76,12 +76,10 @@ class Script(BaseScript):
         rx = self.find_re([self.rx_line1, self.rx_line2, self.rx_line3, self.rx_line4], macs)
         for match in rx.finditer(macs):
             v = match.groupdict()
-            r += [
-                {
+            r.append({
                     "vlan_id": v["vlan_id"],
                     "mac": v["mac"],
                     "interfaces": [v["interface"]],
                     "type": self.types[v["type"].lower()],
-                }
-            ]
+                })
         return r

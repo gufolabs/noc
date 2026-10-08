@@ -75,10 +75,10 @@ class Script(BaseScript):
                 enabled_afi = []
                 if ":" in ip:
                     ip_interfaces = "ipv6_addresses"
-                    enabled_afi += ["IPv6"]
+                    enabled_afi.append("IPv6")
                 else:
                     ip_interfaces = "ipv4_addresses"
-                    enabled_afi += ["IPv4"]
+                    enabled_afi.append("IPv4")
                 iface = {
                     "name": ifname,
                     "type": typ,
@@ -99,7 +99,7 @@ class Script(BaseScript):
                 if mac:
                     iface["mac"] = mac
                     iface["subinterfaces"][0]["mac"] = mac
-                interfaces += [iface]
+                interfaces.append(iface)
         if not interfaces:
             for match in self.rx_sh_int3.finditer(cmd):
                 mac = match.group("mac")
@@ -123,10 +123,10 @@ class Script(BaseScript):
                     enabled_afi = []
                     if ":" in ip:
                         ip_interfaces = "ipv6_addresses"
-                        enabled_afi += ["IPv6"]
+                        enabled_afi.append("IPv6")
                     else:
                         ip_interfaces = "ipv4_addresses"
-                        enabled_afi += ["IPv4"]
+                        enabled_afi.append("IPv4")
                     iface["subinterfaces"][0][ip_interfaces] = ip_list
                     iface["subinterfaces"][0]["enabled_afi"] = enabled_afi
                 if mac:
@@ -134,5 +134,5 @@ class Script(BaseScript):
                     iface["subinterfaces"][0]["mac"] = mac
                 if mtu:
                     iface["subinterfaces"][0]["mtu"] = mtu
-                interfaces += [iface]
+                interfaces.append(iface)
         return [{"interfaces": interfaces}]

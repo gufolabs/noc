@@ -25,5 +25,5 @@ class Script(BaseScript):
             lstate = line[2]
             if (interface is not None) and (interface != iface):
                 continue
-            r += [{"interface": iface, "status": lstate == "Up"}]
+            r.append({"interface": iface, "status": lstate == "Up"})
         return r

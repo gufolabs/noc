@@ -75,7 +75,7 @@ class Script(BaseScript):
                         for iface in interfaces:
                             if iface["name"] == ifname:
                                 if "tagged_vlans" in iface["subinterfaces"][0]:
-                                    iface["subinterfaces"][0]["tagged_vlans"] += [vlan_id]
+                                    iface["subinterfaces"][0]["tagged_vlans"].append(vlan_id)
                                 else:
                                     iface["subinterfaces"][0]["tagged_vlans"] = [vlan_id]
                                 found = True
@@ -92,7 +92,7 @@ class Script(BaseScript):
                                     }
                                 ],
                             }
-                            interfaces += [iface]
+                            interfaces.append(iface)
                 if i[3] != "none":
                     untagged = i[3].split(", ")
                     for port in untagged:
@@ -115,7 +115,7 @@ class Script(BaseScript):
                                     }
                                 ],
                             }
-                            interfaces += [iface]
+                            interfaces.append(iface)
             for i in interfaces:
                 c = self.cli(f"show interfaces mac-address {i['name']}")
                 match = self.rx_mac.search(c)
@@ -153,5 +153,5 @@ class Script(BaseScript):
         mac = self.scripts.get_chassis_id()[0]["first_chassis_mac"]
         iface["mac"] = mac
         iface["subinterfaces"][0]["mac"] = mac
-        interfaces += [iface]
+        interfaces.append(iface)
         return [{"interfaces": interfaces}]

@@ -46,6 +46,6 @@ class Profile(BaseProfile):
                     p2 = [int(x.strip("[]")) for x in p2.split("][")]
                 else:
                     p1, p2 = p, []
-                path += [p1]
+                path.append(p1)
                 path += p2
             yield path, value

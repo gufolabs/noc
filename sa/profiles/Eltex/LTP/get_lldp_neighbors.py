@@ -101,6 +101,6 @@ class Script(BaseScript):
                             n["remote_port_description"] = port_descr
                 except Exception:
                     pass
-                i["neighbors"] += [n]
-                r += [i]
+                i["neighbors"].append(n)
+                r.append(i)
         return r

@@ -108,7 +108,7 @@ class Script(BaseScript):
             local_port_ids["Eth " + port] = MACAddressParameter().clean(local_id)
         v = self.cli("show lldp info remote-device")
         for match in self.rx_neigh.finditer(v):
-            ifs += [{"local_interface": match.group("local_if"), "neighbors": []}]
+            ifs.append({"local_interface": match.group("local_if"), "neighbors": []})
         for i in ifs:
             if i["local_interface"] in local_port_ids:
                 i["local_interface_id"] = local_port_ids[i["local_interface"]]
@@ -167,6 +167,6 @@ class Script(BaseScript):
                 match = self.rx_port_descr.search(v)
                 if match:
                     n["remote_port_description"] = match.group("descr")
-            i["neighbors"] += [n]
-            r += [i]
+            i["neighbors"].append(n)
+            r.append(i)
         return r

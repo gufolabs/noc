@@ -82,14 +82,12 @@ class Script(BaseScript):
                 ]
                 if interface == "CPU":
                     mtype = "C"
-                r += [
-                    {
+                r.append({
                         "vlan_id": match.group("vlan_id"),
                         "mac": match.group("mac"),
                         "interfaces": [interface],
                         "type": mtype,
-                    }
-                ]
+                    })
             if r:
                 return r
             for match in self.rx_olt.finditer(c):
@@ -99,12 +97,10 @@ class Script(BaseScript):
                 ]
                 if interface == "CPU":
                     mtype = "C"
-                r += [
-                    {
+                r.append({
                         "vlan_id": match.group("vlan_id"),
                         "mac": match.group("mac"),
                         "interfaces": [interface],
                         "type": mtype,
-                    }
-                ]
+                    })
         return r
