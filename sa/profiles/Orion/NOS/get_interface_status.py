@@ -33,10 +33,12 @@ class Script(BaseScript):
                             "status": "down" not in match.group("oper_status"),
                         }
                     ]
-                r.append({
+                r.append(
+                    {
                         "interface": match.group("port"),
                         "status": "down" not in match.group("oper_status"),
-                    })
+                    }
+                )
             return r
 
         for match in self.rx_port.finditer(self.cli("show interface port")):
@@ -47,5 +49,7 @@ class Script(BaseScript):
                         "status": match.group("oper_status") != "down",
                     }
                 ]
-            r.append({"interface": match.group("port"), "status": match.group("oper_status") != "down"})
+            r.append(
+                {"interface": match.group("port"), "status": match.group("oper_status") != "down"}
+            )
         return r

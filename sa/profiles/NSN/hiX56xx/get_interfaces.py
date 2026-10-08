@@ -119,7 +119,9 @@ class Script(BaseScript):
                                 iface["subinterfaces"].append(sub)
                                 break
                         else:
-                            interfaces.append({"name": ifname1, "type": "physical", "subinterfaces": [sub]})
+                            interfaces.append(
+                                {"name": ifname1, "type": "physical", "subinterfaces": [sub]}
+                            )
                     else:
                         for iface in interfaces:
                             if iface["name"] == ifname:

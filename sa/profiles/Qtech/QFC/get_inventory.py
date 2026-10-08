@@ -19,24 +19,28 @@ class Script(BaseScript):
         # @todo Old version merge to one OID
         # Optron input for 1 to 4
         for i in range(1, 5):
-            r.append({
+            r.append(
+                {
                     "name": f"in{i}",
                     "status": 1,
                     "description": f"Цифровой вход номер {i}",
                     "measurement": "StatusEnum",
                     "labels": ["noc::sensor::placement::external"],
                     "snmp_oid": f"1.3.6.1.4.1.27514.102.0.{4 + i}.0",
-                })
+                }
+            )
         # Relay output
         for i in range(1, 3):
-            r.append({
+            r.append(
+                {
                     "name": f"relay{i}",
                     "status": 1,
                     "description": f"Реле {i}",
                     "measurement": "StatusEnum",
                     "labels": ["noc::sensor::placement::external", "noc::sensor::mode::relay"],
                     "snmp_oid": f"1.3.6.1.4.1.27514.102.0.{8 + i}.0",
-                })
+                }
+            )
         r += [
             # V48 - Supply voltage
             {
@@ -79,7 +83,8 @@ class Script(BaseScript):
         ]
         # tempOut
         v = self.snmp.get("1.3.6.1.4.1.27514.102.0.14.0")
-        r.append({
+        r.append(
+            {
                 "name": "temp_out",
                 "status": bool(v),
                 "description": "Значение температуры с внешнего датчика",
@@ -89,7 +94,8 @@ class Script(BaseScript):
                     "noc::sensor::mode::temperature",
                 ],
                 "snmp_oid": "1.3.6.1.4.1.27514.102.0.14.0",
-            })
+            }
+        )
         v = self.snmp.get("1.3.6.1.4.1.27514.102.0.15.0")
         # Charging supply
         r += [
@@ -164,7 +170,8 @@ class Script(BaseScript):
             for num in range(1, 5):
                 v = self.snmp.get(f"1.3.6.1.4.1.27514.102.0.{23 + 1}.0")
                 if v:
-                    r.append({
+                    r.append(
+                        {
                             "name": f"elmeter_Tariff{num}",
                             "status": bool(v),
                             "description": f"Электросчётчик. Суммарное значение потреблённой мощности по тарифу {num}",
@@ -175,7 +182,8 @@ class Script(BaseScript):
                                 "noc::sensor::target::power_load",
                             ],
                             "snmp_oid": f"1.3.6.1.4.1.27514.102.0.{23 + 1}.0",
-                        })
+                        }
+                    )
         return r
 
     def get_v3_rev_sensors(self):
@@ -227,24 +235,28 @@ class Script(BaseScript):
         ]
         # temp2
         v = self.snmp.get("1.3.6.1.4.1.27514.103.0.9.0")
-        r.append({
+        r.append(
+            {
                 "name": "temp2",
                 "status": bool(v),
                 "description": "Значение температуры с датчика №2",
                 "measurement": "Celsius",
                 "labels": ["noc::sensor::placement::external", "noc::sensor::mode::temperature"],
                 "snmp_oid": "1.3.6.1.4.1.27514.103.0.9.0",
-            })
+            }
+        )
         # UPS Link
         v = self.snmp.get("1.3.6.1.4.1.27514.103.0.13.0")
-        r.append({
+        r.append(
+            {
                 "name": "ups_rs232",
                 "status": True,
                 "description": "Флаг наличия связи с ИБП по порту RS-232",
                 "measurement": "StatusEnum",
                 "labels": ["noc::sensor::placement::internal", "noc::sensor::mode::flag"],
                 "snmp_oid": "1.3.6.1.4.1.27514.103.0.13.0",
-            })
+            }
+        )
         if v:
             r += [
                 {
@@ -426,7 +438,8 @@ class Script(BaseScript):
             for num in range(1, 5):
                 v = self.snmp.get(f"1.3.6.1.4.1.27514.103.0.{29 + num}.0")
                 if v:
-                    r.append({
+                    r.append(
+                        {
                             "name": f"elmeter_Tariff{num}",
                             "status": bool(v),
                             "description": f"Электросчётчик. Суммарное значение потреблённой мощности по тарифу {num}",
@@ -437,7 +450,8 @@ class Script(BaseScript):
                                 "noc::sensor::target::power_load",
                             ],
                             "snmp_oid": f"1.3.6.1.4.1.27514.103.0.{29 + num}.0",
-                        })
+                        }
+                    )
         return r
 
     def get_chassis_sensors(self):

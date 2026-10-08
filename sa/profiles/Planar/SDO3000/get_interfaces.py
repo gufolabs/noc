@@ -38,13 +38,15 @@ class Script(BaseScript):
         ]
         plat = self.scripts.get_version()["platform"]
         if plat == "SDO3002":
-            ports.append({
+            ports.append(
+                {
                     "name": "Input 2",
                     "admin_status": True,
                     "oper_status": True,
                     "type": "physical",
                     "subinterfaces": [],
-                })
+                }
+            )
         return ports
 
     def execute_cli(self, **kwargs):

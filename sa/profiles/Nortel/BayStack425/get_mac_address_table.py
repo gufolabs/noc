@@ -53,20 +53,24 @@ class Script(BaseScript):
                             skip2 = 0
 
                 if not skip1:
-                    r.append({
+                    r.append(
+                        {
                             "vlan_id": pvids.get(match.group("port1")),
                             "mac": match.group("mac1").replace("-", ":"),
                             "interfaces": [match.group("port1")],
                             "type": "D",
-                        })
+                        }
+                    )
 
                 if not skip2 and match.group("mac2"):
-                    r.append({
+                    r.append(
+                        {
                             "vlan_id": pvids.get(match.group("port2")),
                             "mac": match.group("mac2").replace("-", ":"),
                             "interfaces": [match.group("port2")],
                             "type": "D",
-                        })
+                        }
+                    )
         # Read static MACs
         cmd = "show mac-security mac-address-table"
         v = self.cli(cmd)
@@ -81,10 +85,12 @@ class Script(BaseScript):
                 if vlan is not None and int(pvids.get(match.group("port"))) != int(vlan):
                     skip = 1
                 if not skip:
-                    r.append({
+                    r.append(
+                        {
                             "vlan_id": pvids.get(match.group("port")),
                             "mac": match.group("mac").replace("-", ":"),
                             "interfaces": [match.group("port")],
                             "type": "S",
-                        })
+                        }
+                    )
         return r

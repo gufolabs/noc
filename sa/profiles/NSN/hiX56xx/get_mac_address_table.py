@@ -65,13 +65,15 @@ class Script(BaseScript):
             # Set interface's name according to ifName
             if ifname in port_map:
                 ifname = port_map[ifname]
-            r.append({
+            r.append(
+                {
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
                     "interfaces": [ifname],
                     "type": {"dynamic": "D", "static": "S", "p-locked": "S"}[
                         match.group("type").lower()
                     ],
-                })
+                }
+            )
 
         return r

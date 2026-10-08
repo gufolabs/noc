@@ -41,10 +41,12 @@ class Script(BaseScript):
                         found = True
                         break
                 if not found:
-                    r.append({
+                    r.append(
+                        {
                             "vlan_id": 1,  # XXX Can not get vlan id
                             "mac": match.group("mac"),
                             "interfaces": [match.group("port")],
                             "type": mtype,
-                        })
+                        }
+                    )
         return r

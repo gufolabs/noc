@@ -96,16 +96,20 @@ class Script(BaseScript):
                         rsys_id = match.group("rmac")
                         lportid = match.group("lportid")
                         rportid = match.group("rportid")
-                        bundle.append({
+                        bundle.append(
+                            {
                                 "interface": i,
                                 "local_port_id": lportid,
                                 "remote_system_id": rsys_id,
                                 "remote_port_id": int(rportid),
-                            })
-            r.append({
+                            }
+                        )
+            r.append(
+                {
                     "lag_id": chan_num,
                     "interface": "Port-Channel" + pc[0],
                     "system_id": sys_id,
                     "bundle": bundle,
-                })
+                }
+            )
         return r

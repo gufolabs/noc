@@ -47,11 +47,13 @@ class Script(BaseScript):
         for l in self.cli("show vlan").split("\n"):
             match = self.rx_vlan.search(l)
             if match:
-                vlans.append({
+                vlans.append(
+                    {
                         "vlan_id": match.group("vlan_id"),
                         "ifname": match.group("ifname"),
                         "tagged": match.group("state") == "Tagged",
-                    })
+                    }
+                )
         interfaces = []
         for l in self.cli("show interface counter").split("\n"):
             match = self.rx_ge.search(l)
@@ -115,7 +117,8 @@ class Script(BaseScript):
                 for l1 in v.split("\n"):
                     match1 = self.rx_vpivci.search(l1)
                     if match1:
-                        i["subinterfaces"].append({
+                        i["subinterfaces"].append(
+                            {
                                 "name": ifname,
                                 "oper_status": oper_status,
                                 "admin_status": admin_status,
@@ -123,7 +126,8 @@ class Script(BaseScript):
                                 "vlan_ids": [int(match1.group("pvid"))],
                                 "vpi": int(match1.group("vpi")),
                                 "vci": int(match1.group("vci")),
-                            })
+                            }
+                        )
                 interfaces.append(i)
         v = self.cli("show management gbe")
         i = {

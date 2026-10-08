@@ -28,10 +28,12 @@ class Script(BaseScript):
         for port in range(1, port_count + 1):
             v = self.cli(f"show mac-address-table l2-address port {port}")
             for match1 in self.rx_line.finditer(v):
-                r.append({
+                r.append(
+                    {
                         "vlan_id": match1.group("vlan_id"),
                         "mac": match1.group("mac"),
                         "interfaces": [port],
                         "type": "D",
-                    })
+                    }
+                )
         return r
