@@ -34,11 +34,13 @@ class Script(BaseScript):
         else:
             v = self.cli("show version 0")
         for match in self.rx_slot.finditer(v):
-            r.append({
+            r.append(
+                {
                     "type": "LINECARD",
                     "number": match.group("number"),
                     "vendor": "HUAWEI",
                     "part_no": match.group("part_no"),
                     "revision": match.group("revision"),
-                })
+                }
+            )
         return r

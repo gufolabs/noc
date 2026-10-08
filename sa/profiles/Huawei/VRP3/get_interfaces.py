@@ -80,13 +80,15 @@ class Script(BaseScript):
             ],
         }
         interfaces.append(iface)
-        interfaces.append({
+        interfaces.append(
+            {
                 "name": "FE:0/0/1",
                 "type": "physical",
                 "mac": mac,
                 "hints": ["noc::interface::role::uplink"],
                 "subinterfaces": [],
-            })
+            }
+        )
         return [{"interfaces": interfaces}]
 
     def execute_cli(self, **kwargs):

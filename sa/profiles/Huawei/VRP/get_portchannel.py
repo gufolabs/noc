@@ -48,13 +48,15 @@ class Script(BaseScript):
         except self.CLISyntaxError:
             return []
         for match in self.rx_chan_line_vrp5.finditer(trunk):
-            r.append({
+            r.append(
+                {
                     "interface": match.group("interface"),
                     "members": [],
                     "type": {"normal": "S", "static": "L", "lacp": "L", "dynamic": "L"}[
                         match.group("mode").lower()
                     ],
-                })
+                }
+            )
             for ll in match.group("members").lstrip("\n").splitlines():
                 iface = ll.split(" ", 1)[0]
                 if iface.endswith(")"):

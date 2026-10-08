@@ -93,13 +93,15 @@ class Script(BaseScript):
             # vsi, pwsignal, iface = block.split("\n\n")
             # for b in block.split("\n\n"):
             p.update(parse_kv(self.vsi_instance_map, block))
-            r.append({
+            r.append(
+                {
                     "type": "VPLS",
                     "status": p.get("vsi_state") == "up",
                     "name": p["name"],
                     "vpn_id": p.get("vpn_id"),
                     "interfaces": ifaces,
-                })
+                }
+            )
         # VPWS
         try:
             v = self.cli("display mpls l2vc brief")
@@ -107,13 +109,15 @@ class Script(BaseScript):
             return []
         for block in self.rx_l2vc_split.split(v)[1:]:
             p = parse_kv(self.l2vc_map, block)
-            r.append({
+            r.append(
+                {
                     "type": "VLL",
                     "status": p["state"] == "up",
                     "name": p["vpn_id"],
                     "vpn_id": p["vpn_id"],
                     "interfaces": [self.profile.convert_interface_name(p["interface"])],
-                })
+                }
+            )
         return r
 
     def execute_cli(self, **kwargs):
@@ -130,13 +134,15 @@ class Script(BaseScript):
         for line in v.splitlines():
             match = self.rx_line.search(line)
             if match:
-                vpns.append({
+                vpns.append(
+                    {
                         "type": "VRF",
                         "status": True,
                         "vpn_id": "",
                         "name": match.group("vrf").strip(),
                         "interfaces": [],
-                    })
+                    }
+                )
             elif vpns:
                 if block and line.startswith("    ") and line_format.match(line):
                     vpns[-1][block] += line.strip(" ,\n").split(block_splitter)

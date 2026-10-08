@@ -110,7 +110,8 @@ class Script(BaseScript):
         ipaddr = match.group("ipaddr")
         mask = match.group("mask")
         ip = IPv4(ipaddr, mask)
-        ifaces.append({
+        ifaces.append(
+            {
                 "name": "Inband Mng",
                 "admin_status": True,
                 "oper_status": True,
@@ -127,6 +128,7 @@ class Script(BaseScript):
                         "vlan_ids": [match.group("vid")],
                     }
                 ],
-            })
+            }
+        )
 
         return [{"interfaces": ifaces}]

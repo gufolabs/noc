@@ -97,7 +97,9 @@ class Script(BaseScript):
         ipv4_ifaces = defaultdict(list)
         cmd = self.cli("netstat -i")
         for match in self.rx_ipaddr.finditer(cmd):
-            ipv4_ifaces[match.group("ifname")].append(match.group("ipaddr") + "/" + match.group("net").split("/")[1])
+            ipv4_ifaces[match.group("ifname")].append(
+                match.group("ipaddr") + "/" + match.group("net").split("/")[1]
+            )
         for iface in ifaces:
             if iface["name"] in ipv4_ifaces:
                 iface["subinterfaces"][0]["enabled_afi"].append("IPv4")

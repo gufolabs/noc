@@ -49,7 +49,8 @@ class Script(BaseScript):
         for match in self.rx_int.finditer(lldp):
             if "ChassisID" not in lldp:
                 continue
-            result.append({
+            result.append(
+                {
                     "local_interface": match.group("interface"),
                     "neighbors": [
                         {
@@ -84,5 +85,6 @@ class Script(BaseScript):
                             ),
                         }
                     ],
-                })
+                }
+            )
         return result

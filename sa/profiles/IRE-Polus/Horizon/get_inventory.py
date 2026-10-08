@@ -260,14 +260,16 @@ class Script(BaseScript):
                             # "description": tp.description,
                         }
                     )
-            r.append({
+            r.append(
+                {
                     "name": p.name,
                     "status": status,
                     "description": p.description,
                     "measurement": p.get_measurement_unit,
                     "labels": labels,
                     # "thresholds": thresholds,
-                })
+                }
+            )
         return r, cfg_thresholds
 
     def parse_table(self, v):
@@ -633,13 +635,15 @@ class Script(BaseScript):
             return None
         v = self.http.get("/api/crates/params?names=SrNumber,sysDevType", json=True)
         c = c["crates"][0]
-        r.append({
+        r.append(
+            {
                 "type": "CHASSIS",
                 "number": "1",
                 "vendor": "IRE-Polus",
                 "part_no": c["chassis"],
                 # "serial": c_params["SrNumber"].value,
-            })
+            }
+        )
         for p in v["params"]:
             p = PolusParam.from_code(**p)
             if p.code == "SrNumber":
@@ -686,12 +690,14 @@ class Script(BaseScript):
                 num = num[-1]
             if adapter and adapter not in adapters:
                 # H8 -> H4 card adapter
-                r.append({
+                r.append(
+                    {
                         "type": "ADAPTER",
                         "number": adapter,
                         "vendor": "IRE-Polus",
                         "part_no": "HS-H8",
-                    })
+                    }
+                )
                 adapters.append(adapter)
 
             crossings, card_mode = self.get_crossings(config, d.crate_id - 1, slot)
@@ -739,13 +745,15 @@ class Script(BaseScript):
                     if not cross:
                         continue
                     c_in, c_out = cross[:2]
-                    card["crossing"].append({
+                    card["crossing"].append(
+                        {
                             "input": c_in[0],
                             "input_discriminator": c_in[1],
                             "output": c_out[0],
                             "output_discriminator": c_out[1],
                             # "gain":
-                        })
+                        }
+                    )
             r.append(card)
             for c_name, c in components.items():
                 fru = self.get_fru(c)
@@ -758,13 +766,15 @@ class Script(BaseScript):
                     if c.crossing:
                         for cross in c.crossing.values():
                             c_in, c_out = cross[:2]
-                            card["crossing"].append({
+                            card["crossing"].append(
+                                {
                                     "input": c_in[0],
                                     "input_discriminator": c_in[1],
                                     "output": c_out[0],
                                     "output_discriminator": c_out[1],
                                     # "gain":
-                                })
+                                }
+                            )
                     for cc in c.cfg_params:
                         if not cc.get_param_code():
                             continue
@@ -791,7 +801,8 @@ class Script(BaseScript):
                             "scopes": cc.get_param_scopes(),
                         }
                     )
-                r.append({
+                r.append(
+                    {
                         "type": fru.type,
                         "number": c.num,
                         "vendor": fru.vendor,
@@ -800,7 +811,8 @@ class Script(BaseScript):
                         "revision": fru.revision,
                         # "sensors": sensors,
                         # "param_data": cfgs,
-                    })
+                    }
+                )
         return r
 
     def execute_cli(self, **kwargs):
