@@ -30,11 +30,9 @@ class Script(BaseScript):
                 config = self.cli("show configuration")
         r = [{"name": "main", "config": self.cleaned_config(config)}]
         if e1_error:
-            r += [
-                {
+            r.append({
                     "name": "error",
                     "config": "%LCLI-W-E1MESSAGE: E1 units are not yet updated, cannot show running config",
-                }
-            ]
+                })
 
         return r

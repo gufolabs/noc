@@ -76,8 +76,7 @@ class Script(BaseScript):
             if "." in ifname:
                 ifname, vlan_ids = ifname.split(".", 1)
                 if ifname in interfaces:
-                    interfaces[ifname]["subinterfaces"] += [
-                        {
+                    interfaces[ifname]["subinterfaces"].append({
                             "name": f"{ifname}.{vlan_ids}",
                             "snmp_ifindex": ifindex,
                             "admin_status": admin_status,
@@ -85,8 +84,7 @@ class Script(BaseScript):
                             "mtu": mtu,
                             "enabled_afi": ["BRIDGE"],
                             "vlan_ids": vlan_ids,
-                        }
-                    ]
+                        })
             else:
                 interfaces[ifname] = {
                     "type": iftype,
@@ -204,7 +202,7 @@ class Script(BaseScript):
                     iface["subinterfaces"][0]["enabled_afi"] = ["IPv4"]
                 else:
                     iface["subinterfaces"][0]["enabled_afi"] = ["BRIDGE"]
-                interfaces += [iface]
+                interfaces.append(iface)
                 ri = ssid.get(ifname)
                 if ri:
                     if ri["ssid_broadcast"] == "on":
@@ -233,5 +231,5 @@ class Script(BaseScript):
                             }
                         ],
                     }
-                    interfaces += [iface]
+                    interfaces.append(iface)
         return [{"interfaces": interfaces}]

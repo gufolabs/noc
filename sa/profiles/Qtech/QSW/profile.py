@@ -69,9 +69,9 @@ class Profile(BaseProfile):
     def get_interface_names(self, name):
         r = []
         if name.startswith("port "):
-            r += [name[5:]]
+            r.append(name[5:])
         else:
-            r += [name]
+            r.append(name)
         return r
 
     _IF_TYPES = {

@@ -36,5 +36,5 @@ class Script(BaseScript):
                 "interfaces": [match.group("iface")],
                 "type": {"dynamic": "D", "static": "S"}[match.group("type").lower()],
             }
-            r += [m]
+            r.append(m)
         return r

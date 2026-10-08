@@ -63,7 +63,7 @@ class Script(BaseScript):
                     data["mfg_date"] = mfg_date.strftime("%Y-%m-%d")
                 except ValueError:
                     pass
-                trans_data += [data]
+                trans_data.append(data)
         return trans_data
 
     def execute_cli(self):
@@ -124,7 +124,7 @@ class Script(BaseScript):
                                 ch["mfg_date"] = match.group("mfg_date").replace("/", "-")
                         except self.CLISyntaxError:
                             pass
-                        r += [ch]
+                        r.append(ch)
                         old_member = member
             for t in self.rx_trans.finditer(iface):
                 part_no = self.profile.convert_sfp(
@@ -146,6 +146,6 @@ class Script(BaseScript):
                     data["mfg_date"] = mfg_date.strftime("%Y-%m-%d")
                 except ValueError:
                     pass
-                r += [data]
+                r.append(data)
 
         return r

@@ -51,5 +51,5 @@ class Script(BaseScript):
             }
             if iface == "CPU":
                 m["type"] = "C"
-            r += [m]
+            r.append(m)
         return r

@@ -50,13 +50,11 @@ class Script(BaseScript):
             else:
                 admin_status = "down"
             # print repr("%s\n" % admin_status)
-            interfaces += [
-                {
+            interfaces.append({
                     "type": iftype,
                     "name": name,
                     "mac": mac,
                     "admin_status": (admin_status).lower() == "up",
                     "subinterfaces": [{"name": name, "mac": mac, "enabled_afi": ["BRIDGE"]}],
-                }
-            ]
+                })
         return [{"interfaces": interfaces}]

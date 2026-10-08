@@ -48,7 +48,7 @@ class Script(BaseScript):
         qinq_ports = []
         cmd = self.cli("show dot1q-tunnel")
         for match in self.rx_qinq_port.finditer(cmd):
-            qinq_ports += [match.group("interface")]
+            qinq_ports.append(match.group("interface"))
 
         # Get interfaces' status
         int_status = {}
@@ -108,11 +108,11 @@ class Script(BaseScript):
                     continue
                 for tag in self.expand_rangelist(ma_group):
                     if tag in vlans and tag != pvid:
-                        swp["tagged"] += [tag]
+                        swp["tagged"].append(tag)
             # 802.1q and QinQ
             if ifname in qinq_ports:
                 swp["802.1ad Tunnel"] = True
             if len(swp["tagged"]) > 0:
                 swp["802.1Q Enabled"] = True
-            result += [swp]
+            result.append(swp)
         return result

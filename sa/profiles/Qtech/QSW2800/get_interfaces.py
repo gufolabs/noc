@@ -90,7 +90,7 @@ class Script(BaseScript):
                     continue
                 for tag in self.expand_rangelist(ma_group):
                     if tag != pvid:
-                        r[ifname]["tagged"] += [tag]
+                        r[ifname]["tagged"].append(tag)
         return r
 
     def execute_cli(self):
@@ -119,10 +119,10 @@ class Script(BaseScript):
                 iface["type"] = iftype
                 # proccess LLDP
                 if ifname in lldp:
-                    iface["enabled_protocols"] += ["LLDP"]
+                    iface["enabled_protocols"].append("LLDP")
                 if ifname.startswith("Ethernet"):
                     if self.get_interface_oam(ifname):
-                        iface["enabled_protocols"] += ["OAM"]
+                        iface["enabled_protocols"].append("OAM")
                 # process subinterfaces
                 if "aggregated_interface" not in iface:
                     sub = {
@@ -138,7 +138,7 @@ class Script(BaseScript):
                             sub["untagged_vlan"] = u
                         if t:
                             sub["tagged_vlans"] = t
-                        sub["enabled_afi"] += ["BRIDGE"]
+                        sub["enabled_afi"].append("BRIDGE")
                 else:
                     sub = {}
             match = self.rx_interface_lag.search(l)
@@ -146,7 +146,7 @@ class Script(BaseScript):
                 iface["aggregated_interface"] = self.profile.convert_interface_name(
                     match.group("pc")
                 )
-                iface["enabled_protocols"] += ["LACP"]
+                iface["enabled_protocols"].append("LACP")
             # get snmp ifindex
             match = self.rx_ifindex.search(l)
             if match:
@@ -163,12 +163,12 @@ class Script(BaseScript):
             match = self.rx_ipv4.match(l)
             if match:
                 if "ipv4 addresses" not in sub:
-                    sub["enabled_afi"] += ["IPv4"]
+                    sub["enabled_afi"].append("IPv4")
                     sub["ipv4_addresses"] = []
                     vid = self.rx_vid.search(ifname)
                     sub["vlan_ids"] = [int(vid.group("vid"))]
                 ip = IPv4(match.group("ip"), netmask=match.group("mask")).prefix
-                sub["ipv4_addresses"] += [ip]
+                sub["ipv4_addresses"].append(ip)
             # management interface may have IP address
             if l.strip() == "IPv4 address is:" and iface["name"] == "Ethernet0":
                 iface["type"] = "management"
@@ -184,8 +184,8 @@ class Script(BaseScript):
                 if iface.get("aggregated_interface"):
                     iface["subinterfaces"] = []
                 else:
-                    iface["subinterfaces"] += [sub]
+                    iface["subinterfaces"].append(sub)
             # the following lines are not important
             if l.strip() == "Input packets statistics:":
-                r += [iface]
+                r.append(iface)
         return [{"interfaces": r}]
