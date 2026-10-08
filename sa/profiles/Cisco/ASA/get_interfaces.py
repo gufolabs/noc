@@ -91,7 +91,7 @@ class Script(BaseScript):
                 if match:
                     ip = IPv4(match.group("ip"), netmask=match.group("mask")).prefix
                     sub["ipv4_addresses"] = [ip]
-                    sub["enabled_afi"] += ["IPv4"]
+                    sub["enabled_afi"].append("IPv4")
                 match = self.rx_vlan.search(s)
                 if match:
                     vlan = match.group("vlan")
@@ -105,7 +105,7 @@ class Script(BaseScript):
                     sub["snmp_ifindex"] = ifindex
 
                 if alias in ospfs:
-                    sub["enabled_protocols"] += ["OSPF"]
+                    sub["enabled_protocols"].append("OSPF")
                 phys = ifname.find(".") == -1
                 if phys:
                     iftype = self.profile.get_interface_type(ifname)
@@ -127,16 +127,16 @@ class Script(BaseScript):
                     if ifname2 in portchannel_members:
                         ai, _is_lacp = portchannel_members[ifname2]
                         iface["aggregated_interface"] = ai
-                        iface["enabled_protocols"] += ["LACP"]
+                        iface["enabled_protocols"].append("LACP")
 
-                    interfaces += [iface]
+                    interfaces.append(iface)
                     if iftype == "SVI" and ifname.startswith("Vlan"):
                         vid = int(ifname[4:].strip())
                         sub["vlan_ids"] = [vid]
                 elif interfaces[-1]["name"] == interfaces[-1]["subinterfaces"][-1]["name"]:
                     interfaces[-1]["subinterfaces"] = [sub]
                 else:
-                    interfaces[-1]["subinterfaces"] += [sub]
+                    interfaces[-1]["subinterfaces"].append(sub)
             else:
                 continue
         return [{"interfaces": interfaces}]

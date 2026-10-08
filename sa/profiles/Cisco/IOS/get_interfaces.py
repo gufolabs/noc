@@ -124,7 +124,7 @@ class Script(BaseScript):
             match = self.rx_lldp.search(s)
             if match:
                 if match.group("rx_state").lower() == "enabled":
-                    r += [self.profile.convert_interface_name(match.group("iface").strip())]
+                    r.append(self.profile.convert_interface_name(match.group("iface").strip()))
         return r
 
     def get_oam_interfaces(self):
@@ -140,7 +140,7 @@ class Script(BaseScript):
         for s in v.strip().split("\n"):
             match = self.rx_oam.search(s)
             if match:
-                r += [self.profile.convert_interface_name(match.group("iface").strip())]
+                r.append(self.profile.convert_interface_name(match.group("iface").strip()))
         return r
 
     def get_cdp_interfaces(self):
@@ -157,7 +157,7 @@ class Script(BaseScript):
             match = self.rx_cdp.search(s)
             if match:
                 try:
-                    r += [self.profile.convert_interface_name(match.group("iface").strip())]
+                    r.append(self.profile.convert_interface_name(match.group("iface").strip()))
                 except InterfaceTypeError:
                     continue
         return r
@@ -181,10 +181,10 @@ class Script(BaseScript):
         for s in v1.strip().split("\n"):
             match = self.rx_vtp.search(s)
             if match:
-                r += [self.profile.convert_interface_name(match.group("iface").strip())]
+                r.append(self.profile.convert_interface_name(match.group("iface").strip()))
             match = self.rx_vtp1.search(s)
             if match:
-                r += [self.profile.convert_interface_name(match.group("iface").strip())]
+                r.append(self.profile.convert_interface_name(match.group("iface").strip()))
         return r
 
     def get_ospfint(self):
@@ -196,7 +196,7 @@ class Script(BaseScript):
         for s in v.split("\n"):
             match = self.rx_ospf.search(s)
             if match:
-                r += [match.group("name")]
+                r.append(match.group("name"))
         return r
 
     def get_pimint(self):
@@ -208,7 +208,7 @@ class Script(BaseScript):
         for s in v.split("\n"):
             match = self.rx_pim.search(s)
             if match:
-                r += [self.profile.convert_interface_name(match.group("name").strip())]
+                r.append(self.profile.convert_interface_name(match.group("name").strip()))
         return r
 
     def get_igmpint(self):
@@ -220,7 +220,7 @@ class Script(BaseScript):
         for s in v.split("\n"):
             match = self.rx_igmp.search(s)
             if match:
-                r += [self.profile.convert_interface_name(match.group("name").strip())]
+                r.append(self.profile.convert_interface_name(match.group("name").strip()))
         return r
 
     rx_ifindex = re.compile(
@@ -253,7 +253,7 @@ class Script(BaseScript):
                 if port not in pvm:
                     pvm[port] = [f"{vlan_id}"]
                 else:
-                    pvm[port] += [f"{vlan_id}"]
+                    pvm[port].append(f"{vlan_id}")
         return pvm
 
     def get_mpls_vpn(self):
@@ -362,7 +362,7 @@ class Script(BaseScript):
             for match in rx_vrrp.finditer(v):
                 ifname = self.profile.convert_interface_name(match.group("iface"))
                 if ifname in vrrps:
-                    vrrps[ifname] += [match.group("virtual_ip") + "/32"]
+                    vrrps[ifname].append(match.group("virtual_ip") + "/32")
                 else:
                     vrrps[ifname] = [match.group("virtual_ip") + "/32"]
         return vrrps
@@ -418,7 +418,7 @@ class Script(BaseScript):
                 if not match:
                     continue
             ip = match.group("ip")
-            ipv4_interfaces[c_iface] += [ip]
+            ipv4_interfaces[c_iface].append(ip)
         # Get IPv6 interfaces
         ipv6_interfaces = defaultdict(list)  # interface -> [ipv6 addresses]
         c_iface = None
@@ -443,7 +443,7 @@ class Script(BaseScript):
                 # Secondary ip?
                 continue
             ip = f"{match.group('address')}/{match.group('mask')}"
-            ipv6_interfaces[c_iface] += [ip]
+            ipv6_interfaces[c_iface].append(ip)
         interfaces = {}
         # Get OSPF interfaces
         ospfs = self.get_ospfint()
@@ -476,13 +476,13 @@ class Script(BaseScript):
                         "enabled_protocols": [],
                     }
                     if inm in lldp:
-                        iface["enabled_protocols"] += ["LLDP"]
+                        iface["enabled_protocols"].append("LLDP")
                     if inm in vtp:
-                        iface["enabled_protocols"] += ["VTP"]
+                        iface["enabled_protocols"].append("VTP")
                     if inm in oam:
-                        iface["enabled_protocols"] += ["OAM"]
+                        iface["enabled_protocols"].append("OAM")
                     if inm in cdp:
-                        iface["enabled_protocols"] += ["CDP"]
+                        iface["enabled_protocols"].append("CDP")
                     interfaces[inm] = iface
             a_stat = match.group("admin_status").lower() == "up"
             o_stat = match.group("oper_status").lower() == "up"
@@ -502,7 +502,7 @@ class Script(BaseScript):
             if matchmac:
                 sub["mac"] = matchmac.group("mac")
             if ifname in switchports and ifname not in portchannel_members:
-                sub["enabled_afi"] += ["BRIDGE"]
+                sub["enabled_afi"].append("BRIDGE")
                 u, t = switchports[ifname]
                 if u:
                     sub["untagged_vlan"] = u
@@ -520,23 +520,23 @@ class Script(BaseScript):
             # IPv4/Ipv6
             if match.group("ip"):
                 if ifname in ipv4_interfaces:
-                    sub["enabled_afi"] += ["IPv4"]
+                    sub["enabled_afi"].append("IPv4")
                     sub["ipv4_addresses"] = ipv4_interfaces[ifname]
                 if ifname in ipv6_interfaces:
-                    sub["enabled_afi"] += ["IPv6"]
+                    sub["enabled_afi"].append("IPv6")
                     sub["ipv6_addresses"] = ipv6_interfaces[ifname]
             matchifn = self.rx_cisco_interface_name.match(ifname)
             if not matchifn:
                 matchifn = self.rx_cisco_interface_sonet.match(ifname)
             shotn = matchifn.group("type").capitalize() + matchifn.group("number")
             if shotn in ospfs:
-                sub["enabled_protocols"] += ["OSPF"]
+                sub["enabled_protocols"].append("OSPF")
             if ifname in pims:
-                sub["enabled_protocols"] += ["PIM"]
+                sub["enabled_protocols"].append("PIM")
             if ifname in igmps:
-                sub["enabled_protocols"] += ["IGMP"]
+                sub["enabled_protocols"].append("IGMP")
             if ifname in vrrps.keys():
-                sub["enabled_protocols"] += ["VRRP"]
+                sub["enabled_protocols"].append("VRRP")
                 sub["ipv4_addresses"] += vrrps[ifname]
 
             if full_ifname in ifindex:
@@ -556,16 +556,16 @@ class Script(BaseScript):
                     "subinterfaces": [sub],
                 }
                 if ifname in lldp:
-                    iface["enabled_protocols"] += ["LLDP"]
+                    iface["enabled_protocols"].append("LLDP")
                 if ifname in vtp:
-                    iface["enabled_protocols"] += ["VTP"]
+                    iface["enabled_protocols"].append("VTP")
                 if ifname in oam:
-                    iface["enabled_protocols"] += ["OAM"]
+                    iface["enabled_protocols"].append("OAM")
                 if ifname in cdp:
-                    iface["enabled_protocols"] += ["CDP"]
+                    iface["enabled_protocols"].append("CDP")
                 match1 = self.rx_ctp.search(v)
                 if match1:
-                    iface["enabled_protocols"] += ["CTP"]
+                    iface["enabled_protocols"].append("CTP")
                 if match.group("desc"):
                     iface["description"] = match.group("desc")
                 if "mac" in sub:
@@ -579,7 +579,7 @@ class Script(BaseScript):
                 if ifname in portchannel_members:
                     ai, _is_lacp = portchannel_members[ifname]
                     iface["aggregated_interface"] = ai
-                    iface["enabled_protocols"] += ["LACP"]
+                    iface["enabled_protocols"].append("LACP")
                 # Ifindex
                 if full_ifname in ifindex:
                     iface["snmp_ifindex"] = ifindex[full_ifname]
@@ -591,7 +591,7 @@ class Script(BaseScript):
                 else:
                     if_name, _vlan_id = ifname.split(".", 1)
                 try:
-                    interfaces[if_name]["subinterfaces"] += [sub]
+                    interfaces[if_name]["subinterfaces"].append(sub)
                 except KeyError:
                     interfaces[if_name]["subinterfaces"] = [sub]
 
@@ -603,19 +603,17 @@ class Script(BaseScript):
             interfaces[i]["subinterfaces"] = []
             if i in vrf_if_map:
                 iface_vrf = vrf_if_map[i]
-                vrfs[vrf_if_map[i]]["interfaces"] += [interfaces[i]]
+                vrfs[vrf_if_map[i]]["interfaces"].append(interfaces[i])
             else:
-                vrfs["default"]["interfaces"] += [interfaces[i]]
+                vrfs["default"]["interfaces"].append(interfaces[i])
             for s in subs:
                 if s["name"] in vrf_if_map and vrf_if_map[s["name"]] != iface_vrf:
-                    vrfs[vrf_if_map[s["name"]]]["interfaces"] += [
-                        {
+                    vrfs[vrf_if_map[s["name"]]]["interfaces"].append({
                             "name": s["name"],
                             "type": "other",
                             "enabled_protocols": [],
                             "subinterfaces": [s],
-                        }
-                    ]
+                        })
                 else:
-                    interfaces[i]["subinterfaces"] += [s]
+                    interfaces[i]["subinterfaces"].append(s)
         return list(vrfs.values())

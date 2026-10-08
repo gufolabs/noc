@@ -64,14 +64,12 @@ class Script(BaseScript):
                     continue
                 l_l = l.split()
                 if l_l[0] in port:
-                    bundle += [
-                        {
+                    bundle.append({
                             "interface": l_l[0],
                             "local_port_id": port[l_l[0]],
                             "remote_system_id": l_l[1].split(",")[1],
                             "remote_port_id": int(l_l[2], 16),
-                        }
-                    ]
+                        })
 
             """
             for port in self.split_port_re.split(block):
@@ -90,14 +88,12 @@ class Script(BaseScript):
                     "remote_port_id": part_info[6]
                 }]
             """
-            r += [
-                {
+            r.append({
                     "lag_id": chan_num,
                     "interface": "Port-Channel" + chan_num,
                     "system_id": sys_id,
                     "bundle": bundle,
-                }
-            ]
+                })
             is_block = False
         "show lacp internal detail"
         "Local information:"

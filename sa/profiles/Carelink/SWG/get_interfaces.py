@@ -62,10 +62,10 @@ class Script(BaseScript):
                 "subinterfaces": [{"name": i[0], "enabled_afi": ["BRIDGE"], "untagged_vlan": i[1]}],
             }
             if i[0] in lldp:
-                iface["enabled_protocols"] += ["LLDP"]
+                iface["enabled_protocols"].append("LLDP")
             if i[0] in ctp:
-                iface["enabled_protocols"] += ["CTP"]
-            interfaces += [iface]
+                iface["enabled_protocols"].append("CTP")
+            interfaces.append(iface)
         for v in parse_table(self.cli("show vlan"), max_width=80):
             if not is_int(v[0]):
                 continue
@@ -76,7 +76,7 @@ class Script(BaseScript):
                     continue
                 if int(i["name"]) in ports:
                     if "tagged_vlans" in i["subinterfaces"][0]:
-                        i["subinterfaces"][0]["tagged_vlans"] += [vlan_id]
+                        i["subinterfaces"][0]["tagged_vlans"].append(vlan_id)
                     else:
                         i["subinterfaces"][0]["tagged_vlans"] = [vlan_id]
         mac = self.scripts.get_chassis_id()[0]["first_chassis_mac"]
@@ -98,5 +98,5 @@ class Script(BaseScript):
                 }
             ],
         }
-        interfaces += [iface]
+        interfaces.append(iface)
         return [{"interfaces": interfaces}]

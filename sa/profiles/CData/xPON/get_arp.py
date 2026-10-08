@@ -32,9 +32,9 @@ class Script(BaseScript):
             try:
                 v = self.cli("show arp all")
                 for match in self.rx_line.finditer(v):
-                    r += [match.groupdict()]
+                    r.append(match.groupdict())
             except self.CLISyntaxError:
                 v = self.cli("show arp entry all")
                 for match in self.rx_line2.finditer(v):
-                    r += [match.groupdict()]
+                    r.append(match.groupdict())
         return r

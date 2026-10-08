@@ -40,13 +40,11 @@ class Script(BaseScript):
             match = self.rx_entry.search(v[1])
             if not match:
                 continue
-            r += [
-                {
+            r.append({
                     "local_device": match.group("local_device"),
                     "local_interface": local_interface,
                     "remote_device": match.group("remote_device"),
                     "remote_interface": match.group("remote_interface"),
                     "state": match.group("state").upper(),
-                }
-            ]
+                })
         return r

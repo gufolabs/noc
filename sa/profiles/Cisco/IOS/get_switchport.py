@@ -154,7 +154,7 @@ class Script(BaseScript):
                 iface["untagged"] = match.group("untagged")
             if match.group("descr"):
                 iface["description"] = match.group("descr")
-            r += [iface]
+            r.append(iface)
         return r
 
     def get_description(self):
@@ -164,12 +164,10 @@ class Script(BaseScript):
             match = self.rx_descr_if.match(l.strip())
             if not match:
                 continue
-            r += [
-                {
+            r.append({
                     "interface": self.profile.convert_interface_name(match.group("interface")),
                     "description": match.group("description"),
-                }
-            ]
+                })
         return r
 
     def execute_cli(self, **kwargs):
@@ -243,5 +241,5 @@ class Script(BaseScript):
             if interface in descriptions:
                 iface["description"] = descriptions[interface]
 
-            r += [iface]
+            r.append(iface)
         return r

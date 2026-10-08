@@ -22,5 +22,5 @@ class Script(BaseScript):
         for v in parse_table(self.cli("show vlan", cached=True), max_width=80):
             if not is_int(v[0]):
                 continue
-            r += [{"vlan_id": v[0], "name": v[1]}]
+            r.append({"vlan_id": v[0], "name": v[1]})
         return r

@@ -49,7 +49,7 @@ class Script(BaseScript):
                 ii = ii.replace("Eth ", "")
             if ii != "":
                 ii = ii.split(" ")[1]
-            rip += [ii]
+            rip.append(ii)
         ospf = []
         try:
             c = self.cli("sh ip ospf int | inc OSPF enabled")
@@ -68,7 +68,7 @@ class Script(BaseScript):
                 ii = ii
             elif ii != "":
                 ii = ii.split(" ")[1]
-            ospf += [ii.strip()]
+            ospf.append(ii.strip())
         pim = []
         try:
             c = self.cli("sh ip pim int | inc ^Int")
@@ -81,7 +81,7 @@ class Script(BaseScript):
                     ii = ii.replace("v", "ve")
                 else:
                     ii = ii.replace("e", "")
-                pim += [ii]
+                pim.append(ii)
         dvmrp = []
         try:
             c = self.cli("sh ip dvmrp int | inc ^Int")
@@ -95,7 +95,7 @@ class Script(BaseScript):
                     ii = ii.replace("v", "ve")
                 else:
                     ii = ii.replace("e", "")
-                dvmrp += [ii]
+                dvmrp.append(ii)
         stp = []
         try:
             c = self.cli("show span | inc /")
@@ -123,7 +123,7 @@ class Script(BaseScript):
                 ii = ii.replace("v", "ve")
             else:
                 ii = ii.replace("e", "")
-            igmp += [ii]
+            igmp.append(ii)
         interfaces = []
         shrunvlan = self.cli("sh running-config vlan")
         tagged = {}
@@ -235,22 +235,22 @@ class Script(BaseScript):
                 l2protos = []
                 l3protos = []
                 if ifname in stp:
-                    l2protos += ["STP"]
+                    l2protos.append("STP")
                 if ifname in gvrp:
-                    l2protos += ["GVRP"]
+                    l2protos.append("GVRP")
                 i.update({"enabled_protocols": l2protos})
                 # L3 protocols check:
                 if ifname in rip:
-                    l3protos += ["RIP"]
+                    l3protos.append("RIP")
                 if ifname in ospf:
-                    l3protos += ["OSPF"]
+                    l3protos.append("OSPF")
                 if ifname in pim:
-                    l3protos += ["PIM"]
+                    l3protos.append("PIM")
                 if ifname in dvmrp:
-                    l3protos += ["DVMRP"]
+                    l3protos.append("DVMRP")
                 if ifname in igmp:
-                    l3protos += ["IGMP"]
+                    l3protos.append("IGMP")
                 i["subinterfaces"][0].update({"enabled_protocols": l3protos})
 
-                interfaces += [i]
+                interfaces.append(i)
         return [{"interfaces": interfaces}]

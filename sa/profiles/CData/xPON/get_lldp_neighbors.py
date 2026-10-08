@@ -87,5 +87,5 @@ class Script(BaseScript):
                         neighbor["remote_port_subtype"] = LLDP_PORT_SUBTYPE_ALIAS
                         neighbor["remote_port"] = port_descr
 
-                    r += [{"local_interface": local_interface, "neighbors": [neighbor]}]
+                    r.append({"local_interface": local_interface, "neighbors": [neighbor]})
         return r

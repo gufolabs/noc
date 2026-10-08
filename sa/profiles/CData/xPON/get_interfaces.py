@@ -93,13 +93,11 @@ class Script(BaseScript):
                     vlan_id = match.group("vlan_id")
                     tagged = match.group("tagged").split()
                     untagged = match.group("untagged").split()
-                    vlans += [
-                        {
+                    vlans.append({
                             "vlan_id": vlan_id,
                             "untagged": untagged,
                             "tagged": tagged,
-                        }
-                    ]
+                        })
             v = self.cli("show lacp system port")
             for match in self.rx_port.finditer(v):
                 ifname = match.group("ifname")
@@ -123,11 +121,11 @@ class Script(BaseScript):
                         sub["untagged_vlan"] = vlan["vlan_id"]
                     if ifname in vlan["tagged"]:
                         if "tagged_vlans" in sub:
-                            sub["tagged_vlans"] += [vlan["vlan_id"]]
+                            sub["tagged_vlans"].append(vlan["vlan_id"])
                         else:
                             sub["tagged_vlans"] = [vlan["vlan_id"]]
-                iface["subinterfaces"] += [sub]
-                interfaces += [iface]
+                iface["subinterfaces"].append(sub)
+                interfaces.append(iface)
             v = self.cli("show link-aggregation group summary")
             for match in self.rx_agg.finditer(v):
                 if match.group("type") == "Manual":
@@ -148,7 +146,7 @@ class Script(BaseScript):
                             }
                         ],
                     }
-                    interfaces += [iface]
+                    interfaces.append(iface)
                 for vlan in vlans:
                     if (ifname not in vlan["untagged"]) and (ifname not in vlan["tagged"]):
                         continue
@@ -163,7 +161,7 @@ class Script(BaseScript):
                                     sub["untagged_vlan"] = vlan["vlan_id"]
                                 if ifname in vlan["tagged"]:
                                     if "tagged_vlans" in sub:
-                                        sub["tagged_vlans"] += [vlan["vlan_id"]]
+                                        sub["tagged_vlans"].append(vlan["vlan_id"])
                                     else:
                                         sub["tagged_vlans"] = [vlan["vlan_id"]]
             try:
@@ -192,7 +190,7 @@ class Script(BaseScript):
                             }
                         ],
                     }
-                    interfaces += [iface]
+                    interfaces.append(iface)
                 for match in self.rx_vlanif2.finditer(v):
                     ifname = match.group("ifname")
                     vlan_id = self.rx_vlanid.search(ifname).group("vlan_id")
@@ -214,7 +212,7 @@ class Script(BaseScript):
                             }
                         ],
                     }
-                    interfaces += [iface]
+                    interfaces.append(iface)
             except self.CLISyntaxError:
                 pass
 
@@ -242,7 +240,7 @@ class Script(BaseScript):
                             }
                         ],
                     }
-                    interfaces += [iface]
+                    interfaces.append(iface)
                 else:
                     match = self.rx_mgmt2.search(v)
                     if match:
@@ -263,7 +261,7 @@ class Script(BaseScript):
                                 }
                             ],
                         }
-                        interfaces += [iface]
+                        interfaces.append(iface)
             except self.CLISyntaxError:
                 pass
 

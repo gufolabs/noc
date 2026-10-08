@@ -42,25 +42,21 @@ class Script(BaseScript):
                 if mac is not None:
                     if match.group("mac") != mac:
                         continue
-                r += [
-                    {
+                r.append({
                         "vlan_id": match.group("vlan_id"),
                         "mac": match.group("mac"),
                         "interfaces": [match.group("interface")],
                         "type": {"dynamic": "D", "static": "S"}[match.group("type").lower()],
-                    }
-                ]
+                    })
             if len(r) == 0:
                 for match in self.rx_line2.finditer(v):
                     if mac is not None:
                         if match.group("mac") != mac:
                             continue
-                    r += [
-                        {
+                    r.append({
                             "vlan_id": match.group("vlan_id"),
                             "mac": match.group("mac"),
                             "interfaces": [match.group("interface")],
                             "type": {"dynamic": "D", "static": "S"}[match.group("type").lower()],
-                        }
-                    ]
+                        })
         return r

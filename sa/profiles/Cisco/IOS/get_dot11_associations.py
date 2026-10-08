@@ -28,5 +28,5 @@ class Script(BaseScript):
             raise self.NotSupportedError()
         r = []
         for match in self.rx_assoc_line.findall(assoc):
-            r += [{"mac": match.group("mac"), "ip": match.group("ip")}]
+            r.append({"mac": match.group("mac"), "ip": match.group("ip")})
         return r
