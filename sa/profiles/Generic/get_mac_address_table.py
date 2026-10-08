@@ -99,12 +99,14 @@ class Script(BaseScript):
             if not status:
                 self.logger.warning("[%s] Unknown status: %s", mac_port[r_oid], status)
                 status = 3
-            r.append({
+            r.append(
+                {
                     "interfaces": [mac_port[r_oid]],
                     "mac": mac,
                     "type": self.mac_status_map[status],
                     "vlan_id": max(int(vlan_id), 1),
-                })
+                }
+            )
         return r
 
     def get_max_repetitions(self):

@@ -270,22 +270,30 @@ class Script(BaseScript):
                 #     ifaces[iface["ifindex"]]["mac"] = iface["mac"]
         # Fill interface info
         iter_tables = []
-        iter_tables.append(self.iter_iftable(
+        iter_tables.append(
+            self.iter_iftable(
                 "admin_status",
                 self.SNMP_ADMIN_STATUS_TABLE,
                 ifindexes=ifaces,
                 clean=self.clean_status,
-            ))
-        iter_tables.append(self.iter_iftable("mac", self.SNMP_MAC_TABLE, ifindexes=ifaces, clean=self.clean_mac))
-        iter_tables.append(self.iter_iftable(
+            )
+        )
+        iter_tables.append(
+            self.iter_iftable("mac", self.SNMP_MAC_TABLE, ifindexes=ifaces, clean=self.clean_mac)
+        )
+        iter_tables.append(
+            self.iter_iftable(
                 "description",
                 self.SNMP_IF_DESCR_TABLE,
                 ifindexes=chain(ifaces, subifaces),
                 clean=self.clean_ifdescription,
-            ))
-        iter_tables.append(self.iter_iftable(
+            )
+        )
+        iter_tables.append(
+            self.iter_iftable(
                 "mtu", "IF-MIB::ifMtu", ifindexes=chain(ifaces, subifaces), clean=self.clean_mtu
-            ))
+            )
+        )
         # Collect and merge results
         data = self.merge_tables(*tuple(iter_tables))
         if not ifaces:
@@ -301,11 +309,13 @@ class Script(BaseScript):
                 self.logger.error("Unknown type for interface %s", iface["name"])
                 continue
             if ifindex in ips:
-                iface["subinterfaces"].append({
+                iface["subinterfaces"].append(
+                    {
                         "name": iface["name"],
                         "enabled_afi": ["IPv4"],
                         "ipv4_addresses": [str(i) for i in ips[ifindex]],
-                    })
+                    }
+                )
                 vlan_iface_match = self.rx_vlan_interface.match(iface["name"])
                 if vlan_iface_match and is_vlan(vlan_iface_match.group("vlan_num")):
                     iface["subinterfaces"][-1]["vlan_ids"] = [
@@ -358,12 +368,14 @@ class Script(BaseScript):
                 vrfs["default"]["interfaces"].append(interfaces[i])
             for s in subs:
                 if s["name"] in vrf_if_map and vrf_if_map[s["name"]] != iface_vrf:
-                    vrfs[vrf_if_map[s["name"]]]["interfaces"].append({
+                    vrfs[vrf_if_map[s["name"]]]["interfaces"].append(
+                        {
                             "name": s["name"],
                             "type": "other",
                             "enabled_protocols": [],
                             "subinterfaces": [s],
-                        })
+                        }
+                    )
                 else:
                     interfaces[i]["subinterfaces"].append(s)
         return list(vrfs.values())

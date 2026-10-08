@@ -51,11 +51,13 @@ class Script(BaseScript):
                 # LAG list is empty
                 if not d["Config Master"]:
                     break
-                r.append({
+                r.append(
+                    {
                         "interface": f"T{d['Config Master'][0]}",
                         "members": d["Ld Share Group"],
                         "type": "L" if d["Agg Control"][0].lower() == "lacp" else "S",
-                    })
+                    }
+                )
         else:
             for tt in t.strip().split("\n"):
                 match = self.rx_sh_master.search(tt)
@@ -71,9 +73,11 @@ class Script(BaseScript):
                         tr_members = self.expand_interface_range(memmatch.group("members"))
                     else:
                         tr_members = self.expand_interface_range(match.group("member"))
-                    r.append({
+                    r.append(
+                        {
                             "interface": f"T{match.group('trunk')}",
                             "members": tr_members,
                             "type": "L" if match.group("type").lower() == "lacp" else "S",
-                        })
+                        }
+                    )
         return r

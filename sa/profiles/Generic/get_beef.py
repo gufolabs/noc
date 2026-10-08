@@ -83,11 +83,13 @@ class Script(BaseScript):
                 pass
             # Append tracked data
             for rcmd, packets in self.iter_cli_tracking():
-                r.append({
+                r.append(
+                    {
                         "names": cmd_answers.get(rcmd, ["setup.cli"]),
                         "request": smart_text(rcmd),
                         "reply": [self.encode_cli(v) for v in packets],
-                    })
+                    }
+                )
         self.stop_tracking()
         return r
 

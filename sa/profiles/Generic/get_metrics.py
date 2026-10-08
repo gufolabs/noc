@@ -246,7 +246,9 @@ class MetricScriptBase(BaseScriptMetaclass):
             raise ValueError(f"Error in file '{path}': Must be defined as object")
         if "$metric" not in data:
             raise ValueError("$metric key is required")
-        script._mt_map[data["$metric"]].append(mcs.get_snmp_handler(script, data["$metric"], load_rule(data)))
+        script._mt_map[data["$metric"]].append(
+            mcs.get_snmp_handler(script, data["$metric"], load_rule(data))
+        )
 
     @classmethod
     def get_snmp_handler(mcs, script, metric, rule):
@@ -559,7 +561,8 @@ class Script(BaseScript, metaclass=MetricScriptBase):
         """
         for m in self.metric_configs[metric]:
             for oid, vtype, scale, units, labels in rule.iter_oids(self, m):
-                self.snmp_batch[oid].append(BatchConfig(
+                self.snmp_batch[oid].append(
+                    BatchConfig(
                         id=m.id,
                         metric=m.metric,
                         labels=labels,
@@ -567,7 +570,8 @@ class Script(BaseScript, metaclass=MetricScriptBase):
                         scale=scale,
                         units=units,
                         service=m.service,
-                    ))
+                    )
+                )
                 # Mark as seen to stop further processing
                 self.seen_ids.add(m.id)
 
@@ -724,7 +728,8 @@ class Script(BaseScript, metaclass=MetricScriptBase):
             if not multi and id in self.seen_ids:
                 return  # Already seen
         self.script_metrics["n_measurements"] += 1
-        self.metrics.append({
+        self.metrics.append(
+            {
                 "id": id,
                 "ts": ts or self.get_ts(),
                 "metric": metric,
@@ -737,7 +742,8 @@ class Script(BaseScript, metaclass=MetricScriptBase):
                 "sla_probe": sla_probe,
                 "cpe": cpe,
                 "service": service,
-            })
+            }
+        )
         self.seen_ids.add(id)
 
     def get_metrics(self):

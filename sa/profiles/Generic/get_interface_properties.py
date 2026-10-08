@@ -51,19 +51,23 @@ class Script(BaseScript):
         if enable_interface_mac:
             iter_tables.append(self.iter_iftable("mac", mib[self.SNMP_MAC_TABLE], ifindex=ifindex))
         if enable_admin_status:
-            iter_tables.append(self.iter_iftable(
+            iter_tables.append(
+                self.iter_iftable(
                     "admin_status",
                     mib[self.SNMP_ADMIN_STATUS_TABLE],
                     ifindex=ifindex,
                     clean=self.clean_status,
-                ))
+                )
+            )
         if enable_oper_status:
-            iter_tables.append(self.iter_iftable(
+            iter_tables.append(
+                self.iter_iftable(
                     "oper_status",
                     mib[self.SNMP_OPER_STATUS_TABLE],
                     ifindex=ifindex,
                     clean=self.clean_status,
-                ))
+                )
+            )
         # Collect and merge results
         data = self.merge_tables(*tuple(iter_tables))
         # Format result
