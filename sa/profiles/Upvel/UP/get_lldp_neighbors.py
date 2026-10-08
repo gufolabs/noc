@@ -75,5 +75,5 @@ class Script(BaseScript):
                 neighbor["remote_system_description"] = match.group("system_description").strip()
             if match.group("port_description"):
                 neighbor["remote_port_description"] = match.group("port_description").strip()
-            r += [{"local_interface": match.group("port"), "neighbors": [neighbor]}]
+            r.append({"local_interface": match.group("port"), "neighbors": [neighbor]})
         return r

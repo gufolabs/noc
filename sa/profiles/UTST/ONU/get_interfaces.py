@@ -44,7 +44,7 @@ class Script(BaseScript):
                         }
                     ],
                 }
-                interfaces += [iface]
+                interfaces.append(iface)
         else:
             for match in self.rx_int2.finditer(v):
                 ifname = match.group("ifname")
@@ -70,5 +70,5 @@ class Script(BaseScript):
                         }
                     ],
                 }
-                interfaces += [iface]
+                interfaces.append(iface)
         return [{"interfaces": interfaces}]

@@ -77,7 +77,7 @@ class Script(BaseScript):
                                 port_vlans.update({iface: {"tagged": [], "untagged": ""}})
                             if s[j] == "1":
                                 port_vlans[iface]["untagged"] = v[1]
-                                un += [j]
+                                un.append(j)
 
                     s = self.hex_to_bin(tagged)
                     for i in iface_name:

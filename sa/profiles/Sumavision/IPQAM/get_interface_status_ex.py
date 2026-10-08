@@ -43,29 +43,25 @@ class Script(BaseScript):
                     m_ostatus = False
             except self.snmp.SNMPError:
                 m_ostatus = False
-            result += [
-                {
+            result.append({
                     "interface": f"{channel}/{mname}",
                     "admin_status": bool(m_astatus),
                     "oper_status": m_ostatus,
                     "full_duplex": False,
-                }
-            ]
+                })
 
         for coid, cindex in self.snmp.getnext("1.3.6.1.4.1.32285.2.2.10.3008.5.3.1.8"):
             cstatus = self.snmp.get(f"1.3.6.1.4.1.32285.2.2.10.3008.5.3.1.17.1.1.{cindex}")
             cspeed = self.snmp.get(f"1.3.6.1.4.1.32285.2.2.10.3008.5.3.1.19.1.1.{cindex}")
             cspeed = float(cspeed.rstrip("Mbps")) * 1000
-            result += [
-                {
+            result.append({
                     "interface": f"1/1.{cindex}",
                     "admin_status": cstatus > 0,
                     "oper_status": cstatus > 0,
                     "full_duplex": True,
                     "in_speed": cspeed,
                     "out_speed": cspeed,
-                }
-            ]
+                })
 
         for oid, ifindex in self.snmp.getnext("1.3.6.1.4.1.32285.2.2.10.3008.4.2.1.3"):
             status = False
@@ -80,15 +76,13 @@ class Script(BaseScript):
                 full_duplex = True
             if self.SPEED.get(istatus):
                 ispeed = self.SPEED.get(istatus)
-            result += [
-                {
+            result.append({
                     "interface": ifname,
                     "admin_status": status,
                     "oper_status": status,
                     "full_duplex": full_duplex,
                     "in_speed": ispeed,
                     "out_speed": ispeed,
-                }
-            ]
+                })
 
         return result

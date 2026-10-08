@@ -55,8 +55,7 @@ class Script(BaseScript):
                 o_stat = True
             else:
                 o_stat = False
-            interfaces += [
-                {
+            interfaces.append({
                     "type": iftype,
                     "name": name.replace("softwareLoopback", "lo"),
                     "mac": mac,
@@ -73,6 +72,5 @@ class Script(BaseScript):
                             "enabled_afi": ["BRIDGE"],
                         }
                     ],
-                }
-            ]
+                })
         return [{"interfaces": interfaces}]

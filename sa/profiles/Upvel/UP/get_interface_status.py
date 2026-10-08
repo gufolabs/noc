@@ -23,5 +23,5 @@ class Script(BaseScript):
             status = i[6] != "Down"
             if (interface is not None) and (interface == ifname):
                 return [{"interface": ifname, "status": status}]
-            r += [{"interface": ifname, "status": status}]
+            r.append({"interface": ifname, "status": status})
         return r

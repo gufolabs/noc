@@ -75,7 +75,7 @@ class Script(BaseScript):
             name, cfg = self.parse_section(section)
             # Hack. We use port_id for chassis_id
             if "port-id" not in cfg:
-                r += [{"local_interface": name, "neighbors": []}]
+                r.append({"local_interface": name, "neighbors": []})
                 return r
             remote_chassis_id = cfg["chassis-id"]
             remote_chassis_type = self.CHASSIS_TYPES[cfg["chassis-id-subtype"]]
@@ -98,9 +98,9 @@ class Script(BaseScript):
             found = False
             for i in r:
                 if i["local_interface"] == name:
-                    i["neighbors"] += [neighbor]
+                    i["neighbors"].append(neighbor)
                     found = True
                     break
             if not found:
-                r += [{"local_interface": name, "neighbors": [neighbor]}]
+                r.append({"local_interface": name, "neighbors": [neighbor]})
         return r

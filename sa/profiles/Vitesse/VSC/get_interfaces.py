@@ -63,7 +63,7 @@ class Script(BaseScript):
             r = []
             v = self.cli("show spanning-tree", cached=True)
             for match in self.rx_stp.finditer(v):
-                r += [self.profile.convert_interface_name(match.group("port"))]
+                r.append(self.profile.convert_interface_name(match.group("port")))
             return r
         except self.CLISyntaxError:
             return []
@@ -82,7 +82,7 @@ class Script(BaseScript):
             r = []
             v = self.cli("show link-oam", cached=True)
             for match in self.rx_oam.finditer(v):
-                r += [match.group("port") + " " + match.group("port_num")]
+                r.append(match.group("port") + " " + match.group("port_num"))
             return r
         except self.CLISyntaxError:
             return []
@@ -97,13 +97,11 @@ class Script(BaseScript):
         snmp_indexes = []
         v = self.cli("show snmp mib ifmib ifIndex")
         for row in parse_table(v, max_width=80):
-            snmp_indexes += [
-                {
+            snmp_indexes.append({
                     "ifindex": int(row[0].strip()),
                     "ifdescr": row[1].strip(),
                     "ifname": row[2].strip(),
-                }
-            ]
+                })
         v = self.cli("show interface * status").replace("\n\n", "\n")
         for row in parse_table(v, max_width=85):
             ifname = row[0]
@@ -122,15 +120,15 @@ class Script(BaseScript):
                 "subinterfaces": [],
             }
             if ifname in gvrp:
-                iface["enabled_protocols"] += ["GVRP"]
+                iface["enabled_protocols"].append("GVRP")
             if ifname in stp:
-                iface["enabled_protocols"] += ["STP"]
+                iface["enabled_protocols"].append("STP")
             if ifname in ctp:
-                iface["enabled_protocols"] += ["CTP"]
+                iface["enabled_protocols"].append("CTP")
             if ifname in oam:
-                iface["enabled_protocols"] += ["OAM"]
+                iface["enabled_protocols"].append("OAM")
             # Always enabled
-            iface["enabled_protocols"] += ["LLDP"]
+            iface["enabled_protocols"].append("LLDP")
             for i in snmp_indexes:
                 if ifname == i["ifname"]:
                     iface["snmp_ifindex"] = i["ifindex"]
@@ -158,8 +156,8 @@ class Script(BaseScript):
                     sub["untagged_vlan"] = int(match2.group("native_vlan"))
             else:
                 raise self.NotSupportedError()
-            iface["subinterfaces"] += [sub]
-            interfaces += [iface]
+            iface["subinterfaces"].append(sub)
+            interfaces.append(iface)
         v = self.cli("show ip interface brief")
         for match in self.rx_vlan.finditer(v):
             vlan_id = match.group("vlan")
@@ -186,16 +184,16 @@ class Script(BaseScript):
             }
             match1 = self.rx_ipv4.search(ll)
             if match1:
-                iface["subinterfaces"][0]["enabled_afi"] += ["IPv4"]
+                iface["subinterfaces"][0]["enabled_afi"].append("IPv4")
                 iface["subinterfaces"][0]["ipv4_addresses"] = [match1.group("ip")]
             match1 = self.rx_ipv6.search(ll)
             if match1:
-                iface["subinterfaces"][0]["enabled_afi"] += ["IPv6"]
+                iface["subinterfaces"][0]["enabled_afi"].append("IPv6")
                 iface["subinterfaces"][0]["ipv6_addresses"] = [match1.group("ip")]
             for i in snmp_indexes:
                 if ifname.lower() == i["ifname"].replace(" ", ""):
                     iface["snmp_ifindex"] = i["ifindex"]
                     iface["description"] = i["ifdescr"]
                     break
-            interfaces += [iface]
+            interfaces.append(iface)
         return [{"interfaces": interfaces}]

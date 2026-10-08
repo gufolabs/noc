@@ -25,7 +25,7 @@ class Script(VIMScript):
             for param in q.lldpInfo.parameter:
                 if param.key == "System Name":
                     nei["remote_system_name"] = param.value.strip()
-            result += [{"local_interface": q.device, "neighbors": [nei]}]
+            result.append({"local_interface": q.device, "neighbors": [nei]})
         return result
 
     def execute(self, **kwargs):

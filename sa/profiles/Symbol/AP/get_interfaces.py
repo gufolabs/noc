@@ -69,7 +69,7 @@ class Script(BaseScript):
                 if match.group("ip"):
                     iface["subinterfaces"][0]["enabled_afi"] = ["IPv4"]
                     iface["subinterfaces"][0]["ipv4_addresses"] = [match.group("ip")]
-            interfaces += [iface]
+            interfaces.append(iface)
 
         c = self.cli("show interface switchport")
         for match in self.rx_switchport.finditer(c):
@@ -93,7 +93,7 @@ class Script(BaseScript):
         c = self.cli("show wireless wlan config")
         vlans = []
         for match in self.rx_wlan_config.finditer(c):
-            vlans += [int(match.group("vlan_id"))]
+            vlans.append(int(match.group("vlan_id")))
         c = self.cli("show wireless radio detail")
         iface = {"subinterfaces": []}
         for match in self.rx_wlan.finditer(c):
@@ -101,15 +101,13 @@ class Script(BaseScript):
             iface["type"] = "physical"
             iface["oper_status"] = True
             iface["mac"] = match.group("mac")
-            iface["subinterfaces"] += [
-                {
+            iface["subinterfaces"].append({
                     "name": match.group("sub_name").replace("R", "radio"),
                     "admin_status": match.group("oper_status") == "On",
                     "oper_status": match.group("oper_status") == "On",
                     "mac": match.group("sub_mac"),
                     "enabled_afi": ["BRIDGE"],
                     "tagged_vlans": vlans,
-                }
-            ]
-        interfaces += [iface]
+                })
+        interfaces.append(iface)
         return [{"interfaces": interfaces}]

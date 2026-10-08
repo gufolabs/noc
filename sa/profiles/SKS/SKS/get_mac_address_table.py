@@ -42,14 +42,12 @@ class Script(BaseScript):
         else:
             rx_line = self.rx_line2
         for match in rx_line.finditer(c):
-            r += [
-                {
+            r.append({
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
                     "interfaces": [match.group("iface")],
                     "type": {"dynamic": "D", "static": "S", "self": "C", "secure": "S"}[
                         match.group("type").lower()
                     ],
-                }
-            ]
+                })
         return r

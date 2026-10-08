@@ -28,5 +28,5 @@ class Script(BaseScript):
                 privilege = "superuser"
             else:
                 privilege = "operator"
-            r += [{"username": username, "class": privilege}]
+            r.append({"username": username, "class": privilege})
         return r

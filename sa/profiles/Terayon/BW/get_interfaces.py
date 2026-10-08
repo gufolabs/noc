@@ -61,21 +61,19 @@ class Script(BaseScript):
                     }
                 ],
             }
-            interfaces += [iface]
+            interfaces.append(iface)
         for match in self.rx_sub.finditer(v):
             ifname, vlan_id = match.group("interface").split(".")
             for i in interfaces:
                 if i["name"] == ifname:
                     if i["subinterfaces"][0]["name"] == ifname:
                         i["subinterfaces"] = []
-                    i["subinterfaces"] += [
-                        {
+                    i["subinterfaces"].append({
                             "name": match.group("interface"),
                             "mtu": match.group("mtu"),
                             "enabled_afi": ["BRIDGE"],
                             "vlan_ids": [match.group("vlan_id")],
-                        }
-                    ]
+                        })
                     break
         v = self.cli("show interfaces ip-brief")
         for match in self.rx_ip.finditer(v):
@@ -92,20 +90,20 @@ class Script(BaseScript):
                     if vlan_id == 0:
                         sub = i["subinterfaces"][0]
                         if "IPv4" not in sub["enabled_afi"]:
-                            sub["enabled_afi"] += ["IPv4"]
+                            sub["enabled_afi"].append("IPv4")
                         if "ipv4_addresses" not in sub:
                             sub["ipv4_addresses"] = [ip_address]
                         else:
-                            sub["ipv4_addresses"] += [ip_address]
+                            sub["ipv4_addresses"].append(ip_address)
                         break
                     for sub in i["subinterfaces"]:
                         if sub["name"] == match.group("interface"):
                             if "IPv4" not in sub["enabled_afi"]:
-                                sub["enabled_afi"] += ["IPv4"]
+                                sub["enabled_afi"].append("IPv4")
                             if "ipv4_addresses" not in sub:
                                 sub["ipv4_addresses"] = [ip_address]
                             else:
-                                sub["ipv4_addresses"] += [ip_address]
+                                sub["ipv4_addresses"].append(ip_address)
                             break
 
         return [{"interfaces": interfaces}]

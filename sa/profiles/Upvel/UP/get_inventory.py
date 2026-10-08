@@ -30,14 +30,12 @@ class Script(BaseScript):
                 continue
             if vendor == "OEM":
                 part_no = "NoName | Transceiver | 1G | SFP"
-            r += [
-                {
+            r.append({
                     "type": "XCVR",
                     "vendor": vendor,
                     "part_no": part_no,
                     "number": ifname.split("/")[1],
                     "serial": i[4],
                     "description": (f"{i[3]} {i[5]}").strip(),
-                }
-            ]
+                })
         return r

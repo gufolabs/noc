@@ -66,7 +66,7 @@ class Script(BaseScript):
                 i["snmp_ifindex"] = self.IFINDEX[name]
             if name == "eth0":
                 i["hints"] = ["technology::radio::microwave_relay"]
-            ifaces += [i]
+            ifaces.append(i)
         c = self.cli("show vlan")
         for match in self.rx_vlan.finditer(c):
             vlan_id = int(match.group("vlanid"))
@@ -77,7 +77,7 @@ class Script(BaseScript):
                     if i["name"] == match.group("untagged"):
                         i["subinterfaces"][0]["untagged_vlan"] = vlan_id
                     else:
-                        i["subinterfaces"][0]["tagged_vlans"] += [vlan_id]
+                        i["subinterfaces"][0]["tagged_vlans"].append(vlan_id)
         v = self.cli("show ip all")
         for section in v.split("\n\n"):
             if not section:
@@ -105,5 +105,5 @@ class Script(BaseScript):
             if cfg["vlan"]:
                 if int(cfg["vlan"]) > 0:
                     i["subinterfaces"][0]["vlan_ids"] = int(cfg["vlan"])
-            ifaces += [i]
+            ifaces.append(i)
         return [{"interfaces": ifaces}]

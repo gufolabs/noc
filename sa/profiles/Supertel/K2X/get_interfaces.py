@@ -82,7 +82,7 @@ class Script(BaseScript):
                     }
                 ],
             }
-            interfaces += [iface]
+            interfaces.append(iface)
 
         ip_iface = self.cli("show ipv6 interface")
         for match in self.rx_sh_ipv6_int.finditer(ip_iface):
@@ -100,9 +100,9 @@ class Script(BaseScript):
             for i in interfaces:
                 if i["name"] == ifname:
                     ifac = False
-                    i["subinterfaces"][0]["ipv6_addresses"] += [ip]
+                    i["subinterfaces"][0]["ipv6_addresses"].append(ip)
                     if "IPv6" not in i["subinterfaces"][0]["enabled_afi"]:
-                        i["subinterfaces"][0]["enabled_afi"] += ["IPv6"]
+                        i["subinterfaces"][0]["enabled_afi"].append("IPv6")
 
             if ifac:
                 typ = self.types[ifname[:1]]
@@ -125,7 +125,7 @@ class Script(BaseScript):
                         }
                     ],
                 }
-                interfaces += [iface]
+                interfaces.append(iface)
 
         status = self.cli("show interfaces status")
         config = self.cli("show interfaces configuration")
@@ -204,16 +204,16 @@ class Script(BaseScript):
                         }
                     ],
                 }
-                interfaces += [iface]
+                interfaces.append(iface)
 
             # Portchannel member
             if ifname in portchannel_members:
                 ai, is_lacp = portchannel_members[ifname]
                 iface["aggregated_interface"] = ai
                 if is_lacp:
-                    iface["enabled_protocols"] += ["LACP"]
+                    iface["enabled_protocols"].append("LACP")
             elif ifac:
-                iface["subinterfaces"][0]["enabled_afi"] += ["BRIDGE"]
+                iface["subinterfaces"][0]["enabled_afi"].append("BRIDGE")
                 if switchports[ifname][1]:
                     iface["subinterfaces"][0]["tagged_vlans"] = switchports[ifname][1]
                 if switchports[ifname][0]:
@@ -225,13 +225,13 @@ class Script(BaseScript):
             )
             match = rx_gvrp.search(gvrp)
             if match:
-                iface["enabled_protocols"] += ["GVRP"]
+                iface["enabled_protocols"].append("GVRP")
 
             # LLDP
             rx_lldp = re.compile(r"^" + ifname + r"\s+(Rx and Tx|Rx|Tx)\s+", re.MULTILINE)
             match = rx_lldp.search(lldp)
             if match:
-                iface["enabled_protocols"] += ["LLDP"]
+                iface["enabled_protocols"].append("LLDP")
 
             # STP
             rx_stp = re.compile(
@@ -240,6 +240,6 @@ class Script(BaseScript):
             )
             match = rx_stp.search(stp)
             if match:
-                iface["enabled_protocols"] += ["STP"]
+                iface["enabled_protocols"].append("STP")
 
         return [{"interfaces": interfaces}]
