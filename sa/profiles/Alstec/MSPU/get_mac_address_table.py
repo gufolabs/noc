@@ -35,12 +35,10 @@ class Script(BaseScript):
             break
         cmd = f"context ip router brctl showmacs {iface}"
         for match in self.rx_line.finditer(self.cli(cmd, cached=True)):
-            r += [
-                {
+            r.append({
                     "vlan_id": 1,
                     "mac": match.group("mac"),
                     "interfaces": [match.group("port_no")],
                     "type": {"no": "D", "yes": "C"}[match.group("cpu").lower()],
-                }
-            ]
+                })
         return r

@@ -32,12 +32,10 @@ class Script(BaseScript):
         for match in self.rx_line.finditer(v):
             if mac is not None and mac != match.group("mac"):
                 continue
-            r += [
-                {
+            r.append({
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
                     "interfaces": [match.group("interfaces")],
                     "type": {"dynamic": "D", "static": "S"}[match.group("type")],
-                }
-            ]
+                })
         return r

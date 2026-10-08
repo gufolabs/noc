@@ -41,13 +41,11 @@ class Script(BaseScript):
                 c = self.cli(f"show fiber-ports optical-transceiver {match.group('port')} detail")
                 match1 = self.rx_sfp_serial.search(c)
                 if match1:
-                    r += [
-                        {
+                    r.append({
                             "type": "XCVR",
                             "vendor": "NONAME",
                             "part_no": "Unknown | Transceiver | SFP",
                             "number": match.group("port"),
                             "serial": match1.group("serial"),
-                        }
-                    ]
+                        })
         return r

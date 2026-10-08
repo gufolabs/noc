@@ -43,13 +43,11 @@ class Script(BaseScript):
                 )
                 match1 = self.rx_sfp_serial.search(c)
                 if match1:
-                    r += [
-                        {
+                    r.append({
                             "type": "XCVR",
                             "vendor": "NONAME",
                             "part_no": "Unknown | Transceiver | SFP",
                             "number": match.group("port")[-1:],
                             "serial": match1.group("serial"),
-                        }
-                    ]
+                        })
         return r

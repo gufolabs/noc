@@ -106,8 +106,8 @@ class Script(BaseScript):
                             match1.group("tagged")
                         )
                     if match1.group("igmp"):
-                        iface["subinterfaces"][0]["enabled_protocols"] += ["IGMP"]
-            interfaces += [iface]
+                        iface["subinterfaces"][0]["enabled_protocols"].append("IGMP")
+            interfaces.append(iface)
             snmp_ifindex += 1
         match = self.rx_ip.search(self.cli("show network"))
         ip_address = match.group("ip_address")
@@ -132,13 +132,13 @@ class Script(BaseScript):
         }
         if match.group("ipv6_address"):
             iface["subinterfaces"][0]["ipv6_addresses"] = [match.group("ipv6_address")]
-            iface["subinterfaces"][0]["enabled_afi"] += ["IPv6"]
+            iface["subinterfaces"][0]["enabled_afi"].append("IPv6")
         if match.group("ip_address1") and match.group("ip_address1") != "0.0.0.0":
             ip_address = match.group("ip_address1")
             ip_subnet = match.group("ip_subnet1")
             ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
-            iface["subinterfaces"][0]["ipv4_addresses"] += [ip_address]
+            iface["subinterfaces"][0]["ipv4_addresses"].append(ip_address)
         if match.group("vlan_id1"):
-            iface["subinterfaces"][0]["vlan_ids"] += [int(match.group("vlan_id1"))]
-        interfaces += [iface]
+            iface["subinterfaces"][0]["vlan_ids"].append(int(match.group("vlan_id1")))
+        interfaces.append(iface)
         return [{"interfaces": interfaces}]

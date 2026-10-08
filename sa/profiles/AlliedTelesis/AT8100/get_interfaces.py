@@ -57,7 +57,7 @@ class Script(BaseScript):
                     }
                 ],
             }
-            ifaces += [i]
+            ifaces.append(i)
 
         v = self.cli("show vlan brief", cached=True)
         t = parse_table(v, allow_wrap=True)
@@ -69,7 +69,7 @@ class Script(BaseScript):
                 for iface in ifaces:
                     if iface["name"] == ifname:
                         if tagged:
-                            iface["subinterfaces"][0]["tagged_vlans"] += [vlan_id]
+                            iface["subinterfaces"][0]["tagged_vlans"].append(vlan_id)
                         else:
                             iface["subinterfaces"][0]["untagged_vlan"] = vlan_id
                         break
@@ -92,5 +92,5 @@ class Script(BaseScript):
                 ],
             }
             i["subinterfaces"][0]["vlan_ids"] = int(match.group("ifname")[4:])
-            ifaces += [i]
+            ifaces.append(i)
         return [{"interfaces": ifaces}]

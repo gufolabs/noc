@@ -47,5 +47,5 @@ class Profile(BaseProfile):
         for match in self.rx_cards.finditer(v):
             i += 1
             s = bool(match.group("state"))
-            r += [{"n": i, "s": s}]
+            r.append({"n": i, "s": s})
         return r

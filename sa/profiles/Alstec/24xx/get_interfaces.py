@@ -143,6 +143,6 @@ class Script(BaseScript):
             ],
         }
         if match.group("ipv6_address"):
-            interfaces["0/0"]["subinterfaces"][0]["enabled_afi"] += ["IPv6"]
+            interfaces["0/0"]["subinterfaces"][0]["enabled_afi"].append("IPv6")
             interfaces["0/0"]["subinterfaces"][0]["ipv6_addresses"] = [match.group("ipv6_address")]
         return [{"interfaces": list(interfaces.values())}]

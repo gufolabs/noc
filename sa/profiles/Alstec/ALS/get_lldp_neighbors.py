@@ -94,5 +94,5 @@ class Script(BaseScript):
             }
             if i[3]:
                 neighbor["remote_system_name"] = i[3]
-            r += [{"local_interface": i[0], "neighbors": [neighbor]}]
+            r.append({"local_interface": i[0], "neighbors": [neighbor]})
         return r

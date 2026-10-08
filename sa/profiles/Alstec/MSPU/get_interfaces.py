@@ -59,7 +59,7 @@ class Script(BaseScript):
         if match:
             iface["mac"] = match.group("mac")
             sub["mac"] = match.group("mac")
-        iface["subinterfaces"] += [sub]
+        iface["subinterfaces"].append(sub)
         return iface
 
     def execute_cli(self):
@@ -74,7 +74,7 @@ class Script(BaseScript):
             descr = match.group("descr").strip()
             c = self.cli(f"port adsl {ifname} show")
             iface = self.get_phys_iface(c, ifname, descr)
-            interfaces += [iface]
+            interfaces.append(iface)
         try:
             v = self.cli("port uplink ", command_submit=b"\t")
         except self.CLISyntaxError:
@@ -85,7 +85,7 @@ class Script(BaseScript):
             descr = match.group("descr").strip()
             c = self.cli(f"port uplink {ifname} show")
             iface = self.get_phys_iface(c, ifname, descr)
-            interfaces += [iface]
+            interfaces.append(iface)
         for l in self.cli("context ip router ifconfig").split("\n\n"):
             match = self.rx_iface.search(l)
             if not match:
@@ -124,10 +124,10 @@ class Script(BaseScript):
                 sub["vlan_ids"] = [vlan]
                 for i in interfaces:
                     if i["name"] == parent:
-                        i["subinterfaces"] += [sub]
+                        i["subinterfaces"].append(sub)
                         # found = True
                         break
                 continue
-            iface["subinterfaces"] += [sub]
-            interfaces += [iface]
+            iface["subinterfaces"].append(sub)
+            interfaces.append(iface)
         return [{"interfaces": interfaces}]

@@ -30,7 +30,7 @@ class Script(BaseScript):
                         interface is not None and interface == n
                     ):
                         # ifOperStatus up(1)
-                        r += [{"interface": n, "status": int(s) == 1}]
+                        r.append({"interface": n, "status": int(s) == 1})
                 return r
             except self.snmp.TimeOutError:
                 pass
@@ -52,5 +52,5 @@ class Script(BaseScript):
             if not match:
                 continue
             status = match.group("status")
-            r += [{"interface": iface, "status": status.lower() == "up"}]
+            r.append({"interface": iface, "status": status.lower() == "up"})
         return r

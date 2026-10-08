@@ -20,5 +20,5 @@ class Script(BaseScript):
         v = self.scripts.get_mac_address_table()
         for i in v:
             if i["type"] == "C":
-                r += [{"first_chassis_mac": i["mac"], "last_chassis_mac": i["mac"]}]
+                r.append({"first_chassis_mac": i["mac"], "last_chassis_mac": i["mac"]})
         return r

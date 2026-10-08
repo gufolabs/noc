@@ -26,7 +26,7 @@ class Script(BaseScript):
         for l in pr.split("\n"):
             match = self.rx_result.match(l.strip())
             if match:
-                r += [match.group("resp")]
+                r.append(match.group("resp"))
                 n += int(match.group("resp"))
         avg1 = int(n / len(r))
         return {"success": len(r), "count": 4, "min": min(r), "avg": avg1, "max": max(r)}

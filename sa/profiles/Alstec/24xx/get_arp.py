@@ -72,8 +72,8 @@ class Script(BaseScript):
             mac_gw = f_mac_gw[0]
 
         if mac_gw:
-            r += [{"ip": gw[0], "mac": mac_gw}]
+            r.append({"ip": gw[0], "mac": mac_gw})
 
-        r += [{"ip": ip[0], "mac": mac[0]}]
+        r.append({"ip": ip[0], "mac": mac[0]})
 
         return r

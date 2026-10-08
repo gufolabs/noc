@@ -35,7 +35,7 @@ class Script(BaseScript):
         ne = self.rx_split.split(c)
         for n in range(1, len(ne), 2):
             iface, body = ne[n : n + 2]
-            r += [{"interface": iface, "tagged": [], "members": []}]
+            r.append({"interface": iface, "tagged": [], "members": []})
             if self.rx_pvid.search(body):
                 r[-1]["untagged"] = self.rx_pvid.search(body).group("pvid")
             if self.rx_tagged.search(body):

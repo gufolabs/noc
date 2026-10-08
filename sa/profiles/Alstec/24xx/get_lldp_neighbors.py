@@ -67,7 +67,7 @@ class Script(BaseScript):
             if not ll[0]:
                 data[-1] = [s[0] + s[1] for s in zip(data[-1], ll)]
                 continue
-            data += [ll]
+            data.append(ll)
         for d in data:
             chassis_id = d[2]
             if is_ipv4(chassis_id) or is_ipv6(chassis_id):
@@ -103,11 +103,9 @@ class Script(BaseScript):
                     neighbor["remote_system_name"] = match.group("system_name")
                 """
             neighbor["remote_system_name"] = d[4]
-            r += [
-                {
+            r.append({
                     # "local_interface": match.group("port"),
                     "local_interface": d[0],
                     "neighbors": [neighbor],
-                }
-            ]
+                })
         return r

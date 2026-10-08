@@ -23,5 +23,5 @@ class Script(BaseScript):
         r = []
         for match in self.rx_vlan.finditer(self.cli("show vlan")):
             if match.group("vlan_id") != "1":
-                r += [match.groupdict()]
+                r.append(match.groupdict())
         return r

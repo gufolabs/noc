@@ -28,5 +28,5 @@ class Script(BaseScript):
             if match.group("name"):
                 r.append(match.groupdict())
             else:
-                r += [{"vlan_id": match.group("vlan_id")}]
+                r.append({"vlan_id": match.group("vlan_id")})
         return r

@@ -59,7 +59,7 @@ class Script(BaseScript):
             if not row[0]:
                 data[-1] = [s[0] + s[1] for s in zip(data[-1], row)]
                 continue
-            data += [row]
+            data.append(row)
 
         for d in data:
             try:
@@ -111,6 +111,6 @@ class Script(BaseScript):
             port_descr = match.group("port_descr").strip()
             if port_descr:
                 neighbor["remote_port_description"] = port_descr
-            r += [{"local_interface": ifname, "neighbors": [neighbor]}]
+            r.append({"local_interface": ifname, "neighbors": [neighbor]})
 
         return r
