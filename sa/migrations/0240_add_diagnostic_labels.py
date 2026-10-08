@@ -76,7 +76,8 @@ class Migration(BaseMigration):
         current_labels = {ll["name"]: ll["_id"] for ll in l_coll.find()}
         # Scope labels
         if f"{DIAGNOCSTIC_LABEL_SCOPE}::*" not in current_labels:
-            bulk.append(InsertOne(
+            bulk.append(
+                InsertOne(
                     {
                         "name": f"{DIAGNOCSTIC_LABEL_SCOPE}::*",
                         "description": "",
@@ -99,10 +100,12 @@ class Migration(BaseMigration):
                         "expose_metric": False,
                         "expose_datastream": False,
                     }
-                ))
+                )
+            )
         for label in labels:
             if label in current_labels:
-                bulk.append(UpdateOne(
+                bulk.append(
+                    UpdateOne(
                         {"_id": current_labels[label]},
                         {
                             "$set": {
@@ -114,7 +117,8 @@ class Migration(BaseMigration):
                                 "enable_managedobject": True,
                             }
                         },
-                    ))
+                    )
+                )
             else:
                 doc = {
                     # "_id": bson.ObjectId(),

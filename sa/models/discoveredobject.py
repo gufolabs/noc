@@ -939,7 +939,8 @@ class DiscoveredObject(Document):
             self.set_dirty("Update data")
             break
         else:
-            self.data.append(DataItem(
+            self.data.append(
+                DataItem(
                     source=source,
                     remote_system=remote_system,
                     remote_id=data.pop("remote_id", None),
@@ -951,7 +952,8 @@ class DiscoveredObject(Document):
                     last_update=last_update,
                     is_delete=is_delete,
                     event=event,
-                ))
+                )
+            )
             self.set_dirty("Add New Data")
 
     def get_data(self, source: str, remote_system: RemoteSystem | None = None) -> DataItem | None:

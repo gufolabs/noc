@@ -591,7 +591,8 @@ class ServiceInstance(Document):
             # Instance Deleted
             return
         if bulk is not None:
-            bulk.append(UpdateOne(
+            bulk.append(
+                UpdateOne(
                     {"_id": self.id},
                     {
                         "$set": {
@@ -600,7 +601,8 @@ class ServiceInstance(Document):
                             "last_seen": self.last_seen,
                         }
                     },
-                ))
+                )
+            )
         else:
             ServiceInstance.objects.filter(id=self.id).update(
                 resources=self.resources,

@@ -1533,9 +1533,11 @@ class ManagedObject(NOCModel):
             # Convert list to plain text
             r = []
             for d in sorted(data, key=operator.itemgetter("name")):
-                r.append("==[ {} ]========================================\n{}".format(
+                r.append(
+                    "==[ {} ]========================================\n{}".format(
                         d["name"], d["config"]
-                    ))
+                    )
+                )
             data = "\n".join(r)
         # Wipe out unnecessary parts
         if self.config_filter_handler:
@@ -2801,31 +2803,37 @@ class ManagedObject(NOCModel):
         # ManagedObject
         if self.shape_overlay_glyph:
             pos = self.shape_overlay_position or ShapeOverlayPosition.NW
-            r.append(ShapeOverlay(
+            r.append(
+                ShapeOverlay(
                     code=self.shape_overlay_glyph.code,
                     position=pos,
                     form=self.shape_overlay_form or ShapeOverlayForm.Circle,
-                ))
+                )
+            )
             seen.add(pos)
         # Project
         if self.project and self.project.shape_overlay_glyph:
             pos = self.project.shape_overlay_position or ShapeOverlayPosition.NW
             if pos not in seen:
-                r.append(ShapeOverlay(
+                r.append(
+                    ShapeOverlay(
                         code=self.project.shape_overlay_glyph.code,
                         position=pos,
                         form=self.project.shape_overlay_form or ShapeOverlayForm.Circle,
-                    ))
+                    )
+                )
                 seen.add(pos)
         # ManagedObjectProfile
         if self.object_profile.shape_overlay_glyph:
             pos = self.object_profile.shape_overlay_position or ShapeOverlayPosition.NW
             if pos not in seen:
-                r.append(ShapeOverlay(
+                r.append(
+                    ShapeOverlay(
                         code=self.object_profile.shape_overlay_glyph.code,
                         position=pos,
                         form=self.object_profile.shape_overlay_form or ShapeOverlayForm.Circle,
-                    ))
+                    )
+                )
                 seen.add(pos)
         return r
 

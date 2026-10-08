@@ -23,14 +23,16 @@ class Migration(BaseMigration):
             os_linux_profile_id = os_linux_profile_id["_id"]
         else:
             os_linux_profile_id = bson.ObjectId()
-            bulk.append(InsertOne(
+            bulk.append(
+                InsertOne(
                     {
                         "_id": os_linux_profile_id,
                         "name": "OS.Linux",
                         "uuid": uuid.UUID("ffdf0793-da3c-4f5d-9647-b0f40bad6f53"),
                         "description": None,
                     }
-                ))
+                )
+            )
         old_profiles = set()
         for profile in db.noc.profiles.find({"name": {"$regex": "^Linux.+"}}, {"_id": 1}):
             profile_id = profile["_id"]

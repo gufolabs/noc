@@ -142,7 +142,8 @@ class ManagedObjectSelectorLabels:
             return r["name"]
         # Create RegexLabel
         name = f"SM_{selector_name}_{field}"
-        self.regex_bulk.append(InsertOne(
+        self.regex_bulk.append(
+            InsertOne(
                 {
                     # "_id": bson.ObjectId(),
                     "name": name,
@@ -174,7 +175,8 @@ class ManagedObjectSelectorLabels:
                         }
                     ],
                 }
-            ))
+            )
+        )
         return name
 
     def filter_administrative_domain_id(self, ad_id):

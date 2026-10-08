@@ -275,7 +275,9 @@ class MetricScope(Document):
             elif label.store_column:
                 view_columns.append(f"{label.store_column}")
             elif label.view_column:
-                view_columns.append(f"splitByString('::', arrayFirst(x -> startsWith(x, '{label.label_prefix}'), labels))[-1] AS {label.view_column} ")
+                view_columns.append(
+                    f"splitByString('::', arrayFirst(x -> startsWith(x, '{label.label_prefix}'), labels))[-1] AS {label.view_column} "
+                )
         if view_columns:
             vc_expr = ", ".join(view_columns)
             vc_expr += ", "

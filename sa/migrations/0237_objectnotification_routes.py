@@ -73,14 +73,16 @@ class Migration(BaseMigration):
                         "change_id": str(change_id),
                     }
                 )
-                cfgroute_bulk.append(InsertOne(
+                cfgroute_bulk.append(
+                    InsertOne(
                         {
                             "_id": mr_id,
                             "change_id": change_id,
                             "hash": hashlib.sha256(data).hexdigest()[:16],
                             "data": data.decode("utf-8"),
                         }
-                    ))
+                    )
+                )
         mr_coll = self.mongo_db["messageroutes"]
         cfg_coll = self.mongo_db["ds_cfgmxroute"]
         if route_bulk:

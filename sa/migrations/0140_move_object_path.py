@@ -19,7 +19,8 @@ class Migration(BaseMigration):
         dc = self.mongo_db["noc.objectdata"]
         bulk = []
         for d in uc.find():
-            bulk.append(UpdateOne(
+            bulk.append(
+                UpdateOne(
                     {"_id": d["_id"]},
                     {
                         "$set": {
@@ -29,7 +30,8 @@ class Migration(BaseMigration):
                         }
                     },
                     upsert=True,
-                ))
+                )
+            )
         if bulk:
             print("Commiting changes to database")
             try:

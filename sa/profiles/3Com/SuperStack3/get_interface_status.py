@@ -39,5 +39,7 @@ class Script(BaseScript):
         else:
             cmd = "bridge port summary all"
         for match in self.rx_line.finditer(self.cli(cmd)):
-            r.append({"interface": match.group("interface"), "status": match.group("status") == "Active"})
+            r.append(
+                {"interface": match.group("interface"), "status": match.group("status") == "Active"}
+            )
         return r

@@ -98,11 +98,13 @@ class Migration(BaseMigration):
                         "category": bson.ObjectId(),
                     }
                 )
-            mo_caps[mo_id].append({
+            mo_caps[mo_id].append(
+                {
                     "capability": str(caps),
                     "value": str(attr_value),
                     "source": "caps",
-                })
+                }
+            )
         caps = []
         for mo_id, data in mo_caps.items():
             caps.append((mo_id, orjson.dumps(data).decode("utf-8")))

@@ -340,7 +340,8 @@ class MetricRule(Document):
                 continue
             if action.metric_type and action.thresholds:
                 a_config = action.get_config(rule_id=rule.id)
-                actions.append({
+                actions.append(
+                    {
                         "id": str(action.metric_type.id),
                         "name": str(f"Threshold_{action.metric_type.name}"),
                         "graph_config": a_config.model_dump(),
@@ -351,7 +352,8 @@ class MetricRule(Document):
                                 "sender_id": action.metric_type.scope.table_name,
                             }
                         ],
-                    })
+                    }
+                )
                 continue
             if not action.metric_action:
                 continue

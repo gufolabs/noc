@@ -419,7 +419,9 @@ class MetricAction(Document):
             if thresholds:
                 nodes["alarm"].config["thresholds"] = thresholds
             if dkey_input:
-                nodes["alarm"].inputs.append(InputItem(name=dkey_input.name, node=dkey_input.node, dynamic=True))
+                nodes["alarm"].inputs.append(
+                    InputItem(name=dkey_input.name, node=dkey_input.node, dynamic=True)
+                )
         # Apply param to Node config
         for node_id in node_configs:
             if node_id in nodes:

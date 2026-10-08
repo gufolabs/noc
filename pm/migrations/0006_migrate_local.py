@@ -27,10 +27,12 @@ class Migration(BaseMigration):
                 parent = phash[pn]
             else:
                 parent = Binary("\x00" * 8)
-            bulk.append(UpdateOne(
+            bulk.append(
+                UpdateOne(
                     {"_id": m["_id"]},
                     {"$set": {"local": m["name"].split(".")[-1], "parent": parent}},
-                ))
+                )
+            )
         if bulk:
             print("Commiting changes to database")
             try:

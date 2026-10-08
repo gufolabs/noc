@@ -159,9 +159,11 @@ class ObjectStatus(Document):
         for oid, status, ts in statuses:
             ts = ts or now
             if oid not in cs or (cs[oid]["status"] != status and cs[oid]["last"] <= ts):
-                bulk.append(UpdateOne(
+                bulk.append(
+                    UpdateOne(
                         {"object": oid}, {"$set": {"status": status, "last": ts}}, upsert=True
-                    ))
+                    )
+                )
                 if status and oid in cs:
                     outages.append((oid, cs[oid]["last"], ts))
                 cs[oid] = {"status": status, "last": ts}

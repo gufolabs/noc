@@ -252,7 +252,8 @@ class ServiceSummary(Document):
             ni = new_summary[iface]
             if old_services != ni["service"] or old_subs != ni["subscriber"]:
                 # Changed, update
-                bulk.append(UpdateOne(
+                bulk.append(
+                    UpdateOne(
                         {"_id": oi["_id"]},
                         {
                             "$set": {
@@ -260,7 +261,8 @@ class ServiceSummary(Document):
                                 "subscriber": to_list(ni["subscriber"]),
                             }
                         },
-                    ))
+                    )
+                )
             # Mark as processed
             del new_summary[iface]
         # Process new items
@@ -400,11 +402,13 @@ class ServiceSummary(Document):
         pipeline = []
         if not summary_all:
             # Filter managed objects
-            pipeline.append({
+            pipeline.append(
+                {
                     "$match": {
                         "managed_object": {"$in": [getattr(mo, "id", mo) for mo in managed_objects]}
                     }
-                })
+                }
+            )
         # Mark service and profile with type field
         pipeline += [
             {

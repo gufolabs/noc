@@ -26,12 +26,14 @@ class Migration(BaseMigration):
             bulk.append(DeleteMany({"object": row["_id"]}))
             r = coll.find_one({"object": row["_id"]})
             if r:
-                bulk.append(InsertOne(
+                bulk.append(
+                    InsertOne(
                         {
                             "object": r["object"],
                             "status": r.get("status", True),
                             "last": r.get("last"),
                         }
-                    ))
+                    )
+                )
         if bulk:
             coll.bulk_write(bulk, ordered=True)
