@@ -33,10 +33,12 @@ class Script(BaseScript):
         for match in self.rx_line.finditer(data):
             e = match.group("expires")
             expire = datetime.datetime.fromtimestamp(time.time() + int(e))
-            r.append({
+            r.append(
+                {
                     "ip": match.group("ip"),
                     "mac": match.group("mac"),
                     "expiration": expire,
                     "type": "A",
-                })
+                }
+            )
         return r

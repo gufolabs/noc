@@ -231,10 +231,12 @@ class Script(BaseScript):
             }
         ]
         for match in self.rx_vrfs.finditer(self.cli("show ip vrf")):
-            r.append({
+            r.append(
+                {
                     "forwarding_instance": match.group("vrf"),
                     "type": "ip",
                     "rd": match.group("rd"),
                     "interfaces": self.get_ifaces(match.group("vrf")),
-                })
+                }
+            )
         return r

@@ -116,10 +116,12 @@ class Script(BaseScript):
                     mem2 += mem[j] + "/"
                 for i in mem1:
                     members.append(mem2 + str(i))
-            r.append({
+            r.append(
+                {
                     "interface": match.group("port"),
                     # TODO batter type detection
                     "type": "L" if typ == "Non-candidate" else "S",
                     "members": members,
-                })
+                }
+            )
         return r

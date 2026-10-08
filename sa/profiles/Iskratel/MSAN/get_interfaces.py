@@ -86,21 +86,25 @@ class Script(BaseScript):
                 c = self.cli("show interface all pvc")
                 for match in self.rx_if_pvc.finditer(c):
                     for match1 in self.rx_pvc.finditer(match.group("pvcs")):
-                        pvc.append({
+                        pvc.append(
+                            {
                                 "port": match.group("port"),
                                 "vpi": int(match1.group("vpi")),
                                 "vci": int(match1.group("vci")),
                                 "vlan": int(match1.group("vlan")),
-                            })
+                            }
+                        )
             except self.CLISyntaxError:
                 _ = self.cli("\x08" * 22)
                 c = self.cli("show pvc all")
                 for match in self.rx_pvc1.finditer(c):
-                    pvc.append({
+                    pvc.append(
+                        {
                             "port": match.group("port"),
                             "vpi": int(match.group("vpi")),
                             "vci": int(match.group("vci")),
-                        })
+                        }
+                    )
                 c = self.cli("show vlan port all")
                 for match in self.rx_vlan.finditer(c):
                     ifname = match.group("port")

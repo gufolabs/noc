@@ -59,14 +59,16 @@ class Script(BaseScript):
             optical_rx_dbm = self.rx_rx_dbm.search(I).group("rx_dbm")
             if optical_rx_dbm == "- Inf":
                 optical_rx_dbm = None
-            r.append({
+            r.append(
+                {
                     "interface": name,
                     "temp_c": temp_c,
                     "voltage_v": voltage_v,
                     "current_ma": current_ma,
                     "optical_rx_dbm": optical_rx_dbm,
                     "optical_tx_dbm": optical_tx_dbm,
-                })
+                }
+            )
         return r
 
     def execute_snmp(self, interface=None):
@@ -79,12 +81,14 @@ class Script(BaseScript):
             }
             interface_dom_metrics = self.snmp.get(dom_oid_dict)
             name = self.snmp.get(mib["IF-MIB::ifName", int(ifindex)])
-            r.append({
+            r.append(
+                {
                     "interface": name,
                     "temp_c": interface_dom_metrics["Temperature"],
                     "voltage_v": interface_dom_metrics["Voltage"],
                     "current_ma": interface_dom_metrics["Bias_Current"],
                     "optical_rx_dbm": interface_dom_metrics["RxPower"],
                     "optical_tx_dbm": interface_dom_metrics["TxPower"],
-                })
+                }
+            )
         return r

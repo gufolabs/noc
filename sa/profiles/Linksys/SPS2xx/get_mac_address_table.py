@@ -38,21 +38,25 @@ class Script(BaseScript):
                 continue
             if interface is not None:
                 if interfaces == interface:
-                    r.append({
+                    r.append(
+                        {
                             "vlan_id": match.group("vlan_id"),
                             "mac": match.group("mac"),
                             "interfaces": [interfaces],
                             "type": {"dynamic": "D", "static": "S", "permanent": "S", "self": "S"}[
                                 match.group("type").lower()
                             ],
-                        })
+                        }
+                    )
             else:
-                r.append({
+                r.append(
+                    {
                         "vlan_id": match.group("vlan_id"),
                         "mac": match.group("mac"),
                         "interfaces": [interfaces],
                         "type": {"dynamic": "D", "static": "S", "permanent": "S", "self": "S"}[
                             match.group("type").lower()
                         ],
-                    })
+                    }
+                )
         return r

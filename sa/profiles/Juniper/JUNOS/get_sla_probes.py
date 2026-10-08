@@ -50,12 +50,14 @@ class Script(BaseScript):
         if "probe" in v["configuration"]["services"]["rpm"]:
             for p in v["configuration"]["services"]["rpm"]["probe"]:
                 for t in p["test"]:
-                    r.append({
+                    r.append(
+                        {
                             "group": p["name"],
                             "name": t["name"],
                             "type": self.TEST_TYPES[t["probe-type"]],
                             "target": t["target"]["address"],
-                        })
+                        }
+                    )
                     if "dscp-code-points" in t:
                         r[-1]["tos"] = int(t["dscp-code-points"], 2)
         return r
@@ -72,12 +74,14 @@ class Script(BaseScript):
             r = []
             v = self.cli("show services rpm probe-results")
             for match in self.rx_res.finditer(v):
-                r.append({
+                r.append(
+                    {
                         "group": match.group("owner"),
                         "name": match.group("test"),
                         "type": self.TEST_TYPES[match.group("type").strip(",")],
                         "target": match.group("target"),
-                    })
+                    }
+                )
                 if match.group("hw_timestamp"):
                     r[-1]["hw_timestamp"] = (
                         match.group("hw_timestamp").strip() != "No hardware timestamps"

@@ -78,12 +78,14 @@ class Script(BaseScript):
                 bundle_data_dict, display_hints={bundle_data_dict["partner_sysid"]: render_mac}
             )
 
-            res.append({
+            res.append(
+                {
                     "interface": bundle_data["p_ifname"],
                     "local_port_id": bundle_data["actor_port_num"],
                     "remote_system_id": bundle_data["partner_sysid"],
                     "remote_port_id": bundle_data["partner_port_num"],
-                })
+                }
+            )
         return res
 
     def execute_snmp(self):
@@ -111,10 +113,12 @@ class Script(BaseScript):
                     )
                     bundle = self.get_bundle(port_actor_admin_keys, actor_admin_key)
 
-                    res.append({
+                    res.append(
+                        {
                             "lag_id": lag_id,
                             "interface": ifname,
                             "system_id": sysid,
                             "bundle": bundle,
-                        })
+                        }
+                    )
         return res

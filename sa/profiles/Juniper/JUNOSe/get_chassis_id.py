@@ -38,9 +38,11 @@ class Script(BaseScript):
             for s in slots:
                 if s["slot"] == slot:
                     base = match.group("mac")
-                    macs.append({
+                    macs.append(
+                        {
                             "first_chassis_mac": base,
                             "last_chassis_mac": MAC(base).shift(int(s["count"]) - 1),
-                        })
+                        }
+                    )
                     break
         return macs

@@ -46,8 +46,10 @@ class Script(BaseScript):
         else:
             cmd = "show interfaces status"
         for match in self.rx_interface_status.finditer(self.cli(cmd)):
-            r.append({
+            r.append(
+                {
                     "interface": match.group("interface"),
                     "status": match.group("status").lower() == "up",
-                })
+                }
+            )
         return r

@@ -29,9 +29,11 @@ class Script(BaseScript):
         except self.CLISyntaxError:
             return []
         for match in self.rx_p.finditer(c):
-            r.append({
+            r.append(
+                {
                     "interface": match.group("iface"),
                     "members": [match.group("port1"), match.group("port2")],
                     "type": "S",
-                })
+                }
+            )
         return r

@@ -51,8 +51,10 @@ class Script(BaseScript):
                 s = self.cli(cmd)
                 match = self.rx_interface_status.search(s)
                 if match:
-                    r.append({
+                    r.append(
+                        {
                             "interface": match.group("interface"),
                             "status": match.group("status") == "Up",
-                        })
+                        }
+                    )
         return r

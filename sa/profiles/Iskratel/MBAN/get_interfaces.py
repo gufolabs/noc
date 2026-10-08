@@ -59,35 +59,41 @@ class Script(BaseScript):
                 vci = match.group("vci")
                 for ii in interfaces:
                     if ii["name"] == ifname:
-                        ii["subinterfaces"].append({
+                        ii["subinterfaces"].append(
+                            {
                                 "name": f"{ifname}:{vpi}_{vci}",
                                 "admin_status": match.group("admin_status") == "Yes",
                                 "oper_status": match.group("oper_status") == "Yes",
                                 "enabled_afi": ["BRIDGE", "ATM"],
                                 "vpi": vpi,
                                 "vci": vci,
-                            })
+                            }
+                        )
                         sub_map[f"{ifname}:{vpi}_{vci}"] = ii["subinterfaces"][-1]
                 continue
             if match.group("vpi") and match.group("vci"):
                 vpi = match.group("vpi")
                 vci = match.group("vci")
-                i["subinterfaces"].append({
+                i["subinterfaces"].append(
+                    {
                         "name": f"{ifname}:{vpi}_{vci}",
                         "admin_status": match.group("admin_status") == "Yes",
                         "oper_status": match.group("oper_status") == "Yes",
                         "enabled_afi": ["BRIDGE", "ATM"],
                         "vpi": vpi,
                         "vci": vci,
-                    })
+                    }
+                )
                 sub_map[f"{ifname}:{vpi}_{vci}"] = i["subinterfaces"][-1]
             else:
-                i["subinterfaces"].append({
+                i["subinterfaces"].append(
+                    {
                         "name": ifname,
                         "admin_status": match.group("admin_status") == "Yes",
                         "oper_status": match.group("oper_status") == "Yes",
                         "enabled_afi": ["BRIDGE"],
-                    })
+                    }
+                )
                 sub_map[ifname] = i["subinterfaces"][-1]
 
             interfaces.append(i)

@@ -126,22 +126,26 @@ class Script(BaseScript):
                 "subinterfaces": [],
             }
             if ifname in switchport:
-                interfaces[ifname]["subinterfaces"].append({
+                interfaces[ifname]["subinterfaces"].append(
+                    {
                         "name": ifname,
                         "admin_status": iface.group("admin_status") == "up",
                         "oper_status": iface.group("oper_status") == "up",
                         "enabled_afi": ["BRIDGE"],
                         "tagged_vlans": switchport[ifname]["tagged"],
-                    })
+                    }
+                )
             if iface.group("address"):
-                interfaces[ifname]["subinterfaces"].append({
+                interfaces[ifname]["subinterfaces"].append(
+                    {
                         "name": ifname,
                         "admin_status": True,
                         "oper_status": True,
                         # "mac": mac,
                         "enabled_afi": ["IPv4"],
                         "ipv4_addresses": [iface.group("address")],
-                    })
+                    }
+                )
             if iface.group("mac"):
                 if self.rx_split_mac.match(iface.group("mac")):
                     interfaces[ifname]["mac"] = self.rx_split_mac.match(iface.group("mac")).group(
