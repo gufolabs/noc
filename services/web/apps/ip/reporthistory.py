@@ -121,13 +121,15 @@ class ReportHistoryApplication(SimpleReport):
                 if c.old is None and c.new is None:
                     continue
                 chg.append(f"{c.field}: {c.old} -> {c.new}")
-            r.append((
+            r.append(
+                (
                     self.to_json(ll.timestamp),
                     ll.user,
                     {"C": "Create", "U": "Modify", "M": "Modify", "D": "Delete"}[ll.op],
                     obj,
                     self.format_detail("\n".join(chg)),
-                ))
+                )
+            )
 
         return self.from_dataset(
             title=self.title, columns=["Time", "User", "Action", "Object", "Detail"], data=r

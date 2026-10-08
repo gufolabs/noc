@@ -270,7 +270,8 @@ class MACApplication(ExtApplication):
                 continue
             mo_name, _, _mo_id, pool, _op, op_name = mos[int(d["managed_object"])]
             pool = Pool.get_by_id(pool)
-            out.append({
+            out.append(
+                {
                     "timestamp": str(d["ts"]),
                     "mac": d["mac_s"],
                     "l2_domain": "",
@@ -280,5 +281,6 @@ class MACApplication(ExtApplication):
                     "description": d["description"],
                     "pool": pool.name,
                     "object_profile": op_name,
-                })
+                }
+            )
         return self.response(out, status=self.OK)

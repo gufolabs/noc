@@ -225,7 +225,8 @@ class ReportDiscoveryTopologyProblemApplication(SimpleReport):
         for mo_id in problems:
             mo = mos_id.get(mo_id, ManagedObject.get_by_id(mo_id))
             for iface in problems[mo_id]:
-                data.append((
+                data.append(
+                    (
                         mo.name,
                         mo.address,
                         mo.profile.name,
@@ -238,7 +239,8 @@ class ReportDiscoveryTopologyProblemApplication(SimpleReport):
                         problems[mo_id][iface].get("remote_hostname"),
                         problems[mo_id][iface].get("remote_description"),
                         problems[mo_id][iface].get("remote_chassis"),
-                    ))
+                    )
+                )
                 if problems[mo_id][iface]["problem"] == "Remote object is not found":
                     match = rn.findall(problems[mo_id][iface]["remote_id"])
                     if match:

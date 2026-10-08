@@ -148,13 +148,15 @@ class ObjectModelApplication(ExtDocApplication):
             for t, n in o.iter_connection_proposals(c.name):
                 m = ObjectModel.objects.filter(id=t).first()
                 mc = m.get_model_connection(n)
-                proposals.append({
+                proposals.append(
+                    {
                         "model": m.name,
                         "model_description": m.description,
                         "name": n,
                         "description": mc.description,
                         "gender": mc.gender,
-                    })
+                    }
+                )
             if (
                 r
                 and r[-1]["direction"] == c.direction
@@ -163,12 +165,14 @@ class ObjectModelApplication(ExtDocApplication):
             ):
                 r[-1]["names"].append({"name": c.name, "description": c.description})
             else:
-                r.append({
+                r.append(
+                    {
                         "names": [{"name": c.name, "description": c.description}],
                         "direction": c.direction,
                         "gender": c.gender,
                         "connections": proposals,
-                    })
+                    }
+                )
         # Crossing
         # @todo: Count splitter interface
         rc = []

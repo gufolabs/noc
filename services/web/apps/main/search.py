@@ -33,11 +33,13 @@ class SearchApplication(ExtApplication):
             if not model:
                 continue  # Invalid model
             url = model.get_search_result_url(qr["object"])
-            r.append({
+            r.append(
+                {
                     "title": str(qr["title"]),
                     "card": str(qr["card"]),
                     "tags:": [str(x) for x in (qr.get("tags", []) or [])],
                     "url": url,
                     "score": qr["score"],
-                })
+                }
+            )
         return r

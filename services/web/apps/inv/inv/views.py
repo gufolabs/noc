@@ -706,12 +706,14 @@ class InvApplication(ExtApplication):
             }
         ]
         for cm in ConfiguredMap.objects.filter(nodes__object_filter__container=oid):
-            r.append({
+            r.append(
+                {
                     "id": str(cm.id),
                     "label": _("Configured Map Container: ") + str(o.name),
                     "is_default": False,
                     "args": ["configured", str(cm.id)],
-                })
+                }
+            )
         return r
 
     @api.post(
@@ -772,11 +774,13 @@ class InvApplication(ExtApplication):
             for oid in o.get_path():
                 obj = Object.get_by_id(oid)
                 connection = obj.connections[0] if obj.connections else None
-                result.append({
+                result.append(
+                    {
                         "id": str(oid),
                         "label": obj.name,
                         "connection": connection,
-                    })
+                    }
+                )
             return result
 
         start = int(kwargs.get("__start", 0))

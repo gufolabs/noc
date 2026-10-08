@@ -61,10 +61,12 @@ class ProtocolApplication(ExtDocApplication):
         data["discriminators"] = []
         for d in discriminators:
             value = attr._clean(d["value"])
-            data["discriminators"].append({
+            data["discriminators"].append(
+                {
                     "data": [{"interface": mi.name, "attr": attr.name, "value": value}],
                     "code": d["code"],
-                })
+                }
+            )
         # Clean other
         return super().clean(data)
 

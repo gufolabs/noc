@@ -49,7 +49,8 @@ class PrefixTableApplication(ExtModelApplication):
         labels = defaultdict(list)
         for ll in Label.objects.filter(match_prefixfilter__prefix_table__in=prefix_filters):
             for pf in ll.match_prefixfilter:
-                labels[pf.prefix_table.id].append({
+                labels[pf.prefix_table.id].append(
+                    {
                         "labels": [
                             {
                                 "id": ll.name,
@@ -66,7 +67,8 @@ class PrefixTableApplication(ExtModelApplication):
                         ],
                         "scope": pf.scope,
                         "is_persist": True,
-                    })
+                    }
+                )
         for row in data:
             row["match_labels"] = labels.get(row["id"], [])
         return data

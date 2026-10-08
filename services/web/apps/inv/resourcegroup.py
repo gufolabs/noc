@@ -46,7 +46,8 @@ class ResourceGroupApplication(ExtDocApplication):
         r = []
         for num, ml in enumerate(o.dynamic_service_labels):
             if num:
-                r.append({
+                r.append(
+                    {
                         "id": "&&",
                         "is_protected": False,
                         "scope": "",
@@ -58,10 +59,12 @@ class ResourceGroupApplication(ExtDocApplication):
                         "fg_color1": 16777215,
                         "bg_color2": 0,
                         "fg_color2": 16777215,
-                    })
+                    }
+                )
             for ll in ml.get_labels():
                 scope, value, badges = clean_label(ll.name)
-                r.append({
+                r.append(
+                    {
                         "id": ll.name,
                         "is_protected": ll.is_protected,
                         "scope": scope,
@@ -76,7 +79,8 @@ class ResourceGroupApplication(ExtDocApplication):
                         "fg_color1": ll.fg_color1,
                         "bg_color2": ll.bg_color2,
                         "fg_color2": ll.fg_color2,
-                    })
+                    }
+                )
 
         return r
 
@@ -86,7 +90,8 @@ class ResourceGroupApplication(ExtDocApplication):
         for ml in o.dynamic_client_labels:
             for ll in ml.get_labels():
                 scope, value, _badges = clean_label(ll.name)
-                r.append({
+                r.append(
+                    {
                         "id": ll.name,
                         "is_protected": ll.is_protected,
                         "scope": scope,
@@ -101,7 +106,8 @@ class ResourceGroupApplication(ExtDocApplication):
                         # "fg_color1": f"#{ll.fg_color1:06x}",
                         # "bg_color2": f"#{ll.bg_color2:06x}",
                         # "fg_color2": f"#{ll.fg_color2:06x}",
-                    })
+                    }
+                )
         return r
 
     def instance_to_lookup(self, o, fields=None):

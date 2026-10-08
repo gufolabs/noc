@@ -56,7 +56,8 @@ class RackPlugin(InvPlugin):
             side = c.get_data("rackmount", "side") or "f"
             # Facades
             # Rack content
-            r["load"].append({
+            r["load"].append(
+                {
                     "id": str(c.id),
                     "name": c.name,
                     "model": c.model.name,
@@ -64,7 +65,8 @@ class RackPlugin(InvPlugin):
                     "position_front": pos if units and side == "f" else None,
                     "position_rear": pos if units and side == "r" else None,
                     "shift": c.get_data("rackmount", "shift") or 0,
-                })
+                }
+            )
         return r
 
     def api_set_rack_load(

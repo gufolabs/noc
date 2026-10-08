@@ -382,12 +382,14 @@ class IPAMApplication(ExtApplication):
             t = dmap[prefix.address_discovery_policy]
         prefix_info.append(("Address Discovery", t))
         # Source
-        prefix_info.append((
+        prefix_info.append(
+            (
                 "Source",
                 {"M": "Manual", "i": "Interface", "w": "Whois Route", "n": "Neighbor"}.get(
                     prefix.source, "-"
                 ),
-            ))
+            )
+        )
         #
         # Add custom fields
         for f in CustomField.table_fields("ip_prefix"):

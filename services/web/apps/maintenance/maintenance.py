@@ -91,7 +91,8 @@ class MaintenanceApplication(ExtDocApplication):
             .values("id", "name", "is_managed", "profile", "address", "description", "labels")
             .distinct()
         ):
-            r.append({
+            r.append(
+                {
                     "id": mo["id"],
                     "name": mo["name"],
                     "is_managed": mo["is_managed"],
@@ -113,7 +114,8 @@ class MaintenanceApplication(ExtDocApplication):
                         }
                         for ll in Label.objects.filter(name__in=mo["labels"])
                     ],
-                })
+                }
+            )
 
         out = {"total": len(r), "success": True, "data": r}
         return self.response(out, status=self.OK)

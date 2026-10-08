@@ -35,14 +35,16 @@ class ReportCompareApplication(SimpleReport):
                         weight += "+"
                 else:
                     weight = ""
-                vd.append((
+                vd.append(
+                    (
                         m.name,
                         m.get_data("dimensions", "width") or "",
                         m.get_data("dimensions", "height") or "",
                         m.get_data("dimensions", "depth") or "",
                         ru,
                         weight,
-                    ))
+                    )
+                )
             if vd:
                 data.append(SectionRow(name=v.name))
                 data += vd

@@ -117,7 +117,8 @@ class MODashboard(JinjaDashboard):
                 if iface.type == "SVI" and (iface.profile.is_default or not iface.profile.metrics):
                     continue
                 if iface.type == "aggregated" and iface.lag_members:
-                    lags.append({
+                    lags.append(
+                        {
                             "name": iface.name,
                             "ports": [i.name for i in iface.lag_members],
                             "descr": self.str_cleanup(
@@ -127,19 +128,23 @@ class MODashboard(JinjaDashboard):
                             "status": [
                                 ", Status : ".join([i.name, i.status]) for i in iface.lag_members
                             ],
-                        })
+                        }
+                    )
                     continue
                 if "technology::radio::*" in iface.effective_labels:
-                    radio.append({
+                    radio.append(
+                        {
                             "name": iface.name,
                             "descr": self.str_cleanup(
                                 iface.description, remove_letters=TITLE_BAD_CHARS
                             ),
                             "status": iface.status,
                             "metrics": interface_radio_metrics(profile),
-                        })
+                        }
+                    )
                 if interface_dom_metrics(profile) and iface.type == "physical":
-                    dom.append({
+                    dom.append(
+                        {
                             "name": iface.name,
                             "descr": self.str_cleanup(
                                 iface.description, remove_letters=TITLE_BAD_CHARS
@@ -148,23 +153,28 @@ class MODashboard(JinjaDashboard):
                             "metrics": interface_dom_metrics(profile),
                             "type": profile.id,
                             "profile_name": profile.name,
-                        })
+                        }
+                    )
                 if iface.type == "SVI":
-                    ports.append({
+                    ports.append(
+                        {
                             "name": iface.name,
                             "descr": self.str_cleanup(
                                 iface.description, remove_letters=TITLE_BAD_CHARS
                             ),
                             "status": iface.status,
-                        })
+                        }
+                    )
                 if iface.type in ("physical", "tunnel"):
-                    ports.append({
+                    ports.append(
+                        {
                             "name": iface.name,
                             "descr": self.str_cleanup(
                                 iface.description, remove_letters=TITLE_BAD_CHARS
                             ),
                             "status": iface.status,
-                        })
+                        }
+                    )
                 if iface.profile.allow_subinterface_metrics:
                     subif += [
                         {
@@ -210,14 +220,16 @@ class MODashboard(JinjaDashboard):
                 s_type = "missed"
             if s.munits.enum and s.state.is_productive:
                 sensor_enum.append({"bi_id": s.bi_id, "local_id": s.local_id, "units": s.munits})
-            sensor_types[s_type].append({
+            sensor_types[s_type].append(
+                {
                     "label": s.dashboard_label or s.label,
                     "units": s.munits,
                     "bi_id": s.bi_id,
                     "local_id": s.local_id,
                     "profile": s.profile,
                     "id": int(str(s.bi_id)[-10:]),
-                })
+                }
+            )
 
         return {
             "port_types": port_types,

@@ -20,7 +20,8 @@ class ReportPartnumbersApplication(SimpleReport):
         for v in Vendor.objects.order_by("name"):
             data.append(SectionRow(name=v.name))
             for m in ObjectModel.objects.filter(vendor=v.id):
-                data.append([
+                data.append(
+                    [
                         m.get_data("asset", "part_no0"),
                         m.get_data("asset", "part_no1"),
                         m.get_data("asset", "part_no2"),
@@ -31,7 +32,8 @@ class ReportPartnumbersApplication(SimpleReport):
                         m.get_data("asset", "asset_part_no3"),
                         m.name,
                         m.description,
-                    ])
+                    ]
+                )
 
         return self.from_dataset(
             title=self.title,

@@ -71,25 +71,31 @@ class SensorControllerDashboard(MODashboard):
         sensors_status, sensors, ifaces = interface_profile_has_metrics(self.object.id)
         # Create charts for configured interface metrics
         for sensor in sorted(sensors.keys()):
-            sensor_types.append({
+            sensor_types.append(
+                {
                     "name": sensor,
                     "metrics": sensors[sensor].get("metrics"),
                     "profile": sensors[sensor].get("profile"),
                     "descr": sensors[sensor].get("descr"),
                     "status": sensors[sensor].get("status"),
-                })
+                }
+            )
         # Create charts for configured interface metrics
         for iface in sorted(ifaces.keys()):
-            ports.append({
+            ports.append(
+                {
                     "name": iface,
                     "descr": ifaces[iface].get("descr"),
                     "status": ifaces[iface].get("status"),
-                })
-            port_types.append({
+                }
+            )
+            port_types.append(
+                {
                     "type": ifaces[iface].get("type"),
                     "name": ifaces[iface].get("name"),
                     "ports": ports,
-                })
+                }
+            )
 
         if self.object.object_profile.report_ping_rtt:
             object_metrics.append("rtt")

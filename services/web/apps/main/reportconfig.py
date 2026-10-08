@@ -54,7 +54,9 @@ class ReportConfigApplication(ExtDocApplication):
             r["localization"] = []
             for field, items in o.localization.items():
                 for lang, value in items.items():
-                    r["localization"].append({"field": field, "language": lang, "language__label": lang, "value": value})
+                    r["localization"].append(
+                        {"field": field, "language": lang, "language__label": lang, "value": value}
+                    )
             if r.get("report_source"):
                 r["report_source__label"] = r["report_source"]
         for x in r.get("parameters", []):
