@@ -104,20 +104,24 @@ class Script(BaseScript):
             try:
                 v = self.cli("vlan show")
                 for match in self.rx_vlan.finditer(v):
-                    vlans.append({
+                    vlans.append(
+                        {
                             "vid": int(match.group("vlan_id")),
                             "ports": match.group("ports"),
                             "mode": match.group("mode"),
-                        })
+                        }
+                    )
             except self.CLISyntaxError:
                 for vlan in self.scripts.get_vlans():
                     v = self.cli(f"lcman svlan show {vlan['vlan_id']}")
                     match = self.rx_vlan1.search(v)
-                    vlans.append({
+                    vlans.append(
+                        {
                             "vid": int(vlan["vlan_id"]),
                             "ports": match.group("ports"),
                             "mode": match.group("mode"),
-                        })
+                        }
+                    )
             port_num = 0
             c = self.cli("switch port show")
             if "usage" in c:
@@ -225,14 +229,16 @@ class Script(BaseScript):
                                 pvid = if_pvid.get(ifname, 1)
                             else:
                                 pvid = int(match.group("pvid"))
-                            iface["subinterfaces"].append({
+                            iface["subinterfaces"].append(
+                                {
                                     "name": f"{ifname}.{match.group('pvid')}",
                                     "admin_status": iface["admin_status"],
                                     "enabled_afi": ["BRIDGE", "ATM"],
                                     "vlan_ids": pvid,
                                     "vpi": int(match.group("vpi")),
                                     "vci": int(match.group("vci")),
-                                })
+                                }
+                            )
                             break
                 v = self.cli(f"lcman show {i}")
                 for match in self.rx_ipif_mac.finditer(v):
@@ -249,11 +255,13 @@ class Script(BaseScript):
             if ver["platform"] in ["IES-1248", "IES-612"] or new_syntax:
                 v = self.cli("switch vlan show *")
                 for match in self.rx_vlan2.finditer(v):
-                    vlans.append({
+                    vlans.append(
+                        {
                             "vid": int(match.group("vlan_id")),
                             "ports": f"{match.group('ports')}{match.group('eports')}",
                             "mode": f"{match.group('mode')}{match.group('emode')}",
-                        })
+                        }
+                    )
                 port_num = 0
                 v = self.cli("switch vlan portshow")
                 for match in self.rx_vlan3.finditer(v):
@@ -329,7 +337,8 @@ class Script(BaseScript):
                                 break
                         v = self.cli(f"adsl show pvc {ifname[4:]}")
                         for match in self.rx_sub_pvc2.finditer(v):
-                            iface["subinterfaces"].append({
+                            iface["subinterfaces"].append(
+                                {
                                     "name": match.group("sub"),
                                     "admin_status": iface["admin_status"],
                                     "enabled_afi": ["BRIDGE", "ATM"],
@@ -340,7 +349,8 @@ class Script(BaseScript):
                                     ),
                                     "vpi": int(match.group("vpi")),
                                     "vci": int(match.group("vci")),
-                                })
+                                }
+                            )
                         iface["hints"] = ["technology::dsl::adsl"]
                         interfaces.append(iface)
                     if ifname.startswith("gshdsl"):

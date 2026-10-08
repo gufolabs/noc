@@ -41,11 +41,13 @@ class Script(BaseScript):
         iface_mac = []
         vlans = []
         for match in self.rx_vlan1.finditer(self.cli("switch vlan show *")):
-            vlans.append({
+            vlans.append(
+                {
                     "vid": int(match.group("vlan_id")),
                     "ports": f"{match.group('ports')}{match.group('eports')}",
                     "mode": f"{match.group('mode')}{match.group('emode')}",
-                })
+                }
+            )
         port_num = 0
         for match in self.rx_vlan2.finditer(self.cli("switch vlan portshow")):
             untagged = 0

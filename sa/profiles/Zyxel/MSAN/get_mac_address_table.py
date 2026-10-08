@@ -44,12 +44,14 @@ class Script(BaseScript):
             macs = self.cli(cmd)
             for match in self.rx_line.finditer(macs):
                 iface = match.group("interface").replace(" ", "")
-                r.append({
+                r.append(
+                    {
                         "vlan_id": match.group("vlan_id"),
                         "mac": match.group("mac"),
                         "interfaces": [self.profile.convert_interface_name(iface)],
                         "type": "D",
-                    })
+                    }
+                )
         except self.CLISyntaxError:
             try:
                 macs = self.cli("statistics mac")
@@ -58,19 +60,23 @@ class Script(BaseScript):
             for match in self.rx_port.finditer(macs):
                 port = self.profile.convert_interface_name(match.group("interface"))
                 for match1 in self.rx_mac.finditer(match.group("macs")):
-                    r.append({
+                    r.append(
+                        {
                             "vlan_id": match1.group("vlan_id"),
                             "mac": match1.group("mac"),
                             "interfaces": [port],
                             "type": "D",
-                        })
+                        }
+                    )
             if not r:
                 macs = self.cli("statistics mac show")
                 for match in self.rx_port2.finditer(macs):
-                    r.append({
+                    r.append(
+                        {
                             "vlan_id": 1,
                             "mac": match.group("mac"),
                             "interfaces": [match.group("interface")],
                             "type": "D",
-                        })
+                        }
+                    )
         return r

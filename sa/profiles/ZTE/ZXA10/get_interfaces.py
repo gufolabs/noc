@@ -102,7 +102,8 @@ class Script(BaseScript):
             t = pc["type"] == "L"
             for m in pc["members"]:
                 portchannel_members[m] = (i, t)
-            interfaces.append({
+            interfaces.append(
+                {
                     "name": pc["interface"],
                     "type": "aggregated",
                     "admin_status": True,
@@ -115,7 +116,8 @@ class Script(BaseScript):
                             "enabled_afi": ["BRIDGE"],
                         }
                     ],
-                })
+                }
+            )
         for p in ports:
             if int(p["port"]) < 1 or p["realtype"] == "":
                 continue
