@@ -166,7 +166,8 @@ class InterfaceCheck(PolicyDiscoveryCheck):
                     if addresses:
                         rd = forwarding_instance.rd if forwarding_instance else "0:0"
                         for a in addresses:
-                            self.interface_prefix_artefact.append({
+                            self.interface_prefix_artefact.append(
+                                {
                                     "vpn_id": vpn_id,
                                     "rd": rd,
                                     "address": a,
@@ -174,7 +175,8 @@ class InterfaceCheck(PolicyDiscoveryCheck):
                                     "description": si.get("description"),
                                     "mac": mac,
                                     "vlan_ids": si.get("vlan_ids", []),
-                                })
+                                }
+                            )
                 # Delete hanging subinterfaces
                 self.cleanup_subinterfaces(
                     forwarding_instance, iface, [si["name"] for si in i["subinterfaces"]]

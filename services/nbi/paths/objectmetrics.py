@@ -154,7 +154,9 @@ class ObjectMetricsAPI(NBIAPI):
                 elif len(wx[1]) == 1:
                     qx.append(f"(managed_object = {int(wx[0])} AND path[4] = '{wx[1][0]}')")
                 else:
-                    qx.append(f"(managed_object = {wx[0]} AND path[4] IN ({', '.join(chr(39) + x + chr(39) for x in wx[1])}))")
+                    qx.append(
+                        f"(managed_object = {wx[0]} AND path[4] IN ({', '.join(chr(39) + x + chr(39) for x in wx[1])}))"
+                    )
             fields = ["ts", "managed_object", "path", *sorted(scopes[table][0])]
             query = (
                 f"SELECT {', '.join(fields)} FROM {table} WHERE {date_q} AND ({' OR '.join(qx)})"

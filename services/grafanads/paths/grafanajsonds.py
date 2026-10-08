@@ -78,44 +78,54 @@ class GrafanaJsonDS(JsonDSAPI):
                     continue
                 m = get_model(f.model)
                 if m.objects.count() > cls.MAX_OBJECTS:
-                    payloads.append({
+                    payloads.append(
+                        {
                             "name": f.field_name,
                             "label": f"{f.model} BI ID",
                             "type": "input",
                             "width": 50,
-                        })
+                        }
+                    )
                 else:
-                    payloads.append({
+                    payloads.append(
+                        {
                             "name": f.field_name,
                             "label": f.model,
                             "type": "select",
                             "width": 50,
-                        })
-                payloads.append({
+                        }
+                    )
+                payloads.append(
+                    {
                         "name": f"{f.field_name}__query",
                         "label": f"{f.model} Query",
                         "type": "input",
                         "width": 50,
-                    })
+                    }
+                )
             for label in scope.labels:
                 if not label.is_key_label:
                     continue
                 p_type = "input"
                 if label.field_name in ["interface", "subinterface"]:
                     p_type = "multi-select"
-                payloads.append({
+                payloads.append(
+                    {
                         "name": label.field_name,
                         "label": label.field_name,
                         "type": p_type,
                         "width": 40,
                         "reload_metric": True,
-                    })
+                    }
+                )
 
-            r.append({
+            r.append(
+                {
                     "value": str(scope.id),
                     "label": f"Namespace {scope.name}",
                     "payloads": payloads,
-                })
+                }
+            )
         return r
 
     @staticmethod

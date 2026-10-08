@@ -101,7 +101,9 @@ class EventClassificationRuleApplication(ExtDocApplication):
                     try:
                         v = re.compile(p["value_re"])
                     except re.error as why:
-                        errors.append(f"Invalid value regular expression <<<{p['value_re']}>>>: {why}")
+                        errors.append(
+                            f"Invalid value regular expression <<<{p['value_re']}>>>: {why}"
+                        )
                     if k and v:
                         patterns.append((k, v))
         # Try to match rule
@@ -122,34 +124,40 @@ class EventClassificationRuleApplication(ExtDocApplication):
                             v.update(v_match.groupdict())
                             vars.update(v)
                             # Save patterns
-                            s_patterns.append({
+                            s_patterns.append(
+                                {
                                     "status": True,
                                     "key": k,
                                     "value": data[k],
                                     "key_re": pkey.pattern,
                                     "value_re": pvalue.pattern,
                                     "vars": [{"key": k, "value": v[k]} for k in v],
-                                })
+                                }
+                            )
                         else:
-                            i_patterns.append({
+                            i_patterns.append(
+                                {
                                     "status": False,
                                     "key": k,
                                     "value": data[k],
                                     "key_re": pkey.pattern,
                                     "value_re": pvalue.pattern,
                                     "vars": {},
-                                })
+                                }
+                            )
                         matched = True
                         break
                 if not matched:
-                    i_patterns.append({
+                    i_patterns.append(
+                        {
                             "status": False,
                             "key": None,
                             "value": None,
                             "key_re": pkey.pattern,
                             "value_re": pvalue.pattern,
                             "vars": {},
-                        })
+                        }
+                    )
             if s_patterns and not i_patterns:
                 result = True
             r_patterns = s_patterns + i_patterns

@@ -72,7 +72,8 @@ class MACCheck(DiscoveryCheck):
                 # Filter by interface profile
                 self.logger.debug("[%s] Skip MAC collection on interface: %s", v["mac"], ifname)
                 continue
-            data.append({
+            data.append(
+                {
                     "date": date,
                     "ts": ts,
                     "managed_object": self.object.bi_id,
@@ -82,7 +83,8 @@ class MACCheck(DiscoveryCheck):
                     "segment": self.object.segment.bi_id,
                     "vlan": v.get("vlan_id", 0),
                     "is_uni": 1 if ifprofile.is_uni else 0,
-                })
+                }
+            )
         if unknown_interfaces:
             self.logger.info("Ignoring unknown interfaces: %s", ", ".join(unknown_interfaces))
         processed_macs = len(data)

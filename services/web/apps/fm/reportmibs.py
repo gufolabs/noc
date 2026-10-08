@@ -22,13 +22,15 @@ class ReportreportMIBs(SimpleReport):
         data = []  # Mib, Last Updated, Entries, Depends, Used by
         for m in MIB.objects.order_by("name"):
             ec = MIBData.objects.filter(mib=m.id).count()
-            data.append([
+            data.append(
+                [
                     m.name,
                     m.last_updated,
                     ec,
                     ", ".join(m.depends_on),
                     ", ".join([x.name for x in m.depended_by]),
-                ])
+                ]
+            )
         return self.from_dataset(
             title=self.title,
             columns=[

@@ -296,9 +296,13 @@ class JsonDSAPI:
         for qc in query_configs:
             if qc.if_combinator_condition:
                 # groupArrayIf((t, li), traffic_class = '') AS lii,
-                s_fields.append(f"groupArrayIf((`{qc.metric_type}`, t), {qc.if_combinator_condition}) AS `{qc.alias or qc.metric_type}`")
+                s_fields.append(
+                    f"groupArrayIf((`{qc.metric_type}`, t), {qc.if_combinator_condition}) AS `{qc.alias or qc.metric_type}`"
+                )
             else:
-                s_fields.append(f"groupArray((`{qc.metric_type}`, t)) AS `{qc.alias or qc.metric_type}`")
+                s_fields.append(
+                    f"groupArray((`{qc.metric_type}`, t)) AS `{qc.alias or qc.metric_type}`"
+                )
         target_expr, group_by_expr = self.get_target_expression(table_name)
         timestamp_expr = "(intDiv(toUInt32(ts), 100) * 100) * 1000"
         if self.allow_interval_limit and req.interval.endswith("m"):

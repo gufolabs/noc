@@ -37,7 +37,8 @@ class InventoryPlugin(InvPlugin):
             if n.direction == "i":
                 c = nested_children.get(n.name)
                 if c is None:
-                    children.append({
+                    children.append(
+                        {
                             "id": None,
                             "name": n.name,
                             "leaf": True,
@@ -45,13 +46,15 @@ class InventoryPlugin(InvPlugin):
                             "description": "--- EMPTY ---",
                             "model": None,
                             "iconCls": "fa fa-square-o",
-                        })
+                        }
+                    )
                 else:
                     cc = self.get_nested_inventory(c)
                     cc["name"] = n.name
                     children.append(cc)
             elif n.direction == "s":
-                children.append({
+                children.append(
+                    {
                         "id": None,
                         "name": n.name,
                         "leaf": True,
@@ -59,7 +62,8 @@ class InventoryPlugin(InvPlugin):
                         "description": n.description,
                         "model": ", ".join(str(p) for p in n.protocols),
                         "direction": "s",
-                    })
+                    }
+                )
         if children:
             # to_expand = "Transceiver" not in o.model.name
             to_expand = any(x for x in children if x.get("direction") != "s")

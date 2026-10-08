@@ -107,7 +107,8 @@ class ReportOutagesApplication(SimpleReport):
                 avail = float(td - dt) * 100 / td
             else:
                 avail = 0
-            r.append((
+            r.append(
+                (
                     m.name,
                     m.address,
                     m.profile.name,
@@ -117,7 +118,8 @@ class ReportOutagesApplication(SimpleReport):
                     downtime,
                     avail,
                     len(outages[o]),
-                ))
+                )
+            )
 
         return self.from_dataset(
             title=self.title,

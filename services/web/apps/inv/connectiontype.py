@@ -63,11 +63,13 @@ class ConnectionTypeApplication(ExtDocApplication):
             if o.c_group:
                 so = set(o.c_group)
                 for ct in o.get_by_c_group():
-                    rr.append(fn(
+                    rr.append(
+                        fn(
                             ct,
                             "f",
                             f"Share common groups: {', '.join(so & set(ct.c_group))}",
-                        ))
+                        )
+                    )
             r.append({"gender": "m", "records": rr})
         if "f" in o.genders:
             # Type f
@@ -81,11 +83,13 @@ class ConnectionTypeApplication(ExtDocApplication):
             if o.c_group:
                 so = set(o.c_group)
                 for ct in o.get_by_c_group():
-                    rr.append(fn(
+                    rr.append(
+                        fn(
                             ct,
                             "m",
                             f"Share common groups: {', '.join(so & set(ct.c_group))}",
-                        ))
+                        )
+                    )
             r.append({"gender": "f", "records": rr})
         if "s" in o.genders:
             # Type s
@@ -100,11 +104,13 @@ class ConnectionTypeApplication(ExtDocApplication):
             if o.c_group:
                 so = set(o.c_group)
                 for ct in o.get_by_c_group():
-                    rr.append(fn(
+                    rr.append(
+                        fn(
                             ct,
                             "s",
                             f"Share common groups: {', '.join(so & set(ct.c_group))}",
-                        ))
+                        )
+                    )
 
             r.append({"gender": "s", "records": rr})
         return r

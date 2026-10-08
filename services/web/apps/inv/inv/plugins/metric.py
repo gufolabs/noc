@@ -70,7 +70,8 @@ class MetricPlugin(InvPlugin):
             d = o.get_cfg_data(param=p, scope=f"Sensor::{sensor.local_id}")
             if not d:
                 continue
-            r.append({
+            r.append(
+                {
                     "value": d,
                     "relative_position": 10,  # Percent
                     "op": p.threshold_op,
@@ -78,7 +79,8 @@ class MetricPlugin(InvPlugin):
                     "name": f"{p.code}@Sensor::{sensor.local_id}",
                     "label": f"{sensor.local_id}{p.code}",
                     "description": "Threshold for Sensor",
-                })
+                }
+            )
         return r
 
     def get_threshold_ranges(
@@ -101,7 +103,8 @@ class MetricPlugin(InvPlugin):
         max_value = max(value, right[-1]["value"] if right else value) + 10
         if len(left) == 1:
             left[0]["relative_position"] = 10
-            r.append({
+            r.append(
+                {
                     "left": min_value,
                     "right": left[0]["value"],
                     "relative_position": {
@@ -109,7 +112,8 @@ class MetricPlugin(InvPlugin):
                         "right": 10,
                     },
                     "color": "#d2403d",
-                })
+                }
+            )
         elif len(left) > 1:
             left[0]["relative_position"] = 10
             left[-1]["relative_position"] = 30
@@ -135,7 +139,8 @@ class MetricPlugin(InvPlugin):
             ]
         if len(right) == 1:
             right[0]["relative_position"] = 90
-            r.append({
+            r.append(
+                {
                     "left": right[0]["value"],
                     "right": max_value,
                     "relative_position": {
@@ -143,7 +148,8 @@ class MetricPlugin(InvPlugin):
                         "right": 100,
                     },
                     "color": "#d2403d",
-                })
+                }
+            )
         elif len(right) > 1:
             right[0]["relative_position"] = 70
             right[-1]["relative_position"] = 90

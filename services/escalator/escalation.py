@@ -265,11 +265,13 @@ class EscalationSequence(BaseSequence):
             p = model.get_by_id(k.profile)
             if not p or getattr(p, "show_in_summary", True) is False:
                 continue
-            r.append({
+            r.append(
+                {
                     "profile": p.name,
                     "summary": k.summary,
                     "order": (getattr(p, "display_order", 100), -k.summary),
-                })
+                }
+            )
         return sorted(r, key=operator.itemgetter("order"))
 
     def check_closed(self, close_tt: bool = False) -> None:
@@ -586,10 +588,12 @@ class EscalationSequence(BaseSequence):
                 # Group alarms are virtual and should be locked, but not escalated
                 doc.groups.append(str(alarm.reference))
                 continue
-            doc.items.append(EscalationItem(
+            doc.items.append(
+                EscalationItem(
                     managed_object=alarm.managed_object,
                     alarm=alarm.id,
-                ))
+                )
+            )
             self.alarm_ids[alarm.id] = alarm
             # Update totals
             total_objects[alarm.managed_object.object_profile.id] += 1

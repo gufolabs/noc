@@ -533,7 +533,8 @@ class AlarmApplication(ExtApplication):
                 resolved_vars=r["resolved_vars"],
                 vars=r["vars"],
             )
-            events.append({
+            events.append(
+                {
                     "id": str(event.id),
                     "event_class": str(event.event_class.id),
                     "event_class__label": event.event_class.name,
@@ -544,7 +545,8 @@ class AlarmApplication(ExtApplication):
                         event.managed_object.name if event.managed_object else ""
                     ),
                     "subject": event.subject,
-                })
+                }
+            )
         if events:
             d["events"] = events
         # Alarms
@@ -559,13 +561,15 @@ class AlarmApplication(ExtApplication):
         if alarm.groups:
             d["groups"] = []
             for ag in ActiveAlarm.objects.filter(reference__in=alarm.groups):
-                d["groups"].append({
+                d["groups"].append(
+                    {
                         "id": str(ag.id),
                         "alarm_class": str(ag.alarm_class.id),
                         "alarm_class__label": ag.alarm_class.name,
                         "timestamp": self.to_json(ag.timestamp),
                         "subject": ag.subject,
-                    })
+                    }
+                )
         # Apply plugins
         plugins = []
         acp = alarm.alarm_class.plugins or []
@@ -844,10 +848,12 @@ class AlarmApplication(ExtApplication):
                     else:
                         badge = f'<span class="x-display-tag">{c}</span>'
                     order = getattr(pv, "display_order", 100)
-                    v.append((
+                    v.append(
+                        (
                             (order, -c),
                             f'<i class="{pv.glyph}" title="{pv.name}"></i>{badge}',
-                        ))
+                        )
+                    )
             return f"<span class='x-summary'>{''.join(i[1] for i in sorted(v, key=operator.itemgetter(0)))}</span>"
 
         if not isinstance(s, dict):
@@ -947,13 +953,15 @@ class AlarmApplication(ExtApplication):
             for p, c in sorted(d.items(), key=lambda x: -x[1]):
                 pv = profile.get_by_id(p)
                 if pv and show_in_summary(pv):
-                    v.append({
+                    v.append(
+                        {
                             "profile": str(pv.id),
                             "glyph": pv.glyph,
                             "display_order": pv.display_order,
                             "profile__label": pv.name,
                             "summary": c,
-                        })
+                        }
+                    )
             return v
 
         if not isinstance(s, dict):

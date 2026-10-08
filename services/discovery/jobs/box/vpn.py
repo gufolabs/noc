@@ -189,7 +189,8 @@ class VPNCheck(DiscoveryCheck):
                 vpn_id = get_vpn_id(vpn)
             except ValueError:
                 continue
-            r.append(DiscoveredVPN(
+            r.append(
+                DiscoveredVPN(
                     rd=vpn.get("rd"),
                     vpn_id=vpn_id,
                     name=vpn["name"],
@@ -197,7 +198,8 @@ class VPNCheck(DiscoveryCheck):
                     profile=self.object.object_profile.vpn_profile_confdb,
                     description=vpn.get("description"),
                     source=SRC_CONFDB,
-                ))
+                )
+            )
         return r
 
     @staticmethod

@@ -396,7 +396,8 @@ class _SideBuilder:
         r, used = [], set()
         for s, ss in [("model", o.model), ("object", o)]:
             for c in ss.cross:
-                r.append({
+                r.append(
+                    {
                         "from": {
                             "id": f"{o.id!s}{c.input}",
                             "name": c.input,
@@ -413,7 +414,8 @@ class _SideBuilder:
                         },
                         "gain_db": c.gain_db or 1.0,
                         "is_delete": s == "object",
-                    })
+                    }
+                )
                 used |= {c.input, c.output}
         return used, r
 

@@ -242,10 +242,14 @@ class PrefixCheck(DiscoveryCheck):
                     changes.append(f"name: {prefix.name} -> {name}")
                     prefix.name = name
             if discovered_prefix.asn and prefix.asn != discovered_prefix.asn:
-                changes.append(f"asn: {prefix.asn.asn if prefix.asn else None} -> {discovered_prefix.asn.asn if discovered_prefix.asn else None}")
+                changes.append(
+                    f"asn: {prefix.asn.asn if prefix.asn else None} -> {discovered_prefix.asn.asn if discovered_prefix.asn else None}"
+                )
                 prefix.asn = discovered_prefix.asn
             if discovered_prefix.vlan and prefix.vlan != discovered_prefix.vlan:
-                changes.append(f"vlan: {str(prefix.vlan) if prefix.vlan else None} -> {str(discovered_prefix.vlan) if discovered_prefix.vlan else None}")
+                changes.append(
+                    f"vlan: {str(prefix.vlan) if prefix.vlan else None} -> {str(discovered_prefix.vlan) if discovered_prefix.vlan else None}"
+                )
                 prefix.vlan = discovered_prefix.vlan
             if changes:
                 self.logger.info(
