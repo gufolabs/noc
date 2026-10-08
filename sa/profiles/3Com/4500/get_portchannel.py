@@ -41,15 +41,13 @@ class Script(BaseScript):
                     iface = self.snmp.get(oid, cached=True)  # IF-MIB
                     members.append(iface)
 
-            r += [
-                {
+            r.append({
                     "interface": port,
                     # ?????? type detection
                     # 1.2.840.10006.300.43.1.1.1.1.5 is correct???????????
                     "type": "L" if v[3] == "1" else "S",
                     "members": members,
-                }
-            ]
+                })
         return r
 
     def execute_cli(self):
@@ -91,6 +89,6 @@ class Script(BaseScript):
                 ll = data[i]
                 match = self.rx_iface.search(ll)
 
-            r += [{"interface": port, "type": "L" if typ == "Dynamic" else "S", "members": members}]
+            r.append({"interface": port, "type": "L" if typ == "Dynamic" else "S", "members": members})
 
         return r

@@ -36,7 +36,7 @@ class UserAccess(NOCModel):
     def __str__(self):
         r = [f"user={self.user.username}"]
         if self.administrative_domain:
-            r += [f"domain={self.administrative_domain.name}"]
+            r.append(f"domain={self.administrative_domain.name}")
         return f"({', '.join(r)})"
 
     @classmethod
@@ -57,7 +57,7 @@ class UserAccess(NOCModel):
             if a.administrative_domain:
                 domains.update(AdministrativeDomain.get_nested_ids(a.administrative_domain))
         if domains:
-            uq += [Q(administrative_domain__in=list(domains))]
+            uq.append(Q(administrative_domain__in=list(domains)))
         if uq:
             q = reduce(lambda x, y: x | y, uq)
         else:

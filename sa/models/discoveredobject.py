@@ -769,7 +769,7 @@ class DiscoveredObject(Document):
         if dry_run:
             return
         if bulk is not None:
-            bulk += [UpdateOne({"_id": self.id}, {"$set": {"is_dirty": False}})]
+            bulk.append(UpdateOne({"_id": self.id}, {"$set": {"is_dirty": False}}))
             return
         self.is_dirty = False
         DiscoveredObject.objects.filter(id=self.id).update(is_dirty=False)
@@ -939,8 +939,7 @@ class DiscoveredObject(Document):
             self.set_dirty("Update data")
             break
         else:
-            self.data += [
-                DataItem(
+            self.data.append(DataItem(
                     source=source,
                     remote_system=remote_system,
                     remote_id=data.pop("remote_id", None),
@@ -952,8 +951,7 @@ class DiscoveredObject(Document):
                     last_update=last_update,
                     is_delete=is_delete,
                     event=event,
-                )
-            ]
+                ))
             self.set_dirty("Add New Data")
 
     def get_data(self, source: str, remote_system: RemoteSystem | None = None) -> DataItem | None:

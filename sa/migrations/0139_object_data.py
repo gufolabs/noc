@@ -19,7 +19,7 @@ class Migration(BaseMigration):
         dc = self.mongo_db["noc.objectdata"]
         bulk = []
         for d in uc.find():
-            bulk += [InsertOne({"_id": d["_id"], "uplinks": d.get("uplinks", [])})]
+            bulk.append(InsertOne({"_id": d["_id"], "uplinks": d.get("uplinks", [])}))
         if bulk:
             print("Commiting changes to database")
             try:

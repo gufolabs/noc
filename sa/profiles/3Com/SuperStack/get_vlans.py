@@ -24,5 +24,5 @@ class Script(BaseScript):
         vlans = self.cli("bridge vlan summary all")
         r = []
         for match in self.rx_vlan.finditer(vlans):
-            r += [{"vlan_id": int(match.group("vlan_id")), "name": match.group("name")}]
+            r.append({"vlan_id": int(match.group("vlan_id")), "name": match.group("name")})
         return r

@@ -26,7 +26,7 @@ class Migration(BaseMigration):
         if has_children:
             bulk = []
             for name in has_children:
-                bulk += [UpdateOne({"name": name}, {"$set": {"has_children": has_children[name]}})]
+                bulk.append(UpdateOne({"name": name}, {"$set": {"has_children": has_children[name]}}))
             if bulk:
                 print("Commiting changes to database")
                 try:

@@ -45,7 +45,7 @@ class Migration(BaseMigration):
         ):
             if ap_id not in credentials:
                 continue
-            credentials[ap_id]["suggest_snmp"] += [{"snmp_ro": snmp_ro, "snmp_rw": snmp_rw}]
+            credentials[ap_id]["suggest_snmp"].append({"snmp_ro": snmp_ro, "snmp_rw": snmp_rw})
         # CLI
         for ap_id, user, password, super_password in self.db.execute(
             """
@@ -55,14 +55,14 @@ class Migration(BaseMigration):
         ):
             if ap_id not in credentials:
                 continue
-            credentials[ap_id]["suggest_credential"] += [{"user": user, "password": password}]
+            credentials[ap_id]["suggest_credential"].append({"user": user, "password": password})
             if super_password:
                 credentials[ap_id]["suggest_credential"][-1]["super_password"] = super_password
         bulk = []
         for doc in credentials.values():
             if not doc["suggest_snmp"] and not doc["suggest_credential"]:
                 continue
-            bulk += [InsertOne(doc)]
+            bulk.append(InsertOne(doc))
         if bulk:
             coll.bulk_write(bulk)
         # Additional fields

@@ -625,7 +625,7 @@ class ServiceProfile(Document):
                 )
                 if q:
                     queries[str(q)] = q
-                    r[str(q)] += [pid]
+                    r[str(q)].append(pid)
             if not rules or policy == "B":
                 continue
             q = m_q()
@@ -636,10 +636,10 @@ class ServiceProfile(Document):
                     q |= ServiceInstance.get_instance_filter_by_alarm(alarm, include_object=True)
                 else:
                     # Without instance rule
-                    r[None] += [pid]
+                    r[None].append(pid)
             if q:
                 queries[str(q)] = q
-                r[str(q)] += [pid]
+                r[str(q)].append(pid)
         return [(queries[x] if x else x, r[x]) for x in r]
 
     @classmethod
@@ -669,5 +669,5 @@ def refresh_interface_profiles(sp_id, ip_id):
         return
     collection = Interface._get_collection()
     bulk = []
-    bulk += [UpdateOne({"_id": {"$in": svc}}, {"$set": {"profile": ip_id}})]
+    bulk.append(UpdateOne({"_id": {"$in": svc}}, {"$set": {"profile": ip_id}}))
     collection.bulk_write(bulk, ordered=False)

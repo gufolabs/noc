@@ -96,7 +96,7 @@ class Script(BaseScript):
                             if iface not in port_vlans:
                                 port_vlans.update({iface: {"tagged": [], "untagged": ""}})
                             port_vlans[iface]["untagged"] = v[0]
-                            un += [str(i + 1)]
+                            un.append(str(i + 1))
 
                     s = self.hex_to_bin(tagged)
                     for i in range(len(s)):

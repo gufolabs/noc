@@ -225,14 +225,14 @@ class MetricScope(Document):
         """
         # Key Fields
         kf = [f.field_name for f in self.key_fields]
-        kf += ["date"]
+        kf.append("date")
         pk, ok = kf[:], kf[:]
         for label in self.labels:
             if label.is_order_key or label.is_primary_key:
                 # Primary Key must be a prefix of the sorting key
-                ok += [f"arrayFirst(x -> startsWith(x, '{label.label_prefix}'), labels)"]
+                ok.append(f"arrayFirst(x -> startsWith(x, '{label.label_prefix}'), labels)")
             if label.is_primary_key:
-                pk += [f"arrayFirst(x -> startsWith(x, '{label.label_prefix}'), labels)"]
+                pk.append(f"arrayFirst(x -> startsWith(x, '{label.label_prefix}'), labels)")
         r = [
             f"CREATE TABLE IF NOT EXISTS {self._get_raw_db_table()} (",
             ",\n".join(
@@ -271,13 +271,11 @@ class MetricScope(Document):
         view_columns = []
         for label in self.labels:
             if label.view_column and label.store_column:
-                view_columns += [f"{label.store_column} AS {label.view_column}"]
+                view_columns.append(f"{label.store_column} AS {label.view_column}")
             elif label.store_column:
-                view_columns += [f"{label.store_column}"]
+                view_columns.append(f"{label.store_column}")
             elif label.view_column:
-                view_columns += [
-                    f"splitByString('::', arrayFirst(x -> startsWith(x, '{label.label_prefix}'), labels))[-1] AS {label.view_column} "
-                ]
+                view_columns.append(f"splitByString('::', arrayFirst(x -> startsWith(x, '{label.label_prefix}'), labels))[-1] AS {label.view_column} ")
         if view_columns:
             vc_expr = ", ".join(view_columns)
             vc_expr += ", "
@@ -286,13 +284,13 @@ class MetricScope(Document):
             # field != default_value
             r = ["date", "ts"]
             if view_columns:
-                r += ["labels"]
+                r.append("labels")
             if self.enable_timedelta:
-                r += ["time_delta"]
+                r.append("time_delta")
             for f in self.key_fields:
-                r += [f"{f.field_name}"]
+                r.append(f"{f.field_name}")
             for n, t, me, de in self.iter_metrics_fields():
-                r += [f"nullIf({n}, {de}) AS {n}"]
+                r.append(f"nullIf({n}, {de}) AS {n}")
             f_expr = ",".join(r)
         return (
             f"CREATE OR REPLACE VIEW {view} AS SELECT {v_path}{vc_expr}{f_expr or '*'} FROM {src}"
@@ -434,7 +432,7 @@ class MetricScope(Document):
         r = ["def thunk(labels):"]
         if not p_labels:
             # No path
-            r += ["    return []"]
+            r.append("    return []")
             return "\n".join(r)
         r += [
             "    pc = {}",

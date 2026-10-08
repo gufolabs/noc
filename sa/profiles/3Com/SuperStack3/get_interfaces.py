@@ -39,7 +39,7 @@ class Script(BaseScript):
         mac = v["mac"]
         v = self.cli("bridge port summary all")
         for match in self.rx_port.finditer(v):
-            ports += [{"name": match.group("port"), "status": match.group("status") == "Active"}]
+            ports.append({"name": match.group("port"), "status": match.group("status") == "Active"})
         for p in ports:
             i = {
                 "name": p["name"],
@@ -52,18 +52,18 @@ class Script(BaseScript):
             }
             v = self.cli(f"bridge port detail {p['name']}")
             if gstp and self.rx_stp.search(v):
-                i["enabled_protocols"] += ["STP"]
+                i["enabled_protocols"].append("STP")
             if not self.rx_lacp.search(v):
-                i["enabled_protocols"] += ["LACP"]
+                i["enabled_protocols"].append("LACP")
             for match in self.rx_vlan.finditer(v):
                 vlan_id = int(match.group("vlan_id"))
                 if match.group("mode") == "Untagged":
                     i["subinterfaces"][0]["untagged_vlan"] = vlan_id
                 elif "tagged_vlans" in i["subinterfaces"][0]:
-                    i["subinterfaces"][0]["tagged_vlans"] += [vlan_id]
+                    i["subinterfaces"][0]["tagged_vlans"].append(vlan_id)
                 else:
                     i["subinterfaces"][0]["tagged_vlans"] = [vlan_id]
-            interfaces += [i]
+            interfaces.append(i)
         v = self.cli("protocol ip interface summary all")
         for match in self.rx_ipif.finditer(v):
             status = bool(match.group("status") == "Up")
@@ -96,5 +96,5 @@ class Script(BaseScript):
             mask = match.group("mask")
             ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
             i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
-            interfaces += [i]
+            interfaces.append(i)
         return [{"interfaces": interfaces}]

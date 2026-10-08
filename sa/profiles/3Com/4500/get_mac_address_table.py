@@ -50,15 +50,13 @@ class Script(BaseScript):
             iface = iface.replace("Bridge-Aggregation", "Po ")
             if iface == "0":
                 continue
-            r += [
-                {
+            r.append({
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
                     "interfaces": [iface],
                     "type": {"learned": "D", "static": "S", "permanent": "S", "self": "S"}[
                         match.group("type").lower()
                     ],
-                }
-            ]
+                })
 
         return r

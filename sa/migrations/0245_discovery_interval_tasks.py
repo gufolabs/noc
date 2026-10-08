@@ -32,8 +32,7 @@ class Migration(BaseMigration):
             for row in coll.find(
                 {"jcls": "noc.services.discovery.jobs.periodic.job.PeriodicDiscoveryJob"}
             ):
-                bulk += [
-                    InsertOne(
+                bulk.append(InsertOne(
                         {
                             Job.ATTR_CLASS: INTERVAL_DISCOVERY_JOB,
                             Job.ATTR_KEY: row["key"],
@@ -43,8 +42,7 @@ class Migration(BaseMigration):
                             Job.ATTR_OFFSET: random.random(),
                             Job.ATTR_TS: row.get(Job.ATTR_TS, now),
                         }
-                    )
-                ]
+                    ))
                 if len(bulk) >= CHINK:
                     coll.bulk_write(bulk)
                     bulk = []

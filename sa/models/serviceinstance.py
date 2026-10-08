@@ -254,7 +254,7 @@ class ServiceInstance(Document):
     ):
         """Update source"""
         if source not in self.sources:
-            self.sources += [source]
+            self.sources.append(source)
         if source not in [InputSource.MANUAL, InputSource.CONFIG]:
             self.last_seen = last_seen or datetime.datetime.now().replace(microsecond=0)
             self.service.fire_event("seen")
@@ -303,7 +303,7 @@ class ServiceInstance(Document):
         oo = self.managed_object
         self.managed_object = o
         if bulk is not None:
-            bulk += [UpdateOne({"_id": self.id}, {"$set": {"managed_object": o.id}})]
+            bulk.append(UpdateOne({"_id": self.id}, {"$set": {"managed_object": o.id}}))
         else:
             ServiceInstance.objects.filter(id=self.id).update(managed_object=o)
             # Update Summary
@@ -318,7 +318,7 @@ class ServiceInstance(Document):
         oo = self.managed_object
         self.managed_object = None
         if bulk is not None:
-            bulk += [UpdateOne({"_id": self.id}, {"$unset": {"managed_object": 1}})]
+            bulk.append(UpdateOne({"_id": self.id}, {"$unset": {"managed_object": 1}}))
         else:
             ServiceInstance.objects.filter(id=self.id).update(managed_object=None)
             # Update Summary
@@ -397,9 +397,9 @@ class ServiceInstance(Document):
         """"""
         r = []
         if "mac" in alarm.vars:
-            r += [ValueType.MAC_ADDRESS.clean_reference(alarm.vars["mac"])]
+            r.append(ValueType.MAC_ADDRESS.clean_reference(alarm.vars["mac"]))
         elif "url" in alarm.vars and not is_fqdn(alarm.vars["url"]):
-            r += [ValueType.HTTP_URL.clean_reference(alarm.vars["url"])]
+            r.append(ValueType.HTTP_URL.clean_reference(alarm.vars["url"]))
         return r
 
     @classmethod
@@ -591,8 +591,7 @@ class ServiceInstance(Document):
             # Instance Deleted
             return
         if bulk is not None:
-            bulk += [
-                UpdateOne(
+            bulk.append(UpdateOne(
                     {"_id": self.id},
                     {
                         "$set": {
@@ -601,8 +600,7 @@ class ServiceInstance(Document):
                             "last_seen": self.last_seen,
                         }
                     },
-                )
-            ]
+                ))
         else:
             ServiceInstance.objects.filter(id=self.id).update(
                 resources=self.resources,

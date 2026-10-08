@@ -1342,14 +1342,14 @@ class Service(Document):
             for cfg in cfgs:
                 if cfg.type == InstanceType.SERVICE_ENDPOINT and cfg.name in connected_services:
                     cfg.services = list(connected_services.pop(cfg.name))
-                instances += [cfg]
+                instances.append(cfg)
         # Deps
         for name in connected_services:
             i_type = ServiceInstanceConfig.get_type(InstanceType.SERVICE_ENDPOINT)
             cfg = i_type.from_config(name, services=list(connected_services[name]))
             if not cfg:
                 continue
-            instances += [cfg]
+            instances.append(cfg)
         logger.debug("[%s] Synced instances from config: %s", self, instances)
         self.update_instances(InputSource.CONFIG, instances)
 

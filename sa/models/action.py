@@ -429,7 +429,7 @@ class Action(Document):
         """Run Action job"""
         inputs = [InputMapping(name="action", value=self.name)]
         if managed_object:
-            inputs += [InputMapping(name="managed_object", value=str(managed_object.id))]
+            inputs.append(InputMapping(name="managed_object", value=str(managed_object.id)))
         if kwargs:
             inputs += self.clean_action_args(managed_object, **kwargs)
         if dry_run:

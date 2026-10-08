@@ -174,9 +174,7 @@ class Migration(BaseMigration):
             for m in ip["metrics"]:
                 if not m.get("threshold_profile"):
                     continue
-                thresholds[(str(m["threshold_profile"]), m["metric_type"])] += [
-                    f"noc::interface_profile::{ip['name']}::="
-                ]
+                thresholds[(str(m["threshold_profile"]), m["metric_type"])].append(f"noc::interface_profile::{ip['name']}::=")
         # Object Profile
         for op_id, op_name, metrics in self.db.execute(
             "SELECT id, name, metrics FROM sa_managedobjectprofile"
@@ -185,9 +183,7 @@ class Migration(BaseMigration):
             for m in metrics:
                 if not m.get("threshold_profile"):
                     continue
-                thresholds[(str(m["threshold_profile"]), m["metric_type"])] += [
-                    f"noc::managedobjectprofile::{op_name}::="
-                ]
+                thresholds[(str(m["threshold_profile"]), m["metric_type"])].append(f"noc::managedobjectprofile::{op_name}::=")
         # Create Metric Rule and Metric Action
         mas = {}
         mr_bulk = []
@@ -214,8 +210,7 @@ class Migration(BaseMigration):
             if wc:
                 params["activation-window.max_window"] = wc["max_window"]
                 params["activation-window.min_window"] = wc["min_window"]
-            mr_bulk += [
-                InsertOne(
+            mr_bulk.append(InsertOne(
                     {
                         "_id": bson.ObjectId(),
                         "name": f"Migrate threshold profile {tp_id} for Metric Type {mt}",
@@ -231,8 +226,7 @@ class Migration(BaseMigration):
                             }
                         ],
                     }
-                )
-            ]
+                ))
         if mr_bulk:
             self.mongo_db["metricrules"].bulk_write(mr_bulk)
         if mas:

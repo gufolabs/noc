@@ -298,11 +298,11 @@ class CapsProfile(Document):
 
         r = []
         if self.enable_snmp:
-            r += ["snmp"]
+            r.append("snmp")
             if self.enable_snmp_v1:
-                r += ["snmp_v1"]
+                r.append("snmp_v1")
             if self.enable_snmp_v2c:
-                r += ["snmp_v2c"]
+                r.append("snmp_v2c")
         if self.enable_l2:
             r += [m for m in self.L2_SECTIONS if l2_is_enabled(m)]
         if self.enable_l3:
