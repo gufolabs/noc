@@ -53,8 +53,7 @@ class Command(BaseCommand):
         for r in self.search(RefBook, "main/refbooks/refbooks"):
             name = smart_text(r.name)
             r.sync()
-            if name in loaded_refbooks:
-                del loaded_refbooks[name]
+            loaded_refbooks.pop(name, None)
         # Delete stale refbooks
         for rb in loaded_refbooks.values():
             self.print(f"DELETE REFBOOK: {rb.name}")

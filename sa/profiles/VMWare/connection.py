@@ -34,8 +34,7 @@ def disconnect(alias=DEFAULT_CONNECTION_NAME):
         logger.info("[%s] Close VIM connection", alias)
         Disconnect(connection)
 
-    if alias in _vim_connection_settings:
-        del _vim_connection_settings[alias]
+    _vim_connection_settings.pop(alias, None)
 
 
 def disconnect_all():
