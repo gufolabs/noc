@@ -65,7 +65,7 @@ class VarTransformRule:
         """
         if len(v) != 4:
             return v
-        return f"{int(ord(v[0]))}.{int(ord(v[1]))}.{int(ord(v[2]))}.{int(ord(v[3]))}"
+        return f"{ord(v[0])}.{ord(v[1])}.{ord(v[2])}.{ord(v[3])}"
 
     @staticmethod
     def bin_to_mac(v):

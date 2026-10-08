@@ -285,7 +285,7 @@ def alnum_key(d: Data) -> str:
 
     def maybe_formatted_int(v: str) -> str:
         try:
-            return "%012d" % int(v)
+            return f"{int(v):012d}"
         except ValueError:
             return v
 

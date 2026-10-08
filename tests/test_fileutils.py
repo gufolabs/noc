@@ -25,7 +25,7 @@ from noc.core.fileutils import safe_rewrite, write_tempfile, temporary_file
     ],
 )
 def test_read_write(start, tail, expected):
-    fn = os.path.join("/tmp", "noc-test-fu-%d" % time.time())
+    fn = os.path.join("/tmp", f"noc-test-fu-{int(time.time())}")
     safe_rewrite(fn, start)
     with open(fn, "a") as f:
         f.write(tail)

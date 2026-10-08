@@ -92,7 +92,7 @@ class Script(BaseScript):
             if not d_port:
                 continue
             if isinstance(d_port, int):
-                d_port = f"{int(32774 >> 8):02}.{int(32774 & 255):02}"
+                d_port = f"{(32774 >> 8):02}.{(32774 & 255):02}"
             else:
                 d_port = f"{int(d_port[0]):02d}.{int(d_port[1]):02d}"
             d_priority, d_bridge = d_bridge[:2], d_bridge[2:]
