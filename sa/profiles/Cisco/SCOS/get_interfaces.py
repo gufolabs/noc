@@ -95,9 +95,9 @@ class Script(BaseScript):
 
         for i in ifaces:
             if ifaces[i].get("mac"):
-                afi_m["interfaces"] += [ifaces[i]]
+                afi_m["interfaces"].append(ifaces[i])
             else:
-                afi_b["interfaces"] += [ifaces[i]]
+                afi_b["interfaces"].append(ifaces[i])
 
         return [afi_m, afi_b]
 

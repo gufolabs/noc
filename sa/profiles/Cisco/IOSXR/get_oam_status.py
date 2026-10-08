@@ -42,6 +42,6 @@ class Script(BaseScript):
                 caps = []
                 ic = match.group("caps")
                 if "L" in ic:
-                    caps += ["L"]
-                r += [{"interface": iface, "remote_mac": mac, "caps": caps}]
+                    caps.append("L")
+                r.append({"interface": iface, "remote_mac": mac, "caps": caps})
         return r

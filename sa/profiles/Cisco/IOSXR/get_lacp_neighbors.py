@@ -82,15 +82,13 @@ class Script(BaseScript):
                 if actor_port in port:
                     dc_bundle["interface"] = port[actor_port]
                     dc_bundle["local_port_id"] = actor_port
-                    bundle += [dc_bundle]
+                    bundle.append(dc_bundle)
 
             if bundle:
-                r += [
-                    {
+                r.append({
                         "lag_id": chan_num,
                         "interface": "Bundle-Ether" + chan_num,
                         "system_id": sys_id,
                         "bundle": bundle,
-                    }
-                ]
+                    })
         return r

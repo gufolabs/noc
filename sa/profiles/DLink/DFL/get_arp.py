@@ -32,5 +32,5 @@ class Script(BaseScript):
                 ip = match_line.group("ip")
                 mac = match_line.group("mac")
                 if iface:
-                    r += [{"ip": ip, "mac": mac, "interface": iface}]
+                    r.append({"ip": ip, "mac": mac, "interface": iface})
         return r

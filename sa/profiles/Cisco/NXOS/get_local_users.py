@@ -22,7 +22,7 @@ class Script(BaseScript):
             line = line.strip()
             if line.startswith("user:"):
                 if cu:
-                    r += [cu]
+                    r.append(cu)
                 cu = {"username": line[5:], "is_active": True}
             elif cu and line.startswith("roles:"):
                 for role in line[6:].split(" "):
@@ -37,5 +37,5 @@ class Script(BaseScript):
                     else:
                         cu["class"] = role
         if cu:
-            r += [cu]
+            r.append(cu)
         return r

@@ -140,13 +140,11 @@ class Script(GetMetricsScript):
         }
         c = self.cli("get interface all detail")
         for block in c.split("\n\n"):
-            ifaces += [
-                dict(
+            ifaces.append(dict(
                     line.split(None, 1)
                     for line in block.splitlines()
                     if len(line.split(None, 1)) == 2
-                )
-            ]
+                ))
         self.get_beacon_iface(ifaces)
         for data in ifaces:
             if data.get("status", "up") == "down":

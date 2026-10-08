@@ -59,7 +59,7 @@ class Script(BaseScript):
         for pc in self.scripts.get_portchannel():
             i = pc["interface"]
             t = pc["type"] == "L"
-            portchannel_interface += [i]
+            portchannel_interface.append(i)
             for m in pc["members"]:
                 portchannel_members[m] = (i, t)
 
@@ -75,7 +75,7 @@ class Script(BaseScript):
             except self.CLISyntaxError:
                 raise self.NotSupportedError()
             for match in self.rx_lldp.finditer(c):
-                lldp += [match.group("ipif")]
+                lldp.append(match.group("ipif"))
 
         descriptions = {}
         d = self.cli("show ports descr all")
@@ -95,16 +95,14 @@ class Script(BaseScript):
             )
             for p in members:
                 if p not in untagged_ports:
-                    tagged_ports += [p]
-            vlans += [
-                {
+                    tagged_ports.append(p)
+            vlans.append({
                     "vlan_id": int(match.group("vlan_id")),
                     "vlan_name": match.group("vlan_name"),
                     "vlan_type": match.group("vlan_type"),
                     "tagged_ports": tagged_ports,
                     "untagged_ports": untagged_ports,
-                }
-            ]
+                })
 
         interfaces = []
         c = self.cli("show ports all")
@@ -133,23 +131,23 @@ class Script(BaseScript):
             tagged_vlans = []
             for v in vlans:
                 if ifname in v["tagged_ports"]:
-                    tagged_vlans += [v["vlan_id"]]
+                    tagged_vlans.append(v["vlan_id"])
                 if ifname in v["untagged_ports"]:
                     i["subinterfaces"][0]["untagged_vlan"] = v["vlan_id"]
             if len(tagged_vlans) != 0:
                 i["subinterfaces"][0]["tagged_vlans"] = tagged_vlans
             if lldp_enable and ifname in lldp:
-                i["enabled_protocols"] += ["LLDP"]
+                i["enabled_protocols"].append("LLDP")
             # Portchannel member
             if ifname in portchannel_members:
                 ai, _is_lacp = portchannel_members[ifname]
                 i["aggregated_interface"] = ai
-                i["enabled_protocols"] += ["LACP"]
+                i["enabled_protocols"].append("LACP")
                 i["subinterfaces"][0].update({"enabled_afi": []})
             # Portchannel interface
             if ifname in portchannel_interface:
                 i["type"] = "aggregated"
-            interfaces += [i]
+            interfaces.append(i)
 
         mac = self.scripts.get_chassis_id()[0]["first_chassis_mac"]
         ipif = self.cli("show ipif")
@@ -181,5 +179,5 @@ class Script(BaseScript):
                     i["subinterfaces"][0]["vlan_ids"] = [v["vlan_id"]]
                     break
             i["subinterfaces"][0]["mac"] = mac
-            interfaces += [i]
+            interfaces.append(i)
         return [{"interfaces": interfaces}]

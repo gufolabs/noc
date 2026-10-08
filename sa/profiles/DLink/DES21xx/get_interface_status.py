@@ -53,10 +53,8 @@ class Script(BaseScript):
 
         r = []
         for match in self.rx_link.finditer(s):
-            r += [
-                {
+            r.append({
                     "interface": match.group("interface").lstrip("0"),
                     "status": match.group("status").lower() != "down",
-                }
-            ]
+                })
         return r

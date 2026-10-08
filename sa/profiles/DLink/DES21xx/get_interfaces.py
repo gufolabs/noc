@@ -55,7 +55,7 @@ class Script(BaseScript):
                     i["subinterfaces"][0]["tagged_vlans"] = p1["tagged"]
                     if "untagged" in p1:
                         i["subinterfaces"][0]["untagged_vlan"] = p1["untagged"]
-            interfaces += [i]
+            interfaces.append(i)
         match = self.rx_swi.search(self.cli("show switch"))
         if match:
             i = {
@@ -79,6 +79,6 @@ class Script(BaseScript):
             mask = match.group("mask")
             ip_address = f"{addr}/{IPv4.netmask_to_len(mask)}"
             i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
-            interfaces += [i]
+            interfaces.append(i)
 
         return [{"interfaces": interfaces}]

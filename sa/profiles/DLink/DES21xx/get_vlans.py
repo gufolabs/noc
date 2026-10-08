@@ -26,5 +26,5 @@ class Script(BaseScript):
             d["vlan_id"] = int(match.group("vlanid"))
             if match.group("vlanname"):
                 d["name"] = match.group("vlanname")
-            r += [d]
+            r.append(d)
         return r

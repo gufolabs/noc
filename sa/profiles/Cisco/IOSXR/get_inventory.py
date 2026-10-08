@@ -54,8 +54,7 @@ class Script(BaseScript):
             if not part_no:
                 continue
             vendor = "CISCO" if "NoName" not in part_no else "NONAME"
-            objects += [
-                {
+            objects.append({
                     "type": type,
                     "number": number,
                     "vendor": vendor,
@@ -64,8 +63,7 @@ class Script(BaseScript):
                     "part_no": [part_no],
                     "revision": match.group("vid"),
                     "builtin": False,
-                }
-            ]
+                })
         # Reorder chassis
         if objects[-1]["type"] == "CHASSIS":
             objects = [objects[-1], *objects[:-1]]

@@ -35,7 +35,7 @@ class Script(BaseScript):
             if match:
                 if current:
                     # Write existing VRF
-                    vpns += [current]
+                    vpns.append(current)
                 # Create new VRF
                 current = {
                     "name": match.group("name"),
@@ -63,9 +63,9 @@ class Script(BaseScript):
                 continue
             if in_interfaces:
                 if l.startswith(" "):
-                    current["interfaces"] += [l.strip()]
+                    current["interfaces"].append(l.strip())
                 else:
                     in_interfaces = False
         if current:
-            vpns += [current]
+            vpns.append(current)
         return vpns

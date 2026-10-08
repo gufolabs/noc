@@ -30,9 +30,9 @@ class Script(BaseScript):
                 for i, n, s in self.snmp.join(["1.3.6.1.2.1.31.1.1.1.1", "1.3.6.1.2.1.2.2.1.8"]):
                     if not n.startswith("802.1Q Encapsulation Tag"):
                         if interface is not None and interface == n:
-                            r += [{"interface": n, "status": int(s) == 1}]
+                            r.append({"interface": n, "status": int(s) == 1})
                         else:
-                            r += [{"interface": n, "status": int(s) == 1}]
+                            r.append({"interface": n, "status": int(s) == 1})
                 return r
             except self.snmp.TimeOutError:
                 pass
@@ -46,10 +46,8 @@ class Script(BaseScript):
 
         r = []
         for match in self.rx_line.finditer(s):
-            r += [
-                {
+            r.append({
                     "interface": match.group("interface"),
                     "status": match.group("status").strip() != "Link Down",
-                }
-            ]
+                })
         return r

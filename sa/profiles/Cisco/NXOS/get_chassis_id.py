@@ -43,6 +43,6 @@ class Script(BaseScript):
             count = int(match.group("count"))
             if count == 0:
                 continue
-            r += [{"first_chassis_mac": base, "last_chassis_mac": MAC(base).shift(count - 1)}]
+            r.append({"first_chassis_mac": base, "last_chassis_mac": MAC(base).shift(count - 1)})
 
         return r

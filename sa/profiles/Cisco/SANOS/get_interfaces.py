@@ -67,12 +67,12 @@ class Script(BaseScript):
                 iface["mac"] = match.group("mac")
                 sub["mac"] = match.group("mac")
             if match.group("ip"):
-                sub["enabled_afi"] += ["IPv4"]
+                sub["enabled_afi"].append("IPv4")
                 sub["ipv4_addresses"] = [match.group("ip")]
             if match.group("portmode") and match.group("portmode") == "ISCSI":
-                sub["enabled_afi"] += ["iSCSI"]
+                sub["enabled_afi"].append("iSCSI")
             if match.group("mtu"):
                 sub["mtu"] = int(match.group("mtu"))
-            iface["subinterfaces"] += [sub]
-            interfaces += [iface]
+            iface["subinterfaces"].append(sub)
+            interfaces.append(iface)
         return [{"interfaces": interfaces}]

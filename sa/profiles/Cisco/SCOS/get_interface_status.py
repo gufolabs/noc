@@ -32,7 +32,7 @@ class Script(BaseScript):
         ):
             # ifOperStatus up(1)
             mac = MACAddressParameter().clean(m) if m else None
-            r += [{"snmp_ifindex": i, "interface": n, "status": int(s) == 1, "mac": mac}]
+            r.append({"snmp_ifindex": i, "interface": n, "status": int(s) == 1, "mac": mac})
         return r
 
     def join_four_tables(

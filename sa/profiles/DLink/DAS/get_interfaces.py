@@ -90,8 +90,8 @@ class Script(BaseScript):
                 i["description"] = descr
                 i["subinterfaces"][0]["description"] = descr
             if match.group("type") == "ATM":
-                i["subinterfaces"][0]["enabled_afi"] += ["ATM"]
-            interfaces += [i]
+                i["subinterfaces"][0]["enabled_afi"].append("ATM")
+            interfaces.append(i)
         v = self.cli("get ethernet intf")
         for match in self.rx_eth.finditer(v):
             ifname = match.group("name")
@@ -103,7 +103,7 @@ class Script(BaseScript):
             for i in interfaces:
                 if i["name"] == ifname:
                     i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
-                    i["subinterfaces"][0]["enabled_afi"] += ["IPv4"]
+                    i["subinterfaces"][0]["enabled_afi"].append("IPv4")
                     if match.group("vlan_id") != "-":
                         i["subinterfaces"][0]["vlan_ids"] = [match.group("vlan_id")]
                     break
@@ -128,7 +128,7 @@ class Script(BaseScript):
                         if (port_id == untagged) and (untagged != "None"):
                             i["subinterfaces"][0]["untagged_vlan"] = vlan_id
                         elif "tagged_vlans" in i["subinterfaces"][0]:
-                            i["subinterfaces"][0]["tagged_vlans"] += [vlan_id]
+                            i["subinterfaces"][0]["tagged_vlans"].append(vlan_id)
                         else:
                             i["subinterfaces"][0]["tagged_vlans"] = [vlan_id]
                         break

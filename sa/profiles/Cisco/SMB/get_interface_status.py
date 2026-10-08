@@ -32,12 +32,10 @@ class Script(BaseScript):
         for ll in self.cli(cmd).splitlines():
             match = self.rx_interface_status.match(ll)
             if match:
-                r += [
-                    {
+                r.append({
                         "interface": match.group("interface"),
                         "status": match.group("status").lower() == "up",
-                    }
-                ]
+                    })
         return r
 
     def execute_snmp(self):
@@ -50,5 +48,5 @@ class Script(BaseScript):
             # ifOperStatus up(1)
             if self.rx_digit.match(n):
                 n = "Vlan" + n
-            r += [{"interface": n, "status": bool(int(s) == 1)}]
+            r.append({"interface": n, "status": bool(int(s) == 1)})
         return r

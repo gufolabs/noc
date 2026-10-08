@@ -90,7 +90,7 @@ class Script(BaseScript):
         for s in v.split("\n"):
             match = self.rx_ospf.search(s)
             if match:
-                ospfs += [match.group("name")]
+                ospfs.append(match.group("name"))
         return ospfs
 
     def get_ifindex(self):
@@ -149,7 +149,7 @@ class Script(BaseScript):
             portchannel_dict = {i: []}
             for m in pc["members"]:
                 portchannel_members[m] = (i, t)
-                portchannel_dict[i] += [m]
+                portchannel_dict[i].append(m)
 
         # Get IPv4 interfaces
         ipv4_interfaces = defaultdict(list)  # interface -> [ipv4 addresses]
@@ -167,7 +167,7 @@ class Script(BaseScript):
                 if not match:
                     continue
             ip = match.group("ip") + "/" + match.group("ipsubnet").split("/")[1]
-            ipv4_interfaces[c_iface] += [ip]
+            ipv4_interfaces[c_iface].append(ip)
 
         # Get IPv6 interfaces (may be might not work)
         ipv6_interfaces = defaultdict(list)  # interface -> [ipv6 addresses]
@@ -193,7 +193,7 @@ class Script(BaseScript):
                 # Secondary ip?
                 continue
             ip = f"{match.group('address')}/{match.group('mask')}"
-            ipv6_interfaces[c_iface] += [ip]
+            ipv6_interfaces[c_iface].append(ip)
 
         interfaces = []
 
@@ -214,7 +214,7 @@ class Script(BaseScript):
                         full_ifname = elem.text.strip()
                         if full_ifname[:2] in ["Vi", "Di", "GM", "CP", "Nv", "Do", "Nu", "fc"]:
                             continue
-                        results += [row]
+                        results.append(row)
                         row = {"name": full_ifname, "enabled_afi": [], "enabled_protocols": []}
                     if full_ifname.startswith("Vlan"):
                         if elem.tag == self.fixtag("", "svi_line_proto", nsmap):
@@ -278,7 +278,7 @@ class Script(BaseScript):
                     sub["mac"] = ifdata["mac"]
 
                 if ifname in switchports and ifname not in portchannel_members:
-                    sub["enabled_afi"] += ["BRIDGE"]
+                    sub["enabled_afi"].append("BRIDGE")
                     u, t = switchports[ifname]
                     if u:
                         sub["untagged_vlan"] = u
@@ -296,10 +296,10 @@ class Script(BaseScript):
                 # IPv4/Ipv6
                 if "ip_addr" in ifdata:
                     if ifname in ipv4_interfaces:
-                        sub["enabled_afi"] += ["IPv4"]
+                        sub["enabled_afi"].append("IPv4")
                         sub["ipv4_addresses"] = ipv4_interfaces[ifname]
                     if ifname in ipv6_interfaces:
-                        sub["enabled_afi"] += ["IPv6"]
+                        sub["enabled_afi"].append("IPv6")
                         sub["ipv6_addresses"] = ipv6_interfaces[ifname]
                 # Ifindex
                 if full_ifname in ifindex:
@@ -327,15 +327,15 @@ class Script(BaseScript):
                     if ifname in portchannel_members:
                         ai, _is_lacp = portchannel_members[ifname]
                         iface["aggregated_interface"] = ai
-                        iface["enabled_protocols"] += ["LACP"]
+                        iface["enabled_protocols"].append("LACP")
                     # Ifindex
                     if full_ifname in ifindex:
                         iface["snmp_ifindex"] = ifindex[full_ifname]
-                    interfaces += [iface]
+                    interfaces.append(iface)
                 else:
                     # Append additional subinterface
                     try:
-                        interfaces[-1]["subinterfaces"] += [sub]
+                        interfaces[-1]["subinterfaces"].append(sub)
                     except KeyError:
                         interfaces[-1]["subinterfaces"] = [sub]
 
@@ -393,7 +393,7 @@ class Script(BaseScript):
                 if matchmac:
                     sub["mac"] = matchmac.group("mac")
                 if ifname in switchports and ifname not in portchannel_members:
-                    sub["enabled_afi"] += ["BRIDGE"]
+                    sub["enabled_afi"].append("BRIDGE")
                     u, t = switchports[ifname]
                     if u:
                         sub["untagged_vlan"] = u
@@ -411,10 +411,10 @@ class Script(BaseScript):
                 matchip = self.rx_int_ip.search(ifdata)
                 if matchip:
                     if ifname in ipv4_interfaces:
-                        sub["enabled_afi"] += ["IPv4"]
+                        sub["enabled_afi"].append("IPv4")
                         sub["ipv4_addresses"] = ipv4_interfaces[ifname]
                     if ifname in ipv6_interfaces:
-                        sub["enabled_afi"] += ["IPv6"]
+                        sub["enabled_afi"].append("IPv6")
                         sub["ipv6_addresses"] = ipv6_interfaces[ifname]
                 # Ifindex
                 if full_ifname in ifindex:
@@ -442,15 +442,15 @@ class Script(BaseScript):
                     if ifname in portchannel_members:
                         ai, _is_lacp = portchannel_members[ifname]
                         iface["aggregated_interface"] = ai
-                        iface["enabled_protocols"] += ["LACP"]
+                        iface["enabled_protocols"].append("LACP")
                     # Ifindex
                     if full_ifname in ifindex:
                         iface["snmp_ifindex"] = ifindex[full_ifname]
-                    interfaces += [iface]
+                    interfaces.append(iface)
                 else:
                     # Append additional subinterface
                     try:
-                        interfaces[-1]["subinterfaces"] += [sub]
+                        interfaces[-1]["subinterfaces"].append(sub)
                     except KeyError:
                         interfaces[-1]["subinterfaces"] = [sub]
 
@@ -481,6 +481,6 @@ class Script(BaseScript):
             for vrf in {imap.get(si["name"], "default") for si in subs}:
                 c = i.copy()
                 c["subinterfaces"] = [si for si in subs if imap.get(si["name"], "default") == vrf]
-                vrfs[vrf]["interfaces"] += [c]
+                vrfs[vrf]["interfaces"].append(c)
 
         return list(vrfs.values())

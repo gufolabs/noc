@@ -55,8 +55,7 @@ class Script(BaseScript):
                     vendor = "NONAME"
                 else:
                     vendor = "CISCO"
-            objects += [
-                {
+            objects.append({
                     "type": type,
                     "number": number,
                     "vendor": vendor,
@@ -65,8 +64,7 @@ class Script(BaseScript):
                     "part_no": [part_no],
                     "revision": vid,
                     "builtin": False,
-                }
-            ]
+                })
 
         # Sort transceivers
         r = []
@@ -79,10 +77,10 @@ class Script(BaseScript):
                     if "XCVR" in p.get("type") and i.get("number") == p.get("number").split("/")[1]:
                         t = p.copy()
                         t["number"] = p.get("number").split("/")[2]
-                        r += [i]
-                        r += [t]
+                        r.append(i)
+                        r.append(t)
             else:
-                r += [i]
+                r.append(i)
 
         return r
 
