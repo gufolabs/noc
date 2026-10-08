@@ -215,18 +215,22 @@ class ServiceApplication(ExtDocApplication):
             }
         for a in o.addresses:
             if a.pool:
-                r["addresses"].append({"address": a.address, "pool": str(a.pool.id), "pool__label": a.pool.name})
+                r["addresses"].append(
+                    {"address": a.address, "pool": str(a.pool.id), "pool__label": a.pool.name}
+                )
             else:
                 r["addresses"].append({"address": a.address, "pool": None})
         for rr in o.resources:
             x, _ = from_resource(rr)
-            r["resources"].append({
+            r["resources"].append(
+                {
                     "resource": rr,
                     # "resource__label": str(x),
                     "resource__label": self.get_resource_label(x),
                     "managed_object": x.managed_object.id,
                     "managed_object__label": str(x.managed_object.name),
-                })
+                }
+            )
         return r
 
     @api.get(r"^(?P<sid>[0-9a-f]{24})/resource/(?P<r_type>\S+)/", access="read")

@@ -48,13 +48,15 @@ class MetricRuleApplication(ExtDocApplication):
         if not action.metric_action:
             return r
         for p in action.metric_action.params:
-            r.append({
+            r.append(
+                {
                     "name": p.name,
                     "type": p.type,
                     "value": params.get(p.name) or "",
                     "default": p.default,
                     "description": p.description,
-                })
+                }
+            )
         return r
 
     @staticmethod

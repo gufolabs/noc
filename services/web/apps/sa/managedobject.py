@@ -900,7 +900,9 @@ class ManagedObjectApplication(ExtModelApplication):
                     "rx_wavelength" in optical_data
                     and optical_data["tx_wavelength"] != optical_data["rx_wavelength"]
                 ):
-                    description.append(f"{optical_data['tx_wavelength']}nmTx/{optical_data['rx_wavelength']}nmRx")
+                    description.append(
+                        f"{optical_data['tx_wavelength']}nmTx/{optical_data['rx_wavelength']}nmRx"
+                    )
                 else:
                     description.append(f"{optical_data['tx_wavelength']}nmTx")
                 if "distance_max" in optical_data:
@@ -915,7 +917,8 @@ class ManagedObjectApplication(ExtModelApplication):
             if n.direction == "i":
                 c, r_object, _ = o.get_p2p_connection(n.name)
                 if c is None:
-                    children.append({
+                    children.append(
+                        {
                             "id": None,
                             "name": n.name,
                             "leaf": True,
@@ -923,14 +926,16 @@ class ManagedObjectApplication(ExtModelApplication):
                             "description": "--- EMPTY ---",
                             "model": None,
                             "interface": if_map.get(n.name) or "",
-                        })
+                        }
+                    )
                 else:
                     cc = self.get_nested_inventory(r_object)
                     cc["name"] = n.name
                     cc["interface"] = if_map.get(n.name) or ""
                     children.append(cc)
             elif n.direction == "s":
-                children.append({
+                children.append(
+                    {
                         "id": None,
                         "name": n.name,
                         "leaf": True,
@@ -938,7 +943,8 @@ class ManagedObjectApplication(ExtModelApplication):
                         "description": n.description,
                         "model": ", ".join(str(p) for p in n.protocols),
                         "interface": if_map.get(n.name) or "",
-                    })
+                    }
+                )
         if children:
             to_expand = "Transceiver" not in o.model.name
             r["children"] = children
@@ -1267,19 +1273,23 @@ class ManagedObjectApplication(ExtModelApplication):
             }
         ]
         if o.segment:
-            r.append({
+            r.append(
+                {
                     "id": str(o.segment.id),
                     "label": _("Segment: ") + str(o.segment.name),
                     "is_default": True,
                     "args": ["segment", str(o.segment.id), o.id],
-                })
+                }
+            )
         if o.container:
-            r.append({
+            r.append(
+                {
                     "id": str(o.container.id),
                     "label": _("Container: ") + str(o.container.name),
                     "is_default": False,
                     "args": ["objectcontainer", str(o.container.id), o.id],
-                })
+                }
+            )
         return r
 
     @api.post("^full/", access="read")

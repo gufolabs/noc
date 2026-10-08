@@ -249,7 +249,8 @@ class ReportDsAlarms(ReportDataSource):
             pipeline = []
             if match:
                 pipeline.append({"$match": match})
-            pipeline.append({
+            pipeline.append(
+                {
                     "$addFields": {
                         "duration": {
                             "$divide": [
@@ -277,7 +278,8 @@ class ReportDsAlarms(ReportDataSource):
                             }
                         },
                     }
-                })
+                }
+            )
             if match_duration:
                 pipeline.append({"$match": match_duration})
 

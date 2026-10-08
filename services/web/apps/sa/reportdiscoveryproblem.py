@@ -203,7 +203,8 @@ class ReportFilterApplication(SimpleReport):
                     problem = code_map.get(problem.split(" ")[-1], problem)
                 if isinstance(problem, str):
                     problem = problem.replace("\n", " ").replace("\r", " ")
-                data.append((
+                data.append(
+                    (
                         mo.name,
                         mo.address,
                         mo.profile.name,
@@ -212,7 +213,8 @@ class ReportFilterApplication(SimpleReport):
                         discovery["st"].strftime("%d.%m.%Y %H:%M") if "st" in discovery else "",
                         method,
                         problem,
-                    ))
+                    )
+                )
         return self.from_dataset(
             title=self.title,
             columns=[

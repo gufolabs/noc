@@ -32,7 +32,8 @@ class VLANFilterApplication(ExtDocApplication):
         labels = defaultdict(list)
         for ll in Label.objects.filter(match_vlanfilter__vlan_filter__in=vlan_filters):
             for vf in ll.match_vlanfilter:
-                labels[str(vf.vlan_filter.id)].append({
+                labels[str(vf.vlan_filter.id)].append(
+                    {
                         "labels": [
                             {
                                 "id": ll.name,
@@ -49,7 +50,8 @@ class VLANFilterApplication(ExtDocApplication):
                         ],
                         "scope": vf.scope,
                         "is_persist": False,
-                    })
+                    }
+                )
         for row in data:
             row["match_labels"] = labels.get(str(row["id"]), [])
         return data
