@@ -89,19 +89,17 @@ class Script(BaseScript):
             p = {}
             ifaces = []
             for iface in self.rx_l2vc_iface.finditer(block):
-                ifaces += [self.profile.convert_interface_name(iface.group("iface_name"))]
+                ifaces.append(self.profile.convert_interface_name(iface.group("iface_name")))
             # vsi, pwsignal, iface = block.split("\n\n")
             # for b in block.split("\n\n"):
             p.update(parse_kv(self.vsi_instance_map, block))
-            r += [
-                {
+            r.append({
                     "type": "VPLS",
                     "status": p.get("vsi_state") == "up",
                     "name": p["name"],
                     "vpn_id": p.get("vpn_id"),
                     "interfaces": ifaces,
-                }
-            ]
+                })
         # VPWS
         try:
             v = self.cli("display mpls l2vc brief")
@@ -109,15 +107,13 @@ class Script(BaseScript):
             return []
         for block in self.rx_l2vc_split.split(v)[1:]:
             p = parse_kv(self.l2vc_map, block)
-            r += [
-                {
+            r.append({
                     "type": "VLL",
                     "status": p["state"] == "up",
                     "name": p["vpn_id"],
                     "vpn_id": p["vpn_id"],
                     "interfaces": [self.profile.convert_interface_name(p["interface"])],
-                }
-            ]
+                })
         return r
 
     def execute_cli(self, **kwargs):
@@ -134,15 +130,13 @@ class Script(BaseScript):
         for line in v.splitlines():
             match = self.rx_line.search(line)
             if match:
-                vpns += [
-                    {
+                vpns.append({
                         "type": "VRF",
                         "status": True,
                         "vpn_id": "",
                         "name": match.group("vrf").strip(),
                         "interfaces": [],
-                    }
-                ]
+                    })
             elif vpns:
                 if block and line.startswith("    ") and line_format.match(line):
                     vpns[-1][block] += line.strip(" ,\n").split(block_splitter)
@@ -158,7 +152,7 @@ class Script(BaseScript):
                     continue
                 match_int = self.rx_int.match(line)
                 if match_int:
-                    vpns[-1]["interfaces"] += [match_int.group("iface").strip("\n")]
+                    vpns[-1]["interfaces"].append(match_int.group("iface").strip("\n"))
                     block, block_splitter = "interfaces", ","
                     line_format = self.rx_iface_format
                     continue
@@ -190,5 +184,5 @@ class Script(BaseScript):
             description = match.group("description").strip()
             if description != "No description":
                 vpn["description"] = description
-            vpns += [vpn]
+            vpns.append(vpn)
         return vpns

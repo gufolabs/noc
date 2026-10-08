@@ -169,16 +169,14 @@ class Script(BaseScript):
                 else:
                     match = self.rx_stp_bridge.search(si)
                     v2 = self.rx_mstp_interfaces.finditer(si)
-                r["instances"] += [
-                    {
+                r["instances"].append({
                         "id": int(instance_id),
                         "vlans": iv[instance_id],
                         "root_id": match.group("root_id"),
                         "root_priority": match.group("root_priority"),
                         "bridge_id": match.group("bridge_id"),
                         "bridge_priority": match.group("bridge_priority"),
-                    }
-                ]
+                    })
                 if instance_id not in interfaces:
                     interfaces[instance_id] = []
                 for match in v2:
@@ -191,8 +189,7 @@ class Script(BaseScript):
                         ptop = match.group("ptop_status") == "true"
                         edge = match.group("edge_status") == "true"
                     port_attrs = ports[instance_id][interface]
-                    interfaces[instance_id] += [
-                        {
+                    interfaces[instance_id].append({
                             "interface": interface,
                             "port_id": f"{match.group('priority')}.{match.group('port_id')}",
                             "state": port_attrs["state"],
@@ -203,8 +200,7 @@ class Script(BaseScript):
                             "designated_port_id": match.group("designated_port_id"),
                             "point_to_point": ptop,
                             "edge": edge,
-                        }
-                    ]
+                        })
         for st in r["instances"]:
             st["interfaces"] = interfaces[st["id"]]
         return r

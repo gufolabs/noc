@@ -24,10 +24,10 @@ class Script(BaseScript):
         macs = []
         cli = self.cli("get system mng")
         for match in self.rx_mac.finditer(cli):
-            macs += [match.group("mac")]
+            macs.append(match.group("mac"))
         cli = self.cli("get ethernet state")
         for match in self.rx_mac.finditer(cli):
-            macs += [match.group("mac")]
+            macs.append(match.group("mac"))
 
         return [
             {"first_chassis_mac": fmac, "last_chassis_mac": lmac}

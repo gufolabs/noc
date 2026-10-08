@@ -220,9 +220,9 @@ class Profile(BaseProfile):
         r = [f"undo ip ip-prefix {name}"]
         for prefix, min_len, max_len in pl:
             if min_len == max_len:
-                r += [me % prefix]
+                r.append(me % prefix)
             else:
-                r += [mne % (prefix, max_len)]
+                r.append(mne % (prefix, max_len))
         return "\n".join(r)
 
     rx_interface_name = re.compile(
@@ -404,14 +404,14 @@ class Profile(BaseProfile):
         for num, lines in enumerate(zip_longest(*v, fillvalue="-")):
             if empty_header is None:
                 empty_header = (" ",) * len(lines)
-                head += [lines]
+                head.append(lines)
                 continue
             if set(head[-1]) == {" "} and lines != empty_header:
                 head = np.array(head)
                 # Transpone list header string
                 header[num] = " ".join(["".join(s).strip() for s in head.transpose().tolist()])
                 head = []
-            head += [lines]
+            head.append(lines)
         # last column
         head = np.array(head)
         header[num] = " ".join(["".join(s).strip(" -") for s in head.transpose().tolist()])

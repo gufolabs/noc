@@ -87,8 +87,7 @@ class Script(BaseScript):
                 num = int(match["num"] or 0)
             except ValueError:
                 num = match["num"]
-            r += [
-                self.inventory_item(
+            r.append(self.inventory_item(
                     **{
                         "name": match["sec_name"],
                         "num": num,
@@ -99,8 +98,7 @@ class Script(BaseScript):
                         "barcode": p.get("barcode"),
                         "mnf_date": p.get("mnf_date"),
                     }
-                )
-            ]
+                ))
         return r
 
     def part_parse_s8500(self):
@@ -127,15 +125,13 @@ class Script(BaseScript):
             # https://www.manualslib.com/manual/1216852/Huawei-Quidway-S8500-Series.html?page=52
             item_type, slot_n, part_no = self.get_type(slot_n, sub=subslot_n, part_no=part_no)
             v = self.cli(f"display device manuinfo slot {int(slot['slot'])}")
-            r += [
-                {
+            r.append({
                     "type": item_type,
                     "number": slot_n,
                     "vendor": "Huawei",
                     "description": "",
                     "part_no": [part_no],
-                }
-            ]
+                })
             r[-1].update(
                 parse_kv(
                     {
@@ -379,13 +375,9 @@ class Script(BaseScript):
                     self.logger.warning("Sub have unknown text format...")
             if not i_sub or not inv or self.is_s85xx:
                 # not inv for S85XX models
-                inv += [
-                    {"type": i_type, "slot": slot, "part_no": i_type, "unit": unit, "subcards": []}
-                ]
+                inv.append({"type": i_type, "slot": slot, "part_no": i_type, "unit": unit, "subcards": []})
             else:
-                inv[-1]["subcards"] += [
-                    {"type": i_type, "slot": i_sub, "part_no": i_type, "unit": unit}
-                ]
+                inv[-1]["subcards"].append({"type": i_type, "slot": i_sub, "part_no": i_type, "unit": unit})
         return slot_num, inv
 
     def parse_table(self, s):
@@ -483,15 +475,13 @@ class Script(BaseScript):
             # raise NotImplementedError("Not supported 'display elabel' command")
         if self.is_cx300:
             # Chassis without SN ex. CX300
-            r += [
-                {
+            r.append({
                     "type": "CHASSIS",
                     "number": 0,
                     "vendor": "Huawei",
                     "description": "",
                     "part_no": self.version["platform"],
-                }
-            ]
+                })
         parent_num = None
         for item in parse_result:
             self.logger.debug("Inventory item: %s", item)
@@ -537,5 +527,5 @@ class Script(BaseScript):
                         data["mfg_date"] = mfg_date.strftime("%Y-%m-%d")
                 except ValueError:
                     pass
-            r += [data]
+            r.append(data)
         return r

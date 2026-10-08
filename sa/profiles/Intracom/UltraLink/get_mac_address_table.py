@@ -23,22 +23,18 @@ class Script(BaseScript):
         fdb = []
         cli = self.cli("get fdb dynamic")
         for match in self.rx_mac.finditer(cli):
-            fdb += [
-                {
+            fdb.append({
                     "vlan_id": match.group("vlan"),
                     "mac": match.group("mac"),
                     "interfaces": [match.group("port")],
                     "type": "D",
-                }
-            ]
+                })
         cli = self.cli("get fdb static")
         for match in self.rx_mac.finditer(cli):
-            fdb += [
-                {
+            fdb.append({
                     "vlan_id": match.group("vlan"),
                     "mac": match.group("mac"),
                     "interfaces": [match.group("port")],
                     "type": "S",
-                }
-            ]
+                })
         return fdb

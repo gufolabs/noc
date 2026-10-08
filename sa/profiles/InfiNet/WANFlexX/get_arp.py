@@ -24,11 +24,9 @@ class Script(BaseScript):
         arp = self.cli("arp view")
         res = []
         for match in self.rx_arp.finditer(arp):
-            res += [
-                {
+            res.append({
                     "ip": match.group("ip"),
                     "mac": match.group("mac"),
                     "interface": match.group("interface"),
-                }
-            ]
+                })
         return res

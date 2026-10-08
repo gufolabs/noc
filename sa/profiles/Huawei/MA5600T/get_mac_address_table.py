@@ -65,12 +65,10 @@ class Script(BaseScript):
                         v = self.cli(f"display mac-address port 0/{int(i)}/{p}")
                         ethernet_port = "port"
                 for match in self.rx_line.finditer(v):
-                    r += [
-                        {
+                    r.append({
                             "vlan_id": match.group("vlan_id"),
                             "mac": match.group("mac"),
                             "interfaces": [f"0/{int(i)}/{p}"],
                             "type": {"dynamic": "D", "static": "S"}[match.group("type")],
-                        }
-                    ]
+                        })
         return r

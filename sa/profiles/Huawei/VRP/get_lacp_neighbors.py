@@ -100,20 +100,16 @@ class Script(BaseScript):
                     continue
                 if not partner_map or bun["ActorPortName"] not in partner_map:
                     continue
-                bundle += [
-                    {
+                bundle.append({
                         "interface": bun["ActorPortName"],
                         "local_port_id": int(bun["PortNo"]),
                         "remote_system_id": partner_map[bun["ActorPortName"]]["SystemID"],
                         "remote_port_id": partner_map[bun["ActorPortName"]]["PortNo"],
-                    }
-                ]
-            r += [
-                {
+                    })
+            r.append({
                     "lag_id": int(local_dict["LAG ID"]),
                     "interface": pc_name,
                     "system_id": local_dict["System ID"],
                     "bundle": bundle,
-                }
-            ]
+                })
         return r

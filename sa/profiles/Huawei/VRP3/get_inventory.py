@@ -28,19 +28,17 @@ class Script(BaseScript):
         r = []
         v = self.scripts.get_version()
         platform = v["platform"]
-        r += [{"type": "CHASSIS", "vendor": "HUAWEI", "part_no": platform}]
+        r.append({"type": "CHASSIS", "vendor": "HUAWEI", "part_no": platform})
         if self.is_ma5103:
             v = self.cli("show version 0/7")
         else:
             v = self.cli("show version 0")
         for match in self.rx_slot.finditer(v):
-            r += [
-                {
+            r.append({
                     "type": "LINECARD",
                     "number": match.group("number"),
                     "vendor": "HUAWEI",
                     "part_no": match.group("part_no"),
                     "revision": match.group("revision"),
-                }
-            ]
+                })
         return r

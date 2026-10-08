@@ -43,12 +43,10 @@ class Script(BaseScript):
                 raise NotImplementedError
             r = []
             for match in self.rx_line.finditer(macs):
-                r += [
-                    {
+                r.append({
                         "vlan_id": match.group("vlan_id"),
                         "mac": match.group("mac"),
                         "interfaces": [match.group("interfaces")],
                         "type": "D",
-                    }
-                ]
+                    })
             return r

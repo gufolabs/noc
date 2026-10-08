@@ -143,7 +143,7 @@ class Script(BaseScript):
                 for c in cs.split():
                     caps |= self.CAPS[c.lower().strip()]
                 n["remote_capabilities"] = caps
-                neighbors += [n]
+                neighbors.append(n)
             if neighbors:
-                r += [{"local_interface": local_iface, "neighbors": neighbors}]
+                r.append({"local_interface": local_iface, "neighbors": neighbors})
         return r

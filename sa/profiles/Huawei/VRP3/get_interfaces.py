@@ -79,16 +79,14 @@ class Script(BaseScript):
                 }
             ],
         }
-        interfaces += [iface]
-        interfaces += [
-            {
+        interfaces.append(iface)
+        interfaces.append({
                 "name": "FE:0/0/1",
                 "type": "physical",
                 "mac": mac,
                 "hints": ["noc::interface::role::uplink"],
                 "subinterfaces": [],
-            }
-        ]
+            })
         return [{"interfaces": interfaces}]
 
     def execute_cli(self, **kwargs):
@@ -98,7 +96,7 @@ class Script(BaseScript):
 
         vlans = []
         for v in self.scripts.get_vlans():
-            vlans += [v["vlan_id"]]
+            vlans.append(v["vlan_id"])
         iface = {
             "name": "FE:0/0/1",
             "hints": ["noc::topology::direction::nni"],
@@ -107,7 +105,7 @@ class Script(BaseScript):
                 {"name": "FE:0/0/1", "enabled_afi": ["BRIDGE"], "tagged_vlans": vlans}
             ],
         }
-        interfaces += [iface]
+        interfaces.append(iface)
         iface = {
             "name": "FE:0/0/2",
             "hints": ["noc::topology::direction::nni"],
@@ -116,7 +114,7 @@ class Script(BaseScript):
                 {"name": "FE:0/0/2", "enabled_afi": ["BRIDGE"], "tagged_vlans": vlans}
             ],
         }
-        interfaces += [iface]
+        interfaces.append(iface)
         with self.configure():
             c = self.cli("show pvc all")
             if self.rx_pvc.search(c):
@@ -139,12 +137,12 @@ class Script(BaseScript):
                 found = False
                 for i in interfaces:
                     if ifname == i["name"]:
-                        i["subinterfaces"] += [sub]
+                        i["subinterfaces"].append(sub)
                         found = True
                         break
                 if not found:
                     iface = {"name": ifname, "type": "physical", "subinterfaces": [sub]}
-                    interfaces += [iface]
+                    interfaces.append(iface)
 
         match = self.re_search(self.rx_mac, self.cli("show atmlan mac-address"))
         mac = match.group("mac")
@@ -174,5 +172,5 @@ class Script(BaseScript):
                 }
             ],
         }
-        interfaces += [iface]
+        interfaces.append(iface)
         return [{"interfaces": interfaces}]

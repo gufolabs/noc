@@ -32,6 +32,6 @@ class Script(BaseScript):
             c = self.cli(f"display lacp link-aggregation verbose {lid}")
             iface = {"interface": lid, "type": "L", "members": []}
             for match1 in self.rx_iface.finditer(c):
-                iface["members"] += [match1.group("port")]
-            r += [iface]
+                iface["members"].append(match1.group("port"))
+            r.append(iface)
         return r

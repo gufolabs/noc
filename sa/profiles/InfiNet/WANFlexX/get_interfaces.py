@@ -74,7 +74,7 @@ class Script(BaseScript):
                 parent_iface = match.group("ifname")
                 for i in ifaces:
                     if i["name"] == parent_iface:
-                        i["subinterfaces"] += [sub]
+                        i["subinterfaces"].append(sub)
                         break
                 continue
             match = self.rx_vlan.search(block)
@@ -91,17 +91,15 @@ class Script(BaseScript):
                     if vlan_ids == 0:
                         continue
                     sub["vlan_ids"] = [vlan_ids]
-            iface["subinterfaces"] += [sub]
-            ifaces += [iface]
+            iface["subinterfaces"].append(sub)
+            ifaces.append(iface)
         # collect interfaces ipv4 addresses
         ipv4_ifaces = defaultdict(list)
         cmd = self.cli("netstat -i")
         for match in self.rx_ipaddr.finditer(cmd):
-            ipv4_ifaces[match.group("ifname")] += [
-                match.group("ipaddr") + "/" + match.group("net").split("/")[1]
-            ]
+            ipv4_ifaces[match.group("ifname")].append(match.group("ipaddr") + "/" + match.group("net").split("/")[1])
         for iface in ifaces:
             if iface["name"] in ipv4_ifaces:
-                iface["subinterfaces"][0]["enabled_afi"] += ["IPv4"]
+                iface["subinterfaces"][0]["enabled_afi"].append("IPv4")
                 iface["subinterfaces"][0]["ipv4_addresses"] = ipv4_ifaces[iface["name"]]
         return [{"interfaces": ifaces}]

@@ -30,14 +30,12 @@ class Script(BaseScript):
         r = []
         v = self.cli("display arp all")
         for match in self.rx_arp1.finditer(v):
-            r += [
-                {
+            r.append({
                     "ip": match.group("ip"),
                     "mac": match.group("mac"),
                     "interface": match.group("interface").replace(" ", ""),
-                }
-            ]
+                })
         if not r:
             for match in self.rx_arp2.finditer(v):
-                r += [match.groupdict()]
+                r.append(match.groupdict())
         return r

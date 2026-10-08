@@ -26,7 +26,7 @@ class Script(BaseScript):
             _, boards = self.profile.get_board(self)
             for board in boards:
                 if board["type"] == "GPON" and board["status"] == "Normal":
-                    interfaces += [f"0/{board['num']}/0"]
+                    interfaces.append(f"0/{board['num']}/0")
         r = []
         for iface in interfaces:
             self.cli("config")
@@ -45,16 +45,14 @@ class Script(BaseScript):
                 if port["Port state"] == "Offline":
                     self.logger.info(f"Port {port['Port state']} is offline mode")
                     continue
-                r += [
-                    {
+                r.append({
                         "interface": port["F/S/P"],
                         "temp_c": float(port["Temperature(C)"]),
                         "voltage_v": float(port["Supply Voltage(V)"]),
                         "current_ma": float(port["TX Bias current(mA)"]),
                         "optical_tx_dbm": float(port["TX power(dBm)"]),
                         "optical_rx_dbm": float(port["RX power(dBm)"]),
-                    }
-                ]
+                    })
             self.cli("quit")
             self.cli("quit")
         return r
@@ -82,8 +80,7 @@ class Script(BaseScript):
             if olt_temp_c == 2147483647:
                 continue
             iface_index = olt_index.rsplit(".", 1)[-1]
-            r += [
-                {
+            r.append({
                     "interface": names[int(iface_index)],
                     "temp_c": float(olt_temp_c),
                     "voltage_v": float(olt_voltage_v),
@@ -92,6 +89,5 @@ class Script(BaseScript):
                     "optical_rx_dbm": (
                         float(olt_optical_rx_dbm) / 100.0 if olt_optical_rx_dbm != 2147483647 else 0
                     ),
-                }
-            ]
+                })
         return r
