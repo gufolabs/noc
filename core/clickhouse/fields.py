@@ -376,7 +376,7 @@ class NestedField(ArrayField):
                 self.field_type._meta.fields[f].apply_json(row, item[f])
             for nested_name in row:
                 full_name = f"{self.name}.{nested_name}"
-                arrays[full_name] += [row[nested_name]]
+                arrays[full_name].append(row[nested_name])
         row_json.update(arrays)
 
     def get_db_type(self, name=None):

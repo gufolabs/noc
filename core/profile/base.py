@@ -86,7 +86,7 @@ class BaseProfileMetaclass(type):
                     "Support for text values will be removed in NOC 20.2"
                 )
                 cmd = smart_bytes(cmd)
-            pattern_more += [(pattern, cmd)]
+            pattern_more.append((pattern, cmd))
         n.pattern_more = pattern_more
         # Build patterns
         n.patterns = n._get_patterns()
@@ -1048,7 +1048,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
                 q = qi
             else:
                 q = nqi
-            r += [", ".join(f"{k}={q(kwargs[k])}" for k in kwargs)]
+            r.append(", ".join(f"{k}={q(kwargs[k])}" for k in kwargs))
         r += [";", "\r\n"]
         return "".join(r)
 
@@ -1187,7 +1187,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
             for x in pattern_more:
                 c = x[1]
                 if isinstance(c, bytes):
-                    commands += [c]
+                    commands.append(c)
                 elif isinstance(c, dict):
                     cnew = {}
                     for ck, cv in c.items():
@@ -1197,7 +1197,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
                             cnew[ck] = cv
                         elif ck is None:
                             cnew[None] = cv
-                    commands += [cnew]
+                    commands.append(cnew)
             return commands
 
         patterns = {
@@ -1250,9 +1250,9 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
                         f"{cls.name}: 'rogue_char' {rc!r} pattern must be of binary type. "
                         "Support for text values will be removed in NOC 20.2"
                     )
-                    chain += [get_bytes_cleaner(smart_bytes(rc))]
+                    chain.append(get_bytes_cleaner(smart_bytes(rc)))
                 elif isinstance(rc, bytes):
-                    chain += [get_bytes_cleaner(rc)]
+                    chain.append(get_bytes_cleaner(rc))
                 elif hasattr(rc, "sub"):
                     if not isinstance(rc.pattern, bytes):
                         # Recompile as binary re
@@ -1268,7 +1268,7 @@ class BaseProfile(metaclass=BaseProfileMetaclass):
                             )
                             flags &= ~re.UNICODE
                         rc = re.compile(smart_bytes(rc.pattern), flags)
-                    chain += [get_re_cleaner(rc)]
+                    chain.append(get_re_cleaner(rc))
                 else:
                     raise ValueError(f"Invalid rogue char expression: {rc!r}")
         return chain

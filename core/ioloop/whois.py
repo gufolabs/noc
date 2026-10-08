@@ -42,7 +42,7 @@ def parse_response(data):
             k, v = line.split(":", 1)
             k = k.strip().lower()
             k = FIELDS_MAP.get(k, k)
-            r += [(k, v.strip())]
+            r.append((k, v.strip()))
     return r
 
 

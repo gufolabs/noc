@@ -127,7 +127,7 @@ class ArchivingExtractor(BaseExtractor):
         # Collect data and spool full batches
         for d in self.iter_archived_items():
             cname = str(tpl.render({"doc": d}))
-            data[cname] += [d]
+            data[cname].append(d)
             if len(data[cname]) >= self.archive_batch_limit:
                 result = spool(cname)
                 if result:

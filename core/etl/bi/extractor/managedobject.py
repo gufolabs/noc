@@ -213,7 +213,7 @@ class ManagedObjectsExtractor(BaseExtractor):
             stop = o.stop if (o.stop and o.stop < d) else d
             if (stop - start).total_seconds() == td and skip_zero_avail:
                 continue
-            outages[o.object] += [(stop - start).total_seconds()]
+            outages[o.object].append((stop - start).total_seconds())
         # Normalize to percents
         return {
             o: {

@@ -458,14 +458,14 @@ class DiagnosticHub:
         if update:
             self.logger.debug("Update diagnostics: %s", [x.diagnostic for x in update])
             diags = {d.diagnostic: d.model_dump(exclude={"config"}) for d in update}
-            params += [orjson.dumps(diags, default=json_default).decode("utf-8")]
+            params.append(orjson.dumps(diags, default=json_default).decode("utf-8"))
             query_set += " || %s::jsonb"
         if not params:
             return
         if sync_labels:
-            params += [list(self.__object.effective_labels)]
+            params.append(list(self.__object.effective_labels))
             query_set += ",effective_labels=%s::varchar[]"
-        params += [self.__object.id]
+        params.append(self.__object.id)
         with pg_connection.cursor() as cursor:
             self.logger.debug("[%s] Saving changes", list(update))
             cursor.execute(
@@ -523,7 +523,7 @@ class DiagnosticHub:
                         continue
                     dd = diagnostics[d_name]
                     if dd and dd.is_failed and not alarm_disable:
-                        groups[dc.diagnostic] += [{"diagnostic": d_name, "reason": dd.reason or ""}]
+                        groups[dc.diagnostic].append({"diagnostic": d_name, "reason": dd.reason or ""})
                     processed.add(d_name)
             elif d and d.state == d.state.failed and not alarm_disable:
                 alarms[dc.diagnostic] = {
@@ -543,8 +543,7 @@ class DiagnosticHub:
                 }
         # Group Alarm
         for d in groups:
-            messages += [
-                {
+            messages.append({
                     "$op": "ensure_group",
                     "reference": f"dc:{d}:{o.id}",
                     "alarm_class": alarm_config[d]["alarm_class"],
@@ -559,13 +558,12 @@ class DiagnosticHub:
                         }
                         for dd in groups[d]
                     ],
-                }
-            ]
+                })
         # Other
         for d in alarms:
             if d in processed:
                 continue
-            messages += [alarms[d]]
+            messages.append(alarms[d])
         if dry_run:
             # self.logger.info("Sync Diagnostic Alarm: %s", messages)
             print(f"Sync Diagnostic Alarm: {messages}")

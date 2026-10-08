@@ -132,13 +132,13 @@ class Engine:
             names = []
             params = []
             for k in kwargs:
-                names += [k]
+                names.append(k)
                 v = kwargs[k]
                 if callable(v):
                     v = v(_ctx)
                 if not isinstance(v, list):
                     v = [v]
-                params += [v]
+                params.append(v)
             for values in itertools.product(*params):
                 yield dict(zip(names, values))
         else:
@@ -574,7 +574,7 @@ class Engine:
                 for k in new_ctx:
                     if k in stack:
                         if k in g_ctx:
-                            g_ctx[k] += [new_ctx[k]]
+                            g_ctx[k].append(new_ctx[k])
                         else:
                             g_ctx[k] = [new_ctx[k]]
                     else:
@@ -628,7 +628,7 @@ class Engine:
         collected = defaultdict(list)  # path -> [value, ...]
         for ctx in self.fn_Match(_input, *match_args):
             path = tuple(self.resolve_var(ctx, p) for p in args)
-            collected[path] += [ctx["$value"]]
+            collected[path].append(ctx["$value"])
         # Apply changes
         for path in collected:
             # Merge values

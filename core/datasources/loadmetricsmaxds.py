@@ -157,7 +157,7 @@ class LoadMetricsMaxDS(BaseDataSource):
             for uplink in uplinks[mo]:
                 if rld[mo]:
                     if mo in links:
-                        links[mo] += [rld[mo][uplink]]
+                        links[mo].append(rld[mo][uplink])
                     else:
                         links[mo] = [rld[mo][uplink]]
         return links

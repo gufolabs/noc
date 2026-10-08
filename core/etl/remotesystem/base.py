@@ -171,7 +171,7 @@ class BaseRemoteSystem:
                 ss = f"{int(n)} errors"
             else:
                 ss = "OK"
-            summary += [f"{self.name}.{ll.name}: {ss}"]
+            summary.append(f"{self.name}.{ll.name}: {ss}")
             n_errors += n
             r.append(
                 StepResult(

@@ -86,11 +86,11 @@ class DataStreamClient:
         if filters:
             base_qs += [f"filter={x}" for x in filters]
         if limit:
-            base_qs += [f"limit={limit}"]
+            base_qs.append(f"limit={limit}")
         if ds_format:
-            base_qs += [f"format={ds_format}"]
+            base_qs.append(f"format={ds_format}")
         if filter_policy:
-            base_qs += [f"filter_policy={filter_policy}"]
+            base_qs.append(f"filter_policy={filter_policy}")
         loop = asyncio.get_running_loop()
         # Continue until finish
         while True:
@@ -98,7 +98,7 @@ class DataStreamClient:
             # *datastream* host name will be resolved with *resolve* method
             qs = base_qs[:]
             if change_id:
-                qs += [f"from={change_id}"]
+                qs.append(f"from={change_id}")
             if qs:
                 jqs = "&".join(qs)
                 url = f"{base_url}?{jqs}"
@@ -144,7 +144,7 @@ class DataStreamClient:
             if block and self._is_ready:
                 # Do not set block=1 before is_ready, otherwise
                 # without data in datastream process will be blocked by _is_ready signal
-                base_qs += ["block=1"]
+                base_qs.append("block=1")
             if not block:
                 break  # No data, Stop if non-blocking mode
 

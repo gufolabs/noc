@@ -65,7 +65,7 @@ class CurlyTokenizer(LineTokenizer):
             if tokens[-1] == self.start_of_context:
                 # Push context
                 tokens = tokens[:-1]
-                contexts += [tokens]
+                contexts.append(tokens)
             if to_repeat:
                 yield from self.repeat_groups(tokens)
             else:

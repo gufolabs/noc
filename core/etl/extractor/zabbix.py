@@ -414,7 +414,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
                 send_to = f"{a['sendto']}:{self.media_types[media].topic_id}"
             else:
                 send_to = a["sendto"]
-            r += [{"tag": "alerts", "value": send_to}]
+            r.append({"tag": "alerts", "value": send_to})
         return r
 
     def iter_events(self, start: datetime.datetime | None = None) -> Iterable[ZabbixEvent]:
@@ -580,7 +580,7 @@ class ZabbixFMEventExtractor(ZabbixExtractor):
                 Var(name="opdata", value=e.opdata),
             ]
             if item and item.is_snmp_interface_item:
-                data += [Var(name="index", value=str(item.ifindex))]
+                data.append(Var(name="index", value=str(item.ifindex)))
             if e.host not in self.targets:
                 continue
             labels = ["remote_system::zabbix"] + [f"{t.tag}::{t.value.strip()}" for t in e.tags]

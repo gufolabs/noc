@@ -238,7 +238,7 @@ class IP:
                 else:
                     # Gap, insert separator if needed
                     if sep:
-                        spot += [None]
+                        spot.append(None)
                     # Fill spot around address
                     lt = min(a + dist, s_last)
                     sf = max(a - dist, last)
@@ -533,7 +533,7 @@ class IPv4(IP):
                 else:
                     break
             pfx = IPv4(f"{first.prefix.split('/')[0]}/{int(32 - n)}")
-            r += [pfx]
+            r.append(pfx)
             nfirst = pfx.last + 1
             if nfirst.d == first.d:
                 # 255.255.255.255 + 1 -> 0.0.0.0
@@ -664,10 +664,10 @@ class IPv6(IP):
         mask = self.mask
         while mask:
             if mask >= 32:
-                masks += [0xFFFFFFFF]
+                masks.append(0xFFFFFFFF)
                 mask -= 32
             else:
-                masks += [((1 << mask) - 1) << (32 - mask)]
+                masks.append(((1 << mask) - 1) << (32 - mask))
                 mask = 0
         masks += [0] * (4 - len(masks))
         return masks

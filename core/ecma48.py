@@ -55,12 +55,12 @@ def compile_ecma_def(s: str) -> str:
                 rr = [rf"\x{x:02x}" for x in range(c2, c1 + 1)]
                 x = [f"[{''.join(rr)}]"]
             if match.group(5):
-                x += ["*"]
+                x.append("*")
             r += x
             continue
         match = rx_char.match(token)
         if match:
-            r += [rf"\x{c(int(match.group(1)), int(match.group(2))):02x}"]
+            r.append(rf"\x{c(int(match.group(1)), int(match.group(2))):02x}")
             continue
         msg = f"Invalid token: <{token}>"
         raise SyntaxError(msg)

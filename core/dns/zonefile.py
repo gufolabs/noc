@@ -74,7 +74,7 @@ $TTL {int(ttl)}
                 content = content[:-lnsuffix]
             if r.priority:
                 content = f"{r.priority} {content}"
-            rr += [(name, r.type, content)]
+            rr.append((name, r.type, content))
         # prepare mask for 3-column format
         if rr:
             l1 = max(len(r[0]) for r in rr)
@@ -88,15 +88,15 @@ $TTL {int(ttl)}
         # Add RRs
         for r in rr:
             if is_idna(r[0]):
-                z += [f"; {from_idna(r[0])}"]
+                z.append(f"; {from_idna(r[0])}")
             if r[1] == "TXT":
                 content = self.split_txt(r[2])
-                z += [f"{r[0]:<{l1}}{r[1]:<{l2}}{content.pop(0)}"]
+                z.append(f"{r[0]:<{l1}}{r[1]:<{l2}}{content.pop(0)}")
                 for c in content:
-                    z += [f"{' ' * l1}{c}"]
+                    z.append(f"{' ' * l1}{c}")
             else:
-                z += [f"{r[0]:<{l1}}{r[1]:<{l2}}{r[2]}"]
-        z += [FOOTER]
+                z.append(f"{r[0]:<{l1}}{r[1]:<{l2}}{r[2]}")
+        z.append(FOOTER)
         return "\n".join(z)
 
     @staticmethod
@@ -113,13 +113,13 @@ $TTL {int(ttl)}
         for w in W:
             rr = t // w
             t -= rr * w
-            r += [rr]
+            r.append(rr)
         z = []
         for rr, t in zip(r, T):
             if rr > 1:
-                z += [f"{int(rr)} {t}s"]
+                z.append(f"{int(rr)} {t}s")
             elif rr > 0:
-                z += [f"{int(rr)} {t}"]
+                z.append(f"{int(rr)} {t}")
         return " ".join(z)
 
     @classmethod
@@ -136,7 +136,7 @@ $TTL {int(ttl)}
             value = value[1:-1]
         v = ["("]
         while value:
-            v += [f'"{value[: cls.MAX_TXT]}"']
+            v.append(f'"{value[: cls.MAX_TXT]}"')
             value = value[cls.MAX_TXT :]
-        v += [")"]
+        v.append(")")
         return v

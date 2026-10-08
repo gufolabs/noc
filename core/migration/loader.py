@@ -119,7 +119,7 @@ class MigrationLoader:
             if not app.startswith("noc."):
                 continue
             app = app[4:]
-            apps += [app]
+            apps.append(app)
             chains[app] = iter_chain(app)
         while chains:
             l_seen = len(seen)

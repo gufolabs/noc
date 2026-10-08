@@ -218,13 +218,11 @@ def set_mapping(self, remote_system: Any, remote_id: str, source: str | None = N
             is_new = False
         new_mappings.append(item)
     if is_new:
-        new_mappings += [
-            RemoteMappingValue(
+        new_mappings.append(RemoteMappingValue(
                 remote_system=remote_system,
                 remote_id=remote_id,
                 sources=frozenset([source]),
-            )
-        ]
+            ))
         changed |= True
         logger.info("Adding mapping: %s", new_mappings[-1])
     if changed:

@@ -160,7 +160,7 @@ class ProfileChecker:
             k = (r.method, r.param)
             if k not in d[r.preference]:
                 d[r.preference][k] = []
-            d[r.preference][k] += [(r.match_method, r.value, r.action, r.profile, r.name)]
+            d[r.preference][k].append((r.match_method, r.value, r.action, r.profile, r.name))
         return d
 
     def iter_rules(

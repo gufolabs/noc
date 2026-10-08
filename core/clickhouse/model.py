@@ -448,8 +448,8 @@ class Model(metaclass=ModelBase):
                 default_alias = f"f{int(i):04}"
             alias = f.get("alias", default_alias)
             if not f.get("hide"):
-                aliases += [alias]
-                fields_x += [f"{to_sql(f['expr'], cls)} AS {escape_field(alias)}"]
+                aliases.append(alias)
+                fields_x.append(f"{to_sql(f['expr'], cls)} AS {escape_field(alias)}")
             if "group" in f:
                 group_by[int(f["group"])] = alias
             if "order" in f:
@@ -468,28 +468,28 @@ class Model(metaclass=ModelBase):
             filter_h = to_sql(transformed_query.get("having", {}))
             # Generate SQL
             sql = ["SELECT "]
-            sql += [", ".join(fields_x)]
-            sql += [f"FROM {cls._get_db_table()}"]
+            sql.append(", ".join(fields_x))
+            sql.append(f"FROM {cls._get_db_table()}")
             sample = query.get("sample")
             if sample:
-                sql += [f"SAMPLE {float(sample)}"]
+                sql.append(f"SAMPLE {float(sample)}")
             if filter_x:
-                sql += [f"WHERE {filter_x}"]
+                sql.append(f"WHERE {filter_x}")
             # GROUP BY
             if group_by:
-                sql += [f"GROUP BY {', '.join(group_by[v] for v in sorted(group_by))}"]
+                sql.append(f"GROUP BY {', '.join(group_by[v] for v in sorted(group_by))}")
             # HAVING
             if filter_h:
-                sql += [f"HAVING {filter_h}"]
+                sql.append(f"HAVING {filter_h}")
             # ORDER BY
             if order_by:
-                sql += [f"ORDER BY {', '.join(order_by[v] for v in sorted(order_by))}"]
+                sql.append(f"ORDER BY {', '.join(order_by[v] for v in sorted(order_by))}")
             # LIMIT
             if "limit" in query:
                 if "offset" in query:
-                    sql += [f"LIMIT {int(query['offset'])}, {int(query['limit'])}"]
+                    sql.append(f"LIMIT {int(query['offset'])}, {int(query['limit'])}")
                 else:
-                    sql += [f"LIMIT {int(query['limit'])}"]
+                    sql.append(f"LIMIT {int(query['limit'])}")
             sql = " ".join(sql)
             # Execute query
             ch = connection()
@@ -705,14 +705,14 @@ class DictionaryModel(Model, metaclass=DictionaryBase):
         r = []
         for field in cls._meta.ordered_fields:
             if field.name in cls._meta.primary_key:
-                r += [f"{cls.quote_name(field.name)} AS {field.name}"]
+                r.append(f"{cls.quote_name(field.name)} AS {field.name}")
                 continue
             if field.name == "ts" and cls._meta.incremental_update:
-                r += [f"argMax({cls.quote_name(field.name)}, ts) AS last_changed"]
+                r.append(f"argMax({cls.quote_name(field.name)}, ts) AS last_changed")
                 continue
             if field.name == "ts":
                 continue
-            r += [f"argMax({cls.quote_name(field.name)}, ts) AS {field.name}"]
+            r.append(f"argMax({cls.quote_name(field.name)}, ts) AS {field.name}")
         r = ",\n".join(r)
         view = cls._get_db_table()
         src = cls._get_raw_db_table()
@@ -744,7 +744,7 @@ class DictionaryModel(Model, metaclass=DictionaryBase):
         for name, db_type in cls.iter_create_sql(is_dictionary=True):
             if name == "ts":
                 continue
-            r += [f"{cls.quote_name(name)} {db_type}"]
+            r.append(f"{cls.quote_name(name)} {db_type}")
         update_field = ""
         if cls._meta.incremental_update:
             update_field = "UPDATE_FIELD 'last_changed' UPDATE_LAG 15"
@@ -838,16 +838,16 @@ class ViewModel(Model, metaclass=ModelBase):
         group_by = []
         for field in cls._meta.ordered_fields:
             if isinstance(field, AggregatedField):
-                r += [f"{field.get_expression(combinator='Merge')} AS {cls.quote_name(field.name)}"]
+                r.append(f"{field.get_expression(combinator='Merge')} AS {cls.quote_name(field.name)}")
             else:
-                r += [f"{cls.quote_name(field.name)} "]
-                group_by += [cls.quote_name(field.name)]
+                r.append(f"{cls.quote_name(field.name)} ")
+                group_by.append(cls.quote_name(field.name))
         r = [",\n".join(r)]
         if config.clickhouse.cluster:
-            r += [f"FROM {cls._get_distributed_db_table()} "]
+            r.append(f"FROM {cls._get_distributed_db_table()} ")
         else:
-            r += [f"FROM {cls._get_raw_db_table()} "]
-        r += [f"GROUP BY {','.join(group_by)} "]
+            r.append(f"FROM {cls._get_raw_db_table()} ")
+        r.append(f"GROUP BY {','.join(group_by)} ")
         return f"CREATE OR REPLACE VIEW {cls._get_db_table()} AS SELECT {' '.join(r)}"
 
     @classmethod
@@ -858,13 +858,13 @@ class ViewModel(Model, metaclass=ModelBase):
             if isinstance(field, MaterializedField):
                 continue
             if isinstance(field, AggregatedField):
-                r += [f"{field.get_expression(combinator='State')} AS {cls.quote_name(field.name)}"]
+                r.append(f"{field.get_expression(combinator='State')} AS {cls.quote_name(field.name)}")
             else:
-                r += [f"{cls.quote_name(field.name)} "]
-                group_by += [cls.quote_name(field.name)]
+                r.append(f"{cls.quote_name(field.name)} ")
+                group_by.append(cls.quote_name(field.name))
         r = [",\n".join(r)]
-        r += [f"FROM {cls.Meta.view_table_source} "]
-        r += [f"GROUP BY {','.join(group_by)} "]
+        r.append(f"FROM {cls.Meta.view_table_source} ")
+        r.append(f"GROUP BY {','.join(group_by)} ")
         return "\n".join(r)
 
     @classmethod

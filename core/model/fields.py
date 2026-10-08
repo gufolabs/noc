@@ -111,7 +111,7 @@ class TextArrayField(models.Field):
         if self.has_default():
             r = []
             for v in self.default:
-                r += ['"{}"'.format(v.replace("\\", "\\\\").replace('"', '""'))]
+                r.append('"{}"'.format(v.replace("\\", "\\\\").replace('"', '""')))
             return f"{{{','.join(r)}}}"
         return ""
 
@@ -203,7 +203,7 @@ class TagsContainsLookup(models.Lookup):
                 continue
             t = adapt(t.strip())
             t.encoding = "utf8"
-            tags += [smart_text(t).strip()]
+            tags.append(smart_text(t).strip())
         return f"(ARRAY[{','.join(tags)}] <@ {self.lhs.as_sql(compiler, connection)[0]})", []
 
 

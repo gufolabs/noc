@@ -273,7 +273,7 @@ async def fetch(
             if parsed != received:
                 return ERR_PARSE_ERROR, {}, b"Parse error"
             if parser.is_partial_body():
-                response_body += [parser.recv_body()]
+                response_body.append(parser.recv_body())
         code = parser.get_status_code()
         parsed_headers = parser.get_headers()
         logger.debug("HTTP Response %s", code)

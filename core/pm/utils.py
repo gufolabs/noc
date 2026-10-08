@@ -633,7 +633,7 @@ def get_objects_metrics(
             continue
         for mt in op.metrics:
             mmm.add(mts[mt["metric_type"]])
-            op_fields_map[op.id] += [mts[mt["metric_type"]][1]]
+            op_fields_map[op.id].append(mts[mt["metric_type"]][1])
 
     ch = ch_connection()
     mtable = []  # mo_id, mac, iface, ts
@@ -676,7 +676,7 @@ def get_objects_metrics(
                 i = 0
                 for r in result:
                     f_name = fields[i][2]
-                    mtable += [[mo, ts, labels, r]]
+                    mtable.append([mo, ts, labels, r])
                     if mo not in metric_map:
                         metric_map[mo] = defaultdict(dict)
                     metric_map[mo][labels][f_name] = r
@@ -735,7 +735,7 @@ def get_interface_metrics(
         if not mt:
             continue
         metric_fields[alias] = mt.field_name
-        requested_metrics += [f"argMax({mt.field_name}, ts) as {alias}"]
+        requested_metrics.append(f"argMax({mt.field_name}, ts) as {alias}")
     SQL = """SELECT managed_object, argMax(ts, ts) as tsm,  splitByString('::', arrayFirst(x -> startsWith(x, 'noc::interface::'), labels))[-1] as iface, labels, {}
             FROM {}
             WHERE
