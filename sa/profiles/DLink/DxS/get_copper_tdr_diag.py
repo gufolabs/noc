@@ -79,7 +79,8 @@ class Script(BaseScript):
             match = self.rx_link_ok.search(ln)
             if match:
                 length = int(match.group("length")) * 100
-                r.append({
+                r.append(
+                    {
                         "interface": match.group("interface"),
                         "pairs": [
                             {
@@ -107,11 +108,13 @@ class Script(BaseScript):
                                 "variance_cm": self.variance,
                             },
                         ],
-                    })
+                    }
+                )
 
             match = self.rx_link_nc.search(ln)
             if match:
-                r.append({
+                r.append(
+                    {
                         "interface": match.group("interface"),
                         "pairs": [
                             {"pair": 1, "status": "N", "distance_cm": 0},
@@ -119,7 +122,8 @@ class Script(BaseScript):
                             {"pair": 3, "status": "N", "distance_cm": 0},
                             {"pair": 4, "status": "N", "distance_cm": 0},
                         ],
-                    })
+                    }
+                )
 
             match = self.rx_link_pr.search(ln)
             if match:

@@ -34,13 +34,15 @@ class Script(BaseScript):
         r = []
         for match in self.rx_trunk.finditer(c):
             if match.group("status").lower() == "enable" and match.group("members") is not None:
-                r.append({
+                r.append(
+                    {
                         "interface": f"ch{match.group('trunk')}",
                         "members": self.expand_interface_range(
                             self.profile.open_brackets(match.group("members"))
                         ),
                         "type": "S",
-                    })
+                    }
+                )
         if len(r) > 0:
             try:
                 t = self.cli("show config running")

@@ -35,10 +35,12 @@ class Script(BaseScript):
                 expire = d
             else:
                 expire = datetime.datetime.fromtimestamp(time.time() + int(d))
-            r.append({
+            r.append(
+                {
                     "ip": match.group("ip"),
                     "mac": match.group("mac"),
                     "expiration": expire,
                     "type": match.group("status")[0].upper(),
-                })
+                }
+            )
         return r

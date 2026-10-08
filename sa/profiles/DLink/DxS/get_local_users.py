@@ -23,7 +23,8 @@ class Script(BaseScript):
     def execute(self):
         r = []
         for match in self.rx_line.finditer(self.cli("show account")):
-            r.append({
+            r.append(
+                {
                     "username": match.group("username"),
                     "class": {
                         "Admin": "superuser",
@@ -32,5 +33,6 @@ class Script(BaseScript):
                         "Power_User": "operator",
                     }[match.group("privilege")],
                     "is_active": True,
-                })
+                }
+            )
         return r

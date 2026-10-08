@@ -174,10 +174,12 @@ class Script(BaseScript):
                 )
             else:
                 neigh["remote_capabilities"] = 0
-            r.append({
+            r.append(
+                {
                     "local_interface": local_ports[v[0].split(".")[1]]["local_interface"],
                     "neighbors": [neigh],
-                })
+                }
+            )
         return r
 
     def execute_cli(self):

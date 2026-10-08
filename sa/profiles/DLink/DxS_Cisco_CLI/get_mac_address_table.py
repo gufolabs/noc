@@ -37,10 +37,12 @@ class Script(BaseScript):
             raise self.NotSupportedError()
         r = []
         for match in self.rx_line.finditer(macs):
-            r.append({
+            r.append(
+                {
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
                     "interfaces": [match.group("interfaces")],
                     "type": {"dynamic": "D", "static": "S"}[match.group("type").lower()],
-                })
+                }
+            )
         return r

@@ -52,7 +52,8 @@ class Script(BaseScript):
                 for p in self.scripts.get_portchannel():
                     if p["interface"] == shortname:
                         members = p["members"]
-            r.append({
+            r.append(
+                {
                     "interface": interface,
                     "status": match.group("status") == "enabled",
                     # "description"    : "Dummy";
@@ -61,5 +62,6 @@ class Script(BaseScript):
                     "untagged": pvid,
                     "tagged": tagged,
                     "members": members,
-                })
+                }
+            )
         return r

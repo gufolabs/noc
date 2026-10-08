@@ -67,17 +67,21 @@ class Script(BaseScript):
         for match in self.rx_status.finditer(s):
             if match.group("type") == "fiber":
                 if match.group("speed") == "1000M":
-                    r.append({
+                    r.append(
+                        {
                             "type": "XCVR",
                             "number": match.group("number"),
                             "vendor": "NONAME",
                             "part_no": ["NoName | Transceiver | 1G | SFP"],
-                        })
+                        }
+                    )
                 if match.group("speed") == "10000M":
-                    r.append({
+                    r.append(
+                        {
                             "type": "XCVR",
                             "number": match.group("number"),
                             "vendor": "NONAME",
                             "part_no": ["NoName | Transceiver | 10G | XFP"],
-                        })
+                        }
+                    )
         return r

@@ -38,8 +38,10 @@ class Script(BaseScript):
         # Fallback to CLI
         r = []
         for match in self.rx_line.finditer(self.cli("show interfaces status")):
-            r.append({
+            r.append(
+                {
                     "interface": match.group("interface"),
                     "status": match.group("status").lower() == "up",
-                })
+                }
+            )
         return r

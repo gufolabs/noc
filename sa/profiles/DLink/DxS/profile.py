@@ -332,7 +332,8 @@ class Profile(BaseProfile):
             else:
                 c = script.cli("show ports description")
             for match in self.rx_port.finditer(c):
-                objects.append({
+                objects.append(
+                    {
                         "port": match.group("port"),
                         "media_type": match.group("media_type"),
                         "admin_state": match.group("admin_state") == "Enabled",
@@ -347,12 +348,14 @@ class Profile(BaseProfile):
                         "mdix": match.group("mdix"),
                         "trap_state": match.group("trap_state"),
                         "desc": match.group("desc").strip(),
-                    })
+                    }
+                )
         else:
             if script.match_version(DES1210, version__lt="6.00"):
                 c = script.cli("show ports")
                 for match in self.rx_port_old.finditer(c):
-                    ports.append({
+                    ports.append(
+                        {
                             "port": match.group("port"),
                             "admin_state": match.group("admin_state") in ["Enabled", "MDIX"],
                             "admin_speed": match.group("admin_speed"),
@@ -364,7 +367,8 @@ class Profile(BaseProfile):
                             "flowctrl": match.group("flowctrl"),
                             "mdix": match.group("mdix"),
                             "desc": "",
-                        })
+                        }
+                    )
                 c = script.cli("show ports description")
                 for match in self.rx_port_old_desc.finditer(c):
                     port = match.group("port")
@@ -465,13 +469,15 @@ class Profile(BaseProfile):
                 if match:
                     tagged_ports = script.expand_interface_range(match.group("tagged_ports"))
                     untagged_ports = script.expand_interface_range(match.group("untagged_ports"))
-                    vlans.append({
+                    vlans.append(
+                        {
                             "vlan_id": int(match.group("vlan_id")),
                             "vlan_name": match.group("vlan_name").strip(),
                             "vlan_type": match.group("vlan_type"),
                             "tagged_ports": tagged_ports,
                             "untagged_ports": untagged_ports,
-                        })
+                        }
+                    )
                 else:
                     v = self.get_vlan(script, ll)
                     if v is not None:
