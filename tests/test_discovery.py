@@ -99,7 +99,7 @@ def get_discovery_configs():
     r = []
     paths = config.tests.beef_paths or []
     for n, url in enumerate(paths):
-        pool_name = "DP%04d" % (n + 1)
+        pool_name = f"DP{n + 1:04d}"
         with open_blob(url) as blob:
             num = 0
             for key in blob.scan(""):
@@ -108,7 +108,7 @@ def get_discovery_configs():
                 data = yaml.safe_load(blob[key])
                 # name = os.path.basename(os.path.dirname(path))
                 m = num + 1
-                address = "10.%d.%d.%d" % ((m >> 16) & 0xFF, (m >> 8) & 0xFF, m & 0xFF)
+                address = f"10.{(m >> 16) & 0xFF}.{(m >> 8) & 0xFF}.{m & 0xFF}"
                 r += [(key, address, pool_name, url, key, data)]
                 num += 1
     return r

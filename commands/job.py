@@ -385,7 +385,7 @@ class Command(BaseCommand):
                 "box", 0
             ) + task_count[pool]["periodic_task_per_seconds"] * job_avg[pool].get("periodic", 0)
             self.print(f"{'Pool':>20} Threads est.")
-            self.print(f"{pool.name:>40} {int(math.ceil(job_count))}")
+            self.print(f"{pool.name:>40} {math.ceil(job_count)}")
 
     @classmethod
     def get_max_slots(cls, scheduler: Scheduler) -> int:

@@ -48,7 +48,7 @@ class MockBioSegPolicy(BaseBioSegPolicy):
             profile = ManagedObjectProfile(name="mock", level=self.LEVEL)
             self._objects = [
                 patch_model(
-                    ManagedObject(name="%d" % (i + 1), segment=self.target, object_profile=profile)
+                    ManagedObject(name=str(i + 1), segment=self.target, object_profile=profile)
                 )
                 for i in range(self.N)
             ]
