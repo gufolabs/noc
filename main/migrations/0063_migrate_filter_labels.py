@@ -83,9 +83,12 @@ class Migration(BaseMigration):
                 if changed:
                     match_rules.append({"dynamic_order": mr["dynamic_order"], "labels": nl})
             if match_rules:
-                ip_bulk.append(UpdateOne({"_id": ip["_id"]}, {"$set": {"match_rules": match_rules}}))
+                ip_bulk.append(
+                    UpdateOne({"_id": ip["_id"]}, {"$set": {"match_rules": match_rules}})
+                )
         for vc_name, vc_scope in vc_domains_labels:
-            bulk.append(InsertOne(
+            bulk.append(
+                InsertOne(
                     {
                         "name": f"vlanfilter_{vc_name}_{vc_scope}",
                         "bg_color1": 15844367,
@@ -111,9 +114,11 @@ class Migration(BaseMigration):
                         ],
                         "match_prefixfilter": [],
                     }
-                ))
+                )
+            )
         for pt_name in prefix_table_labels:
-            bulk.append(InsertOne(
+            bulk.append(
+                InsertOne(
                     {
                         "name": f"prefixfilter_{pt_name}",
                         "bg_color1": 15844367,
@@ -135,7 +140,8 @@ class Migration(BaseMigration):
                             }
                         ],
                     }
-                ))
+                )
+            )
         if bulk:
             l_coll.bulk_write(bulk, ordered=True)
         if ip_bulk:

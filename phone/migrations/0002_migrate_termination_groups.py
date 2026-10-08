@@ -32,7 +32,8 @@ class Migration(BaseMigration):
                 if not d.get("_id"):
                     continue
                 rg_id = rg_map[d["_id"]]
-                bulk.append(UpdateMany(
+                bulk.append(
+                    UpdateMany(
                         {"termination_group": d["_id"]},
                         {
                             "$set": {
@@ -41,6 +42,7 @@ class Migration(BaseMigration):
                             },
                             "$unset": {"termination_group": ""},
                         },
-                    ))
+                    )
+                )
             if bulk:
                 coll.bulk_write(bulk)

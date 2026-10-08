@@ -1024,9 +1024,11 @@ class ModelConnectionsCache(Document):
             if k in cache:
                 del cache[k]
                 continue
-            bulk.append(InsertOne(
+            bulk.append(
+                InsertOne(
                     {"type": c.type.id, "gender": c.gender, "model": model.id, "name": c.name}
-                ))
+                )
+            )
         if cache:
             bulk += [DeleteOne({"_id": x}) for x in cache.values()]
         if bulk:

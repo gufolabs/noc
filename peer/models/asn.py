@@ -157,14 +157,16 @@ class AS(NOCModel):
                     to_skip = True
                     break
             if not to_skip:
-                pg[peer.peer_group][peer.remote_asn][peer.peering_point].append((
+                pg[peer.peer_group][peer.remote_asn][peer.peering_point].append(
+                    (
                         peer.import_filter,
                         peer.export_filter,
                         peer.effective_local_pref,
                         e_import_med,
                         e_export_med,
                         peer.rpsl_remark,
-                    ))
+                    )
+                )
         # Build RPSL
         inverse_pref = config.peer.rpsl_inverse_pref_style
         for peer_group in pg:

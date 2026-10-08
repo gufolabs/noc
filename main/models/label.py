@@ -1462,7 +1462,9 @@ class Label(Document):
             for rule in mrs:
                 if not rule["dynamic_order"]:
                     continue
-                r.append({"prof": p_id, "ml": list(rule["labels"]), "d_order": rule["dynamic_order"]})
+                r.append(
+                    {"prof": p_id, "ml": list(rule["labels"]), "d_order": rule["dynamic_order"]}
+                )
         params = [orjson.dumps(r).decode("utf-8"), *params]
         with pg_connection.cursor() as cursor:
             cursor.execute(SQL, params)
@@ -1509,7 +1511,9 @@ class Label(Document):
             for rule in mrs:
                 if not rule["dynamic_order"]:
                     continue
-                r.append({"prof": p_id, "ml": list(rule["labels"]), "d_order": rule["dynamic_order"]})
+                r.append(
+                    {"prof": p_id, "ml": list(rule["labels"]), "d_order": rule["dynamic_order"]}
+                )
         params = [orjson.dumps(r).decode("utf-8"), *params]
         with pg_connection.cursor() as cursor:
             cursor.execute(SQL, params)
