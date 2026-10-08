@@ -55,7 +55,8 @@ class Script(BaseScript):
                     vendor = "NONAME"
                 else:
                     vendor = "CISCO"
-            objects.append({
+            objects.append(
+                {
                     "type": type,
                     "number": number,
                     "vendor": vendor,
@@ -64,7 +65,8 @@ class Script(BaseScript):
                     "part_no": [part_no],
                     "revision": vid,
                     "builtin": False,
-                })
+                }
+            )
 
         # Sort transceivers
         r = []

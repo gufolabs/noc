@@ -96,13 +96,15 @@ class Script(BaseScript):
             for p in members:
                 if p not in untagged_ports:
                     tagged_ports.append(p)
-            vlans.append({
+            vlans.append(
+                {
                     "vlan_id": int(match.group("vlan_id")),
                     "vlan_name": match.group("vlan_name"),
                     "vlan_type": match.group("vlan_type"),
                     "tagged_ports": tagged_ports,
                     "untagged_ports": untagged_ports,
-                })
+                }
+            )
 
         interfaces = []
         c = self.cli("show ports all")

@@ -51,15 +51,19 @@ class Script(BaseScript):
                 continue
             if v.startswith("Members in this channel"):
                 _x, y = v.split(":", 1)
-                r.append({
+                r.append(
+                    {
                         "interface": f"Po {pc}",
                         "members": [m.strip() for m in y.strip().split(",")],
                         "type": "L",  # <!> TODO: port-channel type detection
-                    })
+                    }
+                )
             else:
-                r.append({
+                r.append(
+                    {
                         "interface": f"Po {pc}",
                         "members": [],
                         "type": "L",  # <!> TODO: port-channel type detection
-                    })
+                    }
+                )
         return r

@@ -32,10 +32,12 @@ class Script(BaseScript):
         for ll in self.cli(cmd).splitlines():
             match = self.rx_interface_status.match(ll)
             if match:
-                r.append({
+                r.append(
+                    {
                         "interface": match.group("interface"),
                         "status": match.group("status").lower() == "up",
-                    })
+                    }
+                )
         return r
 
     def execute_snmp(self):

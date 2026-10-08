@@ -85,10 +85,12 @@ class Script(BaseScript):
                     bundle.append(dc_bundle)
 
             if bundle:
-                r.append({
+                r.append(
+                    {
                         "lag_id": chan_num,
                         "interface": "Bundle-Ether" + chan_num,
                         "system_id": sys_id,
                         "bundle": bundle,
-                    })
+                    }
+                )
         return r

@@ -48,7 +48,8 @@ class Script(BaseScript):
             o_stat = match.group("oper_status").lower() == "up"
             # print name, mac, index, alias, a_stat, o_stat
 
-            interfaces.append({
+            interfaces.append(
+                {
                     "type": "physical",
                     "name": name,
                     "mac": mac,
@@ -67,5 +68,6 @@ class Script(BaseScript):
                             "enabled_afi": ["BRIDGE"],
                         }
                     ],
-                })
+                }
+            )
         return [{"interfaces": interfaces}]

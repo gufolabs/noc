@@ -52,5 +52,7 @@ class Script(BaseScript):
         for l in self.cli(cmd).splitlines():
             match = rx_interface_status.match(l)
             if match:
-                r.append({"interface": match.group("interface"), "status": match.group("status") == "up"})
+                r.append(
+                    {"interface": match.group("interface"), "status": match.group("status") == "up"}
+                )
         return r

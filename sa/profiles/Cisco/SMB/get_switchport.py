@@ -52,10 +52,12 @@ class Script(BaseScript):
             interface = match.group("interface")
             if interface in ("Port", "Ch", "-------"):
                 continue
-            r.append({
+            r.append(
+                {
                     "interface": self.profile.convert_interface_name(interface),
                     "description": match.group("description"),
-                })
+                }
+            )
         return r
 
     def execute_cli(self):

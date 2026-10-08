@@ -31,11 +31,13 @@ class Script(BaseScript):
         # Get ports in vlans
         vlan_ports = []
         for match in self.rx_vlan_ports.finditer(self.cli("show vlan", cached=True)):
-            vlan_ports.append({
+            vlan_ports.append(
+                {
                     "vid": match.group("vid"),
                     "tagged": self.expand_rangelist(match.group("tagged").replace(" ", ",")),
                     "untagged": self.expand_rangelist(match.group("untagged").replace(" ", ",")),
-                })
+                }
+            )
 
         # Make a list of tags for each port
         port_tags = {}
