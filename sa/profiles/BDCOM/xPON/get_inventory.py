@@ -60,7 +60,8 @@ class Script(BaseScript):
         revision = self.capabilities.get("Chassis | HW Version")
         if revision:
             p["revision"] = revision
-        r.append({
+        r.append(
+            {
                 "type": "CHASSIS",
                 "number": None,
                 "vendor": "BDCOM",
@@ -69,7 +70,8 @@ class Script(BaseScript):
                 "part_no": [p["platform"]],
                 "revision": revision,
                 "builtin": False,
-            })
+            }
+        )
 
         # Detect transceivers
         c = self.cli("show interface brief")
@@ -110,7 +112,8 @@ class Script(BaseScript):
                         )
 
             if vendor not in ["OEM", "NO"]:
-                r.append({
+                r.append(
+                    {
                         "type": "XCVR",
                         "number": ifname,
                         "vendor": vendor,
@@ -119,7 +122,8 @@ class Script(BaseScript):
                         "part_no": part_no,
                         "mfg_date": match.group("mfg_date"),
                         "builtin": False,
-                    })
+                    }
+                )
             else:
                 xcvr_type = match.group("xcvr_type")
                 if xcvr_type in ["10G-BASE-DAC"]:
@@ -132,7 +136,8 @@ class Script(BaseScript):
                         part_no = "NoName | Transceiver | 10G | SFP+-10G-CU3M"
                     else:
                         part_no = "NoName | Transceiver | 10G | SFP+ Twinax"
-                    r.append({
+                    r.append(
+                        {
                             "type": "XCVR",
                             "number": ifname,
                             "vendor": "NONAME",
@@ -141,7 +146,8 @@ class Script(BaseScript):
                             "part_no": part_no,
                             "mfg_date": match.group("mfg_date"),
                             "builtin": False,
-                        })
+                        }
+                    )
                     continue
                 # Try to add some more info into description
                 nm = match.group("nm")
@@ -181,11 +187,13 @@ class Script(BaseScript):
                     else:
                         nm_rx = "0"
                     if nm_rx != "0":
-                        data.append({
+                        data.append(
+                            {
                                 "interface": "optical",
                                 "attr": "rx_wavelength",
                                 "value": nm_rx,
-                            })
+                            }
+                        )
                 p = part_no
                 part_no = "NoName | Transceiver | "
                 if p == "SFP-LX-SM":
@@ -222,7 +230,8 @@ class Script(BaseScript):
                 else:
                     self.logger.info(f"{ifname} - Unknown `part_no` '{p}'.")
                     part_no = part_no + "Unknown SFP"
-                r.append({
+                r.append(
+                    {
                         "type": "XCVR",
                         "number": ifname,
                         "vendor": "NONAME",
@@ -232,5 +241,6 @@ class Script(BaseScript):
                         "mfg_date": match.group("mfg_date"),
                         "builtin": False,
                         "data": data,
-                    })
+                    }
+                )
         return r

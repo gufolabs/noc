@@ -74,13 +74,15 @@ class Script(BaseScript):
                         ip = match.group("ip")
             # Add subinterfaces
             if ip:
-                iface["subinterfaces"].append({
+                iface["subinterfaces"].append(
+                    {
                         "name": name,
                         "description": iface.get("description"),
                         "mac": iface.get("mac"),
                         "enabled_afi": ["IPv4"],
                         "ipv4_addresses": [ip],
-                    })
+                    }
+                )
             if name in sw:
                 si = {
                     "name": name,

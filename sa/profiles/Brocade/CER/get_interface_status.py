@@ -40,8 +40,10 @@ class Script(BaseScript):
             ln = ln.replace("DisabN", " Disabled N")
             match = rx_interface_status.match(ln)
             if match:
-                r.append({
+                r.append(
+                    {
                         "interface": match.group("interface"),
                         "status": match.group("status").lower() == "up",
-                    })
+                    }
+                )
         return r

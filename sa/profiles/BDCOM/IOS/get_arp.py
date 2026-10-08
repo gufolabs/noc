@@ -24,11 +24,13 @@ class Script(BaseScript):
         for match in self.rx_line.finditer(self.cli("show arp")):
             if "(" in match.group("interface"):
                 svi, _phys = match.group("interface").split("(")
-                r.append({
+                r.append(
+                    {
                         "ip": match.group("ip"),
                         "mac": match.group("mac"),
                         "interface": self.profile.convert_interface_name(svi),
-                    })
+                    }
+                )
             else:
                 r.append(match.groupdict())
         return r
