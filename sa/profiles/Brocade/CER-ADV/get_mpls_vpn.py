@@ -41,6 +41,6 @@ class Script(BaseScript):
                 rd = match.group("rd")
                 if ":" in rd:
                     vpn["rd"] = rd
-                vpns += [vpn]
+                vpns.append(vpn)
 
         return vpns

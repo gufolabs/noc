@@ -102,9 +102,9 @@ class Script(BaseScript):
             found = False
             for i in r:
                 if i["local_interface"] == local_interface:
-                    i["neighbors"] += [neighbor]
+                    i["neighbors"].append(neighbor)
                     found = True
                     break
             if not found:
-                r += [{"local_interface": local_interface, "neighbors": [neighbor]}]
+                r.append({"local_interface": local_interface, "neighbors": [neighbor]})
         return r

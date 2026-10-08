@@ -73,7 +73,7 @@ class Script(BaseScript):
                 iface["description"] = description.strip()
                 iface["subinterfaces"][0]["description"] = description.strip()
             if iface["type"] == "physical":
-                iface["subinterfaces"][0]["enabled_afi"] += ["BRIDGE"]
+                iface["subinterfaces"][0]["enabled_afi"].append("BRIDGE")
             elif iface["type"] == "SVI":
                 iface["subinterfaces"][0]["vlan_ids"] = [iface["name"][4:]]
             mac = match.group("mac")
@@ -83,8 +83,8 @@ class Script(BaseScript):
             ip_address = match.group("ip_address")
             if ip_address is not None:
                 iface["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
-                iface["subinterfaces"][0]["enabled_afi"] += ["IPv4"]
-            interfaces += [iface]
+                iface["subinterfaces"][0]["enabled_afi"].append("IPv4")
+            interfaces.append(iface)
         c = self.cli("show interface brief")
         for match in self.rx_iface_brief.finditer(c):
             ifname = self.profile.convert_interface_name(match.group("ifname"))
@@ -103,7 +103,7 @@ class Script(BaseScript):
                 for i in interfaces:
                     if p == i["name"]:
                         if "tagged_vlans" in i["subinterfaces"][0]:
-                            i["subinterfaces"][0]["tagged_vlans"] += [vlan_id]
+                            i["subinterfaces"][0]["tagged_vlans"].append(vlan_id)
                         else:
                             i["subinterfaces"][0]["tagged_vlans"] = [vlan_id]
                         break

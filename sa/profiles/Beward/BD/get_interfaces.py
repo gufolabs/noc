@@ -55,5 +55,5 @@ class Script(BaseScript):
                 }
             ],
         }
-        interfaces += [iface]
+        interfaces.append(iface)
         return [{"interfaces": interfaces}]

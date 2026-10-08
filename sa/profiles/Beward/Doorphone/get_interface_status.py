@@ -22,5 +22,5 @@ class Script(BaseScript):
             iface = self.profile.convert_interface_name(name)
             if interface and interface == iface:
                 return [{"interface": iface, "status": int(status) == 1}]
-            result += [{"interface": iface, "status": int(status) == 1}]
+            result.append({"interface": iface, "status": int(status) == 1})
         return result

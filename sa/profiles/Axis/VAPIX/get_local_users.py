@@ -20,8 +20,8 @@ class Script(BaseScript):
         users = self.axconfig.get(section).split(",")
         for user in users:
             if user not in self.userlist:
-                self.userlist += [user]
-                self.r += [{"username": user, "class": userclass}]
+                self.userlist.append(user)
+                self.r.append({"username": user, "class": userclass})
 
     def execute(self):
         self.r = []

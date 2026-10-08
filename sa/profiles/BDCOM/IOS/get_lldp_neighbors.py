@@ -67,5 +67,5 @@ class Script(BaseScript):
             port_descr = match1.group("port_descr").strip()
             if port_descr and "-- not advertised" not in port_descr:
                 neighbor["remote_port_description"] = port_descr
-            r += [{"local_interface": local_interface, "neighbors": [neighbor]}]
+            r.append({"local_interface": local_interface, "neighbors": [neighbor]})
         return r

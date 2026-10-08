@@ -32,5 +32,5 @@ class Script(BaseScript):
                 iface = ifaces.split(",", 1)[0]
             else:
                 iface = ifaces
-            r += [{"ip": match.group("ip"), "mac": match.group("mac"), "interface": iface}]
+            r.append({"ip": match.group("ip"), "mac": match.group("mac"), "interface": iface})
         return r

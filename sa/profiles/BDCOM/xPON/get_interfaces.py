@@ -121,5 +121,5 @@ class Script(BaseScript):
             if i["type"] == "SVI":
                 sub["vlan_ids"] = ifname[4:]
             i["subinterfaces"] = [sub]
-            ifaces += [i]
+            ifaces.append(i)
         return [{"interfaces": ifaces}]

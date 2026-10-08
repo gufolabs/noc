@@ -74,15 +74,13 @@ class Script(BaseScript):
                         ip = match.group("ip")
             # Add subinterfaces
             if ip:
-                iface["subinterfaces"] += [
-                    {
+                iface["subinterfaces"].append({
                         "name": name,
                         "description": iface.get("description"),
                         "mac": iface.get("mac"),
                         "enabled_afi": ["IPv4"],
                         "ipv4_addresses": [ip],
-                    }
-                ]
+                    })
             if name in sw:
                 si = {
                     "name": name,
@@ -95,6 +93,6 @@ class Script(BaseScript):
                     si["untagged_vlan"] = untagged
                 if tagged:
                     si["tagged_vlans"] = tagged
-                iface["subinterfaces"] += [si]
-            interfaces += [iface]
+                iface["subinterfaces"].append(si)
+            interfaces.append(iface)
         return [{"interfaces": interfaces}]
