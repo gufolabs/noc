@@ -357,9 +357,9 @@ class BaseLoader:
             if rn > 0 and rn % self.REPORT_INTERVAL == 0:
                 self.logger.info("   ... %d records", rn)
         # Add deferred records
-        if len(deferred_add) or len(deferred_change):
+        if deferred_add or deferred_change:
             self.logger.info("Processed deferred: %s/%s", len(deferred_add), len(deferred_change))
-        while len(deferred_add):
+        while deferred_add:
             nd = []
             for row in deferred_add:
                 try:
@@ -373,7 +373,7 @@ class BaseLoader:
             if rn % self.REPORT_INTERVAL == 0:
                 self.logger.info("   ... %d records", rn)
         # Change deferred records
-        while len(deferred_change):
+        while deferred_change:
             nd = []
             for o, n in deferred_change:
                 try:
