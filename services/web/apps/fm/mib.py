@@ -167,8 +167,7 @@ class MIBApplication(ExtDocApplication):
                     r = svc.compile(MIB.guess_encoding(left[name].read()))
                     if r.get("status"):
                         del left[name]
-                        if name in errors:
-                            del errors[name]
+                        errors.pop(name, None)
                     else:
                         errors[name] = r["msg"]
                 except RPCError as e:
