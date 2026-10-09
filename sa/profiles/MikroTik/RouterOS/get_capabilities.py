@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # MikroTik.RouterOS.get_capabilities_ex
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2025 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -52,4 +52,4 @@ class Script(BaseScript):
         """
         Check box has lldp enabled
         """
-        return bool(self.cli_detail("/ipv6 nd print detail without-paging"))
+        return bool("disable-ipv6: no" in self.cli("/ipv6/settings/print  without-paging"))
