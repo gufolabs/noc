@@ -36,11 +36,11 @@ class MergeTree(BaseEngine):
     def get_create_sql(self):
         sql = ["MergeTree() "]
         if self.partition_function:
-            sql += [f"PARTITION BY {self.partition_function} "]
+            sql.append(f"PARTITION BY {self.partition_function} ")
         elif self.date_field:
-            sql += [f"PARTITION BY toYYYYMM({self.date_field}) "]
+            sql.append(f"PARTITION BY toYYYYMM({self.date_field}) ")
         if self.primary_keys:
-            sql += [f"PRIMARY KEY ({','.join(self.primary_keys)}) "]
+            sql.append(f"PRIMARY KEY ({','.join(self.primary_keys)}) ")
         sql += [
             f"ORDER BY ({','.join(self.order_by)}) ",
             f"SETTINGS index_granularity = {self.granularity} ",

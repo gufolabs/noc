@@ -508,7 +508,7 @@ class ManagedObjectDS(BaseDataSource):
                     c = Capability.get_by_name(f.internal_name)
                 if not c:
                     continue
-                q_caps[str(c.id)] += [(f.name, cls.get_caps_default(c))]
+                q_caps[str(c.id)].append((f.name, cls.get_caps_default(c)))
             elif f.is_diagnostic_state:
                 annotations[f.name] = Case(
                     When(

@@ -79,14 +79,14 @@ class BaseExtractor:
     def register_quality_problem(
         self, line: int, p_class: str, message: str, row: list[Any]
     ) -> None:
-        self.quality_problems += [
+        self.quality_problems.append(
             Problem(line=line + 1, is_rej=False, p_class=p_class, message=message, row=row)
-        ]
+        )
 
     def register_fatal_problem(self, line: int, p_class: str, message: str, row: list[Any]) -> None:
-        self.fatal_problems += [
+        self.fatal_problems.append(
             Problem(line=line + 1, is_rej=True, p_class=p_class, message=message, row=row)
-        ]
+        )
 
     def ensure_import_dir(self) -> None:
         """
@@ -329,7 +329,7 @@ class BaseExtractor:
                     self.logger.error("Duplicated row truncated: %r", row)
                 continue
             seen.add(row.id)
-            data += [row]
+            data.append(row)
             n += 1
             if n % self.REPORT_INTERVAL == 0:
                 self.logger.info("   ... %d records", n)

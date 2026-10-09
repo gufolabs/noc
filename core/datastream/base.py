@@ -306,7 +306,7 @@ class DataStream:
         if bulk is None:
             cls.get_collection(fmt).update_one({cls.F_ID: obj_id}, op, upsert=True)
         else:
-            bulk += [pymongo.UpdateOne({cls.F_ID: obj_id}, op, upsert=True)]
+            bulk.append(pymongo.UpdateOne({cls.F_ID: obj_id}, op, upsert=True))
         logger.info("[%s] Object has been changed", l_name)
         if cls.enable_message:
             # Build MX message

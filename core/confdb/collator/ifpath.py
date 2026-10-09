@@ -127,7 +127,7 @@ class IfPathCollator(BaseCollator):
                     continue
                 protocols = self.get_protocols(if_type)
                 # self.paths[tuple(if_path) or None][if_num].append((if_type, if_name, protocols))
-                self.paths[if_num] += [(tuple(if_path), if_name, protocols)]
+                self.paths[if_num].append((tuple(if_path), if_name, protocols))
             logger.debug("Paths mapping %s", self.paths)
         paths_candidate = []
 

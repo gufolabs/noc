@@ -344,7 +344,7 @@ class BaseLoader:
                     self.on_add(n)
                 except self.Deferred:
                     if not self.discard_deferred:
-                        deferred_add += [n]
+                        deferred_add.append(n)
             elif o and n is None:
                 self.on_delete(o)
             else:
@@ -352,20 +352,20 @@ class BaseLoader:
                     self.on_change(o, n)
                 except self.Deferred:
                     if not self.discard_deferred:
-                        deferred_change += [(o, n)]
+                        deferred_change.append((o, n))
             rn = self.c_add + self.c_change + self.c_delete
             if rn > 0 and rn % self.REPORT_INTERVAL == 0:
                 self.logger.info("   ... %d records", rn)
         # Add deferred records
-        if len(deferred_add) or len(deferred_change):
+        if deferred_add or deferred_change:
             self.logger.info("Processed deferred: %s/%s", len(deferred_add), len(deferred_change))
-        while len(deferred_add):
+        while deferred_add:
             nd = []
             for row in deferred_add:
                 try:
                     self.on_add(row)
                 except self.Deferred:
-                    nd += [row]
+                    nd.append(row)
             if len(nd) == len(deferred_add):
                 raise Exception("Unable to defer references")
             deferred_add = nd
@@ -373,13 +373,13 @@ class BaseLoader:
             if rn % self.REPORT_INTERVAL == 0:
                 self.logger.info("   ... %d records", rn)
         # Change deferred records
-        while len(deferred_change):
+        while deferred_change:
             nd = []
             for o, n in deferred_change:
                 try:
                     self.on_change(o, n)
                 except self.Deferred:
-                    nd += [(o, n)]
+                    nd.append((o, n))
             if len(nd) == len(deferred_change):
                 raise Exception("Unable to defer references")
             deferred_change = nd
@@ -651,7 +651,7 @@ class BaseLoader:
         """
         Delete record
         """
-        self.pending_deletes += [(item.id, item)]
+        self.pending_deletes.append((item.id, item))
 
     def change_workflow(self, o, state: str, changed_date: datetime.datetime | None = None):
         self.logger.debug("Change Workflow state: %s -> %s", o.state, state)
@@ -695,7 +695,7 @@ class BaseLoader:
                     obj.delete()
             except ValueError as e:  # Referred Error
                 self.logger.error("%s", str(e))
-                self.referred_errors += [(r_id, msg)]
+                self.referred_errors.append((r_id, msg))
             except KeyError as e:
                 # Undefined mappings
                 self.logger.error("%s", str(e))

@@ -196,7 +196,7 @@ class ConsulDCS(DCSBase):
             await self.acquire_lock(lock)
         svc_id = self.session or str(f"svc-{uuid.uuid4()}")
         tags = tags[:] if tags else []
-        tags += [svc_id]
+        tags.append(svc_id)
         self.svc_check_url = f"http://{address}:{port}/health/?service={svc_id}"
         self.health_check_service_id = svc_id
         if config.features.consul_healthchecks:
@@ -438,7 +438,7 @@ class ConsulDCS(DCSBase):
             if len(holders) < total_slots:
                 # Available slots from the end
                 slot_number = len(holders)
-                holders += [self.session]
+                holders.append(self.session)
             else:
                 # Try to reclaim slots in the middle
                 try:
@@ -503,9 +503,9 @@ class ConsulDCS(DCSBase):
                 continue
             r = []
             for svc in services:
-                r += [
+                r.append(
                     f"{svc['Service']['Address'] or svc['Node']['Address']!s}:{svc['Service']['Port']!s}"
-                ]
+                )
                 if not full_result:
                     break
             self.logger.debug("Resolved near service %s to %s", name, r)

@@ -248,9 +248,9 @@ class ReportDsAlarms(BaseDataSource):
             value = values[0]
             if name == "source":
                 if "active" in values or "both" in values:
-                    alarm_collections += [ActiveAlarm]
+                    alarm_collections.append(ActiveAlarm)
                 if "archived" in values or "both" in values:
-                    alarm_collections += [ArchivedAlarm]
+                    alarm_collections.append(ArchivedAlarm)
                 if not alarm_collections:
                     raise ValueError("alarm_collections must be not empty")
             elif name == "min_subscribers":
@@ -289,24 +289,8 @@ class ReportDsAlarms(BaseDataSource):
             # if isinstance(coll, ActiveAlarm):
             pipeline = []
             if match:
-                pipeline += [{"$match": match}]
-            pipeline += [
-                # {
-                #     "$lookup": {
-                #         "from": "noc.objects",
-                #         "localField": "container_path",
-                #         "foreignField": "_id",
-                #         "as": "container_path_l",
-                #     }
-                # },
-                # {
-                #     "$lookup": {
-                #         "from": "noc.networksegments",
-                #         "localField": "segment_path",
-                #         "foreignField": "_id",
-                #         "as": "segment_path_l",
-                #     }
-                # },
+                pipeline.append({"$match": match})
+            pipeline.append(
                 {
                     "$addFields": {
                         "duration": {
@@ -342,10 +326,10 @@ class ReportDsAlarms(BaseDataSource):
                         #     "$map": {"input": "$segment_path_l", "as": "ns", "in": "$$ns.name"}
                         # },
                     }
-                },
-            ]
+                }
+            )
             if match_middle:
-                pipeline += [{"$match": match_middle}]
+                pipeline.append({"$match": match_middle})
 
             # print(pipeline, alarm_collections)
             yield from (

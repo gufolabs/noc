@@ -40,7 +40,7 @@ def update_if_changed(obj, values):
         if v != vv:
             if not isinstance(v, int) or not hasattr(vv, "id") or v != vv.id:
                 setattr(obj, k, v)
-                changes += [(k, v)]
+                changes.append((k, v))
     if changes:
         obj.save()
     return changes
@@ -64,7 +64,7 @@ def get_model_fields(model):
                     if ff.name != k and ff.unique:
                         k = ff.name
                         break
-                fields += [(f.name, required, f.remote_field.model, k)]
+                fields.append((f.name, required, f.remote_field.model, k))
         elif hasattr(f, "document"):
             document = f.document
             if isinstance(document, str):
@@ -74,9 +74,9 @@ def get_model_fields(model):
                 if fi.name != k and fi.unique and fi.name not in IGNORED_FIELDS:
                     k = fi.name
                     break
-            fields += [(f.name, required, document, k)]
+            fields.append((f.name, required, document, k))
         else:
-            fields += [(f.name, required, None, None)]
+            fields.append((f.name, required, None, None))
     return fields
 
 
@@ -110,13 +110,13 @@ def csv_export(model, queryset=None, first_row_only=False):
                 "static_client_groups",
                 "effective_client_groups",
             }:
-                row += [",".join(v)]
+                row.append(",".join(v))
             elif f in {"vendor"} and getattr(v, "code", None):
                 row += v.code
             elif rel is None or not v:
-                row += [v]
+                row.append(v)
             else:
-                row += [getattr(v, rf)]
+                row.append(getattr(v, rf))
         row = [smart_text(f) for f in row]
         writer.writerow(row)
         # Return result

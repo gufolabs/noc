@@ -33,7 +33,7 @@ class BaseInterfaceMetaclass(type):
                 continue
             if issubclass(attrs[k].__class__, Parameter):
                 p = attrs[k]
-                n._INPUT_PARAMS += [(k, p)]
+                n._INPUT_PARAMS.append((k, p))
                 n._INPUT_MAP[k] = p
                 if p.required and p.default is not None:
                     n._INPUT_DEFAULTS[k] = p.default
@@ -123,7 +123,7 @@ class BaseInterface(metaclass=BaseInterfaceMetaclass):
             return self.form
         r = []
         for n, p in self.gen_parameters():
-            r += [p.get_form_field(n)]
+            r.append(p.get_form_field(n))
         return r
 
     def get_check_params(self, check) -> dict[str, Any]:

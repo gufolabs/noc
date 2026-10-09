@@ -74,10 +74,10 @@ def md5crypt(password: bytes, salt: bytes | None = None, magic: bytes = b"$1$") 
     for a, b, c in REARRANGED_BITS:
         v = final[a] << 16 | final[b] << 8 | final[c]
         for i in range(4):
-            rearranged += [ITOA64[v & 0x3F]]
+            rearranged.append(ITOA64[v & 0x3F])
             v >>= 6
     v = final[11]
     for i in range(2):
-        rearranged += [ITOA64[v & 0x3F]]
+        rearranged.append(ITOA64[v & 0x3F])
         v >>= 6
     return magic + salt + b"$" + bytes(rearranged)

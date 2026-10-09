@@ -88,7 +88,7 @@ def to_local(profile=None, platform=None):
     def wrap(f):
         if not hasattr(f, "_match"):
             f._match = []
-        f._match += [{"local": True, "profile": profile, "platform": platform}]
+        f._match.append({"local": True, "profile": profile, "platform": platform})
         return f
 
     return wrap
@@ -98,7 +98,7 @@ def to_remote(profile=None, platform=None):
     def wrap(f):
         if not hasattr(f, "_match"):
             f._match = []
-        f._match += [{"local": False, "profile": profile, "platform": platform}]
+        f._match.append({"local": False, "profile": profile, "platform": platform})
         return f
 
     return wrap

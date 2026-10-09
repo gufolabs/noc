@@ -29,7 +29,7 @@ class LoaderChain:
             lc = loader_loader.get_loader(name)
             loader = lc(self)
             self.loaders[name] = loader
-            self.lseq += [loader]
+            self.lseq.append(loader)
         return loader
 
     def __iter__(self):

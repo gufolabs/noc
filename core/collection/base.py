@@ -470,7 +470,7 @@ class Collection:
         for d in self.model._get_collection().find(
             {"uuid": {"$type": "string"}}, {"_id": 1, "uuid": 1}
         ):
-            bulk += [UpdateOne({"_id": d["_id"]}, {"$set": {"uuid": UUID(d["uuid"])}})]
+            bulk.append(UpdateOne({"_id": d["_id"]}, {"$set": {"uuid": UUID(d["uuid"])}}))
         if bulk:
             self.stdout.write(f"[{self.name}] Fixing {len(bulk)} UUID\n")
             self.model._get_collection().bulk_write(bulk)

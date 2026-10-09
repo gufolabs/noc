@@ -78,9 +78,9 @@ class DiscoveryProblemDS(BaseDataSource):
             {"$project": {"job.problems": True, "st": True, "key": True}},
         ]
         if match:
-            pipeline += [{"$match": match}]
+            pipeline.append({"$match": match})
         else:
-            pipeline += [{"$match": {"job.problems": {"$exists": True, "$ne": {}}}}]
+            pipeline.append({"$match": {"job.problems": {"$exists": True, "$ne": {}}}})
         return pipeline
 
     @staticmethod

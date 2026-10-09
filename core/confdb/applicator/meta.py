@@ -114,7 +114,7 @@ class MetaApplicator(BaseApplicator):
                 else:
                     if i.managed_object not in remote_interfaces:
                         remote_interfaces[i.managed_object] = []
-                    remote_interfaces[i.managed_object] += [i.name]
+                    remote_interfaces[i.managed_object].append(i.name)
             for li in local_interfaces:
                 links[li] = remote_interfaces
         # Yield meta for all interfaces

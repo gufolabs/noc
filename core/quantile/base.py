@@ -56,7 +56,7 @@ class Stream:
         :return:
         """
         # Fast unsorted insert untill buffer limit is reached or first query
-        self.samples += [Sample(v, 1, 0)]
+        self.samples.append(Sample(v, 1, 0))
         self.sorted = False
         if len(self.samples) >= self.buff_size:
             self.flush()

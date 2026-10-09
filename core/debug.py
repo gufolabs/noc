@@ -120,7 +120,7 @@ def get_traceback_frames(tb):
             filename, lineno, 7, loader, module_name
         )
         if pre_context_lineno is not None:
-            frames += [
+            frames.append(
                 {
                     "tb": tb,
                     "filename": filename,
@@ -133,7 +133,7 @@ def get_traceback_frames(tb):
                     "post_context": post_context,
                     "pre_context_lineno": pre_context_lineno + 1,
                 }
-            ]
+            )
         tb = tb.tb_next
     if not frames:
         frames = [{"filename": "unknown", "function": "?", "lineno": "?", "context_line": "???"}]
@@ -143,7 +143,7 @@ def get_traceback_frames(tb):
 def get_execution_frames(frame):
     e_f = []
     while frame is not None:
-        e_f += [frame]
+        e_f.append(frame)
         frame = frame.f_back
     e_f.reverse()
     frames = []
@@ -157,7 +157,7 @@ def get_execution_frames(frame):
             filename, lineno, 7, loader, module_name
         )
         if pre_context_lineno is not None:
-            frames += [
+            frames.append(
                 {
                     "filename": filename,
                     "function": function,
@@ -168,7 +168,7 @@ def get_execution_frames(frame):
                     "post_context": post_context,
                     "pre_context_lineno": pre_context_lineno + 1,
                 }
-            ]
+            )
     if not frames:
         frames = [{"filename": "unknown", "function": "?", "lineno": "?", "context_line": "???"}]
     return frames
@@ -178,24 +178,24 @@ def format_frames(frames, reverse=config.traceback.reverse):
     def format_source(lineno, lines):
         r = []
         for line in lines:
-            r += [f"{int(lineno):5}     {line}"]
+            r.append(f"{int(lineno):5}     {line}")
             lineno += 1
         return "\n".join(r)
 
     r = []
-    r += ["START OF TRACEBACK"]
-    r += ["-" * 72]
+    r.append("START OF TRACEBACK")
+    r.append("-" * 72)
     fr = frames[:]
     if reverse:
         fr.reverse()
     for f in fr:
-        r += [f"File: {os.path.relpath(f['filename'])} (Line: {f['lineno']})"]
-        r += [f"Function: {f['function']}"]
+        r.append(f"File: {os.path.relpath(f['filename'])} (Line: {f['lineno']})")
+        r.append(f"Function: {f['function']}")
         if "pre_context_lineno" in f:
-            r += [format_source(f["pre_context_lineno"], f["pre_context"])]
-            r += [f"{int(f['lineno']):5} ==> {f['context_line']}"]
-            r += [format_source(f["lineno"] + 1, f["post_context"])]
-            r += ["Variables:"]
+            r.append(format_source(f["pre_context_lineno"], f["pre_context"]))
+            r.append(f"{int(f['lineno']):5} ==> {f['context_line']}")
+            r.append(format_source(f["lineno"] + 1, f["post_context"]))
+            r.append("Variables:")
             for n, v in f["vars"]:
                 try:
                     pv = smart_text(repr(v))
@@ -203,11 +203,11 @@ def format_frames(frames, reverse=config.traceback.reverse):
                         pv = "\n" + pprint.pformat(v)
                 except:  # noqa
                     pv = "repr() failed"
-                r += [f"{n:>20} = {pv}"]
+                r.append(f"{n:>20} = {pv}")
         else:
-            r += ["???"]
-        r += ["-" * 72]
-    r += ["END OF TRACEBACK"]
+            r.append("???")
+        r.append("-" * 72)
+    r.append("END OF TRACEBACK")
     return "\n".join(r)
 
 
@@ -259,9 +259,9 @@ def get_traceback(reverse=config.traceback.reverse, fp=None, exc_info=None):
         f"VERSION: {version.version}",
     ]
     if version.branch:
-        r += [f"BRANCH: {version.branch} CHANGESET: {version.changeset}"]
+        r.append(f"BRANCH: {version.branch} CHANGESET: {version.changeset}")
     if fp:
-        r += [f"ERROR FINGERPRINT: {fp}"]
+        r.append(f"ERROR FINGERPRINT: {fp}")
     r += [
         f"WORKING DIRECTORY: {os.getcwd()}",
         f"EXCEPTION: {t} {v}",
@@ -281,9 +281,9 @@ def excepthook(t, v, tb):
 
     now = datetime.datetime.now()
     r = [f"UNHANDLED EXCEPTION ({now!s})"]
-    r += [f"Working directory: {os.getcwd()}"]
+    r.append(f"Working directory: {os.getcwd()}")
     r += [str(t), str(v)]
-    r += [format_frames(get_traceback_frames(tb))]
+    r.append(format_frames(get_traceback_frames(tb)))
     sys.stdout.write("\n".join(r))
     sys.stdout.flush()
 
@@ -334,10 +334,10 @@ def frame_report(frame, caption=None, logger=logger):
     now = datetime.datetime.now()
     r = []
     if caption:
-        r += [caption]
-    r += [f"EXECUTION FRAME REPORT ({now!s})"]
-    r += [f"Working directory: {os.getcwd()}"]
-    r += [format_frames(get_execution_frames(frame))]
+        r.append(caption)
+    r.append(f"EXECUTION FRAME REPORT ({now!s})")
+    r.append(f"Working directory: {os.getcwd()}")
+    r.append(format_frames(get_execution_frames(frame)))
     logger.error("\n".join(r))
 
 

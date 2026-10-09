@@ -32,9 +32,9 @@ class NOCBoundField(BoundField):
             )
         classes = []
         if self.is_checkbox:
-            classes += ["vCheckboxLabel"]
+            classes.append("vCheckboxLabel")
         if self.field.required:
-            classes += ["required"]
+            classes.append("required")
         if classes:
             attrs = attrs.copy() if attrs else {}
             attrs["class"] = " ".join(classes)

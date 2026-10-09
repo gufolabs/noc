@@ -55,5 +55,5 @@ class ContextTokenizer(LineTokenizer):
                 tokens = contexts[-1] + tokens
             # Check for new context
             if self.is_matched(tokens):
-                contexts += [tokens]
+                contexts.append(tokens)
             yield tokens

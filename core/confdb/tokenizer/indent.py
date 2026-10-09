@@ -27,8 +27,8 @@ class IndentTokenizer(LineTokenizer):
                 tokens = tokens[1:]
             if c_depth > depths[-1] and last:
                 # Push context
-                depths += [c_depth]
-                contexts += [last]
+                depths.append(c_depth)
+                contexts.append(last)
             elif depths and c_depth < depths[-1]:
                 # Pop context
                 while c_depth < depths[-1]:
@@ -50,8 +50,8 @@ class IndentTokenizer(LineTokenizer):
                 tokens = tokens[1:]
             if depts and c_depth > depts[-1] and last:
                 # Push context
-                depts += [c_depth]
-                contexts += [last]
+                depts.append(c_depth)
+                contexts.append(last)
             elif tokens == eoc:
                 if len(depts) > 1:
                     # Pop context

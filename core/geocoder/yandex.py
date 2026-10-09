@@ -27,13 +27,13 @@ class YandexGeocoder(BaseGeocoder):
     def forward(self, query: str, bounds=None, region=None) -> GeoCoderResult | None:
         url = ["https://geocode-maps.yandex.ru/1.x/?", "format=json"]
         if region:
-            url += [f"&region={region}"]
+            url.append(f"&region={region}")
         if bounds:
             # "&rspn=1&bbox=127.56,49.96~141.05,56.09"
             url += ["&rspn=1", f"&bbox={bounds}~{bounds}"]
-        url += [f"&geocode={urllib_quote(query)}"]
+        url.append(f"&geocode={urllib_quote(query)}")
         if self.apikey:
-            url += [f"&apikey={urllib_quote(self.apikey)}"]
+            url.append(f"&apikey={urllib_quote(self.apikey)}")
         code, response = self.get("".join(url))
         if code == 429:
             raise GeoCoderLimitExceeded()

@@ -74,5 +74,5 @@ def lldp_bits_to_caps(bits):
     for i in range(8):
         bv = 1 << i
         if bits & bv:
-            r += [LLDP_CAP_NAMES[bv]]
+            r.append(LLDP_CAP_NAMES[bv])
     return r

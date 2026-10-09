@@ -90,7 +90,7 @@ class Node:
             node = self.get_children(token)
             if not node:
                 node = Node(token)
-                self.children += [node]
+                self.children.append(node)
             node.append(pattern[1:], handler)
         else:
             self.handler = handler
@@ -176,17 +176,17 @@ class BaseNormalizerMetaclass(type):
         for p in path:
             if p.name:
                 if isinstance(p.token, str):
-                    args += [BasePattern.compile_gen_kwarg(p.name, p.default)]
-                    r += [p.name]
+                    args.append(BasePattern.compile_gen_kwarg(p.name, p.default))
+                    r.append(p.name)
                 else:
-                    args += [p.token.compile_gen_kwarg(p.name, p.default)]
-                    r += [p.token.compile_value(p.name)]
+                    args.append(p.token.compile_gen_kwarg(p.name, p.default))
+                    r.append(p.token.compile_value(p.name))
             else:
-                r += [f"'{p.token}'"]
+                r.append(f"'{p.token}'")
         if replace:
             kw["replace"] = True
         if kw:
-            r += [str(kw)]
+            r.append(str(kw))
         body = "def {}(self, {}):\n    return {}".format(sdef.gen, ", ".join(args), ", ".join(r))
         ctx = {}
         exec(body, {"BOOL": BOOL, "IPv4": IPv4, "IPv6": IPv6, "IP": IP}, ctx)
@@ -277,15 +277,15 @@ class BaseNormalizer(metaclass=BaseNormalizerMetaclass):
                 rv = self._resolve_vars(ctx, dv)
                 if rv is not None:
                     dk.update(rv)
-                    resolved += [partial(dg, **dk)]
+                    resolved.append(partial(dg, **dk))
                 else:
-                    n_deferred += [(dg, dk, dv)]
+                    n_deferred.append((dg, dk, dv))
         if gen and not deferables:
             # Already resolved shortcut
-            resolved += [partial(gen, **nkwargs)]
+            resolved.append(partial(gen, **nkwargs))
         elif gen and deferables:
             # Add to deferred list
-            n_deferred += [(gen, nkwargs, deferables)]
+            n_deferred.append((gen, nkwargs, deferables))
         ctx["."] = n_deferred
         if resolved:
             return yield_resolved
@@ -332,7 +332,7 @@ class BaseNormalizer(metaclass=BaseNormalizerMetaclass):
 def match(*args, **kwargs):
     def wrap(f):
         if hasattr(f, "_seq"):
-            f._matcher += [(args, kwargs.get("matcher"))]
+            f._matcher.append((args, kwargs.get("matcher")))
         else:
             f._seq = next(_match_seq)
             f._matcher = [(args, kwargs.get("matcher"))]

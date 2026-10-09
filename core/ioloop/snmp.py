@@ -127,10 +127,10 @@ async def snmp_get(
             oid_parts = []
             if b_idx:
                 # Oids before b_idx are probable correct
-                oid_parts += [[vb[0] for vb in resp.varbinds[:b_idx]]]
+                oid_parts.append([vb[0] for vb in resp.varbinds[:b_idx]])
             if b_idx < len(resp.varbinds) - 1:
                 # Some oids after b_idx may be correct
-                oid_parts += [[vb[0] for vb in resp.varbinds[b_idx + 1 :]]]
+                oid_parts.append([vb[0] for vb in resp.varbinds[b_idx + 1 :]])
             for new_oids in oid_parts:
                 try:
                     new_result = await snmp_get(
@@ -332,7 +332,7 @@ async def snmp_getnext(
                     if oid.startswith(poid) and not (only_first and result) and oid != last_oid:
                         # Next value
                         if filter(oid, v):
-                            result += [(oid, v)]
+                            result.append((oid, v))
                         last_oid = oid
                         first_oid = first_oid or oid
                     else:
@@ -345,7 +345,7 @@ async def snmp_getnext(
                     if s_oid.startswith(poid) and not (only_first and result) and oid != last_oid:
                         # Next value
                         if filter(s_oid, v):
-                            result += [(oid, v)]
+                            result.append((oid, v))
                         last_oid = oid
                         first_oid = first_oid or oid
                     else:

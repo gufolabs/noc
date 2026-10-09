@@ -176,18 +176,18 @@ class DB:
         sql = []
         params = []
         if with_name:
-            sql += [self.quote_name(field.column)]
-        sql += [field.db_type(connection)]
+            sql.append(self.quote_name(field.column))
+        sql.append(field.db_type(connection))
         type_suffix = field.db_type_suffix(connection)
         if type_suffix:
-            sql += [type_suffix]
+            sql.append(type_suffix)
         # NULL/NOT NULL
-        sql += ["NULL" if field.null else "NOT NULL"]
+        sql.append("NULL" if field.null else "NOT NULL")
         # PRIMARY KEY/UNIQUE
         if field.primary_key:
-            sql += ["PRIMARY KEY"]
+            sql.append("PRIMARY KEY")
         elif field.unique:
-            sql += ["UNIQUE"]
+            sql.append("UNIQUE")
         # DEFAULT
         if field.has_default():
             default = field.get_default()
@@ -200,24 +200,24 @@ class DB:
                     default = f"'{default}'"
                 if isinstance(default, str):
                     default = default.replace("%", "%%")
-                sql += [f"DEFAULT {default}"]
-                params += [default]
+                sql.append(f"DEFAULT {default}")
+                params.append(default)
             elif (not field.null and field.blank) or (field.get_default() == ""):
                 if (
                     field.empty_strings_allowed
                     and connection.features.interprets_empty_strings_as_nulls
                 ):
-                    sql += [" DEFAULT ''"]
+                    sql.append(" DEFAULT ''")
         # FOREIGN KEY
         if field.remote_field:
-            self.deferred_sql += [
+            self.deferred_sql.append(
                 self._foreign_key_sql(
                     table_name,
                     field.column,
                     field.remote_field.model._meta.db_table,
                     field.remote_field.model._meta.get_field(field.remote_field.field_name).column,
                 )
-            ]
+            )
         # Indexes
         model = self.mock_model("FakeModelForGISCreation", table_name)
         self.deferred_sql += self._sql_indexes_for_field(model, field)
