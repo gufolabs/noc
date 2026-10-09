@@ -98,7 +98,7 @@ class Script(BaseScript):
                     continue
 
                 if id != id_last and map[name2] == "local_interface":
-                    neighbors += [{map[name2]: value.strip("'"), "neighbors": [remotehost]}]
+                    neighbors.append({map[name2]: value.strip("'"), "neighbors": [remotehost]})
                 elif map[name2] == "remote_capabilities":
                     remotehost.update({map[name2]: "30"})
                 elif map[name2] == "remote_port":
@@ -156,8 +156,8 @@ class Script(BaseScript):
                 "remote_system_name": match.group("remote_system_name"),
             }
 
-            i["neighbors"] += [n]
-            r += [i]
+            i["neighbors"].append(n)
+            r.append(i)
 
         return r
 

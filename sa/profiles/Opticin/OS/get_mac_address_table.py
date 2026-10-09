@@ -44,14 +44,14 @@ class Script(BaseScript):
                     type = match.group("type")
                     vlan = "1"
                     intf = [interface]
-                    r += [
+                    r.append(
                         {
                             "vlan_id": vlan,
                             "mac": mac,
                             "interfaces": intf,
                             "type": self.types[type.lower()],
                         }
-                    ]
+                    )
             return r
         r = []
         for i in self.scripts.get_interface_status():
@@ -68,12 +68,12 @@ class Script(BaseScript):
                     type = match.group("type")
                     vlan = "1"
                     intf = [port]
-                    r += [
+                    r.append(
                         {
                             "vlan_id": vlan,
                             "mac": mac,
                             "interfaces": intf,
                             "type": self.types[type.lower()],
                         }
-                    ]
+                    )
         return r

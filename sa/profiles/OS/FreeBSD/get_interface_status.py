@@ -37,6 +37,6 @@ class Script(BaseScript):
                 }
                 if (interface is not None) and (interface == if_name):
                     return [iface]
-                r += [iface]
+                r.append(iface)
                 continue
         return r

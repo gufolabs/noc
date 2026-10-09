@@ -24,5 +24,5 @@ class Script(BaseScript):
         r = []
         v = self.cli("show arp")
         for match in self.rx_arp.finditer(v):
-            r += [match.groupdict()]
+            r.append(match.groupdict())
         return r

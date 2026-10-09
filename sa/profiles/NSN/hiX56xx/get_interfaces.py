@@ -74,7 +74,7 @@ class Script(BaseScript):
                     }
                 ],
             }
-            interfaces += [iface]
+            interfaces.append(iface)
 
         for i in interfaces:
             sub = i["subinterfaces"][0]
@@ -116,12 +116,12 @@ class Script(BaseScript):
                         }
                         for iface in interfaces:
                             if iface["name"] == ifname1:
-                                iface["subinterfaces"] += [sub]
+                                iface["subinterfaces"].append(sub)
                                 break
                         else:
-                            interfaces += [
+                            interfaces.append(
                                 {"name": ifname1, "type": "physical", "subinterfaces": [sub]}
-                            ]
+                            )
                     else:
                         for iface in interfaces:
                             if iface["name"] == ifname:
@@ -129,7 +129,7 @@ class Script(BaseScript):
                                 if vlan_type == "u":
                                     sub["untagged_vlan"] = vlan_id
                                 elif "tagged" in sub:
-                                    sub["tagged_vlans"] += [vlan_id]
+                                    sub["tagged_vlans"].append(vlan_id)
                                 else:
                                     sub["tagged_vlans"] = [vlan_id]
                                 break
@@ -141,7 +141,7 @@ class Script(BaseScript):
                             else:
                                 sub["tagged_vlans"] = [vlan_id]
                             iface["subinterfaces"] = [sub]
-                            interfaces += [iface]
+                            interfaces.append(iface)
 
         # Do not use range s1-s10 due to high CPU utilization
         for s in range(11):
@@ -201,7 +201,7 @@ class Script(BaseScript):
             if match:
                 sub["enabled_afi"] = ["IPv4"]
                 sub["ipv4_addreses"] = [match.group("ip")]
-            interfaces += [iface]
+            interfaces.append(iface)
 
         # Set interface's names according to ifName
         for i in interfaces:

@@ -24,7 +24,7 @@ class Script(BaseScript):
         v = self.cli("show vlan properties", cached=True)
         for match in self.rx_vlan.finditer(v):
             if match.group("name") == "<noname>":
-                r += [{"vlan_id": match.group("vlan_id")}]
+                r.append({"vlan_id": match.group("vlan_id")})
             else:
-                r += [match.groupdict()]
+                r.append(match.groupdict())
         return r

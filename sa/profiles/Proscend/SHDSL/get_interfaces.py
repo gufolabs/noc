@@ -55,7 +55,7 @@ class Script(BaseScript):
                     else:
                         o_stat = False
                     # print repr("%s\n" % admin_status)
-                    interfaces += [
+                    interfaces.append(
                         {
                             "type": iftype,
                             "name": name,
@@ -74,7 +74,7 @@ class Script(BaseScript):
                                 }
                             ],
                         }
-                    ]
+                    )
                 return [{"interfaces": interfaces}]
             except self.snmp.TimeOutError:
                 pass

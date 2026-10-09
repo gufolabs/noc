@@ -33,7 +33,7 @@ class Script(BaseScript):
                 ranges = []
                 for m in sorted(macs):
                     if not ranges or m - ranges[-1][1] != 1:
-                        ranges += [[m, m]]
+                        ranges.append([m, m])
                     else:
                         ranges[-1][1] = m
                 return [{"first_chassis_mac": r[0], "last_chassis_mac": r[1]} for r in ranges]

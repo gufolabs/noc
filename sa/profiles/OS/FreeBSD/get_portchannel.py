@@ -33,7 +33,7 @@ class Script(BaseScript):
                 if "members" in self.iface:
                     if "type" not in self.iface:
                         self.iface["type"] = "S"
-                    self.interfaces += [self.iface]
+                    self.interfaces.append(self.iface)
                     self.iface = {}
                 self.iface["interface"] = match.group("ifname")
             match = self.rx_if_lagg_p.search(s)
@@ -43,12 +43,12 @@ class Script(BaseScript):
             if match:
                 ifname = match.group("ifname")
                 if "members" in self.iface:
-                    self.iface["members"] += [ifname]
+                    self.iface["members"].append(ifname)
                 else:
                     self.iface["members"] = [ifname]
                 continue
         if "members" in self.iface:
             if "type" not in self.iface:
                 self.iface["type"] = "S"
-            self.interfaces += [self.iface]
+            self.interfaces.append(self.iface)
         return self.interfaces

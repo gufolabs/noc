@@ -163,20 +163,20 @@ class Script(BaseScript):
 
             # LLDP protocol
             if name in lldp:
-                iface["enabled_protocols"] += ["LLDP"]
+                iface["enabled_protocols"].append("LLDP")
             # GVRP protocol
             if name in gvrp:
-                iface["enabled_protocols"] += ["GVRP"]
+                iface["enabled_protocols"].append("GVRP")
             # STP protocol
             if name in stp:
-                iface["enabled_protocols"] += ["STP"]
+                iface["enabled_protocols"].append("STP")
                 # Portchannel member
             if name in portchannel_members:
                 ai, is_lacp = portchannel_members[name]
                 iface["aggregated_interface"] = ai
                 if is_lacp:
-                    iface["enabled_protocols"] += ["LACP"]
-            iface["subinterfaces"][0]["enabled_afi"] += ["BRIDGE"]
+                    iface["enabled_protocols"].append("LACP")
+            iface["subinterfaces"][0]["enabled_afi"].append("BRIDGE")
             # Vlans
             cmd = self.cli(f"show interfaces switchport ethernet {name}")
             rcmd = cmd.split("\n\n")
@@ -203,14 +203,14 @@ class Script(BaseScript):
                 enabled_afi = []
                 if ":" in ip:
                     ip_interfaces = "ipv6_addresses"
-                    enabled_afi += ["IPv6"]
+                    enabled_afi.append("IPv6")
                 else:
                     ip_interfaces = "ipv4_addresses"
-                    enabled_afi += ["IPv4"]
+                    enabled_afi.append("IPv4")
                 iface["subinterfaces"][0]["enabled_afi"] = enabled_afi
                 iface["subinterfaces"][0][ip_interfaces] = ip_list
 
-            interfaces += [iface]
+            interfaces.append(iface)
 
         ip_iface = self.cli("show ip interface")
         for match in self.rx_sh_ip_int.finditer(ip_iface):
@@ -223,10 +223,10 @@ class Script(BaseScript):
             enabled_afi = []
             if ":" in ip:
                 ip_interfaces = "ipv6_addresses"
-                enabled_afi += ["IPv6"]
+                enabled_afi.append("IPv6")
             else:
                 ip_interfaces = "ipv4_addresses"
-                enabled_afi += ["IPv4"]
+                enabled_afi.append("IPv4")
             if ifname.startswith("vlan"):
                 vlan = ifname.split(" ")[1]
                 ifname = ifname.strip()
@@ -256,6 +256,6 @@ class Script(BaseScript):
                     }
                 ],
             }
-            interfaces += [iface]
+            interfaces.append(iface)
 
         return [{"interfaces": interfaces}]

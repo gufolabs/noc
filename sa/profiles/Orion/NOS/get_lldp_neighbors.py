@@ -90,7 +90,9 @@ class Script(BaseScript):
                 if match.group("sys_name").strip():
                     p = match.group("sys_name").strip()
                     neighbor["remote_system_name"] = p
-                result += [{"local_interface": match.group("interface"), "neighbors": [neighbor]}]
+                result.append(
+                    {"local_interface": match.group("interface"), "neighbors": [neighbor]}
+                )
             return result
 
         chassis = {}
@@ -143,5 +145,5 @@ class Script(BaseScript):
                 },
             )
             neighbor["remote_capabilities"] = caps
-            result += [{"local_interface": match.group("interface"), "neighbors": [neighbor]}]
+            result.append({"local_interface": match.group("interface"), "neighbors": [neighbor]})
         return result

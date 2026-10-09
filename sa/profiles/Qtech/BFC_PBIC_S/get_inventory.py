@@ -56,8 +56,7 @@ class Script(BaseScript):
         temp = self.snmp.get("1.3.6.1.3.55.1.2.1.0")
         r = []
         if temp:
-            r += [
-                # temp
+            r.append(
                 {
                     "name": "temp_out",
                     "status": -55 < temp < 600,
@@ -68,8 +67,8 @@ class Script(BaseScript):
                         "noc::sensor::mode::temperature",
                     ],
                     "snmp_oid": "1.3.6.1.3.55.1.2.1.0",
-                },
-            ]
+                }
+            )
         # Universal input
         for num in range(1, 7):
             in_config = self.snmp.get(f"1.3.6.1.3.55.1.3.1.2.{num - 1}")
@@ -78,7 +77,7 @@ class Script(BaseScript):
                 continue
             # oid = self.get_oid(self.femto_input_config_map[in_config]["type"], num)
             oid = f"1.3.6.1.3.55.1.3.1.4.{num - 1}"
-            r += [
+            r.append(
                 {
                     "name": f"{self.femto_input_config_map[in_config]['type']}{num}",
                     "status": True,
@@ -87,5 +86,5 @@ class Script(BaseScript):
                     "labels": self.femto_input_config_map[in_config]["labels"],
                     "snmp_oid": oid,
                 }
-            ]
+            )
         return r

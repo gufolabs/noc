@@ -44,7 +44,7 @@ class Script(BaseScript):
             v = self.cli("show port", cached=True)  # used in get_interfaces
             for match in self.rx_port.finditer(v):
                 ifname = match.group("port")
-                ports += [ifname]
+                ports.append(ifname)
                 v1 = self.cli(
                     f"show port statistics interface {ifname}",
                     cached=True,  # used in get_interfaces
@@ -65,7 +65,7 @@ class Script(BaseScript):
             # Set interface's name according to ifName
             if ifname in port_map:
                 ifname = port_map[ifname]
-            r += [
+            r.append(
                 {
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
@@ -74,6 +74,6 @@ class Script(BaseScript):
                         match.group("type").lower()
                     ],
                 }
-            ]
+            )
 
         return r

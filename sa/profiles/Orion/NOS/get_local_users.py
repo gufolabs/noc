@@ -24,5 +24,5 @@ class Script(BaseScript):
                 u_class = "superuser"
             else:
                 u_class = "operator"
-            r += [{"username": match.group("username"), "class": u_class, "is_active": True}]
+            r.append({"username": match.group("username"), "class": u_class, "is_active": True})
         return r

@@ -27,11 +27,11 @@ class Script(BaseScript):
             for match in self.rx_vlan_beta.finditer(self.cli("show vlan detail", cached=True)):
                 if match.group("vlan_id") == "1":
                     continue
-                r += [match.groupdict()]
+                r.append(match.groupdict())
             return r
 
         for match in self.rx_vlan.finditer(self.cli("show vlan")):
             if match.group("vlan_id") == "1":
                 continue
-            r += [match.groupdict()]
+            r.append(match.groupdict())
         return r

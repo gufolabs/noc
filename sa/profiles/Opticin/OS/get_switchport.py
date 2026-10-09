@@ -36,5 +36,5 @@ class Script(BaseScript):
                 "status": bool(status),
                 "untagged": untagged,
             }
-            r += [swport]
+            r.append(swport)
         return r

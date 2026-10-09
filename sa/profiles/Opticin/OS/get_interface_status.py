@@ -42,14 +42,14 @@ class Script(BaseScript):
                 n = "Port " + match.group("port")
             if n.startswith("CpuPort"):
                 continue
-            r += [
+            r.append(
                 {
                     "snmp_ifindex": i,
                     "interface": n,
                     "status": int(s) == 1,
                     "mac": MACAddressParameter().clean(m),
                 }
-            ]  # ifOperStatus up(1)
+            )  # ifOperStatus up(1)
         return r
 
     def execute_cli(self, interface=None):
@@ -61,7 +61,7 @@ class Script(BaseScript):
             if match:
                 interface = match.group("interface")
                 linestatus = match.group("status")
-                r += [{"interface": interface, "status": linestatus.lower() == "up"}]
+                r.append({"interface": interface, "status": linestatus.lower() == "up"})
         return r
 
     #
