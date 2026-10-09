@@ -19,7 +19,7 @@ class Migration(BaseMigration):
         bulk = []
         # Create wildcard labels
         if "noc::escalation::*" not in current_labels:
-            bulk += [
+            bulk.append(
                 InsertOne(
                     {
                         "name": "noc::escalation::*",
@@ -33,12 +33,12 @@ class Migration(BaseMigration):
                         "enable_alarm": True,
                     }
                 )
-            ]
+            )
         # Create policy labels
         for ll in ["never", "rootfirst", "root", "alwaysfirst", "always"]:
             ll = f"noc::escalation::{ll}"
             if ll not in current_labels:
-                bulk += [
+                bulk.append(
                     InsertOne(
                         {
                             "name": ll,
@@ -52,6 +52,6 @@ class Migration(BaseMigration):
                             "enable_alarm": True,
                         }
                     )
-                ]
+                )
         if bulk:
             l_coll.bulk_write(bulk, ordered=True)

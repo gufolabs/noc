@@ -37,7 +37,7 @@ class Migration(BaseMigration):
         """
         ):
             data = json.loads(data)
-            bulk += [
+            bulk.append(
                 InsertOne(
                     {
                         "layer": bson.ObjectId(layer),
@@ -46,7 +46,7 @@ class Migration(BaseMigration):
                         "data": data,
                     }
                 )
-            ]
+            )
         if bulk:
             print("Commiting changes to database")
             try:

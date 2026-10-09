@@ -41,8 +41,8 @@ class Migration(BaseMigration):
             ),
         ]
         for s in s_map:
-            bulk += [UpdateMany({"state": s}, {"$set": {"state": s_map[s]}})]
+            bulk.append(UpdateMany({"state": s}, {"$set": {"state": s_map[s]}}))
         # Missing state -> Free
         state = bson.ObjectId("5a17f61b1bb6270001bd0328")
-        bulk += [UpdateMany({"state": {"$exists": False}}, {"$set": {"state": state}})]
+        bulk.append(UpdateMany({"state": {"$exists": False}}, {"$set": {"state": state}}))
         db["noc.interfaces"].bulk_write(bulk, ordered=True)

@@ -99,13 +99,13 @@ class MACVendor(Document):
             if oui in old:
                 if vendor != old[oui]:
                     logger.info("[%s] %s -> %s", oui, old[oui], vendor)
-                    bulk += [UpdateOne({"_id": oui}, {"$set": {"vendor": vendor}})]
+                    bulk.append(UpdateOne({"_id": oui}, {"$set": {"vendor": vendor}}))
             else:
                 logger.info("[%s] Add %s", oui, vendor)
-                bulk += [InsertOne({"_id": oui, "vendor": vendor})]
+                bulk.append(InsertOne({"_id": oui, "vendor": vendor}))
         for oui in set(old) - set(new):
             logger.info("[%s] Delete")
-            bulk += [DeleteOne({"_id": oui})]
+            bulk.append(DeleteOne({"_id": oui}))
         if bulk:
             logger.info("Committing changes to database")
             try:

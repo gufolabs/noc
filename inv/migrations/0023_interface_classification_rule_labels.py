@@ -87,7 +87,7 @@ class InterfaceClassifierLabels:
             if name in self.proccessed_regex:
                 name += f" {self.duplicate_counter}"
             self.proccessed_regex.add(name)
-            self.regex_bulk += [
+            self.regex_bulk.append(
                 InsertOne(
                     {
                         # "_id": bson.ObjectId(),
@@ -122,7 +122,7 @@ class InterfaceClassifierLabels:
                         ],
                     }
                 )
-            ]
+            )
         self.regex_label[(scope, regex)] = name
         return name
 
@@ -177,7 +177,7 @@ class InterfaceClassifierLabels:
             else:
                 label = self.filter_regex(field, op, value, rule_name)
             if label:
-                r += [label]
+                r.append(label)
         return r
 
 
@@ -203,13 +203,13 @@ class Migration(BaseMigration):
         # ServiceProfile Rules
         coll = self.mongo_db["noc.serviceprofiles"]
         for profile in coll.find({"interface_profile": {"$exists": True}}):
-            profile_rules[profile["interface_profile"]] += [
+            profile_rules[profile["interface_profile"]].append(
                 {
                     "order": 5,
                     "description": "",
                     "mlabels": [f"noc::serviceprofile::{profile['name']}::="],
                 }
-            ]
+            )
         # Main loop
         coll = self.mongo_db["noc.inv.interfaceclassificationrules"]
         for rule in coll.find():
@@ -218,13 +218,13 @@ class Migration(BaseMigration):
             m_labels = set()
             m_labels.add(selectors_label[rule["selector"]])
             m_labels |= set(icrl.get_labels(rule["match"], rule["name"]))
-            profile_rules[rule["profile"]] += [
+            profile_rules[rule["profile"]].append(
                 {
                     "order": rule.get("order", 1) if rule["is_active"] else 0,
                     "description": rule.get("description"),
                     "mlabels": m_labels,
                 }
-            ]
+            )
             for ll in m_labels:
                 match_labels[ll].add("")
         # Apply RegexLabels
@@ -244,7 +244,7 @@ class Migration(BaseMigration):
         coll = self.mongo_db["noc.interface_profiles"]
         bulk = []
         for profile, rules in profile_rules.items():
-            bulk += [
+            bulk.append(
                 UpdateOne(
                     {"_id": profile},
                     {
@@ -257,7 +257,7 @@ class Migration(BaseMigration):
                         }
                     },
                 )
-            ]
+            )
         if bulk:
             coll.bulk_write(bulk)
         # Sync Labels
@@ -293,6 +293,6 @@ class Migration(BaseMigration):
                 "expose_metric": False,
                 "expose_datastream": False,
             }
-            bulk += [InsertOne(doc)]
+            bulk.append(InsertOne(doc))
         if bulk:
             l_coll.bulk_write(bulk, ordered=True)

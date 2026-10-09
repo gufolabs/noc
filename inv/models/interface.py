@@ -446,10 +446,10 @@ class Interface(Document):
         # Speed
         if self.oper_status:
             if self.in_speed and self.in_speed == self.out_speed:
-                s += [humanize_speed(self.in_speed)]
+                s.append(humanize_speed(self.in_speed))
             else:
                 s += [humanize_speed(self.in_speed), humanize_speed(self.out_speed)]
-            s += [{True: "Full", False: "Half", None: "-"}[self.full_duplex]]
+            s.append({True: "Full", False: "Half", None: "-"}[self.full_duplex])
         else:
             s += ["-", "-"]
         return "/".join(s)

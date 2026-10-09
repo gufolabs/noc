@@ -29,9 +29,7 @@ class Migration(BaseMigration):
                     c["source"] = "database"
                 caps.append(c)
             if caps:
-                bulk += [
-                    UpdateOne({"_id": cpe["_id"]}, {"$set": {"caps": caps}}),
-                ]
+                bulk.append(UpdateOne({"_id": cpe["_id"]}, {"$set": {"caps": caps}}))
             if len(bulk) > 500:
                 cpe_coll.bulk_write(bulk)
                 bulk = []

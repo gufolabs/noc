@@ -16,7 +16,7 @@ class AreasOverlay(OverlayHandler):
         r = {"type": "GeometryCollection", "geometries": []}
 
         for area in Area.objects.filter(is_active=True):
-            r["geometries"] += [
+            r["geometries"].append(
                 {
                     "type": "Polygon",
                     "coordinates": [
@@ -29,5 +29,5 @@ class AreasOverlay(OverlayHandler):
                         ]
                     ],
                 }
-            ]
+            )
         return r

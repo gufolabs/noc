@@ -119,7 +119,7 @@ class Address(Document):
                 n = str(self.num)
             if self.num_letter:
                 n += self.num_letter
-            a += [f"д. {n}"]
+            a.append(f"д. {n}")
         if self.estate:
             if self.estate2:
                 n = f"{int(self.estate)}/{int(self.estate2)}"
@@ -127,12 +127,12 @@ class Address(Document):
                 n = str(self.estate)
             if self.estate_letter:
                 n += self.estate_letter
-            a += [f"вл. {n}"]
+            a.append(f"вл. {n}")
         if self.build:
             n = str(self.build)
             if self.build_letter:
                 n += self.build_letter
-            a += [f"к. {n}"]
+            a.append(f"к. {n}")
         if self.struct:
             if self.struct2:
                 n = f"{int(self.struct)}/{int(self.struct2)}"
@@ -140,7 +140,7 @@ class Address(Document):
                 n = str(self.struct)
             if self.struct_letter:
                 n += self.struct_letter
-            a += [f"стр. {n}"]
+            a.append(f"стр. {n}")
         # Add street
         n = []
         if self.street:
@@ -151,9 +151,9 @@ class Address(Document):
                     st = f"{self.street.short_name} {self.street.name}"
             else:
                 st = self.street.name
-            n += [f"{st} {' '.join(a)}"]
+            n.append(f"{st} {' '.join(a)}")
         else:
-            n += [" ".join(a)]
+            n.append(" ".join(a))
         if levels or to_level is not None:
             if to_level is not None:
                 levels = 10

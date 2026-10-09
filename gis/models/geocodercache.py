@@ -63,7 +63,7 @@ class GeocoderCache(Document):
                 gc = gc.strip()
                 h = loader[gc]
                 if h:
-                    cls.geocoders += [h]
+                    cls.geocoders.append(h)
         yield from cls.geocoders
 
     @classmethod

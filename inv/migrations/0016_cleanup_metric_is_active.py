@@ -25,7 +25,7 @@ class Migration(BaseMigration):
                 metric["enable_box"] = False
                 if "is_active" in metric:
                     del metric["is_active"]
-                metrics += [metric]
-            bulk += [UpdateOne({"_id": ip["_id"]}, {"$set": {"metrics": metrics}})]
+                metrics.append(metric)
+            bulk.append(UpdateOne({"_id": ip["_id"]}, {"$set": {"metrics": metrics}}))
         if bulk:
             collection.bulk_write(bulk)

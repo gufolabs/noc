@@ -366,7 +366,7 @@ class ActiveAlarm(Document):
     ):
         timestamp = timestamp or datetime.datetime.now()
         if bulk is not None:
-            bulk += [
+            bulk.append(
                 UpdateOne(
                     {"_id": self.id},
                     {
@@ -383,8 +383,8 @@ class ActiveAlarm(Document):
                         }
                     },
                 )
-            ]
-        self.log += [
+            )
+        self.log.append(
             AlarmLog(
                 timestamp=timestamp.replace(microsecond=0),
                 from_status=self.status,
@@ -394,7 +394,7 @@ class ActiveAlarm(Document):
                 tt_id=tt_id,
                 internal=is_internal,
             )
-        ]
+        )
         if to_save and not bulk:
             self.safe_save()
         if not is_internal and not quiet:
@@ -1178,7 +1178,7 @@ class ActiveAlarm(Document):
             alarms[doc["_id"]] = doc
 
         for doc in alarms.values():
-            children[doc.get("root")] += [doc]
+            children[doc.get("root")].append(doc)
 
         # Get path to from current root upwards to global root
         # Check for loops, raise Value error if loop detected
@@ -1227,7 +1227,7 @@ class ActiveAlarm(Document):
                             "message": f"Severity changed to {int(severity)}",
                         }
                     }
-                bulk += [UpdateOne({"_id": root}, op)]
+                bulk.append(UpdateOne({"_id": root}, op))
         return bulk
 
     def set_root(self, root_alarm: "ActiveAlarm", rca_type=RCA_OTHER):
@@ -1245,9 +1245,9 @@ class ActiveAlarm(Document):
             bulk = self._get_path_summary_bulk()
         except ValueError:
             return  # Loop detected
-        bulk += [
+        bulk.append(
             UpdateOne({"_id": self.id}, {"$set": {"root": root_alarm.id, "rca_type": rca_type}})
-        ]
+        )
         self.log_message(f"Alarm {root_alarm.id} has been marked as root cause", bulk=bulk)
         # self.save()  Saved by log_message
         root_alarm.log_message(f"Alarm {self.id} has been marked as child", bulk=bulk)
@@ -1418,7 +1418,7 @@ class ActiveAlarm(Document):
                 p = model.get_by_id(k.profile)
                 if not p or getattr(p, "show_in_summary", True) is False:
                     continue
-                r += [{"profile": p.name, "summary": k.summary}]
+                r.append({"profile": p.name, "summary": k.summary})
             return sorted(r, key=lambda x: -x["summary"])
 
         from noc.sa.models.managedobjectprofile import ManagedObjectProfile

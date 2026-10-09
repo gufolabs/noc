@@ -261,7 +261,7 @@ class AlarmClass(Document):
                 except (ImportError, KeyError):  # Key error for cache exception
                     h = None
                 if h:
-                    handlers += [h]
+                    handlers.append(h)
             return handlers
 
         return _get_handlers(self)
@@ -276,7 +276,7 @@ class AlarmClass(Document):
                 except (ImportError, KeyError):  # Key error for cache exception
                     h = None
                 if h:
-                    handlers += [h]
+                    handlers.append(h)
             return handlers
 
         return _get_handlers(self)

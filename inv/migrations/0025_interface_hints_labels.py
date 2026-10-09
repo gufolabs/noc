@@ -19,7 +19,7 @@ class Migration(BaseMigration):
         current_labels = {ll["name"]: ll["_id"] for ll in l_coll.find()}
         bulk = []
         if "noc::topology::direction::*" not in current_labels:
-            bulk += [
+            bulk.append(
                 InsertOne(
                     {
                         "name": "noc::topology::direction::*",
@@ -34,9 +34,9 @@ class Migration(BaseMigration):
                         "enable_interface": True,
                     }
                 )
-            ]
+            )
         if "noc::interface::role::*" not in current_labels:
-            bulk += [
+            bulk.append(
                 InsertOne(
                     {
                         "name": "noc::interface::role::*",
@@ -51,9 +51,9 @@ class Migration(BaseMigration):
                         "enable_interface": True,
                     }
                 )
-            ]
+            )
         if "noc::interface::hints::*" not in current_labels:
-            bulk += [
+            bulk.append(
                 InsertOne(
                     {
                         "name": "noc::interface::hints::*",
@@ -68,9 +68,9 @@ class Migration(BaseMigration):
                         "enable_interface": True,
                     }
                 )
-            ]
+            )
         if "noc::sensor::mode::*" not in current_labels:
-            bulk += [
+            bulk.append(
                 InsertOne(
                     {
                         "name": "noc::sensor::mode::*",
@@ -85,9 +85,9 @@ class Migration(BaseMigration):
                         "enable_sensor": True,
                     }
                 )
-            ]
+            )
         if "noc::sensor::placement::*" not in current_labels:
-            bulk += [
+            bulk.append(
                 InsertOne(
                     {
                         "name": "noc::sensor::placement::*",
@@ -102,6 +102,6 @@ class Migration(BaseMigration):
                         "enable_sensor": True,
                     }
                 )
-            ]
+            )
         if bulk:
             l_coll.bulk_write(bulk, ordered=True)
