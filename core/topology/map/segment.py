@@ -269,7 +269,7 @@ class SegmentTopology(TopologyBase):
                     # Uplink is a cloud. Use cloud's uplinks instead
                     ups += cu
                 else:
-                    ups += [int(u)]
+                    ups.append(int(u))
             obj_uplinks[mo] = ups
             for u in ups:
                 obj_downlinks[u].add(mo)

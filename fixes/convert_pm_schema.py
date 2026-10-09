@@ -48,9 +48,9 @@ def fix():
                     if not query:
                         continue
                     # print(f'clickhouse-client -h {rep1} --query="{query}"')
-                    rep1_migrate += [f'clickhouse-client -h {rep1} --query="{query}"']
+                    rep1_migrate.append(f'clickhouse-client -h {rep1} --query="{query}"')
                     query = get_insert_query(ms, start, stop, remote=rep1)
-                    rep2_migrate += [f'clickhouse-client -h {rep2} --query="{query}"']
+                    rep2_migrate.append(f'clickhouse-client -h {rep2} --query="{query}"')
                     # print(f'clickhouse-client -h {rep2} --query="{query}"\n\n')
             rep2_migrate = "\n\n".join(rep2_migrate)
             rep1_migrate = "\n\n".join(rep1_migrate)
@@ -84,20 +84,20 @@ def get_insert_query(metric_scope: "MetricScope", start, stop, remote=None):
     for num, label in enumerate(metric_scope.labels, start=1):
         if not label.is_path:
             continue
-        path_ex += [f"arrayStringConcat(['{label.label_prefix}',path[{num}]])"]
+        path_ex.append(f"arrayStringConcat(['{label.label_prefix}',path[{num}]])")
     insert_fields = []
     select_fields = []
     for fn, *_ in r:
         if fn == "path" and path_ex:
-            insert_fields += ["labels"]
-            select_fields += [
+            insert_fields.append("labels")
+            select_fields.append(
                 f"arrayFilter(x -> NOT endsWith(x, '::'), [{', '.join(path_ex)}]) as labels"
-            ]
+            )
             continue
         if fn == "path":
             continue
-        insert_fields += [fn]
-        select_fields += [fn]
+        insert_fields.append(fn)
+        select_fields.append(fn)
     return (
         f"INSERT INTO {DEST_DB_NAME}.{metric_scope._get_raw_db_table()} "
         f"({', '.join(insert_fields)}) "

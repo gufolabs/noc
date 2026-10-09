@@ -45,7 +45,7 @@ class MBuffer:
             return
         with self.lock:
             if group_key and group_key in self.buf:
-                self.buf[group_key] += [msg.value]
+                self.buf[group_key].append(msg.value)
                 return
             if group_key:
                 self.buf[group_key] = []

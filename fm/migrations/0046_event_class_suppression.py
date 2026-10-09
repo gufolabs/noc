@@ -36,7 +36,7 @@ class Migration(BaseMigration):
             vars = doc.get("vars") or []
             for v in vars:
                 v["match_suppress"] = v["name"] in suppress_vars
-            batch += [
+            batch.append(
                 UpdateOne(
                     {"_id": doc["_id"]},
                     {
@@ -44,6 +44,6 @@ class Migration(BaseMigration):
                         "$unset": {"repeat_suppression": ""},
                     },
                 )
-            ]
+            )
         if batch:
             coll.bulk_write(batch)

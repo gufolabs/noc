@@ -22,7 +22,7 @@ def rpsl_format(rpsl, ident=None):
         rpsl = rpsl.split("\n")
     for l in [x for x in rpsl if ":" in x]:
         k, v = l.split(":", 1)
-        out += [f"{k.strip() + ':':<{ident}}{v.strip()}"]
+        out.append(f"{k.strip() + ':':<{ident}}{v.strip()}")
     return "\n".join(out) + "\n"
 
 

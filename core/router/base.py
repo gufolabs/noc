@@ -66,7 +66,7 @@ class Router:
         ):
             cfg = route.get_route_config()
             cfg["type"] = cfg["type"].value
-            self.chains[route.type] += [Route.from_data(cfg)]
+            self.chains[route.type].append(Route.from_data(cfg))
         logger.info("Loading %s route", num)
         self.rebuild_chains()
 

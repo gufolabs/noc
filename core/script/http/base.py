@@ -299,4 +299,4 @@ class HTTP:
             else:
                 # Middleware name
                 mw_cls = loader.get_class(name)
-            self.request_middleware += [mw_cls(self, **cfg)]
+            self.request_middleware.append(mw_cls(self, **cfg))

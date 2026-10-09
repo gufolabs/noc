@@ -154,7 +154,7 @@ class TelnetStream(BaseStream):
         while chunk:
             left, seq, right = chunk.partition(B_IAC)
             # Pass clear part
-            r += [left]
+            r.append(left)
             # Process control sequences
             if seq:
                 # Process IAC sequence
@@ -166,7 +166,7 @@ class TelnetStream(BaseStream):
                 ctl = right[0]
                 if ctl == IAC:
                     # <IAC> <IAC> leads to single <IAC>
-                    r += [B_IAC]
+                    r.append(B_IAC)
                     chunk = right[1:]
                 elif ctl in IGNORED_CMD:
                     # Ignore command
@@ -196,13 +196,13 @@ class TelnetStream(BaseStream):
     def send_iac(self, cmd: int, opt: int) -> None:
         """Send IAC response"""
         self.logger.debug("Send %s", self.iac_repr(cmd, opt))
-        self.out_iac_seq += [bytes((IAC, cmd, opt))]
+        self.out_iac_seq.append(bytes((IAC, cmd, opt)))
 
     def send_iac_sb(self, opt: bytes, data: bytes | None = None) -> None:
         sb: list[bytes] = [B_IAC_SB, opt]
         if data:
-            sb += [data]
-        sb += [B_IAC_SE]
+            sb.append(data)
+        sb.append(B_IAC_SE)
         s_opt = OPTS.get(opt)
         if not s_opt:
             s_opt = f"{opt!r}"

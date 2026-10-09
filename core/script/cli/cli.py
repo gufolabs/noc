@@ -296,7 +296,7 @@ class CLI(BaseCLI):
                 buffer = smart_bytes(buffer)
                 if key not in seen:
                     seen.add(key)
-                    objects += [obj]
+                    objects.append(obj)
                     repeats = 0
                     r_key = None
                 elif r_key:
@@ -333,7 +333,7 @@ class CLI(BaseCLI):
         pg = match.group(0)
         for p, c in self.patterns["more_patterns_commands"]:
             if p.search(pg):
-                self.collected_data += [data]
+                self.collected_data.append(data)
                 if isinstance(c, bytes):
                     await self.send(c)
                     return
@@ -594,7 +594,7 @@ class CLI(BaseCLI):
     def push_prompt_pattern(self, pattern):
         """Override prompt pattern"""
         self.logger.debug("New prompt pattern: %s", pattern)
-        self.prompt_stack += [self.patterns["prompt"]]
+        self.prompt_stack.append(self.patterns["prompt"])
         self.patterns["prompt"] = re.compile(pattern, re.DOTALL | re.MULTILINE)
         self.pattern_table[self.patterns["prompt"]] = self.on_prompt
 

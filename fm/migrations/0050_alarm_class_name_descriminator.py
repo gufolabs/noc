@@ -36,11 +36,11 @@ class Migration(BaseMigration):
                 if doc["_id"] not in ac_map:
                     continue
                 d_hash = self.get_hash(ac_map[doc["_id"]])
-                bulk += [
+                bulk.append(
                     UpdateMany(
                         {"alarm_class": doc["_id"], "vars": {}}, {"$set": {"discriminator": d_hash}}
                     )
-                ]
+                )
             if bulk:
                 ac.bulk_write(bulk)
 

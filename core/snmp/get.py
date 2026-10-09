@@ -151,7 +151,7 @@ def parse_get_response_raw(pdu: bytes, display_hints: _DisplayHints | None = Non
     while msg:
         vb, msg = decoder.split_tlv(msg)
         oid, value = decoder.split_tlv(vb)
-        varbinds += [[parse_p_oid(oid), value]]
+        varbinds.append([parse_p_oid(oid), value])
     data = decoder.parse_sequence(pdu)[0]
     pdu = data[2]
     if pdu[0] != PDU_RESPONSE:
@@ -190,7 +190,7 @@ def parse_get_response_strict(
                 err_index -= 1
             metrics["broken_varbinds"] += 1
         else:
-            cleaned_varbinds += [item]
+            cleaned_varbinds.append(item)
     return GetResponse(
         community=data[1],
         request_id=request_id,

@@ -47,8 +47,8 @@ def get_shortest_path(start: ManagedObject, goal: ManagedObject) -> list[Managed
     if not path:
         raise ValueError("Path not found")
     for pi in path:  # type: PathInfo
-        r += [pi.start]
-    r += [pi.end]
+        r.append(pi.start)
+    r.append(pi.end)
     return r
 
 
@@ -164,7 +164,7 @@ class KSPFinder:
             for mo1, mo2 in itertools.pairwise(obj_path):
                 links = [link for link in self.mo_links[mo1.id] if mo2.id in link.linked_objects]
                 cost = min(link.l2_cost or 1 for link in links)
-                full_path += [PathInfo(mo1, mo2, links, cost)]
+                full_path.append(PathInfo(mo1, mo2, links, cost))
             return full_path
 
         def current_path_len(current_mo: ManagedObject) -> int:
@@ -249,8 +249,8 @@ class KSPFinder:
         def to_path(path: list[PathInfo]) -> list[ManagedObject]:
             r: list[ManagedObject] = []
             for pi in path:
-                r += [pi.start]
-            r += [pi.end]
+                r.append(pi.start)
+            r.append(pi.end)
             return r
 
         def apply_pruned(path: list[PathInfo]) -> None:
@@ -280,7 +280,7 @@ class KSPFinder:
                 except ValueError:
                     continue
                 total_path = root_path + spur_path
-                B += [(total_path, sum(pi.l2_cost for pi in total_path))]
+                B.append((total_path, sum(pi.l2_cost for pi in total_path)))
             if not B:
                 break  # No alternative paths
             # Find best alternative path and add to result

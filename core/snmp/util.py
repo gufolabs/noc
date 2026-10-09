@@ -74,17 +74,17 @@ def render_tc_octetstring(value, format: bytes | str) -> str:
                 elif fmt == "t":
                     s = "".join([chr(v) for v in value[:size]])
                     value = value[size:]
-                    rr += [smart_text(s, errors="ignore")]
+                    rr.append(smart_text(s, errors="ignore"))
                 else:
                     v = 0
                     for j in range(size):
                         v = (v << 8) + value.pop(0)
                     if fmt == "x":
-                        rr += [f"{v:02x}"]
+                        rr.append(f"{v:02x}")
                     elif fmt == "d":
-                        rr += [f"{int(v)}"]
+                        rr.append(f"{int(v)}")
                     elif fmt == "o":
-                        rr += [f"{v:03o}"]
+                        rr.append(f"{v:03o}")
                     else:
                         raise ValueError(f"Unknown format: {fmt}")
             # Join with repeat separator

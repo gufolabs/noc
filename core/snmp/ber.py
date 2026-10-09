@@ -169,14 +169,14 @@ class BERDecoder:
         r = []
         while msg:
             v, msg = self.parse_tlv(msg)
-            r += [smart_text(v, errors="ignore")]
+            r.append(smart_text(v, errors="ignore"))
         return r
 
     def parse_c_t61_string(self, msg):
         r = []
         while msg:
             v, msg = self.parse_tlv(msg)
-            r += [v]
+            r.append(v)
         return r
 
     def parse_null(self, msg: bytes) -> None:
@@ -220,14 +220,14 @@ class BERDecoder:
         r = [tag]
         while msg:
             v, msg = self.parse_tlv(msg)
-            r += [v]
+            r.append(v)
         return r
 
     def parse_set(self, msg):
         r = []
         while msg:
             v, msg = self.parse_tlv(msg)
-            r += [v]
+            r.append(v)
         return r
 
     def parse_opaque(self, msg):

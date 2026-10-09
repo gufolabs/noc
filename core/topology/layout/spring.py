@@ -204,7 +204,7 @@ def _fruchterman_reingold(
         R = k / (math.sin(2.0 * math.pi / len(c)))
         # Indicator array
         iset = {int(x) for x in c}
-        cp += [(R, list(iset), np.array([1.0 if i in iset else 0.0 for i in range(nnodes)]))]
+        cp.append((R, list(iset), np.array([1.0 if i in iset else 0.0 for i in range(nnodes)])))
     # the inscrutable (but fast) version
     # this is still O(V^2)
     # could use multilevel methods to speed this up significantly

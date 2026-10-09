@@ -48,8 +48,8 @@ async def metrics():
             out += list(value.iter_prom_metrics(cleared_name, local_labels))
         else:
             out_labels = ",".join([f'{i.lower()}="{local_labels[i]}"' for i in local_labels])
-            out += [f"# TYPE {cleared_name} untyped"]
-            out += [f"{cleared_name}{{{out_labels}}} {value}"]
+            out.append(f"# TYPE {cleared_name} untyped")
+            out.append(f"{cleared_name}{{{out_labels}}} {value}")
     return PlainTextResponse(
         content="\n".join(out) + "\n", headers={"Content-Type": "text/plain; version=0.0.4"}
     )

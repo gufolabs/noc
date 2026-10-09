@@ -29,7 +29,7 @@ def fix():
             first = MAC(r["first_mac"])
             last = MAC(r["last_mac"])
             macs += list(range(int(first), int(last) + 1))
-        bulk += [UpdateOne({"_id": d["_id"]}, {"$set": {"macs": macs}})]
+        bulk.append(UpdateOne({"_id": d["_id"]}, {"$set": {"macs": macs}}))
         if len(bulk) == BATCH_SIZE:
             print("Commiting changes to database")
             try:

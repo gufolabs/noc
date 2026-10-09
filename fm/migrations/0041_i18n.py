@@ -20,7 +20,7 @@ class Migration(BaseMigration):
             bulk = []
             for d in c.find({}):
                 text = d["text"]["en"]
-                bulk += [
+                bulk.append(
                     UpdateOne(
                         {"_id": d["_id"]},
                         {
@@ -34,7 +34,7 @@ class Migration(BaseMigration):
                             "$unset": {"text": ""},
                         },
                     )
-                ]
+                )
             if bulk:
                 print("Commiting changes to database")
                 try:

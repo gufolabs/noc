@@ -367,40 +367,40 @@ class BaseScript(metaclass=BaseScriptMetaclass):
                 raise Exception(f"Invalid field '{f}'")
                 # Compile lookup functions
             if o == "exact":
-                c += [lambda self, x, f=f, v=v: x[f] == v]
+                c.append(lambda self, x, f=f, v=v: x[f] == v)
             elif o == "iexact":
-                c += [lambda self, x, f=f, v=v: x[f].lower() == v.lower()]
+                c.append(lambda self, x, f=f, v=v: x[f].lower() == v.lower())
             elif o == "startswith":
-                c += [lambda self, x, f=f, v=v: x[f].startswith(v)]
+                c.append(lambda self, x, f=f, v=v: x[f].startswith(v))
             elif o == "istartswith":
-                c += [lambda self, x, f=f, v=v: x[f].lower().startswith(v.lower())]
+                c.append(lambda self, x, f=f, v=v: x[f].lower().startswith(v.lower()))
             elif o == "endswith":
-                c += [lambda self, x, f=f, v=v: x[f].endswith(v)]
+                c.append(lambda self, x, f=f, v=v: x[f].endswith(v))
             elif o == "iendswith":
-                c += [lambda self, x, f=f, v=v: x[f].lower().endswith(v.lower())]
+                c.append(lambda self, x, f=f, v=v: x[f].lower().endswith(v.lower()))
             elif o == "contains":
-                c += [lambda self, x, f=f, v=v: v in x[f]]
+                c.append(lambda self, x, f=f, v=v: v in x[f])
             elif o == "icontains":
-                c += [lambda self, x, f=f, v=v: v.lower() in x[f].lower()]
+                c.append(lambda self, x, f=f, v=v: v.lower() in x[f].lower())
             elif o == "in":
-                c += [lambda self, x, f=f, v=v: x[f] in v]
+                c.append(lambda self, x, f=f, v=v: x[f] in v)
             elif o == "regex":
-                c += [lambda self, x, f=f, v=re.compile(v): v.search(x[f]) is not None]
+                c.append(lambda self, x, f=f, v=re.compile(v): v.search(x[f]) is not None)
             elif o == "iregex":
-                c += [
+                c.append(
                     lambda self, x, f=f, v=re.compile(v, re.IGNORECASE): v.search(x[f]) is not None
-                ]
+                )
             elif o == "isempty":  # Empty string or null
-                c += [lambda self, x, f=f, v=v: not x[f] if v else x[f]]
+                c.append(lambda self, x, f=f, v=v: not x[f] if v else x[f])
             elif f == "version":
                 if o == "lt":  # <
-                    c += [lambda self, x, v=v: self.profile.cmp_version(x["version"], v) < 0]
+                    c.append(lambda self, x, v=v: self.profile.cmp_version(x["version"], v) < 0)
                 elif o == "lte":  # <=
-                    c += [lambda self, x, v=v: self.profile.cmp_version(x["version"], v) <= 0]
+                    c.append(lambda self, x, v=v: self.profile.cmp_version(x["version"], v) <= 0)
                 elif o == "gt":  # >
-                    c += [lambda self, x, v=v: self.profile.cmp_version(x["version"], v) > 0]
+                    c.append(lambda self, x, v=v: self.profile.cmp_version(x["version"], v) > 0)
                 elif o == "gte":  # >=
-                    c += [lambda self, x, v=v: self.profile.cmp_version(x["version"], v) >= 0]
+                    c.append(lambda self, x, v=v: self.profile.cmp_version(x["version"], v) >= 0)
                 else:
                     raise Exception(f"Invalid lookup operation: {o}")
             else:
@@ -626,9 +626,9 @@ class BaseScript(metaclass=BaseScriptMetaclass):
                     # Expand last range
                     r[-1][1] = m
                 else:
-                    r += [[m, m]]
+                    r.append([m, m])
             else:
-                r += [[m, m]]
+                r.append([m, m])
         return [(str(x[0]), str(x[1])) for x in r]
 
     def hexstring_to_mac(self, s):
@@ -837,7 +837,7 @@ class BaseScript(metaclass=BaseScriptMetaclass):
                 for line in result.splitlines():
                     match = list_re.match(line.strip())
                     if match:
-                        x += [match.groupdict()]
+                        x.append(match.groupdict())
                 return x
             return result
 
@@ -1156,11 +1156,11 @@ class BaseScript(metaclass=BaseScriptMetaclass):
     def push_cli_tracking(self, r, state):
         if state == "prompt":
             if self.cli_tracked_command in self.cli_tracked_data:
-                self.cli_tracked_data[self.cli_tracked_command] += [r]
+                self.cli_tracked_data[self.cli_tracked_command].append(r)
             else:
                 self.cli_tracked_data[self.cli_tracked_command] = [r]
         elif state in self.cli_fsm_tracked_data:
-            self.cli_fsm_tracked_data[state] += [r]
+            self.cli_fsm_tracked_data[state].append(r)
         else:
             self.cli_fsm_tracked_data[state] = [r]
 
