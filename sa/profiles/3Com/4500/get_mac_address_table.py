@@ -50,7 +50,7 @@ class Script(BaseScript):
             iface = iface.replace("Bridge-Aggregation", "Po ")
             if iface == "0":
                 continue
-            r += [
+            r.append(
                 {
                     "vlan_id": match.group("vlan_id"),
                     "mac": match.group("mac"),
@@ -59,6 +59,6 @@ class Script(BaseScript):
                         match.group("type").lower()
                     ],
                 }
-            ]
+            )
 
         return r

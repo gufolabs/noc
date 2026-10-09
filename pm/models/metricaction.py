@@ -295,7 +295,7 @@ class MetricAction(Document):
         nodes: dict[str, NodeItem] = {}
         prefix: str = f"{prefix}-" if prefix else ""
         for num, ci in enumerate(self.compose_inputs):
-            inputs += [InputItem(name=ci.metric_type.field_name, node=ci.metric_type.field_name)]
+            inputs.append(InputItem(name=ci.metric_type.field_name, node=ci.metric_type.field_name))
         # Probe nodes
         if self.compose_expression:
             ci = []
@@ -419,9 +419,9 @@ class MetricAction(Document):
             if thresholds:
                 nodes["alarm"].config["thresholds"] = thresholds
             if dkey_input:
-                nodes["alarm"].inputs += [
+                nodes["alarm"].inputs.append(
                     InputItem(name=dkey_input.name, node=dkey_input.node, dynamic=True)
-                ]
+                )
         # Apply param to Node config
         for node_id in node_configs:
             if node_id in nodes:
@@ -433,7 +433,7 @@ class MetricAction(Document):
                 inputs=[*inputs[:], key_input or g_input],
             )
             if dkey_input:
-                nodes["dump"].inputs += [dkey_input]
+                nodes["dump"].inputs.append(dkey_input)
         if not nodes:
             return None
         return GraphConfig(nodes=list(nodes.values()))

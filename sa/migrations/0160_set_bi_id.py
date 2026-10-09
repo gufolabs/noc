@@ -50,9 +50,9 @@ class Migration(BaseMigration):
             coll = mdb[coll_name]
             updates = []
             for d in coll.find({"bi_id": {"$exists": False}}, {"_id": 1}):
-                updates += [
+                updates.append(
                     UpdateOne({"_id": d["_id"]}, {"$set": {"bi_id": bson.Int64(bi_hash(d["_id"]))}})
-                ]
+                )
                 if len(updates) >= MONGO_CHUNK:
                     coll.bulk_write(updates)
                     updates = []

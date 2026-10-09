@@ -19,9 +19,9 @@ class Migration(BaseMigration):
             if is_ipv4(address) or is_ipv6(address):
                 continue
             if address.endswith("."):
-                fixes += [str(mo_id)]
+                fixes.append(str(mo_id))
             else:
-                dot_fixes += [str(mo_id)]
+                dot_fixes.append(str(mo_id))
         if fixes:
             self.db.execute(
                 """

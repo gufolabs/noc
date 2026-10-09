@@ -34,5 +34,5 @@ class Script(BaseScript):
                 continue
             if not interface.startswith("1:"):
                 interface = "1:" + interface
-            r += [{"interface": interface, "ip": match.group("ip"), "mac": mac}]
+            r.append({"interface": interface, "ip": match.group("ip"), "mac": mac})
         return r

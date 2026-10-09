@@ -28,6 +28,6 @@ class Migration(BaseMigration):
                     metric["enable_box"] = False
                     if "is_active" in metric:
                         del metric["is_active"]
-                    metrics += [metric]
+                    metrics.append(metric)
                 mop.metrics = metrics
                 mop.save()

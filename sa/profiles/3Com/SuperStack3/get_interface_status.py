@@ -28,7 +28,7 @@ class Script(BaseScript):
                 for i, n, s in self.snmp.join(["1.3.6.1.2.1.31.1.1.1.1", "1.3.6.1.2.1.2.2.1.8"]):
                     if interface and interface == self.profile.convert_interface_name(n):
                         return [{"interface": n, "status": int(s) == 1}]
-                    r += [{"interface": n, "status": int(s) == 1}]
+                    r.append({"interface": n, "status": int(s) == 1})
                 return r
             except self.snmp.TimeOutError:
                 pass
@@ -39,7 +39,7 @@ class Script(BaseScript):
         else:
             cmd = "bridge port summary all"
         for match in self.rx_line.finditer(self.cli(cmd)):
-            r += [
+            r.append(
                 {"interface": match.group("interface"), "status": match.group("status") == "Active"}
-            ]
+            )
         return r

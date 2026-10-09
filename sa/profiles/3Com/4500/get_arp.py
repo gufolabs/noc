@@ -32,7 +32,7 @@ class Script(BaseScript):
             mac = ":".join([f"{ord(c):02x}" for c in v[2]])
             ip = [f"{ord(c):02x}" for c in v[3]]
             ip = ".".join(str(int(c, 16)) for c in ip)
-            r += [{"ip": ip, "mac": mac, "interface": iface}]
+            r.append({"ip": ip, "mac": mac, "interface": iface})
         return r
 
     def execute_cli(self):
@@ -44,5 +44,5 @@ class Script(BaseScript):
             iface = match.group("interface")
             iface = iface.replace("GE", "Gi ")
             iface = iface.replace("BAGG", "Po ")
-            r += [{"ip": match.group("ip"), "mac": match.group("mac"), "interface": iface}]
+            r.append({"ip": match.group("ip"), "mac": match.group("mac"), "interface": iface})
         return r

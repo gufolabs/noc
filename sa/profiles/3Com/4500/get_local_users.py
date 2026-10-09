@@ -41,7 +41,7 @@ class Script(BaseScript):
                     user_class = "superuser"
                 else:
                     user_class = privilege
-                r += [
+                r.append(
                     {"username": name.group("username"), "class": user_class, "is_active": status}
-                ]
+                )
         return r

@@ -76,13 +76,13 @@ class Script(BaseScript):
             if ":" in ip:
                 ip_interfaces = "ipv6_addresses"
                 ip_ver = "is_ipv6"
-                enabled_afi += ["IPv6"]
+                enabled_afi.append("IPv6")
                 ip = ip + "/" + netmask
                 ip_list = [ip]
             else:
                 ip_interfaces = "ipv4_addresses"
                 ip_ver = "is_ipv4"
-                enabled_afi += ["IPv4"]
+                enabled_afi.append("IPv4")
                 ip = ip + "/" + netmask
                 ip_list = [ip]
             vlan = ifname[14:]
@@ -110,7 +110,7 @@ class Script(BaseScript):
                     }
                 ],
             }
-            interfaces += [iface]
+            interfaces.append(iface)
 
         # Get L2 interfaces
         ifaces = ifaces.splitlines()
@@ -187,6 +187,6 @@ class Script(BaseScript):
                                 tagged
                             )
                         continue
-                interfaces += [iface]
+                interfaces.append(iface)
 
         return [{"interfaces": interfaces}]

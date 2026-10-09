@@ -36,8 +36,8 @@ class Migration(BaseMigration):
         # Reset unknown state
         # Cleanup diagnostics label
         for d, s in product(DIAGNOSTICS, states):
-            remove_labels += [f"funcs::{d}::{s}"]
-            labels += [f"{DIAGNOCSTIC_LABEL_SCOPE}::{d}::{s}"]
+            remove_labels.append(f"funcs::{d}::{s}")
+            labels.append(f"{DIAGNOCSTIC_LABEL_SCOPE}::{d}::{s}")
         self.db.execute(
             """
                 UPDATE sa_managedobject
@@ -76,7 +76,7 @@ class Migration(BaseMigration):
         current_labels = {ll["name"]: ll["_id"] for ll in l_coll.find()}
         # Scope labels
         if f"{DIAGNOCSTIC_LABEL_SCOPE}::*" not in current_labels:
-            bulk += [
+            bulk.append(
                 InsertOne(
                     {
                         "name": f"{DIAGNOCSTIC_LABEL_SCOPE}::*",
@@ -101,10 +101,10 @@ class Migration(BaseMigration):
                         "expose_datastream": False,
                     }
                 )
-            ]
+            )
         for label in labels:
             if label in current_labels:
-                bulk += [
+                bulk.append(
                     UpdateOne(
                         {"_id": current_labels[label]},
                         {
@@ -118,7 +118,7 @@ class Migration(BaseMigration):
                             }
                         },
                     )
-                ]
+                )
             else:
                 doc = {
                     # "_id": bson.ObjectId(),
@@ -142,6 +142,6 @@ class Migration(BaseMigration):
                     "expose_metric": False,
                     "expose_datastream": False,
                 }
-                bulk += [InsertOne(doc)]
+                bulk.append(InsertOne(doc))
         if bulk:
             l_coll.bulk_write(bulk, ordered=True)

@@ -51,7 +51,7 @@ class Migration(BaseMigration):
         for row in coll.find({"object": {"$exists": True}}):
             if row["object"] not in mos:
                 continue
-            bulk += [(row["object"], row["status"], row.get("last"))]
+            bulk.append((row["object"], row["status"], row.get("last")))
             if not row["status"]:
                 suspended_jobs[mos[row["object"]]].append(row["object"])
         if bulk:

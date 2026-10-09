@@ -57,7 +57,7 @@ class Script(BaseScript):
                     pairs = []
                     for i in [1, 2, 3, 4]:
                         pairs.append(self.parce_pair(i, status, length))
-                    r += [{"interface": iface["interface"], "pairs": pairs}]
+                    r.append({"interface": iface["interface"], "pairs": pairs})
         else:
             diag = self.cli(f"interface {interface.replace('Ge ', 'GigabitEthernet ')}")
             diag = self.cli("virtual-cable-test")
@@ -68,5 +68,5 @@ class Script(BaseScript):
                 pairs = []
                 for i in [1, 2, 3, 4]:
                     pairs.append(self.parce_pair(i, status, length))
-                r += [{"interface": interface, "pairs": pairs}]
+                r.append({"interface": interface, "pairs": pairs})
         return r

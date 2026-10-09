@@ -23,17 +23,17 @@ class Migration(BaseMigration):
                 {"$match": {"count": {"$gte": 2}}},
             ]
         ):
-            bulk += [DeleteMany({"object": row["_id"]})]
+            bulk.append(DeleteMany({"object": row["_id"]}))
             r = coll.find_one({"object": row["_id"]})
             if r:
-                bulk += [
+                bulk.append(
                     InsertOne(
                         {
                             "object": r["object"],
                             "status": r.get("status", True),
                             "last": r.get("last"),
                         }
-                    ),
-                ]
+                    )
+                )
         if bulk:
             coll.bulk_write(bulk, ordered=True)

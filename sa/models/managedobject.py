@@ -1316,23 +1316,23 @@ class ManagedObject(NOCModel):
         else:
             content: list[str] = [self.name]
         if self.trap_source_ip:
-            content += [self.trap_source_ip]
+            content.append(self.trap_source_ip)
         platform = self.platform
         if platform:
-            content += [platform.name]
+            content.append(platform.name)
             card += f" [{platform.name}]"
         version = self.version
         if version:
-            content += [str(version)]
+            content.append(str(version))
             card += f" version {version}"
         if self.description:
-            content += [self.description]
+            content.append(self.description)
         config = self.config.read()
         if config:
             if len(config) > 10000000:
-                content += [config[:10000000]]
+                content.append(config[:10000000])
             else:
-                content += [config]
+                content.append(config)
         return {
             "title": self.name,
             "content": "\n".join(content),
@@ -1533,11 +1533,11 @@ class ManagedObject(NOCModel):
             # Convert list to plain text
             r = []
             for d in sorted(data, key=operator.itemgetter("name")):
-                r += [
+                r.append(
                     "==[ {} ]========================================\n{}".format(
                         d["name"], d["config"]
                     )
-                ]
+                )
             data = "\n".join(r)
         # Wipe out unnecessary parts
         if self.config_filter_handler:
@@ -2401,7 +2401,7 @@ class ManagedObject(NOCModel):
         for obj in objects:
             if hasattr(obj, "id"):
                 obj = obj.id
-            o += [obj]
+            o.append(obj)
         uplinks = {obj: [] for obj in o}
         for oid, mo_uplinks in ManagedObject.objects.filter(id__in=o).values_list("id", "uplinks"):
             uplinks[oid] = mo_uplinks or []
@@ -2421,7 +2421,7 @@ class ManagedObject(NOCModel):
         seen_neighbors: set[int] = set()
         uplinks: dict[int, set[int]] = {}
         for ou in iter_uplinks:
-            obj_data += [ou]
+            obj_data.append(ou)
             seen_neighbors |= set(ou.rca_neighbors)
             uplinks[ou.object_id] = set(ou.uplinks)
         if not obj_data:
@@ -2803,37 +2803,37 @@ class ManagedObject(NOCModel):
         # ManagedObject
         if self.shape_overlay_glyph:
             pos = self.shape_overlay_position or ShapeOverlayPosition.NW
-            r += [
+            r.append(
                 ShapeOverlay(
                     code=self.shape_overlay_glyph.code,
                     position=pos,
                     form=self.shape_overlay_form or ShapeOverlayForm.Circle,
                 )
-            ]
+            )
             seen.add(pos)
         # Project
         if self.project and self.project.shape_overlay_glyph:
             pos = self.project.shape_overlay_position or ShapeOverlayPosition.NW
             if pos not in seen:
-                r += [
+                r.append(
                     ShapeOverlay(
                         code=self.project.shape_overlay_glyph.code,
                         position=pos,
                         form=self.project.shape_overlay_form or ShapeOverlayForm.Circle,
                     )
-                ]
+                )
                 seen.add(pos)
         # ManagedObjectProfile
         if self.object_profile.shape_overlay_glyph:
             pos = self.object_profile.shape_overlay_position or ShapeOverlayPosition.NW
             if pos not in seen:
-                r += [
+                r.append(
                     ShapeOverlay(
                         code=self.object_profile.shape_overlay_glyph.code,
                         position=pos,
                         form=self.object_profile.shape_overlay_form or ShapeOverlayForm.Circle,
                     )
-                ]
+                )
                 seen.add(pos)
         return r
 
@@ -2876,7 +2876,7 @@ class ManagedObject(NOCModel):
                 continue
             interval = source.get_metric_discovery_interval(self)
             if interval:
-                r += [interval]
+                r.append(interval)
         return max(min(r), config.discovery.min_metric_interval)
 
     @property

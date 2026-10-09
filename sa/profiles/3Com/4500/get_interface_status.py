@@ -52,14 +52,16 @@ class Script(BaseScript):
         else:
             cmd = "display interface"
         for match in self.rx_interface_status.finditer(self.cli(cmd)):
-            r += [{"interface": match.group("interface"), "status": match.group("status") == "UP"}]
+            r.append(
+                {"interface": match.group("interface"), "status": match.group("status") == "UP"}
+            )
         if not r:
             if interface:
                 cmd = f"display brief interface {interface}"
             else:
                 cmd = "display brief interface"
             for match in self.rx_interface_status.finditer(self.cli(cmd)):
-                r += [
+                r.append(
                     {"interface": match.group("interface"), "status": match.group("status") == "UP"}
-                ]
+                )
         return r

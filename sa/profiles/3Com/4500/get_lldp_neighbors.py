@@ -93,7 +93,7 @@ class Script(BaseScript):
                     "remote_system_name": remote_system_name,
                 }
 
-                i["neighbors"] += [n]
-                r += [i]
+                i["neighbors"].append(n)
+                r.append(i)
 
         return r

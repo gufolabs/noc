@@ -142,7 +142,7 @@ class ManagedObjectSelectorLabels:
             return r["name"]
         # Create RegexLabel
         name = f"SM_{selector_name}_{field}"
-        self.regex_bulk += [
+        self.regex_bulk.append(
             InsertOne(
                 {
                     # "_id": bson.ObjectId(),
@@ -176,7 +176,7 @@ class ManagedObjectSelectorLabels:
                     ],
                 }
             )
-        ]
+        )
         return name
 
     def filter_administrative_domain_id(self, ad_id):
@@ -201,7 +201,7 @@ class ManagedObjectSelectorLabels:
             else:
                 label = self.get_field_label(f_name, f_value)
             if label:
-                r += [label]
+                r.append(label)
         return r
 
 
@@ -227,7 +227,7 @@ class Migration(BaseMigration):
                 FROM sa_managedobjectselector_sources
                 """
         ):
-            sources_map[sel_from] += [sel_to]
+            sources_map[sel_from].append(sel_to)
         # Fix more than two level
         for sel_id in list(sources_map):
             for fid in list(sources_map[sel_id]):
@@ -379,6 +379,6 @@ class Migration(BaseMigration):
                 "expose_metric": False,
                 "expose_datastream": False,
             }
-            bulk += [InsertOne(doc)]
+            bulk.append(InsertOne(doc))
         if bulk:
             l_coll.bulk_write(bulk, ordered=True)

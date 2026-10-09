@@ -27,7 +27,7 @@ class Migration(BaseMigration):
         bulk = []
         # Create root node for migrated termination groups
         root_id = bson.ObjectId()
-        bulk += [
+        bulk.append(
             InsertOne(
                 {
                     "_id": root_id,
@@ -38,11 +38,11 @@ class Migration(BaseMigration):
                     "bi_id": bson.Int64(bi_hash(root_id)),
                 }
             )
-        ]
+        )
         # Attach termination groups
         for id, name, description, remote_system, remote_id, tags in tg_data:
             new_id = bson.ObjectId()
-            bulk += [
+            bulk.append(
                 InsertOne(
                     {
                         "_id": new_id,
@@ -59,6 +59,6 @@ class Migration(BaseMigration):
                         "_legacy_id": id,  # To be removed in future migrations
                     }
                 )
-            ]
+            )
         # Apply groups
         self.mongo_db.resourcegroups.bulk_write(bulk)

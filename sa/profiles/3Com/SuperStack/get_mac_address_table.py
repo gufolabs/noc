@@ -43,12 +43,12 @@ class Script(BaseScript):
         for match in rx.finditer(macs):
             vid = int(match.group("vlan_id"))
             if vlan is None or vid == vlan:
-                r += [
+                r.append(
                     {
                         "vlan_id": vid,
                         "mac": mac if mac else match.group("mac"),
                         "interfaces": [match.group("interfaces")],
                         "type": {"no": "D", "yes": "S"}[match.group("type").lower()],
                     }
-                ]
+                )
         return r
