@@ -25,7 +25,7 @@ class Script(BaseScript):
         r = []
         for match in self.rx_vlan.finditer(self.cli("show vlan")):
             if match.group("name") != "-":
-                r += [match.groupdict()]
+                r.append(match.groupdict())
             else:
-                r += [{"vlan_id": int(match.group("vlan_id"))}]
+                r.append({"vlan_id": int(match.group("vlan_id"))})
         return r

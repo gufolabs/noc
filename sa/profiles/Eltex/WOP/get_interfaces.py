@@ -100,9 +100,9 @@ class Script(BaseScript):
             if value["mac"]:
                 interfaces[ifname]["mac"] = value["mac"]
             if "eth" in ifname:
-                interfaces[ifname]["subinterfaces"] += [
+                interfaces[ifname]["subinterfaces"].append(
                     {"name": ifname, "mac": value["mac"], "enabled_afi": ["BRIDGE"]}
-                ]
+                )
             # static-ip or "ip" field may use
             if value.get("static-ip"):
                 ip_address = f"{value['static-ip']}/{IPv4.netmask_to_len(value.get('static-mask') or '255.255.255.255')}"
@@ -111,14 +111,14 @@ class Script(BaseScript):
                     f"{value['ip']}/{IPv4.netmask_to_len(value.get('mask') or '255.255.255.255')}"
                 )
             if ip_address:
-                interfaces[ifname]["subinterfaces"] += [
+                interfaces[ifname]["subinterfaces"].append(
                     {
                         "name": ifname,
                         "mac": value["mac"],
                         "enabled_afi": ["IPv4"],
                         "ipv4_addresses": [ip_address],
                     }
-                ]
+                )
             if value.get("bss") and value.get("ssid"):
                 # For some reason creating SSID as interfaces otherwise sub.
                 interfaces.pop(ifname)

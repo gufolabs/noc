@@ -60,7 +60,7 @@ class Script(BaseScript):
             for i in t:
                 ifname = " ".join(i[0].split())
                 if "transmit" in i[1] or "receive" in i[1]:
-                    lldp += [ifname]
+                    lldp.append(ifname)
 
         c = self.cli("show interface front-port all vlans")
         t = parse_table(c, allow_wrap=True, footer="N/A - interface doesn't exist")
@@ -69,28 +69,28 @@ class Script(BaseScript):
             if iface is not None:
                 if iface["name"] in lldp:
                     iface["enabled_protocols"] = ["LLDP"]
-                interfaces += [iface]
+                interfaces.append(iface)
         for slot in range(16):
             c = self.cli(f"show interface plc-pon-port {int(slot)}/0-7 vlans")
             t = parse_table(c, allow_wrap=True, footer="dummy footer")
             for i in t:
                 iface = self.create_iface(i, "plc-pon-port")
                 if iface is not None:
-                    interfaces += [iface]
+                    interfaces.append(iface)
 
         c = self.cli("show interface slot-channel 0-15 vlans")
         t = parse_table(c, allow_wrap=True, footer="N/A - interface doesn't exist")
         for i in t:
             iface = self.create_iface(i, "slot-channel")
             if iface is not None:
-                interfaces += [iface]
+                interfaces.append(iface)
 
         c = self.cli("show interface slot-port all vlans")
         t = parse_table(c, allow_wrap=True, footer="N/A - interface doesn't exist")
         for i in t:
             iface = self.create_iface(i, "slot-port")
             if iface is not None:
-                interfaces += [iface]
+                interfaces.append(iface)
         c = self.cli("show management")
         match = self.rx_mgmt.search(c)
         ip_address = f"{match.group('ip')}/{IPv4.netmask_to_len(match.group('mask'))}"
@@ -110,7 +110,7 @@ class Script(BaseScript):
         match = self.rx_mac.search(c)
         iface["mac"] = match.group("mac")
         iface["subinterfaces"][0]["mac"] = match.group("mac")
-        interfaces += [iface]
+        interfaces.append(iface)
         portchannels = self.scripts.get_portchannel()
         for pc in portchannels:
             c = self.cli(f"show interface {pc['interface']} vlans")
@@ -123,14 +123,14 @@ class Script(BaseScript):
                     if pc["type"] == "L":
                         has_lacp = True
                         iface["enabled_protocols"] = ["LACP"]
-                    interfaces += [iface]
+                    interfaces.append(iface)
                     for member in pc["members"]:
                         for i in interfaces:
                             if member == i["name"]:
                                 i["aggregated_interface"] = pc["interface"]
                                 if has_lacp:
                                     if i["enabled_protocols"]:
-                                        i["enabled_protocols"] += ["LACP"]
+                                        i["enabled_protocols"].append("LACP")
                                     else:
                                         i["enabled_protocols"] = ["LACP"]
                                 break

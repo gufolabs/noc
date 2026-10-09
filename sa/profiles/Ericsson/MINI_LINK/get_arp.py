@@ -29,5 +29,5 @@ class Script(BaseScript):
             iface = match.group("interface")
             if (interface is not None) and (interface != iface):
                 continue
-            r += [match.groupdict()]
+            r.append(match.groupdict())
         return r

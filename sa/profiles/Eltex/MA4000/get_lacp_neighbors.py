@@ -49,7 +49,7 @@ class Script(BaseScript):
                         "remote_port_id": match1.group("remote_port_id"),
                     }
                     i["system_id"] = match1.group("sys_id")
-                    i["bundle"] += [bundle]
+                    i["bundle"].append(bundle)
                 if i["bundle"]:
-                    r += [i]
+                    r.append(i)
         return r

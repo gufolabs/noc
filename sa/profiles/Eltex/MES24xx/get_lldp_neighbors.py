@@ -138,6 +138,6 @@ class Script(BaseScript):
             port_description = match.group("port_description").strip()
             if port_description and port_description != "Not Advertised":
                 n["remote_port_description"] = port_description
-            iface["neighbors"] += [n]
-            r += [iface]
+            iface["neighbors"].append(n)
+            r.append(iface)
         return r

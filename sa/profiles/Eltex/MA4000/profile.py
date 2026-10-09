@@ -39,7 +39,7 @@ class Profile(BaseProfile):
         for i in parse_table(v):
             if i[2] == "none":
                 continue
-            r += [
+            r.append(
                 {
                     "slot": int(i[0]),
                     "version": i[3],
@@ -48,5 +48,5 @@ class Profile(BaseProfile):
                     "state": i[6],
                     "type": i[2],
                 }
-            ]
+            )
         return r

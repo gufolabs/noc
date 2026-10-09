@@ -72,7 +72,7 @@ class Script(BaseScript):
                     if i[2] == "Untagged":
                         sub["untagged_vlan"] = vlan_id
                     elif "tagged_vlans" in sub:
-                        sub["tagged_vlans"] += [vlan_id]
+                        sub["tagged_vlans"].append(vlan_id)
                     else:
                         sub["tagged_vlans"] = [vlan_id]
             if iface["name"].startswith("vlan"):
@@ -86,7 +86,7 @@ class Script(BaseScript):
                 iface["description"] = descr
                 sub["description"] = descr
             iface["subinterfaces"] = [sub]
-            interfaces += [iface]
+            interfaces.append(iface)
         v = self.cli("show ip interface")
         for match in self.rx_ip_iface.finditer(v):
             ifname = match.group("ifname")

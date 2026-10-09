@@ -57,7 +57,7 @@ class Script(BaseScript):
                 if len(body) > 100:
                     data = parse_kv(self.kv_map, body)
                     cpe_id = header.split("[")[-1].split("]")[0]
-                    r += [
+                    r.append(
                         {
                             "id": cpe_id[3:].lower(),
                             "global_id": data.get("serial_number"),
@@ -69,5 +69,5 @@ class Script(BaseScript):
                             "version": data.get("software_version"),
                             "distance": float(data.get("ont_distance").split()[0]) * 1000,
                         }
-                    ]
+                    )
         return r

@@ -46,11 +46,11 @@ class Script(BaseScript):
                     ip_address = match.group("ip")
                     ip_subnet = match.group("mask")
                     ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
-                    sub["enabled_afi"] += ["IPv4"]
+                    sub["enabled_afi"].append("IPv4")
                     sub["ipv4_addresses"] = [ip_address]
                 if match.group("ip6"):
                     ip6_address = match.group("ip6")
-                    sub["enabled_afi"] += ["IPv6"]
+                    sub["enabled_afi"].append("IPv6")
                     sub["ipv6_addresses"] = [ip6_address]
                 if "." in ifname:
                     parent, vlan = ifname.split(".")
@@ -59,7 +59,7 @@ class Script(BaseScript):
                     found = False
                     for i in interfaces:
                         if i["name"] == parent:
-                            i["subinterfaces"] += [sub]
+                            i["subinterfaces"].append(sub)
                             found = True
                             break
                     if found:
@@ -76,5 +76,5 @@ class Script(BaseScript):
                     mac = match.group("mac")
                     iface["mac"] = mac
                 iface["subinterfaces"] = [sub]
-                interfaces += [iface]
+                interfaces.append(iface)
         return [{"interfaces": interfaces}]

@@ -64,6 +64,6 @@ class Script(BaseScript):
                     n["remote_system_description"] = match.group("system_description").strip()
                 if match.group("port_description").strip():
                     n["remote_port_description"] = match.group("port_description").strip()
-                iface["neighbors"] += [n]
-            r += [iface]
+                iface["neighbors"].append(n)
+            r.append(iface)
         return r

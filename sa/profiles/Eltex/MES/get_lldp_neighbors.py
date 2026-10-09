@@ -121,7 +121,7 @@ class Script(BaseScript):
             #
             if remote_chassis_id_subtype != LLDP_CHASSIS_SUBTYPE_LOCAL:
                 i["neighbors"] = [n]
-                r += [i]
+                r.append(i)
                 continue
             try:
                 c = self.cli(f"show lldp neighbors {local_interface}")
@@ -148,6 +148,6 @@ class Script(BaseScript):
                         n["remote_port_description"] = port_descr
             except Exception:
                 pass
-            i["neighbors"] += [n]
-            r += [i]
+            i["neighbors"].append(n)
+            r.append(i)
         return r

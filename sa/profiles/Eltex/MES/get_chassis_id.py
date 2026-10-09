@@ -45,7 +45,7 @@ class Script(BaseScript):
                     mac_end = match.group("mac")
                 else:
                     mac_end = mac_begin
-                r += [{"first_chassis_mac": mac_begin, "last_chassis_mac": mac_end}]
+                r.append({"first_chassis_mac": mac_begin, "last_chassis_mac": mac_end})
 
         else:
             c = self.cli("show system", cached=True)

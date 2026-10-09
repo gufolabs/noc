@@ -26,10 +26,10 @@ class Script(BaseScript):
             c = self.cli(f"show system information {i}", cached=True)
             match = self.rx_mac.search(c)
             if match:
-                r += [
+                r.append(
                     {
                         "first_chassis_mac": match.group("mac"),
                         "last_chassis_mac": match.group("mac"),
                     }
-                ]
+                )
         return r
