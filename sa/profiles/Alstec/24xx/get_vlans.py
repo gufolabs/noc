@@ -30,5 +30,5 @@ class Script(BaseScript):
         r = []
         match = self.rx_vlan.search(self.scripts.get_config())
         for vlan_id in self.expand_rangelist(match.group("vlans")):
-            r += [{"vlan_id": vlan_id}]
+            r.append({"vlan_id": vlan_id})
         return r

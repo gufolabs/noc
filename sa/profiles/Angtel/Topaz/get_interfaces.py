@@ -92,11 +92,11 @@ class Script(BaseScript):
             if match:
                 if match.group("port") == "Port":
                     continue
-                descr += [match.groupdict()]
+                descr.append(match.groupdict())
         for line in self.cli("show interfaces configuration").split("\n"):
             match = self.rx_port1.match(line.strip())
             if match:
-                adm_status += [match.groupdict()]
+                adm_status.append(match.groupdict())
         for match in self.rx_port.finditer(self.cli("show interfaces status", cached=True)):
             ifname = match.group("port")
             iftype = self.profile.get_interface_type(ifname)
@@ -113,13 +113,13 @@ class Script(BaseScript):
                 "subinterfaces": [],
             }
             if ifname in gvrp:
-                iface["enabled_protocols"] += ["GVRP"]
+                iface["enabled_protocols"].append("GVRP")
             if ifname in stp:
-                iface["enabled_protocols"] += ["STP"]
+                iface["enabled_protocols"].append("STP")
             if ifname in ctp:
-                iface["enabled_protocols"] += ["CTP"]
+                iface["enabled_protocols"].append("CTP")
             if ifname in lldp:
-                iface["enabled_protocols"] += ["LLDP"]
+                iface["enabled_protocols"].append("LLDP")
             sub = {
                 "name": ifname,
                 "admin_status": st,
@@ -140,9 +140,9 @@ class Script(BaseScript):
                 if match1.group("type") == "Untagged":
                     sub["untagged_vlan"] = int(vlan_id)
                 else:
-                    sub["tagged_vlans"] += [int(vlan_id)]
-            iface["subinterfaces"] += [sub]
-            interfaces += [iface]
+                    sub["tagged_vlans"].append(int(vlan_id))
+            iface["subinterfaces"].append(sub)
+            interfaces.append(iface)
         match = self.rx_mac.search(self.cli("show system", cached=True))
         mac = match.group("mac")
         for line in self.cli("show ip interface").split("\n"):
@@ -167,7 +167,7 @@ class Script(BaseScript):
                         }
                     ],
                 }
-                interfaces += [iface]
+                interfaces.append(iface)
         # Not implemented
         """
         for l in self.cli("show ipv6 interface").split("\n"):

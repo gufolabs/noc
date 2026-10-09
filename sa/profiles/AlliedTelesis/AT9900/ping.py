@@ -30,7 +30,7 @@ class Script(BaseScript):
         for l in pr.split("\n"):
             match = self.rx_result.match(l.strip())
             if match:
-                r += [match.group("resp")]
+                r.append(match.group("resp"))
                 n += float(match.group("resp"))
                 count = match.group("count")
         avg1 = round(float(n / len(r)), 3)

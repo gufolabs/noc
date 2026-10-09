@@ -22,11 +22,11 @@ class Script(BaseScript):
         for l in data.split("\n"):
             match = self.rx_line.match(l.strip())
             if match:
-                r += [
+                r.append(
                     {
                         "username": match.group("username"),
                         "class": {"15": "superuser", "1": "operator"}[match.group("privilege")],
                         "is_active": True,
                     }
-                ]
+                )
         return r

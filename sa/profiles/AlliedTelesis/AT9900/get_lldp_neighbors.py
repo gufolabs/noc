@@ -79,6 +79,6 @@ class Script(BaseScript):
             port_description = match.group("port_description").strip()
             if port_description and port_description != "-":
                 n["remote_port_description"] = re.sub(r"\s+", " ", port_description)
-            iface["neighbors"] += [n]
-            r += [iface]
+            iface["neighbors"].append(n)
+            r.append(iface)
         return r

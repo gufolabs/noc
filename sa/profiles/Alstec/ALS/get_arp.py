@@ -28,5 +28,5 @@ class Script(BaseScript):
         for match in self.rx_line.finditer(self.cli("show arp")):
             if (interface is not None) and (interface != match.group("interface")):
                 continue
-            r += [match.groupdict()]
+            r.append(match.groupdict())
         return r

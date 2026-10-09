@@ -61,7 +61,7 @@ class Script(BaseScript):
             if descr:
                 i["description"] = descr
                 i["subinterfaces"][0]["description"] = descr
-            ifaces += [i]
+            ifaces.append(i)
         v = self.cli("show vlan", cached=True)
         for match in self.rx_vlan.finditer(v):
             tagged = match.group("tagged").strip()
@@ -74,7 +74,7 @@ class Script(BaseScript):
                     if iface["name"] == str(ifname):
                         sub = iface["subinterfaces"][0]
                         if "tagged_vlans" in sub:
-                            sub["tagged_vlans"] += [vlan_id]
+                            sub["tagged_vlans"].append(vlan_id)
                         else:
                             sub["tagged_vlans"] = [vlan_id]
                         break
@@ -110,5 +110,5 @@ class Script(BaseScript):
                             }
                         ],
                     }
-                    ifaces += [i]
+                    ifaces.append(i)
         return [{"interfaces": ifaces}]

@@ -54,10 +54,10 @@ class Script(BaseScript):
                 i1, _i2 = ifname.split(".")
                 for i in interfaces:
                     if i["name"] == i1:
-                        i["subinterfaces"] += [sub]
+                        i["subinterfaces"].append(sub)
                         found = True
                         break
             if not found:
-                iface["subinterfaces"] += [sub]
-                interfaces += [iface]
+                iface["subinterfaces"].append(sub)
+                interfaces.append(iface)
         return [{"interfaces": interfaces}]

@@ -29,7 +29,7 @@ class Script(BaseScript):
         result = [{"vlan_id": 1, "name": "1"}]
         for oid, v in self.snmp.getnext("1.3.6.1.2.1.17.7.1.4.3.1.1"):  # dot1qVlanStaticName
             o = oid.split(".")[-1]
-            result += [{"vlan_id": int(oids[o]), "name": v.strip()}]
+            result.append({"vlan_id": int(oids[o]), "name": v.strip()})
         return sorted(result, key=operator.itemgetter("vlan_id"))
 
     def execute_cli(self):
@@ -38,5 +38,5 @@ class Script(BaseScript):
         for line in vlans.split("\n"):
             match = self.rx_vlan_line.match(line.strip())
             if match:
-                r += [{"vlan_id": match.group("vlan_id"), "name": match.group("name")}]
+                r.append({"vlan_id": match.group("vlan_id"), "name": match.group("name")})
         return r
