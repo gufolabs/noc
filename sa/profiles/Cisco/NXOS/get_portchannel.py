@@ -41,7 +41,7 @@ class Script(BaseScript):
                     match = self.rx_po2_members.match(line)
                     if match:
                         out_if["members"].append(match.group("interface"))
-                r += [out_if]
+                r.append(out_if)
                 return r
         for ll in s.splitlines():
             pc, _rest = ll.split(" ", 1)
@@ -51,19 +51,19 @@ class Script(BaseScript):
                 continue
             if v.startswith("Members in this channel"):
                 _x, y = v.split(":", 1)
-                r += [
+                r.append(
                     {
                         "interface": f"Po {pc}",
                         "members": [m.strip() for m in y.strip().split(",")],
                         "type": "L",  # <!> TODO: port-channel type detection
                     }
-                ]
+                )
             else:
-                r += [
+                r.append(
                     {
                         "interface": f"Po {pc}",
                         "members": [],
                         "type": "L",  # <!> TODO: port-channel type detection
                     }
-                ]
+                )
         return r

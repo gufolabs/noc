@@ -30,12 +30,12 @@ class Script(BaseScript):
         neighbors = []
         c = self.cli("show cdp neighbors detail")
         for match in self.rx_entry.finditer(c):
-            neighbors += [
+            neighbors.append(
                 {
                     "device_id": match.group("device_id"),
                     "local_interface": match.group("local_interface"),
                     "remote_interface": match.group("remote_interface"),
                     "remote_ip": match.group("remote_ip"),
                 }
-            ]
+            )
         return {"device_id": device_id, "neighbors": neighbors}

@@ -92,7 +92,7 @@ class Script(BaseScript):
         instance_id = 0
         interfaces[instance_id] = []
         match = self.rx_pvst_bridge.search(spanning_tree_detail)
-        reply["instances"] += [
+        reply["instances"].append(
             {
                 "id": instance_id,
                 "vlans": "1-4095",
@@ -107,11 +107,11 @@ class Script(BaseScript):
                     else match.group("root_priority")
                 ),
             }
-        ]
+        )
         for match in self.rx_pvst_interfaces.finditer(spanning_tree_detail):
             interface = self.profile.convert_interface_name(match.group("interface"))
             port_attrs = ports[instance_id][interface]
-            interfaces[instance_id] += [
+            interfaces[instance_id].append(
                 {
                     "interface": interface,
                     "port_id": match.group("port_id"),
@@ -124,7 +124,7 @@ class Script(BaseScript):
                     "point_to_point": port_attrs["point_to_point"],
                     "edge": port_attrs["edge"],
                 }
-            ]
+            )
         for INST in reply["instances"]:
             INST["interfaces"] = interfaces[INST["id"]]
         return reply
@@ -180,7 +180,7 @@ class Script(BaseScript):
             if not bridge_id and not bridge_priority:
                 bridge_id = root_id
                 bridge_priority = root_priority
-            reply["instances"] += [
+            reply["instances"].append(
                 {
                     "id": instance_id,
                     "vlans": iv[instance_id],
@@ -189,13 +189,13 @@ class Script(BaseScript):
                     "bridge_id": bridge_id,
                     "bridge_priority": bridge_priority,
                 }
-            ]
+            )
             for match in self.rx_mstp_interfaces.finditer(INS):
                 interface = self.profile.convert_interface_name(match.group("interface"))
                 port_attrs = ports[instance_id][interface]
                 port_id = match.group("port_id")
                 priority = port_id.split(".", 1)[0]
-                interfaces[instance_id] += [
+                interfaces[instance_id].append(
                     {
                         "interface": interface,
                         "port_id": port_id,
@@ -208,7 +208,7 @@ class Script(BaseScript):
                         "point_to_point": port_attrs["point_to_point"],
                         "edge": port_attrs["edge"],
                     }
-                ]
+                )
         for INST in reply["instances"]:
             INST["interfaces"] = interfaces[INST["id"]]
         return reply

@@ -43,11 +43,11 @@ class Script(BaseScript):
                 aports = match.group("aports")
                 for p in aports.split(","):
                     ports += list(self.iter_range(p))
-                r += [
+                r.append(
                     {
                         "interface": match.group("pcname"),
                         "members": ports,  # <!> TODO: inactive ports??? - (Added only active ports @fx00f)
                         "type": "S",  # <!> TODO: port-channel type detection (LACP) - (test pass @fx00f)
                     }
-                ]
+                )
         return r

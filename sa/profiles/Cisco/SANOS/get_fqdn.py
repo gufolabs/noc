@@ -26,9 +26,9 @@ class Script(BaseScript):
         fqdn = []
         match = self.rx_hostname.search(v)
         if match:
-            fqdn += [match.group("hostname")]
+            fqdn.append(match.group("hostname"))
         v = self.cli("show running-config | i domain-name")
         match = self.rx_domain_name.search(v)
         if match:
-            fqdn += [match.group("domain")]
+            fqdn.append(match.group("domain"))
         return ".".join(fqdn)

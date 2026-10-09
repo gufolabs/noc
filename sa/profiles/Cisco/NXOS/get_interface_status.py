@@ -31,7 +31,7 @@ class Script(BaseScript):
                     # ifOperStatus up(1)
                     if n.startswith("Stack") or n.startswith("Voice"):
                         continue
-                    r += [{"interface": n, "status": int(s) == 1}]
+                    r.append({"interface": n, "status": int(s) == 1})
                 return r
             except self.snmp.TimeOutError:
                 pass
@@ -45,7 +45,7 @@ class Script(BaseScript):
         for l in self.cli(cmd).splitlines():
             match = rx_interface_status.match(l)
             if match:
-                r += [
+                r.append(
                     {"interface": match.group("interface"), "status": match.group("status") == "up"}
-                ]
+                )
         return r

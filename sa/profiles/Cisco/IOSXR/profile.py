@@ -59,9 +59,9 @@ class Profile(BaseProfile):
         r = []
         for prefix, min_len, max_len in pl:
             if min_len == max_len:
-                r += [me % prefix]
+                r.append(me % prefix)
             else:
-                r += [mne % (prefix, max_len)]
+                r.append(mne % (prefix, max_len))
         return "\n".join([f"prefix-set {name}", ",\n".join(r), "end-set"])
 
     INTERFACE_TYPES = {

@@ -30,11 +30,11 @@ class Script(BaseScript):
             device_id = match.group("device_id")
             if "(" in device_id:
                 device_id = device_id.split("(")[0]
-            neighbors += [
+            neighbors.append(
                 {
                     "device_id": device_id,
                     "local_interface": match.group("local_interface"),
                     "remote_interface": match.group("remote_interface"),
                 }
-            ]
+            )
         return {"device_id": device_id_own, "neighbors": neighbors}

@@ -52,12 +52,12 @@ class Script(BaseScript):
             interface = match.group("interface")
             if interface in ("Port", "Ch", "-------"):
                 continue
-            r += [
+            r.append(
                 {
                     "interface": self.profile.convert_interface_name(interface),
                     "description": match.group("description"),
                 }
-            ]
+            )
         return r
 
     def execute_cli(self):
@@ -147,5 +147,5 @@ class Script(BaseScript):
                 if descriptions[interface]:
                     iface["description"] = descriptions[interface]
 
-            r += [iface]
+            r.append(iface)
         return r

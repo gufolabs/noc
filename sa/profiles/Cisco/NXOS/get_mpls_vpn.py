@@ -52,6 +52,6 @@ class Script(BaseScript):
                 "interfaces": vrfif.get(name, []),
                 "rd": rd,
             }
-            vpns += [vpn]
+            vpns.append(vpn)
 
         return vpns

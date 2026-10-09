@@ -54,7 +54,7 @@ class Script(BaseScript):
                         parts = [match.group("partno"), match.group("type")]
                 else:
                     parts = [match.group("partno")]
-                trans += [
+                trans.append(
                     {
                         "type": "XCVR",
                         "number": self.get_xcvr_num(match.group("number")),
@@ -65,7 +65,7 @@ class Script(BaseScript):
                         "revision": match.group("rev"),
                         "builtin": False,
                     }
-                ]
+                )
 
         for match in self.rx_item.finditer(v):
             type, number, part_no = self.get_type(
@@ -77,7 +77,7 @@ class Script(BaseScript):
             if not part_no:
                 continue
             vendor = "CISCO" if "NoName" not in part_no else "NONAME"
-            objects += [
+            objects.append(
                 {
                     "type": type,
                     "number": number,
@@ -88,7 +88,7 @@ class Script(BaseScript):
                     "revision": rev,
                     "builtin": builtin,
                 }
-            ]
+            )
             # Add transceivers
             if objects[-1]["type"] == "SUP" or (
                 objects[-1]["type"] == "GEM" and objects[-1]["part_no"][0] not in self.gem_w_o_sfp
@@ -104,12 +104,12 @@ class Script(BaseScript):
                     if not number_c:
                         if len(t["number"].split("/")) == 2:
                             if t["number"].split("/")[0] == number:
-                                objects += [t]
+                                objects.append(t)
                                 # rewrite number
                                 objects[-1]["number"] = objects[-1]["number"].split("/")[-1]
                     elif int(t["number"].split("/")[0]) == int(number_c):
                         if int(t["number"].split("/")[1]) == int(number):
-                            objects += [t]
+                            objects.append(t)
                             objects[-1]["number"] = objects[-1]["number"].split("/")[-1]
         return objects
 

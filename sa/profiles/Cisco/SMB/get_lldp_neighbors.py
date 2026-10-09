@@ -89,5 +89,5 @@ class Script(BaseScript):
             if match and match.group("port_descr"):
                 n["remote_port_description"] = match.group("port_descr")
             i = {"local_interface": local_if, "neighbors": [n]}
-            r += [i]
+            r.append(i)
         return r

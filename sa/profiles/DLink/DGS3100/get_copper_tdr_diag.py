@@ -83,7 +83,7 @@ class Script(BaseScript):
             match = self.rx_link_ok.search(line)
             if match:
                 length = int(match.group("length")) * 100
-                r += [
+                r.append(
                     {
                         "interface": match.group("interface"),
                         "pairs": [
@@ -113,11 +113,11 @@ class Script(BaseScript):
                             },
                         ],
                     }
-                ]
+                )
 
             match = self.rx_link_nc.search(line)
             if match:
-                r += [
+                r.append(
                     {
                         "interface": match.group("interface"),
                         "pairs": [
@@ -127,7 +127,7 @@ class Script(BaseScript):
                             {"pair": 4, "status": "N", "distance_cm": 0},
                         ],
                     }
-                ]
+                )
 
             match = self.rx_link_pr.search(line)
             if match:

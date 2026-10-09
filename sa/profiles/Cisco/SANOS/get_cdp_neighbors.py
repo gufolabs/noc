@@ -40,7 +40,7 @@ class Script(BaseScript):
                 for ii in res:
                     try:
                         msg = res[ii]["4"]
-                        neighbors += [
+                        neighbors.append(
                             {
                                 "device_id": res[ii]["6"],
                                 "local_interface": self.profile.convert_interface_name(ii[0]),
@@ -50,19 +50,19 @@ class Script(BaseScript):
                                 "remote_ip": f"{ord(msg[0])}.{ord(msg[1])}.{ord(msg[2])}.{ord(msg[3])}",
                                 "platform": res[ii]["8"],
                             }
-                        ]
+                        )
                     except Exception:
                         pass
                 return {"device_id": device_id, "neighbors": neighbors}
             except self.snmp.TimeOutError:
                 pass
         for match in self.rx_entry.finditer(self.cli("show cdp neighbors detail")):
-            neighbors += [
+            neighbors.append(
                 {
                     "device_id": match.group("device_id"),
                     "local_interface": match.group("local_interface"),
                     "remote_interface": match.group("remote_interface"),
                     "remote_ip": match.group("remote_ip"),
                 }
-            ]
+            )
         return {"device_id": device_id, "neighbors": neighbors}

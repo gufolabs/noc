@@ -58,7 +58,7 @@ class Script(BaseScript):
                 )
                 serial = match.group("serial")
                 vendor = "CISCO"
-                objects += [
+                objects.append(
                     {
                         "type": type,
                         "number": number,
@@ -69,7 +69,7 @@ class Script(BaseScript):
                         "revision": match.group("vid"),
                         "builtin": False,
                     }
-                ]
+                )
         except self.CLISyntaxError:
             raise self.NotSupportedError()
         return objects
