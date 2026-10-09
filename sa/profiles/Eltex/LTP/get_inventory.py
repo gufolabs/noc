@@ -42,7 +42,7 @@ class Script(BaseScript):
         pwr_num = self.snmp.get("1.3.6.1.4.1.35265.1.22.1.17.1.2.1")
         pwr_pn = self.snmp.get("1.3.6.1.4.1.35265.1.22.1.17.1.3.1")
         pwr_pn = pwr_pn.split()[0]
-        r += [{"type": "PWR", "vendor": "ELTEX", "part_no": pwr_pn, "number": pwr_num}]
+        r.append({"type": "PWR", "vendor": "ELTEX", "part_no": pwr_pn, "number": pwr_num})
         return r
 
     def execute_cli(self, **kwargs):
@@ -69,12 +69,12 @@ class Script(BaseScript):
         ]
 
         for match in self.rx_pwr.finditer(v):
-            r += [
+            r.append(
                 {
                     "type": "PWR",
                     "vendor": "ELTEX",
                     "part_no": match.group("part_no"),
                     "number": match.group("num"),
                 }
-            ]
+            )
         return r

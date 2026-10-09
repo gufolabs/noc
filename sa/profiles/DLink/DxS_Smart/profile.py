@@ -131,7 +131,7 @@ class Profile(BaseProfile):
         try:
             c = script.cli("show ports description", cached=True)
             for match in self.rx_descr.finditer(c):
-                descr += [{"port": match.group("port"), "descr": match.group("descr").strip()}]
+                descr.append({"port": match.group("port"), "descr": match.group("descr").strip()})
         except script.CLISyntaxError:
             pass
         objects = []
@@ -143,7 +143,7 @@ class Profile(BaseProfile):
         except script.CLISyntaxError:
             raise script.NotSupportedError()
         for match in self.rx_port.finditer(c):
-            objects += [
+            objects.append(
                 {
                     "port": match.group("port"),
                     "admin_state": match.group("admin_state") == "Enabled",
@@ -156,7 +156,7 @@ class Profile(BaseProfile):
                     "flowctrl": match.group("flowctrl"),
                     "mdix": match.group("mdix"),
                 }
-            ]
+            )
         prev_port = None
         ports = []
         for i in objects:
@@ -172,7 +172,7 @@ class Profile(BaseProfile):
                             break
                         k = k + 1
             else:
-                ports += [i]
+                ports.append(i)
             prev_port = i["port"]
         return ports
 
@@ -202,7 +202,7 @@ class Profile(BaseProfile):
         for match in self.rx_vlan.finditer(c):
             tagged_ports = script.expand_interface_range(match.group("tagged_ports"))
             untagged_ports = script.expand_interface_range(match.group("untagged_ports"))
-            vlans += [
+            vlans.append(
                 {
                     "vlan_id": int(match.group("vlan_id")),
                     "vlan_name": match.group("vlan_name"),
@@ -210,7 +210,7 @@ class Profile(BaseProfile):
                     "tagged_ports": tagged_ports,
                     "untagged_ports": untagged_ports,
                 }
-            ]
+            )
         if vlans == []:
             for match in self.rx_vlan1.finditer(c):
                 tagged_ports = []
@@ -218,8 +218,8 @@ class Profile(BaseProfile):
                 untagged_ports = script.expand_interface_range(match.group("untagged_ports"))
                 for port in member_ports:
                     if port not in untagged_ports:
-                        tagged_ports += [port]
-                vlans += [
+                        tagged_ports.append(port)
+                vlans.append(
                     {
                         "vlan_id": int(match.group("vlan_id")),
                         "vlan_name": match.group("vlan_name"),
@@ -227,5 +227,5 @@ class Profile(BaseProfile):
                         "tagged_ports": tagged_ports,
                         "untagged_ports": untagged_ports,
                     }
-                ]
+                )
         return vlans

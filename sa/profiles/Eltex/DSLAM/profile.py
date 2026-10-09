@@ -57,7 +57,7 @@ class Profile(BaseProfile):
             match = self.rx_header.search(line[0])
             if match:
                 continue
-            d += [line]
+            d.append(line)
         return d
 
     matchers = {

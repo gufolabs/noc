@@ -81,7 +81,7 @@ class Script(BaseScript):
                 continue
             if n.startswith("Loopback"):
                 continue
-            r += [
+            r.append(
                 {
                     "snmp_ifindex": i,
                     "interface": n,
@@ -89,7 +89,7 @@ class Script(BaseScript):
                     "description": d,
                     "mac": MACAddressParameter().clean(m),
                 }
-            ]
+            )
         return r
 
     def execute_cli(self, interface=None):
@@ -104,14 +104,14 @@ class Script(BaseScript):
             for l in buf.splitlines():
                 match = self.rx_interface_status.match(l)
                 if match:
-                    r += [
+                    r.append(
                         {
                             "interface": match.group("interface"),
                             "status": match.group("status") == "up",
                             "mac": MACAddressParameter().clean(match.group("mac")),
                             "snmp_ifindex": match.group("ifindex"),
                         }
-                    ]
+                    )
                     mdescr = self.rx_interface_descr.match(l)
                     if mdescr:
                         r[-1]["description"] = mdescr.group("descr")
@@ -134,13 +134,13 @@ class Script(BaseScript):
                         submatch = self.rx_interface_linestatus_3526.search(block)
                         if submatch:
                             linestatus = submatch.group("linestatus").lower()
-                    r += [
+                    r.append(
                         {
                             "interface": interface,
                             "mac": MACAddressParameter().clean(match.group("mac")),
                             "status": linestatus.lower() == "up",
                         }
-                    ]
+                    )
                     if descr:
                         r[-1]["description"] = descr
         return r

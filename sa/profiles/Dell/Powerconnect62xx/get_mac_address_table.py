@@ -35,12 +35,12 @@ class Script(BaseScript):
             interface = match.group("interface")
             if interface == "cpu":
                 continue
-            r += [
+            r.append(
                 {
                     "vlan_id": match.group("vlan_id"),
                     "mac": r_mac,
                     "interfaces": [interface],
                     "type": {"dynamic": "D", "static": "S"}[match.group("type").lower()],
                 }
-            ]
+            )
         return r

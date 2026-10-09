@@ -64,7 +64,7 @@ class Script(BaseScript):
                     data["mfg_date"] = mfg_date.strftime("%Y-%m-%d")
                 except ValueError:
                     pass
-                r += [data]
+                r.append(data)
 
         return r
 
@@ -83,7 +83,7 @@ class Script(BaseScript):
             #  1 - not present, 2 - power on, 3 - power off
             if v:
                 num = oid.split(".")[-1]
-                r += [
+                r.append(
                     {
                         "name": f"State of PS-{num}",
                         "status": not (bool(v - 2)),
@@ -96,7 +96,7 @@ class Script(BaseScript):
                         ],
                         "snmp_oid": oid,
                     }
-                ]
+                )
         return r
 
     def execute(self):
@@ -109,7 +109,7 @@ class Script(BaseScript):
         revision = self.capabilities.get("Chassis | HW Version")
         if revision:
             p["revision"] = revision
-        objects += [
+        objects.append(
             {
                 "type": "CHASSIS",
                 "number": None,
@@ -120,7 +120,7 @@ class Script(BaseScript):
                 "revision": revision,
                 "builtin": False,
             }
-        ]
+        )
 
         for ob in objects:
             if ob["type"] == "CHASSIS" and self.has_snmp():
@@ -164,7 +164,7 @@ class Script(BaseScript):
                         if "\\x" in repr(revision).strip("'"):
                             revision = None
                         # Add transceiver
-                        objects += [
+                        objects.append(
                             {
                                 "type": "XCVR",
                                 "number": i.group("int").split("/")[-1],
@@ -175,14 +175,14 @@ class Script(BaseScript):
                                 "revision": revision,
                                 "builtin": False,
                             }
-                        ]
+                        )
 
             except self.CLISyntaxError:
                 pid = self.get_transceiver_pid(i.group("type").upper())
                 if not pid:
                     continue
                 # Add transceiver
-                objects += [
+                objects.append(
                     {
                         "type": "XCVR",
                         "number": i.group("int").split("/")[-1],
@@ -193,7 +193,7 @@ class Script(BaseScript):
                         "revision": None,
                         "builtin": False,
                     }
-                ]
+                )
         return objects
 
     def get_transceiver_pid(self, type):

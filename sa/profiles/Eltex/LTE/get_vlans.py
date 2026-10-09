@@ -25,9 +25,9 @@ class Script(BaseScript):
         with self.profile.switch(self):
             c = self.cli("show vlan", cached=True)
             for match in self.rx_vlan.finditer(c):
-                r += [match.groupdict()]
+                r.append(match.groupdict())
             if not r:
                 t = parse_table(c, allow_wrap=True, footer="dummy footer")
                 for i in t:
-                    r += [{"vlan_id": i[0], "name": i[1]}]
+                    r.append({"vlan_id": i[0], "name": i[1]})
         return r

@@ -31,7 +31,7 @@ class Script(BaseScript):
                 mtype = "C"
             else:
                 mtype = "D"
-            r += [
+            r.append(
                 {"vlan_id": 1, "mac": match.group("mac"), "interfaces": [interface], "type": mtype}
-            ]
+            )
         return r

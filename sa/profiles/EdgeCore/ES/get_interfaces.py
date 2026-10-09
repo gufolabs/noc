@@ -126,7 +126,7 @@ class Script(BaseScript):
                 if match:
                     ip = match.group("ip")
                     mask = match.group("mask")
-                    ip_addr += [IPv4(ip, netmask=mask).prefix]
+                    ip_addr.append(IPv4(ip, netmask=mask).prefix)
 
                 if ls.strip().startswith("Split"):
                     if not ip_addr:
@@ -271,7 +271,7 @@ class Script(BaseScript):
                 if current in untagged_:
                     sub["untagged_vlan"] = untagged_[current]
                 if current in lldp:
-                    ifaces[current]["enabled_protocols"] += ["LLDP"]
+                    ifaces[current]["enabled_protocols"].append("LLDP")
                 if current in descr_:
                     ifaces[current]["description"] = descr_[current]
                     sub["description"] = descr_[current]
@@ -294,7 +294,7 @@ class Script(BaseScript):
                     "mac": mac_[current],
                 }
                 if current in lldp:
-                    ifaces[current]["enabled_protocols"] += ["LLDP"]
+                    ifaces[current]["enabled_protocols"].append("LLDP")
                 if current in descr_:
                     ifaces[current]["description"] = descr_[current]
                     sub["description"] = descr_[current]
@@ -310,7 +310,7 @@ class Script(BaseScript):
                 if current in portchannel_members:
                     ai, _is_lacp = portchannel_members[current]
                     ifaces[current]["aggregated_interface"] = ai
-                    ifaces[current]["enabled_protocols"] += ["LACP"]
+                    ifaces[current]["enabled_protocols"].append("LACP")
 
         # Get VRFs and "default" VRF interfaces
         r = []
@@ -324,6 +324,6 @@ class Script(BaseScript):
             # create ifaces
 
             rr["interfaces"] = list(ifaces.values())
-        r += [rr]
+        r.append(rr)
         # Return result
         return r

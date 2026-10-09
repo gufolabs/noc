@@ -19,7 +19,7 @@ class Script(BaseScript):
         r = []
         c = self.cli("show mac address-table")
         for vlan_id, mac, port, mtype in parse_table(c, footer=r"\d+ valid mac entries"):
-            r += [
+            r.append(
                 {
                     "vlan_id": vlan_id,
                     "mac": mac,
@@ -28,5 +28,5 @@ class Script(BaseScript):
                         mtype.lower()
                     ],
                 }
-            ]
+            )
         return r

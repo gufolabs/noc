@@ -23,5 +23,5 @@ class Script(BaseScript):
                 continue
             if mac == "--":
                 mac = None
-            r += [{"ip": ip, "mac": mac, "interface": iface}]
+            r.append({"ip": ip, "mac": mac, "interface": iface})
         return r

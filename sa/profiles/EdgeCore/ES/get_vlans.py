@@ -37,7 +37,7 @@ class Script(BaseScript):
             "1.3.6.1.2.1.17.7.1.4.3.1.1", bulk=True
         ):  # dot1qVlanStaticName
             o = oid.split(".")[-1]
-            result += [{"vlan_id": int(o), "name": v.strip().rstrip("\x00")}]
+            result.append({"vlan_id": int(o), "name": v.strip().rstrip("\x00")})
         return sorted(result, key=operator.itemgetter("vlan_id"))
 
     def execute_cli(self):
@@ -46,19 +46,19 @@ class Script(BaseScript):
         # ES4626 = Cisco Style
         if self.is_platform_4626:
             for match in self.rx_vlan_line_4626.finditer(vlans):
-                r += [match.groupdict()]
+                r.append(match.groupdict())
             return r
 
         # ES4612 or 3526S
         if self.is_platform_4612 or self.is_platform_3526s:
             for match in self.rx_vlan_line_4612.finditer(vlans):
-                r += [match.groupdict()]
+                r.append(match.groupdict())
             return r
 
         # Other
         for match in self.rx_vlan_line_3526.finditer(vlans):
             if match.group("name"):
-                r += [match.groupdict()]
+                r.append(match.groupdict())
             else:
-                r += [{"vlan_id": int(match.group("vlan_id"))}]
+                r.append({"vlan_id": int(match.group("vlan_id"))})
         return r

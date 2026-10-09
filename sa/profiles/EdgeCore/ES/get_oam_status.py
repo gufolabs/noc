@@ -39,12 +39,12 @@ class Script(BaseScript):
             iface = "Eth " + iface
             caps = []
             if match.group("caps_R") == "Enabled":
-                caps += ["R"]
+                caps.append("R")
             if match.group("caps_U") == "Enabled":
-                caps += ["U"]
+                caps.append("U")
             if match.group("caps_L") == "Enabled":
-                caps += ["L"]
+                caps.append("L")
             if match.group("caps_V") == "Enabled":
-                caps += ["V"]
-            r += [{"interface": iface, "remote_mac": mac, "caps": caps}]
+                caps.append("V")
+            r.append({"interface": iface, "remote_mac": mac, "caps": caps})
         return r

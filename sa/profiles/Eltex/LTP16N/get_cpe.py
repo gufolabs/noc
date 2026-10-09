@@ -79,7 +79,7 @@ class Script(BaseScript):
                         cpe_id = header.split("[ONT")[-1].split("]")[0].lstrip()
                         data = parse_kv(self.kv_map, port)
                         if data:
-                            r += [
+                            r.append(
                                 {
                                     "id": cpe_id.lower(),
                                     "global_id": data.get("serial_number"),
@@ -91,7 +91,7 @@ class Script(BaseScript):
                                     "version": data.get("software_version"),
                                     "distance": float(data.get("ont_distance").split()[0]) * 1000,
                                 }
-                            ]
+                            )
         return r
 
     def execute_snmp(self, **kwargs):
@@ -99,7 +99,7 @@ class Script(BaseScript):
         for oid, v in self.snmp.getnext("1.3.6.1.4.1.35265.1.209.4.1.1.1.5.1"):
             iface = oid[len("1.3.6.1.4.1.35265.1.209.4.1.1.1.5.1") + 1 :].split(".")[0]
             ont_id = oid[len("1.3.6.1.4.1.35265.1.209.4.1.1.1.5.1") + 1 :].split(".")[1]
-            r += [
+            r.append(
                 {
                     "interface": iface,
                     "id": f"{iface}/{ont_id}",
@@ -119,6 +119,6 @@ class Script(BaseScript):
                     "type": "ont",
                     "status": self.state_map_snmp.get(v, "other"),
                 }
-            ]
+            )
 
         return r

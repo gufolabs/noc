@@ -61,7 +61,7 @@ class Script(BaseScript):
                 ifname = match.group("ifname")
                 if ifname not in ifnames:
                     v = "{}\n{}".format(v, self.cli(f"IFSHOW {ifname}"))
-                    ifnames += [ifname]
+                    ifnames.append(ifname)
         interfaces = {}
         ifname = None
         for block in self.rx_l3_iface_splitter.split(v)[1:]:
@@ -95,14 +95,14 @@ class Script(BaseScript):
                 # format inet 224.0.0.1  mask 240.0.0.0
                 address = l3.group("address")
                 netmask = str(IPv4.netmask_to_len(l3.group("netmask")))
-                l3_addresses += [f"{address}/{netmask}"]
+                l3_addresses.append(f"{address}/{netmask}")
             for l3 in self.rx_iface_l3_address2.finditer(block):
                 # format      Internet address: 192.168.20.1
                 #      Broadcast address: 192.168.20.255
                 #      Netmask 0xffffff00 Subnetmask 0xffffff00
                 address = l3.group("address")
                 netmask = format(int(l3.group("netmask"), 16), "b").count("1")
-                l3_addresses += [f"{address}/{netmask}"]
+                l3_addresses.append(f"{address}/{netmask}")
             if l3_addresses:
                 interfaces[ifname]["subinterfaces"][0]["ipv4_addresses"] = l3_addresses
                 interfaces[ifname]["subinterfaces"][0]["enabled_afi"] = ["IPv4"]
@@ -165,7 +165,7 @@ class Script(BaseScript):
                 # "ifindex": None,
                 "subinterfaces": [],  # "enabled_afi": ["ATM"],
             }
-            interfaces[ifname]["subinterfaces"] += [
+            interfaces[ifname]["subinterfaces"].append(
                 {
                     "name": f"{ifname}.{0}:{0}",
                     "type": "physical",
@@ -174,6 +174,6 @@ class Script(BaseScript):
                     "enabled_afi": ["ATM"],
                     # "ifindex": None,
                 }
-            ]
+            )
         interfaces.update(self.get_l3_interfaces())
         return [{"interfaces": sorted(interfaces.values(), key=lambda x: x["name"])}]

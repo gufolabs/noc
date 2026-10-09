@@ -75,7 +75,7 @@ class Script(BaseScript):
                 }
                 if self.rx_agg_member.search(block):
                     # skip portchannel members
-                    r += [swport]
+                    r.append(swport)
                     continue
                 if match.group("mode").lower() == "trunk":
                     swport["802.1Q Enabled"] = "True"
@@ -84,7 +84,7 @@ class Script(BaseScript):
                 p = self.rx_trunk.search(block)
                 if p:
                     swport["tagged"] = self.expand_rangelist(p.group("tagged").replace(";", ","))
-                r += [swport]
+                r.append(swport)
         elif self.is_platform_3510 or self.is_platform_46 or self.is_platform_ecs4100:
             cmd = self.cli("show interface switchport")
             for block in cmd.rstrip("\n\n").split("\n\n"):
@@ -102,11 +102,11 @@ class Script(BaseScript):
                 }
                 if self.rx_member.search(block):
                     # skip portchannel members
-                    r += [swport]
+                    r.append(swport)
                     continue
                 if self.rx_not_present.search(block):
                     # skip strange port state
-                    r += [swport]
+                    r.append(swport)
                     continue
                 match = self.rx_interface_swport_3526.search(block)
                 if match and match.group("mode").lower() in ["hybrid", "trunk"]:
@@ -127,11 +127,11 @@ class Script(BaseScript):
                         if m.group("vlan") == match.group("native"):
                             untagged = m.group("vlan")
                     else:
-                        tagged += [m.group("vlan")]
+                        tagged.append(m.group("vlan"))
                 if untagged:
                     swport["untagged"] = untagged
                 swport["tagged"] = tagged
-                r += [swport]
+                r.append(swport)
         else:
             raise self.NotSupportedError()
         return r

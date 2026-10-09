@@ -35,7 +35,7 @@ class Script(BaseScript):
             r = []
             for match in self.rx_chan_line_4626.finditer(channels):
                 details = self.cli(f"show port-group {match.group('number')} port-channel")
-                r += [
+                r.append(
                     {
                         "interface": "Port-Channel" + match.group("number"),
                         "members": [
@@ -44,19 +44,19 @@ class Script(BaseScript):
                         ],
                         "type": "S",  # <!> TODO: port-channel type detection
                     }
-                ]
+                )
             return r
         if self.is_platform_3510 or self.is_platform_46 or self.is_platform_ecs4100:
             status = self.cli("show interface status", cached=True)
             r = []
             for match in self.rx_chan_line_3526.finditer(status):
                 members = match.group("members_str").strip().rstrip(",").replace("Eth", "Eth ")
-                r += [
+                r.append(
                     {
                         "interface": match.group("interface"),
                         "members": members.split(", "),
                         "type": "S",
                     }
-                ]
+                )
             return r
         raise self.NotSupportedError()

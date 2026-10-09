@@ -33,14 +33,14 @@ class Script(BaseScript):
                 arp = self.cli("show arp", cached=True)
                 for match in self.rx_line.finditer(arp):
                     if match.group("mac") == "00:00:00:00:00:00":
-                        r += [{"ip": match.group("ip"), "mac": None, "interface": None}]
+                        r.append({"ip": match.group("ip"), "mac": None, "interface": None})
                     else:
-                        r += [match.groupdict()]
+                        r.append(match.groupdict())
             except self.CLISyntaxError:
                 arp = self.cli("show ip arp table", cached=True)
                 for match in self.rx_line2.finditer(arp):
                     if match.group("mac") == "00:00:00:00:00:00":
-                        r += [{"ip": match.group("ip"), "mac": None, "interface": None}]
+                        r.append({"ip": match.group("ip"), "mac": None, "interface": None})
                     else:
-                        r += [match.groupdict()]
+                        r.append(match.groupdict())
         return r

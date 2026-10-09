@@ -27,5 +27,5 @@ class Script(BaseScript):
         except self.CLISyntaxError:
             cmd = self.cli("switch show vlan all")
         for match in self.rx_vlan.finditer(cmd):
-            r += [{"vlan_id": match.group("vlan_id")}]
+            r.append({"vlan_id": match.group("vlan_id")})
         return r

@@ -30,13 +30,13 @@ class Script(BaseScript):
         for ifname, state, prio, cost, status, role, portfast, ptype in parse_table(
             c, allow_wrap=True
         ):
-            stp += [ifname]
+            stp.append(ifname)
         vrrp = []
         c = self.cli("show vrrp", cached=True)
         for router, v_ip, pri, pre, state in parse_table(c, allow_wrap=True):
             v = self.cli(f"show vrrp {router}")
             match = self.rx_iface.search(v)
-            vrrp += [match.group("iface")]
+            vrrp.append(match.group("iface"))
         descriptions = {}
         c = self.cli("show interfaces description", cached=True)
         for ifname, astate, lstate, descr in parse_table(c):
@@ -75,21 +75,21 @@ class Script(BaseScript):
                 "enabled_protocols": [],
             }
             if ip_addresses.get(ifname):
-                sub["enabled_afi"] += ["IPv4"]
+                sub["enabled_afi"].append("IPv4")
                 sub["ipv4_addresses"] = [ip_addresses.get(ifname)]
             if ipv6_addresses.get(ifname):
-                sub["enabled_afi"] += ["IPv6"]
+                sub["enabled_afi"].append("IPv6")
                 sub["ipv6_addresses"] = [ipv6_addresses.get(ifname)]
             if description:
                 sub["description"] = description
             if ifname in vrrp:
-                sub["enabled_protocols"] += ["VRRP"]
+                sub["enabled_protocols"].append("VRRP")
             if "." in ifname:
                 name, vlan_ids = ifname.split(".")
                 sub["vlan_ids"] = [vlan_ids]
                 for i in interfaces:
                     if i["name"] == name:
-                        i["subinterfaces"] += [sub]
+                        i["subinterfaces"].append(sub)
                         break
                 continue
             typ = self.types[ifname[:2]]
@@ -105,8 +105,8 @@ class Script(BaseScript):
             if description:
                 iface["description"] = description
             if ifname in stp:
-                iface["enabled_protocols"] += ["STP"]
-            interfaces += [iface]
+                iface["enabled_protocols"].append("STP")
+            interfaces.append(iface)
         return [{"interfaces": interfaces}]
 
     def clean_iftype(self, ifname, ifindex):

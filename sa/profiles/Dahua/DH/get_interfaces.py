@@ -43,6 +43,6 @@ class Script(BaseScript):
                 "ipv4_addresses": [ip_address],
             }
             iface["subinterfaces"] = [sub]
-            r += [iface]
+            r.append(iface)
 
         return [{"interfaces": r}]
