@@ -59,24 +59,24 @@ class Script(BaseScript):
         try:
             s = self.cli("debug info")
             for match in self.rx_line.finditer(s):
-                r += [
+                r.append(
                     {
                         "ip": match.group("ip"),
                         "mac": match.group("mac"),
                         "interface": match.group("interface"),
                     }
-                ]
+                )
             return r
         except self.CLISyntaxError:
             pass
         s = self.cli("show arpentry")
         for match in self.rx_line1.finditer(s):
             if match.group("mac") != "ff:ff:ff:ff:ff:ff":
-                r += [
+                r.append(
                     {
                         "ip": match.group("ip"),
                         "mac": match.group("mac"),
                         "interface": match.group("interface"),
                     }
-                ]
+                )
         return r

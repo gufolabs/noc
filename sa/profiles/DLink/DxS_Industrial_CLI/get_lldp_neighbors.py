@@ -130,7 +130,7 @@ class Script(BaseScript):
                     },
                 )
                 n["remote_capabilities"] = caps
-                iface["neighbors"] += [n]
+                iface["neighbors"].append(n)
             if iface["neighbors"]:
-                r += [iface]
+                r.append(iface)
         return r

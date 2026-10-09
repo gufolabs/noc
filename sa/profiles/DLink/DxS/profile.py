@@ -139,11 +139,11 @@ class Profile(BaseProfile):
     def get_interface_names(self, name):
         r = []
         if name.startswith("1/") or name.startswith("1:"):
-            r += [name[2:]]
+            r.append(name[2:])
             if ":" not in name:
-                r += [name.replace("/", ":")]
+                r.append(name.replace("/", ":"))
             if "/" not in name:
-                r += [name.replace(":", "/")]
+                r.append(name.replace(":", "/"))
         else:
             r += [f"1/{name}", f"1:{name}"]
         return r
@@ -332,7 +332,7 @@ class Profile(BaseProfile):
             else:
                 c = script.cli("show ports description")
             for match in self.rx_port.finditer(c):
-                objects += [
+                objects.append(
                     {
                         "port": match.group("port"),
                         "media_type": match.group("media_type"),
@@ -349,12 +349,12 @@ class Profile(BaseProfile):
                         "trap_state": match.group("trap_state"),
                         "desc": match.group("desc").strip(),
                     }
-                ]
+                )
         else:
             if script.match_version(DES1210, version__lt="6.00"):
                 c = script.cli("show ports")
                 for match in self.rx_port_old.finditer(c):
-                    ports += [
+                    ports.append(
                         {
                             "port": match.group("port"),
                             "admin_state": match.group("admin_state") in ["Enabled", "MDIX"],
@@ -368,7 +368,7 @@ class Profile(BaseProfile):
                             "mdix": match.group("mdix"),
                             "desc": "",
                         }
-                    ]
+                    )
                 c = script.cli("show ports description")
                 for match in self.rx_port_old_desc.finditer(c):
                     port = match.group("port")
@@ -412,7 +412,7 @@ class Profile(BaseProfile):
                             break
                         k = k + 1
             else:
-                ports += [i]
+                ports.append(i)
             prev_port = i["port"]
         return ports
 
@@ -449,7 +449,7 @@ class Profile(BaseProfile):
                 untagged_ports = script.expand_interface_range(match.group("untagged_ports"))
             for port in member_ports:
                 if port not in untagged_ports:
-                    tagged_ports += [port]
+                    tagged_ports.append(port)
             return {
                 "vlan_id": int(match.group("vlan_id")),
                 "vlan_name": match.group("vlan_name").strip(),
@@ -469,7 +469,7 @@ class Profile(BaseProfile):
                 if match:
                     tagged_ports = script.expand_interface_range(match.group("tagged_ports"))
                     untagged_ports = script.expand_interface_range(match.group("untagged_ports"))
-                    vlans += [
+                    vlans.append(
                         {
                             "vlan_id": int(match.group("vlan_id")),
                             "vlan_name": match.group("vlan_name").strip(),
@@ -477,16 +477,16 @@ class Profile(BaseProfile):
                             "tagged_ports": tagged_ports,
                             "untagged_ports": untagged_ports,
                         }
-                    ]
+                    )
                 else:
                     v = self.get_vlan(script, ll)
                     if v is not None:
-                        vlans += [v]
+                        vlans.append(v)
                         match_first = False
             else:
                 v = self.get_vlan(script, ll)
                 if v is not None:
-                    vlans += [self.get_vlan(script, ll)]
+                    vlans.append(self.get_vlan(script, ll))
         return vlans
 
     def cleaned_config(self, config):

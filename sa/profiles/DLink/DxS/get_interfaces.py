@@ -346,7 +346,7 @@ class Script(BaseScript):
                 )
             for i in c:
                 if i["status"] == "Enabled":
-                    ctp += [i["port"]]
+                    ctp.append(i["port"])
 
         gvrp = []
         try:
@@ -366,7 +366,7 @@ class Script(BaseScript):
                 "show stp ports", obj_parser=self.parse_stp, cmd_next="n", cmd_stop="q", cached=True
             )
             for i in c:
-                stp += [i["port"]]
+                stp.append(i["port"])
 
         oam = []
         if self.has_capability("Network | OAM"):
@@ -418,22 +418,22 @@ class Script(BaseScript):
             tagged_vlans = []
             for v in vlans:
                 if p["port"] in v["tagged_ports"]:
-                    tagged_vlans += [v["vlan_id"]]
+                    tagged_vlans.append(v["vlan_id"])
                 if p["port"] in v["untagged_ports"]:
                     i["subinterfaces"][0]["untagged_vlan"] = v["vlan_id"]
             if len(tagged_vlans) != 0:
                 i["subinterfaces"][0]["tagged_vlans"] = tagged_vlans
             if ifname in lldp:
-                i["enabled_protocols"] += ["LLDP"]
+                i["enabled_protocols"].append("LLDP")
             if ifname in ctp:
-                i["enabled_protocols"] += ["CTP"]
+                i["enabled_protocols"].append("CTP")
             if ifname in gvrp:
-                i["enabled_protocols"] += ["GVRP"]
+                i["enabled_protocols"].append("GVRP")
             if ifname in stp:
-                i["enabled_protocols"] += ["STP"]
+                i["enabled_protocols"].append("STP")
             if ifname in oam:
-                i["enabled_protocols"] += ["OAM"]
-            interfaces += [i]
+                i["enabled_protocols"].append("OAM")
+            interfaces.append(i)
 
         try:
             c = self.cli("show link_aggregation")
@@ -465,8 +465,8 @@ class Script(BaseScript):
                 if iface["name"] in members:
                     iface["aggregated_interface"] = ifname
                     if lacp_proto:
-                        iface["enabled_protocols"] += ["LACP"]
-            interfaces += [i]
+                        iface["enabled_protocols"].append("LACP")
+            interfaces.append(i)
 
         ipif = self.cli("show ipif")
         for match in self.rx_ipif1.finditer(ipif):
@@ -499,7 +499,7 @@ class Script(BaseScript):
             ipv6_address = match.group("ipv6_address")
             if ipv6_address is not None:
                 i["subinterfaces"][0]["ipv6_addresses"] = [ipv6_address]
-                i["subinterfaces"][0]["enabled_afi"] += ["IPv6"]
+                i["subinterfaces"][0]["enabled_afi"].append("IPv6")
             vlan_name = match.group("vlan_name")
             for v in vlans:
                 if vlan_name == v["vlan_name"]:
@@ -516,7 +516,7 @@ class Script(BaseScript):
                     "ipv4_addresses"
                 ]
             else:
-                interfaces += [i]
+                interfaces.append(i)
             ipif_found = True
 
         for match in self.rx_ipif2.finditer(ipif):
@@ -550,20 +550,20 @@ class Script(BaseScript):
             ipv4_addresses = []
             ipv4_address = match.group("ipv4_address")
             if ipv4_address is not None:
-                ipv4_addresses += [ipv4_address]
+                ipv4_addresses.append(ipv4_address)
                 if "IPv4" not in enabled_afi:
-                    enabled_afi += ["IPv4"]
+                    enabled_afi.append("IPv4")
             ipv4_addr_pri = match.group("ipv4_addr_pri")
             if ipv4_addr_pri is not None:
-                ipv4_addresses += [ipv4_addr_pri]
+                ipv4_addresses.append(ipv4_addr_pri)
                 if "IPv4" not in enabled_afi:
-                    enabled_afi += ["IPv4"]
+                    enabled_afi.append("IPv4")
             if ipv4_address is not None or ipv4_addr_pri is not None:
                 i["subinterfaces"][0].update({"ipv4_addresses": ipv4_addresses})
             ipv6_address = match.group("ipv6_address")
             if ipv6_address is not None:
                 i["subinterfaces"][0]["ipv6_addresses"] = [ipv6_address]
-                enabled_afi += ["IPv6"]
+                enabled_afi.append("IPv6")
             i["subinterfaces"][0].update({"enabled_afi": enabled_afi})
             vlan_name = match.group("vlan_name")
             # Found illegal stuff in DES-1210-28/ME/B2
@@ -582,19 +582,19 @@ class Script(BaseScript):
                     break
             if not L2_Switch:
                 if ifname in rip:
-                    enabled_protocols += ["RIP"]
+                    enabled_protocols.append("RIP")
                 if ifname in ospf:
-                    enabled_protocols += ["OSPF"]
+                    enabled_protocols.append("OSPF")
                 if ifname in ospfv3:
-                    enabled_protocols += ["OSPFv3"]
+                    enabled_protocols.append("OSPFv3")
                 if ifname in pim:
-                    enabled_protocols += ["PIM"]
+                    enabled_protocols.append("PIM")
                 if ifname in dvmrp:
-                    enabled_protocols += ["DVMRP"]
+                    enabled_protocols.append("DVMRP")
                 if ifname in igmp:
-                    enabled_protocols += ["IGMP"]
+                    enabled_protocols.append("IGMP")
                 i["subinterfaces"][0]["enabled_protocols"] = enabled_protocols
-            interfaces += [i]
+            interfaces.append(i)
             ipif_found = True
 
         for match in self.rx_ipif4.finditer(ipif):
@@ -632,7 +632,7 @@ class Script(BaseScript):
                             i["subinterfaces"][0]["mac"] = f["mac"]
                             break
                     break
-            interfaces += [i]
+            interfaces.append(i)
             ipif_found = True
 
         if self.match_version(DGS3420) or self.match_version(DGS3620):
@@ -659,7 +659,7 @@ class Script(BaseScript):
                 ip_subnet = match.group("ip_subnet")
                 ip_address = f"{ip_address}/{IPv4.netmask_to_len(ip_subnet)}"
                 i["subinterfaces"][0]["ipv4_addresses"] = [ip_address]
-                interfaces += [i]
+                interfaces.append(i)
 
         # Last resort
         if not ipif_found:
@@ -690,7 +690,7 @@ class Script(BaseScript):
                 mac_address = self.rx_mac.search(c).group("mac")
                 i["mac"] = mac_address
                 i["subinterfaces"][0]["mac"] = mac_address
-                interfaces += [i]
+                interfaces.append(i)
 
             match = self.rx_ipswitch.search(c)
             if match:
@@ -706,6 +706,6 @@ class Script(BaseScript):
                         break
                 i["mac"] = mac_address
                 i["subinterfaces"][0]["mac"] = mac_address
-                interfaces += [i]
+                interfaces.append(i)
 
         return [{"interfaces": interfaces}]

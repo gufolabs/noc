@@ -34,5 +34,5 @@ class Script(BaseScript):
             untagged = [v["vlan_id"] for v in vlans if iface in v["untagged_ports"]]
             if untagged:
                 i["untagged"] = untagged[0]
-            interfaces += [i]
+            interfaces.append(i)
         return interfaces

@@ -21,7 +21,7 @@ class Script(BaseScript):
         for match in self.rx_vlan_line.finditer(self.cli("show vlan")):
             vlanid = int(match.group("vlan_id"))
             if vlanid == 1:
-                r += [{"vlan_id": 1}]
+                r.append({"vlan_id": 1})
             else:
-                r += [{"vlan_id": vlanid, "name": match.group("name")}]
+                r.append({"vlan_id": vlanid, "name": match.group("name")})
         return r

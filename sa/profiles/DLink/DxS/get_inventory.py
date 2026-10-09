@@ -137,16 +137,16 @@ class Script(BaseScript):
         if self.is_stack:
             s = self.cli("show stack_device")
             for match in self.rx_stack.finditer(s):
-                stacks += [match.groupdict()]
+                stacks.append(match.groupdict())
         if not stacks:
-            r += [p]
+            r.append(p)
         box_id = "0"
         match = self.rx_mod.search(s)
         if match:
             p = {"type": "MODULE", "vendor": "DLINK", "part_no": [match.group("part_no")]}
             if match.group("descr"):
                 p["description"] = match.group("descr")
-            r += [p]
+            r.append(p)
         match = self.rx_mod1.search(s)
         if match and match.group("part_no") != "None":
             p = {
@@ -157,7 +157,7 @@ class Script(BaseScript):
             }
             if match.group("descr"):
                 p["description"] = match.group("descr")
-                r += [p]
+                r.append(p)
         match = self.rx_mod2.search(s)
         if match and match.group("part_no") != "None":
             p = {
@@ -168,7 +168,7 @@ class Script(BaseScript):
             }
             if match.group("descr"):
                 p["description"] = match.group("descr")
-                r += [p]
+                r.append(p)
         try:
             s = self.cli("show module_info")
             for line in s.splitlines():
@@ -181,7 +181,7 @@ class Script(BaseScript):
                         "part_no": [match.group("part_no")],
                         "description": [match.group("descr")],
                     }
-                    r += [p]
+                    r.append(p)
         except self.CLISyntaxError:
             pass
         try:
@@ -201,15 +201,15 @@ class Script(BaseScript):
                             }
                             if i["serial"]:
                                 p["serial"] = i["serial"]
-                            r += [p]
+                            r.append(p)
                             break
                 i = self.build_xcvr(match)
-                r += [i]
+                r.append(i)
                 found = True
             if not found:  # Try to parse other exotic hardware output
                 for match in self.rx_media_type1210.finditer(c):
                     i = self.build_xcvr(match)
-                    r += [i]
+                    r.append(i)
 
         except self.CLISyntaxError:
             pass

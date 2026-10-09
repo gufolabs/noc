@@ -86,8 +86,8 @@ class Script(BaseScript):
             if name in portchannel_members:
                 iface["aggregated_interface"] = portchannel_members[name][0]
                 if portchannel_members[name][1]:
-                    iface["enabled_protocols"] += ["LACP"]
-            interfaces += [iface]
+                    iface["enabled_protocols"].append("LACP")
+            interfaces.append(iface)
 
         ipif = self.cli("show ipif")
         match = self.rx_ipif.search(ipif)
@@ -126,7 +126,7 @@ class Script(BaseScript):
                             break
             # Need hardware to testing
             i["subinterfaces"][0].update({"vlan_ids": [mgmt_vlan]})
-            interfaces += [i]
+            interfaces.append(i)
 
         for pchn in self.scripts.get_portchannel():
             if len(pchn["members"]) == 0:
@@ -145,6 +145,6 @@ class Script(BaseScript):
                     }
                 ],
             }
-            interfaces += [pch]
+            interfaces.append(pch)
 
         return [{"interfaces": interfaces}]

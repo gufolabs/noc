@@ -26,9 +26,9 @@ class Script(BaseScript):
                 n = n[6:]
             if interface:
                 if n == interface:
-                    r += [{"interface": n, "status": int(s) == 1}]
+                    r.append({"interface": n, "status": int(s) == 1})
             else:
-                r += [{"interface": n, "status": int(s) == 1}]
+                r.append({"interface": n, "status": int(s) == 1})
         return r
 
     def execute_cli(self, interface=None):
@@ -39,5 +39,5 @@ class Script(BaseScript):
                 if interface == p["port"]:
                     return [{"interface": interface, "status": p["status"]}]
             else:
-                r += [{"interface": p["port"], "status": p["status"]}]
+                r.append({"interface": p["port"], "status": p["status"]})
         return r

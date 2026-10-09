@@ -34,7 +34,7 @@ class Script(BaseScript):
         r = []
         for match in self.rx_trunk.finditer(c):
             if match.group("status").lower() == "enable" and match.group("members") is not None:
-                r += [
+                r.append(
                     {
                         "interface": f"ch{match.group('trunk')}",
                         "members": self.expand_interface_range(
@@ -42,7 +42,7 @@ class Script(BaseScript):
                         ),
                         "type": "S",
                     }
-                ]
+                )
         if len(r) > 0:
             try:
                 t = self.cli("show config running")

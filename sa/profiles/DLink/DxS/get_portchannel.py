@@ -28,11 +28,11 @@ class Script(BaseScript):
             raise self.NotSupportedError()
         r = []
         for match in self.rx_trunk.finditer(t):
-            r += [
+            r.append(
                 {
                     "interface": f"T{match.group('trunk')}",
                     "members": self.expand_interface_range(match.group("members")),
                     "type": "L" if match.group("type").lower() == "lacp" else "S",
                 }
-            ]
+            )
         return r
