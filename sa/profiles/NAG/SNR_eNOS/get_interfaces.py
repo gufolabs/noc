@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------
 # NAG.SNR_eNOS.get_interfaces
 # ---------------------------------------------------------------------
-# Copyright (C) 2007-2024 The NOC Project
+# Copyright (C) 2007-2026 The NOC Project
 # See LICENSE for details
 # ---------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ class Script(BaseScript):
     rx_lldp_en = re.compile(r"LLDP has been enabled globally?")
     rx_lldp = re.compile(r"LLDP enabled port : (?P<local_if>\S*.+)$", re.MULTILINE)
     rx_sh_int = re.compile(
-        r"^\s*(?P<interface>\S+)\s+is\s+(?P<admin_status>up|down|administratively down)(?:\s*\(\d\))?,\s+"
+        r"^\s*(?P<interface>\S+)\s+is\s+(?P<admin_status>up|down|administratively down|administrative down)(?:\s*\(\d\))?,\s+"
         r"line protocol is\s+(?P<oper_status>up|down)"
         r"(^\s.*addr: (?P<hwaddr>\d+))?\s*\n"
         r"(?P<other>(?:^\s+.+\n)+?)"
@@ -62,9 +62,7 @@ class Script(BaseScript):
     rx_ip = re.compile(r"inet (?P<ip>\S+)/(?P<mask>\S+)", re.MULTILINE)
     rx_vlan = re.compile(
         r"^interface (?P<ifname>(?:xe|ge)\S+)\s*\n"
-        r"(?:|^ spanning-tree.+\s*\n)"
-        r"(?:|^ description.+\s*\n)"
-        r"(?:|^ speed-duplex.+\s*\n)"
+        r"(?:(?!^ switchport mode ).*\n)*?"
         r"^ switchport mode (?P<mode>\S+)\s*\n"
         r"(^ switchport access vlan (?P<untagged_vlan>\d+)\s*\n|^ switchport trunk allowed vlan (?P<tagged_vlans>\S+))",
         re.MULTILINE,
