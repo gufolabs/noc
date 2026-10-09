@@ -90,9 +90,9 @@ class SourceConfig:
         """
         r = []
         if set(self.labels).difference(sc.labels):
-            r += ["condition"]
+            r.append("condition")
         if set(self.exposed_labels or []).difference(sc.exposed_labels or []):
-            r += ["condition"]
+            r.append("condition")
         return r
 
 

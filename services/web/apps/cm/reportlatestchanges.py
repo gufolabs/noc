@@ -99,7 +99,7 @@ class ReportLatestChangesApplication(SimpleReport):
                 }
             for d in data:
                 name, address, profile = n_map.get(d["_id"], ("-", "-", None))
-                result += [
+                result.append(
                     (
                         d["_id"],
                         name,
@@ -107,7 +107,7 @@ class ReportLatestChangesApplication(SimpleReport):
                         Profile.get_by_id(profile) if profile else "-",
                         d["last_ts"],
                     )
-                ]
+                )
         return self.from_dataset(
             title=f"{self.title}: {repo} in {int(days)} days",
             columns=[

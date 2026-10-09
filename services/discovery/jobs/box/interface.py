@@ -166,7 +166,7 @@ class InterfaceCheck(PolicyDiscoveryCheck):
                     if addresses:
                         rd = forwarding_instance.rd if forwarding_instance else "0:0"
                         for a in addresses:
-                            self.interface_prefix_artefact += [
+                            self.interface_prefix_artefact.append(
                                 {
                                     "vpn_id": vpn_id,
                                     "rd": rd,
@@ -176,7 +176,7 @@ class InterfaceCheck(PolicyDiscoveryCheck):
                                     "mac": mac,
                                     "vlan_ids": si.get("vlan_ids", []),
                                 }
-                            ]
+                            )
                 # Delete hanging subinterfaces
                 self.cleanup_subinterfaces(
                     forwarding_instance, iface, [si["name"] for si in i["subinterfaces"]]
@@ -678,11 +678,11 @@ class InterfaceCheck(PolicyDiscoveryCheck):
                         iface["admin_status"] = p_iface["admin_status"]
                     if if_name in iface_proto:
                         if iface_proto[if_name].get("stp_status") == "on":
-                            iface["enabled_protocols"] += ["STP"]
+                            iface["enabled_protocols"].append("STP")
                         if iface_proto[if_name].get("lldp_status"):
-                            iface["enabled_protocols"] += ["LLDP"]
+                            iface["enabled_protocols"].append("LLDP")
                         if iface_proto[if_name].get("lacp_status"):
-                            iface["enabled_protocols"] += ["LACP"]
+                            iface["enabled_protocols"].append("LACP")
                     if if_name in aggregated:
                         iface["aggregated_interface"] = aggregated[if_name]
             unit: dict[str, Any] = iface["subinterfaces"].get(d["unit"])
@@ -696,13 +696,13 @@ class InterfaceCheck(PolicyDiscoveryCheck):
             elif p_iface and p_iface.get("description"):
                 unit["description"] = p_iface["description"]
             if "ipv4_addresses" in d:
-                unit["enabled_afi"] += ["IPv4"]
+                unit["enabled_afi"].append("IPv4")
                 unit["ipv4_addresses"] = d["ipv4_addresses"]
             if "ipv6_addresses" in d:
-                unit["enabled_afi"] += ["IPv6"]
+                unit["enabled_afi"].append("IPv6")
                 unit["ipv6_addresses"] = d["ipv4_addresses"]
             if "tagged" in d or "untagged" in d:
-                unit["enabled_afi"] += ["BRIDGE"]
+                unit["enabled_afi"].append("BRIDGE")
             if "untagged" in d:
                 unit["untagged_vlan"] = int(d["untagged"])
             if "tagged" in d:
@@ -764,7 +764,7 @@ class InterfaceCheck(PolicyDiscoveryCheck):
                 if if_name:
                     # Parent is already bound
                     obj_ifnames[obj][cn] = if_name
-                    mappings[obj] += [(port.path, if_name)]
+                    mappings[obj].append((port.path, if_name))
                     self.logger.info(
                         "%s mapped to interface %s via parent %s",
                         path_to_str(port.path),
@@ -776,7 +776,7 @@ class InterfaceCheck(PolicyDiscoveryCheck):
                     if_name = collator.collate(port, if_map)
                     if if_name:
                         obj_ifnames[obj][cn] = if_name
-                        mappings[obj] += [(port.path, if_name)]
+                        mappings[obj].append((port.path, if_name))
                         self.logger.info(
                             "%s mapped to interface %s", path_to_str(port.path), if_name
                         )

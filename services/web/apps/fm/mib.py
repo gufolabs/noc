@@ -44,7 +44,7 @@ class MIBApplication(ExtDocApplication):
                         return
                 cp = ds["path"][: -(len(data["path"]) + 1)]
                 c = {"oid": ".".join(str(x) for x in cp), "path": cp, "children": []}
-                data["children"] += [c]
+                data["children"].append(c)
                 insert_tree(c, ds)
 
         def fix_tree(data):
@@ -135,13 +135,13 @@ class MIBApplication(ExtDocApplication):
             if not syntax:
                 return []
             s = []
-            s += [syntax["base_type"]]
+            s.append(syntax["base_type"])
             if "display_hint" in syntax:
-                s += [f"display-hint: {syntax['display_hint']}"]
+                s.append(f"display-hint: {syntax['display_hint']}")
             if syntax["base_type"] in ("Enumeration", "Bits") and "enum_map" in syntax:
                 # Display enumeration
                 for k in sorted(syntax["enum_map"], key=lambda x: int(x)):
-                    s += [f"{k} -> {syntax['enum_map'][k]}"]
+                    s.append(f"{k} -> {syntax['enum_map'][k]}")
             return s
 
         s = []

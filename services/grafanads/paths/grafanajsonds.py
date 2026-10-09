@@ -51,9 +51,9 @@ class GrafanaJsonDS(JsonDSAPI):
         g_count, g = 0, []
         for group, count in cursor:
             if g and g_count + count > cls.MAX_OBJECTS:
-                r += [g or group]
+                r.append(g or group)
                 g_count, g = 0, []
-            g += [group]
+            g.append(group)
             g_count += count
         return r
 
@@ -78,38 +78,38 @@ class GrafanaJsonDS(JsonDSAPI):
                     continue
                 m = get_model(f.model)
                 if m.objects.count() > cls.MAX_OBJECTS:
-                    payloads += [
+                    payloads.append(
                         {
                             "name": f.field_name,
                             "label": f"{f.model} BI ID",
                             "type": "input",
                             "width": 50,
                         }
-                    ]
+                    )
                 else:
-                    payloads += [
+                    payloads.append(
                         {
                             "name": f.field_name,
                             "label": f.model,
                             "type": "select",
                             "width": 50,
                         }
-                    ]
-                payloads += [
+                    )
+                payloads.append(
                     {
                         "name": f"{f.field_name}__query",
                         "label": f"{f.model} Query",
                         "type": "input",
                         "width": 50,
                     }
-                ]
+                )
             for label in scope.labels:
                 if not label.is_key_label:
                     continue
                 p_type = "input"
                 if label.field_name in ["interface", "subinterface"]:
                     p_type = "multi-select"
-                payloads += [
+                payloads.append(
                     {
                         "name": label.field_name,
                         "label": label.field_name,
@@ -117,15 +117,15 @@ class GrafanaJsonDS(JsonDSAPI):
                         "width": 40,
                         "reload_metric": True,
                     }
-                ]
+                )
 
-            r += [
+            r.append(
                 {
                     "value": str(scope.id),
                     "label": f"Namespace {scope.name}",
                     "payloads": payloads,
                 }
-            ]
+            )
         return r
 
     @staticmethod

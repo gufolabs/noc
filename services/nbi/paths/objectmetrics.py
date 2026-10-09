@@ -150,13 +150,13 @@ class ObjectMetricsAPI(NBIAPI):
             qx = []
             for wx in scopes[table][1]:
                 if len(wx) == 1 or not wx[1]:
-                    qx += [f"(managed_object = {int(wx[0])})"]
+                    qx.append(f"(managed_object = {int(wx[0])})")
                 elif len(wx[1]) == 1:
-                    qx += [f"(managed_object = {int(wx[0])} AND path[4] = '{wx[1][0]}')"]
+                    qx.append(f"(managed_object = {int(wx[0])} AND path[4] = '{wx[1][0]}')")
                 else:
-                    qx += [
+                    qx.append(
                         f"(managed_object = {wx[0]} AND path[4] IN ({', '.join(chr(39) + x + chr(39) for x in wx[1])}))"
-                    ]
+                    )
             fields = ["ts", "managed_object", "path", *sorted(scopes[table][0])]
             query = (
                 f"SELECT {', '.join(fields)} FROM {table} WHERE {date_q} AND ({' OR '.join(qx)})"
@@ -184,7 +184,7 @@ class ObjectMetricsAPI(NBIAPI):
                     bucket = sdata.get(key)
                     if bucket:
                         xdata = bucket[0]
-                        xdata += [item]
+                        xdata.append(item)
                     else:
                         sdata[key] = ([item], path)
         # Format result
@@ -219,7 +219,7 @@ class ObjectMetricsAPI(NBIAPI):
                     r = {"object": mc.object, "metric_type": mn, "path": path, "values": points}
                     if iface is not None:
                         r["interface"] = iface
-                    result += [r]
+                    result.append(r)
         # Return response
         return {"from": req.from_, "to": req.to, "metrics": result}
 

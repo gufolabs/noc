@@ -64,7 +64,7 @@ class ParamPlugin(InvPlugin):
             if scopes and cd.scope not in scopes:
                 continue
             param = ConfigurationParam.get_by_code(cd.code)
-            data += [
+            data.append(
                 {
                     "param": str(param.id),
                     "param__label": param.name,
@@ -76,7 +76,7 @@ class ParamPlugin(InvPlugin):
                     "scope": cd.scope,
                     "scope__label": " ".join(s.code for s in cd.scopes),
                 }
-            ]
+            )
             data[-1].update(cd.schema.json_schema)
         return {"id": str(o.id), "name": o.name, "model": o.model.name, "data": data}
 

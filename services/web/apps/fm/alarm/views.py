@@ -158,7 +158,7 @@ class AlarmApplication(ExtApplication):
                 if field not in q:
                     q[field] = [q[p]]
                 else:
-                    q[field] += [q[p]]
+                    q[field].append(q[p])
                 del q[p]
         # Normalize parameters
         for p in list(q):
@@ -170,7 +170,7 @@ class AlarmApplication(ExtApplication):
             params = []
             for x in list(q):
                 if x.startswith(p):
-                    params += [q[x]]
+                    params.append(q[x])
                     del q[x]
             if params:
                 af = self.advanced_filter(self.advanced_filter_params[p], params)
@@ -304,10 +304,10 @@ class AlarmApplication(ExtApplication):
                     cond = {"$lte": int(r), "$gte": int(l)}
                 q["__raw__"] = {field: {"$elemMatch": {"profile": c_id, "summary": cond}}}
             elif c_query == "exists":
-                c_in += [c_id]
+                c_in.append(c_id)
                 continue
             elif c_query == "nexists":
-                c_nin += [c_id]
+                c_nin.append(c_id)
                 continue
             else:
                 try:
@@ -533,7 +533,7 @@ class AlarmApplication(ExtApplication):
                 resolved_vars=r["resolved_vars"],
                 vars=r["vars"],
             )
-            events += [
+            events.append(
                 {
                     "id": str(event.id),
                     "event_class": str(event.event_class.id),
@@ -546,7 +546,7 @@ class AlarmApplication(ExtApplication):
                     ),
                     "subject": event.subject,
                 }
-            ]
+            )
         if events:
             d["events"] = events
         # Alarms
@@ -561,7 +561,7 @@ class AlarmApplication(ExtApplication):
         if alarm.groups:
             d["groups"] = []
             for ag in ActiveAlarm.objects.filter(reference__in=alarm.groups):
-                d["groups"] += [
+                d["groups"].append(
                     {
                         "id": str(ag.id),
                         "alarm_class": str(ag.alarm_class.id),
@@ -569,11 +569,11 @@ class AlarmApplication(ExtApplication):
                         "timestamp": self.to_json(ag.timestamp),
                         "subject": ag.subject,
                     }
-                ]
+                )
         # Apply plugins
         plugins = []
         acp = alarm.alarm_class.plugins or []
-        acp += [self.diagnostic_plugin]
+        acp.append(self.diagnostic_plugin)
         for p in acp:
             if p.name in self.plugins:
                 plugin = self.plugins[p.name]
@@ -597,7 +597,7 @@ class AlarmApplication(ExtApplication):
                 continue
             try:
                 u = User.get_by_id(int(w.key))
-                subscribers += [{"id": u.id, "name": u.get_full_name(), "login": u.username}]
+                subscribers.append({"id": u.id, "name": u.get_full_name(), "login": u.username})
             except User.DoesNotExist:
                 pass
         return subscribers
@@ -848,12 +848,12 @@ class AlarmApplication(ExtApplication):
                     else:
                         badge = f'<span class="x-display-tag">{c}</span>'
                     order = getattr(pv, "display_order", 100)
-                    v += [
+                    v.append(
                         (
                             (order, -c),
                             f'<i class="{pv.glyph}" title="{pv.name}"></i>{badge}',
                         )
-                    ]
+                    )
             return f"<span class='x-summary'>{''.join(i[1] for i in sorted(v, key=operator.itemgetter(0)))}</span>"
 
         if not isinstance(s, dict):
@@ -862,11 +862,11 @@ class AlarmApplication(ExtApplication):
         if "subscriber" in s:
             from noc.crm.models.subscriberprofile import SubscriberProfile
 
-            r += [get_summary(s["subscriber"], SubscriberProfile)]
+            r.append(get_summary(s["subscriber"], SubscriberProfile))
         if "service" in s:
             from noc.sa.models.serviceprofile import ServiceProfile
 
-            r += [get_summary(s["service"], ServiceProfile)]
+            r.append(get_summary(s["service"], ServiceProfile))
         r = [x for x in r if x]
         return "".join(r)
 
@@ -929,9 +929,9 @@ class AlarmApplication(ExtApplication):
                 if None in adr and "" in adr:
                     continue
                 if None in adr:
-                    location += [adr[1].title().strip()]
+                    location.append(adr[1].title().strip())
                 else:
-                    location += [" ".join(adr).title().strip()]
+                    location.append(" ".join(adr).title().strip())
             res = chunk_it(location, 2)
             return ", ".join(res[0]), ", ".join(res[1])
         return "", ""
@@ -953,7 +953,7 @@ class AlarmApplication(ExtApplication):
             for p, c in sorted(d.items(), key=lambda x: -x[1]):
                 pv = profile.get_by_id(p)
                 if pv and show_in_summary(pv):
-                    v += [
+                    v.append(
                         {
                             "profile": str(pv.id),
                             "glyph": pv.glyph,
@@ -961,7 +961,7 @@ class AlarmApplication(ExtApplication):
                             "profile__label": pv.name,
                             "summary": c,
                         }
-                    ]
+                    )
             return v
 
         if not isinstance(s, dict):

@@ -281,7 +281,7 @@ class PathAPI(NBIAPI):
         def encode_link(interfaces: list[Interface]) -> dict:
             objects: defaultdict[ManagedObject, list] = defaultdict(list)
             for iface in interfaces:
-                objects[iface.managed_object] += [iface.name]
+                objects[iface.managed_object].append(iface.name)
             # Order objects
             order: list[ManagedObject] = list(objects)
             try:
@@ -313,12 +313,12 @@ class PathAPI(NBIAPI):
             last: dict[str, ManagedObject] = {"obj": start}
             r: dict[str, Any] = {"path": [], "cost": {"l2": 0}}
             if start_iface:
-                r["path"] += [{"links": [encode_link([start_iface])]}]
+                r["path"].append({"links": [encode_link([start_iface])]})
             for pi in path:  # type: PathInfo
-                r["path"] += [{"links": [encode_link(link.interfaces) for link in pi.links]}]
+                r["path"].append({"links": [encode_link(link.interfaces) for link in pi.links]})
                 r["cost"]["l2"] += pi.l2_cost
             if end_iface:
-                r["path"] += [{"links": [encode_link([end_iface])]}]
+                r["path"].append({"links": [encode_link([end_iface])]})
             yield r
 
     def get_constraints(

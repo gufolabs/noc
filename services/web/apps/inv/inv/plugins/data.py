@@ -282,7 +282,7 @@ class DataPlugin(InvPlugin):
         for item in o.get_effective_data():
             if item.interface not in mi_values:
                 mi_values[item.interface] = defaultdict(list)
-            mi_values[item.interface][item.attr] += [(item.value, item.scope)]
+            mi_values[item.interface][item.attr].append((item.value, item.scope))
         # Yield items
         for i in mi_values:
             mi = ModelInterface.get_by_name(i)

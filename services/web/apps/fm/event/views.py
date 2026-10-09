@@ -118,7 +118,7 @@ class EventApplication(ExtApplication):
             r += [f"ts >= '{from_query.isoformat()}'", f"date >= '{from_query.date().isoformat()}'"]
         else:
             from_query = datetime.datetime.now() - datetime.timedelta(seconds=EVENTS_DEFAULT_WINDOW)
-            r += [f"date >= '{from_query.date().isoformat()}'"]
+            r.append(f"date >= '{from_query.date().isoformat()}'")
         if to_query:
             to_query = datetime.datetime.fromisoformat(to_query)
             r += [f"ts <= '{to_query.isoformat()}'", f"date <= '{to_query.date().isoformat()}'"]
@@ -159,13 +159,13 @@ class EventApplication(ExtApplication):
             event_class,
         )
         if filter_x:
-            sql += [f"WHERE {' AND '.join(filter_x)}"]
-        sql += ["ORDER BY ts DESC"]
+            sql.append(f"WHERE {' AND '.join(filter_x)}")
+        sql.append("ORDER BY ts DESC")
         if limit and offset:
-            sql += [f"LIMIT {offset}, {limit}"]
+            sql.append(f"LIMIT {offset}, {limit}")
         elif limit:
-            sql += [f"LIMIT {limit}"]
-        sql += ["FORMAT JSON"]
+            sql.append(f"LIMIT {limit}")
+        sql.append("FORMAT JSON")
         sql = " ".join(sql)
         ch = connection()
         r = ch.execute(sql, return_raw=True)
@@ -231,7 +231,7 @@ class EventApplication(ExtApplication):
                 r |= {"event_class": ec.name, "event_class_id": str(ec.id)}
             if d["data"]:
                 r["data"] = orjson.loads(d["data"])
-            out += [r]
+            out.append(r)
         return out, rows_count
 
     @api.post(r"^(?P<id>[a-z0-9]{24})/reclassify/$", access="reclassify")

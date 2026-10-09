@@ -32,7 +32,7 @@ class HierarchyReportAppplication(ReportApplication):
             if not e:
                 continue
             p = cc.name.split(" | ")
-            ec += [(len(p) * 24, cc.name, None)]
+            ec.append((len(p) * 24, cc.name, None))
             ec += [(-1, c, EventClassificationRule.objects.filter(event_class=c.id)) for c in e]
             ne += len(e)
         ncr = sum(len(r[2]) if r[2] else 0 for r in ec)
@@ -44,7 +44,7 @@ class HierarchyReportAppplication(ReportApplication):
             if not a:
                 continue
             p = cc.name.split(" | ")
-            ac += [(len(p) * 24, cc.name)]
+            ac.append((len(p) * 24, cc.name))
             ac += [(-1, c) for c in a]
             na += len(a)
         return self.render_template(

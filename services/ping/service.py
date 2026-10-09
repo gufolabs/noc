@@ -113,7 +113,7 @@ class PingService(FastAPIService):
         addresses = data.pop("addresses", [])
         if not addresses and "address" in data:
             # Old format
-            addresses += [{"address": data.pop("address"), "interface": None, "is_fatal": True}]
+            addresses.append({"address": data.pop("address"), "interface": None, "is_fatal": True})
         elif not data["ping"]:
             await self.delete_probe(p_id)
         else:

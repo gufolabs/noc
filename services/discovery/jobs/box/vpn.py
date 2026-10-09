@@ -189,7 +189,7 @@ class VPNCheck(DiscoveryCheck):
                 vpn_id = get_vpn_id(vpn)
             except ValueError:
                 continue
-            r += [
+            r.append(
                 DiscoveredVPN(
                     rd=vpn.get("rd"),
                     vpn_id=vpn_id,
@@ -199,7 +199,7 @@ class VPNCheck(DiscoveryCheck):
                     description=vpn.get("description"),
                     source=SRC_CONFDB,
                 )
-            ]
+            )
         return r
 
     @staticmethod
@@ -260,14 +260,14 @@ class VPNCheck(DiscoveryCheck):
         if self.is_preferred(vpn.source, discovered_vpn.source):
             changes = []
             if vpn.source != discovered_vpn.source:
-                changes += [f"source: {vpn.source} -> {discovered_vpn.source}"]
+                changes.append(f"source: {vpn.source} -> {discovered_vpn.source}")
                 vpn.source = discovered_vpn.source
             if (
                 discovered_vpn.name
                 and discovered_vpn.name != vpn.name
                 and self.get_unique_vpn_name(discovered_vpn) != vpn.name
             ):
-                changes += [f"name: {vpn.name} -> {discovered_vpn.name}"]
+                changes.append(f"name: {vpn.name} -> {discovered_vpn.name}")
                 vpn.name = discovered_vpn.name
             if changes:
                 self.logger.info("Changing %s: %s", vpn.vpn_id, ", ".join(changes))
