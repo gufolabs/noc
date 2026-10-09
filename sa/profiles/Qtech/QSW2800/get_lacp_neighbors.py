@@ -65,23 +65,23 @@ class Script(BaseScript):
                     # Partner not find, skip
                     continue
 
-                bundle += [
+                bundle.append(
                     {
                         "interface": bun[0],
                         "local_port_id": int(index[0][1]),
                         "remote_system_id": r_id,
                         "remote_port_id": int(r_p_id),
                     }
-                ]
+                )
 
-            r += [
+            r.append(
                 {
                     "lag_id": int(pc_name),
                     "interface": "Port-Channel" + pc_name,
                     "system_id": out["lacp"]["System ID"].split(",")[1],
                     "bundle": bundle,
                 }
-            ]
+            )
             first = True
 
         return r

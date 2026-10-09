@@ -175,7 +175,7 @@ class Script(BaseScript):
         first_table_line = 2 if self.is_iscom2924g else 5
         for line in v.splitlines()[first_table_line:]:
             # r[int(line[:6])] = {
-            r += [
+            r.append(
                 {
                     "name": int(line[1:6]) if self.is_iscom2924g else int(line[:6]),
                     "admin_status": (
@@ -185,7 +185,7 @@ class Script(BaseScript):
                         "up" in line[13:28] if self.is_iscom2924g else "up" in line[14:29]
                     ),
                 }
-            ]
+            )
         return r
 
     def get_iface_ip_description(self):
@@ -203,7 +203,7 @@ class Script(BaseScript):
         v = self.cli("show lldp local config")
         lldp_ifaces_raw = self.rx_lldp_iscom2624g.findall(v)
         for iface in lldp_ifaces_raw:
-            lldp_ifaces += [self.profile.convert_interface_name(iface)]
+            lldp_ifaces.append(self.profile.convert_interface_name(iface))
         ifaces = []
         v = self.cli("show interface")
         for iface in v.split("\n\n"):
@@ -239,12 +239,12 @@ class Script(BaseScript):
                 sub["mtu"] = match.group("mtu")
             if match.group("ip"):
                 sub["ipv6_addresses"] = [match.group("ip")]
-                sub["enabled_afi"] += ["IPv4"]
+                sub["enabled_afi"].append("IPv4")
             if match.group("ipv6"):
                 sub["ipv6_addresses"] = [match.group("ipv6")]
-                sub["enabled_afi"] += ["IPv6"]
+                sub["enabled_afi"].append("IPv6")
             if i["type"] == "physical":
-                sub["enabled_afi"] += ["BRIDGE"]
+                sub["enabled_afi"].append("BRIDGE")
                 if ifname in lldp_ifaces:
                     i["enabled_protocols"] = ["LLDP"]
                 match = self.rx_ifunit.search(ifname)
@@ -264,7 +264,7 @@ class Script(BaseScript):
                 ifunit = match.group("ifunit")
                 sub["vlan_ids"] = [int(ifunit)]
             i["subinterfaces"] = [sub]
-            ifaces += [i]
+            ifaces.append(i)
         return [{"interfaces": ifaces}]
 
     def execute_iscom2924g(self):
@@ -414,7 +414,9 @@ class Script(BaseScript):
                     if p_name in interfaces:
                         if p not in untagged:
                             if "tagged_vlans" in interfaces[p_name]["subinterfaces"][0]:
-                                interfaces[p_name]["subinterfaces"][0]["tagged_vlans"] += [vlan_id]
+                                interfaces[p_name]["subinterfaces"][0]["tagged_vlans"].append(
+                                    vlan_id
+                                )
                             else:
                                 interfaces[p_name]["subinterfaces"][0]["tagged_vlans"] = [vlan_id]
                         else:
@@ -425,7 +427,7 @@ class Script(BaseScript):
                     "tagged_vlans" in iface["subinterfaces"][0]
                     or "untagged_vlan" in iface["subinterfaces"][0]
                 ):
-                    iface["subinterfaces"][0]["enabled_afi"] += ["BRIDGE"]
+                    iface["subinterfaces"][0]["enabled_afi"].append("BRIDGE")
         ifdescr = self.get_iface_ip_description()
         v = self.scripts.get_chassis_id()
         mac = v[0]["first_chassis_mac"]

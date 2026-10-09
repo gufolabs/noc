@@ -80,7 +80,7 @@ class Script(BaseScript):
             for i in t:
                 stack[i[0]]["serial"] = i[1]
             for i in stack:
-                r += [stack[i]]
+                r.append(stack[i])
             return r
         v = self.scripts.get_version()
         r = [
@@ -120,7 +120,7 @@ class Script(BaseScript):
                     break
                 match1 = self.rx_sfp_serial.search(c)
                 if match1:
-                    r += [
+                    r.append(
                         {
                             "type": "XCVR",
                             "vendor": "NONAME",
@@ -128,5 +128,5 @@ class Script(BaseScript):
                             "number": match.group("port")[-1:],
                             "serial": match1.group("serial"),
                         }
-                    ]
+                    )
         return r

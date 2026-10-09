@@ -27,7 +27,7 @@ class Script(BaseScript):
         if self.is_support_mac_version:
             cmd = self.cli("show version", cached=True)
             for match in self.rx_mac.finditer(cmd):
-                macs += [match.group("mac")]
+                macs.append(match.group("mac"))
         if not macs:
             # If not SystemID in version command
             cmd = self.cli("show mac-address-table static")

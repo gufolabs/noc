@@ -62,7 +62,7 @@ class Script(BaseScript):
                 if "Vendor Version" in key:
                     xcvr["revision"] = value.strip()
             if "vendor" in xcvr:
-                r += [xcvr]
+                r.append(xcvr)
         return r
 
     def execute_cli(self):
@@ -120,7 +120,7 @@ class Script(BaseScript):
                 # Transfer Distance(meter): 2
                 # SFP register information CRC recalculate ERROR!
                 continue
-            r += [
+            r.append(
                 {
                     "type": "XCVR",
                     "number": num,
@@ -129,5 +129,5 @@ class Script(BaseScript):
                     "serial": d["vendor serial number"].strip(),
                     "description": description,
                 }
-            ]
+            )
         return r

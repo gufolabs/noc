@@ -109,7 +109,7 @@ class Script(BaseScript):
                         p2p = "point-to-point" in p2p_match.group("p2p")
                     else:
                         p2p = False
-                    ifaces += [
+                    ifaces.append(
                         {
                             "interface": iface,
                             "port_id": port,
@@ -130,10 +130,10 @@ class Script(BaseScript):
                             "point_to_point": p2p,
                             "edge": edge,
                         }
-                    ]
+                    )
                     continue
 
-            r["instances"] += [
+            r["instances"].append(
                 {
                     "id": inst_id,
                     "bridge_id": bridge_id,
@@ -143,7 +143,7 @@ class Script(BaseScript):
                     "interfaces": ifaces,
                     "vlans": vlans.replace(";", ","),
                 }
-            ]
+            )
         cmd = self.cli("show spanning-tree mst config")
         match = self.rx_mst_conf.search(cmd)
         if match:

@@ -28,7 +28,7 @@ class Script(BaseScript):
         # Ethernet ports
         v = self.cli("show ethinfo")
         for match in self.rx_iface.finditer(v):
-            interfaces += [
+            interfaces.append(
                 {
                     "name": match.group("name"),
                     "type": "physical",
@@ -43,5 +43,5 @@ class Script(BaseScript):
                         }
                     ],
                 }
-            ]
+            )
         return [{"interfaces": interfaces}]

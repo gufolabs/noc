@@ -73,25 +73,27 @@ class Script(BaseScript):
                 ip = ip + "/" + netmask
                 ip_list = [ip]
                 iface["subinterfaces"][0]["ipv4_addresses"] = ip_list
-                iface["subinterfaces"][0]["enabled_afi"] += ["IPv4"]
+                iface["subinterfaces"][0]["enabled_afi"].append("IPv4")
             if match.group("ipv6_addr"):
                 ip = match.group("ipv6_addr")
                 netmask = match.group("ipv6_mask")
                 ip = IPv6(ip, netmask=match.group("ipv6_mask")).prefix
                 ip_list = [ip]
                 iface["subinterfaces"][0]["ipv6_addresses"] = ip_list
-                iface["subinterfaces"][0]["enabled_afi"] += ["IPv6"]
+                iface["subinterfaces"][0]["enabled_afi"].append("IPv6")
             else:
-                iface["subinterfaces"][0]["enabled_afi"] += ["BRIDGE"]
+                iface["subinterfaces"][0]["enabled_afi"].append("BRIDGE")
             if match.group("pvid"):
                 iface["subinterfaces"][0]["untagged_vlan"] = int(match.group("pvid"))
             if conf_interfaces.get(ifname):
                 cfg = conf_interfaces[ifname]
                 for match in self.rx_trunk.finditer(cfg):
                     if iface["subinterfaces"][0].get("tagged_vlans"):
-                        iface["subinterfaces"][0]["tagged_vlans"] += [int(match.group("vlan_id"))]
+                        iface["subinterfaces"][0]["tagged_vlans"].append(
+                            int(match.group("vlan_id"))
+                        )
                     else:
                         iface["subinterfaces"][0]["tagged_vlans"] = [int(match.group("vlan_id"))]
-            interfaces += [iface]
+            interfaces.append(iface)
 
         return [{"interfaces": interfaces}]

@@ -30,18 +30,18 @@ class Script(BaseScript):
 
         cmd = self.cli("show port-group brief", cached=True)
         for match in self.rx_portgroup.finditer(cmd):
-            r += [
+            r.append(
                 {
                     "interface": f"Port-Channel{match.group('pc')}",
                     "members": [],
                     "type": "L" if match.group("mode").lower() != "on" else "S",
                 }
-            ]
+            )
 
         cmd = self.cli("show interface | include LAG", cached=True)
         for match in self.rx_interface.finditer(cmd):
             for pc in r:
                 if pc["interface"] == match.group("pc"):
-                    pc["members"] += [match.group("interface")]
+                    pc["members"].append(match.group("interface"))
 
         return r

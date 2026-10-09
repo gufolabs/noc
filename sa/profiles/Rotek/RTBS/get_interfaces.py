@@ -91,7 +91,7 @@ class Script(BaseScript):
             if mac:
                 iface["mac"] = MAC(mac)
                 iface["subinterfaces"][0]["mac"] = MAC(mac)
-            interfaces += [iface]
+            interfaces.append(iface)
             for i in ss.items():
                 if int(i[0]) == ifindex:
                     a = self.cli(f"show interface {name} ssid-broadcast")
@@ -122,7 +122,7 @@ class Script(BaseScript):
                     if mac:
                         iface["mac"] = MAC(mac)
                         iface["subinterfaces"][0]["mac"] = MAC(mac)
-                    interfaces += [iface]
+                    interfaces.append(iface)
         return [{"interfaces": interfaces}]
 
     def execute_cli(self):
@@ -197,7 +197,7 @@ class Script(BaseScript):
                     iface["subinterfaces"][0]["enabled_afi"] = ["BRIDGE"]
                 if ifname == "ra0":
                     iface["hints"] = ["technology::radio::802.11"]
-                interfaces += [iface]
+                interfaces.append(iface)
                 ri = ssid.get(ifname)
                 if ri:
                     if ri["ssid_broadcast"] == "enabled":
@@ -226,6 +226,6 @@ class Script(BaseScript):
                             }
                         ],
                     }
-                    interfaces += [iface]
+                    interfaces.append(iface)
 
         return [{"interfaces": interfaces}]

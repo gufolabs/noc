@@ -62,7 +62,7 @@ class Script(BaseScript):
                     }
                 ],
             }
-            interfaces += [i]
+            interfaces.append(i)
         v = self.cli("show interface port switchport")
         for match in self.rx_vlan.finditer(v):
             port = match.group("port")
@@ -108,5 +108,5 @@ class Script(BaseScript):
                     }
                 ],
             }
-            interfaces += [i]
+            interfaces.append(i)
         return [{"interfaces": interfaces}]

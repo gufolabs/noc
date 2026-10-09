@@ -34,10 +34,10 @@ class Script(BaseScript):
         for match in self.rx_line1.finditer(c):
             if interface is not None and interface != match.group("interface"):
                 continue
-            r += [match.groupdict()]
+            r.append(match.groupdict())
         if not r:
             for match in self.rx_line2.finditer(c):
                 if interface is not None and interface != match.group("interface"):
                     continue
-                r += [match.groupdict()]
+                r.append(match.groupdict())
         return r

@@ -171,7 +171,7 @@ class Script(BaseScript):
                 ip2 = match.group("ip2")
                 if ":" in ip1:
                     ip_interfaces = "ipv6_addresses"
-                    enabled_afi += ["IPv6"]
+                    enabled_afi.append("IPv6")
                     ip1 = IPv6(ip1, netmask=match.group("mask1")).prefix
                     if ip2:
                         ip2 = IPv6(ip2, netmask=match.group("mask2")).prefix
@@ -180,7 +180,7 @@ class Script(BaseScript):
                         ip_list = [ip1]
                 else:
                     ip_interfaces = "ipv4_addresses"
-                    enabled_afi += ["IPv4"]
+                    enabled_afi.append("IPv4")
                     ip1 = IPv4(ip1, netmask=match.group("mask1")).prefix
                     if ip2:
                         ip2 = IPv4(ip2, netmask=match.group("mask2")).prefix
@@ -209,7 +209,7 @@ class Script(BaseScript):
                         }
                     ],
                 }
-                interfaces += [iface]
+                interfaces.append(iface)
 
         except self.CLISyntaxError:
             enabled_afi = []
@@ -218,11 +218,11 @@ class Script(BaseScript):
             ip = match.group("ip")
             if ":" in ip:
                 ip_interfaces = "ipv6_addresses"
-                enabled_afi += ["IPv6"]
+                enabled_afi.append("IPv6")
                 ip = IPv6(ip, netmask=match.group("mask")).prefix
             else:
                 ip_interfaces = "ipv4_addresses"
-                enabled_afi += ["IPv4"]
+                enabled_afi.append("IPv4")
                 ip = IPv4(ip, netmask=match.group("mask")).prefix
             ip_list = [ip]
             vlan = match.group("vlan")
@@ -248,7 +248,7 @@ class Script(BaseScript):
                     }
                 ],
             }
-            interfaces += [iface]
+            interfaces.append(iface)
 
         # Get L2 interfaces
         mac = self.scripts.get_chassis_id()[0]["first_chassis_mac"]
@@ -291,6 +291,6 @@ class Script(BaseScript):
                 iface["aggregated_interface"] = ai
                 if is_lacp:
                     iface["enabled_protocols"] = ["LACP"]
-            interfaces += [iface]
+            interfaces.append(iface)
 
         return [{"interfaces": interfaces}]

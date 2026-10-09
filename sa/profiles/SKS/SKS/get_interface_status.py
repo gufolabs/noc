@@ -43,10 +43,10 @@ class Script(BaseScript):
                         "status": match.group("oper_status").lower() == "up",
                     }
                 ]
-            r += [
+            r.append(
                 {
                     "interface": match.group("port"),
                     "status": match.group("oper_status").lower() == "up",
                 }
-            ]
+            )
         return r

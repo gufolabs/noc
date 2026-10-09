@@ -106,7 +106,7 @@ class Script(BaseScript):
                 iface["mac"] = match.group("mac")
                 sub["mac"] = match.group("mac")
             if iface["type"] == "physical":
-                sub["enabled_afi"] += ["BRIDGE"]
+                sub["enabled_afi"].append("BRIDGE")
             if iface["type"] == "SVI":
                 match = self.rx_vlan_id.search(ifname)
                 if match:
@@ -126,18 +126,18 @@ class Script(BaseScript):
                 sub["mtu"] = match.group("mtu")
             for match in self.rx_ipv4.finditer(ll):
                 if "IPv4" not in sub["enabled_afi"]:
-                    sub["enabled_afi"] += ["IPv4"]
+                    sub["enabled_afi"].append("IPv4")
                 if "ipv4_addresses" not in sub:
                     sub["ipv4_addresses"] = []
-                sub["ipv4_addresses"] += [match.group("ipv4")]
+                sub["ipv4_addresses"].append(match.group("ipv4"))
             for match in self.rx_ipv6.finditer(ll):
                 if "IPv6" not in sub["enabled_afi"]:
-                    sub["enabled_afi"] += ["IPv6"]
+                    sub["enabled_afi"].append("IPv6")
                 if "ipv6_addresses" not in sub:
                     sub["ipv6_addresses"] = []
-                sub["ipv6_addresses"] += [match.group("ipv6")]
+                sub["ipv6_addresses"].append(match.group("ipv6"))
             iface["subinterfaces"] = [sub]
-            r += [iface]
+            r.append(iface)
         p = self.scripts.get_portchannel()
         for i in r:
             match = self.rx_ifname.search(i["name"])

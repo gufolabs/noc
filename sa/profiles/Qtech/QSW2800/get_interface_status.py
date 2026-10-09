@@ -34,5 +34,5 @@ class Script(BaseScript):
             iface = match.group("interface")
             if iface.startswith("Vlan") or iface.startswith("l2over"):
                 continue
-            r += [{"interface": iface, "status": match.group("status").lower() == "up"}]
+            r.append({"interface": iface, "status": match.group("status").lower() == "up"})
         return r

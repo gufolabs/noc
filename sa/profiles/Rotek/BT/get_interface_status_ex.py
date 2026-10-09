@@ -24,8 +24,8 @@ class Script(BaseScript):
             name = self.snmp.get(mib["IF-MIB::ifDescr", ifindex])
             a_status = self.snmp.get(mib["IF-MIB::ifAdminStatus", ifindex])
             o_status = self.snmp.get(mib["IF-MIB::ifOperStatus", ifindex])
-            result += [{"interface": name, "admin_status": a_status, "oper_status": o_status}]
+            result.append({"interface": name, "admin_status": a_status, "oper_status": o_status})
         except Exception:
-            result += [{"interface": "st", "admin_status": True, "oper_status": True}]
+            result.append({"interface": "st", "admin_status": True, "oper_status": True})
 
         return result

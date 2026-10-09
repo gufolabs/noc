@@ -42,7 +42,7 @@ class Script(BaseScript):
         for match in self.rx_int.finditer(lldp):
             if match.group("count") == 0:
                 continue
-            result += [
+            result.append(
                 {
                     "local_interface": match.group("interface"),
                     "neighbors": [
@@ -62,5 +62,5 @@ class Script(BaseScript):
                         }
                     ],
                 }
-            ]
+            )
         return result

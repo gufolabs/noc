@@ -90,5 +90,5 @@ class Script(BaseScript):
                 pass
             # Dummy stub
             r["neighbors"][0]["remote_capabilities"] = cap
-            result += [r]
+            result.append(r)
         return result

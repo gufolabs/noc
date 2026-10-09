@@ -55,7 +55,7 @@ class Script(BaseScript):
             if not name:
                 r.append({"vlan_id": int(vlan_id)})
             else:
-                r += [match.groupdict()]
+                r.append(match.groupdict())
         if r == []:
             for match in self.rx_vlan1.finditer(v):
                 vlan_id = match.group("vlan_id")
@@ -63,6 +63,6 @@ class Script(BaseScript):
                 if not name:
                     r.append({"vlan_id": int(vlan_id)})
                 else:
-                    r += [match.groupdict()]
+                    r.append(match.groupdict())
 
         return r

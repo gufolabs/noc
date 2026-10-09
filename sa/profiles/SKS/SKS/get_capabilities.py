@@ -48,7 +48,7 @@ class Script(BaseScript):
             cmd = self.cli("show version", cached=True)
             s = []
             for match in self.rx_stack.finditer(cmd):
-                s += [match.group("box_id")]
+                s.append(match.group("box_id"))
             if s:
                 caps["Stack | Members"] = len(s) if len(s) != 1 else 0
                 caps["Stack | Member Ids"] = " | ".join(s)
