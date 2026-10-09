@@ -38,12 +38,12 @@ class Script(BaseScript):
                     break
         v = self.cli(c, cached=True)
         for match in self.rx_mac.finditer(v):
-            r += [
+            r.append(
                 {
                     "vlan_id": vlans[match.group("vlan")],
                     "mac": match.group("mac"),
                     "interfaces": [match.group("port")],
                     "type": "C" if match.group("port") == "CPU" else "D",
                 }
-            ]
+            )
         return r

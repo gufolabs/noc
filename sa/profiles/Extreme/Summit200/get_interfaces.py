@@ -53,7 +53,7 @@ class Script(BaseScript):
                     }
                 ],
             }
-            interfaces += [iface]
+            interfaces.append(iface)
         c = self.cli("show ipfdb")
         for v in self.cli("show vlan detail").split("VLAN Interface"):
             match = self.rx_vlan.search(v)
@@ -81,7 +81,7 @@ class Script(BaseScript):
                     for i in interfaces:
                         if i["name"] == ifname:
                             if "tagged_vlans" in i["subinterfaces"][0]:
-                                i["subinterfaces"][0]["tagged_vlans"] += [vlan_id]
+                                i["subinterfaces"][0]["tagged_vlans"].append(vlan_id)
                             else:
                                 i["subinterfaces"][0]["tagged_vlans"] = [vlan_id]
                             break
@@ -109,5 +109,5 @@ class Script(BaseScript):
                         iface["mac"] = match1.group("mac")
                         iface["subinterfaces"][0]["mac"] = match1.group("mac")
                         break
-                interfaces += [iface]
+                interfaces.append(iface)
         return [{"interfaces": interfaces}]

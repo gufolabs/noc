@@ -65,9 +65,9 @@ class Script(BaseScript):
                 }
             for match in self.rx_ipv4_address.finditer(p.group("port")):
                 if "IPv4" not in i["subinterfaces"][0]["enabled_afi"]:
-                    i["subinterfaces"][0]["enabled_afi"] += ["IPv4"]
+                    i["subinterfaces"][0]["enabled_afi"].append("IPv4")
                 if "ipv4_addresses" not in i["subinterfaces"][0]:
                     i["subinterfaces"][0]["ipv4_addresses"] = []
-                i["subinterfaces"][0]["ipv4_addresses"] += [match.group("ip_address")]
-            interfaces += [i]
+                i["subinterfaces"][0]["ipv4_addresses"].append(match.group("ip_address"))
+            interfaces.append(i)
         return [{"interfaces": interfaces}]

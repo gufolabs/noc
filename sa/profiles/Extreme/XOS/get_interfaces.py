@@ -112,15 +112,15 @@ class Script(BaseScript):
                         vltag = tg.group("tag")
                 mt = self.rx_ip.search(sv.strip())  # Primary IP
                 if mt:
-                    ip_list += [mt.group("address")]
+                    ip_list.append(mt.group("address"))
                     ip_interfaces = "ipv4_addresses"
-                    enabled_afi += ["IPv4"]
+                    enabled_afi.append("IPv4")
                 mt = self.rx_sec_ip.search(sv.strip())  # Secondary IP's
                 if mt:
                     sec_ip = mt.group("address").replace("\n", "")
                     for s_ip in sec_ip.split(","):
                         s_ip = s_ip.strip()
-                        ip_list += [s_ip]
+                        ip_list.append(s_ip)
             iface = {
                 "name": sviintrf,
                 "type": "SVI",
@@ -141,7 +141,7 @@ class Script(BaseScript):
                     }
                 ],
             }
-            interfaces += [iface]
+            interfaces.append(iface)
         # Get L2 interfaces
         status = self.cli("sh ports no-refresh")
         for ss in status.split("\n"):
@@ -182,7 +182,7 @@ class Script(BaseScript):
                     # else:
                     #    iface["subinterfaces"][0]["untagged_vlan"] = ""
                     aggriface["description"] = switchports[ifname][2]
-                    aggrifaces += [aggriface]
+                    aggrifaces.append(aggriface)
 
                 iftype = "physical"
                 iface = {
@@ -223,6 +223,6 @@ class Script(BaseScript):
                     if is_lacp:
                         iface["enabled_protocols"] = ["LACP"]
 
-                interfaces += [iface]
+                interfaces.append(iface)
         interfaces += aggrifaces
         return [{"interfaces": interfaces}]

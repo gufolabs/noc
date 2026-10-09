@@ -28,7 +28,7 @@ class Script(BaseScript):
             ifindex, ip = oid[21:].split(".", 1)
             ifname = names.get(int(ifindex))
             if ifname and mac:
-                r += [{"ip": ip, "mac": MAC(mac), "interface": ifname}]
+                r.append({"ip": ip, "mac": MAC(mac), "interface": ifname})
             elif ifname:
-                r += [{"ip": ip, "interface": ifname}]
+                r.append({"ip": ip, "interface": ifname})
         return r

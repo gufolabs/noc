@@ -57,23 +57,23 @@ class Script(BaseScript):
                 table_start="-------",
                 table_end="=======",
             ):
-                bundle += [
+                bundle.append(
                     {
                         "interface": b["Member Port"][0],
                         "local_port_id": self.get_local_id(b["Member Port"][0]),
                         "remote_system_id": info[0]["Partner MAC"][0],
                         "remote_port_id": int(b["Partner Port"][0]),
                     }
-                ]
+                )
 
-            r += [
+            r.append(
                 {
                     "lag_id": i,
                     "interface": lag["Lag "][0],
                     "system_id": system_mac,
                     "bundle": bundle,
                 }
-            ]
+            )
             i += 1
 
         return r

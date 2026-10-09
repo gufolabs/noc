@@ -173,7 +173,7 @@ class MetricScriptBase(BaseScriptMetaclass):
             reverse=True,
         ):
             for mt in h.mt_metrics:
-                m._mt_map[mt] += [h]
+                m._mt_map[mt].append(h)
         # Install oid rules
         # Instantiate from base class' OID_RULES
         parent_rules = getattr(bases[0], "_oid_rules", None)
@@ -246,9 +246,9 @@ class MetricScriptBase(BaseScriptMetaclass):
             raise ValueError(f"Error in file '{path}': Must be defined as object")
         if "$metric" not in data:
             raise ValueError("$metric key is required")
-        script._mt_map[data["$metric"]] += [
+        script._mt_map[data["$metric"]].append(
             mcs.get_snmp_handler(script, data["$metric"], load_rule(data))
-        ]
+        )
 
     @classmethod
     def get_snmp_handler(mcs, script, metric, rule):
@@ -427,7 +427,7 @@ class Script(BaseScript, metaclass=MetricScriptBase):
         # Split by metric types
         self.metric_labels = {self.get_labels_hash(m.metric, m.labels): m for m in object_metrics}
         for m in object_metrics:
-            self.metric_configs[m.metric] += [m]
+            self.metric_configs[m.metric].append(m)
         # Process metrics collection
         persistent = set()
         for m in object_metrics:
@@ -561,7 +561,7 @@ class Script(BaseScript, metaclass=MetricScriptBase):
         """
         for m in self.metric_configs[metric]:
             for oid, vtype, scale, units, labels in rule.iter_oids(self, m):
-                self.snmp_batch[oid] += [
+                self.snmp_batch[oid].append(
                     BatchConfig(
                         id=m.id,
                         metric=m.metric,
@@ -571,7 +571,7 @@ class Script(BaseScript, metaclass=MetricScriptBase):
                         units=units,
                         service=m.service,
                     )
-                ]
+                )
                 # Mark as seen to stop further processing
                 self.seen_ids.add(m.id)
 
@@ -616,7 +616,7 @@ class Script(BaseScript, metaclass=MetricScriptBase):
                             vv = results[o]
                             if vv is None:
                                 break
-                            v += [vv]
+                            v.append(vv)
                         else:
                             self.logger.error("Failed to get SNMP OID %s", o)
                             break
@@ -728,7 +728,7 @@ class Script(BaseScript, metaclass=MetricScriptBase):
             if not multi and id in self.seen_ids:
                 return  # Already seen
         self.script_metrics["n_measurements"] += 1
-        self.metrics += [
+        self.metrics.append(
             {
                 "id": id,
                 "ts": ts or self.get_ts(),
@@ -743,7 +743,7 @@ class Script(BaseScript, metaclass=MetricScriptBase):
                 "cpe": cpe,
                 "service": service,
             }
-        ]
+        )
         self.seen_ids.add(id)
 
     def get_metrics(self):

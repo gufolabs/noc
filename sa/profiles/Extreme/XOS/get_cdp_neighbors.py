@@ -41,7 +41,7 @@ class Script(BaseScript):
 
         neighbors = []
         for match in self.rx_entry.finditer(self.cli("show cdp ports")):
-            neighbors += [match.groupdict()]
+            neighbors.append(match.groupdict())
             neighbors[-1]["remote_interface"] = self.normalize_port(
                 neighbors[-1]["remote_interface"]
             )

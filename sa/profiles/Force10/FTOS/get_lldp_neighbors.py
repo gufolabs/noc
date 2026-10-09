@@ -93,6 +93,6 @@ class Script(BaseScript):
                             "station": 128,
                         }[c.lower()]
                 n["remote_capabilities"] = caps
-                sr["neighbors"] += [n]
-            r += [sr]
+                sr["neighbors"].append(n)
+            r.append(sr)
         return r

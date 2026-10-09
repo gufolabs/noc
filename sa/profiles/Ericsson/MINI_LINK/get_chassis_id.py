@@ -28,7 +28,7 @@ class Script(BaseScript):
                 continue
             match1 = self.re_search(self.rx_mac_begin, c)
             match2 = self.re_search(self.rx_mac_end, c)
-            r += [
+            r.append(
                 {"first_chassis_mac": match1.group("mac"), "last_chassis_mac": match2.group("mac")}
-            ]
+            )
         return r

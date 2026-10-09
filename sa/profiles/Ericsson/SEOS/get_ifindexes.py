@@ -44,7 +44,7 @@ class Script(BaseScript):
                 v = self.profile.convert_interface_name(name.strip())
             except InterfaceTypeError as e:
                 self.logger.debug("Ignoring unknown interface %s: %s", name, e)
-                unknown_interfaces += [name]
+                unknown_interfaces.append(name)
                 continue
             r[v] = index
         if unknown_interfaces:

@@ -40,7 +40,7 @@ class Script(BaseScript):
                 pc = self.profile.convert_interface_name(pc)
                 name = self.profile.convert_interface_name(name)
                 try:
-                    port_channel_members[pc] += [name]
+                    port_channel_members[pc].append(name)
                 except KeyError:
                     port_channel_members[pc] = [name]
                 continue
@@ -81,5 +81,5 @@ class Script(BaseScript):
                     p["tagged"] += ll.strip()
             # Expand tagged
             p["tagged"] = self.expand_rangelist(p["tagged"])
-            r += [p]
+            r.append(p)
         return r

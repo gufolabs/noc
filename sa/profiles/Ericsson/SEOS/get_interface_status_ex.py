@@ -36,7 +36,7 @@ class Script(BaseScript):
                     v = self.profile.convert_interface_name(f"{name}/{descr}")
                 except InterfaceTypeError as e:
                     self.logger.debug("Ignoring unknown interface %s: %s", f"{name}/{descr}", e)
-                    unknown_interfaces += [name]
+                    unknown_interfaces.append(name)
                     continue
                 if "." in v:
                     radio[ifindex] = {"interface": v}

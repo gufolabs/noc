@@ -107,7 +107,7 @@ class Script(BaseScript):
             if ifname in portchannel_members:
                 iface["aggregated_interface"] = portchannel_members[ifname][0]
                 if portchannel_members[ifname][1]:
-                    iface["enabled_protocols"] += ["LACP"]
+                    iface["enabled_protocols"].append("LACP")
             # Process subinterfaces
             subinterfaces = []
             if "aggregated_interface" not in iface:
@@ -124,7 +124,7 @@ class Script(BaseScript):
                 # IPv4 addresses
                 match = self.rx_int_ipv4.search(s)
                 if match:
-                    sub["enabled_afi"] += ["IPv4"]
+                    sub["enabled_afi"].append("IPv4")
                     sub["ipv4_addresses"] = [match.group("address")]
                 # ifIndex
                 match = self.rx_int_ifindex.search(s)
@@ -135,17 +135,17 @@ class Script(BaseScript):
                     sub["vlan_ids"] = [int(ifname[3:].strip())]
                 # Set switchports
                 if ifname in switchports:
-                    sub["enabled_afi"] += ["BRIDGE"]
+                    sub["enabled_afi"].append("BRIDGE")
                     u, t = switchports[ifname]
                     if u:
                         sub["untagged_vlan"] = u
                     if t:
                         sub["tagged_vlans"] = t
                 if sub["enabled_afi"]:
-                    subinterfaces += [sub]
+                    subinterfaces.append(sub)
             # Append to interfaces
             iface["subinterfaces"] = subinterfaces
             if subinterfaces or "aggregated_interface" in iface:
-                interfaces += [iface]
+                interfaces.append(iface)
         # Get interfaces
         return [{"interfaces": interfaces}]

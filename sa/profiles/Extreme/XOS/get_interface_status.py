@@ -47,7 +47,7 @@ class Script(BaseScript):
                     macaddr = ""
                     if m:
                         macaddr = MACAddressParameter().clean(m)
-                    r += [
+                    r.append(
                         {
                             "snmp_ifindex": i,
                             "interface": n,
@@ -55,7 +55,7 @@ class Script(BaseScript):
                             "description": d,
                             "mac": macaddr,
                         }
-                    ]  # ifOperStatus up(1)
+                    )  # ifOperStatus up(1)
                 return r
             except self.snmp.TimeOutError:
                 pass
@@ -66,13 +66,13 @@ class Script(BaseScript):
                 port = match.group("port")
                 c = self.cli(f"show ports {port} information\n\x1b")
                 match1 = self.rx_port_status.search(c)
-                r += [
+                r.append(
                     {
                         "interface": port,
                         "status": match1.group("state") == "active",
                         "description": match.group("descr").strip(),
                     }
-                ]
+                )
             return r
 
     # Generator returning a rows of 4 snmp tables joined by index

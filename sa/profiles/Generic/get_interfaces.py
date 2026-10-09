@@ -122,7 +122,7 @@ class Script(BaseScript):
                     continue
                 if vlan_num == result[pid_ifindex_mappings[port]]["untagged_vlan"]:
                     continue
-                result[pid_ifindex_mappings[port]]["tagged_vlans"] += [vlan_num]
+                result[pid_ifindex_mappings[port]]["tagged_vlans"].append(vlan_num)
         return result
 
     def get_portchannels(self) -> dict[int, int]:
@@ -270,30 +270,30 @@ class Script(BaseScript):
                 #     ifaces[iface["ifindex"]]["mac"] = iface["mac"]
         # Fill interface info
         iter_tables = []
-        iter_tables += [
+        iter_tables.append(
             self.iter_iftable(
                 "admin_status",
                 self.SNMP_ADMIN_STATUS_TABLE,
                 ifindexes=ifaces,
                 clean=self.clean_status,
             )
-        ]
-        iter_tables += [
+        )
+        iter_tables.append(
             self.iter_iftable("mac", self.SNMP_MAC_TABLE, ifindexes=ifaces, clean=self.clean_mac)
-        ]
-        iter_tables += [
+        )
+        iter_tables.append(
             self.iter_iftable(
                 "description",
                 self.SNMP_IF_DESCR_TABLE,
                 ifindexes=chain(ifaces, subifaces),
                 clean=self.clean_ifdescription,
             )
-        ]
-        iter_tables += [
+        )
+        iter_tables.append(
             self.iter_iftable(
                 "mtu", "IF-MIB::ifMtu", ifindexes=chain(ifaces, subifaces), clean=self.clean_mtu
             )
-        ]
+        )
         # Collect and merge results
         data = self.merge_tables(*tuple(iter_tables))
         if not ifaces:
@@ -309,13 +309,13 @@ class Script(BaseScript):
                 self.logger.error("Unknown type for interface %s", iface["name"])
                 continue
             if ifindex in ips:
-                iface["subinterfaces"] += [
+                iface["subinterfaces"].append(
                     {
                         "name": iface["name"],
                         "enabled_afi": ["IPv4"],
                         "ipv4_addresses": [str(i) for i in ips[ifindex]],
                     }
-                ]
+                )
                 vlan_iface_match = self.rx_vlan_interface.match(iface["name"])
                 if vlan_iface_match and is_vlan(vlan_iface_match.group("vlan_num")):
                     iface["subinterfaces"][-1]["vlan_ids"] = [
@@ -327,7 +327,7 @@ class Script(BaseScript):
                     "enabled_afi": ["BRIDGE"],
                 }
                 sub.update(switchports[ifindex])
-                iface["subinterfaces"] += [sub]
+                iface["subinterfaces"].append(sub)
             if ifindex in portchannels:
                 iface["aggregated_interface"] = ifaces[portchannels[ifindex]]["name"]
                 iface["enabled_protocols"] = ["LACP"]
@@ -354,7 +354,7 @@ class Script(BaseScript):
                 vlan_ids = int(sub["name"].rsplit(".", 1)[-1])
                 if is_vlan(vlan_ids):
                     sub["vlan_ids"] = vlan_ids
-            interfaces[ifname]["subinterfaces"] += [sub]
+            interfaces[ifname]["subinterfaces"].append(sub)
         # VRF and forwarding_instance proccessed
         vrfs, vrf_if_map = self.get_mpls_vpn_mappings()
         for i in interfaces.keys():
@@ -363,21 +363,21 @@ class Script(BaseScript):
             interfaces[i]["subinterfaces"] = []
             if i in vrf_if_map:
                 iface_vrf = vrf_if_map[i]
-                vrfs[vrf_if_map[i]]["interfaces"] += [interfaces[i]]
+                vrfs[vrf_if_map[i]]["interfaces"].append(interfaces[i])
             else:
-                vrfs["default"]["interfaces"] += [interfaces[i]]
+                vrfs["default"]["interfaces"].append(interfaces[i])
             for s in subs:
                 if s["name"] in vrf_if_map and vrf_if_map[s["name"]] != iface_vrf:
-                    vrfs[vrf_if_map[s["name"]]]["interfaces"] += [
+                    vrfs[vrf_if_map[s["name"]]]["interfaces"].append(
                         {
                             "name": s["name"],
                             "type": "other",
                             "enabled_protocols": [],
                             "subinterfaces": [s],
                         }
-                    ]
+                    )
                 else:
-                    interfaces[i]["subinterfaces"] += [s]
+                    interfaces[i]["subinterfaces"].append(s)
         return list(vrfs.values())
 
     def merge_tables(self, *args: Iterable | None) -> dict[int, dict[str, int | bool | str]]:

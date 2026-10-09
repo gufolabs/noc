@@ -36,7 +36,7 @@ class Script(BaseScript):
             raise self.NotSupportedError("Not supported on")
         for l in v.splitlines():
             if "backplane" in l:
-                objects += [
+                objects.append(
                     {
                         "builtin": False,
                         "description": "Chassis backplane",
@@ -46,9 +46,9 @@ class Script(BaseScript):
                         "vendor": "Ericsson",
                         "type": "CHASSIS",
                     }
-                ]
+                )
             elif "fan tray" in l:
-                objects += [
+                objects.append(
                     {
                         "builtin": False,
                         "description": "Fan Tray",
@@ -58,9 +58,9 @@ class Script(BaseScript):
                         "vendor": "Ericsson",
                         "type": "FAN",
                     }
-                ]
+                )
             elif "alarm card" in l:
-                objects += [
+                objects.append(
                     {
                         "builtin": False,
                         "description": "Alarm Card",
@@ -70,9 +70,9 @@ class Script(BaseScript):
                         "vendor": "Ericsson",
                         "type": "ALRM",
                     }
-                ]
+                )
             elif "-port" in l:
-                objects += [
+                objects.append(
                     {
                         "builtin": False,
                         "description": l.split()[1].strip(),
@@ -82,10 +82,10 @@ class Script(BaseScript):
                         "vendor": "Ericsson",
                         "type": "CARD",
                     }
-                ]
+                )
                 for match in self.rx_trans.findall(media):
                     if l.split()[0].strip() == match[0].split("/")[0]:
-                        objects += [
+                        objects.append(
                             {
                                 "builtin": False,
                                 "description": match[1].strip() + " " + match[4].strip(),
@@ -95,9 +95,9 @@ class Script(BaseScript):
                                 "vendor": "NoName",
                                 "type": "XCVR",
                             }
-                        ]
+                        )
             elif "xcrp" in l:
-                objects += [
+                objects.append(
                     {
                         "builtin": False,
                         "description": l.split()[1].strip(),
@@ -107,5 +107,5 @@ class Script(BaseScript):
                         "vendor": "Ericsson",
                         "type": "MGMT",
                     }
-                ]
+                )
         return objects
