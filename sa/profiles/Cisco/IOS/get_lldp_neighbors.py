@@ -61,7 +61,7 @@ class Script(BaseScript):
             if not match:
                 continue
             if match.group("local_if") not in lldp_interfaces:
-                lldp_interfaces += [match.group("local_if")]
+                lldp_interfaces.append(match.group("local_if"))
         # Get LLDP neighbors
         for local_if in lldp_interfaces:
             i = {"local_interface": local_if, "neighbors": []}
@@ -133,10 +133,10 @@ class Script(BaseScript):
                 item_found = False
                 for item in r:
                     if item["local_interface"] == local_if:
-                        item["neighbors"] += [n]
+                        item["neighbors"].append(n)
                         item_found = True
                         break
                 if not item_found:
-                    i["neighbors"] += [n]
-                    r += [i]
+                    i["neighbors"].append(n)
+                    r.append(i)
         return r

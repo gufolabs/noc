@@ -41,7 +41,7 @@ class Script(BaseScript):
         vlans = self.cli("show running-config | include cable dot1q-vc-map")
         r = []
         for match in self.rx_vlan_ubr.finditer(vlans):
-            r += [{"vlan_id": int(match.group("vlan_id")), "name": match.group("name")}]
+            r.append({"vlan_id": int(match.group("vlan_id")), "name": match.group("name")})
         return r
 
     rx_vlan_dot1q = re.compile(
@@ -65,7 +65,7 @@ class Script(BaseScript):
             r = []
             for match in self.rx_vlan_dot1q.finditer(vlans):
                 vlan_id = int(match.group("vlan_id"))
-                r += [{"vlan_id": vlan_id}]
+                r.append({"vlan_id": vlan_id})
             return r
         vlans, _ = vlans.split("\nVLAN Type", 1)
         return self.extract_vlans(vlans)
@@ -81,7 +81,7 @@ class Script(BaseScript):
             raise self.NotSupportedError()
         for match in self.rx_5350_vlans.finditer(vlans):
             vlan_id = int(match.group("vlan_id"))
-            r += [{"vlan_id": vlan_id}]
+            r.append({"vlan_id": vlan_id})
         return r
 
     #
@@ -112,5 +112,5 @@ class Script(BaseScript):
         ):
             # print port_num, ifindex, port_type, pvid
             _domain_id, vlan_id = vlan_index.split(".")
-            r += [{"vlan_id": vlan_id, "name": vlan_name}]
+            r.append({"vlan_id": vlan_id, "name": vlan_name})
         return r

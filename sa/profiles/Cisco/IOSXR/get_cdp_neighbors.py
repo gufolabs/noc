@@ -32,5 +32,5 @@ class Script(BaseScript):
                     neighbor["local_interface"] = l.split(":", 1)[-1].strip()
                 elif sl.startswith("port id"):
                     neighbor["remote_interface"] = l.split(":", 1)[-1].strip()
-            r += [neighbor]
+            r.append(neighbor)
         return {"device_id": device_id, "neighbors": r}

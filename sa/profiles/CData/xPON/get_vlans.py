@@ -26,5 +26,5 @@ class Script(BaseScript):
         with self.configure():
             v = self.cli("show vlan all")
             for match in self.rx_vlan.finditer(v):
-                r += [match.groupdict()]
+                r.append(match.groupdict())
         return r

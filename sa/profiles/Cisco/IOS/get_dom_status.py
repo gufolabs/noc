@@ -50,7 +50,7 @@ class Script(BaseScript):
             optical_tx_dbm = match.group("optical_tx_dbm")
             if optical_tx_dbm == "N/A":
                 optical_tx_dbm = None
-            r += [
+            r.append(
                 {
                     "interface": match.group("interface"),
                     "temp_c": temp_c,
@@ -59,5 +59,5 @@ class Script(BaseScript):
                     "optical_rx_dbm": optical_rx_dbm,
                     "optical_tx_dbm": optical_tx_dbm,
                 }
-            ]
+            )
         return r

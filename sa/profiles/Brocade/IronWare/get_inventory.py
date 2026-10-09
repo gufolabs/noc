@@ -82,7 +82,7 @@ class Script(BaseScript):
         media = self.cli("show media")
         match = self.rx_hw.search(v)
         if match:
-            objects += [
+            objects.append(
                 {
                     "builtin": False,
                     "description": "Chassis",
@@ -92,7 +92,7 @@ class Script(BaseScript):
                     "vendor": "BROCADE",
                     "type": "CHASSIS",
                 }
-            ]
+            )
         if "Turbo" in match.group("platform"):
             match1 = self.rx_item_ti.search(v)
             objects[0].update({"serial": match1.group("serial")})
@@ -138,7 +138,7 @@ class Script(BaseScript):
                 if nodata:
                     partno = self.TRANS_MAP[trans]
                 if serial:
-                    objects += [
+                    objects.append(
                         {
                             "builtin": False,
                             "description": trans,
@@ -148,7 +148,7 @@ class Script(BaseScript):
                             "type": "XCVR",
                             "vendor": "NONAME",
                         }
-                    ]
+                    )
         elif "SX" in match.group("platform"):
             chserial = self.rx_chserial.search(v)
             objects[0].update({"serial": chserial.group("serial")})
@@ -158,7 +158,7 @@ class Script(BaseScript):
                 descr = line[1]
                 partno = line[2]
                 serial = line[3]
-                objects += [
+                objects.append(
                     {
                         "builtin": False,
                         "description": descr,
@@ -168,13 +168,13 @@ class Script(BaseScript):
                         "type": "PWR",
                         "vendor": "BROCADE",
                     }
-                ]
+                )
             for match1 in self.rx_item_ch.findall(v):
                 if "Mana" in match1[2]:
                     slot_type = "MGMT"
                 else:
                     slot_type = "CARD"
-                objects += [
+                objects.append(
                     {
                         "builtin": False,
                         "description": match1[2],
@@ -184,7 +184,7 @@ class Script(BaseScript):
                         "type": slot_type,
                         "vendor": "BROCADE",
                     }
-                ]
+                )
                 media = self.cli(f"show media slot {match1[0]}")
                 self.logger.debug(media)
                 for match2 in media.splitlines():
@@ -215,7 +215,7 @@ class Script(BaseScript):
                         if not partno:
                             partno = self.TRANS_MAP[trans]
                         if serial:
-                            objects += [
+                            objects.append(
                                 {
                                     "builtin": False,
                                     "description": trans,
@@ -225,7 +225,7 @@ class Script(BaseScript):
                                     "type": "XCVR",
                                     "vendor": "NONAME",
                                 }
-                            ]
+                            )
         elif "RX" in match.group("platform"):
             match = self.rx_chassis_rx.findall(v)[0]
             descr = match[0]
@@ -243,7 +243,7 @@ class Script(BaseScript):
                             partno = ln[2][1:]
                             descr = " ".join([ln[4], ln[5][:-2]])
                             serial = "None"
-                            objects += [
+                            objects.append(
                                 {
                                     "builtin": False,
                                     "description": descr,
@@ -253,14 +253,14 @@ class Script(BaseScript):
                                     "type": "PWR",
                                     "vendor": "BROCADE",
                                 }
-                            ]
+                            )
             for line in v.splitlines():
                 if "Fabric" in line:
                     partno = line.split(":")[2][:-1].strip()
                     descr = "RX-BI-SFM3 Switch Fabric Module"
                     n = line.split()[4]
                     serial = line.split(":")[1].split(",")[0].strip()
-                    objects += [
+                    objects.append(
                         {
                             "builtin": False,
                             "description": descr,
@@ -270,7 +270,7 @@ class Script(BaseScript):
                             "type": "SFM",
                             "vendor": "BROCADE",
                         }
-                    ]
+                    )
             for match1 in self.rx_item_rx.findall(v):
                 if "Mana" in match1[2]:
                     slot_type = "MGMT"
@@ -278,7 +278,7 @@ class Script(BaseScript):
                 else:
                     slot_type = "CARD"
                     num = match1[0]
-                objects += [
+                objects.append(
                     {
                         "builtin": False,
                         "description": match1[1],
@@ -288,7 +288,7 @@ class Script(BaseScript):
                         "type": slot_type,
                         "vendor": "BROCADE",
                     }
-                ]
+                )
                 for trans in self.rx_media_rx.findall(media):
                     if trans[0].split("/")[0] == num and slot_type == "CARD":
                         ntr = trans[0].split("/")[1]
@@ -296,7 +296,7 @@ class Script(BaseScript):
                         partno = trans[2].strip()
                         serial = trans[3].strip()
                         if descr != "N/A":
-                            objects += [
+                            objects.append(
                                 {
                                     "builtin": False,
                                     "description": descr,
@@ -306,13 +306,13 @@ class Script(BaseScript):
                                     "type": "XCVR",
                                     "vendor": "NONAME",
                                 }
-                            ]
+                            )
         else:
             # Old FastIron/BigIron chassis/objects
             serial = self.cli("show chassis", cached=True).splitlines()[-1].split(":")[1].strip()
             objects[0].update({"serial": serial})
             for match1 in self.rx_item_ch.findall(v):
-                objects += [
+                objects.append(
                     {
                         "builtin": False,
                         "description": match1[2].split(",")[0],
@@ -322,10 +322,10 @@ class Script(BaseScript):
                         "type": "MLC",
                         "vendor": "BROCADE",
                     }
-                ]
+                )
                 for match2 in self.rx_media_old.findall(media):
                     if match2[0].split("/")[0] == match1[0]:
-                        objects += [
+                        objects.append(
                             {
                                 "builtin": False,
                                 "description": match2[1],
@@ -336,5 +336,5 @@ class Script(BaseScript):
                                 "type": "XCVR",
                                 "vendor": "NONAME",
                             }
-                        ]
+                        )
         return objects

@@ -137,7 +137,7 @@ class Script(BaseScript):
                         vendor = "NONAME"
                     else:
                         vendor = "CISCO"
-                objects += [
+                objects.append(
                     {
                         "type": type,
                         "number": number,
@@ -148,7 +148,7 @@ class Script(BaseScript):
                         "revision": match.group("vid"),
                         "builtin": False,
                     }
-                ]
+                )
 
                 # if gbic slots in module
                 if part_no in self.GBIC_MODULES or "GBIC ETHERNET" in match.group("descr").upper():
@@ -195,7 +195,7 @@ class Script(BaseScript):
                 if not pid:
                     self.logger.debug("PID on Transiever: :%s is not set. Skipping...", s)
                     continue
-                objects += [
+                objects.append(
                     {
                         "type": "XCVR",
                         "number": t_num,
@@ -206,7 +206,7 @@ class Script(BaseScript):
                         "revision": t_rev,
                         "builtin": False,
                     }
-                ]
+                )
             return objects
         except self.CLISyntaxError:
             pass

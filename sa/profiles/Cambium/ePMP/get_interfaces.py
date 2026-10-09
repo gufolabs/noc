@@ -55,10 +55,10 @@ class Script(BaseScript):
             if match.group("inet_ip"):
                 s["ipv4_addresses"] = [IPv4(match.group("inet_ip"))]
                 s["enabled_afi"] = ["IPv4"]
-            subs[iface_name] += [s.copy()]
+            subs[iface_name].append(s.copy())
 
             # sub = {"subinterfaces": [i.copy()]}
-            r += [
+            r.append(
                 {
                     "name": iface_name,
                     "admin_status": "LOWER_UP" in match.group("status"),
@@ -67,7 +67,7 @@ class Script(BaseScript):
                     "mac": match.group("mac"),
                     "enabled_protocols": [],
                 }
-            ]
+            )
 
         for l in r:
             if l["name"] in subs:

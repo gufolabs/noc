@@ -47,6 +47,6 @@ class Script(BaseScript):
                 if ifname == "ACP":
                     iface["type"] = "L"
                     continue
-                iface["members"] += [self.extract_iface(ifname)]
-            r += [iface]
+                iface["members"].append(self.extract_iface(ifname))
+            r.append(iface)
         return r

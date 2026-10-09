@@ -80,7 +80,7 @@ class Script(BaseScript):
             if not ss:
                 continue
             match = self.re_search(matcher, ss)
-            r += [
+            r.append(
                 {
                     "remote_address": match.group("remote_address"),
                     "local_interface": match.group("local_interface"),
@@ -96,5 +96,5 @@ class Script(BaseScript):
                     "multiplier": int(match.group("mult")),
                     "detect_time": int(match.group("holdown")) * 1000,
                 }
-            ]
+            )
         return r

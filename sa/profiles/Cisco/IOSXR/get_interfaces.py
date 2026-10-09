@@ -103,7 +103,7 @@ class Script(BaseScript):
                 match = self.rx_bundle_member.match(line)
                 if match:
                     m = match.group("name")
-                    ifaces[current]["members"] += [m]
+                    ifaces[current]["members"].append(m)
                     if "." in current:
                         ae_map[m] = current.split(".", 1)[0]
                     else:
@@ -126,7 +126,7 @@ class Script(BaseScript):
             p_ifaces = {x: [] for x in {i.split(".", 1)[0] for i in fi["interfaces"]}}
             for i in fi["interfaces"]:
                 p = i.split(".", 1)[0]
-                p_ifaces[p] += [i]
+                p_ifaces[p].append(i)
             # Create interfaces
             for iface in p_ifaces:
                 if iface not in ifaces:
@@ -174,14 +174,14 @@ class Script(BaseScript):
                             ipv4_addresses = [a for a in ii["addresses"] if ":" not in a]
                             ipv6_addresses = [a for a in ii["addresses"] if ":" in a]
                             if ipv4_addresses:
-                                sp["enabled_afi"] += ["IPv4"]
+                                sp["enabled_afi"].append("IPv4")
                                 sp["ipv4_addresses"] = ipv4_addresses
                             if ipv6_addresses:
-                                sp["enabled_afi"] += ["IPv6"]
+                                sp["enabled_afi"].append("IPv6")
                                 sp["ipv6_addresses"] = ipv6_addresses
-                        p["subinterfaces"] += [sp]
-                rr["interfaces"] += [p]
-            r += [rr]
+                        p["subinterfaces"].append(sp)
+                rr["interfaces"].append(p)
+            r.append(rr)
         # Return result
         return r
 

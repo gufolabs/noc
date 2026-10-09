@@ -42,11 +42,11 @@ class Script(BaseScript):
             interface["Ports"] = row[len(headline) - 1 :]
             members = []
             for m in interface["Ports"]:
-                members += [m.split("(")[0]]
+                members.append(m.split("(")[0])
             if nextinterface:
                 """If Interfaces located in one row it insert add row"""
                 for m in row:
-                    members += [m]
+                    members.append(m)
                 nextinterface = False
                 continue
 
@@ -55,11 +55,11 @@ class Script(BaseScript):
                 consist only Interfaces"""
                 nextinterface = True
 
-            r += [
+            r.append(
                 {
                     "interface": f"Po {interface['Group']}",
                     "members": members,
                     "type": "L",  # <!> TODO: port-channel type detection
                 }
-            ]
+            )
         return r

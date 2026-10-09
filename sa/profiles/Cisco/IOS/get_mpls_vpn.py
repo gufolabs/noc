@@ -70,7 +70,7 @@ class Script(BaseScript):
             match = self.rx_vfi.match(vfi)
             if not match:
                 continue
-            r += [
+            r.append(
                 {
                     "type": "VPLS",
                     "status": match.group("state") == "up",
@@ -85,7 +85,7 @@ class Script(BaseScript):
                         else []
                     ),
                 }
-            ]
+            )
         # VPWS
         try:
             v = self.cli("show xconnect all")
@@ -100,7 +100,7 @@ class Script(BaseScript):
                 continue
             _remote_address, vc_id = match.group("segment2").split(":")
             iface = match.group("segment1").split(":")[0]
-            r += [
+            r.append(
                 {
                     "type": "VLL",
                     "status": match.group("xc_state") == "up",
@@ -108,7 +108,7 @@ class Script(BaseScript):
                     "vpn_id": vc_id,
                     "interfaces": [self.profile.convert_interface_name(iface)],
                 }
-            ]
+            )
         return r
 
     def execute_cli(self, **kwargs):
@@ -128,7 +128,7 @@ class Script(BaseScript):
             # VRF VPN_VRF1; default RD 65501:4579033191; default VPNID <not set>
             if self.rx_vrf.match(line):
                 if vrf and rd:
-                    vpns += [
+                    vpns.append(
                         {
                             "type": "VRF",
                             "vpn_id": "",
@@ -136,7 +136,7 @@ class Script(BaseScript):
                             "name": vrf.strip(),
                             "interfaces": [],
                         }
-                    ]
+                    )
                     if rd and rd.strip() != "<not set>":
                         vpns[-1]["rd"] = rd.strip()
                     if vrf_block["interfaces:"]:
@@ -146,7 +146,7 @@ class Script(BaseScript):
                                 members = self._get_portchannel_members(iface)
                                 vpns[-1]["interfaces"] += members
                             else:
-                                vpns[-1]["interfaces"] += [iface]
+                                vpns[-1]["interfaces"].append(iface)
                     if vrf_block["export vpn route-target communities"]:
                         vpns[-1]["rt_export"] = [
                             ":".join(lll.split(":")[1:])
@@ -180,7 +180,7 @@ class Script(BaseScript):
                 tab = 100
                 block = None
         if vrf:
-            vpns += [
+            vpns.append(
                 {
                     "type": "VRF",
                     "vpn_id": "",
@@ -188,7 +188,7 @@ class Script(BaseScript):
                     "name": vrf.strip(),
                     "interfaces": [],
                 }
-            ]
+            )
             if rd and rd.strip() != "<not set>":
                 vpns[-1]["rd"] = rd.strip()
             if vrf_block["interfaces:"]:
@@ -198,7 +198,7 @@ class Script(BaseScript):
                         members = self._get_portchannel_members(iface)
                         vpns[-1]["interfaces"] += members
                     else:
-                        vpns[-1]["interfaces"] += [iface]
+                        vpns[-1]["interfaces"].append(iface)
             if vrf_block["export vpn route-target communities"]:
                 vpns[-1]["rt_export"] = [
                     ":".join(lll.split(":")[1:])
@@ -238,7 +238,7 @@ class Script(BaseScript):
                 rd = match.group("rd")
                 if ":" in rd:
                     vpn["rd"] = rd
-                vpns += [vpn]
+                vpns.append(vpn)
             elif vpns:
                 match = self.rx_cont.match(line)
                 if match:
@@ -277,7 +277,7 @@ class Script(BaseScript):
             ]
         ):
             vrf_index, ifindex = vrfifindex.split(".")
-            r[int(vrf_index)]["interfaces"] += [names[int(ifindex)]]
+            r[int(vrf_index)]["interfaces"].append(names[int(ifindex)])
         return list(r.values())
 
     def execute_snmp_mpls_mib(self):
@@ -309,7 +309,7 @@ class Script(BaseScript):
             [mib["MPLS-VPN-MIB::mplsVpnInterfaceConfRowStatus"]]
         ):
             conf_id, ifindex = conf_id.rsplit(".", 1)
-            r[conf_id]["interfaces"] += [names[int(ifindex)]]
+            r[conf_id]["interfaces"].append(names[int(ifindex)])
         for conf_id, vrf_rt, vrf_rt_decr in self.snmp.get_tables(
             [
                 mib["MPLS-VPN-MIB::mplsVpnVrfRouteTarget"],
@@ -319,9 +319,9 @@ class Script(BaseScript):
             # rt_type: import(1), export(2), both(3)
             conf_id, _rt_index, rt_type = conf_id.rsplit(".", 2)
             if rt_type in {"2", "3"}:
-                r[conf_id]["rt_export"] += [vrf_rt]
+                r[conf_id]["rt_export"].append(vrf_rt)
             if rt_type in {"1", "3"}:
-                r[conf_id]["rt_import"] += [vrf_rt]
+                r[conf_id]["rt_import"].append(vrf_rt)
         return list(r.values())
 
     def execute_snmp(self, **kwargs):

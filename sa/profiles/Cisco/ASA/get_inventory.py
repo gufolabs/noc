@@ -37,7 +37,7 @@ class Script(BaseScript):
             if not part_no:
                 continue
             vendor = "CISCO" if "NoName" not in part_no else "NONAME"
-            objects += [
+            objects.append(
                 {
                     "type": type,
                     "number": number,
@@ -48,7 +48,7 @@ class Script(BaseScript):
                     "revision": match.group("vid"),
                     "builtin": False,
                 }
-            ]
+            )
         return objects
 
     def get_type(self, name, pid, descr, lo):

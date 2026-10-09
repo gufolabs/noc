@@ -40,5 +40,5 @@ class Script(BaseScript):
             if macs and MAC(f).shift(-1) == macs[-1][1]:
                 macs[-1][1] = t
             else:
-                macs += [[f, t]]
+                macs.append([f, t])
         return [{"first_chassis_mac": f, "last_chassis_mac": t} for f, t in macs]

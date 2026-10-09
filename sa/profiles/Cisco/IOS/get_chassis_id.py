@@ -87,7 +87,7 @@ class Script(BaseScript):
             if macs and MAC(f).shift(-1) == macs[-1][1]:
                 macs[-1][1] = t
             else:
-                macs += [[f, t]]
+                macs.append([f, t])
         return [{"first_chassis_mac": f, "last_chassis_mac": t} for f, t in macs]
 
     rx_c3900 = re.compile(
@@ -110,7 +110,7 @@ class Script(BaseScript):
             if macs and MAC(f).shift(-1) == macs[-1][1]:
                 macs[-1][1] = t
             else:
-                macs += [[f, t]]
+                macs.append([f, t])
         return [{"first_chassis_mac": f, "last_chassis_mac": t} for f, t in macs]
 
     rx_7200 = re.compile(r"MAC Pool Size\s+(?P<count>\d+)\s+MAC Addr Base\s+(?P<mac>\S+)")
@@ -128,7 +128,7 @@ class Script(BaseScript):
             if macs and MAC(f).shift(-1) == macs[-1][1]:
                 macs[-1][1] = t
             else:
-                macs += [[f, t]]
+                macs.append([f, t])
         return [{"first_chassis_mac": f, "last_chassis_mac": t} for f, t in macs]
 
     def execute_cli(self):
