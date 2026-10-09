@@ -57,7 +57,7 @@ class PathCard(BaseCard):
             if not mo.x or not mo.y:
                 continue
             if not path or mo.x != path[-1]["x"] or mo.y != path[-1]["y"]:
-                path += [{"x": mo.x, "y": mo.y, "objects": [{"id": mo.id, "name": mo.name}]}]
+                path.append({"x": mo.x, "y": mo.y, "objects": [{"id": mo.id, "name": mo.name}]})
             else:
-                path[-1]["objects"] += [{"id": mo.id, "name": mo.name}]
+                path[-1]["objects"].append({"id": mo.id, "name": mo.name})
         return {"mo1": mo1, "mo2": mo2, "path": orjson.dumps(path).decode()}

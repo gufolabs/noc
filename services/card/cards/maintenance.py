@@ -59,7 +59,7 @@ class MaintenanceCard(BaseCard):
                 "platform": mo.platform.name if mo.platform else "",
                 "summary": ss,
             }
-            affected += [ao]
+            affected.append(ao)
         return {
             "title": jinja2.Template(stpl).render({"object": self.object}),
             "object": self.object,

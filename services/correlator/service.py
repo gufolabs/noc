@@ -195,7 +195,7 @@ class CorrelatorService(FastAPIService):
             for dr in cfg.dispositions:
                 if not dr.event_classes:
                     rule = EventAlarmRule.from_config(dr, ac)
-                    ac_rules[ac.id] += [rule]
+                    ac_rules[ac.id].append(rule)
                     n_aor += 1
                     if rule.reference_lookup:
                         self.reference_lookup_rules.append(rule)
@@ -205,7 +205,7 @@ class CorrelatorService(FastAPIService):
                     d_rules[ec.id].append(rule)
                     n_rule += 1
                     if dr.object_avail_condition is not None:
-                        oa_rules[dr.object_avail_condition] += [rule]
+                        oa_rules[dr.object_avail_condition].append(rule)
                         n_oar += 1
                     if not dr.combo_condition:
                         # Skip
@@ -219,10 +219,10 @@ class CorrelatorService(FastAPIService):
             rca_forward[ac.id] = []
             for c in ac.root_cause:
                 rc = RCACondition(ac, c)
-                rca_forward[ac.id] += [rc]
+                rca_forward[ac.id].append(rc)
                 if rc.root.id not in rca_reverse:
                     rca_reverse[rc.root.id] = []
-                rca_reverse[rc.root.id] += [rc]
+                rca_reverse[rc.root.id].append(rc)
                 rca_count += 1
         # Disposition rules remain embedded in EventClass.
         for ec in EventClass.objects.filter():
@@ -263,7 +263,7 @@ class CorrelatorService(FastAPIService):
             for c_name, c_id in ec:
                 if re.search(t.alarm_class_re, c_name, re.IGNORECASE):
                     try:
-                        self.triggers[c_id] += [Trigger(t)]
+                        self.triggers[c_id].append(Trigger(t))
                     except KeyError:
                         self.triggers[c_id] = [Trigger(t)]
                     cn += 1
@@ -292,7 +292,7 @@ class CorrelatorService(FastAPIService):
         now = datetime.datetime.now()
         r = [f"UNHANDLED EXCEPTION ({now!s})"]
         r += [str(t), str(v)]
-        r += [format_frames(get_traceback_frames(tb))]
+        r.append(format_frames(get_traceback_frames(tb)))
         r = "\n".join(r)
         event.mark_as_failed(version=version.version, traceback=r)
 

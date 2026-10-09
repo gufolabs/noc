@@ -53,7 +53,7 @@ class TTCard(BaseCard):
                 duration = a.clear_timestamp - a.timestamp
             else:
                 duration = now - a.timestamp
-            r["alarms"] += [
+            r["alarms"].append(
                 {
                     "alarm": a,
                     "id": a.id,
@@ -65,7 +65,7 @@ class TTCard(BaseCard):
                         "service": SummaryItem.items_to_dict(a.total_services),
                     },
                 }
-            ]
+            )
         return r
 
     def redirect_to_alarm(self, tt_id):

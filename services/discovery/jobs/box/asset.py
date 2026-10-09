@@ -175,7 +175,7 @@ class AssetCheck(DiscoveryCheck):
         if is_unknown_xcvr:
             self.logger.info("%s S/N %s should be resolved later", part_no[0], serial)
             self.prepare_context(o_type, number)
-            self.objects += [("XCVR", part_no[0], self.ctx.copy(), serial, data, constant_data)]
+            self.objects.append(("XCVR", part_no[0], self.ctx.copy(), serial, data, constant_data))
             return
         # Cache description
         if description:
@@ -208,9 +208,9 @@ class AssetCheck(DiscoveryCheck):
                         )
 
                         self.prepare_context(o_type, number)
-                        self.objects += [
+                        self.objects.append(
                             ("XCVR", part_no[0], self.ctx.copy(), serial, data, constant_data)
-                        ]
+                        )
                         return
                     self.logger.info(
                         "Unknown model: vendor=%s, part_no=%s (%s). Skipping...",
@@ -259,9 +259,13 @@ class AssetCheck(DiscoveryCheck):
                 ObjectAttr(scope="", interface="asset", attr="serial", value=serial),
             ]
             if revision:
-                o_data += [ObjectAttr(scope="", interface="asset", attr="revision", value=revision)]
+                o_data.append(
+                    ObjectAttr(scope="", interface="asset", attr="revision", value=revision)
+                )
             if mfg_date:
-                o_data += [ObjectAttr(scope="", interface="asset", attr="mfg_date", value=mfg_date)]
+                o_data.append(
+                    ObjectAttr(scope="", interface="asset", attr="mfg_date", value=mfg_date)
+                )
             o = Object(
                 model=m,
                 data=o_data,
@@ -363,7 +367,7 @@ class AssetCheck(DiscoveryCheck):
                     op="CHANGE",
                 )
             self.update_name(o, cpe_id)
-        self.objects += [(o_type, o, self.ctx.copy(), serial, data, constant_data)]
+        self.objects.append((o_type, o, self.ctx.copy(), serial, data, constant_data))
         # Collect sensors
         if sensors:
             self.register_sensors(sensors, o)
@@ -399,13 +403,13 @@ class AssetCheck(DiscoveryCheck):
                 )
                 continue
             if attr.is_const:
-                c_data += [
+                c_data.append(
                     ObjectAttr(scope="discovery", interface=interface, attr=attr.name, value=value)
-                ]
+                )
             else:
-                o_data += [
+                o_data.append(
                     ObjectAttr(scope="discovery", interface=interface, attr=attr.name, value=value)
-                ]
+                )
         return o_data, c_data
 
     def sync_data(self, obj: Object, data: list[ObjectAttr]):
@@ -609,7 +613,7 @@ class AssetCheck(DiscoveryCheck):
         for n in r_names:
             cn, o, c = o1.get_p2p_connection(n)
             if not cn:
-                free_connections += [n]
+                free_connections.append(n)
                 continue
             if o.id == o2.id and c == c2:
                 # Already connected
@@ -817,7 +821,7 @@ class AssetCheck(DiscoveryCheck):
         for p in self.unknown_part_no:
             n = sorted(self.unknown_part_no[p])
             if n not in r:
-                r += [n]
+                r.append(n)
         return r
 
     def get_vendor(self, v: str | None, o_type: str | None = "") -> Optional["Vendor"]:
@@ -856,7 +860,7 @@ class AssetCheck(DiscoveryCheck):
         self.logger.debug("Context mappings: %s", self.rule_context)
         # Compile rules
         for r in rule.rules:
-            self.rule[r.match_type] += [r]
+            self.rule[r.match_type].append(r)
 
     def set_context(self, name: str, value: str | None):
         self.ctx[name] = value
@@ -971,7 +975,7 @@ class AssetCheck(DiscoveryCheck):
             return o
         # Create object
         self.logger.info("Creating new object. model='%s', serial='%s'", m, serial)
-        data += [ObjectAttr(scope="discovery", interface="asset", attr="part_no", value=[name])]
+        data.append(ObjectAttr(scope="discovery", interface="asset", attr="part_no", value=[name]))
         o = Object(
             model=model,
             data=[ObjectAttr(scope="", interface="asset", attr="serial", value=serial), *data],

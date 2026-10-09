@@ -134,12 +134,12 @@ class AlarmCard(BaseCard):
             ca._children = []
             for ac in [ActiveAlarm, ArchivedAlarm]:
                 for aa in ac.objects.filter(root=ca.id):
-                    ca._children += [aa]
+                    ca._children.append(aa)
                     get_children(aa)
             if include_groups and ca.reference:
                 # ca.reference check for OldArchived
                 for aa in ActiveAlarm.objects.filter(groups__in=[ca.reference], root__exists=False):
-                    ca._children += [aa]
+                    ca._children.append(aa)
                     get_children(aa, include_groups=False)
 
         def flatten(ca, r, level):
@@ -148,7 +148,7 @@ class AlarmCard(BaseCard):
                 "service": SummaryItem.items_to_dict(ca.direct_services),
                 "subscriber": SummaryItem.items_to_dict(ca.direct_subscribers),
             }
-            r += [ca]
+            r.append(ca)
             if hasattr(ca, "_children"):
                 for c in sorted(ca._children, key=operator.attrgetter("timestamp")):
                     flatten(c, r, level + 1)

@@ -32,7 +32,7 @@ class SegmentAlarmCard(BaseCard):
             # Self alarms
             if segment.id in aseg:
                 for a in aseg[segment.id]:
-                    r["alarms"] += [
+                    r["alarms"].append(
                         {
                             "alarm_id": a.id,
                             "object": a.managed_object,
@@ -46,7 +46,7 @@ class SegmentAlarmCard(BaseCard):
                                 "service": SummaryItem.items_to_dict(a.direct_services),
                             },
                         }
-                    ]
+                    )
             for ns in NetworkSegment.objects.filter(parent=segment.id):
                 if ns.id not in seen_seg:
                     continue
@@ -57,7 +57,7 @@ class SegmentAlarmCard(BaseCard):
                     "summary": {"subscriber": {}, "service": {}},
                 }
                 process_segment(sr, ns)
-                r["children"] += [sr]
+                r["children"].append(sr)
 
         def update_summary(r):
             services = r["summary"]["service"]
@@ -75,7 +75,7 @@ class SegmentAlarmCard(BaseCard):
         seen_seg = set()
         for a in ActiveAlarm.objects.filter(segment_path=self.object.id):
             seen_seg.update(a.segment_path)
-            aseg[a.segment_path[-1]] += [a]
+            aseg[a.segment_path[-1]].append(a)
         tree = {
             "segment": self.object,
             "children": [],

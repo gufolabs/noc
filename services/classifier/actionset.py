@@ -117,18 +117,18 @@ class ActionSet:
         event_actions = []
         for h in rule.handlers or []:
             try:
-                event_actions += [partial(self.run_event_handler, handler=get_handler(h))]
+                event_actions.append(partial(self.run_event_handler, handler=get_handler(h)))
             except ImportError:
                 self.logger.error("Failed to load handler '%s'. Ignoring", h)
             self.add_handlers += 1
         target_actions, resource_actions = [], defaultdict(list)
         if rule.notification_group:
-            target_actions += [
+            target_actions.append(
                 partial(
                     self.send_notification,
                     notification_group=str(rule.notification_group),
                 )
-            ]
+            )
             self.add_notifications += 1
         for a in rule.actions or []:
             args = a.args or {}

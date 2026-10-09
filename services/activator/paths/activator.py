@@ -351,7 +351,7 @@ class ActivatorAPI(JSONRPCAPI):
             if not checker:
                 self.logger.warning("[%s] Unknown check. Skipping", check.name)
                 continue
-            do_checks[checker.name] += [check]
+            do_checks[checker.name].append(check)
         for checker, d_checks in do_checks.items():
             checker = checker_loader[checker](**kwargs)
             self.logger.debug("[%s] Run checker", ";".join(f"{c.name}({c.arg0})" for c in d_checks))

@@ -50,9 +50,9 @@ class Profile(BaseProfile):
                     # End of header
                     in_header = False
             elif in_header:
-                header += [s]
+                header.append(s)
             else:
-                data += [s]
+                data.append(s)
 
     def setup_script(self, script):
         self.add_script_method(script, "parse_blocks", self.parse_blocks)

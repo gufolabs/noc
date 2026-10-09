@@ -27,5 +27,5 @@ class Script(BaseScript):
             if h.startswith("Net::Vlan: "):
                 match = self.rx_tag.search(data)
                 if match:
-                    r += [{"vlan_id": match.group("tag"), "name": h[11:]}]
+                    r.append({"vlan_id": match.group("tag"), "name": h[11:]})
         return r

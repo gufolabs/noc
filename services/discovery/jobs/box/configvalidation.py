@@ -24,7 +24,7 @@ class ConfigValidationCheck(DiscoveryCheck):
         # New ConfDB path, problems are passed via alarms
         problems = []
         for problem in self.object.iter_validation_problems(is_changed):
-            problems += [problem]
+            problems.append(problem)
             # self.set_problem(**problem)
         if problems:
             self.logger.info("%d problem(s) detected", len(problems))

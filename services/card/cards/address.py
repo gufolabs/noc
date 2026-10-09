@@ -22,7 +22,7 @@ class AddressCard(BaseCard):
         path = []
         current = self.object.prefix
         while current:
-            path += [current]
+            path.append(current)
             current = current.parent
         return {
             "object": self.object,

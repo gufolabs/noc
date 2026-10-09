@@ -127,7 +127,7 @@ class CfgSyslogDataStream(DataStream):
             r["managed_object"]["administrative_domain"]["remote_id"] = adm_domain_remote_id
         if syslog_source_type == "m" and address:
             # Managed Object's address
-            r["addresses"] += [str(address)]
+            r["addresses"].append(str(address))
         elif syslog_source_type == "s" and syslog_source_ip:
             # Syslog source set manually
             r["addresses"] = [str(syslog_source_ip)]
@@ -155,7 +155,7 @@ class CfgSyslogDataStream(DataStream):
         for d in Interface._get_collection().find(
             {"managed_object": int(mo_id), "type": "loopback"}, {"_id": 1}
         ):
-            if_ids += [d["_id"]]
+            if_ids.append(d["_id"])
         if not if_ids:
             return []
         # Get loopback's addresses
@@ -169,7 +169,7 @@ class CfgSyslogDataStream(DataStream):
             {"_id": 0, "ipv4_addresses": 1},
         ):
             for a in d.get("ipv4_addresses", []):
-                r += [str(a).split("/")[0]]
+                r.append(str(a).split("/")[0])
         return r
 
     @classmethod
@@ -181,7 +181,7 @@ class CfgSyslogDataStream(DataStream):
             {"managed_object": int(mo_id), "ipv4_addresses": {"$exists": True}}, {"ipv4_addresses"}
         ):
             for a in d.get("ipv4_addresses", []):
-                r += [str(a).split("/")[0]]
+                r.append(str(a).split("/")[0])
         return r
 
     @classmethod

@@ -82,7 +82,7 @@ class AddressCheck(DiscoveryCheck):
         # vpn_id -> [address, ]
         vrf_addresses = defaultdict(list)
         for vpn_id, a in addresses:
-            vrf_addresses[vpn_id] += [a]
+            vrf_addresses[vpn_id].append(a)
         # build vpn_id -> VRF mapping
         self.logger.debug("Building VRF map")
         vrfs = {}
@@ -284,7 +284,7 @@ class AddressCheck(DiscoveryCheck):
         r = []
         for vpn in neighbors:
             for a in vpn["addresses"]:
-                r += [
+                r.append(
                     DiscoveredAddress(
                         vpn_id=get_vpn_id(vpn.get("vpn_id")),
                         address=a["ip"],
@@ -295,7 +295,7 @@ class AddressCheck(DiscoveryCheck):
                         mac=a.get("mac"),
                         fqdn=None,
                     )
-                ]
+                )
         return r
 
     @staticmethod
@@ -365,36 +365,36 @@ class AddressCheck(DiscoveryCheck):
         if self.is_preferred(address.source, discovered_address.source):
             changes = []
             if address.source != discovered_address.source:
-                changes += [f"source: {address.source} -> {discovered_address.source}"]
+                changes.append(f"source: {address.source} -> {discovered_address.source}")
                 address.source = discovered_address.source
             if discovered_address.source in LOCAL_SRC:
                 # Check name
                 name = self.get_address_name(discovered_address)
                 if name and name != address.name:
-                    changes += [f"name: {address.name} -> {name}"]
+                    changes.append(f"name: {address.name} -> {name}")
                     address.name = name
                 # Check fqdn
                 if discovered_address.fqdn != address.fqdn and discovered_address.fqdn:
-                    changes += [f"fqdn: {address.fqdn} -> {discovered_address.fqdn}"]
+                    changes.append(f"fqdn: {address.fqdn} -> {discovered_address.fqdn}")
                     address.fqdn = discovered_address.fqdn
                 # @todo: Change profile
                 # Change managed object
                 if discovered_address.source in LOCAL_SRC and (
                     not address.managed_object or address.managed_object.id != self.object.id
                 ):
-                    changes += [f"object: {address.managed_object} -> {self.object}"]
+                    changes.append(f"object: {address.managed_object} -> {self.object}")
                     address.managed_object = self.object
                 # Change subinterface
                 if (
                     discovered_address.source == SRC_INTERFACE
                     and address.subinterface != discovered_address.subinterface
                 ):
-                    changes += [
+                    changes.append(
                         f"subinterface: {address.subinterface} -> {discovered_address.subinterface}"
-                    ]
+                    )
                     address.subinterface = discovered_address.subinterface
             if discovered_address.mac and address.mac != discovered_address.mac:
-                changes += [f"mac: {address.mac} -> {discovered_address.mac}"]
+                changes.append(f"mac: {address.mac} -> {discovered_address.mac}")
                 address.mac = discovered_address.mac
             if changes:
                 self.logger.info(

@@ -33,7 +33,7 @@ class ResourceGroupCard(BaseCard):
             for i in s_model.objects.filter(
                 effective_service_groups__overlap=[str(self.object.id)]
             ):
-                services += [{"id": i.id, "card": card, "label": smart_text(i)}]
+                services.append({"id": i.id, "card": card, "label": smart_text(i)})
         else:
             services = []
         # Clients
@@ -42,7 +42,7 @@ class ResourceGroupCard(BaseCard):
             c_model = get_model(self.object.technology.client_model)
             card = self.get_card_name(self.object.technology.client_model)
             for i in c_model.objects.filter(effective_client_groups__overlap=[str(self.object.id)]):
-                clients += [{"id": i.id, "card": card, "label": smart_text(i)}]
+                clients.append({"id": i.id, "card": card, "label": smart_text(i)})
         else:
             clients = []
         # Data
@@ -57,7 +57,7 @@ class ResourceGroupCard(BaseCard):
         }
         # Append children
         for rg in ResourceGroup.objects.filter(parent=self.object.id).order_by("name"):
-            r["children"] += [rg]
+            r["children"].append(rg)
         return r
 
     def get_card_name(self, model):

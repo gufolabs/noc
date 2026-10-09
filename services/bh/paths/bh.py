@@ -36,8 +36,8 @@ async def bulk_ping(req: PingRequest):
             async for rtt in ping.iter_rtt(
                 address, interval=config.bh.bulk_ping_interval, count=req.n
             ):
-                rtt_list += [rtt]
-            result += [{"address": address, "rtt": rtt_list}]
+                rtt_list.append(rtt)
+            result.append({"address": address, "rtt": rtt_list})
 
     timeout = req.timeout or config.bh.bulk_ping_timeout
     result = []
@@ -66,11 +66,13 @@ async def bulk_snmp(req: SNMPRequest):
                     addr=addr.address, community=addr.community, timeout=timeout, tos=tos
                 ) as session:
                     async for oid, value in session.getbulk(req.oid_filter):
-                        objects_list += [(oid, value)]
+                        objects_list.append((oid, value))
                 error_code = None
             except TimeoutError:
                 error_code = "Timeout reached"
-            result += [{"address": addr.address, "objects": objects_list, "error_code": error_code}]
+            result.append(
+                {"address": addr.address, "objects": objects_list, "error_code": error_code}
+            )
 
     timeout = req.timeout or config.bh.bulk_snmp_timeout
     tos = req.tos or 0
@@ -89,7 +91,7 @@ async def traceroute(req: TracerouteRequest):
     items = []
     async with Traceroute(timeout=req.timeout, tos=req.tos) as tr:
         async for hop_info in tr.traceroute(req.address, tries=config.bh.traceroute_tries):
-            items += [hop_info]
+            items.append(hop_info)
     address = {h.addr for h in hop_info.hops if h is not None}
     if len(address) == 1:
         address = address.pop()  # single address

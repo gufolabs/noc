@@ -23,7 +23,7 @@ class PrefixCard(BaseCard):
         path = []
         current = self.object.parent
         while current:
-            path += [current]
+            path.append(current)
             current = current.parent
         return {
             "object": self.object,

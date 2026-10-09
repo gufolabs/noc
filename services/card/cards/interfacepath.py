@@ -75,14 +75,14 @@ class InterfacePathCard(BaseCard):
                     ingress_links = []
                     for link in pi.links:
                         egress, ingress = self.split_interfaces(pi.start, link.interfaces)
-                        ingress_links += [ingress]
-                        item["egress"] += [egress]
+                        ingress_links.append(ingress)
+                        item["egress"].append(egress)
                     if item["ingress"] == item["egress"]:
                         item["ingress"] = []
                     r["link_sets"] = max(r["link_sets"], len(item["egress"]))
-                    items += [item]
-                items += [{"object": pi.end, "ingress": ingress_links, "egress": []}]
-                r["paths"] += [items]
+                    items.append(item)
+                items.append({"object": pi.end, "ingress": ingress_links, "egress": []})
+                r["paths"].append(items)
         except ValueError as e:
             r["error"] = str(e)
             return r
@@ -145,9 +145,9 @@ class InterfacePathCard(BaseCard):
         egress: list[Interface] = []
         for iface in sorted(interfaces, key=lambda x: alnum_key(x.name)):
             if iface.managed_object == obj:
-                egress += [iface]
+                egress.append(iface)
             else:
-                ingress += [iface]
+                ingress.append(iface)
         return egress, ingress
 
     @staticmethod
@@ -234,7 +234,7 @@ class InterfacePathCard(BaseCard):
         for _, mo_bi_id, iface in query:
             if (int(mo_bi_id), str(bi_hash(iface))) not in m_index:
                 for metric in interface_metrics:
-                    metrics += [(str(mo_bi_id), str(bi_hash(iface)), metric, "-")]
+                    metrics.append((str(mo_bi_id), str(bi_hash(iface)), metric, "-"))
         # managed object id -> bi id
         mo_map: dict[int, int] = {q[0]: q[1] for q in query}
         # Get interface statuses

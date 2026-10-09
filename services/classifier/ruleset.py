@@ -116,11 +116,11 @@ class RuleSet:
                 continue
             # Find profile restrictions
             if not rule.profiles:
-                rules[GENERIC_PROFILE, rule.source.value] += [rule]
+                rules[GENERIC_PROFILE, rule.source.value].append(rule)
                 continue
             # Apply rules to appropriative chains
             for p in rule.profiles:
-                rules[p, rule.source.value] += [rule]
+                rules[p, rule.source.value].append(rule)
             n += 1
         # Apply lookup solution
         self.rules = {k: RuleLookup(rules[k]) for k in rules}

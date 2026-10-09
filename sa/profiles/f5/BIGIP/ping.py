@@ -26,10 +26,10 @@ class Script(BaseScript):
 
     def execute(self, address, count=None, source_address=None, size=None, df=None):
         cmd = ["run /util ping"]
-        cmd += [f"-c {int(count if count else 5)}"]
+        cmd.append(f"-c {int(count if count else 5)}")
         if size:
-            cmd += [f"-s {int(size)}"]
-        cmd += [address]
+            cmd.append(f"-s {int(size)}")
+        cmd.append(address)
         cmd = " ".join(cmd)
         pr = self.cli(cmd)
         match = self.re_search(self.rx_result, pr)

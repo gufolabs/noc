@@ -35,7 +35,7 @@ class SegmentCard(BaseCard):
         objects = []
         for mo in self.object.managed_objects.filter(is_managed=True):
             ss = ServiceSummary.get_object_summary(mo)
-            objects += [{"id": mo.id, "name": mo.name, "object": mo, "summary": ss}]
+            objects.append({"id": mo.id, "name": mo.name, "object": mo, "summary": ss})
         # Update object statuses
         mos = [o["id"] for o in objects]
         alarms = {
@@ -56,7 +56,7 @@ class SegmentCard(BaseCard):
         # Calculate children
         children = []
         for ns in NetworkSegment.objects.filter(parent=self.object.id):
-            children += [
+            children.append(
                 {
                     "id": ns.id,
                     "name": ns.name,
@@ -66,7 +66,7 @@ class SegmentCard(BaseCard):
                         "subscriber": SummaryItem.items_to_dict(ns.total_subscribers),
                     },
                 }
-            ]
+            )
         # Calculate VLANs
         vlans = []
         return {

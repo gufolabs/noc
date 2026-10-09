@@ -82,21 +82,21 @@ class ObjectCard(BaseCard):
             # Alarms detailed information
             alarm_list = []
             for alarm in alarms:
-                alarm_list += [
+                alarm_list.append(
                     {
                         "id": alarm.id,
                         "timestamp": alarm.timestamp,
                         "duration": now - alarm.timestamp,
                         "subject": alarm.subject,
                     }
-                ]
+                )
             alarm_list = sorted(alarm_list, key=operator.itemgetter("timestamp"))
 
             # Metrics
             metric_map = self.get_metrics([o])
             metric_map = metric_map[o]
 
-            children += [
+            children.append(
                 {
                     "id": o.id,
                     "name": o.name,
@@ -115,7 +115,7 @@ class ObjectCard(BaseCard):
                     "alarms": alarm_list,
                     "metrics": metric_map["object"],
                 }
-            ]
+            )
 
         contacts_list = []
 
@@ -186,7 +186,7 @@ class ObjectCard(BaseCard):
             if mo:
                 if is_nan(load_in, load_out, errors_in, errors_out):
                     continue
-                mtable += [[mo, iface, ts, load_in, load_out]]
+                mtable.append([mo, iface, ts, load_in, load_out])
                 metric_map[mo]["interface"][iface] = {
                     "load_in": int(load_in),
                     "load_out": int(load_out),
@@ -203,7 +203,7 @@ class ObjectCard(BaseCard):
         for op in ManagedObjectProfile.objects.filter(id__in=object_profiles):
             for mt in op.metrics or []:
                 mmm.add(mts[mt["metric_type"]])
-                op_fields_map[op.id] += [mts[mt["metric_type"]][1]]
+                op_fields_map[op.id].append(mts[mt["metric_type"]][1])
 
         for table, fields in itertools.groupby(sorted(mmm, key=lambda x: x[0]), key=lambda x: x[0]):
             # tb_fields = [f[1] for f in fields]
@@ -230,7 +230,7 @@ class ObjectCard(BaseCard):
                 i = 0
                 for r in result[2:]:
                     f_name = fields[i][2]
-                    mtable += [[mo, ts, r]]
+                    mtable.append([mo, ts, r])
                     metric_map[mo]["object"][f_name] = r
                     last_ts[mo] = max(ts, last_ts.get(mo, ts))
                     i += 1

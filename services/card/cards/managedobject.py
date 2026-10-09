@@ -115,9 +115,9 @@ class ManagedObjectCard(BaseCard):
         o_macs = DiscoveryID.macs_for_object(self.object)
         for f, l in o_macs:
             if f == l:
-                macs += [f]
+                macs.append(f)
             else:
-                macs += [f"{f} - {l}"]
+                macs.append(f"{f} - {l}")
         # Hostname
         hostname = ""
         did = DiscoveryID.objects.filter(object=self.object.id).first()
@@ -139,9 +139,9 @@ class ManagedObjectCard(BaseCard):
             remote_objects = set()
             for iface in _link.interfaces:
                 if iface.managed_object.id == self.object.id:
-                    local_interfaces += [iface]
+                    local_interfaces.append(iface)
                 else:
-                    remote_interfaces += [iface]
+                    remote_interfaces.append(iface)
                     remote_objects.add(iface.managed_object)
             if len(remote_objects) == 1:
                 ro = remote_objects.pop()
@@ -149,7 +149,7 @@ class ManagedObjectCard(BaseCard):
                     role = "uplink"
                 else:
                     role = "downlink"
-                links += [
+                links.append(
                     {
                         "id": _link.id,
                         "role": role,
@@ -162,7 +162,7 @@ class ManagedObjectCard(BaseCard):
                         ),
                         "remote_status": "up" if ro.get_status() else "down",
                     }
-                ]
+                )
             links = sorted(
                 links,
                 key=lambda x: (x["role"] != "uplink", alnum_key(x["local_interface"][0].name)),
@@ -224,7 +224,7 @@ class ManagedObjectCard(BaseCard):
         # Interfaces
         interfaces = []
         for i in Interface.objects.filter(managed_object=self.object.id, type="physical"):
-            interfaces += [
+            interfaces.append(
                 {
                     "id": i.id,
                     "name": i.name,
@@ -240,7 +240,7 @@ class ManagedObjectCard(BaseCard):
                     "service_summary": service_summary.get("interface").get(i.id, {}),
                     "description": i.description,
                 }
-            ]
+            )
             si = list(i.subinterface_set.filter(enabled_afi="BRIDGE"))
             if len(si) == 1:
                 si = si[0]
@@ -254,33 +254,33 @@ class ManagedObjectCard(BaseCard):
         for rg_id in self.object.effective_service_groups:
             rg = ResourceGroup.get_by_id(rg_id)
             if rg:
-                service_groups += [
+                service_groups.append(
                     {
                         "id": rg_id,
                         "name": rg.name,
                         "technology": rg.technology,
                         "is_static": rg_id in static_services,
                     }
-                ]
+                )
         # Client groups (i.e. client)
         static_clients = set(self.object.static_client_groups)
         client_groups = []
         for rg_id in self.object.effective_client_groups:
             rg = ResourceGroup.get_by_id(rg_id)
             if rg:
-                client_groups += [
+                client_groups.append(
                     {
                         "id": rg_id,
                         "name": rg.name,
                         "technology": rg.technology,
                         "is_static": rg_id in static_clients,
                     }
-                ]
+                )
         # @todo: Administrative domain path
         # Alarms
         alarm_list = []
         for a in alarms:
-            alarm_list += [
+            alarm_list.append(
                 {
                     "id": a.id,
                     "root_id": self.get_root(alarms),
@@ -294,7 +294,7 @@ class ManagedObjectCard(BaseCard):
                     },
                     "alarm_class": a.alarm_class,
                 }
-            ]
+            )
         alarm_list = sorted(alarm_list, key=operator.itemgetter("timestamp"))
 
         # Maintenance
@@ -303,7 +303,7 @@ class ManagedObjectCard(BaseCard):
         for m in Maintenance.objects.filter(
             id__in=m_id, is_completed=False, start__lte=now + datetime.timedelta(hours=1)
         ):
-            maintenance += [
+            maintenance.append(
                 {
                     "maintenance": m,
                     "id": m.id,
@@ -312,13 +312,13 @@ class ManagedObjectCard(BaseCard):
                     "stop": m.stop,
                     "in_progress": m.start <= now,
                 }
-            ]
+            )
         # Get Inventory
         inv = []
         for p in self.object.get_inventory():
             c = self.get_nested_inventory(p)
             c["name"] = p.name or self.object.name
-            inv += [c]
+            inv.append(c)
         # Build result
 
         if self.object.platform is not None:
@@ -392,7 +392,7 @@ class ManagedObjectCard(BaseCard):
         r = []
         if service.state.name in ("Testing", "Ready", "Suspended"):
             if service.profile.glyph:
-                r += [(service.profile.name, service.profile.glyph)]
+                r.append((service.profile.name, service.profile.glyph))
             for svc in Service.objects.filter(parent=service):
                 r += self.get_service_glyphs(svc)
         return r
@@ -407,13 +407,13 @@ class ManagedObjectCard(BaseCard):
             q &= UserAccess.Q(handler.current_user)
         r = []
         for mo in ManagedObject.objects.filter(q):
-            r += [
+            r.append(
                 {
                     "scope": "managedobject",
                     "id": mo.id,
                     "label": f"{mo.name} ({mo.address}) [{mo.platform}]",
                 }
-            ]
+            )
         return r
 
     def get_nested_inventory(self, o):
@@ -433,7 +433,7 @@ class ManagedObjectCard(BaseCard):
             if n.direction == "i":
                 c, r_object, _ = o.get_p2p_connection(n.name)
                 if c is None:
-                    r["children"] += [
+                    r["children"].append(
                         {
                             "id": "",
                             "name": n.name,
@@ -442,14 +442,14 @@ class ManagedObjectCard(BaseCard):
                             "model": "",
                             "interface": if_map.get(n.name) or "",
                         }
-                    ]
+                    )
                 else:
                     cc = self.get_nested_inventory(r_object)
                     cc["name"] = n.name
                     cc["interface"] = if_map.get(n.name) or ""
-                    r["children"] += [cc]
+                    r["children"].append(cc)
             elif n.direction == "s":
-                r["children"] += [
+                r["children"].append(
                     {
                         "id": "",
                         "name": n.name,
@@ -458,7 +458,7 @@ class ManagedObjectCard(BaseCard):
                         "model": ", ".join(str(p) for p in n.protocols),
                         "interface": if_map.get(n.name) or "",
                     }
-                ]
+                )
         return r
 
     def flatten_inventory(self, inv, level=0):
@@ -466,7 +466,7 @@ class ManagedObjectCard(BaseCard):
         if not isinstance(inv, list):
             inv = [inv]
         for o in inv:
-            r += [o]
+            r.append(o)
             o["level"] = level
             children = o.get("children", [])
             if children:

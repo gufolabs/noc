@@ -118,10 +118,10 @@ class AlarmHeatCard(BaseCard):
                 # @todo: Should we add the object's weight to summary?
                 # @todo: Check west/south hemisphere
                 if active_layers and west <= mo["x"] <= east and south <= mo["y"] <= north:
-                    t_data[mo["x"], mo["y"]] += [(mo, w)]
+                    t_data[mo["x"], mo["y"]].append((mo, w))
             else:
                 w = 0
-            alarms += [
+            alarms.append(
                 {
                     "alarm_id": str(a.get("_id")),
                     "managed_object": mo["name"],
@@ -129,7 +129,7 @@ class AlarmHeatCard(BaseCard):
                     "y": mo["y"],
                     "w": max(w, 1),
                 }
-            ]
+            )
             if s_service:
                 update_dict(services, s_service)
             if s_sub:
@@ -156,7 +156,7 @@ class AlarmHeatCard(BaseCard):
                             tc = tuple(c)
                             o_data[tc] = t_data.get(tc, [])
                         o_seen.add(tuple(c))
-                        lines += [d["line"]]
+                        lines.append(d["line"])
                         break
             if lines:
                 links = geojson.FeatureCollection(features=lines)
@@ -170,7 +170,7 @@ class AlarmHeatCard(BaseCard):
                 data: list[int] = sorted(data, key=lambda z: data[z], reverse=True)[
                     : self.TOOLTIP_LIMIT
                 ]
-                points += [
+                points.append(
                     geojson.Feature(
                         geometry=geojson.Point(coordinates=(x, y)),
                         properties={
@@ -185,7 +185,7 @@ class AlarmHeatCard(BaseCard):
                             ],
                         },
                     )
-                ]
+                )
             points = geojson.FeatureCollection(features=points)
         return {
             "alarms": alarms,
