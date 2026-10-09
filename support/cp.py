@@ -90,9 +90,9 @@ class CPClient:
             "#",
         ]
         if self.cp_url or self.account_uuid:
-            cfg += ["[account]"]
+            cfg.append("[account]")
             if self.cp_url and self.cp_url != self.CP_URL:
-                cfg += [f"cp_url = {self.cp_url}"]
+                cfg.append(f"cp_url = {self.cp_url}")
             if self.account_uuid:
                 cfg += [
                     f"uuid = {self.account_uuid}",
@@ -106,7 +106,7 @@ class CPClient:
                 f"name = {self.system_name}",
                 f"type = {self.system_type}",
             ]
-        cfg += [""]
+        cfg.append("")
         logger.info("Saving %s", self.CONFIG)
         with open(self.CONFIG, "w") as f:
             f.write("\n".join(cfg))

@@ -64,7 +64,7 @@ class Migration(BaseMigration):
         # NetworkSegment migrate to L2 Domain
         for segment in self.mongo_db["noc.networksegments"].find({"_id": {"$in": segments}}):
             l2domain_id = bson.ObjectId()
-            l2_domains += [
+            l2_domains.append(
                 InsertOne(
                     {
                         "_id": l2domain_id,
@@ -77,9 +77,9 @@ class Migration(BaseMigration):
                         "bi_id": bson.Int64(bi_hash(l2domain_id)),
                     }
                 )
-            ]
+            )
             nsid = segment["_id"]
-            vlans_update += [UpdateMany({"segment": nsid}, {"$set": {"l2_domain": l2domain_id}})]
+            vlans_update.append(UpdateMany({"segment": nsid}, {"$set": {"l2_domain": l2domain_id}}))
             l2_domain_map[nsid] = l2domain_id
         if l2_domains:
             self.mongo_db["l2domains"].bulk_write(l2_domains)
@@ -112,7 +112,7 @@ class Migration(BaseMigration):
         ):
             l2domain_id = bson.ObjectId()
             l2_domain_map[vid] = l2domain_id
-            l2_domains += [
+            l2_domains.append(
                 InsertOne(
                     {
                         "_id": l2domain_id,
@@ -125,7 +125,7 @@ class Migration(BaseMigration):
                         "bi_id": bson.Int64(bi_hash(l2domain_id)),
                     }
                 )
-            ]
+            )
         if l2_domains:
             self.mongo_db["l2domains"].bulk_write(l2_domains)
         vlans = []
@@ -146,7 +146,7 @@ class Migration(BaseMigration):
                 print(f"Duplicate VLAN number on domain: {vc_domain_id}")
                 continue
             vlan_id = bson.ObjectId()
-            vlans += [
+            vlans.append(
                 InsertOne(
                     {
                         "_id": vlan_id,
@@ -161,7 +161,7 @@ class Migration(BaseMigration):
                         "state": bson.ObjectId("5a17f61b1bb6270001bd0328"),
                     }
                 )
-            ]
+            )
             processed_vlans.add((l2_domain_id, v_num))
         if len(vlans) > CHUNK:
             self.mongo_db["vlans"].bulk_write(vlans)

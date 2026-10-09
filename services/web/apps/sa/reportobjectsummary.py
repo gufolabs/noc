@@ -141,18 +141,18 @@ class ReportObjectsSummary(SimpleReport):
             if r == report_type:
                 title = self.title + ": " + t
                 break
-        columns += [TableColumn(_("Quantity"), align="right", total="sum", format="integer")]
+        columns.append(TableColumn(_("Quantity"), align="right", total="sum", format="integer"))
 
         cursor = self.cursor()
         cursor.execute(query, ())
         data = []
         for c in cursor.fetchall():
             if report_type == "profile":
-                data += [(profile.get(c[0]), c[1])]
+                data.append((profile.get(c[0]), c[1]))
             elif report_type == "domain-profile":
-                data += [(c[0], profile.get(c[1]), c[2])]
+                data.append((c[0], profile.get(c[1]), c[2]))
             elif report_type == "platform":
-                data += [(profile.get(c[0]), platform.get(c[1]), c[2])]
+                data.append((profile.get(c[0]), platform.get(c[1]), c[2]))
             elif report_type == "version":
                 fw, fps = version.get(c[1]), None
                 if fw:
@@ -160,8 +160,8 @@ class ReportObjectsSummary(SimpleReport):
                         fps = FirmwarePolicy.get_status(fw)
                     except ValueError:
                         pass
-                data += [(profile.get(c[0]), fw, fp_map.get(fps or "", fps or ""), c[2])]
+                data.append((profile.get(c[0]), fw, fp_map.get(fps or "", fps or ""), c[2]))
             else:
-                data += [c]
+                data.append(c)
 
         return self.from_dataset(title=title, columns=columns, data=data, enumerate=True)

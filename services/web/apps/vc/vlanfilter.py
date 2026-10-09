@@ -32,7 +32,7 @@ class VLANFilterApplication(ExtDocApplication):
         labels = defaultdict(list)
         for ll in Label.objects.filter(match_vlanfilter__vlan_filter__in=vlan_filters):
             for vf in ll.match_vlanfilter:
-                labels[str(vf.vlan_filter.id)] += [
+                labels[str(vf.vlan_filter.id)].append(
                     {
                         "labels": [
                             {
@@ -51,7 +51,7 @@ class VLANFilterApplication(ExtDocApplication):
                         "scope": vf.scope,
                         "is_persist": False,
                     }
-                ]
+                )
         for row in data:
             row["match_labels"] = labels.get(str(row["id"]), [])
         return data
@@ -68,6 +68,6 @@ class VLANFilterApplication(ExtDocApplication):
         else:
             x = "FALSE"
         try:
-            q[None] += [x]
+            q[None].append(x)
         except KeyError:
             q[None] = [x]

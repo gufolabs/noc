@@ -37,7 +37,7 @@ class StateHandlerDecorator(BaseAppDecorator):
             return self.app.response_not_found()
         r = []
         for t in Transition.objects.filter(from_state=o.state, enable_manual=True):
-            r += [
+            r.append(
                 {
                     "id": str(t.id),
                     "label": str(t.label or ""),
@@ -45,7 +45,7 @@ class StateHandlerDecorator(BaseAppDecorator):
                     "to_state": str(t.to_state.id),
                     "to_state__label": str(t.to_state.name),
                 }
-            ]
+            )
         return r
 
     def api_make_transition(self, request, object_id, transition_id):

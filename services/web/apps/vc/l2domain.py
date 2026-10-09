@@ -59,5 +59,5 @@ class L2DomainApplication(ExtDocApplication):
             for x in o.profile.pools:
                 xx = self.instance_to_dict(x, nocustom=True)
                 xx["is_persist"] = True
-                r["pools"] += [xx]
+                r["pools"].append(xx)
         return r

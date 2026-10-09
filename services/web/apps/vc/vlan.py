@@ -144,7 +144,7 @@ class VLANApplication(ExtDocApplication):
         for si in SubInterface.objects.filter(
             managed_object__in=objects, untagged_vlan=vlan.vlan, enabled_afi="BRIDGE"
         ):
-            si_objects[si.managed_object] += [{"name": si.name}]
+            si_objects[si.managed_object].append({"name": si.name})
         untagged = [
             {
                 "managed_object_id": o.id,
@@ -158,7 +158,7 @@ class VLANApplication(ExtDocApplication):
         for si in SubInterface.objects.filter(
             managed_object__in=objects, tagged_vlans=vlan.vlan, enabled_afi="BRIDGE"
         ):
-            si_objects[si.managed_object] += [{"name": si.name}]
+            si_objects[si.managed_object].append({"name": si.name})
         tagged = [
             {
                 "managed_object_id": o.id,
@@ -170,13 +170,13 @@ class VLANApplication(ExtDocApplication):
         # Find l3 interfaces
         si_objects = defaultdict(list)
         for si in SubInterface.objects.filter(managed_object__in=objects, vlan_ids=vlan.vlan):
-            si_objects[si.managed_object] += [
+            si_objects[si.managed_object].append(
                 {
                     "name": si.name,
                     "ipv4_addresses": si.ipv4_addresses,
                     "ipv6_addresses": si.ipv6_addresses,
                 }
-            ]
+            )
         l3 = [
             {
                 "managed_object_id": o.id,

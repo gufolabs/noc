@@ -467,7 +467,7 @@ class Application(metaclass=ApplicationBase):
                 ff = forms.DateTimeField(required=False, label=f.label)
             else:
                 raise ValueError(f"Invalid field type: '{f.type}'")
-            fields += [(str(f.name), ff)]
+            fields.append((str(f.name), ff))
         form.base_fields.update(OrderedDict(fields))
         return form
 

@@ -167,7 +167,7 @@ class ExtDocApplication(ExtApplication):
                 api=True,
             )
         if self.json_collection:
-            self.bulk_fields += [self._bulk_field_is_builtin]
+            self.bulk_fields.append(self._bulk_field_is_builtin)
         # Additional custom fields
         self.custom_fields = {}
         # row_class field
@@ -290,7 +290,7 @@ class ExtDocApplication(ExtApplication):
                 if field not in q:
                     q[field] = [q[p]]
                 else:
-                    q[field] += [q[p]]
+                    q[field].append(q[p])
                 del q[p]
         # Normalize parameters
         for p in q:

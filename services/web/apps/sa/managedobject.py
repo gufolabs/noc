@@ -581,7 +581,7 @@ class ManagedObjectApplication(ExtModelApplication):
                 "next_run": self.to_json(job.get(Job.ATTR_TS)),
                 "jcls": jcls,
             }
-            r += [d]
+            r.append(d)
         return r
 
     @api.post(
@@ -900,13 +900,13 @@ class ManagedObjectApplication(ExtModelApplication):
                     "rx_wavelength" in optical_data
                     and optical_data["tx_wavelength"] != optical_data["rx_wavelength"]
                 ):
-                    description += [
+                    description.append(
                         f"{optical_data['tx_wavelength']}nmTx/{optical_data['rx_wavelength']}nmRx"
-                    ]
+                    )
                 else:
-                    description += [f"{optical_data['tx_wavelength']}nmTx"]
+                    description.append(f"{optical_data['tx_wavelength']}nmTx")
                 if "distance_max" in optical_data:
-                    description += [f"{optical_data['distance_max']}km"]
+                    description.append(f"{optical_data['distance_max']}km")
                 description += ["LC", "DOM"]
                 r["description"] = f"SFP Transceiver ({', '.join(description)})"
                 if "bit_rate" in optical_data:
@@ -917,7 +917,7 @@ class ManagedObjectApplication(ExtModelApplication):
             if n.direction == "i":
                 c, r_object, _ = o.get_p2p_connection(n.name)
                 if c is None:
-                    children += [
+                    children.append(
                         {
                             "id": None,
                             "name": n.name,
@@ -927,14 +927,14 @@ class ManagedObjectApplication(ExtModelApplication):
                             "model": None,
                             "interface": if_map.get(n.name) or "",
                         }
-                    ]
+                    )
                 else:
                     cc = self.get_nested_inventory(r_object)
                     cc["name"] = n.name
                     cc["interface"] = if_map.get(n.name) or ""
-                    children += [cc]
+                    children.append(cc)
             elif n.direction == "s":
-                children += [
+                children.append(
                     {
                         "id": None,
                         "name": n.name,
@@ -944,7 +944,7 @@ class ManagedObjectApplication(ExtModelApplication):
                         "model": ", ".join(str(p) for p in n.protocols),
                         "interface": if_map.get(n.name) or "",
                     }
-                ]
+                )
         if children:
             to_expand = "Transceiver" not in o.model.name
             r["children"] = children
@@ -962,7 +962,7 @@ class ManagedObjectApplication(ExtModelApplication):
         for p in o.get_inventory():
             c = self.get_nested_inventory(p)
             c["name"] = p.name or o.name
-            r += [c]
+            r.append(c)
         return {"expanded": True, "children": r}
 
     @api.get(r"^(?P<id>\d+)/confdb/$", access="config")
@@ -1042,7 +1042,7 @@ class ManagedObjectApplication(ExtModelApplication):
                 "form": interface.get_form(),
                 "preview": interface.preview or "NOC.sa.managedobject.scripts.JSONPreview",
             }
-            r += [ss]
+            r.append(ss)
         return r
 
     @api.post(r"^(?P<id>\d+)/scripts/(?P<name>[^/]+)/$", access="script")
@@ -1273,23 +1273,23 @@ class ManagedObjectApplication(ExtModelApplication):
             }
         ]
         if o.segment:
-            r += [
+            r.append(
                 {
                     "id": str(o.segment.id),
                     "label": _("Segment: ") + str(o.segment.name),
                     "is_default": True,
                     "args": ["segment", str(o.segment.id), o.id],
                 }
-            ]
+            )
         if o.container:
-            r += [
+            r.append(
                 {
                     "id": str(o.container.id),
                     "label": _("Container: ") + str(o.container.name),
                     "is_default": False,
                     "args": ["objectcontainer", str(o.container.id), o.id],
                 }
-            ]
+            )
         return r
 
     @api.post("^full/", access="read")

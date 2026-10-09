@@ -159,7 +159,7 @@ class ExtModelApplication(ExtApplication):
                 api=True,
             )
         if self.json_collection:
-            self.bulk_fields += [self._bulk_field_is_builtin]
+            self.bulk_fields.append(self._bulk_field_is_builtin)
 
     def get_permissions(self):
         p = super().get_permissions()
@@ -344,7 +344,7 @@ class ExtModelApplication(ExtApplication):
                 if model and not is_document(model):
                     extra_where = f'{self.model._meta.db_table}."{self.model._meta.pk.name}" IN (SELECT "{model._meta.get_field(fn).attname}" FROM {model._meta.db_table})'
                     if None in nq:
-                        nq[None] += [extra_where]
+                        nq[None].append(extra_where)
                     else:
                         nq[None] = [extra_where]
                 continue
@@ -459,7 +459,7 @@ class ExtModelApplication(ExtApplication):
             value = [value]
         tq = (f"%s::text[] <@ {self.db_table}.tags", [value])
         if None in q:
-            q[None] += [tq]
+            q[None].append(tq)
         else:
             q[None] = [tq]
 
@@ -542,9 +542,9 @@ class ExtModelApplication(ExtApplication):
             if o in self.order_map:
                 no = f"{fname}_order_{n}"
                 extra_select[no] = self.order_map[o]
-                new_order += [f"{direction}{no}"]
+                new_order.append(f"{direction}{no}")
             else:
-                new_order += [o]
+                new_order.append(o)
         extra = {}
         if extra_select:
             extra["select"] = extra_select
@@ -639,7 +639,7 @@ class ExtModelApplication(ExtApplication):
             except ValidationError as e:
                 e_msg = []
                 for f in e.message_dict:
-                    e_msg += [f"{f}: {'; '.join(e.message_dict[f])}"]
+                    e_msg.append(f"{f}: {'; '.join(e.message_dict[f])}")
                 return self.render_json(
                     {"status": False, "message": f"Validation error: {' | '.join(e_msg)}"},
                     status=self.BAD_REQUEST,
@@ -727,7 +727,7 @@ class ExtModelApplication(ExtApplication):
         except ValidationError as e:
             e_msg = []
             for f in e.message_dict:
-                e_msg += [f"{f}: {'; '.join(e.message_dict[f])}"]
+                e_msg.append(f"{f}: {'; '.join(e.message_dict[f])}")
             return self.render_json(
                 {"status": False, "message": f"Validation error: {' | '.join(e_msg)}"},
                 status=self.BAD_REQUEST,

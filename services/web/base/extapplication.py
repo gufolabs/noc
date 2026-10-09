@@ -74,7 +74,7 @@ class ExtApplication(Application):
         for fn in [n for n in dir(self) if n.startswith("bulk_field_")]:
             h = getattr(self, fn)
             if callable(h):
-                self.bulk_fields += [h]
+                self.bulk_fields.append(h)
 
     def apply_bulk_fields(self, data):
         """
@@ -218,9 +218,9 @@ class ExtApplication(Application):
         if request.is_extjs and self.sort_param in q:
             for r in self.deserialize(q[self.sort_param]):
                 if r["direction"] == "DESC":
-                    ordering += [f"-{r['property']}"]
+                    ordering.append(f"-{r['property']}")
                 else:
-                    ordering += [r["property"]]
+                    ordering.append(r["property"])
         grouping = None
         if request.is_extjs and self.group_param in q:
             r = self.deserialize(q[self.group_param])
@@ -239,10 +239,10 @@ class ExtApplication(Application):
             p = []
             for x in q.pop(None):
                 if type(x) in (list, tuple):
-                    w += [x[0]]
+                    w.append(x[0])
                     p += x[1]
                 else:
-                    w += [x]
+                    w.append(x)
             xa = {"where": w}
             if p:
                 xa["params"] = p

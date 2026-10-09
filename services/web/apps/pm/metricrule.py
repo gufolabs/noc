@@ -37,7 +37,7 @@ class MetricRuleApplication(ExtDocApplication):
                             self.format_label(ll)
                             for ll in Label.objects.filter(name__in=th["alarm_labels"])
                         ]
-                    ths += [th]
+                    ths.append(th)
                 edoc["thresholds"] = ths
         return r
 
@@ -48,7 +48,7 @@ class MetricRuleApplication(ExtDocApplication):
         if not action.metric_action:
             return r
         for p in action.metric_action.params:
-            r += [
+            r.append(
                 {
                     "name": p.name,
                     "type": p.type,
@@ -56,7 +56,7 @@ class MetricRuleApplication(ExtDocApplication):
                     "default": p.default,
                     "description": p.description,
                 }
-            ]
+            )
         return r
 
     @staticmethod

@@ -74,7 +74,7 @@ class WorkflowApplication(ExtDocApplication):
                 "x": state.x,
                 "y": state.y,
             }
-            r["states"] += [sr]
+            r["states"].append(sr)
         for t in Transition.objects.filter(workflow=wf.id):
             tr = {
                 "id": str(t.id),
@@ -101,7 +101,7 @@ class WorkflowApplication(ExtDocApplication):
                 "vertices": [{"x": v.x, "y": v.y} for v in t.vertices],
                 "bi_id": str(t.bi_id) if t.bi_id else None,
             }
-            r["transitions"] += [tr]
+            r["transitions"].append(tr)
         return r
 
     @api.post(
@@ -180,7 +180,7 @@ class WorkflowApplication(ExtDocApplication):
                 get_model(am)
             except ImportError:
                 raise ValueError(f"Bad Model: {am}")
-            wf.allowed_models += [am]
+            wf.allowed_models.append(am)
         wf.save()
         # Get current state
         current_states = {}  # str(id) -> state

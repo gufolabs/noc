@@ -260,7 +260,7 @@ class ReportObjectDetailApplication(ExtApplication):
             cmap = []
             for c in columns.split(","):
                 try:
-                    cmap += [cols.index(c)]
+                    cmap.append(cols.index(c))
                 except ValueError:
                     continue
         else:

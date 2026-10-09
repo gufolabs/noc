@@ -263,7 +263,7 @@ class ReportModelFilter:
             func_stat = self.f_map[f_type]
             func_stat = getattr(func_stat, "get_stat")(f_num, f_val)
             if isinstance(func_stat, set):
-                ids += [func_stat]
+                ids.append(func_stat)
             # @todo remove d_Q, example changing to class
             elif isinstance(func_stat, d_Q):
                 moss = moss.filter(func_stat)
@@ -525,13 +525,13 @@ class CHTableReportDataSource(ReportDataSource):
         select, group = [], []
         if self.max_intervals:
             minutes = max(((self.end - self.start).total_seconds() / 60) / self.max_intervals, 1)
-            select += [f"toStartOfInterval(ts, INTERVAL {minutes} minute) AS ts"]
-            group += ["ts"]
+            select.append(f"toStartOfInterval(ts, INTERVAL {minutes} minute) AS ts")
+            group.append("ts")
         elif self.interval and self.interval not in self.group_intervals:
             raise NotImplementedError("Not supported interval")
         elif self.interval in self.group_intervals:
-            select += [f"{self.group_intervals[self.interval]} as ts"]
-            group += ["ts"]
+            select.append(f"{self.group_intervals[self.interval]} as ts")
+            group.append("ts")
 
         return select, group
 
@@ -552,9 +552,9 @@ class CHTableReportDataSource(ReportDataSource):
                 f_value = ff["value"][0]
             q = f"{f_name} {op} {f_value}"
             if ff["name"] in self.fields and self.fields[ff["name"]].group:
-                where += [q]
+                where.append(q)
             else:
-                having += [q]
+                having.append(q)
         return {
             "q_where": where,
             "q_having": having,
@@ -578,8 +578,8 @@ class CHTableReportDataSource(ReportDataSource):
             fc = self.fields[ff]
             if fc.group and fc.name in self.groups:
                 # query_map["q_select"] += [f"{f.metric_name} as {f.name}"]
-                query_map["q_group"] += [f"{fc.metric_name}"]
-            query_map["q_select"] += [f"{fc.metric_name} as {fc.name}"]
+                query_map["q_group"].append(f"{fc.metric_name}")
+            query_map["q_select"].append(f"{fc.metric_name} as {fc.name}")
         if self.interval:
             query_map["q_order_by"] = ["ts"]
         custom_conditions = self.get_custom_conditions()
@@ -593,15 +593,15 @@ class CHTableReportDataSource(ReportDataSource):
             f"WHERE {' AND '.join(query_map['q_where'])}",
         ]
         if query_map.get("q_group"):
-            query += [f"GROUP BY {','.join(query_map['q_group'])}"]
+            query.append(f"GROUP BY {','.join(query_map['q_group'])}")
         if query_map.get("q_having"):
-            query += [f"HAVING {' AND '.join(query_map['q_having'])}"]
+            query.append(f"HAVING {' AND '.join(query_map['q_having'])}")
         if "q_order_by" in query_map:
-            query += [f"ORDER BY {','.join(query_map['q_order_by'])}"]
+            query.append(f"ORDER BY {','.join(query_map['q_order_by'])}")
         if self.rows:
-            query += [f"LIMIT {self.rows}"]
+            query.append(f"LIMIT {self.rows}")
         if r_format:
-            query += [f" FORMAT {r_format}"]
+            query.append(f" FORMAT {r_format}")
         return "\n ".join(query)
 
     def do_query(self):

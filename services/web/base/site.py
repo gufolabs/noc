@@ -316,7 +316,7 @@ class Site:
         # Find proper place
         while len(parts) > 1:
             p = parts.pop(0)
-            path += [p]
+            path.append(p)
             new_root = [n for n in root["children"] if n["title"] == p]
             if new_root:
                 root = new_root[0]
@@ -324,7 +324,7 @@ class Site:
                 r = {"id": self.get_menu_id(path), "title": p, "children": []}
                 if p in self.folder_glyps:
                     r["iconCls"] = f"fa fa-{self.folder_glyps[p]}"
-                root["children"] += [r]
+                root["children"].append(r)
                 root = r
         path += parts
         # Create item
@@ -339,7 +339,7 @@ class Site:
             app.menu_url = (f"/{app.module}/{app.app}/{view.url[1:]}").replace("$", "")
         else:
             r["access"] = lambda user: app.launch_access.check(app, user)
-        root["children"] += [r]
+        root["children"].append(r)
 
     def setup_router(self):
         """
@@ -374,7 +374,7 @@ class Site:
                     view_url = view.url
                 else:
                     raise ValueError(f"Invalid URL object: {view.url}")
-                app_url_map[view_url.url] += [(view_url, view)]
+                app_url_map[view_url.url].append((view_url, view))
             # Install URLs
             for url in app_url_map:
                 method_map = {}
@@ -387,7 +387,7 @@ class Site:
                     if getattr(view, "menu", None):
                         self.register_app_menu(app, view)
                 site_view = self.site_view(app, method_map)
-                app_chain += [re_path(url, site_view, name=view_url.name)]
+                app_chain.append(re_path(url, site_view, name=view_url.name))
                 for name in names:
                     self.register_named_view(app.module, app.app, name, site_view)
         # Generate router info
@@ -396,9 +396,9 @@ class Site:
             # Collect nested application routes
             mod_includes = []
             for app in sorted(patterns[module]):
-                mod_includes += [path(f"{app}/", include((patterns[module][app], app)))]
+                mod_includes.append(path(f"{app}/", include((patterns[module][app], app))))
             # Install module routes
-            self.urlpatterns += [path(f"{module}/", include((mod_includes, module)))]
+            self.urlpatterns.append(path(f"{module}/", include((mod_includes, module))))
         # Django JS Translation
         # @todo: Remove?
         self.urlpatterns.append(
@@ -418,7 +418,7 @@ class Site:
         app_id = app_class.get_app_id()
         if app_id in self.apps:
             raise Exception(f"Application {app_id} is already registered")
-        self.pending_applications += [app_class]
+        self.pending_applications.append(app_class)
 
     def do_register(self, app_class):
         """
@@ -445,7 +445,7 @@ class Site:
         mn = f"noc.services.web.apps.{m[4:]}"  # Strip noc.
         mod_name = importlib.import_module(mn).MODULE_NAME
         r = {"id": self.get_menu_id([m]), "title": mod_name, "children": []}
-        self.menu += [r]
+        self.menu.append(r)
         return r
 
     def setup_reports(self):
